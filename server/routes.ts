@@ -7,6 +7,7 @@ import {
   corpusQuerySchema,
   topQuerySchema,
   recentQuerySchema,
+  similarityQuerySchema,
 } from "@shared/schema";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
@@ -36,8 +37,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const items = corpusStorage.getEntries({
         func: query.func,
         limit: query.limit,
+        offset: query.offset,
+        perfectOnly: query.perfectOnly,
+        minScore: query.minScore,
+        maxScore: query.maxScore,
+        startDate: query.startDate,
+        endDate: query.endDate,
       });
-      return res.json({ items });
+      return res.json({ items, hasMore: items.length === query.limit });
     } catch (e: any) {
       return res.status(400).json({
         error: "bad_query",
@@ -64,6 +71,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const query = recentQuerySchema.parse(req.query);
       const items = corpusStorage.getRecent(query.limit);
       return res.json({ items });
+    } catch (e: any) {
+      return res.status(400).json({
+        error: "bad_query",
+        details: e?.message ?? String(e),
+      });
+    }
+  });
+
+  app.post("/api/corpus/similar", (req, res) => {
+    try {
+      const query = similarityQuerySchema.parse(req.body);
+      const results = corpusStorage.getSimilar(
+        query.targetSigKey,
+        query.targetPostBow,
+        query.limit
+      );
+      return res.json({ results });
     } catch (e: any) {
       return res.status(400).json({
         error: "bad_query",
