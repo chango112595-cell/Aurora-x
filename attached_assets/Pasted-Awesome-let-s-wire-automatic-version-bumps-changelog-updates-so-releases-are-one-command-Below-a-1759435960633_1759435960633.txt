@@ -1,0 +1,187 @@
+Awesome—let’s wire automatic version bumps + changelog updates so releases are one command.
+
+Below are copy-paste files/patches. They’re offline and repo-local (no secrets). I’m using bump-my-version (actively maintained, works via pyproject.toml).
+
+⸻
+
+1) Add bump-my-version to pyproject.toml
+
+Append this block:
+
+# pyproject.toml (append)
+[project.optional-dependencies]
+dev = ["bump-my-version>=0.24"]
+
+[tool.bumpversion]
+current_version = "0.1.0"
+commit = true
+tag = true
+tag_name = "v{new_version}"
+message = "chore(release): bump version {current_version} → {new_version}"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "CHANGELOG.md"
+
+[tool.bumpversion.part.patch]
+first_value = "1"
+
+[tool.bumpversion.part.minor]
+first_value = "1"
+independent = false
+
+[tool.bumpversion.part.major]
+first_value = "1"
+independent = false
+
+(If your pyproject.toml already defines [project] version, make sure it matches current_version.)
+
+⸻
+
+2) Auto-edit the CHANGELOG on release
+
+Create scripts/release_changelog.py:
+
+#!/usr/bin/env python3
+# scripts/release_changelog.py
+from __future__ import annotations
+import re, sys, time
+from pathlib import Path
+
+def main(ver: str) -> None:
+    p = Path("CHANGELOG.md")
+    s = p.read_text(encoding="utf-8")
+    today = time.strftime("%Y-%m-%d")
+
+    # Turn [Unreleased] section into a dated release entry
+    # Insert a fresh Unreleased stub above it.
+    unreleased_re = re.compile(r"(## \[Unreleased\]\n)(.*?)(\n---\n)", re.S)
+    m = unreleased_re.search(s)
+    if not m:
+        print("No [Unreleased] section found", file=sys.stderr); sys.exit(1)
+
+    head, body, tail = m.groups()
+    body = body.strip()
+    if not body:
+        body = "- No changes recorded."
+
+    release_block = f"## [{ver}] — {today}\n{body}\n\n---\n"
+    new_unreleased = "## [Unreleased]\n\n- (add entries here)\n\n---\n"
+    s2 = unreleased_re.sub(new_unreleased + release_block, s, count=1)
+    p.write_text(s2, encoding="utf-8")
+    print(f"CHANGELOG updated for {ver}")
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("usage: scripts/release_changelog.py <new_version>", file=sys.stderr)
+        sys.exit(2)
+    main(sys.argv[1])
+
+Make it executable:
+
+chmod +x scripts/release_changelog.py
+
+
+⸻
+
+3) Makefile: one-shot release commands
+
+Append to Makefile:
+
+# ---- Version bump & release helpers -----------------------------------------
+.PHONY: bump-patch bump-minor bump-major release-patch release-minor release-major
+
+# Pure version bump (updates pyproject + tag + commit)
+bump-patch:
+	@bump-my-version bump patch
+
+bump-minor:
+	@bump-my-version bump minor
+
+bump-major:
+	@bump-my-version bump major
+
+# Release = update changelog + bump+tag, push optional
+release-patch:
+	@NEW_VER=$$(bump-my-version show --new-version patch); \
+	python scripts/release_changelog.py $$NEW_VER; \
+	git add CHANGELOG.md; git commit -m "docs(changelog): release $$NEW_VER"; \
+	bump-my-version bump patch
+
+release-minor:
+	@NEW_VER=$$(bump-my-version show --new-version minor); \
+	python scripts/release_changelog.py $$NEW_VER; \
+	git add CHANGELOG.md; git commit -m "docs(changelog): release $$NEW_VER"; \
+	bump-my-version bump minor
+
+release-major:
+	@NEW_VER=$$(bump-my-version show --new-version major); \
+	python scripts/release_changelog.py $$NEW_VER; \
+	git add CHANGELOG.md; git commit -m "docs(changelog): release $$NEW_VER"; \
+	bump-my-version bump major
+
+# Optional convenience: push tags
+.PHONY: push-tags
+push-tags:
+	git push --follow-tags
+
+Notes
+	•	release-* will: generate a dated entry in CHANGELOG.md → commit → bump+tag.
+	•	bump-* only bumps + tags (no changelog edit).
+	•	You can make push-tags after review to publish the tag.
+
+⸻
+
+4) CI: verify changelog matches tag (optional but nice)
+
+Add a light check step to .github/workflows/ci.yml after tests:
+
+      - name: Verify changelog mentions current version (non-fatal)
+        run: |
+          VER=$(python - <<'PY'
+import tomllib, sys
+with open("pyproject.toml","rb") as f:
+    print(tomllib.load(f)["project"]["version"])
+PY
+          )
+          grep -q "## \\[${VER}\\]" CHANGELOG.md && echo "CHANGELOG has ${VER}" || echo "WARN: CHANGELOG missing ${VER}"
+
+(Non-fatal by design; keeps contributors unblocked.)
+
+⸻
+
+5) Developer quickstart for releasing (add to README/CONTRIBUTING)
+
+Add this snippet to CONTRIBUTING.md under “Release”:
+
+## Release
+
+```bash
+# Choose one; updates CHANGELOG, bumps version, creates tag
+make release-patch
+# or
+make release-minor
+# or
+make release-major
+
+# Optionally push
+make push-tags
+
+---
+
+## What you do now
+
+1) Paste the three blocks above into your repo:
+   - `pyproject.toml` additions
+   - `scripts/release_changelog.py`
+   - `Makefile` targets  
+2) `pip install -e .[dev]` (or `pip install bump-my-version`)  
+3) Try a dry run locally:
+   ```bash
+   make release-patch   # will create a new entry & tag
+
+If you want, I can also add a GitHub Release workflow that converts tags into release notes automatically (reads the section from CHANGELOG.md and publishes it).
