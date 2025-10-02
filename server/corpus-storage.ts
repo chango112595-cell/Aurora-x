@@ -87,19 +87,55 @@ export class CorpusStorage {
     };
   }
 
-  getEntries(params: { func?: string; limit: number }): any[] {
-    let rows: any[];
+  getEntries(params: {
+    func?: string;
+    limit: number;
+    offset?: number;
+    perfectOnly?: boolean;
+    minScore?: number;
+    maxScore?: number;
+    startDate?: string;
+    endDate?: string;
+  }): any[] {
+    const conditions: string[] = [];
+    const values: any[] = [];
+
     if (params.func) {
-      rows = this.db
-        .prepare(
-          `SELECT * FROM corpus WHERE func_name = ? ORDER BY timestamp DESC LIMIT ?`
-        )
-        .all(params.func, params.limit);
-    } else {
-      rows = this.db
-        .prepare(`SELECT * FROM corpus ORDER BY timestamp DESC LIMIT ?`)
-        .all(params.limit);
+      conditions.push("func_name = ?");
+      values.push(params.func);
     }
+
+    if (params.perfectOnly) {
+      conditions.push("passed = total");
+    }
+
+    if (params.minScore !== undefined) {
+      conditions.push("score >= ?");
+      values.push(params.minScore);
+    }
+
+    if (params.maxScore !== undefined) {
+      conditions.push("score <= ?");
+      values.push(params.maxScore);
+    }
+
+    if (params.startDate) {
+      conditions.push("timestamp >= ?");
+      values.push(params.startDate);
+    }
+
+    if (params.endDate) {
+      conditions.push("timestamp <= ?");
+      values.push(params.endDate);
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+    const offset = params.offset ?? 0;
+
+    const sql = `SELECT * FROM corpus ${whereClause} ORDER BY timestamp DESC LIMIT ? OFFSET ?`;
+    values.push(params.limit, offset);
+
+    const rows = this.db.prepare(sql).all(...values);
     return rows.map((row) => this.parseEntry(row));
   }
 
@@ -120,6 +156,108 @@ export class CorpusStorage {
       .prepare(`SELECT * FROM corpus ORDER BY timestamp DESC LIMIT ?`)
       .all(limit);
     return rows.map((row) => this.parseEntry(row));
+  }
+
+  private bowTokens(s: string): string[] {
+    const words = s.match(/[A-Za-z_][A-Za-z0-9_]*/g) || [];
+    const stopwords = new Set(["and", "or", "not", "ret", "true", "false", "none"]);
+    return words
+      .map((w) => w.toLowerCase())
+      .filter((w) => !stopwords.has(w));
+  }
+
+  private jaccard(a: string[], b: string[]): number {
+    if (a.length === 0 && b.length === 0) return 0;
+    const setA = new Set(a);
+    const setB = new Set(b);
+    const intersection = new Set(Array.from(setA).filter((x) => setB.has(x)));
+    const union = new Set(Array.from(setA).concat(Array.from(setB)));
+    return union.size > 0 ? intersection.size / union.size : 0;
+  }
+
+  getSimilar(
+    targetSigKey: string,
+    targetPostBow: string[],
+    limit: number
+  ): Array<{
+    entry: any;
+    similarity: number;
+    breakdown: {
+      returnMatch: number;
+      argMatch: number;
+      jaccardScore: number;
+      perfectBonus: number;
+    };
+  }> {
+    const rows = this.db
+      .prepare(`SELECT * FROM corpus ORDER BY timestamp DESC LIMIT 2000`)
+      .all();
+
+    const results: Array<{
+      entry: any;
+      similarity: number;
+      breakdown: any;
+    }> = [];
+
+    let targetName = "";
+    let targetArgs = "";
+    let targetRet = "";
+    try {
+      const parts = targetSigKey.split("|");
+      targetName = parts[0] || "";
+      targetArgs = parts[1] || "";
+      targetRet = parts[2] || "";
+    } catch {}
+
+    for (const row of rows) {
+      const entry = this.parseEntry(row);
+      if (!entry.snippet) continue;
+
+      let name = "";
+      let args = "";
+      let ret = "";
+      try {
+        const parts = (entry.sig_key || "||").split("|");
+        name = parts[0] || "";
+        args = parts[1] || "";
+        ret = parts[2] || "";
+      } catch {}
+
+      const returnMatch = ret === targetRet && ret !== "" ? 1.0 : 0.0;
+      const argMatch = args === targetArgs && args !== "" ? 1.0 : 0.0;
+
+      const bow = this.bowTokens(entry.post_bow || "");
+      const jaccardScore = this.jaccard(bow, targetPostBow);
+
+      let similarity = 0.5 * returnMatch + 0.3 * argMatch + 0.2 * jaccardScore;
+      const perfectBonus = entry.passed === entry.total ? 0.15 : 0;
+      similarity += perfectBonus;
+
+      results.push({
+        entry,
+        similarity,
+        breakdown: {
+          returnMatch,
+          argMatch,
+          jaccardScore,
+          perfectBonus,
+        },
+      });
+    }
+
+    results.sort((a, b) => b.similarity - a.similarity);
+
+    const seen = new Set<string>();
+    const unique: typeof results = [];
+    for (const result of results) {
+      if (!seen.has(result.entry.snippet)) {
+        seen.add(result.entry.snippet);
+        unique.push(result);
+      }
+      if (unique.length >= limit) break;
+    }
+
+    return unique;
   }
 
   close(): void {
