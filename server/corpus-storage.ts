@@ -1,6 +1,7 @@
 import Database from "better-sqlite3";
 import { mkdirSync } from "fs";
 import { dirname } from "path";
+import { randomUUID } from "crypto";
 import type { CorpusEntry } from "@shared/schema";
 
 export class CorpusStorage {
@@ -40,6 +41,31 @@ export class CorpusStorage {
       CREATE INDEX IF NOT EXISTS idx_sigkey ON corpus(sig_key);
       CREATE INDEX IF NOT EXISTS idx_time ON corpus(timestamp);
       CREATE INDEX IF NOT EXISTS idx_best_fn ON corpus(func_name, score, passed, total);
+
+      CREATE TABLE IF NOT EXISTS run_meta(
+        run_id TEXT PRIMARY KEY,
+        timestamp TEXT NOT NULL,
+        seed_bias REAL NOT NULL,
+        seeding_enabled INTEGER NOT NULL,
+        max_iters INTEGER NOT NULL,
+        beam INTEGER,
+        notes TEXT
+      );
+      CREATE INDEX IF NOT EXISTS idx_run_meta_ts ON run_meta(timestamp DESC);
+
+      CREATE TABLE IF NOT EXISTS used_seeds(
+        id TEXT PRIMARY KEY,
+        run_id TEXT NOT NULL,
+        function TEXT NOT NULL,
+        source_id TEXT,
+        reason_json TEXT,
+        score REAL,
+        passed INTEGER,
+        total INTEGER,
+        snippet TEXT,
+        timestamp TEXT NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS idx_used_seeds_run ON used_seeds(run_id, timestamp DESC);
     `);
   }
 
@@ -259,6 +285,81 @@ export class CorpusStorage {
     }
 
     return unique;
+  }
+
+  insertRunMeta(meta: any): void {
+    const stmt = this.db.prepare(`
+      INSERT OR REPLACE INTO run_meta(
+        run_id, timestamp, seed_bias, seeding_enabled, max_iters, beam, notes
+      ) VALUES (?,?,?,?,?,?,?)
+    `);
+
+    stmt.run(
+      meta.run_id,
+      meta.timestamp,
+      meta.seed_bias,
+      meta.seeding_enabled ? 1 : 0,
+      meta.max_iters,
+      meta.beam ?? null,
+      meta.notes ?? null
+    );
+  }
+
+  getLatestRunMeta(): any {
+    const row = this.db
+      .prepare(`SELECT * FROM run_meta ORDER BY timestamp DESC LIMIT 1`)
+      .get() as any;
+    if (!row) return null;
+    return {
+      ...row,
+      seeding_enabled: Boolean(row.seeding_enabled),
+    };
+  }
+
+  insertUsedSeed(seed: any): string {
+    const id = randomUUID();
+    const stmt = this.db.prepare(`
+      INSERT INTO used_seeds(
+        id, run_id, function, source_id, reason_json, score, passed, total, snippet, timestamp
+      ) VALUES (?,?,?,?,?,?,?,?,?,?)
+    `);
+
+    stmt.run(
+      id,
+      seed.run_id,
+      seed.function,
+      seed.source_id ?? null,
+      seed.reason ? JSON.stringify(seed.reason) : null,
+      seed.score ?? null,
+      seed.passed ?? null,
+      seed.total ?? null,
+      seed.snippet ?? null,
+      seed.timestamp
+    );
+
+    return id;
+  }
+
+  getUsedSeeds(params: { run_id?: string; limit?: number }): any[] {
+    const limit = params.limit ?? 200;
+
+    if (params.run_id) {
+      const rows = this.db
+        .prepare(`SELECT * FROM used_seeds WHERE run_id = ? ORDER BY timestamp DESC LIMIT ?`)
+        .all(params.run_id, limit);
+      return rows.map((row: any) => ({
+        ...row,
+        reason: row.reason_json ? JSON.parse(row.reason_json) : null,
+      }));
+    } else {
+      const rows = this.db
+        .prepare(`SELECT * FROM used_seeds ORDER BY timestamp DESC LIMIT ?`)
+        .all(limit);
+      return rows.map((row: any) => ({
+        ...row,
+        reason: row.reason_json ? JSON.parse(row.reason_json) : null,
+      }));
+    }
   }
 
   close(): void {

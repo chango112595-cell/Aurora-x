@@ -84,3 +84,29 @@ export type SimilarityResult = {
     perfectBonus: number;
   };
 };
+
+export const runMetaSchema = z.object({
+  run_id: z.string(),
+  timestamp: z.string().datetime(),
+  seed_bias: z.number().min(0).max(0.5),
+  seeding_enabled: z.boolean(),
+  max_iters: z.number().int().positive(),
+  beam: z.number().int().positive().optional(),
+  notes: z.string().optional(),
+});
+
+export type RunMeta = z.infer<typeof runMetaSchema>;
+
+export const usedSeedSchema = z.object({
+  run_id: z.string(),
+  function: z.string(),
+  source_id: z.string().optional(),
+  reason: z.record(z.any()).optional(),
+  score: z.number().optional(),
+  passed: z.number().int().optional(),
+  total: z.number().int().optional(),
+  snippet: z.string().optional(),
+  timestamp: z.string().datetime(),
+});
+
+export type UsedSeed = z.infer<typeof usedSeedSchema>;
