@@ -1,142 +1,120 @@
-# Chango - AI-Powered Autonomous Code Synthesis Platform
+# Aurora-X Ultra & Chango Integration
 
 ## Overview
 
-Chango is a futuristic, JARVIS-inspired web application that serves as the interface for Aurora-X Ultra, an offline autonomous code synthesis engine. The platform enables users to request complex code generation through a chat interface while monitoring real-time synthesis progress, exploring generated code libraries, and analyzing corpus learning data. Built with a cinematic tech aesthetic drawing inspiration from Linear's precision and Vercel's developer focus, Chango provides a professional developer-first experience for AI-assisted code generation.
+This repository contains two integrated systems:
+
+1. **Aurora-X Ultra** - An offline autonomous coding engine that synthesizes Python functions through AST-based beam search, corpus learning, and sandboxed execution
+2. **Chango** - A JARVIS-inspired web interface that provides UI/UX for interacting with Aurora-X's synthesis capabilities
+
+Aurora-X operates as a standalone Python package focused on program synthesis with zero external API dependencies. Chango provides a TypeScript/React frontend with Express backend for visualization and interaction.
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
 
-## Recent Changes
-
-**2025-10-02: Telemetry System Complete**
-- ✅ Run metadata telemetry endpoints (`POST /api/run-meta`, `GET /api/run-meta/latest`)
-- ✅ Used seeds telemetry endpoints (`POST /api/used-seeds`, `GET /api/used-seeds?run_id={id}`)
-- ✅ RunStatus UI component integrated into Corpus page
-- ✅ All endpoints tested with curl and verified working
-- ✅ API key authentication implemented on all telemetry endpoints
-- ✅ Ready for Aurora-X integration when export is enabled
-
-**2025-10-02: Telemetry Disabled**
-- ⚠️ All telemetry endpoints commented out per user request
-- To re-enable: Uncomment endpoints in `server/routes.ts`
-
 ## System Architecture
 
-### Frontend Architecture
+### Aurora-X (Python Engine)
 
-**Technology Stack**: React 18 with TypeScript, leveraging Vite as the build tool for optimal development experience and production builds.
+**Core Synthesis Flow:**
+- Spec parsing → Test generation → AST-based candidate synthesis → Sandbox execution → Iterative refinement
+- Beam search with novelty detection to explore candidate solutions
+- Symbolic reasoning and cost heuristics for scoring candidates
+- Sandboxed unittest execution with timeout protection
 
-**UI Framework**: Shadcn/ui component library built on Radix UI primitives, providing accessible, unstyled components that are styled with Tailwind CSS. The design system follows a "New York" style variant with custom spacing, border radius, and color tokens.
+**Corpus & Learning System (T02):**
+- Dual-write persistence: JSONL (append-only) + SQLite (indexed queries)
+- Records every synthesis attempt with metadata: function signature, pass/total tests, score, snippet, complexity
+- Seeding system retrieves proven solutions from corpus using signature matching and TF-IDF fallback
+- Adaptive bias learning (0.0-0.5 range) for balancing exploration vs exploitation
 
-**Routing**: Wouter for lightweight client-side routing with the following main pages:
-- Home (`/`) - Chat interface for code generation requests
-- Dashboard (`/dashboard`) - Real-time Aurora synthesis monitoring
-- Library (`/library`) - Browse synthesized function library
-- Corpus (`/corpus`) - Explore corpus learning data with advanced features:
-  - Multi-criteria filtering (function name, perfect runs, score range, date range)
-  - Offset-based pagination (25/50/100/200 records per page)
-  - Similarity analysis showing why Aurora chose specific seed snippets
-  - Real-time statistics (total records, perfect runs, average score)
-  - Copy-to-clipboard for code snippets
-- Settings (`/settings`) - Configure Aurora synthesis parameters
+**Key Architectural Decisions:**
+- **Offline-first**: Zero network calls by default; all synthesis happens locally
+- **Security**: AST auditing prevents dangerous operations; restricted builtins in sandbox
+- **Modularity**: Clean separation between core (spec parsing), synth (generation), corpus (storage), sandbox (execution)
+- **Determinism**: Fixed seeds ensure reproducible test results
 
-**State Management**: TanStack Query (React Query) for server state management with infinite stale time and disabled auto-refetch, optimized for a development environment where data changes are explicit.
+**File Structure:**
+```
+aurora_x/
+├── main.py           # CLI orchestrator
+├── corpus/
+│   ├── store.py      # JSONL + SQLite dual-write
+│   └── pretty.py     # Query formatting
+├── debug.py          # Debugging utilities
+└── bench.py          # Benchmarking module
+```
 
-**Design System**: Custom theme built on HSL color space with comprehensive dark mode support (primary theme). Features cinematic tech colors including JARVIS-inspired cyan (195 85% 55%) for AI activity, emerald for success states, amber for warnings, and purple for advanced features. Typography uses Inter for UI and JetBrains Mono for code snippets.
+### Chango (TypeScript Web Interface)
 
-**Component Architecture**: Modular component structure with separation between UI primitives (`/components/ui`), feature components (`/components`), and page-level components (`/pages`). Each major feature has accompanying example components for documentation.
+**Frontend Architecture:**
+- React with TypeScript for type safety
+- Wouter for client-side routing
+- Radix UI components with Tailwind CSS styling
+- TanStack Query for server state management
+- Theme provider supporting light/dark modes
 
-### Backend Architecture
+**Backend Architecture:**
+- Express.js server with TypeScript
+- Better-SQLite3 for corpus data storage
+- Zod schemas for request/response validation
+- Vite development server integration with HMR
 
-**Framework**: Express.js server with TypeScript, using ESM modules throughout the codebase.
+**Key Pages:**
+- `/` - Chat interface for natural language code requests
+- `/dashboard` - Real-time synthesis monitoring
+- `/library` - Browse synthesized functions
+- `/corpus` - Explore and query corpus entries with filters
+- `/settings` - Configure synthesis parameters
 
-**API Design**: RESTful API with the following corpus-focused endpoints:
-- `POST /api/corpus` - Accept new corpus entries from Aurora-X (API key protected)
-- `GET /api/corpus` - Query corpus entries with advanced filtering:
-  - Function name matching
-  - Perfect runs only (passed == total)
-  - Score range (min/max)
-  - Date range (ISO 8601 timestamps)
-  - Offset-based pagination with hasMore flag
-- `GET /api/corpus/top` - Retrieve top-performing functions by name
-- `GET /api/corpus/recent` - Fetch recent corpus entries
-- `POST /api/corpus/similar` - Find similar functions using Jaccard similarity:
-  - Signature matching (return type + arguments)
-  - Bag-of-words Jaccard distance on post-conditions
-  - Weighted scoring: 0.6 signature + 0.4 Jaccard + 0.1 perfect bonus
+**Data Flow:**
+1. Aurora-X synthesizes code and records to corpus (optional HTTP export via env flags)
+2. Chango backend stores corpus entries in SQLite
+3. Frontend queries corpus via REST API with pagination and filters
+4. UI displays synthesis status, code previews, and corpus analytics
 
-**Telemetry System (Complete - Ready for Integration)**: Real-time synthesis monitoring endpoints that receive metadata from Aurora-X synthesis runs:
-- `POST /api/run-meta` - Receives run configuration (spec_id, beam_size, iteration_count, synthesis parameters)
-- `GET /api/run-meta/latest` - Retrieves the most recent synthesis run configuration
-- `POST /api/used-seeds` - Receives seed selection data (run_id, function, seed source, selection reason)
-- `GET /api/used-seeds?run_id={id}` - Fetches all seeds used in a specific run
-- All telemetry endpoints protected by API key authentication (`x-api-key` header)
-- RunStatus UI component displays latest run configuration and seed selections on Corpus page
-- Ready to receive data from Aurora-X when `AURORA_EXPORT_ENABLED=1` is set
+**API Endpoints:**
+- `GET /api/corpus` - Query corpus with filters (func, date range, score)
+- `GET /api/corpus/top` - Top performers by function
+- `GET /api/corpus/recent` - Recent synthesis attempts
+- `GET /api/corpus/similar` - Find similar solutions
+- `GET /api/run-meta/latest` - Latest run metadata
+- `POST /api/corpus` - Ingest corpus entry (currently disabled/commented)
 
-**Request Validation**: Zod schemas for runtime type validation on all API endpoints, ensuring data integrity between Aurora-X Python engine and TypeScript backend.
+**Architectural Decisions:**
+- **Separation of Concerns**: Aurora-X remains independent; Chango provides optional UI layer
+- **Optional Integration**: Aurora can POST corpus data via env flags (`AURORA_EXPORT_ENABLED`, `AURORA_POST_URL`)
+- **Type Safety**: Shared Zod schemas between client and server prevent runtime errors
+- **Performance**: Server-side pagination and filtering for large corpus datasets
 
-**Middleware Stack**:
-- JSON body parsing for API requests
-- Custom request/response logging with duration tracking
-- Error handling middleware with consistent JSON error responses
-- Vite development middleware (dev only) for HMR and asset serving
+## External Dependencies
 
-**Development Features**: 
-- Replit-specific plugins for error overlays, cartographer integration, and dev banners (development environment only)
-- Source maps enabled for debugging
-- Hot Module Replacement through Vite middleware
+### Aurora-X Dependencies
+- **Python 3.10+** - Core runtime
+- **SQLite3** - Local corpus storage (built-in to Python)
+- **Standard Library Only** - No external packages required for core functionality
+- **Optional**: bump-my-version for release automation
 
-### Data Storage Solutions
+### Chango Dependencies
+- **Node.js** - JavaScript runtime for backend
+- **Better-SQLite3** - Native SQLite bindings for corpus storage
+- **Express** - Web server framework
+- **Vite** - Frontend build tool and dev server
+- **React** - UI framework
+- **TanStack Query** - Data fetching and caching
+- **Radix UI** - Accessible component primitives
+- **Tailwind CSS** - Utility-first styling
+- **Zod** - Schema validation
 
-**Corpus Database**: SQLite (via better-sqlite3) with Write-Ahead Logging (WAL) enabled for concurrent read performance. The corpus storage layer tracks learning data from Aurora-X synthesis runs with advanced querying capabilities including multi-parameter filtering, similarity scoring (Jaccard distance on signatures and post-conditions), and offset-based pagination.
+### Integration Points
+- Aurora-X can optionally export corpus data via HTTP POST to Chango backend
+- Configured via environment variables (no hard coupling)
+- Chango can operate independently with mock data or existing corpus
+- Both systems use SQLite for corpus storage (compatible schemas)
 
-**Schema Design**: 
-- Primary table: `corpus` with 18 fields tracking function synthesis metadata
-- UUID primary keys for idempotent ingestion
-- ISO 8601 timestamps for temporal queries
-- JSON-serialized arrays for failing tests, function calls, and BOW tokens
-- Computed fields: func_signature, complexity, sig_key for similarity matching
-
-**Indexes**:
-- `(spec_id, func_name)` - Fast lookups by specification and function
-- `(sig_key)` - Enable signature-based similarity retrieval
-- `(timestamp DESC)` - Temporal ordering for recent queries
-- `(func_name, score, passed, total)` - Optimize best function queries
-
-**User Storage**: In-memory storage implementation (MemStorage class) for user data during development. Prepared for database migration with interface-based design (IStorage).
-
-**Migration Strategy**: Drizzle ORM configured for PostgreSQL migrations with schema defined in `shared/schema.ts`. Database credentials expected via `DATABASE_URL` environment variable.
-
-### Authentication and Authorization
-
-**API Security**: Header-based API key authentication for corpus ingestion endpoint (`x-api-key` header). Key stored in `AURORA_API_KEY` environment variable with fallback to development key.
-
-**User Authentication**: Schema prepared for username/password authentication with Drizzle ORM user table including:
-- UUID primary keys
-- Unique username constraint
-- Password field for hashed credentials
-
-**Session Management**: Infrastructure in place for connect-pg-simple session store (referenced in dependencies), prepared for PostgreSQL-backed sessions.
-
-### External Dependencies
-
-**Aurora-X Integration**: The platform serves as the web interface for Aurora-X Ultra, a Python-based offline autonomous code synthesis engine. Aurora-X operates independently and posts synthesis results to Chango's corpus API when export is enabled via environment variables (`AURORA_EXPORT_ENABLED`, `AURORA_POST_URL`, `AURORA_API_KEY`).
-
-**Anthropic AI SDK**: Integrated via `@anthropic-ai/sdk` package, likely for future LLM-powered features in the chat interface or code explanation capabilities.
-
-**Database Providers**:
-- Neon Serverless PostgreSQL driver (`@neondatabase/serverless`) for production database
-- SQLite (`better-sqlite3`) for corpus storage and local development
-
-**UI Component Dependencies**: Extensive Radix UI primitive collection for accessible, unstyled components including accordions, dialogs, dropdown menus, popovers, tooltips, and form controls.
-
-**Build and Development Tools**:
-- Vite for frontend bundling and development server
-- esbuild for backend bundling in production builds
-- tsx for TypeScript execution in development
-- Tailwind CSS with PostCSS for styling
-
-**Asset Management**: Custom alias (`@assets`) for attached assets directory, currently containing Aurora-X documentation and generated background images for the cinematic UI.
+### Development Tools
+- **TypeScript** - Type checking for Chango
+- **ESBuild/TSX** - Fast TypeScript compilation
+- **Pre-commit hooks** - Code quality (Ruff for Python)
+- **Make** - Build automation for Aurora-X
