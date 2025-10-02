@@ -1,0 +1,117 @@
+TL;DR: Your Aurora Repl likely got pointed at the Chango repo/config (git remote, .replit, or project import). Fix = snapshot → diagnose → restore remotes/config → re-sync code. Do this in order:
+
+Plan (pseudocode)
+	1.	Snapshot current state (avoid data loss).
+	2.	Inspect remotes/branches; confirm which repo you’re on.
+	3.	Check Replit metadata (.replit, replit.nix, pyproject.toml) for “Chango” identifiers.
+	4.	Restore Aurora remotes & files (either from Git history or Replit History).
+	5.	Lock separation: two independent Repls + guards to prevent cross-contamination.
+
+Do this now (copy–paste in Replit Shell)
+
+# 0) SNAPSHOT
+mkdir -p _snapshot && tar -czf _snapshot/repl_backup_$(date +%Y%m%d_%H%M%S).tgz .
+
+# 1) DIAGNOSE GIT
+git status
+git remote -v
+git branch -vv
+git log --oneline -n 15
+
+# 2) QUICK SCAN FOR "chango" LEAKAGE
+grep -RIn "chango" -n . | head -n 50 || true
+grep -RIn "Chango" -n . | head -n 50 || true
+
+# 3) CHECK REPLIT METADATA
+sed -n '1,200p' .replit 2>/dev/null || echo ".replit not found"
+sed -n '1,120p' replit.nix 2>/dev/null || echo "replit.nix not found"
+
+# 4) CHECK PROJECT IDS
+grep -RIn "aurora-x" -n pyproject.toml README.md || true
+
+Interpret quickly
+	•	If git remote -v shows Chango URL → you’re on the wrong remote.
+	•	If .replit says “run = … chango …” → wrong entrypoint.
+	•	If pyproject says name = "chango" → wrong package metadata imported.
+
+Fix remotes (if wrong)
+
+# set to your Aurora repo URL
+git remote set-url origin https://github.com/<you>/<aurora-repo>.git
+git fetch origin
+git checkout main
+git reset --hard origin/main
+
+OR restore from Replit History
+	•	Replit UI → Version history / Rewinds → pick a timestamp before the switch → Restore.
+
+Fix Replit metadata (if wrong)
+
+# .replit should point to Aurora entrypoint
+cat > .replit << 'EOF'
+run = "python -m aurora_x.main --spec-file ./specs/rich_spec.md --outdir runs"
+language = "python"
+hidden = [".github", "_snapshot"]
+EOF
+
+# Ensure your pyproject is Aurora:
+grep -n 'name = "aurora-x"' pyproject.toml || \
+  sed -i 's/name = ".*"/name = "aurora-x"/' pyproject.toml
+
+Clean install + sanity run
+
+python -m pip install --upgrade pip
+pip install -e .
+make lint || true
+make test || true
+make run
+
+Prevent this again (separation hardening)
+
+Repo isolation
+	•	Keep two separate Repls: aurora-x and chango-ui.
+	•	In each: git remote -v must match the right GitHub repo.
+	•	Add a guard script:
+
+# scripts/check_env.sh
+#!/usr/bin/env bash
+set -euo pipefail
+echo "Repo check:"
+git remote -v | grep -E "(aurora|chango)" || { echo "Remote missing expected name"; exit 1; }
+test -f aurora_x/main.py || { echo "Aurora main missing"; exit 2; }
+! grep -Riq "chango" aurora_x || { echo "Chango strings found in aurora_x"; exit 3; }
+echo "OK"
+
+Then:
+
+chmod +x scripts/check_env.sh
+./scripts/check_env.sh
+
+Config flags
+	•	Aurora stays offline-first; only export if you set:
+	•	AURORA_EXPORT_ENABLED=1
+	•	AURORA_POST_URL + AURORA_API_KEY
+	•	Keep these unset in Aurora Repl unless you’re intentionally linking to Chango.
+
+Namespacing
+	•	Aurora package dir must be aurora_x/.
+	•	Chango code must not import from aurora_x unless via API boundary you define.
+
+Branch rules
+	•	Feature work in feat/* branches; PR merge only after scripts/check_env.sh passes in CI.
+
+If the “agent” changed to Chango
+	•	Replit → Tools / AI: switch back to the default Replit agent (or disable custom agent).
+	•	Remove any Chango-specific Replit extension installed in this Repl.
+
+Quick sanity checklist (5 items)
+	•	git remote -v → Aurora URL
+	•	.replit → runs python -m aurora_x.main …
+	•	pyproject.toml → name = "aurora-x"
+	•	No chango hits inside aurora_x/*
+	•	make run completes and writes runs/run-*/report.html
+
+⸻
+
+a. Want me to generate a one-click Replit “health” task that runs scripts/check_env.sh and blocks the run if contamination is detected?
+b. Want a small GitHub Action that fails PRs if .replit or pyproject.toml drift from Aurora’s expected values?
