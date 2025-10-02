@@ -8,6 +8,16 @@ Chango is a futuristic, JARVIS-inspired web application that serves as the inter
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes
+
+**2025-10-02: Telemetry System Complete**
+- ✅ Run metadata telemetry endpoints (`POST /api/run-meta`, `GET /api/run-meta/latest`)
+- ✅ Used seeds telemetry endpoints (`POST /api/used-seeds`, `GET /api/used-seeds?run_id={id}`)
+- ✅ RunStatus UI component integrated into Corpus page
+- ✅ All endpoints tested with curl and verified working
+- ✅ API key authentication implemented on all telemetry endpoints
+- ✅ Ready for Aurora-X integration when export is enabled
+
 ## System Architecture
 
 ### Frontend Architecture
@@ -52,6 +62,15 @@ Preferred communication style: Simple, everyday language.
   - Signature matching (return type + arguments)
   - Bag-of-words Jaccard distance on post-conditions
   - Weighted scoring: 0.6 signature + 0.4 Jaccard + 0.1 perfect bonus
+
+**Telemetry System (Complete - Ready for Integration)**: Real-time synthesis monitoring endpoints that receive metadata from Aurora-X synthesis runs:
+- `POST /api/run-meta` - Receives run configuration (spec_id, beam_size, iteration_count, synthesis parameters)
+- `GET /api/run-meta/latest` - Retrieves the most recent synthesis run configuration
+- `POST /api/used-seeds` - Receives seed selection data (run_id, function, seed source, selection reason)
+- `GET /api/used-seeds?run_id={id}` - Fetches all seeds used in a specific run
+- All telemetry endpoints protected by API key authentication (`x-api-key` header)
+- RunStatus UI component displays latest run configuration and seed selections on Corpus page
+- Ready to receive data from Aurora-X when `AURORA_EXPORT_ENABLED=1` is set
 
 **Request Validation**: Zod schemas for runtime type validation on all API endpoints, ensuring data integrity between Aurora-X Python engine and TypeScript backend.
 
