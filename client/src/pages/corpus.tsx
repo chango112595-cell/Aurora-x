@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { RunStatus } from "@/components/run-status";
 
 type CorpusEntry = {
   id: string;
@@ -230,6 +231,8 @@ export default function Corpus() {
             </Card>
           ))}
         </div>
+
+        <RunStatus />
 
         <Card data-testid="card-corpus-data">
           <CardHeader>
