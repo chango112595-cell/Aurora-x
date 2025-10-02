@@ -18,6 +18,10 @@ Preferred communication style: Simple, everyday language.
 - ✅ API key authentication implemented on all telemetry endpoints
 - ✅ Ready for Aurora-X integration when export is enabled
 
+**2025-10-02: Telemetry Disabled**
+- ⚠️ All telemetry endpoints commented out per user request
+- To re-enable: Uncomment endpoints in `server/routes.ts`
+
 ## System Architecture
 
 ### Frontend Architecture
