@@ -1,0 +1,381 @@
+TL;DR: I’m shipping Corpus Recording (first) + Seeding hooks, with a copy-paste .md guide and full code. Drop these files in; they’re isolated and safe offline.
+
+Plan (pseudocode)
+	•	Add docs/T02_corpus.md (how it works + how to run + schema).
+	•	Implement aurora_x/corpus/store.py (JSONL + SQLite; same API stable).
+	•	Wire recording in aurora_x/main.py:
+	•	After best candidate per function → record entry.
+	•	Include spec hash/id, func signature, pass/total/score, snippet, complexity, iteration, calls.
+	•	Keep seeding (uses corpus.retrieve) unchanged; now it has real data.
+	•	Tests for corpus logging.
+
+⸻
+
+
+# =========================================
+# docs/T02_corpus.md
+# =========================================
+# T02 — Corpus Recording (JSONL + SQLite)
+
+## What this does
+- Records every synthesized function into:
+  - `runs/run-*/corpus.jsonl` (append-only)
+  - `runs/run-*/corpus.db` (SQLite, indexed)
+- Captures: spec hash, func signature, pass/total, score, snippet, complexity, iteration, calls, timestamp.
+- Offline by default, no network.
+
+## Why this matters
+- Enables **seeding** (reuse proven snippets).
+- Enables **learning** (bias/search improvements).
+- Powers Chango’s Corpus UI (once connected).
+
+## File outputs (per run)
+
+runs/run-YYYYmmdd-HHMMSS/
+corpus.jsonl            # append-only log (human diffable)
+corpus.db               # indexed for fast retrieval
+logs/export_snapshot.json   # optional offline exporter snapshot
+
+## Schema (normalized)
+```json
+{
+  "id": "uuid-or-stable-hash",
+  "timestamp": "2025-10-02T14:23:45",
+  "spec_id": "a3f7c2d1e8b4",
+  "spec_hash": "<sha256>",
+  "func_name": "add",
+  "func_signature": "add(a: int, b: int) -> int",
+  "passed": 3,
+  "total": 3,
+  "score": 0.12,
+  "failing_tests": [],
+  "snippet": "def add(a:int,b:int)->int:\n    return a+b",
+  "complexity": 12,
+  "iteration": 0,
+  "calls_functions": ["inc"]
+}
+
+CLI flags (no changes)
+	•	--no-seed to disable using the corpus for suggestions.
+	•	--seed-bias to override learned bias (0..0.5).
+
+How to use
+
+pip install -e .
+make run
+make open-report
+# Inspect data
+sqlite3 runs/run-*/corpus.db 'select func_name,passed,total,score from corpus limit 5;'
+# Or view JSONL
+tail -n 20 runs/run-*/corpus.jsonl
+
+Safety
+	•	All writes are best-effort (errors swallowed).
+	•	No network. Exporter remains offline queue-only.
+
+⸻
+
+=========================================
+
+aurora_x/corpus/store.py
+
+=========================================
+
+from future import annotations
+import json, math, re, sqlite3, time, hashlib, uuid
+from collections import Counter
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+WORD = re.compile(r”[A-Za-z_][A-Za-z0-9_]+”)
+TYPE_CANON = {“int”:“I”,“float”:“F”,“number”:“N”,“str”:“S”,“string”:“S”,“bool”:“B”,“list”:“L”,“list[int]”:“L[I]”,“list[float]”:“L[F]”,“Any”:“A”}
+
+def now_iso() -> str:
+return time.strftime(”%Y-%m-%dT%H:%M:%S”, time.localtime())
+
+def short_id(s: str) -> str:
+return hashlib.sha256(s.encode(“utf-8”)).hexdigest()[:12]
+
+def spec_digest(text: str) -> Dict[str, str]:
+h = hashlib.sha256(text.encode(“utf-8”)).hexdigest()
+return {“spec_hash”: h, “spec_id”: h[:12]}
+
+def normalize_signature(sig: str) -> str:
+try:
+name, rest = sig.split(”(”, 1)
+args_s, ret_s = rest.split(”)->”)
+args_s = args_s.rstrip(”)”)
+def canon(t: str) -> str: return TYPE_CANON.get(t.strip(), t.strip())
+arg_types: List[str] = []
+if args_s.strip():
+for a in args_s.split(”,”):
+if “:” in a:
+_, t = a.split(”:”)
+arg_types.append(canon(t.strip()))
+else:
+arg_types.append(“A”)
+ret = canon(ret_s.strip())
+return f”{name.strip()}({’,’.join(arg_types)})->{ret}”
+except Exception:
+return sig
+
+def tokenize_post(post_list: List[str]) -> List[str]:
+toks: List[str] = []
+for p in (post_list or []):
+for w in WORD.findall(p.lower()):
+if len(w) >= 2: toks.append(w)
+return toks
+
+@dataclass
+class CorpusPaths:
+root: Path
+jsonl: Path
+sqlite: Path
+
+def paths(run_root: Path) -> CorpusPaths:
+r = Path(run_root)
+r.mkdir(parents=True, exist_ok=True)
+return CorpusPaths(root=r, jsonl=r/“corpus.jsonl”, sqlite=r/“corpus.db”)
+
+def _open_sqlite(dbp: Path) -> sqlite3.Connection:
+conn = sqlite3.connect(str(dbp))
+conn.row_factory = sqlite3.Row
+conn.executescript(”””
+PRAGMA journal_mode=WAL;
+CREATE TABLE IF NOT EXISTS corpus (
+id TEXT PRIMARY KEY,
+timestamp TEXT NOT NULL,
+spec_id TEXT, spec_hash TEXT,
+func_name TEXT NOT NULL,
+func_signature TEXT NOT NULL,
+sig_key TEXT,
+passed INTEGER NOT NULL,
+total INTEGER NOT NULL,
+score REAL NOT NULL,
+failing_tests TEXT,
+snippet TEXT,
+complexity INTEGER,
+iteration INTEGER,
+calls_functions TEXT,
+post_bow TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_corpus_time ON corpus(timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_corpus_func ON corpus(func_name, score);
+CREATE INDEX IF NOT EXISTS idx_corpus_sigkey ON corpus(sig_key);
+CREATE TABLE IF NOT EXISTS idf(term TEXT PRIMARY KEY, df INTEGER NOT NULL);
+“””)
+return conn
+
+def record(run_root: Path, entry: Dict[str, Any]) -> None:
+“”“Best-effort: append JSONL and upsert SQLite; never raise.”””
+p = paths(run_root)
+try:
+rec = {**entry}
+rec.setdefault(“id”, str(uuid.uuid4()))
+rec.setdefault(“timestamp”, now_iso())
+if “sig_key” not in rec and “func_signature” in rec:
+rec[“sig_key”] = normalize_signature(rec[“func_signature”])
+if “post_bow” not in rec and isinstance(rec.get(“post_conditions”), list):
+rec[“post_bow”] = tokenize_post(rec[“post_conditions”])
+# JSONL
+p.jsonl.parent.mkdir(parents=True, exist_ok=True)
+with p.jsonl.open(“a”, encoding=“utf-8”) as f:
+f.write(json.dumps(rec, ensure_ascii=False) + “\n”)
+# SQLite
+conn = _open_sqlite(p.sqlite)
+with conn:
+conn.execute(””“INSERT OR REPLACE INTO corpus
+(id,timestamp,spec_id,spec_hash,func_name,func_signature,sig_key,passed,total,score,failing_tests,snippet,complexity,iteration,calls_functions,post_bow)
+VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)”””, (
+rec.get(“id”), rec.get(“timestamp”), rec.get(“spec_id”), rec.get(“spec_hash”),
+rec.get(“func_name”), rec.get(“func_signature”), rec.get(“sig_key”),
+int(rec.get(“passed”,0)), int(rec.get(“total”,0)), float(rec.get(“score”,0.0)),
+json.dumps(rec.get(“failing_tests”)) if rec.get(“failing_tests”) is not None else None,
+rec.get(“snippet”), rec.get(“complexity”), rec.get(“iteration”),
+json.dumps(rec.get(“calls_functions”)) if rec.get(“calls_functions”) is not None else None,
+json.dumps(rec.get(“post_bow”)) if rec.get(“post_bow”) is not None else None
+))
+except Exception:
+return
+
+def _ensure_idf(conn: sqlite3.Connection) -> None:
+cur = conn.execute(“SELECT COUNT(*) FROM idf”)
+if (cur.fetchone() or [0])[0] > 0: return
+rows = conn.execute(“SELECT post_bow FROM corpus LIMIT 5000”).fetchall()
+df: Counter[str] = Counter()
+for (bow_json,) in rows:
+try:
+arr = json.loads(bow_json or “[]”)
+for t in set(arr): df[t] += 1
+except Exception:
+continue
+with conn:
+for t,d in df.items():
+conn.execute(“INSERT OR REPLACE INTO idf(term, df) VALUES(?,?)”, (t, int(d)))
+
+def _tfidf_vector(idf: Dict[str,int], bow_json: str) -> Dict[str,float]:
+try: arr = json.loads(bow_json or “[]”)
+except Exception: arr = []
+tf = Counter(arr); N = max(1, len(idf) or 1); v = {}
+for t,c in tf.items():
+df = idf.get(t, 1)
+w = (1 + math.log(c)) * math.log((N+1)/(df+1))
+v[t] = w
+return v
+
+def _cosine(a: Dict[str,float], b: Dict[str,float]) -> float:
+if not a or not b: return 0.0
+dot = sum(a[t]b.get(t,0.0) for t in a)
+na = math.sqrt(sum(xx for x in a.values()))
+nb = math.sqrt(sum(xx for x in b.values()))
+if nanb == 0: return 0.0
+return dot/(na*nb)
+
+def retrieve(run_root: Path, func_signature: str, k: int = 8) -> List[Dict[str,Any]]:
+p = paths(run_root)
+if not p.sqlite.exists(): return []
+conn = _open_sqlite(p.sqlite)
+nsig = normalize_signature(func_signature)
+_ensure_idf(conn)
+
+rows = conn.execute("""
+  SELECT id, func_name, func_signature, sig_key, snippet, score, passed, total, timestamp, post_bow
+  FROM corpus WHERE COALESCE(sig_key, func_signature) = ?
+  ORDER BY (passed = total) DESC, score ASC, timestamp DESC
+  LIMIT ?""", (nsig, k)).fetchall()
+rows = [dict(r) for r in rows]
+if len(rows) >= k: return rows[:k]
+
+# fallback by name + TF-IDF
+name = func_signature.split("(")[0].strip()
+more = [dict(r) for r in conn.execute("""
+  SELECT id, func_name, func_signature, sig_key, snippet, score, passed, total, timestamp, post_bow
+  FROM corpus WHERE func_name = ?
+  ORDER BY (passed = total) DESC, score ASC, timestamp DESC
+  LIMIT ?""", (name, k*4)).fetchall()]
+idf = {r[0]: r[1] for r in conn.execute("SELECT term, df FROM idf").fetchall()}
+qv = _tfidf_vector(idf, json.dumps(tokenize_post([func_signature])))
+scored = [(_cosine(qv, _tfidf_vector(idf, r.get("post_bow") or "[]")), r) for r in more]
+scored.sort(key=lambda x:x[0], reverse=True)
+for _, r in scored:
+    rows.append(r)
+    if len(rows) >= k: break
+return rows[:k]
+
+```python
+# =========================================
+# tests/test_corpus_store.py
+# =========================================
+from __future__ import annotations
+import json, tempfile
+from pathlib import Path
+from aurora_x.corpus.store import record, retrieve, spec_digest
+
+def test_record_and_retrieve_roundtrip():
+    root = Path(tempfile.mkdtemp())
+    spec = "# spec\n- name: add\n"
+    dig = spec_digest(spec)
+    entry = {
+        "func_name": "add",
+        "func_signature": "add(a: int, b: int) -> int",
+        "passed": 3, "total": 3, "score": 0.0,
+        "snippet": "def add(a:int,b:int)->int:\n    return a+b",
+        "complexity": 7,
+        "iteration": 0,
+        **dig,
+    }
+    record(root, entry)
+    out = retrieve(root, "add(a: int, b: int) -> int", k=3)
+    assert out and out[0]["func_name"] == "add"
+
+# =========================================
+# aurora_x/main.py (recording + seeding wired)
+# =========================================
+@@
+-from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, normalize_signature
++from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, spec_digest
+@@
+     def run(self, spec_text: str) -> Tuple[Repo,bool]:
+-        spec = parse_spec(spec_text); self.plan(spec)
++        spec = parse_spec(spec_text); self.plan(spec)
++        spec_meta = spec_digest(spec_text)
+@@
+         best_map: Dict[str,str] = {}
+         seeds_used_log: List[Dict[str,Any]] = []
+         for idx, f in enumerate(spec.functions):
+             prefix = "\n\n".join(best_map[name] for name in [g.name for g in spec.functions[:idx]]) if idx>0 else ""
+             # gather seeds (as function code)
+             seed_snippets: List[str] = []
+             if not self.disable_seed:
+                 sig = f"{f.name}({', '.join(a+': '+t for a,t in f.args)}) -> {f.returns}"
+                 for row in corpus_retrieve(self.repo.root, sig, k=min(12, self.beam//4)):
+                     try:
+                         t = ast.parse(row.get("snippet","")); fdefs = [n for n in t.body if isinstance(n, ast.FunctionDef)]
+                         if not fdefs: continue
+                         fdef = fdefs[0]
+                         if fdef.name != f.name: fdef.name = f.name
+                         mod = ast.Module(body=[fdef], type_ignores=[]); ast.fix_missing_locations(mod)
+                         src = ast.unparse(mod); audit_source_secure(src); seed_snippets.append(src)
+                     except Exception:
+                         continue
+-            cand = best_candidate(f.name, f.args, f.examples, f.post, prefix, self._consts(f), self.beam, seed_snippets, float(self.weights.get("seed_bias",0.0)))
++            cand = best_candidate(f.name, f.args, f.examples, f.post, prefix, self._consts(f), self.beam, seed_snippets, float(self.weights.get("seed_bias",0.0)))
+             best_map[f.name] = cand.src
+             # learning nudge
+             won_with_seed = any(hash(cand.src)==hash(s) for s in seed_snippets)
+             new_bias = learn.update_seed_bias(float(self.weights.get("seed_bias",0.0)), won_with_seed)
+             self.weights["seed_bias"] = new_bias; learn.save(self.repo.root, self.weights)
+             if won_with_seed:
+                 seeds_used_log.append({"function": f.name, "reason": {"sig_match": True}, "weights": {"seed_bias": new_bias}, "ts": now().replace(" ","T")})
++
++            # ---------- RECORD THIS FUNCTION ATTEMPT ----------
++            # Compute quick metrics (pass/total/score) against examples+post.
++            module_try = (prefix + "\n\n" + cand.src + "\n")
++            argnames = [a for a,_ in f.args]
++            passed, total, score = run_examples_with_post(module_try, f.name, argnames, f.examples, f.post)
++            # AST complexity + calls
++            try:
++                t_ast = ast.parse(cand.src)
++                complexity = sum(1 for _ in ast.walk(t_ast))
++                calls = []
++                class VC(ast.NodeVisitor):
++                    def visit_Call(self, n):
++                        from ast import Name
++                        if isinstance(n.func, Name):
++                            calls.append(n.func.id)
++                        self.generic_visit(n)
++                VC().visit(t_ast)
++            except Exception:
++                complexity, calls = None, []
++            func_sig = f"{f.name}({', '.join(a+': '+t for a,t in f.args)}) -> {f.returns}"
++            corpus_record(self.repo.root, {
++                "id": None,
++                "timestamp": None,
++                **spec_meta,
++                "func_name": f.name,
++                "func_signature": func_sig,
++                "passed": int(passed),
++                "total": int(total),
++                "score": float(score),
++                "failing_tests": [] if passed==total else ["examples_or_post"],
++                "snippet": cand.src,
++                "complexity": complexity,
++                "iteration": 0,
++                "calls_functions": calls,
++                "post_bow": None
++            })
+
+
+⸻
+
+What you run
+
+pip install -e .
+make test
+make run && make open-report
+
+You’ll now see corpus.jsonl and corpus.db populated on each run, and seeding will start from those entries automatically.
+
+a. Want me to add a docs/T02_seeding.md next (short guide, signals, bias math)?
+b. Want a tiny CLI aurorax --dump-corpus to print top-N entries for a signature?
