@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aurora-x"
+version = "0.1.0"
+description = "Offline Autonomous Coding Engine"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+aurorax = "aurora_x.main:main"
+
+[tool.setuptools.packages.find]
+include = ["aurora_x*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E","F","W","I","UP","B"]
+ignore = ["E203","E501"]
+
+[tool.ruff.format]
+quote-style = "preserve"
+indent-style = "space"
