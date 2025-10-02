@@ -43,6 +43,12 @@ export type CorpusEntry = z.infer<typeof corpusEntrySchema>;
 export const corpusQuerySchema = z.object({
   func: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(200).default(50),
+  offset: z.coerce.number().int().min(0).default(0),
+  perfectOnly: z.coerce.boolean().default(false),
+  minScore: z.coerce.number().optional(),
+  maxScore: z.coerce.number().optional(),
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
 });
 
 export type CorpusQuery = z.infer<typeof corpusQuerySchema>;
@@ -59,3 +65,22 @@ export const recentQuerySchema = z.object({
 });
 
 export type RecentQuery = z.infer<typeof recentQuerySchema>;
+
+export const similarityQuerySchema = z.object({
+  targetSigKey: z.string(),
+  targetPostBow: z.array(z.string()),
+  limit: z.coerce.number().int().min(1).max(20).default(5),
+});
+
+export type SimilarityQuery = z.infer<typeof similarityQuerySchema>;
+
+export type SimilarityResult = {
+  entry: CorpusEntry;
+  similarity: number;
+  breakdown: {
+    returnMatch: number;
+    argMatch: number;
+    jaccardScore: number;
+    perfectBonus: number;
+  };
+};
