@@ -78,21 +78,33 @@ export class CorpusStorage {
     );
   }
 
+  private parseEntry(row: any): any {
+    return {
+      ...row,
+      failing_tests: row.failing_tests ? JSON.parse(row.failing_tests) : [],
+      calls_functions: row.calls_functions ? JSON.parse(row.calls_functions) : [],
+      post_bow: row.post_bow ? JSON.parse(row.post_bow) : [],
+    };
+  }
+
   getEntries(params: { func?: string; limit: number }): any[] {
+    let rows: any[];
     if (params.func) {
-      return this.db
+      rows = this.db
         .prepare(
           `SELECT * FROM corpus WHERE func_name = ? ORDER BY timestamp DESC LIMIT ?`
         )
         .all(params.func, params.limit);
+    } else {
+      rows = this.db
+        .prepare(`SELECT * FROM corpus ORDER BY timestamp DESC LIMIT ?`)
+        .all(params.limit);
     }
-    return this.db
-      .prepare(`SELECT * FROM corpus ORDER BY timestamp DESC LIMIT ?`)
-      .all(params.limit);
+    return rows.map((row) => this.parseEntry(row));
   }
 
   getTopByFunc(func: string, limit: number): any[] {
-    return this.db
+    const rows = this.db
       .prepare(
         `SELECT * FROM corpus
          WHERE func_name = ?
@@ -100,12 +112,14 @@ export class CorpusStorage {
          LIMIT ?`
       )
       .all(func, limit);
+    return rows.map((row) => this.parseEntry(row));
   }
 
   getRecent(limit: number): any[] {
-    return this.db
+    const rows = this.db
       .prepare(`SELECT * FROM corpus ORDER BY timestamp DESC LIMIT ?`)
       .all(limit);
+    return rows.map((row) => this.parseEntry(row));
   }
 
   close(): void {
