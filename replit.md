@@ -20,7 +20,12 @@ Preferred communication style: Simple, everyday language.
 - Home (`/`) - Chat interface for code generation requests
 - Dashboard (`/dashboard`) - Real-time Aurora synthesis monitoring
 - Library (`/library`) - Browse synthesized function library
-- Corpus (`/corpus`) - Explore corpus learning data with filtering
+- Corpus (`/corpus`) - Explore corpus learning data with advanced features:
+  - Multi-criteria filtering (function name, perfect runs, score range, date range)
+  - Offset-based pagination (25/50/100/200 records per page)
+  - Similarity analysis showing why Aurora chose specific seed snippets
+  - Real-time statistics (total records, perfect runs, average score)
+  - Copy-to-clipboard for code snippets
 - Settings (`/settings`) - Configure Aurora synthesis parameters
 
 **State Management**: TanStack Query (React Query) for server state management with infinite stale time and disabled auto-refetch, optimized for a development environment where data changes are explicit.
@@ -35,9 +40,18 @@ Preferred communication style: Simple, everyday language.
 
 **API Design**: RESTful API with the following corpus-focused endpoints:
 - `POST /api/corpus` - Accept new corpus entries from Aurora-X (API key protected)
-- `GET /api/corpus` - Query corpus entries with filtering (func name, limit)
-- `GET /api/corpus/top` - Retrieve top-performing functions
+- `GET /api/corpus` - Query corpus entries with advanced filtering:
+  - Function name matching
+  - Perfect runs only (passed == total)
+  - Score range (min/max)
+  - Date range (ISO 8601 timestamps)
+  - Offset-based pagination with hasMore flag
+- `GET /api/corpus/top` - Retrieve top-performing functions by name
 - `GET /api/corpus/recent` - Fetch recent corpus entries
+- `POST /api/corpus/similar` - Find similar functions using Jaccard similarity:
+  - Signature matching (return type + arguments)
+  - Bag-of-words Jaccard distance on post-conditions
+  - Weighted scoring: 0.6 signature + 0.4 Jaccard + 0.1 perfect bonus
 
 **Request Validation**: Zod schemas for runtime type validation on all API endpoints, ensuring data integrity between Aurora-X Python engine and TypeScript backend.
 
@@ -54,7 +68,7 @@ Preferred communication style: Simple, everyday language.
 
 ### Data Storage Solutions
 
-**Corpus Database**: SQLite (via better-sqlite3) with Write-Ahead Logging (WAL) enabled for concurrent read performance. The corpus storage layer tracks learning data from Aurora-X synthesis runs.
+**Corpus Database**: SQLite (via better-sqlite3) with Write-Ahead Logging (WAL) enabled for concurrent read performance. The corpus storage layer tracks learning data from Aurora-X synthesis runs with advanced querying capabilities including multi-parameter filtering, similarity scoring (Jaccard distance on signatures and post-conditions), and offset-based pagination.
 
 **Schema Design**: 
 - Primary table: `corpus` with 18 fields tracking function synthesis metadata
