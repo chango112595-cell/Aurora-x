@@ -15,23 +15,24 @@ import {
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  app.post("/api/corpus", (req, res) => {
-    const auth = req.header("x-api-key") ?? "";
-    if (auth !== AURORA_API_KEY) {
-      return res.status(401).json({ error: "unauthorized" });
-    }
+  // TELEMETRY DISABLED - Uncomment to re-enable Aurora-X data ingestion
+  // app.post("/api/corpus", (req, res) => {
+  //   const auth = req.header("x-api-key") ?? "";
+  //   if (auth !== AURORA_API_KEY) {
+  //     return res.status(401).json({ error: "unauthorized" });
+  //   }
 
-    try {
-      const entry = corpusEntrySchema.parse(req.body);
-      corpusStorage.insertEntry(entry);
-      return res.json({ ok: true, id: entry.id });
-    } catch (e: any) {
-      return res.status(400).json({
-        error: "bad_request",
-        details: e?.message ?? String(e),
-      });
-    }
-  });
+  //   try {
+  //     const entry = corpusEntrySchema.parse(req.body);
+  //     corpusStorage.insertEntry(entry);
+  //     return res.json({ ok: true, id: entry.id });
+  //   } catch (e: any) {
+  //     return res.status(400).json({
+  //       error: "bad_request",
+  //       details: e?.message ?? String(e),
+  //     });
+  //   }
+  // });
 
   app.get("/api/corpus", (req, res) => {
     try {
@@ -98,67 +99,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/run-meta", (req, res) => {
-    const auth = req.header("x-api-key") ?? "";
-    if (auth !== AURORA_API_KEY) {
-      return res.status(401).json({ error: "unauthorized" });
-    }
+  // TELEMETRY DISABLED - Uncomment to re-enable Aurora-X telemetry
+  // app.post("/api/run-meta", (req, res) => {
+  //   const auth = req.header("x-api-key") ?? "";
+  //   if (auth !== AURORA_API_KEY) {
+  //     return res.status(401).json({ error: "unauthorized" });
+  //   }
 
-    try {
-      const meta = runMetaSchema.parse(req.body);
-      corpusStorage.insertRunMeta(meta);
-      return res.json({ ok: true, run_id: meta.run_id });
-    } catch (e: any) {
-      return res.status(400).json({
-        error: "bad_request",
-        details: e?.message ?? String(e),
-      });
-    }
-  });
+  //   try {
+  //     const meta = runMetaSchema.parse(req.body);
+  //     corpusStorage.insertRunMeta(meta);
+  //     return res.json({ ok: true, run_id: meta.run_id });
+  //   } catch (e: any) {
+  //     return res.status(400).json({
+  //       error: "bad_request",
+  //       details: e?.message ?? String(e),
+  //     });
+  //   }
+  // });
 
-  app.get("/api/run-meta/latest", (req, res) => {
-    try {
-      const meta = corpusStorage.getLatestRunMeta();
-      return res.json({ meta });
-    } catch (e: any) {
-      return res.status(500).json({
-        error: "internal_error",
-        details: e?.message ?? String(e),
-      });
-    }
-  });
+  // app.get("/api/run-meta/latest", (req, res) => {
+  //   try {
+  //     const meta = corpusStorage.getLatestRunMeta();
+  //     return res.json({ meta });
+  //   } catch (e: any) {
+  //     return res.status(500).json({
+  //       error: "internal_error",
+  //       details: e?.message ?? String(e),
+  //     });
+  //   }
+  // });
 
-  app.post("/api/used-seeds", (req, res) => {
-    const auth = req.header("x-api-key") ?? "";
-    if (auth !== AURORA_API_KEY) {
-      return res.status(401).json({ error: "unauthorized" });
-    }
+  // app.post("/api/used-seeds", (req, res) => {
+  //   const auth = req.header("x-api-key") ?? "";
+  //   if (auth !== AURORA_API_KEY) {
+  //     return res.status(401).json({ error: "unauthorized" });
+  //   }
 
-    try {
-      const seed = usedSeedSchema.parse(req.body);
-      const id = corpusStorage.insertUsedSeed(seed);
-      return res.json({ ok: true, id });
-    } catch (e: any) {
-      return res.status(400).json({
-        error: "bad_request",
-        details: e?.message ?? String(e),
-      });
-    }
-  });
+  //   try {
+  //     const seed = usedSeedSchema.parse(req.body);
+  //     const id = corpusStorage.insertUsedSeed(seed);
+  //     return res.json({ ok: true, id });
+  //   } catch (e: any) {
+  //     return res.status(400).json({
+  //       error: "bad_request",
+  //       details: e?.message ?? String(e),
+  //     });
+  //   }
+  // });
 
-  app.get("/api/used-seeds", (req, res) => {
-    try {
-      const run_id = req.query.run_id as string | undefined;
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 200;
-      const seeds = corpusStorage.getUsedSeeds({ run_id, limit });
-      return res.json({ seeds });
-    } catch (e: any) {
-      return res.status(500).json({
-        error: "internal_error",
-        details: e?.message ?? String(e),
-      });
-    }
-  });
+  // app.get("/api/used-seeds", (req, res) => {
+  //   try {
+  //     const run_id = req.query.run_id as string | undefined;
+  //     const limit = req.query.limit ? parseInt(req.query.limit as string) : 200;
+  //     const seeds = corpusStorage.getUsedSeeds({ run_id, limit });
+  //     return res.json({ seeds });
+  //   } catch (e: any) {
+  //     return res.status(500).json({
+  //       error: "internal_error",
+  //       details: e?.message ?? String(e),
+  //     });
+  //   }
+  // });
 
   const httpServer = createServer(app);
 
