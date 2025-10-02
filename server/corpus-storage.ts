@@ -226,11 +226,12 @@ export class CorpusStorage {
       const returnMatch = ret === targetRet && ret !== "" ? 1.0 : 0.0;
       const argMatch = args === targetArgs && args !== "" ? 1.0 : 0.0;
 
-      const bow = this.bowTokens(entry.post_bow || "");
+      const bow = entry.post_bow || [];
       const jaccardScore = this.jaccard(bow, targetPostBow);
 
-      let similarity = 0.5 * returnMatch + 0.3 * argMatch + 0.2 * jaccardScore;
-      const perfectBonus = entry.passed === entry.total ? 0.15 : 0;
+      const signatureScore = 0.3 * returnMatch + 0.3 * argMatch;
+      let similarity = 0.6 * signatureScore + 0.4 * jaccardScore;
+      const perfectBonus = entry.passed === entry.total ? 0.1 : 0;
       similarity += perfectBonus;
 
       results.push({
