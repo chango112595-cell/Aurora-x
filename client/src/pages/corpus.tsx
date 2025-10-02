@@ -65,25 +65,37 @@ export default function Corpus() {
   const [perfectOnly, setPerfectOnly] = useState(false);
   const [minScore, setMinScore] = useState<number | undefined>(undefined);
   const [maxScore, setMaxScore] = useState<number | undefined>(undefined);
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<CorpusEntry | null>(null);
   const [showSimilarity, setShowSimilarity] = useState(false);
   const { toast } = useToast();
 
-  const queryParams = {
-    func: funcFilter || undefined,
-    limit,
-    offset,
-    perfectOnly,
-    minScore,
-    maxScore,
+  const buildQueryString = () => {
+    const params = new URLSearchParams();
+    if (funcFilter) params.set("func", funcFilter);
+    params.set("limit", limit.toString());
+    params.set("offset", offset.toString());
+    if (perfectOnly) params.set("perfectOnly", "true");
+    if (minScore !== undefined) params.set("minScore", minScore.toString());
+    if (maxScore !== undefined) params.set("maxScore", maxScore.toString());
+    if (startDate) {
+      const normalized = new Date(startDate).toISOString();
+      params.set("startDate", normalized);
+    }
+    if (endDate) {
+      const normalized = new Date(endDate).toISOString();
+      params.set("endDate", normalized);
+    }
+    return params.toString();
   };
 
   const { data: corpusData, isLoading } = useQuery<{
     items: CorpusEntry[];
     hasMore: boolean;
   }>({
-    queryKey: ["/api/corpus", queryParams],
+    queryKey: [`/api/corpus?${buildQueryString()}`],
   });
 
   const similarityMutation = useMutation({
@@ -177,6 +189,8 @@ export default function Corpus() {
     setPerfectOnly(false);
     setMinScore(undefined);
     setMaxScore(undefined);
+    setStartDate("");
+    setEndDate("");
     setOffset(0);
   };
 
@@ -316,6 +330,32 @@ export default function Corpus() {
                         className="w-24"
                         step="0.01"
                         data-testid="input-max-score"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Date Range</Label>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="datetime-local"
+                        value={startDate}
+                        onChange={(e) => {
+                          setStartDate(e.target.value);
+                          setOffset(0);
+                        }}
+                        className="flex-1"
+                        data-testid="input-start-date"
+                      />
+                      <span className="text-muted-foreground">to</span>
+                      <Input
+                        type="datetime-local"
+                        value={endDate}
+                        onChange={(e) => {
+                          setEndDate(e.target.value);
+                          setOffset(0);
+                        }}
+                        className="flex-1"
+                        data-testid="input-end-date"
                       />
                     </div>
                   </div>
