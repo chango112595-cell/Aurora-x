@@ -19,7 +19,7 @@ export type User = typeof users.$inferSelect;
 
 export const corpusEntrySchema = z.object({
   id: z.string().uuid(),
-  timestamp: z.string(),
+  timestamp: z.string().datetime(),
   spec_id: z.string().min(1),
   spec_hash: z.string().length(64),
   func_name: z.string().min(1),

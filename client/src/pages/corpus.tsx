@@ -17,7 +17,8 @@ type CorpusEntry = {
   total: number;
   score: number;
   snippet: string;
-  failing_tests?: string;
+  failing_tests?: string[];
+  calls_functions?: string[];
   complexity?: number;
   iteration?: number;
 };
