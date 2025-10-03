@@ -1,4 +1,7 @@
 # Aurora-X Ultra
+
+![seed-bias](https://img.shields.io/badge/seed__bias-dynamic-%23007acc?label=seed_bias&style=flat)
+
 _Offline Autonomous Code Synthesis Engine_
 
 ## Overview
@@ -27,6 +30,10 @@ aurorax --dump-corpus "add(a:int,b:int)->int" --top 5
 # Run tests
 make test
 ```
+
+## Seed Bias
+- Current run's `seed_bias` is shown in the HTML report header and printed by the CLI when a run ends.
+- File path: `runs/run-*/learn_weights.json`.
 
 ## Project Status
 - ✅ **Milestone 1**: Core synthesis engine complete
