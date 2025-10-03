@@ -15,10 +15,19 @@ from .learn import weights as learn
 # Stub imports for synthesis modules (to be implemented)
 class Repo:
     @staticmethod
-    def create(outdir): return Repo()
-    def __init__(self): self.root = Path(".")
-    def path(self, p): return self.root / p
-    def set_hash(self, p, c): pass
+    def create(outdir): 
+        r = Repo()
+        r.root = outdir if outdir else Path("/tmp/aurora-tmp")
+        r.root.mkdir(parents=True, exist_ok=True)
+        return r
+    def __init__(self): 
+        self.root = Path(".")
+    def path(self, p): 
+        return self.root / p
+    def set_hash(self, p, c): 
+        pass
+    def list_files(self):
+        return [str(p.relative_to(self.root)) for p in self.root.rglob("*") if p.is_file()]
 
 class Sandbox:
     def __init__(self, root, timeout_s): pass
@@ -27,7 +36,9 @@ class Spec:
     def __init__(self): self.functions = []
 
 def parse_spec(text): return Spec()
-def write_file(p, c): Path(p).write_text(c)
+def write_file(p, c): 
+    Path(p).parent.mkdir(parents=True, exist_ok=True)
+    Path(p).write_text(c)
 
 def main():
     """Main entry point for Aurora-X."""
@@ -90,6 +101,21 @@ def main():
         seed_bias_override=args.seed_bias
     )
     repo, ok = ax.run(spec_text)
+    
+    # Show seed_bias snapshot at the end of the run for quick glance
+    try:
+        weights = learn.load(repo.root)
+        sb = float(weights.get("seed_bias", 0.0))
+    except Exception:
+        sb = 0.0
+    
+    print(f"[AURORA-X] Repo: {repo.root}")
+    print(f"[AURORA-X] Status: {'PASS' if ok else 'INCOMPLETE'}")
+    print(f"[AURORA-X] seed_bias: {sb:.2f}")
+    print("[AURORA-X] Files:")
+    for f in repo.list_files():
+        print(" -", f)
+    print(f"\nOpen HTML report: file://{repo.path('report.html')}")
     
     return 0 if ok else 1
 
