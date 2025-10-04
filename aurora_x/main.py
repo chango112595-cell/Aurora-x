@@ -42,13 +42,14 @@ def write_file(p, c):
 
 def main():
     """Main entry point for Aurora-X."""
-    ap = argparse.ArgumentParser(description="Aurora-X Autonomous Code Synthesis Engine")
+    ap = argparse.ArgumentParser(description="AURORA-X Ultra (Offline)")
     
-    # Mutually exclusive: spec, spec-file, or dump-corpus
+    # Mutually exclusive: spec, spec-file, dump-corpus, or show-bias
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--spec", type=str, help="Inline spec text (Markdown DSL)")
     g.add_argument("--spec-file", type=str, help="Path to spec file")
     g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
+    g.add_argument("--show-bias", action="store_true", help="Print current seed_bias and exit")
     
     # Corpus dump options
     ap.add_argument("--top", type=int, default=10, help="How many corpus entries to print with --dump-corpus")
@@ -77,6 +78,21 @@ def main():
         "top_k": args.top_k,
         "top_p": args.top_p
     }
+    
+    # ----- Show bias mode (no synthesis) -----
+    if args.show_bias:
+        run_root = outdir / "latest"
+        weights_file = run_root / "learn_weights.json"
+        if weights_file.exists():
+            try:
+                weights = json.loads(weights_file.read_text())
+                sb = float(weights.get("seed_bias", 0.0))
+                print(f"[AURORA-X] Current seed_bias: {sb:.2f}")
+            except Exception as e:
+                print(f"[AURORA-X] Error reading seed_bias: {e}")
+        else:
+            print("[AURORA-X] No weights found yet. Run a synthesis first.")
+        return 0
     
     # ----- Corpus dump mode (no synthesis) -----
     if args.dump_corpus:
