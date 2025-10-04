@@ -269,16 +269,6 @@ class AuroraX:
         }
         self.save_run_config(cfg)
         
-        # Update 'latest' symlink to this run (before HTML report so it knows it's latest)
-        try:
-            latest_link = self.repo.root.parent / "latest"
-            if latest_link.exists() or latest_link.is_symlink():
-                latest_link.unlink()
-            latest_link.symlink_to(self.repo.root.resolve())
-            print(f"[AURORA-X] Updated symlink: {latest_link} → {self.repo.root.name}")
-        except Exception as e:
-            print(f"[AURORA-X] (nonfatal) failed to update 'latest' symlink: {e}")
-        
         # Capture end time and save run metadata
         self._end_time = time.time()
         duration_seconds = round(self._end_time - self._start_time, 3)
@@ -289,8 +279,18 @@ class AuroraX:
         }
         write_file(self.repo.path("run_meta.json"), json.dumps(run_metadata, indent=2))
         
-        # Generate HTML report (after symlink so it can detect if it's latest)
+        # Generate HTML report (before symlink update so it can detect previous latest run)
         write_html_report(self.repo, spec)
+        
+        # Update 'latest' symlink to this run (after HTML report generation)
+        try:
+            latest_link = self.repo.root.parent / "latest"
+            if latest_link.exists() or latest_link.is_symlink():
+                latest_link.unlink()
+            latest_link.symlink_to(self.repo.root.resolve())
+            print(f"[AURORA-X] Updated symlink: {latest_link} → {self.repo.root.name}")
+        except Exception as e:
+            print(f"[AURORA-X] (nonfatal) failed to update 'latest' symlink: {e}")
         
         return self.repo, True
     
