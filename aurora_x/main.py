@@ -209,7 +209,7 @@ class AuroraX:
         }
         self.save_run_config(cfg)
         
-        # Update 'latest' symlink to this run
+        # Update 'latest' symlink to this run (before HTML report so it knows it's latest)
         try:
             latest_link = self.repo.root.parent / "latest"
             if latest_link.exists() or latest_link.is_symlink():
@@ -218,6 +218,9 @@ class AuroraX:
             print(f"[AURORA-X] Updated symlink: {latest_link} → {self.repo.root.name}")
         except Exception as e:
             print(f"[AURORA-X] (nonfatal) failed to update 'latest' symlink: {e}")
+        
+        # Generate HTML report (after symlink so it can detect if it's latest)
+        write_html_report(self.repo, spec)
         
         return self.repo, True
     
@@ -231,6 +234,90 @@ class AuroraX:
     
     def save_run_config(self, cfg: Dict[str, Any]) -> None:
         write_file(self.repo.path("run_config.json"), json.dumps(cfg, indent=2))
+
+def write_html_report(repo: Repo, spec: Spec) -> None:
+    """Generate HTML report with latest run status."""
+    # Read report markdown if exists
+    report_path = repo.path("AURORA_REPORT.md")
+    if report_path.exists():
+        md = report_path.read_text()
+    else:
+        md = "# Aurora-X Synthesis Report\n\nRun completed."
+        write_file(report_path, md)
+    
+    cfg = json.loads(repo.path("run_config.json").read_text())
+    
+    # Call graph (stub for now)
+    graph = {"nodes": [f.name for f in spec.functions], "edges": {}}
+    
+    # weights + bias snapshot
+    weights_path = repo.path("learn_weights.json")
+    try:
+        weights = json.loads(weights_path.read_text()) if weights_path.exists() else {}
+    except Exception:
+        weights = {}
+    seed_bias = float(weights.get("seed_bias", 0.0))
+    
+    # latest symlink status
+    latest_link = repo.root.parent / "latest"
+    try:
+        is_latest = latest_link.exists() and latest_link.resolve() == repo.root.resolve()
+    except Exception:
+        is_latest = False
+    
+    latest_badge = (
+        '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#16a34a;color:#fff;font-weight:600;">LATEST RUN ✓</span>'
+        if is_latest else
+        f'<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#f59e0b;color:#111;font-weight:600;">NOT LATEST</span> '
+        f'<a href="../latest/report.html" style="margin-left:8px;">Open Latest Report →</a>'
+    )
+    
+    # quick links if present
+    corpus_jsonl = repo.root / "corpus.jsonl"
+    corpus_db = repo.root / "corpus.db"
+    links = []
+    if corpus_jsonl.exists(): 
+        links.append(f'<a href="corpus.jsonl">corpus.jsonl</a>')
+    if corpus_db.exists(): 
+        links.append(f'<a href="corpus.db">corpus.db</a>')
+    if weights_path.exists():
+        links.append(f'<a href="learn_weights.json">learn_weights.json</a>')
+    links_html = " | ".join(links) if links else "No corpus files yet"
+    
+    body = f"""<!doctype html><html><head><meta charset="utf-8"><title>AURORA-X Report</title>
+<style>
+  body{{font-family:system-ui,Segoe UI,Roboto,sans-serif;margin:24px}}
+  pre,code{{background:#f6f8fa;padding:12px;overflow:auto;border-radius:6px}}
+  .hdr{{display:flex;align-items:center;gap:12px;margin-bottom:8px}}
+  .sub{{color:#555;margin:0 0 16px 0}}
+  h3{{color:#1e293b;margin-top:24px}}
+  a{{color:#0969da;text-decoration:none}}
+  a:hover{{text-decoration:underline}}
+</style>
+</head><body>
+<div class="hdr">
+  <h1 style="margin:0;">AURORA-X Ultra</h1>
+  {latest_badge}
+</div>
+<p class="sub"><b>Run:</b> {repo.root}</p>
+
+<h3>Learning</h3>
+<pre>{json.dumps({"seed_bias": round(seed_bias, 4), "weights_file": str(weights_path.name if weights_path.exists() else "none")}, indent=2)}</pre>
+
+<h3>Quick Links</h3>
+<p>{links_html}</p>
+
+<h3>Config</h3>
+<pre>{json.dumps(cfg, indent=2)}</pre>
+
+<h3>Call Graph</h3>
+<pre>{json.dumps(graph, indent=2)}</pre>
+
+<h3>Report</h3>
+<pre>{md}</pre>
+
+</body></html>"""
+    write_file(repo.path("report.html"), body)
 
 def _seed_won(final_src: str, seeds: List[str]) -> bool:
     """Check if winning code matches any seed (whitespace-insensitive)."""
