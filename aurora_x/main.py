@@ -33,6 +33,43 @@ def fmt_duration(seconds: float) -> str:
     
     return " ".join(parts)
 
+def diff_graphs(old: Dict[str, list], new: Dict[str, list]) -> Dict[str, Any]:
+    """Compute differences between two call graphs.
+    
+    Args:
+        old: Old graph as adjacency list (node -> list of connected nodes)
+        new: New graph as adjacency list (node -> list of connected nodes)
+    
+    Returns:
+        Dictionary with:
+        - "added": sorted list of added edge tuples
+        - "removed": sorted list of removed edge tuples
+        - "old_edges": count of edges in old graph
+        - "new_edges": count of edges in new graph
+    """
+    # Extract edges from both graphs as sets of tuples
+    old_edges = set()
+    for u, neighbors in old.items():
+        for v in neighbors:
+            old_edges.add((u, v))
+    
+    new_edges = set()
+    for u, neighbors in new.items():
+        for v in neighbors:
+            new_edges.add((u, v))
+    
+    # Compute added and removed edges
+    added = new_edges - old_edges
+    removed = old_edges - new_edges
+    
+    # Return result dictionary
+    return {
+        "added": sorted(list(added)),
+        "removed": sorted(list(removed)),
+        "old_edges": len(old_edges),
+        "new_edges": len(new_edges)
+    }
+
 # Stub imports for synthesis modules (to be implemented)
 class Repo:
     @staticmethod
