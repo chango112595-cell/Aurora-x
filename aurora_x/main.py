@@ -17,8 +17,15 @@ class Repo:
     @staticmethod
     def create(outdir): 
         r = Repo()
-        r.root = outdir if outdir else Path("/tmp/aurora-tmp")
-        r.root.mkdir(parents=True, exist_ok=True)
+        if outdir:
+            # Create timestamped run directory under outdir
+            import time
+            timestamp = time.strftime("%Y%m%d-%H%M%S")
+            r.root = outdir / f"run-{timestamp}"
+            r.root.mkdir(parents=True, exist_ok=True)
+        else:
+            r.root = Path("/tmp/aurora-tmp")
+            r.root.mkdir(parents=True, exist_ok=True)
         return r
     def __init__(self): 
         self.root = Path(".")
@@ -201,6 +208,16 @@ class AuroraX:
             "weights": self.weights
         }
         self.save_run_config(cfg)
+        
+        # Update 'latest' symlink to this run
+        try:
+            latest_link = self.repo.root.parent / "latest"
+            if latest_link.exists() or latest_link.is_symlink():
+                latest_link.unlink()
+            latest_link.symlink_to(self.repo.root.resolve())
+            print(f"[AURORA-X] Updated symlink: {latest_link} → {self.repo.root.name}")
+        except Exception as e:
+            print(f"[AURORA-X] (nonfatal) failed to update 'latest' symlink: {e}")
         
         return self.repo, True
     
