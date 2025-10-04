@@ -317,8 +317,24 @@ def write_html_report(repo: Repo, spec: Spec) -> None:
     
     cfg = json.loads(repo.path("run_config.json").read_text())
     
-    # Call graph (stub for now)
+    # Load run metadata for timestamp and duration
+    run_meta_path = repo.path("run_meta.json")
+    start_ts = None
+    duration_seconds = None
+    if run_meta_path.exists():
+        try:
+            run_meta = json.loads(run_meta_path.read_text())
+            start_ts = run_meta.get("start_ts")
+            duration_seconds = run_meta.get("duration_seconds")
+        except Exception:
+            pass
+    
+    # Call graph (stub for now - would load from call_graph.json in real implementation)
     graph = {"nodes": [f.name for f in spec.functions], "edges": {}}
+    
+    # Save call graph for future comparisons
+    call_graph_path = repo.path("call_graph.json")
+    write_file(call_graph_path, json.dumps(graph, indent=2))
     
     # weights + bias snapshot
     weights_path = repo.path("learn_weights.json")
@@ -335,12 +351,73 @@ def write_html_report(repo: Repo, spec: Spec) -> None:
     except Exception:
         is_latest = False
     
+    # If NOT latest run, generate graph comparison
+    graph_diff_generated = False
+    if not is_latest and latest_link.exists():
+        try:
+            latest_graph_path = latest_link / "call_graph.json"
+            if latest_graph_path.exists():
+                latest_graph = json.loads(latest_graph_path.read_text())
+                # Compute diff using diff_graphs function
+                diff = diff_graphs(
+                    latest_graph.get("edges", {}),
+                    graph.get("edges", {})
+                )
+                
+                # Save graph_diff.json
+                graph_diff_path = repo.path("graph_diff.json")
+                write_file(graph_diff_path, json.dumps(diff, indent=2))
+                
+                # Generate graph_diff.html
+                diff_html = f"""<!doctype html><html><head><meta charset="utf-8"><title>Graph Comparison</title>
+<style>
+  body{{font-family:system-ui,Segoe UI,Roboto,sans-serif;margin:24px}}
+  .added{{color:#16a34a;font-weight:600}}
+  .removed{{color:#dc2626;font-weight:600}}
+  pre{{background:#f6f8fa;padding:12px;overflow:auto;border-radius:6px}}
+  h2{{color:#1e293b}}
+  .stats{{background:#f0f9ff;padding:12px;border-radius:6px;margin:16px 0}}
+</style>
+</head><body>
+<h1>Graph Comparison with Latest Run</h1>
+<div class="stats">
+  <b>Statistics:</b><br>
+  Previous edges: {diff['old_edges']}<br>
+  Current edges: {diff['new_edges']}<br>
+  Added: {len(diff['added'])}<br>
+  Removed: {len(diff['removed'])}
+</div>
+
+<h2 class="added">Added Edges ({len(diff['added'])})</h2>
+<pre>{json.dumps(diff['added'], indent=2) if diff['added'] else 'None'}</pre>
+
+<h2 class="removed">Removed Edges ({len(diff['removed'])})</h2>
+<pre>{json.dumps(diff['removed'], indent=2) if diff['removed'] else 'None'}</pre>
+
+<h2>Full Diff Data</h2>
+<pre>{json.dumps(diff, indent=2)}</pre>
+
+<p><a href="report.html">← Back to Report</a></p>
+</body></html>"""
+                write_file(repo.path("graph_diff.html"), diff_html)
+                graph_diff_generated = True
+        except Exception as e:
+            print(f"[AURORA-X] Could not generate graph diff: {e}")
+    
     latest_badge = (
         '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#16a34a;color:#fff;font-weight:600;">LATEST RUN ✓</span>'
         if is_latest else
         f'<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#f59e0b;color:#111;font-weight:600;">NOT LATEST</span> '
         f'<a href="../latest/report.html" style="margin-left:8px;">Open Latest Report →</a>'
     )
+    
+    # Build timestamp/duration banner
+    meta_parts = []
+    if start_ts:
+        meta_parts.append(f"<b>Started:</b> {start_ts}")
+    if duration_seconds is not None:
+        meta_parts.append(f"<b>Duration:</b> {fmt_duration(duration_seconds)}")
+    meta_html = " | ".join(meta_parts) if meta_parts else ""
     
     # quick links if present
     corpus_jsonl = repo.root / "corpus.jsonl"
@@ -352,6 +429,8 @@ def write_html_report(repo: Repo, spec: Spec) -> None:
         links.append(f'<a href="corpus.db">corpus.db</a>')
     if weights_path.exists():
         links.append(f'<a href="learn_weights.json">learn_weights.json</a>')
+    if graph_diff_generated:
+        links.append(f'<a href="graph_diff.html">Compare with latest (diff)</a>')
     links_html = " | ".join(links) if links else "No corpus files yet"
     
     body = f"""<!doctype html><html><head><meta charset="utf-8"><title>AURORA-X Report</title>
@@ -359,7 +438,8 @@ def write_html_report(repo: Repo, spec: Spec) -> None:
   body{{font-family:system-ui,Segoe UI,Roboto,sans-serif;margin:24px}}
   pre,code{{background:#f6f8fa;padding:12px;overflow:auto;border-radius:6px}}
   .hdr{{display:flex;align-items:center;gap:12px;margin-bottom:8px}}
-  .sub{{color:#555;margin:0 0 16px 0}}
+  .sub{{color:#555;margin:0 0 4px 0}}
+  .meta{{color:#666;margin:0 0 16px 0;font-size:14px}}
   h3{{color:#1e293b;margin-top:24px}}
   a{{color:#0969da;text-decoration:none}}
   a:hover{{text-decoration:underline}}
@@ -370,6 +450,7 @@ def write_html_report(repo: Repo, spec: Spec) -> None:
   {latest_badge}
 </div>
 <p class="sub"><b>Run:</b> {repo.root}</p>
+{f'<p class="meta">{meta_html}</p>' if meta_html else ''}
 
 <h3>Learning</h3>
 <pre>{json.dumps({"seed_bias": round(seed_bias, 4), "weights_file": str(weights_path.name if weights_path.exists() else "none")}, indent=2)}</pre>
