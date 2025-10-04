@@ -8,9 +8,29 @@ import json
 import random
 from pathlib import Path
 from typing import Dict, Any, List, Optional
+from datetime import datetime
 from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, spec_digest
 from .corpus.pretty import fmt_rows, filter_rows, to_json
 from .learn import weights as learn
+
+def iso_now() -> str:
+    """Get current ISO timestamp."""
+    return datetime.now().isoformat()
+
+def fmt_duration(seconds: float) -> str:
+    """Format seconds into human-readable 'Xh Ym Zs' format."""
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    secs = int(seconds % 60)
+    
+    parts = []
+    if hours > 0:
+        parts.append(f"{hours}h")
+    if minutes > 0:
+        parts.append(f"{minutes}m")
+    parts.append(f"{secs}s")
+    
+    return " ".join(parts)
 
 # Stub imports for synthesis modules (to be implemented)
 class Repo:
