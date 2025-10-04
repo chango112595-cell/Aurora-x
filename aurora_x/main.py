@@ -6,6 +6,7 @@ import argparse
 import sys
 import json
 import random
+import time
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
@@ -166,6 +167,7 @@ class AuroraX:
     def __init__(self, seed: int, max_iters: int, beam: int, timeout_s: int, outdir: Optional[Path],
                  rng_cfg: Dict[str, Any], disable_seed: bool = False, seed_bias_override: float | None = None):
         random.seed(seed)
+        self._start_time = time.time()
         self.repo = Repo.create(outdir)
         self.sandbox = Sandbox(self.repo.root, timeout_s=timeout_s)
         self.beam = beam
@@ -178,6 +180,7 @@ class AuroraX:
     
     def run(self, spec_text: str):
         """Main orchestration loop."""
+        start_ts = iso_now()  # Capture start timestamp in ISO format
         spec = parse_spec(spec_text)
         best_map: Dict[str,str] = {}
         
@@ -238,6 +241,16 @@ class AuroraX:
             print(f"[AURORA-X] Updated symlink: {latest_link} → {self.repo.root.name}")
         except Exception as e:
             print(f"[AURORA-X] (nonfatal) failed to update 'latest' symlink: {e}")
+        
+        # Capture end time and save run metadata
+        self._end_time = time.time()
+        duration_seconds = round(self._end_time - self._start_time, 3)
+        run_metadata = {
+            "start_ts": start_ts,
+            "end_ts": iso_now(),
+            "duration_seconds": duration_seconds
+        }
+        write_file(self.repo.path("run_meta.json"), json.dumps(run_metadata, indent=2))
         
         # Generate HTML report (after symlink so it can detect if it's latest)
         write_html_report(self.repo, spec)
