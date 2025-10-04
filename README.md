@@ -1,11 +1,12 @@
 # Aurora-X Ultra
 
 ![seed-bias](https://img.shields.io/badge/seed__bias-dynamic-%23007acc?label=seed_bias&style=flat)
+![offline](https://img.shields.io/badge/mode-offline--first-green?style=flat)
 
 _Offline Autonomous Code Synthesis Engine_
 
 ## Overview
-Aurora-X is an autonomous code synthesis engine that uses AST-based mutations, beam search, and corpus-based seeding to synthesize functions from specifications.
+Aurora-X is an autonomous code synthesis engine that uses AST-based mutations, beam search, and corpus-based seeding to synthesize functions from specifications. Aurora is **offline-first** — it records to JSONL/SQLite locally and never calls external APIs unless you enable explicit exports.
 
 ## Features
 - **AST-based synthesis** with beam search and mutations
@@ -22,10 +23,13 @@ pip install -e .
 ## Usage
 ```bash
 # Run synthesis with seeding
-make run
+aurorax --spec-file ./specs/rich_spec.md --outdir runs
 
 # Query corpus for past synthesis attempts
 aurorax --dump-corpus "add(a:int,b:int)->int" --top 5
+
+# Quick check of bias without running synthesis
+aurorax --show-bias --outdir runs
 
 # Run tests
 make test
