@@ -70,6 +70,96 @@ def diff_graphs(old: Dict[str, list], new: Dict[str, list]) -> Dict[str, Any]:
         "new_edges": len(new_edges)
     }
 
+def load_scores_map(run_root: Path) -> Dict[str, Dict[str, Any]]:
+    """Load function scores from logs/scores.jsonl.
+    
+    Args:
+        run_root: Root directory of the run
+    
+    Returns:
+        Dict mapping function names to their latest scores:
+        {'passed': int, 'total': int, 'iter': int}
+    """
+    scores_file = run_root / "logs" / "scores.jsonl"
+    if not scores_file.exists():
+        return {}
+    
+    scores_map = {}
+    try:
+        with open(scores_file, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                entry = json.loads(line)
+                func_name = entry.get("func_name")
+                if not func_name:
+                    continue
+                
+                # Track latest score per function (highest iteration)
+                curr_iter = entry.get("iter", 0)
+                if func_name not in scores_map or curr_iter > scores_map[func_name].get("iter", 0):
+                    scores_map[func_name] = {
+                        "passed": entry.get("passed", 0),
+                        "total": entry.get("total", 0),
+                        "iter": curr_iter
+                    }
+    except Exception:
+        # Return empty dict on any error
+        return {}
+    
+    return scores_map
+
+def diff_scores(old: Dict[str, Dict[str, Any]], new: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+    """Compute per-function score differences.
+    
+    Args:
+        old: Old score map from load_scores_map
+        new: New score map from load_scores_map
+    
+    Returns:
+        Dict with:
+        - "summary": {"regressions": count, "improvements": count, "count": total_functions}
+        - "rows": list of dicts with "function", "old" [passed, total], "new" [passed, total], "delta_passed"
+    """
+    all_funcs = set(old.keys()) | set(new.keys())
+    
+    rows = []
+    regressions = 0
+    improvements = 0
+    
+    for func in sorted(all_funcs):
+        old_score = old.get(func, {"passed": 0, "total": 0})
+        new_score = new.get(func, {"passed": 0, "total": 0})
+        
+        old_passed = old_score.get("passed", 0)
+        old_total = old_score.get("total", 0)
+        new_passed = new_score.get("passed", 0)
+        new_total = new_score.get("total", 0)
+        
+        delta_passed = new_passed - old_passed
+        
+        if delta_passed < 0:
+            regressions += 1
+        elif delta_passed > 0:
+            improvements += 1
+        
+        rows.append({
+            "function": func,
+            "old": [old_passed, old_total],
+            "new": [new_passed, new_total],
+            "delta_passed": delta_passed
+        })
+    
+    return {
+        "summary": {
+            "regressions": regressions,
+            "improvements": improvements,
+            "count": len(all_funcs)
+        },
+        "rows": rows
+    }
+
 # Stub imports for synthesis modules (to be implemented)
 class Repo:
     @staticmethod
