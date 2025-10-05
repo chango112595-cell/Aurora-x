@@ -445,16 +445,29 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
     except Exception:
         is_latest = False
     
-    # If NOT latest run, generate graph comparison
-    graph_diff_generated = False
-    if not is_latest and latest_link.exists():
+    # Choose baseline: use baseline if provided, else use latest_link if it exists
+    base_root = None
+    if baseline:
+        base_root = baseline
+    elif latest_link.exists():
         try:
-            latest_graph_path = latest_link / "call_graph.json"
-            if latest_graph_path.exists():
-                latest_graph = json.loads(latest_graph_path.read_text())
+            base_root = latest_link.resolve()
+        except Exception:
+            base_root = None
+    
+    # Initialize regressions count
+    regressions_count = 0
+    
+    # If base_root exists and is different from current run, generate graph comparison
+    graph_diff_generated = False
+    if base_root and base_root != repo.root.resolve():
+        try:
+            base_graph_path = Path(base_root) / "call_graph.json"
+            if base_graph_path.exists():
+                base_graph = json.loads(base_graph_path.read_text())
                 # Compute diff using diff_graphs function
                 diff = diff_graphs(
-                    latest_graph.get("edges", {}),
+                    base_graph.get("edges", {}),
                     graph.get("edges", {})
                 )
                 
@@ -473,7 +486,7 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
   .stats{{background:#f0f9ff;padding:12px;border-radius:6px;margin:16px 0}}
 </style>
 </head><body>
-<h1>Graph Comparison with Latest Run</h1>
+<h1>Graph Comparison with Baseline</h1>
 <div class="stats">
   <b>Statistics:</b><br>
   Previous edges: {diff['old_edges']}<br>
@@ -501,16 +514,16 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
     # Scores regression comparison
     scores_diff_generated = False
     scores_html = ""
-    if latest_link.exists():
+    if base_root:
         try:
             # Load scores from both runs
-            latest_scores = load_scores_map(latest_link)
+            base_scores = load_scores_map(Path(base_root))
             current_scores = load_scores_map(repo.root)
             
             # Only generate diff if we have scores from at least one run
-            if latest_scores or current_scores:
+            if base_scores or current_scores:
                 # Compute diff
-                scores_diff = diff_scores(latest_scores, current_scores)
+                scores_diff = diff_scores(base_scores, current_scores)
                 
                 # Save scores_diff.json
                 scores_diff_path = repo.path("scores_diff.json")
@@ -519,6 +532,9 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
                 # Generate HTML table for scores regression
                 summary = scores_diff["summary"]
                 rows = scores_diff["rows"]
+                
+                # Extract regressions count from the diff summary
+                regressions_count = summary.get("regressions", 0)
                 
                 # Build regression table rows
                 table_rows = []
@@ -641,6 +657,14 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
         f'<a href="../latest/report.html" style="margin-left:8px;">Open Latest Report →</a>'
     )
     
+    # Add regression badge
+    if regressions_count > 0:
+        reg_badge = f'<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#dc2626;color:#fff;font-weight:600;">REGRESSIONS ⚠ {regressions_count}</span>'
+    elif base_root:
+        reg_badge = '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#16a34a;color:#fff;font-weight:600;">No regressions</span>'
+    else:
+        reg_badge = ""
+    
     # Build timestamp/duration banner
     meta_parts = []
     if start_ts:
@@ -660,7 +684,7 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
     if weights_path.exists():
         links.append(f'<a href="learn_weights.json">learn_weights.json</a>')
     if graph_diff_generated:
-        links.append(f'<a href="graph_diff.html">Compare with latest (diff)</a>')
+        links.append(f'<a href="graph_diff.html">Compare with baseline (diff)</a>')
     if scores_diff_generated:
         links.append(f'<a href="scores_diff.html">Scores regression</a>')
     links_html = " | ".join(links) if links else "No corpus files yet"
@@ -680,6 +704,7 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
 <div class="hdr">
   <h1 style="margin:0;">AURORA-X Ultra</h1>
   {latest_badge}
+  {reg_badge}
 </div>
 <p class="sub"><b>Run:</b> {repo.root}</p>
 {f'<p class="meta">{meta_html}</p>' if meta_html else ''}
