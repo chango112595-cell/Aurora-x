@@ -215,6 +215,7 @@ def main():
     ap.add_argument("--seed", type=int, default=1337, help="Random seed")
     ap.add_argument("--outdir", type=str, default="./runs", help="Output directory")
     ap.add_argument("--no-seed", action="store_true", help="Disable seeding from corpus")
+    ap.add_argument("--baseline", type=str, default=None, help="Path to baseline run dir for report diffs (default: runs/latest)")
     ap.add_argument("--seed-bias", type=float, default=None, help="Override learned seed bias [0.0..0.5]")
     ap.add_argument("--max-iters", type=int, default=100, help="Maximum synthesis iterations")
     ap.add_argument("--beam", type=int, default=20, help="Beam search width")
@@ -269,7 +270,8 @@ def main():
         outdir=outdir, 
         rng_cfg=rng_cfg, 
         disable_seed=args.no_seed, 
-        seed_bias_override=args.seed_bias
+        seed_bias_override=args.seed_bias,
+        baseline=Path(args.baseline).resolve() if args.baseline else None
     )
     repo, ok = ax.run(spec_text)
     
@@ -292,7 +294,8 @@ def main():
 
 class AuroraX:
     def __init__(self, seed: int, max_iters: int, beam: int, timeout_s: int, outdir: Optional[Path],
-                 rng_cfg: Dict[str, Any], disable_seed: bool = False, seed_bias_override: float | None = None):
+                 rng_cfg: Dict[str, Any], disable_seed: bool = False, seed_bias_override: float | None = None,
+                 baseline: Optional[Path] = None):
         random.seed(seed)
         self._start_time = time.time()
         self.repo = Repo.create(outdir)
@@ -301,6 +304,7 @@ class AuroraX:
         self.max_iters = max_iters
         self.rng_cfg = rng_cfg
         self.disable_seed = disable_seed
+        self.baseline = baseline
         self.weights = learn.load(self.repo.root)
         if seed_bias_override is not None:
             self.weights["seed_bias"] = max(0.0, min(0.5, float(seed_bias_override)))
@@ -370,7 +374,7 @@ class AuroraX:
         write_file(self.repo.path("run_meta.json"), json.dumps(run_metadata, indent=2))
         
         # Generate HTML report (before symlink update so it can detect previous latest run)
-        write_html_report(self.repo, spec)
+        write_html_report(self.repo, spec, baseline=self.baseline)
         
         # Update 'latest' symlink to this run (after HTML report generation)
         try:
@@ -395,7 +399,7 @@ class AuroraX:
     def save_run_config(self, cfg: Dict[str, Any]) -> None:
         write_file(self.repo.path("run_config.json"), json.dumps(cfg, indent=2))
 
-def write_html_report(repo: Repo, spec: Spec) -> None:
+def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -> None:
     """Generate HTML report with latest run status."""
     # Read report markdown if exists
     report_path = repo.path("AURORA_REPORT.md")
