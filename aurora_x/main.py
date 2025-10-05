@@ -92,7 +92,7 @@ def load_scores_map(run_root: Path) -> Dict[str, Dict[str, Any]]:
                 if not line:
                     continue
                 entry = json.loads(line)
-                func_name = entry.get("func_name")
+                func_name = entry.get("function")
                 if not func_name:
                     continue
                 
