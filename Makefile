@@ -1,4 +1,4 @@
-.PHONY: run test clean install open-report compare-latest
+.PHONY: run test clean install open-report compare-latest compare-baseline
 
 install:
         pip install -e .
@@ -83,5 +83,70 @@ Path(target/"scores_diff.json").write_text(json.dumps(sd, indent=2), encoding="u
 print("[compare] scores diff written:", target/"scores_diff.json")
 PY
         @echo "[compare] open:"
+        @echo "  - $(RUN)/graph_diff.json"
+        @echo "  - $(RUN)/scores_diff.json"
+
+compare-baseline:
+        @if [ -z "$(RUN)" ]; then echo "Error: RUN parameter is missing. Usage: make compare-baseline RUN=runs/run-X BASELINE=runs/run-Y"; exit 2; fi; \
+        if [ -z "$(BASELINE)" ]; then echo "Error: BASELINE parameter is missing. Usage: make compare-baseline RUN=runs/run-X BASELINE=runs/run-Y"; exit 2; fi; \
+        if [ ! -d "$(RUN)" ]; then echo "Error: RUN directory not found: $(RUN)"; exit 3; fi; \
+        if [ ! -d "$(BASELINE)" ]; then echo "Error: BASELINE directory not found: $(BASELINE)"; exit 3; fi; \
+        echo "[compare-baseline] baseline: $(BASELINE)  vs  target: $(RUN)"; \
+        python - <<'PY'
+import json, sys, os
+from pathlib import Path
+
+target = Path(os.environ.get("RUN"))
+baseline = Path(os.environ.get("BASELINE"))
+def read_json(p):
+    try:
+        return json.loads(Path(p).read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+def edges_of(g):
+    e = g.get("edges", {})
+    return {(u, v) for u, vs in e.items() for v in vs}
+
+# graph diff
+tg = read_json(target/"call_graph.json")
+bg = read_json(baseline/"call_graph.json")
+added = sorted(list(edges_of(tg) - edges_of(bg)))
+removed = sorted(list(edges_of(bg) - edges_of(tg)))
+gd = {"added": added, "removed": removed, "old_edges": len(edges_of(bg)), "new_edges": len(edges_of(tg))}
+Path(target/"graph_diff.json").write_text(json.dumps(gd, indent=2), encoding="utf-8")
+print("[compare-baseline] graph diff written:", target/"graph_diff.json")
+
+# scores diff
+def load_scores(run):
+    p = Path(run)/"logs"/"scores.jsonl"
+    out = {}
+    if not p.exists():
+        return out
+    for line in p.read_text(encoding="utf-8").splitlines():
+        if not line.strip(): continue
+        try:
+            o = json.loads(line); fn=o.get("function"); it=int(o.get("iter",-1))
+            if fn is None: continue
+            prev = out.get(fn)
+            if prev is None or it >= prev.get("iter",-1):
+                out[fn] = {"passed": int(o.get("passed",0)), "total": int(o.get("total",0)), "iter": it}
+        except Exception: pass
+    return out
+
+ts = load_scores(target)
+bs = load_scores(baseline)
+allf = sorted(set(ts.keys())|set(bs.keys()))
+rows=[]; reg=imp=0
+for fn in allf:
+    o=bs.get(fn,{"passed":0,"total":0}); n=ts.get(fn,{"passed":0,"total":0})
+    dp = int(n["passed"])-int(o["passed"])
+    reg += (dp<0); imp += (dp>0)
+    rows.append({"function":fn,"old":[o["passed"],o["total"]],"new":[n["passed"],n["total"]],"delta_passed":dp})
+sd={"summary":{"regressions":reg,"improvements":imp,"count":len(allf)},"rows":rows}
+Path(target/"scores_diff.json").write_text(json.dumps(sd, indent=2), encoding="utf-8")
+print("[compare-baseline] scores diff written:", target/"scores_diff.json")
+PY
+        @echo "[compare-baseline] Comparison complete. Generated files:"
         @echo "  - $(RUN)/graph_diff.json"
         @echo "  - $(RUN)/scores_diff.json"
