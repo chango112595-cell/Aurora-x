@@ -8,6 +8,16 @@ Chango is a futuristic, JARVIS-inspired web application that serves as the inter
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes (October 2025)
+
+### Aurora-X Ultra Implementation Complete
+- **Baseline Comparisons**: Added --baseline CLI flag to compare against any previous run
+- **Visual Regression Badges**: Red "REGRESSIONS ⚠ X" or green "No regressions ✓" badges in HTML reports
+- **Makefile Targets**: compare-latest and compare-baseline for on-demand run comparisons
+- **Graph Diff**: Automatic generation of graph_diff.json/html showing added/removed edges
+- **Scores Diff**: Function-level regression tracking with scores_diff.json/html
+- **Timestamp Tracking**: Full run_meta.json with start_ts, end_ts, duration_seconds
+
 ## System Architecture
 
 ### Frontend Architecture
