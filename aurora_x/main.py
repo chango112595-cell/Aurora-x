@@ -494,6 +494,142 @@ def write_html_report(repo: Repo, spec: Spec) -> None:
         except Exception as e:
             print(f"[AURORA-X] Could not generate graph diff: {e}")
     
+    # Scores regression comparison
+    scores_diff_generated = False
+    scores_html = ""
+    if latest_link.exists():
+        try:
+            # Load scores from both runs
+            latest_scores = load_scores_map(latest_link)
+            current_scores = load_scores_map(repo.root)
+            
+            # Only generate diff if we have scores from at least one run
+            if latest_scores or current_scores:
+                # Compute diff
+                scores_diff = diff_scores(latest_scores, current_scores)
+                
+                # Save scores_diff.json
+                scores_diff_path = repo.path("scores_diff.json")
+                write_file(scores_diff_path, json.dumps(scores_diff, indent=2))
+                
+                # Generate HTML table for scores regression
+                summary = scores_diff["summary"]
+                rows = scores_diff["rows"]
+                
+                # Build regression table rows
+                table_rows = []
+                for row in rows:
+                    func = row["function"]
+                    old_p, old_t = row["old"]
+                    new_p, new_t = row["new"]
+                    delta = row["delta_passed"]
+                    
+                    # Color coding for delta
+                    if delta < 0:
+                        delta_color = "#dc2626"  # red for regression
+                        delta_text = f"{delta:+d}"
+                    elif delta > 0:
+                        delta_color = "#16a34a"  # green for improvement
+                        delta_text = f"{delta:+d}"
+                    else:
+                        delta_color = "#6b7280"  # gray for no change
+                        delta_text = "0"
+                    
+                    table_rows.append(
+                        f'<tr>'
+                        f'<td>{func}</td>'
+                        f'<td>{old_p}/{old_t}</td>'
+                        f'<td>{new_p}/{new_t}</td>'
+                        f'<td style="color:{delta_color};font-weight:600">{delta_text}</td>'
+                        f'</tr>'
+                    )
+                
+                # Generate scores_diff.html standalone page
+                scores_diff_html = f"""<!doctype html><html><head><meta charset="utf-8"><title>Scores Regression</title>
+<style>
+  body{{font-family:system-ui,Segoe UI,Roboto,sans-serif;margin:24px}}
+  .summary{{background:#f0f9ff;padding:16px;border-radius:8px;margin:20px 0}}
+  .summary-bar{{display:flex;gap:20px;margin-top:12px}}
+  .stat{{padding:8px 12px;border-radius:6px;font-weight:600}}
+  .regression{{background:#fee2e2;color:#991b1b}}
+  .improvement{{background:#dcfce7;color:#14532d}}
+  .neutral{{background:#f3f4f6;color:#374151}}
+  table{{width:100%;border-collapse:collapse;margin:20px 0}}
+  th{{background:#f8fafc;text-align:left;padding:12px;border-bottom:2px solid #e5e7eb}}
+  td{{padding:10px 12px;border-bottom:1px solid #e5e7eb}}
+  tr:hover{{background:#f8fafc}}
+  h2{{color:#1e293b}}
+  a{{color:#0969da;text-decoration:none}}
+  a:hover{{text-decoration:underline}}
+</style>
+</head><body>
+<h1>Scores Regression Analysis</h1>
+
+<div class="summary">
+  <h3 style="margin:0 0 12px 0">Summary</h3>
+  <div class="summary-bar">
+    <span class="stat regression">Regressions: {summary['regressions']}</span>
+    <span class="stat improvement">Improvements: {summary['improvements']}</span>
+    <span class="stat neutral">Total Functions: {summary['count']}</span>
+  </div>
+</div>
+
+<h2>Function Scores Comparison</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>Old (pass/total)</th>
+      <th>New (pass/total)</th>
+      <th>Δ passed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {''.join(table_rows)}
+  </tbody>
+</table>
+
+<h2>Raw Data</h2>
+<pre>{json.dumps(scores_diff, indent=2)}</pre>
+
+<p><a href="report.html">← Back to Report</a></p>
+</body></html>"""
+                write_file(repo.path("scores_diff.html"), scores_diff_html)
+                scores_diff_generated = True
+                
+                # Build HTML section for main report
+                scores_html = f"""
+<h3>Scores Regression</h3>
+<div style="background:#f0f9ff;padding:16px;border-radius:8px;margin:12px 0">
+  <div style="display:flex;gap:20px">
+    <span style="padding:8px 12px;border-radius:6px;background:#fee2e2;color:#991b1b;font-weight:600">
+      Regressions: {summary['regressions']}
+    </span>
+    <span style="padding:8px 12px;border-radius:6px;background:#dcfce7;color:#14532d;font-weight:600">
+      Improvements: {summary['improvements']}
+    </span>
+    <span style="padding:8px 12px;border-radius:6px;background:#f3f4f6;color:#374151;font-weight:600">
+      Total: {summary['count']}
+    </span>
+  </div>
+</div>
+<table style="width:100%;border-collapse:collapse;margin:12px 0">
+  <thead>
+    <tr style="background:#f8fafc">
+      <th style="text-align:left;padding:12px;border-bottom:2px solid #e5e7eb">Function</th>
+      <th style="text-align:left;padding:12px;border-bottom:2px solid #e5e7eb">Old (pass/total)</th>
+      <th style="text-align:left;padding:12px;border-bottom:2px solid #e5e7eb">New (pass/total)</th>
+      <th style="text-align:left;padding:12px;border-bottom:2px solid #e5e7eb">Δ passed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {''.join([f'<tr style="border-bottom:1px solid #e5e7eb">' + row.replace('<td', '<td style="padding:10px 12px"') + '</tr>' for row in [r.replace('<tr>', '').replace('</tr>', '') for r in table_rows]])}
+  </tbody>
+</table>
+"""
+        except Exception as e:
+            print(f"[AURORA-X] Could not generate scores diff: {e}")
+    
     latest_badge = (
         '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#16a34a;color:#fff;font-weight:600;">LATEST RUN ✓</span>'
         if is_latest else
@@ -521,6 +657,8 @@ def write_html_report(repo: Repo, spec: Spec) -> None:
         links.append(f'<a href="learn_weights.json">learn_weights.json</a>')
     if graph_diff_generated:
         links.append(f'<a href="graph_diff.html">Compare with latest (diff)</a>')
+    if scores_diff_generated:
+        links.append(f'<a href="scores_diff.html">Scores regression</a>')
     links_html = " | ".join(links) if links else "No corpus files yet"
     
     body = f"""<!doctype html><html><head><meta charset="utf-8"><title>AURORA-X Report</title>
@@ -553,6 +691,8 @@ def write_html_report(repo: Repo, spec: Spec) -> None:
 
 <h3>Call Graph</h3>
 <pre>{json.dumps(graph, indent=2)}</pre>
+
+{scores_html}
 
 <h3>Report</h3>
 <pre>{md}</pre>
