@@ -1,4 +1,9 @@
-.PHONY: run test clean install open-report compare-latest compare-baseline
+.PHONY: run test clean install open-report compare-latest compare-baseline serve progress progress-auto progress-bump check-progress-ci export-csv install-hook
+
+# Variables
+PY ?= python
+PORT ?= 8000
+OUTDIR ?= runs
 
 install:
         pip install -e .
@@ -150,3 +155,28 @@ PY
         @echo "[compare-baseline] Comparison complete. Generated files:"
         @echo "  - $(RUN)/graph_diff.json"
         @echo "  - $(RUN)/scores_diff.json"
+
+progress:
+        @$(PY) tools/update_progress.py
+
+progress-auto:
+        @if [ -z "$(ID)" ]; then echo "Usage: make progress-auto ID=T02"; exit 2; fi; \
+        aurorax --update-task $(ID)=auto
+
+progress-bump:
+        @if [ -z "$(ID)" ] || [ -z "$(DELTA)" ]; then echo "Usage: make progress-bump ID=T02f DELTA=+5"; exit 2; fi; \
+        aurorax --bump $(ID)=$(DELTA)
+
+check-progress-ci:
+        @$(PY) tools/check_progress_regression.py
+
+export-csv:
+        @$(PY) tools/export_progress_csv.py > progress.csv && echo "[ok] wrote progress.csv"
+
+install-hook:
+        @chmod +x tools/precommit.sh && mkdir -p .git/hooks && ln -sf ../../tools/precommit.sh .git/hooks/pre-commit && echo "[ok] pre-commit hook installed"
+
+serve:
+        @LATEST=$$(ls -dt $(OUTDIR)/run-* 2>/dev/null | head -n1); \
+        if [ -z "$$LATEST" ]; then echo "No runs found. Run 'make run' first."; exit 1; fi; \
+        aurorax-serve --run-dir $$LATEST --port $(PORT)
