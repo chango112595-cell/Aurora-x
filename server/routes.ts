@@ -160,48 +160,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Progress tracking endpoints
-  app.get("/api/progress", (req, res) => {
-    try {
-      const fs = require("fs");
-      const path = require("path");
-      const progressPath = path.join(__dirname, "../progress.json");
-      if (fs.existsSync(progressPath)) {
-        const data = JSON.parse(fs.readFileSync(progressPath, "utf-8"));
-        return res.json(data);
-      }
-      return res.status(404).json({ error: "Progress data not found" });
-    } catch (e: any) {
-      return res.status(500).json({ error: "Failed to load progress data" });
-    }
-  });
-
-  app.post("/api/progress/update", (req, res) => {
-    try {
-      const fs = require("fs");
-      const path = require("path");
-      const { execSync } = require("child_process");
-      const progressPath = path.join(__dirname, "../progress.json");
-      
-      if (!fs.existsSync(progressPath)) {
-        return res.status(404).json({ error: "Progress data not found" });
-      }
-      
-      const updates = req.body;
-      const updateCommands = Object.entries(updates).map(([id, value]) => {
-        return `--update-task ${id}=${value}`;
-      }).join(" ");
-      
-      execSync(`python -m aurora_x.main --progress-print ${updateCommands}`, {
-        cwd: path.join(__dirname, ".."),
-      });
-      
-      return res.json({ ok: true, updated: Object.keys(updates) });
-    } catch (e: any) {
-      return res.status(500).json({ error: "Failed to update progress" });
-    }
-  });
-
   const httpServer = createServer(app);
 
   return httpServer;

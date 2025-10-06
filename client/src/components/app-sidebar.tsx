@@ -1,4 +1,4 @@
-import { MessageSquare, Code2, Activity, Database, Settings, Zap, Target } from "lucide-react";
+import { MessageSquare, Code2, Activity, Database, Settings, Zap } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -33,11 +33,6 @@ const menuItems = [
     title: "Corpus Explorer",
     url: "/corpus",
     icon: Database,
-  },
-  {
-    title: "Task Tracker",
-    url: "/tracker",
-    icon: Target,
   },
 ];
 
