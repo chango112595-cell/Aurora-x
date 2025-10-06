@@ -2,6 +2,8 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { corpusStorage } from "./corpus-storage";
+import * as path from "path";
+import * as fs from "fs";
 import {
   corpusEntrySchema,
   corpusQuerySchema,
@@ -157,6 +159,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         error: "internal_error",
         details: e?.message ?? String(e),
       });
+    }
+  });
+
+  // Serve the tracker visual HTML
+  app.get("/tracker-visual", (req, res) => {
+    const trackerPath = path.join(process.cwd(), "tracker_visual.html");
+    if (fs.existsSync(trackerPath)) {
+      res.sendFile(trackerPath);
+    } else {
+      res.status(404).send("Tracker visual not found");
     }
   });
 
