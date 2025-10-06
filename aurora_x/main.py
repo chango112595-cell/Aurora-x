@@ -7,12 +7,19 @@ import sys
 import json
 import random
 import time
+import subprocess
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from glob import glob
 from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, spec_digest
 from .corpus.pretty import fmt_rows, filter_rows, to_json
 from .learn import weights as learn
+
+# Progress tracking constants
+PROGRESS_JSON_DEFAULT = Path(__file__).resolve().parents[1] / "progress.json"
+UPDATE_SCRIPT_DEFAULT = Path(__file__).resolve().parents[1] / "tools" / "update_progress.py"
+HIST_DIR = Path(__file__).resolve().parents[1] / ".progress_history"
 
 def iso_now() -> str:
     """Get current ISO timestamp."""
@@ -199,12 +206,13 @@ def main():
     """Main entry point for Aurora-X."""
     ap = argparse.ArgumentParser(description="AURORA-X Ultra (Offline)")
     
-    # Mutually exclusive: spec, spec-file, dump-corpus, or show-bias
+    # Mutually exclusive: spec, spec-file, dump-corpus, show-bias, or progress-print
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--spec", type=str, help="Inline spec text (Markdown DSL)")
     g.add_argument("--spec-file", type=str, help="Path to spec file")
     g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
     g.add_argument("--show-bias", action="store_true", help="Print current seed_bias and exit")
+    g.add_argument("--progress-print", action="store_true", help="Print computed progress and exit")
     
     # Corpus dump options
     ap.add_argument("--top", type=int, default=10, help="How many corpus entries to print with --dump-corpus")
@@ -226,6 +234,10 @@ def main():
     ap.add_argument("--top-k", type=int, default=50, help="Top-K sampling")
     ap.add_argument("--top-p", type=float, default=0.95, help="Top-P (nucleus) sampling")
     
+    # Progress tracking options
+    ap.add_argument("--update-task", action="append", default=None, help="ID=NN or ID=auto (repeatable)")
+    ap.add_argument("--bump", action="append", default=None, help="ID=+/-Δ (repeatable)")
+    
     args = ap.parse_args()
     
     outdir = Path(args.outdir).resolve() if args.outdir else None
@@ -234,6 +246,52 @@ def main():
         "top_k": args.top_k,
         "top_p": args.top_p
     }
+    
+    # ----- Progress print mode (no synthesis) -----
+    if args.progress_print:
+        data = load_progress() or {}
+        print(json.dumps(data, indent=2))
+        return 0
+    
+    # ----- Handle progress updates (can be used with synthesis) -----
+    if args.update_task or args.bump:
+        updates: Dict[str, str|float] = {}
+        if args.update_task:
+            for item in args.update_task:
+                if "=" not in item:
+                    print(f"[invalid] {item}")
+                    continue
+                k, v = item.split("=", 1)
+                v = v.strip()
+                try:
+                    updates[k.strip()] = float(v)
+                except ValueError:
+                    updates[k.strip()] = v
+        
+        done = []
+        if updates:
+            done += update_progress_ids(updates)
+        
+        if args.bump:
+            for item in args.bump:
+                if "=" not in item or item[0] == "=":
+                    print(f"[invalid bump] {item}")
+                    continue
+                k, v = item.split("=", 1)
+                k = k.strip()
+                v = v.strip()
+                if v[0] in "+-" and v[1:].isdigit():
+                    d = float(v)
+                    r = bump_progress_id(k, d)
+                    if r:
+                        done.append(f"{r}{v}")
+        
+        if done:
+            print("[AURORA-X] updated:", ", ".join(done))
+        
+        # If no synthesis requested, exit after updates
+        if not (args.spec or args.spec_file):
+            return 0
     
     # ----- Show bias mode (no synthesis) -----
     if args.show_bias:
@@ -398,6 +456,257 @@ class AuroraX:
     
     def save_run_config(self, cfg: Dict[str, Any]) -> None:
         write_file(self.repo.path("run_config.json"), json.dumps(cfg, indent=2))
+
+def load_progress() -> Optional[dict]:
+    """Load progress.json if it exists."""
+    try:
+        if PROGRESS_JSON_DEFAULT.exists():
+            return json.loads(PROGRESS_JSON_DEFAULT.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    return None
+
+def save_progress(obj: dict) -> None:
+    """Save progress.json."""
+    PROGRESS_JSON_DEFAULT.write_text(json.dumps(obj, indent=2), encoding="utf-8")
+
+def run_update_script() -> None:
+    """Run update_progress.py if it exists."""
+    if UPDATE_SCRIPT_DEFAULT.exists():
+        try:
+            subprocess.run([sys.executable, str(UPDATE_SCRIPT_DEFAULT)], check=False)
+        except Exception:
+            pass
+
+def update_progress_ids(id_to_pct: Dict[str, str|float]) -> List[str]:
+    """Update progress percentages for given IDs. Handles 'auto' values."""
+    data = load_progress()
+    if not data:
+        return []
+    updated: List[str] = []
+    
+    for ph in data.get("phases", []):
+        for t in ph.get("tasks", []):
+            tid = str(t.get("id"))
+            subs = t.get("subtasks") or []
+            
+            # Update subtasks
+            for s in subs:
+                sid = str(s.get("id"))
+                if sid in id_to_pct and str(id_to_pct[sid]).lower() != "auto":
+                    try:
+                        s["progress"] = float(id_to_pct[sid])
+                        updated.append(sid)
+                    except Exception:
+                        pass
+            
+            # Update task
+            if tid in id_to_pct:
+                val = id_to_pct[tid]
+                if isinstance(val, str) and val.lower() == "auto":
+                    if subs:
+                        avg = sum(float(x.get("progress", 0)) for x in subs) / max(1, len(subs))
+                        t["progress"] = avg
+                        updated.append(f"{tid}=auto({int(round(avg))}%)")
+                    else:
+                        updated.append(f"{tid}=auto(n/a)")
+                else:
+                    try:
+                        t["progress"] = float(val)
+                        updated.append(tid)
+                    except Exception:
+                        pass
+    
+    data["last_updated"] = datetime.utcnow().strftime("%Y-%m-%d")
+    save_progress(data)
+    run_update_script()
+    
+    # Create history snapshot
+    try:
+        HIST_DIR.mkdir(exist_ok=True)
+        ts = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
+        (HIST_DIR / f"progress-{ts}.json").write_text(json.dumps(data, indent=2), encoding="utf-8")
+    except Exception:
+        pass
+    
+    return updated
+
+def bump_progress_id(id_: str, delta: float) -> Optional[str]:
+    """Bump progress by delta for given ID."""
+    data = load_progress()
+    if not data:
+        return None
+    done = None
+    
+    for ph in data.get("phases", []):
+        for t in ph.get("tasks", []):
+            if t.get("id") == id_ and not t.get("subtasks"):
+                t["progress"] = max(0.0, min(100.0, float(t.get("progress", 0) or 0) + delta))
+                done = id_
+            for s in t.get("subtasks", []):
+                if s.get("id") == id_:
+                    s["progress"] = max(0.0, min(100.0, float(s.get("progress", 0) or 0) + delta))
+                    done = id_
+    
+    if done:
+        data["last_updated"] = datetime.utcnow().strftime("%Y-%m-%d")
+        save_progress(data)
+        run_update_script()
+        return done
+    return None
+
+def _recent_runs(parent: Path, limit: int = 12) -> List[Path]:
+    """Get recent run directories."""
+    runs = sorted([Path(p) for p in glob(str(parent / "run-*"))], reverse=True)
+    return runs[:limit]
+
+def _run_pass_count(run_dir: Path) -> Optional[int]:
+    """Count passed tests from scores.jsonl."""
+    fp = run_dir / "logs" / "scores.jsonl"
+    if not fp.exists():
+        return None
+    
+    latest: Dict[str, int] = {}
+    iters: Dict[str, int] = {}
+    
+    for line in fp.read_text(encoding="utf-8").splitlines():
+        try:
+            o = json.loads(line)
+            fn = o.get("function")
+            it = int(o.get("iter", -1))
+            if fn is None:
+                continue
+            if fn not in iters or it >= iters[fn]:
+                iters[fn] = it
+                latest[fn] = int(o.get("passed", 0))
+        except Exception:
+            pass
+    
+    return sum(latest.values()) if latest else None
+
+def render_floating_hud(repo_root: Path) -> str:
+    """Generate floating HUD HTML with SVG chart."""
+    parent = repo_root.parent
+    pts = []
+    for r in reversed(_recent_runs(parent, limit=12)):
+        v = _run_pass_count(r)
+        pts.append(0 if v is None else int(v))
+    
+    if not pts:
+        pts = [0]
+    
+    mx = max(pts) or 1
+    w, h = 160, 36
+    n = len(pts)
+    xs = [i * (w / (max(1, n - 1))) for i in range(n)]
+    ys = [h - (p / mx) * (h - 6) - 3 for p in pts]
+    
+    if n > 1:
+        path = " ".join(f"L{xs[i]:.1f},{ys[i]:.1f}" for i in range(1, n))
+        d = f"M{xs[0]:.1f},{ys[0]:.1f} {path}"
+    else:
+        d = f"M0,{ys[0]:.1f} L{w},{ys[0]:.1f}"
+    
+    return f"""
+<!-- Aurora HUD -->
+<div id="aurora-hud" style="position:fixed; top:16px; right:16px; z-index:9999; font-family:system-ui">
+  <div style="background:#111;color:#fff;padding:8px 10px;border-radius:8px;opacity:0.85; transition:opacity .2s, transform .2s;"
+       onmouseover="this.style.opacity=1; this.style.transform='scale(1.03)'"
+       onmouseout="this.style.opacity=.85; this.style.transform='scale(1.0)'">
+    <div style="display:flex; align-items:center; gap:8px; justify-content:space-between;">
+      <strong>Aurora HUD</strong><span style="font-size:12px;opacity:.8">(hover)</span>
+    </div>
+    <div style="margin-top:6px;background:#222;padding:6px;border-radius:6px">
+      <svg viewBox="0 0 {w} {h}" width="{w}" height="{h}" role="img" aria-label="recent pass counts">
+        <path d="{d}" fill="none" stroke="#10b981" stroke-width="2"/>
+      </svg>
+    </div>
+    <div style="font-size:12px;opacity:.85;margin-top:6px;">Recent runs (newest → right)</div>
+    <div style="margin-top:8px;border-top:1px solid #333;padding-top:6px;">
+      <form id="aurora-edit" onsubmit="return window._auroraSubmit(event)">
+        <div style="display:flex;gap:6px;align-items:center;">
+          <input id="aurora-id" placeholder="ID (e.g., T02f)" style="width:88px;border-radius:4px;border:1px solid #444;background:#000;color:#fff;padding:4px 6px">
+          <input id="aurora-val" placeholder="NN or auto or +5" style="width:120px;border-radius:4px;border:1px solid #444;background:#000;color:#fff;padding:4px 6px">
+          <button type="submit" style="border:0;background:#10b981;color:#000;padding:4px 8px;border-radius:4px;font-weight:700;cursor:pointer">Update</button>
+        </div>
+        <div id="aurora-hint" style="margin-top:4px;font-size:12px;opacity:.85;"></div>
+      </form>
+      <script>
+      (function(){{
+        const hint = document.getElementById('aurora-hint');
+        const served = location.protocol.startsWith('http');
+        if(!served){{
+          hint.innerText = "To edit: run `aurorax-serve --run-dir <RUN_DIR>` and open http://localhost:8000";
+          document.getElementById('aurora-id').disabled = true;
+          document.getElementById('aurora-val').disabled = true;
+        }} else {{
+          hint.innerText = "POST /_aurora/update (ID=NN|auto|+/-Δ)";
+        }}
+        window._auroraSubmit = async (ev) => {{
+          ev.preventDefault();
+          if(!location.protocol.startsWith('http')) return false;
+          const id = document.getElementById('aurora-id').value.trim();
+          const val = document.getElementById('aurora-val').value.trim();
+          if(!id || !val) {{ hint.innerText = "Provide ID and value"; return false; }}
+          const body = {{updates:{{}}}};
+          // allow +5/-3 bump
+          if((val.startsWith('+')||val.startsWith('-')) && !isNaN(Number(val.substring(1)))){{
+            body.bump = {{[id]: Number(val)}};
+          }} else {{
+            body.updates[id] = isNaN(Number(val)) ? val : Number(val);
+          }}
+          try{{
+            const res = await fetch('/_aurora/update', {{method:'POST', headers:{{'Content-Type':'application/json'}}, body: JSON.stringify(body)}});
+            const j = await res.json();
+            hint.innerText = (j.updated && j.updated.length ? "Updated: " + j.updated.join(", ") : "No changes");
+          }}catch(e){{ hint.innerText = "Error: " + e; }}
+          return false;
+        }};
+      }})();
+      </script>
+    </div>
+  </div>
+</div>
+"""
+
+def render_progress_sidebar_html() -> str:
+    """Generate progress sidebar HTML."""
+    data = load_progress()
+    if not data:
+        return ""
+    
+    def task_pct(t):
+        subs = t.get("subtasks") or []
+        return (sum(float(s.get("progress", 0)) for s in subs) / len(subs)) if subs else float(t.get("progress", 0) or 0)
+    
+    def phase_pct(ph):
+        pairs = [(task_pct(t), max(1, len(t.get("subtasks") or []))) for t in ph.get("tasks", [])]
+        num = sum(v * w for v, w in pairs)
+        den = sum(w for _, w in pairs) or 1
+        return num / den
+    
+    def overall(phases):
+        pairs = [(phase_pct(ph), max(1, len(ph.get("tasks") or []))) for ph in phases]
+        num = sum(v * w for v, w in pairs)
+        den = sum(w for _, w in pairs) or 1
+        return num / den
+    
+    ov = overall(data.get("phases", []))
+    rows = []
+    for ph in data.get("phases", []):
+        pct = int(round(phase_pct(ph)))
+        rows.append(f'<div style="margin-bottom:4px">{ph.get("id")} {ph.get("name")}: <strong>{pct}%</strong></div>')
+    
+    return f"""
+<aside style="position:sticky; top:16px; padding:12px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa; max-width:360px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+    <h3 style="margin:0;font-size:16px;">Project Progress</h3>
+    <span style="font-weight:700;">{int(round(ov))}%</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px;">{''.join(rows)}</div>
+  <div style="margin-top:8px;"><a href="../MASTER_TASK_LIST.md">Open MASTER_TASK_LIST.md</a></div>
+</aside>
+"""
 
 def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -> None:
     """Generate HTML report with latest run status."""
@@ -689,6 +998,10 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
         links.append(f'<a href="scores_diff.html">Scores regression</a>')
     links_html = " | ".join(links) if links else "No corpus files yet"
     
+    # Generate HUD and sidebar
+    hud_html = render_floating_hud(repo.root)
+    sidebar_html = render_progress_sidebar_html()
+    
     body = f"""<!doctype html><html><head><meta charset="utf-8"><title>AURORA-X Report</title>
 <style>
   body{{font-family:system-ui,Segoe UI,Roboto,sans-serif;margin:24px}}
@@ -699,8 +1012,13 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
   h3{{color:#1e293b;margin-top:24px}}
   a{{color:#0969da;text-decoration:none}}
   a:hover{{text-decoration:underline}}
+  .layout{{display:grid;grid-template-columns:1fr 380px;gap:24px}}
+  main{{min-width:0}}
 </style>
 </head><body>
+{hud_html}
+<div class="layout">
+<main>
 <div class="hdr">
   <h1 style="margin:0;">AURORA-X Ultra</h1>
   {latest_badge}
@@ -725,7 +1043,9 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
 
 <h3>Report</h3>
 <pre>{md}</pre>
-
+</main>
+{sidebar_html}
+</div>
 </body></html>"""
     write_file(repo.path("report.html"), body)
 
