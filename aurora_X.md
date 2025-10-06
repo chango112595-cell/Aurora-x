@@ -1,3 +1,46 @@
+# AURORA-X — Project Notes & Live Tracker
+
+> **Task Docs Sync (always-accurate docs)**
+>
+> - **Update tracker section in `aurora_X.md`:** `make summary`  
+> - **Detect paste drift vs MASTER_TASK_LIST:** `make drift`  
+> - Pre-commit runs both automatically (`tools/precommit.sh`) so docs never go stale.
+
+Aurora-X Ultra is an offline, zero-API, secure-by-default program synthesis engine with a live HUD/Sidebar/Dashboard tracker.  
+This document now contains the **canonical tracker block** and **sync tools** so your docs always match the true state.
+
+---
+
+## TL;DR — What Aurora Does Today
+- Spec-DSL → tests (examples + fuzz + post-conditions)  
+- AST synthesis (beam); scoring by examples + post; security audit  
+- Iterate (mutate/resynthesize); sandboxed `unittest`; call-graph + scores; HTML report  
+- Auto-debug scaffold (isolate fails, shrink hints, patch suggestions)  
+- Tracker: HUD (floating), Sidebar (sticky), `/dashboard` UI, history snapshots & sparkline, CSV export  
+- Offline-first; optional telemetry to Chango via env-gated POST (off by default)
+
+---
+
+## How To Keep This File In Sync
+Run:
+```bash
+make summary   # upserts the canonical tracker block below
+make drift     # prints diff if anything diverges from MASTER_TASK_LIST.md
+```
+
+---
+
+## Current Scope & Non-Negotiables
+- Offline-first (no external APIs by default)  
+- Strict security auditing on generated code (AST; forbidden calls/imports)  
+- Deterministic runs; isolated subsystems (easy to swap/fix)  
+- If a recommendation improves quality/safety, implement it—don't ask
+
+---
+
+<!-- AURORA_TRACKER_BEGIN -->
+### ✅ Task Tracker Status (Authoritative, from progress.json)
+
 # 🎯 Aurora-X Task Tracker - MASTER_TASK_LIST
 
 *Generated: 2025-10-06 09:58:27*
@@ -65,3 +108,20 @@
 2. Run `python tools/update_progress.py` to validate and regenerate this file
 3. Check for any validation errors or gating violations
 4. Commit both files together
+
+<!-- AURORA_TRACKER_END -->
+
+---
+
+## Usage Recap
+```bash
+pip install -e .
+make run && make open-report
+
+# Serve dashboard
+make serve PORT=8000   # http://localhost:8000  (dashboard at /dashboard)
+
+# Docs sync
+make summary
+make drift
+```

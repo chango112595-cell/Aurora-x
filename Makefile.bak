@@ -187,10 +187,3 @@ summary:
 
 drift:
 	@$(PY) tools/check_task_drift.py || true
-.PHONY: summary drift
-
-summary:
-	@python3 tools/update_summary_md.py
-
-drift:
-	@python3 tools/check_task_drift.py || true
