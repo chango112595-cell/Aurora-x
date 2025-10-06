@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aurora-x"
-version = "0.2.0"
-description = "Aurora-X Ultra - Offline Autonomous Code Synthesis Engine"
+version = "1.1.0"
+description = "Aurora-X Ultra - Offline Autonomous Code Synthesis Engine + Live Task Tracker"
 authors = [
     {name = "Aurora Team"},
 ]
 readme = "README.md"
 requires-python = ">=3.8"
+keywords = ["tracker", "hud"]
 dependencies = []
 
 [project.optional-dependencies]
@@ -22,6 +23,7 @@ dev = [
 
 [project.scripts]
 aurorax = "aurora_x.main:main"
+aurorax-serve = "aurora_x.serve:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
