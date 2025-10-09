@@ -16,6 +16,8 @@ from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, 
 from .corpus.pretty import fmt_rows, filter_rows, to_json
 from .learn import weights as learn, get_seed_store
 from .learn import AdaptiveBiasScheduler, AdaptiveConfig
+from .spec.parser_v2 import parse
+from .synthesis.search import synthesize
 
 # Global adaptive scheduler for API access
 _global_adaptive_scheduler: Optional[AdaptiveBiasScheduler] = None
@@ -206,14 +208,30 @@ def write_file(p, c):
     Path(p).parent.mkdir(parents=True, exist_ok=True)
     Path(p).write_text(c)
 
+def run_spec(path: str):
+    """Run spec compilation for the given spec file."""
+    sp = Path(path)
+    if not sp.exists():
+        print(f"[ERR] Spec not found: {sp}")
+        sys.exit(1)
+    md = sp.read_text(encoding='utf-8')
+    spec = parse(md)
+    out = synthesize(spec, Path('runs'))
+    print(f"[OK] Generated: {out}")
+    print(f"Source: {out/'src'}")
+    print(f"Tests: {out/'tests'}")
+    print(f"Report: {out/'report.html'}")
+    print(f"Run tests: python -m unittest discover -s {out/'tests'} -t {out}")
+
 def main():
     """Main entry point for Aurora-X."""
     ap = argparse.ArgumentParser(description="AURORA-X Ultra (Offline)")
     
-    # Mutually exclusive: spec, spec-file, dump-corpus, show-bias, or progress-print
+    # Mutually exclusive: spec (for spec compilation), spec-text, spec-file, dump-corpus, show-bias, or progress-print
     g = ap.add_mutually_exclusive_group(required=True)
-    g.add_argument("--spec", type=str, help="Inline spec text (Markdown DSL)")
-    g.add_argument("--spec-file", type=str, help="Path to spec file")
+    g.add_argument("--spec", type=str, help="Path to spec markdown to compile → code")
+    g.add_argument("--spec-text", type=str, help="Inline spec text (Markdown DSL)")
+    g.add_argument("--spec-file", type=str, help="Path to spec file (legacy synthesis)")
     g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
     g.add_argument("--show-bias", action="store_true", help="Print current seed_bias and exit")
     g.add_argument("--progress-print", action="store_true", help="Print computed progress and exit")
@@ -250,6 +268,11 @@ def main():
         "top_k": args.top_k,
         "top_p": args.top_p
     }
+    
+    # ----- Spec compilation mode -----
+    if args.spec:
+        run_spec(args.spec)
+        return 0
     
     # ----- Progress print mode (no synthesis) -----
     if args.progress_print:
@@ -294,7 +317,7 @@ def main():
             print("[AURORA-X] updated:", ", ".join(done))
         
         # If no synthesis requested, exit after updates
-        if not (args.spec or args.spec_file):
+        if not (args.spec_text or args.spec_file):
             return 0
     
     # ----- Show bias mode (no synthesis) -----
@@ -322,7 +345,7 @@ def main():
         return 0
     
     # ----- Synthesis mode -----
-    spec_text = args.spec if args.spec else Path(args.spec_file).read_text()
+    spec_text = args.spec_text if args.spec_text else Path(args.spec_file).read_text()
     
     ax = AuroraX(
         seed=args.seed, 
