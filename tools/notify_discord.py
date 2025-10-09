@@ -15,7 +15,10 @@ def _post(payload: Dict[str, Any], retries: int = 3):
     if not WEBHOOK:
         print("❌ DISCORD_WEBHOOK_URL not set"); return False
     data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(WEBHOOK, data=data, headers={"Content-Type":"application/json"})
+    req = urllib.request.Request(WEBHOOK, data=data, headers={
+        "Content-Type": "application/json",
+        "User-Agent": "Aurora-X/1.0"  # Discord requires User-Agent header
+    })
     for i in range(retries+1):
         try:
             with urllib.request.urlopen(req, timeout=10) as r:
