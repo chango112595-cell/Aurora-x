@@ -257,7 +257,7 @@ def get_seed_store(
             path = os.environ.get("AURORA_SEEDS_PATH", ".aurora/seeds.json")
         
         _seed_store = SeedStore(
-            path=path,
+            path=path or ".aurora/seeds.json",
             alpha=alpha,
             drift_cap=drift_cap,
             top_n=top_n
