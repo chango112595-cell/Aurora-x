@@ -1,15 +1,1 @@
-{
-  "biases": {
-    "test1": 0.08000000000000002
-  },
-  "metadata": {
-    "config": {
-      "alpha": 0.2,
-      "drift_cap": 0.15,
-      "top_n": 10
-    },
-    "created": 1760041197.4457786,
-    "total_updates": 1,
-    "updated": 1760041197.4487634
-  }
-}
+{"hello": 0.2}
