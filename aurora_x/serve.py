@@ -609,6 +609,34 @@ class AuroraHandler(SimpleHTTPRequestHandler):
                 response = {"status": "error", "message": str(e)}
                 self._ok(json.dumps(response).encode('utf-8'), "application/json")
         
+        elif self.path == "/api/seed_bias":
+            # Serve seed bias summary and top reasons
+            try:
+                from ..learn import get_seed_store
+                seed_store = get_seed_store()
+                summary = seed_store.get_summary()
+                
+                response = {
+                    "summary": {
+                        "total_seeds": summary["total_seeds"],
+                        "avg_bias": round(summary["avg_bias"], 4),
+                        "max_bias": round(summary["max_bias"], 4),
+                        "min_bias": round(summary["min_bias"], 4),
+                        "total_updates": summary["total_updates"],
+                        "config": summary["config"]
+                    },
+                    "top_biases": [
+                        {"seed_key": key, "bias": round(bias, 4)}
+                        for key, bias in summary.get("top_biases", [])
+                    ]
+                }
+                
+                self._ok(json.dumps(response).encode('utf-8'), "application/json")
+                
+            except Exception as e:
+                response = {"status": "error", "message": str(e)}
+                self._ok(json.dumps(response).encode('utf-8'), "application/json")
+        
         else:
             self.send_error(404, "Endpoint not found")
     
