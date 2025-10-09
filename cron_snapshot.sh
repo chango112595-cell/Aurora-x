@@ -15,6 +15,6 @@ echo "Snapshot complete: $STAMP"
 
 # Send Discord notification
 python - <<'PY'
-from tools.notify_discord import send
-send("🗂️ Aurora snapshot completed successfully.")
+from tools.notify_discord import snapshot_alert
+snapshot_alert(".progress_history", kept=30)
 PY
