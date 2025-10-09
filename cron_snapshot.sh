@@ -12,3 +12,9 @@ STAMP="$(date -u +%Y%m%d_%H%M%S)"
 # prune old
 ls -1t "$DST" | awk "NR>$KEEP" | while read -r f; do rm -f "$DST/$f"; done
 echo "Snapshot complete: $STAMP"
+
+# Send Discord notification
+python - <<'PY'
+from tools.notify_discord import send
+send("🗂️ Aurora snapshot completed successfully.")
+PY
