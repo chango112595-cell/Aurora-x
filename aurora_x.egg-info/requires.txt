@@ -1,0 +1,7 @@
+fastapi>=0.118.2
+uvicorn[standard]>=0.33.0
+
+[dev]
+pytest>=7.0
+black>=22.0
+mypy>=0.950
