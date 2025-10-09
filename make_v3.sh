@@ -10,6 +10,18 @@ case "${2:-spec3-all}" in
     uvicorn aurora_x.serve:app --host 0.0.0.0 --port ${PORT:-5000}
     ;;
     
+  open-dashboard)
+    PORT=${PORT:-5000}
+    HOST="${REPL_SLUG:+${REPL_SLUG}.${REPL_OWNER}.repl.co}"
+    if [ -n "$HOST" ]; then
+      URL="https://$HOST/dashboard/spec_runs"
+    else
+      URL="http://localhost:$PORT/dashboard/spec_runs"
+    fi
+    echo "🌌 Dashboard → $URL"
+    URL=$URL python -c "import webbrowser,os; webbrowser.open(os.environ.get('URL',''))" 2>/dev/null || true
+    ;;
+    
   spec3)
     echo "🔧 v3 compile: $SPEC3"
     python tools/spec_compile_v3.py "$SPEC3" || {
@@ -56,14 +68,16 @@ case "${2:-spec3-all}" in
   *)
     echo "Usage: ./make_v3.sh [spec.md] [command]"
     echo "Commands:"
-    echo "  serve-v3   - Start FastAPI server"
-    echo "  spec3      - Compile v3 spec"
-    echo "  spec3-test - Test latest run"
-    echo "  spec3-all  - Compile, test, and notify (default)"
+    echo "  serve-v3        - Start FastAPI server"
+    echo "  open-dashboard  - Open dashboard URL in browser"
+    echo "  spec3           - Compile v3 spec"
+    echo "  spec3-test      - Test latest run"
+    echo "  spec3-all       - Compile, test, and notify (default)"
     echo ""
     echo "Examples:"
     echo "  ./make_v3.sh specs/check_palindrome.md spec3-all"
     echo "  ./make_v3.sh specs/fibonacci_sequence.md spec3"
     echo "  ./make_v3.sh - serve-v3"
+    echo "  ./make_v3.sh - open-dashboard"
     ;;
 esac
