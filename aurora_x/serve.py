@@ -609,6 +609,40 @@ class AuroraHandler(SimpleHTTPRequestHandler):
                 response = {"status": "error", "message": str(e)}
                 self._ok(json.dumps(response).encode('utf-8'), "application/json")
         
+        elif self.path == "/api/seed_bias/history":
+            # Serve seed bias history from adaptive scheduler
+            try:
+                # Get global scheduler if available
+                from aurora_x.main import _global_adaptive_scheduler
+                if _global_adaptive_scheduler:
+                    response = {"history": _global_adaptive_scheduler.history}
+                else:
+                    response = {"history": []}
+                
+                self._ok(json.dumps(response).encode('utf-8'), "application/json")
+                
+            except Exception as e:
+                response = {"history": []}
+                self._ok(json.dumps(response).encode('utf-8'), "application/json")
+        
+        elif self.path == "/api/adaptive_stats":
+            # Serve adaptive scheduler statistics
+            try:
+                from aurora_x.main import _global_adaptive_scheduler
+                if _global_adaptive_scheduler:
+                    response = {
+                        "summary": _global_adaptive_scheduler.summary(),
+                        "iteration": _global_adaptive_scheduler.iteration
+                    }
+                else:
+                    response = {"summary": {}, "iteration": 0}
+                
+                self._ok(json.dumps(response).encode('utf-8'), "application/json")
+                
+            except Exception as e:
+                response = {"summary": {}, "iteration": 0}
+                self._ok(json.dumps(response).encode('utf-8'), "application/json")
+        
         elif self.path == "/api/seed_bias":
             # Serve seed bias summary and top reasons
             try:
