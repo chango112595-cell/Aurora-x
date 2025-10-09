@@ -17,6 +17,61 @@ import {
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Aurora-X Adaptive Learning Stats endpoints
+  app.get("/api/adaptive_stats", (req, res) => {
+    try {
+      // Import and access the global scheduler if available
+      const { _global_adaptive_scheduler } = require("../aurora_x/main");
+      if (_global_adaptive_scheduler) {
+        return res.json({
+          summary: _global_adaptive_scheduler.summary(),
+          iteration: _global_adaptive_scheduler.iteration
+        });
+      } else {
+        return res.json({ summary: {}, iteration: 0 });
+      }
+    } catch (e) {
+      return res.json({ summary: {}, iteration: 0 });
+    }
+  });
+
+  app.get("/api/seed_bias/history", (req, res) => {
+    try {
+      const { _global_adaptive_scheduler } = require("../aurora_x/main");
+      if (_global_adaptive_scheduler) {
+        return res.json({ history: _global_adaptive_scheduler.history });
+      } else {
+        return res.json({ history: [] });
+      }
+    } catch (e) {
+      return res.json({ history: [] });
+    }
+  });
+
+  app.get("/api/seed_bias", (req, res) => {
+    try {
+      const { get_seed_store } = require("../aurora_x/learn");
+      const seed_store = get_seed_store();
+      const summary = seed_store.get_summary();
+      
+      return res.json({
+        summary: {
+          total_seeds: summary["total_seeds"],
+          avg_bias: Math.round(summary["avg_bias"] * 10000) / 10000,
+          max_bias: Math.round(summary["max_bias"] * 10000) / 10000,
+          min_bias: Math.round(summary["min_bias"] * 10000) / 10000,
+          total_updates: summary["total_updates"],
+          config: summary["config"]
+        },
+        top_biases: (summary["top_biases"] || []).map(([key, bias]) => ({
+          seed_key: key,
+          bias: Math.round(bias * 10000) / 10000
+        }))
+      });
+    } catch (e: any) {
+      return res.status(500).json({ error: "Internal error", details: e?.message ?? String(e) });
+    }
+  });
   app.post("/api/corpus", (req, res) => {
     const auth = req.header("x-api-key") ?? "";
     if (auth !== AURORA_API_KEY) {
