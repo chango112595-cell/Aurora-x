@@ -1,0 +1,36 @@
+# === Aurora-X Spec → Code + Tests + Discord ===
+
+SPEC ?= specs/rich_spec_v2.md
+DISCORD_CLI := tools/discord_cli.py
+
+spec:
+	@echo "🔧 Compiling spec: $(SPEC)"
+	@python -m aurora_x.main --spec $(SPEC) || { \
+	  python $(DISCORD_CLI) error "❌ Spec $(SPEC) failed to compile"; exit 1; }
+
+spec-test:
+	@echo "🧪 Running tests for latest run..."
+	@latest=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
+	if [ -z "$$latest" ]; then echo "No runs found"; exit 1; fi; \
+	cd $$latest && PYTHONPATH=$$PWD python -m unittest discover -s tests || { \
+	  python $(DISCORD_CLI) error "❌ Tests failed for $$(basename $$latest)"; exit 1; }
+
+spec-report:
+	@latest=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
+	if [ -z "$$latest" ]; then echo "No runs found"; exit 1; fi; \
+	echo "📊 Report: $$latest/report.html"
+
+spec-all:
+	@$(MAKE) -f Makefile.aurora spec SPEC=$(SPEC)
+	@$(MAKE) -f Makefile.aurora spec-test
+	@latest=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
+	python $(DISCORD_CLI) success "✅ Aurora-X: $(SPEC) passed — $$(basename $$latest)"
+# === Aurora-X v3 targets ===
+SPEC3 ?= specs/check_palindrome.md
+
+spec3:
+	@echo "🔧 v3 compile: $(SPEC3)"
+	@python tools/spec_compile_v3.py $(SPEC3)"
+
+dashboard:
+	@echo "ℹ️ Mount 'aurora_x.serve_dashboard_v2:make_router' in your server and visit /dashboard/spec_runs"
