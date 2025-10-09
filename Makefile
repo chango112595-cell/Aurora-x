@@ -299,3 +299,30 @@ show-latest:
 	@echo ""
 	@echo "🧪 To test: make spec-test"
 	@echo "📊 To view report: make spec-report"
+
+# === Aurora-X Ultra v3 — Serve + Spec v3 + Discord ===
+.PHONY: serve-v3 spec3 spec3-test spec3-all
+
+SPEC3 ?= specs/check_palindrome.md
+DISCORD := tools/discord_cli.py
+
+serve-v3:
+	uvicorn aurora_x.serve:app --host 0.0.0.0 --port $${PORT:-5000}
+
+spec3:
+	@echo "🔧 v3 compile: $(SPEC3)"
+	@python tools/spec_compile_v3.py $(SPEC3) || { \
+	  [ -f $(DISCORD) ] && python $(DISCORD) error "❌ v3 compile failed: $(SPEC3)"; exit 1; }
+
+spec3-test:
+	@latest=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
+	if [ -z "$$latest" ]; then echo "No runs found"; exit 1; fi; \
+	python -m unittest discover -s $$latest/tests -t $$latest || { \
+	  [ -f $(DISCORD) ] && python $(DISCORD) error "❌ v3 tests failed for $$(basename $$latest)"; exit 1; }
+
+spec3-all:
+	@$(MAKE) spec3 SPEC3=$(SPEC3)
+	@$(MAKE) spec3-test
+	@latest=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
+	echo "📊 Report: $$latest/report.html   |   Dashboard: /dashboard/spec_runs"; \
+	[ -f $(DISCORD) ] && python $(DISCORD) success "✅ v3 spec passed: $(SPEC3) — $$(basename $$latest)"
