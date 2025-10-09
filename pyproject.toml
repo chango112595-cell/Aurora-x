@@ -12,7 +12,10 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.8"
 keywords = ["tracker", "hud"]
-dependencies = []
+dependencies = [
+    "fastapi>=0.118.2",
+    "uvicorn[standard]>=0.33.0",
+]
 
 [project.optional-dependencies]
 dev = [
