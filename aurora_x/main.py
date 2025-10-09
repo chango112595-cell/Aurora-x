@@ -15,6 +15,10 @@ from glob import glob
 from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, spec_digest
 from .corpus.pretty import fmt_rows, filter_rows, to_json
 from .learn import weights as learn, get_seed_store
+from .learn import AdaptiveBiasScheduler, AdaptiveConfig
+
+# Global adaptive scheduler for API access
+_global_adaptive_scheduler: Optional[AdaptiveBiasScheduler] = None
 
 # Progress tracking constants
 PROGRESS_JSON_DEFAULT = Path(__file__).resolve().parents[1] / "progress.json"
@@ -369,6 +373,13 @@ class AuroraX:
         
         # Initialize persistent seed store
         self.seed_store = get_seed_store()
+        
+        # Initialize adaptive scheduler
+        self.adaptive_scheduler = self._attach_adaptive_scheduler()
+        
+        # Set global reference for API access
+        global _global_adaptive_scheduler
+        _global_adaptive_scheduler = self.adaptive_scheduler
     
     def run(self, spec_text: str):
         """Main orchestration loop."""
@@ -387,8 +398,15 @@ class AuroraX:
                 bias = self.seed_store.get_bias(seed_key)
                 
                 # Apply bias to candidate enumeration
+                candidates = []
                 for row in corpus_retrieve(self.repo.root, sig, k=min(12, self.beam//4)):
                     seed_snippets.append(row["snippet"])
+                    candidates.append(seed_key)
+                
+                # Use adaptive scheduler to choose candidate
+                if candidates and self.adaptive_scheduler:
+                    chosen_key = self.adaptive_scheduler.choose(candidates)
+                    self.adaptive_scheduler.tick()
             
             # Synthesize (stub - would call actual synthesis)
             cand = type('obj', (object,), {'src': 'def stub(): pass'})()
@@ -409,12 +427,17 @@ class AuroraX:
             
             # Update seed store with result
             if not self.disable_seed:
+                success = corpus_entry["passed"] == corpus_entry["total"]
                 result = {
                     "seed_key": seed_key,
                     "score": corpus_entry["score"],
-                    "success": corpus_entry["passed"] == corpus_entry["total"]
+                    "success": success
                 }
                 self.seed_store.update(result)
+                
+                # Update adaptive scheduler
+                if self.adaptive_scheduler:
+                    self.adaptive_scheduler.reward(seed_key, success, magnitude=corpus_entry["score"])
             
             # Learning nudge (keep legacy for backward compat)
             won_with_seed = _seed_won(cand.src, seed_snippets)
@@ -477,6 +500,16 @@ class AuroraX:
     
     def save_run_config(self, cfg: Dict[str, Any]) -> None:
         write_file(self.repo.path("run_config.json"), json.dumps(cfg, indent=2))
+    
+    def _attach_adaptive_scheduler(self) -> AdaptiveBiasScheduler:
+        """Attach adaptive bias scheduler to the engine."""
+        cfg = AdaptiveConfig(epsilon=0.15, decay=0.98, cooldown_iters=5, top_k=10)
+        sched = AdaptiveBiasScheduler(cfg)
+        try:
+            sched.load(self.seed_store.get_biases())
+        except Exception:
+            pass
+        return sched
 
 def load_progress() -> Optional[dict]:
     """Load progress.json if it exists."""
