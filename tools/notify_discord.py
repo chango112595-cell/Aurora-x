@@ -38,20 +38,20 @@ def _post(payload: Dict[str, Any], retries: int = 3):
             print("❌ Discord error:", e); return False
 
 def send_text(msg: str) -> bool:
-    return _post({"username": USERNAME, "avatar_url": AVATAR, "content": msg})
+    return _post({"username": USERNAME, "avatar_url": AVATAR, "content": msg}) or False
 
 def send_embed(title: str, description: str, color: int = BLUE, fields: Optional[list] = None, url: Optional[str] = None) -> bool:
     embed = {"title": title, "description": description, "color": color}
     if fields: embed["fields"] = fields
     if url: embed["url"] = url
     payload = {"username": USERNAME, "avatar_url": AVATAR, "embeds": [embed]}
-    return _post(payload)
+    return _post(payload) or False
 
 # Convenience styles
-def success(msg: str, **kw) -> bool: return send_embed("✅ Success", msg, GREEN, **kw)
-def warning(msg: str, **kw) -> bool: return send_embed("⚠️ Warning", msg, YELLOW, **kw)
-def error(msg: str,   **kw) -> bool: return send_embed("❌ Failure", msg, RED, **kw)
-def info(msg: str,    **kw) -> bool: return send_embed("ℹ️ Info", msg, BLUE, **kw)
+def success(msg: str, **kw) -> bool: return send_embed("✅ Success", msg, GREEN, **kw) or False
+def warning(msg: str, **kw) -> bool: return send_embed("⚠️ Warning", msg, YELLOW, **kw) or False
+def error(msg: str,   **kw) -> bool: return send_embed("❌ Failure", msg, RED, **kw) or False
+def info(msg: str,    **kw) -> bool: return send_embed("ℹ️ Info", msg, BLUE, **kw) or False
 
 # Domain-specific helpers
 def commit_alert(repo: str, branch: str, commit_url: str, files: int, message: str) -> bool:
