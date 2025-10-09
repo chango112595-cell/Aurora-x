@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent))
 from aurora_x.spec.parser_v3 import parse_v3
 from aurora_x.synthesis.flow_ops import impl_for
 
@@ -15,23 +13,16 @@ def main(spec_path: str):
     (out / "src").mkdir(parents=True, exist_ok=True)
     (out / "tests").mkdir(parents=True, exist_ok=True)
 
-    test_lines = ["import unittest", "import sys", "from pathlib import Path", "sys.path.insert(0, str(Path(__file__).parent.parent))"]
-    
-    all_imports = []
-    all_tests = []
-    
+    test_lines = ["import unittest"]
     for fn in spec.functions:
         code = impl_for(fn.signature, fn.description)
         modname = fn.name
         (out / "src" / f"{modname}.py").write_text(code, encoding="utf-8")
-        all_imports.append(f"from src.{modname} import {modname}")
-        
+        test_lines.append(f"from src.{modname} import {modname}")
         for i, ex in enumerate(fn.examples or []):
             args = ", ".join(f"{k}={repr(v)}" for k,v in ex.inputs.items())
-            all_tests.append(f"class Test_{modname}_{i}(unittest.TestCase):\n    def test_{i}(self):\n        self.assertEqual({modname}({args}), {repr(ex.output)})")
-    
-    test_lines.extend(all_imports)
-    test_lines.extend(all_tests)
+            test_lines.append(f"class Test_{modname}_{i}(unittest.TestCase):\n    def test_{i}(self):\n        self.assertEqual({modname}({args}), {repr(ex.output)})")
+
     test_lines.append("\nif __name__=='__main__': unittest.main()")
     (out / "tests" / "test_v3.py").write_text("\n".join(test_lines), encoding="utf-8")
     (out / "report.html").write_text(f"<h2>Aurora-X v3 Report</h2><p>Run: {run_id}</p>", encoding="utf-8")
