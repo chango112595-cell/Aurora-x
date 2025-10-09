@@ -1,0 +1,61 @@
+# Production Makefile for Aurora-X
+# Includes CI gates and deployment checks
+
+.PHONY: prod-check prod-config prod-gate prod-deploy snapshot clean-snapshots
+
+# Production check - run all gates
+prod-check: prod-config prod-gate
+	@echo "✅ All production checks passed"
+
+# Validate and save production config
+prod-config:
+	@echo "Saving production configuration..."
+	@python prod_config.py
+
+# CI gate check
+prod-gate:
+	@echo "Running CI gate checks..."
+	@python prod_config.py || (echo "❌ CI gate failed" && exit 1)
+
+# Deploy to production (example)
+prod-deploy: prod-check
+	@echo "=================================================="
+	@echo "DEPLOYING TO PRODUCTION"
+	@echo "=================================================="
+	@echo "Config verified: ✅"
+	@echo "Tests passed: ✅"
+	@echo "Drift within limits: ✅"
+	@echo ""
+	@echo "Deployment steps:"
+	@echo "1. Creating production snapshot..."
+	@bash cron_snapshot.sh
+	@echo "2. Setting production environment..."
+	@export AURORA_ENV=production
+	@echo "3. Starting production server..."
+	@echo "(Add your deployment commands here)"
+
+# Manual snapshot
+snapshot:
+	@bash cron_snapshot.sh
+
+# Clean old snapshots
+clean-snapshots:
+	@echo "Cleaning snapshots older than 30 days..."
+	@find .aurora/snapshots -type f -mtime +30 -delete 2>/dev/null || true
+	@echo "✅ Cleanup complete"
+
+# Install cron job
+install-cron:
+	@echo "Installing daily snapshot cron job..."
+	@echo "Add this line to your crontab (crontab -e):"
+	@echo "0 0 * * * $(PWD)/cron_snapshot.sh"
+	@echo ""
+	@echo "Or run: (crontab -l; echo '0 0 * * * $(PWD)/cron_snapshot.sh') | crontab -"
+
+# Production metrics
+prod-metrics:
+	@python -c "from aurora_x.learn import get_seed_store; s = get_seed_store(); import json; print(json.dumps(s.get_summary(), indent=2))"
+
+# Health check
+health-check:
+	@python -c "from prod_config import ci_gate_check; ci_gate_check()"
