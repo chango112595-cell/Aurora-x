@@ -15,6 +15,7 @@ from glob import glob
 from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, spec_digest
 from .corpus.pretty import fmt_rows, filter_rows, to_json
 from .learn import weights as learn
+from .learn import get_seed_store
 
 # Progress tracking constants
 PROGRESS_JSON_DEFAULT = Path(__file__).resolve().parents[1] / "progress.json"
@@ -366,6 +367,9 @@ class AuroraX:
         self.weights = learn.load(self.repo.root)
         if seed_bias_override is not None:
             self.weights["seed_bias"] = max(0.0, min(0.5, float(seed_bias_override)))
+        
+        # Initialize persistent seed store
+        self.seed_store = get_seed_store()
     
     def run(self, spec_text: str):
         """Main orchestration loop."""
@@ -376,8 +380,14 @@ class AuroraX:
         for idx, f in enumerate(spec.functions):
             # Gather seed snippets from corpus
             seed_snippets: List[str] = []
+            sig = f"{f.name}({', '.join(a+': '+t for a,t in f.args)}) -> {f.returns}"
+            
             if not self.disable_seed:
-                sig = f"{f.name}({', '.join(a+': '+t for a,t in f.args)}) -> {f.returns}"
+                # Get seed bias for this function
+                seed_key = self.seed_store.make_seed_key(sig, spec_text[:100])
+                bias = self.seed_store.get_bias(seed_key)
+                
+                # Apply bias to candidate enumeration
                 for row in corpus_retrieve(self.repo.root, sig, k=min(12, self.beam//4)):
                     seed_snippets.append(row["snippet"])
             
@@ -398,13 +408,25 @@ class AuroraX:
             
             best_map[f.name] = cand.src
             
-            # Learning nudge
+            # Update seed store with result
+            if not self.disable_seed:
+                result = {
+                    "seed_key": seed_key,
+                    "score": corpus_entry["score"],
+                    "success": corpus_entry["passed"] == corpus_entry["total"]
+                }
+                self.seed_store.update(result)
+            
+            # Learning nudge (keep legacy for backward compat)
             won_with_seed = _seed_won(cand.src, seed_snippets)
             self.weights["seed_bias"] = learn.update_seed_bias(
                 float(self.weights.get("seed_bias", 0.0)), 
                 won_with_seed
             )
             learn.save(self.repo.root, self.weights)
+        
+        # Save persistent seed store at end of loop
+        self.seed_store.save()
         
         # Build and save module
         module_src = self.build_module(spec, best_map)
