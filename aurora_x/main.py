@@ -14,8 +14,7 @@ from datetime import datetime
 from glob import glob
 from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, spec_digest
 from .corpus.pretty import fmt_rows, filter_rows, to_json
-from .learn import weights as learn
-from .learn import get_seed_store
+from .learn import weights as learn, get_seed_store
 
 # Progress tracking constants
 PROGRESS_JSON_DEFAULT = Path(__file__).resolve().parents[1] / "progress.json"
