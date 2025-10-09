@@ -10,6 +10,13 @@ from typing import Dict, List, Tuple
 import math
 import random
 
+# Import production config if available
+try:
+    from aurora_x.prod_config import CFG
+    _use_prod_config = True
+except ImportError:
+    _use_prod_config = False
+
 @dataclass
 class BiasStat:
     value: float = 0.0
@@ -19,11 +26,12 @@ class BiasStat:
 
 @dataclass
 class AdaptiveConfig:
-    epsilon: float = 0.15           # exploration rate
-    decay: float = 0.98             # per-iteration decay
-    cooldown_iters: int = 5         # don't reboost same bias immediately
-    max_drift_per_iter: float = 0.10
-    top_k: int = 10
+    # Use production config if available, else defaults
+    epsilon: float = CFG.EPSILON if _use_prod_config else 0.15
+    decay: float = CFG.DECAY if _use_prod_config else 0.98
+    cooldown_iters: int = CFG.COOLDOWN_ITERS if _use_prod_config else 5
+    max_drift_per_iter: float = CFG.MAX_DRIFT if _use_prod_config else 0.10
+    top_k: int = CFG.TOP_K if _use_prod_config else 10
     seed: int = 42
 
 class AdaptiveBiasScheduler:

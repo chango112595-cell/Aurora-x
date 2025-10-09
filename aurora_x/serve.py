@@ -671,6 +671,19 @@ class AuroraHandler(SimpleHTTPRequestHandler):
                 response = {"status": "error", "message": str(e)}
                 self._ok(json.dumps(response).encode('utf-8'), "application/json")
         
+        elif self.path == "/dashboard":
+            # Serve the static dashboard HTML
+            try:
+                static_dir = Path(__file__).parent / "static"
+                dashboard_file = static_dir / "dashboard.html"
+                if dashboard_file.exists():
+                    content = dashboard_file.read_text(encoding="utf-8")
+                    self._ok(content.encode('utf-8'), "text/html")
+                else:
+                    self._ok(b"Dashboard not found", "text/plain")
+            except Exception as e:
+                self._ok(f"Error loading dashboard: {e}".encode('utf-8'), "text/plain")
+        
         else:
             self.send_error(404, "Endpoint not found")
     
