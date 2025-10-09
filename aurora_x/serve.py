@@ -612,7 +612,7 @@ class AuroraHandler(SimpleHTTPRequestHandler):
         elif self.path == "/api/seed_bias":
             # Serve seed bias summary and top reasons
             try:
-                from ..learn import get_seed_store
+                from aurora_x.learn import get_seed_store
                 seed_store = get_seed_store()
                 summary = seed_store.get_summary()
                 
