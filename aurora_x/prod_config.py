@@ -8,7 +8,7 @@ class ProdConfig:
     COOLDOWN_ITERS: int = 5
     MAX_DRIFT: float = 0.10
     TOP_K: int = 10
-    MAX_ABS_DRIFT_BOUND: float = 1.0
+    MAX_ABS_DRIFT_BOUND: float = 5.0  # With decay=0.98, max theoretical bound is 0.1/(1-0.98) = 5.0
     SNAPSHOT_DIR: str = ".progress_history"
     SEEDS_PATH: str = ".aurora/seeds.json"
 
