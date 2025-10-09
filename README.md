@@ -102,8 +102,29 @@ export AURORA_SEEDS_PATH=/path/to/seeds.json
 aurorax --spec-file ./specs/rich_spec.md --seed $AURORA_SEED
 ```
 
+## Adaptive Learning Engine
+
+Aurora-X includes an adaptive bias scheduler that combines exploitation and ε-greedy exploration to optimize synthesis performance over time.
+
+### Features
+- **ε-greedy exploration**: Balance between exploration (ε=0.15) and exploitation
+- **Decay mechanism**: Per-iteration decay (0.98) for bias values
+- **Cooldown periods**: Prevents immediate reuse of same bias (5 iterations)
+- **Top-K tracking**: Maintains top 10 most significant biases
+- **Visual sparklines**: Track bias evolution over time
+
+### API Endpoints
+```bash
+# Get adaptive scheduler statistics
+curl http://localhost:8080/api/adaptive_stats
+
+# Get seed bias history
+curl http://localhost:8080/api/seed_bias/history
+```
+
 ## Project Status
 - ✅ **Milestone 1**: Core synthesis engine complete
 - ✅ **Milestone 2**: Corpus recording and seeding implemented
 - ✅ **Milestone 3**: Persistent learning seeds with EMA updates
-- 🔜 **Next**: Advanced learning strategies and visualization
+- ✅ **Milestone 4**: Adaptive learning engine with ε-greedy exploration
+- 🔜 **Next**: Visualization layer and advanced metrics
