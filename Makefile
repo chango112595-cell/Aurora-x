@@ -301,7 +301,7 @@ show-latest:
         @echo "📊 To view report: make spec-report"
 
 # === Aurora-X Ultra v3 — Serve + Spec v3 + Discord ===
-.PHONY: serve-v3 open-dashboard spec3 spec3-test spec3-all
+.PHONY: serve-v3 open-dashboard open-report spec3 spec3-test spec3-all
 
 SPEC3 ?= specs/check_palindrome.md
 DISCORD := tools/discord_cli.py
@@ -320,6 +320,12 @@ open-dashboard:
         fi; \
         echo "🌌 Dashboard → $$URL"; \
         URL=$$URL python -c "import webbrowser,os; webbrowser.open(os.environ.get('URL',''))" || true
+
+open-report:
+        @latest=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
+        if [ -z "$$latest" ]; then echo "No runs found"; exit 1; fi; \
+        echo "📖 Opening report: $$latest/report.html"; \
+        python -c "import webbrowser,os; webbrowser.open('file://' + os.path.abspath('$$latest/report.html'))"
 
 spec3:
         @echo "🔧 v3 compile: $(SPEC3)"
