@@ -22,6 +22,16 @@ case "${2:-spec3-all}" in
     URL=$URL python -c "import webbrowser,os; webbrowser.open(os.environ.get('URL',''))" 2>/dev/null || true
     ;;
     
+  open-report)
+    latest=$(ls -dt runs/run-* 2>/dev/null | head -1)
+    if [ -z "$latest" ]; then 
+      echo "No runs found"
+      exit 1
+    fi
+    echo "📖 Opening report: $latest/report.html"
+    python -c "import webbrowser,os; webbrowser.open('file://' + os.path.abspath('$latest/report.html'))" 2>/dev/null || true
+    ;;
+    
   spec3)
     echo "🔧 v3 compile: $SPEC3"
     python tools/spec_compile_v3.py "$SPEC3" || {
@@ -70,6 +80,7 @@ case "${2:-spec3-all}" in
     echo "Commands:"
     echo "  serve-v3        - Start FastAPI server"
     echo "  open-dashboard  - Open dashboard URL in browser"
+    echo "  open-report     - Open latest run's HTML report"
     echo "  spec3           - Compile v3 spec"
     echo "  spec3-test      - Test latest run"
     echo "  spec3-all       - Compile, test, and notify (default)"
@@ -79,5 +90,6 @@ case "${2:-spec3-all}" in
     echo "  ./make_v3.sh specs/fibonacci_sequence.md spec3"
     echo "  ./make_v3.sh - serve-v3"
     echo "  ./make_v3.sh - open-dashboard"
+    echo "  ./make_v3.sh - open-report"
     ;;
 esac
