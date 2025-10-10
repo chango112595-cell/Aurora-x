@@ -1,0 +1,6 @@
+# === T08: Natural Language → Spec ===
+WHAT ?= reverse a string
+
+say:
+	@echo "🗣  NL → Spec → Code: $(WHAT)"
+	@python -m aurora_x.main --nl "$(WHAT)"

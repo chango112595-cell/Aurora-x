@@ -382,3 +382,13 @@ spec3-all:
         @latest=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
         echo "📊 Report: $$latest/report.html   |   Dashboard: /dashboard/spec_runs"; \
         [ -f $(DISCORD) ] && python $(DISCORD) success "✅ v3 spec passed: $(SPEC3) — $$(basename $$latest)"
+
+# === T08: Natural Language → Spec ===
+.PHONY: say
+
+WHAT ?= reverse a string
+
+say:
+	@echo "🗣  NL → Spec → Code: $(WHAT)"
+	@python -m aurora_x.main --nl "$(WHAT)"
+
