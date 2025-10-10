@@ -42,6 +42,14 @@ case "${2:-spec3-all}" in
     python aurora_x/orchestrator.py
     ;;
     
+  orchestrate-bg)
+    nohup python aurora_x/orchestrator.py >/tmp/aurora_orch.log 2>&1 &
+    echo "🚀 Daemon started (PID: $!)"
+    echo "📝 Logs: /tmp/aurora_orch.log"
+    echo "📊 To monitor: tail -f /tmp/aurora_orch.log"
+    echo "⚠️  To stop: pkill -f 'python aurora_x/orchestrator.py'"
+    ;;
+    
   orch-test)
     echo "🧪 Testing orchestrator (5 second interval, no git)..."
     AURORA_ORCH_INTERVAL=5 AURORA_GIT_AUTO=0 timeout 15 python aurora_x/orchestrator.py || true
@@ -119,12 +127,14 @@ case "${2:-spec3-all}" in
     echo ""
     echo "Orchestrator commands:"
     echo "  orchestrator    - Start continuous spec monitoring daemon"
+    echo "  orchestrate-bg  - Start daemon in background"
     echo "  orch-test       - Test orchestrator (15 sec quick test)"
     echo "  orch-status     - Show orchestrator environment status"
     echo ""
     echo "Examples:"
     echo "  ./make_v3.sh specs/check_palindrome.md spec3-all"
     echo "  ./make_v3.sh - orchestrator"
+    echo "  ./make_v3.sh - orchestrate-bg"
     echo "  AURORA_GIT_AUTO=1 ./make_v3.sh - orchestrator"
     ;;
 esac
