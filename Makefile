@@ -301,7 +301,7 @@ show-latest:
         @echo "📊 To view report: make spec-report"
 
 # === Aurora-X Ultra v3 — Serve + Spec v3 + Discord ===
-.PHONY: serve-v3 open-dashboard open-report spec3 spec3-test spec3-all
+.PHONY: serve-v3 open-dashboard open-report spec3 spec3-test spec3-all orchestrator orch-status orch-test
 
 SPEC3 ?= specs/check_palindrome.md
 DISCORD := tools/discord_cli.py
@@ -326,6 +326,36 @@ open-report:
         if [ -z "$$latest" ]; then echo "No runs found"; exit 1; fi; \
         echo "📖 Opening report: $$latest/report.html"; \
         python -c "import webbrowser,os; webbrowser.open('file://' + os.path.abspath('$$latest/report.html'))"
+
+# === T07 Orchestrator - Continuous spec monitoring ===
+orchestrator:
+        @echo "🌌 Starting Aurora-X T07 Orchestrator..."
+        @echo "📝 Environment config:"
+        @echo "  AURORA_ORCH_INTERVAL=$${AURORA_ORCH_INTERVAL:-300} seconds"
+        @echo "  AURORA_GIT_AUTO=$${AURORA_GIT_AUTO:-0}"
+        @echo "  AURORA_GIT_BRANCH=$${AURORA_GIT_BRANCH:-main}"
+        @echo "  AURORA_GIT_URL=$${AURORA_GIT_URL:-Not set}"
+        @python aurora_x/orchestrator.py
+
+orch-test:
+        @echo "🧪 Testing orchestrator (5 second interval, no git)..."
+        @AURORA_ORCH_INTERVAL=5 AURORA_GIT_AUTO=0 timeout 15 python aurora_x/orchestrator.py || true
+        @echo "✅ Orchestrator test completed"
+
+orch-status:
+        @echo "🔍 Orchestrator environment status:"
+        @echo "  Poll interval: $${AURORA_ORCH_INTERVAL:-300} seconds"
+        @echo "  Git auto-commit: $${AURORA_GIT_AUTO:-0}"
+        @echo "  Git branch: $${AURORA_GIT_BRANCH:-main}"
+        @echo "  Git URL: $${AURORA_GIT_URL:-Not configured}"
+        @echo ""
+        @echo "📊 Specs being monitored:"
+        @ls -la specs/*.md 2>/dev/null | awk '{print "  - " $$9}' || echo "  No specs found"
+        @echo ""
+        @echo "📝 Recent runs:"
+        @tail -3 runs/spec_runs.jsonl 2>/dev/null | while read line; do \
+          echo "  $$(echo $$line | python -c "import sys,json; d=json.loads(sys.stdin.read()); print(f'{d[\"timestamp\"]}: {d[\"spec\"]} - {d[\"status\"]}')" 2>/dev/null || echo $$line)"; \
+        done || echo "  No recent runs"
 
 spec3:
         @echo "🔧 v3 compile: $(SPEC3)"

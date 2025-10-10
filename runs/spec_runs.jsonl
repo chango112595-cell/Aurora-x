@@ -6,3 +6,7 @@
 {"run_id": "run-20251009-232903", "spec": "check_palindrome.md", "ok": true, "report": "/runs/run-20251009-232903/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251009-232904", "spec": "fibonacci_sequence.md", "ok": true, "report": "/runs/run-20251009-232904/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251009-232904", "spec": "fibonacci_sequence.md", "ok": true, "report": "/runs/run-20251009-232904/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251010-001400", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251010-001400/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251010-001400", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251010-001400/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251010-001401", "spec": "rich_spec_v2.md", "ok": true, "report": "/runs/run-20251010-001401/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251010-001401", "spec": "rich_spec_v2.md", "ok": true, "report": "/runs/run-20251010-001401/report.html", "bias": null, "spark": null}
