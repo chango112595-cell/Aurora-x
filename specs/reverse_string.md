@@ -21,4 +21,4 @@ Reverse the input string. The function must handle empty strings and unicode.
 
 ## Constraints
 - Deterministic.
-- O(n) time, O(1) extra space (not counting output).
+- O(n) time, O(1) extra space (not counting output).# Test spec modification at Fri Oct 10 01:44:49 AM UTC 2025
