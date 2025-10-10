@@ -32,6 +32,38 @@ case "${2:-spec3-all}" in
     python -c "import webbrowser,os; webbrowser.open('file://' + os.path.abspath('$latest/report.html'))" 2>/dev/null || true
     ;;
     
+  orchestrator)
+    echo "🌌 Starting Aurora-X T07 Orchestrator..."
+    echo "📝 Environment config:"
+    echo "  AURORA_ORCH_INTERVAL=${AURORA_ORCH_INTERVAL:-300} seconds"
+    echo "  AURORA_GIT_AUTO=${AURORA_GIT_AUTO:-0}"
+    echo "  AURORA_GIT_BRANCH=${AURORA_GIT_BRANCH:-main}"
+    echo "  AURORA_GIT_URL=${AURORA_GIT_URL:-Not set}"
+    python aurora_x/orchestrator.py
+    ;;
+    
+  orch-test)
+    echo "🧪 Testing orchestrator (5 second interval, no git)..."
+    AURORA_ORCH_INTERVAL=5 AURORA_GIT_AUTO=0 timeout 15 python aurora_x/orchestrator.py || true
+    echo "✅ Orchestrator test completed"
+    ;;
+    
+  orch-status)
+    echo "🔍 Orchestrator environment status:"
+    echo "  Poll interval: ${AURORA_ORCH_INTERVAL:-300} seconds"
+    echo "  Git auto-commit: ${AURORA_GIT_AUTO:-0}"
+    echo "  Git branch: ${AURORA_GIT_BRANCH:-main}"
+    echo "  Git URL: ${AURORA_GIT_URL:-Not configured}"
+    echo ""
+    echo "📊 Specs being monitored:"
+    ls -la specs/*.md 2>/dev/null | awk '{print "  - " $9}' || echo "  No specs found"
+    echo ""
+    echo "📝 Recent runs:"
+    tail -3 runs/spec_runs.jsonl 2>/dev/null | while read line; do
+      echo "  $(echo $line | python -c "import sys,json; d=json.loads(sys.stdin.read()); print(f'{d[\"timestamp\"]}: {d[\"spec\"]} - {d[\"status\"]}')" 2>/dev/null || echo $line)"
+    done || echo "  No recent runs"
+    ;;
+    
   spec3)
     echo "🔧 v3 compile: $SPEC3"
     python tools/spec_compile_v3.py "$SPEC3" || {
@@ -85,11 +117,14 @@ case "${2:-spec3-all}" in
     echo "  spec3-test      - Test latest run"
     echo "  spec3-all       - Compile, test, and notify (default)"
     echo ""
+    echo "Orchestrator commands:"
+    echo "  orchestrator    - Start continuous spec monitoring daemon"
+    echo "  orch-test       - Test orchestrator (15 sec quick test)"
+    echo "  orch-status     - Show orchestrator environment status"
+    echo ""
     echo "Examples:"
     echo "  ./make_v3.sh specs/check_palindrome.md spec3-all"
-    echo "  ./make_v3.sh specs/fibonacci_sequence.md spec3"
-    echo "  ./make_v3.sh - serve-v3"
-    echo "  ./make_v3.sh - open-dashboard"
-    echo "  ./make_v3.sh - open-report"
+    echo "  ./make_v3.sh - orchestrator"
+    echo "  AURORA_GIT_AUTO=1 ./make_v3.sh - orchestrator"
     ;;
 esac
