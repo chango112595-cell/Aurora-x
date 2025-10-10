@@ -227,11 +227,12 @@ def main():
     """Main entry point for Aurora-X."""
     ap = argparse.ArgumentParser(description="AURORA-X Ultra (Offline)")
     
-    # Mutually exclusive: spec (for spec compilation), spec-text, spec-file, dump-corpus, show-bias, or progress-print
+    # Mutually exclusive: spec (for spec compilation), spec-text, spec-file, dump-corpus, show-bias, progress-print, or nl (natural language)
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--spec", type=str, help="Path to spec markdown to compile → code")
     g.add_argument("--spec-text", type=str, help="Inline spec text (Markdown DSL)")
     g.add_argument("--spec-file", type=str, help="Path to spec file (legacy synthesis)")
+    g.add_argument("--nl", type=str, help="Natural language instruction to generate a spec")
     g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
     g.add_argument("--show-bias", action="store_true", help="Print current seed_bias and exit")
     g.add_argument("--progress-print", action="store_true", help="Print computed progress and exit")
@@ -268,6 +269,21 @@ def main():
         "top_k": args.top_k,
         "top_p": args.top_p
     }
+    
+    # ----- Natural language mode -----
+    if args.nl:
+        from tools.spec_from_text import create_spec_from_text
+        spec_path = create_spec_from_text(args.nl)
+        print(f"[OK] Spec generated from English at: {spec_path}")
+        # Now compile the generated spec
+        comp = Path("tools/spec_compile_v3.py")
+        if comp.exists():
+            import subprocess
+            import os
+            subprocess.check_call([sys.executable, "tools/spec_compile_v3.py", str(spec_path)], env=os.environ.copy())
+        else:
+            print("No v3 compiler found (tools/spec_compile_v3.py). Add v3 pack first.")
+        return 0
     
     # ----- Spec compilation mode -----
     if args.spec:

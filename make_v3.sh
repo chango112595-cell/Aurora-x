@@ -115,6 +115,12 @@ case "${2:-spec3-all}" in
     [ -f "$DISCORD" ] && python "$DISCORD" success "✅ v3 spec passed: $SPEC3 — $(basename $latest)"
     ;;
     
+  say)
+    WHAT="${SPEC3:-reverse a string}"
+    echo "🗣  NL → Spec → Code: $WHAT"
+    python -m aurora_x.main --nl "$WHAT"
+    ;;
+    
   *)
     echo "Usage: ./make_v3.sh [spec.md] [command]"
     echo "Commands:"
@@ -131,10 +137,13 @@ case "${2:-spec3-all}" in
     echo "  orch-test       - Test orchestrator (15 sec quick test)"
     echo "  orch-status     - Show orchestrator environment status"
     echo ""
+    echo "T08 Natural Language:"
+    echo "  say             - Convert English to spec and code"
+    echo ""
     echo "Examples:"
     echo "  ./make_v3.sh specs/check_palindrome.md spec3-all"
+    echo "  ./make_v3.sh 'reverse a string' say"
     echo "  ./make_v3.sh - orchestrator"
-    echo "  ./make_v3.sh - orchestrate-bg"
     echo "  AURORA_GIT_AUTO=1 ./make_v3.sh - orchestrator"
     ;;
 esac
