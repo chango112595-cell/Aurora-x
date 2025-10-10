@@ -301,7 +301,7 @@ show-latest:
         @echo "📊 To view report: make spec-report"
 
 # === Aurora-X Ultra v3 — Serve + Spec v3 + Discord ===
-.PHONY: serve-v3 open-dashboard open-report spec3 spec3-test spec3-all orchestrator orch-status orch-test
+.PHONY: serve-v3 open-dashboard open-report spec3 spec3-test spec3-all orchestrator orchestrate-bg orch-status orch-test
 
 SPEC3 ?= specs/check_palindrome.md
 DISCORD := tools/discord_cli.py
@@ -337,6 +337,13 @@ orchestrator:
         @echo "  AURORA_GIT_BRANCH=$${AURORA_GIT_BRANCH:-main}"
         @echo "  AURORA_GIT_URL=$${AURORA_GIT_URL:-Not set}"
         @python aurora_x/orchestrator.py
+
+orchestrate-bg:
+        @nohup python aurora_x/orchestrator.py >/tmp/aurora_orch.log 2>&1 &
+        @echo "🚀 Daemon started (PID: $$!)"
+        @echo "📝 Logs: /tmp/aurora_orch.log"
+        @echo "📊 To monitor: tail -f /tmp/aurora_orch.log"
+        @echo "⚠️  To stop: pkill -f 'python aurora_x/orchestrator.py'"
 
 orch-test:
         @echo "🧪 Testing orchestrator (5 second interval, no git)..."
