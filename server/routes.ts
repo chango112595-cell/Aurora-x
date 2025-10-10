@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { corpusStorage } from "./corpus-storage";
 import * as path from "path";
 import * as fs from "fs";
-import { exec } from "child_process";
+import { spawn } from "child_process";
 import { promisify } from "util";
 import {
   corpusEntrySchema,
@@ -220,8 +220,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Chat endpoint for Aurora-X synthesis requests
-  const execAsync = promisify(exec);
-  
   app.post("/api/chat", async (req, res) => {
     try {
       const { message } = req.body;
@@ -230,26 +228,96 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Message is required" });
       }
 
-      console.log(`[Aurora-X] Processing request: "${message}"`);
+      // Sanitize message to prevent any shell injection
+      // Remove shell metacharacters and control characters
+      // This includes: backticks, $(), semicolons, pipes, ampersands, etc.
+      const sanitizedMessage = message
+        .replace(/[`$()<>|;&\\\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g, '')
+        .replace(/\*/g, '')  // Remove wildcards
+        .replace(/~/g, '')   // Remove tilde expansion
+        .replace(/\[/g, '')  // Remove bracket expansion
+        .replace(/\]/g, '')  // Remove bracket expansion
+        .replace(/\{/g, '')  // Remove brace expansion  
+        .replace(/\}/g, '')  // Remove brace expansion
+        .trim();
       
-      // Execute Aurora-X with the natural language command
+      console.log(`[Aurora-X] Processing request: "${sanitizedMessage}"`);
+      
+      // Execute Aurora-X with the natural language command using spawn for security
       try {
-        // Run Aurora-X synthesis using the make say command
-        const command = `make say WHAT="${message.replace(/"/g, '\\"')}"`;
-        console.log(`[Aurora-X] Executing: ${command}`);
-        
-        const { stdout, stderr } = await execAsync(command, {
+        // Use spawn instead of exec to prevent command injection
+        const spawnProcess = spawn('make', ['say', `WHAT=${sanitizedMessage}`], {
           cwd: process.cwd(),
-          timeout: 30000 // 30 second timeout
+          timeout: 30000, // 30 second timeout
+          shell: false, // Explicitly disable shell to prevent injection
+          env: { ...process.env } // Pass environment variables
+        });
+        
+        let stdout = '';
+        let stderr = '';
+        
+        spawnProcess.stdout.on('data', (data) => {
+          stdout += data.toString();
+        });
+        
+        spawnProcess.stderr.on('data', (data) => {
+          stderr += data.toString();
+        });
+        
+        // Wait for the process to complete
+        await new Promise<void>((resolve, reject) => {
+          spawnProcess.on('close', (code) => {
+            if (code !== 0 && code !== null) {
+              console.error(`[Aurora-X] Process exited with code ${code}`);
+              reject(new Error(`Aurora-X synthesis failed with exit code ${code}`));
+            } else {
+              resolve();
+            }
+          });
+          
+          spawnProcess.on('error', (err) => {
+            console.error(`[Aurora-X] Process error:`, err);
+            reject(err);
+          });
         });
         
         console.log(`[Aurora-X] Command output:`, stdout);
         if (stderr) console.log(`[Aurora-X] Command stderr:`, stderr);
         
-        // Find the latest run directory
+        // Find the latest run directory with proper validation
         const runsDir = path.join(process.cwd(), 'runs');
+        
+        // Pattern for valid run directories: run-YYYYMMDD-HHMMSS
+        const runDirPattern = /^run-\d{8}-\d{6}$/;
+        
         const runDirs = fs.readdirSync(runsDir)
-          .filter(name => name.startsWith('run-'))
+          .filter(name => {
+            // Validate directory name format
+            if (!runDirPattern.test(name)) {
+              return false;
+            }
+            
+            // Check if it's actually a directory
+            const dirPath = path.join(runsDir, name);
+            try {
+              const stats = fs.statSync(dirPath);
+              if (!stats.isDirectory()) {
+                return false;
+              }
+              
+              // Verify the directory contains a src/ subdirectory
+              const srcDir = path.join(dirPath, 'src');
+              if (!fs.existsSync(srcDir) || !fs.statSync(srcDir).isDirectory()) {
+                console.log(`[Aurora-X] Skipping ${name}: no valid src/ directory found`);
+                return false;
+              }
+              
+              return true;
+            } catch (e) {
+              console.error(`[Aurora-X] Error checking directory ${name}:`, e);
+              return false;
+            }
+          })
           .map(name => ({
             name,
             path: path.join(runsDir, name),
@@ -258,11 +326,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           .sort((a, b) => b.time - a.time);
         
         if (runDirs.length === 0) {
-          throw new Error("No synthesis runs found");
+          throw new Error("No valid synthesis runs found with src/ directory");
         }
         
         const latestRun = runDirs[0];
-        console.log(`[Aurora-X] Latest run: ${latestRun.name}`);
+        console.log(`[Aurora-X] Latest valid run: ${latestRun.name}`);
         
         // Read the generated source code
         const srcDir = path.join(latestRun.path, 'src');
@@ -289,8 +357,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const pyFiles = allFiles.filter(f => f.endsWith('.py') && !f.startsWith('test_'));
           if (pyFiles.length > 0) {
             const codeFile = path.join(latestRun.path, pyFiles[0]);
-            code = fs.readFileSync(codeFile, 'utf-8');
-            functionName = pyFiles[0].replace('.py', '');
+            try {
+              const fileContent = fs.readFileSync(codeFile, 'utf-8');
+              // Verify the file is not empty and contains actual code
+              if (fileContent && fileContent.trim().length > 0) {
+                code = fileContent;
+                functionName = pyFiles[0].replace('.py', '');
+              } else {
+                console.log(`[Aurora-X] Warning: File ${pyFiles[0]} is empty`);
+              }
+            } catch (readError) {
+              console.error(`[Aurora-X] Error reading file ${pyFiles[0]}:`, readError);
+            }
           }
         }
         
