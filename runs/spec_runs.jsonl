@@ -54,3 +54,5 @@
 {"run_id": "run-20251010-054719", "spec": "count_vowels.md", "ok": true, "report": "/runs/run-20251010-054719/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251010-054720", "spec": "gcd.md", "ok": true, "report": "/runs/run-20251010-054720/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251010-054720", "spec": "gcd.md", "ok": true, "report": "/runs/run-20251010-054720/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251010-055725", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251010-055725/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251010-055725", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251010-055725/report.html", "bias": null, "spark": null}
