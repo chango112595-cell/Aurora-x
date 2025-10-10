@@ -18,3 +18,7 @@
 {"run_id": "run-20251010-021806", "spec": "add_two_numbers.md", "ok": true, "report": "/runs/run-20251010-021806/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251010-021817", "spec": "sum_of_squares.md", "ok": true, "report": "/runs/run-20251010-021817/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251010-021817", "spec": "sum_of_squares.md", "ok": true, "report": "/runs/run-20251010-021817/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251010-025042", "spec": "max_in_list.md", "ok": true, "report": "/runs/run-20251010-025042/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251010-025042", "spec": "max_in_list.md", "ok": true, "report": "/runs/run-20251010-025042/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251010-025052", "spec": "check_palindrome.md", "ok": true, "report": "/runs/run-20251010-025052/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251010-025052", "spec": "check_palindrome.md", "ok": true, "report": "/runs/run-20251010-025052/report.html", "bias": null, "spark": null}
