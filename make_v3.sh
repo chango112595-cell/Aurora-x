@@ -6,12 +6,12 @@ DISCORD="tools/discord_cli.py"
 
 case "${2:-spec3-all}" in
   serve-v3)
-    echo "🚀 Starting FastAPI server..."
-    uvicorn aurora_x.serve:app --host 0.0.0.0 --port ${PORT:-5000}
+    echo "🚀 Starting FastAPI server on port ${AURORA_PORT:-5001}..."
+    uvicorn aurora_x.serve:app --host 0.0.0.0 --port ${AURORA_PORT:-5001}
     ;;
     
   open-dashboard)
-    PORT=${PORT:-5000}
+    PORT=${AURORA_PORT:-5001}
     HOST="${REPL_SLUG:+${REPL_SLUG}.${REPL_OWNER}.repl.co}"
     if [ -n "$HOST" ]; then
       URL="https://$HOST/dashboard/spec_runs"

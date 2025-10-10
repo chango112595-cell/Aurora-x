@@ -307,11 +307,12 @@ SPEC3 ?= specs/check_palindrome.md
 DISCORD := tools/discord_cli.py
 
 serve-v3:
-        uvicorn aurora_x.serve:app --host 0.0.0.0 --port $${PORT:-5000}
+        @echo "🚀 Starting FastAPI server on port $${AURORA_PORT:-5001}..."
+        @uvicorn aurora_x.serve:app --host 0.0.0.0 --port $${AURORA_PORT:-5001}
 
-# Print the full dashboard URL based on PORT and Replit env
+# Print the full dashboard URL based on AURORA_PORT and Replit env
 open-dashboard:
-        @PORT=$${PORT:-5000}; \
+        @PORT=$${AURORA_PORT:-5001}; \
         HOST=$${REPL_SLUG:+$${REPL_SLUG}.$${REPL_OWNER}.repl.co}; \
         if [ -n "$$HOST" ]; then \
           URL="https://$$HOST/dashboard/spec_runs"; \
