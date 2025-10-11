@@ -11,6 +11,7 @@ from aurora_x.chat.attach_pretty import attach_pretty
 from aurora_x.chat.attach_format import attach_format
 from aurora_x.chat.attach_units_format import attach_units_format
 from aurora_x.chat.attach_demo import attach_demo
+from aurora_x.chat.attach_demo_runall import attach_demo_runall
 
 BASE = Path(__file__).parent
 app = FastAPI(title="Aurora-X Ultra v3")
@@ -48,6 +49,9 @@ attach_units_format(app)
 
 # Attach demo cards for testing
 attach_demo(app)
+
+# Attach Run All functionality for demo cards
+attach_demo_runall(app)
 
 @app.get("/dashboard/demos", response_class=HTMLResponse)
 async def serve_demo_dashboard():
