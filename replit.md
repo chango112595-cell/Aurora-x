@@ -17,6 +17,11 @@ Preferred communication style: Simple, everyday language.
 - **Graph Diff**: Automatic generation of graph_diff.json/html showing added/removed edges
 - **Scores Diff**: Function-level regression tracking with scores_diff.json/html
 - **Timestamp Tracking**: Full run_meta.json with start_ts, end_ts, duration_seconds
+- **Language Auto-Select**: Aurora now automatically selects Python/Go/Rust/C# based on prompt keywords
+  - Go: Fast microservices, high-performance APIs
+  - Rust: Memory-safe CLI tools, system utilities
+  - C#: Enterprise web APIs with Swagger/OpenAPI
+  - Python: Default for everything else (Flask apps, data scripts, functions)
 
 ## System Architecture
 
