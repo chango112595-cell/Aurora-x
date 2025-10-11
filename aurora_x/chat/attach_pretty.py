@@ -1,8 +1,9 @@
 # FastAPI endpoint for human-friendly solver output
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from aurora_x.generators.solver import solve_text
+from aurora_x.chat.attach_units_format import _si_fmt, _hint
 
 class PrettyRequest(BaseModel):
     problem: Optional[str] = None
@@ -35,15 +36,65 @@ def attach_pretty(app: FastAPI):
             raise HTTPException(status_code=422, detail=res)
 
         pretty = None
+        units_info = []
+        
         if res.get("kind") == "physics.orbital_period":
             sec = float(res["period_s"])
             pretty = f"Orbital period: {_fmt_seconds(sec)}"
+            
+            # Add formatted input parameters with SI units and hints
+            if "a_m" in res:
+                a_fmt = _si_fmt(res["a_m"], "m")
+                a_hint = _hint(res["a_m"], "m")
+                units_info.append({
+                    "parameter": "Semi-major axis",
+                    "value": res["a_m"],
+                    "unit": "m",
+                    "pretty": a_fmt,
+                    **({"hint": a_hint} if a_hint else {})
+                })
+            
+            if "M_kg" in res:
+                m_fmt = _si_fmt(res["M_kg"], "kg")
+                m_hint = _hint(res["M_kg"], "kg")
+                units_info.append({
+                    "parameter": "Central mass",
+                    "value": res["M_kg"],
+                    "unit": "kg",
+                    "pretty": m_fmt,
+                    **({"hint": m_hint} if m_hint else {})
+                })
+            
+            # Add period in SI format
+            period_fmt = _si_fmt(sec, "s")
+            units_info.append({
+                "parameter": "Period",
+                "value": sec,
+                "unit": "s",
+                "pretty": period_fmt,
+                "human": _fmt_seconds(sec)
+            })
+            
         elif res.get("kind") == "physics.em_superposition":
             x,y,z = res["result"]
             pretty = f"Field vector sum: ({x:.3f}, {y:.3f}, {z:.3f})"
+            
+            # Format vector components
+            for component, value, label in [(x, "x"), (y, "y"), (z, "z")]:
+                units_info.append({
+                    "parameter": f"Field {label}-component",
+                    "value": value,
+                    "unit": "N/C",
+                    "pretty": _si_fmt(value, "N/C")
+                })
+            
         elif res.get("kind") == "math.evaluate":
             pretty = f"Value = {res['value']:.12g}"
         elif res.get("kind") == "math.differentiate":
             pretty = f"d/dx → {res['derivative']}"
 
-        return {"ok": True, "pretty": pretty, "result": res}
+        response = {"ok": True, "pretty": pretty, "result": res}
+        if units_info:
+            response["units_info"] = units_info
+        
+        return response
