@@ -34,8 +34,82 @@ def _snake(text: str) -> str:
     
     return name
 
+def _extract_routes(text: str) -> list:
+    """Extract potential routes from the request text"""
+    t = text.lower()
+    routes = []
+    
+    # Common route patterns
+    if "home" in t or "landing" in t or "index" in t:
+        routes.append({"path": "/", "name": "home"})
+    if "about" in t:
+        routes.append({"path": "/about", "name": "about"})
+    if "contact" in t:
+        routes.append({"path": "/contact", "name": "contact"})
+    if "login" in t or "signin" in t:
+        routes.append({"path": "/login", "name": "login"})
+    if "register" in t or "signup" in t:
+        routes.append({"path": "/register", "name": "register"})
+    if "dashboard" in t:
+        routes.append({"path": "/dashboard", "name": "dashboard"})
+    if "api" in t:
+        routes.append({"path": "/api", "name": "api"})
+    if "admin" in t:
+        routes.append({"path": "/admin", "name": "admin"})
+    if "profile" in t or "user" in t:
+        routes.append({"path": "/profile", "name": "profile"})
+    if "settings" in t:
+        routes.append({"path": "/settings", "name": "settings"})
+    
+    # Default to home route if none detected
+    if not routes:
+        routes.append({"path": "/", "name": "index"})
+    
+    return routes
+
 def parse_english(text: str) -> NLParseResult:
     t = text.strip().lower()
+    
+    # Flask/Web App Pattern Detection
+    flask_patterns = [
+        "flask", "web app", "webapp", "web application",
+        "micro-app", "microapp", "html", "css", "javascript", "js",
+        "route", "routing", "create_app", "timer", "ui",
+        "web ui", "web interface", "dashboard", "website",
+        "server", "api endpoint", "rest", "restful",
+        "template", "render", "frontend", "backend"
+    ]
+    
+    # Check if this is a Flask/web app request
+    is_flask_request = any(pattern in t for pattern in flask_patterns)
+    
+    if is_flask_request:
+        # Extract the main purpose from the request
+        purpose = text.strip()
+        func_name = _snake(purpose) + "_app"
+        
+        # Return Flask-specific metadata
+        return NLParseResult({
+            "name": func_name,
+            "signature": f"def {func_name}() -> Flask",
+            "description": f"Flask web application: {purpose}",
+            "framework": "flask",  # Key indicator for synthesis pipeline
+            "app_type": "web",
+            "includes": {
+                "html": "html" in t,
+                "css": "css" in t,
+                "js": "javascript" in t or "js" in t,
+                "timer": "timer" in t,
+                "ui": "ui" in t or "interface" in t or "dashboard" in t,
+                "api": "api" in t or "endpoint" in t or "rest" in t,
+                "database": "database" in t or "db" in t,
+                "auth": "auth" in t or "login" in t or "user" in t,
+            },
+            "routes": _extract_routes(text),
+            "examples": [],  # Flask apps don't have traditional examples
+            "template_type": "flask_web_app"
+        })
+    
     if "largest" in t or ("max" in t and "list" in t):
         return NLParseResult({
             "name": "max_in_list",
