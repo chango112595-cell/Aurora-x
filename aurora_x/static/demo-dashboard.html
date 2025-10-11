@@ -387,6 +387,13 @@
             <button class="filter-btn active" data-category="all">All</button>
         </div>
 
+        <div style="text-align: center; margin: 20px 0;">
+            <button id="run-all-btn" style="background: linear-gradient(135deg, #00ffff, #9333ea); color: #0a0e17; padding: 12px 24px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                ▶ Run All Cards
+            </button>
+            <span id="run-status" style="margin-left: 20px; color: #8892a0;"></span>
+        </div>
+
         <div class="cards-grid" id="cards-grid"></div>
     </div>
 
@@ -582,6 +589,59 @@
 
         // Load cards on page load
         loadCards();
+
+        // Run All button functionality
+        document.getElementById('run-all-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('run-all-btn');
+            const status = document.getElementById('run-status');
+            
+            // Disable button and show loading
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.textContent = '⏳ Running...';
+            status.textContent = 'Executing all cards...';
+            status.style.color = 'var(--cyan)';
+            
+            try {
+                const response = await fetch('/api/demo/run_all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.ok) {
+                    status.textContent = `✅ ${result.summary}`;
+                    status.style.color = 'var(--emerald)';
+                    
+                    // Show results in modal
+                    document.getElementById('modal-title').textContent = 'Run All Results';
+                    currentResponse = JSON.stringify(result, null, 2);
+                    document.getElementById('response-container').innerHTML = `
+                        <button class="copy-btn" onclick="copyResponse()">Copy</button>
+                        <div style="margin-bottom: 15px; padding: 10px; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                            <strong style="color: var(--emerald);">Summary:</strong> ${result.summary}<br>
+                            <strong>File saved:</strong> ${result.file}
+                        </div>
+                        <pre id="response-text">${escapeHtml(currentResponse)}</pre>
+                    `;
+                    document.getElementById('modal').classList.add('active');
+                } else {
+                    status.textContent = `❌ Error: ${result.error || 'Unknown error'}`;
+                    status.style.color = 'var(--red)';
+                }
+            } catch (error) {
+                status.textContent = `❌ Error: ${error.message}`;
+                status.style.color = 'var(--red)';
+            } finally {
+                // Re-enable button
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.textContent = '▶ Run All Cards';
+            }
+        });
     </script>
 </body>
 </html>
