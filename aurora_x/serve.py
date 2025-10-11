@@ -1,6 +1,7 @@
 # aurora_x/serve.py — FastAPI app with Aurora-X v3 dashboard mounted
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 from pathlib import Path
 from aurora_x.serve_dashboard_v2 import make_router
 from aurora_x.serve_addons import attach as attach_factory
@@ -48,6 +49,15 @@ attach_units_format(app)
 # Attach demo cards for testing
 attach_demo(app)
 
+@app.get("/dashboard/demos", response_class=HTMLResponse)
+async def serve_demo_dashboard():
+    """Serve the demo dashboard HTML page"""
+    dashboard_path = BASE / "static" / "demo-dashboard.html"
+    if dashboard_path.exists():
+        return HTMLResponse(content=dashboard_path.read_text())
+    else:
+        return HTMLResponse(content="<h1>Demo dashboard not found</h1>", status_code=404)
+
 @app.get("/healthz")
 async def healthz():
     """
@@ -72,6 +82,7 @@ def root():
         "routes": [
             "/healthz",
             "/dashboard/spec_runs", 
+            "/dashboard/demos",
             "/api/spec_runs", 
             "/ws/spec_updates",
             "/api/chat",
