@@ -11,6 +11,8 @@ from typing import Optional
 
 from aurora_x.router.intent_router import classify
 from aurora_x.templates.web_app_flask import render_app
+from aurora_x.templates.cli_tool import render_cli
+from aurora_x.templates.lib_func import render_func
 
 
 class ChatRequest(BaseModel):
@@ -67,12 +69,44 @@ def make_chat_router() -> APIRouter:
                 hint="Run: python app.py"
             )
         
-        # Future: cli_tool, lib_func implementations
+        # Handle cli_tool intent
+        elif intent.kind == "cli_tool":
+            code = render_cli(name=intent.name, brief=intent.brief, fields=intent.fields)
+            
+            # Save generated code
+            filename = "cli_tool.py"
+            Path(filename).write_text(code, encoding="utf-8")
+            
+            return ChatResponse(
+                ok=True,
+                kind="cli_tool",
+                name=intent.name,
+                file=filename,
+                hint=f"Run: python {filename} --help"
+            )
+        
+        # Handle lib_func intent
+        elif intent.kind == "lib_func":
+            code = render_func(name=intent.name, brief=intent.brief, fields=intent.fields)
+            
+            # Save generated code
+            filename = "lib_function.py"
+            Path(filename).write_text(code, encoding="utf-8")
+            
+            return ChatResponse(
+                ok=True,
+                kind="lib_func",
+                name=intent.name,
+                file=filename,
+                hint=f"Run: python {filename}"
+            )
+        
+        # Fallback for unknown intents
         return ChatResponse(
             ok=True, 
             kind=intent.kind, 
             name=intent.name, 
-            note="Template not implemented yet"
+            note="Unknown intent type"
         )
     
     return router
