@@ -230,3 +230,5 @@
 {"run_id": "run-20251011-030219", "spec": "max_in_list.md", "ok": true, "report": "/runs/run-20251011-030219/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251011-065523", "spec": "make_anti_virus.md", "ok": true, "report": "/runs/run-20251011-065523/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251011-065523", "spec": "make_anti_virus.md", "ok": true, "report": "/runs/run-20251011-065523/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251011-171523", "spec": "what_orbit_location.md", "ok": true, "report": "/runs/run-20251011-171523/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251011-171523", "spec": "what_orbit_location.md", "ok": true, "report": "/runs/run-20251011-171523/report.html", "bias": null, "spark": null}
