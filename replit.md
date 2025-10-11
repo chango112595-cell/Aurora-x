@@ -18,10 +18,15 @@ Preferred communication style: Simple, everyday language.
 - **Scores Diff**: Function-level regression tracking with scores_diff.json/html
 - **Timestamp Tracking**: Full run_meta.json with start_ts, end_ts, duration_seconds
 - **Language Auto-Select**: Aurora now automatically selects Python/Go/Rust/C# based on prompt keywords
-  - Go: Fast microservices, high-performance APIs
-  - Rust: Memory-safe CLI tools, system utilities
-  - C#: Enterprise web APIs with Swagger/OpenAPI
-  - Python: Default for everything else (Flask apps, data scripts, functions)
+  - Go: Fast microservices, high-performance APIs (PORT env, default 8080)
+  - Rust: Memory-safe CLI tools, system utilities (non-web service)
+  - C#: Enterprise web APIs with Swagger/OpenAPI (PORT env, default 5080)
+  - Python: Default for everything else (Flask apps, PORT env, default 8000)
+- **Port Configuration**: All web services now use PORT environment variable for cloud deployment
+  - Flask apps: `PORT=8000` (default)
+  - Go services: `PORT=8080` (default)
+  - C# WebAPIs: `PORT=5080` (default)
+  - Fully compatible with Replit, Heroku, and other cloud platforms
 
 ## System Architecture
 
