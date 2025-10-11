@@ -2,7 +2,7 @@
 .PHONY: all help install test run clean serve serve-v3 open-dashboard open-report
 .PHONY: spec spec-test spec-report spec3 spec3-test spec3-all
 .PHONY: orchestrator orchestrate-bg orch-test orch-status
-.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed
+.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed demo-clean demo-clean-hard
 
 # === Default Variables ===
 SPEC ?= specs/check_palindrome.md
@@ -33,6 +33,8 @@ help:
 	@echo "  make demo-all       # run all demo cards (CI/CD)"
 	@echo "  make demo-list      # list available demo cards"
 	@echo "  make open-demos     # open demo dashboard in browser"
+	@echo "  make demo-clean     # remove demo specs and artifacts (safe)"
+	@echo "  make demo-clean-hard # CAUTION: remove ALL runs/* outputs"
 	@echo ""
 	@echo "Orchestrator:"
 	@echo "  make orchestrator   # foreground monitoring"
@@ -368,3 +370,16 @@ demo-seed:
 	@AURORA_GIT_AUTO=0 AURORA_ORCH_INTERVAL=5 python -m aurora_x.orchestrator || true
 	@echo "[ok] Demo seed complete. Check ./runs and /dashboard/demos."
 	@[ -d .git ] && git add -A && git commit -m "chore: demo seed (specs+runs)" || true
+
+# Clean seeded demos and generated artifacts (safe)
+demo-clean:
+	@echo "⚠ Removing demo specs and run artifacts..."
+	@rm -rf specs/reverse_string.md specs/math_eval.md || true
+	@find runs -maxdepth 1 -type f -name 'demo-*.json' -delete 2>/dev/null || true
+	@echo "✅ demo-clean done."
+
+# (Optional) hard reset of *all* run artifacts (careful!)
+demo-clean-hard:
+	@echo "⚠ HARD CLEAN: removing ALL runs/* and test outputs..."
+	@rm -rf runs/* || true
+	@echo "✅ demo-clean-hard done."
