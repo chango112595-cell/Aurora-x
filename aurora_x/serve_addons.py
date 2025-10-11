@@ -19,7 +19,7 @@ from pydantic import BaseModel
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from tools.english_to_spec import generate_v3_spec, sanitize_name
+from aurora_x.spec.parser_v2 import parse_freeform_or_v2, english_to_spec, _snake
 
 class ChatRequest(BaseModel):
     """Request model for chat endpoint"""
@@ -62,11 +62,11 @@ def attach(app: FastAPI) -> None:
             if not request.prompt or not request.prompt.strip():
                 raise HTTPException(status_code=400, detail="Empty prompt provided")
             
-            # Generate spec content
-            spec_content = generate_v3_spec(request.prompt)
+            # Generate spec content using English-to-spec conversion
+            spec_content = english_to_spec(request.prompt)
             
             # Save spec to file
-            filename = f"{sanitize_name(request.prompt)}.md"
+            filename = f"{_snake(request.prompt)}.md"
             spec_path = requests_dir / filename
             
             with open(spec_path, 'w') as f:
