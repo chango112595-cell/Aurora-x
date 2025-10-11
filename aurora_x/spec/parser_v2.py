@@ -104,9 +104,71 @@ def _snake(name: str) -> str:
 
 def english_to_spec(utterance: str) -> str:
     """Convert English utterance to a spec markdown."""
+    # Import parser_nl to get proper parsing including Flask detection
+    from aurora_x.spec.parser_nl import parse_english
+    
+    # Parse the utterance using parser_nl
+    parsed = parse_english(utterance)
+    
+    # Check if this is a Flask request
+    if parsed.get("framework") == "flask":
+        # Generate Flask-specific spec
+        return f"""# {parsed['name']}
+
+## Metadata
+- Framework: Flask
+- Type: Web Application
+- Generated: Auto
+
+## Signature
+```
+{parsed['signature']}
+```
+
+## Description
+{parsed['description']}
+
+## Flask Configuration
+- Routes: {parsed.get('routes', [])}
+- Includes: {parsed.get('includes', {})}
+
+## Examples
+Flask applications do not have traditional input/output examples.
+This will generate a complete Flask web application.
+"""
+    
+    # Fall back to existing pattern matching for non-Flask requests
     lower_utterance = utterance.lower()
     
-    # Recognize common patterns
+    # Check if parser_nl found a known pattern
+    if parsed.get("signature") and parsed.get("name") != _snake(utterance):
+        # Use parser_nl's result for known patterns
+        examples_md = ""
+        if parsed.get("examples"):
+            examples_md = "| " + " | ".join(list(parsed["examples"][0].keys()) + ["out"]) + " |\n"
+            examples_md += "|" + "---|" * (len(parsed["examples"][0]) + 1) + "\n"
+            for ex in parsed["examples"]:
+                row = " | ".join([str(ex.get(k, "")) for k in list(ex.keys())[:-1]] + [str(ex.get("out", ""))])
+                examples_md += f"| {row} |\n"
+        
+        return f"""# {parsed['name']}
+
+## Signature
+```
+{parsed['signature']}
+```
+
+## Description
+{parsed['description']}
+
+## Examples
+{examples_md if examples_md else "No examples provided"}
+
+## Postconditions
+- Generated from natural language
+"""
+    
+    # Recognize common patterns (fallback for backward compatibility)
     if "reverse" in lower_utterance and "string" in lower_utterance:
         return """# reverse_string
 
