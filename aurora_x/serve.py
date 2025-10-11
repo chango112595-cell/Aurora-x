@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from aurora_x.serve_dashboard_v2 import make_router
 from aurora_x.serve_addons import attach as attach_factory
+from aurora_x.chat.attach_router import attach_router
 
 BASE = Path(__file__).parent
 app = FastAPI(title="Aurora-X Ultra v3")
@@ -24,6 +25,9 @@ app.include_router(make_router(static_dir, templates_dir))
 # Attach English mode addons
 attach_factory(app)
 
+# Attach T08 Intent Router for /chat endpoint
+attach_router(app)
+
 @app.get("/")
 def root():
     return {
@@ -34,6 +38,7 @@ def root():
             "/ws/spec_updates",
             "/api/chat",
             "/api/approve",
-            "/api/english/status"
+            "/api/english/status",
+            "/chat"
         ]
     }
