@@ -9,6 +9,7 @@ from aurora_x.chat.attach_domain import attach_domain
 from aurora_x.chat.attach_pretty import attach_pretty
 from aurora_x.chat.attach_format import attach_format
 from aurora_x.chat.attach_units_format import attach_units_format
+from aurora_x.chat.attach_demo import attach_demo
 
 BASE = Path(__file__).parent
 app = FastAPI(title="Aurora-X Ultra v3")
@@ -43,6 +44,9 @@ attach_format(app)
 
 # Attach units formatter with SI prefixes and hints
 attach_units_format(app)
+
+# Attach demo cards for testing
+attach_demo(app)
 
 @app.get("/healthz")
 async def healthz():
@@ -79,6 +83,7 @@ def root():
             "/api/solve/pretty",
             "/api/units",
             "/api/format/seconds",
-            "/api/format/units"
+            "/api/format/units",
+            "/api/demo/cards"
         ]
     }
