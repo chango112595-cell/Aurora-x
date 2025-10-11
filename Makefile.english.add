@@ -1,0 +1,149 @@
+# Aurora-X English Mode Makefile Additions
+# Add these targets to your main Makefile or include this file
+
+.PHONY: chat approve english-test english-demo english-status
+
+# === English Mode Variables ===
+PROMPT ?= find the largest number in a list
+API_URL ?= http://localhost:$${AURORA_PORT:-5001}
+
+# === Interactive Chat Mode ===
+chat:
+	@echo "🗣️  Aurora-X Interactive English Mode"
+	@echo "Enter your request in plain English:"
+	@read -r prompt; \
+	if [ -z "$$prompt" ]; then \
+		echo "Using default: $(PROMPT)"; \
+		prompt="$(PROMPT)"; \
+	fi; \
+	echo "📝 Generating spec from: $$prompt"; \
+	python tools/english_to_spec.py "$$prompt" && \
+	latest_spec=$$(ls -t specs/requests/*.md 2>/dev/null | head -1); \
+	if [ -n "$$latest_spec" ]; then \
+		echo "✅ Spec created: $$latest_spec"; \
+		echo "🔧 Compiling to code..."; \
+		python tools/spec_compile_v3.py "$$latest_spec" && \
+		latest_run=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
+		echo "📊 Code generated in: $$latest_run"; \
+		echo "View report: $$latest_run/report.html"; \
+	else \
+		echo "❌ Failed to generate spec"; \
+	fi
+
+# === API-based Chat (requires server running) ===
+chat-api:
+	@echo "🌐 Using Aurora-X Chat API"
+	@echo "Enter your request:"
+	@read -r prompt; \
+	if [ -z "$$prompt" ]; then \
+		prompt="$(PROMPT)"; \
+		echo "Using default: $$prompt"; \
+	fi; \
+	curl -X POST $(API_URL)/api/chat \
+		-H "Content-Type: application/json" \
+		-d "{\"prompt\": \"$$prompt\", \"auto_synthesize\": true}" | \
+		python -m json.tool
+
+# === Approve Synthesis Runs ===
+approve:
+	@echo "📋 Checking pending synthesis runs..."
+	@curl -s $(API_URL)/api/approve | python -m json.tool
+	@echo ""
+	@echo "Enter token to approve (or press Enter to skip):"
+	@read -r token; \
+	if [ -n "$$token" ]; then \
+		echo "Approving synthesis for token: $$token"; \
+		curl -X POST $(API_URL)/api/approve \
+			-H "Content-Type: application/json" \
+			-d "{\"token\": \"$$token\", \"approved\": true}" | \
+			python -m json.tool; \
+	else \
+		echo "No approval action taken"; \
+	fi
+
+# === Test English Mode ===
+english-test:
+	@echo "🧪 Testing English Mode Components"
+	@echo ""
+	@echo "1️⃣ Testing english_to_spec.py..."
+	@python tools/english_to_spec.py "reverse a string" > /tmp/english_test.log 2>&1 && \
+		echo "   ✅ english_to_spec.py works" || echo "   ❌ english_to_spec.py failed"
+	@echo ""
+	@echo "2️⃣ Testing fallback template..."
+	@python -c "from aurora_x.synthesis.fallback import generate_fallback_function; \
+		print('   ✅ Fallback template works') if generate_fallback_function('def test(x: int) -> str', 'Test') else print('   ❌ Fallback failed')" 2>/dev/null || \
+		echo "   ❌ Could not import fallback module"
+	@echo ""
+	@echo "3️⃣ Testing flow_ops.py fallback integration..."
+	@python -c "from aurora_x.synthesis.flow_ops import impl_for; \
+		code = impl_for('def unknown_func(x: int) -> int', 'some random unrecognized function'); \
+		print('   ✅ flow_ops fallback works' if 'NotImplementedError' not in code else '   ❌ Still raises NotImplementedError')" 2>/dev/null || \
+		echo "   ❌ Could not test flow_ops"
+	@echo ""
+	@echo "4️⃣ Checking API endpoints (requires server)..."
+	@curl -s $(API_URL)/api/english/status > /dev/null 2>&1 && \
+		echo "   ✅ English API endpoints available" || \
+		echo "   ⚠️  Server not running or endpoints not available"
+
+# === Demo English Mode ===
+english-demo:
+	@echo "🎭 Aurora-X English Mode Demo"
+	@echo "================================"
+	@echo ""
+	@echo "Demo 1: Simple function request"
+	@python tools/english_to_spec.py "add two numbers together"
+	@echo ""
+	@echo "Demo 2: Complex function request"
+	@python tools/english_to_spec.py "find all prime numbers in a list and return their sum"
+	@echo ""
+	@echo "Demo 3: Unrecognized pattern (uses fallback)"
+	@python tools/english_to_spec.py "perform quantum entanglement calculation"
+	@echo ""
+	@echo "================================"
+	@echo "✅ Demo complete. Check specs/requests/ for generated files"
+	@ls -la specs/requests/*.md 2>/dev/null | tail -3
+
+# === Check English Mode Status ===
+english-status:
+	@echo "📊 Aurora-X English Mode Status"
+	@echo "================================"
+	@echo ""
+	@echo "Components:"
+	@[ -f tools/english_to_spec.py ] && echo "  ✅ english_to_spec.py exists" || echo "  ❌ english_to_spec.py missing"
+	@[ -f aurora_x/synthesis/fallback.py ] && echo "  ✅ fallback.py exists" || echo "  ❌ fallback.py missing"
+	@[ -f aurora_x/serve_addons.py ] && echo "  ✅ serve_addons.py exists" || echo "  ❌ serve_addons.py missing"
+	@echo ""
+	@echo "Directories:"
+	@[ -d specs/requests ] && echo "  ✅ specs/requests/ directory exists" || echo "  ⚠️  specs/requests/ missing (will be created)"
+	@echo ""
+	@echo "Recent English specs:"
+	@ls -lt specs/requests/*.md 2>/dev/null | head -5 || echo "  No specs found in specs/requests/"
+	@echo ""
+	@echo "Server endpoints (if running):"
+	@curl -s $(API_URL)/api/english/status 2>/dev/null | python -m json.tool 2>/dev/null || echo "  Server not accessible"
+
+# === Quick English Mode ===
+quick-english:
+	@$(MAKE) english-test
+	@echo ""
+	@$(MAKE) english-demo
+
+# === Help for English Mode ===
+english-help:
+	@echo "Aurora-X English Mode Commands:"
+	@echo ""
+	@echo "  make chat              - Interactive English prompt mode"
+	@echo "  make chat-api          - Use API for English synthesis"
+	@echo "  make approve           - Review and approve synthesis runs"
+	@echo "  make english-test      - Test all English mode components"
+	@echo "  make english-demo      - Run demo examples"
+	@echo "  make english-status    - Check English mode status"
+	@echo "  make quick-english     - Run tests and demo"
+	@echo ""
+	@echo "Examples:"
+	@echo "  make chat PROMPT='reverse a string'"
+	@echo "  make chat-api API_URL=http://localhost:8000"
+	@echo ""
+	@echo "Environment variables:"
+	@echo "  AURORA_PORT - Server port (default: 5001)"
+	@echo "  PROMPT - Default prompt for chat commands"

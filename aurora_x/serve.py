@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from aurora_x.serve_dashboard_v2 import make_router
+from aurora_x.serve_addons import attach as attach_factory
 
 BASE = Path(__file__).parent
 app = FastAPI(title="Aurora-X Ultra v3")
@@ -20,9 +21,19 @@ if static_dir.exists() and any(static_dir.iterdir()):
 # Include dashboard router
 app.include_router(make_router(static_dir, templates_dir))
 
+# Attach English mode addons
+attach_factory(app)
+
 @app.get("/")
 def root():
     return {
         "ok": True,
-        "routes": ["/dashboard/spec_runs", "/api/spec_runs", "/ws/spec_updates"]
+        "routes": [
+            "/dashboard/spec_runs", 
+            "/api/spec_runs", 
+            "/ws/spec_updates",
+            "/api/chat",
+            "/api/approve",
+            "/api/english/status"
+        ]
     }
