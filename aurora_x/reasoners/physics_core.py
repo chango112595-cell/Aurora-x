@@ -16,7 +16,11 @@ def solve(intent: str, payload: Dict[str, Any]) -> Dict[str, Any]:
     if intent == "orbital_period":
         a = float(payload.get("a_m") or payload.get("a") or payload.get("semi_major_axis_m") or 0.0)
         M = float(payload.get("M_kg") or payload.get("M") or payload.get("mass_central_kg") or 0.0)
-        return {"ok": True, "kind": "physics.orbital_period", "a_m": a, "M_kg": M, "period_s": orbital_period(a, M)}
+        try:
+            period = orbital_period(a, M)
+            return {"ok": True, "kind": "physics.orbital_period", "a_m": a, "M_kg": M, "period_s": period}
+        except ValueError as e:
+            return {"ok": False, "err": str(e)}
     if intent == "em_superposition":
         vecs = payload.get("vectors") or payload.get("field_vectors") or []
         vecs_t = [tuple(map(float, v)) for v in vecs]
