@@ -691,6 +691,94 @@ if __name__ == "__main__":
     }
   });
 
+  // T09 Domain Router endpoints with unit normalization
+  app.post("/api/units", async (req, res) => {
+    try {
+      const units = await import("./units");
+      const { value } = req.body;
+      
+      if (!value || typeof value !== "string") {
+        return res.status(400).json({ error: "missing 'value'" });
+      }
+      
+      const [numeric_value, unit] = units.parse_value_with_unit(value);
+      
+      if (numeric_value === null) {
+        return res.status(422).json({ error: `Could not parse value from: ${value}` });
+      }
+      
+      const result = units.normalize_to_si(numeric_value, unit);
+      
+      return res.json({
+        si_value: result.si_value,
+        si_unit: result.si_unit,
+        original: value,
+        original_value: result.original_value,
+        original_unit: result.original_unit,
+        conversion_factor: result.conversion_factor,
+        unit_type: result.unit_type
+      });
+    } catch (error: any) {
+      console.error("[Aurora-X] Units API error:", error);
+      return res.status(500).json({
+        error: "Failed to process unit conversion",
+        details: error?.message
+      });
+    }
+  });
+
+  app.post("/api/solve", async (req, res) => {
+    try {
+      const { callPythonSolver } = await import("./python-bridge");
+      const text = (req.body.problem || req.body.prompt || "").trim();
+      
+      if (!text) {
+        return res.status(400).json({ error: "missing 'problem' or 'prompt'" });
+      }
+      
+      const result = await callPythonSolver(text);
+      if (!result.ok) {
+        return res.status(422).json(result);
+      }
+      return res.json(result);
+    } catch (error: any) {
+      console.error("[Aurora-X] Solve API error:", error);
+      return res.status(500).json({
+        error: "Failed to solve problem",
+        details: error?.message
+      });
+    }
+  });
+
+  app.post("/api/explain", async (req, res) => {
+    try {
+      const { callPythonSolver } = await import("./python-bridge");
+      const text = (req.body.problem || req.body.prompt || "").trim();
+      
+      if (!text) {
+        return res.status(400).json({ error: "missing 'problem' or 'prompt'" });
+      }
+      
+      const result = await callPythonSolver(text);
+      if (!result.ok) {
+        return res.status(422).json(result);
+      }
+      
+      const keys = Object.keys(result).sort().join(", ");
+      return res.json({ 
+        ok: true, 
+        explanation: `Solved offline; fields: ${keys}`, 
+        result: result 
+      });
+    } catch (error: any) {
+      console.error("[Aurora-X] Explain API error:", error);
+      return res.status(500).json({
+        error: "Failed to explain problem",
+        details: error?.message
+      });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
