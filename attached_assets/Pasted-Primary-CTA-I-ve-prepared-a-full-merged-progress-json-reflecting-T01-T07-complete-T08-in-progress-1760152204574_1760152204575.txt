@@ -1,3 +1,8 @@
+Primary CTA: I’ve prepared a full, merged progress.json reflecting T01–T07 complete, T08 in-progress, plus new epics (T09x Tier-1 Lang Expansion, T10 Bridge, T11–T12 Templates/i18n, T15 STEM, T00 Omni-Code).
+Secondary CTA: Or you can also Hire an Expert to apply it + wire the auto-render.
+
+Since your env blocked file creation just now, here’s the exact JSON to paste into your repo’s progress.json (replace the file contents with this), then run make progress:
+
 {
   "version": "3.7",
   "updated_utc": "AUTO",
@@ -188,3 +193,11 @@
     }
   ]
 }
+
+After saving, run:
+
+make progress
+
+This will regenerate MASTER_TASK_LIST.md and refresh the dashboard.
+
+One quick preference check: do you want me to also spit out matching GitHub Issues (one per task/subtask) you can paste into the repo’s issue importer?
