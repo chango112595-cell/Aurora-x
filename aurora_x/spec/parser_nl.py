@@ -7,6 +7,33 @@ class NLParseResult(dict):
 def _hash(text: str) -> str:
     return hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]
 
+def _snake(text: str) -> str:
+    """Convert text to snake_case function name"""
+    # Clean and prepare text
+    t = text.lower().strip()
+    # Remove common filler words
+    stopwords = ['a', 'an', 'the', 'to', 'for', 'of', 'with', 'by', 'from', 'in', 'on', 'at', 'me', 'you', 'i', 'we', 'my', 'your', 'please', 'can', 'could', 'would']
+    words = [w for w in re.sub(r'[^\w\s]', '', t).split() if w not in stopwords]
+    
+    # Limit to first 3-4 meaningful words
+    if len(words) > 4:
+        words = words[:4]
+    elif len(words) == 0:
+        words = ['custom', 'function']
+    
+    # Join with underscores
+    name = '_'.join(words)
+    
+    # Ensure valid Python identifier
+    if not name or not name[0].isalpha():
+        name = 'func_' + name
+    
+    # Limit length
+    if len(name) > 30:
+        name = name[:30].rstrip('_')
+    
+    return name
+
 def parse_english(text: str) -> NLParseResult:
     t = text.strip().lower()
     if "largest" in t or ("max" in t and "list" in t):
@@ -124,9 +151,55 @@ def parse_english(text: str) -> NLParseResult:
                 {"a": 17, "b": 5, "out": 1}
             ]
         })
+    
+    # Enhanced fallback for unrecognized patterns
+    # Generate a properly named function based on the request
+    func_name = _snake(text)
+    
+    # Determine appropriate return type based on keywords in request
+    return_type = "str"  # Default to string for creative/text requests
+    if any(word in t for word in ["calculate", "compute", "count", "number", "sum", "total", "how many", "value", "result"]):
+        return_type = "int"
+    elif any(word in t for word in ["check", "is", "verify", "validate", "test", "confirm", "determine"]):
+        return_type = "bool"
+    elif any(word in t for word in ["list", "array", "collection", "items", "all", "multiple", "several"]):
+        return_type = "list[str]"
+    elif any(word in t for word in ["generate", "create", "make", "produce", "write", "compose", "haiku", "poem", "story", "text"]):
+        return_type = "str"
+    
+    # Determine if the function needs parameters based on the request
+    # Default to no parameters for creative/generative functions
+    needs_input = any(word in t for word in ["given", "from", "input", "parameter", "argument", "process", "convert", "transform"])
+    
+    # Generate appropriate signature
+    if needs_input and return_type == "str":
+        signature = f"def {func_name}(input_text: str) -> {return_type}"
+    elif needs_input and return_type == "int":
+        signature = f"def {func_name}(value: int) -> {return_type}"
+    elif needs_input and return_type == "bool":
+        signature = f"def {func_name}(item: str) -> {return_type}"
+    else:
+        signature = f"def {func_name}() -> {return_type}"
+    
+    # Create a meaningful description
+    description = f"Function to {text.strip()}"
+    if "generate" in t or "create" in t or "make" in t:
+        description = f"Generate output for: {text.strip()}"
+    elif "calculate" in t or "compute" in t:
+        description = f"Calculate result for: {text.strip()}"
+    
+    # Generate simple examples based on return type
+    examples = []
+    if return_type == "str" and "() ->" in signature:
+        examples = []  # No examples for parameterless string generators
+    elif return_type == "int" and "() ->" in signature:
+        examples = []  # No examples for parameterless int functions
+    elif return_type == "bool" and "(item: str)" in signature:
+        examples = [{"item": "test", "out": True}]
+    
     return NLParseResult({
-        "name": f"auto_{_hash(t)}",
-        "signature": "def todo_spec() -> None",
-        "description": "Unrecognized intent; placeholder spec.",
-        "examples": []
+        "name": func_name,
+        "signature": signature,
+        "description": description,
+        "examples": examples
     })
