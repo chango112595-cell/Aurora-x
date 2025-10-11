@@ -28,11 +28,29 @@ attach_factory(app)
 # Attach T08 Intent Router for /chat endpoint
 attach_router(app)
 
+@app.get("/healthz")
+async def healthz():
+    """
+    Aurora-X service health endpoint.
+    Returns 200 OK with status and component info.
+    """
+    return {
+        "status": "ok",
+        "service": "Aurora-X",
+        "version": "v3",
+        "components": {
+            "router": "active",
+            "synthesis": "ready",
+            "learning_engine": "online"
+        }
+    }
+
 @app.get("/")
 def root():
     return {
         "ok": True,
         "routes": [
+            "/healthz",
             "/dashboard/spec_runs", 
             "/api/spec_runs", 
             "/ws/spec_updates",

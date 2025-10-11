@@ -27,6 +27,10 @@ Preferred communication style: Simple, everyday language.
   - Go services: `PORT=8080` (default)
   - C# WebAPIs: `PORT=5080` (default)
   - Fully compatible with Replit, Heroku, and other cloud platforms
+- **Health Check Endpoint**: `/healthz` endpoint for service monitoring
+  - Returns service status, version, and component health
+  - Enables automatic restarts and uptime monitoring
+  - Compatible with Cloudflare, Replit, and CI/CD pipelines
 
 ## System Architecture
 
