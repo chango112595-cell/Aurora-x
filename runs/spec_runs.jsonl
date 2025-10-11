@@ -220,3 +220,5 @@
 {"run_id": "run-20251011-023524", "spec": "validate_email_regex_tests.md", "ok": true, "report": "/runs/run-20251011-023524/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251011-023741", "spec": "create_flask_web_app_app.md", "ok": true, "report": "/runs/run-20251011-023741/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251011-023741", "spec": "create_flask_web_app_app.md", "ok": true, "report": "/runs/run-20251011-023741/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251011-025025", "spec": "test_flask_spec.md", "ok": true, "report": "/runs/run-20251011-025025/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251011-025025", "spec": "test_flask_spec.md", "ok": true, "report": "/runs/run-20251011-025025/report.html", "bias": null, "spark": null}
