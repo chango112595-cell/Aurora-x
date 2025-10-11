@@ -1,0 +1,109 @@
+Primary CTA: Done—here’s the auto-units upgrade so prompts like orbital period a=7000 km M=5.972e24 kg work transparently via /api/solve and solve_text(...).
+Secondary CTA: Or you can also Hire an Expert to merge + test this.
+
+1) aurora_x/utils/units.py (add parsing + SI normalization)
+
+# --- keep your existing helpers here if already added ---
+
+from __future__ import annotations
+import re
+from typing import Dict, Tuple
+
+_LEN = {"m":1.0,"km":1e3,"cm":1e-2,"mm":1e-3,"au":1.495978707e11}
+_MASS = {"kg":1.0,"g":1e-3}
+_TIME = {"s":1.0,"ms":1e-3}
+
+def normalize_value(value: float, unit: str) -> Tuple[float,str]:
+    u = (unit or "").strip().lower()
+    if u in _LEN:  return value*_LEN[u], "m"
+    if u in _MASS: return value*_MASS[u], "kg"
+    if u in _TIME: return value*_TIME[u], "s"
+    raise ValueError(f"unsupported unit: {unit}")
+
+def normalize_payload(payload: Dict) -> Dict:
+    out = {}
+    for k,v in list(payload.items()):
+        if isinstance(v, dict) and "value" in v and "unit" in v:
+            val_si, unit_si = normalize_value(float(v["value"]), str(v["unit"]))
+            out[f"{k}_{unit_si}"] = val_si
+    for k,v in list(payload.items()):
+        if "_" in k:
+            base, unit = k.rsplit("_",1)
+            try:
+                val_si, unit_si = normalize_value(float(v), unit)
+                out[f"{base}_{unit_si}"] = val_si
+            except Exception:
+                pass
+    return out
+
+_Q = re.compile(r"""
+    (?P<key>[aA]|M)          # a or A (semi-major axis), or M (mass)
+    \s*=\s*
+    (?P<val>[-+]?\d+(?:\.\d+)?(?:e[+-]?\d+)?)
+    \s*
+    (?P<unit>[A-Za-z]+)?     # optional unit (km, m, kg, etc.)
+""", re.I | re.X)
+
+def extract_quantities(text: str) -> Dict[str, float]:
+    """
+    Parse inline quantities like: 'a=7000 km M=5.972e24 kg'
+    Returns SI-normalized dict, e.g. {'a_m': 7e6, 'M_kg': 5.972e24}
+    Defaults: a→meters if unit missing; M→kg if unit missing.
+    """
+    res: Dict[str, float] = {}
+    for m in _Q.finditer(text or ""):
+        key = m.group("key").lower()
+        val = float(m.group("val"))
+        unit = (m.group("unit") or "").lower()
+
+        if key == "a":
+            if not unit: unit = "m"
+            val_si, u = normalize_value(val, unit)  # expect length unit
+            res[f"a_{u}"] = val_si
+        elif key == "m":
+            if not unit: unit = "kg"
+            val_si, u = normalize_value(val, unit)  # expect mass unit
+            res[f"M_{u}"] = val_si
+    return res
+
+2) aurora_x/generators/solver.py (auto-apply units to physics)
+
+from typing import Dict, Any
+from aurora_x.router.domain_router import classify_domain
+from aurora_x.reasoners import math_core, physics_core
+from aurora_x.utils.units import extract_quantities, normalize_payload
+
+def solve_text(text: str) -> Dict[str, Any]:
+    d = classify_domain(text)
+    if d.domain == "math":
+        return math_core.solve(d.task, d.payload)
+
+    if d.domain == "physics":
+        # 1) Pull inline quantities from free text (a=..., M=..., with units)
+        si_from_text = extract_quantities(text)
+        # 2) Respect any JSON-style payload too (normalize to SI)
+        si_from_payload = normalize_payload(d.payload) if isinstance(d.payload, dict) else {}
+        payload = {**d.payload, **si_from_text, **si_from_payload}
+
+        # Ensure canonical keys for physics_core
+        if "a_m" in payload: payload.setdefault("semi_major_axis_m", payload["a_m"])
+        if "M_kg" in payload: payload.setdefault("mass_central_kg", payload["M_kg"])
+
+        return physics_core.solve(d.task, payload)
+
+    return {"ok": False, "err": "domain not implemented", "domain": d.domain, "task": d.task}
+
+3) Optional: /api/solve already benefits (no change needed) since it uses solve_text.
+
+Quick check (anywhere):
+
+# Inline units
+HOST=https://<your-repl>.replit.dev \
+curl -s -X POST -H 'content-type: application/json' \
+-d '{"problem":"orbital period a=7000 km M=5.972e24 kg"}' $HOST/api/solve | jq .
+
+# Mixed JSON + text units
+curl -s -X POST -H 'content-type: application/json' \
+-d '{"problem":"orbital period", "a_km":7000, "M_kg":5.972e24}' $HOST/api/solve | jq .
+
+Would you like me to add a tiny /api/solve/pretty that returns human-friendly strings (e.g., “Period: 1.6 hours”) alongside the raw seconds?
