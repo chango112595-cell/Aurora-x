@@ -1,82 +1,86 @@
 # Language Auto-Select Testing Targets
 # Usage: HOST=http://localhost:5001 make -f Makefile.lang.add chat PROMPT="your prompt"
+#
+# For Replit: Set HOST to your Replit URL
+# Example: HOST=https://aurora-x.yourusername.replit.dev make -f Makefile.lang.add chat PROMPT="fast api"
 
 HOST ?= http://localhost:5001
 PROMPT ?= make a web api
 LANG ?=
+PORT ?= 8000
 
 # Test chat endpoint with language auto-select
 chat:
-	@echo "🚀 Testing language auto-select with prompt: $(PROMPT)"
-	@echo "────────────────────────────────────────────"
-	@if [ -z "$(LANG)" ]; then \
-		curl -s -X POST -H 'Content-Type: application/json' \
-			-d '{"prompt":"$(PROMPT)"}' \
-			$(HOST)/chat | python -m json.tool; \
-	else \
-		curl -s -X POST -H 'Content-Type: application/json' \
-			-d '{"prompt":"$(PROMPT)","lang":"$(LANG)"}' \
-			$(HOST)/chat | python -m json.tool; \
-	fi
+        @echo "🚀 Testing language auto-select with prompt: $(PROMPT)"
+        @echo "────────────────────────────────────────────"
+        @if [ -z "$(LANG)" ]; then \
+                curl -s -X POST -H 'Content-Type: application/json' \
+                        -d '{"prompt":"$(PROMPT)"}' \
+                        $(HOST)/chat | python -m json.tool; \
+        else \
+                curl -s -X POST -H 'Content-Type: application/json' \
+                        -d '{"prompt":"$(PROMPT)","lang":"$(LANG)"}' \
+                        $(HOST)/chat | python -m json.tool; \
+        fi
 
 # Test Go selection
 test-go:
-	@$(MAKE) -f Makefile.lang.add chat PROMPT="fast microservice web api" HOST=$(HOST)
+        @$(MAKE) -f Makefile.lang.add chat PROMPT="fast microservice web api" HOST=$(HOST)
 
 # Test Rust selection
 test-rust:
-	@$(MAKE) -f Makefile.lang.add chat PROMPT="memory-safe cli to parse args" HOST=$(HOST)
+        @$(MAKE) -f Makefile.lang.add chat PROMPT="memory-safe cli to parse args" HOST=$(HOST)
 
 # Test C# selection
 test-csharp:
-	@$(MAKE) -f Makefile.lang.add chat PROMPT="enterprise web api with health check" HOST=$(HOST)
+        @$(MAKE) -f Makefile.lang.add chat PROMPT="enterprise web api with health check" HOST=$(HOST)
 
 # Test Python default
 test-python:
-	@$(MAKE) -f Makefile.lang.add chat PROMPT="make a futuristic timer ui" HOST=$(HOST)
+        @$(MAKE) -f Makefile.lang.add chat PROMPT="make a futuristic timer ui" HOST=$(HOST)
 
 # Test forced language override
 test-force-lang:
-	@echo "Testing forced C# for a Python-like prompt..."
-	@$(MAKE) -f Makefile.lang.add chat PROMPT="make a simple script" LANG=csharp HOST=$(HOST)
+        @echo "Testing forced C# for a Python-like prompt..."
+        @$(MAKE) -f Makefile.lang.add chat PROMPT="make a simple script" LANG=csharp HOST=$(HOST)
 
 # Test all languages
 test-all-langs:
-	@echo "🌍 Testing all language auto-selections..."
-	@echo "═══════════════════════════════════════════"
-	@echo ""
-	@echo "1️⃣ Testing Go (microservice)..."
-	@$(MAKE) -s -f Makefile.lang.add test-go HOST=$(HOST)
-	@echo ""
-	@echo "2️⃣ Testing Rust (CLI)..."
-	@$(MAKE) -s -f Makefile.lang.add test-rust HOST=$(HOST)
-	@echo ""
-	@echo "3️⃣ Testing C# (enterprise)..."
-	@$(MAKE) -s -f Makefile.lang.add test-csharp HOST=$(HOST)
-	@echo ""
-	@echo "4️⃣ Testing Python (default)..."
-	@$(MAKE) -s -f Makefile.lang.add test-python HOST=$(HOST)
-	@echo ""
-	@echo "✅ All language tests complete!"
+        @echo "🌍 Testing all language auto-selections..."
+        @echo "═══════════════════════════════════════════"
+        @echo ""
+        @echo "1️⃣ Testing Go (microservice)..."
+        @$(MAKE) -s -f Makefile.lang.add test-go HOST=$(HOST)
+        @echo ""
+        @echo "2️⃣ Testing Rust (CLI)..."
+        @$(MAKE) -s -f Makefile.lang.add test-rust HOST=$(HOST)
+        @echo ""
+        @echo "3️⃣ Testing C# (enterprise)..."
+        @$(MAKE) -s -f Makefile.lang.add test-csharp HOST=$(HOST)
+        @echo ""
+        @echo "4️⃣ Testing Python (default)..."
+        @$(MAKE) -s -f Makefile.lang.add test-python HOST=$(HOST)
+        @echo ""
+        @echo "✅ All language tests complete!"
 
 # Help
 help-lang:
-	@echo "Language Auto-Select Makefile Targets"
-	@echo "════════════════════════════════════"
-	@echo ""
-	@echo "Usage:"
-	@echo "  make -f Makefile.lang.add chat PROMPT='your prompt'"
-	@echo "  make -f Makefile.lang.add chat PROMPT='your prompt' LANG=go"
-	@echo ""
-	@echo "Targets:"
-	@echo "  chat          - Test chat with custom prompt"
-	@echo "  test-go       - Test Go auto-selection"
-	@echo "  test-rust     - Test Rust auto-selection"
-	@echo "  test-csharp   - Test C# auto-selection"
-	@echo "  test-python   - Test Python default"
-	@echo "  test-force-lang - Test language override"
-	@echo "  test-all-langs - Test all language selections"
-	@echo ""
-	@echo "Environment:"
-	@echo "  HOST=$(HOST)"
-	@echo "  AURORA_DEFAULT_LANG=<python|go|rust|csharp> (optional)"
+        @echo "Language Auto-Select Makefile Targets"
+        @echo "════════════════════════════════════"
+        @echo ""
+        @echo "Usage:"
+        @echo "  make -f Makefile.lang.add chat PROMPT='your prompt'"
+        @echo "  make -f Makefile.lang.add chat PROMPT='your prompt' LANG=go"
+        @echo ""
+        @echo "Targets:"
+        @echo "  chat          - Test chat with custom prompt"
+        @echo "  test-go       - Test Go auto-selection"
+        @echo "  test-rust     - Test Rust auto-selection"
+        @echo "  test-csharp   - Test C# auto-selection"
+        @echo "  test-python   - Test Python default"
+        @echo "  test-force-lang - Test language override"
+        @echo "  test-all-langs - Test all language selections"
+        @echo ""
+        @echo "Environment:"
+        @echo "  HOST=$(HOST)"
+        @echo "  AURORA_DEFAULT_LANG=<python|go|rust|csharp> (optional)"
