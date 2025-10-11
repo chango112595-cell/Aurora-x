@@ -6,6 +6,7 @@ from aurora_x.serve_dashboard_v2 import make_router
 from aurora_x.serve_addons import attach as attach_factory
 from aurora_x.chat.attach_router_lang import attach_router
 from aurora_x.chat.attach_domain import attach_domain
+from aurora_x.chat.attach_pretty import attach_pretty
 
 BASE = Path(__file__).parent
 app = FastAPI(title="Aurora-X Ultra v3")
@@ -31,6 +32,9 @@ attach_router(app)
 
 # Attach T09 Domain Router for /api/solve and /api/explain endpoints
 attach_domain(app)
+
+# Attach Pretty formatter for human-friendly output
+attach_pretty(app)
 
 @app.get("/healthz")
 async def healthz():
@@ -63,6 +67,8 @@ def root():
             "/api/english/status",
             "/chat",
             "/api/solve",
-            "/api/explain"
+            "/api/explain",
+            "/api/solve/pretty",
+            "/api/units"
         ]
     }
