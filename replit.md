@@ -10,13 +10,7 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (October 2025)
 
-### Aurora-X Ultra Implementation Complete
-- **Baseline Comparisons**: Added --baseline CLI flag to compare against any previous run
-- **Visual Regression Badges**: Red "REGRESSIONS ⚠ X" or green "No regressions ✓" badges in HTML reports
-- **Makefile Targets**: compare-latest and compare-baseline for on-demand run comparisons
-- **Graph Diff**: Automatic generation of graph_diff.json/html showing added/removed edges
-- **Scores Diff**: Function-level regression tracking with scores_diff.json/html
-- **Timestamp Tracking**: Full run_meta.json with start_ts, end_ts, duration_seconds
+### T08 Language Router Complete ✅
 - **Language Auto-Select**: Aurora now automatically selects Python/Go/Rust/C# based on prompt keywords
   - Go: Fast microservices, high-performance APIs (PORT env, default 8080)
   - Rust: Memory-safe CLI tools, system utilities (non-web service)
@@ -31,6 +25,16 @@ Preferred communication style: Simple, everyday language.
   - Returns service status, version, and component health
   - Enables automatic restarts and uptime monitoring
   - Compatible with Cloudflare, Replit, and CI/CD pipelines
+- **Offline Template Validation**: Test suite confirms all templates generate valid, runnable code
+- **FastAPI Integration**: Language router fully integrated with `/api/chat` endpoint
+
+### Aurora-X Ultra Implementation Complete
+- **Baseline Comparisons**: Added --baseline CLI flag to compare against any previous run
+- **Visual Regression Badges**: Red "REGRESSIONS ⚠ X" or green "No regressions ✓" badges in HTML reports
+- **Makefile Targets**: compare-latest and compare-baseline for on-demand run comparisons
+- **Graph Diff**: Automatic generation of graph_diff.json/html showing added/removed edges
+- **Scores Diff**: Function-level regression tracking with scores_diff.json/html
+- **Timestamp Tracking**: Full run_meta.json with start_ts, end_ts, duration_seconds
 
 ## System Architecture
 
