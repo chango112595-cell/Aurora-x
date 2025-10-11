@@ -278,7 +278,11 @@ def main():
         
         if parsed.get("framework") == "flask":
             # Handle Flask app synthesis
-            from tools.spec_from_flask import create_flask_app_from_text
+            # Import by adding tools to path
+            import sys
+            tools_dir = Path(__file__).parent.parent / "tools"
+            sys.path.insert(0, str(tools_dir))
+            from spec_from_flask import create_flask_app_from_text
             from datetime import datetime
             run_name = f"run-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
             run_dir = Path("runs") / run_name
@@ -290,10 +294,17 @@ def main():
             if latest.exists() or latest.is_symlink():
                 latest.unlink()
             latest.symlink_to(run_dir.name)
+            
+            # Also print out the location for the server to read
+            print(f"[Aurora-X] Latest valid run: {run_name}")
+            print(f"[Aurora-X] Read generated code from: {app_file.name}")
             return 0
         else:
             # Regular function synthesis
-            from tools.spec_from_text import create_spec_from_text
+            import sys
+            tools_dir = Path(__file__).parent.parent / "tools"
+            sys.path.insert(0, str(tools_dir))
+            from spec_from_text import create_spec_from_text
             spec_path = create_spec_from_text(args.nl)
             print(f"[OK] Spec generated from English at: {spec_path}")
             # Now compile the generated spec
