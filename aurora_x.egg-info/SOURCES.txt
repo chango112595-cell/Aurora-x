@@ -17,6 +17,9 @@ aurora_x.egg-info/dependency_links.txt
 aurora_x.egg-info/entry_points.txt
 aurora_x.egg-info/requires.txt
 aurora_x.egg-info/top_level.txt
+aurora_x/chat/__init__.py
+aurora_x/chat/attach_router.py
+aurora_x/chat/attach_router_lang.py
 aurora_x/config/__init__.py
 aurora_x/config/modes.py
 aurora_x/corpus/__init__.py
@@ -26,6 +29,9 @@ aurora_x/learn/__init__.py
 aurora_x/learn/adaptive.py
 aurora_x/learn/seeds.py
 aurora_x/learn/weights.py
+aurora_x/router/__init__.py
+aurora_x/router/intent_router.py
+aurora_x/router/lang_select.py
 aurora_x/spec/__init__.py
 aurora_x/spec/parser_nl.py
 aurora_x/spec/parser_v2.py
@@ -36,7 +42,13 @@ aurora_x/synthesis/flow_ops.py
 aurora_x/synthesis/operators.py
 aurora_x/synthesis/search.py
 aurora_x/synthesis/templates_py.py
+aurora_x/templates/cli_tool.py
+aurora_x/templates/csharp_webapi.py
 aurora_x/templates/flask_app.py
+aurora_x/templates/go_service.py
+aurora_x/templates/lib_func.py
+aurora_x/templates/rust_cli.py
+aurora_x/templates/web_app_flask.py
 tests/test_adaptive.py
 tests/test_corpus_store.py
 tests/test_dump_cli.py
