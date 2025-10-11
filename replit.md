@@ -10,6 +10,17 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (October 2025)
 
+### T09 Domain Router Complete ✅
+- **Math & Physics Solvers**: Aurora now solves mathematical and physics problems from English prompts
+  - Math: Expression evaluation ("2+3*4" → 14.0), polynomial differentiation ("differentiate 3x^2" → "6x")
+  - Physics: Orbital period calculations using Kepler's third law, EM field superposition
+  - Domain classification automatically routes prompts to appropriate solver
+- **API Endpoints**: Added /api/solve and /api/explain for direct problem solving
+  - POST /api/solve with {"problem": "differentiate 3x^2+2x+5"} returns derivative
+  - POST /api/explain provides both solution and explanation
+- **Safe Evaluation**: AST-based expression parser prevents code injection
+- **Comprehensive Testing**: 21 tests covering all math/physics operations
+
 ### T08 Language Router Complete ✅
 - **Language Auto-Select**: Aurora now automatically selects Python/Go/Rust/C# based on prompt keywords
   - Go: Fast microservices, high-performance APIs (PORT env, default 8080)
