@@ -4,7 +4,7 @@ from __future__ import annotations
 import re
 from typing import Dict, Tuple
 
-_LEN = {"m":1.0,"km":1e3,"cm":1e-2,"mm":1e-3,"au":1.495978707e11,"AU":1.495978707e11}
+_LEN = {"m":1.0,"km":1e3,"cm":1e-2,"mm":1e-3,"au":1.495978707e11,"AU":1.495978707e11,"miles":1609.344,"mile":1609.344}
 _MASS = {"kg":1.0,"g":1e-3,"tons":1e3,"ton":1e3}
 _TIME = {"s":1.0,"ms":1e-3,"hours":3600,"days":86400,"years":31536000}
 
