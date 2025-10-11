@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from aurora_x.serve_dashboard_v2 import make_router
 from aurora_x.serve_addons import attach as attach_factory
-from aurora_x.chat.attach_router import attach_router
+from aurora_x.chat.attach_router_lang import attach_router
 
 BASE = Path(__file__).parent
 app = FastAPI(title="Aurora-X Ultra v3")
