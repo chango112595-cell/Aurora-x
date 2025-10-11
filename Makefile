@@ -2,7 +2,7 @@
 .PHONY: all help install test run clean serve serve-v3 open-dashboard open-report
 .PHONY: spec spec-test spec-report spec3 spec3-test spec3-all
 .PHONY: orchestrator orchestrate-bg orch-test orch-status
-.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list
+.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos
 
 # === Default Variables ===
 SPEC ?= specs/check_palindrome.md
@@ -27,6 +27,11 @@ help:
 	@echo "  make serve-v3       # start FastAPI (port $(AURORA_PORT))"
 	@echo "  make open-dashboard # open dashboard URL"
 	@echo "  make open-report    # open latest HTML report"
+	@echo ""
+	@echo "Demo Dashboard:"
+	@echo "  make demo-all       # run all demo cards (CI/CD)"
+	@echo "  make demo-list      # list available demo cards"
+	@echo "  make open-demos     # open demo dashboard in browser"
 	@echo ""
 	@echo "Orchestrator:"
 	@echo "  make orchestrator   # foreground monitoring"
@@ -337,3 +342,16 @@ demo-list:
 	@echo "📋 Available demo cards at $(HOST):"
 	@curl -s $(HOST)/api/demo/cards | jq '.cards[] | {id, title, endpoint}' 2>/dev/null || \
 	{ echo "Error: Failed to fetch demo cards. Is Aurora-X running on $(HOST)?"; exit 1; }
+
+# Open demo dashboard in browser
+open-demos:
+	@echo "🌐 Opening demo dashboard at $(HOST)/dashboard/demos ..."
+	@if command -v xdg-open > /dev/null 2>&1; then \
+	xdg-open "$(HOST)/dashboard/demos"; \
+	elif command -v open > /dev/null 2>&1; then \
+	open "$(HOST)/dashboard/demos"; \
+	elif command -v wsl-open > /dev/null 2>&1; then \
+	wsl-open "$(HOST)/dashboard/demos"; \
+	else \
+	echo "✨ Please open in your browser: $(HOST)/dashboard/demos"; \
+	fi
