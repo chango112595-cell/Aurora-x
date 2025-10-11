@@ -2,7 +2,7 @@
 .PHONY: all help install test run clean serve serve-v3 open-dashboard open-report
 .PHONY: spec spec-test spec-report spec3 spec3-test spec3-all
 .PHONY: orchestrator orchestrate-bg orch-test orch-status
-.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos
+.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed
 
 # === Default Variables ===
 SPEC ?= specs/check_palindrome.md
@@ -29,6 +29,7 @@ help:
 	@echo "  make open-report    # open latest HTML report"
 	@echo ""
 	@echo "Demo Dashboard:"
+	@echo "  make demo-seed      # create example specs and run Aurora"
 	@echo "  make demo-all       # run all demo cards (CI/CD)"
 	@echo "  make demo-list      # list available demo cards"
 	@echo "  make open-demos     # open demo dashboard in browser"
@@ -355,3 +356,15 @@ open-demos:
 	else \
 	echo "✨ Please open in your browser: $(HOST)/dashboard/demos"; \
 	fi
+
+# Seed demo specs and runs
+demo-seed:
+	@mkdir -p specs runs
+	@printf "## reverse_string\n\n- input: abc\n- output: cba\n" > specs/reverse_string.md
+	@printf "## math_eval\n\n- expr: (2+3)^2 + 1\n" > specs/math_eval.md
+	@python -m aurora_x.main --spec specs/reverse_string.md || true
+	@python -m aurora_x.main --spec specs/math_eval.md || true
+	@echo "Seeding orchestrator once..."
+	@AURORA_GIT_AUTO=0 AURORA_ORCH_INTERVAL=5 python -m aurora_x.orchestrator || true
+	@echo "[ok] Demo seed complete. Check ./runs and /dashboard/demos."
+	@[ -d .git ] && git add -A && git commit -m "chore: demo seed (specs+runs)" || true
