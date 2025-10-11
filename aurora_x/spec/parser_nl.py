@@ -88,11 +88,21 @@ def parse_english(text: str) -> NLParseResult:
         purpose = text.strip()
         func_name = _snake(purpose) + "_app"
         
+        # Sanitize the description for safe embedding in Python code
+        # Replace special Unicode characters with ASCII equivalents
+        safe_purpose = purpose.replace('•', '*').replace('→', '->').replace('–', '-').replace('—', '-')
+        # Handle other special characters
+        safe_purpose = safe_purpose.replace('（', '(').replace('）', ')').replace('：', ':')
+        # Remove or replace any remaining non-ASCII characters
+        safe_purpose = ''.join(c if ord(c) < 128 else ' ' for c in safe_purpose)
+        # Clean up multiple spaces and newlines
+        safe_purpose = ' '.join(safe_purpose.split())
+        
         # Return Flask-specific metadata
         return NLParseResult({
             "name": func_name,
             "signature": f"def {func_name}() -> Flask",
-            "description": f"Flask web application: {purpose}",
+            "description": f"Flask web application: {safe_purpose}",
             "framework": "flask",  # Key indicator for synthesis pipeline
             "app_type": "web",
             "includes": {
@@ -255,12 +265,22 @@ def parse_english(text: str) -> NLParseResult:
     else:
         signature = f"def {func_name}() -> {return_type}"
     
+    # Sanitize text for description
+    safe_text = text.strip()
+    # Replace special Unicode characters with ASCII equivalents  
+    safe_text = safe_text.replace('•', '*').replace('→', '->').replace('–', '-').replace('—', '-')
+    safe_text = safe_text.replace('（', '(').replace('）', ')').replace('：', ':')
+    # Remove or replace any remaining non-ASCII characters
+    safe_text = ''.join(c if ord(c) < 128 else ' ' for c in safe_text)
+    # Clean up multiple spaces
+    safe_text = ' '.join(safe_text.split())
+    
     # Create a meaningful description
-    description = f"Function to {text.strip()}"
+    description = f"Function to {safe_text}"
     if "generate" in t or "create" in t or "make" in t:
-        description = f"Generate output for: {text.strip()}"
+        description = f"Generate output for: {safe_text}"
     elif "calculate" in t or "compute" in t:
-        description = f"Calculate result for: {text.strip()}"
+        description = f"Calculate result for: {safe_text}"
     
     # Generate simple examples based on return type
     examples = []
