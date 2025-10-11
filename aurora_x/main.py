@@ -272,17 +272,38 @@ def main():
     
     # ----- Natural language mode -----
     if args.nl:
-        from tools.spec_from_text import create_spec_from_text
-        spec_path = create_spec_from_text(args.nl)
-        print(f"[OK] Spec generated from English at: {spec_path}")
-        # Now compile the generated spec
-        comp = Path("tools/spec_compile_v3.py")
-        if comp.exists():
-            import subprocess
-            import os
-            subprocess.check_call([sys.executable, "tools/spec_compile_v3.py", str(spec_path)], env=os.environ.copy())
+        # Check if this is a Flask request
+        from aurora_x.spec.parser_nl import parse_english
+        parsed = parse_english(args.nl)
+        
+        if parsed.get("framework") == "flask":
+            # Handle Flask app synthesis
+            from tools.spec_from_flask import create_flask_app_from_text
+            from datetime import datetime
+            run_name = f"run-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+            run_dir = Path("runs") / run_name
+            app_file = create_flask_app_from_text(args.nl, run_dir)
+            print(f"[OK] Flask app generated at: {app_file}")
+            
+            # Update the latest symlink
+            latest = Path("runs/latest")
+            if latest.exists() or latest.is_symlink():
+                latest.unlink()
+            latest.symlink_to(run_dir.name)
+            return 0
         else:
-            print("No v3 compiler found (tools/spec_compile_v3.py). Add v3 pack first.")
+            # Regular function synthesis
+            from tools.spec_from_text import create_spec_from_text
+            spec_path = create_spec_from_text(args.nl)
+            print(f"[OK] Spec generated from English at: {spec_path}")
+            # Now compile the generated spec
+            comp = Path("tools/spec_compile_v3.py")
+            if comp.exists():
+                import subprocess
+                import os
+                subprocess.check_call([sys.executable, "tools/spec_compile_v3.py", str(spec_path)], env=os.environ.copy())
+            else:
+                print("No v3 compiler found (tools/spec_compile_v3.py). Add v3 pack first.")
         return 0
     
     # ----- Spec compilation mode -----

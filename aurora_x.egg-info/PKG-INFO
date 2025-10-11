@@ -7,6 +7,8 @@ Keywords: tracker,hud
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 Requires-Dist: fastapi>=0.118.2
+Requires-Dist: flask>=3.0.3
+Requires-Dist: flask-cors>=5.0.0
 Requires-Dist: uvicorn[standard]>=0.33.0
 Provides-Extra: dev
 Requires-Dist: pytest>=7.0; extra == "dev"
@@ -138,8 +140,56 @@ curl http://localhost:8080/api/seed_bias/history
 ```
 
 ## Project Status
+
+### Phase Completion (T01–T07)
+| Phase | Status | Description |
+|-------|--------|-------------|
+| **T01** | ✅ Complete | Foundation Core - AST synthesis engine |
+| **T02** | ✅ Complete | Learning & Memory - Corpus recording |
+| **T03** | ✅ Complete | Adaptive Engine - ε-greedy exploration |
+| **T04** | ✅ Complete | Production Hardening - CI/CD, Discord |
+| **T05** | ✅ Complete | Spec DSL v3 - Multi-function specs |
+| **T06** | ✅ Complete | Dashboard v2 - FastAPI with WebSocket |
+| **T07** | ✅ Complete | Orchestrator - Autonomous monitoring |
+
+### Original Milestones
 - ✅ **Milestone 1**: Core synthesis engine complete
 - ✅ **Milestone 2**: Corpus recording and seeding implemented
 - ✅ **Milestone 3**: Persistent learning seeds with EMA updates
 - ✅ **Milestone 4**: Adaptive learning engine with ε-greedy exploration
-- 🔜 **Next**: Visualization layer and advanced metrics
+- 🔜 **Next**: T08 Telemetry/Chango integration (deferred)
+
+## 🚀 Autonomous Mode (T07) — Orchestrator
+
+Aurora's orchestrator watches `/specs/*.md`, synthesizes code on changes/new specs, runs tests, updates the dashboard, and (optionally) pushes to GitHub and pings Discord.
+
+### Quick Start
+```bash
+make orchestrator          # foreground loop
+make orchestrate-bg        # daemon (logs: /tmp/aurora_orch.log)
+make serve-v3 && make open-dashboard   # start UI and print URL
+```
+
+### Config (env / Replit Secrets)
+
+| Var | Default | Notes |
+|-----|---------|-------|
+| `AURORA_ORCH_INTERVAL` | `300` | Poll interval (seconds) |
+| `AURORA_GIT_AUTO` | `0` | Set `1` to enable auto-commit/push |
+| `AURORA_GIT_URL` | — | e.g. `https://github.com/user/repo.git` |
+| `AURORA_GIT_BRANCH` | `main` | Target branch |
+| `DISCORD_WEBHOOK_URL` | — | Enables status alerts |
+
+### Triggers
+- New/changed spec in `/specs` (SHA256 change detection)
+- First-run when no prior row exists in `runs/spec_runs.jsonl`
+
+### Outputs
+- `runs/run-YYYYMMDD-HHMMSS/{src,tests,report.html}`
+- Dashboard row persisted in `runs/spec_runs.jsonl`
+- Optional Git push (`aurora: spec run for <spec>`) + Discord embed
+
+### One-tap v3 Spec Flow
+```bash
+make spec3-all SPEC3=specs/check_palindrome.md
+```
