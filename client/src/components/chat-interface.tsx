@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Code2, Sparkles, Zap, Rocket } from "lucide-react";
+import { Send, Loader2, Code2, Sparkles, Zap, Rocket, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -26,23 +26,28 @@ interface ExamplePrompt {
 const examplePrompts: ExamplePrompt[] = [
   {
     icon: Code2,
-    title: "RESTful API",
-    prompt: "Generate a RESTful API with CRUD operations for a task management system"
-  },
-  {
-    icon: Sparkles,
-    title: "Data Processor",
-    prompt: "Create a data processing pipeline that validates, transforms, and aggregates CSV data"
+    title: "String Reversal",
+    prompt: "reverse a string (unicode safe)"
   },
   {
     icon: Zap,
-    title: "Authentication",
-    prompt: "Build a secure JWT authentication system with refresh tokens"
+    title: "Factorial Function",
+    prompt: "write factorial(n) with unit tests"
+  },
+  {
+    icon: Sparkles,
+    title: "Creative Haiku",
+    prompt: "generate a random haiku about coding"
   },
   {
     icon: Rocket,
-    title: "WebSocket Server",
-    prompt: "Implement a real-time WebSocket server with room management"
+    title: "LRU Cache",
+    prompt: "build a tiny LRU cache class with get/put and capacity"
+  },
+  {
+    icon: Shield,
+    title: "Email Validation",
+    prompt: "validate an email with regex + tests"
   }
 ];
 
@@ -51,7 +56,7 @@ export function ChatInterface() {
     {
       id: "1",
       role: "assistant",
-      content: "Hi! I'm Chango, powered by Aurora-X synthesis. What would you like to build?",
+      content: "Hi! I'm Chango, powered by Aurora-X synthesis. I can turn any English request into working Python code - from algorithms to creative text generation. What would you like to build?",
       timestamp: new Date(),
     },
   ]);
@@ -121,8 +126,10 @@ export function ChatInterface() {
           <div className="p-6 space-y-6">
             {/* Example prompts - show when chat is empty except for initial message */}
             {showExamples && messages.length === 1 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4 animate-in fade-in duration-500">
-                {examplePrompts.map((example, idx) => (
+              <div className="mt-4 animate-in fade-in duration-500">
+                <p className="text-sm text-muted-foreground mb-3 font-medium">Try these examples:</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {examplePrompts.map((example, idx) => (
                   <Card
                     key={idx}
                     className="p-4 cursor-pointer hover-elevate transition-all border-muted"
@@ -142,6 +149,7 @@ export function ChatInterface() {
                     </div>
                   </Card>
                 ))}
+                </div>
               </div>
             )}
 
