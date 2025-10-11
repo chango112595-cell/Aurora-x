@@ -113,7 +113,9 @@ app.MapGet("/api/items/{id}", (int id) =>
 .Produces(404);
 
 // Run the application
-app.Run("http://0.0.0.0:5080");
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5080";
+Console.WriteLine($"🚀 Starting C# Web API on port {port}...");
+app.Run($"http://0.0.0.0:{port}");
 
 // Data models
 public record EchoRequest(string Message);
