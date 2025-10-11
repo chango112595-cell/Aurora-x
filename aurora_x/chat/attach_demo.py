@@ -6,211 +6,229 @@ def attach_demo(app: FastAPI):
     @app.get("/api/demo/cards")
     async def api_demo_cards() -> Dict[str, Any]:
         """
-        Return ready-made demo payloads for dashboard test cards.
-        Each card has a title, description, and payload to send to /api/solve or /api/solve/pretty.
+        Return ready-made demo payloads for testing all Aurora endpoints.
+        Each card has id, title, endpoint, method, body, and optional hint.
         """
         cards = [
-            # Physics - Orbital Mechanics
+            # Chat → code synthesis (auto language select)
             {
-                "category": "Physics - Orbital Mechanics",
-                "cards": [
-                    {
-                        "title": "ISS Orbit",
-                        "description": "International Space Station orbital period",
-                        "endpoint": "/api/solve/pretty",
-                        "payload": {"problem": "orbital period a=6778 km M=5.972e24 kg"},
-                        "expected_output": "~92 minutes"
-                    },
-                    {
-                        "title": "LEO Satellite",
-                        "description": "Low Earth Orbit satellite period",
-                        "endpoint": "/api/solve/pretty",
-                        "payload": {"problem": "orbital period a=7000 km M=5.972e24 kg"},
-                        "expected_output": "~1.6 hours"
-                    },
-                    {
-                        "title": "GEO Satellite",
-                        "description": "Geostationary orbit period",
-                        "endpoint": "/api/solve/pretty",
-                        "payload": {"problem": "orbital period a=42164 km M=5.972e24 kg"},
-                        "expected_output": "~24 hours"
-                    },
-                    {
-                        "title": "Moon's Orbit",
-                        "description": "Earth's Moon orbital period",
-                        "endpoint": "/api/solve/pretty",
-                        "payload": {"problem": "orbital period a=384400 km M=5.972e24 kg"},
-                        "expected_output": "~27.3 days"
-                    },
-                    {
-                        "title": "Earth's Orbit",
-                        "description": "Earth around the Sun",
-                        "endpoint": "/api/solve/pretty",
-                        "payload": {"problem": "orbital period a=1 AU M=1.989e30 kg"},
-                        "expected_output": "~365 days"
-                    },
-                    {
-                        "title": "Mars Orbit",
-                        "description": "Mars around the Sun",
-                        "endpoint": "/api/solve/pretty",
-                        "payload": {"problem": "orbital period a=227.9e6 km M=1.989e30 kg"},
-                        "expected_output": "~687 days"
-                    }
-                ]
+                "id": "chat_timer_python",
+                "title": "Futuristic Timer UI (Python)",
+                "endpoint": "/chat",
+                "method": "POST",
+                "body": {"prompt": "make a futuristic timer ui", "lang": "python"},
+                "hint": "Generates app.py; run with: PORT=8000 python app.py"
             },
-            # Math - Calculus
             {
-                "category": "Math - Calculus",
-                "cards": [
-                    {
-                        "title": "Simple Polynomial",
-                        "description": "Differentiate a quadratic",
-                        "endpoint": "/api/solve/pretty",
-                        "payload": {"problem": "differentiate x^2 + 3x + 5"},
-                        "expected_output": "2x + 3"
-                    },
-                    {
-                        "title": "Cubic Function",
-                        "description": "Differentiate a cubic polynomial",
-                        "endpoint": "/api/solve/pretty",
-                        "payload": {"problem": "differentiate 3x^3 + 2x^2 - x + 7"},
-                        "expected_output": "9x^2 + 4x - 1"
-                    },
-                    {
-                        "title": "Higher Degree",
-                        "description": "Differentiate x^5",
-                        "endpoint": "/api/solve/pretty",
-                        "payload": {"problem": "differentiate x^5 + x^4"},
-                        "expected_output": "5x^4 + 4x^3"
-                    }
-                ]
+                "id": "chat_go_service",
+                "title": "Fast Microservice Web API (Go)",
+                "endpoint": "/chat",
+                "method": "POST",
+                "body": {"prompt": "fast microservice web api", "lang": "go"},
+                "hint": "Generates main.go; run: PORT=8080 go run ."
             },
-            # Math - Evaluation
             {
-                "category": "Math - Evaluation",
-                "cards": [
-                    {
-                        "title": "Order of Operations",
-                        "description": "PEMDAS test",
-                        "endpoint": "/api/solve",
-                        "payload": {"problem": "2 + 3 * 4"},
-                        "expected_output": "14"
-                    },
-                    {
-                        "title": "Powers",
-                        "description": "Exponentiation",
-                        "endpoint": "/api/solve",
-                        "payload": {"problem": "2 ** 10"},
-                        "expected_output": "1024"
-                    },
-                    {
-                        "title": "Complex Expression",
-                        "description": "Mixed operations",
-                        "endpoint": "/api/solve",
-                        "payload": {"problem": "(5 + 3) * 2 ** 3 - 10"},
-                        "expected_output": "54"
-                    }
-                ]
+                "id": "chat_rust_cli",
+                "title": "Memory-Safe CLI Tool (Rust)",
+                "endpoint": "/chat",
+                "method": "POST",
+                "body": {"prompt": "memory-safe cli tool for file processing", "lang": "rust"},
+                "hint": "Generates main.rs; build with: cargo build --release"
             },
-            # Unit Conversions
             {
-                "category": "Unit Conversions",
-                "cards": [
-                    {
-                        "title": "Kilometers to SI",
-                        "description": "Convert 7000 km to meters",
-                        "endpoint": "/api/units",
-                        "payload": {"value": "7000 km"},
-                        "expected_output": "7,000,000 m"
-                    },
-                    {
-                        "title": "AU to Meters",
-                        "description": "1 Astronomical Unit",
-                        "endpoint": "/api/units",
-                        "payload": {"value": "1 AU"},
-                        "expected_output": "149,597,870,700 m"
-                    },
-                    {
-                        "title": "Solar Mass",
-                        "description": "Mass of the Sun in kg",
-                        "endpoint": "/api/units",
-                        "payload": {"value": "1.989e30 kg"},
-                        "expected_output": "1.989e30 kg"
-                    }
-                ]
+                "id": "chat_csharp_api",
+                "title": "Enterprise Web API (C#)",
+                "endpoint": "/chat",
+                "method": "POST",
+                "body": {"prompt": "enterprise web api with health", "lang": "csharp"},
+                "hint": "Generates Aurora.WebApi; run: PORT=5080 dotnet run"
             },
-            # Time Formatting
             {
-                "category": "Time Formatting",
-                "cards": [
-                    {
-                        "title": "One Hour",
-                        "description": "3600 seconds",
-                        "endpoint": "/api/format/seconds",
-                        "payload": {"seconds": 3600},
-                        "expected_output": "1.00 hours"
-                    },
-                    {
-                        "title": "One Day",
-                        "description": "86400 seconds",
-                        "endpoint": "/api/format/seconds",
-                        "payload": {"seconds": 86400},
-                        "expected_output": "24.00 hours"
-                    },
-                    {
-                        "title": "ISS Period",
-                        "description": "5559 seconds",
-                        "endpoint": "/api/format/seconds",
-                        "payload": {"seconds": 5559},
-                        "expected_output": "1.54 hours"
-                    },
-                    {
-                        "title": "One Year",
-                        "description": "31536000 seconds",
-                        "endpoint": "/api/format/seconds",
-                        "payload": {"seconds": 31536000},
-                        "expected_output": "1.00 years"
-                    }
-                ]
+                "id": "chat_auto_select",
+                "title": "Auto Language Selection",
+                "endpoint": "/chat",
+                "method": "POST",
+                "body": {"prompt": "create a high-performance web service"},
+                "hint": "Aurora auto-selects Go for high-performance keywords"
             },
-            # Value Formatting with Units
+            
+            # Cross-domain solver (math/physics)
             {
-                "category": "Value Formatting",
-                "cards": [
-                    {
-                        "title": "LEO Altitude",
-                        "description": "Format with SI prefix",
-                        "endpoint": "/api/format/units",
-                        "payload": {"value": 7e6, "unit": "m"},
-                        "expected_output": "7 Mm (LEO-ish altitude)"
-                    },
-                    {
-                        "title": "Speed of Light",
-                        "description": "Format c with hint",
-                        "endpoint": "/api/format/units",
-                        "payload": {"value": 299792458, "unit": "m/s"},
-                        "expected_output": "300 Mm/s (≈ c)"
-                    },
-                    {
-                        "title": "Earth's Mass",
-                        "description": "Format with SI prefix",
-                        "endpoint": "/api/format/units",
-                        "payload": {"value": 5.972e24, "unit": "kg"},
-                        "expected_output": "5.97e12 Tkg (Mass of Earth)"
-                    }
-                ]
+                "id": "solve_math_eval",
+                "title": "Math Evaluate",
+                "endpoint": "/api/solve",
+                "method": "POST",
+                "body": {"problem": "(2+3)^2 + 1"},
+                "expected": "26"
+            },
+            {
+                "id": "solve_math_diff",
+                "title": "Differentiate Polynomial",
+                "endpoint": "/api/solve/pretty",
+                "method": "POST",
+                "body": {"problem": "differentiate 3x^2 + 2x + 5"},
+                "expected": "6x + 2"
+            },
+            {
+                "id": "solve_orbit_si",
+                "title": "Orbital Period (SI)",
+                "endpoint": "/api/solve/pretty",
+                "method": "POST",
+                "body": {"problem": "orbital period a=7e6 M=5.972e24"},
+                "expected": "Orbital period: 1.54 hours"
+            },
+            {
+                "id": "solve_orbit_units",
+                "title": "Orbital Period (km + kg → SI)",
+                "endpoint": "/api/solve/pretty",
+                "method": "POST",
+                "body": {"problem": "orbital period a=7000 km M=5.972e24 kg"},
+                "expected": "Orbital period: 1.62 hours"
+            },
+            {
+                "id": "solve_iss_orbit",
+                "title": "ISS Orbital Period",
+                "endpoint": "/api/solve/pretty",
+                "method": "POST",
+                "body": {"problem": "orbital period a=6778 km M=5.972e24 kg"},
+                "expected": "Orbital period: 1.54 hours (~92 minutes)"
+            },
+            {
+                "id": "solve_geo_orbit",
+                "title": "GEO Satellite Period",
+                "endpoint": "/api/solve/pretty",
+                "method": "POST",
+                "body": {"problem": "orbital period a=42164 km M=5.972e24 kg"},
+                "expected": "Orbital period: 23.93 hours (~24 hours)"
+            },
+            {
+                "id": "solve_moon_orbit",
+                "title": "Moon's Orbital Period",
+                "endpoint": "/api/solve/pretty",
+                "method": "POST",
+                "body": {"problem": "orbital period a=384400 km M=5.972e24 kg"},
+                "expected": "Orbital period: 27.32 days"
+            },
+            {
+                "id": "solve_earth_orbit",
+                "title": "Earth Around Sun",
+                "endpoint": "/api/solve/pretty",
+                "method": "POST",
+                "body": {"problem": "orbital period a=1 AU M=1.989e30 kg"},
+                "expected": "Orbital period: 365.26 days (1 year)"
+            },
+            {
+                "id": "solve_em_sum",
+                "title": "EM Field Superposition",
+                "endpoint": "/api/solve/pretty",
+                "method": "POST",
+                "body": {"problem": "electric field superposition", "vectors": [[1,0,0],[0,2,0],[-1,0,3]]},
+                "expected": "Resultant field: [0, 2, 3]"
+            },
+            
+            # Unit conversions
+            {
+                "id": "units_km_to_m",
+                "title": "Convert km to meters",
+                "endpoint": "/api/units",
+                "method": "POST",
+                "body": {"value": "7000 km"},
+                "expected": "7,000,000 m"
+            },
+            {
+                "id": "units_au_to_m",
+                "title": "AU to meters",
+                "endpoint": "/api/units",
+                "method": "POST",
+                "body": {"value": "1 AU"},
+                "expected": "149,597,870,700 m"
+            },
+            {
+                "id": "units_miles_to_m",
+                "title": "Miles to meters",
+                "endpoint": "/api/units",
+                "method": "POST",
+                "body": {"value": "100 miles"},
+                "expected": "160,934 m"
+            },
+            
+            # Formatters
+            {
+                "id": "fmt_seconds_hour",
+                "title": "Format Seconds (1 hour)",
+                "endpoint": "/api/format/seconds",
+                "method": "POST",
+                "body": {"seconds": 3600.0},
+                "expected": "1.00 hours"
+            },
+            {
+                "id": "fmt_seconds_day",
+                "title": "Format Seconds (1 day)",
+                "endpoint": "/api/format/seconds",
+                "method": "POST",
+                "body": {"seconds": 86400.0},
+                "expected": "24.00 hours"
+            },
+            {
+                "id": "fmt_seconds_year",
+                "title": "Format Seconds (1 year)",
+                "endpoint": "/api/format/seconds",
+                "method": "POST",
+                "body": {"seconds": 31536000.0},
+                "expected": "1.00 years"
+            },
+            {
+                "id": "fmt_units",
+                "title": "Format Units with SI Prefixes",
+                "endpoint": "/api/format/units",
+                "method": "POST",
+                "body": {"value": 7e6, "unit": "m"},
+                "expected": "7 Mm (LEO-ish altitude)"
+            },
+            {
+                "id": "fmt_units_speed",
+                "title": "Format Speed of Light",
+                "endpoint": "/api/format/units",
+                "method": "POST",
+                "body": {"value": 299792458, "unit": "m/s"},
+                "expected": "300 Mm/s (≈ c)"
+            },
+            {
+                "id": "fmt_units_mass",
+                "title": "Format Earth's Mass",
+                "endpoint": "/api/format/units",
+                "method": "POST",
+                "body": {"value": 5.972e24, "unit": "kg"},
+                "expected": "5.97e12 Tkg (Mass of Earth)"
             }
         ]
         
+        # Group cards by endpoint category
+        categories = {
+            "chat": [c for c in cards if c["endpoint"] == "/chat"],
+            "solve": [c for c in cards if "/solve" in c["endpoint"]],
+            "units": [c for c in cards if c["endpoint"] == "/api/units"],
+            "format": [c for c in cards if "/format" in c["endpoint"]]
+        }
+        
         return {
             "ok": True,
-            "categories": cards,
-            "total_cards": sum(len(cat["cards"]) for cat in cards),
+            "cards": cards,
+            "total": len(cards),
+            "categories": {
+                "chat": len(categories["chat"]),
+                "solve": len(categories["solve"]), 
+                "units": len(categories["units"]),
+                "format": len(categories["format"])
+            },
             "endpoints": [
+                "/chat",
                 "/api/solve",
                 "/api/solve/pretty",
-                "/api/units",
+                "/api/explain",
+                "/api/units", 
                 "/api/format/seconds",
-                "/api/format/units"
+                "/api/format/units",
+                "/api/demo/cards"
             ]
         }
