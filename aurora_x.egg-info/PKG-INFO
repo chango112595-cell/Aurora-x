@@ -9,6 +9,7 @@ Description-Content-Type: text/markdown
 Requires-Dist: fastapi>=0.118.2
 Requires-Dist: flask>=3.0.3
 Requires-Dist: flask-cors>=5.0.0
+Requires-Dist: httpx>=0.28.1
 Requires-Dist: pytest>=8.3.5
 Requires-Dist: requests>=2.32.4
 Requires-Dist: uvicorn[standard]>=0.33.0
