@@ -18,6 +18,10 @@ Preferred communication style: Simple, everyday language.
 - **API Endpoints**: Added /api/solve and /api/explain for direct problem solving
   - POST /api/solve with {"problem": "differentiate 3x^2+2x+5"} returns derivative
   - POST /api/explain provides both solution and explanation
+- **Unit Conversion System**: Automatic normalization to SI units
+  - /api/units endpoint converts any value with units (e.g., "7000 km" → 7,000,000 m)
+  - Physics solver auto-detects units ("orbital period a=1 AU M=2e30 kg" works correctly)
+  - Supports distance (km, miles, AU), mass (tons, pounds), time (hours, days, years)
 - **Safe Evaluation**: AST-based expression parser prevents code injection
 - **Comprehensive Testing**: 21 tests covering all math/physics operations
 
