@@ -2,7 +2,7 @@
 .PHONY: all help install test run clean serve serve-v3 open-dashboard open-report
 .PHONY: spec spec-test spec-report spec3 spec3-test spec3-all
 .PHONY: orchestrator orchestrate-bg orch-test orch-status
-.PHONY: say corpus-dump bias-show adaptive-stats
+.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list
 
 # === Default Variables ===
 SPEC ?= specs/check_palindrome.md
@@ -71,9 +71,9 @@ open-dashboard:
 	@PORT=$${AURORA_PORT:-5001}; \
 	HOST=$${REPL_SLUG:+$${REPL_SLUG}.$${REPL_OWNER}.repl.co}; \
 	if [ -n "$$HOST" ]; then \
-	  URL="https://$$HOST/dashboard/spec_runs"; \
+	URL="https://$$HOST/dashboard/spec_runs"; \
 	else \
-	  URL="http://localhost:$$PORT/dashboard/spec_runs"; \
+	URL="http://localhost:$$PORT/dashboard/spec_runs"; \
 	fi; \
 	echo "🌌 Dashboard → $$URL"; \
 	URL=$$URL python -c "import webbrowser,os; webbrowser.open(os.environ.get('URL',''))" || true
@@ -88,14 +88,14 @@ open-report:
 spec3:
 	@echo "🔧 v3 compile: $(SPEC3)"
 	@python tools/spec_compile_v3.py $(SPEC3) || { \
-	  [ -f $(DISCORD) ] && python $(DISCORD) error "❌ v3 compile failed: $(SPEC3)"; exit 1; }
+	[ -f $(DISCORD) ] && python $(DISCORD) error "❌ v3 compile failed: $(SPEC3)"; exit 1; }
 
 spec3-test:
 	@echo "🧪 Testing latest v3 run..."
 	@latest=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
 	if [ -z "$$latest" ]; then echo "No runs found"; exit 1; fi; \
 	python -m unittest discover -s $$latest/tests -t $$latest || { \
-	  [ -f $(DISCORD) ] && python $(DISCORD) error "❌ v3 tests failed for $$(basename $$latest)"; exit 1; }
+	[ -f $(DISCORD) ] && python $(DISCORD) error "❌ v3 tests failed for $$(basename $$latest)"; exit 1; }
 
 spec3-all:
 	@$(MAKE) spec3 SPEC3=$(SPEC3)
@@ -138,7 +138,7 @@ orch-status:
 	@echo ""
 	@echo "📝 Recent runs:"
 	@tail -3 runs/spec_runs.jsonl 2>/dev/null | while read line; do \
-	  echo "  $$(echo $$line | python -c "import sys,json; d=json.loads(sys.stdin.read()); print(f'{d[\"timestamp\"]}: {d[\"spec\"]} - {d[\"status\"]}')" 2>/dev/null || echo $$line)"; \
+	echo "  $$(echo $$line | python -c "import sys,json; d=json.loads(sys.stdin.read()); print(f'{d[\"timestamp\"]}: {d[\"spec\"]} - {d[\"status\"]}')" 2>/dev/null || echo $$line)"; \
 	done || echo "  No recent runs"
 
 # === Corpus & Bias ===
@@ -188,21 +188,21 @@ chat:
 	@echo "Enter your request in plain English:"
 	@read -r prompt; \
 	if [ -z "$$prompt" ]; then \
-		echo "Using default: $(PROMPT)"; \
-		prompt="$(PROMPT)"; \
+	echo "Using default: $(PROMPT)"; \
+	prompt="$(PROMPT)"; \
 	fi; \
 	echo "📝 Generating spec from: $$prompt"; \
 	python tools/english_to_spec.py "$$prompt" && \
 	latest_spec=$$(ls -t specs/requests/*.md 2>/dev/null | head -1); \
 	if [ -n "$$latest_spec" ]; then \
-		echo "✅ Spec created: $$latest_spec"; \
-		echo "🔧 Compiling to code..."; \
-		python tools/spec_compile_v3.py "$$latest_spec" && \
-		latest_run=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
-		echo "📊 Code generated in: $$latest_run"; \
-		echo "View report: $$latest_run/report.html"; \
+	echo "✅ Spec created: $$latest_spec"; \
+	echo "🔧 Compiling to code..."; \
+	python tools/spec_compile_v3.py "$$latest_spec" && \
+	latest_run=$$(ls -dt runs/run-* 2>/dev/null | head -1); \
+	echo "📊 Code generated in: $$latest_run"; \
+	echo "View report: $$latest_run/report.html"; \
 	else \
-		echo "❌ Failed to generate spec"; \
+	echo "❌ Failed to generate spec"; \
 	fi
 
 # === API-based Chat (requires server running) ===
@@ -211,13 +211,13 @@ chat-api:
 	@echo "Enter your request:"
 	@read -r prompt; \
 	if [ -z "$$prompt" ]; then \
-		prompt="$(PROMPT)"; \
-		echo "Using default: $$prompt"; \
+	prompt="$(PROMPT)"; \
+	echo "Using default: $$prompt"; \
 	fi; \
 	curl -X POST $(API_URL)/api/chat \
-		-H "Content-Type: application/json" \
-		-d "{\"prompt\": \"$$prompt\", \"auto_synthesize\": true}" | \
-		python -m json.tool
+	-H "Content-Type: application/json" \
+	-d "{\"prompt\": \"$$prompt\", \"auto_synthesize\": true}" | \
+	python -m json.tool
 
 # === Approve Synthesis Runs ===
 approve:
@@ -227,13 +227,13 @@ approve:
 	@echo "Enter token to approve (or press Enter to skip):"
 	@read -r token; \
 	if [ -n "$$token" ]; then \
-		echo "Approving synthesis for token: $$token"; \
-		curl -X POST $(API_URL)/api/approve \
-			-H "Content-Type: application/json" \
-			-d "{\"token\": \"$$token\", \"approved\": true}" | \
-			python -m json.tool; \
+	echo "Approving synthesis for token: $$token"; \
+	curl -X POST $(API_URL)/api/approve \
+	-H "Content-Type: application/json" \
+	-d "{\"token\": \"$$token\", \"approved\": true}" | \
+	python -m json.tool; \
 	else \
-		echo "No approval action taken"; \
+	echo "No approval action taken"; \
 	fi
 
 # === Test English Mode ===
@@ -242,23 +242,23 @@ english-test:
 	@echo ""
 	@echo "1️⃣ Testing english_to_spec.py..."
 	@python tools/english_to_spec.py "reverse a string" > /tmp/english_test.log 2>&1 && \
-		echo "   ✅ english_to_spec.py works" || echo "   ❌ english_to_spec.py failed"
+	echo "   ✅ english_to_spec.py works" || echo "   ❌ english_to_spec.py failed"
 	@echo ""
 	@echo "2️⃣ Testing fallback template..."
 	@python -c "from aurora_x.synthesis.fallback import generate_fallback_function; \
-		print('   ✅ Fallback template works') if generate_fallback_function('def test(x: int) -> str', 'Test') else print('   ❌ Fallback failed')" 2>/dev/null || \
-		echo "   ❌ Could not import fallback module"
+	print('   ✅ Fallback template works') if generate_fallback_function('def test(x: int) -> str', 'Test') else print('   ❌ Fallback failed')" 2>/dev/null || \
+	echo "   ❌ Could not import fallback module"
 	@echo ""
 	@echo "3️⃣ Testing flow_ops.py fallback integration..."
 	@python -c "from aurora_x.synthesis.flow_ops import impl_for; \
-		code = impl_for('def unknown_func(x: int) -> int', 'some random unrecognized function'); \
-		print('   ✅ flow_ops fallback works' if 'NotImplementedError' not in code else '   ❌ Still raises NotImplementedError')" 2>/dev/null || \
-		echo "   ❌ Could not test flow_ops"
+	code = impl_for('def unknown_func(x: int) -> int', 'some random unrecognized function'); \
+	print('   ✅ flow_ops fallback works' if 'NotImplementedError' not in code else '   ❌ Still raises NotImplementedError')" 2>/dev/null || \
+	echo "   ❌ Could not test flow_ops"
 	@echo ""
 	@echo "4️⃣ Checking API endpoints (requires server)..."
 	@curl -s $(API_URL)/api/english/status > /dev/null 2>&1 && \
-		echo "   ✅ English API endpoints available" || \
-		echo "   ⚠️  Server not running or endpoints not available"
+	echo "   ✅ English API endpoints available" || \
+	echo "   ⚠️  Server not running or endpoints not available"
 
 # === Demo English Mode ===
 english-demo:
@@ -322,3 +322,18 @@ english-help:
 	@echo "Environment variables:"
 	@echo "  AURORA_PORT - Server port (default: 5001)"
 	@echo "  PROMPT - Default prompt for chat commands"
+
+# === Demo Cards ===
+HOST ?= http://localhost:5001
+
+# One-shot: run every demo card and save results
+demo-all:
+	@echo "▶ Running all demo cards at $(HOST)/api/demo/run_all ..."
+	@curl -s -X POST $(HOST)/api/demo/run_all | jq '{ok, file, count, successful, failed, summary}' 2>/dev/null || \
+	{ echo "Error: Failed to run demo cards. Is Aurora-X running on $(HOST)?"; exit 1; }
+
+# List available demo cards
+demo-list:
+	@echo "📋 Available demo cards at $(HOST):"
+	@curl -s $(HOST)/api/demo/cards | jq '.cards[] | {id, title, endpoint}' 2>/dev/null || \
+	{ echo "Error: Failed to fetch demo cards. Is Aurora-X running on $(HOST)?"; exit 1; }
