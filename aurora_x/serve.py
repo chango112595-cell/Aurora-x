@@ -5,6 +5,7 @@ from pathlib import Path
 from aurora_x.serve_dashboard_v2 import make_router
 from aurora_x.serve_addons import attach as attach_factory
 from aurora_x.chat.attach_router_lang import attach_router
+from aurora_x.chat.attach_domain import attach_domain
 
 BASE = Path(__file__).parent
 app = FastAPI(title="Aurora-X Ultra v3")
@@ -27,6 +28,9 @@ attach_factory(app)
 
 # Attach T08 Intent Router for /chat endpoint
 attach_router(app)
+
+# Attach T09 Domain Router for /api/solve and /api/explain endpoints
+attach_domain(app)
 
 @app.get("/healthz")
 async def healthz():
@@ -57,6 +61,8 @@ def root():
             "/api/chat",
             "/api/approve",
             "/api/english/status",
-            "/chat"
+            "/chat",
+            "/api/solve",
+            "/api/explain"
         ]
     }
