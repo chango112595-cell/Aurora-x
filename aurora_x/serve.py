@@ -13,6 +13,7 @@ from aurora_x.chat.attach_units_format import attach_units_format
 from aurora_x.chat.attach_demo import attach_demo
 from aurora_x.chat.attach_demo_runall import attach_demo_runall
 from aurora_x.chat.attach_progress import attach_progress
+from aurora_x.chat.attach_task_graph import attach_task_graph
 from aurora_x.app_settings import SETTINGS
 from pydantic import BaseModel
 from typing import List, Optional
@@ -66,6 +67,9 @@ attach_demo_runall(app)
 
 # Attach Progress Dashboard for tracking
 attach_progress(app)
+
+# Attach Task Graph visualization for dependency map
+attach_task_graph(app)
 
 @app.get("/dashboard/demos", response_class=HTMLResponse)
 async def serve_demo_dashboard():
