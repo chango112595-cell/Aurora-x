@@ -1,0 +1,16 @@
+T12 — Aurora Factory Bridge (End-to-End)
+Wire into serve.py:
+    from aurora_x.bridge.attach_bridge import attach_bridge
+    attach_bridge(app)
+
+Env (optional):
+    AURORA_GIT_URL=https://<PAT>@github.com/chango112595-cell/Aurora-x.git
+    AURORA_GIT_BRANCH=main
+    DISCORD_WEBHOOK_URL=<webhook>
+    BRIDGE_REPLIT_PING=<https://replit-app-url-to-ping>
+
+Use:
+    make dev
+    make bridge-nl P="create a neon-glass todo app with API and tests"
+    make bridge-spec SPEC=specs/rich_spec_v2.md
+    make bridge-deploy

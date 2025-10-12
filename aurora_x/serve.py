@@ -63,6 +63,10 @@ attach_units_format(app)
 # Attach demo cards for testing
 attach_demo(app)
 
+# Attach T12 Factory Bridge endpoints
+from aurora_x.bridge.attach_bridge import attach_bridge
+attach_bridge(app)
+
 # Attach Run All functionality for demo cards
 attach_demo_runall(app)
 
@@ -71,6 +75,10 @@ attach_progress(app)
 
 # Attach Task Graph visualization for dependency map
 attach_task_graph(app)
+
+# Attach T12 Factory Bridge endpoints
+from aurora_x.bridge.attach_bridge import attach_bridge
+attach_bridge(app)  # /api/bridge/nl, /api/bridge/spec, /api/bridge/deploy
 
 @app.get("/dashboard/demos", response_class=HTMLResponse)
 async def serve_demo_dashboard():
