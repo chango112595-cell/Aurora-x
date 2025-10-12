@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  aurora:
+    image: ghcr.io/${GITHUB_REPOSITORY:-yourusername/aurora-x}:latest
+    container_name: aurora-x
+    restart: unless-stopped
+    environment:
+      - PORT=8000
+      - AURORA_DEFAULT_LANG=python
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    volumes:
+      - ./runs:/app/runs
+      - ./data:/app/data
+    networks:
+      - aurora-network
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: aurora-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      aurora:
+        condition: service_healthy
+    networks:
+      - aurora-network
+    volumes:
+      - ./cloudflare-tunnel.yml:/etc/cloudflared/config.yml:ro
+      - cloudflared-creds:/home/nonroot/.cloudflared
+
+networks:
+  aurora-network:
+    driver: bridge
+
+volumes:
+  cloudflared-creds:
