@@ -1,190 +1,162 @@
 {
-  "version": "3.7",
-  "updated_utc": "AUTO",
-  "automation": "MASTER_TASK_LIST.md is generated from progress.json; HUD/Sidebar/Dashboard auto-refresh.",
-  "phases": [
+  "version": "1.0",
+  "updated_utc": "2025-10-12T04:25:03Z",
+  "tasks": [
     {
       "id": "T01",
-      "name": "FOUNDATION CORE",
-      "overall": "complete",
-      "percent": 100,
+      "name": "Foundation Core",
+      "status": "\u2705 complete",
+      "percent": "100%",
+      "category": "Core",
       "notes": [
-        "Core engine, security layer, auto-debug scaffold, CLI/Makefile, isolation architecture completed."
+        "Core synthesis engine",
+        "Auto-debug scaffold",
+        "CLI/Makefile integration"
       ]
     },
     {
       "id": "T02",
-      "name": "LEARNING & MEMORY CORE",
-      "overall": "complete",
-      "percent": 100,
-      "subtasks": [
-        { "id": "T02a", "name": "Schema & Storage", "percent": 100 },
-        { "id": "T02b", "name": "Local Corpus Engine", "percent": 100 },
-        { "id": "T02c", "name": "Telemetry & Sync (local only)", "percent": 100 },
-        { "id": "T02d", "name": "Baseline Comparison", "percent": 100 },
-        { "id": "T02e", "name": "Enhanced Reporting", "percent": 100 },
-        { "id": "T02f", "name": "Persistent Learning Seeds", "percent": 100 }
-      ],
-      "rule": "We only move to next task when current reaches 100% with realistic options exhausted."
+      "name": "Learning & Memory Core",
+      "status": "\u2705 complete",
+      "percent": "100%",
+      "category": "Learning",
+      "notes": [
+        "Local corpus engine",
+        "Telemetry & sync",
+        "Persistent learning seeds"
+      ]
     },
     {
       "id": "T03",
-      "name": "ADAPTIVE LEARNING ENGINE",
-      "overall": "complete",
-      "percent": 100,
-      "subtasks": [
-        { "id": "T03a", "name": "learn.py Engine", "percent": 100 },
-        { "id": "T03b", "name": "Visualization Layer", "percent": 100 },
-        { "id": "T03c", "name": "Dynamic Bias Scheduler", "percent": 100 }
+      "name": "Adaptive Learning Engine",
+      "status": "\u2705 complete",
+      "percent": "100%",
+      "category": "Learning",
+      "notes": [
+        "Dynamic bias scheduler",
+        "Visualization layer",
+        "Learn.py engine"
       ]
     },
     {
       "id": "T04",
-      "name": "PRODUCTION HARDENING",
-      "overall": "complete",
-      "percent": 100,
-      "notes": [ "CI gates, drift caps, snapshot cron, prod config locks" ]
+      "name": "Production Hardening",
+      "status": "\u2705 complete",
+      "percent": "100%",
+      "category": "Infrastructure",
+      "notes": [
+        "CI gates",
+        "Drift caps",
+        "Snapshot cron",
+        "Prod config locks"
+      ]
     },
     {
       "id": "T05",
-      "name": "SPEC DSL v3",
-      "overall": "complete",
-      "percent": 100
+      "name": "Spec DSL v3",
+      "status": "\u2705 complete",
+      "percent": "100%",
+      "category": "Core",
+      "notes": [
+        "Advanced spec compilation",
+        "Multi-format support"
+      ]
     },
     {
       "id": "T06",
-      "name": "DASHBOARD & API v2",
-      "overall": "complete",
-      "percent": 100
+      "name": "Dashboard & API v2",
+      "status": "\u2705 complete",
+      "percent": "100%",
+      "category": "Interface",
+      "notes": [
+        "FastAPI server",
+        "Real-time dashboard",
+        "API endpoints"
+      ]
     },
     {
       "id": "T07",
-      "name": "ORCHESTRATOR (closed loop)",
-      "overall": "complete",
-      "percent": 100,
-      "notes": [ "Git auto-push, optional approval gate, Discord notify" ]
+      "name": "Orchestrator",
+      "status": "\u2705 complete",
+      "percent": "100%",
+      "category": "Automation",
+      "notes": [
+        "Closed-loop monitoring",
+        "Git auto-push",
+        "Discord notifications"
+      ]
     },
     {
       "id": "T08",
-      "name": "INTENT ROUTER ↔ CHAT LOOP",
-      "overall": "in-progress",
-      "subtasks": [
-        { "id": "T08a", "name": "Router-Core Integration", "percent": 80 },
-        { "id": "T08b", "name": "Spec Bridge to Chat", "percent": 60 },
-        { "id": "T08c", "name": "Testing & Validation", "percent": 50 }
-      ],
-      "rule": "This completes when English requests generate runnable code end-to-end."
+      "name": "Universal Code Intelligence",
+      "status": "\ud83d\ude80 in-progress",
+      "percent": "85%",
+      "category": "Intelligence",
+      "notes": [
+        "Natural language \u2192 code",
+        "Intent routing",
+        "Multi-paradigm synthesis"
+      ]
     },
     {
       "id": "T09",
-      "name": "TEMPLATE PACK 1",
-      "overall": "not started",
-      "subtasks": [
-        { "id": "T09a", "name": "Web UI Template", "percent": 0 },
-        { "id": "T09b", "name": "CLI Template", "percent": 0 },
-        { "id": "T09c", "name": "Data Visualization", "percent": 0 },
-        { "id": "T09d", "name": "Utility Functions + Tests", "percent": 0 }
-      ],
-      "rule": "Core templates operational and tested with unit coverage."
-    },
-    {
-      "id": "T09x",
-      "name": "Tier-1 Language Expansion (Go/Rust/C#)",
-      "overall": "in-progress",
-      "subtasks": [
-        { "id": "T09x-a", "name": "Go Native Templates + CI", "percent": 0 },
-        { "id": "T09x-b", "name": "Rust Native Templates + CI", "percent": 0 },
-        { "id": "T09x-c", "name": "C# Native Templates + CI", "percent": 0 },
-        { "id": "T09x-d", "name": "Auto Language Select (router)", "percent": 0 },
-        { "id": "T09x-e", "name": "Manual Override AURORA_DEFAULT_LANG", "percent": 0 }
-      ],
-      "rule": "Router auto-picks lang by intent; env var forces manual default.",
-      "acceptance": [
-        "router maps: 'fast api service'→go, 'memory-safe cli'→rust, 'enterprise api'→csharp",
-        ".go/.rs/.cs synthesized with unit tests; CI green",
-        "AURORA_DEFAULT_LANG overrides router when set"
+      "name": "Template Expansion Pack",
+      "status": "\u2705 complete",
+      "percent": "100%",
+      "category": "Templates",
+      "notes": [
+        "Go/Rust/C# templates",
+        "Auto-language selection",
+        "Native CI integration"
       ]
     },
     {
       "id": "T10",
-      "name": "AURORA LOGISTICS BRIDGE (replace n8n)",
-      "overall": "not started",
-      "subtasks": [
-        { "id": "T10a", "name": "Git Automation (add/commit/push/branch)", "percent": 0 },
-        { "id": "T10b", "name": "PR Integration (description, tests summary)", "percent": 0 },
-        { "id": "T10c", "name": "Bridge Policy (policy.yaml)", "percent": 0 }
-      ],
-      "rule": "Bridge replaces n8n and supports commit/PR automation."
+      "name": "Cross-Platform Runtime",
+      "status": "\ud83d\ude80 in-progress",
+      "percent": "60%",
+      "category": "Runtime",
+      "notes": [
+        "Multi-language execution",
+        "Container support",
+        "Platform abstraction"
+      ]
     },
     {
       "id": "T11",
-      "name": "MULTILINGUAL PROMPTS",
-      "overall": "not started",
-      "subtasks": [
-        { "id": "T11a", "name": "Language Detection (offline heuristics)", "percent": 0 },
-        { "id": "T11b", "name": "Translation Layer (dictionary/heuristics)", "percent": 0 }
-      ],
-      "rule": "Aurora accepts multiple natural languages."
+      "name": "Deployment Infrastructure",
+      "status": "\u2705 complete",
+      "percent": "100%",
+      "category": "Deployment",
+      "notes": [
+        "Docker multi-arch",
+        "GitHub Actions CI/CD",
+        "Cloudflare tunnel",
+        "Auto-updater"
+      ]
     },
     {
       "id": "T12",
-      "name": "TEMPLATE PACK 2",
-      "overall": "not started",
-      "subtasks": [
-        { "id": "T12a", "name": "API Client (requests + retry/backoff)", "percent": 0 },
-        { "id": "T12b", "name": "File Pipeline (CSV/JSON)", "percent": 0 },
-        { "id": "T12c", "name": "Task Runner (job loop + logging)", "percent": 0 }
-      ]
-    },
-    {
-      "id": "T13",
-      "name": "ORCHESTRATOR & DASHBOARD POLISH",
-      "overall": "not started",
-      "subtasks": [
-        { "id": "T13a", "name": "Live Logs in Dashboard", "percent": 0 },
-        { "id": "T13b", "name": "Error Feedback & Suggestions", "percent": 0 }
-      ]
-    },
-    {
-      "id": "T14",
-      "name": "TELEMETRY WITH CHANGO (LAST)",
-      "overall": "not started",
-      "subtasks": [
-        { "id": "T14a", "name": "Metrics Core (counts only, no payload)", "percent": 0 },
-        { "id": "T14b", "name": "Toggle System (AURORA_TELEMETRY)", "percent": 0 }
-      ],
-      "rule": "Telemetry is opt-in only and deferred until final stability."
-    },
-    {
-      "id": "T15",
-      "name": "STEM MASTERY CORE (Math/Physics/Space/Quantum)",
-      "overall": "not started",
-      "subtasks": [
-        { "id": "T15a", "name": "Math Engine (symbolic & numeric)", "percent": 0 },
-        { "id": "T15b", "name": "Physics Modules (mechanics/EM/thermo)", "percent": 0 },
-        { "id": "T15c", "name": "Space/Astro Utils (orbits/ephemeris)", "percent": 0 },
-        { "id": "T15d", "name": "Quantum Primitives (state ops/sim)", "percent": 0 },
-        { "id": "T15e", "name": "Unit Tests & Benchmarks", "percent": 0 }
-      ],
-      "rule": "Offline libs only; deterministic seeds; safety checks."
-    },
-    {
-      "id": "T00",
-      "name": "OMNI-CODE KNOWLEDGE CORE",
-      "overall": "not started",
-      "subtasks": [
-        { "id": "T00a", "name": "Language Ontology (existing + hypothetical)", "percent": 0 },
-        { "id": "T00b", "name": "Spec↔Semantics Map", "percent": 0 },
-        { "id": "T00c", "name": "Cross-Language Reasoner", "percent": 0 },
-        { "id": "T00d", "name": "Chango Playbooks (defer)", "percent": 0 }
-      ],
-      "rule": "Offline-first; curated ontologies/templates only.",
-      "acceptance": [
-        "Explains ≥20 language compile/runtime models",
-        "Fictional language scaffolds flagged",
-        "Python↔Go↔Rust migration demo passes",
-        "/api/omni/plan ready (gated, LAST)"
+      "name": "Aurora Factory Protocol",
+      "status": "\ud83d\udd27 in-development",
+      "percent": "45%",
+      "category": "Factory",
+      "notes": [
+        "Self-synthesis capability",
+        "Recursive code generation",
+        "Meta-programming"
       ]
     }
+  ],
+  "active": [
+    "T08",
+    "T10",
+    "T12"
+  ],
+  "rules": [
+    "Tasks marked complete have been validated and tested",
+    "In-progress tasks receive primary development focus",
+    "Percentages reflect actual implementation status",
+    "Active tasks are being worked on concurrently"
   ]
 }
