@@ -19,6 +19,7 @@ Preferred communication style: Simple, everyday language.
 - Added interactive force-directed graph with color-coded task status indicators
 - **NEW**: Made graph nodes editable - click any node to update task percentage directly (updates progress.json in real-time)
 - **NEW**: Auto-refresh README badges - task updates now automatically update README progress badges (set AURORA_AUTO_GIT=1 to enable auto git commit/push)
+- **NEW**: Added /api/progress/recompute endpoint to regenerate MASTER_TASK_LIST.md, CSV, and badges on demand
 
 ## System Architecture
 
