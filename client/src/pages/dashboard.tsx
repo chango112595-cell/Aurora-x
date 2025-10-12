@@ -811,6 +811,201 @@ const SolverSection = () => {
   );
 };
 
+// Factory Bridge Component
+const BridgeSection = () => {
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const { toast } = useToast();
+
+  // Mutation for Bridge generation
+  const bridgeMutation = useMutation<any, Error, { prompt: string }>({
+    mutationFn: async (data) => {
+      const response = await apiRequest("POST", "/api/bridge/nl", data);
+      return response.json();
+    },
+    onSuccess: (data) => {
+      if (data.status === "success" || data.response) {
+        setResponse(JSON.stringify(data, null, 2));
+        setErrorMessage("");
+        toast({
+          title: "Bridge Response Received",
+          description: "Successfully processed your request"
+        });
+      } else {
+        const error = data.error || data.message || "Could not process the request.";
+        toast({
+          title: "Bridge Error",
+          description: error,
+          variant: "destructive"
+        });
+        setResponse("");
+        setErrorMessage(error);
+      }
+    },
+    onError: (error) => {
+      const errorMsg = error.message || "An unexpected error occurred";
+      toast({
+        title: "Connection Error",
+        description: errorMsg,
+        variant: "destructive"
+      });
+      setResponse("");
+      setErrorMessage(errorMsg);
+    }
+  });
+
+  const handleGenerate = () => {
+    if (!prompt.trim()) {
+      toast({
+        title: "Input Required",
+        description: "Please describe your app or project",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    bridgeMutation.mutate({ prompt: prompt.trim() });
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !bridgeMutation.isPending) {
+      handleGenerate();
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.3 }}
+      className="mb-8"
+    >
+      <Card className="relative overflow-hidden border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-emerald-500/5">
+        {/* Animated Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-emerald-500/5 animate-pulse" />
+        
+        <CardHeader className="relative">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-cyan-500/10">
+              <Rocket className="h-6 w-6 text-cyan-500" />
+            </div>
+            <div>
+              <CardTitle className="text-xl" data-testid="text-bridge-title">
+                Factory Bridge (NL → Project)
+              </CardTitle>
+              <CardDescription data-testid="text-bridge-description">
+                Test natural language to project generation with T12 Factory Bridge
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        
+        <CardContent className="relative space-y-4">
+          {/* Input and Button */}
+          <div className="flex gap-2">
+            <Input
+              placeholder="Describe your app..."
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyPress={handleKeyPress}
+              className="flex-1 bg-background/50 border-cyan-500/20 focus:border-cyan-500/40 transition-colors"
+              disabled={bridgeMutation.isPending}
+              data-testid="input-bridge-prompt"
+            />
+            
+            <Button
+              onClick={handleGenerate}
+              disabled={bridgeMutation.isPending || !prompt.trim()}
+              className="relative group bg-cyan-500 hover:bg-cyan-600 text-white"
+              data-testid="button-bridge-generate"
+            >
+              {bridgeMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4 group-hover:animate-pulse" />
+                  Generate
+                </>
+              )}
+            </Button>
+          </div>
+          
+          {/* Response Display */}
+          {(response || bridgeMutation.isPending) && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-cyan-500 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="font-medium text-cyan-600 dark:text-cyan-400 mb-2">
+                      Bridge Response:
+                    </p>
+                    {bridgeMutation.isPending ? (
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="h-4 w-4 animate-spin text-cyan-500" />
+                        <span className="text-sm text-muted-foreground">Processing your request...</span>
+                      </div>
+                    ) : (
+                      <pre className="text-sm font-mono text-foreground bg-background/50 p-3 rounded overflow-x-auto" data-testid="text-bridge-response">
+                        {response}
+                      </pre>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+          
+          {/* Error Display */}
+          {errorMessage && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div 
+                className="p-4 rounded-lg bg-red-500/10 border border-red-500/20"
+                role="alert"
+                aria-live="assertive"
+                data-testid="alert-bridge-error"
+              >
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-500 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="font-medium text-red-600 dark:text-red-400 mb-2">
+                      Error:
+                    </p>
+                    <p className="text-sm text-foreground" data-testid="text-bridge-error">
+                      {errorMessage}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+          
+          {/* Info */}
+          <div className="text-xs text-muted-foreground space-y-1">
+            <p>• Factory Bridge API for testing natural language to project generation</p>
+            <p>• Describe your app requirements in plain English</p>
+            <p>• This is a test interface for the T12 Bridge endpoint</p>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
+
 // Loading skeleton
 const DashboardSkeleton = () => {
   return (
@@ -988,6 +1183,9 @@ export default function Dashboard() {
         
         {/* Add Math & Physics Solver Section */}
         <SolverSection />
+        
+        {/* Add Factory Bridge Section */}
+        <BridgeSection />
         
         {data.active && data.active.length > 0 && (
           <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />

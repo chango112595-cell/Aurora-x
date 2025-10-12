@@ -6,14 +6,14 @@ def reverse_string(s: str) -> str
 ```
 
 ## Description
-Reverse the input string.
+Reverse a unicode string.
 
 ## Examples
-| s | out |
-|---|-----|
-| hello | olleh |
-| world | dlrow |
-| python | nohtyp |
+| s | out | out |
+|---|---|---|
+| abc | cba |
+|  |  |
+
 
 ## Postconditions
-- The output is the input string in reverse order
+- Generated from natural language
