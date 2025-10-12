@@ -167,6 +167,142 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendStatus(204); // No content for OPTIONS
   });
 
+  // POST endpoint to update task percentage
+  app.post("/api/progress/task_percent", (req, res) => {
+    try {
+      const { task_id, percentage } = req.body;
+      
+      // Validate inputs
+      if (!task_id || typeof task_id !== 'string') {
+        return res.status(400).json({
+          error: "Invalid request",
+          message: "task_id is required and must be a string"
+        });
+      }
+      
+      if (percentage === undefined || percentage === null || typeof percentage !== 'number') {
+        return res.status(400).json({
+          error: "Invalid request", 
+          message: "percentage is required and must be a number"
+        });
+      }
+      
+      if (percentage < 0 || percentage > 100) {
+        return res.status(400).json({
+          error: "Invalid percentage",
+          message: "Percentage must be between 0 and 100"
+        });
+      }
+      
+      // Read the progress.json file
+      const progressPath = path.join(process.cwd(), 'progress.json');
+      
+      if (!fs.existsSync(progressPath)) {
+        return res.status(404).json({
+          error: "Progress data not found",
+          message: "The progress.json file does not exist"
+        });
+      }
+      
+      // Parse the current data
+      const progressData = fs.readFileSync(progressPath, 'utf-8');
+      const progressJson = JSON.parse(progressData);
+      
+      // Find the task to update
+      const tasks = progressJson.tasks || [];
+      const taskIndex = tasks.findIndex((t: any) => t.id === task_id);
+      
+      if (taskIndex === -1) {
+        return res.status(404).json({
+          error: "Task not found",
+          message: `No task found with ID: ${task_id}`
+        });
+      }
+      
+      // Update the task
+      const task = tasks[taskIndex];
+      const oldPercent = task.percent;
+      const oldStatus = task.status;
+      
+      task.percent = percentage;
+      
+      // Auto-update status based on percentage
+      if (percentage === 100) {
+        task.status = "complete";
+      } else if (percentage > 0) {
+        if (oldStatus === "not-started" || oldStatus === "pending") {
+          task.status = "in-progress";
+        }
+        // Keep existing in-progress or in-development status
+      } else {
+        // 0% means not started
+        task.status = "not-started";
+      }
+      
+      // Update the updated_utc timestamp
+      progressJson.updated_utc = new Date().toISOString();
+      
+      // Write back to file
+      fs.writeFileSync(progressPath, JSON.stringify(progressJson, null, 2));
+      
+      console.log(`[Progress Update] Task ${task_id}: ${oldPercent}% → ${percentage}% (status: ${oldStatus} → ${task.status})`);
+      
+      // Calculate new overall percentage
+      let totalPercent = 0;
+      tasks.forEach((t: any) => {
+        let percent = t.percent || 0;
+        if (typeof percent === 'string') {
+          percent = parseFloat(percent.replace('%', ''));
+        }
+        totalPercent += percent;
+      });
+      const overall_percent = Math.round((totalPercent / Math.max(tasks.length, 1)) * 100) / 100;
+      
+      // Set CORS headers for cross-origin access
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      
+      // Return success response with updated data
+      return res.json({
+        success: true,
+        task_id: task_id,
+        old_percentage: oldPercent,
+        new_percentage: percentage,
+        old_status: oldStatus,
+        new_status: task.status,
+        overall_percent: overall_percent,
+        updated_utc: progressJson.updated_utc,
+        message: `Successfully updated task ${task_id} to ${percentage}%`
+      });
+      
+    } catch (error: any) {
+      console.error('[Progress Update API] Error updating task percentage:', error);
+      
+      if (error instanceof SyntaxError) {
+        return res.status(500).json({
+          error: "Invalid progress data",
+          message: "The progress.json file contains invalid JSON"
+        });
+      } else {
+        return res.status(500).json({
+          error: "Internal server error",
+          message: "Failed to update task percentage",
+          details: error?.message ?? String(error)
+        });
+      }
+    }
+  });
+
+  // Handle OPTIONS preflight requests for task_percent endpoint
+  app.options("/api/progress/task_percent", (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Max-Age', '86400');
+    res.sendStatus(204); // No content for OPTIONS
+  });
+
   // Health check endpoint for auto-updater monitoring
   app.get("/healthz", async (req, res) => {
     const providedToken = req.query.token as string | undefined;
@@ -689,7 +825,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         // Generic extraction for any "generated at:" pattern
-        const genericMatches = stdout.matchAll(/generated at: (runs\/[^\s]+)/g);
+        const genericMatches = Array.from(stdout.matchAll(/generated at: (runs\/[^\s]+)/g));
         for (const match of genericMatches) {
           if (!files_generated.includes(match[1])) {
             files_generated.push(match[1]);
@@ -1410,10 +1546,12 @@ if __name__ == "__main__":
       stroke: #fff;
       stroke-width: 1.2;
       cursor: pointer;
-      transition: r 0.2s;
+      transition: all 0.2s;
     }
     .node:hover circle {
       r: 35;
+      stroke-width: 2;
+      filter: brightness(1.2);
     }
     .node.completed circle {
       fill: #29cc5f;
@@ -1468,6 +1606,7 @@ if __name__ == "__main__":
   <div class="legend">
     Aurora-X Ultra — Master Dependency Graph<br>
     <small>Green=Complete • Blue=In Progress • Yellow=Development • Red=Pending</small>
+    <small style="display:block;margin-top:3px;color:#1e90ff">✏️ Click any node to edit its percentage</small>
   </div>
   <a href="/dashboard" class="btn">← Dashboard</a>
   <svg id="graph"></svg>
@@ -1552,15 +1691,64 @@ if __name__ == "__main__":
           .attr("dy", 5)
           .text(d => d.id);
         
-        // Add click handler to show task details
-        node.on("click", (event, d) => {
-          const percent = typeof d.percent === 'number' ? d.percent : 0;
+        // Add click handler to update task percentage
+        node.on("click", async (event, d) => {
+          const currentPercent = typeof d.percent === 'number' ? d.percent : 0;
           const status = d.group === 'completed' ? 'Completed' :
                         d.group === 'inprogress' ? 'In Progress' :
                         d.group === 'development' ? 'In Development' :
                         'Pending';
           
-          alert(\`Task: \${d.id}\\nName: \${d.name}\\nProgress: \${percent}%\\nStatus: \${status}\`);
+          // Show prompt to update percentage
+          const newPercentStr = prompt(
+            \`Task: \${d.id}\\nName: \${d.name}\\nCurrent Progress: \${currentPercent}%\\nStatus: \${status}\\n\\nEnter new percentage (0-100):\`,
+            currentPercent.toString()
+          );
+          
+          // If user cancelled or entered nothing, do nothing
+          if (newPercentStr === null || newPercentStr.trim() === '') {
+            return;
+          }
+          
+          const newPercent = parseFloat(newPercentStr);
+          
+          // Validate the input
+          if (isNaN(newPercent) || newPercent < 0 || newPercent > 100) {
+            alert('Invalid percentage. Please enter a number between 0 and 100.');
+            return;
+          }
+          
+          try {
+            // Send update to the API
+            const response = await fetch('/api/progress/task_percent', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                task_id: d.id,
+                percentage: newPercent
+              })
+            });
+            
+            if (!response.ok) {
+              const error = await response.json();
+              alert(\`Failed to update task: \${error.message || 'Unknown error'}\`);
+              return;
+            }
+            
+            const result = await response.json();
+            
+            // Show success message
+            alert(\`✅ Successfully updated task \${d.id} from \${result.old_percentage}% to \${result.new_percentage}%\\n\\nStatus: \${result.old_status} → \${result.new_status}\\nOverall Progress: \${result.overall_percent}%\`);
+            
+            // Re-render the graph to show the updated data
+            render();
+            
+          } catch (error) {
+            console.error('Error updating task percentage:', error);
+            alert(\`Failed to update task percentage. Please check the console for details.\`);
+          }
         });
         
         // Add drag behavior
