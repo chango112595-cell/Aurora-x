@@ -408,7 +408,4 @@ export-progress:
 	@python tools/update_progress.py >/dev/null && echo "CSV → progress_export.csv"
 
 progress-view:
-	@python - <<'PY'
-	from pathlib import Path
-	print(Path('MASTER_TASK_LIST.md').read_text()[:1200])
-	PY
+	@head -n 30 MASTER_TASK_LIST.md
