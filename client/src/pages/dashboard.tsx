@@ -17,7 +17,8 @@ import {
   FileCode2,
   Rocket,
   Package,
-  Terminal
+  Terminal,
+  AlertCircle
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -591,6 +592,7 @@ const ProjectGenerationSection = () => {
 const SolverSection = () => {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const { toast } = useToast();
 
   // Mutation for solving queries
@@ -602,22 +604,27 @@ const SolverSection = () => {
     onSuccess: (data) => {
       if (data.ok && data.formatted) {
         setResult(data.formatted);
+        setErrorMessage("");
       } else {
+        const error = data.error || "Could not process the query. Please try a different format.";
         toast({
           title: "Unable to solve",
-          description: data.error || "Could not process the query. Please try a different format.",
+          description: error,
           variant: "destructive"
         });
         setResult("");
+        setErrorMessage(error);
       }
     },
     onError: (error) => {
+      const errorMsg = error.message || "An unexpected error occurred while processing your query";
       toast({
         title: "Error",
-        description: error.message || "An unexpected error occurred while processing your query",
+        description: errorMsg,
         variant: "destructive"
       });
       setResult("");
+      setErrorMessage(errorMsg);
     }
   });
 
@@ -757,6 +764,35 @@ const SolverSection = () => {
                         {result}
                       </p>
                     )}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+          
+          {/* Error Display */}
+          {errorMessage && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div 
+                className="p-4 rounded-lg bg-red-500/10 border border-red-500/20"
+                role="alert"
+                aria-live="assertive"
+                data-testid="alert-solver-error"
+              >
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-500 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="font-medium text-red-600 dark:text-red-400 mb-2">
+                      Error:
+                    </p>
+                    <p className="text-sm text-foreground" data-testid="text-solver-error">
+                      {errorMessage}
+                    </p>
                   </div>
                 </div>
               </div>

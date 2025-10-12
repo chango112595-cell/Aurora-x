@@ -108,37 +108,73 @@ def _diff_poly(expression: str) -> str:
     return result
 
 
-def _safe_eval_arith(expression: str) -> float:
+def _safe_eval_arith(s: str) -> float:
     """
-    Safely evaluate an arithmetic expression
+    Safely evaluate an arithmetic expression using AST parsing
     
     Args:
-        expression: Arithmetic expression like "2 + 3 * 4"
+        s: Arithmetic expression like "2 + 3 * 4"
     
     Returns:
         Evaluated result as float
     
     Raises:
         SolveError: If expression contains unsafe operations
+    
+    Example:
+        >>> _safe_eval_arith("2 + 3 * 4")
+        14.0
     """
-    # Remove whitespace
-    expression = expression.replace(' ', '')
+    import ast
+    import operator
     
-    # Check for allowed characters only
-    allowed_chars = set('0123456789+-*/().')
-    if not all(c in allowed_chars for c in expression):
-        raise SolveError(f"Invalid characters in expression: {expression}")
+    # Define allowed operators
+    ops = {
+        ast.Add: operator.add,
+        ast.Sub: operator.sub,
+        ast.Mult: operator.mul,
+        ast.Div: operator.truediv,
+        ast.FloorDiv: operator.floordiv,
+        ast.Mod: operator.mod,
+        ast.Pow: operator.pow,
+        ast.USub: operator.neg,
+        ast.UAdd: operator.pos
+    }
     
-    # Check for dangerous patterns
-    dangerous_patterns = ['__', 'import', 'eval', 'exec', 'open', 'file', 'input', 'raw_input']
-    for pattern in dangerous_patterns:
-        if pattern in expression.lower():
-            raise SolveError(f"Unsafe pattern detected: {pattern}")
+    def eval_(node):
+        # Handle numbers
+        if isinstance(node, ast.Num):  # Python < 3.8
+            return node.n
+        elif isinstance(node, ast.Constant):  # Python >= 3.8
+            if isinstance(node.value, (int, float)):
+                return node.value
+            else:
+                raise SolveError("Only numeric constants allowed")
+        # Handle unary operations
+        elif isinstance(node, ast.UnaryOp):
+            if type(node.op) in ops:
+                return ops[type(node.op)](eval_(node.operand))
+            else:
+                raise SolveError(f"Unsupported unary operator: {type(node.op).__name__}")
+        # Handle binary operations
+        elif isinstance(node, ast.BinOp):
+            if type(node.op) in ops:
+                return ops[type(node.op)](eval_(node.left), eval_(node.right))
+            else:
+                raise SolveError(f"Unsupported binary operator: {type(node.op).__name__}")
+        # Handle expression wrapper
+        elif isinstance(node, ast.Expression):
+            return eval_(node.body)
+        else:
+            raise SolveError(f"Disallowed expression type: {type(node).__name__}")
     
     try:
-        # Use eval with restricted builtins
-        result = eval(expression, {"__builtins__": {}}, {})
-        return float(result)
+        tree = ast.parse(s, mode="eval")
+        return float(eval_(tree))
+    except (SyntaxError, ValueError) as e:
+        raise SolveError(f"Invalid arithmetic expression: {str(e)}")
+    except ZeroDivisionError:
+        raise SolveError("Division by zero")
     except Exception as e:
         raise SolveError(f"Error evaluating expression: {str(e)}")
 
