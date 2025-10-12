@@ -1,0 +1,11 @@
+tunnel: <TUNNEL-UUID>  # ← replace with UUID from `cloudflared tunnel create aurora`
+credentials-file: /home/<YOU>/.cloudflared/<TUNNEL-UUID>.json
+
+ingress:
+  - hostname: aurora.x.com
+    service: http://localhost:8000
+    originRequest:
+      httpHostHeader: aurora.x.com
+      connectTimeout: 10s
+      noTLSVerify: true
+  - service: http_status:404
