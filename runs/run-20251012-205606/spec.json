@@ -1,0 +1,23 @@
+{
+  "run_id": "run-20251012-205606",
+  "timestamp": "2025-10-12T20:56:06.180637",
+  "project_type": "ui_frontend",
+  "framework": "react",
+  "language": "javascript",
+  "features": [],
+  "description": "create a simple todo app",
+  "entities": {},
+  "files": [
+    "package.json",
+    "src/index.js",
+    "src/App.js",
+    "src/components/.gitkeep",
+    "src/styles/main.css",
+    "public/index.html",
+    "webpack.config.js",
+    "vite.config.js",
+    "README.md",
+    ".gitignore"
+  ],
+  "file_count": 10
+}
