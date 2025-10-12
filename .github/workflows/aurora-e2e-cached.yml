@@ -1,11 +1,11 @@
-name: Aurora-X E2E
+name: Aurora-X E2E (Cached)
 
 on:
   push:
   pull_request:
 
 jobs:
-  e2e:
+  e2e-cached:
     runs-on: ubuntu-latest
     env:
       HOST: http://127.0.0.1:8000
@@ -17,21 +17,38 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: 'pip'
 
-      - name: Install Go
+      - name: Install Go with cache
         uses: actions/setup-go@v5
         with:
           go-version: '1.22.x'
+          cache: true
 
-      - name: Install Rust
+      - name: Install Rust with cache
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
 
-      - name: Install .NET SDK (8.0)
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install .NET SDK (8.0) with cache
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
 
       - name: Install Aurora-X
         run: |
@@ -116,7 +133,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: aurora-artifacts
+          name: aurora-artifacts-cached
           path: |
             /tmp/aurora.log
             /tmp/run_all.json
