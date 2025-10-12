@@ -1,29 +1,26 @@
 # AURORA-X ULTRA — MASTER TASK LIST
-
-_Last update (UTC): 2025-10-12T04:56:37Z_
+_Last update (UTC): will refresh on `make update-progress`_
 
 | Phase | Task | Status | % | Notes |
 |------:|------|--------|---:|-------|
-| **T01** | Foundation Core | ✅ complete | 100% | Core synthesis engine • Auto-debug scaffold |
-| **T02** | Learning & Memory Core | ✅ complete | 100% | Local corpus engine • Telemetry & sync |
-| **T03** | Adaptive Learning Engine | ✅ complete | 100% | Dynamic bias scheduler • Visualization layer |
-| **T04** | Production Hardening | ✅ complete | 100% | CI gates • Drift caps |
-| **T05** | Spec DSL v3 | ✅ complete | 100% | Advanced spec compilation • Multi-format support |
-| **T06** | Dashboard & API v2 | ✅ complete | 100% | FastAPI server • Real-time dashboard |
-| **T07** | Orchestrator | ✅ complete | 100% | Closed-loop monitoring • Git auto-push |
-| **T08** | Universal Code Intelligence | 🚀 in-progress | 85% | Natural language → code • Intent routing |
-| **T09** | Template Expansion Pack | ✅ complete | 100% | Go/Rust/C# templates • Auto-language selection |
-| **T10** | Cross-Platform Runtime | 🚀 in-progress | 60% | Multi-language execution • Container support |
-| **T11** | Deployment Infrastructure | ✅ complete | 100% | Docker multi-arch • GitHub Actions CI/CD |
-| **T12** | Aurora Factory Protocol | 🔧 in-development | 45% | Self-synthesis capability • Recursive code generation |
+| **T01** | Foundation Core | complete | 100 | Isolation architecture, CLI, Makefile, progress tracker, CI checks |
+| **T02** | Learning & Memory Core | complete | 100 | Persistent corpus, bias seeds, telemetry scaffolding, regression gates |
+| **T03** | Adaptive Learning Engine | complete | 100 | ε-greedy bias scheduler, drift tracking, sparklines |
+| **T04** | Production Hardening | complete | 100 | CI gates, daily snapshot, drift caps, Makefile.prod |
+| **T05** | Live Dashboard | complete | 100 | Real-time bias history & stats widgets |
+| **T06** | English → Code Synthesis Engine | complete | 100 | Natural language spec parsing, auto-type detection, fallbacks |
+| **T07** | Orchestrator | complete | 100 | Auto-synthesis on spec changes, Git auto-commit/push, Discord alerts |
+| **T08** | Universal Code Intelligence Layer | in-progress | 85 | All known languages supported • math/physics/quantum/space integration underway |
+| **T09** | Template Expansion System | complete | 100 | UI/API/Data templates • fallback recovery |
+| **T10** | Cross-Platform Runtime (OS Matrix) | in-progress | 60 | Linux/Windows/macOS CI • ARM64 container • phone-friendly PWA |
+| **T11** | Deployment Infrastructure | complete | 100 | Auto-updater cron • SSH deploy • GHCR pipeline • Cloudflare Tunnel |
+| **T12** | Aurora Factory Protocol (Bridge) | in-development | 45 | Chat → GitHub → Replit → Deploy → Test |
+| **T13** | Universal Code Synthesis Engine (UCSE) | not-started | 0 | Any English request → full code or staged scaffold • safety & logic gating |
 
 ## Active Now
-
 - T08, T10, T12
 
 ## Rules
-
-- Tasks marked complete have been validated and tested
-- In-progress tasks receive primary development focus
-- Percentages reflect actual implementation status
-- Active tasks are being worked on concurrently
+- progress.json is the single source of truth  
+- MASTER_TASK_LIST.md is generated; do not edit manually  
+- STRICT_GATING: only advance when acceptance criteria are met
