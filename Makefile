@@ -467,3 +467,49 @@ progress-open:
         if command -v xdg-open >/dev/null; then xdg-open "http://localhost:8000/dashboard/progress"; \
         elif command -v open >/dev/null; then open "http://localhost:8000/dashboard/progress"; \
         else echo "http://localhost:8000/dashboard/progress"; fi
+
+# ------- Aurora Make targets (one-liners) -------
+HOST ?= http://localhost:8000
+
+.PHONY: dev prod-check orch-up orch-down orch-logs thresholds t08-on t08-off badge demo smoke
+
+dev:
+        python -m aurora_x.serve
+
+prod-check:
+        python -m aurora_x.checks.ci_gate
+
+orch-up:
+        AURORA_GIT_AUTO=1 python -m aurora_x.orchestrator --interval 300 --git-branch main --git-url $${AURORA_GIT_URL:-""} & \
+        echo $$! > /tmp/aurora_orch.pid && echo "orchestrator pid: $$(cat /tmp/aurora_orch.pid)"
+
+orch-down:
+        @test -f /tmp/aurora_orch.pid && kill $$(cat /tmp/aurora_orch.pid) && rm /tmp/aurora_orch.pid || echo "no orchestrator pid"
+
+orch-logs:
+        tail -f /tmp/aurora_orch.log || true
+
+thresholds:
+        @test -n "$(OK)" || (echo "Set OK=<int> e.g. 90"; exit 1)
+        @test -n "$(WARN)" || (echo "Set WARN=<int> e.g. 60"; exit 1)
+        @echo "→ thresholds ok=$(OK) warn=$(WARN) @ $(HOST)"
+        @curl -s -X POST -H 'content-type: application/json' \
+          -d '{"ui_thresholds":{"ok":'$(OK)',"warn":'$(WARN)'}}' \
+          $(HOST)/api/progress/ui_thresholds | python -m json.tool
+
+t08-on:
+        curl -s -X POST -H 'content-type: application/json' \
+          -d '{"on": true}' $(HOST)/api/t08/activate | python -m json.tool
+
+t08-off:
+        curl -s -X POST -H 'content-type: application/json' \
+          -d '{"on": false}' $(HOST)/api/t08/activate | python -m json.tool
+
+badge:
+        curl -s $(HOST)/badge/progress.svg -o progress.svg && echo "saved → progress.svg"
+
+demo: thresholds
+        @echo "Demo done."
+
+smoke:
+        curl -fsS $(HOST)/healthz && echo "health: OK"
