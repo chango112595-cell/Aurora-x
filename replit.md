@@ -8,6 +8,15 @@ Chango is a JARVIS-inspired web application that acts as the interface for Auror
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes
+
+**December 2024 Updates**:
+- Added T13 "Universal Code Synthesis Engine (UCSE)" to Master Task List (0% complete)
+- Added visual task dependency graph visualization with D3.js at /dashboard/graph
+- Fixed dashboard rendering issue: Updated Task interface to handle numeric percent values from API
+- Improved sidebar navigation with proper client-side routing using wouter Link components
+- Added "View Task Graph" button to dashboard header linking to http://localhost:8080/dashboard/graph
+
 ## System Architecture
 
 **Frontend Architecture**:
@@ -17,6 +26,7 @@ Preferred communication style: Simple, everyday language.
 - **State Management**: TanStack Query for server state management.
 - **Design System**: Custom HSL-based theme with dark mode, cinematic tech colors (JARVIS-inspired cyan, emerald, amber, purple), Inter font for UI, and JetBrains Mono for code.
 - **Component Architecture**: Modular structure separating UI primitives, feature components, and page-level components.
+- **Dashboard Features**: Real-time progress tracking with 13 tasks (T01-T13), overall progress at 83.8%, visual task cards with status indicators.
 
 **Backend Architecture**:
 - **Framework**: Express.js server with TypeScript, ESM modules.
