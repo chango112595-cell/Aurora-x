@@ -241,6 +241,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get synthesis result endpoint
+  app.get("/api/synthesis/result/:id", (req, res) => {
+    try {
+      const { id } = req.params;
+      const progress = progressStore.getProgress(id);
+      
+      if (!progress) {
+        return res.status(404).json({ error: "Synthesis not found" });
+      }
+      
+      if (progress.stage !== "COMPLETE" && progress.stage !== "ERROR") {
+        return res.status(202).json({
+          message: "Synthesis is still in progress",
+          stage: progress.stage,
+          percentage: progress.percentage,
+          estimatedTimeRemaining: progress.estimatedTimeRemaining
+        });
+      }
+      
+      if (progress.stage === "ERROR") {
+        return res.status(500).json({
+          error: "Synthesis failed",
+          details: progress.error,
+          message: progress.message
+        });
+      }
+      
+      // Return the completed synthesis result
+      if (!progress.result) {
+        return res.status(500).json({ 
+          error: "Synthesis completed but no result found",
+          message: "This may be a legacy synthesis. Please try again." 
+        });
+      }
+      
+      return res.json({
+        synthesis_id: id,
+        message: progress.message,
+        code: progress.result.code,
+        language: progress.result.language,
+        function_name: progress.result.functionName,
+        description: progress.result.description,
+        timestamp: progress.result.timestamp,
+        actualDuration: progress.actualDuration,
+        complexity: progress.complexity
+      });
+    } catch (e: any) {
+      return res.status(500).json({
+        error: "Failed to retrieve synthesis result",
+        details: e?.message ?? String(e)
+      });
+    }
+  });
+
   app.post("/api/synthesis/estimate", (req, res) => {
     try {
       const { message } = req.body;
@@ -578,19 +632,40 @@ def ${funcName}() -> str:
           }
         }
         
-        return res.json({
-          message: responseMessage,
-          code: code,
-          language: "python",
-          synthesis_id: latestRun.name,
-          timestamp: new Date().toISOString(),
-          function_name: functionName
-        });
+        // Update progress store with COMPLETE status and synthesis result
+        progressStore.updateProgress(
+          synthesisId, 
+          "COMPLETE", 
+          100, 
+          responseMessage,
+          {
+            code: code,
+            language: "python",
+            functionName: functionName,
+            description: description || `Function generated based on request: "${message}"`,
+            timestamp: new Date().toISOString()
+          }
+        );
+        
+        // Broadcast completion via WebSocket if available
+        if (wsServer) {
+          wsServer.broadcastProgress(progressStore.getProgress(synthesisId)!);
+        }
+        
+        console.log(`[Aurora-X] Synthesis completed successfully: ${synthesisId}`);
         
       } catch (execError: any) {
         console.error(`[Aurora-X] Execution error:`, execError);
         
-        // Fallback to a simple response if Aurora-X fails
+        // Mark the synthesis as failed in progress store
+        progressStore.markError(synthesisId, execError?.message || "Aurora-X synthesis failed");
+        
+        // Broadcast error status via WebSocket if available
+        if (wsServer) {
+          wsServer.broadcastProgress(progressStore.getProgress(synthesisId)!);
+        }
+        
+        // Try to provide a fallback implementation
         const lowerMessage = message.toLowerCase();
         let fallbackCode = "";
         let fallbackMessage = "I'll help you with that. ";
@@ -754,16 +829,29 @@ if __name__ == "__main__":
     print(result)`;
         }
         
-        return res.json({
-          message: fallbackMessage,
-          code: fallbackCode,
-          language: "python",
-          synthesis_id: `fallback-${Date.now()}`,
-          timestamp: new Date().toISOString(),
-          error_detail: "Aurora-X synthesis failed, using fallback implementation"
-        });
+        // Update progress store with fallback result
+        progressStore.updateProgress(
+          synthesisId,
+          "COMPLETE",
+          100,
+          fallbackMessage,
+          {
+            code: fallbackCode,
+            language: "python",
+            functionName: "fallback_function",
+            description: fallbackMessage,
+            timestamp: new Date().toISOString()
+          }
+        );
+        
+        // Broadcast completion via WebSocket if available
+        if (wsServer) {
+          wsServer.broadcastProgress(progressStore.getProgress(synthesisId)!);
+        }
+        
+        console.log(`[Aurora-X] Synthesis completed with fallback for: ${synthesisId}`);
       }
-      
+      }, 100); // Execute synthesis asynchronously with 100ms delay
     } catch (error: any) {
       console.error("[Aurora-X] Chat API error:", error);
       return res.status(500).json({

@@ -19,6 +19,14 @@ export interface ProgressEntry {
   error?: string;
   complexity?: "simple" | "medium" | "complex";
   actualDuration?: number; // seconds
+  // Synthesis result fields
+  result?: {
+    code: string;
+    language: string;
+    functionName: string;
+    description?: string;
+    timestamp: string;
+  };
 }
 
 class ProgressStore {
@@ -74,7 +82,14 @@ class ProgressStore {
     id: string, 
     stage: SynthesisStage, 
     percentage: number, 
-    message: string
+    message: string,
+    result?: {
+      code: string;
+      language: string;
+      functionName: string;
+      description?: string;
+      timestamp: string;
+    }
   ): ProgressEntry | undefined {
     const entry = this.progressMap.get(id);
     if (!entry) return undefined;
@@ -83,6 +98,11 @@ class ProgressStore {
     entry.percentage = percentage;
     entry.message = message;
     entry.updatedAt = new Date();
+
+    // Store synthesis result if provided
+    if (result) {
+      entry.result = result;
+    }
 
     // Calculate estimated time remaining based on progress
     const elapsedSeconds = (entry.updatedAt.getTime() - entry.startedAt.getTime()) / 1000;
@@ -108,6 +128,25 @@ class ProgressStore {
       const estimatedTotal = elapsedSeconds / (percentage / 100);
       entry.estimatedTimeRemaining = Math.max(0, Math.round(estimatedTotal - elapsedSeconds));
     }
+
+    return entry;
+  }
+
+  // Mark synthesis as failed with error
+  markError(id: string, error: string): ProgressEntry | undefined {
+    const entry = this.progressMap.get(id);
+    if (!entry) return undefined;
+
+    entry.stage = "ERROR";
+    entry.error = error;
+    entry.percentage = 0;
+    entry.message = "Synthesis failed";
+    entry.estimatedTimeRemaining = 0;
+    entry.updatedAt = new Date();
+    entry.completedAt = new Date();
+
+    const elapsedSeconds = (entry.completedAt.getTime() - entry.startedAt.getTime()) / 1000;
+    entry.actualDuration = elapsedSeconds;
 
     return entry;
   }
