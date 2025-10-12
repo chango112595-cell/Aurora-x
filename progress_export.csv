@@ -1,13 +1,14 @@
 id,name,percent,status,category
-T01,Foundation Core,100%,✅ complete,Core
-T02,Learning & Memory Core,100%,✅ complete,Learning
-T03,Adaptive Learning Engine,100%,✅ complete,Learning
-T04,Production Hardening,100%,✅ complete,Infrastructure
-T05,Spec DSL v3,100%,✅ complete,Core
-T06,Dashboard & API v2,100%,✅ complete,Interface
-T07,Orchestrator,100%,✅ complete,Automation
-T08,Universal Code Intelligence,85%,🚀 in-progress,Intelligence
-T09,Template Expansion Pack,100%,✅ complete,Templates
-T10,Cross-Platform Runtime,60%,🚀 in-progress,Runtime
-T11,Deployment Infrastructure,100%,✅ complete,Deployment
-T12,Aurora Factory Protocol,45%,🔧 in-development,Factory
+T01,Foundation Core,100,complete,Core
+T02,Learning & Memory Core,100,complete,Core
+T03,Adaptive Learning Engine,100,complete,Core
+T04,Production Hardening,100,complete,Ops
+T05,Live Dashboard,100,complete,UI
+T06,English → Code Synthesis Engine,100,complete,Core
+T07,Orchestrator,100,complete,Ops
+T08,Universal Code Intelligence Layer,88,in-progress,Core Learning
+T09,Template Expansion System,100,complete,Core
+T10,Cross-Platform Runtime (OS Matrix),60,in-progress,Runtime
+T11,Deployment Infrastructure,100,complete,Ops
+T12,Aurora Factory Protocol (Bridge),45,in-development,Automation
+T13,Universal Code Synthesis Engine (UCSE),5,in-progress,Core
