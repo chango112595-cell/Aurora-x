@@ -1,0 +1,7 @@
+{
+  "default": 0.42,
+  "test": 0.123,
+  "production": 0.999,
+  "dev": 0.456,
+  "staging": 0.789
+}
