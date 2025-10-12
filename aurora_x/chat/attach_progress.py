@@ -86,8 +86,18 @@ def attach_progress(app):
         except Exception as e:
             return JSONResponse({"ok": False, "err": f"invalid progress.json: {e}"}, status_code=422)
         tasks = data.get("tasks", [])
-        overall = round(sum(t.get("percent", 0) for t in tasks) / max(1, len(tasks)), 2)
+        # Parse percent values properly (handle string percentages)
+        total = 0
+        for t in tasks:
+            percent = t.get("percent", 0)
+            if isinstance(percent, str):
+                percent = float(percent.replace('%', ''))
+            total += percent
+        overall = round(total / max(1, len(tasks)), 2)
         data["overall_percent"] = overall
+        # Add thresholds with defaults if missing
+        th = data.get("ui_thresholds") or {}
+        data["ui_thresholds"] = {"ok": int(th.get("ok", 90)), "warn": int(th.get("warn", 60))}
         data["ok"] = True
         return JSONResponse(data)
 
