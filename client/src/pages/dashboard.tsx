@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { 
@@ -11,12 +11,21 @@ import {
   Zap,
   RefreshCw,
   WifiOff,
-  Wifi
+  Wifi,
+  Sparkles,
+  Download,
+  FileCode2,
+  Rocket,
+  Package
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 interface Task {
   id: string;
@@ -33,6 +42,35 @@ interface ProgressData {
   tasks: Task[];
   active: string[];
   rules: string[];
+}
+
+// Synthesis/Generation interfaces
+interface GenerationRequest {
+  prompt: string;
+}
+
+interface GenerationResponse {
+  status: "success" | "error";
+  run_id?: string;
+  files?: string[];
+  project_type?: string;
+  zip_path?: string;
+  framework?: string;
+  language?: string;
+  features?: string[];
+  message?: string;
+  error?: string;
+  details?: string;
+}
+
+interface GeneratedProject {
+  run_id: string;
+  prompt: string;
+  project_type: string;
+  files_count: number;
+  framework?: string;
+  language?: string;
+  timestamp: Date;
 }
 
 // Status mapping for cleaner processing
@@ -284,6 +322,257 @@ const ActiveTasksSection = ({ tasks, activeIds }: { tasks: Task[]; activeIds: st
   );
 };
 
+// Project Generation Component with Aurora-X Theme
+const ProjectGenerationSection = () => {
+  const [prompt, setPrompt] = useState("");
+  const [recentProjects, setRecentProjects] = useState<GeneratedProject[]>([]);
+  const { toast } = useToast();
+
+  // Mutation for generating projects
+  const generateMutation = useMutation<GenerationResponse, Error, GenerationRequest>({
+    mutationFn: (data) => apiRequest("/api/nl/compile_full", {
+      method: "POST",
+      body: JSON.stringify(data)
+    }),
+    onSuccess: (data) => {
+      if (data.status === "success") {
+        toast({
+          title: "Project Generated Successfully!",
+          description: data.message || `Generated ${data.project_type} with ${data.files?.length || 0} files`,
+        });
+        
+        // Add to recent projects
+        if (data.run_id) {
+          const newProject: GeneratedProject = {
+            run_id: data.run_id,
+            prompt: prompt.substring(0, 100),
+            project_type: data.project_type || "unknown",
+            files_count: data.files?.length || 0,
+            framework: data.framework,
+            language: data.language,
+            timestamp: new Date()
+          };
+          setRecentProjects(prev => [newProject, ...prev.slice(0, 4)]);
+          setPrompt(""); // Clear the prompt
+        }
+      } else {
+        toast({
+          title: "Generation Failed",
+          description: data.error || "Failed to generate project",
+          variant: "destructive"
+        });
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive"
+      });
+    }
+  });
+
+  // Function to download project
+  const downloadProject = (run_id: string) => {
+    const downloadUrl = `/api/projects/${run_id}/download`;
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = `${run_id}-project.zip`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast({
+      title: "Download Started",
+      description: `Downloading ${run_id} project...`
+    });
+  };
+
+  const handleGenerate = () => {
+    if (!prompt.trim()) {
+      toast({
+        title: "Prompt Required",
+        description: "Please enter a description of the project you want to generate",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    generateMutation.mutate({ prompt: prompt.trim() });
+  };
+
+  return (
+    <div className="space-y-6 mb-8">
+      {/* Generation Card with Aurora-X Styling */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+          {/* Animated Background Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-secondary/10 animate-pulse" />
+          
+          <CardHeader className="relative">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Sparkles className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-xl" data-testid="text-generation-title">
+                  Generate Project with AI
+                </CardTitle>
+                <CardDescription data-testid="text-generation-description">
+                  Describe your project in natural language and let Aurora-X build it for you
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          
+          <CardContent className="relative space-y-4">
+            <Textarea
+              placeholder="Describe your project... e.g., 'Create a React dashboard with user authentication and real-time data visualization'"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              className="min-h-[120px] bg-background/50 border-primary/20 focus:border-primary/40 transition-colors"
+              disabled={generateMutation.isPending}
+              data-testid="input-generation-prompt"
+            />
+            
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <FileCode2 className="h-4 w-4" />
+                <span>Supports: React, Vue, Flask, FastAPI, AI/ML, and more</span>
+              </div>
+              
+              <Button
+                onClick={handleGenerate}
+                disabled={generateMutation.isPending || !prompt.trim()}
+                className="relative group"
+                data-testid="button-generate"
+              >
+                {generateMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Rocket className="mr-2 h-4 w-4 group-hover:animate-pulse" />
+                    Generate Project
+                  </>
+                )}
+                {/* Hover Effect */}
+                <div className="absolute inset-0 rounded-md bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </Button>
+            </div>
+            
+            {/* Generation Result */}
+            {generateMutation.isSuccess && generateMutation.data?.status === "success" && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-4 rounded-lg bg-green-500/10 border border-green-500/20"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                    <div>
+                      <p className="font-medium text-green-600 dark:text-green-400">
+                        Project Generated Successfully!
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {generateMutation.data.project_type} • {generateMutation.data.files?.length || 0} files
+                      </p>
+                    </div>
+                  </div>
+                  {generateMutation.data.run_id && (
+                    <Button
+                      onClick={() => downloadProject(generateMutation.data.run_id!)}
+                      variant="outline"
+                      size="sm"
+                      className="border-green-500/20 hover:bg-green-500/10"
+                      data-testid="button-download-latest"
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      Download
+                    </Button>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+      
+      {/* Recent Generations */}
+      {recentProjects.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <Card className="border-primary/10">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Package className="h-5 w-5 text-primary" />
+                <CardTitle className="text-lg" data-testid="text-recent-title">
+                  Recent Generations
+                </CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {recentProjects.map((project, index) => (
+                  <motion.div
+                    key={project.run_id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="flex items-center justify-between p-3 rounded-lg bg-secondary/50 hover:bg-secondary/70 transition-colors"
+                    data-testid={`item-recent-${project.run_id}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <FileCode2 className="h-4 w-4 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium text-sm" data-testid={`text-recent-prompt-${project.run_id}`}>
+                          {project.prompt}...
+                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge variant="outline" className="text-xs">
+                            {project.project_type}
+                          </Badge>
+                          {project.framework && (
+                            <Badge variant="secondary" className="text-xs">
+                              {project.framework}
+                            </Badge>
+                          )}
+                          <span className="text-xs text-muted-foreground">
+                            {project.files_count} files • {new Date(project.timestamp).toLocaleTimeString()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={() => downloadProject(project.run_id)}
+                      variant="ghost"
+                      size="sm"
+                      className="hover:bg-primary/10"
+                      data-testid={`button-download-${project.run_id}`}
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
 // Loading skeleton
 const DashboardSkeleton = () => {
   return (
@@ -455,6 +744,9 @@ export default function Dashboard() {
         </motion.div>
 
         <OverallProgress tasks={data.tasks} isRefetching={isRefetching} lastUpdated={lastUpdated} />
+        
+        {/* Add Project Generation Section */}
+        <ProjectGenerationSection />
         
         {data.active && data.active.length > 0 && (
           <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
