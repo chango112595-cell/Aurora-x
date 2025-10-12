@@ -158,5 +158,9 @@
     "In-progress tasks receive primary development focus",
     "Percentages reflect actual implementation status",
     "Active tasks are being worked on concurrently"
-  ]
+  ],
+  "ui_thresholds": {
+    "ok": 90,
+    "warn": 60
+  }
 }
