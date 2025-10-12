@@ -1,0 +1,25 @@
+{
+  "run_id": "run-20251012-205929",
+  "timestamp": "2025-10-12T20:59:29.903562",
+  "project_type": "ui_frontend",
+  "framework": "react",
+  "language": "javascript",
+  "features": [
+    "ui"
+  ],
+  "description": "tiny ui app",
+  "entities": {},
+  "files": [
+    "package.json",
+    "src/index.js",
+    "src/App.js",
+    "src/components/.gitkeep",
+    "src/styles/main.css",
+    "public/index.html",
+    "webpack.config.js",
+    "vite.config.js",
+    "README.md",
+    ".gitignore"
+  ],
+  "file_count": 10
+}
