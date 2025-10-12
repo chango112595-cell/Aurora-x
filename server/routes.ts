@@ -439,6 +439,397 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendStatus(204); // No content for OPTIONS
   });
 
+  // POST endpoint to recompute progress data, regenerate task lists and badges
+  app.post("/api/progress/recompute", async (req, res) => {
+    // Track operation results
+    let timestampUpdated = false;
+    let taskListRegenerated = false;
+    let badgesRefreshed = false;
+    let gitOperations = false;
+    let updatedTimestamp: string | undefined;
+    let errors: string[] = [];
+    let hasAnySuccess = false;
+    
+    try {
+      console.log('[Progress Recompute] Starting progress recomputation...');
+      
+      // Step 1: Update the timestamp in progress.json (CRITICAL - fail fast if this fails)
+      const progressPath = path.join(process.cwd(), 'progress.json');
+      
+      if (!fs.existsSync(progressPath)) {
+        // Set CORS headers
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        
+        return res.status(404).json({
+          error: "Progress data not found",
+          message: "The progress.json file does not exist",
+          operations_performed: {
+            timestamp_updated: false,
+            task_list_regenerated: false,
+            badges_refreshed: false,
+            git_operations: false
+          }
+        });
+      }
+      
+      try {
+        // Read and update the progress.json file
+        const progressData = fs.readFileSync(progressPath, 'utf-8');
+        const progressJson = JSON.parse(progressData);
+        updatedTimestamp = new Date().toISOString();
+        progressJson.updated_utc = updatedTimestamp;
+        
+        // Write the updated timestamp back to file
+        fs.writeFileSync(progressPath, JSON.stringify(progressJson, null, 2));
+        timestampUpdated = true;
+        hasAnySuccess = true;
+        console.log('[Progress Recompute] Updated timestamp in progress.json to:', updatedTimestamp);
+      } catch (timestampError: any) {
+        console.error('[Progress Recompute] Failed to update timestamp:', timestampError);
+        errors.push(`Timestamp update failed: ${timestampError.message}`);
+        
+        // This is a critical error - fail fast
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        
+        return res.status(500).json({
+          error: "Critical operation failed",
+          message: "Failed to update progress.json timestamp",
+          details: timestampError.message,
+          operations_performed: {
+            timestamp_updated: false,
+            task_list_regenerated: false,
+            badges_refreshed: false,
+            git_operations: false
+          }
+        });
+      }
+      
+      // Step 2: Run update_progress.py to regenerate MASTER_TASK_LIST.md and progress_export.csv
+      const updateProgressScriptPath = path.join(process.cwd(), 'tools', 'update_progress.py');
+      
+      if (fs.existsSync(updateProgressScriptPath)) {
+        console.log('[Progress Recompute] Running update_progress.py...');
+        
+        try {
+          await new Promise<void>((resolve, reject) => {
+            execFile('python3', [updateProgressScriptPath], {
+              cwd: process.cwd(),
+              timeout: 30000, // 30 second timeout
+              maxBuffer: 1024 * 1024 * 5, // 5MB buffer
+            }, (error, stdout, stderr) => {
+              if (error) {
+                // Check exit code - non-zero means failure
+                if (error.code && error.code !== 0) {
+                  console.error('[Progress Recompute] update_progress.py failed with exit code:', error.code);
+                  console.error('[Progress Recompute] Error:', error.message);
+                  if (stderr) console.error('[Progress Recompute] stderr:', stderr);
+                  reject(new Error(`update_progress.py failed with exit code ${error.code}: ${error.message}`));
+                  return;
+                }
+                // If error but no exit code, still treat as failure
+                console.error('[Progress Recompute] Error running update_progress.py:', error.message);
+                reject(error);
+                return;
+              }
+              
+              // Check for error indicators in stderr (excluding [OK])
+              if (stderr && !stderr.includes('[OK]') && stderr.trim() !== '') {
+                console.error('[Progress Recompute] update_progress.py stderr:', stderr);
+                // Don't fail on stderr warnings, only if there was an actual error
+              }
+              
+              if (stdout) {
+                console.log('[Progress Recompute] update_progress.py output:', stdout);
+              }
+              
+              console.log('[Progress Recompute] Successfully ran update_progress.py');
+              resolve();
+            });
+          });
+          taskListRegenerated = true;
+          hasAnySuccess = true;
+        } catch (scriptError: any) {
+          console.error('[Progress Recompute] Failed to regenerate task list:', scriptError);
+          errors.push(`Task list regeneration failed: ${scriptError.message}`);
+          // Continue with other operations
+        }
+      } else {
+        console.log('[Progress Recompute] update_progress.py not found - skipping task list generation');
+        // File doesn't exist, so we didn't run it, don't mark as success
+      }
+      
+      // Step 3: Run patch_readme_progress.py to refresh README badges
+      const patchReadmeScriptPath = path.join(process.cwd(), 'tools', 'patch_readme_progress.py');
+      
+      if (fs.existsSync(patchReadmeScriptPath)) {
+        console.log('[Progress Recompute] Running patch_readme_progress.py...');
+        
+        try {
+          await new Promise<void>((resolve, reject) => {
+            execFile('python3', [patchReadmeScriptPath], {
+              cwd: process.cwd(),
+              timeout: 10000, // 10 second timeout
+              maxBuffer: 1024 * 1024, // 1MB buffer
+            }, (error, stdout, stderr) => {
+              if (error) {
+                // Check exit code - non-zero means failure
+                if (error.code && error.code !== 0) {
+                  console.error('[Progress Recompute] patch_readme_progress.py failed with exit code:', error.code);
+                  console.error('[Progress Recompute] Error:', error.message);
+                  if (stderr) console.error('[Progress Recompute] stderr:', stderr);
+                  reject(new Error(`patch_readme_progress.py failed with exit code ${error.code}: ${error.message}`));
+                  return;
+                }
+                // If error but no exit code, still treat as failure
+                console.error('[Progress Recompute] Error running patch_readme_progress.py:', error.message);
+                reject(error);
+                return;
+              }
+              
+              // Check for error indicators in stderr (excluding [OK])
+              if (stderr && !stderr.includes('[OK]') && stderr.trim() !== '') {
+                console.error('[Progress Recompute] patch_readme_progress.py stderr:', stderr);
+                // Don't fail on stderr warnings
+              }
+              
+              if (stdout && stdout.includes('[OK]')) {
+                console.log('[Progress Recompute] README badges updated successfully');
+              }
+              
+              resolve();
+            });
+          });
+          badgesRefreshed = true;
+          hasAnySuccess = true;
+        } catch (badgeError: any) {
+          console.error('[Progress Recompute] Failed to refresh badges:', badgeError);
+          errors.push(`Badge refresh failed: ${badgeError.message}`);
+          // Continue with other operations
+        }
+      } else {
+        console.log('[Progress Recompute] patch_readme_progress.py not found - skipping badge refresh');
+        // File doesn't exist, so we didn't run it, don't mark as success
+      }
+      
+      // Step 4: Optionally commit and push changes if AURORA_AUTO_GIT is enabled
+      const autoGit = process.env.AURORA_AUTO_GIT;
+      const shouldAutoCommit = autoGit && ['1', 'true', 'yes', 'on'].includes(autoGit.toLowerCase());
+      
+      if (shouldAutoCommit) {
+        console.log('[Progress Recompute] Auto-git enabled, committing and pushing changes...');
+        
+        // Add specific files
+        const filesToAdd = [
+          'progress.json',
+          'MASTER_TASK_LIST.md', 
+          'progress_export.csv',
+          'README.md'
+        ];
+        
+        // Check which files exist and add them
+        const existingFiles = filesToAdd.filter(file => 
+          fs.existsSync(path.join(process.cwd(), file))
+        );
+        
+        if (existingFiles.length > 0) {
+          let gitAddSuccess = false;
+          let gitCommitSuccess = false;
+          let gitPushSuccess = false;
+          
+          // Add files to git
+          try {
+            await new Promise<void>((resolve, reject) => {
+              execFile('git', ['add', ...existingFiles], {
+                cwd: process.cwd(),
+                timeout: 5000,
+              }, (error, stdout, stderr) => {
+                if (error) {
+                  console.error('[Progress Recompute] Error adding files to git:', error.message);
+                  reject(new Error(`Git add failed: ${error.message}`));
+                  return;
+                }
+                console.log('[Progress Recompute] Added files to git:', existingFiles.join(', '));
+                resolve();
+              });
+            });
+            gitAddSuccess = true;
+          } catch (gitError: any) {
+            console.error('[Progress Recompute] Git add operation failed:', gitError);
+            errors.push(`Git add failed: ${gitError.message}`);
+          }
+          
+          // Create commit (only if add succeeded)
+          if (gitAddSuccess) {
+            try {
+              await new Promise<void>((resolve, reject) => {
+                execFile('git', ['commit', '-m', 'chore(progress): recompute via API'], {
+                  cwd: process.cwd(),
+                  timeout: 5000,
+                }, (error, stdout, stderr) => {
+                  if (error) {
+                    // Check if it's just "nothing to commit" which is not really an error
+                    if (error.message.includes('nothing to commit')) {
+                      console.log('[Progress Recompute] Nothing to commit, working tree clean');
+                      resolve();  // This is OK, not an error
+                    } else {
+                      console.error('[Progress Recompute] Error creating commit:', error.message);
+                      reject(new Error(`Git commit failed: ${error.message}`));
+                    }
+                    return;
+                  }
+                  console.log('[Progress Recompute] Created commit successfully');
+                  resolve();
+                });
+              });
+              gitCommitSuccess = true;
+            } catch (gitError: any) {
+              console.error('[Progress Recompute] Git commit operation failed:', gitError);
+              errors.push(`Git commit failed: ${gitError.message}`);
+            }
+          }
+          
+          // Push to remote (only if commit succeeded)
+          if (gitCommitSuccess) {
+            try {
+              await new Promise<void>((resolve, reject) => {
+                execFile('git', ['push'], {
+                  cwd: process.cwd(),
+                  timeout: 15000, // Give push more time
+                }, (error, stdout, stderr) => {
+                  if (error) {
+                    console.error('[Progress Recompute] Error pushing to remote:', error.message);
+                    reject(new Error(`Git push failed: ${error.message}`));
+                    return;
+                  }
+                  console.log('[Progress Recompute] Pushed changes to remote repository');
+                  resolve();
+                });
+              });
+              gitPushSuccess = true;
+            } catch (gitError: any) {
+              console.error('[Progress Recompute] Git push operation failed:', gitError);
+              errors.push(`Git push failed: ${gitError.message}`);
+            }
+          }
+          
+          // Git operations succeeded if all attempted operations succeeded
+          gitOperations = gitAddSuccess && gitCommitSuccess && gitPushSuccess;
+          if (gitOperations) {
+            hasAnySuccess = true;
+          }
+        } else {
+          console.log('[Progress Recompute] No files to commit');
+          // No files to commit, not a failure
+        }
+      } else {
+        console.log('[Progress Recompute] Auto-git disabled, skipping commit and push');
+        // Git was disabled, not a failure
+      }
+      
+      // Set CORS headers for cross-origin access
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      
+      // Determine response status based on results
+      const allCriticalSucceeded = timestampUpdated;
+      const anyOperationFailed = errors.length > 0;
+      
+      // If we have any errors but also some successes, it's a partial success
+      if (anyOperationFailed && hasAnySuccess) {
+        // Partial success - some operations succeeded, some failed
+        return res.status(207).json({  // 207 Multi-Status for partial success
+          success: false,
+          partial_success: true,
+          message: "Progress data partially recomputed - some operations failed",
+          updated_utc: updatedTimestamp,
+          operations_performed: {
+            timestamp_updated: timestampUpdated,
+            task_list_regenerated: taskListRegenerated,
+            badges_refreshed: badgesRefreshed,
+            git_operations: gitOperations
+          },
+          errors: errors
+        });
+      } else if (anyOperationFailed) {
+        // Complete failure
+        return res.status(500).json({
+          success: false,
+          error: "Operation failed",
+          message: "Failed to recompute progress data",
+          operations_performed: {
+            timestamp_updated: timestampUpdated,
+            task_list_regenerated: taskListRegenerated,
+            badges_refreshed: badgesRefreshed,
+            git_operations: gitOperations
+          },
+          errors: errors
+        });
+      } else {
+        // Complete success
+        return res.json({
+          success: true,
+          message: "Progress data recomputed successfully",
+          updated_utc: updatedTimestamp,
+          operations_performed: {
+            timestamp_updated: timestampUpdated,
+            task_list_regenerated: taskListRegenerated,
+            badges_refreshed: badgesRefreshed,
+            git_operations: shouldAutoCommit ? gitOperations : false
+          }
+        });
+      }
+      
+    } catch (error: any) {
+      console.error('[Progress Recompute] Unexpected error:', error);
+      
+      // Set CORS headers even on error
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      
+      // Return error response with operation status
+      if (error instanceof SyntaxError) {
+        return res.status(500).json({
+          error: "Invalid progress data",
+          message: "The progress.json file contains invalid JSON",
+          operations_performed: {
+            timestamp_updated: timestampUpdated,
+            task_list_regenerated: taskListRegenerated,
+            badges_refreshed: badgesRefreshed,
+            git_operations: gitOperations
+          },
+          errors: [...errors, error.message]
+        });
+      } else {
+        return res.status(500).json({
+          error: "Internal server error",
+          message: "Failed to recompute progress data",
+          operations_performed: {
+            timestamp_updated: timestampUpdated,
+            task_list_regenerated: taskListRegenerated,
+            badges_refreshed: badgesRefreshed,
+            git_operations: gitOperations
+          },
+          errors: [...errors, error?.message ?? String(error)]
+        });
+      }
+    }
+  });
+
+  // Handle OPTIONS preflight requests for recompute endpoint
+  app.options("/api/progress/recompute", (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Max-Age', '86400');
+    res.sendStatus(204); // No content for OPTIONS
+  });
+
   // Health check endpoint for auto-updater monitoring
   app.get("/healthz", async (req, res) => {
     const providedToken = req.query.token as string | undefined;
