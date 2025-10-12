@@ -330,10 +330,10 @@ const ProjectGenerationSection = () => {
 
   // Mutation for generating projects
   const generateMutation = useMutation<GenerationResponse, Error, GenerationRequest>({
-    mutationFn: (data) => apiRequest("/api/nl/compile_full", {
-      method: "POST",
-      body: JSON.stringify(data)
-    }),
+    mutationFn: async (data) => {
+      const response = await apiRequest("POST", "/api/nl/compile_full", data);
+      return response.json();
+    },
     onSuccess: (data) => {
       if (data.status === "success") {
         toast({
