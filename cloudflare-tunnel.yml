@@ -1,0 +1,43 @@
+# Cloudflare Tunnel configuration for Aurora-X
+# Provides secure HTTPS access without exposing ports
+tunnel: aurora-x
+credentials-file: /home/nonroot/.cloudflared/aurora-x.json
+
+ingress:
+  # Aurora main app
+  - hostname: aurora.yourname.dev
+    service: http://localhost:8000
+    originRequest:
+      noTLSVerify: false
+      connectTimeout: 30s
+      
+  # Health check endpoint (for monitoring)
+  - hostname: health.aurora.yourname.dev
+    service: http://localhost:8000
+    path: /healthz
+    
+  # WebSocket support for real-time features
+  - hostname: aurora.yourname.dev
+    path: /ws
+    service: http://localhost:8000
+    originRequest:
+      noTLSVerify: false
+      
+  # Static assets with caching
+  - hostname: aurora.yourname.dev
+    path: /static
+    service: http://localhost:8000
+    originRequest:
+      noTLSVerify: false
+      http2Origin: true
+      
+  # API endpoints
+  - hostname: api.aurora.yourname.dev
+    service: http://localhost:8000
+    path: /api
+    originRequest:
+      noTLSVerify: false
+      http2Origin: true
+      
+  # Catch-all rule
+  - service: http_status:404
