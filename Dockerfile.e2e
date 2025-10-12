@@ -1,31 +1,13 @@
-FROM --platform=${TARGETPLATFORM:-linux/amd64} python:3.11-slim
-
-# Build args for cross-platform builds
-ARG TARGETPLATFORM
-ARG BUILDPLATFORM
-RUN echo "Building for $TARGETPLATFORM on $BUILDPLATFORM"
-
+# Multi-arch friendly (works on linux/arm64 and amd64)
+FROM python:3.11-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PORT=8000 AURORA_DEFAULT_LANG=python
 WORKDIR /app
-
-# Install system dependencies for ARM compatibility
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    jq \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy project files
-COPY . .
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -e . && \
-    pip install pytest httpx uvicorn[standard] || true
-
-# Expose port
+# system deps for building wheels + curl, jq
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential curl jq && rm -rf /var/lib/apt/lists/*
+COPY . /app
+RUN pip install --upgrade pip && pip install -e . && pip install pytest
 EXPOSE 8000
-
-# Health check
-HEALTHCHECK --interval=5s --timeout=3s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:8000/healthz || exit 1
-
-# Run server
-CMD ["python", "-m", "aurora_x.serve"]
+CMD sh -c "python -m aurora_x.serve & \
+  for i in $(seq 1 30); do curl -fsS http://127.0.0.1:${PORT}/healthz && break || sleep 1; done && \
+  curl -fsS -X POST -H 'content-type: application/json' -d '{\"problem\":\"(2+3)^2 + 1\"}' http://127.0.0.1:${PORT}/api/solve && \
+  tail -f /dev/null"

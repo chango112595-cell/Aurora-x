@@ -149,52 +149,29 @@ jobs:
             Aurora.WebApi/**/*.cs
             Aurora.WebApi/**/*.csproj
 
-  # Linux ARM64 job using Docker buildx (no special runner needed)
   e2e-linux-arm64:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      
-      - name: Set up QEMU for ARM emulation
-        uses: docker/setup-qemu-action@v3
-        
-      - name: Build ARM64 test image
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - name: Build image (linux/arm64)
+        run: docker buildx build --platform linux/arm64 -f Dockerfile.e2e -t aurora-e2e:arm64 --load .
+      - name: Run container and probe APIs
         run: |
-          # Create minimal Dockerfile for testing if not exists
-          if [ ! -f Dockerfile.e2e ]; then
-            cat > Dockerfile.e2e << 'EOF'
-FROM --platform=linux/arm64 python:3.11-slim
-WORKDIR /app
-COPY . .
-RUN pip install --no-cache-dir -e . && \
-    pip install pytest jq pycurl || true
-EXPOSE 8000
-CMD ["python", "-m", "aurora_x.serve"]
-EOF
-          fi
-          
-          # Build ARM64 image
-          docker buildx build --platform linux/arm64 -t aurora-e2e:arm64 -f Dockerfile.e2e --load .
-          
-      - name: Test ARM64 container
-        run: |
-          # Run the container in background
-          docker run -d --name aurora-arm64 -p 8000:8000 aurora-e2e:arm64
-          
-          # Wait for server to be ready
-          for i in $(seq 1 30); do
-            curl -fsS http://localhost:8000/healthz && break || sleep 1
-          done
-          
-          # Test endpoints
-          curl -fsS http://localhost:8000/healthz | jq .
+          docker run -d --name aurora-arm -p 8000:8000 aurora-e2e:arm64
+          # Wait for health
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:8000/healthz && break || sleep 1; done
+          # Quick hits
           curl -fsS -X POST -H 'content-type: application/json' \
-            -d '{"prompt":"hello world","lang":"python"}' \
-            http://localhost:8000/chat | jq .
-          
-          # Cleanup
-          docker stop aurora-arm64
-          docker rm aurora-arm64
+            -d '{"prompt":"make a futuristic timer ui","lang":"python"}' http://127.0.0.1:8000/chat | jq .
+          curl -fsS -X POST -H 'content-type: application/json' \
+            -d '{"problem":"orbital period a=7000 km M=5.972e24 kg"}' http://127.0.0.1:8000/api/solve/pretty | jq .
+          # artifacts
+          docker cp aurora-arm:/app/runs ./runs || true
+      - name: Upload ARM artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arm64-artifacts
+          path: runs/**
