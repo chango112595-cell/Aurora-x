@@ -15,6 +15,7 @@ from aurora_x.chat.attach_demo_runall import attach_demo_runall
 from aurora_x.chat.attach_progress import attach_progress
 from aurora_x.chat.attach_task_graph import attach_task_graph
 from aurora_x.app_settings import SETTINGS
+from aurora_x.generators.solver import solve_text  # Import the solver module
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
@@ -319,6 +320,87 @@ async def compile_from_natural_language(request: NLCompileRequest):
             status="error",
             files_generated=[],
             message=f"Failed to process natural language prompt: {str(e)}"
+        )
+
+# --- Solver Endpoints ---
+
+class SolverRequest(BaseModel):
+    """Request model for the solver endpoints"""
+    text: str
+
+@app.post("/api/solve")
+async def solve_endpoint(request: SolverRequest):
+    """
+    Raw solver endpoint that returns the complete solver result
+    
+    Args:
+        request: JSON body with 'text' field containing the problem to solve
+    
+    Returns:
+        JSON response with the raw solver output
+    """
+    try:
+        result = solve_text(request.text)
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(
+            content={"ok": False, "error": str(e)},
+            status_code=500
+        )
+
+@app.post("/api/solve/pretty")
+async def solve_pretty_endpoint(request: SolverRequest):
+    """
+    Pretty solver endpoint that returns formatted human-readable results
+    
+    Args:
+        request: JSON body with 'text' field containing the problem to solve
+    
+    Returns:
+        Plain text response with formatted solution
+    """
+    try:
+        result = solve_text(request.text)
+        
+        # Format the output in a human-readable way
+        if result.get("ok"):
+            lines = []
+            lines.append("=" * 50)
+            lines.append(f"Domain: {result.get('domain', 'unknown')}")
+            lines.append(f"Task: {result.get('task', 'unknown')}")
+            lines.append("-" * 50)
+            
+            if result.get("input"):
+                lines.append(f"Input: {result['input']}")
+            
+            if result.get("result"):
+                if isinstance(result["result"], dict):
+                    lines.append("Result:")
+                    for key, value in result["result"].items():
+                        if isinstance(value, float):
+                            lines.append(f"  {key}: {value:.6f}")
+                        else:
+                            lines.append(f"  {key}: {value}")
+                else:
+                    lines.append(f"Result: {result['result']}")
+            
+            if result.get("explanation"):
+                lines.append("")
+                lines.append(f"Explanation: {result['explanation']}")
+            
+            lines.append("=" * 50)
+            return PlainTextResponse(content="\n".join(lines))
+        else:
+            # Error response
+            error_msg = f"Error: {result.get('error', 'Unknown error')}"
+            if result.get("hint"):
+                error_msg += f"\nHint: {result['hint']}"
+            return PlainTextResponse(content=error_msg, status_code=400)
+            
+    except Exception as e:
+        return PlainTextResponse(
+            content=f"Internal Server Error: {str(e)}",
+            status_code=500
         )
 
 @app.get("/")
