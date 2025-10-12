@@ -2213,57 +2213,8 @@ if __name__ == "__main__":
     }
   });
 
-  app.post("/api/solve", async (req, res) => {
-    try {
-      const { callPythonSolver } = await import("./python-bridge");
-      const text = (req.body.problem || req.body.prompt || "").trim();
-      
-      if (!text) {
-        return res.status(400).json({ error: "missing 'problem' or 'prompt'" });
-      }
-      
-      const result = await callPythonSolver(text);
-      if (!result.ok) {
-        return res.status(422).json(result);
-      }
-      return res.json(result);
-    } catch (error: any) {
-      console.error("[Aurora-X] Solve API error:", error);
-      return res.status(500).json({
-        error: "Failed to solve problem",
-        details: error?.message
-      });
-    }
-  });
-
-  app.post("/api/explain", async (req, res) => {
-    try {
-      const { callPythonSolver } = await import("./python-bridge");
-      const text = (req.body.problem || req.body.prompt || "").trim();
-      
-      if (!text) {
-        return res.status(400).json({ error: "missing 'problem' or 'prompt'" });
-      }
-      
-      const result = await callPythonSolver(text);
-      if (!result.ok) {
-        return res.status(422).json(result);
-      }
-      
-      const keys = Object.keys(result).sort().join(", ");
-      return res.json({ 
-        ok: true, 
-        explanation: `Solved offline; fields: ${keys}`, 
-        result: result 
-      });
-    } catch (error: any) {
-      console.error("[Aurora-X] Explain API error:", error);
-      return res.status(500).json({
-        error: "Failed to explain problem",
-        details: error?.message
-      });
-    }
-  });
+  // Note: The original /api/solve and /api/explain endpoints have been replaced
+  // with new versions that directly use aurora_x/generators/solver.py
 
   // Task graph visualization endpoint
   app.get("/dashboard/graph", (req, res) => {
@@ -2780,6 +2731,252 @@ asyncio.run(main())
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Max-Age', '86400');
     res.sendStatus(204);
+  });
+
+  // POST endpoint for raw solver results
+  app.post("/api/solve", (req, res) => {
+    try {
+      const { q } = req.body;
+      
+      // Validate input
+      if (!q || typeof q !== 'string') {
+        return res.status(400).json({
+          ok: false,
+          error: "Invalid request",
+          message: "q is required and must be a string"
+        });
+      }
+      
+      // Limit query length for safety
+      if (q.length > 1000) {
+        return res.status(400).json({
+          ok: false,
+          error: "Query too long",
+          message: "Query must be less than 1000 characters"
+        });
+      }
+      
+      console.log(`[Solver] Processing query: "${q.substring(0, 100)}..."`);
+      
+      // Python command to execute the solver
+      const pythonCommand = `from aurora_x.generators.solver import solve_text; import json; import sys; q = sys.stdin.read(); print(json.dumps(solve_text(q)))`;
+      
+      // Spawn Python process with the query as stdin
+      const python = spawn('python3', ['-c', pythonCommand], {
+        cwd: process.cwd(),
+        timeout: 5000, // 5 second timeout
+      });
+      
+      let stdout = '';
+      let stderr = '';
+      
+      // Collect output
+      python.stdout.on('data', (data) => {
+        stdout += data.toString();
+      });
+      
+      python.stderr.on('data', (data) => {
+        stderr += data.toString();
+      });
+      
+      // Send the query to stdin
+      python.stdin.write(q);
+      python.stdin.end();
+      
+      // Handle process completion
+      python.on('close', (code) => {
+        if (code !== 0) {
+          console.error(`[Solver] Python process exited with code ${code}`);
+          console.error(`[Solver] stderr: ${stderr}`);
+          return res.status(500).json({
+            ok: false,
+            error: "Solver execution failed",
+            message: `Python process exited with code ${code}`,
+            details: stderr
+          });
+        }
+        
+        try {
+          // Parse the JSON result
+          const result = JSON.parse(stdout.trim());
+          console.log(`[Solver] Successfully solved query, task: ${result.task || 'unknown'}`);
+          return res.json(result);
+        } catch (parseError: any) {
+          console.error(`[Solver] Error parsing solver result: ${parseError.message}`);
+          console.error(`[Solver] stdout: ${stdout}`);
+          return res.status(500).json({
+            ok: false,
+            error: "Failed to parse solver result",
+            message: parseError.message,
+            stdout: stdout.substring(0, 500)
+          });
+        }
+      });
+      
+      // Handle errors
+      python.on('error', (error) => {
+        console.error(`[Solver] Failed to spawn Python process: ${error.message}`);
+        return res.status(500).json({
+          ok: false,
+          error: "Failed to execute solver",
+          message: error.message
+        });
+      });
+      
+    } catch (error: any) {
+      console.error(`[Solver] Unexpected error: ${error.message}`);
+      return res.status(500).json({
+        ok: false,
+        error: "Internal server error",
+        message: error.message
+      });
+    }
+  });
+
+  // POST endpoint for formatted solver results
+  app.post("/api/solve/pretty", (req, res) => {
+    try {
+      const { q } = req.body;
+      
+      // Validate input
+      if (!q || typeof q !== 'string') {
+        return res.status(400).json({
+          ok: false,
+          error: "Invalid request",
+          message: "q is required and must be a string"
+        });
+      }
+      
+      // Limit query length for safety
+      if (q.length > 1000) {
+        return res.status(400).json({
+          ok: false,
+          error: "Query too long",
+          message: "Query must be less than 1000 characters"
+        });
+      }
+      
+      console.log(`[Solver Pretty] Processing query: "${q.substring(0, 100)}..."`);
+      
+      // Python command to execute the solver
+      const pythonCommand = `from aurora_x.generators.solver import solve_text; import json; import sys; q = sys.stdin.read(); print(json.dumps(solve_text(q)))`;
+      
+      // Spawn Python process with the query as stdin
+      const python = spawn('python3', ['-c', pythonCommand], {
+        cwd: process.cwd(),
+        timeout: 5000, // 5 second timeout
+      });
+      
+      let stdout = '';
+      let stderr = '';
+      
+      // Collect output
+      python.stdout.on('data', (data) => {
+        stdout += data.toString();
+      });
+      
+      python.stderr.on('data', (data) => {
+        stderr += data.toString();
+      });
+      
+      // Send the query to stdin
+      python.stdin.write(q);
+      python.stdin.end();
+      
+      // Handle process completion
+      python.on('close', (code) => {
+        if (code !== 0) {
+          console.error(`[Solver Pretty] Python process exited with code ${code}`);
+          console.error(`[Solver Pretty] stderr: ${stderr}`);
+          return res.status(500).json({
+            ok: false,
+            error: "Solver execution failed",
+            message: `Python process exited with code ${code}`,
+            details: stderr
+          });
+        }
+        
+        try {
+          // Parse the JSON result
+          const result = JSON.parse(stdout.trim());
+          
+          if (!result.ok) {
+            // Return error as-is for failed results
+            return res.json({
+              ok: false,
+              formatted: result.error || "Unknown error",
+              raw: result
+            });
+          }
+          
+          // Format the result based on task type
+          let formatted = "";
+          
+          if (result.task === "arithmetic") {
+            // Format: "2 + 3 * 4 = 14"
+            formatted = `${result.input} = ${result.result}`;
+          } else if (result.task === "differentiate") {
+            // Format: "d/dx(x^3 - 2x^2 + x) = 3x^2 - 4x + 1"
+            formatted = `d/dx(${result.input}) = ${result.result}`;
+          } else if (result.task === "orbital_period") {
+            // Format: "T ≈ 1.51 h (5436 s)"
+            const seconds = result.result.period_seconds;
+            const hours = seconds / 3600;
+            const days = seconds / 86400;
+            
+            if (hours < 24) {
+              formatted = `T ≈ ${hours.toFixed(2)} h (${Math.round(seconds)} s)`;
+            } else if (days < 365) {
+              formatted = `T ≈ ${days.toFixed(2)} days (${Math.round(seconds)} s)`;
+            } else {
+              const years = days / 365.25;
+              formatted = `T ≈ ${years.toFixed(2)} years (${days.toFixed(1)} days)`;
+            }
+          } else {
+            // Default formatting
+            formatted = result.explanation || JSON.stringify(result.result);
+          }
+          
+          console.log(`[Solver Pretty] Successfully formatted result: ${formatted}`);
+          
+          return res.json({
+            ok: true,
+            formatted: formatted,
+            task: result.task,
+            domain: result.domain,
+            raw: result
+          });
+          
+        } catch (parseError: any) {
+          console.error(`[Solver Pretty] Error parsing solver result: ${parseError.message}`);
+          console.error(`[Solver Pretty] stdout: ${stdout}`);
+          return res.status(500).json({
+            ok: false,
+            error: "Failed to parse solver result",
+            message: parseError.message,
+            stdout: stdout.substring(0, 500)
+          });
+        }
+      });
+      
+      // Handle errors
+      python.on('error', (error) => {
+        console.error(`[Solver Pretty] Failed to spawn Python process: ${error.message}`);
+        return res.status(500).json({
+          ok: false,
+          error: "Failed to execute solver",
+          message: error.message
+        });
+      });
+      
+    } catch (error: any) {
+      console.error(`[Solver Pretty] Unexpected error: ${error.message}`);
+      return res.status(500).json({
+        ok: false,
+        error: "Internal server error",
+        message: error.message
+      });
+    }
   });
 
   const httpServer = createServer(app);
