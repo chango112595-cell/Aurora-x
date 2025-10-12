@@ -1,0 +1,271 @@
+name: Deploy via GitHub Container Registry
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      deploy_message:
+        description: 'Deployment message'
+        required: false
+        default: 'Manual deployment triggered'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  HEALTH_TIMEOUT: 120
+  HEALTH_RETRIES: 30
+  HEALTH_INTERVAL: 4
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    name: Build and Push Docker Image
+    permissions:
+      contents: read
+      packages: write
+    
+    outputs:
+      image: ${{ steps.image.outputs.image }}
+      version: ${{ steps.meta.outputs.version }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Send Discord notification - Build starting
+        if: vars.DISCORD_WEBHOOK_URL != ''
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"embeds\":[{\"title\":\"🔨 Aurora-X Build Starting\",\"description\":\"Building Docker image for commit: \`${GITHUB_SHA:0:8}\`\\nBranch: \`${{ github.ref_name }}\`\\nTriggered by: \`${{ github.actor }}\`\",\"color\":3447003,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
+            "${{ vars.DISCORD_WEBHOOK_URL }}" || true
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.app
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: Output image details
+        id: image
+        run: |
+          echo "image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
+          echo "📦 Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+      
+      - name: Send Discord notification - Build complete
+        if: success() && vars.DISCORD_WEBHOOK_URL != ''
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"embeds\":[{\"title\":\"✅ Aurora-X Image Built\",\"description\":\"Docker image built and pushed successfully!\\n\\nImage: \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest\`\\nCommit: \`${GITHUB_SHA:0:8}\`\",\"color\":5763719,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
+            "${{ vars.DISCORD_WEBHOOK_URL }}" || true
+  
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Server
+    needs: build-and-push
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Send Discord notification - Deploy starting
+        if: vars.DISCORD_WEBHOOK_URL != ''
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"embeds\":[{\"title\":\"🚀 Aurora-X Deployment Starting\",\"description\":\"Deploying image: \`${{ needs.build-and-push.outputs.image }}\`\\nTo server: \`${{ secrets.SSH_HOST }}\`\",\"color\":3447003,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
+            "${{ vars.DISCORD_WEBHOOK_URL }}" || true
+      
+      - name: Create deployment directory and backup
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          script: |
+            set -e
+            mkdir -p ~/aurora-x-deployment
+            mkdir -p ~/aurora-x-deployment/backups
+            
+            # Backup current docker-compose.yml if exists
+            if [ -f ~/aurora-x-deployment/docker-compose.yml ]; then
+              cp ~/aurora-x-deployment/docker-compose.yml ~/aurora-x-deployment/backups/docker-compose.yml.$(date +%Y%m%d_%H%M%S)
+            fi
+            
+            # Save current image tag for rollback
+            if docker inspect ghcr.io/${{ github.repository }}:latest >/dev/null 2>&1; then
+              docker tag ghcr.io/${{ github.repository }}:latest ghcr.io/${{ github.repository }}:rollback
+            fi
+      
+      - name: Copy deployment files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          source: "docker-compose.yml,update-aurora.sh,.env.example"
+          target: ~/aurora-x-deployment/
+      
+      - name: Pull new image and deploy
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          command_timeout: 10m
+          script: |
+            set -e
+            cd ~/aurora-x-deployment
+            
+            # Make scripts executable
+            chmod +x update-aurora.sh
+            
+            # Create .env file if it doesn't exist
+            if [ ! -f .env ]; then
+              cp .env.example .env
+              echo "⚠️ Created .env file from template. Please configure it!"
+            fi
+            
+            # Update environment variables
+            if [ -n "${{ secrets.CF_TUNNEL_TOKEN }}" ]; then
+              sed -i "s/^CF_TUNNEL_TOKEN=.*/CF_TUNNEL_TOKEN=${{ secrets.CF_TUNNEL_TOKEN }}/" .env
+            fi
+            
+            if [ -n "${{ secrets.AURORA_HEALTH_TOKEN }}" ]; then
+              sed -i "s/^AURORA_HEALTH_TOKEN=.*/AURORA_HEALTH_TOKEN=${{ secrets.AURORA_HEALTH_TOKEN }}/" .env
+            fi
+            
+            if [ -n "${{ vars.DISCORD_WEBHOOK_URL }}" ]; then
+              sed -i "s|^AURORA_DISCORD_WEBHOOK=.*|AURORA_DISCORD_WEBHOOK=${{ vars.DISCORD_WEBHOOK_URL }}|" .env
+            fi
+            
+            # Set GitHub repository for Docker image
+            sed -i "s|^GITHUB_REPOSITORY=.*|GITHUB_REPOSITORY=${{ github.repository }}|" .env
+            
+            # Login to GitHub Container Registry
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            
+            # Stop existing containers
+            echo "📦 Stopping existing containers..."
+            docker compose down || true
+            
+            # Pull the new image
+            echo "⬇️ Pulling new Docker image..."
+            docker pull ${{ needs.build-and-push.outputs.image }}
+            
+            # Start containers with new image
+            echo "🚀 Starting Aurora-X with new image..."
+            docker compose up -d
+            
+            # Wait for container to be ready
+            echo "⏳ Waiting for Aurora-X to initialize..."
+            sleep 10
+      
+      - name: Health check
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          command_timeout: 3m
+          script: |
+            set -e
+            cd ~/aurora-x-deployment
+            
+            # Load environment variables
+            export $(grep -v '^#' .env | xargs)
+            
+            HEALTH_TOKEN="${AURORA_HEALTH_TOKEN:-ok}"
+            HEALTH_URL="http://localhost:8000/healthz?token=${HEALTH_TOKEN}"
+            
+            echo "🏥 Performing health check..."
+            MAX_ATTEMPTS=${{ env.HEALTH_RETRIES }}
+            ATTEMPT=0
+            
+            while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+              ATTEMPT=$((ATTEMPT + 1))
+              
+              if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
+                echo "✅ Health check passed! (Attempt ${ATTEMPT}/${MAX_ATTEMPTS})"
+                
+                # Get container status
+                docker compose ps
+                
+                # Show image info
+                echo "📦 Running image:"
+                docker inspect ghcr.io/${{ github.repository }}:latest --format='{{.RepoDigests}}'
+                
+                exit 0
+              fi
+              
+              if [ $ATTEMPT -eq 10 ] || [ $ATTEMPT -eq 20 ]; then
+                echo "⏳ Still waiting... (Attempt ${ATTEMPT}/${MAX_ATTEMPTS})"
+                docker compose logs --tail=10 aurora
+              fi
+              
+              sleep ${{ env.HEALTH_INTERVAL }}
+            done
+            
+            echo "❌ Health check failed after ${MAX_ATTEMPTS} attempts!"
+            echo "📋 Full container logs:"
+            docker compose logs aurora
+            exit 1
+      
+      - name: Cleanup old images
+        if: success()
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          script: |
+            echo "🧹 Cleaning up old Docker images..."
+            docker image prune -f || true
+      
+      - name: Send Discord notification - Success
+        if: success() && vars.DISCORD_WEBHOOK_URL != ''
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"embeds\":[{\"title\":\"✅ Aurora-X Deployed via GHCR\",\"description\":\"Deployment completed successfully!\\n\\nImage: \`${{ needs.build-and-push.outputs.image }}\`\\nCommit: \`${GITHUB_SHA:0:8}\`\\nDeployed by: \`${{ github.actor }}\`\\nURL: ${{ vars.AURORA_URL || 'Not configured' }}\",\"color\":5763719,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
+            "${{ vars.DISCORD_WEBHOOK_URL }}" || true
+      
+      - name: Send Discord notification - Failure
+        if: failure() && vars.DISCORD_WEBHOOK_URL != ''
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"embeds\":[{\"title\":\"❌ Aurora-X Deployment Failed\",\"description\":\"Deployment failed!\\n\\nImage: \`${{ needs.build-and-push.outputs.image }}\`\\nCommit: \`${GITHUB_SHA:0:8}\`\\n\\nCheck the [workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.\",\"color\":15158332,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
+            "${{ vars.DISCORD_WEBHOOK_URL }}" || true
