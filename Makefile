@@ -3,6 +3,7 @@
 .PHONY: spec spec-test spec-report spec3 spec3-test spec3-all
 .PHONY: orchestrator orchestrate-bg orch-test orch-status
 .PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed demo-clean demo-clean-hard demo-status
+.PHONY: bridge-up bridge-status bridge-nl bridge-spec bridge-deploy orch-up
 
 # === Default Variables ===
 SPEC ?= specs/check_palindrome.md
@@ -564,6 +565,27 @@ compose-down:
         docker compose -f docker-compose.aurora-x.yml down
 
 # T12 Factory Bridge helpers
+BRIDGE_PORT ?= 5001
+
+# Start Bridge service on port 5001
+bridge-up:
+        @echo "🚀 Starting Factory Bridge service on port $(BRIDGE_PORT)..."
+        @python3 aurora_x/bridge/service.py > /tmp/bridge.log 2>&1 &
+        @sleep 2
+        @curl -s http://localhost:$(BRIDGE_PORT)/healthz | python -m json.tool || echo "Bridge not responding - check /tmp/bridge.log"
+
+# Check Bridge service status
+bridge-status:
+        @echo "🔍 Checking Bridge service status..."
+        @curl -s http://localhost:$(BRIDGE_PORT)/healthz | python -m json.tool || echo "Bridge service not running"
+
+# Start orchestrator with Bridge autostart
+orch-up:
+        @echo "🚀 Starting Orchestrator with Bridge autostart..."
+        @make bridge-up
+        @make orchestrate-bg
+        @echo "✅ Bridge and Orchestrator running in background"
+
 bridge-nl:
         @test -n "$(P)" || (echo "Set P='your prompt'"; exit 1)
         @curl -s -X POST $(HOST)/api/bridge/nl -H 'content-type: application/json' -d '{"prompt":"$(P)"}' | jq .
