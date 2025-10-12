@@ -1,24 +1,277 @@
-from typing import Dict, Any
-from aurora_x.router.domain_router import classify_domain
-from aurora_x.reasoners import math_core, physics_core
-from aurora_x.utils.units import extract_quantities, normalize_payload
+"""
+Aurora-X Universal Solver Module
+Provides mathematical and physics solving capabilities
+"""
+
+import re
+import math
+from typing import Dict, Any, List, Tuple
+
+
+class SolveError(Exception):
+    """Custom exception for solver errors"""
+    pass
+
+
+def _diff_poly(expression: str) -> str:
+    """
+    Differentiate a polynomial expression with respect to x
+    
+    Args:
+        expression: Polynomial expression like "x^3 - 2x^2 + x"
+    
+    Returns:
+        Differentiated expression as string
+    
+    Example:
+        >>> _diff_poly("x^3 - 2x^2 + x")
+        "3x^2 - 4x + 1"
+    """
+    # Clean the expression (remove extra spaces and quotes)
+    expression = expression.strip().strip('"').strip("'")
+    
+    # Parse terms from the expression
+    terms = []
+    
+    # Split by + or - while keeping the sign
+    parts = re.split(r'([+-])', expression.replace(' ', ''))
+    
+    # Reconstruct terms with their signs
+    current_term = ''
+    for part in parts:
+        if part in ['+', '-']:
+            if current_term:
+                terms.append(current_term)
+            current_term = part
+        else:
+            current_term += part
+    if current_term:
+        terms.append(current_term)
+    
+    # Differentiate each term
+    diff_terms = []
+    for term in terms:
+        # Extract coefficient and power
+        if 'x^' in term:
+            # Handle x^n terms
+            match = re.match(r'([+-]?\d*\.?\d*)x\^(\d+)', term)
+            if match:
+                coeff_str = match.group(1)
+                power = int(match.group(2))
+                
+                # Handle implicit coefficient
+                if coeff_str in ['', '+']:
+                    coeff = 1
+                elif coeff_str == '-':
+                    coeff = -1
+                else:
+                    coeff = float(coeff_str)
+                
+                # Apply power rule
+                new_coeff = coeff * power
+                new_power = power - 1
+                
+                if new_power == 0:
+                    diff_terms.append(f"{new_coeff:g}")
+                elif new_power == 1:
+                    diff_terms.append(f"{new_coeff:g}x")
+                else:
+                    diff_terms.append(f"{new_coeff:g}x^{new_power}")
+        elif 'x' in term:
+            # Handle x terms (power = 1)
+            match = re.match(r'([+-]?\d*\.?\d*)x', term)
+            if match:
+                coeff_str = match.group(1)
+                
+                # Handle implicit coefficient
+                if coeff_str in ['', '+']:
+                    coeff = 1
+                elif coeff_str == '-':
+                    coeff = -1
+                else:
+                    coeff = float(coeff_str)
+                
+                diff_terms.append(f"{coeff:g}")
+        # Constants differentiate to 0, so we skip them
+    
+    if not diff_terms:
+        return "0"
+    
+    # Join terms with proper signs
+    result = diff_terms[0]
+    for term in diff_terms[1:]:
+        if term.startswith('-'):
+            result += f" - {term[1:]}"
+        else:
+            result += f" + {term}"
+    
+    return result
+
+
+def _safe_eval_arith(expression: str) -> float:
+    """
+    Safely evaluate an arithmetic expression
+    
+    Args:
+        expression: Arithmetic expression like "2 + 3 * 4"
+    
+    Returns:
+        Evaluated result as float
+    
+    Raises:
+        SolveError: If expression contains unsafe operations
+    """
+    # Remove whitespace
+    expression = expression.replace(' ', '')
+    
+    # Check for allowed characters only
+    allowed_chars = set('0123456789+-*/().')
+    if not all(c in allowed_chars for c in expression):
+        raise SolveError(f"Invalid characters in expression: {expression}")
+    
+    # Check for dangerous patterns
+    dangerous_patterns = ['__', 'import', 'eval', 'exec', 'open', 'file', 'input', 'raw_input']
+    for pattern in dangerous_patterns:
+        if pattern in expression.lower():
+            raise SolveError(f"Unsafe pattern detected: {pattern}")
+    
+    try:
+        # Use eval with restricted builtins
+        result = eval(expression, {"__builtins__": {}}, {})
+        return float(result)
+    except Exception as e:
+        raise SolveError(f"Error evaluating expression: {str(e)}")
+
 
 def solve_text(text: str) -> Dict[str, Any]:
-    d = classify_domain(text)
-    if d.domain == "math":
-        return math_core.solve(d.task, d.payload)
-
-    if d.domain == "physics":
-        # 1) Pull inline quantities from free text (a=..., M=..., with units)
-        si_from_text = extract_quantities(text)
-        # 2) Respect any JSON-style payload too (normalize to SI)
-        si_from_payload = normalize_payload(d.payload) if isinstance(d.payload, dict) else {}
-        payload = {**d.payload, **si_from_text, **si_from_payload}
-
-        # Ensure canonical keys for physics_core
-        if "a_m" in payload: payload.setdefault("semi_major_axis_m", payload["a_m"])
-        if "M_kg" in payload: payload.setdefault("mass_central_kg", payload["M_kg"])
-
-        return physics_core.solve(d.task, payload)
-
-    return {"ok": False, "err": "domain not implemented", "domain": d.domain, "task": d.task}
+    """
+    Universal solver that handles various mathematical and physics problems
+    
+    Args:
+        text: Natural language or mathematical expression
+    
+    Returns:
+        Dict with solution results
+    """
+    text = text.strip()
+    
+    # Check for differentiation requests
+    if 'differentiate' in text.lower() or 'derivative' in text.lower():
+        # Extract polynomial expression
+        # Try to find expression after "differentiate" or in quotes
+        patterns = [
+            r'differentiate\s+(.+)',
+            r'derivative\s+of\s+(.+)',
+            r'"([^"]+)"',
+            r'\'([^\']+)\''
+        ]
+        
+        expression = None
+        for pattern in patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                expression = match.group(1).strip()
+                break
+        
+        if not expression:
+            # Try to extract polynomial-like expression
+            poly_match = re.search(r'([x\d\^\+\-\s\.]+)', text)
+            if poly_match and 'x' in poly_match.group(1):
+                expression = poly_match.group(1)
+        
+        if expression:
+            try:
+                result = _diff_poly(expression)
+                return {
+                    "ok": True,
+                    "domain": "math",
+                    "task": "differentiate",
+                    "input": expression,
+                    "result": result,
+                    "explanation": f"The derivative of {expression} with respect to x is {result}"
+                }
+            except Exception as e:
+                return {
+                    "ok": False,
+                    "domain": "math",
+                    "task": "differentiate",
+                    "error": str(e)
+                }
+    
+    # Check for orbital period calculations
+    if 'orbital' in text.lower() and 'period' in text.lower():
+        # Extract parameters using regex
+        params = {}
+        
+        # Look for semi-major axis (a)
+        a_match = re.search(r'a\s*=\s*([\d\.e\+\-]+)', text, re.IGNORECASE)
+        if a_match:
+            params['a'] = float(a_match.group(1))
+        
+        # Look for mass (M)
+        m_match = re.search(r'M\s*=\s*([\d\.e\+\-]+)', text, re.IGNORECASE)
+        if m_match:
+            params['M'] = float(m_match.group(1))
+        
+        if 'a' in params and 'M' in params:
+            try:
+                # Calculate orbital period using Kepler's Third Law
+                # T = 2π√(a³/GM)
+                G = 6.67430e-11  # Gravitational constant in m³/(kg·s²)
+                a = params['a']
+                M = params['M']
+                
+                T_seconds = 2 * math.pi * math.sqrt((a**3) / (G * M))
+                T_days = T_seconds / 86400
+                T_years = T_days / 365.25
+                
+                return {
+                    "ok": True,
+                    "domain": "physics",
+                    "task": "orbital_period",
+                    "input": {
+                        "semi_major_axis_m": a,
+                        "mass_central_kg": M
+                    },
+                    "result": {
+                        "period_seconds": T_seconds,
+                        "period_days": T_days,
+                        "period_years": T_years
+                    },
+                    "explanation": f"Orbital period for a={a:.2e}m and M={M:.2e}kg is {T_days:.2f} days"
+                }
+            except Exception as e:
+                return {
+                    "ok": False,
+                    "domain": "physics",
+                    "task": "orbital_period",
+                    "error": str(e)
+                }
+    
+    # Try to evaluate as arithmetic expression
+    # Check if it looks like an arithmetic expression
+    if re.match(r'^[\d\s\+\-\*/\(\)\.]+$', text):
+        try:
+            result = _safe_eval_arith(text)
+            return {
+                "ok": True,
+                "domain": "math",
+                "task": "arithmetic",
+                "input": text,
+                "result": result,
+                "explanation": f"{text} = {result}"
+            }
+        except SolveError as e:
+            return {
+                "ok": False,
+                "domain": "math",
+                "task": "arithmetic",
+                "error": str(e)
+            }
+    
+    # Default response for unrecognized inputs
+    return {
+        "ok": False,
+        "error": "Could not recognize the problem type",
+        "hint": "Try: arithmetic (2+3*4), differentiation (differentiate x^3-2x^2+x), or orbital period (orbital period a=7e6 M=5.972e24)"
+    }
