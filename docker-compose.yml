@@ -1,0 +1,28 @@
+# Aurora.X.com Production Stack
+services:
+  aurora:
+    image: ghcr.io/<OWNER>/<REPO>:latest
+    container_name: aurora
+    environment:
+      PORT: "8000"
+      AURORA_DEFAULT_LANG: "python"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/healthz"]
+      interval: 20s
+      timeout: 5s
+      retries: 6
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cf-tunnel
+    command: tunnel run aurora
+    volumes:
+      - ~/.cloudflared:/etc/cloudflared:ro  # contains <TUNNEL-UUID>.json and config.yml
+    network_mode: host                      # lets tunnel reach Aurora at localhost:8000
+    depends_on:
+      aurora:
+        condition: service_healthy
+    restart: unless-stopped
