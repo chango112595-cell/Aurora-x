@@ -555,7 +555,7 @@ serve-pwa:
         @echo "PWA endpoints mounted at /manifest.webmanifest and /service-worker.js"
 
 docker-buildx:
-        docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/OWNER/REPO:latest -f docker/Dockerfile . --push
+        docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/chango112595-cell/Aurora-x:latest -f docker/Dockerfile . --push
 
 compose-up:
         docker compose -f docker-compose.aurora-x.yml up -d
