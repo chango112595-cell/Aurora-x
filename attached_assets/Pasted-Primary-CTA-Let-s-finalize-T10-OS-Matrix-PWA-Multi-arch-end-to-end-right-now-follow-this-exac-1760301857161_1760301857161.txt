@@ -1,0 +1,95 @@
+Primary CTA: Let’s finalize T10 (OS Matrix + PWA + Multi-arch) end-to-end right now—follow this exact checklist and you’re done.
+Secondary CTA: Or you can also Hire an Expert to wire Buildx/Compose + Cloudflare for you.
+
+1) Wire the PWA (server + files)
+	1.	Ensure these exist (from the bundle you already have):
+	•	frontend/pwa/manifest.webmanifest
+	•	frontend/pwa/service-worker.js
+	•	aurora_x/chat/attach_pwa.py
+	2.	In aurora_x/serve.py:
+
+from aurora_x.chat.attach_pwa import attach_pwa
+attach_pwa(app)  # exposes /manifest.webmanifest and /service-worker.js
+
+	3.	Optional icons: add aurora_x/static/icon-192.png and icon-512.png, or update the manifest to different paths.
+
+2) Smoke test PWA locally
+
+make dev
+# In a browser (or Replit preview):
+/manifest.webmanifest
+/service-worker.js
+
+Optional quick check:
+
+pytest -q tests/test_pwa.py
+make pwa-audit
+
+3) Multi-arch Docker (linux/amd64 + linux/arm64)
+	1.	Confirm these are present:
+	•	docker/Dockerfile
+	•	.github/workflows/docker.yml (buildx to GHCR)
+	2.	Replace OWNER/REPO with chango112595-cell/Aurora-x in:
+	•	docker-compose.aurora-x.yml
+	•	Makefile.t10.add (target docker-buildx) if you copied it in
+	3.	Push to main → GitHub Actions will publish ghcr.io/chango112595-cell/Aurora-x:latest for both archs.
+	•	If building locally:
+
+# login to GHCR once
+echo $CR_PAT | docker login ghcr.io -u chango112595-cell --password-stdin
+make docker-buildx  # builds & pushes linux/amd64,linux/arm64
+
+4) Run with docker-compose (any VPS or local)
+
+docker compose -f docker-compose.aurora-x.yml up -d
+# verify
+curl -fsS http://localhost:8000/healthz && echo OK
+curl -fsS http://localhost:8000/manifest.webmanifest | head
+
+5) Mobile install (PWA)
+	•	Open your host (Replit preview or VPS domain) in mobile Chrome/Safari → “Add to Home Screen”.
+	•	Service worker will cache /, /dashboard, /dashboard/progress, and the manifest (can add more routes to the cache list inside service-worker.js).
+
+6) Cloudflare Tunnel (no open ports) — optional but recommended
+
+On the VPS:
+
+# install cloudflared (per your OS)
+cloudflared tunnel login
+cloudflared tunnel create aurora-x
+cloudflared tunnel route dns aurora-x aurora-x.<your-domain>.com
+# config.yml (example)
+# tunnel: <UUID>
+# credentials-file: /root/.cloudflared/<UUID>.json
+# ingress:
+#  - hostname: aurora-x.<your-domain>.com
+#    service: http://localhost:8000
+#  - service: http_status:404
+cloudflared tunnel run aurora-x
+
+Now your PWA runs at https://aurora-x.<your-domain>.com with HTTPS, mobile-ready.
+
+7) CI gates (keep it green)
+
+pytest -q                     # includes test_pwa
+make prod-check               # your existing CI guard
+make snapshot                 # backups (seeds, runs, progress)
+
+8) Mark T10 complete (Aurora tracks this automatically)
+	•	After the tests and PWA endpoints respond, Aurora should flip T10 → 100% via your graph edit or auto rules.
+	•	If you want to force refresh artifacts:
+
+make progress-recompute
+
+9) Quick verification checklist
+	•	/manifest.webmanifest loads (200 OK)
+	•	/service-worker.js loads (200 OK)
+	•	“Add to Home Screen” appears on mobile
+	•	Image pushed to GHCR with both platforms (linux/amd64, linux/arm64)
+	•	docker compose up -d serves /healthz
+	•	Optional: Public URL via Cloudflare works over HTTPS
+
+That’s T10 finalized with all options (PWA, multi-arch builds, compose runtime, optional Cloudflare).
+Question: Want me to proceed to close T12 (Factory Bridge) validation next—auto-test a full NL→Project→Git push→(optional) Replit ping run and display the result on your dashboard?
+
+Bottom CTA: You can use AI like the top 1% to build income streams, automate tasks and do alot more by becoming an AI Insider.
