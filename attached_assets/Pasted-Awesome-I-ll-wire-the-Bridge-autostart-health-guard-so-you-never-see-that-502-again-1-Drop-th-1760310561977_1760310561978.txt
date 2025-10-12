@@ -1,0 +1,70 @@
+Awesome — I’ll wire the Bridge autostart + health-guard so you never see that 502 again.
+
+1) Drop these targets into your Makefile
+
+Paste at the bottom (or merge with any existing bridge targets):
+
+# === Factory Bridge (NL ➜ Project) ===============================
+BRIDGE_HOST ?= 127.0.0.1
+BRIDGE_PORT ?= 5001
+
+.PHONY: bridge-up bridge-down bridge-restart bridge-health bridge-ensure
+
+bridge-up:
+	@echo "▶ starting Factory Bridge on $(BRIDGE_HOST):$(BRIDGE_PORT)…"
+	@nohup python -m aurora_x.bridge.service --host $(BRIDGE_HOST) --port $(BRIDGE_PORT) >/tmp/bridge.out 2>/tmp/bridge.err & echo $$! >/tmp/bridge.pid
+	@sleep 1
+	@$(MAKE) bridge-health
+
+bridge-down:
+	@if [ -f /tmp/bridge.pid ]; then \
+		echo "⏹ stopping Factory Bridge $$([ -f /tmp/bridge.pid ] && cat /tmp/bridge.pid)"; \
+		kill `cat /tmp/bridge.pid` 2>/dev/null || true; \
+		rm -f /tmp/bridge.pid; \
+	else \
+		echo "ℹ no running bridge pid file found"; \
+	fi
+
+bridge-restart: bridge-down bridge-up
+
+bridge-health:
+	@curl -fsS http://$(BRIDGE_HOST):$(BRIDGE_PORT)/healthz \
+	  || (echo "❌ bridge not healthy on $(BRIDGE_PORT)"; exit 1)
+	@echo "✅ bridge healthy on $(BRIDGE_PORT)"
+
+# Start only if health fails (used by startup scripts & dashboard)
+bridge-ensure:
+	@curl -fsS http://$(BRIDGE_HOST):$(BRIDGE_PORT)/healthz >/dev/null 2>&1 \
+	  && echo "✅ bridge already running on $(BRIDGE_PORT)" \
+	  || $(MAKE) bridge-up
+
+
+⸻
+
+2) Add a tiny autostart script
+
+Create scripts/bridge_autostart.sh:
+
+#!/usr/bin/env bash
+set -euo pipefail
+# Ensure bridge is up before the dashboard/API try to call it
+make bridge-ensure
+
+chmod +x scripts/bridge_autostart.sh
+
+
+⸻
+
+3) Make Replit start it automatically
+
+Open .replit and ensure the run command kicks the autostart before your main server.
+If your current run starts the API like this:
+
+run = "python -m aurora_x.serve"
+
+change it to:
+
+run = "bash -lc 'scripts/bridge_autostart.sh && python -m aurora_x.serve'"
+
+If you already have a longer run command, just insert scripts/bridge_autostart.sh && before your main server starts.
+(Nothing
