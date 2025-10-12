@@ -1,0 +1,6 @@
+flask>=2.3.0
+python-dotenv>=1.0.0
+flask-login>=0.6.0
+flask-jwt-extended>=4.5.0
+flask-restful>=0.3.10
+marshmallow>=3.20.0
