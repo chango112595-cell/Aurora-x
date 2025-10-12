@@ -3,11 +3,64 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function Settings() {
-  const [autoSynth, setAutoSynth] = useState(true);
+  const [autoSynth, setAutoSynth] = useState(false);
   const [noveltyCache, setNoveltyCache] = useState(true);
+  const { toast } = useToast();
+
+  // Fetch current T08 status on page load
+  const { data: t08Status, isLoading: isLoadingT08 } = useQuery<{ t08_enabled: boolean }>({
+    queryKey: ["/api/t08/activate"],
+    refetchOnMount: true,
+  });
+
+  // Update local state when T08 status is fetched
+  useEffect(() => {
+    if (t08Status) {
+      setAutoSynth(t08Status.t08_enabled);
+    }
+  }, [t08Status]);
+
+  // Mutation to toggle T08 activation
+  const toggleT08Mutation = useMutation({
+    mutationFn: async (enabled: boolean) => {
+      const response = await apiRequest("POST", "/api/t08/activate", { on: enabled });
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setAutoSynth(data.t08_enabled);
+      toast({
+        title: "Success",
+        description: data.t08_enabled 
+          ? "T08 natural language synthesis activated" 
+          : "T08 natural language synthesis deactivated",
+      });
+      // Invalidate query to ensure data stays in sync
+      queryClient.invalidateQueries({ queryKey: ["/api/t08/activate"] });
+    },
+    onError: (error: Error) => {
+      // Revert the switch state on error
+      setAutoSynth(!autoSynth);
+      toast({
+        title: "Error",
+        description: `Failed to update T08 status: ${error.message}`,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Handle switch toggle
+  const handleAutoSynthToggle = (checked: boolean) => {
+    // Immediately update the UI (optimistic update)
+    setAutoSynth(checked);
+    // Make the API call
+    toggleT08Mutation.mutate(checked);
+  };
 
   return (
     <div className="h-full overflow-auto">
@@ -72,7 +125,8 @@ export default function Settings() {
                 <Switch
                   id="auto-synth"
                   checked={autoSynth}
-                  onCheckedChange={setAutoSynth}
+                  onCheckedChange={handleAutoSynthToggle}
+                  disabled={isLoadingT08 || toggleT08Mutation.isPending}
                   data-testid="switch-auto-synthesis"
                 />
               </div>
