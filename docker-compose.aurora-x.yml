@@ -1,29 +1,145 @@
+version: '3.9'
+
+networks:
+  aurora-network:
+    driver: bridge
+    name: aurora-network
+
+volumes:
+  aurora-data:
+    name: aurora-data
+  aurora-runs:
+    name: aurora-runs
+  aurora-logs:
+    name: aurora-logs
+  chango-assets:
+    name: chango-assets
+
 services:
+  # Aurora Backend Service
   aurora:
-    # Build Aurora from your GitHub repo
     build:
-      context: ./app
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.app
     container_name: aurora_x
+    networks:
+      - aurora-network
+    ports:
+      - "8000:8000"  # Expose for direct access (optional, nginx handles routing)
     environment:
-      PORT: "8000"
-      AURORA_ENV: "prod"
+      PORT: "${AURORA_PORT:-8000}"
+      AURORA_ENV: "${AURORA_ENV:-production}"
       AURORA_HEALTH_TOKEN: "${AURORA_HEALTH_TOKEN:-ok}"
       AURORA_DISCORD_WEBHOOK: "${AURORA_DISCORD_WEBHOOK:-}"
+      DISCORD_WEBHOOK_URL: "${DISCORD_WEBHOOK_URL:-}"
+      AURORA_DEFAULT_LANG: "${AURORA_DEFAULT_LANG:-python}"
+      AURORA_GIT_URL: "${AURORA_GIT_URL}"
+      AURORA_GIT_BRANCH: "${AURORA_GIT_BRANCH:-main}"
+      DATABASE_URL: "${DATABASE_URL:-}"
+    volumes:
+      - ${AURORA_DATA_PATH:-./data}:/app/.aurora:rw
+      - ${AURORA_RUNS_PATH:-./runs}:/app/runs:rw
+      - ${AURORA_LOGS_PATH:-./logs}:/app/logs:rw
+      - ./progress.json:/app/progress.json:rw
+      - ./specs:/app/specs:ro
     healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health?token=${AURORA_HEALTH_TOKEN:-ok}"]
-      interval: 15s
-      timeout: 5s
-      retries: 20
+      test: ["CMD", "curl", "-fsS", "http://localhost:${AURORA_PORT:-8000}/health?token=${AURORA_HEALTH_TOKEN:-ok}"]
+      interval: 30s
+      timeout: 10s
+      start-period: 40s
+      retries: 3
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
+  # Chango Frontend Service
+  chango:
+    build:
+      context: .
+      dockerfile: Dockerfile.chango
+    container_name: chango_frontend
+    networks:
+      - aurora-network
+    ports:
+      - "5000:5000"  # Expose for direct access (optional, nginx handles routing)
+    environment:
+      NODE_ENV: "${NODE_ENV:-production}"
+      PORT: "${CHANGO_PORT:-5000}"
+      SESSION_SECRET: "${SESSION_SECRET}"
+      VITE_API_URL: "${VITE_API_URL:-/api}"
+      VITE_WS_URL: "${VITE_WS_URL:-/ws}"
+      DATABASE_URL: "${DATABASE_URL:-}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      LOG_LEVEL: "${LOG_LEVEL:-info}"
+      DEBUG: "${DEBUG:-false}"
+    volumes:
+      - chango-assets:/app/attached_assets:rw
+      - ./attached_assets:/app/attached_assets:rw
+      - ${AURORA_RUNS_PATH:-./runs}:/app/runs:ro
+      - ./progress.json:/app/progress.json:rw
+    depends_on:
+      - aurora
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:${CHANGO_PORT:-5000}/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }).on('error', () => process.exit(1));"]
+      interval: 30s
+      timeout: 10s
+      start-period: 40s
+      retries: 3
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: aurora_nginx
+    networks:
+      - aurora-network
+    ports:
+      - "80:80"
+      - "443:443"  # For HTTPS if needed
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/ssl:/etc/nginx/ssl:ro  # For SSL certificates if needed
+    depends_on:
+      aurora:
+        condition: service_healthy
+      chango:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/nginx-health"]
+      interval: 30s
+      timeout: 10s
+      start-period: 10s
+      retries: 3
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Cloudflare Tunnel
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: aurora_cf
+    networks:
+      - aurora-network
     depends_on:
-      aurora:
+      nginx:
         condition: service_healthy
     command: tunnel run
     environment:
       TUNNEL_TOKEN: "${CF_TUNNEL_TOKEN}"
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
