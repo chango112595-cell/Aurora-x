@@ -12,6 +12,7 @@ from aurora_x.chat.attach_format import attach_format
 from aurora_x.chat.attach_units_format import attach_units_format
 from aurora_x.chat.attach_demo import attach_demo
 from aurora_x.chat.attach_demo_runall import attach_demo_runall
+from aurora_x.chat.attach_progress import attach_progress
 
 BASE = Path(__file__).parent
 app = FastAPI(title="Aurora-X Ultra v3")
@@ -53,6 +54,9 @@ attach_demo(app)
 # Attach Run All functionality for demo cards
 attach_demo_runall(app)
 
+# Attach Progress Dashboard for tracking
+attach_progress(app)
+
 @app.get("/dashboard/demos", response_class=HTMLResponse)
 async def serve_demo_dashboard():
     """Serve the demo dashboard HTML page"""
@@ -87,6 +91,7 @@ def root():
             "/healthz",
             "/dashboard/spec_runs", 
             "/dashboard/demos",
+            "/dashboard/progress",
             "/api/spec_runs", 
             "/ws/spec_updates",
             "/api/chat",
@@ -99,6 +104,7 @@ def root():
             "/api/units",
             "/api/format/seconds",
             "/api/format/units",
-            "/api/demo/cards"
+            "/api/demo/cards",
+            "/api/progress"
         ]
     }
