@@ -100,6 +100,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Parse the JSON data
       const progressJson = JSON.parse(progressData);
       
+      // Calculate overall percentage
+      const tasks = progressJson.tasks || [];
+      let totalPercent = 0;
+      tasks.forEach((task: any) => {
+        let percent = task.percent || 0;
+        if (typeof percent === 'string') {
+          percent = parseFloat(percent.replace('%', ''));
+        }
+        totalPercent += percent;
+      });
+      const overall_percent = Math.round((totalPercent / Math.max(tasks.length, 1)) * 100) / 100;
+      
+      // Add calculated fields
+      progressJson.overall_percent = overall_percent;
+      progressJson.ok = true;
+      
+      // Ensure ui_thresholds exist with defaults
+      const th = progressJson.ui_thresholds || {};
+      progressJson.ui_thresholds = {
+        ok: typeof th.ok === 'number' ? th.ok : 90,
+        warn: typeof th.warn === 'number' ? th.warn : 60
+      };
+      
       // Set CORS headers for cross-origin access
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
