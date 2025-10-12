@@ -1,0 +1,232 @@
+name: Rollback Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      rollback_reason:
+        description: 'Reason for rollback'
+        required: true
+        type: string
+      rollback_method:
+        description: 'Rollback method'
+        required: true
+        default: 'docker_image'
+        type: choice
+        options:
+          - docker_image
+          - compose_backup
+          - both
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  HEALTH_TIMEOUT: 120
+  HEALTH_RETRIES: 30
+  HEALTH_INTERVAL: 4
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    name: Rollback Aurora-X Deployment
+    
+    steps:
+      - name: Send Discord notification - Starting rollback
+        if: vars.DISCORD_WEBHOOK_URL != ''
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"embeds\":[{\"title\":\"⏮️ Aurora-X Rollback Starting\",\"description\":\"**Reason:** ${{ github.event.inputs.rollback_reason }}\\n**Method:** ${{ github.event.inputs.rollback_method }}\\n**Triggered by:** \`${{ github.actor }}\`\",\"color\":16776960,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
+            "${{ vars.DISCORD_WEBHOOK_URL }}" || true
+      
+      - name: Check available rollback options
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          script: |
+            set -e
+            cd ~/aurora-x-deployment
+            
+            echo "🔍 Checking available rollback options..."
+            
+            # Check for rollback Docker image
+            if docker images | grep -q "ghcr.io/${{ github.repository }}.*rollback"; then
+              echo "✅ Rollback Docker image available"
+              docker images ghcr.io/${{ github.repository }}:rollback
+            else
+              echo "⚠️ No rollback Docker image found"
+            fi
+            
+            # Check for compose file backups
+            echo ""
+            echo "📁 Available compose file backups:"
+            if [ -d ~/aurora-x-deployment/backups ]; then
+              ls -la ~/aurora-x-deployment/backups/ | tail -5
+              LATEST_BACKUP=$(ls -t ~/aurora-x-deployment/backups/docker-compose.yml.* 2>/dev/null | head -1)
+              if [ -n "$LATEST_BACKUP" ]; then
+                echo "Latest backup: $LATEST_BACKUP"
+              else
+                echo "⚠️ No compose file backups found"
+              fi
+            else
+              echo "⚠️ No backups directory found"
+            fi
+            
+            # Show current running containers
+            echo ""
+            echo "📦 Current running containers:"
+            docker compose ps
+      
+      - name: Perform Docker image rollback
+        if: github.event.inputs.rollback_method == 'docker_image' || github.event.inputs.rollback_method == 'both'
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          command_timeout: 10m
+          script: |
+            set -e
+            cd ~/aurora-x-deployment
+            
+            echo "🐳 Attempting Docker image rollback..."
+            
+            # Check if rollback image exists
+            if ! docker images | grep -q "ghcr.io/${{ github.repository }}.*rollback"; then
+              echo "❌ No rollback image found!"
+              exit 1
+            fi
+            
+            # Tag current image as failed for potential investigation
+            docker tag ghcr.io/${{ github.repository }}:latest ghcr.io/${{ github.repository }}:failed-$(date +%Y%m%d_%H%M%S) || true
+            
+            # Stop current containers
+            echo "📦 Stopping current containers..."
+            docker compose down
+            
+            # Restore rollback image as latest
+            echo "🔄 Restoring rollback image..."
+            docker tag ghcr.io/${{ github.repository }}:rollback ghcr.io/${{ github.repository }}:latest
+            
+            # Start containers with rollback image
+            echo "🚀 Starting containers with rollback image..."
+            docker compose up -d
+            
+            # Wait for initialization
+            echo "⏳ Waiting for Aurora-X to initialize..."
+            sleep 10
+      
+      - name: Perform compose file rollback
+        if: github.event.inputs.rollback_method == 'compose_backup' || github.event.inputs.rollback_method == 'both'
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          command_timeout: 10m
+          script: |
+            set -e
+            cd ~/aurora-x-deployment
+            
+            echo "📄 Attempting compose file rollback..."
+            
+            # Find latest backup
+            if [ ! -d ~/aurora-x-deployment/backups ]; then
+              echo "❌ No backups directory found!"
+              exit 1
+            fi
+            
+            LATEST_BACKUP=$(ls -t ~/aurora-x-deployment/backups/docker-compose.yml.* 2>/dev/null | head -1)
+            
+            if [ -z "$LATEST_BACKUP" ]; then
+              echo "❌ No compose file backups found!"
+              exit 1
+            fi
+            
+            echo "📋 Using backup: $LATEST_BACKUP"
+            
+            # Backup current compose file before replacing
+            cp docker-compose.yml docker-compose.yml.pre-rollback-$(date +%Y%m%d_%H%M%S)
+            
+            # Restore backup
+            cp "$LATEST_BACKUP" docker-compose.yml
+            
+            # Stop and restart with restored compose file
+            echo "📦 Restarting with restored compose file..."
+            docker compose down
+            docker compose up -d
+            
+            # Wait for initialization
+            echo "⏳ Waiting for Aurora-X to initialize..."
+            sleep 10
+      
+      - name: Health check after rollback
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          command_timeout: 3m
+          script: |
+            set -e
+            cd ~/aurora-x-deployment
+            
+            # Load environment variables
+            export $(grep -v '^#' .env | xargs)
+            
+            HEALTH_TOKEN="${AURORA_HEALTH_TOKEN:-ok}"
+            HEALTH_URL="http://localhost:8000/healthz?token=${HEALTH_TOKEN}"
+            
+            echo "🏥 Performing health check after rollback..."
+            MAX_ATTEMPTS=${{ env.HEALTH_RETRIES }}
+            ATTEMPT=0
+            
+            while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+              ATTEMPT=$((ATTEMPT + 1))
+              
+              if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
+                echo "✅ Health check passed! Rollback successful! (Attempt ${ATTEMPT}/${MAX_ATTEMPTS})"
+                
+                # Show rolled back container status
+                echo ""
+                echo "📦 Rolled back container status:"
+                docker compose ps
+                
+                # Show current image info
+                echo ""
+                echo "🐳 Current running image:"
+                docker inspect ghcr.io/${{ github.repository }}:latest --format='{{.Id}}' | cut -c 1-12
+                
+                exit 0
+              fi
+              
+              if [ $ATTEMPT -eq 10 ] || [ $ATTEMPT -eq 20 ]; then
+                echo "⏳ Still waiting... (Attempt ${ATTEMPT}/${MAX_ATTEMPTS})"
+                docker compose logs --tail=10 aurora
+              fi
+              
+              sleep ${{ env.HEALTH_INTERVAL }}
+            done
+            
+            echo "❌ Health check failed after rollback!"
+            echo "📋 Container logs:"
+            docker compose logs aurora
+            exit 1
+      
+      - name: Send Discord notification - Rollback success
+        if: success() && vars.DISCORD_WEBHOOK_URL != ''
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"embeds\":[{\"title\":\"✅ Aurora-X Rollback Successful\",\"description\":\"**Reason:** ${{ github.event.inputs.rollback_reason }}\\n**Method:** ${{ github.event.inputs.rollback_method }}\\n**Rolled back by:** \`${{ github.actor }}\`\\n\\nThe system has been successfully restored to a previous working state.\",\"color\":5763719,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
+            "${{ vars.DISCORD_WEBHOOK_URL }}" || true
+      
+      - name: Send Discord notification - Rollback failure
+        if: failure() && vars.DISCORD_WEBHOOK_URL != ''
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"embeds\":[{\"title\":\"❌ Aurora-X Rollback Failed\",\"description\":\"**Reason:** ${{ github.event.inputs.rollback_reason }}\\n**Method:** ${{ github.event.inputs.rollback_method }}\\n**Attempted by:** \`${{ github.actor }}\`\\n\\n⚠️ **URGENT: Manual intervention required!**\\n\\nCheck the [workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.\",\"color\":15158332,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
+            "${{ vars.DISCORD_WEBHOOK_URL }}" || true
