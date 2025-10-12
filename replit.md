@@ -18,6 +18,7 @@ Preferred communication style: Simple, everyday language.
 - Fixed "View Task Graph" button to correctly navigate to /dashboard/graph (now served by Express backend)
 - Added interactive force-directed graph with color-coded task status indicators
 - **NEW**: Made graph nodes editable - click any node to update task percentage directly (updates progress.json in real-time)
+- **NEW**: Auto-refresh README badges - task updates now automatically update README progress badges (set AURORA_AUTO_GIT=1 to enable auto git commit/push)
 
 ## System Architecture
 
