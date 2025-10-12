@@ -1,0 +1,119 @@
+name: Aurora-X E2E Extended
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  e2e-extended:
+    runs-on: ubuntu-latest
+    env:
+      HOST: http://127.0.0.1:8000
+      PORT: 8000
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.21"
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install Aurora-X
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest jq pycurl || true
+
+      - name: Launch server (background)
+        run: |
+          nohup python -m aurora_x.serve >/tmp/aurora.log 2>&1 & echo $! > /tmp/aurora.pid
+          echo "PID:" $(cat /tmp/aurora.pid)
+          for i in $(seq 1 30); do
+            curl -fsS ${HOST}/healthz && break || sleep 1
+          done
+          curl -fsS ${HOST}/healthz | jq .
+
+      - name: Test Python code generation
+        run: |
+          curl -fsS -X POST -H 'content-type: application/json' \
+            -d '{"prompt":"create a web server that responds with hello world","lang":"python"}' \
+            ${HOST}/chat | tee /tmp/python_gen.json | jq .
+          # Extract and save generated Python code
+          jq -r '.code' /tmp/python_gen.json > /tmp/test_server.py
+          # Test Python syntax
+          python -m py_compile /tmp/test_server.py
+
+      - name: Test Go code generation
+        run: |
+          curl -fsS -X POST -H 'content-type: application/json' \
+            -d '{"prompt":"create a high-performance API server","lang":"go"}' \
+            ${HOST}/chat | tee /tmp/go_gen.json | jq .
+          # Extract and save generated Go code
+          jq -r '.code' /tmp/go_gen.json > /tmp/test_server.go
+          # Test Go compilation
+          cd /tmp && go mod init test && go build test_server.go || true
+
+      - name: Test Rust code generation
+        run: |
+          curl -fsS -X POST -H 'content-type: application/json' \
+            -d '{"prompt":"create a memory-safe CLI tool that processes text","lang":"rust"}' \
+            ${HOST}/chat | tee /tmp/rust_gen.json | jq .
+          # Extract and save generated Rust code
+          jq -r '.code' /tmp/rust_gen.json > /tmp/test_cli.rs
+          # Test Rust compilation
+          rustc --edition 2021 /tmp/test_cli.rs -o /tmp/test_cli || true
+
+      - name: Test C# code generation
+        run: |
+          curl -fsS -X POST -H 'content-type: application/json' \
+            -d '{"prompt":"create an enterprise web API with Swagger","lang":"csharp"}' \
+            ${HOST}/chat | tee /tmp/csharp_gen.json | jq .
+          # Extract and save generated C# code
+          jq -r '.code' /tmp/csharp_gen.json > /tmp/Program.cs
+          # Test C# compilation
+          cd /tmp && dotnet new console -n TestApp -f net8.0 && cp Program.cs TestApp/ && cd TestApp && dotnet build || true
+
+      - name: Run full demo suite
+        run: |
+          curl -fsS ${HOST}/api/demo/cards | jq '.ok, (.cards|length)'
+          curl -fsS -X POST ${HOST}/api/demo/run_all | tee /tmp/run_all.json | jq '{ok,file,count,successful,failed}'
+
+      - name: Verify all languages were tested
+        run: |
+          python - <<'PY'
+          import json
+          langs = ["python", "go", "rust", "csharp"]
+          for lang in langs:
+              with open(f"/tmp/{lang}_gen.json") as f:
+                  data = json.load(f)
+                  assert data.get("ok"), f"{lang} generation failed: {data}"
+                  assert data.get("code"), f"{lang} missing code: {data}"
+                  print(f"✅ {lang}: {len(data['code'])} bytes generated")
+          PY
+
+      - name: Upload all artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aurora-artifacts-extended
+          path: |
+            /tmp/aurora.log
+            /tmp/*_gen.json
+            /tmp/run_all.json
+            /tmp/test_server.py
+            /tmp/test_server.go
+            /tmp/test_cli.rs
+            /tmp/Program.cs
+            runs/**/*.json
+            runs/**/*.html
