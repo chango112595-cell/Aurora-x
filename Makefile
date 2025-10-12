@@ -359,7 +359,9 @@ open-demos:
 	echo "✨ Please open in your browser: $(HOST)/dashboard/demos"; \
 	fi
 
-# Seed demo specs and runs
+# Seed example specs, run once, commit, and optionally push
+AURORA_GIT_BRANCH ?= main
+
 demo-seed:
 	@mkdir -p specs runs
 	@printf "## reverse_string\n\n- input: abc\n- output: cba\n" > specs/reverse_string.md
@@ -369,7 +371,16 @@ demo-seed:
 	@echo "Seeding orchestrator once..."
 	@AURORA_GIT_AUTO=0 AURORA_ORCH_INTERVAL=5 python -m aurora_x.orchestrator || true
 	@echo "[ok] Demo seed complete. Check ./runs and /dashboard/demos."
-	@[ -d .git ] && git add -A && git commit -m "chore: demo seed (specs+runs)" || true
+	@if [ -d .git ]; then \
+	git add -A && git commit -m "chore: demo seed (specs+runs)" || true; \
+	if [ "$${AURORA_PUSH}" = "1" ]; then \
+	echo "Pushing to origin $(AURORA_GIT_BRANCH) ..."; \
+	git rev-parse --abbrev-ref HEAD >/dev/null 2>&1 || true; \
+	git push -u origin "$(AURORA_GIT_BRANCH)" || true; \
+	else \
+	echo "AURORA_PUSH not set—skipping push."; \
+	fi; \
+	else echo "Not a git repo—skipping commit/push."; fi
 
 # Clean seeded demos and generated artifacts (safe)
 demo-clean:
