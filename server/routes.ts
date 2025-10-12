@@ -276,6 +276,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return res.status(statusCode).json(response);
   });
 
+  // T08 Natural Language Synthesis activation endpoints
+  // State storage for T08 (in production, this should be in a database or persistent storage)
+  let t08Enabled = false;
+
+  // GET endpoint to fetch current T08 status
+  app.get("/api/t08/activate", (req, res) => {
+    try {
+      return res.json({
+        t08_enabled: t08Enabled
+      });
+    } catch (e: any) {
+      console.error("[T08] Error fetching T08 status:", e);
+      return res.status(500).json({
+        error: "Failed to fetch T08 status",
+        details: e?.message ?? String(e)
+      });
+    }
+  });
+
+  // POST endpoint to toggle T08 activation
+  app.post("/api/t08/activate", (req, res) => {
+    try {
+      const { on } = req.body;
+      
+      // Validate input
+      if (typeof on !== 'boolean') {
+        return res.status(400).json({
+          error: "Invalid request",
+          message: "The 'on' parameter must be a boolean value"
+        });
+      }
+      
+      // Update T08 state
+      t08Enabled = on;
+      
+      // Log the change
+      console.log(`[T08] Natural language synthesis ${on ? 'activated' : 'deactivated'}`);
+      
+      // Return success response
+      return res.json({
+        status: on ? "activated" : "deactivated",
+        t08_enabled: t08Enabled
+      });
+    } catch (e: any) {
+      console.error("[T08] Error updating T08 status:", e);
+      return res.status(500).json({
+        error: "Failed to update T08 status",
+        details: e?.message ?? String(e)
+      });
+    }
+  });
+
   app.post("/api/corpus", (req, res) => {
     const auth = req.header("x-api-key") ?? "";
     if (auth !== AURORA_API_KEY) {
