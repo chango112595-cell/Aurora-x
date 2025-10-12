@@ -3040,7 +3040,7 @@ asyncio.run(main())
       
       // Proxy to FastAPI server
       try {
-        const response = await fetch('http://localhost:5001/bridge/nl', {
+        const response = await fetch('http://localhost:5001/api/bridge/nl', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
