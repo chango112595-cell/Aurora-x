@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { 
   CheckCircle, 
   Loader2, 
@@ -7,7 +8,10 @@ import {
   Circle, 
   TrendingUp,
   Activity,
-  Zap
+  Zap,
+  RefreshCw,
+  WifiOff,
+  Wifi
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -153,7 +157,7 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
 };
 
 // Overall progress component
-const OverallProgress = ({ tasks }: { tasks: Task[] }) => {
+const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; isRefetching: boolean; lastUpdated: Date }) => {
   const totalPercent = tasks.reduce((acc, task) => acc + parsePercent(task.percent), 0) / tasks.length;
   const completedTasks = tasks.filter(t => parseStatus(t.status) === "complete").length;
   const inProgressTasks = tasks.filter(t => parseStatus(t.status) === "in-progress").length;
@@ -173,9 +177,26 @@ const OverallProgress = ({ tasks }: { tasks: Task[] }) => {
             {totalPercent.toFixed(1)}%
           </div>
         </div>
-        <CardDescription data-testid="text-last-updated">
-          Last updated: {new Date().toLocaleString()}
-        </CardDescription>
+        <div className="flex items-center gap-2">
+          <CardDescription data-testid="text-last-updated">
+            Last updated: {lastUpdated.toLocaleString()}
+          </CardDescription>
+          <AnimatePresence mode="wait">
+            {isRefetching && (
+              <motion.div
+                initial={{ opacity: 0, rotate: 0 }}
+                animate={{ opacity: 1, rotate: 360 }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  opacity: { duration: 0.2 },
+                  rotate: { duration: 1, repeat: Infinity, ease: "linear" }
+                }}
+              >
+                <RefreshCw className="h-4 w-4 text-muted-foreground" data-testid="icon-refreshing" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -273,10 +294,45 @@ const DashboardSkeleton = () => {
 };
 
 export default function Dashboard() {
-  const { data, isLoading, error } = useQuery<ProgressData>({
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [connectionError, setConnectionError] = useState(false);
+
+  const { data, isLoading, error, isRefetching, refetch, isSuccess, isError } = useQuery<ProgressData>({
     queryKey: ['/api/progress'],
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 5000, // Refresh every 5 seconds
+    refetchIntervalInBackground: true, // Keep polling even when tab is not active
+    staleTime: 4000, // Prevent excessive refetches
+    retry: 3, // Number of retry attempts
+    retryDelay: (attemptIndex: number) => {
+      // Retry after 10 seconds if polling fails
+      return attemptIndex === 0 ? 1000 : 10000;
+    }
   });
+
+  // Watch query state and update connection status
+  useEffect(() => {
+    if (isSuccess && data) {
+      setLastUpdated(new Date());
+      setConnectionError(false);
+    }
+  }, [isSuccess, data]);
+
+  useEffect(() => {
+    if (isError) {
+      setConnectionError(true);
+    }
+  }, [isError]);
+
+  // Auto-recover when connection is restored
+  useEffect(() => {
+    if (connectionError) {
+      const retryTimer = setTimeout(() => {
+        refetch();
+      }, 10000); // Retry after 10 seconds
+
+      return () => clearTimeout(retryTimer);
+    }
+  }, [connectionError, refetch]);
 
   if (isLoading) {
     return (
@@ -297,9 +353,15 @@ export default function Dashboard() {
       <div className="h-full overflow-auto">
         <div className="p-6">
           <h1 className="text-3xl font-bold mb-2" data-testid="text-page-title">Aurora-X Dashboard</h1>
-          <Card className="p-6">
-            <p className="text-destructive" data-testid="text-error">
-              Failed to load progress data. Please try again later.
+          <Card className="p-6 border-destructive/20">
+            <div className="flex items-center gap-3 mb-4">
+              <WifiOff className="h-5 w-5 text-destructive" data-testid="icon-connection-error" />
+              <p className="text-destructive" data-testid="text-error">
+                Connection lost. Retrying in 10 seconds...
+              </p>
+            </div>
+            <p className="text-sm text-muted-foreground" data-testid="text-error-details">
+              Unable to fetch progress data. The connection will automatically recover when restored.
             </p>
           </Card>
         </div>
@@ -315,14 +377,46 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-3xl font-bold mb-2" data-testid="text-page-title">Aurora-X Dashboard</h1>
-          <p className="text-muted-foreground" data-testid="text-page-description">
-            Monitor Aurora-X task progress and development status
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold mb-2" data-testid="text-page-title">Aurora-X Dashboard</h1>
+              <p className="text-muted-foreground" data-testid="text-page-description">
+                Monitor Aurora-X task progress and development status
+              </p>
+            </div>
+            {/* Connection status indicator */}
+            <AnimatePresence mode="wait">
+              {connectionError ? (
+                <motion.div
+                  key="offline"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="flex items-center gap-2 px-3 py-1 rounded-full bg-destructive/10"
+                  data-testid="badge-connection-error"
+                >
+                  <WifiOff className="h-4 w-4 text-destructive" />
+                  <span className="text-sm text-destructive">Offline</span>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="online"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10"
+                  data-testid="badge-connection-ok"
+                >
+                  <Wifi className="h-4 w-4 text-green-500" />
+                  <span className="text-sm text-green-600 dark:text-green-400">Live</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
 
         <AnimatePresence>
-          <OverallProgress tasks={data.tasks} />
+          <OverallProgress tasks={data.tasks} isRefetching={isRefetching} lastUpdated={lastUpdated} />
           {data.active && data.active.length > 0 && (
             <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
           )}
