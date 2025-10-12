@@ -1379,6 +1379,245 @@ if __name__ == "__main__":
     }
   });
 
+  // Task graph visualization endpoint
+  app.get("/dashboard/graph", (req, res) => {
+    const graphHTML = `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Aurora-X · Master Task Graph</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #03060e;
+      color: #e5e9ff;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, #101526, #03060e);
+    }
+    text {
+      fill: #fff;
+      font-size: 13px;
+      text-anchor: middle;
+      pointer-events: none;
+      user-select: none;
+    }
+    .node circle {
+      stroke: #fff;
+      stroke-width: 1.2;
+      cursor: pointer;
+      transition: r 0.2s;
+    }
+    .node:hover circle {
+      r: 35;
+    }
+    .node.completed circle {
+      fill: #29cc5f;
+    }
+    .node.inprogress circle {
+      fill: #1e90ff;
+    }
+    .node.pending circle {
+      fill: #d93f3f;
+    }
+    .node.development circle {
+      fill: #ffa600;
+    }
+    .link {
+      stroke: #bbb;
+      stroke-opacity: .4;
+      stroke-width: 1.5;
+    }
+    .legend {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: #fff;
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .legend small {
+      display: block;
+      margin-top: 5px;
+      opacity: 0.8;
+    }
+    .btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 8px 14px;
+      background: #1e90ff;
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #1a7fd8;
+    }
+  </style>
+</head>
+<body>
+  <div class="legend">
+    Aurora-X Ultra — Master Dependency Graph<br>
+    <small>Green=Complete • Blue=In Progress • Yellow=Development • Red=Pending</small>
+  </div>
+  <a href="/dashboard" class="btn">← Dashboard</a>
+  <svg id="graph"></svg>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script>
+    async function render() {
+      try {
+        const res = await fetch('/api/progress');
+        const data = await res.json();
+        const tasks = data.tasks || [];
+        
+        // Create nodes from tasks data
+        const nodes = tasks.map(t => ({
+          id: t.id || 'Unknown',
+          name: t.name || 'Unknown Task',
+          percent: typeof t.percent === 'number' ? t.percent : parseFloat(t.percent) || 0,
+          status: t.status,
+          group: determineGroup(t)
+        }));
+        
+        // Function to determine node group/color
+        function determineGroup(task) {
+          const percent = typeof task.percent === 'number' ? task.percent : parseFloat(task.percent) || 0;
+          
+          if (percent >= 100) {
+            return 'completed';
+          } else if (task.status === 'in-development') {
+            return 'development';
+          } else if (percent > 0) {
+            return 'inprogress';
+          } else {
+            return 'pending';
+          }
+        }
+        
+        // Create links between consecutive tasks (T01->T02->T03...)
+        const links = [];
+        for (let i = 1; i < nodes.length; i++) {
+          links.push({
+            source: nodes[i - 1].id,
+            target: nodes[i].id
+          });
+        }
+        
+        // Setup D3 visualization
+        const svg = d3.select("#graph");
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        // Clear previous graph if any
+        svg.selectAll("*").remove();
+        
+        // Create force simulation
+        const simulation = d3.forceSimulation(nodes)
+          .force("link", d3.forceLink(links).id(d => d.id).distance(160))
+          .force("charge", d3.forceManyBody().strength(-450))
+          .force("center", d3.forceCenter(width / 2, height / 2))
+          .force("collision", d3.forceCollide().radius(35));
+        
+        // Create links
+        const link = svg.append("g")
+          .selectAll("line")
+          .data(links)
+          .enter()
+          .append("line")
+          .attr("class", "link");
+        
+        // Create nodes
+        const node = svg.append("g")
+          .selectAll("g")
+          .data(nodes)
+          .enter()
+          .append("g")
+          .attr("class", d => "node " + d.group);
+        
+        // Add circles to nodes
+        node.append("circle")
+          .attr("r", 30);
+        
+        // Add text labels to nodes
+        node.append("text")
+          .attr("dy", 5)
+          .text(d => d.id);
+        
+        // Add click handler to show task details
+        node.on("click", (event, d) => {
+          const percent = typeof d.percent === 'number' ? d.percent : 0;
+          const status = d.group === 'completed' ? 'Completed' :
+                        d.group === 'inprogress' ? 'In Progress' :
+                        d.group === 'development' ? 'In Development' :
+                        'Pending';
+          
+          alert(\`Task: \${d.id}\\nName: \${d.name}\\nProgress: \${percent}%\\nStatus: \${status}\`);
+        });
+        
+        // Add drag behavior
+        node.call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+        
+        // Update positions on tick
+        simulation.on("tick", () => {
+          link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+          
+          node
+            .attr("transform", d => \`translate(\${d.x}, \${d.y})\`);
+        });
+        
+        // Drag functions
+        function dragstarted(event) {
+          if (!event.active) simulation.alphaTarget(0.3).restart();
+          event.subject.fx = event.subject.x;
+          event.subject.fy = event.subject.y;
+        }
+        
+        function dragged(event) {
+          event.subject.fx = event.x;
+          event.subject.fy = event.y;
+        }
+        
+        function dragended(event) {
+          if (!event.active) simulation.alphaTarget(0);
+          event.subject.fx = null;
+          event.subject.fy = null;
+        }
+        
+      } catch (error) {
+        console.error('Error loading task data:', error);
+        alert('Failed to load task data. Please check the console for details.');
+      }
+    }
+    
+    // Render the graph
+    render();
+    
+    // Auto-refresh every 30 seconds
+    setInterval(render, 30000);
+  </script>
+</body>
+</html>`;
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(graphHTML);
+  });
+
   const httpServer = createServer(app);
   
   // Set up WebSocket server for real-time progress updates
