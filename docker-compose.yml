@@ -1,28 +1,55 @@
-# Aurora.X.com Production Stack
+# Aurora-X Production Stack with Cloudflare Tunnel
+# Deploy with: docker compose up -d
+
 services:
   aurora:
-    image: ghcr.io/<OWNER>/<REPO>:latest
-    container_name: aurora
+    # Option 1: Use published image
+    image: ghcr.io/${GITHUB_REPOSITORY:-yourusername/aurora-x}:latest
+    
+    # Option 2: Build from local repo (uncomment if cloning repo to server)
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.app
+    
+    container_name: aurora_x
     environment:
       PORT: "8000"
       AURORA_DEFAULT_LANG: "python"
+      AURORA_ENV: "production"
+      # Optional: Add these for monitoring
+      AURORA_HEALTH_TOKEN: "${AURORA_HEALTH_TOKEN:-secure123}"
+      DISCORD_WEBHOOK_URL: "${DISCORD_WEBHOOK_URL:-}"
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"  # Only bind to localhost for security
     healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/healthz"]
-      interval: 20s
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/healthz"]
+      interval: 15s
       timeout: 5s
-      retries: 6
+      retries: 10
+      start_period: 30s
     restart: unless-stopped
+    volumes:
+      # Persist synthesis runs and data
+      - ./aurora_runs:/app/runs
+      - ./aurora_data:/app/data
+    networks:
+      - aurora_net
 
   cloudflared:
     image: cloudflare/cloudflared:latest
-    container_name: cf-tunnel
-    command: tunnel run aurora
-    volumes:
-      - ~/.cloudflared:/etc/cloudflared:ro  # contains <TUNNEL-UUID>.json and config.yml
-    network_mode: host                      # lets tunnel reach Aurora at localhost:8000
+    container_name: aurora_cf_tunnel
     depends_on:
       aurora:
         condition: service_healthy
+    command: tunnel run
+    environment:
+      # Use the token from Cloudflare Dashboard > Zero Trust > Tunnels
+      TUNNEL_TOKEN: "${CF_TUNNEL_TOKEN}"
     restart: unless-stopped
+    networks:
+      - aurora_net
+
+networks:
+  aurora_net:
+    driver: bridge
+    name: aurora_network
