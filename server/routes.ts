@@ -2,6 +2,8 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { corpusStorage } from "./corpus-storage";
+import { progressStore } from "./progress-store";
+import { createWebSocketServer, type SynthesisWebSocketServer } from "./websocket-server";
 import * as path from "path";
 import * as fs from "fs";
 import { spawn } from "child_process";
@@ -17,6 +19,7 @@ import {
 } from "@shared/schema";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
+let wsServer: SynthesisWebSocketServer | null = null;
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Aurora-X Adaptive Learning Stats endpoints
@@ -219,6 +222,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Progress tracking endpoints
+  app.get("/api/synthesis/progress/:id", (req, res) => {
+    try {
+      const { id } = req.params;
+      const progress = progressStore.getProgress(id);
+      
+      if (!progress) {
+        return res.status(404).json({ error: "Synthesis not found" });
+      }
+      
+      return res.json(progress);
+    } catch (e: any) {
+      return res.status(500).json({
+        error: "Failed to retrieve progress",
+        details: e?.message ?? String(e)
+      });
+    }
+  });
+
+  app.post("/api/synthesis/estimate", (req, res) => {
+    try {
+      const { message } = req.body;
+      
+      if (!message || typeof message !== 'string') {
+        return res.status(400).json({ error: "Message is required" });
+      }
+      
+      const complexity = progressStore.estimateComplexity(message);
+      let estimatedTime: number;
+      
+      switch (complexity) {
+        case "simple":
+          estimatedTime = 7; // 5-10 seconds
+          break;
+        case "medium":
+          estimatedTime = 20; // 15-30 seconds
+          break;
+        case "complex":
+          estimatedTime = 45; // 30-60 seconds
+          break;
+        default:
+          estimatedTime = 15;
+      }
+      
+      return res.json({
+        complexity,
+        estimatedTime,
+        message: `Estimated time: ${estimatedTime} seconds for ${complexity} synthesis`
+      });
+    } catch (e: any) {
+      return res.status(500).json({
+        error: "Failed to estimate synthesis time",
+        details: e?.message ?? String(e)
+      });
+    }
+  });
+
   // Chat endpoint for Aurora-X synthesis requests
   app.post("/api/chat", async (req, res) => {
     try {
@@ -228,41 +288,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Message is required" });
       }
 
-      // Sanitize message to prevent any shell injection
-      // Remove shell metacharacters and control characters
-      // This includes: backticks, $(), semicolons, pipes, ampersands, etc.
-      const sanitizedMessage = message
-        .replace(/[`$()<>|;&\\\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g, '')
-        .replace(/\*/g, '')  // Remove wildcards
-        .replace(/~/g, '')   // Remove tilde expansion
-        .replace(/\[/g, '')  // Remove bracket expansion
-        .replace(/\]/g, '')  // Remove bracket expansion
-        .replace(/\{/g, '')  // Remove brace expansion  
-        .replace(/\}/g, '')  // Remove brace expansion
-        .trim();
+      // Generate synthesis ID and estimate complexity
+      const synthesisId = progressStore.generateId();
+      const complexity = progressStore.estimateComplexity(message);
       
-      console.log(`[Aurora-X] Processing request: "${sanitizedMessage}"`);
+      // Create progress entry
+      const progress = progressStore.createProgress(synthesisId, complexity);
       
-      // Execute Aurora-X with the natural language command using spawn for security
-      try {
-        // Use spawn instead of exec to prevent command injection
-        const spawnProcess = spawn('make', ['say', `WHAT=${sanitizedMessage}`], {
-          cwd: process.cwd(),
-          timeout: 30000, // 30 second timeout
-          shell: false, // Explicitly disable shell to prevent injection
-          env: { ...process.env } // Pass environment variables
-        });
-        
-        let stdout = '';
-        let stderr = '';
-        
-        spawnProcess.stdout.on('data', (data) => {
-          stdout += data.toString();
-        });
-        
-        spawnProcess.stderr.on('data', (data) => {
-          stderr += data.toString();
-        });
+      // Return synthesis ID immediately for progress tracking
+      res.json({
+        synthesis_id: synthesisId,
+        complexity,
+        estimatedTime: progress.estimatedTimeRemaining,
+        message: "Synthesis started. Track progress using the synthesis_id."
+      });
+      
+      // Process synthesis asynchronously
+      setTimeout(async () => {
+        try {
+          // Update progress: ANALYZING
+          progressStore.updateProgress(synthesisId, "ANALYZING", 10, "Analyzing request requirements...");
+          if (wsServer) {
+            wsServer.broadcastProgress(progressStore.getProgress(synthesisId)!);
+          }
+          
+          // Sanitize message to prevent any shell injection
+          const sanitizedMessage = message
+            .replace(/[`$()<>|;&\\\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g, '')
+            .replace(/\*/g, '')  // Remove wildcards
+            .replace(/~/g, '')   // Remove tilde expansion
+            .replace(/\[/g, '')  // Remove bracket expansion
+            .replace(/\]/g, '')  // Remove bracket expansion
+            .replace(/\{/g, '')  // Remove brace expansion  
+            .replace(/\}/g, '')  // Remove brace expansion
+            .trim();
+          
+          console.log(`[Aurora-X] Processing request: "${sanitizedMessage}"`);
+          
+          // Update progress: GENERATING
+          progressStore.updateProgress(synthesisId, "GENERATING", 30, "Generating code solution...");
+          if (wsServer) {
+            wsServer.broadcastProgress(progressStore.getProgress(synthesisId)!);
+          }
+      
+          // Execute Aurora-X with the natural language command using spawn for security
+          // Use spawn instead of exec to prevent command injection
+          const spawnProcess = spawn('make', ['say', `WHAT=${sanitizedMessage}`], {
+            cwd: process.cwd(),
+            timeout: 30000, // 30 second timeout
+            shell: false, // Explicitly disable shell to prevent injection
+            env: { ...process.env } // Pass environment variables
+          });
+          
+          let stdout = '';
+          let stderr = '';
+          
+          spawnProcess.stdout.on('data', (data) => {
+            stdout += data.toString();
+            // Update progress as we receive output
+            progressStore.updateProgress(synthesisId, "GENERATING", 50, "Processing synthesis output...");
+            if (wsServer) {
+              wsServer.broadcastProgress(progressStore.getProgress(synthesisId)!);
+            }
+          });
+          
+          spawnProcess.stderr.on('data', (data) => {
+            stderr += data.toString();
+          });
         
         // Wait for the process to complete
         await new Promise<void>((resolve, reject) => {
@@ -780,6 +872,9 @@ if __name__ == "__main__":
   });
 
   const httpServer = createServer(app);
+  
+  // Set up WebSocket server for real-time progress updates
+  wsServer = createWebSocketServer(httpServer);
 
   return httpServer;
 }
