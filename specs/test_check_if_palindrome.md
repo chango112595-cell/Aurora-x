@@ -6,14 +6,15 @@ def is_palindrome(s: str) -> bool
 ```
 
 ## Description
-Check if a string is a palindrome.
+Check if a string is a palindrome (reads same forwards and backwards).
 
 ## Examples
-| s | out |
-|---|-----|
-| racecar | true |
-| hello | false |
-| noon | true |
+| s | out | out |
+|---|---|---|
+| racecar | True |
+| hello | False |
+| a | True |
+
 
 ## Postconditions
-- Returns true if the string reads the same forwards and backwards
+- Generated from natural language

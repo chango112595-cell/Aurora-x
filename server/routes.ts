@@ -3022,6 +3022,56 @@ asyncio.run(main())
     }
   });
 
+  // Factory Bridge endpoint - proxy to FastAPI backend
+  app.post("/api/bridge/nl", async (req, res) => {
+    try {
+      const { prompt } = req.body;
+      
+      // Validate input
+      if (!prompt || typeof prompt !== 'string') {
+        return res.status(400).json({
+          status: "error",
+          error: "Invalid request",
+          message: "prompt is required and must be a string"
+        });
+      }
+      
+      console.log(`[Bridge] Processing prompt: "${prompt.substring(0, 100)}..."`);
+      
+      // Proxy to FastAPI server
+      try {
+        const response = await fetch('http://localhost:5001/bridge/nl', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ prompt })
+        });
+        
+        const data = await response.json();
+        
+        console.log(`[Bridge] Response from FastAPI: ${JSON.stringify(data).substring(0, 200)}`);
+        
+        return res.json(data);
+      } catch (fetchError: any) {
+        console.error(`[Bridge] Error calling FastAPI: ${fetchError.message}`);
+        return res.status(502).json({
+          status: "error",
+          error: "Bridge service unavailable",
+          message: "Could not connect to the Factory Bridge service. Please ensure it's running on port 5001."
+        });
+      }
+      
+    } catch (error: any) {
+      console.error(`[Bridge] Unexpected error: ${error.message}`);
+      return res.status(500).json({
+        status: "error",
+        error: "Internal server error",
+        message: error.message
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   
   // Set up WebSocket server for real-time progress updates
