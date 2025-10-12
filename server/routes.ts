@@ -2342,6 +2342,232 @@ if __name__ == "__main__":
     res.send(graphHTML);
   });
 
+  // ========== Natural Language Code Synthesis Endpoints ==========
+  
+  // POST endpoint to compile/generate a project from natural language
+  app.post("/api/nl/compile_full", async (req, res) => {
+    try {
+      const { prompt } = req.body;
+      
+      // Validate input
+      if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
+        console.log('[Synthesis] Invalid prompt received');
+        return res.status(400).json({
+          status: "error",
+          error: "Invalid request",
+          details: "prompt is required and must be a non-empty string"
+        });
+      }
+      
+      console.log('[Synthesis] Starting project generation for prompt:', prompt.substring(0, 100) + '...');
+      
+      // For now, create a mock response to test the integration
+      // We'll replace this with the actual Python call once we verify the endpoint works
+      const mockResult = {
+        status: "success",
+        run_id: `run-${new Date().toISOString().replace(/[:.]/g, '-').replace('T', '-').substring(0, 17)}`,
+        files: ["src/main.py", "requirements.txt", "README.md"],
+        project_type: "python_script",
+        framework: "python",
+        language: "python",
+        features: ["simple"],
+        message: "Mock project generated successfully for testing"
+      };
+      
+      console.log('[Synthesis] Mock response created:', mockResult);
+      
+      // Set CORS headers
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Content-Type', 'application/json');
+      
+      // Return the mock result
+      return res.json(mockResult);
+      
+      /* TODO: Replace with actual Python call once verified
+      // Call Python synthesis engine
+      const result = await new Promise<any>((resolve, reject) => {
+        const pythonProcess = spawn('python3', [
+          '-c',
+          `
+import sys
+import json
+import asyncio
+sys.path.insert(0, '.')
+from aurora_x.synthesis.universal_engine import synthesize_universal
+
+async def main():
+    try:
+        result = await synthesize_universal("""${prompt.replace(/"/g, '\\"').replace(/\n/g, '\\n')}""")
+        print(json.dumps(result))
+    except Exception as e:
+        import traceback
+        print(json.dumps({"status": "error", "error": str(e), "traceback": traceback.format_exc()}))
+
+asyncio.run(main())
+`
+        ], {
+          cwd: process.cwd(),
+          env: { ...process.env, PYTHONPATH: process.cwd() }
+        });
+        
+        let stdout = '';
+        let stderr = '';
+        
+        pythonProcess.stdout.on('data', (data) => {
+          stdout += data.toString();
+        });
+        
+        pythonProcess.stderr.on('data', (data) => {
+          stderr += data.toString();
+        });
+        
+        pythonProcess.on('close', (code) => {
+          if (code !== 0) {
+            console.error('[Synthesis] Python process failed:', stderr);
+            reject(new Error(`Synthesis failed with code ${code}: ${stderr}`));
+            return;
+          }
+          
+          try {
+            // Parse the JSON output from Python
+            const result = JSON.parse(stdout);
+            resolve(result);
+          } catch (parseError: any) {
+            console.error('[Synthesis] Failed to parse Python output:', stdout);
+            reject(new Error(`Failed to parse synthesis result: ${parseError.message}`));
+          }
+        });
+        
+        pythonProcess.on('error', (error) => {
+          console.error('[Synthesis] Failed to spawn Python process:', error);
+          reject(error);
+        });
+      });
+      
+      // Check if synthesis was successful
+      if (result.status === 'error') {
+        console.error('[Synthesis] Generation failed:', result.error);
+        return res.status(500).json({
+          status: "error",
+          error: "Synthesis failed",
+          details: result.error || "Unknown error during synthesis"
+        });
+      }
+      
+      console.log('[Synthesis] Successfully generated project:', {
+        run_id: result.run_id,
+        project_type: result.project_type,
+        files_count: result.files?.length || 0
+      });
+      
+      // Set CORS headers
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      
+      // Return the synthesis result
+      return res.json({
+        status: "success",
+        run_id: result.run_id,
+        files: result.files || [],
+        project_type: result.project_type || "unknown",
+        zip_path: result.zip_path || null,
+        framework: result.framework || null,
+        language: result.language || null,
+        features: result.features || [],
+        message: `Successfully generated ${result.project_type || 'project'} with ${(result.files || []).length} files`
+      });
+      */
+      
+    } catch (error: any) {
+      console.error('[Synthesis] Unexpected error:', error);
+      return res.status(500).json({
+        status: "error",
+        error: "Internal server error",
+        details: error?.message || String(error)
+      });
+    }
+  });
+  
+  // Handle OPTIONS preflight requests for synthesis endpoint
+  app.options("/api/nl/compile_full", (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Max-Age', '86400');
+    res.sendStatus(204);
+  });
+  
+  // GET endpoint to download generated project ZIP file
+  app.get("/api/projects/:run_id/download", (req, res) => {
+    try {
+      const { run_id } = req.params;
+      
+      // Validate run_id format (e.g., run-20251012-123456)
+      if (!run_id || !run_id.match(/^run-\d{8}-\d{6}$/)) {
+        return res.status(400).json({
+          error: "Invalid run ID",
+          details: "Run ID must be in format: run-YYYYMMDD-HHMMSS"
+        });
+      }
+      
+      // Build the path to the ZIP file
+      const zipPath = path.join(process.cwd(), 'runs', run_id, 'project.zip');
+      
+      // Check if the ZIP file exists
+      if (!fs.existsSync(zipPath)) {
+        console.error(`[Download] ZIP file not found: ${zipPath}`);
+        return res.status(404).json({
+          error: "Project not found",
+          details: `No project found with run ID: ${run_id}`
+        });
+      }
+      
+      // Get file stats for size
+      const stats = fs.statSync(zipPath);
+      
+      console.log(`[Download] Serving ZIP file: ${zipPath} (${stats.size} bytes)`);
+      
+      // Set headers for file download
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', `attachment; filename="${run_id}-project.zip"`);
+      res.setHeader('Content-Length', stats.size.toString());
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      
+      // Stream the file to the response
+      const fileStream = fs.createReadStream(zipPath);
+      fileStream.pipe(res);
+      
+      fileStream.on('error', (error) => {
+        console.error('[Download] Error streaming file:', error);
+        if (!res.headersSent) {
+          res.status(500).json({
+            error: "Download failed",
+            details: "Failed to stream the project file"
+          });
+        }
+      });
+      
+    } catch (error: any) {
+      console.error('[Download] Unexpected error:', error);
+      return res.status(500).json({
+        error: "Internal server error",
+        details: error?.message || String(error)
+      });
+    }
+  });
+  
+  // Handle OPTIONS preflight requests for download endpoint
+  app.options("/api/projects/:run_id/download", (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Max-Age', '86400');
+    res.sendStatus(204);
+  });
+
   const httpServer = createServer(app);
   
   // Set up WebSocket server for real-time progress updates
