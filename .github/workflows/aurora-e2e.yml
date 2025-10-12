@@ -6,7 +6,11 @@ on:
 
 jobs:
   e2e:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, macos-14]  # macos-14 = Apple Silicon ARM64
     env:
       HOST: http://127.0.0.1:8000
       PORT: 8000
@@ -144,3 +148,53 @@ jobs:
             src/**/*.rs
             Aurora.WebApi/**/*.cs
             Aurora.WebApi/**/*.csproj
+
+  # Linux ARM64 job using Docker buildx (no special runner needed)
+  e2e-linux-arm64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Set up QEMU for ARM emulation
+        uses: docker/setup-qemu-action@v3
+        
+      - name: Build ARM64 test image
+        run: |
+          # Create minimal Dockerfile for testing if not exists
+          if [ ! -f Dockerfile.e2e ]; then
+            cat > Dockerfile.e2e << 'EOF'
+FROM --platform=linux/arm64 python:3.11-slim
+WORKDIR /app
+COPY . .
+RUN pip install --no-cache-dir -e . && \
+    pip install pytest jq pycurl || true
+EXPOSE 8000
+CMD ["python", "-m", "aurora_x.serve"]
+EOF
+          fi
+          
+          # Build ARM64 image
+          docker buildx build --platform linux/arm64 -t aurora-e2e:arm64 -f Dockerfile.e2e --load .
+          
+      - name: Test ARM64 container
+        run: |
+          # Run the container in background
+          docker run -d --name aurora-arm64 -p 8000:8000 aurora-e2e:arm64
+          
+          # Wait for server to be ready
+          for i in $(seq 1 30); do
+            curl -fsS http://localhost:8000/healthz && break || sleep 1
+          done
+          
+          # Test endpoints
+          curl -fsS http://localhost:8000/healthz | jq .
+          curl -fsS -X POST -H 'content-type: application/json' \
+            -d '{"prompt":"hello world","lang":"python"}' \
+            http://localhost:8000/chat | jq .
+          
+          # Cleanup
+          docker stop aurora-arm64
+          docker rm aurora-arm64
