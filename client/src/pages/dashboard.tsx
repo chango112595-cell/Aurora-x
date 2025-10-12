@@ -16,7 +16,8 @@ import {
   Download,
   FileCode2,
   Rocket,
-  Package
+  Package,
+  Terminal
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -24,6 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
@@ -71,6 +73,18 @@ interface GeneratedProject {
   framework?: string;
   language?: string;
   timestamp: Date;
+}
+
+// Solver interfaces
+interface SolverRequest {
+  q: string;  // API expects 'q' not 'query'
+}
+
+interface SolverResponse {
+  ok: boolean;
+  formatted?: string;
+  error?: string;
+  message?: string;
 }
 
 // Status mapping for cleaner processing
@@ -573,6 +587,194 @@ const ProjectGenerationSection = () => {
   );
 };
 
+// Math & Physics Solver Component
+const SolverSection = () => {
+  const [query, setQuery] = useState("");
+  const [result, setResult] = useState<string>("");
+  const { toast } = useToast();
+
+  // Mutation for solving queries
+  const solveMutation = useMutation<SolverResponse, Error, SolverRequest>({
+    mutationFn: async (data) => {
+      const response = await apiRequest("POST", "/api/solve/pretty", data);
+      return response.json();
+    },
+    onSuccess: (data) => {
+      if (data.ok && data.formatted) {
+        setResult(data.formatted);
+      } else {
+        toast({
+          title: "Unable to solve",
+          description: data.error || "Could not process the query. Please try a different format.",
+          variant: "destructive"
+        });
+        setResult("");
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "An unexpected error occurred while processing your query",
+        variant: "destructive"
+      });
+      setResult("");
+    }
+  });
+
+  const handleSolve = () => {
+    if (!query.trim()) {
+      toast({
+        title: "Query Required",
+        description: "Please enter a math or physics problem to solve",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    solveMutation.mutate({ q: query.trim() });
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !solveMutation.isPending) {
+      handleSolve();
+    }
+  };
+
+  // Example queries for quick selection
+  const exampleQueries = [
+    { label: "Arithmetic", query: "2 + 3 * 4" },
+    { label: "Differentiation", query: "differentiate x^3 - 2x^2 + x" },
+    { label: "Orbital Period", query: "orbital period a=7e6 M=5.972e24" },
+    { label: "Integration", query: "integrate x^2 + 3x + 2" },
+    { label: "Quadratic", query: "solve x^2 - 5x + 6 = 0" }
+  ];
+
+  const handleExampleClick = (exampleQuery: string) => {
+    setQuery(exampleQuery);
+    setResult("");
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="mb-8"
+    >
+      <Card className="relative overflow-hidden border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-emerald-500/5">
+        {/* Animated Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-emerald-500/5 animate-pulse" />
+        
+        <CardHeader className="relative">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-cyan-500/10">
+              <Terminal className="h-6 w-6 text-cyan-500" />
+            </div>
+            <div>
+              <CardTitle className="text-xl" data-testid="text-solver-title">
+                Math & Physics Solver
+              </CardTitle>
+              <CardDescription data-testid="text-solver-description">
+                Solve complex mathematical and physics problems instantly
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        
+        <CardContent className="relative space-y-4">
+          {/* Input and Button */}
+          <div className="flex gap-2">
+            <Input
+              placeholder="Try: 2+3*4 or differentiate x^3-2x^2+x or orbital period a=7e6 M=5.972e24"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+              className="flex-1 bg-background/50 border-cyan-500/20 focus:border-cyan-500/40 transition-colors"
+              disabled={solveMutation.isPending}
+              data-testid="input-solver-query"
+            />
+            
+            <Button
+              onClick={handleSolve}
+              disabled={solveMutation.isPending || !query.trim()}
+              className="relative group bg-cyan-500 hover:bg-cyan-600 text-white"
+              data-testid="button-solve"
+            >
+              {solveMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Solving...
+                </>
+              ) : (
+                <>
+                  <Terminal className="mr-2 h-4 w-4 group-hover:animate-pulse" />
+                  Solve
+                </>
+              )}
+            </Button>
+          </div>
+          
+          {/* Example Queries */}
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">Quick examples:</p>
+            <div className="flex flex-wrap gap-2">
+              {exampleQueries.map((example) => (
+                <Badge
+                  key={example.label}
+                  variant="outline"
+                  className="cursor-pointer hover:bg-cyan-500/10 hover:border-cyan-500/40 transition-colors"
+                  onClick={() => handleExampleClick(example.query)}
+                  data-testid={`badge-example-${example.label.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  {example.label}: {example.query}
+                </Badge>
+              ))}
+            </div>
+          </div>
+          
+          {/* Results Display */}
+          {(result || solveMutation.isPending) && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-cyan-500 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="font-medium text-cyan-600 dark:text-cyan-400 mb-2">
+                      Solution:
+                    </p>
+                    {solveMutation.isPending ? (
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="h-4 w-4 animate-spin text-cyan-500" />
+                        <span className="text-sm text-muted-foreground">Processing your query...</span>
+                      </div>
+                    ) : (
+                      <p className="text-lg font-mono text-foreground" data-testid="text-solver-result">
+                        {result}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+          
+          {/* Capabilities Info */}
+          <div className="text-xs text-muted-foreground space-y-1">
+            <p>• Supports arithmetic operations, algebra, calculus, and physics calculations</p>
+            <p>• Try differentiation, integration, equation solving, and orbital mechanics</p>
+            <p>• Use standard mathematical notation: x^2, sqrt(x), sin(x), etc.</p>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
+
 // Loading skeleton
 const DashboardSkeleton = () => {
   return (
@@ -747,6 +949,9 @@ export default function Dashboard() {
         
         {/* Add Project Generation Section */}
         <ProjectGenerationSection />
+        
+        {/* Add Math & Physics Solver Section */}
+        <SolverSection />
         
         {data.active && data.active.length > 0 && (
           <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
