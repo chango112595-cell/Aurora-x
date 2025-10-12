@@ -10,6 +10,28 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (October 2025)
 
+### T11 Auto-Updater System Complete ✅
+- **Zero-Maintenance Updates**: Aurora-X now keeps itself fresh without manual intervention
+  - Automatic git pull and Docker rebuild when changes detected
+  - Runs every 15 minutes for quick updates, plus 3am nightly full refresh
+  - Health checks ensure updates don't break the system (via /healthz endpoint)
+  - Optional Discord webhook notifications for update status
+- **Auto-Updater Components**: Production-ready deployment automation
+  - update-aurora.sh: Main script for git pull, Docker rebuild, health verification
+  - install-updater-cron.sh: Installs cron jobs for automated scheduling
+  - /healthz endpoint: Reliable health checks with async database verification
+  - Proper error handling with 503 responses when components unhealthy
+- **Health Check Features**: Comprehensive system status monitoring
+  - Token authentication (AURORA_HEALTH_TOKEN)
+  - Database connectivity verification with async/await
+  - WebSocket server status with client count and listening state
+  - Returns 200 only when all components healthy, 503 when degraded
+- **Configuration**: Simple environment variables
+  - AURORA_GIT_URL: Repository to pull updates from
+  - AURORA_GIT_BRANCH: Branch to track (default: main)
+  - AURORA_DISCORD_WEBHOOK: Optional update notifications
+  - Logs to /tmp/aurora-update.log for debugging
+
 ### T10 Progress Tracking System Complete ✅
 - **Real-time Synthesis Progress**: Users now see exactly how long Aurora will take to complete code generation
   - Live progress bar with percentage and stage indicators (ANALYZING → GENERATING → TESTING → COMPLETE)
