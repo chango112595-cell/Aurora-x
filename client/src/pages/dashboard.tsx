@@ -393,7 +393,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-3">
               {/* Task Graph Link */}
               <a
-                href="http://localhost:8080/dashboard/graph"
+                href="/dashboard/graph"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
