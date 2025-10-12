@@ -162,6 +162,220 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Aurora-X Universal Code Synthesis endpoints
+  app.post("/api/nl/compile_full", (req, res) => {
+    try {
+      const { prompt } = req.body;
+      
+      // Validate input
+      if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
+        return res.status(400).json({
+          status: "error",
+          error: "Invalid request",
+          message: "prompt is required and must be a non-empty string"
+        });
+      }
+      
+      // Limit prompt length for safety
+      if (prompt.length > 5000) {
+        return res.status(400).json({
+          status: "error",
+          error: "Prompt too long",
+          message: "Prompt must be less than 5000 characters"
+        });
+      }
+      
+      // Generate run ID
+      const runId = `run-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}`;
+      
+      console.log(`[Synthesis] Starting synthesis for run ${runId}: "${prompt.substring(0, 100)}..."`);
+      
+      // Execute Python synthesis engine
+      const pythonScript = `
+import json
+import sys
+import os
+from aurora_x.synthesis.universal_engine import synthesize_universal_sync
+
+# Redirect print output to stderr to keep stdout clean for JSON
+class StderrRedirect:
+    def write(self, text):
+        sys.stderr.write(text)
+    def flush(self):
+        sys.stderr.flush()
+
+try:
+    prompt = ${JSON.stringify(prompt)}
+    run_id = ${JSON.stringify(runId)}
+    
+    # Temporarily redirect stdout to stderr for status messages
+    old_stdout = sys.stdout
+    sys.stdout = StderrRedirect()
+    
+    # Call the synthesis engine
+    result = synthesize_universal_sync(prompt, run_id=run_id)
+    
+    # Restore stdout and output JSON result
+    sys.stdout = old_stdout
+    
+    # Output only the JSON to stdout
+    print(json.dumps(result))
+    sys.exit(0)
+except Exception as e:
+    # Restore stdout in case of error
+    sys.stdout = sys.__stdout__
+    error_result = {
+        "status": "error",
+        "error": str(e),
+        "run_id": run_id,
+        "files": [],
+        "project_type": "unknown"
+    }
+    print(json.dumps(error_result))
+    sys.exit(1)
+`;
+      
+      // Execute the Python script
+      execFile('python3', ['-c', pythonScript], {
+        cwd: process.cwd(),
+        timeout: 60000, // 60 second timeout for synthesis
+        maxBuffer: 10 * 1024 * 1024, // 10MB buffer
+      }, (error, stdout, stderr) => {
+        if (error && !stdout) {
+          console.error(`[Synthesis] Error executing synthesis: ${error.message}`);
+          console.error(`[Synthesis] stderr: ${stderr}`);
+          return res.status(500).json({
+            status: "error",
+            error: "Synthesis failed",
+            message: error.message,
+            details: stderr,
+            run_id: runId
+          });
+        }
+        
+        // Log status messages from stderr (if any)
+        if (stderr) {
+          console.log(`[Synthesis] Status messages: ${stderr}`);
+        }
+        
+        try {
+          // Parse the JSON result from stdout - try to extract JSON if mixed with other text
+          let jsonStr = stdout.trim();
+          
+          // If stdout contains multiple lines, try to find the JSON line
+          const lines = jsonStr.split('\n');
+          for (let i = lines.length - 1; i >= 0; i--) {
+            const line = lines[i].trim();
+            if (line.startsWith('{') && line.endsWith('}')) {
+              jsonStr = line;
+              break;
+            }
+          }
+          
+          const result = JSON.parse(jsonStr);
+          
+          // Log successful synthesis
+          console.log(`[Synthesis] Successfully completed synthesis for run ${runId}`);
+          console.log(`[Synthesis] Project type: ${result.project_type}, Files: ${result.files?.length || 0}`);
+          
+          // Add download URL to the result
+          if (result.status === "success" && result.run_id) {
+            result.download_url = `/api/projects/${result.run_id}/download`;
+          }
+          
+          return res.json(result);
+        } catch (parseError: any) {
+          console.error(`[Synthesis] Error parsing synthesis result: ${parseError.message}`);
+          console.error(`[Synthesis] stdout: ${stdout}`);
+          console.error(`[Synthesis] stderr: ${stderr}`);
+          
+          return res.status(500).json({
+            status: "error",
+            error: "Failed to parse synthesis result",
+            message: parseError.message,
+            run_id: runId,
+            stdout: stdout.substring(0, 1000), // Include first 1000 chars for debugging
+            stderr: stderr.substring(0, 1000)
+          });
+        }
+      });
+    } catch (error: any) {
+      console.error(`[Synthesis] Unexpected error: ${error.message}`);
+      return res.status(500).json({
+        status: "error",
+        error: "Internal server error",
+        message: error.message
+      });
+    }
+  });
+  
+  // Endpoint to download project ZIP files
+  app.get("/api/projects/:runId/download", (req, res) => {
+    try {
+      const { runId } = req.params;
+      
+      // Validate run ID format (should be like run-2025-10-12T15-20-07)
+      // Also support older format run-20241012-143539
+      if (!runId || !/^run-(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}|\d{8}-\d{6})$/.test(runId)) {
+        return res.status(400).json({
+          error: "Invalid run ID",
+          message: "Run ID must be in format run-YYYY-MM-DDTHH-MM-SS or run-YYYYMMDD-HHMMSS"
+        });
+      }
+      
+      // Construct path to the project.zip file
+      const zipPath = path.join(process.cwd(), 'runs', runId, 'project.zip');
+      
+      // Check if the file exists
+      if (!fs.existsSync(zipPath)) {
+        console.error(`[Download] ZIP file not found at: ${zipPath}`);
+        return res.status(404).json({
+          error: "Project not found",
+          message: `No project found for run ID: ${runId}`
+        });
+      }
+      
+      // Get file stats for size
+      const stats = fs.statSync(zipPath);
+      
+      console.log(`[Download] Serving ZIP file for run ${runId}, size: ${stats.size} bytes`);
+      
+      // Set appropriate headers for file download
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', `attachment; filename="${runId}.zip"`);
+      res.setHeader('Content-Length', stats.size.toString());
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+      
+      // Stream the file to the response
+      const fileStream = fs.createReadStream(zipPath);
+      
+      fileStream.on('error', (streamError) => {
+        console.error(`[Download] Error streaming file: ${streamError.message}`);
+        if (!res.headersSent) {
+          res.status(500).json({
+            error: "Download failed",
+            message: "Failed to stream the project file"
+          });
+        }
+      });
+      
+      fileStream.pipe(res);
+      
+      fileStream.on('end', () => {
+        console.log(`[Download] Successfully sent ZIP file for run ${runId}`);
+      });
+      
+    } catch (error: any) {
+      console.error(`[Download] Unexpected error: ${error.message}`);
+      return res.status(500).json({
+        error: "Internal server error",
+        message: error.message
+      });
+    }
+  });
+
   // Aurora-X Adaptive Learning Stats endpoints
   app.get("/api/adaptive_stats", (req, res) => {
     try {
