@@ -160,7 +160,7 @@
     "Active tasks are being worked on concurrently"
   ],
   "ui_thresholds": {
-    "ok": 90,
-    "warn": 60
+    "ok": 85,
+    "warn": 65
   }
 }
