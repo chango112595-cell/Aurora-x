@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    image: ghcr.io/OWNER/REPO:latest
+    image: ghcr.io/chango112595-cell/Aurora-x:latest
     ports:
       - "8000:8000"
     environment:
