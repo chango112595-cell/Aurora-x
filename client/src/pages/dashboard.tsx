@@ -22,7 +22,7 @@ interface Task {
   id: string;
   name: string;
   status: string;
-  percent: string;
+  percent: number;  // Changed from string to number to match API
   category: string;
   notes: string[];
 }
@@ -43,8 +43,9 @@ const parseStatus = (status: string) => {
   return "pending";
 };
 
-// Parse percentage from string
-const parsePercent = (percent: string): number => {
+// Parse percentage - handles both number and string formats
+const parsePercent = (percent: number | string): number => {
+  if (typeof percent === 'number') return percent;
   return parseInt(percent.replace('%', '')) || 0;
 };
 
@@ -125,7 +126,7 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
             </div>
           </div>
           <div className="text-2xl font-bold" style={{ color }} data-testid={`text-percent-${task.id}`}>
-            {task.percent}
+            {task.percent}%
           </div>
         </CardHeader>
         <CardContent>
@@ -158,10 +159,15 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
 
 // Overall progress component
 const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; isRefetching: boolean; lastUpdated: Date }) => {
-  const totalPercent = tasks.reduce((acc, task) => acc + parsePercent(task.percent), 0) / tasks.length;
-  const completedTasks = tasks.filter(t => parseStatus(t.status) === "complete").length;
-  const inProgressTasks = tasks.filter(t => parseStatus(t.status) === "in-progress").length;
-  const inDevelopmentTasks = tasks.filter(t => parseStatus(t.status) === "in-development").length;
+  // Add defensive checks
+  if (!tasks || tasks.length === 0) {
+    return null;
+  }
+  
+  const totalPercent = tasks.reduce((acc, task) => acc + (task.percent || 0), 0) / tasks.length;
+  const completedTasks = tasks.filter(t => parseStatus(t.status || "") === "complete").length;
+  const inProgressTasks = tasks.filter(t => parseStatus(t.status || "") === "in-progress").length;
+  const inDevelopmentTasks = tasks.filter(t => parseStatus(t.status || "") === "in-development").length;
   
   return (
     <Card className="mb-6">
@@ -179,7 +185,7 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
         </div>
         <div className="flex items-center gap-2">
           <CardDescription data-testid="text-last-updated">
-            Last updated: {lastUpdated.toLocaleString()}
+            Last updated: {lastUpdated ? lastUpdated.toLocaleString() : 'Loading...'}
           </CardDescription>
           <AnimatePresence mode="wait">
             {isRefetching && (
@@ -266,7 +272,7 @@ const ActiveTasksSection = ({ tasks, activeIds }: { tasks: Task[]; activeIds: st
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-lg font-bold" style={{ color: getStatusColor(task.status) }} data-testid={`text-active-percent-${task.id}`}>
-                  {task.percent}
+                  {task.percent}%
                 </span>
                 <TrendingUp className="h-4 w-4 text-primary animate-pulse" />
               </div>
@@ -384,8 +390,40 @@ export default function Dashboard() {
                 Monitor Aurora-X task progress and development status
               </p>
             </div>
-            {/* Connection status indicator */}
-            <AnimatePresence mode="wait">
+            <div className="flex items-center gap-3">
+              {/* Task Graph Link */}
+              <a
+                href="http://localhost:8080/dashboard/graph"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
+                data-testid="link-task-graph"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="3" />
+                  <circle cx="6" cy="6" r="2" />
+                  <circle cx="18" cy="6" r="2" />
+                  <circle cx="6" cy="18" r="2" />
+                  <circle cx="18" cy="18" r="2" />
+                  <line x1="9" y1="9" x2="10.5" y2="10.5" />
+                  <line x1="15" y1="9" x2="13.5" y2="10.5" />
+                  <line x1="9" y1="15" x2="10.5" y2="13.5" />
+                  <line x1="15" y1="15" x2="13.5" y2="13.5" />
+                </svg>
+                <span className="font-medium">View Task Graph</span>
+              </a>
+              {/* Connection status indicator */}
+              <AnimatePresence mode="wait">
               {connectionError ? (
                 <motion.div
                   key="offline"
@@ -412,15 +450,15 @@ export default function Dashboard() {
                 </motion.div>
               )}
             </AnimatePresence>
+            </div>
           </div>
         </motion.div>
 
-        <AnimatePresence>
-          <OverallProgress tasks={data.tasks} isRefetching={isRefetching} lastUpdated={lastUpdated} />
-          {data.active && data.active.length > 0 && (
-            <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
-          )}
-        </AnimatePresence>
+        <OverallProgress tasks={data.tasks} isRefetching={isRefetching} lastUpdated={lastUpdated} />
+        
+        {data.active && data.active.length > 0 && (
+          <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
+        )}
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {data.tasks.map((task, index) => (
