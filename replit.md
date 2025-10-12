@@ -11,12 +11,13 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes
 
 **December 2024 Updates**:
-- Added T13 "Universal Code Synthesis Engine (UCSE)" to Master Task List (0% complete)
+- Added T13 "Universal Code Synthesis Engine (UCSE)" to Master Task List (5% complete)
 - Implemented visual task dependency graph visualization with D3.js at /dashboard/graph endpoint
 - Fixed dashboard rendering issue: Updated Task interface to handle numeric percent values from API
 - Improved sidebar navigation with proper client-side routing using wouter Link components
 - Fixed "View Task Graph" button to correctly navigate to /dashboard/graph (now served by Express backend)
 - Added interactive force-directed graph with color-coded task status indicators
+- **NEW**: Made graph nodes editable - click any node to update task percentage directly (updates progress.json in real-time)
 
 ## System Architecture
 
