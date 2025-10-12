@@ -2,7 +2,7 @@
 .PHONY: all help install test run clean serve serve-v3 open-dashboard open-report
 .PHONY: spec spec-test spec-report spec3 spec3-test spec3-all
 .PHONY: orchestrator orchestrate-bg orch-test orch-status
-.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed demo-clean demo-clean-hard
+.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed demo-clean demo-clean-hard demo-status
 
 # === Default Variables ===
 SPEC ?= specs/check_palindrome.md
@@ -29,6 +29,7 @@ help:
 	@echo "  make open-report    # open latest HTML report"
 	@echo ""
 	@echo "Demo Dashboard:"
+	@echo "  make demo-status    # check all endpoints health"
 	@echo "  make demo-seed      # create example specs and run Aurora"
 	@echo "  make demo-all       # run all demo cards (CI/CD)"
 	@echo "  make demo-list      # list available demo cards"
@@ -332,13 +333,11 @@ english-help:
 	@echo "  PROMPT - Default prompt for chat commands"
 
 # === Demo Cards ===
-HOST ?= http://localhost:5001
+HOST ?= http://localhost:8000
 
 # One-shot: run every demo card and save results
 demo-all:
-	@echo "▶ Running all demo cards at $(HOST)/api/demo/run_all ..."
-	@curl -s -X POST $(HOST)/api/demo/run_all | jq '{ok, file, count, successful, failed, summary}' 2>/dev/null || \
-	{ echo "Error: Failed to run demo cards. Is Aurora-X running on $(HOST)?"; exit 1; }
+	@curl -s -X POST $(HOST)/api/demo/run_all | jq '{ok,file,count}'
 
 # List available demo cards
 demo-list:
@@ -348,16 +347,10 @@ demo-list:
 
 # Open demo dashboard in browser
 open-demos:
-	@echo "🌐 Opening demo dashboard at $(HOST)/dashboard/demos ..."
-	@if command -v xdg-open > /dev/null 2>&1; then \
-	xdg-open "$(HOST)/dashboard/demos"; \
-	elif command -v open > /dev/null 2>&1; then \
-	open "$(HOST)/dashboard/demos"; \
-	elif command -v wsl-open > /dev/null 2>&1; then \
-	wsl-open "$(HOST)/dashboard/demos"; \
-	else \
-	echo "✨ Please open in your browser: $(HOST)/dashboard/demos"; \
-	fi
+	@echo "Open: $(HOST)/dashboard/demos"; \
+	if command -v xdg-open >/dev/null; then xdg-open "$(HOST)/dashboard/demos"; \
+	elif command -v open >/dev/null; then open "$(HOST)/dashboard/demos"; \
+	else echo "Please open in your browser."; fi
 
 # Seed example specs, run once, commit, and optionally push
 AURORA_GIT_BRANCH ?= main
@@ -394,3 +387,15 @@ demo-clean-hard:
 	@echo "⚠ HARD CLEAN: removing ALL runs/* and test outputs..."
 	@rm -rf runs/* || true
 	@echo "✅ demo-clean-hard done."
+
+# Comprehensive status check of all Aurora endpoints
+demo-status:
+	@echo "▶ Aurora-X status @ $(HOST)"
+	@echo "• /healthz:" && curl -s $(HOST)/healthz | jq '.status,.components' || true
+	@echo "• /api/demo/cards:" && curl -s $(HOST)/api/demo/cards | jq '.ok, (.cards|length)' || true
+	@echo "• /api/format/seconds:" && curl -s -X POST -H 'content-type: application/json' -d '{"seconds":86400}' $(HOST)/api/format/seconds | jq . || true
+	@echo "• /api/format/units:" && curl -s -X POST -H 'content-type: application/json' -d '{"values":[{"value":7e6,"unit":"m"}]}' $(HOST)/api/format/units | jq . || true
+	@echo "• /api/solve (math):" && curl -s -X POST -H 'content-type: application/json' -d '{"problem":"(2+3)^2 + 1"}' $(HOST)/api/solve | jq . || true
+	@echo "• /api/solve/pretty (physics):" && curl -s -X POST -H 'content-type: application/json' -d '{"problem":"orbital period a=7000 km M=5.972e24 kg"}' $(HOST)/api/solve/pretty | jq . || true
+	@echo "• /chat (timer ui → python):" && curl -s -X POST -H 'content-type: application/json' -d '{"prompt":"make a futuristic timer ui","lang":"python"}' $(HOST)/chat | jq . || true
+	@echo "• /api/demo/run_all:" && curl -s -X POST $(HOST)/api/demo/run_all | jq '{ok,file,count}' || true
