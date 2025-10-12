@@ -1822,6 +1822,58 @@ def synthesize_universal_sync(prompt: str, run_id: str = None, context: dict = N
         loop.close()
 
 
+# ========== Bridge API Wrapper ==========
+
+@dataclass
+class ProjectResult:
+    """Result object for bridge API compatibility"""
+    run_dir: Path
+    manifest: dict
+    
+def generate_project(prompt: str, runs_dir: Path = None) -> ProjectResult:
+    """
+    Generate a project from natural language prompt (Bridge API compatible)
+    
+    Args:
+        prompt: Natural language description of what to build
+        runs_dir: Optional directory to store runs (defaults to "runs")
+        
+    Returns:
+        ProjectResult with run_dir and manifest containing files and metadata
+    """
+    if runs_dir is None:
+        runs_dir = Path("runs")
+    runs_dir.mkdir(exist_ok=True)
+    
+    # Generate timestamp-based run ID
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    run_id = f"run-{timestamp}"
+    
+    # Call the main synthesis function
+    result = synthesize_universal_sync(prompt, run_id)
+    
+    # Create project.zip if it doesn't exist
+    run_dir = Path(result.get("run_dir", runs_dir / run_id))
+    zip_path = run_dir / "project.zip"
+    
+    if not zip_path.exists() and run_dir.exists():
+        with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+            for file_path in run_dir.rglob("*"):
+                if file_path.is_file() and file_path.name != "project.zip":
+                    zf.write(file_path, file_path.relative_to(run_dir))
+    
+    # Build manifest for bridge compatibility
+    manifest = {
+        "ts": timestamp,
+        "files": result.get("files", []),
+        "project_type": result.get("project_type", "unknown"),
+        "status": result.get("status", "success"),
+        "validation": result.get("validation", {})
+    }
+    
+    return ProjectResult(run_dir=run_dir, manifest=manifest)
+
+
 # ========== Testing & Demo ==========
 
 if __name__ == "__main__":

@@ -562,3 +562,13 @@ compose-up:
 
 compose-down:
         docker compose -f docker-compose.aurora-x.yml down
+
+# T12 Factory Bridge helpers
+bridge-nl:
+        @test -n "$(P)" || (echo "Set P='your prompt'"; exit 1)
+        @curl -s -X POST $(HOST)/api/bridge/nl -H 'content-type: application/json' -d '{"prompt":"$(P)"}' | jq .
+bridge-spec:
+        @test -n "$(SPEC)" || (echo "Set SPEC=path/to/spec.md"; exit 1)
+        @curl -s -X POST $(HOST)/api/bridge/spec -H 'content-type: application/json' -d '{"path":"$(SPEC)"}' | jq .
+bridge-deploy:
+        @curl -s -X POST $(HOST)/api/bridge/deploy | jq .
