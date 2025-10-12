@@ -1,0 +1,31 @@
+FROM --platform=${TARGETPLATFORM:-linux/amd64} python:3.11-slim
+
+# Build args for cross-platform builds
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+RUN echo "Building for $TARGETPLATFORM on $BUILDPLATFORM"
+
+WORKDIR /app
+
+# Install system dependencies for ARM compatibility
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy project files
+COPY . .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -e . && \
+    pip install pytest httpx uvicorn[standard] || true
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=5s --timeout=3s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8000/healthz || exit 1
+
+# Run server
+CMD ["python", "-m", "aurora_x.serve"]
