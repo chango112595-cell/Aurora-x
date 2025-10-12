@@ -1,0 +1,33 @@
+{
+  "name": "Aurora-X Ultra",
+  "short_name": "Aurora",
+  "description": "AI-Powered Autonomous Code Synthesis Engine",
+  "start_url": "/dashboard/demos",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#00ffcc",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["developer", "productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/static/screenshot-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Aurora-X Dashboard"
+    }
+  ]
+}
