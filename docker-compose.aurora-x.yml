@@ -1,58 +1,29 @@
-version: '3.8'
-
-# Aurora.X.com Production Deployment
-# One command: docker compose -f docker-compose.aurora-x.yml up -d
-
 services:
   aurora:
-    image: ghcr.io/${GITHUB_REPOSITORY:-yourusername/aurora-x}:latest
-    container_name: aurora-x-app
-    restart: unless-stopped
+    # Build Aurora from your GitHub repo
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: aurora_x
     environment:
-      - PORT=8000
-      - AURORA_DEFAULT_LANG=python
-    ports:
-      - "8000:8000"
+      PORT: "8000"
+      AURORA_ENV: "prod"
+      AURORA_HEALTH_TOKEN: "${AURORA_HEALTH_TOKEN:-ok}"
+      AURORA_DISCORD_WEBHOOK: "${AURORA_DISCORD_WEBHOOK:-}"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/healthz"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 10s
-    volumes:
-      - ./runs:/app/runs
-      - ./data:/app/data
-    networks:
-      - aurora-network
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health?token=${AURORA_HEALTH_TOKEN:-ok}"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
 
   cloudflared:
     image: cloudflare/cloudflared:latest
-    container_name: aurora-x-tunnel
-    restart: unless-stopped
-    command: tunnel run aurora
-    environment:
-      - TUNNEL_LOGLEVEL=info
+    container_name: aurora_cf
     depends_on:
       aurora:
         condition: service_healthy
-    volumes:
-      - ~/.cloudflared:/etc/cloudflared:ro
-    networks:
-      - aurora-network
-
-networks:
-  aurora-network:
-    driver: bridge
-    name: aurora-x-net
-
-# Optional: Add monitoring
-  # monitoring:
-  #   image: prom/prometheus:latest
-  #   container_name: aurora-x-monitoring
-  #   restart: unless-stopped
-  #   ports:
-  #     - "9090:9090"
-  #   volumes:
-  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml
-  #   networks:
-  #     - aurora-network
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: "${CF_TUNNEL_TOKEN}"
+    restart: unless-stopped
