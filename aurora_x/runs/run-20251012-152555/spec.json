@@ -1,0 +1,33 @@
+{
+  "run_id": "run-20251012-152555",
+  "timestamp": "2025-10-12T15:25:55.409866",
+  "project_type": "fullstack",
+  "framework": "react",
+  "language": "javascript",
+  "features": [
+    "auth",
+    "api",
+    "ui"
+  ],
+  "description": "Create a Flask API with user authentication and a React frontend dashboard",
+  "entities": {
+    "models": [
+      "user"
+    ]
+  },
+  "files": [
+    "backend/app.py",
+    "backend/requirements.txt",
+    "backend/config.py",
+    "backend/models.py",
+    "backend/routes.py",
+    "frontend/package.json",
+    "frontend/src/index.js",
+    "frontend/src/App.js",
+    "frontend/src/components/Header.js",
+    "frontend/public/index.html",
+    "README.md",
+    ".gitignore"
+  ],
+  "file_count": 12
+}
