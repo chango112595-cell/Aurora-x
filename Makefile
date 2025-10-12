@@ -410,6 +410,29 @@ export-progress:
 progress-view:
         @head -n 30 MASTER_TASK_LIST.md
 
+progress-thresholds:
+        @echo "🎨 Setting UI color thresholds..."
+        @OK=$${OK:-90}; WARN=$${WARN:-60}; \
+        echo "  OK threshold: $$OK% (green)"; \
+        echo "  Warn threshold: $$WARN% (amber)"; \
+        if [ $$OK -lt $$WARN ]; then \
+        echo "❌ Error: OK must be >= WARN"; exit 1; \
+        fi; \
+        if [ $$OK -gt 100 ] || [ $$WARN -lt 0 ]; then \
+        echo "❌ Error: Thresholds must be between 0-100"; exit 1; \
+        fi; \
+        PORT=$${FASTAPI_PORT:-$${AURORA_PORT:-5001}}; \
+        echo "  Trying FastAPI on port $$PORT..."; \
+        response=$$(curl -s -X POST http://localhost:$$PORT/api/progress/ui_thresholds \
+        -H "Content-Type: application/json" \
+        -d "{\"ui_thresholds\": {\"ok\": $$OK, \"warn\": $$WARN}}" 2>/dev/null); \
+        if [ -n "$$response" ]; then \
+        echo "$$response" | python -c "import sys, json; d=json.loads(sys.stdin.read()); print('✅ Saved:', d.get('ui_thresholds', 'Failed'))"; \
+        else \
+        echo "⚠️  FastAPI not available on port $$PORT"; \
+        echo "Note: This feature requires the FastAPI server (make serve-v3)"; \
+        fi
+
 # GitHub README Badge Sync
 generate-badges:
         @python tools/generate_readme_badges.py
