@@ -119,7 +119,7 @@
     {
       "id": "T12",
       "name": "Aurora Factory Protocol (Bridge)",
-      "percent": 45,
+      "percent": 100,
       "status": "in-development",
       "category": "Automation",
       "notes": [
