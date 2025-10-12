@@ -368,6 +368,9 @@
         <div class="header">
             <h1>Aurora-X Demo Dashboard</h1>
             <p>Interactive test cards for all Aurora endpoints</p>
+            <div style="margin-top: 15px;">
+                <span id="overallChip" class="small" style="padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.06);color:#00ffff;font-weight:600;">Overall: …%</span>
+            </div>
         </div>
 
         <div class="stats" id="stats">
@@ -589,6 +592,39 @@
 
         // Load cards on page load
         loadCards();
+
+        // Overall progress chip update function
+        async function overall() { 
+            try {
+                const r = await fetch('/api/progress'); 
+                const j = await r.json();
+                if(j && j.tasks) {
+                    // Calculate overall percentage from tasks
+                    const tasks = j.tasks;
+                    let totalPercent = 0;
+                    tasks.forEach(task => {
+                        const percent = typeof task.percent === 'string' 
+                            ? parseFloat(task.percent.replace('%', '')) 
+                            : task.percent;
+                        totalPercent += percent || 0;
+                    });
+                    const overallPercent = (totalPercent / Math.max(tasks.length, 1)).toFixed(1);
+                    document.getElementById('overallChip').textContent = `Overall: ${overallPercent}%`;
+                    
+                    // Optional: Add color based on percentage
+                    const chip = document.getElementById('overallChip');
+                    if (overallPercent >= 90) {
+                        chip.style.color = '#10b981'; // green
+                    } else if (overallPercent >= 60) {
+                        chip.style.color = '#f59e0b'; // amber
+                    } else {
+                        chip.style.color = '#ef4444'; // red
+                    }
+                }
+            } catch(e) {}
+        }
+        overall(); 
+        setInterval(overall, 5000);
 
         // Run All button functionality
         document.getElementById('run-all-btn').addEventListener('click', async () => {
