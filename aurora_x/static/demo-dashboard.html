@@ -599,10 +599,14 @@
         loadCards();
 
         // Overall progress chip update function
-        function setChipClass(el, pct){
+        function setChipClass(el, pct, thresholds){
             el.classList.remove('chip-ok','chip-warn','chip-danger');
-            if (pct >= 90) el.classList.add('chip-ok');
-            else if (pct >= 60) el.classList.add('chip-warn');
+            // Use dynamic thresholds if provided, otherwise use defaults
+            const okThreshold = thresholds?.ok || 90;
+            const warnThreshold = thresholds?.warn || 60;
+            
+            if (pct >= okThreshold) el.classList.add('chip-ok');
+            else if (pct >= warnThreshold) el.classList.add('chip-warn');
             else el.classList.add('chip-danger');
         }
         
@@ -623,7 +627,10 @@
                     const pct = Math.round(totalPercent / Math.max(tasks.length, 1));
                     const el = document.getElementById('overallChip');
                     el.textContent = `Overall: ${pct}%`;
-                    setChipClass(el, pct);
+                    
+                    // Use thresholds from API response if available
+                    const thresholds = j.ui_thresholds;
+                    setChipClass(el, pct, thresholds);
                 }
             }catch(e){}
         }
