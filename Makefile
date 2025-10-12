@@ -399,3 +399,16 @@ demo-status:
 	@echo "• /api/solve/pretty (physics):" && curl -s -X POST -H 'content-type: application/json' -d '{"problem":"orbital period a=7000 km M=5.972e24 kg"}' $(HOST)/api/solve/pretty | jq . || true
 	@echo "• /chat (timer ui → python):" && curl -s -X POST -H 'content-type: application/json' -d '{"prompt":"make a futuristic timer ui","lang":"python"}' $(HOST)/chat | jq . || true
 	@echo "• /api/demo/run_all:" && curl -s -X POST $(HOST)/api/demo/run_all | jq '{ok,file,count}' || true
+
+# Progress helpers
+update-progress:
+	python tools/update_progress.py
+
+export-progress:
+	@python tools/update_progress.py >/dev/null && echo "CSV → progress_export.csv"
+
+progress-view:
+	@python - <<'PY'
+	from pathlib import Path
+	print(Path('MASTER_TASK_LIST.md').read_text()[:1200])
+	PY
