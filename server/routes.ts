@@ -153,6 +153,15 @@ async function refreshReadmeBadges(): Promise<void> {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Simple health check endpoint for container health checks
+  app.get("/api/health", (req, res) => {
+    res.status(200).json({ 
+      status: "ok",
+      service: "chango",
+      uptime: Math.floor((Date.now() - serverStartTime) / 1000)
+    });
+  });
+
   // Aurora-X Adaptive Learning Stats endpoints
   app.get("/api/adaptive_stats", (req, res) => {
     try {
