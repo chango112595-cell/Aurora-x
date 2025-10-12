@@ -599,38 +599,22 @@
         loadCards();
 
         // Overall progress chip update function
-        function setChipClass(el, pct, thresholds){
+        function setChipClass(el, pct, th){ // th = {ok, warn}
             el.classList.remove('chip-ok','chip-warn','chip-danger');
-            // Use dynamic thresholds if provided, otherwise use defaults
-            const okThreshold = thresholds?.ok || 90;
-            const warnThreshold = thresholds?.warn || 60;
-            
-            if (pct >= okThreshold) el.classList.add('chip-ok');
-            else if (pct >= warnThreshold) el.classList.add('chip-warn');
+            if (pct >= th.ok) el.classList.add('chip-ok');
+            else if (pct >= th.warn) el.classList.add('chip-warn');
             else el.classList.add('chip-danger');
         }
-        
         async function overall(){
             try{
                 const r = await fetch('/api/progress'); 
                 const j = await r.json();
-                if(j && j.tasks){
-                    // Calculate overall percentage from tasks
-                    const tasks = j.tasks;
-                    let totalPercent = 0;
-                    tasks.forEach(task => {
-                        const percent = typeof task.percent === 'string' 
-                            ? parseFloat(task.percent.replace('%', '')) 
-                            : task.percent;
-                        totalPercent += percent || 0;
-                    });
-                    const pct = Math.round(totalPercent / Math.max(tasks.length, 1));
+                if(j && j.ok){
                     const el = document.getElementById('overallChip');
+                    const pct = Math.round(j.overall_percent||0);
+                    const th = (j.ui_thresholds||{ok:90,warn:60});
                     el.textContent = `Overall: ${pct}%`;
-                    
-                    // Use thresholds from API response if available
-                    const thresholds = j.ui_thresholds;
-                    setChipClass(el, pct, thresholds);
+                    setChipClass(el, pct, th);
                 }
             }catch(e){}
         }
