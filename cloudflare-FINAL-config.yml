@@ -1,0 +1,20 @@
+# FINALIZED CONFIG - Ready to use with free domain
+# Example using Freenom's free .tk domain
+
+tunnel: aurora-tunnel  # This will be replaced with UUID after creation
+credentials-file: /home/user/.cloudflared/aurora-tunnel.json
+
+ingress:
+  - hostname: aurora.myproject.tk  # FREE domain from Freenom
+    service: http://localhost:8000
+    originRequest:
+      httpHostHeader: aurora.myproject.tk
+      noTLSVerify: true
+  - service: http_status:404
+
+# To use this:
+# 1. Get free domain at freenom.com (takes 2 minutes)
+# 2. cloudflared tunnel create aurora-tunnel
+# 3. Replace UUID in this file
+# 4. cloudflared tunnel route dns aurora-tunnel aurora.myproject.tk
+# 5. cloudflared tunnel run aurora-tunnel
