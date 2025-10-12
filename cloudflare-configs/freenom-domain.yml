@@ -1,0 +1,14 @@
+# Option 2: Using Free Domain from Freenom (.tk, .ml, .ga, .cf)
+# First get free domain at: https://www.freenom.com
+# Example: aurora.yourname.tk
+
+tunnel: YOUR-TUNNEL-UUID  # Run: cloudflared tunnel create aurora
+credentials-file: /home/$USER/.cloudflared/YOUR-TUNNEL-UUID.json
+
+ingress:
+  - hostname: aurora.yourname.tk  # Your free domain
+    service: http://localhost:8000
+    originRequest:
+      httpHostHeader: aurora.yourname.tk
+      noTLSVerify: true
+  - service: http_status:404
