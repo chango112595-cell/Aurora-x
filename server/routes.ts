@@ -19,7 +19,9 @@ import {
 } from "@shared/schema";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
+const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
 let wsServer: SynthesisWebSocketServer | null = null;
+let serverStartTime: number = Date.now();
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Aurora-X Adaptive Learning Stats endpoints
@@ -77,6 +79,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ error: "Internal error", details: e?.message ?? String(e) });
     }
   });
+
+  // Health check endpoint for auto-updater monitoring
+  app.get("/healthz", (req, res) => {
+    const providedToken = req.query.token as string | undefined;
+    
+    // Check token authentication if token is provided
+    if (providedToken !== undefined && providedToken !== AURORA_HEALTH_TOKEN) {
+      return res.status(401).json({
+        error: "Unauthorized",
+        message: "Invalid health check token"
+      });
+    }
+    
+    // Calculate uptime in seconds
+    const uptimeSeconds = Math.floor((Date.now() - serverStartTime) / 1000);
+    
+    // Check database connection status
+    let databaseStatus = "disconnected";
+    try {
+      // Attempt to query database to check if it's connected
+      const testQuery = corpusStorage.getRecent(1);
+      databaseStatus = "connected";
+    } catch (e) {
+      databaseStatus = "disconnected";
+    }
+    
+    // Check WebSocket server status
+    const websocketStatus = wsServer ? "active" : "inactive";
+    
+    // Get version from package.json
+    const packageJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8'));
+    const version = packageJson.version || "1.0.0";
+    
+    // Return health check response
+    return res.status(200).json({
+      status: "ok",
+      service: "Aurora-X",
+      version: version,
+      timestamp: new Date().toISOString(),
+      uptime: uptimeSeconds,
+      components: {
+        database: databaseStatus,
+        websocket: websocketStatus
+      }
+    });
+  });
+
   app.post("/api/corpus", (req, res) => {
     const auth = req.header("x-api-key") ?? "";
     if (auth !== AURORA_API_KEY) {
