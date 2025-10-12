@@ -1,0 +1,15 @@
+# Cloudflare Tunnel Configuration (simplified version)
+tunnel: aurora-x  # Will be replaced with UUID after 'cloudflared tunnel create aurora-x'
+credentials-file: /home/$USER/.cloudflared/aurora-x.json
+
+ingress:
+  # Main Aurora app - CUSTOMIZE THIS HOSTNAME
+  - hostname: aurora.yourdomain.com  # Change to your actual domain
+    service: http://localhost:8000
+    originRequest:
+      httpHostHeader: aurora.yourdomain.com
+      connectTimeout: 10s
+      noTLSVerify: true
+  
+  # Catch-all
+  - service: http_status:404
