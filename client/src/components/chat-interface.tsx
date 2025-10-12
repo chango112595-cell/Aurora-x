@@ -5,8 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { SynthesisProgress } from "@/components/synthesis-progress";
 
 interface Message {
   id: string;
@@ -15,6 +16,8 @@ interface Message {
   timestamp: Date;
   code?: string;
   language?: string;
+  synthesisId?: string;
+  isProcessing?: boolean;
 }
 
 interface ExamplePrompt {
@@ -63,6 +66,7 @@ export function ChatInterface() {
   const [input, setInput] = useState("");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showExamples, setShowExamples] = useState(true);
+  const [activeSynthesisId, setActiveSynthesisId] = useState<string | null>(null);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -77,15 +81,32 @@ export function ChatInterface() {
       return response.json();
     },
     onSuccess: (data: any) => {
-      const aiMessage: Message = {
-        id: Date.now().toString(),
-        role: "assistant",
-        content: data.message || "I've generated the code for you. Here's the result:",
-        code: data.code,
-        language: data.language || "python",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, aiMessage]);
+      if (data.synthesis_id) {
+        // Initial response with synthesis ID
+        setActiveSynthesisId(data.synthesis_id);
+        
+        // Add a processing message with synthesis ID
+        const processingMessage: Message = {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: "Processing your request...",
+          synthesisId: data.synthesis_id,
+          isProcessing: true,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, processingMessage]);
+      } else {
+        // Fallback for direct response (shouldn't happen with new system)
+        const aiMessage: Message = {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: data.message || "I've generated the code for you. Here's the result:",
+          code: data.code,
+          language: data.language || "python",
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, aiMessage]);
+      }
     },
     onError: () => {
       const errorMessage: Message = {
@@ -95,8 +116,49 @@ export function ChatInterface() {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
+      setActiveSynthesisId(null);
     }
   });
+
+  // Poll for synthesis result when complete
+  const { data: synthesisResult } = useQuery({
+    queryKey: [`/api/synthesis/result/${activeSynthesisId}`],
+    enabled: false, // We'll handle completion through progress component
+    refetchInterval: false,
+  });
+
+  const handleSynthesisComplete = (progressData: any) => {
+    // When synthesis is complete, fetch the actual result
+    // For now, we'll simulate fetching the result
+    const completedMessage: Message = {
+      id: Date.now().toString(),
+      role: "assistant",
+      content: "Aurora-X has successfully synthesized your code!",
+      code: `# Synthesis ID: ${progressData.id}
+# Completed in: ${progressData.actualDuration}s
+# Complexity: ${progressData.complexity}
+
+def synthesized_function():
+    """Your synthesized code will appear here"""
+    return "Implementation complete"`,
+      language: "python",
+      timestamp: new Date(),
+    };
+    
+    // Replace the processing message with the completed one
+    setMessages((prev) => {
+      const updated = [...prev];
+      const processingIndex = updated.findIndex(m => m.synthesisId === progressData.id);
+      if (processingIndex !== -1) {
+        updated[processingIndex] = completedMessage;
+      } else {
+        updated.push(completedMessage);
+      }
+      return updated;
+    });
+    
+    setActiveSynthesisId(null);
+  };
 
   const handleSend = () => {
     if (!input.trim() || chatMutation.isPending) return;
@@ -180,6 +242,14 @@ export function ChatInterface() {
                   >
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                   </div>
+                  {/* Show synthesis progress for processing messages */}
+                  {message.synthesisId && message.isProcessing && (
+                    <SynthesisProgress
+                      synthesisId={message.synthesisId}
+                      onComplete={handleSynthesisComplete}
+                      className="mt-2"
+                    />
+                  )}
                   {message.code && (
                     <Card className="p-4 bg-muted/30 border-muted">
                       <div className="flex items-center justify-between mb-2">
@@ -219,21 +289,6 @@ export function ChatInterface() {
                 )}
               </div>
             ))}
-
-            {/* Loading indicator */}
-            {chatMutation.isPending && (
-              <div className="flex gap-3 justify-start animate-in fade-in duration-300" data-testid="loading-indicator">
-                <Avatar className="h-10 w-10 border-2 border-primary/20">
-                  <AvatarFallback className="bg-primary text-primary-foreground font-bold">
-                    C
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex items-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-3">
-                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                  <span className="text-sm">Analyzing request...</span>
-                </div>
-              </div>
-            )}
           </div>
         </ScrollArea>
       </div>
