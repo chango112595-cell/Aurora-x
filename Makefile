@@ -544,3 +544,21 @@ demo: thresholds
 
 smoke:
         curl -fsS $(HOST)/healthz && echo "health: OK"
+
+# PWA & OS Matrix helpers (T10)
+pwa-audit:
+        @echo "Checking PWA manifest..."
+        @test -f frontend/pwa/manifest.webmanifest && echo "[OK] manifest: frontend/pwa/manifest.webmanifest" || (echo "[FAIL] manifest missing" && exit 1)
+        @test -f frontend/pwa/service-worker.js && echo "[OK] service-worker: frontend/pwa/service-worker.js" || (echo "[FAIL] service-worker missing" && exit 1)
+
+serve-pwa:
+        @echo "PWA endpoints mounted at /manifest.webmanifest and /service-worker.js"
+
+docker-buildx:
+        docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/OWNER/REPO:latest -f docker/Dockerfile . --push
+
+compose-up:
+        docker compose -f docker-compose.aurora-x.yml up -d
+
+compose-down:
+        docker compose -f docker-compose.aurora-x.yml down

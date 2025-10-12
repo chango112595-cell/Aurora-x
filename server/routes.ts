@@ -162,6 +162,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // PWA endpoints
+  app.get("/manifest.webmanifest", (req, res) => {
+    const manifestPath = path.join(process.cwd(), 'frontend', 'pwa', 'manifest.webmanifest');
+    
+    // Check if the file exists
+    if (!fs.existsSync(manifestPath)) {
+      console.error('[PWA] Manifest file not found at:', manifestPath);
+      return res.status(404).json({
+        ok: false,
+        err: "manifest missing"
+      });
+    }
+    
+    // Set the correct MIME type for PWA manifest
+    res.setHeader('Content-Type', 'application/manifest+json');
+    res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+    
+    // Send the manifest file
+    res.sendFile(manifestPath);
+  });
+
+  app.get("/service-worker.js", (req, res) => {
+    const swPath = path.join(process.cwd(), 'frontend', 'pwa', 'service-worker.js');
+    
+    // Check if the file exists
+    if (!fs.existsSync(swPath)) {
+      console.error('[PWA] Service worker file not found at:', swPath);
+      return res.status(404).json({
+        ok: false,
+        err: "sw missing"
+      });
+    }
+    
+    // Set the correct MIME type for JavaScript
+    res.setHeader('Content-Type', 'application/javascript');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); // Don't cache service worker
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    
+    // Send the service worker file
+    res.sendFile(swPath);
+  });
+
   // Aurora-X Universal Code Synthesis endpoints
   app.post("/api/nl/compile_full", (req, res) => {
     try {
