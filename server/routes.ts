@@ -80,6 +80,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Progress endpoint to serve progress.json data
+  app.get("/api/progress", (req, res) => {
+    try {
+      // Read the progress.json file from the root directory
+      const progressPath = path.join(process.cwd(), 'progress.json');
+      
+      // Check if the file exists
+      if (!fs.existsSync(progressPath)) {
+        return res.status(404).json({
+          error: "Progress data not found",
+          message: "The progress.json file does not exist"
+        });
+      }
+      
+      // Read the file content
+      const progressData = fs.readFileSync(progressPath, 'utf-8');
+      
+      // Parse the JSON data
+      const progressJson = JSON.parse(progressData);
+      
+      // Set CORS headers for cross-origin access
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
+      
+      // Return the progress data with appropriate headers
+      res.setHeader('Content-Type', 'application/json');
+      return res.json(progressJson);
+      
+    } catch (error: any) {
+      // Handle JSON parsing errors or other read errors
+      console.error('[Progress API] Error reading or parsing progress.json:', error);
+      
+      // Return appropriate error response
+      if (error.code === 'ENOENT') {
+        return res.status(404).json({
+          error: "Progress data not found",
+          message: "The progress.json file does not exist"
+        });
+      } else if (error instanceof SyntaxError) {
+        return res.status(500).json({
+          error: "Invalid progress data",
+          message: "The progress.json file contains invalid JSON"
+        });
+      } else {
+        return res.status(500).json({
+          error: "Internal server error",
+          message: "Failed to read progress data",
+          details: error?.message ?? String(error)
+        });
+      }
+    }
+  });
+
+  // Handle OPTIONS preflight requests for CORS
+  app.options("/api/progress", (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Max-Age', '86400');
+    res.sendStatus(204); // No content for OPTIONS
+  });
+
   // Health check endpoint for auto-updater monitoring
   app.get("/healthz", async (req, res) => {
     const providedToken = req.query.token as string | undefined;
