@@ -584,6 +584,175 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Natural Language Compilation endpoint - proxy to Aurora-X backend
+  app.post("/api/nl/compile", async (req, res) => {
+    try {
+      const { prompt } = req.body;
+      
+      if (!prompt || typeof prompt !== 'string') {
+        return res.status(400).json({ 
+          status: "error",
+          run_id: "",
+          files_generated: [],
+          message: "Prompt is required and must be a string"
+        });
+      }
+
+      // Sanitize prompt to prevent shell injection
+      const sanitizedPrompt = prompt
+        .replace(/[`$()<>|;&\\\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g, '')
+        .replace(/\*/g, '')  // Remove wildcards
+        .replace(/~/g, '')   // Remove tilde expansion
+        .replace(/\[/g, '')  // Remove bracket expansion
+        .replace(/\]/g, '')  // Remove bracket expansion
+        .replace(/\{/g, '')  // Remove brace expansion  
+        .replace(/\}/g, '')  // Remove brace expansion
+        .trim();
+      
+      console.log(`[NL Compile] Processing prompt: "${sanitizedPrompt}"`);
+      
+      // Execute Aurora-X natural language compilation command
+      const pythonProcess = spawn('python3', ['-m', 'aurora_x.main', '--nl', sanitizedPrompt], {
+        cwd: process.cwd(),
+        timeout: 60000, // 60 second timeout
+        shell: false, // Disable shell to prevent injection
+        env: { ...process.env }
+      });
+      
+      let stdout = '';
+      let stderr = '';
+      
+      pythonProcess.stdout.on('data', (data) => {
+        stdout += data.toString();
+      });
+      
+      pythonProcess.stderr.on('data', (data) => {
+        stderr += data.toString();
+      });
+      
+      // Wait for process completion
+      const exitCode = await new Promise<number>((resolve, reject) => {
+        pythonProcess.on('close', (code) => {
+          resolve(code || 0);
+        });
+        
+        pythonProcess.on('error', (err) => {
+          console.error(`[NL Compile] Process error:`, err);
+          reject(err);
+        });
+      });
+      
+      console.log(`[NL Compile] Exit code:`, exitCode);
+      console.log(`[NL Compile] Output:`, stdout);
+      if (stderr) console.log(`[NL Compile] Stderr:`, stderr);
+      
+      // Parse output to extract information
+      let status = "error";
+      let run_id = "";
+      let files_generated: string[] = [];
+      let message = "Compilation failed";
+      
+      // Check if output contains [OK] for success
+      if (stdout.includes("[OK]")) {
+        status = "success";
+        
+        // Extract run ID from patterns like "run-20251012-084111"
+        const runIdMatch = stdout.match(/run-\d{8}-\d{6}/);
+        if (runIdMatch) {
+          run_id = runIdMatch[0];
+        }
+        
+        // Extract file paths for Flask apps
+        const flaskMatch = stdout.match(/Flask app generated at: (runs\/[^\s]+)/);
+        if (flaskMatch) {
+          files_generated.push(flaskMatch[1]);
+          message = "Flask application generated successfully";
+        }
+        
+        // Extract file paths for v3 functions
+        const v3Match = stdout.match(/v3 generated: (runs\/[^\s]+)/);
+        if (v3Match) {
+          const runPath = v3Match[1];
+          // Check for generated files in the run directory
+          try {
+            const srcDir = path.join(process.cwd(), runPath, 'src');
+            if (fs.existsSync(srcDir)) {
+              const files = fs.readdirSync(srcDir)
+                .filter(file => file.endsWith('.py'))
+                .map(file => path.join(runPath, 'src', file));
+              files_generated.push(...files);
+            }
+          } catch (e) {
+            console.error(`[NL Compile] Error checking generated files:`, e);
+          }
+          message = "Function generated successfully";
+        }
+        
+        // Generic extraction for any "generated at:" pattern
+        const genericMatches = stdout.matchAll(/generated at: (runs\/[^\s]+)/g);
+        for (const match of genericMatches) {
+          if (!files_generated.includes(match[1])) {
+            files_generated.push(match[1]);
+          }
+        }
+        
+        // If no specific files found but we have a run_id, check the run directory
+        if (files_generated.length === 0 && run_id) {
+          try {
+            const runDir = path.join(process.cwd(), 'runs', run_id);
+            if (fs.existsSync(runDir)) {
+              const srcDir = path.join(runDir, 'src');
+              if (fs.existsSync(srcDir)) {
+                const files = fs.readdirSync(srcDir)
+                  .filter(file => file.endsWith('.py'))
+                  .map(file => path.join('runs', run_id, 'src', file));
+                files_generated.push(...files);
+              }
+            }
+          } catch (e) {
+            console.error(`[NL Compile] Error scanning run directory:`, e);
+          }
+        }
+        
+        if (files_generated.length === 0 && status === "success") {
+          message = "Code generated successfully (check runs directory)";
+        }
+        
+      } else if (exitCode === 0) {
+        // Process completed but no [OK] marker
+        status = "warning";
+        message = "Compilation completed with warnings";
+        
+        // Still try to extract run ID
+        const runIdMatch = stdout.match(/run-\d{8}-\d{6}/);
+        if (runIdMatch) {
+          run_id = runIdMatch[0];
+        }
+      } else {
+        // Process failed
+        status = "error";
+        message = stderr || stdout || "Compilation failed with no output";
+      }
+      
+      // Return the response
+      return res.json({
+        run_id,
+        status,
+        files_generated,
+        message
+      });
+      
+    } catch (e: any) {
+      console.error(`[NL Compile] Error:`, e);
+      return res.status(500).json({
+        status: "error",
+        run_id: "",
+        files_generated: [],
+        message: e?.message ?? "Internal server error during compilation"
+      });
+    }
+  });
+
   // Chat endpoint for Aurora-X synthesis requests
   app.post("/api/chat", async (req, res) => {
     try {
