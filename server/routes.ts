@@ -6,7 +6,7 @@ import { progressStore } from "./progress-store";
 import { createWebSocketServer, type SynthesisWebSocketServer } from "./websocket-server";
 import * as path from "path";
 import * as fs from "fs";
-import { spawn } from "child_process";
+import { spawn, execFile } from "child_process";
 import { promisify } from "util";
 import {
   corpusEntrySchema,
@@ -22,6 +22,135 @@ const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-producti
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
 let wsServer: SynthesisWebSocketServer | null = null;
 let serverStartTime: number = Date.now();
+
+/**
+ * Helper function to refresh README badges after progress updates
+ * Runs asynchronously to avoid blocking the API response
+ * 
+ * This function:
+ * 1. Runs the Python script at tools/patch_readme_progress.py to update README badges
+ * 2. Optionally commits and pushes changes to git if AURORA_AUTO_GIT is set
+ */
+async function refreshReadmeBadges(): Promise<void> {
+  try {
+    // Check if the Python script exists
+    const scriptPath = path.join(process.cwd(), 'tools', 'patch_readme_progress.py');
+    if (!fs.existsSync(scriptPath)) {
+      // Script doesn't exist, log but don't fail
+      console.log('[Badge Refresh] Python script not found at tools/patch_readme_progress.py - skipping badge refresh');
+      return;
+    }
+    
+    // Run the Python script to update badges
+    await new Promise<void>((resolve, reject) => {
+      execFile('python3', [scriptPath], {
+        cwd: process.cwd(),
+        timeout: 10000, // 10 second timeout
+        maxBuffer: 1024 * 1024, // 1MB buffer
+      }, (error, stdout, stderr) => {
+        if (error) {
+          console.error('[Badge Refresh] Error running patch_readme_progress.py:', error.message);
+          // Don't reject, just log and continue
+          resolve();
+          return;
+        }
+        
+        if (stderr && !stderr.includes('[OK]')) {
+          console.error('[Badge Refresh] Script stderr:', stderr);
+        }
+        
+        if (stdout && stdout.includes('[OK]')) {
+          console.log('[Badge Refresh] README badges updated successfully');
+        }
+        
+        resolve();
+      });
+    });
+    
+    // Check if auto-git is enabled
+    const autoGit = process.env.AURORA_AUTO_GIT;
+    const shouldAutoCommit = autoGit && ['1', 'true', 'yes', 'on'].includes(autoGit.toLowerCase());
+    
+    if (shouldAutoCommit) {
+      // Run git operations
+      console.log('[Badge Refresh] Auto-git enabled, committing and pushing changes...');
+      
+      // Add specific files
+      const filesToAdd = [
+        'progress.json',
+        'MASTER_TASK_LIST.md',
+        'progress_export.csv',
+        'README.md'
+      ];
+      
+      // Check which files exist and add them
+      const existingFiles = filesToAdd.filter(file => 
+        fs.existsSync(path.join(process.cwd(), file))
+      );
+      
+      if (existingFiles.length === 0) {
+        console.log('[Badge Refresh] No files to commit');
+        return;
+      }
+      
+      // Add files to git
+      await new Promise<void>((resolve) => {
+        execFile('git', ['add', ...existingFiles], {
+          cwd: process.cwd(),
+          timeout: 5000,
+        }, (error, stdout, stderr) => {
+          if (error) {
+            console.error('[Badge Refresh] Error adding files to git:', error.message);
+            resolve();
+            return;
+          }
+          console.log('[Badge Refresh] Added files to git:', existingFiles.join(', '));
+          resolve();
+        });
+      });
+      
+      // Create commit
+      await new Promise<void>((resolve) => {
+        execFile('git', ['commit', '-m', 'chore(progress): bump via /api and refresh badges'], {
+          cwd: process.cwd(),
+          timeout: 5000,
+        }, (error, stdout, stderr) => {
+          if (error) {
+            // Check if it's just "nothing to commit" which is not really an error
+            if (error.message.includes('nothing to commit')) {
+              console.log('[Badge Refresh] Nothing to commit, working tree clean');
+            } else {
+              console.error('[Badge Refresh] Error creating commit:', error.message);
+            }
+            resolve();
+            return;
+          }
+          console.log('[Badge Refresh] Created commit successfully');
+          resolve();
+        });
+      });
+      
+      // Push to remote
+      await new Promise<void>((resolve) => {
+        execFile('git', ['push'], {
+          cwd: process.cwd(),
+          timeout: 15000, // Give push more time
+        }, (error, stdout, stderr) => {
+          if (error) {
+            console.error('[Badge Refresh] Error pushing to remote:', error.message);
+            resolve();
+            return;
+          }
+          console.log('[Badge Refresh] Pushed changes to remote repository');
+          resolve();
+        });
+      });
+    }
+  } catch (error: any) {
+    // Log error but don't throw - this is a non-critical operation
+    console.error('[Badge Refresh] Unexpected error:', error.message || error);
+  }
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Aurora-X Adaptive Learning Stats endpoints
@@ -246,6 +375,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       fs.writeFileSync(progressPath, JSON.stringify(progressJson, null, 2));
       
       console.log(`[Progress Update] Task ${task_id}: ${oldPercent}% → ${percentage}% (status: ${oldStatus} → ${task.status})`);
+      
+      // Asynchronously refresh README badges after successful update
+      // This runs in the background and doesn't block the API response
+      refreshReadmeBadges().catch((error) => {
+        console.error('[Progress Update] Badge refresh failed:', error);
+        // Don't throw - let the API response succeed even if badge refresh fails
+      });
       
       // Calculate new overall percentage
       let totalPercent = 0;

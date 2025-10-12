@@ -1,6 +1,6 @@
 {
   "project": "AURORA-X Ultra",
-  "updated_utc": "2025-10-12T13:35:51.262Z",
+  "updated_utc": "2025-10-12T13:48:50Z",
   "ui_thresholds": {
     "ok": 90,
     "warn": 60
@@ -33,7 +33,7 @@
       "status": "complete",
       "category": "Core",
       "notes": [
-        "ε-greedy bias scheduler, drift tracking, sparklines"
+        "\u03b5-greedy bias scheduler, drift tracking, sparklines"
       ]
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "id": "T06",
-      "name": "English → Code Synthesis Engine",
+      "name": "English \u2192 Code Synthesis Engine",
       "percent": 100,
       "status": "complete",
       "category": "Core",
@@ -79,7 +79,7 @@
     {
       "id": "T08",
       "name": "Universal Code Intelligence Layer",
-      "percent": 85,
+      "percent": 88,
       "status": "in-progress",
       "category": "Core Learning",
       "notes": [
@@ -123,7 +123,7 @@
       "status": "in-development",
       "category": "Automation",
       "notes": [
-        "Internal bridge: Chat → GitHub → Replit → Deploy → Test"
+        "Internal bridge: Chat \u2192 GitHub \u2192 Replit \u2192 Deploy \u2192 Test"
       ]
     },
     {
