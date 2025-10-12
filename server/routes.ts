@@ -81,7 +81,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Health check endpoint for auto-updater monitoring
-  app.get("/healthz", (req, res) => {
+  app.get("/healthz", async (req, res) => {
     const providedToken = req.query.token as string | undefined;
     
     // Check token authentication if token is provided
@@ -97,24 +97,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     // Check database connection status
     let databaseStatus = "disconnected";
+    let databaseError: string | undefined;
     try {
       // Attempt to query database to check if it's connected
-      const testQuery = corpusStorage.getRecent(1);
+      // Properly await the async operation
+      const testQuery = await corpusStorage.getRecent(1);
       databaseStatus = "connected";
-    } catch (e) {
+    } catch (e: any) {
       databaseStatus = "disconnected";
+      databaseError = e?.message ?? String(e);
+      console.error("[Health Check] Database connection failed:", databaseError);
     }
     
-    // Check WebSocket server status
-    const websocketStatus = wsServer ? "active" : "inactive";
+    // Check WebSocket server status more thoroughly
+    let websocketStatus = "inactive";
+    let websocketDetails: any = {};
+    if (wsServer) {
+      try {
+        // Check if the WebSocket server is properly initialized and listening
+        const wsServerInternal = wsServer as any;
+        if (wsServerInternal.wss) {
+          // Check if WebSocket server has clients property (indicates it's listening)
+          websocketStatus = "active";
+          // Add more detailed status if available
+          if (wsServerInternal.wss.clients) {
+            websocketDetails.clientCount = wsServerInternal.wss.clients.size;
+          }
+          // Check if server is in listening state
+          if (wsServerInternal.wss.listening !== false) {
+            websocketDetails.listening = true;
+          }
+        }
+      } catch (e) {
+        console.error("[Health Check] WebSocket status check failed:", e);
+        websocketStatus = "error";
+      }
+    }
     
     // Get version from package.json
-    const packageJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8'));
-    const version = packageJson.version || "1.0.0";
+    let version = "1.0.0";
+    try {
+      const packageJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8'));
+      version = packageJson.version || "1.0.0";
+    } catch (e) {
+      console.error("[Health Check] Failed to read package.json:", e);
+    }
     
-    // Return health check response
-    return res.status(200).json({
-      status: "ok",
+    // Determine overall health status
+    const isHealthy = databaseStatus === "connected" && 
+                     (websocketStatus === "active" || websocketStatus === "inactive"); // inactive is ok if not initialized
+    
+    const overallStatus = isHealthy ? "ok" : "unhealthy";
+    const statusCode = isHealthy ? 200 : 503;
+    
+    // Build response object
+    const response: any = {
+      status: overallStatus,
       service: "Aurora-X",
       version: version,
       timestamp: new Date().toISOString(),
@@ -123,7 +161,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         database: databaseStatus,
         websocket: websocketStatus
       }
-    });
+    };
+    
+    // Add error details if unhealthy
+    if (!isHealthy) {
+      response.errors = [];
+      if (databaseStatus === "disconnected") {
+        response.errors.push({
+          component: "database",
+          message: databaseError || "Database connection failed"
+        });
+      }
+      if (websocketStatus === "error") {
+        response.errors.push({
+          component: "websocket",
+          message: "WebSocket server error"
+        });
+      }
+    }
+    
+    // Add WebSocket details if available
+    if (Object.keys(websocketDetails).length > 0) {
+      response.components.websocketDetails = websocketDetails;
+    }
+    
+    // Return health check response with appropriate status code
+    return res.status(statusCode).json(response);
   });
 
   app.post("/api/corpus", (req, res) => {
