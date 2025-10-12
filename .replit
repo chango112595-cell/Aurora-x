@@ -2,7 +2,7 @@
 entrypoint = "aurora_x/main.py"
 
 # Auto-pull latest code and run Aurora backend (Python)
-run = "bash -lc 'git pull --ff-only || true; python3 aurora_x/main.py'"
+run = "bash -lc 'git pull --ff-only || true; scripts/bridge_autostart.sh && python3 aurora_x/main.py'"
 onBoot = "bash -lc 'git pull --ff-only || true'"
 modules = ["nodejs-20", "web", "postgresql-16", "python-3.11", "python3"]
 hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
