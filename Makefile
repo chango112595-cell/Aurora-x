@@ -564,25 +564,44 @@ compose-up:
 compose-down:
         docker compose -f docker-compose.aurora-x.yml down
 
-# T12 Factory Bridge helpers
+# === Factory Bridge (NL → Project) ===============================
+BRIDGE_HOST ?= 127.0.0.1
 BRIDGE_PORT ?= 5001
 
-# Start Bridge service on port 5001
-bridge-up:
-        @echo "🚀 Starting Factory Bridge service on port $(BRIDGE_PORT)..."
-        @python3 aurora_x/bridge/service.py > /tmp/bridge.log 2>&1 &
-        @sleep 2
-        @curl -s http://localhost:$(BRIDGE_PORT)/healthz | python -m json.tool || echo "Bridge not responding - check /tmp/bridge.log"
+.PHONY: bridge-up bridge-down bridge-restart bridge-health bridge-ensure
 
-# Check Bridge service status
-bridge-status:
-        @echo "🔍 Checking Bridge service status..."
-        @curl -s http://localhost:$(BRIDGE_PORT)/healthz | python -m json.tool || echo "Bridge service not running"
+bridge-up:
+        @echo "▶ starting Factory Bridge on $(BRIDGE_HOST):$(BRIDGE_PORT)…"
+        @nohup python -m aurora_x.bridge.service --host $(BRIDGE_HOST) --port $(BRIDGE_PORT) >/tmp/bridge.out 2>/tmp/bridge.err & echo $$! >/tmp/bridge.pid
+        @sleep 1
+        @$(MAKE) bridge-health
+
+bridge-down:
+        @if [ -f /tmp/bridge.pid ]; then \
+                echo "⏹ stopping Factory Bridge $$([ -f /tmp/bridge.pid ] && cat /tmp/bridge.pid)"; \
+                kill `cat /tmp/bridge.pid` 2>/dev/null || true; \
+                rm -f /tmp/bridge.pid; \
+        else \
+                echo "ℹ no running bridge pid file found"; \
+        fi
+
+bridge-restart: bridge-down bridge-up
+
+bridge-health:
+        @curl -fsS http://$(BRIDGE_HOST):$(BRIDGE_PORT)/healthz \
+          || (echo "❌ bridge not healthy on $(BRIDGE_PORT)"; exit 1)
+        @echo "✅ bridge healthy on $(BRIDGE_PORT)"
+
+# Start only if health fails (used by startup scripts & dashboard)
+bridge-ensure:
+        @curl -fsS http://$(BRIDGE_HOST):$(BRIDGE_PORT)/healthz >/dev/null 2>&1 \
+          && echo "✅ bridge already running on $(BRIDGE_PORT)" \
+          || $(MAKE) bridge-up
 
 # Start orchestrator with Bridge autostart
 orch-up:
         @echo "🚀 Starting Orchestrator with Bridge autostart..."
-        @make bridge-up
+        @make bridge-ensure
         @make orchestrate-bg
         @echo "✅ Bridge and Orchestrator running in background"
 
