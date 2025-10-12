@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, macos-14]  # macos-14 = Apple Silicon ARM64
+        os: [ubuntu-latest, windows-latest, macos-latest, macos-14]  # macos-14 = Apple Silicon ARM64
     env:
       HOST: http://127.0.0.1:8000
       PORT: 8000
