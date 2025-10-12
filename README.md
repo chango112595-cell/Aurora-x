@@ -1,3 +1,11 @@
+<!-- AURORA_PROGRESS_BADGES:START -->
+<p>
+  <img alt="Overall Progress" src="https://img.shields.io/badge/Overall-90.83%25-7D5BFF?style=for-the-badge" />
+  <img alt="Active" src="https://img.shields.io/badge/Active-T08,%20T10,%20T12-66E6FF?style=for-the-badge" />
+  <img alt="Updated" src="https://img.shields.io/badge/Updated-2025-10-12T05%3A21%3A59Z-32325D?style=for-the-badge" />
+</p>
+<!-- AURORA_PROGRESS_BADGES:END -->
+
 # Aurora-X Ultra
 
 <!-- BADGES-START -->
