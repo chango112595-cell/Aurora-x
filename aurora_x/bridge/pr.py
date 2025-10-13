@@ -1,368 +1,315 @@
 """
 GitHub Pull Request creation module for Aurora Bridge.
-Handles automated PR creation from generated code.
+Handles automated PR creation with optional GPG signing support.
 """
 from __future__ import annotations
 import os
 import json
-import shlex
 import subprocess
-import tempfile
+import shlex
+import time
 import zipfile
-from pathlib import Path
-from typing import Dict, Optional, Tuple, Any
-from datetime import datetime
+import pathlib
 import urllib.request
-import urllib.parse
-import urllib.error
+from contextlib import contextmanager
 
+# Module-level cache for GPG key import status
+_GPG_KEY_IMPORTED = False
 
-def _run(cmd: str) -> Tuple[int, str, str]:
+def _run(cmd: str, cwd: str | None = None):
+    """Execute a shell command and return the result."""
+    return subprocess.run(shlex.split(cmd), cwd=cwd, capture_output=True, text=True)
+
+def _get_git_config(key: str) -> str | None:
+    """Get the current value of a git config key."""
+    result = _run(f"git config --get {key}")
+    return result.stdout.strip() if result.returncode == 0 else None
+
+def _import_gpg_key_once(key_id: str, armored: str) -> bool:
+    """Import GPG key only once per runtime, with caching."""
+    global _GPG_KEY_IMPORTED
+    
+    if _GPG_KEY_IMPORTED:
+        return True
+    
+    try:
+        # Check if GPG is available
+        check_result = subprocess.run(
+            ['gpg', '--version'], 
+            capture_output=True, 
+            text=True,
+            timeout=5
+        )
+        if check_result.returncode != 0:
+            return False
+        
+        # Import the key
+        import_result = subprocess.run(
+            ['gpg', '--batch', '--import'],
+            input=armored,
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        
+        if import_result.returncode == 0:
+            # Verify the key was imported
+            verify_result = _run(f"gpg --batch --list-secret-keys {shlex.quote(key_id)}")
+            if verify_result.returncode == 0:
+                _GPG_KEY_IMPORTED = True
+                return True
+    except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+        # GPG not available or operation failed
+        pass
+    
+    return False
+
+@contextmanager
+def _temporary_git_config(configs: dict[str, str | None]):
     """
-    Execute a shell command and return the result.
+    Context manager to temporarily set git config values and restore them afterwards.
     
     Args:
-        cmd: Command string to execute
+        configs: Dictionary of config keys to temporary values
+    """
+    # Save original values
+    original_values = {}
+    for key in configs:
+        original_values[key] = _get_git_config(key)
+    
+    try:
+        # Set temporary values
+        for key, value in configs.items():
+            if value is not None:
+                _run(f"git config {key} {shlex.quote(str(value))}")
+            else:
+                # Unset the config if value is None
+                _run(f"git config --unset {key}")
         
-    Returns:
-        Tuple of (return_code, stdout, stderr)
-    """
-    p = subprocess.run(shlex.split(cmd), capture_output=True, text=True)
-    return p.returncode, p.stdout.strip(), p.stderr.strip()
+        yield
+    finally:
+        # Restore original values
+        for key, original_value in original_values.items():
+            if original_value is not None:
+                _run(f"git config {key} {shlex.quote(original_value)}")
+            else:
+                # The key didn't exist before, so remove it
+                _run(f"git config --unset {key}")
 
+def _setup_git_identity():
+    """Set up git identity for commits."""
+    email = os.getenv("AURORA_GIT_EMAIL", "aurora@local")
+    name = os.getenv("AURORA_GIT_NAME", "Aurora Bridge")
+    _run(f'git config user.email {shlex.quote(email)}')
+    _run(f'git config user.name {shlex.quote(name)}')
 
-def _ensure_user() -> None:
-    """
-    Ensure git user configuration is set.
-    """
-    # Check if user email is set
-    code, email, _ = _run("git config user.email")
-    if not email:
-        _run("git config user.email 'aurora@bridge.local'")
+def _ensure_remote(url: str):
+    """Ensure git remote is configured."""
+    # Check if we're in a git repo
+    result = _run("git rev-parse --is-inside-work-tree")
+    if result.returncode != 0:
+        # Initialize git repo if not exists
+        _run("git init")
     
-    # Check if user name is set
-    code, name, _ = _run("git config user.name")
-    if not name:
-        _run("git config user.name 'Aurora Bridge'")
+    # Remove and re-add origin
+    _run("git remote remove origin")
+    _run(f"git remote add origin {url}")
 
-
-def _ensure_remote(owner: str, name: str) -> bool:
-    """
-    Ensure the git remote is properly configured.
+def _github_api(path: str, method="GET", payload: dict | None = None):
+    """Make a request to the GitHub API."""
+    tok = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("AURORA_GH_TOKEN")
+    if not tok:
+        return {"ok": False, "err": "No GitHub token found. Please set GITHUB_TOKEN, GH_TOKEN, or AURORA_GH_TOKEN environment variable"}
     
-    Args:
-        owner: Repository owner (GitHub username or organization)
-        name: Repository name
-        
-    Returns:
-        True if remote is configured, False otherwise
-    """
-    # Check for custom repository URL from environment
-    custom_url = os.getenv("AURORA_GIT_URL", "").strip()
-    
-    if custom_url:
-        repo_url = custom_url
-    else:
-        # Construct GitHub URL from owner and name
-        repo_url = f"https://github.com/{owner}/{name}.git"
-    
-    # Get current remote URL
-    code, current_url, _ = _run("git remote get-url origin")
-    
-    # Update remote if needed
-    if code != 0 or (current_url and current_url != repo_url):
-        _run("git remote remove origin")
-        _run(f"git remote add origin {repo_url}")
-    
-    return True
-
-
-def _get_auth_token() -> Optional[str]:
-    """
-    Get GitHub authentication token from environment variables.
-    Checks multiple possible variable names.
-    
-    Returns:
-        Authentication token if found, None otherwise
-    """
-    token_vars = ["GITHUB_TOKEN", "GH_TOKEN", "AURORA_GH_TOKEN"]
-    
-    for var in token_vars:
-        token = os.getenv(var, "").strip()
-        if token:
-            return token
-    
-    return None
-
-
-def _github_api(
-    endpoint: str,
-    method: str = "GET",
-    data: Optional[Dict[str, Any]] = None,
-    token: Optional[str] = None
-) -> Dict[str, Any]:
-    """
-    Make a request to the GitHub API.
-    
-    Args:
-        endpoint: API endpoint (e.g., "/repos/owner/name/pulls")
-        method: HTTP method (GET, POST, etc.)
-        data: Request body data (for POST/PUT requests)
-        token: GitHub authentication token
-        
-    Returns:
-        Response data as dictionary
-        
-    Raises:
-        RuntimeError: If the API request fails
-    """
-    if not token:
-        token = _get_auth_token()
-        if not token:
-            raise RuntimeError(
-                "No GitHub token found. Please set GITHUB_TOKEN, GH_TOKEN, or AURORA_GH_TOKEN environment variable"
-            )
-    
-    # Ensure endpoint starts with /
-    if not endpoint.startswith("/"):
-        endpoint = "/" + endpoint
-    
-    url = f"https://api.github.com{endpoint}"
-    
-    headers = {
-        "Accept": "application/vnd.github.v3+json",
-        "Authorization": f"token {token}",
-        "User-Agent": "Aurora-Bridge/1.0"
-    }
-    
-    req_data = None
-    if data:
-        req_data = json.dumps(data).encode("utf-8")
-        headers["Content-Type"] = "application/json"
-    
-    request = urllib.request.Request(
-        url,
-        data=req_data,
-        headers=headers,
-        method=method
+    req = urllib.request.Request(
+        f"https://api.github.com{path}",
+        data=(json.dumps(payload).encode() if payload else None),
+        method=method,
+        headers={
+            "Authorization": f"Bearer {tok}", 
+            "Accept": "application/vnd.github+json", 
+            "User-Agent": "Aurora-Bridge"
+        }
     )
     
     try:
-        response = urllib.request.urlopen(request)
-        response_data = response.read().decode("utf-8")
-        return json.loads(response_data) if response_data else {}
+        with urllib.request.urlopen(req, timeout=20) as r:
+            return json.loads(r.read().decode())
     except urllib.error.HTTPError as e:
         error_body = e.read().decode("utf-8")
         try:
             error_data = json.loads(error_body)
-            error_msg = error_data.get("message", str(e))
+            return {"ok": False, "err": error_data.get("message", str(e))}
         except:
-            error_msg = str(e)
-        raise RuntimeError(f"GitHub API error: {error_msg}")
+            return {"ok": False, "err": str(e)}
     except Exception as e:
-        raise RuntimeError(f"Failed to call GitHub API: {str(e)}")
+        return {"ok": False, "err": str(e)}
 
+def _extract_zip_into_cwd(zip_rel: str | None):
+    """Extract ZIP file contents into current working directory."""
+    if not zip_rel:
+        return False
+    
+    # Handle API path format
+    if zip_rel.startswith("/api/runs/"):
+        # Extract the run timestamp and construct local path
+        parts = zip_rel.split("/")
+        if len(parts) >= 4:
+            run_ts = parts[3]
+            zpath = pathlib.Path(f"runs/run-{run_ts}/project.zip")
+        else:
+            zpath = pathlib.Path(".") / zip_rel.lstrip("/")
+    else:
+        zpath = pathlib.Path(".") / zip_rel.lstrip("/")
+    
+    if not zpath.exists():
+        # fallback: newest runs/*/project.zip
+        candidates = sorted(pathlib.Path("runs").glob("*/project.zip"))
+        if not candidates: 
+            return False
+        zpath = candidates[-1]
+    
+    with zipfile.ZipFile(zpath, "r") as z:
+        z.extractall(".")
+    return True
 
-def pr_create(
-    owner: str,
-    name: str,
-    base: str = "main",
-    title: str = "Aurora Bridge: Automated Update",
-    body: str = "This PR was automatically generated by Aurora Bridge.",
-    zip_rel: Optional[str] = None,
-    **kwargs
-) -> Dict[str, Any]:
+def pr_create(owner: str, name: str, base: str = "main", 
+              title: str = "Aurora UCSE Generated Project",
+              body: str = "Automatically generated by Aurora Bridge Universal Code Synthesis Engine",
+              zip_rel: str | None = None):
     """
     Create a GitHub Pull Request with generated code.
     
     Args:
         owner: Repository owner (GitHub username or organization)
-        name: Repository name
+        name: Repository name  
         base: Base branch to merge into (default: "main")
         title: PR title
         body: PR description
         zip_rel: Relative path to ZIP file containing generated code
-        **kwargs: Additional arguments (for extensibility)
         
     Returns:
         Dictionary with PR creation results
-        
-    Raises:
-        RuntimeError: If PR creation fails
     """
-    # Validate required parameters
-    if not owner or not name:
-        raise RuntimeError("Repository owner and name are required")
+    if not (owner and name):
+        return {"ok": False, "err": "missing owner/name"}
     
-    # Get authentication token
-    token = _get_auth_token()
-    if not token:
-        raise RuntimeError(
-            "No GitHub token found. Please set GITHUB_TOKEN, GH_TOKEN, or AURORA_GH_TOKEN environment variable"
-        )
+    # Get repository URL from environment or construct from owner/name
+    repo_https = os.getenv("AURORA_GIT_URL") or f"https://github.com/{owner}/{name}.git"
     
-    # Generate branch name with timestamp
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    branch_name = f"aurora/{timestamp}"
+    # Set up git identity (this is always needed for commits)
+    _setup_git_identity()
     
-    # Ensure git is configured
-    _ensure_user()
-    _ensure_remote(owner, name)
+    # Set up remote
+    _ensure_remote(repo_https)
     
-    # Store current branch
-    code, current_branch, _ = _run("git rev-parse --abbrev-ref HEAD")
-    if code != 0:
-        current_branch = "main"
+    # Fetch latest from remote
+    _run("git fetch origin --prune")
     
-    try:
-        # Fetch latest from remote
-        _run(f"git fetch origin {base}")
+    # Create unique branch name with timestamp
+    ts = time.strftime("%Y%m%d-%H%M%S")
+    branch = f"aurora/{ts}"
+    
+    # Create and checkout new branch
+    _run(f"git checkout -B {branch}")
+    
+    # Extract ZIP file if provided
+    if zip_rel:
+        _extract_zip_into_cwd(zip_rel)
+    
+    # Stage all changes
+    _run("git add -A")
+    
+    # Check if there are changes to commit
+    result = _run("git status --porcelain")
+    if not result.stdout.strip():
+        return {"ok": False, "err": "No changes to commit"}
+    
+    # Prepare commit message
+    commit_msg = f"feat(auto): {title}\n\n{body}\n\nGenerated at {time.strftime('%Y-%m-%d %H:%M:%S')}"
+    
+    # Check if we should sign commits
+    should_sign = os.getenv("AURORA_SIGN", "0").lower() in ("1", "true", "yes", "on")
+    commit_success = False
+    
+    if should_sign:
+        key_id = os.getenv("GPG_KEY_ID", "").strip()
+        armored = os.getenv("GPG_PRIVATE_ASC", "").strip()
         
-        # Create and checkout new branch from base
-        code, _, err = _run(f"git checkout -b {branch_name} origin/{base}")
-        if code != 0:
-            # If branch creation fails, try to start from current state
-            _run(f"git checkout -b {branch_name}")
-        
-        # If ZIP file is provided, unpack it
-        if zip_rel:
-            # Convert relative path to absolute
-            if zip_rel.startswith("/api/runs/"):
-                # Extract the run timestamp and construct local path
-                parts = zip_rel.split("/")
-                if len(parts) >= 4:
-                    run_ts = parts[3]
-                    zip_path = Path(f"runs/run-{run_ts}/project.zip")
-                else:
-                    zip_path = Path(zip_rel.lstrip("/"))
-            else:
-                zip_path = Path(zip_rel)
+        # Try to sign the commit if we have the necessary credentials
+        if key_id and armored:
+            # Import GPG key if not already imported
+            gpg_available = _import_gpg_key_once(key_id, armored)
             
-            if zip_path.exists():
-                # Create temporary directory for extraction
-                with tempfile.TemporaryDirectory() as temp_dir:
-                    # Extract ZIP file
-                    with zipfile.ZipFile(zip_path, 'r') as zip_file:
-                        zip_file.extractall(temp_dir)
-                    
-                    # Copy extracted files to working directory
-                    # This will overwrite existing files
-                    import shutil
-                    temp_path = Path(temp_dir)
-                    for item in temp_path.iterdir():
-                        if item.is_file():
-                            shutil.copy2(item, Path.cwd() / item.name)
-                        elif item.is_dir():
-                            dest = Path.cwd() / item.name
-                            if dest.exists():
-                                shutil.rmtree(dest)
-                            shutil.copytree(item, dest)
-            else:
-                print(f"Warning: ZIP file not found at {zip_path}")
-        
-        # Stage all changes
-        _run("git add -A")
-        
-        # Check if there are changes to commit
-        code, status, _ = _run("git status --porcelain")
-        if not status:
-            return {
-                "success": False,
-                "message": "No changes to commit",
-                "branch": branch_name
-            }
-        
-        # Commit changes
-        commit_message = f"feat: {title}\n\nGenerated by Aurora Bridge\n{body}"
-        code, _, err = _run(f'git commit -m {shlex.quote(commit_message)}')
-        if code != 0:
-            raise RuntimeError(f"Failed to commit changes: {err}")
-        
-        # Push branch to remote
-        code, _, err = _run(f"git push -u origin {branch_name}")
-        if code != 0:
-            # Try with force if regular push fails (might be needed for new repos)
-            code, _, err = _run(f"git push -u origin {branch_name} --force")
-            if code != 0:
-                raise RuntimeError(f"Failed to push branch: {err}")
-        
-        # Create PR via GitHub API
-        pr_data = {
-            "title": title,
-            "body": body,
-            "head": branch_name,
-            "base": base,
+            if gpg_available:
+                # Use temporary git config for signing
+                signing_config = {
+                    "commit.gpgsign": "true",
+                    "gpg.program": "gpg",
+                    "user.signingkey": key_id
+                }
+                
+                try:
+                    with _temporary_git_config(signing_config):
+                        # Try to commit with signing
+                        commit_result = _run(f'git commit -m {shlex.quote(commit_msg)}')
+                        commit_success = (commit_result.returncode == 0)
+                        
+                        if not commit_success:
+                            # Log the error but continue with fallback
+                            print(f"Warning: Signed commit failed: {commit_result.stderr}")
+                except Exception as e:
+                    # Log the error but continue with fallback
+                    print(f"Warning: Error during signed commit: {e}")
+    
+    # Fallback to unsigned commit if signing failed or was not requested
+    if not commit_success:
+        # Ensure signing is disabled for this commit
+        with _temporary_git_config({"commit.gpgsign": "false"}):
+            commit_result = _run(f'git commit -m {shlex.quote(commit_msg)}')
+            if commit_result.returncode != 0:
+                return {"ok": False, "err": f"Failed to commit: {commit_result.stderr}"}
+    
+    # Push branch to remote
+    push_result = _run(f"git push -u origin {branch}")
+    if push_result.returncode != 0:
+        # Try with force if regular push fails
+        push_result = _run(f"git push -u origin {branch} --force")
+        if push_result.returncode != 0:
+            return {"ok": False, "err": f"Failed to push branch: {push_result.stderr}"}
+    
+    # Create PR via GitHub API
+    api_result = _github_api(
+        f"/repos/{owner}/{name}/pulls", 
+        method="POST",
+        payload={
+            "title": title, 
+            "head": branch, 
+            "base": base, 
+            "body": body, 
+            "maintainer_can_modify": True, 
             "draft": False
         }
-        
-        try:
-            pr_response = _github_api(
-                f"/repos/{owner}/{name}/pulls",
-                method="POST",
-                data=pr_data,
-                token=token
-            )
-            
-            pr_url = pr_response.get("html_url", "")
-            pr_number = pr_response.get("number", 0)
-            
-            return {
-                "success": True,
-                "message": "Pull request created successfully",
-                "branch": branch_name,
-                "pr_url": pr_url,
-                "pr_number": pr_number,
-                "pr_data": pr_response
-            }
-        
-        except RuntimeError as e:
-            # PR creation failed, but branch was pushed
-            return {
-                "success": False,
-                "message": f"Branch pushed but PR creation failed: {str(e)}",
-                "branch": branch_name,
-                "push_success": True
-            }
+    )
     
-    except Exception as e:
-        # Try to restore original branch
-        _run(f"git checkout {current_branch}")
-        
-        return {
-            "success": False,
-            "message": f"Failed to create PR: {str(e)}",
-            "branch": branch_name,
-            "error": str(e)
-        }
+    if api_result.get("err"):
+        return {"ok": False, "err": f"PR creation failed: {api_result.get('err')}",
+                "branch": branch, "push_success": True}
     
-    finally:
-        # Always try to return to original branch
-        _run(f"git checkout {current_branch}")
-
+    return {"ok": True, "branch": branch, "pr": api_result}
 
 # Convenience function for testing
 def test_connection(owner: str, name: str) -> bool:
-    """
-    Test GitHub API connection and repository access.
-    
-    Args:
-        owner: Repository owner
-        name: Repository name
-        
-    Returns:
-        True if connection successful, False otherwise
-    """
-    try:
-        token = _get_auth_token()
-        if not token:
-            print("No GitHub token found")
-            return False
-        
-        # Try to get repository information
-        repo_data = _github_api(f"/repos/{owner}/{name}", token=token)
-        print(f"Successfully connected to {repo_data.get('full_name', 'repository')}")
-        return True
-    
-    except Exception as e:
-        print(f"Connection test failed: {e}")
+    """Test GitHub API connection and repository access."""
+    tok = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("AURORA_GH_TOKEN")
+    if not tok:
+        print("No GitHub token found")
         return False
+    
+    api_result = _github_api(f"/repos/{owner}/{name}")
+    if api_result.get("err"):
+        print(f"Connection test failed: {api_result.get('err')}")
+        return False
+    
+    print(f"Successfully connected to {api_result.get('full_name', 'repository')}")
+    return True
