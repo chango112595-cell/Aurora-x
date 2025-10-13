@@ -51,6 +51,28 @@ Preferred communication style: Simple, everyday language.
 
 ## Bridge Protocol Enhancements
 
+**Signed Commits Support (GPG Optional)**:
+- **Environment Variables for Signing**:
+  - `AURORA_SIGN=1` - Enable commit signing
+  - `AURORA_GIT_EMAIL` - Git commit email (default: aurora@local)
+  - `AURORA_GIT_NAME` - Git commit name (default: Aurora Bridge)
+  - `GPG_KEY_ID` - GPG key ID for signing (optional)
+  - `GPG_PRIVATE_ASC` - Armored ASCII GPG private key (optional)
+- **Auto-Detection**: Signing is automatically enabled when environment variables are set
+- **Verification**: Commits appear as "Verified" on GitHub when signed
+
+**Preview & Diff Endpoints**:
+- **GET /bridge/preview** - Preview files in generated ZIP without applying changes
+- **GET /bridge/diff** - Get git diff statistics summary
+- **GET /bridge/diff/full** - Get complete git diff
+- **Purpose**: Review changes before creating PR to avoid surprises
+
+**Makefile Helpers**:
+- `make diff-full` - Show full git diff
+- `make preview` - Preview latest generated project ZIP
+- `make sign-on` - Enable commit signing
+- `make sign-off` - Disable commit signing
+
 **Natural Language Project Synthesis**:
 - **New Endpoint**: `/api/bridge/nl/project` - Generate complete projects from natural language prompts
   - **Parameters**:
