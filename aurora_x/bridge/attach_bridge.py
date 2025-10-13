@@ -1,12 +1,22 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel
 from typing import Dict, Optional, Literal
 import time
 import re
+import subprocess
+import shlex
+import pathlib
+import zipfile
+import json
 from aurora_x.bridge.pipeline import compile_from_nl, compile_from_spec, compile_from_nl_project
 from aurora_x.bridge.deploy import deploy as deploy_fn
 from aurora_x.bridge.pr import pr_create as pr_create_fn
+
+def _shell(cmd:str):
+    """Execute shell command and return result."""
+    p = subprocess.run(shlex.split(cmd), capture_output=True, text=True)
+    return p.returncode, p.stdout, p.stderr
 
 class NLBody(BaseModel):
     prompt: str
@@ -191,4 +201,79 @@ def attach_bridge(app: FastAPI):
                 "components": components,
                 "mode": "create"
             })
+    
+    @app.get("/bridge/diff")
+    def bridge_diff():
+        """Get a structured summary of current git diff."""
+        code, out, err = _shell("git --no-pager diff --stat")
+        if code == 0:
+            # Parse the diff stat output
+            lines = out.strip().split('\n') if out else []
+            files_changed = []
+            summary = ""
+            
+            for line in lines:
+                # Skip empty lines and the summary line
+                if not line or 'file' in line and 'changed' in line:
+                    summary = line
+                elif '|' in line:
+                    # This is a file change line
+                    parts = line.split('|')
+                    if len(parts) == 2:
+                        file_path = parts[0].strip()
+                        changes = parts[1].strip()
+                        files_changed.append({
+                            "file": file_path,
+                            "changes": changes
+                        })
+            
+            return JSONResponse({
+                "ok": True,
+                "files_changed": files_changed,
+                "summary": summary,
+                "has_changes": len(files_changed) > 0
+            })
+        else:
+            return JSONResponse({
+                "ok": False,
+                "err": err or "Failed to get diff",
+                "has_changes": False
+            }, status_code=500)
+    
+    @app.get("/bridge/diff/full", response_class=PlainTextResponse)
+    def bridge_diff_full():
+        """Get the full git diff as plain text (for viewing in browser)."""
+        code, out, err = _shell("git --no-pager diff")
+        if code == 0:
+            return out if out else "No changes to display"
+        else:
+            return f"Error getting diff: {err or 'unknown error'}"
+    
+    @app.get("/bridge/preview")
+    def bridge_preview(zip: Optional[str] = None):
+        """
+        Returns a JSON manifest of files that WOULD be applied from the zip (no write).
+        """
+        # prefer explicit ?zip=/api/runs/<ts>/project.zip; fallback newest
+        if zip:
+            zpath = pathlib.Path(".") / (zip.lstrip("/") if zip else "")
+        else:
+            zpath = None
+            
+        if not zpath or not zpath.exists():
+            candidates = sorted(pathlib.Path("runs").glob("*/project.zip"))
+            zpath = candidates[-1] if candidates else None
+        
+        if not zpath or not zpath.exists():
+            return JSONResponse({"ok": False, "err": "no zip found"}, status_code=404)
+        
+        manifest = []
+        with zipfile.ZipFile(zpath, "r") as z:
+            for info in z.infolist():
+                manifest.append({
+                    "name": info.filename,
+                    "size": info.file_size
+                })
+        
+        return {"ok": True, "zip": str(zpath), "files": manifest}
 
