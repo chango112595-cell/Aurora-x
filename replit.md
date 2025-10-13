@@ -49,6 +49,69 @@ Preferred communication style: Simple, everyday language.
 - Added /api/progress/recompute endpoint to regenerate MASTER_TASK_LIST.md, CSV, and badges
 - Added `make progress-recompute` command for CLI access to recompute endpoint
 
+## Bridge Protocol Enhancements
+
+**Natural Language Project Synthesis**:
+- **New Endpoint**: `/api/bridge/nl/project` - Generate complete projects from natural language prompts
+  - **Parameters**:
+    - `prompt` (string): Natural language description of the desired project
+    - `repo` (string): Target repository name for generated code
+    - `stack` (string): Technology stack to use (e.g., "react", "vue", "python", "golang")
+    - `mode` (string): Generation mode ("create" for new projects, "enhance" for existing)
+  - **Example**: POST request with `{"prompt": "Build a todo app", "repo": "todo-app", "stack": "react", "mode": "create"}`
+
+**GitHub Pull Request Integration**:
+- **Automatic PR Creation**: Bridge now supports creating pull requests with generated code
+- **GitHub Integration Features**:
+  - Automatic branch creation for new features
+  - Commit messages generated from synthesis context
+  - PR descriptions with implementation details
+  - Direct push to configured repositories
+- **Required Environment Variables**:
+  - `GITHUB_TOKEN`: Personal access token for GitHub API authentication
+  - `AURORA_GIT_URL`: Target repository URL (e.g., `https://github.com/username/repo.git`)
+  - `AURORA_GIT_BRANCH`: Default branch for pushes (e.g., `main` or `develop`)
+
+**Quality Gates and CI/CD**:
+- **Makefile Quality Targets**:
+  - `make lint`: Run code linting and static analysis
+  - `make sec`: Execute security vulnerability scanning
+  - `make cov`: Generate code coverage reports
+  - `make gates`: Run all quality gates in sequence
+- **GitHub Actions Workflow**:
+  - Automatic CI pipeline on push and pull requests
+  - Runs all quality gates before allowing merge
+  - Multi-architecture Docker builds (ARM64/AMD64)
+  - Health checks and rollback on deployment failures
+  - Test results published as GitHub annotations
+
+**Usage Guide**:
+- **Using the nl-pr Target**: 
+  ```bash
+  # Generate code and create a pull request from natural language
+  make nl-pr PROMPT="Create a REST API for user management" REPO="user-api" STACK="python"
+  
+  # This command will:
+  # 1. Call the /api/bridge/nl/project endpoint
+  # 2. Generate the complete project structure
+  # 3. Run quality gates (lint, security, coverage)
+  # 4. Create a new branch
+  # 5. Commit the generated code
+  # 6. Push to GitHub
+  # 7. Create a pull request with description
+  ```
+
+- **Environment Setup**:
+  ```bash
+  # Set required environment variables
+  export GITHUB_TOKEN="ghp_your_token_here"
+  export AURORA_GIT_URL="https://github.com/yourusername/yourrepo.git"
+  export AURORA_GIT_BRANCH="main"
+  
+  # Verify configuration
+  make bridge-config
+  ```
+
 ## System Architecture
 
 **Frontend Architecture**:
