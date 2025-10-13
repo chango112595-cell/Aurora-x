@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional, Dict, Any
 import subprocess, shlex, json, time, os, hashlib
 
 RUNS = Path("runs"); RUNS.mkdir(exist_ok=True)
@@ -38,6 +39,9 @@ class BridgeResult:
     files: list[str]|None = None
     zip_rel: str|None = None
     logs: list[str]|None = None
+    components: Optional[Dict[str, Any]] = None
+    stack: Optional[str] = None
+    repo_info: Optional[Dict[str, Any]] = None
 
 def compile_from_nl(prompt: str)->BridgeResult:
     from aurora_x.synthesis.universal_engine import generate_project
@@ -52,6 +56,66 @@ def compile_from_nl(prompt: str)->BridgeResult:
                         files=res.manifest["files"],
                         zip_rel=f"/api/runs/{ts}/project.zip",
                         logs=[out,err])
+
+def compile_from_nl_project(prompt: str, repo_info: Optional[dict] = None, stack: Optional[str] = None, components: Optional[dict] = None)->BridgeResult:
+    """
+    Enhanced version of compile_from_nl that accepts additional project parameters.
+    
+    Args:
+        prompt: The natural language prompt describing the project
+        repo_info: Repository information (owner, name, branch)
+        stack: Technology stack preference (e.g., "react", "flask", "fullstack")
+        components: Pre-determined component needs (ui_needed, api_needed, etc.)
+    """
+    from aurora_x.synthesis.universal_engine import generate_project
+    
+    # Build context dict with all the additional information
+    context = {
+        "repo": repo_info,
+        "stack": stack,
+        "components": components,
+        "enhanced": True  # Flag to indicate this is an enhanced request
+    }
+    
+    # Generate project with enhanced context
+    # Note: generate_project will need to be updated to accept context in a future iteration
+    # For now, we'll embed the stack info in the prompt
+    enhanced_prompt = prompt
+    if stack:
+        enhanced_prompt = f"[Stack: {stack}] {prompt}"
+    
+    res = generate_project(enhanced_prompt)
+    
+    # Run tests
+    code,out,err = _run("pytest -q")
+    ok = (code == 0)
+    
+    # Build commit message with stack info
+    msg = f"bridge: NL→Project"
+    if stack:
+        msg += f" [{stack}]"
+    msg += f" :: {prompt[:64]}"
+    
+    _git_commit_push(msg)
+    _discord(("✅" if ok else "❌") + f" Aurora Bridge: {msg}")
+    
+    # Get timestamp from result
+    ts = res.manifest["ts"] if hasattr(res, 'manifest') and res.manifest else time.strftime("%Y%m%d-%H%M%S")
+    
+    # Return enhanced result with component info
+    result = BridgeResult(
+        ok=ok, 
+        message="compiled", 
+        run_dir=str(res.run_dir) if hasattr(res, 'run_dir') else None,
+        files=res.manifest["files"] if hasattr(res, 'manifest') and res.manifest else None,
+        zip_rel=f"/api/runs/{ts}/project.zip",
+        logs=[out,err],
+        components=components,
+        stack=stack,
+        repo_info=repo_info
+    )
+    
+    return result
 
 def compile_from_spec(spec_path: str)->BridgeResult:
     sp = Path(spec_path)
