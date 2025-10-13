@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import Dict, Optional, Literal
 import time
+import re
 from aurora_x.bridge.pipeline import compile_from_nl, compile_from_spec, compile_from_nl_project
 from aurora_x.bridge.deploy import deploy as deploy_fn
 from aurora_x.bridge.pr import pr_create as pr_create_fn
@@ -13,16 +14,11 @@ class NLBody(BaseModel):
 class SpecBody(BaseModel):
     path: str
 
-class RepoInfo(BaseModel):
-    owner: str
-    name: str
-    branch: str = "main"
-
 class ProjectBody(BaseModel):
     prompt: str
-    repo: Optional[RepoInfo] = None
+    repo: Optional[str] = None  # Repository string in format "owner/name" or full URL
     stack: Optional[str] = None
-    mode: Literal["commit", "pr"] = "commit"
+    mode: Literal["create", "enhance"] = "create"  # "create" for new, "enhance" for PR
 
 def attach_bridge(app: FastAPI):
     @app.post("/api/bridge/nl")
@@ -43,6 +39,44 @@ def attach_bridge(app: FastAPI):
     def bridge_nl_project(body: ProjectBody):
         if not body.prompt or len(body.prompt.strip()) < 4:
             raise HTTPException(400, "prompt too short")
+        
+        # Parse repository string if provided
+        repo_info = None
+        repo_owner = None
+        repo_name = None
+        repo_branch = "main"
+        
+        if body.repo:
+            # Handle different repo formats:
+            # - "owner/name"
+            # - "github.com/owner/name"
+            # - "https://github.com/owner/name"
+            # - "https://github.com/owner/name.git"
+            repo_str = body.repo.strip()
+            
+            # Remove common prefixes
+            repo_str = re.sub(r'^https?://', '', repo_str)
+            repo_str = re.sub(r'^github\.com/', '', repo_str)
+            repo_str = re.sub(r'\.git$', '', repo_str)
+            repo_str = repo_str.strip('/')
+            
+            # Split owner/name
+            parts = repo_str.split('/')
+            if len(parts) >= 2:
+                repo_owner = parts[0]
+                repo_name = parts[1]
+                repo_info = {
+                    "owner": repo_owner,
+                    "name": repo_name,
+                    "branch": repo_branch
+                }
+            else:
+                # Invalid format
+                return JSONResponse({
+                    "ok": False,
+                    "message": f"Invalid repository format: {body.repo}. Use 'owner/name' format",
+                    "mode": body.mode
+                })
         
         # Basic planner logic to determine if UI/API components are needed
         prompt_lower = body.prompt.lower()
@@ -95,30 +129,31 @@ def attach_bridge(app: FastAPI):
             enhanced_prompt = f"[Stack: {body.stack}] {body.prompt}"
         
         # Process based on mode
-        if body.mode == "pr":
-            # First, generate the project to get the ZIP file
-            res = compile_from_nl_project(
-                prompt=enhanced_prompt,
-                repo_info=body.repo.dict() if body.repo else None,
-                stack=body.stack,
-                components=components
-            )
-            
+        if body.mode == "enhance":  # PR mode
             # Check if we have repo information
-            if not body.repo or not body.repo.owner or not body.repo.name:
+            if not repo_owner or not repo_name:
                 return JSONResponse({
                     "ok": False,
-                    "message": "Repository information (owner and name) required for PR mode",
-                    "mode": "pr",
+                    "message": "Repository information (owner/name) required for enhance mode",
+                    "mode": "enhance",
                     "components": components
                 })
+            
+            # First, generate the project to get the ZIP file (skip git operations for PR mode)
+            res = compile_from_nl_project(
+                prompt=enhanced_prompt,
+                repo_info=repo_info,
+                stack=body.stack,
+                components=components,
+                skip_git_operations=True  # Don't auto-commit in PR mode
+            )
             
             # Call PR creation function with the generated ZIP
             try:
                 pr_result = pr_create_fn(
-                    owner=body.repo.owner,
-                    name=body.repo.name,
-                    base=body.repo.branch or "main",
+                    owner=repo_owner,
+                    name=repo_name,
+                    base=repo_branch,
                     title=f"Aurora: {body.prompt[:60]}",
                     body=f"Automated PR generated from prompt:\n\n{enhanced_prompt}\n\nComponents: {components}",
                     zip_rel=res.zip_rel,
@@ -129,7 +164,7 @@ def attach_bridge(app: FastAPI):
                 return JSONResponse({
                     "ok": pr_result.get("success", False),
                     "message": pr_result.get("message", "PR creation initiated"),
-                    "mode": "pr",
+                    "mode": "enhance",
                     "components": components,
                     **pr_result
                 })
@@ -137,22 +172,23 @@ def attach_bridge(app: FastAPI):
                 return JSONResponse({
                     "ok": False,
                     "message": f"PR creation failed: {str(e)}",
-                    "mode": "pr",
+                    "mode": "enhance",
                     "components": components
                 })
         else:
-            # Regular commit mode - use compile_from_nl_project
+            # Regular create mode - use compile_from_nl_project with git operations
             # Pass the enhanced context to the compiler
             res = compile_from_nl_project(
                 prompt=enhanced_prompt,
-                repo_info=body.repo.dict() if body.repo else None,
+                repo_info=repo_info,
                 stack=body.stack,
-                components=components
+                components=components,
+                skip_git_operations=False  # Do auto-commit in create mode
             )
             
             return JSONResponse({
                 **res.__dict__,
                 "components": components,
-                "mode": "commit"
+                "mode": "create"
             })
 

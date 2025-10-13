@@ -57,7 +57,7 @@ def compile_from_nl(prompt: str)->BridgeResult:
                         zip_rel=f"/api/runs/{ts}/project.zip",
                         logs=[out,err])
 
-def compile_from_nl_project(prompt: str, repo_info: Optional[dict] = None, stack: Optional[str] = None, components: Optional[dict] = None)->BridgeResult:
+def compile_from_nl_project(prompt: str, repo_info: Optional[dict] = None, stack: Optional[str] = None, components: Optional[dict] = None, skip_git_operations: bool = False)->BridgeResult:
     """
     Enhanced version of compile_from_nl that accepts additional project parameters.
     
@@ -66,6 +66,7 @@ def compile_from_nl_project(prompt: str, repo_info: Optional[dict] = None, stack
         repo_info: Repository information (owner, name, branch)
         stack: Technology stack preference (e.g., "react", "flask", "fullstack")
         components: Pre-determined component needs (ui_needed, api_needed, etc.)
+        skip_git_operations: If True, skip git commit and push operations (used for PR mode)
     """
     from aurora_x.synthesis.universal_engine import generate_project
     
@@ -96,8 +97,10 @@ def compile_from_nl_project(prompt: str, repo_info: Optional[dict] = None, stack
         msg += f" [{stack}]"
     msg += f" :: {prompt[:64]}"
     
-    _git_commit_push(msg)
-    _discord(("✅" if ok else "❌") + f" Aurora Bridge: {msg}")
+    # Only perform git operations if not in PR mode
+    if not skip_git_operations:
+        _git_commit_push(msg)
+        _discord(("✅" if ok else "❌") + f" Aurora Bridge: {msg}")
     
     # Get timestamp from result
     ts = res.manifest["ts"] if hasattr(res, 'manifest') and res.manifest else time.strftime("%Y%m%d-%H%M%S")
