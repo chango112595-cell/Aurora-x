@@ -1,315 +1,170 @@
-"""
-GitHub Pull Request creation module for Aurora Bridge.
-Handles automated PR creation with optional GPG signing support.
-"""
 from __future__ import annotations
-import os
-import json
-import subprocess
-import shlex
-import time
-import zipfile
-import pathlib
-import urllib.request
-from contextlib import contextmanager
+import os, json, subprocess, shlex, time, zipfile, pathlib, urllib.request
 
-# Module-level cache for GPG key import status
+# Module-level flag for GPG import caching
 _GPG_KEY_IMPORTED = False
 
 def _run(cmd: str, cwd: str | None = None):
-    """Execute a shell command and return the result."""
     return subprocess.run(shlex.split(cmd), cwd=cwd, capture_output=True, text=True)
 
-def _get_git_config(key: str) -> str | None:
-    """Get the current value of a git config key."""
-    result = _run(f"git config --get {key}")
+def _check_gpg_available():
+    """Check if GPG binary is available in the system"""
+    try:
+        result = subprocess.run(['gpg', '--version'], capture_output=True, text=True, timeout=5)
+        return result.returncode == 0
+    except (subprocess.SubprocessError, FileNotFoundError, OSError):
+        return False
+
+def _get_git_config(key: str):
+    """Get current git config value, returns None if not set"""
+    result = _run(f'git config --get {key}')
     return result.stdout.strip() if result.returncode == 0 else None
 
-def _import_gpg_key_once(key_id: str, armored: str) -> bool:
-    """Import GPG key only once per runtime, with caching."""
+def _git(cfg: dict[str,str] | None = None):
     global _GPG_KEY_IMPORTED
     
-    if _GPG_KEY_IMPORTED:
-        return True
+    # Save original git config values
+    original_config = {
+        'user.email': _get_git_config('user.email'),
+        'user.name': _get_git_config('user.name'),
+        'commit.gpgsign': _get_git_config('commit.gpgsign'),
+        'gpg.program': _get_git_config('gpg.program'),
+        'user.signingkey': _get_git_config('user.signingkey')
+    }
     
     try:
-        # Check if GPG is available
-        check_result = subprocess.run(
-            ['gpg', '--version'], 
-            capture_output=True, 
-            text=True,
-            timeout=5
-        )
-        if check_result.returncode != 0:
-            return False
+        # base identity
+        email = os.getenv("AURORA_GIT_EMAIL", "aurora@local")
+        name  = os.getenv("AURORA_GIT_NAME",  "Aurora Bridge")
+        _run(f'git config user.email {shlex.quote(email)}')
+        _run(f'git config user.name {shlex.quote(name)}')
         
-        # Import the key
-        import_result = subprocess.run(
-            ['gpg', '--batch', '--import'],
-            input=armored,
-            capture_output=True,
-            text=True,
-            timeout=10
-        )
-        
-        if import_result.returncode == 0:
-            # Verify the key was imported
-            verify_result = _run(f"gpg --batch --list-secret-keys {shlex.quote(key_id)}")
-            if verify_result.returncode == 0:
-                _GPG_KEY_IMPORTED = True
-                return True
-    except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
-        # GPG not available or operation failed
-        pass
-    
-    return False
-
-@contextmanager
-def _temporary_git_config(configs: dict[str, str | None]):
-    """
-    Context manager to temporarily set git config values and restore them afterwards.
-    
-    Args:
-        configs: Dictionary of config keys to temporary values
-    """
-    # Save original values
-    original_values = {}
-    for key in configs:
-        original_values[key] = _get_git_config(key)
-    
-    try:
-        # Set temporary values
-        for key, value in configs.items():
-            if value is not None:
-                _run(f"git config {key} {shlex.quote(str(value))}")
+        # optional signing (with graceful fallback)
+        if os.getenv("AURORA_SIGN","0").lower() in ("1","true","yes","on"):
+            key_id = os.getenv("GPG_KEY_ID","").strip()
+            armored = os.getenv("GPG_PRIVATE_ASC","").strip()
+            
+            # Only configure signing if GPG is available AND keys are provided
+            if armored and key_id and _check_gpg_available():
+                try:
+                    # Import key only once per runtime (caching)
+                    if not _GPG_KEY_IMPORTED:
+                        p = subprocess.run(['gpg', '--batch', '--import'], 
+                                         input=armored, capture_output=True, text=True, timeout=10)
+                        if p.returncode == 0:
+                            _GPG_KEY_IMPORTED = True
+                        else:
+                            print(f"Warning: GPG key import failed: {p.stderr}")
+                    
+                    # Verify key exists
+                    verify = _run(f"gpg --batch --list-secret-keys {shlex.quote(key_id)}")
+                    if verify.returncode == 0:
+                        # Configure git for signing
+                        _run('git config commit.gpgsign true')
+                        _run('git config gpg.program gpg')
+                        _run(f'git config user.signingkey {shlex.quote(key_id)}')
+                    else:
+                        print(f"Warning: GPG signing key not found, continuing without signing")
+                        _run('git config commit.gpgsign false')
+                        
+                except (subprocess.SubprocessError, FileNotFoundError, OSError) as e:
+                    # Graceful fallback - continue without signing
+                    print(f"Warning: GPG signing setup failed ({e}), continuing without signing")
+                    _run('git config commit.gpgsign false')
             else:
-                # Unset the config if value is None
-                _run(f"git config --unset {key}")
+                # GPG not available or keys not provided - continue without signing
+                if not _check_gpg_available():
+                    print("Warning: GPG not available, continuing without signing")
+                elif not (armored and key_id):
+                    print("Warning: GPG keys not provided, continuing without signing")
+                _run('git config commit.gpgsign false')
         
-        yield
-    finally:
-        # Restore original values
-        for key, original_value in original_values.items():
-            if original_value is not None:
-                _run(f"git config {key} {shlex.quote(original_value)}")
-            else:
-                # The key didn't exist before, so remove it
-                _run(f"git config --unset {key}")
+        return original_config
+        
+    except Exception as e:
+        # If anything goes wrong, try to restore original config
+        _restore_git_config(original_config)
+        raise
 
-def _setup_git_identity():
-    """Set up git identity for commits."""
-    email = os.getenv("AURORA_GIT_EMAIL", "aurora@local")
-    name = os.getenv("AURORA_GIT_NAME", "Aurora Bridge")
-    _run(f'git config user.email {shlex.quote(email)}')
-    _run(f'git config user.name {shlex.quote(name)}')
+def _restore_git_config(original_config: dict):
+    """Restore original git config values"""
+    for key, value in original_config.items():
+        if value is not None:
+            _run(f'git config {key} {shlex.quote(value)}')
+        else:
+            # Unset config if it wasn't previously set
+            _run(f'git config --unset {key}')
 
 def _ensure_remote(url: str):
-    """Ensure git remote is configured."""
-    # Check if we're in a git repo
-    result = _run("git rev-parse --is-inside-work-tree")
-    if result.returncode != 0:
-        # Initialize git repo if not exists
-        _run("git init")
-    
-    # Remove and re-add origin
+    _run("git rev-parse --is-inside-work-tree")
     _run("git remote remove origin")
     _run(f"git remote add origin {url}")
 
 def _github_api(path: str, method="GET", payload: dict | None = None):
-    """Make a request to the GitHub API."""
     tok = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("AURORA_GH_TOKEN")
     if not tok:
-        return {"ok": False, "err": "No GitHub token found. Please set GITHUB_TOKEN, GH_TOKEN, or AURORA_GH_TOKEN environment variable"}
-    
+        return {"ok": False, "err": "missing token"}
     req = urllib.request.Request(
         f"https://api.github.com{path}",
         data=(json.dumps(payload).encode() if payload else None),
         method=method,
-        headers={
-            "Authorization": f"Bearer {tok}", 
-            "Accept": "application/vnd.github+json", 
-            "User-Agent": "Aurora-Bridge"
-        }
+        headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json", "User-Agent": "Aurora-Bridge"}
     )
-    
     try:
         with urllib.request.urlopen(req, timeout=20) as r:
             return json.loads(r.read().decode())
-    except urllib.error.HTTPError as e:
-        error_body = e.read().decode("utf-8")
-        try:
-            error_data = json.loads(error_body)
-            return {"ok": False, "err": error_data.get("message", str(e))}
-        except:
-            return {"ok": False, "err": str(e)}
     except Exception as e:
         return {"ok": False, "err": str(e)}
 
 def _extract_zip_into_cwd(zip_rel: str | None):
-    """Extract ZIP file contents into current working directory."""
     if not zip_rel:
         return False
-    
-    # Handle API path format
-    if zip_rel.startswith("/api/runs/"):
-        # Extract the run timestamp and construct local path
-        parts = zip_rel.split("/")
-        if len(parts) >= 4:
-            run_ts = parts[3]
-            zpath = pathlib.Path(f"runs/run-{run_ts}/project.zip")
-        else:
-            zpath = pathlib.Path(".") / zip_rel.lstrip("/")
-    else:
-        zpath = pathlib.Path(".") / zip_rel.lstrip("/")
-    
+    zpath = pathlib.Path(".") / zip_rel.lstrip("/")
     if not zpath.exists():
         # fallback: newest runs/*/project.zip
         candidates = sorted(pathlib.Path("runs").glob("*/project.zip"))
-        if not candidates: 
-            return False
+        if not candidates: return False
         zpath = candidates[-1]
-    
     with zipfile.ZipFile(zpath, "r") as z:
         z.extractall(".")
     return True
 
-def pr_create(owner: str, name: str, base: str = "main", 
-              title: str = "Aurora UCSE Generated Project",
-              body: str = "Automatically generated by Aurora Bridge Universal Code Synthesis Engine",
-              zip_rel: str | None = None):
-    """
-    Create a GitHub Pull Request with generated code.
-    
-    Args:
-        owner: Repository owner (GitHub username or organization)
-        name: Repository name  
-        base: Base branch to merge into (default: "main")
-        title: PR title
-        body: PR description
-        zip_rel: Relative path to ZIP file containing generated code
-        
-    Returns:
-        Dictionary with PR creation results
-    """
+def pr_create(owner: str, name: str, base: str, title: str, body: str, zip_rel: str | None):
     if not (owner and name):
         return {"ok": False, "err": "missing owner/name"}
-    
-    # Get repository URL from environment or construct from owner/name
     repo_https = os.getenv("AURORA_GIT_URL") or f"https://github.com/{owner}/{name}.git"
-    
-    # Set up git identity (this is always needed for commits)
-    _setup_git_identity()
-    
-    # Set up remote
-    _ensure_remote(repo_https)
-    
-    # Fetch latest from remote
-    _run("git fetch origin --prune")
-    
-    # Create unique branch name with timestamp
-    ts = time.strftime("%Y%m%d-%H%M%S")
-    branch = f"aurora/{ts}"
-    
-    # Create and checkout new branch
-    _run(f"git checkout -B {branch}")
-    
-    # Extract ZIP file if provided
-    if zip_rel:
-        _extract_zip_into_cwd(zip_rel)
-    
-    # Stage all changes
-    _run("git add -A")
-    
-    # Check if there are changes to commit
-    result = _run("git status --porcelain")
-    if not result.stdout.strip():
-        return {"ok": False, "err": "No changes to commit"}
-    
-    # Prepare commit message
-    commit_msg = f"feat(auto): {title}\n\n{body}\n\nGenerated at {time.strftime('%Y-%m-%d %H:%M:%S')}"
-    
-    # Check if we should sign commits
-    should_sign = os.getenv("AURORA_SIGN", "0").lower() in ("1", "true", "yes", "on")
-    commit_success = False
-    
-    if should_sign:
-        key_id = os.getenv("GPG_KEY_ID", "").strip()
-        armored = os.getenv("GPG_PRIVATE_ASC", "").strip()
-        
-        # Try to sign the commit if we have the necessary credentials
-        if key_id and armored:
-            # Import GPG key if not already imported
-            gpg_available = _import_gpg_key_once(key_id, armored)
-            
-            if gpg_available:
-                # Use temporary git config for signing
-                signing_config = {
-                    "commit.gpgsign": "true",
-                    "gpg.program": "gpg",
-                    "user.signingkey": key_id
-                }
-                
-                try:
-                    with _temporary_git_config(signing_config):
-                        # Try to commit with signing
-                        commit_result = _run(f'git commit -m {shlex.quote(commit_msg)}')
-                        commit_success = (commit_result.returncode == 0)
-                        
-                        if not commit_success:
-                            # Log the error but continue with fallback
-                            print(f"Warning: Signed commit failed: {commit_result.stderr}")
-                except Exception as e:
-                    # Log the error but continue with fallback
-                    print(f"Warning: Error during signed commit: {e}")
-    
-    # Fallback to unsigned commit if signing failed or was not requested
-    if not commit_success:
-        # Ensure signing is disabled for this commit
-        with _temporary_git_config({"commit.gpgsign": "false"}):
-            commit_result = _run(f'git commit -m {shlex.quote(commit_msg)}')
-            if commit_result.returncode != 0:
-                return {"ok": False, "err": f"Failed to commit: {commit_result.stderr}"}
-    
-    # Push branch to remote
-    push_result = _run(f"git push -u origin {branch}")
-    if push_result.returncode != 0:
-        # Try with force if regular push fails
-        push_result = _run(f"git push -u origin {branch} --force")
-        if push_result.returncode != 0:
-            return {"ok": False, "err": f"Failed to push branch: {push_result.stderr}"}
-    
-    # Create PR via GitHub API
-    api_result = _github_api(
-        f"/repos/{owner}/{name}/pulls", 
-        method="POST",
-        payload={
-            "title": title, 
-            "head": branch, 
-            "base": base, 
-            "body": body, 
-            "maintainer_can_modify": True, 
-            "draft": False
-        }
-    )
-    
-    if api_result.get("err"):
-        return {"ok": False, "err": f"PR creation failed: {api_result.get('err')}",
-                "branch": branch, "push_success": True}
-    
-    return {"ok": True, "branch": branch, "pr": api_result}
 
-# Convenience function for testing
-def test_connection(owner: str, name: str) -> bool:
-    """Test GitHub API connection and repository access."""
-    tok = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("AURORA_GH_TOKEN")
-    if not tok:
-        print("No GitHub token found")
-        return False
+    # Apply git config and save original values
+    original_config = _git({})
     
-    api_result = _github_api(f"/repos/{owner}/{name}")
-    if api_result.get("err"):
-        print(f"Connection test failed: {api_result.get('err')}")
-        return False
+    try:
+        _ensure_remote(repo_https)
+        _run("git fetch origin --prune")
+        ts = time.strftime("%Y%m%d-%H%M%S")
+        branch = f"aurora/{ts}"
+        _run(f"git checkout -B {branch}")
+
+        _extract_zip_into_cwd(zip_rel)
+        _run("git add -A")
+        
+        # Commit with graceful fallback for signing failures
+        commit_result = _run('git commit -m "feat(auto): Aurora UCSE generated project"')
+        if commit_result.returncode != 0 and "gpg" in commit_result.stderr.lower():
+            # If commit failed due to GPG issues, retry without signing
+            print("Warning: GPG signing failed, retrying without signing")
+            _run('git config commit.gpgsign false')
+            commit_result = _run('git commit -m "feat(auto): Aurora UCSE generated project"')
+        
+        if commit_result.returncode != 0:
+            raise Exception(f"Git commit failed: {commit_result.stderr}")
+        
+        _run(f"git push -u origin {branch}")
+
+        api = _github_api(f"/repos/{owner}/{name}/pulls", method="POST",
+                          payload={"title": title, "head": branch, "base": base, "body": body, "maintainer_can_modify": True, "draft": False})
+        
+        return {"ok": True, "branch": branch, "pr": api}
     
-    print(f"Successfully connected to {api_result.get('full_name', 'repository')}")
-    return True
+    finally:
+        # Always restore original git config
+        _restore_git_config(original_config)
