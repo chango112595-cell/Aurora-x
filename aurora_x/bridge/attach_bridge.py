@@ -166,17 +166,15 @@ def attach_bridge(app: FastAPI):
                     base=repo_branch,
                     title=f"Aurora: {body.prompt[:60]}",
                     body=f"Automated PR generated from prompt:\n\n{enhanced_prompt}\n\nComponents: {components}",
-                    zip_rel=res.zip_rel,
-                    prompt=enhanced_prompt,
-                    components=components
+                    zip_rel=res.zip_rel
                 )
                 
                 return JSONResponse({
-                    "ok": pr_result.get("success", False),
-                    "message": pr_result.get("message", "PR creation initiated"),
+                    "ok": pr_result.get("ok", False),
+                    "message": "PR creation initiated" if pr_result.get("ok") else pr_result.get("err", "PR creation failed"),
                     "mode": "enhance",
                     "components": components,
-                    **pr_result
+                    "pr_result": pr_result
                 })
             except Exception as e:
                 return JSONResponse({
