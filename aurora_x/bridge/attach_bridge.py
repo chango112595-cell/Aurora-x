@@ -5,6 +5,7 @@ from typing import Dict, Optional, Literal
 import time
 from aurora_x.bridge.pipeline import compile_from_nl, compile_from_spec, compile_from_nl_project
 from aurora_x.bridge.deploy import deploy as deploy_fn
+from aurora_x.bridge.pr import pr_create as pr_create_fn
 
 class NLBody(BaseModel):
     prompt: str
@@ -95,19 +96,50 @@ def attach_bridge(app: FastAPI):
         
         # Process based on mode
         if body.mode == "pr":
-            # Call PR creation function (stub for now)
-            pr_result = pr_create(
+            # First, generate the project to get the ZIP file
+            res = compile_from_nl_project(
                 prompt=enhanced_prompt,
                 repo_info=body.repo.dict() if body.repo else None,
+                stack=body.stack,
                 components=components
             )
-            return JSONResponse({
-                "ok": True,
-                "message": "PR creation initiated",
-                "mode": "pr",
-                "components": components,
-                **pr_result
-            })
+            
+            # Check if we have repo information
+            if not body.repo or not body.repo.owner or not body.repo.name:
+                return JSONResponse({
+                    "ok": False,
+                    "message": "Repository information (owner and name) required for PR mode",
+                    "mode": "pr",
+                    "components": components
+                })
+            
+            # Call PR creation function with the generated ZIP
+            try:
+                pr_result = pr_create_fn(
+                    owner=body.repo.owner,
+                    name=body.repo.name,
+                    base=body.repo.branch or "main",
+                    title=f"Aurora: {body.prompt[:60]}",
+                    body=f"Automated PR generated from prompt:\n\n{enhanced_prompt}\n\nComponents: {components}",
+                    zip_rel=res.zip_rel,
+                    prompt=enhanced_prompt,
+                    components=components
+                )
+                
+                return JSONResponse({
+                    "ok": pr_result.get("success", False),
+                    "message": pr_result.get("message", "PR creation initiated"),
+                    "mode": "pr",
+                    "components": components,
+                    **pr_result
+                })
+            except Exception as e:
+                return JSONResponse({
+                    "ok": False,
+                    "message": f"PR creation failed: {str(e)}",
+                    "mode": "pr",
+                    "components": components
+                })
         else:
             # Regular commit mode - use compile_from_nl_project
             # Pass the enhanced context to the compiler
@@ -124,19 +156,3 @@ def attach_bridge(app: FastAPI):
                 "mode": "commit"
             })
 
-
-def pr_create(prompt: str, repo_info: Optional[Dict] = None, components: Optional[Dict] = None) -> Dict:
-    """
-    Stub function for PR creation mode.
-    Will be implemented in the next iteration to handle:
-    - Creating feature branch
-    - Generating code changes
-    - Creating pull request via GitHub API
-    """
-    return {
-        "pr_status": "stub",
-        "pr_message": "PR creation not yet implemented",
-        "branch_name": f"feature/aurora-{int(time.time())}",
-        "repo_info": repo_info,
-        "planned_components": components
-    }
