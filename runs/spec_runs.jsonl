@@ -254,3 +254,7 @@
 {"run_id": "run-20251012-090804", "spec": "fibonacci.md", "ok": true, "report": "/runs/run-20251012-090804/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251012-090815", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251012-090815/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251012-090815", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251012-090815/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251014-220039", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251014-220039/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251014-220039", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251014-220039/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251014-220048", "spec": "max_in_list.md", "ok": true, "report": "/runs/run-20251014-220048/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251014-220048", "spec": "max_in_list.md", "ok": true, "report": "/runs/run-20251014-220048/report.html", "bias": null, "spark": null}
