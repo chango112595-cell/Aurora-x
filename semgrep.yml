@@ -1,0 +1,6 @@
+# balance: strong security + low false positives
+rules:
+  - { rules: semgrep-ci,     paths: ["aurora_x", "tools", "apps"] }
+  - { rules: p/python,       paths: ["aurora_x", "tools", "apps"] }
+  - { rules: p/secrets,      paths: ["."] }
+  - { rules: p/docker,       paths: ["."] }

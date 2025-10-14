@@ -811,35 +811,43 @@ const SolverSection = () => {
   );
 };
 
-// Factory Bridge Component
+// Factory Bridge Component with PR mode support
 const BridgeSection = () => {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState<string>("");
+  const [prUrl, setPrUrl] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const { toast } = useToast();
 
-  // Mutation for Bridge generation
-  const bridgeMutation = useMutation<any, Error, { prompt: string }>({
+  // Mutation for Bridge generation via UI relay endpoint
+  const bridgeMutation = useMutation<any, Error, { prompt: string; repo?: string; branch?: string; mode?: string }>({
     mutationFn: async (data) => {
-      const response = await apiRequest("POST", "/api/bridge/nl", data);
+      const response = await apiRequest("POST", "/api/ui/generate", data);
       return response.json();
     },
     onSuccess: (data) => {
-      if (data.status === "success" || data.response) {
+      if (data.status === "success" || data.response || data.pr_url) {
         setResponse(JSON.stringify(data, null, 2));
+        setPrUrl(data.pr_url || "");
         setErrorMessage("");
+        
+        const message = data.pr_url 
+          ? "Pull Request created successfully!" 
+          : "Successfully processed your request";
+        
         toast({
-          title: "Bridge Response Received",
-          description: "Successfully processed your request"
+          title: "Generation Complete",
+          description: message
         });
       } else {
         const error = data.error || data.message || "Could not process the request.";
         toast({
-          title: "Bridge Error",
+          title: "Generation Error",
           description: error,
           variant: "destructive"
         });
         setResponse("");
+        setPrUrl("");
         setErrorMessage(error);
       }
     },
@@ -892,10 +900,10 @@ const BridgeSection = () => {
             </div>
             <div>
               <CardTitle className="text-xl" data-testid="text-bridge-title">
-                Factory Bridge (NL → Project)
+                Generate Code from Natural Language
               </CardTitle>
               <CardDescription data-testid="text-bridge-description">
-                Test natural language to project generation with T12 Factory Bridge
+                Describe your feature and Aurora will create a Pull Request with implementation
               </CardDescription>
             </div>
           </div>
@@ -935,7 +943,7 @@ const BridgeSection = () => {
           </div>
           
           {/* Response Display */}
-          {(response || bridgeMutation.isPending) && (
+          {(response || prUrl || bridgeMutation.isPending) && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
@@ -947,17 +955,36 @@ const BridgeSection = () => {
                   <CheckCircle className="h-5 w-5 text-cyan-500 mt-0.5" />
                   <div className="flex-1">
                     <p className="font-medium text-cyan-600 dark:text-cyan-400 mb-2">
-                      Bridge Response:
+                      {prUrl ? "Pull Request Created:" : "Generation Response:"}
                     </p>
                     {bridgeMutation.isPending ? (
                       <div className="flex items-center gap-2">
                         <Loader2 className="h-4 w-4 animate-spin text-cyan-500" />
-                        <span className="text-sm text-muted-foreground">Processing your request...</span>
+                        <span className="text-sm text-muted-foreground">Generating code and creating PR...</span>
                       </div>
                     ) : (
-                      <pre className="text-sm font-mono text-foreground bg-background/50 p-3 rounded overflow-x-auto" data-testid="text-bridge-response">
-                        {response}
-                      </pre>
+                      <>
+                        {prUrl && (
+                          <div className="mb-3">
+                            <a 
+                              href={prUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-cyan-600 dark:text-cyan-400 hover:underline font-medium"
+                              data-testid="link-pr-url"
+                            >
+                              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                              </svg>
+                              View Pull Request on GitHub
+                            </a>
+                          </div>
+                        )}
+                        <pre className="text-sm font-mono text-foreground bg-background/50 p-3 rounded overflow-x-auto" data-testid="text-bridge-response">
+                          {response}
+                        </pre>
+                      </>
                     )}
                   </div>
                 </div>
@@ -996,9 +1023,10 @@ const BridgeSection = () => {
           
           {/* Info */}
           <div className="text-xs text-muted-foreground space-y-1">
-            <p>• Factory Bridge API for testing natural language to project generation</p>
-            <p>• Describe your app requirements in plain English</p>
-            <p>• This is a test interface for the T12 Bridge endpoint</p>
+            <p>• Describe your feature or app requirements in plain English</p>
+            <p>• Aurora will generate code, tests, and create a Pull Request</p>
+            <p>• PRs are created with GPG signing for verified commits</p>
+            <p>• CI/CD pipeline will automatically validate the generated code</p>
           </div>
         </CardContent>
       </Card>

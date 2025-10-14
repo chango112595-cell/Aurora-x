@@ -1,0 +1,250 @@
+Perfect — here’s both pieces, end-to-end:
+
+⸻
+
+1) Strict CI + Security Gate (drop-in)
+
+A) .github/workflows/aurora-ci.yml
+
+Creates a single CI pipeline that fails if:
+	•	coverage < 85%
+	•	Ruff lint errors exist
+	•	Bandit finds high severity
+	•	Semgrep finds blocking issues
+
+name: Aurora CI (strict)
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt || true
+          pip install pytest pytest-cov ruff bandit semgrep
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Security (bandit, fail on high)
+        run: bandit -r aurora_x -lll
+
+      - name: Tests + Coverage (>=85%)
+        run: |
+          pytest -q --maxfail=1 --disable-warnings \
+            --cov=aurora_x --cov-report=term-missing
+          COVER=$(pytest --cov=aurora_x --cov-report=term | tail -n1 | awk '{print $4}' | tr -d '%')
+          echo "Coverage: $COVER%"
+          python - <<'PY'
+import os,sys
+c=os.environ.get("COVER","0")
+try:
+    v=float(c)
+except:
+    v=0.0
+threshold=85.0
+print(f"threshold={threshold}, actual={v}")
+sys.exit(0 if v>=threshold else 1)
+PY
+
+      - name: Semgrep (recommended rules)
+        run: |
+          semgrep --version
+          semgrep --config semgrep.yml --error
+
+B) pytest.ini
+
+[pytest]
+addopts = -q
+testpaths = tests
+
+C) ruff.toml
+
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E203"]
+
+D) semgrep.yml
+
+# balance: strong security + low false positives
+rules:
+  - { rules: semgrep-ci,     paths: ["aurora_x", "tools", "apps"] }
+  - { rules: p/python,       paths: ["aurora_x", "tools", "apps"] }
+  - { rules: p/secrets,      paths: ["."] }
+  - { rules: p/docker,       paths: ["."] }
+
+E) Makefile helpers (optional local mirror of CI)
+
+Append to your Makefile:
+
+lint:
+\truff check .
+
+sec:
+\tbandit -r aurora_x -lll
+\tsemgrep --config semgrep.yml
+
+test:
+\tpytest --cov=aurora_x --cov-report=term-missing
+
+ci-local: lint sec test
+
+Commit these 4 files and the Makefile additions. With branch protection turned on (require “Aurora CI (strict)”), PRs must pass before merge.
+
+⸻
+
+2) Wire the Dashboard “Generate” button to Bridge (PR mode)
+
+This adds a backend relay that your web app can call, and a tiny front-end JS to post the prompt. It forwards to the Factory Bridge on port 5001 and asks it to open a PR (not push directly).
+
+A) Server: add a relay endpoint
+
+In aurora_x/serve.py (FastAPI/Flask-style app), add:
+
+# --- add near the imports ---
+import os, json
+import requests
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+
+BRIDGE_URL = os.getenv("AURORA_BRIDGE_URL", "http://localhost:5001")
+REPO = os.getenv("AURORA_REPO", "chango112595-cell/Aurora-x")
+TARGET_BRANCH = os.getenv("AURORA_TARGET_BRANCH", "main")
+
+router_bridge = APIRouter()
+
+class NLRequest(BaseModel):
+    prompt: str
+    repo: str | None = None
+    branch: str | None = None
+    mode: str | None = "api"  # keep for future
+
+@router_bridge.post("/api/ui/generate")
+def ui_generate(req: NLRequest):
+    repo = req.repo or REPO
+    branch = req.branch or TARGET_BRANCH
+
+    # Force PR mode via env that Bridge reads
+    payload = {
+        "prompt": req.prompt,
+        "repo": repo,
+        "branch": branch,
+        "mode": "api"
+    }
+
+    # The Bridge should respect PR mode when AURORA_PR=1
+    try:
+        r = requests.post(f"{BRIDGE_URL}/api/bridge/nl", json=payload, timeout=120)
+        if r.status_code >= 300:
+            raise HTTPException(status_code=502, detail={
+                "error": "bridge_failed",
+                "status": r.status_code,
+                "body": r.text
+            })
+        return r.json()
+    except requests.RequestException as e:
+        raise HTTPException(status_code=502, detail={"error":"bridge_unreachable","message":str(e)})
+
+# --- mount the router on your app ---
+# app = FastAPI() ... already exists
+app.include_router(router_bridge)
+
+Ensure your app imports/instantiates app before this include line.
+
+B) Front-end: call the relay
+
+If you have a dashboard JS (e.g. static/dashboard.js), add:
+
+<!-- In your dashboard page -->
+<input id="nlPrompt" placeholder="Describe the feature…" />
+<button id="genBtn">Generate</button>
+<pre id="genOut"></pre>
+
+<script>
+async function generateFromNL() {
+  const prompt = document.getElementById('nlPrompt').value.trim();
+  const out = document.getElementById('genOut');
+  out.textContent = 'Working…';
+
+  try {
+    const res = await fetch('/api/ui/generate', {
+      method: 'POST',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(JSON.stringify(data));
+    out.textContent = JSON.stringify(data, null, 2);
+  } catch (e) {
+    out.textContent = 'Error: ' + e.message;
+  }
+}
+document.getElementById('genBtn').addEventListener('click', generateFromNL);
+</script>
+
+C) Env secrets to enable PR mode (in Replit “Secrets”)
+	•	AURORA_REPO = chango112595-cell/Aurora-x
+	•	AURORA_TARGET_BRANCH = main
+	•	AURORA_BRIDGE_URL = http://localhost:5001
+	•	AURORA_PR = 1  ← Bridge will create PRs instead of pushing
+	•	(Already set) AURORA_GIT_NAME, AURORA_GIT_EMAIL, AURORA_SIGN=true
+	•	(Optional) DISCORD_WEBHOOK_URL for PR notifications
+
+D) Start services (Bridge + App)
+
+# Bridge (port 5001) + Orchestrator
+make bridge-up
+make orch-down || true
+AURORA_PR=1 make orch-up
+
+# App (your server; confirm port in your Procfile/.replit)
+make run         # or however you start aurora_x/serve.py
+
+E) Try it (no curl needed — from the page)
+	1.	Open your dashboard, type:
+“Create a neon stopwatch & countdown UI with lap/save, tests, package under /apps/timer”
+	2.	Click Generate.
+	3.	Expected: PR opened in Aurora-x with new files; CI runs and must pass.
+
+⸻
+
+Quick Validation Checklist
+	•	Bridge health
+curl -s http://localhost:5001/healthz → { "status":"ok" }
+	•	Relay health
+curl -s http://localhost:8000/healthz (or your app port) → ok
+	•	PRs show “Verified” (GPG signing)
+Already configured — GitHub should show the green Verified badge on Aurora’s commits.
+	•	CI status required
+GitHub → Repo → Settings → Branches → Protect main → Require status checks → select Aurora CI (strict).
+
+⸻
+
+What you’ll see after this
+	•	Hitting Generate on the dashboard creates a PR with a feature scaffold (code + tests).
+	•	Aurora CI (strict) blocks merges until lint, security and ≥85% coverage pass.
+	•	Bandit/Semgrep catch risky patterns; Ruff keeps style tight.
+	•	All commits are GPG-signed and show Verified.
+
+If you want, I can also add: coverage badge in README, Semgrep SARIF upload to GitHub Security tab, and a “Rollback last PR” button on the dashboard.
