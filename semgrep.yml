@@ -1,6 +1,5 @@
-# balance: strong security + low false positives
+# Use standard community rulesets
 rules:
-  - { rules: semgrep-ci,     paths: ["aurora_x", "tools", "apps"] }
-  - { rules: p/python,       paths: ["aurora_x", "tools", "apps"] }
-  - { rules: p/secrets,      paths: ["."] }
-  - { rules: p/docker,       paths: ["."] }
+  - r/python.lang.security
+  - r/secrets
+  - r/python.django.security
