@@ -10,6 +10,19 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+**January 2025 Updates**:
+- **Enhanced CI/CD Pipeline**: 
+  - Upgraded GitHub Actions workflow with SARIF output for GitHub Security tab integration
+  - Coverage badge generation as SVG with color coding (red <60%, orange <80%, yellow <85%, green ≥85%)
+  - Auto-publishing of coverage badge to separate 'badges' branch
+  - Coverage calculation using lxml for accurate XML parsing
+  - Added permissions for contents:write and security-events:write
+- **PR Rollback Controls**: 
+  - Added rollback endpoints to manage Aurora-generated pull requests
+  - Dashboard UI integration with "Rollback Open PR" and "Revert Last Merged PR" buttons
+  - Requires AURORA_GH_TOKEN environment variable with repo permissions
+- **Coverage Badge**: Added coverage badge to README.md for real-time coverage visibility
+
 **October 14, 2024 Updates**:
 - **CI/CD Pipeline**: Added strict GitHub Actions workflow with 85% coverage requirement, Ruff linting, Bandit/Semgrep security gates
 - **Dashboard Generate Button**: Integrated Generate button that creates PRs via Aurora Bridge with natural language prompts
@@ -101,6 +114,19 @@ Preferred communication style: Simple, everyday language.
   - `GITHUB_TOKEN`: Personal access token for GitHub API authentication
   - `AURORA_GIT_URL`: Target repository URL (e.g., `https://github.com/username/repo.git`)
   - `AURORA_GIT_BRANCH`: Default branch for pushes (e.g., `main` or `develop`)
+
+**PR Rollback Controls** (Added January 2025):
+- **New Rollback Endpoints**:
+  - `/api/bridge/rollback/open`: Closes the latest open PR with 'aurora' label and deletes its branch
+  - `/api/bridge/rollback/merged`: Creates a revert PR for the latest merged PR with 'aurora' label
+- **Dashboard UI Integration**:
+  - New "PR Rollback Controls" section added to dashboard
+  - "Rollback Open PR" button to close and delete branch
+  - "Revert Last Merged PR" button to create revert PR
+- **Required Environment Variables**:
+  - `AURORA_GH_TOKEN`: GitHub Personal Access Token with repo permissions (for rollback operations)
+  - `AURORA_REPO`: Repository identifier (e.g., `chango112595-cell/Aurora-x`)
+  - `AURORA_BRIDGE_URL`: Bridge service URL (defaults to `http://localhost:5001`)
 
 **Quality Gates and CI/CD**:
 - **Makefile Quality Targets**:
