@@ -41,6 +41,7 @@ jobs:
             --cov=aurora_x --cov-report=term-missing
           COVER=$(pytest --cov=aurora_x --cov-report=term | tail -n1 | awk '{print $4}' | tr -d '%')
           echo "Coverage: $COVER%"
+          export COVER
           python - <<'PY'
           import os,sys
           c=os.environ.get("COVER","0")
