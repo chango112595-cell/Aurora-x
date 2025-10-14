@@ -8,6 +8,8 @@
 
 # Aurora-X Ultra
 
+![coverage](https://raw.githubusercontent.com/chango112595-cell/Aurora-x/badges/badges/coverage.svg)
+
 <!-- BADGES-START -->
 ![Progress](https://img.shields.io/badge/Progress-91%25-brightgreen) ![Active Tasks](https://img.shields.io/badge/Active-T08,T10,T12-blue) ![Last Updated](https://img.shields.io/badge/Updated-2025--10--12-lightgrey) ![Tasks](https://img.shields.io/badge/Tasks-✅9_🚀2_🔧1-informational)
 <!-- BADGES-END -->

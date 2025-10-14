@@ -811,6 +811,210 @@ const SolverSection = () => {
   );
 };
 
+// Rollback Section Component for PR management
+const RollbackSection = () => {
+  const [response, setResponse] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<{ open: boolean; merged: boolean }>({ open: false, merged: false });
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const { toast } = useToast();
+
+  // Handle rollback of open PR
+  const handleRollbackOpen = async () => {
+    setIsLoading({ ...isLoading, open: true });
+    setResponse("");
+    setErrorMessage("");
+    
+    try {
+      const res = await apiRequest("POST", "/api/bridge/rollback/open", {});
+      const data = await res.json();
+      
+      if (res.ok && data.status === "ok") {
+        const message = `Successfully closed PR #${data.closed} and deleted branch ${data.deleted_branch}`;
+        setResponse(JSON.stringify(data, null, 2));
+        toast({
+          title: "Rollback Complete",
+          description: message
+        });
+      } else {
+        const error = data.message || data.error || "Failed to rollback open PR";
+        setErrorMessage(error);
+        toast({
+          title: "Rollback Failed",
+          description: error,
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      const errorMsg = error.message || "Failed to connect to server";
+      setErrorMessage(errorMsg);
+      toast({
+        title: "Connection Error",
+        description: errorMsg,
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading({ ...isLoading, open: false });
+    }
+  };
+
+  // Handle revert of merged PR
+  const handleRollbackMerged = async () => {
+    setIsLoading({ ...isLoading, merged: true });
+    setResponse("");
+    setErrorMessage("");
+    
+    try {
+      const res = await apiRequest("POST", "/api/bridge/rollback/merged", { base: "main" });
+      const data = await res.json();
+      
+      if (res.ok && (data.status === "ok" || data.revert_pr)) {
+        const message = data.revert_pr 
+          ? `Successfully created revert PR #${data.revert_pr}`
+          : "Revert PR created successfully";
+        setResponse(JSON.stringify(data, null, 2));
+        toast({
+          title: "Revert Complete",
+          description: message
+        });
+      } else {
+        const error = data.message || data.error || "Failed to revert merged PR";
+        setErrorMessage(error);
+        toast({
+          title: "Revert Failed",
+          description: error,
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      const errorMsg = error.message || "Failed to connect to server";
+      setErrorMessage(errorMsg);
+      toast({
+        title: "Connection Error",
+        description: errorMsg,
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading({ ...isLoading, merged: false });
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+      className="mb-8"
+    >
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <RefreshCw className="h-5 w-5 text-cyan-500" />
+              <CardTitle data-testid="text-rollback-title">PR Rollback Controls</CardTitle>
+            </div>
+            <Badge variant="outline" className="text-xs">
+              GitHub Integration
+            </Badge>
+          </div>
+          <CardDescription>
+            Manage Aurora-generated pull requests - close open PRs or revert merged changes
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-3">
+            <Button
+              onClick={handleRollbackOpen}
+              disabled={isLoading.open || isLoading.merged}
+              className="flex-1"
+              variant="outline"
+              data-testid="button-rollback-open"
+            >
+              {isLoading.open ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Rolling Back...
+                </>
+              ) : (
+                <>
+                  <AlertCircle className="h-4 w-4 mr-2" />
+                  Rollback Open PR
+                </>
+              )}
+            </Button>
+            
+            <Button
+              onClick={handleRollbackMerged}
+              disabled={isLoading.open || isLoading.merged}
+              className="flex-1"
+              variant="outline"
+              data-testid="button-revert-merged"
+            >
+              {isLoading.merged ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Reverting...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Revert Last Merged PR
+                </>
+              )}
+            </Button>
+          </div>
+
+          {/* Response Display */}
+          {response && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="bg-muted/50 rounded-md p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium">Response:</span>
+                  <Badge variant="secondary" className="text-xs">
+                    Success
+                  </Badge>
+                </div>
+                <pre className="text-xs text-muted-foreground overflow-x-auto" data-testid="text-rollback-response">
+                  {response}
+                </pre>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Error Display */}
+          {errorMessage && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="bg-destructive/10 border border-destructive/20 rounded-md p-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <AlertCircle className="h-4 w-4 text-destructive" />
+                  <span className="text-sm font-medium text-destructive">Error</span>
+                </div>
+                <p className="text-xs text-muted-foreground" data-testid="text-rollback-error">
+                  {errorMessage}
+                </p>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Help Text */}
+          <div className="text-xs text-muted-foreground space-y-1">
+            <p>• <strong>Rollback Open PR:</strong> Closes the latest open PR with 'aurora' label and deletes its branch</p>
+            <p>• <strong>Revert Merged PR:</strong> Creates a revert PR for the latest merged PR with 'aurora' label</p>
+            <p>• Requires AURORA_GH_TOKEN environment variable with repo permissions</p>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
+
 // Factory Bridge Component with PR mode support
 const BridgeSection = () => {
   const [prompt, setPrompt] = useState("");
@@ -1214,6 +1418,9 @@ export default function Dashboard() {
         
         {/* Add Factory Bridge Section */}
         <BridgeSection />
+        
+        {/* Add Rollback Section */}
+        <RollbackSection />
         
         {data.active && data.active.length > 0 && (
           <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
