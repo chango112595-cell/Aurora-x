@@ -10,6 +10,14 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+**October 14, 2024 Updates**:
+- **CI/CD Pipeline**: Added strict GitHub Actions workflow with 85% coverage requirement, Ruff linting, Bandit/Semgrep security gates
+- **Dashboard Generate Button**: Integrated Generate button that creates PRs via Aurora Bridge with natural language prompts
+- **GPG Signing Fixed**: Generated new GPG key for verified commits, properly configured with AURORA_GPG_PRIVATE secret
+- **Aurora Chat Fixed**: Resolved natural language processing issues - Aurora now correctly handles English commands
+- **PR Mode Integration**: Dashboard can create pull requests instead of direct pushes when AURORA_PR=1 is set
+- **Security Configuration**: Added pytest.ini, ruff.toml, semgrep.yml for comprehensive code quality checks
+
 **December 2024 Updates**:
 - **COMPLETED T13**: Universal Code Synthesis Engine (UCSE) now at 100% completion
   - 1855-line synthesis engine with Multi-Intent Parser, Blueprint Engine, Dynamic Synthesizer, Safety Gate, and Persistence Layer
