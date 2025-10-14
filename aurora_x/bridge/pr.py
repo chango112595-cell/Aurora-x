@@ -15,9 +15,15 @@ def _check_gpg_available():
     except (subprocess.SubprocessError, FileNotFoundError, OSError):
         return False
 
-def _get_git_config(key: str):
-    """Get current git config value, returns None if not set"""
-    result = _run(f'git config --get {key}')
+def _get_git_config(key: str, scope: str = ""):
+    """Get current git config value, returns None if not set
+    
+    Args:
+        key: The config key to get
+        scope: Optional scope like '--global' or '--local'
+    """
+    cmd = f'git config {scope} --get {key}'.strip()
+    result = _run(cmd)
     return result.stdout.strip() if result.returncode == 0 else None
 
 def _git(cfg: dict[str,str] | None = None):
@@ -41,42 +47,99 @@ def _git(cfg: dict[str,str] | None = None):
         
         # optional signing (with graceful fallback)
         if os.getenv("AURORA_SIGN","0").lower() in ("1","true","yes","on"):
-            key_id = os.getenv("GPG_KEY_ID","").strip()
-            armored = os.getenv("GPG_PRIVATE_ASC","").strip()
+            # Check if global git config already has signing configured
+            global_gpgsign = _get_git_config('commit.gpgsign', '--global')
+            global_signingkey = _get_git_config('user.signingkey', '--global')
             
-            # Only configure signing if GPG is available AND keys are provided
-            if armored and key_id and _check_gpg_available():
-                try:
-                    # Import key only once per runtime (caching)
-                    if not _GPG_KEY_IMPORTED:
-                        p = subprocess.run(['gpg', '--batch', '--import'], 
-                                         input=armored, capture_output=True, text=True, timeout=10)
-                        if p.returncode == 0:
-                            _GPG_KEY_IMPORTED = True
-                        else:
-                            print(f"Warning: GPG key import failed: {p.stderr}")
-                    
-                    # Verify key exists
-                    verify = _run(f"gpg --batch --list-secret-keys {shlex.quote(key_id)}")
-                    if verify.returncode == 0:
-                        # Configure git for signing
-                        _run('git config commit.gpgsign true')
-                        _run('git config gpg.program gpg')
-                        _run(f'git config user.signingkey {shlex.quote(key_id)}')
-                    else:
-                        print(f"Warning: GPG signing key not found, continuing without signing")
-                        _run('git config commit.gpgsign false')
-                        
-                except (subprocess.SubprocessError, FileNotFoundError, OSError) as e:
-                    # Graceful fallback - continue without signing
-                    print(f"Warning: GPG signing setup failed ({e}), continuing without signing")
-                    _run('git config commit.gpgsign false')
+            # If global config already has signing enabled with a key, use it
+            if global_gpgsign == 'true' and global_signingkey:
+                print("Using existing global GPG signing configuration")
+                # Just ensure local config uses the global settings
+                _run('git config commit.gpgsign true')
+                _run('git config gpg.program gpg')
+                _run(f'git config user.signingkey {shlex.quote(global_signingkey)}')
             else:
-                # GPG not available or keys not provided - continue without signing
-                if not _check_gpg_available():
-                    print("Warning: GPG not available, continuing without signing")
-                elif not (armored and key_id):
-                    print("Warning: GPG keys not provided, continuing without signing")
+                # Try to set up signing from environment variables
+                # Support AURORA_GPG_PRIVATE (new) and GPG_PRIVATE_ASC (legacy)
+                armored = os.getenv("AURORA_GPG_PRIVATE","").strip() or os.getenv("GPG_PRIVATE_ASC","").strip()
+                # Support explicit key ID or try to extract it
+                key_id = os.getenv("AURORA_GPG_KEY_ID","").strip() or os.getenv("GPG_KEY_ID","").strip()
+                
+                # Only configure signing if GPG is available AND keys are provided
+                if armored and _check_gpg_available():
+                    try:
+                        # Import key only once per runtime (caching)
+                        if not _GPG_KEY_IMPORTED:
+                            p = subprocess.run(['gpg', '--batch', '--import'], 
+                                             input=armored, capture_output=True, text=True, timeout=10)
+                            if p.returncode == 0:
+                                _GPG_KEY_IMPORTED = True
+                            else:
+                                print(f"Warning: GPG key import failed: {p.stderr}")
+                        
+                        # If no key_id provided, try to get it from imported keys
+                        if not key_id:
+                            list_keys = _run("gpg --list-secret-keys --with-colons")
+                            if list_keys.returncode == 0:
+                                # Extract the first secret key ID
+                                for line in list_keys.stdout.split('\n'):
+                                    if line.startswith('sec:'):
+                                        parts = line.split(':')
+                                        if len(parts) > 4:
+                                            key_id = parts[4]
+                                            print(f"Auto-detected GPG key ID: {key_id}")
+                                            break
+                        
+                        # Verify key exists
+                        if key_id:
+                            verify = _run(f"gpg --batch --list-secret-keys {shlex.quote(key_id)}")
+                            if verify.returncode == 0:
+                                # Configure git for signing
+                                _run('git config commit.gpgsign true')
+                                _run('git config gpg.program gpg')
+                                _run(f'git config user.signingkey {shlex.quote(key_id)}')
+                            else:
+                                print(f"Warning: GPG signing key not found, continuing without signing")
+                                _run('git config commit.gpgsign false')
+                        else:
+                            print("Warning: Could not determine GPG key ID, continuing without signing")
+                            _run('git config commit.gpgsign false')
+                            
+                    except (subprocess.SubprocessError, FileNotFoundError, OSError) as e:
+                        # Graceful fallback - continue without signing
+                        print(f"Warning: GPG signing setup failed ({e}), continuing without signing")
+                        _run('git config commit.gpgsign false')
+                else:
+                    # GPG not available or keys not provided - continue without signing
+                    if not _check_gpg_available():
+                        print("Warning: GPG not available, continuing without signing")
+                    elif not armored:
+                        print("Warning: GPG key not provided, checking if already in keyring...")
+                        # Even without armored key, check if there's already a key in the keyring
+                        list_keys = _run("gpg --list-secret-keys --with-colons")
+                        if list_keys.returncode == 0 and 'sec:' in list_keys.stdout:
+                            # There are keys in the keyring, use the first one
+                            for line in list_keys.stdout.split('\n'):
+                                if line.startswith('sec:'):
+                                    parts = line.split(':')
+                                    if len(parts) > 4:
+                                        existing_key_id = parts[4]
+                                        print(f"Found existing GPG key in keyring: {existing_key_id}")
+                                        _run('git config commit.gpgsign true')
+                                        _run('git config gpg.program gpg')
+                                        _run(f'git config user.signingkey {shlex.quote(existing_key_id)}')
+                                        break
+                        else:
+                            print("No GPG keys available, continuing without signing")
+                            _run('git config commit.gpgsign false')
+        else:
+            # AURORA_SIGN is not enabled, but check if global config has signing
+            # This respects the bootstrap configuration even when AURORA_SIGN is not set
+            global_gpgsign = _get_git_config('commit.gpgsign', '--global')
+            if global_gpgsign == 'true':
+                print("Preserving global GPG signing configuration")
+                # Don't override global signing config
+            else:
                 _run('git config commit.gpgsign false')
         
         return original_config
