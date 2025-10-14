@@ -23,8 +23,21 @@ const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
 const BRIDGE_URL = process.env.AURORA_BRIDGE_URL || "http://localhost:5001";
 const AURORA_REPO = process.env.AURORA_REPO || "chango112595-cell/Aurora-x";
 const TARGET_BRANCH = process.env.AURORA_TARGET_BRANCH || "main";
+const AURORA_GH_TOKEN = process.env.AURORA_GH_TOKEN;
+const GH_API = "https://api.github.com";
 let wsServer: SynthesisWebSocketServer | null = null;
 let serverStartTime: number = Date.now();
+
+// GitHub API helper function
+function getGitHubHeaders() {
+  if (!AURORA_GH_TOKEN) {
+    throw new Error("Missing AURORA_GH_TOKEN environment variable");
+  }
+  return {
+    "Authorization": `token ${AURORA_GH_TOKEN}`,
+    "Accept": "application/vnd.github+json"
+  };
+}
 
 /**
  * Helper function to refresh README badges after progress updates
@@ -3143,6 +3156,275 @@ asyncio.run(main())
       console.error(`[UI Generate] Unexpected error: ${error.message}`);
       return res.status(500).json({
         error: "internal_error",
+        message: error.message
+      });
+    }
+  });
+
+  // Rollback Open PR endpoint
+  app.post("/api/bridge/rollback/open", async (req, res) => {
+    try {
+      // Check for GitHub token
+      if (!AURORA_GH_TOKEN) {
+        return res.status(500).json({
+          status: "error",
+          error: "Missing AURORA_GH_TOKEN",
+          message: "GitHub token is not configured"
+        });
+      }
+      
+      const [owner, repo] = AURORA_REPO.split("/", 2);
+      const searchQuery = `repo:${AURORA_REPO} is:pr is:open label:aurora`;
+      
+      console.log(`[Rollback Open] Searching for open Aurora PRs: ${searchQuery}`);
+      
+      // Search for open PRs with 'aurora' label
+      const searchResponse = await fetch(`${GH_API}/search/issues?q=${encodeURIComponent(searchQuery)}`, {
+        headers: getGitHubHeaders()
+      });
+      
+      if (!searchResponse.ok) {
+        const error = await searchResponse.text();
+        console.error(`[Rollback Open] GitHub search failed: ${error}`);
+        return res.status(502).json({
+          status: "error",
+          error: "GitHub API error",
+          message: "Failed to search for open PRs"
+        });
+      }
+      
+      const searchData = await searchResponse.json();
+      const items = searchData.items || [];
+      
+      if (items.length === 0) {
+        return res.status(404).json({
+          status: "error",
+          error: "Not found",
+          message: "No open Aurora PR found"
+        });
+      }
+      
+      const prNumber = items[0].number;
+      console.log(`[Rollback Open] Found PR #${prNumber}, fetching details...`);
+      
+      // Get PR details to find the branch
+      const prResponse = await fetch(`${GH_API}/repos/${owner}/${repo}/pulls/${prNumber}`, {
+        headers: getGitHubHeaders()
+      });
+      
+      if (!prResponse.ok) {
+        const error = await prResponse.text();
+        console.error(`[Rollback Open] Failed to get PR details: ${error}`);
+        return res.status(502).json({
+          status: "error",
+          error: "GitHub API error",
+          message: "Failed to get PR details"
+        });
+      }
+      
+      const prData = await prResponse.json();
+      const headRef = prData.head.ref;
+      
+      console.log(`[Rollback Open] Closing PR #${prNumber} and deleting branch ${headRef}`);
+      
+      // Close the PR
+      const closeResponse = await fetch(`${GH_API}/repos/${owner}/${repo}/pulls/${prNumber}`, {
+        method: 'PATCH',
+        headers: {
+          ...getGitHubHeaders(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ state: "closed" })
+      });
+      
+      if (!closeResponse.ok) {
+        const error = await closeResponse.text();
+        console.error(`[Rollback Open] Failed to close PR: ${error}`);
+        return res.status(502).json({
+          status: "error",
+          error: "GitHub API error",
+          message: "Failed to close PR"
+        });
+      }
+      
+      // Delete the branch
+      const deleteResponse = await fetch(`${GH_API}/repos/${owner}/${repo}/git/refs/heads/${headRef}`, {
+        method: 'DELETE',
+        headers: getGitHubHeaders()
+      });
+      
+      if (!deleteResponse.ok) {
+        const error = await deleteResponse.text();
+        console.error(`[Rollback Open] Failed to delete branch: ${error}`);
+        // Don't fail the whole operation if branch deletion fails
+      }
+      
+      console.log(`[Rollback Open] Successfully closed PR #${prNumber} and deleted branch ${headRef}`);
+      
+      return res.json({
+        status: "ok",
+        closed: prNumber,
+        deleted_branch: headRef
+      });
+      
+    } catch (error: any) {
+      console.error(`[Rollback Open] Unexpected error: ${error.message}`);
+      return res.status(500).json({
+        status: "error",
+        error: "Internal error",
+        message: error.message
+      });
+    }
+  });
+
+  // Rollback Merged PR endpoint
+  app.post("/api/bridge/rollback/merged", async (req, res) => {
+    try {
+      // Check for GitHub token
+      if (!AURORA_GH_TOKEN) {
+        return res.status(500).json({
+          status: "error",
+          error: "Missing AURORA_GH_TOKEN",
+          message: "GitHub token is not configured"
+        });
+      }
+      
+      const [owner, repo] = AURORA_REPO.split("/", 2);
+      const base = req.body.base || TARGET_BRANCH;
+      const searchQuery = `repo:${AURORA_REPO} is:pr is:closed is:merged label:aurora sort:updated-desc`;
+      
+      console.log(`[Rollback Merged] Searching for merged Aurora PRs: ${searchQuery}`);
+      
+      // Search for merged PRs with 'aurora' label
+      const searchResponse = await fetch(`${GH_API}/search/issues?q=${encodeURIComponent(searchQuery)}`, {
+        headers: getGitHubHeaders()
+      });
+      
+      if (!searchResponse.ok) {
+        const error = await searchResponse.text();
+        console.error(`[Rollback Merged] GitHub search failed: ${error}`);
+        return res.status(502).json({
+          status: "error",
+          error: "GitHub API error",
+          message: "Failed to search for merged PRs"
+        });
+      }
+      
+      const searchData = await searchResponse.json();
+      const items = searchData.items || [];
+      
+      if (items.length === 0) {
+        return res.status(404).json({
+          status: "error",
+          error: "Not found",
+          message: "No merged Aurora PR found"
+        });
+      }
+      
+      const prNumber = items[0].number;
+      console.log(`[Rollback Merged] Found PR #${prNumber}, fetching details...`);
+      
+      // Get PR details to find merge commit
+      const prResponse = await fetch(`${GH_API}/repos/${owner}/${repo}/pulls/${prNumber}`, {
+        headers: getGitHubHeaders()
+      });
+      
+      if (!prResponse.ok) {
+        const error = await prResponse.text();
+        console.error(`[Rollback Merged] Failed to get PR details: ${error}`);
+        return res.status(502).json({
+          status: "error",
+          error: "GitHub API error",
+          message: "Failed to get PR details"
+        });
+      }
+      
+      const prData = await prResponse.json();
+      
+      if (!prData.merged) {
+        return res.status(400).json({
+          status: "error",
+          error: "Invalid state",
+          message: "Selected PR is not merged"
+        });
+      }
+      
+      const mergeSha = prData.merge_commit_sha;
+      const targetBase = base || prData.base.ref;
+      
+      console.log(`[Rollback Merged] Attempting to revert PR #${prNumber} with merge SHA ${mergeSha}`);
+      
+      // Try GitHub's native revert endpoint first (if available)
+      try {
+        const revertResponse = await fetch(`${GH_API}/repos/${owner}/${repo}/pulls/${prNumber}/reverts`, {
+          method: 'POST',
+          headers: {
+            ...getGitHubHeaders(),
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            commit_title: `Revert PR #${prNumber}`,
+            body: "Automated revert via Aurora dashboard",
+            revert: { branch: targetBase }
+          })
+        });
+        
+        if (revertResponse.ok) {
+          const revertData = await revertResponse.json();
+          console.log(`[Rollback Merged] Successfully created revert PR #${revertData.number}`);
+          return res.json({
+            status: "ok",
+            revert_pr: revertData.number
+          });
+        }
+      } catch (nativeError: any) {
+        console.log(`[Rollback Merged] Native revert failed, trying Bridge fallback: ${nativeError.message}`);
+      }
+      
+      // Fallback to Bridge revert endpoint
+      console.log(`[Rollback Merged] Falling back to Bridge revert endpoint`);
+      
+      try {
+        const bridgeResponse = await fetch(`${BRIDGE_URL}/api/bridge/revert`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            repo: AURORA_REPO,
+            merge_sha: mergeSha,
+            base: targetBase
+          })
+        });
+        
+        if (!bridgeResponse.ok) {
+          const errorText = await bridgeResponse.text();
+          console.error(`[Rollback Merged] Bridge revert failed: ${errorText}`);
+          return res.status(502).json({
+            status: "error",
+            error: "Bridge revert failed",
+            message: errorText.substring(0, 500)
+          });
+        }
+        
+        const bridgeData = await bridgeResponse.json();
+        console.log(`[Rollback Merged] Bridge revert successful`);
+        return res.json(bridgeData);
+        
+      } catch (bridgeError: any) {
+        console.error(`[Rollback Merged] Bridge fallback failed: ${bridgeError.message}`);
+        return res.status(502).json({
+          status: "error",
+          error: "Revert failed",
+          message: "Both native and Bridge revert methods failed"
+        });
+      }
+      
+    } catch (error: any) {
+      console.error(`[Rollback Merged] Unexpected error: ${error.message}`);
+      return res.status(500).json({
+        status: "error",
+        error: "Internal error",
         message: error.message
       });
     }
