@@ -20,6 +20,9 @@ import {
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
+const BRIDGE_URL = process.env.AURORA_BRIDGE_URL || "http://localhost:5001";
+const AURORA_REPO = process.env.AURORA_REPO || "chango112595-cell/Aurora-x";
+const TARGET_BRANCH = process.env.AURORA_TARGET_BRANCH || "main";
 let wsServer: SynthesisWebSocketServer | null = null;
 let serverStartTime: number = Date.now();
 
@@ -3067,6 +3070,79 @@ asyncio.run(main())
       return res.status(500).json({
         status: "error",
         error: "Internal server error",
+        message: error.message
+      });
+    }
+  });
+
+  // UI Generate endpoint - relay to Bridge with PR mode support
+  app.post("/api/ui/generate", async (req, res) => {
+    try {
+      const { prompt, repo, branch, mode } = req.body;
+      
+      // Validate input
+      if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
+        return res.status(400).json({
+          error: "invalid_request",
+          message: "prompt is required and must be a non-empty string"
+        });
+      }
+      
+      // Limit prompt length for safety
+      if (prompt.length > 5000) {
+        return res.status(400).json({
+          error: "prompt_too_long",
+          message: "Prompt must be less than 5000 characters"
+        });
+      }
+      
+      // Build payload for Bridge
+      const payload = {
+        prompt,
+        repo: repo || AURORA_REPO,
+        branch: branch || TARGET_BRANCH,
+        mode: mode || "api"
+      };
+      
+      console.log(`[UI Generate] Processing request: "${prompt.substring(0, 100)}..."`);
+      console.log(`[UI Generate] Target repo: ${payload.repo}, branch: ${payload.branch}`);
+      
+      // Forward to Bridge service
+      try {
+        const response = await fetch(`${BRIDGE_URL}/api/bridge/nl`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload)
+        });
+        
+        if (response.status >= 300) {
+          const errorText = await response.text();
+          console.error(`[UI Generate] Bridge returned error status ${response.status}: ${errorText}`);
+          return res.status(502).json({
+            error: "bridge_failed",
+            status: response.status,
+            body: errorText.substring(0, 500)
+          });
+        }
+        
+        const data = await response.json();
+        console.log(`[UI Generate] Success - PR/code generated`);
+        return res.json(data);
+        
+      } catch (fetchError: any) {
+        console.error(`[UI Generate] Failed to reach Bridge: ${fetchError.message}`);
+        return res.status(502).json({
+          error: "bridge_unreachable",
+          message: `Could not connect to Bridge service at ${BRIDGE_URL}. Ensure it's running.`
+        });
+      }
+      
+    } catch (error: any) {
+      console.error(`[UI Generate] Unexpected error: ${error.message}`);
+      return res.status(500).json({
+        error: "internal_error",
         message: error.message
       });
     }
