@@ -1736,7 +1736,7 @@ except Exception as e:
       
           // Execute Aurora-X with the natural language command using spawn for security
           // Use spawn instead of exec to prevent command injection
-          const spawnProcess = spawn('make', ['say', `WHAT=${sanitizedMessage}`], {
+          const spawnProcess = spawn('python', ['-m', 'aurora_x.main', '--nl', sanitizedMessage], {
             cwd: process.cwd(),
             timeout: 30000, // 30 second timeout
             shell: false, // Explicitly disable shell to prevent injection
