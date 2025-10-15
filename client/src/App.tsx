@@ -8,6 +8,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AppSidebar } from "@/components/app-sidebar";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -152,7 +153,9 @@ function App() {
                   <ThemeToggle />
                 </header>
                 <main className="flex-1 overflow-hidden">
-                  <Router />
+                  <ErrorBoundary>
+                    <Router />
+                  </ErrorBoundary>
                 </main>
               </div>
             </div>
