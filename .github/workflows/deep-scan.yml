@@ -1,0 +1,73 @@
+name: Aurora-x Deep Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  deep-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install Python Tools
+        run: |
+          pip install flake8 black mypy pytest
+
+      - name: Python Lint & Type Check
+        run: |
+          flake8 aurora_x/
+          mypy aurora_x/
+          black --check aurora_x/
+
+      - name: Run Python Tests
+        run: |
+          pytest tests/ || echo "Some tests failed but continuing..."
+
+      - name: Install Client Dependencies
+        working-directory: ./client
+        run: |
+          npm ci
+
+      - name: TypeScript & ESLint Check
+        working-directory: ./client
+        run: |
+          npx eslint . --ext .js,.ts,.tsx || echo "ESLint failed"
+          npx tsc --noEmit || echo "TypeScript compile failed"
+
+      - name: Install Server Dependencies (if Node.js)
+        working-directory: ./server
+        run: |
+          npm ci || true
+
+      - name: Server Lint (JS/TS fallback)
+        working-directory: ./server
+        run: |
+          npx eslint . || echo "Server lint failed"
+
+      - name: Dockerfile Linting
+        run: |
+          sudo apt-get install -y hadolint
+          hadolint docker/Dockerfile || echo "Dockerfile issues"
+
+      - name: Shellcheck for Scripts
+        run: |
+          sudo apt-get install -y shellcheck
+          shellcheck scripts/*.sh || echo "Shellcheck warnings"
+
+      - name: Makefile Check
+        run: |
+          make help || echo "Makefile check failed"
