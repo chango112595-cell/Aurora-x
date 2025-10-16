@@ -1,4 +1,4 @@
-<!-- AURORA_PROGRESS_BADGES:START -->
+<!-- AURORA_PROGRESS_BADGEs:START -->
 <p>
   <img alt="Overall Progress" src="https://img.shields.io/badge/Overall-92.69%25-7D5BFF?style=for-the-badge" />
   <img alt="Active" src="https://img.shields.io/badge/Active-T08,%20T10,%20T12-66E6FF?style=for-the-badge" />
