@@ -150,7 +150,9 @@ def attach(app: FastAPI) -> None:
                     {
                         "spec": str(spec_file),
                         "created": datetime.fromtimestamp(spec_file.stat().st_mtime).isoformat(),
-                        "token": hashlib.md5(str(spec_file).encode()).hexdigest()[:8],  # nosec B324 - Used for file tokens, not security
+                        "token": hashlib.md5(str(spec_file).encode()).hexdigest()[
+                            :8
+                        ],  # nosec B324 - Used for file tokens, not security
                     }
                 )
 

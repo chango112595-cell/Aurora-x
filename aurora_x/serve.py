@@ -358,6 +358,7 @@ async def solve_endpoint(request: SolverRequest):
     except Exception as e:
         # Log error but don't expose stack traces
         import logging
+
         logging.error(f"Solver error: {e}", exc_info=True)
         return JSONResponse(content={"ok": False, "error": "Failed to solve problem"}, status_code=500)
 
@@ -414,6 +415,7 @@ async def solve_pretty_endpoint(request: SolverRequest):
     except Exception as e:
         # Log error but don't expose stack traces
         import logging
+
         logging.error(f"Solver pretty error: {e}", exc_info=True)
         return PlainTextResponse(content="Internal Server Error", status_code=500)
 

@@ -152,7 +152,7 @@ def compile_from_spec(spec_path: str) -> BridgeResult:
     except (ValueError, RuntimeError):
         # Path is outside specs directory
         return BridgeResult(False, f"invalid spec path: {spec_path}")
-    
+
     if not sp.exists():
         return BridgeResult(False, f"spec not found: {spec_path}")
     code, out, err = _run(f"python -m aurora_x.main --spec {shlex.quote(str(sp))}")

@@ -36,7 +36,7 @@ def attach_demo_runall(app: FastAPI):
 
             cards = cards_data["cards"]
 
-        except Exception as e:
+        except Exception:
             # Don't expose stack traces to users
             return {"ok": False, "error": "Failed to load demo cards"}
 
