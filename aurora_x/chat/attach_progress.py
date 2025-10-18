@@ -1,8 +1,10 @@
 from __future__ import annotations
+
+import json
+from pathlib import Path
+
 from fastapi import Response
 from fastapi.responses import JSONResponse
-from pathlib import Path
-import json
 
 PROGRESS_PATH = Path("progress.json")
 

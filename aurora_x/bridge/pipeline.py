@@ -1,8 +1,12 @@
 from __future__ import annotations
+
+import os
+import shlex
+import subprocess
+import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Dict, Any
-import subprocess, shlex, json, time, os, hashlib
+from typing import Any
 
 RUNS = Path("runs"); RUNS.mkdir(exist_ok=True)
 
@@ -14,7 +18,8 @@ def _discord(msg: str):
     url = os.getenv("DISCORD_WEBHOOK_URL")
     if not url: return
     try:
-        import urllib.request, json as _json
+        import json as _json
+        import urllib.request
         req = urllib.request.Request(url, data=_json.dumps({"content": msg}).encode("utf-8"),
                                      headers={"Content-Type":"application/json"})
         urllib.request.urlopen(req, timeout=6).read()
@@ -39,9 +44,9 @@ class BridgeResult:
     files: list[str]|None = None
     zip_rel: str|None = None
     logs: list[str]|None = None
-    components: Optional[Dict[str, Any]] = None
-    stack: Optional[str] = None
-    repo_info: Optional[Dict[str, Any]] = None
+    components: dict[str, Any] | None = None
+    stack: str | None = None
+    repo_info: dict[str, Any] | None = None
 
 def compile_from_nl(prompt: str)->BridgeResult:
     from aurora_x.synthesis.universal_engine import generate_project
@@ -57,10 +62,10 @@ def compile_from_nl(prompt: str)->BridgeResult:
                         zip_rel=f"/api/runs/{ts}/project.zip",
                         logs=[out,err])
 
-def compile_from_nl_project(prompt: str, repo_info: Optional[dict] = None, stack: Optional[str] = None, components: Optional[dict] = None, skip_git_operations: bool = False)->BridgeResult:
+def compile_from_nl_project(prompt: str, repo_info: dict | None = None, stack: str | None = None, components: dict | None = None, skip_git_operations: bool = False)->BridgeResult:
     """
     Enhanced version of compile_from_nl that accepts additional project parameters.
-    
+
     Args:
         prompt: The natural language prompt describing the project
         repo_info: Repository information (owner, name, branch)
@@ -69,46 +74,40 @@ def compile_from_nl_project(prompt: str, repo_info: Optional[dict] = None, stack
         skip_git_operations: If True, skip git commit and push operations (used for PR mode)
     """
     from aurora_x.synthesis.universal_engine import generate_project
-    
+
     # Build context dict with all the additional information
-    context = {
-        "repo": repo_info,
-        "stack": stack,
-        "components": components,
-        "enhanced": True  # Flag to indicate this is an enhanced request
-    }
-    
+
     # Generate project with enhanced context
     # Note: generate_project will need to be updated to accept context in a future iteration
     # For now, we'll embed the stack info in the prompt
     enhanced_prompt = prompt
     if stack:
         enhanced_prompt = f"[Stack: {stack}] {prompt}"
-    
+
     res = generate_project(enhanced_prompt)
-    
+
     # Run tests
     code,out,err = _run("pytest -q")
     ok = (code == 0)
-    
+
     # Build commit message with stack info
-    msg = f"bridge: NL→Project"
+    msg = "bridge: NL→Project"
     if stack:
         msg += f" [{stack}]"
     msg += f" :: {prompt[:64]}"
-    
+
     # Only perform git operations if not in PR mode
     if not skip_git_operations:
         _git_commit_push(msg)
         _discord(("✅" if ok else "❌") + f" Aurora Bridge: {msg}")
-    
+
     # Get timestamp from result
     ts = res.manifest["ts"] if hasattr(res, 'manifest') and res.manifest else time.strftime("%Y%m%d-%H%M%S")
-    
+
     # Return enhanced result with component info
     result = BridgeResult(
-        ok=ok, 
-        message="compiled", 
+        ok=ok,
+        message="compiled",
         run_dir=str(res.run_dir) if hasattr(res, 'run_dir') else None,
         files=res.manifest["files"] if hasattr(res, 'manifest') and res.manifest else None,
         zip_rel=f"/api/runs/{ts}/project.zip",
@@ -117,7 +116,7 @@ def compile_from_nl_project(prompt: str, repo_info: Optional[dict] = None, stack
         stack=stack,
         repo_info=repo_info
     )
-    
+
     return result
 
 def compile_from_spec(spec_path: str)->BridgeResult:

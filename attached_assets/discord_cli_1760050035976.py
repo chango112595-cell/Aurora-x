@@ -1,8 +1,9 @@
 # tools/discord_cli.py
 # Simple CLI wrapper so Makefile can send Discord messages.
 import sys
+
 try:
-    from tools.notify_discord import success, error, warning, info, send_text
+    from tools.notify_discord import error, info, send_text, success, warning
 except Exception:
     # Fallback no-op if notify_discord isn't present
     def _print(msg): print(msg); return True

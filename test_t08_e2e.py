@@ -5,11 +5,9 @@ Tests all language outputs from the /chat endpoint
 """
 
 import os
-import json
-import requests
 from pathlib import Path
-import subprocess
-import time
+
+import requests
 
 HOST = os.getenv("HOST", "http://localhost:5001")
 
@@ -19,7 +17,7 @@ def test_prompt(prompt, expected_lang, description):
     print(f"📝 Testing: {description}")
     print(f"   Prompt: '{prompt}'")
     print(f"   Expected Language: {expected_lang}")
-    
+
     try:
         # Make the API call
         response = requests.post(
@@ -27,28 +25,28 @@ def test_prompt(prompt, expected_lang, description):
             json={"prompt": prompt},
             timeout=10
         )
-        
+
         if response.status_code == 200:
             data = response.json()
-            print(f"✅ Success!")
+            print("✅ Success!")
             print(f"   Language: {data.get('lang', 'unknown')}")
             print(f"   Kind: {data.get('kind', 'unknown')}")
-            
+
             if 'file' in data:
                 print(f"   File: {data['file']}")
             elif 'files' in data:
                 print(f"   Files: {', '.join(data['files'])}")
-            
+
             print(f"   Hint: {data.get('hint', 'N/A')}")
             print(f"   Reason: {data.get('reason', 'N/A')}")
-            
+
             # Verify the generated file exists
             if 'file' in data:
                 if Path(data['file']).exists():
                     print(f"   ✅ Generated file exists: {data['file']}")
                 else:
                     print(f"   ❌ Generated file missing: {data['file']}")
-            
+
             return data
         else:
             print(f"❌ API returned status {response.status_code}")
@@ -62,12 +60,12 @@ def test_health_check():
     """Test the /healthz endpoint."""
     print("\n🩺 Testing Health Check Endpoint")
     print("-" * 40)
-    
+
     try:
         response = requests.get(f"{HOST}/healthz", timeout=5)
         if response.status_code == 200:
             data = response.json()
-            print(f"✅ Health check OK")
+            print("✅ Health check OK")
             print(f"   Status: {data.get('status')}")
             print(f"   Service: {data.get('service')}")
             print(f"   Version: {data.get('version')}")
@@ -86,52 +84,52 @@ def run_generated_app(file_path, lang, hint):
     """Try to run the generated application."""
     print(f"\n🚀 Testing Generated {lang} App")
     print("-" * 40)
-    
+
     if not Path(file_path).exists():
         print(f"❌ File not found: {file_path}")
         return False
-    
+
     # Just verify the file has expected content
     content = Path(file_path).read_text()
-    
+
     if lang == "python":
         if "PORT" in content and "8000" in content:
-            print(f"✅ Python app uses PORT (default 8000)")
+            print("✅ Python app uses PORT (default 8000)")
         if "Flask" in content:
-            print(f"✅ Flask app generated correctly")
-    
+            print("✅ Flask app generated correctly")
+
     elif lang == "go":
         if 'os.Getenv("PORT")' in content:
-            print(f"✅ Go service uses PORT env")
+            print("✅ Go service uses PORT env")
         if "8080" in content:
-            print(f"✅ Go defaults to port 8080")
-    
+            print("✅ Go defaults to port 8080")
+
     elif lang == "csharp":
         if 'Environment.GetEnvironmentVariable("PORT")' in content:
-            print(f"✅ C# API uses PORT env")
+            print("✅ C# API uses PORT env")
         if "5080" in content:
-            print(f"✅ C# defaults to port 5080")
-    
+            print("✅ C# defaults to port 5080")
+
     print(f"   Run Command: {hint}")
     return True
 
 def main():
     """Run the complete T08 end-to-end test suite."""
-    
+
     print("""
     ╔══════════════════════════════════════════════════════════╗
     ║         🚀 T08 End-to-End Test Suite 🚀                  ║
     ║     Language Router + PORT + Health Check                 ║
     ╚══════════════════════════════════════════════════════════╝
     """)
-    
+
     print(f"🌐 Testing against: {HOST}")
-    
+
     # Test health check first
     if not test_health_check():
         print("\n⚠️  Server might not be running. Start with: python -m uvicorn aurora_x.serve:app --port 5001")
         return 1
-    
+
     # Test prompts for each language
     test_cases = [
         ("make a futuristic timer ui", "python", "Python Flask UI"),
@@ -139,7 +137,7 @@ def main():
         ("memory-safe cli to parse args", "rust", "Rust CLI Tool"),
         ("enterprise web api with health", "csharp", "C# Web API"),
     ]
-    
+
     results = []
     for prompt, expected_lang, description in test_cases:
         result = test_prompt(prompt, expected_lang, description)
@@ -156,29 +154,29 @@ def main():
                 "description": description,
                 "success": False
             })
-    
+
     # Try to run each generated app (just verify structure)
     print("\n" + "="*60)
     print("📦 Verifying Generated Code")
-    
+
     for res in results:
         if res["success"] and res["file"]:
             run_generated_app(res["file"], res["lang"], res["hint"])
-    
+
     # Summary
     print("\n" + "="*60)
     print("📊 T08 Test Summary")
     print("-" * 40)
-    
+
     success_count = sum(1 for r in results if r["success"])
     print(f"✅ Successful: {success_count}/{len(results)}")
-    
+
     for res in results:
         status = "✅" if res["success"] else "❌"
         print(f"{status} {res['description']}")
         if res["success"]:
             print(f"   → {res['lang']}: {res['file']}")
-    
+
     if success_count == len(results):
         print("\n🎉 All T08 tests passed!")
         print("\n📝 Next Steps:")

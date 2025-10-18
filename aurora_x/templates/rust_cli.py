@@ -8,10 +8,10 @@ use std::process;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    
+
     // Skip the program name (first argument)
     let args = &args[1..];
-    
+
     if args.is_empty() {
         println!("🦀 Aurora Rust CLI");
         println!("═══════════════════");
@@ -26,47 +26,47 @@ fn main() {
         println!("  {} --verbose process data.txt", env!("CARGO_PKG_NAME"));
         process::exit(0);
     }
-    
+
     // Check for help flag
     if args.iter().any(|arg| arg == "--help" || arg == "-h") {
         print_help();
         process::exit(0);
     }
-    
+
     // Check for version flag
     if args.iter().any(|arg| arg == "--version" || arg == "-V") {
         println!("{} {}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
         process::exit(0);
     }
-    
+
     // Process arguments
     let verbose = args.iter().any(|arg| arg == "--verbose" || arg == "-v");
-    
+
     if verbose {
         println!("🔍 Verbose mode enabled");
         println!("📝 Processing {} argument(s):", args.len());
     }
-    
+
     // Filter out flags and process remaining arguments
     let data_args: Vec<&String> = args.iter()
         .filter(|arg| !arg.starts_with("--") && !arg.starts_with("-"))
         .collect();
-    
+
     if data_args.is_empty() {
         eprintln!("❌ Error: No data arguments provided");
         eprintln!("   Use --help for usage information");
         process::exit(1);
     }
-    
+
     // Process each argument
     println!("✨ Processing {} item(s):", data_args.len());
     println!("───────────────────────────");
-    
+
     for (i, arg) in data_args.iter().enumerate() {
         let result = process_argument(arg);
         println!("{:2}. {} → {}", i + 1, arg, result);
     }
-    
+
     println!("───────────────────────────");
     println!("✅ Processing complete");
 }
@@ -98,7 +98,7 @@ fn process_argument(arg: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_process_argument() {
         assert_eq!(process_argument("hello"), "HELLO (len: 5)");
@@ -128,7 +128,7 @@ path = "src/main.rs"
 def render_rust_cli(name: str, brief: str = None) -> dict:
     """
     Generate a complete Rust CLI project.
-    
+
     Returns:
         dict with 'files' (dict of filename: content) and 'hint' for running
     """
@@ -136,15 +136,15 @@ def render_rust_cli(name: str, brief: str = None) -> dict:
     clean_name = name.replace(" ", "_").replace("-", "_").lower()
     if clean_name and clean_name[0].isdigit():
         clean_name = "cli_" + clean_name
-    
+
     # Update Cargo.toml with the actual name
     cargo = CARGO_TOML.replace("aurora_cli", clean_name)
-    
+
     files = {
         "Cargo.toml": cargo,
         "src/main.rs": RUST_MAIN,
     }
-    
+
     return {
         "files": files,
         "hint": "Run: cargo run -- hello world (or: cargo build --release for optimized binary)"

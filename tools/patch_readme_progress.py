@@ -1,6 +1,10 @@
 from __future__ import annotations
+
+import datetime
+import json
+import re
+import sys
 from pathlib import Path
-import json, re, sys, datetime
 
 ROOT = Path(__file__).resolve().parents[1]
 PROG = ROOT / "progress.json"

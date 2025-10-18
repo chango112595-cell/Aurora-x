@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 from pathlib import Path
+
 from aurora_x.spec.parser_v3 import parse_v3
 from aurora_x.synthesis.flow_ops import impl_for
+
 
 def main(spec_path: str):
     sp = Path(spec_path)
     md = sp.read_text(encoding="utf-8")
     spec = parse_v3(md)
-    import time, json as _J
+    import json as _J
+    import time
     run_id = time.strftime("run-%Y%m%d-%H%M%S")
     out = Path("runs") / run_id
     (out / "src").mkdir(parents=True, exist_ok=True)

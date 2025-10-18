@@ -2,34 +2,37 @@
 """Test the /api/demo/cards endpoint"""
 
 import json
+
 import requests
+
 
 def test_demo_cards_locally():
     """Test the demo cards structure locally"""
-    from aurora_x.chat.attach_demo import attach_demo
     from fastapi import FastAPI
-    
+
+    from aurora_x.chat.attach_demo import attach_demo
+
     app = FastAPI()
     attach_demo(app)
-    
+
     # Simulate the endpoint response
     import asyncio
-    
+
     async def get_cards():
         # Find the endpoint function
         for route in app.routes:
             if route.path == "/api/demo/cards":
                 return await route.endpoint()
         return None
-    
+
     result = asyncio.run(get_cards())
-    
+
     if result:
         print("✅ Demo cards endpoint working locally!")
         print(f"\nTotal categories: {len(result['categories'])}")
         print(f"Total cards: {result['total_cards']}")
         print(f"Endpoints covered: {', '.join(result['endpoints'])}")
-        
+
         print("\n📋 Categories and Cards:\n")
         for category in result['categories']:
             print(f"  {category['category']} ({len(category['cards'])} cards):")
@@ -46,14 +49,14 @@ def test_demo_cards_locally():
 def test_demo_cards_api():
     """Test the API endpoint"""
     base_url = "http://localhost:5001"
-    
+
     print("\n" + "="*60)
     print("Testing /api/demo/cards via API:")
     print("="*60 + "\n")
-    
+
     try:
         resp = requests.get(f"{base_url}/api/demo/cards")
-        
+
         if resp.status_code == 200:
             data = resp.json()
             print("✅ API endpoint working!")
@@ -72,7 +75,7 @@ def test_sample_card():
     print("\n" + "="*60)
     print("Testing Sample Card Execution:")
     print("="*60 + "\n")
-    
+
     sample_card = {
         "title": "LEO Satellite",
         "description": "Low Earth Orbit satellite period",
@@ -80,16 +83,16 @@ def test_sample_card():
         "payload": {"problem": "orbital period a=7000 km M=5.972e24 kg"},
         "expected_output": "~1.6 hours"
     }
-    
+
     print(f"Card: {sample_card['title']}")
     print(f"Description: {sample_card['description']}")
     print(f"Payload: {sample_card['payload']}")
     print(f"Expected: {sample_card['expected_output']}")
-    
+
     # Test locally
     from aurora_x.generators.solver import solve_text
     result = solve_text(sample_card['payload']['problem'])
-    
+
     if result.get('ok'):
         if result.get('kind') == 'physics.orbital_period':
             period_s = result['period_s']
@@ -104,11 +107,11 @@ if __name__ == "__main__":
     print("🎯 DEMO CARDS ENDPOINT TEST")
     print("=" * 60)
     print()
-    
+
     test_demo_cards_locally()
     test_demo_cards_api()
     test_sample_card()
-    
+
     print("\n✨ Demo Cards Features:")
     print("  • 6 categories of test examples")
     print("  • 30+ ready-made test cards")

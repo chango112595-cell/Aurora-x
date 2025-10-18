@@ -3,45 +3,47 @@
 
 import asyncio
 import json
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
 
 async def test_runall_locally():
     """Test the Run All endpoint locally"""
-    from aurora_x.chat.attach_demo_runall import attach_demo_runall
-    from aurora_x.chat.attach_demo import attach_demo
     from fastapi import FastAPI
-    
+
+    from aurora_x.chat.attach_demo import attach_demo
+    from aurora_x.chat.attach_demo_runall import attach_demo_runall
+
     # Create a test app
     app = FastAPI()
     attach_demo(app)
     attach_demo_runall(app)
-    
+
     print("🚀 TESTING RUN ALL FUNCTIONALITY")
     print("=" * 60)
-    
+
     # Find and execute the run_all endpoint
     for route in app.routes:
         if hasattr(route, 'path') and route.path == "/api/demo/run_all":
             print("\n📋 Running all demo cards...")
             print("   This will execute cards sequentially (simulated)")
-            
+
             # Mock execution since we can't make real HTTP calls without running server
             from aurora_x.chat.attach_demo import attach_demo
             test_app = FastAPI()
             attach_demo(test_app)
-            
+
             # Get demo cards
             cards_data = None
             for r in test_app.routes:
                 if hasattr(r, 'path') and r.path == "/api/demo/cards":
                     cards_data = await r.endpoint()
                     break
-            
+
             if cards_data and cards_data.get("ok"):
                 cards = cards_data["cards"]
                 print(f"   Found {len(cards)} demo cards to execute")
-                
+
                 # Simulate results
                 results = []
                 for i, card in enumerate(cards[:5]):  # Just test first 5
@@ -53,10 +55,10 @@ async def test_runall_locally():
                         "status": 200,
                         "response": {"ok": True, "simulated": True}
                     })
-                
+
                 # Create output structure
                 timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
-                output_data = {
+                {
                     "generated_utc": datetime.utcnow().isoformat(),
                     "timestamp": timestamp,
                     "total_cards": len(cards),
@@ -64,31 +66,31 @@ async def test_runall_locally():
                     "failed": 0,
                     "results": results
                 }
-                
+
                 # Check if runs directory would be created
                 runs_dir = Path("runs")
                 output_file = runs_dir / f"demo-{timestamp}.json"
-                
-                print(f"\n✅ Simulation complete!")
+
+                print("\n✅ Simulation complete!")
                 print(f"   Would save to: {output_file}")
                 print(f"   Total cards: {len(cards)}")
                 print(f"   Test executed: {len(results)}")
-                print(f"   Output structure validated")
-                
+                print("   Output structure validated")
+
                 return True
-    
+
     print("❌ Run All endpoint not found")
     return False
 
 def test_dashboard_button():
     """Check if Run All button exists in dashboard"""
     dashboard_path = Path("aurora_x/static/demo-dashboard.html")
-    
+
     print("\n🔍 Checking dashboard for Run All button...")
-    
+
     if dashboard_path.exists():
         content = dashboard_path.read_text()
-        
+
         checks = [
             ("run-all-btn", "Run All button element"),
             ("Run All Cards", "Run All button text"),
@@ -96,7 +98,7 @@ def test_dashboard_button():
             ("run-status", "Status display element"),
             ("Executing all cards", "Loading message")
         ]
-        
+
         all_found = True
         for check_text, desc in checks:
             if check_text in content:
@@ -104,7 +106,7 @@ def test_dashboard_button():
             else:
                 print(f"   ❌ Missing: {desc}")
                 all_found = False
-        
+
         return all_found
     else:
         print("   ❌ Dashboard file not found")
@@ -113,27 +115,27 @@ def test_dashboard_button():
 def test_runs_directory():
     """Check if runs directory can be created"""
     print("\n📁 Testing runs directory...")
-    
+
     runs_dir = Path("runs")
-    
+
     # Test creating directory
     try:
         runs_dir.mkdir(parents=True, exist_ok=True)
         print(f"   ✅ Runs directory ready: {runs_dir.absolute()}")
-        
+
         # Test writing a sample file
         test_file = runs_dir / "test-write.json"
         test_data = {"test": "data", "timestamp": datetime.utcnow().isoformat()}
         test_file.write_text(json.dumps(test_data, indent=2))
-        
+
         if test_file.exists():
-            print(f"   ✅ Can write to runs directory")
+            print("   ✅ Can write to runs directory")
             test_file.unlink()  # Clean up test file
             return True
         else:
-            print(f"   ❌ Cannot write to runs directory")
+            print("   ❌ Cannot write to runs directory")
             return False
-            
+
     except Exception as e:
         print(f"   ❌ Error with runs directory: {e}")
         return False
@@ -165,21 +167,21 @@ def print_instructions():
 async def main():
     print("🧪 RUN ALL FEATURE TEST")
     print("=" * 60)
-    
+
     all_pass = True
-    
+
     # Test 1: Run All endpoint
     if not await test_runall_locally():
         all_pass = False
-    
+
     # Test 2: Dashboard button
     if not test_dashboard_button():
         all_pass = False
-    
+
     # Test 3: Runs directory
     if not test_runs_directory():
         all_pass = False
-    
+
     if all_pass:
         print("\n✅ ALL TESTS PASSED!")
         print("\n✨ Run All Features:")
@@ -190,7 +192,7 @@ async def main():
         print("   • Works from dashboard or API")
     else:
         print("\n⚠️ Some tests failed, check errors above")
-    
+
     print_instructions()
 
 if __name__ == "__main__":

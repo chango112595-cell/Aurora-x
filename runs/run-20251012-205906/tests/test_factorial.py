@@ -1,5 +1,8 @@
 import unittest
+
 from src.factorial import factorial
+
+
 class T0(unittest.TestCase):
     def test_0(self):
         self.assertEqual(factorial(n=0), 1)

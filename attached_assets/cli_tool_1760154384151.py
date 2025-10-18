@@ -1,5 +1,4 @@
 
-from pathlib import Path
 
 GENERIC = """#!/usr/bin/env python3
 import argparse
