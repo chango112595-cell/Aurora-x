@@ -1,30 +1,32 @@
 # aurora_x/serve.py — FastAPI app with Aurora-X v3 dashboard mounted
-from fastapi import FastAPI, Response, status, HTTPException
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
+import html
+import json
+import os
+import subprocess
+import sys
+import time
+import traceback
+from datetime import datetime
 from pathlib import Path
-from aurora_x.serve_dashboard_v2 import make_router
-from aurora_x.serve_addons import attach as attach_factory
-from aurora_x.chat.attach_router_lang import attach_router
-from aurora_x.chat.attach_domain import attach_domain
-from aurora_x.chat.attach_pretty import attach_pretty
-from aurora_x.chat.attach_format import attach_format
-from aurora_x.chat.attach_units_format import attach_units_format
+
+from fastapi import FastAPI, HTTPException, Response
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+
+from aurora_x.app_settings import SETTINGS
 from aurora_x.chat.attach_demo import attach_demo
 from aurora_x.chat.attach_demo_runall import attach_demo_runall
+from aurora_x.chat.attach_domain import attach_domain
+from aurora_x.chat.attach_format import attach_format
+from aurora_x.chat.attach_pretty import attach_pretty
 from aurora_x.chat.attach_progress import attach_progress
+from aurora_x.chat.attach_router_lang import attach_router
 from aurora_x.chat.attach_task_graph import attach_task_graph
-from aurora_x.app_settings import SETTINGS
+from aurora_x.chat.attach_units_format import attach_units_format
 from aurora_x.generators.solver import solve_text  # Import the solver module
-from pydantic import BaseModel
-from typing import List, Optional
-from datetime import datetime
-import time, html
-import json
-import sys
-import subprocess
-import traceback
-import os
+from aurora_x.serve_addons import attach as attach_factory
+from aurora_x.serve_dashboard_v2 import make_router
 
 BASE = Path(__file__).parent
 app = FastAPI(title="Aurora-X Ultra v3")
@@ -65,6 +67,7 @@ attach_demo(app)
 
 # Attach T12 Factory Bridge endpoints
 from aurora_x.bridge.attach_bridge import attach_bridge
+
 attach_bridge(app)
 
 # Attach Run All functionality for demo cards
@@ -78,6 +81,7 @@ attach_task_graph(app)
 
 # Attach T12 Factory Bridge endpoints
 from aurora_x.bridge.attach_bridge import attach_bridge
+
 attach_bridge(app)  # /api/bridge/nl, /api/bridge/spec, /api/bridge/deploy
 
 @app.get("/dashboard/demos", response_class=HTMLResponse)
@@ -143,7 +147,6 @@ def _color_for(val:int, ok:int, warn:int)->str:
 @app.get("/badge/progress.svg")
 def badge_progress():
     # Get actual progress from progress.json
-    import json
     from pathlib import Path
     try:
         progress_path = Path("progress.json")
@@ -161,7 +164,7 @@ def badge_progress():
             val = 85  # default
     except:
         val = 85  # fallback
-    
+
     color = _color_for(val, SETTINGS.ui.ok, SETTINGS.ui.warn)
     svg = _BADGE_TEMPLATE.replace("{VAL}", str(val)).replace("{COLOR}", html.escape(color))
     return Response(content=svg, media_type="image/svg+xml")
@@ -176,17 +179,17 @@ class NLCompileResponse(BaseModel):
     """Response model for natural language compilation."""
     run_id: str
     status: str
-    files_generated: List[str]
+    files_generated: list[str]
     message: str
 
 @app.post("/api/nl/compile", response_model=NLCompileResponse)
 async def compile_from_natural_language(request: NLCompileRequest):
     """
     Process a natural language prompt to generate code.
-    
+
     Args:
         request: JSON body with 'prompt' field containing the natural language request
-    
+
     Returns:
         JSON response with:
         - run_id: the generated run ID
@@ -196,23 +199,23 @@ async def compile_from_natural_language(request: NLCompileRequest):
     """
     try:
         from aurora_x.spec.parser_nl import parse_english
-        
+
         prompt = request.prompt.strip()
         if not prompt:
             raise HTTPException(status_code=400, detail="Prompt cannot be empty")
-        
+
         # Parse the natural language prompt
         parsed = parse_english(prompt)
-        
+
         # Generate timestamp-based run ID
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         run_name = f"run-{timestamp}"
         runs_dir = Path("runs")
         runs_dir.mkdir(exist_ok=True)
         run_dir = runs_dir / run_name
-        
+
         files_generated = []
-        
+
         # Check if this is a Flask request
         if parsed.get("framework") == "flask":
             # Handle Flask app synthesis
@@ -222,17 +225,17 @@ async def compile_from_natural_language(request: NLCompileRequest):
                 from spec_from_flask import create_flask_app_from_text
                 app_file = create_flask_app_from_text(prompt, run_dir)
                 files_generated.append(str(app_file.relative_to(Path.cwd())))
-                
+
                 # Update the latest symlink
                 latest = runs_dir / "latest"
                 if latest.exists() or latest.is_symlink():
                     latest.unlink()
                 latest.symlink_to(run_dir.name)
-                
+
                 message = f"Flask application generated successfully at {app_file.name}"
             except ImportError as e:
                 raise HTTPException(
-                    status_code=500, 
+                    status_code=500,
                     detail=f"Failed to import Flask synthesis module: {str(e)}"
                 )
         else:
@@ -241,11 +244,11 @@ async def compile_from_natural_language(request: NLCompileRequest):
             sys.path.insert(0, str(tools_dir))
             try:
                 from spec_from_text import create_spec_from_text
-                
+
                 # Create spec from natural language
                 spec_path = create_spec_from_text(prompt, str(Path("specs")))
                 files_generated.append(str(spec_path.relative_to(Path.cwd())))
-                
+
                 # Compile the generated spec
                 comp_script = tools_dir / "spec_compile_v3.py"
                 if comp_script.exists():
@@ -256,14 +259,14 @@ async def compile_from_natural_language(request: NLCompileRequest):
                         text=True,
                         env=os.environ.copy()
                     )
-                    
+
                     if result.returncode != 0:
                         error_msg = result.stderr if result.stderr else result.stdout
                         raise HTTPException(
                             status_code=500,
                             detail=f"Spec compilation failed: {error_msg}"
                         )
-                    
+
                     # Parse output to find generated files
                     output_lines = result.stdout.splitlines()
                     for line in output_lines:
@@ -279,7 +282,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                             match = re.search(r'run-\d{8}-\d{6}', line)
                             if match:
                                 run_name = match.group(0)
-                    
+
                     # Update latest symlink
                     if "run-" in run_name:
                         run_dir = runs_dir / run_name
@@ -288,8 +291,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
                             if latest.exists() or latest.is_symlink():
                                 latest.unlink()
                             latest.symlink_to(run_dir.name)
-                    
-                    message = f"Code generated successfully from natural language prompt"
+
+                    message = "Code generated successfully from natural language prompt"
                 else:
                     # If no compiler found, just return the spec
                     message = f"Spec generated at {spec_path.name}. Compiler not found for full synthesis."
@@ -298,7 +301,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                     status_code=500,
                     detail=f"Failed to import synthesis module: {str(e)}"
                 )
-        
+
         # Ensure we have valid files generated list
         if not files_generated:
             # Try to find files in the run directory
@@ -306,14 +309,14 @@ async def compile_from_natural_language(request: NLCompileRequest):
                 for item in run_dir.rglob("*"):
                     if item.is_file():
                         files_generated.append(str(item.relative_to(Path.cwd())))
-        
+
         return NLCompileResponse(
             run_id=run_name,
             status="success",
             files_generated=files_generated,
             message=message
         )
-        
+
     except HTTPException:
         # Re-raise HTTP exceptions as-is
         raise
@@ -321,7 +324,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
         # Log the full traceback for debugging
         error_trace = traceback.format_exc()
         print(f"[ERROR] Natural language compilation failed: {error_trace}", file=sys.stderr)
-        
+
         # Return error response
         return NLCompileResponse(
             run_id="",
@@ -340,10 +343,10 @@ class SolverRequest(BaseModel):
 async def solve_endpoint(request: SolverRequest):
     """
     Raw solver endpoint that returns the complete solver result
-    
+
     Args:
         request: JSON body with 'text' field containing the problem to solve
-    
+
     Returns:
         JSON response with the raw solver output
     """
@@ -360,16 +363,16 @@ async def solve_endpoint(request: SolverRequest):
 async def solve_pretty_endpoint(request: SolverRequest):
     """
     Pretty solver endpoint that returns formatted human-readable results
-    
+
     Args:
         request: JSON body with 'text' field containing the problem to solve
-    
+
     Returns:
         Plain text response with formatted solution
     """
     try:
         result = solve_text(request.text)
-        
+
         # Format the output in a human-readable way
         if result.get("ok"):
             lines = []
@@ -377,10 +380,10 @@ async def solve_pretty_endpoint(request: SolverRequest):
             lines.append(f"Domain: {result.get('domain', 'unknown')}")
             lines.append(f"Task: {result.get('task', 'unknown')}")
             lines.append("-" * 50)
-            
+
             if result.get("input"):
                 lines.append(f"Input: {result['input']}")
-            
+
             if result.get("result"):
                 if isinstance(result["result"], dict):
                     lines.append("Result:")
@@ -391,11 +394,11 @@ async def solve_pretty_endpoint(request: SolverRequest):
                             lines.append(f"  {key}: {value}")
                 else:
                     lines.append(f"Result: {result['result']}")
-            
+
             if result.get("explanation"):
                 lines.append("")
                 lines.append(f"Explanation: {result['explanation']}")
-            
+
             lines.append("=" * 50)
             return PlainTextResponse(content="\n".join(lines))
         else:
@@ -404,7 +407,7 @@ async def solve_pretty_endpoint(request: SolverRequest):
             if result.get("hint"):
                 error_msg += f"\nHint: {result['hint']}"
             return PlainTextResponse(content=error_msg, status_code=400)
-            
+
     except Exception as e:
         return PlainTextResponse(
             content=f"Internal Server Error: {str(e)}",
@@ -417,10 +420,10 @@ def root():
         "ok": True,
         "routes": [
             "/healthz",
-            "/dashboard/spec_runs", 
+            "/dashboard/spec_runs",
             "/dashboard/demos",
             "/dashboard/progress",
-            "/api/spec_runs", 
+            "/api/spec_runs",
             "/ws/spec_updates",
             "/api/chat",
             "/api/approve",

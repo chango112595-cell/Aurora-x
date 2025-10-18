@@ -1,5 +1,8 @@
 from __future__ import annotations
-import re, hashlib
+
+import hashlib
+import re
+
 
 class NLParseResult(dict):
     pass
@@ -14,31 +17,31 @@ def _snake(text: str) -> str:
     # Remove common filler words
     stopwords = ['a', 'an', 'the', 'to', 'for', 'of', 'with', 'by', 'from', 'in', 'on', 'at', 'me', 'you', 'i', 'we', 'my', 'your', 'please', 'can', 'could', 'would']
     words = [w for w in re.sub(r'[^\w\s]', '', t).split() if w not in stopwords]
-    
+
     # Limit to first 3-4 meaningful words
     if len(words) > 4:
         words = words[:4]
     elif len(words) == 0:
         words = ['custom', 'function']
-    
+
     # Join with underscores
     name = '_'.join(words)
-    
+
     # Ensure valid Python identifier
     if not name or not name[0].isalpha():
         name = 'func_' + name
-    
+
     # Limit length
     if len(name) > 30:
         name = name[:30].rstrip('_')
-    
+
     return name
 
 def _extract_routes(text: str) -> list:
     """Extract potential routes from the request text"""
     t = text.lower()
     routes = []
-    
+
     # Common route patterns
     if "home" in t or "landing" in t or "index" in t:
         routes.append({"path": "/", "name": "home"})
@@ -60,16 +63,16 @@ def _extract_routes(text: str) -> list:
         routes.append({"path": "/profile", "name": "profile"})
     if "settings" in t:
         routes.append({"path": "/settings", "name": "settings"})
-    
+
     # Default to home route if none detected
     if not routes:
         routes.append({"path": "/", "name": "index"})
-    
+
     return routes
 
 def parse_english(text: str) -> NLParseResult:
     t = text.strip().lower()
-    
+
     # Flask/Web App Pattern Detection
     flask_patterns = [
         "flask", "web app", "webapp", "web application",
@@ -79,15 +82,15 @@ def parse_english(text: str) -> NLParseResult:
         "server", "api endpoint", "rest", "restful",
         "template", "render", "frontend", "backend"
     ]
-    
+
     # Check if this is a Flask/web app request
     is_flask_request = any(pattern in t for pattern in flask_patterns)
-    
+
     if is_flask_request:
         # Extract the main purpose from the request
         purpose = text.strip()
         func_name = _snake(purpose) + "_app"
-        
+
         # Sanitize the description for safe embedding in Python code
         # Replace special Unicode characters with ASCII equivalents
         safe_purpose = purpose.replace('•', '*').replace('→', '->').replace('–', '-').replace('—', '-')
@@ -97,7 +100,7 @@ def parse_english(text: str) -> NLParseResult:
         safe_purpose = ''.join(c if ord(c) < 128 else ' ' for c in safe_purpose)
         # Clean up multiple spaces and newlines
         safe_purpose = ' '.join(safe_purpose.split())
-        
+
         # Return Flask-specific metadata
         return NLParseResult({
             "name": func_name,
@@ -119,7 +122,7 @@ def parse_english(text: str) -> NLParseResult:
             "examples": [],  # Flask apps don't have traditional examples
             "template_type": "flask_web_app"
         })
-    
+
     if "largest" in t or ("max" in t and "list" in t):
         return NLParseResult({
             "name": "max_in_list",
@@ -235,11 +238,11 @@ def parse_english(text: str) -> NLParseResult:
                 {"a": 17, "b": 5, "out": 1}
             ]
         })
-    
+
     # Enhanced fallback for unrecognized patterns
     # Generate a properly named function based on the request
     func_name = _snake(text)
-    
+
     # Determine appropriate return type based on keywords in request
     return_type = "str"  # Default to string for creative/text requests
     if any(word in t for word in ["calculate", "compute", "count", "number", "sum", "total", "how many", "value", "result"]):
@@ -250,11 +253,11 @@ def parse_english(text: str) -> NLParseResult:
         return_type = "list[str]"
     elif any(word in t for word in ["generate", "create", "make", "produce", "write", "compose", "haiku", "poem", "story", "text"]):
         return_type = "str"
-    
+
     # Determine if the function needs parameters based on the request
     # Default to no parameters for creative/generative functions
     needs_input = any(word in t for word in ["given", "from", "input", "parameter", "argument", "process", "convert", "transform"])
-    
+
     # Generate appropriate signature
     if needs_input and return_type == "str":
         signature = f"def {func_name}(input_text: str) -> {return_type}"
@@ -264,24 +267,24 @@ def parse_english(text: str) -> NLParseResult:
         signature = f"def {func_name}(item: str) -> {return_type}"
     else:
         signature = f"def {func_name}() -> {return_type}"
-    
+
     # Sanitize text for description
     safe_text = text.strip()
-    # Replace special Unicode characters with ASCII equivalents  
+    # Replace special Unicode characters with ASCII equivalents
     safe_text = safe_text.replace('•', '*').replace('→', '->').replace('–', '-').replace('—', '-')
     safe_text = safe_text.replace('（', '(').replace('）', ')').replace('：', ':')
     # Remove or replace any remaining non-ASCII characters
     safe_text = ''.join(c if ord(c) < 128 else ' ' for c in safe_text)
     # Clean up multiple spaces
     safe_text = ' '.join(safe_text.split())
-    
+
     # Create a meaningful description
     description = f"Function to {safe_text}"
     if "generate" in t or "create" in t or "make" in t:
         description = f"Generate output for: {safe_text}"
     elif "calculate" in t or "compute" in t:
         description = f"Calculate result for: {safe_text}"
-    
+
     # Generate simple examples based on return type
     examples = []
     if return_type == "str" and "() ->" in signature:
@@ -290,7 +293,7 @@ def parse_english(text: str) -> NLParseResult:
         examples = []  # No examples for parameterless int functions
     elif return_type == "bool" and "(item: str)" in signature:
         examples = [{"item": "test", "out": True}]
-    
+
     return NLParseResult({
         "name": func_name,
         "signature": signature,

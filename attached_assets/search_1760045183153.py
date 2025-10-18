@@ -1,10 +1,12 @@
 
 from __future__ import annotations
-from pathlib import Path
+
 import time
+from pathlib import Path
+
 from aurora_x.spec.parser_v2 import RichSpec
 from aurora_x.synthesis.templates_py import generate_impl
-from aurora_x.synthesis.operators import mutate_candidates
+
 
 def synthesize(spec: RichSpec, runs_dir: Path) -> Path:
     run_id = time.strftime("run-%Y%m%d-%H%M%S")

@@ -16,29 +16,27 @@ Exit codes:
 - 4: Critical files missing
 """
 
-import json
-import os
-import sys
-import shutil
-from pathlib import Path
-from datetime import datetime
-from typing import Dict, List, Tuple, Optional
 import hashlib
+import json
+import shutil
+import sys
+from datetime import datetime
+from pathlib import Path
 
 
 class AuroraQualityGates:
     """Quality gate checks for Aurora-X CI/CD pipeline"""
-    
+
     def __init__(self, verbose: bool = True):
         self.verbose = verbose
         self.project_root = Path.cwd()
         self.aurora_dir = self.project_root / ".aurora"
         self.runs_dir = self.project_root / "runs"
         self.progress_file = self.project_root / "progress.json"
-        
+
         self.errors = []
         self.warnings = []
-        
+
     def log(self, message: str, level: str = "INFO"):
         """Log messages with level"""
         if self.verbose:
@@ -51,29 +49,29 @@ class AuroraQualityGates:
                 "CHECK": "🔍"
             }.get(level, "  ")
             print(f"[{timestamp}] {prefix} {message}")
-    
+
     def check_configuration(self) -> bool:
         """Check if critical configuration files exist"""
         self.log("Checking configuration files...", "CHECK")
-        
+
         success = True
         required_files = {
             "progress.json": self.progress_file,
             ".aurora/prod_config.json": self.aurora_dir / "prod_config.json",
             ".aurora/seeds.json": self.aurora_dir / "seeds.json"
         }
-        
+
         # Check for config.yml (optional but recommended)
         config_yml = self.aurora_dir / "config.yml"
-        
+
         for name, path in required_files.items():
             if path.exists():
                 self.log(f"  ✓ {name} exists", "SUCCESS")
-                
+
                 # Validate JSON files
                 if path.suffix == ".json":
                     try:
-                        with open(path, 'r') as f:
+                        with open(path) as f:
                             json.load(f)
                         self.log(f"  ✓ {name} is valid JSON", "SUCCESS")
                     except json.JSONDecodeError as e:
@@ -84,19 +82,19 @@ class AuroraQualityGates:
                 self.log(f"  ✗ {name} missing", "ERROR")
                 self.errors.append(f"Missing required file: {name}")
                 success = False
-        
+
         # Check for optional config.yml
         if config_yml.exists():
-            self.log(f"  ✓ .aurora/config.yml exists", "SUCCESS")
+            self.log("  ✓ .aurora/config.yml exists", "SUCCESS")
         else:
-            self.log(f"  ⚠️  .aurora/config.yml missing (optional but recommended)", "WARNING")
+            self.log("  ⚠️  .aurora/config.yml missing (optional but recommended)", "WARNING")
             self.warnings.append(".aurora/config.yml is missing")
-            
+
             # Create a basic config.yml if it doesn't exist
             self._create_default_config_yml(config_yml)
-        
+
         return success
-    
+
     def _create_default_config_yml(self, config_path: Path):
         """Create a default config.yml file"""
         default_config = """# Aurora-X Configuration
@@ -121,7 +119,7 @@ quality_gates:
   max_corpus_drift: 0.15
   min_seed_coverage: 0.8
   max_regression_rate: 0.05
-  
+
 # CI/CD settings
 ci:
   strict_mode: true
@@ -132,42 +130,42 @@ ci:
             config_path.parent.mkdir(parents=True, exist_ok=True)
             with open(config_path, 'w') as f:
                 f.write(default_config)
-            self.log(f"  ✓ Created default .aurora/config.yml", "SUCCESS")
+            self.log("  ✓ Created default .aurora/config.yml", "SUCCESS")
         except Exception as e:
             self.log(f"  ✗ Failed to create default config: {e}", "ERROR")
-    
+
     def check_determinism(self) -> bool:
         """Check seed files for determinism"""
         self.log("Checking determinism (seed files)...", "CHECK")
-        
+
         seeds_dir = self.aurora_dir / "seeds"
         seeds_json = self.aurora_dir / "seeds.json"
-        
+
         # Check if seeds.json exists and is valid
         if not seeds_json.exists():
-            self.log(f"  ✗ seeds.json missing", "ERROR")
+            self.log("  ✗ seeds.json missing", "ERROR")
             self.errors.append("seeds.json is missing")
             return False
-        
+
         try:
-            with open(seeds_json, 'r') as f:
+            with open(seeds_json) as f:
                 seeds_data = json.load(f)
-            
+
             if not seeds_data:
-                self.log(f"  ⚠️  seeds.json is empty", "WARNING")
+                self.log("  ⚠️  seeds.json is empty", "WARNING")
                 self.warnings.append("seeds.json is empty")
             else:
                 self.log(f"  ✓ Found {len(seeds_data)} seed entries", "SUCCESS")
-                
+
             # Check individual seed files if seeds directory exists
             if seeds_dir.exists() and seeds_dir.is_dir():
                 seed_files = list(seeds_dir.glob("*.json"))
                 self.log(f"  ✓ Found {len(seed_files)} seed files in .aurora/seeds/", "SUCCESS")
-                
+
                 # Validate each seed file
                 for seed_file in seed_files:
                     try:
-                        with open(seed_file, 'r') as f:
+                        with open(seed_file) as f:
                             seed_content = json.load(f)
                         # Check for required fields
                         if not isinstance(seed_content, dict):
@@ -178,10 +176,10 @@ ci:
                         self.errors.append(f"Invalid seed file: {seed_file.name}")
                         return False
             else:
-                self.log(f"  ℹ️  .aurora/seeds/ directory not found (using seeds.json only)", "INFO")
-                
+                self.log("  ℹ️  .aurora/seeds/ directory not found (using seeds.json only)", "INFO")
+
             return True
-            
+
         except json.JSONDecodeError as e:
             self.log(f"  ✗ seeds.json has invalid JSON: {e}", "ERROR")
             self.errors.append("Invalid JSON in seeds.json")
@@ -190,86 +188,86 @@ ci:
             self.log(f"  ✗ Error checking seeds: {e}", "ERROR")
             self.errors.append(f"Seed check failed: {e}")
             return False
-    
+
     def check_drift_detection(self) -> bool:
         """Check if corpus drift is within acceptable limits"""
         self.log("Checking drift detection...", "CHECK")
-        
+
         # Load production config for drift limits
         prod_config_path = self.aurora_dir / "prod_config.json"
-        
+
         try:
-            with open(prod_config_path, 'r') as f:
+            with open(prod_config_path) as f:
                 prod_config = json.load(f)
-            
+
             max_drift = prod_config.get("adaptive", {}).get("max_drift_per_iter", 0.1)
             drift_cap = prod_config.get("seeds", {}).get("drift_cap", 0.15)
-            
+
             self.log(f"  ℹ️  Max drift per iteration: {max_drift}", "INFO")
             self.log(f"  ℹ️  Overall drift cap: {drift_cap}", "INFO")
-            
+
             # Check for corpus history files
             corpus_dir = self.project_root / "aurora_x" / "corpus"
             if corpus_dir.exists():
                 corpus_files = list(corpus_dir.glob("*.json")) + list(corpus_dir.glob("*.jsonl"))
                 if corpus_files:
                     self.log(f"  ✓ Found {len(corpus_files)} corpus files", "SUCCESS")
-                    
+
                     # Analyze recent drift (simplified check)
                     drift_ok = self._analyze_corpus_drift(corpus_files, max_drift, drift_cap)
                     if drift_ok:
-                        self.log(f"  ✓ Corpus drift within acceptable limits", "SUCCESS")
+                        self.log("  ✓ Corpus drift within acceptable limits", "SUCCESS")
                     else:
-                        self.log(f"  ✗ Corpus drift exceeded limits", "ERROR")
+                        self.log("  ✗ Corpus drift exceeded limits", "ERROR")
                         self.errors.append("Corpus drift exceeded acceptable limits")
                         return False
                 else:
-                    self.log(f"  ℹ️  No corpus files found (fresh system)", "INFO")
+                    self.log("  ℹ️  No corpus files found (fresh system)", "INFO")
             else:
-                self.log(f"  ℹ️  Corpus directory not found (fresh system)", "INFO")
-            
+                self.log("  ℹ️  Corpus directory not found (fresh system)", "INFO")
+
             return True
-            
+
         except Exception as e:
             self.log(f"  ⚠️  Could not check drift: {e}", "WARNING")
             self.warnings.append(f"Drift check incomplete: {e}")
             return True  # Don't fail on drift check if we can't measure it
-    
-    def _analyze_corpus_drift(self, corpus_files: List[Path], max_drift: float, drift_cap: float) -> bool:
+
+    def _analyze_corpus_drift(self, corpus_files: list[Path], max_drift: float, drift_cap: float) -> bool:
         """Analyze corpus files for drift (simplified implementation)"""
         # This is a simplified check - in production you'd analyze actual drift metrics
         # For now, we'll just check if files exist and are recent
-        
+
         try:
             latest_file = max(corpus_files, key=lambda p: p.stat().st_mtime)
             age_hours = (datetime.now().timestamp() - latest_file.stat().st_mtime) / 3600
-            
+
             if age_hours < 24:
                 self.log(f"  ℹ️  Latest corpus update: {age_hours:.1f} hours ago", "INFO")
                 return True
             else:
                 self.log(f"  ⚠️  Latest corpus update: {age_hours:.1f} hours ago (consider refresh)", "WARNING")
                 return True
-                
+
         except Exception:
             return True  # Don't fail if we can't analyze
-    
+
     def validate_seeds(self) -> bool:
         """Verify seed store integrity"""
         self.log("Validating seed store integrity...", "CHECK")
-        
+
         seeds_json = self.aurora_dir / "seeds.json"
         prod_config = self.aurora_dir / "prod_config.json"
-        
+
         try:
             # Load seeds
-            with open(seeds_json, 'r') as f:
+            with open(seeds_json) as f:
                 seeds = json.load(f)
-                
+
             # Load config
-            with open(prod_config, 'r') as f:
+            with open(prod_config) as f:
                 config = json.load(f)
-            
+
             # Check seed values are within valid range
             invalid_seeds = []
             for key, value in seeds.items():
@@ -277,65 +275,65 @@ ci:
                     invalid_seeds.append(f"{key}: not a number")
                 elif not -1.0 <= value <= 1.0:
                     invalid_seeds.append(f"{key}: {value} out of range [-1, 1]")
-            
+
             if invalid_seeds:
                 self.log(f"  ✗ Invalid seeds found: {', '.join(invalid_seeds)}", "ERROR")
                 self.errors.append(f"Invalid seeds: {invalid_seeds}")
                 return False
             else:
                 self.log(f"  ✓ All {len(seeds)} seeds are valid", "SUCCESS")
-                
+
             # Check seed consistency with config
             seed_config = config.get("seeds", {})
             if "alpha" in seed_config:
                 self.log(f"  ✓ Seed alpha configured: {seed_config['alpha']}", "SUCCESS")
-            
+
             # Calculate and verify checksum
             seeds_str = json.dumps(seeds, sort_keys=True)
             checksum = hashlib.md5(seeds_str.encode()).hexdigest()[:8]
             self.log(f"  ✓ Seed store checksum: {checksum}", "SUCCESS")
-            
+
             return True
-            
+
         except Exception as e:
             self.log(f"  ✗ Seed validation failed: {e}", "ERROR")
             self.errors.append(f"Seed validation failed: {e}")
             return False
-    
+
     def run_all_checks(self) -> int:
         """Run all quality gate checks and return exit code"""
         self.log("=" * 60)
         self.log("Aurora-X CI Quality Gates", "INFO")
         self.log("=" * 60)
-        
+
         checks = [
             ("Configuration", self.check_configuration),
             ("Determinism", self.check_determinism),
             ("Drift Detection", self.check_drift_detection),
             ("Seed Validation", self.validate_seeds)
         ]
-        
+
         all_passed = True
         for name, check_func in checks:
             self.log(f"\n[{name}]", "INFO")
             if not check_func():
                 all_passed = False
-                
+
         # Summary
         self.log("\n" + "=" * 60)
         self.log("SUMMARY", "INFO")
         self.log("=" * 60)
-        
+
         if self.errors:
             self.log(f"Errors ({len(self.errors)}):", "ERROR")
             for error in self.errors:
                 self.log(f"  • {error}", "ERROR")
-                
+
         if self.warnings:
             self.log(f"Warnings ({len(self.warnings)}):", "WARNING")
             for warning in self.warnings:
                 self.log(f"  • {warning}", "WARNING")
-        
+
         if all_passed:
             self.log("\n✅ All quality gates PASSED", "SUCCESS")
             return 0
@@ -352,29 +350,29 @@ ci:
                 return 1  # Configuration issues
 
 
-def create_snapshot(backup_dir: Optional[str] = None, verbose: bool = True) -> str:
+def create_snapshot(backup_dir: str | None = None, verbose: bool = True) -> str:
     """Create a timestamped backup of critical Aurora-X files
-    
+
     Args:
         backup_dir: Optional custom backup directory. If None, uses 'backups/'
         verbose: Whether to print progress messages
-        
+
     Returns:
         Path to the created backup directory
     """
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
+
     if backup_dir:
         backup_base = Path(backup_dir)
     else:
         backup_base = Path.cwd() / "backups"
-    
+
     backup_path = backup_base / f"aurora_backup_{timestamp}"
     backup_path.mkdir(parents=True, exist_ok=True)
-    
+
     if verbose:
         print(f"📦 Creating snapshot at: {backup_path}")
-    
+
     # Files and directories to backup
     items_to_backup = [
         (".aurora", backup_path / ".aurora"),
@@ -383,13 +381,13 @@ def create_snapshot(backup_dir: Optional[str] = None, verbose: bool = True) -> s
         ("MASTER_TASK_LIST.md", backup_path / "MASTER_TASK_LIST.md"),
         ("Makefile", backup_path / "Makefile")
     ]
-    
+
     backed_up = []
     skipped = []
-    
+
     for source_name, dest_path in items_to_backup:
         source = Path.cwd() / source_name
-        
+
         if source.exists():
             try:
                 if source.is_dir():
@@ -407,7 +405,7 @@ def create_snapshot(backup_dir: Optional[str] = None, verbose: bool = True) -> s
             skipped.append(source_name)
             if verbose:
                 print(f"  ⚠️  Skipped (not found): {source_name}")
-    
+
     # Create snapshot metadata
     metadata = {
         "timestamp": timestamp,
@@ -417,25 +415,25 @@ def create_snapshot(backup_dir: Optional[str] = None, verbose: bool = True) -> s
         "total_items": len(items_to_backup),
         "success_count": len(backed_up)
     }
-    
+
     metadata_path = backup_path / "snapshot_metadata.json"
     with open(metadata_path, 'w') as f:
         json.dump(metadata, f, indent=2)
-    
+
     if verbose:
-        print(f"\n📊 Snapshot Summary:")
+        print("\n📊 Snapshot Summary:")
         print(f"  • Backed up: {len(backed_up)} items")
         print(f"  • Skipped: {len(skipped)} items")
         print(f"  • Location: {backup_path}")
         print(f"  • Metadata: {metadata_path}")
-    
+
     return str(backup_path)
 
 
 def main():
     """Main entry point for CI gate checks"""
     import argparse
-    
+
     parser = argparse.ArgumentParser(
         description="Aurora-X CI Quality Gates",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -454,35 +452,35 @@ Examples:
   python -m aurora_x.checks.ci_gate --quiet
         """
     )
-    
+
     parser.add_argument(
         "--snapshot",
         action="store_true",
         help="Create a backup snapshot after successful checks"
     )
-    
+
     parser.add_argument(
         "--snapshot-only",
         action="store_true",
         help="Only create a snapshot without running checks"
     )
-    
+
     parser.add_argument(
         "--backup-dir",
         type=str,
         default=None,
         help="Custom backup directory (default: ./backups/)"
     )
-    
+
     parser.add_argument(
         "--quiet",
         action="store_true",
         help="Suppress verbose output"
     )
-    
+
     args = parser.parse_args()
     verbose = not args.quiet
-    
+
     # If snapshot-only mode
     if args.snapshot_only:
         if verbose:
@@ -491,11 +489,11 @@ Examples:
         if verbose:
             print(f"✅ Snapshot created: {backup_path}")
         sys.exit(0)
-    
+
     # Run quality checks
     gates = AuroraQualityGates(verbose=verbose)
     exit_code = gates.run_all_checks()
-    
+
     # Create snapshot if requested and checks passed
     if args.snapshot and exit_code == 0:
         if verbose:
@@ -506,7 +504,7 @@ Examples:
     elif args.snapshot and exit_code != 0:
         if verbose:
             print("\n⚠️  Skipping snapshot due to failed checks")
-    
+
     sys.exit(exit_code)
 
 

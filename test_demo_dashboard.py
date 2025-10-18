@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """Test the demo dashboard accessibility and functionality"""
 
-import asyncio
 from pathlib import Path
+
 
 def test_dashboard_html_exists():
     """Check if the dashboard HTML file exists"""
@@ -18,19 +18,20 @@ def test_dashboard_html_exists():
 
 def test_dashboard_endpoint():
     """Test the /dashboard/demos endpoint locally"""
-    from aurora_x.serve import app
     from fastapi.testclient import TestClient
-    
+
+    from aurora_x.serve import app
+
     client = TestClient(app)
-    
+
     # Test the dashboard endpoint
     response = client.get("/dashboard/demos")
-    
+
     if response.status_code == 200:
         print("✅ Dashboard endpoint working")
         print(f"   Status: {response.status_code}")
         print(f"   Content-Type: {response.headers.get('content-type')}")
-        
+
         # Check if it contains expected content
         content = response.text
         if "Aurora-X Demo Dashboard" in content:
@@ -46,14 +47,15 @@ def test_dashboard_endpoint():
 
 def test_demo_cards_api():
     """Test that the demo cards API is accessible"""
-    from aurora_x.serve import app
     from fastapi.testclient import TestClient
-    
+
+    from aurora_x.serve import app
+
     client = TestClient(app)
-    
+
     # Test the demo cards API
     response = client.get("/api/demo/cards")
-    
+
     if response.status_code == 200:
         data = response.json()
         if data.get("ok"):
@@ -61,7 +63,7 @@ def test_demo_cards_api():
             print(f"   Total cards: {data.get('total', 0)}")
             print(f"   Categories: {data.get('categories', {})}")
             return True
-    
+
     print("❌ Demo cards API not working")
     return False
 
@@ -106,23 +108,23 @@ if __name__ == "__main__":
     print("🚀 DEMO DASHBOARD TEST")
     print("=" * 60)
     print()
-    
+
     all_pass = True
-    
+
     # Test 1: HTML file exists
     if not test_dashboard_html_exists():
         all_pass = False
     print()
-    
+
     # Test 2: Dashboard endpoint works
     if not test_dashboard_endpoint():
         all_pass = False
     print()
-    
+
     # Test 3: Demo cards API works
     if not test_demo_cards_api():
         all_pass = False
-    
+
     if all_pass:
         print("\n✅ ALL TESTS PASSED!")
         test_dashboard_features()

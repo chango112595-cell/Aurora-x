@@ -4,16 +4,17 @@ T09 Unit Conversion Test Suite
 Tests the /api/units helper and automatic unit normalization
 """
 
+
 from aurora_x.generators.solver import solve_text
-from aurora_x.reasoners.units import parse_value_with_unit, normalize_to_si
-import json
+from aurora_x.reasoners.units import normalize_to_si, parse_value_with_unit
+
 
 def test_unit_conversions():
     """Test direct unit conversions."""
     print("\n" + "="*60)
     print("🔄 UNIT CONVERSION TESTS")
     print("="*60)
-    
+
     # Distance conversions
     print("\n📏 Distance Units:")
     distance_tests = [
@@ -23,13 +24,13 @@ def test_unit_conversions():
         ("5 miles", 8046.72, "m"),
         ("1000 mm", 1.0, "m"),
     ]
-    
-    for input_str, expected_val, expected_unit in distance_tests:
+
+    for input_str, expected_val, _expected_unit in distance_tests:
         value, unit = parse_value_with_unit(input_str)
         result = normalize_to_si(value, unit)
         status = "✅" if abs(result['si_value'] - expected_val) < 0.1 else "❌"
         print(f"  {status} {input_str:15} → {result['si_value']:15,.2f} {result['si_unit']}")
-    
+
     # Mass conversions
     print("\n⚖️  Mass Units:")
     mass_tests = [
@@ -38,13 +39,13 @@ def test_unit_conversions():
         ("2000 g", 2.0, "kg"),
         ("1 msun", 1.989e30, "kg"),
     ]
-    
-    for input_str, expected_val, expected_unit in mass_tests:
+
+    for input_str, expected_val, _expected_unit in mass_tests:
         value, unit = parse_value_with_unit(input_str)
         result = normalize_to_si(value, unit)
         status = "✅" if abs(result['si_value'] / expected_val - 1) < 0.01 else "❌"
         print(f"  {status} {input_str:15} → {result['si_value']:15.3e} {result['si_unit']}")
-    
+
     # Time conversions
     print("\n⏱️  Time Units:")
     time_tests = [
@@ -53,8 +54,8 @@ def test_unit_conversions():
         ("1 year", 31536000, "s"),
         ("60 minutes", 3600, "s"),
     ]
-    
-    for input_str, expected_val, expected_unit in time_tests:
+
+    for input_str, expected_val, _expected_unit in time_tests:
         value, unit = parse_value_with_unit(input_str)
         result = normalize_to_si(value, unit)
         status = "✅" if abs(result['si_value'] - expected_val) < 1 else "❌"
@@ -65,7 +66,7 @@ def test_physics_with_units():
     print("\n" + "="*60)
     print("🌍 PHYSICS WITH UNIT CONVERSION")
     print("="*60)
-    
+
     test_cases = [
         {
             "prompt": "orbital period a=7000 km M=5.972e24 kg",
@@ -88,18 +89,18 @@ def test_physics_with_units():
             "expected_period": 2371877.1  # seconds (~27.3 days)
         },
     ]
-    
+
     for case in test_cases:
         result = solve_text(case["prompt"])
         period = result.get("period_s", 0)
         error_pct = abs(period - case["expected_period"]) / case["expected_period"] * 100
         status = "✅" if error_pct < 1 else "❌"
-        
+
         if period > 86400:
             time_str = f"{period / 86400:.2f} days"
         else:
             time_str = f"{period / 3600:.2f} hours"
-        
+
         print(f"  {status} {case['desc']:25} → {time_str}")
         if error_pct > 1:
             print(f"      Expected: {case['expected_period']:.1f}s, Got: {period:.1f}s")
@@ -109,7 +110,7 @@ def test_api_examples():
     print("\n" + "="*60)
     print("📡 API ENDPOINT EXAMPLES")
     print("="*60)
-    
+
     print("\n🔗 /api/units - Convert units to SI:")
     print('''
 curl -X POST http://localhost:5001/api/units \\
@@ -124,7 +125,7 @@ Response:
   "conversion_factor": 1000.0,
   "unit_type": "distance"
 }''')
-    
+
     print("\n🔗 /api/solve - Physics with auto-conversion:")
     print('''
 curl -X POST http://localhost:5001/api/solve \\
@@ -147,11 +148,11 @@ def main():
     ║        Automatic SI Unit Normalization System            ║
     ╚══════════════════════════════════════════════════════════╝
     """)
-    
+
     test_unit_conversions()
     test_physics_with_units()
     test_api_examples()
-    
+
     print("\n" + "="*60)
     print("📊 SUMMARY")
     print("="*60)
