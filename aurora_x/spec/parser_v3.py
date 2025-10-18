@@ -67,12 +67,12 @@ def parse_functions(md: str) -> list[FunctionSpec]:
         signature = m_sig.group(1).strip() if m_sig else ""
         desc_m = re.search(r"(?ms)^####\s+Description\s*\n(.*?)(?:(?:^####\s+)|\Z)", ch)
         desc = (desc_m.group(1).strip() if desc_m else "")
-        def list_block(h: str):
-            m = re.search(rf"(?ms)^####\s+{h}\s*\n(.*?)(?:(?:^####\s+)|\Z)", ch)
+        def list_block(h: str, content: str):
+            m = re.search(rf"(?ms)^####\s+{h}\s*\n(.*?)(?:(?:^####\s+)|\Z)", content)
             if not m: return []
             return [ln.strip('- ').strip() for ln in m.group(1).splitlines() if ln.strip()]
-        pre = list_block("Preconditions")
-        post = list_block("Postconditions")
+        pre = list_block("Preconditions", ch)
+        post = list_block("Postconditions", ch)
         ex_m = re.search(r"(?ms)^####\s+Examples\s*\n(.*?)(?:(?:^####\s+)|\Z)", ch)
         exs = parse_examples(ex_m.group(1)) if ex_m else []
         out.append(FunctionSpec(name=name, signature=signature, description=desc,
