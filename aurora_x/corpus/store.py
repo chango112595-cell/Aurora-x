@@ -113,14 +113,20 @@ def retrieve(run_root: Path, signature: str, k: int = 10) -> list[dict[str, Any]
             d = dict(row)
             # Parse JSON fields
             if d.get("failing_tests"):
-                try: d["failing_tests"] = json.loads(d["failing_tests"])
-                except: pass
+                try:
+                    d["failing_tests"] = json.loads(d["failing_tests"])
+                except (ValueError, TypeError):
+                    pass
             if d.get("calls_functions"):
-                try: d["calls_functions"] = json.loads(d["calls_functions"])
-                except: pass
+                try:
+                    d["calls_functions"] = json.loads(d["calls_functions"])
+                except (ValueError, TypeError):
+                    pass
             if d.get("post_bow"):
-                try: d["post_bow"] = json.loads(d["post_bow"])
-                except: pass
+                try:
+                    d["post_bow"] = json.loads(d["post_bow"])
+                except (ValueError, TypeError):
+                    pass
             results.append(d)
 
         return results

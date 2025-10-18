@@ -290,7 +290,7 @@ ci:
 
             # Calculate and verify checksum
             seeds_str = json.dumps(seeds, sort_keys=True)
-            checksum = hashlib.md5(seeds_str.encode()).hexdigest()[:8]
+            checksum = hashlib.md5(seeds_str.encode()).hexdigest()[:8]  # nosec B324 - used for non-cryptographic checksum only
             self.log(f"  ✓ Seed store checksum: {checksum}", "SUCCESS")
 
             return True

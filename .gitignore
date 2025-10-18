@@ -10,3 +10,8 @@ __pycache__
 .pytest_cache
 .ruff_cache
 *.egg-info
+
+# Generated directories
+attached_assets/
+backups/
+runs/

@@ -8,8 +8,10 @@ def env_bool(name:str, default:bool) -> bool:
     return default if v is None else v.lower() in ("1","true","yes","on")
 
 def env_int(name:str, default:int) -> int:
-    try: return int(os.getenv(name, f"{default}"))
-    except: return default
+    try:
+        return int(os.getenv(name, f"{default}"))
+    except (ValueError, TypeError):
+        return default
 
 @dataclass
 class UIThresholds:
