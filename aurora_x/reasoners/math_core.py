@@ -1,6 +1,9 @@
 from __future__ import annotations
-import ast, operator as op, re
-from typing import Any, Dict
+
+import ast
+import operator as op
+import re
+from typing import Any
 
 _ALLOWED = {ast.Add:op.add, ast.Sub:op.sub, ast.Mult:op.mul, ast.Div:op.truediv,
             ast.Pow:op.pow, ast.USub:op.neg, ast.UAdd:op.pos, ast.FloorDiv:op.floordiv, ast.Mod:op.mod}
@@ -36,7 +39,7 @@ def differentiate_poly(expr: str) -> str:
     expr_out = re.sub(r"(\s*\+\s*0)+$","", expr_out) or "0"
     return expr_out
 
-def solve(intent: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+def solve(intent: str, payload: dict[str, Any]) -> dict[str, Any]:
     if intent == "evaluate":
         expr = payload.get("expr","").strip()
         return {"ok": True, "kind": "math.evaluate", "expr": expr, "value": _safe_eval_expr(expr)}

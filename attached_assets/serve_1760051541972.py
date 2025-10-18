@@ -1,7 +1,9 @@
 # aurora_x/serve.py — FastAPI app with Aurora-X v3 dashboard mounted
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from pathlib import Path
+
 from aurora_x.serve_dashboard_v2 import make_router
 
 BASE = Path(__file__).parent

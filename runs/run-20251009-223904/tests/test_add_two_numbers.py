@@ -1,5 +1,8 @@
 import unittest
+
 from src.add_two_numbers import add_two_numbers
+
+
 class T0(unittest.TestCase):
     def test_0(self):
         self.assertEqual(add_two_numbers(a=1, b=2), 3)

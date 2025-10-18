@@ -2,28 +2,29 @@
 """
 Test the T08 Intent Router and chat endpoint locally
 """
+from pathlib import Path
+
 from aurora_x.router.intent_router import classify
 from aurora_x.templates.web_app_flask import render_app
-from pathlib import Path
-import json
+
 
 def test_chat_endpoint(prompt):
     """Simulate what the /chat endpoint does"""
     print(f"\n🔍 Testing prompt: {prompt}")
-    
+
     # Classify intent
     intent = classify(prompt)
     print(f"📋 Classified as: {intent.kind} (name: {intent.name})")
-    
+
     # Handle web_app intent
     if intent.kind == "web_app":
         title = "Futuristic UI Timer" if intent.fields.get("feature")=="timer" else intent.name.replace('_',' ').title()
         code = render_app(title=title, subtitle=intent.brief)
-        
+
         # Save the generated Flask app
         output_file = Path("generated_timer_app.py")
         output_file.write_text(code, encoding="utf-8")
-        
+
         result = {
             "ok": True,
             "kind": "web_app",
@@ -35,7 +36,7 @@ def test_chat_endpoint(prompt):
         print(f"📊 Code length: {len(code)} chars")
         print(f"💡 Hint: {result['hint']}")
         return result
-    
+
     # Other intents not yet implemented
     result = {
         "ok": True,
@@ -61,7 +62,7 @@ print("=" * 60)
 
 for prompt in test_prompts:
     result = test_chat_endpoint(prompt)
-    
+
 print("\n" + "=" * 60)
 print("✅ Test complete!")
 

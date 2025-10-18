@@ -1,4 +1,6 @@
-import os, json, urllib.request
+import json
+import os
+import urllib.request
 
 URL = os.getenv("DISCORD_WEBHOOK_URL")
 

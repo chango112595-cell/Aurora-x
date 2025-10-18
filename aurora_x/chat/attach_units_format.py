@@ -1,16 +1,18 @@
 # FastAPI endpoint for formatting values with units to human-friendly strings
+from typing import Any
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Dict, Any, List, Optional
+
 
 class UnitItem(BaseModel):
     value: float
     unit: str
 
 class SingleFormatRequest(BaseModel):
-    value: Optional[float] = None
-    unit: Optional[str] = None
-    values: Optional[List[UnitItem]] = None
+    value: float | None = None
+    unit: str | None = None
+    values: list[UnitItem] | None = None
 
 _SI = [
     (1e12, "T"), (1e9, "G"), (1e6, "M"),
@@ -38,7 +40,7 @@ def _si_fmt(value: float, unit: str) -> str:
             return f"{v/scale:.3g} {prefix}{unit}".strip()
     return f"{v:.3g} {unit}"
 
-def _hint(value: float, unit: str) -> Optional[str]:
+def _hint(value: float, unit: str) -> str | None:
     for (u, lo, hi), msg in _HINTS.items():
         if unit == u and (lo <= value <= hi):
             return msg
@@ -46,16 +48,16 @@ def _hint(value: float, unit: str) -> Optional[str]:
 
 def attach_units_format(app: FastAPI):
     @app.post("/api/format/units")
-    async def api_format_units(request: SingleFormatRequest) -> Dict[str, Any]:
+    async def api_format_units(request: SingleFormatRequest) -> dict[str, Any]:
         """
         Format values with units into human-friendly strings with SI prefixes.
-        
+
         Examples:
         - {"value": 7e6, "unit": "m"} → "7 Mm (LEO-ish altitude)"
         - {"values": [{"value":7e6,"unit":"m"}, {"value":3e8,"unit":"m/s"}]}
         """
         items = []
-        
+
         # Handle both single value and multiple values
         if request.values is not None and isinstance(request.values, list):
             items = [{"value": item.value, "unit": item.unit} for item in request.values]
@@ -71,7 +73,7 @@ def attach_units_format(app: FastAPI):
                 u = str(it["unit"]).strip()
             except Exception:
                 raise HTTPException(status_code=422, detail="invalid item; needs numeric 'value' and string 'unit'")
-            
+
             pretty = _si_fmt(v, u)
             note = _hint(v, u)
             result = {"value": v, "unit": u, "pretty": pretty}

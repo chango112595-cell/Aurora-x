@@ -1,8 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from aurora_x.bridge.pipeline import compile_from_nl, compile_from_spec
+
 from aurora_x.bridge.deploy import deploy as deploy_fn
+from aurora_x.bridge.pipeline import compile_from_nl, compile_from_spec
+
+
 class NLBody(BaseModel):
     prompt: str
 class SpecBody(BaseModel):

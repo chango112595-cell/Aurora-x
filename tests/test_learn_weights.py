@@ -1,7 +1,10 @@
 from __future__ import annotations
-import json, tempfile
+
+import tempfile
 from pathlib import Path
+
 from aurora_x.learn import weights as w
+
 
 def test_update_seed_bias_bounds_and_steps():
     assert w.update_seed_bias(0.0, True) == 0.05

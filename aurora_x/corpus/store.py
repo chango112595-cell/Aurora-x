@@ -1,16 +1,21 @@
 from __future__ import annotations
-import json, math, re, sqlite3, time, hashlib, uuid
-from collections import Counter
+
+import hashlib
+import json
+import re
+import sqlite3
+import time
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 WORD = re.compile(r"[A-Za-z_][A-Za-z0-9_]+")
 TYPE_CANON = {"int":"I","float":"F","number":"N","str":"S","string":"S","bool":"B","list":"L","list[int]":"L[I]","list[float]":"L[F]","Any":"A"}
 
 def now_iso() -> str: return time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
 def short_id(s: str) -> str: return hashlib.sha256(s.encode("utf-8")).hexdigest()[:12]
-def spec_digest(text: str) -> Dict[str, str]:
+def spec_digest(text: str) -> dict[str, str]:
     h = hashlib.sha256(text.encode("utf-8")).hexdigest()
     return {"spec_hash": h, "spec_id": h[:12]}
 
@@ -20,7 +25,7 @@ def normalize_signature(sig: str) -> str:
         args_s, ret_s = rest.split(")->")
         args_s = args_s.rstrip(")")
         def canon(t: str) -> str: return TYPE_CANON.get(t.strip(), t.strip())
-        arg_types: List[str] = []
+        arg_types: list[str] = []
         if args_s.strip():
             for a in args_s.split(","):
                 if ":" in a: _, t = a.split(":"); arg_types.append(canon(t.strip()))
@@ -29,8 +34,8 @@ def normalize_signature(sig: str) -> str:
         return f"{name.strip()}({','.join(arg_types)})->{ret}"
     except Exception: return sig
 
-def tokenize_post(post_list: List[str]) -> List[str]:
-    toks: List[str] = []
+def tokenize_post(post_list: list[str]) -> list[str]:
+    toks: list[str] = []
     for p in (post_list or []):
         for w in WORD.findall(p.lower()):
             if len(w) >= 2: toks.append(w)
@@ -61,7 +66,7 @@ def _open_sqlite(dbp: Path) -> sqlite3.Connection:
     """)
     return conn
 
-def record(run_root: Path, entry: Dict[str, Any]) -> None:
+def record(run_root: Path, entry: dict[str, Any]) -> None:
     p = paths(run_root)
     try:
         rec = {**entry}
@@ -85,24 +90,24 @@ def record(run_root: Path, entry: Dict[str, Any]) -> None:
                  rec.get("iteration"), json.dumps(rec.get("calls_functions")), json.dumps(rec.get("post_bow"))))
     except Exception: return
 
-def retrieve(run_root: Path, signature: str, k: int = 10) -> List[Dict[str, Any]]:
+def retrieve(run_root: Path, signature: str, k: int = 10) -> list[dict[str, Any]]:
     """Retrieve corpus entries matching signature, ordered by score."""
     p = paths(run_root)
     if not p.sqlite.exists():
         return []
-    
+
     sig_key = normalize_signature(signature)
     conn = _open_sqlite(p.sqlite)
-    
+
     try:
         # Query by signature key
         rows = conn.execute("""
-            SELECT * FROM corpus 
-            WHERE sig_key = ? 
-            ORDER BY score DESC, passed DESC 
+            SELECT * FROM corpus
+            WHERE sig_key = ?
+            ORDER BY score DESC, passed DESC
             LIMIT ?
         """, (sig_key, k)).fetchall()
-        
+
         results = []
         for row in rows:
             d = dict(row)
@@ -117,7 +122,7 @@ def retrieve(run_root: Path, signature: str, k: int = 10) -> List[Dict[str, Any]
                 try: d["post_bow"] = json.loads(d["post_bow"])
                 except: pass
             results.append(d)
-        
+
         return results
     finally:
         conn.close()

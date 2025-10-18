@@ -18,7 +18,21 @@ Requires-Dist: pytest>=7.0; extra == "dev"
 Requires-Dist: black>=22.0; extra == "dev"
 Requires-Dist: mypy>=0.950; extra == "dev"
 
+<!-- AURORA_PROGRESS_BADGEs:START -->
+<p>
+  <img alt="Overall Progress" src="https://img.shields.io/badge/Overall-92.69%25-7D5BFF?style=for-the-badge" />
+  <img alt="Active" src="https://img.shields.io/badge/Active-T08,%20T10,%20T12-66E6FF?style=for-the-badge" />
+  <img alt="Updated" src="https://img.shields.io/badge/Updated-2025-10-12T16%3A04%3A33Z-32325D?style=for-the-badge" />
+</p>
+<!-- AURORA_PROGRESS_BADGES:END -->
+
 # Aurora-X Ultra
+
+![coverage](https://raw.githubusercontent.com/chango112595-cell/Aurora-x/badges/badges/coverage.svg)
+
+<!-- BADGES-START -->
+![Progress](https://img.shields.io/badge/Progress-91%25-brightgreen) ![Active Tasks](https://img.shields.io/badge/Active-T08,T10,T12-blue) ![Last Updated](https://img.shields.io/badge/Updated-2025--10--12-lightgrey) ![Tasks](https://img.shields.io/badge/Tasks-✅9_🚀2_🔧1-informational)
+<!-- BADGES-END -->
 
 ![seed-bias](https://img.shields.io/badge/seed__bias-dynamic-%23007acc?label=seed_bias&style=flat)
 ![offline](https://img.shields.io/badge/mode-offline--first-green?style=flat)

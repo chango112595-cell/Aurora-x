@@ -1,12 +1,14 @@
 
 from __future__ import annotations
+
 import re
 from dataclasses import dataclass, field
-from typing import List, Dict, Any
+from typing import Any
+
 
 @dataclass
 class Example:
-    inputs: Dict[str, Any]
+    inputs: dict[str, Any]
     output: Any
 
 @dataclass
@@ -14,9 +16,9 @@ class RichSpec:
     title: str
     signature: str
     description: str
-    examples: List[Example] = field(default_factory=list)
-    postconditions: List[str] = field(default_factory=list)
-    constraints: List[str] = field(default_factory=list)
+    examples: list[Example] = field(default_factory=list)
+    postconditions: list[str] = field(default_factory=list)
+    constraints: list[str] = field(default_factory=list)
 
 SIG_RE = re.compile(r"def\s+([a-zA-Z_]\w*)\s*\((.*?)\)\s*->\s*([a-zA-Z_][\w\[\], ]*)")
 
@@ -29,7 +31,7 @@ def parse_signature(block: str):
     rtype = m.group(3).strip()
     return name, args, rtype
 
-def parse_examples(md: str) -> List[Example]:
+def parse_examples(md: str) -> list[Example]:
     lines = [ln.strip() for ln in md.splitlines() if ln.strip()]
     start = None
     for i, ln in enumerate(lines):
@@ -42,7 +44,7 @@ def parse_examples(md: str) -> List[Example]:
     for ln in lines[start+2:]:
         if not ln.startswith("|"): break
         cells = [c.strip() for c in ln.strip("|").split("|")]
-        rows.append(dict(zip(header, cells)))
+        rows.append(dict(zip(header, cells, strict=False)))
     examples = []
     for row in rows:
         inp = {k: _coerce(row[k]) for k in row if k.lower() not in ("out", "output")}
@@ -74,7 +76,7 @@ def parse_sections(md: str):
     return out
 
 def parse(md: str) -> RichSpec:
-    title = (md.splitlines()[0] or "# Spec").replace("#","").strip()
+    (md.splitlines()[0] or "# Spec").replace("#","").strip()
     sections = parse_sections(md)
     import re as _re
     sig_block = sections.get("Signature","")

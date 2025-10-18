@@ -1,5 +1,8 @@
 import unittest
+
 from src.is_palindrome import is_palindrome
+
+
 class T0(unittest.TestCase):
     def test_0(self):
         self.assertEqual(is_palindrome(s='racecar'), True)

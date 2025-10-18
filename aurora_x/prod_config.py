@@ -1,6 +1,7 @@
 # Locked production parameters + helper checks
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class ProdConfig:
     EPSILON: float = 0.15

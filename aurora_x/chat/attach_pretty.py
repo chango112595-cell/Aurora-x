@@ -1,13 +1,16 @@
 # FastAPI endpoint for human-friendly solver output
+from typing import Any
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Optional, Dict, Any, List
+
+from aurora_x.chat.attach_units_format import _hint, _si_fmt
 from aurora_x.generators.solver import solve_text
-from aurora_x.chat.attach_units_format import _si_fmt, _hint
+
 
 class PrettyRequest(BaseModel):
-    problem: Optional[str] = None
-    prompt: Optional[str] = None
+    problem: str | None = None
+    prompt: str | None = None
 
 def _fmt_seconds(sec: float) -> str:
     if sec < 60:  return f"{sec:.2f} s"
@@ -20,10 +23,10 @@ def _fmt_seconds(sec: float) -> str:
 
 def attach_pretty(app: FastAPI):
     @app.post("/api/solve/pretty")
-    async def api_solve_pretty(request: PrettyRequest) -> Dict[str, Any]:
+    async def api_solve_pretty(request: PrettyRequest) -> dict[str, Any]:
         """
         Solve a problem and return human-friendly formatted output.
-        
+
         Example: {"problem": "orbital period a=7000 km M=5.972e24 kg"}
         Returns: {"ok": true, "pretty": "Orbital period: 1.60 hours", "result": {...}}
         """
@@ -37,11 +40,11 @@ def attach_pretty(app: FastAPI):
 
         pretty = None
         units_info = []
-        
+
         if res.get("kind") == "physics.orbital_period":
             sec = float(res["period_s"])
             pretty = f"Orbital period: {_fmt_seconds(sec)}"
-            
+
             # Add formatted input parameters with SI units and hints
             if "a_m" in res:
                 a_fmt = _si_fmt(res["a_m"], "m")
@@ -53,7 +56,7 @@ def attach_pretty(app: FastAPI):
                     "pretty": a_fmt,
                     **({"hint": a_hint} if a_hint else {})
                 })
-            
+
             if "M_kg" in res:
                 m_fmt = _si_fmt(res["M_kg"], "kg")
                 m_hint = _hint(res["M_kg"], "kg")
@@ -64,7 +67,7 @@ def attach_pretty(app: FastAPI):
                     "pretty": m_fmt,
                     **({"hint": m_hint} if m_hint else {})
                 })
-            
+
             # Add period in SI format
             period_fmt = _si_fmt(sec, "s")
             units_info.append({
@@ -74,20 +77,20 @@ def attach_pretty(app: FastAPI):
                 "pretty": period_fmt,
                 "human": _fmt_seconds(sec)
             })
-            
+
         elif res.get("kind") == "physics.em_superposition":
             x,y,z = res["result"]
             pretty = f"Field vector sum: ({x:.3f}, {y:.3f}, {z:.3f})"
-            
+
             # Format vector components
-            for component, value, label in [(x, "x"), (y, "y"), (z, "z")]:
+            for _component, value, label in [(x, "x"), (y, "y"), (z, "z")]:
                 units_info.append({
                     "parameter": f"Field {label}-component",
                     "value": value,
                     "unit": "N/C",
                     "pretty": _si_fmt(value, "N/C")
                 })
-            
+
         elif res.get("kind") == "math.evaluate":
             pretty = f"Value = {res['value']:.12g}"
         elif res.get("kind") == "math.differentiate":
@@ -96,5 +99,5 @@ def attach_pretty(app: FastAPI):
         response = {"ok": True, "pretty": pretty, "result": res}
         if units_info:
             response["units_info"] = units_info
-        
+
         return response
