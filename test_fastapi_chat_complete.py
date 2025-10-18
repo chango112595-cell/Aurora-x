@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Complete test demonstrating the FastAPI /chat endpoint implementation"""
 
+import asyncio
 import os
 import sys
 from pathlib import Path
@@ -110,8 +111,6 @@ async def test_chat_endpoint():
         os.remove("app.py")
         print("\n🧹 Cleaned up test files")
 
-# Run the async test
-import asyncio
 
 if __name__ == "__main__":
     asyncio.run(test_chat_endpoint())

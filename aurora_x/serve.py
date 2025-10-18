@@ -15,6 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from aurora_x.app_settings import SETTINGS
+from aurora_x.bridge.attach_bridge import attach_bridge
 from aurora_x.chat.attach_demo import attach_demo
 from aurora_x.chat.attach_demo_runall import attach_demo_runall
 from aurora_x.chat.attach_domain import attach_domain
@@ -66,8 +67,6 @@ attach_units_format(app)
 attach_demo(app)
 
 # Attach T12 Factory Bridge endpoints
-from aurora_x.bridge.attach_bridge import attach_bridge
-
 attach_bridge(app)
 
 # Attach Run All functionality for demo cards
@@ -78,11 +77,6 @@ attach_progress(app)
 
 # Attach Task Graph visualization for dependency map
 attach_task_graph(app)
-
-# Attach T12 Factory Bridge endpoints
-from aurora_x.bridge.attach_bridge import attach_bridge
-
-attach_bridge(app)  # /api/bridge/nl, /api/bridge/spec, /api/bridge/deploy
 
 @app.get("/dashboard/demos", response_class=HTMLResponse)
 async def serve_demo_dashboard():
@@ -162,7 +156,7 @@ def badge_progress():
             val = int(round(total / max(1, len(tasks))))
         else:
             val = 85  # default
-    except:
+    except (ValueError, TypeError, ZeroDivisionError):
         val = 85  # fallback
 
     color = _color_for(val, SETTINGS.ui.ok, SETTINGS.ui.warn)
@@ -237,7 +231,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                 raise HTTPException(
                     status_code=500,
                     detail=f"Failed to import Flask synthesis module: {str(e)}"
-                )
+                ) from e
         else:
             # Regular function synthesis
             tools_dir = Path(__file__).parent.parent / "tools"
@@ -300,7 +294,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                 raise HTTPException(
                     status_code=500,
                     detail=f"Failed to import synthesis module: {str(e)}"
-                )
+                ) from e
 
         # Ensure we have valid files generated list
         if not files_generated:

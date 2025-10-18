@@ -67,7 +67,7 @@ def attach_demo_runall(app: FastAPI):
                     # Parse response
                     try:
                         response_data = response.json()
-                    except:
+                    except (ValueError, json.JSONDecodeError):
                         response_data = {"raw": response.text}
 
                     results.append({

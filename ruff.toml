@@ -1,6 +1,22 @@
 line-length = 100
 target-version = "py311"
 
+# Exclude generated files, backups, and test artifacts
+exclude = [
+    "attached_assets",
+    "backups",
+    "runs",
+    ".progress_history",
+    "*.egg-info",
+]
+
 [lint]
 select = ["E", "F", "W", "I", "B", "UP"]
-ignore = ["E203"]
+# E203: whitespace before ':' (black compatibility)
+# E501: line too long (we'll fix critical ones, but allow some flexibility)
+# E701/E702: multiple statements on one line (minor style issue)
+ignore = ["E203", "E501", "E701", "E702"]
+
+[lint.per-file-ignores]
+# B023 is a false positive for closures in parser_v3.py
+"aurora_x/spec/parser_v3.py" = ["B023"]

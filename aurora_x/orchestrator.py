@@ -42,7 +42,7 @@ def latest_run_for(spec_name: str):
             row = json.loads(line)
             if row.get("spec") == spec_name:
                 last = row
-        except:
+        except (json.JSONDecodeError, KeyError):
             pass
     return last
 
@@ -68,7 +68,7 @@ def synth(spec: Path):
                          f"🔄 Auto-synth: {spec.name}"],
                         check=False
                     )
-                except:
+                except Exception:
                     pass
         else:
             print(f"❌ Failed to synthesize {spec.name}")
@@ -80,7 +80,7 @@ def synth(spec: Path):
                          f"❌ Auto-synth failed: {spec.name}"],
                         check=False
                     )
-                except:
+                except Exception:
                     pass
         return result.returncode == 0
     except Exception as e:

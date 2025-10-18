@@ -114,7 +114,7 @@ def attach(app: FastAPI) -> None:
             raise HTTPException(
                 status_code=500,
                 detail=f"Failed to process prompt: {str(e)}"
-            )
+            ) from e
 
     @app.get("/api/approve")
     async def approve_endpoint(token: str | None = None):

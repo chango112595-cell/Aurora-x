@@ -9,7 +9,7 @@ def env_bool(name:str, default:bool) -> bool:
 
 def env_int(name:str, default:int) -> int:
     try: return int(os.getenv(name, f"{default}"))
-    except: return default
+    except (ValueError, TypeError): return default
 
 @dataclass
 class UIThresholds:
