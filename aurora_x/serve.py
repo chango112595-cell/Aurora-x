@@ -162,7 +162,7 @@ def badge_progress():
             val = int(round(total / max(1, len(tasks))))
         else:
             val = 85  # default
-    except:
+    except (ValueError, TypeError, AttributeError):
         val = 85  # fallback
 
     color = _color_for(val, SETTINGS.ui.ok, SETTINGS.ui.warn)
@@ -237,7 +237,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                 raise HTTPException(
                     status_code=500,
                     detail=f"Failed to import Flask synthesis module: {str(e)}"
-                )
+                ) from e
         else:
             # Regular function synthesis
             tools_dir = Path(__file__).parent.parent / "tools"
@@ -300,7 +300,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                 raise HTTPException(
                     status_code=500,
                     detail=f"Failed to import synthesis module: {str(e)}"
-                )
+                ) from e
 
         # Ensure we have valid files generated list
         if not files_generated:

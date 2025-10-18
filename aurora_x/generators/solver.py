@@ -172,11 +172,11 @@ def _safe_eval_arith(s: str) -> float:
         tree = ast.parse(s, mode="eval")
         return float(eval_(tree))
     except (SyntaxError, ValueError) as e:
-        raise SolveError(f"Invalid arithmetic expression: {str(e)}")
-    except ZeroDivisionError:
-        raise SolveError("Division by zero")
+        raise SolveError(f"Invalid arithmetic expression: {str(e)}") from e
+    except ZeroDivisionError as e:
+        raise SolveError("Division by zero") from e
     except Exception as e:
-        raise SolveError(f"Error evaluating expression: {str(e)}")
+        raise SolveError(f"Error evaluating expression: {str(e)}") from e
 
 
 def solve_text(text: str) -> dict[str, Any]:

@@ -71,8 +71,8 @@ def attach_units_format(app: FastAPI):
             try:
                 v = float(it["value"])
                 u = str(it["unit"]).strip()
-            except Exception:
-                raise HTTPException(status_code=422, detail="invalid item; needs numeric 'value' and string 'unit'")
+            except Exception as e:
+                raise HTTPException(status_code=422, detail="invalid item; needs numeric 'value' and string 'unit'") from e
 
             pretty = _si_fmt(v, u)
             note = _hint(v, u)

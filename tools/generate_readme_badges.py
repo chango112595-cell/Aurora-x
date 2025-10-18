@@ -79,7 +79,7 @@ def format_date_for_badge(date_str):
         dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
         # Format as YYYY--MM--DD (double dash for shields.io)
         return dt.strftime('%Y--%m--%d')
-    except:
+    except (ValueError, AttributeError):
         # Fallback to current date if parsing fails
         return datetime.now().strftime('%Y--%m--%d')
 

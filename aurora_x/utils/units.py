@@ -1,4 +1,4 @@
-"""# aurora_x/utils/units.py - Streamlined unit parsing and SI normalization
+# aurora_x/utils/units.py - Streamlined unit parsing and SI normalization
 
 from __future__ import annotations
 import re
@@ -106,4 +106,3 @@ def extract_quantities(text: str) -> Dict[str, float]:
             res[f"M_{u}"] = val_si
 
     return res
-"""

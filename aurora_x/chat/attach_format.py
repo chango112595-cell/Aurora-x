@@ -39,4 +39,4 @@ def attach_format(app: FastAPI):
             formatted = _fmt_seconds(request.seconds)
             return {"ok": True, "formatted": formatted}
         except Exception as e:
-            raise HTTPException(status_code=422, detail=f"invalid 'seconds' value: {str(e)}")
+            raise HTTPException(status_code=422, detail=f"invalid 'seconds' value: {str(e)}") from e
