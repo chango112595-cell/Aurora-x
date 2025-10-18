@@ -356,7 +356,10 @@ async def solve_endpoint(request: SolverRequest):
         result = solve_text(request.text)
         return JSONResponse(content=result)
     except Exception as e:
-        return JSONResponse(content={"ok": False, "error": str(e)}, status_code=500)
+        # Log error but don't expose stack traces
+        import logging
+        logging.error(f"Solver error: {e}", exc_info=True)
+        return JSONResponse(content={"ok": False, "error": "Failed to solve problem"}, status_code=500)
 
 
 @app.post("/api/solve/pretty")
@@ -409,7 +412,10 @@ async def solve_pretty_endpoint(request: SolverRequest):
             return PlainTextResponse(content=error_msg, status_code=400)
 
     except Exception as e:
-        return PlainTextResponse(content=f"Internal Server Error: {str(e)}", status_code=500)
+        # Log error but don't expose stack traces
+        import logging
+        logging.error(f"Solver pretty error: {e}", exc_info=True)
+        return PlainTextResponse(content="Internal Server Error", status_code=500)
 
 
 @app.get("/")

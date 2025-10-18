@@ -14,3 +14,6 @@ runs/
 attached_assets/
 backups/
 .progress_history/
+.coverage
+coverage.xml
+htmlcov/

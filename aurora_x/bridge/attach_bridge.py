@@ -211,10 +211,13 @@ def attach_bridge(app: FastAPI):
                     }
                 )
             except Exception as e:
+                # Log the error but don't expose stack traces
+                import logging
+                logging.error(f"PR creation error: {e}", exc_info=True)
                 return JSONResponse(
                     {
                         "ok": False,
-                        "message": f"PR creation failed: {str(e)}",
+                        "message": "PR creation failed",
                         "mode": "enhance",
                         "components": components,
                     }

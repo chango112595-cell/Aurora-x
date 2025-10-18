@@ -144,10 +144,18 @@ def compile_from_nl_project(
 
 
 def compile_from_spec(spec_path: str) -> BridgeResult:
-    sp = Path(spec_path)
+    sp = Path(spec_path).resolve()
+    # Validate path is within expected directories (prevent path traversal)
+    try:
+        specs_dir = Path("specs").resolve()
+        sp.relative_to(specs_dir)
+    except (ValueError, RuntimeError):
+        # Path is outside specs directory
+        return BridgeResult(False, f"invalid spec path: {spec_path}")
+    
     if not sp.exists():
         return BridgeResult(False, f"spec not found: {spec_path}")
-    code, out, err = _run(f"python -m aurora_x.main --spec {spec_path}")
+    code, out, err = _run(f"python -m aurora_x.main --spec {shlex.quote(str(sp))}")
     ok = code == 0
     msg = ("spec compiled " if ok else "spec failed ") + sp.name
     _git_commit_push("bridge: " + msg)

@@ -55,7 +55,8 @@ def _diff_poly(expression: str) -> str:
         # Extract coefficient and power
         if "x^" in term:
             # Handle x^n terms
-            match = re.match(r"([+-]?\d*\.?\d*)x\^(\d+)", term)
+            # Use more specific regex to avoid ReDoS
+            match = re.match(r"([+-]?(?:\d+\.?\d*|\.\d+)?)x\^(\d+)", term)
             if match:
                 coeff_str = match.group(1)
                 power = int(match.group(2))
@@ -80,7 +81,8 @@ def _diff_poly(expression: str) -> str:
                     diff_terms.append(f"{new_coeff:g}x^{new_power}")
         elif "x" in term:
             # Handle x terms (power = 1)
-            match = re.match(r"([+-]?\d*\.?\d*)x", term)
+            # Use more specific regex to avoid ReDoS
+            match = re.match(r"([+-]?(?:\d+\.?\d*|\.\d+)?)x", term)
             if match:
                 coeff_str = match.group(1)
 

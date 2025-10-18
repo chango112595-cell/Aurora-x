@@ -72,6 +72,9 @@ def attach(app: FastAPI) -> None:
 
             # Save spec to file
             filename = f"{_snake(request.prompt)}.md"
+            # Validate filename doesn't contain path separators (prevent path traversal)
+            if "/" in filename or "\\" in filename or ".." in filename:
+                raise HTTPException(status_code=400, detail="Invalid prompt characters")
             spec_path = requests_dir / filename
 
             with open(spec_path, "w") as f:
