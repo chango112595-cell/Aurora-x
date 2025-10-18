@@ -9,7 +9,7 @@ class NLParseResult(dict):
 
 
 def _hash(text: str) -> str:
-    return hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]
+    return hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]  # nosec B324 - Used for function naming, not security
 
 
 def _snake(text: str) -> str:

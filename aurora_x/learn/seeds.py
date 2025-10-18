@@ -157,7 +157,7 @@ class SeedStore:
             Hashed seed key
         """
         combined = f"{func_signature}:{context}"
-        return hashlib.md5(combined.encode()).hexdigest()[:16]
+        return hashlib.md5(combined.encode()).hexdigest()[:16]  # nosec B324 - Used for seed key generation, not security
 
     def get_top_biases(self, n: int | None = None) -> list[tuple[str, float]]:
         """
