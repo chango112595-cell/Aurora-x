@@ -42,7 +42,9 @@ _Q = re.compile(r"""
     (?P<val>[-+]?\d+(?:\.\d+)?(?:e[+-]?\d+)?)
     \s*
     (?P<unit>[A-Za-z]+)?     # optional unit (km, m, kg, etc.)
-""", re.I | re.X)
+"""
+)
+
 
 def extract_quantities(text: str) -> Dict[str, float]:
     """
@@ -55,7 +57,10 @@ def extract_quantities(text: str) -> Dict[str, float]:
         key = m.group("key").lower()
         val = float(m.group("val"))
         unit = (m.group("unit") or "").lower()
-
+             if not unit:
+                 unit = "m"
+             if not unit:
+                 unit = "kg"
         if key == "a":
             if not unit: unit = "m"
             val_si, u = normalize_value(val, unit)  # expect length unit
@@ -63,5 +68,4 @@ def extract_quantities(text: str) -> Dict[str, float]:
         elif key == "m":
             if not unit: unit = "kg"
             val_si, u = normalize_value(val, unit)  # expect mass unit
-            res[f"M_{u}"] = val_si
-    return res
+            res[f"M_{u}"] = val_si return res
