@@ -1,0 +1,18 @@
+[flake8]
+max-line-length = 120
+# Ignore most style issues for lenient checking
+extend-ignore = E128, E203, E221, E225, E227, E231, E252, E261, E272, E301, E302, E305, E306, E402, E501, E701, E702, F824, W391, W503
+exclude = 
+    .git,
+    __pycache__,
+    .pytest_cache,
+    .ruff_cache,
+    *.egg-info,
+    attached_assets,
+    backups,
+    runs,
+    .progress_history,
+    node_modules,
+    dist
+per-file-ignores = 
+    __init__.py:F401

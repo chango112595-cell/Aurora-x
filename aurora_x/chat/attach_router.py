@@ -16,11 +16,13 @@ from aurora_x.templates.web_app_flask import render_app
 
 class ChatRequest(BaseModel):
     """Request model for chat endpoint"""
+
     prompt: str
 
 
 class ChatResponse(BaseModel):
     """Response model for chat endpoint"""
+
     ok: bool
     kind: str | None = None
     name: str | None = None
@@ -46,7 +48,7 @@ def make_chat_router() -> APIRouter:
             ChatResponse with generated code information
         """
         # Validate prompt
-        prompt = (request.prompt or '').strip()
+        prompt = (request.prompt or "").strip()
         if not prompt:
             return ChatResponse(ok=False, err="missing prompt")
 
@@ -55,18 +57,17 @@ def make_chat_router() -> APIRouter:
 
         # Handle web_app intent
         if intent.kind == "web_app":
-            title = "Futuristic UI Timer" if intent.fields.get("feature") == "timer" else intent.name.replace('_', ' ').title()
+            title = (
+                "Futuristic UI Timer"
+                if intent.fields.get("feature") == "timer"
+                else intent.name.replace("_", " ").title()
+            )
             code = render_app(title=title, subtitle=intent.brief)
 
             # Save generated code
             Path("app.py").write_text(code, encoding="utf-8")
 
-            return ChatResponse(
-                ok=True,
-                kind="web_app",
-                file="app.py",
-                hint="Run: python app.py"
-            )
+            return ChatResponse(ok=True, kind="web_app", file="app.py", hint="Run: python app.py")
 
         # Handle cli_tool intent
         elif intent.kind == "cli_tool":
@@ -77,11 +78,7 @@ def make_chat_router() -> APIRouter:
             Path(filename).write_text(code, encoding="utf-8")
 
             return ChatResponse(
-                ok=True,
-                kind="cli_tool",
-                name=intent.name,
-                file=filename,
-                hint=f"Run: python {filename} --help"
+                ok=True, kind="cli_tool", name=intent.name, file=filename, hint=f"Run: python {filename} --help"
             )
 
         # Handle lib_func intent
@@ -93,20 +90,11 @@ def make_chat_router() -> APIRouter:
             Path(filename).write_text(code, encoding="utf-8")
 
             return ChatResponse(
-                ok=True,
-                kind="lib_func",
-                name=intent.name,
-                file=filename,
-                hint=f"Run: python {filename}"
+                ok=True, kind="lib_func", name=intent.name, file=filename, hint=f"Run: python {filename}"
             )
 
         # Fallback for unknown intents
-        return ChatResponse(
-            ok=True,
-            kind=intent.kind,
-            name=intent.name,
-            note="Unknown intent type"
-        )
+        return ChatResponse(ok=True, kind=intent.kind, name=intent.name, note="Unknown intent type")
 
     return router
 

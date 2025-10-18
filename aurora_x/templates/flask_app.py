@@ -3,6 +3,7 @@ Flask Application Template Generator for Aurora-X
 Generates complete, working Flask application code based on parsed metadata.
 """
 
+
 def generate_flask_app(metadata: dict) -> str:
     """
     Generate complete Flask application code based on metadata from parser_nl.py
@@ -600,7 +601,8 @@ def generate_api_app(routes: list, includes: dict) -> str:
 
     # Add API-specific routes
     if includes.get("auth"):
-        route_handlers.append('''
+        route_handlers.append(
+            '''
     @app.route('/api/auth/login', methods=['POST'])
     def login():
         """Handle user login"""
@@ -616,10 +618,12 @@ def generate_api_app(routes: list, includes: dict) -> str:
         data = request.get_json()
         if data.get('username') and data.get('password'):
             return jsonify({"status": "success", "message": "User registered"}), 201
-        return jsonify({"error": "Missing required fields"}), 400''')
+        return jsonify({"error": "Missing required fields"}), 400'''
+        )
 
     if includes.get("database"):
-        route_handlers.append('''
+        route_handlers.append(
+            '''
     @app.route('/api/data', methods=['GET', 'POST'])
     def data():
         """Handle data operations"""
@@ -628,9 +632,10 @@ def generate_api_app(routes: list, includes: dict) -> str:
             # In production, save to database
             return jsonify({"status": "created", "data": data}), 201
         # In production, fetch from database
-        return jsonify({"items": [], "count": 0})''')
+        return jsonify({"items": [], "count": 0})'''
+        )
 
-    routes_code = ''.join(route_handlers)
+    routes_code = "".join(route_handlers)
 
     return f'''"""
 Flask API Application
@@ -696,7 +701,7 @@ def generate_web_ui_app(routes: list, includes: dict, description: str) -> str:
         ))'''
         route_handlers.append(handler)
 
-    routes_code = ''.join(route_handlers)
+    routes_code = "".join(route_handlers)
 
     return f'''"""
 {description}
@@ -843,7 +848,7 @@ def generate_basic_app(routes: list, description: str) -> str:
         return f"<h1>{name.title()} Page</h1><p>Route: {path}</p>"'''
         route_handlers.append(handler)
 
-    routes_code = ''.join(route_handlers)
+    routes_code = "".join(route_handlers)
 
     return f'''"""
 {description}

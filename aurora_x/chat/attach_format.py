@@ -8,6 +8,7 @@ from pydantic import BaseModel
 class FormatRequest(BaseModel):
     seconds: float
 
+
 def _fmt_seconds(sec: float) -> str:
     if sec < 60:
         return f"{sec:.2f} s"
@@ -22,6 +23,7 @@ def _fmt_seconds(sec: float) -> str:
         return f"{days:.2f} days"
     years = days / 365.0
     return f"{years:.2f} years"
+
 
 def attach_format(app: FastAPI):
     @app.post("/api/format/seconds")
