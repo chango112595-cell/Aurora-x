@@ -172,6 +172,7 @@ APPSETTINGS_DEV_JSON = """{
 }
 """
 
+
 def render_csharp_webapi(name: str, brief: str = None) -> dict:
     """
     Generate a complete C# Web API project.
@@ -198,5 +199,5 @@ def render_csharp_webapi(name: str, brief: str = None) -> dict:
     return {
         "folder": folder,
         "files": files,
-        "hint": f"Run: cd {folder} && dotnet run (then visit http://localhost:5080/swagger)"
+        "hint": f"Run: cd {folder} && dotnet run (then visit http://localhost:5080/swagger)",
     }

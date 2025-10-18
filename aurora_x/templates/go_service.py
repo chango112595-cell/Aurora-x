@@ -107,6 +107,7 @@ require (
 )
 """
 
+
 def render_go_service(name: str, brief: str = None) -> dict:
     """
     Generate a complete Go microservice.
@@ -119,7 +120,4 @@ def render_go_service(name: str, brief: str = None) -> dict:
         "go.mod": GO_MOD,
     }
 
-    return {
-        "files": files,
-        "hint": "Run: go run . (then try: curl localhost:8080/health)"
-    }
+    return {"files": files, "hint": "Run: go run . (then try: curl localhost:8080/health)"}

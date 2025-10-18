@@ -1,4 +1,3 @@
-
 from flask import Response
 
 GRAPH_HTML = r"""<!doctype html><html><head>
@@ -69,6 +68,7 @@ async function render(){
 }
 render();
 </script></body></html>"""
+
 
 def attach_task_graph(app):
     @app.get("/dashboard/graph")

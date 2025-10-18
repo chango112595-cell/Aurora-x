@@ -3,7 +3,8 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, JSONResponse
 
-PWA_DIR = Path('frontend/pwa')
+PWA_DIR = Path("frontend/pwa")
+
 
 def attach_pwa(app: FastAPI):
     @app.get("/manifest.webmanifest")

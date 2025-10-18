@@ -19,6 +19,9 @@ import pytest
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Function name for display purposes
+func_name = "create_a_data_processing_fun"
+
 
 def create_a_data_processing_fun(input_data: Any, **kwargs) -> Any:
     """

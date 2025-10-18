@@ -47,12 +47,13 @@ def main():
                 "/api/bridge/nl - Generate project from natural language",
                 "/api/bridge/spec - Generate project from spec file",
                 "/api/bridge/deploy - Deploy to Replit",
-                "/healthz - Health check"
-            ]
+                "/healthz - Health check",
+            ],
         }
 
     print(f"🚀 Starting Aurora-X Factory Bridge on {args.host}:{args.port}...")
     uvicorn.run(app, host=args.host, port=args.port)
+
 
 if __name__ == "__main__":
     main()

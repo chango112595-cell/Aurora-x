@@ -20,6 +20,7 @@ if _LOG.exists():
     except Exception:
         pass
 
+
 def make_router(static_dir: Path, templates_dir: Path):
     router = APIRouter()
 
@@ -43,11 +44,9 @@ def make_router(static_dir: Path, templates_dir: Path):
 
     return router
 
+
 def record_run(run_id: str, spec: str, ok: bool, report_path: str, bias: float = None, spark: str = None):
-    row = {
-        "run_id": run_id, "spec": spec, "ok": ok,
-        "report": report_path, "bias": bias, "spark": spark
-    }
+    row = {"run_id": run_id, "spec": spec, "ok": ok, "report": report_path, "bias": bias, "spark": spark}
     spec_runs_memory.append(row)
     try:
         _LOG.parent.mkdir(parents=True, exist_ok=True)

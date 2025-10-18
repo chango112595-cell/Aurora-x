@@ -18,8 +18,10 @@ def synthesize(spec: RichSpec, runs_dir: Path) -> Path:
     # tests
     t = ["import unittest", f"from src.{spec.title} import {spec.title}"]
     for i, ex in enumerate(spec.examples):
-        args = ", ".join(f"{k}={repr(v)}" for k,v in ex.inputs.items())
-        t.append(f"class T{i}(unittest.TestCase):\n    def test_{i}(self):\n        self.assertEqual({spec.title}({args}), {repr(ex.output)})")
+        args = ", ".join(f"{k}={repr(v)}" for k, v in ex.inputs.items())
+        t.append(
+            f"class T{i}(unittest.TestCase):\n    def test_{i}(self):\n        self.assertEqual({spec.title}({args}), {repr(ex.output)})"
+        )
     t.append("if __name__=='__main__': unittest.main()")
     (out / "tests" / f"test_{spec.title}.py").write_text("\n".join(t), encoding="utf-8")
 

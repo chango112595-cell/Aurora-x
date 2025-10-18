@@ -31,9 +31,11 @@ PROGRESS_JSON_DEFAULT = Path(__file__).resolve().parents[1] / "progress.json"
 UPDATE_SCRIPT_DEFAULT = Path(__file__).resolve().parents[1] / "tools" / "update_progress.py"
 HIST_DIR = Path(__file__).resolve().parents[1] / ".progress_history"
 
+
 def iso_now() -> str:
     """Get current ISO timestamp."""
     return datetime.now().isoformat()
+
 
 def fmt_duration(seconds: float) -> str:
     """Format seconds into human-readable 'Xh Ym Zs' format."""
@@ -49,6 +51,7 @@ def fmt_duration(seconds: float) -> str:
     parts.append(f"{secs}s")
 
     return " ".join(parts)
+
 
 def diff_graphs(old: dict[str, list], new: dict[str, list]) -> dict[str, Any]:
     """Compute differences between two call graphs.
@@ -84,8 +87,9 @@ def diff_graphs(old: dict[str, list], new: dict[str, list]) -> dict[str, Any]:
         "added": sorted(list(added)),
         "removed": sorted(list(removed)),
         "old_edges": len(old_edges),
-        "new_edges": len(new_edges)
+        "new_edges": len(new_edges),
     }
+
 
 def load_scores_map(run_root: Path) -> dict[str, dict[str, Any]]:
     """Load function scores from logs/scores.jsonl.
@@ -119,13 +123,14 @@ def load_scores_map(run_root: Path) -> dict[str, dict[str, Any]]:
                     scores_map[func_name] = {
                         "passed": entry.get("passed", 0),
                         "total": entry.get("total", 0),
-                        "iter": curr_iter
+                        "iter": curr_iter,
                     }
     except Exception:
         # Return empty dict on any error
         return {}
 
     return scores_map
+
 
 def diff_scores(old: dict[str, dict[str, Any]], new: dict[str, dict[str, Any]]) -> dict[str, Any]:
     """Compute per-function score differences.
@@ -161,21 +166,20 @@ def diff_scores(old: dict[str, dict[str, Any]], new: dict[str, dict[str, Any]]) 
         elif delta_passed > 0:
             improvements += 1
 
-        rows.append({
-            "function": func,
-            "old": [old_passed, old_total],
-            "new": [new_passed, new_total],
-            "delta_passed": delta_passed
-        })
+        rows.append(
+            {
+                "function": func,
+                "old": [old_passed, old_total],
+                "new": [new_passed, new_total],
+                "delta_passed": delta_passed,
+            }
+        )
 
     return {
-        "summary": {
-            "regressions": regressions,
-            "improvements": improvements,
-            "count": len(all_funcs)
-        },
-        "rows": rows
+        "summary": {"regressions": regressions, "improvements": improvements, "count": len(all_funcs)},
+        "rows": rows,
     }
+
 
 # Stub imports for synthesis modules (to be implemented)
 class Repo:
@@ -185,6 +189,7 @@ class Repo:
         if outdir:
             # Create timestamped run directory under outdir
             import time
+
             timestamp = time.strftime("%Y%m%d-%H%M%S")
             r.root = outdir / f"run-{timestamp}"
             r.root.mkdir(parents=True, exist_ok=True)
@@ -192,25 +197,38 @@ class Repo:
             r.root = Path("/tmp/aurora-tmp")
             r.root.mkdir(parents=True, exist_ok=True)
         return r
+
     def __init__(self):
         self.root = Path(".")
+
     def path(self, p):
         return self.root / p
+
     def set_hash(self, p, c):
         pass
+
     def list_files(self):
         return [str(p.relative_to(self.root)) for p in self.root.rglob("*") if p.is_file()]
 
+
 class Sandbox:
-    def __init__(self, root, timeout_s): pass
+    def __init__(self, root, timeout_s):
+        pass
+
 
 class Spec:
-    def __init__(self): self.functions = []
+    def __init__(self):
+        self.functions = []
 
-def parse_spec(text): return Spec()
+
+def parse_spec(text):
+    return Spec()
+
+
 def write_file(p, c):
     Path(p).parent.mkdir(parents=True, exist_ok=True)
     Path(p).write_text(c)
+
 
 def run_spec(path: str):
     """Run spec compilation for the given spec file."""
@@ -218,14 +236,15 @@ def run_spec(path: str):
     if not sp.exists():
         print(f"[ERR] Spec not found: {sp}")
         sys.exit(1)
-    md = sp.read_text(encoding='utf-8')
+    md = sp.read_text(encoding="utf-8")
     spec = parse(md)
-    out = synthesize(spec, Path('runs'))
+    out = synthesize(spec, Path("runs"))
     print(f"[OK] Generated: {out}")
     print(f"Source: {out/'src'}")
     print(f"Tests: {out/'tests'}")
     print(f"Report: {out/'report.html'}")
     print(f"Run tests: python -m unittest discover -s {out/'tests'} -t {out}")
+
 
 def main():
     """Main entry point for Aurora-X."""
@@ -250,7 +269,9 @@ def main():
     ap.add_argument("--seed", type=int, default=1337, help="Random seed")
     ap.add_argument("--outdir", type=str, default="./runs", help="Output directory")
     ap.add_argument("--no-seed", action="store_true", help="Disable seeding from corpus")
-    ap.add_argument("--baseline", type=str, default=None, help="Path to baseline run dir for report diffs (default: runs/latest)")
+    ap.add_argument(
+        "--baseline", type=str, default=None, help="Path to baseline run dir for report diffs (default: runs/latest)"
+    )
     ap.add_argument("--seed-bias", type=float, default=None, help="Override learned seed bias [0.0..0.5]")
     ap.add_argument("--max-iters", type=int, default=100, help="Maximum synthesis iterations")
     ap.add_argument("--beam", type=int, default=20, help="Beam search width")
@@ -268,27 +289,26 @@ def main():
     args = ap.parse_args()
 
     outdir = Path(args.outdir).resolve() if args.outdir else None
-    rng_cfg = {
-        "temperature": args.temp,
-        "top_k": args.top_k,
-        "top_p": args.top_p
-    }
+    rng_cfg = {"temperature": args.temp, "top_k": args.top_k, "top_p": args.top_p}
 
     # ----- Natural language mode -----
     if args.nl:
         # Check if this is a Flask request
         from aurora_x.spec.parser_nl import parse_english
+
         parsed = parse_english(args.nl)
 
         if parsed.get("framework") == "flask":
             # Handle Flask app synthesis
             # Import by adding tools to path
             import sys
+
             tools_dir = Path(__file__).parent.parent / "tools"
             sys.path.insert(0, str(tools_dir))
             from datetime import datetime
 
             from spec_from_flask import create_flask_app_from_text
+
             run_name = f"run-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
             run_dir = Path("runs") / run_name
             app_file = create_flask_app_from_text(args.nl, run_dir)
@@ -307,9 +327,11 @@ def main():
         else:
             # Regular function synthesis
             import sys
+
             tools_dir = Path(__file__).parent.parent / "tools"
             sys.path.insert(0, str(tools_dir))
             from spec_from_text import create_spec_from_text
+
             spec_path = create_spec_from_text(args.nl)
             print(f"[OK] Spec generated from English at: {spec_path}")
             # Now compile the generated spec
@@ -317,7 +339,10 @@ def main():
             if comp.exists():
                 import os
                 import subprocess
-                subprocess.check_call([sys.executable, "tools/spec_compile_v3.py", str(spec_path)], env=os.environ.copy())
+
+                subprocess.check_call(
+                    [sys.executable, "tools/spec_compile_v3.py", str(spec_path)], env=os.environ.copy()
+                )
             else:
                 print("No v3 compiler found (tools/spec_compile_v3.py). Add v3 pack first.")
         return 0
@@ -335,7 +360,7 @@ def main():
 
     # ----- Handle progress updates (can be used with synthesis) -----
     if args.update_task or args.bump:
-        updates: dict[str, str|float] = {}
+        updates: dict[str, str | float] = {}
         if args.update_task:
             for item in args.update_task:
                 if "=" not in item:
@@ -409,7 +434,7 @@ def main():
         rng_cfg=rng_cfg,
         disable_seed=args.no_seed,
         seed_bias_override=args.seed_bias,
-        baseline=Path(args.baseline).resolve() if args.baseline else None
+        baseline=Path(args.baseline).resolve() if args.baseline else None,
     )
     repo, ok = ax.run(spec_text)
 
@@ -430,10 +455,20 @@ def main():
 
     return 0 if ok else 1
 
+
 class AuroraX:
-    def __init__(self, seed: int, max_iters: int, beam: int, timeout_s: int, outdir: Path | None,
-                 rng_cfg: dict[str, Any], disable_seed: bool = False, seed_bias_override: float | None = None,
-                 baseline: Path | None = None):
+    def __init__(
+        self,
+        seed: int,
+        max_iters: int,
+        beam: int,
+        timeout_s: int,
+        outdir: Path | None,
+        rng_cfg: dict[str, Any],
+        disable_seed: bool = False,
+        seed_bias_override: float | None = None,
+        baseline: Path | None = None,
+    ):
         random.seed(seed)
         self._start_time = time.time()
         self.repo = Repo.create(outdir)
@@ -461,7 +496,7 @@ class AuroraX:
         """Main orchestration loop."""
         start_ts = iso_now()  # Capture start timestamp in ISO format
         spec = parse_spec(spec_text)
-        best_map: dict[str,str] = {}
+        best_map: dict[str, str] = {}
 
         for _idx, f in enumerate(spec.functions):
             # Gather seed snippets from corpus
@@ -475,7 +510,7 @@ class AuroraX:
 
                 # Apply bias to candidate enumeration
                 candidates = []
-                for row in corpus_retrieve(self.repo.root, sig, k=min(12, self.beam//4)):
+                for row in corpus_retrieve(self.repo.root, sig, k=min(12, self.beam // 4)):
                     seed_snippets.append(row["snippet"])
                     candidates.append(seed_key)
 
@@ -485,7 +520,7 @@ class AuroraX:
                     self.adaptive_scheduler.tick()
 
             # Synthesize (stub - would call actual synthesis)
-            cand = type('obj', (object,), {'src': 'def stub(): pass'})()
+            cand = type("obj", (object,), {"src": "def stub(): pass"})()
 
             # Record to corpus
             corpus_entry = {
@@ -495,7 +530,7 @@ class AuroraX:
                 "total": 1,
                 "score": 1.0,
                 "snippet": cand.src,
-                **spec_digest(spec_text)
+                **spec_digest(spec_text),
             }
             corpus_record(self.repo.root, corpus_entry)
 
@@ -504,11 +539,7 @@ class AuroraX:
             # Update seed store with result
             if not self.disable_seed:
                 success = corpus_entry["passed"] == corpus_entry["total"]
-                result = {
-                    "seed_key": seed_key,
-                    "score": corpus_entry["score"],
-                    "success": success
-                }
+                result = {"seed_key": seed_key, "score": corpus_entry["score"], "success": success}
                 self.seed_store.update(result)
 
                 # Update adaptive scheduler
@@ -517,10 +548,7 @@ class AuroraX:
 
             # Learning nudge (keep legacy for backward compat)
             won_with_seed = _seed_won(cand.src, seed_snippets)
-            self.weights["seed_bias"] = learn.update_seed_bias(
-                float(self.weights.get("seed_bias", 0.0)),
-                won_with_seed
-            )
+            self.weights["seed_bias"] = learn.update_seed_bias(float(self.weights.get("seed_bias", 0.0)), won_with_seed)
             learn.save(self.repo.root, self.weights)
 
         # Save persistent seed store at end of loop
@@ -537,18 +565,14 @@ class AuroraX:
             "max_iters": self.max_iters,
             "beam": self.beam,
             **self.rng_cfg,
-            "weights": self.weights
+            "weights": self.weights,
         }
         self.save_run_config(cfg)
 
         # Capture end time and save run metadata
         self._end_time = time.time()
         duration_seconds = round(self._end_time - self._start_time, 3)
-        run_metadata = {
-            "start_ts": start_ts,
-            "end_ts": iso_now(),
-            "duration_seconds": duration_seconds
-        }
+        run_metadata = {"start_ts": start_ts, "end_ts": iso_now(), "duration_seconds": duration_seconds}
         write_file(self.repo.path("run_meta.json"), json.dumps(run_metadata, indent=2))
 
         # Generate HTML report (before symlink update so it can detect previous latest run)
@@ -572,7 +596,7 @@ class AuroraX:
 
     def synthesize_best(self, f, callees_meta, base_prefix):
         """Stub for synthesis - returns mock candidate."""
-        return type('obj', (object,), {'src': f'def {f.name}(): pass'})()
+        return type("obj", (object,), {"src": f"def {f.name}(): pass"})()
 
     def save_run_config(self, cfg: dict[str, Any]) -> None:
         write_file(self.repo.path("run_config.json"), json.dumps(cfg, indent=2))
@@ -587,6 +611,7 @@ class AuroraX:
             pass
         return sched
 
+
 def load_progress() -> dict | None:
     """Load progress.json if it exists."""
     try:
@@ -596,9 +621,11 @@ def load_progress() -> dict | None:
         return None
     return None
 
+
 def save_progress(obj: dict) -> None:
     """Save progress.json."""
     PROGRESS_JSON_DEFAULT.write_text(json.dumps(obj, indent=2), encoding="utf-8")
+
 
 def run_update_script() -> None:
     """Run update_progress.py if it exists."""
@@ -608,7 +635,8 @@ def run_update_script() -> None:
         except Exception:
             pass
 
-def update_progress_ids(id_to_pct: dict[str, str|float]) -> list[str]:
+
+def update_progress_ids(id_to_pct: dict[str, str | float]) -> list[str]:
     """Update progress percentages for given IDs. Handles 'auto' values."""
     data = load_progress()
     if not data:
@@ -661,6 +689,7 @@ def update_progress_ids(id_to_pct: dict[str, str|float]) -> list[str]:
 
     return updated
 
+
 def bump_progress_id(id_: str, delta: float) -> str | None:
     """Bump progress by delta for given ID."""
     data = load_progress()
@@ -685,10 +714,12 @@ def bump_progress_id(id_: str, delta: float) -> str | None:
         return done
     return None
 
+
 def _recent_runs(parent: Path, limit: int = 12) -> list[Path]:
     """Get recent run directories."""
     runs = sorted([Path(p) for p in glob(str(parent / "run-*"))], reverse=True)
     return runs[:limit]
+
 
 def _run_pass_count(run_dir: Path) -> int | None:
     """Count passed tests from scores.jsonl."""
@@ -713,6 +744,7 @@ def _run_pass_count(run_dir: Path) -> int | None:
             pass
 
     return sum(latest.values()) if latest else None
+
 
 def render_floating_hud(repo_root: Path) -> str:
     """Generate floating HUD HTML with SVG chart."""
@@ -799,6 +831,7 @@ def render_floating_hud(repo_root: Path) -> str:
 </div>
 """
 
+
 def render_progress_sidebar_html() -> str:
     """Generate progress sidebar HTML."""
     data = load_progress()
@@ -807,7 +840,9 @@ def render_progress_sidebar_html() -> str:
 
     def task_pct(t):
         subs = t.get("subtasks") or []
-        return (sum(float(s.get("progress", 0)) for s in subs) / len(subs)) if subs else float(t.get("progress", 0) or 0)
+        return (
+            (sum(float(s.get("progress", 0)) for s in subs) / len(subs)) if subs else float(t.get("progress", 0) or 0)
+        )
 
     def phase_pct(ph):
         pairs = [(task_pct(t), max(1, len(t.get("subtasks") or []))) for t in ph.get("tasks", [])]
@@ -837,6 +872,7 @@ def render_progress_sidebar_html() -> str:
   <div style="margin-top:8px;"><a href="../MASTER_TASK_LIST.md">Open MASTER_TASK_LIST.md</a></div>
 </aside>
 """
+
 
 def write_html_report(repo: Repo, spec: Spec, baseline: Path | None = None) -> None:
     """Generate HTML report with latest run status."""
@@ -905,10 +941,7 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Path | None = None) -> N
             if base_graph_path.exists():
                 base_graph = json.loads(base_graph_path.read_text())
                 # Compute diff using diff_graphs function
-                diff = diff_graphs(
-                    base_graph.get("edges", {}),
-                    graph.get("edges", {})
-                )
+                diff = diff_graphs(base_graph.get("edges", {}), graph.get("edges", {}))
 
                 # Save graph_diff.json
                 graph_diff_path = repo.path("graph_diff.json")
@@ -995,12 +1028,12 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Path | None = None) -> N
                         delta_text = "0"
 
                     table_rows.append(
-                        f'<tr>'
-                        f'<td>{func}</td>'
-                        f'<td>{old_p}/{old_t}</td>'
-                        f'<td>{new_p}/{new_t}</td>'
+                        f"<tr>"
+                        f"<td>{func}</td>"
+                        f"<td>{old_p}/{old_t}</td>"
+                        f"<td>{new_p}/{new_t}</td>"
                         f'<td style="color:{delta_color};font-weight:600">{delta_text}</td>'
-                        f'</tr>'
+                        f"</tr>"
                     )
 
                 # Generate scores_diff.html standalone page
@@ -1091,8 +1124,8 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Path | None = None) -> N
 
     latest_badge = (
         '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#16a34a;color:#fff;font-weight:600;">LATEST RUN ✓</span>'
-        if is_latest else
-        '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#f59e0b;color:#111;font-weight:600;">NOT LATEST</span> '
+        if is_latest
+        else '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#f59e0b;color:#111;font-weight:600;">NOT LATEST</span> '
         '<a href="../latest/report.html" style="margin-left:8px;">Open Latest Report →</a>'
     )
 
@@ -1179,10 +1212,13 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Path | None = None) -> N
 </body></html>"""
     write_file(repo.path("report.html"), body)
 
+
 def _seed_won(final_src: str, seeds: list[str]) -> bool:
     """Check if winning code matches any seed (whitespace-insensitive)."""
+
     def norm(s: str) -> str:
         return "".join(s.split())
+
     n_final = norm(final_src)
     for s in seeds:
         try:
@@ -1191,6 +1227,7 @@ def _seed_won(final_src: str, seeds: list[str]) -> bool:
         except Exception:
             continue
     return False
+
 
 if __name__ == "__main__":
     sys.exit(main())

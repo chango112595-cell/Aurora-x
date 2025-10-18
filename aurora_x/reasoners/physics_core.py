@@ -5,13 +5,16 @@ from typing import Any
 
 G = 6.67430e-11  # m^3 kg^-1 s^-2
 
+
 def orbital_period(semi_major_axis_m: float, mass_central_kg: float) -> float:
     if semi_major_axis_m <= 0 or mass_central_kg <= 0:
         raise ValueError("a and M must be positive")
     return 2.0 * math.pi * math.sqrt((semi_major_axis_m**3) / (G * mass_central_kg))
 
-def em_superposition(field_vectors: list[tuple[float,float,float]]) -> tuple[float,float,float]:
+
+def em_superposition(field_vectors: list[tuple[float, float, float]]) -> tuple[float, float, float]:
     return (sum(v[0] for v in field_vectors), sum(v[1] for v in field_vectors), sum(v[2] for v in field_vectors))
+
 
 def solve(intent: str, payload: dict[str, Any]) -> dict[str, Any]:
     if intent == "orbital_period":

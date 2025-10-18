@@ -3,6 +3,7 @@ Library Function Template Generator for T08 Intent Router
 Generates Python library functions with unit tests
 """
 
+
 def render_func(name: str, brief: str, fields: dict) -> str:
     """
     Generate a Python library function with tests based on intent
@@ -19,13 +20,13 @@ def render_func(name: str, brief: str, fields: dict) -> str:
     # Check for specific function types
     brief_lower = brief.lower()
 
-    if 'factorial' in brief_lower:
+    if "factorial" in brief_lower:
         return _render_factorial_func(name, brief)
-    elif 'fibonacci' in brief_lower:
+    elif "fibonacci" in brief_lower:
         return _render_fibonacci_func(name, brief)
-    elif 'palindrome' in brief_lower:
+    elif "palindrome" in brief_lower:
         return _render_palindrome_func(name, brief)
-    elif 'reverse' in brief_lower and 'string' in brief_lower:
+    elif "reverse" in brief_lower and "string" in brief_lower:
         return _render_reverse_string_func(name, brief)
     else:
         return _render_generic_func(name, brief)
@@ -740,9 +741,9 @@ if __name__ == "__main__":
 
 def _render_generic_func(name: str, brief: str) -> str:
     """Generate a generic function template with tests"""
-    func_name = name.replace('-', '_').replace(' ', '_').lower()
+    func_name = name.replace("-", "_").replace(" ", "_").lower()
     if not func_name or not func_name[0].isalpha():
-        func_name = 'process'
+        func_name = "process"
 
     return f'''#!/usr/bin/env python3
 """

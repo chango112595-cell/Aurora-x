@@ -102,6 +102,7 @@ $('#refresh').onclick = load; load(); setInterval(load, 5000);
 </script>
 </body></html>"""
 
+
 def attach_progress(app):
     @app.get("/api/progress")
     def api_progress():
@@ -117,7 +118,7 @@ def attach_progress(app):
         for t in tasks:
             percent = t.get("percent", 0)
             if isinstance(percent, str):
-                percent = float(percent.replace('%', ''))
+                percent = float(percent.replace("%", ""))
             total += percent
         overall = round(total / max(1, len(tasks)), 2)
         data["overall_percent"] = overall
@@ -130,6 +131,7 @@ def attach_progress(app):
     @app.post("/api/progress/ui_thresholds")
     def api_progress_update_thresholds():
         from flask import request
+
         try:
             data = json.loads(PROGRESS_PATH.read_text(encoding="utf-8")) if PROGRESS_PATH.exists() else {}
         except Exception as e:

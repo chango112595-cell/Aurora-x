@@ -9,35 +9,36 @@ import re
 def parse_return_type(signature: str) -> str:
     """Extract return type from function signature"""
     # Look for -> return_type pattern
-    match = re.search(r'->\s*([^\s:]+)', signature)
+    match = re.search(r"->\s*([^\s:]+)", signature)
     if match:
         return match.group(1).strip()
     return "Any"
+
 
 def get_default_for_type(type_str: str) -> str:
     """Get appropriate default value for a given type"""
     type_lower = type_str.lower()
 
     # Handle Optional types
-    if 'optional' in type_lower or 'none' in type_lower:
+    if "optional" in type_lower or "none" in type_lower:
         return "None"
 
     # Handle basic types
-    if 'bool' in type_lower:
+    if "bool" in type_lower:
         return "False"
-    elif 'int' in type_lower:
+    elif "int" in type_lower:
         return "0"
-    elif 'float' in type_lower:
+    elif "float" in type_lower:
         return "0.0"
-    elif 'str' in type_lower:
+    elif "str" in type_lower:
         return '""'
-    elif 'list' in type_lower or 'array' in type_lower:
+    elif "list" in type_lower or "array" in type_lower:
         return "[]"
-    elif 'dict' in type_lower or 'mapping' in type_lower:
+    elif "dict" in type_lower or "mapping" in type_lower:
         return "{}"
-    elif 'set' in type_lower:
+    elif "set" in type_lower:
         return "set()"
-    elif 'tuple' in type_lower:
+    elif "tuple" in type_lower:
         return "()"
     elif type_str == "None" or type_str == "NoneType":
         return "None"
@@ -45,10 +46,11 @@ def get_default_for_type(type_str: str) -> str:
         # For unknown types, return None
         return "None"
 
+
 def extract_params(signature: str) -> list:
     """Extract parameter names from function signature"""
     # Get the part between parentheses
-    match = re.search(r'\((.*?)\)', signature)
+    match = re.search(r"\((.*?)\)", signature)
     if not match:
         return []
 
@@ -59,16 +61,16 @@ def extract_params(signature: str) -> list:
     depth = 0
     current = []
     for char in params_str:
-        if char in '([{':
+        if char in "([{":
             depth += 1
-        elif char in ')]}':
+        elif char in ")]}":
             depth -= 1
-        elif char == ',' and depth == 0:
-            param = ''.join(current).strip()
+        elif char == "," and depth == 0:
+            param = "".join(current).strip()
             if param:
                 # Extract just the parameter name (before : or =)
-                param_name = re.split(r'[:\s=]', param)[0].strip()
-                if param_name and param_name != 'self':
+                param_name = re.split(r"[:\s=]", param)[0].strip()
+                if param_name and param_name != "self":
                     params.append(param_name)
             current = []
             continue
@@ -76,13 +78,14 @@ def extract_params(signature: str) -> list:
 
     # Don't forget the last parameter
     if current:
-        param = ''.join(current).strip()
+        param = "".join(current).strip()
         if param:
-            param_name = re.split(r'[:\s=]', param)[0].strip()
-            if param_name and param_name != 'self':
+            param_name = re.split(r"[:\s=]", param)[0].strip()
+            if param_name and param_name != "self":
                 params.append(param_name)
 
     return params
+
 
 def generate_fallback_function(signature: str, description: str = "") -> str:
     """Generate a working placeholder function for any signature"""
@@ -99,23 +102,24 @@ def generate_fallback_function(signature: str, description: str = "") -> str:
     # Add docstring
     doc = description if description else "Generic placeholder function (no specific template matched)"
     lines.append(f'    """{doc}')
-    lines.append('    ')
-    lines.append('    This is an auto-generated placeholder that returns appropriate default values.')
-    lines.append('    Replace this implementation with your actual logic.')
+    lines.append("    ")
+    lines.append("    This is an auto-generated placeholder that returns appropriate default values.")
+    lines.append("    Replace this implementation with your actual logic.")
     lines.append('    """')
 
     # Add some basic parameter validation/logging
     if params:
-        lines.append('    # Log parameters (placeholder behavior)')
+        lines.append("    # Log parameters (placeholder behavior)")
         for param in params:
-            lines.append(f'    _ = {param}  # Parameter received: {param}')
+            lines.append(f"    _ = {param}  # Parameter received: {param}")
 
     # Return appropriate default
-    lines.append('    ')
-    lines.append('    # Return default value for type: ' + return_type)
-    lines.append(f'    return {default_value}')
+    lines.append("    ")
+    lines.append("    # Return default value for type: " + return_type)
+    lines.append(f"    return {default_value}")
 
-    return '\n'.join(lines) + '\n'
+    return "\n".join(lines) + "\n"
+
 
 def create_generic_implementation(signature: str, description: str = "") -> str:
     """Create a complete generic implementation with imports"""
@@ -125,6 +129,7 @@ def create_generic_implementation(signature: str, description: str = "") -> str:
     function = generate_fallback_function(signature, description)
 
     return header + function
+
 
 # Convenience function for direct use
 def fallback_for(signature: str, description: str = "") -> str:

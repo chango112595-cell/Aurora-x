@@ -19,7 +19,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/chat",
                 "method": "POST",
                 "body": {"prompt": "make a futuristic timer ui", "lang": "python"},
-                "hint": "Generates app.py; run with: PORT=8000 python app.py"
+                "hint": "Generates app.py; run with: PORT=8000 python app.py",
             },
             {
                 "id": "chat_go_service",
@@ -27,7 +27,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/chat",
                 "method": "POST",
                 "body": {"prompt": "fast microservice web api", "lang": "go"},
-                "hint": "Generates main.go; run: PORT=8080 go run ."
+                "hint": "Generates main.go; run: PORT=8080 go run .",
             },
             {
                 "id": "chat_rust_cli",
@@ -35,7 +35,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/chat",
                 "method": "POST",
                 "body": {"prompt": "memory-safe cli tool for file processing", "lang": "rust"},
-                "hint": "Generates main.rs; build with: cargo build --release"
+                "hint": "Generates main.rs; build with: cargo build --release",
             },
             {
                 "id": "chat_csharp_api",
@@ -43,7 +43,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/chat",
                 "method": "POST",
                 "body": {"prompt": "enterprise web api with health", "lang": "csharp"},
-                "hint": "Generates Aurora.WebApi; run: PORT=5080 dotnet run"
+                "hint": "Generates Aurora.WebApi; run: PORT=5080 dotnet run",
             },
             {
                 "id": "chat_auto_select",
@@ -51,9 +51,8 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/chat",
                 "method": "POST",
                 "body": {"prompt": "create a high-performance web service"},
-                "hint": "Aurora auto-selects Go for high-performance keywords"
+                "hint": "Aurora auto-selects Go for high-performance keywords",
             },
-
             # Cross-domain solver (math/physics)
             {
                 "id": "solve_math_eval",
@@ -61,7 +60,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/solve",
                 "method": "POST",
                 "body": {"problem": "(2+3)^2 + 1"},
-                "expected": "26"
+                "expected": "26",
             },
             {
                 "id": "solve_math_diff",
@@ -69,7 +68,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/solve/pretty",
                 "method": "POST",
                 "body": {"problem": "differentiate 3x^2 + 2x + 5"},
-                "expected": "6x + 2"
+                "expected": "6x + 2",
             },
             {
                 "id": "solve_orbit_si",
@@ -77,7 +76,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/solve/pretty",
                 "method": "POST",
                 "body": {"problem": "orbital period a=7e6 M=5.972e24"},
-                "expected": "Orbital period: 1.54 hours"
+                "expected": "Orbital period: 1.54 hours",
             },
             {
                 "id": "solve_orbit_units",
@@ -85,7 +84,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/solve/pretty",
                 "method": "POST",
                 "body": {"problem": "orbital period a=7000 km M=5.972e24 kg"},
-                "expected": "Orbital period: 1.62 hours"
+                "expected": "Orbital period: 1.62 hours",
             },
             {
                 "id": "solve_iss_orbit",
@@ -93,7 +92,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/solve/pretty",
                 "method": "POST",
                 "body": {"problem": "orbital period a=6778 km M=5.972e24 kg"},
-                "expected": "Orbital period: 1.54 hours (~92 minutes)"
+                "expected": "Orbital period: 1.54 hours (~92 minutes)",
             },
             {
                 "id": "solve_geo_orbit",
@@ -101,7 +100,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/solve/pretty",
                 "method": "POST",
                 "body": {"problem": "orbital period a=42164 km M=5.972e24 kg"},
-                "expected": "Orbital period: 23.93 hours (~24 hours)"
+                "expected": "Orbital period: 23.93 hours (~24 hours)",
             },
             {
                 "id": "solve_moon_orbit",
@@ -109,7 +108,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/solve/pretty",
                 "method": "POST",
                 "body": {"problem": "orbital period a=384400 km M=5.972e24 kg"},
-                "expected": "Orbital period: 27.32 days"
+                "expected": "Orbital period: 27.32 days",
             },
             {
                 "id": "solve_earth_orbit",
@@ -117,17 +116,16 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/solve/pretty",
                 "method": "POST",
                 "body": {"problem": "orbital period a=1 AU M=1.989e30 kg"},
-                "expected": "Orbital period: 365.26 days (1 year)"
+                "expected": "Orbital period: 365.26 days (1 year)",
             },
             {
                 "id": "solve_em_sum",
                 "title": "EM Field Superposition",
                 "endpoint": "/api/solve/pretty",
                 "method": "POST",
-                "body": {"problem": "electric field superposition", "vectors": [[1,0,0],[0,2,0],[-1,0,3]]},
-                "expected": "Resultant field: [0, 2, 3]"
+                "body": {"problem": "electric field superposition", "vectors": [[1, 0, 0], [0, 2, 0], [-1, 0, 3]]},
+                "expected": "Resultant field: [0, 2, 3]",
             },
-
             # Unit conversions
             {
                 "id": "units_km_to_m",
@@ -135,7 +133,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/units",
                 "method": "POST",
                 "body": {"value": "7000 km"},
-                "expected": "7,000,000 m"
+                "expected": "7,000,000 m",
             },
             {
                 "id": "units_au_to_m",
@@ -143,7 +141,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/units",
                 "method": "POST",
                 "body": {"value": "1 AU"},
-                "expected": "149,597,870,700 m"
+                "expected": "149,597,870,700 m",
             },
             {
                 "id": "units_miles_to_m",
@@ -151,9 +149,8 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/units",
                 "method": "POST",
                 "body": {"value": "100 miles"},
-                "expected": "160,934 m"
+                "expected": "160,934 m",
             },
-
             # Formatters
             {
                 "id": "fmt_seconds_hour",
@@ -161,7 +158,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/format/seconds",
                 "method": "POST",
                 "body": {"seconds": 3600.0},
-                "expected": "1.00 hours"
+                "expected": "1.00 hours",
             },
             {
                 "id": "fmt_seconds_day",
@@ -169,7 +166,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/format/seconds",
                 "method": "POST",
                 "body": {"seconds": 86400.0},
-                "expected": "24.00 hours"
+                "expected": "24.00 hours",
             },
             {
                 "id": "fmt_seconds_year",
@@ -177,7 +174,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/format/seconds",
                 "method": "POST",
                 "body": {"seconds": 31536000.0},
-                "expected": "1.00 years"
+                "expected": "1.00 years",
             },
             {
                 "id": "fmt_units",
@@ -185,7 +182,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/format/units",
                 "method": "POST",
                 "body": {"value": 7e6, "unit": "m"},
-                "expected": "7 Mm (LEO-ish altitude)"
+                "expected": "7 Mm (LEO-ish altitude)",
             },
             {
                 "id": "fmt_units_speed",
@@ -193,7 +190,7 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/format/units",
                 "method": "POST",
                 "body": {"value": 299792458, "unit": "m/s"},
-                "expected": "300 Mm/s (≈ c)"
+                "expected": "300 Mm/s (≈ c)",
             },
             {
                 "id": "fmt_units_mass",
@@ -201,8 +198,8 @@ def attach_demo(app: FastAPI):
                 "endpoint": "/api/format/units",
                 "method": "POST",
                 "body": {"value": 5.972e24, "unit": "kg"},
-                "expected": "5.97e12 Tkg (Mass of Earth)"
-            }
+                "expected": "5.97e12 Tkg (Mass of Earth)",
+            },
         ]
 
         # Group cards by endpoint category
@@ -210,7 +207,7 @@ def attach_demo(app: FastAPI):
             "chat": [c for c in cards if c["endpoint"] == "/chat"],
             "solve": [c for c in cards if "/solve" in c["endpoint"]],
             "units": [c for c in cards if c["endpoint"] == "/api/units"],
-            "format": [c for c in cards if "/format" in c["endpoint"]]
+            "format": [c for c in cards if "/format" in c["endpoint"]],
         }
 
         return {
@@ -221,7 +218,7 @@ def attach_demo(app: FastAPI):
                 "chat": len(categories["chat"]),
                 "solve": len(categories["solve"]),
                 "units": len(categories["units"]),
-                "format": len(categories["format"])
+                "format": len(categories["format"]),
             },
             "endpoints": [
                 "/chat",
@@ -231,6 +228,6 @@ def attach_demo(app: FastAPI):
                 "/api/units",
                 "/api/format/seconds",
                 "/api/format/units",
-                "/api/demo/cards"
-            ]
+                "/api/demo/cards",
+            ],
         }
