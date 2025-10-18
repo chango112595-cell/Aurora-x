@@ -4,20 +4,18 @@ Exports the Universal Code Synthesis Engine and its components
 """
 
 from .universal_engine import (
+    BlueprintEngine,
+    DynamicSynthesizer,
+    # Core components
+    MultiIntentParser,
+    ParsedIntent,
+    PersistenceLayer,
+    # Data structures
+    ProjectType,
+    SafetyGate,
     # Main synthesis function
     synthesize_universal,
     synthesize_universal_sync,
-    
-    # Core components
-    MultiIntentParser,
-    BlueprintEngine,
-    DynamicSynthesizer,
-    SafetyGate,
-    PersistenceLayer,
-    
-    # Data structures
-    ProjectType,
-    ParsedIntent
 )
 
 # Version info

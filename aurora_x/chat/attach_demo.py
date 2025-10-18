@@ -1,10 +1,12 @@
 # FastAPI endpoint for demo/test cards
+from typing import Any
+
 from fastapi import FastAPI
-from typing import Dict, Any, List
+
 
 def attach_demo(app: FastAPI):
     @app.get("/api/demo/cards")
-    async def api_demo_cards() -> Dict[str, Any]:
+    async def api_demo_cards() -> dict[str, Any]:
         """
         Return ready-made demo payloads for testing all Aurora endpoints.
         Each card has id, title, endpoint, method, body, and optional hint.
@@ -51,7 +53,7 @@ def attach_demo(app: FastAPI):
                 "body": {"prompt": "create a high-performance web service"},
                 "hint": "Aurora auto-selects Go for high-performance keywords"
             },
-            
+
             # Cross-domain solver (math/physics)
             {
                 "id": "solve_math_eval",
@@ -125,7 +127,7 @@ def attach_demo(app: FastAPI):
                 "body": {"problem": "electric field superposition", "vectors": [[1,0,0],[0,2,0],[-1,0,3]]},
                 "expected": "Resultant field: [0, 2, 3]"
             },
-            
+
             # Unit conversions
             {
                 "id": "units_km_to_m",
@@ -151,7 +153,7 @@ def attach_demo(app: FastAPI):
                 "body": {"value": "100 miles"},
                 "expected": "160,934 m"
             },
-            
+
             # Formatters
             {
                 "id": "fmt_seconds_hour",
@@ -202,7 +204,7 @@ def attach_demo(app: FastAPI):
                 "expected": "5.97e12 Tkg (Mass of Earth)"
             }
         ]
-        
+
         # Group cards by endpoint category
         categories = {
             "chat": [c for c in cards if c["endpoint"] == "/chat"],
@@ -210,14 +212,14 @@ def attach_demo(app: FastAPI):
             "units": [c for c in cards if c["endpoint"] == "/api/units"],
             "format": [c for c in cards if "/format" in c["endpoint"]]
         }
-        
+
         return {
             "ok": True,
             "cards": cards,
             "total": len(cards),
             "categories": {
                 "chat": len(categories["chat"]),
-                "solve": len(categories["solve"]), 
+                "solve": len(categories["solve"]),
                 "units": len(categories["units"]),
                 "format": len(categories["format"])
             },
@@ -226,7 +228,7 @@ def attach_demo(app: FastAPI):
                 "/api/solve",
                 "/api/solve/pretty",
                 "/api/explain",
-                "/api/units", 
+                "/api/units",
                 "/api/format/seconds",
                 "/api/format/units",
                 "/api/demo/cards"

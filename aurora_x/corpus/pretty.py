@@ -1,13 +1,16 @@
 from __future__ import annotations
-from typing import Dict, Any, Iterable, List
+
 import json as _json
+from collections.abc import Iterable
+from typing import Any
+
 
 def truncate(s: str | None, n: int = 120) -> str:
     if s is None: return ""
     s = str(s).replace("\n","⏎")
     return s if len(s) <= n else s[:n-1] + "…"
 
-def fmt_rows(rows: Iterable[Dict[str, Any]]) -> str:
+def fmt_rows(rows: Iterable[dict[str, Any]]) -> str:
     out = []
     for i, r in enumerate(rows, 1):
         line = (
@@ -18,7 +21,7 @@ def fmt_rows(rows: Iterable[Dict[str, Any]]) -> str:
         out.append(line)
     return "\n".join(out) if out else "(no results)"
 
-def filter_rows(rows: List[Dict[str, Any]], term: str | None) -> List[Dict[str, Any]]:
+def filter_rows(rows: list[dict[str, Any]], term: str | None) -> list[dict[str, Any]]:
     if not term:
         return rows
     t = term.lower()
@@ -29,5 +32,5 @@ def filter_rows(rows: List[Dict[str, Any]], term: str | None) -> List[Dict[str, 
             out.append(r)
     return out
 
-def to_json(rows: List[Dict[str, Any]]) -> str:
+def to_json(rows: list[dict[str, Any]]) -> str:
     return _json.dumps(rows, ensure_ascii=False, indent=2)

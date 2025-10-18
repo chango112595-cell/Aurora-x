@@ -1,9 +1,13 @@
 
 from __future__ import annotations
-import argparse, sys
+
+import argparse
+import sys
 from pathlib import Path
+
 from aurora_x.spec.parser_v2 import parse
 from aurora_x.synthesis.search import synthesize
+
 
 def run_spec(path: str):
     sp = Path(path)

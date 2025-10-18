@@ -2,25 +2,29 @@
 """Aurora-X main module with corpus integration and learning weights."""
 
 from __future__ import annotations
+
 import argparse
-import sys
 import json
 import random
-import time
 import subprocess
-from pathlib import Path
-from typing import Dict, Any, List, Optional
+import sys
+import time
 from datetime import datetime
 from glob import glob
-from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, spec_digest
-from .corpus.pretty import fmt_rows, filter_rows, to_json
-from .learn import weights as learn, get_seed_store
-from .learn import AdaptiveBiasScheduler, AdaptiveConfig
+from pathlib import Path
+from typing import Any
+
+from .corpus.pretty import filter_rows, fmt_rows, to_json
+from .corpus.store import record as corpus_record
+from .corpus.store import retrieve as corpus_retrieve
+from .corpus.store import spec_digest
+from .learn import AdaptiveBiasScheduler, AdaptiveConfig, get_seed_store
+from .learn import weights as learn
 from .spec.parser_v2 import parse
 from .synthesis.search import synthesize
 
 # Global adaptive scheduler for API access
-_global_adaptive_scheduler: Optional[AdaptiveBiasScheduler] = None
+_global_adaptive_scheduler: AdaptiveBiasScheduler | None = None
 
 # Progress tracking constants
 PROGRESS_JSON_DEFAULT = Path(__file__).resolve().parents[1] / "progress.json"
@@ -36,23 +40,23 @@ def fmt_duration(seconds: float) -> str:
     hours = int(seconds // 3600)
     minutes = int((seconds % 3600) // 60)
     secs = int(seconds % 60)
-    
+
     parts = []
     if hours > 0:
         parts.append(f"{hours}h")
     if minutes > 0:
         parts.append(f"{minutes}m")
     parts.append(f"{secs}s")
-    
+
     return " ".join(parts)
 
-def diff_graphs(old: Dict[str, list], new: Dict[str, list]) -> Dict[str, Any]:
+def diff_graphs(old: dict[str, list], new: dict[str, list]) -> dict[str, Any]:
     """Compute differences between two call graphs.
-    
+
     Args:
         old: Old graph as adjacency list (node -> list of connected nodes)
         new: New graph as adjacency list (node -> list of connected nodes)
-    
+
     Returns:
         Dictionary with:
         - "added": sorted list of added edge tuples
@@ -65,16 +69,16 @@ def diff_graphs(old: Dict[str, list], new: Dict[str, list]) -> Dict[str, Any]:
     for u, neighbors in old.items():
         for v in neighbors:
             old_edges.add((u, v))
-    
+
     new_edges = set()
     for u, neighbors in new.items():
         for v in neighbors:
             new_edges.add((u, v))
-    
+
     # Compute added and removed edges
     added = new_edges - old_edges
     removed = old_edges - new_edges
-    
+
     # Return result dictionary
     return {
         "added": sorted(list(added)),
@@ -83,12 +87,12 @@ def diff_graphs(old: Dict[str, list], new: Dict[str, list]) -> Dict[str, Any]:
         "new_edges": len(new_edges)
     }
 
-def load_scores_map(run_root: Path) -> Dict[str, Dict[str, Any]]:
+def load_scores_map(run_root: Path) -> dict[str, dict[str, Any]]:
     """Load function scores from logs/scores.jsonl.
-    
+
     Args:
         run_root: Root directory of the run
-    
+
     Returns:
         Dict mapping function names to their latest scores:
         {'passed': int, 'total': int, 'iter': int}
@@ -96,10 +100,10 @@ def load_scores_map(run_root: Path) -> Dict[str, Dict[str, Any]]:
     scores_file = run_root / "logs" / "scores.jsonl"
     if not scores_file.exists():
         return {}
-    
+
     scores_map = {}
     try:
-        with open(scores_file, 'r') as f:
+        with open(scores_file) as f:
             for line in f:
                 line = line.strip()
                 if not line:
@@ -108,7 +112,7 @@ def load_scores_map(run_root: Path) -> Dict[str, Dict[str, Any]]:
                 func_name = entry.get("function")
                 if not func_name:
                     continue
-                
+
                 # Track latest score per function (highest iteration)
                 curr_iter = entry.get("iter", 0)
                 if func_name not in scores_map or curr_iter > scores_map[func_name].get("iter", 0):
@@ -120,50 +124,50 @@ def load_scores_map(run_root: Path) -> Dict[str, Dict[str, Any]]:
     except Exception:
         # Return empty dict on any error
         return {}
-    
+
     return scores_map
 
-def diff_scores(old: Dict[str, Dict[str, Any]], new: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+def diff_scores(old: dict[str, dict[str, Any]], new: dict[str, dict[str, Any]]) -> dict[str, Any]:
     """Compute per-function score differences.
-    
+
     Args:
         old: Old score map from load_scores_map
         new: New score map from load_scores_map
-    
+
     Returns:
         Dict with:
         - "summary": {"regressions": count, "improvements": count, "count": total_functions}
         - "rows": list of dicts with "function", "old" [passed, total], "new" [passed, total], "delta_passed"
     """
     all_funcs = set(old.keys()) | set(new.keys())
-    
+
     rows = []
     regressions = 0
     improvements = 0
-    
+
     for func in sorted(all_funcs):
         old_score = old.get(func, {"passed": 0, "total": 0})
         new_score = new.get(func, {"passed": 0, "total": 0})
-        
+
         old_passed = old_score.get("passed", 0)
         old_total = old_score.get("total", 0)
         new_passed = new_score.get("passed", 0)
         new_total = new_score.get("total", 0)
-        
+
         delta_passed = new_passed - old_passed
-        
+
         if delta_passed < 0:
             regressions += 1
         elif delta_passed > 0:
             improvements += 1
-        
+
         rows.append({
             "function": func,
             "old": [old_passed, old_total],
             "new": [new_passed, new_total],
             "delta_passed": delta_passed
         })
-    
+
     return {
         "summary": {
             "regressions": regressions,
@@ -176,7 +180,7 @@ def diff_scores(old: Dict[str, Dict[str, Any]], new: Dict[str, Dict[str, Any]]) 
 # Stub imports for synthesis modules (to be implemented)
 class Repo:
     @staticmethod
-    def create(outdir): 
+    def create(outdir):
         r = Repo()
         if outdir:
             # Create timestamped run directory under outdir
@@ -188,11 +192,11 @@ class Repo:
             r.root = Path("/tmp/aurora-tmp")
             r.root.mkdir(parents=True, exist_ok=True)
         return r
-    def __init__(self): 
+    def __init__(self):
         self.root = Path(".")
-    def path(self, p): 
+    def path(self, p):
         return self.root / p
-    def set_hash(self, p, c): 
+    def set_hash(self, p, c):
         pass
     def list_files(self):
         return [str(p.relative_to(self.root)) for p in self.root.rglob("*") if p.is_file()]
@@ -204,7 +208,7 @@ class Spec:
     def __init__(self): self.functions = []
 
 def parse_spec(text): return Spec()
-def write_file(p, c): 
+def write_file(p, c):
     Path(p).parent.mkdir(parents=True, exist_ok=True)
     Path(p).write_text(c)
 
@@ -226,7 +230,7 @@ def run_spec(path: str):
 def main():
     """Main entry point for Aurora-X."""
     ap = argparse.ArgumentParser(description="AURORA-X Ultra (Offline)")
-    
+
     # Mutually exclusive: spec (for spec compilation), spec-text, spec-file, dump-corpus, show-bias, progress-print, or nl (natural language)
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--spec", type=str, help="Path to spec markdown to compile → code")
@@ -236,12 +240,12 @@ def main():
     g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
     g.add_argument("--show-bias", action="store_true", help="Print current seed_bias and exit")
     g.add_argument("--progress-print", action="store_true", help="Print computed progress and exit")
-    
+
     # Corpus dump options
     ap.add_argument("--top", type=int, default=10, help="How many corpus entries to print with --dump-corpus")
     ap.add_argument("--json", action="store_true", help="Emit JSON for --dump-corpus")
     ap.add_argument("--grep", type=str, default=None, help="Filter results by substring for --dump-corpus")
-    
+
     # Synthesis options
     ap.add_argument("--seed", type=int, default=1337, help="Random seed")
     ap.add_argument("--outdir", type=str, default="./runs", help="Output directory")
@@ -251,50 +255,51 @@ def main():
     ap.add_argument("--max-iters", type=int, default=100, help="Maximum synthesis iterations")
     ap.add_argument("--beam", type=int, default=20, help="Beam search width")
     ap.add_argument("--timeout", type=int, default=5, help="Timeout in seconds")
-    
+
     # RNG config
     ap.add_argument("--temp", type=float, default=0.9, help="Temperature")
     ap.add_argument("--top-k", type=int, default=50, help="Top-K sampling")
     ap.add_argument("--top-p", type=float, default=0.95, help="Top-P (nucleus) sampling")
-    
+
     # Progress tracking options
     ap.add_argument("--update-task", action="append", default=None, help="ID=NN or ID=auto (repeatable)")
     ap.add_argument("--bump", action="append", default=None, help="ID=+/-Δ (repeatable)")
-    
+
     args = ap.parse_args()
-    
+
     outdir = Path(args.outdir).resolve() if args.outdir else None
     rng_cfg = {
         "temperature": args.temp,
         "top_k": args.top_k,
         "top_p": args.top_p
     }
-    
+
     # ----- Natural language mode -----
     if args.nl:
         # Check if this is a Flask request
         from aurora_x.spec.parser_nl import parse_english
         parsed = parse_english(args.nl)
-        
+
         if parsed.get("framework") == "flask":
             # Handle Flask app synthesis
             # Import by adding tools to path
             import sys
             tools_dir = Path(__file__).parent.parent / "tools"
             sys.path.insert(0, str(tools_dir))
-            from spec_from_flask import create_flask_app_from_text
             from datetime import datetime
+
+            from spec_from_flask import create_flask_app_from_text
             run_name = f"run-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
             run_dir = Path("runs") / run_name
             app_file = create_flask_app_from_text(args.nl, run_dir)
             print(f"[OK] Flask app generated at: {app_file}")
-            
+
             # Update the latest symlink
             latest = Path("runs/latest")
             if latest.exists() or latest.is_symlink():
                 latest.unlink()
             latest.symlink_to(run_dir.name)
-            
+
             # Also print out the location for the server to read
             print(f"[Aurora-X] Latest valid run: {run_name}")
             print(f"[Aurora-X] Read generated code from: {app_file.name}")
@@ -310,27 +315,27 @@ def main():
             # Now compile the generated spec
             comp = Path("tools/spec_compile_v3.py")
             if comp.exists():
-                import subprocess
                 import os
+                import subprocess
                 subprocess.check_call([sys.executable, "tools/spec_compile_v3.py", str(spec_path)], env=os.environ.copy())
             else:
                 print("No v3 compiler found (tools/spec_compile_v3.py). Add v3 pack first.")
         return 0
-    
+
     # ----- Spec compilation mode -----
     if args.spec:
         run_spec(args.spec)
         return 0
-    
+
     # ----- Progress print mode (no synthesis) -----
     if args.progress_print:
         data = load_progress() or {}
         print(json.dumps(data, indent=2))
         return 0
-    
+
     # ----- Handle progress updates (can be used with synthesis) -----
     if args.update_task or args.bump:
-        updates: Dict[str, str|float] = {}
+        updates: dict[str, str|float] = {}
         if args.update_task:
             for item in args.update_task:
                 if "=" not in item:
@@ -342,11 +347,11 @@ def main():
                     updates[k.strip()] = float(v)
                 except ValueError:
                     updates[k.strip()] = v
-        
+
         done = []
         if updates:
             done += update_progress_ids(updates)
-        
+
         if args.bump:
             for item in args.bump:
                 if "=" not in item or item[0] == "=":
@@ -360,14 +365,14 @@ def main():
                     r = bump_progress_id(k, d)
                     if r:
                         done.append(f"{r}{v}")
-        
+
         if done:
             print("[AURORA-X] updated:", ", ".join(done))
-        
+
         # If no synthesis requested, exit after updates
         if not (args.spec_text or args.spec_file):
             return 0
-    
+
     # ----- Show bias mode (no synthesis) -----
     if args.show_bias:
         run_root = outdir / "latest"
@@ -382,7 +387,7 @@ def main():
         else:
             print("[AURORA-X] No weights found yet. Run a synthesis first.")
         return 0
-    
+
     # ----- Corpus dump mode (no synthesis) -----
     if args.dump_corpus:
         run_root = outdir / "run-dump"
@@ -391,30 +396,30 @@ def main():
         rows = filter_rows(rows, args.grep)
         print(to_json(rows) if args.json else fmt_rows(rows))
         return 0
-    
+
     # ----- Synthesis mode -----
     spec_text = args.spec_text if args.spec_text else Path(args.spec_file).read_text()
-    
+
     ax = AuroraX(
-        seed=args.seed, 
-        max_iters=args.max_iters, 
-        beam=args.beam, 
+        seed=args.seed,
+        max_iters=args.max_iters,
+        beam=args.beam,
         timeout_s=args.timeout,
-        outdir=outdir, 
-        rng_cfg=rng_cfg, 
-        disable_seed=args.no_seed, 
+        outdir=outdir,
+        rng_cfg=rng_cfg,
+        disable_seed=args.no_seed,
         seed_bias_override=args.seed_bias,
         baseline=Path(args.baseline).resolve() if args.baseline else None
     )
     repo, ok = ax.run(spec_text)
-    
+
     # Show seed_bias snapshot at the end of the run for quick glance
     try:
         weights = learn.load(repo.root)
         sb = float(weights.get("seed_bias", 0.0))
     except Exception:
         sb = 0.0
-    
+
     print(f"[AURORA-X] Repo: {repo.root}")
     print(f"[AURORA-X] Status: {'PASS' if ok else 'INCOMPLETE'}")
     print(f"[AURORA-X] seed_bias: {sb:.2f}")
@@ -422,13 +427,13 @@ def main():
     for f in repo.list_files():
         print(" -", f)
     print(f"\nOpen HTML report: file://{repo.path('report.html')}")
-    
+
     return 0 if ok else 1
 
 class AuroraX:
-    def __init__(self, seed: int, max_iters: int, beam: int, timeout_s: int, outdir: Optional[Path],
-                 rng_cfg: Dict[str, Any], disable_seed: bool = False, seed_bias_override: float | None = None,
-                 baseline: Optional[Path] = None):
+    def __init__(self, seed: int, max_iters: int, beam: int, timeout_s: int, outdir: Path | None,
+                 rng_cfg: dict[str, Any], disable_seed: bool = False, seed_bias_override: float | None = None,
+                 baseline: Path | None = None):
         random.seed(seed)
         self._start_time = time.time()
         self.repo = Repo.create(outdir)
@@ -441,47 +446,47 @@ class AuroraX:
         self.weights = learn.load(self.repo.root)
         if seed_bias_override is not None:
             self.weights["seed_bias"] = max(0.0, min(0.5, float(seed_bias_override)))
-        
+
         # Initialize persistent seed store
         self.seed_store = get_seed_store()
-        
+
         # Initialize adaptive scheduler
         self.adaptive_scheduler = self._attach_adaptive_scheduler()
-        
+
         # Set global reference for API access
         global _global_adaptive_scheduler
         _global_adaptive_scheduler = self.adaptive_scheduler
-    
+
     def run(self, spec_text: str):
         """Main orchestration loop."""
         start_ts = iso_now()  # Capture start timestamp in ISO format
         spec = parse_spec(spec_text)
-        best_map: Dict[str,str] = {}
-        
-        for idx, f in enumerate(spec.functions):
+        best_map: dict[str,str] = {}
+
+        for _idx, f in enumerate(spec.functions):
             # Gather seed snippets from corpus
-            seed_snippets: List[str] = []
+            seed_snippets: list[str] = []
             sig = f"{f.name}({', '.join(a+': '+t for a,t in f.args)}) -> {f.returns}"
-            
+
             if not self.disable_seed:
                 # Get seed bias for this function
                 seed_key = self.seed_store.make_seed_key(sig, spec_text[:100])
-                bias = self.seed_store.get_bias(seed_key)
-                
+                self.seed_store.get_bias(seed_key)
+
                 # Apply bias to candidate enumeration
                 candidates = []
                 for row in corpus_retrieve(self.repo.root, sig, k=min(12, self.beam//4)):
                     seed_snippets.append(row["snippet"])
                     candidates.append(seed_key)
-                
+
                 # Use adaptive scheduler to choose candidate
                 if candidates and self.adaptive_scheduler:
-                    chosen_key = self.adaptive_scheduler.choose(candidates)
+                    self.adaptive_scheduler.choose(candidates)
                     self.adaptive_scheduler.tick()
-            
+
             # Synthesize (stub - would call actual synthesis)
             cand = type('obj', (object,), {'src': 'def stub(): pass'})()
-            
+
             # Record to corpus
             corpus_entry = {
                 "func_name": f.name,
@@ -493,9 +498,9 @@ class AuroraX:
                 **spec_digest(spec_text)
             }
             corpus_record(self.repo.root, corpus_entry)
-            
+
             best_map[f.name] = cand.src
-            
+
             # Update seed store with result
             if not self.disable_seed:
                 success = corpus_entry["passed"] == corpus_entry["total"]
@@ -505,27 +510,27 @@ class AuroraX:
                     "success": success
                 }
                 self.seed_store.update(result)
-                
+
                 # Update adaptive scheduler
                 if self.adaptive_scheduler:
                     self.adaptive_scheduler.reward(seed_key, success, magnitude=corpus_entry["score"])
-            
+
             # Learning nudge (keep legacy for backward compat)
             won_with_seed = _seed_won(cand.src, seed_snippets)
             self.weights["seed_bias"] = learn.update_seed_bias(
-                float(self.weights.get("seed_bias", 0.0)), 
+                float(self.weights.get("seed_bias", 0.0)),
                 won_with_seed
             )
             learn.save(self.repo.root, self.weights)
-        
+
         # Save persistent seed store at end of loop
         self.seed_store.save()
-        
+
         # Build and save module
         module_src = self.build_module(spec, best_map)
         write_file(self.repo.path("src/app.py"), module_src)
         self.repo.set_hash("src/app.py", module_src)
-        
+
         # Save run config
         cfg = {
             "seed": random.getstate()[1][0],
@@ -535,7 +540,7 @@ class AuroraX:
             "weights": self.weights
         }
         self.save_run_config(cfg)
-        
+
         # Capture end time and save run metadata
         self._end_time = time.time()
         duration_seconds = round(self._end_time - self._start_time, 3)
@@ -545,10 +550,10 @@ class AuroraX:
             "duration_seconds": duration_seconds
         }
         write_file(self.repo.path("run_meta.json"), json.dumps(run_metadata, indent=2))
-        
+
         # Generate HTML report (before symlink update so it can detect previous latest run)
         write_html_report(self.repo, spec, baseline=self.baseline)
-        
+
         # Update 'latest' symlink to this run (after HTML report generation)
         try:
             latest_link = self.repo.root.parent / "latest"
@@ -558,20 +563,20 @@ class AuroraX:
             print(f"[AURORA-X] Updated symlink: {latest_link} → {self.repo.root.name}")
         except Exception as e:
             print(f"[AURORA-X] (nonfatal) failed to update 'latest' symlink: {e}")
-        
+
         return self.repo, True
-    
+
     def build_module(self, spec, best_map):
         """Build final module source."""
         return "\n\n".join(best_map.values())
-    
+
     def synthesize_best(self, f, callees_meta, base_prefix):
         """Stub for synthesis - returns mock candidate."""
         return type('obj', (object,), {'src': f'def {f.name}(): pass'})()
-    
-    def save_run_config(self, cfg: Dict[str, Any]) -> None:
+
+    def save_run_config(self, cfg: dict[str, Any]) -> None:
         write_file(self.repo.path("run_config.json"), json.dumps(cfg, indent=2))
-    
+
     def _attach_adaptive_scheduler(self) -> AdaptiveBiasScheduler:
         """Attach adaptive bias scheduler to the engine."""
         cfg = AdaptiveConfig(epsilon=0.15, decay=0.98, cooldown_iters=5, top_k=10)
@@ -582,7 +587,7 @@ class AuroraX:
             pass
         return sched
 
-def load_progress() -> Optional[dict]:
+def load_progress() -> dict | None:
     """Load progress.json if it exists."""
     try:
         if PROGRESS_JSON_DEFAULT.exists():
@@ -603,18 +608,18 @@ def run_update_script() -> None:
         except Exception:
             pass
 
-def update_progress_ids(id_to_pct: Dict[str, str|float]) -> List[str]:
+def update_progress_ids(id_to_pct: dict[str, str|float]) -> list[str]:
     """Update progress percentages for given IDs. Handles 'auto' values."""
     data = load_progress()
     if not data:
         return []
-    updated: List[str] = []
-    
+    updated: list[str] = []
+
     for ph in data.get("phases", []):
         for t in ph.get("tasks", []):
             tid = str(t.get("id"))
             subs = t.get("subtasks") or []
-            
+
             # Update subtasks
             for s in subs:
                 sid = str(s.get("id"))
@@ -624,7 +629,7 @@ def update_progress_ids(id_to_pct: Dict[str, str|float]) -> List[str]:
                         updated.append(sid)
                     except Exception:
                         pass
-            
+
             # Update task
             if tid in id_to_pct:
                 val = id_to_pct[tid]
@@ -641,11 +646,11 @@ def update_progress_ids(id_to_pct: Dict[str, str|float]) -> List[str]:
                         updated.append(tid)
                     except Exception:
                         pass
-    
+
     data["last_updated"] = datetime.utcnow().strftime("%Y-%m-%d")
     save_progress(data)
     run_update_script()
-    
+
     # Create history snapshot
     try:
         HIST_DIR.mkdir(exist_ok=True)
@@ -653,16 +658,16 @@ def update_progress_ids(id_to_pct: Dict[str, str|float]) -> List[str]:
         (HIST_DIR / f"progress-{ts}.json").write_text(json.dumps(data, indent=2), encoding="utf-8")
     except Exception:
         pass
-    
+
     return updated
 
-def bump_progress_id(id_: str, delta: float) -> Optional[str]:
+def bump_progress_id(id_: str, delta: float) -> str | None:
     """Bump progress by delta for given ID."""
     data = load_progress()
     if not data:
         return None
     done = None
-    
+
     for ph in data.get("phases", []):
         for t in ph.get("tasks", []):
             if t.get("id") == id_ and not t.get("subtasks"):
@@ -672,7 +677,7 @@ def bump_progress_id(id_: str, delta: float) -> Optional[str]:
                 if s.get("id") == id_:
                     s["progress"] = max(0.0, min(100.0, float(s.get("progress", 0) or 0) + delta))
                     done = id_
-    
+
     if done:
         data["last_updated"] = datetime.utcnow().strftime("%Y-%m-%d")
         save_progress(data)
@@ -680,20 +685,20 @@ def bump_progress_id(id_: str, delta: float) -> Optional[str]:
         return done
     return None
 
-def _recent_runs(parent: Path, limit: int = 12) -> List[Path]:
+def _recent_runs(parent: Path, limit: int = 12) -> list[Path]:
     """Get recent run directories."""
     runs = sorted([Path(p) for p in glob(str(parent / "run-*"))], reverse=True)
     return runs[:limit]
 
-def _run_pass_count(run_dir: Path) -> Optional[int]:
+def _run_pass_count(run_dir: Path) -> int | None:
     """Count passed tests from scores.jsonl."""
     fp = run_dir / "logs" / "scores.jsonl"
     if not fp.exists():
         return None
-    
-    latest: Dict[str, int] = {}
-    iters: Dict[str, int] = {}
-    
+
+    latest: dict[str, int] = {}
+    iters: dict[str, int] = {}
+
     for line in fp.read_text(encoding="utf-8").splitlines():
         try:
             o = json.loads(line)
@@ -706,7 +711,7 @@ def _run_pass_count(run_dir: Path) -> Optional[int]:
                 latest[fn] = int(o.get("passed", 0))
         except Exception:
             pass
-    
+
     return sum(latest.values()) if latest else None
 
 def render_floating_hud(repo_root: Path) -> str:
@@ -716,22 +721,22 @@ def render_floating_hud(repo_root: Path) -> str:
     for r in reversed(_recent_runs(parent, limit=12)):
         v = _run_pass_count(r)
         pts.append(0 if v is None else int(v))
-    
+
     if not pts:
         pts = [0]
-    
+
     mx = max(pts) or 1
     w, h = 160, 36
     n = len(pts)
     xs = [i * (w / (max(1, n - 1))) for i in range(n)]
     ys = [h - (p / mx) * (h - 6) - 3 for p in pts]
-    
+
     if n > 1:
         path = " ".join(f"L{xs[i]:.1f},{ys[i]:.1f}" for i in range(1, n))
         d = f"M{xs[0]:.1f},{ys[0]:.1f} {path}"
     else:
         d = f"M0,{ys[0]:.1f} L{w},{ys[0]:.1f}"
-    
+
     return f"""
 <!-- Aurora HUD -->
 <div id="aurora-hud" style="position:fixed; top:16px; right:16px; z-index:9999; font-family:system-ui">
@@ -799,29 +804,29 @@ def render_progress_sidebar_html() -> str:
     data = load_progress()
     if not data:
         return ""
-    
+
     def task_pct(t):
         subs = t.get("subtasks") or []
         return (sum(float(s.get("progress", 0)) for s in subs) / len(subs)) if subs else float(t.get("progress", 0) or 0)
-    
+
     def phase_pct(ph):
         pairs = [(task_pct(t), max(1, len(t.get("subtasks") or []))) for t in ph.get("tasks", [])]
         num = sum(v * w for v, w in pairs)
         den = sum(w for _, w in pairs) or 1
         return num / den
-    
+
     def overall(phases):
         pairs = [(phase_pct(ph), max(1, len(ph.get("tasks") or []))) for ph in phases]
         num = sum(v * w for v, w in pairs)
         den = sum(w for _, w in pairs) or 1
         return num / den
-    
+
     ov = overall(data.get("phases", []))
     rows = []
     for ph in data.get("phases", []):
         pct = int(round(phase_pct(ph)))
         rows.append(f'<div style="margin-bottom:4px">{ph.get("id")} {ph.get("name")}: <strong>{pct}%</strong></div>')
-    
+
     return f"""
 <aside style="position:sticky; top:16px; padding:12px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa; max-width:360px;">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -833,7 +838,7 @@ def render_progress_sidebar_html() -> str:
 </aside>
 """
 
-def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -> None:
+def write_html_report(repo: Repo, spec: Spec, baseline: Path | None = None) -> None:
     """Generate HTML report with latest run status."""
     # Read report markdown if exists
     report_path = repo.path("AURORA_REPORT.md")
@@ -842,9 +847,9 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
     else:
         md = "# Aurora-X Synthesis Report\n\nRun completed."
         write_file(report_path, md)
-    
+
     cfg = json.loads(repo.path("run_config.json").read_text())
-    
+
     # Load run metadata for timestamp and duration
     run_meta_path = repo.path("run_meta.json")
     start_ts = None
@@ -856,14 +861,14 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
             duration_seconds = run_meta.get("duration_seconds")
         except Exception:
             pass
-    
+
     # Call graph (stub for now - would load from call_graph.json in real implementation)
     graph = {"nodes": [f.name for f in spec.functions], "edges": {}}
-    
+
     # Save call graph for future comparisons
     call_graph_path = repo.path("call_graph.json")
     write_file(call_graph_path, json.dumps(graph, indent=2))
-    
+
     # weights + bias snapshot
     weights_path = repo.path("learn_weights.json")
     try:
@@ -871,14 +876,14 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
     except Exception:
         weights = {}
     seed_bias = float(weights.get("seed_bias", 0.0))
-    
+
     # latest symlink status
     latest_link = repo.root.parent / "latest"
     try:
         is_latest = latest_link.exists() and latest_link.resolve() == repo.root.resolve()
     except Exception:
         is_latest = False
-    
+
     # Choose baseline: use baseline if provided, else use latest_link if it exists
     base_root = None
     if baseline:
@@ -888,10 +893,10 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
             base_root = latest_link.resolve()
         except Exception:
             base_root = None
-    
+
     # Initialize regressions count
     regressions_count = 0
-    
+
     # If base_root exists and is different from current run, generate graph comparison
     graph_diff_generated = False
     if base_root and base_root != repo.root.resolve():
@@ -904,11 +909,11 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
                     base_graph.get("edges", {}),
                     graph.get("edges", {})
                 )
-                
+
                 # Save graph_diff.json
                 graph_diff_path = repo.path("graph_diff.json")
                 write_file(graph_diff_path, json.dumps(diff, indent=2))
-                
+
                 # Generate graph_diff.html
                 diff_html = f"""<!doctype html><html><head><meta charset="utf-8"><title>Graph Comparison</title>
 <style>
@@ -944,7 +949,7 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
                 graph_diff_generated = True
         except Exception as e:
             print(f"[AURORA-X] Could not generate graph diff: {e}")
-    
+
     # Scores regression comparison
     scores_diff_generated = False
     scores_html = ""
@@ -953,23 +958,23 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
             # Load scores from both runs
             base_scores = load_scores_map(Path(base_root))
             current_scores = load_scores_map(repo.root)
-            
+
             # Only generate diff if we have scores from at least one run
             if base_scores or current_scores:
                 # Compute diff
                 scores_diff = diff_scores(base_scores, current_scores)
-                
+
                 # Save scores_diff.json
                 scores_diff_path = repo.path("scores_diff.json")
                 write_file(scores_diff_path, json.dumps(scores_diff, indent=2))
-                
+
                 # Generate HTML table for scores regression
                 summary = scores_diff["summary"]
                 rows = scores_diff["rows"]
-                
+
                 # Extract regressions count from the diff summary
                 regressions_count = summary.get("regressions", 0)
-                
+
                 # Build regression table rows
                 table_rows = []
                 for row in rows:
@@ -977,7 +982,7 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
                     old_p, old_t = row["old"]
                     new_p, new_t = row["new"]
                     delta = row["delta_passed"]
-                    
+
                     # Color coding for delta
                     if delta < 0:
                         delta_color = "#dc2626"  # red for regression
@@ -988,7 +993,7 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
                     else:
                         delta_color = "#6b7280"  # gray for no change
                         delta_text = "0"
-                    
+
                     table_rows.append(
                         f'<tr>'
                         f'<td>{func}</td>'
@@ -997,7 +1002,7 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
                         f'<td style="color:{delta_color};font-weight:600">{delta_text}</td>'
                         f'</tr>'
                     )
-                
+
                 # Generate scores_diff.html standalone page
                 scores_diff_html = f"""<!doctype html><html><head><meta charset="utf-8"><title>Scores Regression</title>
 <style>
@@ -1050,7 +1055,7 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
 </body></html>"""
                 write_file(repo.path("scores_diff.html"), scores_diff_html)
                 scores_diff_generated = True
-                
+
                 # Build HTML section for main report
                 scores_html = f"""
 <h3>Scores Regression</h3>
@@ -1077,20 +1082,20 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
     </tr>
   </thead>
   <tbody>
-    {''.join([f'<tr style="border-bottom:1px solid #e5e7eb">' + row.replace('<td', '<td style="padding:10px 12px"') + '</tr>' for row in [r.replace('<tr>', '').replace('</tr>', '') for r in table_rows]])}
+    {''.join(['<tr style="border-bottom:1px solid #e5e7eb">' + row.replace('<td', '<td style="padding:10px 12px"') + '</tr>' for row in [r.replace('<tr>', '').replace('</tr>', '') for r in table_rows]])}
   </tbody>
 </table>
 """
         except Exception as e:
             print(f"[AURORA-X] Could not generate scores diff: {e}")
-    
+
     latest_badge = (
         '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#16a34a;color:#fff;font-weight:600;">LATEST RUN ✓</span>'
         if is_latest else
-        f'<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#f59e0b;color:#111;font-weight:600;">NOT LATEST</span> '
-        f'<a href="../latest/report.html" style="margin-left:8px;">Open Latest Report →</a>'
+        '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#f59e0b;color:#111;font-weight:600;">NOT LATEST</span> '
+        '<a href="../latest/report.html" style="margin-left:8px;">Open Latest Report →</a>'
     )
-    
+
     # Add regression badge
     if regressions_count > 0:
         reg_badge = f'<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#dc2626;color:#fff;font-weight:600;">REGRESSIONS ⚠ {regressions_count}</span>'
@@ -1098,7 +1103,7 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
         reg_badge = '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#16a34a;color:#fff;font-weight:600;">No regressions</span>'
     else:
         reg_badge = ""
-    
+
     # Build timestamp/duration banner
     meta_parts = []
     if start_ts:
@@ -1106,27 +1111,27 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
     if duration_seconds is not None:
         meta_parts.append(f"<b>Duration:</b> {fmt_duration(duration_seconds)}")
     meta_html = " | ".join(meta_parts) if meta_parts else ""
-    
+
     # quick links if present
     corpus_jsonl = repo.root / "corpus.jsonl"
     corpus_db = repo.root / "corpus.db"
     links = []
-    if corpus_jsonl.exists(): 
-        links.append(f'<a href="corpus.jsonl">corpus.jsonl</a>')
-    if corpus_db.exists(): 
-        links.append(f'<a href="corpus.db">corpus.db</a>')
+    if corpus_jsonl.exists():
+        links.append('<a href="corpus.jsonl">corpus.jsonl</a>')
+    if corpus_db.exists():
+        links.append('<a href="corpus.db">corpus.db</a>')
     if weights_path.exists():
-        links.append(f'<a href="learn_weights.json">learn_weights.json</a>')
+        links.append('<a href="learn_weights.json">learn_weights.json</a>')
     if graph_diff_generated:
-        links.append(f'<a href="graph_diff.html">Compare with baseline (diff)</a>')
+        links.append('<a href="graph_diff.html">Compare with baseline (diff)</a>')
     if scores_diff_generated:
-        links.append(f'<a href="scores_diff.html">Scores regression</a>')
+        links.append('<a href="scores_diff.html">Scores regression</a>')
     links_html = " | ".join(links) if links else "No corpus files yet"
-    
+
     # Generate HUD and sidebar
     hud_html = render_floating_hud(repo.root)
     sidebar_html = render_progress_sidebar_html()
-    
+
     body = f"""<!doctype html><html><head><meta charset="utf-8"><title>AURORA-X Report</title>
 <style>
   body{{font-family:system-ui,Segoe UI,Roboto,sans-serif;margin:24px}}
@@ -1174,9 +1179,9 @@ def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -
 </body></html>"""
     write_file(repo.path("report.html"), body)
 
-def _seed_won(final_src: str, seeds: List[str]) -> bool:
+def _seed_won(final_src: str, seeds: list[str]) -> bool:
     """Check if winning code matches any seed (whitespace-insensitive)."""
-    def norm(s: str) -> str: 
+    def norm(s: str) -> str:
         return "".join(s.split())
     n_final = norm(final_src)
     for s in seeds:

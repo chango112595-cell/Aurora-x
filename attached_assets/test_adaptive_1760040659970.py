@@ -1,6 +1,7 @@
 
 from aurora_x.learn.adaptive import AdaptiveBiasScheduler, AdaptiveConfig
 
+
 def test_exploit_choice():
     cfg = AdaptiveConfig(epsilon=0.0, decay=1.0, cooldown_iters=0, seed=1)
     s = AdaptiveBiasScheduler(cfg)

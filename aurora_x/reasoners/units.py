@@ -4,7 +4,7 @@ Supports distance, mass, time, and other common units.
 """
 
 import re
-from typing import Dict, Tuple, Optional, Any
+from typing import Any
 
 # Conversion factors to SI base units
 DISTANCE_TO_METERS = {
@@ -19,7 +19,7 @@ DISTANCE_TO_METERS = {
     'kilometers': 1000.0,
     'kilometre': 1000.0,
     'kilometres': 1000.0,
-    
+
     # Imperial
     'in': 0.0254,    # inch
     'inch': 0.0254,
@@ -33,7 +33,7 @@ DISTANCE_TO_METERS = {
     'mi': 1609.344,  # mile
     'mile': 1609.344,
     'miles': 1609.344,
-    
+
     # Astronomical
     'au': 149597870700.0,  # astronomical unit
     'AU': 149597870700.0,
@@ -59,7 +59,7 @@ MASS_TO_KG = {
     'tons': 1000.0,
     'tonne': 1000.0,
     'tonnes': 1000.0,
-    
+
     # Imperial
     'oz': 0.0283495, # ounce
     'ounce': 0.0283495,
@@ -69,7 +69,7 @@ MASS_TO_KG = {
     'pound': 0.453592,
     'pounds': 0.453592,
     'stone': 6.35029, # stone
-    
+
     # Solar masses for astronomy
     'msun': 1.989e30,  # solar mass
     'Msun': 1.989e30,
@@ -110,15 +110,15 @@ TIME_TO_SECONDS = {
 SI_UNITS = {
     'distance': 'm',     # meter
     'length': 'm',
-    'mass': 'kg',        # kilogram  
+    'mass': 'kg',        # kilogram
     'time': 's',         # second
     'duration': 's',
 }
 
-def parse_value_with_unit(text: str) -> Tuple[Optional[float], Optional[str]]:
+def parse_value_with_unit(text: str) -> tuple[float | None, str | None]:
     """
     Parse a string containing a value and unit.
-    
+
     Examples:
         "7000 km" -> (7000.0, "km")
         "5.972e24 kg" -> (5.972e24, "kg")
@@ -126,13 +126,13 @@ def parse_value_with_unit(text: str) -> Tuple[Optional[float], Optional[str]]:
     """
     # Remove extra whitespace and handle various formats
     text = text.strip()
-    
+
     # Pattern to match number (including scientific notation) followed by optional unit
     patterns = [
         r'^([+-]?\d*\.?\d+(?:[eE][+-]?\d+)?)\s*([a-zA-Z_]+)?$',  # standard notation
         r'^([+-]?\d+)\s*([a-zA-Z_]+)?$',  # integer
     ]
-    
+
     for pattern in patterns:
         match = re.match(pattern, text)
         if match:
@@ -142,18 +142,18 @@ def parse_value_with_unit(text: str) -> Tuple[Optional[float], Optional[str]]:
                 return value, unit
             except ValueError:
                 continue
-    
+
     return None, None
 
-def normalize_to_si(value: float, unit: str, unit_type: Optional[str] = None) -> Dict[str, Any]:
+def normalize_to_si(value: float, unit: str, unit_type: str | None = None) -> dict[str, Any]:
     """
     Normalize a value with unit to SI base units.
-    
+
     Args:
         value: Numeric value
         unit: Unit string (e.g., "km", "miles", "kg")
         unit_type: Optional hint for unit type ("distance", "mass", "time")
-    
+
     Returns:
         Dict with si_value, si_unit, conversion_factor, unit_type
     """
@@ -166,9 +166,9 @@ def normalize_to_si(value: float, unit: str, unit_type: Optional[str] = None) ->
             'conversion_factor': 1.0,
             'unit_type': 'unknown'
         }
-    
+
     unit_lower = unit.lower()
-    
+
     # Try to determine unit type and convert
     if unit_lower in DISTANCE_TO_METERS:
         si_value = value * DISTANCE_TO_METERS[unit_lower]
@@ -180,7 +180,7 @@ def normalize_to_si(value: float, unit: str, unit_type: Optional[str] = None) ->
             'conversion_factor': DISTANCE_TO_METERS[unit_lower],
             'unit_type': 'distance'
         }
-    
+
     elif unit_lower in MASS_TO_KG:
         si_value = value * MASS_TO_KG[unit_lower]
         return {
@@ -191,7 +191,7 @@ def normalize_to_si(value: float, unit: str, unit_type: Optional[str] = None) ->
             'conversion_factor': MASS_TO_KG[unit_lower],
             'unit_type': 'mass'
         }
-    
+
     elif unit_lower in TIME_TO_SECONDS:
         si_value = value * TIME_TO_SECONDS[unit_lower]
         return {
@@ -202,7 +202,7 @@ def normalize_to_si(value: float, unit: str, unit_type: Optional[str] = None) ->
             'conversion_factor': TIME_TO_SECONDS[unit_lower],
             'unit_type': 'time'
         }
-    
+
     # Unknown unit - return as is
     return {
         'si_value': value,
@@ -217,28 +217,28 @@ def normalize_text(text: str) -> str:
     """
     Find and normalize all values with units in a text string.
     Returns the text with all units converted to SI.
-    
+
     Example:
         "a=7000 km, M=5.972e24 kg" -> "a=7000000 m, M=5.972e24 kg"
     """
     # Create a copy to work with
     result = text
     processed_positions = set()
-    
+
     # Pattern to find variable=value unit pairs
     var_pattern = r'([a-zA-Z_]+)\s*[=:]\s*([+-]?\d*\.?\d+(?:[eE][+-]?\d+)?)\s*([a-zA-Z_]+)'
-    
+
     # Find and replace all variable=value unit patterns
     replacements = []
     for match in re.finditer(var_pattern, text):
         var_name = match.group(1)
         value_str = match.group(2)
         unit = match.group(3)
-        
+
         try:
             value = float(value_str)
             norm = normalize_to_si(value, unit)
-            
+
             if norm['unit_type'] != 'unknown':
                 # Build replacement string
                 replacement = f"{var_name}={norm['si_value']} {norm['si_unit']}"
@@ -247,49 +247,49 @@ def normalize_text(text: str) -> str:
                 processed_positions.add(match.span())
         except ValueError:
             continue
-    
+
     # Apply replacements in reverse order to maintain positions
     for (start, end), replacement in sorted(replacements, reverse=True):
         result = result[:start] + replacement + result[end:]
-    
+
     return result
 
-def get_canonical_unit(unit_type: str) -> Optional[str]:
+def get_canonical_unit(unit_type: str) -> str | None:
     """
     Get the canonical SI unit for a given unit type.
-    
+
     Args:
         unit_type: Type of unit ("distance", "mass", "time", etc.)
-    
+
     Returns:
         SI unit string or None if unknown type
     """
     return SI_UNITS.get(unit_type.lower())
 
-def detect_units_in_text(text: str) -> Dict[str, Any]:
+def detect_units_in_text(text: str) -> dict[str, Any]:
     """
     Detect all values with units in a text string.
-    
+
     Returns a dict with detected values and their units.
     """
     detected = []
-    
+
     # Pattern to find value-unit pairs
     pattern = r'([a-zA-Z_]+\s*[=:]\s*)?([+-]?\d*\.?\d+(?:[eE][+-]?\d+)?)\s*([a-zA-Z_]+)'
-    
+
     for match in re.finditer(pattern, text):
         var_part = match.group(1) or ""
         value_str = match.group(2)
         unit = match.group(3)
-        
+
         # Extract variable name if present
         var_match = re.match(r'([a-zA-Z_]+)\s*[=:]', var_part)
         var_name = var_match.group(1) if var_match else None
-        
+
         try:
             value = float(value_str)
             norm = normalize_to_si(value, unit)
-            
+
             detected.append({
                 'variable': var_name,
                 'original_value': value,
@@ -301,7 +301,7 @@ def detect_units_in_text(text: str) -> Dict[str, Any]:
             })
         except ValueError:
             continue
-    
+
     return {
         'detected_units': detected,
         'has_units': len(detected) > 0,

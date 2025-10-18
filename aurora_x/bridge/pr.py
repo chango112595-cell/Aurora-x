@@ -1,5 +1,13 @@
 from __future__ import annotations
-import os, json, subprocess, shlex, time, zipfile, pathlib, urllib.request
+
+import json
+import os
+import pathlib
+import shlex
+import subprocess
+import time
+import urllib.request
+import zipfile
 
 # Module-level flag for GPG import caching
 _GPG_KEY_IMPORTED = False
@@ -17,7 +25,7 @@ def _check_gpg_available():
 
 def _get_git_config(key: str, scope: str = ""):
     """Get current git config value, returns None if not set
-    
+
     Args:
         key: The config key to get
         scope: Optional scope like '--global' or '--local'
@@ -28,7 +36,7 @@ def _get_git_config(key: str, scope: str = ""):
 
 def _git(cfg: dict[str,str] | None = None):
     global _GPG_KEY_IMPORTED
-    
+
     # Save original git config values
     original_config = {
         'user.email': _get_git_config('user.email'),
@@ -37,20 +45,20 @@ def _git(cfg: dict[str,str] | None = None):
         'gpg.program': _get_git_config('gpg.program'),
         'user.signingkey': _get_git_config('user.signingkey')
     }
-    
+
     try:
         # base identity
         email = os.getenv("AURORA_GIT_EMAIL", "aurora@local")
         name  = os.getenv("AURORA_GIT_NAME",  "Aurora Bridge")
         _run(f'git config user.email {shlex.quote(email)}')
         _run(f'git config user.name {shlex.quote(name)}')
-        
+
         # optional signing (with graceful fallback)
         if os.getenv("AURORA_SIGN","0").lower() in ("1","true","yes","on"):
             # Check if global git config already has signing configured
             global_gpgsign = _get_git_config('commit.gpgsign', '--global')
             global_signingkey = _get_git_config('user.signingkey', '--global')
-            
+
             # If global config already has signing enabled with a key, use it
             if global_gpgsign == 'true' and global_signingkey:
                 print("Using existing global GPG signing configuration")
@@ -64,19 +72,19 @@ def _git(cfg: dict[str,str] | None = None):
                 armored = os.getenv("AURORA_GPG_PRIVATE","").strip() or os.getenv("GPG_PRIVATE_ASC","").strip()
                 # Support explicit key ID or try to extract it
                 key_id = os.getenv("AURORA_GPG_KEY_ID","").strip() or os.getenv("GPG_KEY_ID","").strip()
-                
+
                 # Only configure signing if GPG is available AND keys are provided
                 if armored and _check_gpg_available():
                     try:
                         # Import key only once per runtime (caching)
                         if not _GPG_KEY_IMPORTED:
-                            p = subprocess.run(['gpg', '--batch', '--import'], 
+                            p = subprocess.run(['gpg', '--batch', '--import'],
                                              input=armored, capture_output=True, text=True, timeout=10)
                             if p.returncode == 0:
                                 _GPG_KEY_IMPORTED = True
                             else:
                                 print(f"Warning: GPG key import failed: {p.stderr}")
-                        
+
                         # If no key_id provided, try to get it from imported keys
                         if not key_id:
                             list_keys = _run("gpg --list-secret-keys --with-colons")
@@ -89,7 +97,7 @@ def _git(cfg: dict[str,str] | None = None):
                                             key_id = parts[4]
                                             print(f"Auto-detected GPG key ID: {key_id}")
                                             break
-                        
+
                         # Verify key exists
                         if key_id:
                             verify = _run(f"gpg --batch --list-secret-keys {shlex.quote(key_id)}")
@@ -99,12 +107,12 @@ def _git(cfg: dict[str,str] | None = None):
                                 _run('git config gpg.program gpg')
                                 _run(f'git config user.signingkey {shlex.quote(key_id)}')
                             else:
-                                print(f"Warning: GPG signing key not found, continuing without signing")
+                                print("Warning: GPG signing key not found, continuing without signing")
                                 _run('git config commit.gpgsign false')
                         else:
                             print("Warning: Could not determine GPG key ID, continuing without signing")
                             _run('git config commit.gpgsign false')
-                            
+
                     except (subprocess.SubprocessError, FileNotFoundError, OSError) as e:
                         # Graceful fallback - continue without signing
                         print(f"Warning: GPG signing setup failed ({e}), continuing without signing")
@@ -141,10 +149,10 @@ def _git(cfg: dict[str,str] | None = None):
                 # Don't override global signing config
             else:
                 _run('git config commit.gpgsign false')
-        
+
         return original_config
-        
-    except Exception as e:
+
+    except Exception:
         # If anything goes wrong, try to restore original config
         _restore_git_config(original_config)
         raise
@@ -199,7 +207,7 @@ def pr_create(owner: str, name: str, base: str, title: str, body: str, zip_rel: 
 
     # Apply git config and save original values
     original_config = _git({})
-    
+
     try:
         _ensure_remote(repo_https)
         _run("git fetch origin --prune")
@@ -209,7 +217,7 @@ def pr_create(owner: str, name: str, base: str, title: str, body: str, zip_rel: 
 
         _extract_zip_into_cwd(zip_rel)
         _run("git add -A")
-        
+
         # Commit with graceful fallback for signing failures
         commit_result = _run('git commit -m "feat(auto): Aurora UCSE generated project"')
         if commit_result.returncode != 0 and "gpg" in commit_result.stderr.lower():
@@ -217,17 +225,17 @@ def pr_create(owner: str, name: str, base: str, title: str, body: str, zip_rel: 
             print("Warning: GPG signing failed, retrying without signing")
             _run('git config commit.gpgsign false')
             commit_result = _run('git commit -m "feat(auto): Aurora UCSE generated project"')
-        
+
         if commit_result.returncode != 0:
             raise Exception(f"Git commit failed: {commit_result.stderr}")
-        
+
         _run(f"git push -u origin {branch}")
 
         api = _github_api(f"/repos/{owner}/{name}/pulls", method="POST",
                           payload={"title": title, "head": branch, "base": base, "body": body, "maintainer_can_modify": True, "draft": False})
-        
+
         return {"ok": True, "branch": branch, "pr": api}
-    
+
     finally:
         # Always restore original git config
         _restore_git_config(original_config)

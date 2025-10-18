@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-from pathlib import Path
 import sys
+from pathlib import Path
+
 from aurora_x.spec.parser_v2 import parse
 from aurora_x.synthesis.search import synthesize
+
 
 def main():
     if len(sys.argv) < 2:

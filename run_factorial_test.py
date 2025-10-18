@@ -1,5 +1,6 @@
 
 import sys
+
 sys.path.insert(0, '.')
 from test_lib_factorial import factorial
 

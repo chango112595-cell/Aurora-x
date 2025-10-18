@@ -1,11 +1,13 @@
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import List, Dict, Any
+
 import re
+from dataclasses import dataclass, field
+from typing import Any
+
 
 @dataclass
 class Example:
-    inputs: Dict[str, Any]
+    inputs: dict[str, Any]
     output: Any
 
 @dataclass
@@ -13,14 +15,14 @@ class FunctionSpec:
     name: str
     signature: str
     description: str = ""
-    preconditions: List[str] = field(default_factory=list)
-    postconditions: List[str] = field(default_factory=list)
-    examples: List[Example] = field(default_factory=list)
+    preconditions: list[str] = field(default_factory=list)
+    postconditions: list[str] = field(default_factory=list)
+    examples: list[Example] = field(default_factory=list)
 
 @dataclass
 class RichSpecV3:
     title: str
-    functions: List[FunctionSpec] = field(default_factory=list)
+    functions: list[FunctionSpec] = field(default_factory=list)
 
 SIG_RE = re.compile(r"def\s+([A-Za-z_]\w*)\s*\((.*?)\)\s*->\s*([A-Za-z_\[\],\s]+)")
 
@@ -33,7 +35,7 @@ def _coerce(val: str):
         return val[1:-1]
     return val
 
-def parse_examples(block: str) -> List[Example]:
+def parse_examples(block: str) -> list[Example]:
     lines = [ln.strip() for ln in block.splitlines() if ln.strip()]
     start = None
     for i, ln in enumerate(lines):
@@ -46,16 +48,16 @@ def parse_examples(block: str) -> List[Example]:
     for ln in lines[start+2:]:
         if not ln.startswith('|'): break
         cells = [c.strip() for c in ln.strip('|').split('|')]
-        rows.append(dict(zip(header, cells)))
+        rows.append(dict(zip(header, cells, strict=False)))
     exs = []
     for r in rows:
         inp = {k:_coerce(v) for k,v in r.items() if k not in (out_key,)}
         exs.append(Example(inputs=inp, output=_coerce(r[out_key])))
     return exs
 
-def parse_functions(md: str) -> List[FunctionSpec]:
+def parse_functions(md: str) -> list[FunctionSpec]:
     chunks = re.split(r"(?m)^###\s+Function\s+", md)
-    out: List[FunctionSpec] = []
+    out: list[FunctionSpec] = []
     for ch in chunks:
         ch = ch.strip()
         if not ch or ch.startswith('#'): continue
