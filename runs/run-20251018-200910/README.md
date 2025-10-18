@@ -36,7 +36,7 @@ npm start
 ```
 .
 ├── src/
-├── main.py
+├── src/index.js
 ├── package.json
 ├── tests/
 └── README.md
