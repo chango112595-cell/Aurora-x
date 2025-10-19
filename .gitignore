@@ -9,4 +9,4 @@ __pycache__
 *.pyo
 .pytest_cache
 .ruff_cache
-*.egg-info
+*.egg-info# Force push marker
