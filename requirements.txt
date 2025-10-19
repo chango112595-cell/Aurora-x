@@ -1,0 +1,4 @@
+# requirements.txt — add packages required by CI and tests
+pytest
+ruff
+flask

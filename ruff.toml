@@ -1,6 +1,18 @@
+exclude = [
+  ".venv/",
+  "build/",
+  "dist/",
+  "docs/",
+  "tests/",
+  ".github/",
+  "attached_assets",
+  "runs",
+  "backups",
+  ".aurora",
+  "timer_app.py",
+]
 line-length = 100
 target-version = "py311"
-exclude = ["attached_assets", "runs", "backups", ".aurora", "timer_app.py"]
 
 [lint]
 select = ["E", "F", "W", "I", "B", "UP"]
