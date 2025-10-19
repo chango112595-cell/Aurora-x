@@ -18,11 +18,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Detect Windows-invalid filenames
+        run: |
+          python3 - <<'PY'
+          import os,sys
+          bad=[]
+          for p in os.popen("git ls-files").read().splitlines():
+              b=os.path.basename(p)
+              if ":" in b or b.startswith("#") or b.endswith(" "):
+                  bad.append(p)
+          if bad:
+              print("ERROR: repository contains filenames invalid on Windows:")
+              for i in bad[:100]:
+                  print(" -", i)
+              sys.exit(1)
+          print("No Windows-invalid filenames found.")
+          PY
+
       # Python with pip cache
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
+
+      - name: yq - portable yaml processor
+        uses: mikefarah/yq@v4.48.1
 
       - name: Install Aurora-X
         run: |
@@ -153,6 +173,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Detect Windows-invalid filenames
+        run: |
+          python3 - <<'PY'
+          import os,sys
+          bad=[]
+          for p in os.popen("git ls-files").read().splitlines():
+              b=os.path.basename(p)
+              if ":" in b or b.startswith("#") or b.endswith(" "):
+                  bad.append(p)
+          if bad:
+              print("ERROR: repository contains filenames invalid on Windows:")
+              for i in bad[:100]:
+                  print(" -", i)
+              sys.exit(1)
+          print("No Windows-invalid filenames found.")
+          PY
+
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
       - name: Build image (linux/arm64)
