@@ -89,6 +89,13 @@ def parse_functions(md: str) -> list[FunctionSpec]:
 
         pre = list_block("Preconditions")
         post = list_block("Postconditions")
+        desc = (desc_m.group(1).strip() if desc_m else "")
+        def list_block(h: str, content: str):
+            m = re.search(rf"(?ms)^####\s+{h}\s*\n(.*?)(?:(?:^####\s+)|\Z)", content)
+            if not m: return []
+            return [ln.strip('- ').strip() for ln in m.group(1).splitlines() if ln.strip()]
+        pre = list_block("Preconditions", ch)
+        post = list_block("Postconditions", ch)
         ex_m = re.search(r"(?ms)^####\s+Examples\s*\n(.*?)(?:(?:^####\s+)|\Z)", ch)
         exs = parse_examples(ex_m.group(1)) if ex_m else []
         out.append(

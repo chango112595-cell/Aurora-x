@@ -1,4 +1,4 @@
-# aurora_x/utils/units.py - Streamlined unit parsing and SI normalization
+"""aurora_x/utils/units.py - Streamlined unit parsing and SI normalization"""
 
 from __future__ import annotations
 

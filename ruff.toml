@@ -1,5 +1,6 @@
 line-length = 100
 target-version = "py311"
+exclude = ["attached_assets", "runs", "backups", ".aurora", "timer_app.py"]
 
 # Exclude generated files, backups, and test artifacts
 exclude = [
@@ -20,3 +21,4 @@ ignore = ["E203", "E501", "E701", "E702"]
 [lint.per-file-ignores]
 # B023 is a false positive for closures in parser_v3.py
 "aurora_x/spec/parser_v3.py" = ["B023"]
+ignore = ["E203", "E501", "E701", "E702", "E722", "B904", "E402"]

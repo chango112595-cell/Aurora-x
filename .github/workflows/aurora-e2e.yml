@@ -37,7 +37,7 @@ jobs:
           cache: true
 
       # Rust with build cache
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: stable
 

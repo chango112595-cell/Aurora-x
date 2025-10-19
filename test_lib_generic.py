@@ -278,6 +278,7 @@ def benchmark_create_a_data_processing_fun(iterations: int = 1000):
 # ============================================================================
 
 if __name__ == "__main__":
+    func_name = "create_a_data_processing_fun"
     print(f"{func_name.title().replace('_', ' ')} Function Examples:")
     print("=" * 60)
 
@@ -298,8 +299,10 @@ if __name__ == "__main__":
 
     # Demonstrate with options
     print("\nWith options:")
-    print(f"{func_name}('test', uppercase=True) = {repr(create_a_data_processing_fun('test', uppercase=True))}")
-    print(f"{func_name}('test', reverse=True)   = {repr(create_a_data_processing_fun('test', reverse=True))}")
+    result_upper = create_a_data_processing_fun('test', uppercase=True)
+    print(f"{func_name}('test', uppercase=True) = {repr(result_upper)}")
+    result_reverse = create_a_data_processing_fun('test', reverse=True)
+    print(f"{func_name}('test', reverse=True)   = {repr(result_reverse)}")
 
     # Demonstrate batch processing
     print("\nBatch processing:")
