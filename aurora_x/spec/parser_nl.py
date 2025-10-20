@@ -8,7 +8,7 @@ class NLParseResult(dict):
     pass
 
 def _hash(text: str) -> str:
-    return hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]
+    return hashlib.sha1(text.encode("utf-8"), usedforsecurity=False).hexdigest()[:8]
 
 def _snake(text: str) -> str:
     """Convert text to snake_case function name"""
