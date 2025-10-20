@@ -1,15 +1,7 @@
 rules:
-  - id: hardcoded-secret
-    languages: [python]
-    message: Possible hardcoded secret detected
-    severity: WARNING
-    patterns:
-      - pattern-either:
-        - pattern: password = "..."
-        - pattern: secret = "..."
-        - pattern: api_key = "..."
-  - id: eval-use
-    languages: [python]
-    message: Use of eval() is dangerous
-    severity: ERROR
-    pattern: eval(...)
+  - id: p/security-audit
+    rules: 
+      - p/security-audit
+  - id: p/python
+    rules:
+      - p/python
