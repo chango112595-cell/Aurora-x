@@ -65,7 +65,12 @@ jobs:
           python - <<'PY'
           import os, math
           cov = float(os.getenv("COVER","0") or "${{ steps.testcov.outputs.coverage }}")
-          color = "red" if cov < 10 else "orange" if cov < 15 else "yellow" if cov < 50 else "green"
+          color = (
+              "red" if cov < 20 else
+              "orange" if cov < 50 else
+              "yellow" if cov < 80 else
+              "green"
+          )
           svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="150" height="20">
           <linearGradient id="b" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
           <mask id="a"><rect width="150" height="20" rx="3" fill="#fff"/></mask>
