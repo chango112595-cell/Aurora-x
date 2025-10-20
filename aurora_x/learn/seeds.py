@@ -174,7 +174,7 @@ class SeedStore:
             Hashed seed key
         """
         combined = f"{func_signature}:{context}"
-        return hashlib.md5(combined.encode()).hexdigest()[:16]
+        return hashlib.sha256(combined.encode()).hexdigest()[:16]
 
     def get_top_biases(self, n: int | None = None) -> list[tuple[str, float]]:
         """

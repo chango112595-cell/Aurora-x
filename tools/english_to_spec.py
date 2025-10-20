@@ -20,7 +20,7 @@ def sanitize_name(text: str) -> str:
     # Limit length
     safe = safe[:50]
     # Add a short hash for uniqueness
-    hash_suffix = hashlib.md5(text.encode()).hexdigest()[:6]
+    hash_suffix = hashlib.sha256(text.encode()).hexdigest()[:6]
     return f"{safe}_{hash_suffix}" if safe else f"request_{hash_suffix}"
 
 def infer_function_details(text: str) -> dict:

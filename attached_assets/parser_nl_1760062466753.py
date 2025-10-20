@@ -7,7 +7,7 @@ class NLParseResult(dict):
     pass
 
 def _hash(text: str) -> str:
-    return hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:8]
 
 def parse_english(text: str) -> NLParseResult:
     t = text.strip().lower()
