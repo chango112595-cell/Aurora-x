@@ -1,5 +1,15 @@
-# Use standard community rulesets
 rules:
-  - r/python.lang.security
-  - r/secrets
-  - r/python.django.security
+  - id: hardcoded-secret
+    languages: [python]
+    message: Possible hardcoded secret detected
+    severity: WARNING
+    patterns:
+      - pattern-either:
+        - pattern: password = "..."
+        - pattern: secret = "..."
+        - pattern: api_key = "..."
+  - id: eval-use
+    languages: [python]
+    message: Use of eval() is dangerous
+    severity: ERROR
+    pattern: eval(...)
