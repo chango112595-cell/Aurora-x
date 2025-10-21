@@ -1,7 +1,8 @@
 from __future__ import annotations
+
 import json
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
 
 WEIGHTS_FILE = "learn_weights.json"
 SEED_BIAS_MIN = 0.0
@@ -10,7 +11,7 @@ SEED_BIAS_MAX = 0.5
 def _clamp(x: float, lo: float, hi: float) -> float:
     return max(lo, min(hi, x))
 
-def load(run_root: Path) -> Dict[str, Any]:
+def load(run_root: Path) -> dict[str, Any]:
     """Load weights dict from run root; defaults if missing."""
     p = Path(run_root) / WEIGHTS_FILE
     if not p.exists():
@@ -25,7 +26,7 @@ def load(run_root: Path) -> Dict[str, Any]:
     except Exception:
         return {"seed_bias": 0.0}
 
-def save(run_root: Path, weights: Dict[str, Any]) -> None:
+def save(run_root: Path, weights: dict[str, Any]) -> None:
     p = Path(run_root) / WEIGHTS_FILE
     p.write_text(json.dumps(weights, indent=2), encoding="utf-8")
 

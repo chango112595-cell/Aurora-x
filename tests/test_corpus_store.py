@@ -1,6 +1,8 @@
 import tempfile
 from pathlib import Path
+
 from aurora_x.corpus.store import record, retrieve, spec_digest
+
 
 def test_record_and_retrieve():
     root = Path(tempfile.mkdtemp())

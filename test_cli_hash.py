@@ -14,14 +14,12 @@ Usage examples:
 
 import argparse
 import hashlib
-import os
 import sys
 from pathlib import Path
-from typing import List, Optional
 
 # Try to import colorama for colored output
 try:
-    from colorama import init, Fore, Style
+    from colorama import Fore, Style, init
     init(autoreset=True)
     HAS_COLOR = True
 except ImportError:
@@ -33,27 +31,27 @@ except ImportError:
         BRIGHT = RESET_ALL = ''
 
 
-def compute_hash(filepath: Path, algorithm: str = 'sha256') -> Optional[str]:
+def compute_hash(filepath: Path, algorithm: str = 'sha256') -> str | None:
     """
     Compute hash of a file using specified algorithm
-    
+
     Args:
         filepath: Path to the file
         algorithm: Hash algorithm (md5, sha1, sha256, sha512)
-    
+
     Returns:
         Hex digest string or None if error
     """
     try:
         hash_obj = hashlib.new(algorithm)
-        
+
         # Read file in chunks for memory efficiency
         with open(filepath, 'rb') as f:
             while chunk := f.read(8192):
                 hash_obj.update(chunk)
-        
+
         return hash_obj.hexdigest()
-    except (IOError, OSError) as e:
+    except OSError as e:
         print(f"{Fore.RED}Error reading {filepath}: {e}{Fore.RESET}")
         return None
     except ValueError as e:
@@ -61,23 +59,23 @@ def compute_hash(filepath: Path, algorithm: str = 'sha256') -> Optional[str]:
         return None
 
 
-def process_files(files: List[str], algorithm: str, recursive: bool = False) -> int:
+def process_files(files: list[str], algorithm: str, recursive: bool = False) -> int:
     """
     Process list of files/patterns and compute hashes
-    
+
     Args:
         files: List of file paths or patterns
         algorithm: Hash algorithm to use
         recursive: Whether to process directories recursively
-    
+
     Returns:
         Number of files successfully processed
     """
     processed = 0
-    
+
     for file_pattern in files:
         path = Path(file_pattern)
-        
+
         if path.is_dir():
             if recursive:
                 # Process directory recursively
@@ -108,7 +106,7 @@ def process_files(files: List[str], algorithm: str, recursive: bool = False) -> 
                             processed += 1
             else:
                 print(f"{Fore.YELLOW}No files found matching: {file_pattern}{Fore.RESET}")
-    
+
     return processed
 
 
@@ -127,41 +125,41 @@ Examples:
 Supported algorithms: md5, sha1, sha256 (default), sha512
         """
     )
-    
+
     parser.add_argument(
         'files',
         nargs='+',
         help='Files or patterns to hash'
     )
-    
+
     parser.add_argument(
         '-a', '--algorithm',
         choices=['md5', 'sha1', 'sha256', 'sha512'],
         default='sha256',
         help='Hash algorithm to use (default: sha256)'
     )
-    
+
     parser.add_argument(
         '-r', '--recursive',
         action='store_true',
         help='Process directories recursively'
     )
-    
+
     parser.add_argument(
         '-v', '--version',
         action='version',
         version='%(prog)s 1.0.0'
     )
-    
+
     args = parser.parse_args()
-    
+
     # Process files
     print(f"{Fore.CYAN}{Style.BRIGHT}Computing {args.algorithm.upper()} hashes...{Style.RESET_ALL}")
     processed = process_files(args.files, args.algorithm, args.recursive)
-    
+
     # Summary
     print(f"\n{Fore.GREEN}Processed {processed} file(s){Fore.RESET}")
-    
+
     # Exit with error if no files processed
     sys.exit(0 if processed > 0 else 1)
 

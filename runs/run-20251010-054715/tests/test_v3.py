@@ -1,8 +1,11 @@
-import unittest
 import sys
+import unittest
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.fibonacci import fibonacci
+
+
 class Test_fibonacci_0(unittest.TestCase):
     def test_0(self):
         self.assertEqual(fibonacci(n=0), 0)

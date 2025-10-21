@@ -1,5 +1,6 @@
-from pathlib import Path
 import json
+from pathlib import Path
+
 
 def test_manifest_has_core_fields():
     p = Path('frontend/pwa/manifest.webmanifest')

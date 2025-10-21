@@ -96,7 +96,7 @@ app.MapGet("/api/items/{id}", (int id) =>
     {
         return Results.NotFound(new { error = $"Item with ID {id} not found" });
     }
-    
+
     var item = new Item
     {
         Id = id,
@@ -104,7 +104,7 @@ app.MapGet("/api/items/{id}", (int id) =>
         Description = $"Description for item {id}",
         CreatedAt = DateTime.UtcNow.AddDays(-id)
     };
-    
+
     return Results.Json(item);
 })
 .WithName("GetItemById")
@@ -144,7 +144,7 @@ CS_PROJ = """<Project Sdk="Microsoft.NET.Sdk.Web">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
@@ -175,7 +175,7 @@ APPSETTINGS_DEV_JSON = """{
 def render_csharp_webapi(name: str, brief: str = None) -> dict:
     """
     Generate a complete C# Web API project.
-    
+
     Returns:
         dict with 'folder', 'files' (dict of filename: content) and 'hint' for running
     """
@@ -185,16 +185,16 @@ def render_csharp_webapi(name: str, brief: str = None) -> dict:
         clean_name = "Aurora" + clean_name
     if not clean_name:
         clean_name = "AuroraWebApi"
-    
+
     folder = f"{clean_name}.WebApi"
-    
+
     files = {
         f"{folder}.csproj": CS_PROJ,
         "Program.cs": PROGRAM_CS,
         "appsettings.json": APPSETTINGS_JSON,
         "appsettings.Development.json": APPSETTINGS_DEV_JSON,
     }
-    
+
     return {
         "folder": folder,
         "files": files,

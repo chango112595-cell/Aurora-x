@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Fix Makefile indentation: convert spaces to tabs for command lines"""
 
-import re
 
 # Read the current Makefile
-with open('Makefile', 'r') as f:
+with open('Makefile') as f:
     lines = f.readlines()
 
 # Fix indentation: convert 8 spaces or any leading spaces to tabs for command lines

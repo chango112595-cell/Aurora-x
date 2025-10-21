@@ -1,7 +1,10 @@
 from __future__ import annotations
+
+import os
+import shlex
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
-import subprocess, shlex, json, time, os, hashlib
 
 RUNS = Path("runs"); RUNS.mkdir(exist_ok=True)
 
@@ -13,7 +16,8 @@ def _discord(msg: str):
     url = os.getenv("DISCORD_WEBHOOK_URL")
     if not url: return
     try:
-        import urllib.request, json as _json
+        import json as _json
+        import urllib.request
         req = urllib.request.Request(url, data=_json.dumps({"content": msg}).encode("utf-8"),
                                      headers={"Content-Type":"application/json"})
         urllib.request.urlopen(req, timeout=6).read()

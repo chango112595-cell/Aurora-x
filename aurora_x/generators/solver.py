@@ -3,9 +3,9 @@ Aurora-X Universal Solver Module
 Provides mathematical and physics solving capabilities
 """
 
-import re
 import math
-from typing import Dict, Any, List, Tuple
+import re
+from typing import Any
 
 
 class SolveError(Exception):
@@ -16,26 +16,26 @@ class SolveError(Exception):
 def _diff_poly(expression: str) -> str:
     """
     Differentiate a polynomial expression with respect to x
-    
+
     Args:
         expression: Polynomial expression like "x^3 - 2x^2 + x"
-    
+
     Returns:
         Differentiated expression as string
-    
+
     Example:
         >>> _diff_poly("x^3 - 2x^2 + x")
         "3x^2 - 4x + 1"
     """
     # Clean the expression (remove extra spaces and quotes)
     expression = expression.strip().strip('"').strip("'")
-    
+
     # Parse terms from the expression
     terms = []
-    
+
     # Split by + or - while keeping the sign
     parts = re.split(r'([+-])', expression.replace(' ', ''))
-    
+
     # Reconstruct terms with their signs
     current_term = ''
     for part in parts:
@@ -47,7 +47,7 @@ def _diff_poly(expression: str) -> str:
             current_term += part
     if current_term:
         terms.append(current_term)
-    
+
     # Differentiate each term
     diff_terms = []
     for term in terms:
@@ -58,7 +58,7 @@ def _diff_poly(expression: str) -> str:
             if match:
                 coeff_str = match.group(1)
                 power = int(match.group(2))
-                
+
                 # Handle implicit coefficient
                 if coeff_str in ['', '+']:
                     coeff = 1
@@ -66,11 +66,11 @@ def _diff_poly(expression: str) -> str:
                     coeff = -1
                 else:
                     coeff = float(coeff_str)
-                
+
                 # Apply power rule
                 new_coeff = coeff * power
                 new_power = power - 1
-                
+
                 if new_power == 0:
                     diff_terms.append(f"{new_coeff:g}")
                 elif new_power == 1:
@@ -82,7 +82,7 @@ def _diff_poly(expression: str) -> str:
             match = re.match(r'([+-]?\d*\.?\d*)x', term)
             if match:
                 coeff_str = match.group(1)
-                
+
                 # Handle implicit coefficient
                 if coeff_str in ['', '+']:
                     coeff = 1
@@ -90,13 +90,13 @@ def _diff_poly(expression: str) -> str:
                     coeff = -1
                 else:
                     coeff = float(coeff_str)
-                
+
                 diff_terms.append(f"{coeff:g}")
         # Constants differentiate to 0, so we skip them
-    
+
     if not diff_terms:
         return "0"
-    
+
     # Join terms with proper signs
     result = diff_terms[0]
     for term in diff_terms[1:]:
@@ -104,30 +104,30 @@ def _diff_poly(expression: str) -> str:
             result += f" - {term[1:]}"
         else:
             result += f" + {term}"
-    
+
     return result
 
 
 def _safe_eval_arith(s: str) -> float:
     """
     Safely evaluate an arithmetic expression using AST parsing
-    
+
     Args:
         s: Arithmetic expression like "2 + 3 * 4"
-    
+
     Returns:
         Evaluated result as float
-    
+
     Raises:
         SolveError: If expression contains unsafe operations
-    
+
     Example:
         >>> _safe_eval_arith("2 + 3 * 4")
         14.0
     """
     import ast
     import operator
-    
+
     # Define allowed operators
     ops = {
         ast.Add: operator.add,
@@ -140,7 +140,7 @@ def _safe_eval_arith(s: str) -> float:
         ast.USub: operator.neg,
         ast.UAdd: operator.pos
     }
-    
+
     def eval_(node):
         # Handle numbers
         if isinstance(node, ast.Num):  # Python < 3.8
@@ -167,7 +167,7 @@ def _safe_eval_arith(s: str) -> float:
             return eval_(node.body)
         else:
             raise SolveError(f"Disallowed expression type: {type(node).__name__}")
-    
+
     try:
         tree = ast.parse(s, mode="eval")
         return float(eval_(tree))
@@ -179,18 +179,18 @@ def _safe_eval_arith(s: str) -> float:
         raise SolveError(f"Error evaluating expression: {str(e)}")
 
 
-def solve_text(text: str) -> Dict[str, Any]:
+def solve_text(text: str) -> dict[str, Any]:
     """
     Universal solver that handles various mathematical and physics problems
-    
+
     Args:
         text: Natural language or mathematical expression
-    
+
     Returns:
         Dict with solution results
     """
     text = text.strip()
-    
+
     # Check for differentiation requests
     if 'differentiate' in text.lower() or 'derivative' in text.lower():
         # Extract polynomial expression
@@ -201,20 +201,20 @@ def solve_text(text: str) -> Dict[str, Any]:
             r'"([^"]+)"',
             r'\'([^\']+)\''
         ]
-        
+
         expression = None
         for pattern in patterns:
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
                 expression = match.group(1).strip()
                 break
-        
+
         if not expression:
             # Try to extract polynomial-like expression
             poly_match = re.search(r'([x\d\^\+\-\s\.]+)', text)
             if poly_match and 'x' in poly_match.group(1):
                 expression = poly_match.group(1)
-        
+
         if expression:
             try:
                 result = _diff_poly(expression)
@@ -233,22 +233,22 @@ def solve_text(text: str) -> Dict[str, Any]:
                     "task": "differentiate",
                     "error": str(e)
                 }
-    
+
     # Check for orbital period calculations
     if 'orbital' in text.lower() and 'period' in text.lower():
         # Extract parameters using regex
         params = {}
-        
+
         # Look for semi-major axis (a)
         a_match = re.search(r'a\s*=\s*([\d\.e\+\-]+)', text, re.IGNORECASE)
         if a_match:
             params['a'] = float(a_match.group(1))
-        
+
         # Look for mass (M)
         m_match = re.search(r'M\s*=\s*([\d\.e\+\-]+)', text, re.IGNORECASE)
         if m_match:
             params['M'] = float(m_match.group(1))
-        
+
         if 'a' in params and 'M' in params:
             try:
                 # Calculate orbital period using Kepler's Third Law
@@ -256,11 +256,11 @@ def solve_text(text: str) -> Dict[str, Any]:
                 G = 6.67430e-11  # Gravitational constant in m³/(kg·s²)
                 a = params['a']
                 M = params['M']
-                
+
                 T_seconds = 2 * math.pi * math.sqrt((a**3) / (G * M))
                 T_days = T_seconds / 86400
                 T_years = T_days / 365.25
-                
+
                 return {
                     "ok": True,
                     "domain": "physics",
@@ -283,7 +283,7 @@ def solve_text(text: str) -> Dict[str, Any]:
                     "task": "orbital_period",
                     "error": str(e)
                 }
-    
+
     # Try to evaluate as arithmetic expression
     # Check if it looks like an arithmetic expression
     if re.match(r'^[\d\s\+\-\*/\(\)\.]+$', text):
@@ -304,7 +304,7 @@ def solve_text(text: str) -> Dict[str, Any]:
                 "task": "arithmetic",
                 "error": str(e)
             }
-    
+
     # Default response for unrecognized inputs
     return {
         "ok": False,

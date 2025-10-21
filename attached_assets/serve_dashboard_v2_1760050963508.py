@@ -5,9 +5,9 @@ except Exception:
     APIRouter = None
 
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
 
-spec_runs_memory: List[Dict[str, Any]] = []
+spec_runs_memory: list[dict[str, Any]] = []
 
 def make_router(static_dir: Path, templates_dir: Path):
     router = APIRouter()

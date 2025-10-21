@@ -6,31 +6,31 @@ Generates complete, working Flask application code based on parsed metadata.
 def generate_flask_app(metadata: dict) -> str:
     """
     Generate complete Flask application code based on metadata from parser_nl.py
-    
+
     Args:
         metadata: Dict containing framework, includes, routes, and other app config
-        
+
     Returns:
         str: Complete Python code for a Flask application
     """
-    
+
     # Check what type of app to generate
     includes = metadata.get("includes", {})
     routes = metadata.get("routes", [{"path": "/", "name": "index"}])
     description = metadata.get("description", "Flask application")
-    
+
     # Special case: Timer UI app
     if includes.get("timer") and includes.get("ui"):
         return generate_timer_ui_app()
-    
+
     # API-focused app
     if includes.get("api"):
         return generate_api_app(routes, includes)
-    
+
     # General web app with UI
     if includes.get("ui") or includes.get("html"):
         return generate_web_ui_app(routes, includes, description)
-    
+
     # Default: Basic Flask app
     return generate_basic_app(routes, description)
 
@@ -51,13 +51,13 @@ import os
 def format_mmss(ms: int) -> str:
     """
     Convert milliseconds to MM:SS format
-    
+
     Args:
         ms: Time in milliseconds
-        
+
     Returns:
         str: Formatted time as MM:SS
-        
+
     Examples:
         >>> format_mmss(0)
         '00:00'
@@ -70,11 +70,11 @@ def format_mmss(ms: int) -> str:
     """
     if ms < 0:
         ms = 0
-    
+
     total_seconds = ms // 1000
     minutes = total_seconds // 60
     seconds = total_seconds % 60
-    
+
     return f"{minutes:02d}:{seconds:02d}"
 
 
@@ -96,17 +96,17 @@ TIMER_HTML = """
             --aurora-bg-mid: #1a1a2e;
             --aurora-text: #e0e0e0;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--aurora-bg-dark);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 20% 50%, rgba(0, 255, 204, 0.3) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.3) 0%, transparent 50%),
                 radial-gradient(circle at 40% 20%, rgba(0, 204, 255, 0.3) 0%, transparent 50%);
@@ -117,17 +117,17 @@ TIMER_HTML = """
             color: var(--aurora-text);
             animation: aurora-shift 20s ease-in-out infinite;
         }
-        
+
         @keyframes aurora-shift {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
-        
+
         .timer-container {
             background: rgba(26, 26, 46, 0.9);
             border-radius: 20px;
             padding: 3rem;
-            box-shadow: 
+            box-shadow:
                 0 0 50px rgba(0, 255, 204, 0.3),
                 0 0 100px rgba(255, 0, 255, 0.2),
                 inset 0 0 50px rgba(0, 204, 255, 0.1);
@@ -138,12 +138,12 @@ TIMER_HTML = """
             text-align: center;
             animation: container-glow 3s ease-in-out infinite alternate;
         }
-        
+
         @keyframes container-glow {
             0% { box-shadow: 0 0 50px rgba(0, 255, 204, 0.3), 0 0 100px rgba(255, 0, 255, 0.2); }
             100% { box-shadow: 0 0 70px rgba(0, 255, 204, 0.5), 0 0 120px rgba(255, 0, 255, 0.4); }
         }
-        
+
         h1 {
             font-size: 2.5rem;
             margin-bottom: 2rem;
@@ -154,12 +154,12 @@ TIMER_HTML = """
             text-shadow: 0 0 30px var(--aurora-glow);
             animation: text-glow 2s ease-in-out infinite alternate;
         }
-        
+
         @keyframes text-glow {
             0% { filter: brightness(1); }
             100% { filter: brightness(1.2); }
         }
-        
+
         .timer-display {
             font-size: 4rem;
             font-weight: bold;
@@ -170,17 +170,17 @@ TIMER_HTML = """
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 
+            text-shadow:
                 0 0 20px var(--aurora-glow),
                 0 0 40px rgba(0, 255, 204, 0.3);
             animation: timer-pulse 1s ease-in-out infinite;
         }
-        
+
         @keyframes timer-pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.02); }
         }
-        
+
         .timer-input-group {
             margin: 2rem 0;
             display: flex;
@@ -188,13 +188,13 @@ TIMER_HTML = """
             gap: 1rem;
             flex-wrap: wrap;
         }
-        
+
         .time-input {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        
+
         .time-input label {
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
@@ -202,7 +202,7 @@ TIMER_HTML = """
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
-        
+
         .time-input input {
             width: 80px;
             padding: 0.5rem;
@@ -214,14 +214,14 @@ TIMER_HTML = """
             color: var(--aurora-text);
             transition: all 0.3s ease;
         }
-        
+
         .time-input input:focus {
             outline: none;
             background: rgba(0, 255, 204, 0.2);
             box-shadow: 0 0 20px var(--aurora-glow);
             transform: scale(1.05);
         }
-        
+
         .controls {
             display: flex;
             justify-content: center;
@@ -229,7 +229,7 @@ TIMER_HTML = """
             margin-top: 2rem;
             flex-wrap: wrap;
         }
-        
+
         .btn {
             padding: 1rem 2rem;
             font-size: 1.1rem;
@@ -243,7 +243,7 @@ TIMER_HTML = """
             position: relative;
             overflow: hidden;
         }
-        
+
         .btn::before {
             content: '';
             position: absolute;
@@ -256,51 +256,51 @@ TIMER_HTML = """
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
-        
+
         .btn:active::before {
             width: 300px;
             height: 300px;
         }
-        
+
         .btn-start {
             background: linear-gradient(45deg, var(--aurora-primary), var(--aurora-accent));
             color: var(--aurora-bg-dark);
             box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
         }
-        
+
         .btn-start:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 30px rgba(0, 255, 204, 0.7);
         }
-        
+
         .btn-pause {
             background: linear-gradient(45deg, var(--aurora-secondary), #ff6b6b);
             color: white;
             box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
         }
-        
+
         .btn-pause:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 30px rgba(255, 0, 255, 0.7);
         }
-        
+
         .btn-reset {
             background: linear-gradient(45deg, #6b6b6b, #8b8b8b);
             color: white;
             box-shadow: 0 0 20px rgba(107, 107, 107, 0.5);
         }
-        
+
         .btn-reset:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 30px rgba(107, 107, 107, 0.7);
         }
-        
+
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none !important;
         }
-        
+
         .status {
             margin-top: 1.5rem;
             font-size: 1rem;
@@ -309,7 +309,7 @@ TIMER_HTML = """
             letter-spacing: 0.2em;
             animation: status-blink 2s ease-in-out infinite;
         }
-        
+
         @keyframes status-blink {
             0%, 100% { opacity: 0.7; }
             50% { opacity: 1; }
@@ -319,9 +319,9 @@ TIMER_HTML = """
 <body>
     <div class="timer-container">
         <h1>⏱ Aurora Timer</h1>
-        
+
         <div class="timer-display" id="display">00:00</div>
-        
+
         <div class="timer-input-group">
             <div class="time-input">
                 <label for="minutes">Minutes</label>
@@ -332,16 +332,16 @@ TIMER_HTML = """
                 <input type="number" id="seconds" min="0" max="59" value="0">
             </div>
         </div>
-        
+
         <div class="controls">
             <button class="btn btn-start" id="startBtn">Start</button>
             <button class="btn btn-pause" id="pauseBtn" disabled>Pause</button>
             <button class="btn btn-reset" id="resetBtn">Reset</button>
         </div>
-        
+
         <div class="status" id="status">Ready</div>
     </div>
-    
+
     <script>
         class Timer {
             constructor() {
@@ -351,7 +351,7 @@ TIMER_HTML = """
                 this.animationId = null;
                 this.lastTime = null;
                 this.initialTime = 0;
-                
+
                 // Get DOM elements
                 this.display = document.getElementById('display');
                 this.startBtn = document.getElementById('startBtn');
@@ -360,29 +360,29 @@ TIMER_HTML = """
                 this.minutesInput = document.getElementById('minutes');
                 this.secondsInput = document.getElementById('seconds');
                 this.status = document.getElementById('status');
-                
+
                 // Bind event listeners
                 this.startBtn.addEventListener('click', () => this.start());
                 this.pauseBtn.addEventListener('click', () => this.pause());
                 this.resetBtn.addEventListener('click', () => this.reset());
-                
+
                 // Initialize display
                 this.updateDisplay();
             }
-            
+
             formatTime(ms) {
                 if (ms < 0) ms = 0;
-                
+
                 const totalSeconds = Math.floor(ms / 1000);
                 const minutes = Math.floor(totalSeconds / 60);
                 const seconds = totalSeconds % 60;
-                
+
                 return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
             }
-            
+
             updateDisplay() {
                 this.display.textContent = this.formatTime(this.timeRemaining);
-                
+
                 // Add visual feedback when time is low
                 if (this.timeRemaining > 0 && this.timeRemaining <= 10000) {
                     this.display.style.color = '#ff6b6b';
@@ -390,51 +390,51 @@ TIMER_HTML = """
                     this.display.style.color = '';
                 }
             }
-            
+
             start() {
                 if (!this.isRunning) {
                     // Get time from inputs
                     const minutes = parseInt(this.minutesInput.value) || 0;
                     const seconds = parseInt(this.secondsInput.value) || 0;
                     this.initialTime = (minutes * 60 + seconds) * 1000;
-                    
+
                     if (this.initialTime <= 0) {
                         this.status.textContent = 'Please enter a valid time';
                         return;
                     }
-                    
+
                     this.timeRemaining = this.initialTime;
                     this.isRunning = true;
                     this.isPaused = false;
                     this.lastTime = performance.now();
-                    
+
                     // Update UI
                     this.startBtn.disabled = true;
                     this.pauseBtn.disabled = false;
                     this.minutesInput.disabled = true;
                     this.secondsInput.disabled = true;
                     this.status.textContent = 'Running';
-                    
+
                     // Start animation loop
                     this.animate();
                 } else if (this.isPaused) {
                     this.resume();
                 }
             }
-            
+
             pause() {
                 if (this.isRunning && !this.isPaused) {
                     this.isPaused = true;
                     this.pauseBtn.textContent = 'Resume';
                     this.status.textContent = 'Paused';
-                    
+
                     if (this.animationId) {
                         cancelAnimationFrame(this.animationId);
                         this.animationId = null;
                     }
                 }
             }
-            
+
             resume() {
                 if (this.isRunning && this.isPaused) {
                     this.isPaused = false;
@@ -444,17 +444,17 @@ TIMER_HTML = """
                     this.animate();
                 }
             }
-            
+
             reset() {
                 this.isRunning = false;
                 this.isPaused = false;
                 this.timeRemaining = 0;
-                
+
                 if (this.animationId) {
                     cancelAnimationFrame(this.animationId);
                     this.animationId = null;
                 }
-                
+
                 // Reset UI
                 this.startBtn.disabled = false;
                 this.pauseBtn.disabled = true;
@@ -463,39 +463,39 @@ TIMER_HTML = """
                 this.secondsInput.disabled = false;
                 this.status.textContent = 'Ready';
                 this.display.style.color = '';
-                
+
                 this.updateDisplay();
             }
-            
+
             animate() {
                 if (!this.isRunning || this.isPaused) return;
-                
+
                 const currentTime = performance.now();
                 const deltaTime = currentTime - this.lastTime;
                 this.lastTime = currentTime;
-                
+
                 this.timeRemaining = Math.max(0, this.timeRemaining - deltaTime);
                 this.updateDisplay();
-                
+
                 if (this.timeRemaining <= 0) {
                     this.complete();
                 } else {
                     this.animationId = requestAnimationFrame(() => this.animate());
                 }
             }
-            
+
             complete() {
                 this.isRunning = false;
                 this.status.textContent = '✨ Time\'s Up!';
                 this.display.style.color = '#00ffcc';
-                
+
                 // Reset buttons
                 this.startBtn.disabled = false;
                 this.pauseBtn.disabled = true;
                 this.pauseBtn.textContent = 'Pause';
                 this.minutesInput.disabled = false;
                 this.secondsInput.disabled = false;
-                
+
                 // Visual celebration
                 this.display.style.animation = 'timer-pulse 0.5s ease-in-out 5';
                 setTimeout(() => {
@@ -503,7 +503,7 @@ TIMER_HTML = """
                 }, 2500);
             }
         }
-        
+
         // Initialize timer when page loads
         document.addEventListener('DOMContentLoaded', () => {
             new Timer();
@@ -519,48 +519,48 @@ def create_app() -> Flask:
     app = Flask(__name__)
     app.config['ENV'] = 'development'
     app.config['DEBUG'] = True
-    
+
     @app.route('/')
     def index():
         """Render the timer UI"""
         return render_template_string(TIMER_HTML)
-    
+
     @app.route('/api/health')
     def health():
         """Health check endpoint"""
         return jsonify({"status": "healthy", "app": "Aurora Timer UI"})
-    
+
     return app
 
 
 # Unit tests for format_mmss function
 class TestFormatMMSS(unittest.TestCase):
     """Test cases for the format_mmss function"""
-    
+
     def test_zero_milliseconds(self):
         """Test formatting of 0 milliseconds"""
         self.assertEqual(format_mmss(0), "00:00")
-    
+
     def test_one_second(self):
         """Test formatting of 1 second"""
         self.assertEqual(format_mmss(1000), "00:01")
-    
+
     def test_one_minute(self):
         """Test formatting of 1 minute"""
         self.assertEqual(format_mmss(60000), "01:00")
-    
+
     def test_mixed_time(self):
         """Test formatting of mixed minutes and seconds"""
         self.assertEqual(format_mmss(125000), "02:05")
-    
+
     def test_large_time(self):
         """Test formatting of large time values"""
         self.assertEqual(format_mmss(5999000), "99:59")
-    
+
     def test_negative_time(self):
         """Test that negative values are handled correctly"""
         self.assertEqual(format_mmss(-5000), "00:00")
-    
+
     def test_partial_second(self):
         """Test that partial seconds are truncated"""
         self.assertEqual(format_mmss(1500), "00:01")
@@ -584,20 +584,20 @@ if __name__ == '__main__':
 
 def generate_api_app(routes: list, includes: dict) -> str:
     """Generate an API-focused Flask application"""
-    
+
     # Build route handlers
     route_handlers = []
     for route in routes:
         path = route.get("path", "/")
         name = route.get("name", "endpoint")
-        
+
         handler = f'''
     @app.route('{path}')
     def {name}():
         """Handle {path} endpoint"""
         return jsonify({{"message": "Welcome to {name}", "path": "{path}"}})'''
         route_handlers.append(handler)
-    
+
     # Add API-specific routes
     if includes.get("auth"):
         route_handlers.append('''
@@ -609,7 +609,7 @@ def generate_api_app(routes: list, includes: dict) -> str:
         if data.get('username') and data.get('password'):
             return jsonify({"status": "success", "token": "mock-jwt-token"}), 200
         return jsonify({"error": "Invalid credentials"}), 401
-    
+
     @app.route('/api/auth/register', methods=['POST'])
     def register():
         """Handle user registration"""
@@ -617,7 +617,7 @@ def generate_api_app(routes: list, includes: dict) -> str:
         if data.get('username') and data.get('password'):
             return jsonify({"status": "success", "message": "User registered"}), 201
         return jsonify({"error": "Missing required fields"}), 400''')
-    
+
     if includes.get("database"):
         route_handlers.append('''
     @app.route('/api/data', methods=['GET', 'POST'])
@@ -629,9 +629,9 @@ def generate_api_app(routes: list, includes: dict) -> str:
             return jsonify({"status": "created", "data": data}), 201
         # In production, fetch from database
         return jsonify({"items": [], "count": 0})''')
-    
+
     routes_code = ''.join(route_handlers)
-    
+
     return f'''"""
 Flask API Application
 Generated by Aurora-X Synthesis Engine
@@ -646,26 +646,26 @@ def create_app() -> Flask:
     """Create and configure the Flask API application"""
     app = Flask(__name__)
     CORS(app)  # Enable CORS for API access
-    
+
     app.config['ENV'] = 'development'
     app.config['DEBUG'] = True
-    
+
     @app.route('/api/health')
     def health():
         """Health check endpoint"""
         return jsonify({{"status": "healthy", "app": "Flask API"}})
     {routes_code}
-    
+
     @app.errorhandler(404)
     def not_found(error):
         """Handle 404 errors"""
         return jsonify({{"error": "Endpoint not found"}}), 404
-    
+
     @app.errorhandler(500)
     def internal_error(error):
         """Handle 500 errors"""
         return jsonify({{"error": "Internal server error"}}), 500
-    
+
     return app
 
 
@@ -679,13 +679,13 @@ if __name__ == '__main__':
 
 def generate_web_ui_app(routes: list, includes: dict, description: str) -> str:
     """Generate a web UI Flask application"""
-    
+
     # Build route handlers
     route_handlers = []
     for route in routes:
         path = route.get("path", "/")
         name = route.get("name", "page")
-        
+
         handler = f'''
     @app.route('{path}')
     def {name}():
@@ -695,9 +695,9 @@ def generate_web_ui_app(routes: list, includes: dict, description: str) -> str:
             content="<h2>{name.title()} Page</h2><p>Welcome to the {name} section.</p>"
         ))'''
         route_handlers.append(handler)
-    
+
     routes_code = ''.join(route_handlers)
-    
+
     return f'''"""
 {description}
 Generated by Aurora-X Synthesis Engine
@@ -720,7 +720,7 @@ HTML_TEMPLATE = """
             padding: 0;
             box-sizing: border-box;
         }}
-        
+
         body {{
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -730,7 +730,7 @@ HTML_TEMPLATE = """
             align-items: center;
             color: #333;
         }}
-        
+
         .container {{
             background: white;
             border-radius: 12px;
@@ -739,30 +739,30 @@ HTML_TEMPLATE = """
             max-width: 800px;
             width: 90%;
         }}
-        
+
         h1 {{
             color: #667eea;
             margin-bottom: 1rem;
             font-size: 2rem;
         }}
-        
+
         h2 {{
             color: #764ba2;
             margin-bottom: 1rem;
         }}
-        
+
         p {{
             line-height: 1.6;
             color: #666;
         }}
-        
+
         nav {{
             margin: 2rem 0;
             padding: 1rem 0;
             border-top: 1px solid #e0e0e0;
             border-bottom: 1px solid #e0e0e0;
         }}
-        
+
         nav a {{
             color: #667eea;
             text-decoration: none;
@@ -770,11 +770,11 @@ HTML_TEMPLATE = """
             font-weight: 500;
             transition: color 0.3s ease;
         }}
-        
+
         nav a:hover {{
             color: #764ba2;
         }}
-        
+
         .content {{
             margin-top: 2rem;
         }}
@@ -802,12 +802,12 @@ def create_app() -> Flask:
     app.config['ENV'] = 'development'
     app.config['DEBUG'] = True
     {routes_code}
-    
+
     @app.route('/api/health')
     def health():
         """Health check endpoint"""
         return jsonify({{"status": "healthy", "app": "Flask Web UI"}})
-    
+
     @app.errorhandler(404)
     def not_found(error):
         """Handle 404 errors"""
@@ -815,7 +815,7 @@ def create_app() -> Flask:
             title="404 - Not Found",
             content="<h2>Page Not Found</h2><p>The requested page could not be found.</p>"
         )), 404
-    
+
     return app
 
 
@@ -829,22 +829,22 @@ if __name__ == '__main__':
 
 def generate_basic_app(routes: list, description: str) -> str:
     """Generate a basic Flask application"""
-    
+
     # Build route handlers
     route_handlers = []
     for route in routes:
         path = route.get("path", "/")
         name = route.get("name", "endpoint")
-        
+
         handler = f'''
     @app.route('{path}')
     def {name}():
         """Handle {path} route"""
         return f"<h1>{name.title()} Page</h1><p>Route: {path}</p>"'''
         route_handlers.append(handler)
-    
+
     routes_code = ''.join(route_handlers)
-    
+
     return f'''"""
 {description}
 Generated by Aurora-X Synthesis Engine
@@ -860,12 +860,12 @@ def create_app() -> Flask:
     app.config['ENV'] = 'development'
     app.config['DEBUG'] = True
     {routes_code}
-    
+
     @app.route('/api/health')
     def health():
         """Health check endpoint"""
         return jsonify({{"status": "healthy"}})
-    
+
     return app
 
 
