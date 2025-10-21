@@ -13,3 +13,5 @@ __pycache__
 .coverage
 htmlcov/
 runs/run-*/
+runs/latest
+semgrep.sarif
