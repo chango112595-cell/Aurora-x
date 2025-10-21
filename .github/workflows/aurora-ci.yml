@@ -66,9 +66,9 @@ jobs:
           import os, math
           cov = float(os.getenv("COVER","0") or "${{ steps.testcov.outputs.coverage }}")
           color = (
-              "red" if cov < 20 else
-              "orange" if cov < 50 else
-              "yellow" if cov < 80 else
+              "red" if cov < 10 else
+              "orange" if cov < 15 else
+              "yellow" if cov < 50 else
               "green"
           )
           svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="150" height="20">
