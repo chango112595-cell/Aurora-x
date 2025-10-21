@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-import os, urllib.request, json, sys
+import json
+import os
+import sys
+import urllib.request
+
 BASE = os.getenv("AURORA_BASE_URL", "http://localhost:5000")
 paths = ["/dashboard/spec_runs", "/api/spec_runs"]
 ok = True

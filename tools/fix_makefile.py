@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fix Makefile tab/space issues while preserving heredocs."""
 
-with open('Makefile', 'r') as f:
+with open('Makefile') as f:
     lines = f.readlines()
 
 fixed_lines = []

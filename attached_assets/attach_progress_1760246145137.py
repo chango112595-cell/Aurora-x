@@ -1,8 +1,10 @@
 
 from __future__ import annotations
-from flask import jsonify, Response
-from pathlib import Path
+
 import json
+from pathlib import Path
+
+from flask import Response, jsonify
 
 PROGRESS_PATH = Path("progress.json")
 

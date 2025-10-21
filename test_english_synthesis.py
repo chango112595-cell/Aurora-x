@@ -4,31 +4,30 @@ Test Aurora-X English synthesis - verify real code is generated
 """
 
 import subprocess
-import os
-import json
+
 
 def test_english_request(request_text):
     """Test that an English request generates real code, not todo_spec"""
     print(f"\n📝 Testing: '{request_text}'")
-    
+
     # Generate spec from English
     from aurora_x.spec.parser_v2 import english_to_spec
     spec = english_to_spec(request_text)
     print(f"   ✓ Generated spec for: {spec.split('##')[0].strip()}")
-    
+
     # Save spec to file
     spec_file = f"specs/test_{request_text[:20].replace(' ', '_')}.md"
     with open(spec_file, 'w') as f:
         f.write(spec)
-    
+
     # Run synthesis
-    result = subprocess.run(
+    subprocess.run(
         f"python -m aurora_x.main --spec {spec_file}",
         shell=True,
         capture_output=True,
         text=True
     )
-    
+
     # Find the generated run directory
     import glob
     runs = sorted(glob.glob("runs/run-*"))
@@ -36,16 +35,16 @@ def test_english_request(request_text):
         latest_run = runs[-1]
         src_files = glob.glob(f"{latest_run}/src/*.py")
         if src_files:
-            with open(src_files[0], 'r') as f:
+            with open(src_files[0]) as f:
                 code = f.read()
                 print(f"   ✓ Generated code in: {src_files[0]}")
-                
+
                 # Check it's not todo_spec
                 if "todo_spec" in code:
-                    print(f"   ❌ ERROR: Still generating todo_spec!")
+                    print("   ❌ ERROR: Still generating todo_spec!")
                     return False
                 elif "raise NotImplementedError" in code:
-                    print(f"   ❌ ERROR: Still has NotImplementedError!")
+                    print("   ❌ ERROR: Still has NotImplementedError!")
                     return False
                 else:
                     # Show first few lines of actual implementation
@@ -54,10 +53,10 @@ def test_english_request(request_text):
                         if line.strip() and not line.startswith('#'):
                             print(f"      Code: {line.strip()[:60]}...")
                             break
-                    print(f"   ✅ SUCCESS: Real code generated!")
+                    print("   ✅ SUCCESS: Real code generated!")
                     return True
-    
-    print(f"   ⚠️  Could not find generated code")
+
+    print("   ⚠️  Could not find generated code")
     return False
 
 # Test various English requests

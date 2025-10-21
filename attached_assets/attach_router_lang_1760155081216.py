@@ -1,13 +1,16 @@
-from flask import request, jsonify
 from pathlib import Path
+
+from aurora_x.templates.lib_function import render_function
+from flask import jsonify, request
+
 from aurora_x.router.intent_router import classify
 from aurora_x.router.lang_select import pick_language
-from aurora_x.templates.web_app_flask import render_app
+from aurora_x.templates.cli_tool import render_cli
+from aurora_x.templates.csharp_webapi import render_csharp_webapi
 from aurora_x.templates.go_service import render_go_service
 from aurora_x.templates.rust_cli import render_rust_cli
-from aurora_x.templates.csharp_webapi import render_csharp_webapi
-from aurora_x.templates.cli_tool import render_cli
-from aurora_x.templates.lib_function import render_function
+from aurora_x.templates.web_app_flask import render_app
+
 
 def attach_router(app):
     @app.post('/chat')

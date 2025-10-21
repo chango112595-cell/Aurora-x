@@ -1,7 +1,7 @@
-import unittest
 import sys
+import unittest
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from src.create_hello_world_function import create_hello_world_function
 
 if __name__=='__main__': unittest.main()

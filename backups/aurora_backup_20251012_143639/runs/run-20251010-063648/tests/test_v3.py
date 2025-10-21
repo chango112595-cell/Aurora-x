@@ -1,8 +1,11 @@
-import unittest
 import sys
+import unittest
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.sum_of_squares import sum_of_squares
+
+
 class Test_sum_of_squares_0(unittest.TestCase):
     def test_0(self):
         self.assertEqual(sum_of_squares(nums='[1, 2, 3]'), 14)

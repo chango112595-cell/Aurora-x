@@ -1,6 +1,10 @@
-import subprocess, sys, tempfile
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
+
 from aurora_x.corpus.store import record, spec_digest
+
 
 def test_dump_cli_prints_rows():
     tmp = Path(tempfile.mkdtemp())

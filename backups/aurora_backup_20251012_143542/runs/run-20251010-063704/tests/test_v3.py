@@ -1,8 +1,11 @@
-import unittest
 import sys
+import unittest
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.factorial import factorial
+
+
 class Test_factorial_0(unittest.TestCase):
     def test_0(self):
         self.assertEqual(factorial(n=0), 1)

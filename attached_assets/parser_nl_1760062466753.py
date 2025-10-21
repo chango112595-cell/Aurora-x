@@ -1,5 +1,7 @@
 from __future__ import annotations
-import re, hashlib
+
+import hashlib
+
 
 class NLParseResult(dict):
     pass

@@ -1,5 +1,5 @@
+
 from flask import Response
-import json
 
 GRAPH_HTML = r"""<!doctype html><html><head>
 <meta charset="utf-8"/><title>Aurora-X · Master Task Graph</title>
@@ -24,10 +24,10 @@ GRAPH_HTML = r"""<!doctype html><html><head>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script>
 async function render(){
-  const res = await fetch('/api/progress'); 
+  const res = await fetch('/api/progress');
   const data = await res.json();
   const tasks = data.tasks || [];
-  
+
   const nodes = tasks.map(t=>({
     id: t.id,
     name: t.name,
@@ -36,13 +36,13 @@ async function render(){
            t.status==='in-development'?'development':
            t.percent>0?'inprogress':'pending'
   }));
-  
+
   const links = [];
   for(let i=1;i<nodes.length;i++) links.push({source:nodes[i-1].id,target:nodes[i].id});
 
   const svg = d3.select("#graph");
   const w = window.innerWidth, h = window.innerHeight;
-  
+
   const simulation = d3.forceSimulation(nodes)
     .force("link", d3.forceLink(links).id(d=>d.id).distance(160))
     .force("charge", d3.forceManyBody().strength(-450))

@@ -5,10 +5,10 @@ Implements epsilon-greedy exploration with decay and cooldown
 """
 
 from __future__ import annotations
-from dataclasses import dataclass
-from typing import Dict, List, Tuple
+
 import math
 import random
+from dataclasses import dataclass
 
 # Import production config if available
 try:
@@ -40,26 +40,26 @@ class AdaptiveBiasScheduler:
         self.cfg = config or AdaptiveConfig()
         self.rng = random.Random(self.cfg.seed)
         self.iteration = 0
-        self.stats: Dict[str, BiasStat] = {}
-        self.history: List[Tuple[int, str, float]] = []  # (iter, key, value)
+        self.stats: dict[str, BiasStat] = {}
+        self.history: list[tuple[int, str, float]] = []  # (iter, key, value)
 
-    def load(self, payload: Dict[str, float] | None):
+    def load(self, payload: dict[str, float] | None):
         if not payload: return
         for k, v in payload.items():
             self.stats.setdefault(k, BiasStat()).value = float(v)
 
-    def dump(self) -> Dict[str, float]:
+    def dump(self) -> dict[str, float]:
         return {k: round(v.value, 6) for k, v in self.stats.items()}
 
     def tick(self):
         self.iteration += 1
-        for k, st in self.stats.items():
+        for _k, st in self.stats.items():
             st.value *= self.cfg.decay
         if len(self.stats) > self.cfg.top_k * 2:
             top = sorted(self.stats.items(), key=lambda kv: abs(kv[1].value), reverse=True)[: self.cfg.top_k]
             self.stats = dict(top)
 
-    def choose(self, candidates: List[str]) -> str:
+    def choose(self, candidates: list[str]) -> str:
         if not candidates: return ""
         if self.rng.random() < self.cfg.epsilon:
             return self.rng.choice(candidates)
@@ -83,7 +83,7 @@ class AdaptiveBiasScheduler:
             st.value -= delta
         self.history.append((self.iteration, key, st.value))
 
-    def summary(self) -> Dict[str, float]:
+    def summary(self) -> dict[str, float]:
         return {k: round(v.value, 4) for k, v in sorted(self.stats.items(), key=lambda kv: -abs(kv[1].value))[: self.cfg.top_k]}
 
     def sparkline(self, key: str, width: int = 24) -> str:

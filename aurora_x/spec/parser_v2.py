@@ -1,11 +1,13 @@
 from __future__ import annotations
+
 import re
 from dataclasses import dataclass, field
-from typing import List, Dict, Any
+from typing import Any
+
 
 @dataclass
 class Example:
-    inputs: Dict[str, Any]
+    inputs: dict[str, Any]
     output: Any
 
 @dataclass
@@ -13,9 +15,9 @@ class RichSpec:
     title: str
     signature: str
     description: str
-    examples: List[Example] = field(default_factory=list)
-    postconditions: List[str] = field(default_factory=list)
-    constraints: List[str] = field(default_factory=list)
+    examples: list[Example] = field(default_factory=list)
+    postconditions: list[str] = field(default_factory=list)
+    constraints: list[str] = field(default_factory=list)
 
 SIG_RE = re.compile(r"def\s+([a-zA-Z_]\w*)\s*\((.*?)\)\s*->\s*([a-zA-Z_][\w\[\], ]*)")
 
@@ -28,7 +30,7 @@ def parse_signature(block: str):
     rtype = m.group(3).strip()
     return name, args, rtype
 
-def parse_examples(md: str) -> List[Example]:
+def parse_examples(md: str) -> list[Example]:
     lines = [ln.strip() for ln in md.splitlines() if ln.strip()]
     start = None
     for i, ln in enumerate(lines):
@@ -41,7 +43,7 @@ def parse_examples(md: str) -> List[Example]:
     for ln in lines[start+2:]:
         if not ln.startswith("|"): break
         cells = [c.strip() for c in ln.strip("|").split("|")]
-        rows.append(dict(zip(header, cells)))
+        rows.append(dict(zip(header, cells, strict=False)))
     examples = []
     for row in rows:
         inp = {k: _coerce(row[k]) for k in row if k.lower() not in ("out", "output")}
@@ -73,7 +75,7 @@ def parse_sections(md: str):
     return out
 
 def parse(md: str) -> RichSpec:
-    title = (md.splitlines()[0] or "# Spec").replace("#","").strip()
+    (md.splitlines()[0] or "# Spec").replace("#","").strip()
     sections = parse_sections(md)
     import re as _re
     sig_block = sections.get("Signature","")
@@ -106,10 +108,10 @@ def english_to_spec(utterance: str) -> str:
     """Convert English utterance to a spec markdown."""
     # Import parser_nl to get proper parsing including Flask detection
     from aurora_x.spec.parser_nl import parse_english
-    
+
     # Parse the utterance using parser_nl
     parsed = parse_english(utterance)
-    
+
     # Check if this is a Flask request
     if parsed.get("framework") == "flask":
         # Generate Flask-specific spec
@@ -136,10 +138,10 @@ def english_to_spec(utterance: str) -> str:
 Flask applications do not have traditional input/output examples.
 This will generate a complete Flask web application.
 """
-    
+
     # Fall back to existing pattern matching for non-Flask requests
     lower_utterance = utterance.lower()
-    
+
     # Check if parser_nl found a known pattern
     if parsed.get("signature") and parsed.get("name") != _snake(utterance):
         # Use parser_nl's result for known patterns
@@ -150,7 +152,7 @@ This will generate a complete Flask web application.
             for ex in parsed["examples"]:
                 row = " | ".join([str(ex.get(k, "")) for k in list(ex.keys())[:-1]] + [str(ex.get("out", ""))])
                 examples_md += f"| {row} |\n"
-        
+
         return f"""# {parsed['name']}
 
 ## Signature
@@ -167,7 +169,7 @@ This will generate a complete Flask web application.
 ## Postconditions
 - Generated from natural language
 """
-    
+
     # Recognize common patterns (fallback for backward compatibility)
     if "reverse" in lower_utterance and "string" in lower_utterance:
         return """# reverse_string
@@ -322,7 +324,7 @@ Create a timer or countdown function.
         func_name = _snake(utterance)
         if not func_name or func_name == 'function':
             func_name = "generated_function"
-        
+
         return f"""# {func_name}
 
 ## Signature
@@ -352,7 +354,7 @@ def parse_freeform_or_v2(text: str) -> RichSpec:
             return parse(text)
         except Exception as e:
             print(f"[Parser] V2 parse failed: {e}, falling back to English mode")
-    
+
     # Fall back to English-to-spec conversion
     spec_md = english_to_spec(text)
     try:

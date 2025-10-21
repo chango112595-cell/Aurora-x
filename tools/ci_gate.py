@@ -2,14 +2,16 @@
 Run with:  python tools/ci_gate.py
 Exits non-zero on failure (CI gate).
 """
-import json, sys, os, math, time
+import json
+import sys
 from pathlib import Path
 
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from aurora_x.prod_config import CFG, validate_numbers
 from aurora_x.learn.adaptive import AdaptiveBiasScheduler, AdaptiveConfig
+from aurora_x.prod_config import CFG, validate_numbers
+
 
 def test_adaptive_numbers():
     validate_numbers()

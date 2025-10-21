@@ -1,7 +1,9 @@
 # FastAPI endpoint for formatting seconds to human-readable time
+from typing import Any
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Dict, Any
+
 
 class FormatRequest(BaseModel):
     seconds: float
@@ -23,13 +25,13 @@ def _fmt_seconds(sec: float) -> str:
 
 def attach_format(app: FastAPI):
     @app.post("/api/format/seconds")
-    async def api_format_seconds(request: FormatRequest) -> Dict[str, Any]:
+    async def api_format_seconds(request: FormatRequest) -> dict[str, Any]:
         """
         Format seconds into human-readable time.
-        
+
         Examples:
         - {"seconds": 60} → "1.00 min"
-        - {"seconds": 3600} → "1.00 hours"  
+        - {"seconds": 3600} → "1.00 hours"
         - {"seconds": 86400} → "1.00 days"
         - {"seconds": 31536000} → "1.00 years"
         """
