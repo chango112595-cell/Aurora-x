@@ -61,11 +61,16 @@ jobs:
 
       - name: Launch server (background)
         run: |
-          nohup python -m aurora_x.serve >/tmp/aurora.log 2>&1 & echo $! > /tmp/aurora.pid
-          echo "PID:" $(cat /tmp/aurora.pid)
-          for i in $(seq 1 30); do
-            curl -fsS ${HOST}/healthz && break || sleep 1
+          nohup python -m uvicorn aurora_x.serve:app --host 127.0.0.1 --port 8000 >/tmp/aurora.log 2>&1 & echo $! > /tmp/aurora.pid
+          echo "Server PID: $(cat /tmp/aurora.pid)"
+          for i in $(seq 1 60); do
+            curl -fsS http://127.0.0.1:8000/healthz && break || sleep 1
           done
+          if ! curl -fsS http://127.0.0.1:8000/healthz; then
+            echo "Server failed to start. Logs:"
+            cat /tmp/aurora.log
+            exit 1
+          fi
           curl -fsS ${HOST}/healthz | jq .
 
       - name: Hit demo/status endpoints
@@ -148,3 +153,10 @@ jobs:
             src/**/*.rs
             Aurora.WebApi/**/*.cs
             Aurora.WebApi/**/*.csproj
+
+      - name: Upload server logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-logs
+          path: /tmp/aurora.log
