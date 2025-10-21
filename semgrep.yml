@@ -1,7 +1,3 @@
 rules:
-  - id: p/security-audit
-    rules: 
-      - p/security-audit
-  - id: p/python
-    rules:
-      - p/python
+  - p/security-audit
+  - p/python
