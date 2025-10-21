@@ -1,6 +1,7 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, JSONResponse
-from pathlib import Path
 
 PWA_DIR = Path('frontend/pwa')
 

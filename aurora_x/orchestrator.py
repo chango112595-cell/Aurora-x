@@ -4,9 +4,14 @@ T07 Orchestrator - Continuous spec monitoring daemon
 Monitors specs/*.md for changes and auto-runs synthesis
 Optional git auto-commit/push gated by env vars
 """
-from pathlib import Path
-import os, time, subprocess, json, hashlib, sys
+import hashlib
+import json
+import os
+import subprocess
+import sys
+import time
 from datetime import datetime
+from pathlib import Path
 
 SPEC_DIR = Path("specs")
 RUNS = Path("runs")
@@ -29,7 +34,7 @@ def list_specs():
 def latest_run_for(spec_name: str):
     """Get latest run info for a spec from spec_runs.jsonl"""
     log = RUNS / "spec_runs.jsonl"
-    if not log.exists(): 
+    if not log.exists():
         return None
     last = None
     for line in log.read_text(encoding="utf-8").splitlines():
@@ -52,14 +57,14 @@ def synth(spec: Path):
             capture_output=True,
             text=True
         )
-        
+
         if result.returncode == 0:
             print(f"✅ Successfully synthesized {spec.name}")
             # Send Discord notification if available
             if DISCORD.exists():
                 try:
                     subprocess.run(
-                        ["python", str(DISCORD), "success", 
+                        ["python", str(DISCORD), "success",
                          f"🔄 Auto-synth: {spec.name}"],
                         check=False
                     )
@@ -86,22 +91,22 @@ def git_push_if_enabled(msg: str):
     """Auto-commit and push if enabled via env vars"""
     if not GIT_AUTO:
         return
-    
+
     if not REPO_URL:
         print("⚠️  AURORA_GIT_URL not set, skipping git push")
         return
-    
+
     try:
         # Add all changes
         subprocess.run(["git", "add", "-A"], check=True)
-        
+
         # Try to commit
         result = subprocess.run(
             ["git", "commit", "-m", msg],
             capture_output=True,
             text=True
         )
-        
+
         if result.returncode == 0:
             print(f"📝 Committed: {msg}")
             # Push to remote
@@ -127,28 +132,28 @@ def run_once(digests: dict) -> dict:
     """Run one iteration of spec monitoring"""
     specs_processed = 0
     specs_changed = 0
-    
+
     for p in list_specs():
         d = spec_digest(p)
         changed = (digests.get(p.name) != d)
         last = latest_run_for(p.name)
-        
+
         if changed:
             print(f"🔄 Change detected: {p.name}")
             specs_changed += 1
-        
+
         if changed or last is None:
             if last is None:
                 print(f"🆕 First run for: {p.name}")
-            
+
             if synth(p):
                 git_push_if_enabled(f"aurora: spec run for {p.name}")
                 digests[p.name] = d
                 specs_processed += 1
-    
+
     if specs_processed > 0:
         print(f"📊 Processed {specs_processed} specs ({specs_changed} changed)")
-    
+
     return digests
 
 def main():
@@ -159,34 +164,34 @@ def main():
     print(f"📁 Spec directory: {SPEC_DIR}")
     print(f"⏱️  Poll interval: {POLL_SECS} seconds")
     print(f"🔀 Git auto-commit: {'ON' if GIT_AUTO else 'OFF'}")
-    
+
     if GIT_AUTO:
         print(f"🌿 Git branch: {BRANCH}")
         print(f"📍 Git repo: {REPO_URL or 'Not set'}")
-    
+
     print("=" * 60)
-    
+
     # Initial digest computation
     digests = {}
     for p in list_specs():
         digests[p.name] = spec_digest(p)
         print(f"📄 Monitoring: {p.name} [{digests[p.name][:8]}...]")
-    
-    print(f"\n🚀 Starting continuous monitoring...")
-    
+
+    print("\n🚀 Starting continuous monitoring...")
+
     iteration = 0
     try:
         while True:
             iteration += 1
             print(f"\n--- Iteration {iteration} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---")
-            
+
             # Run monitoring pass
             digests = run_once(digests)
-            
+
             # Sleep until next iteration
             print(f"💤 Sleeping {POLL_SECS} seconds until next check...")
             time.sleep(POLL_SECS)
-            
+
     except KeyboardInterrupt:
         print("\n\n⚠️  Orchestrator stopped by user")
         sys.exit(0)

@@ -6,6 +6,7 @@ Demonstrates real calls to math/physics solvers
 
 from aurora_x.generators.solver import solve_text
 
+
 def custom_function():
     examples = {
         "math_eval": "2 + 3 * 4",

@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Discord notification styles for Aurora-X Ultra."""
 
-import os, json, urllib.request, urllib.error
+import json
+import os
+import urllib.error
+import urllib.request
 from datetime import datetime
 
 URL = os.getenv("DISCORD_WEBHOOK_URL")
@@ -11,7 +14,7 @@ def send_embed(title: str, description: str, color: int, fields: list = None):
     if not URL:
         print("❌ No DISCORD_WEBHOOK_URL found")
         return False
-    
+
     embed = {
         "title": title,
         "description": description,
@@ -22,16 +25,16 @@ def send_embed(title: str, description: str, color: int, fields: list = None):
             "icon_url": "https://cdn.discordapp.com/embed/avatars/1.png"
         }
     }
-    
+
     if fields:
         embed["fields"] = fields
-    
+
     payload = {
         "username": "Aurora-X Bot",
         "avatar_url": "https://cdn.discordapp.com/embed/avatars/2.png",
         "embeds": [embed]
     }
-    
+
     try:
         data = json.dumps(payload).encode("utf-8")
         req = urllib.request.Request(URL, data=data, headers={"Content-Type": "application/json"})
@@ -47,25 +50,25 @@ def send_embed(title: str, description: str, color: int, fields: list = None):
 
 def success(title: str, message: str, **kwargs):
     """Send a success notification (green)."""
-    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} 
+    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True}
               for k, v in kwargs.items()]
     return send_embed(f"✅ {title}", message, 0x00ff00, fields)
 
 def warning(title: str, message: str, **kwargs):
     """Send a warning notification (amber)."""
-    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} 
+    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True}
               for k, v in kwargs.items()]
     return send_embed(f"⚠️ {title}", message, 0xffa500, fields)
 
 def failure(title: str, message: str, **kwargs):
     """Send a failure notification (red)."""
-    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} 
+    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True}
               for k, v in kwargs.items()]
     return send_embed(f"❌ {title}", message, 0xff0000, fields)
 
 def milestone(title: str, message: str, **kwargs):
     """Send a milestone notification (cyan)."""
-    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} 
+    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True}
               for k, v in kwargs.items()]
     return send_embed(f"🌌 {title}", message, 0x00ffff, fields)
 

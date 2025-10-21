@@ -1,17 +1,18 @@
+import pathlib
+import re
+import shlex
+import subprocess
+import zipfile
+from typing import Literal
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel
-from typing import Dict, Optional, Literal
-import time
-import re
-import subprocess
-import shlex
-import pathlib
-import zipfile
-import json
-from aurora_x.bridge.pipeline import compile_from_nl, compile_from_spec, compile_from_nl_project
+
 from aurora_x.bridge.deploy import deploy as deploy_fn
+from aurora_x.bridge.pipeline import compile_from_nl, compile_from_nl_project, compile_from_spec
 from aurora_x.bridge.pr import pr_create as pr_create_fn
+
 
 def _shell(cmd:str):
     """Execute shell command and return result."""
@@ -26,8 +27,8 @@ class SpecBody(BaseModel):
 
 class ProjectBody(BaseModel):
     prompt: str
-    repo: Optional[str] = None  # Repository string in format "owner/name" or full URL
-    stack: Optional[str] = None
+    repo: str | None = None  # Repository string in format "owner/name" or full URL
+    stack: str | None = None
     mode: Literal["create", "enhance"] = "create"  # "create" for new, "enhance" for PR
 
 def attach_bridge(app: FastAPI):
@@ -44,18 +45,18 @@ def attach_bridge(app: FastAPI):
     @app.post("/api/bridge/deploy")
     def bridge_deploy():
         return JSONResponse(deploy_fn())
-    
+
     @app.post("/api/bridge/nl/project")
     def bridge_nl_project(body: ProjectBody):
         if not body.prompt or len(body.prompt.strip()) < 4:
             raise HTTPException(400, "prompt too short")
-        
+
         # Parse repository string if provided
         repo_info = None
         repo_owner = None
         repo_name = None
         repo_branch = "main"
-        
+
         if body.repo:
             # Handle different repo formats:
             # - "owner/name"
@@ -63,13 +64,13 @@ def attach_bridge(app: FastAPI):
             # - "https://github.com/owner/name"
             # - "https://github.com/owner/name.git"
             repo_str = body.repo.strip()
-            
+
             # Remove common prefixes
             repo_str = re.sub(r'^https?://', '', repo_str)
             repo_str = re.sub(r'^github\.com/', '', repo_str)
             repo_str = re.sub(r'\.git$', '', repo_str)
             repo_str = repo_str.strip('/')
-            
+
             # Split owner/name
             parts = repo_str.split('/')
             if len(parts) >= 2:
@@ -87,11 +88,11 @@ def attach_bridge(app: FastAPI):
                     "message": f"Invalid repository format: {body.repo}. Use 'owner/name' format",
                     "mode": body.mode
                 })
-        
+
         # Basic planner logic to determine if UI/API components are needed
         prompt_lower = body.prompt.lower()
         stack_lower = body.stack.lower() if body.stack else ""
-        
+
         # Determine project components based on stack and prompt keywords
         components = {
             "ui_needed": False,
@@ -99,45 +100,45 @@ def attach_bridge(app: FastAPI):
             "database_needed": False,
             "auth_needed": False
         }
-        
+
         # UI detection patterns - use word boundaries for better matching
-        ui_patterns = ["frontend", "react", "vue", "angular", "interface", 
-                       "dashboard", "website", "html", "css", "component", "page", 
+        ui_patterns = ["frontend", "react", "vue", "angular", "interface",
+                       "dashboard", "website", "html", "css", "component", "page",
                        "user interface", "web ui", "webapp", "web app"]
         if any(pattern in prompt_lower for pattern in ui_patterns) or \
            any(pattern in stack_lower for pattern in ["react", "vue", "angular", "nextjs"]) or \
            " ui " in f" {prompt_lower} ":  # Check for UI as a standalone word
             components["ui_needed"] = True
-        
-        # API detection patterns  
-        api_patterns = ["api", "backend", "rest", "endpoint", "server", "flask", 
+
+        # API detection patterns
+        api_patterns = ["api", "backend", "rest", "endpoint", "server", "flask",
                         "fastapi", "express", "django", "route", "crud"]
         if any(pattern in prompt_lower for pattern in api_patterns) or \
            any(pattern in stack_lower for pattern in ["flask", "fastapi", "express", "django"]):
             components["api_needed"] = True
-        
+
         # Database detection patterns
-        db_patterns = ["database", "db", "sql", "postgres", "mysql", "mongodb", 
+        db_patterns = ["database", "db", "sql", "postgres", "mysql", "mongodb",
                        "store", "persist", "save data"]
         if any(pattern in prompt_lower for pattern in db_patterns):
             components["database_needed"] = True
-        
+
         # Auth detection patterns
-        auth_patterns = ["auth", "login", "user", "account", "signup", "signin", 
+        auth_patterns = ["auth", "login", "user", "account", "signup", "signin",
                          "authentication", "authorization"]
         if any(pattern in prompt_lower for pattern in auth_patterns):
             components["auth_needed"] = True
-        
+
         # If nothing detected but stack is fullstack, enable both UI and API
         if body.stack and "fullstack" in stack_lower:
             components["ui_needed"] = True
             components["api_needed"] = True
-        
+
         # Build enhanced prompt with stack info
         enhanced_prompt = body.prompt
         if body.stack:
             enhanced_prompt = f"[Stack: {body.stack}] {body.prompt}"
-        
+
         # Process based on mode
         if body.mode == "enhance":  # PR mode
             # Check if we have repo information
@@ -148,7 +149,7 @@ def attach_bridge(app: FastAPI):
                     "mode": "enhance",
                     "components": components
                 })
-            
+
             # First, generate the project to get the ZIP file (skip git operations for PR mode)
             res = compile_from_nl_project(
                 prompt=enhanced_prompt,
@@ -157,7 +158,7 @@ def attach_bridge(app: FastAPI):
                 components=components,
                 skip_git_operations=True  # Don't auto-commit in PR mode
             )
-            
+
             # Call PR creation function with the generated ZIP
             try:
                 pr_result = pr_create_fn(
@@ -168,7 +169,7 @@ def attach_bridge(app: FastAPI):
                     body=f"Automated PR generated from prompt:\n\n{enhanced_prompt}\n\nComponents: {components}",
                     zip_rel=res.zip_rel
                 )
-                
+
                 return JSONResponse({
                     "ok": pr_result.get("ok", False),
                     "message": "PR creation initiated" if pr_result.get("ok") else pr_result.get("err", "PR creation failed"),
@@ -193,13 +194,13 @@ def attach_bridge(app: FastAPI):
                 components=components,
                 skip_git_operations=False  # Do auto-commit in create mode
             )
-            
+
             return JSONResponse({
                 **res.__dict__,
                 "components": components,
                 "mode": "create"
             })
-    
+
     @app.get("/bridge/diff")
     def bridge_diff():
         """Get a structured summary of current git diff."""
@@ -209,7 +210,7 @@ def attach_bridge(app: FastAPI):
             lines = out.strip().split('\n') if out else []
             files_changed = []
             summary = ""
-            
+
             for line in lines:
                 # Skip empty lines and the summary line
                 if not line or 'file' in line and 'changed' in line:
@@ -224,7 +225,7 @@ def attach_bridge(app: FastAPI):
                             "file": file_path,
                             "changes": changes
                         })
-            
+
             return JSONResponse({
                 "ok": True,
                 "files_changed": files_changed,
@@ -237,7 +238,7 @@ def attach_bridge(app: FastAPI):
                 "err": err or "Failed to get diff",
                 "has_changes": False
             }, status_code=500)
-    
+
     @app.get("/bridge/diff/full", response_class=PlainTextResponse)
     def bridge_diff_full():
         """Get the full git diff as plain text (for viewing in browser)."""
@@ -246,9 +247,9 @@ def attach_bridge(app: FastAPI):
             return out if out else "No changes to display"
         else:
             return f"Error getting diff: {err or 'unknown error'}"
-    
+
     @app.get("/bridge/preview")
-    def bridge_preview(zip: Optional[str] = None):
+    def bridge_preview(zip: str | None = None):
         """
         Returns a JSON manifest of files that WOULD be applied from the zip (no write).
         """
@@ -257,14 +258,14 @@ def attach_bridge(app: FastAPI):
             zpath = pathlib.Path(".") / (zip.lstrip("/") if zip else "")
         else:
             zpath = None
-            
+
         if not zpath or not zpath.exists():
             candidates = sorted(pathlib.Path("runs").glob("*/project.zip"))
             zpath = candidates[-1] if candidates else None
-        
+
         if not zpath or not zpath.exists():
             return JSONResponse({"ok": False, "err": "no zip found"}, status_code=404)
-        
+
         manifest = []
         with zipfile.ZipFile(zpath, "r") as z:
             for info in z.infolist():
@@ -272,6 +273,6 @@ def attach_bridge(app: FastAPI):
                     "name": info.filename,
                     "size": info.file_size
                 })
-        
+
         return {"ok": True, "zip": str(zpath), "files": manifest}
 

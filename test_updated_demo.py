@@ -1,36 +1,38 @@
 #!/usr/bin/env python
 """Test the updated /api/demo/cards endpoint"""
 
-import json
 import asyncio
+import json
+
 
 def test_demo_cards_locally():
     """Test the updated demo cards structure locally"""
-    from aurora_x.chat.attach_demo import attach_demo
     from fastapi import FastAPI
-    
+
+    from aurora_x.chat.attach_demo import attach_demo
+
     app = FastAPI()
     attach_demo(app)
-    
+
     async def get_cards():
         # Find the endpoint function
         for route in app.routes:
             if route.path == "/api/demo/cards":
                 return await route.endpoint()
         return None
-    
+
     result = asyncio.run(get_cards())
-    
+
     if result:
         print("✅ Demo cards endpoint working!")
-        print(f"\n📊 Statistics:")
+        print("\n📊 Statistics:")
         print(f"  Total cards: {result['total']}")
-        print(f"  Categories breakdown:")
+        print("  Categories breakdown:")
         for cat, count in result['categories'].items():
             print(f"    - {cat}: {count} cards")
-        
-        print(f"\n🎯 Sample Cards by Category:\n")
-        
+
+        print("\n🎯 Sample Cards by Category:\n")
+
         # Group cards by category
         by_category = {}
         for card in result['cards']:
@@ -41,7 +43,7 @@ def test_demo_cards_locally():
             if cat not in by_category:
                 by_category[cat] = []
             by_category[cat].append(card)
-        
+
         # Show samples from each category
         for cat_name, cat_cards in by_category.items():
             print(f"  📁 {cat_name.upper()} ({len(cat_cards)} cards):")
@@ -56,7 +58,7 @@ def test_demo_cards_locally():
                 print(f"    ... and {len(cat_cards) - 2} more\n")
             else:
                 print()
-        
+
         # Verify structure
         print("📋 Structure Validation:")
         required_fields = ['id', 'title', 'endpoint', 'method', 'body']
@@ -66,7 +68,7 @@ def test_demo_cards_locally():
                 print(f"  ✅ Has '{field}' field")
             else:
                 print(f"  ❌ Missing '{field}' field")
-        
+
         return result
     else:
         print("❌ Failed to get demo cards")
@@ -74,49 +76,51 @@ def test_demo_cards_locally():
 
 def test_specific_card(card_id="solve_orbit_units"):
     """Test executing a specific card"""
-    from aurora_x.chat.attach_demo import attach_demo
-    from fastapi import FastAPI
     import asyncio
-    
+
+    from fastapi import FastAPI
+
+    from aurora_x.chat.attach_demo import attach_demo
+
     app = FastAPI()
     attach_demo(app)
-    
+
     async def get_cards():
         for route in app.routes:
             if route.path == "/api/demo/cards":
                 return await route.endpoint()
         return None
-    
+
     result = asyncio.run(get_cards())
-    
+
     if not result:
         print("❌ Could not get cards")
         return
-    
+
     # Find the specific card
     card = None
     for c in result['cards']:
         if c['id'] == card_id:
             card = c
             break
-    
+
     if not card:
         print(f"❌ Card '{card_id}' not found")
         return
-    
+
     print(f"\n🧪 Testing Card: {card['title']}")
     print(f"  ID: {card['id']}")
     print(f"  Endpoint: {card['method']} {card['endpoint']}")
     print(f"  Body: {json.dumps(card['body'], indent=2)}")
-    
+
     # Test locally for solve endpoints
     if "/solve" in card['endpoint']:
         from aurora_x.generators.solver import solve_text
         problem = card['body'].get('problem', '')
-        
+
         result = solve_text(problem)
         if result.get('ok'):
-            print(f"  ✅ Local test successful!")
+            print("  ✅ Local test successful!")
             print(f"  Result: {result}")
             if 'expected' in card:
                 print(f"  Expected: {card['expected']}")
@@ -124,14 +128,14 @@ def test_specific_card(card_id="solve_orbit_units"):
             print(f"  ❌ Error: {result}")
     else:
         print(f"  ℹ️  Card type: {card['endpoint']} (not tested locally)")
-    
+
     if 'hint' in card:
         print(f"  💡 Hint: {card['hint']}")
 
 def print_curl_commands():
     """Print example curl commands for testing"""
     print("\n📝 Example curl commands:\n")
-    
+
     examples = [
         {
             "desc": "Get all demo cards",
@@ -156,7 +160,7 @@ def print_curl_commands():
   http://localhost:5001/api/format/units | jq .'''
         }
     ]
-    
+
     for ex in examples:
         print(f"# {ex['desc']}:")
         print(f"{ex['cmd']}\n")
@@ -165,15 +169,15 @@ if __name__ == "__main__":
     print("🚀 AURORA-X DEMO CARDS TEST")
     print("=" * 60)
     print()
-    
+
     result = test_demo_cards_locally()
-    
+
     if result:
         test_specific_card("solve_orbit_units")
         test_specific_card("chat_timer_python")
-        
+
         print_curl_commands()
-        
+
         print("\n✨ Demo Cards Ready!")
         print("  • 25+ test cards covering all endpoints")
         print("  • Chat synthesis examples (Python/Go/Rust/C#)")

@@ -1,9 +1,12 @@
-import unittest
 import sys
+import unittest
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from src.reverse_string import reverse_string
 from src.check_palindrome import check_palindrome
+from src.reverse_string import reverse_string
+
+
 class Test_reverse_string_0(unittest.TestCase):
     def test_0(self):
         self.assertEqual(reverse_string(s='abc'), 'cba')

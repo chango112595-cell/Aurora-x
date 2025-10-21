@@ -5,11 +5,11 @@ try:
 except Exception:
     APIRouter = None
 
-from pathlib import Path
-from typing import List, Dict, Any
 import json
+from pathlib import Path
+from typing import Any
 
-spec_runs_memory: List[Dict[str, Any]] = []
+spec_runs_memory: list[dict[str, Any]] = []
 
 _LOG = Path("runs/spec_runs.jsonl")
 if _LOG.exists():

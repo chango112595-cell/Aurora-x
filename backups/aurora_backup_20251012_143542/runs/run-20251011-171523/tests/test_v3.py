@@ -1,7 +1,7 @@
-import unittest
 import sys
+import unittest
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from src.what_orbit_location import what_orbit_location
 
 if __name__=='__main__': unittest.main()

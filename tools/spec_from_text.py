@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from aurora_x.spec.parser_nl import parse_english
 
 TEMPLATE = """# {name}

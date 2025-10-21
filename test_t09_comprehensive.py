@@ -3,17 +3,18 @@
 T09 Comprehensive Test Suite - Domain Router for Math and Physics
 """
 
-from aurora_x.router.domain_router import classify_domain
+
 from aurora_x.generators.solver import solve_text
-from aurora_x.reasoners import math_core, physics_core
-import json
+from aurora_x.reasoners import physics_core
+from aurora_x.router.domain_router import classify_domain
+
 
 def test_math_operations():
     """Test math domain operations."""
     print("\n" + "="*60)
     print("🔢 MATH OPERATIONS TEST")
     print("="*60)
-    
+
     # Test expression evaluation
     test_cases = [
         ("2 + 3 * 4", 14.0),
@@ -21,14 +22,14 @@ def test_math_operations():
         ("2 ** 3 + 1", 9.0),
         ("10 / 2 - 3", 2.0),
     ]
-    
+
     print("\n📊 Expression Evaluation:")
     for expr, expected in test_cases:
         result = solve_text(expr)
         actual = result.get("value")
         status = "✅" if actual == expected else "❌"
         print(f"  {status} {expr} = {actual} (expected: {expected})")
-    
+
     # Test polynomial differentiation
     print("\n📐 Polynomial Differentiation:")
     diff_cases = [
@@ -37,7 +38,7 @@ def test_math_operations():
         ("differentiate 5x^4 + 3x^2", "20x^3 + 6x"),
         ("differentiate 10", "0"),
     ]
-    
+
     for prompt, expected in diff_cases:
         result = solve_text(prompt)
         actual = result.get("derivative", "").strip()
@@ -50,7 +51,7 @@ def test_physics_operations():
     print("\n" + "="*60)
     print("🌍 PHYSICS OPERATIONS TEST")
     print("="*60)
-    
+
     # Test orbital period calculations
     print("\n🛸 Orbital Period Calculations:")
     orbital_cases = [
@@ -60,7 +61,7 @@ def test_physics_operations():
             "expected_range": (5800, 5900)  # seconds
         },
         {
-            "prompt": "orbital period a=4.22e7 M=5.972e24", 
+            "prompt": "orbital period a=4.22e7 M=5.972e24",
             "desc": "Geostationary orbit",
             "expected_range": (86000, 87000)  # ~24 hours
         },
@@ -70,7 +71,7 @@ def test_physics_operations():
             "expected_range": (2.36e6, 2.38e6)  # ~27.3 days
         },
     ]
-    
+
     for case in orbital_cases:
         result = solve_text(case["prompt"])
         period = result.get("period_s", 0)
@@ -80,7 +81,7 @@ def test_physics_operations():
         days = hours / 24
         print(f"  {status} {case['desc']}:")
         print(f"      Period: {period:.1f}s = {hours:.1f}h = {days:.2f} days")
-    
+
     # Test EM field superposition
     print("\n⚡ Electromagnetic Field Superposition:")
     em_result = physics_core.em_superposition([(1,0,0), (0,2,0), (-1,0,3)])
@@ -94,7 +95,7 @@ def test_domain_classification():
     print("\n" + "="*60)
     print("🎯 DOMAIN CLASSIFICATION TEST")
     print("="*60)
-    
+
     test_prompts = [
         ("calculate 2 + 2", "math"),
         ("differentiate x^2", "math"),
@@ -104,7 +105,7 @@ def test_domain_classification():
         ("write a function to sort", "code"),
         ("hello world", "code"),
     ]
-    
+
     for prompt, expected in test_prompts:
         domain_intent = classify_domain(prompt)
         actual = domain_intent.domain
@@ -116,14 +117,14 @@ def test_edge_cases():
     print("\n" + "="*60)
     print("⚠️  EDGE CASES TEST")
     print("="*60)
-    
+
     # Test invalid expressions
     print("\n🔴 Invalid Expressions:")
     invalid_cases = [
         "integrate x^2 dx",  # Integration not implemented
         "orbital period a=-1000 M=5.972e24",  # Invalid negative semi-major axis
     ]
-    
+
     for expr in invalid_cases:
         result = solve_text(expr)
         ok = result.get("ok", False)
@@ -140,12 +141,12 @@ def run_all_tests():
     ║       Math & Physics Solvers for Aurora-X Ultra          ║
     ╚══════════════════════════════════════════════════════════╝
     """)
-    
+
     test_domain_classification()
     test_math_operations()
     test_physics_operations()
     test_edge_cases()
-    
+
     print("\n" + "="*60)
     print("📊 SUMMARY")
     print("="*60)

@@ -1,7 +1,13 @@
 from __future__ import annotations
-import json, subprocess, sys, tempfile
+
+import json
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
+
 from aurora_x.corpus.store import record, spec_digest
+
 
 def _seed(tmp: Path, name="add", snippet="def add(a,b): return a+b"):
     entry = {
@@ -24,7 +30,7 @@ def test_dump_grep_and_json():
         "--grep", "variant",
         "--json"
     ]
-    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.run(cmd, capture_output=True, text=True)
     arr = json.loads(proc.stdout)
     assert len(arr) >= 1
     assert any("variant" in (r.get("snippet") or "") for r in arr)

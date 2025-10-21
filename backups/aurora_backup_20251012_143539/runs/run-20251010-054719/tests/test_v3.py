@@ -1,8 +1,11 @@
-import unittest
 import sys
+import unittest
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.count_vowels import count_vowels
+
+
 class Test_count_vowels_0(unittest.TestCase):
     def test_0(self):
         self.assertEqual(count_vowels(s='hello'), 2)

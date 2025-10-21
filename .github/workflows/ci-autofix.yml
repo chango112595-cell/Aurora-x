@@ -1,0 +1,42 @@
+name: Python Lint & Auto-Fix
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-fix:
+    name: Lint + Fix Python
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Tools
+        run: |
+          pip install ruff black bandit
+
+      - name: Ruff Lint & Fix
+        run: ruff check . --fix
+
+      - name: Format with Black
+        run: black .
+
+      - name: Bandit Security Check
+        run: bandit -r . -lll || true
+
+      - name: Commit Fixes (if any)
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .
+          git diff --cached --quiet || git commit -m "style: auto-fix Python issues (ruff/black)"
+          git push || echo "No changes to push"

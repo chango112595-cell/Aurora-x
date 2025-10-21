@@ -4,12 +4,14 @@ Bridge Service Main Entry Point
 Run with: python -m aurora_x.bridge.service
 """
 
-import sys
 import argparse
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from aurora_x.bridge.attach_bridge import attach_bridge
+
 
 def main():
     parser = argparse.ArgumentParser(description="Aurora-X Factory Bridge Service")

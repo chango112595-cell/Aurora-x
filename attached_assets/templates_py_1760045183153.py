@@ -1,5 +1,7 @@
 
 from __future__ import annotations
+
+
 def generate_impl(signature: str, description: str) -> str:
     desc = (description or "").lower()
     if "sum" in desc or "add" in desc:

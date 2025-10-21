@@ -4,12 +4,12 @@ English-to-Spec Converter for Aurora-X v3
 Converts plain English requests into V3 spec markdown files
 """
 
-import sys
-import re
-import os
 import hashlib
-from pathlib import Path
+import re
+import sys
 from datetime import datetime
+from pathlib import Path
+
 
 def sanitize_name(text: str) -> str:
     """Convert text to a safe filename"""
@@ -26,7 +26,7 @@ def sanitize_name(text: str) -> str:
 def infer_function_details(text: str) -> dict:
     """Try to infer function details from English text"""
     text_lower = text.lower()
-    
+
     # Common patterns
     patterns = {
         'function_with_list': r'(list|array|numbers|items|collection)',
@@ -35,18 +35,18 @@ def infer_function_details(text: str) -> dict:
         'function_returns_bool': r'(check|is|can|should|verify|validate)',
         'function_returns_list': r'(sort|filter|collect|gather|find all)',
     }
-    
+
     # Determine input/output types
     input_type = 'Any'
     output_type = 'Any'
-    
+
     if re.search(patterns['function_with_list'], text_lower):
         input_type = 'list[Any]'
     elif re.search(patterns['function_with_string'], text_lower):
         input_type = 'str'
     elif re.search(patterns['function_with_number'], text_lower):
         input_type = 'int'
-    
+
     if re.search(patterns['function_returns_bool'], text_lower):
         output_type = 'bool'
     elif re.search(patterns['function_returns_list'], text_lower):
@@ -55,12 +55,12 @@ def infer_function_details(text: str) -> dict:
         output_type = 'int'
     elif 'reverse' in text_lower or 'convert' in text_lower:
         output_type = input_type
-    
+
     # Generate a function name
     name = sanitize_name(text)
     if not name.replace('_', '').replace('-', '').isidentifier():
         name = f"func_{name}"
-    
+
     # Create parameter name based on input type
     param_name = 'input_value'
     if 'list' in input_type:
@@ -69,7 +69,7 @@ def infer_function_details(text: str) -> dict:
         param_name = 'text'
     elif input_type == 'int':
         param_name = 'n'
-    
+
     return {
         'name': name,
         'input_type': input_type,
@@ -81,7 +81,7 @@ def infer_function_details(text: str) -> dict:
 def generate_v3_spec(text: str) -> str:
     """Generate a V3 spec markdown from English text"""
     details = infer_function_details(text)
-    
+
     spec = f"""# SpecV3: {text}
 
 ## Metadata
@@ -95,7 +95,7 @@ def generate_v3_spec(text: str) -> str:
 def {details['name']}({details['param_name']}: {details['input_type']}) -> {details['output_type']}:
     \"\"\"
     {details['description']}
-    
+
     This is a generic template placeholder function.
     \"\"\"
     pass
@@ -119,7 +119,7 @@ assert {details['name']}({details['param_name']}) == expected_output
 
 {details['description']}
 
-This specification was auto-generated from an English prompt. 
+This specification was auto-generated from an English prompt.
 The function signature and examples may need refinement.
 
 ## Tags
@@ -134,37 +134,37 @@ def main():
         print("Usage: python english_to_spec.py 'your English request'")
         print("       python english_to_spec.py --stdin < request.txt")
         sys.exit(1)
-    
+
     # Get input text
     if sys.argv[1] == '--stdin':
         text = sys.stdin.read().strip()
     else:
         text = ' '.join(sys.argv[1:])
-    
+
     if not text:
         print("Error: Empty input text")
         sys.exit(1)
-    
+
     # Generate spec
     spec_content = generate_v3_spec(text)
-    
+
     # Ensure requests directory exists
     requests_dir = Path("specs/requests")
     requests_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Save spec to file
     filename = f"{sanitize_name(text)}.md"
     spec_path = requests_dir / filename
-    
+
     with open(spec_path, 'w') as f:
         f.write(spec_content)
-    
+
     print(f"✅ Spec generated: {spec_path}")
     print(f"📝 Function name: {infer_function_details(text)['name']}")
-    
+
     # Also output the path for scripting
     print(f"SPEC_PATH={spec_path}")
-    
+
     return spec_path
 
 if __name__ == "__main__":
