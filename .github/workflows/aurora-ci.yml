@@ -34,6 +34,8 @@ jobs:
       - name: Security (bandit - high only)
         run: bandit -r aurora_x -lll
 
+      # NOTE: The current coverage threshold (>=15%) is a temporary baseline to allow incremental improvements.
+      # As test coverage increases, we plan to raise this threshold to better reflect project quality standards.
       - name: Tests + Coverage XML (>=15%)
         id: testcov
         run: |
