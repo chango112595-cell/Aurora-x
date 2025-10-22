@@ -7,3 +7,8 @@ httpx>=0.28.1
 pytest>=8.3.5
 requests>=2.32.4
 uvicorn[standard]>=0.33.0
+bandit
+lxml
+pytest-cov
+ruff
+semgrep

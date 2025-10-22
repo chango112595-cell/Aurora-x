@@ -1,6 +1,6 @@
 line-length = 100
 target-version = "py311"
-exclude = ["attached_assets", "runs", "backups", ".aurora", "timer_app.py"]
+exclude = ["attached_assets", "runs", "backups", ".aurora", "timer_app.py", "hello_world.py", "tests/test_hello_world.py", "tests/runs"]
 
 [lint]
 select = ["E", "F", "W", "I", "B", "UP"]
