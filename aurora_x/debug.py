@@ -8,3 +8,4 @@ def debug_candidate(code: str, test_cases: list) -> dict:
         "tests_run": len(test_cases),
         "status": "stub"
     }
+    
