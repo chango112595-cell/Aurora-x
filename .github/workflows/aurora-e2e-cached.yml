@@ -93,7 +93,8 @@ jobs:
               return json.load(urllib.request.urlopen(req))
           # Health
           h = json.load(urllib.request.urlopen(host+"/healthz"))
-          assert h.get("status")=="ok", h
++          # healthz currently returns {"ok": true, ...}
++          assert h.get("ok") is True or h.get("status") == "ok", h
           # Math
           r = post("/api/solve", {"problem":"(2+3)^2 + 1"})
           assert r.get("ok") and abs(r["value"]-26.0)<1e-9, r
