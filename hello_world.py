@@ -10,8 +10,8 @@ Example usage:
     >>> print(result)
 """
 
-from typing import Any, List, Dict, Optional, Union, Tuple
 import logging
+from typing import Any
 
 # Optional pytest import
 try:
@@ -80,7 +80,7 @@ def hello_world(input_data: Any, **kwargs) -> Any:
     return result
 
 
-def hello_world_batch(items: List[Any], **kwargs) -> List[Any]:
+def hello_world_batch(items: list[Any], **kwargs) -> list[Any]:
     """
     Process multiple items in batch.
 
@@ -98,7 +98,7 @@ def hello_world_batch(items: List[Any], **kwargs) -> List[Any]:
     return [hello_world(item, **kwargs) for item in items]
 
 
-def hello_world_async(input_data: Any, callback: Optional[callable] = None) -> Any:
+def hello_world_async(input_data: Any, callback: callable | None = None) -> Any:
     """
     Process data with optional callback.
 
@@ -273,7 +273,7 @@ def benchmark_hello_world(iterations: int = 1000):
     """
     import time
 
-    test_data = ["test_{}".format(i) for i in range(100)]
+    test_data = [f"test_{i}" for i in range(100)]
 
     print(f"\nBenchmarking {func_name} with {iterations} iterations...")
 
