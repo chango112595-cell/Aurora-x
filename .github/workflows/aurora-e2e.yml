@@ -12,8 +12,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest, macos-14]  # macos-14 = Apple Silicon ARM64
     env:
-      HOST: http://127.0.0.1:8000
-      PORT: 8000
+      HOST: ${{ secrets.HOST || 'http://127.0.0.1:8000' }}
+      PORT: ${{ secrets.PORT || '8000' }}
       AURORA_DEFAULT_LANG: python
     steps:
       - uses: actions/checkout@v4
