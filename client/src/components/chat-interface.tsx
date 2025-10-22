@@ -108,11 +108,11 @@ export function ChatInterface() {
         setMessages((prev) => [...prev, aiMessage]);
       }
     },
-    onError: () => {
+    onError: (error: any) => {
       const errorMessage: Message = {
         id: Date.now().toString(),
         role: "assistant",
-        content: "I encountered an error while processing your request. Please try again.",
+        content: `I encountered an error while processing your request: ${error?.message || "Unknown error"}. Please try again.`,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -128,20 +128,19 @@ export function ChatInterface() {
   });
 
   const handleSynthesisComplete = (progressData: any) => {
-    // When synthesis is complete, fetch the actual result
-    // For now, we'll simulate fetching the result
+    // Extract the synthesized code from the progress data result
+    const result = progressData.result;
+    const code = result?.code || `# Synthesis completed but no code was generated\n# Synthesis ID: ${progressData.id}`;
+    const language = result?.language || "python";
+    const functionName = result?.functionName || "synthesized_function";
+    const description = result?.description || progressData.message || "Aurora-X has successfully synthesized your code!";
+    
     const completedMessage: Message = {
       id: Date.now().toString(),
       role: "assistant",
-      content: "Aurora-X has successfully synthesized your code!",
-      code: `# Synthesis ID: ${progressData.id}
-# Completed in: ${progressData.actualDuration}s
-# Complexity: ${progressData.complexity}
-
-def synthesized_function():
-    """Your synthesized code will appear here"""
-    return "Implementation complete"`,
-      language: "python",
+      content: description,
+      code: code,
+      language: language,
       timestamp: new Date(),
     };
     

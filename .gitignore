@@ -13,6 +13,6 @@ __pycache__
 .coverage
 coverage.xml
 htmlcov/
-runs/run-*
-htmlcov/
 runs/run-*/
+runs/latest
+semgrep.sarif
