@@ -440,3 +440,15 @@ def root():
             "/api/nl/compile"
         ]
     }
+
+
+def main():
+    """Entry point for running the server via uvicorn."""
+    import uvicorn
+    port = int(os.environ.get("PORT", os.environ.get("AURORA_PORT", 8000)))
+    host = os.environ.get("HOST", "0.0.0.0")
+    uvicorn.run("aurora_x.serve:app", host=host, port=port, reload=False)
+
+
+if __name__ == "__main__":
+    main()
