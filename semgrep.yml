@@ -1,3 +1,8 @@
 rules:
   - p/security-audit
   - p/python
+  - id: use-semgrep-rules
+    pattern: dummy
+    languages: [python]
+    severity: WARNING
+    message: "Dummy rule - using auto mode"
