@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
@@ -22,7 +21,7 @@ class AdaptiveConfig:
     seed: int = 42
 
 class AdaptiveBiasScheduler:
-    \"\"\"Adaptive scheduler mixing exploitation and ε-greedy exploration.\"\"\"
+    """Adaptive scheduler mixing exploitation and ε-greedy exploration."""
     def __init__(self, config: AdaptiveConfig | None = None):
         self.cfg = config or AdaptiveConfig()
         self.rng = random.Random(self.cfg.seed)
