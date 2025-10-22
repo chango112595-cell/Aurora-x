@@ -1,5 +1,6 @@
-# Use standard community rulesets
 rules:
+  - p/security-audit
+  - p/python
   - id: use-semgrep-rules
     pattern: dummy
     languages: [python]
