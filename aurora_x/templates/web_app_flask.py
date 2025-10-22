@@ -36,6 +36,9 @@ document.getElementById('start').onclick=()=>{const secs=Math.max(0,Number(docum
 document.getElementById('pause').onclick=()=>{run=false;};document.getElementById('reset').onclick=()=>{run=false;t0=0;left=0;view.textContent='00:00';};
 </script></body></html>"""
 
+
+# (keep the existing HTML string above)
+
 def render_app(title: str, subtitle: str) -> str:
     return f"""from flask import Flask, Response
 
@@ -44,11 +47,15 @@ SUBTITLE = {subtitle!r}
 
 HTML = r{HTML!r}
 
+
 def create_app() -> Flask:
     app = Flask(__name__)
     @app.get('/')
     def index() -> Response:
-        return Response(HTML.format(title=TITLE, subtitle=SUBTITLE), mimetype='text/html')
+        return Response(
+            HTML.format(title=TITLE, subtitle=SUBTITLE),
+            mimetype='text/html'
+        )
     return app
 
 if __name__ == '__main__':
