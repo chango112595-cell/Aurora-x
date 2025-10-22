@@ -1,6 +1,8 @@
-rules:
+imports:
   - p/security-audit
   - p/python
+
+rules:
   - id: use-semgrep-rules
     pattern: dummy
     languages: [python]
