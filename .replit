@@ -14,7 +14,7 @@ packages = ["gnupg", "openssl", "postgresql", "xcodebuild", "zlib"]
 [deployment]
 deploymentTarget = "autoscale"
 build = ["npm", "run", "build"]
-run = ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+run = ["npm", "start"]  # Changed from gunicorn
 
 [[ports]]
 localPort = 5000
@@ -101,8 +101,9 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "gunicorn --bind 0.0.0.0:5000 --reuse-port --reload main:app"
+args = "npm run dev"  # Changed from gunicorn
 waitForPort = 5000
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
+expertMode = true
