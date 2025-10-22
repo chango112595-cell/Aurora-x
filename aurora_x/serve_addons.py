@@ -143,7 +143,6 @@ def attach(app: FastAPI) -> None:
                     "spec": str(spec_file),
                     "created": datetime.fromtimestamp(spec_file.stat().st_mtime).isoformat(),
                     "token": hashlib.sha256(str(spec_file).encode()).hexdigest()[:8]
-                    "token": hashlib.md5(str(spec_file).encode(), usedforsecurity=False).hexdigest()[:8]
                 })
 
         return {

@@ -11,8 +11,8 @@ from pathlib import Path
 # Add aurora_x to path for import
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from aurora_x.spec.parser_nl import _hash
 from aurora_x.learn import SeedStore
+from aurora_x.spec.parser_nl import _hash
 
 
 class TestHashSecurity(unittest.TestCase):
@@ -30,17 +30,17 @@ class TestHashSecurity(unittest.TestCase):
         import tempfile
         temp_dir = tempfile.mkdtemp()
         seed_path = Path(temp_dir) / "test_seeds.json"
-        
+
         try:
             store = SeedStore(path=str(seed_path))
-            
+
             # Test that make_seed_key produces SHA-256 hash
             func_sig = "def test() -> None"
             context = "test context"
             combined = f"{func_sig}:{context}"
             expected = hashlib.sha256(combined.encode()).hexdigest()[:16]
             actual = store.make_seed_key(func_sig, context)
-            
+
             self.assertEqual(actual, expected)
         finally:
             # Cleanup
