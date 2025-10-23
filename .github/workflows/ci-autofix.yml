@@ -1,8 +1,10 @@
-name: Python Lint & Auto-Fix (DISABLED)
+name: Python Lint & Auto-Fix
 
 on:
-  # PERMANENTLY DISABLED: Auto-commit requires dangerous write permissions
-  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   lint-fix:
@@ -21,7 +23,6 @@ jobs:
       - name: Install Tools
         run: |
           pip install ruff black bandit
-
       - name: Ruff Lint & Fix
         run: ruff check . --fix
 
