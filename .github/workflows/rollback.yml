@@ -24,12 +24,8 @@ on:
           - compose_backup
           - both
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-  HEALTH_TIMEOUT: 120
-  HEALTH_RETRIES: 30
-  HEALTH_INTERVAL: 4
+permissions:
+  contents: write
 
 jobs:
   check-secrets:

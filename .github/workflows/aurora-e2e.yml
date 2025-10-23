@@ -12,11 +12,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-    
+
     env:
       HOST: http://127.0.0.1:8000
       PORT: 8000
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -25,26 +25,26 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt || true
           pip install pytest || true
-      
+
       - name: Launch Aurora server
         run: |
           nohup python -m uvicorn aurora_x.serve:app --host 127.0.0.1 --port 8000 >/tmp/aurora.log 2>&1 & echo $! > /tmp/aurora.pid
           for i in $(seq 1 30); do
             curl -fsS http://127.0.0.1:8000/healthz && break || sleep 1
           done
-      
+
       - name: Test API endpoints
         run: |
           curl -fsS http://127.0.0.1:8000/healthz || (cat /tmp/aurora.log && exit 1)
           curl -fsS http://127.0.0.1:8000/api/adaptive_stats || echo "Stats endpoint not available"
           curl -fsS http://127.0.0.1:8000/ || echo "Root endpoint not available"
-      
+
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4

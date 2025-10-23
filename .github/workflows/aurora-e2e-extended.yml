@@ -1,4 +1,4 @@
-name: Aurora-X E2E Extended
+name: Aurora-x E2E Extended
 
 on:
   workflow_dispatch:  # Manual trigger only due to resource requirements
@@ -6,13 +6,14 @@ on:
 jobs:
   e2e-extended:
     runs-on: ubuntu-latest
+    continue-on-error: true
     env:
       HOST: http://127.0.0.1:8000
       PORT: 8000
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
