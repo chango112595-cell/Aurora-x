@@ -1,9 +1,7 @@
-name: Aurora-X E2E Extended
+name: Aurora-X E2E Extended (DISABLED)
 
 on:
-  # Disabled: E2E tests require full infrastructure
-  # push:
-  # pull_request:
+  # PERMANENTLY DISABLED: Requires full infrastructure
   workflow_dispatch:
 
 jobs:

@@ -1,9 +1,7 @@
-name: Aurora-X E2E (Cached)
+name: Aurora-X E2E Cached (DISABLED)
 
 on:
-  # Disabled: E2E tests require full infrastructure
-  # push:
-  # pull_request:
+  # PERMANENTLY DISABLED: Requires full infrastructure
   workflow_dispatch:
 
 jobs:
