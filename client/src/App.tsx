@@ -36,6 +36,7 @@ function App() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
   const { toast } = useToast();
+  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('connected');
 
   const style = {
     "--sidebar-width": "16rem",
@@ -105,9 +106,26 @@ function App() {
       });
     });
 
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
+    // Monitor WebSocket connection status in development
+    if (import.meta.env.DEV) {
+      const checkConnection = () => {
+        fetch('/api/health')
+          .then(res => res.ok ? setConnectionStatus('connected') : setConnectionStatus('disconnected'))
+          .catch(() => setConnectionStatus('disconnected'));
+      };
+
+      checkConnection();
+      const interval = setInterval(checkConnection, 10000);
+
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      };
+    } else {
+      return () => {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      };
+    }
   }, [toast]);
 
   const handleInstallClick = async () => {
@@ -153,6 +171,11 @@ function App() {
                   <ThemeToggle />
                 </header>
                 <main className="flex-1 overflow-hidden">
+                  {import.meta.env.DEV && connectionStatus === 'disconnected' && (
+                    <div className="bg-yellow-500 text-black px-4 py-2 text-sm text-center">
+                      ⚠️ Server connection lost. Attempting to reconnect...
+                    </div>
+                  )}
                   <ErrorBoundary>
                     <Router />
                   </ErrorBoundary>
