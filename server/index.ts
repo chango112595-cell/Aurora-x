@@ -61,15 +61,21 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
+  
+  // Ensure clean server startup
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`Port ${port} is already in use`);
+      process.exit(1);
+    } else {
+      console.error('Server error:', err);
+    }
+  });
+  
+  server.listen(port, "0.0.0.0", () => {
     log(`serving on port ${port}`);
     log(`environment: ${app.get("env")}`);
     log(`access at: http://0.0.0.0:${port}`);
-  }).on('error', (err) => {
-    console.error('Server error:', err);
+    log(`vite hmr ready on wss://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`);
   });
 })();
