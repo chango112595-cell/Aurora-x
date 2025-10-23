@@ -1,8 +1,9 @@
 name: Aurora-X E2E Cached (DISABLED)
 
 on:
-  # PERMANENTLY DISABLED: Requires full infrastructure
   workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * 0'  # Weekly on Sunday at 2 AM
 
 jobs:
   e2e-cached:

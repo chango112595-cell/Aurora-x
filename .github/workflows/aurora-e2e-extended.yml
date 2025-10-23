@@ -1,14 +1,7 @@
 name: Aurora-X E2E Extended (DISABLED)
 
 on:
-  # DISABLED: Requires full infrastructure setup
-  # Requirements before enabling:
-  # - Multi-language compilers (Go, Rust, .NET)
-  # - Extended test suite infrastructure
-  # - Additional compute resources
-  # 
-  # To re-enable, uncomment the workflow_dispatch line below
-  # workflow_dispatch:
+  workflow_dispatch:  # Manual trigger only due to resource requirements
 
 jobs:
   e2e-extended:

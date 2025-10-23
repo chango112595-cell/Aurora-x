@@ -54,6 +54,12 @@ help:
 	@echo "  make rollback       # rollback to previous commit"
 	@echo "  make nl-pr P='...'  # create PR from natural language"
 	@echo ""
+	@echo "Workflow Management:"
+	@echo "  make check-workflows   # Check workflow status via script"
+	@echo "  make enable-workflows # Suggest enabling disabled workflows"
+	@echo "  make workflow-status # Display detailed workflow status dashboard"
+	@echo "  make fix-workflows   # Run script to fix workflow issues"
+	@echo ""
 	@echo "Legacy Commands:"
 	@echo "  make run            # run synthesis"
 	@echo "  make test           # run unit tests"
@@ -792,3 +798,29 @@ test:
 	pytest --cov=aurora_x --cov-report=term-missing
 
 ci-local: lint sec test
+
+# Workflow Management
+.PHONY: check-workflows enable-workflows workflow-status fix-workflows workflow-dashboard
+
+check-workflows:
+	@echo "🔍 Checking workflow status..."
+	@python3 tools/check_workflows.py
+
+enable-workflows:
+	@echo "✅ Enabling disabled workflows..."
+	@echo "  - aurora-e2e-cached.yml: Weekly schedule"
+	@echo "  - aurora-e2e-extended.yml: Manual only"
+	@echo "  - docker-multiarch.yml: On version tags"
+	@echo "Run 'git add .github/workflows && git commit -m \"Enable workflows\"'"
+
+workflow-status:
+	@python3 tools/workflow_dashboard.py
+
+fix-workflows:
+	@echo "🔧 Running workflow fix script..."
+	@bash tools/fix_workflows.sh
+
+workflow-dashboard:
+	@python3 tools/workflow_dashboard.py
+
+# === End of Makefile ===
