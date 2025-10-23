@@ -1,37 +1,55 @@
-# (excerpt showing where to add yq; insert into your existing workflow)
+name: Aurora-X E2E Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+
 jobs:
   e2e:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest, macos-14]
+        os: [ubuntu-latest]
+    
+    env:
+      HOST: http://127.0.0.1:8000
+      PORT: 8000
+    
     steps:
       - uses: actions/checkout@v4
-
-      # Install yq so you can run `yq` in subsequent steps
-      - name: Install yq (portable YAML processor)
-        uses: mikefarah/yq@v4.48.1
-
-      # Example: read a value from config/settings.yml (adjust path as needed)
-      - name: Show server port from YAML
-        run: |
-          echo "server.port = $(yq eval '.server.port' config/settings.yml || echo 'n/a')"
-
-      # Example: update a value in-place (careful: commits require git config)
-      - name: Set ci.enabled in config (example)
-        run: |
-          # backup then update
-          cp config/settings.yml config/settings.yml.bak || true
-          yq eval -i '.ci.enabled = true' config/settings.yml || true
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
-
-      # ... rest of your e2e job steps ...
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install pytest jq || true
+      
+      - name: Launch Aurora server
+        run: |
+          nohup python -m uvicorn aurora_x.serve:app --host 127.0.0.1 --port 8000 >/tmp/aurora.log 2>&1 & echo $! > /tmp/aurora.pid
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8000/healthz && break || sleep 1
+          done
+      
+      - name: Test API endpoints
+        run: |
+          curl -fsS http://127.0.0.1:8000/healthz
+          curl -fsS http://127.0.0.1:8000/api/adaptive_stats || true
+      
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-logs-${{ matrix.os }}
+          path: /tmp/aurora.log
 
   e2e-linux-arm64:
     runs-on: ubuntu-latest

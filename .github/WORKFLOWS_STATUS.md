@@ -1,57 +1,92 @@
 
-# Aurora-X GitHub Workflows Status
+# GitHub Workflows Status
 
-## ✅ ACTIVE (Run on every PR/push)
+## ✅ Active & Working
 
-1. **aurora-ci.yml** - Main CI Pipeline
-   - Runs: Lint (ruff), Security (bandit), Tests (pytest), Coverage (≥15%)
-   - Publishes coverage badge to `badges` branch
-   - Uploads SARIF security scan results
+### CI/CD Workflows
+- **aurora-ci.yml** - Main CI pipeline with quality gates, tests, and coverage badge
+- **ci-quick.yml** - Fast PR checks (lint, security scan)
+- **ci.yml** - Standard CI with quality gates
 
-2. **ci.yml** - Quality Gates
-   - Runs: `make gates` (calls `aurora_x/checks/ci_gate.py`)
-   - Validates config, seeds, drift limits
+### Build & Release
+- **aurora-release.yml** - Multi-arch Docker builds to GHCR (manual trigger or tags)
+- **docker-multiarch.yml** - Full multi-arch builds (manual trigger)
 
-3. **aurora-release.yml** - Docker Build & Publish
-   - Runs: On push to `main`
-   - Builds multi-arch image (amd64, arm64)
-   - Pushes to `ghcr.io`
+### E2E Testing
+- **aurora-e2e.yml** - Basic E2E tests (manual trigger)
 
-## 🔧 MANUAL ONLY (workflow_dispatch)
+## ⚠️ Disabled (Require Configuration)
 
-4. **deploy-ghcr.yml** - Deploy to VPS (requires secrets)
-5. **rollback.yml** - Emergency rollback (requires secrets)
+### Deployment Workflows
+- **deploy-ghcr.yml** - Requires SSH secrets: `SSH_HOST`, `SSH_USER`, `SSH_KEY`
+- **deploy-ssh.yml** - Requires SSH secrets: `SSH_HOST`, `SSH_USER`, `SSH_KEY`
+- **rollback.yml** - Requires SSH secrets for rollback operations
 
-## ❌ DISABLED (Not running)
+To enable: Add secrets in GitHub Settings → Secrets and Variables → Actions
 
-- `aurora-e2e.yml` - Needs full infra
-- `aurora-e2e-cached.yml` - Needs full infra
-- `aurora-e2e-extended.yml` - Needs full infra
-- `deploy-ssh.yml` - Duplicate of deploy-ghcr
-- `docker-multiarch.yml` - Duplicate of release
-- `deep-scan.yml` - Redundant with aurora-ci
-- `ci-autofix.yml` - Requires write permissions
-- `manual.yml` - Just a hello-world example
+### Advanced E2E
+- **aurora-e2e-cached.yml** - Requires full infrastructure setup
+- **aurora-e2e-extended.yml** - Requires full infrastructure setup
 
-## Self-Healing Architecture
+### Maintenance
+- **ci-autofix.yml** - Auto-commit disabled (requires write permissions)
+- **deep-scan.yml** - Redundant with aurora-ci.yml
 
-Aurora can recover from failures via:
+## 🔧 Configuration Notes
 
-1. **Isolated runs** - Each synthesis in `runs/run-*/` 
-2. **Fallback templates** - `aurora_x/synthesis/fallback.py`
-3. **Health monitoring** - `/healthz` endpoint
-4. **Persistent corpus** - `data/corpus.db` survives crashes
-5. **CI gates** - Block bad deploys
-6. **Automatic snapshots** - `backups/aurora_backup_*/`
+### Aurora CI (Main Pipeline)
+- Runs on: PRs and pushes to `main`
+- Coverage threshold: 15% minimum
+- Auto-publishes coverage badge to `badges` branch
+- Quality gates: lint, security scan, tests
 
----
+### Docker Builds
+- Multi-arch support: `linux/amd64`, `linux/arm64`
+- Published to: `ghcr.io/${{ github.repository }}`
+- Tags: `latest`, `sha-<commit>`, `v*` (for releases)
 
-**To check workflow status:**
+### Secrets Required for Full Deployment
 ```bash
-gh run list --limit 20
+# VPS Deployment
+SSH_HOST=your.vps.ip
+SSH_USER=ubuntu
+SSH_KEY=<your-private-key>
+SSH_PORT=22  # optional
+
+# Optional Services
+CF_TUNNEL_TOKEN=<cloudflare-tunnel-token>
+AURORA_HEALTH_TOKEN=<health-check-token>
+DISCORD_WEBHOOK_URL=<discord-webhook>
 ```
 
-**To manually trigger deploy:**
+## 📊 Workflow Triggers
+
+| Workflow | PR | Push | Manual | Schedule |
+|----------|----|----- |--------|----------|
+| aurora-ci | ✅ | ✅ | - | - |
+| ci-quick | ✅ | ✅ | - | - |
+| aurora-release | - | ✅ (main/tags) | ✅ | - |
+| aurora-e2e | ✅ | - | ✅ | - |
+| deploy-* | - | - | ✅ | - |
+
+## 🚀 Quick Actions
+
+**Run E2E Tests:**
+```bash
+gh workflow run aurora-e2e.yml
+```
+
+**Trigger Release Build:**
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+**Manual Deployment:**
 ```bash
 gh workflow run deploy-ghcr.yml
 ```
+
+---
+
+Last updated: 2025-01-22
