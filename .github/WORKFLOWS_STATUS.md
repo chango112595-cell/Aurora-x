@@ -1,92 +1,91 @@
 
-# GitHub Workflows Status
+# GitHub Actions Workflows Status
 
-## ✅ Active & Working
+## ✅ Active & Working Workflows
 
-### CI/CD Workflows
-- **aurora-ci.yml** - Main CI pipeline with quality gates, tests, and coverage badge
-- **ci-quick.yml** - Fast PR checks (lint, security scan)
-- **ci.yml** - Standard CI with quality gates
+### Core CI/CD
+- **aurora-ci.yml** - Main CI pipeline with quality gates, linting, and testing
+- **ci-quick.yml** - Fast PR checks for quick feedback
+- **ci.yml** - Standard CI with comprehensive quality gates
+- **ci-autofix.yml** - Auto-fixes linting issues and commits them
+- **aurora-e2e.yml** - End-to-end API testing
+- **aurora-release.yml** - Automated releases with semantic versioning
+- **docker-multiarch.yml** - Multi-architecture Docker builds (AMD64/ARM64)
 
-### Build & Release
-- **aurora-release.yml** - Multi-arch Docker builds to GHCR (manual trigger or tags)
-- **docker-multiarch.yml** - Full multi-arch builds (manual trigger)
+### Utilities
+- **manual.yml** - Manual workflow dispatch for custom commands
 
-### E2E Testing
-- **aurora-e2e.yml** - Basic E2E tests (manual trigger)
+## ⚙️ Configuration Required
 
-## ⚠️ Disabled (Require Configuration)
+These workflows are functional but require secrets/configuration:
 
 ### Deployment Workflows
-- **deploy-ghcr.yml** - Requires SSH secrets: `SSH_HOST`, `SSH_USER`, `SSH_KEY`
-- **deploy-ssh.yml** - Requires SSH secrets: `SSH_HOST`, `SSH_USER`, `SSH_KEY`
-- **rollback.yml** - Requires SSH secrets for rollback operations
+- **deploy-ghcr.yml** - Deploy via GitHub Container Registry
+  - Required: `SSH_HOST`, `SSH_USER`, `SSH_KEY`
+  - Optional: `SSH_PORT`, `CF_TUNNEL_TOKEN`, `AURORA_HEALTH_TOKEN`
+  
+- **deploy-ssh.yml** - Direct SSH deployment
+  - Required: `SSH_HOST`, `SSH_USER`, `SSH_KEY`
+  - Optional: `SSH_PORT`
 
-To enable: Add secrets in GitHub Settings → Secrets and Variables → Actions
+- **rollback.yml** - Deployment rollback
+  - Required: `SSH_HOST`, `SSH_USER`, `SSH_KEY`
+  - Optional: `SSH_PORT`
 
-### Advanced E2E
-- **aurora-e2e-cached.yml** - Requires full infrastructure setup
-- **aurora-e2e-extended.yml** - Requires full infrastructure setup
+## 🚫 Disabled Workflows
 
-### Maintenance
-- **ci-autofix.yml** - Auto-commit disabled (requires write permissions)
+These workflows are intentionally disabled:
+
 - **deep-scan.yml** - Redundant with aurora-ci.yml
+- **aurora-e2e-cached.yml** - Requires full infrastructure setup
+- **aurora-e2e-extended.yml** - Requires multi-language compilers (Go, Rust, .NET)
 
-## 🔧 Configuration Notes
+## 📊 Workflow Health Summary
 
-### Aurora CI (Main Pipeline)
-- Runs on: PRs and pushes to `main`
-- Coverage threshold: 15% minimum
-- Auto-publishes coverage badge to `badges` branch
-- Quality gates: lint, security scan, tests
+| Category | Status | Count |
+|----------|--------|-------|
+| Active & Passing | ✅ | 7 |
+| Needs Configuration | ⚙️ | 3 |
+| Intentionally Disabled | 🚫 | 3 |
 
-### Docker Builds
-- Multi-arch support: `linux/amd64`, `linux/arm64`
-- Published to: `ghcr.io/${{ github.repository }}`
-- Tags: `latest`, `sha-<commit>`, `v*` (for releases)
+## 🔧 Setup Instructions
 
-### Secrets Required for Full Deployment
-```bash
-# VPS Deployment
-SSH_HOST=your.vps.ip
-SSH_USER=ubuntu
-SSH_KEY=<your-private-key>
-SSH_PORT=22  # optional
+### To Enable Deployment Workflows:
 
-# Optional Services
-CF_TUNNEL_TOKEN=<cloudflare-tunnel-token>
-AURORA_HEALTH_TOKEN=<health-check-token>
-DISCORD_WEBHOOK_URL=<discord-webhook>
-```
+1. Go to your repository Settings → Secrets and variables → Actions
+2. Add the required secrets:
+   ```
+   SSH_HOST=your.server.com
+   SSH_USER=deployuser
+   SSH_KEY=<your-private-key>
+   SSH_PORT=22 (optional, defaults to 22)
+   ```
+3. Uncomment the `push:` trigger in the workflow file
+4. Push to `main` branch to trigger automatic deployments
 
-## 📊 Workflow Triggers
+### To Enable Extended E2E Testing:
 
-| Workflow | PR | Push | Manual | Schedule |
-|----------|----|----- |--------|----------|
-| aurora-ci | ✅ | ✅ | - | - |
-| ci-quick | ✅ | ✅ | - | - |
-| aurora-release | - | ✅ (main/tags) | ✅ | - |
-| aurora-e2e | ✅ | - | ✅ | - |
-| deploy-* | - | - | ✅ | - |
+1. Ensure your runner has:
+   - Go 1.21+
+   - Rust (stable)
+   - .NET 8.0+
+2. Uncomment `workflow_dispatch:` in aurora-e2e-extended.yml
+3. Manually trigger from Actions tab
 
-## 🚀 Quick Actions
+## 🐛 Troubleshooting
 
-**Run E2E Tests:**
-```bash
-gh workflow run aurora-e2e.yml
-```
+If a workflow fails:
 
-**Trigger Release Build:**
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
+1. Check the workflow logs in the Actions tab
+2. Verify all required secrets are configured
+3. Ensure the workflow is not disabled
+4. Check for recent changes to workflow files
+5. Review the specific workflow's requirements above
 
-**Manual Deployment:**
-```bash
-gh workflow run deploy-ghcr.yml
-```
+## 📝 Notes
 
----
-
-Last updated: 2025-01-22
+- All workflows use the latest Ubuntu runner
+- Python 3.11 is the standard version
+- Node.js 18 is used for TypeScript/JavaScript workflows
+- Caching is enabled for all language dependencies
+- Auto-fix workflows will skip CI on commits with `[skip ci]`
