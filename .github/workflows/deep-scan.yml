@@ -1,11 +1,7 @@
-name: Aurora-x Deep Scan
+name: Aurora-x Deep Scan (DISABLED)
 
 on:
-  # Disabled: Comprehensive scan - enable when needed
-  # push:
-  #   branches: [main]
-  # pull_request:
-  #   branches: [main]
+  # PERMANENTLY DISABLED: Redundant with aurora-ci.yml
   workflow_dispatch:
 
 jobs:
