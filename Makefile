@@ -802,7 +802,7 @@ lint:
 
 sec:
 	bandit -r aurora_x -lll
-	semgrep --config semgrep.yml
+	semgrep --config p/security-audit --config p/python --config semgrep.yml
 
 test:
 	pytest --cov=aurora_x --cov-report=term-missing
