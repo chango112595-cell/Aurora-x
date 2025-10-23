@@ -129,6 +129,13 @@ def parse_english(text: str) -> NLParseResult:
         "render",
         "frontend",
         "backend",
+        "page",
+        "site",
+        "countdown",
+        "form",
+        "button",
+        "navbar",
+        "menu",
     ]
 
     # Check if this is a Flask/web app request
