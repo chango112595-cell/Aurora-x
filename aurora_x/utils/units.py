@@ -25,7 +25,7 @@ _TIME = {
     "ms": 1e-3,
     "hours": 3600,
     "days": 86400,
-    "years": 31536000,
+    "years": 31557600,  # 1 year = 365.25 days (Julian year, accounts for leap years)
 }
 
 
