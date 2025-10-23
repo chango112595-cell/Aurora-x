@@ -3,6 +3,7 @@ Library Function Template Generator for T08 Intent Router
 Generates Python library functions with unit tests
 """
 
+
 def render_func(name: str, brief: str, fields: dict) -> str:
     """
     Generate a Python library function with tests based on intent
@@ -19,13 +20,13 @@ def render_func(name: str, brief: str, fields: dict) -> str:
     # Check for specific function types
     brief_lower = brief.lower()
 
-    if 'factorial' in brief_lower:
+    if "factorial" in brief_lower:
         return _render_factorial_func(name, brief)
-    elif 'fibonacci' in brief_lower:
+    elif "fibonacci" in brief_lower:
         return _render_fibonacci_func(name, brief)
-    elif 'palindrome' in brief_lower:
+    elif "palindrome" in brief_lower:
         return _render_palindrome_func(name, brief)
-    elif 'reverse' in brief_lower and 'string' in brief_lower:
+    elif "reverse" in brief_lower and "string" in brief_lower:
         return _render_reverse_string_func(name, brief)
     else:
         return _render_generic_func(name, brief)
@@ -740,9 +741,9 @@ if __name__ == "__main__":
 
 def _render_generic_func(name: str, brief: str) -> str:
     """Generate a generic function template with tests"""
-    func_name = name.replace('-', '_').replace(' ', '_').lower()
+    func_name = name.replace("-", "_").replace(" ", "_").lower()
     if not func_name or not func_name[0].isalpha():
-        func_name = 'process'
+        func_name = "process"
 
     return f'''#!/usr/bin/env python3
 """
@@ -908,7 +909,7 @@ def transform_output(result: Any, format: str = "default") -> Any:
 # Unit Tests
 # ============================================================================
 
-class Test{func_name.title().replace('_', '')}:
+class Test{func_name.title().replace("_", "")}:
     """Test suite for {func_name} function"""
 
     def test_string_input(self):
@@ -971,7 +972,7 @@ class Test{func_name.title().replace('_', '')}:
         assert callback_result[0] == result
 
 
-class Test{func_name.title().replace('_', '')}Integration:
+class Test{func_name.title().replace("_", "")}Integration:
     """Integration tests"""
 
     def test_end_to_end_workflow(self):
@@ -1078,8 +1079,8 @@ if __name__ == "__main__":
     except ImportError:
         print("pytest not installed. Running manual tests...")
 
-        test_basic = Test{func_name.title().replace('_', '')}()
-        test_integration = Test{func_name.title().replace('_', '')}Integration()
+        test_basic = Test{func_name.title().replace("_", "")}()
+        test_integration = Test{func_name.title().replace("_", "")}Integration()
 
         all_tests = []
         for test_cls in [test_basic, test_integration]:

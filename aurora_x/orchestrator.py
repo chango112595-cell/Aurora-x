@@ -4,6 +4,7 @@ T07 Orchestrator - Continuous spec monitoring daemon
 Monitors specs/*.md for changes and auto-runs synthesis
 Optional git auto-commit/push gated by env vars
 """
+
 import hashlib
 import json
 import os
@@ -16,10 +17,11 @@ from pathlib import Path
 SPEC_DIR = Path("specs")
 RUNS = Path("runs")
 POLL_SECS = int(os.getenv("AURORA_ORCH_INTERVAL", "300"))  # 5 min default
-GIT_AUTO = os.getenv("AURORA_GIT_AUTO", "0") == "1"       # gate push
+GIT_AUTO = os.getenv("AURORA_GIT_AUTO", "0") == "1"  # gate push
 BRANCH = os.getenv("AURORA_GIT_BRANCH", "main")
-REPO_URL = os.getenv("AURORA_GIT_URL", "")                # e.g. https://github.com/..git
+REPO_URL = os.getenv("AURORA_GIT_URL", "")  # e.g. https://github.com/..git
 DISCORD = Path("tools/discord_cli.py")
+
 
 def spec_digest(p: Path) -> str:
     """Compute SHA256 hash of spec file"""
@@ -27,9 +29,11 @@ def spec_digest(p: Path) -> str:
     h.update(p.read_bytes())
     return h.hexdigest()
 
+
 def list_specs():
     """List all markdown spec files"""
     return sorted([p for p in SPEC_DIR.glob("*.md") if p.is_file()])
+
 
 def latest_run_for(spec_name: str):
     """Get latest run info for a spec from spec_runs.jsonl"""
@@ -46,6 +50,7 @@ def latest_run_for(spec_name: str):
             pass
     return last
 
+
 def synth(spec: Path):
     """Run v3 synthesis for a spec"""
     print(f"⚙️  Synthesizing {spec.name}")
@@ -55,7 +60,7 @@ def synth(spec: Path):
             ["python", "tools/spec_compile_v3.py", str(spec)],
             env=os.environ.copy(),
             capture_output=True,
-            text=True
+            text=True,
         )
 
         if result.returncode == 0:
@@ -64,9 +69,8 @@ def synth(spec: Path):
             if DISCORD.exists():
                 try:
                     subprocess.run(
-                        ["python", str(DISCORD), "success",
-                         f"🔄 Auto-synth: {spec.name}"],
-                        check=False
+                        ["python", str(DISCORD), "success", f"🔄 Auto-synth: {spec.name}"],
+                        check=False,
                     )
                 except:
                     pass
@@ -76,9 +80,8 @@ def synth(spec: Path):
             if DISCORD.exists():
                 try:
                     subprocess.run(
-                        ["python", str(DISCORD), "error",
-                         f"❌ Auto-synth failed: {spec.name}"],
-                        check=False
+                        ["python", str(DISCORD), "error", f"❌ Auto-synth failed: {spec.name}"],
+                        check=False,
                     )
                 except:
                     pass
@@ -86,6 +89,7 @@ def synth(spec: Path):
     except Exception as e:
         print(f"❌ Exception synthesizing {spec.name}: {e}")
         return False
+
 
 def git_push_if_enabled(msg: str):
     """Auto-commit and push if enabled via env vars"""
@@ -101,19 +105,13 @@ def git_push_if_enabled(msg: str):
         subprocess.run(["git", "add", "-A"], check=True)
 
         # Try to commit
-        result = subprocess.run(
-            ["git", "commit", "-m", msg],
-            capture_output=True,
-            text=True
-        )
+        result = subprocess.run(["git", "commit", "-m", msg], capture_output=True, text=True)
 
         if result.returncode == 0:
             print(f"📝 Committed: {msg}")
             # Push to remote
             push_result = subprocess.run(
-                ["git", "push", "origin", BRANCH],
-                capture_output=True,
-                text=True
+                ["git", "push", "origin", BRANCH], capture_output=True, text=True
             )
             if push_result.returncode == 0:
                 print(f"🚀 Pushed to {BRANCH}")
@@ -128,6 +126,7 @@ def git_push_if_enabled(msg: str):
     except Exception as e:
         print(f"❌ Git error: {e}")
 
+
 def run_once(digests: dict) -> dict:
     """Run one iteration of spec monitoring"""
     specs_processed = 0
@@ -135,7 +134,7 @@ def run_once(digests: dict) -> dict:
 
     for p in list_specs():
         d = spec_digest(p)
-        changed = (digests.get(p.name) != d)
+        changed = digests.get(p.name) != d
         last = latest_run_for(p.name)
 
         if changed:
@@ -155,6 +154,7 @@ def run_once(digests: dict) -> dict:
         print(f"📊 Processed {specs_processed} specs ({specs_changed} changed)")
 
     return digests
+
 
 def main():
     """Main orchestrator loop"""
@@ -183,7 +183,9 @@ def main():
     try:
         while True:
             iteration += 1
-            print(f"\n--- Iteration {iteration} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---")
+            print(
+                f"\n--- Iteration {iteration} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---"
+            )
 
             # Run monitoring pass
             digests = run_once(digests)
@@ -198,6 +200,7 @@ def main():
     except Exception as e:
         print(f"\n❌ Orchestrator error: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

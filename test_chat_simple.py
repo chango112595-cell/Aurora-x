@@ -17,7 +17,7 @@ def test_chat_endpoint():
     server = subprocess.Popen(
         ["python", "-m", "uvicorn", "aurora_x.serve:app", "--port", "8000", "--host", "127.0.0.1"],
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
+        stderr=subprocess.PIPE,
     )
 
     # Wait for server to start
@@ -30,27 +30,20 @@ def test_chat_endpoint():
         # Test 1: Valid web app prompt
         print("\n1. Testing web app prompt:")
         response = requests.post(
-            "http://127.0.0.1:8000/chat",
-            json={"prompt": "Build me a timer UI"}
+            "http://127.0.0.1:8000/chat", json={"prompt": "Build me a timer UI"}
         )
         print(f"   Status: {response.status_code}")
         print(f"   Response: {json.dumps(response.json(), indent=2)}")
 
         # Test 2: CLI tool prompt
         print("\n2. Testing CLI tool prompt:")
-        response = requests.post(
-            "http://127.0.0.1:8000/chat",
-            json={"prompt": "Make a CLI script"}
-        )
+        response = requests.post("http://127.0.0.1:8000/chat", json={"prompt": "Make a CLI script"})
         print(f"   Status: {response.status_code}")
         print(f"   Response: {json.dumps(response.json(), indent=2)}")
 
         # Test 3: Empty prompt
         print("\n3. Testing empty prompt:")
-        response = requests.post(
-            "http://127.0.0.1:8000/chat",
-            json={"prompt": ""}
-        )
+        response = requests.post("http://127.0.0.1:8000/chat", json={"prompt": ""})
         print(f"   Status: {response.status_code}")
         print(f"   Response: {json.dumps(response.json(), indent=2)}")
 
@@ -70,6 +63,7 @@ def test_chat_endpoint():
         print("\nStopping server...")
         server.terminate()
         server.wait()
+
 
 if __name__ == "__main__":
     test_chat_endpoint()

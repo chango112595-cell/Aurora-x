@@ -13,12 +13,18 @@ def main(spec_path: str):
     spec = parse_v3(md)
     import json as _J
     import time
+
     run_id = time.strftime("run-%Y%m%d-%H%M%S")
     out = Path("runs") / run_id
     (out / "src").mkdir(parents=True, exist_ok=True)
     (out / "tests").mkdir(parents=True, exist_ok=True)
 
-    test_lines = ["import unittest", "import sys", "from pathlib import Path", "sys.path.insert(0, str(Path(__file__).parent.parent))"]
+    test_lines = [
+        "import unittest",
+        "import sys",
+        "from pathlib import Path",
+        "sys.path.insert(0, str(Path(__file__).parent.parent))",
+    ]
 
     all_imports = []
     all_tests = []
@@ -30,14 +36,18 @@ def main(spec_path: str):
         all_imports.append(f"from src.{modname} import {modname}")
 
         for i, ex in enumerate(fn.examples or []):
-            args = ", ".join(f"{k}={repr(v)}" for k,v in ex.inputs.items())
-            all_tests.append(f"class Test_{modname}_{i}(unittest.TestCase):\n    def test_{i}(self):\n        self.assertEqual({modname}({args}), {repr(ex.output)})")
+            args = ", ".join(f"{k}={repr(v)}" for k, v in ex.inputs.items())
+            all_tests.append(
+                f"class Test_{modname}_{i}(unittest.TestCase):\n    def test_{i}(self):\n        self.assertEqual({modname}({args}), {repr(ex.output)})"
+            )
 
     test_lines.extend(all_imports)
     test_lines.extend(all_tests)
     test_lines.append("\nif __name__=='__main__': unittest.main()")
     (out / "tests" / "test_v3.py").write_text("\n".join(test_lines), encoding="utf-8")
-    (out / "report.html").write_text(f"<h2>Aurora-X v3 Report</h2><p>Run: {run_id}</p>", encoding="utf-8")
+    (out / "report.html").write_text(
+        f"<h2>Aurora-X v3 Report</h2><p>Run: {run_id}</p>", encoding="utf-8"
+    )
 
     row = {
         "run_id": out.name,
@@ -45,7 +55,7 @@ def main(spec_path: str):
         "ok": True,
         "report": f"/{out}/report.html",
         "bias": None,
-        "spark": None
+        "spark": None,
     }
     log = Path("runs") / "spec_runs.jsonl"
     log.parent.mkdir(parents=True, exist_ok=True)
@@ -54,6 +64,7 @@ def main(spec_path: str):
 
     try:
         from aurora_x.serve_dashboard_v2 import record_run
+
         record_run(out.name, sp.name, True, f"/{out}/report.html")
     except Exception:
         pass
@@ -62,10 +73,13 @@ def main(spec_path: str):
     print(" - Source:", out / "src")
     print(" - Tests: ", out / "tests")
     print(" - Report:", out / "report.html")
-    print(f"Run tests: python -m unittest discover -s {out/'tests'} -t {out}")
+    print(f"Run tests: python -m unittest discover -s {out / 'tests'} -t {out}")
+
 
 if __name__ == "__main__":
     import sys
+
     if len(sys.argv) < 2:
-        print("Usage: python tools/spec_compile_v3.py <spec.md>"); exit(1)
+        print("Usage: python tools/spec_compile_v3.py <spec.md>")
+        exit(1)
     main(sys.argv[1])

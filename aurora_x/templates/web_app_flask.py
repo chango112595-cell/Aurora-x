@@ -1,4 +1,3 @@
-
 HTML = """<!doctype html><html><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>{title}</title>
@@ -35,6 +34,7 @@ function tick(ts){if(!run)return;if(!t0)t0=ts;const el=ts-t0;left=Math.max(0,dur
 document.getElementById('start').onclick=()=>{const secs=Math.max(0,Number(document.getElementById('seconds').value||0));if(!run){if(left<=0)dur=secs*1000;t0=0;run=true;raf=requestAnimationFrame(tick);}};
 document.getElementById('pause').onclick=()=>{run=false;};document.getElementById('reset').onclick=()=>{run=false;t0=0;left=0;view.textContent='00:00';};
 </script></body></html>"""
+
 
 def render_app(title: str, subtitle: str) -> str:
     return f"""from flask import Flask, Response

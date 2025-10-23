@@ -3,6 +3,7 @@ Flask Application Template Generator for Aurora-X
 Generates complete, working Flask application code based on parsed metadata.
 """
 
+
 def generate_flask_app(metadata: dict) -> str:
     """
     Generate complete Flask application code based on metadata from parser_nl.py
@@ -630,7 +631,7 @@ def generate_api_app(routes: list, includes: dict) -> str:
         # In production, fetch from database
         return jsonify({"items": [], "count": 0})''')
 
-    routes_code = ''.join(route_handlers)
+    routes_code = "".join(route_handlers)
 
     return f'''"""
 Flask API Application
@@ -696,7 +697,7 @@ def generate_web_ui_app(routes: list, includes: dict, description: str) -> str:
         ))'''
         route_handlers.append(handler)
 
-    routes_code = ''.join(route_handlers)
+    routes_code = "".join(route_handlers)
 
     return f'''"""
 {description}
@@ -843,7 +844,7 @@ def generate_basic_app(routes: list, description: str) -> str:
         return f"<h1>{name.title()} Page</h1><p>Route: {path}</p>"'''
         route_handlers.append(handler)
 
-    routes_code = ''.join(route_handlers)
+    routes_code = "".join(route_handlers)
 
     return f'''"""
 {description}

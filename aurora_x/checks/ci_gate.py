@@ -46,7 +46,7 @@ class AuroraQualityGates:
                 "SUCCESS": "✅",
                 "WARNING": "⚠️ ",
                 "ERROR": "❌",
-                "CHECK": "🔍"
+                "CHECK": "🔍",
             }.get(level, "  ")
             print(f"[{timestamp}] {prefix} {message}")
 
@@ -58,21 +58,21 @@ class AuroraQualityGates:
         required_files = {
             "progress.json": self.progress_file,
             ".aurora/prod_config.json": self.aurora_dir / "prod_config.json",
-            ".aurora/seeds.json": self.aurora_dir / "seeds.json"
+            ".aurora/seeds.json": self.aurora_dir / "seeds.json",
         }
 
         # Create .aurora directory if it doesn't exist
         self.aurora_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Create missing critical files with defaults
         if not self.progress_file.exists():
-            self.log(f"  ℹ️  Creating default progress.json", "INFO")
-            with open(self.progress_file, 'w') as f:
+            self.log("  ℹ️  Creating default progress.json", "INFO")
+            with open(self.progress_file, "w") as f:
                 json.dump({"tasks": [], "initialized": True}, f, indent=2)
-        
+
         if not (self.aurora_dir / "seeds.json").exists():
-            self.log(f"  ℹ️  Creating default seeds.json", "INFO")
-            with open(self.aurora_dir / "seeds.json", 'w') as f:
+            self.log("  ℹ️  Creating default seeds.json", "INFO")
+            with open(self.aurora_dir / "seeds.json", "w") as f:
                 json.dump({}, f, indent=2)
 
         # Check for config.yml (optional but recommended)
@@ -142,7 +142,7 @@ ci:
 """
         try:
             config_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(config_path, 'w') as f:
+            with open(config_path, "w") as f:
                 f.write(default_config)
             self.log("  ✓ Created default .aurora/config.yml", "SUCCESS")
         except Exception as e:
@@ -184,7 +184,9 @@ ci:
                         # Check for required fields
                         if not isinstance(seed_content, dict):
                             self.log(f"  ⚠️  {seed_file.name} has unexpected format", "WARNING")
-                            self.warnings.append(f"Seed file {seed_file.name} has unexpected format")
+                            self.warnings.append(
+                                f"Seed file {seed_file.name} has unexpected format"
+                            )
                     except Exception as e:
                         self.log(f"  ✗ Error reading {seed_file.name}: {e}", "ERROR")
                         self.errors.append(f"Invalid seed file: {seed_file.name}")
@@ -247,7 +249,9 @@ ci:
             self.warnings.append(f"Drift check incomplete: {e}")
             return True  # Don't fail on drift check if we can't measure it
 
-    def _analyze_corpus_drift(self, corpus_files: list[Path], max_drift: float, drift_cap: float) -> bool:
+    def _analyze_corpus_drift(
+        self, corpus_files: list[Path], max_drift: float, drift_cap: float
+    ) -> bool:
         """Analyze corpus files for drift (simplified implementation)"""
         # This is a simplified check - in production you'd analyze actual drift metrics
         # For now, we'll just check if files exist and are recent
@@ -260,7 +264,10 @@ ci:
                 self.log(f"  ℹ️  Latest corpus update: {age_hours:.1f} hours ago", "INFO")
                 return True
             else:
-                self.log(f"  ⚠️  Latest corpus update: {age_hours:.1f} hours ago (consider refresh)", "WARNING")
+                self.log(
+                    f"  ⚠️  Latest corpus update: {age_hours:.1f} hours ago (consider refresh)",
+                    "WARNING",
+                )
                 return True
 
         except Exception:
@@ -324,7 +331,7 @@ ci:
             ("Configuration", self.check_configuration),
             ("Determinism", self.check_determinism),
             ("Drift Detection", self.check_drift_detection),
-            ("Seed Validation", self.validate_seeds)
+            ("Seed Validation", self.validate_seeds),
         ]
 
         all_passed = True
@@ -393,7 +400,7 @@ def create_snapshot(backup_dir: str | None = None, verbose: bool = True) -> str:
         ("runs", backup_path / "runs"),
         ("progress.json", backup_path / "progress.json"),
         ("MASTER_TASK_LIST.md", backup_path / "MASTER_TASK_LIST.md"),
-        ("Makefile", backup_path / "Makefile")
+        ("Makefile", backup_path / "Makefile"),
     ]
 
     backed_up = []
@@ -427,11 +434,11 @@ def create_snapshot(backup_dir: str | None = None, verbose: bool = True) -> str:
         "backed_up": backed_up,
         "skipped": skipped,
         "total_items": len(items_to_backup),
-        "success_count": len(backed_up)
+        "success_count": len(backed_up),
     }
 
     metadata_path = backup_path / "snapshot_metadata.json"
-    with open(metadata_path, 'w') as f:
+    with open(metadata_path, "w") as f:
         json.dump(metadata, f, indent=2)
 
     if verbose:
@@ -464,33 +471,22 @@ Examples:
   python -m aurora_x.checks.ci_gate --snapshot
   python -m aurora_x.checks.ci_gate --snapshot-only
   python -m aurora_x.checks.ci_gate --quiet
-        """
+        """,
     )
 
     parser.add_argument(
-        "--snapshot",
-        action="store_true",
-        help="Create a backup snapshot after successful checks"
+        "--snapshot", action="store_true", help="Create a backup snapshot after successful checks"
     )
 
     parser.add_argument(
-        "--snapshot-only",
-        action="store_true",
-        help="Only create a snapshot without running checks"
+        "--snapshot-only", action="store_true", help="Only create a snapshot without running checks"
     )
 
     parser.add_argument(
-        "--backup-dir",
-        type=str,
-        default=None,
-        help="Custom backup directory (default: ./backups/)"
+        "--backup-dir", type=str, default=None, help="Custom backup directory (default: ./backups/)"
     )
 
-    parser.add_argument(
-        "--quiet",
-        action="store_true",
-        help="Suppress verbose output"
-    )
+    parser.add_argument("--quiet", action="store_true", help="Suppress verbose output")
 
     args = parser.parse_args()
     verbose = not args.quiet

@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 
-def get_git_file_content(file_path: str, revision: str = 'HEAD~1') -> str | None:
+def get_git_file_content(file_path: str, revision: str = "HEAD~1") -> str | None:
     """
     Get file content from a specific git revision.
 
@@ -24,10 +24,7 @@ def get_git_file_content(file_path: str, revision: str = 'HEAD~1') -> str | None
     """
     try:
         result = subprocess.run(
-            ['git', 'show', f'{revision}:{file_path}'],
-            capture_output=True,
-            text=True,
-            check=True
+            ["git", "show", f"{revision}:{file_path}"], capture_output=True, text=True, check=True
         )
         return result.stdout
     except subprocess.CalledProcessError:
@@ -45,27 +42,27 @@ def calculate_overall_progress(data: dict[str, Any]) -> float:
     Returns:
         Overall completion percentage (0-100)
     """
-    if 'phases' not in data or not data['phases']:
+    if "phases" not in data or not data["phases"]:
         return 0
 
     total_progress = 0
-    phase_count = len(data['phases'])
+    phase_count = len(data["phases"])
 
-    for phase in data['phases']:
+    for phase in data["phases"]:
         phase_progress = 0
-        task_count = len(phase.get('tasks', []))
+        task_count = len(phase.get("tasks", []))
 
         if task_count > 0:
-            for task in phase['tasks']:
+            for task in phase["tasks"]:
                 task_progress = 0
 
-                if 'subtasks' in task and task['subtasks']:
-                    subtask_count = len(task['subtasks'])
+                if "subtasks" in task and task["subtasks"]:
+                    subtask_count = len(task["subtasks"])
                     if subtask_count > 0:
-                        subtask_total = sum(st.get('progress', 0) for st in task['subtasks'])
+                        subtask_total = sum(st.get("progress", 0) for st in task["subtasks"])
                         task_progress = subtask_total / subtask_count
                 else:
-                    task_progress = task.get('progress', 0)
+                    task_progress = task.get("progress", 0)
 
                 phase_progress += task_progress
 
@@ -88,24 +85,24 @@ def check_gating_violations(data: dict[str, Any]) -> list[str]:
     """
     violations = []
 
-    for phase in data.get('phases', []):
-        phase_id = phase.get('id', 'Unknown')
+    for phase in data.get("phases", []):
+        phase_id = phase.get("id", "Unknown")
 
         # Check if phase is complete but has incomplete tasks
-        if phase.get('status') == 'completed':
-            for task in phase.get('tasks', []):
-                if task.get('progress', 0) < 100:
+        if phase.get("status") == "completed":
+            for task in phase.get("tasks", []):
+                if task.get("progress", 0) < 100:
                     violations.append(
                         f"Phase {phase_id} marked complete but task {task.get('id', 'Unknown')} is incomplete"
                     )
 
         # Check tasks with subtasks
-        for task in phase.get('tasks', []):
-            task_id = task.get('id', 'Unknown')
+        for task in phase.get("tasks", []):
+            task_id = task.get("id", "Unknown")
 
-            if task.get('status') == 'completed' and 'subtasks' in task:
-                for subtask in task['subtasks']:
-                    if subtask.get('progress', 0) < 100:
+            if task.get("status") == "completed" and "subtasks" in task:
+                for subtask in task["subtasks"]:
+                    if subtask.get("progress", 0) < 100:
                         violations.append(
                             f"Task {task_id} marked complete but subtask {subtask.get('id', 'Unknown')} is incomplete"
                         )
@@ -150,7 +147,7 @@ def compare_progress(current_file: Path, previous_content: str | None) -> tuple[
 
 def main():
     """Main entry point."""
-    progress_file = Path('progress.json')
+    progress_file = Path("progress.json")
 
     # Check if file exists
     if not progress_file.exists():
@@ -158,7 +155,7 @@ def main():
         sys.exit(1)
 
     # Get previous version from git
-    previous_content = get_git_file_content('progress.json')
+    previous_content = get_git_file_content("progress.json")
 
     # Compare progress
     current, previous, has_regression = compare_progress(progress_file, previous_content)
@@ -191,7 +188,7 @@ def main():
     print()
 
     # Check for violations if STRICT_GATING is set
-    strict_gating = os.environ.get('STRICT_GATING', '').lower() in ['true', '1', 'yes']
+    strict_gating = os.environ.get("STRICT_GATING", "").lower() in ["true", "1", "yes"]
 
     if violations:
         print(f"⚠️  Found {len(violations)} gating violation(s):")
@@ -212,5 +209,5 @@ def main():
     sys.exit(0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

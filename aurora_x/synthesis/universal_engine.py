@@ -18,8 +18,10 @@ from typing import Any
 
 # ========== Component 1: Multi-Intent Parser ==========
 
+
 class ProjectType(Enum):
     """Supported project types for synthesis"""
+
     UI_FRONTEND = "ui_frontend"  # React, Vue, HTML/CSS/JS
     API_BACKEND = "api_backend"  # Flask, FastAPI, Express
     AI_ML = "ai_ml"  # Model training, data processing
@@ -33,6 +35,7 @@ class ProjectType(Enum):
 @dataclass
 class ParsedIntent:
     """Result of intent parsing"""
+
     project_type: ProjectType
     framework: str  # e.g., "react", "flask", "fastapi", "pytorch"
     language: str  # "python", "javascript", "typescript"
@@ -48,28 +51,28 @@ class MultiIntentParser:
     PATTERNS = {
         ProjectType.UI_FRONTEND: [
             r"\b(react|vue|angular|frontend|ui|interface|dashboard|website|webpage|html|css)\b",
-            r"\b(component|button|form|modal|navbar|sidebar|layout)\b"
+            r"\b(component|button|form|modal|navbar|sidebar|layout)\b",
         ],
         ProjectType.API_BACKEND: [
             r"\b(api|backend|rest|restful|endpoint|server|flask|fastapi|express|django)\b",
-            r"\b(route|middleware|controller|service|crud)\b"
+            r"\b(route|middleware|controller|service|crud)\b",
         ],
         ProjectType.AI_ML: [
             r"\b(ai|ml|model|train|predict|neural|network|tensorflow|pytorch|sklearn)\b",
-            r"\b(dataset|features|classification|regression|clustering)\b"
+            r"\b(dataset|features|classification|regression|clustering)\b",
         ],
         ProjectType.DATABASE: [
             r"\b(database|db|schema|migration|sql|postgres|mysql|mongodb)\b",
-            r"\b(table|column|index|constraint|relationship)\b"
+            r"\b(table|column|index|constraint|relationship)\b",
         ],
         ProjectType.FULLSTACK: [
             r"\b(fullstack|full-stack|complete app|entire application)\b",
-            r"\b(frontend.*backend|backend.*frontend|ui.*api|api.*ui)\b"
+            r"\b(frontend.*backend|backend.*frontend|ui.*api|api.*ui)\b",
         ],
         ProjectType.CLI_TOOL: [
             r"\b(cli|command|tool|script|automation|terminal)\b",
-            r"\b(argparse|click|arguments|options)\b"
-        ]
+            r"\b(argparse|click|arguments|options)\b",
+        ],
     }
 
     # Framework detection patterns
@@ -81,7 +84,7 @@ class MultiIntentParser:
         "express": r"\b(express|expressjs|express\.js)\b",
         "django": r"\b(django|drf|django rest)\b",
         "pytorch": r"\b(pytorch|torch|neural)\b",
-        "tensorflow": r"\b(tensorflow|tf|keras)\b"
+        "tensorflow": r"\b(tensorflow|tf|keras)\b",
     }
 
     def parse(self, prompt: str) -> ParsedIntent:
@@ -109,7 +112,7 @@ class MultiIntentParser:
             language=language,
             features=features,
             description=prompt.strip(),
-            entities=entities
+            entities=entities,
         )
 
     def _detect_project_type(self, prompt: str) -> ProjectType:
@@ -125,7 +128,10 @@ class MultiIntentParser:
             return ProjectType.FULLSTACK
 
         # If both frontend and backend detected, it's fullstack
-        if scores.get(ProjectType.UI_FRONTEND, 0) > 0 and scores.get(ProjectType.API_BACKEND, 0) > 0:
+        if (
+            scores.get(ProjectType.UI_FRONTEND, 0) > 0
+            and scores.get(ProjectType.API_BACKEND, 0) > 0
+        ):
             return ProjectType.FULLSTACK
 
         # Return highest scoring type
@@ -149,7 +155,7 @@ class MultiIntentParser:
             ProjectType.DATABASE: "postgresql",
             ProjectType.FULLSTACK: "flask-react",
             ProjectType.CLI_TOOL: "click",
-            ProjectType.MICROSERVICE: "fastapi"
+            ProjectType.MICROSERVICE: "fastapi",
         }
         return defaults.get(project_type, "python")
 
@@ -176,7 +182,7 @@ class MultiIntentParser:
             "realtime": ["realtime", "websocket", "socket", "live", "streaming"],
             "testing": ["test", "testing", "unittest", "pytest", "jest"],
             "docker": ["docker", "container", "kubernetes", "k8s"],
-            "payment": ["payment", "stripe", "paypal", "checkout", "billing"]
+            "payment": ["payment", "stripe", "paypal", "checkout", "billing"],
         }
 
         for feature, keywords in feature_keywords.items():
@@ -211,6 +217,7 @@ class MultiIntentParser:
 
 
 # ========== Component 2: Blueprint Engine ==========
+
 
 class BlueprintEngine:
     """Generate project structure and configuration files"""
@@ -258,7 +265,7 @@ class BlueprintEngine:
             "frontend/src/index.js": "",
             "frontend/src/App.js": "",
             "frontend/src/components/Header.js": "",
-            "frontend/public/index.html": ""
+            "frontend/public/index.html": "",
         }
 
     def _frontend_structure(self, intent: ParsedIntent) -> dict[str, str]:
@@ -271,7 +278,7 @@ class BlueprintEngine:
             "src/styles/main.css": "",
             "public/index.html": "",
             "webpack.config.js": "" if intent.framework != "react" else "",
-            "vite.config.js": "" if intent.framework == "react" else ""
+            "vite.config.js": "" if intent.framework == "react" else "",
         }
 
     def _backend_structure(self, intent: ParsedIntent) -> dict[str, str]:
@@ -284,7 +291,7 @@ class BlueprintEngine:
             "routes.py": "",
             "middleware.py": "",
             "tests/test_app.py": "",
-            "tests/test_routes.py": ""
+            "tests/test_routes.py": "",
         }
 
     def _ml_structure(self, intent: ParsedIntent) -> dict[str, str]:
@@ -299,7 +306,7 @@ class BlueprintEngine:
             "config.yaml": "",
             "notebooks/exploration.ipynb": "",
             "data/.gitkeep": "",
-            "models/.gitkeep": ""
+            "models/.gitkeep": "",
         }
 
     def _database_structure(self, intent: ParsedIntent) -> dict[str, str]:
@@ -312,7 +319,7 @@ class BlueprintEngine:
             "queries/common_queries.sql": "",
             "config/database.yml": "",
             "scripts/backup.sh": "",
-            "scripts/restore.sh": ""
+            "scripts/restore.sh": "",
         }
 
     def _cli_structure(self, intent: ParsedIntent) -> dict[str, str]:
@@ -324,7 +331,7 @@ class BlueprintEngine:
             "config.py": "",
             "requirements.txt": "click>=8.0\ncolorama>=0.4\n",
             "setup.py": "",
-            "tests/test_cli.py": ""
+            "tests/test_cli.py": "",
         }
 
     def _default_structure(self, intent: ParsedIntent) -> dict[str, str]:
@@ -334,7 +341,7 @@ class BlueprintEngine:
             "requirements.txt": "",
             "config.py": "",
             "utils.py": "",
-            "tests/test_main.py": ""
+            "tests/test_main.py": "",
         }
 
     def _generate_readme(self, intent: ParsedIntent) -> str:
@@ -342,12 +349,12 @@ class BlueprintEngine:
         return f"""# {intent.description}
 
 ## Project Type
-{intent.project_type.value.replace('_', ' ').title()}
+{intent.project_type.value.replace("_", " ").title()}
 
 ## Technology Stack
 - Language: {intent.language.title()}
 - Framework: {intent.framework.title()}
-- Features: {', '.join(intent.features)}
+- Features: {", ".join(intent.features)}
 
 ## Setup Instructions
 
@@ -376,9 +383,9 @@ cd <project-directory>
 ## Project Structure
 ```
 .
-├── {'src/' if intent.language == 'javascript' else ''}
-├── {'app.py' if intent.framework == 'flask' else 'main.py'}
-├── {'package.json' if intent.language == 'javascript' else 'requirements.txt'}
+├── {"src/" if intent.language == "javascript" else ""}
+├── {"app.py" if intent.framework == "flask" else "main.py"}
+├── {"package.json" if intent.language == "javascript" else "requirements.txt"}
 ├── tests/
 └── README.md
 ```
@@ -476,7 +483,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE {intent.entities.get('port', 8000)}
+EXPOSE {intent.entities.get("port", 8000)}
 
 CMD ["python", "{"app.py" if intent.framework == "flask" else "main.py"}"]
 """
@@ -490,7 +497,7 @@ RUN npm ci --only=production
 
 COPY . .
 
-EXPOSE {intent.entities.get('port', 3000)}
+EXPOSE {intent.entities.get("port", 3000)}
 
 CMD ["npm", "start"]
 """
@@ -503,12 +510,13 @@ services:
   app:
     build: .
     ports:
-      - "{intent.entities.get('port', 8000)}:{intent.entities.get('port', 8000)}"
+      - "{intent.entities.get("port", 8000)}:{intent.entities.get("port", 8000)}"
     environment:
       - NODE_ENV=production
     {"depends_on:" if "database" in intent.features else ""}
 {"      - db" if "database" in intent.features else ""}
-{'''
+{
+            '''
   db:
     image: postgres:15
     environment:
@@ -519,7 +527,10 @@ services:
       - db_data:/var/lib/postgresql/data
 
 volumes:
-  db_data:''' if "database" in intent.features else ""}
+  db_data:'''
+            if "database" in intent.features
+            else ""
+        }
 """
 
     def _python_requirements(self, features: list[str]) -> str:
@@ -559,23 +570,11 @@ tensorboard>=2.13.0
         dev_deps = {}
 
         if framework == "react":
-            deps = {
-                "react": "^18.2.0",
-                "react-dom": "^18.2.0",
-                "react-router-dom": "^6.15.0"
-            }
-            dev_deps = {
-                "@vitejs/plugin-react": "^4.0.0",
-                "vite": "^4.4.0"
-            }
+            deps = {"react": "^18.2.0", "react-dom": "^18.2.0", "react-router-dom": "^6.15.0"}
+            dev_deps = {"@vitejs/plugin-react": "^4.0.0", "vite": "^4.4.0"}
         elif framework == "vue":
-            deps = {
-                "vue": "^3.3.0"
-            }
-            dev_deps = {
-                "@vitejs/plugin-vue": "^4.2.0",
-                "vite": "^4.4.0"
-            }
+            deps = {"vue": "^3.3.0"}
+            dev_deps = {"@vitejs/plugin-vue": "^4.2.0", "vite": "^4.4.0"}
 
         # Add feature-specific dependencies
         if "ui" in features:
@@ -587,19 +586,16 @@ tensorboard>=2.13.0
             "name": "aurora-generated-app",
             "version": "1.0.0",
             "description": "Generated by Aurora-X",
-            "scripts": {
-                "start": "vite",
-                "build": "vite build",
-                "test": "jest"
-            },
+            "scripts": {"start": "vite", "build": "vite build", "test": "jest"},
             "dependencies": deps,
-            "devDependencies": dev_deps
+            "devDependencies": dev_deps,
         }
 
         return json.dumps(package, indent=2)
 
 
 # ========== Component 3: Dynamic Synthesizer ==========
+
 
 class DynamicSynthesizer:
     """Generate actual code based on templates and patterns"""
@@ -612,21 +608,25 @@ class DynamicSynthesizer:
         completed_files = {}
 
         for file_path, _ in files.items():
-            if file_path.endswith('.py'):
+            if file_path.endswith(".py"):
                 content = self._generate_python_file(file_path, intent)
-            elif file_path.endswith('.js') or file_path.endswith('.jsx'):
+            elif file_path.endswith(".js") or file_path.endswith(".jsx"):
                 content = self._generate_javascript_file(file_path, intent)
-            elif file_path.endswith('.sql'):
+            elif file_path.endswith(".sql"):
                 content = self._generate_sql_file(file_path, intent)
-            elif file_path.endswith('.html'):
+            elif file_path.endswith(".html"):
                 content = self._generate_html_file(file_path, intent)
-            elif file_path.endswith('.css'):
+            elif file_path.endswith(".css"):
                 content = self._generate_css_file(file_path, intent)
-            elif file_path.endswith('.json') or file_path.endswith('.yml') or file_path.endswith('.yaml'):
+            elif (
+                file_path.endswith(".json")
+                or file_path.endswith(".yml")
+                or file_path.endswith(".yaml")
+            ):
                 content = files[file_path]  # Already generated
-            elif file_path.endswith('.md'):
+            elif file_path.endswith(".md"):
                 content = files[file_path]  # Already generated
-            elif file_path.endswith('.gitignore') or file_path.endswith('Dockerfile'):
+            elif file_path.endswith(".gitignore") or file_path.endswith("Dockerfile"):
                 content = files[file_path]  # Already generated
             else:
                 content = files[file_path] or ""  # Empty or placeholder
@@ -642,7 +642,7 @@ class DynamicSynthesizer:
             "react_app": self._react_app_template(),
             "fastapi_app": self._fastapi_app_template(),
             "cli_tool": self._cli_tool_template(),
-            "ml_model": self._ml_model_template()
+            "ml_model": self._ml_model_template(),
         }
 
     def _generate_python_file(self, file_path: str, intent: ParsedIntent) -> str:
@@ -794,7 +794,7 @@ def create_app():
         \"\"\"Health check endpoint\"\"\"
         return jsonify({{'status': 'healthy', 'timestamp': datetime.utcnow().isoformat()}})
 
-    {self._generate_route_handlers(intent.entities.get('routes', []))}
+    {self._generate_route_handlers(intent.entities.get("routes", []))}
 
     @app.errorhandler(404)
     def not_found(error):
@@ -809,12 +809,12 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    port = int(os.environ.get('PORT', {intent.entities.get('port', 8000)}))
+    port = int(os.environ.get('PORT', {intent.entities.get("port", 8000)}))
     debug = os.environ.get('DEBUG', 'true').lower() == 'true'
 
     print(f"🚀 Starting Flask application on port {{port}}...")
     print(f"📝 Description: {intent.description[:100]}")
-    print(f"🔧 Features: {', '.join(intent.features)}")
+    print(f"🔧 Features: {", ".join(intent.features)}")
 
     app.run(host='0.0.0.0', port=port, debug=debug)
 """
@@ -826,7 +826,7 @@ if __name__ == '__main__':
 
         handlers = []
         for route in routes:
-            route_name = route.strip('/').replace('/', '_') or 'root'
+            route_name = route.strip("/").replace("/", "_") or "root"
             handlers.append(f"""@app.route('/{route}')
     def {route_name}_handler():
         \"\"\"Handler for /{route} endpoint\"\"\"
@@ -886,11 +886,11 @@ async def health_check():
     \"\"\"Health check endpoint\"\"\"
     return HealthResponse(status="healthy", timestamp=datetime.utcnow())
 
-{self._generate_fastapi_routes(intent.entities.get('routes', []))}
+{self._generate_fastapi_routes(intent.entities.get("routes", []))}
 
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", {intent.entities.get('port', 8000)}))
+    port = int(os.environ.get("PORT", {intent.entities.get("port", 8000)}))
 
     print(f"🚀 Starting FastAPI application on port {{port}}...")
     print(f"📝 Description: {intent.description[:100]}")
@@ -906,7 +906,7 @@ if __name__ == "__main__":
 
         handlers = []
         for route in routes:
-            route_name = route.strip('/').replace('/', '_') or 'root'
+            route_name = route.strip("/").replace("/", "_") or "root"
             handlers.append(f"""@app.get("/{route}")
 async def get_{route_name}():
     \"\"\"GET handler for /{route}\"\"\"
@@ -969,7 +969,7 @@ function App() {{
         <div className="features">
           <h2>Features</h2>
           <ul>
-            {chr(10).join(f'            <li>{feature}</li>' for feature in intent.features) if intent.features else '            <li>No features specified</li>'}
+            {chr(10).join(f"            <li>{feature}</li>" for feature in intent.features) if intent.features else "            <li>No features specified</li>"}
           </ul>
         </div>
       </main>
@@ -986,7 +986,7 @@ export default App;
 
     def _models_code(self, intent: ParsedIntent) -> str:
         """Generate database models code"""
-        models = intent.entities.get('models', ['User', 'Item'])
+        models = intent.entities.get("models", ["User", "Item"])
 
         code = """\"\"\"
 Database Models
@@ -1113,15 +1113,15 @@ class Config:
 
     # Server
     HOST: str = os.environ.get('HOST', '0.0.0.0')
-    PORT: int = int(os.environ.get('PORT', {intent.entities.get('port', 8000)}))
+    PORT: int = int(os.environ.get('PORT', {intent.entities.get("port", 8000)}))
 
-{'    # Database' if "database" in intent.features else ""}
+{"    # Database" if "database" in intent.features else ""}
 {'    DATABASE_URL: str = os.environ.get("DATABASE_URL", "sqlite:///app.db")' if "database" in intent.features else ""}
-{'    SQLALCHEMY_TRACK_MODIFICATIONS: bool = False' if "database" in intent.features else ""}
+{"    SQLALCHEMY_TRACK_MODIFICATIONS: bool = False" if "database" in intent.features else ""}
 
-{'    # Authentication' if "auth" in intent.features else ""}
+{"    # Authentication" if "auth" in intent.features else ""}
 {'    JWT_SECRET_KEY: str = os.environ.get("JWT_SECRET_KEY", SECRET_KEY)' if "auth" in intent.features else ""}
-{'    JWT_ACCESS_TOKEN_EXPIRES: int = 3600  # 1 hour' if "auth" in intent.features else ""}
+{"    JWT_ACCESS_TOKEN_EXPIRES: int = 3600  # 1 hour" if "auth" in intent.features else ""}
 
     # Features
     FEATURES_ENABLED = {intent.features}
@@ -1320,7 +1320,7 @@ if __name__ == '__main__':
     def _test_code(self, intent: ParsedIntent, file_name: str) -> str:
         """Generate test code"""
         return f"""\"\"\"
-Tests for {file_name.replace('test_', '').replace('.py', '')}
+Tests for {file_name.replace("test_", "").replace(".py", "")}
 Generated by Aurora-X Synthesis Engine
 \"\"\"
 
@@ -1390,7 +1390,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     def _react_component_code(self, intent: ParsedIntent, file_name: str) -> str:
         """Generate React component code"""
-        component_name = file_name.replace('.js', '').replace('.jsx', '')
+        component_name = file_name.replace(".js", "").replace(".jsx", "")
         return f"""import React, {{ useState, useEffect }} from 'react';
 
 const {component_name} = ({{ props }}) => {{
@@ -1416,12 +1416,12 @@ export default {component_name};
 
     def _sql_schema_code(self, intent: ParsedIntent) -> str:
         """Generate SQL schema code"""
-        models = intent.entities.get('models', ['users', 'items'])
+        models = intent.entities.get("models", ["users", "items"])
 
         schema = "-- Database Schema\n-- Generated by Aurora-X Synthesis Engine\n\n"
 
         for model in models:
-            table_name = model.lower() if model.endswith('s') else f"{model.lower()}s"
+            table_name = model.lower() if model.endswith("s") else f"{model.lower()}s"
             schema += f"""
 CREATE TABLE IF NOT EXISTS {table_name} (
     id SERIAL PRIMARY KEY,
@@ -1544,6 +1544,7 @@ if __name__ == '__main__':
 
 # ========== Component 4: Safety Gate ==========
 
+
 class SafetyGate:
     """Validate generated code for safety and completeness"""
 
@@ -1582,7 +1583,7 @@ class SafetyGate:
 
         # Check file sizes (not too small, not too large)
         for file_path, content in files.items():
-            if len(content) < 10 and not file_path.endswith('.gitkeep'):
+            if len(content) < 10 and not file_path.endswith(".gitkeep"):
                 issues.append(f"File too small: {file_path}")
             if len(content) > 1_000_000:  # 1MB
                 issues.append(f"File too large: {file_path}")
@@ -1627,15 +1628,15 @@ class SafetyGate:
 
     def _check_syntax(self, file_path: str, content: str) -> str | None:
         """Basic syntax checking for known file types"""
-        if file_path.endswith('.json'):
+        if file_path.endswith(".json"):
             try:
                 json.loads(content) if content else {}
             except json.JSONDecodeError as e:
                 return str(e)
 
-        if file_path.endswith('.py'):
+        if file_path.endswith(".py"):
             try:
-                compile(content, file_path, 'exec')
+                compile(content, file_path, "exec")
             except SyntaxError as e:
                 return str(e)
 
@@ -1644,13 +1645,13 @@ class SafetyGate:
 
 # ========== Component 5: Persistence Layer ==========
 
+
 class PersistenceLayer:
     """Save generated code to runs directory"""
 
-    def save_project(self,
-                    files: dict[str, str],
-                    intent: ParsedIntent,
-                    run_id: str = None) -> dict[str, Any]:
+    def save_project(
+        self, files: dict[str, str], intent: ParsedIntent, run_id: str = None
+    ) -> dict[str, Any]:
         """
         Save project files to runs directory
 
@@ -1671,7 +1672,7 @@ class PersistenceLayer:
         for file_path, content in files.items():
             full_path = run_dir / file_path
             full_path.parent.mkdir(parents=True, exist_ok=True)
-            full_path.write_text(content, encoding='utf-8')
+            full_path.write_text(content, encoding="utf-8")
             saved_files.append(file_path)
 
         # Create spec.json with metadata
@@ -1685,11 +1686,11 @@ class PersistenceLayer:
             "description": intent.description,
             "entities": intent.entities,
             "files": saved_files,
-            "file_count": len(saved_files)
+            "file_count": len(saved_files),
         }
 
         spec_path = run_dir / "spec.json"
-        spec_path.write_text(json.dumps(spec_data, indent=2), encoding='utf-8')
+        spec_path.write_text(json.dumps(spec_data, indent=2), encoding="utf-8")
 
         # Create project.zip for download
         zip_path = self._create_zip(run_dir, files)
@@ -1703,14 +1704,14 @@ class PersistenceLayer:
             "run_dir": str(run_dir),
             "files": saved_files,
             "project_type": intent.project_type.value,
-            "zip_path": str(zip_path)
+            "zip_path": str(zip_path),
         }
 
     def _create_zip(self, run_dir: Path, files: dict[str, str]) -> Path:
         """Create a zip file of the project"""
         zip_path = run_dir / "project.zip"
 
-        with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
             for file_path, content in files.items():
                 zipf.writestr(file_path, content)
 
@@ -1733,11 +1734,8 @@ class PersistenceLayer:
 
 # ========== Main Universal Synthesis Function ==========
 
-async def synthesize_universal(
-    prompt: str,
-    run_id: str = None,
-    context: dict = None
-) -> dict:
+
+async def synthesize_universal(prompt: str, run_id: str = None, context: dict = None) -> dict:
     """
     Universal code synthesis engine main function
 
@@ -1789,10 +1787,7 @@ async def synthesize_universal(
         result = persistence.save_project(completed_files, intent, run_id)
 
         # Add validation results to output
-        result["validation"] = {
-            "is_valid": is_valid,
-            "issues": issues if not is_valid else []
-        }
+        result["validation"] = {"is_valid": is_valid, "issues": issues if not is_valid else []}
 
         print(f"✅ Project saved to: {result['run_dir']}")
         print(f"📦 Download package: {result['zip_path']}")
@@ -1806,7 +1801,7 @@ async def synthesize_universal(
             "error": str(e),
             "run_id": run_id or "error",
             "files": [],
-            "project_type": "unknown"
+            "project_type": "unknown",
         }
 
 
@@ -1823,11 +1818,14 @@ def synthesize_universal_sync(prompt: str, run_id: str = None, context: dict = N
 
 # ========== Bridge API Wrapper ==========
 
+
 @dataclass
 class ProjectResult:
     """Result object for bridge API compatibility"""
+
     run_dir: Path
     manifest: dict
+
 
 def generate_project(prompt: str, runs_dir: Path = None) -> ProjectResult:
     """
@@ -1856,7 +1854,7 @@ def generate_project(prompt: str, runs_dir: Path = None) -> ProjectResult:
     zip_path = run_dir / "project.zip"
 
     if not zip_path.exists() and run_dir.exists():
-        with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
             for file_path in run_dir.rglob("*"):
                 if file_path.is_file() and file_path.name != "project.zip":
                     zf.write(file_path, file_path.relative_to(run_dir))
@@ -1867,7 +1865,7 @@ def generate_project(prompt: str, runs_dir: Path = None) -> ProjectResult:
         "files": result.get("files", []),
         "project_type": result.get("project_type", "unknown"),
         "status": result.get("status", "success"),
-        "validation": result.get("validation", {})
+        "validation": result.get("validation", {}),
     }
 
     return ProjectResult(run_dir=run_dir, manifest=manifest)
@@ -1884,24 +1882,24 @@ if __name__ == "__main__":
     else:
         prompt = "Create a Flask API with user authentication and a React frontend dashboard"
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("Aurora-X Universal Code Synthesis Engine")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     # Run synthesis
     result = synthesize_universal_sync(prompt)
 
     # Print results
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("Synthesis Complete!")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Status: {result.get('status', 'unknown')}")
     print(f"Run ID: {result.get('run_id', 'N/A')}")
     print(f"Project Type: {result.get('project_type', 'N/A')}")
     print(f"Files Generated: {len(result.get('files', []))}")
 
-    if result.get('validation'):
-        if result['validation']['is_valid']:
+    if result.get("validation"):
+        if result["validation"]["is_valid"]:
             print("✅ All validations passed")
         else:
             print(f"⚠️ {len(result['validation']['issues'])} validation issues found")

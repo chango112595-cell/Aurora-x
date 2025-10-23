@@ -31,16 +31,21 @@ def test_healthz_implementation():
 
             # Show expected response
             print("\n📊 Expected Health Check Response:")
-            print(json.dumps({
-                "status": "ok",
-                "service": "Aurora-X",
-                "version": "v3",
-                "components": {
-                    "router": "active",
-                    "synthesis": "ready",
-                    "learning_engine": "online"
-                }
-            }, indent=2))
+            print(
+                json.dumps(
+                    {
+                        "status": "ok",
+                        "service": "Aurora-X",
+                        "version": "v3",
+                        "components": {
+                            "router": "active",
+                            "synthesis": "ready",
+                            "learning_engine": "online",
+                        },
+                    },
+                    indent=2,
+                )
+            )
 
             print("\n🚀 Test the endpoint when server is running:")
             print("   curl http://localhost:5001/healthz")
@@ -53,6 +58,7 @@ def test_healthz_implementation():
     else:
         print("❌ serve.py not found")
         return False
+
 
 def test_route_listing():
     """Verify healthz is listed in available routes."""
@@ -70,6 +76,7 @@ def test_route_listing():
             print("⚠️  /healthz may not be listed in routes")
 
     return True
+
 
 def main():
     """Run all health check tests."""
@@ -97,6 +104,8 @@ def main():
 
     return 0 if success else 1
 
+
 if __name__ == "__main__":
     import sys
+
     sys.exit(main())

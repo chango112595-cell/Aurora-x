@@ -46,7 +46,9 @@ def test_cli_hash_files():
 
 def test_cli_generic():
     """Test generic CLI tool generation"""
-    print("Testing generic CLI tool generation for: 'build a command line tool for file processing'")
+    print(
+        "Testing generic CLI tool generation for: 'build a command line tool for file processing'"
+    )
     print("=" * 60)
 
     prompt = "build a command line tool for file processing"
@@ -129,10 +131,7 @@ def test_execution():
     # Test CLI hash tool help
     try:
         result = subprocess.run(
-            ["python", "test_cli_hash.py", "--help"],
-            capture_output=True,
-            text=True,
-            timeout=5
+            ["python", "test_cli_hash.py", "--help"], capture_output=True, text=True, timeout=5
         )
         if result.returncode == 0:
             print("✓ CLI hash tool --help runs successfully")
@@ -156,10 +155,7 @@ print("✓ Factorial function tests pass")
         Path("run_factorial_test.py").write_text(test_code)
 
         result = subprocess.run(
-            ["python", "run_factorial_test.py"],
-            capture_output=True,
-            text=True,
-            timeout=5
+            ["python", "run_factorial_test.py"], capture_output=True, text=True, timeout=5
         )
         if result.returncode == 0:
             print(result.stdout.strip())

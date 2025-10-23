@@ -12,24 +12,23 @@ def test_english_request(request_text):
 
     # Generate spec from English
     from aurora_x.spec.parser_v2 import english_to_spec
+
     spec = english_to_spec(request_text)
     print(f"   ✓ Generated spec for: {spec.split('##')[0].strip()}")
 
     # Save spec to file
     spec_file = f"specs/test_{request_text[:20].replace(' ', '_')}.md"
-    with open(spec_file, 'w') as f:
+    with open(spec_file, "w") as f:
         f.write(spec)
 
     # Run synthesis
     subprocess.run(
-        f"python -m aurora_x.main --spec {spec_file}",
-        shell=True,
-        capture_output=True,
-        text=True
+        f"python -m aurora_x.main --spec {spec_file}", shell=True, capture_output=True, text=True
     )
 
     # Find the generated run directory
     import glob
+
     runs = sorted(glob.glob("runs/run-*"))
     if runs:
         latest_run = runs[-1]
@@ -48,9 +47,9 @@ def test_english_request(request_text):
                     return False
                 else:
                     # Show first few lines of actual implementation
-                    lines = code.split('\n')
+                    lines = code.split("\n")
                     for line in lines[1:6]:  # Skip header comment
-                        if line.strip() and not line.startswith('#'):
+                        if line.strip() and not line.startswith("#"):
                             print(f"      Code: {line.strip()[:60]}...")
                             break
                     print("   ✅ SUCCESS: Real code generated!")
@@ -59,13 +58,9 @@ def test_english_request(request_text):
     print("   ⚠️  Could not find generated code")
     return False
 
+
 # Test various English requests
-test_cases = [
-    "reverse a string",
-    "add two numbers",
-    "calculate factorial",
-    "check if palindrome"
-]
+test_cases = ["reverse a string", "add two numbers", "calculate factorial", "check if palindrome"]
 
 print("=" * 60)
 print("Aurora-X English Synthesis Test")

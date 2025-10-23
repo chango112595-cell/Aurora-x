@@ -6,9 +6,11 @@ from typing import Any
 
 
 def truncate(s: str | None, n: int = 120) -> str:
-    if s is None: return ""
-    s = str(s).replace("\n","⏎")
-    return s if len(s) <= n else s[:n-1] + "…"
+    if s is None:
+        return ""
+    s = str(s).replace("\n", "⏎")
+    return s if len(s) <= n else s[: n - 1] + "…"
+
 
 def fmt_rows(rows: Iterable[dict[str, Any]]) -> str:
     out = []
@@ -21,16 +23,21 @@ def fmt_rows(rows: Iterable[dict[str, Any]]) -> str:
         out.append(line)
     return "\n".join(out) if out else "(no results)"
 
+
 def filter_rows(rows: list[dict[str, Any]], term: str | None) -> list[dict[str, Any]]:
     if not term:
         return rows
     t = term.lower()
     out = []
     for r in rows:
-        blob = " ".join(str(r.get(k,"")) for k in ("func_name","func_signature","sig_key","snippet","timestamp")).lower()
+        blob = " ".join(
+            str(r.get(k, ""))
+            for k in ("func_name", "func_signature", "sig_key", "snippet", "timestamp")
+        ).lower()
         if t in blob:
             out.append(r)
     return out
+
 
 def to_json(rows: list[dict[str, Any]]) -> str:
     return _json.dumps(rows, ensure_ascii=False, indent=2)
