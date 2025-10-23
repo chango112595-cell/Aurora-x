@@ -24,9 +24,28 @@ env:
   HEALTH_INTERVAL: 4
 
 jobs:
+  check-secrets:
+    runs-on: ubuntu-latest
+    name: Validate Secrets
+    outputs:
+      has_secrets: ${{ steps.check.outputs.has_secrets }}
+    steps:
+      - name: Check required secrets
+        id: check
+        run: |
+          if [ -n "${{ secrets.SSH_HOST }}" ] && [ -n "${{ secrets.SSH_USER }}" ] && [ -n "${{ secrets.SSH_KEY }}" ]; then
+            echo "has_secrets=true" >> $GITHUB_OUTPUT
+            echo "✅ All required secrets configured"
+          else
+            echo "has_secrets=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Missing required secrets - deployment will be skipped"
+          fi
+
   deploy:
     runs-on: ubuntu-latest
     name: Deploy to VPS via SSH
+    needs: check-secrets
+    if: needs.check-secrets.outputs.has_secrets == 'true'
 
     steps:
       - name: Checkout code
