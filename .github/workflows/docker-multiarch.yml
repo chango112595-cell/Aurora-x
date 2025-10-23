@@ -1,14 +1,9 @@
 name: Multi-Arch Docker Build
 
 on:
-  # Disabled: Multi-arch builds are slow and resource-intensive
-  # Enable manually when needed for releases
-  # push:
-  #   branches: [main]
-  #   tags: ['v*']
-  # pull_request:
-  #   branches: [main]
   workflow_dispatch:
+  push:
+    tags: ['v*']  # Auto-build on version tags
 
 env:
   REGISTRY: ghcr.io
