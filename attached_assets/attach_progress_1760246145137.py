@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import json
@@ -77,6 +76,7 @@ async function load(){ try{ const r=await fetch('/api/progress'); const j=await 
 $('#refresh').onclick = load; load(); setInterval(load, 5000);
 </script>
 </body></html>"""
+
 
 def attach_progress(app):
     @app.get("/api/progress")

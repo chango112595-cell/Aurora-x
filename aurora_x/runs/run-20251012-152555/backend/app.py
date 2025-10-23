@@ -30,27 +30,21 @@ def main(args: argparse.Namespace) -> int:
     print("✅ Execution complete")
     return 0
 
+
 def parse_arguments() -> argparse.Namespace:
     """Parse command-line arguments"""
     parser = argparse.ArgumentParser(
         description="Create a Flask API with user authentication and a React frontend dashboard",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        help='Enable verbose output'
-    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output")
 
-    parser.add_argument(
-        '-o', '--output',
-        type=Path,
-        help='Output file path'
-    )
+    parser.add_argument("-o", "--output", type=Path, help="Output file path")
 
     return parser.parse_args()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     args = parse_arguments()
     sys.exit(main(args))

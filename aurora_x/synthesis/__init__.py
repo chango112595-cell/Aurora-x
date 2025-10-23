@@ -32,5 +32,5 @@ __all__ = [
     "SafetyGate",
     "PersistenceLayer",
     "ProjectType",
-    "ParsedIntent"
+    "ParsedIntent",
 ]

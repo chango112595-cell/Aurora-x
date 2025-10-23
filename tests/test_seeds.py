@@ -52,11 +52,7 @@ class TestSeedStore(unittest.TestCase):
         # Create and update a store
         store1 = SeedStore(path=str(self.seed_path))
 
-        result = {
-            "seed_key": "test_key_1",
-            "score": 0.8,
-            "success": True
-        }
+        result = {"seed_key": "test_key_1", "score": 0.8, "success": True}
         store1.update(result)
         store1.save()
 
@@ -86,20 +82,12 @@ class TestSeedStore(unittest.TestCase):
         store = SeedStore(path=str(self.seed_path), drift_cap=0.1)
 
         # First update
-        result1 = {
-            "seed_key": "drift_test",
-            "score": 0.9,
-            "success": True
-        }
+        result1 = {"seed_key": "drift_test", "score": 0.9, "success": True}
         store.update(result1)
         bias1 = store.get_bias("drift_test")
 
         # Second update with extreme score
-        result2 = {
-            "seed_key": "drift_test",
-            "score": 0.0,
-            "success": False
-        }
+        result2 = {"seed_key": "drift_test", "score": 0.0, "success": False}
         store.update(result2)
         bias2 = store.get_bias("drift_test")
 
@@ -130,8 +118,8 @@ class TestSeedStore(unittest.TestCase):
 
         # Series of updates
         updates = [
-            {"seed_key": "ema_test", "score": 0.7, "success": True},   # 0.3
-            {"seed_key": "ema_test", "score": 0.8, "success": True},   # 0.4
+            {"seed_key": "ema_test", "score": 0.7, "success": True},  # 0.3
+            {"seed_key": "ema_test", "score": 0.8, "success": True},  # 0.4
             {"seed_key": "ema_test", "score": 0.6, "success": False},  # 0.0
         ]
 
@@ -156,7 +144,7 @@ class TestSeedStore(unittest.TestCase):
             result = {
                 "seed_key": f"key_{i}",
                 "score": 0.5 + i * 0.1,  # Varying scores
-                "success": True
+                "success": True,
             }
             store.update(result)
 
@@ -209,6 +197,7 @@ class TestSeedStore(unittest.TestCase):
 
         try:
             from aurora_x.learn import get_seed_store
+
             store = get_seed_store()
 
             # Check that custom path was used

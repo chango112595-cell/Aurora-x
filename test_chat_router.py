@@ -2,6 +2,7 @@
 """
 Test the T08 Intent Router and chat endpoint locally
 """
+
 from pathlib import Path
 
 from aurora_x.router.intent_router import classify
@@ -18,7 +19,9 @@ def test_chat_endpoint(prompt):
 
     # Handle web_app intent
     if intent.kind == "web_app":
-        title = "Futuristic UI Timer" if intent.fields.get("feature")=="timer" else intent.name.replace('_',' ').title()
+        title = (
+            "Futuristic UI Timer" if intent.fields.get("feature") == "timer" else intent.name.replace("_", " ").title()
+        )
         code = render_app(title=title, subtitle=intent.brief)
 
         # Save the generated Flask app
@@ -30,7 +33,7 @@ def test_chat_endpoint(prompt):
             "kind": "web_app",
             "file": str(output_file),
             "hint": "Run: python generated_timer_app.py",
-            "code_length": len(code)
+            "code_length": len(code),
         }
         print(f"✅ Generated Flask app: {output_file}")
         print(f"📊 Code length: {len(code)} chars")
@@ -42,10 +45,11 @@ def test_chat_endpoint(prompt):
         "ok": True,
         "kind": intent.kind,
         "name": intent.name,
-        "note": f"Template for {intent.kind} not implemented yet"
+        "note": f"Template for {intent.kind} not implemented yet",
     }
     print(f"⚠️  {result['note']}")
     return result
+
 
 # Test cases
 test_prompts = [
@@ -53,7 +57,7 @@ test_prompts = [
     "create a countdown timer with neon effects",
     "build a web dashboard",
     "create a CLI tool to hash files",
-    "write factorial(n) with tests"
+    "write factorial(n) with tests",
 ]
 
 print("=" * 60)

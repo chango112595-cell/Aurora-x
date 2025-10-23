@@ -9,6 +9,7 @@ from datetime import datetime
 
 URL = os.getenv("DISCORD_WEBHOOK_URL")
 
+
 def send_embed(title: str, description: str, color: int, fields: list = None):
     """Send a rich Discord embed notification."""
     if not URL:
@@ -22,8 +23,8 @@ def send_embed(title: str, description: str, color: int, fields: list = None):
         "timestamp": datetime.utcnow().isoformat(),
         "footer": {
             "text": "Aurora-X Ultra",
-            "icon_url": "https://cdn.discordapp.com/embed/avatars/1.png"
-        }
+            "icon_url": "https://cdn.discordapp.com/embed/avatars/1.png",
+        },
     }
 
     if fields:
@@ -32,7 +33,7 @@ def send_embed(title: str, description: str, color: int, fields: list = None):
     payload = {
         "username": "Aurora-X Bot",
         "avatar_url": "https://cdn.discordapp.com/embed/avatars/2.png",
-        "embeds": [embed]
+        "embeds": [embed],
     }
 
     try:
@@ -48,29 +49,30 @@ def send_embed(title: str, description: str, color: int, fields: list = None):
         print(f"❌ Error: {e}")
     return False
 
+
 def success(title: str, message: str, **kwargs):
     """Send a success notification (green)."""
-    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True}
-              for k, v in kwargs.items()]
-    return send_embed(f"✅ {title}", message, 0x00ff00, fields)
+    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} for k, v in kwargs.items()]
+    return send_embed(f"✅ {title}", message, 0x00FF00, fields)
+
 
 def warning(title: str, message: str, **kwargs):
     """Send a warning notification (amber)."""
-    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True}
-              for k, v in kwargs.items()]
-    return send_embed(f"⚠️ {title}", message, 0xffa500, fields)
+    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} for k, v in kwargs.items()]
+    return send_embed(f"⚠️ {title}", message, 0xFFA500, fields)
+
 
 def failure(title: str, message: str, **kwargs):
     """Send a failure notification (red)."""
-    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True}
-              for k, v in kwargs.items()]
-    return send_embed(f"❌ {title}", message, 0xff0000, fields)
+    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} for k, v in kwargs.items()]
+    return send_embed(f"❌ {title}", message, 0xFF0000, fields)
+
 
 def milestone(title: str, message: str, **kwargs):
     """Send a milestone notification (cyan)."""
-    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True}
-              for k, v in kwargs.items()]
-    return send_embed(f"🌌 {title}", message, 0x00ffff, fields)
+    fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} for k, v in kwargs.items()]
+    return send_embed(f"🌌 {title}", message, 0x00FFFF, fields)
+
 
 if __name__ == "__main__":
     # Test all styles
