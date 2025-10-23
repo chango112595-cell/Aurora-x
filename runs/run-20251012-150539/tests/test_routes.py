@@ -10,12 +10,13 @@ from pathlib import Path
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+
 class TestMain(unittest.TestCase):
     """Test cases for main functionality"""
 
     def setUp(self):
         """Set up test fixtures"""
-        self.test_data = {'key': 'value'}
+        self.test_data = {"key": "value"}
 
     def tearDown(self):
         """Clean up after tests"""
@@ -37,5 +38,6 @@ class TestMain(unittest.TestCase):
         with self.assertRaises(Exception):
             raise Exception("Test exception")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

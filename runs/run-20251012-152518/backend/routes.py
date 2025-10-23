@@ -7,54 +7,56 @@ from datetime import datetime
 
 from flask import Blueprint, jsonify, request
 
-api_bp = Blueprint('api', __name__, url_prefix='/api')
+api_bp = Blueprint("api", __name__, url_prefix="/api")
 
-@api_bp.route('/status')
+
+@api_bp.route("/status")
 def status():
     """API status endpoint"""
-    return jsonify({
-        'status': 'operational',
-        'timestamp': datetime.utcnow().isoformat(),
-        'version': '1.0.0'
-    })
+    return jsonify({"status": "operational", "timestamp": datetime.utcnow().isoformat(), "version": "1.0.0"})
 
-@api_bp.route('/items', methods=['GET', 'POST'])
+
+@api_bp.route("/items", methods=["GET", "POST"])
 def items():
     """Items CRUD endpoint"""
-    if request.method == 'GET':
+    if request.method == "GET":
         # TODO: Implement GET logic
-        return jsonify({'items': [], 'total': 0})
+        return jsonify({"items": [], "total": 0})
 
-    elif request.method == 'POST':
+    elif request.method == "POST":
         # TODO: Implement POST logic
         data = request.get_json()
-        return jsonify({'message': 'Item created', 'data': data}), 201
+        return jsonify({"message": "Item created", "data": data}), 201
 
-@api_bp.route('/items/<int:item_id>', methods=['GET', 'PUT', 'DELETE'])
+
+@api_bp.route("/items/<int:item_id>", methods=["GET", "PUT", "DELETE"])
 def item_detail(item_id):
     """Single item CRUD endpoint"""
-    if request.method == 'GET':
+    if request.method == "GET":
         # TODO: Implement GET logic
-        return jsonify({'id': item_id, 'name': 'Sample Item'})
+        return jsonify({"id": item_id, "name": "Sample Item"})
 
-    elif request.method == 'PUT':
+    elif request.method == "PUT":
         # TODO: Implement PUT logic
         data = request.get_json()
-        return jsonify({'message': f'Item {item_id} updated', 'data': data})
+        return jsonify({"message": f"Item {item_id} updated", "data": data})
 
-    elif request.method == 'DELETE':
+    elif request.method == "DELETE":
         # TODO: Implement DELETE logic
-        return jsonify({'message': f'Item {item_id} deleted'}), 204
+        return jsonify({"message": f"Item {item_id} deleted"}), 204
+
 
 # Error handlers
 @api_bp.errorhandler(400)
 def bad_request(error):
-    return jsonify({'error': 'Bad request'}), 400
+    return jsonify({"error": "Bad request"}), 400
+
 
 @api_bp.errorhandler(404)
 def not_found(error):
-    return jsonify({'error': 'Resource not found'}), 404
+    return jsonify({"error": "Resource not found"}), 404
+
 
 @api_bp.errorhandler(500)
 def internal_error(error):
-    return jsonify({'error': 'Internal server error'}), 500
+    return jsonify({"error": "Internal server error"}), 500

@@ -14,47 +14,45 @@ from flask_cors import CORS
 def create_app():
     """Create and configure Flask application"""
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
 
     # Enable CORS for API endpoints
     CORS(app)
 
-
-
-    @app.route('/')
+    @app.route("/")
     def index():
         """Home page"""
-        return jsonify({
-            'message': 'Welcome to Create a simple Flask API with a health check endp',
-            'timestamp': datetime.utcnow().isoformat(),
-            'status': 'running'
-        })
+        return jsonify(
+            {
+                "message": "Welcome to Create a simple Flask API with a health check endp",
+                "timestamp": datetime.utcnow().isoformat(),
+                "status": "running",
+            }
+        )
 
-    @app.route('/health')
+    @app.route("/health")
     def health_check():
         """Health check endpoint"""
-        return jsonify({'status': 'healthy', 'timestamp': datetime.utcnow().isoformat()})
-
-
+        return jsonify({"status": "healthy", "timestamp": datetime.utcnow().isoformat()})
 
     @app.errorhandler(404)
     def not_found(error):
-        return jsonify({'error': 'Not found'}), 404
+        return jsonify({"error": "Not found"}), 404
 
     @app.errorhandler(500)
     def internal_error(error):
-        return jsonify({'error': 'Internal server error'}), 500
+        return jsonify({"error": "Internal server error"}), 500
 
     return app
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = create_app()
-    port = int(os.environ.get('PORT', 8000))
-    debug = os.environ.get('DEBUG', 'true').lower() == 'true'
+    port = int(os.environ.get("PORT", 8000))
+    debug = os.environ.get("DEBUG", "true").lower() == "true"
 
     print(f"🚀 Starting Flask application on port {port}...")
     print("📝 Description: Create a simple Flask API with a health check endpoint")
     print("🔧 Features: api")
 
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    app.run(host="0.0.0.0", port=port, debug=debug)

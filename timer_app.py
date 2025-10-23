@@ -1,7 +1,8 @@
 from flask import Flask, render_template_string
 from textwrap import dedent
 
-HTML = dedent("""
+HTML = dedent(
+    """
 <!doctype html>
 <html lang="en">
 <head>
@@ -110,7 +111,9 @@ updateDisplay();
 </script>
 </body>
 </html>
-""")
+"""
+)
+
 
 def format_mmss(ms: int) -> str:
     """Format milliseconds to MM:SS (zero-padded)."""
@@ -120,6 +123,7 @@ def format_mmss(ms: int) -> str:
     minutes = total_seconds // 60
     seconds = total_seconds % 60
     return f"{minutes:02d}:{seconds:02d}"
+
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -131,6 +135,7 @@ def create_app() -> Flask:
     app.format_mmss = format_mmss
     return app
 
+
 # Basic unit tests for format_mmss
 def _run_tests():
     assert format_mmss(0) == "00:00"
@@ -140,6 +145,7 @@ def _run_tests():
     assert format_mmss(3599000) == "59:59"
     assert format_mmss(-200) == "00:00"
     print("format_mmss tests passed")
+
 
 if __name__ == "__main__":
     _run_tests()
