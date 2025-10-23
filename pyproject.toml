@@ -46,7 +46,7 @@ exclude = '''
  |dist
  |backups
 )/
-''']
+'''
 
 [tool.mypy]
 python_version = "3.8"
