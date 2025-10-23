@@ -67,6 +67,7 @@ export function ChatInterface() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showExamples, setShowExamples] = useState(true);
   const [activeSynthesisId, setActiveSynthesisId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false); // Added to manage loading state
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -167,20 +168,75 @@ export function ChatInterface() {
     setActiveSynthesisId(null);
   };
 
-  const handleSend = () => {
-    if (!input.trim() || chatMutation.isPending) return;
+  const handleSend = async () => {
+    if (!input.trim()) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      role: "user",
+      role: 'user',
       content: input,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setShowExamples(false);
-    chatMutation.mutate(input);
+    setMessages(prev => [...prev, userMessage]);
+    const userInput = input;
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      // Call the chat API endpoint
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: userInput }),
+      });
+
+      const data = await response.json();
+
+      let aiContent = '';
+      if (data.status === 'success') {
+        aiContent = `✅ Synthesis completed!\n\n`;
+        if (data.runDir) {
+          aiContent += `📁 Generated code in: runs/${data.runDir}\n`;
+          aiContent += `🔗 View report: runs/${data.runDir}/report.html\n\n`;
+        }
+        if (data.output) {
+          const outputLines = data.output.split('\n').filter((line: string) => 
+            line.includes('[OK]') || line.includes('Generated') || line.includes('Latest')
+          );
+          if (outputLines.length > 0) {
+            aiContent += outputLines.join('\n');
+          }
+        }
+      } else {
+        aiContent = `❌ Synthesis failed\n\n${data.error || 'Unknown error'}\n\n${data.details || ''}`;
+        if (data.stderr) {
+          aiContent += `\n\nError output:\n${data.stderr}`;
+        }
+      }
+
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: aiContent,
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: `❌ Error: ${error instanceof Error ? error.message : 'Failed to process request'}`,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleExampleClick = (prompt: string) => {
@@ -322,15 +378,16 @@ export function ChatInterface() {
             placeholder="Ask Chango to generate code..."
             className="min-h-[56px] max-h-32 resize-none bg-muted/50"
             data-testid="input-chat"
+            disabled={isLoading} // Disable input while loading
           />
           <Button
             onClick={handleSend}
             size="icon"
-            disabled={!input.trim() || chatMutation.isPending}
+            disabled={!input.trim() || isLoading} // Disable button while loading
             className="h-[56px] w-[56px]"
             data-testid="button-send"
           >
-            <Send className="h-5 w-5" />
+            {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
           </Button>
         </div>
       </div>
