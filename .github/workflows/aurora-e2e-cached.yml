@@ -94,7 +94,8 @@ jobs:
           # Health
           h = json.load(urllib.request.urlopen(host+"/healthz"))
 +          # healthz currently returns {"ok": true, ...}
-+          assert h.get("ok") is True or h.get("status") == "ok", h
++                    # Support both legacy status=ok and new ok=true formats during migration
+          assert h.get("ok") is True or h.get("status") == "ok", h
           # Math
           r = post("/api/solve", {"problem":"(2+3)^2 + 1"})
           assert r.get("ok") and abs(r["value"]-26.0)<1e-9, r
