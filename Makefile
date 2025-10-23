@@ -611,9 +611,19 @@ bridge-health:
 
 # Start only if health fails (used by startup scripts & dashboard)
 bridge-ensure:
-	@curl -fsS http://$(BRIDGE_HOST):$(BRIDGE_PORT)/healthz >/dev/null 2>&1 \
-	  && echo "✅ bridge already running on $(BRIDGE_PORT)" \
-	  || $(MAKE) bridge-up
+	@if curl -fsS http://$(BRIDGE_HOST):$(BRIDGE_PORT)/healthz >/dev/null 2>&1; then \
+		echo "✅ bridge already running on $(BRIDGE_PORT)"; \
+	else \
+		echo "🚀 Starting Bridge..."; \
+		nohup python3 -m aurora_x.bridge.service >/tmp/bridge.log 2>&1 & \
+		echo $$! > /tmp/bridge.pid; \
+		sleep 2; \
+		if curl -fsS http://$(BRIDGE_HOST):$(BRIDGE_PORT)/healthz >/dev/null 2>&1; then \
+			echo "✅ Bridge started successfully"; \
+		else \
+			echo "⚠️  Bridge startup issue - continuing anyway"; \
+		fi; \
+	fi
 
 # Start orchestrator with Bridge autostart
 orch-up:
