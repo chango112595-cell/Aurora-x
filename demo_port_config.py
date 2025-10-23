@@ -10,11 +10,13 @@ import os
 def demo_replit_config():
     """Demonstrate Replit-friendly port configuration."""
 
-    print("""
+    print(
+        """
     ╔════════════════════════════════════════════════════════╗
     ║     🚀 Replit Port Configuration Demo 🚀               ║
     ╚════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     print("📋 How to Deploy Aurora-X Generated Apps on Replit:")
     print("=" * 60)
@@ -48,7 +50,8 @@ def demo_replit_config():
     print("\n" + "=" * 60)
     print("🎯 Replit Deployment Steps:")
     print("=" * 60)
-    print("""
+    print(
+        """
     1. Generate your app using Aurora-X:
        curl -X POST http://localhost:5001/chat \\
          -H 'Content-Type: application/json' \\
@@ -63,12 +66,14 @@ def demo_replit_config():
        • Replit provides a public URL
        • Example: https://aurora-app.yourusername.replit.dev
        • All traffic proxied to your PORT
-    """)
+    """
+    )
 
     print("=" * 60)
     print("💡 Testing Locally with Custom Ports:")
     print("=" * 60)
-    print("""
+    print(
+        """
     # Test with custom port locally:
     PORT=3000 python app.py              # Flask on port 3000
     PORT=4000 go run main.go             # Go on port 4000
@@ -78,7 +83,8 @@ def demo_replit_config():
     python app.py                        # Flask on 8000
     go run main.go                       # Go on 8080
     dotnet run                           # C# on 5080
-    """)
+    """
+    )
 
     print("\n✅ All templates are now cloud-ready and port-configurable!")
 
@@ -88,6 +94,7 @@ def demo_replit_config():
         print(f"\n🔍 Current PORT environment variable: {current_port}")
     else:
         print("\n🔍 No PORT set (will use defaults)")
+
 
 if __name__ == "__main__":
     demo_replit_config()

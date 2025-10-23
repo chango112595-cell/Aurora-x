@@ -54,6 +54,7 @@ def test_enhanced_pretty_locally():
 
         print()
 
+
 def test_api_response_structure():
     """Test the API response structure"""
     import requests
@@ -74,7 +75,7 @@ def test_api_response_structure():
             resp = requests.post(
                 f"{base_url}/api/solve/pretty",
                 json=tc,
-                headers={"Content-Type": "application/json"}
+                headers={"Content-Type": "application/json"},
             )
 
             if resp.status_code == 200:
@@ -105,6 +106,7 @@ def test_api_response_structure():
 
         print()
 
+
 def test_sample_output():
     """Show sample enhanced output"""
     print("\n📝 Sample Enhanced Output:\n")
@@ -117,7 +119,7 @@ def test_sample_output():
             "kind": "physics.orbital_period",
             "a_m": 7000000.0,
             "M_kg": 5.972e24,
-            "period_s": 5837.776554
+            "period_s": 5837.776554,
         },
         "units_info": [
             {
@@ -125,31 +127,32 @@ def test_sample_output():
                 "value": 7000000.0,
                 "unit": "m",
                 "pretty": "7 Mm",
-                "hint": "LEO-ish altitude"
+                "hint": "LEO-ish altitude",
             },
             {
                 "parameter": "Central mass",
                 "value": 5.972e24,
                 "unit": "kg",
                 "pretty": "5.97e12 Tkg",
-                "hint": "Mass of Earth"
+                "hint": "Mass of Earth",
             },
             {
                 "parameter": "Period",
                 "value": 5837.776554,
                 "unit": "s",
                 "pretty": "5.84 ks",
-                "human": "1.62 hours"
-            }
-        ]
+                "human": "1.62 hours",
+            },
+        ],
     }
 
     print(json.dumps(sample, indent=2))
 
+
 if __name__ == "__main__":
-    print("="*60)
+    print("=" * 60)
     print("ENHANCED PRETTY ENDPOINT TEST")
-    print("="*60)
+    print("=" * 60)
     print()
 
     test_enhanced_pretty_locally()

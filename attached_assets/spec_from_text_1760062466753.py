@@ -16,12 +16,14 @@ TEMPLATE = """# {name}
 {examples_table}
 """
 
+
 def _repr_cell(v):
     if isinstance(v, bool):
         return "true" if v else "false"
     if isinstance(v, (int, float)):
         return str(v)
     return repr(v)
+
 
 def _examples_table(examples):
     if not examples:
@@ -37,6 +39,7 @@ def _examples_table(examples):
             row.append(_repr_cell(ex.get(k, "")))
         rows.append("| " + " | ".join(row) + " |")
     return "\n".join([head, sep] + rows)
+
 
 def create_spec_from_text(text: str, specs_dir: str = "specs") -> Path:
     parsed = parse_english(text)

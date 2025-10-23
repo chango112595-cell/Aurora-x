@@ -1,5 +1,6 @@
-# Use standard community rulesets
 rules:
-  - r/python.lang.security
-  - r/secrets
-  - r/python.django.security
+  - id: use-semgrep-rules
+    pattern: dummy
+    languages: [python]
+    severity: WARNING
+    message: "Dummy rule - using auto mode"

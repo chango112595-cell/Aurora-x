@@ -92,7 +92,7 @@ if __name__ == '__main__':
     test_file.write_text(test_code, encoding="utf-8")
 
     # Create a simple report
-    report_html = f'''<!DOCTYPE html>
+    report_html = f"""<!DOCTYPE html>
 <html>
 <head>
     <title>Aurora-X Flask App Generation Report</title>
@@ -127,7 +127,7 @@ python -m unittest tests/test_{app_name}_app.py</pre>
     </div>
 </body>
 </html>
-'''
+"""
 
     report_file = run_dir / "report.html"
     report_file.write_text(report_html, encoding="utf-8")
@@ -141,9 +141,11 @@ python -m unittest tests/test_{app_name}_app.py</pre>
 
 if __name__ == "__main__":
     import sys
+
     if len(sys.argv) > 1:
         text = " ".join(sys.argv[1:])
         from datetime import datetime
+
         run_name = f"run-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         run_dir = Path("runs") / run_name
         create_flask_app_from_text(text, run_dir)

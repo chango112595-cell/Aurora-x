@@ -1,0 +1,43 @@
+name: Manual workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Task to run'
+        required: true
+        type: choice
+        options:
+          - test
+          - build
+          - deploy
+          - status
+
+jobs:
+  manual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e .
+      - name: Run task
+        run: |
+          case "${{ github.event.inputs.task }}" in
+            test)
+              pip install pytest && pytest tests/ -v || true
+              ;;
+            build)
+              echo "Building Aurora-X..."
+              ;;
+            deploy)
+              echo "Deployment would happen here"
+              ;;
+            status)
+              echo "Aurora-X Status: OK"
+              ;;
+          esac

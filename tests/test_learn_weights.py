@@ -12,6 +12,7 @@ def test_update_seed_bias_bounds_and_steps():
     assert w.update_seed_bias(0.5, False) == 0.48
     assert w.update_seed_bias(0.0, False) == 0.0
 
+
 def test_persist_load_cycle():
     root = Path(tempfile.mkdtemp())
     data = {"seed_bias": 0.12}

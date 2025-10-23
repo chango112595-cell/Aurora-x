@@ -9,14 +9,22 @@ class UnitItem(BaseModel):
     value: float
     unit: str
 
+
 class SingleFormatRequest(BaseModel):
     value: float | None = None
     unit: str | None = None
     values: list[UnitItem] | None = None
 
+
 _SI = [
-    (1e12, "T"), (1e9, "G"), (1e6, "M"),
-    (1e3, "k"), (1.0, ""), (1e-3, "m"), (1e-6, "µ"), (1e-9, "n")
+    (1e12, "T"),
+    (1e9, "G"),
+    (1e6, "M"),
+    (1e3, "k"),
+    (1.0, ""),
+    (1e-3, "m"),
+    (1e-6, "µ"),
+    (1e-9, "n"),
 ]
 
 # Simple catalog for friendly hints (expand later)
@@ -33,18 +41,21 @@ _HINTS = {
     ("kg", 7.34e22, 7.36e22): "Mass of Moon",
 }
 
+
 def _si_fmt(value: float, unit: str) -> str:
     v = float(value)
     for scale, prefix in _SI:
         if (v >= scale and scale >= 1) or (scale < 1 and v < 1 and v >= scale):
-            return f"{v/scale:.3g} {prefix}{unit}".strip()
+            return f"{v / scale:.3g} {prefix}{unit}".strip()
     return f"{v:.3g} {unit}"
+
 
 def _hint(value: float, unit: str) -> str | None:
     for (u, lo, hi), msg in _HINTS.items():
         if unit == u and (lo <= value <= hi):
             return msg
     return None
+
 
 def attach_units_format(app: FastAPI):
     @app.post("/api/format/units")

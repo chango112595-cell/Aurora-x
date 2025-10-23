@@ -10,3 +10,9 @@ __pycache__
 .pytest_cache
 .ruff_cache
 *.egg-info
+.coverage
+coverage.xml
+htmlcov/
+runs/run-*/
+runs/latest
+semgrep.sarif

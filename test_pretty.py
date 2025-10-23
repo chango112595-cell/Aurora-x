@@ -14,7 +14,7 @@ def test_pretty_locally():
         "orbital period a=42164 km M=5.972e24 kg",
         "orbital period a=1 AU M=1.989e30 kg",
         "differentiate 3x^2 + 2x + 5",
-        "2 + 3 * 4"  # Just the expression for evaluation
+        "2 + 3 * 4",  # Just the expression for evaluation
     ]
 
     print("Testing Pretty Formatting Locally:\n")
@@ -29,7 +29,7 @@ def test_pretty_locally():
                 sec = float(result["period_s"])
                 pretty = f"Orbital period: {_fmt_seconds(sec)}"
             elif result.get("kind") == "physics.em_superposition":
-                x,y,z = result["result"]
+                x, y, z = result["result"]
                 pretty = f"Field vector sum: ({x:.3f}, {y:.3f}, {z:.3f})"
             elif result.get("kind") == "math.evaluate":
                 pretty = f"Value = {result['value']:.12g}"
@@ -43,6 +43,7 @@ def test_pretty_locally():
 
         print()
 
+
 def test_api():
     """Test the API endpoint"""
     import requests
@@ -53,7 +54,7 @@ def test_api():
         {"problem": "orbital period a=7000 km M=5.972e24 kg"},
         {"problem": "orbital period a=42164 km M=5.972e24 kg"},
         {"problem": "differentiate 3x^2 + 2x + 5"},
-        {"problem": "2 + 3 * 4"}  # Just the expression for evaluation
+        {"problem": "2 + 3 * 4"},  # Just the expression for evaluation
     ]
 
     print("\nTesting /api/solve/pretty endpoint:\n")
@@ -65,7 +66,7 @@ def test_api():
             resp = requests.post(
                 f"{base_url}/api/solve/pretty",
                 json=tc,
-                headers={"Content-Type": "application/json"}
+                headers={"Content-Type": "application/json"},
             )
 
             if resp.status_code == 200:
@@ -84,10 +85,11 @@ def test_api():
 
         print()
 
+
 if __name__ == "__main__":
-    print("="*60)
+    print("=" * 60)
     print("T09 PRETTY FORMATTER TEST")
-    print("="*60)
+    print("=" * 60)
     print()
 
     # Test locally first (doesn't need server)

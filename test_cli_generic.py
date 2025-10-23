@@ -20,14 +20,17 @@ from pathlib import Path
 # Try to import colorama for colored output
 try:
     from colorama import Fore, Style, init
+
     init(autoreset=True)
     HAS_COLOR = True
 except ImportError:
     HAS_COLOR = False
+
     class Fore:
-        GREEN = YELLOW = RED = CYAN = MAGENTA = RESET = ''
+        GREEN = YELLOW = RED = CYAN = MAGENTA = RESET = ""
+
     class Style:
-        BRIGHT = DIM = RESET_ALL = ''
+        BRIGHT = DIM = RESET_ALL = ""
 
 
 class CLI:
@@ -36,21 +39,21 @@ class CLI:
     def __init__(self, verbose: bool = False):
         self.verbose = verbose
 
-    def log(self, message: str, level: str = 'info'):
+    def log(self, message: str, level: str = "info"):
         """Log a message with color coding based on level"""
-        timestamp = datetime.now().strftime('%H:%M:%S')
+        timestamp = datetime.now().strftime("%H:%M:%S")
 
         colors = {
-            'info': Fore.CYAN,
-            'success': Fore.GREEN,
-            'warning': Fore.YELLOW,
-            'error': Fore.RED,
-            'debug': Fore.MAGENTA
+            "info": Fore.CYAN,
+            "success": Fore.GREEN,
+            "warning": Fore.YELLOW,
+            "error": Fore.RED,
+            "debug": Fore.MAGENTA,
         }
 
-        color = colors.get(level, '')
+        color = colors.get(level, "")
 
-        if level == 'debug' and not self.verbose:
+        if level == "debug" and not self.verbose:
             return
 
         print(f"{color}[{timestamp}] {message}{Fore.RESET}")
@@ -119,54 +122,26 @@ def main():
     """Main entry point for the CLI"""
     parser = argparse.ArgumentParser(
         description="build a command line tool for file processing",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-    parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        help='Enable verbose output'
-    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output")
 
-    parser.add_argument(
-        '--version',
-        action='version',
-        version='%(prog)s 1.0.0'
-    )
+    parser.add_argument("--version", action="version", version="%(prog)s 1.0.0")
 
     # Subcommands
-    subparsers = parser.add_subparsers(
-        title='Commands',
-        dest='command',
-        help='Available commands'
-    )
+    subparsers = parser.add_subparsers(title="Commands", dest="command", help="Available commands")
 
     # Info command
-    subparsers.add_parser(
-        'info',
-        help='Display system information'
-    )
+    subparsers.add_parser("info", help="Display system information")
 
     # Process command
-    process_parser = subparsers.add_parser(
-        'process',
-        help='Process input files'
-    )
-    process_parser.add_argument(
-        'input',
-        help='Input file to process'
-    )
+    process_parser = subparsers.add_parser("process", help="Process input files")
+    process_parser.add_argument("input", help="Input file to process")
 
     # Run command
-    run_parser = subparsers.add_parser(
-        'run',
-        help='Run the application'
-    )
-    run_parser.add_argument(
-        '-t', '--tasks',
-        nargs='*',
-        help='Tasks to execute'
-    )
+    run_parser = subparsers.add_parser("run", help="Run the application")
+    run_parser.add_argument("-t", "--tasks", nargs="*", help="Tasks to execute")
 
     args = parser.parse_args()
 
@@ -178,11 +153,7 @@ def main():
         parser.print_help()
         return 1
 
-    commands = {
-        'info': cli.cmd_info,
-        'process': cli.cmd_process,
-        'run': cli.cmd_run
-    }
+    commands = {"info": cli.cmd_info, "process": cli.cmd_process, "run": cli.cmd_run}
 
     handler = commands.get(args.command)
     if handler:
@@ -192,5 +163,5 @@ def main():
         return 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

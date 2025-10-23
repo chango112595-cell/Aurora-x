@@ -24,19 +24,20 @@ async def test_runall_locally():
 
     # Find and execute the run_all endpoint
     for route in app.routes:
-        if hasattr(route, 'path') and route.path == "/api/demo/run_all":
+        if hasattr(route, "path") and route.path == "/api/demo/run_all":
             print("\n📋 Running all demo cards...")
             print("   This will execute cards sequentially (simulated)")
 
             # Mock execution since we can't make real HTTP calls without running server
             from aurora_x.chat.attach_demo import attach_demo
+
             test_app = FastAPI()
             attach_demo(test_app)
 
             # Get demo cards
             cards_data = None
             for r in test_app.routes:
-                if hasattr(r, 'path') and r.path == "/api/demo/cards":
+                if hasattr(r, "path") and r.path == "/api/demo/cards":
                     cards_data = await r.endpoint()
                     break
 
@@ -47,14 +48,16 @@ async def test_runall_locally():
                 # Simulate results
                 results = []
                 for i, card in enumerate(cards[:5]):  # Just test first 5
-                    print(f"   [{i+1}/{min(5, len(cards))}] {card['title']}...")
-                    results.append({
-                        "id": card["id"],
-                        "title": card.get("title", card["id"]),
-                        "endpoint": card["endpoint"],
-                        "status": 200,
-                        "response": {"ok": True, "simulated": True}
-                    })
+                    print(f"   [{i + 1}/{min(5, len(cards))}] {card['title']}...")
+                    results.append(
+                        {
+                            "id": card["id"],
+                            "title": card.get("title", card["id"]),
+                            "endpoint": card["endpoint"],
+                            "status": 200,
+                            "response": {"ok": True, "simulated": True},
+                        }
+                    )
 
                 # Create output structure
                 timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
@@ -64,7 +67,7 @@ async def test_runall_locally():
                     "total_cards": len(cards),
                     "successful": len(results),
                     "failed": 0,
-                    "results": results
+                    "results": results,
                 }
 
                 # Check if runs directory would be created
@@ -82,6 +85,7 @@ async def test_runall_locally():
     print("❌ Run All endpoint not found")
     return False
 
+
 def test_dashboard_button():
     """Check if Run All button exists in dashboard"""
     dashboard_path = Path("aurora_x/static/demo-dashboard.html")
@@ -96,7 +100,7 @@ def test_dashboard_button():
             ("Run All Cards", "Run All button text"),
             ("/api/demo/run_all", "Run All API endpoint"),
             ("run-status", "Status display element"),
-            ("Executing all cards", "Loading message")
+            ("Executing all cards", "Loading message"),
         ]
 
         all_found = True
@@ -111,6 +115,7 @@ def test_dashboard_button():
     else:
         print("   ❌ Dashboard file not found")
         return False
+
 
 def test_runs_directory():
     """Check if runs directory can be created"""
@@ -140,11 +145,12 @@ def test_runs_directory():
         print(f"   ❌ Error with runs directory: {e}")
         return False
 
+
 def print_instructions():
     """Print usage instructions"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📋 HOW TO USE RUN ALL FEATURE:")
-    print("="*60)
+    print("=" * 60)
     print()
     print("1. Start Aurora-X server:")
     print("   python -m aurora_x.serve")
@@ -163,6 +169,7 @@ def print_instructions():
     print("5. Check saved results:")
     print("   ls -la runs/demo-*.json")
     print()
+
 
 async def main():
     print("🧪 RUN ALL FEATURE TEST")
@@ -194,6 +201,7 @@ async def main():
         print("\n⚠️ Some tests failed, check errors above")
 
     print_instructions()
+
 
 if __name__ == "__main__":
     asyncio.run(main())
