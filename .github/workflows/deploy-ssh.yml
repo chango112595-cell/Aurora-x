@@ -1,7 +1,13 @@
 name: Deploy via SSH
 
 on:
-  # Disabled: Requires SSH_HOST, SSH_USER, SSH_KEY secrets to be configured
+  # To enable SSH deployments, configure these GitHub Secrets:
+  # - SSH_HOST: Your deployment server hostname/IP
+  # - SSH_USER: SSH username for deployment
+  # - SSH_KEY: SSH private key for authentication
+  # - SSH_PORT (optional): SSH port (defaults to 22)
+  # 
+  # Then uncomment the push trigger below:
   # push:
   #   branches:
   #     - main
@@ -21,18 +27,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy to VPS via SSH
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Send Discord notification - Starting
         if: vars.DISCORD_WEBHOOK_URL != ''
         run: |
           curl -X POST -H "Content-Type: application/json" \
             -d "{\"embeds\":[{\"title\":\"🚀 Aurora-X Deployment Starting\",\"description\":\"Deploying commit: \`${GITHUB_SHA:0:8}\`\\nBranch: \`${{ github.ref_name }}\`\\nTriggered by: \`${{ github.actor }}\`\\nMessage: ${{ github.event.inputs.deploy_message || github.event.head_commit.message }}\",\"color\":3447003,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
             "${{ vars.DISCORD_WEBHOOK_URL }}" || true
-      
+
       - name: Create deployment directory on server
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -44,12 +50,12 @@ jobs:
             set -e
             mkdir -p ~/aurora-x-deployment
             mkdir -p ~/aurora-x-deployment/backups
-            
+
             # Backup current stack if exists
             if [ -f ~/aurora-x-deployment/docker-compose.yml ]; then
               cp ~/aurora-x-deployment/docker-compose.yml ~/aurora-x-deployment/backups/docker-compose.yml.$(date +%Y%m%d_%H%M%S)
             fi
-      
+
       - name: Copy deployment files to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -59,7 +65,7 @@ jobs:
           port: ${{ secrets.SSH_PORT || '22' }}
           source: "docker-compose.yml,update-aurora.sh,Dockerfile.app,.env.example"
           target: ~/aurora-x-deployment/
-      
+
       - name: Setup environment and deploy
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -71,46 +77,46 @@ jobs:
           script: |
             set -e
             cd ~/aurora-x-deployment
-            
+
             # Make scripts executable
             chmod +x update-aurora.sh
-            
+
             # Create .env file if it doesn't exist
             if [ ! -f .env ]; then
               cp .env.example .env
               echo "⚠️ Created .env file from template. Please configure it!"
             fi
-            
+
             # Update environment variables
             if [ -n "${{ secrets.CF_TUNNEL_TOKEN }}" ]; then
               sed -i "s/^CF_TUNNEL_TOKEN=.*/CF_TUNNEL_TOKEN=${{ secrets.CF_TUNNEL_TOKEN }}/" .env
             fi
-            
+
             if [ -n "${{ secrets.AURORA_HEALTH_TOKEN }}" ]; then
               sed -i "s/^AURORA_HEALTH_TOKEN=.*/AURORA_HEALTH_TOKEN=${{ secrets.AURORA_HEALTH_TOKEN }}/" .env
             fi
-            
+
             if [ -n "${{ vars.DISCORD_WEBHOOK_URL }}" ]; then
               sed -i "s|^AURORA_DISCORD_WEBHOOK=.*|AURORA_DISCORD_WEBHOOK=${{ vars.DISCORD_WEBHOOK_URL }}|" .env
             fi
-            
+
             # Set GitHub repository for Docker image
             sed -i "s|^GITHUB_REPOSITORY=.*|GITHUB_REPOSITORY=${{ github.repository }}|" .env
-            
+
             # Stop existing containers
             docker compose down || true
-            
+
             # Build and start new containers
             echo "🔨 Building Aurora-X Docker image..."
             docker compose build --pull aurora
-            
+
             echo "🚀 Starting Aurora-X containers..."
             docker compose up -d
-            
+
             # Wait for container to be ready
             echo "⏳ Waiting for Aurora-X to be healthy..."
             sleep 10
-      
+
       - name: Health check
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -122,52 +128,52 @@ jobs:
           script: |
             set -e
             cd ~/aurora-x-deployment
-            
+
             # Load environment variables
             export $(grep -v '^#' .env | xargs)
-            
+
             HEALTH_TOKEN="${AURORA_HEALTH_TOKEN:-ok}"
             HEALTH_URL="http://localhost:8000/healthz?token=${HEALTH_TOKEN}"
-            
+
             echo "🏥 Performing health check..."
             MAX_ATTEMPTS=${{ env.HEALTH_RETRIES }}
             ATTEMPT=0
-            
+
             while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
               ATTEMPT=$((ATTEMPT + 1))
-              
+
               if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
                 echo "✅ Health check passed! (Attempt ${ATTEMPT}/${MAX_ATTEMPTS})"
-                
+
                 # Get container status
                 docker compose ps
-                
+
                 # Get recent logs
                 echo "📋 Recent Aurora logs:"
                 docker compose logs --tail=20 aurora
-                
+
                 exit 0
               fi
-              
+
               if [ $ATTEMPT -eq 10 ] || [ $ATTEMPT -eq 20 ]; then
                 echo "⏳ Still waiting... (Attempt ${ATTEMPT}/${MAX_ATTEMPTS})"
               fi
-              
+
               sleep ${{ env.HEALTH_INTERVAL }}
             done
-            
+
             echo "❌ Health check failed after ${MAX_ATTEMPTS} attempts!"
             echo "📋 Container logs:"
             docker compose logs aurora
             exit 1
-      
+
       - name: Send Discord notification - Success
         if: success() && vars.DISCORD_WEBHOOK_URL != ''
         run: |
           curl -X POST -H "Content-Type: application/json" \
             -d "{\"embeds\":[{\"title\":\"✅ Aurora-X Deployed Successfully\",\"description\":\"Deployment completed!\\n\\nCommit: \`${GITHUB_SHA:0:8}\`\\nBranch: \`${{ github.ref_name }}\`\\nDeployed by: \`${{ github.actor }}\`\\nURL: ${{ vars.AURORA_URL || 'Not configured' }}\",\"color\":5763719,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
             "${{ vars.DISCORD_WEBHOOK_URL }}" || true
-      
+
       - name: Send Discord notification - Failure
         if: failure() && vars.DISCORD_WEBHOOK_URL != ''
         run: |

@@ -2,7 +2,9 @@ name: Aurora-x Deep Scan (DISABLED)
 
 on:
   # PERMANENTLY DISABLED: Redundant with aurora-ci.yml
-  workflow_dispatch:
+  # This workflow has been superseded by aurora-ci.yml which includes all these checks
+  # To re-enable, uncomment the workflow_dispatch line below
+  # workflow_dispatch:
 
 jobs:
   deep-scan:

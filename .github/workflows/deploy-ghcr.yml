@@ -1,7 +1,15 @@
 name: Deploy via GitHub Container Registry
 
 on:
-  # Disabled: Requires SSH_HOST, SSH_USER, SSH_KEY secrets to be configured
+  # To enable automatic deployments on push, configure these GitHub Secrets:
+  # - SSH_HOST: Your deployment server hostname/IP
+  # - SSH_USER: SSH username for deployment
+  # - SSH_KEY: SSH private key for authentication
+  # - SSH_PORT (optional): SSH port (defaults to 22)
+  # - CF_TUNNEL_TOKEN (optional): Cloudflare Tunnel token
+  # - AURORA_HEALTH_TOKEN (optional): Health check authentication token
+  # 
+  # Then uncomment the push trigger below:
   # push:
   #   branches:
   #     - main
