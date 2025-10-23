@@ -1,13 +1,59 @@
 # Multi-arch friendly (works on linux/arm64 and amd64)
-FROM python:3.11-slim
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PORT=8000 AURORA_DEFAULT_LANG=python
+FROM --platform=$BUILDPLATFORM python:3.11-slim AS builder
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+
 WORKDIR /app
-# system deps for building wheels + curl, jq
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential curl jq && rm -rf /var/lib/apt/lists/*
-COPY . /app
-RUN pip install --upgrade pip && pip install -e . && pip install pytest
+
+# Install system deps for building wheels + curl, jq
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    jq && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy only what we need for installation
+COPY pyproject.toml setup.py README.md ./
+COPY aurora_x/ ./aurora_x/
+
+# Install Python dependencies
+RUN pip install --upgrade pip && \
+    pip install -e . && \
+    pip install pytest
+
+# Final stage
+FROM python:3.11-slim
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8000 \
+    AURORA_DEFAULT_LANG=python
+
+WORKDIR /app
+
+# Install runtime deps only
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl jq && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy from builder
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=builder /app /app
+
 EXPOSE 8000
+
+# Health check and demo test
 CMD sh -c "python -m aurora_x.serve & \
-  for i in $(seq 1 30); do curl -fsS http://127.0.0.1:${PORT}/healthz && break || sleep 1; done && \
-  curl -fsS -X POST -H 'content-type: application/json' -d '{\"problem\":\"(2+3)^2 + 1\"}' http://127.0.0.1:${PORT}/api/solve && \
+  for i in $(seq 1 30); do \
+    if curl -fsS http://127.0.0.1:${PORT}/healthz 2>/dev/null; then \
+      echo 'Health check passed'; \
+      break; \
+    fi; \
+    sleep 1; \
+  done && \
+  curl -fsS -X POST -H 'content-type: application/json' \
+    -d '{\"problem\":\"(2+3)^2 + 1\"}' \
+    http://127.0.0.1:${PORT}/api/solve && \
   tail -f /dev/null"

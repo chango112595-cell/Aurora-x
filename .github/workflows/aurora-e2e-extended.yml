@@ -1,4 +1,3 @@
-
 name: Aurora-x E2E Extended
 
 on:
@@ -97,6 +96,22 @@ jobs:
             echo "⚠️ No C# code generated"
           fi
 
+      - name: Test ARM64 build
+        run: |
+          # Build for ARM64 with proper context
+          docker buildx build \
+            --platform linux/arm64 \
+            -f Dockerfile.e2e \
+            -t aurora-e2e:arm64 \
+            --load \
+            --progress=plain \
+            .
+
+          # Run basic health check on ARM64 (emulated via QEMU)
+          docker run --rm --platform linux/arm64 aurora-e2e:arm64 \
+            sh -c "python -c 'import aurora_x; print(\"ARM64 OK\")' && echo 'Health check passed'"
+        timeout-minutes: 15
+
       - name: Run full demo suite
         continue-on-error: true
         run: |
@@ -109,11 +124,11 @@ jobs:
           python3 - <<'PYEOF'
           import json
           import sys
-          
+
           langs = ["python", "go", "rust", "csharp"]
           passed = 0
           failed = 0
-          
+
           for lang in langs:
               try:
                   with open(f"/tmp/{lang}_gen.json") as f:
@@ -127,7 +142,7 @@ jobs:
               except Exception as e:
                   print(f"❌ {lang}: error reading results - {e}")
                   failed += 1
-          
+
           print(f"\n📊 Summary: {passed} passed, {failed} failed")
           sys.exit(0 if failed == 0 else 1)
           PYEOF
