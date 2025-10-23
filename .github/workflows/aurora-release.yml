@@ -1,9 +1,10 @@
 name: Aurora-X Release (GHCR)
 on:
+  workflow_dispatch:
   push:
     branches: [main]
-    paths:
-      - '**'
+    tags: ['v*']
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -11,8 +12,8 @@ jobs:
       contents: read
       packages: write
     env:
-      IMAGE: ghcr.io/${{ github.repository_owner }}/aurora-x:latest
-      IMAGE_SHA: ghcr.io/${{ github.repository_owner }}/aurora-x:${{ github.sha }}
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
@@ -20,9 +21,21 @@ jobs:
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=tag
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+      
       - name: Build & Push (multi-arch)
         uses: docker/build-push-action@v6
         with:
@@ -30,8 +43,9 @@ jobs:
           file: Dockerfile.app
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: |
-            ${{ env.IMAGE }}
-            ${{ env.IMAGE_SHA }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           build-args: |
             PORT=8000
