@@ -25,7 +25,7 @@ class SeedStore:
         path: str = ".aurora/seeds.json",
         alpha: float = 0.2,
         drift_cap: float = 0.15,
-        top_n: int = 10
+        top_n: int = 10,
     ):
         """
         Initialize SeedStore with configurable parameters.
@@ -47,11 +47,7 @@ class SeedStore:
             "created": None,
             "updated": None,
             "total_updates": 0,
-            "config": {
-                "alpha": alpha,
-                "drift_cap": drift_cap,
-                "top_n": top_n
-            }
+            "config": {"alpha": alpha, "drift_cap": drift_cap, "top_n": top_n},
         }
 
         # Load existing data if available
@@ -82,22 +78,15 @@ class SeedStore:
         self.path.parent.mkdir(parents=True, exist_ok=True)
 
         # Keep only top N biases
-        sorted_biases = sorted(
-            self.biases.items(),
-            key=lambda x: abs(x[1]),
-            reverse=True
-        )[:self.top_n]
+        sorted_biases = sorted(self.biases.items(), key=lambda x: abs(x[1]), reverse=True)[: self.top_n]
         self.biases = dict(sorted_biases)
 
         # Update metadata
         self.metadata["updated"] = time.time()
 
-        data = {
-            "biases": self.biases,
-            "metadata": self.metadata
-        }
+        data = {"biases": self.biases, "metadata": self.metadata}
 
-        with open(self.path, 'w') as f:
+        with open(self.path, "w") as f:
             json.dump(data, f, indent=2, sort_keys=True)
 
     def get_bias(self, seed_key: str) -> float:
@@ -174,7 +163,7 @@ class SeedStore:
             Hashed seed key
         """
         combined = f"{func_signature}:{context}"
-        return hashlib.md5(combined.encode()).hexdigest()[:16]
+        return hashlib.md5(combined.encode(), usedforsecurity=False).hexdigest()[:16]
 
     def get_top_biases(self, n: int | None = None) -> list[tuple[str, float]]:
         """
@@ -187,11 +176,7 @@ class SeedStore:
             List of (seed_key, bias) tuples
         """
         n = n or self.top_n
-        return sorted(
-            self.biases.items(),
-            key=lambda x: abs(x[1]),
-            reverse=True
-        )[:n]
+        return sorted(self.biases.items(), key=lambda x: abs(x[1]), reverse=True)[:n]
 
     def get_summary(self) -> dict[str, Any]:
         """
@@ -207,7 +192,7 @@ class SeedStore:
                 "max_bias": 0.0,
                 "min_bias": 0.0,
                 "total_updates": self.metadata.get("total_updates", 0),
-                "config": self.metadata.get("config", {})
+                "config": self.metadata.get("config", {}),
             }
 
         bias_values = list(self.biases.values())
@@ -218,7 +203,7 @@ class SeedStore:
             "min_bias": min(bias_values),
             "total_updates": self.metadata.get("total_updates", 0),
             "config": self.metadata.get("config", {}),
-            "top_biases": self.get_top_biases(5)  # Top 5 for summary
+            "top_biases": self.get_top_biases(5),  # Top 5 for summary
         }
 
     def reset(self) -> None:
@@ -232,12 +217,7 @@ class SeedStore:
 _seed_store: SeedStore | None = None
 
 
-def get_seed_store(
-    path: str | None = None,
-    alpha: float = 0.2,
-    drift_cap: float = 0.15,
-    top_n: int = 10
-) -> SeedStore:
+def get_seed_store(path: str | None = None, alpha: float = 0.2, drift_cap: float = 0.15, top_n: int = 10) -> SeedStore:
     """
     Get or create the global SeedStore instance.
 
@@ -257,11 +237,6 @@ def get_seed_store(
         if path is None:
             path = os.environ.get("AURORA_SEEDS_PATH", ".aurora/seeds.json")
 
-        _seed_store = SeedStore(
-            path=path or ".aurora/seeds.json",
-            alpha=alpha,
-            drift_cap=drift_cap,
-            top_n=top_n
-        )
+        _seed_store = SeedStore(path=path or ".aurora/seeds.json", alpha=alpha, drift_cap=drift_cap, top_n=top_n)
 
     return _seed_store

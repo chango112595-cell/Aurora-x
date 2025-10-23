@@ -4,7 +4,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath("."))
 
 
 from aurora_x.chat.attach_router import ChatRequest, ChatResponse, make_chat_router
@@ -33,12 +33,7 @@ def verify_implementation():
     print(f"   - ChatRequest with prompt: '{request.prompt}'")
 
     # Test ChatResponse
-    response = ChatResponse(
-        ok=True,
-        kind="web_app",
-        file="app.py",
-        hint="Run: python app.py"
-    )
+    response = ChatResponse(ok=True, kind="web_app", file="app.py", hint="Run: python app.py")
     print(f"   - ChatResponse created: ok={response.ok}, kind={response.kind}")
 
     # 3. Test router creation
@@ -49,11 +44,7 @@ def verify_implementation():
 
     # 4. Test intent classification
     print("\n✅ Step 4: Intent classification")
-    test_prompts = [
-        "Build me a timer UI",
-        "Create a CLI tool",
-        "Write a function to add numbers"
-    ]
+    test_prompts = ["Build me a timer UI", "Create a CLI tool", "Write a function to add numbers"]
 
     for prompt in test_prompts:
         intent = classify(prompt)
@@ -92,6 +83,7 @@ def verify_implementation():
     print("5. ✅ Flask app template generation unchanged (as required)")
     print("6. ✅ Integration with serve.py completed")
     print("\nThe T08 Intent Router has been successfully adapted to FastAPI!")
+
 
 if __name__ == "__main__":
     verify_implementation()

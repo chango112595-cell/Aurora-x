@@ -84,6 +84,7 @@ from aurora_x.bridge.attach_bridge import attach_bridge
 
 attach_bridge(app)  # /api/bridge/nl, /api/bridge/spec, /api/bridge/deploy
 
+
 @app.get("/dashboard/demos", response_class=HTMLResponse)
 async def serve_demo_dashboard():
     """Serve the demo dashboard HTML page"""
@@ -93,6 +94,7 @@ async def serve_demo_dashboard():
     else:
         return HTMLResponse(content="<h1>Demo dashboard not found</h1>", status_code=404)
 
+
 @app.get("/healthz")
 def healthz():
     """
@@ -101,21 +103,23 @@ def healthz():
     """
     return {"ok": True, "t08_enabled": SETTINGS.t08_enabled, "ts": time.time()}
 
+
 # --- UI thresholds (POST to adjust) ---
 @app.post("/api/progress/ui_thresholds")
 def set_thresholds(payload: dict):
     try:
         ui = payload.get("ui_thresholds", {})
-        ok  = int(ui.get("ok", SETTINGS.ui.ok))
-        warn= int(ui.get("warn", SETTINGS.ui.warn))
+        ok = int(ui.get("ok", SETTINGS.ui.ok))
+        warn = int(ui.get("warn", SETTINGS.ui.warn))
         # clamp
-        ok  = max(0, min(100, ok))
-        warn= max(0, min(ok, warn))
-        SETTINGS.ui.ok   = ok
+        ok = max(0, min(100, ok))
+        warn = max(0, min(ok, warn))
+        SETTINGS.ui.ok = ok
         SETTINGS.ui.warn = warn
-        return {"status":"updated","ui_thresholds":{"ok":ok,"warn":warn}}
+        return {"status": "updated", "ui_thresholds": {"ok": ok, "warn": warn}}
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=400)
+
 
 # --- T08 activation (on/off) ---
 @app.post("/api/t08/activate")
@@ -123,6 +127,7 @@ def t08_activate(payload: dict):
     on = bool(payload.get("on", True))
     SETTINGS.t08_enabled = on
     return {"t08_enabled": SETTINGS.t08_enabled}
+
 
 # --- Live SVG badge ---
 _BADGE_TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" width="170" height="20" role="img" aria-label="progress:{VAL}%">
@@ -139,15 +144,20 @@ _BADGE_TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" width="170" height=
 </g>
 </svg>"""
 
-def _color_for(val:int, ok:int, warn:int)->str:
-    if val >= ok: return "#2ebc4f"     # green
-    if val >= warn: return "#1f78ff"   # blue
-    return "#d73a49"                   # red
+
+def _color_for(val: int, ok: int, warn: int) -> str:
+    if val >= ok:
+        return "#2ebc4f"  # green
+    if val >= warn:
+        return "#1f78ff"  # blue
+    return "#d73a49"  # red
+
 
 @app.get("/badge/progress.svg")
 def badge_progress():
     # Get actual progress from progress.json
     from pathlib import Path
+
     try:
         progress_path = Path("progress.json")
         if progress_path.exists():
@@ -157,7 +167,7 @@ def badge_progress():
             for t in tasks:
                 percent = t.get("percent", 0)
                 if isinstance(percent, str):
-                    percent = float(percent.replace('%', ''))
+                    percent = float(percent.replace("%", ""))
                 total += percent
             val = int(round(total / max(1, len(tasks))))
         else:
@@ -169,18 +179,24 @@ def badge_progress():
     svg = _BADGE_TEMPLATE.replace("{VAL}", str(val)).replace("{COLOR}", html.escape(color))
     return Response(content=svg, media_type="image/svg+xml")
 
+
 # --- Natural Language Compilation Endpoint ---
+
 
 class NLCompileRequest(BaseModel):
     """Request model for natural language compilation."""
+
     prompt: str
+
 
 class NLCompileResponse(BaseModel):
     """Response model for natural language compilation."""
+
     run_id: str
     status: str
     files_generated: list[str]
     message: str
+
 
 @app.post("/api/nl/compile", response_model=NLCompileResponse)
 async def compile_from_natural_language(request: NLCompileRequest):
@@ -223,6 +239,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
             sys.path.insert(0, str(tools_dir))
             try:
                 from spec_from_flask import create_flask_app_from_text
+
                 app_file = create_flask_app_from_text(prompt, run_dir)
                 files_generated.append(str(app_file.relative_to(Path.cwd())))
 
@@ -234,10 +251,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
                 message = f"Flask application generated successfully at {app_file.name}"
             except ImportError as e:
-                raise HTTPException(
-                    status_code=500,
-                    detail=f"Failed to import Flask synthesis module: {str(e)}"
-                )
+                raise HTTPException(status_code=500, detail=f"Failed to import Flask synthesis module: {str(e)}")
         else:
             # Regular function synthesis
             tools_dir = Path(__file__).parent.parent / "tools"
@@ -257,15 +271,12 @@ async def compile_from_natural_language(request: NLCompileRequest):
                         [sys.executable, str(comp_script), str(spec_path)],
                         capture_output=True,
                         text=True,
-                        env=os.environ.copy()
+                        env=os.environ.copy(),
                     )
 
                     if result.returncode != 0:
                         error_msg = result.stderr if result.stderr else result.stdout
-                        raise HTTPException(
-                            status_code=500,
-                            detail=f"Spec compilation failed: {error_msg}"
-                        )
+                        raise HTTPException(status_code=500, detail=f"Spec compilation failed: {error_msg}")
 
                     # Parse output to find generated files
                     output_lines = result.stdout.splitlines()
@@ -279,7 +290,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
                         if "run-" in line:
                             # Extract run ID from output
                             import re
-                            match = re.search(r'run-\d{8}-\d{6}', line)
+
+                            match = re.search(r"run-\d{8}-\d{6}", line)
                             if match:
                                 run_name = match.group(0)
 
@@ -297,10 +309,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                     # If no compiler found, just return the spec
                     message = f"Spec generated at {spec_path.name}. Compiler not found for full synthesis."
             except ImportError as e:
-                raise HTTPException(
-                    status_code=500,
-                    detail=f"Failed to import synthesis module: {str(e)}"
-                )
+                raise HTTPException(status_code=500, detail=f"Failed to import synthesis module: {str(e)}")
 
         # Ensure we have valid files generated list
         if not files_generated:
@@ -310,12 +319,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                     if item.is_file():
                         files_generated.append(str(item.relative_to(Path.cwd())))
 
-        return NLCompileResponse(
-            run_id=run_name,
-            status="success",
-            files_generated=files_generated,
-            message=message
-        )
+        return NLCompileResponse(run_id=run_name, status="success", files_generated=files_generated, message=message)
 
     except HTTPException:
         # Re-raise HTTP exceptions as-is
@@ -330,14 +334,18 @@ async def compile_from_natural_language(request: NLCompileRequest):
             run_id="",
             status="error",
             files_generated=[],
-            message=f"Failed to process natural language prompt: {str(e)}"
+            message=f"Failed to process natural language prompt: {str(e)}",
         )
+
 
 # --- Solver Endpoints ---
 
+
 class SolverRequest(BaseModel):
     """Request model for the solver endpoints"""
+
     text: str
+
 
 @app.post("/api/solve")
 async def solve_endpoint(request: SolverRequest):
@@ -354,10 +362,8 @@ async def solve_endpoint(request: SolverRequest):
         result = solve_text(request.text)
         return JSONResponse(content=result)
     except Exception as e:
-        return JSONResponse(
-            content={"ok": False, "error": str(e)},
-            status_code=500
-        )
+        return JSONResponse(content={"ok": False, "error": str(e)}, status_code=500)
+
 
 @app.post("/api/solve/pretty")
 async def solve_pretty_endpoint(request: SolverRequest):
@@ -409,10 +415,8 @@ async def solve_pretty_endpoint(request: SolverRequest):
             return PlainTextResponse(content=error_msg, status_code=400)
 
     except Exception as e:
-        return PlainTextResponse(
-            content=f"Internal Server Error: {str(e)}",
-            status_code=500
-        )
+        return PlainTextResponse(content=f"Internal Server Error: {str(e)}", status_code=500)
+
 
 @app.get("/")
 def root():
@@ -437,6 +441,19 @@ def root():
             "/api/format/units",
             "/api/demo/cards",
             "/api/progress",
-            "/api/nl/compile"
-        ]
+            "/api/nl/compile",
+        ],
     }
+
+
+def main():
+    """Entry point for running the server via uvicorn."""
+    import uvicorn
+
+    port = int(os.environ.get("PORT", os.environ.get("AURORA_PORT", 8000)))
+    host = os.environ.get("HOST", "0.0.0.0")
+    uvicorn.run("aurora_x.serve:app", host=host, port=port, reload=False)
+
+
+if __name__ == "__main__":
+    main()

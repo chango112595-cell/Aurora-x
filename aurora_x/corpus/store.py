@@ -11,35 +11,64 @@ from pathlib import Path
 from typing import Any
 
 WORD = re.compile(r"[A-Za-z_][A-Za-z0-9_]+")
-TYPE_CANON = {"int":"I","float":"F","number":"N","str":"S","string":"S","bool":"B","list":"L","list[int]":"L[I]","list[float]":"L[F]","Any":"A"}
+TYPE_CANON = {
+    "int": "I",
+    "float": "F",
+    "number": "N",
+    "str": "S",
+    "string": "S",
+    "bool": "B",
+    "list": "L",
+    "list[int]": "L[I]",
+    "list[float]": "L[F]",
+    "Any": "A",
+}
 
-def now_iso() -> str: return time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
-def short_id(s: str) -> str: return hashlib.sha256(s.encode("utf-8")).hexdigest()[:12]
+
+def now_iso() -> str:
+    return time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
+
+
+def short_id(s: str) -> str:
+    return hashlib.sha256(s.encode("utf-8")).hexdigest()[:12]
+
+
 def spec_digest(text: str) -> dict[str, str]:
     h = hashlib.sha256(text.encode("utf-8")).hexdigest()
     return {"spec_hash": h, "spec_id": h[:12]}
+
 
 def normalize_signature(sig: str) -> str:
     try:
         name, rest = sig.split("(", 1)
         args_s, ret_s = rest.split(")->")
         args_s = args_s.rstrip(")")
-        def canon(t: str) -> str: return TYPE_CANON.get(t.strip(), t.strip())
+
+        def canon(t: str) -> str:
+            return TYPE_CANON.get(t.strip(), t.strip())
+
         arg_types: list[str] = []
         if args_s.strip():
             for a in args_s.split(","):
-                if ":" in a: _, t = a.split(":"); arg_types.append(canon(t.strip()))
-                else: arg_types.append("A")
+                if ":" in a:
+                    _, t = a.split(":")
+                    arg_types.append(canon(t.strip()))
+                else:
+                    arg_types.append("A")
         ret = canon(ret_s.strip())
         return f"{name.strip()}({','.join(arg_types)})->{ret}"
-    except Exception: return sig
+    except Exception:
+        return sig
+
 
 def tokenize_post(post_list: list[str]) -> list[str]:
     toks: list[str] = []
-    for p in (post_list or []):
+    for p in post_list or []:
         for w in WORD.findall(p.lower()):
-            if len(w) >= 2: toks.append(w)
+            if len(w) >= 2:
+                toks.append(w)
     return toks
+
 
 @dataclass
 class CorpusPaths:
@@ -47,13 +76,18 @@ class CorpusPaths:
     jsonl: Path
     sqlite: Path
 
+
 def paths(run_root: Path) -> CorpusPaths:
-    r = Path(run_root); r.mkdir(parents=True, exist_ok=True)
-    return CorpusPaths(root=r, jsonl=r/"corpus.jsonl", sqlite=r/"corpus.db")
+    r = Path(run_root)
+    r.mkdir(parents=True, exist_ok=True)
+    return CorpusPaths(root=r, jsonl=r / "corpus.jsonl", sqlite=r / "corpus.db")
+
 
 def _open_sqlite(dbp: Path) -> sqlite3.Connection:
-    conn = sqlite3.connect(str(dbp)); conn.row_factory = sqlite3.Row
-    conn.executescript("""
+    conn = sqlite3.connect(str(dbp))
+    conn.row_factory = sqlite3.Row
+    conn.executescript(
+        """
     PRAGMA journal_mode=WAL;
     CREATE TABLE IF NOT EXISTS corpus (
       id TEXT PRIMARY KEY, timestamp TEXT,
@@ -63,8 +97,10 @@ def _open_sqlite(dbp: Path) -> sqlite3.Connection:
       failing_tests TEXT, snippet TEXT, complexity INTEGER,
       iteration INTEGER, calls_functions TEXT, post_bow TEXT
     );
-    """)
+    """
+    )
     return conn
+
 
 def record(run_root: Path, entry: dict[str, Any]) -> None:
     p = paths(run_root)
@@ -80,15 +116,32 @@ def record(run_root: Path, entry: dict[str, Any]) -> None:
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
         conn = _open_sqlite(p.sqlite)
         with conn:
-            conn.execute("""INSERT OR REPLACE INTO corpus
+            conn.execute(
+                """INSERT OR REPLACE INTO corpus
                 (id,timestamp,spec_id,spec_hash,func_name,func_signature,sig_key,passed,total,score,failing_tests,snippet,complexity,iteration,calls_functions,post_bow)
                 VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-                (rec.get("id"), rec.get("timestamp"), rec.get("spec_id"), rec.get("spec_hash"),
-                 rec.get("func_name"), rec.get("func_signature"), rec.get("sig_key"),
-                 int(rec.get("passed",0)), int(rec.get("total",0)), float(rec.get("score",0.0)),
-                 json.dumps(rec.get("failing_tests")), rec.get("snippet"), rec.get("complexity"),
-                 rec.get("iteration"), json.dumps(rec.get("calls_functions")), json.dumps(rec.get("post_bow"))))
-    except Exception: return
+                (
+                    rec.get("id"),
+                    rec.get("timestamp"),
+                    rec.get("spec_id"),
+                    rec.get("spec_hash"),
+                    rec.get("func_name"),
+                    rec.get("func_signature"),
+                    rec.get("sig_key"),
+                    int(rec.get("passed", 0)),
+                    int(rec.get("total", 0)),
+                    float(rec.get("score", 0.0)),
+                    json.dumps(rec.get("failing_tests")),
+                    rec.get("snippet"),
+                    rec.get("complexity"),
+                    rec.get("iteration"),
+                    json.dumps(rec.get("calls_functions")),
+                    json.dumps(rec.get("post_bow")),
+                ),
+            )
+    except Exception:
+        return
+
 
 def retrieve(run_root: Path, signature: str, k: int = 10) -> list[dict[str, Any]]:
     """Retrieve corpus entries matching signature, ordered by score."""
@@ -101,26 +154,35 @@ def retrieve(run_root: Path, signature: str, k: int = 10) -> list[dict[str, Any]
 
     try:
         # Query by signature key
-        rows = conn.execute("""
+        rows = conn.execute(
+            """
             SELECT * FROM corpus
             WHERE sig_key = ?
             ORDER BY score DESC, passed DESC
             LIMIT ?
-        """, (sig_key, k)).fetchall()
+        """,
+            (sig_key, k),
+        ).fetchall()
 
         results = []
         for row in rows:
             d = dict(row)
             # Parse JSON fields
             if d.get("failing_tests"):
-                try: d["failing_tests"] = json.loads(d["failing_tests"])
-                except: pass
+                try:
+                    d["failing_tests"] = json.loads(d["failing_tests"])
+                except:
+                    pass
             if d.get("calls_functions"):
-                try: d["calls_functions"] = json.loads(d["calls_functions"])
-                except: pass
+                try:
+                    d["calls_functions"] = json.loads(d["calls_functions"])
+                except:
+                    pass
             if d.get("post_bow"):
-                try: d["post_bow"] = json.loads(d["post_bow"])
-                except: pass
+                try:
+                    d["post_bow"] = json.loads(d["post_bow"])
+                except:
+                    pass
             results.append(d)
 
         return results

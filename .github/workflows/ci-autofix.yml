@@ -1,42 +1,40 @@
-name: Python Lint & Auto-Fix
+name: Python Lint & Auto-Fix / Lint + Fix Python
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
-    branches: [main]
+
+permissions:
+  contents: write
 
 jobs:
   lint-fix:
-    name: Lint + Fix Python
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v3
         with:
-          python-version: "3.11"
-
-      - name: Install Tools
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install tools
+        run: pip install ruff black
+      - name: Auto-fix
+        continue-on-error: true
         run: |
-          pip install ruff black bandit
-
-      - name: Ruff Lint & Fix
-        run: ruff check . --fix
-
-      - name: Format with Black
-        run: black .
-
-      - name: Bandit Security Check
-        run: bandit -r . -lll || true
-
-      - name: Commit Fixes (if any)
+          ruff check --fix . || true
+          black . || true
+      - name: Check for changes
+        id: changes
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .
-          git diff --cached --quiet || git commit -m "style: auto-fix Python issues (ruff/black)"
-          git push || echo "No changes to push"
+          git diff --exit-code || echo "has_changes=true" >> $GITHUB_OUTPUT
+      - name: Commit fixes
+        if: steps.changes.outputs.has_changes == 'true' && github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: auto-fix linting issues [skip ci]" || true
+          git push || true

@@ -12,14 +12,19 @@ class PrettyRequest(BaseModel):
     problem: str | None = None
     prompt: str | None = None
 
+
 def _fmt_seconds(sec: float) -> str:
-    if sec < 60:  return f"{sec:.2f} s"
+    if sec < 60:
+        return f"{sec:.2f} s"
     mins = sec / 60.0
-    if mins < 60: return f"{mins:.2f} min"
+    if mins < 60:
+        return f"{mins:.2f} min"
     hours = mins / 60.0
-    if hours < 48: return f"{hours:.2f} hours"
+    if hours < 48:
+        return f"{hours:.2f} hours"
     days = hours / 24.0
     return f"{days:.2f} days"
+
 
 def attach_pretty(app: FastAPI):
     @app.post("/api/solve/pretty")
@@ -49,47 +54,55 @@ def attach_pretty(app: FastAPI):
             if "a_m" in res:
                 a_fmt = _si_fmt(res["a_m"], "m")
                 a_hint = _hint(res["a_m"], "m")
-                units_info.append({
-                    "parameter": "Semi-major axis",
-                    "value": res["a_m"],
-                    "unit": "m",
-                    "pretty": a_fmt,
-                    **({"hint": a_hint} if a_hint else {})
-                })
+                units_info.append(
+                    {
+                        "parameter": "Semi-major axis",
+                        "value": res["a_m"],
+                        "unit": "m",
+                        "pretty": a_fmt,
+                        **({"hint": a_hint} if a_hint else {}),
+                    }
+                )
 
             if "M_kg" in res:
                 m_fmt = _si_fmt(res["M_kg"], "kg")
                 m_hint = _hint(res["M_kg"], "kg")
-                units_info.append({
-                    "parameter": "Central mass",
-                    "value": res["M_kg"],
-                    "unit": "kg",
-                    "pretty": m_fmt,
-                    **({"hint": m_hint} if m_hint else {})
-                })
+                units_info.append(
+                    {
+                        "parameter": "Central mass",
+                        "value": res["M_kg"],
+                        "unit": "kg",
+                        "pretty": m_fmt,
+                        **({"hint": m_hint} if m_hint else {}),
+                    }
+                )
 
             # Add period in SI format
             period_fmt = _si_fmt(sec, "s")
-            units_info.append({
-                "parameter": "Period",
-                "value": sec,
-                "unit": "s",
-                "pretty": period_fmt,
-                "human": _fmt_seconds(sec)
-            })
+            units_info.append(
+                {
+                    "parameter": "Period",
+                    "value": sec,
+                    "unit": "s",
+                    "pretty": period_fmt,
+                    "human": _fmt_seconds(sec),
+                }
+            )
 
         elif res.get("kind") == "physics.em_superposition":
-            x,y,z = res["result"]
+            x, y, z = res["result"]
             pretty = f"Field vector sum: ({x:.3f}, {y:.3f}, {z:.3f})"
 
             # Format vector components
             for _component, value, label in [(x, "x"), (y, "y"), (z, "z")]:
-                units_info.append({
-                    "parameter": f"Field {label}-component",
-                    "value": value,
-                    "unit": "N/C",
-                    "pretty": _si_fmt(value, "N/C")
-                })
+                units_info.append(
+                    {
+                        "parameter": f"Field {label}-component",
+                        "value": value,
+                        "unit": "N/C",
+                        "pretty": _si_fmt(value, "N/C"),
+                    }
+                )
 
         elif res.get("kind") == "math.evaluate":
             pretty = f"Value = {res['value']:.12g}"

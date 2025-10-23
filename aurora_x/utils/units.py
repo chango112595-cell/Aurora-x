@@ -1,18 +1,29 @@
-"""# aurora_x/utils/units.py - Streamlined unit parsing and SI normalization
+"""aurora_x/utils/units.py - Streamlined unit parsing and SI normalization"""
 
 from __future__ import annotations
-import re
-from typing import Dict, Tuple
 
-_LEN = {"m": 1.0, "km": 1e3, "cm": 1e-2, "mm": 1e-3, "au": 1.495978707e11, "miles": 1609.344, "mile": 1609.344}
+import re
+
+_LEN = {
+    "m": 1.0,
+    "km": 1e3,
+    "cm": 1e-2,
+    "mm": 1e-3,
+    "au": 1.495978707e11,
+    "miles": 1609.344,
+    "mile": 1609.344,
+}
 _MASS = {"kg": 1.0, "g": 1e-3, "tons": 1e3, "ton": 1e3}
 _TIME = {"s": 1.0, "ms": 1e-3, "hours": 3600, "days": 86400, "years": 31536000}
 
-def normalize_value(value: float, unit: str) -> Tuple[float, str]:
-    """Convert a numeric value with a given unit to SI and return (value_si, si_unit).
 
-    Recognizes length, mass and time units. If unit is empty, make a reasonable
-    default based on the magnitude (large numbers->meters) or caller expectation.
+def normalize_value(value: float, unit: str) -> tuple[float, str]:
+    """Convert a numeric value with a given unit to SI and return
+    (value_si, si_unit).
+
+    Recognizes length, mass and time units. If unit is empty, make a
+    reasonable default based on the magnitude (large numbers -> meters) or
+    caller expectation.
     """
     u = (unit or "").strip().lower()
     if u in _LEN:
@@ -32,7 +43,8 @@ def normalize_value(value: float, unit: str) -> Tuple[float, str]:
 
     raise ValueError(f"unsupported unit: {unit}")
 
-def normalize_payload(payload: Dict) -> Dict:
+
+def normalize_payload(payload: dict) -> dict:
     """Normalize values in a payload dictionary to SI units.
 
     Handles entries of the form:
@@ -40,9 +52,10 @@ def normalize_payload(payload: Dict) -> Dict:
     or
       key_unit: value
 
-    Returns a new dict with keys suffixed by the SI unit (e.g. "a_m", "mass_kg").
+    Returns a new dict with keys suffixed by the SI unit.
+    Example: "a_m", "mass_kg".
     """
-    out: Dict[str, object] = {}
+    out: dict[str, object] = {}
 
     for k, v in payload.items():
         # Case: dict with explicit value/unit
@@ -72,21 +85,25 @@ def normalize_payload(payload: Dict) -> Dict:
 
 
 # Regex to extract inline quantities like: a=7000 km M=5.97e24 kg
-_Q = re.compile(r"""
+_Q = re.compile(
+    r"""
     (?P<key>[aAmM])       # a (semi-major axis) or m/M (mass)
     \s*=\s*
     (?P<val>[-+]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)
     \s*
     (?P<unit>[A-Za-z]+)?  # optional unit (km, m, kg, etc.)
-""", re.VERBOSE)
+""",
+    re.VERBOSE,
+)
 
-def extract_quantities(text: str) -> Dict[str, float]:
+
+def extract_quantities(text: str) -> dict[str, float]:
     """Parse inline quantities and return SI-normalized dict.
 
     Example: 'a=7000 km M=5.972e24 kg' -> {'a_m': 7e6, 'M_kg': 5.972e24}
     If a unit is omitted, defaults are: a -> meters, M -> kilograms.
     """
-    res: Dict[str, float] = {}
+    res: dict[str, float] = {}
 
     for m in _Q.finditer(text or ""):
         key = (m.group("key") or "").lower()
@@ -106,4 +123,3 @@ def extract_quantities(text: str) -> Dict[str, float]:
             res[f"M_{u}"] = val_si
 
     return res
-"""

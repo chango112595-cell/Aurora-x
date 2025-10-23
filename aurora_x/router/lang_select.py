@@ -3,15 +3,18 @@ from dataclasses import dataclass
 
 SUPPORTED = ("python", "go", "rust", "csharp")
 
+
 @dataclass
 class LangChoice:
     lang: str
     reason: str
 
+
 def _env_override() -> str | None:
     """Check for environment variable override."""
     v = os.getenv("AURORA_DEFAULT_LANG", "").strip().lower()
     return v if v in SUPPORTED else None
+
 
 def pick_language(user_text: str) -> LangChoice:
     """
@@ -32,7 +35,18 @@ def pick_language(user_text: str) -> LangChoice:
     t = (user_text or "").lower()
 
     # Go: High-performance web services and microservices
-    if any(k in t for k in ["fast", "high performance", "microservice", "api service", "concurrency", "golang", "go"]):
+    if any(
+        k in t
+        for k in [
+            "fast",
+            "high performance",
+            "microservice",
+            "api service",
+            "concurrency",
+            "golang",
+            "go",
+        ]
+    ):
         if any(w in t for w in ["web", "api", "service", "server", "http"]):
             return LangChoice("go", "fast web service/microservice → Go")
 
@@ -42,7 +56,19 @@ def pick_language(user_text: str) -> LangChoice:
             return LangChoice("rust", "memory-safe CLI/systems → Rust")
 
     # C#: Enterprise and Windows-focused APIs
-    if any(k in t for k in ["enterprise", "windows", "asp.net", "dotnet", ".net", "c#", "csharp", "api controller"]):
+    if any(
+        k in t
+        for k in [
+            "enterprise",
+            "windows",
+            "asp.net",
+            "dotnet",
+            ".net",
+            "c#",
+            "csharp",
+            "api controller",
+        ]
+    ):
         return LangChoice("csharp", "enterprise/Windows API → C#")
 
     # Python: Default for everything else

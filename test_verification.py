@@ -31,6 +31,7 @@ def test_seeds_persistence():
         print("  ✗ Seeds not persisting")
         return False
 
+
 def test_determinism():
     """Test deterministic behavior with AURORA_SEED."""
     print("✅ Testing determinism with AURORA_SEED...")
@@ -53,6 +54,7 @@ def test_determinism():
     else:
         print(f"  ✗ Not deterministic: {val1} != {val2}")
         return False
+
 
 def test_drift_caps():
     """Test that drift doesn't exceed caps."""
@@ -83,6 +85,7 @@ def test_drift_caps():
         return True
     return False
 
+
 def test_api_endpoints():
     """Test that API endpoint data structures work."""
     print("✅ Testing API data structures...")
@@ -106,6 +109,7 @@ def test_api_endpoints():
     print(f"  ✓ Dump has {len(data)} entries")
 
     return True
+
 
 if __name__ == "__main__":
     print("=" * 50)

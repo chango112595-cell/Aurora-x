@@ -16,6 +16,8 @@ def custom_function():
     }
     return {k: solve_text(v) for k, v in examples.items()}
 
+
 if __name__ == "__main__":
     import json
+
     print(json.dumps(custom_function(), indent=2))

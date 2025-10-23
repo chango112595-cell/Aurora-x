@@ -2,19 +2,19 @@
 entrypoint = "aurora_x/main.py"
 
 # Auto-pull latest code and run Aurora backend (Python)
-run = "bash -lc 'git pull --ff-only || true; scripts/bridge_autostart.sh && python3 aurora_x/main.py'"
+run = "bash -lc 'git pull --ff-only || true; bash scripts/bridge_autostart.sh || echo \"Bridge startup skipped\"; python3 aurora_x/main.py'"
 onBoot = "bash -lc 'git pull --ff-only || true'"
 modules = ["nodejs-20", "web", "postgresql-16", "python-3.11", "python3"]
 hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["gnupg"]
+packages = ["gnupg", "openssl", "postgresql", "xcodebuild", "zlib"]
 
 [deployment]
 deploymentTarget = "autoscale"
 build = ["npm", "run", "build"]
-run = ["npm", "run", "start"]
+run = ["npm", "start"]  # Changed from gunicorn
 
 [[ports]]
 localPort = 5000
@@ -101,8 +101,9 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev"
+args = "npm run dev"  # Changed from gunicorn
 waitForPort = 5000
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
+expertMode = true

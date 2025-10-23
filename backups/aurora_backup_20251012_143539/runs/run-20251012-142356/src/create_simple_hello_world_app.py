@@ -14,15 +14,15 @@ def create_app() -> Flask:
     app = Flask(__name__)
     CORS(app)  # Enable CORS for API access
 
-    app.config['ENV'] = 'development'
-    app.config['DEBUG'] = True
+    app.config["ENV"] = "development"
+    app.config["DEBUG"] = True
 
-    @app.route('/api/health')
+    @app.route("/api/health")
     def health():
         """Health check endpoint"""
         return jsonify({"status": "healthy", "app": "Flask API"})
 
-    @app.route('/api')
+    @app.route("/api")
     def api():
         """Handle /api endpoint"""
         return jsonify({"message": "Welcome to api", "path": "/api"})
@@ -40,8 +40,8 @@ def create_app() -> Flask:
     return app
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = create_app()
-    port = int(os.environ.get('PORT', '5000'))
+    port = int(os.environ.get("PORT", "5000"))
     print(f"🚀 Flask API starting on http://localhost:{port}")
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=True)

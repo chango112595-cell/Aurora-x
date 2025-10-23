@@ -11,15 +11,15 @@ from flask import Flask, jsonify
 def create_app() -> Flask:
     """Create and configure the Flask application"""
     app = Flask(__name__)
-    app.config['ENV'] = 'development'
-    app.config['DEBUG'] = True
+    app.config["ENV"] = "development"
+    app.config["DEBUG"] = True
 
-    @app.route('/')
+    @app.route("/")
     def index():
         """Handle / route"""
         return "<h1>Index Page</h1><p>Route: /</p>"
 
-    @app.route('/api/health')
+    @app.route("/api/health")
     def health():
         """Health check endpoint"""
         return jsonify({"status": "healthy"})
@@ -27,8 +27,8 @@ def create_app() -> Flask:
     return app
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = create_app()
-    port = int(os.environ.get('PORT', '5000'))
+    port = int(os.environ.get("PORT", "5000"))
     print(f"🚀 Flask App starting on http://localhost:{port}")
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=True)

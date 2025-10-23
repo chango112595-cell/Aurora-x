@@ -21,6 +21,11 @@ CS_PROJ = """<Project Sdk="Microsoft.NET.Sdk.Web">
 </Project>
 """
 
+
 def render_csharp_webapi(name: str) -> dict:
     folder = name or "Aurora.WebApi"
-    return {"folder": folder, "files": {f"{folder}.csproj": CS_PROJ, "Program.cs": PROGRAM_CS}, "hint": f"Run: dotnet run (in ./{folder})"}
+    return {
+        "folder": folder,
+        "files": {f"{folder}.csproj": CS_PROJ, "Program.cs": PROGRAM_CS},
+        "hint": f"Run: dotnet run (in ./{folder})",
+    }
