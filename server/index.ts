@@ -67,5 +67,9 @@ app.use((req, res, next) => {
     reusePort: true,
   }, () => {
     log(`serving on port ${port}`);
+    log(`environment: ${app.get("env")}`);
+    log(`access at: http://0.0.0.0:${port}`);
+  }).on('error', (err) => {
+    console.error('Server error:', err);
   });
 })();
