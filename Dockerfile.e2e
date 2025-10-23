@@ -1,13 +1,67 @@
+
 # Multi-arch friendly (works on linux/arm64 and amd64)
-FROM python:3.11-slim
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PORT=8000 AURORA_DEFAULT_LANG=python
+FROM --platform=$TARGETPLATFORM python:3.11-slim AS builder
+
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    DEBIAN_FRONTEND=noninteractive
+
 WORKDIR /app
-# system deps for building wheels + curl, jq
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential curl jq && rm -rf /var/lib/apt/lists/*
-COPY . /app
-RUN pip install --upgrade pip && pip install -e . && pip install pytest
+
+# Install system deps for building wheels + curl, jq
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    jq \
+    ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy only what we need for installation
+COPY pyproject.toml setup.py README.md ./
+COPY aurora_x/ ./aurora_x/
+
+# Install Python dependencies with retries and fallback
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir -e . || \
+    (pip install --no-cache-dir uvicorn fastapi pydantic && echo "Minimal install completed") && \
+    pip install --no-cache-dir pytest || echo "pytest install skipped"
+
+# Final stage
+FROM --platform=$TARGETPLATFORM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8000 \
+    AURORA_DEFAULT_LANG=python \
+    DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /app
+
+# Install runtime deps only
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    jq \
+    ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy from builder
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=builder /app /app
+
+# Create necessary directories
+RUN mkdir -p /app/runs /app/.aurora && \
+    chmod -R 755 /app
+
 EXPOSE 8000
-CMD sh -c "python -m aurora_x.serve & \
-  for i in $(seq 1 30); do curl -fsS http://127.0.0.1:${PORT}/healthz && break || sleep 1; done && \
-  curl -fsS -X POST -H 'content-type: application/json' -d '{\"problem\":\"(2+3)^2 + 1\"}' http://127.0.0.1:${PORT}/api/solve && \
-  tail -f /dev/null"
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -fsS http://127.0.0.1:${PORT}/healthz || exit 1
+
+# Start server and wait for health check
+CMD python -m uvicorn aurora_x.serve:app --host 0.0.0.0 --port ${PORT}

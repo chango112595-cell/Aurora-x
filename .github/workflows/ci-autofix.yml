@@ -1,70 +1,40 @@
-name: Python Lint & Auto-Fix / Lint + Fix Python (push)
+name: Python Lint & Auto-Fix / Lint + Fix Python
 
 on:
   push:
-    branches: [main]
-    paths:
-      - '**.py'
-      - 'aurora_x/**'
-      - 'tools/**'
-      - 'tests/**'
+    branches: [main, dev]
+  pull_request:
+
+permissions:
+  contents: write
 
 jobs:
-  lint-and-fix:
+  lint-fix:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install ruff || true
-
-      - name: Run ruff check
+      - name: Install tools
+        run: pip install ruff black
+      - name: Auto-fix
         continue-on-error: true
         run: |
-          ruff check . --fix || echo "⚠️ Ruff check found issues"
-
-      - name: Run ruff format
-        continue-on-error: true
+          ruff check --fix . || true
+          black . || true
+      - name: Check for changes
+        id: changes
         run: |
-          ruff format . || echo "⚠️ Ruff format found issues"
-
+          git diff --exit-code || echo "has_changes=true" >> $GITHUB_OUTPUT
       - name: Commit fixes
-        continue-on-error: true
+        if: steps.changes.outputs.has_changes == 'true' && github.event_name == 'push'
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@users.noreply.github.com"
-          
-          # Stash any local changes before operations
-          git stash --include-untracked || true
-          
-          # Ensure we're on the right branch
-          git checkout main || git checkout -b main
-          
-          # Pull latest changes
-          git pull --rebase origin main || true
-          
-          # Pop stashed changes back
-          git stash pop || true
-          
-          # Stage all changes
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          
-          # Commit if there are changes
-          if ! git diff --staged --quiet; then
-            git commit -m "style: auto-fix linting issues [skip ci]" || true
-            git push origin main || echo "⚠️ Push failed - possible conflict"
-          else
-            echo "✅ No changes to commit"
-          fi
+          git commit -m "chore: auto-fix linting issues [skip ci]" || true
+          git push || true

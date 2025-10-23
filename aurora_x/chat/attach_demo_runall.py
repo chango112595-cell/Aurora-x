@@ -27,7 +27,7 @@ def attach_demo_runall(app: FastAPI):
             # Find the demo cards endpoint and call it
             cards_data = None
             for route in test_app.routes:
-                if hasattr(route, 'path') and route.path == "/api/demo/cards":
+                if hasattr(route, "path") and route.path == "/api/demo/cards":
                     cards_data = await route.endpoint()
                     break
 
@@ -37,10 +37,7 @@ def attach_demo_runall(app: FastAPI):
             cards = cards_data["cards"]
 
         except Exception as e:
-            return {
-                "ok": False,
-                "error": f"Failed to load cards: {str(e)}"
-            }
+            return {"ok": False, "error": f"Failed to load cards: {str(e)}"}
 
         # Execute each card
         results = []
@@ -70,16 +67,18 @@ def attach_demo_runall(app: FastAPI):
                     except:
                         response_data = {"raw": response.text}
 
-                    results.append({
-                        "id": card_id,
-                        "title": card.get("title", card_id),
-                        "endpoint": endpoint,
-                        "method": method,
-                        "status": response.status_code,
-                        "response": response_data,
-                        "expected": card.get("expected", None),
-                        "hint": card.get("hint", None)
-                    })
+                    results.append(
+                        {
+                            "id": card_id,
+                            "title": card.get("title", card_id),
+                            "endpoint": endpoint,
+                            "method": method,
+                            "status": response.status_code,
+                            "response": response_data,
+                            "expected": card.get("expected", None),
+                            "hint": card.get("hint", None),
+                        }
+                    )
 
                     if 200 <= response.status_code < 300:
                         success_count += 1
@@ -87,14 +86,16 @@ def attach_demo_runall(app: FastAPI):
                         error_count += 1
 
                 except Exception as e:
-                    results.append({
-                        "id": card_id,
-                        "title": card.get("title", card_id),
-                        "endpoint": endpoint,
-                        "method": method,
-                        "status": 0,
-                        "error": str(e)
-                    })
+                    results.append(
+                        {
+                            "id": card_id,
+                            "title": card.get("title", card_id),
+                            "endpoint": endpoint,
+                            "method": method,
+                            "status": 0,
+                            "error": str(e),
+                        }
+                    )
                     error_count += 1
 
         # Save results to file
@@ -110,7 +111,7 @@ def attach_demo_runall(app: FastAPI):
             "total_cards": len(cards),
             "successful": success_count,
             "failed": error_count,
-            "results": results
+            "results": results,
         }
 
         output_file.write_text(json.dumps(output_data, indent=2), encoding="utf-8")
@@ -122,5 +123,5 @@ def attach_demo_runall(app: FastAPI):
             "successful": success_count,
             "failed": error_count,
             "summary": f"Ran {len(results)} cards: {success_count} successful, {error_count} failed",
-            "results": results
+            "results": results,
         }

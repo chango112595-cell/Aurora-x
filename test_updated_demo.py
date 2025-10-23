@@ -28,18 +28,19 @@ def test_demo_cards_locally():
         print("\n📊 Statistics:")
         print(f"  Total cards: {result['total']}")
         print("  Categories breakdown:")
-        for cat, count in result['categories'].items():
+        for cat, count in result["categories"].items():
             print(f"    - {cat}: {count} cards")
 
         print("\n🎯 Sample Cards by Category:\n")
 
         # Group cards by category
         by_category = {}
-        for card in result['cards']:
-            cat = 'chat' if '/chat' in card['endpoint'] else \
-                  'solve' if '/solve' in card['endpoint'] else \
-                  'units' if '/units' in card['endpoint'] else \
-                  'format'
+        for card in result["cards"]:
+            cat = (
+                "chat"
+                if "/chat" in card["endpoint"]
+                else "solve" if "/solve" in card["endpoint"] else "units" if "/units" in card["endpoint"] else "format"
+            )
             if cat not in by_category:
                 by_category[cat] = []
             by_category[cat].append(card)
@@ -50,9 +51,9 @@ def test_demo_cards_locally():
             for card in cat_cards[:2]:  # Show first 2
                 print(f"    • [{card['id']}] {card['title']}")
                 print(f"      Endpoint: {card['method']} {card['endpoint']}")
-                if 'hint' in card:
+                if "hint" in card:
                     print(f"      💡 {card['hint']}")
-                if 'expected' in card:
+                if "expected" in card:
                     print(f"      Expected: {card['expected']}")
             if len(cat_cards) > 2:
                 print(f"    ... and {len(cat_cards) - 2} more\n")
@@ -61,8 +62,8 @@ def test_demo_cards_locally():
 
         # Verify structure
         print("📋 Structure Validation:")
-        required_fields = ['id', 'title', 'endpoint', 'method', 'body']
-        sample_card = result['cards'][0]
+        required_fields = ["id", "title", "endpoint", "method", "body"]
+        sample_card = result["cards"][0]
         for field in required_fields:
             if field in sample_card:
                 print(f"  ✅ Has '{field}' field")
@@ -73,6 +74,7 @@ def test_demo_cards_locally():
     else:
         print("❌ Failed to get demo cards")
         return None
+
 
 def test_specific_card(card_id="solve_orbit_units"):
     """Test executing a specific card"""
@@ -99,8 +101,8 @@ def test_specific_card(card_id="solve_orbit_units"):
 
     # Find the specific card
     card = None
-    for c in result['cards']:
-        if c['id'] == card_id:
+    for c in result["cards"]:
+        if c["id"] == card_id:
             card = c
             break
 
@@ -114,23 +116,25 @@ def test_specific_card(card_id="solve_orbit_units"):
     print(f"  Body: {json.dumps(card['body'], indent=2)}")
 
     # Test locally for solve endpoints
-    if "/solve" in card['endpoint']:
+    if "/solve" in card["endpoint"]:
         from aurora_x.generators.solver import solve_text
-        problem = card['body'].get('problem', '')
+
+        problem = card["body"].get("problem", "")
 
         result = solve_text(problem)
-        if result.get('ok'):
+        if result.get("ok"):
             print("  ✅ Local test successful!")
             print(f"  Result: {result}")
-            if 'expected' in card:
+            if "expected" in card:
                 print(f"  Expected: {card['expected']}")
         else:
             print(f"  ❌ Error: {result}")
     else:
         print(f"  ℹ️  Card type: {card['endpoint']} (not tested locally)")
 
-    if 'hint' in card:
+    if "hint" in card:
         print(f"  💡 Hint: {card['hint']}")
+
 
 def print_curl_commands():
     """Print example curl commands for testing"""
@@ -139,31 +143,32 @@ def print_curl_commands():
     examples = [
         {
             "desc": "Get all demo cards",
-            "cmd": "curl -s http://localhost:5001/api/demo/cards | jq ."
+            "cmd": "curl -s http://localhost:5001/api/demo/cards | jq .",
         },
         {
             "desc": "Run chat_timer_python card",
-            "cmd": '''curl -s -X POST -H 'Content-Type: application/json' \\
+            "cmd": """curl -s -X POST -H 'Content-Type: application/json' \\
   -d '{"prompt": "make a futuristic timer ui", "lang": "python"}' \\
-  http://localhost:5001/chat | jq .'''
+  http://localhost:5001/chat | jq .""",
         },
         {
             "desc": "Run solve_orbit_units card",
-            "cmd": '''curl -s -X POST -H 'Content-Type: application/json' \\
+            "cmd": """curl -s -X POST -H 'Content-Type: application/json' \\
   -d '{"problem": "orbital period a=7000 km M=5.972e24 kg"}' \\
-  http://localhost:5001/api/solve/pretty | jq .'''
+  http://localhost:5001/api/solve/pretty | jq .""",
         },
         {
             "desc": "Run fmt_units card",
-            "cmd": '''curl -s -X POST -H 'Content-Type: application/json' \\
+            "cmd": """curl -s -X POST -H 'Content-Type: application/json' \\
   -d '{"value": 7e6, "unit": "m"}' \\
-  http://localhost:5001/api/format/units | jq .'''
-        }
+  http://localhost:5001/api/format/units | jq .""",
+        },
     ]
 
     for ex in examples:
         print(f"# {ex['desc']}:")
         print(f"{ex['cmd']}\n")
+
 
 if __name__ == "__main__":
     print("🚀 AURORA-X DEMO CARDS TEST")

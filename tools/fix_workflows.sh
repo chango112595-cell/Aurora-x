@@ -50,12 +50,12 @@ make workflow-status
 
 echo ""
 echo "4️⃣ Testing a sample workflow..."
-if gh workflow list > /dev/null 2>&1; then
+if timeout 3 gh auth status > /dev/null 2>&1; then
     echo "✅ GitHub CLI connected successfully"
-    gh workflow list | head -5
+    gh workflow list | head -5 || echo "⚠️  Could not list workflows"
 else
     echo "⚠️  GitHub CLI not authenticated or not installed"
-    echo "   Run: gh auth login"
+    echo "   Skipping workflow listing (not required for syntax validation)"
 fi
 
 echo ""

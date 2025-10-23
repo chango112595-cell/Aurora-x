@@ -13,7 +13,9 @@ class ProdConfig:
     SNAPSHOT_DIR: str = ".progress_history"
     SEEDS_PATH: str = ".aurora/seeds.json"
 
+
 CFG = ProdConfig()
+
 
 def validate_numbers():
     assert 0.0 <= CFG.EPSILON <= 0.5

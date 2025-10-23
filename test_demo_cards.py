@@ -34,25 +34,26 @@ def test_demo_cards_locally():
         print(f"Endpoints covered: {', '.join(result['endpoints'])}")
 
         print("\n📋 Categories and Cards:\n")
-        for category in result['categories']:
+        for category in result["categories"]:
             print(f"  {category['category']} ({len(category['cards'])} cards):")
-            for card in category['cards'][:2]:  # Show first 2 cards per category
+            for card in category["cards"][:2]:  # Show first 2 cards per category
                 print(f"    - {card['title']}: {card['description']}")
                 print(f"      Endpoint: {card['endpoint']}")
                 print(f"      Expected: {card['expected_output']}")
-            if len(category['cards']) > 2:
+            if len(category["cards"]) > 2:
                 print(f"    ... and {len(category['cards']) - 2} more")
             print()
     else:
         print("❌ Failed to get demo cards")
 
+
 def test_demo_cards_api():
     """Test the API endpoint"""
     base_url = "http://localhost:5001"
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Testing /api/demo/cards via API:")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     try:
         resp = requests.get(f"{base_url}/api/demo/cards")
@@ -70,18 +71,19 @@ def test_demo_cards_api():
     except Exception as e:
         print(f"❌ Error: {e}")
 
+
 def test_sample_card():
     """Test executing a sample card"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Testing Sample Card Execution:")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     sample_card = {
         "title": "LEO Satellite",
         "description": "Low Earth Orbit satellite period",
         "endpoint": "/api/solve/pretty",
         "payload": {"problem": "orbital period a=7000 km M=5.972e24 kg"},
-        "expected_output": "~1.6 hours"
+        "expected_output": "~1.6 hours",
     }
 
     print(f"Card: {sample_card['title']}")
@@ -91,17 +93,19 @@ def test_sample_card():
 
     # Test locally
     from aurora_x.generators.solver import solve_text
-    result = solve_text(sample_card['payload']['problem'])
 
-    if result.get('ok'):
-        if result.get('kind') == 'physics.orbital_period':
-            period_s = result['period_s']
+    result = solve_text(sample_card["payload"]["problem"])
+
+    if result.get("ok"):
+        if result.get("kind") == "physics.orbital_period":
+            period_s = result["period_s"]
             period_hours = period_s / 3600
             print(f"✅ Result: {period_hours:.2f} hours (matches expected)")
         else:
             print(f"Result: {result}")
     else:
         print(f"❌ Error: {result}")
+
 
 if __name__ == "__main__":
     print("🎯 DEMO CARDS ENDPOINT TEST")

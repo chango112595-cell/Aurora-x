@@ -20,18 +20,21 @@ from pathlib import Path
 # Try to import colorama for colored output
 try:
     from colorama import Fore, Style, init
+
     init(autoreset=True)
     HAS_COLOR = True
 except ImportError:
     HAS_COLOR = False
+
     # Define dummy color constants
     class Fore:
-        GREEN = YELLOW = RED = CYAN = RESET = ''
+        GREEN = YELLOW = RED = CYAN = RESET = ""
+
     class Style:
-        BRIGHT = RESET_ALL = ''
+        BRIGHT = RESET_ALL = ""
 
 
-def compute_hash(filepath: Path, algorithm: str = 'sha256') -> str | None:
+def compute_hash(filepath: Path, algorithm: str = "sha256") -> str | None:
     """
     Compute hash of a file using specified algorithm
 
@@ -46,7 +49,7 @@ def compute_hash(filepath: Path, algorithm: str = 'sha256') -> str | None:
         hash_obj = hashlib.new(algorithm)
 
         # Read file in chunks for memory efficiency
-        with open(filepath, 'rb') as f:
+        with open(filepath, "rb") as f:
             while chunk := f.read(8192):
                 hash_obj.update(chunk)
 
@@ -79,30 +82,33 @@ def process_files(files: list[str], algorithm: str, recursive: bool = False) -> 
         if path.is_dir():
             if recursive:
                 # Process directory recursively
-                pattern = '**/*' if recursive else '*'
+                pattern = "**/*" if recursive else "*"
                 for file_path in path.glob(pattern):
                     if file_path.is_file():
                         if hash_value := compute_hash(file_path, algorithm):
-                            print(f"{Fore.GREEN}{algorithm.upper():8}{Fore.RESET} "
-                                  f"{hash_value}  {Fore.CYAN}{file_path}{Fore.RESET}")
+                            print(
+                                f"{Fore.GREEN}{algorithm.upper():8}{Fore.RESET} "
+                                f"{hash_value}  {Fore.CYAN}{file_path}{Fore.RESET}"
+                            )
                             processed += 1
             else:
                 print(f"{Fore.YELLOW}Skipping directory: {path} (use -r for recursive){Fore.RESET}")
         elif path.is_file():
             # Process single file
             if hash_value := compute_hash(path, algorithm):
-                print(f"{Fore.GREEN}{algorithm.upper():8}{Fore.RESET} "
-                      f"{hash_value}  {Fore.CYAN}{path}{Fore.RESET}")
+                print(f"{Fore.GREEN}{algorithm.upper():8}{Fore.RESET} " f"{hash_value}  {Fore.CYAN}{path}{Fore.RESET}")
                 processed += 1
         else:
             # Try as glob pattern
-            matches = list(Path('.').glob(file_pattern))
+            matches = list(Path(".").glob(file_pattern))
             if matches:
                 for file_path in matches:
                     if file_path.is_file():
                         if hash_value := compute_hash(file_path, algorithm):
-                            print(f"{Fore.GREEN}{algorithm.upper():8}{Fore.RESET} "
-                                  f"{hash_value}  {Fore.CYAN}{file_path}{Fore.RESET}")
+                            print(
+                                f"{Fore.GREEN}{algorithm.upper():8}{Fore.RESET} "
+                                f"{hash_value}  {Fore.CYAN}{file_path}{Fore.RESET}"
+                            )
                             processed += 1
             else:
                 print(f"{Fore.YELLOW}No files found matching: {file_pattern}{Fore.RESET}")
@@ -123,33 +129,22 @@ Examples:
   %(prog)s file1.txt file2.txt file3.txt    # Multiple files at once
 
 Supported algorithms: md5, sha1, sha256 (default), sha512
-        """
+        """,
     )
 
-    parser.add_argument(
-        'files',
-        nargs='+',
-        help='Files or patterns to hash'
-    )
+    parser.add_argument("files", nargs="+", help="Files or patterns to hash")
 
     parser.add_argument(
-        '-a', '--algorithm',
-        choices=['md5', 'sha1', 'sha256', 'sha512'],
-        default='sha256',
-        help='Hash algorithm to use (default: sha256)'
+        "-a",
+        "--algorithm",
+        choices=["md5", "sha1", "sha256", "sha512"],
+        default="sha256",
+        help="Hash algorithm to use (default: sha256)",
     )
 
-    parser.add_argument(
-        '-r', '--recursive',
-        action='store_true',
-        help='Process directories recursively'
-    )
+    parser.add_argument("-r", "--recursive", action="store_true", help="Process directories recursively")
 
-    parser.add_argument(
-        '-v', '--version',
-        action='version',
-        version='%(prog)s 1.0.0'
-    )
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.0")
 
     args = parser.parse_args()
 
@@ -164,5 +159,5 @@ Supported algorithms: md5, sha1, sha256 (default), sha512
     sys.exit(0 if processed > 0 else 1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

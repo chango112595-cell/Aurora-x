@@ -10,21 +10,16 @@ import sys
 def test_english_command(command, expected_in_output):
     """Test an English command and check if expected output is present"""
     print(f"\n✨ Testing: '{command}'")
-    result = subprocess.run(
-        f'make say WHAT="{command}"',
-        shell=True,
-        capture_output=True,
-        text=True
-    )
+    result = subprocess.run(f'make say WHAT="{command}"', shell=True, capture_output=True, text=True)
 
     success = expected_in_output.lower() in result.stdout.lower()
     if success:
         print(f"  ✅ Success - Generated {expected_in_output}")
         # Extract the run directory
-        lines = result.stdout.split('\n')
+        lines = result.stdout.split("\n")
         for line in lines:
-            if 'v3 generated:' in line:
-                run_dir = line.split('v3 generated:')[1].strip()
+            if "v3 generated:" in line:
+                run_dir = line.split("v3 generated:")[1].strip()
                 print(f"     Generated code at: {run_dir}")
                 break
     else:
@@ -32,6 +27,7 @@ def test_english_command(command, expected_in_output):
         print(f"     Output: {result.stdout[:200]}")
 
     return success
+
 
 def main():
     print("=" * 60)
@@ -66,6 +62,7 @@ def main():
 
     if failed > 0:
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

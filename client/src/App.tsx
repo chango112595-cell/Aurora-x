@@ -36,6 +36,7 @@ function App() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
   const { toast } = useToast();
+  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('connected');
 
   const style = {
     "--sidebar-width": "16rem",
@@ -50,7 +51,7 @@ function App() {
           .register('/sw.js')
           .then((registration) => {
             console.log('Service Worker registered:', registration);
-            
+
             // Check for updates periodically
             setInterval(() => {
               registration.update();
@@ -105,9 +106,26 @@ function App() {
       });
     });
 
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
+    // Monitor WebSocket connection status in development
+    if (import.meta.env.DEV) {
+      const checkConnection = () => {
+        fetch('/api/health')
+          .then(res => res.ok ? setConnectionStatus('connected') : setConnectionStatus('disconnected'))
+          .catch(() => setConnectionStatus('disconnected'));
+      };
+
+      checkConnection();
+      const interval = setInterval(checkConnection, 10000);
+
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      };
+    } else {
+      return () => {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      };
+    }
   }, [toast]);
 
   const handleInstallClick = async () => {
@@ -115,13 +133,13 @@ function App() {
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
     } else {
       console.log('User dismissed the install prompt');
     }
-    
+
     setDeferredPrompt(null);
     setShowInstallButton(false);
   };
@@ -130,7 +148,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
-          <SidebarProvider style={style as React.CSSProperties}>
+          <SidebarProvider style={style as React.CSSProperties} defaultOpen={true}>
             <div className="flex h-screen w-full">
               <AppSidebar />
               <div className="flex flex-col flex-1">
@@ -153,6 +171,11 @@ function App() {
                   <ThemeToggle />
                 </header>
                 <main className="flex-1 overflow-hidden">
+                  {import.meta.env.DEV && connectionStatus === 'disconnected' && (
+                    <div className="bg-yellow-500 text-black px-4 py-2 text-sm text-center">
+                      ⚠️ Server connection lost. Attempting to reconnect...
+                    </div>
+                  )}
                   <ErrorBoundary>
                     <Router />
                   </ErrorBoundary>

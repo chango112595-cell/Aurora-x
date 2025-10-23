@@ -2,6 +2,7 @@
 """
 Complete test of T08 Intent Router with all template types
 """
+
 from pathlib import Path
 
 from aurora_x.router.intent_router import classify
@@ -12,16 +13,18 @@ from aurora_x.templates.web_app_flask import render_app
 
 def test_complete_router(prompt):
     """Test all router functionality"""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"📝 Prompt: {prompt}")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     # Classify intent
     intent = classify(prompt)
     print(f"🎯 Intent: {intent.kind} (name: {intent.name})")
 
     if intent.kind == "web_app":
-        title = "Futuristic UI Timer" if intent.fields.get("feature")=="timer" else intent.name.replace('_',' ').title()
+        title = (
+            "Futuristic UI Timer" if intent.fields.get("feature") == "timer" else intent.name.replace("_", " ").title()
+        )
         code = render_app(title=title, subtitle=intent.brief)
         filename = "generated_web_app.py"
         Path(filename).write_text(code, encoding="utf-8")
@@ -47,11 +50,12 @@ def test_complete_router(prompt):
 
     return filename
 
+
 # Test all three types
 test_cases = [
     ("make a futuristic timer ui", "web_app"),
     ("create a CLI tool to hash files", "cli_tool"),
-    ("write factorial(n) with tests", "lib_func")
+    ("write factorial(n) with tests", "lib_func"),
 ]
 
 print("\n" + "🚀 T08 INTENT ROUTER - COMPLETE TEST SUITE 🚀".center(60))
@@ -61,9 +65,9 @@ for prompt, _expected_type in test_cases:
     filename = test_complete_router(prompt)
     generated_files.append(filename)
 
-print(f"\n{'='*60}")
+print(f"\n{'=' * 60}")
 print("📊 TEST SUMMARY")
-print(f"{'='*60}")
+print(f"{'=' * 60}")
 print("✅ All 3 template types working:")
 print("   • Web App (Flask) - generated_web_app.py")
 print("   • CLI Tool - generated_cli_tool.py")

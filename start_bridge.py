@@ -16,7 +16,7 @@ def start_bridge():
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
-        bufsize=1
+        bufsize=1,
     )
 
     print(f"Bridge started with PID: {proc.pid}")
@@ -38,6 +38,7 @@ def start_bridge():
         print("\nShutting down Bridge service...")
         proc.terminate()
         proc.wait(timeout=5)
+
 
 if __name__ == "__main__":
     start_bridge()

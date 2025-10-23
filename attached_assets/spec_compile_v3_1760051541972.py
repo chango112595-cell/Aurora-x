@@ -11,6 +11,7 @@ def main(spec_path: str):
     spec = parse_v3(md)
     import json as _J
     import time
+
     run_id = time.strftime("run-%Y%m%d-%H%M%S")
     out = Path("runs") / run_id
     (out / "src").mkdir(parents=True, exist_ok=True)
@@ -23,8 +24,10 @@ def main(spec_path: str):
         (out / "src" / f"{modname}.py").write_text(code, encoding="utf-8")
         test_lines.append(f"from src.{modname} import {modname}")
         for i, ex in enumerate(fn.examples or []):
-            args = ", ".join(f"{k}={repr(v)}" for k,v in ex.inputs.items())
-            test_lines.append(f"class Test_{modname}_{i}(unittest.TestCase):\n    def test_{i}(self):\n        self.assertEqual({modname}({args}), {repr(ex.output)})")
+            args = ", ".join(f"{k}={repr(v)}" for k, v in ex.inputs.items())
+            test_lines.append(
+                f"class Test_{modname}_{i}(unittest.TestCase):\n    def test_{i}(self):\n        self.assertEqual({modname}({args}), {repr(ex.output)})"
+            )
 
     test_lines.append("\nif __name__=='__main__': unittest.main()")
     (out / "tests" / "test_v3.py").write_text("\n".join(test_lines), encoding="utf-8")
@@ -36,7 +39,7 @@ def main(spec_path: str):
         "ok": True,
         "report": f"/{out}/report.html",
         "bias": None,
-        "spark": None
+        "spark": None,
     }
     log = Path("runs") / "spec_runs.jsonl"
     log.parent.mkdir(parents=True, exist_ok=True)
@@ -45,6 +48,7 @@ def main(spec_path: str):
 
     try:
         from aurora_x.serve_dashboard_v2 import record_run
+
         record_run(out.name, sp.name, True, f"/{out}/report.html")
     except Exception:
         pass
@@ -55,8 +59,11 @@ def main(spec_path: str):
     print(" - Report:", out / "report.html")
     print(f"Run tests: python -m unittest discover -s {out/'tests'} -t {out}")
 
+
 if __name__ == "__main__":
     import sys
+
     if len(sys.argv) < 2:
-        print("Usage: python tools/spec_compile_v3.py <spec.md>"); exit(1)
+        print("Usage: python tools/spec_compile_v3.py <spec.md>")
+        exit(1)
     main(sys.argv[1])

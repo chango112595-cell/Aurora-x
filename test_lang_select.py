@@ -40,6 +40,7 @@ def test_language_selection():
     print()
     return True
 
+
 def test_code_generation():
     """Test actual code generation for each language."""
 
@@ -50,7 +51,7 @@ def test_code_generation():
     print("\n1. Go Service Generation:")
     go_pkg = render_go_service("test_service", "Test Go microservice")
     print(f"   ✅ Generated {len(go_pkg['files'])} files")
-    for fname in go_pkg['files']:
+    for fname in go_pkg["files"]:
         print(f"      • {fname}")
     print(f"   Hint: {go_pkg['hint']}")
 
@@ -58,7 +59,7 @@ def test_code_generation():
     print("\n2. Rust CLI Generation:")
     rust_pkg = render_rust_cli("test_cli", "Test Rust CLI tool")
     print(f"   ✅ Generated {len(rust_pkg['files'])} files")
-    for fname in rust_pkg['files']:
+    for fname in rust_pkg["files"]:
         print(f"      • {fname}")
     print(f"   Hint: {rust_pkg['hint']}")
 
@@ -66,7 +67,7 @@ def test_code_generation():
     print("\n3. C# WebAPI Generation:")
     csharp_pkg = render_csharp_webapi("test_api", "Test C# Web API")
     print(f"   ✅ Generated {len(csharp_pkg['files'])} files in {csharp_pkg['folder']}/")
-    for fname in csharp_pkg['files']:
+    for fname in csharp_pkg["files"]:
         print(f"      • {fname}")
     print(f"   Hint: {csharp_pkg['hint']}")
 
@@ -77,6 +78,7 @@ def test_code_generation():
     print("   Hint: Run: python app.py")
 
     return True
+
 
 def test_full_pipeline():
     """Test the complete pipeline: prompt → intent → language → code."""
@@ -122,14 +124,17 @@ def test_full_pipeline():
 
     return True
 
+
 def main():
     """Run all tests."""
 
-    print("""
+    print(
+        """
     ╔══════════════════════════════════════════════════════════╗
     ║     🌍 Aurora-X Language Auto-Select Test Suite 🌍       ║
     ╚══════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     # Run tests
     success = True
@@ -153,6 +158,7 @@ def main():
     print("   from aurora_x.chat.attach_router_lang import attach_router")
 
     return 0 if success else 1
+
 
 if __name__ == "__main__":
     sys.exit(main())
