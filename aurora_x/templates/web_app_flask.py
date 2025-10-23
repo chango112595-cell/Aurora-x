@@ -44,11 +44,15 @@ SUBTITLE = {subtitle!r}
 
 HTML = r{HTML!r}
 
+
 def create_app() -> Flask:
     app = Flask(__name__)
     @app.get('/')
     def index() -> Response:
-        return Response(HTML.format(title=TITLE, subtitle=SUBTITLE), mimetype='text/html')
+        return Response(
+            HTML.format(title=TITLE, subtitle=SUBTITLE),
+            mimetype='text/html'
+        )
     return app
 
 if __name__ == '__main__':
