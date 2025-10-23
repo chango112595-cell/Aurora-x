@@ -77,14 +77,23 @@ export function ChatInterface() {
 
   const chatMutation = useMutation({
     mutationFn: async (message: string) => {
-      const response = await apiRequest("POST", "/api/chat", { message });
-      return response.json();
+      const response = await apiRequest("POST", "/api/chat", { message: message.trim() });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('Chat API error:', data);
+        throw new Error(data.error || data.message || 'Failed to send message');
+      }
+
+      console.log('Chat API response:', data);
+      return data;
     },
     onSuccess: (data: any) => {
       if (data.synthesis_id) {
         // Initial response with synthesis ID
         setActiveSynthesisId(data.synthesis_id);
-        
+
         // Add a processing message with synthesis ID
         const processingMessage: Message = {
           id: Date.now().toString(),
@@ -97,15 +106,14 @@ export function ChatInterface() {
         setMessages((prev) => [...prev, processingMessage]);
       } else {
         // Fallback for direct response (shouldn't happen with new system)
-        const aiMessage: Message = {
-          id: Date.now().toString(),
-          role: "assistant",
-          content: data.message || "I've generated the code for you. Here's the result:",
-          code: data.code,
-          language: data.language || "python",
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, aiMessage]);
+        // Show the synthesis result
+        const resultMessage = data.message || 
+          (data.code_file ? `✅ Generated: ${data.code_file}` : 'Code generated successfully');
+
+        setMessages((prev) => [...prev, {
+          role: 'assistant',
+          content: resultMessage,
+        }]);
       }
     },
     onError: (error: any) => {
@@ -134,7 +142,7 @@ export function ChatInterface() {
     const language = result?.language || "python";
     const functionName = result?.functionName || "synthesized_function";
     const description = result?.description || progressData.message || "Aurora-X has successfully synthesized your code!";
-    
+
     const completedMessage: Message = {
       id: Date.now().toString(),
       role: "assistant",
@@ -143,7 +151,7 @@ export function ChatInterface() {
       language: language,
       timestamp: new Date(),
     };
-    
+
     // Replace the processing message with the completed one
     setMessages((prev) => {
       const updated = [...prev];
@@ -155,7 +163,7 @@ export function ChatInterface() {
       }
       return updated;
     });
-    
+
     setActiveSynthesisId(null);
   };
 
