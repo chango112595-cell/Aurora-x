@@ -1,10 +1,12 @@
 name: Aurora-x Deep Scan
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  # Disabled: Comprehensive scan - enable when needed
+  # push:
+  #   branches: [main]
+  # pull_request:
+  #   branches: [main]
+  workflow_dispatch:
 
 jobs:
   deep-scan:

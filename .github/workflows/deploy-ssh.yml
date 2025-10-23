@@ -1,9 +1,10 @@
 name: Deploy via SSH
 
 on:
-  push:
-    branches:
-      - main
+  # Disabled: Requires SSH_HOST, SSH_USER, SSH_KEY secrets to be configured
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
     inputs:
       deploy_message:

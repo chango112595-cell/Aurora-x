@@ -1,10 +1,12 @@
 name: Python Lint & Auto-Fix
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  # Disabled: Auto-commit requires write permissions
+  # push:
+  #   branches: [main]
+  # pull_request:
+  #   branches: [main]
+  workflow_dispatch:
 
 jobs:
   lint-fix:

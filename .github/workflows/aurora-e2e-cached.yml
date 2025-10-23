@@ -1,8 +1,10 @@
 name: Aurora-X E2E (Cached)
 
 on:
-  push:
-  pull_request:
+  # Disabled: E2E tests require full infrastructure
+  # push:
+  # pull_request:
+  workflow_dispatch:
 
 jobs:
   e2e-cached:
