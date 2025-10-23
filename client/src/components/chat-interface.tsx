@@ -233,21 +233,28 @@ export function ChatInterface() {
                 data-testid={`message-${message.role}-${message.id}`}
               >
                 {message.role === "assistant" && (
-                  <Avatar className="h-10 w-10 border-2 border-primary/20">
-                    <AvatarFallback className="bg-primary text-primary-foreground font-bold">
+                  <Avatar className="h-10 w-10 border-2 border-cyan-500/50 shadow-lg shadow-cyan-500/20 relative">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 animate-pulse" />
+                    <AvatarFallback className="bg-gradient-to-br from-cyan-600 to-purple-600 text-white font-bold relative z-10">
                       C
                     </AvatarFallback>
                   </Avatar>
                 )}
                 <div className={`max-w-[70%] space-y-2`}>
                   <div
-                    className={`rounded-lg px-4 py-3 ${
+                    className={`rounded-lg px-4 py-3 relative overflow-hidden ${
                       message.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted/50 border border-border"
+                        ? "bg-gradient-to-br from-cyan-600 to-cyan-700 text-white border border-cyan-500/50 shadow-lg shadow-cyan-500/20"
+                        : "bg-muted/50 border border-cyan-500/20 backdrop-blur-sm"
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    {message.role === "assistant" && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-cyan-500/5 animate-pulse" />
+                    )}
+                    <p className="text-sm whitespace-pre-wrap relative z-10">{message.content}</p>
+                    {message.role === "assistant" && (
+                      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                    )}
                   </div>
                   {/* Show synthesis progress for processing messages */}
                   {message.synthesisId && message.isProcessing && (

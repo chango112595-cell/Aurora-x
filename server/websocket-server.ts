@@ -135,10 +135,7 @@ export class SynthesisWebSocketServer {
         break;
 
       case 'ping':
-        // The 'pong' event is handled automatically by the ws library when ping is sent from server
-        // If client sends ping, we should ideally send pong back if not handled automatically
-        // However, standard practice is server sends ping, client replies pong.
-        // If client sends 'ping', we can just acknowledge or send a specific response.
+        // Respond to ping with pong to keep connection alive
         ws.send(JSON.stringify({ type: 'pong' }));
         break;
 
