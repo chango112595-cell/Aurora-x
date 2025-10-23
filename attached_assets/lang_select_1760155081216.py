@@ -1,16 +1,19 @@
 import os
 from dataclasses import dataclass
 
-SUPPORTED = ("python","go","rust","csharp")
+SUPPORTED = ("python", "go", "rust", "csharp")
+
 
 @dataclass
 class LangChoice:
     lang: str
     reason: str
 
+
 def _env_override() -> str | None:
     v = os.getenv("AURORA_DEFAULT_LANG", "").strip().lower()
     return v if v in SUPPORTED else None
+
 
 def pick_language(user_text: str) -> LangChoice:
     env = _env_override()

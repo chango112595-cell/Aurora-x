@@ -10,20 +10,26 @@ MASTER = ROOT / "MASTER_TASK_LIST.md"
 TARGET = ROOT / "aurora_X.md"  # change if your target file differs
 
 BEGIN = "<!-- AURORA_TRACKER_BEGIN -->"
-END   = "<!-- AURORA_TRACKER_END -->"
+END = "<!-- AURORA_TRACKER_END -->"
+
 
 def read_text(p: Path) -> str:
-    try: return p.read_text(encoding="utf-8")
-    except FileNotFoundError: return ""
+    try:
+        return p.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return ""
+
 
 def extract_block(text: str) -> str:
     if BEGIN in text and END in text:
-        return text.split(BEGIN,1)[1].split(END,1)[0]
+        return text.split(BEGIN, 1)[1].split(END, 1)[0]
     return ""
+
 
 def normalize(s: str) -> list[str]:
     lines = [ln.rstrip() for ln in s.strip().splitlines() if ln.strip()]
     return lines
+
 
 def main():
     if not MASTER.exists():
@@ -44,16 +50,20 @@ def main():
 
     if master_norm != block_norm:
         print("[drift] aurora_X.md tracker section differs from MASTER_TASK_LIST.md")
-        diff = difflib.unified_diff(block_norm, master_norm,
-                                    fromfile="aurora_X.md::tracker",
-                                    tofile="MASTER_TASK_LIST.md",
-                                    lineterm="")
+        diff = difflib.unified_diff(
+            block_norm,
+            master_norm,
+            fromfile="aurora_X.md::tracker",
+            tofile="MASTER_TASK_LIST.md",
+            lineterm="",
+        )
         for line in diff:
             print(line)
         sys.exit(2)
 
     print("[ok] No drift detected.")
     sys.exit(0)
+
 
 if __name__ == "__main__":
     main()

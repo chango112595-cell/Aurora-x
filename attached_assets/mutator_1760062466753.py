@@ -7,6 +7,7 @@ def mutate_safe(code: str) -> list[str]:
         out.append(code.replace("return", "return "))
     return list(dict.fromkeys(out))
 
+
 def mutate_explore(code: str) -> list[str]:
     out = mutate_safe(code)
     if " + " in code:

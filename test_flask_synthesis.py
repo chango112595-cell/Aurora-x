@@ -41,7 +41,7 @@ if parsed.get("framework") == "flask":
     print(f"  ✓ Timer HTML: {'timer-container' in flask_code}")
     print(f"  ✓ Aurora theme: {'aurora-primary' in flask_code}")
     print(f"  ✓ Unit tests: {'TestFormatMMSS' in flask_code}")
-    port_check = 'port=port' in flask_code and "'5000'" in flask_code
+    port_check = "port=port" in flask_code and "'5000'" in flask_code
     print(f"  ✓ Port 5000: {port_check}")
 
 print("\n" + "=" * 60)

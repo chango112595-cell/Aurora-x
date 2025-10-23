@@ -40,5 +40,6 @@ func main() {
 }
 """
 
+
 def render_go_service(name: str) -> dict:
     return {"files": {"main.go": GO_MAIN}, "hint": "Run: go run .   (then GET /health)"}

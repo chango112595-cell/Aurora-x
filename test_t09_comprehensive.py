@@ -3,7 +3,6 @@
 T09 Comprehensive Test Suite - Domain Router for Math and Physics
 """
 
-
 from aurora_x.generators.solver import solve_text
 from aurora_x.reasoners import physics_core
 from aurora_x.router.domain_router import classify_domain
@@ -11,9 +10,9 @@ from aurora_x.router.domain_router import classify_domain
 
 def test_math_operations():
     """Test math domain operations."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🔢 MATH OPERATIONS TEST")
-    print("="*60)
+    print("=" * 60)
 
     # Test expression evaluation
     test_cases = [
@@ -46,11 +45,12 @@ def test_math_operations():
         print(f"  {status} {prompt}")
         print(f"      → {actual}")
 
+
 def test_physics_operations():
     """Test physics domain operations."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🌍 PHYSICS OPERATIONS TEST")
-    print("="*60)
+    print("=" * 60)
 
     # Test orbital period calculations
     print("\n🛸 Orbital Period Calculations:")
@@ -58,17 +58,17 @@ def test_physics_operations():
         {
             "prompt": "orbital period a=7e6 M=5.972e24",
             "desc": "Low Earth Orbit",
-            "expected_range": (5800, 5900)  # seconds
+            "expected_range": (5800, 5900),  # seconds
         },
         {
             "prompt": "orbital period a=4.22e7 M=5.972e24",
             "desc": "Geostationary orbit",
-            "expected_range": (86000, 87000)  # ~24 hours
+            "expected_range": (86000, 87000),  # ~24 hours
         },
         {
             "prompt": "orbital period a=3.844e8 M=5.972e24",
             "desc": "Moon's orbit",
-            "expected_range": (2.36e6, 2.38e6)  # ~27.3 days
+            "expected_range": (2.36e6, 2.38e6),  # ~27.3 days
         },
     ]
 
@@ -84,17 +84,18 @@ def test_physics_operations():
 
     # Test EM field superposition
     print("\n⚡ Electromagnetic Field Superposition:")
-    em_result = physics_core.em_superposition([(1,0,0), (0,2,0), (-1,0,3)])
+    em_result = physics_core.em_superposition([(1, 0, 0), (0, 2, 0), (-1, 0, 3)])
     expected = (0.0, 2.0, 3.0)
     status = "✅" if em_result == expected else "❌"
     print(f"  {status} Superposition of (1,0,0), (0,2,0), (-1,0,3)")
     print(f"      → Result: {em_result}")
 
+
 def test_domain_classification():
     """Test domain router classification."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🎯 DOMAIN CLASSIFICATION TEST")
-    print("="*60)
+    print("=" * 60)
 
     test_prompts = [
         ("calculate 2 + 2", "math"),
@@ -112,11 +113,12 @@ def test_domain_classification():
         status = "✅" if actual == expected else "❌"
         print(f"  {status} '{prompt}' → {actual} (expected: {expected})")
 
+
 def test_edge_cases():
     """Test error handling and edge cases."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("⚠️  EDGE CASES TEST")
-    print("="*60)
+    print("=" * 60)
 
     # Test invalid expressions
     print("\n🔴 Invalid Expressions:")
@@ -133,24 +135,28 @@ def test_edge_cases():
         if "err" in result:
             print(f"      Error: {result['err']}")
 
+
 def run_all_tests():
     """Run all T09 tests."""
-    print("""
+    print(
+        """
     ╔══════════════════════════════════════════════════════════╗
     ║          🚀 T09 Domain Router Test Suite 🚀              ║
     ║       Math & Physics Solvers for Aurora-X Ultra          ║
     ╚══════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     test_domain_classification()
     test_math_operations()
     test_physics_operations()
     test_edge_cases()
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📊 SUMMARY")
-    print("="*60)
-    print("""
+    print("=" * 60)
+    print(
+        """
 ✅ Domain Classification: Working
 ✅ Math Evaluation: Safe eval for arithmetic expressions
 ✅ Math Differentiation: Polynomial derivatives
@@ -159,7 +165,9 @@ def run_all_tests():
 ✅ Error Handling: Proper rejection of invalid inputs
 
 🎯 Ready for production use!
-    """)
+    """
+    )
+
 
 if __name__ == "__main__":
     run_all_tests()

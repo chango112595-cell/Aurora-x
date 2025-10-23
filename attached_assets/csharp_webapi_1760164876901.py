@@ -1,4 +1,3 @@
-
 PROGRAM_CS = """using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -24,6 +23,11 @@ CS_PROJ = """<Project Sdk="Microsoft.NET.Sdk.Web">
 </Project>
 """
 
+
 def render_csharp_webapi(name: str) -> dict:
     folder = name or "Aurora.WebApi"
-    return {"folder": folder, "files": {f"{folder}.csproj": CS_PROJ, "Program.cs": PROGRAM_CS}, "hint": "Run: PORT=5080 dotnet run"}
+    return {
+        "folder": folder,
+        "files": {f"{folder}.csproj": CS_PROJ, "Program.cs": PROGRAM_CS},
+        "hint": "Run: PORT=5080 dotnet run",
+    }

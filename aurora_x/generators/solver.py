@@ -10,6 +10,7 @@ from typing import Any
 
 class SolveError(Exception):
     """Custom exception for solver errors"""
+
     pass
 
 
@@ -34,12 +35,12 @@ def _diff_poly(expression: str) -> str:
     terms = []
 
     # Split by + or - while keeping the sign
-    parts = re.split(r'([+-])', expression.replace(' ', ''))
+    parts = re.split(r"([+-])", expression.replace(" ", ""))
 
     # Reconstruct terms with their signs
-    current_term = ''
+    current_term = ""
     for part in parts:
-        if part in ['+', '-']:
+        if part in ["+", "-"]:
             if current_term:
                 terms.append(current_term)
             current_term = part
@@ -52,17 +53,17 @@ def _diff_poly(expression: str) -> str:
     diff_terms = []
     for term in terms:
         # Extract coefficient and power
-        if 'x^' in term:
+        if "x^" in term:
             # Handle x^n terms
-            match = re.match(r'([+-]?\d*\.?\d*)x\^(\d+)', term)
+            match = re.match(r"([+-]?\d*\.?\d*)x\^(\d+)", term)
             if match:
                 coeff_str = match.group(1)
                 power = int(match.group(2))
 
                 # Handle implicit coefficient
-                if coeff_str in ['', '+']:
+                if coeff_str in ["", "+"]:
                     coeff = 1
-                elif coeff_str == '-':
+                elif coeff_str == "-":
                     coeff = -1
                 else:
                     coeff = float(coeff_str)
@@ -77,16 +78,16 @@ def _diff_poly(expression: str) -> str:
                     diff_terms.append(f"{new_coeff:g}x")
                 else:
                     diff_terms.append(f"{new_coeff:g}x^{new_power}")
-        elif 'x' in term:
+        elif "x" in term:
             # Handle x terms (power = 1)
-            match = re.match(r'([+-]?\d*\.?\d*)x', term)
+            match = re.match(r"([+-]?\d*\.?\d*)x", term)
             if match:
                 coeff_str = match.group(1)
 
                 # Handle implicit coefficient
-                if coeff_str in ['', '+']:
+                if coeff_str in ["", "+"]:
                     coeff = 1
-                elif coeff_str == '-':
+                elif coeff_str == "-":
                     coeff = -1
                 else:
                     coeff = float(coeff_str)
@@ -100,7 +101,7 @@ def _diff_poly(expression: str) -> str:
     # Join terms with proper signs
     result = diff_terms[0]
     for term in diff_terms[1:]:
-        if term.startswith('-'):
+        if term.startswith("-"):
             result += f" - {term[1:]}"
         else:
             result += f" + {term}"
@@ -138,7 +139,7 @@ def _safe_eval_arith(s: str) -> float:
         ast.Mod: operator.mod,
         ast.Pow: operator.pow,
         ast.USub: operator.neg,
-        ast.UAdd: operator.pos
+        ast.UAdd: operator.pos,
     }
 
     def eval_(node):
@@ -192,14 +193,14 @@ def solve_text(text: str) -> dict[str, Any]:
     text = text.strip()
 
     # Check for differentiation requests
-    if 'differentiate' in text.lower() or 'derivative' in text.lower():
+    if "differentiate" in text.lower() or "derivative" in text.lower():
         # Extract polynomial expression
         # Try to find expression after "differentiate" or in quotes
         patterns = [
-            r'differentiate\s+(.+)',
-            r'derivative\s+of\s+(.+)',
+            r"differentiate\s+(.+)",
+            r"derivative\s+of\s+(.+)",
             r'"([^"]+)"',
-            r'\'([^\']+)\''
+            r"\'([^\']+)\'",
         ]
 
         expression = None
@@ -211,8 +212,8 @@ def solve_text(text: str) -> dict[str, Any]:
 
         if not expression:
             # Try to extract polynomial-like expression
-            poly_match = re.search(r'([x\d\^\+\-\s\.]+)', text)
-            if poly_match and 'x' in poly_match.group(1):
+            poly_match = re.search(r"([x\d\^\+\-\s\.]+)", text)
+            if poly_match and "x" in poly_match.group(1):
                 expression = poly_match.group(1)
 
         if expression:
@@ -224,38 +225,33 @@ def solve_text(text: str) -> dict[str, Any]:
                     "task": "differentiate",
                     "input": expression,
                     "result": result,
-                    "explanation": f"The derivative of {expression} with respect to x is {result}"
+                    "explanation": f"The derivative of {expression} with respect to x is {result}",
                 }
             except Exception as e:
-                return {
-                    "ok": False,
-                    "domain": "math",
-                    "task": "differentiate",
-                    "error": str(e)
-                }
+                return {"ok": False, "domain": "math", "task": "differentiate", "error": str(e)}
 
     # Check for orbital period calculations
-    if 'orbital' in text.lower() and 'period' in text.lower():
+    if "orbital" in text.lower() and "period" in text.lower():
         # Extract parameters using regex
         params = {}
 
         # Look for semi-major axis (a)
-        a_match = re.search(r'a\s*=\s*([\d\.e\+\-]+)', text, re.IGNORECASE)
+        a_match = re.search(r"a\s*=\s*([\d\.e\+\-]+)", text, re.IGNORECASE)
         if a_match:
-            params['a'] = float(a_match.group(1))
+            params["a"] = float(a_match.group(1))
 
         # Look for mass (M)
-        m_match = re.search(r'M\s*=\s*([\d\.e\+\-]+)', text, re.IGNORECASE)
+        m_match = re.search(r"M\s*=\s*([\d\.e\+\-]+)", text, re.IGNORECASE)
         if m_match:
-            params['M'] = float(m_match.group(1))
+            params["M"] = float(m_match.group(1))
 
-        if 'a' in params and 'M' in params:
+        if "a" in params and "M" in params:
             try:
                 # Calculate orbital period using Kepler's Third Law
                 # T = 2π√(a³/GM)
                 G = 6.67430e-11  # Gravitational constant in m³/(kg·s²)
-                a = params['a']
-                M = params['M']
+                a = params["a"]
+                M = params["M"]
 
                 T_seconds = 2 * math.pi * math.sqrt((a**3) / (G * M))
                 T_days = T_seconds / 86400
@@ -265,28 +261,20 @@ def solve_text(text: str) -> dict[str, Any]:
                     "ok": True,
                     "domain": "physics",
                     "task": "orbital_period",
-                    "input": {
-                        "semi_major_axis_m": a,
-                        "mass_central_kg": M
-                    },
+                    "input": {"semi_major_axis_m": a, "mass_central_kg": M},
                     "result": {
                         "period_seconds": T_seconds,
                         "period_days": T_days,
-                        "period_years": T_years
+                        "period_years": T_years,
                     },
-                    "explanation": f"Orbital period for a={a:.2e}m and M={M:.2e}kg is {T_days:.2f} days"
+                    "explanation": f"Orbital period for a={a:.2e}m and M={M:.2e}kg is {T_days:.2f} days",
                 }
             except Exception as e:
-                return {
-                    "ok": False,
-                    "domain": "physics",
-                    "task": "orbital_period",
-                    "error": str(e)
-                }
+                return {"ok": False, "domain": "physics", "task": "orbital_period", "error": str(e)}
 
     # Try to evaluate as arithmetic expression
     # Check if it looks like an arithmetic expression
-    if re.match(r'^[\d\s\+\-\*/\(\)\.]+$', text):
+    if re.match(r"^[\d\s\+\-\*/\(\)\.]+$", text):
         try:
             result = _safe_eval_arith(text)
             return {
@@ -295,19 +283,14 @@ def solve_text(text: str) -> dict[str, Any]:
                 "task": "arithmetic",
                 "input": text,
                 "result": result,
-                "explanation": f"{text} = {result}"
+                "explanation": f"{text} = {result}",
             }
         except SolveError as e:
-            return {
-                "ok": False,
-                "domain": "math",
-                "task": "arithmetic",
-                "error": str(e)
-            }
+            return {"ok": False, "domain": "math", "task": "arithmetic", "error": str(e)}
 
     # Default response for unrecognized inputs
     return {
         "ok": False,
         "error": "Could not recognize the problem type",
-        "hint": "Try: arithmetic (2+3*4), differentiation (differentiate x^3-2x^2+x), or orbital period (orbital period a=7e6 M=5.972e24)"
+        "hint": "Try: arithmetic (2+3*4), differentiation (differentiate x^3-2x^2+x), or orbital period (orbital period a=7e6 M=5.972e24)",
     }

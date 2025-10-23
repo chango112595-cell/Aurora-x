@@ -13,28 +13,21 @@ class Config:
 
     # Application
     APP_NAME: str = "Create a simple Flask API with"
-    DEBUG: bool = os.environ.get('DEBUG', 'true').lower() == 'true'
-    SECRET_KEY: str = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+    DEBUG: bool = os.environ.get("DEBUG", "true").lower() == "true"
+    SECRET_KEY: str = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
 
     # Server
-    HOST: str = os.environ.get('HOST', '0.0.0.0')
-    PORT: int = int(os.environ.get('PORT', 8000))
-
-
-
-
-
-
-
-
+    HOST: str = os.environ.get("HOST", "0.0.0.0")
+    PORT: int = int(os.environ.get("PORT", 8000))
 
     # Features
-    FEATURES_ENABLED = ['api']
+    FEATURES_ENABLED = ["api"]
 
     @classmethod
-    def from_env(cls) -> 'Config':
+    def from_env(cls) -> "Config":
         """Create config from environment variables"""
         return cls()
+
 
 # Global config instance
 config = Config.from_env()
