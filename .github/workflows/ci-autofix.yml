@@ -45,9 +45,25 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@users.noreply.github.com"
+          
+          # Stash any local changes before operations
+          git stash --include-untracked || true
+          
+          # Ensure we're on the right branch
+          git checkout main || git checkout -b main
+          
+          # Pull latest changes
+          git pull --rebase origin main || true
+          
+          # Pop stashed changes back
+          git stash pop || true
+          
+          # Stage all changes
           git add -A
+          
+          # Commit if there are changes
           if ! git diff --staged --quiet; then
-            git commit -m "style: auto-fix linting issues [skip ci]"
+            git commit -m "style: auto-fix linting issues [skip ci]" || true
             git push origin main || echo "⚠️ Push failed - possible conflict"
           else
             echo "✅ No changes to commit"
