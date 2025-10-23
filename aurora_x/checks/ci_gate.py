@@ -61,6 +61,9 @@ class AuroraQualityGates:
             ".aurora/seeds.json": self.aurora_dir / "seeds.json"
         }
 
+        # Create .aurora directory if it doesn't exist
+        self.aurora_dir.mkdir(parents=True, exist_ok=True)
+
         # Check for config.yml (optional but recommended)
         config_yml = self.aurora_dir / "config.yml"
 
