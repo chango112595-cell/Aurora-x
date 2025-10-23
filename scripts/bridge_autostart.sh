@@ -12,6 +12,7 @@ echo "🚀 Starting Aurora-X Factory Bridge..."
 nohup python3 -m aurora_x.bridge.service >/tmp/bridge.log 2>&1 &
 BRIDGE_PID=$!
 echo $BRIDGE_PID > /tmp/bridge.pid
+echo "Bridge PID: $BRIDGE_PID"
 
 # Wait for Bridge to be healthy (max 10 seconds)
 for i in {1..20}; do
@@ -23,4 +24,8 @@ for i in {1..20}; do
 done
 
 echo "⚠️  Bridge startup timeout - check /tmp/bridge.log"
+if [ -f /tmp/bridge.log ]; then
+    echo "Last 10 lines of bridge.log:"
+    tail -n 10 /tmp/bridge.log
+fi
 exit 1
