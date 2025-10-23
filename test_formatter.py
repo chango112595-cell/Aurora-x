@@ -16,7 +16,7 @@ def test_formatter_locally():
         (172800, "2.00 days"),
         (31536000, "365.00 days"),
         (31536001, "1.00 years"),
-        (63072000, "2.00 years")
+        (63072000, "2.00 years"),
     ]
 
     print("Testing Seconds Formatter Locally:\n")
@@ -30,6 +30,7 @@ def test_formatter_locally():
         print(f"  {status} {seconds:>10} s → {result:15} (expected: {expected})")
 
     return all_passed
+
 
 def test_api():
     """Test the API endpoint"""
@@ -55,14 +56,14 @@ def test_api():
             resp = requests.post(
                 f"{base_url}/api/format/seconds",
                 json={"seconds": tc["seconds"]},
-                headers={"Content-Type": "application/json"}
+                headers={"Content-Type": "application/json"},
             )
 
             if resp.status_code == 200:
                 result = resp.json()
                 if result.get("formatted"):
                     print(f"    ✓ Formatted: {result['formatted']}")
-                    if result['formatted'] == tc['expected']:
+                    if result["formatted"] == tc["expected"]:
                         print(f"    ✓ Matches expected: {tc['expected']}")
                     else:
                         print(f"    ⚠ Expected: {tc['expected']}")
@@ -78,10 +79,11 @@ def test_api():
 
         print()
 
+
 if __name__ == "__main__":
-    print("="*60)
+    print("=" * 60)
     print("T09 SECONDS FORMATTER TEST")
-    print("="*60)
+    print("=" * 60)
     print()
 
     # Test locally first
@@ -97,10 +99,10 @@ if __name__ == "__main__":
     print()
     print("curl -X POST http://localhost:5001/api/format/seconds \\")
     print('  -H "Content-Type: application/json" \\')
-    print('  -d \'{"seconds": 86400}\'')
-    print("# Returns: {\"ok\": true, \"formatted\": \"1.00 days\"}")
+    print("  -d '{\"seconds\": 86400}'")
+    print('# Returns: {"ok": true, "formatted": "1.00 days"}')
     print()
     print("curl -X POST http://localhost:5001/api/format/seconds \\")
     print('  -H "Content-Type: application/json" \\')
-    print('  -d \'{"seconds": 3661.5}\'')
-    print("# Returns: {\"ok\": true, \"formatted\": \"1.02 hours\"}")
+    print("  -d '{\"seconds\": 3661.5}'")
+    print('# Returns: {"ok": true, "formatted": "1.02 hours"}')

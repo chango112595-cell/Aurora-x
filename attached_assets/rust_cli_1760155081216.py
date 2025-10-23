@@ -16,5 +16,6 @@ edition = "2021"
 [dependencies]
 """
 
+
 def render_rust_cli(name: str) -> dict:
     return {"files": {"Cargo.toml": CARGO_TOML, "src/main.rs": RUST_MAIN}, "hint": "Run: cargo run -- hello world"}

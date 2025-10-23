@@ -17,12 +17,14 @@ from aurora_x.templates.web_app_flask import render_app
 def test_all_templates():
     """Test all language templates offline."""
 
-    print("""
+    print(
+        """
     ╔══════════════════════════════════════════════════════════╗
     ║         🚀 T08 Offline Template Test 🚀                  ║
     ║     Testing Language Router + PORT Configuration          ║
     ╚══════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     test_cases = [
         ("make a futuristic timer ui", "python", "Flask UI"),
@@ -32,7 +34,7 @@ def test_all_templates():
     ]
 
     for prompt, expected_lang, desc in test_cases:
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"📝 Testing: {desc}")
         print(f"   Prompt: '{prompt}'")
 
@@ -94,7 +96,7 @@ def test_all_templates():
                 print(f"✅ Generated: {fname}")
                 print("   ℹ️  CLI tool (not a web service, no PORT)")
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📊 Summary")
     print("-" * 40)
     print("✅ All templates generated successfully")
@@ -112,7 +114,9 @@ def test_all_templates():
 
     return True
 
+
 if __name__ == "__main__":
     import sys
+
     success = test_all_templates()
     sys.exit(0 if success else 1)

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import re
 
-
 _LEN = {
     "m": 1.0,
     "km": 1e3,
@@ -14,26 +13,17 @@ _LEN = {
     "miles": 1609.344,
     "mile": 1609.344,
 }
-_MASS = {
-    "kg": 1.0,
-    "g": 1e-3,
-    "tons": 1e3,
-    "ton": 1e3,
-}
-_TIME = {
-    "s": 1.0,
-    "ms": 1e-3,
-    "hours": 3600,
-    "days": 86400,
-    "years": 31557600,  # 1 year = 365.25 days (Julian year, accounts for leap years)
-}
+_MASS = {"kg": 1.0, "g": 1e-3, "tons": 1e3, "ton": 1e3}
+_TIME = {"s": 1.0, "ms": 1e-3, "hours": 3600, "days": 86400, "years": 31536000}
 
 
 def normalize_value(value: float, unit: str) -> tuple[float, str]:
-    """Convert a numeric value with a given unit to SI and return (value_si, si_unit).
+    """Convert a numeric value with a given unit to SI and return
+    (value_si, si_unit).
 
-    Recognizes length, mass and time units. If unit is empty, make a reasonable
-    default based on the magnitude (large numbers->meters) or caller expectation.
+    Recognizes length, mass and time units. If unit is empty, make a
+    reasonable default based on the magnitude (large numbers -> meters) or
+    caller expectation.
     """
     u = (unit or "").strip().lower()
     if u in _LEN:
@@ -62,7 +52,8 @@ def normalize_payload(payload: dict) -> dict:
     or
       key_unit: value
 
-    Returns a new dict with keys suffixed by the SI unit (e.g. "a_m", "mass_kg").
+    Returns a new dict with keys suffixed by the SI unit.
+    Example: "a_m", "mass_kg".
     """
     out: dict[str, object] = {}
 

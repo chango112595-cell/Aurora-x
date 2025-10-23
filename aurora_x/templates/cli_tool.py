@@ -3,6 +3,7 @@ CLI Tool Template Generator for T08 Intent Router
 Generates Python CLI applications with argparse
 """
 
+
 def render_cli(name: str, brief: str, fields: dict) -> str:
     """
     Generate a CLI tool Python script based on intent
@@ -17,7 +18,7 @@ def render_cli(name: str, brief: str, fields: dict) -> str:
     """
 
     # Check if this is a hash files request
-    is_hash_tool = any(word in brief.lower() for word in ['hash', 'md5', 'sha', 'checksum'])
+    is_hash_tool = any(word in brief.lower() for word in ["hash", "md5", "sha", "checksum"])
 
     if is_hash_tool:
         return _render_hash_cli(name, brief)

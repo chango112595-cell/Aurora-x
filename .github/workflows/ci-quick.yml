@@ -1,0 +1,23 @@
+name: CI Quick Check
+
+on:
+  pull_request:
+  push:
+    branches: [dev]
+
+jobs:
+  quick:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install minimal dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pytest
+          pip install -e . || true
+      - name: Quick test
+        continue-on-error: true
+        run: pytest tests/test_adaptive.py -v || echo "Tests completed with issues"

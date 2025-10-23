@@ -63,11 +63,11 @@ def create_a_data_processing_fun(input_data: Any, **kwargs) -> Any:
         result = f"PROCESSED: {str(input_data)}"
 
     # Apply any additional processing from kwargs
-    if kwargs.get('uppercase', False):
+    if kwargs.get("uppercase", False):
         if isinstance(result, str):
             result = result.upper()
 
-    if kwargs.get('reverse', False):
+    if kwargs.get("reverse", False):
         if isinstance(result, str):
             result = result[::-1]
 
@@ -116,6 +116,7 @@ def create_a_data_processing_fun_async(input_data: Any, callback: callable | Non
 # Helper Functions
 # ============================================================================
 
+
 def validate_input(data: Any) -> bool:
     """
     Validate input data meets requirements.
@@ -146,6 +147,7 @@ def transform_output(result: Any, format: str = "default") -> Any:
     """
     if format == "json":
         import json
+
         return json.dumps(result)
     elif format == "upper":
         return str(result).upper()
@@ -156,6 +158,7 @@ def transform_output(result: Any, format: str = "default") -> Any:
 # ============================================================================
 # Unit Tests
 # ============================================================================
+
 
 class TestCreateADataProcessingFun:
     """Test suite for create_a_data_processing_fun function"""
@@ -245,6 +248,7 @@ class TestCreateADataProcessingFunIntegration:
 # Benchmarks
 # ============================================================================
 
+
 def benchmark_create_a_data_processing_fun(iterations: int = 1000):
     """
     Performance benchmark for create_a_data_processing_fun.
@@ -296,14 +300,14 @@ if __name__ == "__main__":
 
     # Demonstrate with options
     print("\nWith options:")
-    result_upper = create_a_data_processing_fun('test', uppercase=True)
+    result_upper = create_a_data_processing_fun("test", uppercase=True)
     print(f"{func_name}('test', uppercase=True) = {repr(result_upper)}")
-    result_reverse = create_a_data_processing_fun('test', reverse=True)
+    result_reverse = create_a_data_processing_fun("test", reverse=True)
     print(f"{func_name}('test', reverse=True)   = {repr(result_reverse)}")
 
     # Demonstrate batch processing
     print("\nBatch processing:")
-    batch_result = create_a_data_processing_fun_batch(['a', 'b', 'c'])
+    batch_result = create_a_data_processing_fun_batch(["a", "b", "c"])
     print(f"{func_name}_batch(['a', 'b', 'c']) = {batch_result}")
 
     # Run unit tests
@@ -312,6 +316,7 @@ if __name__ == "__main__":
 
     try:
         import pytest
+
         pytest.main([__file__, "-v", "--tb=short"])
     except ImportError:
         print("pytest not installed. Running manual tests...")
@@ -321,10 +326,7 @@ if __name__ == "__main__":
 
         all_tests = []
         for test_cls in [test_basic, test_integration]:
-            all_tests.extend([
-                (test_cls, method) for method in dir(test_cls)
-                if method.startswith('test_')
-            ])
+            all_tests.extend([(test_cls, method) for method in dir(test_cls) if method.startswith("test_")])
 
         passed = 0
         failed = 0

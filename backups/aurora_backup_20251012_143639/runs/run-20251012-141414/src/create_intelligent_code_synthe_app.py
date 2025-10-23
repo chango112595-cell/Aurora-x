@@ -99,18 +99,20 @@ HTML_TEMPLATE = """
 def create_app() -> Flask:
     """Create and configure the Flask application"""
     app = Flask(__name__)
-    app.config['ENV'] = 'development'
-    app.config['DEBUG'] = True
+    app.config["ENV"] = "development"
+    app.config["DEBUG"] = True
 
-    @app.route('/dashboard')
+    @app.route("/dashboard")
     def dashboard():
         """Render dashboard page"""
-        return render_template_string(HTML_TEMPLATE.format(
-            title="Dashboard - Aurora App",
-            content="<h2>Dashboard Page</h2><p>Welcome to the dashboard section.</p>"
-        ))
+        return render_template_string(
+            HTML_TEMPLATE.format(
+                title="Dashboard - Aurora App",
+                content="<h2>Dashboard Page</h2><p>Welcome to the dashboard section.</p>",
+            )
+        )
 
-    @app.route('/api/health')
+    @app.route("/api/health")
     def health():
         """Health check endpoint"""
         return jsonify({"status": "healthy", "app": "Flask Web UI"})
@@ -118,16 +120,21 @@ def create_app() -> Flask:
     @app.errorhandler(404)
     def not_found(error):
         """Handle 404 errors"""
-        return render_template_string(HTML_TEMPLATE.format(
-            title="404 - Not Found",
-            content="<h2>Page Not Found</h2><p>The requested page could not be found.</p>"
-        )), 404
+        return (
+            render_template_string(
+                HTML_TEMPLATE.format(
+                    title="404 - Not Found",
+                    content="<h2>Page Not Found</h2><p>The requested page could not be found.</p>",
+                )
+            ),
+            404,
+        )
 
     return app
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = create_app()
-    port = int(os.environ.get('PORT', '5000'))
+    port = int(os.environ.get("PORT", "5000"))
     print(f"🚀 Flask Web App starting on http://localhost:{port}")
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=True)

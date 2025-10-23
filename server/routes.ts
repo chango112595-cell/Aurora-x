@@ -1112,6 +1112,11 @@ except Exception as e:
     res.sendStatus(204); // No content for OPTIONS
   });
 
+  // Simple health check endpoint
+  app.get("/api/health", async (_req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  });
+
   // Health check endpoint for auto-updater monitoring
   app.get("/healthz", async (req, res) => {
     const providedToken = req.query.token as string | undefined;
