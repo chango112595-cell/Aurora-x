@@ -116,20 +116,20 @@ def run_generated_app(file_path, lang, hint):
 def main():
     """Run the complete T08 end-to-end test suite."""
 
-    print("""
+    print(
+        """
     ╔══════════════════════════════════════════════════════════╗
     ║         🚀 T08 End-to-End Test Suite 🚀                  ║
     ║     Language Router + PORT + Health Check                 ║
     ╚══════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     print(f"🌐 Testing against: {HOST}")
 
     # Test health check first
     if not test_health_check():
-        print(
-            "\n⚠️  Server might not be running. Start with: python -m uvicorn aurora_x.serve:app --port 5001"
-        )
+        print("\n⚠️  Server might not be running. Start with: python -m uvicorn aurora_x.serve:app --port 5001")
         return 1
 
     # Test prompts for each language
@@ -148,9 +148,7 @@ def main():
                 {
                     "description": description,
                     "lang": result.get("lang"),
-                    "file": result.get("file") or result.get("files", [])[0]
-                    if result.get("files")
-                    else None,
+                    "file": result.get("file") or result.get("files", [])[0] if result.get("files") else None,
                     "hint": result.get("hint"),
                     "success": True,
                 }

@@ -39,17 +39,13 @@ def test_determinism():
 
 
 def test_drift_bound():
-    c = AdaptiveConfig(
-        epsilon=0.0, decay=0.98, cooldown_iters=0, max_drift_per_iter=CFG.MAX_DRIFT, top_k=CFG.TOP_K
-    )
+    c = AdaptiveConfig(epsilon=0.0, decay=0.98, cooldown_iters=0, max_drift_per_iter=CFG.MAX_DRIFT, top_k=CFG.TOP_K)
     s = AdaptiveBiasScheduler(c)
     for _ in range(1000):
         s.tick()
         s.reward("a", True, magnitude=1.0)
     # With decay, value should stay bounded
-    assert (
-        abs(s.stats["a"].value) <= CFG.MAX_ABS_DRIFT_BOUND * 1.1
-    )  # Small margin for floating point
+    assert abs(s.stats["a"].value) <= CFG.MAX_ABS_DRIFT_BOUND * 1.1  # Small margin for floating point
 
 
 def test_seeds_persist():

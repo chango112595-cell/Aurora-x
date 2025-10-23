@@ -62,9 +62,7 @@ class AdaptiveBiasScheduler:
         for _k, st in self.stats.items():
             st.value *= self.cfg.decay
         if len(self.stats) > self.cfg.top_k * 2:
-            top = sorted(self.stats.items(), key=lambda kv: abs(kv[1].value), reverse=True)[
-                : self.cfg.top_k
-            ]
+            top = sorted(self.stats.items(), key=lambda kv: abs(kv[1].value), reverse=True)[: self.cfg.top_k]
             self.stats = dict(top)
 
     def choose(self, candidates: list[str]) -> str:
@@ -77,8 +75,7 @@ class AdaptiveBiasScheduler:
             v = self.stats.get(k, BiasStat()).value
             if (
                 v > best_val
-                and (self.iteration - self.stats.get(k, BiasStat()).last_used_iter)
-                >= self.cfg.cooldown_iters
+                and (self.iteration - self.stats.get(k, BiasStat()).last_used_iter) >= self.cfg.cooldown_iters
             ):
                 best_key, best_val = k, v
         return best_key or self.rng.choice(candidates)
@@ -100,9 +97,7 @@ class AdaptiveBiasScheduler:
     def summary(self) -> dict[str, float]:
         return {
             k: round(v.value, 4)
-            for k, v in sorted(self.stats.items(), key=lambda kv: -abs(kv[1].value))[
-                : self.cfg.top_k
-            ]
+            for k, v in sorted(self.stats.items(), key=lambda kv: -abs(kv[1].value))[: self.cfg.top_k]
         }
 
     def sparkline(self, key: str, width: int = 24) -> str:

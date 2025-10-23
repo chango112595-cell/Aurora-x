@@ -184,9 +184,7 @@ ci:
                         # Check for required fields
                         if not isinstance(seed_content, dict):
                             self.log(f"  ⚠️  {seed_file.name} has unexpected format", "WARNING")
-                            self.warnings.append(
-                                f"Seed file {seed_file.name} has unexpected format"
-                            )
+                            self.warnings.append(f"Seed file {seed_file.name} has unexpected format")
                     except Exception as e:
                         self.log(f"  ✗ Error reading {seed_file.name}: {e}", "ERROR")
                         self.errors.append(f"Invalid seed file: {seed_file.name}")
@@ -249,9 +247,7 @@ ci:
             self.warnings.append(f"Drift check incomplete: {e}")
             return True  # Don't fail on drift check if we can't measure it
 
-    def _analyze_corpus_drift(
-        self, corpus_files: list[Path], max_drift: float, drift_cap: float
-    ) -> bool:
+    def _analyze_corpus_drift(self, corpus_files: list[Path], max_drift: float, drift_cap: float) -> bool:
         """Analyze corpus files for drift (simplified implementation)"""
         # This is a simplified check - in production you'd analyze actual drift metrics
         # For now, we'll just check if files exist and are recent
@@ -474,17 +470,11 @@ Examples:
         """,
     )
 
-    parser.add_argument(
-        "--snapshot", action="store_true", help="Create a backup snapshot after successful checks"
-    )
+    parser.add_argument("--snapshot", action="store_true", help="Create a backup snapshot after successful checks")
 
-    parser.add_argument(
-        "--snapshot-only", action="store_true", help="Only create a snapshot without running checks"
-    )
+    parser.add_argument("--snapshot-only", action="store_true", help="Only create a snapshot without running checks")
 
-    parser.add_argument(
-        "--backup-dir", type=str, default=None, help="Custom backup directory (default: ./backups/)"
-    )
+    parser.add_argument("--backup-dir", type=str, default=None, help="Custom backup directory (default: ./backups/)")
 
     parser.add_argument("--quiet", action="store_true", help="Suppress verbose output")
 

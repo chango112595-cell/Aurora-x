@@ -45,9 +45,7 @@ def make_router(static_dir: Path, templates_dir: Path):
     return router
 
 
-def record_run(
-    run_id: str, spec: str, ok: bool, report_path: str, bias: float = None, spark: str = None
-):
+def record_run(run_id: str, spec: str, ok: bool, report_path: str, bias: float = None, spark: str = None):
     row = {
         "run_id": run_id,
         "spec": spec,

@@ -51,10 +51,7 @@ def pick_language(user_text: str) -> LangChoice:
             return LangChoice("go", "fast web service/microservice → Go")
 
     # Rust: Memory-safe system tools and CLIs
-    if any(
-        k in t
-        for k in ["memory-safe", "memory safe", "systems", "rust", "cargo", "binary", "performance"]
-    ):
+    if any(k in t for k in ["memory-safe", "memory safe", "systems", "rust", "cargo", "binary", "performance"]):
         if any(c in t for c in ["cli", "command", "tool", "parser"]):
             return LangChoice("rust", "memory-safe CLI/systems → Rust")
 

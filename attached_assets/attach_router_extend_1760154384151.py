@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 from aurora_x.templates.lib_function import render_function
@@ -10,10 +9,10 @@ from aurora_x.templates.web_app_flask import render_app
 
 
 def attach_router(app):
-    @app.post('/chat')
+    @app.post("/chat")
     def chat():
         data = request.get_json(silent=True) or {}
-        prompt = (data.get('prompt') or '').strip()
+        prompt = (data.get("prompt") or "").strip()
         if not prompt:
             return jsonify({"ok": False, "err": "missing prompt"}), 400
         intent = classify(prompt)

@@ -22,9 +22,7 @@ def test_english_request(request_text):
         f.write(spec)
 
     # Run synthesis
-    subprocess.run(
-        f"python -m aurora_x.main --spec {spec_file}", shell=True, capture_output=True, text=True
-    )
+    subprocess.run(f"python -m aurora_x.main --spec {spec_file}", shell=True, capture_output=True, text=True)
 
     # Find the generated run directory
     import glob

@@ -73,15 +73,9 @@ def _git(cfg: dict[str, str] | None = None):
             else:
                 # Try to set up signing from environment variables
                 # Support AURORA_GPG_PRIVATE (new) and GPG_PRIVATE_ASC (legacy)
-                armored = (
-                    os.getenv("AURORA_GPG_PRIVATE", "").strip()
-                    or os.getenv("GPG_PRIVATE_ASC", "").strip()
-                )
+                armored = os.getenv("AURORA_GPG_PRIVATE", "").strip() or os.getenv("GPG_PRIVATE_ASC", "").strip()
                 # Support explicit key ID or try to extract it
-                key_id = (
-                    os.getenv("AURORA_GPG_KEY_ID", "").strip()
-                    or os.getenv("GPG_KEY_ID", "").strip()
-                )
+                key_id = os.getenv("AURORA_GPG_KEY_ID", "").strip() or os.getenv("GPG_KEY_ID", "").strip()
 
                 # Only configure signing if GPG is available AND keys are provided
                 if armored and _check_gpg_available():
@@ -122,21 +116,15 @@ def _git(cfg: dict[str, str] | None = None):
                                 _run("git config gpg.program gpg")
                                 _run(f"git config user.signingkey {shlex.quote(key_id)}")
                             else:
-                                print(
-                                    "Warning: GPG signing key not found, continuing without signing"
-                                )
+                                print("Warning: GPG signing key not found, continuing without signing")
                                 _run("git config commit.gpgsign false")
                         else:
-                            print(
-                                "Warning: Could not determine GPG key ID, continuing without signing"
-                            )
+                            print("Warning: Could not determine GPG key ID, continuing without signing")
                             _run("git config commit.gpgsign false")
 
                     except (subprocess.SubprocessError, FileNotFoundError, OSError) as e:
                         # Graceful fallback - continue without signing
-                        print(
-                            f"Warning: GPG signing setup failed ({e}), continuing without signing"
-                        )
+                        print(f"Warning: GPG signing setup failed ({e}), continuing without signing")
                         _run("git config commit.gpgsign false")
                 else:
                     # GPG not available or keys not provided - continue without signing
@@ -153,14 +141,10 @@ def _git(cfg: dict[str, str] | None = None):
                                     parts = line.split(":")
                                     if len(parts) > 4:
                                         existing_key_id = parts[4]
-                                        print(
-                                            f"Found existing GPG key in keyring: {existing_key_id}"
-                                        )
+                                        print(f"Found existing GPG key in keyring: {existing_key_id}")
                                         _run("git config commit.gpgsign true")
                                         _run("git config gpg.program gpg")
-                                        _run(
-                                            f"git config user.signingkey {shlex.quote(existing_key_id)}"
-                                        )
+                                        _run(f"git config user.signingkey {shlex.quote(existing_key_id)}")
                                         break
                         else:
                             print("No GPG keys available, continuing without signing")

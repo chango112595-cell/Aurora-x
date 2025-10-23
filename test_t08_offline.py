@@ -17,12 +17,14 @@ from aurora_x.templates.web_app_flask import render_app
 def test_all_templates():
     """Test all language templates offline."""
 
-    print("""
+    print(
+        """
     ╔══════════════════════════════════════════════════════════╗
     ║         🚀 T08 Offline Template Test 🚀                  ║
     ║     Testing Language Router + PORT Configuration          ║
     ╚══════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     test_cases = [
         ("make a futuristic timer ui", "python", "Flask UI"),
@@ -76,10 +78,7 @@ def test_all_templates():
                     print(f"✅ Generated: {filepath}")
 
                     if fname == "Program.cs":
-                        if (
-                            'Environment.GetEnvironmentVariable("PORT")' in content
-                            and "5080" in content
-                        ):
+                        if 'Environment.GetEnvironmentVariable("PORT")' in content and "5080" in content:
                             print("   ✅ Uses PORT env (default: 5080)")
 
         elif intent.kind == "cli_tool":

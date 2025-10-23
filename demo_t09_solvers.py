@@ -80,25 +80,31 @@ def demo_api_usage():
     print("=" * 60)
 
     print("\n🔗 /api/solve endpoint:")
-    print("""curl -X POST http://localhost:5001/api/solve \\
+    print(
+        """curl -X POST http://localhost:5001/api/solve \\
   -H 'Content-Type: application/json' \\
   -d '{"problem": "differentiate 3x^2 + 2x + 5"}'
-""")
+"""
+    )
 
     print("🔗 /api/explain endpoint:")
-    print("""curl -X POST http://localhost:5001/api/explain \\
+    print(
+        """curl -X POST http://localhost:5001/api/explain \\
   -H 'Content-Type: application/json' \\
   -d '{"problem": "orbital period a=7e6 M=5.972e24"}'
-""")
+"""
+    )
 
 
 def main():
-    print("""
+    print(
+        """
     ╔══════════════════════════════════════════════════════════╗
     ║       🚀 Aurora-X T09 Domain Router Demo 🚀              ║
     ║          Math & Physics Solving Capabilities             ║
     ╚══════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     demo_math_operations()
     demo_physics_operations()

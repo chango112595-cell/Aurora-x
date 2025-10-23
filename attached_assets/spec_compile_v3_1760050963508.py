@@ -10,6 +10,7 @@ def main(spec_path: str):
     md = sp.read_text(encoding="utf-8")
     spec = parse_v3(md)
     import time
+
     run_id = time.strftime("run-%Y%m%d-%H%M%S")
     out = Path("runs") / run_id
     (out / "src").mkdir(parents=True, exist_ok=True)
@@ -21,8 +22,10 @@ def main(spec_path: str):
         (out / "src" / f"{modname}.py").write_text(code, encoding="utf-8")
         test_lines.append(f"from src.{modname} import {modname}")
         for i, ex in enumerate(fn.examples or []):
-            args = ", ".join(f"{k}={repr(v)}" for k,v in ex.inputs.items())
-            test_lines.append(f"class Test_{modname}_{i}(unittest.TestCase):\n    def test_{i}(self):\n        self.assertEqual({modname}({args}), {repr(ex.output)})")
+            args = ", ".join(f"{k}={repr(v)}" for k, v in ex.inputs.items())
+            test_lines.append(
+                f"class Test_{modname}_{i}(unittest.TestCase):\n    def test_{i}(self):\n        self.assertEqual({modname}({args}), {repr(ex.output)})"
+            )
     test_lines.append("\nif __name__=='__main__': unittest.main()")
     (out / "tests" / "test_v3.py").write_text("\n".join(test_lines), encoding="utf-8")
     (out / "report.html").write_text(f"<h2>Aurora-X v3 Report</h2><p>Run: {run_id}</p>", encoding="utf-8")
@@ -32,8 +35,11 @@ def main(spec_path: str):
     print(" - Report:", out / "report.html")
     print(f"Run tests: python -m unittest discover -s {out/'tests'} -t {out}")
 
+
 if __name__ == "__main__":
     import sys
+
     if len(sys.argv) < 2:
-        print("Usage: python tools/spec_compile_v3.py <spec.md>"); exit(1)
+        print("Usage: python tools/spec_compile_v3.py <spec.md>")
+        exit(1)
     main(sys.argv[1])

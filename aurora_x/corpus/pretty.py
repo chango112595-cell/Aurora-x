@@ -31,8 +31,7 @@ def filter_rows(rows: list[dict[str, Any]], term: str | None) -> list[dict[str, 
     out = []
     for r in rows:
         blob = " ".join(
-            str(r.get(k, ""))
-            for k in ("func_name", "func_signature", "sig_key", "snippet", "timestamp")
+            str(r.get(k, "")) for k in ("func_name", "func_signature", "sig_key", "snippet", "timestamp")
         ).lower()
         if t in blob:
             out.append(r)

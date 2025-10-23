@@ -1,4 +1,3 @@
-
 GO_MAIN = """package main
 
 import (
@@ -41,6 +40,7 @@ func main() {
     log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 """
+
 
 def render_go_service(name: str) -> dict:
     return {"files": {"main.go": GO_MAIN}, "hint": "Run: PORT=8080 go run .  (GET /health)"}

@@ -23,9 +23,7 @@ def get_git_file_content(file_path: str, revision: str = "HEAD~1") -> str | None
         File content as string, or None if not found
     """
     try:
-        result = subprocess.run(
-            ["git", "show", f"{revision}:{file_path}"], capture_output=True, text=True, check=True
-        )
+        result = subprocess.run(["git", "show", f"{revision}:{file_path}"], capture_output=True, text=True, check=True)
         return result.stdout
     except subprocess.CalledProcessError:
         # File might not exist in previous revision

@@ -113,7 +113,8 @@ def test_api_examples():
     print("=" * 60)
 
     print("\n🔗 /api/units - Convert units to SI:")
-    print("""
+    print(
+        """
 curl -X POST http://localhost:5001/api/units \\
   -H 'Content-Type: application/json' \\
   -d '{"value": "7000 km"}'
@@ -125,10 +126,12 @@ Response:
   "original": "7000 km",
   "conversion_factor": 1000.0,
   "unit_type": "distance"
-}""")
+}"""
+    )
 
     print("\n🔗 /api/solve - Physics with auto-conversion:")
-    print("""
+    print(
+        """
 curl -X POST http://localhost:5001/api/solve \\
   -H 'Content-Type: application/json' \\
   -d '{"problem": "orbital period a=1 AU M=2e30 kg"}'
@@ -140,16 +143,19 @@ Response:
   "a_m": 149597870700.0,  // AU converted to meters
   "M_kg": 2e30,
   "period_s": 31466622.3  // ~1 year
-}""")
+}"""
+    )
 
 
 def main():
-    print("""
+    print(
+        """
     ╔══════════════════════════════════════════════════════════╗
     ║         🚀 T09 Unit Conversion Test Suite 🚀             ║
     ║        Automatic SI Unit Normalization System            ║
     ╚══════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     test_unit_conversions()
     test_physics_with_units()
@@ -158,7 +164,8 @@ def main():
     print("\n" + "=" * 60)
     print("📊 SUMMARY")
     print("=" * 60)
-    print("""
+    print(
+        """
 ✅ Distance conversions: km, miles, feet, AU → meters
 ✅ Mass conversions: tons, pounds, grams, solar masses → kg
 ✅ Time conversions: hours, days, years → seconds
@@ -166,7 +173,8 @@ def main():
 ✅ /api/units endpoint provides explicit conversions
 
 🎯 Aurora-X now handles units intelligently!
-    """)
+    """
+    )
 
 
 if __name__ == "__main__":

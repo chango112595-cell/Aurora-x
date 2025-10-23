@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import datetime
@@ -12,7 +11,8 @@ PROG = ROOT / "progress.json"
 README = ROOT / "README.md"
 
 BADGE_START = "<!-- AURORA_PROGRESS_BADGES:START -->"
-BADGE_END   = "<!-- AURORA_PROGRESS_BADGES:END -->"
+BADGE_END = "<!-- AURORA_PROGRESS_BADGES:END -->"
+
 
 def compute(data: dict):
     tasks = data.get("tasks", [])
@@ -20,6 +20,7 @@ def compute(data: dict):
     active = ", ".join(data.get("active", []))
     ts = data.get("updated_utc", "")
     return overall, active, ts
+
 
 def render_block(overall: float, active: str, ts: str) -> str:
     return f"""{BADGE_START}
@@ -30,9 +31,11 @@ def render_block(overall: float, active: str, ts: str) -> str:
 </p>
 {BADGE_END}"""
 
+
 def main(argv=None):
     if not PROG.exists():
-        print("progress.json missing", file=sys.stderr); sys.exit(1)
+        print("progress.json missing", file=sys.stderr)
+        sys.exit(1)
     data = json.loads(PROG.read_text(encoding="utf-8"))
     data["updated_utc"] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
     PROG.write_text(json.dumps(data, indent=2), encoding="utf-8")
@@ -53,6 +56,7 @@ def main(argv=None):
 
     README.write_text(content, encoding="utf-8")
     print("[OK] README badges updated")
+
 
 if __name__ == "__main__":
     main()

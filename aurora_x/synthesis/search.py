@@ -25,7 +25,5 @@ def synthesize(spec: RichSpec, runs_dir: Path) -> Path:
     t.append("if __name__=='__main__': unittest.main()")
     (out / "tests" / f"test_{spec.title}.py").write_text("\n".join(t), encoding="utf-8")
 
-    (out / "report.html").write_text(
-        f"<h3>{spec.title}</h3><p>Generated at {run_id}</p>", encoding="utf-8"
-    )
+    (out / "report.html").write_text(f"<h3>{spec.title}</h3><p>Generated at {run_id}</p>", encoding="utf-8")
     return out

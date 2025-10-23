@@ -141,9 +141,7 @@ def parse_english(text: str) -> NLParseResult:
 
         # Sanitize the description for safe embedding in Python code
         # Replace special Unicode characters with ASCII equivalents
-        safe_purpose = (
-            purpose.replace("•", "*").replace("→", "->").replace("–", "-").replace("—", "-")
-        )
+        safe_purpose = purpose.replace("•", "*").replace("→", "->").replace("–", "-").replace("—", "-")
         # Handle other special characters
         safe_purpose = safe_purpose.replace("（", "(").replace("）", ")").replace("：", ":")
         # Remove or replace any remaining non-ASCII characters
@@ -307,13 +305,9 @@ def parse_english(text: str) -> NLParseResult:
         ]
     ):
         return_type = "int"
-    elif any(
-        word in t for word in ["check", "is", "verify", "validate", "test", "confirm", "determine"]
-    ):
+    elif any(word in t for word in ["check", "is", "verify", "validate", "test", "confirm", "determine"]):
         return_type = "bool"
-    elif any(
-        word in t for word in ["list", "array", "collection", "items", "all", "multiple", "several"]
-    ):
+    elif any(word in t for word in ["list", "array", "collection", "items", "all", "multiple", "several"]):
         return_type = "list[str]"
     elif any(
         word in t
