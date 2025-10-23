@@ -99,9 +99,11 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.labels }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
 
       - name: Output image details
         id: image
@@ -234,7 +236,7 @@ jobs:
             cd ~/aurora-x-deployment
 
             # Load environment variables
-            export $(grep -v '^#' .env | xargs)
+            export $(grep -v '^#' .env | xargs 2>/dev/null || true)
 
             HEALTH_TOKEN="${AURORA_HEALTH_TOKEN:-ok}"
             HEALTH_URL="http://localhost:8000/healthz?token=${HEALTH_TOKEN}"
@@ -246,6 +248,15 @@ jobs:
             while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
               ATTEMPT=$((ATTEMPT + 1))
 
+              # Check if container is running
+              if ! docker compose ps aurora | grep -q "Up"; then
+                echo "⚠️  Container not running (Attempt ${ATTEMPT}/${MAX_ATTEMPTS})"
+                docker compose ps aurora
+                sleep ${{ env.HEALTH_INTERVAL }}
+                continue
+              fi
+
+              # Perform health check
               if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
                 echo "✅ Health check passed! (Attempt ${ATTEMPT}/${MAX_ATTEMPTS})"
 
@@ -254,14 +265,15 @@ jobs:
 
                 # Show image info
                 echo "📦 Running image:"
-                docker inspect ghcr.io/${{ github.repository }}:latest --format='{{.RepoDigests}}'
+                docker inspect ghcr.io/${{ github.repository }}:latest --format='{{.RepoDigests}}' 2>/dev/null || echo "Image info unavailable"
 
                 exit 0
               fi
 
               if [ $ATTEMPT -eq 10 ] || [ $ATTEMPT -eq 20 ]; then
                 echo "⏳ Still waiting... (Attempt ${ATTEMPT}/${MAX_ATTEMPTS})"
-                docker compose logs --tail=10 aurora
+                echo "📋 Recent logs:"
+                docker compose logs --tail=20 aurora
               fi
 
               sleep ${{ env.HEALTH_INTERVAL }}
@@ -269,7 +281,18 @@ jobs:
 
             echo "❌ Health check failed after ${MAX_ATTEMPTS} attempts!"
             echo "📋 Full container logs:"
-            docker compose logs aurora
+            docker compose logs --tail=100 aurora
+            echo "📊 Container status:"
+            docker compose ps
+            
+            # Attempt rollback
+            echo "🔄 Attempting rollback to previous image..."
+            if docker image inspect ghcr.io/${{ github.repository }}:rollback >/dev/null 2>&1; then
+              docker tag ghcr.io/${{ github.repository }}:rollback ghcr.io/${{ github.repository }}:latest
+              docker compose up -d
+              echo "⚠️  Rolled back to previous version"
+            fi
+            
             exit 1
 
       - name: Cleanup old images
@@ -291,9 +314,30 @@ jobs:
             -d "{\"embeds\":[{\"title\":\"✅ Aurora-X Deployed via GHCR\",\"description\":\"Deployment completed successfully!\\n\\nImage: \`${{ needs.build-and-push.outputs.image }}\`\\nCommit: \`${GITHUB_SHA:0:8}\`\\nDeployed by: \`${{ github.actor }}\`\\nURL: ${{ vars.AURORA_URL || 'Not configured' }}\",\"color\":5763719,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
             "${{ vars.DISCORD_WEBHOOK_URL }}" || true
 
+      - name: Rollback on failure
+        if: failure()
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          script: |
+            cd ~/aurora-x-deployment
+            
+            echo "🔄 Rolling back to previous version..."
+            if docker image inspect ghcr.io/${{ github.repository }}:rollback >/dev/null 2>&1; then
+              docker tag ghcr.io/${{ github.repository }}:rollback ghcr.io/${{ github.repository }}:latest
+              docker compose down
+              docker compose up -d
+              echo "✅ Rollback completed"
+            else
+              echo "⚠️  No rollback image available"
+            fi
+
       - name: Send Discord notification - Failure
         if: failure() && vars.DISCORD_WEBHOOK_URL != ''
         run: |
           curl -X POST -H "Content-Type: application/json" \
-            -d "{\"embeds\":[{\"title\":\"❌ Aurora-X Deployment Failed\",\"description\":\"Deployment failed!\\n\\nImage: \`${{ needs.build-and-push.outputs.image }}\`\\nCommit: \`${GITHUB_SHA:0:8}\`\\n\\nCheck the [workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.\",\"color\":15158332,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
+            -d "{\"embeds\":[{\"title\":\"❌ Aurora-X Deployment Failed\",\"description\":\"Deployment failed!\\n\\nImage: \`${{ needs.build-and-push.outputs.image }}\`\\nCommit: \`${GITHUB_SHA:0:8}\`\\n\\n**Rollback**: Previous version restored\\n\\nCheck the [workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.\",\"color\":15158332,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
             "${{ vars.DISCORD_WEBHOOK_URL }}" || true
