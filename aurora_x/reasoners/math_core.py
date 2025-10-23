@@ -33,9 +33,7 @@ def _safe_eval_expr(expr: str) -> float:
     return float(_eval(node))
 
 
-_POLY_TERM = re.compile(
-    r"""(?P<coef>[+-]?\d+(?:\.\d+)?)?\s*\*?\s*x\s*(?:\^\s*(?P<pow>[+-]?\d+))?""", re.X
-)
+_POLY_TERM = re.compile(r"""(?P<coef>[+-]?\d+(?:\.\d+)?)?\s*\*?\s*x\s*(?:\^\s*(?P<pow>[+-]?\d+))?""", re.X)
 
 
 def differentiate_poly(expr: str) -> str:
@@ -49,11 +47,7 @@ def differentiate_poly(expr: str) -> str:
         m = _POLY_TERM.search(term.replace(" ", ""))
         if m:
             coef = m.group("coef")
-            coef = (
-                float(coef)
-                if coef not in (None, "", "+", "-")
-                else (1.0 if coef in (None, "", "+") else -1.0)
-            )
+            coef = float(coef) if coef not in (None, "", "+", "-") else (1.0 if coef in (None, "", "+") else -1.0)
             powv = int(m.group("pow") or 1)
             new_coef, new_pow = coef * powv, powv - 1
             out.append(

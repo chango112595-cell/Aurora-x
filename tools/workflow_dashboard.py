@@ -51,9 +51,7 @@ def print_dashboard():
                 "queued": "⏳",
             }.get(run.get("status"), "❓")
 
-            print(
-                f"  {status_icon} {run['name'][:40]:40s} - {run.get('conclusion', run.get('status'))}"
-            )
+            print(f"  {status_icon} {run['name'][:40]:40s} - {run.get('conclusion', run.get('status'))}")
     else:
         print("ℹ️  No recent runs found (gh CLI may not be configured)")
 

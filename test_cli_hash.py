@@ -96,10 +96,7 @@ def process_files(files: list[str], algorithm: str, recursive: bool = False) -> 
         elif path.is_file():
             # Process single file
             if hash_value := compute_hash(path, algorithm):
-                print(
-                    f"{Fore.GREEN}{algorithm.upper():8}{Fore.RESET} "
-                    f"{hash_value}  {Fore.CYAN}{path}{Fore.RESET}"
-                )
+                print(f"{Fore.GREEN}{algorithm.upper():8}{Fore.RESET} " f"{hash_value}  {Fore.CYAN}{path}{Fore.RESET}")
                 processed += 1
         else:
             # Try as glob pattern
@@ -145,9 +142,7 @@ Supported algorithms: md5, sha1, sha256 (default), sha512
         help="Hash algorithm to use (default: sha256)",
     )
 
-    parser.add_argument(
-        "-r", "--recursive", action="store_true", help="Process directories recursively"
-    )
+    parser.add_argument("-r", "--recursive", action="store_true", help="Process directories recursively")
 
     parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.0")
 

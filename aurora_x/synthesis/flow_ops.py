@@ -90,9 +90,7 @@ def impl_for(signature: str, description: str, metadata: dict | None = None) -> 
             + ':\n    """Compute the sum of squares of numbers in a list."""\n    return sum(x * x for x in nums)\n'
         )
     if ("add" in d or "sum" in d) and ("two" in d or "integers" in d):
-        return (
-            SAFE_HEADER + sig + ':\n    """Return the sum of two integers."""\n    return a + b\n'
-        )
+        return SAFE_HEADER + sig + ':\n    """Return the sum of two integers."""\n    return a + b\n'
     if "prime" in d:
         return (
             SAFE_HEADER
@@ -100,11 +98,7 @@ def impl_for(signature: str, description: str, metadata: dict | None = None) -> 
             + ':\n    """Check if a number is prime."""\n    if n < 2: return False\n    for i in range(2, int(n ** 0.5) + 1):\n        if n % i == 0: return False\n    return True\n'
         )
     if "sort" in d and ("list" in d or "integers" in d):
-        return (
-            SAFE_HEADER
-            + sig
-            + ':\n    """Sort a list of integers in ascending order."""\n    return sorted(nums)\n'
-        )
+        return SAFE_HEADER + sig + ':\n    """Sort a list of integers in ascending order."""\n    return sorted(nums)\n'
     if "count" in d and "vowel" in d:
         return (
             SAFE_HEADER
@@ -175,9 +169,7 @@ def impl_for(signature: str, description: str, metadata: dict | None = None) -> 
             )
 
     # Check for calculation/computation requests
-    if any(
-        word in d for word in ["calculate", "compute", "quantum", "entanglement", "physics", "math"]
-    ):
+    if any(word in d for word in ["calculate", "compute", "quantum", "entanglement", "physics", "math"]):
         if "quantum" in d:
             return (
                 SAFE_HEADER
@@ -186,9 +178,7 @@ def impl_for(signature: str, description: str, metadata: dict | None = None) -> 
             )
         else:
             return (
-                SAFE_HEADER
-                + sig
-                + ':\n    """Perform calculation."""\n    # Placeholder calculation\n    return 0\n'
+                SAFE_HEADER + sig + ':\n    """Perform calculation."""\n    # Placeholder calculation\n    return 0\n'
             )
 
     # Check for validation/checking requests
@@ -201,11 +191,7 @@ def impl_for(signature: str, description: str, metadata: dict | None = None) -> 
 
     # Check for list/collection requests
     if any(word in d for word in ["list", "collection", "array", "items"]):
-        return (
-            SAFE_HEADER
-            + sig
-            + ':\n    """Generate a list of items."""\n    return ["item1", "item2", "item3"]\n'
-        )
+        return SAFE_HEADER + sig + ':\n    """Generate a list of items."""\n    return ["item1", "item2", "item3"]\n'
 
     # For any other unrecognized pattern, use an improved fallback
     # Parse the signature to determine return type
@@ -217,9 +203,7 @@ def impl_for(signature: str, description: str, metadata: dict | None = None) -> 
         )
     elif "-> int" in sig:
         return (
-            SAFE_HEADER
-            + sig
-            + ':\n    """Calculate integer result."""\n    return 42  # Default meaningful integer\n'
+            SAFE_HEADER + sig + ':\n    """Calculate integer result."""\n    return 42  # Default meaningful integer\n'
         )
     elif "-> bool" in sig:
         return (
@@ -228,11 +212,7 @@ def impl_for(signature: str, description: str, metadata: dict | None = None) -> 
             + ':\n    """Perform boolean check."""\n    return True  # Default to True for positive experience\n'
         )
     elif "-> list" in sig:
-        return (
-            SAFE_HEADER
-            + sig
-            + ':\n    """Generate list result."""\n    return []  # Empty list as safe default\n'
-        )
+        return SAFE_HEADER + sig + ':\n    """Generate list result."""\n    return []  # Empty list as safe default\n'
     else:
         # Final fallback - use the generic fallback but ensure it works
         fallback_impl = generate_fallback_function(sig, description or "Function implementation")
@@ -241,8 +221,6 @@ def impl_for(signature: str, description: str, metadata: dict | None = None) -> 
         # Replace the placeholder return with something more meaningful
         result = SAFE_HEADER + "\n".join(fallback_lines)
         # Ensure no NotImplementedError or pass-only functions
-        result = result.replace(
-            "raise NotImplementedError", "return None  # Placeholder implementation"
-        )
+        result = result.replace("raise NotImplementedError", "return None  # Placeholder implementation")
         result = result.replace("pass", "return None  # Placeholder implementation")
         return result

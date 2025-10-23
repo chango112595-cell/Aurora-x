@@ -110,9 +110,7 @@ def git_push_if_enabled(msg: str):
         if result.returncode == 0:
             print(f"📝 Committed: {msg}")
             # Push to remote
-            push_result = subprocess.run(
-                ["git", "push", "origin", BRANCH], capture_output=True, text=True
-            )
+            push_result = subprocess.run(["git", "push", "origin", BRANCH], capture_output=True, text=True)
             if push_result.returncode == 0:
                 print(f"🚀 Pushed to {BRANCH}")
             else:
@@ -183,9 +181,7 @@ def main():
     try:
         while True:
             iteration += 1
-            print(
-                f"\n--- Iteration {iteration} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---"
-            )
+            print(f"\n--- Iteration {iteration} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---")
 
             # Run monitoring pass
             digests = run_once(digests)

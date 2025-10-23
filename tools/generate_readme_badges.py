@@ -94,9 +94,7 @@ def generate_badges(progress_data):
     progress_color = get_badge_color(overall_progress)
 
     # Overall Progress Badge
-    progress_badge = (
-        f"![Progress](https://img.shields.io/badge/Progress-{overall_progress}%25-{progress_color})"
-    )
+    progress_badge = f"![Progress](https://img.shields.io/badge/Progress-{overall_progress}%25-{progress_color})"
     badges.append(progress_badge)
 
     # Active Tasks Badge
@@ -113,15 +111,11 @@ def generate_badges(progress_data):
     updated_date = progress_data.get("updated_utc", "")
     if updated_date:
         formatted_date = format_date_for_badge(updated_date)
-        updated_badge = (
-            f"![Last Updated](https://img.shields.io/badge/Updated-{formatted_date}-lightgrey)"
-        )
+        updated_badge = f"![Last Updated](https://img.shields.io/badge/Updated-{formatted_date}-lightgrey)"
     else:
         # Use current date as fallback
         formatted_date = datetime.now().strftime("%Y--%m--%d")
-        updated_badge = (
-            f"![Last Updated](https://img.shields.io/badge/Updated-{formatted_date}-lightgrey)"
-        )
+        updated_badge = f"![Last Updated](https://img.shields.io/badge/Updated-{formatted_date}-lightgrey)"
     badges.append(updated_badge)
 
     # Task Status Counts

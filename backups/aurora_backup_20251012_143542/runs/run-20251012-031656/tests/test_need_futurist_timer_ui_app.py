@@ -17,7 +17,7 @@ class TestFlaskApp(unittest.TestCase):
     def setUp(self):
         """Set up test client"""
         self.app = create_app()
-        self.app.config['TESTING'] = True
+        self.app.config["TESTING"] = True
         self.client = self.app.test_client()
 
     def test_app_exists(self):
@@ -26,18 +26,19 @@ class TestFlaskApp(unittest.TestCase):
 
     def test_health_endpoint(self):
         """Test the health check endpoint"""
-        response = self.client.get('/api/health')
+        response = self.client.get("/api/health")
         self.assertEqual(response.status_code, 200)
         data = response.get_json()
-        self.assertIn('status', data)
-        self.assertEqual(data['status'], 'healthy')
+        self.assertIn("status", data)
+        self.assertEqual(data["status"], "healthy")
 
     def test_home_route(self):
         """Test the home route returns successfully"""
-        response = self.client.get('/')
+        response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
         # Check that HTML is returned
-        self.assertIn(b'<!DOCTYPE html>', response.data)
+        self.assertIn(b"<!DOCTYPE html>", response.data)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

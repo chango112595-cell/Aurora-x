@@ -127,11 +127,7 @@ def compile_from_nl_project(
         _discord(("✅" if ok else "❌") + f" Aurora Bridge: {msg}")
 
     # Get timestamp from result
-    ts = (
-        res.manifest["ts"]
-        if hasattr(res, "manifest") and res.manifest
-        else time.strftime("%Y%m%d-%H%M%S")
-    )
+    ts = res.manifest["ts"] if hasattr(res, "manifest") and res.manifest else time.strftime("%Y%m%d-%H%M%S")
 
     # Return enhanced result with component info
     result = BridgeResult(

@@ -43,15 +43,11 @@ def validate_config() -> tuple[bool, str]:
 
         errors = []
         if cfg.epsilon != PROD_CONFIG["adaptive"]["epsilon"]:
-            errors.append(
-                f"epsilon mismatch: {cfg.epsilon} != {PROD_CONFIG['adaptive']['epsilon']}"
-            )
+            errors.append(f"epsilon mismatch: {cfg.epsilon} != {PROD_CONFIG['adaptive']['epsilon']}")
         if cfg.decay != PROD_CONFIG["adaptive"]["decay"]:
             errors.append(f"decay mismatch: {cfg.decay} != {PROD_CONFIG['adaptive']['decay']}")
         if cfg.cooldown_iters != PROD_CONFIG["adaptive"]["cooldown_iters"]:
-            errors.append(
-                f"cooldown mismatch: {cfg.cooldown_iters} != {PROD_CONFIG['adaptive']['cooldown_iters']}"
-            )
+            errors.append(f"cooldown mismatch: {cfg.cooldown_iters} != {PROD_CONFIG['adaptive']['cooldown_iters']}")
 
         if errors:
             return False, "\n".join(errors)
@@ -83,9 +79,7 @@ def ci_gate_check() -> bool:
     try:
         import subprocess
 
-        result = subprocess.run(
-            [sys.executable, "tests/test_adaptive.py"], capture_output=True, text=True, timeout=30
-        )
+        result = subprocess.run([sys.executable, "tests/test_adaptive.py"], capture_output=True, text=True, timeout=30)
         if result.returncode == 0:
             print("  ✅ All adaptive tests passed")
             checks_passed.append(True)
@@ -99,9 +93,7 @@ def ci_gate_check() -> bool:
     # 3. Run seed tests
     print("\n[3/5] Running seed persistence tests...")
     try:
-        result = subprocess.run(
-            [sys.executable, "tests/test_seeds.py"], capture_output=True, text=True, timeout=30
-        )
+        result = subprocess.run([sys.executable, "tests/test_seeds.py"], capture_output=True, text=True, timeout=30)
         if result.returncode == 0:
             print("  ✅ All seed tests passed")
             checks_passed.append(True)
@@ -133,9 +125,7 @@ def ci_gate_check() -> bool:
                 violations.append(f"{key}: {stat.value}")
 
         if not violations:
-            print(
-                f"  ✅ All biases within ±{PROD_CONFIG['thresholds']['max_bias']} after 1000 iterations"
-            )
+            print(f"  ✅ All biases within ±{PROD_CONFIG['thresholds']['max_bias']} after 1000 iterations")
             checks_passed.append(True)
         else:
             print(f"  ❌ Bias violations: {violations}")

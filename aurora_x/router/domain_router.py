@@ -50,15 +50,11 @@ def normalize_units_in_text(text: str) -> str:
 
     # Build replacement list
     result = text
-    for unit_info in sorted(
-        detection_result["detected_units"], key=lambda x: x["position"][0], reverse=True
-    ):
+    for unit_info in sorted(detection_result["detected_units"], key=lambda x: x["position"][0], reverse=True):
         # Replace with SI normalized value
         start, end = unit_info["position"]
         si_str = (
-            f"{unit_info['si_value']} {unit_info['si_unit']}"
-            if unit_info["si_unit"]
-            else str(unit_info["si_value"])
+            f"{unit_info['si_value']} {unit_info['si_unit']}" if unit_info["si_unit"] else str(unit_info["si_value"])
         )
 
         if unit_info["variable"]:

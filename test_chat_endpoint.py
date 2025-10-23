@@ -51,23 +51,21 @@ def test_chat_endpoint():
 
         # Validate response structure
         assert data["ok"], "Response should have ok=True"
-        assert data["kind"] == test["expected_kind"], (
-            f"Expected kind={test['expected_kind']}, got {data['kind']}"
-        )
+        assert data["kind"] == test["expected_kind"], f"Expected kind={test['expected_kind']}, got {data['kind']}"
 
         if "expected_file" in test:
-            assert data.get("file") == test["expected_file"], (
-                f"Expected file={test['expected_file']}, got {data.get('file')}"
-            )
+            assert (
+                data.get("file") == test["expected_file"]
+            ), f"Expected file={test['expected_file']}, got {data.get('file')}"
             # Check if file was created for web_app
             if test["expected_kind"] == "web_app":
                 assert os.path.exists("app.py"), "app.py should be created"
                 print("  ✅ File app.py created successfully")
 
         if "expected_note" in test:
-            assert data.get("note") == test["expected_note"], (
-                f"Expected note={test['expected_note']}, got {data.get('note')}"
-            )
+            assert (
+                data.get("note") == test["expected_note"]
+            ), f"Expected note={test['expected_note']}, got {data.get('note')}"
 
     # Test empty prompt
     print(f"\nTest {len(test_cases) + 1}: Empty prompt")

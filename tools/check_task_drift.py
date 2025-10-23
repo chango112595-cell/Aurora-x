@@ -42,9 +42,7 @@ def main():
 
     block = extract_block(target)
     if not block:
-        print(
-            f"[drift] No tracker block markers in {TARGET.name}. Expected markers:\n{BEGIN}\n...\n{END}"
-        )
+        print(f"[drift] No tracker block markers in {TARGET.name}. Expected markers:\n{BEGIN}\n...\n{END}")
         sys.exit(1)
 
     master_norm = normalize(read_text(MASTER))

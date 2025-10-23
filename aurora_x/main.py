@@ -260,20 +260,14 @@ def main():
     g.add_argument("--spec-text", type=str, help="Inline spec text (Markdown DSL)")
     g.add_argument("--spec-file", type=str, help="Path to spec file (legacy synthesis)")
     g.add_argument("--nl", type=str, help="Natural language instruction to generate a spec")
-    g.add_argument(
-        "--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis"
-    )
+    g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
     g.add_argument("--show-bias", action="store_true", help="Print current seed_bias and exit")
     g.add_argument("--progress-print", action="store_true", help="Print computed progress and exit")
 
     # Corpus dump options
-    ap.add_argument(
-        "--top", type=int, default=10, help="How many corpus entries to print with --dump-corpus"
-    )
+    ap.add_argument("--top", type=int, default=10, help="How many corpus entries to print with --dump-corpus")
     ap.add_argument("--json", action="store_true", help="Emit JSON for --dump-corpus")
-    ap.add_argument(
-        "--grep", type=str, default=None, help="Filter results by substring for --dump-corpus"
-    )
+    ap.add_argument("--grep", type=str, default=None, help="Filter results by substring for --dump-corpus")
 
     # Synthesis options
     ap.add_argument("--seed", type=int, default=1337, help="Random seed")
@@ -285,9 +279,7 @@ def main():
         default=None,
         help="Path to baseline run dir for report diffs (default: runs/latest)",
     )
-    ap.add_argument(
-        "--seed-bias", type=float, default=None, help="Override learned seed bias [0.0..0.5]"
-    )
+    ap.add_argument("--seed-bias", type=float, default=None, help="Override learned seed bias [0.0..0.5]")
     ap.add_argument("--max-iters", type=int, default=100, help="Maximum synthesis iterations")
     ap.add_argument("--beam", type=int, default=20, help="Beam search width")
     ap.add_argument("--timeout", type=int, default=5, help="Timeout in seconds")
@@ -298,9 +290,7 @@ def main():
     ap.add_argument("--top-p", type=float, default=0.95, help="Top-P (nucleus) sampling")
 
     # Progress tracking options
-    ap.add_argument(
-        "--update-task", action="append", default=None, help="ID=NN or ID=auto (repeatable)"
-    )
+    ap.add_argument("--update-task", action="append", default=None, help="ID=NN or ID=auto (repeatable)")
     ap.add_argument("--bump", action="append", default=None, help="ID=+/-Δ (repeatable)")
 
     args = ap.parse_args()
@@ -562,15 +552,11 @@ class AuroraX:
 
                 # Update adaptive scheduler
                 if self.adaptive_scheduler:
-                    self.adaptive_scheduler.reward(
-                        seed_key, success, magnitude=corpus_entry["score"]
-                    )
+                    self.adaptive_scheduler.reward(seed_key, success, magnitude=corpus_entry["score"])
 
             # Learning nudge (keep legacy for backward compat)
             won_with_seed = _seed_won(cand.src, seed_snippets)
-            self.weights["seed_bias"] = learn.update_seed_bias(
-                float(self.weights.get("seed_bias", 0.0)), won_with_seed
-            )
+            self.weights["seed_bias"] = learn.update_seed_bias(float(self.weights.get("seed_bias", 0.0)), won_with_seed)
             learn.save(self.repo.root, self.weights)
 
         # Save persistent seed store at end of loop
@@ -867,9 +853,7 @@ def render_progress_sidebar_html() -> str:
     def task_pct(t):
         subs = t.get("subtasks") or []
         return (
-            (sum(float(s.get("progress", 0)) for s in subs) / len(subs))
-            if subs
-            else float(t.get("progress", 0) or 0)
+            (sum(float(s.get("progress", 0)) for s in subs) / len(subs)) if subs else float(t.get("progress", 0) or 0)
         )
 
     def phase_pct(ph):
@@ -888,9 +872,7 @@ def render_progress_sidebar_html() -> str:
     rows = []
     for ph in data.get("phases", []):
         pct = int(round(phase_pct(ph)))
-        rows.append(
-            f'<div style="margin-bottom:4px">{ph.get("id")} {ph.get("name")}: <strong>{pct}%</strong></div>'
-        )
+        rows.append(f'<div style="margin-bottom:4px">{ph.get("id")} {ph.get("name")}: <strong>{pct}%</strong></div>')
 
     return f"""
 <aside style="position:sticky; top:16px; padding:12px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa; max-width:360px;">

@@ -152,9 +152,7 @@ def main():
     parser = argparse.ArgumentParser(description="Rollback progress.json from history snapshots")
 
     group = parser.add_mutually_exclusive_group()
-    group.add_argument(
-        "--to", metavar="TIMESTAMP", help="Rollback to specific timestamp (YYYYMMDD_HHMMSS)"
-    )
+    group.add_argument("--to", metavar="TIMESTAMP", help="Rollback to specific timestamp (YYYYMMDD_HHMMSS)")
     group.add_argument("--last", action="store_true", help="Rollback to most recent snapshot")
     group.add_argument("--list", action="store_true", help="List available snapshots")
 

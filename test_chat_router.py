@@ -20,9 +20,7 @@ def test_chat_endpoint(prompt):
     # Handle web_app intent
     if intent.kind == "web_app":
         title = (
-            "Futuristic UI Timer"
-            if intent.fields.get("feature") == "timer"
-            else intent.name.replace("_", " ").title()
+            "Futuristic UI Timer" if intent.fields.get("feature") == "timer" else intent.name.replace("_", " ").title()
         )
         code = render_app(title=title, subtitle=intent.brief)
 

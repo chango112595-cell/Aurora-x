@@ -86,7 +86,8 @@ def paths(run_root: Path) -> CorpusPaths:
 def _open_sqlite(dbp: Path) -> sqlite3.Connection:
     conn = sqlite3.connect(str(dbp))
     conn.row_factory = sqlite3.Row
-    conn.executescript("""
+    conn.executescript(
+        """
     PRAGMA journal_mode=WAL;
     CREATE TABLE IF NOT EXISTS corpus (
       id TEXT PRIMARY KEY, timestamp TEXT,
@@ -96,7 +97,8 @@ def _open_sqlite(dbp: Path) -> sqlite3.Connection:
       failing_tests TEXT, snippet TEXT, complexity INTEGER,
       iteration INTEGER, calls_functions TEXT, post_bow TEXT
     );
-    """)
+    """
+    )
     return conn
 
 

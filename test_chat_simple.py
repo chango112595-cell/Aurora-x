@@ -29,9 +29,7 @@ def test_chat_endpoint():
 
         # Test 1: Valid web app prompt
         print("\n1. Testing web app prompt:")
-        response = requests.post(
-            "http://127.0.0.1:8000/chat", json={"prompt": "Build me a timer UI"}
-        )
+        response = requests.post("http://127.0.0.1:8000/chat", json={"prompt": "Build me a timer UI"})
         print(f"   Status: {response.status_code}")
         print(f"   Response: {json.dumps(response.json(), indent=2)}")
 

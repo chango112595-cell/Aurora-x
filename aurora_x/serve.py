@@ -251,9 +251,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
                 message = f"Flask application generated successfully at {app_file.name}"
             except ImportError as e:
-                raise HTTPException(
-                    status_code=500, detail=f"Failed to import Flask synthesis module: {str(e)}"
-                )
+                raise HTTPException(status_code=500, detail=f"Failed to import Flask synthesis module: {str(e)}")
         else:
             # Regular function synthesis
             tools_dir = Path(__file__).parent.parent / "tools"
@@ -278,9 +276,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
                     if result.returncode != 0:
                         error_msg = result.stderr if result.stderr else result.stdout
-                        raise HTTPException(
-                            status_code=500, detail=f"Spec compilation failed: {error_msg}"
-                        )
+                        raise HTTPException(status_code=500, detail=f"Spec compilation failed: {error_msg}")
 
                     # Parse output to find generated files
                     output_lines = result.stdout.splitlines()
@@ -313,9 +309,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                     # If no compiler found, just return the spec
                     message = f"Spec generated at {spec_path.name}. Compiler not found for full synthesis."
             except ImportError as e:
-                raise HTTPException(
-                    status_code=500, detail=f"Failed to import synthesis module: {str(e)}"
-                )
+                raise HTTPException(status_code=500, detail=f"Failed to import synthesis module: {str(e)}")
 
         # Ensure we have valid files generated list
         if not files_generated:
@@ -325,9 +319,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                     if item.is_file():
                         files_generated.append(str(item.relative_to(Path.cwd())))
 
-        return NLCompileResponse(
-            run_id=run_name, status="success", files_generated=files_generated, message=message
-        )
+        return NLCompileResponse(run_id=run_name, status="success", files_generated=files_generated, message=message)
 
     except HTTPException:
         # Re-raise HTTP exceptions as-is

@@ -78,9 +78,7 @@ class SeedStore:
         self.path.parent.mkdir(parents=True, exist_ok=True)
 
         # Keep only top N biases
-        sorted_biases = sorted(self.biases.items(), key=lambda x: abs(x[1]), reverse=True)[
-            : self.top_n
-        ]
+        sorted_biases = sorted(self.biases.items(), key=lambda x: abs(x[1]), reverse=True)[: self.top_n]
         self.biases = dict(sorted_biases)
 
         # Update metadata
@@ -219,9 +217,7 @@ class SeedStore:
 _seed_store: SeedStore | None = None
 
 
-def get_seed_store(
-    path: str | None = None, alpha: float = 0.2, drift_cap: float = 0.15, top_n: int = 10
-) -> SeedStore:
+def get_seed_store(path: str | None = None, alpha: float = 0.2, drift_cap: float = 0.15, top_n: int = 10) -> SeedStore:
     """
     Get or create the global SeedStore instance.
 
@@ -241,8 +237,6 @@ def get_seed_store(
         if path is None:
             path = os.environ.get("AURORA_SEEDS_PATH", ".aurora/seeds.json")
 
-        _seed_store = SeedStore(
-            path=path or ".aurora/seeds.json", alpha=alpha, drift_cap=drift_cap, top_n=top_n
-        )
+        _seed_store = SeedStore(path=path or ".aurora/seeds.json", alpha=alpha, drift_cap=drift_cap, top_n=top_n)
 
     return _seed_store

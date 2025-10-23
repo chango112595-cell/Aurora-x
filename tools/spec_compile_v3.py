@@ -45,9 +45,7 @@ def main(spec_path: str):
     test_lines.extend(all_tests)
     test_lines.append("\nif __name__=='__main__': unittest.main()")
     (out / "tests" / "test_v3.py").write_text("\n".join(test_lines), encoding="utf-8")
-    (out / "report.html").write_text(
-        f"<h2>Aurora-X v3 Report</h2><p>Run: {run_id}</p>", encoding="utf-8"
-    )
+    (out / "report.html").write_text(f"<h2>Aurora-X v3 Report</h2><p>Run: {run_id}</p>", encoding="utf-8")
 
     row = {
         "run_id": out.name,

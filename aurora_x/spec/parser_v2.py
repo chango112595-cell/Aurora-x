@@ -101,14 +101,8 @@ def parse(md: str) -> RichSpec:
     signature = sig_code.group(1).strip()
     name, args, rtype = parse_signature(signature)
     examples = parse_examples(sections.get("Examples", ""))
-    post = [
-        ln.strip("- ").strip()
-        for ln in sections.get("Postconditions", "").splitlines()
-        if ln.strip()
-    ]
-    cons = [
-        ln.strip("- ").strip() for ln in sections.get("Constraints", "").splitlines() if ln.strip()
-    ]
+    post = [ln.strip("- ").strip() for ln in sections.get("Postconditions", "").splitlines() if ln.strip()]
+    cons = [ln.strip("- ").strip() for ln in sections.get("Constraints", "").splitlines() if ln.strip()]
     return RichSpec(
         title=name,
         signature=signature,
@@ -180,9 +174,7 @@ This will generate a complete Flask web application.
             examples_md = "| " + " | ".join(list(parsed["examples"][0].keys()) + ["out"]) + " |\n"
             examples_md += "|" + "---|" * (len(parsed["examples"][0]) + 1) + "\n"
             for ex in parsed["examples"]:
-                row = " | ".join(
-                    [str(ex.get(k, "")) for k in list(ex.keys())[:-1]] + [str(ex.get("out", ""))]
-                )
+                row = " | ".join([str(ex.get(k, "")) for k in list(ex.keys())[:-1]] + [str(ex.get("out", ""))])
                 examples_md += f"| {row} |\n"
 
         return f"""# {parsed["name"]}

@@ -601,7 +601,8 @@ def generate_api_app(routes: list, includes: dict) -> str:
 
     # Add API-specific routes
     if includes.get("auth"):
-        route_handlers.append('''
+        route_handlers.append(
+            '''
     @app.route('/api/auth/login', methods=['POST'])
     def login():
         """Handle user login"""
@@ -617,10 +618,12 @@ def generate_api_app(routes: list, includes: dict) -> str:
         data = request.get_json()
         if data.get('username') and data.get('password'):
             return jsonify({"status": "success", "message": "User registered"}), 201
-        return jsonify({"error": "Missing required fields"}), 400''')
+        return jsonify({"error": "Missing required fields"}), 400'''
+        )
 
     if includes.get("database"):
-        route_handlers.append('''
+        route_handlers.append(
+            '''
     @app.route('/api/data', methods=['GET', 'POST'])
     def data():
         """Handle data operations"""
@@ -629,7 +632,8 @@ def generate_api_app(routes: list, includes: dict) -> str:
             # In production, save to database
             return jsonify({"status": "created", "data": data}), 201
         # In production, fetch from database
-        return jsonify({"items": [], "count": 0})''')
+        return jsonify({"items": [], "count": 0})'''
+        )
 
     routes_code = "".join(route_handlers)
 

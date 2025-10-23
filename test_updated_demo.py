@@ -39,11 +39,7 @@ def test_demo_cards_locally():
             cat = (
                 "chat"
                 if "/chat" in card["endpoint"]
-                else "solve"
-                if "/solve" in card["endpoint"]
-                else "units"
-                if "/units" in card["endpoint"]
-                else "format"
+                else "solve" if "/solve" in card["endpoint"] else "units" if "/units" in card["endpoint"] else "format"
             )
             if cat not in by_category:
                 by_category[cat] = []

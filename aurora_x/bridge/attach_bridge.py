@@ -224,9 +224,11 @@ def attach_bridge(app: FastAPI):
                 return JSONResponse(
                     {
                         "ok": pr_result.get("ok", False),
-                        "message": "PR creation initiated"
-                        if pr_result.get("ok")
-                        else pr_result.get("err", "PR creation failed"),
+                        "message": (
+                            "PR creation initiated"
+                            if pr_result.get("ok")
+                            else pr_result.get("err", "PR creation failed")
+                        ),
                         "mode": "enhance",
                         "components": components,
                         "pr_result": pr_result,

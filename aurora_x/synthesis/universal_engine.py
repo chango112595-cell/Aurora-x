@@ -128,10 +128,7 @@ class MultiIntentParser:
             return ProjectType.FULLSTACK
 
         # If both frontend and backend detected, it's fullstack
-        if (
-            scores.get(ProjectType.UI_FRONTEND, 0) > 0
-            and scores.get(ProjectType.API_BACKEND, 0) > 0
-        ):
+        if scores.get(ProjectType.UI_FRONTEND, 0) > 0 and scores.get(ProjectType.API_BACKEND, 0) > 0:
             return ProjectType.FULLSTACK
 
         # Return highest scoring type
@@ -618,11 +615,7 @@ class DynamicSynthesizer:
                 content = self._generate_html_file(file_path, intent)
             elif file_path.endswith(".css"):
                 content = self._generate_css_file(file_path, intent)
-            elif (
-                file_path.endswith(".json")
-                or file_path.endswith(".yml")
-                or file_path.endswith(".yaml")
-            ):
+            elif file_path.endswith(".json") or file_path.endswith(".yml") or file_path.endswith(".yaml"):
                 content = files[file_path]  # Already generated
             elif file_path.endswith(".md"):
                 content = files[file_path]  # Already generated
@@ -827,14 +820,16 @@ if __name__ == '__main__':
         handlers = []
         for route in routes:
             route_name = route.strip("/").replace("/", "_") or "root"
-            handlers.append(f"""@app.route('/{route}')
+            handlers.append(
+                f"""@app.route('/{route}')
     def {route_name}_handler():
         \"\"\"Handler for /{route} endpoint\"\"\"
         return jsonify({{
             'endpoint': '/{route}',
             'method': request.method,
             'timestamp': datetime.utcnow().isoformat()
-        }})""")
+        }})"""
+            )
 
         return "\n    \n    ".join(handlers)
 
@@ -907,7 +902,8 @@ if __name__ == "__main__":
         handlers = []
         for route in routes:
             route_name = route.strip("/").replace("/", "_") or "root"
-            handlers.append(f"""@app.get("/{route}")
+            handlers.append(
+                f"""@app.get("/{route}")
 async def get_{route_name}():
     \"\"\"GET handler for /{route}\"\"\"
     return {{"endpoint": "/{route}", "method": "GET"}}
@@ -915,7 +911,8 @@ async def get_{route_name}():
 @app.post("/{route}")
 async def post_{route_name}(data: dict):
     \"\"\"POST handler for /{route}\"\"\"
-    return {{"endpoint": "/{route}", "method": "POST", "data": data}}""")
+    return {{"endpoint": "/{route}", "method": "POST", "data": data}}"""
+            )
 
         return "\n\n".join(handlers)
 
@@ -1649,9 +1646,7 @@ class SafetyGate:
 class PersistenceLayer:
     """Save generated code to runs directory"""
 
-    def save_project(
-        self, files: dict[str, str], intent: ParsedIntent, run_id: str = None
-    ) -> dict[str, Any]:
+    def save_project(self, files: dict[str, str], intent: ParsedIntent, run_id: str = None) -> dict[str, Any]:
         """
         Save project files to runs directory
 

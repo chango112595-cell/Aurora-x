@@ -50,9 +50,7 @@ def test_unit_normalization():
 
     for value, unit, unit_type in test_cases:
         result = normalize_to_si(value, unit, unit_type)
-        print(
-            f"  {value} {unit} -> {result['si_value']} {result['si_unit']} (factor: {result['conversion_factor']})"
-        )
+        print(f"  {value} {unit} -> {result['si_value']} {result['si_unit']} (factor: {result['conversion_factor']})")
 
 
 def test_text_normalization():
@@ -135,9 +133,7 @@ def test_api_units():
             response = requests.post(base_url, json={"value": value})
             if response.status_code == 200:
                 data = response.json()
-                print(
-                    f"  {value} -> {data['si_value']} {data['si_unit']} (type: {data['unit_type']})"
-                )
+                print(f"  {value} -> {data['si_value']} {data['si_unit']} (type: {data['unit_type']})")
             else:
                 print(f"  {value} -> Error: {response.status_code}")
         except Exception as e:

@@ -138,12 +138,14 @@ def test_edge_cases():
 
 def run_all_tests():
     """Run all T09 tests."""
-    print("""
+    print(
+        """
     ╔══════════════════════════════════════════════════════════╗
     ║          🚀 T09 Domain Router Test Suite 🚀              ║
     ║       Math & Physics Solvers for Aurora-X Ultra          ║
     ╚══════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     test_domain_classification()
     test_math_operations()
@@ -153,7 +155,8 @@ def run_all_tests():
     print("\n" + "=" * 60)
     print("📊 SUMMARY")
     print("=" * 60)
-    print("""
+    print(
+        """
 ✅ Domain Classification: Working
 ✅ Math Evaluation: Safe eval for arithmetic expressions
 ✅ Math Differentiation: Polynomial derivatives
@@ -162,7 +165,8 @@ def run_all_tests():
 ✅ Error Handling: Proper rejection of invalid inputs
 
 🎯 Ready for production use!
-    """)
+    """
+    )
 
 
 if __name__ == "__main__":
