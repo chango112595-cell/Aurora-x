@@ -184,20 +184,26 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build ARM64 image
+        timeout-minutes: 20
         run: |
-          if [ ! -f Dockerfile.e2e ]; then
-            echo "Creating Dockerfile.e2e..."
-            cat > Dockerfile.e2e << 'EOF'
-          FROM python:3.11-slim
-          WORKDIR /app
-          COPY requirements.txt .
-          RUN pip install --no-cache-dir -r requirements.txt || pip install uvicorn fastapi
-          COPY . .
-          EXPOSE 8000
-          CMD ["python", "-m", "uvicorn", "aurora_x.serve:app", "--host", "0.0.0.0", "--port", "8000"]
-          EOF
-          fi
-          docker buildx build --platform linux/arm64 -f Dockerfile.e2e -t aurora-e2e:arm64 --load .
+          echo "Building ARM64 Docker image..."
+          docker buildx build \
+            --platform linux/arm64 \
+            -f Dockerfile.e2e \
+            -t aurora-e2e:arm64 \
+            --load \
+            --progress=plain \
+            . || {
+              echo "❌ ARM64 build failed, attempting fallback build..."
+              docker buildx build \
+                --platform linux/arm64 \
+                -f Dockerfile.e2e \
+                -t aurora-e2e:arm64 \
+                --load \
+                --no-cache \
+                .
+            }
+          echo "✅ ARM64 image built successfully"
 
       - name: Run ARM64 container
         run: |
