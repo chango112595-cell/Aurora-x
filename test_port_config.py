@@ -13,10 +13,11 @@ def test_flask_port():
     code = render_app("Test", "Test App")
 
     # Check for PORT environment variable usage
-    assert "os.getenv('PORT'" in code or "os.getenv(\"PORT\"" in code
+    assert "os.getenv('PORT'" in code or 'os.getenv("PORT"' in code
     assert "8000" in code  # Default port
     print("✅ Flask template uses PORT env (default: 8000)")
     return True
+
 
 def test_go_port():
     """Test Go service template uses PORT env variable."""
@@ -29,6 +30,7 @@ def test_go_port():
     print("✅ Go service uses PORT env (default: 8080)")
     return True
 
+
 def test_csharp_port():
     """Test C# WebAPI template uses PORT env variable."""
     result = render_csharp_webapi("test", "Test API")
@@ -40,6 +42,7 @@ def test_csharp_port():
     print("✅ C# WebAPI uses PORT env (default: 5080)")
     return True
 
+
 def test_port_defaults():
     """Test default port assignments."""
     print("\n📊 Default Port Configuration:")
@@ -50,14 +53,17 @@ def test_port_defaults():
     print("\n💡 Set PORT environment variable to override")
     return True
 
+
 def main():
     """Run all port configuration tests."""
 
-    print("""
+    print(
+        """
     ╔════════════════════════════════════════════════════════╗
     ║     🌐 Port Configuration Test Suite 🌐                ║
     ╚════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     success = True
 
@@ -79,11 +85,14 @@ def main():
     except Exception as e:
         print(f"❌ Error during testing: {e}")
         import traceback
+
         traceback.print_exc()
         return 1
 
     return 0 if success else 1
 
+
 if __name__ == "__main__":
     import sys
+
     sys.exit(main())

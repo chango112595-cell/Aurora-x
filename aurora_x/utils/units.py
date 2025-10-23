@@ -4,7 +4,15 @@ from __future__ import annotations
 
 import re
 
-_LEN = {"m": 1.0, "km": 1e3, "cm": 1e-2, "mm": 1e-3, "au": 1.495978707e11, "miles": 1609.344, "mile": 1609.344}
+_LEN = {
+    "m": 1.0,
+    "km": 1e3,
+    "cm": 1e-2,
+    "mm": 1e-3,
+    "au": 1.495978707e11,
+    "miles": 1609.344,
+    "mile": 1609.344,
+}
 _MASS = {"kg": 1.0, "g": 1e-3, "tons": 1e3, "ton": 1e3}
 _TIME = {"s": 1.0, "ms": 1e-3, "hours": 3600, "days": 86400, "years": 31536000}
 
@@ -77,13 +85,17 @@ def normalize_payload(payload: dict) -> dict:
 
 
 # Regex to extract inline quantities like: a=7000 km M=5.97e24 kg
-_Q = re.compile(r"""
+_Q = re.compile(
+    r"""
     (?P<key>[aAmM])       # a (semi-major axis) or m/M (mass)
     \s*=\s*
     (?P<val>[-+]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)
     \s*
     (?P<unit>[A-Za-z]+)?  # optional unit (km, m, kg, etc.)
-""", re.VERBOSE)
+""",
+    re.VERBOSE,
+)
+
 
 def extract_quantities(text: str) -> dict[str, float]:
     """Parse inline quantities and return SI-normalized dict.

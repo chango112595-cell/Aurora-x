@@ -94,6 +94,7 @@ def factorial_recursive(n: int) -> int:
 # Unit Tests
 # ============================================================================
 
+
 class TestFactorial:
     """Test suite for factorial function"""
 
@@ -185,6 +186,7 @@ class TestFactorialProperties:
 # Performance Benchmarks (optional)
 # ============================================================================
 
+
 def benchmark_factorial(max_n: int = 100):
     """
     Simple benchmark for factorial performance.
@@ -225,6 +227,7 @@ if __name__ == "__main__":
     # Run pytest if available, otherwise run tests manually
     try:
         import pytest
+
         pytest.main([__file__, "-v", "--tb=short"])
     except ImportError:
         print("pytest not installed. Running manual tests...")
@@ -233,10 +236,7 @@ if __name__ == "__main__":
         test_factorial = TestFactorial()
         test_properties = TestFactorialProperties()
 
-        test_methods = [
-            method for method in dir(test_factorial)
-            if method.startswith('test_')
-        ]
+        test_methods = [method for method in dir(test_factorial) if method.startswith("test_")]
 
         passed = 0
         failed = 0

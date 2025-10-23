@@ -25,7 +25,7 @@ async def test_dashboard_locally():
             ("executeCard", "Card execution function"),
             ("category-filters", "Category filter buttons"),
             ("modal", "Response modal"),
-            ("/api/demo/cards", "API endpoint reference")
+            ("/api/demo/cards", "API endpoint reference"),
         ]
 
         print("\n📋 Content validation:")
@@ -40,6 +40,7 @@ async def test_dashboard_locally():
         print("❌ Dashboard HTML file not found")
         return False
 
+
 async def test_dashboard_endpoint():
     """Test that the endpoint exists in the app"""
 
@@ -48,7 +49,7 @@ async def test_dashboard_endpoint():
     # Check if the route exists
     routes = []
     for route in app.routes:
-        if hasattr(route, 'path'):
+        if hasattr(route, "path"):
             routes.append(route.path)
 
     if "/dashboard/demos" in routes:
@@ -56,7 +57,7 @@ async def test_dashboard_endpoint():
 
         # Find the actual endpoint
         for route in app.routes:
-            if hasattr(route, 'path') and route.path == "/dashboard/demos":
+            if hasattr(route, "path") and route.path == "/dashboard/demos":
                 print(f"   ✅ Method: {route.methods}")
                 print("   ✅ Response class: HTMLResponse")
                 break
@@ -66,6 +67,7 @@ async def test_dashboard_endpoint():
         print(f"   Available routes: {routes}")
         return False
 
+
 async def test_demo_cards_endpoint():
     """Test that demo cards endpoint exists"""
 
@@ -74,7 +76,7 @@ async def test_demo_cards_endpoint():
     # Check if the route exists
     routes = []
     for route in app.routes:
-        if hasattr(route, 'path'):
+        if hasattr(route, "path"):
             routes.append(route.path)
 
     if "/api/demo/cards" in routes:
@@ -90,7 +92,7 @@ async def test_demo_cards_endpoint():
 
         # Find and call the endpoint
         for route in test_app.routes:
-            if hasattr(route, 'path') and route.path == "/api/demo/cards":
+            if hasattr(route, "path") and route.path == "/api/demo/cards":
                 result = await route.endpoint()
                 if result.get("ok"):
                     print(f"   ✅ Returns {result.get('total', 0)} demo cards")
@@ -102,11 +104,12 @@ async def test_demo_cards_endpoint():
         print("   ❌ /api/demo/cards endpoint not found")
         return False
 
+
 def print_instructions():
     """Print access instructions"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🚀 DEMO DASHBOARD READY!")
-    print("="*60)
+    print("=" * 60)
     print()
     print("📋 How to use:")
     print()
@@ -128,6 +131,7 @@ def print_instructions():
     print("   • Real-time execution")
     print("   • Standalone (doesn't touch main UI)")
     print()
+
 
 async def main():
     print("🎨 AURORA-X DEMO DASHBOARD TEST")
@@ -151,6 +155,7 @@ async def main():
         print("\n⚠️ Some checks failed, but dashboard may still work")
 
     print_instructions()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

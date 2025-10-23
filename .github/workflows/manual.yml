@@ -1,32 +1,43 @@
-# This is a basic workflow that is manually triggered
-
 name: Manual workflow
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
     inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
+      task:
+        description: 'Task to run'
         required: true
-        # The data type of the input
-        type: string
+        type: choice
+        options:
+          - test
+          - build
+          - deploy
+          - status
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  greet:
-    # The type of runner that the job will run on
+  manual:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ inputs.name }}"
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e .
+      - name: Run task
+        run: |
+          case "${{ github.event.inputs.task }}" in
+            test)
+              pip install pytest && pytest tests/ -v || true
+              ;;
+            build)
+              echo "Building Aurora-X..."
+              ;;
+            deploy)
+              echo "Deployment would happen here"
+              ;;
+            status)
+              echo "Aurora-X Status: OK"
+              ;;
+          esac

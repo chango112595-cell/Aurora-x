@@ -125,6 +125,7 @@ name = "aurora_cli"
 path = "src/main.rs"
 """
 
+
 def render_rust_cli(name: str, brief: str = None) -> dict:
     """
     Generate a complete Rust CLI project.
@@ -147,5 +148,5 @@ def render_rust_cli(name: str, brief: str = None) -> dict:
 
     return {
         "files": files,
-        "hint": "Run: cargo run -- hello world (or: cargo build --release for optimized binary)"
+        "hint": "Run: cargo run -- hello world (or: cargo build --release for optimized binary)",
     }

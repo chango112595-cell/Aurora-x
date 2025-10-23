@@ -1,5 +1,3 @@
-
-
 GENERIC = """#!/usr/bin/env python3
 import argparse
 
@@ -12,6 +10,7 @@ def main():
 if __name__ == '__main__':
     main()
 """
+
 
 def render_cli(name: str, brief: str) -> str:
     desc = brief or f"{name} command-line tool"
