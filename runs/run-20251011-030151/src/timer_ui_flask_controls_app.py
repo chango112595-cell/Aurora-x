@@ -478,15 +478,15 @@ TIMER_HTML = """
 def create_app() -> Flask:
     """Create and configure the Flask application"""
     app = Flask(__name__)
-    app.config['ENV'] = 'development'
-    app.config['DEBUG'] = True
+    app.config["ENV"] = "development"
+    app.config["DEBUG"] = True
 
-    @app.route('/')
+    @app.route("/")
     def index():
         """Render the timer UI"""
         return render_template_string(TIMER_HTML)
 
-    @app.route('/api/health')
+    @app.route("/api/health")
     def health():
         """Health check endpoint"""
         return jsonify({"status": "healthy", "app": "Aurora Timer UI"})
@@ -528,15 +528,16 @@ class TestFormatMMSS(unittest.TestCase):
         self.assertEqual(format_mmss(999), "00:00")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Check if running tests
     import sys
-    if len(sys.argv) > 1 and sys.argv[1] == 'test':
+
+    if len(sys.argv) > 1 and sys.argv[1] == "test":
         # Run unit tests
-        unittest.main(argv=[''], exit=False, verbosity=2)
+        unittest.main(argv=[""], exit=False, verbosity=2)
     else:
         # Run the Flask application
         app = create_app()
-        port = int(os.environ.get('PORT', '5000'))
+        port = int(os.environ.get("PORT", "5000"))
         print(f"🚀 Aurora Timer UI starting on http://localhost:{port}")
-        app.run(host='0.0.0.0', port=port, debug=True)
+        app.run(host="0.0.0.0", port=port, debug=True)

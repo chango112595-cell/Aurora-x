@@ -5,11 +5,18 @@ from src.is_palindrome import is_palindrome
 
 class T0(unittest.TestCase):
     def test_0(self):
-        self.assertEqual(is_palindrome(s='racecar'), True)
+        self.assertEqual(is_palindrome(s="racecar"), True)
+
+
 class T1(unittest.TestCase):
     def test_1(self):
-        self.assertEqual(is_palindrome(s='hello'), False)
+        self.assertEqual(is_palindrome(s="hello"), False)
+
+
 class T2(unittest.TestCase):
     def test_2(self):
-        self.assertEqual(is_palindrome(s='a'), True)
-if __name__=='__main__': unittest.main()
+        self.assertEqual(is_palindrome(s="a"), True)
+
+
+if __name__ == "__main__":
+    unittest.main()
