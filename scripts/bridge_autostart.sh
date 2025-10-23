@@ -9,6 +9,7 @@ fi
 
 # Start Bridge in background
 echo "🚀 Starting Aurora-X Factory Bridge..."
+cd "$(dirname "$0")/.." || exit 1
 nohup python3 -m aurora_x.bridge.service >/tmp/bridge.log 2>&1 &
 BRIDGE_PID=$!
 echo $BRIDGE_PID > /tmp/bridge.pid
