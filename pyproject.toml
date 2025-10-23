@@ -38,7 +38,6 @@ where = ["."]
 include = ["aurora_x*"]
 
 [tool.black]
-[tool.black]
 line-length = 120
 exclude = '''
 /(
