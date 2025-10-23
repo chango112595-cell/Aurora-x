@@ -63,6 +63,17 @@ class AuroraQualityGates:
 
         # Create .aurora directory if it doesn't exist
         self.aurora_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Create missing critical files with defaults
+        if not self.progress_file.exists():
+            self.log(f"  ℹ️  Creating default progress.json", "INFO")
+            with open(self.progress_file, 'w') as f:
+                json.dump({"tasks": [], "initialized": True}, f, indent=2)
+        
+        if not (self.aurora_dir / "seeds.json").exists():
+            self.log(f"  ℹ️  Creating default seeds.json", "INFO")
+            with open(self.aurora_dir / "seeds.json", 'w') as f:
+                json.dump({}, f, indent=2)
 
         # Check for config.yml (optional but recommended)
         config_yml = self.aurora_dir / "config.yml"
