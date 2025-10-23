@@ -16,6 +16,7 @@ def test_dashboard_html_exists():
         print("❌ Dashboard HTML file not found")
         return False
 
+
 def test_dashboard_endpoint():
     """Test the /dashboard/demos endpoint locally"""
     from fastapi.testclient import TestClient
@@ -45,6 +46,7 @@ def test_dashboard_endpoint():
         print(f"❌ Dashboard endpoint error: {response.status_code}")
         return False
 
+
 def test_demo_cards_api():
     """Test that the demo cards API is accessible"""
     from fastapi.testclient import TestClient
@@ -67,11 +69,12 @@ def test_demo_cards_api():
     print("❌ Demo cards API not working")
     return False
 
+
 def print_access_instructions():
     """Print instructions for accessing the dashboard"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📋 HOW TO ACCESS THE DEMO DASHBOARD:")
-    print("="*60)
+    print("=" * 60)
     print()
     print("1. Start Aurora-X server:")
     print("   python -m aurora_x.serve")
@@ -89,6 +92,7 @@ def print_access_instructions():
     print("   curl http://localhost:5001/dashboard/demos")
     print()
 
+
 def test_dashboard_features():
     """Describe the dashboard features"""
     print("\n✨ DEMO DASHBOARD FEATURES:")
@@ -103,6 +107,7 @@ def test_dashboard_features():
     print("• Responsive grid layout")
     print("• Loading spinners and error handling")
     print("• Standalone - doesn't touch main Aurora UI")
+
 
 if __name__ == "__main__":
     print("🚀 DEMO DASHBOARD TEST")

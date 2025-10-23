@@ -11,20 +11,17 @@ import requests
 
 HOST = os.getenv("HOST", "http://localhost:5001")
 
+
 def test_prompt(prompt, expected_lang, description):
     """Test a single prompt through the /chat endpoint."""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"📝 Testing: {description}")
     print(f"   Prompt: '{prompt}'")
     print(f"   Expected Language: {expected_lang}")
 
     try:
         # Make the API call
-        response = requests.post(
-            f"{HOST}/chat",
-            json={"prompt": prompt},
-            timeout=10
-        )
+        response = requests.post(f"{HOST}/chat", json={"prompt": prompt}, timeout=10)
 
         if response.status_code == 200:
             data = response.json()
@@ -32,17 +29,17 @@ def test_prompt(prompt, expected_lang, description):
             print(f"   Language: {data.get('lang', 'unknown')}")
             print(f"   Kind: {data.get('kind', 'unknown')}")
 
-            if 'file' in data:
+            if "file" in data:
                 print(f"   File: {data['file']}")
-            elif 'files' in data:
+            elif "files" in data:
                 print(f"   Files: {', '.join(data['files'])}")
 
             print(f"   Hint: {data.get('hint', 'N/A')}")
             print(f"   Reason: {data.get('reason', 'N/A')}")
 
             # Verify the generated file exists
-            if 'file' in data:
-                if Path(data['file']).exists():
+            if "file" in data:
+                if Path(data["file"]).exists():
                     print(f"   ✅ Generated file exists: {data['file']}")
                 else:
                     print(f"   ❌ Generated file missing: {data['file']}")
@@ -55,6 +52,7 @@ def test_prompt(prompt, expected_lang, description):
     except Exception as e:
         print(f"❌ Error: {e}")
         return None
+
 
 def test_health_check():
     """Test the /healthz endpoint."""
@@ -69,7 +67,7 @@ def test_health_check():
             print(f"   Status: {data.get('status')}")
             print(f"   Service: {data.get('service')}")
             print(f"   Version: {data.get('version')}")
-            components = data.get('components', {})
+            components = data.get("components", {})
             for comp, status in components.items():
                 print(f"   • {comp}: {status}")
             return True
@@ -79,6 +77,7 @@ def test_health_check():
     except Exception as e:
         print(f"❌ Health check error: {e}")
         return False
+
 
 def run_generated_app(file_path, lang, hint):
     """Try to run the generated application."""
@@ -113,6 +112,7 @@ def run_generated_app(file_path, lang, hint):
     print(f"   Run Command: {hint}")
     return True
 
+
 def main():
     """Run the complete T08 end-to-end test suite."""
 
@@ -127,7 +127,9 @@ def main():
 
     # Test health check first
     if not test_health_check():
-        print("\n⚠️  Server might not be running. Start with: python -m uvicorn aurora_x.serve:app --port 5001")
+        print(
+            "\n⚠️  Server might not be running. Start with: python -m uvicorn aurora_x.serve:app --port 5001"
+        )
         return 1
 
     # Test prompts for each language
@@ -142,21 +144,22 @@ def main():
     for prompt, expected_lang, description in test_cases:
         result = test_prompt(prompt, expected_lang, description)
         if result:
-            results.append({
-                "description": description,
-                "lang": result.get("lang"),
-                "file": result.get("file") or result.get("files", [])[0] if result.get("files") else None,
-                "hint": result.get("hint"),
-                "success": True
-            })
+            results.append(
+                {
+                    "description": description,
+                    "lang": result.get("lang"),
+                    "file": result.get("file") or result.get("files", [])[0]
+                    if result.get("files")
+                    else None,
+                    "hint": result.get("hint"),
+                    "success": True,
+                }
+            )
         else:
-            results.append({
-                "description": description,
-                "success": False
-            })
+            results.append({"description": description, "success": False})
 
     # Try to run each generated app (just verify structure)
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📦 Verifying Generated Code")
 
     for res in results:
@@ -164,7 +167,7 @@ def main():
             run_generated_app(res["file"], res["lang"], res["hint"])
 
     # Summary
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📊 T08 Test Summary")
     print("-" * 40)
 
@@ -186,13 +189,15 @@ def main():
         print("   cargo run")
         print("   PORT=5080 dotnet run")
         print("\n2. Commit changes:")
-        print('   git add -A')
+        print("   git add -A")
         print('   git commit -m "feat(T08): router wired + PORT-aware + /healthz"')
         return 0
     else:
         print(f"\n⚠️  Some tests failed ({len(results) - success_count}/{len(results)})")
         return 1
 
+
 if __name__ == "__main__":
     import sys
+
     sys.exit(main())

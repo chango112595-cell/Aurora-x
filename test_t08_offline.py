@@ -32,7 +32,7 @@ def test_all_templates():
     ]
 
     for prompt, expected_lang, desc in test_cases:
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"📝 Testing: {desc}")
         print(f"   Prompt: '{prompt}'")
 
@@ -76,7 +76,10 @@ def test_all_templates():
                     print(f"✅ Generated: {filepath}")
 
                     if fname == "Program.cs":
-                        if 'Environment.GetEnvironmentVariable("PORT")' in content and "5080" in content:
+                        if (
+                            'Environment.GetEnvironmentVariable("PORT")' in content
+                            and "5080" in content
+                        ):
                             print("   ✅ Uses PORT env (default: 5080)")
 
         elif intent.kind == "cli_tool":
@@ -94,7 +97,7 @@ def test_all_templates():
                 print(f"✅ Generated: {fname}")
                 print("   ℹ️  CLI tool (not a web service, no PORT)")
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📊 Summary")
     print("-" * 40)
     print("✅ All templates generated successfully")
@@ -112,7 +115,9 @@ def test_all_templates():
 
     return True
 
+
 if __name__ == "__main__":
     import sys
+
     success = test_all_templates()
     sys.exit(0 if success else 1)

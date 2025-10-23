@@ -12,46 +12,53 @@ from pathlib import Path
 # Production configuration - DO NOT MODIFY
 PROD_CONFIG = {
     "adaptive": {
-        "epsilon": 0.15,        # Exploration rate - locked
-        "decay": 0.98,          # Per-iteration decay - locked
-        "cooldown_iters": 5,    # Cooldown period - locked
+        "epsilon": 0.15,  # Exploration rate - locked
+        "decay": 0.98,  # Per-iteration decay - locked
+        "cooldown_iters": 5,  # Cooldown period - locked
         "max_drift_per_iter": 0.10,  # Max drift - locked
-        "top_k": 10,            # Top biases to track - locked
-        "seed": int(os.environ.get("AURORA_SEED", 42))
+        "top_k": 10,  # Top biases to track - locked
+        "seed": int(os.environ.get("AURORA_SEED", 42)),
     },
     "seeds": {
-        "alpha": 0.2,           # EMA smoothing - locked
-        "drift_cap": 0.15,      # Drift cap - locked
-        "top_n": 10             # Top seeds - locked
+        "alpha": 0.2,  # EMA smoothing - locked
+        "drift_cap": 0.15,  # Drift cap - locked
+        "top_n": 10,  # Top seeds - locked
     },
     "thresholds": {
-        "max_bias": 1.0,        # Maximum allowed bias
-        "min_bias": -1.0,       # Minimum allowed bias
-        "max_history": 10000,   # Maximum history entries
-        "max_test_duration": 60 # Maximum test duration in seconds
-    }
+        "max_bias": 1.0,  # Maximum allowed bias
+        "min_bias": -1.0,  # Minimum allowed bias
+        "max_history": 10000,  # Maximum history entries
+        "max_test_duration": 60,  # Maximum test duration in seconds
+    },
 }
+
 
 def validate_config() -> tuple[bool, str]:
     """Validate production configuration is intact."""
     try:
         # Check adaptive config
         from aurora_x.learn import AdaptiveConfig
+
         cfg = AdaptiveConfig()
 
         errors = []
         if cfg.epsilon != PROD_CONFIG["adaptive"]["epsilon"]:
-            errors.append(f"epsilon mismatch: {cfg.epsilon} != {PROD_CONFIG['adaptive']['epsilon']}")
+            errors.append(
+                f"epsilon mismatch: {cfg.epsilon} != {PROD_CONFIG['adaptive']['epsilon']}"
+            )
         if cfg.decay != PROD_CONFIG["adaptive"]["decay"]:
             errors.append(f"decay mismatch: {cfg.decay} != {PROD_CONFIG['adaptive']['decay']}")
         if cfg.cooldown_iters != PROD_CONFIG["adaptive"]["cooldown_iters"]:
-            errors.append(f"cooldown mismatch: {cfg.cooldown_iters} != {PROD_CONFIG['adaptive']['cooldown_iters']}")
+            errors.append(
+                f"cooldown mismatch: {cfg.cooldown_iters} != {PROD_CONFIG['adaptive']['cooldown_iters']}"
+            )
 
         if errors:
             return False, "\n".join(errors)
         return True, "Configuration validated"
     except Exception as e:
         return False, f"Validation error: {e}"
+
 
 def ci_gate_check() -> bool:
     """CI gate check for production deployment."""
@@ -75,11 +82,9 @@ def ci_gate_check() -> bool:
     print("\n[2/5] Running adaptive learning tests...")
     try:
         import subprocess
+
         result = subprocess.run(
-            [sys.executable, "tests/test_adaptive.py"],
-            capture_output=True,
-            text=True,
-            timeout=30
+            [sys.executable, "tests/test_adaptive.py"], capture_output=True, text=True, timeout=30
         )
         if result.returncode == 0:
             print("  ✅ All adaptive tests passed")
@@ -95,10 +100,7 @@ def ci_gate_check() -> bool:
     print("\n[3/5] Running seed persistence tests...")
     try:
         result = subprocess.run(
-            [sys.executable, "tests/test_seeds.py"],
-            capture_output=True,
-            text=True,
-            timeout=30
+            [sys.executable, "tests/test_seeds.py"], capture_output=True, text=True, timeout=30
         )
         if result.returncode == 0:
             print("  ✅ All seed tests passed")
@@ -131,7 +133,9 @@ def ci_gate_check() -> bool:
                 violations.append(f"{key}: {stat.value}")
 
         if not violations:
-            print(f"  ✅ All biases within ±{PROD_CONFIG['thresholds']['max_bias']} after 1000 iterations")
+            print(
+                f"  ✅ All biases within ±{PROD_CONFIG['thresholds']['max_bias']} after 1000 iterations"
+            )
             checks_passed.append(True)
         else:
             print(f"  ❌ Bias violations: {violations}")
@@ -181,15 +185,17 @@ def ci_gate_check() -> bool:
         print("❌ NOT READY - Fix failures above before deploying")
         return False
 
+
 def save_prod_config():
     """Save production configuration to file."""
     config_path = Path(".aurora/prod_config.json")
     config_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(config_path, 'w') as f:
+    with open(config_path, "w") as f:
         json.dump(PROD_CONFIG, f, indent=2)
 
     print(f"Production config saved to: {config_path}")
+
 
 if __name__ == "__main__":
     # Save config

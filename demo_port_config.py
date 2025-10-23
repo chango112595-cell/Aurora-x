@@ -89,5 +89,6 @@ def demo_replit_config():
     else:
         print("\n🔍 No PORT set (will use defaults)")
 
+
 if __name__ == "__main__":
     demo_replit_config()

@@ -13,8 +13,9 @@ MASTER = ROOT / "MASTER_TASK_LIST.md"
 TARGET = ROOT / "aurora_X.md"  # change if your target file differs
 
 BEGIN = "<!-- AURORA_TRACKER_BEGIN -->"
-END   = "<!-- AURORA_TRACKER_END -->"
+END = "<!-- AURORA_TRACKER_END -->"
 HEADER = "### ✅ Task Tracker Status (Authoritative, from progress.json)"
+
 
 def ensure_master_uptodate():
     if not PROGRESS.exists():
@@ -25,18 +26,24 @@ def ensure_master_uptodate():
     if not MASTER.exists():
         raise SystemExit("[update_summary_md] MASTER_TASK_LIST.md not generated.")
 
+
 def read_text(p: Path) -> str:
-    try: return p.read_text(encoding="utf-8")
-    except FileNotFoundError: return ""
+    try:
+        return p.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return ""
+
 
 def write_text(p: Path, s: str) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(s, encoding="utf-8")
 
+
 def build_replacement_block() -> str:
     master = read_text(MASTER).strip()
     block = f"{HEADER}\n\n{master}\n"
     return f"{BEGIN}\n{block}\n{END}"
+
 
 def upsert_block(doc: str, replacement: str) -> str:
     if BEGIN in doc and END in doc:
@@ -50,6 +57,7 @@ def upsert_block(doc: str, replacement: str) -> str:
         return doc + section
     return doc + section
 
+
 def main():
     ensure_master_uptodate()
     current = read_text(TARGET)
@@ -57,12 +65,15 @@ def main():
     updated = upsert_block(current, new_block)
     if updated != current:
         bak = TARGET.with_suffix(TARGET.suffix + ".bak")
-        try: shutil.copyfile(TARGET, bak)
-        except Exception: pass
+        try:
+            shutil.copyfile(TARGET, bak)
+        except Exception:
+            pass
         write_text(TARGET, updated)
         print(f"[ok] updated {TARGET.name} with canonical tracker block.")
     else:
         print("[ok] no changes; tracker block already up-to-date.")
+
 
 if __name__ == "__main__":
     main()

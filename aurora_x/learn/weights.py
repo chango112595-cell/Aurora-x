@@ -8,8 +8,10 @@ WEIGHTS_FILE = "learn_weights.json"
 SEED_BIAS_MIN = 0.0
 SEED_BIAS_MAX = 0.5
 
+
 def _clamp(x: float, lo: float, hi: float) -> float:
     return max(lo, min(hi, x))
+
 
 def load(run_root: Path) -> dict[str, Any]:
     """Load weights dict from run root; defaults if missing."""
@@ -26,9 +28,11 @@ def load(run_root: Path) -> dict[str, Any]:
     except Exception:
         return {"seed_bias": 0.0}
 
+
 def save(run_root: Path, weights: dict[str, Any]) -> None:
     p = Path(run_root) / WEIGHTS_FILE
     p.write_text(json.dumps(weights, indent=2), encoding="utf-8")
+
 
 def update_seed_bias(current: float, seed_won: bool) -> float:
     """

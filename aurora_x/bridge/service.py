@@ -25,10 +25,12 @@ app.add_middleware(
 # Attach bridge endpoints
 attach_bridge(app)
 
+
 # Health check endpoint
 @app.get("/healthz")
 def health_check():
     return {"status": "ok", "service": "bridge", "port": 5001}
+
 
 @app.get("/")
 def root():
@@ -38,9 +40,10 @@ def root():
             "/api/bridge/nl - Generate project from natural language",
             "/api/bridge/spec - Generate project from spec file",
             "/api/bridge/deploy - Deploy to Replit",
-            "/healthz - Health check"
-        ]
+            "/healthz - Health check",
+        ],
     }
+
 
 if __name__ == "__main__":
     print("🚀 Starting Aurora-X Factory Bridge on port 5001...")

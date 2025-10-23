@@ -131,7 +131,7 @@ if __name__ == "__main__":
         iteration=100,
         wins=75,
         losses=25,
-        top_summary={"seed_a": 0.234, "seed_b": -0.156, "seed_c": 0.089}
+        top_summary={"seed_a": 0.234, "seed_b": -0.156, "seed_c": 0.089},
     )
 
     # Test drift warning

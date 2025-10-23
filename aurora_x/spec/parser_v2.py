@@ -10,6 +10,7 @@ class Example:
     inputs: dict[str, Any]
     output: Any
 
+
 @dataclass
 class RichSpec:
     title: str
@@ -19,7 +20,9 @@ class RichSpec:
     postconditions: list[str] = field(default_factory=list)
     constraints: list[str] = field(default_factory=list)
 
+
 SIG_RE = re.compile(r"def\s+([a-zA-Z_]\w*)\s*\((.*?)\)\s*->\s*([a-zA-Z_][\w\[\], ]*)")
+
 
 def parse_signature(block: str):
     m = SIG_RE.search(block)
@@ -30,18 +33,21 @@ def parse_signature(block: str):
     rtype = m.group(3).strip()
     return name, args, rtype
 
+
 def parse_examples(md: str) -> list[Example]:
     lines = [ln.strip() for ln in md.splitlines() if ln.strip()]
     start = None
     for i, ln in enumerate(lines):
         if ln.startswith("|") and ln.endswith("|") and "out" in ln.lower():
-            start = i; break
+            start = i
+            break
     if start is None:
         return []
     header = [h.strip().strip("`") for h in lines[start].strip("|").split("|")]
     rows = []
-    for ln in lines[start+2:]:
-        if not ln.startswith("|"): break
+    for ln in lines[start + 2 :]:
+        if not ln.startswith("|"):
+            break
         cells = [c.strip() for c in ln.strip("|").split("|")]
         rows.append(dict(zip(header, cells, strict=False)))
     examples = []
@@ -51,19 +57,27 @@ def parse_examples(md: str) -> list[Example]:
         examples.append(Example(inputs=inp, output=_coerce(row[out_key])))
     return examples
 
+
 def _coerce(s: str):
-    if re.fullmatch(r"-?\d+", s): return int(s)
-    if re.fullmatch(r"-?\d+\.\d+", s): return float(s)
-    if s.lower() in ("true","false"): return s.lower()=="true"
+    if re.fullmatch(r"-?\d+", s):
+        return int(s)
+    if re.fullmatch(r"-?\d+\.\d+", s):
+        return float(s)
+    if s.lower() in ("true", "false"):
+        return s.lower() == "true"
     return s
+
 
 def parse_sections(md: str):
     out = {}
     current = None
     buf = []
+
     def flush():
         nonlocal current, buf
-        if current: out[current] = "\n".join(buf).strip()
+        if current:
+            out[current] = "\n".join(buf).strip()
+
     for ln in md.splitlines():
         if ln.startswith("## "):
             flush()
@@ -74,35 +88,51 @@ def parse_sections(md: str):
     flush()
     return out
 
+
 def parse(md: str) -> RichSpec:
-    (md.splitlines()[0] or "# Spec").replace("#","").strip()
+    (md.splitlines()[0] or "# Spec").replace("#", "").strip()
     sections = parse_sections(md)
     import re as _re
-    sig_block = sections.get("Signature","")
-    sig_code = _re.search(r"```(.*?)```", sig_block, flags=_re.S|_re.M)
+
+    sig_block = sections.get("Signature", "")
+    sig_code = _re.search(r"```(.*?)```", sig_block, flags=_re.S | _re.M)
     if not sig_code:
         raise ValueError("Signature must be in a code block")
     signature = sig_code.group(1).strip()
     name, args, rtype = parse_signature(signature)
-    examples = parse_examples(sections.get("Examples",""))
-    post = [ln.strip("- ").strip() for ln in sections.get("Postconditions","").splitlines() if ln.strip()]
-    cons = [ln.strip("- ").strip() for ln in sections.get("Constraints","").splitlines() if ln.strip()]
-    return RichSpec(title=name, signature=signature, description=sections.get("Description","").strip(),
-                    examples=examples, postconditions=post, constraints=cons)
+    examples = parse_examples(sections.get("Examples", ""))
+    post = [
+        ln.strip("- ").strip()
+        for ln in sections.get("Postconditions", "").splitlines()
+        if ln.strip()
+    ]
+    cons = [
+        ln.strip("- ").strip() for ln in sections.get("Constraints", "").splitlines() if ln.strip()
+    ]
+    return RichSpec(
+        title=name,
+        signature=signature,
+        description=sections.get("Description", "").strip(),
+        examples=examples,
+        postconditions=post,
+        constraints=cons,
+    )
+
 
 def _snake(name: str) -> str:
     """Convert text to snake_case."""
     # Remove special characters and convert to lowercase
-    name = re.sub(r'[^\w\s]', '', name)
+    name = re.sub(r"[^\w\s]", "", name)
     # Replace spaces with underscores
-    name = name.replace(' ', '_')
+    name = name.replace(" ", "_")
     # Convert to lowercase
     name = name.lower()
     # Remove multiple underscores
-    name = re.sub(r'_+', '_', name)
+    name = re.sub(r"_+", "_", name)
     # Remove leading/trailing underscores
-    name = name.strip('_')
-    return name if name else 'function'
+    name = name.strip("_")
+    return name if name else "function"
+
 
 def english_to_spec(utterance: str) -> str:
     """Convert English utterance to a spec markdown."""
@@ -115,7 +145,7 @@ def english_to_spec(utterance: str) -> str:
     # Check if this is a Flask request
     if parsed.get("framework") == "flask":
         # Generate Flask-specific spec
-        return f"""# {parsed['name']}
+        return f"""# {parsed["name"]}
 
 ## Metadata
 - Framework: Flask
@@ -124,15 +154,15 @@ def english_to_spec(utterance: str) -> str:
 
 ## Signature
 ```
-{parsed['signature']}
+{parsed["signature"]}
 ```
 
 ## Description
-{parsed['description']}
+{parsed["description"]}
 
 ## Flask Configuration
-- Routes: {parsed.get('routes', [])}
-- Includes: {parsed.get('includes', {})}
+- Routes: {parsed.get("routes", [])}
+- Includes: {parsed.get("includes", {})}
 
 ## Examples
 Flask applications do not have traditional input/output examples.
@@ -150,18 +180,20 @@ This will generate a complete Flask web application.
             examples_md = "| " + " | ".join(list(parsed["examples"][0].keys()) + ["out"]) + " |\n"
             examples_md += "|" + "---|" * (len(parsed["examples"][0]) + 1) + "\n"
             for ex in parsed["examples"]:
-                row = " | ".join([str(ex.get(k, "")) for k in list(ex.keys())[:-1]] + [str(ex.get("out", ""))])
+                row = " | ".join(
+                    [str(ex.get(k, "")) for k in list(ex.keys())[:-1]] + [str(ex.get("out", ""))]
+                )
                 examples_md += f"| {row} |\n"
 
-        return f"""# {parsed['name']}
+        return f"""# {parsed["name"]}
 
 ## Signature
 ```
-{parsed['signature']}
+{parsed["signature"]}
 ```
 
 ## Description
-{parsed['description']}
+{parsed["description"]}
 
 ## Examples
 {examples_md if examples_md else "No examples provided"}
@@ -192,7 +224,9 @@ Reverse the input string.
 ## Postconditions
 - The output is the input string in reverse order
 """
-    elif ("add" in lower_utterance or "sum" in lower_utterance) and ("two" in lower_utterance or "numbers" in lower_utterance):
+    elif ("add" in lower_utterance or "sum" in lower_utterance) and (
+        "two" in lower_utterance or "numbers" in lower_utterance
+    ):
         return """# add_two_numbers
 
 ## Signature
@@ -322,7 +356,7 @@ Create a timer or countdown function.
     else:
         # Generic fallback for unrecognized patterns
         func_name = _snake(utterance)
-        if not func_name or func_name == 'function':
+        if not func_name or func_name == "function":
             func_name = "generated_function"
 
         return f"""# {func_name}
@@ -344,6 +378,7 @@ def {func_name}(input_value: str) -> str
 ## Postconditions
 - Implements the requested functionality: {utterance}
 """
+
 
 def parse_freeform_or_v2(text: str) -> RichSpec:
     """Try to parse as v2 spec first, fall back to English if that fails."""
@@ -369,5 +404,5 @@ def parse_freeform_or_v2(text: str) -> RichSpec:
             description=text,
             examples=[Example(inputs={"input_value": "test"}, output="test_result")],
             postconditions=[f"Implements: {text}"],
-            constraints=[]
+            constraints=[],
         )
