@@ -448,8 +448,9 @@ def root():
 
 def main():
     """Entry point for running the server via uvicorn."""
-    import uvicorn
     import os
+
+    import uvicorn
 
     port = int(os.getenv("AURORA_PORT", "5001"))
     print(f"[Aurora-X] Starting server on 0.0.0.0:{port}")
