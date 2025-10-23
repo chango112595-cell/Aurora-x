@@ -22,21 +22,27 @@ from aurora_x.spec.parser_v2 import _snake, english_to_spec
 
 class ChatRequest(BaseModel):
     """Request model for chat endpoint"""
+
     prompt: str
     auto_synthesize: bool = False  # Whether to immediately trigger synthesis
 
+
 class ChatResponse(BaseModel):
     """Response model for chat endpoint"""
+
     ok: bool
     spec: str  # Path to generated spec
     function_name: str | None = None
     message: str | None = None
     synthesis_started: bool = False
 
+
 class ApprovalRequest(BaseModel):
     """Request model for approval endpoint"""
+
     token: str
     approved: bool
+
 
 def attach(app: FastAPI) -> None:
     """Attach English mode routes to the FastAPI app"""
@@ -68,12 +74,13 @@ def attach(app: FastAPI) -> None:
             filename = f"{_snake(request.prompt)}.md"
             spec_path = requests_dir / filename
 
-            with open(spec_path, 'w') as f:
+            with open(spec_path, "w") as f:
                 f.write(spec_content)
 
             # Extract function name from spec
             import re
-            func_match = re.search(r'def\s+(\w+)\s*\(', spec_content)
+
+            func_match = re.search(r"def\s+(\w+)\s*\(", spec_content)
             function_name = func_match.group(1) if func_match else "unknown"
 
             response_data = {
@@ -81,7 +88,7 @@ def attach(app: FastAPI) -> None:
                 "spec": str(spec_path),
                 "function_name": function_name,
                 "message": f"Spec generated successfully for: {request.prompt[:100]}",
-                "synthesis_started": False
+                "synthesis_started": False,
             }
 
             # Optionally trigger synthesis
@@ -92,7 +99,7 @@ def attach(app: FastAPI) -> None:
                         ["python", "tools/spec_compile_v3.py", str(spec_path)],
                         capture_output=True,
                         text=True,
-                        timeout=30
+                        timeout=30,
                     )
 
                     if result.returncode == 0:
@@ -111,10 +118,7 @@ def attach(app: FastAPI) -> None:
         except HTTPException:
             raise
         except Exception as e:
-            raise HTTPException(
-                status_code=500,
-                detail=f"Failed to process prompt: {str(e)}"
-            )
+            raise HTTPException(status_code=500, detail=f"Failed to process prompt: {str(e)}")
 
     @app.get("/api/approve")
     async def approve_endpoint(token: str | None = None):
@@ -139,16 +143,18 @@ def attach(app: FastAPI) -> None:
             for spec_file in requests_dir.glob("*.md"):
                 # Check if this spec has been synthesized
                 # (You could track this in a database or file)
-                pending_runs.append({
-                    "spec": str(spec_file),
-                    "created": datetime.fromtimestamp(spec_file.stat().st_mtime).isoformat(),
-                    "token": hashlib.md5(str(spec_file).encode(), usedforsecurity=False).hexdigest()[:8]
-                })
+                pending_runs.append(
+                    {
+                        "spec": str(spec_file),
+                        "created": datetime.fromtimestamp(spec_file.stat().st_mtime).isoformat(),
+                        "token": hashlib.md5(str(spec_file).encode(), usedforsecurity=False).hexdigest()[:8],
+                    }
+                )
 
         return {
             "ok": True,
             "pending_runs": pending_runs[:10],  # Limit to last 10
-            "message": f"Found {len(pending_runs)} pending specs"
+            "message": f"Found {len(pending_runs)} pending specs",
         }
 
     @app.post("/api/approve")
@@ -168,7 +174,7 @@ def attach(app: FastAPI) -> None:
             "ok": True,
             "token": request.token,
             "approved": request.approved,
-            "message": f"Synthesis {'approved' if request.approved else 'rejected'} for token {request.token}"
+            "message": f"Synthesis {'approved' if request.approved else 'rejected'} for token {request.token}",
         }
 
     @app.get("/api/english/status")
@@ -180,11 +186,11 @@ def attach(app: FastAPI) -> None:
             "endpoints": [
                 "/api/chat - Generate spec from English prompt",
                 "/api/approve - Manage synthesis approvals",
-                "/api/english/status - This status endpoint"
+                "/api/english/status - This status endpoint",
             ],
             "specs_directory": str(requests_dir),
             "fallback_enabled": True,
-            "message": "English mode is active and ready to accept plain language requests"
+            "message": "English mode is active and ready to accept plain language requests",
         }
 
     # Log that addons have been attached

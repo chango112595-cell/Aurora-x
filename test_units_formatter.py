@@ -17,17 +17,14 @@ def test_units_formatter_locally():
         (149597870700, "m", "150 Gm", "1 AU (Earth-Sun distance)"),
         (384400000, "m", "384 Mm", "Earth-Moon distance"),
         (1000, "m", "1 km", None),
-
         # Speed tests
         (7800, "m/s", "7.8 km/s", "LEO orbital speed"),
         (30000, "m/s", "30 km/s", "Earth orbital speed"),
         (299792458, "m/s", "300 Mm/s", "Speed of light (≈ c)"),
-
         # Mass tests
         (5.972e24, "kg", "5.97e+24 kg", "Mass of Earth"),
         (1.989e30, "kg", "1.99e+30 kg", "Mass of Sun"),
         (7.342e22, "kg", "7.34e+22 kg", "Mass of Moon"),
-
         # Small values
         (0.001, "m", "1 mm", None),
         (1e-6, "s", "1 µs", None),
@@ -46,6 +43,7 @@ def test_units_formatter_locally():
             print(f"     {status_hint} Hint: {hint or '(none)'} (expected: {expected_hint})")
         print()
 
+
 def test_api():
     """Test the API endpoint"""
     import requests
@@ -62,7 +60,7 @@ def test_api():
         resp = requests.post(
             f"{base_url}/api/format/units",
             json=test_single,
-            headers={"Content-Type": "application/json"}
+            headers={"Content-Type": "application/json"},
         )
 
         if resp.status_code == 200:
@@ -81,7 +79,7 @@ def test_api():
         "values": [
             {"value": 7e6, "unit": "m"},
             {"value": 3e8, "unit": "m/s"},
-            {"value": 5.97e24, "unit": "kg"}
+            {"value": 5.97e24, "unit": "kg"},
         ]
     }
 
@@ -89,7 +87,7 @@ def test_api():
         resp = requests.post(
             f"{base_url}/api/format/units",
             json=test_multiple,
-            headers={"Content-Type": "application/json"}
+            headers={"Content-Type": "application/json"},
         )
 
         if resp.status_code == 200:
@@ -108,6 +106,7 @@ def test_api():
         print("  ⚠ API not running - testing locally only")
     except Exception as e:
         print(f"  ✗ Error: {e}")
+
 
 def test_direct():
     """Direct test of the formatting functions"""
@@ -141,10 +140,11 @@ def test_direct():
     print(f"  Earth: {_si_fmt(earth_mass, 'kg')} → {_hint(earth_mass, 'kg')}")
     print(f"  Sun: {_si_fmt(sun_mass, 'kg')} → {_hint(sun_mass, 'kg')}")
 
+
 if __name__ == "__main__":
-    print("="*60)
+    print("=" * 60)
     print("T09 UNITS FORMATTER TEST")
-    print("="*60)
+    print("=" * 60)
     print()
 
     test_units_formatter_locally()
@@ -156,7 +156,9 @@ if __name__ == "__main__":
     print("curl -X POST http://localhost:5001/api/format/units \\")
     print('  -H "Content-Type: application/json" \\')
     print('  -d \'{"value": 7e6, "unit": "m"}\'')
-    print("# Returns: {\"ok\": true, \"items\": [{\"value\": 7000000, \"unit\": \"m\", \"pretty\": \"7 Mm\", \"hint\": \"LEO-ish altitude\"}]}")
+    print(
+        '# Returns: {"ok": true, "items": [{"value": 7000000, "unit": "m", "pretty": "7 Mm", "hint": "LEO-ish altitude"}]}'
+    )
     print()
     print("curl -X POST http://localhost:5001/api/format/units \\")
     print('  -H "Content-Type: application/json" \\')

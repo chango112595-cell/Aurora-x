@@ -6,7 +6,7 @@ on:
   # - SSH_USER: SSH username for deployment
   # - SSH_KEY: SSH private key for authentication
   # - SSH_PORT (optional): SSH port (defaults to 22)
-  # 
+  #
   # Then uncomment the push trigger below:
   # push:
   #   branches:
@@ -17,6 +17,9 @@ on:
         description: 'Deployment message'
         required: false
         default: 'Manual deployment triggered'
+      confirm:
+        description: 'Type "deploy" to confirm'
+        required: true
 
 env:
   HEALTH_TIMEOUT: 120
@@ -24,9 +27,28 @@ env:
   HEALTH_INTERVAL: 4
 
 jobs:
+  check-secrets:
+    runs-on: ubuntu-latest
+    name: Validate Secrets
+    outputs:
+      has_secrets: ${{ steps.check.outputs.has_secrets }}
+    steps:
+      - name: Check required secrets
+        id: check
+        run: |
+          if [ -n "${{ secrets.DEPLOY_SSH_HOST }}" ] && [ -n "${{ secrets.DEPLOY_SSH_USER }}" ] && [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
+            echo "has_secrets=true" >> $GITHUB_OUTPUT
+            echo "✅ All required secrets configured"
+          else
+            echo "has_secrets=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Missing required secrets - deployment will be skipped"
+          fi
+
   deploy:
     runs-on: ubuntu-latest
     name: Deploy to VPS via SSH
+    needs: check-secrets
+    if: needs.check-secrets.outputs.has_secrets == 'true' && (github.event.inputs.confirm == 'deploy' || github.event_name == 'push')
 
     steps:
       - name: Checkout code
@@ -35,17 +57,18 @@ jobs:
       - name: Send Discord notification - Starting
         if: vars.DISCORD_WEBHOOK_URL != ''
         run: |
+          MESSAGE="${{ github.event.inputs.deploy_message || 'Automated deployment' }}"
           curl -X POST -H "Content-Type: application/json" \
-            -d "{\"embeds\":[{\"title\":\"🚀 Aurora-X Deployment Starting\",\"description\":\"Deploying commit: \`${GITHUB_SHA:0:8}\`\\nBranch: \`${{ github.ref_name }}\`\\nTriggered by: \`${{ github.actor }}\`\\nMessage: ${{ github.event.inputs.deploy_message || github.event.head_commit.message }}\",\"color\":3447003,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
+            -d "{\"embeds\":[{\"title\":\"🚀 Aurora-X Deployment Starting\",\"description\":\"Deploying commit: \`${GITHUB_SHA:0:8}\`\\nBranch: \`${{ github.ref_name }}\`\\nTriggered by: \`${{ github.actor }}\`\\nMessage: ${MESSAGE}\",\"color\":3447003,\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}]}" \
             "${{ vars.DISCORD_WEBHOOK_URL }}" || true
 
       - name: Create deployment directory on server
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT || '22' }}
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || '22' }}
           script: |
             set -e
             mkdir -p ~/aurora-x-deployment
@@ -59,20 +82,20 @@ jobs:
       - name: Copy deployment files to server
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT || '22' }}
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || '22' }}
           source: "docker-compose.yml,update-aurora.sh,Dockerfile.app,.env.example"
           target: ~/aurora-x-deployment/
 
       - name: Setup environment and deploy
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT || '22' }}
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || '22' }}
           command_timeout: 10m
           script: |
             set -e
@@ -120,10 +143,10 @@ jobs:
       - name: Health check
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT || '22' }}
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || '22' }}
           command_timeout: 3m
           script: |
             set -e

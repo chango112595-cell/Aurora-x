@@ -39,7 +39,14 @@ include = ["aurora_x*"]
 
 [tool.black]
 line-length = 120
-target-version = ['py38', 'py39', 'py310', 'py311']
+exclude = '''
+/(
+  \.eggs
+ |build
+ |dist
+ |backups
+)/
+'''
 
 [tool.mypy]
 python_version = "3.8"

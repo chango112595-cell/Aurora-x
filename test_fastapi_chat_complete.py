@@ -6,7 +6,8 @@ import sys
 from pathlib import Path
 
 # Add current directory to path
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath("."))
+
 
 async def test_chat_endpoint():
     """Test the /chat endpoint implementation directly"""
@@ -23,7 +24,7 @@ async def test_chat_endpoint():
     # Get the endpoint function
     chat_func = None
     for route in router.routes:
-        if hasattr(route, 'endpoint'):
+        if hasattr(route, "endpoint"):
             chat_func = route.endpoint
             break
 
@@ -109,6 +110,7 @@ async def test_chat_endpoint():
     if Path("app.py").exists():
         os.remove("app.py")
         print("\n🧹 Cleaned up test files")
+
 
 # Run the async test
 import asyncio
