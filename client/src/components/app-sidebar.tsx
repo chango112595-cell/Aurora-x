@@ -29,11 +29,6 @@ const menuItems = [
     url: "/dashboard",
     icon: Activity,
   },
-  {
-    title: "Corpus Explorer",
-    url: "/corpus",
-    icon: Database,
-  },
 ];
 
 const bottomItems = [
