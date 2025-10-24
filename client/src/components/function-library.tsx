@@ -1,77 +1,125 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, CheckCircle2, XCircle } from "lucide-react";
+import { Search, Code2, Clock, Download, Zap, Terminal } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 interface FunctionItem {
+  id: string;
   name: string;
-  args: string;
-  returns: string;
-  passRate: number;
-  complexity: number;
-  status: "passed" | "failed";
+  description: string;
+  language: string;
+  createdAt: string;
+  code: string;
 }
 
 export function FunctionLibrary() {
-  const [search, setSearch] = useState("");
-  
-  const functions: FunctionItem[] = [
-    { name: "normalize_spaces", args: "s:str", returns: "str", passRate: 100, complexity: 8, status: "passed" },
-    { name: "tokenize", args: "s:str", returns: "list[str]", passRate: 100, complexity: 12, status: "passed" },
-    { name: "safe_int", args: "s:str, default:int", returns: "int", passRate: 95, complexity: 15, status: "passed" },
-    { name: "clamp", args: "x:int, lo:int, hi:int", returns: "int", passRate: 100, complexity: 10, status: "passed" },
-    { name: "score_keyword", args: "s:str, kw:str", returns: "int", passRate: 90, complexity: 18, status: "passed" },
-  ];
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const filtered = functions.filter(f => 
-    f.name.toLowerCase().includes(search.toLowerCase())
+  const { data: functions = [] } = useQuery<FunctionItem[]>({
+    queryKey: ['/api/corpus'],
+  });
+
+  const filteredFunctions = functions.filter(fn =>
+    fn.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    fn.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <Card data-testid="card-function-library">
-      <CardHeader>
-        <CardTitle>Function Library</CardTitle>
-        <div className="relative mt-2">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+    <div className="space-y-6">
+      {/* Futuristic search bar */}
+      <div className="relative group">
+        <div className="absolute -inset-1 bg-gradient-to-r from-primary/50 to-cyan-500/50 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-300" />
+        <div className="relative">
+          <Search className="absolute left-4 top-4 h-5 w-5 text-primary" />
+          <Terminal className="absolute right-4 top-4 h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search functions..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-8"
-            data-testid="input-search"
+            placeholder="Initialize search protocol..."
+            className="pl-12 pr-12 h-14 bg-background/80 backdrop-blur-sm border-primary/30 focus:border-primary transition-all font-mono text-base"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2">
-          {filtered.map((func) => (
-            <div
-              key={func.name}
-              className="flex items-center justify-between rounded-lg border border-border p-3 hover-elevate"
-              data-testid={`function-${func.name}`}
-            >
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <code className="text-sm font-mono font-semibold">{func.name}</code>
-                  {func.status === "passed" ? (
-                    <CheckCircle2 className="h-4 w-4 text-chart-2" />
-                  ) : (
-                    <XCircle className="h-4 w-4 text-destructive" />
-                  )}
+      </div>
+
+      {/* Function grid with futuristic cards */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {filteredFunctions.map((fn, index) => (
+          <Card 
+            key={fn.id} 
+            className="group relative overflow-hidden border-primary/20 bg-gradient-to-br from-card via-card to-card/80 hover:border-primary/50 transition-all duration-300 hover-elevate"
+            style={{ animationDelay: `${index * 50}ms` }}
+          >
+            {/* Animated border glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/20 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+            {/* Corner accent */}
+            <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 blur-2xl rounded-full -translate-y-10 translate-x-10 group-hover:bg-primary/20 transition-colors" />
+
+            <CardHeader className="relative">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
+                    <Code2 className="h-5 w-5 text-primary" />
+                  </div>
+                  <CardTitle className="text-lg font-mono bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                    {fn.name}
+                  </CardTitle>
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground font-mono">
-                  ({func.args}) → {func.returns}
-                </p>
+                <Badge 
+                  variant="secondary" 
+                  className="bg-primary/10 text-primary border-primary/30 font-mono text-xs"
+                >
+                  {fn.language}
+                </Badge>
               </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary">Pass: {func.passRate}%</Badge>
-                <Badge variant="outline">AST: {func.complexity}</Badge>
+            </CardHeader>
+
+            <CardContent className="relative">
+              <p className="text-sm text-muted-foreground mb-6 line-clamp-2 font-mono">
+                {fn.description}
+              </p>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
+                  <Clock className="h-3 w-3 text-primary" />
+                  <span className="text-primary">:</span>
+                  {new Date(fn.createdAt).toLocaleDateString()}
+                </div>
+
+                <Button 
+                  size="sm" 
+                  variant="ghost"
+                  className="hover:bg-primary/10 hover:text-primary transition-colors group/btn"
+                >
+                  <Download className="h-4 w-4 group-hover/btn:animate-bounce" />
+                </Button>
               </div>
-            </div>
-          ))}
+
+              {/* Scan line animation */}
+              <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-scan" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Enhanced empty state */}
+      {filteredFunctions.length === 0 && (
+        <div className="text-center py-16">
+          <div className="relative inline-block">
+            <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
+            <Zap className="relative h-16 w-16 text-primary/50 mx-auto mb-4 animate-pulse" />
+          </div>
+          <p className="text-muted-foreground font-mono text-lg">
+            {'>'} No functions found in database
+          </p>
+          <p className="text-muted-foreground/60 font-mono text-sm mt-2">
+            Initialize synthesis protocol to generate code
+          </p>
         </div>
-      </CardContent>
-    </Card>
+      )}
+    </div>
   );
 }
