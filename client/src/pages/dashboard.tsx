@@ -1,11 +1,11 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { 
-  CheckCircle, 
-  Loader2, 
-  Wrench, 
-  Circle, 
+import {
+  CheckCircle,
+  Loader2,
+  Wrench,
+  Circle,
   TrendingUp,
   Activity,
   Zap,
@@ -18,7 +18,8 @@ import {
   Rocket,
   Package,
   Terminal,
-  AlertCircle
+  AlertCircle,
+  Database // Added Database icon import
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -45,6 +46,7 @@ interface ProgressData {
   tasks: Task[];
   active: string[];
   rules: string[];
+  overall_percent?: number; // Added for overall progress
 }
 
 // Synthesis/Generation interfaces
@@ -117,7 +119,7 @@ const getStatusColor = (status: string) => {
 const StatusIcon = ({ status }: { status: string }) => {
   const cleanStatus = parseStatus(status);
   const iconClass = "h-5 w-5";
-  
+
   switch(cleanStatus) {
     case "complete":
       return <CheckCircle className={iconClass} style={{ color: "#10b981" }} data-testid="icon-complete" />;
@@ -151,7 +153,7 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
   const status = parseStatus(task.status);
   const percent = parsePercent(task.percent);
   const color = getStatusColor(task.status);
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -216,12 +218,12 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
   if (!tasks || tasks.length === 0) {
     return null;
   }
-  
+
   const totalPercent = tasks.reduce((acc, task) => acc + (task.percent || 0), 0) / tasks.length;
   const completedTasks = tasks.filter(t => parseStatus(t.status || "") === "complete").length;
   const inProgressTasks = tasks.filter(t => parseStatus(t.status || "") === "in-progress").length;
   const inDevelopmentTasks = tasks.filter(t => parseStatus(t.status || "") === "in-development").length;
-  
+
   return (
     <Card className="mb-6">
       <CardHeader>
@@ -291,9 +293,9 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
 // Active tasks section
 const ActiveTasksSection = ({ tasks, activeIds }: { tasks: Task[]; activeIds: string[] }) => {
   const activeTasks = tasks.filter(t => activeIds.includes(t.id));
-  
+
   if (activeTasks.length === 0) return null;
-  
+
   return (
     <Card className="mb-6 border-primary/20 bg-primary/5">
       <CardHeader>
@@ -355,7 +357,7 @@ const ProjectGenerationSection = () => {
           title: "Project Generated Successfully!",
           description: data.message || `Generated ${data.project_type} with ${data.files?.length || 0} files`,
         });
-        
+
         // Add to recent projects
         if (data.run_id) {
           const newProject: GeneratedProject = {
@@ -396,7 +398,7 @@ const ProjectGenerationSection = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     toast({
       title: "Download Started",
       description: `Downloading ${run_id} project...`
@@ -412,7 +414,7 @@ const ProjectGenerationSection = () => {
       });
       return;
     }
-    
+
     generateMutation.mutate({ prompt: prompt.trim() });
   };
 
@@ -427,7 +429,7 @@ const ProjectGenerationSection = () => {
         <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
           {/* Animated Background Gradient */}
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-secondary/10 animate-pulse" />
-          
+
           <CardHeader className="relative">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-primary/10">
@@ -443,7 +445,7 @@ const ProjectGenerationSection = () => {
               </div>
             </div>
           </CardHeader>
-          
+
           <CardContent className="relative space-y-4">
             <Textarea
               placeholder="Describe your project... e.g., 'Create a React dashboard with user authentication and real-time data visualization'"
@@ -453,13 +455,13 @@ const ProjectGenerationSection = () => {
               disabled={generateMutation.isPending}
               data-testid="input-generation-prompt"
             />
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <FileCode2 className="h-4 w-4" />
                 <span>Supports: React, Vue, Flask, FastAPI, AI/ML, and more</span>
               </div>
-              
+
               <Button
                 onClick={handleGenerate}
                 disabled={generateMutation.isPending || !prompt.trim()}
@@ -481,7 +483,7 @@ const ProjectGenerationSection = () => {
                 <div className="absolute inset-0 rounded-md bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
             </div>
-            
+
             {/* Generation Result */}
             {generateMutation.isSuccess && generateMutation.data?.status === "success" && (
               <motion.div
@@ -519,7 +521,7 @@ const ProjectGenerationSection = () => {
           </CardContent>
         </Card>
       </motion.div>
-      
+
       {/* Recent Generations */}
       {recentProjects.length > 0 && (
         <motion.div
@@ -637,7 +639,7 @@ const SolverSection = () => {
       });
       return;
     }
-    
+
     solveMutation.mutate({ q: query.trim() });
   };
 
@@ -671,7 +673,7 @@ const SolverSection = () => {
       <Card className="relative overflow-hidden border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-emerald-500/5">
         {/* Animated Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-emerald-500/5 animate-pulse" />
-        
+
         <CardHeader className="relative">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-cyan-500/10">
@@ -687,7 +689,7 @@ const SolverSection = () => {
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="relative space-y-4">
           {/* Input and Button */}
           <div className="flex gap-2">
@@ -700,7 +702,7 @@ const SolverSection = () => {
               disabled={solveMutation.isPending}
               data-testid="input-solver-query"
             />
-            
+
             <Button
               onClick={handleSolve}
               disabled={solveMutation.isPending || !query.trim()}
@@ -720,7 +722,7 @@ const SolverSection = () => {
               )}
             </Button>
           </div>
-          
+
           {/* Example Queries */}
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">Quick examples:</p>
@@ -738,7 +740,7 @@ const SolverSection = () => {
               ))}
             </div>
           </div>
-          
+
           {/* Results Display */}
           {(result || solveMutation.isPending) && (
             <motion.div
@@ -769,7 +771,7 @@ const SolverSection = () => {
               </div>
             </motion.div>
           )}
-          
+
           {/* Error Display */}
           {errorMessage && (
             <motion.div
@@ -778,7 +780,7 @@ const SolverSection = () => {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <div 
+              <div
                 className="p-4 rounded-lg bg-red-500/10 border border-red-500/20"
                 role="alert"
                 aria-live="assertive"
@@ -798,7 +800,7 @@ const SolverSection = () => {
               </div>
             </motion.div>
           )}
-          
+
           {/* Capabilities Info */}
           <div className="text-xs text-muted-foreground space-y-1">
             <p>• Supports arithmetic operations, algebra, calculus, and physics calculations</p>
@@ -813,7 +815,7 @@ const SolverSection = () => {
 
 // Show Progress Section
 const ShowProgressSection = () => {
-  const { data: progressData } = useQuery({
+  const { data: progressData } = useQuery<ProgressData>({ // Added type assertion
     queryKey: ['/api/progress'],
     refetchInterval: 10000,
   });
@@ -970,11 +972,11 @@ const RollbackSection = () => {
     setIsLoading({ ...isLoading, open: true });
     setResponse("");
     setErrorMessage("");
-    
+
     try {
       const res = await apiRequest("POST", "/api/bridge/rollback/open", {});
       const data = await res.json();
-      
+
       if (res.ok && data.status === "ok") {
         const message = `Successfully closed PR #${data.closed} and deleted branch ${data.deleted_branch}`;
         setResponse(JSON.stringify(data, null, 2));
@@ -1009,13 +1011,13 @@ const RollbackSection = () => {
     setIsLoading({ ...isLoading, merged: true });
     setResponse("");
     setErrorMessage("");
-    
+
     try {
       const res = await apiRequest("POST", "/api/bridge/rollback/merged", { base: "main" });
       const data = await res.json();
-      
+
       if (res.ok && (data.status === "ok" || data.revert_pr)) {
-        const message = data.revert_pr 
+        const message = data.revert_pr
           ? `Successfully created revert PR #${data.revert_pr}`
           : "Revert PR created successfully";
         setResponse(JSON.stringify(data, null, 2));
@@ -1088,7 +1090,7 @@ const RollbackSection = () => {
                 </>
               )}
             </Button>
-            
+
             <Button
               onClick={handleRollbackMerged}
               disabled={isLoading.open || isLoading.merged}
@@ -1181,11 +1183,11 @@ const BridgeSection = () => {
         setResponse(JSON.stringify(data, null, 2));
         setPrUrl(data.pr_url || "");
         setErrorMessage("");
-        
-        const message = data.pr_url 
-          ? "Pull Request created successfully!" 
+
+        const message = data.pr_url
+          ? "Pull Request created successfully!"
           : "Successfully processed your request";
-        
+
         toast({
           title: "Generation Complete",
           description: message
@@ -1223,7 +1225,7 @@ const BridgeSection = () => {
       });
       return;
     }
-    
+
     bridgeMutation.mutate({ prompt: prompt.trim() });
   };
 
@@ -1243,7 +1245,7 @@ const BridgeSection = () => {
       <Card className="relative overflow-hidden border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-emerald-500/5">
         {/* Animated Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-emerald-500/5 animate-pulse" />
-        
+
         <CardHeader className="relative">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-cyan-500/10">
@@ -1259,7 +1261,7 @@ const BridgeSection = () => {
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="relative space-y-4">
           {/* Input and Button */}
           <div className="flex gap-2">
@@ -1272,7 +1274,7 @@ const BridgeSection = () => {
               disabled={bridgeMutation.isPending}
               data-testid="input-bridge-prompt"
             />
-            
+
             <Button
               onClick={handleGenerate}
               disabled={bridgeMutation.isPending || !prompt.trim()}
@@ -1292,7 +1294,7 @@ const BridgeSection = () => {
               )}
             </Button>
           </div>
-          
+
           {/* Response Display */}
           {(response || prUrl || bridgeMutation.isPending) && (
             <motion.div
@@ -1317,9 +1319,9 @@ const BridgeSection = () => {
                       <>
                         {prUrl && (
                           <div className="mb-3">
-                            <a 
-                              href={prUrl} 
-                              target="_blank" 
+                            <a
+                              href={prUrl}
+                              target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-2 text-cyan-600 dark:text-cyan-400 hover:underline font-medium"
                               data-testid="link-pr-url"
@@ -1342,7 +1344,7 @@ const BridgeSection = () => {
               </div>
             </motion.div>
           )}
-          
+
           {/* Error Display */}
           {errorMessage && (
             <motion.div
@@ -1351,7 +1353,7 @@ const BridgeSection = () => {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <div 
+              <div
                 className="p-4 rounded-lg bg-red-500/10 border border-red-500/20"
                 role="alert"
                 aria-live="assertive"
@@ -1371,7 +1373,7 @@ const BridgeSection = () => {
               </div>
             </motion.div>
           )}
-          
+
           {/* Info */}
           <div className="text-xs text-muted-foreground space-y-1">
             <p>• Describe your feature or app requirements in plain English</p>
@@ -1415,7 +1417,7 @@ export default function Dashboard() {
     initialData: () => ({
       tasks: [],
       updated_utc: new Date().toISOString(),
-      ui_thresholds: { ok: 90, warn: 60 }
+      // ui_thresholds: { ok: 90, warn: 60 } // This property is not defined in ProgressData
     }), // Provide initial data to prevent loading state
     refetchOnWindowFocus: false, // Don't refetch when window regains focus
     refetchOnMount: true, // Only refetch on mount
@@ -1561,35 +1563,28 @@ export default function Dashboard() {
         </motion.div>
 
         <OverallProgress tasks={data.tasks} isRefetching={isRefetching} lastUpdated={lastUpdated} />
-        
-        {/* Aurora Stats & Info Grid */}
-        <div className="grid gap-6 md:grid-cols-3 mb-6">
-          <ShowProgressSection />
-          <AdaptiveStatsSection />
-          <CorpusInfoSection />
-        </div>
-        
+
         {/* Add Project Generation Section */}
         <ProjectGenerationSection />
-        
+
         {/* Add Math & Physics Solver Section */}
         <SolverSection />
-        
+
         {/* Add Factory Bridge Section */}
         <BridgeSection />
-        
+
         {/* Add Rollback Section */}
         <RollbackSection />
-        
+
         {data.active && data.active.length > 0 && (
           <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
         )}
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {data.tasks.map((task, index) => (
-            <TaskCard 
-              key={task.id} 
-              task={task} 
+            <TaskCard
+              key={task.id}
+              task={task}
               isActive={data.active?.includes(task.id) || false}
             />
           ))}
