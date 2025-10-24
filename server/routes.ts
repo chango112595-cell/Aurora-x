@@ -1351,25 +1351,27 @@ except Exception as e:
     }
   });
 
-  app.get("/api/corpus", (req, res) => {
+  // Corpus API endpoint
+  app.get("/api/corpus", async (req, res) => {
     try {
-      const query = corpusQuerySchema.parse(req.query);
-      const items = corpusStorage.getEntries({
-        func: query.func,
-        limit: query.limit,
-        offset: query.offset,
-        perfectOnly: query.perfectOnly,
-        minScore: query.minScore,
-        maxScore: query.maxScore,
-        startDate: query.startDate,
-        endDate: query.endDate,
-      });
-      return res.json({ items, hasMore: items.length === query.limit });
-    } catch (e: any) {
-      return res.status(400).json({
-        error: "bad_query",
-        details: e?.message ?? String(e),
-      });
+      const result = await fetch("http://0.0.0.0:5001/api/corpus");
+      const data = await result.json();
+
+      // Ensure consistent array format
+      if (data && typeof data === 'object') {
+        if (Array.isArray(data)) {
+          res.json({ items: data });
+        } else if (data.items && Array.isArray(data.items)) {
+          res.json(data);
+        } else {
+          res.json({ items: [] });
+        }
+      } else {
+        res.json({ items: [] });
+      }
+    } catch (error) {
+      console.error("Error fetching corpus:", error);
+      res.json({ items: [] });
     }
   });
 

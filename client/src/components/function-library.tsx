@@ -55,13 +55,18 @@ export function FunctionLibrary() {
   }
 
   // Safely get the items array
-  const allFunctions = response?.items || [];
+  // Handle both array and object responses
+  const allFunctions = Array.isArray(response)
+    ? response
+    : (response?.items || response?.functions || []);
 
   // Filter functions based on search term
-  const filteredFunctions = allFunctions.filter(fn =>
-    fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredFunctions = Array.isArray(allFunctions)
+    ? allFunctions.filter(fn =>
+        fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   return (
     <div className="space-y-6">
