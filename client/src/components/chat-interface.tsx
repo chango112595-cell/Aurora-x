@@ -156,7 +156,7 @@ Just type what you want in natural language - I'll understand and generate it fo
       } else {
         // Fallback for direct response (shouldn't happen with new system)
         // Show the synthesis result
-        const resultMessage = data.message || 
+        const resultMessage = data.message ||
           (data.code_file ? `✅ Generated: ${data.code_file}` : 'Code generated successfully');
 
         setMessages((prev) => [...prev, {
@@ -250,16 +250,16 @@ Just type what you want in natural language - I'll understand and generate it fo
       const data = await response.json();
 
       let aiContent = '';
-      
+
       // Handle different response types
       if (data.synthesis_id) {
         // This will be handled by the synthesis progress component
         return;
       }
-      
+
       if (data.status === 'success' || data.ok) {
         aiContent = `✅ ${data.message || 'Request completed successfully!'}\n\n`;
-        
+
         // Handle project generation responses
         if (data.run_id || data.runDir) {
           aiContent += `📁 Generated code in: runs/${data.run_id || data.runDir}\n`;
@@ -273,20 +273,20 @@ Just type what you want in natural language - I'll understand and generate it fo
             aiContent += `📦 Download: ${data.zip_path}\n`;
           }
         }
-        
+
         // Handle solver responses
         if (data.formatted) {
           aiContent = `✅ Solution: ${data.formatted}`;
         }
-        
+
         // Handle PR/Bridge responses
         if (data.pr_url) {
           aiContent += `🔗 Pull Request: ${data.pr_url}\n`;
         }
-        
+
         // Handle generic output
         if (data.output) {
-          const outputLines = data.output.split('\n').filter((line: string) => 
+          const outputLines = data.output.split('\n').filter((line: string) =>
             line.includes('[OK]') || line.includes('Generated') || line.includes('Latest')
           );
           if (outputLines.length > 0) {
