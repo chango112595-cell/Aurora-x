@@ -1587,17 +1587,6 @@ export default function Dashboard() {
         {/* Corpus Explorer Section - Embedded */}
         <CorpusExplorerSection />
 
-        {/* Tasks Grid */}
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 mb-8">
-          {data.tasks.map((task, index) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              isActive={data.active?.includes(task.id) || false}
-            />
-          ))}
-        </div>
-
         {/* Active Now Section */}
         {data.active && data.active.length > 0 && (
           <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background">
@@ -1640,6 +1629,17 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         )}
+
+        {/* Tasks Grid */}
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 mb-8">
+          {data.tasks.map((task, index) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              isActive={data.active?.includes(task.id) || false}
+            />
+          ))}
+        </div>
 
         {/* PR Rollback Controls Section - Moved to bottom */}
         <RollbackSection />
