@@ -1130,8 +1130,9 @@ except Exception as e:
 
       // Check database
       try {
-        await corpusStorage.getRecent(1);
+        const recentItems = await corpusStorage.getRecent(1);
         diagnostics.services.database = "connected";
+        diagnostics.corpus_count = recentItems.length;
       } catch (e) {
         diagnostics.services.database = "error";
         diagnostics.status = "degraded";
@@ -1368,6 +1369,10 @@ except Exception as e:
       };
 
       const query = corpusQuerySchema.parse(queryDefaults);
+      
+      // Debug logging
+      console.log("[Corpus API] Query params:", query);
+      
       const items = corpusStorage.getEntries({
         func: query.func,
         limit: query.limit,
@@ -1378,6 +1383,12 @@ except Exception as e:
         startDate: query.startDate,
         endDate: query.endDate,
       });
+      
+      console.log("[Corpus API] Found items:", items.length);
+      if (items.length > 0) {
+        console.log("[Corpus API] First item:", items[0]);
+      }
+      
       return res.json({ items, hasMore: items.length === query.limit });
     } catch (e: any) {
       console.error("[Corpus API] Error fetching corpus entries:", e);
