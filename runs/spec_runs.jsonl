@@ -10,3 +10,15 @@
 {"run_id": "run-20251024-032230", "spec": "self_diagnosis.md", "ok": true, "report": "/runs/run-20251024-032230/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251024-184651", "spec": "need_decryption_program.md", "ok": true, "report": "/runs/run-20251024-184651/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251024-184651", "spec": "need_decryption_program.md", "ok": true, "report": "/runs/run-20251024-184651/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201707", "spec": "add_two_numbers.md", "ok": true, "report": "/runs/run-20251024-201707/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201707", "spec": "add_two_numbers.md", "ok": true, "report": "/runs/run-20251024-201707/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201732", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251024-201732/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201732", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251024-201732/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201733", "spec": "is_prime.md", "ok": true, "report": "/runs/run-20251024-201733/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201733", "spec": "is_prime.md", "ok": true, "report": "/runs/run-20251024-201733/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201807", "spec": "add_two_numbers.md", "ok": true, "report": "/runs/run-20251024-201807/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201807", "spec": "add_two_numbers.md", "ok": true, "report": "/runs/run-20251024-201807/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201833", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251024-201833/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201833", "spec": "reverse_string.md", "ok": true, "report": "/runs/run-20251024-201833/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201834", "spec": "is_prime.md", "ok": true, "report": "/runs/run-20251024-201834/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-201834", "spec": "is_prime.md", "ok": true, "report": "/runs/run-20251024-201834/report.html", "bias": null, "spark": null}
