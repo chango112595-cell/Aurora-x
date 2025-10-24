@@ -18,8 +18,13 @@ interface FunctionItem {
 export function FunctionLibrary() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: response, isLoading, error } = useQuery<{ items: FunctionItem[], hasMore: boolean }>({
+  const { data, isLoading, error } = useQuery<{ items: FunctionItem[], hasMore: boolean }>({
     queryKey: ['/api/corpus'],
+    queryFn: async () => {
+      const response = await fetch('/api/corpus');
+      if (!response.ok) throw new Error('Failed to fetch corpus');
+      return response.json();
+    },
   });
 
   if (isLoading) {
@@ -44,9 +49,10 @@ export function FunctionLibrary() {
     );
   }
 
-  const functions = response?.items || [];
+  // Extract functions array from API response
+  const functions = Array.isArray(data) ? data : (data?.items || []);
 
-  const filteredFunctions = functions.filter(fn =>
+  const filteredFunctions = functions.filter((fn: any) =>
     fn.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     fn.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -71,8 +77,8 @@ export function FunctionLibrary() {
       {/* Function grid with futuristic cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredFunctions.map((fn, index) => (
-          <Card 
-            key={fn.id} 
+          <Card
+            key={fn.id}
             className="group relative overflow-hidden border-primary/20 bg-gradient-to-br from-card via-card to-card/80 hover:border-primary/50 transition-all duration-300 hover-elevate"
             style={{ animationDelay: `${index * 50}ms` }}
           >
@@ -92,8 +98,8 @@ export function FunctionLibrary() {
                     {fn.name}
                   </CardTitle>
                 </div>
-                <Badge 
-                  variant="secondary" 
+                <Badge
+                  variant="secondary"
                   className="bg-primary/10 text-primary border-primary/30 font-mono text-xs"
                 >
                   {fn.language}
@@ -113,8 +119,8 @@ export function FunctionLibrary() {
                   {new Date(fn.createdAt).toLocaleDateString()}
                 </div>
 
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="ghost"
                   className="hover:bg-primary/10 hover:text-primary transition-colors group/btn"
                 >
