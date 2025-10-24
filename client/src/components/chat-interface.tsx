@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Code2, Sparkles, Zap, Rocket, Shield } from "lucide-react";
+import { Send, Loader2, Code2, Sparkles, Zap, Rocket, Shield, Activity, TrendingUp, Database, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { SynthesisProgress } from "@/components/synthesis-progress";
@@ -51,6 +52,26 @@ const examplePrompts: ExamplePrompt[] = [
     icon: Shield,
     title: "Email Validation",
     prompt: "validate an email with regex + tests"
+  },
+  {
+    icon: Activity,
+    title: "Show Progress",
+    prompt: "/progress"
+  },
+  {
+    icon: TrendingUp,
+    title: "Adaptive Stats",
+    prompt: "/stats"
+  },
+  {
+    icon: Database,
+    title: "Corpus Info",
+    prompt: "/corpus"
+  },
+  {
+    icon: Terminal,
+    title: "Solve Math",
+    prompt: "/solve 2 + 3 * 4"
   }
 ];
 
@@ -59,7 +80,7 @@ export function ChatInterface() {
     {
       id: "1",
       role: "assistant",
-      content: "Hi! I'm Chango, powered by Aurora-X synthesis. I can turn any English request into working Python code - from algorithms to creative text generation. What would you like to build?",
+      content: "Hi! I'm Chango, powered by Aurora-X synthesis. I can turn any English request into working Python code - from algorithms to creative text generation.\n\nTry commands like `/progress`, `/stats`, `/solve`, or describe what you want to build!\n\nType `/help` for all available commands.",
       timestamp: new Date(),
     },
   ]);
@@ -67,7 +88,29 @@ export function ChatInterface() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showExamples, setShowExamples] = useState(true);
   const [activeSynthesisId, setActiveSynthesisId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false); // Added to manage loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Check system health on mount
+  useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const res = await fetch('/api/diagnostics');
+        const data = await res.json();
+        if (data.status !== 'ok') {
+          const healthMessage: Message = {
+            id: 'health-' + Date.now(),
+            role: 'assistant',
+            content: `⚠️ System Status: ${data.status}\n\nServices:\n${Object.entries(data.services || {}).map(([k, v]) => `• ${k}: ${v}`).join('\n')}`,
+            timestamp: new Date()
+          };
+          setMessages(prev => [...prev, healthMessage]);
+        }
+      } catch (e) {
+        console.error('Health check failed:', e);
+      }
+    };
+    checkHealth();
+  }, []);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -179,11 +222,17 @@ export function ChatInterface() {
     };
 
     setMessages(prev => [...prev, userMessage]);
-    const userInput = input;
+    const userInput = input.trim();
     setInput('');
     setIsLoading(true);
 
     try {
+      // Handle special commands
+      if (userInput.startsWith('/')) {
+        await handleCommand(userInput);
+        return;
+      }
+
       // Call the chat API endpoint
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -231,6 +280,99 @@ export function ChatInterface() {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: `❌ Error: ${error instanceof Error ? error.message : 'Failed to process request'}`,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCommand = async (command: string) => {
+    const parts = command.split(' ');
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1).join(' ');
+
+    let response = '';
+    let endpoint = '';
+
+    try {
+      switch (cmd) {
+        case '/progress':
+          endpoint = '/api/progress';
+          const progressRes = await fetch(endpoint);
+          const progressData = await progressRes.json();
+          response = `📊 **Project Progress: ${progressData.overall_percent?.toFixed(1) || 0}%**\n\n`;
+          response += `Last updated: ${progressData.updated_utc || 'Unknown'}\n\n`;
+          if (progressData.tasks) {
+            progressData.tasks.forEach((task: any) => {
+              const status = task.status === 'complete' ? '✅' : task.status === 'in-progress' ? '⏳' : '⭕';
+              response += `${status} ${task.name}: ${task.percent}%\n`;
+            });
+          }
+          break;
+
+        case '/stats':
+          endpoint = '/api/adaptive_stats';
+          const statsRes = await fetch(endpoint);
+          const statsData = await statsRes.json();
+          response = `📈 **Adaptive Learning Stats**\n\n`;
+          response += `Iteration: ${statsData.iteration || 0}\n`;
+          response += JSON.stringify(statsData.summary, null, 2);
+          break;
+
+        case '/corpus':
+          endpoint = '/api/corpus/recent?limit=5';
+          const corpusRes = await fetch(endpoint);
+          const corpusData = await corpusRes.json();
+          response = `🗄️ **Recent Corpus Entries**\n\n`;
+          corpusData.items?.forEach((item: any, idx: number) => {
+            response += `${idx + 1}. ${item.func_name} - Score: ${item.score?.toFixed(2) || 0}\n`;
+          });
+          break;
+
+        case '/solve':
+          if (!args) {
+            response = '❌ Please provide a math expression. Example: /solve 2 + 3 * 4';
+            break;
+          }
+          endpoint = '/api/solve/pretty';
+          const solveRes = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ q: args })
+          });
+          const solveData = await solveRes.json();
+          response = solveData.ok ? `✅ **Result:** ${solveData.formatted}` : `❌ ${solveData.error || 'Failed to solve'}`;
+          break;
+
+        case '/help':
+          response = `🤖 **Available Commands:**\n\n`;
+          response += `/progress - View project progress\n`;
+          response += `/stats - View adaptive learning statistics\n`;
+          response += `/corpus - View recent corpus entries\n`;
+          response += `/solve <expr> - Solve math/physics expressions\n`;
+          response += `/help - Show this help message\n`;
+          break;
+
+        default:
+          response = `❌ Unknown command: ${cmd}. Type /help for available commands.`;
+      }
+
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: response,
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('Command error:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: `❌ Error executing command: ${error instanceof Error ? error.message : 'Unknown error'}`,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);

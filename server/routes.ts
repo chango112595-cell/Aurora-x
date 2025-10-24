@@ -1117,6 +1117,59 @@ except Exception as e:
     res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
 
+  // System diagnostics endpoint
+  app.get("/api/diagnostics", async (_req, res) => {
+    try {
+      const diagnostics: any = {
+        status: "ok",
+        timestamp: new Date().toISOString(),
+        services: {}
+      };
+
+      // Check database
+      try {
+        await corpusStorage.getRecent(1);
+        diagnostics.services.database = "connected";
+      } catch (e) {
+        diagnostics.services.database = "error";
+        diagnostics.status = "degraded";
+      }
+
+      // Check WebSocket
+      diagnostics.services.websocket = wsServer ? "active" : "inactive";
+
+      // Check Bridge
+      try {
+        const bridgeRes = await fetch("http://0.0.0.0:5001/healthz", { signal: AbortSignal.timeout(2000) });
+        diagnostics.services.bridge = bridgeRes.ok ? "connected" : "error";
+      } catch (e) {
+        diagnostics.services.bridge = "unreachable";
+      }
+
+      // Check progress system
+      try {
+        const progressPath = path.join(process.cwd(), 'progress.json');
+        if (fs.existsSync(progressPath)) {
+          const progressData = JSON.parse(fs.readFileSync(progressPath, 'utf-8'));
+          diagnostics.services.progress = "ok";
+          diagnostics.progress_tasks = progressData.tasks?.length || 0;
+        } else {
+          diagnostics.services.progress = "missing";
+        }
+      } catch (e) {
+        diagnostics.services.progress = "error";
+      }
+
+      res.json(diagnostics);
+    } catch (error: any) {
+      res.status(500).json({
+        status: "error",
+        error: error.message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  });
+
   // Health check endpoint for auto-updater monitoring
   app.get("/healthz", async (req, res) => {
     const providedToken = req.query.token as string | undefined;
