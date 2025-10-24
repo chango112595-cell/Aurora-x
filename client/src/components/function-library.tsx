@@ -115,10 +115,13 @@ export function FunctionLibrary() {
             <Zap className="relative h-16 w-16 text-primary/50 mx-auto mb-4 animate-pulse" />
           </div>
           <p className="text-muted-foreground font-mono text-lg">
-            {'>'} No functions found in database
+            {'>'} No synthesis records found
           </p>
           <p className="text-muted-foreground/60 font-mono text-sm mt-2">
-            Initialize synthesis protocol to generate code
+            Run Aurora-X synthesis to populate the library
+          </p>
+          <p className="text-muted-foreground/60 font-mono text-xs mt-1">
+            Try: python3 -m aurora_x.main --nl "create a function"
           </p>
         </div>
       )}
