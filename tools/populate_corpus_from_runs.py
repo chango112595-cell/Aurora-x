@@ -12,11 +12,11 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from aurora_x.corpus.store import get_corpus_store
+from aurora_x.corpus.store import record, spec_digest
 
 def populate_from_runs():
     """Scan runs directory and populate corpus with successful syntheses"""
-    store = get_corpus_store()
+    run_root = Path(".")
     runs_dir = Path("runs")
     
     if not runs_dir.exists():
@@ -55,13 +55,21 @@ def populate_from_runs():
                 # Create a simple signature
                 sig = f"def {func_name}(...)"
                 
-                # Record to corpus with a good score
-                store.record_success(
-                    sig=sig,
-                    code=code,
-                    score=0.95,
-                    tags=[func_name, "imported-from-runs", run_dir.name]
-                )
+                # Create corpus entry
+                entry = {
+                    "func_name": func_name,
+                    "func_signature": sig,
+                    "snippet": code,
+                    "passed": 1,
+                    "total": 1,
+                    "score": 0.95,
+                    "complexity": len(code.split('\n')),
+                    "iteration": 0,
+                    **spec_digest(f"# Imported from {run_dir.name}")
+                }
+                
+                # Record to corpus
+                record(run_root, entry)
                 
                 recorded += 1
                 print(f"✅ Recorded: {func_name} from {run_dir.name}")
@@ -70,10 +78,22 @@ def populate_from_runs():
                 print(f"⚠️  Error processing {py_file}: {e}")
                 skipped += 1
     
+    from aurora_x.corpus.store import retrieve
+    
     print(f"\n📊 Summary:")
     print(f"   Recorded: {recorded}")
     print(f"   Skipped: {skipped}")
-    print(f"   Total corpus entries: {len(list(store.query_top('', top_k=1000)))}")
+    
+    # Try to get a count by checking the database
+    db_path = run_root / "corpus.db"
+    if db_path.exists():
+        import sqlite3
+        conn = sqlite3.connect(str(db_path))
+        count = conn.execute("SELECT COUNT(*) FROM corpus").fetchone()[0]
+        conn.close()
+        print(f"   Total corpus entries: {count}")
+    else:
+        print(f"   Corpus database not yet created")
 
 if __name__ == "__main__":
     populate_from_runs()
