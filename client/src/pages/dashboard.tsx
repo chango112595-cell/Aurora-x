@@ -11,7 +11,15 @@ import {
   Zap,
   RefreshCw,
   WifiOff,
-  Wifi
+  Wifi,
+  Database, // Added for Corpus Info
+  AlertCircle, // Added for Solver and Rollback errors
+  FileCode2, // Added for ProjectGenerationSection
+  Sparkles, // Added for ProjectGenerationSection and BridgeSection
+  Rocket, // Added for ProjectGenerationSection and BridgeSection
+  Download, // Added for ProjectGenerationSection
+  Package, // Added for ProjectGenerationSection
+  Terminal, // Added for SolverSection
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -1422,6 +1430,94 @@ export default function Dashboard() {
         {data.active && data.active.length > 0 && (
           <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
         )}
+
+        {/* Adaptive Stats Section */}
+        <Card className="mb-6 border-primary/10">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              <CardTitle data-testid="text-adaptive-title">Adaptive Learning Stats</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-sm text-muted-foreground">
+              View adaptive learning statistics and performance metrics at{" "}
+              <code className="bg-muted px-2 py-1 rounded">/api/adaptive_stats</code>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Corpus Info Section */}
+        <Card className="mb-6 border-primary/10">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Database className="h-5 w-5 text-primary" />
+              <CardTitle data-testid="text-corpus-title">Corpus Information</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-sm text-muted-foreground">
+              Explore the corpus database and recent entries in the{" "}
+              <a href="/corpus" className="text-primary hover:underline">Corpus Explorer</a> page.
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Show Progress Section */}
+        <Card className="mb-6 border-primary/10">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Activity className="h-5 w-5 text-primary" />
+              <CardTitle data-testid="text-show-progress-title">Project Progress</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="text-sm text-muted-foreground mb-4">
+                Detailed progress tracking for all Aurora-X tasks and modules.
+              </div>
+
+              {/* Progress summary cards */}
+              <div className="grid gap-4 md:grid-cols-3">
+                <Card className="bg-secondary/50">
+                  <CardContent className="pt-6">
+                    <div className="text-center">
+                      <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />
+                      <div className="text-2xl font-bold">
+                        {data.tasks.filter(t => parseStatus(t.status) === "complete").length}
+                      </div>
+                      <div className="text-xs text-muted-foreground">Completed</div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-secondary/50">
+                  <CardContent className="pt-6">
+                    <div className="text-center">
+                      <Loader2 className="h-8 w-8 mx-auto mb-2 text-blue-500" />
+                      <div className="text-2xl font-bold">
+                        {data.tasks.filter(t => parseStatus(t.status) === "in-progress").length}
+                      </div>
+                      <div className="text-xs text-muted-foreground">In Progress</div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-secondary/50">
+                  <CardContent className="pt-6">
+                    <div className="text-center">
+                      <Wrench className="h-8 w-8 mx-auto mb-2 text-amber-500" />
+                      <div className="text-2xl font-bold">
+                        {data.tasks.filter(t => parseStatus(t.status) === "in-development").length}
+                      </div>
+                      <div className="text-xs text-muted-foreground">In Development</div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {data.tasks.map((task, index) => (

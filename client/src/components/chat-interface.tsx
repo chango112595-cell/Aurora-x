@@ -52,11 +52,6 @@ const examplePrompts: ExamplePrompt[] = [
     icon: Shield,
     title: "Physics Problem",
     prompt: "orbital period a=7000km M=5.972e24kg"
-  },
-  {
-    icon: Terminal,
-    title: "Project Status",
-    prompt: "/progress"
   }
 ];
 
@@ -76,10 +71,11 @@ export function ChatInterface() {
 • "Solve 2 + 3 * 4" or "/solve differentiate x^3 - 2x^2"
 • "orbital period a=7000km M=5.972e24kg"
 
-**📊 Project Info:**
+**📊 Commands:**
 • "/progress" - View project progress
 • "/stats" - Adaptive learning statistics
 • "/corpus" - Recent corpus entries
+• "/solve <expr>" - Solve math/physics expressions
 
 Just type what you want in natural language - I'll understand and generate it for you!`,
       timestamp: new Date()
