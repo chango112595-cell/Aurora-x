@@ -12,14 +12,19 @@ import {
   RefreshCw,
   WifiOff,
   Wifi,
-  Database, // Added for Corpus Info
-  AlertCircle, // Added for Solver and Rollback errors
-  FileCode2, // Added for ProjectGenerationSection
-  Sparkles, // Added for ProjectGenerationSection and BridgeSection
-  Rocket, // Added for ProjectGenerationSection and BridgeSection
-  Download, // Added for ProjectGenerationSection
-  Package, // Added for ProjectGenerationSection
-  Terminal, // Added for SolverSection
+  Database,
+  AlertCircle,
+  FileCode2,
+  Sparkles,
+  Rocket,
+  Download,
+  Package,
+  Terminal,
+  Copy,
+  Search,
+  Filter,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -28,6 +33,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
@@ -159,32 +172,41 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.02, y: -4 }}
       data-testid={`card-task-${task.id}`}
     >
-      <Card className={`h-full ${isActive ? 'ring-2 ring-primary' : ''}`}>
-        <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-3">
+      <Card className={`h-full relative overflow-hidden ${
+        isActive 
+          ? 'border-primary/50 bg-gradient-to-br from-primary/10 via-background to-background' 
+          : 'border-primary/10 bg-gradient-to-br from-background to-secondary/5'
+      }`}>
+        {isActive && (
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-cyan-500/5 to-transparent animate-pulse" />
+        )}
+        <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-3 relative">
           <div className="flex items-center gap-3">
-            <StatusIcon status={task.status} />
+            <div className="p-2 rounded-lg bg-gradient-to-br from-background to-secondary/30 border border-primary/10">
+              <StatusIcon status={task.status} />
+            </div>
             <div>
               <CardTitle className="text-lg" data-testid={`text-task-name-${task.id}`}>
                 {task.name}
               </CardTitle>
               <div className="flex items-center gap-2 mt-1">
-                <Badge variant="secondary" className="text-xs" data-testid={`badge-task-id-${task.id}`}>
+                <Badge variant="secondary" className="text-xs bg-primary/10 border-primary/20" data-testid={`badge-task-id-${task.id}`}>
                   {task.id}
                 </Badge>
-                <Badge variant="outline" className="text-xs" data-testid={`badge-category-${task.id}`}>
+                <Badge variant="outline" className="text-xs border-primary/20" data-testid={`badge-category-${task.id}`}>
                   {task.category}
                 </Badge>
               </div>
             </div>
           </div>
-          <div className="text-2xl font-bold" style={{ color }} data-testid={`text-percent-${task.id}`}>
+          <div className="text-2xl font-bold bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent" data-testid={`text-percent-${task.id}`}>
             {task.percent}%
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative">
           <AnimatedProgress value={percent} color={color} />
           <div className="mt-3 space-y-1">
             {task.notes.map((note, idx) => (
@@ -200,8 +222,8 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
               animate={{ opacity: 1 }}
               className="mt-3"
             >
-              <Badge className="bg-primary/10 text-primary border-primary/20" data-testid={`badge-active-${task.id}`}>
-                <Activity className="h-3 w-3 mr-1" />
+              <Badge className="bg-gradient-to-r from-primary/20 to-cyan-500/20 text-primary border-primary/30" data-testid={`badge-active-${task.id}`}>
+                <Activity className="h-3 w-3 mr-1 animate-pulse" />
                 Active Now
               </Badge>
             </motion.div>
@@ -225,16 +247,19 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
   const inDevelopmentTasks = tasks.filter(t => parseStatus(t.status || "") === "in-development").length;
 
   return (
-    <Card className="mb-6">
-      <CardHeader>
+    <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary/10 via-background to-cyan-500/5 relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,white,transparent)]" />
+      <CardHeader className="relative">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Zap className="h-6 w-6 text-primary" />
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-primary/20 border border-primary/30">
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
             <CardTitle className="text-2xl" data-testid="text-overall-title">
               Aurora-X Project Progress
             </CardTitle>
           </div>
-          <div className="text-3xl font-bold text-primary" data-testid="text-overall-percent">
+          <div className="text-4xl font-bold bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent" data-testid="text-overall-percent">
             {totalPercent.toFixed(1)}%
           </div>
         </div>
@@ -259,29 +284,30 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
           </AnimatePresence>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative">
         <div className="space-y-4">
-          <div className="relative w-full h-4 bg-secondary/50 rounded-full overflow-hidden">
+          <div className="relative w-full h-6 bg-secondary/30 rounded-full overflow-hidden border border-primary/20">
             <motion.div
-              className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-primary/70 rounded-full"
+              className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary via-cyan-500 to-purple-500 rounded-full"
               initial={{ width: "0%" }}
               animate={{ width: `${totalPercent}%` }}
               transition={{ duration: 1.5, ease: "easeOut" }}
               data-testid="progress-overall"
             />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse" />
           </div>
           <div className="flex justify-between text-sm">
-            <div className="flex items-center gap-1" data-testid="text-completed-count">
-              <CheckCircle className="h-4 w-4 text-green-500" />
-              <span>{completedTasks} Completed</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/20" data-testid="text-completed-count">
+              <CheckCircle className="h-5 w-5 text-green-500" />
+              <span className="font-medium">{completedTasks} Completed</span>
             </div>
-            <div className="flex items-center gap-1" data-testid="text-in-progress-count">
-              <Loader2 className="h-4 w-4 text-blue-500" />
-              <span>{inProgressTasks} In Progress</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20" data-testid="text-in-progress-count">
+              <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
+              <span className="font-medium">{inProgressTasks} In Progress</span>
             </div>
-            <div className="flex items-center gap-1" data-testid="text-in-development-count">
-              <Wrench className="h-4 w-4 text-amber-500" />
-              <span>{inDevelopmentTasks} In Development</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20" data-testid="text-in-development-count">
+              <Wrench className="h-5 w-5 text-amber-500" />
+              <span className="font-medium">{inDevelopmentTasks} In Development</span>
             </div>
           </div>
         </div>
@@ -290,50 +316,212 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
   );
 };
 
-// Active tasks section
-const ActiveTasksSection = ({ tasks, activeIds }: { tasks: Task[]; activeIds: string[] }) => {
-  const activeTasks = tasks.filter(t => activeIds.includes(t.id));
+// Corpus Explorer Component
+const CorpusExplorerSection = () => {
+  const [funcFilter, setFuncFilter] = useState("");
+  const [limit, setLimit] = useState(50);
+  const [offset, setOffset] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
+  const { toast } = useToast();
 
-  if (activeTasks.length === 0) return null;
+  const buildQueryString = () => {
+    const params = new URLSearchParams();
+    if (funcFilter) params.set("func", funcFilter);
+    params.set("limit", limit.toString());
+    params.set("offset", offset.toString());
+    return params.toString();
+  };
+
+  const { data: corpusData, isLoading } = useQuery<{
+    items: any[];
+    hasMore: boolean;
+  }>({
+    queryKey: [`/api/corpus?${buildQueryString()}`],
+  });
+
+  const entries = corpusData?.items || [];
+  const hasMore = corpusData?.hasMore || false;
+  const totalRecords = entries.length;
+  const perfectRuns = entries.filter((e) => e.passed === e.total).length;
+  const avgScore = entries.length > 0
+    ? (entries.reduce((sum, e) => sum + e.score, 0) / entries.length).toFixed(2)
+    : "0";
+
+  const copySnippet = async (snippet: string) => {
+    try {
+      await navigator.clipboard.writeText(snippet);
+      toast({
+        title: "Copied",
+        description: "Snippet copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Error",
+        description: "Failed to copy snippet",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const passPercentage = (passed: number, total: number) => {
+    if (!total) return "0%";
+    return `${Math.round((passed / total) * 100)}%`;
+  };
+
+  const nextPage = () => setOffset(offset + limit);
+  const prevPage = () => setOffset(Math.max(0, offset - limit));
 
   return (
-    <Card className="mb-6 border-primary/20 bg-primary/5">
+    <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background">
       <CardHeader>
-        <div className="flex items-center gap-2">
-          <Activity className="h-5 w-5 text-primary animate-pulse" />
-          <CardTitle data-testid="text-active-title">Active Now</CardTitle>
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <Database className="h-6 w-6 text-primary" />
+          </div>
+          <div className="flex-1">
+            <CardTitle className="text-xl">Corpus Explorer</CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              Explore Aurora's learning corpus and synthesis history
+            </p>
+          </div>
         </div>
-        <CardDescription data-testid="text-active-description">
-          Tasks currently being worked on
-        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="grid gap-3">
-          {activeTasks.map((task) => (
-            <motion.div
-              key={task.id}
-              className="flex items-center justify-between p-3 rounded-lg bg-background/50 hover:bg-background/70 transition-colors"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              whileHover={{ x: 5 }}
-              data-testid={`item-active-${task.id}`}
-            >
-              <div className="flex items-center gap-3">
-                <StatusIcon status={task.status} />
-                <div>
-                  <div className="font-medium" data-testid={`text-active-name-${task.id}`}>{task.name}</div>
-                  <div className="text-xs text-muted-foreground" data-testid={`text-active-category-${task.id}`}>{task.category}</div>
-                </div>
+      <CardContent className="space-y-4">
+        {/* Stats Grid */}
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card className="bg-secondary/30 border-primary/10">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <Database className="h-8 w-8 mx-auto mb-2 text-chart-1" />
+                <div className="text-2xl font-bold">{totalRecords}</div>
+                <div className="text-xs text-muted-foreground">Total Records</div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold" style={{ color: getStatusColor(task.status) }} data-testid={`text-active-percent-${task.id}`}>
-                  {task.percent}%
-                </span>
-                <TrendingUp className="h-4 w-4 text-primary animate-pulse" />
+            </CardContent>
+          </Card>
+          <Card className="bg-secondary/30 border-primary/10">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <CheckCircle className="h-8 w-8 mx-auto mb-2 text-chart-2" />
+                <div className="text-2xl font-bold">{perfectRuns}</div>
+                <div className="text-xs text-muted-foreground">Perfect Runs</div>
               </div>
-            </motion.div>
-          ))}
+            </CardContent>
+          </Card>
+          <Card className="bg-secondary/30 border-primary/10">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <Zap className="h-8 w-8 mx-auto mb-2 text-chart-3" />
+                <div className="text-2xl font-bold">{avgScore}</div>
+                <div className="text-xs text-muted-foreground">Avg Score</div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
+
+        {/* Filter Bar */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="relative flex-1 min-w-60">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Filter by function name"
+              value={funcFilter}
+              onChange={(e) => {
+                setFuncFilter(e.target.value);
+                setOffset(0);
+              }}
+              className="pl-8 bg-background/50"
+            />
+          </div>
+          <select
+            value={limit}
+            onChange={(e) => {
+              setLimit(Number(e.target.value));
+              setOffset(0);
+            }}
+            className="border rounded-md px-3 min-h-9 bg-background"
+          >
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
+        </div>
+
+        {/* Records List */}
+        {isLoading ? (
+          <div className="text-center py-8 text-muted-foreground">Loading...</div>
+        ) : entries.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            No synthesis records found. Start a synthesis run to see results.
+          </div>
+        ) : (
+          <>
+            <div className="space-y-3">
+              {entries.map((entry) => (
+                <div
+                  key={entry.id}
+                  className="rounded-lg border border-primary/10 p-4 space-y-3 bg-background/50 hover:bg-background/70 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <code className="text-sm font-mono font-semibold">{entry.func_name}</code>
+                        <Badge variant="secondary">
+                          {entry.passed}/{entry.total} ({passPercentage(entry.passed, entry.total)})
+                        </Badge>
+                        <Badge variant="outline">Score: {entry.score.toFixed(4)}</Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1 font-mono">
+                        {entry.func_signature}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {new Date(entry.timestamp).toLocaleString()}
+                      </p>
+                    </div>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => copySnippet(entry.snippet)}
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <div className="relative">
+                    <pre className="text-xs bg-muted p-3 rounded-md overflow-x-auto max-h-40 overflow-y-auto">
+                      {entry.snippet}
+                    </pre>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            <div className="flex items-center justify-between pt-4 border-t border-primary/10">
+              <div className="text-sm text-muted-foreground">
+                Showing {offset + 1} - {offset + entries.length}
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={prevPage}
+                  disabled={offset === 0}
+                >
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={nextPage}
+                  disabled={!hasMore}
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
       </CardContent>
     </Card>
   );
@@ -1352,13 +1540,17 @@ export default function Dashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
+          className="mb-8 relative"
         >
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-cyan-500/10 to-purple-500/10 blur-3xl -z-10" />
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold mb-2" data-testid="text-page-title">Aurora-X Dashboard</h1>
-              <p className="text-muted-foreground" data-testid="text-page-description">
-                Monitor Aurora-X task progress and development status
+              <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary via-cyan-500 to-purple-500 bg-clip-text text-transparent" data-testid="text-page-title">
+                Aurora-X Dashboard
+              </h1>
+              <p className="text-muted-foreground flex items-center gap-2" data-testid="text-page-description">
+                <Activity className="h-4 w-4 text-primary animate-pulse" />
+                Real-time monitoring of autonomous code synthesis
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -1367,7 +1559,7 @@ export default function Dashboard() {
                 href="/dashboard/graph"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-cyan-500/10 hover:from-primary/20 hover:to-cyan-500/20 text-primary rounded-lg transition-all border border-primary/20 hover:border-primary/40"
                 data-testid="link-task-graph"
               >
                 <svg
@@ -1391,7 +1583,7 @@ export default function Dashboard() {
                   <line x1="9" y1="15" x2="10.5" y2="13.5" />
                   <line x1="15" y1="15" x2="13.5" y2="13.5" />
                 </svg>
-                <span className="font-medium">View Task Graph</span>
+                <span className="font-medium">Task Graph</span>
               </a>
               {/* Connection status indicator */}
               <AnimatePresence mode="wait">
@@ -1401,11 +1593,11 @@ export default function Dashboard() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  className="flex items-center gap-2 px-3 py-1 rounded-full bg-destructive/10"
+                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-destructive/10 border border-destructive/20"
                   data-testid="badge-connection-error"
                 >
                   <WifiOff className="h-4 w-4 text-destructive" />
-                  <span className="text-sm text-destructive">Offline</span>
+                  <span className="text-sm font-medium text-destructive">Offline</span>
                 </motion.div>
               ) : (
                 <motion.div
@@ -1413,11 +1605,11 @@ export default function Dashboard() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10"
+                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-green-500/10 border border-green-500/20"
                   data-testid="badge-connection-ok"
                 >
-                  <Wifi className="h-4 w-4 text-green-500" />
-                  <span className="text-sm text-green-600 dark:text-green-400">Live</span>
+                  <Wifi className="h-4 w-4 text-green-500 animate-pulse" />
+                  <span className="text-sm font-medium text-green-600 dark:text-green-400">Live</span>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -1431,93 +1623,116 @@ export default function Dashboard() {
           <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
         )}
 
-        {/* Adaptive Stats Section */}
-        <Card className="mb-6 border-primary/10">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-primary" />
-              <CardTitle data-testid="text-adaptive-title">Adaptive Learning Stats</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-muted-foreground">
-              View adaptive learning statistics and performance metrics at{" "}
-              <code className="bg-muted px-2 py-1 rounded">/api/adaptive_stats</code>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Corpus Info Section */}
-        <Card className="mb-6 border-primary/10">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Database className="h-5 w-5 text-primary" />
-              <CardTitle data-testid="text-corpus-title">Corpus Information</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-muted-foreground">
-              Explore the corpus database and recent entries in the{" "}
-              <a href="/corpus" className="text-primary hover:underline">Corpus Explorer</a> page.
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Show Progress Section */}
-        <Card className="mb-6 border-primary/10">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-primary" />
-              <CardTitle data-testid="text-show-progress-title">Project Progress</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="text-sm text-muted-foreground mb-4">
-                Detailed progress tracking for all Aurora-X tasks and modules.
+        {/* Generate Code from Natural Language Section */}
+        <Card className="mb-6 border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-background relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-transparent animate-pulse" />
+          <CardHeader className="relative">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-cyan-500/10">
+                <Rocket className="h-6 w-6 text-cyan-500" />
               </div>
-
-              {/* Progress summary cards */}
-              <div className="grid gap-4 md:grid-cols-3">
-                <Card className="bg-secondary/50">
-                  <CardContent className="pt-6">
-                    <div className="text-center">
-                      <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />
-                      <div className="text-2xl font-bold">
-                        {data.tasks.filter(t => parseStatus(t.status) === "complete").length}
-                      </div>
-                      <div className="text-xs text-muted-foreground">Completed</div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-secondary/50">
-                  <CardContent className="pt-6">
-                    <div className="text-center">
-                      <Loader2 className="h-8 w-8 mx-auto mb-2 text-blue-500" />
-                      <div className="text-2xl font-bold">
-                        {data.tasks.filter(t => parseStatus(t.status) === "in-progress").length}
-                      </div>
-                      <div className="text-xs text-muted-foreground">In Progress</div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-secondary/50">
-                  <CardContent className="pt-6">
-                    <div className="text-center">
-                      <Wrench className="h-8 w-8 mx-auto mb-2 text-amber-500" />
-                      <div className="text-2xl font-bold">
-                        {data.tasks.filter(t => parseStatus(t.status) === "in-development").length}
-                      </div>
-                      <div className="text-xs text-muted-foreground">In Development</div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <div>
+                <CardTitle className="text-xl">Generate Code from Natural Language</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Describe your feature and Aurora will create a Pull Request with implementation
+                </p>
               </div>
             </div>
+          </CardHeader>
+          <CardContent className="relative">
+            <div className="space-y-3 text-sm text-muted-foreground">
+              <p>• Describe your feature or app requirements in plain English</p>
+              <p>• Aurora will generate code, tests, and create a Pull Request</p>
+              <p>• PRs are created with GPG signing for verified commits</p>
+              <p>• CI/CD pipeline will automatically validate the generated code</p>
+            </div>
+            <div className="mt-4 p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+              <p className="text-xs text-cyan-600 dark:text-cyan-400">
+                Use the Chat interface to generate code with commands like "/generate" or describe your requirements naturally
+              </p>
+            </div>
           </CardContent>
         </Card>
+
+        {/* PR Rollback Controls Section */}
+        <Card className="mb-6 border-orange-500/20 bg-gradient-to-br from-orange-500/5 via-background to-background">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-orange-500/10">
+                  <RefreshCw className="h-6 w-6 text-orange-500" />
+                </div>
+                <div>
+                  <CardTitle>PR Rollback Controls</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Manage Aurora-generated pull requests - close open PRs or revert merged changes
+                  </p>
+                </div>
+              </div>
+              <Badge variant="outline" className="text-xs border-orange-500/30">
+                GitHub Integration
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3 text-sm text-muted-foreground">
+              <p>• <strong>Rollback Open PR:</strong> Closes the latest open PR with 'aurora' label and deletes its branch</p>
+              <p>• <strong>Revert Merged PR:</strong> Creates a revert PR for the latest merged PR with 'aurora' label</p>
+              <p>• Requires AURORA_GH_TOKEN environment variable with repo permissions</p>
+            </div>
+            <div className="mt-4 p-3 rounded-lg bg-orange-500/10 border border-orange-500/20">
+              <p className="text-xs text-orange-600 dark:text-orange-400">
+                Use the Chat interface with commands like "/rollback" to manage pull requests
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Corpus Explorer Section - Embedded */}
+        <CorpusExplorerSection />
+
+        {/* Active Now Section */}
+        {data.active && data.active.length > 0 && (
+          <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Activity className="h-5 w-5 text-primary animate-pulse" />
+                <CardTitle data-testid="text-active-title">Active Now</CardTitle>
+              </div>
+              <CardDescription data-testid="text-active-description">
+                Tasks currently being worked on
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3">
+                {data.tasks.filter(t => data.active?.includes(t.id)).map((task) => (
+                  <motion.div
+                    key={task.id}
+                    className="flex items-center justify-between p-3 rounded-lg bg-background/50 hover:bg-background/70 transition-colors border border-primary/10"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    whileHover={{ x: 5 }}
+                    data-testid={`item-active-${task.id}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <StatusIcon status={task.status} />
+                      <div>
+                        <div className="font-medium" data-testid={`text-active-name-${task.id}`}>{task.name}</div>
+                        <div className="text-xs text-muted-foreground" data-testid={`text-active-category-${task.id}`}>{task.category}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg font-bold" style={{ color: getStatusColor(task.status) }} data-testid={`text-active-percent-${task.id}`}>
+                        {task.percent}%
+                      </span>
+                      <TrendingUp className="h-4 w-4 text-primary animate-pulse" />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {data.tasks.map((task, index) => (
