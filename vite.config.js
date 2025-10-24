@@ -41,5 +41,15 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
+    hmr: {
+      timeout: 30000,
+      overlay: false,
+      clientPort: 443,
+      protocol: 'wss',
+    },
+    watch: {
+      usePolling: false,
+      interval: 1000,
+    },
   },
 });
