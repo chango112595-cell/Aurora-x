@@ -2,10 +2,13 @@
 set -euo pipefail
 
 # Check if Bridge is already running
-if curl -fsS http://127.0.0.1:5001/healthz >/dev/null 2>&1; then
+if curl -fsS http://0.0.0.0:5001/healthz >/dev/null 2>&1; then
     echo "✅ Bridge already running"
     exit 0
 fi
+
+# Kill any stale Bridge processes
+pkill -f "aurora_x.bridge.service" 2>/dev/null || true
 
 # Start Bridge in background
 echo "🚀 Starting Aurora-X Factory Bridge..."
@@ -17,7 +20,7 @@ echo "Bridge PID: $BRIDGE_PID"
 
 # Wait for Bridge to be healthy (max 10 seconds)
 for i in {1..20}; do
-    if curl -fsS http://127.0.0.1:5001/healthz >/dev/null 2>&1; then
+    if curl -fsS http://0.0.0.0:5001/healthz >/dev/null 2>&1; then
         echo "✅ Bridge healthy on port 5001"
         exit 0
     fi
@@ -26,7 +29,7 @@ done
 
 echo "⚠️  Bridge startup timeout - check /tmp/bridge.log"
 if [ -f /tmp/bridge.log ]; then
-    echo "Last 10 lines of bridge.log:"
-    tail -n 10 /tmp/bridge.log
+    echo "Last 20 lines of bridge.log:"
+    tail -n 20 /tmp/bridge.log
 fi
 exit 1

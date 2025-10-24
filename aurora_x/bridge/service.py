@@ -50,4 +50,4 @@ if __name__ == "__main__":
 
     print("🚀 Starting Aurora-X Factory Bridge on port 5001...", flush=True)
     sys.stdout.flush()
-    uvicorn.run(app, host="0.0.0.0", port=5001)
+    uvicorn.run(app, host="0.0.0.0", port=5001, log_level="info")

@@ -20,7 +20,7 @@ import {
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
-const BRIDGE_URL = process.env.AURORA_BRIDGE_URL || "http://localhost:5001";
+const BRIDGE_URL = process.env.AURORA_BRIDGE_URL || "http://0.0.0.0:5001";
 const AURORA_REPO = process.env.AURORA_REPO || "chango112595-cell/Aurora-x";
 const TARGET_BRANCH = process.env.AURORA_TARGET_BRANCH || "main";
 const AURORA_GH_TOKEN = process.env.AURORA_GH_TOKEN;
@@ -375,7 +375,7 @@ except Exception as e:
 
       // Validate run ID format (should be like run-2025-10-12T15-20-07)
       // Also support older format run-20241012-143539
-      if (!runId || !/^run-(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}|\d{8}-\d{6})$/.test(runId)) {
+      if (!runId || !runId.match(/^run-(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}|\d{8}-\d{6})$/)) {
         return res.status(400).json({
           error: "Invalid run ID",
           message: "Run ID must be in format run-YYYY-MM-DDTHH-MM-SS or run-YYYYMMDD-HHMMSS"
