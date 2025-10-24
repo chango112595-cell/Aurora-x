@@ -1584,9 +1584,6 @@ export default function Dashboard() {
 
         <OverallProgress tasks={data.tasks} isRefetching={isRefetching} lastUpdated={lastUpdated} />
 
-        {/* PR Rollback Controls Section */}
-        <RollbackSection />
-
         {/* Corpus Explorer Section - Embedded */}
         <CorpusExplorerSection />
 
@@ -1642,6 +1639,9 @@ export default function Dashboard() {
             />
           ))}
         </div>
+
+        {/* PR Rollback Controls Section - Moved to bottom */}
+        <RollbackSection />
       </div>
     </div>
   );
