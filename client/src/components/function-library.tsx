@@ -60,6 +60,11 @@ export function FunctionLibrary() {
     ? response
     : (response?.items || response?.functions || []);
 
+  // Debug: Log the response data
+  console.log('[Function Library] Response:', response);
+  console.log('[Function Library] All Functions:', allFunctions);
+  console.log('[Function Library] Items count:', allFunctions.length);
+
   // Filter functions based on search term
   const filteredFunctions = Array.isArray(allFunctions)
     ? allFunctions.filter(fn =>
