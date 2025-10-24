@@ -1619,10 +1619,6 @@ export default function Dashboard() {
 
         <OverallProgress tasks={data.tasks} isRefetching={isRefetching} lastUpdated={lastUpdated} />
 
-        {data.active && data.active.length > 0 && (
-          <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
-        )}
-
         {/* Generate Code from Natural Language Section */}
         <Card className="mb-6 border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-background relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-transparent animate-pulse" />
