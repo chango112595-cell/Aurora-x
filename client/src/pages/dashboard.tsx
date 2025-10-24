@@ -1259,14 +1259,19 @@ export default function Dashboard() {
 
   const { data, isLoading, error, isRefetching, refetch, isSuccess, isError } = useQuery<ProgressData>({
     queryKey: ['/api/progress'],
-    refetchInterval: 5000, // Refresh every 5 seconds
-    refetchIntervalInBackground: true, // Keep polling even when tab is not active
-    staleTime: 4000, // Prevent excessive refetches
-    retry: 3, // Number of retry attempts
-    retryDelay: (attemptIndex: number) => {
-      // Retry after 10 seconds if polling fails
-      return attemptIndex === 0 ? 1000 : 10000;
-    }
+    refetchInterval: 10000, // Refresh every 10 seconds instead of 5
+    refetchIntervalInBackground: false, // Don't poll when tab is inactive
+    staleTime: 8000, // Cache data for 8 seconds
+    cacheTime: 30000, // Keep cache for 30 seconds
+    retry: 2, // Reduce retry attempts to speed up failure detection
+    retryDelay: 1000, // Faster retry delay
+    initialData: () => ({
+      tasks: [],
+      updated_utc: new Date().toISOString(),
+      ui_thresholds: { ok: 90, warn: 60 }
+    }), // Provide initial data to prevent loading state
+    refetchOnWindowFocus: false, // Don't refetch when window regains focus
+    refetchOnMount: true, // Only refetch on mount
   });
 
   // Watch query state and update connection status
