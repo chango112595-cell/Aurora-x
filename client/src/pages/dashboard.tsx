@@ -329,6 +329,11 @@ const CorpusExplorerSection = () => {
   const [showFilters, setShowFilters] = useState(false);
   const { toast } = useToast();
 
+  // Fetch latest run metadata
+  const { data: metaData } = useQuery<{ meta: any }>({
+    queryKey: ["/api/run-meta/latest"],
+  });
+
   const buildQueryString = () => {
     const params = new URLSearchParams();
     if (funcFilter) params.set("func", funcFilter);
@@ -399,6 +404,65 @@ const CorpusExplorerSection = () => {
 
   return (
     <>
+      {/* Latest Run Status */}
+      {metaData?.meta && (
+        <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Activity className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-xl">Latest Run</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Most recent synthesis run metadata
+                </p>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <div className="text-sm text-muted-foreground">Run ID</div>
+                <div className="font-mono text-sm mt-1">{metaData.meta.run_id}</div>
+              </div>
+              <div>
+                <div className="text-sm text-muted-foreground">Timestamp</div>
+                <div className="text-sm mt-1">
+                  {new Date(metaData.meta.timestamp).toLocaleString()}
+                </div>
+              </div>
+              <div>
+                <div className="text-sm text-muted-foreground">Seed Bias</div>
+                <div className="text-sm mt-1">{metaData.meta.seed_bias.toFixed(4)}</div>
+              </div>
+              <div>
+                <div className="text-sm text-muted-foreground">Max Iterations</div>
+                <div className="text-sm mt-1">{metaData.meta.max_iters}</div>
+              </div>
+              <div>
+                <div className="text-sm text-muted-foreground">Seeding</div>
+                <Badge variant={metaData.meta.seeding_enabled ? "default" : "secondary"}>
+                  {metaData.meta.seeding_enabled ? "Enabled" : "Disabled"}
+                </Badge>
+              </div>
+              {metaData.meta.beam && (
+                <div>
+                  <div className="text-sm text-muted-foreground">Beam Width</div>
+                  <div className="text-sm mt-1">{metaData.meta.beam}</div>
+                </div>
+              )}
+            </div>
+            {metaData.meta.notes && (
+              <div className="mt-4 pt-4 border-t border-primary/10">
+                <div className="text-sm text-muted-foreground mb-2">Notes</div>
+                <p className="text-sm">{metaData.meta.notes}</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-3 mb-6">
         <Card className="bg-secondary/30 border-primary/10">
