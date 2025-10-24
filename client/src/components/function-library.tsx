@@ -18,9 +18,31 @@ interface FunctionItem {
 export function FunctionLibrary() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: response } = useQuery<{ items: FunctionItem[], hasMore: boolean }>({
+  const { data: response, isLoading, error } = useQuery<{ items: FunctionItem[], hasMore: boolean }>({
     queryKey: ['/api/corpus'],
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center space-y-4">
+          <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
+          <p className="text-muted-foreground font-mono">Loading corpus...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center space-y-4">
+          <p className="text-destructive font-mono">Error loading corpus</p>
+          <p className="text-sm text-muted-foreground">{String(error)}</p>
+        </div>
+      </div>
+    );
+  }
 
   const functions = response?.items || [];
 
