@@ -1351,7 +1351,7 @@ except Exception as e:
     }
   });
 
-  // Corpus API endpoint - fetch from local database
+  // Corpus API endpoint - Function Library
   app.get("/api/corpus", (req, res) => {
     try {
       // Provide defaults for query parameters
@@ -1366,7 +1366,7 @@ except Exception as e:
         endDate: undefined,
         ...req.query
       };
-      
+
       const query = corpusQuerySchema.parse(queryDefaults);
       const items = corpusStorage.getEntries({
         func: query.func,
