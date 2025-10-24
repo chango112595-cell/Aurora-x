@@ -18,9 +18,11 @@ interface FunctionItem {
 export function FunctionLibrary() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: functions = [] } = useQuery<FunctionItem[]>({
+  const { data: response } = useQuery<{ items: FunctionItem[], hasMore: boolean }>({
     queryKey: ['/api/corpus'],
   });
+
+  const functions = response?.items || [];
 
   const filteredFunctions = functions.filter(fn =>
     fn.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
