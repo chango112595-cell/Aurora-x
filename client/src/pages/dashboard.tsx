@@ -48,7 +48,7 @@ interface Task {
   id: string;
   name: string;
   status: string;
-  percent: number;  // Changed from string to number to match API
+  percent: number;
   category: string;
   notes: string[];
 }
@@ -59,7 +59,7 @@ interface ProgressData {
   tasks: Task[];
   active: string[];
   rules: string[];
-  overall_percent?: number; // Added for overall progress
+  overall_percent?: number;
 }
 
 // Synthesis/Generation interfaces
@@ -1008,8 +1008,6 @@ const SolverSection = () => {
     </motion.div>
   );
 };
-
-
 
 // Rollback Section Component for PR management
 const RollbackSection = () => {
