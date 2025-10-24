@@ -1,29 +1,33 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search, Code2, Clock, Download, Zap, Terminal } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Search, Code2, CheckCircle2, XCircle } from "lucide-react";
 
 interface FunctionItem {
   id: string;
-  name: string;
-  description: string;
-  language: string;
-  createdAt: string;
-  code: string;
+  func_name: string;
+  func_signature: string;
+  snippet: string;
+  score: number;
+  passed: number;
+  total: number;
+  timestamp: string;
 }
 
 export function FunctionLibrary() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data, isLoading, error } = useQuery<{ items: FunctionItem[], hasMore: boolean }>({
+  const { data: response, isLoading, error } = useQuery<{ items: FunctionItem[], hasMore: boolean }>({
     queryKey: ['/api/corpus'],
     queryFn: async () => {
-      const response = await fetch('/api/corpus');
-      if (!response.ok) throw new Error('Failed to fetch corpus');
-      return response.json();
+      const res = await fetch('/api/corpus');
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return res.json();
     },
   });
 
@@ -42,6 +46,7 @@ export function FunctionLibrary() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center space-y-4">
+          <XCircle className="h-12 w-12 text-destructive mx-auto" />
           <p className="text-destructive font-mono">Error loading corpus</p>
           <p className="text-sm text-muted-foreground">{String(error)}</p>
         </div>
@@ -49,110 +54,82 @@ export function FunctionLibrary() {
     );
   }
 
-  // Extract functions array from API response
-  const functions = Array.isArray(data) ? data : (data?.items || []);
+  // Safely get the items array
+  const allFunctions = response?.items || [];
 
-  const filteredFunctions = functions.filter((fn: any) =>
-    fn.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    fn.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filter functions based on search term
+  const filteredFunctions = allFunctions.filter(fn =>
+    fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="space-y-6">
-      {/* Futuristic search bar */}
-      <div className="relative group">
-        <div className="absolute -inset-1 bg-gradient-to-r from-primary/50 to-cyan-500/50 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-300" />
-        <div className="relative">
-          <Search className="absolute left-4 top-4 h-5 w-5 text-primary" />
-          <Terminal className="absolute right-4 top-4 h-5 w-5 text-muted-foreground" />
-          <Input
-            placeholder="Initialize search protocol..."
-            className="pl-12 pr-12 h-14 bg-background/80 backdrop-blur-sm border-primary/30 focus:border-primary transition-all font-mono text-base"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+      <div className="relative">
+        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search functions..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="pl-10"
+        />
       </div>
 
-      {/* Function grid with futuristic cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredFunctions.map((fn, index) => (
-          <Card
-            key={fn.id}
-            className="group relative overflow-hidden border-primary/20 bg-gradient-to-br from-card via-card to-card/80 hover:border-primary/50 transition-all duration-300 hover-elevate"
-            style={{ animationDelay: `${index * 50}ms` }}
-          >
-            {/* Animated border glow */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/20 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-            {/* Corner accent */}
-            <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 blur-2xl rounded-full -translate-y-10 translate-x-10 group-hover:bg-primary/20 transition-colors" />
-
-            <CardHeader className="relative">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                    <Code2 className="h-5 w-5 text-primary" />
-                  </div>
-                  <CardTitle className="text-lg font-mono bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
-                    {fn.name}
-                  </CardTitle>
-                </div>
-                <Badge
-                  variant="secondary"
-                  className="bg-primary/10 text-primary border-primary/30 font-mono text-xs"
-                >
-                  {fn.language}
-                </Badge>
-              </div>
-            </CardHeader>
-
-            <CardContent className="relative">
-              <p className="text-sm text-muted-foreground mb-6 line-clamp-2 font-mono">
-                {fn.description}
-              </p>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
-                  <Clock className="h-3 w-3 text-primary" />
-                  <span className="text-primary">:</span>
-                  {new Date(fn.createdAt).toLocaleDateString()}
-                </div>
-
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="hover:bg-primary/10 hover:text-primary transition-colors group/btn"
-                >
-                  <Download className="h-4 w-4 group-hover/btn:animate-bounce" />
-                </Button>
-              </div>
-
-              {/* Scan line animation */}
-              <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-scan" />
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Enhanced empty state */}
-      {filteredFunctions.length === 0 && (
-        <div className="text-center py-16">
-          <div className="relative inline-block">
-            <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
-            <Zap className="relative h-16 w-16 text-primary/50 mx-auto mb-4 animate-pulse" />
+      {allFunctions.length === 0 ? (
+        <div className="text-center py-12 space-y-4">
+          <Code2 className="h-16 w-16 text-muted-foreground mx-auto opacity-50" />
+          <div>
+            <p className="text-lg font-semibold text-muted-foreground">No functions in corpus yet</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Run some Aurora-X syntheses to populate the code library
+            </p>
           </div>
-          <p className="text-muted-foreground font-mono text-lg">
-            {'>'} No synthesis records found
-          </p>
-          <p className="text-muted-foreground/60 font-mono text-sm mt-2">
-            Run Aurora-X synthesis to populate the library
-          </p>
-          <p className="text-muted-foreground/60 font-mono text-xs mt-1">
-            Try: python3 -m aurora_x.main --nl "create a function"
-          </p>
         </div>
+      ) : (
+        <ScrollArea className="h-[600px]">
+          <div className="grid gap-4">
+            {filteredFunctions.map((fn) => (
+              <Card key={fn.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1">
+                      <CardTitle className="text-lg font-mono">{fn.func_name}</CardTitle>
+                      <CardDescription className="font-mono text-xs">
+                        {fn.func_signature}
+                      </CardDescription>
+                    </div>
+                    <div className="flex gap-2">
+                      <Badge variant={fn.score >= 0.8 ? "default" : "secondary"}>
+                        Score: {(fn.score * 100).toFixed(0)}%
+                      </Badge>
+                      <Badge variant={fn.passed === fn.total ? "default" : "destructive"}>
+                        {fn.passed === fn.total ? (
+                          <CheckCircle2 className="h-3 w-3 mr-1" />
+                        ) : (
+                          <XCircle className="h-3 w-3 mr-1" />
+                        )}
+                        {fn.passed}/{fn.total}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-xs">
+                    <code>{fn.snippet}</code>
+                  </pre>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Added: {new Date(fn.timestamp).toLocaleString()}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </ScrollArea>
       )}
+
+      <div className="text-sm text-muted-foreground text-center">
+        Showing {filteredFunctions.length} of {allFunctions.length} functions
+      </div>
     </div>
   );
 }
