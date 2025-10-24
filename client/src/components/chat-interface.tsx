@@ -78,11 +78,19 @@ const examplePrompts: ExamplePrompt[] = [
 export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: "1",
-      role: "assistant",
-      content: "Hi! I'm Chango, powered by Aurora-X synthesis. I can turn any English request into working Python code - from algorithms to creative text generation.\n\nTry commands like `/progress`, `/stats`, `/solve`, or describe what you want to build!\n\nType `/help` for all available commands.",
-      timestamp: new Date(),
-    },
+      id: '0',
+      role: 'assistant',
+      content: `👋 Welcome to Aurora-X! I can help you with:
+
+• **Generate Projects** - "Create a React dashboard" or "Build a Flask API"
+• **Solve Math/Physics** - "differentiate x^2 + 3x" or "orbital period a=7000km M=5.972e24kg"
+• **Show Progress** - "What's the current progress?" or "Show task status"
+• **Adaptive Stats** - "Show learning stats" or "What's the current iteration?"
+• **Corpus Info** - "Show recent corpus entries" or "What's in the corpus?"
+
+Just ask me in natural language!`,
+      timestamp: new Date()
+    }
   ]);
   const [input, setInput] = useState("");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -96,10 +104,10 @@ export function ChatInterface() {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
-        
+
         const res = await fetch('/api/diagnostics', { signal: controller.signal });
         clearTimeout(timeoutId);
-        
+
         const data = await res.json();
         if (data.status !== 'ok') {
           const healthMessage: Message = {
@@ -114,7 +122,7 @@ export function ChatInterface() {
         console.error('Health check failed:', e);
       }
     };
-    
+
     // Delay health check to prioritize UI rendering
     const timer = setTimeout(checkHealth, 500);
     return () => clearTimeout(timer);
