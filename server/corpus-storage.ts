@@ -91,7 +91,7 @@ export class CorpusStorage {
       ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     `);
 
-    stmt.run(
+    const result = stmt.run(
       entry.id,
       entry.timestamp,
       entry.spec_id,
@@ -111,6 +111,8 @@ export class CorpusStorage {
       entry.duration_ms ?? null,
       entry.synthesis_method ?? null
     );
+    
+    console.log(`[Corpus Storage] Inserted entry: ${entry.func_name}, changes: ${result.changes}`);
   }
 
   private parseEntry(row: any): any {
