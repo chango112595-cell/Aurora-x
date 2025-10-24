@@ -8,3 +8,5 @@
 {"run_id": "run-20251023-145007", "spec": "self_diagnose.md", "ok": true, "report": "/runs/run-20251023-145007/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251024-032230", "spec": "self_diagnosis.md", "ok": true, "report": "/runs/run-20251024-032230/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251024-032230", "spec": "self_diagnosis.md", "ok": true, "report": "/runs/run-20251024-032230/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-184651", "spec": "need_decryption_program.md", "ok": true, "report": "/runs/run-20251024-184651/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-184651", "spec": "need_decryption_program.md", "ok": true, "report": "/runs/run-20251024-184651/report.html", "bias": null, "spark": null}
