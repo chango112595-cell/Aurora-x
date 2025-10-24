@@ -14,14 +14,27 @@ from glob import glob
 from pathlib import Path
 from typing import Any
 
-from .corpus.pretty import filter_rows, fmt_rows, to_json
-from .corpus.store import record as corpus_record
-from .corpus.store import retrieve as corpus_retrieve
-from .corpus.store import spec_digest
-from .learn import AdaptiveBiasScheduler, AdaptiveConfig, get_seed_store
-from .learn import weights as learn
-from .spec.parser_v2 import parse
-from .synthesis.search import synthesize
+# Handle both direct execution and module import
+try:
+    from .corpus.pretty import filter_rows, fmt_rows, to_json
+    from .corpus.store import record as corpus_record
+    from .corpus.store import retrieve as corpus_retrieve
+    from .corpus.store import spec_digest
+    from .learn import AdaptiveBiasScheduler, AdaptiveConfig, get_seed_store
+    from .learn import weights as learn
+    from .spec.parser_v2 import parse
+    from .synthesis.search import synthesize
+except ImportError:
+    # Running as script, add parent to path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from aurora_x.corpus.pretty import filter_rows, fmt_rows, to_json
+    from aurora_x.corpus.store import record as corpus_record
+    from aurora_x.corpus.store import retrieve as corpus_retrieve
+    from aurora_x.corpus.store import spec_digest
+    from aurora_x.learn import AdaptiveBiasScheduler, AdaptiveConfig, get_seed_store
+    from aurora_x.learn import weights as learn
+    from aurora_x.spec.parser_v2 import parse
+    from aurora_x.synthesis.search import synthesize
 
 # Global adaptive scheduler for API access
 _global_adaptive_scheduler: AdaptiveBiasScheduler | None = None

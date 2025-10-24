@@ -101,8 +101,25 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev"  # Changed from gunicorn
+args = "npm run dev"
 waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Run Aurora-X"
+author = 47570941
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "git pull --ff-only || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash scripts/bridge_autostart.sh || echo \"Bridge startup skipped\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 -m aurora_x.main --help"
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
