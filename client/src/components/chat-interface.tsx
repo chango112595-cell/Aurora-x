@@ -29,34 +29,34 @@ interface ExamplePrompt {
 
 const examplePrompts: ExamplePrompt[] = [
   {
+    icon: Rocket,
+    title: "React Dashboard",
+    prompt: "Create a React dashboard with user authentication and real-time data"
+  },
+  {
     icon: Code2,
-    title: "String Reversal",
-    prompt: "reverse a string (unicode safe)"
+    title: "Flask API",
+    prompt: "Build a Flask REST API with SQLite database"
   },
   {
     icon: Zap,
-    title: "Factorial Function",
-    prompt: "write factorial(n) with unit tests"
+    title: "Python CLI Tool",
+    prompt: "Create a Python CLI tool for processing CSV files"
   },
   {
     icon: Sparkles,
-    title: "Creative Haiku",
-    prompt: "generate a random haiku about coding"
-  },
-  {
-    icon: Rocket,
-    title: "LRU Cache",
-    prompt: "build a tiny LRU cache class with get/put and capacity"
+    title: "Solve Math",
+    prompt: "/solve differentiate x^3 - 2x^2 + x"
   },
   {
     icon: Shield,
-    title: "Email Validation",
-    prompt: "validate an email with regex + tests"
+    title: "Physics Problem",
+    prompt: "orbital period a=7000km M=5.972e24kg"
   },
   {
     icon: Terminal,
-    title: "Solve Math",
-    prompt: "/solve 2 + 3 * 4"
+    title: "Project Status",
+    prompt: "/progress"
   }
 ];
 
@@ -67,13 +67,21 @@ export function ChatInterface() {
       role: 'assistant',
       content: `👋 Welcome to Aurora-X! I can help you with:
 
-• **Generate Projects** - "Create a React dashboard" or "Build a Flask API"
-• **Solve Math/Physics** - "differentiate x^2 + 3x" or "orbital period a=7000km M=5.972e24kg"
-• **Show Progress** - "What's the current progress?" or "Show task status"
-• **Adaptive Stats** - "Show learning stats" or "What's the current iteration?"
-• **Corpus Info** - "Show recent corpus entries" or "What's in the corpus?"
+**🚀 Code Generation:**
+• "Create a React dashboard with user authentication"
+• "Build a Flask API with database integration"
+• "Generate a Python CLI tool for file processing"
 
-Just ask me in natural language!`,
+**🧮 Math & Physics:**
+• "Solve 2 + 3 * 4" or "/solve differentiate x^3 - 2x^2"
+• "orbital period a=7000km M=5.972e24kg"
+
+**📊 Project Info:**
+• "/progress" - View project progress
+• "/stats" - Adaptive learning statistics
+• "/corpus" - Recent corpus entries
+
+Just type what you want in natural language - I'll understand and generate it for you!`,
       timestamp: new Date()
     }
   ]);
@@ -246,24 +254,56 @@ Just ask me in natural language!`,
       const data = await response.json();
 
       let aiContent = '';
-      if (data.status === 'success') {
-        aiContent = `✅ Synthesis completed!\n\n`;
-        if (data.runDir) {
-          aiContent += `📁 Generated code in: runs/${data.runDir}\n`;
-          aiContent += `🔗 View report: runs/${data.runDir}/report.html\n\n`;
+      
+      // Handle different response types
+      if (data.synthesis_id) {
+        // This will be handled by the synthesis progress component
+        return;
+      }
+      
+      if (data.status === 'success' || data.ok) {
+        aiContent = `✅ ${data.message || 'Request completed successfully!'}\n\n`;
+        
+        // Handle project generation responses
+        if (data.run_id || data.runDir) {
+          aiContent += `📁 Generated code in: runs/${data.run_id || data.runDir}\n`;
+          if (data.files && Array.isArray(data.files)) {
+            aiContent += `📄 Files created: ${data.files.length}\n`;
+          }
+          if (data.project_type) {
+            aiContent += `🏗️ Project type: ${data.project_type}\n`;
+          }
+          if (data.zip_path) {
+            aiContent += `📦 Download: ${data.zip_path}\n`;
+          }
         }
+        
+        // Handle solver responses
+        if (data.formatted) {
+          aiContent = `✅ Solution: ${data.formatted}`;
+        }
+        
+        // Handle PR/Bridge responses
+        if (data.pr_url) {
+          aiContent += `🔗 Pull Request: ${data.pr_url}\n`;
+        }
+        
+        // Handle generic output
         if (data.output) {
           const outputLines = data.output.split('\n').filter((line: string) => 
             line.includes('[OK]') || line.includes('Generated') || line.includes('Latest')
           );
           if (outputLines.length > 0) {
-            aiContent += outputLines.join('\n');
+            aiContent += '\n' + outputLines.join('\n');
           }
         }
       } else {
-        aiContent = `❌ Synthesis failed\n\n${data.error || 'Unknown error'}\n\n${data.details || ''}`;
+        aiContent = `❌ ${data.error || data.message || 'Request failed'}\n\n`;
+        if (data.details) {
+          aiContent += `${data.details}\n`;
+        }
         if (data.stderr) {
-          aiContent += `\n\nError output:\n${data.stderr}`;
+          aiContent += `\nError output:\n${data.stderr}`;
         }
       }
 

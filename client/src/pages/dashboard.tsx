@@ -11,15 +11,7 @@ import {
   Zap,
   RefreshCw,
   WifiOff,
-  Wifi,
-  Sparkles,
-  Download,
-  FileCode2,
-  Rocket,
-  Package,
-  Terminal,
-  AlertCircle,
-  Database // Added Database icon import
+  Wifi
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -339,8 +331,16 @@ const ActiveTasksSection = ({ tasks, activeIds }: { tasks: Task[]; activeIds: st
   );
 };
 
-// Project Generation Component with Aurora-X Theme
-const ProjectGenerationSection = () => {
+// Removed ProjectGenerationSection - now available via chat commands
+
+// Removed SolverSection - now available via chat commands
+
+// Removed BridgeSection - now available via chat commands
+
+// Removed RollbackSection - now available via chat commands
+
+// Project Generation Component with Aurora-X Theme (REMOVED)
+const ProjectGenerationSection_REMOVED = () => {
   const [prompt, setPrompt] = useState("");
   const [recentProjects, setRecentProjects] = useState<GeneratedProject[]>([]);
   const { toast } = useToast();
@@ -1418,18 +1418,6 @@ export default function Dashboard() {
         </motion.div>
 
         <OverallProgress tasks={data.tasks} isRefetching={isRefetching} lastUpdated={lastUpdated} />
-
-        {/* Add Project Generation Section */}
-        <ProjectGenerationSection />
-
-        {/* Add Math & Physics Solver Section */}
-        <SolverSection />
-
-        {/* Add Factory Bridge Section */}
-        <BridgeSection />
-
-        {/* Add Rollback Section */}
-        <RollbackSection />
 
         {data.active && data.active.length > 0 && (
           <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
