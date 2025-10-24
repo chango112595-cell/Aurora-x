@@ -90,11 +90,16 @@ export function ChatInterface() {
   const [activeSynthesisId, setActiveSynthesisId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Check system health on mount
+  // Check system health on mount (optimized)
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const res = await fetch('/api/diagnostics');
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+        
+        const res = await fetch('/api/diagnostics', { signal: controller.signal });
+        clearTimeout(timeoutId);
+        
         const data = await res.json();
         if (data.status !== 'ok') {
           const healthMessage: Message = {
@@ -109,7 +114,10 @@ export function ChatInterface() {
         console.error('Health check failed:', e);
       }
     };
-    checkHealth();
+    
+    // Delay health check to prioritize UI rendering
+    const timer = setTimeout(checkHealth, 500);
+    return () => clearTimeout(timer);
   }, []);
 
   // Auto-scroll to bottom on new messages
