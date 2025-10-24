@@ -2,3 +2,9 @@
 {"run_id": "run-20251023-123817", "spec": "decryption_program.md", "ok": true, "report": "/runs/run-20251023-123817/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251023-124937", "spec": "generate_decryption_program.md", "ok": true, "report": "/runs/run-20251023-124937/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251023-124937", "spec": "generate_decryption_program.md", "ok": true, "report": "/runs/run-20251023-124937/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251023-144946", "spec": "generate_decryption.md", "ok": true, "report": "/runs/run-20251023-144946/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251023-144946", "spec": "generate_decryption.md", "ok": true, "report": "/runs/run-20251023-144946/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251023-145007", "spec": "self_diagnose.md", "ok": true, "report": "/runs/run-20251023-145007/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251023-145007", "spec": "self_diagnose.md", "ok": true, "report": "/runs/run-20251023-145007/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-032230", "spec": "self_diagnosis.md", "ok": true, "report": "/runs/run-20251024-032230/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251024-032230", "spec": "self_diagnosis.md", "ok": true, "report": "/runs/run-20251024-032230/report.html", "bias": null, "spark": null}
