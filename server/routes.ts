@@ -1354,7 +1354,20 @@ except Exception as e:
   // Corpus API endpoint - fetch from local database
   app.get("/api/corpus", (req, res) => {
     try {
-      const query = corpusQuerySchema.parse(req.query);
+      // Provide defaults for query parameters
+      const queryDefaults = {
+        func: undefined,
+        limit: 50,
+        offset: 0,
+        perfectOnly: false,
+        minScore: undefined,
+        maxScore: undefined,
+        startDate: undefined,
+        endDate: undefined,
+        ...req.query
+      };
+      
+      const query = corpusQuerySchema.parse(queryDefaults);
       const items = corpusStorage.getEntries({
         func: query.func,
         limit: query.limit,

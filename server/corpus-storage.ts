@@ -1,14 +1,23 @@
 import Database from "better-sqlite3";
-import { mkdirSync } from "fs";
-import { dirname } from "path";
-import { randomUUID } from "crypto";
-import type { CorpusEntry } from "@shared/schema";
+import * as fs from "fs";
+import * as path from "path";
+import type {
+  CorpusEntry,
+  RunMeta,
+  UsedSeed,
+  CorpusQuery,
+} from "@shared/schema";
 
 export class CorpusStorage {
   private db: Database.Database;
 
   constructor(dbPath: string) {
-    mkdirSync(dirname(dbPath), { recursive: true });
+    // Ensure data directory exists
+    const dataDir = path.dirname(dbPath);
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+
     this.db = new Database(dbPath);
     this.db.pragma("journal_mode = WAL");
     this.db.pragma("foreign_keys = ON");
