@@ -176,8 +176,8 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
       data-testid={`card-task-${task.id}`}
     >
       <Card className={`h-full relative overflow-hidden ${
-        isActive 
-          ? 'border-primary/50 bg-gradient-to-br from-primary/10 via-background to-background' 
+        isActive
+          ? 'border-primary/50 bg-gradient-to-br from-primary/10 via-background to-background'
           : 'border-primary/10 bg-gradient-to-br from-background to-secondary/5'
       }`}>
         {isActive && (
@@ -1655,38 +1655,7 @@ export default function Dashboard() {
         </Card>
 
         {/* PR Rollback Controls Section */}
-        <Card className="mb-6 border-orange-500/20 bg-gradient-to-br from-orange-500/5 via-background to-background">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-orange-500/10">
-                  <RefreshCw className="h-6 w-6 text-orange-500" />
-                </div>
-                <div>
-                  <CardTitle>PR Rollback Controls</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Manage Aurora-generated pull requests - close open PRs or revert merged changes
-                  </p>
-                </div>
-              </div>
-              <Badge variant="outline" className="text-xs border-orange-500/30">
-                GitHub Integration
-              </Badge>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3 text-sm text-muted-foreground">
-              <p>• <strong>Rollback Open PR:</strong> Closes the latest open PR with 'aurora' label and deletes its branch</p>
-              <p>• <strong>Revert Merged PR:</strong> Creates a revert PR for the latest merged PR with 'aurora' label</p>
-              <p>• Requires AURORA_GH_TOKEN environment variable with repo permissions</p>
-            </div>
-            <div className="mt-4 p-3 rounded-lg bg-orange-500/10 border border-orange-500/20">
-              <p className="text-xs text-orange-600 dark:text-orange-400">
-                Use the Chat interface with commands like "/rollback" to manage pull requests
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        <RollbackSection />
 
         {/* Corpus Explorer Section - Embedded */}
         <CorpusExplorerSection />
