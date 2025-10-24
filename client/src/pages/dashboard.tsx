@@ -404,6 +404,37 @@ const CorpusExplorerSection = () => {
 
   return (
     <>
+      {/* Stats Grid */}
+      <div className="grid gap-4 md:grid-cols-3 mb-6">
+        <Card className="bg-secondary/30 border-primary/10">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <Database className="h-8 w-8 mx-auto mb-2 text-chart-1" />
+              <div className="text-2xl font-bold">{totalRecords}</div>
+              <div className="text-xs text-muted-foreground">Total Records</div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-secondary/30 border-primary/10">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <CheckCircle className="h-8 w-8 mx-auto mb-2 text-chart-2" />
+              <div className="text-2xl font-bold">{perfectRuns}</div>
+              <div className="text-xs text-muted-foreground">Perfect Runs</div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-secondary/30 border-primary/10">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <Zap className="h-8 w-8 mx-auto mb-2 text-chart-3" />
+              <div className="text-2xl font-bold">{avgScore}</div>
+              <div className="text-xs text-muted-foreground">Avg Score</div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Latest Run Status */}
       {metaData?.meta && (
         <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background">
@@ -462,37 +493,6 @@ const CorpusExplorerSection = () => {
           </CardContent>
         </Card>
       )}
-
-      {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-3 mb-6">
-        <Card className="bg-secondary/30 border-primary/10">
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <Database className="h-8 w-8 mx-auto mb-2 text-chart-1" />
-              <div className="text-2xl font-bold">{totalRecords}</div>
-              <div className="text-xs text-muted-foreground">Total Records</div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-secondary/30 border-primary/10">
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <CheckCircle className="h-8 w-8 mx-auto mb-2 text-chart-2" />
-              <div className="text-2xl font-bold">{perfectRuns}</div>
-              <div className="text-xs text-muted-foreground">Perfect Runs</div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-secondary/30 border-primary/10">
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <Zap className="h-8 w-8 mx-auto mb-2 text-chart-3" />
-              <div className="text-2xl font-bold">{avgScore}</div>
-              <div className="text-xs text-muted-foreground">Avg Score</div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
 
       {/* Corpus Records Card */}
       <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background">
