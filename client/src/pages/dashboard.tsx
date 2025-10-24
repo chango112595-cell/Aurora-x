@@ -321,6 +321,11 @@ const CorpusExplorerSection = () => {
   const [funcFilter, setFuncFilter] = useState("");
   const [limit, setLimit] = useState(50);
   const [offset, setOffset] = useState(0);
+  const [perfectOnly, setPerfectOnly] = useState(false);
+  const [minScore, setMinScore] = useState<number | undefined>(undefined);
+  const [maxScore, setMaxScore] = useState<number | undefined>(undefined);
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
   const [showFilters, setShowFilters] = useState(false);
   const { toast } = useToast();
 
@@ -329,6 +334,17 @@ const CorpusExplorerSection = () => {
     if (funcFilter) params.set("func", funcFilter);
     params.set("limit", limit.toString());
     params.set("offset", offset.toString());
+    if (perfectOnly) params.set("perfectOnly", "true");
+    if (minScore !== undefined) params.set("minScore", minScore.toString());
+    if (maxScore !== undefined) params.set("maxScore", maxScore.toString());
+    if (startDate) {
+      const normalized = new Date(startDate).toISOString();
+      params.set("startDate", normalized);
+    }
+    if (endDate) {
+      const normalized = new Date(endDate).toISOString();
+      params.set("endDate", normalized);
+    }
     return params.toString();
   };
 
@@ -370,6 +386,16 @@ const CorpusExplorerSection = () => {
 
   const nextPage = () => setOffset(offset + limit);
   const prevPage = () => setOffset(Math.max(0, offset - limit));
+
+  const resetFilters = () => {
+    setFuncFilter("");
+    setPerfectOnly(false);
+    setMinScore(undefined);
+    setMaxScore(undefined);
+    setStartDate("");
+    setEndDate("");
+    setOffset(0);
+  };
 
   return (
     <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background">
@@ -432,6 +458,13 @@ const CorpusExplorerSection = () => {
               className="pl-8 bg-background/50"
             />
           </div>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <Filter className="h-4 w-4" />
+          </Button>
           <select
             value={limit}
             onChange={(e) => {
@@ -443,15 +476,97 @@ const CorpusExplorerSection = () => {
             <option value={25}>25</option>
             <option value={50}>50</option>
             <option value={100}>100</option>
+            <option value={200}>200</option>
           </select>
         </div>
+
+        {/* Advanced Filters */}
+        {showFilters && (
+          <div className="p-4 border rounded-lg space-y-4 bg-muted/30">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-medium">Advanced Filters</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={resetFilters}
+              >
+                Reset All
+              </Button>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="perfect-only"
+                  checked={perfectOnly}
+                  onCheckedChange={(checked) => {
+                    setPerfectOnly(checked);
+                    setOffset(0);
+                  }}
+                />
+                <Label htmlFor="perfect-only">Perfect runs only</Label>
+              </div>
+              <div className="space-y-2">
+                <Label>Score Range</Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number"
+                    placeholder="Min"
+                    value={minScore ?? ""}
+                    onChange={(e) => {
+                      setMinScore(e.target.value ? Number(e.target.value) : undefined);
+                      setOffset(0);
+                    }}
+                    className="w-24"
+                    step="0.01"
+                  />
+                  <span className="text-muted-foreground">to</span>
+                  <Input
+                    type="number"
+                    placeholder="Max"
+                    value={maxScore ?? ""}
+                    onChange={(e) => {
+                      setMaxScore(e.target.value ? Number(e.target.value) : undefined);
+                      setOffset(0);
+                    }}
+                    className="w-24"
+                    step="0.01"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Date Range</Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="datetime-local"
+                    value={startDate}
+                    onChange={(e) => {
+                      setStartDate(e.target.value);
+                      setOffset(0);
+                    }}
+                    className="flex-1"
+                  />
+                  <span className="text-muted-foreground">to</span>
+                  <Input
+                    type="datetime-local"
+                    value={endDate}
+                    onChange={(e) => {
+                      setEndDate(e.target.value);
+                      setOffset(0);
+                    }}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Records List */}
         {isLoading ? (
           <div className="text-center py-8 text-muted-foreground">Loading...</div>
         ) : entries.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            No synthesis records found. Start a synthesis run to see results.
+            No synthesis records found. Adjust your filters or start a synthesis run.
           </div>
         ) : (
           <>
@@ -469,6 +584,12 @@ const CorpusExplorerSection = () => {
                           {entry.passed}/{entry.total} ({passPercentage(entry.passed, entry.total)})
                         </Badge>
                         <Badge variant="outline">Score: {entry.score.toFixed(4)}</Badge>
+                        {entry.complexity !== undefined && entry.complexity >= 0 && (
+                          <Badge variant="outline">AST: {entry.complexity}</Badge>
+                        )}
+                        {entry.calls_functions && entry.calls_functions.length > 0 && (
+                          <Badge variant="outline">Calls: {entry.calls_functions.length}</Badge>
+                        )}
                       </div>
                       <p className="text-xs text-muted-foreground mt-1 font-mono">
                         {entry.func_signature}
@@ -485,8 +606,13 @@ const CorpusExplorerSection = () => {
                       <Copy className="h-4 w-4" />
                     </Button>
                   </div>
+                  {entry.failing_tests && entry.failing_tests.length > 0 && (
+                    <div className="text-xs text-destructive">
+                      Failed: {entry.failing_tests.join(", ")}
+                    </div>
+                  )}
                   <div className="relative">
-                    <pre className="text-xs bg-muted p-3 rounded-md overflow-x-auto max-h-40 overflow-y-auto">
+                    <pre className="text-xs bg-muted p-3 rounded-md overflow-x-auto max-h-60 overflow-y-auto">
                       {entry.snippet}
                     </pre>
                   </div>
