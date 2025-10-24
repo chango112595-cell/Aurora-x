@@ -54,21 +54,6 @@ const examplePrompts: ExamplePrompt[] = [
     prompt: "validate an email with regex + tests"
   },
   {
-    icon: Activity,
-    title: "Show Progress",
-    prompt: "/progress"
-  },
-  {
-    icon: TrendingUp,
-    title: "Adaptive Stats",
-    prompt: "/stats"
-  },
-  {
-    icon: Database,
-    title: "Corpus Info",
-    prompt: "/corpus"
-  },
-  {
     icon: Terminal,
     title: "Solve Math",
     prompt: "/solve 2 + 3 * 4"
