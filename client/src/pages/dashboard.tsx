@@ -176,8 +176,8 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
       data-testid={`card-task-${task.id}`}
     >
       <Card className={`h-full relative overflow-hidden ${
-        isActive 
-          ? 'border-primary/50 bg-gradient-to-br from-primary/10 via-background to-background' 
+        isActive
+          ? 'border-primary/50 bg-gradient-to-br from-primary/10 via-background to-background'
           : 'border-primary/10 bg-gradient-to-br from-background to-secondary/5'
       }`}>
         {isActive && (
