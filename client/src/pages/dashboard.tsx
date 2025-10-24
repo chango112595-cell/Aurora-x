@@ -1617,37 +1617,6 @@ export default function Dashboard() {
 
         <OverallProgress tasks={data.tasks} isRefetching={isRefetching} lastUpdated={lastUpdated} />
 
-        {/* Generate Code from Natural Language Section */}
-        <Card className="mb-6 border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-background relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-transparent animate-pulse" />
-          <CardHeader className="relative">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-cyan-500/10">
-                <Rocket className="h-6 w-6 text-cyan-500" />
-              </div>
-              <div>
-                <CardTitle className="text-xl">Generate Code from Natural Language</CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Describe your feature and Aurora will create a Pull Request with implementation
-                </p>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="relative">
-            <div className="space-y-3 text-sm text-muted-foreground">
-              <p>• Describe your feature or app requirements in plain English</p>
-              <p>• Aurora will generate code, tests, and create a Pull Request</p>
-              <p>• PRs are created with GPG signing for verified commits</p>
-              <p>• CI/CD pipeline will automatically validate the generated code</p>
-            </div>
-            <div className="mt-4 p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
-              <p className="text-xs text-cyan-600 dark:text-cyan-400">
-                Use the Chat interface to generate code with commands like "/generate" or describe your requirements naturally
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* PR Rollback Controls Section */}
         <Card className="mb-6 border-orange-500/20 bg-gradient-to-br from-orange-500/5 via-background to-background">
           <CardHeader>
