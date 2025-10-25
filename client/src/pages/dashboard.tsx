@@ -222,7 +222,7 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
               animate={{ opacity: 1 }}
               className="mt-3"
             >
-              <Badge className="bg-gradient-to-r from-primary/20 to-cyan-500/20 text-primary border-primary/30" data-testid={`badge-active-${task.id}`}>
+              <Badge className="bg-gradient-to-r from-primary/30 to-cyan-500/30 text-foreground font-semibold border-primary/50 dark:from-primary/20 dark:to-cyan-500/20 dark:text-primary" data-testid={`badge-active-${task.id}`}>
                 <Activity className="h-3 w-3 mr-1 animate-pulse" />
                 Active Now
               </Badge>
@@ -1604,7 +1604,7 @@ export default function Dashboard() {
                 {data.tasks.filter(t => data.active?.includes(t.id)).map((task) => (
                   <motion.div
                     key={task.id}
-                    className="flex items-center justify-between p-3 rounded-lg bg-background/50 hover:bg-background/70 transition-colors border border-primary/10"
+                    className="flex items-center justify-between p-3 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors border border-primary/30 dark:bg-background/50 dark:hover:bg-background/70 dark:border-primary/10"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     whileHover={{ x: 5 }}
