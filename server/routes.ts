@@ -1310,11 +1310,14 @@ except Exception as e:
     }
 
     try {
-      console.log('[Self-Learning] Starting daemon with aggressive 15s interval...');
+      const { sleepInterval = 15 } = req.body;
+      const interval = Math.max(5, Math.min(3600, sleepInterval)); // Clamp between 5s and 1h
+      
+      console.log(`[Self-Learning] Starting daemon with ${interval}s interval...`);
       
       selfLearningProcess = spawn('python3', [
         '-m', 'aurora_x.self_learn',
-        '--sleep', '15',  // Very aggressive - runs every 15 seconds
+        '--sleep', interval.toString(),
         '--max-iters', '50',
         '--beam', '20'
       ], {
@@ -1364,8 +1367,9 @@ except Exception as e:
 
       return res.json({
         status: "started",
-        message: "Self-learning daemon started successfully (runs every 15 seconds)",
-        stats: selfLearningStats
+        message: `Self-learning daemon started successfully (runs every ${interval} seconds)`,
+        stats: selfLearningStats,
+        interval: interval
       });
     } catch (error: any) {
       console.error('[Self-Learning] Failed to start:', error);
