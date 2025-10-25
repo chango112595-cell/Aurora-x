@@ -52,7 +52,7 @@ export default function SelfLearning() {
   const [showSettings, setShowSettings] = useState(false);
   const [settings, setSettings] = useState<LearningSettings>(() => {
     const saved = localStorage.getItem("aurora-learning-settings");
-    return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
+    return saved ? JSON.JSON.parse(saved) : DEFAULT_SETTINGS;
   });
 
   // Save settings to localStorage whenever they change
@@ -327,8 +327,8 @@ export default function SelfLearning() {
                 </div>
                 <div>
                   <CardTitle className="text-xl">Learning Status</CardTitle>
-                  <CardDescription>
-                    Current state of the self-learning daemon
+                  <CardDescription className="flex flex-col gap-1">
+                    <span>Current state of the self-learning daemon</span>
                   </CardDescription>
                 </div>
               </div>
