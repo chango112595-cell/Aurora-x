@@ -15,9 +15,10 @@ coverage.xml
 htmlcov/
 runs/run-*
 runs/latest
-semgrep.sarif
+.semgrep.sarif
 # Self-learning daemon
 .self_learning.pid
+.self_learning_state.json
 
 # Logs
 logs
