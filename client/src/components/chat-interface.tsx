@@ -156,7 +156,7 @@ Just type what you want in natural language - I'll understand and generate it fo
       } else {
         // Fallback for direct response (shouldn't happen with new system)
         // Show the synthesis result
-        const resultMessage = data.message || 
+        const resultMessage = data.message ||
           (data.code_file ? `✅ Generated: ${data.code_file}` : 'Code generated successfully');
 
         setMessages((prev) => [...prev, {
