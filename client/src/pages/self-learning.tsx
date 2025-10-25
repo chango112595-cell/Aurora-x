@@ -32,7 +32,7 @@ interface RecentRun {
 
 interface LearningSettings {
   autoStart: boolean;
-  sleepInterval: number; // minutes
+  sleepInterval: number; // seconds
   wakeTime: string; // HH:MM format
   sleepTime: string; // HH:MM format
   enableSchedule: boolean;
@@ -40,7 +40,7 @@ interface LearningSettings {
 
 const DEFAULT_SETTINGS: LearningSettings = {
   autoStart: true, // Always auto-start
-  sleepInterval: 15, // Default interval between self-learning runs in minutes.
+  sleepInterval: 15, // Default interval between self-learning runs in seconds.
   wakeTime: "00:00", // Run 24/7
   sleepTime: "23:59", // Run 24/7
   enableSchedule: false, // Disabled - run continuously

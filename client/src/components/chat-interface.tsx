@@ -235,6 +235,7 @@ Just type what you want in natural language - I'll understand and generate it fo
       // Handle special commands
       if (userInput.startsWith('/')) {
         await handleCommand(userInput);
+        setIsLoading(false);
         return;
       }
 
@@ -254,6 +255,7 @@ Just type what you want in natural language - I'll understand and generate it fo
       // Handle different response types
       if (data.synthesis_id) {
         // This will be handled by the synthesis progress component
+        setIsLoading(false);
         return;
       }
 
