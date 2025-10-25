@@ -1652,7 +1652,7 @@ except Exception as e:
         total: item.total,
       }));
 
-      return res.json({ runs });
+      return res.json({ items: runs });
     } catch (e: any) {
       return res.status(400).json({
         error: "bad_query",
