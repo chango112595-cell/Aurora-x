@@ -623,10 +623,40 @@ demo: thresholds
 smoke:
 	curl -fsS $(HOST)/healthz && echo "health: OK"
 
-# === Self-Learning Target ===
+# === Self-Learning Targets ===
 self-learn:
 	@echo "Starting Aurora-X continuous self-learning daemon..."
 	python3 -m aurora_x.self_learn --sleep 300 --max-iters 50 --beam 20
+
+# New: Start dedicated self-learning server
+self-learn-server:
+	@echo "🧠 Starting Aurora-X Self-Learning Server on port 5002..."
+	python3 -m aurora_x.self_learn_server
+
+# Start self-learning in background
+self-learn-bg:
+	@echo "🧠 Starting Self-Learning Server in background..."
+	@nohup python3 -m aurora_x.self_learn_server > /tmp/self_learn.log 2>&1 & echo $$! > /tmp/self_learn.pid
+	@sleep 2
+	@curl -s http://0.0.0.0:5002/health | python3 -m json.tool || echo "⚠️  Server may still be starting..."
+	@echo "✅ Self-Learning Server started (PID: $$(cat /tmp/self_learn.pid))"
+	@echo "📝 Logs: /tmp/self_learn.log"
+
+# Stop self-learning server
+self-learn-stop:
+	@if [ -f /tmp/self_learn.pid ]; then \
+		echo "⏹  Stopping Self-Learning Server (PID: $$(cat /tmp/self_learn.pid))"; \
+		kill $$(cat /tmp/self_learn.pid) 2>/dev/null || true; \
+		rm /tmp/self_learn.pid; \
+		echo "✅ Self-Learning Server stopped"; \
+	else \
+		echo "ℹ  No running self-learning server found"; \
+	fi
+
+# Check self-learning server status
+self-learn-status:
+	@echo "📊 Self-Learning Server Status:"
+	@curl -s http://0.0.0.0:5002/stats 2>/dev/null | python3 -m json.tool || echo "⚠️  Server not responding"
 
 # PWA & OS Matrix helpers (T10)
 pwa-audit:
