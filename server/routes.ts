@@ -1448,21 +1448,33 @@ except Exception as e:
         });
       }
       
-      // Kill the detached process group (negative PID kills the process group)
+      // Kill the process directly with SIGTERM, then SIGKILL if needed
+      let killed = false;
       try {
-        process.kill(-pid, 'SIGTERM');
-        console.log(`[Self-Learning] Sent SIGTERM to process group -${pid}`);
-      } catch (e: any) {
-        if (e.code !== 'ESRCH') {
-          // If process group kill fails, try killing just the process
+        process.kill(pid, 'SIGTERM');
+        console.log(`[Self-Learning] Sent SIGTERM to process ${pid}`);
+        
+        // Wait a bit and check if it's still running
+        setTimeout(() => {
           try {
-            process.kill(pid, 'SIGKILL');
-            console.log(`[Self-Learning] Sent SIGKILL to process ${pid}`);
-          } catch (e2: any) {
-            if (e2.code !== 'ESRCH') {
-              throw e2;
+            process.kill(pid!, 0); // Check if still exists
+            // Still running, force kill
+            console.log(`[Self-Learning] Process still running, sending SIGKILL to ${pid}`);
+            process.kill(pid!, 'SIGKILL');
+          } catch (e: any) {
+            if (e.code === 'ESRCH') {
+              console.log(`[Self-Learning] Process ${pid} terminated successfully`);
             }
           }
+        }, 500);
+        
+        killed = true;
+      } catch (e: any) {
+        if (e.code === 'ESRCH') {
+          console.log(`[Self-Learning] Process ${pid} not found`);
+          killed = true;
+        } else {
+          throw e;
         }
       }
       
