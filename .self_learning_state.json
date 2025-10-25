@@ -24,8 +24,18 @@
       "timestamp": "2025-10-25T07:44:20.523904",
       "success": true,
       "run_dir": "runs/run-20251025-074420"
+    },
+    "generate_decryption.md": {
+      "timestamp": "2025-10-25T07:44:35.536907",
+      "success": true,
+      "run_dir": "runs/run-20251025-074435"
+    },
+    "self_diagnosis.md": {
+      "timestamp": "2025-10-25T07:44:50.612262",
+      "success": true,
+      "run_dir": "runs/run-20251025-074450"
     }
   },
-  "last_updated": "2025-10-25T07:44:20.523909",
-  "run_count": 114
+  "last_updated": "2025-10-25T07:44:50.612267",
+  "run_count": 116
 }
