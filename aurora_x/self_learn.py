@@ -135,6 +135,43 @@ class SelfLearningDaemon:
                     "run_dir": str(repo.root)
                 }
                 self._save_state()
+                
+                # Record to corpus database for UI visibility
+                try:
+                    from aurora_x.corpus.store import CorpusStore
+                    corpus = CorpusStore()
+                    
+                    # Extract function info from the run
+                    run_id = repo.root.name
+                    timestamp = datetime.now().isoformat()
+                    
+                    # Create a corpus entry for the self-learning run
+                    entry = {
+                        "id": f"self-learn-{run_id}",
+                        "timestamp": timestamp,
+                        "spec_id": spec_path.stem,
+                        "spec_hash": spec_path.name[:8],
+                        "func_name": spec_path.stem,
+                        "func_signature": f"# Self-learning run: {spec_path.name}",
+                        "passed": 1 if success else 0,
+                        "total": 1,
+                        "score": 1.0 if success else 0.0,
+                        "failing_tests": [],
+                        "snippet": f"# Auto-learned from {spec_path.name}",
+                        "complexity": 1,
+                        "iteration": self.run_count,
+                        "calls_functions": [],
+                        "sig_key": f"{spec_path.stem}||",
+                        "post_bow": [],
+                        "duration_ms": 0,
+                        "synthesis_method": "self_learning"
+                    }
+                    
+                    corpus.insert_entry(entry)
+                    self.log(f"Recorded to corpus: {entry['id']}")
+                except Exception as e:
+                    self.log(f"Warning: Failed to record to corpus: {e}")
+                
             else:
                 self.log(f"✗ Synthesis incomplete: {repo.root}")
                 # Still mark as processed but with failure flag
