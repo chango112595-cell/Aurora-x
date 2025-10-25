@@ -33,13 +33,15 @@ def check_node_environment():
     header("Node.js Environment")
 
     try:
-        node_version = subprocess.check_output(["node", "--version"], text=True).strip()
+        node_version = subprocess.check_output(["node", "--version"],
+                                               text=True).strip()
         print(f"✅ Node.js: {node_version}")
     except Exception as e:
         print(f"❌ Node.js: {e}")
 
     try:
-        npm_version = subprocess.check_output(["npm", "--version"], text=True).strip()
+        npm_version = subprocess.check_output(["npm", "--version"],
+                                              text=True).strip()
         print(f"✅ npm: {npm_version}")
     except Exception as e:
         print(f"❌ npm: {e}")
@@ -128,7 +130,8 @@ def check_processes():
         result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
 
         aurora_procs = [
-            line for line in result.stdout.split("\n") if "aurora" in line.lower() or "bridge" in line.lower()
+            line for line in result.stdout.split("\n")
+            if "aurora" in line.lower() or "bridge" in line.lower()
         ]
 
         if aurora_procs:
@@ -193,7 +196,9 @@ def check_specs():
 
     if spec_files:
         print("Recent specs:")
-        for spec in sorted(spec_files, key=lambda p: p.stat().st_mtime, reverse=True)[:5]:
+        for spec in sorted(spec_files,
+                           key=lambda p: p.stat().st_mtime,
+                           reverse=True)[:5]:
             print(f"  - {spec.name}")
 
 
@@ -206,7 +211,10 @@ def check_runs():
         print("❌ Runs directory not found")
         return
 
-    run_dirs = [d for d in runs_dir.iterdir() if d.is_dir() and d.name.startswith("run-")]
+    run_dirs = [
+        d for d in runs_dir.iterdir()
+        if d.is_dir() and d.name.startswith("run-")
+    ]
     print(f"📂 Total runs: {len(run_dirs)}")
 
     latest_link = runs_dir / "latest"
@@ -243,10 +251,12 @@ def check_git():
     header("Git Repository")
 
     try:
-        branch = subprocess.check_output(["git", "branch", "--show-current"], text=True).strip()
+        branch = subprocess.check_output(["git", "branch", "--show-current"],
+                                         text=True).strip()
         print(f"🌿 Current branch: {branch}")
 
-        status = subprocess.check_output(["git", "status", "--short"], text=True)
+        status = subprocess.check_output(["git", "status", "--short"],
+                                         text=True)
         if status:
             lines = status.strip().split("\n")
             print(f"📝 Modified files: {len(lines)}")
