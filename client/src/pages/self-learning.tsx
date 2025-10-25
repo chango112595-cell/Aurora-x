@@ -185,7 +185,11 @@ export default function SelfLearning() {
     },
   });
 
-  const handleStart = () => startMutation.mutate();
+  const handleStart = () => {
+    // Update auto-start setting immediately when user clicks start/resume
+    setSettings((prev) => ({ ...prev, autoStart: true }));
+    startMutation.mutate();
+  };
   const handleStop = () => stopMutation.mutate();
 
   const updateSetting = <K extends keyof LearningSettings>(
