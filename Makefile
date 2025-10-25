@@ -27,6 +27,36 @@ debug:
 health-check:
 	@python tools/system_health_check.py
 
+# --- Health & Monitoring ---
+.PHONY: health
+health:
+	@echo "🏥 Checking Aurora-X health..."
+	@curl -s http://0.0.0.0:5001/healthz || echo "Bridge not responding"
+	@curl -s http://0.0.0.0:5000/api/health || echo "Main server not responding"
+
+.PHONY: server-status
+server-status:
+	@python3 tools/server_manager.py --status
+
+.PHONY: server-fix
+server-fix:
+	@python3 tools/server_manager.py --fix
+
+.PHONY: start-web
+start-web:
+	@python3 tools/server_manager.py --start-web
+
+.PHONY: restart-all
+restart-all:
+	@echo "🔄 Restarting all Aurora-X services..."
+	@python3 tools/server_manager.py --kill-port 5000 || true
+	@python3 tools/server_manager.py --kill-port 5001 || true
+	@sleep 2
+	@python3 tools/server_manager.py --start-web
+	@python3 tools/server_manager.py --start-bridge
+	@sleep 3
+	@python3 tools/server_manager.py --status
+
 # === Help ===
 help:
 	@echo "Aurora-X Ultra Commands:"
@@ -81,6 +111,12 @@ help:
 	@echo ""
 	@echo "Self-Learning:"
 	@echo "  make self-learn     # run continuous self-learning daemon"
+	@echo ""
+	@echo "Server Manager:"
+	@echo "  make server-status  # Check status of all Aurora-X services"
+	@echo "  make server-fix     # Attempt to fix any down services"
+	@echo "  make start-web      # Start the main web server"
+	@echo "  make restart-all    # Restart all Aurora-X services"
 	@echo ""
 	@echo "Legacy Commands:"
 	@echo "  make run            # run synthesis"
