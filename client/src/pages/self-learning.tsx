@@ -52,7 +52,7 @@ export default function SelfLearning() {
   const [showSettings, setShowSettings] = useState(false);
   const [settings, setSettings] = useState<LearningSettings>(() => {
     const saved = localStorage.getItem("aurora-learning-settings");
-    return saved ? JSON.JSON.parse(saved) : DEFAULT_SETTINGS;
+    return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
   });
 
   // Save settings to localStorage whenever they change
