@@ -50,6 +50,7 @@ export default function SelfLearning() {
   const { toast } = useToast();
   const [statusPolling, setStatusPolling] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const [manualStop, setManualStop] = useState(false);
   const [settings, setSettings] = useState<LearningSettings>(() => {
     const saved = localStorage.getItem("aurora-learning-settings");
     return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
@@ -173,9 +174,6 @@ export default function SelfLearning() {
   ) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
-
-  // Track if user manually stopped to prevent auto-restart
-  const [manualStop, setManualStop] = React.useState(false);
 
   return (
     <div className="h-full overflow-auto">
