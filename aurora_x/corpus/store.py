@@ -81,11 +81,7 @@ def paths(run_root: Path) -> CorpusPaths:
     # Use the global data directory for consistency with TypeScript server
     data_dir = Path("data")
     data_dir.mkdir(parents=True, exist_ok=True)
-    return CorpusPaths(
-        root=data_dir, 
-        jsonl=data_dir / "corpus.jsonl", 
-        sqlite=data_dir / "corpus.db"
-    )
+    return CorpusPaths(root=data_dir, jsonl=data_dir / "corpus.jsonl", sqlite=data_dir / "corpus.db")
 
 
 def _open_sqlite(dbp: Path) -> sqlite3.Connection:
@@ -150,18 +146,18 @@ def record(run_root: Path, entry: dict[str, Any]) -> None:
 
 class CorpusStore:
     """Corpus storage interface for consistent database access."""
-    
+
     def __init__(self):
         self.data_dir = Path("data")
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self.db_path = self.data_dir / "corpus.db"
         self._ensure_db()
-    
+
     def _ensure_db(self):
         """Ensure database exists and has correct schema."""
         conn = _open_sqlite(self.db_path)
         conn.close()
-    
+
     def insert_entry(self, entry: dict[str, Any]) -> None:
         """Insert a corpus entry into the database."""
         # Use the data directory consistently
@@ -172,7 +168,7 @@ class CorpusStore:
             rec["sig_key"] = normalize_signature(rec["func_signature"])
         if "post_bow" not in rec and isinstance(rec.get("post_conditions"), list):
             rec["post_bow"] = tokenize_post(rec["post_conditions"])
-        
+
         conn = _open_sqlite(self.db_path)
         with conn:
             conn.execute(
