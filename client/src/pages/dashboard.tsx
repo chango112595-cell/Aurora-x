@@ -177,32 +177,32 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
     >
       <Card className={`h-full relative overflow-hidden ${
         isActive
-          ? 'border-primary/50 bg-gradient-to-br from-primary/10 via-background to-background'
-          : 'border-primary/10 bg-gradient-to-br from-background to-secondary/5'
+          ? 'border-primary/50 bg-gradient-to-br from-primary/20 via-primary/5 to-background dark:from-primary/10 dark:via-background dark:to-background shadow-lg'
+          : 'border-border bg-card shadow-md hover:shadow-lg transition-shadow'
       }`}>
         {isActive && (
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-cyan-500/5 to-transparent animate-pulse" />
         )}
         <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-3 relative">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-background to-secondary/30 border border-primary/10">
+            <div className="p-2 rounded-lg bg-primary/10 border border-primary/30 dark:bg-gradient-to-br dark:from-background dark:to-secondary/30 dark:border-primary/10">
               <StatusIcon status={task.status} />
             </div>
             <div>
-              <CardTitle className="text-lg" data-testid={`text-task-name-${task.id}`}>
+              <CardTitle className="text-lg font-semibold" data-testid={`text-task-name-${task.id}`}>
                 {task.name}
               </CardTitle>
               <div className="flex items-center gap-2 mt-1">
-                <Badge variant="secondary" className="text-xs bg-primary/10 border-primary/20" data-testid={`badge-task-id-${task.id}`}>
+                <Badge variant="secondary" className="text-xs font-medium bg-primary/20 border-primary/40 dark:bg-primary/10 dark:border-primary/20" data-testid={`badge-task-id-${task.id}`}>
                   {task.id}
                 </Badge>
-                <Badge variant="outline" className="text-xs border-primary/20" data-testid={`badge-category-${task.id}`}>
+                <Badge variant="outline" className="text-xs font-medium border-border dark:border-primary/20" data-testid={`badge-category-${task.id}`}>
                   {task.category}
                 </Badge>
               </div>
             </div>
           </div>
-          <div className="text-2xl font-bold bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent" data-testid={`text-percent-${task.id}`}>
+          <div className="text-2xl font-bold text-primary dark:bg-gradient-to-r dark:from-primary dark:to-cyan-500 dark:bg-clip-text dark:text-transparent" data-testid={`text-percent-${task.id}`}>
             {task.percent}%
           </div>
         </CardHeader>
@@ -210,7 +210,7 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
           <AnimatedProgress value={percent} color={color} />
           <div className="mt-3 space-y-1">
             {task.notes.map((note, idx) => (
-              <div key={idx} className="text-xs text-muted-foreground flex items-start gap-1" data-testid={`text-note-${task.id}-${idx}`}>
+              <div key={idx} className="text-xs text-foreground/70 dark:text-muted-foreground flex items-start gap-1 font-medium" data-testid={`text-note-${task.id}-${idx}`}>
                 <span className="inline-block mt-0.5">•</span>
                 <span>{note}</span>
               </div>
