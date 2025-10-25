@@ -40,7 +40,7 @@ interface LearningSettings {
 
 const DEFAULT_SETTINGS: LearningSettings = {
   autoStart: true, // Always auto-start
-  sleepInterval: 15, // 15 seconds - minimum interval
+  sleepInterval: 15, // Default: 15 seconds. UI allows minimum interval down to 5 seconds.
   wakeTime: "00:00", // Run 24/7
   sleepTime: "23:59", // Run 24/7
   enableSchedule: false, // Disabled - run continuously
