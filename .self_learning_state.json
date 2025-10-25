@@ -44,8 +44,13 @@
       "timestamp": "2025-10-25T07:45:20.699335",
       "success": true,
       "run_dir": "runs/run-20251025-074520"
+    },
+    "factorial.md": {
+      "timestamp": "2025-10-25T07:45:35.750621",
+      "success": true,
+      "run_dir": "runs/run-20251025-074535"
     }
   },
-  "last_updated": "2025-10-25T07:45:20.699341",
-  "run_count": 118
+  "last_updated": "2025-10-25T07:45:35.750629",
+  "run_count": 119
 }
