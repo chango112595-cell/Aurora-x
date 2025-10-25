@@ -132,6 +132,7 @@ export default function SelfLearning() {
       });
       queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
       setManualStop(false); // Clear manual stop flag when starting
+      updateSetting("autoStart", true); // Turn on auto-start when resuming
     },
     onError: (error: any) => {
       toast({
