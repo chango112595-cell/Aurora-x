@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -51,6 +51,7 @@ export default function SelfLearning() {
   const [statusPolling, setStatusPolling] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [manualStop, setManualStop] = useState(false);
+  const manualStopRef = useRef(false); // Use ref to track manual stop immediately
   const [settings, setSettings] = useState<LearningSettings>(() => {
     const saved = localStorage.getItem("aurora-learning-settings");
     return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
@@ -71,7 +72,8 @@ export default function SelfLearning() {
   // Auto-start on mount and keep running continuously
   useEffect(() => {
     // Always try to start if not running (unless user manually stopped it)
-    if (status && !status.running && !isLoading && !manualStop) {
+    // Use ref to avoid race conditions with state updates
+    if (status && !status.running && !isLoading && !manualStopRef.current) {
       // Check if we're within wake hours if schedule is enabled
       if (settings.enableSchedule) {
         const now = new Date();
@@ -85,7 +87,7 @@ export default function SelfLearning() {
         startMutation.mutate();
       }
     }
-  }, [status, isLoading, settings.enableSchedule, settings.wakeTime, settings.sleepTime, manualStop]);
+  }, [status, isLoading, settings.enableSchedule, settings.wakeTime, settings.sleepTime]);
 
   // Schedule-based sleep/wake cycle
   useEffect(() => {
@@ -142,7 +144,8 @@ export default function SelfLearning() {
       return response.json();
     },
     onSuccess: (data) => {
-      // Clear manual stop flag and update UI
+      // Clear manual stop flag and update UI (both ref and state)
+      manualStopRef.current = false;
       setManualStop(false);
       updateSetting("autoStart", true);
       queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
@@ -168,7 +171,8 @@ export default function SelfLearning() {
   // Stop mutation
   const stopMutation = useMutation({
     mutationFn: async () => {
-      // Set manual stop flag BEFORE making the API call
+      // Set BOTH ref and state immediately to prevent race conditions
+      manualStopRef.current = true;
       setManualStop(true);
       updateSetting("autoStart", false);
       
@@ -185,6 +189,7 @@ export default function SelfLearning() {
     },
     onError: (error: any) => {
       // If stop failed, revert the flags
+      manualStopRef.current = false;
       setManualStop(false);
       updateSetting("autoStart", true);
       
@@ -198,6 +203,7 @@ export default function SelfLearning() {
 
   const handleStart = () => {
     // Update auto-start setting immediately when user clicks start/resume
+    manualStopRef.current = false;
     setSettings((prev) => ({ ...prev, autoStart: true }));
     startMutation.mutate();
   };
@@ -264,6 +270,7 @@ export default function SelfLearning() {
                     updateSetting("autoStart", checked);
                     // Clear manual stop flag when user changes auto-start setting
                     if (checked) {
+                      manualStopRef.current = false;
                       setManualStop(false);
                     }
                   }}
