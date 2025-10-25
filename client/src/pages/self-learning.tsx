@@ -123,16 +123,33 @@ export default function SelfLearning() {
       const response = await apiRequest("POST", "/api/self-learning/start", {
         sleepInterval: settings.sleepInterval,
       });
+      
+      // Handle "already running" error gracefully
+      if (response.status === 400) {
+        const data = await response.json();
+        if (data.error === "Already running") {
+          // If it's already running, just update the UI state
+          return { status: "started", message: "Self-learning daemon is already running", alreadyRunning: true };
+        }
+      }
+      
       return response.json();
     },
     onSuccess: (data) => {
-      toast({
-        title: "Self-Learning Started",
-        description: data.message || "Aurora is now learning autonomously",
-      });
-      queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
-      setManualStop(false); // Clear manual stop flag when starting
-      updateSetting("autoStart", true); // Turn on auto-start when resuming
+      if (data.alreadyRunning) {
+        // Just update the UI state without showing an error
+        setManualStop(false);
+        updateSetting("autoStart", true);
+        queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
+      } else {
+        toast({
+          title: "Self-Learning Started",
+          description: data.message || "Aurora is now learning autonomously",
+        });
+        queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
+        setManualStop(false); // Clear manual stop flag when starting
+        updateSetting("autoStart", true); // Turn on auto-start when resuming
+      }
     },
     onError: (error: any) => {
       toast({
