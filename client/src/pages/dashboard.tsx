@@ -1433,8 +1433,8 @@ export default function Dashboard() {
     initialData: () => ({
       tasks: [],
       updated_utc: new Date().toISOString(),
-      active: [], // should be string[] per ProgressData interface
-      rules: [], // should be string[] per ProgressData interface
+      active: [],
+      rules: [],
     }), // Provide initial data to prevent loading state
     refetchOnWindowFocus: false, // Don't refetch when window regains focus
     refetchOnMount: true, // Only refetch on mount
