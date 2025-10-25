@@ -39,19 +39,64 @@ class SelfLearningDaemon:
         self.beam = beam
         self.run_count = 0
         self.seed_store = get_seed_store()
+        self.state_file = Path(".self_learning_state.json")
+        self.processed_specs = self._load_state()
         
+    def _load_state(self) -> dict:
+        """Load learning state from disk."""
+        if self.state_file.exists():
+            try:
+                state = json.loads(self.state_file.read_text())
+                return state.get("processed_specs", {})
+            except Exception as e:
+                self.log(f"Failed to load state: {e}")
+        return {}
+    
+    def _save_state(self):
+        """Save learning state to disk."""
+        try:
+            state = {
+                "processed_specs": self.processed_specs,
+                "last_updated": datetime.now().isoformat(),
+                "run_count": self.run_count
+            }
+            self.state_file.write_text(json.dumps(state, indent=2))
+        except Exception as e:
+            self.log(f"Failed to save state: {e}")
+    
     def get_next_spec(self) -> Path | None:
-        """Get next spec file to synthesize."""
+        """Get next spec file to synthesize, prioritizing unprocessed specs."""
         # Get all spec files
         specs = list(self.spec_dir.glob("*.md"))
         
         if not specs:
-            print("[Self-Learn] No spec files found")
+            self.log("No spec files found")
             return None
-            
-        # Prioritize specs that haven't been run recently
-        # For now, just pick randomly
-        return random.choice(specs)
+        
+        # Separate unprocessed and processed specs
+        unprocessed = []
+        processed = []
+        
+        for spec in specs:
+            spec_name = spec.name
+            if spec_name not in self.processed_specs:
+                unprocessed.append(spec)
+            else:
+                processed.append(spec)
+        
+        # Prioritize unprocessed specs
+        if unprocessed:
+            self.log(f"Found {len(unprocessed)} unprocessed specs, selecting one")
+            return random.choice(unprocessed)
+        
+        # If all specs processed, reset and start over
+        if processed:
+            self.log("All specs processed, resetting cycle")
+            self.processed_specs = {}
+            self._save_state()
+            return random.choice(specs)
+        
+        return None
         
     def log(self, msg: str):
         """Log with timestamp."""
@@ -83,8 +128,22 @@ class SelfLearningDaemon:
             # Log results
             if success:
                 self.log(f"✓ Synthesis successful: {repo.root}")
+                # Mark spec as processed
+                self.processed_specs[spec_path.name] = {
+                    "timestamp": datetime.now().isoformat(),
+                    "success": True,
+                    "run_dir": str(repo.root)
+                }
+                self._save_state()
             else:
                 self.log(f"✗ Synthesis incomplete: {repo.root}")
+                # Still mark as processed but with failure flag
+                self.processed_specs[spec_path.name] = {
+                    "timestamp": datetime.now().isoformat(),
+                    "success": False,
+                    "run_dir": str(repo.root)
+                }
+                self._save_state()
                 
             # Get updated seed bias
             try:
@@ -98,6 +157,13 @@ class SelfLearningDaemon:
             
         except Exception as e:
             self.log(f"Error during synthesis: {e}")
+            # Mark as attempted but errored
+            self.processed_specs[spec_path.name] = {
+                "timestamp": datetime.now().isoformat(),
+                "success": False,
+                "error": str(e)
+            }
+            self._save_state()
             return False
             
     def run_forever(self):
@@ -106,6 +172,15 @@ class SelfLearningDaemon:
         self.log(f"Specs directory: {self.spec_dir}")
         self.log(f"Output directory: {self.outdir}")
         self.log(f"Sleep interval: {self.sleep_seconds}s")
+        
+        # Log resume state
+        total_specs = len(list(self.spec_dir.glob("*.md")))
+        processed_count = len(self.processed_specs)
+        if processed_count > 0:
+            self.log(f"📋 Resuming: {processed_count}/{total_specs} specs already processed")
+            self.log(f"🎯 Will continue with remaining {total_specs - processed_count} specs")
+        else:
+            self.log(f"🆕 Starting fresh: {total_specs} specs to process")
         
         while True:
             try:
@@ -126,10 +201,14 @@ class SelfLearningDaemon:
                 # Log summary
                 self.log(f"Completed run #{self.run_count} ({'success' if success else 'incomplete'})")
                 
-                # Show seed store summary periodically
+                # Show seed store summary and progress periodically
                 if self.run_count % 5 == 0:
                     summary = self.seed_store.get_summary()
+                    total_specs = len(list(self.spec_dir.glob("*.md")))
+                    processed_count = len(self.processed_specs)
+                    progress_pct = (processed_count / total_specs * 100) if total_specs > 0 else 0
                     self.log(f"Seed store: {summary['total_seeds']} seeds, avg bias: {summary['avg_bias']:.4f}")
+                    self.log(f"Progress: {processed_count}/{total_specs} specs ({progress_pct:.1f}%)")
                 
                 # Sleep before next run
                 self.log(f"Sleeping {self.sleep_seconds}s before next run...")
