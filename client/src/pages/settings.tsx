@@ -11,7 +11,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Settings as SettingsIcon, Zap, Cpu, Activity } from "lucide-react";
 
 export default function Settings() {
-  const [autoSynth, setAutoSynth] = useState(false);
+  const [autoSynth, setAutoSynth] = useState(true);
   const [noveltyCache, setNoveltyCache] = useState(true);
   const { toast } = useToast();
 

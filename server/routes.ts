@@ -1284,7 +1284,7 @@ except Exception as e:
 
   // T08 Natural Language Synthesis activation endpoints
   // State storage for T08 (in production, this should be in a database or persistent storage)
-  let t08Enabled = false;
+  let t08Enabled = true;
 
   // GET endpoint to fetch current T08 status
   app.get("/api/t08/activate", (req, res) => {
