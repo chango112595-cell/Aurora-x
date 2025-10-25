@@ -1,5 +1,5 @@
 # Aurora-X Ultra Unified Makefile (T01-T08)
-.PHONY: all help install test run clean serve serve-v3 open-dashboard open-report
+.PHONY: all help install test run clean serve serve-v3 open-dashboard open-report debug health-check
 .PHONY: spec spec-test spec-report spec3 spec3-test spec3-all
 .PHONY: orchestrator orchestrate-bg orch-test orch-status
 .PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed demo-clean demo-clean-hard demo-status
@@ -12,9 +12,27 @@ WHAT ?= reverse a string
 DISCORD := tools/discord_cli.py
 AURORA_PORT ?= 5001
 
+# === Debug & Health ===
+debug:
+	@echo "🔍 Running Aurora-X Debug Suite..."
+	@python tools/system_health_check.py
+	@echo ""
+	@echo "Checking database..."
+	@python tools/check_db_health.py
+	@echo ""
+	@echo "Checking Bridge service..."
+	@bash scripts/bridge_autostart.sh || echo "⚠️  Bridge check failed"
+
+health-check:
+	@python tools/system_health_check.py
+
 # === Help ===
 help:
 	@echo "Aurora-X Ultra Commands:"
+	@echo ""
+	@echo "Debug & Health:"
+	@echo "  make debug          # run full system debug"
+	@echo "  make health-check   # run health checks only"
 	@echo ""
 	@echo "T08 Natural Language:"
 	@echo "  make say WHAT='find the largest number'"

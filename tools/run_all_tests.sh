@@ -1,48 +1,34 @@
 #!/bin/bash
-# Run tests from all Aurora-X spec compilation runs
+# Run all Aurora-X tests with comprehensive reporting
 
-echo "🧪 Aurora-X Test Runner"
-echo "========================"
+set -e
 
-TOTAL_RUNS=0
-TOTAL_TESTS=0
-FAILED_RUNS=0
+echo "🧪 Running Aurora-X test suite..."
+echo "================================"
 
-# Find all run directories
-for RUN_DIR in runs/run-*/; do
-    if [[ -d "$RUN_DIR" && -d "${RUN_DIR}tests" ]]; then
-        RUN_NAME=$(basename "$RUN_DIR")
-        echo ""
-        echo "📁 Testing: $RUN_NAME"
-        echo "------------------------"
-        
-        # Run tests with PYTHONPATH set
-        cd "$RUN_DIR"
-        if PYTHONPATH=$PWD python -m unittest discover -s tests 2>&1; then
-            echo "✅ Tests passed for $RUN_NAME"
-            # Count tests
-            TEST_COUNT=$(python -m unittest discover -s tests 2>&1 | grep -oE "Ran [0-9]+ test" | grep -oE "[0-9]+")
-            if [[ -n "$TEST_COUNT" ]]; then
-                TOTAL_TESTS=$((TOTAL_TESTS + TEST_COUNT))
-            fi
-        else
-            echo "❌ Tests failed for $RUN_NAME"
-            FAILED_RUNS=$((FAILED_RUNS + 1))
-        fi
-        
-        TOTAL_RUNS=$((TOTAL_RUNS + 1))
-        cd - > /dev/null
-    fi
-done
+# Check Python environment
+if ! command -v python3 &> /dev/null; then
+    echo "❌ Python 3 not found"
+    exit 1
+fi
 
+# Check pytest
+if ! python3 -c "import pytest" 2>/dev/null; then
+    echo "⚠️  pytest not installed, installing..."
+    pip install pytest pytest-cov
+fi
+
+# Run tests with coverage
 echo ""
-echo "========================"
-echo "📊 Summary:"
-echo "  Total runs tested: $TOTAL_RUNS"
-echo "  Total tests executed: $TOTAL_TESTS"
-if [[ $FAILED_RUNS -eq 0 ]]; then
-    echo "  ✅ All runs passed!"
+echo "Running tests with coverage..."
+python3 -m pytest tests/ -v --cov=aurora_x --cov-report=term-missing --cov-report=html
+
+# Check exit code
+if [ $? -eq 0 ]; then
+    echo ""
+    echo "✅ All tests passed"
 else
-    echo "  ❌ Failed runs: $FAILED_RUNS"
+    echo ""
+    echo "❌ Some tests failed"
     exit 1
 fi

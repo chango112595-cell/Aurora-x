@@ -207,35 +207,49 @@ export function SynthesisProgress({
   };
 
   return (
-    <Card className={`${className}`} data-testid="card-synthesis-progress">
+    <Card className={`${className} border-cyan-500/30 bg-gradient-to-br from-background via-cyan-950/10 to-background relative overflow-hidden`} data-testid="card-synthesis-progress">
+      {/* Holographic scanning effect */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent top-0 animate-scan" />
+      </div>
+      
+      {/* Corner glow effects */}
+      <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-transparent blur-xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-tl from-purple-500/20 to-transparent blur-xl pointer-events-none" />
+      
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Synthesis Progress</CardTitle>
+        <div className="flex items-center justify-between relative z-10">
+          <CardTitle className="flex items-center gap-2">
+            <div className="w-1 h-6 bg-gradient-to-b from-cyan-500 to-purple-500 rounded-full animate-pulse" />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">
+              Synthesis Progress
+            </span>
+          </CardTitle>
           <div className="flex items-center gap-2">
             {currentData.complexity && (
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs border-cyan-500/50 bg-cyan-500/10 text-cyan-300">
                 {currentData.complexity}
               </Badge>
             )}
             {currentData.stage === "COMPLETE" ? (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 bg-green-500/20 text-green-300 border-green-500/50">
                 <CheckCircle2 className="h-3 w-3" />
                 Complete
               </Badge>
             ) : currentData.stage === "ERROR" ? (
-              <Badge variant="destructive" className="gap-1">
+              <Badge variant="destructive" className="gap-1 bg-red-500/20 text-red-300 border-red-500/50">
                 <AlertCircle className="h-3 w-3" />
                 Error
               </Badge>
             ) : (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 bg-cyan-500/20 text-cyan-300 border-cyan-500/50">
                 <Loader2 className="h-3 w-3 animate-spin" />
                 Running
               </Badge>
             )}
             {isConnected && (
-              <Badge variant="outline" className="text-xs gap-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <Badge variant="outline" className="text-xs gap-1 border-green-500/50 bg-green-500/10 text-green-300">
+                <div className="w-2 h-2 bg-green-400 rounded-full shadow-lg shadow-green-500/50" style={{ animation: 'pulse 1s ease-in-out infinite' }} />
                 Live
               </Badge>
             )}
@@ -245,19 +259,30 @@ export function SynthesisProgress({
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Overall Progress</span>
+            <span className="text-cyan-300/70 font-mono">Overall Progress</span>
             <div className="flex items-center gap-2">
-              <span className="font-medium" data-testid="text-progress-percentage">
+              <span className="font-bold text-cyan-400 text-lg tabular-nums" data-testid="text-progress-percentage">
                 {currentData.percentage}%
               </span>
               {currentData.estimatedTimeRemaining > 0 && currentData.stage !== "COMPLETE" && (
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-cyan-300/50 font-mono">
                   (~{formatTime(currentData.estimatedTimeRemaining)} remaining)
                 </span>
               )}
             </div>
           </div>
-          <Progress value={currentData.percentage} className="h-2" data-testid="progress-bar" />
+          <div className="relative">
+            <Progress value={currentData.percentage} className="h-3 bg-cyan-950/30" data-testid="progress-bar" />
+            <div 
+              className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 rounded-full transition-all duration-300"
+              style={{ 
+                width: `${currentData.percentage}%`,
+                boxShadow: '0 0 20px rgba(6, 182, 212, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+            </div>
+          </div>
         </div>
 
         <div className="space-y-3">

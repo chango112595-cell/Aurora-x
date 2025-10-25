@@ -448,11 +448,13 @@ def root():
 
 def main():
     """Entry point for running the server via uvicorn."""
+    import os
+
     import uvicorn
 
-    port = int(os.environ.get("PORT", os.environ.get("AURORA_PORT", 8000)))
-    host = os.environ.get("HOST", "0.0.0.0")
-    uvicorn.run("aurora_x.serve:app", host=host, port=port, reload=False)
+    port = int(os.getenv("AURORA_PORT", "5001"))
+    print(f"[Aurora-X] Starting server on 0.0.0.0:{port}")
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
 
 if __name__ == "__main__":

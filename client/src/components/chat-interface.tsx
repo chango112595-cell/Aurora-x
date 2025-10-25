@@ -77,14 +77,23 @@ export function ChatInterface() {
 
   const chatMutation = useMutation({
     mutationFn: async (message: string) => {
-      const response = await apiRequest("POST", "/api/chat", { message });
-      return response.json();
+      const response = await apiRequest("POST", "/api/chat", { message: message.trim() });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('Chat API error:', data);
+        throw new Error(data.error || data.message || 'Failed to send message');
+      }
+
+      console.log('Chat API response:', data);
+      return data;
     },
     onSuccess: (data: any) => {
       if (data.synthesis_id) {
         // Initial response with synthesis ID
         setActiveSynthesisId(data.synthesis_id);
-        
+
         // Add a processing message with synthesis ID
         const processingMessage: Message = {
           id: Date.now().toString(),
@@ -97,15 +106,14 @@ export function ChatInterface() {
         setMessages((prev) => [...prev, processingMessage]);
       } else {
         // Fallback for direct response (shouldn't happen with new system)
-        const aiMessage: Message = {
-          id: Date.now().toString(),
-          role: "assistant",
-          content: data.message || "I've generated the code for you. Here's the result:",
-          code: data.code,
-          language: data.language || "python",
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, aiMessage]);
+        // Show the synthesis result
+        const resultMessage = data.message || 
+          (data.code_file ? `✅ Generated: ${data.code_file}` : 'Code generated successfully');
+
+        setMessages((prev) => [...prev, {
+          role: 'assistant',
+          content: resultMessage,
+        }]);
       }
     },
     onError: (error: any) => {
@@ -134,7 +142,7 @@ export function ChatInterface() {
     const language = result?.language || "python";
     const functionName = result?.functionName || "synthesized_function";
     const description = result?.description || progressData.message || "Aurora-X has successfully synthesized your code!";
-    
+
     const completedMessage: Message = {
       id: Date.now().toString(),
       role: "assistant",
@@ -143,7 +151,7 @@ export function ChatInterface() {
       language: language,
       timestamp: new Date(),
     };
-    
+
     // Replace the processing message with the completed one
     setMessages((prev) => {
       const updated = [...prev];
@@ -155,7 +163,7 @@ export function ChatInterface() {
       }
       return updated;
     });
-    
+
     setActiveSynthesisId(null);
   };
 
@@ -225,21 +233,28 @@ export function ChatInterface() {
                 data-testid={`message-${message.role}-${message.id}`}
               >
                 {message.role === "assistant" && (
-                  <Avatar className="h-10 w-10 border-2 border-primary/20">
-                    <AvatarFallback className="bg-primary text-primary-foreground font-bold">
+                  <Avatar className="h-10 w-10 border-2 border-cyan-500/50 shadow-lg shadow-cyan-500/20 relative">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 animate-pulse" />
+                    <AvatarFallback className="bg-gradient-to-br from-cyan-600 to-purple-600 text-white font-bold relative z-10">
                       C
                     </AvatarFallback>
                   </Avatar>
                 )}
                 <div className={`max-w-[70%] space-y-2`}>
                   <div
-                    className={`rounded-lg px-4 py-3 ${
+                    className={`rounded-lg px-4 py-3 relative overflow-hidden ${
                       message.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted/50 border border-border"
+                        ? "bg-gradient-to-br from-cyan-600 to-cyan-700 text-white border border-cyan-500/50 shadow-lg shadow-cyan-500/20"
+                        : "bg-muted/50 border border-cyan-500/20 backdrop-blur-sm"
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    {message.role === "assistant" && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-cyan-500/5 animate-pulse" />
+                    )}
+                    <p className="text-sm whitespace-pre-wrap relative z-10">{message.content}</p>
+                    {message.role === "assistant" && (
+                      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                    )}
                   </div>
                   {/* Show synthesis progress for processing messages */}
                   {message.synthesisId && message.isProcessing && (

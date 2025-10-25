@@ -32,6 +32,11 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    host: '0.0.0.0',
+    allowedHosts: [
+      '.replit.dev',
+      '.repl.co',
+    ],
     fs: {
       strict: true,
       deny: ["**/.*"],
