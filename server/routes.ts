@@ -1641,7 +1641,17 @@ except Exception as e:
     try {
       const query = recentQuerySchema.parse(req.query);
       const items = corpusStorage.getRecent(query.limit);
-      return res.json({ items });
+      
+      // Transform corpus entries to recent run format for self-learning UI
+      const runs = items.map((item: any) => ({
+        run_id: item.id,
+        timestamp: item.timestamp,
+        score: item.score,
+        passed: item.passed,
+        total: item.total,
+      }));
+      
+      return res.json({ runs });
     } catch (e: any) {
       return res.status(400).json({
         error: "bad_query",
