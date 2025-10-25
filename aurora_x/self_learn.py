@@ -28,7 +28,7 @@ class SelfLearningDaemon:
         self,
         spec_dir: Path = Path("specs"),
         outdir: Path = Path("runs"),
-        sleep_seconds: int = 60,  # 1 minute between runs - more aggressive learning
+        sleep_seconds: int = 15,  # 15 seconds - very aggressive learning (practical minimum)
         max_iters: int = 50,
         beam: int = 20,
     ):
