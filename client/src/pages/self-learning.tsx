@@ -12,6 +12,11 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 interface SelfLearningStatus {
   running: boolean;
   message?: string;
+  stats?: {
+    started_at: string | null;
+    last_activity: string | null;
+    run_count: number;
+  };
 }
 
 interface RecentRun {
@@ -182,6 +187,22 @@ export default function SelfLearning() {
             </div>
             {status?.message && (
               <p className="mt-4 text-sm text-muted-foreground">{status.message}</p>
+            )}
+            {status?.stats && status.running && (
+              <div className="mt-4 p-3 rounded-lg bg-secondary/30 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Started:</span>
+                  <span className="font-mono">{new Date(status.stats.started_at || '').toLocaleTimeString()}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Last Activity:</span>
+                  <span className="font-mono">{status.stats.last_activity ? new Date(status.stats.last_activity).toLocaleTimeString() : 'N/A'}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Runs Completed:</span>
+                  <span className="font-mono font-bold text-primary">{status.stats.run_count}</span>
+                </div>
+              </div>
             )}
           </CardContent>
         </Card>
