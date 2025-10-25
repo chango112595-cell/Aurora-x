@@ -1290,6 +1290,54 @@ except Exception as e:
     run_count: 0,
   };
 
+  // Auto-restart self-learning if it was running before (based on PID file)
+  const pidPath = path.join(process.cwd(), '.self_learning.pid');
+  if (fs.existsSync(pidPath)) {
+    console.log('[Self-Learning] Detected previous PID file, checking if process is still running...');
+    const pidStr = fs.readFileSync(pidPath, 'utf-8').trim();
+    const pid = parseInt(pidStr);
+    
+    let processRunning = false;
+    if (pid) {
+      try {
+        process.kill(pid, 0); // Check if process exists
+        processRunning = true;
+        console.log(`[Self-Learning] Process ${pid} is still running`);
+      } catch (e: any) {
+        if (e.code === 'ESRCH') {
+          console.log(`[Self-Learning] Process ${pid} not found, will auto-restart`);
+        }
+      }
+    }
+    
+    // If process not running, auto-restart with default settings
+    if (!processRunning) {
+      setTimeout(() => {
+        console.log('[Self-Learning] Auto-starting daemon after server boot...');
+        const interval = 15; // Default 15 seconds
+        
+        selfLearningProcess = spawn('python3', [
+          '-m', 'aurora_x.self_learn',
+          '--sleep', interval.toString(),
+          '--max-iters', '50',
+          '--beam', '20'
+        ], {
+          cwd: process.cwd(),
+          detached: true,
+          stdio: ['ignore', 'ignore', 'ignore']
+        });
+        
+        selfLearningProcess.unref();
+        fs.writeFileSync(pidPath, selfLearningProcess.pid?.toString() || '');
+        
+        selfLearningStats.started_at = new Date().toISOString();
+        selfLearningStats.last_activity = new Date().toISOString();
+        
+        console.log(`[Self-Learning] Auto-started with PID ${selfLearningProcess.pid}`);
+      }, 2000); // Wait 2 seconds after server boot
+    }
+  }
+
   // Self-learning status endpoint
   app.get("/api/self-learning/status", (req, res) => {
     // Check if process is actually running
