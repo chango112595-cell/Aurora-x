@@ -124,17 +124,16 @@ export default function SelfLearning() {
         sleepInterval: settings.sleepInterval,
       });
       
-      // Handle "already running" error gracefully
+      // Handle "already running" error gracefully - return success without throwing
       if (response.status === 400) {
         const data = await response.json();
         if (data.error === "Already running") {
-          // If it's already running, just update the UI state - don't throw error
+          // Treat "already running" as success - just return a flag
           return { status: "started", message: "Self-learning daemon is already running", alreadyRunning: true };
         }
-        // Other 400 errors should throw
-        throw new Error(data.message || "Failed to start learning");
       }
       
+      // For other errors or success, parse normally
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message || "Failed to start learning");
@@ -157,6 +156,7 @@ export default function SelfLearning() {
       }
     },
     onError: (error: any) => {
+      // Only show error for actual failures
       toast({
         title: "Failed to Start",
         description: error.message,
@@ -168,6 +168,10 @@ export default function SelfLearning() {
   // Stop mutation
   const stopMutation = useMutation({
     mutationFn: async () => {
+      // Set manual stop flag BEFORE making the API call
+      setManualStop(true);
+      updateSetting("autoStart", false);
+      
       const response = await apiRequest("POST", "/api/self-learning/stop", {});
       return response.json();
     },
@@ -177,11 +181,13 @@ export default function SelfLearning() {
         description: data.message || "Aurora has stopped learning",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
-      setManualStop(true); // Mark as manually stopped
-      // Turn off auto-start when user manually stops
-      updateSetting("autoStart", false);
+      // Flags already set in mutationFn
     },
     onError: (error: any) => {
+      // If stop failed, revert the flags
+      setManualStop(false);
+      updateSetting("autoStart", true);
+      
       toast({
         title: "Failed to Stop",
         description: error.message,
