@@ -1351,12 +1351,77 @@ except Exception as e:
 
       selfLearningProcess.on('exit', (code: number) => {
         console.log(`[Self-Learning] Daemon exited with code ${code}`);
+        
+        // Auto-restart if it wasn't manually stopped (code 0 or SIGTERM)
+        const wasManualStop = code === 0 || code === null;
+        
         selfLearningProcess = null;
         selfLearningStats = {
           started_at: null,
           last_activity: null,
           run_count: 0,
         };
+        
+        // Auto-restart after 5 seconds if it crashed
+        if (!wasManualStop) {
+          console.log(`[Self-Learning] Unexpected exit, will auto-restart in 5 seconds...`);
+          setTimeout(() => {
+            if (!selfLearningProcess) {
+              console.log(`[Self-Learning] Auto-restarting daemon...`);
+              // Restart with same interval
+              const restartInterval = interval || 15;
+              
+              selfLearningProcess = spawn('python3', [
+                '-m', 'aurora_x.self_learn',
+                '--sleep', restartInterval.toString(),
+                '--max-iters', '50',
+                '--beam', '20'
+              ], {
+                cwd: process.cwd(),
+                detached: false,
+                stdio: ['ignore', 'pipe', 'pipe']
+              });
+              
+              // Re-attach event handlers
+              selfLearningProcess.stdout.on('data', (data: Buffer) => {
+                const output = data.toString().trim();
+                if (output) {
+                  console.log(`[Self-Learning] ${output}`);
+                  selfLearningStats.last_activity = new Date().toISOString();
+                  if (output.includes('Completed run #')) {
+                    const match = output.match(/Completed run #(\d+)/);
+                    if (match) {
+                      selfLearningStats.run_count = parseInt(match[1]);
+                    }
+                  }
+                }
+              });
+              
+              selfLearningProcess.stderr.on('data', (data: Buffer) => {
+                const output = data.toString().trim();
+                if (output && !output.includes('Traceback')) {
+                  console.log(`[Self-Learning] ${output}`);
+                }
+              });
+              
+              selfLearningProcess.on('exit', (code: number) => {
+                console.log(`[Self-Learning] Daemon exited with code ${code}`);
+                selfLearningProcess = null;
+                selfLearningStats = {
+                  started_at: null,
+                  last_activity: null,
+                  run_count: 0,
+                };
+              });
+              
+              selfLearningStats.started_at = new Date().toISOString();
+              selfLearningStats.last_activity = new Date().toISOString();
+              selfLearningStats.run_count = 0;
+              
+              console.log('[Self-Learning] Auto-restart successful');
+            }
+          }, 5000);
+        }
       });
 
       selfLearningStats.started_at = new Date().toISOString();
