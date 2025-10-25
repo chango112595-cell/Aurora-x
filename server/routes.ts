@@ -375,7 +375,7 @@ except Exception as e:
 
       // Validate run ID format (should be like run-2025-10-12T15-20-07)
       // Also support older format run-20241012-143539
-      if (!runId || !runId.match(/^run-(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}|\d{8}-\d{6})$/)) {
+      if (!runId || !/^run-(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}|\d{8}-\d{6})$/.test(runId)) {
         return res.status(400).json({
           error: "Invalid run ID",
           message: "Run ID must be in format run-YYYY-MM-DDTHH-MM-SS or run-YYYYMMDD-HHMMSS"
