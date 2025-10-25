@@ -4,6 +4,7 @@
 .PHONY: orchestrator orchestrate-bg orch-test orch-status
 .PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed demo-clean demo-clean-hard demo-status
 .PHONY: bridge-up bridge-status bridge-nl bridge-spec bridge-deploy orch-up
+.PHONY: self-learn
 
 # === Default Variables ===
 SPEC ?= specs/check_palindrome.md
@@ -78,6 +79,9 @@ help:
 	@echo "  make workflow-status # Display detailed workflow status dashboard"
 	@echo "  make fix-workflows   # Run script to fix workflow issues"
 	@echo ""
+	@echo "Self-Learning:"
+	@echo "  make self-learn     # run continuous self-learning daemon"
+	@echo ""
 	@echo "Legacy Commands:"
 	@echo "  make run            # run synthesis"
 	@echo "  make test           # run unit tests"
@@ -110,6 +114,8 @@ say:
 serve-v3:
 	@echo "🚀 Starting FastAPI server on port $${AURORA_PORT:-5001}..."
 	@uvicorn aurora_x.serve:app --host 0.0.0.0 --port $${AURORA_PORT:-5001}
+
+serve: serve-v3
 
 # === Dashboard & Reports ===
 open-dashboard:
@@ -216,7 +222,7 @@ spec-report:
 
 # === Quick Start Aliases ===
 all: help
-serve: serve-v3
+# serve: serve-v3 # This is now handled by 'serve' alias above
 dashboard: open-dashboard
 # Aurora-X English Mode Makefile Additions
 # Add these targets to your main Makefile or include this file
@@ -581,6 +587,11 @@ demo: thresholds
 smoke:
 	curl -fsS $(HOST)/healthz && echo "health: OK"
 
+# === Self-Learning Target ===
+self-learn:
+	@echo "Starting Aurora-X continuous self-learning daemon..."
+	python3 -m aurora_x.self_learn --sleep 300 --max-iters 50 --beam 20
+
 # PWA & OS Matrix helpers (T10)
 pwa-audit:
 	@echo "Checking PWA manifest..."
@@ -815,6 +826,7 @@ sign-off:
 	@echo "  unset AURORA_SIGN"
 
 # === CI Helper Commands ===
+# Redefined lint, sec, test for CI environment
 lint:
 	ruff check .
 
