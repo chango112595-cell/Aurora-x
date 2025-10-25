@@ -105,8 +105,10 @@ def parse_english(text: str) -> NLParseResult:
     if any(kw in text_lower for kw in ["flask", "web app", "web application", "api server", "rest api"]):
         return NLParseResult(
             {
-                "name": _snake(text) + "_app",
-                "signature": f"def {_snake(text)}_app() -> Flask",
+                # Compute snake_case name once
+                snake_name = _snake(text)
+                "name": snake_name + "_app",
+                "signature": f"def {snake_name}_app() -> Flask",
                 "description": f"Flask web application: {text}",
                 "framework": "flask",  # Key indicator for synthesis pipeline
                 "app_type": "web",
