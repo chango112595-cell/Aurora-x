@@ -29,6 +29,11 @@ const menuItems = [
     url: "/dashboard",
     icon: Activity,
   },
+  {
+    title: "Self-Learning",
+    url: "/self-learning",
+    icon: Zap,
+  },
 ];
 
 const bottomItems = [

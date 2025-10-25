@@ -1282,6 +1282,77 @@ except Exception as e:
     return res.status(statusCode).json(response);
   });
 
+  // Self-learning daemon state
+  let selfLearningProcess: any = null;
+
+  // Self-learning status endpoint
+  app.get("/api/self-learning/status", (req, res) => {
+    const running = selfLearningProcess !== null;
+    return res.json({
+      running,
+      message: running ? "Self-learning daemon is active" : "Self-learning daemon is stopped"
+    });
+  });
+
+  // Start self-learning daemon
+  app.post("/api/self-learning/start", (req, res) => {
+    if (selfLearningProcess) {
+      return res.status(400).json({
+        error: "Already running",
+        message: "Self-learning daemon is already active"
+      });
+    }
+
+    try {
+      selfLearningProcess = spawn('python3', ['-m', 'aurora_x.self_learn', '--sleep', '300', '--max-iters', '50', '--beam', '20'], {
+        cwd: process.cwd(),
+        detached: true,
+        stdio: 'ignore'
+      });
+
+      selfLearningProcess.on('exit', () => {
+        selfLearningProcess = null;
+      });
+
+      selfLearningProcess.unref();
+
+      return res.json({
+        status: "started",
+        message: "Self-learning daemon started successfully"
+      });
+    } catch (error: any) {
+      return res.status(500).json({
+        error: "Failed to start",
+        message: error.message
+      });
+    }
+  });
+
+  // Stop self-learning daemon
+  app.post("/api/self-learning/stop", (req, res) => {
+    if (!selfLearningProcess) {
+      return res.status(400).json({
+        error: "Not running",
+        message: "Self-learning daemon is not active"
+      });
+    }
+
+    try {
+      selfLearningProcess.kill();
+      selfLearningProcess = null;
+
+      return res.json({
+        status: "stopped",
+        message: "Self-learning daemon stopped successfully"
+      });
+    } catch (error: any) {
+      return res.status(500).json({
+        error: "Failed to stop",
+        message: error.message
+      });
+    }
+  });
+
   // T08 Natural Language Synthesis activation endpoints
   // State storage for T08 (in production, this should be in a database or persistent storage)
   let t08Enabled = true;

@@ -18,6 +18,7 @@ import Dashboard from "@/pages/dashboard";
 import Library from "@/pages/library";
 import Corpus from "@/pages/corpus";
 import Settings from "@/pages/settings";
+import SelfLearning from "@/pages/self-learning";
 
 function Router() {
   return (
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/library" component={Library} />
       <Route path="/corpus" component={Corpus} />
+      <Route path="/self-learning" component={SelfLearning} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>
