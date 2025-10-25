@@ -111,7 +111,7 @@ export class CorpusStorage {
       entry.duration_ms ?? null,
       entry.synthesis_method ?? null
     );
-    
+
     console.log(`[Corpus Storage] Inserted entry: ${entry.func_name}, changes: ${result.changes}`);
   }
 
@@ -188,11 +188,20 @@ export class CorpusStorage {
     return rows.map((row) => this.parseEntry(row));
   }
 
-  getRecent(limit: number): any[] {
-    const rows = this.db
-      .prepare(`SELECT * FROM corpus ORDER BY timestamp DESC LIMIT ?`)
-      .all(limit);
-    return rows.map((row) => this.parseEntry(row));
+  async getRecent(limit: number = 10): Promise<CorpusEntry[]> {
+    const query = `
+      SELECT * FROM corpus 
+      WHERE id IS NOT NULL
+      ORDER BY timestamp DESC 
+      LIMIT ?
+    `;
+
+    const rows = this.db.prepare(query).all(limit) as any[];
+    console.log(`[Corpus Storage] getRecent found ${rows.length} entries`);
+    if (rows.length > 0) {
+      console.log(`[Corpus Storage] First entry:`, rows[0]);
+    }
+    return rows.map(row => this.parseEntry(row));
   }
 
   private bowTokens(s: string): string[] {
