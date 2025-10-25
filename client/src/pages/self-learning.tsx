@@ -359,10 +359,10 @@ export default function SelfLearning() {
             <div className="flex gap-3">
               <Button
                 onClick={handleStart}
-                disabled={status?.running || manualStop}
+                disabled={status?.running || startMutation.isPending}
                 className="flex-1"
               >
-                {manualStop ? 'Stopped (Click to Resume)' : 'Start Learning'}
+                {startMutation.isPending ? 'Starting...' : (status?.running ? 'Running' : (manualStop ? 'Resume Learning' : 'Start Learning'))}
               </Button>
               <Button
                 onClick={handleStop}
