@@ -107,6 +107,8 @@ def parse_english(text: str) -> NLParseResult:
         snake_name = _snake(text)
         return NLParseResult(
             {
+                # Compute snake_case name once
+                snake_name = _snake(text.split('.')[0].strip() if '.' in text else text[:50].strip())
                 "name": snake_name + "_app",
                 "signature": f"def {snake_name}_app() -> Flask",
                 "description": f"Flask web application: {text}",
