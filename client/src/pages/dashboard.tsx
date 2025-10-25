@@ -1433,7 +1433,6 @@ export default function Dashboard() {
     initialData: () => ({
       tasks: [],
       updated_utc: new Date().toISOString(),
-      // ui_thresholds: { ok: 90, warn: 60 } // This property is not defined in ProgressData
     }), // Provide initial data to prevent loading state
     refetchOnWindowFocus: false, // Don't refetch when window regains focus
     refetchOnMount: true, // Only refetch on mount
