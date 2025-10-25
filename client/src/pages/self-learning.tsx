@@ -128,27 +128,32 @@ export default function SelfLearning() {
       if (response.status === 400) {
         const data = await response.json();
         if (data.error === "Already running") {
-          // If it's already running, just update the UI state
+          // If it's already running, just update the UI state - don't throw error
           return { status: "started", message: "Self-learning daemon is already running", alreadyRunning: true };
         }
+        // Other 400 errors should throw
+        throw new Error(data.message || "Failed to start learning");
+      }
+      
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to start learning");
       }
       
       return response.json();
     },
     onSuccess: (data) => {
-      if (data.alreadyRunning) {
-        // Just update the UI state without showing an error
-        setManualStop(false);
-        updateSetting("autoStart", true);
-        queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
-      } else {
+      // Clear manual stop flag and update UI
+      setManualStop(false);
+      updateSetting("autoStart", true);
+      queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
+      
+      // Only show toast for actual starts, not for "already running"
+      if (!data.alreadyRunning) {
         toast({
           title: "Self-Learning Started",
           description: data.message || "Aurora is now learning autonomously",
         });
-        queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
-        setManualStop(false); // Clear manual stop flag when starting
-        updateSetting("autoStart", true); // Turn on auto-start when resuming
       }
     },
     onError: (error: any) => {
