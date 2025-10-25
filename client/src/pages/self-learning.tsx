@@ -370,7 +370,7 @@ export default function SelfLearning() {
                 disabled={status?.running || startMutation.isPending}
                 className="flex-1"
               >
-                {startMutation.isPending ? 'Starting...' : (status?.running ? 'Running' : (manualStop ? 'Resume Learning' : 'Start Learning'))}
+                {startMutation.isPending ? 'Starting...' : (manualStop ? 'Resume Learning' : (status?.running ? 'Running...' : 'Start Learning'))}
               </Button>
               <Button
                 onClick={handleStop}
