@@ -84,6 +84,7 @@ externalPort = 6800
 PORT = "5000"
 
 [workflows]
+runButton = "Start Aurora Web Server"
 
 [[workflows.workflow]]
 name = "Aurora Self-Learning"
@@ -93,6 +94,15 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python3 -m aurora_x.self_learn --sleep 15 --max-iters 50 --beam 20"
+
+[[workflows.workflow]]
+name = "Start Aurora Web Server"
+author = 47570941
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
