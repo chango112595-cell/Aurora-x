@@ -540,11 +540,7 @@ except Exception as e:
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
       res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
 
-<<<<<<< HEAD
-      // Return the progress data with aggressive caching
-=======
-      // Return the progress data with appropriate headers
->>>>>>> 57cc3ebc7f7eafeafbbc8e0b4e7ca4b39b188022
+// Return the progress data with appropriate headers
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Cache-Control', 'public, max-age=5, stale-while-revalidate=10'); // Cache for 5s, allow stale for 10s
       res.setHeader('ETag', `"${Date.now()}"`); // Add ETag for conditional requests
