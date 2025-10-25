@@ -1448,12 +1448,21 @@ except Exception as e:
         });
       }
       
-      // Kill the process
+      // Kill the detached process group (negative PID kills the process group)
       try {
-        process.kill(pid, 'SIGTERM');
+        process.kill(-pid, 'SIGTERM');
+        console.log(`[Self-Learning] Sent SIGTERM to process group -${pid}`);
       } catch (e: any) {
         if (e.code !== 'ESRCH') {
-          throw e;
+          // If process group kill fails, try killing just the process
+          try {
+            process.kill(pid, 'SIGKILL');
+            console.log(`[Self-Learning] Sent SIGKILL to process ${pid}`);
+          } catch (e2: any) {
+            if (e2.code !== 'ESRCH') {
+              throw e2;
+            }
+          }
         }
       }
       
