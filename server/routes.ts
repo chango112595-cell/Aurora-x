@@ -2028,20 +2028,6 @@ except Exception as e:
     }
 
     try {
-<<<<<<< HEAD
-      // Call Python Aurora-X with natural language
-      const { exec } = await import("child_process");
-      const { promisify } = await import("util");
-      const execAsync = promisify(exec);
-
-      const command = `python3 -m aurora_x.main --nl "${prompt.replace(/"/g, '\\"')}"`;
-      console.log(`[Aurora] Executing: ${command}`);
-
-      const { stdout, stderr } = await execAsync(command, {
-        cwd: process.cwd(),
-        timeout: 60000, // 60 second timeout
-      });
-=======
       const { message } = req.body;
 
       if (!message || typeof message !== 'string') {
@@ -2294,22 +2280,6 @@ Data flows like streams"""`;
           if (lowerMsg.includes('haiku') || lowerMsg.includes('poem')) {
             code = `# Aurora-X Synthesis Result
 # Request: ${message}
->>>>>>> 57cc3ebc7f7eafeafbbc8e0b4e7ca4b39b188022
-
-      // Extract run directory from output
-      const runMatch = stdout.match(/Latest valid run: (run-[\d-]+)/);
-      const runDir = runMatch ? runMatch[1] : null;
-
-<<<<<<< HEAD
-      res.json({
-        message: "Synthesis completed",
-        prompt,
-        status: "success",
-        output: stdout,
-        runDir: runDir,
-        error: stderr || null
-      });
-=======
 def ${funcName}() -> str:
     """Generate something to brighten your day"""
     return "😊 You're doing amazing! Keep up the great work!"`;
@@ -2564,7 +2534,6 @@ if __name__ == "__main__":
         console.log(`[Aurora-X] Synthesis completed with fallback for: ${synthesisId}`);
       }
       }, 100); // Execute synthesis asynchronously with 100ms delay
->>>>>>> 57cc3ebc7f7eafeafbbc8e0b4e7ca4b39b188022
     } catch (error: any) {
       console.error("Chat error:", error);
       res.status(500).json({ 
