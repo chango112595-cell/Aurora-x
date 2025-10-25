@@ -225,7 +225,13 @@ export default function SelfLearning() {
                 </div>
                 <Switch
                   checked={settings.autoStart}
-                  onCheckedChange={(checked) => updateSetting("autoStart", checked)}
+                  onCheckedChange={(checked) => {
+                    updateSetting("autoStart", checked);
+                    // Clear manual stop flag when user changes auto-start setting
+                    if (checked) {
+                      setManualStop(false);
+                    }
+                  }}
                 />
               </div>
 
