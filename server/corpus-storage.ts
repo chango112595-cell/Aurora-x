@@ -188,7 +188,7 @@ export class CorpusStorage {
     return rows.map((row) => this.parseEntry(row));
   }
 
-  async getRecent(limit: number = 10): Promise<CorpusEntry[]> {
+  getRecent(limit: number = 10): any[] {
     const query = `
       SELECT * FROM corpus 
       WHERE id IS NOT NULL
