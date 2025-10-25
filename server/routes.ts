@@ -1290,6 +1290,10 @@ except Exception as e:
     run_count: 0,
   };
 
+  // Self-learning default configuration
+  const SELF_LEARNING_DEFAULT_MAX_ITERS = 50;
+  const SELF_LEARNING_DEFAULT_BEAM = 20;
+
   // Auto-restart self-learning if it was running before (based on PID file)
   const pidPath = path.join(process.cwd(), '.self_learning.pid');
   if (fs.existsSync(pidPath)) {
@@ -1319,8 +1323,8 @@ except Exception as e:
         selfLearningProcess = spawn('python3', [
           '-m', 'aurora_x.self_learn',
           '--sleep', interval.toString(),
-          '--max-iters', '50',
-          '--beam', '20'
+          '--max-iters', SELF_LEARNING_DEFAULT_MAX_ITERS.toString(),
+          '--beam', SELF_LEARNING_DEFAULT_BEAM.toString()
         ], {
           cwd: process.cwd(),
           detached: true,
@@ -1390,8 +1394,8 @@ except Exception as e:
       selfLearningProcess = spawn('python3', [
         '-m', 'aurora_x.self_learn',
         '--sleep', interval.toString(),
-        '--max-iters', '50',
-        '--beam', '20'
+        '--max-iters', SELF_LEARNING_DEFAULT_MAX_ITERS.toString(),
+        '--beam', SELF_LEARNING_DEFAULT_BEAM.toString()
       ], {
         cwd: process.cwd(),
         detached: true,  // Run independently
@@ -1652,7 +1656,8 @@ except Exception as e:
         total: item.total,
       }));
 
-      return res.json({ runs });
+      // Return both 'items' (original) and 'runs' (new format) for backward compatibility
+      return res.json({ items, runs });
     } catch (e: any) {
       return res.status(400).json({
         error: "bad_query",

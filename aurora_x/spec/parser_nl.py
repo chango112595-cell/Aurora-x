@@ -103,10 +103,10 @@ def parse_english(text: str) -> NLParseResult:
 
     # Check for Flask app requests
     if any(kw in text_lower for kw in ["flask", "web app", "web application", "api server", "rest api"]):
+        # Compute snake_case name once
+        snake_name = _snake(text)
         return NLParseResult(
             {
-                # Compute snake_case name once
-                snake_name = _snake(text)
                 "name": snake_name + "_app",
                 "signature": f"def {snake_name}_app() -> Flask",
                 "description": f"Flask web application: {text}",
