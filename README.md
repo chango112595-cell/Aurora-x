@@ -41,6 +41,12 @@ pip install -e .
 # Run synthesis with seeding
 aurorax --spec-file ./specs/rich_spec.md --outdir runs
 
+# Run continuous self-learning (runs forever, learning from each iteration)
+make self-learn
+
+# Or run directly with custom parameters
+python3 -m aurora_x.self_learn --sleep 300 --max-iters 50 --beam 20
+
 # Query corpus for past synthesis attempts
 aurorax --dump-corpus "add(a:int,b:int)->int" --top 5
 
