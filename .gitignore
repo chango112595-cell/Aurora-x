@@ -13,6 +13,13 @@ __pycache__
 .coverage
 coverage.xml
 htmlcov/
-runs/run-*/
+runs/run-*
 runs/latest
 semgrep.sarif
+# Self-learning daemon
+.self_learning.pid
+
+# Logs
+logs
+*.log
+npm-debug.log*

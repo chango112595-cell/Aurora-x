@@ -1292,7 +1292,29 @@ except Exception as e:
 
   // Self-learning status endpoint
   app.get("/api/self-learning/status", (req, res) => {
-    const running = selfLearningProcess !== null;
+    // Check if process is actually running
+    const pidPath = path.join(process.cwd(), '.self_learning.pid');
+    let running = false;
+    
+    if (fs.existsSync(pidPath)) {
+      const pidStr = fs.readFileSync(pidPath, 'utf-8').trim();
+      const pid = parseInt(pidStr);
+      
+      if (pid) {
+        try {
+          // Check if process exists (signal 0 doesn't kill, just checks)
+          process.kill(pid, 0);
+          running = true;
+        } catch (e: any) {
+          // Process doesn't exist
+          if (e.code === 'ESRCH') {
+            fs.unlinkSync(pidPath);
+            running = false;
+          }
+        }
+      }
+    }
+    
     return res.json({
       running,
       message: running ? "Self-learning daemon is active" : "Self-learning daemon is stopped",
@@ -1315,6 +1337,7 @@ except Exception as e:
       
       console.log(`[Self-Learning] Starting daemon with ${interval}s interval...`);
       
+      // Start as detached background process
       selfLearningProcess = spawn('python3', [
         '-m', 'aurora_x.self_learn',
         '--sleep', interval.toString(),
@@ -1322,113 +1345,22 @@ except Exception as e:
         '--beam', '20'
       ], {
         cwd: process.cwd(),
-        detached: false,  // Keep attached so we can monitor
-        stdio: ['ignore', 'pipe', 'pipe']  // Capture stdout/stderr
+        detached: true,  // Run independently
+        stdio: ['ignore', 'ignore', 'ignore']  // Fully detached
       });
+      
+      // Unref so it can run independently
+      selfLearningProcess.unref();
 
-      // Log output for debugging
-      selfLearningProcess.stdout.on('data', (data: Buffer) => {
-        const output = data.toString().trim();
-        if (output) {
-          console.log(`[Self-Learning] ${output}`);
-          selfLearningStats.last_activity = new Date().toISOString();
-          // Count runs
-          if (output.includes('Completed run #')) {
-            const match = output.match(/Completed run #(\d+)/);
-            if (match) {
-              selfLearningStats.run_count = parseInt(match[1]);
-            }
-          }
-        }
-      });
-
-      selfLearningProcess.stderr.on('data', (data: Buffer) => {
-        const output = data.toString().trim();
-        if (output && !output.includes('Traceback')) {
-          console.log(`[Self-Learning] ${output}`);
-        }
-      });
-
-      selfLearningProcess.on('exit', (code: number) => {
-        console.log(`[Self-Learning] Daemon exited with code ${code}`);
-        
-        // Auto-restart if it wasn't manually stopped (code 0 or SIGTERM)
-        const wasManualStop = code === 0 || code === null;
-        
-        selfLearningProcess = null;
-        selfLearningStats = {
-          started_at: null,
-          last_activity: null,
-          run_count: 0,
-        };
-        
-        // Auto-restart after 5 seconds if it crashed
-        if (!wasManualStop) {
-          console.log(`[Self-Learning] Unexpected exit, will auto-restart in 5 seconds...`);
-          setTimeout(() => {
-            if (!selfLearningProcess) {
-              console.log(`[Self-Learning] Auto-restarting daemon...`);
-              // Restart with same interval
-              const restartInterval = interval || 15;
-              
-              selfLearningProcess = spawn('python3', [
-                '-m', 'aurora_x.self_learn',
-                '--sleep', restartInterval.toString(),
-                '--max-iters', '50',
-                '--beam', '20'
-              ], {
-                cwd: process.cwd(),
-                detached: false,
-                stdio: ['ignore', 'pipe', 'pipe']
-              });
-              
-              // Re-attach event handlers
-              selfLearningProcess.stdout.on('data', (data: Buffer) => {
-                const output = data.toString().trim();
-                if (output) {
-                  console.log(`[Self-Learning] ${output}`);
-                  selfLearningStats.last_activity = new Date().toISOString();
-                  if (output.includes('Completed run #')) {
-                    const match = output.match(/Completed run #(\d+)/);
-                    if (match) {
-                      selfLearningStats.run_count = parseInt(match[1]);
-                    }
-                  }
-                }
-              });
-              
-              selfLearningProcess.stderr.on('data', (data: Buffer) => {
-                const output = data.toString().trim();
-                if (output && !output.includes('Traceback')) {
-                  console.log(`[Self-Learning] ${output}`);
-                }
-              });
-              
-              selfLearningProcess.on('exit', (code: number) => {
-                console.log(`[Self-Learning] Daemon exited with code ${code}`);
-                selfLearningProcess = null;
-                selfLearningStats = {
-                  started_at: null,
-                  last_activity: null,
-                  run_count: 0,
-                };
-              });
-              
-              selfLearningStats.started_at = new Date().toISOString();
-              selfLearningStats.last_activity = new Date().toISOString();
-              selfLearningStats.run_count = 0;
-              
-              console.log('[Self-Learning] Auto-restart successful');
-            }
-          }, 5000);
-        }
-      });
+      // Store PID for later management
+      const pidPath = path.join(process.cwd(), '.self_learning.pid');
+      fs.writeFileSync(pidPath, selfLearningProcess.pid?.toString() || '');
 
       selfLearningStats.started_at = new Date().toISOString();
       selfLearningStats.last_activity = new Date().toISOString();
       selfLearningStats.run_count = 0;
 
-      console.log('[Self-Learning] Daemon started successfully');
+      console.log(`[Self-Learning] Daemon started successfully with PID ${selfLearningProcess.pid}`);
 
       return res.json({
         status: "started",
@@ -1447,16 +1379,40 @@ except Exception as e:
 
   // Stop self-learning daemon
   app.post("/api/self-learning/stop", (req, res) => {
-    if (!selfLearningProcess) {
-      return res.status(400).json({
-        error: "Not running",
-        message: "Self-learning daemon is not active"
-      });
-    }
-
     try {
       console.log('[Self-Learning] Stopping daemon...');
-      selfLearningProcess.kill('SIGTERM');
+      
+      const pidPath = path.join(process.cwd(), '.self_learning.pid');
+      
+      // Try to read PID from file
+      let pid: number | null = null;
+      if (fs.existsSync(pidPath)) {
+        const pidStr = fs.readFileSync(pidPath, 'utf-8').trim();
+        pid = parseInt(pidStr);
+      } else if (selfLearningProcess?.pid) {
+        pid = selfLearningProcess.pid;
+      }
+      
+      if (!pid) {
+        return res.status(400).json({
+          error: "Not running",
+          message: "Self-learning daemon is not active"
+        });
+      }
+      
+      // Kill the process
+      try {
+        process.kill(pid, 'SIGTERM');
+      } catch (e: any) {
+        if (e.code !== 'ESRCH') {
+          throw e;
+        }
+      }
+      
+      // Clean up
+      if (fs.existsSync(pidPath)) {
+        fs.unlinkSync(pidPath);
+      }
       selfLearningProcess = null;
       
       const finalStats = { ...selfLearningStats };
