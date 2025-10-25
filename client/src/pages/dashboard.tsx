@@ -222,7 +222,7 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
               animate={{ opacity: 1 }}
               className="mt-3"
             >
-              <Badge className="bg-gradient-to-r from-primary/30 to-cyan-500/30 text-foreground font-semibold border-primary/50 dark:from-primary/20 dark:to-cyan-500/20 dark:text-primary" data-testid={`badge-active-${task.id}`}>
+              <Badge className="bg-gradient-to-r from-primary/30 to-cyan-500/30 text-foreground font-semibold border-primary/50 dark:from-primary/50 dark:to-cyan-500/50 dark:text-white dark:border-primary/70" data-testid={`badge-active-${task.id}`}>
                 <Activity className="h-3 w-3 mr-1 animate-pulse" />
                 Active Now
               </Badge>
