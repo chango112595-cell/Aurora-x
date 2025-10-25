@@ -1,13 +1,17 @@
 
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Activity, Zap, Play, Square, RefreshCw, Database } from "lucide-react";
+import { Activity, Zap, Play, Square, RefreshCw, Database, Settings, Clock, Moon, Sun } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
 
 interface SelfLearningStatus {
   running: boolean;
@@ -27,9 +31,35 @@ interface RecentRun {
   total: number;
 }
 
+interface LearningSettings {
+  autoStart: boolean;
+  sleepInterval: number; // minutes
+  wakeTime: string; // HH:MM format
+  sleepTime: string; // HH:MM format
+  enableSchedule: boolean;
+}
+
+const DEFAULT_SETTINGS: LearningSettings = {
+  autoStart: false,
+  sleepInterval: 15, // 15 seconds default
+  wakeTime: "08:00",
+  sleepTime: "22:00",
+  enableSchedule: false,
+};
+
 export default function SelfLearning() {
   const { toast } = useToast();
   const [statusPolling, setStatusPolling] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
+  const [settings, setSettings] = useState<LearningSettings>(() => {
+    const saved = localStorage.getItem("aurora-learning-settings");
+    return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
+  });
+
+  // Save settings to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("aurora-learning-settings", JSON.stringify(settings));
+  }, [settings]);
 
   // Query for self-learning status
   const { data: status, isLoading } = useQuery<SelfLearningStatus>({
@@ -37,6 +67,47 @@ export default function SelfLearning() {
     refetchInterval: statusPolling ? 5000 : false,
     retry: 1,
   });
+
+  // Auto-start on mount if enabled
+  useEffect(() => {
+    if (settings.autoStart && status && !status.running && !isLoading) {
+      // Check if we're within wake hours if schedule is enabled
+      if (settings.enableSchedule) {
+        const now = new Date();
+        const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        
+        if (currentTime >= settings.wakeTime && currentTime < settings.sleepTime) {
+          startMutation.mutate();
+        }
+      } else {
+        startMutation.mutate();
+      }
+    }
+  }, [settings.autoStart, status, isLoading]);
+
+  // Schedule-based sleep/wake cycle
+  useEffect(() => {
+    if (!settings.enableSchedule || !status?.running) return;
+
+    const checkSchedule = () => {
+      const now = new Date();
+      const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+      
+      // Stop if past sleep time
+      if (currentTime >= settings.sleepTime || currentTime < settings.wakeTime) {
+        if (status.running) {
+          stopMutation.mutate();
+          toast({
+            title: "Aurora is Sleeping",
+            description: `Stopped for the night. Will resume at ${settings.wakeTime}`,
+          });
+        }
+      }
+    };
+
+    const interval = setInterval(checkSchedule, 60000); // Check every minute
+    return () => clearInterval(interval);
+  }, [settings.enableSchedule, settings.sleepTime, settings.wakeTime, status]);
 
   // Query for recent runs
   const { data: recentRuns } = useQuery<{ runs: RecentRun[] }>({
@@ -47,7 +118,9 @@ export default function SelfLearning() {
   // Start mutation
   const startMutation = useMutation({
     mutationFn: async () => {
-      const response = await apiRequest("POST", "/api/self-learning/start", {});
+      const response = await apiRequest("POST", "/api/self-learning/start", {
+        sleepInterval: settings.sleepInterval,
+      });
       return response.json();
     },
     onSuccess: (data) => {
@@ -91,6 +164,13 @@ export default function SelfLearning() {
   const handleStart = () => startMutation.mutate();
   const handleStop = () => stopMutation.mutate();
 
+  const updateSetting = <K extends keyof LearningSettings>(
+    key: K,
+    value: LearningSettings[K]
+  ) => {
+    setSettings((prev) => ({ ...prev, [key]: value }));
+  };
+
   return (
     <div className="h-full overflow-auto">
       <div className="p-6">
@@ -111,6 +191,130 @@ export default function SelfLearning() {
             </div>
           </div>
         </motion.div>
+
+        {/* Settings Card */}
+        <Card className="mb-6 border-primary/10">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Settings className="h-5 w-5 text-primary" />
+                <CardTitle className="text-lg">Learning Settings</CardTitle>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowSettings(!showSettings)}
+              >
+                {showSettings ? "Hide" : "Show"}
+              </Button>
+            </div>
+          </CardHeader>
+          {showSettings && (
+            <CardContent className="space-y-6">
+              {/* Auto-Start */}
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label className="text-base">Auto-Start Learning</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Automatically start Aurora when the page loads
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.autoStart}
+                  onCheckedChange={(checked) => updateSetting("autoStart", checked)}
+                />
+              </div>
+
+              <Separator />
+
+              {/* Sleep Interval */}
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  Sleep Interval (seconds)
+                </Label>
+                <Input
+                  type="number"
+                  min="5"
+                  max="3600"
+                  value={settings.sleepInterval}
+                  onChange={(e) => updateSetting("sleepInterval", parseInt(e.target.value) || 15)}
+                  className="max-w-xs"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Time between learning runs (minimum 5 seconds)
+                </p>
+              </div>
+
+              <Separator />
+
+              {/* Wake/Sleep Schedule */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Enable Sleep Schedule</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Aurora will only run during specified hours
+                    </p>
+                  </div>
+                  <Switch
+                    checked={settings.enableSchedule}
+                    onCheckedChange={(checked) => updateSetting("enableSchedule", checked)}
+                  />
+                </div>
+
+                {settings.enableSchedule && (
+                  <div className="grid grid-cols-2 gap-4 pl-4 border-l-2 border-primary/20">
+                    <div className="space-y-2">
+                      <Label className="flex items-center gap-2">
+                        <Sun className="h-4 w-4 text-yellow-500" />
+                        Wake Time
+                      </Label>
+                      <Input
+                        type="time"
+                        value={settings.wakeTime}
+                        onChange={(e) => updateSetting("wakeTime", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="flex items-center gap-2">
+                        <Moon className="h-4 w-4 text-purple-500" />
+                        Sleep Time
+                      </Label>
+                      <Input
+                        type="time"
+                        value={settings.sleepTime}
+                        onChange={(e) => updateSetting("sleepTime", e.target.value)}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Current Status */}
+              {settings.enableSchedule && (
+                <div className="p-3 rounded-lg bg-secondary/30 text-sm">
+                  <p className="text-muted-foreground">
+                    <strong>Active Hours:</strong> {settings.wakeTime} - {settings.sleepTime}
+                  </p>
+                  {(() => {
+                    const now = new Date();
+                    const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                    const isActive = currentTime >= settings.wakeTime && currentTime < settings.sleepTime;
+                    return (
+                      <p className="mt-1">
+                        <strong>Status:</strong>{" "}
+                        <Badge variant={isActive ? "default" : "secondary"} className="ml-1">
+                          {isActive ? "Active Period" : "Sleep Period"}
+                        </Badge>
+                      </p>
+                    );
+                  })()}
+                </div>
+              )}
+            </CardContent>
+          )}
+        </Card>
 
         {/* Status Card */}
         <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary/10 via-background to-cyan-500/5">
