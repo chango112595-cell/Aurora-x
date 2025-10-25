@@ -1424,7 +1424,7 @@ export default function Dashboard() {
 
   const { data, isLoading, error, isRefetching, refetch, isSuccess, isError } = useQuery<ProgressData>({
     queryKey: ['/api/progress'],
-    refetchInterval: 10000, // Refresh every 10 seconds instead of 5
+    refetchInterval: 10000, // Refresh every 10 seconds
     refetchIntervalInBackground: false, // Don't poll when tab is inactive
     staleTime: 8000, // Cache data for 8 seconds
     cacheTime: 30000, // Keep cache for 30 seconds
