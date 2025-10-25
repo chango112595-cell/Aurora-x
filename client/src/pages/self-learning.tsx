@@ -61,7 +61,7 @@ export default function SelfLearning() {
   }, [settings]);
 
   // Query for self-learning status
-  const { data: status, isLoading } = useQuery<SelfLearningStatus>({
+  const { data: status, isLoading, refetch } = useQuery<SelfLearningStatus>({
     queryKey: ["/api/self-learning/status"],
     refetchInterval: statusPolling ? 5000 : false,
     retry: 1,
@@ -70,7 +70,7 @@ export default function SelfLearning() {
   // Auto-start on mount and keep running continuously
   useEffect(() => {
     // Always try to start if not running (unless user manually stopped it)
-    if (status && !status.running && !isLoading) {
+    if (status && !status.running && !isLoading && !manualStop) {
       // Check if we're within wake hours if schedule is enabled
       if (settings.enableSchedule) {
         const now = new Date();
@@ -84,7 +84,7 @@ export default function SelfLearning() {
         startMutation.mutate();
       }
     }
-  }, [status, isLoading, settings.enableSchedule, settings.wakeTime, settings.sleepTime]);
+  }, [status, isLoading, settings.enableSchedule, settings.wakeTime, settings.sleepTime, manualStop]);
 
   // Schedule-based sleep/wake cycle
   useEffect(() => {
@@ -130,6 +130,7 @@ export default function SelfLearning() {
         description: data.message || "Aurora is now learning autonomously",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
+      setManualStop(false); // Clear manual stop flag when starting
     },
     onError: (error: any) => {
       toast({
@@ -152,6 +153,7 @@ export default function SelfLearning() {
         description: data.message || "Aurora has stopped learning",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
+      setManualStop(true); // Mark as manually stopped
     },
     onError: (error: any) => {
       toast({
@@ -171,6 +173,9 @@ export default function SelfLearning() {
   ) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
+
+  // Track if user manually stopped to prevent auto-restart
+  const [manualStop, setManualStop] = React.useState(false);
 
   return (
     <div className="h-full overflow-auto">
@@ -356,20 +361,10 @@ export default function SelfLearning() {
             <div className="flex gap-3">
               <Button
                 onClick={handleStart}
-                disabled={status?.running || startMutation.isPending}
+                disabled={status?.running || manualStop}
                 className="flex-1"
               >
-                {startMutation.isPending ? (
-                  <>
-                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                    Starting...
-                  </>
-                ) : (
-                  <>
-                    <Play className="mr-2 h-4 w-4" />
-                    Start Learning
-                  </>
-                )}
+                {manualStop ? 'Stopped (Click to Resume)' : 'Start Learning'}
               </Button>
               <Button
                 onClick={handleStop}
