@@ -274,8 +274,18 @@
       "timestamp": "2025-10-25T09:25:02.585323",
       "success": true,
       "run_dir": "runs/run-20251025-092502"
+    },
+    "self_diagnosis.md": {
+      "timestamp": "2025-10-25T09:26:08.494886",
+      "success": true,
+      "run_dir": "runs/run-20251025-092608"
+    },
+    "who_are.md": {
+      "timestamp": "2025-10-25T09:26:26.266843",
+      "success": true,
+      "run_dir": "runs/run-20251025-092626"
     }
   },
-  "last_updated": "2025-10-25T09:25:02.585337",
+  "last_updated": "2025-10-25T09:26:26.266848",
   "run_count": 0
 }
