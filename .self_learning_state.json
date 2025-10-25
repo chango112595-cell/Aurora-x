@@ -114,8 +114,18 @@
       "timestamp": "2025-10-25T05:57:20.025599",
       "success": true,
       "run_dir": "runs/run-20251025-055720"
+    },
+    "self_diagnosis.md": {
+      "timestamp": "2025-10-25T06:01:45.830546",
+      "success": true,
+      "run_dir": "runs/run-20251025-060145"
+    },
+    "rich_spec_v2.md": {
+      "timestamp": "2025-10-25T06:01:52.167598",
+      "success": true,
+      "run_dir": "runs/run-20251025-060152"
     }
   },
-  "last_updated": "2025-10-25T05:57:20.025607",
-  "run_count": 8
+  "last_updated": "2025-10-25T06:01:52.167605",
+  "run_count": 0
 }
