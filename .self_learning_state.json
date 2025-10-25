@@ -224,8 +224,28 @@
       "timestamp": "2025-10-25T07:54:22.979267",
       "success": true,
       "run_dir": "runs/run-20251025-075422"
+    },
+    "is_palindrome.md": {
+      "timestamp": "2025-10-25T07:54:38.038164",
+      "success": true,
+      "run_dir": "runs/run-20251025-075438"
+    },
+    "self_diagnose.md": {
+      "timestamp": "2025-10-25T07:54:53.051379",
+      "success": true,
+      "run_dir": "runs/run-20251025-075453"
+    },
+    "need_decryption_program.md": {
+      "timestamp": "2025-10-25T07:55:08.152042",
+      "success": true,
+      "run_dir": "runs/run-20251025-075508"
+    },
+    "auto_5a6748d5.md": {
+      "timestamp": "2025-10-25T07:55:23.211803",
+      "success": true,
+      "run_dir": "runs/run-20251025-075523"
     }
   },
-  "last_updated": "2025-10-25T07:54:22.979274",
-  "run_count": 154
+  "last_updated": "2025-10-25T07:55:23.211810",
+  "run_count": 158
 }
