@@ -4,15 +4,13 @@ Populate corpus database from existing synthesis runs
 """
 
 import sys
-import os
-import json
 from pathlib import Path
-from datetime import datetime
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from aurora_x.corpus.store import record, spec_digest
+
 
 def get_db_path():
     """Get the corpus database path."""
@@ -72,9 +70,9 @@ def populate_from_runs():
                     "passed": 1,
                     "total": 1,
                     "score": 0.95,
-                    "complexity": len(code.split('\n')),
+                    "complexity": len(code.split("\n")),
                     "iteration": 0,
-                    **spec_digest(f"# Imported from {run_dir.name}")
+                    **spec_digest(f"# Imported from {run_dir.name}"),
                 }
 
                 # Record to corpus
@@ -87,9 +85,7 @@ def populate_from_runs():
                 print(f"⚠️  Error processing {py_file}: {e}")
                 skipped += 1
 
-    from aurora_x.corpus.store import retrieve
-
-    print(f"\n📊 Summary:")
+    print("\n📊 Summary:")
     print(f"   Recorded: {recorded}")
     print(f"   Skipped: {skipped}")
 
@@ -101,7 +97,8 @@ def populate_from_runs():
         conn.close()
         print(f"   Total corpus entries: {count}")
     else:
-        print(f"   Corpus database not yet created")
+        print("   Corpus database not yet created")
+
 
 if __name__ == "__main__":
     populate_from_runs()
