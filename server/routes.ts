@@ -1296,7 +1296,7 @@ except Exception as e:
     console.log('[Self-Learning] Detected previous PID file, checking if process is still running...');
     const pidStr = fs.readFileSync(pidPath, 'utf-8').trim();
     const pid = parseInt(pidStr);
-    
+
     let processRunning = false;
     if (pid) {
       try {
@@ -1309,13 +1309,13 @@ except Exception as e:
         }
       }
     }
-    
+
     // If process not running, auto-restart with default settings
     if (!processRunning) {
       setTimeout(() => {
         console.log('[Self-Learning] Auto-starting daemon after server boot...');
         const interval = 15; // Default 15 seconds
-        
+
         selfLearningProcess = spawn('python3', [
           '-m', 'aurora_x.self_learn',
           '--sleep', interval.toString(),
@@ -1326,13 +1326,13 @@ except Exception as e:
           detached: true,
           stdio: ['ignore', 'ignore', 'ignore']
         });
-        
+
         selfLearningProcess.unref();
         fs.writeFileSync(pidPath, selfLearningProcess.pid?.toString() || '');
-        
+
         selfLearningStats.started_at = new Date().toISOString();
         selfLearningStats.last_activity = new Date().toISOString();
-        
+
         console.log(`[Self-Learning] Auto-started with PID ${selfLearningProcess.pid}`);
       }, 2000); // Wait 2 seconds after server boot
     }
@@ -1340,33 +1340,34 @@ except Exception as e:
 
   // Self-learning status endpoint
   app.get("/api/self-learning/status", (req, res) => {
-    // Check if process is actually running
-    const pidPath = path.join(process.cwd(), '.self_learning.pid');
-    let running = false;
-    
-    if (fs.existsSync(pidPath)) {
-      const pidStr = fs.readFileSync(pidPath, 'utf-8').trim();
-      const pid = parseInt(pidStr);
-      
-      if (pid) {
-        try {
-          // Check if process exists (signal 0 doesn't kill, just checks)
-          process.kill(pid, 0);
-          running = true;
-        } catch (e: any) {
-          // Process doesn't exist
-          if (e.code === 'ESRCH') {
-            fs.unlinkSync(pidPath);
-            running = false;
-          }
+    const running = selfLearningProcess !== null;
+
+    // Read the state file to get current run count
+    let currentRunCount = selfLearningStats.run_count || 0;
+    if (running) {
+      try {
+        const stateFile = path.join(process.cwd(), '.self_learning_state.json');
+        if (fs.existsSync(stateFile)) {
+          const state = JSON.parse(fs.readFileSync(stateFile, 'utf-8'));
+          currentRunCount = state.run_count || 0;
+          // Update our cached stats
+          selfLearningStats.run_count = currentRunCount;
+          selfLearningStats.last_activity = state.last_run || selfLearningStats.last_activity;
         }
+      } catch (e) {
+        console.error('[Self-Learning] Error reading state file:', e);
       }
     }
-    
+
     return res.json({
       running,
-      message: running ? "Self-learning daemon is active" : "Self-learning daemon is stopped",
-      stats: running ? selfLearningStats : null
+      message: running 
+        ? "Self-learning daemon is running"
+        : "Self-learning daemon is stopped",
+      stats: running ? {
+        ...selfLearningStats,
+        run_count: currentRunCount
+      } : undefined
     });
   });
 
@@ -1382,9 +1383,9 @@ except Exception as e:
     try {
       const { sleepInterval = 15 } = req.body;
       const interval = Math.max(5, Math.min(3600, sleepInterval)); // Clamp between 5s and 1h
-      
+
       console.log(`[Self-Learning] Starting daemon with ${interval}s interval...`);
-      
+
       // Start as detached background process
       selfLearningProcess = spawn('python3', [
         '-m', 'aurora_x.self_learn',
@@ -1396,7 +1397,7 @@ except Exception as e:
         detached: true,  // Run independently
         stdio: ['ignore', 'ignore', 'ignore']  // Fully detached
       });
-      
+
       // Unref so it can run independently
       selfLearningProcess.unref();
 
@@ -1429,9 +1430,9 @@ except Exception as e:
   app.post("/api/self-learning/stop", (req, res) => {
     try {
       console.log('[Self-Learning] Stopping daemon...');
-      
+
       const pidPath = path.join(process.cwd(), '.self_learning.pid');
-      
+
       // Try to read PID from file
       let pid: number | null = null;
       if (fs.existsSync(pidPath)) {
@@ -1440,20 +1441,20 @@ except Exception as e:
       } else if (selfLearningProcess?.pid) {
         pid = selfLearningProcess.pid;
       }
-      
+
       if (!pid) {
         return res.status(400).json({
           error: "Not running",
           message: "Self-learning daemon is not active"
         });
       }
-      
+
       // Kill the process directly with SIGTERM, then SIGKILL if needed
       let killed = false;
       try {
         process.kill(pid, 'SIGTERM');
         console.log(`[Self-Learning] Sent SIGTERM to process ${pid}`);
-        
+
         // Wait a bit and check if it's still running
         setTimeout(() => {
           try {
@@ -1467,7 +1468,7 @@ except Exception as e:
             }
           }
         }, 500);
-        
+
         killed = true;
       } catch (e: any) {
         if (e.code === 'ESRCH') {
@@ -1477,13 +1478,13 @@ except Exception as e:
           throw e;
         }
       }
-      
+
       // Clean up
       if (fs.existsSync(pidPath)) {
         fs.unlinkSync(pidPath);
       }
       selfLearningProcess = null;
-      
+
       const finalStats = { ...selfLearningStats };
       selfLearningStats = {
         started_at: null,
@@ -1594,10 +1595,10 @@ except Exception as e:
       };
 
       const query = corpusQuerySchema.parse(queryDefaults);
-      
+
       // Debug logging
       console.log("[Corpus API] Query params:", query);
-      
+
       const items = corpusStorage.getEntries({
         func: query.func,
         limit: query.limit,
@@ -1608,12 +1609,12 @@ except Exception as e:
         startDate: query.startDate,
         endDate: query.endDate,
       });
-      
+
       console.log("[Corpus API] Found items:", items.length);
       if (items.length > 0) {
         console.log("[Corpus API] First item:", items[0]);
       }
-      
+
       return res.json({ items, hasMore: items.length === query.limit });
     } catch (e: any) {
       console.error("[Corpus API] Error fetching corpus entries:", e);
@@ -1641,7 +1642,7 @@ except Exception as e:
     try {
       const query = recentQuerySchema.parse(req.query);
       const items = corpusStorage.getRecent(query.limit);
-      
+
       // Transform corpus entries to recent run format for self-learning UI
       const runs = items.map((item: any) => ({
         run_id: item.id,
@@ -1650,7 +1651,7 @@ except Exception as e:
         passed: item.passed,
         total: item.total,
       }));
-      
+
       return res.json({ runs });
     } catch (e: any) {
       return res.status(400).json({
