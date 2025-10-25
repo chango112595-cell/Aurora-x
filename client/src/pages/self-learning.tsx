@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -40,11 +39,11 @@ interface LearningSettings {
 }
 
 const DEFAULT_SETTINGS: LearningSettings = {
-  autoStart: false,
-  sleepInterval: 15, // 15 seconds default
-  wakeTime: "08:00",
-  sleepTime: "22:00",
-  enableSchedule: false,
+  autoStart: true, // Always auto-start
+  sleepInterval: 15, // 15 seconds - minimum interval
+  wakeTime: "00:00", // Run 24/7
+  sleepTime: "23:59", // Run 24/7
+  enableSchedule: false, // Disabled - run continuously
 };
 
 export default function SelfLearning() {
@@ -68,22 +67,24 @@ export default function SelfLearning() {
     retry: 1,
   });
 
-  // Auto-start on mount if enabled
+  // Auto-start on mount and keep running continuously
   useEffect(() => {
-    if (settings.autoStart && status && !status.running && !isLoading) {
+    // Always try to start if not running (unless user manually stopped it)
+    if (status && !status.running && !isLoading) {
       // Check if we're within wake hours if schedule is enabled
       if (settings.enableSchedule) {
         const now = new Date();
         const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-        
+
         if (currentTime >= settings.wakeTime && currentTime < settings.sleepTime) {
           startMutation.mutate();
         }
       } else {
+        // Run continuously by default
         startMutation.mutate();
       }
     }
-  }, [settings.autoStart, status, isLoading]);
+  }, [status, isLoading, settings.enableSchedule, settings.wakeTime, settings.sleepTime]);
 
   // Schedule-based sleep/wake cycle
   useEffect(() => {
@@ -92,7 +93,7 @@ export default function SelfLearning() {
     const checkSchedule = () => {
       const now = new Date();
       const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-      
+
       // Stop if past sleep time
       if (currentTime >= settings.sleepTime || currentTime < settings.wakeTime) {
         if (status.running) {
