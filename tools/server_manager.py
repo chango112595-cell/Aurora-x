@@ -53,6 +53,22 @@ def check_server_health(url: str) -> dict:
         }
 
 
+def start_self_learn_server() -> bool:
+    """Start the self-learning server"""
+    try:
+        print("🧠 Starting Self-Learning server on port 5002...")
+        subprocess.Popen(
+            ["python3", "-m", "aurora_x.self_learn_server"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        time.sleep(3)
+        return True
+    except Exception as e:
+        print(f"✗ Failed to start Self-Learning server: {e}")
+        return False
+
+
 def get_running_workflows() -> list:
     """Get list of running workflows"""
     try:
@@ -154,6 +170,7 @@ def print_status():
     endpoints = [
         ("http://0.0.0.0:5000/api/health", "Main Web Server"),
         ("http://0.0.0.0:5001/healthz", "Python Bridge"),
+        ("http://0.0.0.0:5002/health", "Self-Learning Server"),
     ]
     
     for url, name in endpoints:
