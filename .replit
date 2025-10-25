@@ -92,7 +92,7 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 -m aurora_x.self_learn --sleep 300 --max-iters 50 --beam 20"
+args = "python3 -m aurora_x.self_learn --sleep 30 --max-iters 50 --beam 20"
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
