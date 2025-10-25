@@ -1,5 +1,5 @@
 
-import { corpusStorage } from "../server/corpus-storage";
+import { corpusStorage } from "server/corpus-storage";
 
 // Add comprehensive test entries matching the original corpus
 const testEntries = [
