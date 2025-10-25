@@ -2022,11 +2022,6 @@ except Exception as e:
 
   // Chat endpoint for natural language synthesis
   app.post("/api/chat", async (req, res) => {
-    const { prompt } = req.body;
-    if (!prompt) {
-      return res.status(400).json({ error: "Missing prompt" });
-    }
-
     try {
       const { message } = req.body;
 
