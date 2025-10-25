@@ -1284,13 +1284,19 @@ except Exception as e:
 
   // Self-learning daemon state
   let selfLearningProcess: any = null;
+  let selfLearningStats = {
+    started_at: null as string | null,
+    last_activity: null as string | null,
+    run_count: 0,
+  };
 
   // Self-learning status endpoint
   app.get("/api/self-learning/status", (req, res) => {
     const running = selfLearningProcess !== null;
     return res.json({
       running,
-      message: running ? "Self-learning daemon is active" : "Self-learning daemon is stopped"
+      message: running ? "Self-learning daemon is active" : "Self-learning daemon is stopped",
+      stats: running ? selfLearningStats : null
     });
   });
 
@@ -1304,23 +1310,65 @@ except Exception as e:
     }
 
     try {
-      selfLearningProcess = spawn('python3', ['-m', 'aurora_x.self_learn', '--sleep', '300', '--max-iters', '50', '--beam', '20'], {
+      console.log('[Self-Learning] Starting daemon with aggressive 15s interval...');
+      
+      selfLearningProcess = spawn('python3', [
+        '-m', 'aurora_x.self_learn',
+        '--sleep', '15',  // Very aggressive - runs every 15 seconds
+        '--max-iters', '50',
+        '--beam', '20'
+      ], {
         cwd: process.cwd(),
-        detached: true,
-        stdio: 'ignore'
+        detached: false,  // Keep attached so we can monitor
+        stdio: ['ignore', 'pipe', 'pipe']  // Capture stdout/stderr
       });
 
-      selfLearningProcess.on('exit', () => {
+      // Log output for debugging
+      selfLearningProcess.stdout.on('data', (data: Buffer) => {
+        const output = data.toString().trim();
+        if (output) {
+          console.log(`[Self-Learning] ${output}`);
+          selfLearningStats.last_activity = new Date().toISOString();
+          // Count runs
+          if (output.includes('Completed run #')) {
+            const match = output.match(/Completed run #(\d+)/);
+            if (match) {
+              selfLearningStats.run_count = parseInt(match[1]);
+            }
+          }
+        }
+      });
+
+      selfLearningProcess.stderr.on('data', (data: Buffer) => {
+        const output = data.toString().trim();
+        if (output && !output.includes('Traceback')) {
+          console.log(`[Self-Learning] ${output}`);
+        }
+      });
+
+      selfLearningProcess.on('exit', (code: number) => {
+        console.log(`[Self-Learning] Daemon exited with code ${code}`);
         selfLearningProcess = null;
+        selfLearningStats = {
+          started_at: null,
+          last_activity: null,
+          run_count: 0,
+        };
       });
 
-      selfLearningProcess.unref();
+      selfLearningStats.started_at = new Date().toISOString();
+      selfLearningStats.last_activity = new Date().toISOString();
+      selfLearningStats.run_count = 0;
+
+      console.log('[Self-Learning] Daemon started successfully');
 
       return res.json({
         status: "started",
-        message: "Self-learning daemon started successfully"
+        message: "Self-learning daemon started successfully (runs every 15 seconds)",
+        stats: selfLearningStats
       });
     } catch (error: any) {
+      console.error('[Self-Learning] Failed to start:', error);
       return res.status(500).json({
         error: "Failed to start",
         message: error.message
@@ -1338,14 +1386,26 @@ except Exception as e:
     }
 
     try {
-      selfLearningProcess.kill();
+      console.log('[Self-Learning] Stopping daemon...');
+      selfLearningProcess.kill('SIGTERM');
       selfLearningProcess = null;
+      
+      const finalStats = { ...selfLearningStats };
+      selfLearningStats = {
+        started_at: null,
+        last_activity: null,
+        run_count: 0,
+      };
+
+      console.log('[Self-Learning] Daemon stopped successfully');
 
       return res.json({
         status: "stopped",
-        message: "Self-learning daemon stopped successfully"
+        message: "Self-learning daemon stopped successfully",
+        final_stats: finalStats
       });
     } catch (error: any) {
+      console.error('[Self-Learning] Failed to stop:', error);
       return res.status(500).json({
         error: "Failed to stop",
         message: error.message
