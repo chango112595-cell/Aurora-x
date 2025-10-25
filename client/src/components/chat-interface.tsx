@@ -244,7 +244,7 @@ Just type what you want in natural language - I'll understand and generate it fo
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt: userInput }),
+        body: JSON.stringify({ message: userInput }),
       });
 
       const data = await response.json();
