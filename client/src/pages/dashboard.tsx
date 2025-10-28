@@ -1427,15 +1427,16 @@ export default function Dashboard() {
     refetchInterval: 10000, // Refresh every 10 seconds
     refetchIntervalInBackground: false, // Don't poll when tab is inactive
     staleTime: 8000, // Cache data for 8 seconds
-    cacheTime: 30000, // Keep cache for 30 seconds
+    gcTime: 30000, // Keep cache for 30 seconds (formerly cacheTime)
     retry: 2, // Reduce retry attempts to speed up failure detection
     retryDelay: 1000, // Faster retry delay
-    initialData: () => ({
+    initialData: {
+      version: "1.0.0",
       tasks: [],
       updated_utc: new Date().toISOString(),
       active: [],
       rules: [],
-    }), // Provide initial data to prevent loading state
+    } as ProgressData, // Provide initial data to prevent loading state
     refetchOnWindowFocus: false, // Don't refetch when window regains focus
     refetchOnMount: true, // Only refetch on mount
   });

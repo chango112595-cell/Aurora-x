@@ -1,4 +1,5 @@
-import Database from "better-sqlite3";
+import Database from 'better-sqlite3';
+import { randomUUID } from 'crypto';
 import * as fs from "fs";
 import * as path from "path";
 import type {
@@ -173,7 +174,7 @@ export class CorpusStorage {
     values.push(params.limit, offset);
 
     const rows = this.db.prepare(sql).all(...values);
-    return rows.map((row) => this.parseEntry(row));
+    return rows.map((row: any) => this.parseEntry(row));
   }
 
   getTopByFunc(func: string, limit: number): any[] {
@@ -185,7 +186,7 @@ export class CorpusStorage {
          LIMIT ?`
       )
       .all(func, limit);
-    return rows.map((row) => this.parseEntry(row));
+    return rows.map((row: any) => this.parseEntry(row));
   }
 
   getRecent(limit: number = 10): any[] {

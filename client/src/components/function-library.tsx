@@ -58,7 +58,7 @@ export function FunctionLibrary() {
   // Handle both array and object responses
   const allFunctions = Array.isArray(response)
     ? response
-    : (response?.items || response?.functions || []);
+    : (response?.items || []);
 
   // Debug: Log the response data
 
