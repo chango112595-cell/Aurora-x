@@ -19,12 +19,14 @@ import Library from "@/pages/library";
 import Corpus from "@/pages/corpus";
 import Settings from "@/pages/settings";
 import SelfLearning from "@/pages/self-learning";
+import ComparisonDashboard from "@/pages/ComparisonDashboard";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/comparison" component={ComparisonDashboard} />
       <Route path="/library" component={Library} />
       <Route path="/corpus" component={Corpus} />
       <Route path="/self-learning" component={SelfLearning} />
