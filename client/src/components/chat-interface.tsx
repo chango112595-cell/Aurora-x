@@ -160,8 +160,10 @@ Just type what you want in natural language - I'll understand and generate it fo
           (data.code_file ? `✅ Generated: ${data.code_file}` : 'Code generated successfully');
 
         setMessages((prev) => [...prev, {
+          id: `assistant-${Date.now()}`,
           role: 'assistant',
           content: resultMessage,
+          timestamp: new Date(),
         }]);
       }
     },
