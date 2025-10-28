@@ -22,6 +22,8 @@ _Offline Autonomous Code Synthesis Engine_
 ## Overview
 Aurora-X is an autonomous code synthesis engine that uses AST-based mutations, beam search, and corpus-based seeding to synthesize functions from specifications. Aurora is **offline-first** — it records to JSONL/SQLite locally and never calls external APIs unless you enable explicit exports.
 
+📚 **New to Aurora-X?** See **[BUILDING_WORKSPACE.md](BUILDING_WORKSPACE.md)** for complete setup and build instructions.
+
 ## Features
 - **AST-based synthesis** with beam search and mutations
 - **Persistent corpus** in JSONL + SQLite format
@@ -32,8 +34,13 @@ Aurora-X is an autonomous code synthesis engine that uses AST-based mutations, b
 - **Web API** with seed bias tracking endpoint
 
 ## Installation
+
+For detailed setup instructions, see **[BUILDING_WORKSPACE.md](BUILDING_WORKSPACE.md)**.
+
+### Quick Install
 ```bash
 pip install -e .
+npm install
 ```
 
 ## Usage

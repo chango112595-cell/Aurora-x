@@ -1,3 +1,0 @@
-[console_scripts]
-aurorax = aurora_x.main:main
-aurorax-serve = aurora_x.serve:main
