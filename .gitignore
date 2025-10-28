@@ -16,6 +16,13 @@ htmlcov/
 runs/run-*
 runs/latest
 semgrep.sarif
+
+# Database artifacts
+data/corpus.db
+data/corpus.db-shm
+data/corpus.db-wal
+data/corpus.jsonl
+
 # Self-learning daemon
 .self_learning.pid
 .self_learning_state.json
