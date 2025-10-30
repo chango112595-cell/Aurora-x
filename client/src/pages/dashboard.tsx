@@ -120,7 +120,7 @@ const parsePercent = (percent: number | string): number => {
 // Color mapping for status
 const getStatusColor = (status: string) => {
   const cleanStatus = parseStatus(status);
-  switch(cleanStatus) {
+  switch (cleanStatus) {
     case "complete": return "#10b981"; // Green
     case "in-progress": return "#3b82f6"; // Blue
     case "in-development": return "#f59e0b"; // Amber
@@ -133,7 +133,7 @@ const StatusIcon = ({ status }: { status: string }) => {
   const cleanStatus = parseStatus(status);
   const iconClass = "h-5 w-5";
 
-  switch(cleanStatus) {
+  switch (cleanStatus) {
     case "complete":
       return <CheckCircle className={iconClass} style={{ color: "#10b981" }} data-testid="icon-complete" />;
     case "in-progress":
@@ -175,11 +175,10 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
       whileHover={{ scale: 1.02, y: -4 }}
       data-testid={`card-task-${task.id}`}
     >
-      <Card className={`h-full relative overflow-hidden ${
-        isActive
+      <Card className={`h-full relative overflow-hidden ${isActive
           ? 'border-primary/50 bg-gradient-to-br from-primary/20 via-primary/5 to-background dark:from-primary/10 dark:via-background dark:to-background shadow-lg'
           : 'border-border bg-card shadow-md hover:shadow-lg transition-shadow'
-      }`}>
+        }`}>
         {isActive && (
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-cyan-500/5 to-transparent animate-pulse" />
         )}
@@ -1554,32 +1553,32 @@ export default function Dashboard() {
               </a>
               {/* Connection status indicator */}
               <AnimatePresence mode="wait">
-              {connectionError ? (
-                <motion.div
-                  key="offline"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-destructive/10 border border-destructive/20"
-                  data-testid="badge-connection-error"
-                >
-                  <WifiOff className="h-4 w-4 text-destructive" />
-                  <span className="text-sm font-medium text-destructive">Offline</span>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="online"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-green-500/10 border border-green-500/20"
-                  data-testid="badge-connection-ok"
-                >
-                  <Wifi className="h-4 w-4 text-green-500 animate-pulse" />
-                  <span className="text-sm font-medium text-green-600 dark:text-green-400">Live</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                {connectionError ? (
+                  <motion.div
+                    key="offline"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-full bg-destructive/10 border border-destructive/20"
+                    data-testid="badge-connection-error"
+                  >
+                    <WifiOff className="h-4 w-4 text-destructive" />
+                    <span className="text-sm font-medium text-destructive">Offline</span>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="online"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-full bg-green-500/10 border border-green-500/20"
+                    data-testid="badge-connection-ok"
+                  >
+                    <Wifi className="h-4 w-4 text-green-500 animate-pulse" />
+                    <span className="text-sm font-medium text-green-600 dark:text-green-400">Live</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </motion.div>

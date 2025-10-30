@@ -1,5 +1,6 @@
 README.md
 pyproject.toml
+setup.py
 aurora_x/__init__.py
 aurora_x/air.py
 aurora_x/app_settings.py
@@ -9,6 +10,8 @@ aurora_x/main.py
 aurora_x/mutator.py
 aurora_x/orchestrator.py
 aurora_x/prod_config.py
+aurora_x/self_learn.py
+aurora_x/self_learn_server.py
 aurora_x/serve.py
 aurora_x/serve_addons.py
 aurora_x/serve_dashboard_v2.py
