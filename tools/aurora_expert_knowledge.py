@@ -406,6 +406,223 @@ class AuroraExpertKnowledge:
                 expert_level=10
             ),
             
+            # MOBILE & DEVICE PROGRAMMING LANGUAGES (Aurora masters ALL devices!)
+            "swift": LanguageExpertise(
+                name="Swift (iOS/macOS)",
+                paradigms=["Protocol-Oriented", "Object-Oriented", "Functional", "Type-Safe"],
+                syntax_patterns={
+                    "optional": "var optional: String?",
+                    "guard_let": "guard let value = optional else { return }",
+                    "closure": "{ (param) -> ReturnType in ... }",
+                    "protocol": "protocol MyProtocol { func method() }",
+                    "extension": "extension Type { ... }"
+                },
+                best_practices=[
+                    "Use optionals for nil safety",
+                    "Prefer protocols over inheritance",
+                    "Use guard statements for early returns",
+                    "Follow Swift naming conventions",
+                    "Use value types when appropriate",
+                    "Implement proper memory management with ARC",
+                    "Use weak references to prevent retain cycles"
+                ],
+                common_pitfalls=[
+                    "Force unwrapping optionals",
+                    "Retain cycles with closures",
+                    "Not using weak/unowned references",
+                    "Ignoring memory warnings"
+                ],
+                performance_tips=[
+                    "Use structs over classes when possible",
+                    "Implement copy-on-write for collections",
+                    "Use lazy initialization",
+                    "Profile with Instruments"
+                ],
+                security_guidelines=[
+                    "Use Keychain for sensitive data",
+                    "Implement App Transport Security",
+                    "Validate all user inputs",
+                    "Use biometric authentication"
+                ],
+                frameworks=["UIKit", "SwiftUI", "Core Data", "Combine", "AVFoundation"],
+                testing_approaches=["XCTest", "Quick/Nimble", "UI Testing"],
+                code_smells=["Force unwrapping", "Massive view controllers"],
+                expert_level=10
+            ),
+            
+            "kotlin": LanguageExpertise(
+                name="Kotlin (Android/JVM)",
+                paradigms=["Object-Oriented", "Functional", "Null-Safe", "Coroutines"],
+                syntax_patterns={
+                    "null_safety": "var nullable: String?",
+                    "data_class": "data class User(val name: String)",
+                    "extension_function": "fun String.customMethod(): String",
+                    "coroutine": "suspend fun fetchData(): Data",
+                    "sealed_class": "sealed class Result<out T>"
+                },
+                best_practices=[
+                    "Use null safety features extensively",
+                    "Prefer data classes for simple containers",
+                    "Use coroutines for asynchronous programming",
+                    "Leverage extension functions",
+                    "Follow Android architectural patterns",
+                    "Use sealed classes for restricted hierarchies",
+                    "Implement proper lifecycle management"
+                ],
+                common_pitfalls=[
+                    "Blocking main thread",
+                    "Memory leaks in Activities",
+                    "Not handling configuration changes",
+                    "Improper coroutine usage"
+                ],
+                performance_tips=[
+                    "Use RecyclerView for large lists",
+                    "Implement proper caching strategies",
+                    "Use Kotlin coroutines for async operations",
+                    "Profile with Android Studio Profiler"
+                ],
+                security_guidelines=[
+                    "Use Android Keystore for sensitive data",
+                    "Implement proper permissions",
+                    "Validate all inputs",
+                    "Use encrypted shared preferences"
+                ],
+                frameworks=["Android Jetpack", "Retrofit", "Room", "Dagger/Hilt", "Compose"],
+                testing_approaches=["JUnit", "Mockito", "Espresso", "Robolectric"],
+                code_smells=["God activities", "Callback hell"],
+                expert_level=10
+            ),
+            
+            "applescript": LanguageExpertise(
+                name="AppleScript (macOS Automation)",
+                paradigms=["Natural Language", "Event-Driven", "Scripting"],
+                syntax_patterns={
+                    "tell_application": "tell application \"Finder\" to ...",
+                    "if_statement": "if condition then ... end if",
+                    "repeat_loop": "repeat with item in list ... end repeat",
+                    "handler": "on handlerName() ... end handlerName",
+                    "property": "property myProperty : \"default value\""
+                },
+                best_practices=[
+                    "Use descriptive variable names",
+                    "Handle errors with try/catch blocks",
+                    "Use application-specific terminology",
+                    "Test scripts thoroughly before deployment",
+                    "Document complex automation workflows",
+                    "Use Script Editor for development",
+                    "Implement proper user feedback"
+                ],
+                common_pitfalls=[
+                    "Not handling application not running",
+                    "Timing issues with UI automation",
+                    "Hard-coded file paths",
+                    "Not checking for user permissions"
+                ],
+                performance_tips=[
+                    "Minimize application launches",
+                    "Use bulk operations when possible",
+                    "Cache application references",
+                    "Avoid unnecessary UI interactions"
+                ],
+                security_guidelines=[
+                    "Request proper accessibility permissions",
+                    "Validate file paths and operations",
+                    "Use secure password handling",
+                    "Implement user confirmation for critical actions"
+                ],
+                frameworks=["System Events", "Finder", "Mail", "Safari", "Automator"],
+                testing_approaches=["Manual testing", "AppleScript Editor debugging"],
+                code_smells=["Hardcoded paths", "No error handling"],
+                expert_level=10
+            ),
+            
+            # EMBEDDED & IoT PROGRAMMING
+            "arduino_cpp": LanguageExpertise(
+                name="Arduino C++ (Embedded)",
+                paradigms=["Embedded", "Real-time", "Hardware-oriented"],
+                syntax_patterns={
+                    "setup": "void setup() { ... }",
+                    "loop": "void loop() { ... }",
+                    "digital_write": "digitalWrite(pin, HIGH);",
+                    "analog_read": "int value = analogRead(pin);",
+                    "serial": "Serial.println(\"message\");"
+                },
+                best_practices=[
+                    "Minimize memory usage",
+                    "Use appropriate data types",
+                    "Implement proper timing",
+                    "Handle hardware failures gracefully",
+                    "Use interrupts for time-critical tasks",
+                    "Document pin assignments",
+                    "Implement watchdog timers"
+                ],
+                common_pitfalls=[
+                    "Memory overflow",
+                    "Blocking delays in loop()",
+                    "Floating point precision issues",
+                    "Not debouncing inputs"
+                ],
+                performance_tips=[
+                    "Use bitwise operations",
+                    "Minimize dynamic memory allocation",
+                    "Use PROGMEM for constants",
+                    "Optimize interrupt service routines"
+                ],
+                security_guidelines=[
+                    "Validate sensor inputs",
+                    "Implement secure communication",
+                    "Use encryption for sensitive data",
+                    "Implement access controls"
+                ],
+                frameworks=["Arduino IDE", "PlatformIO", "ESP-IDF"],
+                testing_approaches=["Hardware-in-the-loop", "Unit testing with simulators"],
+                code_smells=["Magic numbers", "Blocking code in main loop"],
+                expert_level=10
+            ),
+            
+            "micropython": LanguageExpertise(
+                name="MicroPython (IoT/Embedded)",
+                paradigms=["Embedded Python", "Real-time", "IoT-focused"],
+                syntax_patterns={
+                    "pin_control": "from machine import Pin; pin = Pin(2, Pin.OUT)",
+                    "i2c": "from machine import I2C; i2c = I2C(scl=Pin(22), sda=Pin(21))",
+                    "timer": "from machine import Timer; timer = Timer()",
+                    "wifi": "import network; wlan = network.WLAN()",
+                    "sleep": "import time; time.sleep_ms(100)"
+                },
+                best_practices=[
+                    "Use appropriate sleep modes for power efficiency",
+                    "Implement proper exception handling for hardware",
+                    "Use asynchronous programming for I/O operations",
+                    "Optimize memory usage for constrained devices",
+                    "Implement proper error recovery",
+                    "Use appropriate data structures",
+                    "Handle network connectivity issues"
+                ],
+                common_pitfalls=[
+                    "Memory fragmentation",
+                    "Blocking network operations",
+                    "Not handling hardware exceptions",
+                    "Power management issues"
+                ],
+                performance_tips=[
+                    "Use native code for time-critical operations",
+                    "Minimize garbage collection",
+                    "Use efficient data structures",
+                    "Implement proper caching"
+                ],
+                security_guidelines=[
+                    "Use secure WiFi protocols",
+                    "Implement device authentication",
+                    "Encrypt sensitive communications",
+                    "Validate all external inputs"
+                ],
+                frameworks=["ESP32", "ESP8266", "Raspberry Pi Pico", "PyBoard"],
+                testing_approaches=["Hardware simulation", "Integration testing"],
+                code_smells=["Busy waiting", "No error handling"],
+                expert_level=10
+            ),
+            
             # QUANTUM COMPUTING LANGUAGES (Aurora is future-ready!)
             "qiskit": LanguageExpertise(
                 name="Qiskit (Quantum)",
@@ -445,6 +662,746 @@ class AuroraExpertKnowledge:
                 testing_approaches=["Quantum simulators", "Statistical testing"],
                 code_smells=["Inefficient quantum gates", "Unnecessary measurements"],
                 expert_level=10
+            ),
+            
+            # APPLE ECOSYSTEM PROGRAMMING (iOS, macOS, watchOS, tvOS)
+            "swift": LanguageExpertise(
+                name="Swift",
+                paradigms=["Object-Oriented", "Protocol-Oriented", "Functional", "Memory Safe"],
+                syntax_patterns={
+                    "optional": "var value: String?",
+                    "guard": "guard let value = optional else { return }",
+                    "closure": "{ (param) -> ReturnType in }",
+                    "protocol": "protocol Name { func method() }",
+                    "extension": "extension Type { }"
+                },
+                best_practices=[
+                    "Use optionals safely with guard/if let",
+                    "Prefer protocols over inheritance",
+                    "Use lazy properties for expensive computations",
+                    "Follow Swift naming conventions",
+                    "Use value types when possible",
+                    "Handle errors with do-try-catch",
+                    "Use weak references to prevent retain cycles"
+                ],
+                common_pitfalls=[
+                    "Force unwrapping optionals",
+                    "Retain cycles with closures",
+                    "Not using weak/unowned references",
+                    "Overusing classes instead of structs"
+                ],
+                performance_tips=[
+                    "Use structs for data models",
+                    "Implement copy-on-write for large structs",
+                    "Use lazy sequences for large datasets",
+                    "Profile with Instruments"
+                ],
+                security_guidelines=[
+                    "Validate all user inputs",
+                    "Use Keychain for sensitive data",
+                    "Implement App Transport Security",
+                    "Use biometric authentication"
+                ],
+                frameworks=["UIKit", "SwiftUI", "Combine", "Core Data", "CloudKit", "WidgetKit"],
+                testing_approaches=["XCTest", "Quick", "Nimble", "UI Testing"],
+                code_smells=["Massive view controllers", "Force unwrapping", "God objects"],
+                expert_level=10
+            ),
+            
+            "applescript": LanguageExpertise(
+                name="AppleScript",
+                paradigms=["Natural Language", "Event-Driven", "Object-Oriented"],
+                syntax_patterns={
+                    "tell_block": "tell application \"Application Name\" to do something",
+                    "if_statement": "if condition then do something",
+                    "repeat_loop": "repeat with i from 1 to 10",
+                    "handler": "on handlerName(parameter) return result end handlerName",
+                    "property": "property propertyName : default value"
+                },
+                best_practices=[
+                    "Use specific application references",
+                    "Handle errors with try blocks",
+                    "Use handlers for reusable code",
+                    "Test scripts on different macOS versions",
+                    "Use proper quotation marks",
+                    "Optimize script performance",
+                    "Document script functionality"
+                ],
+                common_pitfalls=[
+                    "Not handling application unavailability",
+                    "Using deprecated commands",
+                    "Poor error handling",
+                    "Hardcoded file paths"
+                ],
+                performance_tips=[
+                    "Minimize application launches",
+                    "Cache application references",
+                    "Use system events efficiently",
+                    "Batch operations when possible"
+                ],
+                security_guidelines=[
+                    "Request necessary permissions",
+                    "Validate file operations",
+                    "Use secure communication methods",
+                    "Handle privacy settings properly"
+                ],
+                frameworks=["System Events", "Finder", "Mail", "Calendar", "Contacts", "Shortcuts"],
+                testing_approaches=["Script Editor testing", "Automated UI testing"],
+                code_smells=["Long monolithic scripts", "Hardcoded values", "No error handling"],
+                expert_level=10
+            ),
+            
+            "objective_c": LanguageExpertise(
+                name="Objective-C",
+                paradigms=["Object-Oriented", "Dynamic", "Message Passing"],
+                syntax_patterns={
+                    "method_call": "[object methodName:parameter]",
+                    "property": "@property (nonatomic, strong) NSString *name",
+                    "protocol": "@protocol ProtocolName <NSObject>",
+                    "category": "@interface ClassName (CategoryName)",
+                    "block": "^(NSString *param){ return result; }"
+                },
+                best_practices=[
+                    "Use ARC for memory management",
+                    "Follow naming conventions",
+                    "Use properties instead of direct ivar access",
+                    "Handle nil gracefully",
+                    "Use protocols for delegation",
+                    "Implement proper dealloc methods",
+                    "Use categories appropriately"
+                ],
+                common_pitfalls=[
+                    "Memory leaks without ARC",
+                    "Retain cycles",
+                    "Not handling nil properly",
+                    "Overusing global variables"
+                ],
+                performance_tips=[
+                    "Use object pooling",
+                    "Minimize autoreleasepool usage",
+                    "Profile with Instruments",
+                    "Use Core Data efficiently"
+                ],
+                security_guidelines=[
+                    "Validate inputs thoroughly",
+                    "Use secure coding practices",
+                    "Handle sensitive data properly",
+                    "Implement proper authentication"
+                ],
+                frameworks=["Foundation", "UIKit", "Core Data", "Core Animation", "AVFoundation"],
+                testing_approaches=["XCTest", "OCMock", "Unit testing"],
+                code_smells=["Massive view controllers", "Spaghetti code", "Memory leaks"],
+                expert_level=10
+            ),
+            
+            # ANDROID ECOSYSTEM PROGRAMMING
+            "kotlin": LanguageExpertise(
+                name="Kotlin",
+                paradigms=["Object-Oriented", "Functional", "Coroutines", "Null Safe"],
+                syntax_patterns={
+                    "null_safe": "val value: String?",
+                    "data_class": "data class Person(val name: String)",
+                    "coroutine": "suspend fun fetchData(): String",
+                    "extension": "fun String.isEmail(): Boolean",
+                    "when": "when (value) { is Type -> result }"
+                },
+                best_practices=[
+                    "Use null safety features",
+                    "Prefer data classes for simple models",
+                    "Use coroutines for async operations",
+                    "Follow Android architecture guidelines",
+                    "Use extension functions appropriately",
+                    "Handle lifecycle properly",
+                    "Use sealed classes for state management"
+                ],
+                common_pitfalls=[
+                    "Blocking main thread",
+                    "Memory leaks with context references",
+                    "Not handling configuration changes",
+                    "Improper lifecycle management"
+                ],
+                performance_tips=[
+                    "Use lazy initialization",
+                    "Optimize RecyclerView performance",
+                    "Use view binding",
+                    "Profile with Android Studio profiler"
+                ],
+                security_guidelines=[
+                    "Validate all inputs",
+                    "Use encrypted SharedPreferences",
+                    "Implement proper authentication",
+                    "Follow Android security guidelines"
+                ],
+                frameworks=["Android SDK", "Jetpack Compose", "Room", "Retrofit", "Dagger", "Coroutines"],
+                testing_approaches=["JUnit", "Mockito", "Espresso", "Robolectric"],
+                code_smells=["God activities", "Memory leaks", "Blocking operations"],
+                expert_level=10
+            ),
+            
+            "java_android": LanguageExpertise(
+                name="Java (Android)",
+                paradigms=["Object-Oriented", "Android Framework", "Event-Driven"],
+                syntax_patterns={
+                    "activity": "public class MainActivity extends AppCompatActivity",
+                    "intent": "Intent intent = new Intent(this, Activity.class)",
+                    "listener": "button.setOnClickListener(new View.OnClickListener())",
+                    "async_task": "private class AsyncTask extends AsyncTask<>",
+                    "fragment": "public class Fragment extends Fragment"
+                },
+                best_practices=[
+                    "Use modern Android architecture components",
+                    "Handle lifecycle properly",
+                    "Use fragments appropriately",
+                    "Implement proper memory management",
+                    "Follow material design guidelines",
+                    "Use dependency injection",
+                    "Handle configuration changes"
+                ],
+                common_pitfalls=[
+                    "Memory leaks with static references",
+                    "ANR (Application Not Responding)",
+                    "Improper lifecycle handling",
+                    "UI operations on background threads"
+                ],
+                performance_tips=[
+                    "Use RecyclerView instead of ListView",
+                    "Implement view holder pattern",
+                    "Use AsyncTask or modern alternatives",
+                    "Optimize layouts and overdraw"
+                ],
+                security_guidelines=[
+                    "Validate inputs and outputs",
+                    "Use HTTPS for network calls",
+                    "Implement proper permissions",
+                    "Secure sensitive data storage"
+                ],
+                frameworks=["Android SDK", "Support Library", "Architecture Components", "Firebase"],
+                testing_approaches=["JUnit", "Mockito", "Espresso", "UI Automator"],
+                code_smells=["Massive activities", "Memory leaks", "Poor separation of concerns"],
+                expert_level=10
+            ),
+            
+            # EMBEDDED SYSTEMS & IoT PROGRAMMING
+            "arduino": LanguageExpertise(
+                name="Arduino C++",
+                paradigms=["Embedded", "Real-time", "Hardware Abstraction"],
+                syntax_patterns={
+                    "setup": "void setup() { }",
+                    "loop": "void loop() { }",
+                    "digital_write": "digitalWrite(pin, HIGH)",
+                    "analog_read": "analogRead(pin)",
+                    "serial": "Serial.begin(9600)"
+                },
+                best_practices=[
+                    "Minimize memory usage",
+                    "Use appropriate data types",
+                    "Handle timing carefully",
+                    "Use interrupts properly",
+                    "Optimize power consumption",
+                    "Document hardware connections",
+                    "Use libraries efficiently"
+                ],
+                common_pitfalls=[
+                    "Running out of memory",
+                    "Blocking delays in time-critical code",
+                    "Poor interrupt handling",
+                    "Stack overflow"
+                ],
+                performance_tips=[
+                    "Use direct port manipulation",
+                    "Optimize interrupt service routines",
+                    "Minimize serial communication",
+                    "Use efficient algorithms"
+                ],
+                security_guidelines=[
+                    "Validate sensor inputs",
+                    "Secure communication protocols",
+                    "Implement proper authentication",
+                    "Protect against physical attacks"
+                ],
+                frameworks=["Arduino IDE", "PlatformIO", "Various sensor libraries"],
+                testing_approaches=["Hardware-in-the-loop testing", "Simulation"],
+                code_smells=["Blocking loops", "Memory leaks", "Poor error handling"],
+                expert_level=10
+            ),
+            
+            "micropython": LanguageExpertise(
+                name="MicroPython",
+                paradigms=["Embedded Python", "IoT", "Real-time"],
+                syntax_patterns={
+                    "pin_setup": "pin = machine.Pin(2, machine.Pin.OUT)",
+                    "pwm": "pwm = machine.PWM(pin)",
+                    "i2c": "i2c = machine.I2C(scl=Pin(5), sda=Pin(4))",
+                    "wifi": "wlan = network.WLAN(network.STA_IF)",
+                    "timer": "timer = machine.Timer(-1)"
+                },
+                best_practices=[
+                    "Manage memory carefully",
+                    "Use appropriate sleep modes",
+                    "Handle exceptions properly",
+                    "Optimize for battery life",
+                    "Use interrupts efficiently",
+                    "Plan for firmware updates",
+                    "Implement watchdog timers"
+                ],
+                common_pitfalls=[
+                    "Memory allocation issues",
+                    "Blocking network operations",
+                    "Poor power management",
+                    "Inadequate error handling"
+                ],
+                performance_tips=[
+                    "Use native code for critical sections",
+                    "Minimize garbage collection",
+                    "Optimize network usage",
+                    "Use efficient data structures"
+                ],
+                security_guidelines=[
+                    "Secure WiFi connections",
+                    "Encrypt sensitive data",
+                    "Implement secure boot",
+                    "Validate all inputs"
+                ],
+                frameworks=["ESP32", "Raspberry Pi Pico", "PyBoard", "BBC micro:bit"],
+                testing_approaches=["Unit testing on device", "Simulation environments"],
+                code_smells=["Blocking operations", "Memory leaks", "Poor exception handling"],
+                expert_level=10
+            ),
+            
+            # CROSS-PLATFORM MOBILE DEVELOPMENT
+            "dart": LanguageExpertise(
+                name="Dart (Flutter)",
+                paradigms=["Object-Oriented", "Functional", "Reactive", "Cross-platform"],
+                syntax_patterns={
+                    "widget": "class MyWidget extends StatelessWidget",
+                    "build_method": "Widget build(BuildContext context)",
+                    "async": "Future<String> fetchData() async",
+                    "stream": "Stream<int> countStream()",
+                    "null_safety": "String? nullableString"
+                },
+                best_practices=[
+                    "Use const constructors when possible",
+                    "Follow Flutter widget guidelines",
+                    "Implement proper state management",
+                    "Use null safety features",
+                    "Handle async operations properly",
+                    "Optimize widget rebuilds",
+                    "Follow material design principles"
+                ],
+                common_pitfalls=[
+                    "Unnecessary widget rebuilds",
+                    "Memory leaks with listeners",
+                    "Poor state management",
+                    "Blocking the UI thread"
+                ],
+                performance_tips=[
+                    "Use const widgets",
+                    "Implement efficient list builders",
+                    "Optimize image loading",
+                    "Use flutter performance tools"
+                ],
+                security_guidelines=[
+                    "Validate all user inputs",
+                    "Secure local storage",
+                    "Implement proper authentication",
+                    "Use HTTPS for network calls"
+                ],
+                frameworks=["Flutter", "Provider", "Riverpod", "Bloc", "GetX", "Dio"],
+                testing_approaches=["flutter_test", "Integration tests", "Widget tests"],
+                code_smells=["Massive widgets", "Poor separation of concerns", "Callback hell"],
+                expert_level=10
+            ),
+            
+            # WINDOWS PLATFORM PROGRAMMING
+            "powershell": LanguageExpertise(
+                name="PowerShell",
+                paradigms=["Object-Oriented", "Pipeline", "Administrative", "Automation"],
+                syntax_patterns={
+                    "cmdlet": "Get-Process | Where-Object {$_.CPU -gt 100}",
+                    "function": "function Get-Something { param($Name) }",
+                    "pipeline": "Get-ChildItem | ForEach-Object { $_.Name }",
+                    "variable": "$variable = \"value\"",
+                    "script_block": "& { Get-Date }"
+                },
+                best_practices=[
+                    "Use approved verbs for functions",
+                    "Implement proper error handling",
+                    "Use pipeline efficiently",
+                    "Follow PowerShell naming conventions",
+                    "Write help documentation",
+                    "Use parameters properly",
+                    "Implement proper logging"
+                ],
+                common_pitfalls=[
+                    "Not handling errors properly",
+                    "Poor parameter validation",
+                    "Inefficient pipeline usage",
+                    "Security vulnerabilities"
+                ],
+                performance_tips=[
+                    "Use efficient cmdlets",
+                    "Minimize pipeline overhead",
+                    "Use parallel processing",
+                    "Cache expensive operations"
+                ],
+                security_guidelines=[
+                    "Use execution policies",
+                    "Validate all inputs",
+                    "Use secure string for passwords",
+                    "Implement proper authentication"
+                ],
+                frameworks=["Windows PowerShell", "PowerShell Core", "Azure PowerShell", "Exchange PowerShell"],
+                testing_approaches=["Pester", "Unit testing", "Integration testing"],
+                code_smells=["Monolithic scripts", "Poor error handling", "Hard-coded values"],
+                expert_level=10
+            ),
+            
+            "csharp": LanguageExpertise(
+                name="C#",
+                paradigms=["Object-Oriented", ".NET Ecosystem", "Type-Safe", "Garbage Collected"],
+                syntax_patterns={
+                    "class": "public class ClassName { }",
+                    "property": "public string Name { get; set; }",
+                    "async": "public async Task<string> MethodAsync()",
+                    "linq": "items.Where(x => x.IsValid).Select(x => x.Name)",
+                    "using": "using (var resource = new Resource())"
+                },
+                best_practices=[
+                    "Use async/await properly",
+                    "Implement IDisposable correctly",
+                    "Follow C# naming conventions",
+                    "Use LINQ efficiently",
+                    "Handle exceptions appropriately",
+                    "Use dependency injection",
+                    "Write unit tests"
+                ],
+                common_pitfalls=[
+                    "Not disposing resources properly",
+                    "Deadlocks with async code",
+                    "Memory leaks with event handlers",
+                    "Poor exception handling"
+                ],
+                performance_tips=[
+                    "Use span and memory for performance",
+                    "Minimize allocations",
+                    "Use efficient collections",
+                    "Profile with dotnet tools"
+                ],
+                security_guidelines=[
+                    "Validate all inputs",
+                    "Use parameterized queries",
+                    "Implement proper authentication",
+                    "Follow OWASP guidelines"
+                ],
+                frameworks=[".NET Core", "ASP.NET", "Entity Framework", "Xamarin", "Blazor", "MAUI"],
+                testing_approaches=["MSTest", "NUnit", "xUnit", "Moq"],
+                code_smells=["God classes", "Long methods", "Feature envy"],
+                expert_level=10
+            ),
+            
+            # GAME DEVELOPMENT LANGUAGES  
+            "gdscript": LanguageExpertise(
+                name="GDScript (Godot Game Engine)",
+                paradigms=["Object-Oriented", "Scripting", "Game-focused"],
+                syntax_patterns={
+                    "extends": "extends Node2D",
+                    "signal": "signal health_changed(new_health)",
+                    "ready": "func _ready(): ...",
+                    "process": "func _process(delta): ...",
+                    "export": "export var speed = 100"
+                },
+                best_practices=[
+                    "Use signals for decoupled communication",
+                    "Implement proper scene structure",
+                    "Use resource files for game data",
+                    "Optimize physics calculations",
+                    "Implement proper state management",
+                    "Use autoload for global systems",
+                    "Profile performance regularly"
+                ],
+                common_pitfalls=[
+                    "Too many nodes in scene tree",
+                    "Not freeing unused resources",
+                    "Blocking the main thread",
+                    "Improper signal connections"
+                ],
+                performance_tips=[
+                    "Use object pooling for frequent spawning",
+                    "Optimize draw calls",
+                    "Use appropriate collision shapes",
+                    "Implement level-of-detail systems"
+                ],
+                security_guidelines=[
+                    "Validate player inputs",
+                    "Implement anti-cheat measures",
+                    "Secure network communications",
+                    "Protect game assets"
+                ],
+                frameworks=["Godot Engine", "GDNative", "Godot Networking"],
+                testing_approaches=["Unit testing with GUT", "Playtesting"],
+                code_smells=["God nodes", "Hardcoded values"],
+                expert_level=10
+            ),
+            
+            # IOT & EMBEDDED SYSTEMS PROGRAMMING
+            "raspberry_pi": LanguageExpertise(
+                name="Raspberry Pi Programming",
+                paradigms=["GPIO Control", "Linux Embedded", "IoT", "Real-time"],
+                syntax_patterns={
+                    "gpio_setup": "GPIO.setup(18, GPIO.OUT)",
+                    "pwm": "pwm = GPIO.PWM(18, 1000)",
+                    "spi": "spi = spidev.SpiDev()",
+                    "i2c": "bus = smbus.SMBus(1)",
+                    "camera": "camera = PiCamera()"
+                },
+                best_practices=[
+                    "Always cleanup GPIO on exit",
+                    "Use proper pull-up/pull-down resistors",
+                    "Handle hardware interrupts properly",
+                    "Implement proper power management",
+                    "Use appropriate communication protocols",
+                    "Document hardware connections",
+                    "Test on actual hardware"
+                ],
+                common_pitfalls=[
+                    "Not cleaning up GPIO resources",
+                    "Voltage level mismatches", 
+                    "Timing issues with sensors",
+                    "Poor error handling for hardware failures"
+                ],
+                performance_tips=[
+                    "Use hardware SPI/I2C when possible",
+                    "Optimize polling loops",
+                    "Use DMA for large data transfers",
+                    "Implement proper buffering"
+                ],
+                security_guidelines=[
+                    "Secure SSH access",
+                    "Use VPN for remote access",
+                    "Validate sensor data",
+                    "Encrypt communication channels"
+                ],
+                frameworks=["RPi.GPIO", "gpiozero", "pigpio", "Adafruit CircuitPython"],
+                testing_approaches=["Hardware simulation", "Unit testing with mocks"],
+                code_smells=["Hardcoded pin numbers", "No error handling", "Blocking loops"],
+                expert_level=10
+            ),
+            
+            "esp32_esp8266": LanguageExpertise(
+                name="ESP32/ESP8266 Programming",
+                paradigms=["WiFi IoT", "Real-time", "Low Power", "Microcontroller"],
+                syntax_patterns={
+                    "wifi_connect": "WiFi.begin(ssid, password)",
+                    "deep_sleep": "ESP.deepSleep(sleepTime)",
+                    "analog_read": "analogRead(A0)",
+                    "web_server": "server.on(\"/\", handleRoot)",
+                    "mqtt": "client.publish(\"topic\", \"message\")"
+                },
+                best_practices=[
+                    "Implement proper sleep modes",
+                    "Handle WiFi disconnections gracefully",
+                    "Use watchdog timers",
+                    "Optimize for battery life",
+                    "Implement OTA updates",
+                    "Use secure communication protocols",
+                    "Monitor memory usage"
+                ],
+                common_pitfalls=[
+                    "Not handling WiFi failures",
+                    "Memory leaks in loop functions",
+                    "Blocking operations causing watchdog resets",
+                    "Poor power management"
+                ],
+                performance_tips=[
+                    "Use FreeRTOS tasks efficiently",
+                    "Minimize WiFi connections",
+                    "Use appropriate sleep modes",
+                    "Optimize sketch size"
+                ],
+                security_guidelines=[
+                    "Use WPA2/WPA3 for WiFi",
+                    "Encrypt MQTT communications", 
+                    "Validate all inputs",
+                    "Implement secure boot"
+                ],
+                frameworks=["Arduino ESP32", "ESP-IDF", "MicroPython", "NodeMCU"],
+                testing_approaches=["Serial monitor debugging", "Hardware simulation"],
+                code_smells=["Hardcoded credentials", "No error handling", "Blocking delays"],
+                expert_level=10
+            ),
+            
+            # AUTOMATION & DEVICE SCRIPTING
+            "bash_scripting": LanguageExpertise(
+                name="Bash Scripting", 
+                paradigms=["Shell Scripting", "System Administration", "Automation"],
+                syntax_patterns={
+                    "shebang": "#!/bin/bash",
+                    "variable": "VARIABLE=\"value\"",
+                    "function": "function_name() { echo \"Hello\"; }",
+                    "conditional": "if [ condition ]; then ... fi",
+                    "loop": "for file in *.txt; do ... done"
+                },
+                best_practices=[
+                    "Always quote variables",
+                    "Use set -e for error handling",
+                    "Validate input parameters",
+                    "Use meaningful function names",
+                    "Add proper documentation",
+                    "Use shellcheck for validation",
+                    "Handle edge cases properly"
+                ],
+                common_pitfalls=[
+                    "Unquoted variables causing word splitting",
+                    "Not handling spaces in filenames",
+                    "Poor error handling",
+                    "Security vulnerabilities with user input"
+                ],
+                performance_tips=[
+                    "Use built-in commands over external tools",
+                    "Avoid unnecessary subshells",
+                    "Use arrays efficiently",
+                    "Minimize external command calls"
+                ],
+                security_guidelines=[
+                    "Validate all inputs",
+                    "Use absolute paths",
+                    "Avoid eval and shell injection",
+                    "Set proper file permissions"
+                ],
+                frameworks=["GNU Bash", "Zsh", "Fish shell", "POSIX shell"],
+                testing_approaches=["Bats testing framework", "Manual testing"],
+                code_smells=["Hardcoded paths", "No error checking", "Complex one-liners"],
+                expert_level=10
+            ),
+            
+            "python_automation": LanguageExpertise(
+                name="Python Automation",
+                paradigms=["Scripting", "Task Automation", "System Integration"],
+                syntax_patterns={
+                    "file_operations": "with open('file.txt', 'r') as f:",
+                    "subprocess": "subprocess.run(['command', 'arg'])",
+                    "scheduling": "@schedule.every(10).minutes.do(job)",
+                    "web_scraping": "response = requests.get(url)",
+                    "gui_automation": "pyautogui.click(x, y)"
+                },
+                best_practices=[
+                    "Use virtual environments",
+                    "Handle exceptions properly",
+                    "Log important operations", 
+                    "Use configuration files",
+                    "Implement proper error recovery",
+                    "Document automation workflows",
+                    "Test thoroughly before deployment"
+                ],
+                common_pitfalls=[
+                    "Not handling network failures",
+                    "Hardcoded file paths",
+                    "Poor error handling",
+                    "Security vulnerabilities"
+                ],
+                performance_tips=[
+                    "Use async for I/O operations",
+                    "Cache expensive operations",
+                    "Use multiprocessing for CPU tasks", 
+                    "Profile and optimize bottlenecks"
+                ],
+                security_guidelines=[
+                    "Validate all inputs",
+                    "Use secure authentication",
+                    "Encrypt sensitive data",
+                    "Follow principle of least privilege"
+                ],
+                frameworks=["Schedule", "Celery", "Requests", "BeautifulSoup", "Selenium", "PyAutoGUI"],
+                testing_approaches=["pytest", "unittest", "Integration testing"],
+                code_smells=["Hardcoded values", "No error handling", "Monolithic scripts"],
+                expert_level=10
+            ),
+            
+            # CLOUD & CONTAINER PLATFORMS
+            "docker_scripting": LanguageExpertise(
+                name="Docker & Container Automation",
+                paradigms=["Containerization", "DevOps", "Microservices", "Infrastructure"],
+                syntax_patterns={
+                    "dockerfile": "FROM ubuntu:20.04",
+                    "docker_run": "docker run -d --name app -p 80:80 image",
+                    "docker_compose": "version: '3.8'",
+                    "volume_mount": "-v /host:/container",
+                    "environment": "ENV VARIABLE=value"
+                },
+                best_practices=[
+                    "Use multi-stage builds",
+                    "Minimize image layers",
+                    "Use non-root users",
+                    "Implement proper health checks",
+                    "Use .dockerignore files",
+                    "Tag images appropriately",
+                    "Monitor container resources"
+                ],
+                common_pitfalls=[
+                    "Running as root user",
+                    "Large image sizes",
+                    "Hardcoded configurations",
+                    "Poor layer caching"
+                ],
+                performance_tips=[
+                    "Optimize Dockerfile layer order",
+                    "Use appropriate base images",
+                    "Implement proper caching",
+                    "Monitor resource usage"
+                ],
+                security_guidelines=[
+                    "Scan images for vulnerabilities",
+                    "Use trusted base images",
+                    "Implement proper secrets management",
+                    "Use security contexts"
+                ],
+                frameworks=["Docker", "Docker Compose", "Kubernetes", "Podman"],
+                testing_approaches=["Container testing", "Integration testing"],
+                code_smells=["Monolithic containers", "Hardcoded secrets", "Poor resource limits"],
+                expert_level=10
+            ),
+            
+            "kubernetes_yaml": LanguageExpertise(
+                name="Kubernetes YAML",
+                paradigms=["Container Orchestration", "Declarative Configuration", "Cloud Native"],
+                syntax_patterns={
+                    "deployment": "apiVersion: apps/v1\\nkind: Deployment",
+                    "service": "apiVersion: v1\\nkind: Service", 
+                    "configmap": "apiVersion: v1\\nkind: ConfigMap",
+                    "secret": "apiVersion: v1\\nkind: Secret",
+                    "ingress": "apiVersion: networking.k8s.io/v1\\nkind: Ingress"
+                },
+                best_practices=[
+                    "Use resource limits and requests",
+                    "Implement proper health checks",
+                    "Use namespaces for isolation",
+                    "Implement proper RBAC",
+                    "Use ConfigMaps and Secrets properly",
+                    "Version your manifests",
+                    "Use labels and selectors consistently"
+                ],
+                common_pitfalls=[
+                    "No resource limits",
+                    "Poor security configurations",
+                    "Hardcoded values in manifests",
+                    "Insufficient monitoring"
+                ],
+                performance_tips=[
+                    "Set appropriate resource requests",
+                    "Use horizontal pod autoscaling",
+                    "Optimize container startup time",
+                    "Monitor cluster resources"
+                ],
+                security_guidelines=[
+                    "Use Pod Security Standards",
+                    "Implement network policies",
+                    "Use service accounts properly",
+                    "Scan container images"
+                ],
+                frameworks=["Kubernetes", "Helm", "Kustomize", "OpenShift"],
+                testing_approaches=["Manifest validation", "End-to-end testing"],
+                code_smells=["Hardcoded configurations", "No resource limits", "Poor security contexts"],
+                expert_level=10
             )
         }
     
@@ -472,7 +1429,54 @@ class AuroraExpertKnowledge:
                 "ionic": {"language": "JavaScript", "type": "Hybrid", "expertise": 10},
                 "xamarin": {"language": "C#", "type": "Cross-platform", "expertise": 10},
                 "swift_ui": {"language": "Swift", "type": "iOS", "expertise": 10},
-                "android_jetpack": {"language": "Kotlin", "type": "Android", "expertise": 10}
+                "android_jetpack": {"language": "Kotlin", "type": "Android", "expertise": 10},
+                "cordova": {"language": "JavaScript", "type": "Hybrid", "expertise": 10},
+                "phonegap": {"language": "JavaScript", "type": "Hybrid", "expertise": 10}
+            },
+            "ios_frameworks": {
+                "uikit": {"language": "Swift/Objective-C", "type": "Native iOS UI", "expertise": 10},
+                "swiftui": {"language": "Swift", "type": "Declarative UI", "expertise": 10},
+                "core_data": {"language": "Swift", "type": "Data Persistence", "expertise": 10},
+                "combine": {"language": "Swift", "type": "Reactive Programming", "expertise": 10},
+                "avfoundation": {"language": "Swift", "type": "Audio/Video", "expertise": 10},
+                "core_location": {"language": "Swift", "type": "Location Services", "expertise": 10},
+                "healthkit": {"language": "Swift", "type": "Health Data", "expertise": 10},
+                "arkit": {"language": "Swift", "type": "Augmented Reality", "expertise": 10},
+                "metal": {"language": "Swift", "type": "Graphics/Compute", "expertise": 10}
+            },
+            "android_frameworks": {
+                "android_jetpack": {"language": "Kotlin/Java", "type": "Modern Android", "expertise": 10},
+                "retrofit": {"language": "Kotlin/Java", "type": "Networking", "expertise": 10},
+                "room": {"language": "Kotlin/Java", "type": "Database", "expertise": 10},
+                "dagger_hilt": {"language": "Kotlin/Java", "type": "Dependency Injection", "expertise": 10},
+                "compose": {"language": "Kotlin", "type": "Declarative UI", "expertise": 10},
+                "camerax": {"language": "Kotlin/Java", "type": "Camera API", "expertise": 10},
+                "workmanager": {"language": "Kotlin/Java", "type": "Background Tasks", "expertise": 10},
+                "navigation": {"language": "Kotlin/Java", "type": "App Navigation", "expertise": 10}
+            },
+            "macos_automation": {
+                "applescript": {"language": "AppleScript", "type": "macOS Automation", "expertise": 10},
+                "automator": {"language": "Visual/AppleScript", "type": "Workflow Automation", "expertise": 10},
+                "shortcuts": {"language": "Visual", "type": "Cross-device Automation", "expertise": 10},
+                "shell_scripting": {"language": "Bash/Zsh", "type": "Command Line", "expertise": 10},
+                "osascript": {"language": "JavaScript/AppleScript", "type": "Script Execution", "expertise": 10}
+            },
+            "embedded_iot": {
+                "arduino": {"language": "C++", "type": "Microcontroller", "expertise": 10},
+                "esp_idf": {"language": "C", "type": "ESP32 Framework", "expertise": 10},
+                "micropython": {"language": "Python", "type": "IoT Scripting", "expertise": 10},
+                "circuitpython": {"language": "Python", "type": "Hardware Control", "expertise": 10},
+                "platformio": {"language": "C/C++", "type": "Embedded Development", "expertise": 10},
+                "freertos": {"language": "C", "type": "Real-time OS", "expertise": 10},
+                "zephyr": {"language": "C", "type": "IoT OS", "expertise": 10},
+                "mbed": {"language": "C++", "type": "ARM Microcontrollers", "expertise": 10}
+            },
+            "game_development": {
+                "unity": {"language": "C#", "type": "Game Engine", "expertise": 10},
+                "unreal": {"language": "C++/Blueprint", "type": "Game Engine", "expertise": 10},
+                "godot": {"language": "GDScript/C#", "type": "Open Source Engine", "expertise": 10},
+                "construct": {"language": "Visual", "type": "2D Game Creation", "expertise": 10},
+                "defold": {"language": "Lua", "type": "Mobile Game Engine", "expertise": 10}
             },
             "data_science": {
                 "pandas": {"language": "Python", "type": "Data manipulation", "expertise": 10},
