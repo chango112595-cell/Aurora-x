@@ -156,7 +156,7 @@ Just type what you want in natural language - I'll understand and generate it fo
       } else {
         // Fallback for direct response (shouldn't happen with new system)
         // Show the synthesis result
-        const resultMessage = data.message || 
+        const resultMessage = data.message ||
           (data.code_file ? `✅ Generated: ${data.code_file}` : 'Code generated successfully');
 
         setMessages((prev) => [...prev, {
@@ -438,25 +438,25 @@ Just type what you want in natural language - I'll understand and generate it fo
                 <p className="text-sm text-muted-foreground mb-3 font-medium">Try these examples:</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {examplePrompts.map((example, idx) => (
-                  <Card
-                    key={idx}
-                    className="p-4 cursor-pointer hover-elevate transition-all border-muted"
-                    onClick={() => handleExampleClick(example.prompt)}
-                    data-testid={`example-prompt-${idx}`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-md bg-primary/10">
-                        <example.icon className="h-5 w-5 text-primary" />
+                    <Card
+                      key={idx}
+                      className="p-4 cursor-pointer hover-elevate transition-all border-muted"
+                      onClick={() => handleExampleClick(example.prompt)}
+                      data-testid={`example-prompt-${idx}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-md bg-primary/10">
+                          <example.icon className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-sm font-medium mb-1">{example.title}</h4>
+                          <p className="text-xs text-muted-foreground line-clamp-2">
+                            {example.prompt}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <h4 className="text-sm font-medium mb-1">{example.title}</h4>
-                        <p className="text-xs text-muted-foreground line-clamp-2">
-                          {example.prompt}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
+                    </Card>
+                  ))}
                 </div>
               </div>
             )}
@@ -465,9 +465,8 @@ Just type what you want in natural language - I'll understand and generate it fo
             {messages.map((message, index) => (
               <div
                 key={message.id}
-                className={`flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300 ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
+                className={`flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300 ${message.role === "user" ? "justify-end" : "justify-start"
+                  }`}
                 style={{ animationDelay: `${index * 50}ms` }}
                 data-testid={`message-${message.role}-${message.id}`}
               >
@@ -481,11 +480,10 @@ Just type what you want in natural language - I'll understand and generate it fo
                 )}
                 <div className={`max-w-[70%] space-y-2`}>
                   <div
-                    className={`rounded-lg px-4 py-3 relative overflow-hidden ${
-                      message.role === "user"
+                    className={`rounded-lg px-4 py-3 relative overflow-hidden ${message.role === "user"
                         ? "bg-gradient-to-br from-cyan-600 to-cyan-700 text-white border border-cyan-500/50 shadow-lg shadow-cyan-500/20"
                         : "bg-muted/50 border border-cyan-500/20 backdrop-blur-sm"
-                    }`}
+                      }`}
                   >
                     {message.role === "assistant" && (
                       <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-cyan-500/5 animate-pulse" />

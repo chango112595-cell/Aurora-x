@@ -65,9 +65,9 @@ export function FunctionLibrary() {
   // Filter functions based on search term
   const filteredFunctions = Array.isArray(allFunctions)
     ? allFunctions.filter(fn =>
-        fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : [];
 
   return (

@@ -16,7 +16,7 @@ def render_function(name: str, brief: str):
         return code, tests
     code = dedent(f"""
     def {name}(*args, **kwargs):
-        """{brief or "Auto-generated function."}"""
+        \"\"\"{brief or "Auto-generated function."}\"\"\"""
         raise NotImplementedError("Please refine specification for {name}.")
     """)
     tests = dedent(f"""

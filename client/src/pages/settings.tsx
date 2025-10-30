@@ -13,6 +13,8 @@ import { Settings as SettingsIcon, Zap, Cpu, Activity } from "lucide-react";
 export default function Settings() {
   const [autoSynth, setAutoSynth] = useState(true);
   const [noveltyCache, setNoveltyCache] = useState(true);
+  const [beamWidth, setBeamWidth] = useState(20);
+  const [maxIters, setMaxIters] = useState(1000);
   const { toast } = useToast();
 
   // Fetch current T08 status on page load
@@ -63,6 +65,40 @@ export default function Settings() {
     // Make the API call
     toggleT08Mutation.mutate(checked);
   };
+
+  // Save settings function
+  const handleSaveSettings = () => {
+    // Save to localStorage
+    const settings = {
+      autoSynth,
+      noveltyCache,
+      beamWidth,
+      maxIters,
+      timestamp: Date.now()
+    };
+    localStorage.setItem("aurora-settings", JSON.stringify(settings));
+    
+    toast({
+      title: "Settings Saved",
+      description: "Your Aurora configuration has been saved successfully.",
+    });
+  };
+
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("aurora-settings");
+    if (saved) {
+      try {
+        const settings = JSON.parse(saved);
+        setAutoSynth(settings.autoSynth ?? true);
+        setNoveltyCache(settings.noveltyCache ?? true);
+        setBeamWidth(settings.beamWidth ?? 20);
+        setMaxIters(settings.maxIters ?? 1000);
+      } catch (error) {
+        console.warn("Failed to load settings:", error);
+      }
+    }
+  }, []);
 
   return (
     <div className="h-full overflow-auto bg-gradient-to-br from-background via-background to-primary/5">
@@ -119,7 +155,10 @@ export default function Settings() {
                 <Input
                   id="beam-width"
                   type="number"
-                  defaultValue="120"
+                  min="1"
+                  max="100"
+                  value={beamWidth}
+                  onChange={(e) => setBeamWidth(parseInt(e.target.value) || 20)}
                   className="border-primary/30 bg-background/50 backdrop-blur-sm focus:border-primary focus:ring-primary/50 transition-all"
                   data-testid="input-beam-width"
                 />
@@ -132,7 +171,10 @@ export default function Settings() {
                 <Input
                   id="max-iters"
                   type="number"
-                  defaultValue="20"
+                  min="10"
+                  max="10000"
+                  value={maxIters}
+                  onChange={(e) => setMaxIters(parseInt(e.target.value) || 1000)}
                   className="border-primary/30 bg-background/50 backdrop-blur-sm focus:border-cyan-500 focus:ring-cyan-500/50 transition-all"
                   data-testid="input-max-iterations"
                 />
@@ -209,6 +251,7 @@ export default function Settings() {
               <Button 
                 className="w-full bg-gradient-to-r from-primary to-cyan-500 hover:from-primary/90 hover:to-cyan-500/90 shadow-lg hover:shadow-xl hover:shadow-primary/30 transition-all text-white font-semibold" 
                 data-testid="button-save-settings"
+                onClick={handleSaveSettings}
               >
                 <Zap className="mr-2 h-4 w-4" />
                 Save Settings
