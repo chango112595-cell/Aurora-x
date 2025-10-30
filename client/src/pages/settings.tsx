@@ -40,8 +40,8 @@ export default function Settings() {
       setAutoSynth(data.t08_enabled);
       toast({
         title: "Success",
-        description: data.t08_enabled 
-          ? "T08 natural language synthesis activated" 
+        description: data.t08_enabled
+          ? "T08 natural language synthesis activated"
           : "T08 natural language synthesis deactivated",
       });
       // Invalidate query to ensure data stays in sync
@@ -77,7 +77,7 @@ export default function Settings() {
       timestamp: Date.now()
     };
     localStorage.setItem("aurora-settings", JSON.stringify(settings));
-    
+
     toast({
       title: "Settings Saved",
       description: "Your Aurora configuration has been saved successfully.",
@@ -108,7 +108,7 @@ export default function Settings() {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-cyan-500/10 to-transparent animate-pulse" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl" />
-          
+
           <div className="relative flex items-center gap-4">
             <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/30 to-cyan-500/30 border border-primary/40 shadow-lg">
               <SettingsIcon className="h-8 w-8 text-primary" />
@@ -126,13 +126,13 @@ export default function Settings() {
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Aurora Configuration Card */}
-          <Card 
-            className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-card via-card to-primary/5 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300" 
+          <Card
+            className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-card via-card to-primary/5 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300"
             data-testid="card-aurora-settings"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-cyan-500/5" />
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl" />
-            
+
             <CardHeader className="relative">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-primary/20 border border-primary/30">
@@ -196,13 +196,13 @@ export default function Settings() {
           </Card>
 
           {/* Feature Toggles Card */}
-          <Card 
+          <Card
             className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-card via-card to-cyan-500/5 shadow-xl hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300"
             data-testid="card-feature-settings"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-primary/5" />
             <div className="absolute top-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl" />
-            
+
             <CardHeader className="relative">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-cyan-500/20 border border-cyan-500/30">
@@ -248,8 +248,8 @@ export default function Settings() {
                   className="data-[state=checked]:bg-cyan-500"
                 />
               </div>
-              <Button 
-                className="w-full bg-gradient-to-r from-primary to-cyan-500 hover:from-primary/90 hover:to-cyan-500/90 shadow-lg hover:shadow-xl hover:shadow-primary/30 transition-all text-white font-semibold" 
+              <Button
+                className="w-full bg-gradient-to-r from-primary to-cyan-500 hover:from-primary/90 hover:to-cyan-500/90 shadow-lg hover:shadow-xl hover:shadow-primary/30 transition-all text-white font-semibold"
                 data-testid="button-save-settings"
                 onClick={handleSaveSettings}
               >
