@@ -1,0 +1,100 @@
+{
+  "knowledge_base": {},
+  "issue_patterns": {
+    "multiple_processes": {
+      "symptoms": [
+        "port conflicts",
+        "high CPU",
+        "connection refused"
+      ],
+      "causes": [
+        "duplicate server starts",
+        "failed shutdowns",
+        "process zombies"
+      ],
+      "solutions": [
+        "kill duplicate processes",
+        "clean restart",
+        "port cleanup"
+      ]
+    },
+    "port_conflicts": {
+      "symptoms": [
+        "address already in use",
+        "connection refused",
+        "bind errors"
+      ],
+      "causes": [
+        "multiple servers on same port",
+        "zombie processes",
+        "service conflicts"
+      ],
+      "solutions": [
+        "identify port user",
+        "terminate conflicting process",
+        "use different port"
+      ]
+    },
+    "resource_exhaustion": {
+      "symptoms": [
+        "high CPU",
+        "high memory",
+        "slow response",
+        "timeouts"
+      ],
+      "causes": [
+        "memory leaks",
+        "infinite loops",
+        "large datasets",
+        "too many concurrent requests"
+      ],
+      "solutions": [
+        "restart service",
+        "optimize code",
+        "add resource limits",
+        "scale horizontally"
+      ]
+    },
+    "api_manager_overload": {
+      "symptoms": [
+        "slow API responses",
+        "timeouts",
+        "error rates increase"
+      ],
+      "causes": [
+        "too many requests",
+        "blocking operations",
+        "resource contention"
+      ],
+      "solutions": [
+        "implement rate limiting",
+        "add caching",
+        "optimize database queries",
+        "use async operations"
+      ]
+    }
+  },
+  "solution_database": {
+    "server_cleanup": {
+      "command": "python aurora_server_manager.py --cleanup",
+      "description": "Clean up conflicting processes and restart",
+      "confidence": 0.9
+    },
+    "process_restart": {
+      "command": "python aurora_server_manager.py --kill-all && python aurora_server_manager.py --start bridge",
+      "description": "Force restart all Aurora services",
+      "confidence": 0.8
+    },
+    "health_check": {
+      "command": "python aurora_server_manager.py --status",
+      "description": "Check system health and identify issues",
+      "confidence": 1.0
+    },
+    "port_cleanup": {
+      "command": "lsof -ti:5001 | xargs kill -9",
+      "description": "Force kill processes using Aurora's port",
+      "confidence": 0.7
+    }
+  },
+  "last_updated": "2025-10-30T21:49:44.898196"
+}
