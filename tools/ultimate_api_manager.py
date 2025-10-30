@@ -36,6 +36,14 @@ import re
 import ast
 import traceback
 
+# Import Aurora's approval system
+try:
+    from aurora_approval_system import AuroraApprovalSystem
+    AURORA_APPROVAL_AVAILABLE = True
+except ImportError:
+    AURORA_APPROVAL_AVAILABLE = False
+    print("⚠️ Aurora Approval System not available - Aurora will work in legacy mode")
+
 
 class AdvancedCodingKnowledge:
     """
@@ -304,6 +312,12 @@ class UltimateAPIManager:
         self.error_patterns_learned = {}  # Patterns we've discovered
         self.success_rate_by_fix_type = {}  # Track success rates of different fix types
         self.intelligent_monitoring = True  # Enable intelligent code analysis
+        
+        # AURORA APPROVAL SYSTEM INTEGRATION
+        if AURORA_APPROVAL_AVAILABLE:
+            self.approval_system = AuroraApprovalSystem()
+        else:
+            self.approval_system = None
         
         # SELF-LEARNING CAPABILITIES
         self.learning_modes = {
@@ -2703,24 +2717,35 @@ except ImportError as e:
     
     def aurora_learning_session(self) -> Dict[str, Any]:
         """
-        AURORA'S COLLABORATIVE LEARNING SESSION
+        AURORA'S COLLABORATIVE LEARNING SESSION WITH APPROVAL SYSTEM
         Aurora learns step by step by working alongside humans
+        Now requires approval for all changes!
         """
-        print("🌟 AURORA'S LEARNING SESSION - WORKING WITH HUMANS")
+        print("🌟 AURORA'S LEARNING SESSION - WORKING WITH HUMANS (APPROVAL MODE)")
         print("="*70)
         print("👩‍💻 Aurora: Hello! I'm ready to learn alongside you.")
-        print("📚 Aurora: Let me observe how you solve coding problems so I can improve.")
+        print("📚 Aurora: I will now ask for approval before making any changes.")
+        print("🎓 Aurora: This will help me learn what's right and wrong!")
         print()
         
+        # Initialize approval system
+        if AURORA_APPROVAL_AVAILABLE:
+            self.approval_system = AuroraApprovalSystem()
+            print("✅ Aurora Approval System activated!")
+        else:
+            print("⚠️ Approval system unavailable - working in observation mode only")
+        
         learning_results = {
-            "session_type": "collaborative_learning",
+            "session_type": "collaborative_learning_with_approval",
             "observations": [],
+            "change_requests_submitted": [],
             "lessons_learned": [],
             "improvements_made": [],
             "knowledge_gained": [],
             "mistakes_identified": [],
             "success_rate": 0,
-            "areas_for_improvement": []
+            "areas_for_improvement": [],
+            "approval_mode": AURORA_APPROVAL_AVAILABLE
         }
         
         # Aurora observes the current state
@@ -2778,6 +2803,28 @@ except ImportError as e:
             print(f"\n🌟 Aurora: Great progress! I'm learning to code better.")
         
         return learning_results
+    
+    def aurora_request_change(self, file_path: str, proposed_change: str, reason: str, change_type: str = "fix") -> str:
+        """
+        Aurora's new method to request changes instead of making them directly
+        
+        Args:
+            file_path: File to change
+            proposed_change: What Aurora wants to change
+            reason: Aurora's explanation
+            change_type: Type of change (fix, feature, etc.)
+            
+        Returns:
+            request_id: ID to track this request
+        """
+        if not AURORA_APPROVAL_AVAILABLE or not self.approval_system:
+            print("🤖 Aurora: I would like to make a change, but approval system is not available.")
+            print(f"📁 File: {file_path}")
+            print(f"💭 Reasoning: {reason}")
+            print(f"✨ Proposed: {proposed_change}")
+            return "no-approval-system"
+        
+        return self.approval_system.submit_change_request(file_path, proposed_change, reason, change_type)
     
     def _aurora_observe_issues(self) -> List[Dict]:
         """Aurora observes current system issues to learn from them"""
@@ -2897,8 +2944,10 @@ except ImportError as e:
         return techniques
     
     def _aurora_apply_learning(self) -> List[Dict]:
-        """Aurora carefully applies what she learned"""
+        """Aurora carefully applies what she learned - NOW WITH APPROVAL SYSTEM"""
         improvements = []
+        
+        print("🤖 Aurora: Now I will request approval for any changes I want to make!")
         
         # Aurora validates current state first
         serve_file = Path("/workspaces/Aurora-x/aurora_x/serve.py")
@@ -2915,6 +2964,22 @@ except ImportError as e:
                     "description": "✅ serve.py has correct syntax",
                     "success": True
                 })
+                
+                # Instead of making changes directly, Aurora now requests approval
+                if "Import 'spec_from_flask' could not be resolved" in content or "Import 'spec_from_text' could not be resolved" in content:
+                    # Aurora wants to add better comments or documentation
+                    request_id = self.aurora_request_change(
+                        str(serve_file),
+                        "Add documentation comment about Pylance import warnings",
+                        "I want to add a comment explaining that these import warnings are expected because the modules are dynamically loaded from tools/ directory. This will help other developers understand why we use # type: ignore comments.",
+                        "documentation"
+                    )
+                    improvements.append({
+                        "type": "documentation_request", 
+                        "description": f"📝 Requested approval for documentation (ID: {request_id})",
+                        "success": True,
+                        "request_id": request_id
+                    })
                 
                 # Check if proper error handling exists
                 if "try:" in content and "except ImportError" in content:
@@ -2994,6 +3059,7 @@ def main():
     parser.add_argument('--intelligent-analysis', action='store_true', help='Run comprehensive intelligent system analysis with coding knowledge')
     parser.add_argument('--aurora-learn', action='store_true', help='Start Aurora\'s collaborative learning session')
     parser.add_argument('--aurora-assistant', action='store_true', help='Activate Aurora\'s intelligent code assistant to fix persistent issues')
+    parser.add_argument('--aurora-approval', action='store_true', help='Start Aurora in approval-only mode (requires human approval for all changes)')
     parser.add_argument('--fix-connections', action='store_true', help='Intelligently monitor and auto-fix connection issues')
     
     args = parser.parse_args()
@@ -3097,6 +3163,30 @@ def main():
                 for area in learning_results["areas_for_improvement"]:
                     print(f"   • {area}")
             
+            if learning_results.get("change_requests_submitted"):
+                print(f"\n📝 Aurora submitted {len(learning_results['change_requests_submitted'])} change requests")
+                print("   Use: python tools/aurora_approval_system.py pending")
+                print("   To review and approve/reject Aurora's requests")
+        
+        elif args.aurora_approval:
+            print("🎓 STARTING AURORA IN APPROVAL-ONLY MODE")
+            print("="*50)
+            print("🤖 Aurora: I am now in learning mode!")
+            print("📝 Aurora: I will ask for approval before making any changes.")
+            print("🎯 Aurora: This helps me learn what's right and wrong!")
+            print()
+            
+            if AURORA_APPROVAL_AVAILABLE:
+                approval_system = AuroraApprovalSystem()
+                approval_system.show_pending_requests()
+                print("\n💡 Commands:")
+                print("   python tools/aurora_approval_system.py pending")
+                print("   python tools/aurora_approval_system.py approve <id> <grade> [feedback]") 
+                print("   python tools/aurora_approval_system.py reject <id> <grade> <feedback>")
+                print("   python tools/aurora_approval_system.py grades")
+            else:
+                print("❌ Aurora Approval System not available!")
+                
         elif args.aurora_assistant:
             print("🤖 ACTIVATING AURORA'S INTELLIGENT CODE ASSISTANT...")
             aurora_results = manager.aurora_intelligent_code_assistant()
