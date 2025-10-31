@@ -5,7 +5,15 @@
     "status": "healthy",
     "type": "text/html",
     "server": "Unknown",
-    "response_time": 3.8
+    "response_time": 157.0
+  },
+  "service_5001": {
+    "port": 5001,
+    "health_url": "http://localhost:5001/healthz",
+    "status": "healthy",
+    "type": "Unknown",
+    "server": "Unknown",
+    "response_time": 8.81
   },
   "service_8080": {
     "port": 8080,
@@ -13,6 +21,6 @@
     "status": "healthy",
     "type": "Unknown",
     "server": "SimpleHTTP/0.6 Python/3.12.1",
-    "response_time": 2.75
+    "response_time": 5.49
   }
 }

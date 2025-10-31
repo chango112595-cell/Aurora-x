@@ -1,9 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, AlertCircle, GitBranch, Code2, Zap, Shield, TrendingUp } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CheckCircle, AlertCircle, GitBranch, Code2, Zap, Shield, TrendingUp, RefreshCw, GitCommit } from 'lucide-react';
+
+interface Commit {
+    hash: string;
+    message: string;
+    short_hash: string;
+}
+
+interface FileChange {
+    status: string;
+    file: string;
+    status_text: string;
+}
+
+interface AuroraRun {
+    name: string;
+    path: string;
+    has_graph_diff: boolean;
+    has_scores_diff: boolean;
+    has_report: boolean;
+    start_time?: number;
+    duration?: number;
+    seed?: number;
+    max_iters?: number;
+}
+
+interface BranchInfo {
+    name: string;
+    commit_count: number;
+    last_commit: string;
+    last_commit_message: string;
+    unique_features: string[];
+    file_changes: number;
+    lines_added: number;
+    lines_deleted: number;
+    feature_category: string;
+    improvement_score: number;
+}
 
 interface ComparisonItem {
     id: string;
@@ -15,6 +53,88 @@ interface ComparisonItem {
 
 export default function ComparisonDashboard() {
     const [approvedItems, setApprovedItems] = useState<Set<string>>(new Set());
+    const [commits, setCommits] = useState<Commit[]>([]);
+    const [auroraRuns, setAuroraRuns] = useState<AuroraRun[]>([]);
+    const [selectedCommit1, setSelectedCommit1] = useState<string>('');
+    const [selectedCommit2, setSelectedCommit2] = useState<string>('');
+    const [fileChanges, setFileChanges] = useState<FileChange[]>([]);
+    const [currentBranch, setCurrentBranch] = useState<string>('');
+    const [branches, setBranches] = useState<BranchInfo[]>([]);
+    const [selectedBranch, setSelectedBranch] = useState<string>('');
+    const [branchAnalysis, setBranchAnalysis] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
+
+    // Fetch real data from APIs
+    const fetchCommits = async () => {
+        try {
+            const response = await fetch('/api/bridge/comparison/commits');
+            const data = await response.json();
+            if (data.ok) {
+                setCommits(data.commits);
+                setCurrentBranch(data.current_branch);
+            }
+        } catch (error) {
+            console.error('Failed to fetch commits:', error);
+        }
+    };
+
+    const fetchAuroraRuns = async () => {
+        try {
+            const response = await fetch('/api/bridge/comparison/aurora-runs');
+            const data = await response.json();
+            if (data.ok) {
+                setAuroraRuns(data.runs);
+            }
+        } catch (error) {
+            console.error('Failed to fetch Aurora runs:', error);
+        }
+    };
+
+    const fetchDiff = async (commit1?: string, commit2?: string) => {
+        setLoading(true);
+        try {
+            const params = new URLSearchParams();
+            if (commit1) params.append('commit1', commit1);
+            if (commit2) params.append('commit2', commit2);
+
+            const response = await fetch(`/api/bridge/comparison/diff?${params}`);
+            const data = await response.json();
+            if (data.ok) {
+                setFileChanges(data.files);
+            }
+        } catch (error) {
+            console.error('Failed to fetch diff:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchBranches = async () => {
+        try {
+            const response = await fetch('/api/bridge/comparison/branches');
+            const data = await response.json();
+            if (data.ok) {
+                setBranches(data.branches);
+            }
+        } catch (error) {
+            console.error('Failed to fetch branches:', error);
+        }
+    };
+
+    const fetchBranchAnalysis = async (branchName: string) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`/api/bridge/comparison/branch-analysis?branch=${encodeURIComponent(branchName)}`);
+            const data = await response.json();
+            if (data.ok) {
+                setBranchAnalysis(data.analysis);
+            }
+        } catch (error) {
+            console.error('Failed to fetch branch analysis:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleApproval = (itemId: string, approved: boolean) => {
         const newApproved = new Set(approvedItems);
@@ -25,6 +145,19 @@ export default function ComparisonDashboard() {
         }
         setApprovedItems(newApproved);
     };
+
+    useEffect(() => {
+        fetchCommits();
+        fetchAuroraRuns();
+        fetchBranches();
+        fetchDiff(); // Get current working directory changes
+    }, []);
+
+    useEffect(() => {
+        if (selectedCommit1 || selectedCommit2) {
+            fetchDiff(selectedCommit1, selectedCommit2);
+        }
+    }, [selectedCommit1, selectedCommit2]);
 
     const comparisonData = {
         overview: {
@@ -100,15 +233,380 @@ export default function ComparisonDashboard() {
                     </p>
                 </div>
 
-                <Tabs defaultValue="overview" className="space-y-6">
-                    <TabsList className="grid w-full grid-cols-6 bg-slate-800/50 backdrop-blur-sm">
+                <Tabs defaultValue="git-comparison" className="space-y-6">
+                    <TabsList className="grid w-full grid-cols-8 bg-slate-800/50 backdrop-blur-sm">
+                        <TabsTrigger value="git-comparison" className="text-cyan-400">Git Comparison</TabsTrigger>
+                        <TabsTrigger value="branch-analysis" className="text-cyan-400">Branch Analysis</TabsTrigger>
+                        <TabsTrigger value="aurora-runs" className="text-cyan-400">Aurora Runs</TabsTrigger>
                         <TabsTrigger value="overview" className="text-cyan-400">Overview</TabsTrigger>
                         <TabsTrigger value="branches" className="text-cyan-400">Branches</TabsTrigger>
                         <TabsTrigger value="features" className="text-cyan-400">Features</TabsTrigger>
-                        <TabsTrigger value="improvements" className="text-cyan-400">Improvements</TabsTrigger>
                         <TabsTrigger value="diagnostics" className="text-cyan-400">Diagnostics</TabsTrigger>
                         <TabsTrigger value="approval" className="text-cyan-400">Approval</TabsTrigger>
                     </TabsList>
+
+                    {/* Git Comparison Tab */}
+                    <TabsContent value="git-comparison" className="space-y-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {/* Commit Selection */}
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30">
+                                <CardHeader>
+                                    <CardTitle className="text-cyan-400 flex items-center gap-2">
+                                        <GitCommit className="w-5 h-5" />
+                                        Select Commits to Compare
+                                    </CardTitle>
+                                    <CardDescription>
+                                        Current Branch: <Badge className="bg-purple-500/20 text-purple-400">{currentBranch}</Badge>
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div>
+                                        <label className="text-sm text-slate-300 mb-2 block">Commit 1 (Base)</label>
+                                        <Select value={selectedCommit1} onValueChange={setSelectedCommit1}>
+                                            <SelectTrigger className="bg-slate-700 border-slate-600">
+                                                <SelectValue placeholder="Select base commit" />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-800 border-slate-600">
+                                                <SelectItem value="">Working Directory</SelectItem>
+                                                {commits.map((commit) => (
+                                                    <SelectItem key={commit.hash} value={commit.hash}>
+                                                        {commit.short_hash}: {commit.message}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div>
+                                        <label className="text-sm text-slate-300 mb-2 block">Commit 2 (Compare with)</label>
+                                        <Select value={selectedCommit2} onValueChange={setSelectedCommit2}>
+                                            <SelectTrigger className="bg-slate-700 border-slate-600">
+                                                <SelectValue placeholder="Select commit to compare" />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-800 border-slate-600">
+                                                <SelectItem value="">Working Directory</SelectItem>
+                                                {commits.map((commit) => (
+                                                    <SelectItem key={commit.hash} value={commit.hash}>
+                                                        {commit.short_hash}: {commit.message}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <Button
+                                        onClick={() => fetchDiff(selectedCommit1, selectedCommit2)}
+                                        className="w-full bg-gradient-to-r from-cyan-500 to-purple-500"
+                                        disabled={loading}
+                                    >
+                                        {loading ? <RefreshCw className="w-4 h-4 animate-spin mr-2" /> : null}
+                                        Compare Commits
+                                    </Button>
+                                </CardContent>
+                            </Card>
+
+                            {/* File Changes */}
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-green-500/30">
+                                <CardHeader>
+                                    <CardTitle className="text-green-400 flex items-center gap-2">
+                                        <Code2 className="w-5 h-5" />
+                                        File Changes ({fileChanges.length})
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-2 max-h-96 overflow-y-auto">
+                                        {fileChanges.length === 0 ? (
+                                            <p className="text-slate-400 text-center py-8">No changes found</p>
+                                        ) : (
+                                            fileChanges.map((change, index) => (
+                                                <div key={index} className="flex items-center justify-between p-2 bg-slate-700/50 rounded">
+                                                    <span className="text-slate-300 text-sm font-mono">{change.file}</span>
+                                                    <Badge
+                                                        className={
+                                                            change.status === 'M' ? 'bg-yellow-500/20 text-yellow-400' :
+                                                                change.status === 'A' ? 'bg-green-500/20 text-green-400' :
+                                                                    change.status === 'D' ? 'bg-red-500/20 text-red-400' :
+                                                                        'bg-blue-500/20 text-blue-400'
+                                                        }
+                                                    >
+                                                        {change.status_text}
+                                                    </Badge>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        {/* Full Diff View */}
+                        {fileChanges.length > 0 && (
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
+                                <CardHeader>
+                                    <CardTitle className="text-purple-400">Detailed Diff View</CardTitle>
+                                    <CardDescription>
+                                        Comparing: {selectedCommit1 || 'Working Directory'} vs {selectedCommit2 || 'Working Directory'}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <Button
+                                        onClick={() => window.open('/api/bridge/diff/full', '_blank')}
+                                        className="bg-purple-500/20 text-purple-400 border border-purple-500/30 hover:bg-purple-500/30"
+                                    >
+                                        View Full Diff in New Tab
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        )}
+                    </TabsContent>
+
+                    {/* Branch Analysis Tab */}
+                    <TabsContent value="branch-analysis" className="space-y-6">
+                        <div className="grid grid-cols-1 gap-6">
+                            {/* Branch Selection */}
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30">
+                                <CardHeader>
+                                    <CardTitle className="text-cyan-400 flex items-center gap-2">
+                                        <GitBranch className="w-5 h-5" />
+                                        Branch Feature Analysis
+                                    </CardTitle>
+                                    <CardDescription>
+                                        Analyze features and improvements across different branches
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div>
+                                        <label className="text-sm text-slate-300 mb-2 block">Select Branch to Analyze</label>
+                                        <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+                                            <SelectTrigger className="bg-slate-700 border-slate-600">
+                                                <SelectValue placeholder="Choose a branch for detailed analysis" />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-800 border-slate-600">
+                                                {branches.map((branch) => (
+                                                    <SelectItem key={branch.name} value={branch.name}>
+                                                        {branch.name} ({branch.commit_count} commits)
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <Button
+                                        onClick={() => selectedBranch && fetchBranchAnalysis(selectedBranch)}
+                                        disabled={!selectedBranch || loading}
+                                        className="w-full bg-gradient-to-r from-cyan-500 to-purple-500"
+                                    >
+                                        {loading ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : null}
+                                        Analyze Branch Features
+                                    </Button>
+                                </CardContent>
+                            </Card>
+
+                            {/* Branch Overview Grid */}
+                            {branches.length > 0 && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {branches.map((branch) => (
+                                        <Card key={branch.name} className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30 hover:border-cyan-400/50 transition-colors">
+                                            <CardHeader className="pb-3">
+                                                <CardTitle className="text-cyan-400 text-sm flex items-center justify-between">
+                                                    <span className="truncate">{branch.name}</span>
+                                                    <Badge className={`ml-2 ${branch.improvement_score > 7 ? 'bg-green-500/20 text-green-400' : branch.improvement_score > 4 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-gray-500/20 text-gray-400'}`}>
+                                                        {branch.improvement_score}/10
+                                                    </Badge>
+                                                </CardTitle>
+                                                <CardDescription className="text-xs">
+                                                    {branch.feature_category}
+                                                </CardDescription>
+                                            </CardHeader>
+                                            <CardContent className="space-y-2">
+                                                <div className="flex justify-between text-xs text-slate-400">
+                                                    <span>Commits: {branch.commit_count}</span>
+                                                    <span>Files: {branch.file_changes}</span>
+                                                </div>
+                                                <div className="flex justify-between text-xs text-slate-400">
+                                                    <span className="text-green-400">+{branch.lines_added}</span>
+                                                    <span className="text-red-400">-{branch.lines_deleted}</span>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    {branch.unique_features.slice(0, 3).map((feature, idx) => (
+                                                        <Badge key={idx} className="text-xs bg-purple-500/20 text-purple-400 block">
+                                                            {feature}
+                                                        </Badge>
+                                                    ))}
+                                                    {branch.unique_features.length > 3 && (
+                                                        <Badge className="text-xs bg-slate-500/20 text-slate-400">
+                                                            +{branch.unique_features.length - 3} more
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    className="w-full text-xs"
+                                                    onClick={() => {
+                                                        setSelectedBranch(branch.name);
+                                                        fetchBranchAnalysis(branch.name);
+                                                    }}
+                                                >
+                                                    Analyze
+                                                </Button>
+                                            </CardContent>
+                                        </Card>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Detailed Branch Analysis Results */}
+                            {branchAnalysis && (
+                                <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30">
+                                    <CardHeader>
+                                        <CardTitle className="text-cyan-400 flex items-center gap-2">
+                                            <TrendingUp className="w-5 h-5" />
+                                            Detailed Analysis: {selectedBranch}
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-6">
+                                        {/* Feature Highlights */}
+                                        <div>
+                                            <h4 className="text-lg font-semibold text-white mb-3">Key Features & Improvements</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                {branchAnalysis.key_features?.map((feature: any, idx: number) => (
+                                                    <div key={idx} className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                                                        <div className="flex items-center gap-2 mb-2">
+                                                            <CheckCircle className="w-4 h-4 text-green-400" />
+                                                            <span className="font-medium text-green-400">{feature.category}</span>
+                                                        </div>
+                                                        <p className="text-sm text-slate-300">{feature.description}</p>
+                                                        <div className="mt-2">
+                                                            <Badge className="text-xs bg-blue-500/20 text-blue-400">
+                                                                Impact: {feature.impact}
+                                                            </Badge>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Code Quality Metrics */}
+                                        {branchAnalysis.quality_metrics && (
+                                            <div>
+                                                <h4 className="text-lg font-semibold text-white mb-3">Code Quality Metrics</h4>
+                                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                    <div className="bg-slate-700/50 p-3 rounded-lg text-center">
+                                                        <div className="text-2xl font-bold text-cyan-400">{branchAnalysis.quality_metrics.test_coverage}%</div>
+                                                        <div className="text-xs text-slate-400">Test Coverage</div>
+                                                    </div>
+                                                    <div className="bg-slate-700/50 p-3 rounded-lg text-center">
+                                                        <div className="text-2xl font-bold text-green-400">{branchAnalysis.quality_metrics.code_quality_score}/10</div>
+                                                        <div className="text-xs text-slate-400">Code Quality</div>
+                                                    </div>
+                                                    <div className="bg-slate-700/50 p-3 rounded-lg text-center">
+                                                        <div className="text-2xl font-bold text-purple-400">{branchAnalysis.quality_metrics.performance_score}/10</div>
+                                                        <div className="text-xs text-slate-400">Performance</div>
+                                                    </div>
+                                                    <div className="bg-slate-700/50 p-3 rounded-lg text-center">
+                                                        <div className="text-2xl font-bold text-yellow-400">{branchAnalysis.quality_metrics.maintainability}/10</div>
+                                                        <div className="text-xs text-slate-400">Maintainability</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* File Changes Summary */}
+                                        {branchAnalysis.file_changes && (
+                                            <div>
+                                                <h4 className="text-lg font-semibold text-white mb-3">File Changes Summary</h4>
+                                                <div className="space-y-2 max-h-60 overflow-y-auto">
+                                                    {branchAnalysis.file_changes.map((change: any, idx: number) => (
+                                                        <div key={idx} className="flex items-center justify-between bg-slate-700/30 p-3 rounded">
+                                                            <div className="flex items-center gap-3">
+                                                                <Badge className={`w-8 text-center ${change.status === 'A' ? 'bg-green-500/20 text-green-400' : change.status === 'M' ? 'bg-blue-500/20 text-blue-400' : 'bg-red-500/20 text-red-400'}`}>
+                                                                    {change.status}
+                                                                </Badge>
+                                                                <span className="text-sm font-mono text-slate-300">{change.file}</span>
+                                                            </div>
+                                                            <div className="flex gap-2 text-xs">
+                                                                {change.additions > 0 && <span className="text-green-400">+{change.additions}</span>}
+                                                                {change.deletions > 0 && <span className="text-red-400">-{change.deletions}</span>}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Recommendations */}
+                                        {branchAnalysis.recommendations && (
+                                            <div>
+                                                <h4 className="text-lg font-semibold text-white mb-3">Merge Recommendations</h4>
+                                                <div className="bg-slate-700/30 p-4 rounded-lg border-l-4 border-cyan-400">
+                                                    <div className="flex items-start gap-3">
+                                                        <Shield className="w-5 h-5 text-cyan-400 mt-0.5" />
+                                                        <div>
+                                                            <p className="text-slate-300">{branchAnalysis.recommendations.summary}</p>
+                                                            <div className="mt-3 space-y-2">
+                                                                {branchAnalysis.recommendations.action_items?.map((item: string, idx: number) => (
+                                                                    <div key={idx} className="flex items-center gap-2">
+                                                                        <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></div>
+                                                                        <span className="text-sm text-slate-400">{item}</span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            )}
+                        </div>
+                    </TabsContent>
+
+                    {/* Aurora Runs Tab */}
+                    <TabsContent value="aurora-runs" className="space-y-6">
+                        <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30">
+                            <CardHeader>
+                                <CardTitle className="text-cyan-400 flex items-center gap-2">
+                                    <Zap className="w-5 h-5" />
+                                    Aurora Run History ({auroraRuns.length} runs)
+                                </CardTitle>
+                                <CardDescription>Compare different Aurora synthesis runs and their results</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-4 max-h-96 overflow-y-auto">
+                                    {auroraRuns.length === 0 ? (
+                                        <p className="text-slate-400 text-center py-8">No Aurora runs found</p>
+                                    ) : (
+                                        auroraRuns.map((run, index) => (
+                                            <div key={index} className="p-4 bg-slate-700/50 rounded-lg">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span className="text-cyan-400 font-mono text-sm">{run.name}</span>
+                                                    <div className="flex gap-2">
+                                                        {run.has_graph_diff && <Badge className="bg-green-500/20 text-green-400 text-xs">Graph Diff</Badge>}
+                                                        {run.has_scores_diff && <Badge className="bg-blue-500/20 text-blue-400 text-xs">Scores Diff</Badge>}
+                                                        {run.has_report && <Badge className="bg-purple-500/20 text-purple-400 text-xs">Report</Badge>}
+                                                    </div>
+                                                </div>
+                                                <div className="text-slate-400 text-xs space-y-1">
+                                                    {run.start_time && <div>Started: {new Date(run.start_time * 1000).toLocaleString()}</div>}
+                                                    {run.duration && <div>Duration: {run.duration.toFixed(2)}s</div>}
+                                                    {run.seed && <div>Seed: {run.seed}</div>}
+                                                    {run.max_iters && <div>Max Iterations: {run.max_iters}</div>}
+                                                </div>
+                                                {run.has_report && (
+                                                    <Button
+                                                        size="sm"
+                                                        className="mt-2 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/30"
+                                                        onClick={() => window.open(`/runs/${run.name}/report.html`, '_blank')}
+                                                    >
+                                                        View Report
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
 
                     {/* Overview Tab */}
                     <TabsContent value="overview" className="space-y-6">

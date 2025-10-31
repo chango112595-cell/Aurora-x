@@ -58,16 +58,16 @@ export function FunctionLibrary() {
   // Handle both array and object responses
   const allFunctions = Array.isArray(response)
     ? response
-    : (response?.items || response?.functions || []);
+    : (response?.items || []);
 
   // Debug: Log the response data
 
   // Filter functions based on search term
   const filteredFunctions = Array.isArray(allFunctions)
     ? allFunctions.filter(fn =>
-        fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : [];
 
   return (
