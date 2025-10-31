@@ -104,7 +104,7 @@ def parse_english(text: str) -> NLParseResult:
     # Check for Flask app requests
     if any(kw in text_lower for kw in ["flask", "web app", "web application", "api server", "rest api"]):
         # Compute snake_case name once
-        snake_name = _snake(text.split('.')[0].strip() if '.' in text else text[:50].strip())
+        snake_name = _snake(text.split(".")[0].strip() if "." in text else text[:50].strip())
         return NLParseResult(
             {
                 "name": snake_name + "_app",
