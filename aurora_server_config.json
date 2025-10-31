@@ -1,0 +1,22 @@
+{
+  "services": {
+    "bridge": {
+      "port": 5001,
+      "module": "aurora_x.bridge.serve",
+      "priority": 1
+    },
+    "main_server": {
+      "port": 5000,
+      "module": "aurora_x.serve",
+      "priority": 2
+    },
+    "chat_server": {
+      "port": 5002,
+      "module": "aurora_x.chat.serve",
+      "priority": 3
+    }
+  },
+  "max_concurrent": 1,
+  "auto_restart": true,
+  "health_check_interval": 30
+}
