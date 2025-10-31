@@ -15,7 +15,6 @@ Usage:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Add tools directory to path
@@ -31,14 +30,14 @@ except ImportError:
 
 class AuroraTeacher:
     """Simple CLI for teaching Aurora"""
-    
+
     def __init__(self):
         self.approval_system = AuroraApprovalSystem()
-    
+
     def show_help(self):
         """Show usage help"""
         print("🎓 AURORA TEACHER - Help Aurora Learn!")
-        print("="*40)
+        print("=" * 40)
         print()
         print("📚 Commands:")
         print("  python aurora_teacher.py                    # Show pending requests")
@@ -58,7 +57,7 @@ class AuroraTeacher:
         print("  • Be specific in feedback - help Aurora learn!")
         print("  • Explain WHY something is good or bad")
         print("  • Encourage Aurora when she's learning")
-        
+
     def grade_request(self, request_id: str, grade: int, feedback: str):
         """Grade a request with detailed feedback"""
         if grade >= 7:
@@ -69,76 +68,76 @@ class AuroraTeacher:
             success = self.approval_system.reject_change(request_id, grade, feedback)
             if success:
                 print(f"\n📚 Aurora will learn from this feedback! Grade: {grade}/10")
-        
+
         return success
-    
+
     def quick_approve(self, request_id: str):
         """Quickly approve with a good grade"""
         feedback = "Good work! This approach is correct and well-reasoned."
         return self.grade_request(request_id, 8, feedback)
-    
+
     def quick_reject(self, request_id: str):
         """Quickly reject with learning feedback"""
         feedback = "This needs improvement. Please reconsider the approach and think about potential side effects."
         return self.grade_request(request_id, 3, feedback)
-    
+
     def show_interactive_pending(self):
         """Show pending requests with interactive options"""
         self.approval_system.show_pending_requests()
-        
+
         if not self.approval_system.pending_changes:
             print("✅ No requests to grade! Aurora is waiting for new challenges.")
             return
-        
+
         print("\n💡 Quick Actions:")
         for req in self.approval_system.pending_changes[:3]:  # Show first 3
-            req_id = req['id']
+            req_id = req["id"]
             print(f"   🟢 Approve {req_id}: python aurora_teacher.py approve {req_id}")
             print(f"   🔴 Reject {req_id}:  python aurora_teacher.py reject {req_id}")
             print(f"   📝 Grade {req_id}:   python aurora_teacher.py grade {req_id} <1-10> '<feedback>'")
-    
+
     def run(self):
         """Main CLI interface"""
         if len(sys.argv) == 1:
             # No arguments - show pending requests
             self.show_interactive_pending()
             return
-        
+
         command = sys.argv[1].lower()
-        
-        if command in ['help', '-h', '--help']:
+
+        if command in ["help", "-h", "--help"]:
             self.show_help()
-        
-        elif command == 'report':
+
+        elif command == "report":
             self.approval_system.show_grade_report()
-        
-        elif command == 'approve' and len(sys.argv) >= 3:
+
+        elif command == "approve" and len(sys.argv) >= 3:
             request_id = sys.argv[2]
             if self.quick_approve(request_id):
                 print("✅ Aurora's request approved!")
-        
-        elif command == 'reject' and len(sys.argv) >= 3:
+
+        elif command == "reject" and len(sys.argv) >= 3:
             request_id = sys.argv[2]
             if self.quick_reject(request_id):
                 print("📚 Aurora will learn from this rejection!")
-        
-        elif command == 'grade' and len(sys.argv) >= 5:
+
+        elif command == "grade" and len(sys.argv) >= 5:
             request_id = sys.argv[2]
             try:
                 grade = int(sys.argv[3])
                 if not 1 <= grade <= 10:
                     print("❌ Grade must be between 1 and 10!")
                     return
-                
+
                 feedback = " ".join(sys.argv[4:])
                 if self.grade_request(request_id, grade, feedback):
                     print("✅ Aurora has been graded!")
             except ValueError:
                 print("❌ Grade must be a number between 1 and 10!")
-        
-        elif command == 'pending':
+
+        elif command == "pending":
             self.approval_system.show_pending_requests()
-        
+
         else:
             print("❌ Unknown command or missing arguments!")
             print("Use: python aurora_teacher.py help")

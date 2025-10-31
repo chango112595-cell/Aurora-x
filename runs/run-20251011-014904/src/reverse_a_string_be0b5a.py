@@ -2,7 +2,7 @@
 def reverse_a_string_be0b5a(text: str) -> str:
     """
     reverse a string
-    
+
     This is a generic template placeholder function.
     """
     """Reverse a unicode string."""
