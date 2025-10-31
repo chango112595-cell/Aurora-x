@@ -18,6 +18,7 @@ runs/latest
 semgrep.sarif
 # Self-learning daemon
 .self_learning.pid
+.self_learning_state.json
 
 # Logs
 logs
