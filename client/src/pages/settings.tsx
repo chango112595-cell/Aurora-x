@@ -13,6 +13,8 @@ import { Settings as SettingsIcon, Zap, Cpu, Activity } from "lucide-react";
 export default function Settings() {
   const [autoSynth, setAutoSynth] = useState(true);
   const [noveltyCache, setNoveltyCache] = useState(true);
+  const [beamWidth, setBeamWidth] = useState(20);
+  const [maxIters, setMaxIters] = useState(1000);
   const { toast } = useToast();
 
   // Fetch current T08 status on page load
@@ -38,8 +40,8 @@ export default function Settings() {
       setAutoSynth(data.t08_enabled);
       toast({
         title: "Success",
-        description: data.t08_enabled 
-          ? "T08 natural language synthesis activated" 
+        description: data.t08_enabled
+          ? "T08 natural language synthesis activated"
           : "T08 natural language synthesis deactivated",
       });
       // Invalidate query to ensure data stays in sync
@@ -64,6 +66,40 @@ export default function Settings() {
     toggleT08Mutation.mutate(checked);
   };
 
+  // Save settings function
+  const handleSaveSettings = () => {
+    // Save to localStorage
+    const settings = {
+      autoSynth,
+      noveltyCache,
+      beamWidth,
+      maxIters,
+      timestamp: Date.now()
+    };
+    localStorage.setItem("aurora-settings", JSON.stringify(settings));
+
+    toast({
+      title: "Settings Saved",
+      description: "Your Aurora configuration has been saved successfully.",
+    });
+  };
+
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("aurora-settings");
+    if (saved) {
+      try {
+        const settings = JSON.parse(saved);
+        setAutoSynth(settings.autoSynth ?? true);
+        setNoveltyCache(settings.noveltyCache ?? true);
+        setBeamWidth(settings.beamWidth ?? 20);
+        setMaxIters(settings.maxIters ?? 1000);
+      } catch (error) {
+        console.warn("Failed to load settings:", error);
+      }
+    }
+  }, []);
+
   return (
     <div className="h-full overflow-auto bg-gradient-to-br from-background via-background to-primary/5">
       <div className="p-6 space-y-6">
@@ -72,7 +108,7 @@ export default function Settings() {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-cyan-500/10 to-transparent animate-pulse" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl" />
-          
+
           <div className="relative flex items-center gap-4">
             <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/30 to-cyan-500/30 border border-primary/40 shadow-lg">
               <SettingsIcon className="h-8 w-8 text-primary" />
@@ -90,13 +126,13 @@ export default function Settings() {
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Aurora Configuration Card */}
-          <Card 
-            className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-card via-card to-primary/5 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300" 
+          <Card
+            className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-card via-card to-primary/5 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300"
             data-testid="card-aurora-settings"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-cyan-500/5" />
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl" />
-            
+
             <CardHeader className="relative">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-primary/20 border border-primary/30">
@@ -119,7 +155,10 @@ export default function Settings() {
                 <Input
                   id="beam-width"
                   type="number"
-                  defaultValue="120"
+                  min="1"
+                  max="100"
+                  value={beamWidth}
+                  onChange={(e) => setBeamWidth(parseInt(e.target.value) || 20)}
                   className="border-primary/30 bg-background/50 backdrop-blur-sm focus:border-primary focus:ring-primary/50 transition-all"
                   data-testid="input-beam-width"
                 />
@@ -132,7 +171,10 @@ export default function Settings() {
                 <Input
                   id="max-iters"
                   type="number"
-                  defaultValue="20"
+                  min="10"
+                  max="10000"
+                  value={maxIters}
+                  onChange={(e) => setMaxIters(parseInt(e.target.value) || 1000)}
                   className="border-primary/30 bg-background/50 backdrop-blur-sm focus:border-cyan-500 focus:ring-cyan-500/50 transition-all"
                   data-testid="input-max-iterations"
                 />
@@ -154,13 +196,13 @@ export default function Settings() {
           </Card>
 
           {/* Feature Toggles Card */}
-          <Card 
+          <Card
             className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-card via-card to-cyan-500/5 shadow-xl hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300"
             data-testid="card-feature-settings"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-primary/5" />
             <div className="absolute top-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl" />
-            
+
             <CardHeader className="relative">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-cyan-500/20 border border-cyan-500/30">
@@ -206,9 +248,10 @@ export default function Settings() {
                   className="data-[state=checked]:bg-cyan-500"
                 />
               </div>
-              <Button 
-                className="w-full bg-gradient-to-r from-primary to-cyan-500 hover:from-primary/90 hover:to-cyan-500/90 shadow-lg hover:shadow-xl hover:shadow-primary/30 transition-all text-white font-semibold" 
+              <Button
+                className="w-full bg-gradient-to-r from-primary to-cyan-500 hover:from-primary/90 hover:to-cyan-500/90 shadow-lg hover:shadow-xl hover:shadow-primary/30 transition-all text-white font-semibold"
                 data-testid="button-save-settings"
+                onClick={handleSaveSettings}
               >
                 <Zap className="mr-2 h-4 w-4" />
                 Save Settings

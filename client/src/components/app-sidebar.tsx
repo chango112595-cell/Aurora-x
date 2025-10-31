@@ -1,4 +1,4 @@
-import { MessageSquare, Code2, Activity, Database, Settings, Zap } from "lucide-react";
+import { MessageSquare, Code2, Activity, Database, Settings, Zap, GitCompare } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -28,6 +28,11 @@ const menuItems = [
     title: "Aurora Dashboard",
     url: "/dashboard",
     icon: Activity,
+  },
+  {
+    title: "Comparison",
+    url: "/comparison",
+    icon: GitCompare,
   },
   {
     title: "Self-Learning",
@@ -109,16 +114,14 @@ export function AppSidebar() {
                   >
                     <Link to={item.url}>
                       <div className="flex items-center gap-3 relative z-10">
-                        <item.icon className={`h-4 w-4 transition-all duration-300 drop-shadow-sm ${
-                          location === item.url
+                        <item.icon className={`h-4 w-4 transition-all duration-300 drop-shadow-sm ${location === item.url
                             ? 'text-primary animate-pulse'
                             : 'text-muted-foreground group-hover:text-primary group-hover:scale-110 group-hover:drop-shadow-md'
-                        }`} />
-                        <span className={`font-mono text-sm ${
-                          location === item.url
+                          }`} />
+                        <span className={`font-mono text-sm ${location === item.url
                             ? 'text-primary font-bold drop-shadow-sm'
                             : 'text-foreground font-medium group-hover:text-primary group-hover:font-semibold'
-                        }`}>
+                          }`}>
                           {item.title}
                         </span>
                       </div>
@@ -151,16 +154,14 @@ export function AppSidebar() {
               >
                 <Link to={item.url}>
                   <div className="flex items-center gap-3 relative z-10">
-                    <item.icon className={`h-4 w-4 transition-all duration-300 drop-shadow-sm ${
-                      location === item.url
+                    <item.icon className={`h-4 w-4 transition-all duration-300 drop-shadow-sm ${location === item.url
                         ? 'text-primary animate-pulse'
                         : 'text-muted-foreground group-hover:text-primary group-hover:scale-110 group-hover:drop-shadow-md'
-                    }`} />
-                    <span className={`font-mono text-sm ${
-                      location === item.url
+                      }`} />
+                    <span className={`font-mono text-sm ${location === item.url
                         ? 'text-primary font-bold drop-shadow-sm'
                         : 'text-foreground font-medium group-hover:text-primary group-hover:font-semibold'
-                    }`}>
+                      }`}>
                       {item.title}
                     </span>
                   </div>
@@ -177,34 +178,7 @@ export function AppSidebar() {
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent animate-scan shadow-lg shadow-primary/50" style={{ animationDelay: '2s' }} />
       </SidebarFooter>
 
-      <style jsx>{`
-        @keyframes gridPulse {
-          0%, 100% { opacity: 0.15; }
-          50% { opacity: 0.25; }
-        }
-        @keyframes scan {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateX(-10px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        .animate-scan {
-          animation: scan 3s linear infinite;
-        }
-        .animate-shimmer {
-          animation: shimmer 2s linear infinite;
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.5s ease-out forwards;
-          opacity: 0;
-        }
-      `}</style>
+
     </Sidebar>
   );
 }
