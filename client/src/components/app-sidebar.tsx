@@ -1,4 +1,4 @@
-import { MessageSquare, Code2, Activity, Database, Settings, Zap, GitCompare } from "lucide-react";
+import { MessageSquare, Code2, Activity, Database, Settings, Zap, GitCompare, Sparkles } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -33,6 +33,11 @@ const menuItems = [
     title: "Comparison",
     url: "/comparison",
     icon: GitCompare,
+  },
+  {
+    title: "Luminar Nexus",
+    url: "/luminar",
+    icon: Sparkles,
   },
   {
     title: "Self-Learning",
