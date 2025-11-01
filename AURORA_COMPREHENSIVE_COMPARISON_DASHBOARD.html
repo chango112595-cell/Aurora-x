@@ -1120,7 +1120,13 @@
         
         // Initialize dashboard
         function initializeDashboard() {
-            renderAllCards();
+            console.log('🚀 Initializing dashboard...');
+            try {
+                renderAllCards();
+                console.log('✅ Dashboard initialized successfully');
+            } catch (error) {
+                console.error('❌ Error initializing dashboard:', error);
+            }
         }
         
         // Render all cards
@@ -1136,20 +1142,25 @@
             
             // Clear all containers
             Object.values(categories).forEach(id => {
-                document.getElementById(id).innerHTML = '';
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = '';
+                else console.warn(`⚠️ Container not found: ${id}`);
             });
             
             // Populate cards
+            let cardsRendered = 0;
             Object.entries(fileDatabase).forEach(([filename, file]) => {
                 if (shouldDisplayFile(file)) {
                     const card = createFileCard(file);
                     const container = document.getElementById(categories[file.category]);
                     if (container) {
                         container.innerHTML += card;
+                        cardsRendered++;
                     }
                 }
             });
             
+            console.log(`📊 Rendered ${cardsRendered} cards`);
             updateCategoryCounts();
         }
         
