@@ -86,7 +86,7 @@ export function AppSidebar() {
           </div>
           <div>
             <h2 className="text-xl font-bold bg-gradient-to-r from-primary via-cyan-500 to-primary bg-clip-text text-transparent drop-shadow-sm">
-              Chango
+              Aurora
             </h2>
             <p className="text-[10px] text-muted-foreground font-mono font-semibold">
               <span className="text-primary animate-pulse drop-shadow-sm">●</span> Aurora-X Ultra

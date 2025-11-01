@@ -66,7 +66,7 @@ export default function Home() {
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 animate-gradient" 
                 data-testid="text-page-title"
                 style={{ animation: 'gradient 3s ease infinite' }}>
-              Chat with Chango
+              Chat with Aurora
             </h1>
             <p className="text-sm text-cyan-300/70 mt-2 font-mono">
               <span className="inline-block w-2 h-2 bg-cyan-400 rounded-full mr-2 animate-pulse" />
