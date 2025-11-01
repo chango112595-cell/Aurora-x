@@ -1,0 +1,103 @@
+# Aurora-x: Draft vs Main — Interactive Change Dashboard
+
+---
+
+## How to Use
+- **Click tabs** to filter by change type (All, Added, Modified, Deleted, Docs, Config, Binary)
+- **Click column headers** to sort
+- **Use search** to find files by name
+
+---
+
+<script>
+const changes = [
+  {status: 'Modified', file: '.aurora/seeds.json', added: 6, removed: 0, type: 'Config'},
+  {status: 'Modified', file: '.gitignore', added: 7, removed: 0, type: 'Config'},
+  {status: 'Added', file: '.self_learning_manual_stop', added: 1, removed: 0, type: 'Config'},
+  {status: 'Added', file: '.self_learning_state.json', added: 226, removed: 0, type: 'Config'},
+  {status: 'Added', file: '.vscode/mcp.json', added: 12, removed: 0, type: 'Config'},
+  {status: 'Added', file: 'BUILDING_WORKSPACE.md', added: 702, removed: 0, type: 'Docs'},
+  {status: 'Modified', file: 'README.md', added: 7, removed: 0, type: 'Docs'},
+  {status: 'Deleted', file: 'aurora_x.egg-info/dependency_links.txt', added: 0, removed: 1, type: 'Config'},
+  {status: 'Deleted', file: 'aurora_x.egg-info/entry_points.txt', added: 0, removed: 3, type: 'Config'},
+  {status: 'Deleted', file: 'aurora_x.egg-info/requires.txt', added: 0, removed: 12, type: 'Config'},
+  {status: 'Deleted', file: 'aurora_x.egg-info/top_level.txt', added: 0, removed: 1, type: 'Config'},
+  {status: 'Added', file: 'data/corpus.db-shm', added: '-', removed: '-', type: 'Binary'},
+  {status: 'Added', file: 'data/corpus.db-wal', added: '-', removed: '-', type: 'Binary'},
+];
+
+let currentFilter = 'All';
+let searchTerm = '';
+let sortColumn = 'file';
+let sortAsc = true;
+
+function setFilter(type) {
+  currentFilter = type;
+  renderTable();
+}
+function setSearch(term) {
+  searchTerm = term.toLowerCase();
+  renderTable();
+}
+function setSort(col) {
+  if (sortColumn === col) sortAsc = !sortAsc;
+  else { sortColumn = col; sortAsc = true; }
+  renderTable();
+}
+function renderTable() {
+  let filtered = changes.filter(c =>
+    (currentFilter === 'All' || c.type === currentFilter) &&
+    (searchTerm === '' || c.file.toLowerCase().includes(searchTerm))
+  );
+  filtered.sort((a, b) => {
+    if (a[sortColumn] < b[sortColumn]) return sortAsc ? -1 : 1;
+    if (a[sortColumn] > b[sortColumn]) return sortAsc ? 1 : -1;
+    return 0;
+  });
+  document.getElementById('change-table').innerHTML = `
+    <table style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th onclick="setSort('status')">Status</th>
+          <th onclick="setSort('file')">File</th>
+          <th onclick="setSort('added')">+Lines</th>
+          <th onclick="setSort('removed')">-Lines</th>
+          <th onclick="setSort('type')">Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filtered.map(c => `
+          <tr>
+            <td>${c.status}</td>
+            <td>${c.file}</td>
+            <td style="text-align:right;">${c.added}</td>
+            <td style="text-align:right;">${c.removed}</td>
+            <td>${c.type}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+window.setFilter = setFilter;
+window.setSearch = setSearch;
+window.setSort = setSort;
+window.onload = renderTable;
+</script>
+
+<div style="margin-bottom:1em;">
+  <button onclick="setFilter('All')">All</button>
+  <button onclick="setFilter('Added')">Added</button>
+  <button onclick="setFilter('Modified')">Modified</button>
+  <button onclick="setFilter('Deleted')">Deleted</button>
+  <button onclick="setFilter('Docs')">Docs</button>
+  <button onclick="setFilter('Config')">Config</button>
+  <button onclick="setFilter('Binary')">Binary</button>
+  <input type="text" placeholder="Search file..." oninput="setSearch(this.value)" style="margin-left:1em;" />
+</div>
+
+<div id="change-table"></div>
+
+---
+
+*Click tabs above to filter. Click column headers to sort. Use search to find files.*
