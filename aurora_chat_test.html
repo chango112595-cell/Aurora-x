@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aurora Chat Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            max-width: 800px;
+            margin: 50px auto;
+            background: #1a1a1a;
+            color: #00ff88;
+            padding: 20px;
+        }
+        #messages {
+            border: 1px solid #00ff88;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 300px;
+            background: #0a0a0a;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 3px solid #00ff88;
+        }
+        .user { color: #88ccff; }
+        .assistant { color: #00ff88; }
+        input, button {
+            background: #0a0a0a;
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            padding: 10px;
+            font-family: monospace;
+        }
+        button { cursor: pointer; }
+        button:hover { background: #00ff88; color: #0a0a0a; }
+    </style>
+</head>
+<body>
+    <h1>🌟 Aurora Chat Test Page</h1>
+    <p>This page directly tests the chat endpoint.</p>
+    
+    <input type="text" id="input" placeholder="Type your message..." style="width: 70%">
+    <button onclick="sendMessage()">Send</button>
+    
+    <div id="messages"></div>
+    
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const inputField = document.getElementById('input');
+        
+        function addMessage(role, content) {
+            const div = document.createElement('div');
+            div.className = 'message ' + role;
+            div.innerHTML = '<strong>' + role + ':</strong><br>' + content;
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        async function sendMessage() {
+            const prompt = inputField.value;
+            if (!prompt) return;
+            
+            addMessage('user', prompt);
+            inputField.value = '';
+            
+            try {
+                console.log('🌟 Sending to Aurora:', prompt);
+                
+                const response = await fetch('http://localhost:5001/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+                
+                console.log('📡 Response status:', response.status);
+                
+                const data = await response.json();
+                console.log('📦 Response data:', data);
+                
+                // Format Aurora's response
+                let auroraReply = '🌟 Aurora says:\n\n';
+                auroraReply += JSON.stringify(data, null, 2);
+                
+                addMessage('assistant', '<pre>' + auroraReply + '</pre>');
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                addMessage('assistant', '❌ Error: ' + error.message);
+            }
+        }
+        
+        inputField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Initial message
+        addMessage('assistant', '🌟 Aurora test page ready! Type a message to test the chat endpoint.');
+    </script>
+</body>
+</html>
