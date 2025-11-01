@@ -223,6 +223,36 @@ export default function ComparisonDashboard() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
             <div className="container mx-auto max-w-7xl">
+      {/* Aurora's Quantum Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-cyan-950/20 to-purple-950/20" />
+        
+        {/* Particle field */}
+        <div className="absolute inset-0 opacity-20" style={
+          backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+          animation: 'particleFloat 20s linear infinite'
+        } />
+        
+        {/* Neural network grid */}
+        <svg className="absolute inset-0 w-full h-full opacity-10">
+          <defs>
+            <linearGradient id="grid-ComparisonDashboard" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#a855f7" stopOpacity="0.5" />
+            </linearGradient>
+          </defs>
+          <pattern id="grid-pattern-ComparisonDashboard" width="50" height="50" patternUnits="userSpaceOnUse">
+            <circle cx="25" cy="25" r="1" fill="url(#grid-ComparisonDashboard)" />
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#grid-pattern-ComparisonDashboard)" />
+        </svg>
+        
+        {/* Holographic orbs */}
+        <div className="absolute top-20 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={animationDelay: '2s'} />
+      </div>
+
                 {/* Header */}
                 <div className="mb-8 text-center">
                     <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-4">
@@ -249,7 +279,7 @@ export default function ComparisonDashboard() {
                     <TabsContent value="git-comparison" className="space-y-6">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             {/* Commit Selection */}
-                            <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30">
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30 quantum-card">
                                 <CardHeader>
                                     <CardTitle className="text-cyan-400 flex items-center gap-2">
                                         <GitCommit className="w-5 h-5" />
@@ -304,7 +334,7 @@ export default function ComparisonDashboard() {
                             </Card>
 
                             {/* File Changes */}
-                            <Card className="bg-slate-800/50 backdrop-blur-sm border-green-500/30">
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-green-500/30 quantum-card">
                                 <CardHeader>
                                     <CardTitle className="text-green-400 flex items-center gap-2">
                                         <Code2 className="w-5 h-5" />
@@ -339,7 +369,7 @@ export default function ComparisonDashboard() {
 
                         {/* Full Diff View */}
                         {fileChanges.length > 0 && (
-                            <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30 quantum-card">
                                 <CardHeader>
                                     <CardTitle className="text-purple-400">Detailed Diff View</CardTitle>
                                     <CardDescription>
@@ -362,7 +392,7 @@ export default function ComparisonDashboard() {
                     <TabsContent value="branch-analysis" className="space-y-6">
                         <div className="grid grid-cols-1 gap-6">
                             {/* Branch Selection */}
-                            <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30">
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30 quantum-card">
                                 <CardHeader>
                                     <CardTitle className="text-cyan-400 flex items-center gap-2">
                                         <GitBranch className="w-5 h-5" />
@@ -455,7 +485,7 @@ export default function ComparisonDashboard() {
 
                             {/* Detailed Branch Analysis Results */}
                             {branchAnalysis && (
-                                <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30">
+                                <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30 quantum-card">
                                     <CardHeader>
                                         <CardTitle className="text-cyan-400 flex items-center gap-2">
                                             <TrendingUp className="w-5 h-5" />
@@ -562,7 +592,7 @@ export default function ComparisonDashboard() {
 
                     {/* Aurora Runs Tab */}
                     <TabsContent value="aurora-runs" className="space-y-6">
-                        <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30">
+                        <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30 quantum-card">
                             <CardHeader>
                                 <CardTitle className="text-cyan-400 flex items-center gap-2">
                                     <Zap className="w-5 h-5" />
@@ -611,7 +641,7 @@ export default function ComparisonDashboard() {
                     {/* Overview Tab */}
                     <TabsContent value="overview" className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-                            <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30">
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30 quantum-card">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="text-cyan-400 flex items-center gap-2">
                                         <GitBranch className="w-5 h-5" />
@@ -624,7 +654,7 @@ export default function ComparisonDashboard() {
                                 </CardContent>
                             </Card>
 
-                            <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30">
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/30 quantum-card">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="text-purple-400 flex items-center gap-2">
                                         <Code2 className="w-5 h-5" />
@@ -637,7 +667,7 @@ export default function ComparisonDashboard() {
                                 </CardContent>
                             </Card>
 
-                            <Card className="bg-slate-800/50 backdrop-blur-sm border-green-500/30">
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-green-500/30 quantum-card">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="text-green-400 flex items-center gap-2">
                                         <CheckCircle className="w-5 h-5" />
@@ -650,7 +680,7 @@ export default function ComparisonDashboard() {
                                 </CardContent>
                             </Card>
 
-                            <Card className="bg-slate-800/50 backdrop-blur-sm border-yellow-500/30">
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-yellow-500/30 quantum-card">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="text-yellow-400 flex items-center gap-2">
                                         <AlertCircle className="w-5 h-5" />
@@ -663,7 +693,7 @@ export default function ComparisonDashboard() {
                                 </CardContent>
                             </Card>
 
-                            <Card className="bg-slate-800/50 backdrop-blur-sm border-blue-500/30">
+                            <Card className="bg-slate-800/50 backdrop-blur-sm border-blue-500/30 quantum-card">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="text-blue-400 flex items-center gap-2">
                                         <TrendingUp className="w-5 h-5" />
@@ -778,7 +808,7 @@ export default function ComparisonDashboard() {
 
                     {/* Diagnostics Tab */}
                     <TabsContent value="diagnostics" className="space-y-6">
-                        <Card className="bg-slate-800/50 backdrop-blur-sm border-blue-500/30">
+                        <Card className="bg-slate-800/50 backdrop-blur-sm border-blue-500/30 quantum-card">
                             <CardHeader>
                                 <CardTitle className="text-blue-400 flex items-center gap-2">
                                     <Shield className="w-5 h-5" />
@@ -810,7 +840,7 @@ export default function ComparisonDashboard() {
 
                     {/* Approval Tab */}
                     <TabsContent value="approval" className="space-y-6">
-                        <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30">
+                        <Card className="bg-slate-800/50 backdrop-blur-sm border-cyan-500/30 quantum-card">
                             <CardHeader>
                                 <CardTitle className="text-cyan-400">Feature Approval System</CardTitle>
                                 <CardDescription>Review and approve features for production deployment</CardDescription>

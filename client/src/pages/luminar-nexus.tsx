@@ -44,6 +44,36 @@ export default function LuminarNexus() {
   return (
     <div className="h-full overflow-auto bg-gradient-to-br from-background via-background to-primary/5 p-6">
       <div className="container mx-auto space-y-6 max-w-7xl">
+      {/* Aurora's Quantum Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-cyan-950/20 to-purple-950/20" />
+        
+        {/* Particle field */}
+        <div className="absolute inset-0 opacity-20" style={
+          backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+          animation: 'particleFloat 20s linear infinite'
+        } />
+        
+        {/* Neural network grid */}
+        <svg className="absolute inset-0 w-full h-full opacity-10">
+          <defs>
+            <linearGradient id="grid-luminar-nexus" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#a855f7" stopOpacity="0.5" />
+            </linearGradient>
+          </defs>
+          <pattern id="grid-pattern-luminar-nexus" width="50" height="50" patternUnits="userSpaceOnUse">
+            <circle cx="25" cy="25" r="1" fill="url(#grid-luminar-nexus)" />
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#grid-pattern-luminar-nexus)" />
+        </svg>
+        
+        {/* Holographic orbs */}
+        <div className="absolute top-20 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={animationDelay: '2s'} />
+      </div>
+
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-cyan-500 to-purple-500 bg-clip-text text-transparent mb-2">
             🌟 Luminar Nexus

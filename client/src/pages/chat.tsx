@@ -125,6 +125,36 @@ export default function ChatPage() {
 
     return (
         <div className="flex flex-col h-screen bg-gray-950">
+      {/* Aurora's Quantum Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-cyan-950/20 to-purple-950/20" />
+        
+        {/* Particle field */}
+        <div className="absolute inset-0 opacity-20" style={
+          backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+          animation: 'particleFloat 20s linear infinite'
+        } />
+        
+        {/* Neural network grid */}
+        <svg className="absolute inset-0 w-full h-full opacity-10">
+          <defs>
+            <linearGradient id="grid-chat" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#a855f7" stopOpacity="0.5" />
+            </linearGradient>
+          </defs>
+          <pattern id="grid-pattern-chat" width="50" height="50" patternUnits="userSpaceOnUse">
+            <circle cx="25" cy="25" r="1" fill="url(#grid-chat)" />
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#grid-pattern-chat)" />
+        </svg>
+        
+        {/* Holographic orbs */}
+        <div className="absolute top-20 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={animationDelay: '2s'} />
+      </div>
+
             {/* Header */}
             <div className="border-b border-cyan-500/20 bg-gray-900/50 backdrop-blur-sm">
                 <div className="container mx-auto px-4 py-4">

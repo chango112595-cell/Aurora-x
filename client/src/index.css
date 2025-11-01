@@ -398,3 +398,34 @@
     inset: -1px;
   }
 }
+/* Aurora's Quantum UI Styles */
+.quantum-card {
+  @apply bg-gradient-to-br from-slate-900/80 to-slate-800/80;
+  @apply border border-cyan-500/30;
+  @apply backdrop-blur-md;
+  @apply shadow-lg shadow-cyan-500/20;
+  transition: all 0.3s ease;
+}
+
+.quantum-card:hover {
+  @apply border-cyan-400/50;
+  @apply shadow-xl shadow-cyan-500/30;
+  transform: translateY(-2px);
+}
+
+.quantum-button {
+  @apply bg-gradient-to-r from-cyan-500 to-purple-500;
+  @apply text-white font-semibold;
+  @apply border border-cyan-400/50;
+  @apply shadow-lg shadow-cyan-500/50;
+  transition: all 0.3s ease;
+}
+
+.quantum-button:hover {
+  @apply shadow-xl shadow-purple-500/50;
+  transform: scale(1.05);
+}
+
+.quantum-glow {
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+}
