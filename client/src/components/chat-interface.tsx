@@ -60,24 +60,21 @@ export function ChatInterface() {
     {
       id: '0',
       role: 'assistant',
-      content: `👋 Welcome to Aurora-X! I can help you with:
+      content: `🌟 Hello! I'm Aurora, your AI companion for code generation and problem solving.
 
-**🚀 Code Generation:**
-• "Create a React dashboard with user authentication"
-• "Build a Flask API with database integration"
-• "Generate a Python CLI tool for file processing"
+**✨ I can help you with:**
+• Code generation in any language
+• Math and physics problem solving
+• Project scaffolding and architecture
+• API development and testing
 
-**🧮 Math & Physics:**
-• "Solve 2 + 3 * 4" or "/solve differentiate x^3 - 2x^2"
-• "orbital period a=7000km M=5.972e24kg"
+**💫 Try asking me:**
+• "Create a Python web scraper"
+• "Build a REST API with authentication"
+• "Solve this equation: x^2 + 5x + 6 = 0"
+• "/progress" to see project status
 
-**📊 Commands:**
-• "/progress" - View project progress
-• "/stats" - Adaptive learning statistics
-• "/corpus" - Recent corpus entries
-• "/solve <expr>" - Solve math/physics expressions
-
-Just type what you want in natural language - I'll understand and generate it for you!`,
+I'm here to make your development journey smoother. What would you like to create today?`,
       timestamp: new Date()
     }
   ]);
@@ -474,7 +471,7 @@ Just type what you want in natural language - I'll understand and generate it fo
                   <Avatar className="h-10 w-10 border-2 border-cyan-500/50 shadow-lg shadow-cyan-500/20 relative">
                     <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 animate-pulse" />
                     <AvatarFallback className="bg-gradient-to-br from-cyan-600 to-purple-600 text-white font-bold relative z-10">
-                      C
+                      A
                     </AvatarFallback>
                   </Avatar>
                 )}
@@ -556,7 +553,7 @@ Just type what you want in natural language - I'll understand and generate it fo
                 handleSend();
               }
             }}
-            placeholder="Ask Chango to generate code..."
+            placeholder="Ask Aurora to create something amazing... ✨"
             className="min-h-[56px] max-h-32 resize-none bg-muted/50"
             data-testid="input-chat"
             disabled={isLoading} // Disable input while loading
