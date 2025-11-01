@@ -1,7 +1,7 @@
 # hello_aurora
 
 ## Description
-Function to Hello Aurora
+Function to hello aurora
 
 ## Signature
 ```

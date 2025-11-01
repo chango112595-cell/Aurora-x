@@ -44,6 +44,13 @@ if static_dir.exists() and any(static_dir.iterdir()):
 # Include dashboard router
 app.include_router(make_router(static_dir, templates_dir))
 
+# Include server control API (Aurora's fix for Server Control page)
+try:
+    from aurora_x.api.server_control import router as server_control_router
+    app.include_router(server_control_router)
+except ImportError:
+    pass  # API endpoints not available yet
+
 # Attach English mode addons
 attach_factory(app)
 

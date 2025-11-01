@@ -1,4 +1,4 @@
-import { MessageSquare, Code2, Activity, Database, Settings, Zap, GitCompare, Sparkles } from "lucide-react";
+import { MessageSquare, Code2, Activity, Database, Settings, Zap, GitCompare, Sparkles, Server } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -16,7 +16,7 @@ import { useLocation, Link } from "wouter";
 const menuItems = [
   {
     title: "Chat",
-    url: "/",
+    url: "/chat",
     icon: MessageSquare,
   },
   {
@@ -38,6 +38,11 @@ const menuItems = [
     title: "Luminar Nexus",
     url: "/luminar",
     icon: Sparkles,
+  },
+  {
+    title: "Server Control",
+    url: "/servers",
+    icon: Server,
   },
   {
     title: "Self-Learning",
@@ -120,12 +125,12 @@ export function AppSidebar() {
                     <Link to={item.url}>
                       <div className="flex items-center gap-3 relative z-10">
                         <item.icon className={`h-4 w-4 transition-all duration-300 drop-shadow-sm ${location === item.url
-                            ? 'text-primary animate-pulse'
-                            : 'text-muted-foreground group-hover:text-primary group-hover:scale-110 group-hover:drop-shadow-md'
+                          ? 'text-primary animate-pulse'
+                          : 'text-muted-foreground group-hover:text-primary group-hover:scale-110 group-hover:drop-shadow-md'
                           }`} />
                         <span className={`font-mono text-sm ${location === item.url
-                            ? 'text-primary font-bold drop-shadow-sm'
-                            : 'text-foreground font-medium group-hover:text-primary group-hover:font-semibold'
+                          ? 'text-primary font-bold drop-shadow-sm'
+                          : 'text-foreground font-medium group-hover:text-primary group-hover:font-semibold'
                           }`}>
                           {item.title}
                         </span>
@@ -160,12 +165,12 @@ export function AppSidebar() {
                 <Link to={item.url}>
                   <div className="flex items-center gap-3 relative z-10">
                     <item.icon className={`h-4 w-4 transition-all duration-300 drop-shadow-sm ${location === item.url
-                        ? 'text-primary animate-pulse'
-                        : 'text-muted-foreground group-hover:text-primary group-hover:scale-110 group-hover:drop-shadow-md'
+                      ? 'text-primary animate-pulse'
+                      : 'text-muted-foreground group-hover:text-primary group-hover:scale-110 group-hover:drop-shadow-md'
                       }`} />
                     <span className={`font-mono text-sm ${location === item.url
-                        ? 'text-primary font-bold drop-shadow-sm'
-                        : 'text-foreground font-medium group-hover:text-primary group-hover:font-semibold'
+                      ? 'text-primary font-bold drop-shadow-sm'
+                      : 'text-foreground font-medium group-hover:text-primary group-hover:font-semibold'
                       }`}>
                       {item.title}
                     </span>
