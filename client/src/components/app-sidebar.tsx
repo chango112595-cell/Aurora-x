@@ -33,7 +33,7 @@ export function AppSidebar() {
         
         {/* Animated particle field */}
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle, rgba(6, 182, 212, 0.4) 1px, transparent 1px)`,
+          backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.4) 1px, transparent 1px)',
           backgroundSize: '50px 50px',
           animation: 'particleFloat 20s linear infinite'
         }} />
