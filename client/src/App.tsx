@@ -20,6 +20,7 @@ import Corpus from "@/pages/corpus";
 import Settings from "@/pages/settings";
 import SelfLearning from "@/pages/self-learning";
 import ComparisonDashboard from "@/pages/ComparisonDashboard";
+import LuminarNexus from "@/pages/luminar-nexus";
 
 function Router() {
   return (
@@ -27,6 +28,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/comparison" component={ComparisonDashboard} />
+      <Route path="/luminar" component={LuminarNexus} />
       <Route path="/library" component={Library} />
       <Route path="/corpus" component={Corpus} />
       <Route path="/self-learning" component={SelfLearning} />
