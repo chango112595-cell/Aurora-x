@@ -246,7 +246,7 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
   const inDevelopmentTasks = tasks.filter(t => parseStatus(t.status || "") === "in-development").length;
 
   return (
-    <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary/10 via-background to-cyan-500/5 relative overflow-hidden">
+    <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary/10 via-background to-cyan-500/5 relative overflow-hidden quantum-card">
       <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,white,transparent)]" />
       <CardHeader className="relative">
         <div className="flex items-center justify-between">
@@ -405,7 +405,7 @@ const CorpusExplorerSection = () => {
     <>
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-3 mb-6">
-        <Card className="bg-secondary/30 border-primary/10">
+        <Card className="bg-secondary/30 border-primary/10 quantum-card">
           <CardContent className="pt-6">
             <div className="text-center">
               <Database className="h-8 w-8 mx-auto mb-2 text-chart-1" />
@@ -414,7 +414,7 @@ const CorpusExplorerSection = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-secondary/30 border-primary/10">
+        <Card className="bg-secondary/30 border-primary/10 quantum-card">
           <CardContent className="pt-6">
             <div className="text-center">
               <CheckCircle className="h-8 w-8 mx-auto mb-2 text-chart-2" />
@@ -423,7 +423,7 @@ const CorpusExplorerSection = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-secondary/30 border-primary/10">
+        <Card className="bg-secondary/30 border-primary/10 quantum-card">
           <CardContent className="pt-6">
             <div className="text-center">
               <Zap className="h-8 w-8 mx-auto mb-2 text-chart-3" />
@@ -436,7 +436,7 @@ const CorpusExplorerSection = () => {
 
       {/* Latest Run Status */}
       {metaData?.meta && (
-        <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background">
+        <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background quantum-card">
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-primary/10">
@@ -494,7 +494,7 @@ const CorpusExplorerSection = () => {
       )}
 
       {/* Corpus Records Card */}
-      <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background">
+      <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background quantum-card">
         <CardHeader>
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
@@ -811,7 +811,7 @@ const ProjectGenerationSection_REMOVED = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+        <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-background to-secondary/5 quantum-card">
           {/* Animated Background Gradient */}
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-secondary/10 animate-pulse" />
 
@@ -914,7 +914,7 @@ const ProjectGenerationSection_REMOVED = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <Card className="border-primary/10">
+          <Card className="border-primary/10 quantum-card">
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Package className="h-5 w-5 text-primary" />
@@ -1055,7 +1055,7 @@ const SolverSection = () => {
       transition={{ duration: 0.5, delay: 0.2 }}
       className="mb-8"
     >
-      <Card className="relative overflow-hidden border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-emerald-500/5">
+      <Card className="relative overflow-hidden border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-emerald-500/5 quantum-card">
         {/* Animated Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-emerald-500/5 animate-pulse" />
 
@@ -1484,7 +1484,7 @@ export default function Dashboard() {
       <div className="h-full overflow-auto">
         <div className="p-6">
           <h1 className="text-3xl font-bold mb-2" data-testid="text-page-title">Aurora-X Dashboard</h1>
-          <Card className="p-6 border-destructive/20">
+          <Card className="p-6 border-destructive/20 quantum-card">
             <div className="flex items-center gap-3 mb-4">
               <WifiOff className="h-5 w-5 text-destructive" data-testid="icon-connection-error" />
               <p className="text-destructive" data-testid="text-error">
@@ -1590,7 +1590,7 @@ export default function Dashboard() {
 
         {/* Active Now Section */}
         {data.active && data.active.length > 0 && (
-          <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background">
+          <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background quantum-card">
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Activity className="h-5 w-5 text-primary animate-pulse" />

@@ -174,8 +174,9 @@ export function ChatInterface() {
                                   j % 2 === 1 ? <strong key={j}>{part}</strong> : part
                                 )}
                               </div>
-                            );
-                          }
+    </QuantumBackground>
+  );
+}
                           if (line.includes('`')) {
                             const parts = line.split('`');
                             return (
@@ -186,8 +187,9 @@ export function ChatInterface() {
                                   ) : part
                                 )}
                               </div>
-                            );
-                          }
+    </QuantumBackground>
+  );
+}
                           return <div key={i}>{line}</div>;
                         })}
                       </div>
@@ -259,5 +261,6 @@ export function ChatInterface() {
         </div>
       </div>
     </div>
+    </QuantumBackground>
   );
 }
