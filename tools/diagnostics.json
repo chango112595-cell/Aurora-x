@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-11-01T12:24:11.153440",
+  "services": {
+    "5000": {
+      "name": "Aurora UI (frontend)",
+      "status": "DOWN"
+    },
+    "5001": {
+      "name": "Aurora backend (uvicorn)",
+      "status": "DOWN"
+    },
+    "5002": {
+      "name": "Learning API / FastAPI",
+      "status": "DOWN"
+    },
+    "8080": {
+      "name": "File Server",
+      "status": "DOWN"
+    },
+    "8000": {
+      "name": "Standalone dashboards (legacy)",
+      "status": "UP"
+    }
+  },
+  "system_info": {
+    "python_version": "3.12.1 (main, Jul 10 2025, 11:57:50) [GCC 13.3.0]",
+    "working_directory": "/workspaces/Aurora-x",
+    "diagnostics_file": "/workspaces/Aurora-x/tools/diagnostics.json"
+  }
+}
