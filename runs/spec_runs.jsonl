@@ -12,3 +12,7 @@
 {"run_id": "run-20251030-050026", "spec": "decrypt_program.md", "ok": true, "report": "/runs/run-20251030-050026/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251030-051139", "spec": "generate_analytic_program.md", "ok": true, "report": "/runs/run-20251030-051139/report.html", "bias": null, "spark": null}
 {"run_id": "run-20251030-051139", "spec": "generate_analytic_program.md", "ok": true, "report": "/runs/run-20251030-051139/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251101-125023", "spec": "run_python_toolsfull_diagnosti.md", "ok": true, "report": "/runs/run-20251101-125023/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251101-125023", "spec": "run_python_toolsfull_diagnosti.md", "ok": true, "report": "/runs/run-20251101-125023/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251101-135807", "spec": "fix_chat_and_see.md", "ok": true, "report": "/runs/run-20251101-135807/report.html", "bias": null, "spark": null}
+{"run_id": "run-20251101-135807", "spec": "fix_chat_and_see.md", "ok": true, "report": "/runs/run-20251101-135807/report.html", "bias": null, "spark": null}
