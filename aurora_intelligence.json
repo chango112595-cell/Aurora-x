@@ -406,5 +406,9 @@
       "confidence": 0.7
     }
   },
-  "last_updated": "2025-11-01T00:00:00.000000"
+  "last_updated": "2025-11-01T00:00:00.000000",
+  "auto_fix_enabled": true,
+  "guardian_mode": "active",
+  "autonomous_healing": true,
+  "scan_interval_seconds": 15
 }
