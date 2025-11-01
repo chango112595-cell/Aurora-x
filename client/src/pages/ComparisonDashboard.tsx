@@ -267,7 +267,7 @@ export default function ComparisonDashboard() {
                                                 <SelectValue placeholder="Select base commit" />
                                             </SelectTrigger>
                                             <SelectContent className="bg-slate-800 border-slate-600">
-                                                <SelectItem value="">Working Directory</SelectItem>
+                                                <SelectItem value="working-dir">Working Directory</SelectItem>
                                                 {commits.map((commit) => (
                                                     <SelectItem key={commit.hash} value={commit.hash}>
                                                         {commit.short_hash}: {commit.message}
@@ -283,7 +283,7 @@ export default function ComparisonDashboard() {
                                                 <SelectValue placeholder="Select commit to compare" />
                                             </SelectTrigger>
                                             <SelectContent className="bg-slate-800 border-slate-600">
-                                                <SelectItem value="">Working Directory</SelectItem>
+                                                <SelectItem value="working-dir">Working Directory</SelectItem>
                                                 {commits.map((commit) => (
                                                     <SelectItem key={commit.hash} value={commit.hash}>
                                                         {commit.short_hash}: {commit.message}
