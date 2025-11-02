@@ -354,8 +354,18 @@
       "timestamp": "2025-11-02T19:02:08.500569",
       "success": true,
       "run_dir": "runs/run-20251102-190208"
+    },
+    "add_two_numbers.md": {
+      "timestamp": "2025-11-02T19:02:23.805884",
+      "success": true,
+      "run_dir": "runs/run-20251102-190223"
+    },
+    "generate_decryption.md": {
+      "timestamp": "2025-11-02T19:02:39.051320",
+      "success": true,
+      "run_dir": "runs/run-20251102-190238"
     }
   },
-  "last_updated": "2025-11-02T19:02:08.500579",
-  "run_count": 40
+  "last_updated": "2025-11-02T19:02:39.051329",
+  "run_count": 42
 }
