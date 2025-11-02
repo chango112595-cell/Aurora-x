@@ -221,11 +221,11 @@ export default function ServerControl() {
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-cyan-950/20 to-purple-950/20" />
         
         {/* Particle field */}
-        <div className="absolute inset-0 opacity-20" style={
+        <div className="absolute inset-0 opacity-20" style={{
           backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 1px, transparent 1px)',
           backgroundSize: '50px 50px',
           animation: 'particleFloat 20s linear infinite'
-        } />
+        }} />
         
         {/* Neural network grid */}
         <svg className="absolute inset-0 w-full h-full opacity-10">
@@ -243,7 +243,7 @@ export default function ServerControl() {
         
         {/* Holographic orbs */}
         <div className="absolute top-20 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={animationDelay: '2s'} />
+        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
 
@@ -297,7 +297,7 @@ export default function ServerControl() {
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <Button
                                         onClick={startAllServices}
-                                        disabled={allServicesRunning}
+                                        disabled={allServicesRunning || false}
                                         size="lg"
                                         variant={allServicesRunning ? "secondary" : "default"}
                                         className="h-16 text-lg font-semibold gap-3"
