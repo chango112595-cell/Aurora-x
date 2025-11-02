@@ -56,12 +56,12 @@ class LuminarNexusServerManager:
     def check_tmux_installed(self) -> bool:
         """Check if tmux is available"""
         try:
-            subprocess.run(['tmux', '-V'], capture_output=True, check=True)
+            subprocess.run(['tmux', '-V'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
             return True
         except:
             print("❌ tmux not installed. Installing...")
-            subprocess.run(['apt-get', 'update'], capture_output=True)
-            subprocess.run(['apt-get', 'install', '-y', 'tmux'], capture_output=True)
+            subprocess.run(['apt-get', 'update'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            subprocess.run(['apt-get', 'install', '-y', 'tmux'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             return True
     
     def start_server(self, server_key: str) -> bool:
@@ -86,7 +86,7 @@ class LuminarNexusServerManager:
         # Create new tmux session and run command
         result = subprocess.run([
             'tmux', 'new-session', '-d', '-s', session, command
-        ], capture_output=True, text=True)
+        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         
         if result.returncode == 0:
             print(f"   ✅ Started in tmux session: {session}")
@@ -144,7 +144,7 @@ class LuminarNexusServerManager:
         
         try:
             result = subprocess.run(['curl', '-s', '-I', health_url],
-                                  capture_output=True, text=True, timeout=2)
+                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=2)
             
             if "200" in result.stdout or "OK" in result.stdout:
                 return True

@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-11-02T21:27:21.125633",
+  "issues": [
+    {
+      "timestamp": "2025-11-02T21:27:21.125139",
+      "severity": "ERROR",
+      "issue": "Still mixing capture_output with DEVNULL in the code!",
+      "system": "AURORA_SELF_DIAGNOSTIC"
+    },
+    {
+      "timestamp": "2025-11-02T21:27:21.125358",
+      "severity": "ERROR",
+      "issue": "package.json not found in client directory!",
+      "system": "AURORA_SELF_DIAGNOSTIC"
+    }
+  ],
+  "fixes": [],
+  "status": "NEEDS_ATTENTION"
+}
