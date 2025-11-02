@@ -1,0 +1,4 @@
+{"timestamp": "2025-11-02T21:09:40.029640", "event": "SERVER_STARTED", "server": "vite", "details": {"session": "aurora-vite", "port": 5173, "command": "cd /workspaces/Aurora-x/client && npm run dev"}, "system": "LUMINAR_NEXUS"}
+{"timestamp": "2025-11-02T21:09:45.097655", "event": "SERVER_STARTED", "server": "backend", "details": {"session": "aurora-api", "port": 5001, "command": "cd /workspaces/Aurora-x && npm run server"}, "system": "LUMINAR_NEXUS"}
+{"timestamp": "2025-11-02T21:19:22.680577", "event": "SERVER_STARTED", "server": "vite", "details": {"session": "aurora-vite", "port": 5173, "command": "cd /workspaces/Aurora-x/client && npm run dev"}, "system": "LUMINAR_NEXUS"}
+{"timestamp": "2025-11-02T21:19:27.726551", "event": "SERVER_STARTED", "server": "backend", "details": {"session": "aurora-api", "port": 5001, "command": "cd /workspaces/Aurora-x && npm run server"}, "system": "LUMINAR_NEXUS"}
