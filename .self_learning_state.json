@@ -1,326 +1,236 @@
 {
   "processed_specs": {
-    "what_orbit_location.md": {
-      "timestamp": "2025-11-02T20:06:59.726146",
+    "auto_c94801f9.md": {
+      "timestamp": "2025-11-02T21:08:54.428935",
       "success": true,
-      "run_dir": "runs/run-20251102-200659"
-    },
-    "is_palindrome.md": {
-      "timestamp": "2025-11-02T20:07:14.788484",
-      "success": true,
-      "run_dir": "runs/run-20251102-200714"
-    },
-    "generate_decryption_program.md": {
-      "timestamp": "2025-11-02T20:07:29.851187",
-      "success": true,
-      "run_dir": "runs/run-20251102-200729"
-    },
-    "generate_multicomplex_time_clo.md": {
-      "timestamp": "2025-11-02T20:07:44.951002",
-      "success": true,
-      "run_dir": "runs/run-20251102-200744"
-    },
-    "self_diagnosis.md": {
-      "timestamp": "2025-11-02T20:08:00.014876",
-      "success": true,
-      "run_dir": "runs/run-20251102-200759"
-    },
-    "generate_analytic_program.md": {
-      "timestamp": "2025-11-02T20:08:15.080645",
-      "success": true,
-      "run_dir": "runs/run-20251102-200815"
-    },
-    "if_are_getting_messages.md": {
-      "timestamp": "2025-11-02T20:08:30.273130",
-      "success": true,
-      "run_dir": "runs/run-20251102-200830"
-    },
-    "generate_most_complex_time.md": {
-      "timestamp": "2025-11-02T20:08:45.340604",
-      "success": true,
-      "run_dir": "runs/run-20251102-200845"
-    },
-    "auto_557a3aa6.md": {
-      "timestamp": "2025-11-02T20:09:00.402098",
-      "success": true,
-      "run_dir": "runs/run-20251102-200900"
-    },
-    "generate_futuristic_clock.md": {
-      "timestamp": "2025-11-02T20:09:15.468327",
-      "success": true,
-      "run_dir": "runs/run-20251102-200915"
-    },
-    "generate_voice_overlap_recordi.md": {
-      "timestamp": "2025-11-02T20:09:30.528597",
-      "success": true,
-      "run_dir": "runs/run-20251102-200930"
-    },
-    "generate_anti_virus.md": {
-      "timestamp": "2025-11-02T20:09:45.591987",
-      "success": true,
-      "run_dir": "runs/run-20251102-200945"
-    },
-    "write_simple_hello_world.md": {
-      "timestamp": "2025-11-02T20:10:00.653848",
-      "success": true,
-      "run_dir": "runs/run-20251102-201000"
-    },
-    "test_add_two_numbers.md": {
-      "timestamp": "2025-11-02T20:10:15.712983",
-      "success": true,
-      "run_dir": "runs/run-20251102-201015"
-    },
-    "create_hello_world_function.md": {
-      "timestamp": "2025-11-02T20:10:30.781217",
-      "success": true,
-      "run_dir": "runs/run-20251102-201030"
-    },
-    "what_have_learned.md": {
-      "timestamp": "2025-11-02T20:10:45.845816",
-      "success": true,
-      "run_dir": "runs/run-20251102-201045"
-    },
-    "auto_ea78d353.md": {
-      "timestamp": "2025-11-02T20:11:00.908134",
-      "success": true,
-      "run_dir": "runs/run-20251102-201100"
-    },
-    "auto_5a6748d5.md": {
-      "timestamp": "2025-11-02T20:11:16.134364",
-      "success": true,
-      "run_dir": "runs/run-20251102-201115"
-    },
-    "auto_c44b6cbc.md": {
-      "timestamp": "2025-11-02T20:11:31.235668",
-      "success": true,
-      "run_dir": "runs/run-20251102-201131"
-    },
-    "create_test_function.md": {
-      "timestamp": "2025-11-02T20:11:46.315570",
-      "success": true,
-      "run_dir": "runs/run-20251102-201146"
-    },
-    "calculate_meaning_life.md": {
-      "timestamp": "2025-11-02T20:12:01.385235",
-      "success": true,
-      "run_dir": "runs/run-20251102-201201"
-    },
-    "count_vowels.md": {
-      "timestamp": "2025-11-02T20:12:16.474803",
-      "success": true,
-      "run_dir": "runs/run-20251102-201216"
-    },
-    "okay_generate_codes_clock.md": {
-      "timestamp": "2025-11-02T20:12:31.554265",
-      "success": true,
-      "run_dir": "runs/run-20251102-201231"
-    },
-    "learn_how_make_best.md": {
-      "timestamp": "2025-11-02T20:12:46.635966",
-      "success": true,
-      "run_dir": "runs/run-20251102-201246"
-    },
-    "hello.md": {
-      "timestamp": "2025-11-02T20:13:01.701251",
-      "success": true,
-      "run_dir": "runs/run-20251102-201301"
+      "run_dir": "runs/run-20251102-210854"
     },
     "test_calculate_factorial.md": {
-      "timestamp": "2025-11-02T20:13:16.763329",
+      "timestamp": "2025-11-02T21:09:09.493828",
       "success": true,
-      "run_dir": "runs/run-20251102-201316"
+      "run_dir": "runs/run-20251102-210909"
     },
-    "analyze_current_aurorax_codeba.md": {
-      "timestamp": "2025-11-02T20:13:31.937734",
+    "rich_spec_v2.md": {
+      "timestamp": "2025-11-02T21:09:24.605994",
       "success": true,
-      "run_dir": "runs/run-20251102-201331"
-    },
-    "hello_aurora.md": {
-      "timestamp": "2025-11-02T20:13:47.006891",
-      "success": true,
-      "run_dir": "runs/run-20251102-201346"
-    },
-    "run_synthesis.md": {
-      "timestamp": "2025-11-02T20:14:02.068573",
-      "success": true,
-      "run_dir": "runs/run-20251102-201402"
-    },
-    "factorial.md": {
-      "timestamp": "2025-11-02T20:14:17.251217",
-      "success": true,
-      "run_dir": "runs/run-20251102-201417"
-    },
-    "auto_1602c3fa.md": {
-      "timestamp": "2025-11-02T20:14:32.316675",
-      "success": true,
-      "run_dir": "runs/run-20251102-201432"
-    },
-    "auto_865b4b71.md": {
-      "timestamp": "2025-11-02T20:14:47.378513",
-      "success": true,
-      "run_dir": "runs/run-20251102-201447"
-    },
-    "auto_0b6592c7.md": {
-      "timestamp": "2025-11-02T20:15:02.442876",
-      "success": true,
-      "run_dir": "runs/run-20251102-201502"
-    },
-    "gcd.md": {
-      "timestamp": "2025-11-02T20:15:17.704356",
-      "success": true,
-      "run_dir": "runs/run-20251102-201517"
+      "run_dir": "runs/run-20251102-210924"
     },
     "auto_00ba140c.md": {
-      "timestamp": "2025-11-02T20:15:32.777790",
+      "timestamp": "2025-11-02T21:09:39.716722",
       "success": true,
-      "run_dir": "runs/run-20251102-201532"
+      "run_dir": "runs/run-20251102-210939"
     },
-    "generate_antivirus.md": {
-      "timestamp": "2025-11-02T20:15:47.840096",
+    "learn_how_make_best.md": {
+      "timestamp": "2025-11-02T21:09:54.893692",
       "success": true,
-      "run_dir": "runs/run-20251102-201547"
+      "run_dir": "runs/run-20251102-210954"
     },
-    "test_reverse_a_string.md": {
-      "timestamp": "2025-11-02T20:16:02.905368",
+    "generate_multicomplex_time_clo.md": {
+      "timestamp": "2025-11-02T21:10:09.972378",
       "success": true,
-      "run_dir": "runs/run-20251102-201602"
+      "run_dir": "runs/run-20251102-211009"
     },
-    "make_anti_virus.md": {
-      "timestamp": "2025-11-02T20:16:17.967806",
+    "create_api_endpoints_aurora_xs.md": {
+      "timestamp": "2025-11-02T21:10:25.074220",
       "success": true,
-      "run_dir": "runs/run-20251102-201617"
-    },
-    "create_flask_web_app_app.md": {
-      "timestamp": "2025-11-02T20:16:33.030905",
-      "success": true,
-      "run_dir": "runs/run-20251102-201632"
-    },
-    "generate_hello_world_function.md": {
-      "timestamp": "2025-11-02T20:16:48.096194",
-      "success": true,
-      "run_dir": "runs/run-20251102-201648"
-    },
-    "auto_b47c2b77.md": {
-      "timestamp": "2025-11-02T20:17:03.198284",
-      "success": true,
-      "run_dir": "runs/run-20251102-201703"
-    },
-    "auto_ef4957ec.md": {
-      "timestamp": "2025-11-02T20:17:18.314857",
-      "success": true,
-      "run_dir": "runs/run-20251102-201718"
-    },
-    "auto_92ef6a7b.md": {
-      "timestamp": "2025-11-02T20:17:33.423260",
-      "success": true,
-      "run_dir": "runs/run-20251102-201733"
-    },
-    "auto_4eb935ca.md": {
-      "timestamp": "2025-11-02T20:17:48.485685",
-      "success": true,
-      "run_dir": "runs/run-20251102-201748"
-    },
-    "generate_ui_timer_futuristic.md": {
-      "timestamp": "2025-11-02T20:18:03.549788",
-      "success": true,
-      "run_dir": "runs/run-20251102-201803"
-    },
-    "decrypt_program.md": {
-      "timestamp": "2025-11-02T20:18:18.628130",
-      "success": true,
-      "run_dir": "runs/run-20251102-201818"
-    },
-    "test_orchestrator.md": {
-      "timestamp": "2025-11-02T20:18:33.688921",
-      "success": true,
-      "run_dir": "runs/run-20251102-201833"
-    },
-    "fibonacci_sequence.md": {
-      "timestamp": "2025-11-02T20:18:48.749235",
-      "success": true,
-      "run_dir": "runs/run-20251102-201848"
-    },
-    "create_cli_tool_that.md": {
-      "timestamp": "2025-11-02T20:19:04.117368",
-      "success": true,
-      "run_dir": "runs/run-20251102-201903"
-    },
-    "test_check_if_palindrome.md": {
-      "timestamp": "2025-11-02T20:19:19.240944",
-      "success": true,
-      "run_dir": "runs/run-20251102-201919"
-    },
-    "who_are.md": {
-      "timestamp": "2025-11-02T20:19:34.306185",
-      "success": true,
-      "run_dir": "runs/run-20251102-201934"
-    },
-    "auto_fdfbb9bc.md": {
-      "timestamp": "2025-11-02T20:19:49.383121",
-      "success": true,
-      "run_dir": "runs/run-20251102-201949"
-    },
-    "create_encryption_program_that.md": {
-      "timestamp": "2025-11-02T20:20:04.738636",
-      "success": true,
-      "run_dir": "runs/run-20251102-202004"
-    },
-    "is_prime.md": {
-      "timestamp": "2025-11-02T20:20:19.835192",
-      "success": true,
-      "run_dir": "runs/run-20251102-202019"
-    },
-    "validate_email_regex_tests.md": {
-      "timestamp": "2025-11-02T20:20:34.901654",
-      "success": true,
-      "run_dir": "runs/run-20251102-202034"
-    },
-    "auto_3150ecd5.md": {
-      "timestamp": "2025-11-02T20:20:50.223922",
-      "success": true,
-      "run_dir": "runs/run-20251102-202049"
-    },
-    "rich_spec.md": {
-      "timestamp": "2025-11-02T20:21:05.606336",
-      "success": true,
-      "run_dir": "runs/run-20251102-202105"
-    },
-    "auto_e0bbc603.md": {
-      "timestamp": "2025-11-02T20:21:20.762297",
-      "success": true,
-      "run_dir": "runs/run-20251102-202120"
+      "run_dir": "runs/run-20251102-211024"
     },
     "run_python_toolsfull_diagnosti.md": {
-      "timestamp": "2025-11-02T20:21:35.841272",
+      "timestamp": "2025-11-02T21:10:40.146588",
       "success": true,
-      "run_dir": "runs/run-20251102-202135"
+      "run_dir": "runs/run-20251102-211040"
     },
-    "reverse_string.md": {
-      "timestamp": "2025-11-02T20:21:50.906303",
+    "factorial.md": {
+      "timestamp": "2025-11-02T21:10:55.226797",
       "success": true,
-      "run_dir": "runs/run-20251102-202150"
+      "run_dir": "runs/run-20251102-211055"
     },
-    "check_palindrome.md": {
-      "timestamp": "2025-11-02T20:22:06.040448",
+    "auto_fdfbb9bc.md": {
+      "timestamp": "2025-11-02T21:11:10.363931",
       "success": true,
-      "run_dir": "runs/run-20251102-202205"
+      "run_dir": "runs/run-20251102-211110"
     },
-    "auto_ba9e4d1f.md": {
-      "timestamp": "2025-11-02T20:22:21.112981",
+    "auto_1602c3fa.md": {
+      "timestamp": "2025-11-02T21:11:25.462216",
       "success": true,
-      "run_dir": "runs/run-20251102-202221"
+      "run_dir": "runs/run-20251102-211125"
+    },
+    "is_palindrome.md": {
+      "timestamp": "2025-11-02T21:11:40.546708",
+      "success": true,
+      "run_dir": "runs/run-20251102-211140"
+    },
+    "self_diagnosis.md": {
+      "timestamp": "2025-11-02T21:11:55.635188",
+      "success": true,
+      "run_dir": "runs/run-20251102-211155"
+    },
+    "generate_most_complex_time.md": {
+      "timestamp": "2025-11-02T21:12:10.709725",
+      "success": true,
+      "run_dir": "runs/run-20251102-211210"
+    },
+    "auto_92ef6a7b.md": {
+      "timestamp": "2025-11-02T21:12:25.777328",
+      "success": true,
+      "run_dir": "runs/run-20251102-211225"
+    },
+    "auto_b47c2b77.md": {
+      "timestamp": "2025-11-02T21:12:40.852783",
+      "success": true,
+      "run_dir": "runs/run-20251102-211240"
+    },
+    "is_prime.md": {
+      "timestamp": "2025-11-02T21:12:55.922083",
+      "success": true,
+      "run_dir": "runs/run-20251102-211255"
+    },
+    "sum_of_squares.md": {
+      "timestamp": "2025-11-02T21:13:10.988552",
+      "success": true,
+      "run_dir": "runs/run-20251102-211310"
+    },
+    "okay_generate_codes_clock.md": {
+      "timestamp": "2025-11-02T21:13:26.131207",
+      "success": true,
+      "run_dir": "runs/run-20251102-211325"
     },
     "generate_branch_comparison_dashboard.md": {
-      "timestamp": "2025-11-02T20:22:36.178907",
+      "timestamp": "2025-11-02T21:13:41.249190",
       "success": true,
-      "run_dir": "runs/run-20251102-202236"
+      "run_dir": "runs/run-20251102-211341"
     },
-    "auto_818568c1.md": {
-      "timestamp": "2025-11-02T20:22:51.318091",
+    "analyze_current_aurorax_codeba.md": {
+      "timestamp": "2025-11-02T21:13:56.330360",
       "success": true,
-      "run_dir": "runs/run-20251102-202251"
+      "run_dir": "runs/run-20251102-211356"
+    },
+    "if_are_getting_messages.md": {
+      "timestamp": "2025-11-02T21:14:11.399725",
+      "success": true,
+      "run_dir": "runs/run-20251102-211411"
+    },
+    "create_flask_web_app_app.md": {
+      "timestamp": "2025-11-02T21:14:26.471820",
+      "success": true,
+      "run_dir": "runs/run-20251102-211426"
+    },
+    "make_anti_virus.md": {
+      "timestamp": "2025-11-02T21:14:41.686482",
+      "success": true,
+      "run_dir": "runs/run-20251102-211441"
+    },
+    "auto_865b4b71.md": {
+      "timestamp": "2025-11-02T21:14:56.751084",
+      "success": true,
+      "run_dir": "runs/run-20251102-211456"
+    },
+    "max_in_list.md": {
+      "timestamp": "2025-11-02T21:15:11.819931",
+      "success": true,
+      "run_dir": "runs/run-20251102-211511"
+    },
+    "test_reverse_a_string.md": {
+      "timestamp": "2025-11-02T21:15:26.892683",
+      "success": true,
+      "run_dir": "runs/run-20251102-211526"
+    },
+    "decrypt_program.md": {
+      "timestamp": "2025-11-02T21:15:42.002179",
+      "success": true,
+      "run_dir": "runs/run-20251102-211541"
+    },
+    "generate_futuristic_clock.md": {
+      "timestamp": "2025-11-02T21:15:57.076650",
+      "success": true,
+      "run_dir": "runs/run-20251102-211557"
+    },
+    "generate_voice_overlap_recordi.md": {
+      "timestamp": "2025-11-02T21:16:12.179765",
+      "success": true,
+      "run_dir": "runs/run-20251102-211612"
+    },
+    "generate_decryption.md": {
+      "timestamp": "2025-11-02T21:16:27.275368",
+      "success": true,
+      "run_dir": "runs/run-20251102-211627"
+    },
+    "who_are.md": {
+      "timestamp": "2025-11-02T21:16:42.353070",
+      "success": true,
+      "run_dir": "runs/run-20251102-211642"
+    },
+    "create_encryption_program_that.md": {
+      "timestamp": "2025-11-02T21:16:57.419609",
+      "success": true,
+      "run_dir": "runs/run-20251102-211657"
+    },
+    "auto_c0aa60ae.md": {
+      "timestamp": "2025-11-02T21:17:12.540193",
+      "success": true,
+      "run_dir": "runs/run-20251102-211712"
+    },
+    "reverse_string.md": {
+      "timestamp": "2025-11-02T21:17:27.611448",
+      "success": true,
+      "run_dir": "runs/run-20251102-211727"
+    },
+    "auto_ef4957ec.md": {
+      "timestamp": "2025-11-02T21:17:42.697421",
+      "success": true,
+      "run_dir": "runs/run-20251102-211742"
+    },
+    "fibonacci_sequence.md": {
+      "timestamp": "2025-11-02T21:17:57.763347",
+      "success": true,
+      "run_dir": "runs/run-20251102-211757"
+    },
+    "gcd.md": {
+      "timestamp": "2025-11-02T21:18:12.847005",
+      "success": true,
+      "run_dir": "runs/run-20251102-211812"
+    },
+    "self_diagnose.md": {
+      "timestamp": "2025-11-02T21:18:27.929830",
+      "success": true,
+      "run_dir": "runs/run-20251102-211827"
+    },
+    "generate_decryption_program.md": {
+      "timestamp": "2025-11-02T21:18:43.006172",
+      "success": true,
+      "run_dir": "runs/run-20251102-211842"
+    },
+    "fix_chat_and_see.md": {
+      "timestamp": "2025-11-02T21:18:58.103317",
+      "success": true,
+      "run_dir": "runs/run-20251102-211858"
+    },
+    "auto_3150ecd5.md": {
+      "timestamp": "2025-11-02T21:19:13.168621",
+      "success": true,
+      "run_dir": "runs/run-20251102-211913"
+    },
+    "hello.md": {
+      "timestamp": "2025-11-02T21:19:28.240571",
+      "success": true,
+      "run_dir": "runs/run-20251102-211928"
+    },
+    "run_synthesis.md": {
+      "timestamp": "2025-11-02T21:19:43.315009",
+      "success": true,
+      "run_dir": "runs/run-20251102-211943"
+    },
+    "auto_e0bbc603.md": {
+      "timestamp": "2025-11-02T21:19:58.397092",
+      "success": true,
+      "run_dir": "runs/run-20251102-211958"
+    },
+    "auto_c44b6cbc.md": {
+      "timestamp": "2025-11-02T21:20:13.534349",
+      "success": true,
+      "run_dir": "runs/run-20251102-212013"
     }
   },
-  "last_updated": "2025-11-02T20:22:51.318099",
-  "run_count": 361
+  "last_updated": "2025-11-02T21:20:13.534357",
+  "run_count": 589
 }
