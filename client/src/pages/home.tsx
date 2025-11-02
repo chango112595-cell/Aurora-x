@@ -18,7 +18,7 @@ export default function Home() {
   }, []);
 
   return (
-    <QuantumBackground>
+    <div>
       <div className="h-full flex flex-col relative overflow-hidden">
       {/* Animated background with holographic effect */}
       <div
@@ -110,7 +110,7 @@ export default function Home() {
           50% { background-position: 100% 50%; }
         }
       `}</style>
+      </div>
     </div>
-    </QuantumBackground>
   );
 }
