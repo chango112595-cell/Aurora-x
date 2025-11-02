@@ -94,7 +94,7 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "bash scripts/bridge_autostart.sh"
+args = "bash scripts/bridge_autostart.sh || echo \"⚠️ Bridge startup had issues, continuing...\""
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
