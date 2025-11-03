@@ -629,7 +629,7 @@ def main():
     except Exception as e:
         print(f"[Aurora-X] Warning: Could not auto-start services: {e}")
 
-    port = int(os.getenv("AURORA_PORT", "5001"))
+    port = int(os.getenv("AURORA_PORT", "5002"))
     print(f"[Aurora-X] Starting server on 0.0.0.0:{port}")
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
