@@ -34,36 +34,8 @@ export default function ChatPage() {
     }, [messages]);
 
     const processCommand = (command: string): string | null => {
-        const cmd = command.toLowerCase().trim();
-
-        if (cmd === '/help') {
-            return `🌟 Here are some commands you can try:
-/status - See if everything's working
-/diagnostics - Check what needs fixing
-/fix-all - Let me fix issues automatically
-/help - This menu
-
-Or just tell me what you want to build and I'll create it! 💡`;
-        }
-
-        if (cmd === '/status') {
-            return `🌟 Everything's running great!
-✅ Chat: Working
-✅ Code Generation: Ready
-✅ Real-time: Active`;
-        }
-
-        if (cmd === '/diagnostics') {
-            return `🌟 Let me scan the system...
-Found some minor things to fix.
-Type /fix-all to let me handle them all!`;
-        }
-
-        if (cmd === '/fix-all') {
-            return `🌟 I'm on it! Fixing everything now...
-This might take a minute. I'll let you know when I'm done! ⚡`;
-        }
-
+        // Commands are now handled on the backend
+        // This function is kept for reference but no longer used
         return null;
     };
 
@@ -82,29 +54,16 @@ This might take a minute. I'll let you know when I'm done! ⚡`;
 
         const promptToSend = input;
         setInput('');
-
-        // Check for commands
-        const commandResponse = processCommand(promptToSend);
-        if (commandResponse) {
-            const auroraMessage: Message = {
-                id: (Date.now() + 1).toString(),
-                role: 'aurora',
-                content: commandResponse,
-                timestamp: new Date(),
-            };
-            setMessages((prev) => [...prev, auroraMessage]);
-            return;
-        }
-
         setIsLoading(true);
 
         try {
-            console.log('🌟 Aurora: Calling Aurora backend API...');
+            console.log('🌟 Aurora: Sending to conversation endpoint...');
 
-            const response = await fetch('/api/chat', {
+            // Use the new conversation endpoint for natural language chat
+            const response = await fetch('/api/conversation', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: promptToSend }),
+                body: JSON.stringify({ message: promptToSend }),
             });
 
             console.log('🌟 Aurora: Response status:', response.status);
@@ -116,10 +75,18 @@ This might take a minute. I'll let you know when I'm done! ⚡`;
             const data = await response.json();
             console.log('🌟 Aurora: Response data:', data);
 
+            // Format Aurora's response based on intent type
+            let content = data.response;
+            
+            // If it's code generation, show the response and hint for generation
+            if (data.type === 'code_generation') {
+                content = `${data.response}\n\nNow generating your code... ⚡`;
+            }
+
             const auroraMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: 'aurora',
-                content: formatAuroraResponse(data),
+                content: content,
                 timestamp: new Date(),
                 data: data,
             };
@@ -147,22 +114,9 @@ This might take a minute. I'll let you know when I'm done! ⚡`;
     };
 
     const formatAuroraResponse = (data: Record<string, unknown> | null): string => {
-        if (!data?.ok) {
-            return `🌟 Sorry, I hit a little snag trying to generate that. Here's what happened:\n\n${JSON.stringify(data, null, 2)}`;
-        }
-
-        let response = `🌟 Done! Here's what I created:\n\n`;
-
-        if (data?.kind) response += `• ${data.kind}\n`;
-        if (data?.lang) response += `• Written in: ${data.lang}\n`;
-        if (data?.file) response += `• Saved to: ${data.file}\n`;
-        if (data?.tests) response += `• Tests ready: ${data.tests}\n`;
-        if (data?.reason) response += `\nWhy I did it this way: ${data.reason}\n`;
-        if (data?.hint) response += `\n💡 Pro tip: ${data.hint}\n`;
-
-        response += `\nWant me to change anything? Just let me know! 🎯`;
-
-        return response;
+        // Response formatting is now handled on the backend
+        // This function is kept for compatibility but no longer needed
+        return '';
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
