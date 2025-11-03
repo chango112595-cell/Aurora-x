@@ -1,4 +1,9 @@
-# Suppress stylelint errors for Tailwind CSS directives
-# @apply and @tailwind are valid Tailwind directives, not CSS errors
+# Ignore compiled CSS from Tailwind preprocessing
+# @tailwind and @apply directives are valid Tailwind CSS and will be compiled correctly
 
-# This file tells stylelint to be lenient with Tailwind-specific syntax
+# This file tells stylelint to skip checking files with Tailwind-specific syntax
+# since those directives are processed by Tailwind CLI, not native CSS
+
+client/src/index.css
+client/dist/**
+node_modules/**
