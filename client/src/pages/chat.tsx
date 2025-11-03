@@ -77,7 +77,7 @@ export default function ChatPage() {
 
             // Format Aurora's response based on intent type
             let content = data.response;
-            
+
             // If it's code generation, show the response and hint for generation
             if (data.type === 'code_generation') {
                 content = `${data.response}\n\nNow generating your code... ⚡`;
