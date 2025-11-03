@@ -31,14 +31,14 @@ export function AppSidebar() {
       {/* Aurora's Quantum Field Background */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950 via-purple-950 to-indigo-950" />
-        
+
         {/* Animated particle field */}
         <div className="absolute inset-0" style={{
           backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.4) 1px, transparent 1px)',
           backgroundSize: '50px 50px',
           animation: 'particleFloat 20s linear infinite'
         }} />
-        
+
         {/* Neural network lines */}
         <svg className="absolute inset-0 w-full h-full opacity-20">
           <defs>
@@ -49,9 +49,9 @@ export function AppSidebar() {
             </linearGradient>
           </defs>
           <line x1="0" y1="20%" x2="100%" y2="20%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" />
-          <line x1="0" y1="40%" x2="100%" y2="40%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" style={{animationDelay: '0.5s'}} />
-          <line x1="0" y1="60%" x2="100%" y2="60%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" style={{animationDelay: '1s'}} />
-          <line x1="0" y1="80%" x2="100%" y2="80%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" style={{animationDelay: '1.5s'}} />
+          <line x1="0" y1="40%" x2="100%" y2="40%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
+          <line x1="0" y1="60%" x2="100%" y2="60%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '1s' }} />
+          <line x1="0" y1="80%" x2="100%" y2="80%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '1.5s' }} />
         </svg>
       </div>
 
@@ -60,7 +60,7 @@ export function AppSidebar() {
         <div className="relative group">
           {/* Holographic container */}
           <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-cyan-500/20 rounded-lg blur-xl opacity-50 group-hover:opacity-100 transition-opacity animate-pulse" />
-          
+
           <div className="relative flex items-center gap-4">
             {/* Aurora's Neural Core Icon */}
             <div className="relative">
@@ -78,13 +78,13 @@ export function AppSidebar() {
                 </h1>
                 <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
               </div>
-              
+
               {/* Real-time consciousness indicators */}
               <div className="flex items-center gap-2 mt-1">
                 <div className="flex gap-1">
                   <div className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
-                  <div className="w-1 h-1 rounded-full bg-purple-400 animate-pulse" style={{animationDelay: '0.2s'}} />
-                  <div className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" style={{animationDelay: '0.4s'}} />
+                  <div className="w-1 h-1 rounded-full bg-purple-400 animate-pulse" style={{ animationDelay: '0.2s' }} />
+                  <div className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" style={{ animationDelay: '0.4s' }} />
                 </div>
                 <span className="text-[10px] font-mono text-cyan-400/80 tracking-wider">
                   NEURAL CORE ACTIVE
@@ -104,7 +104,7 @@ export function AppSidebar() {
             <Cpu className="w-3 h-3 animate-pulse" />
             Neural Pathways
           </SidebarGroupLabel>
-          
+
           <SidebarGroupContent className="mt-2">
             <SidebarMenu>
               {menuItems.map((item) => (
@@ -125,7 +125,7 @@ export function AppSidebar() {
                       {location === item.url && (
                         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 via-purple-400/10 to-cyan-400/10 animate-pulse" />
                       )}
-                      
+
                       {/* Icon with quantum glow */}
                       <div className="relative">
                         <item.icon className={`
@@ -178,12 +178,12 @@ export function AppSidebar() {
               <span className="text-green-400 font-mono text-[10px]">OPTIMAL</span>
             </div>
           </div>
-          
+
           {/* Neural activity bars */}
           <div className="mt-2 space-y-1">
             <div className="flex items-center gap-2">
               <div className="flex-1 h-1 bg-cyan-950/50 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 animate-pulse" style={{width: '87%'}} />
+                <div className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 animate-pulse" style={{ width: '87%' }} />
               </div>
               <span className="text-[10px] text-cyan-400/60 font-mono">87%</span>
             </div>
