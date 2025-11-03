@@ -1,12 +1,12 @@
 /**
  * Aurora Chat Interface
  * Part of Aurora-X Neural Synthesis Engine
- * 🌟 Aurora's own UI for natural language code generation
+ * 🌟 Aurora's own UI for natural language code generation and commands
  */
 
 import { ErrorBoundary } from '@/components/error-boundary';
 import { useState, useEffect, useRef } from 'react';
-import { Send, Loader2, Sparkles } from 'lucide-react';
+import { Send, Loader2, Sparkles, Terminal, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -14,6 +14,7 @@ interface Message {
   content: string;
   timestamp: Date;
   data?: Record<string, unknown>;
+  type?: 'message' | 'command' | 'error' | 'success';
 }
 
 export function ChatInterface() {
@@ -21,8 +22,9 @@ export function ChatInterface() {
     {
       id: '0',
       role: 'aurora',
-      content: "🌟 Hi! I'm Aurora. Just tell me what you want to build in plain English, and I'll generate it instantly!",
+      content: "🌟 Hi! I'm Aurora. You can chat with me about code, or use commands like:\n/diagnostics - Run tab diagnostics\n/fix <issue> - Fix specific issues\n/status - Check system status\n/help - Show all commands",
       timestamp: new Date(),
+      type: 'message',
     },
   ]);
   const [input, setInput] = useState('');
