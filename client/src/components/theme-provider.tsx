@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@/components/error-boundary';
 import { createContext, useContext, useEffect, useState } from "react";
 
 type Theme = "dark" | "light" | "system";

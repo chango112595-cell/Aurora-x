@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@/components/error-boundary';
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -329,7 +330,7 @@ const CorpusExplorerSection = () => {
   const { toast } = useToast();
 
   // Fetch latest run metadata
-  const { data: metaData } = useQuery<{ meta: any }>({
+  const { data: metaData } = useQuery<{ meta: unknown }>({
     queryKey: ["/api/run-meta/latest"],
   });
 
@@ -353,7 +354,7 @@ const CorpusExplorerSection = () => {
   };
 
   const { data: corpusData, isLoading } = useQuery<{
-    items: any[];
+    items: unknown[];
     hasMore: boolean;
   }>({
     queryKey: [`/api/corpus?${buildQueryString()}`],
@@ -1231,7 +1232,7 @@ const RollbackSection = () => {
           variant: "destructive"
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = error.message || "Failed to connect to server";
       setErrorMessage(errorMsg);
       toast({
@@ -1272,7 +1273,7 @@ const RollbackSection = () => {
           variant: "destructive"
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = error.message || "Failed to connect to server";
       setErrorMessage(errorMsg);
       toast({

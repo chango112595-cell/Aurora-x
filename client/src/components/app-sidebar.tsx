@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@/components/error-boundary';
 import { Home, MessageSquare, BookOpen, BarChart3, Settings, Zap, Activity, TrendingUp, Database, Network, Cpu, Sparkles } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import {

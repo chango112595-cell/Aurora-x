@@ -4,6 +4,7 @@
  * 🌟 Aurora's own UI for natural language code generation
  */
 
+import { ErrorBoundary } from '@/components/error-boundary';
 import { useState, useEffect, useRef } from 'react';
 import { Send, Loader2, Sparkles } from 'lucide-react';
 
@@ -12,7 +13,7 @@ interface Message {
   role: 'user' | 'aurora';
   content: string;
   timestamp: Date;
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 export function ChatInterface() {
@@ -97,19 +98,19 @@ export function ChatInterface() {
     }
   };
 
-  const formatAuroraResponse = (data: any): string => {
-    if (!data.ok) {
+  const formatAuroraResponse = (data: Record<string, unknown> | null): string => {
+    if (!data?.ok) {
       return `🌟 I couldn't generate that:\n\n${JSON.stringify(data, null, 2)}`;
     }
 
     let response = `🌟 Got it! I've generated:\n\n`;
 
-    if (data.kind) response += `**Type:** ${data.kind}\n`;
-    if (data.lang) response += `**Language:** ${data.lang}\n`;
-    if (data.file) response += `**File:** \`${data.file}\`\n`;
-    if (data.tests) response += `**Tests:** \`${data.tests}\`\n`;
-    if (data.reason) response += `\n**Reasoning:** ${data.reason}\n`;
-    if (data.hint) response += `\n💡 ${data.hint}\n`;
+    if (data?.kind) response += `**Type:** ${data.kind}\n`;
+    if (data?.lang) response += `**Language:** ${data.lang}\n`;
+    if (data?.file) response += `**File:** \`${data.file}\`\n`;
+    if (data?.tests) response += `**Tests:** \`${data.tests}\`\n`;
+    if (data?.reason) response += `\n**Reasoning:** ${data.reason}\n`;
+    if (data?.hint) response += `\n💡 ${data.hint}\n`;
 
     response += `\nNeed changes? Just ask! ⚡`;
 
@@ -238,7 +239,7 @@ export function ChatInterface() {
               onClick={sendMessage}
               disabled={!input.trim() || isLoading}
               className="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
-            >
+             aria-label="action">
               {isLoading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />

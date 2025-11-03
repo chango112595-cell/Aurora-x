@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@/components/error-boundary';
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -61,7 +62,7 @@ export default function ComparisonDashboard() {
     const [currentBranch, setCurrentBranch] = useState<string>('');
     const [branches, setBranches] = useState<BranchInfo[]>([]);
     const [selectedBranch, setSelectedBranch] = useState<string>('');
-    const [branchAnalysis, setBranchAnalysis] = useState<any>(null);
+    const [branchAnalysis, setBranchAnalysis] = useState<unknown>(null);
     const [loading, setLoading] = useState(false);
 
     // Fetch real data from APIs
@@ -497,7 +498,7 @@ export default function ComparisonDashboard() {
                                         <div>
                                             <h4 className="text-lg font-semibold text-white mb-3">Key Features & Improvements</h4>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {branchAnalysis.key_features?.map((feature: any, idx: number) => (
+                                                {branchAnalysis.key_features?.map((feature: unknown, idx: number) => (
                                                     <div key={idx} className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
                                                         <div className="flex items-center gap-2 mb-2">
                                                             <CheckCircle className="w-4 h-4 text-green-400" />
@@ -544,7 +545,7 @@ export default function ComparisonDashboard() {
                                             <div>
                                                 <h4 className="text-lg font-semibold text-white mb-3">File Changes Summary</h4>
                                                 <div className="space-y-2 max-h-60 overflow-y-auto">
-                                                    {branchAnalysis.file_changes.map((change: any, idx: number) => (
+                                                    {branchAnalysis.file_changes.map((change: unknown, idx: number) => (
                                                         <div key={idx} className="flex items-center justify-between bg-slate-700/30 p-3 rounded">
                                                             <div className="flex items-center gap-3">
                                                                 <Badge className={`w-8 text-center ${change.status === 'A' ? 'bg-green-500/20 text-green-400' : change.status === 'M' ? 'bg-blue-500/20 text-blue-400' : 'bg-red-500/20 text-red-400'}`}>

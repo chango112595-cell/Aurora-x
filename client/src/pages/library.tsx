@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@/components/error-boundary';
 import { FunctionLibrary } from "@/components/function-library";
 
 export default function Library() {
