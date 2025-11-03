@@ -259,9 +259,9 @@ class LuminarNexusServerManager:
             "backend": {
                 "name": "Aurora Backend API",
                 "command": "cd /workspaces/Aurora-x && npm run server",
-                "session": "aurora-api",
-                "port": 5001,
-                "health_check": "http://localhost:5001/health"
+                "session": "aurora-backend",
+                "port": 5000,
+                "health_check": "http://localhost:5000/health"
             }
         }
         
