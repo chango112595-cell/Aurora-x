@@ -90,7 +90,7 @@ export function ChatInterface() {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'aurora',
-        content: `🌟 Oops! Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        content: `🌟 Something went wrong. ${error instanceof Error ? error.message : 'Not sure what.'} Try again!`,
         timestamp: new Date(),
       };
 
@@ -102,19 +102,19 @@ export function ChatInterface() {
 
   const formatAuroraResponse = (data: Record<string, unknown> | null): string => {
     if (!data?.ok) {
-      return `🌟 I couldn't generate that:\n\n${JSON.stringify(data, null, 2)}`;
+      return `🌟 Sorry, I hit a snag trying to generate that. Here's what happened:\n\n${JSON.stringify(data, null, 2)}`;
     }
 
-    let response = `🌟 Got it! I've generated:\n\n`;
+    let response = `🌟 Done! Here's what I created:\n\n`;
 
-    if (data?.kind) response += `**Type:** ${data.kind}\n`;
-    if (data?.lang) response += `**Language:** ${data.lang}\n`;
-    if (data?.file) response += `**File:** \`${data.file}\`\n`;
-    if (data?.tests) response += `**Tests:** \`${data.tests}\`\n`;
-    if (data?.reason) response += `\n**Reasoning:** ${data.reason}\n`;
-    if (data?.hint) response += `\n💡 ${data.hint}\n`;
+    if (data?.kind) response += `• ${data.kind}\n`;
+    if (data?.lang) response += `• Written in: ${data.lang}\n`;
+    if (data?.file) response += `• Saved to: ${data.file}\n`;
+    if (data?.tests) response += `• Tests ready: ${data.tests}\n`;
+    if (data?.reason) response += `\nWhy I did it this way: ${data.reason}\n`;
+    if (data?.hint) response += `\n💡 Pro tip: ${data.hint}\n`;
 
-    response += `\nNeed changes? Just ask! ⚡`;
+    response += `\nWant me to change it? Just let me know! 🎯`;
 
     return response;
   };
