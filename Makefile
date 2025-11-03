@@ -5,7 +5,6 @@
 .PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed demo-clean demo-clean-hard demo-status
 .PHONY: bridge-up bridge-status bridge-nl bridge-spec bridge-deploy orch-up
 .PHONY: self-learn
-.PHONY: aurora-start aurora-stop aurora-status aurora-fix aurora-control
 
 # === Default Variables ===
 SPEC ?= specs/check_palindrome.md
@@ -13,19 +12,6 @@ SPEC3 ?= specs/check_palindrome.md
 WHAT ?= reverse a string
 DISCORD := tools/discord_cli.py
 AURORA_PORT ?= 5001
-
-# === Aurora Unified Control ===
-aurora-start:
-	@echo "🚀 Starting Aurora Complete System..."
-	@python3 tools/aurora_process_grandmaster.py start all
-
-aurora-stop:
-	@echo "⏹  Stopping Aurora System..."
-	@python3 tools/aurora_process_grandmaster.py stop all
-
-aurora-status:
-	@echo "📊 Aurora System Status..."
-	@python3 tools/luminar_nexus.py status
 
 # === Debug & Health ===
 debug:
