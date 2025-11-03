@@ -601,12 +601,38 @@ def self_monitor_auto_heal():
 def main():
     """Entry point for running the server via uvicorn."""
     import os
-
     import uvicorn
+
+    # Auto-start all Aurora services via Luminar Nexus (if not already running)
+    try:
+        from pathlib import Path
+        import subprocess
+        
+        tools_dir = Path(__file__).parent.parent / "tools"
+        luminar_nexus = tools_dir / "luminar_nexus.py"
+        
+        if luminar_nexus.exists():
+            # Check if services are already running
+            import requests
+            try:
+                requests.get("http://localhost:5000/healthz", timeout=1)
+            except:
+                # Services not running, start them
+                print("[Aurora-X] Starting all services via Luminar Nexus...")
+                subprocess.Popen(
+                    ["python3", str(luminar_nexus), "start-all"],
+                    cwd=tools_dir.parent,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+                time.sleep(3)  # Wait for services to start
+    except Exception as e:
+        print(f"[Aurora-X] Warning: Could not auto-start services: {e}")
 
     port = int(os.getenv("AURORA_PORT", "5001"))
     print(f"[Aurora-X] Starting server on 0.0.0.0:{port}")
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
+
 
 
 if __name__ == "__main__":
