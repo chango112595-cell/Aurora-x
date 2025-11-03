@@ -19,16 +19,23 @@ class LuminarNexusServerManager:
     
     def __init__(self):
         self.servers = {
+            "bridge": {
+                "name": "Aurora Bridge Service (Main UI Chat)",
+                "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
+                "session": "aurora-bridge",
+                "port": 5001,
+                "health_check": "http://localhost:5001/healthz"
+            },
             "vite": {
                 "name": "Aurora Vite Dev Server",
-                "command": "cd /workspaces/Aurora-x && npx vite",
+                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173",
                 "session": "aurora-vite",
                 "port": 5173,
                 "health_check": "http://localhost:5173"
             },
             "backend": {
                 "name": "Aurora Backend API",
-                "command": "cd /workspaces/Aurora-x && npm run dev",
+                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
                 "session": "aurora-backend",
                 "port": 5000,
                 "health_check": "http://localhost:5000/healthz"
@@ -66,7 +73,6 @@ class LuminarNexusServerManager:
     
     def start_server(self, server_key: str) -> bool:
         """Start a server in tmux session"""
-        print(f"🔥 DEBUG: START_SERVER CALLED FOR {server_key}")
         if server_key not in self.servers:
             print(f"❌ Unknown server: {server_key}")
             return False
@@ -85,13 +91,9 @@ class LuminarNexusServerManager:
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
         # Create new tmux session and run command
-        print(f"🔥 DEBUG: About to run: tmux new-session -d -s {session} '{command}'")
         result = subprocess.run([
             'tmux', 'new-session', '-d', '-s', session, command
         ], capture_output=True, text=True)
-        print(f"🔥 DEBUG: Return code: {result.returncode}")
-        print(f"🔥 DEBUG: stdout: '{result.stdout}'")
-        print(f"🔥 DEBUG: stderr: '{result.stderr}'")
         
         if result.returncode == 0:
             print(f"   ✅ Started in tmux session: {session}")
@@ -107,7 +109,7 @@ class LuminarNexusServerManager:
             # Wait a moment and check health
             time.sleep(3)
             if self.check_health(server_key):
-                print(f"   ✅ Health check PASSED")
+                print(f"   ✅ Health check PASSED FUCK YEAH LOL")
                 return True
             else:
                 print(f"   ⚠️  Server started but health check pending...")
