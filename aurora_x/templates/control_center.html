@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -180,13 +181,27 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
 
         @keyframes pulse-warn {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
         }
 
         .status-box {
@@ -237,10 +252,21 @@
             border-bottom: 1px solid rgba(102, 230, 255, 0.05);
         }
 
-        .log-entry.success { color: #26de81; }
-        .log-entry.error { color: #ff6b6b; }
-        .log-entry.warning { color: #ffc107; }
-        .log-entry.info { color: #66e6ff; }
+        .log-entry.success {
+            color: #26de81;
+        }
+
+        .log-entry.error {
+            color: #ff6b6b;
+        }
+
+        .log-entry.warning {
+            color: #ffc107;
+        }
+
+        .log-entry.info {
+            color: #66e6ff;
+        }
 
         .loading {
             display: inline-block;
@@ -253,7 +279,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .footer {
@@ -266,12 +294,22 @@
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 1.8em; }
-            .grid { grid-template-columns: 1fr; }
-            button { font-size: 0.85em; padding: 10px 12px; }
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                font-size: 0.85em;
+                padding: 10px 12px;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -357,7 +395,7 @@
             try {
                 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
                 ws = new WebSocket(`${protocol}//${window.location.host}/api/commands/ws/status`);
-                
+
                 ws.onmessage = (event) => {
                     const health = JSON.parse(event.data);
                     updateHealthDisplay(health);
@@ -379,7 +417,7 @@
             const btn = document.getElementById('startBtn');
             btn.disabled = true;
             btn.innerHTML = '<span class="loading"></span> Starting...';
-            
+
             try {
                 const response = await fetch('/api/commands/start', { method: 'POST' });
                 const data = await response.json();
@@ -397,7 +435,7 @@
             const btn = document.getElementById('stopBtn');
             btn.disabled = true;
             btn.innerHTML = '<span class="loading"></span> Stopping...';
-            
+
             try {
                 const response = await fetch('/api/commands/stop', { method: 'POST' });
                 const data = await response.json();
@@ -424,7 +462,7 @@
             const btn = event.target;
             btn.disabled = true;
             btn.innerHTML = '<span class="loading"></span> Fixing...';
-            
+
             try {
                 const response = await fetch('/api/commands/fix', { method: 'POST' });
                 const data = await response.json();
@@ -441,7 +479,7 @@
             const btn = event.target;
             btn.disabled = true;
             btn.innerHTML = '<span class="loading"></span> Testing...';
-            
+
             try {
                 const response = await fetch('/api/commands/test', { method: 'POST' });
                 const data = await response.json();
@@ -518,4 +556,5 @@
         });
     </script>
 </body>
+
 </html>
