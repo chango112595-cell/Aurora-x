@@ -20,25 +20,32 @@ class LuminarNexusServerManager:
     def __init__(self):
         self.servers = {
             "bridge": {
-                "name": "Aurora Bridge Service (Main UI Chat)",
+                "name": "Aurora Bridge Service (Factory NL→Project)",
                 "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
                 "session": "aurora-bridge",
                 "port": 5001,
                 "health_check": "http://localhost:5001/healthz"
             },
+            "backend": {
+                "name": "Aurora Backend API (Main Server)",
+                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
+                "session": "aurora-backend",
+                "port": 5000,
+                "health_check": "http://localhost:5000/healthz"
+            },
             "vite": {
-                "name": "Aurora Vite Dev Server",
+                "name": "Aurora Vite Dev Server (Frontend)",
                 "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173",
                 "session": "aurora-vite",
                 "port": 5173,
                 "health_check": "http://localhost:5173"
             },
-            "backend": {
-                "name": "Aurora Backend API",
-                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
-                "session": "aurora-backend",
-                "port": 5000,
-                "health_check": "http://localhost:5000/healthz"
+            "self-learn": {
+                "name": "Aurora Self-Learning Server (Continuous Learning)",
+                "command": "cd /workspaces/Aurora-x && python3 -c 'from aurora_x.self_learn_server import app; import uvicorn; uvicorn.run(app, host=\"0.0.0.0\", port=5002)'",
+                "session": "aurora-self-learn",
+                "port": 5002,
+                "health_check": "http://localhost:5002/healthz"
             }
         }
         
