@@ -63,11 +63,11 @@ export default function SelfLearning() {
     localStorage.setItem("aurora-learning-settings", JSON.stringify(settings));
   }, [settings]);
 
-  // Query for self-learning status
-  const { data: status, isLoading, refetch } = useQuery<SelfLearningStatus>({
+  // Query for self-learning status with enhanced error handling
+  const { data: status, isLoading, refetch, error: statusError } = useQuery<SelfLearningStatus>({
     queryKey: ["/api/self-learning/status"],
     refetchInterval: statusPolling ? 5000 : false,
-    retry: 1,
+    retry: 2,
   });
 
   // Auto-start on mount and keep running continuously
@@ -114,11 +114,24 @@ export default function SelfLearning() {
     return () => clearInterval(interval);
   }, [settings.enableSchedule, settings.sleepTime, settings.wakeTime, status]);
 
-  // Query for recent runs
-  const { data: recentRuns } = useQuery<{ runs: RecentRun[] }>({
+  // Query for recent runs with error handling
+  const { data: recentRuns, error: recentRunsError, isError: recentRunsIsError } = useQuery<{ runs: RecentRun[] }>({
     queryKey: ["/api/corpus/recent?limit=10"],
     refetchInterval: 10000,
+    retry: 2,
   });
+
+  // Handle errors after query completes
+  useEffect(() => {
+    if (recentRunsIsError && recentRunsError) {
+      console.error('🌟 Aurora: Error fetching recent runs:', recentRunsError);
+      toast({
+        title: "Could not load recent activity",
+        description: "Retrying real-time data fetch...",
+        variant: "destructive",
+      });
+    }
+  }, [recentRunsIsError, recentRunsError, toast]);
 
   // Start mutation
   const startMutation = useMutation({
@@ -126,7 +139,7 @@ export default function SelfLearning() {
       const response = await apiRequest("POST", "/api/self-learning/start", {
         sleepInterval: settings.sleepInterval,
       });
-      
+
       // Handle "already running" error gracefully - return success without throwing
       if (response.status === 400) {
         const data = await response.json();
@@ -135,13 +148,13 @@ export default function SelfLearning() {
           return { status: "started", message: "Self-learning daemon is already running", alreadyRunning: true };
         }
       }
-      
+
       // For other errors or success, parse normally
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message || "Failed to start learning");
       }
-      
+
       return response.json();
     },
     onSuccess: (data) => {
@@ -150,7 +163,7 @@ export default function SelfLearning() {
       setManualStop(false);
       updateSetting("autoStart", true);
       queryClient.invalidateQueries({ queryKey: ["/api/self-learning/status"] });
-      
+
       // Only show toast for actual starts, not for "already running"
       if (!data.alreadyRunning) {
         toast({
@@ -176,7 +189,7 @@ export default function SelfLearning() {
       manualStopRef.current = true;
       setManualStop(true);
       updateSetting("autoStart", false);
-      
+
       const response = await apiRequest("POST", "/api/self-learning/stop", {});
       return response.json();
     },
@@ -193,7 +206,7 @@ export default function SelfLearning() {
       manualStopRef.current = false;
       setManualStop(false);
       updateSetting("autoStart", true);
-      
+
       toast({
         title: "Failed to Stop",
         description: error.message,
@@ -468,7 +481,7 @@ export default function SelfLearning() {
           <CardContent>
             {recentRuns?.runs && recentRuns.runs.length > 0 ? (
               <div className="space-y-3">
-                {recentRuns.runs.map((run) => (
+                {recentRuns.runs.map((run: RecentRun) => (
                   <div
                     key={run.run_id}
                     className="flex items-center justify-between p-3 rounded-lg bg-secondary/50 hover:bg-secondary/70 transition-colors"

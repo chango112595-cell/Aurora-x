@@ -44,6 +44,21 @@ interface BranchInfo {
     improvement_score: number;
 }
 
+interface BranchAnalysis {
+    key_features?: Array<{category: string; description: string; impact: string}>;
+    quality_metrics?: {
+        test_coverage: number;
+        code_quality_score: number;
+        performance_score: number;
+        maintainability: number;
+    };
+    file_changes?: Array<{status: string; file: string; additions: number; deletions: number}>;
+    recommendations?: {
+        summary: string;
+        action_items?: string[];
+    };
+}
+
 interface ComparisonItem {
     id: string;
     title: string;
@@ -62,7 +77,7 @@ export default function ComparisonDashboard() {
     const [currentBranch, setCurrentBranch] = useState<string>('');
     const [branches, setBranches] = useState<BranchInfo[]>([]);
     const [selectedBranch, setSelectedBranch] = useState<string>('');
-    const [branchAnalysis, setBranchAnalysis] = useState<unknown>(null);
+    const [branchAnalysis, setBranchAnalysis] = useState<BranchAnalysis | null>(null);
     const [loading, setLoading] = useState(false);
 
     // Fetch real data from APIs
@@ -152,6 +167,17 @@ export default function ComparisonDashboard() {
         fetchAuroraRuns();
         fetchBranches();
         fetchDiff(); // Get current working directory changes
+
+        // Set up real-time polling for commits and runs
+        const commitsInterval = setInterval(fetchCommits, 10000);
+        const runsInterval = setInterval(fetchAuroraRuns, 15000);
+        const branchesInterval = setInterval(fetchBranches, 12000);
+
+        return () => {
+            clearInterval(commitsInterval);
+            clearInterval(runsInterval);
+            clearInterval(branchesInterval);
+        };
     }, []);
 
     useEffect(() => {
@@ -498,7 +524,7 @@ export default function ComparisonDashboard() {
                                         <div>
                                             <h4 className="text-lg font-semibold text-white mb-3">Key Features & Improvements</h4>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {branchAnalysis.key_features?.map((feature: unknown, idx: number) => (
+                                                {branchAnalysis.key_features?.map((feature, idx: number) => (
                                                     <div key={idx} className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
                                                         <div className="flex items-center gap-2 mb-2">
                                                             <CheckCircle className="w-4 h-4 text-green-400" />
@@ -545,7 +571,7 @@ export default function ComparisonDashboard() {
                                             <div>
                                                 <h4 className="text-lg font-semibold text-white mb-3">File Changes Summary</h4>
                                                 <div className="space-y-2 max-h-60 overflow-y-auto">
-                                                    {branchAnalysis.file_changes.map((change: unknown, idx: number) => (
+                                                    {branchAnalysis.file_changes.map((change, idx: number) => (
                                                         <div key={idx} className="flex items-center justify-between bg-slate-700/30 p-3 rounded">
                                                             <div className="flex items-center gap-3">
                                                                 <Badge className={`w-8 text-center ${change.status === 'A' ? 'bg-green-500/20 text-green-400' : change.status === 'M' ? 'bg-blue-500/20 text-blue-400' : 'bg-red-500/20 text-red-400'}`}>

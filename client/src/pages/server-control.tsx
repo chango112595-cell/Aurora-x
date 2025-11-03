@@ -135,13 +135,18 @@ export default function ServerControl() {
                                     <Zap className="h-10 w-10" /> START ALL SERVERS
                                 </Button>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                     <Button onClick={startAllServices} disabled={allRunning || false} size="lg" variant={allRunning ? "secondary" : "default"} className="h-16 text-lg font-semibold gap-3">
                                         <Zap className="h-6 w-6" /> {allRunning ? 'All Running' : 'Start All'}
                                     </Button>
                                     <Button onClick={restartAllServices} size="lg" variant="outline" className="h-16 text-lg font-semibold gap-3 border-2">
                                         <RotateCw className="h-6 w-6" /> Restart All
                                     </Button>
+                                    <Link href="/luminar">
+                                        <Button size="lg" variant="outline" className="h-16 text-lg font-semibold gap-3 border-2 w-full">
+                                            <Activity className="h-6 w-6" /> View All
+                                        </Button>
+                                    </Link>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <Button size="lg" variant="destructive" className="h-16 text-lg font-semibold gap-3">
