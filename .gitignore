@@ -27,6 +27,9 @@ data/corpus.jsonl
 .self_learning.pid
 .self_learning_state.json
 
+# Aurora runtime state files
+.aurora/seeds.json
+
 # Logs
 logs
 *.log
