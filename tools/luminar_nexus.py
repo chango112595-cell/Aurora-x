@@ -31,7 +31,7 @@ class LuminarNexusServerManager:
                 "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
                 "session": "aurora-backend",
                 "port": 5000,
-                "health_check": "http://localhost:5000"
+                "health_check": "http://localhost:5000/healthz"
             }
         }
         
