@@ -227,7 +227,7 @@ AURORA_ULTIMATE_GRANDMASTER = {
     }
 }
 
-def print_ultimate_grandmaster():
+def print_ultimate_grandmaster() -> None:
     """Display Aurora's ULTIMATE OMNISCIENT GRANDMASTER status"""
     
     print("\n" + "="*90)

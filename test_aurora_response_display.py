@@ -217,6 +217,7 @@ class TestTestAuroraResponseDisplay:
         callback_result = []
 
         def callback(result):
+    """Auto-generated: callback function."""
             callback_result.append(result)
 
         result = test_aurora_response_display_async("test", callback=callback)
