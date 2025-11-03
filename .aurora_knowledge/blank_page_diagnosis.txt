@@ -1,0 +1,27 @@
+Blank Page Diagnosis Report
+Generated: 2025-11-03T08:25:44.209143
+
+TSX Issues Found: 6
+
+/workspaces/Aurora-x/client/src/components/aurora-status.tsx:
+    ❌ Component 'AuroraStatus' might not return JSX
+
+/workspaces/Aurora-x/client/src/pages/self-learning.tsx:
+    ❌ Component 'DEFAULT_SETTINGS' might not return JSX
+
+/workspaces/Aurora-x/client/src/components/ui/navigation-menu.tsx:
+    ❌ Component 'NavigationMenuItem' might not return JSX
+
+/workspaces/Aurora-x/client/src/components/ui/sidebar.tsx:
+    ❌ Component 'SidebarProvider' might not return JSX
+
+/workspaces/Aurora-x/client/src/components/ui/collapsible.tsx:
+    ❌ Component 'Collapsible' might not return JSX
+    ❌ Component 'CollapsibleTrigger' might not return JSX
+    ❌ Component 'CollapsibleContent' might not return JSX
+
+/workspaces/Aurora-x/client/src/components/ui/aspect-ratio.tsx:
+    ❌ Component 'AspectRatio' might not return JSX
+
+Build Errors: 1
+  ❌ tsconfig.json not found
