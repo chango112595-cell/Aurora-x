@@ -283,6 +283,86 @@ class LuminarNexusServerManager:
             except Exception as e:
                 print(f"⚠️  Could not load debug knowledge: {e}")
         return knowledge
+    
+    def self_monitor(self) -> dict:
+        """Monitor all services health and return status"""
+        health_report = {
+            "timestamp": datetime.now().isoformat(),
+            "services": {},
+            "overall_health": "healthy"
+        }
+        
+        issues_found = []
+        
+        for server_key in self.servers.keys():
+            status = self.get_status(server_key)
+            health_report["services"][server_key] = status
+            
+            if status["status"] != "running":
+                issues_found.append({
+                    "service": server_key,
+                    "issue": f"Service not running (status: {status['status']})",
+                    "severity": "critical" if self.servers[server_key].get("critical", False) else "warning"
+                })
+        
+        if issues_found:
+            health_report["overall_health"] = "degraded"
+            health_report["issues"] = issues_found
+        
+        return health_report
+    
+    def self_heal(self, health_report: dict = None) -> dict:
+        """Automatically fix detected issues"""
+        if health_report is None:
+            health_report = self.self_monitor()
+        
+        healing_actions = []
+        
+        if "issues" in health_report:
+            for issue in health_report["issues"]:
+                service = issue["service"]
+                print(f"🔧 Auto-healing {service}...")
+                
+                # Attempt to restart the service
+                success = self.start_server(service)
+                
+                healing_actions.append({
+                    "service": service,
+                    "issue": issue["issue"],
+                    "action": "restart",
+                    "success": success,
+                    "timestamp": datetime.now().isoformat()
+                })
+        
+        # Log healing actions
+        healing_log = Path("/workspaces/Aurora-x/.aurora_knowledge/self_healing.jsonl")
+        with open(healing_log, "a") as f:
+            for action in healing_actions:
+                f.write(json.dumps(action) + "\n")
+        
+        return {
+            "timestamp": datetime.now().isoformat(),
+            "actions_taken": healing_actions,
+            "health_restored": all(a["success"] for a in healing_actions)
+        }
+    
+    def get_master_skills(self) -> dict:
+        """Return Aurora's master skills status"""
+        return {
+            "debug_mastery": len(self.debug_knowledge),
+            "code_patterns": len(self.corpus),
+            "skill_tiers": len(self.skills),
+            "services_managed": len(self.servers),
+            "capabilities": [
+                "Self-Monitoring",
+                "Self-Healing",
+                "Process Management",
+                "Service Orchestration",
+                "Knowledge Integration",
+                "Debug Mastery",
+                "Pattern Recognition"
+            ]
+        }
 
 def main():
     """Luminar Nexus main entry point"""
@@ -299,7 +379,9 @@ def main():
         print("  python luminar_nexus.py status           - Show all status")
         print("  python luminar_nexus.py start-all        - Start all servers")
         print("  python luminar_nexus.py stop-all         - Stop all servers")
-        print("\nAvailable servers: vite, backend")
+        print("  python luminar_nexus.py monitor          - Start continuous monitoring")
+        print("  python luminar_nexus.py skills           - Show master skills")
+        print("\nAvailable servers: bridge, backend, vite, self-learn")
         return
     
     command = sys.argv[1]
@@ -310,6 +392,30 @@ def main():
         nexus.stop_all()
     elif command == "status":
         nexus.show_status()
+    elif command == "monitor":
+        print("🌟 Starting Luminar Nexus continuous monitoring...")
+        print("   Press Ctrl+C to stop\n")
+        try:
+            while True:
+                health = nexus.self_monitor()
+                if health["overall_health"] != "healthy":
+                    print(f"\n⚠️  Issues detected at {health['timestamp']}")
+                    nexus.self_heal(health)
+                time.sleep(30)  # Check every 30 seconds
+        except KeyboardInterrupt:
+            print("\n\n✅ Monitoring stopped")
+    elif command == "skills":
+        skills = nexus.get_master_skills()
+        print("\n🌟 LUMINAR NEXUS MASTER SKILLS")
+        print("=" * 70)
+        for key, value in skills.items():
+            if isinstance(value, list):
+                print(f"\n{key}:")
+                for item in value:
+                    print(f"  • {item}")
+            else:
+                print(f"{key}: {value}")
+        print("\n" + "=" * 70)
     elif command == "start" and len(sys.argv) > 2:
         nexus.start_server(sys.argv[2])
     elif command == "stop" and len(sys.argv) > 2:
