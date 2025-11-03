@@ -3749,6 +3749,54 @@ asyncio.run(main())
     }
   });
 
+  // Server Control Endpoints (for UI Server Control page)
+  app.get("/api/status", (req, res) => {
+    const uptime = Date.now() - serverStartTime;
+    res.json({
+      services: {
+        "Backend API": {
+          name: "Backend API",
+          status: "running",
+          port: 5000,
+          restart_count: 0,
+          uptime_seconds: Math.floor(uptime / 1000)
+        },
+        "Frontend (Vite)": {
+          name: "Frontend (Vite)",
+          status: "running",
+          port: 5001,
+          restart_count: 0,
+          uptime_seconds: Math.floor(uptime / 1000)
+        }
+      }
+    });
+  });
+
+  app.post("/api/control", async (req, res) => {
+    const { service, action } = req.body;
+    
+    try {
+      const { execSync } = await import("child_process");
+      
+      if (action === "start") {
+        execSync("python3 /workspaces/Aurora-x/luminar-keeper.py start", { stdio: "inherit" });
+        res.json({ status: "ok", message: `${service} started` });
+      } else if (action === "stop") {
+        execSync("python3 /workspaces/Aurora-x/luminar-keeper.py stop", { stdio: "inherit" });
+        res.json({ status: "ok", message: `${service} stopped` });
+      } else if (action === "restart") {
+        execSync("python3 /workspaces/Aurora-x/luminar-keeper.py stop", { stdio: "inherit" });
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        execSync("python3 /workspaces/Aurora-x/luminar-keeper.py start", { stdio: "inherit" });
+        res.json({ status: "ok", message: `${service} restarted` });
+      } else {
+        res.status(400).json({ status: "error", message: "Unknown action" });
+      }
+    } catch (error: any) {
+      res.status(500).json({ status: "error", message: error.message });
+    }
+  });
+
   const httpServer = createServer(app);
 
   // Set up WebSocket server for real-time progress updates

@@ -51,7 +51,7 @@ export default function ServerControl() {
 
     const fetchStatus = async () => {
         try {
-            const res = await fetch('http://localhost:9090/api/status');
+            const res = await fetch('/api/status');
             const data = await res.json();
             setServices(data);
             setLoading(false);
@@ -62,7 +62,7 @@ export default function ServerControl() {
 
     const controlService = async (service: string, action: string) => {
         try {
-            await fetch('http://localhost:9090/api/control', {
+            await fetch('/api/control', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ service, action })
