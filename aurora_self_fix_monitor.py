@@ -5,8 +5,6 @@ Aurora must implement her own architecture decision
 """
 
 import json
-import subprocess
-from pathlib import Path
 from datetime import datetime
 
 # Task for Aurora

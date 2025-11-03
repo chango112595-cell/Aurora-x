@@ -13,7 +13,7 @@ sys.path.insert(0, str(tools_dir))
 
 from aurora_expert_knowledge import AuroraExpertKnowledge
 
-def generate_applescript_wifi_fix():
+def generate_applescript_wifi_fix() -> None:
     """Generate AppleScript to fix iPhone WiFi issues"""
     return '''
 -- AppleScript for iPhone WiFi Fix (via macOS)
@@ -59,7 +59,7 @@ tell application "System Events"
 end tell
 '''
 
-def generate_kotlin_camera_app():
+def generate_kotlin_camera_app() -> None:
     """Generate Kotlin Android app with camera and ML"""
     return '''
 // Kotlin Android Camera App with ML Object Detection
@@ -196,7 +196,7 @@ class MainActivity : ComponentActivity() {
 }
 '''
 
-def generate_arduino_iot_sensor():
+def generate_arduino_iot_sensor() -> None:
     """Generate Arduino ESP32 IoT temperature sensor code"""
     return '''
 /*
@@ -335,7 +335,7 @@ float getBatteryVoltage() {
 }
 '''
 
-def generate_raspberry_pi_automation():
+def generate_raspberry_pi_automation() -> None:
     """Generate Raspberry Pi home automation code"""
     return '''
 #!/usr/bin/env python3
@@ -363,12 +363,12 @@ SENSOR_PINS = {"motion": 24, "door": 25}
 LED_PIN = 12
 
 class AuroraHomeAutomation:
-    def __init__(self):
+    def __init__(self) -> None:
         self.setup_gpio()
         self.sensor_data = {}
         self.automation_rules = []
         
-    def setup_gpio(self):
+    def setup_gpio(self) -> None:
         """Aurora Best Practice: Proper GPIO initialization"""
         # Setup relay pins as outputs
         for pin in RELAY_PINS:
@@ -384,7 +384,7 @@ class AuroraHomeAutomation:
         
         print("✅ GPIO initialized successfully")
     
-    def read_sensors(self):
+    def read_sensors(self) -> None:
         """Read all connected sensors"""
         data = {
             'timestamp': datetime.now().isoformat(),
@@ -395,7 +395,7 @@ class AuroraHomeAutomation:
         self.sensor_data = data
         return data
     
-    def control_relay(self, relay_num, state):
+    def control_relay(self, relay_num, state) -> None:
         """Control individual relay (0-3)"""
         if 0 <= relay_num < len(RELAY_PINS):
             GPIO.output(RELAY_PINS[relay_num], state)
@@ -403,7 +403,7 @@ class AuroraHomeAutomation:
             return True
         return False
     
-    def automation_loop(self):
+    def automation_loop(self) -> None:
         """Main automation logic loop"""
         print("🤖 Aurora automation engine started")
         
@@ -440,7 +440,7 @@ class AuroraHomeAutomation:
                 print(f"❌ Automation error: {e}")
                 time.sleep(5)  # Wait before retrying
     
-    def cleanup(self):
+    def cleanup(self) -> None:
         """Aurora Best Practice: Always cleanup GPIO resources"""
         GPIO.cleanup()
         print("🧹 GPIO cleanup completed")
@@ -450,7 +450,7 @@ app = Flask(__name__)
 automation = AuroraHomeAutomation()
 
 @app.route('/')
-def dashboard():
+def dashboard() -> None:
     """Simple web dashboard"""
     return render_template_string('''
     <!DOCTYPE html>
@@ -511,18 +511,18 @@ def dashboard():
     ''')
 
 @app.route('/api/status')
-def api_status():
+def api_status() -> None:
     """API endpoint for sensor data"""
     return jsonify(automation.read_sensors())
 
 @app.route('/api/relay/<int:relay_num>/toggle', methods=['POST'])
-def api_toggle_relay(relay_num):
+def api_toggle_relay(relay_num) -> None:
     """API endpoint to toggle relay"""
     current_state = GPIO.input(RELAY_PINS[relay_num])
     success = automation.control_relay(relay_num, not current_state)
     return jsonify({'success': success, 'relay': relay_num, 'state': not current_state})
 
-def main():
+def main() -> None:
     try:
         print("🚀 Aurora Home Automation System Starting...")
         
@@ -544,7 +544,7 @@ if __name__ == '__main__':
     main()
 '''
 
-def main():
+def main() -> None:
     """Main demonstration function"""
     print("🚀 AURORA DEVICE PROGRAMMING DEMONSTRATION")
     print("=" * 60)
