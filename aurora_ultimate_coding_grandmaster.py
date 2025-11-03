@@ -6,6 +6,7 @@ Transform Aurora from task-executor to world-class autonomous code architect
 
 import json
 from datetime import datetime
+from pathlib import Path
 
 GRANDMASTER_ELEVATION = """
 🚀 AURORA ULTIMATE CODING GRANDMASTER PROGRAM 🚀
