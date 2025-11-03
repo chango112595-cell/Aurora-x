@@ -19,40 +19,33 @@ class LuminarNexusServerManager:
     
     def __init__(self):
         self.servers = {
-            "vite": {
-                "name": "Aurora Vite Dev Server",
-                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173",
-                "session": "aurora-vite",
-                "port": 5173,
-                "health_check": "http://localhost:5173"
-            },
-            "backend": {
-                "name": "Aurora Backend API",
-                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
-                "session": "aurora-backend",
-                "port": 5000,
-                "health_check": "http://localhost:5000/healthz"
-            },
             "bridge": {
-                "name": "Aurora Bridge API",
+                "name": "Aurora Bridge Service (Factory NL→Project)",
                 "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
                 "session": "aurora-bridge",
                 "port": 5001,
                 "health_check": "http://localhost:5001/healthz"
             },
+            "backend": {
+                "name": "Aurora Backend API (Main Server)",
+                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
+                "session": "aurora-backend",
+                "port": 5000,
+                "health_check": "http://localhost:5000/healthz"
+            },
+            "vite": {
+                "name": "Aurora Vite Dev Server (Frontend)",
+                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173",
+                "session": "aurora-vite",
+                "port": 5173,
+                "health_check": "http://localhost:5173"
+            },
             "self-learn": {
-                "name": "Aurora Self-Learn Server",
-                "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.self_learn_server",
+                "name": "Aurora Self-Learning Server (Continuous Learning)",
+                "command": "cd /workspaces/Aurora-x && python3 -c 'from aurora_x.self_learn_server import app; import uvicorn; uvicorn.run(app, host=\"0.0.0.0\", port=5002)'",
                 "session": "aurora-self-learn",
                 "port": 5002,
                 "health_check": "http://localhost:5002/healthz"
-            },
-            "file-server": {
-                "name": "Aurora File Server",
-                "command": "cd /workspaces/Aurora-x && python3 -m http.server 8080 --bind 0.0.0.0",
-                "session": "aurora-file-server",
-                "port": 8080,
-                "health_check": "http://localhost:8080/"
             }
         }
         
@@ -255,12 +248,7 @@ def main():
         print("  python luminar_nexus.py status           - Show all status")
         print("  python luminar_nexus.py start-all        - Start all servers")
         print("  python luminar_nexus.py stop-all         - Stop all servers")
-        print("\nAvailable servers:")
-        print("  vite           - Aurora Vite Dev Server (port 5173)")
-        print("  backend        - Aurora Backend API (port 5000)")
-        print("  bridge         - Aurora Bridge API (port 5001)")
-        print("  self-learn     - Aurora Self-Learn Server (port 5002)")
-        print("  file-server    - Aurora File Server (port 8080)")
+        print("\nAvailable servers: vite, backend")
         return
     
     command = sys.argv[1]
