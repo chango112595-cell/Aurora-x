@@ -11,28 +11,6 @@
         3031,
         3032
     ],
-    "portAttributes": {
-        "5000": {
-            "label": "Aurora Main Server",
-            "onAutoForward": "notify"
-        },
-        "5001": {
-            "label": "Aurora Bridge API",
-            "onAutoForward": "notify"
-        },
-        "5002": {
-            "label": "Aurora Self-Learn",
-            "onAutoForward": "notify"
-        },
-        "5173": {
-            "label": "Vite Dev Server",
-            "onAutoForward": "notify"
-        },
-        "8080": {
-            "label": "File Server",
-            "onAutoForward": "notify"
-        }
-    },
     "customizations": {
         "vscode": {
             "extensions": [

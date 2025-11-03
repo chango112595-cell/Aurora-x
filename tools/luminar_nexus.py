@@ -2,7 +2,6 @@
 """
 Luminar Nexus - Aurora's Server Command Center
 Manages all development servers with proper process control
-Aurora's autonomous decision engine handles all debugging and fixing
 """
 
 import subprocess
@@ -20,6 +19,13 @@ class LuminarNexusServerManager:
     
     def __init__(self):
         self.servers = {
+            "vite": {
+                "name": "Aurora Vite Dev Server",
+                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173",
+                "session": "aurora-vite",
+                "port": 5173,
+                "health_check": "http://localhost:5173"
+            },
             "backend": {
                 "name": "Aurora Backend API",
                 "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
@@ -27,12 +33,26 @@ class LuminarNexusServerManager:
                 "port": 5000,
                 "health_check": "http://localhost:5000/healthz"
             },
-            "vite": {
-                "name": "Aurora UI/Chat Interface",
-                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5001",
-                "session": "aurora-vite",
+            "bridge": {
+                "name": "Aurora Bridge API",
+                "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
+                "session": "aurora-bridge",
                 "port": 5001,
-                "health_check": "http://localhost:5001"
+                "health_check": "http://localhost:5001/healthz"
+            },
+            "self-learn": {
+                "name": "Aurora Self-Learn Server",
+                "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.self_learn_server",
+                "session": "aurora-self-learn",
+                "port": 5002,
+                "health_check": "http://localhost:5002/healthz"
+            },
+            "file-server": {
+                "name": "Aurora File Server",
+                "command": "cd /workspaces/Aurora-x && python3 -m http.server 8080 --bind 0.0.0.0",
+                "session": "aurora-file-server",
+                "port": 8080,
+                "health_check": "http://localhost:8080/"
             }
         }
         
@@ -235,7 +255,12 @@ def main():
         print("  python luminar_nexus.py status           - Show all status")
         print("  python luminar_nexus.py start-all        - Start all servers")
         print("  python luminar_nexus.py stop-all         - Stop all servers")
-        print("\nAvailable servers: vite, backend")
+        print("\nAvailable servers:")
+        print("  vite           - Aurora Vite Dev Server (port 5173)")
+        print("  backend        - Aurora Backend API (port 5000)")
+        print("  bridge         - Aurora Bridge API (port 5001)")
+        print("  self-learn     - Aurora Self-Learn Server (port 5002)")
+        print("  file-server    - Aurora File Server (port 8080)")
         return
     
     command = sys.argv[1]
