@@ -51,6 +51,11 @@ class LuminarNexusServerManager:
         
         self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/luminar_nexus.jsonl")
         self.log_file.parent.mkdir(exist_ok=True)
+        
+        # Load Aurora's knowledge systems
+        self.corpus = self.load_corpus()
+        self.skills = self.load_skills_registry()
+        self.debug_knowledge = self.load_debug_knowledge()
     
     def log_event(self, event_type, server, details):
         """Log Luminar Nexus events"""
@@ -232,6 +237,52 @@ class LuminarNexusServerManager:
             print()
         
         print("="*70 + "\n")
+
+    def load_corpus(self) -> list:
+        """Load Aurora's code generation corpus"""
+        corpus_file = Path("/workspaces/Aurora-x/corpus.jsonl")
+        corpus = []
+        if corpus_file.exists():
+            try:
+                with open(corpus_file) as f:
+                    for line in f:
+                        if line.strip():
+                            corpus.append(json.loads(line))
+                print(f"✅ Loaded corpus: {len(corpus)} code samples")
+            except Exception as e:
+                print(f"⚠️  Could not load corpus: {e}")
+        return corpus
+    
+    def load_skills_registry(self) -> dict:
+        """Load Aurora's grandmaster skills registry"""
+        skills_file = Path("/workspaces/Aurora-x/.aurora_knowledge/grandmaster_skills_registry.jsonl")
+        skills = {}
+        if skills_file.exists():
+            try:
+                with open(skills_file) as f:
+                    for line in f:
+                        if line.strip():
+                            data = json.loads(line)
+                            skills.update(data)
+                print(f"✅ Loaded skills registry: Aurora has {len(skills)} mastery tiers")
+            except Exception as e:
+                print(f"⚠️  Could not load skills: {e}")
+        return skills
+    
+    def load_debug_knowledge(self) -> list:
+        """Load Aurora's debugging mastery knowledge"""
+        debug_file = Path("/workspaces/Aurora-x/.aurora_knowledge/debug_mastery.jsonl")
+        knowledge = []
+        if debug_file.exists():
+            try:
+                with open(debug_file) as f:
+                    for line in f:
+                        if line.strip():
+                            knowledge.append(json.loads(line))
+                print(f"✅ Loaded debug knowledge: {len(knowledge)} lessons learned")
+            except Exception as e:
+                print(f"⚠️  Could not load debug knowledge: {e}")
+        return knowledge
 
 def main():
     """Luminar Nexus main entry point"""
