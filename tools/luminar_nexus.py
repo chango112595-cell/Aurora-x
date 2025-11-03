@@ -21,17 +21,17 @@ class LuminarNexusServerManager:
         self.servers = {
             "vite": {
                 "name": "Aurora Vite Dev Server",
-                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173",
+                "command": "cd /workspaces/Aurora-x/client && npm run dev",
                 "session": "aurora-vite",
                 "port": 5173,
                 "health_check": "http://localhost:5173"
             },
             "backend": {
                 "name": "Aurora Backend API",
-                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
-                "session": "aurora-backend",
-                "port": 5000,
-                "health_check": "http://localhost:5000"
+                "command": "cd /workspaces/Aurora-x && npm run server",
+                "session": "aurora-api",
+                "port": 5001,
+                "health_check": "http://localhost:5001/health"
             }
         }
         
@@ -102,7 +102,7 @@ class LuminarNexusServerManager:
             # Wait a moment and check health
             time.sleep(3)
             if self.check_health(server_key):
-                print(f"   ✅ Health check PASSED FUCK YEAH LOL")
+                print(f"   ✅ Health check PASSED")
                 return True
             else:
                 print(f"   ⚠️  Server started but health check pending...")
