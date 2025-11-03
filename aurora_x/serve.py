@@ -58,6 +58,13 @@ try:
 except ImportError:
     pass  # API endpoints not available yet
 
+# Include natural conversation router
+try:
+    from aurora_x.chat.conversation import attach_conversation
+    attach_conversation(app)
+except ImportError:
+    pass  # Conversation endpoint not available yet
+
 # Attach English mode addons
 attach_factory(app)
 
