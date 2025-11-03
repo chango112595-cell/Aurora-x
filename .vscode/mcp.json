@@ -7,6 +7,14 @@
         "server",
         "start"
       ]
+    },
+    "M365AgentsToolkit MCP Server": {
+      "command": "npx",
+      "args": [
+        "@microsoft/m365agentstoolkit-mcp@latest",
+        "server",
+        "start"
+      ]
     }
   }
 }
