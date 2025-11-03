@@ -1,0 +1,4 @@
+# Suppress stylelint errors for Tailwind CSS directives
+# @apply and @tailwind are valid Tailwind directives, not CSS errors
+
+# This file tells stylelint to be lenient with Tailwind-specific syntax
