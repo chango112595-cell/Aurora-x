@@ -121,7 +121,7 @@ class LuminarNexusServerManager:
             # Wait a moment and check health
             time.sleep(3)
             if self.check_health(server_key):
-                print(f"   ✅ Health check PASSED FUCK YEAH LOL")
+                print(f"   ✅ Health check PASSED")
                 return True
             else:
                 print(f"   ⚠️  Server started but health check pending...")
