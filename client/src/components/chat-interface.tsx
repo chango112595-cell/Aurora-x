@@ -239,7 +239,7 @@ export function ChatInterface() {
               onClick={sendMessage}
               disabled={!input.trim() || isLoading}
               className="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
-             aria-label="action">
+              aria-label="action">
               {isLoading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
