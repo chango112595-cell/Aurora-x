@@ -184,8 +184,13 @@
       "timestamp": "2025-11-03T07:00:50.056727",
       "success": true,
       "run_dir": "runs/run-20251103-070049"
+    },
+    "decrypt_program.md": {
+      "timestamp": "2025-11-03T07:01:05.250448",
+      "success": true,
+      "run_dir": "runs/run-20251103-070105"
     }
   },
-  "last_updated": "2025-11-03T07:00:50.056735",
-  "run_count": 222
+  "last_updated": "2025-11-03T07:01:05.250458",
+  "run_count": 223
 }
