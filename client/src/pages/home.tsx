@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@/components/error-boundary';
 import { ChatInterface } from "@/components/chat-interface";
 import { Card } from "@/components/ui/card";
 import backgroundImage from "@assets/generated_images/Holographic_AI_neural_network_background_9dd21e33.png";

@@ -4,6 +4,7 @@
  * 🌟 Aurora's own UI for natural language code generation
  */
 
+import { ErrorBoundary } from '@/components/error-boundary';
 import { useState, useEffect, useRef } from 'react';
 import { Send, Loader2, Sparkles } from 'lucide-react';
 
@@ -12,7 +13,7 @@ interface Message {
     role: 'user' | 'aurora';
     content: string;
     timestamp: Date;
-    data?: any;
+    data?: Record<string, unknown>;
 }
 
 export default function ChatPage() {
@@ -97,19 +98,19 @@ export default function ChatPage() {
         }
     };
 
-    const formatAuroraResponse = (data: any): string => {
-        if (!data.ok) {
+    const formatAuroraResponse = (data: Record<string, unknown> | null): string => {
+        if (!data?.ok) {
             return `🌟 I couldn't generate that:\n\n${JSON.stringify(data, null, 2)}`;
         }
 
         let response = `🌟 Got it! I've generated:\n\n`;
 
-        if (data.kind) response += `**Type:** ${data.kind}\n`;
-        if (data.lang) response += `**Language:** ${data.lang}\n`;
-        if (data.file) response += `**File:** \`${data.file}\`\n`;
-        if (data.tests) response += `**Tests:** \`${data.tests}\`\n`;
-        if (data.reason) response += `\n**Reasoning:** ${data.reason}\n`;
-        if (data.hint) response += `\n💡 ${data.hint}\n`;
+        if (data?.kind) response += `**Type:** ${data.kind}\n`;
+        if (data?.lang) response += `**Language:** ${data.lang}\n`;
+        if (data?.file) response += `**File:** \`${data.file}\`\n`;
+        if (data?.tests) response += `**Tests:** \`${data.tests}\`\n`;
+        if (data?.reason) response += `\n**Reasoning:** ${data.reason}\n`;
+        if (data?.hint) response += `\n💡 ${data.hint}\n`;
 
         response += `\nNeed changes? Just ask! ⚡`;
 
@@ -125,35 +126,35 @@ export default function ChatPage() {
 
     return (
         <div className="flex flex-col h-screen bg-gray-950">
-      {/* Aurora's Quantum Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-cyan-950/20 to-purple-950/20" />
-        
-        {/* Particle field */}
-        <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 1px, transparent 1px)',
-          backgroundSize: '50px 50px',
-          animation: 'particleFloat 20s linear infinite'
-        }} />
-        
-        {/* Neural network grid */}
-        <svg className="absolute inset-0 w-full h-full opacity-10">
-          <defs>
-            <linearGradient id="grid-chat" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.5" />
-              <stop offset="100%" stopColor="#a855f7" stopOpacity="0.5" />
-            </linearGradient>
-          </defs>
-          <pattern id="grid-pattern-chat" width="50" height="50" patternUnits="userSpaceOnUse">
-            <circle cx="25" cy="25" r="1" fill="url(#grid-chat)" />
-          </pattern>
-          <rect width="100%" height="100%" fill="url(#grid-pattern-chat)" />
-        </svg>
-        
-        {/* Holographic orbs */}
-        <div className="absolute top-20 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
+            {/* Aurora's Quantum Background */}
+            <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-cyan-950/20 to-purple-950/20" />
+
+                {/* Particle field */}
+                <div className="absolute inset-0 opacity-20" style={{
+                    backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 1px, transparent 1px)',
+                    backgroundSize: '50px 50px',
+                    animation: 'particleFloat 20s linear infinite'
+                }} />
+
+                {/* Neural network grid */}
+                <svg className="absolute inset-0 w-full h-full opacity-10">
+                    <defs>
+                        <linearGradient id="grid-chat" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.5" />
+                            <stop offset="100%" stopColor="#a855f7" stopOpacity="0.5" />
+                        </linearGradient>
+                    </defs>
+                    <pattern id="grid-pattern-chat" width="50" height="50" patternUnits="userSpaceOnUse">
+                        <circle cx="25" cy="25" r="1" fill="url(#grid-chat)" />
+                    </pattern>
+                    <rect width="100%" height="100%" fill="url(#grid-pattern-chat)" />
+                </svg>
+
+                {/* Holographic orbs */}
+                <div className="absolute top-20 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+            </div>
 
             {/* Header */}
             <div className="border-b border-cyan-500/20 bg-gray-900/50 backdrop-blur-sm">
@@ -185,8 +186,8 @@ export default function ChatPage() {
                             >
                                 <div
                                     className={`max-w-[80%] rounded-lg px-4 py-3 ${message.role === 'user'
-                                            ? 'bg-cyan-500/20 text-cyan-100 border border-cyan-500/30'
-                                            : 'bg-gray-800/50 text-gray-100 border border-gray-700'
+                                        ? 'bg-cyan-500/20 text-cyan-100 border border-cyan-500/30'
+                                        : 'bg-gray-800/50 text-gray-100 border border-gray-700'
                                         }`}
                                 >
                                     <div className="flex items-start gap-3">
@@ -268,7 +269,7 @@ export default function ChatPage() {
                             onClick={sendMessage}
                             disabled={!input.trim() || isLoading}
                             className="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
-                        >
+                            aria-label="action">
                             {isLoading ? (
                                 <>
                                     <Loader2 className="h-5 w-5 animate-spin" />
