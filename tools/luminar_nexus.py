@@ -2,6 +2,7 @@
 """
 Luminar Nexus - Aurora's Server Command Center
 Manages all development servers with proper process control
+Aurora's autonomous decision engine handles all debugging and fixing
 """
 
 import subprocess
