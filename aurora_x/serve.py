@@ -48,6 +48,13 @@ app.include_router(make_router(static_dir, templates_dir))
 try:
     from aurora_x.api.server_control import router as server_control_router
     app.include_router(server_control_router)
+except:
+    pass
+
+# Include unified command router
+try:
+    from aurora_x.api.commands import router as commands_router
+    app.include_router(commands_router)
 except ImportError:
     pass  # API endpoints not available yet
 
@@ -100,6 +107,17 @@ async def serve_demo_dashboard():
         return HTMLResponse(content=dashboard_path.read_text())
     else:
         return HTMLResponse(content="<h1>Demo dashboard not found</h1>", status_code=404)
+
+
+@app.get("/control", response_class=HTMLResponse)
+@app.get("/control-center", response_class=HTMLResponse)
+async def serve_control_center():
+    """Serve Aurora's master control center"""
+    control_center_path = BASE / "templates" / "control_center.html"
+    if control_center_path.exists():
+        return HTMLResponse(content=control_center_path.read_text())
+    else:
+        return HTMLResponse(content="<h1>Control Center not found</h1>", status_code=404)
 
 
 @app.get("/healthz")

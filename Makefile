@@ -5,6 +5,7 @@
 .PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed demo-clean demo-clean-hard demo-status
 .PHONY: bridge-up bridge-status bridge-nl bridge-spec bridge-deploy orch-up
 .PHONY: self-learn
+.PHONY: aurora-start aurora-stop aurora-status aurora-fix aurora-control
 
 # === Default Variables ===
 SPEC ?= specs/check_palindrome.md
@@ -12,6 +13,30 @@ SPEC3 ?= specs/check_palindrome.md
 WHAT ?= reverse a string
 DISCORD := tools/discord_cli.py
 AURORA_PORT ?= 5001
+
+# === Aurora Unified Control ===
+aurora-start:
+	@echo "🚀 Starting Aurora Complete System..."
+	@python3 aurora_unified_cmd.py start
+
+aurora-stop:
+	@echo "⏹  Stopping Aurora System..."
+	@python3 aurora_unified_cmd.py stop
+
+aurora-status:
+	@echo "📊 Aurora System Status..."
+	@python3 aurora_unified_cmd.py status
+
+aurora-fix:
+	@echo "🔧 Aurora Auto-Fix..."
+	@python3 aurora_unified_cmd.py fix
+
+aurora-control:
+	@echo "🎮 Opening Aurora Control Center..."
+	@python3 aurora_unified_cmd.py start
+	@echo "Opening http://localhost:5000/control in your browser..."
+	@sleep 2
+	@$${BROWSER:-xdg-open} "http://localhost:5000/control" 2>/dev/null || echo "Open http://localhost:5000/control in your browser"
 
 # === Debug & Health ===
 debug:
