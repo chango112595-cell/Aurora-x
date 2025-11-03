@@ -360,9 +360,105 @@ class LuminarNexusServerManager:
                 "Service Orchestration",
                 "Knowledge Integration",
                 "Debug Mastery",
-                "Pattern Recognition"
+                "Pattern Recognition",
+                "Autonomous Decision-Making",
+                "Code Generation",
+                "Performance Analysis",
+                "Architecture Evaluation"
             ]
         }
+    
+    def autonomous_analyze(self) -> dict:
+        """Autonomously analyze system state and make recommendations"""
+        analysis = {
+            "timestamp": datetime.now().isoformat(),
+            "system_health": self.self_monitor(),
+            "recommendations": []
+        }
+        
+        # Check for services that frequently crash
+        health_log = Path("/workspaces/Aurora-x/.aurora_knowledge/self_healing.jsonl")
+        if health_log.exists():
+            recent_issues = []
+            with open(health_log, "r") as f:
+                for line in f.readlines()[-20:]:  # Last 20 healing actions
+                    try:
+                        recent_issues.append(json.loads(line))
+                    except:
+                        pass
+            
+            # Detect patterns
+            service_failures = {}
+            for issue in recent_issues:
+                svc = issue.get("service", "unknown")
+                service_failures[svc] = service_failures.get(svc, 0) + 1
+            
+            for service, count in service_failures.items():
+                if count > 3:
+                    analysis["recommendations"].append({
+                        "type": "stability_concern",
+                        "service": service,
+                        "issue": f"Service has failed {count} times recently",
+                        "suggestion": "Consider investigating root cause or increasing resource limits"
+                    })
+        
+        # Check resource usage
+        try:
+            import psutil
+            cpu = psutil.cpu_percent(interval=1)
+            mem = psutil.virtual_memory().percent
+            
+            if cpu > 80:
+                analysis["recommendations"].append({
+                    "type": "resource_warning",
+                    "metric": "CPU",
+                    "value": f"{cpu}%",
+                    "suggestion": "High CPU usage detected - consider optimizing processes"
+                })
+            
+            if mem > 80:
+                analysis["recommendations"].append({
+                    "type": "resource_warning",
+                    "metric": "Memory",
+                    "value": f"{mem}%",
+                    "suggestion": "High memory usage - consider restarting services"
+                })
+        except ImportError:
+            pass
+        
+        return analysis
+    
+    def learn_from_patterns(self) -> dict:
+        """Autonomously learn from execution patterns"""
+        learning = {
+            "timestamp": datetime.now().isoformat(),
+            "patterns_detected": [],
+            "adjustments_made": []
+        }
+        
+        # Analyze corpus for common patterns
+        if len(self.corpus) > 10:
+            # Look for frequently used code patterns
+            pattern_frequency = {}
+            for entry in self.corpus:
+                code = entry.get("code", "")
+                # Simple pattern detection (you can make this more sophisticated)
+                if "async def" in code:
+                    pattern_frequency["async_functions"] = pattern_frequency.get("async_functions", 0) + 1
+                if "class " in code:
+                    pattern_frequency["classes"] = pattern_frequency.get("classes", 0) + 1
+                if "try:" in code:
+                    pattern_frequency["error_handling"] = pattern_frequency.get("error_handling", 0) + 1
+            
+            for pattern, count in pattern_frequency.items():
+                if count > len(self.corpus) * 0.3:  # Pattern appears in 30%+ of code
+                    learning["patterns_detected"].append({
+                        "pattern": pattern,
+                        "frequency": count,
+                        "percentage": f"{(count/len(self.corpus)*100):.1f}%"
+                    })
+        
+        return learning
 
 def main():
     """Luminar Nexus main entry point"""
@@ -381,6 +477,8 @@ def main():
         print("  python luminar_nexus.py stop-all         - Stop all servers")
         print("  python luminar_nexus.py monitor          - Start continuous monitoring")
         print("  python luminar_nexus.py skills           - Show master skills")
+        print("  python luminar_nexus.py analyze          - Autonomous system analysis")
+        print("  python luminar_nexus.py learn            - Learn from code patterns")
         print("\nAvailable servers: bridge, backend, vite, self-learn")
         return
     
@@ -416,6 +514,35 @@ def main():
             else:
                 print(f"{key}: {value}")
         print("\n" + "=" * 70)
+    elif command == "analyze":
+        print("\n🧠 Running autonomous analysis...\n")
+        analysis = nexus.autonomous_analyze()
+        print(f"Timestamp: {analysis['timestamp']}")
+        print(f"System Health: {analysis['system_health']['overall_health']}")
+        
+        if analysis['recommendations']:
+            print("\n📋 Recommendations:")
+            for rec in analysis['recommendations']:
+                print(f"\n  Type: {rec['type']}")
+                if 'service' in rec:
+                    print(f"  Service: {rec['service']}")
+                if 'metric' in rec:
+                    print(f"  Metric: {rec['metric']} = {rec['value']}")
+                print(f"  Issue: {rec['issue'] if 'issue' in rec else 'N/A'}")
+                print(f"  Suggestion: {rec['suggestion']}")
+        else:
+            print("\n✅ No issues detected - system running optimally")
+    elif command == "learn":
+        print("\n📚 Analyzing patterns and learning...\n")
+        learning = nexus.learn_from_patterns()
+        print(f"Timestamp: {learning['timestamp']}")
+        
+        if learning['patterns_detected']:
+            print("\n🔍 Patterns Detected:")
+            for pattern in learning['patterns_detected']:
+                print(f"  • {pattern['pattern']}: {pattern['frequency']} occurrences ({pattern['percentage']})")
+        else:
+            print("\n⚠️  Insufficient data for pattern detection")
     elif command == "start" and len(sys.argv) > 2:
         nexus.start_server(sys.argv[2])
     elif command == "stop" and len(sys.argv) > 2:
