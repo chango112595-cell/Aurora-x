@@ -311,7 +311,7 @@ class LuminarNexusServerManager:
         
         # Kill existing session if it exists
         subprocess.run(['tmux', 'kill-session', '-t', session], 
-                      capture_output=True, stderr=subprocess.DEVNULL)
+                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
         # Create new tmux session and run command
         result = subprocess.run([

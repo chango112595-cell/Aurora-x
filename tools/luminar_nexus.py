@@ -21,17 +21,17 @@ class LuminarNexusServerManager:
         self.servers = {
             "vite": {
                 "name": "Aurora Vite Dev Server",
-                "command": "cd /workspaces/Aurora-x/client && npm run dev",
+                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173",
                 "session": "aurora-vite",
                 "port": 5173,
                 "health_check": "http://localhost:5173"
             },
             "backend": {
                 "name": "Aurora Backend API",
-                "command": "cd /workspaces/Aurora-x && npm run server",
-                "session": "aurora-api",
-                "port": 5001,
-                "health_check": "http://localhost:5001/health"
+                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
+                "session": "aurora-backend",
+                "port": 5000,
+                "health_check": "http://localhost:5000"
             }
         }
         
@@ -56,12 +56,12 @@ class LuminarNexusServerManager:
     def check_tmux_installed(self) -> bool:
         """Check if tmux is available"""
         try:
-            subprocess.run(['tmux', '-V'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            subprocess.run(['tmux', '-V'], capture_output=True, check=True)
             return True
         except:
             print("❌ tmux not installed. Installing...")
-            subprocess.run(['apt-get', 'update'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            subprocess.run(['apt-get', 'install', '-y', 'tmux'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            subprocess.run(['apt-get', 'update'], capture_output=True)
+            subprocess.run(['apt-get', 'install', '-y', 'tmux'], capture_output=True)
             return True
     
     def start_server(self, server_key: str) -> bool:
@@ -86,7 +86,7 @@ class LuminarNexusServerManager:
         # Create new tmux session and run command
         result = subprocess.run([
             'tmux', 'new-session', '-d', '-s', session, command
-        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        ], capture_output=True, text=True)
         
         if result.returncode == 0:
             print(f"   ✅ Started in tmux session: {session}")
@@ -102,7 +102,7 @@ class LuminarNexusServerManager:
             # Wait a moment and check health
             time.sleep(3)
             if self.check_health(server_key):
-                print(f"   ✅ Health check PASSED")
+                print(f"   ✅ Health check PASSED FUCK YEAH LOL")
                 return True
             else:
                 print(f"   ⚠️  Server started but health check pending...")
@@ -124,7 +124,7 @@ class LuminarNexusServerManager:
         print(f"🛑 Stopping {server['name']}...")
         
         result = subprocess.run(['tmux', 'kill-session', '-t', session],
-                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                               capture_output=True, text=True)
         
         if result.returncode == 0:
             print(f"   ✅ Stopped session: {session}")
@@ -144,7 +144,7 @@ class LuminarNexusServerManager:
         
         try:
             result = subprocess.run(['curl', '-s', '-I', health_url],
-                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=2)
+                                  capture_output=True, text=True, timeout=2)
             
             if "200" in result.stdout or "OK" in result.stdout:
                 return True
@@ -162,7 +162,7 @@ class LuminarNexusServerManager:
         
         # Check if tmux session exists
         result = subprocess.run(['tmux', 'has-session', '-t', session],
-                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                               capture_output=True)
         
         session_exists = (result.returncode == 0)
         health_ok = self.check_health(server_key)
