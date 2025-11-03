@@ -3,16 +3,25 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useQuery } from "@tanstack/react-query";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield } from "lucide-react";
+import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
-type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics';
+type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics' | 'learning';
 
 export default function LuminarNexus() {
   const [healthData, setHealthData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>('overview');
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Fetch corpus data
+  const { data: corpusResponse, isLoading: corpusLoading } = useQuery<{ items: any[], hasMore: boolean }>({
+    queryKey: ['/api/corpus?limit=50'],
+  });
 
   useEffect(() => {
     fetchHealthData();
@@ -120,6 +129,14 @@ export default function LuminarNexus() {
             <CheckCircle2 className="h-4 w-4" />
             Diagnostics
           </Button>
+          <Button
+            variant={activeTab === 'learning' ? 'default' : 'outline'}
+            onClick={() => setActiveTab('learning')}
+            className="gap-2"
+          >
+            <BookOpen className="h-4 w-4" />
+            Learning
+          </Button>
         </div>
 
         {/* Operational Health Score */}
@@ -222,17 +239,103 @@ export default function LuminarNexus() {
 
         {/* Safety Protocol Status */}
         {(activeTab === 'overview' || activeTab === 'services') && (
-        <Card className="border-2 border-cyan-500/30">
-          <CardHeader><CardTitle className="flex items-center gap-2"><Shield className="h-5 w-5 text-cyan-500" />Safety Protocol Active</CardTitle></CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div><div className="text-sm text-muted-foreground">Auto-Save</div><div className="text-2xl font-bold text-cyan-500">● Active</div></div>
-              <div><div className="text-sm text-muted-foreground">Last Save</div><div className="text-2xl font-bold">2m ago</div></div>
-              <div><div className="text-sm text-muted-foreground">Total Saves</div><div className="text-2xl font-bold">156</div></div>
-              <div><div className="text-sm text-muted-foreground">Crashes</div><div className="text-2xl font-bold text-green-500">0</div></div>
-            </div>
-          </CardContent>
-        </Card>
+          <Card className="border-2 border-cyan-500/30">
+            <CardHeader><CardTitle className="flex items-center gap-2"><Shield className="h-5 w-5 text-cyan-500" />Safety Protocol Active</CardTitle></CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div><div className="text-sm text-muted-foreground">Auto-Save</div><div className="text-2xl font-bold text-cyan-500">● Active</div></div>
+                <div><div className="text-sm text-muted-foreground">Last Save</div><div className="text-2xl font-bold">2m ago</div></div>
+                <div><div className="text-sm text-muted-foreground">Total Saves</div><div className="text-2xl font-bold">156</div></div>
+                <div><div className="text-sm text-muted-foreground">Crashes</div><div className="text-2xl font-bold text-green-500">0</div></div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Learning Tab - Aurora's Corpus */}
+        {activeTab === 'learning' && (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <BookOpen className="h-6 w-6 text-primary" />
+                  <div>
+                    <CardTitle>Aurora's Learning Corpus</CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Synthesized functions from self-learning runs
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search functions by name or signature..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+
+                {corpusLoading ? (
+                  <div className="flex items-center justify-center min-h-[200px]">
+                    <div className="text-center space-y-4">
+                      <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto" />
+                      <p className="text-muted-foreground font-mono">Loading corpus...</p>
+                    </div>
+                  </div>
+                ) : !corpusResponse?.items || corpusResponse.items.length === 0 ? (
+                  <div className="flex items-center justify-center min-h-[200px]">
+                    <div className="text-center space-y-4">
+                      <Code2 className="h-12 w-12 text-muted-foreground mx-auto opacity-50" />
+                      <p className="text-muted-foreground">No functions in corpus yet</p>
+                      <p className="text-sm text-muted-foreground">Run self-learning to populate Aurora's function library</p>
+                    </div>
+                  </div>
+                ) : (
+                  <ScrollArea className="h-[600px]">
+                    <div className="space-y-3 pr-4">
+                      {corpusResponse.items
+                        .filter((fn: any) =>
+                          fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase())
+                        )
+                        .map((fn: any) => (
+                          <div key={fn.id} className="rounded-lg border border-primary/10 p-4 bg-background/50 hover:bg-background/70 transition-colors">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap mb-2">
+                                  <code className="text-sm font-mono font-semibold">{fn.func_name}</code>
+                                  <Badge variant={fn.score >= 0.8 ? "default" : "secondary"}>
+                                    Score: {(fn.score * 100).toFixed(0)}%
+                                  </Badge>
+                                  <Badge variant={fn.passed === fn.total ? "default" : "destructive"}>
+                                    {fn.passed === fn.total ? (
+                                      <CheckCircle2 className="h-3 w-3 mr-1" />
+                                    ) : (
+                                      <XCircle className="h-3 w-3 mr-1" />
+                                    )}
+                                    {fn.passed}/{fn.total}
+                                  </Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground font-mono">{fn.func_signature}</p>
+                              </div>
+                            </div>
+                            <pre className="bg-muted p-3 rounded-lg overflow-x-auto text-xs mt-3">
+                              <code>{fn.snippet}</code>
+                            </pre>
+                            <p className="text-xs text-muted-foreground mt-2">
+                              Added: {new Date(fn.timestamp).toLocaleString()}
+                            </p>
+                          </div>
+                        ))}
+                    </div>
+                  </ScrollArea>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         )}
       </div>
     </div>
