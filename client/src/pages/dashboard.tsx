@@ -26,6 +26,8 @@ import {
   Filter,
   ChevronLeft,
   ChevronRight,
+  BookOpen,
+  Code2,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -36,6 +38,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Link } from "wouter";
 import {
   Dialog,
   DialogContent,
@@ -177,8 +180,8 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
       data-testid={`card-task-${task.id}`}
     >
       <Card className={`h-full relative overflow-hidden ${isActive
-          ? 'border-primary/50 bg-gradient-to-br from-primary/20 via-primary/5 to-background dark:from-primary/10 dark:via-background dark:to-background shadow-lg'
-          : 'border-border bg-card shadow-md hover:shadow-lg transition-shadow'
+        ? 'border-primary/50 bg-gradient-to-br from-primary/20 via-primary/5 to-background dark:from-primary/10 dark:via-background dark:to-background shadow-lg'
+        : 'border-border bg-card shadow-md hover:shadow-lg transition-shadow'
         }`}>
         {isActive && (
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-cyan-500/5 to-transparent animate-pulse" />
@@ -316,90 +319,38 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
   );
 };
 
-// Corpus Explorer Component with full inline content
+// Corpus Explorer Component - Recent Learning Activity (Summary View)
 const CorpusExplorerSection = () => {
-  const [funcFilter, setFuncFilter] = useState("");
-  const [limit, setLimit] = useState(50);
-  const [offset, setOffset] = useState(0);
-  const [perfectOnly, setPerfectOnly] = useState(false);
-  const [minScore, setMinScore] = useState<number | undefined>(undefined);
-  const [maxScore, setMaxScore] = useState<number | undefined>(undefined);
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
-  const [showFilters, setShowFilters] = useState(false);
-  const { toast } = useToast();
+  // Show only recent 5 items by default
+  const recentLimit = 5;
 
-  // Fetch latest run metadata
-  const { data: metaData } = useQuery<{ meta: unknown }>({
-    queryKey: ["/api/run-meta/latest"],
-  });
-
-  const buildQueryString = () => {
-    const params = new URLSearchParams();
-    if (funcFilter) params.set("func", funcFilter);
-    params.set("limit", limit.toString());
-    params.set("offset", offset.toString());
-    if (perfectOnly) params.set("perfectOnly", "true");
-    if (minScore !== undefined) params.set("minScore", minScore.toString());
-    if (maxScore !== undefined) params.set("maxScore", maxScore.toString());
-    if (startDate) {
-      const normalized = new Date(startDate).toISOString();
-      params.set("startDate", normalized);
-    }
-    if (endDate) {
-      const normalized = new Date(endDate).toISOString();
-      params.set("endDate", normalized);
-    }
-    return params.toString();
-  };
+  interface CorpusEntry {
+    id: string;
+    func_name: string;
+    func_signature: string;
+    passed: number;
+    total: number;
+    score: number;
+    timestamp: string;
+  }
 
   const { data: corpusData, isLoading } = useQuery<{
-    items: unknown[];
+    items: CorpusEntry[];
     hasMore: boolean;
   }>({
-    queryKey: [`/api/corpus?${buildQueryString()}`],
+    queryKey: [`/api/corpus?limit=${recentLimit}&offset=0`],
   });
 
   const entries = corpusData?.items || [];
-  const hasMore = corpusData?.hasMore || false;
   const totalRecords = entries.length;
-  const perfectRuns = entries.filter((e) => e.passed === e.total).length;
+  const perfectRuns = entries.filter((e: CorpusEntry) => e.passed === e.total).length;
   const avgScore = entries.length > 0
-    ? (entries.reduce((sum, e) => sum + e.score, 0) / entries.length).toFixed(2)
+    ? (entries.reduce((sum: number, e: CorpusEntry) => sum + e.score, 0) / entries.length).toFixed(2)
     : "0";
-
-  const copySnippet = async (snippet: string) => {
-    try {
-      await navigator.clipboard.writeText(snippet);
-      toast({
-        title: "Copied",
-        description: "Snippet copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Error",
-        description: "Failed to copy snippet",
-        variant: "destructive",
-      });
-    }
-  };
 
   const passPercentage = (passed: number, total: number) => {
     if (!total) return "0%";
     return `${Math.round((passed / total) * 100)}%`;
-  };
-
-  const nextPage = () => setOffset(offset + limit);
-  const prevPage = () => setOffset(Math.max(0, offset - limit));
-
-  const resetFilters = () => {
-    setFuncFilter("");
-    setPerfectOnly(false);
-    setMinScore(undefined);
-    setMaxScore(undefined);
-    setStartDate("");
-    setEndDate("");
-    setOffset(0);
   };
 
   return (
@@ -411,7 +362,7 @@ const CorpusExplorerSection = () => {
             <div className="text-center">
               <Database className="h-8 w-8 mx-auto mb-2 text-chart-1" />
               <div className="text-2xl font-bold">{totalRecords}</div>
-              <div className="text-xs text-muted-foreground">Total Records</div>
+              <div className="text-xs text-muted-foreground">Recent Syntheses</div>
             </div>
           </CardContent>
         </Card>
@@ -427,7 +378,7 @@ const CorpusExplorerSection = () => {
         <Card className="bg-secondary/30 border-primary/10 quantum-card">
           <CardContent className="pt-6">
             <div className="text-center">
-              <Zap className="h-8 w-8 mx-auto mb-2 text-chart-3" />
+              <TrendingUp className="h-8 w-8 mx-auto mb-2 text-chart-3" />
               <div className="text-2xl font-bold">{avgScore}</div>
               <div className="text-xs text-muted-foreground">Avg Score</div>
             </div>
@@ -435,291 +386,73 @@ const CorpusExplorerSection = () => {
         </Card>
       </div>
 
-      {/* Latest Run Status */}
-      {metaData?.meta && (
-        <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background quantum-card">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Activity className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <CardTitle className="text-xl">Latest Run</CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Most recent synthesis run metadata
-                </p>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <div className="text-sm text-muted-foreground">Run ID</div>
-                <div className="font-mono text-sm mt-1">{metaData.meta.run_id}</div>
-              </div>
-              <div>
-                <div className="text-sm text-muted-foreground">Timestamp</div>
-                <div className="text-sm mt-1">
-                  {new Date(metaData.meta.timestamp).toLocaleString()}
-                </div>
-              </div>
-              <div>
-                <div className="text-sm text-muted-foreground">Seed Bias</div>
-                <div className="text-sm mt-1">{metaData.meta.seed_bias.toFixed(4)}</div>
-              </div>
-              <div>
-                <div className="text-sm text-muted-foreground">Max Iterations</div>
-                <div className="text-sm mt-1">{metaData.meta.max_iters}</div>
-              </div>
-              <div>
-                <div className="text-sm text-muted-foreground">Seeding</div>
-                <Badge variant={metaData.meta.seeding_enabled ? "default" : "secondary"}>
-                  {metaData.meta.seeding_enabled ? "Enabled" : "Disabled"}
-                </Badge>
-              </div>
-              {metaData.meta.beam && (
-                <div>
-                  <div className="text-sm text-muted-foreground">Beam Width</div>
-                  <div className="text-sm mt-1">{metaData.meta.beam}</div>
-                </div>
-              )}
-            </div>
-            {metaData.meta.notes && (
-              <div className="mt-4 pt-4 border-t border-primary/10">
-                <div className="text-sm text-muted-foreground mb-2">Notes</div>
-                <p className="text-sm">{metaData.meta.notes}</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Corpus Records Card */}
+      {/* Recent Activity Card */}
       <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background quantum-card">
         <CardHeader>
-          <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-primary/10">
-                <Database className="h-6 w-6 text-primary" />
+                <Sparkles className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <CardTitle className="text-xl">Synthesis Records</CardTitle>
+                <CardTitle className="text-xl">Recent Learning Activity</CardTitle>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Aurora's learning corpus and synthesis history
+                  Aurora's latest synthesized functions
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <div className="relative flex-1 min-w-60">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Filter by function name"
-                  value={funcFilter}
-                  onChange={(e) => {
-                    setFuncFilter(e.target.value);
-                    setOffset(0);
-                  }}
-                  className="pl-8 bg-background/50"
-                />
-              </div>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShowFilters(!showFilters)}
-              >
-                <Filter className="h-4 w-4" />
+            <Link href="/luminar?tab=learning">
+              <Button variant="outline" size="sm" className="gap-2">
+                <BookOpen className="h-4 w-4" />
+                See All in Luminar
               </Button>
-              <select
-                value={limit}
-                onChange={(e) => {
-                  setLimit(Number(e.target.value));
-                  setOffset(0);
-                }}
-                className="border rounded-md px-3 min-h-9 bg-background"
-              >
-                <option value={25}>25</option>
-                <option value={50}>50</option>
-                <option value={100}>100</option>
-                <option value={200}>200</option>
-              </select>
-            </div>
+            </Link>
           </div>
-          {showFilters && (
-            <div className="mt-4 p-4 border rounded-lg space-y-4 bg-muted/30">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium">Advanced Filters</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={resetFilters}
-                >
-                  Reset All
-                </Button>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="perfect-only"
-                    checked={perfectOnly}
-                    onCheckedChange={(checked) => {
-                      setPerfectOnly(checked);
-                      setOffset(0);
-                    }}
-                  />
-                  <Label htmlFor="perfect-only">Perfect runs only</Label>
-                </div>
-                <div className="space-y-2">
-                  <Label>Score Range</Label>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="number"
-                      placeholder="Min"
-                      value={minScore ?? ""}
-                      onChange={(e) => {
-                        setMinScore(e.target.value ? Number(e.target.value) : undefined);
-                        setOffset(0);
-                      }}
-                      className="w-24"
-                      step="0.01"
-                    />
-                    <span className="text-muted-foreground">to</span>
-                    <Input
-                      type="number"
-                      placeholder="Max"
-                      value={maxScore ?? ""}
-                      onChange={(e) => {
-                        setMaxScore(e.target.value ? Number(e.target.value) : undefined);
-                        setOffset(0);
-                      }}
-                      className="w-24"
-                      step="0.01"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Date Range</Label>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="datetime-local"
-                      value={startDate}
-                      onChange={(e) => {
-                        setStartDate(e.target.value);
-                        setOffset(0);
-                      }}
-                      className="flex-1"
-                    />
-                    <span className="text-muted-foreground">to</span>
-                    <Input
-                      type="datetime-local"
-                      value={endDate}
-                      onChange={(e) => {
-                        setEndDate(e.target.value);
-                        setOffset(0);
-                      }}
-                      className="flex-1"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <div className="text-center py-8 text-muted-foreground">Loading...</div>
+            <div className="text-center py-8 text-muted-foreground">Loading recent activity...</div>
           ) : entries.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              No synthesis records found. Adjust your filters or start a synthesis run.
+              <Code2 className="h-12 w-12 mx-auto mb-4 opacity-30" />
+              <p>No learning activity yet</p>
+              <p className="text-sm mt-2">Run self-learning to see synthesis records</p>
             </div>
           ) : (
-            <>
-              <div className="space-y-3">
-                {entries.map((entry) => (
-                  <div
-                    key={entry.id}
-                    className="rounded-lg border border-primary/10 p-4 space-y-3 bg-background/50 hover:bg-background/70 transition-colors"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <code className="text-sm font-mono font-semibold">{entry.func_name}</code>
-                          <Badge variant="secondary">
-                            {entry.passed}/{entry.total} ({passPercentage(entry.passed, entry.total)})
-                          </Badge>
-                          <Badge variant="outline">Score: {entry.score.toFixed(4)}</Badge>
-                          {entry.complexity !== undefined && entry.complexity >= 0 && (
-                            <Badge variant="outline">AST: {entry.complexity}</Badge>
-                          )}
-                          {entry.calls_functions && entry.calls_functions.length > 0 && (
-                            <Badge variant="outline">Calls: {entry.calls_functions.length}</Badge>
-                          )}
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-1 font-mono">
-                          {entry.func_signature}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {new Date(entry.timestamp).toLocaleString()}
-                        </p>
+            <div className="space-y-3">
+              {entries.map((entry: CorpusEntry) => (
+                <div
+                  key={entry.id}
+                  className="rounded-lg border border-primary/10 p-3 bg-background/50 hover:bg-background/70 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <code className="text-sm font-mono font-semibold truncate">{entry.func_name}</code>
+                        <Badge variant={entry.passed === entry.total ? "default" : "secondary"} className="text-xs">
+                          {entry.passed}/{entry.total}
+                        </Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {(entry.score * 100).toFixed(0)}%
+                        </Badge>
                       </div>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => copySnippet(entry.snippet)}
-                      >
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    {entry.failing_tests && entry.failing_tests.length > 0 && (
-                      <div className="text-xs text-destructive">
-                        Failed: {entry.failing_tests.join(", ")}
-                      </div>
-                    )}
-                    <div className="relative">
-                      <pre className="text-xs bg-muted p-3 rounded-md overflow-x-auto max-h-60 overflow-y-auto">
-                        {entry.snippet}
-                      </pre>
+                      <p className="text-xs text-muted-foreground mt-1 font-mono truncate">
+                        {entry.func_signature}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(entry.timestamp).toLocaleString()}
+                      </p>
                     </div>
                   </div>
-                ))}
-              </div>
-
-              {/* Pagination */}
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-primary/10">
-                <div className="text-sm text-muted-foreground">
-                  Showing {offset + 1} - {offset + entries.length}
                 </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={prevPage}
-                    disabled={offset === 0}
-                  >
-                    <ChevronLeft className="h-4 w-4 mr-1" />
-                    Previous
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={nextPage}
-                    disabled={!hasMore}
-                  >
-                    Next
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </div>
-              </div>
-            </>
+              ))}
+            </div>
           )}
         </CardContent>
       </Card>
     </>
   );
 };
-
-// Removed ProjectGenerationSection - now available via chat commands
-
-// Removed SolverSection - now available via chat commands
 
 // Removed BridgeSection - now available via chat commands
 
@@ -1233,7 +966,7 @@ const RollbackSection = () => {
         });
       }
     } catch (error: unknown) {
-      const errorMsg = error.message || "Failed to connect to server";
+      const errorMsg = (error instanceof Error ? error.message : "Failed to connect to server");
       setErrorMessage(errorMsg);
       toast({
         title: "Connection Error",
@@ -1274,7 +1007,7 @@ const RollbackSection = () => {
         });
       }
     } catch (error: unknown) {
-      const errorMsg = error.message || "Failed to connect to server";
+      const errorMsg = (error instanceof Error ? error.message : "Failed to connect to server");
       setErrorMessage(errorMsg);
       toast({
         title: "Connection Error",
