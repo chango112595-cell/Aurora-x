@@ -321,8 +321,8 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
 
 // Corpus Explorer Component - Recent Learning Activity (Summary View)
 const CorpusExplorerSection = () => {
-  // Show only recent 5 items by default
-  const recentLimit = 5;
+  // Show only recent 20 items by default
+  const recentLimit = 20;
 
   interface CorpusEntry {
     id: string;
