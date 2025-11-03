@@ -7,21 +7,64 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle } from "lucide-react";
+import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle, ChevronDown, Copy, Eye } from "lucide-react";
 import { motion } from "framer-motion";
 
 type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics' | 'learning';
+type Category = 'all' | 'hard' | 'soft' | 'medium';
+type PassFailFilter = 'all' | 'pass' | 'fail';
+type LevelshipFilter = 'all' | 'ancient' | 'classical' | 'modern' | 'future';
 
 export default function LuminarNexus() {
   const [healthData, setHealthData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<Category>('all');
+  const [passFailFilter, setPassFailFilter] = useState<PassFailFilter>('all');
+  const [levelshipFilter, setLevelshipFilter] = useState<LevelshipFilter>('all');
+  const [expandedCode, setExpandedCode] = useState<string | null>(null);
 
-  // Fetch corpus data
+  // Fetch corpus data - fetch all available
   const { data: corpusResponse, isLoading: corpusLoading } = useQuery<{ items: any[], hasMore: boolean }>({
-    queryKey: ['/api/corpus?limit=50'],
+    queryKey: ['/api/corpus?limit=500'],
   });
+
+  // Helper function to determine levelship (Ancient to Future based on complexity/novelty)
+  const getLevelship = (fn: any): LevelshipFilter => {
+    // Simple heuristic: based on signature complexity and score
+    const signatureLength = fn.func_signature.length;
+    const score = fn.score;
+    
+    if (signatureLength > 100 && score > 0.9) return 'future'; // Novel, complex, high score
+    if (signatureLength > 60 && score > 0.75) return 'modern'; // Contemporary coding
+    if (signatureLength > 40) return 'classical'; // Traditional but solid
+    return 'ancient'; // Legacy/simple patterns
+  };
+
+  // Helper function to determine category based on function signature/name
+  const getCategory = (fn: any): Category => {
+    const name = fn.func_name.toLowerCase();
+    const sig = fn.func_signature.toLowerCase();
+    const combined = `${name}${sig}`.toLowerCase();
+    
+    // Hard: Complex algorithms, recursion, graph/tree operations
+    if (combined.includes('sort') || combined.includes('search') || 
+        combined.includes('traverse') || combined.includes('recursive') ||
+        combined.includes('algorithm') || combined.includes('compute')) {
+      return 'hard';
+    }
+    
+    // Soft: String/utility operations, simple transformations
+    if (combined.includes('format') || combined.includes('parse') ||
+        combined.includes('convert') || combined.includes('validate') ||
+        combined.includes('clean') || combined.includes('helper')) {
+      return 'soft';
+    }
+    
+    // Medium: Everything else - data operations, filtering, etc
+    return 'medium';
+  };
 
   useEffect(() => {
     fetchHealthData();
@@ -252,22 +295,23 @@ export default function LuminarNexus() {
           </Card>
         )}
 
-        {/* Learning Tab - Aurora's Corpus */}
+        {/* Learning Tab - Aurora's Corpus with Advanced Filtering */}
         {activeTab === 'learning' && (
           <div className="space-y-6">
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <BookOpen className="h-6 w-6 text-primary" />
-                  <div>
+                  <div className="flex-1">
                     <CardTitle>Aurora's Learning Corpus</CardTitle>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Synthesized functions from self-learning runs
+                      Synthesized functions from self-learning runs - {corpusResponse?.items?.length || 0} total
                     </p>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6">
+                {/* Search Bar */}
                 <div className="relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -278,15 +322,133 @@ export default function LuminarNexus() {
                   />
                 </div>
 
+                {/* Filter Bar */}
+                <div className="space-y-4">
+                  {/* Category Filter */}
+                  <div>
+                    <p className="text-sm font-semibold mb-2">Category</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedCategory('all')}
+                      >
+                        All
+                      </Button>
+                      <Button
+                        variant={selectedCategory === 'hard' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedCategory('hard')}
+                        className={selectedCategory === 'hard' ? 'bg-red-500/80 hover:bg-red-500' : ''}
+                      >
+                        Hard (Complex)
+                      </Button>
+                      <Button
+                        variant={selectedCategory === 'medium' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedCategory('medium')}
+                        className={selectedCategory === 'medium' ? 'bg-orange-500/80 hover:bg-orange-500' : ''}
+                      >
+                        Medium
+                      </Button>
+                      <Button
+                        variant={selectedCategory === 'soft' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedCategory('soft')}
+                        className={selectedCategory === 'soft' ? 'bg-green-500/80 hover:bg-green-500' : ''}
+                      >
+                        Soft (Utilities)
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Pass/Fail Filter */}
+                  <div>
+                    <p className="text-sm font-semibold mb-2">Status</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant={passFailFilter === 'all' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setPassFailFilter('all')}
+                      >
+                        All
+                      </Button>
+                      <Button
+                        variant={passFailFilter === 'pass' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setPassFailFilter('pass')}
+                        className={passFailFilter === 'pass' ? 'bg-green-500/80 hover:bg-green-500' : ''}
+                      >
+                        <CheckCircle2 className="h-4 w-4 mr-1" /> Passing
+                      </Button>
+                      <Button
+                        variant={passFailFilter === 'fail' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setPassFailFilter('fail')}
+                        className={passFailFilter === 'fail' ? 'bg-red-500/80 hover:bg-red-500' : ''}
+                      >
+                        <XCircle className="h-4 w-4 mr-1" /> Failing
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Levelship Filter (Ancient to Future) */}
+                  <div>
+                    <p className="text-sm font-semibold mb-2">Coding Evolution (Ancient → Future)</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant={levelshipFilter === 'all' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setLevelshipFilter('all')}
+                      >
+                        All
+                      </Button>
+                      <Button
+                        variant={levelshipFilter === 'ancient' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setLevelshipFilter('ancient')}
+                        className={levelshipFilter === 'ancient' ? 'bg-gray-500/80 hover:bg-gray-500' : ''}
+                      >
+                        Ancient (Legacy)
+                      </Button>
+                      <Button
+                        variant={levelshipFilter === 'classical' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setLevelshipFilter('classical')}
+                        className={levelshipFilter === 'classical' ? 'bg-blue-500/80 hover:bg-blue-500' : ''}
+                      >
+                        Classical
+                      </Button>
+                      <Button
+                        variant={levelshipFilter === 'modern' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setLevelshipFilter('modern')}
+                        className={levelshipFilter === 'modern' ? 'bg-purple-500/80 hover:bg-purple-500' : ''}
+                      >
+                        Modern
+                      </Button>
+                      <Button
+                        variant={levelshipFilter === 'future' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setLevelshipFilter('future')}
+                        className={levelshipFilter === 'future' ? 'bg-cyan-500/80 hover:bg-cyan-500' : ''}
+                      >
+                        🚀 Future (Novel)
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Corpus Display */}
                 {corpusLoading ? (
-                  <div className="flex items-center justify-center min-h-[200px]">
+                  <div className="flex items-center justify-center min-h-[300px]">
                     <div className="text-center space-y-4">
                       <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto" />
                       <p className="text-muted-foreground font-mono">Loading corpus...</p>
                     </div>
                   </div>
                 ) : !corpusResponse?.items || corpusResponse.items.length === 0 ? (
-                  <div className="flex items-center justify-center min-h-[200px]">
+                  <div className="flex items-center justify-center min-h-[300px]">
                     <div className="text-center space-y-4">
                       <Code2 className="h-12 w-12 text-muted-foreground mx-auto opacity-50" />
                       <p className="text-muted-foreground">No functions in corpus yet</p>
@@ -294,44 +456,139 @@ export default function LuminarNexus() {
                     </div>
                   </div>
                 ) : (
-                  <ScrollArea className="h-[600px]">
-                    <div className="space-y-3 pr-4">
-                      {corpusResponse.items
-                        .filter((fn: any) =>
-                          fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase())
-                        )
-                        .map((fn: any) => (
-                          <div key={fn.id} className="rounded-lg border border-primary/10 p-4 bg-background/50 hover:bg-background/70 transition-colors">
-                            <div className="flex items-start justify-between gap-4">
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 flex-wrap mb-2">
-                                  <code className="text-sm font-mono font-semibold">{fn.func_name}</code>
-                                  <Badge variant={fn.score >= 0.8 ? "default" : "secondary"}>
-                                    Score: {(fn.score * 100).toFixed(0)}%
-                                  </Badge>
-                                  <Badge variant={fn.passed === fn.total ? "default" : "destructive"}>
-                                    {fn.passed === fn.total ? (
-                                      <CheckCircle2 className="h-3 w-3 mr-1" />
-                                    ) : (
-                                      <XCircle className="h-3 w-3 mr-1" />
-                                    )}
-                                    {fn.passed}/{fn.total}
-                                  </Badge>
+                  <>
+                    {/* Filter Results Summary */}
+                    {(() => {
+                      const filtered = corpusResponse.items.filter((fn: any) => {
+                        const matchesSearch = fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase());
+                        const matchesCategory = selectedCategory === 'all' || getCategory(fn) === selectedCategory;
+                        const matchesPassFail = passFailFilter === 'all' || 
+                          (passFailFilter === 'pass' && fn.passed === fn.total) ||
+                          (passFailFilter === 'fail' && fn.passed !== fn.total);
+                        const matchesLevelship = levelshipFilter === 'all' || getLevelship(fn) === levelshipFilter;
+                        
+                        return matchesSearch && matchesCategory && matchesPassFail && matchesLevelship;
+                      });
+                      
+                      return (
+                        <div className="text-sm text-muted-foreground">
+                          Showing <span className="font-semibold text-primary">{filtered.length}</span> of {corpusResponse.items.length} functions
+                        </div>
+                      );
+                    })()}
+
+                    <ScrollArea className="h-[700px]">
+                      <div className="space-y-3 pr-4">
+                        {corpusResponse.items
+                          .filter((fn: any) => {
+                            const matchesSearch = fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase());
+                            const matchesCategory = selectedCategory === 'all' || getCategory(fn) === selectedCategory;
+                            const matchesPassFail = passFailFilter === 'all' || 
+                              (passFailFilter === 'pass' && fn.passed === fn.total) ||
+                              (passFailFilter === 'fail' && fn.passed !== fn.total);
+                            const matchesLevelship = levelshipFilter === 'all' || getLevelship(fn) === levelshipFilter;
+                            
+                            return matchesSearch && matchesCategory && matchesPassFail && matchesLevelship;
+                          })
+                          .map((fn: any) => {
+                            const category = getCategory(fn);
+                            const levelship = getLevelship(fn);
+                            const isExpanded = expandedCode === fn.id;
+                            
+                            return (
+                              <div key={fn.id} className="rounded-lg border border-primary/10 p-4 bg-background/50 hover:bg-background/70 transition-colors">
+                                <div className="space-y-3">
+                                  {/* Header */}
+                                  <div className="flex items-start justify-between gap-4">
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center gap-2 flex-wrap mb-2">
+                                        <code className="text-sm font-mono font-semibold">{fn.func_name}</code>
+                                        <Badge variant="outline" className="text-xs">
+                                          {category === 'hard' && '🔴 Hard'}
+                                          {category === 'medium' && '🟠 Medium'}
+                                          {category === 'soft' && '🟢 Soft'}
+                                        </Badge>
+                                        <Badge variant="outline" className="text-xs">
+                                          {levelship === 'ancient' && '⏰ Ancient'}
+                                          {levelship === 'classical' && '📚 Classical'}
+                                          {levelship === 'modern' && '🔧 Modern'}
+                                          {levelship === 'future' && '🚀 Future'}
+                                        </Badge>
+                                      </div>
+                                      <p className="text-xs text-muted-foreground font-mono truncate">{fn.func_signature}</p>
+                                    </div>
+                                  </div>
+
+                                  {/* Badges */}
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <Badge variant={fn.score >= 0.8 ? "default" : "secondary"}>
+                                      Score: {(fn.score * 100).toFixed(0)}%
+                                    </Badge>
+                                    <Badge variant={fn.passed === fn.total ? "default" : "destructive"}>
+                                      {fn.passed === fn.total ? (
+                                        <CheckCircle2 className="h-3 w-3 mr-1" />
+                                      ) : (
+                                        <XCircle className="h-3 w-3 mr-1" />
+                                      )}
+                                      {fn.passed}/{fn.total}
+                                    </Badge>
+                                  </div>
+
+                                  {/* Code Display */}
+                                  {fn.snippet && (
+                                    <div>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => setExpandedCode(isExpanded ? null : fn.id)}
+                                        className="text-xs"
+                                      >
+                                        {isExpanded ? (
+                                          <>
+                                            <ChevronDown className="h-3 w-3 mr-1 rotate-180" />
+                                            Hide Code
+                                          </>
+                                        ) : (
+                                          <>
+                                            <ChevronDown className="h-3 w-3 mr-1" />
+                                            View Code
+                                          </>
+                                        )}
+                                      </Button>
+                                      {isExpanded && (
+                                        <div className="mt-2 relative">
+                                          <pre className="bg-muted p-3 rounded-lg overflow-x-auto text-xs border border-primary/20">
+                                            <code>{fn.snippet}</code>
+                                          </pre>
+                                          <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="absolute top-2 right-2 h-8 w-8 p-0"
+                                            onClick={() => {
+                                              navigator.clipboard.writeText(fn.snippet);
+                                            }}
+                                            title="Copy code"
+                                          >
+                                            <Copy className="h-3 w-3" />
+                                          </Button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {/* Metadata */}
+                                  <p className="text-xs text-muted-foreground">
+                                    Added: {new Date(fn.timestamp).toLocaleString()}
+                                  </p>
                                 </div>
-                                <p className="text-xs text-muted-foreground font-mono">{fn.func_signature}</p>
                               </div>
-                            </div>
-                            <pre className="bg-muted p-3 rounded-lg overflow-x-auto text-xs mt-3">
-                              <code>{fn.snippet}</code>
-                            </pre>
-                            <p className="text-xs text-muted-foreground mt-2">
-                              Added: {new Date(fn.timestamp).toLocaleString()}
-                            </p>
-                          </div>
-                        ))}
-                    </div>
-                  </ScrollArea>
+                            );
+                          })}
+                      </div>
+                    </ScrollArea>
+                  </>
                 )}
               </CardContent>
             </Card>
