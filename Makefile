@@ -17,26 +17,15 @@ AURORA_PORT ?= 5001
 # === Aurora Unified Control ===
 aurora-start:
 	@echo "🚀 Starting Aurora Complete System..."
-	@python3 aurora_unified_cmd.py start
+	@python3 tools/aurora_process_grandmaster.py start all
 
 aurora-stop:
 	@echo "⏹  Stopping Aurora System..."
-	@python3 aurora_unified_cmd.py stop
+	@python3 tools/aurora_process_grandmaster.py stop all
 
 aurora-status:
 	@echo "📊 Aurora System Status..."
-	@python3 aurora_unified_cmd.py status
-
-aurora-fix:
-	@echo "🔧 Aurora Auto-Fix..."
-	@python3 aurora_unified_cmd.py fix
-
-aurora-control:
-	@echo "🎮 Opening Aurora Control Center..."
-	@python3 aurora_unified_cmd.py start
-	@echo "Opening http://localhost:5000/control in your browser..."
-	@sleep 2
-	@$${BROWSER:-xdg-open} "http://localhost:5000/control" 2>/dev/null || echo "Open http://localhost:5000/control in your browser"
+	@python3 tools/luminar_nexus.py status
 
 # === Debug & Health ===
 debug:
