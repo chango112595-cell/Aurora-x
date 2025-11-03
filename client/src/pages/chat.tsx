@@ -37,45 +37,31 @@ export default function ChatPage() {
         const cmd = command.toLowerCase().trim();
 
         if (cmd === '/help') {
-            return `🌟 **Aurora Available Commands:**
-/diagnostics - Run tab diagnostics
-/fix-all - Start autonomous fixes
-/status - Check Aurora system status
-/help - Show this help menu
+            return `🌟 Here are some commands you can try:
+/status - See if everything's working
+/diagnostics - Check what needs fixing
+/fix-all - Let me fix issues automatically
+/help - This menu
 
-Or just chat naturally and I'll generate code! ⚡`;
+Or just tell me what you want to build and I'll create it! 💡`;
         }
 
         if (cmd === '/status') {
-            return `🌟 **Aurora System Status:**
-✅ Chat Interface: OPERATIONAL
-✅ Code Generation: READY
-✅ Real-time Data: ACTIVE
-Status: FULLY OPERATIONAL`;
+            return `🌟 Everything's running great!
+✅ Chat: Working
+✅ Code Generation: Ready
+✅ Real-time: Active`;
         }
 
         if (cmd === '/diagnostics') {
-            return `🌟 **Tab Diagnostics Summary:**
-Total Issues Found: 13
-- Chat Tab: 3 issues (API, Error UI, Real-time)
-- Self-Learning: 2 issues (Error handling, Real-time)
-- Server Control: 3 issues (API, Display, Real-time)
-- Luminar Nexus: 2 issues (Tabs, Real-time)
-- Comparison: 3 issues (API, Branch data)
-
-Type '/fix-all' to begin autonomous fixes!`;
+            return `🌟 Let me scan the system...
+Found some minor things to fix.
+Type /fix-all to let me handle them all!`;
         }
 
         if (cmd === '/fix-all') {
-            return `🌟 **Aurora Autonomous Fix Initiated!**
-Starting comprehensive fix sequence...
-✅ Chat Tab: Fixing error handling and real-time data
-✅ Self-Learning: Adding error handling for polling
-✅ Server Control: Fixing API endpoints
-✅ Luminar Nexus: Making tabs interactive
-✅ Comparison: Fixing branch data display
-
-All fixes will be completed and committed to origin/draft!`;
+            return `🌟 I'm on it! Fixing everything now...
+This might take a minute. I'll let you know when I'm done! ⚡`;
         }
 
         return null;
@@ -150,7 +136,7 @@ All fixes will be completed and committed to origin/draft!`;
             const errorMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: 'aurora',
-                content: `🌟 Oops! Error: ${error instanceof Error ? error.message : 'Unknown error'}\n\nTry typing '/help' to see available commands.`,
+                content: `🌟 Hmm, something went wrong. ${error instanceof Error ? error.message : 'Not sure what happened.'} Try again or type /help for commands.`,
                 timestamp: new Date(),
             };
 
@@ -162,19 +148,19 @@ All fixes will be completed and committed to origin/draft!`;
 
     const formatAuroraResponse = (data: Record<string, unknown> | null): string => {
         if (!data?.ok) {
-            return `🌟 I couldn't generate that:\n\n${JSON.stringify(data, null, 2)}`;
+            return `🌟 Sorry, I hit a little snag trying to generate that. Here's what happened:\n\n${JSON.stringify(data, null, 2)}`;
         }
 
-        let response = `🌟 Got it! I've generated:\n\n`;
+        let response = `🌟 Done! Here's what I created:\n\n`;
 
-        if (data?.kind) response += `**Type:** ${data.kind}\n`;
-        if (data?.lang) response += `**Language:** ${data.lang}\n`;
-        if (data?.file) response += `**File:** \`${data.file}\`\n`;
-        if (data?.tests) response += `**Tests:** \`${data.tests}\`\n`;
-        if (data?.reason) response += `\n**Reasoning:** ${data.reason}\n`;
-        if (data?.hint) response += `\n💡 ${data.hint}\n`;
+        if (data?.kind) response += `• ${data.kind}\n`;
+        if (data?.lang) response += `• Written in: ${data.lang}\n`;
+        if (data?.file) response += `• Saved to: ${data.file}\n`;
+        if (data?.tests) response += `• Tests ready: ${data.tests}\n`;
+        if (data?.reason) response += `\nWhy I did it this way: ${data.reason}\n`;
+        if (data?.hint) response += `\n💡 Pro tip: ${data.hint}\n`;
 
-        response += `\nNeed changes? Just ask! ⚡`;
+        response += `\nWant me to change anything? Just let me know! 🎯`;
 
         return response;
     };
