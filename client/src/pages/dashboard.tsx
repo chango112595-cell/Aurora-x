@@ -321,7 +321,7 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
 
 // Corpus Explorer Component - Recent Learning Activity (Summary View)
 const CorpusExplorerSection = () => {
-  // Show only recent 20 items by default
+  // Show recent 20 items for the activity list
   const recentLimit = 20;
 
   interface CorpusEntry {
@@ -334,6 +334,15 @@ const CorpusExplorerSection = () => {
     timestamp: string;
   }
 
+  // Fetch ALL items to calculate overall stats
+  const { data: allCorpusData } = useQuery<{
+    items: CorpusEntry[];
+    hasMore: boolean;
+  }>({
+    queryKey: [`/api/corpus?limit=1000&offset=0`],
+  });
+
+  // Fetch recent items for display
   const { data: corpusData, isLoading } = useQuery<{
     items: CorpusEntry[];
     hasMore: boolean;
@@ -341,12 +350,16 @@ const CorpusExplorerSection = () => {
     queryKey: [`/api/corpus?limit=${recentLimit}&offset=0`],
   });
 
-  const entries = corpusData?.items || [];
-  const totalRecords = entries.length;
-  const perfectRuns = entries.filter((e: CorpusEntry) => e.passed === e.total).length;
-  const avgScore = entries.length > 0
-    ? (entries.reduce((sum: number, e: CorpusEntry) => sum + e.score, 0) / entries.length).toFixed(2)
+  // Calculate OVERALL stats from all corpus data
+  const allEntries = allCorpusData?.items || [];
+  const totalRecords = allEntries.length;
+  const perfectRuns = allEntries.filter((e: CorpusEntry) => e.passed === e.total).length;
+  const avgScore = allEntries.length > 0
+    ? (allEntries.reduce((sum: number, e: CorpusEntry) => sum + e.score, 0) / allEntries.length).toFixed(2)
     : "0";
+
+  // Use recent entries for the activity list
+  const entries = corpusData?.items || [];
 
   const passPercentage = (passed: number, total: number) => {
     if (!total) return "0%";
