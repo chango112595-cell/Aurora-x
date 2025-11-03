@@ -35,7 +35,7 @@ export default function LuminarNexus() {
     // Simple heuristic: based on signature complexity and score
     const signatureLength = fn.func_signature.length;
     const score = fn.score;
-    
+
     if (signatureLength > 100 && score > 0.9) return 'future'; // Novel, complex, high score
     if (signatureLength > 60 && score > 0.75) return 'modern'; // Contemporary coding
     if (signatureLength > 40) return 'classical'; // Traditional but solid
@@ -47,21 +47,21 @@ export default function LuminarNexus() {
     const name = fn.func_name.toLowerCase();
     const sig = fn.func_signature.toLowerCase();
     const combined = `${name}${sig}`.toLowerCase();
-    
+
     // Hard: Complex algorithms, recursion, graph/tree operations
-    if (combined.includes('sort') || combined.includes('search') || 
-        combined.includes('traverse') || combined.includes('recursive') ||
-        combined.includes('algorithm') || combined.includes('compute')) {
+    if (combined.includes('sort') || combined.includes('search') ||
+      combined.includes('traverse') || combined.includes('recursive') ||
+      combined.includes('algorithm') || combined.includes('compute')) {
       return 'hard';
     }
-    
+
     // Soft: String/utility operations, simple transformations
     if (combined.includes('format') || combined.includes('parse') ||
-        combined.includes('convert') || combined.includes('validate') ||
-        combined.includes('clean') || combined.includes('helper')) {
+      combined.includes('convert') || combined.includes('validate') ||
+      combined.includes('clean') || combined.includes('helper')) {
       return 'soft';
     }
-    
+
     // Medium: Everything else - data operations, filtering, etc
     return 'medium';
   };
@@ -463,14 +463,14 @@ export default function LuminarNexus() {
                         const matchesSearch = fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase());
                         const matchesCategory = selectedCategory === 'all' || getCategory(fn) === selectedCategory;
-                        const matchesPassFail = passFailFilter === 'all' || 
+                        const matchesPassFail = passFailFilter === 'all' ||
                           (passFailFilter === 'pass' && fn.passed === fn.total) ||
                           (passFailFilter === 'fail' && fn.passed !== fn.total);
                         const matchesLevelship = levelshipFilter === 'all' || getLevelship(fn) === levelshipFilter;
-                        
+
                         return matchesSearch && matchesCategory && matchesPassFail && matchesLevelship;
                       });
-                      
+
                       return (
                         <div className="text-sm text-muted-foreground">
                           Showing <span className="font-semibold text-primary">{filtered.length}</span> of {corpusResponse.items.length} functions
@@ -485,18 +485,18 @@ export default function LuminarNexus() {
                             const matchesSearch = fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                               fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase());
                             const matchesCategory = selectedCategory === 'all' || getCategory(fn) === selectedCategory;
-                            const matchesPassFail = passFailFilter === 'all' || 
+                            const matchesPassFail = passFailFilter === 'all' ||
                               (passFailFilter === 'pass' && fn.passed === fn.total) ||
                               (passFailFilter === 'fail' && fn.passed !== fn.total);
                             const matchesLevelship = levelshipFilter === 'all' || getLevelship(fn) === levelshipFilter;
-                            
+
                             return matchesSearch && matchesCategory && matchesPassFail && matchesLevelship;
                           })
                           .map((fn: any) => {
                             const category = getCategory(fn);
                             const levelship = getLevelship(fn);
                             const isExpanded = expandedCode === fn.id;
-                            
+
                             return (
                               <div key={fn.id} className="rounded-lg border border-primary/10 p-4 bg-background/50 hover:bg-background/70 transition-colors">
                                 <div className="space-y-3">
