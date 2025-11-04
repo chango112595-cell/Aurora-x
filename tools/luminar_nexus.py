@@ -24,6 +24,7 @@ try:
     from aurora_intelligence_manager import AuroraIntelligenceManager
     from aurora_ultimate_omniscient_grandmaster import AURORA_ULTIMATE_GRANDMASTER
     from aurora_grandmaster_autonomous_tools import AURORA_AUTONOMOUS_TOOL_MASTERY
+    from aurora_foundational_genius import AURORA_FOUNDATIONAL_SKILLS
     AURORA_INTELLIGENCE = AuroraIntelligenceManager()
     AURORA_IS_BOSS = True
     AURORA_CAN_USE_TOOLS = True  # Aurora can now autonomously execute tools!
@@ -40,6 +41,11 @@ try:
             AURORA_INTELLIGENCE.log(f"      • Self-diagnosis, autonomous debugging, autonomous fixing")
             AURORA_INTELLIGENCE.log(f"      • Can read files, run commands, modify code, restart services")
             AURORA_INTELLIGENCE.log(f"      • {len(AURORA_AUTONOMOUS_TOOL_MASTERY['tiers'])} tiers: Ancient → Future → Sci-Fi")
+            AURORA_INTELLIGENCE.log(f"   🧠 TIER 29-32: FOUNDATIONAL & PROFESSIONAL GENIUS")
+            AURORA_INTELLIGENCE.log(f"      • {len(AURORA_FOUNDATIONAL_SKILLS)} complete skill categories")
+            AURORA_INTELLIGENCE.log(f"      • Problem-solving, Logic, Mathematics, Communication, Teamwork")
+            AURORA_INTELLIGENCE.log(f"      • Data Structures, Algorithms, SDLC, Testing, Version Control")
+            AURORA_INTELLIGENCE.log(f"      • 400+ individual skills from Ancient to Sci-Fi mastery")
             AURORA_INTELLIGENCE.log(f"   🚀 Tier 10: Browser & Automation (Shell exec → Neural browsers)")
             AURORA_INTELLIGENCE.log(f"   🔐 Tier 11: Security & Cryptography (Caesar → Quantum encryption)")
             AURORA_INTELLIGENCE.log(f"   🌍 Tier 12: Networking & Protocols (OSI → Quantum networks)")
