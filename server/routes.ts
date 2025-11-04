@@ -3809,18 +3809,26 @@ asyncio.run(main())
     
     try {
       const { execSync } = await import("child_process");
+      const luminarCmd = "/workspaces/Aurora-x/tools/luminar_nexus.py";
       
       if (action === "start") {
-        execSync("python3 /workspaces/Aurora-x/luminar-keeper.py start", { stdio: "inherit" });
-        res.json({ status: "ok", message: `${service} started` });
+        // Start all services using Luminar Nexus
+        execSync(`python3 ${luminarCmd} start-all`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `All Aurora services started via Luminar Nexus` });
       } else if (action === "stop") {
-        execSync("python3 /workspaces/Aurora-x/luminar-keeper.py stop", { stdio: "inherit" });
-        res.json({ status: "ok", message: `${service} stopped` });
+        // Stop all services using Luminar Nexus
+        execSync(`python3 ${luminarCmd} stop-all`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `All Aurora services stopped via Luminar Nexus` });
       } else if (action === "restart") {
-        execSync("python3 /workspaces/Aurora-x/luminar-keeper.py stop", { stdio: "inherit" });
+        // Restart all services using Luminar Nexus
+        execSync(`python3 ${luminarCmd} stop-all`, { stdio: "pipe" });
         await new Promise(resolve => setTimeout(resolve, 2000));
-        execSync("python3 /workspaces/Aurora-x/luminar-keeper.py start", { stdio: "inherit" });
-        res.json({ status: "ok", message: `${service} restarted` });
+        execSync(`python3 ${luminarCmd} start-all`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `All Aurora services restarted via Luminar Nexus` });
+      } else if (action === "status") {
+        // Get status from Luminar Nexus
+        const output = execSync(`python3 ${luminarCmd} status`, { encoding: 'utf-8' });
+        res.json({ status: "ok", message: output });
       } else {
         res.status(400).json({ status: "error", message: "Unknown action" });
       }
@@ -3881,6 +3889,35 @@ asyncio.run(main())
 // Knowledge is embedded directly in responses - no dynamic loading needed
 async function processAuroraMessage(userMessage: string): Promise<string> {
   const msg = userMessage.toLowerCase().trim();
+  
+  // Query Aurora's learned skills if user asks about her library
+  if (msg.includes('what have you learned') || msg.includes('show me your skills') || 
+      msg.includes('your library') || msg.includes('learned functions')) {
+    try {
+      const response = await fetch('http://localhost:5000/api/corpus?limit=10');
+      const data = await response.json();
+      const functions = data.items || [];
+      
+      const functionList = functions.slice(0, 5).map((fn: any) => 
+        `• **${fn.func_name}** - ${fn.score === 1 ? '✅ Passing' : `⚠️ ${fn.passed}/${fn.total} tests`} (Learned: ${new Date(fn.timestamp).toLocaleDateString()})`
+      ).join('\n');
+      
+      return `📚 **Aurora's Learning Library**
+
+I've learned ${functions.length}+ functions through self-synthesis! Here are my most recent:
+
+${functionList}
+
+**Stats:**
+• Total functions: ${functions.length}
+• Passing all tests: ${functions.filter((f: any) => f.score === 1).length}
+• Check **Code Library** tab to see all my learned code!
+
+What would you like me to help you build using these skills?`;
+    } catch (error) {
+      return "I have a comprehensive learning library! Check the **Code Library** tab in the sidebar to see all the functions I've learned through self-synthesis.";
+    }
+  }
   
   // Context-aware conversational responses using ACTUAL GRANDMASTER KNOWLEDGE
   // All 27 tiers are referenced in the responses below
