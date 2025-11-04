@@ -969,8 +969,9 @@ class AuroraConversationalAI:
         # Detect what task to execute
         task_type = None
         target_file = None
+        is_creative_mode = "creative" in user_message.lower() or "unique" in user_message.lower()
 
-        if re.search(r"(rebuild|recreate|create new|build new).*chat.*(ui|interface|component)", user_message.lower()):
+        if re.search(r"(rebuild|recreate|create|design|build|unique|creative).*(?:new|chat|ui|interface|component)", user_message.lower()):
             task_type = "create_chat_ui"
             target_file = "/workspaces/Aurora-x/client/src/components/AuroraRebuiltChat.tsx"
         elif re.search(r"write.*file|create.*file|build.*component", user_message.lower()):
