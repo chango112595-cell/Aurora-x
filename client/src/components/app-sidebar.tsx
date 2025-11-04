@@ -14,13 +14,13 @@ import {
 } from "@/components/ui/sidebar";
 
 const menuItems = [
-  { title: "Chat", icon: MessageSquare, url: "/luminar?tab=chat" },
-  { title: "Code Library", icon: BookOpen, url: "/luminar?tab=learning" },
-  { title: "Aurora Dashboard", icon: BarChart3, url: "/luminar?tab=overview" },
-  { title: "Diagnostics", icon: Activity, url: "/luminar?tab=diagnostics" },
-  { title: "Services", icon: Cpu, url: "/luminar?tab=services" },
-  { title: "Metrics", icon: TrendingUp, url: "/luminar?tab=metrics" },
+  { title: "Chat", icon: MessageSquare, url: "/chat" },
+  { title: "Code Library", icon: BookOpen, url: "/library" },
+  { title: "Aurora Dashboard", icon: BarChart3, url: "/dashboard" },
+  { title: "Comparison", icon: TrendingUp, url: "/comparison" },
   { title: "Luminar Nexus", icon: Network, url: "/luminar" },
+  { title: "Server Control", icon: Cpu, url: "/servers" },
+  { title: "Self-Learning", icon: Sparkles, url: "/self-learning" },
 ];
 
 export function AppSidebar() {
