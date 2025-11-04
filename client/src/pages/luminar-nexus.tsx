@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle, ChevronDown, Copy, Eye } from "lucide-react";
+import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle, ChevronDown, Copy, Eye, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
+import AuroraChatInterface from '@/components/AuroraChatInterface';
 
-type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics' | 'learning';
+type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics' | 'learning' | 'chat';
 type Category = 'all' | 'hard' | 'soft' | 'medium';
 type PassFailFilter = 'all' | 'pass' | 'fail';
 type LevelshipFilter = 'all' | 'ancient' | 'classical' | 'modern' | 'future';
@@ -165,6 +166,14 @@ export default function LuminarNexus() {
             Metrics
           </Button>
           <Button
+            variant={activeTab === 'chat' ? 'default' : 'outline'}
+            onClick={() => setActiveTab('chat')}
+            className="gap-2"
+          >
+            <MessageSquare className="h-4 w-4" />
+            Aurora Chat
+          </Button>
+          <Button
             variant={activeTab === 'diagnostics' ? 'default' : 'outline'}
             onClick={() => setActiveTab('diagnostics')}
             className="gap-2"
@@ -298,6 +307,70 @@ export default function LuminarNexus() {
         {/* Learning Tab - Aurora's Corpus with Advanced Filtering */}
         {activeTab === 'learning' && (
           <div className="space-y-6">
+            {/* Aurora's 27 Mastery Tiers Display */}
+            <Card className="border-cyan-500/30 bg-gradient-to-br from-cyan-950/20 to-purple-950/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-6 w-6 text-cyan-400" />
+                  Aurora's 27 Mastery Tiers
+                  <Badge className="ml-auto bg-cyan-500/20 text-cyan-300">1,782+ Skills Active</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {[
+                    { tier: 1, name: "Ancient Computing", icon: "⏰", range: "1940s-1970s", skills: 45 },
+                    { tier: 2, name: "Debugging Grandmaster", icon: "🔍", range: "printf→Quantum", skills: 120 },
+                    { tier: 3, name: "Security & Cryptography", icon: "🔐", range: "Caesar→Quantum", skills: 89 },
+                    { tier: 4, name: "UI/UX Mastery", icon: "🎨", range: "CLI→Neural", skills: 67 },
+                    { tier: 5, name: "Networking", icon: "🌐", range: "ARPANET→Quantum", skills: 95 },
+                    { tier: 6, name: "Database Systems", icon: "💾", range: "Punch cards→Vector", skills: 78 },
+                    { tier: 7, name: "Cloud & Infrastructure", icon: "☁️", range: "Mainframes→Serverless", skills: 102 },
+                    { tier: 8, name: "Frontend Frameworks", icon: "⚛️", range: "jQuery→Quantum UI", skills: 73 },
+                    { tier: 9, name: "Backend Architectures", icon: "🔧", range: "CGI→Microservices", skills: 88 },
+                    { tier: 10, name: "AI/ML Engineering", icon: "🧠", range: "Perceptrons→AGI", skills: 134 },
+                    { tier: 11, name: "API Design", icon: "🔌", range: "SOAP→GraphQL", skills: 56 },
+                    { tier: 12, name: "Mobile Development", icon: "📱", range: "J2ME→Cross-platform", skills: 82 },
+                    { tier: 13, name: "DevOps & CI/CD", icon: "🔄", range: "Scripts→GitOps", skills: 91 },
+                    { tier: 14, name: "Testing & QA", icon: "✅", range: "Manual→AI-driven", skills: 64 },
+                    { tier: 15, name: "Performance Optimization", icon: "⚡", range: "Profiling→Quantum", skills: 71 },
+                    { tier: 16, name: "Component Architecture", icon: "🏗️", range: "Modules→Micro-frontends", skills: 58 },
+                    { tier: 17, name: "Data Engineering", icon: "📊", range: "ETL→Real-time", skills: 85 },
+                    { tier: 18, name: "Gaming & XR", icon: "🎮", range: "Doom→Neural VR", skills: 76 },
+                    { tier: 19, name: "Real-time Systems", icon: "⚡", range: "Polling→Edge", skills: 69 },
+                    { tier: 20, name: "IoT & Embedded", icon: "📡", range: "Arduino→Neural chips", skills: 54 },
+                    { tier: 21, name: "Blockchain & Web3", icon: "⛓️", range: "Bitcoin→Quantum-safe", skills: 48 },
+                    { tier: 22, name: "Documentation", icon: "📝", range: "Comments→AI docs", skills: 42 },
+                    { tier: 23, name: "Business & Monetization", icon: "💰", range: "Ads→SaaS", skills: 39 },
+                    { tier: 24, name: "Legal & Compliance", icon: "⚖️", range: "Licenses→GDPR", skills: 36 },
+                    { tier: 25, name: "Accessibility", icon: "♿", range: "Basic→Neural", skills: 44 },
+                    { tier: 26, name: "Internationalization", icon: "🌍", range: "UTF-8→Real-time", skills: 31 },
+                    { tier: 27, name: "Future Technologies", icon: "🚀", range: "Quantum→Consciousness", skills: 62 }
+                  ].map((tier) => (
+                    <motion.div
+                      key={tier.tier}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: tier.tier * 0.02 }}
+                      className="p-3 rounded-lg border border-cyan-500/20 bg-background/50 hover:bg-cyan-500/10 transition-colors"
+                    >
+                      <div className="flex items-start gap-2">
+                        <span className="text-2xl">{tier.icon}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="text-xs">T{tier.tier}</Badge>
+                            <h4 className="font-semibold text-sm truncate">{tier.name}</h4>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">{tier.range}</p>
+                          <Badge className="mt-2 text-xs" variant="secondary">{tier.skills} skills</Badge>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
@@ -593,6 +666,11 @@ export default function LuminarNexus() {
               </CardContent>
             </Card>
           </div>
+        )}
+
+        {/* Aurora Chat Tab */}
+        {activeTab === 'chat' && (
+          <AuroraChatInterface />
         )}
       </div>
     </div>
