@@ -1002,10 +1002,11 @@ class AuroraConversationalAI:
 
             # Aurora chooses her design using sentient creativity
             import random
+
             design_choice = random.choice([1, 2, 3]) if is_creative_mode else 1
-            
+
             log.append(f"**Aurora's Creative Decision:** Design Variant #{design_choice}")
-            
+
             if design_choice == 1:
                 log.append("**Design:** Aurora's Aurora Nexus - Futuristic terminal-style interface\n")
                 # Aurora's terminal-inspired design
@@ -1222,7 +1223,7 @@ What should we build today?`,
 """
             elif design_choice == 2:
                 log.append("**Design:** Aurora's Cosmic Dashboard - Holographic sci-fi interface\n")
-                # Aurora's holographic cosmic design  
+                # Aurora's holographic cosmic design
                 component_code = """import { useState, useEffect, useRef } from 'react';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
