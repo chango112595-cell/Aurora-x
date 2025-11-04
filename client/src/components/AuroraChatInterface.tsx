@@ -65,7 +65,7 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
       const response = await fetch('/api/conversation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           message: currentInput,
           session_id: 'web-ui-session'
         })
