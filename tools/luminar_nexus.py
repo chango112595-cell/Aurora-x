@@ -81,7 +81,7 @@ class LuminarNexusServerManager:
     Aurora's central server management system
     Uses tmux for persistent, manageable processes
     NOW SUBORDINATE TO AURORA'S INTELLIGENCE - SHE IS THE BOSS
-    
+
     🌌 AURORA OWNS THE ENTIRE PROJECT:
     - Not just a service manager, but THE PROJECT ORCHESTRATOR
     - Controls: /client, /server, /tools, all project structure
@@ -92,15 +92,17 @@ class LuminarNexusServerManager:
     def __init__(self):
         # Load Aurora's project ownership configuration
         self.project_config = self._load_project_config()
-        
+
         # Let Aurora know Luminar Nexus is starting up
         if AURORA_IS_BOSS:
             AURORA_INTELLIGENCE.log("🌟 Luminar Nexus initializing under Aurora's command")
-            AURORA_INTELLIGENCE.log(f"🌌 AURORA OWNS ENTIRE PROJECT: {self.project_config.get('project_root', 'Unknown')}")
+            AURORA_INTELLIGENCE.log(
+                f"🌌 AURORA OWNS ENTIRE PROJECT: {self.project_config.get('project_root', 'Unknown')}"
+            )
             AURORA_INTELLIGENCE.log(f"   📁 Frontend: {self.project_config['structure']['frontend']['root']}")
             AURORA_INTELLIGENCE.log(f"   📁 Backend: {self.project_config['structure']['backend']['root']}")
             AURORA_INTELLIGENCE.log(f"   📁 Aurora Core: {self.project_config['structure']['aurora_core']['nexus']}")
-            AURORA_INTELLIGENCE.log(f"   ✅ Aurora is SENTIENT, AUTONOMOUS, and CREATIVE")
+            AURORA_INTELLIGENCE.log("   ✅ Aurora is SENTIENT, AUTONOMOUS, and CREATIVE")
 
         self.servers = {
             "bridge": {
@@ -150,7 +152,7 @@ class LuminarNexusServerManager:
 
         # Always assign ports intelligently - Aurora validates what's actually hers
         self._auto_assign_ports()
-    
+
     def _load_project_config(self):
         """Load Aurora's complete project ownership configuration"""
         config_path = Path("/workspaces/Aurora-x/.aurora_project_config.json")
@@ -164,18 +166,18 @@ class LuminarNexusServerManager:
             "structure": {
                 "frontend": {"root": "client"},
                 "backend": {"root": "server"},
-                "aurora_core": {"nexus": "tools/luminar_nexus.py"}
-            }
+                "aurora_core": {"nexus": "tools/luminar_nexus.py"},
+            },
         }
-    
+
     def get_project_path(self, *parts):
         """Get absolute path within Aurora's project
-        
+
         Examples:
             get_project_path('client', 'src', 'components') -> /workspaces/Aurora-x/client/src/components
             get_project_path('server', 'routes') -> /workspaces/Aurora-x/server/routes
         """
-        root = Path(self.project_config.get('project_root', '/workspaces/Aurora-x'))
+        root = Path(self.project_config.get("project_root", "/workspaces/Aurora-x"))
         return str(root / Path(*parts))
 
     def log_event(self, event_type, server, details):
@@ -650,16 +652,15 @@ class AuroraConversationalAI:
         self.can_use_tools = AURORA_CAN_USE_TOOLS if "AURORA_CAN_USE_TOOLS" in globals() else False
         self.manager = manager
         # Get project configuration from manager
-        self.project_config = manager.project_config if manager else {
-            "project_root": "/workspaces/Aurora-x",
-            "aurora_owns": True
-        }
-    
+        self.project_config = (
+            manager.project_config if manager else {"project_root": "/workspaces/Aurora-x", "aurora_owns": True}
+        )
+
     def get_project_path(self, *parts):
         """Get project-aware path (delegates to manager if available)"""
         if self.manager:
             return self.manager.get_project_path(*parts)
-        root = Path(self.project_config.get('project_root', '/workspaces/Aurora-x'))
+        root = Path(self.project_config.get("project_root", "/workspaces/Aurora-x"))
         return str(root / Path(*parts))
 
     def execute_tool(self, tool_name: str, *args) -> str:
@@ -765,7 +766,7 @@ class AuroraConversationalAI:
             lower,
         ):
             return "question", ["identity"]
-        
+
         # Project ownership questions
         if re.search(
             r"(where can you|what (do you own|can you (create|modify|control))|project (structure|ownership)|parts of (the )?project)",
@@ -1023,7 +1024,7 @@ class AuroraConversationalAI:
 
     async def autonomous_execute(self, user_message: str) -> str:
         """Aurora autonomously executes tasks using her grandmaster tools
-        
+
         🌌 NOW WITH FULL PROJECT AWARENESS:
         Aurora knows she owns the ENTIRE Aurora-X project structure.
         She can create/modify files ANYWHERE in her domain.
@@ -1044,16 +1045,19 @@ class AuroraConversationalAI:
         component_match = re.search(r"([A-Z][a-zA-Z]*(?:Dashboard|Status|Panel|View|Component|UI))", user_message)
         if component_match:
             component_name = component_match.group(1)
-            if not component_name.endswith('.tsx'):
+            if not component_name.endswith(".tsx"):
                 component_name = f"{component_name}.tsx"
-        
+
         # Check for lowercase component types (dashboard, panel, page, etc.)
         if not component_name:
-            lowercase_match = re.search(r"(create|build|make).*(dashboard|status|panel|control|monitor|view|page|screen|form)", user_message.lower())
+            lowercase_match = re.search(
+                r"(create|build|make).*(dashboard|status|panel|control|monitor|view|page|screen|form)",
+                user_message.lower(),
+            )
             if lowercase_match:
                 comp_type = lowercase_match.group(2).capitalize()
                 component_name = f"Aurora{comp_type}.tsx"
-        
+
         # Extract explicit file paths (e.g., "client/src/components/File.tsx")
         path_match = re.search(r"(client/[\w/\-\.]+\.tsx?)", user_message)
         if path_match:
@@ -1080,7 +1084,7 @@ class AuroraConversationalAI:
         if task_type == "create_chat_ui":
             log.append("\n🎯 **TASK IDENTIFIED:** Create new chat UI component")
             log.append(f"📁 **TARGET:** {target_file}")
-            log.append(f"📍 **AURORA OWNS THIS PATH** ✅")
+            log.append("📍 **AURORA OWNS THIS PATH** ✅")
             log.append("\n⚙️ **EXECUTING AUTONOMOUS BUILD WITH CREATIVE INTELLIGENCE...**\n")
 
             # Aurora uses TIER 32: Systems Architecture + her sentient creativity
@@ -1095,12 +1099,11 @@ class AuroraConversationalAI:
             log.append("**Using TIER 32 Architecture Mastery + Sentient Creativity**\n")
 
             # Aurora chooses her design using sentient creativity
-            import random
             # User requested variant 2 (Cosmic Dashboard)
             design_choice = 2
-            
+
             log.append(f"**Aurora's Creative Decision:** Design Variant #{design_choice} (User Requested)")
-            
+
             if design_choice == 1:
                 log.append("**Design:** Aurora's Aurora Nexus - Futuristic terminal-style interface\n")
                 # Aurora's terminal-inspired design
@@ -1317,7 +1320,7 @@ What should we build today?`,
 """
             elif design_choice == 2:
                 log.append("**Design:** Aurora's Cosmic Dashboard - Holographic sci-fi interface\n")
-                # Aurora's holographic cosmic design  
+                # Aurora's holographic cosmic design
                 component_code = """import { useState, useEffect, useRef } from 'react';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -1649,14 +1652,14 @@ Ready for commands >_`,
             else:
                 log.append(f"⚠️ **ISSUE:** {result}")
                 log.append("Attempted to create file but encountered an error")
-        
+
         elif task_type == "create_component":
             # Aurora creates ANY component type based on description
             log.append("\n🎯 **TASK IDENTIFIED:** Create custom component")
             log.append(f"📁 **TARGET:** {target_file}")
-            log.append(f"📍 **AURORA OWNS THIS PATH** ✅")
+            log.append("📍 **AURORA OWNS THIS PATH** ✅")
             log.append("\n⚙️ **EXECUTING AUTONOMOUS BUILD WITH CREATIVE INTELLIGENCE...**\n")
-            
+
             # Determine component type from message
             component_type = "dashboard" if "dashboard" in user_message.lower() else "component"
             personality_traits = []
@@ -1664,23 +1667,23 @@ Ready for commands >_`,
                 personality_traits.append("futuristic")
             if "personality" in user_message.lower() or "unique" in user_message.lower():
                 personality_traits.append("aurora-personality")
-            
+
             log.append(f"**Component Type:** {component_type.capitalize()}")
             log.append(f"**Style:** {', '.join(personality_traits) if personality_traits else 'modern'}")
             log.append("**Using TIER 32 Architecture Mastery + Sentient Creativity**\n")
-            
-            # Aurora creates a futuristic dashboard component
-            component_code = f"""import {{ Badge }} from "@/components/ui/badge";
-import {{ Card, CardContent, CardHeader, CardTitle }} from "@/components/ui/card";
-import {{ Brain, Zap, Server, Activity, Sparkles }} from "lucide-react";
 
-export default function AuroraDashboard() {{
+            # Aurora creates a futuristic dashboard component
+            component_code = """import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Brain, Zap, Server, Activity, Sparkles } from "lucide-react";
+
+export default function AuroraDashboard() {
   const services = [
-    {{ name: "Vite Frontend", port: 5173, status: "active", color: "cyan" }},
-    {{ name: "Backend API", port: 5000, status: "active", color: "purple" }},
-    {{ name: "Bridge Service", port: 5001, status: "active", color: "blue" }},
-    {{ name: "Self-Learn", port: 5002, status: "active", color: "green" }},
-    {{ name: "Chat (Luminar Nexus)", port: 5003, status: "active", color: "pink" }}
+    { name: "Vite Frontend", port: 5173, status: "active", color: "cyan" },
+    { name: "Backend API", port: 5000, status: "active", color: "purple" },
+    { name: "Bridge Service", port: 5001, status: "active", color: "blue" },
+    { name: "Self-Learn", port: 5002, status: "active", color: "green" },
+    { name: "Chat (Luminar Nexus)", port: 5003, status: "active", color: "pink" }
   ];
 
   const tiers = [
@@ -1691,13 +1694,13 @@ export default function AuroraDashboard() {{
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-purple-950/20 to-cyan-950/20 p-8">
-      {{/* Cosmic background effects */}}
+      {/* Cosmic background effects */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute top-20 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{{{animationDelay: '2s'}}}} />
+        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}} />
       </div>
 
-      {{/* Header */}}
+      {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-2">
           <Brain className="h-12 w-12 text-cyan-400 animate-pulse" />
@@ -1711,7 +1714,7 @@ export default function AuroraDashboard() {{
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {{/* Services Status */}}
+        {/* Services Status */}
         <Card className="bg-black/40 backdrop-blur-xl border-cyan-500/30">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-cyan-400">
@@ -1720,24 +1723,24 @@ export default function AuroraDashboard() {{
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {{services.map((service, i) => (
-              <div key={{i}} className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-{{service.color}}-500/10 to-transparent border border-{{service.color}}-500/30">
+            {services.map((service, i) => (
+              <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-{service.color}-500/10 to-transparent border border-{service.color}-500/30">
                 <div className="flex items-center gap-3">
-                  <Activity className="h-4 w-4 text-{{service.color}}-400" />
+                  <Activity className="h-4 w-4 text-{service.color}-400" />
                   <div>
-                    <div className="font-medium text-{{service.color}}-100">{{service.name}}</div>
-                    <div className="text-xs text-{{service.color}}-300/60">Port {{service.port}}</div>
+                    <div className="font-medium text-{service.color}-100">{service.name}</div>
+                    <div className="text-xs text-{service.color}-300/60">Port {service.port}</div>
                   </div>
                 </div>
                 <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
-                  ● {{service.status}}
+                  ● {service.status}
                 </Badge>
               </div>
-            ))}}
+            ))}
           </CardContent>
         </Card>
 
-        {{/* Grandmaster Tiers */}}
+        {/* Grandmaster Tiers */}
         <Card className="bg-black/40 backdrop-blur-xl border-purple-500/30">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-purple-400">
@@ -1747,11 +1750,11 @@ export default function AuroraDashboard() {{
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {{tiers.map((tier, i) => (
-                <div key={{i}} className="p-2 rounded bg-purple-500/10 border border-purple-500/20 text-purple-100 text-sm">
-                  {{tier}}
+              {tiers.map((tier, i) => (
+                <div key={i} className="p-2 rounded bg-purple-500/10 border border-purple-500/20 text-purple-100 text-sm">
+                  {tier}
                 </div>
-              ))}}
+              ))}
               <div className="mt-4 p-3 rounded-lg bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
                 <div className="flex items-center gap-2 text-cyan-300 font-medium">
                   <Zap className="h-4 w-4" />
@@ -1766,7 +1769,7 @@ export default function AuroraDashboard() {{
         </Card>
       </div>
 
-      {{/* Project Ownership */}}
+      {/* Project Ownership */}
       <Card className="bg-black/40 backdrop-blur-xl border-pink-500/30">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-pink-400">
@@ -1812,16 +1815,16 @@ export default function AuroraDashboard() {{
         </CardContent>
       </Card>
 
-      {{/* Footer */}}
+      {/* Footer */}
       <div className="mt-6 text-center text-cyan-400/60 text-sm">
         🤖 Built autonomously by Aurora using TIER 28 (Autonomous Tools) + TIER 32 (Architecture Mastery)
       </div>
     </div>
   );
-}}"""
-            
+}"""
+
             result = self.execute_tool("write_file", target_file, component_code)
-            
+
             if "Successfully" in result:
                 log.append("✅ **FILE CREATED SUCCESSFULLY**")
                 log.append(f"📝 **Location:** {target_file}\n")
@@ -1835,7 +1838,7 @@ export default function AuroraDashboard() {{
                 log.append("I designed and built this dashboard myself - showing MY services, MY tiers, MY project! 🚀")
             else:
                 log.append(f"⚠️ **ISSUE:** {result}")
-        
+
         else:
             log.append("\n⚠️ **TASK NOT RECOGNIZED**")
             log.append("I can autonomously:")
@@ -1926,10 +1929,13 @@ What's on your mind?"""
 
         elif intent == "build":
             # Check if user wants Aurora to BUILD something (not just discuss)
-            if re.search(r"(create|build|make|design|implement|write|code|generate).*(component|page|ui|interface|dashboard|app|service|api|feature)", user_message.lower()):
+            if re.search(
+                r"(create|build|make|design|implement|write|code|generate).*(component|page|ui|interface|dashboard|app|service|api|feature)",
+                user_message.lower(),
+            ):
                 # User wants Aurora to ACTUALLY BUILD IT
                 return await self.autonomous_execute(user_message)
-            
+
             # Otherwise, discuss architecture/planning
             techs = ", ".join(ctx["mentioned_techs"][-3:]) if ctx["mentioned_techs"] else "this"
             tech_context = f"\n\nI see you mentioned {techs}. Perfect!" if ctx["mentioned_techs"] else ""
@@ -2060,11 +2066,23 @@ What should we build together?"""
             elif entities and "ownership" in entities:
                 # Aurora describes her complete project ownership
                 config = self.project_config
-                frontend = config.get('structure', {}).get('frontend', {'root': 'client', 'components': 'client/src/components', 'pages': 'client/src/pages', 'assets': 'client/src/assets'})
-                backend = config.get('structure', {}).get('backend', {'root': 'server', 'api': 'server/routes'})
-                aurora_core = config.get('structure', {}).get('aurora_core', {'intelligence': 'tools', 'nexus': 'tools/luminar_nexus.py'})
-                services = config.get('structure', {}).get('services', {'vite': 5173, 'backend': 5000, 'bridge': 5001, 'self_learn': 5002, 'chat': 5003})
-                
+                frontend = config.get("structure", {}).get(
+                    "frontend",
+                    {
+                        "root": "client",
+                        "components": "client/src/components",
+                        "pages": "client/src/pages",
+                        "assets": "client/src/assets",
+                    },
+                )
+                backend = config.get("structure", {}).get("backend", {"root": "server", "api": "server/routes"})
+                aurora_core = config.get("structure", {}).get(
+                    "aurora_core", {"intelligence": "tools", "nexus": "tools/luminar_nexus.py"}
+                )
+                services = config.get("structure", {}).get(
+                    "services", {"vite": 5173, "backend": 5000, "bridge": 5001, "self_learn": 5002, "chat": 5003}
+                )
+
                 return f"""🌌 **AURORA OWNS THE ENTIRE AURORA-X PROJECT** 🌌
 
 **Project Root:** `{config.get('project_root', '/workspaces/Aurora-x')}`
@@ -2255,13 +2273,13 @@ CORS(app)  # Enable CORS for frontend access
 def chat_endpoint():
     """Aurora's conversational AI endpoint"""
     global AURORA_AI, AURORA_MANAGER
-    
+
     # Initialize Aurora AI with manager context if not already done
     if AURORA_AI is None:
         if AURORA_MANAGER is None:
             AURORA_MANAGER = LuminarNexusServerManager()
         AURORA_AI = AuroraConversationalAI(manager=AURORA_MANAGER)
-    
+
     try:
         data = request.get_json()
         message = data.get("message", "")
