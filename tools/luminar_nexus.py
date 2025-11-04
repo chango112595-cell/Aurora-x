@@ -965,11 +965,11 @@ class AuroraConversationalAI:
         log.append("**TIER 28: Autonomous Tool Use & Self-Debugging**")
         log.append("**TIER 32: Systems Architecture & Design Mastery**")
         log.append("All eras: Ancient (1940s) → Modern → Future → Sci-Fi\n")
-        
+
         # Detect what task to execute
         task_type = None
         target_file = None
-        
+
         if re.search(r"(rebuild|recreate|create new|build new).*chat.*(ui|interface|component)", user_message.lower()):
             task_type = "create_chat_ui"
             target_file = "/workspaces/Aurora-x/client/src/components/AuroraRebuiltChat.tsx"
@@ -979,14 +979,14 @@ class AuroraConversationalAI:
             match = re.search(r"(/[\w/\-\.]+\.tsx?)", user_message)
             if match:
                 target_file = match.group(1)
-        
+
         if task_type == "create_chat_ui":
-            log.append(f"\n🎯 **TASK IDENTIFIED:** Create new chat UI component")
+            log.append("\n🎯 **TASK IDENTIFIED:** Create new chat UI component")
             log.append(f"📁 **TARGET:** {target_file}")
-            log.append(f"\n⚙️ **EXECUTING AUTONOMOUS BUILD...**\n")
-            
+            log.append("\n⚙️ **EXECUTING AUTONOMOUS BUILD...**\n")
+
             # Aurora designs the component using her 32 tiers
-            component_code = '''import { useState, useEffect, useRef } from 'react';
+            component_code = """import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -1196,15 +1196,15 @@ What should we build today?`,
     </div>
   );
 }
-'''
-            
+"""
+
             # Use write_file tool to create the component
             result = self.execute_tool("write_file", target_file, component_code)
-            
+
             if "successfully" in result.lower() or "created" in result.lower():
                 log.append("✅ **FILE CREATED SUCCESSFULLY**")
                 log.append(f"📝 **Location:** {target_file}")
-                log.append(f"\n**🎨 DESIGN DECISIONS (Using TIER 32 Architecture Mastery):**")
+                log.append("\n**🎨 DESIGN DECISIONS (Using TIER 32 Architecture Mastery):**")
                 log.append("• Clean, modern UI with gradient backgrounds")
                 log.append("• Proper TypeScript interfaces for type safety")
                 log.append("• Error handling with try/catch/finally")
@@ -1213,16 +1213,16 @@ What should we build today?`,
                 log.append("• Connects to /api/chat endpoint (port 5003)")
                 log.append("• Shows all 32 tiers badge")
                 log.append("• Conversational welcome message")
-                log.append(f"\n**✨ AUTONOMOUS CAPABILITIES USED:**")
+                log.append("\n**✨ AUTONOMOUS CAPABILITIES USED:**")
                 log.append("• ✅ write_file tool executed")
                 log.append("• ✅ TIER 28: Autonomous tool use")
                 log.append("• ✅ TIER 32: Systems architecture design")
                 log.append("• ✅ TIER 1-27: Full-stack development mastery")
-                log.append(f"\n**🚀 NEXT STEPS:**")
+                log.append("\n**🚀 NEXT STEPS:**")
                 log.append("1. Import this component in your app")
                 log.append("2. Vite will detect the new file and compile it")
                 log.append("3. Test the chat interface - it's fully functional!")
-                log.append(f"\n🎉 **AUTONOMOUS BUILD COMPLETE!**")
+                log.append("\n🎉 **AUTONOMOUS BUILD COMPLETE!**")
                 log.append("I've created a complete, production-ready chat UI autonomously.")
                 log.append("This demonstrates true autonomous coding capability! 🤖")
             else:
@@ -1235,7 +1235,7 @@ What should we build today?`,
             log.append("• Fix my own code")
             log.append("• Build new features")
             log.append("\nTry: 'Aurora, create a new chat UI component'")
-        
+
         return "\n".join(log)
 
     async def process_message(self, user_message: str, session_id: str = "default") -> str:
