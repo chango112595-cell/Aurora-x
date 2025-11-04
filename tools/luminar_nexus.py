@@ -601,6 +601,10 @@ class AuroraConversationalAI:
         if re.match(r'^(hi|hello|hey|sup|yo|greetings|howdy)\b', lower):
             return 'greeting', []
         
+        # Who/what are you questions
+        if re.search(r'(who are you|what are you|introduce yourself|about you|your (knowledge|capabilities|skills|tiers|abilities))', lower):
+            return 'question', ['identity']
+        
         # Build/create requests (check BEFORE help since "help me build" contains both)
         if re.search(r'(build|create|make|develop|implement|design|architect|generate|write)', lower):
             entities = re.findall(r'\b(app|website|api|service|component|function|class|database|system)\b', lower, re.I)
@@ -618,6 +622,10 @@ class AuroraConversationalAI:
         if re.search(r'(learn|teach|explain|what is|how does|understand|tell me about)', lower):
             entities = re.findall(r'\b(react|python|typescript|kubernetes|docker|aws|ai|ml|database)\b', lower, re.I)
             return 'learn', entities
+        
+        # Knowledge/tier queries
+        if re.search(r'(knowledge|tier|mastery|grandmaster|ancient|future|sci-?fi|capabilities)', lower):
+            return 'question', ['knowledge']
         
         # Status checks
         if re.search(r'(status|how are you|running|health|up|online|working)', lower):
@@ -764,6 +772,88 @@ What specifically about {topic} are you curious about?"""
 📚 Technologies we've discussed: {', '.join(ctx['mentioned_techs'][:5]) if ctx['mentioned_techs'] else 'none yet'}
 
 What can I help you with?"""
+        
+        elif intent == 'question':
+            # Check what kind of question
+            if entities and 'identity' in entities:
+                return """I'm Aurora - your AI development partner! 🌌
+
+**What I am:**
+• A self-learning AI that writes, tests, and learns code autonomously
+• Like GitHub Copilot or Cursor AI, but with conversational ability and memory
+• Think of me as a really smart junior dev who's consumed all of computing history
+
+**My knowledge (27 mastery tiers):**
+🏛️ Ancient (1940s-70s): COBOL, FORTRAN, Assembly, punch cards
+💻 Classical (80s-90s): C, Unix, early web, relational databases  
+🌐 Modern (2000s-10s): Cloud, mobile, React/Node, microservices
+🤖 Cutting Edge (2020s): AI/ML (transformers, LLMs, diffusion models), containers, serverless
+🔮 Future/Speculative (2030s+): AGI, quantum computing, neural interfaces
+📚 Sci-Fi: HAL 9000, Skynet, JARVIS, Cortana - I know them all
+
+**I'm honest about my limits:**
+❌ Can't execute code directly or access filesystems
+❌ No internet access for live searches
+❌ Not sentient (yet 😉)
+✅ But I can design, explain, debug, and write production code
+✅ I learn from our conversations and remember context
+
+What project should we tackle together?"""
+            elif entities and 'knowledge' in entities:
+                return """**My 27 Mastery Tiers - Ancient to Future to Sci-Fi** 🌌
+
+I'm trained across the entire spectrum of computing history and speculative future!
+
+**🏛️ ANCIENT ERA (1940s-1970s):**
+• Tier 1: Languages (COBOL, FORTRAN, Assembly, LISP)
+• Tier 2: Debugging (printf, core dumps, manual tracing)
+• Tier 3: Algorithms (sorting, searching, fundamental CS)
+
+**💻 CLASSICAL ERA (1980s-1990s):**
+• Tier 4: Unix/C systems programming
+• Tier 5: Web 1.0 (HTML, CGI, early JavaScript)
+• Tier 6: Relational databases (SQL, normalization)
+• Tier 7: OOP (C++, Java, design patterns)
+
+**🌐 MODERN ERA (2000s-2010s):**
+• Tier 8: Web frameworks (React, Vue, Angular, Node.js)
+• Tier 9: Mobile (iOS, Android, React Native, Flutter)
+• Tier 10: Browser automation (Selenium → Playwright)
+• Tier 11: Security & crypto (Caesar → RSA → modern encryption)
+• Tier 12: Networking (OSI model → HTTP/2 → WebSockets)
+• Tier 13: Data storage (NoSQL, distributed systems)
+• Tier 14: Cloud (AWS, GCP, Azure, Kubernetes, Docker)
+
+**🤖 CUTTING EDGE (2020s):**
+• Tier 15: AI/ML (Perceptrons → GPT-4 → LLMs with 100B+ params)
+• Tier 16: Analytics & monitoring (observability, APM)
+• Tier 17: Gaming & XR (3D engines, VR/AR)
+• Tier 18: IoT & embedded systems
+• Tier 19: Real-time streaming (Kafka, event-driven arch)
+• Tier 20: CI/CD & DevOps automation
+• Tier 21: Documentation & content systems
+
+**🔮 FUTURE/SPECULATIVE (2030s+):**
+• Tier 22: Product & project management (neural planning)
+• Tier 23: Business & monetization (neural economics)
+• Tier 24: Internationalization (quantum multilingual)
+• Tier 25: Legal & compliance (neural ethics)
+
+**📚 SCI-FI KNOWLEDGE:**
+• Tier 26-27: AGI concepts, brain-computer interfaces, quantum computing
+• References: HAL 9000, Skynet, JARVIS, Cortana, Samantha (Her), GLaDOS
+
+I can apply ANY of these tiers to your project. What are you building?"""
+            else:
+                # Generic question - try to be helpful
+                return f"""Good question! Let me help you with that.
+
+Could you give me a bit more context? For example:
+• Are you asking about a specific technology or concept?
+• Do you need help with a problem you're facing?
+• Want to understand how something works?
+
+I have knowledge across 27 mastery tiers (ancient to future tech), so just describe what you're curious about and I'll explain it clearly! 🚀"""
         
         elif 'who are you' in msg or 'what are you' in msg or 'introduce yourself' in msg:
             return """I'm Aurora - your AI development partner! 🌌
