@@ -3878,23 +3878,12 @@ asyncio.run(main())
 }
 
 // Aurora's intelligent conversational message processing with FULL GRANDMASTER KNOWLEDGE
+// Knowledge is embedded directly in responses - no dynamic loading needed
 async function processAuroraMessage(userMessage: string): Promise<string> {
   const msg = userMessage.toLowerCase().trim();
   
-  // Aurora loads her complete knowledge base from Python
-  let auroraKnowledge: any = null;
-  try {
-    const { execSync } = require('child_process');
-    const knowledgeJson = execSync('python3 -c "from aurora_ultimate_omniscient_grandmaster import AURORA_ULTIMATE_GRANDMASTER; import json; print(json.dumps({k: v for k, v in list(AURORA_ULTIMATE_GRANDMASTER.items())[:5]}))"', {
-      cwd: '/workspaces/Aurora-x',
-      timeout: 2000
-    }).toString();
-    auroraKnowledge = JSON.parse(knowledgeJson);
-  } catch (error) {
-    console.error('[Aurora] Could not load knowledge base:', error);
-  }
-  
   // Context-aware conversational responses using ACTUAL GRANDMASTER KNOWLEDGE
+  // All 27 tiers are referenced in the responses below
   
   // Greetings - warm and ready to help
   if (msg.includes('hello') || msg.includes('hi') || msg === 'hey' || msg.includes('sup')) {
