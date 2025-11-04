@@ -179,10 +179,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // Aurora: Natural language conversation endpoint
+  // Aurora: Natural language conversation endpoint (proxies to Luminar Nexus)
   app.post("/api/conversation", async (req, res) => {
     try {
-      const { message } = req.body;
+      const { message, session_id } = req.body;
 
       if (!message || typeof message !== 'string') {
         return res.status(400).json({
@@ -191,18 +191,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      console.log('[Aurora] Conversation request:', message);
+      console.log('[Aurora] Proxying conversation to Luminar Nexus:', message);
 
-      // Process Aurora's intelligent response
-      const response = await processAuroraMessage(message);
+      // Proxy to Luminar Nexus chat server (port 5003)
+      const nexusResponse = await fetch('http://localhost:5003/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: message,
+          session_id: session_id || 'backend-session'
+        })
+      });
+
+      if (!nexusResponse.ok) {
+        throw new Error(`Luminar Nexus returned ${nexusResponse.status}`);
+      }
+
+      const data = await nexusResponse.json();
 
       res.status(200).json({
-        response: response,
+        response: data.response,
         type: "conversation",
         timestamp: new Date().toISOString()
       });
     } catch (error) {
-      console.error('[Aurora] Conversation error:', error);
+      console.error('[Aurora] Conversation proxy error:', error);
       res.status(500).json({
         response: "I encountered an error processing that. Could you try again?",
         type: "error"

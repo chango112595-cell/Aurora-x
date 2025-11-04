@@ -19,11 +19,11 @@ type LevelshipFilter = 'all' | 'ancient' | 'classical' | 'modern' | 'future';
 
 export default function LuminarNexus() {
   const [location] = useLocation();
-  
+
   // Parse tab from URL query parameter
   const urlParams = new URLSearchParams(window.location.search);
   const tabFromUrl = (urlParams.get('tab') as TabType) || 'overview';
-  
+
   const [healthData, setHealthData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>(tabFromUrl);
