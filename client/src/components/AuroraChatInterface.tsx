@@ -61,10 +61,14 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/conversation', {
+      // Use Luminar Nexus chat endpoint (port 5003)
+      const response = await fetch('http://localhost:5003/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: currentInput })
+        body: JSON.stringify({ 
+          message: currentInput,
+          session_id: 'web-ui-session'
+        })
       });
 
       if (!response.ok) {
