@@ -305,3 +305,4 @@
 {"timestamp": "2025-11-04T06:50:40.420134", "event": "PORT_REASSIGNED", "server": "backend", "details": {"preferred": 5000, "assigned": 5004, "reason": "port_conflict"}, "system": "LUMINAR_NEXUS"}
 {"timestamp": "2025-11-04T06:50:40.463739", "event": "PORT_REASSIGNED", "server": "vite", "details": {"preferred": 5173, "assigned": 5005, "reason": "port_conflict"}, "system": "LUMINAR_NEXUS"}
 {"timestamp": "2025-11-04T06:50:40.512676", "event": "PORT_REASSIGNED", "server": "self-learn", "details": {"preferred": 5002, "assigned": 5006, "reason": "port_conflict"}, "system": "LUMINAR_NEXUS"}
+{"timestamp": "2025-11-04T07:12:54.669959", "event": "SERVER_STARTED", "server": "vite", "details": {"session": "aurora-vite", "port": 5173, "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173"}, "system": "LUMINAR_NEXUS"}
