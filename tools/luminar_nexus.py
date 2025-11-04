@@ -654,7 +654,7 @@ class AuroraConversationalAI:
             elif tool_name == "write_file":
                 file_path = args[0]
                 content = args[1]
-                with open(file_path, 'w') as f:
+                with open(file_path, "w") as f:
                     f.write(content)
                 return f"✅ Successfully wrote to {file_path}"
 
@@ -662,11 +662,11 @@ class AuroraConversationalAI:
                 file_path = args[0]
                 old_text = args[1]
                 new_text = args[2]
-                with open(file_path, 'r') as f:
+                with open(file_path) as f:
                     content = f.read()
                 if old_text in content:
                     content = content.replace(old_text, new_text, 1)
-                    with open(file_path, 'w') as f:
+                    with open(file_path, "w") as f:
                         f.write(content)
                     return f"✅ Successfully modified {file_path}"
                 else:
@@ -676,7 +676,7 @@ class AuroraConversationalAI:
                 file_path = args[0]
                 backup_path = f"{file_path}.aurora_backup"
                 result = subprocess.run(f"cp {file_path} {backup_path}", shell=True, capture_output=True, text=True)
-                return f"✅ Backed up to {backup_path}" if result.returncode == 0 else f"⚠️ Backup failed"
+                return f"✅ Backed up to {backup_path}" if result.returncode == 0 else "⚠️ Backup failed"
 
             else:
                 return f"Unknown tool: {tool_name}"
@@ -768,7 +768,7 @@ class AuroraConversationalAI:
 
         # Step 3: Comprehensive system check
         diagnostic_log.append("\n**Step 3: System Health Check**")
-        
+
         # Check all Aurora services
         services_check = self.execute_tool("run_command", "ps aux | grep -E '(aurora|luminar|vite)' | grep -v grep")
         running_services = []
@@ -778,18 +778,20 @@ class AuroraConversationalAI:
             running_services.append("✓ Vite dev server")
         if "aurora-backend" in services_check or "node" in services_check:
             running_services.append("✓ Backend")
-        
-        diagnostic_log.append(f"Running services: {', '.join(running_services) if running_services else '⚠️ Some services may be down'}")
+
+        diagnostic_log.append(
+            f"Running services: {', '.join(running_services) if running_services else '⚠️ Some services may be down'}"
+        )
 
         # Step 4: Read and analyze frontend component
         diagnostic_log.append("\n**Step 4: Analyzing Frontend Component**")
         component_path = "/workspaces/Aurora-x/client/src/components/AuroraChatInterface.tsx"
         issues_found = []
         fixes_to_apply = []
-        
+
         try:
             component_code = self.execute_tool("read_file", component_path)
-            
+
             # Check for common issues
             if "setIsLoading(false)" in component_code:
                 issues_found.append("✓ setIsLoading(false) is present")
@@ -801,7 +803,10 @@ class AuroraConversationalAI:
             if "} finally {" in component_code or "finally {" in component_code:
                 issues_found.append("✓ finally block exists")
                 # Check if setIsLoading is in finally
-                if "finally" in component_code and "setIsLoading(false)" in component_code.split("finally")[1].split("}")[0]:
+                if (
+                    "finally" in component_code
+                    and "setIsLoading(false)" in component_code.split("finally")[1].split("}")[0]
+                ):
                     issues_found.append("✓ setIsLoading(false) in finally block")
                 else:
                     issues_found.append("⚠️ setIsLoading(false) NOT in finally block")
@@ -809,13 +814,13 @@ class AuroraConversationalAI:
             else:
                 issues_found.append("⚠️ No finally block - loading state might not reset")
                 fixes_to_apply.append("add_finally_block")
-            
+
             # Check for error handling
             if "catch" in component_code:
                 issues_found.append("✓ Error handling exists")
             else:
                 issues_found.append("⚠️ Missing error handling")
-            
+
             # Check if response is being displayed
             if "setMessages" in component_code or "messages.push" in component_code:
                 issues_found.append("✓ Message state management exists")
@@ -823,7 +828,7 @@ class AuroraConversationalAI:
                 issues_found.append("❌ No message state updates found")
 
             diagnostic_log.append("\n".join(issues_found))
-            
+
         except Exception as e:
             diagnostic_log.append(f"⚠️ Could not read component: {e}")
             fixes_to_apply = []
@@ -832,15 +837,15 @@ class AuroraConversationalAI:
         if fixes_to_apply:
             diagnostic_log.append("\n**🔧 AUTONOMOUS CODE MODIFICATION IN PROGRESS...**")
             diagnostic_log.append(f"Fixes to apply: {', '.join(fixes_to_apply)}")
-            
+
             # Backup the original file first
             backup_result = self.execute_tool("backup_file", component_path)
             diagnostic_log.append(f"• {backup_result}")
-            
+
             # Apply the fix: Add finally block with setIsLoading(false)
             if "add_finally_block" in fixes_to_apply or "move_loading_to_finally" in fixes_to_apply:
                 diagnostic_log.append("\n**Applying Fix: Adding finally block with setIsLoading(false)**")
-                
+
                 # Find the try-catch block and add finally
                 old_code = """    } catch (error) {
       console.error('[Aurora Chat] Error:', error);
@@ -854,7 +859,7 @@ class AuroraConversationalAI:
 
     setIsLoading(false);
     console.log('[Aurora Chat] isLoading=false');"""
-                
+
                 new_code = """    } catch (error) {
       console.error('[Aurora Chat] Error:', error);
       setMessages(prev => [...prev, {
@@ -867,10 +872,10 @@ class AuroraConversationalAI:
       setIsLoading(false);
       console.log('[Aurora Chat] isLoading=false (finally block)');
     }"""
-                
+
                 fix_result = self.execute_tool("modify_file", component_path, old_code, new_code)
                 diagnostic_log.append(f"• {fix_result}")
-                
+
                 if "✅" in fix_result:
                     diagnostic_log.append("✅ **FIX APPLIED SUCCESSFULLY!**")
                     diagnostic_log.append("• Moved setIsLoading(false) into finally block")
@@ -904,7 +909,7 @@ class AuroraConversationalAI:
 
         diagnostic_log.append("\n**✨ AUTONOMOUS CAPABILITIES DEMONSTRATED:**")
         diagnostic_log.append("• ✅ Read my own source code")
-        diagnostic_log.append("• ✅ Tested endpoints autonomously")  
+        diagnostic_log.append("• ✅ Tested endpoints autonomously")
         diagnostic_log.append("• ✅ Analyzed system state")
         diagnostic_log.append("• ✅ **MODIFIED MY OWN CODE** autonomously")
         diagnostic_log.append("• ✅ Created backup before changes")
@@ -1015,7 +1020,7 @@ I'll design the architecture, write clean code, and explain my decisions. Let's 
             # Check if this is a self-debugging request
             if re.search(
                 r"(yourself|your own|your code|your (system|state|interface|component)|analyze yourself|fix.*own.*issue|aurora.*fix|aurora.*analyze|aurora.*diagnose|self.*diagnos|self.*fix|autonomous.*fix)",
-                user_message.lower()
+                user_message.lower(),
             ):
                 # AUTONOMOUS SELF-DEBUGGING MODE
                 return await self.self_debug_chat_issue()
