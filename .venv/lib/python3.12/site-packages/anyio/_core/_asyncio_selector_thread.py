@@ -55,9 +55,7 @@ class Selector:
         self._receive.close()
         self._selector.close()
         _selector = None
-        assert not self._selector.get_map(), (
-            "selector still has registered file descriptors after shutdown"
-        )
+        assert not self._selector.get_map(), "selector still has registered file descriptors after shutdown"
 
     def _notify_self(self) -> None:
         try:
@@ -73,9 +71,7 @@ class Selector:
             self._selector.register(fd, EVENT_READ, {EVENT_READ: (loop, callback)})
         else:
             if EVENT_READ in key.data:
-                raise ValueError(
-                    "this file descriptor is already registered for reading"
-                )
+                raise ValueError("this file descriptor is already registered for reading")
 
             key.data[EVENT_READ] = loop, callback
             self._selector.modify(fd, key.events | EVENT_READ, key.data)
@@ -90,9 +86,7 @@ class Selector:
             self._selector.register(fd, EVENT_WRITE, {EVENT_WRITE: (loop, callback)})
         else:
             if EVENT_WRITE in key.data:
-                raise ValueError(
-                    "this file descriptor is already registered for writing"
-                )
+                raise ValueError("this file descriptor is already registered for writing")
 
             key.data[EVENT_WRITE] = loop, callback
             self._selector.modify(fd, key.events | EVENT_WRITE, key.data)

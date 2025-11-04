@@ -9,8 +9,8 @@ Aurora must create a NEW autonomous execution engine that is:
 """
 
 import json
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 TRAINING_PROMPT = """
 🌟 AURORA AUTONOMOUS GRANDMASTER TRAINING 🌟
@@ -97,12 +97,12 @@ with open(log_file, "a") as f:
         "current_problem": "Port 5001 conflict - serve.py vs Luminar Nexus",
         "status": "TRAINING_STARTED",
         "expected_outcome": "Aurora autonomously detects, analyzes, and fixes the port conflict",
-        "difficulty": "EXPERT"
+        "difficulty": "EXPERT",
     }
     f.write(json.dumps(entry) + "\n")
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("📋 GRANDMASTER TRAINING LOGGED")
-print("="*70)
+print("=" * 70)
 print("Aurora, this is your level-up moment.")
 print("Show us what true autonomy looks like. 🌟\n")

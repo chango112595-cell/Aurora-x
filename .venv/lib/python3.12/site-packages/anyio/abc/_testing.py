@@ -54,9 +54,7 @@ class TestRunner(metaclass=ABCMeta):
         """
 
     @abstractmethod
-    def run_test(
-        self, test_func: Callable[..., Coroutine[Any, Any, Any]], kwargs: dict[str, Any]
-    ) -> None:
+    def run_test(self, test_func: Callable[..., Coroutine[Any, Any, Any]], kwargs: dict[str, Any]) -> None:
         """
         Run an async test function.
 

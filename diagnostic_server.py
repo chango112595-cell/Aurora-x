@@ -7,14 +7,11 @@ Aurora Diagnostic Web Server (No Dependencies)
 - Provides real-time status viewing without executing shell commands
 - SAFE: No side effects, read-only
 """
-from pathlib import Path
-import json
-from datetime import datetime
-import socket
 import http.server
+import json
 import socketserver
+from pathlib import Path
 from urllib.parse import urlparse
-import threading
 
 DIAGNOSTICS_FILE = Path(__file__).parent / "tools" / "diagnostics.json"
 LOG_FILE = Path(__file__).parent / "tools" / "services_status.log"
@@ -173,23 +170,25 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 </html>
 """
 
+
 def get_latest_report():
     """Read latest diagnostic report"""
     if DIAGNOSTICS_FILE.exists():
         try:
-            with open(DIAGNOSTICS_FILE, 'r') as f:
+            with open(DIAGNOSTICS_FILE) as f:
                 return json.load(f)
         except:
             pass
     return None
+
 
 def build_services_html(services):
     """Build HTML for services list"""
     html = ""
     for port in sorted(services.keys()):
         service = services[str(port)]
-        status_class = service['status'].lower()
-        status_icon = "✅ ONLINE" if service['status'] == 'UP' else "❌ OFFLINE"
+        status_class = service["status"].lower()
+        status_icon = "✅ ONLINE" if service["status"] == "UP" else "❌ OFFLINE"
         html += f"""
             <div class="service {status_class}">
                 <div class="port">[PORT {port}] Aurora System</div>
@@ -200,118 +199,121 @@ def build_services_html(services):
         """
     return html
 
+
 class DiagnosticHandler(http.server.SimpleHTTPRequestHandler):
     """HTTP request handler for diagnostics"""
-    
+
     def do_GET(self):
         """Handle GET requests"""
         path = urlparse(self.path).path
-        
-        if path == '/':
+
+        if path == "/":
             self.handle_dashboard()
-        elif path == '/api/status':
+        elif path == "/api/status":
             self.handle_api_status()
-        elif path.startswith('/api/port/'):
-            port = path.split('/')[-1]
+        elif path.startswith("/api/port/"):
+            port = path.split("/")[-1]
             self.handle_api_port(port)
-        elif path == '/health':
+        elif path == "/health":
             self.handle_health()
         else:
             self.send_error(404)
-    
+
     def handle_dashboard(self):
         """Serve the dashboard"""
         report = get_latest_report()
-        
+
         if report is None:
             html = HTML_TEMPLATE.format(
                 timestamp="No data",
                 summary_text="⚠️ No diagnostic data available",
                 summary_class="has-down",
-                services_html="<p>No services found</p>"
+                services_html="<p>No services found</p>",
             )
         else:
-            services = report.get('services', {})
-            all_up = all(s['status'] == 'UP' for s in services.values())
+            services = report.get("services", {})
+            all_up = all(s["status"] == "UP" for s in services.values())
             services_html = build_services_html(services)
-            
+
             html = HTML_TEMPLATE.format(
-                timestamp=report.get('timestamp', 'Unknown'),
+                timestamp=report.get("timestamp", "Unknown"),
                 summary_text="✨ All Services OPERATIONAL" if all_up else "⚠️ Some Services OFFLINE",
                 summary_class="all-up" if all_up else "has-down",
-                services_html=services_html
+                services_html=services_html,
             )
-        
+
         self.send_response(200)
-        self.send_header('Content-type', 'text/html; charset=utf-8')
+        self.send_header("Content-type", "text/html; charset=utf-8")
         self.end_headers()
-        self.wfile.write(html.encode('utf-8'))
-    
+        self.wfile.write(html.encode("utf-8"))
+
     def handle_api_status(self):
         """Serve JSON API"""
         report = get_latest_report()
-        
+
         if report is None:
             self.send_response(404)
             data = json.dumps({"error": "No diagnostic data"})
         else:
             self.send_response(200)
             data = json.dumps(report)
-        
-        self.send_header('Content-type', 'application/json; charset=utf-8')
+
+        self.send_header("Content-type", "application/json; charset=utf-8")
         self.end_headers()
-        self.wfile.write(data.encode('utf-8'))
-    
+        self.wfile.write(data.encode("utf-8"))
+
     def handle_api_port(self, port):
         """Check specific port"""
         report = get_latest_report()
-        
-        if report is None or port not in report.get('services', {}):
+
+        if report is None or port not in report.get("services", {}):
             self.send_response(404)
             data = json.dumps({"error": f"Port {port} not found"})
         else:
             self.send_response(200)
-            service = report['services'][port]
+            service = report["services"][port]
             data = json.dumps({"port": port, "service": service})
-        
-        self.send_header('Content-type', 'application/json; charset=utf-8')
+
+        self.send_header("Content-type", "application/json; charset=utf-8")
         self.end_headers()
-        self.wfile.write(data.encode('utf-8'))
-    
+        self.wfile.write(data.encode("utf-8"))
+
     def handle_health(self):
         """Health check"""
         self.send_response(200)
         data = json.dumps({"status": "Diagnostic Server OK", "port": 9999})
-        self.send_header('Content-type', 'application/json; charset=utf-8')
+        self.send_header("Content-type", "application/json; charset=utf-8")
         self.end_headers()
-        self.wfile.write(data.encode('utf-8'))
-    
+        self.wfile.write(data.encode("utf-8"))
+
     def log_message(self, format, *args):
         """Suppress default logging"""
         pass
 
+
 def run_server():
     """Start the diagnostic server"""
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("🔍 Aurora Diagnostic Server Starting")
-    print("="*70)
-    print(f"\n📊 Access Diagnostic Dashboard at:")
+    print("=" * 70)
+    print("\n📊 Access Diagnostic Dashboard at:")
     print(f"   http://127.0.0.1:{PORT}")
-    print(f"\n📡 API Endpoints:")
+    print("\n📡 API Endpoints:")
     print(f"   GET http://127.0.0.1:{PORT}/api/status - Full report JSON")
     print(f"   GET http://127.0.0.1:{PORT}/api/port/5000 - Check port 5000")
     print(f"   GET http://127.0.0.1:{PORT}/health - Server health")
-    print(f"\n✨ Dashboard auto-refreshes every 10 seconds")
-    print("="*70 + "\n")
-    
+    print("\n✨ Dashboard auto-refreshes every 10 seconds")
+    print("=" * 70 + "\n")
+
     handler = DiagnosticHandler
     with socketserver.TCPServer(("127.0.0.1", PORT), handler) as httpd:
         print(f"✅ Server running on port {PORT}")
-        print(f"📍 Press Ctrl+C to stop\n")
+        print("📍 Press Ctrl+C to stop\n")
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
             print("\n\n👋 Diagnostic server stopped")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     run_server()

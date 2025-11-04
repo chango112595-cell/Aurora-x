@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import inspect
 import re
-from typing import Any, Callable, NamedTuple
+from collections.abc import Callable
+from typing import Any, NamedTuple
 
 from starlette.requests import Request
 from starlette.responses import Response

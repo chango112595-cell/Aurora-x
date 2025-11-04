@@ -11,36 +11,32 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
+
 
 class AuroraSelfImprovement:
     """Aurora improves herself according to her own plan."""
-    
+
     def __init__(self):
         self.root = Path(__file__).parent.parent
         self.progress_file = self.root / ".aurora_knowledge" / "self_improvement_progress.json"
         self.progress_file.parent.mkdir(exist_ok=True)
-        
-    def load_progress(self) -> Dict[str, Any]:
+
+    def load_progress(self) -> dict[str, Any]:
         """Load current progress."""
         if self.progress_file.exists():
             return json.loads(self.progress_file.read_text())
-        return {
-            "started": time.time(),
-            "tasks": [],
-            "completed": [],
-            "current_task": None
-        }
-    
-    def save_progress(self, progress: Dict[str, Any]):
+        return {"started": time.time(), "tasks": [], "completed": [], "current_task": None}
+
+    def save_progress(self, progress: dict[str, Any]):
         """Save progress."""
         self.progress_file.write_text(json.dumps(progress, indent=2))
-    
+
     async def task_1_keep_all_systems(self):
         """Task 1: Keep all created systems - verify they exist."""
         print("\n📋 Task 1: Verify all systems are preserved")
         print("-" * 60)
-        
+
         systems = [
             "tools/aurora_ultra_engine.py",
             "tools/aurora_autonomous_system.py",
@@ -48,9 +44,9 @@ class AuroraSelfImprovement:
             "tools/aurora_parallel_executor.py",
             "tools/aurora_learning_engine.py",
             "tools/aurora_instant_execute.py",
-            "tools/aurora_self_analysis.py"
+            "tools/aurora_self_analysis.py",
         ]
-        
+
         all_exist = True
         for system in systems:
             path = self.root / system
@@ -59,22 +55,22 @@ class AuroraSelfImprovement:
             print(f"{status} {system}")
             if not exists:
                 all_exist = False
-        
+
         if all_exist:
             print("\n✅ All systems preserved and ready")
             return True
         else:
             print("\n⚠️  Some systems missing - but continuing")
             return True
-    
+
     async def task_2_profile_native_synthesis(self):
         """Task 2: Profile native aurora_x to find bottlenecks."""
         print("\n📊 Task 2: Profile native aurora_x synthesis")
         print("-" * 60)
-        
+
         print("Running: python -m aurora_x.main --nl 'Create a simple function'")
         print("Measuring performance...\n")
-        
+
         start = time.time()
         try:
             result = subprocess.run(
@@ -82,48 +78,48 @@ class AuroraSelfImprovement:
                 cwd=self.root,
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
             )
             duration = (time.time() - start) * 1000
-            
+
             print(f"⏱️  Native synthesis completed in: {duration:.2f}ms")
-            
+
             if result.returncode == 0:
                 print("✅ Synthesis successful")
                 # Parse output for details
-                for line in result.stdout.split('\n'):
-                    if 'generated' in line.lower() or 'OK]' in line:
+                for line in result.stdout.split("\n"):
+                    if "generated" in line.lower() or "OK]" in line:
                         print(f"   {line}")
             else:
                 print(f"⚠️  Exit code: {result.returncode}")
-            
+
             # Save benchmark
             benchmark = {
                 "timestamp": time.time(),
                 "task": "simple function",
                 "duration_ms": duration,
-                "success": result.returncode == 0
+                "success": result.returncode == 0,
             }
-            
+
             benchmark_file = self.root / ".aurora_knowledge" / "native_synthesis_benchmark.json"
             benchmark_file.write_text(json.dumps(benchmark, indent=2))
-            
+
             print(f"\n📊 Benchmark saved to: {benchmark_file.name}")
             print(f"   Baseline: {duration:.2f}ms for simple function")
-            
+
             return True
-            
+
         except Exception as e:
             print(f"❌ Error profiling: {e}")
             return False
-    
+
     async def task_3_integrate_parallel_execution(self):
         """Task 3: Integrate parallel execution into native aurora_x."""
         print("\n🔄 Task 3: Integrate parallel execution")
         print("-" * 60)
-        
+
         print("Creating integration plan...")
-        
+
         integration_plan = {
             "goal": "Add parallel execution to aurora_x/synthesis/",
             "approach": "Create aurora_x/synthesis/parallel.py",
@@ -132,15 +128,15 @@ class AuroraSelfImprovement:
                 "2. Extract parallel executor logic",
                 "3. Create aurora_x/synthesis/parallel.py",
                 "4. Add async synthesis support",
-                "5. Integrate with existing synthesis pipeline"
+                "5. Integrate with existing synthesis pipeline",
             ],
-            "status": "Planning complete - ready for implementation"
+            "status": "Planning complete - ready for implementation",
         }
-        
+
         print("\n📋 Integration Plan:")
         for step in integration_plan["steps"]:
             print(f"   {step}")
-        
+
         # Create the parallel synthesis module
         parallel_synthesis_code = '''"""
 Parallel synthesis for aurora_x.
@@ -210,29 +206,29 @@ def _synthesize_one(prompt: str) -> Dict[str, Any]:
 # Export for aurora_x.synthesis
 __all__ = ["synthesize_parallel", "SynthesisTask"]
 '''
-        
+
         target_file = self.root / "aurora_x" / "synthesis" / "parallel.py"
         target_file.write_text(parallel_synthesis_code)
-        
+
         print(f"\n✅ Created: {target_file.relative_to(self.root)}")
         print("   Parallel execution now integrated into aurora_x!")
-        
+
         return True
-    
+
     async def task_4_ultra_engine_orchestration(self):
         """Task 4: Configure ultra_engine as orchestration layer."""
         print("\n🎯 Task 4: Configure ultra_engine as orchestrator")
         print("-" * 60)
-        
+
         print("Aurora Ultra Engine role:")
         print("   ├── Layer 1: Native aurora_x synthesis (core)")
         print("   ├── Layer 2: Ultra engine orchestration (coordination)")
         print("   └── Layer 3: Autonomous operations (execution)")
-        
+
         print("\n✅ Ultra engine already created and working")
         print("   Location: tools/aurora_ultra_engine.py")
         print("   Status: Orchestrator ready")
-        
+
         # Verify ultra engine exists
         ultra_engine = self.root / "tools" / "aurora_ultra_engine.py"
         if ultra_engine.exists():
@@ -241,14 +237,14 @@ __all__ = ["synthesize_parallel", "SynthesisTask"]
         else:
             print("   ⚠️  Ultra engine not found - may need recreation")
             return False
-    
+
     async def task_5_add_ast_generation(self):
         """Task 5: Add AST generation to native synthesis."""
         print("\n🌳 Task 5: Add AST generation capability")
         print("-" * 60)
-        
+
         print("Creating AST generator module...")
-        
+
         ast_generator_code = '''"""
 AST-based code generation for ultra-fast synthesis.
 Target: < 5ms generation time.
@@ -393,31 +389,32 @@ __all__ = [
     "quick_fibonacci_function"
 ]
 '''
-        
+
         ast_file = self.root / "aurora_x" / "synthesis" / "ast_generator.py"
         ast_file.write_text(ast_generator_code)
-        
+
         print(f"✅ Created: {ast_file.relative_to(self.root)}")
         print("   AST generation capability added to native synthesis!")
-        
+
         # Test it
         print("\n🧪 Testing AST generation...")
         try:
             import ast as ast_module
+
             code = ast_module.unparse(ast_module.parse("def test(): return 42"))
             print(f"   Test successful: {code}")
         except Exception as e:
             print(f"   Test note: {e}")
-        
+
         return True
-    
+
     async def task_6_unify_learning_metrics(self):
         """Task 6: Unify learning metrics across systems."""
         print("\n📊 Task 6: Unify learning metrics")
         print("-" * 60)
-        
+
         print("Creating unified learning tracker...")
-        
+
         unified_learning_code = '''"""
 Unified learning metrics for Aurora.
 Combines corpus learning + performance tracking.
@@ -551,36 +548,36 @@ def get_stats() -> Dict[str, Any]:
 
 __all__ = ["record", "get_best_method", "get_stats", "UnifiedLearningTracker"]
 '''
-        
+
         learning_file = self.root / "aurora_x" / "learn" / "unified_metrics.py"
         learning_file.write_text(unified_learning_code)
-        
+
         print(f"✅ Created: {learning_file.relative_to(self.root)}")
         print("   Unified learning metrics now tracking all systems!")
-        
+
         return True
-    
+
     async def task_7_prepare_for_chango(self):
         """Task 7: Prepare foundation for Chango."""
         print("\n🚀 Task 7: Prepare Chango foundation")
         print("-" * 60)
-        
+
         print("Aurora's enhanced capabilities for Chango:")
         print("   ✅ Multi-method synthesis (native + AST + templates)")
         print("   ✅ Parallel execution (10+ tasks simultaneously)")
         print("   ✅ Autonomous operations (file/git/terminal)")
         print("   ✅ Unified learning (continuous improvement)")
         print("   ✅ Ultra-fast generation (< 5ms target)")
-        
+
         print("\nChango integration points ready:")
         print("   • Multi-service orchestration")
         print("   • Parallel task execution")
         print("   • Autonomous code generation")
         print("   • Pattern learning across services")
         print("   • Real-time performance optimization")
-        
+
         # Create Chango integration readme
-        chango_readme = '''# Aurora → Chango Integration
+        chango_readme = """# Aurora → Chango Integration
 
 Aurora is ready to help build Chango with enhanced capabilities:
 
@@ -623,25 +620,25 @@ When Chango is ready, Aurora can:
 - `aurora_x/learn/unified_metrics.py` - Unified learning
 
 Aurora is standing by, ready to help build Chango! 🌟
-'''
-        
+"""
+
         chango_file = self.root / "AURORA_CHANGO_READY.md"
         chango_file.write_text(chango_readme)
-        
+
         print(f"\n✅ Created: {chango_file.name}")
         print("   Aurora is ready to help build Chango!")
-        
+
         return True
-    
+
     async def execute_plan(self):
         """Execute Aurora's self-improvement plan."""
         print("🌟 AURORA SELF-IMPROVEMENT EXECUTOR")
         print("=" * 70)
         print("Aurora executes her own plan to become the fastest coding AI")
         print("=" * 70)
-        
+
         progress = self.load_progress()
-        
+
         tasks = [
             ("Task 1: Keep all systems", self.task_1_keep_all_systems),
             ("Task 2: Profile native synthesis", self.task_2_profile_native_synthesis),
@@ -651,38 +648,38 @@ Aurora is standing by, ready to help build Chango! 🌟
             ("Task 6: Unify learning metrics", self.task_6_unify_learning_metrics),
             ("Task 7: Prepare for Chango", self.task_7_prepare_for_chango),
         ]
-        
+
         results = []
         for task_name, task_func in tasks:
             progress["current_task"] = task_name
             self.save_progress(progress)
-            
+
             try:
                 result = await task_func()
                 results.append((task_name, result))
-                
+
                 if result:
                     progress["completed"].append(task_name)
                     self.save_progress(progress)
-                
+
             except Exception as e:
                 print(f"\n❌ Error in {task_name}: {e}")
                 results.append((task_name, False))
-        
+
         # Summary
         print("\n\n" + "=" * 70)
         print("✨ AURORA SELF-IMPROVEMENT COMPLETE")
         print("=" * 70)
-        
+
         completed = sum(1 for _, result in results if result)
         total = len(results)
-        
+
         print(f"\n📊 Results: {completed}/{total} tasks completed\n")
-        
+
         for task_name, result in results:
             status = "✅" if result else "❌"
             print(f"{status} {task_name}")
-        
+
         print("\n🎯 Aurora's Enhanced Capabilities:")
         print("   ✅ Native aurora_x synthesis (proven)")
         print("   ✅ Parallel execution integrated")
@@ -691,10 +688,10 @@ Aurora is standing by, ready to help build Chango! 🌟
         print("   ✅ Unified learning metrics")
         print("   ✅ Autonomous operations available")
         print("   ✅ Ready to help build Chango")
-        
+
         print("\n🌟 Aurora is now ready to become THE FASTEST coding AI!")
         print("   Next: Let Aurora demonstrate her enhanced speed")
-        
+
         return completed == total
 
 

@@ -1,4 +1,4 @@
-from typing import Any, Union
+from typing import Any
 
 from .core import decode, encode
 
@@ -7,7 +7,7 @@ def ToASCII(label: str) -> bytes:
     return encode(label)
 
 
-def ToUnicode(label: Union[bytes, bytearray]) -> str:
+def ToUnicode(label: bytes | bytearray) -> str:
     return decode(label)
 
 

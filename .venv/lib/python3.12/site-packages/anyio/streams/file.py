@@ -124,9 +124,7 @@ class FileWriteStream(_BaseFileStream, ByteSendStream):
     """
 
     @classmethod
-    async def from_path(
-        cls, path: str | PathLike[str], append: bool = False
-    ) -> FileWriteStream:
+    async def from_path(cls, path: str | PathLike[str], append: bool = False) -> FileWriteStream:
         """
         Create a file write stream by opening the given file for writing.
 

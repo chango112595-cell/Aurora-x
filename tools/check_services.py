@@ -6,9 +6,9 @@ Lightweight service checker for Aurora-X.
 - Prints recommended start commands when services are down (no auto-start to avoid side effects).
 Usage: python tools/check_services.py
 """
+import json
 import socket
 import time
-import json
 from pathlib import Path
 
 PORTS = {
@@ -16,7 +16,7 @@ PORTS = {
     5001: "Aurora backend (uvicorn)",
     5002: "Learning API / FastAPI",
     8080: "File Server",
-    8000: "Standalone dashboards (legacy)"
+    8000: "Standalone dashboards (legacy)",
 }
 
 RECOMMENDED_COMMANDS = {
@@ -24,7 +24,7 @@ RECOMMENDED_COMMANDS = {
     5001: "cd /workspaces/Aurora-x && python -m uvicorn aurora_x.serve:app --host 0.0.0.0 --port 5001 --reload",
     5002: "cd /workspaces/Aurora-x && python -m uvicorn aurora_x.serve:app --host 0.0.0.0 --port 5002 --reload",
     8080: "cd /workspaces/Aurora-x && python -m http.server 8080 --directory ./public",
-    8000: "cd /workspaces/Aurora-x && python -m http.server 8000 --directory ./"
+    8000: "cd /workspaces/Aurora-x && python -m http.server 8000 --directory ./",
 }
 
 LOG_FILE = Path(__file__).parent / "services_status.log"
@@ -56,7 +56,7 @@ def main():
     print(f"\n{'='*70}")
     print(f"🔍 Aurora Service Status Check ({timestamp})")
     print(f"{'='*70}\n")
-    
+
     for port in sorted(PORTS.keys()):
         entry = results[port]
         status = "✅ UP" if entry["up"] else "❌ DOWN"
@@ -65,7 +65,7 @@ def main():
             cmd = RECOMMENDED_COMMANDS.get(port)
             if cmd:
                 print(f"         └─ Try: {cmd}")
-    
+
     print(f"\n{'='*70}")
     print(f"📋 Log file: {LOG_FILE}")
     print(f"{'='*70}\n")

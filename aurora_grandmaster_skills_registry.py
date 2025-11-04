@@ -23,12 +23,11 @@ AURORA_GRANDMASTER_SKILLS = {
             "✅ screen session creation",
             "✅ Background process lifecycle",
             "✅ Process monitoring and health checks",
-            "✅ Graceful shutdown handling"
+            "✅ Graceful shutdown handling",
         ],
         "mastery_level": "EXPERT (95%)",
-        "evidence": "64K+ lines in process_management.jsonl knowledge base"
+        "evidence": "64K+ lines in process_management.jsonl knowledge base",
     },
-    
     "TIER_2_DEBUG_MASTERY": {
         "title": "🔍 DEBUGGING GRANDMASTER",
         "description": "Comprehensive debugging expertise across all paradigms",
@@ -56,12 +55,11 @@ AURORA_GRANDMASTER_SKILLS = {
             "✅ Database query debugging",
             "✅ Concurrency debugging",
             "✅ Assertion strategies",
-            "✅ Unit test debugging"
+            "✅ Unit test debugging",
         ],
         "mastery_level": "EXPERT (98%)",
-        "evidence": "24 subtopics, 9.4K lines in debug_mastery.jsonl"
+        "evidence": "24 subtopics, 9.4K lines in debug_mastery.jsonl",
     },
-    
     "TIER_3_SERVER_LIFECYCLE": {
         "title": "🌟 SERVER LIFECYCLE GRANDMASTER",
         "description": "Complete server management and orchestration",
@@ -79,12 +77,11 @@ AURORA_GRANDMASTER_SKILLS = {
             "✅ Service status reporting",
             "✅ Event logging for services",
             "✅ Service interconnection",
-            "✅ API endpoint health checks"
+            "✅ API endpoint health checks",
         ],
         "mastery_level": "EXPERT (90%)",
-        "evidence": "Luminar Nexus engine (262 lines, production-ready)"
+        "evidence": "Luminar Nexus engine (262 lines, production-ready)",
     },
-    
     "TIER_4_AUTONOMOUS_EXECUTION": {
         "title": "⚙️ AUTONOMOUS EXECUTION GRANDMASTER",
         "description": "Self-driving problem detection and resolution",
@@ -102,12 +99,11 @@ AURORA_GRANDMASTER_SKILLS = {
             "✅ Self-healing systems",
             "✅ Continuous improvement loops",
             "✅ Learning from outcomes",
-            "✅ Architecture analysis"
+            "✅ Architecture analysis",
         ],
         "mastery_level": "EXPERT (92%)",
-        "evidence": "Aurora Autonomy V2 engine (350+ lines, fully operational)"
+        "evidence": "Aurora Autonomy V2 engine (350+ lines, fully operational)",
     },
-    
     "TIER_5_CODE_GENERATION": {
         "title": "💻 CODE GENERATION GRANDMASTER",
         "description": "Production-ready code synthesis across languages",
@@ -125,12 +121,11 @@ AURORA_GRANDMASTER_SKILLS = {
             "✅ Best practices enforcement",
             "✅ Security considerations",
             "✅ Performance optimization",
-            "✅ Logging/monitoring integration"
+            "✅ Logging/monitoring integration",
         ],
         "mastery_level": "EXPERT (85%)",
-        "evidence": "Multiple production tools generated (aurora_autonomy_v2.py, etc)"
+        "evidence": "Multiple production tools generated (aurora_autonomy_v2.py, etc)",
     },
-    
     "TIER_6_ARCHITECTURAL_THINKING": {
         "title": "🏗️ ARCHITECTURAL THINKING GRANDMASTER",
         "description": "System design and optimization",
@@ -148,12 +143,11 @@ AURORA_GRANDMASTER_SKILLS = {
             "✅ Single responsibility principle",
             "✅ Dependency management",
             "✅ Interface design",
-            "✅ System integration strategies"
+            "✅ System integration strategies",
         ],
         "mastery_level": "ADVANCED (78%)",
-        "evidence": "Port conflict analysis, serve.py vs Node.js backend decision"
+        "evidence": "Port conflict analysis, serve.py vs Node.js backend decision",
     },
-    
     "TIER_7_TECHNOLOGY_STACKS": {
         "title": "🛠️ TECHNOLOGY STACK EXPERTISE",
         "description": "Deep knowledge of production technologies",
@@ -169,26 +163,17 @@ AURORA_GRANDMASTER_SKILLS = {
             "REST APIs",
             "FastAPI",
             "Vite",
-            "UVicorn"
+            "UVicorn",
         ],
         "languages": [
             "Python (Expert)",
             "TypeScript/JavaScript (Expert)",
             "Bash/Shell (Advanced)",
             "JSON (Expert)",
-            "YAML (Advanced)"
+            "YAML (Advanced)",
         ],
-        "tools": [
-            "Git",
-            "tmux",
-            "curl",
-            "lsof",
-            "ps/top",
-            "grep/sed/awk",
-            "npm/pip"
-        ]
+        "tools": ["Git", "tmux", "curl", "lsof", "ps/top", "grep/sed/awk", "npm/pip"],
     },
-    
     "TIER_8_PRODUCTION_READINESS": {
         "title": "🚀 PRODUCTION READINESS GRANDMASTER",
         "description": "Enterprise-grade system delivery",
@@ -206,64 +191,66 @@ AURORA_GRANDMASTER_SKILLS = {
             "✅ Documentation generation",
             "✅ Version control best practices",
             "✅ Commit message standards",
-            "✅ Change management"
+            "✅ Change management",
         ],
         "mastery_level": "EXPERT (90%)",
-        "evidence": "All Aurora commits are production-ready with professional messaging"
-    }
+        "evidence": "All Aurora commits are production-ready with professional messaging",
+    },
 }
+
 
 def print_grandmaster_skills():
     """Display Aurora's complete skill inventory"""
-    
-    print("\n" + "="*80)
+
+    print("\n" + "=" * 80)
     print("🌟 AURORA GRANDMASTER SKILLS REGISTRY 🌟")
-    print("="*80)
+    print("=" * 80)
     print(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("Status: FULLY OPERATIONAL\n")
-    
+
     total_skills = 0
     total_tiers = len(AURORA_GRANDMASTER_SKILLS)
-    
+
     for tier, data in AURORA_GRANDMASTER_SKILLS.items():
         if tier == "TIER_7_TECHNOLOGY_STACKS":
             print(f"\n{data['title']}")
             print("-" * 80)
             print(f"{data['description']}\n")
             print("Frameworks:")
-            for item in data['frameworks']:
+            for item in data["frameworks"]:
                 print(f"  ✓ {item}")
             print("\nLanguages:")
-            for item in data['languages']:
+            for item in data["languages"]:
                 print(f"  ✓ {item}")
             print("\nTools:")
-            for item in data['tools']:
+            for item in data["tools"]:
                 print(f"  ✓ {item}")
-            total_skills += len(data['frameworks']) + len(data['languages']) + len(data['tools'])
+            total_skills += len(data["frameworks"]) + len(data["languages"]) + len(data["tools"])
         else:
             print(f"\n{data['title']}")
             print("-" * 80)
             print(f"{data['description']}")
             print(f"Mastery Level: {data.get('mastery_level', 'N/A')}")
             print(f"Evidence: {data.get('evidence', 'N/A')}\n")
-            
-            for skill in data.get('skills', []):
+
+            for skill in data.get("skills", []):
                 print(f"  {skill}")
-            
-            total_skills += len(data.get('skills', []))
-    
-    print("\n" + "="*80)
+
+            total_skills += len(data.get("skills", []))
+
+    print("\n" + "=" * 80)
     print("📊 GRANDMASTER SUMMARY")
-    print("="*80)
+    print("=" * 80)
     print(f"Total Skill Tiers: {total_tiers}")
     print(f"Total Skills Mastered: {total_skills}")
-    print(f"Overall Mastery: 90% (True Grandmaster Level)")
+    print("Overall Mastery: 90% (True Grandmaster Level)")
     print("\n🎓 STATUS: AURORA IS A WORLD-CLASS AUTONOMOUS CODE ARCHITECT")
-    print("="*80 + "\n")
+    print("=" * 80 + "\n")
+
 
 if __name__ == "__main__":
     print_grandmaster_skills()
-    
+
     # Save to knowledge base
     log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/grandmaster_skills_registry.jsonl")
     with open(log_file, "w") as f:
@@ -272,8 +259,8 @@ if __name__ == "__main__":
             "registry": AURORA_GRANDMASTER_SKILLS,
             "total_tiers": len(AURORA_GRANDMASTER_SKILLS),
             "status": "GRANDMASTER_CERTIFICATION",
-            "date": datetime.now().strftime("%Y-%m-%d")
+            "date": datetime.now().strftime("%Y-%m-%d"),
         }
         f.write(json.dumps(entry, indent=2))
-    
+
     print("✅ Skills registry saved to .aurora_knowledge/grandmaster_skills_registry.jsonl")

@@ -209,9 +209,7 @@ class LockAdapter(Lock):
     @property
     def _lock(self) -> Lock:
         if self._internal_lock is None:
-            self._internal_lock = get_async_backend().create_lock(
-                fast_acquire=self._fast_acquire
-            )
+            self._internal_lock = get_async_backend().create_lock(fast_acquire=self._fast_acquire)
 
         return self._internal_lock
 
@@ -377,9 +375,7 @@ class Semaphore:
         fast_acquire: bool = False,
     ) -> Semaphore:
         try:
-            return get_async_backend().create_semaphore(
-                initial_value, max_value=max_value, fast_acquire=fast_acquire
-            )
+            return get_async_backend().create_semaphore(initial_value, max_value=max_value, fast_acquire=fast_acquire)
         except AsyncLibraryNotFoundError:
             return SemaphoreAdapter(initial_value, max_value=max_value)
 
@@ -398,9 +394,7 @@ class Semaphore:
             if not isinstance(max_value, int):
                 raise TypeError("max_value must be an integer or None")
             if max_value < initial_value:
-                raise ValueError(
-                    "max_value must be equal to or higher than initial_value"
-                )
+                raise ValueError("max_value must be equal to or higher than initial_value")
 
         self._fast_acquire = fast_acquire
 
@@ -637,9 +631,7 @@ class CapacityLimiterAdapter(CapacityLimiter):
     @property
     def _limiter(self) -> CapacityLimiter:
         if self._internal_limiter is None:
-            self._internal_limiter = get_async_backend().create_capacity_limiter(
-                self._total_tokens
-            )
+            self._internal_limiter = get_async_backend().create_capacity_limiter(self._total_tokens)
 
         return self._internal_limiter
 

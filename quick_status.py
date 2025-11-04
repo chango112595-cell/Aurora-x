@@ -3,9 +3,8 @@
 Quick status check - determines which services are down and what to do
 """
 import socket
-import subprocess
-import time
 import sys
+
 
 def check_port(port, timeout=1.0):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,14 +16,11 @@ def check_port(port, timeout=1.0):
     except:
         return False
 
-# Check critical ports
-ports = {
-    5000: "Aurora UI",
-    5002: "Learning API",
-    8000: "Dashboards"
-}
 
-print("\n🔍 Aurora Status Check\n" + "="*50)
+# Check critical ports
+ports = {5000: "Aurora UI", 5002: "Learning API", 8000: "Dashboards"}
+
+print("\n🔍 Aurora Status Check\n" + "=" * 50)
 
 all_up = True
 for port, name in ports.items():
@@ -33,7 +29,7 @@ for port, name in ports.items():
     if not check_port(port):
         all_up = False
 
-print("="*50)
+print("=" * 50)
 
 if all_up:
     print("\n✨ All services UP! Aurora is ready!\n")

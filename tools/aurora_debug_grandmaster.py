@@ -18,26 +18,24 @@ TEACHES AURORA:
 Aurora will become a DEBUGGING GRANDMASTER!
 """
 
-import subprocess
 import json
-import time
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Any
+
 
 class AuroraDebugGrandmaster:
     """
     Aurora's complete debugging mastery
     Every debugging technique from beginner to expert
     """
-    
+
     def __init__(self):
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
         self.knowledge_base.mkdir(exist_ok=True)
         self.debug_log = self.knowledge_base / "debug_mastery.jsonl"
         self.total_mastery = 0
         self.max_mastery = 1000
-        
+
     def log_learning(self, topic, details, points=10):
         """Log Aurora's debugging knowledge"""
         entry = {
@@ -45,21 +43,21 @@ class AuroraDebugGrandmaster:
             "topic": topic,
             "details": details,
             "points": points,
-            "total_mastery": self.total_mastery
+            "total_mastery": self.total_mastery,
         }
-        
+
         with open(self.debug_log, "a") as f:
             f.write(json.dumps(entry) + "\n")
-        
+
         print(f"🔍 Aurora mastered: {topic} (+{points} points)")
         self.total_mastery += points
-    
+
     def teach_debugging_fundamentals(self):
         """Teach Aurora the fundamentals of debugging"""
-        print("\n" + "="*70)
+        print("\n" + "=" * 70)
         print("🐛 DEBUGGING FUNDAMENTALS")
-        print("="*70 + "\n")
-        
+        print("=" * 70 + "\n")
+
         fundamentals = {
             "The Scientific Method of Debugging": {
                 "1. Observe": "What is the bug? What are the symptoms?",
@@ -68,9 +66,8 @@ class AuroraDebugGrandmaster:
                 "4. Analyze": "What do the results tell you?",
                 "5. Iterate": "Refine hypothesis and repeat",
                 "6. Fix": "Apply the solution",
-                "7. Verify": "Confirm the bug is fixed"
+                "7. Verify": "Confirm the bug is fixed",
             },
-            
             "Types of Bugs": {
                 "Syntax Errors": "Code won't compile/parse",
                 "Runtime Errors": "Code crashes during execution",
@@ -78,58 +75,54 @@ class AuroraDebugGrandmaster:
                 "Race Conditions": "Timing-dependent bugs",
                 "Memory Leaks": "Gradual resource exhaustion",
                 "Off-by-One": "Array index or loop iteration errors",
-                "Null/Undefined": "Missing or uninitialized values"
+                "Null/Undefined": "Missing or uninitialized values",
             },
-            
             "Debugging Mindset": {
                 "Stay Calm": "Bugs are normal, not personal failures",
                 "Be Systematic": "Don't randomly change things",
                 "Question Assumptions": "The bug is where you least expect",
                 "Simplify": "Reproduce with minimal code",
                 "Document": "Write down what you've tried",
-                "Ask for Help": "Fresh eyes see different things"
+                "Ask for Help": "Fresh eyes see different things",
             },
-            
             "The Rubber Duck Method": {
                 "Principle": "Explain your code line-by-line to a rubber duck",
                 "Why It Works": "Articulating forces you to think deeply",
                 "Aurora's Version": "Explain to yourself out loud or in writing",
-                "Benefit": "Often find the bug while explaining"
-            }
+                "Benefit": "Often find the bug while explaining",
+            },
         }
-        
+
         for category, items in fundamentals.items():
             print(f"📖 {category}:")
             for key, value in items.items():
                 print(f"   {key}: {value}")
             print()
-            
+
             self.log_learning(category, items, 15)
-        
+
         print("✅ Debugging Fundamentals: MASTERED\n")
-    
+
     def teach_debugging_tools(self):
         """Teach Aurora all debugging tools"""
-        print("\n" + "="*70)
+        print("\n" + "=" * 70)
         print("🔧 DEBUGGING TOOLS MASTERY")
-        print("="*70 + "\n")
-        
+        print("=" * 70 + "\n")
+
         tools = {
             "Print Debugging (Most Common)": {
                 "Python": "print(f'variable = {variable}')",
                 "JavaScript": "console.log('variable:', variable)",
                 "Pros": "Simple, fast, works everywhere",
                 "Cons": "Clutters code, need to rerun",
-                "Best Practice": "Use logging instead in production"
+                "Best Practice": "Use logging instead in production",
             },
-            
             "Logging": {
                 "Python": "import logging; logging.debug('message')",
                 "Levels": "DEBUG < INFO < WARNING < ERROR < CRITICAL",
                 "Benefits": "Configurable, permanent, filterable",
-                "Aurora's Rule": "Always use logging in production code"
+                "Aurora's Rule": "Always use logging in production code",
             },
-            
             "Python Debugger (pdb)": {
                 "Start": "import pdb; pdb.set_trace()",
                 "Python 3.7+": "breakpoint()",
@@ -140,11 +133,10 @@ class AuroraDebugGrandmaster:
                     "p variable": "Print variable value",
                     "l (list)": "Show current code",
                     "w (where)": "Show stack trace",
-                    "q (quit)": "Exit debugger"
+                    "q (quit)": "Exit debugger",
                 },
-                "Power Move": "Can modify variables while debugging!"
+                "Power Move": "Can modify variables while debugging!",
             },
-            
             "VS Code Debugger": {
                 "Set Breakpoint": "Click left of line number (red dot appears)",
                 "Start Debugging": "F5 or Run > Start Debugging",
@@ -156,9 +148,8 @@ class AuroraDebugGrandmaster:
                 "Watch Variables": "Add to WATCH panel",
                 "Debug Console": "Execute code while paused",
                 "Conditional Breakpoints": "Right-click breakpoint",
-                "Aurora's Favorite": "Best visual debugging experience!"
+                "Aurora's Favorite": "Best visual debugging experience!",
             },
-            
             "Chrome DevTools": {
                 "Open": "F12 or Right-click > Inspect",
                 "Console": "See errors, run JavaScript",
@@ -167,9 +158,8 @@ class AuroraDebugGrandmaster:
                 "Elements": "Inspect/modify HTML/CSS live",
                 "Performance": "Profile JavaScript execution",
                 "Memory": "Find memory leaks",
-                "Aurora Must Know": "Essential for web debugging!"
+                "Aurora Must Know": "Essential for web debugging!",
             },
-            
             "Command Line Tools": {
                 "curl": "Test HTTP requests",
                 "netstat": "Check ports and connections",
@@ -177,10 +167,10 @@ class AuroraDebugGrandmaster:
                 "top/htop": "Monitor system resources",
                 "lsof": "List open files",
                 "strace": "Trace system calls (Linux)",
-                "tcpdump": "Capture network packets"
-            }
+                "tcpdump": "Capture network packets",
+            },
         }
-        
+
         for tool, details in tools.items():
             print(f"🔨 {tool}:")
             if isinstance(details, dict):
@@ -194,25 +184,24 @@ class AuroraDebugGrandmaster:
             else:
                 print(f"   {details}")
             print()
-            
+
             self.log_learning(tool, details, 20)
-        
+
         print("✅ Debugging Tools: MASTERED\n")
-    
+
     def teach_reading_errors(self):
         """Teach Aurora how to read and understand error messages"""
-        print("\n" + "="*70)
+        print("\n" + "=" * 70)
         print("📚 READING ERROR MESSAGES LIKE A PRO")
-        print("="*70 + "\n")
-        
+        print("=" * 70 + "\n")
+
         error_wisdom = {
             "Anatomy of a Stack Trace": {
                 "Bottom Frame": "Where the error actually occurred",
                 "Middle Frames": "How you got there (call stack)",
                 "Top Frame": "Where execution started",
-                "Aurora's Rule": "Start reading from the BOTTOM!"
+                "Aurora's Rule": "Start reading from the BOTTOM!",
             },
-            
             "Python Errors": {
                 "SyntaxError": "Code won't parse - check for typos, missing colons",
                 "IndentationError": "Wrong indentation (Python is strict!)",
@@ -222,18 +211,16 @@ class AuroraDebugGrandmaster:
                 "IndexError": "List index out of range",
                 "KeyError": "Dictionary key doesn't exist",
                 "ValueError": "Right type but wrong value",
-                "ImportError": "Can't find module to import"
+                "ImportError": "Can't find module to import",
             },
-            
             "JavaScript Errors": {
                 "SyntaxError": "Invalid JavaScript syntax",
                 "ReferenceError": "Variable not defined",
                 "TypeError": "Value is not expected type",
                 "RangeError": "Number out of valid range",
                 "URIError": "Invalid URI encoding",
-                "Uncaught Promise": "Promise rejected without .catch()"
+                "Uncaught Promise": "Promise rejected without .catch()",
             },
-            
             "HTTP Status Codes": {
                 "200 OK": "Success!",
                 "201 Created": "Resource created successfully",
@@ -243,109 +230,102 @@ class AuroraDebugGrandmaster:
                 "404 Not Found": "Resource doesn't exist",
                 "500 Internal Server Error": "Server-side bug",
                 "502 Bad Gateway": "Upstream server issue",
-                "503 Service Unavailable": "Server overloaded"
+                "503 Service Unavailable": "Server overloaded",
             },
-            
             "Error Message Strategy": {
                 "1. Read Carefully": "Don't just glance, read every word",
                 "2. Identify Type": "What kind of error is it?",
                 "3. Find Location": "File and line number",
                 "4. Google It": "Copy exact error message",
                 "5. Check Recent Changes": "What did you just modify?",
-                "6. Reproduce": "Can you make it happen again?"
-            }
+                "6. Reproduce": "Can you make it happen again?",
+            },
         }
-        
+
         for category, items in error_wisdom.items():
             print(f"📖 {category}:")
             for key, value in items.items():
                 print(f"   {key}: {value}")
             print()
-            
+
             self.log_learning(category, items, 18)
-        
+
         print("✅ Error Message Reading: MASTERED\n")
-    
+
     def teach_advanced_debugging(self):
         """Teach Aurora advanced debugging techniques"""
-        print("\n" + "="*70)
+        print("\n" + "=" * 70)
         print("🎯 ADVANCED DEBUGGING TECHNIQUES")
-        print("="*70 + "\n")
-        
+        print("=" * 70 + "\n")
+
         advanced = {
             "Binary Search Debugging": {
                 "Concept": "Comment out half the code, see if bug persists",
                 "Repeat": "Keep halving until you isolate the bug",
                 "Works For": "Complex code where bug location is unknown",
-                "Time Saved": "Massive - O(log n) instead of O(n)"
+                "Time Saved": "Massive - O(log n) instead of O(n)",
             },
-            
             "Git Bisect (Find When Bug Was Introduced)": {
                 "Command": "git bisect start",
                 "Mark Bad": "git bisect bad (current commit has bug)",
                 "Mark Good": "git bisect good <commit> (old commit was fine)",
                 "Test": "Git checks out middle commit, you test",
                 "Repeat": "Mark each as good or bad until bug found",
-                "Power": "Automatically finds the commit that broke it!"
+                "Power": "Automatically finds the commit that broke it!",
             },
-            
             "Debugging Race Conditions": {
                 "Add Logging": "See order of operations",
                 "Add Delays": "time.sleep() to change timing",
                 "Use Locks": "Ensure atomic operations",
                 "Reproduce Consistently": "Make deterministic if possible",
-                "Tools": "Thread sanitizers, race detectors"
+                "Tools": "Thread sanitizers, race detectors",
             },
-            
             "Memory Debugging": {
                 "Python": "memory_profiler, tracemalloc, objgraph",
                 "JavaScript": "Chrome DevTools Memory tab",
                 "Signs": "Gradual slowdown, increasing memory usage",
                 "Common Causes": "Unreleased resources, circular references",
-                "Fix": "Proper cleanup, weak references"
+                "Fix": "Proper cleanup, weak references",
             },
-            
             "Performance Debugging": {
                 "Python Profiling": "python -m cProfile script.py",
                 "JavaScript": "Chrome DevTools Performance tab",
                 "Look For": "Functions called many times, long execution",
                 "Optimize": "Start with biggest time sinks",
-                "Measure": "Always benchmark before and after"
+                "Measure": "Always benchmark before and after",
             },
-            
             "Debugging Production Issues": {
                 "1. Never Debug in Production": "Reproduce locally first",
                 "2. Check Logs": "What happened before the error?",
                 "3. Check Monitoring": "CPU, memory, network usage",
                 "4. Recent Deploys": "What changed recently?",
                 "5. Rollback": "If critical, rollback first, debug later",
-                "6. Post-Mortem": "Document what happened and why"
+                "6. Post-Mortem": "Document what happened and why",
             },
-            
             "The Heisenbug": {
                 "Definition": "Bug that disappears when you try to observe it",
                 "Causes": "Timing issues, debugger changes behavior",
                 "Strategy": "Logging instead of breakpoints",
-                "Example": "Race condition that debugger slows down"
-            }
+                "Example": "Race condition that debugger slows down",
+            },
         }
-        
+
         for technique, details in advanced.items():
             print(f"🎯 {technique}:")
             for key, value in details.items():
                 print(f"   {key}: {value}")
             print()
-            
+
             self.log_learning(technique, details, 25)
-        
+
         print("✅ Advanced Debugging: MASTERED\n")
-    
+
     def teach_debugging_workflow(self):
         """Teach Aurora Aurora's complete debugging workflow"""
-        print("\n" + "="*70)
+        print("\n" + "=" * 70)
         print("⚡ AURORA'S DEBUGGING WORKFLOW")
-        print("="*70 + "\n")
-        
+        print("=" * 70 + "\n")
+
         workflow = """
 🔍 AURORA'S SYSTEMATIC DEBUGGING PROCESS
 
@@ -403,20 +383,19 @@ Step 7: PREVENT
    • Keep a debugging log
    • Learn from every bug
 """
-        
+
         print(workflow)
-        
-        self.log_learning("Aurora's Debugging Workflow", 
-                         "Complete systematic debugging process", 30)
-        
+
+        self.log_learning("Aurora's Debugging Workflow", "Complete systematic debugging process", 30)
+
         print("✅ Debugging Workflow: MASTERED\n")
-    
+
     def create_debug_toolkit(self):
         """Create Aurora's personal debugging toolkit"""
-        print("\n" + "="*70)
+        print("\n" + "=" * 70)
         print("🧰 CREATING AURORA'S DEBUG TOOLKIT")
-        print("="*70 + "\n")
-        
+        print("=" * 70 + "\n")
+
         toolkit_code = '''#!/usr/bin/env python3
 """
 Aurora's Personal Debugging Toolkit
@@ -554,11 +533,11 @@ if __name__ == "__main__":
     print("  inspect(obj)   - Inspect any object")
     print("  check_types()  - Check variable types")
 '''
-        
+
         toolkit_file = Path("/workspaces/Aurora-x/tools/aurora_debug_toolkit.py")
         toolkit_file.write_text(toolkit_code)
         toolkit_file.chmod(0o755)
-        
+
         print(f"✅ Created: {toolkit_file}")
         print()
         print("🧰 Aurora's Debug Toolkit ready!")
@@ -567,19 +546,19 @@ if __name__ == "__main__":
         print("  from tools.aurora_debug_toolkit import dprint, trace, time_it")
         print("  dprint('Debug message', variable)")
         print()
-        
+
         self.log_learning("Aurora's Debug Toolkit", "Personal debugging utilities", 25)
-    
+
     def generate_certification(self):
         """Generate Aurora's Debugging Grandmaster Certification"""
-        print("\n" + "="*70)
+        print("\n" + "=" * 70)
         print("🏆 AURORA DEBUGGING GRANDMASTER CERTIFICATION")
-        print("="*70 + "\n")
-        
+        print("=" * 70 + "\n")
+
         percentage = (self.total_mastery / self.max_mastery) * 100
-        
+
         print(f"📊 Debugging Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)")
-        
+
         if percentage >= 90:
             rank = "DEBUGGING GRANDMASTER"
             emoji = "👑"
@@ -592,9 +571,9 @@ if __name__ == "__main__":
         else:
             rank = "DEBUGGING PRACTITIONER"
             emoji = "🔍"
-        
+
         print(f"\n{emoji} Rank: {rank}")
-        
+
         print("\n✅ Aurora now masters:")
         print("   • Debugging fundamentals and scientific method")
         print("   • All debugging tools (print, logging, pdb, VS Code, Chrome)")
@@ -605,7 +584,7 @@ if __name__ == "__main__":
         print("   • Production debugging")
         print("   • Complete systematic debugging workflow")
         print("   • Personal debugging toolkit")
-        
+
         print("\n🎯 Aurora's Debugging Superpowers:")
         print("   ⚡ Can diagnose any bug systematically")
         print("   ⚡ Reads error messages like poetry")
@@ -613,7 +592,7 @@ if __name__ == "__main__":
         print("   ⚡ Profiles and optimizes performance")
         print("   ⚡ Debugs production issues calmly")
         print("   ⚡ Prevents bugs through testing")
-        
+
         # Save certification
         cert = {
             "timestamp": datetime.now().isoformat(),
@@ -625,27 +604,28 @@ if __name__ == "__main__":
                 "Tool mastery",
                 "Error interpretation",
                 "Advanced techniques",
-                "Systematic workflow"
-            ]
+                "Systematic workflow",
+            ],
         }
-        
+
         cert_file = self.knowledge_base / "debug_grandmaster_cert.json"
         with open(cert_file, "w") as f:
             json.dump(cert, f, indent=2)
-        
+
         print(f"\n📜 Certification saved: {cert_file}")
-        print("="*70 + "\n")
+        print("=" * 70 + "\n")
+
 
 def main():
     """Train Aurora in debugging mastery"""
-    
+
     print("\n🐛 AURORA DEBUGGING GRANDMASTER TRAINING")
-    print("="*70)
+    print("=" * 70)
     print("Master every debugging technique ever created")
-    print("="*70 + "\n")
-    
+    print("=" * 70 + "\n")
+
     master = AuroraDebugGrandmaster()
-    
+
     master.teach_debugging_fundamentals()
     master.teach_debugging_tools()
     master.teach_reading_errors()
@@ -653,9 +633,10 @@ def main():
     master.teach_debugging_workflow()
     master.create_debug_toolkit()
     master.generate_certification()
-    
+
     print("🎉 Aurora is now a DEBUGGING GRANDMASTER!")
     print("   She can debug ANYTHING!")
-    
+
+
 if __name__ == "__main__":
     main()

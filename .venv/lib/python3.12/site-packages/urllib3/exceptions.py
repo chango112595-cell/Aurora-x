@@ -92,9 +92,7 @@ class MaxRetryError(RequestError):
 
     """
 
-    def __init__(
-        self, pool: ConnectionPool, url: str, reason: Exception | None = None
-    ) -> None:
+    def __init__(self, pool: ConnectionPool, url: str, reason: Exception | None = None) -> None:
         self.reason = reason
 
         message = f"Max retries exceeded with url: {url} (Caused by {reason!r})"
@@ -109,9 +107,7 @@ class MaxRetryError(RequestError):
 class HostChangedError(RequestError):
     """Raised when an existing pool gets a request for a foreign host."""
 
-    def __init__(
-        self, pool: ConnectionPool, url: str, retries: Retry | int = 3
-    ) -> None:
+    def __init__(self, pool: ConnectionPool, url: str, retries: Retry | int = 3) -> None:
         message = f"Tried to open a foreign host with url: {url}"
         super().__init__(pool, url, message)
         self.retries = retries
@@ -154,8 +150,7 @@ class NewConnectionError(ConnectTimeoutError, HTTPError):
     @property
     def pool(self) -> HTTPConnection:
         warnings.warn(
-            "The 'pool' property is deprecated and will be removed "
-            "in urllib3 v2.1.0. Use 'conn' instead.",
+            "The 'pool' property is deprecated and will be removed " "in urllib3 v2.1.0. Use 'conn' instead.",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -324,9 +319,7 @@ class ProxySchemeUnsupported(ValueError):
 class HeaderParsingError(HTTPError):
     """Raised by assert_header_parsing, but we convert it to a log.warning statement."""
 
-    def __init__(
-        self, defects: list[MessageDefect], unparsed_data: bytes | str | None
-    ) -> None:
+    def __init__(self, defects: list[MessageDefect], unparsed_data: bytes | str | None) -> None:
         message = f"{defects or 'Unknown'}, unparsed data: {unparsed_data!r}"
         super().__init__(message)
 

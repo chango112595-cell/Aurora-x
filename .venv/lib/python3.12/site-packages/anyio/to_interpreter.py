@@ -51,6 +51,7 @@ if sys.version_info >= (3, 14):
                 raise res
 
             return res
+
 elif sys.version_info >= (3, 13):
     import _interpqueues
     import _interpreters
@@ -96,9 +97,7 @@ except NotShareableError:
         def __init__(self) -> None:
             self._interpreter_id = _interpreters.create()
             self._queue_id = _interpqueues.create(1, *QUEUE_UNPICKLE_ARGS)
-            _interpreters.set___main___attrs(
-                self._interpreter_id, {"queue_id": self._queue_id}
-            )
+            _interpreters.set___main___attrs(self._interpreter_id, {"queue_id": self._queue_id})
 
         def destroy(self) -> None:
             _interpqueues.destroy(self._queue_id)
@@ -126,6 +125,7 @@ except NotShareableError:
                 raise res
 
             return res
+
 else:
 
     class Worker:
@@ -146,9 +146,7 @@ else:
 
 
 DEFAULT_CPU_COUNT: Final = 8  # this is just an arbitrarily selected value
-MAX_WORKER_IDLE_TIME = (
-    30  # seconds a subinterpreter can be idle before becoming eligible for pruning
-)
+MAX_WORKER_IDLE_TIME = 30  # seconds a subinterpreter can be idle before becoming eligible for pruning
 
 T_Retval = TypeVar("T_Retval")
 PosArgsT = TypeVarTuple("PosArgsT")

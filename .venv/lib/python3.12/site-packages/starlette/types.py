@@ -1,6 +1,6 @@
-from collections.abc import Awaitable, Mapping, MutableMapping
+from collections.abc import Awaitable, Callable, Mapping, MutableMapping
 from contextlib import AbstractAsyncContextManager
-from typing import TYPE_CHECKING, Any, Callable, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 if TYPE_CHECKING:
     from starlette.requests import Request
