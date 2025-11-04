@@ -98,7 +98,7 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
         timestamp: new Date()
       }]);
     }
-    
+
     setIsLoading(false);
     console.log('[Aurora Chat] isLoading=false');
   };
