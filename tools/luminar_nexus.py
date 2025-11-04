@@ -827,6 +827,15 @@ class AuroraConversationalAI:
             else:
                 issues_found.append("❌ No message state updates found")
 
+            # Check which endpoint is being called
+            if "/api/conversation" in component_code:
+                issues_found.append("❌ WRONG ENDPOINT! Calling /api/conversation instead of /api/chat")
+                fixes_to_apply.append("fix_endpoint_url")
+            elif "/api/chat" in component_code:
+                issues_found.append("✓ Correct endpoint /api/chat")
+            else:
+                issues_found.append("⚠️ No API endpoint found in fetch call")
+
             diagnostic_log.append("\n".join(issues_found))
 
         except Exception as e:
@@ -884,6 +893,26 @@ class AuroraConversationalAI:
                 else:
                     diagnostic_log.append("⚠️ Could not apply fix automatically")
                     diagnostic_log.append("• Manual intervention may be required")
+
+            # Apply the fix: Change endpoint from /api/conversation to /api/chat
+            if "fix_endpoint_url" in fixes_to_apply:
+                diagnostic_log.append("\n**Applying Fix: Changing endpoint to Luminar Nexus /api/chat**")
+
+                old_endpoint = "      const response = await fetch('/api/conversation', {"
+                new_endpoint = "      const response = await fetch('/api/chat', {"
+
+                fix_result = self.execute_tool("modify_file", component_path, old_endpoint, new_endpoint)
+                diagnostic_log.append(f"• {fix_result}")
+
+                if "✅" in fix_result:
+                    diagnostic_log.append("✅ **ENDPOINT FIX APPLIED SUCCESSFULLY!**")
+                    diagnostic_log.append("• Changed from /api/conversation (old backend) to /api/chat (Luminar Nexus)")
+                    diagnostic_log.append("• Now using my own Luminar Nexus conversational AI!")
+                    diagnostic_log.append("• This fixes the timeout issue - I was calling the wrong service")
+                    diagnostic_log.append("• Using TIER 28 autonomous fixing + TIER 32 architecture design mastery")
+                else:
+                    diagnostic_log.append("⚠️ Could not apply endpoint fix automatically")
+                    diagnostic_log.append("• The fetch URL may have changed format")
 
         # Step 6: Root Cause Analysis
         diagnostic_log.append("\n**🔍 ROOT CAUSE ANALYSIS:**")
