@@ -614,8 +614,8 @@ class AuroraConversationalAI:
         if re.search(r'(help|assist|guide|support|stuck|don\'t know|confused)', lower):
             return 'help', []
         
-        # Debug requests
-        if re.search(r'(debug|fix|error|broken|issue|problem|bug|crash|fail)', lower):
+        # Debug requests (check before status - more specific)
+        if re.search(r'(debug|fix|error|broken|issue|problem|bug|crash|fail|not work)', lower):
             return 'debug', []
         
         # Learning queries
@@ -627,8 +627,8 @@ class AuroraConversationalAI:
         if re.search(r'(knowledge|tier|mastery|grandmaster|ancient|future|sci-?fi|capabilities)', lower):
             return 'question', ['knowledge']
         
-        # Status checks
-        if re.search(r'(status|how are you|running|health|up|online|working)', lower):
+        # Status checks (more restrictive to avoid false positives)
+        if re.search(r'^(status|how are you|what.* (status|state))|(are you (up|online|healthy|ok))', lower):
             return 'status', []
         
         # Goodbye
