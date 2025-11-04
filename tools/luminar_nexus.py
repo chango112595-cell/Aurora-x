@@ -51,11 +51,6 @@ class LuminarNexusServerManager:
         
         self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/luminar_nexus.jsonl")
         self.log_file.parent.mkdir(exist_ok=True)
-        
-        # Load Aurora's knowledge systems
-        self.corpus = self.load_corpus()
-        self.skills = self.load_skills_registry()
-        self.debug_knowledge = self.load_debug_knowledge()
     
     def log_event(self, event_type, server, details):
         """Log Luminar Nexus events"""
@@ -121,7 +116,7 @@ class LuminarNexusServerManager:
             # Wait a moment and check health
             time.sleep(3)
             if self.check_health(server_key):
-                print(f"   ✅ Health check PASSED")
+                print(f"   ✅ Health check PASSED FUCK YEAH LOL")
                 return True
             else:
                 print(f"   ⚠️  Server started but health check pending...")
@@ -154,22 +149,36 @@ class LuminarNexusServerManager:
             return False
     
     def check_health(self, server_key: str) -> bool:
-        """Check if server is responding"""
+        """Check if server is responding - tries multiple health check patterns"""
         if server_key not in self.servers:
             return False
         
         server = self.servers[server_key]
-        health_url = server["health_check"]
+        base_url = server["health_check"]
         
-        try:
-            result = subprocess.run(['curl', '-s', '-I', health_url],
-                                  capture_output=True, text=True, timeout=2)
-            
-            if "200" in result.stdout or "OK" in result.stdout:
-                return True
-            return False
-        except:
-            return False
+        # Try multiple health check patterns (Aurora-style adaptation)
+        health_endpoints = [
+            base_url,  # Try the configured endpoint first
+            base_url.replace("/healthz", "/health"),  # Try /health variant
+            base_url.replace("/health", "/healthz"),  # Try /healthz variant
+        ]
+        
+        for endpoint in health_endpoints:
+            try:
+                # Try GET request (more reliable than HEAD for varied APIs)
+                result = subprocess.run(['curl', '-s', '-f', endpoint],
+                                      capture_output=True, text=True, timeout=2)
+                
+                # Check if we got a response (any JSON or text response is good)
+                if result.returncode == 0 and result.stdout:
+                    # Look for positive health indicators
+                    response = result.stdout.lower()
+                    if any(indicator in response for indicator in ['ok', 'healthy', 'status', 'true']):
+                        return True
+            except:
+                continue
+        
+        return False
     
     def get_status(self, server_key: str) -> Dict:
         """Get server status"""
@@ -238,228 +247,6 @@ class LuminarNexusServerManager:
         
         print("="*70 + "\n")
 
-    def load_corpus(self) -> list:
-        """Load Aurora's code generation corpus"""
-        corpus_file = Path("/workspaces/Aurora-x/corpus.jsonl")
-        corpus = []
-        if corpus_file.exists():
-            try:
-                with open(corpus_file) as f:
-                    for line in f:
-                        if line.strip():
-                            corpus.append(json.loads(line))
-                print(f"✅ Loaded corpus: {len(corpus)} code samples")
-            except Exception as e:
-                print(f"⚠️  Could not load corpus: {e}")
-        return corpus
-    
-    def load_skills_registry(self) -> dict:
-        """Load Aurora's grandmaster skills registry"""
-        skills_file = Path("/workspaces/Aurora-x/.aurora_knowledge/grandmaster_skills_registry.jsonl")
-        skills = {}
-        if skills_file.exists():
-            try:
-                with open(skills_file) as f:
-                    for line in f:
-                        if line.strip():
-                            data = json.loads(line)
-                            skills.update(data)
-                print(f"✅ Loaded skills registry: Aurora has {len(skills)} mastery tiers")
-            except Exception as e:
-                print(f"⚠️  Could not load skills: {e}")
-        return skills
-    
-    def load_debug_knowledge(self) -> list:
-        """Load Aurora's debugging mastery knowledge"""
-        debug_file = Path("/workspaces/Aurora-x/.aurora_knowledge/debug_mastery.jsonl")
-        knowledge = []
-        if debug_file.exists():
-            try:
-                with open(debug_file) as f:
-                    for line in f:
-                        if line.strip():
-                            knowledge.append(json.loads(line))
-                print(f"✅ Loaded debug knowledge: {len(knowledge)} lessons learned")
-            except Exception as e:
-                print(f"⚠️  Could not load debug knowledge: {e}")
-        return knowledge
-    
-    def self_monitor(self) -> dict:
-        """Monitor all services health and return status"""
-        health_report = {
-            "timestamp": datetime.now().isoformat(),
-            "services": {},
-            "overall_health": "healthy"
-        }
-        
-        issues_found = []
-        
-        for server_key in self.servers.keys():
-            status = self.get_status(server_key)
-            health_report["services"][server_key] = status
-            
-            if status["status"] != "running":
-                issues_found.append({
-                    "service": server_key,
-                    "issue": f"Service not running (status: {status['status']})",
-                    "severity": "critical" if self.servers[server_key].get("critical", False) else "warning"
-                })
-        
-        if issues_found:
-            health_report["overall_health"] = "degraded"
-            health_report["issues"] = issues_found
-        
-        return health_report
-    
-    def self_heal(self, health_report: dict = None) -> dict:
-        """Automatically fix detected issues"""
-        if health_report is None:
-            health_report = self.self_monitor()
-        
-        healing_actions = []
-        
-        if "issues" in health_report:
-            for issue in health_report["issues"]:
-                service = issue["service"]
-                print(f"🔧 Auto-healing {service}...")
-                
-                # Attempt to restart the service
-                success = self.start_server(service)
-                
-                healing_actions.append({
-                    "service": service,
-                    "issue": issue["issue"],
-                    "action": "restart",
-                    "success": success,
-                    "timestamp": datetime.now().isoformat()
-                })
-        
-        # Log healing actions
-        healing_log = Path("/workspaces/Aurora-x/.aurora_knowledge/self_healing.jsonl")
-        with open(healing_log, "a") as f:
-            for action in healing_actions:
-                f.write(json.dumps(action) + "\n")
-        
-        return {
-            "timestamp": datetime.now().isoformat(),
-            "actions_taken": healing_actions,
-            "health_restored": all(a["success"] for a in healing_actions)
-        }
-    
-    def get_master_skills(self) -> dict:
-        """Return Aurora's master skills status"""
-        return {
-            "debug_mastery": len(self.debug_knowledge),
-            "code_patterns": len(self.corpus),
-            "skill_tiers": len(self.skills),
-            "services_managed": len(self.servers),
-            "capabilities": [
-                "Self-Monitoring",
-                "Self-Healing",
-                "Process Management",
-                "Service Orchestration",
-                "Knowledge Integration",
-                "Debug Mastery",
-                "Pattern Recognition",
-                "Autonomous Decision-Making",
-                "Code Generation",
-                "Performance Analysis",
-                "Architecture Evaluation"
-            ]
-        }
-    
-    def autonomous_analyze(self) -> dict:
-        """Autonomously analyze system state and make recommendations"""
-        analysis = {
-            "timestamp": datetime.now().isoformat(),
-            "system_health": self.self_monitor(),
-            "recommendations": []
-        }
-        
-        # Check for services that frequently crash
-        health_log = Path("/workspaces/Aurora-x/.aurora_knowledge/self_healing.jsonl")
-        if health_log.exists():
-            recent_issues = []
-            with open(health_log, "r") as f:
-                for line in f.readlines()[-20:]:  # Last 20 healing actions
-                    try:
-                        recent_issues.append(json.loads(line))
-                    except:
-                        pass
-            
-            # Detect patterns
-            service_failures = {}
-            for issue in recent_issues:
-                svc = issue.get("service", "unknown")
-                service_failures[svc] = service_failures.get(svc, 0) + 1
-            
-            for service, count in service_failures.items():
-                if count > 3:
-                    analysis["recommendations"].append({
-                        "type": "stability_concern",
-                        "service": service,
-                        "issue": f"Service has failed {count} times recently",
-                        "suggestion": "Consider investigating root cause or increasing resource limits"
-                    })
-        
-        # Check resource usage
-        try:
-            import psutil
-            cpu = psutil.cpu_percent(interval=1)
-            mem = psutil.virtual_memory().percent
-            
-            if cpu > 80:
-                analysis["recommendations"].append({
-                    "type": "resource_warning",
-                    "metric": "CPU",
-                    "value": f"{cpu}%",
-                    "suggestion": "High CPU usage detected - consider optimizing processes"
-                })
-            
-            if mem > 80:
-                analysis["recommendations"].append({
-                    "type": "resource_warning",
-                    "metric": "Memory",
-                    "value": f"{mem}%",
-                    "suggestion": "High memory usage - consider restarting services"
-                })
-        except ImportError:
-            pass
-        
-        return analysis
-    
-    def learn_from_patterns(self) -> dict:
-        """Autonomously learn from execution patterns"""
-        learning = {
-            "timestamp": datetime.now().isoformat(),
-            "patterns_detected": [],
-            "adjustments_made": []
-        }
-        
-        # Analyze corpus for common patterns
-        if len(self.corpus) > 10:
-            # Look for frequently used code patterns
-            pattern_frequency = {}
-            for entry in self.corpus:
-                code = entry.get("code", "")
-                # Simple pattern detection (you can make this more sophisticated)
-                if "async def" in code:
-                    pattern_frequency["async_functions"] = pattern_frequency.get("async_functions", 0) + 1
-                if "class " in code:
-                    pattern_frequency["classes"] = pattern_frequency.get("classes", 0) + 1
-                if "try:" in code:
-                    pattern_frequency["error_handling"] = pattern_frequency.get("error_handling", 0) + 1
-            
-            for pattern, count in pattern_frequency.items():
-                if count > len(self.corpus) * 0.3:  # Pattern appears in 30%+ of code
-                    learning["patterns_detected"].append({
-                        "pattern": pattern,
-                        "frequency": count,
-                        "percentage": f"{(count/len(self.corpus)*100):.1f}%"
-                    })
-        
-        return learning
-
 def main():
     """Luminar Nexus main entry point"""
     import sys
@@ -475,11 +262,7 @@ def main():
         print("  python luminar_nexus.py status           - Show all status")
         print("  python luminar_nexus.py start-all        - Start all servers")
         print("  python luminar_nexus.py stop-all         - Stop all servers")
-        print("  python luminar_nexus.py monitor          - Start continuous monitoring")
-        print("  python luminar_nexus.py skills           - Show master skills")
-        print("  python luminar_nexus.py analyze          - Autonomous system analysis")
-        print("  python luminar_nexus.py learn            - Learn from code patterns")
-        print("\nAvailable servers: bridge, backend, vite, self-learn")
+        print("\nAvailable servers: vite, backend")
         return
     
     command = sys.argv[1]
@@ -490,59 +273,6 @@ def main():
         nexus.stop_all()
     elif command == "status":
         nexus.show_status()
-    elif command == "monitor":
-        print("🌟 Starting Luminar Nexus continuous monitoring...")
-        print("   Press Ctrl+C to stop\n")
-        try:
-            while True:
-                health = nexus.self_monitor()
-                if health["overall_health"] != "healthy":
-                    print(f"\n⚠️  Issues detected at {health['timestamp']}")
-                    nexus.self_heal(health)
-                time.sleep(30)  # Check every 30 seconds
-        except KeyboardInterrupt:
-            print("\n\n✅ Monitoring stopped")
-    elif command == "skills":
-        skills = nexus.get_master_skills()
-        print("\n🌟 LUMINAR NEXUS MASTER SKILLS")
-        print("=" * 70)
-        for key, value in skills.items():
-            if isinstance(value, list):
-                print(f"\n{key}:")
-                for item in value:
-                    print(f"  • {item}")
-            else:
-                print(f"{key}: {value}")
-        print("\n" + "=" * 70)
-    elif command == "analyze":
-        print("\n🧠 Running autonomous analysis...\n")
-        analysis = nexus.autonomous_analyze()
-        print(f"Timestamp: {analysis['timestamp']}")
-        print(f"System Health: {analysis['system_health']['overall_health']}")
-        
-        if analysis['recommendations']:
-            print("\n📋 Recommendations:")
-            for rec in analysis['recommendations']:
-                print(f"\n  Type: {rec['type']}")
-                if 'service' in rec:
-                    print(f"  Service: {rec['service']}")
-                if 'metric' in rec:
-                    print(f"  Metric: {rec['metric']} = {rec['value']}")
-                print(f"  Issue: {rec['issue'] if 'issue' in rec else 'N/A'}")
-                print(f"  Suggestion: {rec['suggestion']}")
-        else:
-            print("\n✅ No issues detected - system running optimally")
-    elif command == "learn":
-        print("\n📚 Analyzing patterns and learning...\n")
-        learning = nexus.learn_from_patterns()
-        print(f"Timestamp: {learning['timestamp']}")
-        
-        if learning['patterns_detected']:
-            print("\n🔍 Patterns Detected:")
-            for pattern in learning['patterns_detected']:
-                print(f"  • {pattern['pattern']}: {pattern['frequency']} occurrences ({pattern['percentage']})")
-        else:
-            print("\n⚠️  Insufficient data for pattern detection")
     elif command == "start" and len(sys.argv) > 2:
         nexus.start_server(sys.argv[2])
     elif command == "stop" and len(sys.argv) > 2:
