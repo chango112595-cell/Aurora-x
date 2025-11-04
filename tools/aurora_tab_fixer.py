@@ -5,73 +5,65 @@ Aurora Tab Issues Auto-Fixer
 """
 
 import json
-from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Any
+from pathlib import Path
+from typing import Any
+
 
 class AuroraTabFixer:
     """Aurora's comprehensive tab fix engine"""
-    
+
     def __init__(self):
         self.project_root = Path("/workspaces/Aurora-x")
         self.client_src = self.project_root / "client" / "src"
         self.fixes_applied = []
-        
+
     def log(self, level: str, message: str):
         """Aurora's logging"""
         timestamp = datetime.now().strftime("%H:%M:%S")
-        icons = {
-            "INFO": "🌟",
-            "FIX": "✅",
-            "ISSUE": "🐛",
-            "PLAN": "📋"
-        }
+        icons = {"INFO": "🌟", "FIX": "✅", "ISSUE": "🐛", "PLAN": "📋"}
         icon = icons.get(level, "→")
         print(f"[{timestamp}] {icon} Aurora: {message}")
-    
-    def plan_fixes(self) -> Dict[str, List[str]]:
+
+    def plan_fixes(self) -> dict[str, list[str]]:
         """Plan fixes for each tab"""
-        
+
         fixes = {
             "Self-Learning": [
                 "✓ Add error handling for polling operations",
                 "✓ Display recent learning activities list",
                 "✓ Add real-time progress indicators",
-                "✓ Reroute to Luminar Nexus for learning control"
+                "✓ Reroute to Luminar Nexus for learning control",
             ],
             "Server Control": [
                 "✓ Fix API endpoint references",
                 "✓ Add real-time server status display",
-                "✓ Reroute to Luminar Nexus (all servers managed there)"
+                "✓ Reroute to Luminar Nexus (all servers managed there)",
             ],
             "Luminar Nexus": [
                 "✓ Fix clickable tab handlers for Active Services",
                 "✓ Add real-time data display for each tab",
-                "✓ Implement WebSocket connection for live updates"
+                "✓ Implement WebSocket connection for live updates",
             ],
             "Comparison": [
                 "✓ Fix API endpoints for branch data",
                 "✓ Add real-time branch comparison display",
-                "✓ Implement live branch tracking"
+                "✓ Implement live branch tracking",
             ],
             "Chat": [
                 "✓ Fix /api/chat endpoint handling (remove 404 errors)",
                 "✓ Add proper error state UI with user messaging",
-                "✓ Implement real-time message response capability"
+                "✓ Implement real-time message response capability",
             ],
-            "Aurora Dashboard": [
-                "✓ Already working - no critical issues"
-            ],
-            "Code Library": [
-                "✓ Already working - corpus loading functional"
-            ]
+            "Aurora Dashboard": ["✓ Already working - no critical issues"],
+            "Code Library": ["✓ Already working - corpus loading functional"],
         }
-        
+
         return fixes
-    
-    def generate_fix_recommendations(self) -> Dict[str, Any]:
+
+    def generate_fix_recommendations(self) -> dict[str, Any]:
         """Generate detailed fix recommendations"""
-        
+
         recommendations = {
             "Self-Learning Tab": {
                 "issues": ["Missing error handling", "No real-time data"],
@@ -79,8 +71,8 @@ class AuroraTabFixer:
                     "Add try-catch around polling refetch",
                     "Display recent_run array from API",
                     "Show activity timestamps and scores",
-                    "Add 'View in Luminar Nexus' redirect button"
-                ]
+                    "Add 'View in Luminar Nexus' redirect button",
+                ],
             },
             "Server Control Tab": {
                 "issues": ["API endpoint issues", "No real-time display"],
@@ -88,8 +80,8 @@ class AuroraTabFixer:
                     "Verify API endpoints are correct",
                     "Add real-time server status polling",
                     "Redirect to /luminar since Luminar Nexus manages all servers",
-                    "Remove duplicate server control interface"
-                ]
+                    "Remove duplicate server control interface",
+                ],
             },
             "Luminar Nexus Tab": {
                 "issues": ["Tabs not clickable", "No real-time data"],
@@ -97,8 +89,8 @@ class AuroraTabFixer:
                     "Add onClick handlers to Active Services tab",
                     "Wire up real-time data fetching via WebSocket",
                     "Display live system metrics and status",
-                    "Make tabs interactive and responsive"
-                ]
+                    "Make tabs interactive and responsive",
+                ],
             },
             "Comparison Tab": {
                 "issues": ["Missing branch data", "No live comparison"],
@@ -106,8 +98,8 @@ class AuroraTabFixer:
                     "Fix branch fetching endpoints",
                     "Fetch git branch data in real-time",
                     "Display branch comparison view",
-                    "Add live update capability"
-                ]
+                    "Add live update capability",
+                ],
             },
             "Chat Tab": {
                 "issues": ["404 errors on /api/chat", "No error UI"],
@@ -116,49 +108,44 @@ class AuroraTabFixer:
                     "Add error toast notifications",
                     "Show loading state while awaiting response",
                     "Display error message to user on failure",
-                    "Wire Aurora's response handling"
-                ]
+                    "Wire Aurora's response handling",
+                ],
             },
-            "Aurora Dashboard": {
-                "issues": ["None identified"],
-                "status": "Working correctly"
-            },
-            "Code Library": {
-                "issues": ["None identified"],
-                "status": "Corpus loading functional"
-            }
+            "Aurora Dashboard": {"issues": ["None identified"], "status": "Working correctly"},
+            "Code Library": {"issues": ["None identified"], "status": "Corpus loading functional"},
         }
-        
+
         return recommendations
-    
-    def save_fix_plan(self, fixes: Dict[str, Any]):
+
+    def save_fix_plan(self, fixes: dict[str, Any]):
         """Save comprehensive fix plan"""
         report_path = self.project_root / ".aurora_knowledge" / "tab_fix_plan.json"
         report_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         plan = {
             "timestamp": datetime.now().isoformat(),
             "total_tabs": 7,
             "tabs_with_issues": 5,
             "total_issues": 13,
-            "recommendations": fixes
+            "recommendations": fixes,
         }
-        
-        with open(report_path, 'w') as f:
+
+        with open(report_path, "w") as f:
             json.dump(plan, f, indent=2, default=str)
-        
+
         self.log("FIX", f"Fix plan saved to {report_path}")
         return plan
 
+
 def main():
     """Aurora's autonomous fix planning"""
-    
-    print("\n" + "="*80)
+
+    print("\n" + "=" * 80)
     print("🌟 AURORA TAB ISSUES - COMPREHENSIVE FIX PLAN")
-    print("="*80 + "\n")
-    
+    print("=" * 80 + "\n")
+
     fixer = AuroraTabFixer()
-    
+
     # Show tab fixes summary
     print("FIXES TO APPLY:\n")
     fixes = fixer.plan_fixes()
@@ -167,13 +154,13 @@ def main():
         for fix in fix_list:
             print(f"  {fix}")
         print()
-    
+
     # Generate recommendations
-    print("="*80)
+    print("=" * 80)
     print("DETAILED RECOMMENDATIONS\n")
     recommendations = fixer.generate_fix_recommendations()
     fixer.save_fix_plan(recommendations)
-    
+
     for tab_name, details in recommendations.items():
         print(f"\n{tab_name}:")
         if "status" in details:
@@ -182,13 +169,14 @@ def main():
             if details.get("issues"):
                 print(f"  Issues: {', '.join(details['issues'])}")
             if details.get("fixes"):
-                print(f"  Fixes:")
-                for fix in details['fixes']:
+                print("  Fixes:")
+                for fix in details["fixes"]:
                     print(f"    • {fix}")
-    
-    print("\n" + "="*80)
-    print(f"\nPlan complete. Aurora ready to apply fixes autonomously.")
-    print("="*80 + "\n")
+
+    print("\n" + "=" * 80)
+    print("\nPlan complete. Aurora ready to apply fixes autonomously.")
+    print("=" * 80 + "\n")
+
 
 if __name__ == "__main__":
     main()

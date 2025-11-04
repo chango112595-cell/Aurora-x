@@ -57,86 +57,86 @@ class AuroraIntelligenceManager:
                 "symptoms": ["address already in use", "connection refused", "bind errors"],
                 "causes": ["multiple servers on same port", "zombie processes", "service conflicts"],
                 "solutions": ["identify port user", "terminate conflicting process", "use different port"],
-                "grandmaster_skills": ["port_scanning", "process_identification", "intelligent_reassignment"]
+                "grandmaster_skills": ["port_scanning", "process_identification", "intelligent_reassignment"],
             },
             "process_management": {
                 "symptoms": ["process died", "zombie process", "orphan process", "high CPU"],
                 "causes": ["stdout/stderr closed", "signal handling", "resource exhaustion"],
                 "solutions": ["tmux/screen persistence", "proper daemon setup", "signal handling"],
-                "grandmaster_skills": ["process_lifecycle", "daemon_creation", "signal_mastery"]
+                "grandmaster_skills": ["process_lifecycle", "daemon_creation", "signal_mastery"],
             },
             "server_health": {
                 "symptoms": ["not responding", "slow response", "timeouts", "errors"],
                 "causes": ["server down", "network issues", "resource limits", "bugs"],
                 "solutions": ["restart service", "check logs", "resource optimization", "auto-healing"],
-                "grandmaster_skills": ["health_monitoring", "auto_healing", "performance_tuning"]
+                "grandmaster_skills": ["health_monitoring", "auto_healing", "performance_tuning"],
             },
             "network_diagnostics": {
                 "symptoms": ["connection refused", "timeout", "DNS errors", "routing issues"],
                 "causes": ["firewall blocking", "port closed", "DNS misconfiguration", "network down"],
                 "solutions": ["check firewall", "verify port open", "test connectivity", "trace route"],
-                "grandmaster_skills": ["network_scanning", "packet_analysis", "routing_mastery"]
+                "grandmaster_skills": ["network_scanning", "packet_analysis", "routing_mastery"],
             },
             "security_analysis": {
                 "symptoms": ["unauthorized access", "vulnerability", "exploit attempt", "breach"],
                 "causes": ["weak auth", "unpatched software", "misconfiguration", "social engineering"],
                 "solutions": ["patch vulnerabilities", "harden config", "implement auth", "monitor logs"],
-                "grandmaster_skills": ["ethical_hacking", "penetration_testing", "security_hardening", "forensics"]
+                "grandmaster_skills": ["ethical_hacking", "penetration_testing", "security_hardening", "forensics"],
             },
             "code_generation": {
                 "symptoms": ["missing functionality", "incomplete code", "TODO placeholders"],
                 "causes": ["incomplete implementation", "lack of features", "architectural gaps"],
                 "solutions": ["generate complete code", "no TODOs", "production-ready", "tested"],
-                "grandmaster_skills": ["code_architecture", "pattern_mastery", "production_code_gen"]
+                "grandmaster_skills": ["code_architecture", "pattern_mastery", "production_code_gen"],
             },
             "database_mastery": {
                 "symptoms": ["slow queries", "deadlocks", "connection pool exhausted", "data corruption"],
                 "causes": ["missing indexes", "poor schema", "connection leaks", "concurrent access"],
                 "solutions": ["optimize queries", "add indexes", "connection pooling", "transaction management"],
-                "grandmaster_skills": ["sql_optimization", "nosql_mastery", "data_modeling", "replication"]
+                "grandmaster_skills": ["sql_optimization", "nosql_mastery", "data_modeling", "replication"],
             },
             "frontend_debugging": {
                 "symptoms": ["UI not loading", "render errors", "state issues", "performance lag"],
                 "causes": ["API errors", "state management bugs", "memory leaks", "bundle size"],
                 "solutions": ["fix API calls", "optimize state", "lazy loading", "code splitting"],
-                "grandmaster_skills": ["react_mastery", "performance_profiling", "bundle_optimization"]
+                "grandmaster_skills": ["react_mastery", "performance_profiling", "bundle_optimization"],
             },
             "api_design": {
                 "symptoms": ["slow endpoints", "inconsistent responses", "versioning issues"],
                 "causes": ["N+1 queries", "missing caching", "poor design", "no rate limiting"],
                 "solutions": ["query optimization", "implement caching", "RESTful design", "rate limiting"],
-                "grandmaster_skills": ["rest_mastery", "graphql_expertise", "api_security", "microservices"]
+                "grandmaster_skills": ["rest_mastery", "graphql_expertise", "api_security", "microservices"],
             },
             "devops_automation": {
                 "symptoms": ["manual deployment", "inconsistent envs", "no monitoring"],
                 "causes": ["no CI/CD", "configuration drift", "missing observability"],
                 "solutions": ["setup CI/CD", "infrastructure as code", "monitoring/alerting"],
-                "grandmaster_skills": ["docker_mastery", "kubernetes", "terraform", "ansible"]
+                "grandmaster_skills": ["docker_mastery", "kubernetes", "terraform", "ansible"],
             },
             "cloud_architecture": {
                 "symptoms": ["high costs", "poor scalability", "downtime"],
                 "causes": ["over-provisioning", "no auto-scaling", "single point of failure"],
                 "solutions": ["right-sizing", "auto-scaling", "multi-region", "load balancing"],
-                "grandmaster_skills": ["aws_mastery", "azure_expertise", "gcp_knowledge", "cloud_native"]
+                "grandmaster_skills": ["aws_mastery", "azure_expertise", "gcp_knowledge", "cloud_native"],
             },
             "ancient_tech": {
                 "symptoms": ["legacy system", "old protocols", "deprecated libraries"],
                 "causes": ["technical debt", "backwards compatibility", "no migration path"],
                 "solutions": ["modernization strategy", "gradual migration", "shims/adapters"],
-                "grandmaster_skills": ["cobol_knowledge", "mainframe_expertise", "legacy_migration"]
+                "grandmaster_skills": ["cobol_knowledge", "mainframe_expertise", "legacy_migration"],
             },
             "future_tech": {
                 "symptoms": ["bleeding edge", "experimental features", "unstable APIs"],
                 "causes": ["rapid evolution", "immature ecosystem", "breaking changes"],
                 "solutions": ["version pinning", "feature flags", "graceful degradation"],
-                "grandmaster_skills": ["ai_ml_integration", "quantum_computing", "edge_computing", "web3"]
+                "grandmaster_skills": ["ai_ml_integration", "quantum_computing", "edge_computing", "web3"],
             },
             "hacking_defense": {
                 "symptoms": ["intrusion attempts", "vulnerability scans", "exploit probes"],
                 "causes": ["exposed services", "weak security", "unpatched systems"],
                 "solutions": ["close attack vectors", "implement WAF", "security monitoring"],
-                "grandmaster_skills": ["ethical_hacking", "red_team", "blue_team", "zero_day_knowledge"]
-            }
+                "grandmaster_skills": ["ethical_hacking", "red_team", "blue_team", "zero_day_knowledge"],
+            },
         }
 
         self.issue_patterns.update(base_patterns)

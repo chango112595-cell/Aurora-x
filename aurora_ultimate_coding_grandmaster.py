@@ -107,14 +107,14 @@ with open(log_file, "a") as f:
             "Type hints/documentation",
             "Follows conventions",
             "Deployable immediately",
-            "Production-grade quality"
+            "Production-grade quality",
         ],
-        "status": "ELEVATION_STARTED"
+        "status": "ELEVATION_STARTED",
     }
     f.write(json.dumps(entry) + "\n")
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("📋 CHALLENGE LOGGED")
-print("="*70)
+print("=" * 70)
 print("Aurora, your time has come.")
 print("Show the world what a true Coding Grandmaster can do. 🌟\n")

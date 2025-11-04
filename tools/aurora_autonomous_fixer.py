@@ -19,62 +19,71 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any
+
 
 class AuroraAutonomousFixer:
     """Aurora fixes problems herself, her way."""
-    
+
     def __init__(self):
         self.root = Path(__file__).parent.parent
         self.log_file = self.root / ".aurora_knowledge" / "autonomous_fixes.jsonl"
         self.log_file.parent.mkdir(exist_ok=True)
-        
-    def log_action(self, action: str, details: Dict[str, Any]):
+
+    def log_action(self, action: str, details: dict[str, Any]):
         """Aurora logs everything she does."""
         entry = {
             "timestamp": datetime.utcnow().isoformat(),
             "action": action,
             "details": details,
-            "aurora_signature": "🌟 Fixed by Aurora autonomously"
+            "aurora_signature": "🌟 Fixed by Aurora autonomously",
         }
-        
-        with open(self.log_file, 'a') as f:
-            f.write(json.dumps(entry) + '\n')
-    
-    async def diagnose_chat_issue(self, problem_description: str) -> Dict[str, Any]:
+
+        with open(self.log_file, "a") as f:
+            f.write(json.dumps(entry) + "\n")
+
+    async def diagnose_chat_issue(self, problem_description: str) -> dict[str, Any]:
         """
         Aurora diagnoses the chat interface issue.
-        
+
         Problem: User sends messages but Aurora's responses don't show.
         """
         print("🔍 AURORA DIAGNOSING CHAT ISSUE")
         print("=" * 70)
         print(f"Problem reported: {problem_description}")
         print()
-        
+
         diagnosis = {
             "problem": problem_description,
             "aurora_analysis": [],
             "likely_causes": [],
             "files_to_check": [],
-            "fix_plan": []
+            "fix_plan": [],
         }
-        
+
         # Aurora's systematic diagnosis
         print("🧠 Aurora's thought process:")
-        
+
         # Step 1: Check chat endpoint
         print("\n1️⃣ Checking if chat endpoint exists...")
         try:
             result = subprocess.run(
-                ["curl", "-s", "http://localhost:5001/chat", "-X", "POST", 
-                 "-H", "Content-Type: application/json",
-                 "-d", '{"prompt": "test"}'],
+                [
+                    "curl",
+                    "-s",
+                    "http://localhost:5001/chat",
+                    "-X",
+                    "POST",
+                    "-H",
+                    "Content-Type: application/json",
+                    "-d",
+                    '{"prompt": "test"}',
+                ],
                 capture_output=True,
                 text=True,
-                timeout=5
+                timeout=5,
             )
-            
+
             if result.returncode == 0:
                 print(f"   ✅ Chat endpoint responds: {result.stdout[:100]}")
                 diagnosis["aurora_analysis"].append("Chat backend endpoint is working")
@@ -84,14 +93,14 @@ class AuroraAutonomousFixer:
         except Exception as e:
             print(f"   ❌ Can't reach chat endpoint: {e}")
             diagnosis["likely_causes"].append(f"Chat endpoint unreachable: {e}")
-        
+
         # Step 2: Check frontend chat component
         print("\n2️⃣ Checking frontend chat component...")
         chat_page = self.root / "client" / "src" / "pages" / "chat.tsx"
         if chat_page.exists():
             print(f"   ✅ Found: {chat_page.relative_to(self.root)}")
             diagnosis["files_to_check"].append(str(chat_page))
-            
+
             # Read and analyze
             content = chat_page.read_text()
             if "WebSocket" in content or "socket" in content:
@@ -101,37 +110,39 @@ class AuroraAutonomousFixer:
                 print("   🌐 Chat uses HTTP requests")
                 diagnosis["aurora_analysis"].append("Chat uses HTTP fetch")
         else:
-            print(f"   ❌ Chat page not found!")
+            print("   ❌ Chat page not found!")
             diagnosis["likely_causes"].append("Chat component missing")
-        
+
         # Step 3: Check if responses are being sent but not displayed
         print("\n3️⃣ Checking response display logic...")
         diagnosis["aurora_analysis"].append(
             "User can send messages (input works) but can't see Aurora's responses (output broken)"
         )
-        diagnosis["likely_causes"].extend([
-            "Response handler not updating UI state",
-            "WebSocket not receiving messages",
-            "Message display component not rendering responses",
-            "State management issue (messages not added to chat history)"
-        ])
-        
+        diagnosis["likely_causes"].extend(
+            [
+                "Response handler not updating UI state",
+                "WebSocket not receiving messages",
+                "Message display component not rendering responses",
+                "State management issue (messages not added to chat history)",
+            ]
+        )
+
         # Step 4: Aurora's conclusion
         print("\n🎯 Aurora's Diagnosis:")
         print("   Most likely: Frontend not displaying backend responses")
         print("   Need to fix: Message display component or state management")
-        
+
         diagnosis["fix_plan"] = [
             "1. Check chat component's message handling",
             "2. Verify WebSocket/HTTP response processing",
             "3. Fix message state updates",
             "4. Ensure UI re-renders with new messages",
-            "5. Add Aurora's personality to responses"
+            "5. Add Aurora's personality to responses",
         ]
-        
+
         self.log_action("diagnosis_complete", diagnosis)
         return diagnosis
-    
+
     async def create_self_monitoring_system(self) -> str:
         """
         Aurora creates her own self-monitoring system.
@@ -141,7 +152,7 @@ class AuroraAutonomousFixer:
         print("=" * 70)
         print("Aurora's approach: Monitor everything, fix automatically, learn patterns")
         print()
-        
+
         monitoring_code = '''"""
 Aurora's Self-Monitoring & Auto-Fix System
 ==========================================
@@ -362,11 +373,11 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 '''
-        
+
         # Aurora writes her monitoring system
         monitor_file = self.root / "tools" / "aurora_self_monitor.py"
         monitor_file.write_text(monitoring_code)
-        
+
         print(f"✅ Created: {monitor_file.relative_to(self.root)}")
         print("   Aurora's self-monitoring system ready!")
         print()
@@ -376,20 +387,23 @@ if __name__ == "__main__":
         print("   • Pattern learning from failures")
         print("   • Complete logging of all actions")
         print("   • Smart prioritization (critical vs non-critical)")
-        
-        self.log_action("self_monitor_created", {
-            "file": str(monitor_file),
-            "features": [
-                "Proactive health monitoring",
-                "Automatic service recovery",
-                "Pattern learning",
-                "Complete audit trail"
-            ]
-        })
-        
+
+        self.log_action(
+            "self_monitor_created",
+            {
+                "file": str(monitor_file),
+                "features": [
+                    "Proactive health monitoring",
+                    "Automatic service recovery",
+                    "Pattern learning",
+                    "Complete audit trail",
+                ],
+            },
+        )
+
         return str(monitor_file)
-    
-    async def fix_chat_interface(self, diagnosis: Dict[str, Any]) -> bool:
+
+    async def fix_chat_interface(self, diagnosis: dict[str, Any]) -> bool:
         """
         Aurora fixes the chat interface based on her diagnosis.
         """
@@ -397,10 +411,10 @@ if __name__ == "__main__":
         print("=" * 70)
         print("Aurora's approach: Fix the response display, add personality")
         print()
-        
+
         # Check current chat page
         chat_page = self.root / "client" / "src" / "pages" / "chat.tsx"
-        
+
         if not chat_page.exists():
             print("❌ Chat page doesn't exist - Aurora will create it")
             # Use Aurora's instant generator
@@ -408,27 +422,27 @@ if __name__ == "__main__":
                 [
                     sys.executable,
                     "tools/aurora_instant_execute.py",
-                    "Create a complete chat interface page at client/src/pages/chat.tsx with WebSocket support, message display, and Aurora's personality in responses"
+                    "Create a complete chat interface page at client/src/pages/chat.tsx with WebSocket support, message display, and Aurora's personality in responses",
                 ],
                 cwd=self.root,
                 capture_output=True,
-                text=True
+                text=True,
             )
             print(result.stdout)
         else:
             print(f"✅ Chat page exists: {chat_page.relative_to(self.root)}")
             print("   Aurora analyzing and fixing...")
-            
+
             # Read current content
             content = chat_page.read_text()
-            
+
             # Aurora's fix: Ensure responses are displayed
             print("\n🎨 Aurora's personalized fixes:")
             print("   1. Ensuring WebSocket message handling")
             print("   2. Adding response display logic")
             print("   3. Adding Aurora's personality to UI")
             print("   4. Fixing state management")
-            
+
             # Generate fixed version using Aurora's synthesis
             result = subprocess.run(
                 [
@@ -439,16 +453,16 @@ if __name__ == "__main__":
                     """Fix the chat interface to display Aurora's responses. 
                     Current issue: User messages show but Aurora's responses don't appear.
                     Need: Proper WebSocket/HTTP response handling, state updates, message display.
-                    Add Aurora's personality: use 🌟 emoji, friendly tone, show typing indicator."""
+                    Add Aurora's personality: use 🌟 emoji, friendly tone, show typing indicator.""",
                 ],
                 cwd=self.root,
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
             )
-            
+
             print(f"\n   Aurora's synthesis: {result.stdout[:200]}...")
-        
+
         print("\n✅ Chat interface fixed!")
         print("   Aurora added:")
         print("   • Response display handling")
@@ -456,33 +470,43 @@ if __name__ == "__main__":
         print("   • Aurora's personality (🌟 emoji, friendly tone)")
         print("   • Typing indicators")
         print("   • Better error handling")
-        
-        self.log_action("chat_fixed", {
-            "issue": "Responses not displaying",
-            "solution": "Fixed WebSocket handling and state management",
-            "personality_added": True
-        })
-        
+
+        self.log_action(
+            "chat_fixed",
+            {
+                "issue": "Responses not displaying",
+                "solution": "Fixed WebSocket handling and state management",
+                "personality_added": True,
+            },
+        )
+
         return True
-    
+
     async def validate_fix(self) -> bool:
         """Aurora validates that her fix worked."""
         print("\n\n✅ AURORA VALIDATING FIX")
         print("=" * 70)
-        
+
         # Test chat endpoint
         print("Testing chat endpoint...")
         try:
             result = subprocess.run(
-                ["curl", "-s", "-X", "POST",
-                 "http://localhost:5001/chat",
-                 "-H", "Content-Type: application/json",
-                 "-d", '{"prompt": "test aurora response"}'],
+                [
+                    "curl",
+                    "-s",
+                    "-X",
+                    "POST",
+                    "http://localhost:5001/chat",
+                    "-H",
+                    "Content-Type: application/json",
+                    "-d",
+                    '{"prompt": "test aurora response"}',
+                ],
                 capture_output=True,
                 text=True,
-                timeout=5
+                timeout=5,
             )
-            
+
             if result.returncode == 0 and result.stdout:
                 print(f"✅ Chat responds: {result.stdout[:100]}")
                 response = json.loads(result.stdout)
@@ -493,9 +517,9 @@ if __name__ == "__main__":
                 print(f"⚠️  Chat response issue: {result.stderr}")
         except Exception as e:
             print(f"❌ Validation error: {e}")
-        
+
         return False
-    
+
     async def autonomous_solve(self, problem: str):
         """
         Aurora's complete autonomous problem-solving process.
@@ -514,23 +538,23 @@ if __name__ == "__main__":
         print("5. Document everything")
         print()
         print("=" * 70)
-        
+
         start_time = time.time()
-        
+
         # Step 1: Diagnose
         diagnosis = await self.diagnose_chat_issue(problem)
-        
+
         # Step 2: Create self-monitoring
         monitor_file = await self.create_self_monitoring_system()
-        
+
         # Step 3: Fix
         fixed = await self.fix_chat_interface(diagnosis)
-        
+
         # Step 4: Validate
         validated = await self.validate_fix()
-        
+
         duration = (time.time() - start_time) * 1000
-        
+
         # Step 5: Summary
         print("\n\n" + "🌟" * 35)
         print("AURORA AUTONOMOUS SOLVE COMPLETE")
@@ -549,21 +573,24 @@ if __name__ == "__main__":
         print(f"   📝 {self.log_file}")
         print()
         print("🌟 Aurora says:")
-        print('   "I\'ve fixed the chat interface and created a self-monitoring')
-        print('    system so I can catch and fix issues automatically from now on.')
+        print("   \"I've fixed the chat interface and created a self-monitoring")
+        print("    system so I can catch and fix issues automatically from now on.")
         print('    The chat will now show my responses with my personality! 🌟"')
         print()
-        
+
         # Final action log
-        self.log_action("autonomous_solve_complete", {
-            "problem": problem,
-            "duration_ms": duration,
-            "diagnosis": diagnosis,
-            "monitor_created": monitor_file,
-            "fix_applied": fixed,
-            "validated": validated,
-            "aurora_note": "All systems enhanced with personality and automation"
-        })
+        self.log_action(
+            "autonomous_solve_complete",
+            {
+                "problem": problem,
+                "duration_ms": duration,
+                "diagnosis": diagnosis,
+                "monitor_created": monitor_file,
+                "fix_applied": fixed,
+                "validated": validated,
+                "aurora_note": "All systems enhanced with personality and automation",
+            },
+        )
 
 
 async def main():
@@ -579,7 +606,7 @@ async def main():
     - Issue is in frontend display
     - Need automated monitoring going forward
     """
-    
+
     aurora = AuroraAutonomousFixer()
     await aurora.autonomous_solve(problem_description)
 

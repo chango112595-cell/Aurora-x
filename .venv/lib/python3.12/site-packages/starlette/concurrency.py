@@ -3,8 +3,8 @@ from __future__ import annotations
 import functools
 import sys
 import warnings
-from collections.abc import AsyncIterator, Coroutine, Iterable, Iterator
-from typing import Callable, TypeVar
+from collections.abc import AsyncIterator, Callable, Coroutine, Iterable, Iterator
+from typing import TypeVar
 
 import anyio.to_thread
 

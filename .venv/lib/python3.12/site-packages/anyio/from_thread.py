@@ -50,8 +50,7 @@ def _token_or_error(token: EventLoopToken | None) -> EventLoopToken:
         return threadlocals.current_token
     except AttributeError:
         raise NoEventLoopError(
-            "Not running inside an AnyIO worker thread, and no event loop token was "
-            "provided"
+            "Not running inside an AnyIO worker thread, and no event loop token was " "provided"
         ) from None
 
 
@@ -78,9 +77,7 @@ def run(
     """
     explicit_token = token is not None
     token = _token_or_error(token)
-    return token.backend_class.run_async_from_thread(
-        func, args, token=token.native_token if explicit_token else None
-    )
+    return token.backend_class.run_async_from_thread(func, args, token=token.native_token if explicit_token else None)
 
 
 def run_sync(
@@ -106,22 +103,16 @@ def run_sync(
     """
     explicit_token = token is not None
     token = _token_or_error(token)
-    return token.backend_class.run_sync_from_thread(
-        func, args, token=token.native_token if explicit_token else None
-    )
+    return token.backend_class.run_sync_from_thread(func, args, token=token.native_token if explicit_token else None)
 
 
 class _BlockingAsyncContextManager(Generic[T_co], AbstractContextManager):
     _enter_future: Future[T_co]
     _exit_future: Future[bool | None]
     _exit_event: Event
-    _exit_exc_info: tuple[
-        type[BaseException] | None, BaseException | None, TracebackType | None
-    ] = (None, None, None)
+    _exit_exc_info: tuple[type[BaseException] | None, BaseException | None, TracebackType | None] = (None, None, None)
 
-    def __init__(
-        self, async_cm: AbstractAsyncContextManager[T_co], portal: BlockingPortal
-    ):
+    def __init__(self, async_cm: AbstractAsyncContextManager[T_co], portal: BlockingPortal):
         self._async_cm = async_cm
         self._portal = portal
 
@@ -202,9 +193,7 @@ class BlockingPortal:
         if self._event_loop_thread_id is None:
             raise RuntimeError("This portal is not running")
         if self._event_loop_thread_id == get_ident():
-            raise RuntimeError(
-                "This method cannot be called from the event loop thread"
-            )
+            raise RuntimeError("This method cannot be called from the event loop thread")
 
     async def sleep_until_stopped(self) -> None:
         """Sleep until :meth:`stop` is called."""
@@ -299,9 +288,7 @@ class BlockingPortal:
     ) -> T_Retval: ...
 
     @overload
-    def call(
-        self, func: Callable[[Unpack[PosArgsT]], T_Retval], *args: Unpack[PosArgsT]
-    ) -> T_Retval: ...
+    def call(self, func: Callable[[Unpack[PosArgsT]], T_Retval], *args: Unpack[PosArgsT]) -> T_Retval: ...
 
     def call(
         self,
@@ -395,9 +382,7 @@ class BlockingPortal:
                 elif future.exception():
                     task_status_future.set_exception(future.exception())
                 else:
-                    exc = RuntimeError(
-                        "Task exited without calling task_status.started()"
-                    )
+                    exc = RuntimeError("Task exited without calling task_status.started()")
                     task_status_future.set_exception(exc)
 
         self._check_running()
@@ -408,9 +393,7 @@ class BlockingPortal:
         self._spawn_task_from_thread(func, args, {"task_status": task_status}, name, f)
         return f, task_status_future.result()
 
-    def wrap_async_context_manager(
-        self, cm: AbstractAsyncContextManager[T_co]
-    ) -> AbstractContextManager[T_co]:
+    def wrap_async_context_manager(self, cm: AbstractAsyncContextManager[T_co]) -> AbstractContextManager[T_co]:
         """
         Wrap an async context manager as a synchronous context manager via this portal.
 
@@ -448,16 +431,12 @@ class BlockingPortalProvider:
     _lock: Lock = field(init=False, default_factory=Lock)
     _leases: int = field(init=False, default=0)
     _portal: BlockingPortal = field(init=False)
-    _portal_cm: AbstractContextManager[BlockingPortal] | None = field(
-        init=False, default=None
-    )
+    _portal_cm: AbstractContextManager[BlockingPortal] | None = field(init=False, default=None)
 
     def __enter__(self) -> BlockingPortal:
         with self._lock:
             if self._portal_cm is None:
-                self._portal_cm = start_blocking_portal(
-                    self.backend, self.backend_options
-                )
+                self._portal_cm = start_blocking_portal(self.backend, self.backend_options)
                 self._portal = self._portal_cm.__enter__()
 
             self._leases += 1
@@ -516,9 +495,7 @@ def start_blocking_portal(
     def run_blocking_portal() -> None:
         if future.set_running_or_notify_cancel():
             try:
-                run_eventloop(
-                    run_portal, backend=backend, backend_options=backend_options
-                )
+                run_eventloop(run_portal, backend=backend, backend_options=backend_options)
             except BaseException as exc:
                 if not future.done():
                     future.set_exception(exc)
@@ -558,8 +535,6 @@ def check_cancelled() -> None:
     try:
         token: EventLoopToken = threadlocals.current_token
     except AttributeError:
-        raise NoEventLoopError(
-            "This function can only be called inside an AnyIO worker thread"
-        ) from None
+        raise NoEventLoopError("This function can only be called inside an AnyIO worker thread") from None
 
     token.backend_class.check_cancelled()

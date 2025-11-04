@@ -1,11 +1,8 @@
-from contextvars import ContextVar
-from typing import Optional
 import sys
 import threading
+from contextvars import ContextVar
 
-current_async_library_cvar = ContextVar(
-    "current_async_library_cvar", default=None
-)  # type: ContextVar[Optional[str]]
+current_async_library_cvar = ContextVar("current_async_library_cvar", default=None)  # type: ContextVar[Optional[str]]
 
 
 class _ThreadLocal(threading.local):
@@ -74,6 +71,7 @@ def current_async_library() -> str:
     # Need to sniff for asyncio
     if "asyncio" in sys.modules:
         import asyncio
+
         try:
             current_task = asyncio.current_task  # type: ignore[attr-defined]
         except AttributeError:
@@ -85,11 +83,10 @@ def current_async_library() -> str:
             pass
 
     # Sniff for curio (for now)
-    if 'curio' in sys.modules:
+    if "curio" in sys.modules:
         from curio.meta import curio_running
-        if curio_running():
-            return 'curio'
 
-    raise AsyncLibraryNotFoundError(
-        "unknown async library, or not in async context"
-    )
+        if curio_running():
+            return "curio"
+
+    raise AsyncLibraryNotFoundError("unknown async library, or not in async context")

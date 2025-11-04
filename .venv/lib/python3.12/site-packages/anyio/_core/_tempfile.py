@@ -202,9 +202,7 @@ class NamedTemporaryFile(Generic[AnyStr]):
             self._params["delete_on_close"] = delete_on_close
 
     async def __aenter__(self) -> AsyncFile[AnyStr]:
-        fp = await to_thread.run_sync(
-            lambda: tempfile.NamedTemporaryFile(**self._params)
-        )
+        fp = await to_thread.run_sync(lambda: tempfile.NamedTemporaryFile(**self._params))
         self._async_file = AsyncFile(fp)
         return self._async_file
 
@@ -324,9 +322,7 @@ class SpooledTemporaryFile(AsyncFile[AnyStr]):
         self._rolled = True
         buffer = self._fp
         buffer.seek(0)
-        self._fp = await to_thread.run_sync(
-            lambda: tempfile.TemporaryFile(**self._tempfile_params)
-        )
+        self._fp = await to_thread.run_sync(lambda: tempfile.TemporaryFile(**self._tempfile_params))
         await self.write(buffer.read())
         buffer.close()
 
@@ -423,13 +419,9 @@ class SpooledTemporaryFile(AsyncFile[AnyStr]):
         return await super().write(b)  # type: ignore[misc]
 
     @overload
-    async def writelines(
-        self: SpooledTemporaryFile[bytes], lines: Iterable[ReadableBuffer]
-    ) -> None: ...
+    async def writelines(self: SpooledTemporaryFile[bytes], lines: Iterable[ReadableBuffer]) -> None: ...
     @overload
-    async def writelines(
-        self: SpooledTemporaryFile[str], lines: Iterable[str]
-    ) -> None: ...
+    async def writelines(self: SpooledTemporaryFile[str], lines: Iterable[str]) -> None: ...
 
     async def writelines(self, lines: Iterable[str] | Iterable[ReadableBuffer]) -> None:
         """
@@ -496,9 +488,7 @@ class TemporaryDirectory(Generic[AnyStr]):
         if sys.version_info >= (3, 12):
             params["delete"] = self.delete
 
-        self._tempdir = await to_thread.run_sync(
-            lambda: tempfile.TemporaryDirectory(**params)
-        )
+        self._tempdir = await to_thread.run_sync(lambda: tempfile.TemporaryDirectory(**params))
         return await to_thread.run_sync(self._tempdir.__enter__)
 
     async def __aexit__(
@@ -508,9 +498,7 @@ class TemporaryDirectory(Generic[AnyStr]):
         traceback: TracebackType | None,
     ) -> None:
         if self._tempdir is not None:
-            await to_thread.run_sync(
-                self._tempdir.__exit__, exc_type, exc_value, traceback
-            )
+            await to_thread.run_sync(self._tempdir.__exit__, exc_type, exc_value, traceback)
 
     async def cleanup(self) -> None:
         if self._tempdir is not None:

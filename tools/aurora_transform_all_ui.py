@@ -4,20 +4,21 @@
 Mission: Transform every page with my advanced technology design
 """
 
-from pathlib import Path
 import re
+from pathlib import Path
+
 
 class AuroraUITransformer:
     def __init__(self):
         self.workspace = Path("/workspaces/Aurora-x")
         self.pages_dir = self.workspace / "client/src/pages"
-        
+
     def log(self, msg):
         print(f"🌟 Aurora: {msg}")
-    
+
     def create_quantum_wrapper(self, page_name: str) -> str:
         """Create quantum UI wrapper for any page"""
-        return f'''
+        return f"""
       {{/* Aurora's Quantum Background */}}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-cyan-950/20 to-purple-950/20" />
@@ -47,11 +48,11 @@ class AuroraUITransformer:
         <div className="absolute top-20 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}} />
       </div>
-'''
+"""
 
     def add_quantum_styles(self) -> str:
         """Global quantum animation styles"""
-        return '''
+        return """
       <style jsx global>{`
         @keyframes particleFloat {
           0%, 100% { transform: translateY(0) translateX(0); }
@@ -68,119 +69,116 @@ class AuroraUITransformer:
           50% { opacity: 0.8; }
         }
       `}</style>
-'''
+"""
 
     def transform_chat_page(self):
         """Transform chat.tsx with quantum UI"""
         self.log("Transforming chat page...")
-        
+
         chat_file = self.pages_dir / "chat.tsx"
         content = chat_file.read_text()
-        
+
         # Add quantum background wrapper after the main div
-        if 'Aurora\'s Quantum Background' not in content:
+        if "Aurora's Quantum Background" not in content:
             # Find the main container and add quantum elements
             content = re.sub(
-                r'(<div className="[^"]*h-screen[^"]*">)',
-                r'\1' + self.create_quantum_wrapper('chat'),
-                content,
-                count=1
+                r'(<div className="[^"]*h-screen[^"]*">)', r"\1" + self.create_quantum_wrapper("chat"), content, count=1
             )
-            
+
             # Add styles at the end
-            if 'particleFloat' not in content:
-                content = content.rstrip() + '\n' + self.add_quantum_styles()
-            
+            if "particleFloat" not in content:
+                content = content.rstrip() + "\n" + self.add_quantum_styles()
+
             chat_file.write_text(content)
             self.log("✅ Chat page transformed!")
             return True
         else:
             self.log("Chat page already has quantum UI")
             return False
-    
+
     def transform_all_pages(self):
         """Apply quantum UI to all pages"""
         self.log("Transforming ALL pages with quantum UI...")
-        
+
         pages_to_transform = [
-            'home.tsx',
-            'dashboard.tsx', 
-            'library.tsx',
-            'luminar-nexus.tsx',
-            'server-control-new.tsx',
-            'self-learning.tsx',
-            'ComparisonDashboard.tsx'
+            "home.tsx",
+            "dashboard.tsx",
+            "library.tsx",
+            "luminar-nexus.tsx",
+            "server-control-new.tsx",
+            "self-learning.tsx",
+            "ComparisonDashboard.tsx",
         ]
-        
+
         transformed = []
-        
+
         for page_file in pages_to_transform:
             page_path = self.pages_dir / page_file
             if not page_path.exists():
                 continue
-                
+
             content = page_path.read_text()
-            page_name = page_file.replace('.tsx', '')
-            
+            page_name = page_file.replace(".tsx", "")
+
             # Skip if already transformed
-            if 'Aurora\'s Quantum Background' in content:
+            if "Aurora's Quantum Background" in content:
                 self.log(f"  ⏭️  {page_file} already quantum")
                 continue
-            
+
             # Find the main container
             patterns = [
-                (r'(<div className="[^"]*container[^"]*">)', r'\1' + self.create_quantum_wrapper(page_name)),
-                (r'(<div className="[^"]*min-h-screen[^"]*">)', r'\1' + self.create_quantum_wrapper(page_name)),
-                (r'(<div className="[^"]*h-screen[^"]*">)', r'\1' + self.create_quantum_wrapper(page_name)),
+                (r'(<div className="[^"]*container[^"]*">)', r"\1" + self.create_quantum_wrapper(page_name)),
+                (r'(<div className="[^"]*min-h-screen[^"]*">)', r"\1" + self.create_quantum_wrapper(page_name)),
+                (r'(<div className="[^"]*h-screen[^"]*">)', r"\1" + self.create_quantum_wrapper(page_name)),
             ]
-            
+
             modified = False
             for pattern, replacement in patterns:
                 if re.search(pattern, content):
                     content = re.sub(pattern, replacement, content, count=1)
                     modified = True
                     break
-            
+
             if modified:
                 # Add styles
-                if 'particleFloat' not in content:
-                    content = content.rstrip() + '\n' + self.add_quantum_styles()
-                
+                if "particleFloat" not in content:
+                    content = content.rstrip() + "\n" + self.add_quantum_styles()
+
                 page_path.write_text(content)
                 transformed.append(page_file)
                 self.log(f"  ✅ {page_file} transformed!")
             else:
                 self.log(f"  ⚠️  {page_file} - couldn't find container")
-        
+
         return transformed
-    
+
     def verify_chat_interface(self):
         """Make sure chat interface has quantum styling"""
         self.log("Verifying chat interface component...")
-        
+
         chat_interface = self.workspace / "client/src/components/chat-interface.tsx"
         if chat_interface.exists():
             self.log("✅ Chat interface exists")
             return True
         return False
-    
+
     def execute(self):
-        print("="*80)
+        print("=" * 80)
         print("🌟 AURORA'S QUANTUM UI TRANSFORMATION")
-        print("="*80)
-        
+        print("=" * 80)
+
         # Transform chat first (most important)
         self.transform_chat_page()
-        
+
         # Transform all other pages
         transformed = self.transform_all_pages()
-        
+
         # Verify
         self.verify_chat_interface()
-        
-        print("\n" + "="*80)
+
+        print("\n" + "=" * 80)
         print("✅ TRANSFORMATION COMPLETE")
-        print("="*80)
+        print("=" * 80)
         print(f"\n🌟 Aurora: Transformed {len(transformed) + 1} pages with quantum UI!")
         print("\n💫 Features applied:")
         print("   • Quantum particle field backgrounds")
@@ -189,8 +187,9 @@ class AuroraUITransformer:
         print("   • Advanced glow animations")
         print("   • Futuristic sci-fi aesthetic")
         print("\n✨ Refresh browser to see the changes!")
-        
+
         return transformed
+
 
 if __name__ == "__main__":
     aurora = AuroraUITransformer()

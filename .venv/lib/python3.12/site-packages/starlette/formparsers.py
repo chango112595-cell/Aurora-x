@@ -11,7 +11,11 @@ from starlette.datastructures import FormData, Headers, UploadFile
 
 if TYPE_CHECKING:
     import python_multipart as multipart
-    from python_multipart.multipart import MultipartCallbacks, QuerystringCallbacks, parse_options_header
+    from python_multipart.multipart import (
+        MultipartCallbacks,
+        QuerystringCallbacks,
+        parse_options_header,
+    )
 else:
     try:
         try:

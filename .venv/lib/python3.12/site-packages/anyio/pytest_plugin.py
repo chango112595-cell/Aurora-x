@@ -35,9 +35,7 @@ def extract_backend_and_options(backend: object) -> tuple[str, dict[str, Any]]:
 
 
 @contextmanager
-def get_runner(
-    backend_name: str, backend_options: dict[str, Any]
-) -> Iterator[TestRunner]:
+def get_runner(backend_name: str, backend_options: dict[str, Any]) -> Iterator[TestRunner]:
     global _current_runner, _runner_leases, _runner_stack
     if _current_runner is None:
         asynclib = get_async_backend(backend_name)
@@ -49,9 +47,7 @@ def get_runner(
             _runner_stack.callback(sniffio.current_async_library_cvar.reset, token)
 
         backend_options = backend_options or {}
-        _current_runner = _runner_stack.enter_context(
-            asynclib.create_test_runner(backend_options)
-        )
+        _current_runner = _runner_stack.enter_context(asynclib.create_test_runner(backend_options))
 
     _runner_leases += 1
     try:
@@ -96,11 +92,7 @@ def pytest_configure(config: pytest.Config) -> None:
 def pytest_fixture_setup(fixturedef: Any, request: Any) -> Generator[Any]:
     def wrapper(anyio_backend: Any, request: SubRequest, **kwargs: Any) -> Any:
         # Rebind any fixture methods to the request instance
-        if (
-            request.instance
-            and ismethod(func)
-            and type(func.__self__) is type(request.instance)
-        ):
+        if request.instance and ismethod(func) and type(func.__self__) is type(request.instance):
             local_func = func.__func__.__get__(request.instance)
         else:
             local_func = func
@@ -142,20 +134,14 @@ def pytest_fixture_setup(fixturedef: Any, request: Any) -> Generator[Any]:
 
 
 @pytest.hookimpl(tryfirst=True)
-def pytest_pycollect_makeitem(
-    collector: pytest.Module | pytest.Class, name: str, obj: object
-) -> None:
+def pytest_pycollect_makeitem(collector: pytest.Module | pytest.Class, name: str, obj: object) -> None:
     if collector.istestfunction(obj, name):
         inner_func = obj.hypothesis.inner_test if hasattr(obj, "hypothesis") else obj
         if iscoroutinefunction(inner_func):
             anyio_auto_mode = collector.config.getini("anyio_mode") == "auto"
             marker = collector.get_closest_marker("anyio")
             own_markers = getattr(obj, "pytestmark", ())
-            if (
-                anyio_auto_mode
-                or marker
-                or any(marker.name == "anyio" for marker in own_markers)
-            ):
+            if anyio_auto_mode or marker or any(marker.name == "anyio" for marker in own_markers):
                 pytest.mark.usefixtures("anyio_backend")(obj)
 
 

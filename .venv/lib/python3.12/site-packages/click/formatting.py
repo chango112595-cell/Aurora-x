@@ -21,9 +21,7 @@ def measure_table(rows: cabc.Iterable[tuple[str, str]]) -> tuple[int, ...]:
     return tuple(y for x, y in sorted(widths.items()))
 
 
-def iter_rows(
-    rows: cabc.Iterable[tuple[str, str]], col_count: int
-) -> cabc.Iterator[tuple[str, ...]]:
+def iter_rows(rows: cabc.Iterable[tuple[str, str]], col_count: int) -> cabc.Iterator[tuple[str, ...]]:
     for row in rows:
         yield row + ("",) * (col_count - len(row))
 
@@ -174,11 +172,7 @@ class HelpFormatter:
             self.write(usage_prefix)
             self.write("\n")
             indent = " " * (max(self.current_indent, term_len(prefix)) + 4)
-            self.write(
-                wrap_text(
-                    args, text_width, initial_indent=indent, subsequent_indent=indent
-                )
-            )
+            self.write(wrap_text(args, text_width, initial_indent=indent, subsequent_indent=indent))
 
         self.write("\n")
 

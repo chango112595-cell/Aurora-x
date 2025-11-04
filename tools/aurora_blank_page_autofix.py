@@ -5,38 +5,36 @@ Aurora autonomously fixes the blank page issue
 Checks and fixes rendering, CSS, and React issues
 """
 
-import os
-import sys
-import subprocess
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
 
 class AuroraBlankPageAutoFixer:
     """Aurora's autonomous blank page fixing system v2"""
-    
+
     def __init__(self):
         self.workspace = Path("/workspaces/Aurora-x")
         self.client_dir = self.workspace / "client" / "src"
         self.knowledge_dir = self.workspace / ".aurora_knowledge"
         self.knowledge_dir.mkdir(exist_ok=True)
         self.fixes_applied = []
-        
+
     def print_fix(self, msg: str, status: str = "FIX"):
         """Print fix status"""
         icons = {"FIX": "🔧", "SUCCESS": "✅", "ERROR": "❌", "CHECK": "🔍", "WARN": "⚠️"}
         print(f"{icons.get(status, '•')} {msg}")
-    
+
     def fix_index_css_body_styles(self) -> bool:
         """Ensure body/root has proper display styles"""
         self.print_fix("Checking body/root CSS styles...", "CHECK")
-        
+
         index_css = self.client_dir / "index.css"
         if not index_css.exists():
             self.print_fix("index.css not found!", "ERROR")
             return False
-        
+
         content = index_css.read_text()
-        
+
         # Check if body has proper styling
         if "body {" not in content:
             self.print_fix("Adding body CSS rules...", "FIX")
@@ -64,27 +62,27 @@ class AuroraBlankPageAutoFixer:
                 self.print_fix("Added body and root CSS styles", "SUCCESS")
                 self.fixes_applied.append("body_css_styles")
                 return True
-        
+
         self.print_fix("Body CSS already configured", "SUCCESS")
         return True
-    
+
     def fix_main_tsx_error_handling(self) -> bool:
         """Ensure main.tsx has proper error handling"""
         self.print_fix("Checking main.tsx React rendering...", "CHECK")
-        
+
         main_tsx = self.client_dir / "main.tsx"
         if not main_tsx.exists():
             self.print_fix("main.tsx not found!", "ERROR")
             return False
-        
+
         content = main_tsx.read_text()
-        
+
         # Check if it has error handling
         if "try" not in content and "catch" not in content:
             self.print_fix("Adding error handling to main.tsx...", "FIX")
-            
+
             # Create enhanced main.tsx with error handling
-            enhanced_main = '''import { createRoot } from "react-dom/client";
+            enhanced_main = """import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
@@ -105,26 +103,26 @@ if (!rootElement) {
     rootElement.innerHTML = `<div style="padding: 20px; color: red;"><h1>Application Error</h1><p>${error instanceof Error ? error.message : 'Unknown error'}</p></div>`;
   }
 }
-'''
+"""
             main_tsx.write_text(enhanced_main)
             self.print_fix("Enhanced main.tsx with error handling", "SUCCESS")
             self.fixes_applied.append("main_tsx_error_handling")
             return True
-        
+
         self.print_fix("main.tsx already has error handling", "SUCCESS")
         return True
-    
+
     def fix_app_tsx_error_boundary(self) -> bool:
         """Verify App.tsx has proper error boundary"""
         self.print_fix("Checking App.tsx ErrorBoundary...", "CHECK")
-        
+
         app_tsx = self.client_dir / "App.tsx"
         if not app_tsx.exists():
             self.print_fix("App.tsx not found!", "ERROR")
             return False
-        
+
         content = app_tsx.read_text()
-        
+
         # Check for ErrorBoundary
         if "<ErrorBoundary>" in content and "<Router />" in content:
             self.print_fix("ErrorBoundary properly wraps Router", "SUCCESS")
@@ -132,20 +130,20 @@ if (!rootElement) {
         else:
             self.print_fix("ErrorBoundary not properly configured!", "WARN")
             return False
-    
+
     def check_page_exports(self) -> bool:
         """Verify all pages export components correctly"""
         self.print_fix("Checking page component exports...", "CHECK")
-        
+
         pages_dir = self.client_dir / "pages"
         if not pages_dir.exists():
             self.print_fix("pages directory not found!", "ERROR")
             return False
-        
+
         issues = []
         for page_file in pages_dir.glob("*.tsx"):
             content = page_file.read_text()
-            
+
             # Check for export
             if "export default" not in content and "export const" not in content:
                 issues.append(f"{page_file.name}: Missing export")
@@ -153,44 +151,44 @@ if (!rootElement) {
             elif "return" not in content and "<" not in content:
                 issues.append(f"{page_file.name}: Might not return JSX")
                 self.print_fix(f"  ⚠️  {page_file.name} might not return JSX", "WARN")
-        
+
         if issues:
             self.print_fix(f"Found {len(issues)} page export issues", "WARN")
             return False
-        
+
         self.print_fix("All page components properly export", "SUCCESS")
         return True
-    
+
     def fix_vite_config(self) -> bool:
         """Check Vite configuration"""
         self.print_fix("Checking Vite configuration...", "CHECK")
-        
+
         vite_config = self.workspace / "vite.config.ts"
         if not vite_config.exists():
             self.print_fix("vite.config.ts not found!", "ERROR")
             return False
-        
+
         content = vite_config.read_text()
-        
+
         # Check for common Vite issues
         if "root:" in content and "client" in content:
             self.print_fix("Vite root configured correctly", "SUCCESS")
         else:
             self.print_fix("Vite root configuration might be incorrect", "WARN")
-        
+
         return True
-    
+
     def check_service_worker_cleanup(self) -> bool:
         """Verify service worker is properly disabled"""
         self.print_fix("Verifying service worker cleanup...", "CHECK")
-        
+
         index_html = self.workspace / "client" / "index.html"
         if not index_html.exists():
             self.print_fix("index.html not found!", "ERROR")
             return False
-        
+
         content = index_html.read_text()
-        
+
         # Check for service worker cleanup
         if "serviceWorker.getRegistrations" in content and "unregister" in content:
             self.print_fix("Service worker cleanup script present", "SUCCESS")
@@ -198,10 +196,10 @@ if (!rootElement) {
             return True
         else:
             self.print_fix("Adding service worker cleanup...", "FIX")
-            
+
             # Add cleanup script if missing
             if "<script>" not in content or "caches.keys()" not in content:
-                cleanup_script = '''    <script>
+                cleanup_script = """    <script>
       // Aurora: Kill all service workers immediately
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -221,52 +219,57 @@ if (!rootElement) {
         });
       }
     </script>
-'''
+"""
                 # Insert before closing head tag
                 content = content.replace("</head>", cleanup_script + "\n  </head>")
                 index_html.write_text(content)
                 self.print_fix("Added service worker cleanup script", "SUCCESS")
                 return True
-        
+
         return True
-    
+
     def verify_dependencies(self) -> bool:
         """Check if critical dependencies are installed"""
         self.print_fix("Verifying npm dependencies...", "CHECK")
-        
+
         package_json = self.workspace / "client" / "package.json"
         if not package_json.exists():
             self.print_fix("package.json not found!", "ERROR")
             return False
-        
+
         try:
             import json
+
             with open(package_json) as f:
                 pkg = json.load(f)
-            
+
             required = ["react", "react-dom", "vite"]
-            missing = [dep for dep in required if dep not in pkg.get("dependencies", {}) and dep not in pkg.get("devDependencies", {})]
-            
+            missing = [
+                dep
+                for dep in required
+                if dep not in pkg.get("dependencies", {}) and dep not in pkg.get("devDependencies", {})
+            ]
+
             if missing:
                 self.print_fix(f"Missing dependencies: {', '.join(missing)}", "WARN")
                 return False
-            
+
             self.print_fix("All critical dependencies present", "SUCCESS")
             return True
-            
+
         except Exception as e:
             self.print_fix(f"Error checking dependencies: {e}", "ERROR")
             return False
-    
+
     def run_full_autofix(self):
         """Execute complete blank page auto-fix"""
-        print("\n" + "="*90)
+        print("\n" + "=" * 90)
         print("🔧 AURORA BLANK PAGE AUTO-FIX ENGINE v2".center(90))
-        print("="*90 + "\n")
-        
+        print("=" * 90 + "\n")
+
         self.print_fix("Starting comprehensive blank page fixes...", "FIX")
         print()
-        
+
         # Run all fixes
         self.fix_index_css_body_styles()
         self.fix_main_tsx_error_handling()
@@ -275,20 +278,21 @@ if (!rootElement) {
         self.fix_vite_config()
         self.check_service_worker_cleanup()
         self.verify_dependencies()
-        
-        print("\n" + "-"*90)
+
+        print("\n" + "-" * 90)
         print("✨ AUTO-FIX SUMMARY".center(90))
-        print("-"*90)
-        
+        print("-" * 90)
+
         print(f"\n🔧 Fixes Applied: {len(self.fixes_applied)}")
         for fix in self.fixes_applied:
             print(f"   ✅ {fix}")
-        
-        print("\n" + "-"*90)
+
+        print("\n" + "-" * 90)
         print("🚀 NEXT STEPS".center(90))
-        print("-"*90)
-        
-        print("""
+        print("-" * 90)
+
+        print(
+            """
 ✅ Aurora has applied all automatic fixes!
 
 TO VERIFY THE FIX WORKS:
@@ -317,12 +321,13 @@ ROOT CAUSES OF BLANK PAGE (FIXED):
 ✅ Service worker caching old UI (cleanup added)
 ✅ Vite configuration issues (verified)
 ✅ Missing component exports (verified)
-""")
-        
-        print("-"*90)
+"""
+        )
+
+        print("-" * 90)
         print("✅ AURORA BLANK PAGE FIX COMPLETE".center(90))
-        print("="*90 + "\n")
-        
+        print("=" * 90 + "\n")
+
         # Save fix report
         report_file = self.knowledge_dir / "blank_page_autofix_report.txt"
         with open(report_file, "w") as f:
@@ -332,8 +337,9 @@ ROOT CAUSES OF BLANK PAGE (FIXED):
             for fix in self.fixes_applied:
                 f.write(f"  • {fix}\n")
             f.write("\nStatus: ✅ COMPLETE\n")
-        
-        print(f"📄 Report saved to: .aurora_knowledge/blank_page_autofix_report.txt")
+
+        print("📄 Report saved to: .aurora_knowledge/blank_page_autofix_report.txt")
+
 
 if __name__ == "__main__":
     fixer = AuroraBlankPageAutoFixer()

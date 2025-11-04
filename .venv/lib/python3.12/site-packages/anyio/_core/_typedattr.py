@@ -26,9 +26,7 @@ class TypedAttributeSet:
         annotations: dict[str, Any] = getattr(cls, "__annotations__", {})
         for attrname in dir(cls):
             if not attrname.startswith("_") and attrname not in annotations:
-                raise TypeError(
-                    f"Attribute {attrname!r} is missing its type annotation"
-                )
+                raise TypeError(f"Attribute {attrname!r} is missing its type annotation")
 
         super().__init_subclass__()
 
