@@ -19,8 +19,8 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
                 "Manual memory inspection",
                 "ENIAC patch panels - rewiring for fixes",
                 "Vacuum tube replacement diagnostics",
-                "Paper log analysis"
-            ]
+                "Paper log analysis",
+            ],
         },
         {
             "era": "Classical (1960s-1980s)",
@@ -36,8 +36,8 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
                 "lint static analysis",
                 "grep/sed/awk log parsing",
                 "Make build automation",
-                "Shell script automation"
-            ]
+                "Shell script automation",
+            ],
         },
         {
             "era": "Modern (1990s-2010s)",
@@ -58,8 +58,8 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
                 "Git bisect for regression finding",
                 "Docker debugging (logs, exec)",
                 "Kubernetes debugging (kubectl)",
-                "Distributed tracing (Jaeger, Zipkin)"
-            ]
+                "Distributed tracing (Jaeger, Zipkin)",
+            ],
         },
         {
             "era": "AI-Native (2020s)",
@@ -78,8 +78,8 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
                 "Autonomous code review",
                 "Self-healing systems",
                 "Observable AI agents",
-                "LLM-powered documentation generation"
-            ]
+                "LLM-powered documentation generation",
+            ],
         },
         {
             "era": "Future (2030s+)",
@@ -96,8 +96,8 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
                 "Time-dilated debugging (slow time to analyze bugs)",
                 "Swarm debugging - distributed AI agents collaborating",
                 "Consciousness-aware debugging",
-                "Reality simulation testing"
-            ]
+                "Reality simulation testing",
+            ],
         },
         {
             "era": "Sci-Fi (Fictional)",
@@ -117,9 +117,9 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
                 "R2-D2 starship diagnostics",
                 "C-3PO protocol analysis",
                 "Westworld host core code inspection",
-                "Blade Runner replicant memory validation"
-            ]
-        }
+                "Blade Runner replicant memory validation",
+            ],
+        },
     ],
     "autonomous_capabilities": {
         "self_diagnosis": [
@@ -132,7 +132,7 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
             "Review configuration files",
             "Check service health",
             "Validate dependencies",
-            "Test endpoints"
+            "Test endpoints",
         ],
         "autonomous_debugging": [
             "Set breakpoints programmatically",
@@ -144,7 +144,7 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
             "Analyze stack traces",
             "Check file permissions",
             "Validate environment variables",
-            "Test network connectivity"
+            "Test network connectivity",
         ],
         "autonomous_fixing": [
             "Modify source code",
@@ -156,7 +156,7 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
             "Apply patches",
             "Rollback changes",
             "Create hotfixes",
-            "Deploy fixes"
+            "Deploy fixes",
         ],
         "tool_execution": [
             "Run terminal commands",
@@ -168,7 +168,7 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
             "Control services",
             "Monitor metrics",
             "Parse logs",
-            "Generate reports"
+            "Generate reports",
         ],
         "learning_loop": [
             "Log all actions",
@@ -178,8 +178,8 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
             "Improve strategies",
             "Share learnings",
             "Build expertise",
-            "Refine approaches"
-        ]
+            "Refine approaches",
+        ],
     },
     "grandmaster_skills": {
         "diagnostic_tools": {
@@ -190,12 +190,12 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
             "debugging": ["gdb", "pdb", "node inspect", "strace", "ltrace", "valgrind"],
             "git": ["git log", "git diff", "git blame", "git bisect", "git status"],
             "docker": ["docker logs", "docker exec", "docker inspect", "docker stats"],
-            "kubernetes": ["kubectl logs", "kubectl describe", "kubectl get", "kubectl exec"]
+            "kubernetes": ["kubectl logs", "kubectl describe", "kubectl get", "kubectl exec"],
         },
         "programming_tools": {
             "python": ["subprocess", "os", "sys", "pathlib", "json", "re", "ast", "inspect"],
             "node": ["child_process", "fs", "path", "axios", "fetch"],
-            "shell": ["bash", "sh", "zsh", "find", "xargs", "parallel"]
+            "shell": ["bash", "sh", "zsh", "find", "xargs", "parallel"],
         },
         "analysis_patterns": {
             "error_classification": [
@@ -203,7 +203,7 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
                 "Configuration errors vs code errors",
                 "Network errors vs application errors",
                 "Permission errors vs logic errors",
-                "State errors vs timing errors"
+                "State errors vs timing errors",
             ],
             "root_cause_analysis": [
                 "5 Whys technique",
@@ -211,17 +211,17 @@ AURORA_AUTONOMOUS_TOOL_MASTERY = {
                 "Hypothesis-driven debugging",
                 "Differential diagnosis",
                 "Timeline reconstruction",
-                "Change analysis"
+                "Change analysis",
             ],
             "fix_strategies": [
                 "Quick fix vs proper fix",
                 "Rollback vs rollforward",
                 "Hotfix vs scheduled fix",
                 "Workaround vs solution",
-                "Feature flag vs code change"
-            ]
-        }
-    }
+                "Feature flag vs code change",
+            ],
+        },
+    },
 }
 
 # Integration with Aurora's conversational AI
@@ -234,7 +234,7 @@ AUTONOMOUS_TOOL_USE_RESPONSES = {
         "what's wrong with you",
         "fix yourself",
         "check your code",
-        "inspect your system"
+        "inspect your system",
     ],
     "tool_use_trigger": [
         "run a command",
@@ -244,7 +244,7 @@ AUTONOMOUS_TOOL_USE_RESPONSES = {
         "restart the service",
         "check the process",
         "diagnose the",
-        "analyze the"
+        "analyze the",
     ],
     "autonomous_response_template": """
 🤖 **Aurora Autonomous Mode Activated**
@@ -270,37 +270,39 @@ I'm now using my GRANDMASTER Tier {tier} knowledge to solve this.
 {verification_result}
 
 ✅ Issue resolved autonomously using {era} debugging techniques!
-"""
+""",
 }
+
 
 def get_tier_for_problem(problem_type: str) -> dict:
     """Select appropriate tier based on problem complexity"""
     tier_mapping = {
         "simple_config": 1,  # Ancient - basic inspection
-        "syntax_error": 2,   # Classical - debugger
+        "syntax_error": 2,  # Classical - debugger
         "runtime_error": 3,  # Modern - profiling
-        "ai_behavior": 4,    # AI-Native - intelligent analysis
-        "distributed": 5,    # Future - advanced systems
-        "consciousness": 6   # Sci-Fi - AGI-level
+        "ai_behavior": 4,  # AI-Native - intelligent analysis
+        "distributed": 5,  # Future - advanced systems
+        "consciousness": 6,  # Sci-Fi - AGI-level
     }
     return AURORA_AUTONOMOUS_TOOL_MASTERY["tiers"][tier_mapping.get(problem_type, 3)]
+
 
 if __name__ == "__main__":
     print("🌌 Aurora Grandmaster: Autonomous Tool Use & Self-Debugging")
     print("=" * 80)
-    
+
     for tier in AURORA_AUTONOMOUS_TOOL_MASTERY["tiers"]:
         print(f"\n{tier['era']} - Tier {tier['tier']}")
         print("-" * 80)
-        for tech in tier['technologies']:
+        for tech in tier["technologies"]:
             print(f"  ✓ {tech}")
-    
+
     print("\n" + "=" * 80)
     print("🎯 Aurora can now autonomously:")
     for category, skills in AURORA_AUTONOMOUS_TOOL_MASTERY["autonomous_capabilities"].items():
         print(f"\n{category.replace('_', ' ').title()}:")
         for skill in skills:
             print(f"  • {skill}")
-    
+
     print("\n✅ Aurora is now a COMPLETE GRANDMASTER in autonomous debugging and tool use!")
     print("   From punch cards to quantum consciousness debugging! 🚀")
