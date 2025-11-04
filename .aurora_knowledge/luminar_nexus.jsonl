@@ -365,3 +365,7 @@
 {"timestamp": "2025-11-04T19:02:39.700508", "event": "SERVER_STARTED", "server": "backend", "details": {"session": "aurora-backend", "port": 5000, "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts"}, "system": "LUMINAR_NEXUS"}
 {"timestamp": "2025-11-04T19:07:39.007155", "event": "SERVER_STOPPED", "server": "chat", "details": {"session": "aurora-chat"}, "system": "LUMINAR_NEXUS"}
 {"timestamp": "2025-11-04T19:07:41.033112", "event": "SERVER_STARTED", "server": "chat", "details": {"session": "aurora-chat", "port": 5003, "command": "cd /workspaces/Aurora-x && python3 -c 'from tools.luminar_nexus import run_chat_server; run_chat_server(5003)'"}, "system": "LUMINAR_NEXUS"}
+{"timestamp": "2025-11-04T19:13:46.082018", "event": "SERVER_STOPPED", "server": "vite", "details": {"session": "aurora-vite"}, "system": "LUMINAR_NEXUS"}
+{"timestamp": "2025-11-04T19:13:48.095499", "event": "SERVER_STARTED", "server": "vite", "details": {"session": "aurora-vite", "port": 5173, "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173"}, "system": "LUMINAR_NEXUS"}
+{"timestamp": "2025-11-04T19:42:37.108474", "event": "SERVER_STOPPED", "server": "chat", "details": {"session": "aurora-chat"}, "system": "LUMINAR_NEXUS"}
+{"timestamp": "2025-11-04T19:42:39.120324", "event": "SERVER_STARTED", "server": "chat", "details": {"session": "aurora-chat", "port": 5003, "command": "cd /workspaces/Aurora-x && python3 -c 'from tools.luminar_nexus import run_chat_server; run_chat_server(5003)'"}, "system": "LUMINAR_NEXUS"}
