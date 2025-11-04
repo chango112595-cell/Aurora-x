@@ -97,10 +97,10 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
         content: "Hmm, I hit a snag there. Mind trying that again? 🔧",
         timestamp: new Date()
       }]);
+    } finally {
+      setIsLoading(false);
+      console.log('[Aurora Chat] isLoading=false (finally block)');
     }
-
-    setIsLoading(false);
-    console.log('[Aurora Chat] isLoading=false');
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
