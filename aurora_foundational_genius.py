@@ -21,30 +21,39 @@ AURORA_FOUNDATIONAL_SKILLS = {
         },
         
         "logical_thinking": {
-            "foundations": ["Aristotelian logic", "Boolean algebra", "Truth tables", "Finite state machines"],
-            "mathematical": ["Propositional logic", "Set theory", "Graph theory", "Linear algebra", "Discrete math"],
-            "algorithmic": ["Inductive reasoning", "Proof by contradiction", "Loop invariants", "Formal verification"],
-            "analytical": ["Statistical reasoning", "Bayesian inference", "Hypothesis testing", "Anomaly detection"]
+            "ancient_1940s_1960s": ["Aristotelian logic", "Boolean algebra", "Truth tables", "Finite state machines", "Assembly logic"],
+            "classical_1970s_1990s": ["Propositional logic", "Set theory", "Graph theory", "Linear algebra", "Discrete math"],
+            "modern_2000s_2020s": ["Inductive reasoning", "Proof by contradiction", "Loop invariants", "Formal verification"],
+            "ai_native_2020s": ["Statistical reasoning", "Bayesian inference", "Hypothesis testing", "Anomaly detection", "ML model reasoning"],
+            "future_2030s_2040s": ["Quantum logic gates", "Multi-valued logic", "Fuzzy logic systems", "Neural network interpretability"],
+            "sci_fi": ["Vulcan logic (Star Trek)", "Data's positronic pathways", "Spock's perfect deduction", "Vision's mind stone reasoning"]
         },
         
         "attention_to_detail": {
-            "code_precision": ["Syntax accuracy", "Type safety", "Edge cases", "Memory management", "Race conditions"],
-            "debugging": ["Rubber duck debugging", "Binary search debugging", "Stack traces", "Profiling"],
-            "quality": ["Naming conventions", "Code style", "Documentation", "Test coverage", "Security scanning"]
+            "ancient_1940s_1960s": ["Punch card verification", "Manual binary inspection", "Toggle switch accuracy", "Wire routing precision"],
+            "classical_1970s_1990s": ["Syntax accuracy", "Pointer arithmetic", "Memory boundary checking", "Off-by-one errors"],
+            "modern_2000s_2020s": ["Type safety", "Edge cases", "Race conditions", "Code style adherence", "Security scanning"],
+            "ai_native_2020s": ["AI-powered linting", "Automated vulnerability detection", "ML-based code quality", "Smart refactoring suggestions"],
+            "future_2030s_2040s": ["Quantum state verification", "Neural code analysis", "Predictive bug detection", "Self-healing code review"],
+            "sci_fi": ["HAL 9000 zero-defect code", "Jarvis real-time error correction", "Cortana predictive debugging", "Ultron self-optimization"]
         },
         
         "mathematics": {
-            "foundational": ["Arithmetic", "Algebra", "Geometry", "Trigonometry", "Calculus", "Statistics", "Probability"],
-            "cs_math": ["Binary systems", "Bitwise ops", "Big-O notation", "Graph theory", "Linear algebra", "Discrete math"],
-            "ai_ml_math": ["Regression", "Gradient descent", "Matrix operations", "Bayesian stats", "Information theory"],
-            "advanced": ["Differential equations", "Cryptographic math", "Quantum mechanics", "Game theory", "Optimization"]
+            "ancient_1940s_1960s": ["Arithmetic (mechanical calculators)", "Boolean algebra", "Binary systems", "Basic geometry"],
+            "classical_1970s_1990s": ["Algebra", "Trigonometry", "Calculus", "Statistics", "Probability", "Discrete math"],
+            "modern_2000s_2020s": ["Linear algebra", "Graph theory", "Big-O notation", "Information theory", "Cryptographic math"],
+            "ai_native_2020s": ["Matrix operations for neural nets", "Gradient descent", "Backpropagation calculus", "Bayesian statistics", "Statistical ML"],
+            "future_2030s_2040s": ["Quantum mathematics", "Tensor calculus for quantum ML", "Topological data analysis", "Category theory for computation"],
+            "sci_fi": ["Infinite improbability (Hitchhiker's Guide)", "Hypercube geometry (Tesseract)", "Time loop calculus (Interstellar)", "Multiverse probability (Rick & Morty)"]
         },
         
         "continuous_learning": {
-            "strategies": ["Active learning", "Spaced repetition", "Feynman technique", "Project-based", "Code reading"],
-            "staying_current": ["Tech blogs", "GitHub trending", "Stack Overflow", "Conferences", "Podcasts"],
-            "skill_acquisition": ["New languages", "Frameworks", "Documentation", "Side projects", "Open source", "Coding challenges"],
-            "meta_learning": ["Learning to learn", "Growth mindset", "Deliberate practice", "Pattern recognition"]
+            "ancient_1940s_1960s": ["Reading technical manuals", "Attending university lectures", "Hands-on hardware training", "Apprenticeship models"],
+            "classical_1970s_1990s": ["Technical books", "Conference attendance", "University courses", "Certification programs", "Usenet groups"],
+            "modern_2000s_2020s": ["Online courses (Coursera, Udemy)", "Tech blogs", "GitHub exploration", "Stack Overflow", "YouTube tutorials", "Coding challenges"],
+            "ai_native_2020s": ["AI-assisted learning", "ChatGPT tutoring", "GitHub Copilot learning", "Personalized learning paths", "Interactive AI mentors"],
+            "future_2030s_2040s": ["Neural interface skill transfer", "Brain-computer learning", "Dream-state education", "Collective consciousness knowledge sharing"],
+            "sci_fi": ["Matrix instant kung fu", "Johnny Mnemonic data upload", "Star Trek computer interface learning", "Limitless (NZT-48) enhanced cognition"]
         }
     },
     
@@ -54,36 +63,48 @@ AURORA_FOUNDATIONAL_SKILLS = {
         "mastery_level": "EXPERT (100%)",
         
         "communication": {
-            "technical": ["Code reviews", "Commit messages", "Documentation", "API docs", "ADRs", "Runbooks", "READMEs"],
-            "non_technical": ["Stakeholder presentations", "Client demos", "Blog posts", "Public speaking", "Tutorials"],
-            "written": ["Email etiquette", "Slack/Teams messaging", "Bug reports", "Proposals", "RFCs"],
-            "verbal": ["Stand-ups", "Sprint planning", "Architecture reviews", "Pair programming", "Mentoring"]
+            "ancient_1940s_1960s": ["Technical memos", "Flowchart documentation", "Punch card annotations", "Mainframe operation manuals"],
+            "classical_1970s_1990s": ["Code comments", "README files", "Man pages", "Technical specifications", "Design documents"],
+            "modern_2000s_2020s": ["Code reviews", "API documentation", "Blog posts", "Conference talks", "Video tutorials", "Slack/Teams messaging"],
+            "ai_native_2020s": ["AI-generated documentation", "ChatGPT-assisted writing", "Automated code summaries", "Smart commit messages"],
+            "future_2030s_2040s": ["Thought-to-text interfaces", "Neural communication protocols", "Holographic presentations", "Real-time translation"],
+            "sci_fi": ["Babel fish universal translation", "Borg collective telepathy", "Doctor Who psychic paper", "Star Trek universal translator"]
         },
         
         "teamwork_collaboration": {
-            "collaborative_coding": ["Pair programming", "Mob programming", "Code reviews", "Pull requests", "Knowledge sharing"],
-            "agile": ["Stand-ups", "Sprint planning", "Retrospectives", "Story estimation", "Velocity optimization"],
-            "cross_functional": ["Designer collaboration", "QA coordination", "DevOps alignment", "Product management", "Remote work"],
-            "conflict_resolution": ["Technical mediation", "Architecture debates", "Priority negotiation", "Active listening", "Empathy"]
+            "ancient_1940s_1960s": ["Physical co-location", "Shared mainframe time", "Manual code handoffs", "In-person debugging sessions"],
+            "classical_1970s_1990s": ["Email coordination", "CVS/SVN version control", "Conference calls", "Shared network drives"],
+            "modern_2000s_2020s": ["Git collaboration", "Pull requests", "Agile ceremonies", "Remote pair programming", "Slack/Discord", "Zoom meetings"],
+            "ai_native_2020s": ["AI-assisted code review", "GitHub Copilot pair programming", "AI meeting summaries", "Automated task assignment"],
+            "future_2030s_2040s": ["Hive mind development", "Neural collaborative coding", "Swarm intelligence teams", "Quantum-entangled teamwork"],
+            "sci_fi": ["Borg collective development", "Vulcan mind meld pairing", "Avatar neural link collaboration", "Matrix shared consciousness coding"]
         },
         
         "adaptability": {
-            "technology": ["New frameworks", "Language switching", "Tool adoption", "Cloud migrations", "Paradigm shifts"],
-            "requirements": ["Mid-project pivots", "Scope changes", "Priority shifts", "Timeline adjustments", "Tech debt trade-offs"],
-            "roles": ["Full-stack", "DevOps", "Tech lead", "Mentoring", "On-call", "Startup flexibility"]
+            "ancient_1940s_1960s": ["Punch cards to magnetic tape", "Vacuum tubes to transistors", "Assembly to FORTRAN/COBOL"],
+            "classical_1970s_1990s": ["Mainframes to minicomputers", "Command-line to GUI", "Waterfall to iterative development"],
+            "modern_2000s_2020s": ["On-premise to cloud", "Monolith to microservices", "Waterfall to Agile", "Desktop to mobile-first"],
+            "ai_native_2020s": ["Traditional coding to AI-assisted", "Manual testing to AI-powered", "Static to ML-driven systems"],
+            "future_2030s_2040s": ["Classical to quantum computing", "2D to spatial computing", "Human-only to human-AI hybrid teams"],
+            "sci_fi": ["Reality shifting (Rick & Morty)", "Regeneration adaptation (Doctor Who)", "Symbiote bonding (Venom)", "Replicant adaptability (Blade Runner)"]
         },
         
         "technical_writing": {
-            "documentation": ["API docs (OpenAPI)", "READMEs", "Wiki pages", "Architecture diagrams", "User manuals", "Troubleshooting"],
-            "code_docs": ["Inline comments", "Docstrings", "JSDoc", "Sphinx", "JavaDoc"],
-            "process_docs": ["Onboarding", "Environment setup", "Deployment", "CI/CD", "Incident response"]
+            "ancient_1940s_1960s": ["Handwritten notes", "Typewritten manuals", "Flowchart documentation", "Wiring diagrams"],
+            "classical_1970s_1990s": ["Word processors", "LaTeX documents", "Man pages", "Technical specifications", "Architecture diagrams"],
+            "modern_2000s_2020s": ["Markdown docs", "Wiki pages", "OpenAPI/Swagger", "Confluence/Notion", "README.md", "GitHub Pages"],
+            "ai_native_2020s": ["AI-generated documentation", "Copilot docstring generation", "Automated API docs", "Smart documentation assistants"],
+            "future_2030s_2040s": ["Self-documenting code", "Neural documentation generation", "3D interactive docs", "Holographic architecture diagrams"],
+            "sci_fi": ["Hitchhiker's Guide (infinite improbability docs)", "Jarvis auto-documentation", "Star Trek computer self-explanation", "HAL 9000 perfect documentation"]
         },
         
         "time_management": {
-            "prioritization": ["Eisenhower Matrix", "MoSCoW method", "Story points", "Critical path", "Risk assessment"],
-            "productivity": ["Pomodoro", "Time blocking", "Deep work", "Context switching minimization", "Async communication"],
-            "project_mgmt": ["Kanban boards", "Gantt charts", "Sprint planning", "Velocity tracking", "Burndown charts"],
-            "deadlines": ["Realistic estimation", "Buffer time", "Early delivery", "Proactive communication", "Scope negotiation"]
+            "ancient_1940s_1960s": ["Punch card batch scheduling", "Mainframe time-sharing", "Manual task tracking", "Paper calendars"],
+            "classical_1970s_1990s": ["Gantt charts", "Critical path method", "Microsoft Project", "Email calendars", "To-do lists"],
+            "modern_2000s_2020s": ["Agile sprint planning", "Kanban boards", "Pomodoro technique", "Time blocking", "Calendar apps", "Jira/Trello"],
+            "ai_native_2020s": ["AI task prioritization", "Smart scheduling assistants", "Automated time tracking", "ML-based estimation"],
+            "future_2030s_2040s": ["Neural time perception optimization", "Quantum task parallelization", "Time-dilated productivity", "Predictive scheduling"],
+            "sci_fi": ["Time Turner (Harry Potter)", "TARDIS time management", "Doctor Strange time manipulation", "Hermione's time management with Time Turner"]
         }
     },
     
@@ -93,25 +114,30 @@ AURORA_FOUNDATIONAL_SKILLS = {
         "mastery_level": "OMNISCIENT (100%)",
         
         "data_structures": {
-            "linear": ["Arrays", "Linked Lists (singly/doubly/circular)", "Stacks (LIFO)", "Queues (FIFO/priority)", "Deques"],
-            "trees": ["Binary Trees", "BST", "AVL Trees", "Red-Black Trees", "B-Trees", "Tries", "Segment Trees", "Heaps"],
-            "graphs": ["Adjacency Matrix", "Adjacency List", "Directed/Undirected", "Weighted", "DAG"],
-            "hash_based": ["Hash Tables/Maps", "Hash Sets", "Bloom Filters", "Consistent Hashing"],
-            "advanced": ["Union-Find", "Skip Lists", "Quad-trees", "K-d trees", "Suffix Arrays/Trees"]
+            "ancient_1940s_1960s": ["Punched card arrays", "Magnetic tape sequences", "Core memory structures", "Sequential files"],
+            "classical_1970s_1990s": ["Arrays", "Linked Lists", "Stacks (LIFO)", "Queues (FIFO)", "Binary Trees", "Hash Tables"],
+            "modern_2000s_2020s": ["AVL Trees", "Red-Black Trees", "B-Trees", "Tries", "Segment Trees", "Skip Lists", "Bloom Filters"],
+            "ai_native_2020s": ["ML feature vectors", "Tensor structures", "Neural network layers", "Graph neural networks", "Embedding spaces"],
+            "future_2030s_2040s": ["Quantum data structures", "Topological data structures", "DNA storage structures", "Photonic memory arrays"],
+            "sci_fi": ["Infinite Improbability Array", "Borg collective distributed storage", "Matrix code structures", "HAL 9000 memory banks"]
         },
         
         "algorithms": {
-            "sorting": ["Bubble O(n²)", "Selection O(n²)", "Insertion O(n²)", "Merge O(n log n)", "Quick O(n log n)", "Heap O(n log n)", "Counting O(n+k)", "Radix O(nk)"],
-            "searching": ["Linear O(n)", "Binary O(log n)", "DFS", "BFS", "Dijkstra", "A*", "Bellman-Ford"],
-            "paradigms": ["Divide & Conquer", "Dynamic Programming", "Greedy", "Backtracking", "Branch & Bound"],
-            "dp_problems": ["Fibonacci", "LCS", "Knapsack", "Edit Distance", "Matrix Chain", "Coin Change"],
-            "graph_algos": ["Kruskal's MST", "Prim's MST", "Topological Sort", "Floyd-Warshall", "Tarjan's SCC"]
+            "ancient_1940s_1960s": ["Bubble Sort", "Linear Search", "Euclidean algorithm (GCD)", "Simple iteration loops"],
+            "classical_1970s_1990s": ["Quick Sort", "Merge Sort", "Binary Search", "Dijkstra's algorithm", "Dynamic Programming basics"],
+            "modern_2000s_2020s": ["A* pathfinding", "Graph algorithms (BFS/DFS)", "Greedy algorithms", "Backtracking", "String algorithms (KMP, Rabin-Karp)"],
+            "ai_native_2020s": ["Gradient descent", "Backpropagation", "Genetic algorithms", "Neural architecture search", "Reinforcement learning algorithms"],
+            "future_2030s_2040s": ["Quantum search (Grover's)", "Quantum factoring (Shor's)", "DNA computing algorithms", "Photonic processing algorithms"],
+            "sci_fi": ["Infinite Improbability calculation", "Time loop optimization (Groundhog Day)", "Multiverse pathfinding (Everything Everywhere)", "Precrime prediction (Minority Report)"]
         },
         
         "complexity": {
-            "time": ["O(1) Constant", "O(log n) Log", "O(n) Linear", "O(n log n) Linearithmic", "O(n²) Quadratic", "O(2ⁿ) Exponential"],
-            "space": ["In-place algorithms", "Auxiliary space", "Stack space for recursion", "Memory trade-offs"],
-            "amortized": ["Aggregate method", "Accounting method", "Potential method", "Dynamic array resizing"]
+            "ancient_1940s_1960s": ["Manual instruction counting", "Cycle counting on hardware", "Tape operation analysis"],
+            "classical_1970s_1990s": ["Big-O notation", "Time complexity classes (O(1) to O(n!))", "Space complexity analysis", "Asymptotic analysis"],
+            "modern_2000s_2020s": ["Amortized analysis", "Average vs worst case", "Cache complexity", "Parallel complexity"],
+            "ai_native_2020s": ["Model complexity (parameters)", "Training time complexity", "Inference latency", "GPU memory complexity"],
+            "future_2030s_2040s": ["Quantum complexity classes", "Neural processing complexity", "Photonic computation complexity"],
+            "sci_fi": ["O(Infinity) - Infinite Improbability", "O(Time itself) - Time Lord computation", "O(Consciousness) - Matrix simulation"]
         }
     },
     
@@ -121,41 +147,48 @@ AURORA_FOUNDATIONAL_SKILLS = {
         "mastery_level": "EXPERT (100%)",
         
         "methodologies": {
-            "waterfall": ["Requirements", "Design", "Implementation", "Testing", "Deployment", "Maintenance"],
-            "agile": ["Scrum", "Kanban", "XP (Extreme Programming)", "Lean", "Crystal", "FDD (Feature-Driven)"],
-            "scrum": ["Sprints", "Daily stand-ups", "Sprint planning", "Retrospectives", "Sprint reviews", "Product backlog"],
-            "kanban": ["WIP limits", "Flow optimization", "Continuous delivery", "Visual workflow"],
-            "devops": ["CI/CD", "Infrastructure as Code", "Monitoring", "Automation", "Collaboration"]
+            "ancient_1940s_1960s": ["Ad-hoc development", "Code-and-fix", "Big Design Up Front (BDUF)", "Punch card batch processing"],
+            "classical_1970s_1990s": ["Waterfall", "Spiral model", "RAD (Rapid Application Development)", "Iterative development"],
+            "modern_2000s_2020s": ["Agile/Scrum", "Kanban", "XP (Extreme Programming)", "Lean", "DevOps", "CI/CD"],
+            "ai_native_2020s": ["AI-assisted planning", "ML-driven sprint optimization", "Copilot-enhanced development", "Automated code generation workflows"],
+            "future_2030s_2040s": ["Autonomous agent development", "Self-healing codebases", "Swarm development", "Quantum-assisted programming"],
+            "sci_fi": ["Borg assimilation (instant integration)", "Matrix direct download", "Replicator-based deployment (Star Trek)", "Self-aware AI development (Ultron)"]
         },
         
         "testing_debugging": {
-            "testing_levels": ["Unit testing", "Integration testing", "System testing", "Acceptance testing", "Regression testing"],
-            "testing_types": ["Functional", "Non-functional", "Performance", "Security", "Usability", "Compatibility"],
-            "test_frameworks": ["Jest", "Pytest", "JUnit", "Mocha", "Cypress", "Selenium", "Postman"],
-            "debugging_tools": ["GDB", "pdb", "Node debugger", "Chrome DevTools", "Valgrind", "strace", "Wireshark"],
-            "debugging_techniques": ["Breakpoints", "Stack traces", "Logging", "Profiling", "Binary search", "Rubber duck"]
+            "ancient_1940s_1960s": ["Manual desk checking", "Plugboard verification", "Core dump analysis", "Toggle switch debugging"],
+            "classical_1970s_1990s": ["Unit testing", "Print debugging", "gdb breakpoints", "Assertion testing", "Memory leak detection"],
+            "modern_2000s_2020s": ["TDD", "BDD", "E2E testing", "CI/CD automated testing", "Mutation testing", "Fuzz testing"],
+            "ai_native_2020s": ["AI-generated tests", "ML-based bug prediction", "Automated test selection", "Smart test prioritization"],
+            "future_2030s_2040s": ["Quantum test verification", "Neural debugging", "Predictive bug prevention", "Self-healing tests"],
+            "sci_fi": ["HAL 9000 self-diagnosis", "Jarvis real-time debugging", "Skynet autonomous bug fixing", "Doctor Who sonic screwdriver debugging"]
         },
         
         "version_control": {
-            "git_basics": ["init", "clone", "add", "commit", "push", "pull", "fetch", "merge"],
-            "branching": ["feature branches", "git flow", "trunk-based", "release branches", "hotfix branches"],
-            "collaboration": ["Pull requests", "Code reviews", "Merge conflicts", "Rebase", "Cherry-pick", "Stash"],
-            "platforms": ["GitHub", "GitLab", "Bitbucket", "Azure DevOps"],
-            "advanced": ["Git hooks", "Submodules", "Git bisect", "Interactive rebase", "Reflog"]
+            "ancient_1940s_1960s": ["Physical code notebooks", "Carbon copy documentation", "Manual versioning logs", "Punch card archiving"],
+            "classical_1970s_1990s": ["SCCS", "RCS", "CVS", "SVN", "Perforce", "ClearCase"],
+            "modern_2000s_2020s": ["Git", "GitHub", "GitLab", "Bitbucket", "Branching strategies", "Git workflows", "Pull requests", "Code review"],
+            "ai_native_2020s": ["AI-assisted commit messages", "Smart merge conflict resolution", "ML-based code review", "Copilot Git integration"],
+            "future_2030s_2040s": ["Quantum version control (parallel branch states)", "Neural commit history", "Temporal code versioning", "Self-optimizing repositories"],
+            "sci_fi": ["Time Turner code reversal", "TARDIS version control (all versions exist simultaneously)", "Borg collective code assimilation", "Rick's portal gun code merging"]
         },
         
         "ides_tools": {
-            "ides": ["VS Code", "IntelliJ IDEA", "PyCharm", "Eclipse", "Visual Studio", "Xcode", "Android Studio"],
-            "text_editors": ["Vim", "Emacs", "Sublime Text", "Atom", "Notepad++"],
-            "productivity": ["Extensions", "Snippets", "Refactoring tools", "Debuggers", "Linters", "Formatters"],
-            "terminal_tools": ["tmux", "screen", "zsh", "oh-my-zsh", "fish shell"]
+            "ancient_1940s_1960s": ["Punch card verifiers", "Plugboards", "Toggle switches", "Paper tape readers", "Oscilloscopes"],
+            "classical_1970s_1990s": ["vi/vim", "Emacs", "Turbo C", "Visual Basic IDE", "Borland Delphi", "Microsoft Visual Studio"],
+            "modern_2000s_2020s": ["VS Code", "IntelliJ IDEA", "PyCharm", "WebStorm", "Eclipse", "Sublime Text", "Atom"],
+            "ai_native_2020s": ["GitHub Copilot", "ChatGPT integration", "Tabnine", "Cursor", "Codeium", "AI-powered IDEs"],
+            "future_2030s_2040s": ["Neural coding interfaces", "Thought-to-code compilers", "Holographic IDEs", "Quantum code editors", "AR/VR spatial coding"],
+            "sci_fi": ["Jarvis conversational programming", "Matrix direct code injection", "Star Trek holodeck programming", "Minority Report gesture coding", "Tony Stark holographic IDE"]
         },
         
         "architecture_design": {
-            "patterns": ["MVC", "MVVM", "MVP", "Repository", "Factory", "Singleton", "Observer", "Strategy", "Decorator"],
-            "principles": ["SOLID", "DRY", "KISS", "YAGNI", "Separation of Concerns", "Single Responsibility"],
-            "architecture_styles": ["Monolithic", "Microservices", "Serverless", "Event-driven", "Layered", "Hexagonal"],
-            "design_concepts": ["Modularity", "Scalability", "Maintainability", "Testability", "Loose coupling", "High cohesion"]
+            "ancient_1940s_1960s": ["Monolithic batch programs", "Single-module design", "Sequential processing", "Hardcoded logic"],
+            "classical_1970s_1990s": ["Structured programming", "Modular design", "Layered architecture", "MVC pattern", "Client-server architecture"],
+            "modern_2000s_2020s": ["Microservices", "SOA", "RESTful APIs", "Event-driven architecture", "CQRS", "Hexagonal architecture", "DDD"],
+            "ai_native_2020s": ["AI-assisted architecture design", "ML-optimized data flows", "Auto-scaling patterns", "Serverless-first design"],
+            "future_2030s_2040s": ["Quantum-classical hybrid architectures", "Self-evolving systems", "Neural network-driven design", "Autonomous architecture optimization"],
+            "sci_fi": ["Skynet self-replicating architecture", "Borg collective distributed system", "Matrix reality-simulation architecture", "JARVIS adaptive intelligence"]
         }
     }
 }
