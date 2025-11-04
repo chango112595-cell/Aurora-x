@@ -340,7 +340,14 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             # Aurora: Intelligent import with fallback for spec_from_flask
             try:
-                from spec_from_flask import create_flask_app_from_text  # type: ignore
+# Aurora: Intelligent import with fallback for spec_from_flask
+try:
+    from spec_from_flask import create_flask_app_from_text  # type: ignore
+except ImportError as e:
+    # Aurora: Graceful fallback to prevent crashes
+    def create_flask_app_from_text  # type: ignore(*args, **kwargs):
+        raise HTTPException(status_code=500, detail=f"Module 'spec_from_flask' not available: {e}")
+    print(f"Aurora Warning: Using fallback for spec_from_flask")
 
                 app_file = create_flask_app_from_text(prompt, run_dir)
                 files_generated.append(str(app_file.relative_to(Path.cwd())))
@@ -364,7 +371,14 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             # Aurora: Learning Session - Step by step import fixing
             try:
-                from spec_from_text import create_spec_from_text  # type: ignore
+# Aurora: Intelligent import with fallback for spec_from_text
+try:
+    from spec_from_text import create_spec_from_text  # type: ignore
+except ImportError as e:
+    # Aurora: Graceful fallback to prevent crashes
+    def create_spec_from_text  # type: ignore(*args, **kwargs):
+        raise HTTPException(status_code=500, detail=f"Module 'spec_from_text' not available: {e}")
+    print(f"Aurora Warning: Using fallback for spec_from_text")
 
                 # Create spec from natural language
                 spec_path = create_spec_from_text(prompt, str(Path("specs")))

@@ -375,15 +375,16 @@ class LuminarNexusServerManager:
         
         print("="*70 + "\n")
     
-    def start_autonomous_monitoring(self, check_interval=30):
+    def start_autonomous_monitoring(self, check_interval=5):
         """
         Aurora's autonomous monitoring daemon - continuously monitors and self-heals
         This gives Aurora independent operation without external supervision
+        Default: 5 second checks for fast response
         """
         print("\n" + "="*70)
         print("🤖 AURORA AUTONOMOUS MONITORING - ACTIVATED")
         print("="*70)
-        print(f"Check interval: {check_interval} seconds")
+        print(f"Check interval: {check_interval} seconds (FAST MODE)")
         print("Aurora will now monitor and self-heal all servers autonomously")
         print("Press Ctrl+C to stop monitoring\n")
         
