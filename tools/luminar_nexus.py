@@ -2,22 +2,39 @@
 """
 Luminar Nexus - Aurora's Server Command Center
 Manages all development servers with proper process control
+NOW MANAGED BY AURORA'S INTELLIGENCE SYSTEM
 """
 
 import subprocess
 import json
 import time
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Optional
+
+# Import Aurora's Intelligence Manager
+sys.path.append(str(Path(__file__).parent.parent))
+try:
+    from aurora_intelligence_manager import AuroraIntelligenceManager
+    AURORA_INTELLIGENCE = AuroraIntelligenceManager()
+    AURORA_IS_BOSS = True
+except ImportError:
+    AURORA_INTELLIGENCE = None
+    AURORA_IS_BOSS = False
 
 class LuminarNexusServerManager:
     """
     Aurora's central server management system
     Uses tmux for persistent, manageable processes
+    NOW SUBORDINATE TO AURORA'S INTELLIGENCE - SHE IS THE BOSS
     """
     
     def __init__(self):
+        # Let Aurora know Luminar Nexus is starting up
+        if AURORA_IS_BOSS:
+            AURORA_INTELLIGENCE.log("🌟 Luminar Nexus initializing under Aurora's command")
+        
         self.servers = {
             "bridge": {
                 "name": "Aurora Bridge Service (Factory NL→Project)",
@@ -105,59 +122,78 @@ class LuminarNexusServerManager:
             except:
                 return set()
     
-    def _find_available_port(self, preferred_port: int, start_range: int = 5000, end_range: int = 6000) -> int:
+    def _find_available_port(self, preferred_port: int, exclude_ports: set, start_range: int = 5000, end_range: int = 6000) -> int:
         """Find an available port, preferring the suggested port"""
         listening_ports = self._get_listening_ports()
+        all_excluded = listening_ports | exclude_ports
         
         # Try preferred port first
-        if preferred_port not in listening_ports:
+        if preferred_port not in all_excluded:
             return preferred_port
         
         # Find next available port in range
         for port in range(start_range, end_range):
-            if port not in listening_ports:
+            if port not in all_excluded:
                 print(f"   ⚠️  Port {preferred_port} in use, assigned {port} instead")
                 return port
         
         raise Exception(f"No available ports in range {start_range}-{end_range}")
     
     def _auto_assign_ports(self):
-        """Intelligently assign ports to all servers, avoiding conflicts"""
+        """
+        Intelligently assign ports to all servers, avoiding conflicts
+        Aurora makes the decisions, Luminar Nexus executes
+        """
+        if AURORA_IS_BOSS:
+            AURORA_INTELLIGENCE.log("🎯 Aurora analyzing port allocation strategy...")
+        
         print("🔍 Analyzing port availability...")
         
         listening_ports = self._get_listening_ports()
         assigned_ports = set()
+        port_decisions = []
         
         for server_key, config in self.servers.items():
-            # Find available port
             preferred = config["preferred_port"]
             
             # Check if preferred port is available (not in use AND not already assigned)
             if preferred in listening_ports or preferred in assigned_ports:
-                # Find next available
-                available_port = self._find_available_port(preferred)
-                # Make sure we don't assign something already assigned this session
-                while available_port in assigned_ports:
-                    available_port += 1
-            else:
-                available_port = preferred
-            
-            # Assign port and generate command/health_check from templates
-            config["port"] = available_port
-            config["command"] = config["command_template"].format(port=available_port)
-            config["health_check"] = config["health_check_template"].format(port=available_port)
-            
-            assigned_ports.add(available_port)
-            
-            if available_port != config["preferred_port"]:
+                # Aurora decides on alternative port
+                new_port = self._find_available_port(preferred, assigned_ports)
+                config["port"] = new_port
+                assigned_ports.add(new_port)
+                
+                decision = f"Port {preferred} conflict - reassigning {server_key} to {new_port}"
+                port_decisions.append(decision)
+                
+                if AURORA_IS_BOSS:
+                    AURORA_INTELLIGENCE.log(f"⚠️ {decision}")
+                
                 self.log_event("PORT_REASSIGNED", server_key, {
-                    "preferred": config["preferred_port"],
-                    "assigned": available_port,
+                    "preferred": preferred,
+                    "assigned": new_port,
                     "reason": "port_conflict"
                 })
+            else:
+                # Preferred port is available
+                config["port"] = preferred
+                assigned_ports.add(preferred)
+                
+                if AURORA_IS_BOSS:
+                    AURORA_INTELLIGENCE.log(f"✅ {server_key} assigned to preferred port {preferred}")
+        
+        # Build health check URLs with assigned ports
+        for config in self.servers.values():
+            config["health_check"] = config["health_check_template"].format(port=config["port"])
+            config["command"] = config["command_template"].format(port=config["port"])
+        
+        if AURORA_IS_BOSS and port_decisions:
+            AURORA_INTELLIGENCE.log(f"📋 Aurora made {len(port_decisions)} port decisions")
         
         print(f"✅ Port assignment complete: {len(assigned_ports)} ports allocated")
-    
+        
+        if AURORA_IS_BOSS:
+            AURORA_INTELLIGENCE.log(f"🎯 Port allocation complete - all {len(self.servers)} servers configured")
     
     def check_tmux_installed(self) -> bool:
         """Check if tmux is available"""
@@ -338,6 +374,68 @@ class LuminarNexusServerManager:
             print()
         
         print("="*70 + "\n")
+    
+    def start_autonomous_monitoring(self, check_interval=30):
+        """
+        Aurora's autonomous monitoring daemon - continuously monitors and self-heals
+        This gives Aurora independent operation without external supervision
+        """
+        print("\n" + "="*70)
+        print("🤖 AURORA AUTONOMOUS MONITORING - ACTIVATED")
+        print("="*70)
+        print(f"Check interval: {check_interval} seconds")
+        print("Aurora will now monitor and self-heal all servers autonomously")
+        print("Press Ctrl+C to stop monitoring\n")
+        
+        cycle_count = 0
+        
+        try:
+            while True:
+                cycle_count += 1
+                timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+                
+                print(f"\n🔍 [{timestamp}] Monitoring Cycle #{cycle_count}")
+                print("-" * 70)
+                
+                failed_servers = []
+                
+                # Check all servers
+                for server_key in self.servers.keys():
+                    status = self.get_status(server_key)
+                    server_name = status['server']
+                    
+                    if status['status'] == 'running':
+                        print(f"  ✅ {server_name}: HEALTHY (port {status['port']})")
+                    else:
+                        print(f"  ❌ {server_name}: FAILED - {status['status']}")
+                        failed_servers.append((server_key, server_name))
+                
+                # Auto-heal failed servers
+                if failed_servers:
+                    print(f"\n🔧 Aurora detected {len(failed_servers)} failed server(s) - initiating self-repair...")
+                    
+                    for server_key, server_name in failed_servers:
+                        print(f"   🔄 Restarting {server_name}...")
+                        self.stop_server(server_key)
+                        time.sleep(2)
+                        self.start_server(server_key)
+                        time.sleep(3)
+                        
+                        # Verify fix
+                        new_status = self.get_status(server_key)
+                        if new_status['status'] == 'running':
+                            print(f"   ✅ {server_name} RESTORED")
+                        else:
+                            print(f"   ⚠️ {server_name} still unstable - will retry next cycle")
+                else:
+                    print(f"  💚 All systems operational")
+                
+                print(f"\n⏱️  Next check in {check_interval} seconds...")
+                time.sleep(check_interval)
+                
+        except KeyboardInterrupt:
+            print("\n\n🛑 Aurora autonomous monitoring stopped by user")
+            print("All servers remain in their current state\n")
 
 def main():
     """Luminar Nexus main entry point"""
@@ -354,7 +452,8 @@ def main():
         print("  python luminar_nexus.py status           - Show all status")
         print("  python luminar_nexus.py start-all        - Start all servers")
         print("  python luminar_nexus.py stop-all         - Stop all servers")
-        print("\nAvailable servers: vite, backend")
+        print("  python luminar_nexus.py monitor          - Start autonomous monitoring daemon")
+        print("\nAvailable servers: vite, backend, bridge, self-learn")
         return
     
     command = sys.argv[1]
@@ -365,6 +464,9 @@ def main():
         nexus.stop_all()
     elif command == "status":
         nexus.show_status()
+    elif command == "monitor":
+        # Aurora's autonomous mode
+        nexus.start_autonomous_monitoring()
     elif command == "start" and len(sys.argv) > 2:
         nexus.start_server(sys.argv[2])
     elif command == "stop" and len(sys.argv) > 2:
