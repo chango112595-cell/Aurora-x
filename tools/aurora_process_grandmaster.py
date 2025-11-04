@@ -491,8 +491,18 @@ if __name__ == "__main__":
     main()
 '''
         
-        # Write Luminar Nexus to file
+        # Write Luminar Nexus to file (only if it doesn't exist or is outdated)
         luminar_file = Path("/workspaces/Aurora-x/tools/luminar_nexus.py")
+        
+        # Check if file exists and is already good
+        if luminar_file.exists():
+            existing_content = luminar_file.read_text()
+            if "adaptive" in existing_content.lower() or len(existing_content) > len(luminar_code):
+                print(f"⚠️  {luminar_file} already exists with production code")
+                print("   Skipping template generation to preserve customizations")
+                print("   (Use the existing file - it's better than this template!)")
+                return
+        
         luminar_file.write_text(luminar_code)
         luminar_file.chmod(0o755)
         
