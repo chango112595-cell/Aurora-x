@@ -95,12 +95,15 @@ export default function ComparisonDashboard() {
     };
 
     const fetchAuroraRuns = async () => {
+        // 🌌 Aurora fix: Endpoint doesn't exist - disabled to prevent 500 errors
+        // TODO: Create /api/bridge/comparison/aurora-runs endpoint or remove this feature
         try {
-            const response = await fetch('/api/bridge/comparison/aurora-runs');
-            const data = await response.json();
-            if (data.ok) {
-                setAuroraRuns(data.runs);
-            }
+            // const response = await fetch('/api/bridge/comparison/aurora-runs');
+            // const data = await response.json();
+            // if (data.ok) {
+            //     setAuroraRuns(data.runs);
+            // }
+            setAuroraRuns([]); // Aurora: Set empty for now
         } catch (error) {
             console.error('Failed to fetch Aurora runs:', error);
         }
