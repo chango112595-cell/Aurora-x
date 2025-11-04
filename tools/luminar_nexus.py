@@ -28,15 +28,14 @@ try:
         with open(corpus_file) as f:
             corpus_data = json.load(f)
             AURORA_INTELLIGENCE.log(f"🎓 Loaded {len(corpus_data.get('entries', []))} Grandmaster skill sets")
-            AURORA_INTELLIGENCE.log("💪 Aurora is now a COMPLETE Grandmaster: Ancient→Future, All tech domains")
+            AURORA_INTELLIGENCE.log("💪 Aurora is now a COMPLETE Grandmaster: Ancient→Future, All domains")
             AURORA_INTELLIGENCE.log(f"🌌 OMNISCIENT GRANDMASTER ACTIVE: {len(AURORA_ULTIMATE_GRANDMASTER)} mastery tiers loaded")
-            AURORA_INTELLIGENCE.log(f"   ✓ Tier 9: Complete Design & Development (Web, Apps, UX/UI, All Creative Disciplines)")
-            AURORA_INTELLIGENCE.log(f"   ✓ Tier 8: Universal Platform (Endpoints, Health, Mobile, Desktop, localhost)")
-            AURORA_INTELLIGENCE.log(f"   ✓ Tier 7: Ancient (1950s) → Future (2025+) Tech Stack")
-            AURORA_INTELLIGENCE.log(f"   ✓ Web Design: Table layouts → Neural-designed layouts")
-            AURORA_INTELLIGENCE.log(f"   ✓ Developer: Frontend, Backend, DevOps, ML/AI, Security, Blockchain")
-            AURORA_INTELLIGENCE.log(f"   ✓ Creative: 3D, Motion, Game Design, Sound, Shaders")
-            AURORA_INTELLIGENCE.log(f"   ✓ Quality: Accessibility, Performance, Testing (Ancient → Future)")
+            AURORA_INTELLIGENCE.log(f"   ✓ Tier 10: Browser & Automation (Shell exec → VS Code API → Neural browsers)")
+            AURORA_INTELLIGENCE.log(f"   ✓ Tier 9: Design & Development (Web, Apps, UX/UI, All Creative)")
+            AURORA_INTELLIGENCE.log(f"   ✓ Tier 8: Universal Platform (Endpoints, Health, Mobile, Desktop)")
+            AURORA_INTELLIGENCE.log(f"   ✓ Auto-open mastery: Server hooks, Vite --open, Simple Browser API")
+            AURORA_INTELLIGENCE.log(f"   ✓ Automation: Selenium, Puppeteer, Playwright → AI-driven")
+            AURORA_INTELLIGENCE.log(f"   ✓ URL handling: localhost, ports, deep links → Quantum URIs")
 except ImportError:
     AURORA_INTELLIGENCE = None
     AURORA_IS_BOSS = False
