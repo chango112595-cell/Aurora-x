@@ -4,7 +4,6 @@ Aurora Self-Fix: Chat Loading State Issue
 Aurora analyzing and fixing the "generating" hang
 """
 
-import re
 
 print("🔧 Aurora Self-Fix: Frontend Loading State")
 print("=" * 60)
@@ -34,7 +33,7 @@ print("   • Add response validation")
 print("\n✨ Implementing fix...")
 
 # Read the current file
-with open('/workspaces/Aurora-x/client/src/components/AuroraChatInterface.tsx', 'r') as f:
+with open("/workspaces/Aurora-x/client/src/components/AuroraChatInterface.tsx") as f:
     content = f.read()
 
 # Find and replace the sendMessage function with improved error handling
@@ -166,7 +165,7 @@ new_send = """  const sendMessage = async () => {
 new_content = content.replace(old_send, new_send)
 
 if new_content != content:
-    with open('/workspaces/Aurora-x/client/src/components/AuroraChatInterface.tsx', 'w') as f:
+    with open("/workspaces/Aurora-x/client/src/components/AuroraChatInterface.tsx", "w") as f:
         f.write(new_content)
     print("   ✅ Applied fix to AuroraChatInterface.tsx")
     print("\n📋 CHANGES MADE:")
