@@ -12,8 +12,11 @@ interface Message {
   content: string;
   timestamp: Date;
 }
+interface AuroraChatProps {
+  compact?: boolean;
+}
 
-export default function AuroraChatInterface() {
+export default function AuroraChatInterface({ compact = false }: AuroraChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [connected, setConnected] = useState(false);
@@ -22,17 +25,21 @@ export default function AuroraChatInterface() {
 
   useEffect(() => {
     // Aurora welcome message with conversational style
-    setMessages([{
-      id: '0',
-      role: 'aurora',
-      content: "Hey! 👋 Aurora here with all 27 mastery tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?",
-      timestamp: new Date()
-    }]);
+    setMessages([
+      {
+        id: '0',
+        role: 'aurora',
+        content: compact
+          ? "Hey — I'm Aurora. Chat with me quickly from the sidebar. Ask anything!"
+          : "Hey! 👋 Aurora here with all 27 mastery tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?",
+        timestamp: new Date(),
+      },
+    ]);
     setConnected(true);
 
     // Auto-scroll
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, []);
+  }, [compact]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -95,38 +102,40 @@ export default function AuroraChatInterface() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-background via-background to-primary/5">
-      {/* Aurora's Quantum Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-cyan-950/20 to-purple-950/20" />
+    <div className={compact ? "h-full flex flex-col" : "h-full flex flex-col bg-gradient-to-br from-background via-background to-primary/5"}>
+      {/* Aurora's Quantum Background - hidden in compact mode */}
+      {!compact && (
+        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-cyan-950/20 to-purple-950/20" />
 
-        {/* Particle field */}
-        <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 1px, transparent 1px)',
-          backgroundSize: '50px 50px',
-          animation: 'particleFloat 20s linear infinite'
-        }} />
+          {/* Particle field */}
+          <div className="absolute inset-0 opacity-20" style={{
+            backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 1px, transparent 1px)',
+            backgroundSize: '50px 50px',
+            animation: 'particleFloat 20s linear infinite'
+          }} />
 
-        {/* Holographic orbs */}
-        <div className="absolute top-20 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
+          {/* Holographic orbs */}
+          <div className="absolute top-20 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+        </div>
+      )}
 
-      <Card className="m-6 flex-1 flex flex-col border-cyan-500/20">
+      <Card className={compact ? "m-3 flex-none h-64 border-cyan-500/20" : "m-6 flex-1 flex flex-col border-cyan-500/20"}>
         <CardHeader className="border-b border-cyan-500/20">
           <CardTitle className="flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-cyan-400" />
             Chat with Aurora
             <Badge variant={connected ? "default" : "secondary"} className="ml-auto bg-cyan-500/20 text-cyan-300">
-              {connected ? '🌌 27 Tiers Active' : '○ Offline'}
+              {connected ? (compact ? '🌌 Sidebar' : '🌌 27 Tiers Active') : '○ Offline'}
             </Badge>
           </CardTitle>
           <p className="text-sm text-muted-foreground mt-2">
-            Conversational AI with complete mastery across all domains - just like Copilot!
+            {compact ? 'Compact sidebar chat — quick context and replies.' : 'Conversational AI with complete mastery across all domains - just like Copilot!'}
           </p>
         </CardHeader>
 
-        <CardContent className="flex-1 flex flex-col p-6">
+        <CardContent className={`${compact ? 'flex-none h-[calc(100%-80px)] p-3' : 'flex-1 flex flex-col p-6'}`}>
           <ScrollArea className="flex-1 pr-4 mb-4">
             <div className="space-y-4">
               {messages.map((msg) => (
@@ -136,10 +145,10 @@ export default function AuroraChatInterface() {
                 >
                   <div
                     className={`max-w-[85%] rounded-lg px-4 py-3 ${msg.role === 'user'
-                        ? 'bg-cyan-500/20 text-cyan-100 border border-cyan-500/30'
-                        : msg.role === 'aurora'
-                          ? 'bg-purple-500/20 text-purple-100 border border-purple-500/30'
-                          : 'bg-muted/50 text-muted-foreground border border-muted'
+                      ? 'bg-cyan-500/20 text-cyan-100 border border-cyan-500/30'
+                      : msg.role === 'aurora'
+                        ? 'bg-purple-500/20 text-purple-100 border border-purple-500/30'
+                        : 'bg-muted/50 text-muted-foreground border border-muted'
                       }`}
                   >
                     <div className="flex items-start gap-2">
@@ -177,13 +186,13 @@ export default function AuroraChatInterface() {
             </div>
           </ScrollArea>
 
-          <div className="space-y-3">
+          <div className={`${compact ? 'space-y-2' : 'space-y-3'}`}>
             <div className="flex gap-2">
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Chat naturally with Aurora - ask anything! 💬"
+                placeholder={compact ? "Quick ask Aurora..." : "Chat naturally with Aurora - ask anything! 💬"}
                 disabled={!connected || isLoading}
                 className="flex-1"
               />
@@ -195,20 +204,21 @@ export default function AuroraChatInterface() {
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Thinking
+                    {compact ? '...' : 'Thinking'}
                   </>
                 ) : (
                   <>
                     <Send className="h-4 w-4" />
-                    Send
+                    {compact ? 'Send' : 'Send'}
                   </>
                 )}
               </Button>
             </div>
-
-            <div className="text-xs text-muted-foreground text-center">
-              💡 I understand context and have real conversations - try asking me anything!
-            </div>
+            {!compact && (
+              <div className="text-xs text-muted-foreground text-center">
+                💡 I understand context and have real conversations - try asking me anything!
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
