@@ -36,12 +36,15 @@ def health_check():
 def root():
     return {
         "service": "Aurora-X Factory Bridge",
-        "endpoints": [
-            "/api/bridge/nl - Generate project from natural language",
-            "/api/bridge/spec - Generate project from spec file",
-            "/api/bridge/deploy - Deploy to Replit",
-            "/healthz - Health check",
-        ],
+        "version": "1.0.0",
+        "port": 5001,
+        "status": "running",
+        "endpoints": {
+            "nl": "/api/bridge/nl - Generate project from natural language",
+            "spec": "/api/bridge/spec - Generate project from spec file", 
+            "deploy": "/api/bridge/deploy - Deploy to Replit",
+            "health": "/healthz - Health check"
+        }
     }
 
 
