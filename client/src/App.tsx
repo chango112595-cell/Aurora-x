@@ -20,6 +20,9 @@ import Corpus from "@/pages/corpus";
 import Settings from "@/pages/settings";
 import SelfLearning from "@/pages/self-learning";
 import ComparisonDashboard from "@/pages/ComparisonDashboard";
+import LuminarNexus from "@/pages/luminar-nexus";
+import ServerControl from "@/pages/server-control";
+import ChatPage from "@/pages/chat";
 
 function Router() {
   return (
@@ -27,10 +30,15 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/comparison" component={ComparisonDashboard} />
+      <Route path="/luminar" component={LuminarNexus} />
+      <Route path="/luminar-nexus" component={LuminarNexus} />
+      <Route path="/servers" component={ServerControl} />
+      <Route path="/server-control" component={ServerControl} />
       <Route path="/library" component={Library} />
       <Route path="/corpus" component={Corpus} />
       <Route path="/self-learning" component={SelfLearning} />
       <Route path="/settings" component={Settings} />
+      <Route path="/chat" component={ChatPage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -48,7 +56,19 @@ function App() {
   };
 
   useEffect(() => {
-    // Register service worker
+    // Service worker disabled - was caching old UI and blocking updates
+    // Unregister existing service worker if present
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+          console.log('🌟 Aurora: Unregistered service worker to allow updates');
+        }
+      });
+    }
+
+    // Original service worker code commented out - it was blocking UI updates
+    /*
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker
@@ -90,6 +110,7 @@ function App() {
           });
       });
     }
+    */
 
     // Handle PWA install prompt
     const handleBeforeInstallPrompt = (e: Event) => {

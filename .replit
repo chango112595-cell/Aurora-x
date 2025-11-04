@@ -82,27 +82,32 @@ externalPort = 6800
 
 [env]
 PORT = "5000"
+AURORA_PORT = "5000"
 
 [workflows]
 runButton = "Start Aurora Web Server"
 
 [[workflows.workflow]]
-name = "Aurora Self-Learning"
-author = 47570941
+name = "Start Aurora Web Server"
+author = 49309805
 mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 -m aurora_x.self_learn --sleep 15 --max-iters 50 --beam 20"
+args = "python3 tools/luminar_nexus.py start backend"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 tools/luminar_nexus.py start vite"
 
 [[workflows.workflow]]
-name = "Start Aurora Web Server"
-author = 47570941
+name = "Start All Aurora Services"
+author = 49309805
 mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev"
+args = "python3 tools/luminar_nexus.py start-all"
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
