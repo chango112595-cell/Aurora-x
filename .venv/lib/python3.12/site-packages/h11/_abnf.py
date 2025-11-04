@@ -62,11 +62,7 @@ field_value = r"({field_content})?".format(**globals())
 
 #  header-field   = field-name ":" OWS field-value OWS
 header_field = (
-    r"(?P<field_name>{field_name})"
-    r":"
-    r"{OWS}"
-    r"(?P<field_value>{field_value})"
-    r"{OWS}".format(**globals())
+    r"(?P<field_name>{field_name})" r":" r"{OWS}" r"(?P<field_value>{field_value})" r"{OWS}".format(**globals())
 )
 
 # https://svn.tools.ietf.org/svn/wg/httpbis/specs/rfc7230.html#request.line
@@ -82,13 +78,7 @@ header_field = (
 method = token
 request_target = r"{vchar}+".format(**globals())
 http_version = r"HTTP/(?P<http_version>[0-9]\.[0-9])"
-request_line = (
-    r"(?P<method>{method})"
-    r" "
-    r"(?P<target>{request_target})"
-    r" "
-    r"{http_version}".format(**globals())
-)
+request_line = r"(?P<method>{method})" r" " r"(?P<target>{request_target})" r" " r"{http_version}".format(**globals())
 
 # https://svn.tools.ietf.org/svn/wg/httpbis/specs/rfc7230.html#status.line
 #
@@ -125,8 +115,6 @@ chunk_ext = r";.*"
 chunk_header = (
     r"(?P<chunk_size>{chunk_size})"
     r"(?P<chunk_ext>{chunk_ext})?"
-    r"{OWS}\r\n".format(
-        **globals()
-    )  # Even though the specification does not allow for extra whitespaces,
+    r"{OWS}\r\n".format(**globals())  # Even though the specification does not allow for extra whitespaces,
     # we are lenient with trailing whitespaces because some servers on the wild use it.
 )

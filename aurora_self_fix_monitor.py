@@ -47,7 +47,7 @@ with open(log_file, "a") as f:
         "task": "Port Configuration Consolidation",
         "status": "ASSIGNED",
         "description": "Move Vite to 5001, consolidate services, clean architecture",
-        "expected_outcome": "Clean entry point with UI on 5001, API on 5000"
+        "expected_outcome": "Clean entry point with UI on 5001, API on 5000",
     }
     f.write(json.dumps(entry) + "\n")
 

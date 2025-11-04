@@ -5,11 +5,11 @@ FastAPI Command Control Router
 - Supports both sync and async operations
 """
 
-from fastapi import APIRouter, WebSocket
-from pydantic import BaseModel
-import json
 import sys
 from pathlib import Path
+
+from fastapi import APIRouter, WebSocket
+from pydantic import BaseModel
 
 # Import our unified command manager
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -21,6 +21,7 @@ manager = AuroraCommandManager()
 
 class CommandRequest(BaseModel):
     """Request model for commands"""
+
     command: str
     args: list = []
 
@@ -85,6 +86,7 @@ async def websocket_status(websocket: WebSocket):
         while True:
             # Send health status every 2 seconds
             import asyncio
+
             await asyncio.sleep(2)
             health = manager.check_system_health()
             await websocket.send_json(health)

@@ -54,9 +54,7 @@ class MemoryObjectStreamState(Generic[T_Item]):
     waiting_receivers: OrderedDict[Event, MemoryObjectItemReceiver[T_Item]] = field(
         init=False, default_factory=OrderedDict
     )
-    waiting_senders: OrderedDict[Event, T_Item] = field(
-        init=False, default_factory=OrderedDict
-    )
+    waiting_senders: OrderedDict[Event, T_Item] = field(init=False, default_factory=OrderedDict)
 
     def statistics(self) -> MemoryObjectStreamStatistics:
         return MemoryObjectStreamStatistics(

@@ -117,9 +117,7 @@ RunVar = trio.lowlevel.RunVar
 
 
 class CancelScope(BaseCancelScope):
-    def __new__(
-        cls, original: trio.CancelScope | None = None, **kwargs: object
-    ) -> CancelScope:
+    def __new__(cls, original: trio.CancelScope | None = None, **kwargs: object) -> CancelScope:
         return object.__new__(cls)
 
     def __init__(self, original: trio.CancelScope | None = None, **kwargs: Any) -> None:
@@ -207,19 +205,13 @@ class TaskGroup(abc.TaskGroup):
         name: object = None,
     ) -> None:
         if not self._active:
-            raise RuntimeError(
-                "This task group is not active; no new tasks can be started."
-            )
+            raise RuntimeError("This task group is not active; no new tasks can be started.")
 
         self._nursery.start_soon(func, *args, name=name)
 
-    async def start(
-        self, func: Callable[..., Awaitable[Any]], *args: object, name: object = None
-    ) -> Any:
+    async def start(self, func: Callable[..., Awaitable[Any]], *args: object, name: object = None) -> Any:
         if not self._active:
-            raise RuntimeError(
-                "This task group is not active; no new tasks can be started."
-            )
+            raise RuntimeError("This task group is not active; no new tasks can be started.")
 
         return await self._nursery.start(func, *args, name=name)
 
@@ -360,9 +352,7 @@ class _ProcessPoolShutdownInstrument(trio.abc.Instrument):
         super().after_run()
 
 
-current_default_worker_process_limiter: trio.lowlevel.RunVar = RunVar(
-    "current_default_worker_process_limiter"
-)
+current_default_worker_process_limiter: trio.lowlevel.RunVar = RunVar("current_default_worker_process_limiter")
 
 
 async def _shutdown_process_pool(workers: set[abc.Process]) -> None:
@@ -610,9 +600,7 @@ class UNIXDatagramSocket(_TrioSocketMixin[str], abc.UNIXDatagramSocket):
                 self._convert_socket_error(exc)
 
 
-class ConnectedUNIXDatagramSocket(
-    _TrioSocketMixin[str], abc.ConnectedUNIXDatagramSocket
-):
+class ConnectedUNIXDatagramSocket(_TrioSocketMixin[str], abc.ConnectedUNIXDatagramSocket):
     def __init__(self, trio_socket: TrioSocketType) -> None:
         super().__init__(trio_socket)
         self._receive_guard = ResourceGuard("reading from")
@@ -710,9 +698,7 @@ class Lock(BaseLock):
     def statistics(self) -> LockStatistics:
         orig_statistics = self.__original.statistics()
         owner = TrioTaskInfo(orig_statistics.owner) if orig_statistics.owner else None
-        return LockStatistics(
-            orig_statistics.locked, owner, orig_statistics.tasks_waiting
-        )
+        return LockStatistics(orig_statistics.locked, owner, orig_statistics.tasks_waiting)
 
 
 class Semaphore(BaseSemaphore):
@@ -966,9 +952,7 @@ class TestRunner(abc.TestRunner):
     ) -> T_Retval:
         return self._call_in_runner_task(fixture_func, **kwargs)
 
-    def run_test(
-        self, test_func: Callable[..., Coroutine[Any, Any, Any]], kwargs: dict[str, Any]
-    ) -> None:
+    def run_test(self, test_func: Callable[..., Coroutine[Any, Any, Any]], kwargs: dict[str, Any]) -> None:
         self._call_in_runner_task(test_func, **kwargs)
 
 
@@ -1030,9 +1014,7 @@ class TrioBackend(AsyncBackend):
         await trio.sleep(delay)
 
     @classmethod
-    def create_cancel_scope(
-        cls, *, deadline: float = math.inf, shield: bool = False
-    ) -> abc.CancelScope:
+    def create_cancel_scope(cls, *, deadline: float = math.inf, shield: bool = False) -> abc.CancelScope:
         return CancelScope(deadline=deadline, shield=shield)
 
     @classmethod
@@ -1164,9 +1146,7 @@ class TrioBackend(AsyncBackend):
         trio.lowlevel.spawn_system_task(_shutdown_process_pool, workers)
 
     @classmethod
-    async def connect_tcp(
-        cls, host: str, port: int, local_address: IPSockAddrType | None = None
-    ) -> SocketStream:
+    async def connect_tcp(cls, host: str, port: int, local_address: IPSockAddrType | None = None) -> SocketStream:
         family = socket.AF_INET6 if ":" in host else socket.AF_INET
         trio_socket = trio.socket.socket(family)
         trio_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
@@ -1268,9 +1248,7 @@ class TrioBackend(AsyncBackend):
         return await trio.socket.getaddrinfo(host, port, family, type, proto, flags)
 
     @classmethod
-    async def getnameinfo(
-        cls, sockaddr: IPSockAddrType, flags: int = 0
-    ) -> tuple[str, str]:
+    async def getnameinfo(cls, sockaddr: IPSockAddrType, flags: int = 0) -> tuple[str, str]:
         return await trio.socket.getnameinfo(sockaddr, flags)
 
     @classmethod
@@ -1325,9 +1303,7 @@ class TrioBackend(AsyncBackend):
         return UNIXDatagramSocket(trio_sock)
 
     @classmethod
-    async def wrap_connected_unix_datagram_socket(
-        cls, sock: socket.socket
-    ) -> ConnectedUNIXDatagramSocket:
+    async def wrap_connected_unix_datagram_socket(cls, sock: socket.socket) -> ConnectedUNIXDatagramSocket:
         trio_sock = trio.socket.from_stdlib_socket(sock)
         return ConnectedUNIXDatagramSocket(trio_sock)
 
@@ -1336,16 +1312,12 @@ class TrioBackend(AsyncBackend):
         try:
             return _capacity_limiter_wrapper.get()
         except LookupError:
-            limiter = CapacityLimiter(
-                original=trio.to_thread.current_default_thread_limiter()
-            )
+            limiter = CapacityLimiter(original=trio.to_thread.current_default_thread_limiter())
             _capacity_limiter_wrapper.set(limiter)
             return limiter
 
     @classmethod
-    def open_signal_receiver(
-        cls, *signals: Signals
-    ) -> AbstractContextManager[AsyncIterator[Signals]]:
+    def open_signal_receiver(cls, *signals: Signals) -> AbstractContextManager[AsyncIterator[Signals]]:
         return _SignalReceiver(signals)
 
     @classmethod

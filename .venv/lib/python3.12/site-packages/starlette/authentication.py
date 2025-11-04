@@ -3,8 +3,8 @@ from __future__ import annotations
 import functools
 import inspect
 import sys
-from collections.abc import Sequence
-from typing import Any, Callable
+from collections.abc import Callable, Sequence
+from typing import Any
 from urllib.parse import urlencode
 
 if sys.version_info >= (3, 10):  # pragma: no cover

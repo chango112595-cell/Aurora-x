@@ -7,6 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+
 def main():
     """Start all Aurora services"""
     workspace = Path("/workspaces/Aurora-x")
@@ -14,12 +15,14 @@ def main():
 
     # Change to workspace directory
     import os
+
     os.chdir(workspace)
 
     # Run Luminar Nexus start-all
     result = subprocess.run(luminar_cmd)
 
     return result.returncode
+
 
 if __name__ == "__main__":
     sys.exit(main())

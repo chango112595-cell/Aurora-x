@@ -6,50 +6,53 @@ NOW MANAGED BY AURORA'S COMPLETE GRANDMASTER INTELLIGENCE
 Aurora is a Grandmaster in ALL tech: Ancient to Future, Ethical to Unethical
 """
 
-import subprocess
 import json
-import time
+import subprocess
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional
 
 # Import Aurora's COMPLETE Intelligence System with ALL Grandmaster skills
 sys.path.append(str(Path(__file__).parent.parent))
 try:
     from aurora_intelligence_manager import AuroraIntelligenceManager
     from aurora_ultimate_omniscient_grandmaster import AURORA_ULTIMATE_GRANDMASTER
+
     AURORA_INTELLIGENCE = AuroraIntelligenceManager()
     AURORA_IS_BOSS = True
-    
+
     # Load Aurora's Grandmaster skills from consolidated corpus
-    corpus_file = Path('/workspaces/Aurora-x/.aurora_knowledge/consolidated_learning_corpus.json')
+    corpus_file = Path("/workspaces/Aurora-x/.aurora_knowledge/consolidated_learning_corpus.json")
     if corpus_file.exists():
         with open(corpus_file) as f:
             corpus_data = json.load(f)
             AURORA_INTELLIGENCE.log(f"🎓 Loaded {len(corpus_data.get('entries', []))} Grandmaster skill sets")
             AURORA_INTELLIGENCE.log("💪 Aurora is now a COMPLETE UNIVERSAL OMNISCIENT GRANDMASTER")
-            AURORA_INTELLIGENCE.log(f"🌌 OMNISCIENT GRANDMASTER ACTIVE: {len(AURORA_ULTIMATE_GRANDMASTER)} mastery tiers loaded")
-            AURORA_INTELLIGENCE.log(f"   🚀 Tier 10: Browser & Automation (Shell exec → Neural browsers)")
-            AURORA_INTELLIGENCE.log(f"   🔐 Tier 11: Security & Cryptography (Caesar → Quantum encryption)")
-            AURORA_INTELLIGENCE.log(f"   🌍 Tier 12: Networking & Protocols (OSI → Quantum networks)")
-            AURORA_INTELLIGENCE.log(f"   💾 Tier 13: Data & Storage (Files → Quantum databases)")
-            AURORA_INTELLIGENCE.log(f"   ☁️ Tier 14: Cloud & Infrastructure (Bare metal → Quantum cloud)")
-            AURORA_INTELLIGENCE.log(f"   🧠 Tier 15: AI/ML & LLMs (Statistics → AGI consciousness)")
-            AURORA_INTELLIGENCE.log(f"   📊 Tier 16: Analytics & Monitoring (Syslog → Neural observability)")
-            AURORA_INTELLIGENCE.log(f"   🎮 Tier 17: Gaming & XR (Doom → Neural immersion)")
-            AURORA_INTELLIGENCE.log(f"   📡 Tier 18: IoT & Embedded (8051 → Neural chips)")
-            AURORA_INTELLIGENCE.log(f"   ⚡ Tier 19: Real-time & Streaming (Polling → Quantum streams)")
-            AURORA_INTELLIGENCE.log(f"   🔄 Tier 20: Version Control & CI/CD (CVS → Neural deployment)")
-            AURORA_INTELLIGENCE.log(f"   📝 Tier 21: Documentation & Content (ASCII → Neural knowledge)")
-            AURORA_INTELLIGENCE.log(f"   📋 Tier 22: Product & Project Mgmt (Gantt → Neural planning)")
-            AURORA_INTELLIGENCE.log(f"   💰 Tier 23: Business & Monetization (Barter → Neural economics)")
-            AURORA_INTELLIGENCE.log(f"   🌐 Tier 24: Internationalization (ASCII → Quantum multilingual)")
-            AURORA_INTELLIGENCE.log(f"   ⚖️ Tier 25: Legal & Compliance (Laws → Neural ethics)")
-            AURORA_INTELLIGENCE.log(f"   ✅ COMPLETE: Every domain Ancient→Classical→Modern→AI-Native→Future")
+            AURORA_INTELLIGENCE.log(
+                f"🌌 OMNISCIENT GRANDMASTER ACTIVE: {len(AURORA_ULTIMATE_GRANDMASTER)} mastery tiers loaded"
+            )
+            AURORA_INTELLIGENCE.log("   🚀 Tier 10: Browser & Automation (Shell exec → Neural browsers)")
+            AURORA_INTELLIGENCE.log("   🔐 Tier 11: Security & Cryptography (Caesar → Quantum encryption)")
+            AURORA_INTELLIGENCE.log("   🌍 Tier 12: Networking & Protocols (OSI → Quantum networks)")
+            AURORA_INTELLIGENCE.log("   💾 Tier 13: Data & Storage (Files → Quantum databases)")
+            AURORA_INTELLIGENCE.log("   ☁️ Tier 14: Cloud & Infrastructure (Bare metal → Quantum cloud)")
+            AURORA_INTELLIGENCE.log("   🧠 Tier 15: AI/ML & LLMs (Statistics → AGI consciousness)")
+            AURORA_INTELLIGENCE.log("   📊 Tier 16: Analytics & Monitoring (Syslog → Neural observability)")
+            AURORA_INTELLIGENCE.log("   🎮 Tier 17: Gaming & XR (Doom → Neural immersion)")
+            AURORA_INTELLIGENCE.log("   📡 Tier 18: IoT & Embedded (8051 → Neural chips)")
+            AURORA_INTELLIGENCE.log("   ⚡ Tier 19: Real-time & Streaming (Polling → Quantum streams)")
+            AURORA_INTELLIGENCE.log("   🔄 Tier 20: Version Control & CI/CD (CVS → Neural deployment)")
+            AURORA_INTELLIGENCE.log("   📝 Tier 21: Documentation & Content (ASCII → Neural knowledge)")
+            AURORA_INTELLIGENCE.log("   📋 Tier 22: Product & Project Mgmt (Gantt → Neural planning)")
+            AURORA_INTELLIGENCE.log("   💰 Tier 23: Business & Monetization (Barter → Neural economics)")
+            AURORA_INTELLIGENCE.log("   🌐 Tier 24: Internationalization (ASCII → Quantum multilingual)")
+            AURORA_INTELLIGENCE.log("   ⚖️ Tier 25: Legal & Compliance (Laws → Neural ethics)")
+            AURORA_INTELLIGENCE.log("   ✅ COMPLETE: Every domain Ancient→Classical→Modern→AI-Native→Future")
 except ImportError:
     AURORA_INTELLIGENCE = None
     AURORA_IS_BOSS = False
+
 
 class LuminarNexusServerManager:
     """
@@ -57,12 +60,12 @@ class LuminarNexusServerManager:
     Uses tmux for persistent, manageable processes
     NOW SUBORDINATE TO AURORA'S INTELLIGENCE - SHE IS THE BOSS
     """
-    
+
     def __init__(self):
         # Let Aurora know Luminar Nexus is starting up
         if AURORA_IS_BOSS:
             AURORA_INTELLIGENCE.log("🌟 Luminar Nexus initializing under Aurora's command")
-        
+
         self.servers = {
             "bridge": {
                 "name": "Aurora Bridge Service (Factory NL→Project)",
@@ -70,7 +73,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-bridge",
                 "preferred_port": 5001,
                 "port": None,  # Will be assigned dynamically
-                "health_check_template": "http://localhost:{port}/healthz"
+                "health_check_template": "http://localhost:{port}/healthz",
             },
             "backend": {
                 "name": "Aurora Backend API (Main Server)",
@@ -78,7 +81,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-backend",
                 "preferred_port": 5000,
                 "port": None,
-                "health_check_template": "http://localhost:{port}/healthz"
+                "health_check_template": "http://localhost:{port}/healthz",
             },
             "vite": {
                 "name": "Aurora Vite Dev Server (Frontend)",
@@ -86,7 +89,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-vite",
                 "preferred_port": 5173,
                 "port": None,
-                "health_check_template": "http://localhost:{port}"
+                "health_check_template": "http://localhost:{port}",
             },
             "self-learn": {
                 "name": "Aurora Self-Learning Server (Continuous Learning)",
@@ -94,16 +97,16 @@ class LuminarNexusServerManager:
                 "session": "aurora-self-learn",
                 "preferred_port": 5002,
                 "port": None,
-                "health_check_template": "http://localhost:{port}/healthz"
-            }
+                "health_check_template": "http://localhost:{port}/healthz",
+            },
         }
-        
+
         self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/luminar_nexus.jsonl")
         self.log_file.parent.mkdir(exist_ok=True)
-        
+
         # Always assign ports intelligently - Aurora validates what's actually hers
         self._auto_assign_ports()
-    
+
     def log_event(self, event_type, server, details):
         """Log Luminar Nexus events"""
         entry = {
@@ -111,80 +114,78 @@ class LuminarNexusServerManager:
             "event": event_type,
             "server": server,
             "details": details,
-            "system": "LUMINAR_NEXUS"
+            "system": "LUMINAR_NEXUS",
         }
-        
+
         with open(self.log_file, "a") as f:
             f.write(json.dumps(entry) + "\n")
-        
+
         print(f"🌟 Luminar Nexus: {event_type} - {server}")
-    
-    def _get_listening_ports(self) -> Dict[int, Dict]:
+
+    def _get_listening_ports(self) -> dict[int, dict]:
         """
         Get all ports currently in use WITH process info
         Aurora's GRANDMASTER port scanning - identifies WHO owns each port
         """
         if AURORA_IS_BOSS:
             AURORA_INTELLIGENCE.log("🔍 Aurora Grandmaster: Comprehensive port scan with process identification")
-        
+
         port_info = {}
-        
+
         # Use lsof for detailed process information
         try:
-            result = subprocess.run(['lsof', '-i', '-P', '-n'], capture_output=True, text=True, timeout=2)
-            for line in result.stdout.split('\n'):
-                if 'LISTEN' in line:
+            result = subprocess.run(["lsof", "-i", "-P", "-n"], capture_output=True, text=True, timeout=2)
+            for line in result.stdout.split("\n"):
+                if "LISTEN" in line:
                     try:
                         parts = line.split()
                         process_name = parts[0]
                         pid = parts[1]
                         port_part = parts[-2] if len(parts) > 8 else parts[-1]
-                        port = int(port_part.split(':')[-1])
-                        
+                        port = int(port_part.split(":")[-1])
+
                         # Check if this is Aurora's tmux session
                         is_aurora = False
                         try:
                             # Check if PID belongs to Aurora's tmux sessions
-                            tmux_check = subprocess.run(['tmux', 'list-sessions'], 
-                                                       capture_output=True, text=True, timeout=1)
-                            is_aurora = 'aurora-' in tmux_check.stdout
+                            tmux_check = subprocess.run(
+                                ["tmux", "list-sessions"], capture_output=True, text=True, timeout=1
+                            )
+                            is_aurora = "aurora-" in tmux_check.stdout
                         except:
                             pass
-                        
-                        port_info[port] = {
-                            "process": process_name,
-                            "pid": pid,
-                            "is_aurora": is_aurora,
-                            "port": port
-                        }
+
+                        port_info[port] = {"process": process_name, "pid": pid, "is_aurora": is_aurora, "port": port}
                     except:
                         continue
         except:
             pass
-        
+
         if AURORA_IS_BOSS:
-            aurora_ports = sum(1 for p in port_info.values() if p.get('is_aurora'))
+            aurora_ports = sum(1 for p in port_info.values() if p.get("is_aurora"))
             AURORA_INTELLIGENCE.log(f"🎯 Port scan complete: {len(port_info)} ports ({aurora_ports} Aurora's)")
-        
+
         return port_info
-    
-    def _find_available_port(self, preferred_port: int, exclude_ports: set, start_range: int = 5000, end_range: int = 6000) -> int:
+
+    def _find_available_port(
+        self, preferred_port: int, exclude_ports: set, start_range: int = 5000, end_range: int = 6000
+    ) -> int:
         """Find an available port, preferring the suggested port"""
         listening_ports = self._get_listening_ports()
         all_excluded = listening_ports | exclude_ports
-        
+
         # Try preferred port first
         if preferred_port not in all_excluded:
             return preferred_port
-        
+
         # Find next available port in range
         for port in range(start_range, end_range):
             if port not in all_excluded:
                 print(f"   ⚠️  Port {preferred_port} in use, assigned {port} instead")
                 return port
-        
+
         raise Exception(f"No available ports in range {start_range}-{end_range}")
-    
+
     def _auto_assign_ports(self):
         """
         Intelligently assign ports to all servers, avoiding conflicts
@@ -194,151 +195,157 @@ class LuminarNexusServerManager:
             AURORA_INTELLIGENCE.log("🎯 Aurora analyzing port allocation with OMNISCIENT GRANDMASTER knowledge...")
             AURORA_INTELLIGENCE.log("   🔍 Applying Ancient Unix process management principles")
             AURORA_INTELLIGENCE.log("   🔍 Using Modern cloud-native port detection")
-        
+
         print("🔍 Analyzing port availability...")
-        
+
         listening_ports = self._get_listening_ports()
         assigned_ports = set()
         port_decisions = []
-        
+
         for server_key, config in self.servers.items():
             preferred = config["preferred_port"]
-            
+
             # Aurora's OMNISCIENT port analysis - check if port is ours or external
             port_info = listening_ports.get(preferred, {})
-            is_aurora_server = port_info.get('is_aurora', False)
-            process_name = port_info.get('process', 'unknown')
-            
+            is_aurora_server = port_info.get("is_aurora", False)
+            process_name = port_info.get("process", "unknown")
+
             if AURORA_IS_BOSS and preferred in listening_ports:
-                AURORA_INTELLIGENCE.log(f"🔎 Port {preferred} analysis: process={process_name}, is_aurora={is_aurora_server}")
-            
+                AURORA_INTELLIGENCE.log(
+                    f"🔎 Port {preferred} analysis: process={process_name}, is_aurora={is_aurora_server}"
+                )
+
             # Check if preferred port needs reassignment
             if preferred in listening_ports and not is_aurora_server:
                 # External process owns it - Aurora uses Future tech to find alternative
                 if AURORA_IS_BOSS:
                     AURORA_INTELLIGENCE.log(f"⚠️ Port {preferred} owned by external process '{process_name}'")
-                    AURORA_INTELLIGENCE.log(f"   💡 Applying AI-Native dynamic allocation algorithms...")
-                
+                    AURORA_INTELLIGENCE.log("   💡 Applying AI-Native dynamic allocation algorithms...")
+
                 new_port = self._find_available_port(preferred, assigned_ports)
                 config["port"] = new_port
                 assigned_ports.add(new_port)
-                
+
                 decision = f"Port {preferred} (owned by {process_name}) - reassigning {server_key} to {new_port}"
                 port_decisions.append(decision)
-                
+
                 if AURORA_IS_BOSS:
                     AURORA_INTELLIGENCE.log(f"🔧 {decision}")
-                
-                self.log_event("PORT_REASSIGNED", server_key, {
-                    "preferred": preferred,
-                    "assigned": new_port,
-                    "reason": "external_process_conflict",
-                    "blocking_process": process_name
-                })
+
+                self.log_event(
+                    "PORT_REASSIGNED",
+                    server_key,
+                    {
+                        "preferred": preferred,
+                        "assigned": new_port,
+                        "reason": "external_process_conflict",
+                        "blocking_process": process_name,
+                    },
+                )
             elif preferred in listening_ports and is_aurora_server:
                 # Aurora's own server is using it - KEEP IT
                 config["port"] = preferred
                 assigned_ports.add(preferred)
-                
+
                 if AURORA_IS_BOSS:
-                    AURORA_INTELLIGENCE.log(f"✅ {server_key} already running on preferred port {preferred} - maintaining assignment")
+                    AURORA_INTELLIGENCE.log(
+                        f"✅ {server_key} already running on preferred port {preferred} - maintaining assignment"
+                    )
             elif preferred not in assigned_ports:
                 # Preferred port is completely available
                 config["port"] = preferred
                 assigned_ports.add(preferred)
-                
+
                 if AURORA_IS_BOSS:
                     AURORA_INTELLIGENCE.log(f"✅ {server_key} assigned to preferred port {preferred}")
-        
+
         # Build health check URLs with assigned ports
         for config in self.servers.values():
             config["health_check"] = config["health_check_template"].format(port=config["port"])
             config["command"] = config["command_template"].format(port=config["port"])
-        
+
         if AURORA_IS_BOSS and port_decisions:
-            AURORA_INTELLIGENCE.log(f"📋 Aurora applied OMNISCIENT port management: {len(port_decisions)} conflicts resolved")
-            AURORA_INTELLIGENCE.log(f"   ✓ Used Ancient: Unix process detection")
-            AURORA_INTELLIGENCE.log(f"   ✓ Used Modern: Cloud-native port scanning")
-            AURORA_INTELLIGENCE.log(f"   ✓ Used Future: AI-driven dynamic allocation")
-        
+            AURORA_INTELLIGENCE.log(
+                f"📋 Aurora applied OMNISCIENT port management: {len(port_decisions)} conflicts resolved"
+            )
+            AURORA_INTELLIGENCE.log("   ✓ Used Ancient: Unix process detection")
+            AURORA_INTELLIGENCE.log("   ✓ Used Modern: Cloud-native port scanning")
+            AURORA_INTELLIGENCE.log("   ✓ Used Future: AI-driven dynamic allocation")
+
         print(f"✅ Port assignment complete: {len(assigned_ports)} ports allocated")
-        
+
         if AURORA_IS_BOSS:
-            AURORA_INTELLIGENCE.log(f"🎯 OMNISCIENT port allocation complete - all {len(self.servers)} servers configured")
-    
+            AURORA_INTELLIGENCE.log(
+                f"🎯 OMNISCIENT port allocation complete - all {len(self.servers)} servers configured"
+            )
+
     def check_tmux_installed(self) -> bool:
         """Check if tmux is available"""
         try:
-            subprocess.run(['tmux', '-V'], capture_output=True, check=True)
+            subprocess.run(["tmux", "-V"], capture_output=True, check=True)
             return True
         except:
             print("❌ tmux not installed. Installing...")
-            subprocess.run(['apt-get', 'update'], capture_output=True)
-            subprocess.run(['apt-get', 'install', '-y', 'tmux'], capture_output=True)
+            subprocess.run(["apt-get", "update"], capture_output=True)
+            subprocess.run(["apt-get", "install", "-y", "tmux"], capture_output=True)
             return True
-    
+
     def start_server(self, server_key: str) -> bool:
         """Start a server in tmux session"""
         if server_key not in self.servers:
             print(f"❌ Unknown server: {server_key}")
             return False
-        
+
         server = self.servers[server_key]
         session = server["session"]
         command = server["command"]
-        
+
         print(f"🚀 Starting {server['name']}...")
-        
+
         # Check if tmux is available
         self.check_tmux_installed()
-        
+
         # Kill existing session if it exists
-        subprocess.run(['tmux', 'kill-session', '-t', session], 
-                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        
+        subprocess.run(["tmux", "kill-session", "-t", session], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
         # Create new tmux session and run command
-        result = subprocess.run([
-            'tmux', 'new-session', '-d', '-s', session, command
-        ], capture_output=True, text=True)
-        
+        result = subprocess.run(["tmux", "new-session", "-d", "-s", session, command], capture_output=True, text=True)
+
         if result.returncode == 0:
             print(f"   ✅ Started in tmux session: {session}")
             print(f"   📺 View output: tmux attach -t {session}")
             print(f"   🔌 Port: {server['port']}")
-            
-            self.log_event("SERVER_STARTED", server_key, {
-                "session": session,
-                "port": server["port"],
-                "command": command
-            })
-            
+
+            self.log_event(
+                "SERVER_STARTED", server_key, {"session": session, "port": server["port"], "command": command}
+            )
+
             # Wait a moment and check health
             time.sleep(3)
             if self.check_health(server_key):
-                print(f"   ✅ Health check PASSED FUCK YEAH LOL")
+                print("   ✅ Health check PASSED FUCK YEAH LOL")
                 return True
             else:
-                print(f"   ⚠️  Server started but health check pending...")
+                print("   ⚠️  Server started but health check pending...")
                 return True
         else:
             print(f"   ❌ Failed to start: {result.stderr}")
             self.log_event("START_FAILED", server_key, {"error": result.stderr})
             return False
-    
+
     def stop_server(self, server_key: str) -> bool:
         """Stop a server's tmux session"""
         if server_key not in self.servers:
             print(f"❌ Unknown server: {server_key}")
             return False
-        
+
         server = self.servers[server_key]
         session = server["session"]
-        
+
         print(f"🛑 Stopping {server['name']}...")
-        
-        result = subprocess.run(['tmux', 'kill-session', '-t', session],
-                               capture_output=True, text=True)
-        
+
+        result = subprocess.run(["tmux", "kill-session", "-t", session], capture_output=True, text=True)
+
         if result.returncode == 0:
             print(f"   ✅ Stopped session: {session}")
             self.log_event("SERVER_STOPPED", server_key, {"session": session})
@@ -346,175 +353,173 @@ class LuminarNexusServerManager:
         else:
             print(f"   ⚠️  Session may not exist: {session}")
             return False
-    
+
     def check_health(self, server_key: str) -> bool:
         """Check if server is responding - tries multiple health check patterns"""
         if server_key not in self.servers:
             return False
-        
+
         server = self.servers[server_key]
         base_url = server["health_check"]
-        
+
         # Try multiple health check patterns (Aurora-style adaptation)
         health_endpoints = [
             base_url,  # Try the configured endpoint first
             base_url.replace("/healthz", "/health"),  # Try /health variant
             base_url.replace("/health", "/healthz"),  # Try /healthz variant
         ]
-        
+
         for endpoint in health_endpoints:
             try:
                 # Try GET request (more reliable than HEAD for varied APIs)
-                result = subprocess.run(['curl', '-s', '-f', endpoint],
-                                      capture_output=True, text=True, timeout=2)
-                
+                result = subprocess.run(["curl", "-s", "-f", endpoint], capture_output=True, text=True, timeout=2)
+
                 # Check if we got a response (any JSON or text response is good)
                 if result.returncode == 0 and result.stdout:
                     # Look for positive health indicators
                     response = result.stdout.lower()
-                    if any(indicator in response for indicator in ['ok', 'healthy', 'status', 'true']):
+                    if any(indicator in response for indicator in ["ok", "healthy", "status", "true"]):
                         return True
             except:
                 continue
-        
+
         return False
-    
-    def get_status(self, server_key: str) -> Dict:
+
+    def get_status(self, server_key: str) -> dict:
         """Get server status"""
         if server_key not in self.servers:
             return {"status": "unknown", "exists": False}
-        
+
         server = self.servers[server_key]
         session = server["session"]
-        
+
         # Check if tmux session exists
-        result = subprocess.run(['tmux', 'has-session', '-t', session],
-                               capture_output=True)
-        
-        session_exists = (result.returncode == 0)
+        result = subprocess.run(["tmux", "has-session", "-t", session], capture_output=True)
+
+        session_exists = result.returncode == 0
         health_ok = self.check_health(server_key)
-        
+
         status = {
             "server": server["name"],
             "session": session,
             "session_running": session_exists,
             "health_check_passed": health_ok,
             "port": server["port"],
-            "status": "running" if (session_exists and health_ok) else 
-                     "starting" if session_exists else "stopped"
+            "status": "running" if (session_exists and health_ok) else "starting" if session_exists else "stopped",
         }
-        
+
         return status
-    
+
     def start_all(self):
         """Start all servers"""
         print("\n🌟 Luminar Nexus: Starting ALL servers...\n")
-        
+
         for server_key in self.servers.keys():
             self.start_server(server_key)
             time.sleep(2)  # Stagger starts
-        
+
         print("\n✅ All servers started!\n")
         self.show_status()
-    
+
     def stop_all(self):
         """Stop all servers"""
         print("\n🛑 Luminar Nexus: Stopping ALL servers...\n")
-        
+
         for server_key in self.servers.keys():
             self.stop_server(server_key)
-        
+
         print("\n✅ All servers stopped!\n")
-    
+
     def show_status(self):
         """Show status of all servers"""
-        print("\n" + "="*70)
+        print("\n" + "=" * 70)
         print("📊 LUMINAR NEXUS - SERVER STATUS")
-        print("="*70 + "\n")
-        
+        print("=" * 70 + "\n")
+
         for server_key in self.servers.keys():
             status = self.get_status(server_key)
-            
+
             icon = "✅" if status["status"] == "running" else "⚠️" if status["status"] == "starting" else "❌"
-            
+
             print(f"{icon} {status['server']}")
             print(f"   Status: {status['status']}")
             print(f"   Port: {status['port']}")
             print(f"   Session: {status['session']}")
             print(f"   Health: {'✅ OK' if status['health_check_passed'] else '❌ Not responding'}")
             print()
-        
-        print("="*70 + "\n")
-    
+
+        print("=" * 70 + "\n")
+
     def start_autonomous_monitoring(self, check_interval=5):
         """
         Aurora's autonomous monitoring daemon - continuously monitors and self-heals
         This gives Aurora independent operation without external supervision
         Default: 5 second checks for fast response
         """
-        print("\n" + "="*70)
+        print("\n" + "=" * 70)
         print("🤖 AURORA AUTONOMOUS MONITORING - ACTIVATED")
-        print("="*70)
+        print("=" * 70)
         print(f"Check interval: {check_interval} seconds (FAST MODE)")
         print("Aurora will now monitor and self-heal all servers autonomously")
         print("Press Ctrl+C to stop monitoring\n")
-        
+
         cycle_count = 0
-        
+
         try:
             while True:
                 cycle_count += 1
                 timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-                
+
                 print(f"\n🔍 [{timestamp}] Monitoring Cycle #{cycle_count}")
                 print("-" * 70)
-                
+
                 failed_servers = []
-                
+
                 # Check all servers
                 for server_key in self.servers.keys():
                     status = self.get_status(server_key)
-                    server_name = status['server']
-                    
-                    if status['status'] == 'running':
+                    server_name = status["server"]
+
+                    if status["status"] == "running":
                         print(f"  ✅ {server_name}: HEALTHY (port {status['port']})")
                     else:
                         print(f"  ❌ {server_name}: FAILED - {status['status']}")
                         failed_servers.append((server_key, server_name))
-                
+
                 # Auto-heal failed servers
                 if failed_servers:
                     print(f"\n🔧 Aurora detected {len(failed_servers)} failed server(s) - initiating self-repair...")
-                    
+
                     for server_key, server_name in failed_servers:
                         print(f"   🔄 Restarting {server_name}...")
                         self.stop_server(server_key)
                         time.sleep(2)
                         self.start_server(server_key)
                         time.sleep(3)
-                        
+
                         # Verify fix
                         new_status = self.get_status(server_key)
-                        if new_status['status'] == 'running':
+                        if new_status["status"] == "running":
                             print(f"   ✅ {server_name} RESTORED")
                         else:
                             print(f"   ⚠️ {server_name} still unstable - will retry next cycle")
                 else:
-                    print(f"  💚 All systems operational")
-                
+                    print("  💚 All systems operational")
+
                 print(f"\n⏱️  Next check in {check_interval} seconds...")
                 time.sleep(check_interval)
-                
+
         except KeyboardInterrupt:
             print("\n\n🛑 Aurora autonomous monitoring stopped by user")
             print("All servers remain in their current state\n")
 
+
 def main():
     """Luminar Nexus main entry point"""
     import sys
-    
+
     nexus = LuminarNexusServerManager()
-    
+
     if len(sys.argv) < 2:
         print("Luminar Nexus Server Manager")
         print("\nUsage:")
@@ -527,9 +532,9 @@ def main():
         print("  python luminar_nexus.py monitor          - Start autonomous monitoring daemon")
         print("\nAvailable servers: vite, backend, bridge, self-learn")
         return
-    
+
     command = sys.argv[1]
-    
+
     if command == "start-all":
         nexus.start_all()
     elif command == "stop-all":
@@ -550,6 +555,7 @@ def main():
         nexus.start_server(server)
     else:
         print("❌ Invalid command")
+
 
 if __name__ == "__main__":
     main()

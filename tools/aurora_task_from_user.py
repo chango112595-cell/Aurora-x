@@ -32,51 +32,52 @@ EXECUTE NOW - NO MISTAKES
 """
 
 import subprocess
-import requests
-import json
 from pathlib import Path
+
+import requests
+
 
 class AuroraTaskExecutor:
     def __init__(self):
         self.workspace = Path("/workspaces/Aurora-x")
-    
+
     def log(self, msg, emoji="🌟"):
         print(f"{emoji} Aurora: {msg}")
-    
+
     def step1_verify_vite_serving(self):
         """Verify Vite is serving the UI"""
         self.log("Step 1: Verifying what's on port 5000...", "🔍")
-        
+
         try:
             response = requests.get("http://localhost:5000", timeout=3)
             html = response.text
-            
+
             # Check for Vite indicators
             has_vite = "vite" in html.lower() or "@vite" in html
             has_react_root = 'id="root"' in html or 'id="app"' in html
-            
+
             self.log(f"  Vite detected: {has_vite}", "✓" if has_vite else "✗")
             self.log(f"  React root found: {has_react_root}", "✓" if has_react_root else "✗")
-            
+
             # Check for Chango references
             has_chango = "chango" in html.lower()
             self.log(f"  Chango in HTML: {has_chango}", "⚠️" if has_chango else "✓")
-            
+
             return has_vite and has_react_root and not has_chango
         except Exception as e:
             self.log(f"Error checking port 5000: {e}", "❌")
             return False
-    
+
     def step2_force_service_worker_unregister(self):
         """Create a script to force unregister service workers"""
         self.log("Step 2: Creating service worker killer...", "🔧")
-        
+
         # Add to index.html to kill service workers immediately
         index_html = self.workspace / "client/index.html"
-        
+
         if index_html.exists():
             content = index_html.read_text()
-            
+
             sw_killer = """
     <script>
       // Aurora: Kill all service workers immediately
@@ -99,7 +100,7 @@ class AuroraTaskExecutor:
       }
     </script>
 """
-            
+
             if sw_killer.strip() not in content:
                 # Add before </head>
                 content = content.replace("</head>", f"{sw_killer}\n  </head>")
@@ -112,17 +113,17 @@ class AuroraTaskExecutor:
         else:
             self.log("index.html not found!", "❌")
             return False
-    
+
     def step3_add_cache_busting(self):
         """Add cache busting to prevent old UI loading"""
         self.log("Step 3: Adding cache busting...", "🔧")
-        
+
         # Update vite config to add cache busting
         vite_config = self.workspace / "vite.config.js"
-        
+
         if vite_config.exists():
             content = vite_config.read_text()
-            
+
             # Check if build.rollupOptions exists
             if "rollupOptions" not in content:
                 # Add cache busting to build config
@@ -137,48 +138,45 @@ class AuroraTaskExecutor:
       }
     }
   },"""
-                
+
                 # Find and replace build section
                 import re
-                pattern = r'build:\s*\{[^}]*\},'
+
+                pattern = r"build:\s*\{[^}]*\},"
                 if re.search(pattern, content):
                     content = re.sub(pattern, cache_bust, content)
                     vite_config.write_text(content)
                     self.log("✅ Cache busting enabled", "✅")
                     return True
-            
+
             self.log("Cache busting already configured", "ℹ️")
             return True
         else:
             self.log("vite.config.js not found", "❌")
             return False
-    
+
     def step4_restart_vite(self):
         """Restart Vite with clean state"""
         self.log("Step 4: Restarting Vite cleanly...", "🔄")
-        
+
         # Kill any Vite processes
         subprocess.run(["pkill", "-9", "-f", "vite"], capture_output=True)
         subprocess.run(["sleep", "2"])
-        
+
         # Clear port 5000
         subprocess.run(["fuser", "-k", "5000/tcp"], capture_output=True, stderr=subprocess.DEVNULL)
         subprocess.run(["sleep", "1"])
-        
+
         # Start Vite fresh
         cmd = ["npx", "vite", "--host", "0.0.0.0", "--port", "5000", "--clearScreen", "false"]
-        
+
         log_file = open("/tmp/aurora_vite_clean.log", "w")
         process = subprocess.Popen(
-            cmd,
-            cwd=str(self.workspace),
-            stdout=log_file,
-            stderr=subprocess.STDOUT,
-            start_new_session=True
+            cmd, cwd=str(self.workspace), stdout=log_file, stderr=subprocess.STDOUT, start_new_session=True
         )
-        
+
         subprocess.run(["sleep", "6"])
-        
+
         # Check if running
         result = subprocess.run(["lsof", "-i", ":5000"], capture_output=True, text=True)
         if "vite" in result.stdout.lower() or "node" in result.stdout.lower():
@@ -187,11 +185,11 @@ class AuroraTaskExecutor:
         else:
             self.log("❌ Vite failed to start", "❌")
             return False
-    
+
     def step5_create_user_instructions(self):
         """Create clear instructions for user"""
         self.log("Step 5: Creating user instructions...", "📝")
-        
+
         instructions = """
 # 🌟 AURORA UI - USER INSTRUCTIONS
 
@@ -239,35 +237,36 @@ class AuroraTaskExecutor:
 ---
 🌟 Aurora is ready to serve you!
 """
-        
+
         instructions_file = self.workspace / "AURORA_USER_INSTRUCTIONS.md"
         instructions_file.write_text(instructions)
-        
+
         self.log(f"✅ Instructions saved: {instructions_file}", "📄")
         print("\n" + instructions)
-        
+
         return True
-    
+
     def execute_task(self):
         """Execute the complete task"""
         self.log("EXECUTING USER TASK - NO MISTAKES", "🚀")
-        print("="*80)
-        
+        print("=" * 80)
+
         success = True
-        
+
         success &= self.step1_verify_vite_serving()
         success &= self.step2_force_service_worker_unregister()
         success &= self.step3_add_cache_busting()
         success &= self.step4_restart_vite()
         success &= self.step5_create_user_instructions()
-        
-        print("="*80)
+
+        print("=" * 80)
         if success:
             self.log("✅ TASK COMPLETE - Aurora UI is ready!", "🎉")
         else:
             self.log("⚠️ Task completed with warnings - check logs", "⚠️")
-        
+
         return success
+
 
 if __name__ == "__main__":
     aurora = AuroraTaskExecutor()

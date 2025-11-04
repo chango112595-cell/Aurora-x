@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import sys
-from collections.abc import Sequence
-from typing import Any, Callable
+from collections.abc import Callable, Sequence
+from typing import Any
 
 if sys.version_info >= (3, 10):  # pragma: no cover
     from typing import ParamSpec
