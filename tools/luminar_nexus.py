@@ -21,36 +21,43 @@ class LuminarNexusServerManager:
         self.servers = {
             "bridge": {
                 "name": "Aurora Bridge Service (Factory NL→Project)",
-                "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
+                "command_template": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
                 "session": "aurora-bridge",
-                "port": 5001,
-                "health_check": "http://localhost:5001/healthz"
+                "preferred_port": 5001,
+                "port": None,  # Will be assigned dynamically
+                "health_check_template": "http://localhost:{port}/healthz"
             },
             "backend": {
                 "name": "Aurora Backend API (Main Server)",
-                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
+                "command_template": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
                 "session": "aurora-backend",
-                "port": 5000,
-                "health_check": "http://localhost:5000/healthz"
+                "preferred_port": 5000,
+                "port": None,
+                "health_check_template": "http://localhost:{port}/healthz"
             },
             "vite": {
                 "name": "Aurora Vite Dev Server (Frontend)",
-                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173",
+                "command_template": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port {port}",
                 "session": "aurora-vite",
-                "port": 5173,
-                "health_check": "http://localhost:5173"
+                "preferred_port": 5173,
+                "port": None,
+                "health_check_template": "http://localhost:{port}"
             },
             "self-learn": {
                 "name": "Aurora Self-Learning Server (Continuous Learning)",
-                "command": "cd /workspaces/Aurora-x && python3 -c 'from aurora_x.self_learn_server import app; import uvicorn; uvicorn.run(app, host=\"0.0.0.0\", port=5002)'",
+                "command_template": "cd /workspaces/Aurora-x && python3 -c 'from aurora_x.self_learn_server import app; import uvicorn; uvicorn.run(app, host=\"0.0.0.0\", port={port})'",
                 "session": "aurora-self-learn",
-                "port": 5002,
-                "health_check": "http://localhost:5002/healthz"
+                "preferred_port": 5002,
+                "port": None,
+                "health_check_template": "http://localhost:{port}/healthz"
             }
         }
         
         self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/luminar_nexus.jsonl")
         self.log_file.parent.mkdir(exist_ok=True)
+        
+        # Intelligently assign ports on initialization
+        self._auto_assign_ports()
     
     def log_event(self, event_type, server, details):
         """Log Luminar Nexus events"""
@@ -66,6 +73,91 @@ class LuminarNexusServerManager:
             f.write(json.dumps(entry) + "\n")
         
         print(f"🌟 Luminar Nexus: {event_type} - {server}")
+    
+    def _get_listening_ports(self) -> set:
+        """Get all ports currently in use"""
+        try:
+            result = subprocess.run(['ss', '-tlnp'], capture_output=True, text=True)
+            ports = set()
+            for line in result.stdout.split('\n'):
+                if ':' in line and 'LISTEN' in line:
+                    try:
+                        # Extract port number from lines like "0.0.0.0:5000"
+                        port_part = line.split()[3]
+                        port = int(port_part.split(':')[-1])
+                        ports.add(port)
+                    except:
+                        continue
+            return ports
+        except:
+            # Fallback to lsof if ss not available
+            try:
+                result = subprocess.run(['lsof', '-i', '-P', '-n'], capture_output=True, text=True)
+                ports = set()
+                for line in result.stdout.split('\n'):
+                    if 'LISTEN' in line:
+                        try:
+                            port = int(line.split(':')[-1].split()[0])
+                            ports.add(port)
+                        except:
+                            continue
+                return ports
+            except:
+                return set()
+    
+    def _find_available_port(self, preferred_port: int, start_range: int = 5000, end_range: int = 6000) -> int:
+        """Find an available port, preferring the suggested port"""
+        listening_ports = self._get_listening_ports()
+        
+        # Try preferred port first
+        if preferred_port not in listening_ports:
+            return preferred_port
+        
+        # Find next available port in range
+        for port in range(start_range, end_range):
+            if port not in listening_ports:
+                print(f"   ⚠️  Port {preferred_port} in use, assigned {port} instead")
+                return port
+        
+        raise Exception(f"No available ports in range {start_range}-{end_range}")
+    
+    def _auto_assign_ports(self):
+        """Intelligently assign ports to all servers, avoiding conflicts"""
+        print("🔍 Analyzing port availability...")
+        
+        listening_ports = self._get_listening_ports()
+        assigned_ports = set()
+        
+        for server_key, config in self.servers.items():
+            # Find available port
+            preferred = config["preferred_port"]
+            
+            # Check if preferred port is available (not in use AND not already assigned)
+            if preferred in listening_ports or preferred in assigned_ports:
+                # Find next available
+                available_port = self._find_available_port(preferred)
+                # Make sure we don't assign something already assigned this session
+                while available_port in assigned_ports:
+                    available_port += 1
+            else:
+                available_port = preferred
+            
+            # Assign port and generate command/health_check from templates
+            config["port"] = available_port
+            config["command"] = config["command_template"].format(port=available_port)
+            config["health_check"] = config["health_check_template"].format(port=available_port)
+            
+            assigned_ports.add(available_port)
+            
+            if available_port != config["preferred_port"]:
+                self.log_event("PORT_REASSIGNED", server_key, {
+                    "preferred": config["preferred_port"],
+                    "assigned": available_port,
+                    "reason": "port_conflict"
+                })
+        
+        print(f"✅ Port assignment complete: {len(assigned_ports)} ports allocated")
+    
     
     def check_tmux_installed(self) -> bool:
         """Check if tmux is available"""
