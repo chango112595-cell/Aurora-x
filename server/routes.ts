@@ -2070,8 +2070,8 @@ except Exception as e:
     }
   });
 
-  // Chat endpoint for natural language synthesis
-  app.post("/api/chat", async (req, res) => {
+  // OLD synthesis endpoint - now using /api/conversation for chat
+  app.post("/api/synthesis", async (req, res) => {
     try {
       const { message } = req.body;
 

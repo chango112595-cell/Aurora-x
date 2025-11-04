@@ -60,8 +60,9 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
     setInput('');
     setIsLoading(true);
 
+    console.log('[Aurora Chat] Starting request, isLoading=true');
+
     try {
-      // Use backend proxy to Luminar Nexus (avoids CORS issues)
       const response = await fetch('/api/conversation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -71,31 +72,35 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
         })
       });
 
+      console.log('[Aurora Chat] Got response:', response.status);
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
 
       const data = await response.json();
+      console.log('[Aurora Chat] Parsed JSON, adding message');
 
-      const auroraMsg: Message = {
+      setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'aurora',
-        content: data.response,
+        content: data.response || 'No response',
         timestamp: new Date()
-      };
+      }]);
 
-      setMessages(prev => [...prev, auroraMsg]);
+      console.log('[Aurora Chat] Message added, clearing loading');
     } catch (error) {
-      const errorMsg: Message = {
+      console.error('[Aurora Chat] Error:', error);
+      setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'aurora',
-        content: "Hmm, I hit a snag there. Mind trying that again? I'm here to help! 🔧",
+        content: "Hmm, I hit a snag there. Mind trying that again? 🔧",
         timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMsg]);
-    } finally {
-      setIsLoading(false);
+      }]);
     }
+    
+    setIsLoading(false);
+    console.log('[Aurora Chat] isLoading=false');
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
