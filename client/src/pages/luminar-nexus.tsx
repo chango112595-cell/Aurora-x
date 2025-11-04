@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle, ChevronDown, Copy, Eye, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
-import AuroraChatInterface from '@/components/AuroraChatInterface';
+import AuroraRebuiltChat from '@/components/AuroraRebuiltChat';
 import { useLocation } from 'wouter';
 
 type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics' | 'learning' | 'chat';
@@ -679,14 +679,14 @@ export default function LuminarNexus() {
                 )}
               </CardContent>
             </Card>
-          </div>
-        )}
+        </div>
+      )}
 
-        {/* Aurora Chat Tab */}
-        {activeTab === 'chat' && (
-          <AuroraChatInterface />
-        )}
-      </div>
+      {/* Aurora Chat Tab - REBUILT AUTONOMOUSLY BY AURORA! */}
+      {activeTab === 'chat' && (
+        <AuroraRebuiltChat />
+      )}
     </div>
-  );
+  </div>
+);
 }
