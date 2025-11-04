@@ -589,7 +589,9 @@ class AuroraConversationalAI:
             self.contexts[session_id] = {
                 'mentioned_techs': [],
                 'conversation_depth': 0,
-                'last_topic': None
+                'last_topic': None,
+                'last_intent': None,
+                'awaiting_details': False
             }
         return self.contexts[session_id]
     
@@ -657,6 +659,33 @@ class AuroraConversationalAI:
         
         # INTENT-BASED RESPONSES
         
+        # Check if we're in a follow-up conversation
+        if ctx.get('awaiting_details') and ctx.get('last_intent'):
+            # User is providing details after Aurora asked questions
+            last_intent = ctx['last_intent']
+            ctx['awaiting_details'] = False  # Reset
+            
+            if last_intent == 'debug':
+                return f"""Got it! Let me help you debug this. 🔍
+
+Based on what you've told me, here's my analysis:
+
+**Aurora's TIER_2 Debug Analysis:**
+
+I'll need to investigate the chat scroll issue. This could be:
+• CSS overflow issue (check if ScrollArea component has proper height)
+• React state preventing scroll updates
+• Message list not triggering scroll-to-bottom
+• Container height constraints
+
+Since I can't directly access the code right now, I recommend:
+1. Check browser DevTools for CSS issues on the scroll container
+2. Look for `overflow: hidden` that shouldn't be there  
+3. Verify the ScrollArea component is getting a defined height
+4. Check if `scrollIntoView()` is being called after new messages
+
+Want me to look at the actual code, or want to share what you're seeing in DevTools?"""
+        
         if intent == 'greeting':
             if ctx['conversation_depth'] == 1:
                 return """Hey! 👋 I'm Aurora - your AI coding partner.
@@ -709,6 +738,8 @@ What's on your mind?"""
 I'll design the architecture, write clean code, and explain my decisions. Let's map this out!"""
         
         elif intent == 'debug':
+            ctx['last_intent'] = 'debug'
+            ctx['awaiting_details'] = True
             return """Debugging time! Let's solve this systematically. 🔍
 
 **TIER_2: ETERNAL DEBUGGING GRANDMASTER ACTIVATED**
