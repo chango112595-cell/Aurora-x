@@ -4,10 +4,9 @@ Aurora's Self-Diagnostic for Chat System
 Let Aurora figure out what's wrong!
 """
 
-import requests
-import json
 import subprocess
-import sys
+
+import requests
 
 print("🌌 Aurora's Chat System Diagnostic")
 print("=" * 60)
@@ -16,9 +15,7 @@ print("=" * 60)
 print("\n1️⃣ Testing backend /api/conversation...")
 try:
     response = requests.post(
-        'http://localhost:5000/api/conversation',
-        json={'message': 'test', 'session_id': 'diagnostic'},
-        timeout=5
+        "http://localhost:5000/api/conversation", json={"message": "test", "session_id": "diagnostic"}, timeout=5
     )
     if response.status_code == 200:
         print(f"   ✅ Backend responds: {response.status_code}")
@@ -33,9 +30,7 @@ except Exception as e:
 print("\n2️⃣ Testing Luminar Nexus /api/chat...")
 try:
     response = requests.post(
-        'http://localhost:5003/api/chat',
-        json={'message': 'test', 'session_id': 'diagnostic'},
-        timeout=5
+        "http://localhost:5003/api/chat", json={"message": "test", "session_id": "diagnostic"}, timeout=5
     )
     if response.status_code == 200:
         print(f"   ✅ Luminar Nexus responds: {response.status_code}")
@@ -49,9 +44,7 @@ except Exception as e:
 print("\n3️⃣ Testing Vite frontend proxy...")
 try:
     response = requests.post(
-        'http://localhost:5173/api/conversation',
-        json={'message': 'test', 'session_id': 'diagnostic'},
-        timeout=5
+        "http://localhost:5173/api/conversation", json={"message": "test", "session_id": "diagnostic"}, timeout=5
     )
     if response.status_code == 200:
         print(f"   ✅ Vite proxy works: {response.status_code}")
@@ -64,13 +57,9 @@ except Exception as e:
 # Test 4: Check tmux sessions
 print("\n4️⃣ Checking service status...")
 try:
-    result = subprocess.run(
-        ['tmux', 'list-sessions'],
-        capture_output=True,
-        text=True
-    )
+    result = subprocess.run(["tmux", "list-sessions"], capture_output=True, text=True)
     sessions = result.stdout
-    aurora_sessions = [s for s in sessions.split('\n') if 'aurora' in s.lower()]
+    aurora_sessions = [s for s in sessions.split("\n") if "aurora" in s.lower()]
     print(f"   Found {len(aurora_sessions)} Aurora sessions:")
     for sess in aurora_sessions[:5]:
         print(f"   • {sess}")
@@ -89,10 +78,7 @@ print("   5. Response flows back")
 # Test 6: Check if there's a CORS issue
 print("\n6️⃣ Testing CORS headers...")
 try:
-    response = requests.options(
-        'http://localhost:5173/api/conversation',
-        headers={'Origin': 'http://localhost:5173'}
-    )
+    response = requests.options("http://localhost:5173/api/conversation", headers={"Origin": "http://localhost:5173"})
     print(f"   OPTIONS preflight: {response.status_code}")
     print(f"   CORS headers: {dict(response.headers)}")
 except Exception as e:
@@ -101,12 +87,12 @@ except Exception as e:
 # Test 7: Check vite config for proxy
 print("\n7️⃣ Checking Vite proxy configuration...")
 try:
-    with open('/workspaces/Aurora-x/vite.config.ts', 'r') as f:
+    with open("/workspaces/Aurora-x/vite.config.ts") as f:
         config = f.read()
-        if 'proxy' in config:
+        if "proxy" in config:
             print("   ✅ Vite proxy configuration found")
             # Extract proxy config
-            proxy_section = config[config.find('proxy'):config.find('proxy') + 500]
+            proxy_section = config[config.find("proxy") : config.find("proxy") + 500]
             print(f"   {proxy_section[:300]}...")
         else:
             print("   ❌ No proxy configuration in vite.config.ts")
@@ -119,7 +105,8 @@ print("🧠 Aurora's Analysis:")
 print("=" * 60)
 
 # Aurora's diagnosis
-print("""
+print(
+    """
 Based on the tests above:
 
 ✅ If all backend tests pass → Issue is in frontend/browser
@@ -137,4 +124,5 @@ server: {
     }
   }
 }
-""")
+"""
+)
