@@ -10,6 +10,7 @@ import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Cartesia
 import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle, ChevronDown, Copy, Eye, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 import AuroraChatInterface from '@/components/AuroraChatInterface';
+import { useLocation } from 'wouter';
 
 type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics' | 'learning' | 'chat';
 type Category = 'all' | 'hard' | 'soft' | 'medium';
@@ -17,14 +18,27 @@ type PassFailFilter = 'all' | 'pass' | 'fail';
 type LevelshipFilter = 'all' | 'ancient' | 'classical' | 'modern' | 'future';
 
 export default function LuminarNexus() {
+  const [location] = useLocation();
+  
+  // Parse tab from URL query parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const tabFromUrl = (urlParams.get('tab') as TabType) || 'overview';
+  
   const [healthData, setHealthData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<TabType>('overview');
+  const [activeTab, setActiveTab] = useState<TabType>(tabFromUrl);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category>('all');
   const [passFailFilter, setPassFailFilter] = useState<PassFailFilter>('all');
   const [levelshipFilter, setLevelshipFilter] = useState<LevelshipFilter>('all');
   const [expandedCode, setExpandedCode] = useState<string | null>(null);
+
+  // Update activeTab when URL changes
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const newTab = (urlParams.get('tab') as TabType) || 'overview';
+    setActiveTab(newTab);
+  }, [location]);
 
   // Fetch corpus data - fetch all available
   const { data: corpusResponse, isLoading: corpusLoading } = useQuery<{ items: any[], hasMore: boolean }>({
