@@ -24,7 +24,7 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # Add aurora_x to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -43,13 +43,13 @@ class AuroraGrandmasterKnowledge:
         self.learning_file = Path(__file__).parent.parent / ".aurora_knowledge" / "ultra_learning.json"
         self.learning_file.parent.mkdir(exist_ok=True)
 
-    def load_knowledge(self) -> Dict[str, Any]:
+    def load_knowledge(self) -> dict[str, Any]:
         """Load Aurora's grandmaster knowledge."""
         if self.knowledge_file.exists():
             return {"source": str(self.knowledge_file), "loaded": True}
         return {"loaded": False}
 
-    def load_learning(self) -> Dict[str, Any]:
+    def load_learning(self) -> dict[str, Any]:
         """Load Aurora's learning from previous executions."""
         if self.learning_file.exists():
             try:
@@ -58,7 +58,7 @@ class AuroraGrandmasterKnowledge:
                 return {"executions": [], "patterns": {}, "speed_records": {}}
         return {"executions": [], "patterns": {}, "speed_records": {}}
 
-    def save_learning(self, data: Dict[str, Any]) -> None:
+    def save_learning(self, data: dict[str, Any]) -> None:
         """Save Aurora's learning."""
         self.learning_file.write_text(json.dumps(data, indent=2))
 
@@ -87,9 +87,9 @@ class AuroraGrandmasterKnowledge:
             pattern["success_count"] += 1
 
         # Update average duration
-        pattern["avg_duration_ms"] = (
-            pattern["avg_duration_ms"] * (pattern["count"] - 1) + duration_ms
-        ) / pattern["count"]
+        pattern["avg_duration_ms"] = (pattern["avg_duration_ms"] * (pattern["count"] - 1) + duration_ms) / pattern[
+            "count"
+        ]
 
         # Track speed records
         task_key = task.split()[0]  # First word as key
@@ -128,7 +128,7 @@ class AuroraGrandmasterKnowledge:
 class AuroraUltraEngine:
     """
     Aurora's Ultra-Fast Coding Engine.
-    
+
     Designed by Aurora herself to beat all existing AI systems.
     Combines multiple synthesis methods and chooses the fastest for each task.
     """
@@ -139,7 +139,7 @@ class AuroraUltraEngine:
         self.runs_dir = self.aurora_root / "runs"
         self.runs_dir.mkdir(exist_ok=True)
 
-    async def synthesize_native(self, prompt: str) -> Dict[str, Any]:
+    async def synthesize_native(self, prompt: str) -> dict[str, Any]:
         """
         Use Aurora's native synthesis engine (aurora_x.main --nl).
         This is her original instant synthesis system.
@@ -185,7 +185,7 @@ class AuroraUltraEngine:
                 "error": str(e),
             }
 
-    async def synthesize_ast(self, prompt: str) -> Dict[str, Any]:
+    async def synthesize_ast(self, prompt: str) -> dict[str, Any]:
         """
         AST-level synthesis - generates code structures directly.
         Target: < 5ms generation time.
@@ -213,7 +213,7 @@ class AuroraUltraEngine:
                 "error": str(e),
             }
 
-    async def synthesize_parallel(self, tasks: List[str]) -> List[Dict[str, Any]]:
+    async def synthesize_parallel(self, tasks: list[str]) -> list[dict[str, Any]]:
         """
         Parallel synthesis - handle multiple tasks simultaneously.
         Aurora can work on 10+ files at once.
@@ -227,7 +227,7 @@ class AuroraUltraEngine:
 
         return [{**result, "parallel_duration_ms": duration_ms} for result in results]
 
-    async def synthesize(self, prompt: str) -> Dict[str, Any]:
+    async def synthesize(self, prompt: str) -> dict[str, Any]:
         """
         Main synthesis entry point.
         Aurora decides which method to use based on her learning.
@@ -253,7 +253,7 @@ class AuroraUltraEngine:
 
         return result
 
-    def _extract_generated_files(self, output: str) -> List[Dict[str, str]]:
+    def _extract_generated_files(self, output: str) -> list[dict[str, str]]:
         """Extract generated files from aurora_x output."""
         files = []
 
@@ -302,7 +302,7 @@ if __name__ == "__main__":
     main()
 """
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get Aurora's performance statistics."""
         learning = self.knowledge.load_learning()
 
@@ -346,7 +346,7 @@ async def main():
 
     # Show current stats
     stats = engine.get_stats()
-    print(f"\n📊 Current Performance Stats:")
+    print("\n📊 Current Performance Stats:")
     print(json.dumps(stats, indent=2))
 
     # Test synthesis

@@ -4,24 +4,21 @@ Aurora Advanced Code Generation Engine
 Generates complex TypeScript/React/Python code INSTANTLY using templates and AST manipulation
 """
 
-import re
-from typing import Dict, List, Any, Optional
-from pathlib import Path
 
 class AuroraCodeGenerator:
     """
     Aurora's instant code generation engine.
     Uses her grandmaster knowledge to generate production-ready code in milliseconds.
     """
-    
+
     def __init__(self):
         self.templates = self._load_templates()
-        
-    def _load_templates(self) -> Dict[str, str]:
+
+    def _load_templates(self) -> dict[str, str]:
         """Load code templates from Aurora's knowledge base"""
         return {
             # React Component Templates
-            "react_component": '''import {{ {imports} }} from "{import_path}";
+            "react_component": """import {{ {imports} }} from "{import_path}";
 
 export {export_type} function {component_name}() {{
   {state_declarations}
@@ -33,9 +30,8 @@ export {export_type} function {component_name}() {{
       {jsx_content}
     </div>
   );
-}}''',
-
-            "react_component_with_props": '''import {{ {imports} }} from "{import_path}";
+}}""",
+            "react_component_with_props": """import {{ {imports} }} from "{import_path}";
 
 interface {component_name}Props {{
   {props}
@@ -51,13 +47,11 @@ export {export_type} function {component_name}({{ {props_destructure} }}: {compo
       {jsx_content}
     </div>
   );
-}}''',
-
+}}""",
             # Python Function Template
             "python_function": '''def {function_name}({parameters}) -> {return_type}:
     """{docstring}"""
     {implementation}''',
-
             # Python Class Template
             "python_class": '''class {class_name}:
     """{docstring}"""
@@ -66,7 +60,6 @@ export {export_type} function {component_name}({{ {props_destructure} }}: {compo
         {init_body}
     
     {methods}''',
-
             # FastAPI Endpoint Template
             "fastapi_endpoint": '''@app.{method}("{path}")
 async def {endpoint_name}({parameters}):
@@ -76,14 +69,12 @@ async def {endpoint_name}({parameters}):
         return {{"status": "success", "data": result}}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))''',
-
             # TypeScript Interface Template
-            "typescript_interface": '''interface {interface_name} {{
+            "typescript_interface": """interface {interface_name} {{
   {properties}
-}}''',
-
+}}""",
             # API Hook Template
-            "react_api_hook": '''export function {hook_name}() {{
+            "react_api_hook": """export function {hook_name}() {{
   return useQuery({{
     queryKey: ['{query_key}'],
     queryFn: async () => {{
@@ -92,12 +83,12 @@ async def {endpoint_name}({parameters}):
       return response.json();
     }}
   }});
-}}''',
+}}""",
         }
-    
+
     def generate_react_server_control(self) -> str:
         """Generate complete server-control.tsx INSTANTLY"""
-        return '''import { useEffect, useState } from 'react';
+        return """import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -327,17 +318,17 @@ export default function ServerControl() {
       </div>
     </div>
   );
-}'''
-    
+}"""
+
     def generate_python_safety_protocol(self) -> str:
         """Generate complete safety protocol INSTANTLY"""
         # This would be the complete safety protocol code
         # For now, returning a reference to the existing file
         return "# See aurora_safety_protocol.py - already generated"
-    
+
     def generate_luminar_nexus_dashboard(self) -> str:
         """Generate complete Luminar Nexus with charts INSTANTLY"""
-        return '''import { useState, useEffect } from 'react';
+        return """import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
@@ -497,7 +488,8 @@ export default function LuminarNexus() {
       </div>
     </div>
   );
-}'''
+}"""
+
 
 # Export instant generator
 aurora_instant_generator = AuroraCodeGenerator()

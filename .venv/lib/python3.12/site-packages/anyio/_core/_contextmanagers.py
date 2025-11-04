@@ -42,9 +42,7 @@ class ContextManagerMixin:
         # Needed for mypy to assume self still has the __cm member
         assert isinstance(self, ContextManagerMixin)
         if self.__cm is not None:
-            raise RuntimeError(
-                f"this {self.__class__.__qualname__} has already been entered"
-            )
+            raise RuntimeError(f"this {self.__class__.__qualname__} has already been entered")
 
         cm = self.__contextmanager__()
         if not isinstance(cm, AbstractContextManager):
@@ -55,10 +53,7 @@ class ContextManagerMixin:
                     "decorator?"
                 )
 
-            raise TypeError(
-                f"__contextmanager__() did not return a context manager object, "
-                f"but {cm.__class__!r}"
-            )
+            raise TypeError(f"__contextmanager__() did not return a context manager object, " f"but {cm.__class__!r}")
 
         if cm is self:
             raise TypeError(
@@ -81,9 +76,7 @@ class ContextManagerMixin:
         # Needed for mypy to assume self still has the __cm member
         assert isinstance(self, ContextManagerMixin)
         if self.__cm is None:
-            raise RuntimeError(
-                f"this {self.__class__.__qualname__} has not been entered yet"
-            )
+            raise RuntimeError(f"this {self.__class__.__qualname__} has not been entered yet")
 
         # Prevent circular references
         cm = self.__cm
@@ -128,9 +121,7 @@ class AsyncContextManagerMixin:
         # Needed for mypy to assume self still has the __cm member
         assert isinstance(self, AsyncContextManagerMixin)
         if self.__cm is not None:
-            raise RuntimeError(
-                f"this {self.__class__.__qualname__} has already been entered"
-            )
+            raise RuntimeError(f"this {self.__class__.__qualname__} has already been entered")
 
         cm = self.__asynccontextmanager__()
         if not isinstance(cm, AbstractAsyncContextManager):
@@ -149,8 +140,7 @@ class AsyncContextManagerMixin:
                 )
 
             raise TypeError(
-                f"__asynccontextmanager__() did not return an async context manager, "
-                f"but {cm.__class__!r}"
+                f"__asynccontextmanager__() did not return an async context manager, " f"but {cm.__class__!r}"
             )
 
         if cm is self:
@@ -173,9 +163,7 @@ class AsyncContextManagerMixin:
     ) -> _ExitT_co:
         assert isinstance(self, AsyncContextManagerMixin)
         if self.__cm is None:
-            raise RuntimeError(
-                f"this {self.__class__.__qualname__} has not been entered yet"
-            )
+            raise RuntimeError(f"this {self.__class__.__qualname__} has not been entered yet")
 
         # Prevent circular references
         cm = self.__cm

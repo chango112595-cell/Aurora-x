@@ -9,8 +9,6 @@ import json
 import subprocess
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from pathlib import Path
-from threading import Thread
 from urllib.parse import parse_qs, urlparse
 
 import psutil
@@ -20,47 +18,47 @@ PORT = 9090
 
 class HealthDashboardHandler(BaseHTTPRequestHandler):
     """HTTP handler for health dashboard"""
-    
+
     def log_message(self, format, *args):
         """Suppress default logging"""
         pass
-    
+
     def do_HEAD(self):
         """Handle HEAD requests for browser compatibility"""
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.send_header('Content-Length', '0')
+        self.send_header("Content-type", "text/html")
+        self.send_header("Content-Length", "0")
         self.end_headers()
-        
+
     def do_GET(self):
         """Handle GET requests"""
         parsed_path = urlparse(self.path)
         path = parsed_path.path
-        
-        if path == '/':
+
+        if path == "/":
             self.serve_dashboard()
-        elif path == '/api/status':
+        elif path == "/api/status":
             self.serve_status_api()
-        elif path == '/api/logs':
+        elif path == "/api/logs":
             self.serve_logs_api(parse_qs(parsed_path.query))
-        elif path == '/api/metrics':
+        elif path == "/api/metrics":
             self.serve_metrics_api()
         else:
             self.send_error(404)
-            
+
     def do_POST(self):
         """Handle POST requests for service control"""
         parsed_path = urlparse(self.path)
         path = parsed_path.path
-        
-        if path == '/api/control':
-            content_length = int(self.headers['Content-Length'])
+
+        if path == "/api/control":
+            content_length = int(self.headers["Content-Length"])
             post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            data = json.loads(post_data.decode("utf-8"))
             self.handle_control_action(data)
         else:
             self.send_error(404)
-            
+
     def serve_dashboard(self):
         """Serve main dashboard HTML"""
         html = """
@@ -346,126 +344,107 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
 </html>
 """
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
+        self.send_header("Content-type", "text/html")
         self.end_headers()
         self.wfile.write(html.encode())
-        
+
     def serve_status_api(self):
         """Serve status JSON API"""
         # Always use port-based fallback for real-time accuracy
         # The supervisor.py status command doesn't connect to running supervisor
         data = self.get_fallback_status()
-            
+
         self.send_response(200)
-        self.send_header('Content-type', 'application/json')
+        self.send_header("Content-type", "application/json")
         self.end_headers()
         self.wfile.write(data.encode())
-        
+
     def get_fallback_status(self):
         """Get status by checking ports directly"""
-        ports = {
-            'aurora-ui': 5000,
-            'aurora-backend': 5001,
-            'self-learning': 5002,
-            'file-server': 8080
-        }
-        
+        ports = {"aurora-ui": 5000, "aurora-backend": 5001, "self-learning": 5002, "file-server": 8080}
+
         services = {}
         for name, port in ports.items():
-            listening = any(
-                conn.laddr.port == port and conn.status == 'LISTEN'
-                for conn in psutil.net_connections()
-            )
-            
+            listening = any(conn.laddr.port == port and conn.status == "LISTEN" for conn in psutil.net_connections())
+
             services[name] = {
-                'name': name,
-                'status': 'running' if listening else 'stopped',
-                'port': port,
-                'restart_count': 0,
-                'uptime_seconds': 0,
-                'health_status': 'unknown'
+                "name": name,
+                "status": "running" if listening else "stopped",
+                "port": port,
+                "restart_count": 0,
+                "uptime_seconds": 0,
+                "health_status": "unknown",
             }
-            
-        return json.dumps({
-            'timestamp': datetime.now().isoformat(),
-            'services': services
-        })
-        
+
+        return json.dumps({"timestamp": datetime.now().isoformat(), "services": services})
+
     def serve_logs_api(self, params):
         """Serve logs JSON API"""
-        lines = int(params.get('lines', ['50'])[0])
-        
-        log_files = [
-            '/tmp/aurora_supervisor.log',
-            '/tmp/aurora_orchestrator.log',
-            '/tmp/aurora_uvicorn_5001.log'
-        ]
-        
+        lines = int(params.get("lines", ["50"])[0])
+
+        log_files = ["/tmp/aurora_supervisor.log", "/tmp/aurora_orchestrator.log", "/tmp/aurora_uvicorn_5001.log"]
+
         logs = []
         for log_file in log_files:
             try:
-                with open(log_file, 'r') as f:
+                with open(log_file) as f:
                     logs.extend(f.readlines()[-lines:])
             except:
                 pass
-                
+
         self.send_response(200)
-        self.send_header('Content-type', 'application/json')
+        self.send_header("Content-type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps({'logs': [l.strip() for l in logs[-lines:]]}).encode())
-        
+        self.wfile.write(json.dumps({"logs": [l.strip() for l in logs[-lines:]]}).encode())
+
     def serve_metrics_api(self):
         """Serve system metrics API"""
         metrics = {
-            'cpu_percent': psutil.cpu_percent(interval=1),
-            'memory_percent': psutil.virtual_memory().percent,
-            'disk_percent': psutil.disk_usage('/').percent,
-            'timestamp': datetime.now().isoformat()
+            "cpu_percent": psutil.cpu_percent(interval=1),
+            "memory_percent": psutil.virtual_memory().percent,
+            "disk_percent": psutil.disk_usage("/").percent,
+            "timestamp": datetime.now().isoformat(),
         }
-        
+
         self.send_response(200)
-        self.send_header('Content-type', 'application/json')
+        self.send_header("Content-type", "application/json")
         self.end_headers()
         self.wfile.write(json.dumps(metrics).encode())
-        
+
     def handle_control_action(self, data):
         """Handle service control actions"""
-        service = data.get('service')
-        action = data.get('action')
-        
+        service = data.get("service")
+        action = data.get("action")
+
         if not service or not action:
             self.send_error(400)
             return
-            
+
         try:
-            cmd = [
-                'python3',
-                '/workspaces/Aurora-x/tools/aurora_supervisor.py',
-                action
-            ]
-            if service != 'all':
-                cmd.extend(['--service', service])
-                
+            cmd = ["python3", "/workspaces/Aurora-x/tools/aurora_supervisor.py", action]
+            if service != "all":
+                cmd.extend(["--service", service])
+
             subprocess.Popen(cmd)
-            
+
             self.send_response(200)
-            self.send_header('Content-type', 'application/json')
+            self.send_header("Content-type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps({'success': True}).encode())
-            
+            self.wfile.write(json.dumps({"success": True}).encode())
+
         except Exception as e:
             self.send_response(500)
-            self.send_header('Content-type', 'application/json')
+            self.send_header("Content-type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps({'error': str(e)}).encode())
+            self.wfile.write(json.dumps({"error": str(e)}).encode())
 
 
 def main():
     """Run health dashboard server"""
-    server = HTTPServer(('0.0.0.0', PORT), HealthDashboardHandler)
+    server = HTTPServer(("0.0.0.0", PORT), HealthDashboardHandler)
     print(f"🌐 Aurora Health Monitor running at http://localhost:{PORT}")
-    print(f"📊 Open in browser to view real-time dashboard")
-    
+    print("📊 Open in browser to view real-time dashboard")
+
     try:
         server.serve_forever()
     except KeyboardInterrupt:

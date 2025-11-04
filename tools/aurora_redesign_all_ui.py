@@ -4,19 +4,20 @@
 Fast execution - implementing my vision across the entire app
 """
 
-from pathlib import Path
 import re
+from pathlib import Path
+
 
 class AuroraUIRedesigner:
     def __init__(self):
         self.workspace = Path("/workspaces/Aurora-x")
-        
+
     def log(self, msg, emoji="🌟"):
         print(f"{emoji} Aurora: {msg}")
-    
+
     def create_quantum_wrapper(self):
         """Create reusable quantum background component"""
-        component = '''import { ReactNode } from 'react';
+        component = """import { ReactNode } from 'react';
 
 interface QuantumBackgroundProps {
   children: ReactNode;
@@ -66,102 +67,99 @@ export function QuantumBackground({ children, className = '' }: QuantumBackgroun
     </div>
   );
 }
-'''
-        
+"""
+
         path = self.workspace / "client/src/components/quantum-background.tsx"
         path.write_text(component)
-        self.log(f"✅ Created quantum background component")
-    
+        self.log("✅ Created quantum background component")
+
     def redesign_chat_interface(self):
         """Redesign chat interface with quantum theme"""
         self.log("Redesigning chat interface...")
-        
+
         chat_file = self.workspace / "client/src/components/chat-interface.tsx"
         content = chat_file.read_text()
-        
+
         # Add quantum styling to chat container
         new_container_class = '''className="flex h-full flex-col relative overflow-hidden"'''
         old_container_class = '''className="flex h-full flex-col bg-background"'''
-        
+
         if old_container_class in content:
             content = content.replace(old_container_class, new_container_class)
-        
+
         # Update message bubbles with holographic effect
         content = re.sub(
-            r'bg-gradient-to-br from-cyan-600 to-cyan-700',
-            'bg-gradient-to-br from-cyan-500/80 to-purple-500/80 backdrop-blur-sm border border-cyan-400/30 shadow-lg shadow-cyan-500/50',
-            content
+            r"bg-gradient-to-br from-cyan-600 to-cyan-700",
+            "bg-gradient-to-br from-cyan-500/80 to-purple-500/80 backdrop-blur-sm border border-cyan-400/30 shadow-lg shadow-cyan-500/50",
+            content,
         )
-        
+
         # Add quantum background
-        if 'QuantumBackground' not in content:
+        if "QuantumBackground" not in content:
             content = content.replace(
                 "import { useState, useRef, useEffect } from 'react';",
-                "import { useState, useRef, useEffect } from 'react';\nimport { QuantumBackground } from '@/components/quantum-background';"
+                "import { useState, useRef, useEffect } from 'react';\nimport { QuantumBackground } from '@/components/quantum-background';",
             )
-            
+
             # Wrap main div
             content = re.sub(
                 r'return \(\s*<div className="flex h-full flex-col',
-                '''return (
+                """return (
     <QuantumBackground>
-      <div className="flex h-full flex-col''',
-                content
+      <div className="flex h-full flex-col""",
+                content,
             )
-            
+
             # Close wrapper
             content = re.sub(
-                r'</div>\s*\);\s*}$',
-                '''</div>
+                r"</div>\s*\);\s*}$",
+                """</div>
     </QuantumBackground>
   );
-}''',
-                content, flags=re.MULTILINE
+}""",
+                content,
+                flags=re.MULTILINE,
             )
-        
+
         chat_file.write_text(content)
         self.log("✅ Chat interface redesigned")
-    
+
     def redesign_home_page(self):
         """Add quantum effects to home page"""
         self.log("Redesigning home page...")
-        
+
         home_file = self.workspace / "client/src/pages/home.tsx"
         content = home_file.read_text()
-        
+
         # Add quantum background import
-        if 'QuantumBackground' not in content:
+        if "QuantumBackground" not in content:
             content = content.replace(
                 'import { useQuery } from "@tanstack/react-query";',
-                'import { useQuery } from "@tanstack/react-query";\nimport { QuantumBackground } from "@/components/quantum-background";'
+                'import { useQuery } from "@tanstack/react-query";\nimport { QuantumBackground } from "@/components/quantum-background";',
             )
-            
+
             # Wrap return content
+            content = re.sub(r"return \(\s*<div", "return (\n    <QuantumBackground>\n      <div", content)
+
             content = re.sub(
-                r'return \(\s*<div',
-                'return (\n    <QuantumBackground>\n      <div',
-                content
-            )
-            
-            content = re.sub(
-                r'</div>\s*\);\s*}',
-                '''</div>
+                r"</div>\s*\);\s*}",
+                """</div>
     </QuantumBackground>
   );
-}''',
-                content
+}""",
+                content,
             )
-        
+
         home_file.write_text(content)
         self.log("✅ Home page redesigned")
-    
+
     def add_quantum_card_styles(self):
         """Add quantum styling to global CSS"""
         self.log("Adding quantum card styles...")
-        
+
         global_css = self.workspace / "client/src/index.css"
-        
-        quantum_styles = '''
+
+        quantum_styles = """
 /* Aurora's Quantum UI Styles */
 .quantum-card {
   @apply bg-gradient-to-br from-slate-900/80 to-slate-800/80;
@@ -193,61 +191,54 @@ export function QuantumBackground({ children, className = '' }: QuantumBackgroun
 .quantum-glow {
   text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
 }
-'''
-        
+"""
+
         content = global_css.read_text()
-        if '.quantum-card' not in content:
+        if ".quantum-card" not in content:
             content += quantum_styles
             global_css.write_text(content)
             self.log("✅ Quantum styles added to global CSS")
-    
+
     def update_all_cards(self):
         """Update Card components across pages"""
         self.log("Updating all cards with quantum styling...")
-        
+
         pages = [
             "client/src/pages/dashboard.tsx",
             "client/src/pages/library.tsx",
-            "client/src/pages/ComparisonDashboard.tsx"
+            "client/src/pages/ComparisonDashboard.tsx",
         ]
-        
+
         for page_path in pages:
             file_path = self.workspace / page_path
             if not file_path.exists():
                 continue
-                
+
             content = file_path.read_text()
-            
+
             # Replace Card className with quantum version
-            content = re.sub(
-                r'<Card className="([^"]*)"',
-                r'<Card className="\1 quantum-card"',
-                content
-            )
-            
+            content = re.sub(r'<Card className="([^"]*)"', r'<Card className="\1 quantum-card"', content)
+
             # Replace Button with quantum version
-            content = re.sub(
-                r'<Button className="([^"]*)"',
-                r'<Button className="\1 quantum-button"',
-                content
-            )
-            
+            content = re.sub(r'<Button className="([^"]*)"', r'<Button className="\1 quantum-button"', content)
+
             file_path.write_text(content)
             self.log(f"✅ Updated {page_path}")
-    
+
     def execute(self):
         self.log("Starting complete UI redesign...", "🚀")
-        print("="*80)
-        
+        print("=" * 80)
+
         self.create_quantum_wrapper()
         self.redesign_chat_interface()
         self.redesign_home_page()
         self.add_quantum_card_styles()
         self.update_all_cards()
-        
-        print("="*80)
+
+        print("=" * 80)
         self.log("UI redesign complete!", "✅")
         self.log("All pages now have quantum holographic theme!", "🎨")
+
 
 if __name__ == "__main__":
     aurora = AuroraUIRedesigner()

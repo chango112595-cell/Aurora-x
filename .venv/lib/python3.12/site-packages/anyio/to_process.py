@@ -29,9 +29,7 @@ T_Retval = TypeVar("T_Retval")
 PosArgsT = TypeVarTuple("PosArgsT")
 
 _process_pool_workers: RunVar[set[Process]] = RunVar("_process_pool_workers")
-_process_pool_idle_workers: RunVar[deque[tuple[Process, float]]] = RunVar(
-    "_process_pool_idle_workers"
-)
+_process_pool_idle_workers: RunVar[deque[tuple[Process, float]]] = RunVar("_process_pool_idle_workers")
 _default_process_limiter: RunVar[CapacityLimiter] = RunVar("_default_process_limiter")
 
 
@@ -64,9 +62,7 @@ async def run_sync(  # type: ignore[return]
             response = await buffered.receive_until(b"\n", 50)
             status, length = response.split(b" ")
             if status not in (b"RETURN", b"EXCEPTION"):
-                raise RuntimeError(
-                    f"Worker process returned unexpected response: {response!r}"
-                )
+                raise RuntimeError(f"Worker process returned unexpected response: {response!r}")
 
             pickled_response = await buffered.receive_exactly(int(length))
         except BaseException as exc:
@@ -113,9 +109,7 @@ async def run_sync(  # type: ignore[return]
             process, idle_since = idle_workers.pop()
             if process.returncode is None:
                 stdin = cast(ByteSendStream, process.stdin)
-                buffered = BufferedByteReceiveStream(
-                    cast(ByteReceiveStream, process.stdout)
-                )
+                buffered = BufferedByteReceiveStream(cast(ByteReceiveStream, process.stdout))
 
                 # Prune any other workers that have been idle for WORKER_MAX_IDLE_TIME
                 # seconds or longer
@@ -139,21 +133,15 @@ async def run_sync(  # type: ignore[return]
             workers.remove(process)
         else:
             command = [sys.executable, "-u", "-m", __name__]
-            process = await open_process(
-                command, stdin=subprocess.PIPE, stdout=subprocess.PIPE
-            )
+            process = await open_process(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             try:
                 stdin = cast(ByteSendStream, process.stdin)
-                buffered = BufferedByteReceiveStream(
-                    cast(ByteReceiveStream, process.stdout)
-                )
+                buffered = BufferedByteReceiveStream(cast(ByteReceiveStream, process.stdout))
                 with fail_after(20):
                     message = await buffered.receive(6)
 
                 if message != b"READY\n":
-                    raise BrokenWorkerProcess(
-                        f"Worker process returned unexpected response: {message!r}"
-                    )
+                    raise BrokenWorkerProcess(f"Worker process returned unexpected response: {message!r}")
 
                 main_module_path = getattr(sys.modules["__main__"], "__file__", None)
                 pickled = pickle.dumps(
@@ -165,9 +153,7 @@ async def run_sync(  # type: ignore[return]
                 raise
             except BaseException as exc:
                 process.kill()
-                raise BrokenWorkerProcess(
-                    "Error during worker process initialization"
-                ) from exc
+                raise BrokenWorkerProcess("Error during worker process initialization") from exc
 
             workers.add(process)
 

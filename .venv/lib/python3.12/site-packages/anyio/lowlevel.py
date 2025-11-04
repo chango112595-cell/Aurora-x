@@ -107,9 +107,7 @@ class RunVar(Generic[T]):
 
     NO_VALUE_SET: Literal[_NoValueSet.NO_VALUE_SET] = _NoValueSet.NO_VALUE_SET
 
-    def __init__(
-        self, name: str, default: T | Literal[_NoValueSet.NO_VALUE_SET] = NO_VALUE_SET
-    ):
+    def __init__(self, name: str, default: T | Literal[_NoValueSet.NO_VALUE_SET] = NO_VALUE_SET):
         self._name = name
         self._default = default
 
@@ -128,9 +126,7 @@ class RunVar(Generic[T]):
     @overload
     def get(self) -> T: ...
 
-    def get(
-        self, default: D | Literal[_NoValueSet.NO_VALUE_SET] = NO_VALUE_SET
-    ) -> T | D:
+    def get(self, default: D | Literal[_NoValueSet.NO_VALUE_SET] = NO_VALUE_SET) -> T | D:
         try:
             return self._current_vars[self]
         except KeyError:
@@ -139,9 +135,7 @@ class RunVar(Generic[T]):
             elif self._default is not RunVar.NO_VALUE_SET:
                 return self._default
 
-        raise LookupError(
-            f'Run variable "{self._name}" has no value and no default set'
-        )
+        raise LookupError(f'Run variable "{self._name}" has no value and no default set')
 
     def set(self, value: T) -> RunvarToken[T]:
         current_vars = self._current_vars

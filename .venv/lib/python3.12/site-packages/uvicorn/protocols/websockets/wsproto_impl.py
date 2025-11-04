@@ -84,9 +84,7 @@ class WSProtocol(asyncio.Protocol):
 
     # Protocol interface
 
-    def connection_made(  # type: ignore[override]
-        self, transport: asyncio.Transport
-    ) -> None:
+    def connection_made(self, transport: asyncio.Transport) -> None:  # type: ignore[override]
         self.connections.add(self)
         self.transport = transport
         self.server = get_local_addr(transport)

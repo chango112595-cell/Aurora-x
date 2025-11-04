@@ -5,8 +5,8 @@ Aurora must diagnose and decide how to fix the port conflict
 """
 
 import json
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 AURORA_DEBUG_TASK = """
 🤖 AURORA DEBUG TASK: PORT 5001 CONFLICT
@@ -57,7 +57,7 @@ with open(log_file, "a") as f:
         "task": "Port 5001 Conflict Resolution",
         "status": "INVESTIGATING",
         "problem": "serve.py and Luminar Nexus both want port 5001",
-        "expected": "Port 5001 = Vite UI (HTML), Port 5000 = Backend API (JSON)"
+        "expected": "Port 5001 = Vite UI (HTML), Port 5000 = Backend API (JSON)",
     }
     f.write(json.dumps(entry) + "\n")
 

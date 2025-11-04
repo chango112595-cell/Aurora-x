@@ -60,17 +60,13 @@ class MessageLoggerMiddleware:
             message = await receive()
             logged_message = message_with_placeholders(message)
             log_text = "%s [%d] Receive %s"
-            self.logger.trace(  # type: ignore
-                log_text, prefix, task_counter, logged_message
-            )
+            self.logger.trace(log_text, prefix, task_counter, logged_message)  # type: ignore
             return message
 
         async def inner_send(message: "ASGISendEvent") -> None:
             logged_message = message_with_placeholders(message)
             log_text = "%s [%d] Send %s"
-            self.logger.trace(  # type: ignore
-                log_text, prefix, task_counter, logged_message
-            )
+            self.logger.trace(log_text, prefix, task_counter, logged_message)  # type: ignore
             await send(message)
 
         logged_scope = message_with_placeholders(scope)

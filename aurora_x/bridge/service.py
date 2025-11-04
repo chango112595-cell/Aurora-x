@@ -41,10 +41,10 @@ def root():
         "status": "running",
         "endpoints": {
             "nl": "/api/bridge/nl - Generate project from natural language",
-            "spec": "/api/bridge/spec - Generate project from spec file", 
+            "spec": "/api/bridge/spec - Generate project from spec file",
             "deploy": "/api/bridge/deploy - Deploy to Replit",
-            "health": "/healthz - Health check"
-        }
+            "health": "/healthz - Health check",
+        },
     }
 
 

@@ -10,12 +10,13 @@ Example usage:
     >>> print(result)
 """
 
-from typing import Any, List, Dict, Optional, Union, Tuple
 import logging
+from typing import Any
 
 # Optional pytest import
 try:
     import pytest
+
     HAS_PYTEST = True
 except ImportError:
     HAS_PYTEST = False
@@ -68,11 +69,11 @@ def create_a_simple_hello_world(input_data: Any, **kwargs) -> Any:
         result = f"PROCESSED: {str(input_data)}"
 
     # Apply any additional processing from kwargs
-    if kwargs.get('uppercase', False):
+    if kwargs.get("uppercase", False):
         if isinstance(result, str):
             result = result.upper()
 
-    if kwargs.get('reverse', False):
+    if kwargs.get("reverse", False):
         if isinstance(result, str):
             result = result[::-1]
 
@@ -80,7 +81,7 @@ def create_a_simple_hello_world(input_data: Any, **kwargs) -> Any:
     return result
 
 
-def create_a_simple_hello_world_batch(items: List[Any], **kwargs) -> List[Any]:
+def create_a_simple_hello_world_batch(items: list[Any], **kwargs) -> list[Any]:
     """
     Process multiple items in batch.
 
@@ -98,7 +99,7 @@ def create_a_simple_hello_world_batch(items: List[Any], **kwargs) -> List[Any]:
     return [create_a_simple_hello_world(item, **kwargs) for item in items]
 
 
-def create_a_simple_hello_world_async(input_data: Any, callback: Optional[callable] = None) -> Any:
+def create_a_simple_hello_world_async(input_data: Any, callback: callable | None = None) -> Any:
     """
     Process data with optional callback.
 
@@ -120,6 +121,7 @@ def create_a_simple_hello_world_async(input_data: Any, callback: Optional[callab
 # ============================================================================
 # Helper Functions
 # ============================================================================
+
 
 def validate_input(data: Any) -> bool:
     """
@@ -151,6 +153,7 @@ def transform_output(result: Any, format: str = "default") -> Any:
     """
     if format == "json":
         import json
+
         return json.dumps(result)
     elif format == "upper":
         return str(result).upper()
@@ -161,6 +164,7 @@ def transform_output(result: Any, format: str = "default") -> Any:
 # ============================================================================
 # Unit Tests
 # ============================================================================
+
 
 class TestCreateASimpleHelloWorld:
     """Test suite for create_a_simple_hello_world function"""
@@ -264,6 +268,7 @@ class TestCreateASimpleHelloWorldIntegration:
 # Benchmarks
 # ============================================================================
 
+
 def benchmark_create_a_simple_hello_world(iterations: int = 1000):
     """
     Performance benchmark for create_a_simple_hello_world.
@@ -273,7 +278,7 @@ def benchmark_create_a_simple_hello_world(iterations: int = 1000):
     """
     import time
 
-    test_data = ["test_{}".format(i) for i in range(100)]
+    test_data = [f"test_{i}" for i in range(100)]
 
     print(f"\nBenchmarking {func_name} with {iterations} iterations...")
 
@@ -319,7 +324,7 @@ if __name__ == "__main__":
 
     # Demonstrate batch processing
     print("\nBatch processing:")
-    batch_result = create_a_simple_hello_world_batch(['a', 'b', 'c'])
+    batch_result = create_a_simple_hello_world_batch(["a", "b", "c"])
     print(f"{func_name}_batch(['a', 'b', 'c']) = {batch_result}")
 
     # Run unit tests
@@ -328,6 +333,7 @@ if __name__ == "__main__":
 
     try:
         import pytest
+
         pytest.main([__file__, "-v", "--tb=short"])
     except ImportError:
         print("pytest not installed. Running manual tests...")
@@ -337,10 +343,7 @@ if __name__ == "__main__":
 
         all_tests = []
         for test_cls in [test_basic, test_integration]:
-            all_tests.extend([
-                (test_cls, method) for method in dir(test_cls)
-                if method.startswith('test_')
-            ])
+            all_tests.extend([(test_cls, method) for method in dir(test_cls) if method.startswith("test_")])
 
         passed = 0
         failed = 0
