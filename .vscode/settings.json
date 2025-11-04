@@ -7,4 +7,27 @@
     "python.defaultInterpreterPath": "./.venv/bin/python",
     "css.lint.unknownAtRules": "ignore",
     "css.lint.vendorPrefix": "warning"
+    ,
+    "remote.portsAttributes": {
+        "5000": {
+            "label": "Aurora Backend (5000)",
+            "onAutoForward": "notify",
+            "protocol": "http"
+        },
+        "5001": {
+            "label": "Aurora Bridge (5001)",
+            "onAutoForward": "notify",
+            "protocol": "http"
+        },
+        "5002": {
+            "label": "Aurora Self-Learn (5002)",
+            "onAutoForward": "notify",
+            "protocol": "http"
+        },
+        "5173": {
+            "label": "Aurora Frontend (Vite 5173)",
+            "onAutoForward": "openPreview",
+            "protocol": "http"
+        }
+    }
 }
