@@ -17,11 +17,11 @@ except ImportError:
     print("⚠️ Aurora Expert Knowledge module not found. Creating mock...")
 
     class AuroraExpertKnowledge:
-        def __init__(self):
+        def __init__(self) -> None:
             self.languages = ["Python", "JavaScript", "Swift", "Kotlin", "C++"]
 
 
-def generate_applescript_wifi_fix():
+def generate_applescript_wifi_fix() -> None:
     """Generate AppleScript to fix iPhone WiFi issues"""
     return """
 -- AppleScript for iPhone WiFi Fix
@@ -31,7 +31,7 @@ end tell
 """
 
 
-def generate_kotlin_camera_app():
+def generate_kotlin_camera_app() -> None:
     """Generate Kotlin Android camera app with ML integration"""
     return """
 // Kotlin Android Camera App with ML
@@ -49,7 +49,7 @@ class AuroraCameraActivity : ComponentActivity() {
 """
 
 
-def generate_arduino_iot_sensor():
+def generate_arduino_iot_sensor() -> None:
     """Generate Arduino ESP32 IoT sensor code"""
     return """
 // Aurora ESP32 IoT Temperature Sensor
@@ -68,7 +68,7 @@ void loop() {
 """
 
 
-def generate_raspberry_pi_automation():
+def generate_raspberry_pi_automation() -> None:
     """Generate Raspberry Pi home automation code"""
     return """
 #!/usr/bin/env python3
@@ -76,7 +76,7 @@ def generate_raspberry_pi_automation():
 import RPi.GPIO as GPIO
 import time
 
-def main():
+def main() -> None:
     print("Aurora Pi Automation System")
     GPIO.setmode(GPIO.BCM)
 
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 """
 
 
-def main():
+def main() -> None:
     """Main demonstration function"""
     print("🚀 AURORA DEVICE PROGRAMMING DEMONSTRATION")
     print("=" * 60)

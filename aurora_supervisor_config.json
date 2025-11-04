@@ -1,0 +1,50 @@
+{
+  "services": [
+    {
+      "name": "aurora-ui",
+      "port": 5000,
+      "start_command": "npm run dev",
+      "working_dir": "/workspaces/Aurora-x",
+      "health_endpoint": null,
+      "dependencies": [],
+      "max_restarts": 5,
+      "restart_delay": 5,
+      "env_activation": null
+    },
+    {
+      "name": "aurora-backend",
+      "port": 5001,
+      "start_command": "uvicorn aurora_x.serve:app --host 0.0.0.0 --port 5001",
+      "working_dir": "/workspaces/Aurora-x",
+      "health_endpoint": null,
+      "dependencies": [],
+      "max_restarts": 5,
+      "restart_delay": 5,
+      "env_activation": ". .venv/bin/activate"
+    },
+    {
+      "name": "self-learning",
+      "port": 5002,
+      "start_command": "python -m aurora_x.self_learn_server",
+      "working_dir": "/workspaces/Aurora-x",
+      "health_endpoint": null,
+      "dependencies": [
+        "aurora-backend"
+      ],
+      "max_restarts": 5,
+      "restart_delay": 5,
+      "env_activation": ". .venv/bin/activate"
+    },
+    {
+      "name": "file-server",
+      "port": 8080,
+      "start_command": "python3 -m http.server 8080 --directory /workspaces/Aurora-x",
+      "working_dir": "/workspaces/Aurora-x",
+      "health_endpoint": null,
+      "dependencies": [],
+      "max_restarts": 5,
+      "restart_delay": 5,
+      "env_activation": null
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-11-04T02:30:00Z",
+  "issue": "Two services failing health checks",
+  "services_affected": [
+    {
+      "name": "aurora-bridge",
+      "port": 5001,
+      "status": "running",
+      "error": "405 Method Not Allowed on HEAD /healthz",
+      "diagnosis": "Server running but /healthz endpoint rejects HEAD requests",
+      "likely_cause": "FastAPI endpoint only accepts GET, not HEAD",
+      "fix_needed": "Add HEAD method support to /healthz endpoint"
+    },
+    {
+      "name": "aurora-self-learn", 
+      "port": 5002,
+      "status": "running",
+      "error": "404 Not Found on HEAD /healthz",
+      "diagnosis": "Server running but /healthz endpoint doesn't exist",
+      "likely_cause": "Missing /healthz route in FastAPI app",
+      "fix_needed": "Add /healthz endpoint to self_learn_server.py"
+    }
+  ],
+  "task": "Aurora, analyze these issues and fix both services to respond properly to health checks. The endpoints should accept both GET and HEAD requests and return 200 OK.",
+  "priority": "HIGH",
+  "autonomous_action_required": true
+}

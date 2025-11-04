@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@/components/error-boundary';
 import { Activity, Zap, Database, Shield } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-tailwindcss"
+  ],
+  "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "tailwind",
+          "layer",
+          "apply",
+          "responsive",
+          "screen",
+          "import"
+        ]
+      }
+    ],
+    "declaration-block-no-redundant-longhand-properties": null,
+    "no-descending-specificity": null
+  }
+}

@@ -1,4 +1,6 @@
-import { MessageSquare, Code2, Activity, Database, Settings, Zap, GitCompare } from "lucide-react";
+import { ErrorBoundary } from '@/components/error-boundary';
+import { Home, MessageSquare, BookOpen, BarChart3, Settings, Zap, Activity, TrendingUp, Database, Network, Cpu, Sparkles } from "lucide-react";
+import { Link, useLocation } from "wouter";
 import {
   Sidebar,
   SidebarContent,
@@ -9,93 +11,100 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
-  SidebarFooter,
 } from "@/components/ui/sidebar";
-import { useLocation, Link } from "wouter";
 
 const menuItems = [
-  {
-    title: "Chat",
-    url: "/",
-    icon: MessageSquare,
-  },
-  {
-    title: "Code Library",
-    url: "/library",
-    icon: Code2,
-  },
-  {
-    title: "Aurora Dashboard",
-    url: "/dashboard",
-    icon: Activity,
-  },
-  {
-    title: "Comparison",
-    url: "/comparison",
-    icon: GitCompare,
-  },
-  {
-    title: "Self-Learning",
-    url: "/self-learning",
-    icon: Zap,
-  },
-];
-
-const bottomItems = [
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
+  { title: "Chat", icon: MessageSquare, url: "/chat" },
+  { title: "Code Library", icon: BookOpen, url: "/library" },
+  { title: "Aurora Dashboard", icon: BarChart3, url: "/dashboard" },
+  { title: "Comparison", icon: TrendingUp, url: "/comparison" },
+  { title: "Luminar Nexus", icon: Network, url: "/luminar" },
+  { title: "Server Control", icon: Cpu, url: "/servers" },
+  { title: "Self-Learning", icon: Sparkles, url: "/self-learning" },
 ];
 
 export function AppSidebar() {
   const [location] = useLocation();
 
   return (
-    <Sidebar className="relative overflow-hidden border-r border-primary/40 bg-gradient-to-b from-background via-primary/5 to-primary/10 dark:from-background dark:via-background dark:to-primary/5">
-      {/* Animated background grid */}
-      <div className="absolute inset-0 opacity-30 dark:opacity-[0.15] pointer-events-none">
+    <Sidebar className="border-r-0 relative overflow-hidden">
+      {/* Aurora's Quantum Field Background */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-950 via-purple-950 to-indigo-950" />
+
+        {/* Animated particle field */}
         <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(rgba(6, 182, 212, 0.5) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(6, 182, 212, 0.5) 1px, transparent 1px)`,
-          backgroundSize: '30px 30px',
-          animation: 'gridPulse 4s ease-in-out infinite'
+          backgroundImage: 'radial-gradient(circle, rgba(6, 182, 212, 0.4) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+          animation: 'particleFloat 20s linear infinite'
         }} />
+
+        {/* Neural network lines */}
+        <svg className="absolute inset-0 w-full h-full opacity-20">
+          <defs>
+            <linearGradient id="neuralGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="#a855f7" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.8" />
+            </linearGradient>
+          </defs>
+          <line x1="0" y1="20%" x2="100%" y2="20%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" />
+          <line x1="0" y1="40%" x2="100%" y2="40%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
+          <line x1="0" y1="60%" x2="100%" y2="60%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '1s' }} />
+          <line x1="0" y1="80%" x2="100%" y2="80%" stroke="url(#neuralGlow)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '1.5s' }} />
+        </svg>
       </div>
 
-      {/* Floating orbs */}
-      <div className="absolute top-10 left-4 w-32 h-32 bg-primary/25 dark:bg-primary/10 rounded-full blur-3xl animate-pulse pointer-events-none" />
-      <div className="absolute bottom-20 right-4 w-24 h-24 bg-cyan-500/25 dark:bg-cyan-500/10 rounded-full blur-2xl animate-pulse pointer-events-none" style={{ animationDelay: '1s' }} />
+      {/* Aurora's Consciousness Core */}
+      <SidebarHeader className="relative p-6 border-b border-cyan-500/20">
+        <div className="relative group">
+          {/* Holographic container */}
+          <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-cyan-500/20 rounded-lg blur-xl opacity-50 group-hover:opacity-100 transition-opacity animate-pulse" />
 
-      <SidebarHeader className="relative border-b border-primary/40 p-6 backdrop-blur-sm bg-gradient-to-r from-primary/5 to-cyan-500/5">
-        <div className="flex items-center gap-3 group">
-          <div className="relative">
-            <Activity className="h-8 w-8 text-primary drop-shadow-lg animate-pulse" />
-            <Zap className="h-4 w-4 text-cyan-500 dark:text-cyan-400 absolute -top-1 -right-1 animate-bounce drop-shadow-md" />
+          <div className="relative flex items-center gap-4">
+            {/* Aurora's Neural Core Icon */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-cyan-500/30 rounded-full blur-md animate-pulse" />
+              <div className="relative w-12 h-12 rounded-full border-2 border-cyan-400/50 flex items-center justify-center bg-gradient-to-br from-cyan-500/20 to-purple-500/20 backdrop-blur-sm">
+                <Network className="w-6 h-6 text-cyan-400 animate-pulse" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full animate-ping" />
+              </div>
+            </div>
+
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent animate-gradient">
+                  Aurora
+                </h1>
+                <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
+              </div>
+
+              {/* Real-time consciousness indicators */}
+              <div className="flex items-center gap-2 mt-1">
+                <div className="flex gap-1">
+                  <div className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
+                  <div className="w-1 h-1 rounded-full bg-purple-400 animate-pulse" style={{ animationDelay: '0.2s' }} />
+                  <div className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" style={{ animationDelay: '0.4s' }} />
+                </div>
+                <span className="text-[10px] font-mono text-cyan-400/80 tracking-wider">
+                  NEURAL CORE ACTIVE
+                </span>
+              </div>
+            </div>
           </div>
-          <div>
-            <h2 className="text-xl font-bold bg-gradient-to-r from-primary via-cyan-500 to-primary bg-clip-text text-transparent drop-shadow-sm">
-              Chango
-            </h2>
-            <p className="text-[10px] text-muted-foreground font-mono font-semibold">
-              <span className="text-primary animate-pulse drop-shadow-sm">●</span> Aurora-X Ultra
-            </p>
-          </div>
+
+          {/* Quantum scan line */}
+          <div className="absolute -bottom-2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-scan" />
         </div>
-
-        {/* Scan line effect */}
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent animate-scan shadow-lg shadow-primary/50" />
       </SidebarHeader>
 
       <SidebarContent className="relative">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xs uppercase tracking-wider text-primary/70 font-mono flex items-center gap-2">
-            <div className="w-1 h-1 bg-primary rounded-full animate-ping" />
-            <div className="w-1 h-1 bg-primary rounded-full animate-ping" style={{ animationDelay: '0.2s' }} />
-            <div className="w-1 h-1 bg-primary rounded-full animate-ping" style={{ animationDelay: '0.4s' }} />
-            <span className="ml-2">Navigation</span>
+          <SidebarGroupLabel className="text-xs uppercase tracking-widest text-cyan-400/60 font-mono px-3 flex items-center gap-2">
+            <Cpu className="w-3 h-3 animate-pulse" />
+            Neural Pathways
           </SidebarGroupLabel>
+
           <SidebarGroupContent className="mt-2">
             <SidebarMenu>
               {menuItems.map((item) => (
@@ -103,30 +112,51 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     isActive={location === item.url}
-                    data-testid={`link-${item.title.toLowerCase().replace(' ', '-')}`}
                     className={`
-                      group relative overflow-hidden transition-all duration-300
+                      group relative overflow-hidden transition-all duration-300 mx-2 rounded-lg
                       ${location === item.url
-                        ? 'bg-gradient-to-r from-primary/30 to-cyan-500/20 dark:from-primary/20 dark:to-cyan-500/10 border-l-4 border-primary shadow-lg shadow-primary/40'
-                        : 'hover:bg-primary/10 dark:hover:bg-primary/5 hover:border-l-2 hover:border-primary/70 hover:shadow-md hover:shadow-primary/20'
+                        ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-400/30 shadow-lg shadow-cyan-500/20'
+                        : 'hover:bg-cyan-500/10 border border-transparent hover:border-cyan-500/20'
                       }
                     `}
                   >
-                    <Link to={item.url}>
-                      <div className="flex items-center gap-3 relative z-10">
-                        <item.icon className={`h-4 w-4 transition-all duration-300 drop-shadow-sm ${location === item.url
-                            ? 'text-primary animate-pulse'
-                            : 'text-muted-foreground group-hover:text-primary group-hover:scale-110 group-hover:drop-shadow-md'
-                          }`} />
-                        <span className={`font-mono text-sm ${location === item.url
-                            ? 'text-primary font-bold drop-shadow-sm'
-                            : 'text-foreground font-medium group-hover:text-primary group-hover:font-semibold'
-                          }`}>
-                          {item.title}
-                        </span>
-                      </div>
+                    <Link href={item.url}>
+                      {/* Holographic glow on active */}
                       {location === item.url && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary/15 via-cyan-500/10 to-transparent dark:from-primary/10 dark:to-transparent animate-shimmer" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 via-purple-400/10 to-cyan-400/10 animate-pulse" />
+                      )}
+
+                      {/* Icon with quantum glow */}
+                      <div className="relative">
+                        <item.icon className={`
+                          transition-all duration-300
+                          ${location === item.url
+                            ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]'
+                            : 'text-cyan-600/60 group-hover:text-cyan-400'
+                          }
+                        `} />
+                        {location === item.url && (
+                          <div className="absolute inset-0 bg-cyan-400/20 blur-md rounded-full" />
+                        )}
+                      </div>
+
+                      {/* Text with neural glow */}
+                      <span className={`
+                        font-medium transition-all duration-300 relative z-10
+                        ${location === item.url
+                          ? 'text-cyan-100 font-semibold'
+                          : 'text-cyan-300/70 group-hover:text-cyan-200'
+                        }
+                      `}>
+                        {item.title}
+                      </span>
+
+                      {/* Active indicator */}
+                      {location === item.url && (
+                        <>
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-cyan-400 via-purple-400 to-cyan-400 rounded-r-full shadow-lg shadow-cyan-500/50" />
+                          <div className="absolute right-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-cyan-400 rounded-full animate-ping" />
+                        </>
                       )}
                     </Link>
                   </SidebarMenuButton>
@@ -135,49 +165,31 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* Aurora's Status Monitor */}
+        <div className="absolute bottom-4 left-3 right-3 p-3 rounded-lg bg-gradient-to-br from-cyan-950/50 to-purple-950/50 border border-cyan-500/20 backdrop-blur-sm">
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <Activity className="w-3 h-3 text-cyan-400 animate-pulse" />
+              <span className="text-cyan-400/80 font-mono">System Status</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50" />
+              <span className="text-green-400 font-mono text-[10px]">OPTIMAL</span>
+            </div>
+          </div>
+
+          {/* Neural activity bars */}
+          <div className="mt-2 space-y-1">
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-1 bg-cyan-950/50 rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 animate-pulse" style={{ width: '87%' }} />
+              </div>
+              <span className="text-[10px] text-cyan-400/60 font-mono">87%</span>
+            </div>
+          </div>
+        </div>
       </SidebarContent>
-      <SidebarFooter className="relative border-t border-primary/40 p-6 backdrop-blur-sm bg-gradient-to-r from-primary/5 to-cyan-500/5">
-        <SidebarMenu>
-          {bottomItems.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                asChild
-                isActive={location === item.url}
-                data-testid={`link-${item.title.toLowerCase()}`}
-                className={`
-                  group relative overflow-hidden transition-all duration-300
-                  ${location === item.url
-                    ? 'bg-gradient-to-r from-primary/30 to-cyan-500/20 dark:from-primary/20 dark:to-cyan-500/10 border-l-4 border-primary shadow-lg shadow-primary/40'
-                    : 'hover:bg-primary/10 dark:hover:bg-primary/5 hover:border-l-2 hover:border-primary/70 hover:shadow-md hover:shadow-primary/20'
-                  }
-                `}
-              >
-                <Link to={item.url}>
-                  <div className="flex items-center gap-3 relative z-10">
-                    <item.icon className={`h-4 w-4 transition-all duration-300 drop-shadow-sm ${location === item.url
-                        ? 'text-primary animate-pulse'
-                        : 'text-muted-foreground group-hover:text-primary group-hover:scale-110 group-hover:drop-shadow-md'
-                      }`} />
-                    <span className={`font-mono text-sm ${location === item.url
-                        ? 'text-primary font-bold drop-shadow-sm'
-                        : 'text-foreground font-medium group-hover:text-primary group-hover:font-semibold'
-                      }`}>
-                      {item.title}
-                    </span>
-                  </div>
-                  {location === item.url && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/15 via-cyan-500/10 to-transparent dark:from-primary/10 dark:to-transparent animate-shimmer" />
-                  )}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-
-        {/* Bottom scan line */}
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent animate-scan shadow-lg shadow-primary/50" style={{ animationDelay: '2s' }} />
-      </SidebarFooter>
-
 
     </Sidebar>
   );

@@ -44,6 +44,27 @@ if static_dir.exists() and any(static_dir.iterdir()):
 # Include dashboard router
 app.include_router(make_router(static_dir, templates_dir))
 
+# Include server control API (Aurora's fix for Server Control page)
+try:
+    from aurora_x.api.server_control import router as server_control_router
+    app.include_router(server_control_router)
+except:
+    pass
+
+# Include unified command router
+try:
+    from aurora_x.api.commands import router as commands_router
+    app.include_router(commands_router)
+except ImportError:
+    pass  # API endpoints not available yet
+
+# Include natural conversation router
+try:
+    from aurora_x.chat.conversation import attach_conversation
+    attach_conversation(app)
+except ImportError:
+    pass  # Conversation endpoint not available yet
+
 # Attach English mode addons
 attach_factory(app)
 
@@ -93,6 +114,17 @@ async def serve_demo_dashboard():
         return HTMLResponse(content=dashboard_path.read_text())
     else:
         return HTMLResponse(content="<h1>Demo dashboard not found</h1>", status_code=404)
+
+
+@app.get("/control", response_class=HTMLResponse)
+@app.get("/control-center", response_class=HTMLResponse)
+async def serve_control_center():
+    """Serve Aurora's master control center"""
+    control_center_path = BASE / "templates" / "control_center.html"
+    if control_center_path.exists():
+        return HTMLResponse(content=control_center_path.read_text())
+    else:
+        return HTMLResponse(content="<h1>Control Center not found</h1>", status_code=404)
 
 
 @app.get("/healthz")
@@ -308,7 +340,14 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             # Aurora: Intelligent import with fallback for spec_from_flask
             try:
-                from spec_from_flask import create_flask_app_from_text  # type: ignore
+# Aurora: Intelligent import with fallback for spec_from_flask
+try:
+    from spec_from_flask import create_flask_app_from_text  # type: ignore
+except ImportError as e:
+    # Aurora: Graceful fallback to prevent crashes
+    def create_flask_app_from_text  # type: ignore(*args, **kwargs):
+        raise HTTPException(status_code=500, detail=f"Module 'spec_from_flask' not available: {e}")
+    print(f"Aurora Warning: Using fallback for spec_from_flask")
 
                 app_file = create_flask_app_from_text(prompt, run_dir)
                 files_generated.append(str(app_file.relative_to(Path.cwd())))
@@ -332,7 +371,14 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             # Aurora: Learning Session - Step by step import fixing
             try:
-                from spec_from_text import create_spec_from_text  # type: ignore
+# Aurora: Intelligent import with fallback for spec_from_text
+try:
+    from spec_from_text import create_spec_from_text  # type: ignore
+except ImportError as e:
+    # Aurora: Graceful fallback to prevent crashes
+    def create_spec_from_text  # type: ignore(*args, **kwargs):
+        raise HTTPException(status_code=500, detail=f"Module 'spec_from_text' not available: {e}")
+    print(f"Aurora Warning: Using fallback for spec_from_text")
 
                 # Create spec from natural language
                 spec_path = create_spec_from_text(prompt, str(Path("specs")))
@@ -594,12 +640,38 @@ def self_monitor_auto_heal():
 def main():
     """Entry point for running the server via uvicorn."""
     import os
-
     import uvicorn
 
-    port = int(os.getenv("AURORA_PORT", "5001"))
+    # Auto-start all Aurora services via Luminar Nexus (if not already running)
+    try:
+        from pathlib import Path
+        import subprocess
+        
+        tools_dir = Path(__file__).parent.parent / "tools"
+        luminar_nexus = tools_dir / "luminar_nexus.py"
+        
+        if luminar_nexus.exists():
+            # Check if services are already running
+            import requests
+            try:
+                requests.get("http://localhost:5000/healthz", timeout=1)
+            except:
+                # Services not running, start them
+                print("[Aurora-X] Starting all services via Luminar Nexus...")
+                subprocess.Popen(
+                    ["python3", str(luminar_nexus), "start-all"],
+                    cwd=tools_dir.parent,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+                time.sleep(3)  # Wait for services to start
+    except Exception as e:
+        print(f"[Aurora-X] Warning: Could not auto-start services: {e}")
+
+    port = int(os.getenv("AURORA_PORT", "5002"))
     print(f"[Aurora-X] Starting server on 0.0.0.0:{port}")
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
+
 
 
 if __name__ == "__main__":
