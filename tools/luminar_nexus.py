@@ -1055,6 +1055,35 @@ class AuroraConversationalAI:
                 result = subprocess.run(f"cp {file_path} {backup_path}", shell=True, capture_output=True, text=True)
                 return f"✅ Backed up to {backup_path}" if result.returncode == 0 else "⚠️ Backup failed"
 
+            elif tool_name == "run_tests":
+                # Phase 2 Task 2: Test execution
+                test_type = args[0] if len(args) > 0 else "auto"
+                test_path = args[1] if len(args) > 1 else None
+                
+                if test_type == "python" or (test_type == "auto" and test_path and test_path.endswith(".py")):
+                    # Run Python tests
+                    cmd = f"python -m pytest {test_path} -v" if test_path else "python -m pytest -v"
+                    result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=30)
+                    return f"TESTS {'PASSED' if result.returncode == 0 else 'FAILED'}\nEXIT: {result.returncode}\n{result.stdout}\n{result.stderr}"
+                
+                elif test_type == "npm" or (test_type == "auto" and test_path and test_path.endswith(('.ts', '.tsx', '.js'))):
+                    # Run npm tests
+                    result = subprocess.run("npm test", shell=True, capture_output=True, text=True, timeout=30, cwd="/workspaces/Aurora-x")
+                    return f"TESTS {'PASSED' if result.returncode == 0 else 'FAILED'}\nEXIT: {result.returncode}\n{result.stdout}"
+                
+                else:
+                    return "⚠️ Unknown test type. Specify: python, npm, or provide test file path"
+
+            elif tool_name == "rollback_file":
+                # Phase 2 Task 2: Rollback from backup
+                file_path = args[0]
+                backup_path = f"{file_path}.aurora_backup"
+                if Path(backup_path).exists():
+                    result = subprocess.run(f"mv {backup_path} {file_path}", shell=True, capture_output=True, text=True)
+                    return f"✅ Rolled back {file_path} from backup" if result.returncode == 0 else "⚠️ Rollback failed"
+                else:
+                    return f"⚠️ No backup found: {backup_path}"
+
             else:
                 return f"Unknown tool: {tool_name}"
 
@@ -2135,6 +2164,15 @@ class AuroraConversationalAI:
                     status = self.manager.get_status(server_key)
                     if status["status"] == "running":
                         log.append(f"  ✅ {status['server']}: HEALTHY")
+                        
+                        # 🧪 PHASE 2 TASK 2: Health endpoint testing
+                        port = status.get("port")
+                        if port:
+                            health_test = self.execute_tool("test_endpoint", f"http://localhost:{port}/health")
+                            if "200" in health_test or "OK" in health_test:
+                                log.append(f"     🧪 Health check: PASSED")
+                            else:
+                                log.append(f"     ⚠️ Health check: {health_test}")
                     else:
                         log.append(f"  ❌ {status['server']}: {status['status']}")
                         all_healthy = False
@@ -2238,7 +2276,19 @@ class AuroraConversationalAI:
                             # Write fixed file
                             self.execute_tool("write_file", file_path, new_content)
                             log.append("   ✅ Fixed: localhost:9090 → /api (Vite proxy)")
-                            fixed_count += 1
+                            
+                            # 🧪 PHASE 2 TASK 2: TEST-DRIVEN FIX WORKFLOW
+                            log.append("   🧪 Running tests to validate fix...")
+                            test_result = self.execute_tool("run_tests", "npm", file_path)
+                            
+                            if "TESTS PASSED" in test_result or "EXIT: 0" in test_result:
+                                log.append("   ✅ **TESTS PASSED** - Fix validated!")
+                                fixed_count += 1
+                            else:
+                                log.append("   ❌ **TESTS FAILED** - Rolling back...")
+                                rollback_result = self.execute_tool("rollback_file", file_path)
+                                log.append(f"   {rollback_result}")
+                                log.append("   ⚠️ Fix reverted - original code restored")
                         else:
                             log.append("   ℹ️ Pattern not found")
 
@@ -2272,38 +2322,54 @@ class AuroraConversationalAI:
             return "\n".join(log)
 
         elif task_type == "create_python_class":
-            log.append("\n🐍 **PYTHON CLASS CREATION MODE ACTIVATED**")
+            log.append("\n🐍 **PYTHON CLASS CREATION MODE - AUTONOMOUS IMPLEMENTATION**")
             log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
-            log.append("**TIER 28**: Autonomous Tool Use")
+            log.append("**TIER 28**: Autonomous Tool Use (self-coding)")
             log.append("**TIER 32**: Systems Architecture & Design Mastery")
             log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
             
-            # Extract class name
+            # Extract class name and details from message
             class_match = re.search(r"class.*(called |named )?([A-Z][a-zA-Z]+)", user_message)
-            if class_match:
-                class_name = class_match.group(2)
-                log.append(f"📝 **Class Name**: {class_name}")
-            else:
-                class_name = "AuroraNewClass"
-                log.append(f"📝 **Class Name**: {class_name} (auto-generated)")
+            class_name = class_match.group(2) if class_match else "AuroraAutoClass"
+            log.append(f"📝 **Class Name**: {class_name}")
             
-            # Extract file to modify
-            file_match = re.search(r"(tools/luminar_nexus\.py|luminar_nexus\.py)", user_message)
-            if file_match:
-                target_file = "/workspaces/Aurora-x/tools/luminar_nexus.py"
-                log.append(f"📁 **Target File**: {target_file}")
-            else:
-                log.append("⚠️ **No target file specified**")
-                log.append("Please specify which .py file to modify")
-                return "\n".join(log)
+            # Extract purpose/description
+            purpose = "General utility class"
+            if "search" in msg_lower or "query" in msg_lower:
+                purpose = "Search and query functionality"
+            elif "monitor" in msg_lower or "check" in msg_lower:
+                purpose = "Monitoring and health checking"
+            elif "test" in msg_lower or "validate" in msg_lower:
+                purpose = "Testing and validation"
             
-            log.append("\n🚧 **IMPLEMENTATION REQUIRED**")
-            log.append("This task requires detailed class implementation.")
-            log.append("Please provide:")
-            log.append(f"1. What methods should {class_name} have?")
-            log.append("2. What data should it store?")
-            log.append("3. What is its purpose?")
-            log.append("\nOr, I'll implement it with the assistant's help and record the process! 📝")
+            log.append(f"🎯 **Purpose**: {purpose}")
+            log.append(f"🤖 **I will autonomously generate the class structure!**\n")
+            
+            # Generate basic class structure
+            class_code = f'''
+class {class_name}:
+    """
+    Autonomously generated by Aurora
+    Purpose: {purpose}
+    """
+    
+    def __init__(self):
+        """Initialize {class_name}"""
+        pass
+    
+    def execute(self, *args, **kwargs):
+        """Main execution method"""
+        return "{{}} initialized and ready".format(self.__class__.__name__)
+'''
+            
+            log.append("**Generated Class Structure:**")
+            log.append("```python")
+            log.append(class_code.strip())
+            log.append("```\n")
+            
+            log.append("✅ **Class structure generated successfully!**")
+            log.append("💡 **Next step**: Specify exact methods and I'll implement them fully!")
+            log.append(f"📋 **Template ready** for {class_name}")
             
             return "\n".join(log)
 
