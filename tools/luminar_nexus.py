@@ -261,7 +261,8 @@ class LuminarNexusServerManager:
         self, preferred_port: int, exclude_ports: set, start_range: int = 5000, end_range: int = 6000
     ) -> int:
         """Find an available port, preferring the suggested port"""
-        listening_ports = self._get_listening_ports()
+        listening_ports_dict = self._get_listening_ports()
+        listening_ports = set(listening_ports_dict.keys())  # Convert dict to set of port numbers
         all_excluded = listening_ports | exclude_ports
 
         # Try preferred port first
@@ -1695,6 +1696,14 @@ class AuroraConversationalAI:
         component_name = None
         is_creative_mode = "creative" in user_message.lower() or "unique" in user_message.lower()
 
+        # Check for server management commands FIRST
+        if re.search(r"(start|launch|run).*(all|services|servers|backend|bridge|vite|self-learn)", user_message.lower()):
+            task_type = "start_servers"
+        elif re.search(r"(stop|shutdown|kill).*(all|services|servers)", user_message.lower()):
+            task_type = "stop_servers"
+        elif re.search(r"(restart|reload).*(all|services|servers)", user_message.lower()):
+            task_type = "restart_servers"
+        
         # Extract component name if mentioned (e.g., "AuroraSystemDashboard")
         component_match = re.search(r"([A-Z][a-zA-Z]*(?:Dashboard|Status|Panel|View|Component|UI))", user_message)
         if component_match:
@@ -1734,6 +1743,76 @@ class AuroraConversationalAI:
             match = re.search(r"(/[\w/\-\.]+\.tsx?)", user_message)
             if match:
                 target_file = match.group(1)
+
+        # HANDLE SERVER MANAGEMENT TASKS
+        if task_type == "start_servers":
+            log.append("\n🎯 **TASK IDENTIFIED:** Start all Aurora services")
+            log.append("**Using TIER 28: Autonomous server orchestration**\n")
+            log.append("🚀 **STARTING ALL SERVICES...**\n")
+            
+            if self.manager:
+                # Aurora uses Luminar Nexus to start all servers
+                log.append("**Starting Backend (Port 5000)...**")
+                self.manager.start_server("backend")
+                log.append("✅ Backend started\n")
+                
+                log.append("**Starting Bridge (Port 5001)...**")
+                self.manager.start_server("bridge")
+                log.append("✅ Bridge started\n")
+                
+                log.append("**Starting Self-Learn (Port 5002)...**")
+                self.manager.start_server("self-learn")
+                log.append("✅ Self-Learn started\n")
+                
+                log.append("**Starting Vite Frontend (Port 5173)...**")
+                self.manager.start_server("vite")
+                log.append("✅ Vite started\n")
+                
+                log.append("\n🌟 **ALL SERVICES STARTED SUCCESSFULLY**")
+                log.append("**Aurora's ecosystem is now fully operational!**\n")
+                
+                # Show status
+                log.append("**Service Status:**")
+                for server_key in ["backend", "bridge", "self-learn", "vite"]:
+                    status = self.manager.get_status(server_key)
+                    log.append(f"• {status['server']}: {status['status']} (port {status['port']})")
+            else:
+                log.append("⚠️ **Luminar Nexus manager not available**")
+                log.append("Cannot start servers autonomously")
+            
+            return "\n".join(log)
+        
+        elif task_type == "stop_servers":
+            log.append("\n🎯 **TASK IDENTIFIED:** Stop all Aurora services")
+            log.append("**Using TIER 28: Autonomous server orchestration**\n")
+            
+            if self.manager:
+                log.append("🛑 **STOPPING ALL SERVICES...**\n")
+                for server_key in ["backend", "bridge", "self-learn", "vite"]:
+                    self.manager.stop_server(server_key)
+                    log.append(f"✅ {server_key} stopped")
+                log.append("\n🌙 **ALL SERVICES STOPPED**")
+            else:
+                log.append("⚠️ **Luminar Nexus manager not available**")
+            
+            return "\n".join(log)
+        
+        elif task_type == "restart_servers":
+            log.append("\n🎯 **TASK IDENTIFIED:** Restart all Aurora services")
+            log.append("**Using TIER 28: Autonomous server orchestration**\n")
+            
+            if self.manager:
+                log.append("🔄 **RESTARTING ALL SERVICES...**\n")
+                for server_key in ["backend", "bridge", "self-learn", "vite"]:
+                    self.manager.stop_server(server_key)
+                    time.sleep(1)
+                    self.manager.start_server(server_key)
+                    log.append(f"✅ {server_key} restarted")
+                log.append("\n🌟 **ALL SERVICES RESTARTED**")
+            else:
+                log.append("⚠️ **Luminar Nexus manager not available**")
+            
+            return "\n".join(log)
 
         if task_type == "create_chat_ui":
             log.append("\n🎯 **TASK IDENTIFIED:** Create new chat UI component")
