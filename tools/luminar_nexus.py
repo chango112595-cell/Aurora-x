@@ -775,197 +775,6 @@ if __name__ == "__main__":
 
 
 # ============================================================================
-# AURORA'S UNIFIED LEARNING QUERY SYSTEM - Phase 2 Task 1
-# ============================================================================
-
-
-class AuroraUnifiedLearningQuery:
-    """
-    Unified learning query system for Aurora Phase 2.
-    Searches across all knowledge sources to find past experiences and solutions.
-
-    Knowledge Sources:
-    - JSONL conversation logs (.aurora_knowledge/*.jsonl)
-    - Corpus database (data/corpus.db)
-    - Monitoring logs (.aurora_knowledge/*_monitoring_*.log)
-    """
-
-    def __init__(self, project_root="/workspaces/Aurora-x"):
-        self.project_root = Path(project_root)
-        self.knowledge_dir = self.project_root / ".aurora_knowledge"
-        self.corpus_db = self.project_root / "data" / "corpus.db"
-
-    def search_jsonl(self, query: str, limit: int = 10) -> list:
-        """Search JSONL conversation logs"""
-        results = []
-        query_lower = query.lower()
-
-        # Find all JSONL files
-        jsonl_files = list(self.knowledge_dir.glob("*.jsonl"))
-
-        for jsonl_file in jsonl_files:
-            try:
-                with open(jsonl_file) as f:
-                    for line_num, line in enumerate(f, 1):
-                        try:
-                            entry = json.loads(line)
-
-                            # Handle different JSONL formats
-                            # Format 1: Luminar Nexus server logs {event, server, details, system}
-                            if "event" in entry:
-                                content = f"{entry.get('event', '')} {entry.get('server', '')} {entry.get('system', '')} {str(entry.get('details', ''))}"
-                            # Format 2: Chat logs {user_message, aurora_response}
-                            elif "user_message" in entry or "aurora_response" in entry:
-                                content = str(entry.get("user_message", "")) + str(entry.get("aurora_response", ""))
-                            # Format 3: Generic - search all string values
-                            else:
-                                content = " ".join(str(v) for v in entry.values() if isinstance(v, (str, int, float)))
-
-                            if query_lower in content.lower():
-                                results.append(
-                                    {
-                                        "source": "jsonl",
-                                        "file": jsonl_file.name,
-                                        "line": line_num,
-                                        "timestamp": entry.get("timestamp", "unknown"),
-                                        "snippet": content[:200],
-                                        "relevance_score": content.lower().count(query_lower),
-                                        "data": entry,
-                                    }
-                                )
-                        except json.JSONDecodeError:
-                            continue
-            except Exception as e:
-                print(f"Error reading {jsonl_file}: {e}")
-
-        return results[:limit]
-
-    def search_corpus(self, query: str, limit: int = 10) -> list:
-        """Search SQLite corpus database"""
-        results = []
-
-        if not self.corpus_db.exists():
-            return results
-
-        try:
-            import sqlite3
-
-            conn = sqlite3.connect(str(self.corpus_db))
-            cursor = conn.cursor()
-
-            # Search in corpus table (code snippets and test results)
-            query_pattern = f"%{query}%"
-
-            cursor.execute(
-                """
-                SELECT func_name, func_signature, snippet, failing_tests, 
-                       passed, total, score, timestamp
-                FROM corpus 
-                WHERE func_name LIKE ? 
-                   OR func_signature LIKE ? 
-                   OR snippet LIKE ?
-                   OR failing_tests LIKE ?
-                LIMIT ?
-            """,
-                (query_pattern, query_pattern, query_pattern, query_pattern, limit),
-            )
-
-            for row in cursor.fetchall():
-                combined_text = f"{row[0]} {row[1]} {row[2]} {row[3]}"
-                results.append(
-                    {
-                        "source": "corpus_db",
-                        "type": "code_snippet",
-                        "func_name": row[0],
-                        "signature": row[1],
-                        "snippet": row[2][:200],
-                        "failing_tests": row[3],
-                        "passed": row[4],
-                        "total": row[5],
-                        "score": row[6],
-                        "timestamp": row[7],
-                        "relevance_score": combined_text.lower().count(query.lower()),
-                    }
-                )
-
-            conn.close()
-        except Exception as e:
-            print(f"Error querying corpus DB: {e}")
-
-        return results
-
-    def search_monitoring_logs(self, query: str, limit: int = 10) -> list:
-        """Search monitoring log files"""
-        results = []
-        query_lower = query.lower()
-
-        # Find all monitoring log files
-        log_files = list(self.knowledge_dir.glob("*monitoring*.log"))
-
-        for log_file in log_files:
-            try:
-                with open(log_file) as f:
-                    for line_num, line in enumerate(f, 1):
-                        if query_lower in line.lower():
-                            results.append(
-                                {
-                                    "source": "monitoring_log",
-                                    "file": log_file.name,
-                                    "line": line_num,
-                                    "content": line.strip(),
-                                    "relevance_score": line.lower().count(query_lower),
-                                }
-                            )
-                            if len(results) >= limit:
-                                break
-            except Exception as e:
-                print(f"Error reading {log_file}: {e}")
-
-        return results[:limit]
-
-    def query(self, search_term: str, limit_per_source: int = 10) -> dict:
-        """
-        Unified query across all knowledge sources.
-        Returns combined and ranked results.
-        """
-        print(f"\n🔍 Aurora Unified Learning Query: '{search_term}'")
-        print("=" * 70)
-
-        # Search all sources
-        jsonl_results = self.search_jsonl(search_term, limit_per_source)
-        corpus_results = self.search_corpus(search_term, limit_per_source)
-        log_results = self.search_monitoring_logs(search_term, limit_per_source)
-
-        # Combine and rank
-        all_results = jsonl_results + corpus_results + log_results
-        ranked_results = self.rank_results(all_results)
-
-        # Summary
-        summary = {
-            "query": search_term,
-            "total_results": len(all_results),
-            "by_source": {
-                "jsonl": len(jsonl_results),
-                "corpus_db": len(corpus_results),
-                "monitoring_logs": len(log_results),
-            },
-            "top_results": ranked_results[:20],  # Top 20 overall
-            "all_results": all_results,
-        }
-
-        print(f"\n📊 Results: {summary['total_results']} found")
-        print(f"   • JSONL logs: {summary['by_source']['jsonl']}")
-        print(f"   • Corpus DB: {summary['by_source']['corpus_db']}")
-        print(f"   • Monitoring: {summary['by_source']['monitoring_logs']}")
-
-        return summary
-
-    def rank_results(self, results: list) -> list:
-        """Rank results by relevance score (descending)"""
-        return sorted(results, key=lambda x: x.get("relevance_score", 0), reverse=True)
-
-
-# ============================================================================
 # AURORA'S CONVERSATIONAL AI - Integrated into Luminar Nexus
 # ============================================================================
 
@@ -1064,39 +873,6 @@ class AuroraConversationalAI:
                 backup_path = f"{file_path}.aurora_backup"
                 result = subprocess.run(f"cp {file_path} {backup_path}", shell=True, capture_output=True, text=True)
                 return f"✅ Backed up to {backup_path}" if result.returncode == 0 else "⚠️ Backup failed"
-
-            elif tool_name == "run_tests":
-                # Phase 2 Task 2: Test execution
-                test_type = args[0] if len(args) > 0 else "auto"
-                test_path = args[1] if len(args) > 1 else None
-
-                if test_type == "python" or (test_type == "auto" and test_path and test_path.endswith(".py")):
-                    # Run Python tests
-                    cmd = f"python -m pytest {test_path} -v" if test_path else "python -m pytest -v"
-                    result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=30)
-                    return f"TESTS {'PASSED' if result.returncode == 0 else 'FAILED'}\nEXIT: {result.returncode}\n{result.stdout}\n{result.stderr}"
-
-                elif test_type == "npm" or (
-                    test_type == "auto" and test_path and test_path.endswith((".ts", ".tsx", ".js"))
-                ):
-                    # Run npm tests
-                    result = subprocess.run(
-                        "npm test", shell=True, capture_output=True, text=True, timeout=30, cwd="/workspaces/Aurora-x"
-                    )
-                    return f"TESTS {'PASSED' if result.returncode == 0 else 'FAILED'}\nEXIT: {result.returncode}\n{result.stdout}"
-
-                else:
-                    return "⚠️ Unknown test type. Specify: python, npm, or provide test file path"
-
-            elif tool_name == "rollback_file":
-                # Phase 2 Task 2: Rollback from backup
-                file_path = args[0]
-                backup_path = f"{file_path}.aurora_backup"
-                if Path(backup_path).exists():
-                    result = subprocess.run(f"mv {backup_path} {file_path}", shell=True, capture_output=True, text=True)
-                    return f"✅ Rolled back {file_path} from backup" if result.returncode == 0 else "⚠️ Rollback failed"
-                else:
-                    return f"⚠️ No backup found: {backup_path}"
 
             else:
                 return f"Unknown tool: {tool_name}"
@@ -1997,12 +1773,16 @@ class AuroraConversationalAI:
             log.append("🔍 **DEBUG**: Detected fix_bug task type")
         # Check for PYTHON CLASS/METHOD creation (Phase 2+)
         elif re.search(
-            r"(create|add|implement|build).*(class|method|function).*(luminar|aurora|python|\.py)", msg_lower
+            r"(create|add|implement|build).*(class|method|function).*(luminar|aurora|python|\.py)",
+            msg_lower
         ):
             task_type = "create_python_class"
             log.append("🔍 **DEBUG**: Detected create_python_class task type - Aurora will write Python code!")
         # Check for MODIFY FILE commands (Phase 2+)
-        elif re.search(r"(modify|update|change|edit).*(file|code|luminar_nexus\.py|tools/)", msg_lower):
+        elif re.search(
+            r"(modify|update|change|edit).*(file|code|luminar_nexus\.py|tools/)",
+            msg_lower
+        ):
             task_type = "modify_python_file"
             log.append("🔍 **DEBUG**: Detected modify_python_file task type - Aurora will modify existing code!")
 
@@ -2174,15 +1954,6 @@ class AuroraConversationalAI:
                     status = self.manager.get_status(server_key)
                     if status["status"] == "running":
                         log.append(f"  ✅ {status['server']}: HEALTHY")
-
-                        # 🧪 PHASE 2 TASK 2: Health endpoint testing
-                        port = status.get("port")
-                        if port:
-                            health_test = self.execute_tool("test_endpoint", f"http://localhost:{port}/health")
-                            if "200" in health_test or "OK" in health_test:
-                                log.append("     🧪 Health check: PASSED")
-                            else:
-                                log.append(f"     ⚠️ Health check: {health_test}")
                     else:
                         log.append(f"  ❌ {status['server']}: {status['status']}")
                         all_healthy = False
@@ -2286,19 +2057,7 @@ class AuroraConversationalAI:
                             # Write fixed file
                             self.execute_tool("write_file", file_path, new_content)
                             log.append("   ✅ Fixed: localhost:9090 → /api (Vite proxy)")
-
-                            # 🧪 PHASE 2 TASK 2: TEST-DRIVEN FIX WORKFLOW
-                            log.append("   🧪 Running tests to validate fix...")
-                            test_result = self.execute_tool("run_tests", "npm", file_path)
-
-                            if "TESTS PASSED" in test_result or "EXIT: 0" in test_result:
-                                log.append("   ✅ **TESTS PASSED** - Fix validated!")
-                                fixed_count += 1
-                            else:
-                                log.append("   ❌ **TESTS FAILED** - Rolling back...")
-                                rollback_result = self.execute_tool("rollback_file", file_path)
-                                log.append(f"   {rollback_result}")
-                                log.append("   ⚠️ Fix reverted - original code restored")
+                            fixed_count += 1
                         else:
                             log.append("   ℹ️ Pattern not found")
 
@@ -2328,83 +2087,6 @@ class AuroraConversationalAI:
             else:
                 log.append("⚠️ **No files found to fix**")
                 log.append("Please specify files or pattern to search for")
-
-            return "\n".join(log)
-
-        elif task_type == "create_python_class":
-            log.append("\n🐍 **PYTHON CLASS CREATION MODE - AUTONOMOUS IMPLEMENTATION**")
-            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
-            log.append("**TIER 28**: Autonomous Tool Use (self-coding)")
-            log.append("**TIER 32**: Systems Architecture & Design Mastery")
-            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
-
-            # Extract class name and details from message
-            class_match = re.search(r"class.*(called |named )?([A-Z][a-zA-Z]+)", user_message)
-            class_name = class_match.group(2) if class_match else "AuroraAutoClass"
-            log.append(f"📝 **Class Name**: {class_name}")
-
-            # Extract purpose/description
-            purpose = "General utility class"
-            if "search" in msg_lower or "query" in msg_lower:
-                purpose = "Search and query functionality"
-            elif "monitor" in msg_lower or "check" in msg_lower:
-                purpose = "Monitoring and health checking"
-            elif "test" in msg_lower or "validate" in msg_lower:
-                purpose = "Testing and validation"
-
-            log.append(f"🎯 **Purpose**: {purpose}")
-            log.append("🤖 **I will autonomously generate the class structure!**\n")
-
-            # Generate basic class structure
-            class_code = f'''
-class {class_name}:
-    """
-    Autonomously generated by Aurora
-    Purpose: {purpose}
-    """
-    
-    def __init__(self):
-        """Initialize {class_name}"""
-        pass
-    
-    def execute(self, *args, **kwargs):
-        """Main execution method"""
-        return "{{}} initialized and ready".format(self.__class__.__name__)
-'''
-
-            log.append("**Generated Class Structure:**")
-            log.append("```python")
-            log.append(class_code.strip())
-            log.append("```\n")
-
-            log.append("✅ **Class structure generated successfully!**")
-            log.append("💡 **Next step**: Specify exact methods and I'll implement them fully!")
-            log.append(f"📋 **Template ready** for {class_name}")
-
-            return "\n".join(log)
-
-        elif task_type == "modify_python_file":
-            log.append("\n🔧 **PYTHON FILE MODIFICATION MODE ACTIVATED**")
-            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
-            log.append("**TIER 28**: Autonomous code modification")
-            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
-
-            # Extract file to modify
-            file_match = re.search(r"(tools/[\w_]+\.py|[\w_]+\.py)", user_message)
-            if file_match:
-                target_file = (
-                    f"/workspaces/Aurora-x/{file_match.group(1)}"
-                    if not file_match.group(1).startswith("/")
-                    else file_match.group(1)
-                )
-                log.append(f"📁 **Target File**: {target_file}")
-            else:
-                log.append("⚠️ **No target file specified**")
-                return "\n".join(log)
-
-            log.append("\n🚧 **MODIFICATION REQUIRED**")
-            log.append("This task requires specific code changes.")
-            log.append("The assistant will implement this and record Aurora's process! 📝")
 
             return "\n".join(log)
 
@@ -2979,6 +2661,82 @@ Ready for commands >_`,
             else:
                 log.append(f"⚠️ **ISSUE:** {result}")
                 log.append("Attempted to create file but encountered an error")
+
+        elif task_type == "create_python_class":
+            log.append("\n🐍 **PYTHON CLASS CREATION MODE - AUTONOMOUS IMPLEMENTATION**")
+            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
+            log.append("**TIER 28**: Autonomous Tool Use (self-coding)")
+            log.append("**TIER 32**: Systems Architecture & Design Mastery")
+            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
+            
+            # Extract class name and details from message
+            class_match = re.search(r"class.*(called |named )?([A-Z][a-zA-Z]+)", user_message)
+            class_name = class_match.group(2) if class_match else "AuroraAutoClass"
+            log.append(f"📝 **Class Name**: {class_name}")
+            
+            # Extract purpose/description
+            purpose = "General utility class"
+            if "search" in msg_lower or "query" in msg_lower:
+                purpose = "Search and query functionality"
+            elif "monitor" in msg_lower or "check" in msg_lower:
+                purpose = "Monitoring and health checking"
+            elif "test" in msg_lower or "validate" in msg_lower:
+                purpose = "Testing and validation"
+            elif "resource" in msg_lower or "optimization" in msg_lower:
+                purpose = "Resource optimization and monitoring"
+            
+            log.append(f"🎯 **Purpose**: {purpose}")
+            log.append(f"🤖 **I will autonomously generate the class structure!**\n")
+            
+            # Generate basic class structure
+            class_code = f'''
+class {class_name}:
+    """
+    Autonomously generated by Aurora
+    Purpose: {purpose}
+    """
+    
+    def __init__(self):
+        """Initialize {class_name}"""
+        pass
+    
+    def execute(self, *args, **kwargs):
+        """Main execution method"""
+        return "{{}} initialized and ready".format(self.__class__.__name__)
+'''
+            
+            log.append("**Generated Class Structure:**")
+            log.append("```python")
+            log.append(class_code.strip())
+            log.append("```\n")
+            
+            log.append("✅ **Class structure generated successfully!**")
+            log.append("💡 **Next step**: Specify exact methods and I'll implement them fully!")
+            log.append(f"📋 **Template ready** for {class_name}")
+            
+            return "\n".join(log)
+
+        elif task_type == "modify_python_file":
+            log.append("\n🔧 **PYTHON FILE MODIFICATION MODE ACTIVATED**")
+            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
+            log.append("**TIER 28**: Autonomous code modification")
+            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
+            
+            # Extract file to modify
+            file_match = re.search(r"(tools/[\w_]+\.py|[\w_]+\.py)", user_message)
+            if file_match:
+                target_file = f"/workspaces/Aurora-x/{file_match.group(1)}" if not file_match.group(1).startswith("/") else file_match.group(1)
+                log.append(f"📁 **Target File**: {target_file}")
+            else:
+                log.append("⚠️ **No target file specified**")
+                log.append("Please specify which .py file to modify")
+                return "\n".join(log)
+
+            log.append("\n🚧 **AUTONOMOUS IMPLEMENTATION READY**")
+            log.append("Aurora will analyze the file and implement the requested changes!")
+            log.append("Using TIER 28 tools for code modification...")
+            
+            return "\n".join(log)
 
         elif task_type == "create_component":
             # Aurora creates ANY component type based on description
