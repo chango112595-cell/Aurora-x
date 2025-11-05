@@ -40,9 +40,12 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
+    port: 5173,
     allowedHosts: [
       '.replit.dev',
       '.repl.co',
+      '.app.github.dev',
+      '.preview.app.github.dev',
     ],
     proxy: {
       '/api/chat': {
@@ -61,8 +64,9 @@ export default defineConfig({
     hmr: {
       timeout: 30000,
       overlay: false,
-      clientPort: 443,
-      protocol: 'wss',
+      // For Codespaces/GitHub dev containers
+      host: 'localhost',
+      port: 5173,
     },
     watch: {
       usePolling: false,
