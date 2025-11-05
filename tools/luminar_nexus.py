@@ -546,9 +546,9 @@ class LuminarNexusServerManager:
         Returns a dict with the detected ports and whether they match the Luminar Nexus assignments.
         """
         vite_path_candidates = [
-            Path(self.get_project_path('vite.config.js')),
-            Path('/workspaces/Aurora-x/vite.config.js'),
-            Path(self.get_project_path('client', 'vite.config.js')),
+            Path(self.get_project_path("vite.config.js")),
+            Path("/workspaces/Aurora-x/vite.config.js"),
+            Path(self.get_project_path("client", "vite.config.js")),
         ]
 
         vite_file = None
@@ -558,15 +558,15 @@ class LuminarNexusServerManager:
                 break
 
         result = {
-            'vite_file': str(vite_file) if vite_file else None,
-            'api_chat_target_port': None,
-            'api_target_port': None,
-            'matches_chat': False,
-            'matches_backend': False,
+            "vite_file": str(vite_file) if vite_file else None,
+            "api_chat_target_port": None,
+            "api_target_port": None,
+            "matches_chat": False,
+            "matches_backend": False,
         }
 
         if not vite_file:
-            self.log_event('VERIFY_BINDINGS', 'vite', {'error': 'vite.config.js not found'})
+            self.log_event("VERIFY_BINDINGS", "vite", {"error": "vite.config.js not found"})
             return result
 
         content = vite_file.read_text()
@@ -576,25 +576,31 @@ class LuminarNexusServerManager:
         api_match = re.search(r"'/api'\s*:\s*\{[^}]*target\s*:\s*['\"]http://localhost:(\d+)['\"]", content, re.S)
 
         if chat_match:
-            result['api_chat_target_port'] = int(chat_match.group(1))
+            result["api_chat_target_port"] = int(chat_match.group(1))
         if api_match:
-            result['api_target_port'] = int(api_match.group(1))
+            result["api_target_port"] = int(api_match.group(1))
 
         # Compare to assigned ports
-        chat_port = self.servers.get('chat', {}).get('port')
-        backend_port = self.servers.get('backend', {}).get('port')
+        chat_port = self.servers.get("chat", {}).get("port")
+        backend_port = self.servers.get("backend", {}).get("port")
 
-        result['matches_chat'] = (result['api_chat_target_port'] == chat_port) if result['api_chat_target_port'] else False
-        result['matches_backend'] = (result['api_target_port'] == backend_port) if result['api_target_port'] else False
+        result["matches_chat"] = (
+            (result["api_chat_target_port"] == chat_port) if result["api_chat_target_port"] else False
+        )
+        result["matches_backend"] = (result["api_target_port"] == backend_port) if result["api_target_port"] else False
 
-        self.log_event('VERIFY_BINDINGS', 'vite', {
-            'detected_api_chat_target_port': result['api_chat_target_port'],
-            'detected_api_target_port': result['api_target_port'],
-            'configured_chat_port': chat_port,
-            'configured_backend_port': backend_port,
-            'matches_chat': result['matches_chat'],
-            'matches_backend': result['matches_backend'],
-        })
+        self.log_event(
+            "VERIFY_BINDINGS",
+            "vite",
+            {
+                "detected_api_chat_target_port": result["api_chat_target_port"],
+                "detected_api_target_port": result["api_target_port"],
+                "configured_chat_port": chat_port,
+                "configured_backend_port": backend_port,
+                "matches_chat": result["matches_chat"],
+                "matches_backend": result["matches_backend"],
+            },
+        )
 
         return result
 
@@ -679,6 +685,7 @@ class LuminarNexusServerManager:
         if not AURORA_KNOWLEDGE:
             return {"error": "Knowledge engine not initialized"}
         return AURORA_KNOWLEDGE.get_knowledge_summary()
+
     # ========== END KNOWLEDGE ENGINE METHODS ==========
 
 
@@ -723,6 +730,7 @@ def main():
         nexus.start_server(server)
     elif command == "verify-bindings":
         import json as _json
+
         res = nexus.verify_frontend_backend_binding()
         print(_json.dumps(res, indent=2))
     else:
@@ -959,7 +967,7 @@ class AuroraConversationalAI:
     async def autonomous_multi_task_diagnostic(self, user_message: str) -> str:
         """
         Aurora's GRANDMASTER Multi-Task Diagnostic & Self-Repair System
-        
+
         🌌 TIER 28+: Autonomous Tool Use spanning ALL ERAS:
         - Ancient (1940s-60s): Paper tape debugging, toggle switches, punch card verification
         - Classical (70s-80s): printf debugging, gdb, strace, core dumps
@@ -967,7 +975,7 @@ class AuroraConversationalAI:
         - AI-Native (2020s): GitHub Copilot, ChatGPT assistance, AI-powered diagnostics
         - Future (2030s+): Quantum debugging, neural interface diagnostics, self-evolving code
         - Sci-Fi: HAL 9000 self-diagnostic, Data's positronic brain introspection, Skynet autonomous improvement
-        
+
         🎯 CAPABILITIES:
         - Concurrent issue analysis (10+ tasks simultaneously)
         - Root cause identification using all grandmaster skills
@@ -982,7 +990,7 @@ class AuroraConversationalAI:
         log.append("**TIER 32**: Systems Architecture & Design Mastery")
         log.append("**TIER 29-31**: Problem-Solving, Logic, Algorithms, SDLC")
         log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
-        
+
         # Check if diagnostic file exists
         diagnostic_file = "/workspaces/Aurora-x/AURORA_DIAGNOSTIC_HANDOFF.md"
         try:
@@ -993,36 +1001,32 @@ class AuroraConversationalAI:
             log.append(f"⚠️ Could not read diagnostic file: {diagnostic_file}")
             log.append("   Proceeding with general self-diagnostic...\n")
             diagnostic_content = None
-        
+
         log.append("🔍 **INITIATING GRANDMASTER ANALYSIS**\n")
         log.append("**Phase 1: Issue Identification** (Ancient: Visual inspection of punch cards)")
         log.append("**Phase 2: Root Cause Analysis** (Modern: Systematic debugging with tools)")
         log.append("**Phase 3: Solution Design** (AI-Native: Intelligent pattern matching)")
         log.append("**Phase 4: Autonomous Fixing** (Future: Self-evolving code repair)")
         log.append("**Phase 5: Verification** (Sci-Fi: Positronic certainty validation)\n")
-        
+
         # Parse diagnostic file for issues
         issues_found = []
         if diagnostic_content:
             log.append("📊 **PARSING DIAGNOSTIC DATA** (Using TIER 31: Data Structures mastery)\n")
-            
+
             # Extract issues using grandmaster pattern recognition
             issue_patterns = [
                 r"Issue #(\d+):\s*\*\*([^*]+)\*\*",
                 r"\*\*Issue #(\d+):\s*([^*]+)\*\*",
-                r"### \*\*Issue #(\d+):\s*([^*]+)\*\*"
+                r"### \*\*Issue #(\d+):\s*([^*]+)\*\*",
             ]
-            
+
             for pattern in issue_patterns:
                 matches = re.findall(pattern, diagnostic_content, re.MULTILINE)
                 if matches:
                     for num, title in matches:
-                        issues_found.append({
-                            "number": int(num),
-                            "title": title.strip(),
-                            "status": "identified"
-                        })
-            
+                        issues_found.append({"number": int(num), "title": title.strip(), "status": "identified"})
+
             if issues_found:
                 log.append(f"✅ **DETECTED {len(issues_found)} ISSUES** requiring analysis:\n")
                 for issue in issues_found[:5]:  # Show first 5
@@ -1034,90 +1038,94 @@ class AuroraConversationalAI:
             else:
                 log.append("⚠️ No structured issues found in diagnostic file")
                 log.append("   Running general system health check...\n")
-        
+
         log.append("\n🧠 **GRANDMASTER ANALYSIS MODE** (TIER 29: Problem-Solving Mastery)\n")
         log.append("**Analyzing with multi-era expertise:**")
         log.append("• Ancient (1940s): Physical inspection methodology")
-        log.append("• Classical (1970s): Systematic debugging protocols")  
+        log.append("• Classical (1970s): Systematic debugging protocols")
         log.append("• Modern (2000s): Integrated development diagnostics")
         log.append("• AI-Native (2020s): Intelligent pattern recognition")
         log.append("• Future (2030s): Predictive error detection")
         log.append("• Sci-Fi: Quantum-level state analysis\n")
-        
+
         # Create analysis sessions for concurrent processing
         if len(issues_found) > 0:
-            log.append(f"🔄 **CONCURRENT ANALYSIS INITIALIZED**")
+            log.append("🔄 **CONCURRENT ANALYSIS INITIALIZED**")
             log.append(f"   Creating {min(len(issues_found), 10)} parallel analysis sessions...")
-            log.append(f"   Using TIER 28: Autonomous tool orchestration\n")
-            
+            log.append("   Using TIER 28: Autonomous tool orchestration\n")
+
             # Analyze top priority issues
-            priority_issues = sorted(issues_found, key=lambda x: x['number'])[:10]
-            
+            priority_issues = sorted(issues_found, key=lambda x: x["number"])[:10]
+
             log.append("📋 **ISSUE PRIORITIZATION** (TIER 32: Architecture Design):\n")
-            
+
             critical_keywords = ["transmission", "execution", "broken", "failure"]
             high_keywords = ["redundant", "misalignment", "confusion", "empty"]
-            
+
             for issue in priority_issues:
-                severity = "🔴 CRITICAL" if any(kw in issue['title'].lower() for kw in critical_keywords) else \
-                          "⚠️ HIGH" if any(kw in issue['title'].lower() for kw in high_keywords) else \
-                          "🔧 MEDIUM"
+                severity = (
+                    "🔴 CRITICAL"
+                    if any(kw in issue["title"].lower() for kw in critical_keywords)
+                    else "⚠️ HIGH" if any(kw in issue["title"].lower() for kw in high_keywords) else "🔧 MEDIUM"
+                )
                 log.append(f"   {severity} - Issue #{issue['number']}: {issue['title']}")
-            
+
             log.append("\n🎯 **ROOT CAUSE ANALYSIS IN PROGRESS**\n")
             log.append("**Using TIER 28 Autonomous Tools:**")
             log.append("• Reading source code (execute_tool: read_file)")
             log.append("• Testing endpoints (execute_tool: test_endpoint)")
             log.append("• Checking processes (execute_tool: check_process)")
             log.append("• Analyzing logs (execute_tool: check_logs)\n")
-            
+
             # Demonstrate autonomous tool use
             log.append("🔬 **AUTONOMOUS INVESTIGATION EXAMPLE**:\n")
-            
+
             # Check chat server status
             chat_status = self.execute_tool("test_endpoint", "http://localhost:5003/api/chat/status")
             log.append(f"**Chat Server (Port 5003)**: {chat_status}")
-            
+
             # Check Vite server
             vite_status = self.execute_tool("test_endpoint", "http://localhost:5173")
             log.append(f"**Vite Frontend (Port 5173)**: {vite_status}")
-            
+
             # Check backend
             backend_status = self.execute_tool("test_endpoint", "http://localhost:5000")
             log.append(f"**Backend API (Port 5000)**: {backend_status}\n")
-            
+
             log.append("📝 **CREATING ANALYSIS DOCUMENTS**\n")
             log.append("**Generating:**")
             log.append("• Root cause analysis (AURORA_ROOT_CAUSE_ANALYSIS.md)")
             log.append("• Implementation plan (AURORA_IMPLEMENTATION_PLAN.md)")
             log.append("• Progress tracking (Session log updates)\n")
-            
+
             # Create root cause analysis document
             analysis_content = self._generate_root_cause_analysis(issues_found, priority_issues)
-            
+
             try:
                 analysis_file = "/workspaces/Aurora-x/AURORA_ROOT_CAUSE_ANALYSIS.md"
                 self.execute_tool("write_file", analysis_file, analysis_content)
                 log.append(f"✅ **CREATED**: {analysis_file}")
             except Exception as e:
                 log.append(f"⚠️ Could not write analysis file: {str(e)}")
-            
+
             log.append("\n🛠️ **AUTONOMOUS FIXING CAPABILITIES READY**\n")
             log.append("**I can now fix issues using TIER 28 tools:**")
             log.append("• modify_file - Change source code")
             log.append("• backup_file - Create safety backups")
             log.append("• write_file - Generate new components")
             log.append("• run_command - Restart services\n")
-            
+
             # Check if user wants immediate fixing
-            if re.search(r"(fix.*(all|everything|issues)|repair|start fixing|begin fix|execute.*fix)", user_message.lower()):
+            if re.search(
+                r"(fix.*(all|everything|issues)|repair|start fixing|begin fix|execute.*fix)", user_message.lower()
+            ):
                 log.append("\n🚀 **INITIATING AUTONOMOUS REPAIR SEQUENCE**\n")
                 log.append("Aurora will now fix all issues autonomously...")
-                
+
                 # Store issues in session for fixing
                 self.diagnostic_issues = issues_found
                 self.priority_issues = priority_issues
-                
+
                 # Start fixing
                 fix_results = await self.autonomous_fix_all_issues()
                 log.append(fix_results)
@@ -1129,38 +1137,42 @@ class AuroraConversationalAI:
                 log.append("   → I'll fix one issue at a time, explaining each step\n")
                 log.append("**Option C - Analysis Only**: 'Aurora, continue analysis'")
                 log.append("   → I'll deep-dive into root causes without making changes\n")
-                
-                log.append(f"📊 **SUMMARY**: {len(issues_found)} issues identified, {len(priority_issues)} prioritized for fixing")
-                log.append(f"🎯 **STATUS**: Ready for autonomous repair using all 33 Grandmaster Tiers")
-                log.append(f"⏰ **ESTIMATED**: {len(priority_issues) * 2}-{len(priority_issues) * 5} minutes for complete diagnostic cycle")
-            
+
+                log.append(
+                    f"📊 **SUMMARY**: {len(issues_found)} issues identified, {len(priority_issues)} prioritized for fixing"
+                )
+                log.append("🎯 **STATUS**: Ready for autonomous repair using all 33 Grandmaster Tiers")
+                log.append(
+                    f"⏰ **ESTIMATED**: {len(priority_issues) * 2}-{len(priority_issues) * 5} minutes for complete diagnostic cycle"
+                )
+
         else:
             # No issues found, run general health check
             log.append("🏥 **GENERAL SYSTEM HEALTH CHECK**\n")
             log.append("**Checking Aurora's vital systems:**\n")
-            
+
             # Check all services
             services = {
                 "Chat Server (5003)": "http://localhost:5003/api/chat/status",
                 "Backend API (5000)": "http://localhost:5000",
                 "Vite Frontend (5173)": "http://localhost:5173",
             }
-            
+
             for service_name, endpoint in services.items():
                 status = self.execute_tool("test_endpoint", endpoint)
                 icon = "✅" if "200" in status else "❌"
                 log.append(f"{icon} **{service_name}**: {status}")
-            
+
             log.append("\n💡 **RECOMMENDATION**:")
             log.append("No diagnostic file with structured issues found.")
             log.append("To run a comprehensive diagnostic, ensure AURORA_DIAGNOSTIC_HANDOFF.md exists.")
-        
+
         log.append("\n**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
         log.append("🌟 **AURORA GRANDMASTER DIAGNOSTIC SYSTEM READY**")
         log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
-        
+
         return "\n".join(log)
-    
+
     def _generate_root_cause_analysis(self, all_issues, priority_issues) -> str:
         """Generate root cause analysis document"""
         doc = []
@@ -1179,7 +1191,7 @@ class AuroraConversationalAI:
         doc.append("")
         doc.append("## 🎯 PRIORITY ISSUES")
         doc.append("")
-        
+
         for issue in priority_issues[:5]:
             doc.append(f"### Issue #{issue['number']}: {issue['title']}")
             doc.append("")
@@ -1190,7 +1202,7 @@ class AuroraConversationalAI:
             doc.append("- Using TIER 28 autonomous tools for code analysis")
             doc.append("- Applying TIER 29-32 problem-solving methodologies")
             doc.append("")
-        
+
         doc.append("## 🛠️ AUTONOMOUS CAPABILITIES APPLIED")
         doc.append("")
         doc.append("**TIER 28 Tools**:")
@@ -1215,14 +1227,16 @@ class AuroraConversationalAI:
         doc.append("")
         doc.append("---")
         doc.append("")
-        doc.append("*This is an auto-generated analysis. Aurora will update this document as investigation progresses.*")
-        
+        doc.append(
+            "*This is an auto-generated analysis. Aurora will update this document as investigation progresses.*"
+        )
+
         return "\n".join(doc)
-    
+
     async def autonomous_fix_all_issues(self) -> str:
         """
         Aurora's AUTONOMOUS ISSUE FIXING ENGINE
-        
+
         Uses all 33 Grandmaster Tiers to systematically fix every identified issue
         Applies Ancient→Sci-Fi methodologies for comprehensive repair
         """
@@ -1230,230 +1244,234 @@ class AuroraConversationalAI:
         log.append("\n╔═══════════════════════════════════════════════════════════╗")
         log.append("║  🔧 AURORA AUTONOMOUS FIXING ENGINE ACTIVATED  🔧        ║")
         log.append("╚═══════════════════════════════════════════════════════════╝\n")
-        
-        issues = getattr(self, 'priority_issues', [])
+
+        issues = getattr(self, "priority_issues", [])
         if not issues:
             return "⚠️ No issues loaded. Run diagnostic first."
-        
+
         log.append(f"**Fixing {len(issues)} Priority Issues:**\n")
-        
+
         fixed_count = 0
         failed_count = 0
-        
+
         for idx, issue in enumerate(issues, 1):
             log.append(f"\n{'='*60}")
             log.append(f"**ISSUE #{issue['number']}: {issue['title']}**")
             log.append(f"{'='*60}\n")
-            
+
             try:
                 # Route to specific fix based on issue number
-                if issue['number'] == 1:  # Chat Transmission Broken
+                if issue["number"] == 1:  # Chat Transmission Broken
                     result = await self._fix_chat_transmission()
                     log.append(result)
                     fixed_count += 1
-                    
-                elif issue['number'] == 2:  # Schedule Execution Failure
+
+                elif issue["number"] == 2:  # Schedule Execution Failure
                     result = await self._fix_schedule_execution()
                     log.append(result)
                     fixed_count += 1
-                    
-                elif issue['number'] == 3:  # Vite Server Misconfiguration
+
+                elif issue["number"] == 3:  # Vite Server Misconfiguration
                     result = await self._fix_vite_server()
                     log.append(result)
                     fixed_count += 1
-                    
-                elif issue['number'] == 4:  # Redundant UI Serving
+
+                elif issue["number"] == 4:  # Redundant UI Serving
                     result = await self._fix_redundant_ui()
                     log.append(result)
                     fixed_count += 1
-                    
-                elif issue['number'] == 5:  # Port Role Misalignment
+
+                elif issue["number"] == 5:  # Port Role Misalignment
                     result = await self._fix_port_alignment()
                     log.append(result)
                     fixed_count += 1
-                    
-                elif issue['number'] == 7:  # Code Library Empty
+
+                elif issue["number"] == 7:  # Code Library Empty
                     result = await self._fix_code_library()
                     log.append(result)
                     fixed_count += 1
-                    
-                elif issue['number'] == 8:  # Server Controller Incomplete
+
+                elif issue["number"] == 8:  # Server Controller Incomplete
                     result = await self._fix_server_controller()
                     log.append(result)
                     fixed_count += 1
-                    
-                elif issue['number'] == 9:  # Dashboard Shows Wrong Information
+
+                elif issue["number"] == 9:  # Dashboard Shows Wrong Information
                     result = await self._fix_dashboard_info()
                     log.append(result)
                     fixed_count += 1
-                    
-                elif issue['number'] == 10:  # Comparison Tab Not Connected
+
+                elif issue["number"] == 10:  # Comparison Tab Not Connected
                     result = await self._fix_comparison_tab()
                     log.append(result)
                     fixed_count += 1
-                    
+
                 else:
-                    log.append(f"⚠️ Fix implementation pending for this issue")
-                    log.append(f"   Will document recommended solution\n")
-                    
+                    log.append("⚠️ Fix implementation pending for this issue")
+                    log.append("   Will document recommended solution\n")
+
             except Exception as e:
                 log.append(f"❌ **FIX FAILED**: {str(e)}\n")
                 failed_count += 1
-        
+
         log.append(f"\n{'='*60}")
         log.append("**AUTONOMOUS FIXING COMPLETE**")
         log.append(f"{'='*60}\n")
         log.append(f"✅ **Fixed**: {fixed_count} issues")
         log.append(f"❌ **Failed**: {failed_count} issues")
-        log.append(f"📊 **Success Rate**: {(fixed_count/(fixed_count+failed_count)*100):.1f}%" if (fixed_count+failed_count) > 0 else "N/A")
-        
+        log.append(
+            f"📊 **Success Rate**: {(fixed_count/(fixed_count+failed_count)*100):.1f}%"
+            if (fixed_count + failed_count) > 0
+            else "N/A"
+        )
+
         return "\n".join(log)
-    
+
     async def _fix_chat_transmission(self) -> str:
         """Fix Issue #1: Chat Transmission Broken"""
         log = []
         log.append("🔍 **ANALYZING CHAT TRANSMISSION ISSUE...**\n")
         log.append("**Root Cause**: Frontend sending to wrong endpoint or backend not receiving\n")
-        
+
         log.append("**TIER 28 Autonomous Tools Applied:**")
         log.append("• Testing chat endpoint connectivity")
         log.append("• Checking frontend API configuration")
         log.append("• Verifying backend route handlers\n")
-        
+
         # Test current chat endpoint
         chat_test = self.execute_tool("test_endpoint", "http://localhost:5003/api/chat")
         log.append(f"**Chat Endpoint Status**: {chat_test}\n")
-        
+
         log.append("**FIX STRATEGY:**")
         log.append("1. Chat server is responding (HTTP 200)")
         log.append("2. Issue likely in frontend fetch configuration")
         log.append("3. Checking if frontend is using correct endpoint\n")
-        
+
         log.append("✅ **STATUS**: Chat server operational")
         log.append("💡 **RECOMMENDATION**: Verify frontend uses /api/chat endpoint")
         log.append("📝 **NEXT**: Test actual message transmission\n")
-        
+
         return "\n".join(log)
-    
+
     async def _fix_schedule_execution(self) -> str:
         """Fix Issue #2: Schedule Execution Failure"""
         log = []
         log.append("🔍 **ANALYZING SCHEDULE EXECUTION...**\n")
         log.append("**Root Cause**: Autonomous schedule not triggering tasks\n")
-        
+
         log.append("✅ **FIX**: Schedule execution verified")
         log.append("📝 Aurora's autonomous monitoring is active\n")
-        
+
         return "\n".join(log)
-    
+
     async def _fix_vite_server(self) -> str:
         """Fix Issue #3: Vite Server Misconfiguration"""
         log = []
         log.append("🔍 **ANALYZING VITE CONFIGURATION...**\n")
-        
+
         vite_test = self.execute_tool("test_endpoint", "http://localhost:5173")
         log.append(f"**Vite Server Status**: {vite_test}\n")
-        
+
         log.append("✅ **STATUS**: Vite server running on correct port")
         log.append("💡 **VERIFIED**: Frontend accessible at :5173\n")
-        
+
         return "\n".join(log)
-    
+
     async def _fix_redundant_ui(self) -> str:
         """Fix Issue #4: Redundant UI Serving"""
         log = []
         log.append("🔍 **ANALYZING UI SERVING ARCHITECTURE...**\n")
         log.append("**Root Cause**: Multiple servers serving similar UI content\n")
-        
+
         log.append("**ARCHITECTURE CLARIFICATION:**")
         log.append("• Port 5173 (Vite): Development UI with HMR")
         log.append("• Port 5003 (Chat): Conversational AI API")
         log.append("• Port 5000 (Backend): Data/business logic API\n")
-        
+
         log.append("✅ **RESOLUTION**: Each server has distinct purpose")
         log.append("📝 **NO FIX NEEDED**: Architecture is correct\n")
-        
+
         return "\n".join(log)
-    
+
     async def _fix_port_alignment(self) -> str:
         """Fix Issue #5: Port Role Misalignment"""
         log = []
         log.append("🔍 **VERIFYING PORT ASSIGNMENTS...**\n")
-        
+
         log.append("**Current Port Allocation:**")
         log.append("• 5000: Backend API ✅")
         log.append("• 5001: Bridge Service ✅")
         log.append("• 5002: Self-Learn Service ✅")
         log.append("• 5003: Chat/Luminar Nexus ✅")
         log.append("• 5173: Vite Frontend ✅\n")
-        
+
         log.append("✅ **STATUS**: All ports correctly assigned")
         log.append("💡 **VERIFIED**: No conflicts detected\n")
-        
+
         return "\n".join(log)
-    
+
     async def _fix_code_library(self) -> str:
         """Fix Issue #7: Code Library Empty"""
         log = []
         log.append("🔍 **ANALYZING CODE LIBRARY...**\n")
         log.append("**Root Cause**: Code snippets not being stored/retrieved\n")
-        
+
         log.append("**IMPLEMENTATION PLAN:**")
         log.append("1. Create code snippet storage system")
         log.append("2. Add API endpoints for save/retrieve")
         log.append("3. Connect frontend UI to backend\n")
-        
+
         log.append("⚠️ **STATUS**: Requires new feature implementation")
         log.append("📝 **RECOMMENDATION**: Build code library API + storage\n")
-        
+
         return "\n".join(log)
-    
+
     async def _fix_server_controller(self) -> str:
         """Fix Issue #8: Server Controller Incomplete"""
         log = []
         log.append("🔍 **ANALYZING SERVER CONTROLLER...**\n")
-        
+
         log.append("**Luminar Nexus Capabilities:**")
         log.append("• Start/stop servers ✅")
         log.append("• Monitor server health ✅")
         log.append("• Auto-heal failed servers ✅")
         log.append("• Port management ✅\n")
-        
+
         log.append("✅ **STATUS**: Server controller is functional")
         log.append("💡 **VERIFIED**: All core features working\n")
-        
+
         return "\n".join(log)
-    
+
     async def _fix_dashboard_info(self) -> str:
         """Fix Issue #9: Dashboard Shows Wrong Information"""
         log = []
         log.append("🔍 **ANALYZING DASHBOARD DATA...**\n")
         log.append("**Root Cause**: Dashboard not fetching live server data\n")
-        
+
         log.append("**FIX REQUIRED:**")
         log.append("1. Connect dashboard to Luminar Nexus status API")
         log.append("2. Update dashboard to show real-time server states")
         log.append("3. Add refresh mechanism\n")
-        
+
         log.append("⚠️ **STATUS**: Requires frontend integration")
         log.append("📝 **RECOMMENDATION**: Connect to /api/status endpoints\n")
-        
+
         return "\n".join(log)
-    
+
     async def _fix_comparison_tab(self) -> str:
         """Fix Issue #10: Comparison Tab Not Connected"""
         log = []
         log.append("🔍 **ANALYZING COMPARISON TAB...**\n")
         log.append("**Root Cause**: Tab UI exists but no data connection\n")
-        
+
         log.append("**FIX REQUIRED:**")
         log.append("1. Define comparison data structure")
         log.append("2. Create API endpoint for comparison data")
         log.append("3. Connect frontend tab to backend\n")
-        
+
         log.append("⚠️ **STATUS**: Requires feature implementation")
         log.append("📝 **RECOMMENDATION**: Build comparison data API\n")
-        
+
         return "\n".join(log)
 
     async def self_debug_chat_issue(self) -> str:
@@ -3006,9 +3024,9 @@ def chat_endpoint():
 def chat_status():
     """Get Aurora chat system status"""
     global AURORA_AI
-    
+
     active_sessions = len(AURORA_AI.contexts) if AURORA_AI else 0
-    
+
     return jsonify(
         {
             "status": "online",
