@@ -1773,16 +1773,12 @@ class AuroraConversationalAI:
             log.append("🔍 **DEBUG**: Detected fix_bug task type")
         # Check for PYTHON CLASS/METHOD creation (Phase 2+)
         elif re.search(
-            r"(create|add|implement|build).*(class|method|function).*(luminar|aurora|python|\.py)",
-            msg_lower
+            r"(create|add|implement|build).*(class|method|function).*(luminar|aurora|python|\.py)", msg_lower
         ):
             task_type = "create_python_class"
             log.append("🔍 **DEBUG**: Detected create_python_class task type - Aurora will write Python code!")
         # Check for MODIFY FILE commands (Phase 2+)
-        elif re.search(
-            r"(modify|update|change|edit).*(file|code|luminar_nexus\.py|tools/)",
-            msg_lower
-        ):
+        elif re.search(r"(modify|update|change|edit).*(file|code|luminar_nexus\.py|tools/)", msg_lower):
             task_type = "modify_python_file"
             log.append("🔍 **DEBUG**: Detected modify_python_file task type - Aurora will modify existing code!")
 
@@ -2668,12 +2664,12 @@ Ready for commands >_`,
             log.append("**TIER 28**: Autonomous Tool Use (self-coding)")
             log.append("**TIER 32**: Systems Architecture & Design Mastery")
             log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
-            
+
             # Extract class name and details from message
             class_match = re.search(r"class.*(called |named )?([A-Z][a-zA-Z]+)", user_message)
             class_name = class_match.group(2) if class_match else "AuroraAutoClass"
             log.append(f"📝 **Class Name**: {class_name}")
-            
+
             # Extract purpose/description
             purpose = "General utility class"
             if "search" in msg_lower or "query" in msg_lower:
@@ -2684,10 +2680,10 @@ Ready for commands >_`,
                 purpose = "Testing and validation"
             elif "resource" in msg_lower or "optimization" in msg_lower:
                 purpose = "Resource optimization and monitoring"
-            
+
             log.append(f"🎯 **Purpose**: {purpose}")
-            log.append(f"🤖 **I will autonomously generate the class structure!**\n")
-            
+            log.append("🤖 **I will autonomously generate the class structure!**\n")
+
             # Generate basic class structure
             class_code = f'''
 class {class_name}:
@@ -2704,16 +2700,16 @@ class {class_name}:
         """Main execution method"""
         return "{{}} initialized and ready".format(self.__class__.__name__)
 '''
-            
+
             log.append("**Generated Class Structure:**")
             log.append("```python")
             log.append(class_code.strip())
             log.append("```\n")
-            
+
             log.append("✅ **Class structure generated successfully!**")
             log.append("💡 **Next step**: Specify exact methods and I'll implement them fully!")
             log.append(f"📋 **Template ready** for {class_name}")
-            
+
             return "\n".join(log)
 
         elif task_type == "modify_python_file":
@@ -2721,11 +2717,15 @@ class {class_name}:
             log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
             log.append("**TIER 28**: Autonomous code modification")
             log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
-            
+
             # Extract file to modify
             file_match = re.search(r"(tools/[\w_]+\.py|[\w_]+\.py)", user_message)
             if file_match:
-                target_file = f"/workspaces/Aurora-x/{file_match.group(1)}" if not file_match.group(1).startswith("/") else file_match.group(1)
+                target_file = (
+                    f"/workspaces/Aurora-x/{file_match.group(1)}"
+                    if not file_match.group(1).startswith("/")
+                    else file_match.group(1)
+                )
                 log.append(f"📁 **Target File**: {target_file}")
             else:
                 log.append("⚠️ **No target file specified**")
@@ -2735,7 +2735,7 @@ class {class_name}:
             log.append("\n🚧 **AUTONOMOUS IMPLEMENTATION READY**")
             log.append("Aurora will analyze the file and implement the requested changes!")
             log.append("Using TIER 28 tools for code modification...")
-            
+
             return "\n".join(log)
 
         elif task_type == "create_component":
