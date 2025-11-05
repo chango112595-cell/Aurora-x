@@ -26,10 +26,20 @@ try:
     from aurora_intelligence_manager import AuroraIntelligenceManager
     from aurora_internet_mastery import AURORA_INTERNET_MASTERY
     from aurora_ultimate_omniscient_grandmaster import AURORA_ULTIMATE_GRANDMASTER
+    from tools.aurora_knowledge_engine import AuroraKnowledgeEngine
 
     AURORA_INTELLIGENCE = AuroraIntelligenceManager()
     AURORA_IS_BOSS = True
     AURORA_CAN_USE_TOOLS = True  # Aurora can now autonomously execute tools!
+    
+    # Initialize Aurora's Knowledge Engine - allows her to UTILIZE all 33 tiers
+    AURORA_KNOWLEDGE = AuroraKnowledgeEngine(
+        ultimate_grandmaster=AURORA_ULTIMATE_GRANDMASTER,
+        autonomous_tools=AURORA_AUTONOMOUS_TOOL_MASTERY,
+        foundational_skills=AURORA_FOUNDATIONAL_SKILLS,
+        internet_mastery=AURORA_INTERNET_MASTERY
+    )
+    AURORA_INTELLIGENCE.log("🧠 KNOWLEDGE ENGINE INITIALIZED - Aurora can now utilize all 33 tiers dynamically")
 
     # Load Aurora's Grandmaster skills from consolidated corpus
     corpus_file = Path("/workspaces/Aurora-x/.aurora_knowledge/consolidated_learning_corpus.json")
@@ -759,6 +769,20 @@ class AuroraConversationalAI:
             }
         return self.contexts[session_id]
 
+    # ========== AURORA KNOWLEDGE ENGINE METHODS ==========
+    def query_knowledge(self, topic: str) -> dict:
+        """Query Aurora's knowledge engine for specific topic"""
+        if not AURORA_KNOWLEDGE:
+            return {"error": "Knowledge engine not initialized"}
+        return AURORA_KNOWLEDGE.query_knowledge(topic) or {"error": "No knowledge found"}
+
+    def can_aurora_do(self, task: str) -> dict:
+        """Check if Aurora can do a specific task based on tier knowledge"""
+        if not AURORA_KNOWLEDGE:
+            return {"can_do": True, "confidence": "unknown"}
+        return AURORA_KNOWLEDGE.can_aurora_do(task)
+    # ========== END KNOWLEDGE ENGINE METHODS ==========
+
     def classify_intent(self, msg: str) -> tuple[str, list[str]]:
         """Classify user intent and extract entities"""
         lower = msg.lower().strip()
@@ -804,9 +828,19 @@ class AuroraConversationalAI:
         if re.search(r"(debug|fix|error|broken|issue|problem|bug|crash|fail|not work)", lower):
             return "debug", []
 
+        # "Can you do X?" capability queries
+        if re.search(r"(can you|are you able to|do you know how to|are you capable)", lower):
+            task_match = re.search(r"(can you|are you able to|do you know how to)\s+(.+)", lower)
+            if task_match:
+                return "capability", [task_match.group(2).strip()]
+            return "capability", []
+
         # Learning queries
         if re.search(r"(learn|teach|explain|what is|how does|understand|tell me about)", lower):
-            entities = re.findall(r"\b(react|python|typescript|kubernetes|docker|aws|ai|ml|database)\b", lower, re.I)
+            topic_match = re.search(r"(?:learn|teach|explain|tell me about|what is|how does)\s+(?:about\s+)?(.+?)(?:\?|$)", lower)
+            if topic_match:
+                return "learn", [topic_match.group(1).strip()]
+            entities = re.findall(r"\b(react|python|typescript|kubernetes|docker|aws|ai|ml|database|mqtt|iot|5g|quantum)\b", lower, re.I)
             return "learn", entities
 
         # Knowledge/tier queries
@@ -2004,7 +2038,24 @@ Paste your error or describe the issue - we'll track it down!"""
             if entities:
                 ctx["mentioned_techs"].append(topic)
 
-            return f"""Great question! I love explaining things. 📚
+            # UTILIZE KNOWLEDGE ENGINE - Query Aurora's actual tier knowledge
+            knowledge = self.query_knowledge(topic)
+            
+            tier_info = ""
+            if knowledge and "error" not in knowledge:
+                if knowledge.get("match_type") == "partial":
+                    matches = knowledge.get("matches", [])[:3]
+                    match_list = "\n".join([f"• {m.get('skill', 'Unknown')} (TIER {m.get('tier', '?')})" for m in matches])
+                    tier_info = f"\n\n**Found in my knowledge base:**\n{match_list}"
+                else:
+                    tier_num = knowledge.get("tier", "?")
+                    tier_name = knowledge.get("tier_name", "Unknown")
+                    skill = knowledge.get("skill", topic)
+                    era = knowledge.get("era", "")
+                    era_text = f" ({era})" if era else ""
+                    tier_info = f"\n\n**From my TIER {tier_num}: {tier_name}**{era_text}\n🎯 Skill: {skill}"
+
+            return f"""Great question! I love explaining things. 📚{tier_info}
 
 **Teaching {topic}**
 
@@ -2028,6 +2079,43 @@ I'll break this down clearly with:
 • "Compare with X" → contrast with alternatives
 
 What specifically about {topic} are you curious about?"""
+
+        elif intent == "capability":
+            # NEW: Use knowledge engine to determine if Aurora can do something
+            task = entities[0] if entities else "that"
+            capability_check = self.can_aurora_do(task)
+            
+            if capability_check.get("can_do"):
+                confidence = capability_check.get("confidence", "medium")
+                relevant_skills = capability_check.get("relevant_skills", [])
+                
+                skills_text = ""
+                if relevant_skills:
+                    skill_list = []
+                    for skill_info in relevant_skills[:3]:
+                        if isinstance(skill_info, dict):
+                            tier = skill_info.get("tier", "?")
+                            skill_name = skill_info.get("skill", skill_info.get("technology", "Unknown"))
+                            skill_list.append(f"TIER {tier}: {skill_name}")
+                    if skill_list:
+                        skills_text = f"\n\n**Relevant expertise:**\n• " + "\n• ".join(skill_list)
+                
+                confidence_emoji = "🎯" if confidence == "high" else "✅"
+                
+                return f"""{confidence_emoji} Yes! I can definitely help with {task}.{skills_text}
+
+{capability_check.get('explanation', 'I have expertise across all 33 tiers of knowledge.')}
+
+**Want me to:**
+• Explain how to approach this?
+• Build it for you autonomously?
+• Show you code examples?
+• Walk through the architecture?
+
+Just let me know what you need!"""
+            return f"""I'm not sure about {task}, but I'd love to try! 🚀
+
+Let me know what specific aspect you're trying to accomplish?"""
 
         elif intent == "status":
             # TODO: Query actual Luminar Nexus status
