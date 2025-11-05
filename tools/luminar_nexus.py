@@ -510,17 +510,19 @@ class LuminarNexusServerManager:
             time.sleep(2)  # Stagger starts
 
         print("\n✅ All servers started!\n")
-        
+
         # Start autonomous monitoring as a separate background process
         print("🤖 Starting Aurora Autonomous Monitoring as separate process...")
         project_root = self.project_config.get("project_root", "/workspaces/Aurora-x")
-        monitor_cmd = f"cd {project_root} && python tools/luminar_nexus.py monitor > .aurora_knowledge/monitor_daemon.log 2>&1 &"
+        monitor_cmd = (
+            f"cd {project_root} && python tools/luminar_nexus.py monitor > .aurora_knowledge/monitor_daemon.log 2>&1 &"
+        )
         subprocess.Popen(monitor_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(1)
         print("✅ Autonomous monitoring started (runs independently of chat server)")
         print("   └─ Log file: .aurora_knowledge/monitor_daemon.log")
         print("   └─ Activity log: .aurora_knowledge/autonomous_monitoring_*.log\n")
-        
+
         self.show_status()
 
     def stop_all(self):
@@ -534,7 +536,7 @@ class LuminarNexusServerManager:
         print("🛑 Stopping autonomous monitoring daemon...")
         subprocess.run(["pkill", "-f", "luminar_nexus.py monitor"], capture_output=True)
         print("✅ Autonomous monitoring stopped")
-        
+
         print("\n✅ All servers stopped!\n")
 
     def show_status(self):
@@ -631,7 +633,7 @@ class LuminarNexusServerManager:
         log_dir = Path(".aurora_knowledge")
         log_dir.mkdir(exist_ok=True)
         log_file = log_dir / f"autonomous_monitoring_{time.strftime('%Y%m%d')}.log"
-        
+
         def log(msg):
             """Write to both stdout and log file"""
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -639,7 +641,7 @@ class LuminarNexusServerManager:
             print(log_msg)
             with open(log_file, "a") as f:
                 f.write(log_msg + "\n")
-        
+
         log("=" * 70)
         log("🤖 AURORA AUTONOMOUS MONITORING - ACTIVATED")
         log("=" * 70)
@@ -1720,7 +1722,7 @@ class AuroraConversationalAI:
         log.append("All eras: Ancient (1940s) → Modern → Future → Sci-Fi")
         log.append(f"🌌 **PROJECT ROOT:** {self.project_config.get('project_root', '/workspaces/Aurora-x')}\n")
         log.append(f"🔍 **DEBUG**: Received message = '{user_message}'")
-        
+
         # Create lowercase version for pattern matching
         msg_lower = user_message.lower()
         log.append(f"🔍 **DEBUG**: Lowercased = '{msg_lower}'\n")
@@ -1733,18 +1735,29 @@ class AuroraConversationalAI:
 
         # 🤖 PHASE 1 AUTONOMOUS ACTIVATION - SELF-HEALING DETECTION
         # Check for self-healing commands first (highest priority)
-        if any(phrase in msg_lower for phrase in [
-            "restart yourself", "restart aurora",
-            "fix yourself", "fix aurora", 
-            "heal yourself", "heal aurora",
-            "self heal", "auto heal", "self restart"
-        ]):
+        if any(
+            phrase in msg_lower
+            for phrase in [
+                "restart yourself",
+                "restart aurora",
+                "fix yourself",
+                "fix aurora",
+                "heal yourself",
+                "heal aurora",
+                "self heal",
+                "auto heal",
+                "self restart",
+            ]
+        ):
             task_type = "self_heal"
-            log.append(f"🔍 **DEBUG**: Detected SELF-HEALING command - Aurora will heal herself!")
+            log.append("🔍 **DEBUG**: Detected SELF-HEALING command - Aurora will heal herself!")
         # 🌟 LEGACY: Check for old-style self-heal patterns
-        elif re.search(r"(fix|restart|heal|repair).*(yourself|your.*(service|server|chat)|aurora.*(service|server|chat))", msg_lower):
+        elif re.search(
+            r"(fix|restart|heal|repair).*(yourself|your.*(service|server|chat)|aurora.*(service|server|chat))",
+            msg_lower,
+        ):
             task_type = "self_heal"
-            log.append(f"🔍 **DEBUG**: Detected self_heal task type (legacy pattern) - Aurora will fix herself!")
+            log.append("🔍 **DEBUG**: Detected self_heal task type (legacy pattern) - Aurora will fix herself!")
         # Check for server management commands
         elif re.search(r"(start|launch|run).*(all|services|servers|backend|bridge|vite|self-learn)", msg_lower):
             task_type = "start_servers"
@@ -1753,12 +1766,14 @@ class AuroraConversationalAI:
         elif re.search(r"(restart|reload).*(all|services|servers)", msg_lower):
             task_type = "restart_servers"
         # Check for BUG FIX commands (GRANDMASTER LEVEL)
-        elif re.search(r"(fix|repair|correct|patch|resolve).*(bug|error|issue|404|500|broken|localhost)", user_message.lower()):
+        elif re.search(
+            r"(fix|repair|correct|patch|resolve).*(bug|error|issue|404|500|broken|localhost)", user_message.lower()
+        ):
             task_type = "fix_bug"
-            log.append(f"🔍 **DEBUG**: Detected fix_bug task type")
-        
+            log.append("🔍 **DEBUG**: Detected fix_bug task type")
+
         log.append(f"🔍 **DEBUG**: task_type after detection = '{task_type}'")
-        
+
         # Extract component name if mentioned (e.g., "AuroraSystemDashboard")
         # BUT ONLY if we haven't already identified a different task type!
         if not task_type:
@@ -1806,28 +1821,28 @@ class AuroraConversationalAI:
             log.append("\n🎯 **TASK IDENTIFIED:** Start all Aurora services")
             log.append("**Using TIER 28: Autonomous server orchestration**\n")
             log.append("🚀 **STARTING ALL SERVICES...**\n")
-            
+
             if self.manager:
                 # Aurora uses Luminar Nexus to start all servers
                 log.append("**Starting Backend (Port 5000)...**")
                 self.manager.start_server("backend")
                 log.append("✅ Backend started\n")
-                
+
                 log.append("**Starting Bridge (Port 5001)...**")
                 self.manager.start_server("bridge")
                 log.append("✅ Bridge started\n")
-                
+
                 log.append("**Starting Self-Learn (Port 5002)...**")
                 self.manager.start_server("self-learn")
                 log.append("✅ Self-Learn started\n")
-                
+
                 log.append("**Starting Vite Frontend (Port 5173)...**")
                 self.manager.start_server("vite")
                 log.append("✅ Vite started\n")
-                
+
                 log.append("\n🌟 **ALL SERVICES STARTED SUCCESSFULLY**")
                 log.append("**Aurora's ecosystem is now fully operational!**\n")
-                
+
                 # Show status
                 log.append("**Service Status:**")
                 for server_key in ["backend", "bridge", "self-learn", "vite"]:
@@ -1836,13 +1851,13 @@ class AuroraConversationalAI:
             else:
                 log.append("⚠️ **Luminar Nexus manager not available**")
                 log.append("Cannot start servers autonomously")
-            
+
             return "\n".join(log)
-        
+
         elif task_type == "stop_servers":
             log.append("\n🎯 **TASK IDENTIFIED:** Stop all Aurora services")
             log.append("**Using TIER 28: Autonomous server orchestration**\n")
-            
+
             if self.manager:
                 log.append("🛑 **STOPPING ALL SERVICES...**\n")
                 for server_key in ["backend", "bridge", "self-learn", "vite"]:
@@ -1851,13 +1866,13 @@ class AuroraConversationalAI:
                 log.append("\n🌙 **ALL SERVICES STOPPED**")
             else:
                 log.append("⚠️ **Luminar Nexus manager not available**")
-            
+
             return "\n".join(log)
-        
+
         elif task_type == "restart_servers":
             log.append("\n🎯 **TASK IDENTIFIED:** Restart all Aurora services")
             log.append("**Using TIER 28: Autonomous server orchestration**\n")
-            
+
             if self.manager:
                 log.append("🔄 **RESTARTING ALL SERVICES...**\n")
                 for server_key in ["backend", "bridge", "self-learn", "vite"]:
@@ -1868,9 +1883,9 @@ class AuroraConversationalAI:
                 log.append("\n🌟 **ALL SERVICES RESTARTED**")
             else:
                 log.append("⚠️ **Luminar Nexus manager not available**")
-            
+
             return "\n".join(log)
-        
+
         # PHASE 1 AUTONOMOUS ACTIVATION - SELF-HEALING
         elif task_type == "self_heal":
             log.append("\n🤖 **AURORA SELF-HEALING PROTOCOL ACTIVATED**")
@@ -1878,12 +1893,12 @@ class AuroraConversationalAI:
             log.append("**PHASE 1:** Autonomous Activation Complete")
             log.append("**CAPABILITY:** Self-diagnosis, self-restart, self-monitoring")
             log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
-            
+
             if self.manager:
                 # Step 1: System diagnosis
                 log.append("**Step 1: System Diagnosis**")
                 log.append("Checking all service health...\n")
-                
+
                 unhealthy_services = []
                 for server_key in ["backend", "bridge", "self-learn", "vite"]:
                     status = self.manager.get_status(server_key)
@@ -1892,9 +1907,9 @@ class AuroraConversationalAI:
                         log.append(f"  ⚠️ {status['server']}: {status['status']}")
                     else:
                         log.append(f"  ✅ {status['server']}: Healthy")
-                
+
                 # Step 2: Self-healing action
-                log.append(f"\n**Step 2: Self-Healing Action**")
+                log.append("\n**Step 2: Self-Healing Action**")
                 if unhealthy_services:
                     log.append(f"Restarting {len(unhealthy_services)} unhealthy service(s)...\n")
                     for server_key in unhealthy_services:
@@ -1915,11 +1930,11 @@ class AuroraConversationalAI:
                         time.sleep(1)
                         self.manager.start_server(server_key)
                         log.append(f"  ✅ {server_key} restarted")
-                
+
                 # Step 3: Verification
-                log.append(f"\n**Step 3: Post-Healing Verification**")
+                log.append("\n**Step 3: Post-Healing Verification**")
                 log.append("Re-checking system health...\n")
-                
+
                 all_healthy = True
                 for server_key in ["backend", "bridge", "self-learn", "vite"]:
                     status = self.manager.get_status(server_key)
@@ -1928,9 +1943,9 @@ class AuroraConversationalAI:
                     else:
                         log.append(f"  ❌ {status['server']}: {status['status']}")
                         all_healthy = False
-                
+
                 # Summary
-                log.append(f"\n**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
+                log.append("\n**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
                 if all_healthy:
                     log.append("🎉 **SELF-HEALING COMPLETE - ALL SYSTEMS OPERATIONAL**")
                     log.append("✅ Aurora has successfully healed herself")
@@ -1942,119 +1957,123 @@ class AuroraConversationalAI:
             else:
                 log.append("⚠️ **Luminar Nexus manager not available**")
                 log.append("Cannot perform self-healing without manager context")
-            
+
             return "\n".join(log)
-        
+
         # HANDLE BUG FIX TASKS (GRANDMASTER AUTONOMOUS FIXING)
         elif task_type == "fix_bug":
             log.append("\n🔧 **GRANDMASTER BUG FIXING ENGINE ACTIVATED**")
             log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
             log.append("**Ancient (1940s)**: Manual code patching")
-            log.append("**Classical (1970s)**: sed/awk automation")  
+            log.append("**Classical (1970s)**: sed/awk automation")
             log.append("**Modern (2000s)**: IDE refactoring")
             log.append("**AI-Native (2020s)**: Intelligent pattern matching")
             log.append("**Future (2030s)**: Predictive self-healing")
             log.append("**Sci-Fi**: HAL 9000 autonomous code evolution")
             log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
-            
+
             # Extract what needs fixing
             search_pattern = None
             target_files = []
-            
+
             # Find files mentioned
             file_matches = re.findall(r"([\w-]+\.tsx?)", user_message)
             if file_matches:
                 target_files = file_matches
                 log.append(f"📁 **Target Files**: {', '.join(target_files)}\n")
-            
+
             # Find what to search for
             if "localhost:9090" in user_message or "9090" in user_message:
                 search_pattern = "localhost:9090"
                 log.append(f"🔍 **Searching for**: {search_pattern}\n")
-            
+
             # If no specific files mentioned, search for them
             if not target_files and search_pattern:
                 log.append("🔍 **Scanning project for affected files...**")
                 try:
-                    result = self.execute_tool("run_command", 
-                        f"grep -r '{search_pattern}' client/src --include='*.tsx' --include='*.ts' -l 2>/dev/null")
+                    result = self.execute_tool(
+                        "run_command",
+                        f"grep -r '{search_pattern}' client/src --include='*.tsx' --include='*.ts' -l 2>/dev/null",
+                    )
                     if result and result.strip():
-                        target_files = [f.strip() for f in result.split('\n') if f.strip()]
+                        target_files = [f.strip() for f in result.split("\n") if f.strip()]
                         log.append(f"✅ Found {len(target_files)} files:\n")
                         for f in target_files:
                             log.append(f"   • {f}")
                 except:
                     log.append("⚠️ Could not scan files")
                 log.append("")
-            
+
             if target_files:
-                log.append(f"🛠️ **AUTONOMOUS FIX EXECUTION**\n")
-                
+                log.append("🛠️ **AUTONOMOUS FIX EXECUTION**\n")
+
                 fixed_count = 0
                 for file_path in target_files:
                     # Make full path
-                    if not file_path.startswith('/'):
+                    if not file_path.startswith("/"):
                         file_path = f"/workspaces/Aurora-x/{file_path}"
-                    
+
                     log.append(f"📝 **Processing**: {file_path.split('/')[-1]}")
-                    
+
                     try:
                         # Read file
                         content = self.execute_tool("read_file", file_path)
                         if not content or "error" in str(content).lower():
                             log.append("   ❌ Cannot read file\n")
                             continue
-                        
+
                         # Check if pattern exists
                         if search_pattern and search_pattern in content:
                             log.append(f"   🔍 Found '{search_pattern}'")
-                            
+
                             # Create backup in unused folder
-                            filename = file_path.split('/')[-1]
+                            filename = file_path.split("/")[-1]
                             unused_dir = "/workspaces/Aurora-x/client/src/unused/"
                             self.execute_tool("run_command", f"mkdir -p {unused_dir}")
                             backup_path = f"{unused_dir}{filename}.backup"
                             self.execute_tool("run_command", f"cp {file_path} {backup_path}")
                             log.append(f"   💾 Backup: unused/{filename}.backup")
-                            
+
                             # Apply fix - Replace localhost:9090 with relative /api
                             new_content = content.replace("'http://localhost:9090/api/status'", "'/api/status'")
                             new_content = new_content.replace("'http://localhost:9090/api/control'", "'/api/control'")
                             new_content = new_content.replace('"http://localhost:9090/api/status"', '"/api/status"')
                             new_content = new_content.replace('"http://localhost:9090/api/control"', '"/api/control"')
-                            
+
                             # Write fixed file
                             self.execute_tool("write_file", file_path, new_content)
-                            log.append(f"   ✅ Fixed: localhost:9090 → /api (Vite proxy)")
+                            log.append("   ✅ Fixed: localhost:9090 → /api (Vite proxy)")
                             fixed_count += 1
                         else:
-                            log.append(f"   ℹ️ Pattern not found")
-                        
+                            log.append("   ℹ️ Pattern not found")
+
                         log.append("")
-                    
+
                     except Exception as e:
                         log.append(f"   ❌ Error: {str(e)}\n")
-                
+
                 log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
                 log.append(f"✅ **AUTONOMOUS FIX COMPLETE**: {fixed_count}/{len(target_files)} files fixed")
                 log.append("💾 **Backups saved**: client/src/unused/")
                 log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
-                
+
                 # Verify fix
                 if search_pattern:
                     log.append("🧪 **VERIFYING FIX...**")
-                    verify = self.execute_tool("run_command", 
-                        f"grep -r '{search_pattern}' client/src --include='*.tsx' --include='*.ts' -l 2>/dev/null || echo 'CLEAN'")
+                    verify = self.execute_tool(
+                        "run_command",
+                        f"grep -r '{search_pattern}' client/src --include='*.tsx' --include='*.ts' -l 2>/dev/null || echo 'CLEAN'",
+                    )
                     if "CLEAN" in verify or not verify.strip():
                         log.append(f"✅ **VERIFIED**: No '{search_pattern}' found in client/src!")
                         log.append("🎉 **404 errors should now be resolved!**")
                     else:
-                        remaining = [f.strip() for f in verify.split('\n') if f.strip() and f != 'CLEAN']
+                        remaining = [f.strip() for f in verify.split("\n") if f.strip() and f != "CLEAN"]
                         log.append(f"⚠️ Still found in {len(remaining)} files (may need manual review)")
             else:
                 log.append("⚠️ **No files found to fix**")
                 log.append("Please specify files or pattern to search for")
-            
+
             return "\n".join(log)
 
         if task_type == "create_chat_ui":
@@ -3362,14 +3381,14 @@ def chat_status():
 def run_chat_server(port=5003):
     """Run Aurora's chat server"""
     global AURORA_MANAGER
-    
+
     print(f"🌌 Aurora Conversational AI starting on port {port}...")
-    
+
     # Initialize manager if not already done
     if AURORA_MANAGER is None:
         AURORA_MANAGER = LuminarNexusServerManager()
-    
+
     print("ℹ️  Note: Autonomous monitoring runs as a separate process")
     print("   Use 'python tools/luminar_nexus.py start-all' to start everything\n")
-    
+
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
