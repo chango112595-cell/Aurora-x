@@ -31,13 +31,13 @@ try:
     AURORA_INTELLIGENCE = AuroraIntelligenceManager()
     AURORA_IS_BOSS = True
     AURORA_CAN_USE_TOOLS = True  # Aurora can now autonomously execute tools!
-    
+
     # Initialize Aurora's Knowledge Engine - allows her to UTILIZE all 33 tiers
     AURORA_KNOWLEDGE = AuroraKnowledgeEngine(
         ultimate_grandmaster=AURORA_ULTIMATE_GRANDMASTER,
         autonomous_tools=AURORA_AUTONOMOUS_TOOL_MASTERY,
         foundational_skills=AURORA_FOUNDATIONAL_SKILLS,
-        internet_mastery=AURORA_INTERNET_MASTERY
+        internet_mastery=AURORA_INTERNET_MASTERY,
     )
     AURORA_INTELLIGENCE.log("🧠 KNOWLEDGE ENGINE INITIALIZED - Aurora can now utilize all 33 tiers dynamically")
 
@@ -781,6 +781,7 @@ class AuroraConversationalAI:
         if not AURORA_KNOWLEDGE:
             return {"can_do": True, "confidence": "unknown"}
         return AURORA_KNOWLEDGE.can_aurora_do(task)
+
     # ========== END KNOWLEDGE ENGINE METHODS ==========
 
     def classify_intent(self, msg: str) -> tuple[str, list[str]]:
@@ -837,10 +838,14 @@ class AuroraConversationalAI:
 
         # Learning queries
         if re.search(r"(learn|teach|explain|what is|how does|understand|tell me about)", lower):
-            topic_match = re.search(r"(?:learn|teach|explain|tell me about|what is|how does)\s+(?:about\s+)?(.+?)(?:\?|$)", lower)
+            topic_match = re.search(
+                r"(?:learn|teach|explain|tell me about|what is|how does)\s+(?:about\s+)?(.+?)(?:\?|$)", lower
+            )
             if topic_match:
                 return "learn", [topic_match.group(1).strip()]
-            entities = re.findall(r"\b(react|python|typescript|kubernetes|docker|aws|ai|ml|database|mqtt|iot|5g|quantum)\b", lower, re.I)
+            entities = re.findall(
+                r"\b(react|python|typescript|kubernetes|docker|aws|ai|ml|database|mqtt|iot|5g|quantum)\b", lower, re.I
+            )
             return "learn", entities
 
         # Knowledge/tier queries
@@ -2040,12 +2045,14 @@ Paste your error or describe the issue - we'll track it down!"""
 
             # UTILIZE KNOWLEDGE ENGINE - Query Aurora's actual tier knowledge
             knowledge = self.query_knowledge(topic)
-            
+
             tier_info = ""
             if knowledge and "error" not in knowledge:
                 if knowledge.get("match_type") == "partial":
                     matches = knowledge.get("matches", [])[:3]
-                    match_list = "\n".join([f"• {m.get('skill', 'Unknown')} (TIER {m.get('tier', '?')})" for m in matches])
+                    match_list = "\n".join(
+                        [f"• {m.get('skill', 'Unknown')} (TIER {m.get('tier', '?')})" for m in matches]
+                    )
                     tier_info = f"\n\n**Found in my knowledge base:**\n{match_list}"
                 else:
                     tier_num = knowledge.get("tier", "?")
@@ -2084,11 +2091,11 @@ What specifically about {topic} are you curious about?"""
             # NEW: Use knowledge engine to determine if Aurora can do something
             task = entities[0] if entities else "that"
             capability_check = self.can_aurora_do(task)
-            
+
             if capability_check.get("can_do"):
                 confidence = capability_check.get("confidence", "medium")
                 relevant_skills = capability_check.get("relevant_skills", [])
-                
+
                 skills_text = ""
                 if relevant_skills:
                     skill_list = []
@@ -2098,10 +2105,10 @@ What specifically about {topic} are you curious about?"""
                             skill_name = skill_info.get("skill", skill_info.get("technology", "Unknown"))
                             skill_list.append(f"TIER {tier}: {skill_name}")
                     if skill_list:
-                        skills_text = f"\n\n**Relevant expertise:**\n• " + "\n• ".join(skill_list)
-                
+                        skills_text = "\n\n**Relevant expertise:**\n• " + "\n• ".join(skill_list)
+
                 confidence_emoji = "🎯" if confidence == "high" else "✅"
-                
+
                 return f"""{confidence_emoji} Yes! I can definitely help with {task}.{skills_text}
 
 {capability_check.get('explanation', 'I have expertise across all 33 tiers of knowledge.')}
