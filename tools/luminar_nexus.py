@@ -24,8 +24,8 @@ try:
     from aurora_foundational_genius import AURORA_FOUNDATIONAL_SKILLS
     from aurora_grandmaster_autonomous_tools import AURORA_AUTONOMOUS_TOOL_MASTERY
     from aurora_intelligence_manager import AuroraIntelligenceManager
-    from aurora_ultimate_omniscient_grandmaster import AURORA_ULTIMATE_GRANDMASTER
     from aurora_internet_mastery import AURORA_INTERNET_MASTERY
+    from aurora_ultimate_omniscient_grandmaster import AURORA_ULTIMATE_GRANDMASTER
 
     AURORA_INTELLIGENCE = AuroraIntelligenceManager()
     AURORA_IS_BOSS = True
@@ -54,7 +54,9 @@ try:
             AURORA_INTELLIGENCE.log("      • Problem-solving, Logic, Mathematics, Communication, Teamwork")
             AURORA_INTELLIGENCE.log("      • Data Structures, Algorithms, SDLC, Testing, Version Control")
             AURORA_INTELLIGENCE.log("      • 400+ individual skills from Ancient to Sci-Fi mastery")
-            AURORA_INTELLIGENCE.log(f"   🌐 TIER 33: INTERNET & NETWORK MASTERY ({AURORA_INTERNET_MASTERY['skill_count']}+ skills)")
+            AURORA_INTELLIGENCE.log(
+                f"   🌐 TIER 33: INTERNET & NETWORK MASTERY ({AURORA_INTERNET_MASTERY['skill_count']}+ skills)"
+            )
             AURORA_INTELLIGENCE.log("      • IoT, Internet Engineering, Application Development")
             AURORA_INTELLIGENCE.log("      • Network Science, Internet Governance, Social Impact")
             AURORA_INTELLIGENCE.log("      • Telegraph → 6G → Quantum Internet → Neural Mesh Networks")
