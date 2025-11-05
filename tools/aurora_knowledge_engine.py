@@ -3,8 +3,8 @@ Aurora Knowledge Engine - Dynamic knowledge retrieval for all 33 tiers
 Allows Aurora to UTILIZE her tier knowledge, not just load it
 """
 
-from typing import Dict, List, Any, Optional
 import re
+from typing import Any
 
 
 class AuroraKnowledgeEngine:
@@ -12,10 +12,10 @@ class AuroraKnowledgeEngine:
 
     def __init__(
         self,
-        ultimate_grandmaster: Dict,
-        autonomous_tools: Dict,
-        foundational_skills: Dict,
-        internet_mastery: Dict,
+        ultimate_grandmaster: dict,
+        autonomous_tools: dict,
+        foundational_skills: dict,
+        internet_mastery: dict,
     ):
         """Initialize with all tier data structures"""
         self.tier_1_27 = ultimate_grandmaster
@@ -100,7 +100,7 @@ class AuroraKnowledgeEngine:
                 "skills": spec_data.get("skills", []),
             }
 
-    def query_knowledge(self, topic: str) -> Optional[Dict[str, Any]]:
+    def query_knowledge(self, topic: str) -> dict[str, Any] | None:
         """Query Aurora's knowledge for a specific topic"""
         topic_lower = topic.lower()
 
@@ -128,7 +128,7 @@ class AuroraKnowledgeEngine:
 
         return None
 
-    def can_aurora_do(self, task: str) -> Dict[str, Any]:
+    def can_aurora_do(self, task: str) -> dict[str, Any]:
         """Check if Aurora can do a specific task based on tier knowledge"""
         task_lower = task.lower()
 
@@ -158,7 +158,7 @@ class AuroraKnowledgeEngine:
             "explanation": "Aurora's 33 tiers of knowledge likely cover this.",
         }
 
-    def get_knowledge_summary(self) -> Dict[str, Any]:
+    def get_knowledge_summary(self) -> dict[str, Any]:
         """Get summary statistics of Aurora's knowledge"""
         return {
             "total_tiers": 33,
