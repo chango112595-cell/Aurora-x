@@ -775,6 +775,187 @@ if __name__ == "__main__":
 
 
 # ============================================================================
+# AURORA'S UNIFIED LEARNING QUERY SYSTEM - Phase 2 Task 1
+# ============================================================================
+
+
+class AuroraUnifiedLearningQuery:
+    """
+    Unified learning query system for Aurora Phase 2.
+    Searches across all knowledge sources to find past experiences and solutions.
+    
+    Knowledge Sources:
+    - JSONL conversation logs (.aurora_knowledge/*.jsonl)
+    - Corpus database (data/corpus.db)
+    - Monitoring logs (.aurora_knowledge/*_monitoring_*.log)
+    """
+    
+    def __init__(self, project_root="/workspaces/Aurora-x"):
+        self.project_root = Path(project_root)
+        self.knowledge_dir = self.project_root / ".aurora_knowledge"
+        self.corpus_db = self.project_root / "data" / "corpus.db"
+        
+    def search_jsonl(self, query: str, limit: int = 10) -> list:
+        """Search JSONL conversation logs"""
+        results = []
+        query_lower = query.lower()
+        
+        # Find all JSONL files
+        jsonl_files = list(self.knowledge_dir.glob("*.jsonl"))
+        
+        for jsonl_file in jsonl_files:
+            try:
+                with open(jsonl_file, 'r') as f:
+                    for line_num, line in enumerate(f, 1):
+                        try:
+                            entry = json.loads(line)
+                            
+                            # Handle different JSONL formats
+                            # Format 1: Luminar Nexus server logs {event, server, details, system}
+                            if 'event' in entry:
+                                content = f"{entry.get('event', '')} {entry.get('server', '')} {entry.get('system', '')} {str(entry.get('details', ''))}"
+                            # Format 2: Chat logs {user_message, aurora_response}
+                            elif 'user_message' in entry or 'aurora_response' in entry:
+                                content = str(entry.get('user_message', '')) + str(entry.get('aurora_response', ''))
+                            # Format 3: Generic - search all string values
+                            else:
+                                content = ' '.join(str(v) for v in entry.values() if isinstance(v, (str, int, float)))
+                            
+                            if query_lower in content.lower():
+                                results.append({
+                                    'source': 'jsonl',
+                                    'file': jsonl_file.name,
+                                    'line': line_num,
+                                    'timestamp': entry.get('timestamp', 'unknown'),
+                                    'snippet': content[:200],
+                                    'relevance_score': content.lower().count(query_lower),
+                                    'data': entry
+                                })
+                        except json.JSONDecodeError:
+                            continue
+            except Exception as e:
+                print(f"Error reading {jsonl_file}: {e}")
+                
+        return results[:limit]
+    
+    def search_corpus(self, query: str, limit: int = 10) -> list:
+        """Search SQLite corpus database"""
+        results = []
+        
+        if not self.corpus_db.exists():
+            return results
+            
+        try:
+            import sqlite3
+            conn = sqlite3.connect(str(self.corpus_db))
+            cursor = conn.cursor()
+            
+            # Search in corpus table (code snippets and test results)
+            query_pattern = f"%{query}%"
+            
+            cursor.execute("""
+                SELECT func_name, func_signature, snippet, failing_tests, 
+                       passed, total, score, timestamp
+                FROM corpus 
+                WHERE func_name LIKE ? 
+                   OR func_signature LIKE ? 
+                   OR snippet LIKE ?
+                   OR failing_tests LIKE ?
+                LIMIT ?
+            """, (query_pattern, query_pattern, query_pattern, query_pattern, limit))
+            
+            for row in cursor.fetchall():
+                combined_text = f"{row[0]} {row[1]} {row[2]} {row[3]}"
+                results.append({
+                    'source': 'corpus_db',
+                    'type': 'code_snippet',
+                    'func_name': row[0],
+                    'signature': row[1],
+                    'snippet': row[2][:200],
+                    'failing_tests': row[3],
+                    'passed': row[4],
+                    'total': row[5],
+                    'score': row[6],
+                    'timestamp': row[7],
+                    'relevance_score': combined_text.lower().count(query.lower())
+                })
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error querying corpus DB: {e}")
+            
+        return results
+    
+    def search_monitoring_logs(self, query: str, limit: int = 10) -> list:
+        """Search monitoring log files"""
+        results = []
+        query_lower = query.lower()
+        
+        # Find all monitoring log files
+        log_files = list(self.knowledge_dir.glob("*monitoring*.log"))
+        
+        for log_file in log_files:
+            try:
+                with open(log_file, 'r') as f:
+                    for line_num, line in enumerate(f, 1):
+                        if query_lower in line.lower():
+                            results.append({
+                                'source': 'monitoring_log',
+                                'file': log_file.name,
+                                'line': line_num,
+                                'content': line.strip(),
+                                'relevance_score': line.lower().count(query_lower)
+                            })
+                            if len(results) >= limit:
+                                break
+            except Exception as e:
+                print(f"Error reading {log_file}: {e}")
+                
+        return results[:limit]
+    
+    def query(self, search_term: str, limit_per_source: int = 10) -> dict:
+        """
+        Unified query across all knowledge sources.
+        Returns combined and ranked results.
+        """
+        print(f"\n🔍 Aurora Unified Learning Query: '{search_term}'")
+        print("=" * 70)
+        
+        # Search all sources
+        jsonl_results = self.search_jsonl(search_term, limit_per_source)
+        corpus_results = self.search_corpus(search_term, limit_per_source)
+        log_results = self.search_monitoring_logs(search_term, limit_per_source)
+        
+        # Combine and rank
+        all_results = jsonl_results + corpus_results + log_results
+        ranked_results = self.rank_results(all_results)
+        
+        # Summary
+        summary = {
+            'query': search_term,
+            'total_results': len(all_results),
+            'by_source': {
+                'jsonl': len(jsonl_results),
+                'corpus_db': len(corpus_results),
+                'monitoring_logs': len(log_results)
+            },
+            'top_results': ranked_results[:20],  # Top 20 overall
+            'all_results': all_results
+        }
+        
+        print(f"\n📊 Results: {summary['total_results']} found")
+        print(f"   • JSONL logs: {summary['by_source']['jsonl']}")
+        print(f"   • Corpus DB: {summary['by_source']['corpus_db']}")
+        print(f"   • Monitoring: {summary['by_source']['monitoring_logs']}")
+        
+        return summary
+    
+    def rank_results(self, results: list) -> list:
+        """Rank results by relevance score (descending)"""
+        return sorted(results, key=lambda x: x.get('relevance_score', 0), reverse=True)
+
+
+# ============================================================================
 # AURORA'S CONVERSATIONAL AI - Integrated into Luminar Nexus
 # ============================================================================
 
@@ -1771,6 +1952,20 @@ class AuroraConversationalAI:
         ):
             task_type = "fix_bug"
             log.append("🔍 **DEBUG**: Detected fix_bug task type")
+        # Check for PYTHON CLASS/METHOD creation (Phase 2+)
+        elif re.search(
+            r"(create|add|implement|build).*(class|method|function).*(luminar|aurora|python|\.py)",
+            msg_lower
+        ):
+            task_type = "create_python_class"
+            log.append("🔍 **DEBUG**: Detected create_python_class task type - Aurora will write Python code!")
+        # Check for MODIFY FILE commands (Phase 2+)
+        elif re.search(
+            r"(modify|update|change|edit).*(file|code|luminar_nexus\.py|tools/)",
+            msg_lower
+        ):
+            task_type = "modify_python_file"
+            log.append("🔍 **DEBUG**: Detected modify_python_file task type - Aurora will modify existing code!")
 
         log.append(f"🔍 **DEBUG**: task_type after detection = '{task_type}'")
 
@@ -2074,6 +2269,63 @@ class AuroraConversationalAI:
                 log.append("⚠️ **No files found to fix**")
                 log.append("Please specify files or pattern to search for")
 
+            return "\n".join(log)
+
+        elif task_type == "create_python_class":
+            log.append("\n🐍 **PYTHON CLASS CREATION MODE ACTIVATED**")
+            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
+            log.append("**TIER 28**: Autonomous Tool Use")
+            log.append("**TIER 32**: Systems Architecture & Design Mastery")
+            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
+            
+            # Extract class name
+            class_match = re.search(r"class.*(called |named )?([A-Z][a-zA-Z]+)", user_message)
+            if class_match:
+                class_name = class_match.group(2)
+                log.append(f"📝 **Class Name**: {class_name}")
+            else:
+                class_name = "AuroraNewClass"
+                log.append(f"📝 **Class Name**: {class_name} (auto-generated)")
+            
+            # Extract file to modify
+            file_match = re.search(r"(tools/luminar_nexus\.py|luminar_nexus\.py)", user_message)
+            if file_match:
+                target_file = "/workspaces/Aurora-x/tools/luminar_nexus.py"
+                log.append(f"📁 **Target File**: {target_file}")
+            else:
+                log.append("⚠️ **No target file specified**")
+                log.append("Please specify which .py file to modify")
+                return "\n".join(log)
+            
+            log.append("\n🚧 **IMPLEMENTATION REQUIRED**")
+            log.append("This task requires detailed class implementation.")
+            log.append("Please provide:")
+            log.append(f"1. What methods should {class_name} have?")
+            log.append("2. What data should it store?")
+            log.append("3. What is its purpose?")
+            log.append("\nOr, I'll implement it with the assistant's help and record the process! 📝")
+            
+            return "\n".join(log)
+
+        elif task_type == "modify_python_file":
+            log.append("\n🔧 **PYTHON FILE MODIFICATION MODE ACTIVATED**")
+            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
+            log.append("**TIER 28**: Autonomous code modification")
+            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
+            
+            # Extract file to modify
+            file_match = re.search(r"(tools/[\w_]+\.py|[\w_]+\.py)", user_message)
+            if file_match:
+                target_file = f"/workspaces/Aurora-x/{file_match.group(1)}" if not file_match.group(1).startswith("/") else file_match.group(1)
+                log.append(f"📁 **Target File**: {target_file}")
+            else:
+                log.append("⚠️ **No target file specified**")
+                return "\n".join(log)
+            
+            log.append("\n🚧 **MODIFICATION REQUIRED**")
+            log.append("This task requires specific code changes.")
+            log.append("The assistant will implement this and record Aurora's process! 📝")
+            
             return "\n".join(log)
 
         if task_type == "create_chat_ui":
