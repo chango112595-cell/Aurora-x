@@ -7,49 +7,50 @@ Simple recorder/monitor script for Aurora-X workspace.
 
 This script runs independently of Aurora and does NOT modify Aurora runtime.
 """
-import time
-import requests
 import json
-import shutil
 import os
-from pathlib import Path
+import shutil
+import time
 from datetime import datetime, timedelta
+from pathlib import Path
+
+import requests
 
 LOG_PATH = Path(".aurora_knowledge/RECORDING_LOG.jsonl")
 LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-MONITOR_LOG = Path('.aurora_knowledge/recorder_monitor.log')
+MONITOR_LOG = Path(".aurora_knowledge/recorder_monitor.log")
 
 SERVICES = [
-    {"name":"backend","url":"http://localhost:5000/health"},
-    {"name":"bridge","url":"http://localhost:5001/health"},
-    {"name":"self-learn","url":"http://localhost:5002/health"},
-    {"name":"chat","url":"http://localhost:5003/health"},
-    {"name":"vite","url":"http://localhost:5173/"},
+    {"name": "backend", "url": "http://localhost:5000/health"},
+    {"name": "bridge", "url": "http://localhost:5001/health"},
+    {"name": "self-learn", "url": "http://localhost:5002/health"},
+    {"name": "chat", "url": "http://localhost:5003/health"},
+    {"name": "vite", "url": "http://localhost:5173/"},
 ]
 
 CLEANUP_PATTERNS = ["*.pyc", "__pycache__", "*.aurora_backup"]
 CLEANUP_AGE_DAYS = 7
 
-INTERVAL = int(os.environ.get('RECORDER_INTERVAL_SECONDS', '60'))
+INTERVAL = int(os.environ.get("RECORDER_INTERVAL_SECONDS", "60"))
 
 
 def write_log(entry: dict):
-    entry.setdefault('timestamp', datetime.utcnow().isoformat() + 'Z')
-    with LOG_PATH.open('a', encoding='utf-8') as f:
+    entry.setdefault("timestamp", datetime.utcnow().isoformat() + "Z")
+    with LOG_PATH.open("a", encoding="utf-8") as f:
         f.write(json.dumps(entry, default=str) + "\n")
 
 
 def log_monitor(msg: str):
-    ts = datetime.utcnow().isoformat() + 'Z'
-    with MONITOR_LOG.open('a', encoding='utf-8') as f:
+    ts = datetime.utcnow().isoformat() + "Z"
+    with MONITOR_LOG.open("a", encoding="utf-8") as f:
         f.write(f"{ts} {msg}\n")
 
 
 def check_endpoints():
     results = []
     for svc in SERVICES:
-        name = svc['name']
-        url = svc['url']
+        name = svc["name"]
+        url = svc["url"]
         try:
             r = requests.get(url, timeout=5)
             snippet = r.text[:200]
@@ -64,7 +65,7 @@ def check_endpoints():
 
 def check_disk():
     try:
-        total, used, free = shutil.disk_usage('/')
+        total, used, free = shutil.disk_usage("/")
         pct_free = (free / total) * 100
         entry = {"type": "disk_check", "total": total, "used": used, "free": free, "pct_free": pct_free}
         write_log(entry)
@@ -83,15 +84,15 @@ def cleanup_temp():
     cutoff = now - timedelta(days=CLEANUP_AGE_DAYS)
     removed = []
     # cleanup .pyc and .aurora_backup files
-    for root, dirs, files in os.walk('.'):
+    for root, dirs, files in os.walk("."):
         # remove __pycache__ dirs older than cutoff
-        if '__pycache__' in dirs:
-            dirpath = Path(root) / '__pycache__'
+        if "__pycache__" in dirs:
+            dirpath = Path(root) / "__pycache__"
             try:
                 mtime = datetime.fromtimestamp(dirpath.stat().st_mtime)
                 if mtime < cutoff:
                     # remove files inside then dir
-                    for p in dirpath.rglob('*'):
+                    for p in dirpath.rglob("*"):
                         try:
                             if p.is_file():
                                 p.unlink()
@@ -127,8 +128,8 @@ def main_loop():
             cleanup_temp()
             time.sleep(INTERVAL)
     except KeyboardInterrupt:
-        log_monitor('recorder_monitor stopped')
+        log_monitor("recorder_monitor stopped")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main_loop()
