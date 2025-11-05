@@ -89,7 +89,7 @@ export default function LuminarNexus() {
 
   const fetchHealthData = async () => {
     try {
-      const res = await fetch('http://localhost:9090/api/status');
+      const res = await fetch('/api/status');
       const data = await res.json();
       setHealthData(data);
       setLoading(false);
