@@ -1697,13 +1697,15 @@ class AuroraConversationalAI:
         is_creative_mode = "creative" in user_message.lower() or "unique" in user_message.lower()
 
         # Check for server management commands FIRST
-        if re.search(r"(start|launch|run).*(all|services|servers|backend|bridge|vite|self-learn)", user_message.lower()):
+        if re.search(
+            r"(start|launch|run).*(all|services|servers|backend|bridge|vite|self-learn)", user_message.lower()
+        ):
             task_type = "start_servers"
         elif re.search(r"(stop|shutdown|kill).*(all|services|servers)", user_message.lower()):
             task_type = "stop_servers"
         elif re.search(r"(restart|reload).*(all|services|servers)", user_message.lower()):
             task_type = "restart_servers"
-        
+
         # Extract component name if mentioned (e.g., "AuroraSystemDashboard")
         component_match = re.search(r"([A-Z][a-zA-Z]*(?:Dashboard|Status|Panel|View|Component|UI))", user_message)
         if component_match:
@@ -1749,28 +1751,28 @@ class AuroraConversationalAI:
             log.append("\n🎯 **TASK IDENTIFIED:** Start all Aurora services")
             log.append("**Using TIER 28: Autonomous server orchestration**\n")
             log.append("🚀 **STARTING ALL SERVICES...**\n")
-            
+
             if self.manager:
                 # Aurora uses Luminar Nexus to start all servers
                 log.append("**Starting Backend (Port 5000)...**")
                 self.manager.start_server("backend")
                 log.append("✅ Backend started\n")
-                
+
                 log.append("**Starting Bridge (Port 5001)...**")
                 self.manager.start_server("bridge")
                 log.append("✅ Bridge started\n")
-                
+
                 log.append("**Starting Self-Learn (Port 5002)...**")
                 self.manager.start_server("self-learn")
                 log.append("✅ Self-Learn started\n")
-                
+
                 log.append("**Starting Vite Frontend (Port 5173)...**")
                 self.manager.start_server("vite")
                 log.append("✅ Vite started\n")
-                
+
                 log.append("\n🌟 **ALL SERVICES STARTED SUCCESSFULLY**")
                 log.append("**Aurora's ecosystem is now fully operational!**\n")
-                
+
                 # Show status
                 log.append("**Service Status:**")
                 for server_key in ["backend", "bridge", "self-learn", "vite"]:
@@ -1779,13 +1781,13 @@ class AuroraConversationalAI:
             else:
                 log.append("⚠️ **Luminar Nexus manager not available**")
                 log.append("Cannot start servers autonomously")
-            
+
             return "\n".join(log)
-        
+
         elif task_type == "stop_servers":
             log.append("\n🎯 **TASK IDENTIFIED:** Stop all Aurora services")
             log.append("**Using TIER 28: Autonomous server orchestration**\n")
-            
+
             if self.manager:
                 log.append("🛑 **STOPPING ALL SERVICES...**\n")
                 for server_key in ["backend", "bridge", "self-learn", "vite"]:
@@ -1794,13 +1796,13 @@ class AuroraConversationalAI:
                 log.append("\n🌙 **ALL SERVICES STOPPED**")
             else:
                 log.append("⚠️ **Luminar Nexus manager not available**")
-            
+
             return "\n".join(log)
-        
+
         elif task_type == "restart_servers":
             log.append("\n🎯 **TASK IDENTIFIED:** Restart all Aurora services")
             log.append("**Using TIER 28: Autonomous server orchestration**\n")
-            
+
             if self.manager:
                 log.append("🔄 **RESTARTING ALL SERVICES...**\n")
                 for server_key in ["backend", "bridge", "self-learn", "vite"]:
@@ -1811,7 +1813,7 @@ class AuroraConversationalAI:
                 log.append("\n🌟 **ALL SERVICES RESTARTED**")
             else:
                 log.append("⚠️ **Luminar Nexus manager not available**")
-            
+
             return "\n".join(log)
 
         if task_type == "create_chat_ui":
