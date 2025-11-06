@@ -408,7 +408,7 @@
                         coreStatus = '\n\n🧠 *Aurora Core v2.0 Intelligence Active*';
                     }
                     addMessage('aurora', response.response + coreStatus);
-                    
+
                     // Update UI indicators
                     document.querySelector('.status-badge').textContent = '⚡ 33 TIERS ACTIVE • AURORA CORE v2.0';
                 } else {
@@ -427,7 +427,26 @@
             }
         }
 
-        // Auto-scroll to bottom on page load
+        // Reset session on page load to prevent generic responses
+        async function resetSession() {
+            try {
+                await fetch('http://localhost:5003/api/chat/reset', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        session_id: 'cosmic-nexus-ui'
+                    })
+                });
+                console.log('🔄 Session reset for fresh Aurora conversation');
+            } catch (error) {
+                console.log('⚠️ Session reset failed, but Aurora will adapt');
+            }
+        }
+
+        // Initialize interface
+        resetSession();
         setTimeout(scrollToBottom, 100);
 
         console.log('🌌 Aurora Cosmic Nexus Interface Loaded');

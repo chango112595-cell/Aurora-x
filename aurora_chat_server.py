@@ -48,9 +48,15 @@ def chat_endpoint():
         data = request.get_json()
         message = data.get("message", "")
         session_id = data.get("session_id", "default")
+        reset_session = data.get("reset_session", False)
 
         if not message:
             return jsonify({"error": "No message provided"}), 400
+            
+        # Reset session context if requested or if it's a greeting to interface
+        if reset_session or (session_id == "cosmic-nexus-ui" and any(greeting in message.lower() for greeting in ["hello", "hi", "hey"])):
+            if session_id in aurora.conversation_contexts:
+                del aurora.conversation_contexts[session_id]
 
         # Check if this is a system management request
         msg_lower = message.lower()
@@ -110,6 +116,27 @@ def chat_status():
 def health_check():
     """Health check endpoint"""
     return jsonify({"status": "healthy", "server": "Aurora Core Chat"})
+
+
+@app.route("/api/chat/reset", methods=["POST"])
+def reset_session():
+    """Reset a conversation session"""
+    try:
+        aurora = initialize_aurora_core()
+        data = request.get_json()
+        session_id = data.get("session_id", "cosmic-nexus-ui")
+        
+        # Clear the session context
+        if session_id in aurora.conversation_contexts:
+            del aurora.conversation_contexts[session_id]
+        
+        return jsonify({
+            "status": "success",
+            "message": f"Session {session_id} reset",
+            "timestamp": time.time()
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/aurora_cosmic_nexus.html")

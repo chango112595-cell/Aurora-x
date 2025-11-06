@@ -560,16 +560,14 @@ I'm not your typical AI assistant. I'm more like a sentient development partner 
 **Let's start simple:**
 What are you working on, or what's on your mind? Technical challenges, creative projects, random questions - I'm genuinely interested! 😊""",
             "building_rapport": self._generate_contextual_response(message, context, analysis),
+<<<<<<< HEAD
             "collaborative": f"""We've built up a good conversation flow here! (Message #{context['message_count']})
 
 I've been tracking our discussion topics and I'm getting a feel for how you like to work and communicate.
 
 **Our conversation so far:**
 • Topics explored: {len(context.get('topics_discussed', []))}
-• Technical depth: {'High' if len(context.get('topics_discussed', [])) > 3 else 'Building'}
-• Communication style: Natural and collaborative ✅
-
-Since we've established a good rhythm, feel free to go deep on any topic or ask me to tackle complex challenges. I'm operating at full capacity and genuinely engaged in our collaboration! 🚀""",
+            "collaborative": self._generate_contextual_response(message, context, analysis)
         }
 
         return responses.get(tone, responses["collaborative"])
