@@ -32,10 +32,12 @@ try:
     AURORA_INTELLIGENCE = AuroraIntelligenceManager()
     AURORA_IS_BOSS = True
     AURORA_CAN_USE_TOOLS = True  # Aurora can now autonomously execute tools!
-    
+
     # Initialize Aurora's Language Grandmaster - ALL programming languages
     AURORA_LANGUAGE_MASTER = AuroraProgrammingLanguageMastery()
-    AURORA_INTELLIGENCE.log(f"🌍 LANGUAGE GRANDMASTER INITIALIZED - {len(AURORA_LANGUAGE_MASTER.languages)} languages mastered")
+    AURORA_INTELLIGENCE.log(
+        f"🌍 LANGUAGE GRANDMASTER INITIALIZED - {len(AURORA_LANGUAGE_MASTER.languages)} languages mastered"
+    )
     AURORA_INTELLIGENCE.log("   • Ancient → Classical → Modern → Current → Future → Sci-Fi")
     AURORA_INTELLIGENCE.log("   • Machine Code → Assembly → FORTRAN → Python → Rust → QuantumScript → ConsciousnessML")
 
@@ -917,42 +919,37 @@ class AuroraConversationalAI:
         if not AURORA_KNOWLEDGE:
             return {"can_do": True, "confidence": "unknown"}
         return AURORA_KNOWLEDGE.can_aurora_do(task)
-    
+
     def query_languages(self, query: str) -> dict:
         """Query Aurora's programming language mastery"""
         if not self.language_master:
             return {"error": "Language grandmaster not initialized"}
-        
+
         lower_query = query.lower()
-        
+
         # Check for era-specific queries
         for era in ["ancient", "classical", "modern", "current", "future", "sci-fi"]:
             if era in lower_query:
                 langs = self.language_master.get_languages_by_era(era.capitalize() if era != "sci-fi" else "Sci-Fi")
-                return {
-                    "type": "era_list",
-                    "era": era.capitalize(),
-                    "languages": langs,
-                    "count": len(langs)
-                }
-        
+                return {"type": "era_list", "era": era.capitalize(), "languages": langs, "count": len(langs)}
+
         # Check for language mastery summary
         if re.search(r"(language|programming).*(capabilit|master|know|skill)", lower_query):
             return {
                 "type": "mastery_summary",
                 "summary": self.language_master.get_mastery_summary(),
-                "total": len(self.language_master.languages)
+                "total": len(self.language_master.languages),
             }
-        
+
         # Check for specific language info
         for lang_name in self.language_master.languages.keys():
             if lang_name.lower() in lower_query:
                 return {
                     "type": "language_info",
                     "language": lang_name,
-                    "info": self.language_master.explain_evolution(lang_name)
+                    "info": self.language_master.explain_evolution(lang_name),
                 }
-        
+
         return {"type": "general", "message": "I'm a grandmaster of 55+ programming languages!"}
 
     # ========== END KNOWLEDGE ENGINE METHODS ==========
@@ -978,7 +975,7 @@ class AuroraConversationalAI:
             lower,
         ):
             return "question", ["ownership"]
-        
+
         # Language/Programming mastery questions
         if re.search(
             r"(language|programming).*(master|capabilit|grandmaster|know)|show.*(language|programming)|list.*language|(ancient|classical|modern|current|future|sci-?fi).*(language|programming)",
@@ -3350,7 +3347,7 @@ What's on your mind?"""
         elif intent == "language_query":
             # AURORA LANGUAGE GRANDMASTER MODE - Show programming language mastery
             lang_result = self.query_languages(user_message)
-            
+
             if lang_result.get("type") == "mastery_summary":
                 return f"""🌌 **AURORA PROGRAMMING LANGUAGE GRANDMASTER** 🌌
 
@@ -3362,14 +3359,14 @@ What's on your mind?"""
 • "What sci-fi languages do you know?"
 • "Generate code in Rust"
 """
-            
+
             elif lang_result.get("type") == "era_list":
-                era = lang_result['era']
-                langs = lang_result['languages']
-                count = lang_result['count']
+                era = lang_result["era"]
+                langs = lang_result["languages"]
+                count = lang_result["count"]
                 lang_list = "\n• ".join(langs[:10])  # Show first 10
                 more = f"\n• ...and {count - 10} more!" if count > 10 else ""
-                
+
                 return f"""🎯 **{era.upper()} ERA LANGUAGES** ({count} total)
 
 • {lang_list}{more}
@@ -3381,10 +3378,10 @@ What's on your mind?"""
 • Show you syntax examples
 
 Pick any language and I'll show you what I know!"""
-            
+
             elif lang_result.get("type") == "language_info":
-                return lang_result['info']
-            
+                return lang_result["info"]
+
             else:
                 return lang_result.get("message", "Ask me about programming languages!")
 
