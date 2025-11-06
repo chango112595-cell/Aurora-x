@@ -49,7 +49,7 @@ export default defineConfig({
     ],
     proxy: {
       '/api/chat': {
-        target: 'http://localhost:5004',
+        target: 'http://localhost:5003',
         changeOrigin: true,
       },
       '/api': {
