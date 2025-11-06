@@ -1,20 +1,73 @@
 # 🚀 Aurora-X Quick Commands Reference
 
-**Last Updated:** November 5, 2025  
+**Last Updated:** November 6, 2025  
 **Project:** Aurora-X Autonomous AI System
 
 ---
 
-## 🔥 Start Aurora (Recommended)
+## 🔥 Start Aurora (Simplified Commands)
 
-### Start Chat Server with Autonomous Monitoring
+### ⭐ Start All Services (EASIEST WAY)
 ```bash
-python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(5003)"
+python3 x-start
 ```
 
-### Start All Services at Once
+### ⭐ Stop All Services
+```bash
+python3 x-stop
+```
+
+### ⭐ Check Status
+```bash
+python3 x-nexus status
+```
+
+---
+
+## 🎯 Individual Service Control
+
+### Start Individual Service
+```bash
+python3 x-nexus start <service>
+
+# Examples:
+python3 x-nexus start vite       # Frontend
+python3 x-nexus start chat       # Chat server
+python3 x-nexus start backend    # Backend API
+python3 x-nexus start bridge     # Bridge service
+python3 x-nexus start self-learn # Self-learning server
+```
+
+### Stop Individual Service
+```bash
+python3 x-nexus stop <service>
+
+# Examples:
+python3 x-nexus stop vite
+python3 x-nexus stop chat
+```
+
+### Restart Individual Service
+```bash
+python3 x-nexus restart <service>
+
+# Examples:
+python3 x-nexus restart backend
+python3 x-nexus restart chat
+```
+
+---
+
+## 🔧 Advanced/Legacy Commands
+
+### Start All Services (Legacy Method)
 ```bash
 python tools/luminar_nexus.py start-all
+```
+
+### Start Chat Server Directly
+```bash
+python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(5003)"
 ```
 
 ### Start in Background (Detached)
@@ -26,12 +79,12 @@ python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(500
 
 ## 📊 Check Status
 
-### Check All Service Status
+### ⭐ Check All Services (Simplified)
 ```bash
-python tools/luminar_nexus.py status
+python3 x-nexus status
 ```
 
-### Check Individual Service
+### Check Individual Service Health
 ```bash
 # Backend
 curl http://localhost:5000/health
@@ -55,12 +108,22 @@ ps aux | grep -E "uvicorn|luminar|aurora" | grep -v grep
 
 ## 🛑 Stop Services
 
-### Stop All Services
+### ⭐ Stop All Services (Simplified)
 ```bash
-python tools/luminar_nexus.py stop-all
+python3 x-stop
 ```
 
-### Stop Individual Service
+### Stop Individual Service (Simplified)
+```bash
+python3 x-nexus stop <service>
+
+# Examples:
+python3 x-nexus stop chat
+python3 x-nexus stop vite
+python3 x-nexus stop backend
+```
+
+### Emergency Stop (Kill All)
 ```bash
 # Kill chat server
 pkill -f "python.*luminar_nexus.*5003"
@@ -82,18 +145,28 @@ pkill -f "vite.*5173"
 
 ## 🔄 Restart Services
 
-### Restart All
+### ⭐ Restart All (Simplified)
+```bash
+python3 x-stop
+sleep 2
+python3 x-start
+```
+
+### ⭐ Restart Individual Service
+```bash
+python3 x-nexus restart <service>
+
+# Examples:
+python3 x-nexus restart chat
+python3 x-nexus restart backend
+python3 x-nexus restart vite
+```
+
+### Legacy Restart Method
 ```bash
 python tools/luminar_nexus.py stop-all
 sleep 2
 python tools/luminar_nexus.py start-all
-```
-
-### Restart Chat Server Only
-```bash
-pkill -f "python.*luminar_nexus.*5003"
-sleep 2
-python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(5003)" &
 ```
 
 ---
@@ -176,9 +249,11 @@ curl -s -X POST http://localhost:5003/api/chat \
 
 ---
 
-## 🔧 Individual Service Management
+## 🔧 Individual Service Management (Legacy)
 
-### Start Individual Services
+> **Note:** Use the simplified `python3 x-nexus` commands above instead!
+
+### Start Individual Services (Old Way)
 ```bash
 # Backend
 python tools/luminar_nexus.py start backend
@@ -196,7 +271,7 @@ python tools/luminar_nexus.py start vite
 python tools/luminar_nexus.py start chat
 ```
 
-### Stop Individual Services
+### Stop Individual Services (Old Way)
 ```bash
 python tools/luminar_nexus.py stop backend
 python tools/luminar_nexus.py stop bridge
@@ -205,7 +280,7 @@ python tools/luminar_nexus.py stop vite
 python tools/luminar_nexus.py stop chat
 ```
 
-### Restart Individual Services
+### Restart Individual Services (Old Way)
 ```bash
 python tools/luminar_nexus.py restart backend
 python tools/luminar_nexus.py restart bridge
@@ -344,14 +419,19 @@ curl -s http://localhost:5003/api/chat \
 
 ## 🎯 Common Workflows
 
-### Daily Startup
+### ⭐ Daily Startup (Simplified)
 ```bash
-python tools/luminar_nexus.py start-all
+python3 x-start
 ```
 
-### Check Everything is Running
+### ⭐ Check Everything is Running
 ```bash
-python tools/luminar_nexus.py status
+python3 x-nexus status
+```
+
+### ⭐ Restart a Single Service
+```bash
+python3 x-nexus restart chat
 ```
 
 ### Aurora Self-Heal
@@ -364,9 +444,9 @@ curl -X POST http://localhost:5003/api/chat -d '{"message":"Aurora, fix yourself
 tail -30 .aurora_knowledge/autonomous_monitoring_$(date +%Y%m%d).log
 ```
 
-### Clean Shutdown
+### ⭐ Clean Shutdown
 ```bash
-python tools/luminar_nexus.py stop-all
+python3 x-stop
 ```
 
 ---
@@ -375,17 +455,15 @@ python tools/luminar_nexus.py stop-all
 
 ### Aurora Not Responding?
 ```bash
-# Kill and restart
-pkill -f luminar_nexus
-sleep 2
-python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(5003)" &
+# Quick restart
+python3 x-nexus restart chat
 ```
 
 ### All Services Down?
 ```bash
-python tools/luminar_nexus.py stop-all
+python3 x-stop
 sleep 3
-python tools/luminar_nexus.py start-all
+python3 x-start
 ```
 
 ### Port Already in Use?
@@ -397,7 +475,16 @@ lsof -i :5003
 kill -9 $(lsof -t -i :5003)
 
 # Restart
-python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(5003)"
+python3 x-nexus start chat
+```
+
+### Nuclear Option (Kill Everything)
+```bash
+pkill -f luminar_nexus
+pkill -f "uvicorn.*500[0-2]"
+pkill -f vite
+sleep 3
+python3 x-start
 ```
 
 ---
@@ -413,15 +500,25 @@ python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(500
 
 **Quick Start (Copy-Paste):**
 ```bash
-# Start Aurora with monitoring
-python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(5003)"
+# ⭐ Start Aurora (EASIEST WAY)
+python3 x-start
 
-# In another terminal, watch logs
-tail -f .aurora_knowledge/autonomous_monitoring_$(date +%Y%m%d).log
+# Check status
+python3 x-nexus status
 
 # Test Aurora
 curl -s http://localhost:5003/api/chat -d '{"message":"Hello Aurora!"}' | jq -r '.response'
+
+# Stop everything
+python3 x-stop
 ```
+
+**Available Services:**
+- `vite` - Frontend (port 5173)
+- `backend` - Backend API (port 5000)
+- `bridge` - Bridge service (port 5001)
+- `self-learn` - Self-learning server (port 5002)
+- `chat` - Aurora chat AI (port 5003)
 
 ---
 
