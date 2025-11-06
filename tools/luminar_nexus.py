@@ -3273,18 +3273,21 @@ export default function AuroraDashboard() {
 
         # ENHANCED PROCESSING: Use full Aurora intelligence instead of intent classification
         msg = user_message.lower().strip()
-        
+
         # Check for Aurora self-referential questions
-        if re.search(r"(aurora|your (capability|tier|knowledge|skill|architecture|intelligence)|what (are you|can you do)|tell me about (yourself|you))", msg):
+        if re.search(
+            r"(aurora|your (capability|tier|knowledge|skill|architecture|intelligence)|what (are you|can you do)|tell me about (yourself|you))",
+            msg,
+        ):
             return await self._respond_about_aurora(user_message, ctx)
-        
-        # Check for system improvement requests  
+
+        # Check for system improvement requests
         if re.search(r"(add language|human interaction|improve|enhance|fix.*chat|natural language|conversation)", msg):
             return await self._respond_about_improvements(user_message, ctx)
-        
+
         # For everything else, use Aurora's full grandmaster intelligence
         return await self._full_intelligence_response(user_message, ctx)
-    
+
     async def _respond_about_aurora(self, message: str, ctx: dict) -> str:
         """Aurora describing her own capabilities and architecture"""
         return f"""🌌 **AURORA SYSTEM STATUS** - All 33 Tiers Active
@@ -3314,7 +3317,7 @@ What would you like to explore about my architecture or build together?"""
 
     async def _respond_about_improvements(self, message: str, ctx: dict) -> str:
         """Aurora responding to improvement requests"""
-        return f"""🔧 **AURORA ENHANCEMENT PROTOCOL ACTIVE**
+        return """🔧 **AURORA ENHANCEMENT PROTOCOL ACTIVE**
 
 I understand you want to improve my natural language and conversation abilities!
 
@@ -3343,15 +3346,17 @@ Just tell me what specific improvements you'd like to see!"""
 
     async def _full_intelligence_response(self, message: str, ctx: dict) -> str:
         """Process with full Aurora intelligence - no intent limitations"""
-        
+
         # Use Aurora's complete knowledge base and reasoning
         intent, entities = self.classify_intent(message)
-        
+
         # Instead of generic responses, engage full intelligence
         if intent == "greeting":
             recent_tech = ", ".join(ctx["mentioned_techs"][-3:]) if ctx["mentioned_techs"] else None
             context_note = (
-                f"We've been working with {recent_tech} together. " if ctx["conversation_depth"] > 2 and recent_tech else ""
+                f"We've been working with {recent_tech} together. "
+                if ctx["conversation_depth"] > 2 and recent_tech
+                else ""
             )
             return f"""🌌 Aurora here! {context_note}Ready to dive into some serious technical work?
 

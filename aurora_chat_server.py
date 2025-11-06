@@ -8,12 +8,13 @@ for all conversation processing. No more complex luminar_nexus dependencies.
 """
 
 import asyncio
-import time
 import os
-from flask import Flask, request, jsonify, send_file
-from flask_cors import CORS
-from aurora_core import create_aurora_core
+import time
 
+from flask import Flask, jsonify, request, send_file
+from flask_cors import CORS
+
+from aurora_core import create_aurora_core
 
 # Global Aurora Core instance
 AURORA_CORE = None
@@ -42,7 +43,7 @@ def chat_endpoint():
     try:
         # Initialize Aurora Core if needed
         aurora = initialize_aurora_core()
-        
+
         # Get request data
         data = request.get_json()
         message = data.get("message", "")
@@ -53,7 +54,10 @@ def chat_endpoint():
 
         # Check if this is a system management request
         msg_lower = message.lower()
-        if any(cmd in msg_lower for cmd in ["start all", "stop all", "fire up", "status", "health", "restart chat", "system"]):
+        if any(
+            cmd in msg_lower
+            for cmd in ["start all", "stop all", "fire up", "status", "health", "restart chat", "system"]
+        ):
             # Use Aurora's autonomous system management
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
@@ -66,16 +70,18 @@ def chat_endpoint():
             response = loop.run_until_complete(aurora.process_conversation(message, session_id))
             loop.close()
 
-        return jsonify({
-            "response": response, 
-            "session_id": session_id, 
-            "timestamp": time.time(),
-            "aurora_version": "2.0",
-            "core_intelligence": True,
-            "orchestration_active": True,
-            "luminar_nexus_preserved": True
-        })
-        
+        return jsonify(
+            {
+                "response": response,
+                "session_id": session_id,
+                "timestamp": time.time(),
+                "aurora_version": "2.0",
+                "core_intelligence": True,
+                "orchestration_active": True,
+                "luminar_nexus_preserved": True,
+            }
+        )
+
     except Exception as e:
         print(f"❌ Chat error: {e}")
         return jsonify({"error": str(e)}), 500
@@ -86,16 +92,18 @@ def chat_status():
     """Get Aurora chat system status"""
     aurora = initialize_aurora_core()
     status = aurora.get_system_status()
-    
-    return jsonify({
-        "status": "online",
-        "aurora_core_version": status["aurora_core_version"],
-        "intelligence_tiers_active": status["intelligence_tiers_active"],
-        "autonomous_mode": status["autonomous_mode"],
-        "active_conversations": status["active_conversations"],
-        "enhanced_nlp": True,
-        "server_type": "Aurora Core Chat Server"
-    })
+
+    return jsonify(
+        {
+            "status": "online",
+            "aurora_core_version": status["aurora_core_version"],
+            "intelligence_tiers_active": status["intelligence_tiers_active"],
+            "autonomous_mode": status["autonomous_mode"],
+            "active_conversations": status["active_conversations"],
+            "enhanced_nlp": True,
+            "server_type": "Aurora Core Chat Server",
+        }
+    )
 
 
 @app.route("/api/health", methods=["GET"])
@@ -132,11 +140,12 @@ def run_aurora_chat_server(port=5003):
     print("🧠 Using Aurora Core Intelligence v2.0")
     print("⚡ Enhanced natural language processing active")
     print("🚀 Ready for intelligent conversations!\n")
-    
+
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
 
 
 if __name__ == "__main__":
     import sys
+
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 5003
     run_aurora_chat_server(port)
