@@ -51,10 +51,40 @@ export default defineConfig({
       '/api/chat': {
         target: 'http://localhost:5003',
         changeOrigin: true,
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.log('Proxy error for /api/chat:', err.message);
+          });
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            console.log('Proxying /api/chat request to localhost:5003');
+          });
+          proxy.on('proxyRes', (proxyRes, req, res) => {
+            console.log('Response from localhost:5003, status:', proxyRes.statusCode);
+          });
+        },
+      },
+      '/api/status': {
+        target: 'http://localhost:5001',
+        changeOrigin: true,
+      },
+      '/api/bridge': {
+        target: 'http://localhost:5001',
+        changeOrigin: true,
       },
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:5002',
         changeOrigin: true,
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.log('Proxy error for /api:', err.message);
+          });
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            console.log('Proxying /api request to localhost:5002');
+          });
+          proxy.on('proxyRes', (proxyRes, req, res) => {
+            console.log('Response from localhost:5002, status:', proxyRes.statusCode);
+          });
+        },
       },
     },
     fs: {
