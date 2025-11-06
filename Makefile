@@ -1,12 +1,43 @@
-# Aurora-X Ultra Unified Makefile (T01-T08)
-.PHONY: all help install test run clean serve serve-v3 open-dashboard open-report debug health-check
-.PHONY: spec spec-test spec-report spec3 spec3-test spec3-all
-.PHONY: orchestrator orchestrate-bg orch-test orch-status
-.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed demo-clean demo-clean-hard demo-status
-.PHONY: bridge-up bridge-status bridge-nl bridge-spec bridge-deploy orch-up
-.PHONY: self-learn
+# Aurora-X Complete Project Makefile
+# Comprehensive automation for Aurora AI System
+# Author: GitHub Copilot & User
+# Date: November 6, 2025 - Windows Compatibility Fixed
 
-# === Default Variables ===
+# ============================================================================
+# VARIABLES
+# ============================================================================
+
+PYTHON := python3
+PIP := pip3
+NODE := node
+NPM := npm
+VITE := npx vite
+DOCKER := docker
+GIT := git
+
+# Ports
+BACKEND_PORT := 5000
+BRIDGE_PORT := 5001
+SELF_LEARN_PORT := 5002
+CHAT_PORT := 5003
+FRONTEND_PORT := 5173
+
+# Directories
+TOOLS_DIR := tools
+CLIENT_DIR := client
+BACKUPS_DIR := backups
+KNOWLEDGE_DIR := .aurora_knowledge
+DATA_DIR := data
+LOGS_DIR := logs
+
+# Core Aurora Files
+AURORA_CORE := $(TOOLS_DIR)/aurora_core.py
+AURORA_ENHANCED := $(TOOLS_DIR)/aurora_enhanced_core.py
+LANGUAGE_MASTER := $(TOOLS_DIR)/aurora_language_grandmaster.py
+LUMINAR_NEXUS := $(TOOLS_DIR)/luminar_nexus.py
+INTELLIGENCE_MANAGER := aurora_intelligence_manager.py
+
+# Legacy Variables (preserved for compatibility)
 SPEC ?= specs/check_palindrome.md
 SPEC3 ?= specs/check_palindrome.md
 WHAT ?= reverse a string
