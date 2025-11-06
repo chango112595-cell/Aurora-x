@@ -745,6 +745,9 @@ def main():
 
     if command == "start-all":
         nexus.start_all()
+    elif command == "start" and len(sys.argv) == 2:
+        # 'start' alone means start-all
+        nexus.start_all()
     elif command == "stop-all":
         nexus.stop_all()
     elif command == "status":
