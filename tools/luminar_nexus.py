@@ -1870,7 +1870,10 @@ if __name__ == "__main__":
             task_type = "modify_python_file"
             log.append("🔍 **DEBUG**: Detected modify_python_file task type - Aurora will modify existing code!")
         # Check for ARCHITECTURAL REFACTORING commands (Phase 2+)
-        elif re.search(r"(extract|refactor|restructure|reorganize|invert|reverse).*(architecture|class|component|aurora.*core|luminar.*nexus)", msg_lower):
+        elif re.search(
+            r"(extract|refactor|restructure|reorganize|invert|reverse).*(architecture|class|component|aurora.*core|luminar.*nexus)",
+            msg_lower,
+        ):
             task_type = "refactor_architecture"
             log.append("🔍 **DEBUG**: Detected refactor_architecture task type - Aurora will restructure her own code!")
         elif re.search(r"(create|build).*(aurora_core\.py|aurora.*core|core.*system)", msg_lower):
@@ -2818,11 +2821,11 @@ class {class_name}:
             log.append("📋 **READING ARCHITECTURAL ANALYSIS...**")
             analysis_path = self.get_project_path("AURORA_ARCHITECTURE_ANALYSIS.md")
             analysis_content = self.execute_tool("read_file", analysis_path)
-            
+
             if analysis_content and "error" not in str(analysis_content).lower():
                 log.append("✅ **Analysis loaded successfully!**\n")
                 log.append("🎯 **EXECUTING MIGRATION PLAN:**\n")
-                
+
                 # Step 1: Create Aurora Core
                 log.append("**STEP 1/3: Creating aurora_core.py (Aurora's main brain)**")
                 core_code = '''#!/usr/bin/env python3
@@ -2903,11 +2906,11 @@ if __name__ == "__main__":
     print("   Use: aurora.start_all_services()")
     print("   Use: aurora.start_chat_server()")
 '''
-                
+
                 core_path = self.get_project_path("tools", "aurora_core.py")
                 result = self.execute_tool("write_file", core_path, core_code)
                 log.append(f"   ✅ Created: {result}\n")
-                
+
                 # Step 2: Extract chat to separate file
                 log.append("**STEP 2/3: Extracting AuroraChatInterface to aurora_chat.py**")
                 chat_code = '''#!/usr/bin/env python3
@@ -2960,18 +2963,18 @@ def run_aurora_chat_server(port=5003, aurora_core=None):
     print(f"🌌 Aurora Chat Interface starting on port {port}...")
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
 '''
-                
+
                 chat_path = self.get_project_path("tools", "aurora_chat.py")
                 result = self.execute_tool("write_file", chat_path, chat_code)
                 log.append(f"   ✅ Created: {result}\n")
-                
+
                 # Step 3: Document what needs manual completion
                 log.append("**STEP 3/3: Architecture Documentation**")
                 log.append("   ⚠️ Manual steps required:")
                 log.append("   1. Move AuroraConversationalAI class to aurora_chat.py")
                 log.append("   2. Update luminar_nexus.py to remove chat code")
                 log.append("   3. Update x-start/x-stop/x-nexus to use AuroraCore\n")
-                
+
                 log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
                 log.append("✅ **ARCHITECTURAL FOUNDATION CREATED!**")
                 log.append("📁 **Files Created:**")
