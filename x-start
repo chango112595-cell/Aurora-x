@@ -2,6 +2,7 @@
 """
 Aurora-X Unified Start Command
 Simple command to start all Aurora services
+NOW USING AURORA CORE - Aurora is in control!
 """
 
 import sys
@@ -10,9 +11,9 @@ import os
 # Add tools directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'tools'))
 
-from luminar_nexus import LuminarNexusServerManager
+from aurora_core import AuroraCore
 
 if __name__ == "__main__":
-    print("🚀 Starting all Aurora-X services...\n")
-    nexus = LuminarNexusServerManager()
-    nexus.start_all()
+    print("🌌 Aurora Core System Initializing...\n")
+    aurora = AuroraCore()
+    aurora.start_all_services()
