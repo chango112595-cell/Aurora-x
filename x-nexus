@@ -2,6 +2,8 @@
 """
 Aurora-X Individual Server Control
 Control individual Aurora services
+NOW USING AURORA CORE - Aurora is in control!
+
 Usage: 
   python3 x-nexus start <server>   - Start a specific server
   python3 x-nexus stop <server>    - Stop a specific server
@@ -18,7 +20,7 @@ import time
 # Add tools directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'tools'))
 
-from luminar_nexus import LuminarNexusServerManager
+from aurora_core import AuroraCore
 
 def show_usage():
     print(__doc__)
@@ -29,24 +31,24 @@ if __name__ == "__main__":
         sys.exit(1)
     
     command = sys.argv[1]
-    nexus = LuminarNexusServerManager()
+    aurora = AuroraCore()
     
     if command == "status":
-        nexus.show_status()
+        aurora.get_status()
     elif command == "start" and len(sys.argv) > 2:
         server = sys.argv[2]
-        print(f"🚀 Starting {server}...\n")
-        nexus.start_server(server)
+        print(f"🚀 Aurora Core: Starting {server}...\n")
+        aurora.start_service(server)
     elif command == "stop" and len(sys.argv) > 2:
         server = sys.argv[2]
-        print(f"🛑 Stopping {server}...\n")
-        nexus.stop_server(server)
+        print(f"🛑 Aurora Core: Stopping {server}...\n")
+        aurora.stop_service(server)
     elif command == "restart" and len(sys.argv) > 2:
         server = sys.argv[2]
-        print(f"🔄 Restarting {server}...\n")
-        nexus.stop_server(server)
+        print(f"🔄 Aurora Core: Restarting {server}...\n")
+        aurora.stop_service(server)
         time.sleep(2)
-        nexus.start_server(server)
+        aurora.start_service(server)
     else:
         print(f"❌ Invalid command: {command}\n")
         show_usage()

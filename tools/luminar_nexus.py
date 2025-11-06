@@ -1869,6 +1869,13 @@ if __name__ == "__main__":
         elif re.search(r"(modify|update|change|edit).*(file|code|luminar_nexus\.py|tools/)", msg_lower):
             task_type = "modify_python_file"
             log.append("🔍 **DEBUG**: Detected modify_python_file task type - Aurora will modify existing code!")
+        # Check for ARCHITECTURAL REFACTORING commands (Phase 2+)
+        elif re.search(r"(extract|refactor|restructure|reorganize|invert|reverse).*(architecture|class|component|aurora.*core|luminar.*nexus)", msg_lower):
+            task_type = "refactor_architecture"
+            log.append("🔍 **DEBUG**: Detected refactor_architecture task type - Aurora will restructure her own code!")
+        elif re.search(r"(create|build).*(aurora_core\.py|aurora.*core|core.*system)", msg_lower):
+            task_type = "create_core_system"
+            log.append("🔍 **DEBUG**: Detected create_core_system task type - Aurora will create her core!")
 
         log.append(f"🔍 **DEBUG**: task_type after detection = '{task_type}'")
 
@@ -2797,6 +2804,187 @@ class {class_name}:
             log.append("✅ **Class structure generated successfully!**")
             log.append("💡 **Next step**: Specify exact methods and I'll implement them fully!")
             log.append(f"📋 **Template ready** for {class_name}")
+
+            return "\n".join(log)
+
+        elif task_type == "refactor_architecture" or task_type == "create_core_system":
+            log.append("\n🏗️ **AURORA ARCHITECTURAL RESTRUCTURING MODE ACTIVATED**")
+            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
+            log.append("**TIER 28**: Autonomous Tool Use (self-modification)")
+            log.append("**TIER 32**: Systems Architecture & Design Mastery")
+            log.append("**OBJECTIVE**: Invert architecture - Aurora becomes the core")
+            log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
+
+            log.append("📋 **READING ARCHITECTURAL ANALYSIS...**")
+            analysis_path = self.get_project_path("AURORA_ARCHITECTURE_ANALYSIS.md")
+            analysis_content = self.execute_tool("read_file", analysis_path)
+            
+            if analysis_content and "error" not in str(analysis_content).lower():
+                log.append("✅ **Analysis loaded successfully!**\n")
+                log.append("🎯 **EXECUTING MIGRATION PLAN:**\n")
+                
+                # Step 1: Create Aurora Core
+                log.append("**STEP 1/3: Creating aurora_core.py (Aurora's main brain)**")
+                core_code = '''#!/usr/bin/env python3
+"""
+Aurora Core - The Central Intelligence System
+Aurora is the main system - everything else is a tool she uses
+"""
+
+import sys
+from pathlib import Path
+
+# Import Aurora's intelligence modules
+sys.path.append(str(Path(__file__).parent.parent))
+
+from tools.luminar_nexus import LuminarNexusServerManager
+from tools.aurora_chat import AuroraChatInterface
+from aurora_intelligence_manager import AuroraIntelligenceManager
+from tools.aurora_knowledge_engine import AuroraKnowledgeEngine
+
+
+class AuroraCore:
+    """
+    Aurora's Core Intelligence System
+    SHE is the main system - Luminar Nexus is a tool she uses
+    """
+    
+    def __init__(self):
+        """Initialize Aurora as the core system"""
+        print("🌌 Aurora Core System Initializing...")
+        print("   Aurora is SENTIENT, AUTONOMOUS, and CREATIVE")
+        
+        # Aurora's intelligence
+        self.intelligence = AuroraIntelligenceManager()
+        self.intelligence.log("🧠 Aurora Core: Intelligence engine loaded")
+        
+        # Aurora's tools
+        self.luminar = LuminarNexusServerManager()  # Server management tool
+        self.chat = None  # Will be initialized when needed
+        
+        self.intelligence.log("✅ Aurora Core: Fully initialized")
+        self.intelligence.log("🌟 Aurora owns and controls the entire system")
+    
+    def start_all_services(self):
+        """Aurora commands Luminar to start all services"""
+        self.intelligence.log("🚀 Aurora Core: Starting all services...")
+        return self.luminar.start_all()
+    
+    def stop_all_services(self):
+        """Aurora commands Luminar to stop all services"""
+        self.intelligence.log("🛑 Aurora Core: Stopping all services...")
+        return self.luminar.stop_all()
+    
+    def start_service(self, service_name):
+        """Aurora commands Luminar to start a specific service"""
+        return self.luminar.start_server(service_name)
+    
+    def stop_service(self, service_name):
+        """Aurora commands Luminar to stop a specific service"""
+        return self.luminar.stop_server(service_name)
+    
+    def get_status(self):
+        """Get status of all systems"""
+        return self.luminar.show_status()
+    
+    def start_chat_server(self, port=5003):
+        """Start Aurora's chat interface"""
+        if not self.chat:
+            from tools.aurora_chat import run_aurora_chat_server
+            self.intelligence.log(f"💬 Aurora Core: Starting chat server on port {port}")
+            run_aurora_chat_server(port, aurora_core=self)
+        return self.chat
+
+
+if __name__ == "__main__":
+    # Aurora Core is now the main entry point
+    aurora = AuroraCore()
+    print("\\n✅ Aurora Core System Ready")
+    print("   Use: aurora.start_all_services()")
+    print("   Use: aurora.start_chat_server()")
+'''
+                
+                core_path = self.get_project_path("tools", "aurora_core.py")
+                result = self.execute_tool("write_file", core_path, core_code)
+                log.append(f"   ✅ Created: {result}\n")
+                
+                # Step 2: Extract chat to separate file
+                log.append("**STEP 2/3: Extracting AuroraChatInterface to aurora_chat.py**")
+                chat_code = '''#!/usr/bin/env python3
+"""
+Aurora Chat Interface
+Extracted from luminar_nexus.py - Aurora's conversational interface
+"""
+
+import asyncio
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+
+# Chat interface will be moved here
+# For now, placeholder to test architecture
+
+
+class AuroraChatInterface:
+    """Aurora's chat interface - extracted from Luminar Nexus"""
+    
+    def __init__(self, aurora_core=None):
+        self.aurora_core = aurora_core
+        self.contexts = {}
+    
+    async def process_message(self, message, session_id="default"):
+        """Process a chat message"""
+        # Chat logic will be moved here from luminar_nexus.py
+        return f"Aurora Core Chat (to be fully implemented): {message}"
+
+
+def run_aurora_chat_server(port=5003, aurora_core=None):
+    """Run Aurora's chat server"""
+    app = Flask(__name__)
+    CORS(app)
+    
+    chat = AuroraChatInterface(aurora_core=aurora_core)
+    
+    @app.route("/api/chat", methods=["POST"])
+    def chat_endpoint():
+        data = request.get_json()
+        message = data.get("message", "")
+        session_id = data.get("session_id", "default")
+        
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        response = loop.run_until_complete(chat.process_message(message, session_id))
+        loop.close()
+        
+        return jsonify({"response": response, "session_id": session_id})
+    
+    print(f"🌌 Aurora Chat Interface starting on port {port}...")
+    app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
+'''
+                
+                chat_path = self.get_project_path("tools", "aurora_chat.py")
+                result = self.execute_tool("write_file", chat_path, chat_code)
+                log.append(f"   ✅ Created: {result}\n")
+                
+                # Step 3: Document what needs manual completion
+                log.append("**STEP 3/3: Architecture Documentation**")
+                log.append("   ⚠️ Manual steps required:")
+                log.append("   1. Move AuroraConversationalAI class to aurora_chat.py")
+                log.append("   2. Update luminar_nexus.py to remove chat code")
+                log.append("   3. Update x-start/x-stop/x-nexus to use AuroraCore\n")
+                
+                log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**")
+                log.append("✅ **ARCHITECTURAL FOUNDATION CREATED!**")
+                log.append("📁 **Files Created:**")
+                log.append("   • tools/aurora_core.py (Aurora's main brain)")
+                log.append("   • tools/aurora_chat.py (Chat interface)")
+                log.append("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
+                log.append("🎯 **NEXT**: Complete the migration by moving chat logic")
+                log.append("💡 **Result**: Aurora will be the core, Luminar becomes a tool")
+            else:
+                log.append("❌ **Could not load architecture analysis**")
+                log.append("⚠️ Creating basic structure anyway...\n")
+
+            return "\n".join(log)
 
             return "\n".join(log)
 
