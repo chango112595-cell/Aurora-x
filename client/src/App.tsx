@@ -23,11 +23,12 @@ import ComparisonDashboard from "@/pages/ComparisonDashboard";
 import LuminarNexus from "@/pages/luminar-nexus";
 import ServerControl from "@/pages/server-control";
 import ChatPage from "@/pages/chat";
+import AuroraUIPage from "@/pages/aurora-ui";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/" component={AuroraUIPage} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/comparison" component={ComparisonDashboard} />
       <Route path="/luminar" component={LuminarNexus} />
