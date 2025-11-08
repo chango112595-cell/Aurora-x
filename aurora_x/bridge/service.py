@@ -26,8 +26,9 @@ app.add_middleware(
 attach_bridge(app)
 
 
-# Health check endpoint
+# Health check endpoints
 @app.get("/healthz")
+@app.get("/health")
 def health_check():
     return {"status": "ok", "service": "bridge", "port": 5001}
 

@@ -137,11 +137,11 @@ class LuminarNexusServerManager:
         self.servers = {
             "bridge": {
                 "name": "Aurora Bridge Service (Factory NL→Project)",
-                "command_template": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
+                "command_template": "cd /workspaces/Aurora-x && /workspaces/Aurora-x/env/bin/python3 -m aurora_x.bridge.service",
                 "session": "aurora-bridge",
                 "preferred_port": 5001,
                 "port": None,  # Will be assigned dynamically
-                "health_check_template": "http://localhost:{port}/healthz",
+                "health_check_template": "http://localhost:{port}/health",
             },
             "backend": {
                 "name": "Aurora Backend API (Main Server)",
@@ -161,19 +161,19 @@ class LuminarNexusServerManager:
             },
             "self-learn": {
                 "name": "Aurora Self-Learning Server (Continuous Learning)",
-                "command_template": "cd /workspaces/Aurora-x && python3 -c 'from aurora_x.self_learn_server import app; import uvicorn; uvicorn.run(app, host=\"0.0.0.0\", port={port})'",
+                "command_template": "cd /workspaces/Aurora-x && /workspaces/Aurora-x/env/bin/python3 -c 'from aurora_x.self_learn_server import app; import uvicorn; uvicorn.run(app, host=\"0.0.0.0\", port={port})'",
                 "session": "aurora-self-learn",
                 "preferred_port": 5002,
                 "port": None,
-                "health_check_template": "http://localhost:{port}/healthz",
+                "health_check_template": "http://localhost:{port}/health",
             },
             "chat": {
                 "name": "Aurora Conversational AI Chat Server",
-                "command_template": "cd /workspaces/Aurora-x && python3 -c 'from tools.luminar_nexus import run_chat_server; run_chat_server({port})'",
+                "command_template": "cd /workspaces/Aurora-x && /workspaces/Aurora-x/env/bin/python3 -c 'from tools.luminar_nexus import run_chat_server; run_chat_server({port})'",
                 "session": "aurora-chat",
                 "preferred_port": 5003,
                 "port": None,
-                "health_check_template": "http://localhost:{port}/api/chat/status",
+                "health_check_template": "http://localhost:{port}/health",
             },
         }
 
@@ -3963,6 +3963,13 @@ def chat_status():
             "version": "Aurora Conversational AI v1.0",
         }
     )
+
+
+@app.route("/health", methods=["GET"])
+@app.route("/healthz", methods=["GET"])
+def health_check():
+    """Health check endpoint for service monitoring"""
+    return jsonify({"ok": True, "service": "chat", "status": "running"})
 
 
 def run_chat_server(port=5003):

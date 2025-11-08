@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/workspaces/Aurora-x/env/bin/python3
 """Start Aurora Core System"""
 import sys
 sys.path.insert(0, '/workspaces/Aurora-x')
