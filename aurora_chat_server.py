@@ -52,9 +52,11 @@ def chat_endpoint():
 
         if not message:
             return jsonify({"error": "No message provided"}), 400
-            
+
         # Reset session context if requested or if it's a greeting to interface
-        if reset_session or (session_id == "cosmic-nexus-ui" and any(greeting in message.lower() for greeting in ["hello", "hi", "hey"])):
+        if reset_session or (
+            session_id == "cosmic-nexus-ui" and any(greeting in message.lower() for greeting in ["hello", "hi", "hey"])
+        ):
             if session_id in aurora.conversation_contexts:
                 del aurora.conversation_contexts[session_id]
 
@@ -125,16 +127,12 @@ def reset_session():
         aurora = initialize_aurora_core()
         data = request.get_json()
         session_id = data.get("session_id", "cosmic-nexus-ui")
-        
+
         # Clear the session context
         if session_id in aurora.conversation_contexts:
             del aurora.conversation_contexts[session_id]
-        
-        return jsonify({
-            "status": "success",
-            "message": f"Session {session_id} reset",
-            "timestamp": time.time()
-        })
+
+        return jsonify({"status": "success", "message": f"Session {session_id} reset", "timestamp": time.time()})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
