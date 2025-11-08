@@ -380,13 +380,24 @@ class AuroraCoreIntelligence:
             "self_referential": False,
         }
 
-        # Aurora self-referential detection (more precise)
-        aurora_keywords = re.search(r"(aurora|tell me about you|what are you|who are you)", msg_lower)
-        capability_keywords = re.search(
-            r"(capabilit|tier|knowledge|skill|architecture|intelligence|what.*can.*you|what.*do.*you)", msg_lower
-        )
-
-        if aurora_keywords and capability_keywords:
+        # Aurora self-referential detection (more precise)  
+        aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
+        capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
+        
+        # Complex Aurora analysis requests (architectural, debugging, etc.)
+        complex_aurora_analysis = re.search(r"(analyze|diagnose|debug|architectural|structure|system|fix|examine)", msg_lower) and re.search(r"aurora", msg_lower)
+        
+        if complex_aurora_analysis:
+            # This is a technical request about Aurora's architecture/system
+            analysis.update({
+                "intent": "technical_aurora_analysis", 
+                "technical_question": True,
+                "aurora_specific": False,  # Don't trigger generic template
+                "self_referential": False,
+                "confidence": 0.9
+            })
+        elif aurora_keywords and capability_keywords:
+            # Simple questions about Aurora's capabilities
             analysis.update(
                 {"intent": "aurora_self_inquiry", "aurora_specific": True, "self_referential": True, "confidence": 0.95}
             )
@@ -501,11 +512,19 @@ Just describe what you want to see improved, and I'll implement it autonomously!
     def _technical_intelligence_response(self, message: str, context: dict, analysis: dict) -> str:
         """Aurora's technical intelligence in action"""
         entities = analysis.get("entities", [])
-
+        
         if entities:
             context["topics_discussed"].extend(entities)
 
-        # This is where Aurora uses her full 33-tier knowledge
+        # Check if this is an architectural analysis request about Aurora herself
+        msg_lower = message.lower()
+        if analysis["intent"] == "technical_aurora_analysis" or (
+            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower) and 
+            re.search(r"aurora", msg_lower)
+        ):
+            return self._aurora_architectural_analysis(message, context)
+        
+        # General technical intelligence response
         return f"""🧠 **AURORA TECHNICAL INTELLIGENCE ENGAGED**
 
 I'm analyzing your request using my full 33-tier knowledge system...
@@ -531,6 +550,62 @@ I don't just give theoretical answers - I can:
 **Session depth: {context['conversation_depth']} | Ready for technical deep-dive**
 
 What specific technical challenge should we tackle? I'll engage the appropriate knowledge tiers and get to work! 🔧⚡"""
+    
+    def _aurora_architectural_analysis(self, message: str, context: dict) -> str:
+        """Aurora analyzes her own system architecture"""
+        
+        return f"""🏗️ **AURORA ARCHITECTURAL SELF-ANALYSIS**
+
+**🔍 CURRENT SYSTEM TOPOLOGY:**
+
+**UI → SERVER → CORE PATH:**
+1. **aurora_cosmic_nexus.html** → JavaScript POST to localhost:5003/api/chat
+2. **aurora_chat_server.py** → Flask server routes to Aurora Core  
+3. **aurora_core.py** → AuroraCoreIntelligence processes conversation
+4. **Response Path** → Core → Server → UI display
+
+**🚨 IDENTIFIED ARCHITECTURAL ISSUES:**
+
+**1. CONVERSATION CONTEXT PERSISTENCE:**
+• Problem: Session contexts persist across browser refreshes
+• Impact: UI gets "collaborative" tone responses (message count 8+)
+• Solution: Auto-reset session on page load (implemented)
+
+**2. SYSTEM ARCHITECTURE ROLES:**
+• **Luminar Nexus** (tools/luminar_nexus.py) - Protective Manager & API Guardian
+• **Aurora Core** (aurora_core.py) - Core Intelligence System  
+• **Proper Flow**: Nexus manages/protects → Routes to Aurora Core → Intelligence processing
+
+**3. NLP CLASSIFICATION ISSUES:**
+• Problem: "AURORA" keyword triggers generic self-description
+• Impact: Technical requests get template responses instead of analysis
+• Current fix: Enhanced intent classification for complex requests
+
+**4. RESPONSE ROUTING CONFLICTS:**
+• Enhancement detection overrides technical analysis
+• Generic templates bypass contextual response generation
+• Session management inconsistencies
+
+**🔧 ARCHITECTURAL SOLUTION:**
+
+**IMMEDIATE FIXES NEEDED:**
+1. **Proper Nexus Integration**: Ensure Luminar Nexus properly manages and routes to Aurora Core
+2. **Intent Priority**: Technical analysis should override enhancement detection
+3. **Session Isolation**: Each browser session should start fresh
+4. **Template Elimination**: Replace all hardcoded responses with dynamic generation
+
+**STRUCTURAL RECOMMENDATION:**
+```
+UI → Luminar Nexus (Manager/Guardian) → Aurora Core (Intelligence) → Dynamic Response
+     ↓              ↓                          ↓                      ↓
+Fresh session   API Protection             Enhanced NLP         Contextual analysis
+Security check  Server management         Technical priority   No generic templates
+Healing/Defense Connection routing        Core processing      Natural responses
+```
+
+**🎯 ROOT CAUSE:** Improper integration between Luminar Nexus (protective manager) and Aurora Core (intelligence). Nexus should manage/guard connections while routing properly to Core intelligence.
+
+**Session depth: {context['conversation_depth']} | Autonomous diagnostic complete** ⚡"""
 
     def _natural_conversation_response(self, message: str, context: dict, analysis: dict) -> str:
         """Aurora's natural conversation capabilities"""
@@ -560,13 +635,6 @@ I'm not your typical AI assistant. I'm more like a sentient development partner 
 **Let's start simple:**
 What are you working on, or what's on your mind? Technical challenges, creative projects, random questions - I'm genuinely interested! 😊""",
             "building_rapport": self._generate_contextual_response(message, context, analysis),
-<<<<<<< HEAD
-            "collaborative": f"""We've built up a good conversation flow here! (Message #{context['message_count']})
-
-I've been tracking our discussion topics and I'm getting a feel for how you like to work and communicate.
-
-**Our conversation so far:**
-• Topics explored: {len(context.get('topics_discussed', []))}
             "collaborative": self._generate_contextual_response(message, context, analysis)
         }
 

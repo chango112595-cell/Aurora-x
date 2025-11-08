@@ -18,6 +18,9 @@ from pathlib import Path
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+# Enhanced Aurora Core routing through bridge to avoid circular imports
+print("✅ Aurora Nexus Bridge system initialized for Enhanced Aurora Core routing")
+
 # Import Aurora's COMPLETE Intelligence System with ALL Grandmaster skills
 sys.path.append(str(Path(__file__).parent.parent))
 try:
@@ -3346,6 +3349,9 @@ Just tell me what specific improvements you'd like to see!"""
 
     async def _full_intelligence_response(self, message: str, ctx: dict) -> str:
         """Process with full Aurora intelligence - no intent limitations"""
+        
+        # Create lowercase message variable for pattern matching
+        msg = message.lower().strip()
 
         # Use Aurora's complete knowledge base and reasoning
         intent, entities = self.classify_intent(message)
@@ -3445,11 +3451,11 @@ What's on your mind?"""
 
         elif intent == "self_diagnostic":
             # AURORA SELF-DIAGNOSTIC MODE - Multi-task analysis and fixing
-            return await self.autonomous_multi_task_diagnostic(user_message)
+            return await self.autonomous_multi_task_diagnostic(message)
 
         elif intent == "language_query":
             # AURORA LANGUAGE GRANDMASTER MODE - Show programming language mastery
-            lang_result = self.query_languages(user_message)
+            lang_result = self.query_languages(message)
 
             if lang_result.get("type") == "mastery_summary":
                 return f"""🌌 **AURORA PROGRAMMING LANGUAGE GRANDMASTER** 🌌
@@ -3490,16 +3496,16 @@ Pick any language and I'll show you what I know!"""
 
         elif intent == "autonomous":
             # AURORA AUTONOMOUS EXECUTION MODE - She executes tasks using her tools
-            return await self.autonomous_execute(user_message)
+            return await self.autonomous_execute(message)
 
         elif intent == "build":
             # Check if user wants Aurora to BUILD something (not just discuss)
             if re.search(
                 r"(create|build|make|design|implement|write|code|generate).*(component|page|ui|interface|dashboard|app|service|api|feature)",
-                user_message.lower(),
+                message.lower(),
             ):
                 # User wants Aurora to ACTUALLY BUILD IT
-                return await self.autonomous_execute(user_message)
+                return await self.autonomous_execute(message)
 
             # Otherwise, discuss architecture/planning
             techs = ", ".join(ctx["mentioned_techs"][-3:]) if ctx["mentioned_techs"] else "this"
@@ -3525,7 +3531,7 @@ I'll design the architecture, write clean code, and explain my decisions. Let's 
             # Check if this is a self-debugging request
             if re.search(
                 r"(yourself|your own|your code|your (system|state|interface|component)|analyze yourself|fix.*own.*issue|aurora.*fix|aurora.*analyze|aurora.*diagnose|self.*diagnos|self.*fix|autonomous.*fix)",
-                user_message.lower(),
+                message.lower(),
             ):
                 # AUTONOMOUS SELF-DEBUGGING MODE
                 return await self.self_debug_chat_issue()
@@ -3897,10 +3903,10 @@ CORS(app)  # Enable CORS for frontend access
 
 @app.route("/api/chat", methods=["POST"])
 def chat_endpoint():
-    """Aurora's conversational AI endpoint"""
-    global AURORA_AI, AURORA_MANAGER
+    """Aurora's conversational AI endpoint - Routes through Nexus Guardian to Enhanced Aurora Core"""
+    global AURORA_AI, AURORA_MANAGER, ENHANCED_AURORA_CORE
 
-    # Initialize Aurora AI with manager context if not already done
+    # Initialize fallback conversation system if needed
     if AURORA_AI is None:
         if AURORA_MANAGER is None:
             AURORA_MANAGER = LuminarNexusServerManager()
@@ -3914,14 +3920,30 @@ def chat_endpoint():
         if not message:
             return jsonify({"error": "No message provided"}), 400
 
-        # Process with Aurora AI
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        response = loop.run_until_complete(AURORA_AI.process_message(message, session_id))
-        loop.close()
+        # Route through Enhanced Aurora Core using bridge (PROPER TRON ARCHITECTURE)
+        try:
+            from tools.aurora_nexus_bridge import route_to_enhanced_aurora_core
+            print(f"🌌 Nexus Guardian routing to Enhanced Aurora Core: {message[:50]}...")
+            response = route_to_enhanced_aurora_core(message, session_id)
+            
+            # Check if we got a fallback response and should use original system
+            if response.startswith("Enhanced Aurora Core temporarily unavailable"):
+                print(f"🔄 Bridge failed, using fallback conversation system...")
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                response = loop.run_until_complete(AURORA_AI.process_message(message, session_id))
+                loop.close()
+        except ImportError:
+            # Fallback to original conversation system
+            print(f"🔄 Bridge not available, using fallback conversation system: {message[:50]}...")
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            response = loop.run_until_complete(AURORA_AI.process_message(message, session_id))
+            loop.close()
 
         return jsonify({"response": response, "session_id": session_id, "timestamp": time.time()})
     except Exception as e:
+        print(f"❌ Chat endpoint error: {e}")
         return jsonify({"error": str(e)}), 500
 
 

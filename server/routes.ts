@@ -179,6 +179,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Aurora: Serve Aurora's custom UI interface
+  app.get("/aurora", (req, res) => {
+    const auroraUIPath = path.join(process.cwd(), 'aurora_chat_test.html');
+    
+    if (!fs.existsSync(auroraUIPath)) {
+      return res.status(404).json({
+        error: "Aurora UI not found",
+        message: "The aurora_chat_test.html file does not exist"
+      });
+    }
+    
+    res.setHeader('Content-Type', 'text/html');
+    res.sendFile(auroraUIPath);
+  });
+
   // Aurora: Natural language conversation endpoint (proxies to Luminar Nexus)
   app.post("/api/conversation", async (req, res) => {
     try {
