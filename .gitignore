@@ -34,3 +34,4 @@ data/corpus.jsonl
 logs
 *.log
 npm-debug.log*systems/chango/
+env/
