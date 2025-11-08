@@ -13,6 +13,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from aurora_intelligence_manager import AuroraIntelligenceManager
 from tools.luminar_nexus import LuminarNexusServerManager
+from tools.aurora_task_manager import AuroraTaskManager
 
 # Import Aurora's AUTONOMOUS CAPABILITIES
 try:
@@ -76,6 +77,10 @@ class AuroraCore:
         self.luminar = LuminarNexusServerManager()  # Server management tool
         self.chat = None  # Will be initialized when needed
 
+        # Aurora's Task Management System
+        self.task_manager = AuroraTaskManager()
+        self.intelligence.log("📋 Aurora Core: Task Manager INITIALIZED")
+
         # Start autonomous monitoring
         self._start_autonomous_monitoring()
 
@@ -88,24 +93,44 @@ class AuroraCore:
         import threading
 
         def autonomous_loop():
-            """Aurora's autonomous monitoring loop"""
+            """Aurora's autonomous monitoring loop with task management"""
             import time
             from pathlib import Path
 
             while True:
                 try:
-                    # Check for creative task flags
-                    flag_file = Path("/workspaces/Aurora-x/.aurora_knowledge/PRIORITY_CREATIVE_TASK.flag")
-                    if flag_file.exists():
-                        self.intelligence.log("🎨 CREATIVE TASK DETECTED!")
-                        self._execute_creative_task(flag_file)
-
-                    # Check for autonomous execution requests
-                    request_file = Path("/workspaces/Aurora-x/.aurora_knowledge/autonomous_request.json")
-                    if request_file.exists():
-                        self.intelligence.log("🚀 AUTONOMOUS REQUEST DETECTED!")
-                        self._execute_autonomous_request(request_file)
-
+                    # Get next pending task (skips already completed tasks)
+                    next_task = self.task_manager.get_next_task()
+                    
+                    if next_task:
+                        task_id = next_task["id"]
+                        task_type = next_task["type"]
+                        flag_file = Path(next_task["flag_file"])
+                        
+                        self.intelligence.log(f"📋 Task detected: {task_type} (ID: {task_id[:8]})")
+                        
+                        # Mark task as in progress
+                        self.task_manager.mark_task_in_progress(task_id)
+                        
+                        # Execute task based on type
+                        try:
+                            if task_type == "creative":
+                                self.intelligence.log("🎨 CREATIVE TASK DETECTED!")
+                                self._execute_creative_task(flag_file)
+                            elif task_type == "autonomous_request":
+                                self.intelligence.log("🚀 AUTONOMOUS REQUEST DETECTED!")
+                                self._execute_autonomous_request(flag_file)
+                            
+                            # Mark task as completed and archive
+                            self.task_manager.mark_task_completed(
+                                task_id,
+                                result={"status": "success", "timestamp": time.time()}
+                            )
+                            self.intelligence.log(f"✅ Task {task_id[:8]} completed and archived")
+                        except Exception as task_error:
+                            self.intelligence.log(f"❌ Task {task_id[:8]} failed: {task_error}")
+                            # Task remains in-progress for retry or manual intervention
+                    
                     time.sleep(5)  # Check every 5 seconds
                 except Exception as e:
                     self.intelligence.log(f"⚠️ Autonomous monitoring error: {e}")
