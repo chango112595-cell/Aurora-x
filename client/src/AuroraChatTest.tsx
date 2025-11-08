@@ -139,7 +139,7 @@ export default function AuroraChatTest() {
             data = await response.json();
             break;
           }
-        } catch (err) {}
+        } catch (err) { }
       }
       if (data) {
         let auroraReply = "🌟 Aurora via Luminar Nexus v2:\n\n";
