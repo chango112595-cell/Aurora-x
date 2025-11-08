@@ -133,9 +133,16 @@ class AuroraTaskManager:
                 key, value = line.split("=", 1)
                 task_data[key.strip()] = value.strip()
 
+        # Determine task type from flag filename
+        task_type = "creative"  # Default type
+        flag_name = flag_file.name.lower()
+        if "request" in flag_name or "autonomous" in flag_name:
+            task_type = "autonomous_request"
+
         task = {
             "id": task_id,
-            "flag_file": flag_file.name,
+            "type": task_type,
+            "flag_file": str(flag_file),
             "created_at": datetime.now().isoformat(),
             "status": "pending",
             "data": task_data,
