@@ -1,5 +1,5 @@
 {
-  "total_completed": 2,
+  "total_completed": 5,
   "history": [
     {
       "task_id": "13f087c17aa8",
@@ -9,6 +9,21 @@
     {
       "task_id": "8cb630f6bdff",
       "completed_at": "2025-11-08T22:28:48.904808",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "5fdf42df466f",
+      "completed_at": "2025-11-08T22:32:12.205811",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "aefb10eba258",
+      "completed_at": "2025-11-08T22:44:24.434403",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "0ba085fe0cad",
+      "completed_at": "2025-11-08T22:52:44.066794",
       "task_name": "unknown"
     }
   ]
