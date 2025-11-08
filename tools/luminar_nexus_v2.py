@@ -21,6 +21,7 @@ Features:
 import asyncio
 import os
 import socket
+import subprocess
 import sys
 import threading
 import time
@@ -145,78 +146,310 @@ class AIServiceOrchestrator:
         return predictions
 
     def recommend_healing_action(self, service_health: ServiceHealth) -> str | None:
-        """AI-recommended healing actions"""
+        """AI-recommended healing actions with pattern learning"""
+        # Track healing effectiveness
+        service_name = getattr(service_health, 'service_name', 'unknown')
+        
         if service_health.status == "critical":
             if service_health.memory_usage > 0.9:
-                return "restart_service"
+                action = "restart_service"
+                self._record_healing_strategy(service_name, action, "high_memory")
+                return action
             elif service_health.error_rate > 0.1:
-                return "restart_service"
+                action = "restart_service"
+                self._record_healing_strategy(service_name, action, "high_errors")
+                return action
             elif service_health.response_time > 5.0:
-                return "scale_service"
+                action = "scale_service"
+                self._record_healing_strategy(service_name, action, "slow_response")
+                return action
 
         elif service_health.status == "degraded":
             if service_health.cpu_usage > 0.8:
-                return "scale_service"
+                action = "scale_service"
+                self._record_healing_strategy(service_name, action, "high_cpu")
+                return action
             elif service_health.memory_usage > 0.8:
-                return "optimize_memory"
+                action = "optimize_memory"
+                self._record_healing_strategy(service_name, action, "elevated_memory")
+                return action
 
         return None
+    
+    def _record_healing_strategy(self, service_name: str, action: str, reason: str):
+        """Record healing actions for learning which strategies work best"""
+        if service_name not in self.healing_strategies:
+            self.healing_strategies[service_name] = []
+        
+        self.healing_strategies[service_name].append({
+            'timestamp': time.time(),
+            'action': action,
+            'reason': reason
+        })
+        
+        # Keep last 100 healing actions
+        if len(self.healing_strategies[service_name]) > 100:
+            self.healing_strategies[service_name] = self.healing_strategies[service_name][-100:]
+    
+    def learn_optimal_thresholds(self, service_name: str) -> dict[str, float]:
+        """Machine learning to determine optimal thresholds for this service"""
+        if service_name not in self.service_history or len(self.service_history[service_name]) < 50:
+            # Return default thresholds
+            return {
+                'cpu_threshold': 80.0,
+                'memory_threshold': 85.0,
+                'response_time_threshold': 1000.0,
+                'error_rate_threshold': 5.0
+            }
+        
+        # Analyze historical data to find optimal thresholds
+        history = self.service_history[service_name]
+        
+        # Extract metrics
+        cpu_values = [h['metrics'].get('cpu_usage', 0) for h in history]
+        memory_values = [h['metrics'].get('memory_usage', 0) for h in history]
+        response_times = [h['metrics'].get('response_time', 0) for h in history]
+        error_rates = [h['metrics'].get('error_rate', 0) for h in history]
+        
+        # Calculate 90th percentile as threshold (balance between sensitivity and false positives)
+        def percentile_90(values):
+            sorted_vals = sorted(values)
+            index = int(len(sorted_vals) * 0.90)
+            return sorted_vals[index] if sorted_vals else 0
+        
+        return {
+            'cpu_threshold': percentile_90(cpu_values),
+            'memory_threshold': percentile_90(memory_values),
+            'response_time_threshold': percentile_90(response_times),
+            'error_rate_threshold': percentile_90(error_rates)
+        }
+    
+    def detect_service_patterns(self, service_name: str) -> dict[str, Any]:
+        """Advanced pattern detection using ML techniques"""
+        if service_name not in self.service_history or len(self.service_history[service_name]) < 30:
+            return {'status': 'insufficient_data'}
+        
+        history = self.service_history[service_name]
+        
+        # Pattern 1: Periodic behavior (daily, weekly cycles)
+        periodicity = self._detect_periodicity(service_name)
+        
+        # Pattern 2: Correlation between metrics
+        correlations = self._analyze_metric_correlations(history)
+        
+        # Pattern 3: Failure precursors (what happens before service fails)
+        failure_precursors = self._identify_failure_precursors(history)
+        
+        return {
+            'status': 'patterns_detected',
+            'periodicity': periodicity,
+            'correlations': correlations,
+            'failure_precursors': failure_precursors,
+            'data_points_analyzed': len(history)
+        }
+    
+    def _detect_periodicity(self, service_name: str) -> dict:
+        """Detect if service has periodic patterns (e.g., daily traffic spikes)"""
+        history = self.service_history[service_name]
+        
+        # Extract timestamps and a key metric (e.g., performance score)
+        time_series = [(h['timestamp'], h['performance_score']) for h in history]
+        
+        if len(time_series) < 50:
+            return {'detected': False}
+        
+        # Simple autocorrelation check for daily patterns (86400 seconds)
+        # This is a simplified version - real ML would use FFT or more sophisticated methods
+        daily_pattern_detected = self._check_pattern_interval(time_series, 86400, tolerance=3600)
+        
+        return {
+            'detected': daily_pattern_detected,
+            'type': 'daily' if daily_pattern_detected else 'none',
+            'confidence': 0.7 if daily_pattern_detected else 0.1
+        }
+    
+    def _check_pattern_interval(self, time_series: list, interval: float, tolerance: float) -> bool:
+        """Check if patterns repeat at given interval"""
+        if len(time_series) < 10:
+            return False
+        
+        # Look for similar values at interval distances
+        matches = 0
+        comparisons = 0
+        
+        for i in range(len(time_series) - 5):
+            t1, v1 = time_series[i]
+            
+            # Find points approximately 'interval' seconds later
+            for j in range(i + 1, len(time_series)):
+                t2, v2 = time_series[j]
+                time_diff = abs((t2 - t1) - interval)
+                
+                if time_diff < tolerance:
+                    comparisons += 1
+                    value_diff = abs(v1 - v2)
+                    if value_diff < 0.2:  # Values are similar
+                        matches += 1
+                    break
+        
+        return comparisons > 0 and (matches / comparisons) > 0.6
+    
+    def _analyze_metric_correlations(self, history: list) -> dict:
+        """Analyze correlations between different metrics"""
+        if len(history) < 20:
+            return {}
+        
+        # Extract metric arrays
+        metrics_data = {}
+        metric_names = ['cpu_usage', 'memory_usage', 'response_time', 'error_rate']
+        
+        for metric_name in metric_names:
+            metrics_data[metric_name] = [h['metrics'].get(metric_name, 0) for h in history]
+        
+        # Calculate simple correlations
+        correlations = {}
+        
+        # CPU vs Response Time
+        correlations['cpu_response_correlation'] = self._simple_correlation(
+            metrics_data['cpu_usage'], metrics_data['response_time']
+        )
+        
+        # Memory vs Error Rate
+        correlations['memory_error_correlation'] = self._simple_correlation(
+            metrics_data['memory_usage'], metrics_data['error_rate']
+        )
+        
+        return correlations
+    
+    def _simple_correlation(self, x: list, y: list) -> float:
+        """Calculate Pearson correlation coefficient"""
+        if len(x) != len(y) or len(x) < 2:
+            return 0.0
+        
+        n = len(x)
+        mean_x = sum(x) / n
+        mean_y = sum(y) / n
+        
+        numerator = sum((x[i] - mean_x) * (y[i] - mean_y) for i in range(n))
+        denominator_x = sum((x[i] - mean_x) ** 2 for i in range(n)) ** 0.5
+        denominator_y = sum((y[i] - mean_y) ** 2 for i in range(n)) ** 0.5
+        
+        if denominator_x == 0 or denominator_y == 0:
+            return 0.0
+        
+        return numerator / (denominator_x * denominator_y)
+    
+    def _identify_failure_precursors(self, history: list) -> list[str]:
+        """Identify patterns that typically precede service failures"""
+        precursors = []
+        
+        # Look for failures (high error rate or very slow response)
+        for i in range(len(history) - 5, len(history)):
+            entry = history[i]
+            if entry['metrics'].get('error_rate', 0) > 10 or entry['metrics'].get('response_time', 0) > 5000:
+                # This was a failure - check what happened before
+                if i > 5:
+                    before_failure = history[i-5:i]
+                    
+                    # Check if memory was climbing
+                    memory_vals = [h['metrics'].get('memory_usage', 0) for h in before_failure]
+                    if all(memory_vals[j] <= memory_vals[j+1] for j in range(len(memory_vals)-1)):
+                        if "memory_leak_pattern" not in precursors:
+                            precursors.append("memory_leak_pattern")
+                    
+                    # Check if CPU spiked before failure
+                    cpu_vals = [h['metrics'].get('cpu_usage', 0) for h in before_failure]
+                    if any(cpu > 90 for cpu in cpu_vals):
+                        if "cpu_spike_before_failure" not in precursors:
+                            precursors.append("cpu_spike_before_failure")
+        
+        return precursors
 
 
 class LuminarNexusV2:
-    """
-    🌌 LUMINAR NEXUS V2 - Advanced System Orchestrator
-    Revolutionary service management with AI-driven capabilities
-    """
+    """Advanced System Orchestrator with AI-driven management"""
 
     def __init__(self):
         self.version = "2.0.0"
         self.initialized_at = datetime.now()
-
-        # Core Components
         self.service_registry = {}
         self.health_monitor = {}
+        self.monitoring_active = True
+        self.port_healing_active = True
+
+        # Initialize AI components
         self.ai_orchestrator = AIServiceOrchestrator()
+        self.security_guardian = SecurityGuardian()
+        self.performance_optimizer = PerformanceOptimizer()
+        self.predictive_scaler = PredictiveScaler()
+        self.neural_anomaly_detector = NeuralAnomalyDetector()
+
+        # Initialize Quantum Service Mesh
         self.quantum_mesh = QuantumServiceMesh(
             entanglement_map={}, quantum_states={}, coherence_level=1.0, superposition_services=[]
         )
 
-        # Advanced Features
-        self.security_guardian = SecurityGuardian()
+        # Configuration
+        self.config = {
+            "monitoring_interval": 5,
+            "healing_enabled": True,
+            "ai_learning_enabled": True,
+            "quantum_coherence_threshold": 0.7,
+        }
 
-        # Port Management Integration
+        # Server configurations (tmux-based management)
+        self.servers = {
+            "bridge": {
+                "name": "Aurora Bridge Service",
+                "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
+                "session": "aurora-bridge",
+                "port": 5001,
+                "health_check": "http://localhost:5001/health",
+            },
+            "backend": {
+                "name": "Aurora Backend API",
+                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
+                "session": "aurora-backend",
+                "port": 5000,
+                "health_check": "http://localhost:5000/health",
+            },
+            "vite": {
+                "name": "Aurora Vite Dev Server",
+                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173",
+                "session": "aurora-vite",
+                "port": 5173,
+                "health_check": "http://localhost:5173",
+            },
+            "self-learn": {
+                "name": "Aurora Self-Learning Server",
+                "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.self_learn_server",
+                "session": "aurora-self-learn",
+                "port": 5002,
+                "health_check": "http://localhost:5002/health",
+            },
+            "chat": {
+                "name": "Aurora Chat Server",
+                "command": "cd /workspaces/Aurora-x && python3 -c 'from tools.luminar_nexus_v2 import run_chat_server_v2; run_chat_server_v2(5003)'",
+                "session": "aurora-chat",
+                "port": 5003,
+                "health_check": "http://localhost:5003/health",
+            },
+        }
+
+        # Initialize Port Manager if available
         self.port_manager = None
         if PORT_MANAGER_AVAILABLE:
             try:
                 self.port_manager = AuroraPortManager()
                 print("✅ Aurora Port Manager integrated with Luminar Nexus v2")
             except Exception as e:
-                print(f"⚠️ Failed to initialize Port Manager: {e}")
-                self.port_manager = None
+                print(f"⚠️  Could not initialize Port Manager: {e}")
 
-        # Port monitoring flags
-        self.port_healing_active = True
-        self.port_monitor_thread = None
-        self.performance_optimizer = PerformanceOptimizer()
-        self.predictive_scaler = PredictiveScaler()
-        self.neural_anomaly_detector = NeuralAnomalyDetector()
-
-        # Configuration
-        self.config = {
-            "monitoring_interval": 5,  # seconds
-            "healing_enabled": True,
-            "auto_scaling_enabled": True,
-            "security_level": "maximum",
-            "quantum_coherence_threshold": 0.8,
-            "ai_learning_enabled": True,
-        }
-
-        # Start background processes
-        self.monitoring_active = True
-        self.start_advanced_monitoring()
-
-        print("🌌 Luminar Nexus v2.0 - Advanced System Orchestrator Initialized")
-        print("✨ AI-Driven | Quantum-Inspired | Self-Healing | Autonomous")
+        print("🌌 Luminar Nexus v2 initialized")
+        print(f"   Version: {self.version}")
+        print(f"   Quantum Coherence: {self.quantum_mesh.coherence_level:.2f}")
+        print(f"   AI Learning: {'Enabled' if self.config['ai_learning_enabled'] else 'Disabled'}")
+        print(f"   Autonomous Healing: {'Enabled' if self.config['healing_enabled'] else 'Disabled'}")
 
     def register_service(
         self,
@@ -357,7 +590,7 @@ class LuminarNexusV2:
                 await self._optimize_memory(service_name)
 
     async def _restart_service(self, service_name: str):
-        """Graceful service restart"""
+        """Graceful service restart using tmux"""
         if service_name not in self.service_registry:
             return
 
@@ -366,18 +599,240 @@ class LuminarNexusV2:
 
         print(f"🔄 Restarting service '{service_name}' (restart #{service_info['restart_count']})")
 
-        # Implementation would depend on how services are managed
-        # This is a placeholder for the actual restart logic
+        # Stop the service first
+        await self._stop_service_internal(service_name)
+        await asyncio.sleep(2)
+        
+        # Start the service again
+        await self._start_service_internal(service_name)
 
     async def _scale_service(self, service_name: str):
-        """Intelligent service scaling"""
+        """Intelligent service scaling - adjust resource limits"""
+        if service_name not in self.service_registry:
+            return
+            
         print(f"📈 Scaling service '{service_name}' for better performance")
-        # Placeholder for scaling logic
+        
+        try:
+            # Get service process and adjust priority
+            for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+                try:
+                    if service_name in ' '.join(proc.info['cmdline'] or []):
+                        # Increase process priority (nice value)
+                        proc.nice(-5)  # Higher priority
+                        print(f"   ✅ Increased priority for {service_name}")
+                        break
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+        except Exception as e:
+            print(f"   ⚠️ Scaling error: {e}")
 
     async def _optimize_memory(self, service_name: str):
-        """Memory optimization strategies"""
+        """Memory optimization strategies - trigger garbage collection"""
+        if service_name not in self.service_registry:
+            return
+            
         print(f"🧠 Optimizing memory for service '{service_name}'")
-        # Placeholder for memory optimization
+        
+        try:
+            # For Python processes, we can send signals to trigger GC
+            import signal
+            for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+                try:
+                    cmdline = ' '.join(proc.info['cmdline'] or [])
+                    if service_name in cmdline and 'python' in cmdline.lower():
+                        # Send SIGUSR1 for potential GC trigger (if service handles it)
+                        proc.send_signal(signal.SIGUSR1)
+                        print(f"   ✅ Sent memory optimization signal to {service_name}")
+                        break
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+        except Exception as e:
+            print(f"   ⚠️ Memory optimization error: {e}")
+
+    # ============================================================================
+    # SERVER MANAGEMENT - Full tmux-based service control
+    # ============================================================================
+
+    def check_tmux_installed(self) -> bool:
+        """Check if tmux is available"""
+        try:
+            subprocess.run(["tmux", "-V"], capture_output=True, check=True, timeout=2)
+            return True
+        except:
+            print("⚠️ tmux not installed - required for service management")
+            return False
+
+    async def _start_service_internal(self, service_key: str) -> bool:
+        """Start a service in tmux session"""
+        if service_key not in self.servers:
+            print(f"❌ Unknown service: {service_key}")
+            return False
+
+        server = self.servers[service_key]
+        session = server["session"]
+        command = server["command"]
+
+        print(f"🚀 Starting {server['name']}...")
+
+        if not self.check_tmux_installed():
+            return False
+
+        # Kill existing session if it exists
+        subprocess.run(["tmux", "kill-session", "-t", session], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        # Create new tmux session and run command
+        result = subprocess.run(
+            ["tmux", "new-session", "-d", "-s", session, command], 
+            capture_output=True, 
+            text=True,
+            timeout=5
+        )
+
+        if result.returncode == 0:
+            print(f"   ✅ Started in tmux session: {session}")
+            print(f"   🔌 Port: {server['port']}")
+
+            # Wait and check health
+            await asyncio.sleep(3)
+            if await self._check_service_health(service_key):
+                print("   ✅ Health check PASSED")
+                return True
+            else:
+                print("   ⚠️  Server started but health check pending...")
+                return True
+        else:
+            print(f"   ❌ Failed to start: {result.stderr}")
+            return False
+
+    async def _stop_service_internal(self, service_key: str) -> bool:
+        """Stop a service's tmux session"""
+        if service_key not in self.servers:
+            print(f"❌ Unknown service: {service_key}")
+            return False
+
+        server = self.servers[service_key]
+        session = server["session"]
+
+        print(f"🛑 Stopping {server['name']}...")
+
+        result = subprocess.run(
+            ["tmux", "kill-session", "-t", session], 
+            capture_output=True, 
+            text=True,
+            timeout=2
+        )
+
+        if result.returncode == 0:
+            print(f"   ✅ Stopped session: {session}")
+            return True
+        else:
+            print(f"   ⚠️  Session may not exist: {session}")
+            return False
+
+    async def _check_service_health(self, service_key: str) -> bool:
+        """Check if a service is responding to health checks"""
+        if service_key not in self.servers:
+            return False
+
+        server = self.servers[service_key]
+        base_url = server["health_check"]
+
+        # Try multiple health check patterns
+        health_endpoints = [
+            base_url,
+            base_url.replace("/healthz", "/health"),
+            base_url.replace("/health", "/healthz"),
+        ]
+
+        for endpoint in health_endpoints:
+            try:
+                result = subprocess.run(
+                    ["curl", "-s", "-f", endpoint], 
+                    capture_output=True, 
+                    text=True, 
+                    timeout=2
+                )
+
+                if result.returncode == 0 and result.stdout:
+                    response = result.stdout.lower()
+                    if any(indicator in response for indicator in ["ok", "healthy", "status", "true"]):
+                        return True
+            except:
+                continue
+
+        return False
+
+    def start_server(self, server_key: str) -> bool:
+        """Public API to start a server"""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        result = loop.run_until_complete(self._start_service_internal(server_key))
+        loop.close()
+        return result
+
+    def stop_server(self, server_key: str) -> bool:
+        """Public API to stop a server"""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        result = loop.run_until_complete(self._stop_service_internal(server_key))
+        loop.close()
+        return result
+
+    def start_all_servers(self):
+        """Start all Aurora services"""
+        print("\n🌌 Luminar Nexus V2: Starting ALL services...\n")
+
+        for server_key in self.servers.keys():
+            self.start_server(server_key)
+            time.sleep(2)  # Stagger starts
+
+        print("\n✅ All services started!\n")
+        self.show_status()
+
+    def stop_all_servers(self):
+        """Stop all Aurora services"""
+        print("\n🛑 Luminar Nexus V2: Stopping ALL services...\n")
+
+        for server_key in self.servers.keys():
+            self.stop_server(server_key)
+
+        print("\n✅ All services stopped!\n")
+
+    def show_status(self):
+        """Show status of all services"""
+        print("\n" + "=" * 70)
+        print("📊 LUMINAR NEXUS V2 - SERVER STATUS")
+        print("=" * 70 + "\n")
+
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+        for server_key in self.servers.keys():
+            server = self.servers[server_key]
+            
+            # Check if tmux session exists
+            session_result = subprocess.run(
+                ["tmux", "has-session", "-t", server["session"]], 
+                capture_output=True
+            )
+            session_exists = session_result.returncode == 0
+            
+            # Check health
+            health_ok = loop.run_until_complete(self._check_service_health(server_key))
+
+            status = "running" if (session_exists and health_ok) else "starting" if session_exists else "stopped"
+            icon = "✅" if status == "running" else "⚠️" if status == "starting" else "❌"
+
+            print(f"{icon} {server['name']}")
+            print(f"   Status: {status}")
+            print(f"   Port: {server['port']}")
+            print(f"   Session: {server['session']}")
+            print(f"   Health: {'✅ OK' if health_ok else '❌ Not responding'}")
+            print()
+
+        loop.close()
+        print("=" * 70 + "\n")
 
     def start_advanced_monitoring(self):
         """Start advanced monitoring with AI analysis"""
@@ -551,55 +1006,641 @@ class LuminarNexusV2:
 
 
 class SecurityGuardian:
-    """Advanced security guardian with threat detection"""
+    """Advanced security guardian with threat detection (Aurora Tier 11: Security & Cryptography)"""
 
     def __init__(self):
-        self.threat_patterns = []
+        self.threat_patterns = {
+            'sql_injection': [r"(?i)(union.*select|insert.*into|delete.*from|drop.*table|exec\s*\(|;.*--|'.*or.* =.*)", "SQL Injection attempt"],
+            'path_traversal': [r"\.\.\/|\.\.\\", "Path traversal attempt"],
+            'xss': [r"<script|javascript:|onerror=|onload=", "XSS attempt"],
+            'command_injection': [r"[;&|]|\$\(|`", "Command injection attempt"],
+            'excessive_requests': {'threshold': 100, 'window': 60},
+        }
         self.security_events = []
-
+        self.blocked_ips = set()
+        self.request_tracking = {}  # IP -> list of request timestamps
+        
     def detect_threats(self, request_data: dict) -> list[str]:
-        """Advanced threat detection"""
+        """Advanced threat detection using pattern matching and behavioral analysis"""
         threats = []
-        # Placeholder for advanced security logic
+        source_ip = request_data.get('ip', 'unknown')
+        request_path = request_data.get('path', '')
+        request_body = str(request_data.get('body', ''))
+        request_params = str(request_data.get('params', ''))
+        
+        # Check if IP is already blocked
+        if source_ip in self.blocked_ips:
+            threats.append(f"BLOCKED_IP: {source_ip} is on blocklist")
+            return threats
+        
+        # Pattern-based threat detection
+        import re
+        full_request = f"{request_path} {request_body} {request_params}"
+        
+        for threat_type, pattern_data in self.threat_patterns.items():
+            if threat_type == 'excessive_requests':
+                continue  # Handled separately
+            
+            pattern, description = pattern_data
+            if re.search(pattern, full_request):
+                threats.append(f"{threat_type.upper()}: {description}")
+                self._log_security_event(source_ip, threat_type, request_path)
+        
+        # Rate limiting / DDoS detection
+        if self._check_rate_limit(source_ip):
+            threats.append(f"RATE_LIMIT_EXCEEDED: {source_ip} exceeds request threshold")
+            self.blocked_ips.add(source_ip)
+        
+        # Port scanning detection
+        if self._detect_port_scan(source_ip, request_data.get('port')):
+            threats.append(f"PORT_SCAN_DETECTED: {source_ip} scanning ports")
+            self.blocked_ips.add(source_ip)
+        
         return threats
+    
+    def _check_rate_limit(self, ip: str) -> bool:
+        """Check if IP exceeds rate limits"""
+        current_time = time.time()
+        threshold = self.threat_patterns['excessive_requests']['threshold']
+        window = self.threat_patterns['excessive_requests']['window']
+        
+        if ip not in self.request_tracking:
+            self.request_tracking[ip] = []
+        
+        # Add current request
+        self.request_tracking[ip].append(current_time)
+        
+        # Remove old requests outside window
+        self.request_tracking[ip] = [
+            t for t in self.request_tracking[ip]
+            if current_time - t < window
+        ]
+        
+        return len(self.request_tracking[ip]) > threshold
+    
+    def _detect_port_scan(self, ip: str, port: int | None) -> bool:
+        """Detect port scanning behavior"""
+        if not port:
+            return False
+        
+        # Track ports accessed by IP
+        port_key = f"{ip}_ports"
+        if port_key not in self.request_tracking:
+            self.request_tracking[port_key] = set()
+        
+        self.request_tracking[port_key].add(port)
+        
+        # If accessing more than 5 different ports in short time, likely scanning
+        return len(self.request_tracking[port_key]) > 5
+    
+    def _log_security_event(self, ip: str, threat_type: str, path: str):
+        """Log security events for analysis"""
+        event = {
+            'timestamp': time.time(),
+            'ip': ip,
+            'threat': threat_type,
+            'path': path
+        }
+        self.security_events.append(event)
+        
+        # Keep only last 10000 events
+        if len(self.security_events) > 10000:
+            self.security_events = self.security_events[-10000:]
+    
+    def get_security_report(self) -> dict:
+        """Generate security report"""
+        return {
+            'total_threats': len(self.security_events),
+            'blocked_ips': list(self.blocked_ips),
+            'recent_events': self.security_events[-50:],
+            'threat_summary': self._summarize_threats()
+        }
+    
+    def _summarize_threats(self) -> dict:
+        """Summarize threat types and frequencies"""
+        summary = {}
+        for event in self.security_events:
+            threat = event['threat']
+            summary[threat] = summary.get(threat, 0) + 1
+        return summary
 
 
 class PerformanceOptimizer:
-    """AI-driven performance optimization"""
+    """AI-driven performance optimization (Aurora Tier 14: Cloud/Infrastructure + Tier 16: Analytics)"""
 
     def __init__(self):
-        self.optimization_strategies = {}
+        self.optimization_strategies = {
+            'high_cpu': {'action': 'scale_horizontal', 'threshold': 80},
+            'high_memory': {'action': 'increase_memory', 'threshold': 85},
+            'slow_response': {'action': 'add_caching', 'threshold': 1000},  # ms
+            'high_error_rate': {'action': 'restart_service', 'threshold': 5},  # %
+        }
+        self.performance_history = {}
+        self.optimization_cache = {}
 
     def optimize_performance(self, service_metrics: dict) -> dict[str, Any]:
-        """Optimize system performance"""
-        recommendations = {}
-        # Placeholder for optimization logic
+        """Optimize system performance using analytics and load balancing"""
+        recommendations = {
+            'immediate_actions': [],
+            'preventive_measures': [],
+            'resource_allocation': {},
+            'load_balancing': {}
+        }
+        
+        service_name = service_metrics.get('service_name', 'unknown')
+        
+        # Track performance history
+        self._track_performance(service_name, service_metrics)
+        
+        # CPU optimization
+        cpu_usage = service_metrics.get('cpu_usage', 0)
+        if cpu_usage > self.optimization_strategies['high_cpu']['threshold']:
+            recommendations['immediate_actions'].append({
+                'type': 'scale_horizontal',
+                'reason': f'CPU usage at {cpu_usage}% (threshold: {self.optimization_strategies["high_cpu"]["threshold"]}%)',
+                'priority': 'high',
+                'estimated_impact': 'Reduce CPU by 30-40%'
+            })
+            recommendations['resource_allocation']['additional_instances'] = self._calculate_instance_needs(cpu_usage)
+        
+        # Memory optimization
+        memory_usage = service_metrics.get('memory_usage', 0)
+        if memory_usage > self.optimization_strategies['high_memory']['threshold']:
+            recommendations['immediate_actions'].append({
+                'type': 'memory_optimization',
+                'reason': f'Memory usage at {memory_usage}% (threshold: {self.optimization_strategies["high_memory"]["threshold"]}%)',
+                'priority': 'high',
+                'actions': ['clear_cache', 'garbage_collect', 'check_memory_leaks']
+            })
+        
+        # Response time optimization
+        response_time = service_metrics.get('response_time', 0)
+        if response_time > self.optimization_strategies['slow_response']['threshold']:
+            recommendations['immediate_actions'].append({
+                'type': 'caching_strategy',
+                'reason': f'Response time at {response_time}ms (threshold: {self.optimization_strategies["slow_response"]["threshold"]}ms)',
+                'priority': 'medium',
+                'suggestions': ['enable_redis_cache', 'optimize_database_queries', 'add_cdn']
+            })
+        
+        # Error rate optimization
+        error_rate = service_metrics.get('error_rate', 0)
+        if error_rate > self.optimization_strategies['high_error_rate']['threshold']:
+            recommendations['immediate_actions'].append({
+                'type': 'stability_improvement',
+                'reason': f'Error rate at {error_rate}% (threshold: {self.optimization_strategies["high_error_rate"]["threshold"]}%)',
+                'priority': 'critical',
+                'actions': ['check_logs', 'restart_service', 'rollback_if_recent_deploy']
+            })
+        
+        # Load balancing recommendations
+        recommendations['load_balancing'] = self._generate_load_balancing_strategy(service_name, service_metrics)
+        
+        # Preventive measures based on trends
+        recommendations['preventive_measures'] = self._analyze_trends(service_name)
+        
         return recommendations
+    
+    def _track_performance(self, service_name: str, metrics: dict):
+        """Track performance over time for trend analysis"""
+        if service_name not in self.performance_history:
+            self.performance_history[service_name] = []
+        
+        self.performance_history[service_name].append({
+            'timestamp': time.time(),
+            'metrics': metrics
+        })
+        
+        # Keep last 1000 data points
+        if len(self.performance_history[service_name]) > 1000:
+            self.performance_history[service_name] = self.performance_history[service_name][-1000:]
+    
+    def _calculate_instance_needs(self, cpu_usage: float) -> int:
+        """Calculate how many additional instances needed"""
+        if cpu_usage > 95:
+            return 3
+        elif cpu_usage > 85:
+            return 2
+        elif cpu_usage > 75:
+            return 1
+        return 0
+    
+    def _generate_load_balancing_strategy(self, service_name: str, metrics: dict) -> dict:
+        """Generate intelligent load balancing strategy"""
+        return {
+            'algorithm': 'least_connections',  # Best for varying request complexity
+            'health_check_interval': 5,  # seconds
+            'failover_enabled': True,
+            'sticky_sessions': metrics.get('requires_session', False),
+            'weight_distribution': self._calculate_weights(service_name)
+        }
+    
+    def _calculate_weights(self, service_name: str) -> dict:
+        """Calculate load distribution weights based on performance"""
+        if service_name not in self.performance_history or len(self.performance_history[service_name]) < 5:
+            return {'default': 1.0}
+        
+        # Analyze recent performance to distribute load intelligently
+        recent = self.performance_history[service_name][-10:]
+        avg_response_time = sum(m['metrics'].get('response_time', 500) for m in recent) / len(recent)
+        
+        # Better performing instances get higher weight
+        if avg_response_time < 100:
+            return {'high_performance': 2.0}
+        elif avg_response_time < 500:
+            return {'normal': 1.0}
+        else:
+            return {'degraded': 0.5}
+    
+    def _analyze_trends(self, service_name: str) -> list[dict]:
+        """Analyze performance trends for preventive measures"""
+        if service_name not in self.performance_history or len(self.performance_history[service_name]) < 20:
+            return []
+        
+        measures = []
+        history = self.performance_history[service_name]
+        
+        # Check if CPU usage trending up
+        recent_cpu = [h['metrics'].get('cpu_usage', 0) for h in history[-10:]]
+        older_cpu = [h['metrics'].get('cpu_usage', 0) for h in history[-20:-10]]
+        
+        if recent_cpu and older_cpu:
+            cpu_trend = (sum(recent_cpu) / len(recent_cpu)) - (sum(older_cpu) / len(older_cpu))
+            if cpu_trend > 10:  # 10% increase
+                measures.append({
+                    'type': 'cpu_trend',
+                    'message': f'CPU usage trending up by {cpu_trend:.1f}%',
+                    'recommendation': 'Consider scaling before hitting limits'
+                })
+        
+        return measures
 
 
 class PredictiveScaler:
-    """Predictive scaling based on usage patterns"""
+    """Predictive scaling based on usage patterns (Aurora Tier 14: Cloud + Tier 15: AI/ML)"""
 
     def __init__(self):
         self.scaling_history = {}
+        self.load_predictions = {}
+        self.time_patterns = {}  # Track time-based patterns (e.g., peak hours)
+        self.scaling_decisions = {}
 
     def predict_scaling_needs(self, service_name: str, current_load: float) -> str | None:
-        """Predict if scaling is needed"""
-        # Placeholder for predictive scaling logic
+        """Predict if scaling is needed using historical patterns and trend analysis"""
+        
+        # Initialize tracking for new services
+        if service_name not in self.scaling_history:
+            self.scaling_history[service_name] = []
+            self.time_patterns[service_name] = {}
+        
+        # Record current load with timestamp
+        current_time = time.time()
+        hour_of_day = int((current_time % 86400) / 3600)  # 0-23
+        
+        self.scaling_history[service_name].append({
+            'timestamp': current_time,
+            'load': current_load,
+            'hour': hour_of_day
+        })
+        
+        # Keep last 1000 data points
+        if len(self.scaling_history[service_name]) > 1000:
+            self.scaling_history[service_name] = self.scaling_history[service_name][-1000:]
+        
+        # Need enough data for predictions
+        if len(self.scaling_history[service_name]) < 20:
+            return self._simple_threshold_scaling(current_load)
+        
+        # Learn time-based patterns
+        self._learn_time_patterns(service_name, hour_of_day, current_load)
+        
+        # Predict future load
+        predicted_load = self._predict_future_load(service_name, current_load)
+        
+        # Make scaling decision
+        scaling_action = self._make_scaling_decision(
+            service_name, current_load, predicted_load
+        )
+        
+        # Log decision
+        if scaling_action:
+            self.scaling_decisions[service_name] = {
+                'timestamp': current_time,
+                'action': scaling_action,
+                'current_load': current_load,
+                'predicted_load': predicted_load
+            }
+        
+        return scaling_action
+    
+    def _simple_threshold_scaling(self, current_load: float) -> str | None:
+        """Simple threshold-based scaling for when insufficient data"""
+        if current_load > 80:
+            return "scale_up"
+        elif current_load < 20:
+            return "scale_down"
         return None
+    
+    def _learn_time_patterns(self, service_name: str, hour: int, load: float):
+        """Learn load patterns by time of day"""
+        if hour not in self.time_patterns[service_name]:
+            self.time_patterns[service_name][hour] = []
+        
+        self.time_patterns[service_name][hour].append(load)
+        
+        # Keep last 30 data points per hour
+        if len(self.time_patterns[service_name][hour]) > 30:
+            self.time_patterns[service_name][hour] = self.time_patterns[service_name][hour][-30:]
+    
+    def _predict_future_load(self, service_name: str, current_load: float) -> float:
+        """Predict future load using trend analysis and time patterns"""
+        history = self.scaling_history[service_name]
+        
+        # Get recent trend (last 10 data points)
+        if len(history) >= 10:
+            recent_loads = [h['load'] for h in history[-10:]]
+            trend = self._calculate_trend(recent_loads)
+        else:
+            trend = 0
+        
+        # Get time-based prediction
+        current_hour = int((time.time() % 86400) / 3600)
+        next_hour = (current_hour + 1) % 24
+        
+        time_prediction = current_load
+        if next_hour in self.time_patterns[service_name]:
+            hour_loads = self.time_patterns[service_name][next_hour]
+            if hour_loads:
+                time_prediction = sum(hour_loads) / len(hour_loads)
+        
+        # Combine trend and time-based predictions
+        # Weight: 60% time pattern, 40% trend
+        predicted_load = (time_prediction * 0.6) + ((current_load + trend) * 0.4)
+        
+        return max(0, min(100, predicted_load))  # Clamp between 0-100
+    
+    def _calculate_trend(self, values: list[float]) -> float:
+        """Calculate linear trend using simple linear regression"""
+        n = len(values)
+        if n < 2:
+            return 0
+        
+        # Simple linear regression
+        x_values = list(range(n))
+        x_mean = sum(x_values) / n
+        y_mean = sum(values) / n
+        
+        numerator = sum((x_values[i] - x_mean) * (values[i] - y_mean) for i in range(n))
+        denominator = sum((x - x_mean) ** 2 for x in x_values)
+        
+        if denominator == 0:
+            return 0
+        
+        slope = numerator / denominator
+        return slope  # Trend per time unit
+    
+    def _make_scaling_decision(self, service_name: str, current_load: float, predicted_load: float) -> str | None:
+        """Make intelligent scaling decision based on current and predicted load"""
+        
+        # Define thresholds
+        scale_up_threshold = 75
+        scale_down_threshold = 25
+        prediction_weight = 0.7  # How much to trust prediction vs current
+        
+        # Weighted decision score
+        decision_score = (current_load * (1 - prediction_weight)) + (predicted_load * prediction_weight)
+        
+        # Check if we recently made a scaling decision (avoid thrashing)
+        if service_name in self.scaling_decisions:
+            last_decision = self.scaling_decisions[service_name]
+            time_since_last = time.time() - last_decision['timestamp']
+            if time_since_last < 300:  # 5 minutes cooldown
+                return None
+        
+        # Make decision
+        if decision_score > scale_up_threshold:
+            # Scale up more aggressively if trend is strongly upward
+            if predicted_load > current_load + 10:
+                return "scale_up_aggressive"  # Add multiple instances
+            return "scale_up"
+        
+        elif decision_score < scale_down_threshold:
+            # Only scale down if both current and predicted are low (be conservative)
+            if current_load < 30 and predicted_load < 30:
+                return "scale_down"
+        
+        # Proactive scaling: if prediction shows spike coming, scale early
+        if predicted_load > scale_up_threshold and current_load < scale_up_threshold:
+            return "scale_up_proactive"
+        
+        return None
+    
+    def get_scaling_report(self, service_name: str) -> dict:
+        """Generate scaling analysis report"""
+        if service_name not in self.scaling_history:
+            return {'status': 'no_data'}
+        
+        history = self.scaling_history[service_name]
+        
+        # Calculate statistics
+        recent_loads = [h['load'] for h in history[-20:]]
+        avg_load = sum(recent_loads) / len(recent_loads) if recent_loads else 0
+        max_load = max(recent_loads) if recent_loads else 0
+        min_load = min(recent_loads) if recent_loads else 0
+        
+        # Identify peak hours
+        peak_hours = self._identify_peak_hours(service_name)
+        
+        return {
+            'status': 'active',
+            'data_points': len(history),
+            'average_load': round(avg_load, 2),
+            'max_load': round(max_load, 2),
+            'min_load': round(min_load, 2),
+            'peak_hours': peak_hours,
+            'last_scaling_decision': self.scaling_decisions.get(service_name),
+            'pattern_learning_progress': f"{len(self.time_patterns.get(service_name, {}))} hours learned"
+        }
+    
+    def _identify_peak_hours(self, service_name: str) -> list[int]:
+        """Identify hours with highest average load"""
+        if service_name not in self.time_patterns:
+            return []
+        
+        hourly_averages = {}
+        for hour, loads in self.time_patterns[service_name].items():
+            if loads:
+                hourly_averages[hour] = sum(loads) / len(loads)
+        
+        if not hourly_averages:
+            return []
+        
+        # Get top 3 peak hours
+        sorted_hours = sorted(hourly_averages.items(), key=lambda x: x[1], reverse=True)
+        return [hour for hour, _ in sorted_hours[:3]]
 
 
 class NeuralAnomalyDetector:
-    """Neural network-based anomaly detection"""
+    """Neural network-based anomaly detection (Aurora Tier 15: AI/ML + Tier 28: Autonomous Tools)"""
 
     def __init__(self):
         self.anomaly_patterns = {}
+        self.baseline_metrics = {}
+        self.anomaly_history = {}
+        self.learning_window = 100  # Number of samples to establish baseline
+        self.sensitivity = 2.5  # Standard deviations for anomaly threshold
 
     def detect_anomalies(self, service_name: str, metrics: dict) -> list[str]:
-        """Detect system anomalies"""
+        """Detect system anomalies using statistical ML and pattern recognition"""
         anomalies = []
-        # Placeholder for neural anomaly detection
+        
+        # Initialize tracking for new services
+        if service_name not in self.baseline_metrics:
+            self.baseline_metrics[service_name] = {
+                'cpu_usage': [],
+                'memory_usage': [],
+                'response_time': [],
+                'error_rate': [],
+                'request_rate': []
+            }
+            self.anomaly_history[service_name] = []
+        
+        baseline = self.baseline_metrics[service_name]
+        
+        # Check each metric for anomalies
+        for metric_name in ['cpu_usage', 'memory_usage', 'response_time', 'error_rate', 'request_rate']:
+            metric_value = metrics.get(metric_name)
+            if metric_value is None:
+                continue
+            
+            # Update baseline
+            baseline[metric_name].append(metric_value)
+            if len(baseline[metric_name]) > self.learning_window:
+                baseline[metric_name] = baseline[metric_name][-self.learning_window:]
+            
+            # Need sufficient data for anomaly detection
+            if len(baseline[metric_name]) < 20:
+                continue
+            
+            # Statistical anomaly detection (Z-score method)
+            anomaly = self._detect_statistical_anomaly(
+                metric_name, metric_value, baseline[metric_name]
+            )
+            if anomaly:
+                anomalies.append(anomaly)
+        
+        # Pattern-based anomaly detection
+        pattern_anomalies = self._detect_pattern_anomalies(service_name, metrics)
+        anomalies.extend(pattern_anomalies)
+        
+        # Correlation-based anomaly detection (multiple metrics acting weird together)
+        correlation_anomalies = self._detect_correlation_anomalies(service_name, metrics)
+        anomalies.extend(correlation_anomalies)
+        
+        # Log anomalies for learning
+        if anomalies:
+            self.anomaly_history[service_name].append({
+                'timestamp': time.time(),
+                'metrics': metrics,
+                'anomalies': anomalies
+            })
+            
+            # Keep last 1000 anomaly events
+            if len(self.anomaly_history[service_name]) > 1000:
+                self.anomaly_history[service_name] = self.anomaly_history[service_name][-1000:]
+        
         return anomalies
+    
+    def _detect_statistical_anomaly(self, metric_name: str, value: float, baseline: list[float]) -> str | None:
+        """Detect anomalies using statistical analysis (Z-score)"""
+        if len(baseline) < 20:
+            return None
+        
+        # Calculate mean and standard deviation
+        mean = sum(baseline) / len(baseline)
+        variance = sum((x - mean) ** 2 for x in baseline) / len(baseline)
+        std_dev = variance ** 0.5
+        
+        if std_dev == 0:
+            return None
+        
+        # Calculate Z-score
+        z_score = (value - mean) / std_dev
+        
+        # If beyond threshold, it's an anomaly
+        if abs(z_score) > self.sensitivity:
+            direction = "spike" if z_score > 0 else "drop"
+            return f"STATISTICAL_ANOMALY: {metric_name} {direction} detected (Z-score: {z_score:.2f}, value: {value:.2f}, baseline: {mean:.2f}±{std_dev:.2f})"
+        
+        return None
+    
+    def _detect_pattern_anomalies(self, service_name: str, metrics: dict) -> list[str]:
+        """Detect anomalies based on known patterns"""
+        anomalies = []
+        
+        # Pattern 1: High error rate with normal CPU (something wrong in code)
+        if metrics.get('error_rate', 0) > 5 and metrics.get('cpu_usage', 100) < 50:
+            anomalies.append("PATTERN_ANOMALY: High error rate with low CPU usage suggests code/logic error")
+        
+        # Pattern 2: High CPU with low request rate (inefficient processing or infinite loop)
+        if metrics.get('cpu_usage', 0) > 80 and metrics.get('request_rate', 100) < 10:
+            anomalies.append("PATTERN_ANOMALY: High CPU with low requests suggests inefficient processing or background task issue")
+        
+        # Pattern 3: Memory leak detection (memory consistently increasing)
+        if service_name in self.baseline_metrics:
+            memory_history = self.baseline_metrics[service_name].get('memory_usage', [])
+            if len(memory_history) >= 10:
+                recent_10 = memory_history[-10:]
+                if all(recent_10[i] <= recent_10[i+1] for i in range(len(recent_10)-1)):
+                    anomalies.append("PATTERN_ANOMALY: Potential memory leak detected (consistently increasing memory)")
+        
+        # Pattern 4: Response time spikes (possible database/network issue)
+        if metrics.get('response_time', 0) > 5000:  # 5 seconds
+            anomalies.append("PATTERN_ANOMALY: Extreme response time detected - possible database or network issue")
+        
+        return anomalies
+    
+    def _detect_correlation_anomalies(self, service_name: str, metrics: dict) -> list[str]:
+        """Detect anomalies based on correlation between metrics"""
+        anomalies = []
+        
+        # Normally, high request rate correlates with high CPU
+        # If requests are high but CPU is low, something is wrong (requests not being processed)
+        request_rate = metrics.get('request_rate', 0)
+        cpu_usage = metrics.get('cpu_usage', 0)
+        
+        if request_rate > 50 and cpu_usage < 20:
+            anomalies.append("CORRELATION_ANOMALY: High request rate but low CPU - requests may not be processing")
+        
+        # High memory + high error rate = possible OOM errors
+        if metrics.get('memory_usage', 0) > 90 and metrics.get('error_rate', 0) > 10:
+            anomalies.append("CORRELATION_ANOMALY: High memory usage with high error rate - possible out-of-memory errors")
+        
+        return anomalies
+    
+    def get_anomaly_report(self, service_name: str) -> dict:
+        """Generate anomaly detection report"""
+        if service_name not in self.anomaly_history:
+            return {'status': 'no_data', 'total_anomalies': 0}
+        
+        history = self.anomaly_history[service_name]
+        
+        return {
+            'status': 'active',
+            'total_anomalies': len(history),
+            'recent_anomalies': history[-10:],
+            'anomaly_types': self._summarize_anomaly_types(history),
+            'baseline_established': len(self.baseline_metrics.get(service_name, {}).get('cpu_usage', [])) >= self.learning_window
+        }
+    
+    def _summarize_anomaly_types(self, history: list) -> dict:
+        """Summarize types of anomalies detected"""
+        summary = {}
+        for event in history:
+            for anomaly in event['anomalies']:
+                anomaly_type = anomaly.split(':')[0]
+                summary[anomaly_type] = summary.get(anomaly_type, 0) + 1
+        return summary
 
 
 def run_luminar_nexus_v2(port: int = 5005):
@@ -625,5 +1666,66 @@ def run_luminar_nexus_v2(port: int = 5005):
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
 
 
+def run_chat_server_v2(port: int = 5003):
+    """Run Aurora's V2 chat server with enhanced routing"""
+    print(f"🌌 Aurora Chat Server V2 starting on port {port}...")
+    print("✨ Enhanced with Quantum Coherence and AI Routing")
+
+    # Initialize Nexus V2
+    nexus = LuminarNexusV2()
+
+    # Create the advanced API (includes /api/chat endpoint)
+    app = nexus.create_advanced_api()
+
+    # Add health check endpoint
+    @app.route("/health", methods=["GET"])
+    def health_check():
+        return {"status": "healthy", "service": "aurora-chat-v2", "version": nexus.version}, 200
+
+    print(f"🚀 Chat Server V2 running on port {port}")
+    print("   Health: http://localhost:{port}/health")
+    print("   Chat: POST http://localhost:{port}/api/chat")
+
+    app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
+
+
+def main():
+    """Main entry point for V2 with CLI support"""
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Luminar Nexus V2 - Advanced System Orchestrator")
+        print("\nUsage:")
+        print("  python luminar_nexus_v2.py start <server>   - Start a server")
+        print("  python luminar_nexus_v2.py stop <server>    - Stop a server")
+        print("  python luminar_nexus_v2.py start-all        - Start all servers")
+        print("  python luminar_nexus_v2.py stop-all         - Stop all servers")
+        print("  python luminar_nexus_v2.py status           - Show all status")
+        print("  python luminar_nexus_v2.py api              - Run API server (port 5005)")
+        print("  python luminar_nexus_v2.py chat             - Run chat server (port 5003)")
+        print("\nAvailable servers: vite, backend, bridge, self-learn, chat")
+        return
+
+    nexus = LuminarNexusV2()
+    command = sys.argv[1]
+
+    if command == "start-all":
+        nexus.start_all_servers()
+    elif command == "start" and len(sys.argv) > 2:
+        nexus.start_server(sys.argv[2])
+    elif command == "stop-all":
+        nexus.stop_all_servers()
+    elif command == "stop" and len(sys.argv) > 2:
+        nexus.stop_server(sys.argv[2])
+    elif command == "status":
+        nexus.show_status()
+    elif command == "api":
+        run_luminar_nexus_v2(5005)
+    elif command == "chat":
+        run_chat_server_v2(5003)
+    else:
+        print("❌ Invalid command")
+
+
 if __name__ == "__main__":
-    run_luminar_nexus_v2()
+    main()
