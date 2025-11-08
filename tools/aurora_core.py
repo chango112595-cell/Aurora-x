@@ -128,10 +128,10 @@ class AuroraCore:
             # Read the completion request - check for task-specific or default
             knowledge_dir = Path("/workspaces/Aurora-x/.aurora_knowledge")
             request_file = knowledge_dir / "test_task_completion_request.md"
-            
+
             if not request_file.exists():
                 request_file = knowledge_dir / "luminar_nexus_v2_completion_request.md"
-            
+
             if not request_file.exists():
                 self.intelligence.log("⚠️ No completion request found - working from flag file only")
                 request_content = content
