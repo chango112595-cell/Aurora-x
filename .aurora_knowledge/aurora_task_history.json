@@ -1,0 +1,15 @@
+{
+  "total_completed": 2,
+  "history": [
+    {
+      "task_id": "13f087c17aa8",
+      "completed_at": "2025-11-08T22:26:32.271068",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "8cb630f6bdff",
+      "completed_at": "2025-11-08T22:28:48.904808",
+      "task_name": "unknown"
+    }
+  ]
+}
