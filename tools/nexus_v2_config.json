@@ -1,0 +1,146 @@
+{
+  "nexus_v2_config": {
+    "version": "2.0.0",
+    "description": "Luminar Nexus v2 - Advanced AI-Driven System Orchestrator",
+    
+    "core_features": {
+      "ai_driven_healing": true,
+      "quantum_inspired_architecture": true,
+      "predictive_scaling": true,
+      "neural_anomaly_detection": true,
+      "advanced_security_guardian": true,
+      "intelligent_request_routing": true,
+      "self_learning_optimization": true
+    },
+    
+    "service_architecture": {
+      "primary_services": {
+        "frontend": {
+          "port": 5173,
+          "type": "ui",
+          "quantum_state": "entangled",
+          "dependencies": [],
+          "health_check_endpoint": "http://localhost:5173",
+          "scaling_strategy": "horizontal"
+        },
+        "backend": {
+          "port": 5000,
+          "type": "api",
+          "quantum_state": "stable",
+          "dependencies": [],
+          "health_check_endpoint": "http://localhost:5000/api/status",
+          "scaling_strategy": "vertical"
+        },
+        "bridge": {
+          "port": 5001,
+          "type": "middleware",
+          "quantum_state": "stable",
+          "dependencies": ["backend"],
+          "health_check_endpoint": "http://localhost:5001/api/status",
+          "scaling_strategy": "horizontal"
+        },
+        "self_learn": {
+          "port": 5002,
+          "type": "ai",
+          "quantum_state": "superposition",
+          "dependencies": ["backend"],
+          "health_check_endpoint": "http://localhost:5002/api/status",
+          "scaling_strategy": "ai_adaptive"
+        },
+        "chat": {
+          "port": 5003,
+          "type": "ai",
+          "quantum_state": "entangled",
+          "dependencies": ["bridge"],
+          "health_check_endpoint": "http://localhost:5003/api/chat/status",
+          "scaling_strategy": "ai_adaptive"
+        }
+      },
+      
+      "nexus_v2_management": {
+        "port": 5005,
+        "type": "orchestrator",
+        "quantum_state": "quantum_superposition",
+        "dependencies": ["all"],
+        "health_check_endpoint": "http://localhost:5005/api/nexus/status"
+      }
+    },
+    
+    "quantum_mesh_configuration": {
+      "coherence_threshold": 0.8,
+      "entanglement_map": {
+        "frontend": ["chat", "backend"],
+        "chat": ["self_learn", "bridge"],
+        "bridge": ["backend"],
+        "self_learn": ["backend"]
+      },
+      "superposition_services": ["self_learn"],
+      "quantum_healing_enabled": true
+    },
+    
+    "ai_orchestrator_settings": {
+      "learning_enabled": true,
+      "pattern_recognition": true,
+      "predictive_analysis": true,
+      "autonomous_healing": true,
+      "performance_optimization": true,
+      "anomaly_detection": true,
+      "machine_learning_model": "adaptive_neural_network"
+    },
+    
+    "monitoring_configuration": {
+      "health_check_interval": 5,
+      "anomaly_detection_sensitivity": 0.7,
+      "performance_baseline_learning_period": 300,
+      "healing_cooldown_period": 60,
+      "quantum_coherence_update_interval": 10
+    },
+    
+    "security_guardian_settings": {
+      "threat_detection_enabled": true,
+      "request_validation": true,
+      "rate_limiting": true,
+      "intrusion_detection": true,
+      "automated_response": true,
+      "security_level": "maximum"
+    },
+    
+    "performance_optimization": {
+      "auto_tuning_enabled": true,
+      "resource_allocation_optimization": true,
+      "load_balancing_strategy": "ai_weighted",
+      "caching_strategy": "intelligent_predictive",
+      "compression_optimization": true
+    },
+    
+    "advanced_features": {
+      "neural_pattern_recognition": true,
+      "quantum_entanglement_healing": true,
+      "predictive_failure_prevention": true,
+      "self_evolving_architecture": true,
+      "consciousness_aware_routing": true,
+      "dimensional_service_mapping": true
+    },
+    
+    "api_endpoints": {
+      "/api/nexus/status": "Get comprehensive system status",
+      "/api/nexus/health/<service>": "Get detailed service health",
+      "/api/nexus/quantum": "Get quantum mesh status",
+      "/api/nexus/ai/insights": "Get AI orchestrator insights",
+      "/api/nexus/security/status": "Get security guardian status",
+      "/api/nexus/performance/metrics": "Get performance optimization metrics",
+      "/api/chat": "Intelligent chat routing with Aurora Bridge"
+    },
+    
+    "upgrade_features_from_v1": [
+      "AI-driven autonomous healing (new)",
+      "Quantum-inspired service mesh (new)",
+      "Neural anomaly detection (new)",
+      "Predictive performance scaling (new)",
+      "Advanced security guardian (enhanced)",
+      "Intelligent request routing (enhanced)",
+      "Self-learning optimization (new)",
+      "Consciousness-aware architecture (new)"
+    ]
+  }
+}

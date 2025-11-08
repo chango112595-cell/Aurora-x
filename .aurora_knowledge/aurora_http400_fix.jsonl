@@ -1,0 +1,11 @@
+{"timestamp": "2025-11-04T10:49:45.335374", "agent": "Aurora", "message": "\ud83d\udcf8 SCREENSHOT RECEIVED FROM USER"}
+{"timestamp": "2025-11-04T10:49:45.335809", "agent": "Aurora", "message": "Error: \"Something went wrong. HTTP error! status: 400 Try again!\""}
+{"timestamp": "2025-11-04T10:49:45.335952", "agent": "Aurora", "message": "Time: 5:28:14 AM"}
+{"timestamp": "2025-11-04T10:49:45.336246", "agent": "Aurora", "message": ""}
+{"timestamp": "2025-11-04T10:49:45.336520", "agent": "Aurora", "message": "\ud83d\udd0d TIER_2 DEBUGGING ACTIVATED"}
+{"timestamp": "2025-11-04T10:49:45.336861", "agent": "Aurora", "message": "Diagnosing HTTP 400 error in Aurora Chat interface..."}
+{"timestamp": "2025-11-04T10:49:47.655668", "agent": "Aurora", "message": "TEST 1: Backend /api/conversation endpoint"}
+{"timestamp": "2025-11-04T10:49:47.665717", "agent": "Aurora", "message": "\u2705 Backend working: Returns 200 OK"}
+{"timestamp": "2025-11-04T10:49:47.665841", "agent": "Aurora", "message": ""}
+{"timestamp": "2025-11-04T10:49:47.666140", "agent": "Aurora", "message": "TEST 2: Vite proxy on port 5173"}
+{"timestamp": "2025-11-04T10:49:47.673622", "agent": "Aurora", "message": "\u274c Vite issue: \nHTTP:000"}

@@ -1,11 +1,43 @@
-# Aurora-X Ultra Unified Makefile (T01-T08)
-.PHONY: all help install test run clean serve serve-v3 open-dashboard open-report debug health-check
-.PHONY: spec spec-test spec-report spec3 spec3-test spec3-all
-.PHONY: orchestrator orchestrate-bg orch-test orch-status
-.PHONY: say corpus-dump bias-show adaptive-stats demo-all demo-list open-demos demo-seed demo-clean demo-clean-hard demo-status
-.PHONY: bridge-up bridge-status bridge-nl bridge-spec bridge-deploy orch-up
+# Aurora-X Complete Project Makefile
+# Comprehensive automation for Aurora AI System
+# Author: GitHub Copilot & User
+# Date: November 6, 2025 - Windows Compatibility Fixed
 
-# === Default Variables ===
+# ============================================================================
+# VARIABLES
+# ============================================================================
+
+PYTHON := python3
+PIP := pip3
+NODE := node
+NPM := npm
+VITE := npx vite
+DOCKER := docker
+GIT := git
+
+# Ports
+BACKEND_PORT := 5000
+BRIDGE_PORT := 5001
+SELF_LEARN_PORT := 5002
+CHAT_PORT := 5003
+FRONTEND_PORT := 5173
+
+# Directories
+TOOLS_DIR := tools
+CLIENT_DIR := client
+BACKUPS_DIR := backups
+KNOWLEDGE_DIR := .aurora_knowledge
+DATA_DIR := data
+LOGS_DIR := logs
+
+# Core Aurora Files
+AURORA_CORE := $(TOOLS_DIR)/aurora_core.py
+AURORA_ENHANCED := $(TOOLS_DIR)/aurora_enhanced_core.py
+LANGUAGE_MASTER := $(TOOLS_DIR)/aurora_language_grandmaster.py
+LUMINAR_NEXUS := $(TOOLS_DIR)/luminar_nexus.py
+INTELLIGENCE_MANAGER := aurora_intelligence_manager.py
+
+# Legacy Variables (preserved for compatibility)
 SPEC ?= specs/check_palindrome.md
 SPEC3 ?= specs/check_palindrome.md
 WHAT ?= reverse a string
@@ -25,6 +57,36 @@ debug:
 
 health-check:
 	@python tools/system_health_check.py
+
+# --- Health & Monitoring ---
+.PHONY: health
+health:
+	@echo "🏥 Checking Aurora-X health..."
+	@curl -s http://0.0.0.0:5001/healthz || echo "Bridge not responding"
+	@curl -s http://0.0.0.0:5000/api/health || echo "Main server not responding"
+
+.PHONY: server-status
+server-status:
+	@python3 tools/server_manager.py --status
+
+.PHONY: server-fix
+server-fix:
+	@python3 tools/server_manager.py --fix
+
+.PHONY: start-web
+start-web:
+	@python3 tools/server_manager.py --start-web
+
+.PHONY: restart-all
+restart-all:
+	@echo "🔄 Restarting all Aurora-X services..."
+	@python3 tools/server_manager.py --kill-port 5000 || true
+	@python3 tools/server_manager.py --kill-port 5001 || true
+	@sleep 2
+	@python3 tools/server_manager.py --start-web
+	@python3 tools/server_manager.py --start-bridge
+	@sleep 3
+	@python3 tools/server_manager.py --status
 
 # === Help ===
 help:
@@ -78,6 +140,15 @@ help:
 	@echo "  make workflow-status # Display detailed workflow status dashboard"
 	@echo "  make fix-workflows   # Run script to fix workflow issues"
 	@echo ""
+	@echo "Self-Learning:"
+	@echo "  make self-learn     # run continuous self-learning daemon"
+	@echo ""
+	@echo "Server Manager:"
+	@echo "  make server-status  # Check status of all Aurora-X services"
+	@echo "  make server-fix     # Attempt to fix any down services"
+	@echo "  make start-web      # Start the main web server"
+	@echo "  make restart-all    # Restart all Aurora-X services"
+	@echo ""
 	@echo "Legacy Commands:"
 	@echo "  make run            # run synthesis"
 	@echo "  make test           # run unit tests"
@@ -110,6 +181,8 @@ say:
 serve-v3:
 	@echo "🚀 Starting FastAPI server on port $${AURORA_PORT:-5001}..."
 	@uvicorn aurora_x.serve:app --host 0.0.0.0 --port $${AURORA_PORT:-5001}
+
+serve: serve-v3
 
 # === Dashboard & Reports ===
 open-dashboard:
@@ -216,7 +289,7 @@ spec-report:
 
 # === Quick Start Aliases ===
 all: help
-serve: serve-v3
+# serve: serve-v3 # This is now handled by 'serve' alias above
 dashboard: open-dashboard
 # Aurora-X English Mode Makefile Additions
 # Add these targets to your main Makefile or include this file
@@ -581,6 +654,41 @@ demo: thresholds
 smoke:
 	curl -fsS $(HOST)/healthz && echo "health: OK"
 
+# === Self-Learning Targets ===
+self-learn:
+	@echo "Starting Aurora-X continuous self-learning daemon..."
+	python3 -m aurora_x.self_learn --sleep 300 --max-iters 50 --beam 20
+
+# New: Start dedicated self-learning server
+self-learn-server:
+	@echo "🧠 Starting Aurora-X Self-Learning Server on port 5002..."
+	python3 -m aurora_x.self_learn_server
+
+# Start self-learning in background
+self-learn-bg:
+	@echo "🧠 Starting Self-Learning Server in background..."
+	@nohup python3 -m aurora_x.self_learn_server > /tmp/self_learn.log 2>&1 & echo $$! > /tmp/self_learn.pid
+	@sleep 2
+	@curl -s http://0.0.0.0:5002/health | python3 -m json.tool || echo "⚠️  Server may still be starting..."
+	@echo "✅ Self-Learning Server started (PID: $$(cat /tmp/self_learn.pid))"
+	@echo "📝 Logs: /tmp/self_learn.log"
+
+# Stop self-learning server
+self-learn-stop:
+	@if [ -f /tmp/self_learn.pid ]; then \
+		echo "⏹  Stopping Self-Learning Server (PID: $$(cat /tmp/self_learn.pid))"; \
+		kill $$(cat /tmp/self_learn.pid) 2>/dev/null || true; \
+		rm /tmp/self_learn.pid; \
+		echo "✅ Self-Learning Server stopped"; \
+	else \
+		echo "ℹ  No running self-learning server found"; \
+	fi
+
+# Check self-learning server status
+self-learn-status:
+	@echo "📊 Self-Learning Server Status:"
+	@curl -s http://0.0.0.0:5002/stats 2>/dev/null | python3 -m json.tool || echo "⚠️  Server not responding"
+
 # PWA & OS Matrix helpers (T10)
 pwa-audit:
 	@echo "Checking PWA manifest..."
@@ -815,6 +923,7 @@ sign-off:
 	@echo "  unset AURORA_SIGN"
 
 # === CI Helper Commands ===
+# Redefined lint, sec, test for CI environment
 lint:
 	ruff check .
 

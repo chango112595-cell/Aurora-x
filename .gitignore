@@ -13,6 +13,24 @@ __pycache__
 .coverage
 coverage.xml
 htmlcov/
-runs/run-*/
+runs/run-*
 runs/latest
 semgrep.sarif
+
+# Database artifacts
+data/corpus.db
+data/corpus.db-shm
+data/corpus.db-wal
+data/corpus.jsonl
+
+# Self-learning daemon
+.self_learning.pid
+.self_learning_state.json
+
+# Aurora runtime state files
+.aurora/seeds.json
+
+# Logs
+logs
+*.log
+npm-debug.log*systems/chango/

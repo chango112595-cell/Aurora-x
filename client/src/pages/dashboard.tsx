@@ -1,24 +1,33 @@
+import { ErrorBoundary } from '@/components/error-boundary';
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { 
-  CheckCircle, 
-  Loader2, 
-  Wrench, 
-  Circle, 
+import {
+  CheckCircle,
+  Loader2,
+  Wrench,
+  Circle,
   TrendingUp,
   Activity,
   Zap,
   RefreshCw,
   WifiOff,
   Wifi,
-  Sparkles,
-  Download,
+  Database,
+  AlertCircle,
   FileCode2,
+  Sparkles,
   Rocket,
+  Download,
   Package,
   Terminal,
-  AlertCircle
+  Copy,
+  Search,
+  Filter,
+  ChevronLeft,
+  ChevronRight,
+  BookOpen,
+  Code2,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -27,6 +36,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Link } from "wouter";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
@@ -34,7 +52,7 @@ interface Task {
   id: string;
   name: string;
   status: string;
-  percent: number;  // Changed from string to number to match API
+  percent: number;
   category: string;
   notes: string[];
 }
@@ -45,6 +63,7 @@ interface ProgressData {
   tasks: Task[];
   active: string[];
   rules: string[];
+  overall_percent?: number;
 }
 
 // Synthesis/Generation interfaces
@@ -105,7 +124,7 @@ const parsePercent = (percent: number | string): number => {
 // Color mapping for status
 const getStatusColor = (status: string) => {
   const cleanStatus = parseStatus(status);
-  switch(cleanStatus) {
+  switch (cleanStatus) {
     case "complete": return "#10b981"; // Green
     case "in-progress": return "#3b82f6"; // Blue
     case "in-development": return "#f59e0b"; // Amber
@@ -117,8 +136,8 @@ const getStatusColor = (status: string) => {
 const StatusIcon = ({ status }: { status: string }) => {
   const cleanStatus = parseStatus(status);
   const iconClass = "h-5 w-5";
-  
-  switch(cleanStatus) {
+
+  switch (cleanStatus) {
     case "complete":
       return <CheckCircle className={iconClass} style={{ color: "#10b981" }} data-testid="icon-complete" />;
     case "in-progress":
@@ -151,42 +170,50 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
   const status = parseStatus(task.status);
   const percent = parsePercent(task.percent);
   const color = getStatusColor(task.status);
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.02, y: -4 }}
       data-testid={`card-task-${task.id}`}
     >
-      <Card className={`h-full ${isActive ? 'ring-2 ring-primary' : ''}`}>
-        <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-3">
+      <Card className={`h-full relative overflow-hidden ${isActive
+        ? 'border-primary/50 bg-gradient-to-br from-primary/20 via-primary/5 to-background dark:from-primary/10 dark:via-background dark:to-background shadow-lg'
+        : 'border-border bg-card shadow-md hover:shadow-lg transition-shadow'
+        }`}>
+        {isActive && (
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-cyan-500/5 to-transparent animate-pulse" />
+        )}
+        <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-3 relative">
           <div className="flex items-center gap-3">
-            <StatusIcon status={task.status} />
+            <div className="p-2 rounded-lg bg-primary/10 border border-primary/30 dark:bg-gradient-to-br dark:from-background dark:to-secondary/30 dark:border-primary/10">
+              <StatusIcon status={task.status} />
+            </div>
             <div>
-              <CardTitle className="text-lg" data-testid={`text-task-name-${task.id}`}>
+              <CardTitle className="text-lg font-semibold" data-testid={`text-task-name-${task.id}`}>
                 {task.name}
               </CardTitle>
               <div className="flex items-center gap-2 mt-1">
-                <Badge variant="secondary" className="text-xs" data-testid={`badge-task-id-${task.id}`}>
+                <Badge variant="secondary" className="text-xs font-medium bg-primary/20 border-primary/40 dark:bg-primary/10 dark:border-primary/20" data-testid={`badge-task-id-${task.id}`}>
                   {task.id}
                 </Badge>
-                <Badge variant="outline" className="text-xs" data-testid={`badge-category-${task.id}`}>
+                <Badge variant="outline" className="text-xs font-medium border-border dark:border-primary/20" data-testid={`badge-category-${task.id}`}>
                   {task.category}
                 </Badge>
               </div>
             </div>
           </div>
-          <div className="text-2xl font-bold" style={{ color }} data-testid={`text-percent-${task.id}`}>
+          <div className="text-2xl font-bold text-primary dark:bg-gradient-to-r dark:from-primary dark:to-cyan-500 dark:bg-clip-text dark:text-transparent" data-testid={`text-percent-${task.id}`}>
             {task.percent}%
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative">
           <AnimatedProgress value={percent} color={color} />
           <div className="mt-3 space-y-1">
             {task.notes.map((note, idx) => (
-              <div key={idx} className="text-xs text-muted-foreground flex items-start gap-1" data-testid={`text-note-${task.id}-${idx}`}>
+              <div key={idx} className="text-xs text-foreground/70 dark:text-muted-foreground flex items-start gap-1 font-medium" data-testid={`text-note-${task.id}-${idx}`}>
                 <span className="inline-block mt-0.5">•</span>
                 <span>{note}</span>
               </div>
@@ -198,8 +225,8 @@ const TaskCard = ({ task, isActive }: { task: Task; isActive: boolean }) => {
               animate={{ opacity: 1 }}
               className="mt-3"
             >
-              <Badge className="bg-primary/10 text-primary border-primary/20" data-testid={`badge-active-${task.id}`}>
-                <Activity className="h-3 w-3 mr-1" />
+              <Badge className="bg-gradient-to-r from-primary/30 to-cyan-500/30 text-foreground font-semibold border-primary/50 dark:from-primary/50 dark:to-cyan-500/50 dark:text-white dark:border-primary/70" data-testid={`badge-active-${task.id}`}>
+                <Activity className="h-3 w-3 mr-1 animate-pulse" />
                 Active Now
               </Badge>
             </motion.div>
@@ -216,23 +243,26 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
   if (!tasks || tasks.length === 0) {
     return null;
   }
-  
+
   const totalPercent = tasks.reduce((acc, task) => acc + (task.percent || 0), 0) / tasks.length;
   const completedTasks = tasks.filter(t => parseStatus(t.status || "") === "complete").length;
   const inProgressTasks = tasks.filter(t => parseStatus(t.status || "") === "in-progress").length;
   const inDevelopmentTasks = tasks.filter(t => parseStatus(t.status || "") === "in-development").length;
-  
+
   return (
-    <Card className="mb-6">
-      <CardHeader>
+    <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary/10 via-background to-cyan-500/5 relative overflow-hidden quantum-card">
+      <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,white,transparent)]" />
+      <CardHeader className="relative">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Zap className="h-6 w-6 text-primary" />
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-primary/20 border border-primary/30">
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
             <CardTitle className="text-2xl" data-testid="text-overall-title">
               Aurora-X Project Progress
             </CardTitle>
           </div>
-          <div className="text-3xl font-bold text-primary" data-testid="text-overall-percent">
+          <div className="text-4xl font-bold bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent" data-testid="text-overall-percent">
             {totalPercent.toFixed(1)}%
           </div>
         </div>
@@ -257,29 +287,30 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
           </AnimatePresence>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative">
         <div className="space-y-4">
-          <div className="relative w-full h-4 bg-secondary/50 rounded-full overflow-hidden">
+          <div className="relative w-full h-6 bg-secondary/30 rounded-full overflow-hidden border border-primary/20">
             <motion.div
-              className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-primary/70 rounded-full"
+              className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary via-cyan-500 to-purple-500 rounded-full"
               initial={{ width: "0%" }}
               animate={{ width: `${totalPercent}%` }}
               transition={{ duration: 1.5, ease: "easeOut" }}
               data-testid="progress-overall"
             />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse" />
           </div>
           <div className="flex justify-between text-sm">
-            <div className="flex items-center gap-1" data-testid="text-completed-count">
-              <CheckCircle className="h-4 w-4 text-green-500" />
-              <span>{completedTasks} Completed</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/20" data-testid="text-completed-count">
+              <CheckCircle className="h-5 w-5 text-green-500" />
+              <span className="font-medium">{completedTasks} Completed</span>
             </div>
-            <div className="flex items-center gap-1" data-testid="text-in-progress-count">
-              <Loader2 className="h-4 w-4 text-blue-500" />
-              <span>{inProgressTasks} In Progress</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20" data-testid="text-in-progress-count">
+              <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
+              <span className="font-medium">{inProgressTasks} In Progress</span>
             </div>
-            <div className="flex items-center gap-1" data-testid="text-in-development-count">
-              <Wrench className="h-4 w-4 text-amber-500" />
-              <span>{inDevelopmentTasks} In Development</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20" data-testid="text-in-development-count">
+              <Wrench className="h-5 w-5 text-amber-500" />
+              <span className="font-medium">{inDevelopmentTasks} In Development</span>
             </div>
           </div>
         </div>
@@ -288,57 +319,160 @@ const OverallProgress = ({ tasks, isRefetching, lastUpdated }: { tasks: Task[]; 
   );
 };
 
-// Active tasks section
-const ActiveTasksSection = ({ tasks, activeIds }: { tasks: Task[]; activeIds: string[] }) => {
-  const activeTasks = tasks.filter(t => activeIds.includes(t.id));
-  
-  if (activeTasks.length === 0) return null;
-  
+// Corpus Explorer Component - Recent Learning Activity (Summary View)
+const CorpusExplorerSection = () => {
+  // Show recent 20 items for the activity list
+  const recentLimit = 20;
+
+  interface CorpusEntry {
+    id: string;
+    func_name: string;
+    func_signature: string;
+    passed: number;
+    total: number;
+    score: number;
+    timestamp: string;
+  }
+
+  // Fetch ALL items to calculate overall stats
+  const { data: allCorpusData } = useQuery<{
+    items: CorpusEntry[];
+    hasMore: boolean;
+  }>({
+    queryKey: [`/api/corpus?limit=1000&offset=0`],
+  });
+
+  // Fetch recent items for display
+  const { data: corpusData, isLoading } = useQuery<{
+    items: CorpusEntry[];
+    hasMore: boolean;
+  }>({
+    queryKey: [`/api/corpus?limit=${recentLimit}&offset=0`],
+  });
+
+  // Calculate OVERALL stats from all corpus data
+  const allEntries = allCorpusData?.items || [];
+  const totalRecords = allEntries.length;
+  const perfectRuns = allEntries.filter((e: CorpusEntry) => e.passed === e.total).length;
+  const avgScore = allEntries.length > 0
+    ? (allEntries.reduce((sum: number, e: CorpusEntry) => sum + e.score, 0) / allEntries.length).toFixed(2)
+    : "0";
+
+  // Use recent entries for the activity list
+  const entries = corpusData?.items || [];
+
+  const passPercentage = (passed: number, total: number) => {
+    if (!total) return "0%";
+    return `${Math.round((passed / total) * 100)}%`;
+  };
+
   return (
-    <Card className="mb-6 border-primary/20 bg-primary/5">
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <Activity className="h-5 w-5 text-primary animate-pulse" />
-          <CardTitle data-testid="text-active-title">Active Now</CardTitle>
-        </div>
-        <CardDescription data-testid="text-active-description">
-          Tasks currently being worked on
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-3">
-          {activeTasks.map((task) => (
-            <motion.div
-              key={task.id}
-              className="flex items-center justify-between p-3 rounded-lg bg-background/50 hover:bg-background/70 transition-colors"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              whileHover={{ x: 5 }}
-              data-testid={`item-active-${task.id}`}
-            >
-              <div className="flex items-center gap-3">
-                <StatusIcon status={task.status} />
-                <div>
-                  <div className="font-medium" data-testid={`text-active-name-${task.id}`}>{task.name}</div>
-                  <div className="text-xs text-muted-foreground" data-testid={`text-active-category-${task.id}`}>{task.category}</div>
+    <>
+      {/* Stats Grid */}
+      <div className="grid gap-4 md:grid-cols-3 mb-6">
+        <Card className="bg-secondary/30 border-primary/10 quantum-card">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <Database className="h-8 w-8 mx-auto mb-2 text-chart-1" />
+              <div className="text-2xl font-bold">{totalRecords}</div>
+              <div className="text-xs text-muted-foreground">Recent Syntheses</div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-secondary/30 border-primary/10 quantum-card">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <CheckCircle className="h-8 w-8 mx-auto mb-2 text-chart-2" />
+              <div className="text-2xl font-bold">{perfectRuns}</div>
+              <div className="text-xs text-muted-foreground">Perfect Runs</div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-secondary/30 border-primary/10 quantum-card">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <TrendingUp className="h-8 w-8 mx-auto mb-2 text-chart-3" />
+              <div className="text-2xl font-bold">{avgScore}</div>
+              <div className="text-xs text-muted-foreground">Avg Score</div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Recent Activity Card */}
+      <Card className="mb-6 border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background quantum-card">
+        <CardHeader>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Sparkles className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-xl">Recent Learning Activity</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Aurora's latest synthesized functions
+                </p>
+              </div>
+            </div>
+            <Link href="/luminar?tab=learning">
+              <Button variant="outline" size="sm" className="gap-2">
+                <BookOpen className="h-4 w-4" />
+                See All in Luminar
+              </Button>
+            </Link>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="text-center py-8 text-muted-foreground">Loading recent activity...</div>
+          ) : entries.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Code2 className="h-12 w-12 mx-auto mb-4 opacity-30" />
+              <p>No learning activity yet</p>
+              <p className="text-sm mt-2">Run self-learning to see synthesis records</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {entries.map((entry: CorpusEntry) => (
+                <div
+                  key={entry.id}
+                  className="rounded-lg border border-primary/10 p-3 bg-background/50 hover:bg-background/70 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <code className="text-sm font-mono font-semibold truncate">{entry.func_name}</code>
+                        <Badge variant={entry.passed === entry.total ? "default" : "secondary"} className="text-xs">
+                          {entry.passed}/{entry.total}
+                        </Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {(entry.score * 100).toFixed(0)}%
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1 font-mono truncate">
+                        {entry.func_signature}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(entry.timestamp).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold" style={{ color: getStatusColor(task.status) }} data-testid={`text-active-percent-${task.id}`}>
-                  {task.percent}%
-                </span>
-                <TrendingUp className="h-4 w-4 text-primary animate-pulse" />
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </>
   );
 };
 
-// Project Generation Component with Aurora-X Theme
-const ProjectGenerationSection = () => {
+// Removed BridgeSection - now available via chat commands
+
+// Removed RollbackSection - now available via chat commands
+
+// Project Generation Component with Aurora-X Theme (REMOVED)
+const ProjectGenerationSection_REMOVED = () => {
   const [prompt, setPrompt] = useState("");
   const [recentProjects, setRecentProjects] = useState<GeneratedProject[]>([]);
   const { toast } = useToast();
@@ -355,7 +489,7 @@ const ProjectGenerationSection = () => {
           title: "Project Generated Successfully!",
           description: data.message || `Generated ${data.project_type} with ${data.files?.length || 0} files`,
         });
-        
+
         // Add to recent projects
         if (data.run_id) {
           const newProject: GeneratedProject = {
@@ -396,7 +530,7 @@ const ProjectGenerationSection = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     toast({
       title: "Download Started",
       description: `Downloading ${run_id} project...`
@@ -412,7 +546,7 @@ const ProjectGenerationSection = () => {
       });
       return;
     }
-    
+
     generateMutation.mutate({ prompt: prompt.trim() });
   };
 
@@ -424,10 +558,10 @@ const ProjectGenerationSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+        <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-background to-secondary/5 quantum-card">
           {/* Animated Background Gradient */}
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-secondary/10 animate-pulse" />
-          
+
           <CardHeader className="relative">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-primary/10">
@@ -443,7 +577,7 @@ const ProjectGenerationSection = () => {
               </div>
             </div>
           </CardHeader>
-          
+
           <CardContent className="relative space-y-4">
             <Textarea
               placeholder="Describe your project... e.g., 'Create a React dashboard with user authentication and real-time data visualization'"
@@ -453,13 +587,13 @@ const ProjectGenerationSection = () => {
               disabled={generateMutation.isPending}
               data-testid="input-generation-prompt"
             />
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <FileCode2 className="h-4 w-4" />
                 <span>Supports: React, Vue, Flask, FastAPI, AI/ML, and more</span>
               </div>
-              
+
               <Button
                 onClick={handleGenerate}
                 disabled={generateMutation.isPending || !prompt.trim()}
@@ -481,7 +615,7 @@ const ProjectGenerationSection = () => {
                 <div className="absolute inset-0 rounded-md bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
             </div>
-            
+
             {/* Generation Result */}
             {generateMutation.isSuccess && generateMutation.data?.status === "success" && (
               <motion.div
@@ -519,7 +653,7 @@ const ProjectGenerationSection = () => {
           </CardContent>
         </Card>
       </motion.div>
-      
+
       {/* Recent Generations */}
       {recentProjects.length > 0 && (
         <motion.div
@@ -527,7 +661,7 @@ const ProjectGenerationSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <Card className="border-primary/10">
+          <Card className="border-primary/10 quantum-card">
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Package className="h-5 w-5 text-primary" />
@@ -637,7 +771,7 @@ const SolverSection = () => {
       });
       return;
     }
-    
+
     solveMutation.mutate({ q: query.trim() });
   };
 
@@ -668,10 +802,10 @@ const SolverSection = () => {
       transition={{ duration: 0.5, delay: 0.2 }}
       className="mb-8"
     >
-      <Card className="relative overflow-hidden border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-emerald-500/5">
+      <Card className="relative overflow-hidden border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-emerald-500/5 quantum-card">
         {/* Animated Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-emerald-500/5 animate-pulse" />
-        
+
         <CardHeader className="relative">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-cyan-500/10">
@@ -687,7 +821,7 @@ const SolverSection = () => {
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="relative space-y-4">
           {/* Input and Button */}
           <div className="flex gap-2">
@@ -700,7 +834,7 @@ const SolverSection = () => {
               disabled={solveMutation.isPending}
               data-testid="input-solver-query"
             />
-            
+
             <Button
               onClick={handleSolve}
               disabled={solveMutation.isPending || !query.trim()}
@@ -720,7 +854,7 @@ const SolverSection = () => {
               )}
             </Button>
           </div>
-          
+
           {/* Example Queries */}
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">Quick examples:</p>
@@ -738,7 +872,7 @@ const SolverSection = () => {
               ))}
             </div>
           </div>
-          
+
           {/* Results Display */}
           {(result || solveMutation.isPending) && (
             <motion.div
@@ -769,7 +903,7 @@ const SolverSection = () => {
               </div>
             </motion.div>
           )}
-          
+
           {/* Error Display */}
           {errorMessage && (
             <motion.div
@@ -778,7 +912,7 @@ const SolverSection = () => {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <div 
+              <div
                 className="p-4 rounded-lg bg-red-500/10 border border-red-500/20"
                 role="alert"
                 aria-live="assertive"
@@ -798,7 +932,7 @@ const SolverSection = () => {
               </div>
             </motion.div>
           )}
-          
+
           {/* Capabilities Info */}
           <div className="text-xs text-muted-foreground space-y-1">
             <p>• Supports arithmetic operations, algebra, calculus, and physics calculations</p>
@@ -823,11 +957,11 @@ const RollbackSection = () => {
     setIsLoading({ ...isLoading, open: true });
     setResponse("");
     setErrorMessage("");
-    
+
     try {
       const res = await apiRequest("POST", "/api/bridge/rollback/open", {});
       const data = await res.json();
-      
+
       if (res.ok && data.status === "ok") {
         const message = `Successfully closed PR #${data.closed} and deleted branch ${data.deleted_branch}`;
         setResponse(JSON.stringify(data, null, 2));
@@ -844,8 +978,8 @@ const RollbackSection = () => {
           variant: "destructive"
         });
       }
-    } catch (error: any) {
-      const errorMsg = error.message || "Failed to connect to server";
+    } catch (error: unknown) {
+      const errorMsg = (error instanceof Error ? error.message : "Failed to connect to server");
       setErrorMessage(errorMsg);
       toast({
         title: "Connection Error",
@@ -862,13 +996,13 @@ const RollbackSection = () => {
     setIsLoading({ ...isLoading, merged: true });
     setResponse("");
     setErrorMessage("");
-    
+
     try {
       const res = await apiRequest("POST", "/api/bridge/rollback/merged", { base: "main" });
       const data = await res.json();
-      
+
       if (res.ok && (data.status === "ok" || data.revert_pr)) {
-        const message = data.revert_pr 
+        const message = data.revert_pr
           ? `Successfully created revert PR #${data.revert_pr}`
           : "Revert PR created successfully";
         setResponse(JSON.stringify(data, null, 2));
@@ -885,8 +1019,8 @@ const RollbackSection = () => {
           variant: "destructive"
         });
       }
-    } catch (error: any) {
-      const errorMsg = error.message || "Failed to connect to server";
+    } catch (error: unknown) {
+      const errorMsg = (error instanceof Error ? error.message : "Failed to connect to server");
       setErrorMessage(errorMsg);
       toast({
         title: "Connection Error",
@@ -941,7 +1075,7 @@ const RollbackSection = () => {
                 </>
               )}
             </Button>
-            
+
             <Button
               onClick={handleRollbackMerged}
               disabled={isLoading.open || isLoading.merged}
@@ -1015,229 +1149,6 @@ const RollbackSection = () => {
   );
 };
 
-// Factory Bridge Component with PR mode support
-const BridgeSection = () => {
-  const [prompt, setPrompt] = useState("");
-  const [response, setResponse] = useState<string>("");
-  const [prUrl, setPrUrl] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const { toast } = useToast();
-
-  // Mutation for Bridge generation via UI relay endpoint
-  const bridgeMutation = useMutation<any, Error, { prompt: string; repo?: string; branch?: string; mode?: string }>({
-    mutationFn: async (data) => {
-      const response = await apiRequest("POST", "/api/ui/generate", data);
-      return response.json();
-    },
-    onSuccess: (data) => {
-      if (data.status === "success" || data.response || data.pr_url) {
-        setResponse(JSON.stringify(data, null, 2));
-        setPrUrl(data.pr_url || "");
-        setErrorMessage("");
-        
-        const message = data.pr_url 
-          ? "Pull Request created successfully!" 
-          : "Successfully processed your request";
-        
-        toast({
-          title: "Generation Complete",
-          description: message
-        });
-      } else {
-        const error = data.error || data.message || "Could not process the request.";
-        toast({
-          title: "Generation Error",
-          description: error,
-          variant: "destructive"
-        });
-        setResponse("");
-        setPrUrl("");
-        setErrorMessage(error);
-      }
-    },
-    onError: (error) => {
-      const errorMsg = error.message || "An unexpected error occurred";
-      toast({
-        title: "Connection Error",
-        description: errorMsg,
-        variant: "destructive"
-      });
-      setResponse("");
-      setErrorMessage(errorMsg);
-    }
-  });
-
-  const handleGenerate = () => {
-    if (!prompt.trim()) {
-      toast({
-        title: "Input Required",
-        description: "Please describe your app or project",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    bridgeMutation.mutate({ prompt: prompt.trim() });
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !bridgeMutation.isPending) {
-      handleGenerate();
-    }
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.3 }}
-      className="mb-8"
-    >
-      <Card className="relative overflow-hidden border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-background to-emerald-500/5">
-        {/* Animated Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-emerald-500/5 animate-pulse" />
-        
-        <CardHeader className="relative">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-cyan-500/10">
-              <Rocket className="h-6 w-6 text-cyan-500" />
-            </div>
-            <div>
-              <CardTitle className="text-xl" data-testid="text-bridge-title">
-                Generate Code from Natural Language
-              </CardTitle>
-              <CardDescription data-testid="text-bridge-description">
-                Describe your feature and Aurora will create a Pull Request with implementation
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        
-        <CardContent className="relative space-y-4">
-          {/* Input and Button */}
-          <div className="flex gap-2">
-            <Input
-              placeholder="Describe your app..."
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              onKeyPress={handleKeyPress}
-              className="flex-1 bg-background/50 border-cyan-500/20 focus:border-cyan-500/40 transition-colors"
-              disabled={bridgeMutation.isPending}
-              data-testid="input-bridge-prompt"
-            />
-            
-            <Button
-              onClick={handleGenerate}
-              disabled={bridgeMutation.isPending || !prompt.trim()}
-              className="relative group bg-cyan-500 hover:bg-cyan-600 text-white"
-              data-testid="button-bridge-generate"
-            >
-              {bridgeMutation.isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="mr-2 h-4 w-4 group-hover:animate-pulse" />
-                  Generate
-                </>
-              )}
-            </Button>
-          </div>
-          
-          {/* Response Display */}
-          {(response || prUrl || bridgeMutation.isPending) && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
-            >
-              <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-cyan-500 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="font-medium text-cyan-600 dark:text-cyan-400 mb-2">
-                      {prUrl ? "Pull Request Created:" : "Generation Response:"}
-                    </p>
-                    {bridgeMutation.isPending ? (
-                      <div className="flex items-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin text-cyan-500" />
-                        <span className="text-sm text-muted-foreground">Generating code and creating PR...</span>
-                      </div>
-                    ) : (
-                      <>
-                        {prUrl && (
-                          <div className="mb-3">
-                            <a 
-                              href={prUrl} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 text-cyan-600 dark:text-cyan-400 hover:underline font-medium"
-                              data-testid="link-pr-url"
-                            >
-                              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                              </svg>
-                              View Pull Request on GitHub
-                            </a>
-                          </div>
-                        )}
-                        <pre className="text-sm font-mono text-foreground bg-background/50 p-3 rounded overflow-x-auto" data-testid="text-bridge-response">
-                          {response}
-                        </pre>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-          
-          {/* Error Display */}
-          {errorMessage && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
-            >
-              <div 
-                className="p-4 rounded-lg bg-red-500/10 border border-red-500/20"
-                role="alert"
-                aria-live="assertive"
-                data-testid="alert-bridge-error"
-              >
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="h-5 w-5 text-red-500 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="font-medium text-red-600 dark:text-red-400 mb-2">
-                      Error:
-                    </p>
-                    <p className="text-sm text-foreground" data-testid="text-bridge-error">
-                      {errorMessage}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-          
-          {/* Info */}
-          <div className="text-xs text-muted-foreground space-y-1">
-            <p>• Describe your feature or app requirements in plain English</p>
-            <p>• Aurora will generate code, tests, and create a Pull Request</p>
-            <p>• PRs are created with GPG signing for verified commits</p>
-            <p>• CI/CD pipeline will automatically validate the generated code</p>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-};
-
 // Loading skeleton
 const DashboardSkeleton = () => {
   return (
@@ -1259,14 +1170,21 @@ export default function Dashboard() {
 
   const { data, isLoading, error, isRefetching, refetch, isSuccess, isError } = useQuery<ProgressData>({
     queryKey: ['/api/progress'],
-    refetchInterval: 5000, // Refresh every 5 seconds
-    refetchIntervalInBackground: true, // Keep polling even when tab is not active
-    staleTime: 4000, // Prevent excessive refetches
-    retry: 3, // Number of retry attempts
-    retryDelay: (attemptIndex: number) => {
-      // Retry after 10 seconds if polling fails
-      return attemptIndex === 0 ? 1000 : 10000;
-    }
+    refetchInterval: 10000, // Refresh every 10 seconds
+    refetchIntervalInBackground: false, // Don't poll when tab is inactive
+    staleTime: 8000, // Cache data for 8 seconds
+    gcTime: 30000, // Keep cache for 30 seconds (formerly cacheTime)
+    retry: 2, // Reduce retry attempts to speed up failure detection
+    retryDelay: 1000, // Faster retry delay
+    initialData: {
+      version: "1.0.0",
+      tasks: [],
+      updated_utc: new Date().toISOString(),
+      active: [],
+      rules: [],
+    } as ProgressData, // Provide initial data to prevent loading state
+    refetchOnWindowFocus: false, // Don't refetch when window regains focus
+    refetchOnMount: true, // Only refetch on mount
   });
 
   // Watch query state and update connection status
@@ -1313,7 +1231,7 @@ export default function Dashboard() {
       <div className="h-full overflow-auto">
         <div className="p-6">
           <h1 className="text-3xl font-bold mb-2" data-testid="text-page-title">Aurora-X Dashboard</h1>
-          <Card className="p-6 border-destructive/20">
+          <Card className="p-6 border-destructive/20 quantum-card">
             <div className="flex items-center gap-3 mb-4">
               <WifiOff className="h-5 w-5 text-destructive" data-testid="icon-connection-error" />
               <p className="text-destructive" data-testid="text-error">
@@ -1335,13 +1253,17 @@ export default function Dashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
+          className="mb-8 relative"
         >
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-cyan-500/10 to-purple-500/10 blur-3xl -z-10" />
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold mb-2" data-testid="text-page-title">Aurora-X Dashboard</h1>
-              <p className="text-muted-foreground" data-testid="text-page-description">
-                Monitor Aurora-X task progress and development status
+              <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary via-cyan-500 to-purple-500 bg-clip-text text-transparent" data-testid="text-page-title">
+                Aurora-X Dashboard
+              </h1>
+              <p className="text-muted-foreground flex items-center gap-2" data-testid="text-page-description">
+                <Activity className="h-4 w-4 text-primary animate-pulse" />
+                Real-time monitoring of autonomous code synthesis
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -1350,7 +1272,7 @@ export default function Dashboard() {
                 href="/dashboard/graph"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-cyan-500/10 hover:from-primary/20 hover:to-cyan-500/20 text-primary rounded-lg transition-all border border-primary/20 hover:border-primary/40"
                 data-testid="link-task-graph"
               >
                 <svg
@@ -1374,67 +1296,101 @@ export default function Dashboard() {
                   <line x1="9" y1="15" x2="10.5" y2="13.5" />
                   <line x1="15" y1="15" x2="13.5" y2="13.5" />
                 </svg>
-                <span className="font-medium">View Task Graph</span>
+                <span className="font-medium">Task Graph</span>
               </a>
               {/* Connection status indicator */}
               <AnimatePresence mode="wait">
-              {connectionError ? (
-                <motion.div
-                  key="offline"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className="flex items-center gap-2 px-3 py-1 rounded-full bg-destructive/10"
-                  data-testid="badge-connection-error"
-                >
-                  <WifiOff className="h-4 w-4 text-destructive" />
-                  <span className="text-sm text-destructive">Offline</span>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="online"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10"
-                  data-testid="badge-connection-ok"
-                >
-                  <Wifi className="h-4 w-4 text-green-500" />
-                  <span className="text-sm text-green-600 dark:text-green-400">Live</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                {connectionError ? (
+                  <motion.div
+                    key="offline"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-full bg-destructive/10 border border-destructive/20"
+                    data-testid="badge-connection-error"
+                  >
+                    <WifiOff className="h-4 w-4 text-destructive" />
+                    <span className="text-sm font-medium text-destructive">Offline</span>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="online"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-full bg-green-500/10 border border-green-500/20"
+                    data-testid="badge-connection-ok"
+                  >
+                    <Wifi className="h-4 w-4 text-green-500 animate-pulse" />
+                    <span className="text-sm font-medium text-green-600 dark:text-green-400">Live</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </motion.div>
 
         <OverallProgress tasks={data.tasks} isRefetching={isRefetching} lastUpdated={lastUpdated} />
-        
-        {/* Add Project Generation Section */}
-        <ProjectGenerationSection />
-        
-        {/* Add Math & Physics Solver Section */}
-        <SolverSection />
-        
-        {/* Add Factory Bridge Section */}
-        <BridgeSection />
-        
-        {/* Add Rollback Section */}
-        <RollbackSection />
-        
+
+        {/* Corpus Explorer Section - Embedded */}
+        <CorpusExplorerSection />
+
+        {/* Active Now Section */}
         {data.active && data.active.length > 0 && (
-          <ActiveTasksSection tasks={data.tasks} activeIds={data.active} />
+          <Card className="mb-6 border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background quantum-card">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Activity className="h-5 w-5 text-primary animate-pulse" />
+                <CardTitle data-testid="text-active-title">Active Now</CardTitle>
+              </div>
+              <CardDescription data-testid="text-active-description">
+                Tasks currently being worked on
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3">
+                {data.tasks.filter(t => data.active?.includes(t.id)).map((task) => (
+                  <motion.div
+                    key={task.id}
+                    className="flex items-center justify-between p-3 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors border border-primary/30 dark:bg-background/50 dark:hover:bg-background/70 dark:border-primary/10"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    whileHover={{ x: 5 }}
+                    data-testid={`item-active-${task.id}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <StatusIcon status={task.status} />
+                      <div>
+                        <div className="font-medium" data-testid={`text-active-name-${task.id}`}>{task.name}</div>
+                        <div className="text-xs text-muted-foreground" data-testid={`text-active-category-${task.id}`}>{task.category}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg font-bold" style={{ color: getStatusColor(task.status) }} data-testid={`text-active-percent-${task.id}`}>
+                        {task.percent}%
+                      </span>
+                      <TrendingUp className="h-4 w-4 text-primary animate-pulse" />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         )}
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {/* Tasks Grid */}
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 mb-8">
           {data.tasks.map((task, index) => (
-            <TaskCard 
-              key={task.id} 
-              task={task} 
+            <TaskCard
+              key={task.id}
+              task={task}
               isActive={data.active?.includes(task.id) || false}
             />
           ))}
         </div>
+
+        {/* PR Rollback Controls Section - Moved to bottom */}
+        <RollbackSection />
       </div>
     </div>
   );

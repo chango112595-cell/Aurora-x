@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+"""
+Aurora-X Unified Stop Command
+Simple command to stop all Aurora services
+NOW USING AURORA CORE - Aurora is in control!
+"""
+
+import sys
+import os
+
+# Add tools directory to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'tools'))
+
+from aurora_core import AuroraCore
+
+if __name__ == "__main__":
+    print("🛑 Aurora Core: Stopping all services...\n")
+    aurora = AuroraCore()
+    aurora.stop_all_services()

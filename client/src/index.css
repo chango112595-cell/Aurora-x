@@ -1,6 +1,8 @@
+/* stylelint-disable */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* stylelint-enable */
 
 @layer utilities {
   @keyframes shimmer {
@@ -21,12 +23,30 @@
     }
   }
   
+  @keyframes particleFloat {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+    100% {
+      transform: translateY(-20px) translateX(10px);
+      opacity: 0;
+    }
+  }
+  
   .animate-shimmer {
     animation: shimmer 2s infinite;
   }
   
   .animate-scan {
     animation: scan 4s linear infinite;
+  }
+  
+  .animate-particle-float {
+    animation: particleFloat 20s linear infinite;
   }
   
   .hover-elevate {
@@ -59,55 +79,55 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  --background: 220 6% 97%;
+  --background: 220 20% 98%;
 
-  --foreground: 220 15% 12%;
+  --foreground: 220 25% 5%;
 
-  --border: 220 12% 88%;
+  --border: 195 45% 75%;
 
-  --card: 220 8% 95%;
+  --card: 220 15% 96%;
 
-  --card-foreground: 220 15% 15%;
+  --card-foreground: 220 20% 12%;
 
-  --card-border: 220 12% 86%;
+  --card-border: 195 40% 80%;
 
-  --sidebar: 220 8% 93%;
+  --sidebar: 220 30% 96%;
 
-  --sidebar-foreground: 220 15% 18%;
+  --sidebar-foreground: 220 30% 15%;
 
-  --sidebar-border: 220 12% 84%;
+  --sidebar-border: 195 50% 70%;
 
-  --sidebar-primary: 195 85% 45%;
+  --sidebar-primary: 195 90% 40%;
 
   --sidebar-primary-foreground: 195 10% 98%;
 
-  --sidebar-accent: 220 15% 85%;
+  --sidebar-accent: 195 35% 88%;
 
-  --sidebar-accent-foreground: 220 15% 20%;
+  --sidebar-accent-foreground: 220 25% 18%;
 
-  --sidebar-ring: 195 85% 55%;
+  --sidebar-ring: 195 90% 45%;
 
-  --popover: 220 10% 90%;
+  --popover: 220 20% 95%;
 
-  --popover-foreground: 220 15% 20%;
+  --popover-foreground: 220 25% 15%;
 
-  --popover-border: 220 12% 82%;
+  --popover-border: 195 40% 78%;
 
-  --primary: 195 85% 45%;
+  --primary: 195 90% 40%;
 
   --primary-foreground: 195 10% 98%;
 
-  --secondary: 220 12% 82%;
+  --secondary: 195 30% 85%;
 
-  --secondary-foreground: 220 15% 22%;
+  --secondary-foreground: 220 25% 18%;
 
-  --muted: 220 15% 88%;
+  --muted: 220 20% 90%;
 
-  --muted-foreground: 220 10% 38%;
+  --muted-foreground: 220 15% 35%;
 
-  --accent: 220 18% 86%;
+  --accent: 195 40% 85%;
 
-  --accent-foreground: 220 12% 25%;
+  --accent-foreground: 220 25% 20%;
 
   --destructive: 0 75% 48%;
 
@@ -324,9 +344,15 @@
   /* .no-default-hover-elevate/no-default-active-elevate is an escape hatch so consumers of
    * buttons/badges can remove the automatic brightness adjustment on interactions
    * and program their own. */
-  .no-default-hover-elevate {}
+  .no-default-hover-elevate {
+    /* escape hatch - provider's own styles will override */
+    all: revert;
+  }
 
-  .no-default-active-elevate {}
+  .no-default-active-elevate {
+    /* escape hatch - provider's own styles will override */
+    all: revert;
+  }
 
 
   /**
@@ -397,4 +423,35 @@
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
   }
+}
+/* Aurora's Quantum UI Styles */
+.quantum-card {
+  @apply bg-gradient-to-br from-slate-900/80 to-slate-800/80;
+  @apply border border-cyan-500/30;
+  @apply backdrop-blur-md;
+  @apply shadow-lg shadow-cyan-500/20;
+  transition: all 0.3s ease;
+}
+
+.quantum-card:hover {
+  @apply border-cyan-400/50;
+  @apply shadow-xl shadow-cyan-500/30;
+  transform: translateY(-2px);
+}
+
+.quantum-button {
+  @apply bg-gradient-to-r from-cyan-500 to-purple-500;
+  @apply text-white font-semibold;
+  @apply border border-cyan-400/50;
+  @apply shadow-lg shadow-cyan-500/50;
+  transition: all 0.3s ease;
+}
+
+.quantum-button:hover {
+  @apply shadow-xl shadow-purple-500/50;
+  transform: scale(1.05);
+}
+
+.quantum-glow {
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
 }

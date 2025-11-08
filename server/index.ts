@@ -71,6 +71,23 @@ app.use((req, res, next) => {
       console.error('Server error:', err);
     }
   });
+
+  // Handle process termination
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM received, closing server...');
+    server.close(() => {
+      console.log('Server closed');
+      process.exit(0);
+    });
+  });
+
+  process.on('SIGINT', () => {
+    console.log('SIGINT received, closing server...');
+    server.close(() => {
+      console.log('Server closed');
+      process.exit(0);
+    });
+  });
   
   server.listen(port, "0.0.0.0", () => {
     log(`serving on port ${port}`);

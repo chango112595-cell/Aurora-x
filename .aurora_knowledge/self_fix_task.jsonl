@@ -1,0 +1,1 @@
+{"timestamp": "2025-11-03T07:48:42.875984", "task": "Port Configuration Consolidation", "status": "ASSIGNED", "description": "Move Vite to 5001, consolidate services, clean architecture", "expected_outcome": "Clean entry point with UI on 5001, API on 5000"}

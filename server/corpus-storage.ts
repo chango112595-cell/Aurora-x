@@ -1,14 +1,24 @@
-import Database from "better-sqlite3";
-import { mkdirSync } from "fs";
-import { dirname } from "path";
-import { randomUUID } from "crypto";
-import type { CorpusEntry } from "@shared/schema";
+import Database from 'better-sqlite3';
+import { randomUUID } from 'crypto';
+import * as fs from "fs";
+import * as path from "path";
+import type {
+  CorpusEntry,
+  RunMeta,
+  UsedSeed,
+  CorpusQuery,
+} from "@shared/schema";
 
 export class CorpusStorage {
   private db: Database.Database;
 
   constructor(dbPath: string) {
-    mkdirSync(dirname(dbPath), { recursive: true });
+    // Ensure data directory exists
+    const dataDir = path.dirname(dbPath);
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+
     this.db = new Database(dbPath);
     this.db.pragma("journal_mode = WAL");
     this.db.pragma("foreign_keys = ON");
@@ -82,7 +92,7 @@ export class CorpusStorage {
       ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     `);
 
-    stmt.run(
+    const result = stmt.run(
       entry.id,
       entry.timestamp,
       entry.spec_id,
@@ -102,6 +112,8 @@ export class CorpusStorage {
       entry.duration_ms ?? null,
       entry.synthesis_method ?? null
     );
+
+    console.log(`[Corpus Storage] Inserted entry: ${entry.func_name}, changes: ${result.changes}`);
   }
 
   private parseEntry(row: any): any {
@@ -162,7 +174,7 @@ export class CorpusStorage {
     values.push(params.limit, offset);
 
     const rows = this.db.prepare(sql).all(...values);
-    return rows.map((row) => this.parseEntry(row));
+    return rows.map((row: any) => this.parseEntry(row));
   }
 
   getTopByFunc(func: string, limit: number): any[] {
@@ -174,14 +186,23 @@ export class CorpusStorage {
          LIMIT ?`
       )
       .all(func, limit);
-    return rows.map((row) => this.parseEntry(row));
+    return rows.map((row: any) => this.parseEntry(row));
   }
 
-  getRecent(limit: number): any[] {
-    const rows = this.db
-      .prepare(`SELECT * FROM corpus ORDER BY timestamp DESC LIMIT ?`)
-      .all(limit);
-    return rows.map((row) => this.parseEntry(row));
+  getRecent(limit: number = 10): any[] {
+    const query = `
+      SELECT * FROM corpus 
+      WHERE id IS NOT NULL
+      ORDER BY timestamp DESC 
+      LIMIT ?
+    `;
+
+    const rows = this.db.prepare(query).all(limit) as any[];
+    console.log(`[Corpus Storage] getRecent found ${rows.length} entries`);
+    if (rows.length > 0) {
+      console.log(`[Corpus Storage] First entry:`, rows[0]);
+    }
+    return rows.map(row => this.parseEntry(row));
   }
 
   private bowTokens(s: string): string[] {

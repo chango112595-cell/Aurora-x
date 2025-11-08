@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+"""Start Aurora Core System"""
+import sys
+sys.path.insert(0, '/workspaces/Aurora-x')
+
+from tools.aurora_core import AuroraCore
+
+print("🌌 Initializing Aurora Core System...")
+aurora = AuroraCore()
+aurora.start_all_services()
+print("✅ Aurora is fully operational!")

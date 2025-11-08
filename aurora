@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+"""
+Aurora Command Center - Unified entry point for all Aurora operations
+"""
+
+import sys
+import subprocess
+from pathlib import Path
+
+PROJECT_ROOT = Path("/workspaces/Aurora-x")
+
+def print_banner():
+    print("""
+    ╔══════════════════════════════════════════════╗
+    ║          🌟 AURORA COMMAND CENTER 🌟        ║
+    ║        Unified Interface for All Aurora     ║
+    ╚══════════════════════════════════════════════╝
+    """)
+
+def show_help():
+    print_banner()
+    print("""
+USAGE:
+    aurora [COMMAND] [OPTIONS]
+
+COMMANDS:
+
+  SERVERS (Development & Deployment)
+    aurora server start       - Start development servers (backend + frontend)
+    aurora server stop        - Stop all servers
+    aurora server status      - Show server status and health
+    aurora server logs        - View real-time server logs
+    aurora server restart     - Restart all servers
+
+  DASHBOARD & MONITORING
+    aurora dashboard          - Open Aurora Dashboard (browser)
+    aurora progress           - Show Aurora learning progress
+    aurora status             - Quick status overview
+
+  LEARNING & KNOWLEDGE
+    aurora learn              - View Aurora's learning corpus
+    aurora skills             - Show Aurora's mastered skills
+    aurora train <topic>      - Train Aurora on a specific topic
+
+  UTILITIES
+    aurora help               - Show this help message
+    aurora version            - Show Aurora version
+
+EXAMPLES:
+    aurora server start                 # Start everything
+    aurora server status                # Check health
+    aurora dashboard                    # Open UI
+    aurora progress                     # View progress
+
+For more info: aurora help <command>
+    """)
+
+def main():
+    if len(sys.argv) < 2:
+        show_help()
+        return 1
+    
+    command = sys.argv[1]
+    args = sys.argv[2:]
+    
+    # Server commands
+    if command == "server":
+        if not args:
+            print("Aurora Server Manager")
+            print("Usage: aurora server [start|stop|status|logs|restart]")
+            return 1
+        
+        subcommand = args[0]
+        keeper_script = PROJECT_ROOT / "luminar-keeper.py"
+        
+        if subcommand == "start":
+            subprocess.run([sys.executable, str(keeper_script), "start"])
+        elif subcommand == "stop":
+            subprocess.run([sys.executable, str(keeper_script), "stop"])
+        elif subcommand == "status":
+            subprocess.run([sys.executable, str(keeper_script), "status"])
+        elif subcommand == "logs":
+            subprocess.run([sys.executable, str(keeper_script), "logs"])
+        elif subcommand == "restart":
+            subprocess.run([sys.executable, str(keeper_script), "stop"])
+            import time
+            time.sleep(2)
+            subprocess.run([sys.executable, str(keeper_script), "start"])
+        else:
+            print(f"Unknown subcommand: {subcommand}")
+            return 1
+    
+    # Dashboard
+    elif command == "dashboard":
+        print("🚀 Opening Aurora Dashboard...")
+        subprocess.run([sys.executable, str(PROJECT_ROOT / "aurorax"), "progress", "--view"])
+    
+    # Progress
+    elif command == "progress":
+        subprocess.run([sys.executable, str(PROJECT_ROOT / "aurorax"), "progress"] + args)
+    
+    # Status
+    elif command == "status":
+        subprocess.run([sys.executable, str(PROJECT_ROOT / "luminar-keeper.py"), "status"])
+    
+    # Help
+    elif command == "help":
+        show_help()
+    
+    # Version
+    elif command == "version":
+        print("Aurora-X Version 1.0.0")
+        print("Build: 2025-11-03")
+    
+    else:
+        print(f"❌ Unknown command: {command}")
+        print("Run 'aurora help' for available commands")
+        return 1
+    
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,337 +1,264 @@
-import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Code2, Sparkles, Zap, Rocket, Shield } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Card } from "@/components/ui/card";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { SynthesisProgress } from "@/components/synthesis-progress";
+/**
+ * Aurora Chat Interface
+ * Part of Aurora-X Neural Synthesis Engine
+ * 🌟 Aurora's own UI for natural language code generation and commands
+ */
+
+import { ErrorBoundary } from '@/components/error-boundary';
+import { useState, useEffect, useRef } from 'react';
+import { Send, Loader2, Sparkles, Terminal, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface Message {
   id: string;
-  role: "user" | "assistant";
+  role: 'user' | 'aurora';
   content: string;
   timestamp: Date;
-  code?: string;
-  language?: string;
-  synthesisId?: string;
-  isProcessing?: boolean;
+  data?: Record<string, unknown>;
+  type?: 'message' | 'command' | 'error' | 'success';
 }
-
-interface ExamplePrompt {
-  icon: any;
-  title: string;
-  prompt: string;
-}
-
-const examplePrompts: ExamplePrompt[] = [
-  {
-    icon: Code2,
-    title: "String Reversal",
-    prompt: "reverse a string (unicode safe)"
-  },
-  {
-    icon: Zap,
-    title: "Factorial Function",
-    prompt: "write factorial(n) with unit tests"
-  },
-  {
-    icon: Sparkles,
-    title: "Creative Haiku",
-    prompt: "generate a random haiku about coding"
-  },
-  {
-    icon: Rocket,
-    title: "LRU Cache",
-    prompt: "build a tiny LRU cache class with get/put and capacity"
-  },
-  {
-    icon: Shield,
-    title: "Email Validation",
-    prompt: "validate an email with regex + tests"
-  }
-];
 
 export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: "1",
-      role: "assistant",
-      content: "Hi! I'm Chango, powered by Aurora-X synthesis. I can turn any English request into working Python code - from algorithms to creative text generation. What would you like to build?",
+      id: '0',
+      role: 'aurora',
+      content: "🌟 Hi! I'm Aurora. You can chat with me about code, or use commands like:\n/diagnostics - Run tab diagnostics\n/fix <issue> - Fix specific issues\n/status - Check system status\n/help - Show all commands",
       timestamp: new Date(),
+      type: 'message',
     },
   ]);
-  const [input, setInput] = useState("");
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const [showExamples, setShowExamples] = useState(true);
-  const [activeSynthesisId, setActiveSynthesisId] = useState<string | null>(null);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom on new messages
   useEffect(() => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const chatMutation = useMutation({
-    mutationFn: async (message: string) => {
-      const response = await apiRequest("POST", "/api/chat", { message: message.trim() });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error('Chat API error:', data);
-        throw new Error(data.error || data.message || 'Failed to send message');
-      }
-
-      console.log('Chat API response:', data);
-      return data;
-    },
-    onSuccess: (data: any) => {
-      if (data.synthesis_id) {
-        // Initial response with synthesis ID
-        setActiveSynthesisId(data.synthesis_id);
-
-        // Add a processing message with synthesis ID
-        const processingMessage: Message = {
-          id: Date.now().toString(),
-          role: "assistant",
-          content: "Processing your request...",
-          synthesisId: data.synthesis_id,
-          isProcessing: true,
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, processingMessage]);
-      } else {
-        // Fallback for direct response (shouldn't happen with new system)
-        // Show the synthesis result
-        const resultMessage = data.message || 
-          (data.code_file ? `✅ Generated: ${data.code_file}` : 'Code generated successfully');
-
-        setMessages((prev) => [...prev, {
-          role: 'assistant',
-          content: resultMessage,
-        }]);
-      }
-    },
-    onError: (error: any) => {
-      const errorMessage: Message = {
-        id: Date.now().toString(),
-        role: "assistant",
-        content: `I encountered an error while processing your request: ${error?.message || "Unknown error"}. Please try again.`,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-      setActiveSynthesisId(null);
-    }
-  });
-
-  // Poll for synthesis result when complete
-  const { data: synthesisResult } = useQuery({
-    queryKey: [`/api/synthesis/result/${activeSynthesisId}`],
-    enabled: false, // We'll handle completion through progress component
-    refetchInterval: false,
-  });
-
-  const handleSynthesisComplete = (progressData: any) => {
-    // Extract the synthesized code from the progress data result
-    const result = progressData.result;
-    const code = result?.code || `# Synthesis completed but no code was generated\n# Synthesis ID: ${progressData.id}`;
-    const language = result?.language || "python";
-    const functionName = result?.functionName || "synthesized_function";
-    const description = result?.description || progressData.message || "Aurora-X has successfully synthesized your code!";
-
-    const completedMessage: Message = {
-      id: Date.now().toString(),
-      role: "assistant",
-      content: description,
-      code: code,
-      language: language,
-      timestamp: new Date(),
-    };
-
-    // Replace the processing message with the completed one
-    setMessages((prev) => {
-      const updated = [...prev];
-      const processingIndex = updated.findIndex(m => m.synthesisId === progressData.id);
-      if (processingIndex !== -1) {
-        updated[processingIndex] = completedMessage;
-      } else {
-        updated.push(completedMessage);
-      }
-      return updated;
-    });
-
-    setActiveSynthesisId(null);
-  };
-
-  const handleSend = () => {
-    if (!input.trim() || chatMutation.isPending) return;
+  const sendMessage = async () => {
+    if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      role: "user",
+      role: 'user',
       content: input,
       timestamp: new Date(),
     };
 
+    console.log('🌟 Aurora: Sending message:', input);
     setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setShowExamples(false);
-    chatMutation.mutate(input);
+
+    const promptToSend = input;
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      console.log('🌟 Aurora: Calling Aurora backend API...');
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: promptToSend }),
+      });
+
+      console.log('🌟 Aurora: Response status:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('🌟 Aurora: Response data:', data);
+
+      const auroraMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'aurora',
+        content: formatAuroraResponse(data),
+        timestamp: new Date(),
+        data: data,
+      };
+
+      setMessages((prev) => {
+        console.log('🌟 Aurora: Adding response, count:', prev.length + 1);
+        return [...prev, auroraMessage];
+      });
+
+      console.log('✅ Aurora: Message added!');
+    } catch (error) {
+      console.error('❌ Aurora error:', error);
+
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'aurora',
+        content: `🌟 Something went wrong. ${error instanceof Error ? error.message : 'Not sure what.'} Try again!`,
+        timestamp: new Date(),
+      };
+
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleExampleClick = (prompt: string) => {
-    setInput(prompt);
-    setShowExamples(false);
+  const formatAuroraResponse = (data: Record<string, unknown> | null): string => {
+    if (!data?.ok) {
+      return `🌟 Sorry, I hit a snag trying to generate that. Here's what happened:\n\n${JSON.stringify(data, null, 2)}`;
+    }
+
+    let response = `🌟 Done! Here's what I created:\n\n`;
+
+    if (data?.kind) response += `• ${data.kind}\n`;
+    if (data?.lang) response += `• Written in: ${data.lang}\n`;
+    if (data?.file) response += `• Saved to: ${data.file}\n`;
+    if (data?.tests) response += `• Tests ready: ${data.tests}\n`;
+    if (data?.reason) response += `\nWhy I did it this way: ${data.reason}\n`;
+    if (data?.hint) response += `\n💡 Pro tip: ${data.hint}\n`;
+
+    response += `\nWant me to change it? Just let me know! 🎯`;
+
+    return response;
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
   };
 
   return (
-    <div className="flex h-full flex-col bg-background">
-      <div className="flex-1 overflow-hidden" ref={scrollAreaRef}>
-        <ScrollArea className="h-full">
-          <div className="p-6 space-y-6">
-            {/* Example prompts - show when chat is empty except for initial message */}
-            {showExamples && messages.length === 1 && (
-              <div className="mt-4 animate-in fade-in duration-500">
-                <p className="text-sm text-muted-foreground mb-3 font-medium">Try these examples:</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {examplePrompts.map((example, idx) => (
-                  <Card
-                    key={idx}
-                    className="p-4 cursor-pointer hover-elevate transition-all border-muted"
-                    onClick={() => handleExampleClick(example.prompt)}
-                    data-testid={`example-prompt-${idx}`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-md bg-primary/10">
-                        <example.icon className="h-5 w-5 text-primary" />
+    <div className="flex flex-col h-screen bg-gray-950">
+      {/* Header */}
+      <div className="border-b border-cyan-500/20 bg-gray-900/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center gap-3">
+            <Sparkles className="h-6 w-6 text-cyan-400" />
+            <h1 className="text-2xl font-bold text-cyan-400">Chat with Aurora</h1>
+            <div className="ml-auto">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-sm">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
+                </span>
+                Status: ACTIVE
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="container mx-auto px-4 py-6 max-w-4xl">
+          <div className="space-y-6">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[80%] rounded-lg px-4 py-3 ${message.role === 'user'
+                    ? 'bg-cyan-500/20 text-cyan-100 border border-cyan-500/30'
+                    : 'bg-gray-800/50 text-gray-100 border border-gray-700'
+                    }`}
+                >
+                  <div className="flex items-start gap-3">
+                    {message.role === 'aurora' && (
+                      <Sparkles className="h-5 w-5 text-cyan-400 mt-1 flex-shrink-0" />
+                    )}
+                    <div className="flex-1">
+                      <div className="whitespace-pre-wrap break-words">
+                        {message.content.split('\n').map((line, i) => {
+                          if (line.includes('**')) {
+                            const parts = line.split('**');
+                            return (
+                              <div key={i}>
+                                {parts.map((part, j) =>
+                                  j % 2 === 1 ? <strong key={j}>{part}</strong> : part
+                                )}
+                              </div>
+                            );
+                          }
+                          if (line.includes('`')) {
+                            const parts = line.split('`');
+                            return (
+                              <div key={i}>
+                                {parts.map((part, j) =>
+                                  j % 2 === 1 ? (
+                                    <code key={j} className="bg-gray-900 px-1 rounded text-cyan-300">{part}</code>
+                                  ) : part
+                                )}
+                              </div>
+                            );
+                          }
+                          return <div key={i}>{line}</div>;
+                        })}
                       </div>
-                      <div className="flex-1">
-                        <h4 className="text-sm font-medium mb-1">{example.title}</h4>
-                        <p className="text-xs text-muted-foreground line-clamp-2">
-                          {example.prompt}
-                        </p>
+                      <div className="text-xs text-gray-500 mt-2">
+                        {message.timestamp.toLocaleTimeString()}
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-gray-800/50 rounded-lg px-4 py-3 border border-gray-700">
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="h-5 w-5 text-cyan-400 animate-pulse" />
+                    <div className="flex gap-1">
+                      <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    </div>
+                    <span className="text-gray-400 text-sm">Aurora is generating...</span>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Messages */}
-            {messages.map((message, index) => (
-              <div
-                key={message.id}
-                className={`flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300 ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-                style={{ animationDelay: `${index * 50}ms` }}
-                data-testid={`message-${message.role}-${message.id}`}
-              >
-                {message.role === "assistant" && (
-                  <Avatar className="h-10 w-10 border-2 border-cyan-500/50 shadow-lg shadow-cyan-500/20 relative">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 animate-pulse" />
-                    <AvatarFallback className="bg-gradient-to-br from-cyan-600 to-purple-600 text-white font-bold relative z-10">
-                      C
-                    </AvatarFallback>
-                  </Avatar>
-                )}
-                <div className={`max-w-[70%] space-y-2`}>
-                  <div
-                    className={`rounded-lg px-4 py-3 relative overflow-hidden ${
-                      message.role === "user"
-                        ? "bg-gradient-to-br from-cyan-600 to-cyan-700 text-white border border-cyan-500/50 shadow-lg shadow-cyan-500/20"
-                        : "bg-muted/50 border border-cyan-500/20 backdrop-blur-sm"
-                    }`}
-                  >
-                    {message.role === "assistant" && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-cyan-500/5 animate-pulse" />
-                    )}
-                    <p className="text-sm whitespace-pre-wrap relative z-10">{message.content}</p>
-                    {message.role === "assistant" && (
-                      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-                    )}
-                  </div>
-                  {/* Show synthesis progress for processing messages */}
-                  {message.synthesisId && message.isProcessing && (
-                    <SynthesisProgress
-                      synthesisId={message.synthesisId}
-                      onComplete={handleSynthesisComplete}
-                      className="mt-2"
-                    />
-                  )}
-                  {message.code && (
-                    <Card className="p-4 bg-muted/30 border-muted">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-medium text-muted-foreground">
-                          {message.language || "python"}
-                        </span>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-6 text-xs"
-                          onClick={() => navigator.clipboard.writeText(message.code!)}
-                          data-testid="button-copy-code"
-                        >
-                          Copy
-                        </Button>
-                      </div>
-                      <pre className="overflow-x-auto">
-                        <code className="text-xs font-mono text-foreground">
-                          {message.code}
-                        </code>
-                      </pre>
-                    </Card>
-                  )}
-                  <p className="text-xs text-muted-foreground px-1">
-                    {message.timestamp.toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
-                </div>
-                {message.role === "user" && (
-                  <Avatar className="h-10 w-10 border-2 border-primary/20">
-                    <AvatarFallback className="bg-primary text-primary-foreground font-bold">
-                      U
-                    </AvatarFallback>
-                  </Avatar>
-                )}
-              </div>
-            ))}
+            <div ref={messagesEndRef} />
           </div>
-        </ScrollArea>
+        </div>
       </div>
 
-      {/* Input area */}
-      <div className="border-t border-border bg-background/95 backdrop-blur-sm p-4">
-        <div className="flex gap-3 max-w-4xl mx-auto">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            placeholder="Ask Chango to generate code..."
-            className="min-h-[56px] max-h-32 resize-none bg-muted/50"
-            data-testid="input-chat"
-          />
-          <Button
-            onClick={handleSend}
-            size="icon"
-            disabled={!input.trim() || chatMutation.isPending}
-            className="h-[56px] w-[56px]"
-            data-testid="button-send"
-          >
-            <Send className="h-5 w-5" />
-          </Button>
+      {/* Input */}
+      <div className="border-t border-cyan-500/20 bg-gray-900/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4 max-w-4xl">
+          <div className="flex gap-3">
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Just type what you want – I'll understand and generate it! 🌟"
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
+              rows={3}
+              disabled={isLoading}
+            />
+            <button
+              onClick={sendMessage}
+              disabled={!input.trim() || isLoading}
+              className="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+              aria-label="action">
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Send className="h-5 w-5" />
+                  Send
+                </>
+              )}
+            </button>
+          </div>
+
+          <div className="mt-3 text-xs text-gray-500 text-center">
+            🌟 Aurora generates CLI tools, web apps, libraries, and more!
+          </div>
         </div>
       </div>
     </div>

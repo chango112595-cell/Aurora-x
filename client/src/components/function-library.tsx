@@ -1,77 +1,143 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Search, CheckCircle2, XCircle } from "lucide-react";
+import { ErrorBoundary } from '@/components/error-boundary';
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Search, Code2, CheckCircle2, XCircle } from "lucide-react";
 
 interface FunctionItem {
-  name: string;
-  args: string;
-  returns: string;
-  passRate: number;
-  complexity: number;
-  status: "passed" | "failed";
+  id: string;
+  func_name: string;
+  func_signature: string;
+  snippet: string;
+  score: number;
+  passed: number;
+  total: number;
+  timestamp: string;
 }
 
 export function FunctionLibrary() {
-  const [search, setSearch] = useState("");
-  
-  const functions: FunctionItem[] = [
-    { name: "normalize_spaces", args: "s:str", returns: "str", passRate: 100, complexity: 8, status: "passed" },
-    { name: "tokenize", args: "s:str", returns: "list[str]", passRate: 100, complexity: 12, status: "passed" },
-    { name: "safe_int", args: "s:str, default:int", returns: "int", passRate: 95, complexity: 15, status: "passed" },
-    { name: "clamp", args: "x:int, lo:int, hi:int", returns: "int", passRate: 100, complexity: 10, status: "passed" },
-    { name: "score_keyword", args: "s:str, kw:str", returns: "int", passRate: 90, complexity: 18, status: "passed" },
-  ];
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const filtered = functions.filter(f => 
-    f.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const { data: response, isLoading, error } = useQuery<{ items: FunctionItem[], hasMore: boolean }>({
+    queryKey: ['/api/corpus'],
+    queryFn: async () => {
+      const res = await fetch('/api/corpus');
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return res.json();
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center space-y-4">
+          <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
+          <p className="text-muted-foreground font-mono">Loading corpus...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center space-y-4">
+          <XCircle className="h-12 w-12 text-destructive mx-auto" />
+          <p className="text-destructive font-mono">Error loading corpus</p>
+          <p className="text-sm text-muted-foreground">{String(error)}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Safely get the items array
+  // Handle both array and object responses
+  const allFunctions = Array.isArray(response)
+    ? response
+    : (response?.items || []);
+
+  // Debug: Log the response data
+
+  // Filter functions based on search term
+  const filteredFunctions = Array.isArray(allFunctions)
+    ? allFunctions.filter(fn =>
+      fn.func_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      fn.func_signature.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    : [];
 
   return (
-    <Card data-testid="card-function-library">
-      <CardHeader>
-        <CardTitle>Function Library</CardTitle>
-        <div className="relative mt-2">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search functions..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-8"
-            data-testid="input-search"
-          />
+    <div className="space-y-6">
+      <div className="relative">
+        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search functions..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="pl-10"
+        />
+      </div>
+
+      {allFunctions.length === 0 ? (
+        <div className="text-center py-12 space-y-4">
+          <Code2 className="h-16 w-16 text-muted-foreground mx-auto opacity-50" />
+          <div>
+            <p className="text-lg font-semibold text-muted-foreground">No functions in corpus yet</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Run some Aurora-X syntheses to populate the code library
+            </p>
+          </div>
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2">
-          {filtered.map((func) => (
-            <div
-              key={func.name}
-              className="flex items-center justify-between rounded-lg border border-border p-3 hover-elevate"
-              data-testid={`function-${func.name}`}
-            >
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <code className="text-sm font-mono font-semibold">{func.name}</code>
-                  {func.status === "passed" ? (
-                    <CheckCircle2 className="h-4 w-4 text-chart-2" />
-                  ) : (
-                    <XCircle className="h-4 w-4 text-destructive" />
-                  )}
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground font-mono">
-                  ({func.args}) → {func.returns}
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary">Pass: {func.passRate}%</Badge>
-                <Badge variant="outline">AST: {func.complexity}</Badge>
-              </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+      ) : (
+        <ScrollArea className="h-[600px]">
+          <div className="grid gap-4">
+            {filteredFunctions.map((fn) => (
+              <Card key={fn.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1">
+                      <CardTitle className="text-lg font-mono">{fn.func_name}</CardTitle>
+                      <CardDescription className="font-mono text-xs">
+                        {fn.func_signature}
+                      </CardDescription>
+                    </div>
+                    <div className="flex gap-2">
+                      <Badge variant={fn.score >= 0.8 ? "default" : "secondary"}>
+                        Score: {(fn.score * 100).toFixed(0)}%
+                      </Badge>
+                      <Badge variant={fn.passed === fn.total ? "default" : "destructive"}>
+                        {fn.passed === fn.total ? (
+                          <CheckCircle2 className="h-3 w-3 mr-1" />
+                        ) : (
+                          <XCircle className="h-3 w-3 mr-1" />
+                        )}
+                        {fn.passed}/{fn.total}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-xs">
+                    <code>{fn.snippet}</code>
+                  </pre>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Added: {new Date(fn.timestamp).toLocaleString()}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </ScrollArea>
+      )}
+
+      <div className="text-sm text-muted-foreground text-center">
+        Showing {filteredFunctions.length} of {allFunctions.length} functions
+      </div>
+    </div>
   );
 }

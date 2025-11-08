@@ -1,0 +1,33 @@
+{
+  "grade_required": 95,
+  "grade_received": 60,
+  "feedback": "Port 5001 conflict not resolved - serve.py and Luminar Nexus fighting over the same port",
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Diagnose Port Conflict",
+      "description": "Determine why serve.py defaults to port 5001 and conflicts with Luminar Nexus",
+      "files_involved": ["aurora_x/serve.py", "tools/luminar_nexus.py"],
+      "success_metric": "Understand relationship between serve.py and Node.js backend"
+    },
+    {
+      "id": 2,
+      "name": "Fix Port Configuration",
+      "description": "Reconfigure so port 5001 serves Vite UI and port 5000 serves Backend API",
+      "files_involved": ["aurora_x/serve.py"],
+      "success_metric": "Port 5001 returns HTML (Vite), port 5000 returns JSON (API)"
+    },
+    {
+      "id": 3,
+      "name": "Test and Verify",
+      "description": "Start services and confirm correct ports work",
+      "success_metric": "curl http://localhost:5001 returns HTML, curl http://localhost:5000 returns JSON"
+    },
+    {
+      "id": 4,
+      "name": "Commit Changes",
+      "description": "Git commit with clear explanation of the port fix",
+      "success_metric": "Changes pushed to origin/draft with descriptive commit message"
+    }
+  ]
+}

@@ -98,74 +98,29 @@ def _extract_routes(text: str) -> list:
 
 
 def parse_english(text: str) -> NLParseResult:
-    t = text.strip().lower()
+    """Parse English request into structured format."""
+    text_lower = text.lower().strip()
 
-    # Flask/Web App Pattern Detection
-    flask_patterns = [
-        "flask",
-        "web app",
-        "webapp",
-        "web application",
-        "micro-app",
-        "microapp",
-        "html",
-        "css",
-        "javascript",
-        "js",
-        "route",
-        "routing",
-        "create_app",
-        "timer",
-        "ui",
-        "web ui",
-        "web interface",
-        "dashboard",
-        "website",
-        "server",
-        "api endpoint",
-        "rest",
-        "restful",
-        "template",
-        "render",
-        "frontend",
-        "backend",
-    ]
-
-    # Check if this is a Flask/web app request
-    is_flask_request = any(pattern in t for pattern in flask_patterns)
-
-    if is_flask_request:
-        # Extract the main purpose from the request
-        purpose = text.strip()
-        func_name = _snake(purpose) + "_app"
-
-        # Sanitize the description for safe embedding in Python code
-        # Replace special Unicode characters with ASCII equivalents
-        safe_purpose = purpose.replace("•", "*").replace("→", "->").replace("–", "-").replace("—", "-")
-        # Handle other special characters
-        safe_purpose = safe_purpose.replace("（", "(").replace("）", ")").replace("：", ":")
-        # Remove or replace any remaining non-ASCII characters
-        safe_purpose = "".join(c if ord(c) < 128 else " " for c in safe_purpose)
-        # Clean up multiple spaces and newlines
-        safe_purpose = " ".join(safe_purpose.split())
-
-        # Return Flask-specific metadata
+    # Check for Flask app requests
+    if any(kw in text_lower for kw in ["flask", "web app", "web application", "api server", "rest api"]):
+        # Compute snake_case name once
+        snake_name = _snake(text.split(".")[0].strip() if "." in text else text[:50].strip())
         return NLParseResult(
             {
-                "name": func_name,
-                "signature": f"def {func_name}() -> Flask",
-                "description": f"Flask web application: {safe_purpose}",
+                "name": snake_name + "_app",
+                "signature": f"def {snake_name}_app() -> Flask",
+                "description": f"Flask web application: {text}",
                 "framework": "flask",  # Key indicator for synthesis pipeline
                 "app_type": "web",
                 "includes": {
-                    "html": "html" in t,
-                    "css": "css" in t,
-                    "js": "javascript" in t or "js" in t,
-                    "timer": "timer" in t,
-                    "ui": "ui" in t or "interface" in t or "dashboard" in t,
-                    "api": "api" in t or "endpoint" in t or "rest" in t,
-                    "database": "database" in t or "db" in t,
-                    "auth": "auth" in t or "login" in t or "user" in t,
+                    "html": "html" in text_lower,
+                    "css": "css" in text_lower,
+                    "js": "javascript" in text_lower or "js" in text_lower,
+                    "timer": "timer" in text_lower,
+                    "ui": "ui" in text_lower or "interface" in text_lower or "dashboard" in text_lower,
+                    "api": "api" in text_lower or "endpoint" in text_lower or "rest" in text_lower,
+                    "database": "database" in text_lower or "db" in text_lower,
+                    "auth": "auth" in text_lower or "login" in text_lower or "user" in text_lower,
                 },
                 "routes": _extract_routes(text),
                 "examples": [],  # Flask apps don't have traditional examples
@@ -173,7 +128,7 @@ def parse_english(text: str) -> NLParseResult:
             }
         )
 
-    if "largest" in t or ("max" in t and "list" in t):
+    if "largest" in text_lower or ("max" in text_lower and "list" in text_lower):
         return NLParseResult(
             {
                 "name": "max_in_list",
@@ -182,7 +137,7 @@ def parse_english(text: str) -> NLParseResult:
                 "examples": [{"nums": [1, 2, 3], "out": 3}, {"nums": [-5, 10, 0], "out": 10}],
             }
         )
-    if ("reverse" in t and "string" in t) or ("reverse" in t and "text" in t):
+    if ("reverse" in text_lower and "string" in text_lower) or ("reverse" in text_lower and "text" in text_lower):
         return NLParseResult(
             {
                 "name": "reverse_string",
@@ -191,7 +146,7 @@ def parse_english(text: str) -> NLParseResult:
                 "examples": [{"s": "abc", "out": "cba"}, {"s": "", "out": ""}],
             }
         )
-    if ("sum of squares" in t) or ("square each" in t and "sum" in t):
+    if ("sum of squares" in text_lower) or ("square each" in text_lower and "sum" in text_lower):
         return NLParseResult(
             {
                 "name": "sum_of_squares",
@@ -200,7 +155,7 @@ def parse_english(text: str) -> NLParseResult:
                 "examples": [{"nums": [1, 2, 3], "out": 14}, {"nums": [0, 4, 5], "out": 41}],
             }
         )
-    if ("add" in t or "sum" in t) and ("two" in t or "2" in t):
+    if ("add" in text_lower or "sum" in text_lower) and ("two" in text_lower or "2" in text_lower):
         return NLParseResult(
             {
                 "name": "add_two_numbers",
@@ -209,7 +164,7 @@ def parse_english(text: str) -> NLParseResult:
                 "examples": [{"a": 1, "b": 2, "out": 3}, {"a": -5, "b": 5, "out": 0}],
             }
         )
-    if "factorial" in t:
+    if "factorial" in text_lower:
         return NLParseResult(
             {
                 "name": "factorial",
@@ -218,7 +173,7 @@ def parse_english(text: str) -> NLParseResult:
                 "examples": [{"n": 0, "out": 1}, {"n": 5, "out": 120}, {"n": 3, "out": 6}],
             }
         )
-    if "palindrome" in t:
+    if "palindrome" in text_lower:
         return NLParseResult(
             {
                 "name": "is_palindrome",
@@ -231,7 +186,7 @@ def parse_english(text: str) -> NLParseResult:
                 ],
             }
         )
-    if "fibonacci" in t:
+    if "fibonacci" in text_lower:
         return NLParseResult(
             {
                 "name": "fibonacci",
@@ -240,7 +195,7 @@ def parse_english(text: str) -> NLParseResult:
                 "examples": [{"n": 0, "out": 0}, {"n": 1, "out": 1}, {"n": 6, "out": 8}],
             }
         )
-    if ("prime" in t) and ("check" in t or "is" in t):
+    if ("prime" in text_lower) and ("check" in text_lower or "is" in text_lower):
         return NLParseResult(
             {
                 "name": "is_prime",
@@ -249,7 +204,7 @@ def parse_english(text: str) -> NLParseResult:
                 "examples": [{"n": 2, "out": True}, {"n": 17, "out": True}, {"n": 4, "out": False}],
             }
         )
-    if ("sort" in t) and ("list" in t or "array" in t):
+    if ("sort" in text_lower) and ("list" in text_lower or "array" in text_lower):
         return NLParseResult(
             {
                 "name": "sort_list",
@@ -261,7 +216,7 @@ def parse_english(text: str) -> NLParseResult:
                 ],
             }
         )
-    if ("count" in t) and ("vowel" in t):
+    if ("count" in text_lower) and ("vowel" in text_lower):
         return NLParseResult(
             {
                 "name": "count_vowels",
@@ -274,7 +229,7 @@ def parse_english(text: str) -> NLParseResult:
                 ],
             }
         )
-    if ("gcd" in t) or ("greatest common divisor" in t):
+    if ("gcd" in text_lower) or ("greatest common divisor" in text_lower):
         return NLParseResult(
             {
                 "name": "gcd",
@@ -291,7 +246,7 @@ def parse_english(text: str) -> NLParseResult:
     # Determine appropriate return type based on keywords in request
     return_type = "str"  # Default to string for creative/text requests
     if any(
-        word in t
+        word in text_lower
         for word in [
             "calculate",
             "compute",
@@ -305,12 +260,12 @@ def parse_english(text: str) -> NLParseResult:
         ]
     ):
         return_type = "int"
-    elif any(word in t for word in ["check", "is", "verify", "validate", "test", "confirm", "determine"]):
+    elif any(word in text_lower for word in ["check", "is", "verify", "validate", "test", "confirm", "determine"]):
         return_type = "bool"
-    elif any(word in t for word in ["list", "array", "collection", "items", "all", "multiple", "several"]):
+    elif any(word in text_lower for word in ["list", "array", "collection", "items", "all", "multiple", "several"]):
         return_type = "list[str]"
     elif any(
-        word in t
+        word in text_lower
         for word in [
             "generate",
             "create",
@@ -329,7 +284,7 @@ def parse_english(text: str) -> NLParseResult:
     # Determine if the function needs parameters based on the request
     # Default to no parameters for creative/generative functions
     needs_input = any(
-        word in t
+        word in text_lower
         for word in [
             "given",
             "from",
@@ -364,9 +319,9 @@ def parse_english(text: str) -> NLParseResult:
 
     # Create a meaningful description
     description = f"Function to {safe_text}"
-    if "generate" in t or "create" in t or "make" in t:
+    if "generate" in text_lower or "create" in text_lower or "make" in text_lower:
         description = f"Generate output for: {safe_text}"
-    elif "calculate" in t or "compute" in t:
+    elif "calculate" in text_lower or "compute" in text_lower:
         description = f"Calculate result for: {safe_text}"
 
     # Generate simple examples based on return type

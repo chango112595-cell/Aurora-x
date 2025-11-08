@@ -1,0 +1,40 @@
+{
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": [],
+    "python.analysis.extraPaths": [
+        "./tools"
+    ],
+    "python.defaultInterpreterPath": "./.venv/bin/python",
+    "css.lint.unknownAtRules": "ignore",
+    "css.lint.vendorPrefix": "warning",
+    "remote.autoForwardPorts": true,
+    "remote.autoForwardPortsSource": "process",
+    "remote.forwardOnOpen": true,
+    "remote.portsAttributes": {
+        "5000": {
+            "label": "🔷 Aurora Backend API",
+            "onAutoForward": "notify",
+            "protocol": "http",
+            "elevateIfNeeded": false
+        },
+        "5001": {
+            "label": "🌉 Aurora Bridge Service",
+            "onAutoForward": "notify",
+            "protocol": "http",
+            "elevateIfNeeded": false
+        },
+        "5002": {
+            "label": "🧠 Aurora Self-Learning",
+            "onAutoForward": "notify",
+            "protocol": "http",
+            "elevateIfNeeded": false
+        },
+        "5173": {
+            "label": "⚡ Aurora Frontend (Main UI)",
+            "onAutoForward": "openBrowserOnce",
+            "protocol": "http",
+            "elevateIfNeeded": false,
+            "requireLocalPort": false
+        }
+    }
+}

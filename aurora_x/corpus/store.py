@@ -78,9 +78,10 @@ class CorpusPaths:
 
 
 def paths(run_root: Path) -> CorpusPaths:
-    r = Path(run_root)
-    r.mkdir(parents=True, exist_ok=True)
-    return CorpusPaths(root=r, jsonl=r / "corpus.jsonl", sqlite=r / "corpus.db")
+    # Use the global data directory for consistency with TypeScript server
+    data_dir = Path("data")
+    data_dir.mkdir(parents=True, exist_ok=True)
+    return CorpusPaths(root=data_dir, jsonl=data_dir / "corpus.jsonl", sqlite=data_dir / "corpus.db")
 
 
 def _open_sqlite(dbp: Path) -> sqlite3.Connection:
@@ -141,6 +142,59 @@ def record(run_root: Path, entry: dict[str, Any]) -> None:
             )
     except Exception:
         return
+
+
+class CorpusStore:
+    """Corpus storage interface for consistent database access."""
+
+    def __init__(self):
+        self.data_dir = Path("data")
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        self.db_path = self.data_dir / "corpus.db"
+        self._ensure_db()
+
+    def _ensure_db(self):
+        """Ensure database exists and has correct schema."""
+        conn = _open_sqlite(self.db_path)
+        conn.close()
+
+    def insert_entry(self, entry: dict[str, Any]) -> None:
+        """Insert a corpus entry into the database."""
+        # Use the data directory consistently
+        rec = {**entry}
+        rec.setdefault("id", str(uuid.uuid4()))
+        rec.setdefault("timestamp", now_iso())
+        if "sig_key" not in rec and "func_signature" in rec:
+            rec["sig_key"] = normalize_signature(rec["func_signature"])
+        if "post_bow" not in rec and isinstance(rec.get("post_conditions"), list):
+            rec["post_bow"] = tokenize_post(rec["post_conditions"])
+
+        conn = _open_sqlite(self.db_path)
+        with conn:
+            conn.execute(
+                """INSERT OR REPLACE INTO corpus
+                (id,timestamp,spec_id,spec_hash,func_name,func_signature,sig_key,passed,total,score,failing_tests,snippet,complexity,iteration,calls_functions,post_bow)
+                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                (
+                    rec.get("id"),
+                    rec.get("timestamp"),
+                    rec.get("spec_id"),
+                    rec.get("spec_hash"),
+                    rec.get("func_name"),
+                    rec.get("func_signature"),
+                    rec.get("sig_key"),
+                    int(rec.get("passed", 0)),
+                    int(rec.get("total", 0)),
+                    float(rec.get("score", 0.0)),
+                    json.dumps(rec.get("failing_tests")),
+                    rec.get("snippet"),
+                    rec.get("complexity"),
+                    rec.get("iteration"),
+                    json.dumps(rec.get("calls_functions")),
+                    json.dumps(rec.get("post_bow")),
+                ),
+            )
+        conn.close()
 
 
 def retrieve(run_root: Path, signature: str, k: int = 10) -> list[dict[str, Any]]:
