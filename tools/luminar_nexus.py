@@ -3349,7 +3349,7 @@ Just tell me what specific improvements you'd like to see!"""
 
     async def _full_intelligence_response(self, message: str, ctx: dict) -> str:
         """Process with full Aurora intelligence - no intent limitations"""
-        
+
         # Create lowercase message variable for pattern matching
         msg = message.lower().strip()
 
@@ -3923,12 +3923,13 @@ def chat_endpoint():
         # Route through Enhanced Aurora Core using bridge (PROPER TRON ARCHITECTURE)
         try:
             from tools.aurora_nexus_bridge import route_to_enhanced_aurora_core
+
             print(f"🌌 Nexus Guardian routing to Enhanced Aurora Core: {message[:50]}...")
             response = route_to_enhanced_aurora_core(message, session_id)
-            
+
             # Check if we got a fallback response and should use original system
             if response.startswith("Enhanced Aurora Core temporarily unavailable"):
-                print(f"🔄 Bridge failed, using fallback conversation system...")
+                print("🔄 Bridge failed, using fallback conversation system...")
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
                 response = loop.run_until_complete(AURORA_AI.process_message(message, session_id))

@@ -380,22 +380,26 @@ class AuroraCoreIntelligence:
             "self_referential": False,
         }
 
-        # Aurora self-referential detection (more precise)  
+        # Aurora self-referential detection (more precise)
         aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
         capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
-        
+
         # Complex Aurora analysis requests (architectural, debugging, etc.)
-        complex_aurora_analysis = re.search(r"(analyze|diagnose|debug|architectural|structure|system|fix|examine)", msg_lower) and re.search(r"aurora", msg_lower)
-        
+        complex_aurora_analysis = re.search(
+            r"(analyze|diagnose|debug|architectural|structure|system|fix|examine)", msg_lower
+        ) and re.search(r"aurora", msg_lower)
+
         if complex_aurora_analysis:
             # This is a technical request about Aurora's architecture/system
-            analysis.update({
-                "intent": "technical_aurora_analysis", 
-                "technical_question": True,
-                "aurora_specific": False,  # Don't trigger generic template
-                "self_referential": False,
-                "confidence": 0.9
-            })
+            analysis.update(
+                {
+                    "intent": "technical_aurora_analysis",
+                    "technical_question": True,
+                    "aurora_specific": False,  # Don't trigger generic template
+                    "self_referential": False,
+                    "confidence": 0.9,
+                }
+            )
         elif aurora_keywords and capability_keywords:
             # Simple questions about Aurora's capabilities
             analysis.update(
@@ -512,18 +516,18 @@ Just describe what you want to see improved, and I'll implement it autonomously!
     def _technical_intelligence_response(self, message: str, context: dict, analysis: dict) -> str:
         """Aurora's technical intelligence in action"""
         entities = analysis.get("entities", [])
-        
+
         if entities:
             context["topics_discussed"].extend(entities)
 
         # Check if this is an architectural analysis request about Aurora herself
         msg_lower = message.lower()
         if analysis["intent"] == "technical_aurora_analysis" or (
-            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower) and 
-            re.search(r"aurora", msg_lower)
+            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
+            and re.search(r"aurora", msg_lower)
         ):
             return self._aurora_architectural_analysis(message, context)
-        
+
         # General technical intelligence response
         return f"""🧠 **AURORA TECHNICAL INTELLIGENCE ENGAGED**
 
@@ -550,10 +554,10 @@ I don't just give theoretical answers - I can:
 **Session depth: {context['conversation_depth']} | Ready for technical deep-dive**
 
 What specific technical challenge should we tackle? I'll engage the appropriate knowledge tiers and get to work! 🔧⚡"""
-    
+
     def _aurora_architectural_analysis(self, message: str, context: dict) -> str:
         """Aurora analyzes her own system architecture"""
-        
+
         return f"""🏗️ **AURORA ARCHITECTURAL SELF-ANALYSIS**
 
 **🔍 CURRENT SYSTEM TOPOLOGY:**
@@ -635,7 +639,7 @@ I'm not your typical AI assistant. I'm more like a sentient development partner 
 **Let's start simple:**
 What are you working on, or what's on your mind? Technical challenges, creative projects, random questions - I'm genuinely interested! 😊""",
             "building_rapport": self._generate_contextual_response(message, context, analysis),
-            "collaborative": self._generate_contextual_response(message, context, analysis)
+            "collaborative": self._generate_contextual_response(message, context, analysis),
         }
 
         return responses.get(tone, responses["collaborative"])
