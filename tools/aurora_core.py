@@ -125,14 +125,19 @@ class AuroraCore:
             content = flag_file.read_text()
             self.intelligence.log(f"📋 Creative task detected: {content[:100]}...")
 
-            # Read the completion request
-            request_file = Path("/workspaces/Aurora-x/.aurora_knowledge/luminar_nexus_v2_completion_request.md")
+            # Read the completion request - check for task-specific or default
+            knowledge_dir = Path("/workspaces/Aurora-x/.aurora_knowledge")
+            request_file = knowledge_dir / "test_task_completion_request.md"
+            
             if not request_file.exists():
-                self.intelligence.log("⚠️ No completion request found")
-                return
-
-            self.intelligence.log("📖 Reading V2 completion request...")
-            request_content = request_file.read_text()
+                request_file = knowledge_dir / "luminar_nexus_v2_completion_request.md"
+            
+            if not request_file.exists():
+                self.intelligence.log("⚠️ No completion request found - working from flag file only")
+                request_content = content
+            else:
+                self.intelligence.log(f"📖 Reading completion request: {request_file.name}")
+                request_content = request_file.read_text()
 
             # Mark task as in progress immediately
             progress_file = flag_file.with_suffix(".in_progress")
