@@ -73,5 +73,20 @@
       "status": "success",
       "timestamp": 1762642364.066791
     }
+  },
+  {
+    "id": "fbf81dcc3368",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/V2_VERIFICATION_TEST.flag",
+    "created_at": "2025-11-08T23:00:22.684777",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-08T23:00:22.685375",
+    "completed_at": "2025-11-08T23:00:22.693651",
+    "result": {
+      "status": "success",
+      "timestamp": 1762642822.6936479
+    }
   }
 ]

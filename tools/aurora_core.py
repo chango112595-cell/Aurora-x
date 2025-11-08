@@ -13,7 +13,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from aurora_intelligence_manager import AuroraIntelligenceManager
 from tools.aurora_task_manager import AuroraTaskManager
-from tools.luminar_nexus import LuminarNexusServerManager
+from tools.luminar_nexus_v2 import LuminarNexusV2
 
 # Import Aurora's AUTONOMOUS CAPABILITIES
 try:
@@ -74,7 +74,7 @@ class AuroraCore:
             self.intelligence.log("🔧 Aurora Core: Autonomous Fixer READY")
 
         # Aurora's tools
-        self.luminar = LuminarNexusServerManager()  # Server management tool
+        self.luminar = LuminarNexusV2()  # Server management tool (V2 with AI features)
         self.chat = None  # Will be initialized when needed
 
         # Aurora's Task Management System
