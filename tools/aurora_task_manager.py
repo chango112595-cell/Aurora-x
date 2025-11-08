@@ -5,10 +5,8 @@ Manages task lifecycle, prevents re-execution of completed tasks, and provides t
 """
 
 import json
-import time
-from pathlib import Path
-from typing import Dict, List, Optional
 from datetime import datetime
+from pathlib import Path
 
 
 class AuroraTaskManager:
@@ -31,7 +29,7 @@ class AuroraTaskManager:
         self.completed_tasks = self._load_completed_tasks()
         self.task_history = self._load_task_history()
 
-    def _load_tasks(self) -> Dict:
+    def _load_tasks(self) -> dict:
         """Load pending tasks from file"""
         if self.tasks_file.exists():
             try:
@@ -40,7 +38,7 @@ class AuroraTaskManager:
                 return {"pending": [], "in_progress": []}
         return {"pending": [], "in_progress": []}
 
-    def _load_completed_tasks(self) -> List:
+    def _load_completed_tasks(self) -> list:
         """Load completed tasks from file"""
         if self.completed_tasks_file.exists():
             try:
@@ -49,7 +47,7 @@ class AuroraTaskManager:
                 return []
         return []
 
-    def _load_task_history(self) -> Dict:
+    def _load_task_history(self) -> dict:
         """Load task execution history"""
         if self.task_history_file.exists():
             try:
@@ -70,7 +68,7 @@ class AuroraTaskManager:
         """Save task history to file"""
         self.task_history_file.write_text(json.dumps(self.task_history, indent=2))
 
-    def get_next_task(self) -> Optional[Dict]:
+    def get_next_task(self) -> dict | None:
         """
         Get the next pending task that hasn't been completed
         Returns None if no tasks available
@@ -78,41 +76,41 @@ class AuroraTaskManager:
         # Check for priority tasks first
         for task in self.tasks["pending"]:
             task_id = task.get("id")
-            
+
             # Skip if already completed
             if self.is_task_completed(task_id):
                 # Remove from pending
                 self.tasks["pending"].remove(task)
                 self._save_tasks()
                 continue
-            
+
             # Check for flag file
             flag_file = self.knowledge_dir / task.get("flag_file", "")
             if flag_file.exists() and flag_file.suffix == ".flag":
                 return task
-        
+
         # If no tasks in queue, check for new flag files
         return self._scan_for_new_tasks()
 
-    def _scan_for_new_tasks(self) -> Optional[Dict]:
+    def _scan_for_new_tasks(self) -> dict | None:
         """Scan for new .flag files that aren't in the system yet"""
         for flag_file in self.knowledge_dir.glob("*.flag"):
             task_id = self._generate_task_id(flag_file)
-            
+
             # Skip if already completed
             if self.is_task_completed(task_id):
                 # Archive the old flag file
                 self._archive_flag_file(flag_file)
                 continue
-            
+
             # Check if already in pending queue
             if any(t.get("id") == task_id for t in self.tasks["pending"]):
                 continue
-            
+
             # New task found!
             task = self._create_task_from_flag(flag_file)
             return task
-        
+
         return None
 
     def _generate_task_id(self, flag_file: Path) -> str:
@@ -120,33 +118,34 @@ class AuroraTaskManager:
         # Use flag file content hash as ID
         content = flag_file.read_text()
         import hashlib
+
         return hashlib.md5(content.encode()).hexdigest()[:12]
 
-    def _create_task_from_flag(self, flag_file: Path) -> Dict:
+    def _create_task_from_flag(self, flag_file: Path) -> dict:
         """Create task object from flag file"""
         content = flag_file.read_text()
         task_id = self._generate_task_id(flag_file)
-        
+
         # Parse flag file content
         task_data = {}
-        for line in content.split('\n'):
-            if '=' in line:
-                key, value = line.split('=', 1)
+        for line in content.split("\n"):
+            if "=" in line:
+                key, value = line.split("=", 1)
                 task_data[key.strip()] = value.strip()
-        
+
         task = {
             "id": task_id,
             "flag_file": flag_file.name,
             "created_at": datetime.now().isoformat(),
             "status": "pending",
             "data": task_data,
-            "attempts": 0
+            "attempts": 0,
         }
-        
+
         # Add to pending queue
         self.tasks["pending"].append(task)
         self._save_tasks()
-        
+
         return task
 
     def is_task_completed(self, task_id: str) -> bool:
@@ -166,7 +165,7 @@ class AuroraTaskManager:
                 self._save_tasks()
                 break
 
-    def mark_task_completed(self, task_id: str, result: Optional[Dict] = None):
+    def mark_task_completed(self, task_id: str, result: dict | None = None):
         """Mark task as completed and archive it"""
         # Find task in in_progress
         for task in self.tasks["in_progress"]:
@@ -175,59 +174,61 @@ class AuroraTaskManager:
                 task["completed_at"] = datetime.now().isoformat()
                 if result:
                     task["result"] = result
-                
+
                 # Move to completed
                 self.completed_tasks.append(task)
                 self.tasks["in_progress"].remove(task)
-                
+
                 # Update history
                 self.task_history["total_completed"] += 1
-                self.task_history["history"].append({
-                    "task_id": task_id,
-                    "completed_at": task["completed_at"],
-                    "task_name": task.get("data", {}).get("AURORA_CREATIVE_TASK", "unknown")
-                })
-                
+                self.task_history["history"].append(
+                    {
+                        "task_id": task_id,
+                        "completed_at": task["completed_at"],
+                        "task_name": task.get("data", {}).get("AURORA_CREATIVE_TASK", "unknown"),
+                    }
+                )
+
                 # Keep only last 100 history entries
                 if len(self.task_history["history"]) > 100:
                     self.task_history["history"] = self.task_history["history"][-100:]
-                
+
                 # Save all
                 self._save_tasks()
                 self._save_completed_tasks()
                 self._save_task_history()
-                
+
                 # Archive flag file
                 flag_file = self.knowledge_dir / task.get("flag_file", "")
                 if flag_file.exists():
                     self._archive_flag_file(flag_file)
-                
+
                 break
 
     def _archive_flag_file(self, flag_file: Path):
         """Archive a completed flag file"""
         archive_dir = self.knowledge_dir / "completed_tasks"
         archive_dir.mkdir(exist_ok=True)
-        
+
         # Move to archive with timestamp
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         archive_name = f"{flag_file.stem}_{timestamp}.archived"
         archive_path = archive_dir / archive_name
-        
+
         try:
             flag_file.rename(archive_path)
         except Exception:
             # If rename fails, just delete it
             flag_file.unlink()
 
-    def get_task_statistics(self) -> Dict:
+    def get_task_statistics(self) -> dict:
         """Get statistics about task execution"""
         return {
             "pending_tasks": len(self.tasks["pending"]),
             "in_progress_tasks": len(self.tasks["in_progress"]),
             "completed_tasks": len(self.completed_tasks),
             "total_completed_all_time": self.task_history["total_completed"],
-            "recent_completions": self.task_history["history"][-10:]
+            "recent_completions": self.task_history["history"][-10:],
         }
 
     def clear_old_flag_files(self):
@@ -246,7 +247,7 @@ if __name__ == "__main__":
     manager = AuroraTaskManager()
     print("🎯 Aurora Task Manager Test")
     print(f"Statistics: {manager.get_task_statistics()}")
-    
+
     next_task = manager.get_next_task()
     if next_task:
         print(f"\n📋 Next Task: {next_task['id']}")

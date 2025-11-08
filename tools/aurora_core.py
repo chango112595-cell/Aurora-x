@@ -12,8 +12,8 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from aurora_intelligence_manager import AuroraIntelligenceManager
-from tools.luminar_nexus import LuminarNexusServerManager
 from tools.aurora_task_manager import AuroraTaskManager
+from tools.luminar_nexus import LuminarNexusServerManager
 
 # Import Aurora's AUTONOMOUS CAPABILITIES
 try:
@@ -101,17 +101,17 @@ class AuroraCore:
                 try:
                     # Get next pending task (skips already completed tasks)
                     next_task = self.task_manager.get_next_task()
-                    
+
                     if next_task:
                         task_id = next_task["id"]
                         task_type = next_task["type"]
                         flag_file = Path(next_task["flag_file"])
-                        
+
                         self.intelligence.log(f"📋 Task detected: {task_type} (ID: {task_id[:8]})")
-                        
+
                         # Mark task as in progress
                         self.task_manager.mark_task_in_progress(task_id)
-                        
+
                         # Execute task based on type
                         try:
                             if task_type == "creative":
@@ -120,17 +120,16 @@ class AuroraCore:
                             elif task_type == "autonomous_request":
                                 self.intelligence.log("🚀 AUTONOMOUS REQUEST DETECTED!")
                                 self._execute_autonomous_request(flag_file)
-                            
+
                             # Mark task as completed and archive
                             self.task_manager.mark_task_completed(
-                                task_id,
-                                result={"status": "success", "timestamp": time.time()}
+                                task_id, result={"status": "success", "timestamp": time.time()}
                             )
                             self.intelligence.log(f"✅ Task {task_id[:8]} completed and archived")
                         except Exception as task_error:
                             self.intelligence.log(f"❌ Task {task_id[:8]} failed: {task_error}")
                             # Task remains in-progress for retry or manual intervention
-                    
+
                     time.sleep(5)  # Check every 5 seconds
                 except Exception as e:
                     self.intelligence.log(f"⚠️ Autonomous monitoring error: {e}")
