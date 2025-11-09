@@ -1,0 +1,76 @@
+TASK: IMPLEMENT_ENDPOINT_FIXES
+STATUS: PENDING
+PRIORITY: CRITICAL
+CREATED: 2025-11-09 03:55:00
+
+DESCRIPTION:
+Implement the endpoint routing fixes to resolve frontend connection issues.
+
+CURRENT PROBLEM:
+- Frontend showing "Server connection lost - attempting to reconnect"
+- Chat server (port 5003) returning 404 for /chat endpoint
+- Chat server only has /api/chat endpoint (POST method)
+- Frontend trying to access /chat or using wrong HTTP method
+
+ROOT CAUSE IDENTIFIED:
+Route mismatch between frontend expectations and chat server implementation.
+
+REQUIRED FIXES:
+
+Fix #1: Add /chat Route Alias to Chat Server
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+File: tools/luminar_nexus_v2.py
+Function: run_chat_server_v2()
+Action: Add /chat route handler that redirects to /api/chat
+
+Code to add (after the existing /api/chat route):
+
+    @app.route('/chat', methods=['GET', 'POST'])
+    def chat_alias():
+        """Route alias for compatibility"""
+        if request.method == 'POST':
+            return chat_api()
+        return jsonify({
+            "error": "Use POST method",
+            "correct_endpoint": "/api/chat",
+            "usage": "POST /api/chat with JSON body"
+        }), 405
+
+Fix #2: Update Frontend API Configuration
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Location: client/src/ directory
+Action: Find and update chat API endpoint configuration
+- Change endpoint from '/chat' to '/api/chat'
+- Ensure POST method is used
+- Check .env or config files for API_URL settings
+
+IMPLEMENTATION STEPS:
+1. Backup current chat server code
+2. Modify tools/luminar_nexus_v2.py to add /chat route
+3. Search client/src for chat endpoint references
+4. Update frontend chat API calls to use /api/chat with POST
+5. Restart chat server (port 5003)
+6. Test endpoints with curl
+7. Verify frontend connection restored
+8. Commit fixes to git
+
+VERIFICATION:
+After fixes, these should all work:
+✅ curl http://localhost:5003/health
+✅ curl http://localhost:5003/chat (should explain to use POST)
+✅ curl -X POST http://localhost:5003/chat -H "Content-Type: application/json" -d '{"message":"test"}'
+✅ curl -X POST http://localhost:5003/api/chat -H "Content-Type: application/json" -d '{"message":"test"}'
+✅ Frontend interface should reconnect and show no errors
+
+SUCCESS CRITERIA:
+- No more "Server connection lost" errors in frontend
+- Chat server responds to both /chat and /api/chat
+- POST requests work on both endpoints
+- Frontend successfully connects to chat server
+- All tests pass
+
+USER DIRECTIVE:
+User said: "no let aurora do it"
+This means Aurora should implement these fixes autonomously without asking for permission.
+
+AUTONOMOUS EXECUTION AUTHORIZED: YES

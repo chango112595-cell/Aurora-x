@@ -983,6 +983,18 @@ class LuminarNexusV2:
                 print(f"❌ Chat routing error: {e}")
                 return jsonify({"error": str(e)}), 500
 
+        @app.route("/chat", methods=["GET", "POST"])
+        def chat_alias():
+            """Route alias for /chat → /api/chat compatibility (Aurora autonomous fix)"""
+            if request.method == "POST":
+                return intelligent_chat_routing()
+            return jsonify({
+                "error": "Use POST method",
+                "correct_endpoint": "/api/chat",
+                "usage": "POST /api/chat or POST /chat with JSON body: {\"message\": \"your message\"}",
+                "aurora_fix": "Route alias added by Aurora autonomous endpoint fix"
+            }), 405
+
         return app
 
 

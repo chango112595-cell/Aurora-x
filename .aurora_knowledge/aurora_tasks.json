@@ -1,4 +1,17 @@
 {
-  "pending": [],
+  "pending": [
+    {
+      "id": "7cd7a9b85ca3",
+      "type": "creative",
+      "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/IMPLEMENT_ENDPOINT_FIXES.flag",
+      "created_at": "2025-11-09T03:57:34.857273",
+      "status": "pending",
+      "data": {
+        "@app.route('/chat', methods": "['GET', 'POST'])",
+        "if request.method": "= 'POST':"
+      },
+      "attempts": 0
+    }
+  ],
   "in_progress": []
 }
