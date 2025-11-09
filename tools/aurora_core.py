@@ -457,12 +457,12 @@ class AuroraCore:
     def start_all_services(self):
         """Aurora commands Luminar to start all services Hell YAH"""
         self.intelligence.log("🚀 Aurora Core: Starting all services Fucking ...")
-        return self.luminar.start_all()
+        return self.luminar.start_all_servers()
 
     def stop_all_services(self):
         """Aurora commands Luminar to stop all services"""
         self.intelligence.log("🛑 Aurora Core: Stopping all services Fucking A...")
-        return self.luminar.stop_all()
+        return self.luminar.stop_all_servers()
 
     def start_service(self, service_name):
         """Aurora commands Luminar to start a specific service"""
