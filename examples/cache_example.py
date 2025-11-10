@@ -3,7 +3,7 @@ Example: Using Aurora caching system
 Demonstrates how to use the @cached decorator for performance optimization
 """
 
-from aurora_x.cache import cached, get_cache, invalidate_cache
+from aurora_x.cache import cached, get_cache
 
 
 # Example 1: Cache function results

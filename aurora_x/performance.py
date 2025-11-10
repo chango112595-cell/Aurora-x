@@ -4,8 +4,8 @@ Request timing and performance monitoring
 """
 
 import time
+from collections.abc import Callable
 from datetime import datetime
-from typing import Callable
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware

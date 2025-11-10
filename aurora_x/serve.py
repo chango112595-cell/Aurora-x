@@ -68,6 +68,7 @@ except Exception:
 # Include performance API (Aurora Priority #9)
 try:
     from aurora_x.api.performance import router as performance_router
+
     app.include_router(performance_router)
 except Exception:
     pass  # Performance endpoints not available yet
@@ -125,21 +126,22 @@ attach_task_graph(app)
 
 # Aurora Priority #9: Add performance middleware after all routers
 try:
-    from aurora_x.performance import PerformanceMiddleware
     from aurora_x.api.performance import set_performance_middleware
+    from aurora_x.performance import PerformanceMiddleware
 
     # Add middleware - it will wrap all previously defined routes
     app.add_middleware(PerformanceMiddleware, slow_request_threshold=1.0)
-    
+
     # Create a reference instance for stats (middleware instances are created internally)
     _perf_stats_holder = PerformanceMiddleware(app, slow_request_threshold=1.0)
     _performance_middleware_ref["instance"] = _perf_stats_holder
     set_performance_middleware(_perf_stats_holder)
-    
+
     print("✅ Aurora: Performance middleware enabled")
 except Exception as e:
     print(f"Aurora Warning: Performance middleware error: {e}")
     import traceback
+
     traceback.print_exc()
 
 # Attach T12 Factory Bridge endpoints

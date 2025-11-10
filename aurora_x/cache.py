@@ -3,19 +3,20 @@ Aurora Redis Cache Manager
 Centralized caching layer for performance optimization
 """
 
-import json
 import pickle
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, Optional
+from typing import Any
 
 try:
     import redis
     from redis.asyncio import Redis as AsyncRedis
+
     REDIS_AVAILABLE = True
 except ImportError:
     REDIS_AVAILABLE = False
 
-from cachetools import TTLCache, LRUCache
+from cachetools import LRUCache, TTLCache
 
 
 class CacheManager:
@@ -32,8 +33,8 @@ class CacheManager:
     ):
         self.default_ttl = default_ttl
         self.redis_url = redis_url
-        self.redis_client: Optional[redis.Redis] = None
-        self.async_redis_client: Optional[AsyncRedis] = None
+        self.redis_client: redis.Redis | None = None
+        self.async_redis_client: AsyncRedis | None = None
 
         # In-memory cache as fallback
         self.memory_cache = TTLCache(maxsize=max_memory_items, ttl=default_ttl)
@@ -42,9 +43,7 @@ class CacheManager:
         # Try to connect to Redis
         if REDIS_AVAILABLE:
             try:
-                self.redis_client = redis.from_url(
-                    redis_url, decode_responses=False, socket_connect_timeout=2
-                )
+                self.redis_client = redis.from_url(redis_url, decode_responses=False, socket_connect_timeout=2)
                 # Test connection
                 self.redis_client.ping()
                 self.using_redis = True
@@ -55,7 +54,7 @@ class CacheManager:
             print("Aurora Warning: Redis library not installed, using in-memory cache")
             self.using_redis = False
 
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str) -> Any | None:
         """Get value from cache."""
         try:
             if self.using_redis and self.redis_client:
@@ -68,7 +67,7 @@ class CacheManager:
             print(f"Aurora Cache Error (get): {e}")
             return None
 
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
         """Set value in cache with optional TTL."""
         try:
             ttl = ttl or self.default_ttl
@@ -96,7 +95,7 @@ class CacheManager:
             print(f"Aurora Cache Error (delete): {e}")
             return False
 
-    def clear(self, pattern: Optional[str] = None) -> int:
+    def clear(self, pattern: str | None = None) -> int:
         """Clear cache entries matching pattern."""
         try:
             if self.using_redis and self.redis_client:
@@ -136,9 +135,7 @@ class CacheManager:
                     "total_keys": self.redis_client.dbsize(),
                     "hits": info.get("keyspace_hits", 0),
                     "misses": info.get("keyspace_misses", 0),
-                    "hit_rate": self._calculate_hit_rate(
-                        info.get("keyspace_hits", 0), info.get("keyspace_misses", 0)
-                    ),
+                    "hit_rate": self._calculate_hit_rate(info.get("keyspace_hits", 0), info.get("keyspace_misses", 0)),
                 }
             else:
                 return {
@@ -159,7 +156,7 @@ class CacheManager:
 
 
 # Global cache manager instance
-_cache_manager: Optional[CacheManager] = None
+_cache_manager: CacheManager | None = None
 
 
 def get_cache() -> CacheManager:
@@ -173,11 +170,11 @@ def get_cache() -> CacheManager:
 def cached(ttl: int = 300, key_prefix: str = ""):
     """
     Decorator to cache function results.
-    
+
     Args:
         ttl: Time to live in seconds (default: 300)
         key_prefix: Prefix for cache key (default: function name)
-    
+
     Example:
         @cached(ttl=600, key_prefix="user")
         def get_user(user_id: int):
