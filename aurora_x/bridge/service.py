@@ -34,6 +34,19 @@ def health_check():
     return {"status": "ok", "service": "bridge", "port": 5001, "aurora_fix": "Added /api/health for frontend compatibility"}
 
 
+@app.get("/api/status")
+def status_check():
+    """Status endpoint for frontend server control pages (Aurora fix)"""
+    return {
+        "status": "running",
+        "service": "bridge",
+        "port": 5001,
+        "version": "1.0.0",
+        "healthy": True,
+        "aurora_fix": "Added /api/status for frontend server control"
+    }
+
+
 @app.get("/")
 def root():
     return {
