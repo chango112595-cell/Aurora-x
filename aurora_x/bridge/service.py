@@ -29,8 +29,9 @@ attach_bridge(app)
 # Health check endpoints
 @app.get("/healthz")
 @app.get("/health")
+@app.get("/api/health")
 def health_check():
-    return {"status": "ok", "service": "bridge", "port": 5001}
+    return {"status": "ok", "service": "bridge", "port": 5001, "aurora_fix": "Added /api/health for frontend compatibility"}
 
 
 @app.get("/")

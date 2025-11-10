@@ -1670,10 +1670,11 @@ def run_chat_server_v2(port: int = 5003):
     # Create the advanced API (includes /api/chat endpoint)
     app = nexus.create_advanced_api()
 
-    # Add health check endpoint
+    # Add health check endpoints
     @app.route("/health", methods=["GET"])
+    @app.route("/api/health", methods=["GET"])
     def health_check():
-        return {"status": "healthy", "service": "aurora-chat-v2", "version": nexus.version}, 200
+        return {"status": "healthy", "service": "aurora-chat-v2", "version": nexus.version, "aurora_fix": "Added /api/health for frontend compatibility"}, 200
 
     print(f"🚀 Chat Server V2 running on port {port}")
     print("   Health: http://localhost:{port}/health")

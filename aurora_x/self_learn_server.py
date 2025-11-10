@@ -55,6 +55,19 @@ def health():
     }
 
 
+@app.get("/api/health")
+def api_health():
+    """API health check endpoint for frontend compatibility (Aurora fix)"""
+    return {
+        "ok": True,
+        "service": "self-learning",
+        "status": daemon_stats["status"],
+        "port": 5002,
+        "timestamp": time.time(),
+        "aurora_fix": "Added /api/health route for frontend compatibility"
+    }
+
+
 @app.get("/stats")
 def get_stats():
     """Get self-learning statistics"""
