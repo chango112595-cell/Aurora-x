@@ -48,8 +48,17 @@ app.include_router(make_router(static_dir, templates_dir))
 try:
     from aurora_x.api.server_control import router as server_control_router
     app.include_router(server_control_router)
-except:
+except Exception:
     pass
+
+# Include health check and monitoring APIs (Aurora Priority #7)
+try:
+    from aurora_x.api.health_check import router as health_check_router
+    from aurora_x.api.monitoring import router as monitoring_router
+    app.include_router(health_check_router)
+    app.include_router(monitoring_router)
+except Exception:
+    pass  # Health check and monitoring endpoints not available yet
 
 # Include unified command router
 try:
@@ -340,14 +349,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             # Aurora: Intelligent import with fallback for spec_from_flask
             try:
-# Aurora: Intelligent import with fallback for spec_from_flask
-try:
-    from spec_from_flask import create_flask_app_from_text  # type: ignore
-except ImportError as e:
-    # Aurora: Graceful fallback to prevent crashes
-    def create_flask_app_from_text  # type: ignore(*args, **kwargs):
-        raise HTTPException(status_code=500, detail=f"Module 'spec_from_flask' not available: {e}")
-    print(f"Aurora Warning: Using fallback for spec_from_flask")
+                from spec_from_flask import create_flask_app_from_text  # type: ignore
 
                 app_file = create_flask_app_from_text(prompt, run_dir)
                 files_generated.append(str(app_file.relative_to(Path.cwd())))
@@ -371,14 +373,7 @@ except ImportError as e:
 
             # Aurora: Learning Session - Step by step import fixing
             try:
-# Aurora: Intelligent import with fallback for spec_from_text
-try:
-    from spec_from_text import create_spec_from_text  # type: ignore
-except ImportError as e:
-    # Aurora: Graceful fallback to prevent crashes
-    def create_spec_from_text  # type: ignore(*args, **kwargs):
-        raise HTTPException(status_code=500, detail=f"Module 'spec_from_text' not available: {e}")
-    print(f"Aurora Warning: Using fallback for spec_from_text")
+                from spec_from_text import create_spec_from_text  # type: ignore
 
                 # Create spec from natural language
                 spec_path = create_spec_from_text(prompt, str(Path("specs")))
