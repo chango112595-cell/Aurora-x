@@ -5,7 +5,7 @@
 # Security Scanning
 bandit==1.7.5                    # Python AST-based security linter
 safety==2.3.5                    # Dependency vulnerability scanner
-pip-audit==2.6.1                 # Audit Python packages for vulnerabilities
+pip-audit==2.9.0                 # Audit Python packages for vulnerabilities
 
 # Code Quality & Security Analysis
 pylint==3.0.2                    # Python code analysis
