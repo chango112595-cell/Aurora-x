@@ -29,7 +29,67 @@ from aurora_x.serve_addons import attach as attach_factory
 from aurora_x.serve_dashboard_v2 import make_router
 
 BASE = Path(__file__).parent
-app = FastAPI(title="Aurora-X Ultra v3")
+
+# Enhanced API documentation metadata
+app = FastAPI(
+    title="Aurora-X API",
+    description="""
+# Aurora-X Ultra v3 API
+
+Aurora-X is a comprehensive AI-powered platform for natural language processing,
+code synthesis, intelligent problem solving, and system monitoring.
+
+## Key Features
+
+* 🤖 **Natural Language Compilation**: Convert English descriptions to working code
+* 🧮 **Intelligent Solver**: Math, physics, chemistry, and logic problem solving
+* 💬 **Conversational AI**: Natural language chat interface with context awareness
+* 📊 **Real-time Monitoring**: System health checks, metrics, and performance tracking
+* ⚡ **Performance Optimization**: Redis caching, load balancing, request profiling
+* 🔄 **Self-Learning**: Autonomous improvement through continuous learning
+* 🏗️ **Code Generation**: Spec-based function synthesis and Flask app creation
+* 📈 **Progress Tracking**: Visual dashboards and task management
+
+## Architecture
+
+Aurora-X uses a modular architecture with:
+- FastAPI for high-performance async API
+- Redis for distributed caching
+- Prometheus for metrics collection
+- PostgreSQL for data persistence
+- WebSocket for real-time updates
+
+## Authentication
+
+Most endpoints are currently open for development. Production deployments should
+enable authentication via the `/api/auth` endpoints.
+
+## Rate Limiting
+
+Performance-optimized endpoints use caching to reduce load. Heavy operations
+may have rate limiting applied in production environments.
+    """,
+    version="3.0.0",
+    contact={
+        "name": "Aurora-X Development Team",
+        "url": "https://github.com/chango112595-cell/Aurora-x",
+    },
+    license_info={
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT",
+    },
+    openapi_tags=[
+        {"name": "health", "description": "Health checks and service status"},
+        {"name": "compilation", "description": "Natural language to code compilation"},
+        {"name": "solver", "description": "Intelligent problem solving across domains"},
+        {"name": "chat", "description": "Conversational AI interface"},
+        {"name": "monitoring", "description": "System monitoring and metrics"},
+        {"name": "performance", "description": "Performance optimization and caching"},
+        {"name": "self-learning", "description": "Autonomous learning and improvement"},
+        {"name": "progress", "description": "Task and progress tracking"},
+        {"name": "bridge", "description": "Factory bridge for spec compilation"},
+    ],
+)
 
 # Aurora Priority #9: Performance optimization will be added after routers
 _performance_middleware_ref = {"instance": None}
@@ -171,11 +231,15 @@ async def serve_control_center():
         return HTMLResponse(content="<h1>Control Center not found</h1>", status_code=404)
 
 
-@app.get("/healthz")
+@app.get("/healthz", tags=["health"], summary="Service Health Check")
 def healthz():
     """
     Aurora-X service health endpoint.
-    Returns 200 OK with status and component info.
+    
+    Returns basic health status and configuration info.
+    
+    Returns:
+        dict: Health status with timestamp and enabled features
     """
     return {"ok": True, "t08_enabled": SETTINGS.t08_enabled, "ts": time.time()}
 
@@ -211,9 +275,21 @@ def t08_activate(payload: dict):
 
 
 # --- Self-Learning Status ---
-@app.get("/api/self-learning/status")
+@app.get("/api/self-learning/status", tags=["self-learning"], 
+         summary="Get Self-Learning Status")
 def self_learning_status():
-    """Get current self-learning daemon status"""
+    """
+    Check if the autonomous self-learning daemon is running.
+    
+    The self-learning system continuously improves Aurora-X by:
+    - Analyzing past solutions and errors
+    - Discovering optimization opportunities
+    - Testing improvements automatically
+    - Learning from user interactions
+    
+    Returns:
+        dict: Status including running state, PID, and last check timestamp
+    """
     try:
 
         import psutil
@@ -236,9 +312,20 @@ def self_learning_status():
         return {"running": False, "error": str(e)}
 
 
-@app.post("/api/self-learning/start")
+@app.post("/api/self-learning/start", tags=["self-learning"],
+         summary="Start Self-Learning Daemon")
 def start_self_learning():
-    """Start the self-learning daemon"""
+    """
+    Start the autonomous self-learning daemon.
+    
+    Default configuration:
+    - Sleep interval: 15 seconds between iterations
+    - Max iterations: 50 per session
+    - Beam width: 20 for solution exploration
+    
+    Returns:
+        dict: Startup status with process PID
+    """
     try:
         import subprocess
 
@@ -252,9 +339,15 @@ def start_self_learning():
         return JSONResponse({"error": str(e)}, status_code=500)
 
 
-@app.post("/api/self-learning/stop")
+@app.post("/api/self-learning/stop", tags=["self-learning"],
+         summary="Stop Self-Learning Daemon")
 def stop_self_learning():
-    """Stop the self-learning daemon"""
+    """
+    Gracefully stop the self-learning daemon.
+    
+    Returns:
+        dict: Status with list of stopped process IDs
+    """
     try:
         import psutil
 
@@ -342,20 +435,33 @@ class NLCompileResponse(BaseModel):
     message: str
 
 
-@app.post("/api/nl/compile", response_model=NLCompileResponse)
+@app.post("/api/nl/compile", response_model=NLCompileResponse, tags=["compilation"], 
+         summary="Compile from Natural Language")
 async def compile_from_natural_language(request: NLCompileRequest):
     """
-    Process a natural language prompt to generate code.
+    Convert natural language descriptions into working code.
+    
+    This endpoint uses advanced AI to parse English descriptions and generate
+    complete, runnable code including functions, tests, and documentation.
+    
+    **Supported Frameworks:**
+    - Flask web applications
+    - Python functions with specs
+    - General-purpose scripts
+    
+    **Example Prompts:**
+    - "Create a Flask API that calculates fibonacci numbers"
+    - "Write a function that sorts a list of numbers"
+    - "Build a REST endpoint for user authentication"
 
     Args:
         request: JSON body with 'prompt' field containing the natural language request
 
     Returns:
-        JSON response with:
-        - run_id: the generated run ID
-        - status: "success" or "error"
-        - files_generated: list of generated file paths
-        - message: success or error message
+        NLCompileResponse: Contains run_id, status, generated files list, and message
+        
+    Raises:
+        HTTPException: If prompt is empty or compilation fails
     """
     try:
         from aurora_x.spec.parser_nl import parse_english
@@ -501,16 +607,29 @@ class SolverRequest(BaseModel):
     text: str
 
 
-@app.post("/api/solve")
+@app.post("/api/solve", tags=["solver"], summary="Solve Problem (Raw JSON)")
 async def solve_endpoint(request: SolverRequest):
     """
-    Raw solver endpoint that returns the complete solver result
+    Solve problems across multiple domains with structured JSON output.
+    
+    The intelligent solver can handle:
+    - **Mathematics**: Algebra, calculus, statistics, linear algebra
+    - **Physics**: Mechanics, thermodynamics, electromagnetism
+    - **Chemistry**: Stoichiometry, molecular calculations
+    - **Logic**: Boolean algebra, propositional logic
+    - **Unit Conversion**: SI units, imperial, custom units
+    
+    **Example Problems:**
+    - "What is the derivative of x^2 + 3x - 5?"
+    - "Calculate the force on a 10kg object accelerating at 5m/s^2"
+    - "Convert 100 fahrenheit to celsius"
+    - "Solve the system: x + y = 5, 2x - y = 1"
 
     Args:
         request: JSON body with 'text' field containing the problem to solve
 
     Returns:
-        JSON response with the raw solver output
+        dict: Complete solver result with domain, task, input, result, and explanation
     """
     try:
         result = solve_text(request.text)
@@ -519,16 +638,25 @@ async def solve_endpoint(request: SolverRequest):
         return JSONResponse(content={"ok": False, "error": str(e)}, status_code=500)
 
 
-@app.post("/api/solve/pretty")
+@app.post("/api/solve/pretty", tags=["solver"], summary="Solve Problem (Formatted)")
 async def solve_pretty_endpoint(request: SolverRequest):
     """
-    Pretty solver endpoint that returns formatted human-readable results
+    Solve problems with human-readable formatted output.
+    
+    This endpoint returns the same intelligent solving capabilities as `/api/solve`
+    but formats the output in an easy-to-read plain text format with:
+    - Clear section headers
+    - Formatted numbers (6 decimal places)
+    - Step-by-step explanations
+    - Domain and task identification
+    
+    Perfect for command-line tools, terminal applications, or human review.
 
     Args:
         request: JSON body with 'text' field containing the problem to solve
 
     Returns:
-        Plain text response with formatted solution
+        str: Formatted plain text solution with explanations
     """
     try:
         result = solve_text(request.text)
@@ -600,9 +728,21 @@ def root():
     }
 
 
-@app.get("/api/self-monitor/health")
+@app.get("/api/self-monitor/health", tags=["monitoring"],
+         summary="Self-Monitoring Health Check")
 def self_monitor_health():
-    """Self-monitoring health check endpoint"""
+    """
+    Comprehensive health check with self-diagnostics.
+    
+    Tests all essential services:
+    - Solver functionality
+    - Chat interface
+    - File system access
+    - Self-healing status
+    
+    Returns:
+        dict: Detailed health status for each service component
+    """
     try:
         # Check if all essential components are working
         health_status = {
@@ -633,9 +773,21 @@ def self_monitor_health():
         }
 
 
-@app.post("/api/self-monitor/auto-heal")
+@app.post("/api/self-monitor/auto-heal", tags=["monitoring"],
+         summary="Trigger Self-Healing")
 def self_monitor_auto_heal():
-    """Trigger self-healing processes"""
+    """
+    Manually trigger self-healing and recovery processes.
+    
+    Automated recovery actions include:
+    - Clearing corrupted cache state
+    - Verifying core functionality
+    - Restarting failed services
+    - Testing all critical systems
+    
+    Returns:
+        dict: Healing status with actions taken and recommendations
+    """
     try:
         healing_actions = []
 
