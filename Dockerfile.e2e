@@ -1,6 +1,6 @@
 
 # Multi-arch friendly (works on linux/arm64 and amd64)
-FROM --platform=$TARGETPLATFORM python:3.11-slim AS builder
+FROM --platform=$TARGETPLATFORM python:3.14-slim AS builder
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -31,7 +31,7 @@ RUN pip install --upgrade pip setuptools wheel && \
     pip install --no-cache-dir pytest || echo "pytest install skipped"
 
 # Final stage
-FROM --platform=$TARGETPLATFORM python:3.11-slim
+FROM --platform=$TARGETPLATFORM python:3.14-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
