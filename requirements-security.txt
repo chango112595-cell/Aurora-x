@@ -22,7 +22,7 @@ pipdeptree==2.13.1               # Dependency tree visualization
 pip-licenses==4.3.3              # License checker
 
 # SAST (Static Application Security Testing)
-semgrep==1.45.0                  # Lightweight SAST tool
+semgrep==1.136.0                  # Lightweight SAST tool
 
 # Web Security (for API testing)
 requests==2.31.0                 # HTTP library
