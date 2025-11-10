@@ -4,9 +4,7 @@ Test script for Aurora health check and monitoring APIs
 """
 
 import sys
-import time
 
-import psutil
 import requests
 
 
@@ -147,7 +145,9 @@ def test_health_endpoints():
             data = response.json()
             print(f"   ✅ Overall Status: {data.get('status')}")
             components = data.get("components", {})
-            print(f"   ✅ Components: CPU={components.get('cpu')}, Memory={components.get('memory')}, Disk={components.get('disk')}")
+            print(
+                f"   ✅ Components: CPU={components.get('cpu')}, Memory={components.get('memory')}, Disk={components.get('disk')}"
+            )
             tests_passed += 1
         else:
             print(f"   ❌ Failed with status code: {response.status_code}")

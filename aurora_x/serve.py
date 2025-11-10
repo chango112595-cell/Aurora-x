@@ -47,6 +47,7 @@ app.include_router(make_router(static_dir, templates_dir))
 # Include server control API (Aurora's fix for Server Control page)
 try:
     from aurora_x.api.server_control import router as server_control_router
+
     app.include_router(server_control_router)
 except Exception:
     pass
@@ -55,6 +56,7 @@ except Exception:
 try:
     from aurora_x.api.health_check import router as health_check_router
     from aurora_x.api.monitoring import router as monitoring_router
+
     app.include_router(health_check_router)
     app.include_router(monitoring_router)
 except Exception:
@@ -63,6 +65,7 @@ except Exception:
 # Include unified command router
 try:
     from aurora_x.api.commands import router as commands_router
+
     app.include_router(commands_router)
 except ImportError:
     pass  # API endpoints not available yet
@@ -70,6 +73,7 @@ except ImportError:
 # Include natural conversation router
 try:
     from aurora_x.chat.conversation import attach_conversation
+
     attach_conversation(app)
 except ImportError:
     pass  # Conversation endpoint not available yet
@@ -635,19 +639,21 @@ def self_monitor_auto_heal():
 def main():
     """Entry point for running the server via uvicorn."""
     import os
+
     import uvicorn
 
     # Auto-start all Aurora services via Luminar Nexus (if not already running)
     try:
-        from pathlib import Path
         import subprocess
-        
+        from pathlib import Path
+
         tools_dir = Path(__file__).parent.parent / "tools"
         luminar_nexus = tools_dir / "luminar_nexus.py"
-        
+
         if luminar_nexus.exists():
             # Check if services are already running
             import requests
+
             try:
                 requests.get("http://localhost:5000/healthz", timeout=1)
             except:
@@ -657,7 +663,7 @@ def main():
                     ["python3", str(luminar_nexus), "start-all"],
                     cwd=tools_dir.parent,
                     stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL
+                    stderr=subprocess.DEVNULL,
                 )
                 time.sleep(3)  # Wait for services to start
     except Exception as e:
@@ -666,7 +672,6 @@ def main():
     port = int(os.getenv("AURORA_PORT", "5002"))
     print(f"[Aurora-X] Starting server on 0.0.0.0:{port}")
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
-
 
 
 if __name__ == "__main__":
