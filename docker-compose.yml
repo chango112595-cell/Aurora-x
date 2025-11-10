@@ -1,55 +1,160 @@
-# Aurora-X Production Stack with Cloudflare Tunnel
-# Deploy with: docker compose up -d
+# Aurora-X Complete Development and Production Stack
+# Multi-service architecture with all 5 services
+
+version: '3.8'
 
 services:
-  aurora:
-    # Option 1: Use published image
-    image: ghcr.io/${GITHUB_REPOSITORY:-yourusername/aurora-x}:latest
-    
-    # Option 2: Build from local repo (uncomment if cloning repo to server)
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile.app
-    
-    container_name: aurora_x
+  # Backend API Service (Node.js/Express)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: aurora_backend
     environment:
-      PORT: "8000"
-      AURORA_DEFAULT_LANG: "python"
-      AURORA_ENV: "production"
-      # Optional: Add these for monitoring
-      AURORA_HEALTH_TOKEN: "${AURORA_HEALTH_TOKEN:-secure123}"
-      DISCORD_WEBHOOK_URL: "${DISCORD_WEBHOOK_URL:-}"
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: "5000"
+      DATABASE_URL: ${DATABASE_URL:-}
     ports:
-      - "127.0.0.1:8000:8000"  # Only bind to localhost for security
+      - "5000:5000"
     healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost:8000/healthz"]
-      interval: 15s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     restart: unless-stopped
     volumes:
-      # Persist synthesis runs and data
-      - ./aurora_runs:/app/runs
-      - ./aurora_data:/app/data
+      - backend_data:/app/data
+    networks:
+      - aurora_net
+    depends_on:
+      - db
+
+  # Bridge Service (Python/FastAPI)
+  bridge:
+    build:
+      context: .
+      dockerfile: aurora_x/bridge/Dockerfile
+    container_name: aurora_bridge
+    environment:
+      PYTHONUNBUFFERED: "1"
+    ports:
+      - "5001:5001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    volumes:
+      - bridge_specs:/app/specs
+      - bridge_runs:/app/runs
     networks:
       - aurora_net
 
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: aurora_cf_tunnel
-    depends_on:
-      aurora:
-        condition: service_healthy
-    command: tunnel run
+  # Self-Learn Server (Python/FastAPI)
+  self-learn:
+    build:
+      context: .
+      dockerfile: Dockerfile.self-learn
+    container_name: aurora_self_learn
     environment:
-      # Use the token from Cloudflare Dashboard > Zero Trust > Tunnels
-      TUNNEL_TOKEN: "${CF_TUNNEL_TOKEN}"
+      PYTHONUNBUFFERED: "1"
+      SELF_LEARN_PORT: "5002"
+    ports:
+      - "5002:5002"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    volumes:
+      - self_learn_specs:/app/specs_learning
+      - self_learn_runs:/app/runs_learning
+    networks:
+      - aurora_net
+
+  # Chat Server (Python/Flask)
+  chat:
+    build:
+      context: .
+      dockerfile: Dockerfile.chat
+    container_name: aurora_chat
+    environment:
+      PYTHONUNBUFFERED: "1"
+      CHAT_PORT: "5003"
+    ports:
+      - "5003:5003"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    volumes:
+      - aurora_knowledge:/app/.aurora_knowledge
+      - chat_history:/app/chat_history
+    networks:
+      - aurora_net
+
+  # Frontend (React/Vite + nginx)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: aurora_frontend
+    ports:
+      - "5173:5173"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     restart: unless-stopped
     networks:
       - aurora_net
+    depends_on:
+      - backend
+      - bridge
+      - self-learn
+      - chat
+
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: aurora_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-aurora_x}
+      POSTGRES_USER: ${POSTGRES_USER:-aurora}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aurora_secure_password}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aurora}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - aurora_net
+
+volumes:
+  backend_data:
+  bridge_specs:
+  bridge_runs:
+  self_learn_specs:
+  self_learn_runs:
+  aurora_knowledge:
+  chat_history:
+  postgres_data:
 
 networks:
   aurora_net:
     driver: bridge
-    name: aurora_network
