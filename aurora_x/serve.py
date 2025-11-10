@@ -235,9 +235,9 @@ async def serve_control_center():
 def healthz():
     """
     Aurora-X service health endpoint.
-    
+
     Returns basic health status and configuration info.
-    
+
     Returns:
         dict: Health status with timestamp and enabled features
     """
@@ -275,18 +275,17 @@ def t08_activate(payload: dict):
 
 
 # --- Self-Learning Status ---
-@app.get("/api/self-learning/status", tags=["self-learning"], 
-         summary="Get Self-Learning Status")
+@app.get("/api/self-learning/status", tags=["self-learning"], summary="Get Self-Learning Status")
 def self_learning_status():
     """
     Check if the autonomous self-learning daemon is running.
-    
+
     The self-learning system continuously improves Aurora-X by:
     - Analyzing past solutions and errors
     - Discovering optimization opportunities
     - Testing improvements automatically
     - Learning from user interactions
-    
+
     Returns:
         dict: Status including running state, PID, and last check timestamp
     """
@@ -312,17 +311,16 @@ def self_learning_status():
         return {"running": False, "error": str(e)}
 
 
-@app.post("/api/self-learning/start", tags=["self-learning"],
-         summary="Start Self-Learning Daemon")
+@app.post("/api/self-learning/start", tags=["self-learning"], summary="Start Self-Learning Daemon")
 def start_self_learning():
     """
     Start the autonomous self-learning daemon.
-    
+
     Default configuration:
     - Sleep interval: 15 seconds between iterations
     - Max iterations: 50 per session
     - Beam width: 20 for solution exploration
-    
+
     Returns:
         dict: Startup status with process PID
     """
@@ -339,12 +337,11 @@ def start_self_learning():
         return JSONResponse({"error": str(e)}, status_code=500)
 
 
-@app.post("/api/self-learning/stop", tags=["self-learning"],
-         summary="Stop Self-Learning Daemon")
+@app.post("/api/self-learning/stop", tags=["self-learning"], summary="Stop Self-Learning Daemon")
 def stop_self_learning():
     """
     Gracefully stop the self-learning daemon.
-    
+
     Returns:
         dict: Status with list of stopped process IDs
     """
@@ -435,20 +432,21 @@ class NLCompileResponse(BaseModel):
     message: str
 
 
-@app.post("/api/nl/compile", response_model=NLCompileResponse, tags=["compilation"], 
-         summary="Compile from Natural Language")
+@app.post(
+    "/api/nl/compile", response_model=NLCompileResponse, tags=["compilation"], summary="Compile from Natural Language"
+)
 async def compile_from_natural_language(request: NLCompileRequest):
     """
     Convert natural language descriptions into working code.
-    
+
     This endpoint uses advanced AI to parse English descriptions and generate
     complete, runnable code including functions, tests, and documentation.
-    
+
     **Supported Frameworks:**
     - Flask web applications
     - Python functions with specs
     - General-purpose scripts
-    
+
     **Example Prompts:**
     - "Create a Flask API that calculates fibonacci numbers"
     - "Write a function that sorts a list of numbers"
@@ -459,7 +457,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
     Returns:
         NLCompileResponse: Contains run_id, status, generated files list, and message
-        
+
     Raises:
         HTTPException: If prompt is empty or compilation fails
     """
@@ -611,14 +609,14 @@ class SolverRequest(BaseModel):
 async def solve_endpoint(request: SolverRequest):
     """
     Solve problems across multiple domains with structured JSON output.
-    
+
     The intelligent solver can handle:
     - **Mathematics**: Algebra, calculus, statistics, linear algebra
     - **Physics**: Mechanics, thermodynamics, electromagnetism
     - **Chemistry**: Stoichiometry, molecular calculations
     - **Logic**: Boolean algebra, propositional logic
     - **Unit Conversion**: SI units, imperial, custom units
-    
+
     **Example Problems:**
     - "What is the derivative of x^2 + 3x - 5?"
     - "Calculate the force on a 10kg object accelerating at 5m/s^2"
@@ -642,14 +640,14 @@ async def solve_endpoint(request: SolverRequest):
 async def solve_pretty_endpoint(request: SolverRequest):
     """
     Solve problems with human-readable formatted output.
-    
+
     This endpoint returns the same intelligent solving capabilities as `/api/solve`
     but formats the output in an easy-to-read plain text format with:
     - Clear section headers
     - Formatted numbers (6 decimal places)
     - Step-by-step explanations
     - Domain and task identification
-    
+
     Perfect for command-line tools, terminal applications, or human review.
 
     Args:
@@ -728,18 +726,17 @@ def root():
     }
 
 
-@app.get("/api/self-monitor/health", tags=["monitoring"],
-         summary="Self-Monitoring Health Check")
+@app.get("/api/self-monitor/health", tags=["monitoring"], summary="Self-Monitoring Health Check")
 def self_monitor_health():
     """
     Comprehensive health check with self-diagnostics.
-    
+
     Tests all essential services:
     - Solver functionality
     - Chat interface
     - File system access
     - Self-healing status
-    
+
     Returns:
         dict: Detailed health status for each service component
     """
@@ -773,18 +770,17 @@ def self_monitor_health():
         }
 
 
-@app.post("/api/self-monitor/auto-heal", tags=["monitoring"],
-         summary="Trigger Self-Healing")
+@app.post("/api/self-monitor/auto-heal", tags=["monitoring"], summary="Trigger Self-Healing")
 def self_monitor_auto_heal():
     """
     Manually trigger self-healing and recovery processes.
-    
+
     Automated recovery actions include:
     - Clearing corrupted cache state
     - Verifying core functionality
     - Restarting failed services
     - Testing all critical systems
-    
+
     Returns:
         dict: Healing status with actions taken and recommendations
     """
