@@ -1,0 +1,22 @@
+# Aurora-X Backup Cron Schedule
+# Add these lines to crontab: crontab -e
+#
+# Format: minute hour day month weekday command
+
+# Daily database backup at 2 AM
+0 2 * * * cd /workspaces/Aurora-x && ./scripts/backup-database.sh >> /workspaces/Aurora-x/logs/cron-backup.log 2>&1
+
+# Daily configuration backup at 2:30 AM
+30 2 * * * cd /workspaces/Aurora-x && ./scripts/backup-config.sh >> /workspaces/Aurora-x/logs/cron-backup.log 2>&1
+
+# Weekly full backup on Sundays at 3 AM
+0 3 * * 0 cd /workspaces/Aurora-x && ./scripts/backup-all.sh >> /workspaces/Aurora-x/logs/cron-backup.log 2>&1
+
+# Hourly backup during business hours (9 AM - 5 PM, Mon-Fri)
+0 9-17 * * 1-5 cd /workspaces/Aurora-x && ./scripts/backup-database.sh >> /workspaces/Aurora-x/logs/cron-backup.log 2>&1
+
+# Installation instructions:
+# 1. Edit crontab: crontab -e
+# 2. Copy the desired schedule lines above
+# 3. Save and exit
+# 4. Verify: crontab -l
