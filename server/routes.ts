@@ -18,6 +18,7 @@ import {
   runMetaSchema,
   usedSeedSchema,
 } from "@shared/schema";
+import authRouter from "./auth-routes";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
@@ -170,6 +171,15 @@ async function refreshReadmeBadges(): Promise<void> {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // ══════════════════════════════════════════════════════════════
+  // 🔐 AUTHENTICATION ROUTES
+  // ══════════════════════════════════════════════════════════════
+  app.use("/api/auth", authRouter);
+
+  // ══════════════════════════════════════════════════════════════
+  // 📊 SYSTEM ROUTES
+  // ══════════════════════════════════════════════════════════════
+  
   // Simple health check endpoint for container health checks
   app.get("/api/health", (req, res) => {
     res.status(200).json({ 
