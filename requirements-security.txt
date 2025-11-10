@@ -31,5 +31,5 @@ urllib3==2.1.0                   # HTTP client
 # Additional Security Tools
 cryptography==41.0.7             # Cryptographic recipes and primitives
 PyJWT==2.8.0                     # JSON Web Token implementation
-bcrypt==4.1.1                    # Password hashing
+bcrypt==4.3.0                    # Password hashing
  
