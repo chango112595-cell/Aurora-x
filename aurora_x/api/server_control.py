@@ -183,7 +183,7 @@ async def stop_service(service_name: str) -> dict[str, Any]:
             "pid": pid,
             "note": "Process terminated with SIGTERM",
         }
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         # Try force kill if graceful shutdown fails
         try:
             subprocess.run(["kill", "-KILL", str(pid)], check=True, timeout=5)
@@ -236,7 +236,9 @@ async def restart_service(service_name: str) -> dict[str, Any]:
         }
     except HTTPException as e:
         raise HTTPException(
-            status_code=500, detail=f"Service stopped but failed to restart: {str(e.detail)}", headers={"X-Restart-Details": str(results)}
+            status_code=500,
+            detail=f"Service stopped but failed to restart: {str(e.detail)}",
+            headers={"X-Restart-Details": str(results)},
         )
 
 
