@@ -1,0 +1,53 @@
+# Aurora-X Code Owners
+# This file defines who is responsible for code review in specific parts of the repository
+# Patterns follow the same syntax as .gitignore
+# The last matching pattern has the most precedence
+
+# Default owners for everything in the repo
+* @chango112595-cell
+
+# Core application code
+/aurora_x/ @chango112595-cell
+/aurora_x/serve.py @chango112595-cell
+/aurora_x/cache.py @chango112595-cell
+/aurora_x/performance.py @chango112595-cell
+
+# API endpoints
+/aurora_x/api/ @chango112595-cell
+
+# Bridge and generators
+/aurora_x/bridge/ @chango112595-cell
+/aurora_x/generators/ @chango112595-cell
+
+# Testing
+/tests/ @chango112595-cell
+pytest.ini @chango112595-cell
+
+# Documentation
+/docs/ @chango112595-cell
+*.md @chango112595-cell
+README.md @chango112595-cell
+
+# CI/CD and deployment
+/.github/ @chango112595-cell
+/scripts/ @chango112595-cell
+docker-compose.yml @chango112595-cell
+Dockerfile @chango112595-cell
+
+# Database migrations
+/alembic/ @chango112595-cell
+
+# Dependencies and configuration
+requirements*.txt @chango112595-cell
+pyproject.toml @chango112595-cell
+setup.py @chango112595-cell
+
+# Monitoring and performance
+/monitoring/ @chango112595-cell
+/prometheus/ @chango112595-cell
+
+# Tools and utilities
+/tools/ @chango112595-cell
+
+# Examples
+/examples/ @chango112595-cell

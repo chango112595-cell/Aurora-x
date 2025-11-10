@@ -1,0 +1,89 @@
+# Dependabot configuration for Aurora-X
+# Automatically checks for dependency updates and creates PRs
+
+version: 2
+updates:
+  # Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for stable dependencies
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # Group testing dependencies together
+      testing:
+        patterns:
+          - "pytest*"
+          - "coverage"
+          - "hypothesis"
+      # Group linting/formatting tools
+      dev-tools:
+        patterns:
+          - "black"
+          - "ruff"
+          - "isort"
+          - "mypy"
+          - "pre-commit"
+      # Group FastAPI ecosystem
+      fastapi:
+        patterns:
+          - "fastapi"
+          - "uvicorn"
+          - "pydantic"
+          - "starlette"
+      # Group database dependencies
+      database:
+        patterns:
+          - "sqlalchemy"
+          - "alembic"
+          - "psycopg2*"
+          - "asyncpg"
+      # Group caching dependencies
+      caching:
+        patterns:
+          - "redis"
+          - "aioredis"
+          - "hiredis"
+          - "cachetools"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+
+  # Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "chore"
+    ignore:
+      # Pin Python base image major versions
+      - dependency-name: "python"
+        update-types: ["version-update:semver-major"]
