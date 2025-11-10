@@ -31,7 +31,12 @@ attach_bridge(app)
 @app.get("/health")
 @app.get("/api/health")
 def health_check():
-    return {"status": "ok", "service": "bridge", "port": 5001, "aurora_fix": "Added /api/health for frontend compatibility"}
+    return {
+        "status": "ok",
+        "service": "bridge",
+        "port": 5001,
+        "aurora_fix": "Added /api/health for frontend compatibility",
+    }
 
 
 @app.get("/api/status")
@@ -43,7 +48,7 @@ def status_check():
         "port": 5001,
         "version": "1.0.0",
         "healthy": True,
-        "aurora_fix": "Added /api/status for frontend server control"
+        "aurora_fix": "Added /api/status for frontend server control",
     }
 
 

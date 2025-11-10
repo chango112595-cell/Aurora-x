@@ -64,7 +64,7 @@ def api_health():
         "status": daemon_stats["status"],
         "port": 5002,
         "timestamp": time.time(),
-        "aurora_fix": "Added /api/health route for frontend compatibility"
+        "aurora_fix": "Added /api/health route for frontend compatibility",
     }
 
 

@@ -3,31 +3,29 @@ Pytest Configuration and Shared Fixtures
 Provides reusable test fixtures for all test modules
 """
 
-import pytest
 import asyncio
+from collections.abc import AsyncGenerator, Generator
 from pathlib import Path
-from typing import Generator, AsyncGenerator
-from fastapi.testclient import TestClient
-import httpx
 
+import httpx
+import pytest
+from fastapi.testclient import TestClient
 
 # ============================================
 # Pytest Configuration
 # ============================================
 
+
 def pytest_configure(config):
     """Configure pytest with custom settings"""
-    config.addinivalue_line(
-        "markers", "requires_network: Tests that require network access"
-    )
-    config.addinivalue_line(
-        "markers", "requires_gpu: Tests that require GPU"
-    )
+    config.addinivalue_line("markers", "requires_network: Tests that require network access")
+    config.addinivalue_line("markers", "requires_gpu: Tests that require GPU")
 
 
 # ============================================
 # Path Fixtures
 # ============================================
+
 
 @pytest.fixture(scope="session")
 def project_root() -> Path:
@@ -47,10 +45,12 @@ def test_data_dir(project_root) -> Path:
 # Bridge Service Fixtures
 # ============================================
 
+
 @pytest.fixture(scope="module")
 def bridge_app():
     """Create Bridge service FastAPI app for testing"""
     from aurora_x.bridge.service import app
+
     return app
 
 
@@ -64,9 +64,7 @@ def bridge_client(bridge_app) -> Generator[TestClient, None, None]:
 @pytest.fixture
 async def bridge_async_client(bridge_app) -> AsyncGenerator[httpx.AsyncClient, None]:
     """Create async Bridge service test client"""
-    async with httpx.AsyncClient(
-        app=bridge_app, base_url="http://test"
-    ) as client:
+    async with httpx.AsyncClient(app=bridge_app, base_url="http://test") as client:
         yield client
 
 
@@ -74,10 +72,12 @@ async def bridge_async_client(bridge_app) -> AsyncGenerator[httpx.AsyncClient, N
 # Self-Learn Server Fixtures
 # ============================================
 
+
 @pytest.fixture(scope="module")
 def selflearn_app():
     """Create Self-Learn server FastAPI app for testing"""
     from aurora_x.self_learn_server import app
+
     return app
 
 
@@ -91,6 +91,7 @@ def selflearn_client(selflearn_app) -> Generator[TestClient, None, None]:
 # ============================================
 # Mock Data Fixtures
 # ============================================
+
 
 @pytest.fixture
 def sample_code():
@@ -113,7 +114,7 @@ def sample_spec():
         "description": "A test project for Aurora",
         "language": "python",
         "features": ["cli", "api"],
-        "dependencies": ["fastapi", "pytest"]
+        "dependencies": ["fastapi", "pytest"],
     }
 
 
@@ -127,10 +128,12 @@ def sample_nl_input():
 # Database Fixtures
 # ============================================
 
+
 @pytest.fixture
 def mock_db_session():
     """Mock database session for testing"""
     from unittest.mock import MagicMock
+
     session = MagicMock()
     return session
 
@@ -138,6 +141,7 @@ def mock_db_session():
 # ============================================
 # Environment Fixtures
 # ============================================
+
 
 @pytest.fixture
 def clean_env(monkeypatch):
@@ -163,6 +167,7 @@ def test_env(monkeypatch):
 # Async Fixtures
 # ============================================
 
+
 @pytest.fixture(scope="session")
 def event_loop():
     """Create event loop for async tests"""
@@ -175,6 +180,7 @@ def event_loop():
 # ============================================
 # Cleanup Fixtures
 # ============================================
+
 
 @pytest.fixture(autouse=True)
 def cleanup_temp_files(tmp_path, project_root):
@@ -192,30 +198,27 @@ def cleanup_temp_files(tmp_path, project_root):
 # Performance Fixtures
 # ============================================
 
+
 @pytest.fixture
 def benchmark_config():
     """Configuration for benchmark tests"""
-    return {
-        "min_rounds": 5,
-        "min_time": 0.01,
-        "max_time": 1.0,
-        "warmup": True
-    }
+    return {"min_rounds": 5, "min_time": 0.01, "max_time": 1.0, "warmup": True}
 
 
 # ============================================
 # Mock Service Fixtures
 # ============================================
 
+
 @pytest.fixture
 def mock_external_api(monkeypatch):
     """Mock external API calls"""
     from unittest.mock import MagicMock, patch
-    
+
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.json.return_value = {"status": "success"}
-    
+
     with patch("httpx.get", return_value=mock_response):
         with patch("httpx.post", return_value=mock_response):
             yield mock_response
