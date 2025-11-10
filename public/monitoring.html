@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -229,6 +230,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -305,7 +307,7 @@
         </div>
 
         <button class="refresh-button" onclick="refreshData()">🔄 Refresh</button>
-        
+
         <div class="last-updated">
             Last updated: <span id="lastUpdated">-</span>
         </div>
@@ -318,7 +320,7 @@
             const days = Math.floor(seconds / 86400);
             const hours = Math.floor((seconds % 86400) / 3600);
             const minutes = Math.floor((seconds % 3600) / 60);
-            
+
             if (days > 0) return `${days}d ${hours}h`;
             if (hours > 0) return `${hours}h ${minutes}m`;
             return `${minutes}m`;
@@ -347,37 +349,37 @@
                 const data = await response.json();
 
                 // Update overview
-                document.getElementById('servicesRunning').textContent = 
+                document.getElementById('servicesRunning').textContent =
                     `${data.overview.services_running}/${data.overview.services_total}`;
                 document.getElementById('systemStatus').textContent = data.overview.system_status;
                 document.getElementById('uptime').textContent = formatUptime(data.overview.uptime_seconds);
 
                 // Update overall status badge
                 const statusBadge = document.getElementById('overallStatus');
-                const systemStatus = data.system.cpu.status === 'critical' || 
-                                   data.system.memory.status === 'critical' || 
-                                   data.system.disk.status === 'critical' ? 'critical' :
-                                   data.system.cpu.status === 'warning' || 
-                                   data.system.memory.status === 'warning' || 
-                                   data.system.disk.status === 'warning' ? 'warning' : 'healthy';
-                
+                const systemStatus = data.system.cpu.status === 'critical' ||
+                    data.system.memory.status === 'critical' ||
+                    data.system.disk.status === 'critical' ? 'critical' :
+                    data.system.cpu.status === 'warning' ||
+                        data.system.memory.status === 'warning' ||
+                        data.system.disk.status === 'warning' ? 'warning' : 'healthy';
+
                 statusBadge.textContent = systemStatus.toUpperCase();
                 statusBadge.className = `status-badge status-${systemStatus}`;
 
                 // Update memory
                 const memoryUsed = data.system.memory.total_gb - data.system.memory.available_gb;
-                document.getElementById('memoryUsage').textContent = 
+                document.getElementById('memoryUsage').textContent =
                     `${memoryUsed.toFixed(1)} GB / ${data.system.memory.total_gb} GB`;
                 updateProgress('memoryProgress', data.system.memory.used_percent, 'memory');
 
                 // Update disk
                 const diskUsed = data.system.disk.total_gb - data.system.disk.free_gb;
-                document.getElementById('diskUsage').textContent = 
+                document.getElementById('diskUsage').textContent =
                     `${diskUsed.toFixed(1)} GB / ${data.system.disk.total_gb} GB`;
                 updateProgress('diskProgress', data.system.disk.used_percent, 'disk');
 
                 // Update CPU
-                document.getElementById('cpuUsage').textContent = 
+                document.getElementById('cpuUsage').textContent =
                     `${Math.round(data.system.cpu.usage_percent)}%`;
                 updateProgress('cpuProgress', data.system.cpu.usage_percent, 'cpu');
 
@@ -428,7 +430,7 @@
 
             } catch (error) {
                 console.error('Error fetching monitoring data:', error);
-                document.getElementById('loadingIndicator').textContent = 
+                document.getElementById('loadingIndicator').textContent =
                     '❌ Error loading monitoring data. Please check if the backend server is running.';
             }
         }
@@ -445,4 +447,5 @@
         });
     </script>
 </body>
+
 </html>
