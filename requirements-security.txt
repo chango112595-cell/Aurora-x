@@ -15,7 +15,7 @@ pyre-check==0.9.18               # Type checker with security focus
 
 # Secrets Detection
 detect-secrets==1.4.0            # Prevent secrets in code
-truffleHog==3.63.0               # Find secrets in git history
+truffleHog==2.2.1                # Find secrets in git history (fixed version)
 
 # Dependency Management
 pipdeptree==2.13.1               # Dependency tree visualization
