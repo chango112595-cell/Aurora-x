@@ -55,7 +55,8 @@ def chat_endpoint():
 
         # Reset session context if requested or if it's a greeting to interface
         if reset_session or (
-            session_id == "cosmic-nexus-ui" and any(greeting in message.lower() for greeting in ["hello", "hi", "hey"])
+            session_id == "cosmic-nexus-ui"
+            and any(greeting in message.lower() for greeting in ["hello", "hi", "hey"])
         ):
             if session_id in aurora.conversation_contexts:
                 del aurora.conversation_contexts[session_id]
@@ -64,7 +65,15 @@ def chat_endpoint():
         msg_lower = message.lower()
         if any(
             cmd in msg_lower
-            for cmd in ["start all", "stop all", "fire up", "status", "health", "restart chat", "system"]
+            for cmd in [
+                "start all",
+                "stop all",
+                "fire up",
+                "status",
+                "health",
+                "restart chat",
+                "system",
+            ]
         ):
             # Use Aurora's autonomous system management
             loop = asyncio.new_event_loop()
@@ -132,7 +141,13 @@ def reset_session():
         if session_id in aurora.conversation_contexts:
             del aurora.conversation_contexts[session_id]
 
-        return jsonify({"status": "success", "message": f"Session {session_id} reset", "timestamp": time.time()})
+        return jsonify(
+            {
+                "status": "success",
+                "message": f"Session {session_id} reset",
+                "timestamp": time.time(),
+            }
+        )
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -159,7 +174,7 @@ def serve_home():
     return serve_cosmic_interface()
 
 
-def run_aurora_chat_server(port=5003):
+def run_aurora_chat_server(port=9000):
     """Run Aurora's enhanced chat server"""
     print(f"🌌 Aurora Core Chat Server starting on port {port}...")
     print("🧠 Using Aurora Core Intelligence v2.0")
@@ -172,5 +187,5 @@ def run_aurora_chat_server(port=5003):
 if __name__ == "__main__":
     import sys
 
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 5003
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else 9000
     run_aurora_chat_server(port)

@@ -1,5 +1,5 @@
 {
-  "total_completed": 10,
+  "total_completed": 20,
   "history": [
     {
       "task_id": "13f087c17aa8",
@@ -49,6 +49,56 @@
     {
       "task_id": "7cd7a9b85ca3",
       "completed_at": "2025-11-10T13:16:41.423905",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "122f97c092fa",
+      "completed_at": "2025-11-10T23:45:38.246722",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "2a45b06ad4a7",
+      "completed_at": "2025-11-10T23:45:43.254985",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "7c25835f170a",
+      "completed_at": "2025-11-10T23:45:48.266152",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "f5b3d8771ab0",
+      "completed_at": "2025-11-10T23:45:53.278795",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "93d617a88488",
+      "completed_at": "2025-11-10T23:45:58.288893",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "927b58cea8d9",
+      "completed_at": "2025-11-10T23:46:03.299549",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "28246b891ed2",
+      "completed_at": "2025-11-11T02:57:26.519282",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "9f8cd88576e3",
+      "completed_at": "2025-11-11T02:57:31.555339",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "b8cf32c94203",
+      "completed_at": "2025-11-11T02:57:36.569631",
+      "task_name": "unknown"
+    },
+    {
+      "task_id": "60f4ab5bddc4",
+      "completed_at": "2025-11-11T02:57:41.587168",
       "task_name": "unknown"
     }
   ]

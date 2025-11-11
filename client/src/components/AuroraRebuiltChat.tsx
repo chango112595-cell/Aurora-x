@@ -48,17 +48,20 @@ I designed this holographic interface myself! Ask me anything about code, system
     setInput('');
     setIsLoading(true);
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch('http://localhost:5003/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: input, session_id: 'cosmic-ui' })
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
+      const auroraResponse = data.message || data.response ||
+        `✨ Generated spec: ${data.function_name}\n📁 ${data.spec}\n\n${data.ok ? '✅ Success!' : '⚠️ Check the spec file for details'}`;
+
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'aurora',
-        content: data.response || 'No response',
+        content: auroraResponse,
         timestamp: new Date()
       }]);
     } catch (error) {
@@ -81,7 +84,7 @@ I designed this holographic interface myself! Ask me anything about code, system
         backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.2) 0%, transparent 50%)',
         animation: 'pulse 4s ease-in-out infinite'
       }}></div>
-      
+
       <div className="relative h-full flex flex-col p-4">
         {/* Holographic header */}
         <div className="bg-gradient-to-r from-purple-500/10 to-cyan-500/10 backdrop-blur-xl border border-purple-500/30 rounded-lg p-4 mb-4">
@@ -106,11 +109,10 @@ I designed this holographic interface myself! Ask me anything about code, system
         <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2">
           {messages.map((msg) => (
             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[80%] rounded-lg p-4 backdrop-blur-sm border ${
-                msg.role === 'user'
-                  ? 'bg-cyan-500/20 border-cyan-400/50 text-cyan-100'
-                  : 'bg-purple-500/20 border-purple-400/50 text-purple-100'
-              }`}>
+              <div className={`max-w-[80%] rounded-lg p-4 backdrop-blur-sm border ${msg.role === 'user'
+                ? 'bg-cyan-500/20 border-cyan-400/50 text-cyan-100'
+                : 'bg-purple-500/20 border-purple-400/50 text-purple-100'
+                }`}>
                 {msg.role === 'aurora' && <Sparkles className="h-4 w-4 text-cyan-400 mb-2" />}
                 <div className="text-sm whitespace-pre-wrap">{msg.content}</div>
                 <div className="text-xs opacity-50 mt-2">{msg.timestamp.toLocaleTimeString()}</div>
