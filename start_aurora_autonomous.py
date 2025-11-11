@@ -67,9 +67,7 @@ class AuroraAutonomousRunner:
                     for task in tasks:
                         print(f"   ⚡ Task: {task.get('description', 'Unknown')}")
                         # Execute task autonomously
-                        result = self.autonomous_system.autonomous_execute(
-                            task.get("description", "")
-                        )
+                        result = self.autonomous_system.autonomous_execute(task.get("description", ""))
                         if result:
                             print("   ✅ Task completed")
                         else:
@@ -115,9 +113,7 @@ class AuroraAutonomousRunner:
         import subprocess
 
         for name, port in servers.items():
-            result = subprocess.run(
-                f"lsof -i :{port} -t", shell=True, capture_output=True, text=True
-            )
+            result = subprocess.run(f"lsof -i :{port} -t", shell=True, capture_output=True, text=True)
             if result.returncode != 0:
                 issues.append(f"{name} not running on port {port}")
 
@@ -127,11 +123,7 @@ class AuroraAutonomousRunner:
             try:
                 with open(log_file) as f:
                     logs = f.readlines()
-                    errors = [
-                        line
-                        for line in logs[-100:]
-                        if "error" in line.lower() or "failed" in line.lower()
-                    ]
+                    errors = [line for line in logs[-100:] if "error" in line.lower() or "failed" in line.lower()]
                     if errors:
                         issues.append(f"Found {len(errors)} error entries in logs")
             except:
