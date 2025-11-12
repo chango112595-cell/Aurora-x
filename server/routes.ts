@@ -189,6 +189,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Luminar Nexus V2 Status Proxy - forwards requests to port 3000
+  app.get("/api/luminar-nexus/v2/status", async (req, res) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/nexus/status');
+      
+      if (!response.ok) {
+        return res.status(response.status).json({ 
+          error: "Luminar Nexus V2 service unavailable",
+          status: "degraded"
+        });
+      }
+      
+      const data = await response.json();
+      res.json(data);
+    } catch (error) {
+      console.error('[Luminar Nexus V2] Proxy error:', error);
+      res.status(503).json({ 
+        error: "Could not connect to Luminar Nexus V2",
+        status: "unavailable",
+        services: {},
+        quantum_coherence: 0,
+        healthy_services: 0,
+        ai_learning_active: false,
+        autonomous_healing_active: false
+      });
+    }
+  });
+
   // Conversation memory store - persists across requests
   const conversationMemory = new Map<string, Array<{role: string, content: string, timestamp: number}>>();
 
