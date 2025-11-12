@@ -3,6 +3,8 @@ import { ChatInterface } from "@/components/chat-interface";
 import { Card } from "@/components/ui/card";
 import backgroundImage from "@assets/generated_images/Holographic_AI_neural_network_background_9dd21e33.png";
 import { useEffect, useState } from "react";
+import UnifiedAuroraChat from '@/components/UnifiedAuroraChat';
+
 
 export default function Home() {
   const [particles, setParticles] = useState<Array<{ id: number, x: number, y: number, delay: number }>>([]);
@@ -84,7 +86,7 @@ export default function Home() {
           <div className="absolute bottom-0 left-0 w-20 h-20 border-l-2 border-b-2 border-cyan-500/30 pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-20 h-20 border-r-2 border-b-2 border-cyan-500/30 pointer-events-none" />
 
-          <ChatInterface />
+          <UnifiedAuroraChat />
         </div>
       </div>
 
@@ -95,17 +97,17 @@ export default function Home() {
           50% { transform: translateY(-40px) translateX(-10px); }
           75% { transform: translateY(-20px) translateX(10px); }
         }
-        
+
         @keyframes scan {
           0% { top: -2px; }
           100% { top: 100%; }
         }
-        
+
         @keyframes hueRotate {
           0% { filter: hue-rotate(0deg); }
           100% { filter: hue-rotate(360deg); }
         }
-        
+
         @keyframes gradient {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }

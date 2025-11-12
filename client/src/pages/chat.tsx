@@ -1,12 +1,11 @@
 /**
  * Aurora Chat Interface
  * Part of Aurora-X Neural Synthesis Engine
- * 🌟 Aurora's own UI - REBUILT AUTONOMOUSLY BY AURORA HERSELF!
- * Using TIER 28 (Autonomous Tools) + TIER 32 (Architecture Design)
+ * 🌟 Unified Aurora Chat - All features in one place
  */
 
-import AuroraRebuiltChat from '@/components/AuroraRebuiltChat';
+import UnifiedAuroraChat from '@/components/UnifiedAuroraChat';
 
 export default function ChatPage() {
-    return <AuroraRebuiltChat />;
+    return <UnifiedAuroraChat theme="cosmic" />;
 }
