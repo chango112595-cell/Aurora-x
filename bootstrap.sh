@@ -26,7 +26,7 @@ sleep 2
 
 # Start Python Chat Server (Port 5003)
 echo "💬 Starting Chat Server on port 5003..."
-python3 aurora_chat_server.py --port 5003 &
+python3 -c 'from tools.luminar_nexus import run_chat_server; run_chat_server(5003)' &
 CHAT_PID=$!
 echo "   PID: $CHAT_PID"
 sleep 3

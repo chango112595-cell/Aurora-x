@@ -53,8 +53,11 @@ try:
     )
     AURORA_INTELLIGENCE.log("🧠 KNOWLEDGE ENGINE INITIALIZED - Aurora can now utilize all 33 tiers dynamically")
 
+    # Determine project root from current file location
+    PROJECT_ROOT = Path(__file__).resolve().parents[1]
+    
     # Load Aurora's Grandmaster skills from consolidated corpus
-    corpus_file = Path("/workspaces/Aurora-x/.aurora_knowledge/consolidated_learning_corpus.json")
+    corpus_file = PROJECT_ROOT / ".aurora_knowledge" / "consolidated_learning_corpus.json"
     if corpus_file.exists():
         with open(corpus_file) as f:
             corpus_data = json.load(f)
@@ -120,6 +123,9 @@ class LuminarNexusServerManager:
     """
 
     def __init__(self):
+        # Determine project root from current file location
+        self._project_root = Path(__file__).resolve().parents[1]
+        
         # Load Aurora's project ownership configuration
         self.project_config = self._load_project_config()
 
@@ -137,7 +143,7 @@ class LuminarNexusServerManager:
         self.servers = {
             "bridge": {
                 "name": "Aurora Bridge Service (Factory NL→Project)",
-                "command_template": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
+                "command_template": f"cd {self._project_root} && python3 -m aurora_x.bridge.service",
                 "session": "aurora-bridge",
                 "preferred_port": 5001,
                 "port": None,  # Will be assigned dynamically
@@ -145,7 +151,7 @@ class LuminarNexusServerManager:
             },
             "backend": {
                 "name": "Aurora Backend API (Main Server)",
-                "command_template": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
+                "command_template": f"cd {self._project_root} && NODE_ENV=development npx tsx server/index.ts",
                 "session": "aurora-backend",
                 "preferred_port": 5000,
                 "port": None,
@@ -153,7 +159,7 @@ class LuminarNexusServerManager:
             },
             "vite": {
                 "name": "Aurora Vite Dev Server (Frontend)",
-                "command_template": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port {port}",
+                "command_template": f"cd {self._project_root} && npx vite --host 0.0.0.0 --port {{port}}",
                 "session": "aurora-vite",
                 "preferred_port": 5173,
                 "port": None,
@@ -161,7 +167,7 @@ class LuminarNexusServerManager:
             },
             "self-learn": {
                 "name": "Aurora Self-Learning Server (Continuous Learning)",
-                "command_template": "cd /workspaces/Aurora-x && python3 -c 'from aurora_x.self_learn_server import app; import uvicorn; uvicorn.run(app, host=\"0.0.0.0\", port={port})'",
+                "command_template": f"cd {self._project_root} && python3 -c 'from aurora_x.self_learn_server import app; import uvicorn; uvicorn.run(app, host=\"0.0.0.0\", port={{port}})'",
                 "session": "aurora-self-learn",
                 "preferred_port": 5002,
                 "port": None,
@@ -169,7 +175,7 @@ class LuminarNexusServerManager:
             },
             "chat": {
                 "name": "Aurora Conversational AI Chat Server",
-                "command_template": "cd /workspaces/Aurora-x && python3 -c 'from tools.luminar_nexus import run_chat_server; run_chat_server({port})'",
+                "command_template": f"cd {self._project_root} && python3 -c 'from tools.luminar_nexus import run_chat_server; run_chat_server({{port}})'",
                 "session": "aurora-chat",
                 "preferred_port": 5003,
                 "port": None,
@@ -177,7 +183,7 @@ class LuminarNexusServerManager:
             },
         }
 
-        self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/luminar_nexus.jsonl")
+        self.log_file = self._project_root / ".aurora_knowledge" / "luminar_nexus.jsonl"
         self.log_file.parent.mkdir(exist_ok=True)
 
         # Always assign ports intelligently - Aurora validates what's actually hers
@@ -185,13 +191,13 @@ class LuminarNexusServerManager:
 
     def _load_project_config(self):
         """Load Aurora's complete project ownership configuration"""
-        config_path = Path("/workspaces/Aurora-x/.aurora_project_config.json")
+        config_path = self._project_root / ".aurora_project_config.json"
         if config_path.exists():
             with open(config_path) as f:
                 return json.load(f)
         return {
             "project_name": "Aurora-X",
-            "project_root": "/workspaces/Aurora-x",
+            "project_root": str(self._project_root),
             "aurora_owns": True,
             "structure": {
                 "frontend": {"root": "client"},
@@ -204,10 +210,10 @@ class LuminarNexusServerManager:
         """Get absolute path within Aurora's project
 
         Examples:
-            get_project_path('client', 'src', 'components') -> /workspaces/Aurora-x/client/src/components
-            get_project_path('server', 'routes') -> /workspaces/Aurora-x/server/routes
+            get_project_path('client', 'src', 'components') -> {project_root}/client/src/components
+            get_project_path('server', 'routes') -> {project_root}/server/routes
         """
-        root = Path(self.project_config.get("project_root", "/workspaces/Aurora-x"))
+        root = Path(self.project_config.get("project_root", str(self._project_root)))
         return str(root / Path(*parts))
 
     def log_event(self, event_type, server, details):
