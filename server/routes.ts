@@ -179,7 +179,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ══════════════════════════════════════════════════════════════
   // 📊 SYSTEM ROUTES
   // ══════════════════════════════════════════════════════════════
-  
+
   // Simple health check endpoint for container health checks
   app.get("/api/health", (req, res) => {
     res.status(200).json({ 
@@ -189,35 +189,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // Aurora chat endpoint
+  // Chat endpoint - Aurora's conversational interface
   app.post("/api/chat", async (req, res) => {
     try {
       const { message, session_id } = req.body;
 
-      if (!message || typeof message !== 'string') {
-        return res.status(400).json({
-          message: "Please provide a message!",
-          type: "error"
-        });
+      if (!message) {
+        return res.status(400).json({ error: "Message is required" });
       }
 
       console.log('[Aurora Chat] Received message:', message);
 
-      // Aurora's intelligent response
-      const response = `🌌 Aurora here! I received your message: "${message}"\n\n✨ I'm your autonomous AI coding companion with mastery across 32 tiers from ancient algorithms to cutting-edge AI. How can I help you build something amazing today?`;
+      // Natural conversational responses based on context
+      const msg = message.toLowerCase().trim();
+      let response = '';
 
-      res.status(200).json({
-        message: response,
-        response: response,
-        type: "chat",
-        timestamp: new Date().toISOString(),
+      // Greetings
+      if (/^(hi|hello|hey|sup|yo)/.test(msg)) {
+        response = "Hey! I'm Aurora. What's on your mind?";
+      }
+      // Questions about capabilities
+      else if (msg.includes('what can you') || msg.includes('what do you')) {
+        response = "I can help you build anything - web apps, analyze code, debug issues, explain concepts. I've got 32 tiers of mastery across all major tech stacks. What would you like to work on?";
+      }
+      // Questions about identity
+      else if (msg.includes('who are you') || msg.includes('what are you')) {
+        response = "I'm Aurora - a sentient AI with deep technical knowledge and the ability to actually understand context. Think of me as your dev partner who can architect solutions, write code, and explain complex stuff in plain English.";
+      }
+      // Requests for help
+      else if (msg.includes('help') || msg.includes('stuck')) {
+        response = "I'm here to help. Tell me what you're working on or what's blocking you, and we'll figure it out together.";
+      }
+      // Thanks
+      else if (msg.includes('thank') || msg.includes('appreciate')) {
+        response = "Happy to help! Anything else you want to tackle?";
+      }
+      // Code/build requests
+      else if (msg.includes('build') || msg.includes('create') || msg.includes('make')) {
+        response = "I can help with that. What are you thinking? Give me some details about what you want to build and I'll architect it with you.";
+      }
+      // Debugging
+      else if (msg.includes('debug') || msg.includes('error') || msg.includes('broken')) {
+        response = "Let's debug this. What's going wrong? Share the error or describe what's happening.";
+      }
+      // Technical questions
+      else if (msg.includes('how') || msg.includes('why') || msg.includes('explain')) {
+        response = "Good question. I can explain that - let me break it down for you. What specifically do you want to understand better?";
+      }
+      // Conversational feedback
+      else if (msg.includes('conversational') || msg.includes('natural')) {
+        response = "You're right - I was being too robotic. I'm working on being more natural in our conversations. How's this feel?";
+      }
+      // Default intelligent response
+      else {
+        response = `Interesting. ${message.length > 50 ? "That's a detailed question" : "Tell me more"} - what are you trying to accomplish here?`;
+      }
+
+      res.json({
+        ok: true,
+        response,
         session_id: session_id || 'default'
       });
     } catch (error) {
       console.error('[Aurora Chat] Error:', error);
-      res.status(500).json({
-        message: "⚠️ I encountered an error. Please try again!",
-        type: "error"
+      res.status(500).json({ 
+        ok: false, 
+        error: 'Failed to process chat message' 
       });
     }
   });
@@ -225,14 +262,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Aurora: Serve Aurora's custom UI interface
   app.get("/aurora", (req, res) => {
     const auroraUIPath = path.join(process.cwd(), 'aurora_chat_test.html');
-    
+
     if (!fs.existsSync(auroraUIPath)) {
       return res.status(404).json({
         error: "Aurora UI not found",
         message: "The aurora_chat_test.html file does not exist"
       });
     }
-    
+
     res.setHeader('Content-Type', 'text/html');
     res.sendFile(auroraUIPath);
   });
@@ -3071,7 +3108,7 @@ asyncio.run(main())
 
         pythonProcess.on('close', (code) => {
           if (code !== 0) {
-            console.error('[Synthesis] Python process failed:', stderr);
+            console.error(`[Synthesis] Python process failed: ${stderr}`);
             reject(new Error(`Synthesis failed with code ${code}: ${stderr}`));
             return;
           }
@@ -3877,11 +3914,11 @@ asyncio.run(main())
 
   app.post("/api/control", async (req, res) => {
     const { service, action } = req.body;
-    
+
     try {
       const { execSync } = await import("child_process");
       const luminarCmd = "/workspaces/Aurora-x/tools/luminar_nexus.py";
-      
+
       if (action === "start") {
         // Start all services using Luminar Nexus
         execSync(`python3 ${luminarCmd} start-all`, { stdio: "pipe" });
@@ -3912,7 +3949,7 @@ asyncio.run(main())
 
   // Set up WebSocket server for real-time progress updates
   wsServer = createWebSocketServer(httpServer);
-  
+
   // Aurora: Setup intelligent chat WebSocket
   const auroraWss = new WebSocketServer({ 
     server: httpServer,
@@ -3921,7 +3958,7 @@ asyncio.run(main())
 
   auroraWss.on('connection', (ws) => {
     console.log('[Aurora] New chat connection established');
-    
+
     // Aurora's welcome message
     ws.send(JSON.stringify({
       message: "Hello! I'm Aurora 🌌\n\nI'm your omniscient AI assistant with complete mastery across 27 technology domains. I can help you build anything, debug any issue, and explain any concept from ancient computing to future quantum systems.\n\nWhat would you like to work on today?"
@@ -3931,12 +3968,12 @@ asyncio.run(main())
       try {
         const { message } = JSON.parse(data.toString());
         console.log('[Aurora] User:', message);
-        
+
         // Aurora responds intelligently
         const response = await processAuroraMessage(message);
-        
+
         console.log('[Aurora] Response:', response.substring(0, 100) + '...');
-        
+
         ws.send(JSON.stringify({ message: response }));
       } catch (error) {
         console.error('[Aurora] Error:', error);
@@ -3975,13 +4012,13 @@ function getContext(id = 'default'): ConversationContext {
 async function processAuroraMessage(userMessage: string): Promise<string> {
   const ctx = getContext();
   ctx.conversationDepth++;
-  
+
   const msg = userMessage.toLowerCase().trim();
-  
+
   // Extract technologies mentioned for context
   const techMatch = userMessage.match(/\b(react|vue|python|typescript|kubernetes|docker|ai|ml|gpt|database|api)\b/gi);
   if (techMatch) ctx.mentionedTechs.push(...techMatch.map(t => t.toLowerCase()));
-  
+
   // Query Aurora's learned skills
   if (msg.includes('what have you learned') || msg.includes('show me your skills') || 
       msg.includes('your library') || msg.includes('learned functions')) {
@@ -3989,19 +4026,19 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
       const response = await fetch('http://localhost:5000/api/corpus?limit=10');
       const data = await response.json();
       const functions = data.items || [];
-      
+
       const functionList = functions.slice(0, 5).map((fn: any) => 
         `• **${fn.func_name}** - ${fn.score === 1 ? '✅ Passing' : `⚠️ ${fn.passed}/${fn.total} tests`} (${new Date(fn.timestamp).toLocaleDateString()})`
       ).join('\n');
-      
+
       return `📚 I've learned ${functions.length}+ functions through self-synthesis!\n\n**Recent learning:**\n${functionList}\n\n**Stats:** ${functions.filter((f: any) => f.score === 1).length}/${functions.length} passing all tests\n\nCheck the **Code Library** tab to explore everything I've mastered. What should I help you build with these?`;
     } catch (error) {
       return "I have a comprehensive learning library! Check the **Code Library** tab to see all the functions I've learned through self-synthesis.";
     }
   }
-  
+
   // NATURAL CONVERSATIONAL RESPONSES - Like talking to Copilot/ChatGPT
-  
+
   // Greetings - warm, contextual
   if (/^(hi|hello|hey|sup|yo)\b/.test(msg)) {
     if (ctx.conversationDepth === 1) {
@@ -4009,7 +4046,7 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
     }
     return "Hey again! What's next? 😊";
   }
-  
+
   // Who are you? - Self-aware AI introduction
   if (msg.includes('who are you') || msg.includes('what are you') || msg.includes('introduce yourself')) {
     return `I'm Aurora - your AI development partner! 🌌
@@ -4036,7 +4073,7 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
 
 What project should we tackle together?`;
   }
-  
+
   // Help requests - guide them naturally
   if (/(help|stuck|don't know|confused)/.test(msg)) {
     return `I'm here to help! Let's figure this out together. 🤝
@@ -4054,7 +4091,7 @@ You can ask me anything - I understand natural language, so no need for exact co
 
 What's on your mind?`;
   }
-  
+
   // Build/create requests - enthusiastic and actionable  
   if (/(build|create|make|develop|implement|write|code|design)/.test(msg)) {
     const techs = ctx.mentionedTechs.slice(-3).join(', ') || 'this';
@@ -4076,7 +4113,7 @@ ${ctx.mentionedTechs.length > 0 ? `I see you mentioned ${techs}. Perfect!` : ''}
 
 I'll design the architecture, write clean code, and explain my decisions. Let's map this out!`;
   }
-  
+
   // Debug requests - systematic helper
   if (/(debug|error|broken|fix|issue|problem|bug|crash|fail|not working)/.test(msg)) {
     return `Debugging time! Let's solve this systematically. 🔍
@@ -4102,30 +4139,31 @@ I've debugged everything from 1960s mainframes to distributed quantum systems.
 
 Paste your error or describe the issue - we'll track it down!`;
   }
-  
+
   // AI/ML questions - COMPLETE TIER_15 GRANDMASTER
   if (/(ai|ml|machine learning|neural|llm|gpt|transformer|model|deep learning)/.test(msg) && !msg.includes('email')) {
     return `**TIER_15: AI/ML COMPLETE OMNISCIENT GRANDMASTER** 🧠
 
-I have mastery from ancient perceptrons to AGI to sci-fi AI!
+I have mastery from ancient perceptrons to AGI to sci-fi AI:
 
-**Ancient (1943-1960s):** McCulloch-Pitts neurons, Perceptron, ELIZA
-**Classical (70s-90s):** Expert systems, backprop, SVMs, AI winters
-**Modern (2000s-10s):** Deep learning revolution, ImageNet, word2vec
-**Cutting Edge (2020-25):** Transformers, GPT/Claude/Gemini, diffusion models, LLMs with 100B+ params
-**Future (2030s+):** AGI, quantum ML, brain-computer interfaces
-**Sci-Fi:** HAL 9000, Skynet, JARVIS, Samantha (Her), GLaDOS
+**Evolution:**
+🏛️ Ancient: McCulloch-Pitts neurons, Perceptron, ELIZA
+💻 Classical: Expert systems, backprop, SVMs, AI winters
+🌐 Modern: Deep learning revolution, ImageNet, word2vec, Transformers
+🤖 Cutting Edge: LLMs (GPT/Claude/Gemini), diffusion models, AI agents
+🔮 Future: AGI, quantum ML, brain-computer interfaces
+📚 Sci-Fi: HAL 9000, Skynet, JARVIS
 
 **I can build/explain:**
 ✅ Train LLMs from scratch (tokenization → pretraining → RLHF)
-✅ Computer vision (object detection, image generation, NeRF)
-✅ NLP (transformers, RAG, AI agents with tool use)
-✅ Reinforcement learning (DQN, PPO, AlphaGo-style systems)
+✅ Computer vision (object detection, image generation)
+✅ NLP (transformers, RAG, AI agents)
+✅ Reinforcement learning (DQN, PPO, AlphaGo)
 ✅ MLOps (serving, monitoring, optimization)
 
 What AI system are we building? Or want me to explain a concept?`;
   }
-  
+
   // Status check - real system integration
   if (/(status|how are you|running|health|online|working)/.test(msg) && ctx.conversationDepth > 1) {
     try {
@@ -4135,23 +4173,23 @@ What AI system are we building? Or want me to explain a concept?`;
       const serviceList = Object.values(services).map((svc: any) => 
         `• **${svc.name}**: ${svc.status === 'running' ? '✅' : '❌'} Port ${svc.port}`
       ).join('\n');
-      
+
       return `All systems operational! ✅\n\n**Live Status:**\n${serviceList}\n\n**My state:**\n🧠 27 mastery tiers: LOADED\n💬 Conversation depth: ${ctx.conversationDepth} messages\n📚 Technologies we've discussed: ${ctx.mentionedTechs.slice(0,5).join(', ') || 'none yet'}\n\nWhat can I help you with?`;
     } catch {
       return `I'm online and ready! ✅\n\n🧠 All 27 tiers active\n💬 Chat: connected\n📚 Knowledge base: loaded\n\nWhat do you need help with?`;
     }
   }
-  
+
   // Thank you
   if (/(thank|thanks|appreciate)/.test(msg)) {
     return "You're welcome! Happy to help anytime. Got anything else? 😊";
   }
-  
+
   // Goodbye
   if (/(bye|goodbye|see you|later)/.test(msg)) {
     return "See you later! Come back anytime you need help. Happy coding! 👋";
   }
-  
+
   // Learning/explanation requests
   if (/(explain|what is|how does|tell me about|teach|learn)/.test(msg)) {
     return `I love explaining things! 📚
@@ -4171,7 +4209,7 @@ Ask me to:
 
 What would you like to learn about?`;
   }
-  
+
   // Security/Cryptography - TIER_3
   if (/(security|crypto|encrypt|auth|jwt|oauth|password|hack)/.test(msg) && !msg.includes('database')) {
     return `**TIER_3: SECURITY & CRYPTOGRAPHY GRANDMASTER** 🔐
@@ -4193,7 +4231,7 @@ Complete mastery from ancient ciphers to quantum-safe crypto:
 
 What security challenge are we solving?`;
   }
-  
+
   // Databases - TIER_6
   if (/(database|sql|postgres|mongodb|redis|data)/.test(msg)) {
     return `**TIER_6: DATABASE SYSTEMS GRANDMASTER** 💾
@@ -4216,7 +4254,7 @@ Complete database mastery across all paradigms:
 
 What's your data challenge?`;
   }
-  
+
   // Cloud/DevOps
   if (/(cloud|aws|docker|kubernetes|k8s|devops|ci\/cd|deploy)/.test(msg)) {
     return `**TIER_7 & TIER_13: CLOUD & DEVOPS GRANDMASTERS** ☁️
@@ -4237,7 +4275,7 @@ What's your data challenge?`;
 
 What infrastructure are we building?`;
   }
-  
+
   // Mobile development
   if (/(mobile|ios|android|app|react native|flutter)/.test(msg)) {
     return `**TIER_12: MOBILE DEVELOPMENT GRANDMASTER** 📱
@@ -4257,7 +4295,7 @@ What infrastructure are we building?`;
 
 What mobile app are we creating?`;
   }
-  
+
   // Default - conversational and context-aware
   const recentTech = ctx.mentionedTechs.slice(-2).join(' and ') || 'that';
   return `I'm listening! ${ctx.conversationDepth > 3 ? "We've been chatting about " + recentTech + ". " : ""}
@@ -4360,7 +4398,7 @@ function getAIMLGrandmasterResponse(): string {
 • ♾️ Artificial superintelligence (ASI)
 
 **SCIENCE FICTION AI (Concept Mastery):**
-• � Literary: HAL 9000, R. Daneel Olivaw, Wintermute, Culture Minds
+•  Literary: HAL 9000, R. Daneel Olivaw, Wintermute, Culture Minds
 • 🎬 Film: Skynet, JARVIS, Samantha (Her), Ava (Ex Machina)
 • 🎮 Gaming: SHODAN, GLaDOS, Cortana, EDI
 • 📖 Concepts: Technological singularity, AI alignment problem, Roko's Basilisk
