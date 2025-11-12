@@ -189,7 +189,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // Chat endpoint - Aurora's conversational interface with command execution
+  // Conversation memory store - persists across requests
+  const conversationMemory = new Map<string, Array<{role: string, content: string, timestamp: number}>>();
+  
+  // Chat endpoint - Aurora's conversational interface with command execution and memory
   app.post("/api/chat", async (req, res) => {
     try {
       const { message, session_id } = req.body;
@@ -198,21 +201,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Message is required" });
       }
 
-      console.log('[Aurora Chat] Received message:', message);
+      const sessionId = session_id || 'default';
+      console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId);
+
+      // Initialize or retrieve conversation history
+      if (!conversationMemory.has(sessionId)) {
+        conversationMemory.set(sessionId, []);
+      }
+      const history = conversationMemory.get(sessionId)!;
+      
+      // Add user message to history
+      history.push({
+        role: 'user',
+        content: message,
+        timestamp: Date.now()
+      });
+
+      // Keep only last 20 messages to prevent memory overflow
+      if (history.length > 20) {
+        history.splice(0, history.length - 20);
+      }
 
       const msg = message.toLowerCase().trim();
       let response = '';
       let action = null;
 
+      // Check for memory-related queries
+      if (msg.includes('remember') || msg.includes('you said') || msg.includes('earlier')) {
+        const previousMessages = history.slice(0, -1).filter(m => m.role === 'assistant').slice(-3);
+        if (previousMessages.length > 0) {
+          response = `I remember our conversation. Here's what I said recently:\n${previousMessages.map((m, i) => `${i + 1}. ${m.content.substring(0, 100)}...`).join('\n')}`;
+        } else {
+          response = "This is the start of our conversation. I don't have previous messages to recall yet.";
+        }
+      }
       // Command detection and execution
-      if (msg.includes('check') && (msg.includes('system') || msg.includes('status') || msg.includes('health'))) {
+      else if (msg.includes('check') && (msg.includes('system') || msg.includes('status') || msg.includes('health'))) {
         // System status check
         try {
           const healthRes = await fetch('http://localhost:5000/api/health');
           const health = await healthRes.json();
           response = `System check complete! Backend is ${health.status === 'ok' ? '✅ healthy' : '❌ down'}. Uptime: ${health.uptime}s. Everything's running smoothly.`;
           action = { type: 'system_check', result: health };
-        } catch (e) {
+        } catch (e: any) {
           response = "I tried to check the system but got an error. Let me investigate...";
           action = { type: 'system_check', error: e.message };
         }
@@ -227,7 +258,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         response = "Running tests now... I'll execute the test suite and report back with results.";
         action = { type: 'run_tests' };
       }
-      else if (msg.includes('fix') || msg.includes('repair')) {
+      else if (msg.includes('fix') || msg.includes('repair') || msg.includes('debug')) {
         // Fix something
         response = "I'm on it! I'll analyze what needs fixing and apply the necessary corrections. What specifically should I fix?";
         action = { type: 'fix', target: message };
@@ -239,19 +270,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       // Greetings
       else if (/^(hi|hello|hey|sup|yo)/.test(msg)) {
-        response = "Hey! I'm Aurora. What command can I execute for you today?";
+        response = `Hey! I'm Aurora. ${history.length > 1 ? "Good to continue our conversation." : "What command can I execute for you today?"}`;
       }
       // Questions about capabilities
       else if (msg.includes('what can you') || msg.includes('what do you')) {
-        response = "I can execute commands like:\n• Check system status\n• Generate code and apps\n• Run tests\n• Fix bugs\n• Analyze code\n• Deploy changes\n\nJust tell me what to do!";
+        response = "I can execute commands like:\n• Check system status\n• Generate code and apps\n• Run tests\n• Fix bugs\n• Analyze code\n• Remember our conversation\n\nJust tell me what to do!";
       }
-      // Questions about identity
+      // Questions about identity  
       else if (msg.includes('who are you') || msg.includes('what are you')) {
-        response = "I'm Aurora - an AI that can actually execute commands and take action. I don't just talk, I do things. Try asking me to check the system or generate code!";
+        response = "I'm Aurora - an AI with conversation memory and the ability to execute commands. I remember what we discuss and can take action on your requests.";
       }
       // Requests for help
       else if (msg.includes('help') || msg.includes('stuck')) {
-        response = "Tell me what you need done and I'll execute it. I can check systems, generate code, run tests, fix issues, and more.";
+        response = "Tell me what you need done and I'll execute it. I can check systems, generate code, run tests, fix issues, and more. I also remember our conversation, so feel free to refer back to things we've discussed.";
       }
       // Thanks
       else if (msg.includes('thank') || msg.includes('appreciate')) {
@@ -262,11 +293,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         response = `Got it. To execute this command, please be more specific. Try:\n• "check system status"\n• "generate a timer app"\n• "run tests"\n• "fix the backend"\n• "analyze the code"`;
       }
 
+      // Add Aurora's response to history
+      history.push({
+        role: 'assistant',
+        content: response,
+        timestamp: Date.now()
+      });
+
       res.json({
         ok: true,
         response,
         action,
-        session_id: session_id || 'default'
+        session_id: sessionId,
+        conversation_length: history.length,
+        has_memory: true
       });
     } catch (error) {
       console.error('[Aurora Chat] Error:', error);
