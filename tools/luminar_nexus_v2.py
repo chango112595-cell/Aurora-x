@@ -395,7 +395,7 @@ class LuminarNexusV2:
 
         # Get the current working directory
         cwd = os.getcwd()
-        
+
         # Server configurations (tmux-based management)
         self.servers = {
             "bridge": {

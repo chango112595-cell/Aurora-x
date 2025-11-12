@@ -55,7 +55,7 @@ try:
 
     # Determine project root from current file location
     PROJECT_ROOT = Path(__file__).resolve().parents[1]
-    
+
     # Load Aurora's Grandmaster skills from consolidated corpus
     corpus_file = PROJECT_ROOT / ".aurora_knowledge" / "consolidated_learning_corpus.json"
     if corpus_file.exists():
@@ -125,7 +125,7 @@ class LuminarNexusServerManager:
     def __init__(self):
         # Determine project root from current file location
         self._project_root = Path(__file__).resolve().parents[1]
-        
+
         # Load Aurora's project ownership configuration
         self.project_config = self._load_project_config()
 
