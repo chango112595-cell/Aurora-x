@@ -455,9 +455,9 @@ def attach_bridge(app: FastAPI):
                     hash_part, message = line.split("|", 1)
                     commits.append({"hash": hash_part, "short_hash": hash_part[:7], "message": message})
 
-            return {"ok": True, "commits": commits, "current_branch": current_branch}
+            return JSONResponse({"ok": True, "commits": commits, "current_branch": current_branch})
         except Exception as e:
-            return {"ok": False, "error": str(e)}
+            return JSONResponse({"ok": False, "error": str(e)}, status_code=500)
 
     @app.get("/api/bridge/comparison/diff")
     def get_diff(commit1: str = "", commit2: str = ""):
@@ -491,9 +491,9 @@ def attach_bridge(app: FastAPI):
 
                         files.append({"status": status, "file": file_path, "status_text": status_text})
 
-            return {"ok": True, "files": files}
+            return JSONResponse({"ok": True, "files": files})
         except Exception as e:
-            return {"ok": False, "error": str(e)}
+            return JSONResponse({"ok": False, "error": str(e)}, status_code=500)
 
     @app.get("/api/bridge/comparison/aurora-runs")
     def get_aurora_runs():
@@ -501,7 +501,7 @@ def attach_bridge(app: FastAPI):
         try:
             runs_dir = pathlib.Path("runs")
             if not runs_dir.exists():
-                return {"ok": True, "runs": []}
+                return JSONResponse({"ok": True, "runs": []})
 
             runs = []
             for run_path in sorted(runs_dir.iterdir()):
@@ -534,9 +534,9 @@ def attach_bridge(app: FastAPI):
 
                     runs.append(run_data)
 
-            return {"ok": True, "runs": runs}
+            return JSONResponse({"ok": True, "runs": runs})
         except Exception as e:
-            return {"ok": False, "error": str(e)}
+            return JSONResponse({"ok": False, "error": str(e)}, status_code=500)
 
     @app.get("/api/bridge/diff/full", response_class=PlainTextResponse)
     def get_full_diff(commit1: str = "", commit2: str = ""):
@@ -800,10 +800,10 @@ def attach_bridge(app: FastAPI):
                     print(f"Error processing branch {branch}: {e}")
                     continue
 
-            return {"ok": True, "branches": branch_data}
+            return JSONResponse({"ok": True, "branches": branch_data})
 
         except Exception as e:
-            return {"ok": False, "error": str(e)}
+            return JSONResponse({"ok": False, "error": str(e)}, status_code=500)
 
     @app.get("/api/bridge/comparison/branch-analysis")
     def get_branch_analysis(branch: str):
@@ -958,7 +958,7 @@ def attach_bridge(app: FastAPI):
                 "recommendations": recommendations,
             }
 
-            return {"ok": True, "analysis": analysis}
+            return JSONResponse({"ok": True, "analysis": analysis})
 
         except Exception as e:
-            return {"ok": False, "error": str(e)}
+            return JSONResponse({"ok": False, "error": str(e)}, status_code=500)
