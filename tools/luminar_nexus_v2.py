@@ -393,39 +393,35 @@ class LuminarNexusV2:
             "quantum_coherence_threshold": 0.7,
         }
 
+        # Get the current working directory
+        cwd = os.getcwd()
+        
         # Server configurations (tmux-based management)
         self.servers = {
             "bridge": {
                 "name": "Aurora Bridge Service",
-                "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
+                "command": f"cd {cwd} && python3 -m aurora_x.bridge.service",
                 "session": "aurora-bridge",
                 "port": 5001,
                 "health_check": "http://localhost:5001/health",
             },
             "backend": {
                 "name": "Aurora Backend API",
-                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
+                "command": f"cd {cwd} && NODE_ENV=development npx tsx server/index.ts",
                 "session": "aurora-backend",
                 "port": 5000,
                 "health_check": "http://localhost:5000/health",
             },
-            "vite": {
-                "name": "Aurora Vite Dev Server",
-                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port 5173",
-                "session": "aurora-vite",
-                "port": 5173,
-                "health_check": "http://localhost:5173",
-            },
             "self-learn": {
                 "name": "Aurora Self-Learning Server",
-                "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.self_learn_server",
+                "command": f"cd {cwd} && python3 -m aurora_x.self_learn_server",
                 "session": "aurora-self-learn",
                 "port": 5002,
                 "health_check": "http://localhost:5002/health",
             },
             "chat": {
                 "name": "Aurora Chat Server",
-                "command": "cd /workspaces/Aurora-x && python3 -c 'from tools.luminar_nexus_v2 import run_chat_server_v2; run_chat_server_v2(5003)'",
+                "command": f"cd {cwd} && python3 aurora_chat_server.py --port 5003",
                 "session": "aurora-chat",
                 "port": 5003,
                 "health_check": "http://localhost:5003/health",
