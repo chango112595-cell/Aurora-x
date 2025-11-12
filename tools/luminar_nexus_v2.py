@@ -43,6 +43,7 @@ except ImportError:
     PORT_MANAGER_AVAILABLE = False
     print("⚠️ Aurora Port Manager not available - using basic port monitoring")
 import sys
+import math
 
 import numpy as np
 
@@ -53,7 +54,32 @@ try:
     AURORA_BRIDGE_AVAILABLE = True
 except ImportError:
     AURORA_BRIDGE_AVAILABLE = False
-    print("⚠️  Aurora Bridge not available, using fallback routing")
+
+
+def sanitize_for_json(obj: Any) -> Any:
+    """
+    Recursively sanitize data structures for JSON serialization.
+    Replaces NaN, Infinity, and other non-JSON-safe values with None.
+    """
+    if isinstance(obj, dict):
+        return {k: sanitize_for_json(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [sanitize_for_json(v) for v in obj]
+    elif isinstance(obj, float):
+        if not math.isfinite(obj):  # Catches NaN, Infinity, -Infinity
+            return None
+        return obj
+    elif isinstance(obj, np.floating):
+        if not np.isfinite(obj):
+            return None
+        return float(obj)
+    elif isinstance(obj, np.integer):
+        return int(obj)
+    else:
+        return obj
+
+
+print("⚠️  Aurora Bridge not available, using fallback routing")
 
 
 @dataclass
@@ -918,7 +944,9 @@ class LuminarNexusV2:
 
         @app.route("/api/nexus/status", methods=["GET"])
         def get_status():
-            return jsonify(self.get_system_status())
+            status = self.get_system_status()
+            sanitized_status = sanitize_for_json(status)
+            return jsonify(sanitized_status)
 
         @app.route("/api/nexus/health/<service_name>", methods=["GET"])
         def get_service_health(service_name):

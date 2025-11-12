@@ -555,6 +555,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Luminar Nexus V2 detailed status endpoint for dashboard
+  app.get("/api/luminar-nexus/v2/status", async (req, res) => {
+    try {
+      const v2Response = await fetch('http://localhost:3000/api/nexus/status', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (v2Response.ok) {
+        const v2Data = await v2Response.json();
+        res.json({
+          version: '2.0.0',
+          active: true,
+          ...v2Data
+        });
+      } else {
+        res.status(503).json({ 
+          error: 'Luminar Nexus V2 not available',
+          active: false,
+          version: '2.0.0'
+        });
+      }
+    } catch (error: any) {
+      res.status(503).json({ 
+        error: 'Luminar Nexus V2 not running',
+        message: error.message,
+        active: false,
+        version: '2.0.0'
+      });
+    }
+  });
+
   // Aurora: Natural language conversation endpoint (proxies to Luminar Nexus)
   app.post("/api/conversation", async (req, res) => {
     try {

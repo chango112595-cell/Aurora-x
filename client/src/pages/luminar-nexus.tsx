@@ -89,24 +89,35 @@ export default function LuminarNexus() {
 
   const fetchHealthData = async () => {
     try {
-      const res = await fetch('/api/status');
+      // Fetch from Luminar Nexus V2 via backend proxy
+      const res = await fetch('/api/luminar-nexus/v2/status');
       const data = await res.json();
       setHealthData(data);
       setLoading(false);
     } catch (error) {
+      console.error('Error fetching V2 status:', error);
       setLoading(false);
     }
   };
 
-  const healthScore = 95; // Calculate from actual data
+  // Extract V2 metrics from healthData
+  const quantumCoherence = healthData?.quantum_coherence || 0;
+  const healthyServices = healthData?.healthy_services || 0;
+  const totalServices = healthData?.services ? Object.keys(healthData.services).length : 5;
+  const aiLearningActive = healthData?.ai_learning_active || false;
+  const autonomousHealingActive = healthData?.autonomous_healing_active || false;
+  
+  // Calculate health score from quantum coherence and service health
+  const healthScore = Math.round((quantumCoherence * 50) + ((healthyServices / totalServices) * 50));
+  
   const uptimeData = [
     { time: '10m', uptime: 98 }, { time: '20m', uptime: 97 }, { time: '30m', uptime: 99 },
     { time: '40m', uptime: 100 }, { time: '50m', uptime: 98 }, { time: '60m', uptime: 99 }
   ];
 
   const serviceDistribution = [
-    { name: 'Running', value: 4, color: '#10b981' },
-    { name: 'Stopped', value: 0, color: '#ef4444' }
+    { name: 'Healthy', value: healthyServices, color: '#10b981' },
+    { name: 'Degraded', value: totalServices - healthyServices, color: '#ef4444' }
   ];
 
   if (loading) {
@@ -147,10 +158,17 @@ export default function LuminarNexus() {
         </div>
 
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-cyan-500 to-purple-500 bg-clip-text text-transparent mb-2">
-            🌟 Luminar Nexus
-          </h1>
-          <p className="text-muted-foreground">Advanced Aurora Analytics & Monitoring</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-cyan-500 to-purple-500 bg-clip-text text-transparent mb-2">
+                🌟 Luminar Nexus V2
+              </h1>
+              <p className="text-muted-foreground">AI-Powered Service Orchestration & Monitoring</p>
+            </div>
+            <Badge className="bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
+              Version 2.0.0 • Quantum Coherence: {(quantumCoherence * 100).toFixed(0)}%
+            </Badge>
+          </div>
         </motion.div>
 
         {/* Tab Navigation */}
@@ -209,20 +227,22 @@ export default function LuminarNexus() {
               </CardHeader>
               <CardContent>
                 <div className="text-4xl font-bold text-green-500">{healthScore}%</div>
-                <p className="text-xs text-muted-foreground mt-1">Excellent</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {healthScore >= 90 ? 'Excellent' : healthScore >= 70 ? 'Good' : healthScore >= 50 ? 'Fair' : 'Degraded'}
+                </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Activity className="h-4 w-4" />Active Services</CardTitle></CardHeader>
-              <CardContent><div className="text-4xl font-bold">4/4</div></CardContent>
+              <CardContent><div className="text-4xl font-bold">{healthyServices}/{totalServices}</div></CardContent>
             </Card>
             <Card>
-              <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-green-500" />Checks Passed</CardTitle></CardHeader>
-              <CardContent><div className="text-4xl font-bold text-green-500">12</div></CardContent>
+              <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-cyan-500" />AI Learning</CardTitle></CardHeader>
+              <CardContent><div className="text-2xl font-bold text-cyan-500">{aiLearningActive ? '✓ Active' : '✗ Inactive'}</div></CardContent>
             </Card>
             <Card>
-              <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Clock className="h-4 w-4" />Auto-Saves</CardTitle></CardHeader>
-              <CardContent><div className="text-4xl font-bold">156</div></CardContent>
+              <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Shield className="h-4 w-4 text-purple-500" />Auto-Healing</CardTitle></CardHeader>
+              <CardContent><div className="text-2xl font-bold text-purple-500">{autonomousHealingActive ? '✓ Enabled' : '✗ Disabled'}</div></CardContent>
             </Card>
           </motion.div>
         )}

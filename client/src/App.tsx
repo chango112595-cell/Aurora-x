@@ -30,7 +30,7 @@ function Router() {
       <Route path="/chat" component={ChatPage} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/comparison" component={ComparisonDashboard} />
-      <Route path="/luminar" component={LuminarNexus} />
+      <Route path="/luminar-nexus" component={LuminarNexus} />
       <Route path="/servers" component={ServerControl} />
       <Route path="/library" component={Library} />
       <Route path="/corpus" component={Corpus} />
