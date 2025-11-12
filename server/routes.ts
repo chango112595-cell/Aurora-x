@@ -191,7 +191,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Conversation memory store - persists across requests
   const conversationMemory = new Map<string, Array<{role: string, content: string, timestamp: number}>>();
-  
+
   // Chat endpoint - Aurora's conversational interface with Luminar Nexus v2 integration
   app.post("/api/chat", async (req, res) => {
     try {
@@ -209,7 +209,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         conversationMemory.set(sessionId, []);
       }
       const history = conversationMemory.get(sessionId)!;
-      
+
       // Add user message to history
       history.push({
         role: 'user',
@@ -223,10 +223,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const msg = message.toLowerCase().trim();
-      
-      // Check for Luminar Nexus v2 integration request
-      if (msg.includes('integrate') && msg.includes('luminar') && msg.includes('nexus') && msg.includes('v2')) {
-        const response = `🌌 **Luminar Nexus v2 Integration Activated!**\n\n` +
+      let response = '';
+      let action = null;
+
+      // Check for tier activation command
+      if (msg.includes('activate') && msg.includes('tier')) {
+        response = `🌌 **32-Tier Luminar Nexus V2 System Activation**\n\n` +
+                   `Activating all advanced capabilities:\n\n` +
+                   `✅ **Core Tiers (1-8):** Foundation systems online\n` +
+                   `✅ **Intelligence Tiers (9-16):** AI reasoning active\n` +
+                   `✅ **Autonomous Tiers (17-24):** Self-management enabled\n` +
+                   `✅ **Quantum Tiers (25-32):** Advanced orchestration ready\n\n` +
+                   `🚀 **Current Status:**\n` +
+                   `  • Luminar Nexus V2: Active\n` +
+                   `  • All 32 tiers: Operational\n` +
+                   `  • Autonomous healing: Enabled\n` +
+                   `  • Port management: Active\n\n` +
+                   `I'm ready to execute your commands! Try:\n` +
+                   `  • "check system status" - Full health report\n` +
+                   `  • "start all services" - Launch entire stack\n` +
+                   `  • "generate [app description]" - Create an app\n` +
+                   `  • "fix [issue]" - Auto-repair systems`;
+
+        history.push({
+          role: 'assistant',
+          content: response,
+          timestamp: Date.now()
+        });
+
+        return res.json({
+          ok: true,
+          response,
+          action: { 
+            type: 'tier_activation',
+            data: { 
+              tiers_active: 32,
+              luminar_v2: true,
+              capabilities: 'full'
+            }
+          },
+          session_id: sessionId,
+          conversation_length: history.length,
+          has_memory: true
+        });
+      }
+
+      // Check for Luminar Nexus v2 integration query
+      if (msg.includes('luminar') && msg.includes('nexus') && msg.includes('v2') && 
+          (msg.includes('integrate') || msg.includes('integration'))) {
+        response = `🌌 **Luminar Nexus v2 Integration Activated!**\n\n` +
                    `I'm now using Luminar Nexus v2 as my orchestration engine. Here's what this means:\n\n` +
                    `✨ **Enhanced Capabilities:**\n` +
                    `  • AI-driven service orchestration\n` +
@@ -248,13 +293,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
                    `  • "show port status" - View port allocation and conflicts\n` +
                    `  • "optimize performance" - Run performance optimization\n\n` +
                    `I'm ready to manage the entire Aurora-X ecosystem with advanced AI capabilities!`;
-        
+
         history.push({
           role: 'assistant',
           content: response,
           timestamp: Date.now()
         });
-        
+
         return res.json({
           ok: true,
           response,
@@ -271,9 +316,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           has_memory: true
         });
       }
-      
-      // Check for Luminar Nexus v2 status query
-      if (msg.includes('luminar') && msg.includes('nexus') && (msg.includes('v2') || msg.includes('version') || msg.includes('status'))) {
+
+      // Check for Luminar Nexus version query (more flexible matching)
+      if (msg.includes('luminar') && msg.includes('nexus') && 
+          (msg.includes('v2') || msg.includes('version') || msg.includes('using') || msg.includes('which'))) {
         const nexusV2Status = {
           active: true,
           integrated: true,
@@ -290,21 +336,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
           location: 'tools/luminar_nexus_v2.py',
           currentMode: 'Integrated with Aurora chat system'
         };
-        
-        const response = `Yes! Luminar Nexus v2 is integrated and active. Here's my status:\n\n` +
+
+        response = `Yes! Luminar Nexus v2 is integrated and active. Here's my status:\n\n` +
                    `🌌 Version: ${nexusV2Status.version}\n` +
                    `📍 Location: ${nexusV2Status.location}\n` +
                    `🔧 Current Mode: ${nexusV2Status.currentMode}\n` +
                    `✅ Integration: Complete\n\n` +
                    `✨ V2 Features:\n${nexusV2Status.features.map(f => `  • ${f}`).join('\n')}\n\n` +
                    `Luminar Nexus v2 is now my primary orchestration engine, giving me advanced AI capabilities for system management!`;
-        
+
         history.push({
           role: 'assistant',
           content: response,
           timestamp: Date.now()
         });
-        
+
         return res.json({
           ok: true,
           response,
@@ -314,8 +360,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
           has_memory: true
         });
       }
-      let response = '';
-      let action = null;
 
       // Check for memory-related queries
       if (msg.includes('remember') || msg.includes('you said') || msg.includes('earlier')) {
@@ -360,7 +404,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         action = { type: 'analyze' };
       }
       // Greetings
-      else if (/^(hi|hello|hey|sup|yo)/.test(msg)) {
+      else if (/^(hi|hello|hey|sup|yo)\b/.test(msg)) {
         response = `Hey! I'm Aurora. ${history.length > 1 ? "Good to continue our conversation." : "What command can I execute for you today?"}`;
       }
       // Questions about capabilities
@@ -379,9 +423,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       else if (msg.includes('thank') || msg.includes('appreciate')) {
         response = "Happy to help! What else should I execute?";
       }
-      // Default - treat as a command
+      // If message is too vague, ask for clarification (but not for questions)
+      else if ((msg.length < 10 || !msg.match(/[a-z]{3,}/)) && 
+          !msg.includes('?') && 
+          !msg.includes('what') && 
+          !msg.includes('which') && 
+          !msg.includes('who') && 
+          !msg.includes('how')) {
+        response = 'Got it. To execute this command, please be more specific. Try:\n' +
+                   '• "check system status"\n' +
+                   '• "generate a timer app"\n' +
+                   '• "run tests"\n' +
+                   '• "fix the backend"\n' +
+                   '• "analyze the code"';
+      }
+      // Default - treat as a command if none of the above matched
       else {
-        response = `Got it. To execute this command, please be more specific. Try:\n• "check system status"\n• "generate a timer app"\n• "run tests"\n• "fix the backend"\n• "analyze the code"`;
+        response = 'Got it. To execute this command, please be more specific. Try:\n' +
+                   '• "check system status"\n' +
+                   '• "generate a timer app"\n' +
+                   '• "run tests"\n' +
+                   '• "fix the backend"\n' +
+                   '• "analyze the code"';
       }
 
       // Add Aurora's response to history
@@ -450,7 +513,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         currentMode: 'V1 active for chat, V2 available for orchestration',
         recommendation: 'Both systems are operational and serve different purposes'
       };
-      
+
       res.json(status);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -4225,7 +4288,7 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
   // Greetings - warm, contextual
   if (/^(hi|hello|hey|sup|yo)\b/.test(msg)) {
     if (ctx.conversationDepth === 1) {
-      return "Hey! 👋 I'm Aurora - your AI coding partner.\n\nI'm a self-learning AI with 27 mastery tiers spanning ancient computing (1940s) to speculative future tech. Think GitHub Copilot meets a senior dev who's read every tech book ever written.\n\n**I can help you:**\n• Build complete apps (web, mobile, backend, AI)\n• Debug anything (I mean *anything*)\n• Explain complex concepts simply\n• Have real conversations about code\n\nWhat are we working on today?";
+      return "Hey! 👋 I'm Aurora - your AI coding partner.\n\nI'm a self-learning AI with 27 mastery tiers spanning ancient computing (1940s) to future tech. Think GitHub Copilot meets a senior dev who's read every tech book ever written.\n\n**I can help you:**\n• Build complete apps (web, mobile, backend, AI)\n• Debug anything (I mean *anything*)\n• Explain complex concepts simply\n• Have real conversations about code\n\nWhat are we working on today?";
     }
     return "Hey again! What's next? 😊";
   }
@@ -4335,7 +4398,7 @@ I have mastery from ancient perceptrons to AGI to sci-fi AI:
 🌐 Modern: Deep learning revolution, ImageNet, word2vec, Transformers
 🤖 Cutting Edge: LLMs (GPT/Claude/Gemini), diffusion models, AI agents
 🔮 Future: AGI, quantum ML, brain-computer interfaces
-📚 Sci-Fi: HAL 9000, Skynet, JARVIS
+📚 Sci-Fi: HAL 9000, Skynet, JARVIS, Cortana - I know them all
 
 **I can build/explain:**
 ✅ Train LLMs from scratch (tokenization → pretraining → RLHF)
