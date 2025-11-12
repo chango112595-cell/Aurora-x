@@ -2,7 +2,7 @@
 entrypoint = "aurora_x/main.py"
 
 # Auto-pull latest code and run Aurora backend (Python)
-run = "bash -lc 'git fetch origin 2>/dev/null || true; bash scripts/bridge_autostart.sh || echo \"Bridge startup skipped\"; echo \"[INFO] To start Aurora, open the Workflows tab (left sidebar) and select \\\"Start Aurora Web Server\\\". The Run button does not start Aurora directly.\"'"
+run = run = "echo 'Use the Workflows panel to start the application'"
 onBoot = "bash -lc 'git pull --ff-only || true'"
 modules = ["nodejs-20", "web", "postgresql-16", "python-3.11", "python3"]
 hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
