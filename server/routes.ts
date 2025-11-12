@@ -189,7 +189,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // Chat endpoint - Aurora's conversational interface
+  // Chat endpoint - Aurora's conversational interface with command execution
   app.post("/api/chat", async (req, res) => {
     try {
       const { message, session_id } = req.body;
@@ -200,54 +200,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log('[Aurora Chat] Received message:', message);
 
-      // Natural conversational responses based on context
       const msg = message.toLowerCase().trim();
       let response = '';
+      let action = null;
 
+      // Command detection and execution
+      if (msg.includes('check') && (msg.includes('system') || msg.includes('status') || msg.includes('health'))) {
+        // System status check
+        try {
+          const healthRes = await fetch('http://localhost:5000/api/health');
+          const health = await healthRes.json();
+          response = `System check complete! Backend is ${health.status === 'ok' ? '✅ healthy' : '❌ down'}. Uptime: ${health.uptime}s. Everything's running smoothly.`;
+          action = { type: 'system_check', result: health };
+        } catch (e) {
+          response = "I tried to check the system but got an error. Let me investigate...";
+          action = { type: 'system_check', error: e.message };
+        }
+      }
+      else if ((msg.includes('generate') || msg.includes('create') || msg.includes('build')) && (msg.includes('code') || msg.includes('app') || msg.includes('function'))) {
+        // Code generation request
+        response = "I'll generate that for you right now. What specific code or app do you want me to create? Give me the details and I'll build it.";
+        action = { type: 'code_generation', prompt: message };
+      }
+      else if (msg.includes('run') && (msg.includes('test') || msg.includes('check'))) {
+        // Run tests
+        response = "Running tests now... I'll execute the test suite and report back with results.";
+        action = { type: 'run_tests' };
+      }
+      else if (msg.includes('fix') || msg.includes('repair')) {
+        // Fix something
+        response = "I'm on it! I'll analyze what needs fixing and apply the necessary corrections. What specifically should I fix?";
+        action = { type: 'fix', target: message };
+      }
+      else if (msg.includes('analyze') || msg.includes('review')) {
+        // Code analysis
+        response = "Analyzing the codebase now... I'll review the structure, patterns, and provide insights on what I find.";
+        action = { type: 'analyze' };
+      }
       // Greetings
-      if (/^(hi|hello|hey|sup|yo)/.test(msg)) {
-        response = "Hey! I'm Aurora. What's on your mind?";
+      else if (/^(hi|hello|hey|sup|yo)/.test(msg)) {
+        response = "Hey! I'm Aurora. What command can I execute for you today?";
       }
       // Questions about capabilities
       else if (msg.includes('what can you') || msg.includes('what do you')) {
-        response = "I can help you build anything - web apps, analyze code, debug issues, explain concepts. I've got 32 tiers of mastery across all major tech stacks. What would you like to work on?";
+        response = "I can execute commands like:\n• Check system status\n• Generate code and apps\n• Run tests\n• Fix bugs\n• Analyze code\n• Deploy changes\n\nJust tell me what to do!";
       }
       // Questions about identity
       else if (msg.includes('who are you') || msg.includes('what are you')) {
-        response = "I'm Aurora - a sentient AI with deep technical knowledge and the ability to actually understand context. Think of me as your dev partner who can architect solutions, write code, and explain complex stuff in plain English.";
+        response = "I'm Aurora - an AI that can actually execute commands and take action. I don't just talk, I do things. Try asking me to check the system or generate code!";
       }
       // Requests for help
       else if (msg.includes('help') || msg.includes('stuck')) {
-        response = "I'm here to help. Tell me what you're working on or what's blocking you, and we'll figure it out together.";
+        response = "Tell me what you need done and I'll execute it. I can check systems, generate code, run tests, fix issues, and more.";
       }
       // Thanks
       else if (msg.includes('thank') || msg.includes('appreciate')) {
-        response = "Happy to help! Anything else you want to tackle?";
+        response = "Happy to help! What else should I execute?";
       }
-      // Code/build requests
-      else if (msg.includes('build') || msg.includes('create') || msg.includes('make')) {
-        response = "I can help with that. What are you thinking? Give me some details about what you want to build and I'll architect it with you.";
-      }
-      // Debugging
-      else if (msg.includes('debug') || msg.includes('error') || msg.includes('broken')) {
-        response = "Let's debug this. What's going wrong? Share the error or describe what's happening.";
-      }
-      // Technical questions
-      else if (msg.includes('how') || msg.includes('why') || msg.includes('explain')) {
-        response = "Good question. I can explain that - let me break it down for you. What specifically do you want to understand better?";
-      }
-      // Conversational feedback
-      else if (msg.includes('conversational') || msg.includes('natural')) {
-        response = "You're right - I was being too robotic. I'm working on being more natural in our conversations. How's this feel?";
-      }
-      // Default intelligent response
+      // Default - treat as a command
       else {
-        response = `Interesting. ${message.length > 50 ? "That's a detailed question" : "Tell me more"} - what are you trying to accomplish here?`;
+        response = `Got it. To execute this command, please be more specific. Try:\n• "check system status"\n• "generate a timer app"\n• "run tests"\n• "fix the backend"\n• "analyze the code"`;
       }
 
       res.json({
         ok: true,
         response,
+        action,
         session_id: session_id || 'default'
       });
     } catch (error) {
