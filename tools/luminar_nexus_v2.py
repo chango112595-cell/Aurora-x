@@ -542,7 +542,7 @@ class LuminarNexusV2:
                 # Find process using the port
                 for proc in psutil.process_iter(["pid", "name", "cpu_percent", "memory_percent"]):
                     try:
-                        connections = proc.connections()
+                        connections = proc.net_connections()
                         for conn in connections:
                             if conn.laddr.port == health.port:
                                 health.cpu_usage = proc.cpu_percent() / 100.0

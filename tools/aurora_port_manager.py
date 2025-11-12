@@ -10,6 +10,7 @@ import threading
 import time
 from dataclasses import dataclass
 
+import psutil
 import requests
 
 
@@ -40,52 +41,43 @@ class AuroraPortManager:
         self.monitoring_thread = None
 
     def scan_port_usage(self) -> dict[int, PortInfo]:
-        """Scan all Aurora ports for current usage"""
+        """Scan all Aurora ports for current usage using psutil"""
         port_usage = {}
 
         try:
-            # Get listening processes
-            result = subprocess.run(["lsof", "-i", ":5000-5173"], capture_output=True, text=True)
+            # Iterate through all processes and check their network connections
+            for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+                try:
+                    connections = proc.net_connections()
+                    for conn in connections:
+                        # Check if connection is listening and in our port range
+                        if conn.status == 'LISTEN' and conn.laddr and 5000 <= conn.laddr.port <= 5173:
+                            port = conn.laddr.port
+                            pid = proc.pid
+                            process_name = proc.name()
+                            
+                            # Get full command
+                            cmdline = proc.cmdline()
+                            command = ' '.join(cmdline) if cmdline else process_name
 
-            for line in result.stdout.split("\n"):
-                if "LISTEN" in line:
-                    parts = line.split()
-                    if len(parts) >= 2:
-                        process_name = parts[0]
-                        pid = int(parts[1])
+                            # Determine if it's an Aurora service
+                            is_aurora = any(
+                                keyword in command.lower()
+                                for keyword in ["aurora", "luminar", "nexus", "bridge", "chango"]
+                            )
 
-                        # Extract port from the line
-                        for part in parts:
-                            if ":" in part and "LISTEN" not in part:
-                                try:
-                                    port = int(part.split(":")[-1])
-                                    if 5000 <= port <= 5173:
+                            service_type = self.aurora_port_map.get(port, {}).get("type", "unknown")
 
-                                        # Get full command
-                                        cmd_result = subprocess.run(
-                                            ["ps", "-p", str(pid), "-o", "cmd="], capture_output=True, text=True
-                                        )
-                                        command = cmd_result.stdout.strip()
-
-                                        # Determine if it's an Aurora service
-                                        is_aurora = any(
-                                            keyword in command.lower()
-                                            for keyword in ["aurora", "luminar", "nexus", "bridge"]
-                                        )
-
-                                        service_type = self.aurora_port_map.get(port, {}).get("type", "unknown")
-
-                                        port_usage[port] = PortInfo(
-                                            port=port,
-                                            pid=pid,
-                                            process_name=process_name,
-                                            command=command,
-                                            service_type=service_type,
-                                            is_aurora_service=is_aurora,
-                                        )
-                                        break
-                                except ValueError:
-                                    continue
+                            port_usage[port] = PortInfo(
+                                port=port,
+                                pid=pid,
+                                process_name=process_name,
+                                command=command,
+                                service_type=service_type,
+                                is_aurora_service=is_aurora,
+                            )
+                except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                    continue
 
         except Exception as e:
             print(f"❌ Error scanning ports: {e}")
@@ -233,9 +225,11 @@ class AuroraPortManager:
                 except:
                     continue
 
-            # If no health endpoint, just check if port is listening
-            result = subprocess.run(["lsof", "-i", f":{port}"], capture_output=True, text=True)
-            return "LISTEN" in result.stdout
+            # If no health endpoint, just check if port is listening using psutil
+            for conn in psutil.net_connections(kind='inet'):
+                if conn.status == 'LISTEN' and conn.laddr and conn.laddr.port == port:
+                    return True
+            return False
 
         except Exception:
             return False
