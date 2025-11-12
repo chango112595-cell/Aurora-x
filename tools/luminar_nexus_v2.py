@@ -1727,5 +1727,41 @@ def main():
         print("❌ Invalid command")
 
 
+def serve():
+    """Start Luminar Nexus V2 API server"""
+    nexus = LuminarNexusV2()
+    
+    # Register Aurora services
+    nexus.register_service("backend", 5000, "api", [], "stable")
+    nexus.register_service("bridge", 5001, "middleware", ["backend"], "stable")
+    nexus.register_service("self-learn", 5002, "ai", ["backend"], "superposition")
+    nexus.register_service("chat", 5003, "ai", [], "stable")
+    nexus.register_service("frontend", 5173, "ui", [], "entangled")
+    
+    # Start monitoring
+    nexus.start_advanced_monitoring()
+    
+    # Create and run Flask API
+    app = nexus.create_advanced_api()
+    
+    print("\n🌌 Luminar Nexus V2 API Server Starting...")
+    print(f"   Port: 5005")
+    print(f"   Quantum Coherence: {nexus.quantum_mesh.coherence_level:.2f}")
+    print(f"   Services Registered: {len(nexus.service_registry)}")
+    print("\n✨ Advanced Features Active:")
+    print("   • AI-driven autonomous healing")
+    print("   • Port conflict resolution")
+    print("   • Predictive scaling")
+    print("   • Neural anomaly detection")
+    print("\n")
+    
+    app.run(host='0.0.0.0', port=5005, debug=False)
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    
+    if len(sys.argv) > 1 and sys.argv[1] == 'serve':
+        serve()
+    else:
+        main()

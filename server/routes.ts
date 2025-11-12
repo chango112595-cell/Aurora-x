@@ -192,7 +192,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Conversation memory store - persists across requests
   const conversationMemory = new Map<string, Array<{role: string, content: string, timestamp: number}>>();
 
-  // Chat endpoint - Aurora's conversational interface with Luminar Nexus v2 integration
+  // Chat endpoint - Aurora's conversational interface with Luminar Nexus V2
   app.post("/api/chat", async (req, res) => {
     try {
       const { message, session_id } = req.body;
@@ -202,22 +202,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const sessionId = session_id || 'default';
-      console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId);
+      console.log('[Aurora Chat V2] Received message:', message, 'Session:', sessionId);
 
-      // Initialize or retrieve conversation history
+      // Route to Luminar Nexus V2 API
+      try {
+        const v2Response = await fetch('http://localhost:5005/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message, session_id: sessionId })
+        });
+
+        if (v2Response.ok) {
+          const v2Data = await v2Response.json();
+          console.log('[Aurora Chat V2] Routed to V2 successfully');
+          return res.json(v2Data);
+        }
+      } catch (v2Error) {
+        console.warn('[Aurora Chat V2] V2 not available, using fallback');
+      }
+
+      // Fallback to V1 conversation memory if V2 is not running
       if (!conversationMemory.has(sessionId)) {
         conversationMemory.set(sessionId, []);
       }
       const history = conversationMemory.get(sessionId)!;
 
-      // Add user message to history
       history.push({
         role: 'user',
         content: message,
         timestamp: Date.now()
       });
 
-      // Keep only last 20 messages to prevent memory overflow
       if (history.length > 20) {
         history.splice(0, history.length - 20);
       }
@@ -487,16 +502,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Luminar Nexus v2 status endpoint
-  app.get("/api/luminar-nexus/status", (req, res) => {
+  app.get("/api/luminar-nexus/status", async (req, res) => {
     try {
+      // Check V2 status
+      let v2Active = false;
+      let v2SystemStatus = null;
+      
+      try {
+        const v2StatusResponse = await fetch('http://localhost:5005/api/nexus/status', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (v2StatusResponse.ok) {
+          v2Active = true;
+          v2SystemStatus = await v2StatusResponse.json();
+        }
+      } catch (e) {
+        // V2 not running
+      }
+
       const status = {
         v1: {
-          active: true,
+          active: false,
           location: 'tools/luminar_nexus.py',
-          features: ['Server management', 'Chat interface', 'Process control']
+          features: ['Server management', 'Chat interface', 'Process control'],
+          status: 'Legacy - replaced by V2'
         },
         v2: {
-          active: true,
+          active: v2Active,
           available: true,
           location: 'tools/luminar_nexus_v2.py',
           version: '2.0.0',
@@ -508,10 +542,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
             'Advanced health monitoring',
             'Predictive scaling',
             'Neural anomaly detection'
-          ]
+          ],
+          systemStatus: v2SystemStatus
         },
-        currentMode: 'V1 active for chat, V2 available for orchestration',
-        recommendation: 'Both systems are operational and serve different purposes'
+        currentMode: v2Active ? 'V2 Active - Full AI orchestration' : 'V2 Available - Start with python3 tools/luminar_nexus_v2.py',
+        recommendation: v2Active ? 'V2 is running with advanced features' : 'Start V2 for AI-driven management'
       };
 
       res.json(status);
