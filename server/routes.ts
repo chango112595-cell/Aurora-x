@@ -206,7 +206,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Route to Luminar Nexus V2 API
       try {
-        const v2Response = await fetch('http://localhost:5005/api/chat', {
+        const v2Response = await fetch('http://localhost:3000/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message, session_id: sessionId })
@@ -509,7 +509,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let v2SystemStatus = null;
       
       try {
-        const v2StatusResponse = await fetch('http://localhost:5005/api/nexus/status', {
+        const v2StatusResponse = await fetch('http://localhost:3000/api/nexus/status', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });

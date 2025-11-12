@@ -18,3 +18,7 @@ flask-sqlalchemy
 gunicorn
 psycopg2-binary
 psutil
+flask
+flask-cors
+numpy
+psutil
