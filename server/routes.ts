@@ -189,6 +189,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Aurora chat endpoint
+  app.post("/api/chat", async (req, res) => {
+    try {
+      const { message, session_id } = req.body;
+
+      if (!message || typeof message !== 'string') {
+        return res.status(400).json({
+          message: "Please provide a message!",
+          type: "error"
+        });
+      }
+
+      console.log('[Aurora Chat] Received message:', message);
+
+      // Aurora's intelligent response
+      const response = `🌌 Aurora here! I received your message: "${message}"\n\n✨ I'm your autonomous AI coding companion with mastery across 32 tiers from ancient algorithms to cutting-edge AI. How can I help you build something amazing today?`;
+
+      res.status(200).json({
+        message: response,
+        response: response,
+        type: "chat",
+        timestamp: new Date().toISOString(),
+        session_id: session_id || 'default'
+      });
+    } catch (error) {
+      console.error('[Aurora Chat] Error:', error);
+      res.status(500).json({
+        message: "⚠️ I encountered an error. Please try again!",
+        type: "error"
+      });
+    }
+  });
+
   // Aurora: Serve Aurora's custom UI interface
   app.get("/aurora", (req, res) => {
     const auroraUIPath = path.join(process.cwd(), 'aurora_chat_test.html');
