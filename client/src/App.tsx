@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import NotFound from "@/pages/not-found";
-import Home from "@/pages/home";
 import Dashboard from "@/pages/dashboard";
 import Library from "@/pages/library";
 import Corpus from "@/pages/corpus";
@@ -23,23 +22,20 @@ import ComparisonDashboard from "@/pages/ComparisonDashboard";
 import LuminarNexus from "@/pages/luminar-nexus";
 import ServerControl from "@/pages/server-control";
 import ChatPage from "@/pages/chat";
-import AuroraUIPage from "@/pages/aurora-ui";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={AuroraUIPage} />
+      <Route path="/" component={ChatPage} />
+      <Route path="/chat" component={ChatPage} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/comparison" component={ComparisonDashboard} />
       <Route path="/luminar" component={LuminarNexus} />
-      <Route path="/luminar-nexus" component={LuminarNexus} />
       <Route path="/servers" component={ServerControl} />
-      <Route path="/server-control" component={ServerControl} />
       <Route path="/library" component={Library} />
       <Route path="/corpus" component={Corpus} />
       <Route path="/self-learning" component={SelfLearning} />
       <Route path="/settings" component={Settings} />
-      <Route path="/chat" component={ChatPage} />
       <Route component={NotFound} />
     </Switch>
   );

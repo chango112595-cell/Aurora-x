@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import AuroraRebuiltChat from '@/components/AuroraRebuiltChat';
 import { useLocation } from 'wouter';
 
-type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics' | 'learning' | 'chat';
+type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics' | 'learning';
 type Category = 'all' | 'hard' | 'soft' | 'medium';
 type PassFailFilter = 'all' | 'pass' | 'fail';
 type LevelshipFilter = 'all' | 'ancient' | 'classical' | 'modern' | 'future';
@@ -178,14 +178,6 @@ export default function LuminarNexus() {
           >
             <TrendingUp className="h-4 w-4" />
             Metrics
-          </Button>
-          <Button
-            variant={activeTab === 'chat' ? 'default' : 'outline'}
-            onClick={() => setActiveTab('chat')}
-            className="gap-2"
-          >
-            <MessageSquare className="h-4 w-4" />
-            Aurora Chat
           </Button>
           <Button
             variant={activeTab === 'diagnostics' ? 'default' : 'outline'}
@@ -680,11 +672,6 @@ export default function LuminarNexus() {
               </CardContent>
             </Card>
         </div>
-      )}
-
-      {/* Aurora Chat Tab - REBUILT AUTONOMOUSLY BY AURORA! */}
-      {activeTab === 'chat' && (
-        <AuroraRebuiltChat />
       )}
     </div>
   </div>
