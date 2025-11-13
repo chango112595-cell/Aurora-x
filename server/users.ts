@@ -58,7 +58,9 @@ class UserStore {
 
   private async initializeDefaultAdmin(): Promise<void> {
     try {
-      const adminPasswordHash = await hashPassword('admin123');
+      // Use environment variable for admin password, or fall back to a secure default
+      const defaultPassword = process.env.ADMIN_PASSWORD || 'ChangeMe123!';
+      const adminPasswordHash = await hashPassword(defaultPassword);
       
       const adminUser: User = {
         id: 'admin-001',
@@ -75,8 +77,10 @@ class UserStore {
       this.usernameIndex.set(adminUser.username.toLowerCase(), adminUser.id);
       this.emailIndex.set(adminUser.email.toLowerCase(), adminUser.id);
 
-      console.log('[UserStore] ✅ Default admin user created (username: admin, password: admin123)');
-      console.log('[UserStore] ⚠️  SECURITY WARNING: Change default admin password in production!');
+      console.log('[UserStore] ✅ Default admin user created (username: admin)');
+      if (!process.env.ADMIN_PASSWORD) {
+        console.log('[UserStore] ⚠️  SECURITY WARNING: Using default admin password. Set ADMIN_PASSWORD environment variable in production!');
+      }
     } catch (error: any) {
       console.error('[UserStore] Failed to create default admin:', error);
     }
