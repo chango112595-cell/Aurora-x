@@ -6,16 +6,14 @@ const MAX_CONVERSATION_TURNS = 10; // 10 turns = 20 messages (10 user + 10 assis
 
 // Initialize Anthropic client with proper error handling
 let anthropic: Anthropic | null = null;
-let useHuggingFace = false;
 
 try {
   if (process.env.ANTHROPIC_API_KEY) {
     anthropic = new Anthropic({
       apiKey: process.env.ANTHROPIC_API_KEY,
     });
-    console.log('[Aurora Chat] ✨ Claude AI initialized successfully');
+    console.log('[Aurora Chat] ✨ Claude AI initialized (will fallback to Hugging Face if credits low)');
   } else if (process.env.HUGGINGFACE_API_KEY) {
-    useHuggingFace = true;
     console.log('[Aurora Chat] 🤗 Using free Hugging Face AI (Llama/Mistral models)');
   } else {
     console.warn('[Aurora Chat] ⚠️  No API keys set - using fallback conversational mode');
@@ -76,48 +74,13 @@ export async function getChatResponse(
 
     let responseText: string;
 
-    // Check if Claude AI is available
-    if (!anthropic && !useHuggingFace) {
-      // Fallback to friendly conversational responses
-      responseText = getFallbackResponse(message, history);
-    } else if (useHuggingFace) {
-      try {
-        // Call free Hugging Face API (Llama 3 or Mistral)
-        const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: 'meta-llama/Meta-Llama-3-8B-Instruct',
-            messages: [
-              { role: 'system', content: AURORA_SYSTEM_PROMPT },
-              ...history.map(msg => ({
-                role: msg.role === 'user' ? 'user' : 'assistant',
-                content: msg.content
-              }))
-            ],
-            max_tokens: 2048,
-            temperature: 0.7
-          })
-        });
-
-        if (hfResponse.ok) {
-          const data = await hfResponse.json();
-          responseText = data.choices[0].message.content;
-          console.log('[Aurora Chat] 🤗 Hugging Face AI response generated successfully');
-        } else {
-          throw new Error(`HF API error: ${hfResponse.status}`);
-        }
-      } catch (error: any) {
-        console.error('[Aurora Chat] Hugging Face AI error:', error.message);
-        responseText = getFallbackResponse(message, history);
-      }
-    } else {
+    // Try Claude first if available, then Hugging Face, then fallback
+    let triedClaude = false;
+    
+    if (anthropic) {
       try {
         // Call Claude AI for response
-        const completion = await anthropic!.messages.create({
+        const completion = await anthropic.messages.create({
           model: DEFAULT_MODEL_STR,
           max_tokens: 2048,
           system: AURORA_SYSTEM_PROMPT,
@@ -131,18 +94,60 @@ export async function getChatResponse(
           ? completion.content[0].text 
           : 'I apologize, I had trouble generating a response.';
 
-        console.log('[Aurora Chat] Claude AI response generated successfully');
+        console.log('[Aurora Chat] ✨ Claude AI response generated successfully');
+        triedClaude = true;
       } catch (error: any) {
         console.error('[Aurora Chat] Claude AI error:', error.message);
+        triedClaude = true;
         
-        // Try Hugging Face as fallback if we have a key
-        if (process.env.HUGGINGFACE_API_KEY) {
-          console.log('[Aurora Chat] Attempting Hugging Face fallback...');
-          useHuggingFace = true;
-          return getChatResponse(message, sessionId); // Retry with HF
+        // Fall through to try Hugging Face
+        if (!process.env.HUGGINGFACE_API_KEY) {
+          responseText = "I'm having trouble connecting to my AI core right now (low credits). Please add a Hugging Face API key to use the free alternative!";
         }
-        
-        responseText = "I'm having trouble connecting to my AI core right now. Let me try to help you anyway - what did you need?";
+      }
+    }
+
+    // Try Hugging Face if Claude failed or wasn't available
+    if (!triedClaude || (triedClaude && !responseText)) {
+      if (process.env.HUGGINGFACE_API_KEY) {
+        try {
+          console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
+          
+          // Call free Hugging Face API (Llama 3)
+          const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              model: 'meta-llama/Meta-Llama-3-8B-Instruct',
+              messages: [
+                { role: 'system', content: AURORA_SYSTEM_PROMPT },
+                ...history.map(msg => ({
+                  role: msg.role === 'user' ? 'user' : 'assistant',
+                  content: msg.content
+                }))
+              ],
+              max_tokens: 2048,
+              temperature: 0.7
+            })
+          });
+
+          if (hfResponse.ok) {
+            const data = await hfResponse.json();
+            responseText = data.choices[0].message.content;
+            console.log('[Aurora Chat] 🤗 Hugging Face AI response generated successfully');
+          } else {
+            throw new Error(`HF API error: ${hfResponse.status}`);
+          }
+        } catch (error: any) {
+          console.error('[Aurora Chat] Hugging Face AI error:', error.message);
+          responseText = getFallbackResponse(message, history);
+        }
+      } else if (!responseText) {
+        // No API keys available, use simple fallback
+        responseText = getFallbackResponse(message, history);
       }
     }
 
