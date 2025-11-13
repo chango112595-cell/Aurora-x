@@ -697,9 +697,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/luminar-nexus/v2/logs/:serviceName", async (req, res) => {
+    const { serviceName } = req.params;
+    
     try {
-      const { serviceName } = req.params;
-      
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 

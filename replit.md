@@ -36,7 +36,21 @@ Preferred communication style: Simple, everyday language.
 - **API Security**: Header-based API key authentication (`x-api-key`) for corpus ingestion.
 - **User Authentication**: Schema prepared for username/password authentication with Drizzle ORM and PostgreSQL-backed sessions.
 
+**Luminar Nexus V2 Integration**:
+- **Service Monitoring**: AI-driven service orchestration and monitoring system with quantum-inspired architecture.
+- **Port Configuration**: Luminar Nexus V2 API runs on port 5005, backend/frontend on port 5000.
+- **Architecture Note**: Frontend is served via Vite middleware through backend on port 5000 (not separate port 5173). Only backend:5000 requires monitoring as it serves both API and frontend.
+- **Service Registry**: Monitors backend:5000 (fullstack service) only. Services that don't exist (bridge, chat, self-learn) or run as middleware (Vite) are not monitored to prevent false healing triggers.
+- **Health Monitoring**: Socket-based connectivity checks with AI analysis for performance classification. "Down" services skip AI analysis to prevent healing loops.
+- **Quantum Coherence**: System health metric based on healthy_services / total_services ratio (100% = all services healthy).
+
 ## Recent Updates
+
+**November 13, 2025**:
+- **Fixed Luminar Nexus V2 Healing Loops**: Reduced service registry from 5 phantom services to 1 actual service (backend:5000), eliminating false healing triggers.
+- **Quantum Coherence Restored**: Improved from 20% to 100% by monitoring only actually running services.
+- **Health Check Logic**: Fixed to properly handle "down" services without triggering autonomous healing loops. Down services now skip AI analysis.
+- **LSP Errors Fixed**: Resolved serviceName scope issue in server/routes.ts error handling.
 
 **October 14, 2024**:
 - **Enhanced CI/CD Pipeline**: 

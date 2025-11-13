@@ -535,7 +535,7 @@ class LuminarNexusV2:
                 health.response_time = time.time() - start_time
             else:
                 health.status = "down"
-                health.response_time = float("inf")
+                health.response_time = None  # Don't use infinity - service is down
 
             # System resource monitoring
             try:
@@ -553,30 +553,32 @@ class LuminarNexusV2:
             except Exception:
                 pass
 
-            # AI-based health assessment
-            metrics = {
-                "response_time": health.response_time,
-                "cpu_usage": health.cpu_usage,
-                "memory_usage": health.memory_usage,
-                "error_rate": health.error_rate,
-            }
+            # AI-based health assessment (only for services that are up)
+            if health.status != "down":
+                metrics = {
+                    "response_time": health.response_time if health.response_time is not None else 0.0,
+                    "cpu_usage": health.cpu_usage,
+                    "memory_usage": health.memory_usage,
+                    "error_rate": health.error_rate,
+                }
 
-            # Learn patterns for AI improvement
-            self.ai_orchestrator.learn_service_patterns(service_name, metrics)
+                # Learn patterns for AI improvement
+                self.ai_orchestrator.learn_service_patterns(service_name, metrics)
 
-            # Generate predictions
-            health.predictions = self.ai_orchestrator.predict_service_issues(service_name)
+                # Generate predictions
+                health.predictions = self.ai_orchestrator.predict_service_issues(service_name)
 
-            # Anomaly detection
-            health.anomalies = self.neural_anomaly_detector.detect_anomalies(service_name, metrics)
+                # Anomaly detection
+                health.anomalies = self.neural_anomaly_detector.detect_anomalies(service_name, metrics)
 
-            # Performance classification
-            if health.response_time > 2.0 or health.cpu_usage > 0.9 or health.memory_usage > 0.9:
-                health.status = "critical"
-            elif health.response_time > 1.0 or health.cpu_usage > 0.7 or health.memory_usage > 0.7:
-                health.status = "degraded"
-            else:
-                health.status = "healthy"
+            # Performance classification (only for services that are up)
+            if health.status != "down":
+                if health.response_time and health.response_time > 2.0 or health.cpu_usage > 0.9 or health.memory_usage > 0.9:
+                    health.status = "critical"
+                elif health.response_time and health.response_time > 1.0 or health.cpu_usage > 0.7 or health.memory_usage > 0.7:
+                    health.status = "degraded"
+                elif health.status != "down":
+                    health.status = "healthy"
 
             health.last_check = datetime.now()
 
@@ -1759,12 +1761,15 @@ def serve():
     """Start Luminar Nexus V2 API server"""
     nexus = LuminarNexusV2()
 
-    # Register Aurora services
-    nexus.register_service("backend", 5000, "api", [], "stable")
-    nexus.register_service("bridge", 5001, "middleware", ["backend"], "stable")
-    nexus.register_service("self-learn", 5002, "ai", ["backend"], "superposition")
-    nexus.register_service("chat", 5003, "ai", [], "stable")
-    nexus.register_service("frontend", 5173, "ui", [], "entangled")
+    # Register Aurora services - only services that are actually running
+    # Note: Frontend is served through backend via Vite middleware on port 5000
+    nexus.register_service("backend", 5000, "fullstack", [], "stable")
+    
+    # Disabled services (not currently running):
+    # frontend on port 5173 - doesn't exist (Vite runs in middleware mode on port 5000)
+    # nexus.register_service("bridge", 5001, "middleware", ["backend"], "stable")
+    # nexus.register_service("self-learn", 5002, "ai", ["backend"], "superposition")
+    # nexus.register_service("chat", 5003, "ai", [], "stable")
 
     # Start monitoring
     nexus.start_advanced_monitoring()
