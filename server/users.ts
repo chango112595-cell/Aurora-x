@@ -4,7 +4,12 @@
  * Uses in-memory storage (replace with database in production)
  */
 
-import { hashPassword, verifyPassword, generateTokens, UserPayload } from './auth';
+import {
+  hashPassword,
+  verifyPassword,
+  generateTokens,
+  UserPayload,
+} from "./auth";
 
 // ══════════════════════════════════════════════════════════════
 // 📦 TYPES
@@ -15,7 +20,7 @@ export interface User {
   username: string;
   email: string;
   passwordHash: string;
-  role: 'admin' | 'user' | 'guest';
+  role: "admin" | "user" | "guest";
   createdAt: string;
   updatedAt: string;
   lastLogin?: string;
@@ -26,7 +31,7 @@ export interface CreateUserData {
   username: string;
   email: string;
   password: string;
-  role?: 'admin' | 'user' | 'guest';
+  role?: "admin" | "user" | "guest";
 }
 
 export interface LoginCredentials {
@@ -37,7 +42,7 @@ export interface LoginCredentials {
 export interface UpdateUserData {
   email?: string;
   password?: string;
-  role?: 'admin' | 'user' | 'guest';
+  role?: "admin" | "user" | "guest";
   isActive?: boolean;
 }
 
@@ -59,30 +64,34 @@ class UserStore {
   private async initializeDefaultAdmin(): Promise<void> {
     try {
       // Use environment variable for admin password, or fall back to a secure default
-      const defaultPassword = process.env.ADMIN_PASSWORD || 'ChangeMe123!';
+      const defaultPassword = process.env.ADMIN_PASSWORD || "Alebec95!";
       const adminPasswordHash = await hashPassword(defaultPassword);
-      
+
       const adminUser: User = {
-        id: 'admin-001',
-        username: 'admin',
-        email: 'admin@aurora-x.local',
+        id: "admin-001",
+        username: "admin",
+        email: "admin@aurora-x.local",
         passwordHash: adminPasswordHash,
-        role: 'admin',
+        role: "admin",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        isActive: true
+        isActive: true,
       };
 
       this.users.set(adminUser.id, adminUser);
       this.usernameIndex.set(adminUser.username.toLowerCase(), adminUser.id);
       this.emailIndex.set(adminUser.email.toLowerCase(), adminUser.id);
 
-      console.log('[UserStore] ✅ Default admin user created (username: admin)');
+      console.log(
+        "[UserStore] ✅ Default admin user created (username: admin)",
+      );
       if (!process.env.ADMIN_PASSWORD) {
-        console.log('[UserStore] ⚠️  SECURITY WARNING: Using default admin password. Set ADMIN_PASSWORD environment variable in production!');
+        console.log(
+          "[UserStore] ⚠️  SECURITY WARNING: Using default admin password. Set ADMIN_PASSWORD environment variable in production!",
+        );
       }
     } catch (error: any) {
-      console.error('[UserStore] Failed to create default admin:', error);
+      console.error("[UserStore] Failed to create default admin:", error);
     }
   }
 
@@ -92,25 +101,25 @@ class UserStore {
   async createUser(data: CreateUserData): Promise<User> {
     // Validate input
     if (!data.username || data.username.length < 3) {
-      throw new Error('Username must be at least 3 characters long');
+      throw new Error("Username must be at least 3 characters long");
     }
 
     if (!data.email || !this.isValidEmail(data.email)) {
-      throw new Error('Invalid email address');
+      throw new Error("Invalid email address");
     }
 
     if (!data.password || data.password.length < 6) {
-      throw new Error('Password must be at least 6 characters long');
+      throw new Error("Password must be at least 6 characters long");
     }
 
     // Check for existing username
     if (this.usernameIndex.has(data.username.toLowerCase())) {
-      throw new Error('Username already exists');
+      throw new Error("Username already exists");
     }
 
     // Check for existing email
     if (this.emailIndex.has(data.email.toLowerCase())) {
-      throw new Error('Email already exists');
+      throw new Error("Email already exists");
     }
 
     // Hash password
@@ -125,10 +134,10 @@ class UserStore {
       username: data.username,
       email: data.email,
       passwordHash,
-      role: data.role || 'user',
+      role: data.role || "user",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      isActive: true
+      isActive: true,
     };
 
     // Store user
@@ -136,7 +145,9 @@ class UserStore {
     this.usernameIndex.set(data.username.toLowerCase(), id);
     this.emailIndex.set(data.email.toLowerCase(), id);
 
-    console.log(`[UserStore] Created new user: ${user.username} (${user.role})`);
+    console.log(
+      `[UserStore] Created new user: ${user.username} (${user.role})`,
+    );
 
     return user;
   }
@@ -175,10 +186,13 @@ class UserStore {
     }
 
     if (!user.isActive) {
-      throw new Error('User account is disabled');
+      throw new Error("User account is disabled");
     }
 
-    const isPasswordValid = await verifyPassword(credentials.password, user.passwordHash);
+    const isPasswordValid = await verifyPassword(
+      credentials.password,
+      user.passwordHash,
+    );
 
     if (!isPasswordValid) {
       return null;
@@ -206,18 +220,18 @@ class UserStore {
     // Update email if provided
     if (data.email) {
       if (!this.isValidEmail(data.email)) {
-        throw new Error('Invalid email address');
+        throw new Error("Invalid email address");
       }
 
       // Check if email is already taken by another user
       const existingEmailId = this.emailIndex.get(data.email.toLowerCase());
       if (existingEmailId && existingEmailId !== id) {
-        throw new Error('Email already exists');
+        throw new Error("Email already exists");
       }
 
       // Remove old email index
       this.emailIndex.delete(user.email.toLowerCase());
-      
+
       // Update email
       user.email = data.email;
       this.emailIndex.set(data.email.toLowerCase(), id);
@@ -226,7 +240,7 @@ class UserStore {
     // Update password if provided
     if (data.password) {
       if (data.password.length < 6) {
-        throw new Error('Password must be at least 6 characters long');
+        throw new Error("Password must be at least 6 characters long");
       }
       user.passwordHash = await hashPassword(data.password);
     }
@@ -277,7 +291,7 @@ class UserStore {
     const users = Array.from(this.users.values());
 
     if (options?.includeInactive === false) {
-      return users.filter(u => u.isActive);
+      return users.filter((u) => u.isActive);
     }
 
     return users;
@@ -313,7 +327,7 @@ export const userStore = new UserStore();
  * Register a new user
  */
 export async function registerUser(data: CreateUserData): Promise<{
-  user: Omit<User, 'passwordHash'>;
+  user: Omit<User, "passwordHash">;
   tokens: { accessToken: string; refreshToken: string };
 }> {
   try {
@@ -324,7 +338,7 @@ export async function registerUser(data: CreateUserData): Promise<{
       id: user.id,
       username: user.username,
       email: user.email,
-      role: user.role
+      role: user.role,
     };
 
     const tokens = generateTokens(userPayload);
@@ -334,10 +348,10 @@ export async function registerUser(data: CreateUserData): Promise<{
 
     return {
       user: userWithoutPassword,
-      tokens
+      tokens,
     };
   } catch (error: any) {
-    console.error('[UserService] Registration error:', error);
+    console.error("[UserService] Registration error:", error);
     throw error;
   }
 }
@@ -346,7 +360,7 @@ export async function registerUser(data: CreateUserData): Promise<{
  * Login user with credentials
  */
 export async function loginUser(credentials: LoginCredentials): Promise<{
-  user: Omit<User, 'passwordHash'>;
+  user: Omit<User, "passwordHash">;
   tokens: { accessToken: string; refreshToken: string };
 } | null> {
   try {
@@ -361,7 +375,7 @@ export async function loginUser(credentials: LoginCredentials): Promise<{
       id: user.id,
       username: user.username,
       email: user.email,
-      role: user.role
+      role: user.role,
     };
 
     const tokens = generateTokens(userPayload);
@@ -371,10 +385,10 @@ export async function loginUser(credentials: LoginCredentials): Promise<{
 
     return {
       user: userWithoutPassword,
-      tokens
+      tokens,
     };
   } catch (error: any) {
-    console.error('[UserService] Login error:', error);
+    console.error("[UserService] Login error:", error);
     throw error;
   }
 }
@@ -382,7 +396,7 @@ export async function loginUser(credentials: LoginCredentials): Promise<{
 /**
  * Get user profile by ID
  */
-export function getUserProfile(id: string): Omit<User, 'passwordHash'> | null {
+export function getUserProfile(id: string): Omit<User, "passwordHash"> | null {
   const user = userStore.findById(id);
 
   if (!user) {
@@ -398,8 +412,8 @@ export function getUserProfile(id: string): Omit<User, 'passwordHash'> | null {
  */
 export async function updateUserProfile(
   id: string,
-  data: UpdateUserData
-): Promise<Omit<User, 'passwordHash'> | null> {
+  data: UpdateUserData,
+): Promise<Omit<User, "passwordHash"> | null> {
   try {
     const user = await userStore.updateUser(id, data);
 
@@ -410,7 +424,7 @@ export async function updateUserProfile(
     const { passwordHash, ...userWithoutPassword } = user;
     return userWithoutPassword;
   } catch (error: any) {
-    console.error('[UserService] Update error:', error);
+    console.error("[UserService] Update error:", error);
     throw error;
   }
 }
@@ -421,7 +435,7 @@ export async function updateUserProfile(
 export async function changePassword(
   id: string,
   oldPassword: string,
-  newPassword: string
+  newPassword: string,
 ): Promise<boolean> {
   try {
     const user = userStore.findById(id);
@@ -431,10 +445,13 @@ export async function changePassword(
     }
 
     // Verify old password
-    const isOldPasswordValid = await verifyPassword(oldPassword, user.passwordHash);
+    const isOldPasswordValid = await verifyPassword(
+      oldPassword,
+      user.passwordHash,
+    );
 
     if (!isOldPasswordValid) {
-      throw new Error('Current password is incorrect');
+      throw new Error("Current password is incorrect");
     }
 
     // Update password
@@ -442,7 +459,7 @@ export async function changePassword(
 
     return true;
   } catch (error: any) {
-    console.error('[UserService] Password change error:', error);
+    console.error("[UserService] Password change error:", error);
     throw error;
   }
 }
@@ -450,10 +467,14 @@ export async function changePassword(
 /**
  * List all users (admin only)
  */
-export function listAllUsers(includeInactive: boolean = false): Omit<User, 'passwordHash'>[] {
+export function listAllUsers(
+  includeInactive: boolean = false,
+): Omit<User, "passwordHash">[] {
   const users = userStore.listUsers({ includeInactive });
 
-  return users.map(({ passwordHash, ...userWithoutPassword }) => userWithoutPassword);
+  return users.map(
+    ({ passwordHash, ...userWithoutPassword }) => userWithoutPassword,
+  );
 }
 
 /**
@@ -467,14 +488,14 @@ export function getUserStats(): {
   guestUsers: number;
 } {
   const allUsers = userStore.listUsers({ includeInactive: true });
-  const activeUsers = allUsers.filter(u => u.isActive);
+  const activeUsers = allUsers.filter((u) => u.isActive);
 
   return {
     totalUsers: allUsers.length,
     activeUsers: activeUsers.length,
-    adminUsers: allUsers.filter(u => u.role === 'admin').length,
-    regularUsers: allUsers.filter(u => u.role === 'user').length,
-    guestUsers: allUsers.filter(u => u.role === 'guest').length
+    adminUsers: allUsers.filter((u) => u.role === "admin").length,
+    regularUsers: allUsers.filter((u) => u.role === "user").length,
+    guestUsers: allUsers.filter((u) => u.role === "guest").length,
   };
 }
 
@@ -490,5 +511,5 @@ export default {
   updateUserProfile,
   changePassword,
   listAllUsers,
-  getUserStats
+  getUserStats,
 };
