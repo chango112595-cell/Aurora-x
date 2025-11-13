@@ -193,14 +193,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/luminar-nexus/v2/status", async (req, res) => {
     try {
       const response = await fetch('http://localhost:3000/api/nexus/status');
-      
+
       if (!response.ok) {
         return res.status(response.status).json({ 
           error: "Luminar Nexus V2 service unavailable",
           status: "degraded"
         });
       }
-      
+
       const data = await response.json();
       res.json(data);
     } catch (error) {
@@ -535,13 +535,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Check V2 status
       let v2Active = false;
       let v2SystemStatus = null;
-      
+
       try {
         const v2StatusResponse = await fetch('http://localhost:3000/api/nexus/status', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });
-        
+
         if (v2StatusResponse.ok) {
           v2Active = true;
           v2SystemStatus = await v2StatusResponse.json();
@@ -2670,7 +2670,7 @@ except Exception as e:
           }
         }
 
-        // If no code found in src, check if there's a single file with function name
+        // If still no code, check if there's a single file with function name
         if (!code) {
           const allFiles = fs.readdirSync(latestRun.path);
           const pyFiles = allFiles.filter(f => f.endsWith('.py') && !f.startsWith('test_'));
@@ -4403,7 +4403,7 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
 🌐 Modern (2000s-10s): Cloud, mobile, React/Node, microservices
 🤖 Cutting Edge (2020s): AI/ML (transformers, LLMs, diffusion models), containers, serverless
 🔮 Future/Speculative (2030s+): AGI, quantum computing, neural interfaces
-📚 Sci-Fi: HAL 9000, Skynet, JARVIS, Cortana - I know them all
+📚 Sci-Fi:HAL 9000, Skynet, JARVIS, Cortana - I know them all
 
 **I'm honest about my limits:**
 ❌ Can't execute code directly or access filesystems

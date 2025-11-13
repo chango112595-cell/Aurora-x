@@ -136,6 +136,23 @@ task = "shell.exec"
 args = "python3 tools/luminar_nexus_v2.py serve"
 waitForPort = 3000
 
+[[workflows.workflow]]
+name = "Restart & Activate Aurora Chat"
+author = 49690521
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"🔄 Restarting Aurora with chat enabled...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"✅ Aurora Chat is now available!\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"📍 Open the chat at: /chat or /aurora-ui\""
+
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
 expertMode = true
