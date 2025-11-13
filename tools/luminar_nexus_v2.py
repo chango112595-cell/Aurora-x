@@ -37,9 +37,9 @@ from flask_cors import CORS
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 try:
     from aurora_port_manager import AuroraPortManager
-
     PORT_MANAGER_AVAILABLE = True
 except ImportError:
+    AuroraPortManager = None  # type: ignore
     PORT_MANAGER_AVAILABLE = False
     print("⚠️ Aurora Port Manager not available - using basic port monitoring")
 import sys
@@ -50,9 +50,9 @@ import numpy as np
 # Import Aurora's Enhanced Intelligence
 try:
     from aurora_nexus_bridge import route_to_enhanced_aurora_core
-
     AURORA_BRIDGE_AVAILABLE = True
 except ImportError:
+    route_to_enhanced_aurora_core = None  # type: ignore
     AURORA_BRIDGE_AVAILABLE = False
 
 
@@ -456,7 +456,7 @@ class LuminarNexusV2:
 
         # Initialize Port Manager if available
         self.port_manager = None
-        if PORT_MANAGER_AVAILABLE:
+        if PORT_MANAGER_AVAILABLE and AuroraPortManager is not None:
             try:
                 self.port_manager = AuroraPortManager()
                 print("✅ Aurora Port Manager integrated with Luminar Nexus v2")
@@ -474,7 +474,7 @@ class LuminarNexusV2:
         name: str,
         port: int,
         service_type: str = "standard",
-        dependencies: list[str] = None,
+        dependencies: list[str] | None = None,
         quantum_state: str = "stable",
     ):
         """Register a service with advanced metadata"""
@@ -515,7 +515,7 @@ class LuminarNexusV2:
             anomalies=[],
         )
 
-    async def comprehensive_health_check(self, service_name: str) -> ServiceHealth:
+    async def comprehensive_health_check(self, service_name: str) -> ServiceHealth | None:
         """Advanced health check with AI analysis"""
         if service_name not in self.health_monitor:
             return None
@@ -542,13 +542,14 @@ class LuminarNexusV2:
                 # Find process using the port
                 for proc in psutil.process_iter(["pid", "name", "cpu_percent", "memory_percent"]):
                     try:
-                        connections = proc.net_connections()
-                        for conn in connections:
-                            if conn.laddr.port == health.port:
-                                health.cpu_usage = proc.cpu_percent() / 100.0
-                                health.memory_usage = proc.memory_percent() / 100.0
-                                break
-                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                        if hasattr(proc, 'net_connections'):
+                            connections = proc.net_connections()  # type: ignore
+                            for conn in connections:
+                                if conn.laddr.port == health.port:
+                                    health.cpu_usage = proc.cpu_percent() / 100.0
+                                    health.memory_usage = proc.memory_percent() / 100.0
+                                    break
+                    except (psutil.NoSuchProcess, psutil.AccessDenied, AttributeError):
                         continue
             except Exception:
                 pass
@@ -923,7 +924,9 @@ class LuminarNexusV2:
             self.quantum_mesh.coherence_level = healthy_services / total_services
 
         # If coherence is low, trigger system-wide healing
-        if self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"]:
+        # Skip warning only if all services are still in unknown state (initial health check not complete)
+        all_unknown = all(health.status == "unknown" for health in self.health_monitor.values())
+        if self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"] and not all_unknown:
             print(f"⚠️  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
 
     def get_system_status(self) -> dict[str, Any]:
@@ -989,7 +992,7 @@ class LuminarNexusV2:
                     return jsonify({"error": "No message provided"}), 400
 
                 # Advanced routing through Aurora Bridge
-                if AURORA_BRIDGE_AVAILABLE:
+                if AURORA_BRIDGE_AVAILABLE and route_to_enhanced_aurora_core is not None:
                     print(f"🌌 Nexus v2 → Aurora Bridge: {message[:50]}...")
                     response = route_to_enhanced_aurora_core(message, session_id)
                 else:
