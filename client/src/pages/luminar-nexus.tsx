@@ -131,6 +131,18 @@ export default function LuminarNexus() {
     );
   }
 
+  if (!healthData) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-background via-background to-primary/5">
+        <div className="text-center space-y-4">
+          <AlertCircle className="h-12 w-12 mx-auto text-yellow-500" />
+          <p className="text-muted-foreground">Unable to connect to Luminar Nexus V2</p>
+          <p className="text-sm text-muted-foreground">Make sure the V2 service is running on port 3000</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full overflow-auto bg-gradient-to-br from-background via-background to-primary/5 p-6">
       <div className="container mx-auto space-y-6 max-w-7xl">

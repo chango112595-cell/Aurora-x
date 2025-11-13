@@ -586,10 +586,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Luminar Nexus V2 detailed status endpoint for dashboard
   app.get("/api/luminar-nexus/v2/status", async (req, res) => {
     try {
-      const v2Response = await fetch('http://localhost:3000/api/nexus/status', {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+      const v2Response = await fetch('http://0.0.0.0:3000/api/nexus/status', {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
 
       if (v2Response.ok) {
         const v2Data = await v2Response.json();
@@ -606,7 +612,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
     } catch (error: any) {
-      res.status(503).json({ 
+      if (error.name === 'AbortError') {
+        res.status(504).json({ 
+          error: 'Luminar Nexus V2 timeout',
+          active: false,
+          version: '2.0.0'
+        });
+      } else {
+        res.status(503).json({ 
         error: 'Luminar Nexus V2 not running',
         message: error.message,
         active: false,
