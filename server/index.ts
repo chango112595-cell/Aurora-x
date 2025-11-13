@@ -1,9 +1,11 @@
 import express, { type Request, Response, NextFunction } from "express";
+import { createServer } from "http";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { registerLuminarRoutes } from "./luminarNexus"; // Assuming this is where registerLuminarRoutes is defined
+import { registerLuminarRoutes } from "./luminar-routes";
 
 const app = express();
+const server = createServer(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
