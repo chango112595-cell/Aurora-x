@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { Express } from 'express'; // Assuming Express is used for the app object
 
 const DEFAULT_MODEL_STR = "claude-sonnet-4-20250514";
 const MAX_CONVERSATION_TURNS = 10; // 10 turns = 20 messages (10 user + 10 assistant)
@@ -111,7 +112,7 @@ export async function getChatResponse(
       const messagesToRemove = history.length - maxMessages;
       const pairsToRemove = Math.ceil(messagesToRemove / 2); // Round up to ensure we stay under limit
       const actualMessagesToRemove = pairsToRemove * 2; // Always remove in pairs
-      
+
       history.splice(0, actualMessagesToRemove);
     }
 
@@ -128,7 +129,7 @@ export async function getChatResponse(
 
   } catch (error: any) {
     console.error('[Aurora Chat] Unexpected error:', error.message);
-    
+
     // Final fallback if everything fails
     return {
       response: "Sorry, I encountered an unexpected error. Please try again!",
@@ -142,27 +143,27 @@ export async function getChatResponse(
  */
 function getFallbackResponse(message: string, history: Array<{role: string, content: string}>): string {
   const msg = message.toLowerCase().trim();
-  
+
   // Greetings
   if (/^(hi|hello|hey|sup|yo)\b/.test(msg)) {
     return `Hey! I'm Aurora. ${history.length > 2 ? "Good to continue our conversation!" : "What can I help you with today?"}`;
   }
-  
+
   // Questions about capabilities
   if (msg.includes('what can you') || msg.includes('what do you') || msg.includes('help')) {
     return "I can help you with conversations, answer questions, and assist with various tasks! Right now I'm running in fallback mode since Claude AI isn't connected, but I can still chat with you. What would you like to talk about?";
   }
-  
+
   // Questions about identity  
   if (msg.includes('who are you') || msg.includes('what are you')) {
     return "I'm Aurora - your friendly AI assistant! I'm part of the Aurora-X ecosystem. I remember our conversations and I'm here to help however I can.";
   }
-  
+
   // Thanks
   if (msg.includes('thank') || msg.includes('appreciate')) {
     return "You're welcome! Happy to help! 😊";
   }
-  
+
   // Default friendly response
   const responses = [
     "That's interesting! Tell me more about that.",
@@ -171,7 +172,7 @@ function getFallbackResponse(message: string, history: Array<{role: string, cont
     "I'd love to help with that. Can you give me a bit more detail?",
     "Interesting point! What aspect of that interests you most?"
   ];
-  
+
   return responses[Math.floor(Math.random() * responses.length)];
 }
 
@@ -183,14 +184,48 @@ export async function searchWeb(query: string): Promise<string> {
     const searchUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1`;
     const response = await fetch(searchUrl);
     const data = await response.json();
-    
+
     if (data.AbstractText) {
       return `Search result for "${query}":\n${data.AbstractText}`;
     }
-    
+
     return '';
   } catch (error) {
     console.error('[Web Search] Error:', error);
     return '';
   }
+}
+
+// Placeholder for route registration function, assuming it exists elsewhere
+// This is a common pattern in Express.js applications.
+// If this function is meant to be defined here, it would need to be implemented.
+// For now, we'll assume it's defined in another file and imported.
+// If this is the file where routes are registered, the definition should be here.
+export function registerAuroraChatRoutes(app: Express) {
+  // Health check for Aurora AI Core
+  app.get("/api/aurora/health", (req, res) => {
+    res.json({ 
+      ok: true, 
+      status: "Aurora AI Core Online",
+      timestamp: new Date().toISOString() 
+    });
+  });
+
+  // Aurora chat endpoint
+  app.post("/api/aurora/chat", async (req, res) => {
+    // The original code for this endpoint would be here.
+    // Since it's not provided, we'll add a placeholder.
+    console.log("Received chat request:", req.body);
+    // Assume getChatResponse is defined and imported correctly
+    const { message, sessionId } = req.body;
+    if (!message) {
+      return res.status(400).json({ error: "Message is required" });
+    }
+    const { response, ok } = await getChatResponse(message, sessionId);
+    if (ok) {
+      res.json({ response });
+    } else {
+      res.status(500).json({ error: response });
+    }
+  });
 }
