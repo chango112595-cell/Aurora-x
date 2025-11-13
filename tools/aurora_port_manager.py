@@ -63,7 +63,7 @@ class AuroraPortManager:
                             # Determine if it's an Aurora service
                             is_aurora = any(
                                 keyword in command.lower()
-                                for keyword in ["aurora", "luminar", "nexus", "bridge", "chango"]
+                                for keyword in ["aurora", "luminar", "nexus", "bridge", "chango", "tsx server", "npm run dev"]
                             )
 
                             service_type = self.aurora_port_map.get(port, {}).get("type", "unknown")
@@ -118,8 +118,9 @@ class AuroraPortManager:
                 )
 
         # Check for non-Aurora services on Aurora ports
+        # SKIP port 5000 as it's the main backend that should never be killed
         for port, info in port_usage.items():
-            if port in self.aurora_port_map and not info.is_aurora_service:
+            if port in self.aurora_port_map and not info.is_aurora_service and port != 5000:
                 conflicts.append(
                     {
                         "type": "port_hijack",
