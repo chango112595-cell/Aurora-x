@@ -139,47 +139,47 @@ export async function getChatResponse(
     }
 
     // Try Hugging Face if Claude failed or wasn't available
-    if (!triedClaude || (triedClaude && !responseText)) {
-      if (process.env.HUGGINGFACE_API_KEY) {
-        try {
-          console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
+    if (!responseText && process.env.HUGGINGFACE_API_KEY) {
+      try {
+        console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
 
-          // Call free Hugging Face API (Llama 3)
-          const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              model: 'meta-llama/Meta-Llama-3-8B-Instruct',
-              messages: [
-                { role: 'system', content: AURORA_SYSTEM_PROMPT },
-                ...history.map(msg => ({
-                  role: msg.role === 'user' ? 'user' : 'assistant',
-                  content: msg.content
-                }))
-              ],
-              max_tokens: 2048,
-              temperature: 0.7
-            })
-          });
+        // Call free Hugging Face API (Llama 3)
+        const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'meta-llama/Meta-Llama-3-8B-Instruct',
+            messages: [
+              { role: 'system', content: AURORA_SYSTEM_PROMPT },
+              ...history.map(msg => ({
+                role: msg.role === 'user' ? 'user' : 'assistant',
+                content: msg.content
+              }))
+            ],
+            max_tokens: 2048,
+            temperature: 0.7
+          })
+        });
 
-          if (hfResponse.ok) {
-            const data = await hfResponse.json();
-            responseText = data.choices[0].message.content;
-            console.log('[Aurora Chat] 🤗 Hugging Face AI response generated successfully');
-          } else {
-            throw new Error(`HF API error: ${hfResponse.status}`);
-          }
-        } catch (error: any) {
-          console.error('[Aurora Chat] Hugging Face AI error:', error.message);
-          responseText = getFallbackResponse(message, history);
+        if (hfResponse.ok) {
+          const data = await hfResponse.json();
+          responseText = data.choices[0].message.content;
+          console.log('[Aurora Chat] 🤗 Hugging Face AI response generated successfully');
+        } else {
+          const errorText = await hfResponse.text();
+          console.error('[Aurora Chat] Hugging Face API error:', hfResponse.status, errorText);
+          throw new Error(`HF API error: ${hfResponse.status}`);
         }
-      } else if (!responseText) {
-        // No API keys available, use simple fallback
+      } catch (error: any) {
+        console.error('[Aurora Chat] Hugging Face AI error:', error.message);
         responseText = getFallbackResponse(message, history);
       }
+    } else if (!responseText) {
+      // No API keys available, use simple fallback
+      responseText = getFallbackResponse(message, history);
     }
 
     // Add Aurora's response to history
