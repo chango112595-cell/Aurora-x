@@ -121,7 +121,14 @@ export default function LuminarNexus() {
   ];
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen"><Activity className="animate-spin h-12 w-12" /></div>;
+    return (
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-background via-background to-primary/5">
+        <div className="text-center space-y-4">
+          <Activity className="animate-spin h-12 w-12 mx-auto text-cyan-500" />
+          <p className="text-muted-foreground">Loading Luminar Nexus V2...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
