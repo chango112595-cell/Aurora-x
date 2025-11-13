@@ -75,26 +75,32 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
       console.log('[Aurora Chat] Got response:', response.status);
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+        const errorText = await response.text();
+        console.error('[Aurora Chat] Error response:', errorText);
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
       }
 
       const data = await response.json();
-      console.log('[Aurora Chat] Parsed JSON, adding message');
+      console.log('[Aurora Chat] Parsed JSON:', data);
+
+      if (!data.ok || !data.response) {
+        throw new Error('Invalid response format');
+      }
 
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'aurora',
-        content: data.response || 'No response',
+        content: data.response,
         timestamp: new Date()
       }]);
 
-      console.log('[Aurora Chat] Message added, clearing loading');
+      console.log('[Aurora Chat] Message added successfully');
     } catch (error) {
       console.error('[Aurora Chat] Error:', error);
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'aurora',
-        content: "Hmm, I hit a snag there. Mind trying that again? 🔧",
+        content: `I encountered an error: ${error instanceof Error ? error.message : 'Unknown error'}. Please check the console for details. 🔧`,
         timestamp: new Date()
       }]);
     } finally {

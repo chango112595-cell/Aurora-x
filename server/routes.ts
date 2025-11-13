@@ -236,7 +236,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const msgLower = message.toLowerCase().trim();
       const isSystemCommand = msgLower.includes('activate tier') || 
                               (msgLower.includes('luminar') && msgLower.includes('nexus') && msgLower.includes('integrate'));
-      
+
       if (isSystemCommand) {
         try {
           const v2Response = await fetch('http://localhost:5005/api/chat', {
@@ -257,7 +257,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Use Claude AI for human-like conversational responses
       const chatResult = await getChatResponse(message, sessionId);
-      
+
       res.json({
         ok: chatResult.ok,
         response: chatResult.response,
@@ -379,7 +379,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/luminar-nexus/v2/services/:serviceName/restart", async (req, res) => {
     try {
       const { serviceName } = req.params;
-      
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
@@ -412,7 +412,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/luminar-nexus/v2/services/:serviceName/scale", async (req, res) => {
     try {
       const { serviceName } = req.params;
-      
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
@@ -444,7 +444,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/luminar-nexus/v2/logs/:serviceName", async (req, res) => {
     const { serviceName } = req.params;
-    
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
@@ -4643,5 +4643,3 @@ function getAIMLGrandmasterResponse(): string {
 
 **What AI system are we building? From ancient perceptrons to AGI to sci-fi concepts, I've got complete mastery!** 🚀`;
 }
-
-// Cleanup complete - Aurora now has natural conversational responses with full grandmaster knowledge!

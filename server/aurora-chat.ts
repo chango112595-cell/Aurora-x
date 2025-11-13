@@ -107,7 +107,7 @@ export async function getChatResponse(
 
     // Try Claude first if available, then Hugging Face, then fallback
     let triedClaude = false;
-    
+
     if (anthropic) {
       try {
         // Call Claude AI for response
@@ -130,7 +130,7 @@ export async function getChatResponse(
       } catch (error: any) {
         console.error('[Aurora Chat] Claude AI error:', error.message);
         triedClaude = true;
-        
+
         // Fall through to try Hugging Face
         if (!process.env.HUGGINGFACE_API_KEY) {
           responseText = "I'm having trouble connecting to my AI core right now (low credits). Please add a Hugging Face API key to use the free alternative!";
@@ -143,7 +143,7 @@ export async function getChatResponse(
       if (process.env.HUGGINGFACE_API_KEY) {
         try {
           console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
-          
+
           // Call free Hugging Face API (Llama 3)
           const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct/v1/chat/completions', {
             method: 'POST',
@@ -296,19 +296,122 @@ export function registerAuroraChatRoutes(app: Express) {
 
   // Aurora chat endpoint
   app.post("/api/aurora/chat", async (req, res) => {
-    // The original code for this endpoint would be here.
-    // Since it's not provided, we'll add a placeholder.
-    console.log("Received chat request:", req.body);
-    // Assume getChatResponse is defined and imported correctly
     const { message, sessionId } = req.body;
+    
     if (!message) {
       return res.status(400).json({ error: "Message is required" });
     }
-    const { response, ok } = await getChatResponse(message, sessionId);
-    if (ok) {
-      res.json({ response });
-    } else {
-      res.status(500).json({ error: response });
+
+    // Retrieve conversation history for the session
+    let conversationHistory = conversationMemory.get(sessionId) || [];
+    
+    // Add user message to history (temporarily for this request)
+    const tempHistory = [...conversationHistory, { role: 'user', content: message }];
+
+    let aiResponse: string = '';
+    let ok = false;
+
+    // Try Claude AI first
+    try {
+      if (anthropic) {
+        const completion = await anthropic.messages.create({
+          model: DEFAULT_MODEL_STR,
+          max_tokens: 2048,
+          system: AURORA_SYSTEM_PROMPT,
+          messages: tempHistory.map(msg => ({
+            role: msg.role === 'user' ? 'user' : 'assistant',
+            content: msg.content
+          }))
+        });
+
+        if (completion.content && completion.content.length > 0 && completion.content[0].type === 'text') {
+          aiResponse = completion.content[0].text;
+          console.log('[Aurora Chat] ✨ Claude AI response generated successfully');
+          ok = true;
+        } else {
+          console.error('[Aurora Chat] Claude API returned empty or invalid content.');
+          aiResponse = 'I apologize, I had trouble generating a response.';
+        }
+      } else {
+        console.log('[Aurora Chat] Claude AI client not initialized, falling back to Hugging Face.');
+      }
+    } catch (error: any) {
+      console.error('[Aurora Chat] Claude API error:', error.message);
+      if (!process.env.HUGGINGFACE_API_KEY) {
+        aiResponse = "I'm having trouble connecting to my AI core right now. Please add an API key for an alternative service like Hugging Face!";
+      }
+      // If Claude fails, the code will proceed to try Hugging Face
     }
+
+    // Try Hugging Face if Claude failed or wasn't available and we haven't gotten a response
+    if (!ok && process.env.HUGGINGFACE_API_KEY) {
+      try {
+        console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
+        const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'meta-llama/Meta-Llama-3-8B-Instruct',
+            messages: [
+              { role: 'system', content: AURORA_SYSTEM_PROMPT },
+              ...tempHistory.map(msg => ({
+                role: msg.role === 'user' ? 'user' : 'assistant',
+                content: msg.content
+              }))
+            ],
+            max_tokens: 2048,
+            temperature: 0.7
+          })
+        });
+
+        if (hfResponse.ok) {
+          const data = await hfResponse.json();
+          aiResponse = data.choices[0].message.content;
+          console.log('[Aurora Chat] 🤗 Hugging Face AI response generated successfully');
+          ok = true;
+        } else {
+          const errorText = await hfResponse.text();
+          console.error('[Aurora Chat] Hugging Face API error:', hfResponse.status, errorText);
+          aiResponse = getFallbackResponse(message, tempHistory); // Use fallback
+        }
+      } catch (error: any) {
+        console.error('[Aurora Chat] Hugging Face AI fetch error:', error.message);
+        aiResponse = getFallbackResponse(message, tempHistory); // Use fallback
+      }
+    } else if (!ok && !process.env.HUGGINGFACE_API_KEY && !anthropic) {
+        // If no AI services are available, use the simple fallback
+        aiResponse = getFallbackResponse(message, tempHistory);
+        ok = true; // Consider fallback as a successful response
+    }
+
+    // If after all attempts, we still don't have a response, use the ultimate fallback
+    if (!ok) {
+        aiResponse = getFallbackResponse(message, tempHistory);
+        ok = true; // Fallback is considered a successful response for the endpoint
+    }
+
+    // Update persistent conversation memory
+    if (!conversationMemory.has(sessionId)) {
+      conversationMemory.set(sessionId, []);
+    }
+    const currentHistory = conversationMemory.get(sessionId)!;
+    currentHistory.push({ role: 'user', content: message });
+    currentHistory.push({ role: 'assistant', content: aiResponse });
+
+    // Trim history to maintain conversation length limit
+    const maxMessages = MAX_CONVERSATION_TURNS * 2;
+    if (currentHistory.length > maxMessages) {
+      currentHistory.splice(0, currentHistory.length - maxMessages);
+    }
+    
+    // Return the response to the frontend
+    res.json({
+      response: aiResponse,
+      ok: ok,
+      session_id: sessionId // Include session_id in response if needed by frontend
+    });
   });
 }
