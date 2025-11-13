@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle, ChevronDown, Copy, Eye, MessageSquare } from "lucide-react";
+import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle, ChevronDown, Copy, Eye, MessageSquare, ArrowUp, ArrowDown, AlertTriangle, Server, Cpu, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import AuroraRebuiltChat from '@/components/AuroraRebuiltChat';
 import { useLocation } from 'wouter';
@@ -42,7 +42,7 @@ export default function LuminarNexus() {
 
   // Fetch corpus data - fetch all available
   const { data: corpusResponse, isLoading: corpusLoading } = useQuery<{ items: any[], hasMore: boolean }>({
-    queryKey: ['/api/corpus?limit=500'],
+    queryKey: ['/api/corpus?limit=200'],
   });
 
   // Helper function to determine levelship (Ancient to Future based on complexity/novelty)
@@ -328,6 +328,219 @@ export default function LuminarNexus() {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Services Tab - Detailed Service Status */}
+        {activeTab === 'services' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="space-y-6"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent">
+                Service Status Monitor
+              </h2>
+              <Badge className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border-cyan-500/30" data-testid="badge-service-count">
+                {healthData?.services ? Object.keys(healthData.services).length : 0} Services Active
+              </Badge>
+            </div>
+
+            {/* Service Cards Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {healthData?.services && Object.entries(healthData.services).map(([serviceName, service]: [string, any], index) => {
+                const isHealthy = service.status === 'healthy';
+                const statusColor = isHealthy ? 'green' : 'red';
+                const hasAnomalies = service.anomalies && service.anomalies.length > 0;
+                const hasPredictions = service.predictions && Object.keys(service.predictions).length > 0;
+                
+                // Helper to format response time
+                const formatResponseTime = (time: number | null) => {
+                  if (time === null || time === undefined) return 'N/A';
+                  if (time < 0.001) return `${(time * 1000000).toFixed(0)}μs`;
+                  if (time < 1) return `${(time * 1000).toFixed(2)}ms`;
+                  return `${time.toFixed(2)}s`;
+                };
+
+                // Helper to render trend indicator
+                const renderTrend = (trend: number | null | undefined, label: string) => {
+                  if (trend === null || trend === undefined) return null;
+                  const isPositive = trend > 0;
+                  const isNegative = trend < 0;
+                  
+                  return (
+                    <div className="flex items-center gap-1">
+                      {isPositive && <ArrowUp className="h-3 w-3 text-red-500" data-testid={`icon-trend-up-${label}`} />}
+                      {isNegative && <ArrowDown className="h-3 w-3 text-green-500" data-testid={`icon-trend-down-${label}`} />}
+                      {!isPositive && !isNegative && <span className="text-muted-foreground">─</span>}
+                    </div>
+                  );
+                };
+
+                return (
+                  <motion.div
+                    key={serviceName}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Card 
+                      className={`border-2 ${isHealthy ? 'border-green-500/30' : 'border-red-500/30'} bg-gradient-to-br from-background to-${statusColor}-500/5`}
+                      data-testid={`card-service-${serviceName}`}
+                    >
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-2">
+                            <Server className={`h-5 w-5 text-${statusColor}-500`} data-testid={`icon-service-${serviceName}`} />
+                            <CardTitle className="text-lg capitalize">{serviceName}</CardTitle>
+                          </div>
+                          <Badge 
+                            className={`bg-${statusColor}-500/20 text-${statusColor}-300 border-${statusColor}-500/30`}
+                            data-testid={`badge-status-${serviceName}`}
+                          >
+                            {isHealthy ? (
+                              <><CheckCircle2 className="h-3 w-3 mr-1" /> Healthy</>
+                            ) : (
+                              <><AlertCircle className="h-3 w-3 mr-1" /> Critical</>
+                            )}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      
+                      <CardContent className="space-y-4">
+                        {/* Port and Response Time */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <div className="text-xs text-muted-foreground mb-1">Port</div>
+                            <div className="text-2xl font-bold font-mono" data-testid={`text-port-${serviceName}`}>
+                              {service.port || 'N/A'}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                              Response Time
+                              {hasPredictions && renderTrend(service.predictions?.response_time_trend, `response-${serviceName}`)}
+                            </div>
+                            <div className="text-2xl font-bold font-mono" data-testid={`text-response-time-${serviceName}`}>
+                              {formatResponseTime(service.response_time)}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* CPU and Memory Usage */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+                            <div className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                              <Cpu className="h-3 w-3" />
+                              CPU Usage
+                              {hasPredictions && renderTrend(service.predictions?.cpu_usage_trend, `cpu-${serviceName}`)}
+                            </div>
+                            <div className="text-xl font-bold" data-testid={`text-cpu-${serviceName}`}>
+                              {service.cpu_usage !== null && service.cpu_usage !== undefined 
+                                ? `${(service.cpu_usage * 100).toFixed(2)}%` 
+                                : 'N/A'}
+                            </div>
+                          </div>
+                          <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                            <div className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                              <Zap className="h-3 w-3" />
+                              Memory
+                              {hasPredictions && renderTrend(service.predictions?.memory_usage_trend, `memory-${serviceName}`)}
+                            </div>
+                            <div className="text-xl font-bold" data-testid={`text-memory-${serviceName}`}>
+                              {service.memory_usage !== null && service.memory_usage !== undefined 
+                                ? `${(service.memory_usage * 100).toFixed(2)}%` 
+                                : 'N/A'}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Predictions (if available) */}
+                        {hasPredictions && (
+                          <div className="p-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+                            <div className="text-xs font-semibold text-cyan-300 mb-2 flex items-center gap-1">
+                              <TrendingUp className="h-3 w-3" />
+                              Predictive Trends
+                            </div>
+                            <div className="grid grid-cols-3 gap-2 text-xs">
+                              {service.predictions?.cpu_usage_trend !== undefined && (
+                                <div data-testid={`text-prediction-cpu-${serviceName}`}>
+                                  <span className="text-muted-foreground">CPU: </span>
+                                  <span className={service.predictions.cpu_usage_trend > 0 ? 'text-red-400' : 'text-green-400'}>
+                                    {service.predictions.cpu_usage_trend > 0 ? '+' : ''}{(service.predictions.cpu_usage_trend * 100).toFixed(1)}%
+                                  </span>
+                                </div>
+                              )}
+                              {service.predictions?.memory_usage_trend !== undefined && (
+                                <div data-testid={`text-prediction-memory-${serviceName}`}>
+                                  <span className="text-muted-foreground">Mem: </span>
+                                  <span className={service.predictions.memory_usage_trend > 0 ? 'text-red-400' : 'text-green-400'}>
+                                    {service.predictions.memory_usage_trend > 0 ? '+' : ''}{(service.predictions.memory_usage_trend * 100).toFixed(1)}%
+                                  </span>
+                                </div>
+                              )}
+                              {service.predictions?.response_time_trend !== undefined && (
+                                <div data-testid={`text-prediction-response-${serviceName}`}>
+                                  <span className="text-muted-foreground">Resp: </span>
+                                  <span className={service.predictions.response_time_trend > 0 ? 'text-red-400' : 'text-green-400'}>
+                                    {service.predictions.response_time_trend > 0 ? '+' : ''}{(service.predictions.response_time_trend * 1000).toFixed(2)}ms
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Anomalies (if any) */}
+                        {hasAnomalies && (
+                          <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20" data-testid={`container-anomalies-${serviceName}`}>
+                            <div className="text-xs font-semibold text-yellow-300 mb-2 flex items-center gap-1">
+                              <AlertTriangle className="h-3 w-3" />
+                              Anomalies Detected ({service.anomalies.length})
+                            </div>
+                            <ScrollArea className="max-h-20">
+                              <ul className="space-y-1 text-xs">
+                                {service.anomalies.map((anomaly: string, idx: number) => (
+                                  <li key={idx} className="flex items-start gap-2" data-testid={`text-anomaly-${serviceName}-${idx}`}>
+                                    <AlertTriangle className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
+                                    <span className="text-muted-foreground">{anomaly}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </ScrollArea>
+                          </div>
+                        )}
+
+                        {/* No Anomalies Message */}
+                        {!hasAnomalies && (
+                          <div className="text-xs text-muted-foreground text-center p-2" data-testid={`text-no-anomalies-${serviceName}`}>
+                            <CheckCircle2 className="h-4 w-4 text-green-500 inline mr-1" />
+                            No anomalies detected
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* No Services Available */}
+            {(!healthData?.services || Object.keys(healthData.services).length === 0) && (
+              <Card className="border-2 border-cyan-500/30">
+                <CardContent className="flex flex-col items-center justify-center min-h-[300px] space-y-4">
+                  <Server className="h-16 w-16 text-muted-foreground opacity-50" />
+                  <div className="text-center">
+                    <h3 className="text-lg font-semibold mb-2">No Services Available</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Service data is currently unavailable. Please check system health.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </motion.div>
         )}
 
         {/* Learning Tab - Aurora's Corpus with Advanced Filtering */}
