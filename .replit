@@ -125,18 +125,6 @@ waitForPort = 5000
 outputType = "webview"
 
 [[workflows.workflow]]
-name = "Luminar Nexus V2"
-author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "console"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python3 tools/luminar_nexus_v2.py serve"
-waitForPort = 3000
-
-[[workflows.workflow]]
 name = "Restart & Activate Aurora Chat"
 author = 49690521
 mode = "sequential"
@@ -152,6 +140,17 @@ args = "echo \"✅ Aurora Chat is now available!\""
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "echo \"📍 Open the chat at: /chat or /aurora-ui\""
+
+[[workflows.workflow]]
+name = "Luminar Nexus V2"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 tools/luminar_nexus_v2.py serve"
+
+[workflows.workflow.metadata]
+outputType = "console"
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]

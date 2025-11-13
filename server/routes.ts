@@ -189,10 +189,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // Luminar Nexus V2 Status Proxy - forwards requests to port 3000
+  // Luminar Nexus V2 Status Proxy - forwards requests to port 5005
   app.get("/api/luminar-nexus/v2/status", async (req, res) => {
     try {
-      const response = await fetch('http://localhost:3000/api/nexus/status');
+      const response = await fetch('http://localhost:5005/api/nexus/status');
 
       if (!response.ok) {
         return res.status(response.status).json({ 
@@ -234,7 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Route to Luminar Nexus V2 API
       try {
-        const v2Response = await fetch('http://localhost:3000/api/chat', {
+        const v2Response = await fetch('http://localhost:5005/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message, session_id: sessionId })
@@ -537,7 +537,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let v2SystemStatus = null;
 
       try {
-        const v2StatusResponse = await fetch('http://localhost:3000/api/nexus/status', {
+        const v2StatusResponse = await fetch('http://localhost:5005/api/nexus/status', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });
@@ -589,7 +589,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-      const v2Response = await fetch('http://0.0.0.0:3000/api/nexus/status', {
+      const v2Response = await fetch('http://0.0.0.0:5005/api/nexus/status', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal
@@ -637,7 +637,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-      const v2Response = await fetch(`http://0.0.0.0:3000/api/services/${serviceName}/restart`, {
+      const v2Response = await fetch(`http://0.0.0.0:5005/api/services/${serviceName}/restart`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal
@@ -670,7 +670,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-      const v2Response = await fetch(`http://0.0.0.0:3000/api/services/${serviceName}/scale`, {
+      const v2Response = await fetch(`http://0.0.0.0:5005/api/services/${serviceName}/scale`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal
@@ -703,7 +703,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-      const v2Response = await fetch(`http://0.0.0.0:3000/api/services/${serviceName}/logs`, {
+      const v2Response = await fetch(`http://0.0.0.0:5005/api/services/${serviceName}/logs`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal

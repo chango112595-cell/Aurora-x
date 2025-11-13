@@ -1773,7 +1773,7 @@ def serve():
     app = nexus.create_advanced_api()
 
     print("\n🌌 Luminar Nexus V2 API Server Starting...")
-    print(f"   Port: 3000")
+    print(f"   Port: 5005")
     print(f"   Quantum Coherence: {nexus.quantum_mesh.coherence_level:.2f}")
     print(f"   Services Registered: {len(nexus.service_registry)}")
     print("\n✨ Advanced Features Active:")
@@ -1783,7 +1783,7 @@ def serve():
     print("   • Neural anomaly detection")
     print("\n")
 
-    app.run(host='0.0.0.0', port=3000, debug=False)
+    app.run(host='0.0.0.0', port=5005, debug=False)
 
 
 if __name__ == "__main__":
