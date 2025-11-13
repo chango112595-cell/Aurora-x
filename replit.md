@@ -26,6 +26,7 @@ Preferred communication style: Simple, everyday language.
 - **Language Router**: Automatic language selection (Python, Go, Rust, C#) based on prompts.
 - **Progress Tracking**: Real-time synthesis progress via WebSockets.
 - **Bridge Protocol**: API bridge endpoints (`/api/bridge/nl`, `/api/bridge/spec`, `/api/bridge/deploy`, `/api/bridge/nl/project`) for natural language and spec compilation, Git integration with automatic commits/pushes, Discord webhooks, and Replit ping support. Includes features for signed commits, preview/diff endpoints, and automatic GitHub Pull Request creation and rollback controls.
+- **Aurora Chat AI**: Anthropic Claude-powered conversational AI with natural language processing, conversation memory management (10 turn history with pair-wise trimming), web search capabilities via DuckDuckGo API, and graceful fallback mode when Claude is unavailable. Located in `server/aurora-chat.ts`.
 
 **Data Storage Solutions**:
 - **Corpus Database**: SQLite (better-sqlite3) with WAL for function synthesis metadata, including advanced querying and similarity scoring (Jaccard distance).
@@ -47,10 +48,19 @@ Preferred communication style: Simple, everyday language.
 ## Recent Updates
 
 **November 13, 2025**:
-- **Fixed Luminar Nexus V2 Healing Loops**: Reduced service registry from 5 phantom services to 1 actual service (backend:5000), eliminating false healing triggers.
-- **Quantum Coherence Restored**: Improved from 20% to 100% by monitoring only actually running services.
-- **Health Check Logic**: Fixed to properly handle "down" services without triggering autonomous healing loops. Down services now skip AI analysis.
-- **LSP Errors Fixed**: Resolved serviceName scope issue in server/routes.ts error handling.
+- **Aurora Chat AI Enhanced**: Integrated Anthropic Claude Sonnet 4 for natural, human-like conversations
+  - Conversation memory management with proper user/assistant pairing (10 turn history, 20 messages total)
+  - Pair-wise trimming logic ensures conversation structure is always maintained
+  - Safety guards prevent orphaned assistant messages
+  - Web search capability via DuckDuckGo API for real-time information access
+  - Graceful fallback mode with friendly responses when Claude API is unavailable
+  - Robust error handling with multiple fallback layers
+- **Fixed Luminar Nexus V2 Routing**: Updated sidebar URL from `/luminar` to `/luminar-nexus` to match route definition
+- **Fixed HTTP Server Creation**: Added proper `createServer` initialization and corrected import paths
+- **Fixed Luminar Nexus V2 Healing Loops**: Reduced service registry from 5 phantom services to 1 actual service (backend:5000), eliminating false healing triggers
+- **Quantum Coherence Restored**: Improved from 20% to 100% by monitoring only actually running services
+- **Health Check Logic**: Fixed to properly handle "down" services without triggering autonomous healing loops. Down services now skip AI analysis
+- **LSP Errors Fixed**: Resolved serviceName scope issue in server/routes.ts error handling
 
 **October 14, 2024**:
 - **Enhanced CI/CD Pipeline**: 
