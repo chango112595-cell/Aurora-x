@@ -620,11 +620,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       } else {
         res.status(503).json({ 
-        error: 'Luminar Nexus V2 not running',
-        message: error.message,
-        active: false,
-        version: '2.0.0'
-      });
+          error: 'Luminar Nexus V2 not running',
+          message: error.message,
+          active: false,
+          version: '2.0.0'
+        });
+      }
     }
   });
 
