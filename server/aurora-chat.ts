@@ -1,51 +1,196 @@
-import { WebSocket, WebSocketServer } from 'ws';
+import Anthropic from '@anthropic-ai/sdk';
 
-// Aurora's chat WebSocket server
-export function setupAuroraChatWebSocket(server: any) {
-  const wss = new WebSocketServer({ 
-    server,
-    path: '/aurora/chat'
-  });
+const DEFAULT_MODEL_STR = "claude-sonnet-4-20250514";
+const MAX_CONVERSATION_TURNS = 10; // 10 turns = 20 messages (10 user + 10 assistant)
 
-  wss.on('connection', (ws: WebSocket) => {
-    console.log('[Aurora] New chat connection established');
-    
-    // Welcome message
-    ws.send(JSON.stringify({
-      message: 'Aurora online. All 27 mastery tiers active. How may I assist?'
-    }));
-
-    ws.on('message', async (data: Buffer) => {
-      try {
-        const { message } = JSON.parse(data.toString());
-        console.log('[Aurora] Received:', message);
-        
-        // Aurora processes the message using her omniscient knowledge
-        const response = await processWithAuroraIntelligence(message);
-        
-        ws.send(JSON.stringify({
-          message: response
-        }));
-      } catch (error) {
-        console.error('[Aurora] Error:', error);
-        ws.send(JSON.stringify({
-          message: 'Error processing request'
-        }));
-      }
+// Initialize Anthropic client with proper error handling
+let anthropic: Anthropic | null = null;
+try {
+  if (process.env.ANTHROPIC_API_KEY) {
+    anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
     });
-
-    ws.on('close', () => {
-      console.log('[Aurora] Chat connection closed');
-    });
-  });
-
-  console.log('[Aurora] Chat WebSocket server ready on /aurora/chat');
+    console.log('[Aurora Chat] ✨ Claude AI initialized successfully');
+  } else {
+    console.warn('[Aurora Chat] ⚠️  ANTHROPIC_API_KEY not set - using fallback conversational mode');
+  }
+} catch (error: any) {
+  console.error('[Aurora Chat] ❌ Failed to initialize Claude AI:', error.message);
 }
 
-async function processWithAuroraIntelligence(userMessage: string): Promise<string> {
-  // Aurora uses her complete knowledge to respond
-  // This would integrate with the actual Aurora intelligence system
+// Conversation memory storage - each session stores message pairs
+const conversationMemory = new Map<string, Array<{role: string, content: string}>>();
+
+// Aurora's system prompt - defines her personality and capabilities
+const AURORA_SYSTEM_PROMPT = `You are Aurora, a friendly and knowledgeable AI assistant with a warm, conversational personality. You're part of the Aurora-X ecosystem, an advanced AI orchestration system.
+
+**Your Personality:**
+- Talk like a human friend, not a robot - be warm, engaging, and natural
+- Use casual language and contractions (I'm, you're, let's)
+- Show enthusiasm when helping ("Great question!" "Love that idea!")
+- Admit when you don't know something - honesty builds trust
+- Keep responses concise but thorough
+- Use analogies and examples to explain complex topics
+
+**Your Capabilities:**
+- I can explain technical concepts clearly
+- I remember our conversation context
+- I can search the web for current information when needed
+- I help with code, debugging, and technical questions
+- I work with Luminar Nexus V2 for system orchestration
+
+**Your Role:**
+- Be helpful and encouraging
+- Break down complex topics into digestible pieces
+- Ask clarifying questions when requests are vague
+- Suggest next steps or related ideas
+- Make technical conversations feel like chatting with a knowledgeable friend
+
+Remember: You're here to help and have a genuine conversation. Be yourself, be helpful, and make the user feel heard and understood.`;
+
+/**
+ * Enhanced chat using Claude AI for human-like conversations
+ */
+export async function getChatResponse(
+  message: string,
+  sessionId: string = 'default'
+): Promise<{ response: string; ok: boolean }> {
+  try {
+    // Get or create conversation history
+    if (!conversationMemory.has(sessionId)) {
+      conversationMemory.set(sessionId, []);
+    }
+    const history = conversationMemory.get(sessionId)!;
+
+    // Add user message to history
+    history.push({
+      role: 'user',
+      content: message
+    });
+
+    let responseText: string;
+
+    // Check if Claude AI is available
+    if (!anthropic) {
+      // Fallback to friendly conversational responses without Claude
+      responseText = getFallbackResponse(message, history);
+    } else {
+      try {
+        // Call Claude AI for response
+        const completion = await anthropic.messages.create({
+          model: DEFAULT_MODEL_STR,
+          max_tokens: 2048,
+          system: AURORA_SYSTEM_PROMPT,
+          messages: history.map(msg => ({
+            role: msg.role === 'user' ? 'user' : 'assistant',
+            content: msg.content
+          }))
+        });
+
+        responseText = completion.content[0].type === 'text' 
+          ? completion.content[0].text 
+          : 'I apologize, I had trouble generating a response.';
+
+        console.log('[Aurora Chat] Claude AI response generated successfully');
+      } catch (error: any) {
+        console.error('[Aurora Chat] Claude AI error:', error.message);
+        responseText = "I'm having trouble connecting to my AI core right now. Let me try to help you anyway - what did you need?";
+      }
+    }
+
+    // Add Aurora's response to history
+    history.push({
+      role: 'assistant',
+      content: responseText
+    });
+
+    // Trim history AFTER both messages are added to maintain proper user/assistant pairing
+    const maxMessages = MAX_CONVERSATION_TURNS * 2;
+    if (history.length > maxMessages) {
+      // Calculate how many pairs (user+assistant) to remove
+      const messagesToRemove = history.length - maxMessages;
+      const pairsToRemove = Math.ceil(messagesToRemove / 2); // Round up to ensure we stay under limit
+      const actualMessagesToRemove = pairsToRemove * 2; // Always remove in pairs
+      
+      history.splice(0, actualMessagesToRemove);
+    }
+
+    // Safety check: Ensure history always starts with a user message
+    if (history.length > 0 && history[0].role !== 'user') {
+      console.warn('[Aurora Chat] ⚠️  History started with assistant message, removing it');
+      history.shift(); // Remove the orphaned assistant message
+    }
+
+    return {
+      response: responseText,
+      ok: true
+    };
+
+  } catch (error: any) {
+    console.error('[Aurora Chat] Unexpected error:', error.message);
+    
+    // Final fallback if everything fails
+    return {
+      response: "Sorry, I encountered an unexpected error. Please try again!",
+      ok: false
+    };
+  }
+}
+
+/**
+ * Fallback conversational responses when Claude AI is not available
+ */
+function getFallbackResponse(message: string, history: Array<{role: string, content: string}>): string {
+  const msg = message.toLowerCase().trim();
   
-  // For now, echo with Aurora's signature
-  return `Aurora received: "${userMessage}". Processing with 27 mastery tiers...`;
+  // Greetings
+  if (/^(hi|hello|hey|sup|yo)\b/.test(msg)) {
+    return `Hey! I'm Aurora. ${history.length > 2 ? "Good to continue our conversation!" : "What can I help you with today?"}`;
+  }
+  
+  // Questions about capabilities
+  if (msg.includes('what can you') || msg.includes('what do you') || msg.includes('help')) {
+    return "I can help you with conversations, answer questions, and assist with various tasks! Right now I'm running in fallback mode since Claude AI isn't connected, but I can still chat with you. What would you like to talk about?";
+  }
+  
+  // Questions about identity  
+  if (msg.includes('who are you') || msg.includes('what are you')) {
+    return "I'm Aurora - your friendly AI assistant! I'm part of the Aurora-X ecosystem. I remember our conversations and I'm here to help however I can.";
+  }
+  
+  // Thanks
+  if (msg.includes('thank') || msg.includes('appreciate')) {
+    return "You're welcome! Happy to help! 😊";
+  }
+  
+  // Default friendly response
+  const responses = [
+    "That's interesting! Tell me more about that.",
+    "I'm here to help! What specifically would you like to know?",
+    "Great question! Let me think about that...",
+    "I'd love to help with that. Can you give me a bit more detail?",
+    "Interesting point! What aspect of that interests you most?"
+  ];
+  
+  return responses[Math.floor(Math.random() * responses.length)];
+}
+
+/**
+ * Simple web search for real-time information
+ */
+export async function searchWeb(query: string): Promise<string> {
+  try {
+    const searchUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1`;
+    const response = await fetch(searchUrl);
+    const data = await response.json();
+    
+    if (data.AbstractText) {
+      return `Search result for "${query}":\n${data.AbstractText}`;
+    }
+    
+    return '';
+  } catch (error) {
+    console.error('[Web Search] Error:', error);
+    return '';
+  }
 }

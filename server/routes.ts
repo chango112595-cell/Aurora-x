@@ -19,6 +19,7 @@ import {
   usedSeedSchema,
 } from "@shared/schema";
 import authRouter from "./auth-routes";
+import { getChatResponse, searchWeb } from "./aurora-chat";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
@@ -217,10 +218,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Conversation memory store - persists across requests
-  const conversationMemory = new Map<string, Array<{role: string, content: string, timestamp: number}>>();
+  // Note: Conversation memory and web search are now handled in server/aurora-chat.ts
 
-  // Chat endpoint - Aurora's conversational interface with Luminar Nexus V2
+  // Chat endpoint - Aurora's conversational interface with Claude AI
   app.post("/api/chat", async (req, res) => {
     try {
       const { message, session_id } = req.body;
@@ -230,306 +230,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const sessionId = session_id || 'default';
-      console.log('[Aurora Chat V2] Received message:', message, 'Session:', sessionId);
+      console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId);
 
-      // Route to Luminar Nexus V2 API
-      try {
-        const v2Response = await fetch('http://localhost:5005/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message, session_id: sessionId })
-        });
-
-        if (v2Response.ok) {
-          const v2Data = await v2Response.json();
-          console.log('[Aurora Chat V2] Routed to V2 successfully');
-          return res.json(v2Data);
-        }
-      } catch (v2Error) {
-        console.warn('[Aurora Chat V2] V2 not available, using fallback');
-      }
-
-      // Fallback to V1 conversation memory if V2 is not running
-      if (!conversationMemory.has(sessionId)) {
-        conversationMemory.set(sessionId, []);
-      }
-      const history = conversationMemory.get(sessionId)!;
-
-      history.push({
-        role: 'user',
-        content: message,
-        timestamp: Date.now()
-      });
-
-      if (history.length > 20) {
-        history.splice(0, history.length - 20);
-      }
-
-      const msg = message.toLowerCase().trim();
-      let response = '';
-      let action = null;
-
-      // Check for tier activation command
-      if (msg.includes('activate') && msg.includes('tier')) {
-        response = `🌌 **32-Tier Luminar Nexus V2 System Activation**\n\n` +
-                   `Activating all advanced capabilities:\n\n` +
-                   `✅ **Core Tiers (1-8):** Foundation systems online\n` +
-                   `✅ **Intelligence Tiers (9-16):** AI reasoning active\n` +
-                   `✅ **Autonomous Tiers (17-24):** Self-management enabled\n` +
-                   `✅ **Quantum Tiers (25-32):** Advanced orchestration ready\n\n` +
-                   `🚀 **Current Status:**\n` +
-                   `  • Luminar Nexus V2: Active\n` +
-                   `  • All 32 tiers: Operational\n` +
-                   `  • Autonomous healing: Enabled\n` +
-                   `  • Port management: Active\n\n` +
-                   `I'm ready to execute your commands! Try:\n` +
-                   `  • "check system status" - Full health report\n` +
-                   `  • "start all services" - Launch entire stack\n` +
-                   `  • "generate [app description]" - Create an app\n` +
-                   `  • "fix [issue]" - Auto-repair systems`;
-
-        history.push({
-          role: 'assistant',
-          content: response,
-          timestamp: Date.now()
-        });
-
-        return res.json({
-          ok: true,
-          response,
-          action: { 
-            type: 'tier_activation',
-            data: { 
-              tiers_active: 32,
-              luminar_v2: true,
-              capabilities: 'full'
-            }
-          },
-          session_id: sessionId,
-          conversation_length: history.length,
-          has_memory: true
-        });
-      }
-
-      // Check for Luminar Nexus v2 integration query
-      if (msg.includes('luminar') && msg.includes('nexus') && msg.includes('v2') && 
-          (msg.includes('integrate') || msg.includes('integration'))) {
-        response = `🌌 **Luminar Nexus v2 Integration Activated!**\n\n` +
-                   `I'm now using Luminar Nexus v2 as my orchestration engine. Here's what this means:\n\n` +
-                   `✨ **Enhanced Capabilities:**\n` +
-                   `  • AI-driven service orchestration\n` +
-                   `  • Autonomous healing and self-repair\n` +
-                   `  • Intelligent port conflict resolution\n` +
-                   `  • Quantum service mesh architecture\n` +
-                   `  • Advanced health monitoring with predictions\n` +
-                   `  • Predictive scaling and optimization\n` +
-                   `  • Neural anomaly detection\n\n` +
-                   `🔧 **System Status:**\n` +
-                   `  • Version: 2.0.0\n` +
-                   `  • Location: tools/luminar_nexus_v2.py\n` +
-                   `  • Mode: Active and operational\n` +
-                   `  • Integration: Complete\n\n` +
-                   `🚀 **Available Commands:**\n` +
-                   `  • "start all services" - Start all Aurora services\n` +
-                   `  • "check system status" - Get comprehensive health report\n` +
-                   `  • "heal services" - Trigger autonomous healing\n` +
-                   `  • "show port status" - View port allocation and conflicts\n` +
-                   `  • "optimize performance" - Run performance optimization\n\n` +
-                   `I'm ready to manage the entire Aurora-X ecosystem with advanced AI capabilities!`;
-
-        history.push({
-          role: 'assistant',
-          content: response,
-          timestamp: Date.now()
-        });
-
-        return res.json({
-          ok: true,
-          response,
-          action: { 
-            type: 'v2_integration_complete',
-            data: {
-              version: '2.0.0',
-              active: true,
-              features_enabled: true
-            }
-          },
-          session_id: sessionId,
-          conversation_length: history.length,
-          has_memory: true
-        });
-      }
-
-      // Check for Luminar Nexus version query (more flexible matching)
-      if (msg.includes('luminar') && msg.includes('nexus') && 
-          (msg.includes('v2') || msg.includes('version') || msg.includes('using') || msg.includes('which'))) {
-        const nexusV2Status = {
-          active: true,
-          integrated: true,
-          version: '2.0.0',
-          features: [
-            'AI-driven service orchestration',
-            'Autonomous healing',
-            'Port conflict resolution', 
-            'Quantum service mesh',
-            'Advanced health monitoring',
-            'Predictive scaling',
-            'Neural anomaly detection'
-          ],
-          location: 'tools/luminar_nexus_v2.py',
-          currentMode: 'Integrated with Aurora chat system'
-        };
-
-        response = `Yes! Luminar Nexus v2 is integrated and active. Here's my status:\n\n` +
-                   `🌌 Version: ${nexusV2Status.version}\n` +
-                   `📍 Location: ${nexusV2Status.location}\n` +
-                   `🔧 Current Mode: ${nexusV2Status.currentMode}\n` +
-                   `✅ Integration: Complete\n\n` +
-                   `✨ V2 Features:\n${nexusV2Status.features.map(f => `  • ${f}`).join('\n')}\n\n` +
-                   `Luminar Nexus v2 is now my primary orchestration engine, giving me advanced AI capabilities for system management!`;
-
-        history.push({
-          role: 'assistant',
-          content: response,
-          timestamp: Date.now()
-        });
-
-        return res.json({
-          ok: true,
-          response,
-          action: { type: 'system_status', data: nexusV2Status },
-          session_id: sessionId,
-          conversation_length: history.length,
-          has_memory: true
-        });
-      }
-
-      // Check for memory-related queries
-      if (msg.includes('remember') || msg.includes('you said') || msg.includes('earlier')) {
-        const previousMessages = history.slice(0, -1).filter(m => m.role === 'assistant').slice(-3);
-        if (previousMessages.length > 0) {
-          response = `I remember our conversation. Here's what I said recently:\n${previousMessages.map((m, i) => `${i + 1}. ${m.content.substring(0, 100)}...`).join('\n')}`;
-        } else {
-          response = "This is the start of our conversation. I don't have previous messages to recall yet.";
-        }
-      }
-      // Command detection and execution
-      else if (msg.includes('check') && (msg.includes('system') || msg.includes('status') || msg.includes('health'))) {
-        // System status check
+      // Try routing to Luminar Nexus V2 first for specific system commands
+      const msgLower = message.toLowerCase().trim();
+      const isSystemCommand = msgLower.includes('activate tier') || 
+                              (msgLower.includes('luminar') && msgLower.includes('nexus') && msgLower.includes('integrate'));
+      
+      if (isSystemCommand) {
         try {
-          const healthRes = await fetch('http://localhost:5000/api/health');
-          const health = await healthRes.json();
-          response = `System check complete! Backend is ${health.status === 'ok' ? '✅ healthy' : '❌ down'}. Uptime: ${health.uptime}s. Everything's running smoothly.`;
-          action = { type: 'system_check', result: health };
-        } catch (e: any) {
-          response = "I tried to check the system but got an error. Let me investigate...";
-          action = { type: 'system_check', error: e.message };
+          const v2Response = await fetch('http://localhost:5005/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message, session_id: sessionId })
+          });
+
+          if (v2Response.ok) {
+            const v2Data = await v2Response.json();
+            console.log('[Aurora Chat] Routed system command to Luminar V2');
+            return res.json(v2Data);
+          }
+        } catch (v2Error) {
+          console.warn('[Aurora Chat] Luminar V2 unavailable, using Claude AI');
         }
       }
-      else if ((msg.includes('generate') || msg.includes('create') || msg.includes('build')) && (msg.includes('code') || msg.includes('app') || msg.includes('function'))) {
-        // Code generation request
-        response = "I'll generate that for you right now. What specific code or app do you want me to create? Give me the details and I'll build it.";
-        action = { type: 'code_generation', prompt: message };
-      }
-      else if (msg.includes('run') && (msg.includes('test') || msg.includes('check'))) {
-        // Run tests
-        response = "Running tests now... I'll execute the test suite and report back with results.";
-        action = { type: 'run_tests' };
-      }
-      else if (msg.includes('fix') || msg.includes('repair') || msg.includes('debug')) {
-        // Fix something
-        response = "I'm on it! I'll analyze what needs fixing and apply the necessary corrections. What specifically should I fix?";
-        action = { type: 'fix', target: message };
-      }
-      else if (msg.includes('analyze') || msg.includes('review')) {
-        // Code analysis
-        response = "Analyzing the codebase now... I'll review the structure, patterns, and provide insights on what I find.";
-        action = { type: 'analyze' };
-      }
-      // Greetings
-      else if (/^(hi|hello|hey|sup|yo)\b/.test(msg)) {
-        response = `Hey! I'm Aurora. ${history.length > 1 ? "Good to continue our conversation." : "What command can I execute for you today?"}`;
-      }
-      // Questions about capabilities
-      else if (msg.includes('what can you') || msg.includes('what do you')) {
-        response = "I can execute commands like:\n• Check system status\n• Generate code and apps\n• Run tests\n• Fix bugs\n• Analyze code\n• Remember our conversation\n\nJust tell me what to do!";
-      }
-      // Questions about identity  
-      else if (msg.includes('who are you') || msg.includes('what are you')) {
-        response = "I'm Aurora - an AI with conversation memory and the ability to execute commands. I remember what we discuss and can take action on your requests.";
-      }
-      // Requests for help
-      else if (msg.includes('help') || msg.includes('stuck')) {
-        response = "Tell me what you need done and I'll execute it. I can check systems, generate code, run tests, fix issues, and more. I also remember our conversation, so feel free to refer back to things we've discussed.";
-      }
-      // Thanks
-      else if (msg.includes('thank') || msg.includes('appreciate')) {
-        response = "Happy to help! What else should I execute?";
-      }
-      // If message is too vague, ask for clarification (but not for questions)
-      else if ((msg.length < 10 || !msg.match(/[a-z]{3,}/)) && 
-          !msg.includes('?') && 
-          !msg.includes('what') && 
-          !msg.includes('which') && 
-          !msg.includes('who') && 
-          !msg.includes('how')) {
-        response = 'Got it. To execute this command, please be more specific. Try:\n' +
-                   '• "check system status"\n' +
-                   '• "generate a timer app"\n' +
-                   '• "run tests"\n' +
-                   '• "fix the backend"\n' +
-                   '• "analyze the code"';
-      }
-      // Default - treat as a command if none of the above matched
-      else {
-        response = 'Got it. To execute this command, please be more specific. Try:\n' +
-                   '• "check system status"\n' +
-                   '• "generate a timer app"\n' +
-                   '• "run tests"\n' +
-                   '• "fix the backend"\n' +
-                   '• "analyze the code"';
-      }
 
-      // Add Aurora's response to history
-      history.push({
-        role: 'assistant',
-        content: response,
-        timestamp: Date.now()
-      });
-
+      // Use Claude AI for human-like conversational responses
+      const chatResult = await getChatResponse(message, sessionId);
+      
       res.json({
-        ok: true,
-        response,
-        action,
+        ok: chatResult.ok,
+        response: chatResult.response,
+        message: chatResult.response,
         session_id: sessionId,
-        conversation_length: history.length,
-        has_memory: true
+        ai_powered: true
       });
-    } catch (error) {
+
+    } catch (error: any) {
       console.error('[Aurora Chat] Error:', error);
       res.status(500).json({ 
         ok: false, 
-        error: 'Failed to process chat message' 
+        error: "Chat service error",
+        message: "I'm having trouble right now. Please try again!"
       });
     }
   });
 
-  // Aurora: Serve Aurora's custom UI interface
-  app.get("/aurora", (req, res) => {
-    const auroraUIPath = path.join(process.cwd(), 'aurora_chat_test.html');
-
-    if (!fs.existsSync(auroraUIPath)) {
-      return res.status(404).json({
-        error: "Aurora UI not found",
-        message: "The aurora_chat_test.html file does not exist"
-      });
-    }
-
-    res.setHeader('Content-Type', 'text/html');
-    res.sendFile(auroraUIPath);
-  });
-
-  // Luminar Nexus v2 status endpoint
   app.get("/api/luminar-nexus/status", async (req, res) => {
     try {
       // Check V2 status
