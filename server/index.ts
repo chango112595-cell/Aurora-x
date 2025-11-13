@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { registerLuminarRoutes } from "./luminarNexus"; // Assuming this is where registerLuminarRoutes is defined
 
 const app = express();
 app.use(express.json());
@@ -37,7 +38,11 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  const server = await registerRoutes(app);
+  // Register application routes
+  registerRoutes(app);
+
+  // Register Luminar Nexus V2 routes
+  registerLuminarRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
@@ -61,7 +66,7 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
-  
+
   // Ensure clean server startup
   server.on('error', (err: any) => {
     if (err.code === 'EADDRINUSE') {
@@ -88,7 +93,7 @@ app.use((req, res, next) => {
       process.exit(0);
     });
   });
-  
+
   server.listen(port, "0.0.0.0", () => {
     log(`serving on port ${port}`);
     log(`environment: ${app.get("env")}`);
