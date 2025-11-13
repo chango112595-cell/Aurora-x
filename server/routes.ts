@@ -629,6 +629,110 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Luminar Nexus V2 service action endpoints
+  app.post("/api/luminar-nexus/v2/services/:serviceName/restart", async (req, res) => {
+    try {
+      const { serviceName } = req.params;
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+      const v2Response = await fetch(`http://0.0.0.0:3000/api/services/${serviceName}/restart`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (v2Response.ok) {
+        const data = await v2Response.json();
+        res.json(data);
+      } else {
+        res.status(503).json({ 
+          error: 'Service restart not available',
+          message: 'Luminar Nexus V2 service action endpoint not responding'
+        });
+      }
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        res.status(504).json({ error: 'Request timeout' });
+      } else {
+        res.status(500).json({ error: error.message });
+      }
+    }
+  });
+
+  app.post("/api/luminar-nexus/v2/services/:serviceName/scale", async (req, res) => {
+    try {
+      const { serviceName } = req.params;
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+      const v2Response = await fetch(`http://0.0.0.0:3000/api/services/${serviceName}/scale`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (v2Response.ok) {
+        const data = await v2Response.json();
+        res.json(data);
+      } else {
+        res.status(503).json({ 
+          error: 'Service scaling not available',
+          message: 'Luminar Nexus V2 service action endpoint not responding'
+        });
+      }
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        res.status(504).json({ error: 'Request timeout' });
+      } else {
+        res.status(500).json({ error: error.message });
+      }
+    }
+  });
+
+  app.get("/api/luminar-nexus/v2/logs/:serviceName", async (req, res) => {
+    try {
+      const { serviceName } = req.params;
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+      const v2Response = await fetch(`http://0.0.0.0:3000/api/services/${serviceName}/logs`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (v2Response.ok) {
+        const data = await v2Response.json();
+        res.json(data);
+      } else {
+        res.json({ 
+          logs: [
+            `[${new Date().toISOString()}] Service logs not available`,
+            `[${new Date().toISOString()}] Luminar Nexus V2 service log endpoint not responding`,
+            `[${new Date().toISOString()}] Service: ${serviceName}`
+          ]
+        });
+      }
+    } catch (error: any) {
+      res.json({ 
+        logs: [
+          `[${new Date().toISOString()}] Error fetching logs: ${error.message}`,
+          `[${new Date().toISOString()}] Service: ${serviceName}`
+        ]
+      });
+    }
+  });
+
   // Aurora: Natural language conversation endpoint (proxies to Luminar Nexus)
   app.post("/api/conversation", async (req, res) => {
     try {

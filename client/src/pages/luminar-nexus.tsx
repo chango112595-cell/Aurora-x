@@ -5,9 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useQuery } from "@tanstack/react-query";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { queryClient, apiRequest } from "@/lib/queryClient";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle, ChevronDown, Copy, Eye, MessageSquare, ArrowUp, ArrowDown, AlertTriangle, Server, Cpu, Zap } from "lucide-react";
+import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle, ChevronDown, Copy, Eye, MessageSquare, ArrowUp, ArrowDown, AlertTriangle, Server, Cpu, Zap, RotateCw, Maximize2, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import AuroraRebuiltChat from '@/components/AuroraRebuiltChat';
 import { useLocation } from 'wouter';
@@ -19,6 +23,7 @@ type LevelshipFilter = 'all' | 'ancient' | 'classical' | 'modern' | 'future';
 
 export default function LuminarNexus() {
   const [location] = useLocation();
+  const { toast } = useToast();
 
   // Parse tab from URL query parameter
   const urlParams = new URLSearchParams(window.location.search);
@@ -32,6 +37,7 @@ export default function LuminarNexus() {
   const [passFailFilter, setPassFailFilter] = useState<PassFailFilter>('all');
   const [levelshipFilter, setLevelshipFilter] = useState<LevelshipFilter>('all');
   const [expandedCode, setExpandedCode] = useState<string | null>(null);
+  const [selectedServiceForLogs, setSelectedServiceForLogs] = useState<string | null>(null);
 
   // Update activeTab when URL changes
   useEffect(() => {
@@ -43,6 +49,91 @@ export default function LuminarNexus() {
   // Fetch corpus data - fetch all available
   const { data: corpusResponse, isLoading: corpusLoading } = useQuery<{ items: any[], hasMore: boolean }>({
     queryKey: ['/api/corpus?limit=200'],
+  });
+
+  // Fetch service logs
+  const { data: serviceLogs } = useQuery<{ logs: string[] }>({
+    queryKey: ['/api/luminar-nexus/v2/logs', selectedServiceForLogs],
+    queryFn: async () => {
+      if (!selectedServiceForLogs) return { logs: [] };
+      
+      try {
+        const encodedServiceName = encodeURIComponent(selectedServiceForLogs);
+        const response = await fetch(`/api/luminar-nexus/v2/logs/${encodedServiceName}`);
+        
+        if (!response.ok) {
+          toast({
+            title: "Failed to fetch logs",
+            description: `Could not retrieve logs for ${selectedServiceForLogs}`,
+            variant: "destructive",
+          });
+          return { logs: [] };
+        }
+        
+        return response.json();
+      } catch (error) {
+        toast({
+          title: "Error fetching logs",
+          description: `An error occurred while fetching logs for ${selectedServiceForLogs}`,
+          variant: "destructive",
+        });
+        return { logs: [] };
+      }
+    },
+    enabled: !!selectedServiceForLogs,
+  });
+
+  // Service action mutations
+  const restartServiceMutation = useMutation({
+    mutationFn: async (serviceName: string) => {
+      const encodedServiceName = encodeURIComponent(serviceName);
+      const response = await fetch(`/api/luminar-nexus/v2/services/${encodedServiceName}/restart`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!response.ok) throw new Error('Failed to restart service');
+      return response.json();
+    },
+    onSuccess: (_, serviceName) => {
+      toast({
+        title: "Service Restart Initiated",
+        description: `${serviceName} is restarting...`,
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/luminar-nexus/v2/status'] });
+    },
+    onError: (error, serviceName) => {
+      toast({
+        title: "Restart Failed",
+        description: `Failed to restart ${serviceName}`,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const scaleServiceMutation = useMutation({
+    mutationFn: async (serviceName: string) => {
+      const encodedServiceName = encodeURIComponent(serviceName);
+      const response = await fetch(`/api/luminar-nexus/v2/services/${encodedServiceName}/scale`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!response.ok) throw new Error('Failed to scale service');
+      return response.json();
+    },
+    onSuccess: (_, serviceName) => {
+      toast({
+        title: "Service Scaling Initiated",
+        description: `${serviceName} is scaling for better performance...`,
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/luminar-nexus/v2/status'] });
+    },
+    onError: (error, serviceName) => {
+      toast({
+        title: "Scaling Failed",
+        description: `Failed to scale ${serviceName}`,
+        variant: "destructive",
+      });
+    },
   });
 
   // Helper function to determine levelship (Ancient to Future based on complexity/novelty)
@@ -475,69 +566,185 @@ export default function LuminarNexus() {
                           </div>
                         </div>
 
-                        {/* Predictions (if available) */}
-                        {hasPredictions && (
-                          <div className="p-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
-                            <div className="text-xs font-semibold text-cyan-300 mb-2 flex items-center gap-1">
-                              <TrendingUp className="h-3 w-3" />
-                              Predictive Trends
-                            </div>
-                            <div className="grid grid-cols-3 gap-2 text-xs">
-                              {service.predictions?.cpu_usage_trend !== undefined && (
-                                <div data-testid={`text-prediction-cpu-${serviceName}`}>
-                                  <span className="text-muted-foreground">CPU: </span>
-                                  <span className={service.predictions.cpu_usage_trend > 0 ? 'text-red-400' : 'text-green-400'}>
-                                    {service.predictions.cpu_usage_trend > 0 ? '+' : ''}{(service.predictions.cpu_usage_trend * 100).toFixed(1)}%
-                                  </span>
+                        {/* Interactive Details Accordion */}
+                        <Accordion type="single" collapsible className="w-full">
+                          {/* Predictions Section */}
+                          {hasPredictions && (
+                            <AccordionItem value="predictions" data-testid={`accordion-predictions-${serviceName}`}>
+                              <AccordionTrigger className="text-xs py-2 hover-elevate">
+                                <div className="flex items-center gap-2">
+                                  <TrendingUp className="h-3 w-3 text-cyan-500" />
+                                  <span>Predictive Trends</span>
+                                  <Badge variant="outline" className="ml-auto mr-2">
+                                    {Object.keys(service.predictions || {}).length} metrics
+                                  </Badge>
                                 </div>
-                              )}
-                              {service.predictions?.memory_usage_trend !== undefined && (
-                                <div data-testid={`text-prediction-memory-${serviceName}`}>
-                                  <span className="text-muted-foreground">Mem: </span>
-                                  <span className={service.predictions.memory_usage_trend > 0 ? 'text-red-400' : 'text-green-400'}>
-                                    {service.predictions.memory_usage_trend > 0 ? '+' : ''}{(service.predictions.memory_usage_trend * 100).toFixed(1)}%
-                                  </span>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <div className="p-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 space-y-2">
+                                  <div className="grid grid-cols-2 gap-2 text-xs">
+                                    {service.predictions?.cpu_usage_trend !== undefined && (
+                                      <div data-testid={`text-prediction-cpu-${serviceName}`}>
+                                        <span className="text-muted-foreground">CPU Trend: </span>
+                                        <span className={service.predictions.cpu_usage_trend > 0 ? 'text-red-400' : 'text-green-400'}>
+                                          {service.predictions.cpu_usage_trend > 0 ? '+' : ''}{(service.predictions.cpu_usage_trend * 100).toFixed(2)}%
+                                        </span>
+                                      </div>
+                                    )}
+                                    {service.predictions?.memory_usage_trend !== undefined && (
+                                      <div data-testid={`text-prediction-memory-${serviceName}`}>
+                                        <span className="text-muted-foreground">Memory Trend: </span>
+                                        <span className={service.predictions.memory_usage_trend > 0 ? 'text-red-400' : 'text-green-400'}>
+                                          {service.predictions.memory_usage_trend > 0 ? '+' : ''}{(service.predictions.memory_usage_trend * 100).toFixed(2)}%
+                                        </span>
+                                      </div>
+                                    )}
+                                    {service.predictions?.response_time_trend !== undefined && (
+                                      <div data-testid={`text-prediction-response-${serviceName}`}>
+                                        <span className="text-muted-foreground">Response Trend: </span>
+                                        <span className={service.predictions.response_time_trend > 0 ? 'text-red-400' : 'text-green-400'}>
+                                          {service.predictions.response_time_trend > 0 ? '+' : ''}{(service.predictions.response_time_trend * 1000).toFixed(2)}ms
+                                        </span>
+                                      </div>
+                                    )}
+                                    {service.predictions?.error_rate_trend !== undefined && (
+                                      <div data-testid={`text-prediction-error-${serviceName}`}>
+                                        <span className="text-muted-foreground">Error Trend: </span>
+                                        <span className={service.predictions.error_rate_trend > 0 ? 'text-red-400' : 'text-green-400'}>
+                                          {service.predictions.error_rate_trend > 0 ? '+' : ''}{(service.predictions.error_rate_trend * 100).toFixed(2)}%
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                  {service.predictions?.cpu_usage_prediction_5min !== undefined && (
+                                    <div className="pt-2 border-t border-cyan-500/20">
+                                      <div className="text-xs font-semibold text-cyan-300 mb-1">5-Minute Predictions</div>
+                                      <div className="grid grid-cols-2 gap-2 text-xs">
+                                        {service.predictions?.cpu_usage_prediction_5min !== undefined && (
+                                          <div>
+                                            <span className="text-muted-foreground">CPU: </span>
+                                            <span>{(service.predictions.cpu_usage_prediction_5min * 100).toFixed(1)}%</span>
+                                          </div>
+                                        )}
+                                        {service.predictions?.memory_usage_prediction_5min !== undefined && (
+                                          <div>
+                                            <span className="text-muted-foreground">Memory: </span>
+                                            <span>{(service.predictions.memory_usage_prediction_5min * 100).toFixed(1)}%</span>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
-                              )}
-                              {service.predictions?.response_time_trend !== undefined && (
-                                <div data-testid={`text-prediction-response-${serviceName}`}>
-                                  <span className="text-muted-foreground">Resp: </span>
-                                  <span className={service.predictions.response_time_trend > 0 ? 'text-red-400' : 'text-green-400'}>
-                                    {service.predictions.response_time_trend > 0 ? '+' : ''}{(service.predictions.response_time_trend * 1000).toFixed(2)}ms
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
+                              </AccordionContent>
+                            </AccordionItem>
+                          )}
 
-                        {/* Anomalies (if any) */}
-                        {hasAnomalies && (
-                          <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20" data-testid={`container-anomalies-${serviceName}`}>
-                            <div className="text-xs font-semibold text-yellow-300 mb-2 flex items-center gap-1">
-                              <AlertTriangle className="h-3 w-3" />
-                              Anomalies Detected ({service.anomalies.length})
-                            </div>
-                            <ScrollArea className="max-h-20">
-                              <ul className="space-y-1 text-xs">
-                                {service.anomalies.map((anomaly: string, idx: number) => (
-                                  <li key={idx} className="flex items-start gap-2" data-testid={`text-anomaly-${serviceName}-${idx}`}>
-                                    <AlertTriangle className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
-                                    <span className="text-muted-foreground">{anomaly}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </ScrollArea>
-                          </div>
-                        )}
+                          {/* Anomalies Section */}
+                          {hasAnomalies && (
+                            <AccordionItem value="anomalies" data-testid={`accordion-anomalies-${serviceName}`}>
+                              <AccordionTrigger className="text-xs py-2 hover-elevate">
+                                <div className="flex items-center gap-2">
+                                  <AlertTriangle className="h-3 w-3 text-yellow-500" />
+                                  <span>Anomalies Detected</span>
+                                  <Badge variant="outline" className="ml-auto mr-2 bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
+                                    {service.anomalies.length}
+                                  </Badge>
+                                </div>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20" data-testid={`container-anomalies-${serviceName}`}>
+                                  <ScrollArea className="max-h-32">
+                                    <ul className="space-y-2">
+                                      {service.anomalies.map((anomaly: string, idx: number) => (
+                                        <li key={idx} className="flex items-start gap-2 p-2 rounded bg-background/50" data-testid={`text-anomaly-${serviceName}-${idx}`}>
+                                          <AlertTriangle className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
+                                          <span className="text-xs text-muted-foreground">{anomaly}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </ScrollArea>
+                                </div>
+                              </AccordionContent>
+                            </AccordionItem>
+                          )}
+                        </Accordion>
 
                         {/* No Anomalies Message */}
-                        {!hasAnomalies && (
-                          <div className="text-xs text-muted-foreground text-center p-2" data-testid={`text-no-anomalies-${serviceName}`}>
+                        {!hasAnomalies && !hasPredictions && (
+                          <div className="text-xs text-muted-foreground text-center p-2" data-testid={`text-no-issues-${serviceName}`}>
                             <CheckCircle2 className="h-4 w-4 text-green-500 inline mr-1" />
-                            No anomalies detected
+                            All metrics nominal
                           </div>
                         )}
+
+                        {/* Service Action Buttons */}
+                        <div className="flex gap-2 pt-2 border-t border-border/50">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => restartServiceMutation.mutate(serviceName)}
+                            disabled={restartServiceMutation.isPending}
+                            className="flex-1"
+                            data-testid={`button-restart-${serviceName}`}
+                          >
+                            <RotateCw className={`h-3 w-3 mr-1 ${restartServiceMutation.isPending ? 'animate-spin' : ''}`} />
+                            Restart
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => scaleServiceMutation.mutate(serviceName)}
+                            disabled={scaleServiceMutation.isPending}
+                            className="flex-1"
+                            data-testid={`button-scale-${serviceName}`}
+                          >
+                            <Maximize2 className="h-3 w-3 mr-1" />
+                            Scale
+                          </Button>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setSelectedServiceForLogs(serviceName)}
+                                className="flex-1"
+                                data-testid={`button-logs-${serviceName}`}
+                              >
+                                <FileText className="h-3 w-3 mr-1" />
+                                Logs
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-3xl max-h-[80vh]">
+                              <DialogHeader>
+                                <DialogTitle className="flex items-center gap-2">
+                                  <FileText className="h-5 w-5" />
+                                  Service Logs: {serviceName}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Real-time diagnostic logs for the {serviceName} service
+                                </DialogDescription>
+                              </DialogHeader>
+                              <ScrollArea className="h-[60vh] rounded-md border p-4">
+                                <div className="font-mono text-xs space-y-1">
+                                  {serviceLogs?.logs && serviceLogs.logs.length > 0 ? (
+                                    serviceLogs.logs.map((log, idx) => (
+                                      <div key={idx} className="text-muted-foreground" data-testid={`log-entry-${idx}`}>
+                                        {log}
+                                      </div>
+                                    ))
+                                  ) : (
+                                    <div className="text-center text-muted-foreground py-8">
+                                      <FileText className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                                      <p>No logs available for this service</p>
+                                      <p className="text-xs mt-1">Logs will appear when the service generates output</p>
+                                    </div>
+                                  )}
+                                </div>
+                              </ScrollArea>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
                       </CardContent>
                     </Card>
                   </motion.div>
