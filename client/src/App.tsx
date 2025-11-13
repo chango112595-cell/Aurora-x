@@ -19,7 +19,7 @@ import Corpus from "@/pages/corpus";
 import Settings from "@/pages/settings";
 import SelfLearning from "@/pages/self-learning";
 import ComparisonDashboard from "@/pages/ComparisonDashboard";
-import LuminarNexus from "./pages/luminar-nexus";
+import LuminarNexus from "@/pages/luminar-nexus";
 import ServerControl from "@/pages/server-control";
 import ChatPage from "@/pages/chat";
 
