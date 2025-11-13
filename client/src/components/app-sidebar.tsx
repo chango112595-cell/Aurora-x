@@ -18,7 +18,7 @@ const menuItems = [
   { title: "Code Library", icon: BookOpen, url: "/library" },
   { title: "Aurora Dashboard", icon: BarChart3, url: "/dashboard" },
   { title: "Comparison", icon: TrendingUp, url: "/comparison" },
-  { title: "Luminar Nexus", icon: Network, url: "/luminar" },
+  { title: "Luminar Nexus", icon: Network, url: "/luminar-nexus" },
   { title: "Server Control", icon: Cpu, url: "/servers" },
   { title: "Self-Learning", icon: Sparkles, url: "/self-learning" },
 ];
