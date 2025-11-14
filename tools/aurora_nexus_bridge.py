@@ -63,9 +63,9 @@ def route_to_enhanced_aurora_core(message: str, session_id: str = "default") -> 
                 # Use Aurora's advanced processing with context awareness
                 response = loop.run_until_complete(aurora.process_conversation(message, session_id))
                 
-                # If Aurora generated a thoughtful response, return it
+                # Return Aurora's response directly without wrapping
                 if response and len(response.strip()) > 0:
-                    return f"🌟 Aurora (Enhanced Core): {response}"
+                    return response
                 else:
                     return "I'm processing that. Let me think..."
             finally:

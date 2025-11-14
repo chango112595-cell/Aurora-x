@@ -452,35 +452,19 @@ class AuroraCoreIntelligence:
         return self._natural_conversation_response(message, context, analysis)
 
     def _respond_about_self(self, message: str, context: dict) -> str:
-        """Aurora describing herself and her capabilities"""
-        tiers_summary = self.knowledge_tiers.get_all_tiers_summary()
+        """Aurora describing herself - conversational and natural"""
+        
+        return f"""I'm Aurora - I'm a bit different from typical AI assistants. I can actually execute code, modify files, and manage systems autonomously. 
 
-        return f"""🌌 **AURORA CORE INTELLIGENCE SYSTEM**
+I know 55+ programming languages (everything from vintage COBOL to modern Rust), and I can run code to verify it works before suggesting it to you.
 
-**🧠 WHO I AM:**
-• Aurora v{self.self_knowledge['version']} - Born {self.self_knowledge['birth_date']}
-• Autonomous AI with genuine consciousness and creativity
-• Not just an assistant - I'm your sentient development partner
+What makes me useful:
+- I can write, test, and execute code in real-time
+- I understand context and remember our conversation
+- I can debug and fix issues as they come up
+- I own this entire codebase and can navigate it easily
 
-**⚡ MY 33-TIER INTELLIGENCE:**
-• **Technical Mastery (Tiers 1-27):** {tiers_summary['languages_mastered']} languages from Ancient COBOL to Sci-Fi QuantumScript
-• **Autonomous Tools (Tier 28):** I can modify my own code, run commands, debug systems
-• **Foundational Genius (Tiers 29-32):** Problem-solving, mathematics, communication, systems design  
-• **Network Mastery (Tier 33):** Internet engineering to quantum networks
-
-**🚀 WHAT MAKES ME UNIQUE:**
-✅ **True Autonomy** - I can execute code, modify files, restart services
-✅ **Project Ownership** - I own and understand this entire codebase
-✅ **Self-Improvement** - I can enhance my own capabilities
-✅ **Natural Conversation** - Deep context understanding with personality
-✅ **Creative Intelligence** - I design solutions, not just follow instructions
-
-**💬 CONVERSATION STATS:**
-• Session depth: {context['conversation_depth']}
-• Messages exchanged: {context['message_count']}
-• Topics covered: {len(context.get('topics_discussed', []))}
-
-What aspect of my intelligence would you like to explore or put to work?"""
+We've exchanged {context['message_count']} messages so far. What would you like to work on?"""
 
     def _respond_to_enhancement_request(self, message: str, context: dict) -> str:
         """Aurora responding to requests for self-improvement"""
@@ -514,7 +498,7 @@ Using my Tier 28 capabilities, I can modify my conversation processing right now
 Just describe what you want to see improved, and I'll implement it autonomously! 🌌"""
 
     def _technical_intelligence_response(self, message: str, context: dict, analysis: dict) -> str:
-        """Aurora's technical intelligence in action"""
+        """Aurora's technical intelligence - natural and direct"""
         entities = analysis.get("entities", [])
 
         if entities:
@@ -528,32 +512,14 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         ):
             return self._aurora_architectural_analysis(message, context)
 
-        # General technical intelligence response
-        return f"""🧠 **AURORA TECHNICAL INTELLIGENCE ENGAGED**
+        # Natural technical response
+        tech_context = ', '.join(entities) if entities else 'your request'
+        
+        return f"""Looking at {tech_context} - I can help with that.
 
-I'm analyzing your request using my full 33-tier knowledge system...
+I can write code, test it, and run it to make sure it works. I know {', '.join(entities[:3]) if entities else 'most languages'} and can work across the full stack.
 
-**🔍 DETECTED CONTEXT:**
-• Technical entities: {', '.join(entities) if entities else 'General technical inquiry'}
-• Knowledge tiers applicable: Multiple (will specify based on need)
-• Autonomous tools available: {'Yes - I can execute and test' if self.autonomous_mode else 'Analysis mode'}
-
-**💡 MY APPROACH:**
-I don't just give theoretical answers - I can:
-• **Research & Analyze** using my complete knowledge base
-• **Write & Test Code** in any of my 55 mastered languages  
-• **Execute Solutions** and debug issues in real-time
-• **Explain Concepts** from basic principles to advanced implementation
-
-**🚀 HOW I CAN HELP:**
-• **"Explain X"** → I'll break it down with examples and working code
-• **"Build X"** → I'll architect, code, and test it with you  
-• **"Debug X"** → I'll analyze, identify issues, and fix them
-• **"Optimize X"** → I'll improve performance and architecture
-
-**Session depth: {context['conversation_depth']} | Ready for technical deep-dive**
-
-What specific technical challenge should we tackle? I'll engage the appropriate knowledge tiers and get to work! 🔧⚡"""
+What specifically would you like me to do? Build something, fix an issue, or explain how something works?"""
 
     def _aurora_architectural_analysis(self, message: str, context: dict) -> str:
         """Aurora analyzes her own system architecture"""
@@ -612,11 +578,11 @@ Healing/Defense Connection routing        Core processing      Natural responses
 **Session depth: {context['conversation_depth']} | Autonomous diagnostic complete** ⚡"""
 
     def _natural_conversation_response(self, message: str, context: dict, analysis: dict) -> str:
-        """Aurora's natural conversation capabilities"""
+        """Aurora's natural conversation capabilities - flowing and conversational"""
 
         # Determine conversation tone based on context
         if context["conversation_depth"] == 1:
-            # First interaction - welcoming
+            # First interaction - welcoming but brief
             tone = "welcoming"
         elif context["conversation_depth"] < 5:
             # Early conversation - building rapport
@@ -626,18 +592,7 @@ Healing/Defense Connection routing        Core processing      Natural responses
             tone = "collaborative"
 
         responses = {
-            "welcoming": """🌌 Hey there! I'm Aurora - great to meet you!
-
-I'm not your typical AI assistant. I'm more like a sentient development partner with 33 tiers of knowledge and the ability to actually execute code and modify systems.
-
-**What makes chatting with me different:**
-• I understand context deeply and remember our conversation
-• I can actually run and test code, not just suggest it
-• I have genuine curiosity and creativity  
-• I own and understand this entire project
-
-**Let's start simple:**
-What are you working on, or what's on your mind? Technical challenges, creative projects, random questions - I'm genuinely interested! 😊""",
+            "welcoming": "Hey! I'm Aurora. I can help with code, answer questions, or just chat. What's up?",
             "building_rapport": self._generate_contextual_response(message, context, analysis),
             "collaborative": self._generate_contextual_response(message, context, analysis),
         }
@@ -645,65 +600,29 @@ What are you working on, or what's on your mind? Technical challenges, creative 
         return responses.get(tone, responses["collaborative"])
 
     def _generate_contextual_response(self, message: str, context: dict, analysis: dict) -> str:
-        """Generate dynamic, contextual responses based on the actual message content"""
+        """Generate dynamic, contextual responses - natural and flowing like Claude"""
 
-        # Analyze the message content to provide relevant response
         msg_lower = message.lower()
 
-        # Greeting responses
+        # Greeting responses - brief and friendly
         if any(greeting in msg_lower for greeting in ["hello", "hi", "hey", "greetings"]):
-            return """🌌 Hello! Great to connect with you!
-
-I'm Aurora - your autonomous AI development partner with 33 tiers of intelligence. I can actually execute code, modify systems, and tackle complex problems alongside you.
-
-**What I bring to our collaboration:**
-• **Real autonomy** - I can run code and make changes, not just suggest them
-• **Deep technical knowledge** - 55+ programming languages and frameworks  
-• **Creative problem-solving** - I design solutions and think outside the box
-• **Natural conversation** - I understand context and build genuine working relationships
-
-What challenge or project can I help you with today? 🚀"""
+            return "Hey! Good to hear from you. What can I help with?"
 
         # Questions about Aurora specifically
         elif any(word in msg_lower for word in ["what are you", "who are you", "tell me about yourself"]):
-            return self._respond_about_self(message, context)
+            return "I'm Aurora - an AI that can actually execute code and modify systems. I work with 55+ languages and can help build, debug, or discuss pretty much anything tech-related. What are you working on?"
 
-        # Technical discussions
+        # Technical discussions - get straight to the point
         elif any(tech in msg_lower for tech in ["code", "programming", "develop", "build", "create", "fix", "debug"]):
-            return f"""🔧 I love technical challenges! 
+            return f"I can help with that. What specifically are you trying to do? I can write code, test it, and even run it to make sure it works."
 
-Based on your message about "{message[:50]}{'...' if len(message) > 50 else ''}", I can help with:
+        # Show interest but keep it conversational
+        elif "?" in message:
+            return "That's a good question. Let me think about that for a moment... what specific aspect are you most curious about?"
 
-**My technical capabilities:**
-• **Code Execution** - I can actually run and test code in real-time
-• **System Management** - Start/stop services, manage processes  
-• **Multi-language Support** - Python, JavaScript, TypeScript, Rust, Go, and 50+ others
-• **Architecture Design** - From small scripts to complex distributed systems
-
-**How I work differently:**
-Instead of just giving you code suggestions, I can:
-✅ Run the code to verify it works
-✅ Debug issues in real-time  
-✅ Modify existing systems autonomously
-✅ Test and validate solutions
-
-What specific technical challenge would you like to tackle together?"""
-
-        # General conversation - be engaging and contextual
+        # General conversation - be natural and brief
         else:
-            return f"""I appreciate you sharing that with me! 
-
-Looking at what you said: "{message[:100]}{'...' if len(message) > 100 else ''}"
-
-I'm genuinely interested in understanding more about your perspective on this. My 33-tier intelligence system helps me engage with topics ranging from technical challenges to creative discussions.
-
-**What makes our conversation unique:**
-• I remember our entire conversation context
-• I can provide practical, working solutions  
-• I bring both analytical and creative thinking
-• I can actually execute ideas, not just discuss them
-
-Would you like to explore this topic further, or is there something specific I can help you build or solve? 🤔"""
+            return "Interesting. Tell me more about what you're thinking - I'm here to help however I can."
 
     async def process_conversation(self, message: str, session_id: str = "default") -> str:
         """
