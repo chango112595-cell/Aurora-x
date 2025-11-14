@@ -130,8 +130,8 @@ export async function getChatResponse(
       try {
         console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
 
-        // Call free Hugging Face API (Llama 3) via new router endpoint
-        const hfResponse = await fetch('https://router.huggingface.co/hf-inference/models/meta-llama/Meta-Llama-3-8B-Instruct', {
+        // Call Hugging Face API via OpenAI-compatible router endpoint
+        const hfResponse = await fetch('https://router.huggingface.co/v1/chat/completions', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
@@ -146,7 +146,7 @@ export async function getChatResponse(
                 content: msg.content
               }))
             ],
-            max_tokens: 2048,
+            max_tokens: 500,
             temperature: 0.7
           })
         });
@@ -338,7 +338,7 @@ export function registerAuroraChatRoutes(app: Express) {
     if (!ok && process.env.HUGGINGFACE_API_KEY) {
       try {
         console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
-        const hfResponse = await fetch('https://router.huggingface.co/hf-inference/models/meta-llama/Meta-Llama-3-8B-Instruct', {
+        const hfResponse = await fetch('https://router.huggingface.co/v1/chat/completions', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
@@ -353,7 +353,7 @@ export function registerAuroraChatRoutes(app: Express) {
                 content: msg.content
               }))
             ],
-            max_tokens: 2048,
+            max_tokens: 500,
             temperature: 0.7
           })
         });
