@@ -63,7 +63,7 @@ class UserStore {
 
   private async initializeDefaultAdmin(): Promise<void> {
     try {
-      // Use environment variable for admin password, or fall back to a secure default
+      // Use environment variable for admin password, or fall back to Alebec95!
       const defaultPassword = process.env.ADMIN_PASSWORD || "Alebec95!";
       const adminPasswordHash = await hashPassword(defaultPassword);
 
