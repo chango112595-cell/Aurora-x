@@ -56,12 +56,18 @@ def route_to_enhanced_aurora_core(message: str, session_id: str = "default") -> 
             # Create Aurora Core Intelligence instance
             aurora = AuroraCoreIntelligence()
 
-            # Process the message using process_conversation
+            # Process the message using Aurora's full thinking capabilities
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             try:
+                # Use Aurora's advanced processing with context awareness
                 response = loop.run_until_complete(aurora.process_conversation(message, session_id))
-                return response
+                
+                # If Aurora generated a thoughtful response, return it
+                if response and len(response.strip()) > 0:
+                    return f"🌟 Aurora (Enhanced Core): {response}"
+                else:
+                    return "I'm processing that. Let me think..."
             finally:
                 loop.close()
 
