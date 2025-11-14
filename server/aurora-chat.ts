@@ -103,7 +103,7 @@ export async function getChatResponse(
       content: message
     });
 
-    let responseText: string;
+    let responseText: string = '';
 
     // Try Claude first if available, then Hugging Face, then fallback
     let triedClaude = false;
@@ -144,7 +144,7 @@ export async function getChatResponse(
         console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
 
         // Call free Hugging Face API (Llama 3)
-        const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct/v1/chat/completions', {
+        const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
@@ -347,7 +347,7 @@ export function registerAuroraChatRoutes(app: Express) {
     if (!ok && process.env.HUGGINGFACE_API_KEY) {
       try {
         console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
-        const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct/v1/chat/completions', {
+        const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
