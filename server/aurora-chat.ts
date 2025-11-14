@@ -130,8 +130,8 @@ export async function getChatResponse(
       try {
         console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
 
-        // Call free Hugging Face API (Llama 3)
-        const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct', {
+        // Call free Hugging Face API (Llama 3) via new router endpoint
+        const hfResponse = await fetch('https://router.huggingface.co/hf-inference/models/meta-llama/Meta-Llama-3-8B-Instruct', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
@@ -338,7 +338,7 @@ export function registerAuroraChatRoutes(app: Express) {
     if (!ok && process.env.HUGGINGFACE_API_KEY) {
       try {
         console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
-        const hfResponse = await fetch('https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct', {
+        const hfResponse = await fetch('https://router.huggingface.co/hf-inference/models/meta-llama/Meta-Llama-3-8B-Instruct', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
