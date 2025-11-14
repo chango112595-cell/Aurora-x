@@ -5,7 +5,7 @@
 echo "Logging in as admin..."
 LOGIN_RESPONSE=$(curl -s -X POST http://localhost:5000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}')
+  -d '{"username":"admin","password":"Alebec95!"}')
 
 # Extract the access token
 ACCESS_TOKEN=$(echo $LOGIN_RESPONSE | grep -o '"accessToken":"[^"]*' | cut -d'"' -f4)
@@ -23,7 +23,7 @@ read -s NEW_PASSWORD
 curl -X POST http://localhost:5000/api/auth/change-password \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
-  -d "{\"currentPassword\":\"admin123\",\"newPassword\":\"$NEW_PASSWORD\"}"
+  -d "{\"currentPassword\":\"Alebec95!\",\"newPassword\":\"$NEW_PASSWORD\"}"
 
 echo ""
 echo "Password change complete!"
