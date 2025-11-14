@@ -37,19 +37,21 @@ from flask_cors import CORS
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 try:
     from aurora_port_manager import AuroraPortManager
+
     PORT_MANAGER_AVAILABLE = True
 except ImportError:
     AuroraPortManager = None  # type: ignore
     PORT_MANAGER_AVAILABLE = False
     print("⚠️ Aurora Port Manager not available - using basic port monitoring")
-import sys
 import math
+import sys
 
 import numpy as np
 
 # Import Aurora's Enhanced Intelligence
 try:
     from aurora_nexus_bridge import route_to_enhanced_aurora_core
+
     AURORA_BRIDGE_AVAILABLE = True
 except ImportError:
     route_to_enhanced_aurora_core = None  # type: ignore
@@ -542,7 +544,7 @@ class LuminarNexusV2:
                 # Find process using the port
                 for proc in psutil.process_iter(["pid", "name", "cpu_percent", "memory_percent"]):
                     try:
-                        if hasattr(proc, 'net_connections'):
+                        if hasattr(proc, "net_connections"):
                             connections = proc.net_connections()  # type: ignore
                             for conn in connections:
                                 if conn.laddr.port == health.port:
@@ -574,9 +576,19 @@ class LuminarNexusV2:
 
             # Performance classification (only for services that are up)
             if health.status != "down":
-                if health.response_time and health.response_time > 2.0 or health.cpu_usage > 0.9 or health.memory_usage > 0.9:
+                if (
+                    health.response_time
+                    and health.response_time > 2.0
+                    or health.cpu_usage > 0.9
+                    or health.memory_usage > 0.9
+                ):
                     health.status = "critical"
-                elif health.response_time and health.response_time > 1.0 or health.cpu_usage > 0.7 or health.memory_usage > 0.7:
+                elif (
+                    health.response_time
+                    and health.response_time > 1.0
+                    or health.cpu_usage > 0.7
+                    or health.memory_usage > 0.7
+                ):
                     health.status = "degraded"
                 elif health.status != "down":
                     health.status = "healthy"
@@ -1767,7 +1779,7 @@ def serve():
     # Register Aurora services - only services that are actually running
     # Note: Frontend is served through backend via Vite middleware on port 5000
     nexus.register_service("backend", 5000, "fullstack", [], "stable")
-    
+
     # Disabled services (not currently running):
     # frontend on port 5173 - doesn't exist (Vite runs in middleware mode on port 5000)
     # nexus.register_service("bridge", 5001, "middleware", ["backend"], "stable")
@@ -1781,7 +1793,7 @@ def serve():
     app = nexus.create_advanced_api()
 
     print("\n🌌 Luminar Nexus V2 API Server Starting...")
-    print(f"   Port: 5005")
+    print("   Port: 5005")
     print(f"   Quantum Coherence: {nexus.quantum_mesh.coherence_level:.2f}")
     print(f"   Services Registered: {len(nexus.service_registry)}")
     print("\n✨ Advanced Features Active:")
@@ -1791,13 +1803,13 @@ def serve():
     print("   • Neural anomaly detection")
     print("\n")
 
-    app.run(host='0.0.0.0', port=5005, debug=False)
+    app.run(host="0.0.0.0", port=5005, debug=False)
 
 
 if __name__ == "__main__":
     import sys
 
-    if len(sys.argv) > 1 and sys.argv[1] == 'serve':
+    if len(sys.argv) > 1 and sys.argv[1] == "serve":
         serve()
     else:
         main()

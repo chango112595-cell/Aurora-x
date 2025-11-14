@@ -162,7 +162,7 @@ def main():
     print(f"📁 Spec directory: {SPEC_DIR}")
     print(f"⏱️  Poll interval: {POLL_SECS} seconds")
     print(f"🔀 Git auto-commit: {'ON' if GIT_AUTO else 'OFF'}")
-    print(f"💬 Aurora Chat: Ready at /aurora/chat")
+    print("💬 Aurora Chat: Ready at /aurora/chat")
 
     if GIT_AUTO:
         print(f"🌿 Git branch: {BRANCH}")

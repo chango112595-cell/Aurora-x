@@ -968,25 +968,23 @@ def attach_bridge(app: FastAPI):
         """Get diff between branches."""
         try:
             import subprocess
+
             result = subprocess.run(
-                ["git", "diff", "--stat", "HEAD~1..HEAD"],
-                capture_output=True,
-                text=True,
-                timeout=5
+                ["git", "diff", "--stat", "HEAD~1..HEAD"], capture_output=True, text=True, timeout=5
             )
             # Parse the diff stat output to extract file changes and summary
             files_changed = []
             summary = {"additions": 0, "deletions": 0, "files_changed": 0}
             if result.returncode == 0 and result.stdout:
-                lines = result.stdout.strip().split('\n')
+                lines = result.stdout.strip().split("\n")
                 for line in lines:
-                    if '|' in line:
-                        parts = line.split('|')
+                    if "|" in line:
+                        parts = line.split("|")
                         if len(parts) == 2:
                             file_path = parts[0].strip()
                             changes = parts[1].strip()
                             files_changed.append({"file": file_path, "changes": changes})
-                
+
                 # Try to parse the summary line if it exists
                 if lines and lines[-1].strip().startswith(f"{len(files_changed)} file"):
                     summary_line = lines[-1]
@@ -999,75 +997,62 @@ def attach_bridge(app: FastAPI):
                     match_deletions = re.search(r"(\d+) deletion", summary_line)
                     if match_deletions:
                         summary["deletions"] = int(match_deletions.group(1))
-            
-            return JSONResponse({
-                "diff": files_changed,
-                "summary": summary
-            })
-        except Exception as e:
-            return JSONResponse({
-                "diff": [],
-                "summary": {"additions": 0, "deletions": 0, "files_changed": 0},
-                "error": str(e)
-            })
 
+            return JSONResponse({"diff": files_changed, "summary": summary})
+        except Exception as e:
+            return JSONResponse(
+                {"diff": [], "summary": {"additions": 0, "deletions": 0, "files_changed": 0}, "error": str(e)}
+            )
 
     @app.get("/api/bridge/comparison/branches")
     async def get_comparison_branches():
         """Get available branches."""
         try:
             import subprocess
-            result = subprocess.run(
-                ["git", "branch", "-a"],
-                capture_output=True,
-                text=True,
-                timeout=5
-            )
+
+            result = subprocess.run(["git", "branch", "-a"], capture_output=True, text=True, timeout=5)
             branches = []
             if result.returncode == 0:
-                for b in result.stdout.split('\n'):
+                for b in result.stdout.split("\n"):
                     stripped_b = b.strip()
                     if stripped_b and not stripped_b.startswith("remotes/origin/HEAD"):
                         # Remove remote prefix and '*' for current branch marker
-                        branch_name = stripped_b.replace('remotes/origin/', '').replace('* ', '')
+                        branch_name = stripped_b.replace("remotes/origin/", "").replace("* ", "")
                         if branch_name:
                             branches.append(branch_name)
-            
+
             # Ensure 'main' is included if not found and return unique branches
             if not branches:
-                 return JSONResponse({"branches": ["main"]})
+                return JSONResponse({"branches": ["main"]})
             elif "main" not in branches:
-                 branches.insert(0, "main")
-            
-            return JSONResponse({"branches": list(dict.fromkeys(branches))}) # Return unique branches preserving order
+                branches.insert(0, "main")
+
+            return JSONResponse({"branches": list(dict.fromkeys(branches))})  # Return unique branches preserving order
         except Exception as e:
             # Fallback to 'main' if any error occurs
             return JSONResponse({"branches": ["main"], "error": str(e)})
-
 
     @app.get("/api/bridge/comparison/commits")
     async def get_comparison_commits():
         """Get commit history."""
         try:
             import subprocess
-            result = subprocess.run(
-                ["git", "log", "--oneline", "-10"],
-                capture_output=True,
-                text=True,
-                timeout=5
-            )
+
+            result = subprocess.run(["git", "log", "--oneline", "-10"], capture_output=True, text=True, timeout=5)
             commits = []
             if result.returncode == 0:
-                for line in result.stdout.split('\n'):
+                for line in result.stdout.split("\n"):
                     if line.strip():
-                        parts = line.split(' ', 1)
+                        parts = line.split(" ", 1)
                         if len(parts) == 2:
-                            commits.append({
-                                "hash": parts[0],
-                                "short_hash": parts[0][:7], # Add short hash
-                                "message": parts[1],
-                                "date": "" # Placeholder, as --oneline doesn't easily provide date
-                            })
+                            commits.append(
+                                {
+                                    "hash": parts[0],
+                                    "short_hash": parts[0][:7],  # Add short hash
+                                    "message": parts[1],
+                                    "date": "",  # Placeholder, as --oneline doesn't easily provide date
+                                }
+                            )
             return JSONResponse({"commits": commits})
         except Exception as e:
             return JSONResponse({"commits": [], "error": str(e)})

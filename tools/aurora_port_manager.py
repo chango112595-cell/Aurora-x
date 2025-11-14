@@ -46,24 +46,32 @@ class AuroraPortManager:
 
         try:
             # Iterate through all processes and check their network connections
-            for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            for proc in psutil.process_iter(["pid", "name", "cmdline"]):
                 try:
                     connections = proc.net_connections()
                     for conn in connections:
                         # Check if connection is listening and in our port range
-                        if conn.status == 'LISTEN' and conn.laddr and 5000 <= conn.laddr.port <= 5173:
+                        if conn.status == "LISTEN" and conn.laddr and 5000 <= conn.laddr.port <= 5173:
                             port = conn.laddr.port
                             pid = proc.pid
                             process_name = proc.name()
-                            
+
                             # Get full command
                             cmdline = proc.cmdline()
-                            command = ' '.join(cmdline) if cmdline else process_name
+                            command = " ".join(cmdline) if cmdline else process_name
 
                             # Determine if it's an Aurora service
                             is_aurora = any(
                                 keyword in command.lower()
-                                for keyword in ["aurora", "luminar", "nexus", "bridge", "chango", "tsx server", "npm run dev"]
+                                for keyword in [
+                                    "aurora",
+                                    "luminar",
+                                    "nexus",
+                                    "bridge",
+                                    "chango",
+                                    "tsx server",
+                                    "npm run dev",
+                                ]
                             )
 
                             service_type = self.aurora_port_map.get(port, {}).get("type", "unknown")
@@ -227,8 +235,8 @@ class AuroraPortManager:
                     continue
 
             # If no health endpoint, just check if port is listening using psutil
-            for conn in psutil.net_connections(kind='inet'):
-                if conn.status == 'LISTEN' and conn.laddr and conn.laddr.port == port:
+            for conn in psutil.net_connections(kind="inet"):
+                if conn.status == "LISTEN" and conn.laddr and conn.laddr.port == port:
                     return True
             return False
 

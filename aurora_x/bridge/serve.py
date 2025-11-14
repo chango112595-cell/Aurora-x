@@ -32,8 +32,8 @@ def health():
 
 if __name__ == "__main__":
     import uvicorn
-    
+
     print("🌉 Starting Aurora Bridge API on port 5001...")
     print("📍 Comparison endpoints available at /api/bridge/comparison/*")
-    
+
     uvicorn.run(app, host="0.0.0.0", port=5001)
