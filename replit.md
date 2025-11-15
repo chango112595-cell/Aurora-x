@@ -47,6 +47,29 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Updates
 
+**November 15, 2025**:
+- **System-Wide Debugging and Optimization**: Comprehensive system health check and fixes
+  - Fixed Luminar Nexus V2 Aurora Bridge warning being printed unconditionally
+  - Fixed CREATE_NEW_PROCESS_GROUP cross-platform compatibility issue in luminar_nexus_v2.py (Windows/Linux)
+  - Fixed quantum coherence initialization showing 0.0 at startup - now maintains 1.0 until first health check completes
+  - Updated @replit/vite-plugin-cartographer from 0.3.2 to 0.4.3
+  - All LSP errors resolved - codebase is clean
+- **Security Configuration Notes**:
+  - `ANTHROPIC_API_KEY`: Required for Aurora Chat AI with Claude Sonnet 4. System falls back to conversational mode when unavailable
+  - `JWT_SECRET`: Currently using default development secret. Set custom value in production for enhanced security
+  - `ADMIN_PASSWORD`: Set via environment variable. Default development password is in use
+- **Corpus Database Git Issue**: 
+  - File `data/corpus.db` is properly listed in `.gitignore`
+  - If still appearing in git status, it was likely committed before being ignored
+  - **To remove from git tracking** (user action required):
+    ```bash
+    git rm --cached data/corpus.db
+    git rm --cached data/corpus.db-shm
+    git rm --cached data/corpus.db-wal
+    git commit -m "Remove corpus database from git tracking"
+    ```
+  - This removes files from git index while preserving them on disk
+
 **November 13, 2025**:
 - **Aurora Chat AI Enhanced**: Integrated Anthropic Claude Sonnet 4 for natural, human-like conversations
   - Conversation memory management with proper user/assistant pairing (10 turn history, 20 messages total)
