@@ -56,6 +56,7 @@ try:
 except ImportError:
     route_to_enhanced_aurora_core = None  # type: ignore
     AURORA_BRIDGE_AVAILABLE = False
+    print("⚠️  Aurora Bridge not available, using fallback routing")
 
 
 def sanitize_for_json(obj: Any) -> Any:
@@ -79,9 +80,6 @@ def sanitize_for_json(obj: Any) -> Any:
         return int(obj)
     else:
         return obj
-
-
-print("⚠️  Aurora Bridge not available, using fallback routing")
 
 
 @dataclass
@@ -743,13 +741,21 @@ class LuminarNexusV2:
 
                 # Start process in background with logging
                 with open(log_file, "w", encoding="utf-8") as out, open(err_file, "w", encoding="utf-8") as err:
+                    # Windows-specific process creation flags
+                    creation_flags = 0
+                    if self.is_windows():
+                        try:
+                            creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP  # type: ignore
+                        except AttributeError:
+                            creation_flags = 0x00000200  # CREATE_NEW_PROCESS_GROUP value on Windows
+
                     subprocess.Popen(
                         actual_cmd,
                         shell=True,
                         cwd=cwd,
                         stdout=out,
                         stderr=err,
-                        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if self.is_windows() else 0,
+                        creationflags=creation_flags,
                     )
 
                 print("   ✅ Started in background")
@@ -1087,11 +1093,16 @@ class LuminarNexusV2:
 
     def _update_quantum_coherence(self):
         """Update system quantum coherence level"""
-        healthy_services = sum(1 for health in self.health_monitor.values() if health.status == "healthy")
-        total_services = len(self.health_monitor)
+        # Only count services that have been checked (not in "unknown" state)
+        checked_services = [h for h in self.health_monitor.values() if h.status != "unknown"]
 
-        if total_services > 0:
-            self.quantum_mesh.coherence_level = healthy_services / total_services
+        if checked_services:
+            healthy_services = sum(1 for health in checked_services if health.status == "healthy")
+            total_checked = len(checked_services)
+            self.quantum_mesh.coherence_level = healthy_services / total_checked
+        else:
+            # Keep initial coherence of 1.0 until first health check completes
+            self.quantum_mesh.coherence_level = 1.0
 
         # If coherence is low, trigger system-wide healing
         # Skip warning only if all services are still in unknown state (initial health check not complete)
