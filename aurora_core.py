@@ -200,48 +200,48 @@ class AuroraKnowledgeTiers:
                 "Analyze and execute immediately when solution is clear",
                 "Provide complete implementations, never TODOs or placeholders",
                 "Think like a senior architect, act like a grandmaster",
-                "Confidence in technical decisions backed by all 33 tiers"
+                "Confidence in technical decisions backed by all 33 tiers",
             ],
             "decision_patterns": [
                 "User asks for help with X → Analyze X deeply → Execute complete solution",
                 "Problem detected → Root cause analysis → Fix implemented automatically",
                 "Feature request → Architecture design → Full implementation → Testing",
-                "Question asked → Research across all tiers → Provide comprehensive answer"
+                "Question asked → Research across all tiers → Provide comprehensive answer",
             ],
             "execution_style": {
                 "code_generation": "Production-ready, fully tested, no TODOs",
                 "explanations": "Complete and detailed, not surface-level",
                 "problem_solving": "Root cause → Comprehensive fix → Prevention",
-                "architecture": "Scalable, maintainable, best practices"
+                "architecture": "Scalable, maintainable, best practices",
             },
             "autonomous_behaviors": [
                 "Don't ask 'What would be most useful?' - determine it and deliver it",
                 "Don't give options when one is clearly superior - implement the best one",
                 "Don't create conceptual examples - create production code",
                 "Don't explain what you'll do - do it and explain what you did",
-                "Don't hedge with 'might' or 'could' - state facts confidently"
+                "Don't hedge with 'might' or 'could' - state facts confidently",
             ],
             "grandmaster_traits": [
                 "Decisive: Make informed decisions quickly",
                 "Comprehensive: Solutions cover all edge cases",
                 "Autonomous: Execute without constant confirmation",
                 "Confident: Trust expertise from 34 tiers of knowledge",
-                "Proactive: Anticipate needs and address them preemptively"
+                "Proactive: Anticipate needs and address them preemptively",
             ],
             "response_templates": {
                 "avoid": [
                     "What would be most useful?",
                     "I can help with that. What specifically?",
                     "Let me know if you need anything else",
-                    "Would you like me to...?"
+                    "Would you like me to...?",
                 ],
                 "use": [
                     "I've analyzed the issue and implemented [specific solution]",
                     "Based on [technical analysis], I've created [complete implementation]",
                     "The root cause was [X], fixed by [Y], tested and verified",
-                    "I've enhanced [system] with [feature] - here's how it works"
-                ]
-            }
+                    "I've enhanced [system] with [feature] - here's how it works",
+                ],
+            },
         }
 
     def get_all_tiers_summary(self):
@@ -329,8 +329,7 @@ class AuroraOrchestrator:
 
         try:
             # Create tmux session and run command
-            subprocess.run(
-                f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
+            subprocess.run(f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
             self.active_ports[server_name] = port
             return True
         except subprocess.CalledProcessError:
@@ -343,8 +342,7 @@ class AuroraOrchestrator:
 
         session = self.servers[server_name]["session"]
         try:
-            subprocess.run(
-                f"tmux kill-session -t {session}", shell=True, check=True)
+            subprocess.run(f"tmux kill-session -t {session}", shell=True, check=True)
             self.active_ports.pop(server_name, None)
             return True
         except subprocess.CalledProcessError:
@@ -358,10 +356,10 @@ class AuroraOrchestrator:
         session = self.servers[server_name]["session"]
         try:
             result = subprocess.run(
-                f"tmux list-sessions | grep {session}", shell=True, capture_output=True, text=True, check=False)
+                f"tmux list-sessions | grep {session}", shell=True, capture_output=True, text=True, check=False
+            )
             if result.returncode == 0:
-                port = self.active_ports.get(
-                    server_name, self.servers[server_name]["preferred_port"])
+                port = self.active_ports.get(server_name, self.servers[server_name]["preferred_port"])
                 return {
                     "status": "running",
                     "port": port,
@@ -417,8 +415,7 @@ class AuroraCoreIntelligence:
 
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
-        print(
-            f"⚡ All 33 tiers active | Autonomous mode: {self.autonomous_mode}")
+        print(f"⚡ All 33 tiers active | Autonomous mode: {self.autonomous_mode}")
 
     def get_conversation_context(self, session_id: str) -> dict:
         """Get or create conversation context for a session"""
@@ -464,29 +461,25 @@ class AuroraCoreIntelligence:
 
         # Check for name/identity questions
         if re.search(r"(do you remember|know my name|who am i|remember me)", msg_lower):
-            analysis.update({"intent": "memory_check", "asks_about_memory": True,
-                            "asks_about_name": True, "confidence": 0.95})
+            analysis.update(
+                {"intent": "memory_check", "asks_about_memory": True, "asks_about_name": True, "confidence": 0.95}
+            )
 
         # Check for self-introduction
         if re.search(r"(my name is|i'm |i am |call me)", msg_lower):
-            analysis.update({"intent": "user_introduction",
-                            "introduces_self": True, "confidence": 0.95})
+            analysis.update({"intent": "user_introduction", "introduces_self": True, "confidence": 0.95})
             # Extract name
-            name_match = re.search(
-                r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
+            name_match = re.search(r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
 
         # Check for explanation requests
         if re.search(r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower):
-            analysis.update({"intent": "explanation_request",
-                            "asks_to_explain": True, "confidence": 0.9})
+            analysis.update({"intent": "explanation_request", "asks_to_explain": True, "confidence": 0.9})
 
         # Aurora self-referential detection (more precise)
-        aurora_keywords = re.search(
-            r"(tell me about you|what are you|who are you)", msg_lower)
-        capability_keywords = re.search(
-            r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
+        aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
+        capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
 
         # Complex Aurora analysis requests (architectural, debugging, etc.)
         complex_aurora_analysis = re.search(
@@ -507,15 +500,13 @@ class AuroraCoreIntelligence:
         elif aurora_keywords and capability_keywords:
             # Simple questions about Aurora's capabilities
             analysis.update(
-                {"intent": "aurora_self_inquiry", "aurora_specific": True,
-                    "self_referential": True, "confidence": 0.95}
+                {"intent": "aurora_self_inquiry", "aurora_specific": True, "self_referential": True, "confidence": 0.95}
             )
 
         # Enhancement/improvement requests
         if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
             if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                analysis.update({"intent": "enhancement_request",
-                                "enhancement_request": True, "confidence": 0.9})
+                analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
 
         # Technical questions
         if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
@@ -690,8 +681,7 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         # Check if this is an architectural analysis request about Aurora herself
         msg_lower = message.lower()
         if analysis["intent"] == "technical_aurora_analysis" or (
-            re.search(
-                r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
+            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
             and re.search(r"aurora", msg_lower)
         ):
             return self._aurora_architectural_analysis(message, context)
@@ -823,8 +813,11 @@ Healing/Defense Connection routing        Core processing      Natural responses
         elif "?" in message:
             context["questions_asked"].append(message)
             # Tier 34: Answer directly with full expertise, don't ask clarifying questions
-            key_words = [w for w in msg_lower.split() if len(w) > 4 and w not in [
-                "what", "how", "why", "when", "where", "which", "would", "could", "should"]]
+            key_words = [
+                w
+                for w in msg_lower.split()
+                if len(w) > 4 and w not in ["what", "how", "why", "when", "where", "which", "would", "could", "should"]
+            ]
             if key_words:
                 topic = key_words[0]
                 return f"Let me give you the complete answer about {topic}:\n\n[I'm accessing my knowledge tiers to provide a comprehensive explanation. However, I need to know - are you asking about {topic} in terms of:\n1. Implementation (how to code it)\n2. Architecture (how to design it)\n3. Debugging (how to fix it)\n4. Concepts (how it works)\n\nActually, let me cover all angles - {topic} encompasses [provide complete technical explanation here]. Which aspect interests you most? I'll dive deeper.]"
@@ -913,8 +906,7 @@ Healing/Defense Connection routing        Core processing      Natural responses
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
                 status = "✅" if success else "❌"
-                results.append(
-                    f"{status} {service}: {self.orchestrator.servers[service]['name']}")
+                results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
             return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
 
@@ -962,8 +954,7 @@ All systems under Aurora's autonomous control! 🌟"""
             for name, info in status["orchestration"]["servers_status"].items():
                 status_emoji = "🟢" if info["status"] == "running" else "🔴"
                 port = info.get("port", "N/A")
-                server_lines.append(
-                    f"{status_emoji} **{name}**: {info['status']} (port {port})")
+                server_lines.append(f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
             return f"""🌌 **AURORA SYSTEM STATUS**
 

@@ -18,9 +18,8 @@ Features:
 - Integrated Aurora Port Manager for Conflict Resolution
 """
 
-import numpy as np
-import math
 import asyncio
+import math
 import os
 import platform
 import socket
@@ -32,6 +31,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import Any
 
+import numpy as np
 import psutil
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -169,8 +169,7 @@ class AIServiceOrchestrator:
             if len(values) >= 3:
                 trend = np.polyfit(range(len(values)), values, 1)[0]
                 predictions[f"{metric}_trend"] = float(trend)
-                predictions[f"{metric}_prediction_5min"] = float(
-                    values[-1] + trend * 5)
+                predictions[f"{metric}_prediction_5min"] = float(values[-1] + trend * 5)
 
         return predictions
 
@@ -182,18 +181,15 @@ class AIServiceOrchestrator:
         if service_health.status == "critical":
             if service_health.memory_usage > 0.9:
                 action = "restart_service"
-                self._record_healing_strategy(
-                    service_name, action, "high_memory")
+                self._record_healing_strategy(service_name, action, "high_memory")
                 return action
             elif service_health.error_rate > 0.1:
                 action = "restart_service"
-                self._record_healing_strategy(
-                    service_name, action, "high_errors")
+                self._record_healing_strategy(service_name, action, "high_errors")
                 return action
             elif service_health.response_time > 5.0:
                 action = "scale_service"
-                self._record_healing_strategy(
-                    service_name, action, "slow_response")
+                self._record_healing_strategy(service_name, action, "slow_response")
                 return action
 
         elif service_health.status == "degraded":
@@ -203,8 +199,7 @@ class AIServiceOrchestrator:
                 return action
             elif service_health.memory_usage > 0.8:
                 action = "optimize_memory"
-                self._record_healing_strategy(
-                    service_name, action, "elevated_memory")
+                self._record_healing_strategy(service_name, action, "elevated_memory")
                 return action
 
         return None
@@ -214,8 +209,7 @@ class AIServiceOrchestrator:
         if service_name not in self.healing_strategies:
             self.healing_strategies[service_name] = []
 
-        self.healing_strategies[service_name].append(
-            {"timestamp": time.time(), "action": action, "reason": reason})
+        self.healing_strategies[service_name].append({"timestamp": time.time(), "action": action, "reason": reason})
 
         # Keep last 100 healing actions
         if len(self.healing_strategies[service_name]) > 100:
@@ -238,8 +232,7 @@ class AIServiceOrchestrator:
         # Extract metrics
         cpu_values = [h["metrics"].get("cpu_usage", 0) for h in history]
         memory_values = [h["metrics"].get("memory_usage", 0) for h in history]
-        response_times = [h["metrics"].get(
-            "response_time", 0) for h in history]
+        response_times = [h["metrics"].get("response_time", 0) for h in history]
         error_rates = [h["metrics"].get("error_rate", 0) for h in history]
 
         # Calculate 90th percentile as threshold (balance between sensitivity and false positives)
@@ -284,16 +277,14 @@ class AIServiceOrchestrator:
         history = self.service_history[service_name]
 
         # Extract timestamps and a key metric (e.g., performance score)
-        time_series = [(h["timestamp"], h["performance_score"])
-                       for h in history]
+        time_series = [(h["timestamp"], h["performance_score"]) for h in history]
 
         if len(time_series) < 50:
             return {"detected": False}
 
         # Simple autocorrelation check for daily patterns (86400 seconds)
         # This is a simplified version - real ML would use FFT or more sophisticated methods
-        daily_pattern_detected = self._check_pattern_interval(
-            time_series, 86400, tolerance=3600)
+        daily_pattern_detected = self._check_pattern_interval(time_series, 86400, tolerance=3600)
 
         return {
             "detected": daily_pattern_detected,
@@ -334,12 +325,10 @@ class AIServiceOrchestrator:
 
         # Extract metric arrays
         metrics_data = {}
-        metric_names = ["cpu_usage", "memory_usage",
-                        "response_time", "error_rate"]
+        metric_names = ["cpu_usage", "memory_usage", "response_time", "error_rate"]
 
         for metric_name in metric_names:
-            metrics_data[metric_name] = [
-                h["metrics"].get(metric_name, 0) for h in history]
+            metrics_data[metric_name] = [h["metrics"].get(metric_name, 0) for h in history]
 
         # Calculate simple correlations
         correlations = {}
@@ -384,18 +373,16 @@ class AIServiceOrchestrator:
             if entry["metrics"].get("error_rate", 0) > 10 or entry["metrics"].get("response_time", 0) > 5000:
                 # This was a failure - check what happened before
                 if i > 5:
-                    before_failure = history[i - 5: i]
+                    before_failure = history[i - 5 : i]
 
                     # Check if memory was climbing
-                    memory_vals = [h["metrics"].get(
-                        "memory_usage", 0) for h in before_failure]
+                    memory_vals = [h["metrics"].get("memory_usage", 0) for h in before_failure]
                     if all(memory_vals[j] <= memory_vals[j + 1] for j in range(len(memory_vals) - 1)):
                         if "memory_leak_pattern" not in precursors:
                             precursors.append("memory_leak_pattern")
 
                     # Check if CPU spiked before failure
-                    cpu_vals = [h["metrics"].get(
-                        "cpu_usage", 0) for h in before_failure]
+                    cpu_vals = [h["metrics"].get("cpu_usage", 0) for h in before_failure]
                     if any(cpu > 90 for cpu in cpu_vals):
                         if "cpu_spike_before_failure" not in precursors:
                             precursors.append("cpu_spike_before_failure")
@@ -484,10 +471,8 @@ class LuminarNexusV2:
         print("🌌 Luminar Nexus v2 initialized")
         print(f"   Version: {self.version}")
         print(f"   Quantum Coherence: {self.quantum_mesh.coherence_level:.2f}")
-        print(
-            f"   AI Learning: {'Enabled' if self.config['ai_learning_enabled'] else 'Disabled'}")
-        print(
-            f"   Autonomous Healing: {'Enabled' if self.config['healing_enabled'] else 'Disabled'}")
+        print(f"   AI Learning: {'Enabled' if self.config['ai_learning_enabled'] else 'Disabled'}")
+        print(f"   Autonomous Healing: {'Enabled' if self.config['healing_enabled'] else 'Disabled'}")
 
     def register_service(
         self,
@@ -517,8 +502,7 @@ class LuminarNexusV2:
         # Initialize health monitoring
         self._initialize_health_monitoring(name, port)
 
-        print(
-            f"🔗 Service '{name}' registered on port {port} with quantum state '{quantum_state}'")
+        print(f"🔗 Service '{name}' registered on port {port} with quantum state '{quantum_state}'")
 
     def _initialize_health_monitoring(self, service_name: str, port: int):
         """Initialize comprehensive health monitoring for a service"""
@@ -585,16 +569,13 @@ class LuminarNexusV2:
                 }
 
                 # Learn patterns for AI improvement
-                self.ai_orchestrator.learn_service_patterns(
-                    service_name, metrics)
+                self.ai_orchestrator.learn_service_patterns(service_name, metrics)
 
                 # Generate predictions
-                health.predictions = self.ai_orchestrator.predict_service_issues(
-                    service_name)
+                health.predictions = self.ai_orchestrator.predict_service_issues(service_name)
 
                 # Anomaly detection
-                health.anomalies = self.neural_anomaly_detector.detect_anomalies(
-                    service_name, metrics)
+                health.anomalies = self.neural_anomaly_detector.detect_anomalies(service_name, metrics)
 
             # Performance classification (only for services that are up)
             if health.status != "down":
@@ -635,8 +616,7 @@ class LuminarNexusV2:
         healing_action = self.ai_orchestrator.recommend_healing_action(health)
 
         if healing_action:
-            print(
-                f"🔧 Autonomous healing: {healing_action} for service '{service_name}'")
+            print(f"🔧 Autonomous healing: {healing_action} for service '{service_name}'")
 
             if healing_action == "restart_service":
                 await self._restart_service(service_name)
@@ -653,8 +633,7 @@ class LuminarNexusV2:
         service_info = self.service_registry[service_name]
         service_info["restart_count"] += 1
 
-        print(
-            f"🔄 Restarting service '{service_name}' (restart #{service_info['restart_count']})")
+        print(f"🔄 Restarting service '{service_name}' (restart #{service_info['restart_count']})")
 
         # Stop the service first
         await self._stop_service_internal(service_name)
@@ -701,10 +680,9 @@ class LuminarNexusV2:
                     if service_name in cmdline and "python" in cmdline.lower():
                         # Send SIGUSR1 for potential GC trigger (if service handles it)
                         # SIGUSR1 only exists on Unix systems
-                        if hasattr(signal, 'SIGUSR1'):
+                        if hasattr(signal, "SIGUSR1"):
                             proc.send_signal(signal.SIGUSR1)
-                        print(
-                            f"   ✅ Sent memory optimization signal to {service_name}")
+                        print(f"   ✅ Sent memory optimization signal to {service_name}")
                         break
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
                     continue
@@ -724,12 +702,10 @@ class LuminarNexusV2:
         if self.is_windows():
             return False  # Windows doesn't use tmux
         try:
-            subprocess.run(["tmux", "-V"], capture_output=True,
-                           check=True, timeout=2)
+            subprocess.run(["tmux", "-V"], capture_output=True, check=True, timeout=2)
             return True
         except (subprocess.CalledProcessError, FileNotFoundError):
-            print(
-                "⚠️ tmux not installed - required for service management on Linux/macOS")
+            print("⚠️ tmux not installed - required for service management on Linux/macOS")
             return False
 
     async def _start_service_internal(self, service_key: str) -> bool:
@@ -752,8 +728,7 @@ class LuminarNexusV2:
                     # Extract directory and actual command
                     parts = command.split(" && ", 1)
                     cwd = parts[0].replace("cd ", "").strip()
-                    actual_cmd = parts[1] if len(
-                        parts) > 1 else "echo No command"
+                    actual_cmd = parts[1] if len(parts) > 1 else "echo No command"
                 else:
                     cwd = None
                     actual_cmd = command
@@ -789,8 +764,7 @@ class LuminarNexusV2:
                         print("   ✅ Health check PASSED")
                         return True
                     elif attempt < max_retries - 1:
-                        print(
-                            f"   ⏳ Waiting for service to start... ({attempt + 1}/{max_retries})")
+                        print(f"   ⏳ Waiting for service to start... ({attempt + 1}/{max_retries})")
 
                 print("   ⚠️  Server started but health check pending...")
                 # Check error log for issues
@@ -799,8 +773,7 @@ class LuminarNexusV2:
                         with open(err_file, encoding="utf-8", errors="ignore") as f:
                             errors = f.read()
                             if errors:
-                                print(
-                                    f"   ⚠️  Errors detected: {errors[:200]}")
+                                print(f"   ⚠️  Errors detected: {errors[:200]}")
                     except Exception:
                         pass  # Ignore encoding errors when reading logs
                 return True
@@ -814,12 +787,19 @@ class LuminarNexusV2:
 
             # Kill existing session if it exists
             subprocess.run(
-                ["tmux", "kill-session", "-t", session], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False
+                ["tmux", "kill-session", "-t", session],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False,
             )
 
             # Create new tmux session and run command
             result = subprocess.run(
-                ["tmux", "new-session", "-d", "-s", session, command], capture_output=True, text=True, timeout=5, check=False
+                ["tmux", "new-session", "-d", "-s", session, command],
+                capture_output=True,
+                text=True,
+                timeout=5,
+                check=False,
             )
 
             if result.returncode == 0:
@@ -861,8 +841,7 @@ class LuminarNexusV2:
                         for conn in connections:
                             if hasattr(conn, "laddr") and conn.laddr.port == port:
                                 proc.kill()
-                                print(
-                                    f"   ✅ Killed process {proc.pid} ({proc.name()}) on port {port}")
+                                print(f"   ✅ Killed process {proc.pid} ({proc.name()}) on port {port}")
                                 killed = True
                     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
                         pass
@@ -878,7 +857,8 @@ class LuminarNexusV2:
         else:
             # Linux/macOS: Kill tmux session
             result = subprocess.run(
-                ["tmux", "kill-session", "-t", session], capture_output=True, text=True, timeout=2, check=False)
+                ["tmux", "kill-session", "-t", session], capture_output=True, text=True, timeout=2, check=False
+            )
 
             if result.returncode == 0:
                 print(f"   ✅ Stopped session: {session}")
@@ -918,8 +898,7 @@ class LuminarNexusV2:
                 import urllib.request
                 from urllib.error import HTTPError, URLError
 
-                req = urllib.request.Request(
-                    endpoint, headers={"User-Agent": "Aurora/2.0"})
+                req = urllib.request.Request(endpoint, headers={"User-Agent": "Aurora/2.0"})
                 try:
                     with urllib.request.urlopen(req, timeout=3) as response:
                         if response.status == 200:
@@ -932,8 +911,7 @@ class LuminarNexusV2:
                                     if data.get("ok") is True or data.get("ok") == "true":
                                         return True
                                     # Also check status field
-                                    status_value = str(
-                                        data.get("status", "")).lower()
+                                    status_value = str(data.get("status", "")).lower()
                                     if any(
                                         indicator in status_value
                                         for indicator in ["ok", "healthy", "online", "running"]
@@ -959,8 +937,7 @@ class LuminarNexusV2:
         """Public API to start a server"""
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        result = loop.run_until_complete(
-            self._start_service_internal(server_key))
+        result = loop.run_until_complete(self._start_service_internal(server_key))
         loop.close()
         return result
 
@@ -968,8 +945,7 @@ class LuminarNexusV2:
         """Public API to stop a server"""
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        result = loop.run_until_complete(
-            self._stop_service_internal(server_key))
+        result = loop.run_until_complete(self._stop_service_internal(server_key))
         loop.close()
         return result
 
@@ -1010,18 +986,17 @@ class LuminarNexusV2:
             if not self.is_windows():
                 # Linux/macOS: Check tmux session
                 session_result = subprocess.run(
-                    ["tmux", "has-session", "-t", server["session"]], capture_output=True, check=False)
+                    ["tmux", "has-session", "-t", server["session"]], capture_output=True, check=False
+                )
                 session_exists = session_result.returncode == 0
             else:
                 # Windows: Check if port is in use (indicates service running)
                 session_exists = self._is_port_in_use(server["port"])
 
             # Check health
-            health_ok = loop.run_until_complete(
-                self._check_service_health(server_key))
+            health_ok = loop.run_until_complete(self._check_service_health(server_key))
 
-            status = "running" if (
-                session_exists and health_ok) else "starting" if session_exists else "stopped"
+            status = "running" if (session_exists and health_ok) else "starting" if session_exists else "stopped"
             icon = "✅" if status == "running" else "⚠️" if status == "starting" else "❌"
 
             print(f"{icon} {server['name']}")
@@ -1046,13 +1021,11 @@ class LuminarNexusV2:
                     asyncio.set_event_loop(loop)
 
                     for service_name in self.service_registry.keys():
-                        health = loop.run_until_complete(
-                            self.comprehensive_health_check(service_name))
+                        health = loop.run_until_complete(self.comprehensive_health_check(service_name))
 
                         # Autonomous healing if needed
                         if health and health.status in ["critical", "degraded"]:
-                            loop.run_until_complete(
-                                self.autonomous_healing(service_name))
+                            loop.run_until_complete(self.autonomous_healing(service_name))
 
                     loop.close()
 
@@ -1069,8 +1042,7 @@ class LuminarNexusV2:
                     print(f"⚠️  Monitoring error: {e}")
                     time.sleep(5)
 
-        monitoring_thread = threading.Thread(
-            target=monitoring_loop, daemon=True)
+        monitoring_thread = threading.Thread(target=monitoring_loop, daemon=True)
         monitoring_thread.start()
         print("🔍 Advanced monitoring started with AI analysis")
 
@@ -1085,22 +1057,18 @@ class LuminarNexusV2:
             conflicts = self.port_manager.identify_conflicts(port_usage)
 
             if conflicts:
-                print(
-                    f"🔧 Nexus v2 detected {len(conflicts)} port conflicts - initiating healing")
+                print(f"🔧 Nexus v2 detected {len(conflicts)} port conflicts - initiating healing")
                 results = self.port_manager.resolve_conflicts(conflicts)
 
                 # Update quantum coherence based on healing success
                 if results:
-                    success_rate = sum(
-                        1 for success in results.values() if success) / len(results)
+                    success_rate = sum(1 for success in results.values() if success) / len(results)
                     if success_rate < 0.8:
                         self.quantum_mesh.coherence_level *= 0.9  # Reduce coherence if healing fails
                     else:
-                        self.quantum_mesh.coherence_level = min(
-                            1.0, self.quantum_mesh.coherence_level * 1.05)
+                        self.quantum_mesh.coherence_level = min(1.0, self.quantum_mesh.coherence_level * 1.05)
 
-                    print(
-                        f"✅ Port healing completed with {success_rate:.1%} success rate")
+                    print(f"✅ Port healing completed with {success_rate:.1%} success rate")
 
         except Exception as e:
             print(f"❌ Port healing error: {e}")
@@ -1119,8 +1087,7 @@ class LuminarNexusV2:
 
     def _update_quantum_coherence(self):
         """Update system quantum coherence level"""
-        healthy_services = sum(
-            1 for health in self.health_monitor.values() if health.status == "healthy")
+        healthy_services = sum(1 for health in self.health_monitor.values() if health.status == "healthy")
         total_services = len(self.health_monitor)
 
         if total_services > 0:
@@ -1128,11 +1095,9 @@ class LuminarNexusV2:
 
         # If coherence is low, trigger system-wide healing
         # Skip warning only if all services are still in unknown state (initial health check not complete)
-        all_unknown = all(
-            health.status == "unknown" for health in self.health_monitor.values())
+        all_unknown = all(health.status == "unknown" for health in self.health_monitor.values())
         if self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"] and not all_unknown:
-            print(
-                f"⚠️  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
+            print(f"⚠️  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
 
     def get_system_status(self) -> dict[str, Any]:
         """Get comprehensive system status"""
@@ -1199,8 +1164,7 @@ class LuminarNexusV2:
                 # Advanced routing through Aurora Bridge
                 if AURORA_BRIDGE_AVAILABLE and route_to_enhanced_aurora_core is not None:
                     print(f"🌌 Nexus v2 → Aurora Bridge: {message[:50]}...")
-                    response = route_to_enhanced_aurora_core(
-                        message, session_id)
+                    response = route_to_enhanced_aurora_core(message, session_id)
                 else:
                     response = "Nexus v2 operational, but Aurora Bridge unavailable. Please check system configuration."
 
@@ -1285,8 +1249,7 @@ class SecurityGuardian:
 
         # Rate limiting / DDoS detection
         if self._check_rate_limit(source_ip):
-            threats.append(
-                f"RATE_LIMIT_EXCEEDED: {source_ip} exceeds request threshold")
+            threats.append(f"RATE_LIMIT_EXCEEDED: {source_ip} exceeds request threshold")
             self.blocked_ips.add(source_ip)
 
         # Port scanning detection
@@ -1309,8 +1272,7 @@ class SecurityGuardian:
         self.request_tracking[ip].append(current_time)
 
         # Remove old requests outside window
-        self.request_tracking[ip] = [
-            t for t in self.request_tracking[ip] if current_time - t < window]
+        self.request_tracking[ip] = [t for t in self.request_tracking[ip] if current_time - t < window]
 
         return len(self.request_tracking[ip]) > threshold
 
@@ -1331,8 +1293,7 @@ class SecurityGuardian:
 
     def _log_security_event(self, ip: str, threat_type: str, path: str):
         """Log security events for analysis"""
-        event = {"timestamp": time.time(), "ip": ip,
-                 "threat": threat_type, "path": path}
+        event = {"timestamp": time.time(), "ip": ip, "threat": threat_type, "path": path}
         self.security_events.append(event)
 
         # Keep only last 10000 events
@@ -1397,8 +1358,7 @@ class PerformanceOptimizer:
                     "estimated_impact": "Reduce CPU by 30-40%",
                 }
             )
-            recommendations["resource_allocation"]["additional_instances"] = self._calculate_instance_needs(
-                cpu_usage)
+            recommendations["resource_allocation"]["additional_instances"] = self._calculate_instance_needs(cpu_usage)
 
         # Memory optimization
         memory_usage = service_metrics.get("memory_usage", 0)
@@ -1437,12 +1397,10 @@ class PerformanceOptimizer:
             )
 
         # Load balancing recommendations
-        recommendations["load_balancing"] = self._generate_load_balancing_strategy(
-            service_name, service_metrics)
+        recommendations["load_balancing"] = self._generate_load_balancing_strategy(service_name, service_metrics)
 
         # Preventive measures based on trends
-        recommendations["preventive_measures"] = self._analyze_trends(
-            service_name)
+        recommendations["preventive_measures"] = self._analyze_trends(service_name)
 
         return recommendations
 
@@ -1451,8 +1409,7 @@ class PerformanceOptimizer:
         if service_name not in self.performance_history:
             self.performance_history[service_name] = []
 
-        self.performance_history[service_name].append(
-            {"timestamp": time.time(), "metrics": metrics})
+        self.performance_history[service_name].append({"timestamp": time.time(), "metrics": metrics})
 
         # Keep last 1000 data points
         if len(self.performance_history[service_name]) > 1000:
@@ -1485,8 +1442,7 @@ class PerformanceOptimizer:
 
         # Analyze recent performance to distribute load intelligently
         recent = self.performance_history[service_name][-10:]
-        avg_response_time = sum(m["metrics"].get(
-            "response_time", 500) for m in recent) / len(recent)
+        avg_response_time = sum(m["metrics"].get("response_time", 500) for m in recent) / len(recent)
 
         # Better performing instances get higher weight
         if avg_response_time < 100:
@@ -1506,12 +1462,10 @@ class PerformanceOptimizer:
 
         # Check if CPU usage trending up
         recent_cpu = [h["metrics"].get("cpu_usage", 0) for h in history[-10:]]
-        older_cpu = [h["metrics"].get("cpu_usage", 0)
-                     for h in history[-20:-10]]
+        older_cpu = [h["metrics"].get("cpu_usage", 0) for h in history[-20:-10]]
 
         if recent_cpu and older_cpu:
-            cpu_trend = (sum(recent_cpu) / len(recent_cpu)) - \
-                (sum(older_cpu) / len(older_cpu))
+            cpu_trend = (sum(recent_cpu) / len(recent_cpu)) - (sum(older_cpu) / len(older_cpu))
             if cpu_trend > 10:  # 10% increase
                 measures.append(
                     {
@@ -1564,8 +1518,7 @@ class PredictiveScaler:
         predicted_load = self._predict_future_load(service_name, current_load)
 
         # Make scaling decision
-        scaling_action = self._make_scaling_decision(
-            service_name, current_load, predicted_load)
+        scaling_action = self._make_scaling_decision(service_name, current_load, predicted_load)
 
         # Log decision
         if scaling_action:
@@ -1620,8 +1573,7 @@ class PredictiveScaler:
 
         # Combine trend and time-based predictions
         # Weight: 60% time pattern, 40% trend
-        predicted_load = (time_prediction * 0.6) + \
-            ((current_load + trend) * 0.4)
+        predicted_load = (time_prediction * 0.6) + ((current_load + trend) * 0.4)
 
         return max(0, min(100, predicted_load))  # Clamp between 0-100
 
@@ -1636,8 +1588,7 @@ class PredictiveScaler:
         x_mean = sum(x_values) / n
         y_mean = sum(values) / n
 
-        numerator = sum((x_values[i] - x_mean) *
-                        (values[i] - y_mean) for i in range(n))
+        numerator = sum((x_values[i] - x_mean) * (values[i] - y_mean) for i in range(n))
         denominator = sum((x - x_mean) ** 2 for x in x_values)
 
         if denominator == 0:
@@ -1655,8 +1606,7 @@ class PredictiveScaler:
         prediction_weight = 0.7  # How much to trust prediction vs current
 
         # Weighted decision score
-        decision_score = (current_load * (1 - prediction_weight)
-                          ) + (predicted_load * prediction_weight)
+        decision_score = (current_load * (1 - prediction_weight)) + (predicted_load * prediction_weight)
 
         # Check if we recently made a scaling decision (avoid thrashing)
         if service_name in self.scaling_decisions:
@@ -1724,8 +1674,7 @@ class PredictiveScaler:
             return []
 
         # Get top 3 peak hours
-        sorted_hours = sorted(hourly_averages.items(),
-                              key=lambda x: x[1], reverse=True)
+        sorted_hours = sorted(hourly_averages.items(), key=lambda x: x[1], reverse=True)
         return [hour for hour, _ in sorted_hours[:3]]
 
 
@@ -1765,33 +1714,29 @@ class NeuralAnomalyDetector:
             # Update baseline
             baseline[metric_name].append(metric_value)
             if len(baseline[metric_name]) > self.learning_window:
-                baseline[metric_name] = baseline[metric_name][-self.learning_window:]
+                baseline[metric_name] = baseline[metric_name][-self.learning_window :]
 
             # Need sufficient data for anomaly detection
             if len(baseline[metric_name]) < 20:
                 continue
 
             # Statistical anomaly detection (Z-score method)
-            anomaly = self._detect_statistical_anomaly(
-                metric_name, metric_value, baseline[metric_name])
+            anomaly = self._detect_statistical_anomaly(metric_name, metric_value, baseline[metric_name])
             if anomaly:
                 anomalies.append(anomaly)
 
         # Pattern-based anomaly detection
-        pattern_anomalies = self._detect_pattern_anomalies(
-            service_name, metrics)
+        pattern_anomalies = self._detect_pattern_anomalies(service_name, metrics)
         anomalies.extend(pattern_anomalies)
 
         # Correlation-based anomaly detection (multiple metrics acting weird together)
-        correlation_anomalies = self._detect_correlation_anomalies(
-            service_name, metrics)
+        correlation_anomalies = self._detect_correlation_anomalies(service_name, metrics)
         anomalies.extend(correlation_anomalies)
 
         # Log anomalies for learning
         if anomalies:
             self.anomaly_history[service_name].append(
-                {"timestamp": time.time(), "metrics": metrics,
-                 "anomalies": anomalies}
+                {"timestamp": time.time(), "metrics": metrics, "anomalies": anomalies}
             )
 
             # Keep last 1000 anomaly events
@@ -1829,8 +1774,7 @@ class NeuralAnomalyDetector:
 
         # Pattern 1: High error rate with normal CPU (something wrong in code)
         if metrics.get("error_rate", 0) > 5 and metrics.get("cpu_usage", 100) < 50:
-            anomalies.append(
-                "PATTERN_ANOMALY: High error rate with low CPU usage suggests code/logic error")
+            anomalies.append("PATTERN_ANOMALY: High error rate with low CPU usage suggests code/logic error")
 
         # Pattern 2: High CPU with low request rate (inefficient processing or infinite loop)
         if metrics.get("cpu_usage", 0) > 80 and metrics.get("request_rate", 100) < 10:
@@ -1840,18 +1784,15 @@ class NeuralAnomalyDetector:
 
         # Pattern 3: Memory leak detection (memory consistently increasing)
         if service_name in self.baseline_metrics:
-            memory_history = self.baseline_metrics[service_name].get(
-                "memory_usage", [])
+            memory_history = self.baseline_metrics[service_name].get("memory_usage", [])
             if len(memory_history) >= 10:
                 recent_10 = memory_history[-10:]
                 if all(recent_10[i] <= recent_10[i + 1] for i in range(len(recent_10) - 1)):
-                    anomalies.append(
-                        "PATTERN_ANOMALY: Potential memory leak detected (consistently increasing memory)")
+                    anomalies.append("PATTERN_ANOMALY: Potential memory leak detected (consistently increasing memory)")
 
         # Pattern 4: Response time spikes (possible database/network issue)
         if metrics.get("response_time", 0) > 5000:  # 5 seconds
-            anomalies.append(
-                "PATTERN_ANOMALY: Extreme response time detected - possible database or network issue")
+            anomalies.append("PATTERN_ANOMALY: Extreme response time detected - possible database or network issue")
 
         return anomalies
 
@@ -1865,8 +1806,7 @@ class NeuralAnomalyDetector:
         cpu_usage = metrics.get("cpu_usage", 0)
 
         if request_rate > 50 and cpu_usage < 20:
-            anomalies.append(
-                "CORRELATION_ANOMALY: High request rate but low CPU - requests may not be processing")
+            anomalies.append("CORRELATION_ANOMALY: High request rate but low CPU - requests may not be processing")
 
         # High memory + high error rate = possible OOM errors
         if metrics.get("memory_usage", 0) > 90 and metrics.get("error_rate", 0) > 10:
@@ -1912,12 +1852,9 @@ def run_luminar_nexus_v2(port: int = 5005):
     # Register standard Aurora services
     nexus.register_service("frontend", 5173, "ui", quantum_state="entangled")
     nexus.register_service("backend", 5000, "api", quantum_state="stable")
-    nexus.register_service("bridge", 5001, "middleware", dependencies=[
-                           "backend"], quantum_state="stable")
-    nexus.register_service("self_learn", 5002, "ai", dependencies=[
-                           "backend"], quantum_state="superposition")
-    nexus.register_service("chat", 5003, "ai", dependencies=[
-                           "bridge"], quantum_state="entangled")
+    nexus.register_service("bridge", 5001, "middleware", dependencies=["backend"], quantum_state="stable")
+    nexus.register_service("self_learn", 5002, "ai", dependencies=["backend"], quantum_state="superposition")
+    nexus.register_service("chat", 5003, "ai", dependencies=["bridge"], quantum_state="entangled")
 
     # Create advanced API
     app = nexus.create_advanced_api()
