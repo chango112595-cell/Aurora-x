@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Aurora core foundations should be imported from aurora_core.py
+# This file contains extended skill definitions for Tier 29-31
 """
 AURORA GRANDMASTER: FOUNDATIONAL & PROFESSIONAL MASTERY
 TIER 29-31: The bedrock skills that complete Aurora's genius-level capabilities

@@ -1,6 +1,5 @@
 {
   "processed_specs": {
-<<<<<<< HEAD
     "auto_c0aa60ae.md": {
       "timestamp": "2025-10-25T10:05:53.069469",
       "success": true,
@@ -205,11 +204,7 @@
       "timestamp": "2025-10-25T13:13:24.663211",
       "success": true,
       "run_dir": "runs/run-20251025-131324"
-    }
-  },
-  "last_updated": "2025-10-25T13:13:24.663219",
-  "run_count": 208
-=======
+    },
     "generate_anti_virus.md": {
       "timestamp": "2025-10-25T10:41:55.121499",
       "success": true,
@@ -431,7 +426,6 @@
       "run_dir": "runs/run-20251025-105243"
     }
   },
-  "last_updated": "2025-10-25T10:52:43.104627",
+  "last_updated": "2025-10-25T13:13:24.663219",
   "run_count": 290
->>>>>>> badges
 }

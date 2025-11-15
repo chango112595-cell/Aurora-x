@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Note: Core tier definitions are in aurora_core.py
+# This manager coordinates Aurora's intelligence systems
 """
 Aurora Intelligence Management System
 Teaches Aurora how to diagnose and fix server issues herself

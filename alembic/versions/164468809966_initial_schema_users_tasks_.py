@@ -36,10 +36,13 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_alerts_component"), "alerts", ["component"], unique=False)
-    op.create_index(op.f("ix_alerts_created_at"), "alerts", ["created_at"], unique=False)
+    op.create_index(op.f("ix_alerts_component"),
+                    "alerts", ["component"], unique=False)
+    op.create_index(op.f("ix_alerts_created_at"),
+                    "alerts", ["created_at"], unique=False)
     op.create_index(op.f("ix_alerts_id"), "alerts", ["id"], unique=False)
-    op.create_index(op.f("ix_alerts_severity"), "alerts", ["severity"], unique=False)
+    op.create_index(op.f("ix_alerts_severity"),
+                    "alerts", ["severity"], unique=False)
     op.create_table(
         "audit_logs",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -54,10 +57,14 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_audit_logs_action"), "audit_logs", ["action"], unique=False)
-    op.create_index(op.f("ix_audit_logs_created_at"), "audit_logs", ["created_at"], unique=False)
-    op.create_index(op.f("ix_audit_logs_id"), "audit_logs", ["id"], unique=False)
-    op.create_index(op.f("ix_audit_logs_user_id"), "audit_logs", ["user_id"], unique=False)
+    op.create_index(op.f("ix_audit_logs_action"),
+                    "audit_logs", ["action"], unique=False)
+    op.create_index(op.f("ix_audit_logs_created_at"),
+                    "audit_logs", ["created_at"], unique=False)
+    op.create_index(op.f("ix_audit_logs_id"),
+                    "audit_logs", ["id"], unique=False)
+    op.create_index(op.f("ix_audit_logs_user_id"),
+                    "audit_logs", ["user_id"], unique=False)
     op.create_table(
         "conversation_history",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -69,9 +76,12 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_conversation_history_id"), "conversation_history", ["id"], unique=False)
-    op.create_index(op.f("ix_conversation_history_session_id"), "conversation_history", ["session_id"], unique=False)
-    op.create_index(op.f("ix_conversation_history_user_id"), "conversation_history", ["user_id"], unique=False)
+    op.create_index(op.f("ix_conversation_history_id"),
+                    "conversation_history", ["id"], unique=False)
+    op.create_index(op.f("ix_conversation_history_session_id"),
+                    "conversation_history", ["session_id"], unique=False)
+    op.create_index(op.f("ix_conversation_history_user_id"),
+                    "conversation_history", ["user_id"], unique=False)
     op.create_table(
         "synthesis_tasks",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -86,8 +96,10 @@ def upgrade() -> None:
         sa.Column("completed_at", sa.DateTime(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_synthesis_tasks_id"), "synthesis_tasks", ["id"], unique=False)
-    op.create_index(op.f("ix_synthesis_tasks_user_id"), "synthesis_tasks", ["user_id"], unique=False)
+    op.create_index(op.f("ix_synthesis_tasks_id"),
+                    "synthesis_tasks", ["id"], unique=False)
+    op.create_index(op.f("ix_synthesis_tasks_user_id"),
+                    "synthesis_tasks", ["user_id"], unique=False)
     op.create_table(
         "system_metrics",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -100,9 +112,12 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_system_metrics_created_at"), "system_metrics", ["created_at"], unique=False)
-    op.create_index(op.f("ix_system_metrics_id"), "system_metrics", ["id"], unique=False)
-    op.create_index(op.f("ix_system_metrics_metric_type"), "system_metrics", ["metric_type"], unique=False)
+    op.create_index(op.f("ix_system_metrics_created_at"),
+                    "system_metrics", ["created_at"], unique=False)
+    op.create_index(op.f("ix_system_metrics_id"),
+                    "system_metrics", ["id"], unique=False)
+    op.create_index(op.f("ix_system_metrics_metric_type"),
+                    "system_metrics", ["metric_type"], unique=False)
     op.create_table(
         "users",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -118,7 +133,8 @@ def upgrade() -> None:
     )
     op.create_index(op.f("ix_users_email"), "users", ["email"], unique=True)
     op.create_index(op.f("ix_users_id"), "users", ["id"], unique=False)
-    op.create_index(op.f("ix_users_username"), "users", ["username"], unique=True)
+    op.create_index(op.f("ix_users_username"),
+                    "users", ["username"], unique=True)
     op.drop_table("test")
     # ### end Alembic commands ###
 
@@ -126,21 +142,28 @@ def upgrade() -> None:
 def downgrade() -> None:
     """Downgrade schema."""
     # ### commands auto generated by Alembic - please adjust! ###
-    op.create_table("test", sa.Column("id", sa.INTEGER(), nullable=True), sa.PrimaryKeyConstraint("id"))
+    op.create_table("test", sa.Column("id", sa.INTEGER(),
+                    nullable=True), sa.PrimaryKeyConstraint("id"))
     op.drop_index(op.f("ix_users_username"), table_name="users")
     op.drop_index(op.f("ix_users_id"), table_name="users")
     op.drop_index(op.f("ix_users_email"), table_name="users")
     op.drop_table("users")
-    op.drop_index(op.f("ix_system_metrics_metric_type"), table_name="system_metrics")
+    op.drop_index(op.f("ix_system_metrics_metric_type"),
+                  table_name="system_metrics")
     op.drop_index(op.f("ix_system_metrics_id"), table_name="system_metrics")
-    op.drop_index(op.f("ix_system_metrics_created_at"), table_name="system_metrics")
+    op.drop_index(op.f("ix_system_metrics_created_at"),
+                  table_name="system_metrics")
     op.drop_table("system_metrics")
-    op.drop_index(op.f("ix_synthesis_tasks_user_id"), table_name="synthesis_tasks")
+    op.drop_index(op.f("ix_synthesis_tasks_user_id"),
+                  table_name="synthesis_tasks")
     op.drop_index(op.f("ix_synthesis_tasks_id"), table_name="synthesis_tasks")
     op.drop_table("synthesis_tasks")
-    op.drop_index(op.f("ix_conversation_history_user_id"), table_name="conversation_history")
-    op.drop_index(op.f("ix_conversation_history_session_id"), table_name="conversation_history")
-    op.drop_index(op.f("ix_conversation_history_id"), table_name="conversation_history")
+    op.drop_index(op.f("ix_conversation_history_user_id"),
+                  table_name="conversation_history")
+    op.drop_index(op.f("ix_conversation_history_session_id"),
+                  table_name="conversation_history")
+    op.drop_index(op.f("ix_conversation_history_id"),
+                  table_name="conversation_history")
     op.drop_table("conversation_history")
     op.drop_index(op.f("ix_audit_logs_user_id"), table_name="audit_logs")
     op.drop_index(op.f("ix_audit_logs_id"), table_name="audit_logs")

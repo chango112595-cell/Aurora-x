@@ -779,14 +779,8 @@ class LuminarNexusV2:
                         with open(err_file, encoding="utf-8", errors="ignore") as f:
                             errors = f.read()
                             if errors:
-<<<<<<< HEAD
-                                print(
-                                    f"   ⚠️  Errors detected: {errors[:200]}")
-                    except Exception:  # noqa: BLE001 - Ignore log read errors
-=======
                                 print(f"   ⚠️  Errors detected: {errors[:200]}")
-                    except Exception:
->>>>>>> bbded31303535d18b813d0d9b34b54afb561dd7d
+                    except Exception:  # noqa: BLE001 - Ignore log read errors
                         pass  # Ignore encoding errors when reading logs
                 return True
             except Exception as e:  # noqa: BLE001 - Broad catch for start operation

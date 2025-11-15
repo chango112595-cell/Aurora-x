@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Skills registry - references Tier definitions from aurora_core.py
 """
 AURORA GRANDMASTER SKILLS REGISTRY
 Complete inventory of Aurora's mastered capabilities

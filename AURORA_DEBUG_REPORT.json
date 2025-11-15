@@ -1,0 +1,9 @@
+{
+  "successes": 240,
+  "warnings": 1,
+  "errors": 0,
+  "error_details": [],
+  "warning_details": [
+    "Pylint not installed"
+  ]
+}
