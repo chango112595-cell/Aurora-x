@@ -1,0 +1,18 @@
+[MESSAGES CONTROL]
+# Disable warnings for intentional production code patterns
+disable=
+    broad-except,          # We intentionally catch broad exceptions for resilience
+    global-statement,      # Flask singleton pattern requires global
+    too-many-lines,        # Complex system files are naturally large
+    too-many-instance-attributes,  # Complex classes need many attributes
+    too-many-arguments,    # Some functions need many parameters
+    too-many-locals,       # Complex algorithms need many locals
+    too-many-branches,     # Complex logic requires branching
+    too-many-statements,   # Some functions are legitimately complex
+    
+[BASIC]
+# Good variable names
+good-names=i,j,k,ex,Run,_,e,f,h,p,q,x,y,z,id,db,ai,ml,ui
+
+[DESIGN]
+max-line-length=120

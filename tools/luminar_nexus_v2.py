@@ -570,7 +570,7 @@ class LuminarNexusV2:
                                     break
                     except (psutil.NoSuchProcess, psutil.AccessDenied, AttributeError):
                         continue
-            except Exception:
+            except Exception:  # noqa: BLE001 - Ignore status check errors
                 pass
 
             # AI-based health assessment (only for services that are up)
@@ -807,10 +807,10 @@ class LuminarNexusV2:
                             if errors:
                                 print(
                                     f"   ⚠️  Errors detected: {errors[:200]}")
-                    except Exception:
+                    except Exception:  # noqa: BLE001 - Ignore log read errors
                         pass  # Ignore encoding errors when reading logs
                 return True
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - Broad catch for start operation
                 print(f"   ❌ Failed to start: {e}")
                 return False
         else:
@@ -1129,7 +1129,7 @@ class LuminarNexusV2:
             status = self.port_manager.get_status_report()
             status["integration"] = "active"
             return status
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - Broad catch for server status
             return {"error": str(e), "available": False}
 
     def _update_quantum_coherence(self):

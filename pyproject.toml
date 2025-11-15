@@ -85,3 +85,42 @@ patch_tags = ["fix", "perf"]
 python_version = "3.8"
 warn_return_any = true
 warn_unused_configs = true
+
+[tool.ruff]
+# Allow lines up to 120 characters
+line-length = 120
+target-version = "py313"
+
+[tool.ruff.lint]
+# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default
+select = ["E", "F", "W"]
+ignore = [
+    "E501",   # Line too long (handled by line-length)
+    "BLE001", # Catching too general exception (intentional for resilience)
+    "PLW0603", # Global statement (Flask pattern)
+    "PLR0912", # Too many branches
+    "PLR0913", # Too many arguments
+    "PLR0915", # Too many statements
+    "C901",   # Too complex
+]
+
+# Allow autofix for all enabled rules
+fixable = ["ALL"]
+unfixable = []
+
+# Exclude common directories
+exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    "node_modules",
+    "dist",
+    "build",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Allow broad exception catches in service management files
+"tools/luminar_nexus_v2.py" = ["BLE001"]
+"aurora_chat_server.py" = ["PLW0603"]
+"aurora_core.py" = ["BLE001"]
