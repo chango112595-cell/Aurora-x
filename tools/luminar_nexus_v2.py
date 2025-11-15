@@ -735,11 +735,11 @@ class LuminarNexusV2:
                 # Create logs directory
                 logs_dir = os.path.join(cwd if cwd else os.getcwd(), "logs")
                 os.makedirs(logs_dir, exist_ok=True)
-                
+
                 # Create log files for this service
                 log_file = os.path.join(logs_dir, f"{session}.log")
                 err_file = os.path.join(logs_dir, f"{session}.err")
-                
+
                 # Start process in background with logging
                 with open(log_file, "w") as out, open(err_file, "w") as err:
                     subprocess.Popen(
@@ -765,7 +765,7 @@ class LuminarNexusV2:
                     # Check error log for issues
                     if os.path.exists(err_file) and os.path.getsize(err_file) > 0:
                         try:
-                            with open(err_file, "r", encoding="utf-8", errors="ignore") as f:
+                            with open(err_file, encoding="utf-8", errors="ignore") as f:
                                 errors = f.read()
                                 if errors:
                                     print(f"   ⚠️  Errors detected: {errors[:200]}")
@@ -822,12 +822,12 @@ class LuminarNexusV2:
             # Windows: Find and kill process using the port
             try:
                 killed = False
-                for proc in psutil.process_iter(['pid', 'name']):
+                for proc in psutil.process_iter(["pid", "name"]):
                     try:
                         # Get connections for this process
                         connections = proc.connections()
                         for conn in connections:
-                            if hasattr(conn, 'laddr') and conn.laddr.port == port:
+                            if hasattr(conn, "laddr") and conn.laddr.port == port:
                                 proc.kill()
                                 print(f"   ✅ Killed process {proc.pid} ({proc.name()}) on port {port}")
                                 killed = True
@@ -835,7 +835,7 @@ class LuminarNexusV2:
                         pass
                     except Exception:
                         pass  # Skip processes we can't access
-                
+
                 if not killed:
                     print(f"   ⚠️  No process found on port {port}")
                 return killed
@@ -880,30 +880,36 @@ class LuminarNexusV2:
         for endpoint in health_endpoints:
             try:
                 # Use urllib instead of curl for cross-platform compatibility
-                import urllib.request
                 import json
-                from urllib.error import URLError, HTTPError
-                
-                req = urllib.request.Request(endpoint, headers={'User-Agent': 'Aurora/2.0'})
+                import urllib.request
+                from urllib.error import HTTPError, URLError
+
+                req = urllib.request.Request(endpoint, headers={"User-Agent": "Aurora/2.0"})
                 try:
                     with urllib.request.urlopen(req, timeout=1) as response:
                         if response.status == 200:
-                            response_data = response.read().decode('utf-8')
+                            response_data = response.read().decode("utf-8")
                             try:
                                 # Try to parse as JSON
                                 data = json.loads(response_data)
                                 if isinstance(data, dict):
                                     # Check if 'ok' field is True
-                                    if data.get('ok') is True or data.get('ok') == 'true':
+                                    if data.get("ok") is True or data.get("ok") == "true":
                                         return True
                                     # Also check status field
-                                    status_value = str(data.get('status', '')).lower()
-                                    if any(indicator in status_value for indicator in ["ok", "healthy", "online", "running"]):
+                                    status_value = str(data.get("status", "")).lower()
+                                    if any(
+                                        indicator in status_value
+                                        for indicator in ["ok", "healthy", "online", "running"]
+                                    ):
                                         return True
                             except json.JSONDecodeError:
                                 # If not JSON, check raw text
                                 response_text = response_data.lower()
-                                if any(indicator in response_text for indicator in ["ok", "healthy", "status", "true", "online"]):
+                                if any(
+                                    indicator in response_text
+                                    for indicator in ["ok", "healthy", "status", "true", "online"]
+                                ):
                                     return True
                 except (URLError, HTTPError, TimeoutError, ConnectionError):
                     continue

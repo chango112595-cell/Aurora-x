@@ -219,15 +219,16 @@ class AuroraOrchestrator:
 
     def __init__(self, project_root: str = None):
         import platform
+
         # Use actual project root or detect it
         if project_root is None:
             self.project_root = Path(__file__).parent
         else:
             self.project_root = Path(project_root)
-        
+
         # Detect correct Python command for platform
         python_cmd = "python" if platform.system() == "Windows" else "python3"
-        
+
         self.servers = {
             "bridge": {
                 "name": "Aurora Bridge Service",
@@ -337,7 +338,7 @@ class AuroraCoreIntelligence:
             self.project_root = Path(__file__).parent
         else:
             self.project_root = Path(project_root)
-        
+
         self.knowledge_tiers = AuroraKnowledgeTiers()
         self.conversation_contexts: dict[str, dict] = {}
         self.learning_memory: dict[str, Any] = {}

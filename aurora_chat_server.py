@@ -184,17 +184,18 @@ def run_aurora_chat_server(port=9000):
 
 
 if __name__ == "__main__":
-    import sys
     import argparse
+    import sys
 
     # Set UTF-8 encoding for Windows compatibility
     if sys.platform == "win32":
         import io
-        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-    parser = argparse.ArgumentParser(description='Aurora Chat Server')
-    parser.add_argument('--port', type=int, default=9000, help='Port to run the server on')
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
+
+    parser = argparse.ArgumentParser(description="Aurora Chat Server")
+    parser.add_argument("--port", type=int, default=9000, help="Port to run the server on")
     args = parser.parse_args()
-    
+
     run_aurora_chat_server(args.port)

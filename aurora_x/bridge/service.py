@@ -74,9 +74,10 @@ if __name__ == "__main__":
     # Set UTF-8 encoding for Windows compatibility
     if sys.platform == "win32":
         import io
-        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
-    
+
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
+
     print("🚀 Starting Aurora-X Factory Bridge on port 5001...", flush=True)
     sys.stdout.flush()
     uvicorn.run(app, host="0.0.0.0", port=5001, log_level="info")
