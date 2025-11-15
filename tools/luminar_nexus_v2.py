@@ -728,7 +728,7 @@ class LuminarNexusV2:
                 else:
                     cwd = None
                     actual_cmd = command
-                
+
                 # Start process in background
                 subprocess.Popen(
                     actual_cmd,
@@ -736,12 +736,12 @@ class LuminarNexusV2:
                     cwd=cwd,
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
-                    creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if self.is_windows() else 0
+                    creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if self.is_windows() else 0,
                 )
-                
-                print(f"   ✅ Started in background")
+
+                print("   ✅ Started in background")
                 print(f"   🔌 Port: {server['port']}")
-                
+
                 # Wait and check health
                 await asyncio.sleep(3)
                 if await self._check_service_health(service_key):
@@ -759,7 +759,9 @@ class LuminarNexusV2:
                 return False
 
             # Kill existing session if it exists
-            subprocess.run(["tmux", "kill-session", "-t", session], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(
+                ["tmux", "kill-session", "-t", session], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
 
             # Create new tmux session and run command
             result = subprocess.run(
@@ -797,7 +799,7 @@ class LuminarNexusV2:
         if self.is_windows():
             # Windows: Find and kill process using the port
             try:
-                for proc in psutil.process_iter(['pid', 'name', 'connections']):
+                for proc in psutil.process_iter(["pid", "name", "connections"]):
                     try:
                         for conn in proc.connections():
                             if conn.laddr.port == port:
@@ -826,7 +828,7 @@ class LuminarNexusV2:
         """Check if a port is in use"""
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                return s.connect_ex(('localhost', port)) == 0
+                return s.connect_ex(("localhost", port)) == 0
         except:
             return False
 
@@ -914,7 +916,7 @@ class LuminarNexusV2:
                 session_exists = session_result.returncode == 0
             else:
                 # Windows: Check if port is in use (indicates service running)
-                session_exists = self._is_port_in_use(server['port'])
+                session_exists = self._is_port_in_use(server["port"])
 
             # Check health
             health_ok = loop.run_until_complete(self._check_service_health(server_key))
