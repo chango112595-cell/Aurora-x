@@ -748,7 +748,7 @@ class LuminarNexusV2:
                             creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP  # type: ignore
                         except AttributeError:
                             creation_flags = 0x00000200  # CREATE_NEW_PROCESS_GROUP value on Windows
-                    
+
                     subprocess.Popen(
                         actual_cmd,
                         shell=True,
@@ -1095,7 +1095,7 @@ class LuminarNexusV2:
         """Update system quantum coherence level"""
         # Only count services that have been checked (not in "unknown" state)
         checked_services = [h for h in self.health_monitor.values() if h.status != "unknown"]
-        
+
         if checked_services:
             healthy_services = sum(1 for health in checked_services if health.status == "healthy")
             total_checked = len(checked_services)
