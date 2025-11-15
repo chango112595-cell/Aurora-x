@@ -20,8 +20,10 @@ class AuroraAutonomousAgent:
     def __init__(self):
         self.name = "Aurora"
         self.status = "INITIALIZING"
-        self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/autonomous_agent.jsonl")
-        self.log_file.parent.mkdir(exist_ok=True)
+        # Use cross-platform path relative to project root
+        self.project_root = Path(__file__).parent
+        self.log_file = self.project_root / ".aurora_knowledge" / "autonomous_agent.jsonl"
+        self.log_file.parent.mkdir(parents=True, exist_ok=True)
 
         # Load complete omniscient knowledge
         self.knowledge = AURORA_ULTIMATE_GRANDMASTER
@@ -63,9 +65,9 @@ class AuroraAutonomousAgent:
         # Check UI/chat interface
         self.log("🔎 Checking chat UI...")
         chat_files = [
-            "/workspaces/Aurora-x/src/components/Chat.tsx",
-            "/workspaces/Aurora-x/src/components/ChatInterface.tsx",
-            "/workspaces/Aurora-x/src/App.tsx",
+            self.project_root / "src" / "components" / "Chat.tsx",
+            self.project_root / "src" / "components" / "ChatInterface.tsx",
+            self.project_root / "src" / "App.tsx",
         ]
 
         for file in chat_files:
@@ -77,7 +79,7 @@ class AuroraAutonomousAgent:
 
         # Check backend chat endpoint
         self.log("🔎 Checking backend chat API...")
-        backend_routes = Path("/workspaces/Aurora-x/server")
+        backend_routes = self.project_root / "server"
         if backend_routes.exists():
             self.log("✅ Backend directory exists")
         else:
@@ -91,7 +93,7 @@ class AuroraAutonomousAgent:
         self.log("🎨 Analyzing chat UI using TIER_9: Design & Development Grandmaster")
 
         # Read current UI
-        ui_file = Path("/workspaces/Aurora-x/src/App.tsx")
+        ui_file = self.project_root / "src" / "App.tsx"
         if ui_file.exists():
             content = ui_file.read_text()
             self.log(f"📄 Current UI: {len(content)} chars")
@@ -317,7 +319,7 @@ export default function AuroraChatInterface() {
 """
 
         # Write Aurora's chat interface
-        chat_file = Path("/workspaces/Aurora-x/src/components/AuroraChatInterface.tsx")
+        chat_file = self.project_root / "src" / "components" / "AuroraChatInterface.tsx"
         chat_file.parent.mkdir(parents=True, exist_ok=True)
         chat_file.write_text(chat_interface)
 
@@ -384,7 +386,7 @@ async function processWithAuroraIntelligence(userMessage: string): Promise<strin
 """
 
         # Write backend endpoint
-        backend_file = Path("/workspaces/Aurora-x/server/aurora-chat.ts")
+        backend_file = self.project_root / "server" / "aurora-chat.ts"
         backend_file.parent.mkdir(parents=True, exist_ok=True)
         backend_file.write_text(backend_code)
 
@@ -395,7 +397,7 @@ async function processWithAuroraIntelligence(userMessage: string): Promise<strin
         """Integrate Aurora's chat into main App"""
         self.log("🔧 Integrating Aurora chat into main UI...")
 
-        app_file = Path("/workspaces/Aurora-x/src/App.tsx")
+        app_file = self.project_root / "src" / "App.tsx"
         if app_file.exists():
             content = app_file.read_text()
 

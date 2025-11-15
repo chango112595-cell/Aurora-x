@@ -20,6 +20,7 @@ Features:
 
 import asyncio
 import os
+import platform
 import socket
 import subprocess
 import sys
@@ -685,20 +686,26 @@ class LuminarNexusV2:
             print(f"   ⚠️ Memory optimization error: {e}")
 
     # ============================================================================
-    # SERVER MANAGEMENT - Full tmux-based service control
+    # SERVER MANAGEMENT - Cross-platform service control
     # ============================================================================
 
+    def is_windows(self) -> bool:
+        """Check if running on Windows"""
+        return platform.system() == "Windows"
+
     def check_tmux_installed(self) -> bool:
-        """Check if tmux is available"""
+        """Check if tmux is available (Linux/macOS only)"""
+        if self.is_windows():
+            return False  # Windows doesn't use tmux
         try:
             subprocess.run(["tmux", "-V"], capture_output=True, check=True, timeout=2)
             return True
         except:
-            print("⚠️ tmux not installed - required for service management")
+            print("⚠️ tmux not installed - required for service management on Linux/macOS")
             return False
 
     async def _start_service_internal(self, service_key: str) -> bool:
-        """Start a service in tmux session"""
+        """Start a service (cross-platform)"""
         if service_key not in self.servers:
             print(f"❌ Unknown service: {service_key}")
             return False
@@ -709,51 +716,118 @@ class LuminarNexusV2:
 
         print(f"🚀 Starting {server['name']}...")
 
-        if not self.check_tmux_installed():
-            return False
-
-        # Kill existing session if it exists
-        subprocess.run(["tmux", "kill-session", "-t", session], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-        # Create new tmux session and run command
-        result = subprocess.run(
-            ["tmux", "new-session", "-d", "-s", session, command], capture_output=True, text=True, timeout=5
-        )
-
-        if result.returncode == 0:
-            print(f"   ✅ Started in tmux session: {session}")
-            print(f"   🔌 Port: {server['port']}")
-
-            # Wait and check health
-            await asyncio.sleep(3)
-            if await self._check_service_health(service_key):
-                print("   ✅ Health check PASSED")
-                return True
-            else:
-                print("   ⚠️  Server started but health check pending...")
-                return True
+        if self.is_windows():
+            # Windows: Start process directly in background
+            try:
+                # Parse command for Windows
+                if command.startswith("cd "):
+                    # Extract directory and actual command
+                    parts = command.split(" && ", 1)
+                    cwd = parts[0].replace("cd ", "").strip()
+                    actual_cmd = parts[1] if len(parts) > 1 else "echo No command"
+                else:
+                    cwd = None
+                    actual_cmd = command
+                
+                # Start process in background
+                subprocess.Popen(
+                    actual_cmd,
+                    shell=True,
+                    cwd=cwd,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if self.is_windows() else 0
+                )
+                
+                print(f"   ✅ Started in background")
+                print(f"   🔌 Port: {server['port']}")
+                
+                # Wait and check health
+                await asyncio.sleep(3)
+                if await self._check_service_health(service_key):
+                    print("   ✅ Health check PASSED")
+                    return True
+                else:
+                    print("   ⚠️  Server started but health check pending...")
+                    return True
+            except Exception as e:
+                print(f"   ❌ Failed to start: {e}")
+                return False
         else:
-            print(f"   ❌ Failed to start: {result.stderr}")
-            return False
+            # Linux/macOS: Use tmux
+            if not self.check_tmux_installed():
+                return False
+
+            # Kill existing session if it exists
+            subprocess.run(["tmux", "kill-session", "-t", session], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            # Create new tmux session and run command
+            result = subprocess.run(
+                ["tmux", "new-session", "-d", "-s", session, command], capture_output=True, text=True, timeout=5
+            )
+
+            if result.returncode == 0:
+                print(f"   ✅ Started in tmux session: {session}")
+                print(f"   🔌 Port: {server['port']}")
+
+                # Wait and check health
+                await asyncio.sleep(3)
+                if await self._check_service_health(service_key):
+                    print("   ✅ Health check PASSED")
+                    return True
+                else:
+                    print("   ⚠️  Server started but health check pending...")
+                    return True
+            else:
+                print(f"   ❌ Failed to start: {result.stderr}")
+                return False
 
     async def _stop_service_internal(self, service_key: str) -> bool:
-        """Stop a service's tmux session"""
+        """Stop a service (cross-platform)"""
         if service_key not in self.servers:
             print(f"❌ Unknown service: {service_key}")
             return False
 
         server = self.servers[service_key]
         session = server["session"]
+        port = server["port"]
 
         print(f"🛑 Stopping {server['name']}...")
 
-        result = subprocess.run(["tmux", "kill-session", "-t", session], capture_output=True, text=True, timeout=2)
-
-        if result.returncode == 0:
-            print(f"   ✅ Stopped session: {session}")
-            return True
+        if self.is_windows():
+            # Windows: Find and kill process using the port
+            try:
+                for proc in psutil.process_iter(['pid', 'name', 'connections']):
+                    try:
+                        for conn in proc.connections():
+                            if conn.laddr.port == port:
+                                proc.kill()
+                                print(f"   ✅ Killed process on port {port}")
+                                return True
+                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                        pass
+                print(f"   ⚠️  No process found on port {port}")
+                return False
+            except Exception as e:
+                print(f"   ❌ Error stopping service: {e}")
+                return False
         else:
-            print(f"   ⚠️  Session may not exist: {session}")
+            # Linux/macOS: Kill tmux session
+            result = subprocess.run(["tmux", "kill-session", "-t", session], capture_output=True, text=True, timeout=2)
+
+            if result.returncode == 0:
+                print(f"   ✅ Stopped session: {session}")
+                return True
+            else:
+                print(f"   ⚠️  Session may not exist: {session}")
+                return False
+
+    def _is_port_in_use(self, port: int) -> bool:
+        """Check if a port is in use"""
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                return s.connect_ex(('localhost', port)) == 0
+        except:
             return False
 
     async def _check_service_health(self, service_key: str) -> bool:
@@ -832,9 +906,15 @@ class LuminarNexusV2:
         for server_key in self.servers.keys():
             server = self.servers[server_key]
 
-            # Check if tmux session exists
-            session_result = subprocess.run(["tmux", "has-session", "-t", server["session"]], capture_output=True)
-            session_exists = session_result.returncode == 0
+            # Check if service process exists (cross-platform)
+            session_exists = False
+            if not self.is_windows():
+                # Linux/macOS: Check tmux session
+                session_result = subprocess.run(["tmux", "has-session", "-t", server["session"]], capture_output=True)
+                session_exists = session_result.returncode == 0
+            else:
+                # Windows: Check if port is in use (indicates service running)
+                session_exists = self._is_port_in_use(server['port'])
 
             # Check health
             health_ok = loop.run_until_complete(self._check_service_health(server_key))
@@ -845,7 +925,8 @@ class LuminarNexusV2:
             print(f"{icon} {server['name']}")
             print(f"   Status: {status}")
             print(f"   Port: {server['port']}")
-            print(f"   Session: {server['session']}")
+            if not self.is_windows():
+                print(f"   Session: {server['session']}")
             print(f"   Health: {'✅ OK' if health_ok else '❌ Not responding'}")
             print()
 
