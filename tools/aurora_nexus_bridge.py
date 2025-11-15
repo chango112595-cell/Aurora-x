@@ -62,7 +62,7 @@ def route_to_enhanced_aurora_core(message: str, session_id: str = "default") -> 
             try:
                 # Use Aurora's advanced processing with context awareness
                 response = loop.run_until_complete(aurora.process_conversation(message, session_id))
-                
+
                 # Return Aurora's response directly without wrapping
                 if response and len(response.strip()) > 0:
                     return response

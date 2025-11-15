@@ -453,7 +453,7 @@ class AuroraCoreIntelligence:
 
     def _respond_about_self(self, message: str, context: dict) -> str:
         """Aurora describing herself - conversational and natural"""
-        
+
         return f"""I'm Aurora - I'm a bit different from typical AI assistants. I can actually execute code, modify files, and manage systems autonomously. 
 
 I know 55+ programming languages (everything from vintage COBOL to modern Rust), and I can run code to verify it works before suggesting it to you.
@@ -513,8 +513,8 @@ Just describe what you want to see improved, and I'll implement it autonomously!
             return self._aurora_architectural_analysis(message, context)
 
         # Natural technical response
-        tech_context = ', '.join(entities) if entities else 'your request'
-        
+        tech_context = ", ".join(entities) if entities else "your request"
+
         return f"""Looking at {tech_context} - I can help with that.
 
 I can write code, test it, and run it to make sure it works. I know {', '.join(entities[:3]) if entities else 'most languages'} and can work across the full stack.
@@ -614,7 +614,7 @@ Healing/Defense Connection routing        Core processing      Natural responses
 
         # Technical discussions - get straight to the point
         elif any(tech in msg_lower for tech in ["code", "programming", "develop", "build", "create", "fix", "debug"]):
-            return f"I can help with that. What specifically are you trying to do? I can write code, test it, and even run it to make sure it works."
+            return "I can help with that. What specifically are you trying to do? I can write code, test it, and even run it to make sure it works."
 
         # Show interest but keep it conversational
         elif "?" in message:
