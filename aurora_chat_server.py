@@ -48,13 +48,13 @@ def chat_endpoint():
         data = request.get_json()
         message = data.get("message", "")
         session_id = data.get("session_id", "default")
-        reset_session = data.get("reset_session", False)
+        should_reset = data.get("reset_session", False)
 
         if not message:
             return jsonify({"error": "No message provided"}), 400
 
         # Reset session context if requested or if it's a greeting to interface
-        if reset_session or (
+        if should_reset or (
             session_id == "cosmic-nexus-ui" and any(greeting in message.lower() for greeting in ["hello", "hi", "hey"])
         ):
             if session_id in aurora.conversation_contexts:

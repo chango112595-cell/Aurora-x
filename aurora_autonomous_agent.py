@@ -37,7 +37,7 @@ class AuroraAutonomousAgent:
         """Log Aurora's actions"""
         entry = {"timestamp": datetime.now().isoformat(), "agent": "Aurora", "message": message}
 
-        with open(self.log_file, "a") as f:
+        with open(self.log_file, "a", encoding="utf-8") as f:
             f.write(json.dumps(entry) + "\n")
 
         print(f"[Aurora] {message}")
@@ -54,7 +54,7 @@ class AuroraAutonomousAgent:
         issues = []
 
         for server, port in servers.items():
-            result = subprocess.run(f"lsof -i :{port} -t", shell=True, capture_output=True, text=True)
+            result = subprocess.run(f"lsof -i :{port} -t", shell=True, capture_output=True, text=True, check=False)
 
             if result.returncode == 0:
                 self.log(f"✅ {server} running on port {port}")
