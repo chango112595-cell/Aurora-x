@@ -4,10 +4,9 @@ Aurora Auto-Fix: Organize Everything Properly
 Automatically fixes all identified organization issues
 """
 
-import os
 import shutil
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 
 class AuroraAutoOrganizer:
@@ -56,27 +55,27 @@ class AuroraAutoOrganizer:
         files_to_fix = {
             "aurora_foundational_genius.py": (
                 "#!/usr/bin/env python3\n",
-                "#!/usr/bin/env python3\n# Aurora core foundations should be imported from aurora_core.py\n# This file contains extended skill definitions for Tier 29-31\n"
+                "#!/usr/bin/env python3\n# Aurora core foundations should be imported from aurora_core.py\n# This file contains extended skill definitions for Tier 29-31\n",
             ),
             "aurora_grandmaster_skills_registry.py": (
                 "#!/usr/bin/env python3\n",
-                "#!/usr/bin/env python3\n# Skills registry - references Tier definitions from aurora_core.py\n"
+                "#!/usr/bin/env python3\n# Skills registry - references Tier definitions from aurora_core.py\n",
             ),
             "aurora_intelligence_manager.py": (
                 "#!/usr/bin/env python3\n",
-                "#!/usr/bin/env python3\n# Note: Core tier definitions are in aurora_core.py\n# This manager coordinates Aurora's intelligence systems\n"
+                "#!/usr/bin/env python3\n# Note: Core tier definitions are in aurora_core.py\n# This manager coordinates Aurora's intelligence systems\n",
             ),
         }
 
         for file_name, (old_header, new_header) in files_to_fix.items():
             file_path = self.root / file_name
             if file_path.exists():
-                content = file_path.read_text(encoding='utf-8')
+                content = file_path.read_text(encoding="utf-8")
 
                 # Add note about aurora_core if not already present
                 if "aurora_core" not in content and old_header in content:
                     new_content = content.replace(old_header, new_header, 1)
-                    file_path.write_text(new_content, encoding='utf-8')
+                    file_path.write_text(new_content, encoding="utf-8")
                     print(f"   ✅ Added aurora_core reference to: {file_name}")
                     self.actions_taken.append(f"Updated {file_name} header")
                 else:
@@ -88,15 +87,15 @@ class AuroraAutoOrganizer:
 
         verify_file = self.root / "aurora_comprehensive_verification.py"
         if verify_file.exists():
-            content = verify_file.read_text(encoding='utf-8')
+            content = verify_file.read_text(encoding="utf-8")
 
             # Fix luminar_nexus_v2.py location check
             if '"luminar_nexus_v2.py": "Service orchestration"' in content:
                 new_content = content.replace(
                     'services = {\n            "luminar_nexus_v2.py": "Service orchestration",',
-                    'services = {\n            "tools/luminar_nexus_v2.py": "Service orchestration",\n            "luminar_nexus.py": "Legacy service orchestration",'
+                    'services = {\n            "tools/luminar_nexus_v2.py": "Service orchestration",\n            "luminar_nexus.py": "Legacy service orchestration",',
                 )
-                verify_file.write_text(new_content, encoding='utf-8')
+                verify_file.write_text(new_content, encoding="utf-8")
                 print("   ✅ Updated verification script to check correct paths")
                 self.actions_taken.append("Updated verification script")
 
@@ -149,7 +148,7 @@ class AuroraAutoOrganizer:
         for action in self.actions_taken:
             summary += f"- ✅ {action}\n"
 
-        summary += f"""
+        summary += """
 ---
 
 ## 📊 Final Verification
@@ -214,16 +213,16 @@ Aurora-x/
 """
 
         summary_file = self.root / "AURORA_ORGANIZATION_COMPLETE.md"
-        summary_file.write_text(summary, encoding='utf-8')
+        summary_file.write_text(summary, encoding="utf-8")
         print(f"   ✅ Summary saved to: {summary_file}")
 
         return summary_file
 
     def organize_everything(self):
         """Run all organization tasks"""
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("🚀 AURORA AUTO-ORGANIZATION SYSTEM")
-        print("="*80)
+        print("=" * 80)
 
         self.create_archive_directory()
         self.archive_legacy_files()
@@ -231,15 +230,15 @@ Aurora-x/
         self.update_verification_script()
         summary_file = self.create_organization_summary()
 
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("✅ ORGANIZATION COMPLETE")
-        print("="*80)
+        print("=" * 80)
         print(f"\n📊 Actions taken: {len(self.actions_taken)}")
         print(f"📄 Summary: {summary_file}")
         print("\n🎉 Everything is now where it belongs!")
         print("\n💡 Run verification to confirm:")
         print("   python aurora_comprehensive_verification.py")
-        print("="*80 + "\n")
+        print("=" * 80 + "\n")
 
 
 if __name__ == "__main__":

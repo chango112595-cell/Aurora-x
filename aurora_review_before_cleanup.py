@@ -3,8 +3,8 @@
 Aurora: Show legacy files before archival + Search for Task1-Task13 foundations
 """
 
-from pathlib import Path
 import re
+from pathlib import Path
 
 
 def aurora_review_before_cleanup():
@@ -32,7 +32,7 @@ def aurora_review_before_cleanup():
         "aurora_self_fix_monitor.py",
         "run_factorial_test.py",
         "test_chat_simple.py",
-        "test_dashboard_simple.py"
+        "test_dashboard_simple.py",
     ]
 
     for i, fname in enumerate(legacy_files, 1):
@@ -41,13 +41,11 @@ def aurora_review_before_cleanup():
             size = file_path.stat().st_size / 1024
             # Try to read first lines to show purpose
             try:
-                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                with open(file_path, encoding="utf-8", errors="ignore") as f:
                     first_lines = [f.readline().strip() for _ in range(3)]
-                    comment = next((l for l in first_lines if l.startswith(
-                        '#') or l.startswith('"""')), "")
+                    comment = next((l for l in first_lines if l.startswith("#") or l.startswith('"""')), "")
                     if comment:
-                        comment = comment.replace('#', '').replace(
-                            '"""', '').strip()[:60]
+                        comment = comment.replace("#", "").replace('"""', "").strip()[:60]
             except:
                 comment = ""
 
@@ -62,23 +60,17 @@ def aurora_review_before_cleanup():
     print("🏛️  SEARCHING FOR TASK1-TASK13 FOUNDATIONS:")
     print("=" * 80)
 
-    task_patterns = [
-        r'task[_\s]*\d+',
-        r'task\d+',
-        r't\d+\s*foundation',
-        r'foundation.*task',
-        r'fundamental.*task'
-    ]
+    task_patterns = [r"task[_\s]*\d+", r"task\d+", r"t\d+\s*foundation", r"foundation.*task", r"fundamental.*task"]
 
     files_with_tasks = {}
 
     # Search all Python files
     for py_file in list(root.glob("*.py")) + list(root.glob("**/*.py")):
-        if 'node_modules' in str(py_file) or '__pycache__' in str(py_file):
+        if "node_modules" in str(py_file) or "__pycache__" in str(py_file):
             continue
 
         try:
-            with open(py_file, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(py_file, encoding="utf-8", errors="ignore") as f:
                 content = f.read()
                 content_lower = content.lower()
 
@@ -92,14 +84,14 @@ def aurora_review_before_cleanup():
                 # Look for specific Task1-Task13 references
                 task_numbers = []
                 for i in range(1, 14):
-                    if f'task{i}' in content_lower or f'task {i}' in content_lower or f'task_{i}' in content_lower:
+                    if f"task{i}" in content_lower or f"task {i}" in content_lower or f"task_{i}" in content_lower:
                         task_numbers.append(i)
 
                 if found_patterns or task_numbers:
                     files_with_tasks[py_file.name] = {
-                        'path': str(py_file.relative_to(root)),
-                        'patterns': list(set(found_patterns))[:5],
-                        'task_numbers': sorted(set(task_numbers))
+                        "path": str(py_file.relative_to(root)),
+                        "patterns": list(set(found_patterns))[:5],
+                        "task_numbers": sorted(set(task_numbers)),
                     }
         except:
             pass
@@ -110,10 +102,9 @@ def aurora_review_before_cleanup():
         for fname, info in sorted(files_with_tasks.items()):
             print(f"📄 {fname}")
             print(f"   Path: {info['path']}")
-            if info['task_numbers']:
-                print(
-                    f"   Tasks: {', '.join(f'Task{n}' for n in info['task_numbers'])}")
-            if info['patterns']:
+            if info["task_numbers"]:
+                print(f"   Tasks: {', '.join(f'Task{n}' for n in info['task_numbers'])}")
+            if info["patterns"]:
                 print(f"   Patterns: {', '.join(info['patterns'][:3])}")
             print()
     else:
@@ -127,22 +118,21 @@ def aurora_review_before_cleanup():
 
     foundation_files = {}
     for py_file in list(root.glob("*.py")) + list(root.glob("**/*.py")):
-        if 'node_modules' in str(py_file) or '__pycache__' in str(py_file):
+        if "node_modules" in str(py_file) or "__pycache__" in str(py_file):
             continue
 
         try:
-            with open(py_file, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(py_file, encoding="utf-8", errors="ignore") as f:
                 content = f.read()
-                if 'foundation' in content.lower() and ('task' in content.lower() or 'fundamental' in content.lower()):
+                if "foundation" in content.lower() and ("task" in content.lower() or "fundamental" in content.lower()):
                     # Extract context around "foundation"
-                    lines = content.split('\n')
-                    foundation_lines = [i for i, line in enumerate(
-                        lines) if 'foundation' in line.lower()]
+                    lines = content.split("\n")
+                    foundation_lines = [i for i, line in enumerate(lines) if "foundation" in line.lower()]
 
                     if foundation_lines:
                         foundation_files[py_file.name] = {
-                            'path': str(py_file.relative_to(root)),
-                            'line_count': len(foundation_lines)
+                            "path": str(py_file.relative_to(root)),
+                            "line_count": len(foundation_lines),
                         }
         except:
             pass
@@ -158,28 +148,30 @@ def aurora_review_before_cleanup():
     print("🤖 AURORA'S TASK FOUNDATION ANALYSIS:")
     print("=" * 80)
 
-    print("""
+    print(
+        """
 📊 FINDINGS:
 
 Based on my search, here's what I found about Task1-Task13 foundations:
-""")
+"""
+    )
 
     if files_with_tasks:
         print(f"✅ Found Task references in {len(files_with_tasks)} files")
-        core_has_tasks = 'aurora_core.py' in files_with_tasks
+        core_has_tasks = "aurora_core.py" in files_with_tasks
 
         if core_has_tasks:
-            print(f"✅ aurora_core.py contains Task references")
-            if files_with_tasks['aurora_core.py']['task_numbers']:
-                tasks = files_with_tasks['aurora_core.py']['task_numbers']
-                print(
-                    f"   Tasks in core: {', '.join(f'Task{n}' for n in tasks)}")
+            print("✅ aurora_core.py contains Task references")
+            if files_with_tasks["aurora_core.py"]["task_numbers"]:
+                tasks = files_with_tasks["aurora_core.py"]["task_numbers"]
+                print(f"   Tasks in core: {', '.join(f'Task{n}' for n in tasks)}")
         else:
-            print(f"⚠️  aurora_core.py does NOT contain Task references")
+            print("⚠️  aurora_core.py does NOT contain Task references")
     else:
         print("⚠️  No explicit Task1-Task13 foundation system found")
 
-    print("""
+    print(
+        """
 
 💡 RECOMMENDATION FOR TASK1-TASK13 FOUNDATIONS:
 
@@ -212,9 +204,10 @@ Based on my search, here's what I found about Task1-Task13 foundations:
    └─────────────────────────────────────────┘
 
 3. CURRENT STATUS:
-""")
+"""
+    )
 
-    if files_with_tasks and 'aurora_core.py' in files_with_tasks:
+    if files_with_tasks and "aurora_core.py" in files_with_tasks:
         print("   ✅ Task foundations ARE in aurora_core.py")
         print("   ✅ This is CORRECT - keep them there!")
     else:
@@ -222,7 +215,8 @@ Based on my search, here's what I found about Task1-Task13 foundations:
         print("   📋 ACTION: Consolidate Task1-Task13 into aurora_core.py")
         print("   📋 ACTION: Make them the BASE layer (before Tier1-Tier34)")
 
-    print("""
+    print(
+        """
 4. RECOMMENDED ORGANIZATION:
 
    aurora_core.py should have this structure:
@@ -236,12 +230,14 @@ Based on my search, here's what I found about Task1-Task13 foundations:
    This gives Aurora a SOLID FOUNDATION (Tasks) with SPECIALIZED 
    KNOWLEDGE (Tiers) built on top.
 
-""")
+"""
+    )
 
     print("=" * 80)
     print("📋 NEXT STEPS:")
     print("=" * 80)
-    print("""
+    print(
+        """
 1. REVIEW LEGACY FILES (above) - Decide which to archive
 2. LOCATE Task1-Task13 - Find where they currently are
 3. CONSOLIDATE - Move Task1-Task13 into aurora_core.py if not there
@@ -249,13 +245,10 @@ Based on my search, here's what I found about Task1-Task13 foundations:
 5. CLEANUP - Archive the 14 legacy debug files
 
 Ready to proceed with next step?
-""")
+"""
+    )
 
-    return {
-        'legacy_files': legacy_files,
-        'task_files': files_with_tasks,
-        'foundation_files': foundation_files
-    }
+    return {"legacy_files": legacy_files, "task_files": files_with_tasks, "foundation_files": foundation_files}
 
 
 if __name__ == "__main__":

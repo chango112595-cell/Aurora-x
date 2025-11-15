@@ -4,10 +4,9 @@ Aurora Autonomous System Organization
 Aurora will analyze and reorganize the entire system autonomously
 """
 
-from pathlib import Path
-import shutil
 import json
 from datetime import datetime
+from pathlib import Path
 
 
 def aurora_organize_system():
@@ -22,12 +21,7 @@ def aurora_organize_system():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # Create organization structure
-    organization = {
-        "moved": [],
-        "archived": [],
-        "kept": [],
-        "errors": []
-    }
+    organization = {"moved": [], "archived": [], "kept": [], "errors": []}
 
     # 1. CREATE PROPER DIRECTORY STRUCTURE
     print("\n📁 PHASE 1: Creating proper directory structure...")
@@ -35,7 +29,7 @@ def aurora_organize_system():
     directories = {
         "archive": root / "archive" / timestamp,
         "legacy": root / "archive" / "legacy",
-        "tests": root / "tests" / "archive"
+        "tests": root / "tests" / "archive",
     }
 
     for name, path in directories.items():
@@ -46,12 +40,12 @@ def aurora_organize_system():
     print("\n✅ PHASE 2: Core systems to keep in root...")
 
     core_systems = [
-        "aurora_core.py",                    # Main intelligence engine - ALL TIERS HERE
-        "aurora_chat_server.py",             # Chat API endpoint
-        "aurora_autonomous_agent.py",        # Autonomous operations
-        "aurora_intelligence_manager.py",    # Intelligence coordination
-        "x-start",                           # Service startup
-        "x-stop",                            # Service shutdown
+        "aurora_core.py",  # Main intelligence engine - ALL TIERS HERE
+        "aurora_chat_server.py",  # Chat API endpoint
+        "aurora_autonomous_agent.py",  # Autonomous operations
+        "aurora_intelligence_manager.py",  # Intelligence coordination
+        "x-start",  # Service startup
+        "x-stop",  # Service shutdown
     ]
 
     for core in core_systems:
@@ -79,8 +73,7 @@ def aurora_organize_system():
 
     # Remove duplicates and filter
     files_to_archive = list(set(files_to_archive))
-    files_to_archive = [
-        f for f in files_to_archive if f.is_file() and f.name not in core_systems]
+    files_to_archive = [f for f in files_to_archive if f.is_file() and f.name not in core_systems]
 
     for file in sorted(files_to_archive):
         try:
@@ -96,7 +89,7 @@ def aurora_organize_system():
 
     core_file = root / "aurora_core.py"
     if core_file.exists():
-        with open(core_file, 'r', encoding='utf-8') as f:
+        with open(core_file, encoding="utf-8") as f:
             content = f.read()
 
         # Check for all tiers
@@ -108,7 +101,7 @@ def aurora_organize_system():
         print(f"  ✓ Found {len(found_tiers)}/34 tiers in aurora_core.py")
 
         if len(found_tiers) == 34:
-            print(f"  ✅ ALL TIERS (T1-T34) are in aurora_core.py")
+            print("  ✅ ALL TIERS (T1-T34) are in aurora_core.py")
         else:
             missing = set(range(1, 35)) - set(found_tiers)
             print(f"  ⚠️  Missing tiers: {sorted(missing)}")
@@ -122,22 +115,21 @@ def aurora_organize_system():
             continue
 
         try:
-            with open(py_file, 'r', encoding='utf-8') as f:
+            with open(py_file, encoding="utf-8") as f:
                 content = f.read()
 
             # Check for tier definitions (not just usage)
-            if 'def _get_tier' in content or 'tier_' in content and '=' in content:
+            if "def _get_tier" in content or "tier_" in content and "=" in content:
                 tier_files[py_file.name] = True
         except:
             pass
 
     if tier_files:
-        print(
-            f"  ⚠️  Found tier definitions in {len(tier_files)} other files:")
+        print(f"  ⚠️  Found tier definitions in {len(tier_files)} other files:")
         for fname in sorted(tier_files.keys())[:10]:
             print(f"    • {fname}")
     else:
-        print(f"  ✅ No scattered tier definitions found")
+        print("  ✅ No scattered tier definitions found")
 
     # 6. TOOLS DIRECTORY CHECK
     print("\n🛠️  PHASE 6: Tools directory organization...")
@@ -148,8 +140,7 @@ def aurora_organize_system():
         print(f"  ✓ Tools directory has {len(tool_files)} files")
 
         # Check for duplicates of core functionality
-        core_names = ['aurora_core.py',
-                      'luminar_nexus.py', 'luminar_nexus_v2.py']
+        core_names = ["aurora_core.py", "luminar_nexus.py", "luminar_nexus_v2.py"]
         for cn in core_names:
             if (tools_dir / cn).exists():
                 print(f"    ✓ {cn} is in tools/")
@@ -162,15 +153,15 @@ def aurora_organize_system():
         "analysis": {
             "core_systems_kept": len(organization["kept"]),
             "files_to_archive": len(organization["archived"]),
-            "errors": len(organization["errors"])
+            "errors": len(organization["errors"]),
         },
         "kept": organization["kept"],
         "to_archive": organization["archived"],
-        "errors": organization["errors"]
+        "errors": organization["errors"],
     }
 
     report_file = root / "AURORA_ORGANIZATION_REPORT.json"
-    with open(report_file, 'w', encoding='utf-8') as f:
+    with open(report_file, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
 
     print(f"  ✓ Report saved: {report_file.name}")
@@ -180,7 +171,8 @@ def aurora_organize_system():
     print("🤖 AURORA'S ORGANIZATION SUMMARY:")
     print("=" * 80)
 
-    print(f"""
+    print(
+        f"""
 ✅ CURRENT STATE ANALYSIS:
 
 1. CORE INTELLIGENCE:
@@ -234,7 +226,8 @@ Your architecture is ALREADY WELL-ORGANIZED! The main tasks:
 3. Everything else is in the right place!
 
 T1-T34 ARE in aurora_core.py where they belong! ✅
-""")
+"""
+    )
 
     print("=" * 80)
     print("🎯 Ready to execute archival? (Manual confirmation required)")

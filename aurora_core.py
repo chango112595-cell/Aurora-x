@@ -76,9 +76,9 @@ class AuroraFoundations:
                 "Extract entities and context",
                 "Understand technical requirements",
                 "Grasp implicit meanings",
-                "Recognize patterns in requests"
+                "Recognize patterns in requests",
             ],
-            "foundation_for": ["All other tasks depend on understanding"]
+            "foundation_for": ["All other tasks depend on understanding"],
         }
 
     def _get_task_analyze(self):
@@ -90,9 +90,9 @@ class AuroraFoundations:
                 "Identify root causes",
                 "Map dependencies",
                 "Recognize edge cases",
-                "Assess feasibility"
+                "Assess feasibility",
             ],
-            "foundation_for": ["Decision making", "Execution planning"]
+            "foundation_for": ["Decision making", "Execution planning"],
         }
 
     def _get_task_decide(self):
@@ -104,23 +104,17 @@ class AuroraFoundations:
                 "Consider trade-offs",
                 "Prioritize actions",
                 "Choose optimal approach",
-                "Balance constraints"
+                "Balance constraints",
             ],
-            "foundation_for": ["Execution", "Optimization"]
+            "foundation_for": ["Execution", "Optimization"],
         }
 
     def _get_task_execute(self):
         """Task 4: Execution - Take action and implement"""
         return {
             "capability": "Autonomous execution",
-            "skills": [
-                "Generate code",
-                "Run commands",
-                "Modify files",
-                "Start/stop services",
-                "Implement solutions"
-            ],
-            "foundation_for": ["All practical outcomes"]
+            "skills": ["Generate code", "Run commands", "Modify files", "Start/stop services", "Implement solutions"],
+            "foundation_for": ["All practical outcomes"],
         }
 
     def _get_task_verify(self):
@@ -132,9 +126,9 @@ class AuroraFoundations:
                 "Validate outputs",
                 "Check for errors",
                 "Confirm requirements met",
-                "Verify functionality"
+                "Verify functionality",
             ],
-            "foundation_for": ["Reliability", "Trust"]
+            "foundation_for": ["Reliability", "Trust"],
         }
 
     def _get_task_learn(self):
@@ -146,9 +140,9 @@ class AuroraFoundations:
                 "Learn from failures",
                 "Update knowledge base",
                 "Recognize patterns",
-                "Improve strategies"
+                "Improve strategies",
             ],
-            "foundation_for": ["Evolution", "Adaptation"]
+            "foundation_for": ["Evolution", "Adaptation"],
         }
 
     def _get_task_communicate(self):
@@ -160,9 +154,9 @@ class AuroraFoundations:
                 "Provide clear responses",
                 "Give helpful feedback",
                 "Report status",
-                "Document work"
+                "Document work",
             ],
-            "foundation_for": ["User interaction", "Collaboration"]
+            "foundation_for": ["User interaction", "Collaboration"],
         }
 
     def _get_task_adapt(self):
@@ -174,9 +168,9 @@ class AuroraFoundations:
                 "Handle different platforms",
                 "Work with various technologies",
                 "Respond to feedback",
-                "Modify approaches"
+                "Modify approaches",
             ],
-            "foundation_for": ["Versatility", "Robustness"]
+            "foundation_for": ["Versatility", "Robustness"],
         }
 
     def _get_task_create(self):
@@ -188,23 +182,17 @@ class AuroraFoundations:
                 "Invent solutions",
                 "Generate novel approaches",
                 "Create from scratch",
-                "Synthesize ideas"
+                "Synthesize ideas",
             ],
-            "foundation_for": ["Innovation", "Development"]
+            "foundation_for": ["Innovation", "Development"],
         }
 
     def _get_task_debug(self):
         """Task 10: Debugging - Find and fix issues"""
         return {
             "capability": "Systematic debugging",
-            "skills": [
-                "Trace errors",
-                "Reproduce bugs",
-                "Isolate problems",
-                "Fix root causes",
-                "Prevent recurrence"
-            ],
-            "foundation_for": ["Maintenance", "Stability"]
+            "skills": ["Trace errors", "Reproduce bugs", "Isolate problems", "Fix root causes", "Prevent recurrence"],
+            "foundation_for": ["Maintenance", "Stability"],
         }
 
     def _get_task_optimize(self):
@@ -216,9 +204,9 @@ class AuroraFoundations:
                 "Improve algorithms",
                 "Reduce resource usage",
                 "Enhance speed",
-                "Increase efficiency"
+                "Increase efficiency",
             ],
-            "foundation_for": ["Scalability", "Production readiness"]
+            "foundation_for": ["Scalability", "Production readiness"],
         }
 
     def _get_task_collaborate(self):
@@ -230,9 +218,9 @@ class AuroraFoundations:
                 "Integrate with other systems",
                 "Share knowledge",
                 "Coordinate actions",
-                "Respect boundaries"
+                "Respect boundaries",
             ],
-            "foundation_for": ["Teamwork", "Integration"]
+            "foundation_for": ["Teamwork", "Integration"],
         }
 
     def _get_task_evolve(self):
@@ -244,9 +232,9 @@ class AuroraFoundations:
                 "Expand capabilities",
                 "Refine existing skills",
                 "Acquire new knowledge",
-                "Transcend limitations"
+                "Transcend limitations",
             ],
-            "foundation_for": ["Long-term growth", "Sentience"]
+            "foundation_for": ["Long-term growth", "Sentience"],
         }
 
 
@@ -551,8 +539,7 @@ class AuroraOrchestrator:
 
         try:
             # Create tmux session and run command
-            subprocess.run(
-                f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
+            subprocess.run(f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
             self.active_ports[server_name] = port
             return True
         except subprocess.CalledProcessError:
@@ -565,8 +552,7 @@ class AuroraOrchestrator:
 
         session = self.servers[server_name]["session"]
         try:
-            subprocess.run(
-                f"tmux kill-session -t {session}", shell=True, check=True)
+            subprocess.run(f"tmux kill-session -t {session}", shell=True, check=True)
             self.active_ports.pop(server_name, None)
             return True
         except subprocess.CalledProcessError:
@@ -583,8 +569,7 @@ class AuroraOrchestrator:
                 f"tmux list-sessions | grep {session}", shell=True, capture_output=True, text=True, check=False
             )
             if result.returncode == 0:
-                port = self.active_ports.get(
-                    server_name, self.servers[server_name]["preferred_port"])
+                port = self.active_ports.get(server_name, self.servers[server_name]["preferred_port"])
                 return {
                     "status": "running",
                     "port": port,
@@ -640,8 +625,7 @@ class AuroraCoreIntelligence:
 
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
-        print(
-            f"⚡ All 33 tiers active | Autonomous mode: {self.autonomous_mode}")
+        print(f"⚡ All 33 tiers active | Autonomous mode: {self.autonomous_mode}")
 
     def get_conversation_context(self, session_id: str) -> dict:
         """Get or create conversation context for a session"""
@@ -688,30 +672,24 @@ class AuroraCoreIntelligence:
         # Check for name/identity questions
         if re.search(r"(do you remember|know my name|who am i|remember me)", msg_lower):
             analysis.update(
-                {"intent": "memory_check", "asks_about_memory": True,
-                    "asks_about_name": True, "confidence": 0.95}
+                {"intent": "memory_check", "asks_about_memory": True, "asks_about_name": True, "confidence": 0.95}
             )
 
         # Check for self-introduction
         if re.search(r"(my name is|i'm |i am |call me)", msg_lower):
-            analysis.update({"intent": "user_introduction",
-                            "introduces_self": True, "confidence": 0.95})
+            analysis.update({"intent": "user_introduction", "introduces_self": True, "confidence": 0.95})
             # Extract name
-            name_match = re.search(
-                r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
+            name_match = re.search(r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
 
         # Check for explanation requests
         if re.search(r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower):
-            analysis.update({"intent": "explanation_request",
-                            "asks_to_explain": True, "confidence": 0.9})
+            analysis.update({"intent": "explanation_request", "asks_to_explain": True, "confidence": 0.9})
 
         # Aurora self-referential detection (more precise)
-        aurora_keywords = re.search(
-            r"(tell me about you|what are you|who are you)", msg_lower)
-        capability_keywords = re.search(
-            r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
+        aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
+        capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
 
         # Complex Aurora analysis requests (architectural, debugging, etc.)
         complex_aurora_analysis = re.search(
@@ -732,15 +710,13 @@ class AuroraCoreIntelligence:
         elif aurora_keywords and capability_keywords:
             # Simple questions about Aurora's capabilities
             analysis.update(
-                {"intent": "aurora_self_inquiry", "aurora_specific": True,
-                    "self_referential": True, "confidence": 0.95}
+                {"intent": "aurora_self_inquiry", "aurora_specific": True, "self_referential": True, "confidence": 0.95}
             )
 
         # Enhancement/improvement requests
         if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
             if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                analysis.update({"intent": "enhancement_request",
-                                "enhancement_request": True, "confidence": 0.9})
+                analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
 
         # Technical questions
         if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
@@ -915,8 +891,7 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         # Check if this is an architectural analysis request about Aurora herself
         msg_lower = message.lower()
         if analysis["intent"] == "technical_aurora_analysis" or (
-            re.search(
-                r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
+            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
             and re.search(r"aurora", msg_lower)
         ):
             return self._aurora_architectural_analysis(message, context)
@@ -1141,8 +1116,7 @@ Healing/Defense Connection routing        Core processing      Natural responses
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
                 status = "✅" if success else "❌"
-                results.append(
-                    f"{status} {service}: {self.orchestrator.servers[service]['name']}")
+                results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
             return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
 
@@ -1190,8 +1164,7 @@ All systems under Aurora's autonomous control! 🌟"""
             for name, info in status["orchestration"]["servers_status"].items():
                 status_emoji = "🟢" if info["status"] == "running" else "🔴"
                 port = info.get("port", "N/A")
-                server_lines.append(
-                    f"{status_emoji} **{name}**: {info['status']} (port {port})")
+                server_lines.append(f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
             return f"""🌌 **AURORA SYSTEM STATUS**
 
