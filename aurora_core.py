@@ -217,36 +217,45 @@ class AuroraOrchestrator:
     Moved from Luminar Nexus - Aurora now directly controls her ecosystem.
     """
 
-    def __init__(self, project_root: str = "/workspaces/Aurora-x"):
-        self.project_root = Path(project_root)
+    def __init__(self, project_root: str = None):
+        import platform
+        # Use actual project root or detect it
+        if project_root is None:
+            self.project_root = Path(__file__).parent
+        else:
+            self.project_root = Path(project_root)
+        
+        # Detect correct Python command for platform
+        python_cmd = "python" if platform.system() == "Windows" else "python3"
+        
         self.servers = {
             "bridge": {
                 "name": "Aurora Bridge Service",
-                "command": "cd /workspaces/Aurora-x && python3 -m aurora_x.bridge.service",
+                "command": f"cd {self.project_root} && {python_cmd} -m aurora_x.bridge.service",
                 "preferred_port": 5001,
                 "session": "aurora-bridge",
             },
             "backend": {
                 "name": "Aurora Backend API",
-                "command": "cd /workspaces/Aurora-x && NODE_ENV=development npx tsx server/index.ts",
+                "command": f"cd {self.project_root} && {'set NODE_ENV=development &&' if platform.system() == 'Windows' else 'NODE_ENV=development'} npx tsx server/index.ts",
                 "preferred_port": 5000,
                 "session": "aurora-backend",
             },
             "vite": {
                 "name": "Aurora Frontend",
-                "command": "cd /workspaces/Aurora-x && npx vite --host 0.0.0.0 --port {port}",
+                "command": f"cd {self.project_root} && npx vite --host 0.0.0.0 --port {{port}}",
                 "preferred_port": 5173,
                 "session": "aurora-vite",
             },
             "self_learn": {
                 "name": "Aurora Self-Learning",
-                "command": "cd /workspaces/Aurora-x && python3 -c 'from tools.luminar_nexus import run_self_learning_server; run_self_learning_server({port})'",
+                "command": f"cd {self.project_root} && {python_cmd} -c 'from tools.luminar_nexus import run_self_learning_server; run_self_learning_server({{port}})'",
                 "preferred_port": 5002,
                 "session": "aurora-self-learn",
             },
             "chat": {
                 "name": "Aurora Chat Server",
-                "command": "cd /workspaces/Aurora-x && python3 aurora_chat_server.py {port}",
+                "command": f"cd {self.project_root} && {python_cmd} aurora_chat_server.py {{port}}",
                 "preferred_port": 5003,
                 "session": "aurora-chat",
             },
@@ -322,15 +331,20 @@ class AuroraCoreIntelligence:
     and now also orchestrates the entire system.
     """
 
-    def __init__(self, project_root: str = "/workspaces/Aurora-x"):
-        self.project_root = Path(project_root)
+    def __init__(self, project_root: str = None):
+        # Use actual project root or detect it
+        if project_root is None:
+            self.project_root = Path(__file__).parent
+        else:
+            self.project_root = Path(project_root)
+        
         self.knowledge_tiers = AuroraKnowledgeTiers()
         self.conversation_contexts: dict[str, dict] = {}
         self.learning_memory: dict[str, Any] = {}
         self.autonomous_mode = True
 
         # Aurora's orchestration capabilities
-        self.orchestrator = AuroraOrchestrator(project_root)
+        self.orchestrator = AuroraOrchestrator(str(self.project_root))
 
         # Initialize Aurora's self-awareness
         self.self_knowledge = {
@@ -789,7 +803,7 @@ What would you like me to do? 🌌"""
 # ============================================================================
 
 
-def create_aurora_core(project_root: str = "/workspaces/Aurora-x") -> AuroraCoreIntelligence:
+def create_aurora_core(project_root: str = None) -> AuroraCoreIntelligence:
     """Create and initialize Aurora's core intelligence system"""
     return AuroraCoreIntelligence(project_root)
 

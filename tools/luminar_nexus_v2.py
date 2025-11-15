@@ -425,32 +425,35 @@ class LuminarNexusV2:
         # Get the current working directory
         cwd = os.getcwd()
 
-        # Server configurations (tmux-based management)
+        # Determine correct Python command for the platform
+        python_cmd = "python" if platform.system() == "Windows" else "python3"
+
+        # Server configurations (cross-platform)
         self.servers = {
             "bridge": {
                 "name": "Aurora Bridge Service",
-                "command": f"cd {cwd} && python3 -m aurora_x.bridge.service",
+                "command": f"cd {cwd} && {python_cmd} -m aurora_x.bridge.service",
                 "session": "aurora-bridge",
                 "port": 5001,
                 "health_check": "http://localhost:5001/health",
             },
             "backend": {
                 "name": "Aurora Backend API",
-                "command": f"cd {cwd} && NODE_ENV=development npx tsx server/index.ts",
+                "command": f"cd {cwd} && {'set NODE_ENV=development &&' if platform.system() == 'Windows' else 'NODE_ENV=development'} npx tsx server/index.ts",
                 "session": "aurora-backend",
                 "port": 5000,
                 "health_check": "http://localhost:5000/health",
             },
             "self-learn": {
                 "name": "Aurora Self-Learning Server",
-                "command": f"cd {cwd} && python3 -m aurora_x.self_learn_server",
+                "command": f"cd {cwd} && {python_cmd} -m aurora_x.self_learn_server",
                 "session": "aurora-self-learn",
                 "port": 5002,
                 "health_check": "http://localhost:5002/health",
             },
             "chat": {
                 "name": "Aurora Chat Server",
-                "command": f"cd {cwd} && python3 aurora_chat_server.py --port 5003",
+                "command": f"cd {cwd} && {python_cmd} aurora_chat_server.py --port 5003",
                 "session": "aurora-chat",
                 "port": 5003,
                 "health_check": "http://localhost:5003/health",
@@ -729,18 +732,28 @@ class LuminarNexusV2:
                     cwd = None
                     actual_cmd = command
 
-                # Start process in background
-                subprocess.Popen(
-                    actual_cmd,
-                    shell=True,
-                    cwd=cwd,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                    creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if self.is_windows() else 0,
-                )
+                # Create logs directory
+                logs_dir = os.path.join(cwd if cwd else os.getcwd(), "logs")
+                os.makedirs(logs_dir, exist_ok=True)
+                
+                # Create log files for this service
+                log_file = os.path.join(logs_dir, f"{session}.log")
+                err_file = os.path.join(logs_dir, f"{session}.err")
+                
+                # Start process in background with logging
+                with open(log_file, "w") as out, open(err_file, "w") as err:
+                    subprocess.Popen(
+                        actual_cmd,
+                        shell=True,
+                        cwd=cwd,
+                        stdout=out,
+                        stderr=err,
+                        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if self.is_windows() else 0,
+                    )
 
                 print("   ✅ Started in background")
                 print(f"   🔌 Port: {server['port']}")
+                print(f"   📝 Logs: {log_file}")
 
                 # Wait and check health
                 await asyncio.sleep(3)
@@ -749,6 +762,15 @@ class LuminarNexusV2:
                     return True
                 else:
                     print("   ⚠️  Server started but health check pending...")
+                    # Check error log for issues
+                    if os.path.exists(err_file) and os.path.getsize(err_file) > 0:
+                        try:
+                            with open(err_file, "r", encoding="utf-8", errors="ignore") as f:
+                                errors = f.read()
+                                if errors:
+                                    print(f"   ⚠️  Errors detected: {errors[:200]}")
+                        except Exception:
+                            pass  # Ignore encoding errors when reading logs
                     return True
             except Exception as e:
                 print(f"   ❌ Failed to start: {e}")
@@ -799,17 +821,24 @@ class LuminarNexusV2:
         if self.is_windows():
             # Windows: Find and kill process using the port
             try:
-                for proc in psutil.process_iter(["pid", "name", "connections"]):
+                killed = False
+                for proc in psutil.process_iter(['pid', 'name']):
                     try:
-                        for conn in proc.connections():
-                            if conn.laddr.port == port:
+                        # Get connections for this process
+                        connections = proc.connections()
+                        for conn in connections:
+                            if hasattr(conn, 'laddr') and conn.laddr.port == port:
                                 proc.kill()
-                                print(f"   ✅ Killed process on port {port}")
-                                return True
-                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                                print(f"   ✅ Killed process {proc.pid} ({proc.name()}) on port {port}")
+                                killed = True
+                    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
                         pass
-                print(f"   ⚠️  No process found on port {port}")
-                return False
+                    except Exception:
+                        pass  # Skip processes we can't access
+                
+                if not killed:
+                    print(f"   ⚠️  No process found on port {port}")
+                return killed
             except Exception as e:
                 print(f"   ❌ Error stopping service: {e}")
                 return False
@@ -845,17 +874,40 @@ class LuminarNexusV2:
             base_url,
             base_url.replace("/healthz", "/health"),
             base_url.replace("/health", "/healthz"),
+            base_url.replace("/health", "/api/health"),
         ]
 
         for endpoint in health_endpoints:
             try:
-                result = subprocess.run(["curl", "-s", "-f", endpoint], capture_output=True, text=True, timeout=2)
-
-                if result.returncode == 0 and result.stdout:
-                    response = result.stdout.lower()
-                    if any(indicator in response for indicator in ["ok", "healthy", "status", "true"]):
-                        return True
-            except:
+                # Use urllib instead of curl for cross-platform compatibility
+                import urllib.request
+                import json
+                from urllib.error import URLError, HTTPError
+                
+                req = urllib.request.Request(endpoint, headers={'User-Agent': 'Aurora/2.0'})
+                try:
+                    with urllib.request.urlopen(req, timeout=1) as response:
+                        if response.status == 200:
+                            response_data = response.read().decode('utf-8')
+                            try:
+                                # Try to parse as JSON
+                                data = json.loads(response_data)
+                                if isinstance(data, dict):
+                                    # Check if 'ok' field is True
+                                    if data.get('ok') is True or data.get('ok') == 'true':
+                                        return True
+                                    # Also check status field
+                                    status_value = str(data.get('status', '')).lower()
+                                    if any(indicator in status_value for indicator in ["ok", "healthy", "online", "running"]):
+                                        return True
+                            except json.JSONDecodeError:
+                                # If not JSON, check raw text
+                                response_text = response_data.lower()
+                                if any(indicator in response_text for indicator in ["ok", "healthy", "status", "true", "online"]):
+                                    return True
+                except (URLError, HTTPError, TimeoutError, ConnectionError):
+                    continue
+            except Exception:
                 continue
 
         return False
