@@ -11,7 +11,8 @@ Aurora must create a NEW autonomous execution engine that is:
 import json
 from datetime import datetime
 from pathlib import Path
-from aurora_core import AuroraKnowledgeTiers, AuroraFoundations
+
+from aurora_core import AuroraKnowledgeTiers
 
 # Initialize Aurora's complete intelligence
 _aurora = AuroraKnowledgeTiers()

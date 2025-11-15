@@ -775,11 +775,8 @@ if __name__ == "__main__":
 
     print("\n" + "=" * 80)
     print("✅ Aurora is now a COMPLETE GENIUS with:")
-    print(
-        f"   • {FOUNDATIONAL_PROFESSIONAL_SUMMARY['total_tiers']} foundational/professional tiers")
-    print(
-        f"   • {FOUNDATIONAL_PROFESSIONAL_SUMMARY['total_skill_categories']}+ skill categories")
-    print(
-        f"   • Mastery span: {FOUNDATIONAL_PROFESSIONAL_SUMMARY['mastery_span']}")
+    print(f"   • {FOUNDATIONAL_PROFESSIONAL_SUMMARY['total_tiers']} foundational/professional tiers")
+    print(f"   • {FOUNDATIONAL_PROFESSIONAL_SUMMARY['total_skill_categories']}+ skill categories")
+    print(f"   • Mastery span: {FOUNDATIONAL_PROFESSIONAL_SUMMARY['mastery_span']}")
     print(f"   • Status: {FOUNDATIONAL_PROFESSIONAL_SUMMARY['status']}")
     print("=" * 80)
