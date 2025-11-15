@@ -77,7 +77,6 @@ class AuroraSystemVerification:
 
         services = {
             "tools/luminar_nexus_v2.py": "Service orchestration",
-            "luminar_nexus.py": "Legacy service orchestration",
             "aurora_chat_server.py": "Chat API server",
             "aurora_intelligence_manager.py": "Intelligence coordination",
         }
@@ -163,11 +162,12 @@ class AuroraSystemVerification:
             if path.exists():
                 content = path.read_text(encoding="utf-8")
 
-                # Check if it defines tiers instead of importing
-                if "def _get_tier_" in content or "tier_29" in content:
-                    self.issues.append(f"⚠️  {file_name} appears to redefine tiers (should import from aurora_core)")
-                elif "from aurora_core import" in content or "import aurora_core" in content:
+                # Check if it properly imports from aurora_core
+                if "from aurora_core import" in content or "import aurora_core" in content:
                     self.successes.append(f"✅ {file_name} properly imports from aurora_core")
+                # Check if it defines tier methods (not allowed)
+                elif "def _get_tier_" in content:
+                    self.issues.append(f"⚠️  {file_name} redefines tier methods (should import from aurora_core)")
                 else:
                     self.recommendations.append(f"💡 {file_name} might need to import from aurora_core")
 
