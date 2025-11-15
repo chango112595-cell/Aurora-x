@@ -99,12 +99,55 @@ export async function getChatResponse(
 
     let responseText: string = '';
 
-    // Try Claude first if available, then Hugging Face, then fallback
-    let triedClaude = false;
+    // Use Aurora's self-contained intelligence core (priority #1)
+    try {
+      console.log('[Aurora Chat] 🧠 Using Aurora Core Intelligence...');
+      
+      const { spawn } = await import('child_process');
+      
+      const pythonProcess = spawn('python3', ['-c', `
+import sys
+sys.path.insert(0, '.')
+from aurora_x.chat.aurora_core_intelligence import get_aurora_intelligence
 
-    if (anthropic) {
+aurora = get_aurora_intelligence()
+message = """${message.replace(/"/g, '\\"')}"""
+session_id = "${sessionId}"
+
+response = aurora.process_message(message, session_id)
+print(response)
+`]);
+
+      let output = '';
+      let error = '';
+
+      pythonProcess.stdout.on('data', (data) => {
+        output += data.toString();
+      });
+
+      pythonProcess.stderr.on('data', (data) => {
+        error += data.toString();
+      });
+
+      const exitCode = await new Promise<number>((resolve) => {
+        pythonProcess.on('close', resolve);
+      });
+
+      if (exitCode === 0 && output.trim()) {
+        responseText = output.trim();
+        console.log('[Aurora Chat] 🧠 Aurora Core Intelligence response generated');
+      } else {
+        console.warn('[Aurora Chat] Core Intelligence error:', error);
+        // Fall through to external AI
+      }
+    } catch (coreError: any) {
+      console.warn('[Aurora Chat] Core Intelligence unavailable:', coreError.message);
+      // Fall through to external AI
+    }
+
+    // Try Claude as backup if core intelligence failed
+    if (!responseText && anthropic) {
       try {
-        // Call Claude AI for response
         const completion = await anthropic.messages.create({
           model: DEFAULT_MODEL_STR,
           max_tokens: 2048,
@@ -120,24 +163,16 @@ export async function getChatResponse(
           : 'I apologize, I had trouble generating a response.';
 
         console.log('[Aurora Chat] ✨ Claude AI response generated successfully');
-        triedClaude = true;
       } catch (error: any) {
         console.error('[Aurora Chat] Claude AI error:', error.message);
-        triedClaude = true;
-
-        // Fall through to try Hugging Face
-        if (!process.env.HUGGINGFACE_API_KEY) {
-          responseText = "I'm having trouble connecting to my AI core right now (low credits). Please add a Hugging Face API key to use the free alternative!";
-        }
       }
     }
 
-    // Try Hugging Face if Claude failed or wasn't available
+    // Try Hugging Face if both core and Claude failed
     if (!responseText && process.env.HUGGINGFACE_API_KEY) {
       try {
         console.log('[Aurora Chat] 🤗 Using Hugging Face AI fallback...');
 
-        // Call Hugging Face API via OpenAI-compatible router endpoint
         const hfResponse = await fetch('https://router.huggingface.co/v1/chat/completions', {
           method: 'POST',
           headers: {
@@ -172,7 +207,7 @@ export async function getChatResponse(
         responseText = getFallbackResponse(message, history);
       }
     } else if (!responseText) {
-      // No API keys available, use simple fallback
+      // Final fallback
       responseText = getFallbackResponse(message, history);
     }
 
