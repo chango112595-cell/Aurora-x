@@ -35,7 +35,8 @@ class AuroraAutonomousAgent:
 
     def log(self, message):
         """Log Aurora's actions"""
-        entry = {"timestamp": datetime.now().isoformat(), "agent": "Aurora", "message": message}
+        entry = {"timestamp": datetime.now().isoformat(),
+                 "agent": "Aurora", "message": message}
 
         with open(self.log_file, "a", encoding="utf-8") as f:
             f.write(json.dumps(entry) + "\n")
@@ -49,12 +50,14 @@ class AuroraAutonomousAgent:
 
         # Check all servers
         self.log("🔎 Checking server status...")
-        servers = {"bridge": 5001, "backend": 5000, "vite": 5173, "self-learn": 5002}
+        servers = {"bridge": 5001, "backend": 5000,
+                   "vite": 5173, "self-learn": 5002}
 
         issues = []
 
         for server, port in servers.items():
-            result = subprocess.run(f"lsof -i :{port} -t", shell=True, capture_output=True, text=True, check=False)
+            result = subprocess.run(
+                f"lsof -i :{port} -t", shell=True, capture_output=True, text=True, check=False)
 
             if result.returncode == 0:
                 self.log(f"✅ {server} running on port {port}")
