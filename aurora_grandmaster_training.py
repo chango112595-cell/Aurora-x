@@ -11,6 +11,10 @@ Aurora must create a NEW autonomous execution engine that is:
 import json
 from datetime import datetime
 from pathlib import Path
+from aurora_core import AuroraKnowledgeTiers, AuroraFoundations
+
+# Initialize Aurora's complete intelligence
+_aurora = AuroraKnowledgeTiers()
 
 TRAINING_PROMPT = """
 🌟 AURORA AUTONOMOUS GRANDMASTER TRAINING 🌟
@@ -83,26 +87,27 @@ Files to focus on:
 Go. Be autonomous. Be a Grandmaster. 💪
 """
 
-print(TRAINING_PROMPT)
+if __name__ == "__main__":
+    print(TRAINING_PROMPT)
 
-# Log this as a GRANDMASTER TRAINING session
-log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/grandmaster_training_session.jsonl")
-log_file.parent.mkdir(exist_ok=True)
+    # Log this as a GRANDMASTER TRAINING session
+    log_file = Path(".aurora_knowledge/grandmaster_training_session.jsonl")
+    log_file.parent.mkdir(exist_ok=True, parents=True)
 
-with open(log_file, "a") as f:
-    entry = {
-        "timestamp": datetime.now().isoformat(),
-        "level": "GRANDMASTER",
-        "objective": "Rewrite autonomous engine to be dynamic, intelligent, self-healing",
-        "current_problem": "Port 5001 conflict - serve.py vs Luminar Nexus",
-        "status": "TRAINING_STARTED",
-        "expected_outcome": "Aurora autonomously detects, analyzes, and fixes the port conflict",
-        "difficulty": "EXPERT",
-    }
-    f.write(json.dumps(entry) + "\n")
+    with open(log_file, "a", encoding="utf-8") as f:
+        entry = {
+            "timestamp": datetime.now().isoformat(),
+            "level": "GRANDMASTER",
+            "objective": "Rewrite autonomous engine to be dynamic, intelligent, self-healing",
+            "current_problem": "Port 5001 conflict - serve.py vs Luminar Nexus",
+            "status": "TRAINING_STARTED",
+            "expected_outcome": "Aurora autonomously detects, analyzes, and fixes the port conflict",
+            "difficulty": "EXPERT",
+        }
+        f.write(json.dumps(entry) + "\n")
 
-print("\n" + "=" * 70)
-print("📋 GRANDMASTER TRAINING LOGGED")
-print("=" * 70)
-print("Aurora, this is your level-up moment.")
-print("Show us what true autonomy looks like. 🌟\n")
+    print("\n" + "=" * 70)
+    print("📋 GRANDMASTER TRAINING LOGGED")
+    print("=" * 70)
+    print("Aurora, this is your level-up moment.")
+    print("Show us what true autonomy looks like. 🌟\n")

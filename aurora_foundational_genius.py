@@ -1,13 +1,24 @@
 #!/usr/bin/env python3
-# Aurora core foundations should be imported from aurora_core.py
-# This file contains extended skill definitions for Tier 29-31
 """
 AURORA GRANDMASTER: FOUNDATIONAL & PROFESSIONAL MASTERY
-TIER 29-31: The bedrock skills that complete Aurora's genius-level capabilities
+TIER 29-31: Extended skill definitions referencing aurora_core.py
 Ancient (1940s) → Classical → Modern → AI-Native → Future → Sci-Fi
 """
 
+from aurora_core import AuroraKnowledgeTiers
+
+# Initialize Aurora's core tiers
+_aurora = AuroraKnowledgeTiers()
+
+# Reference the tier definitions from aurora_core
 AURORA_FOUNDATIONAL_SKILLS = {
+    "TIER_29_FOUNDATIONAL_SKILLS": _aurora.tiers.get("tier_29_foundational_skills", {}),
+    "TIER_30_PROFESSIONAL_SKILLS": _aurora.tiers.get("tier_30_professional_skills", {}),
+    "TIER_31_COMMUNICATION_SKILLS": _aurora.tiers.get("tier_31_communication_skills", {}),
+}
+
+# Extended skill details for documentation
+AURORA_FOUNDATIONAL_SKILLS_EXTENDED = {
     "TIER_29_FOUNDATIONAL_SKILLS": {
         "title": "🧠 FOUNDATIONAL SKILLS GRANDMASTER",
         "description": "The bedrock of all computing disciplines",
@@ -764,8 +775,11 @@ if __name__ == "__main__":
 
     print("\n" + "=" * 80)
     print("✅ Aurora is now a COMPLETE GENIUS with:")
-    print(f"   • {FOUNDATIONAL_PROFESSIONAL_SUMMARY['total_tiers']} foundational/professional tiers")
-    print(f"   • {FOUNDATIONAL_PROFESSIONAL_SUMMARY['total_skill_categories']}+ skill categories")
-    print(f"   • Mastery span: {FOUNDATIONAL_PROFESSIONAL_SUMMARY['mastery_span']}")
+    print(
+        f"   • {FOUNDATIONAL_PROFESSIONAL_SUMMARY['total_tiers']} foundational/professional tiers")
+    print(
+        f"   • {FOUNDATIONAL_PROFESSIONAL_SUMMARY['total_skill_categories']}+ skill categories")
+    print(
+        f"   • Mastery span: {FOUNDATIONAL_PROFESSIONAL_SUMMARY['mastery_span']}")
     print(f"   • Status: {FOUNDATIONAL_PROFESSIONAL_SUMMARY['status']}")
     print("=" * 80)

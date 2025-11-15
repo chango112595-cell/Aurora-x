@@ -3,13 +3,12 @@
 Test script for the Universal Code Synthesis Engine
 """
 
+from aurora_x.synthesis import synthesize_universal_sync
 import sys
 from pathlib import Path
 
 # Add aurora_x to path
 sys.path.insert(0, str(Path(__file__).parent))
-
-from aurora_x.synthesis import synthesize_universal_sync
 
 
 def test_universal_engine():
@@ -42,7 +41,8 @@ def test_universal_engine():
                 if result["validation"]["is_valid"]:
                     print("   Validation: ✅ Passed")
                 else:
-                    print(f"   Validation: ⚠️ {len(result['validation']['issues'])} issues")
+                    print(
+                        f"   Validation: ⚠️ {len(result['validation']['issues'])} issues")
 
             print(f"   Run Directory: {result.get('run_dir', 'N/A')}")
 

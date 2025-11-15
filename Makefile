@@ -34,7 +34,7 @@ LOGS_DIR := logs
 AURORA_CORE := $(TOOLS_DIR)/aurora_core.py
 AURORA_ENHANCED := $(TOOLS_DIR)/aurora_enhanced_core.py
 LANGUAGE_MASTER := $(TOOLS_DIR)/aurora_language_grandmaster.py
-LUMINAR_NEXUS := $(TOOLS_DIR)/luminar_nexus.py
+LUMINAR_NEXUS := $(TOOLS_DIR)/luminar_nexus_v2.py
 INTELLIGENCE_MANAGER := aurora_intelligence_manager.py
 
 # Legacy Variables (preserved for compatibility)
