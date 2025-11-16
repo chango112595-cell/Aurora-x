@@ -1514,7 +1514,8 @@ class PerformanceOptimizer:
 
         # Analyze recent performance to distribute load intelligently
         recent = self.performance_history[service_name][-10:]
-        avg_response_time = sum(m["metrics"].get("response_time", 500) for m in recent) / len(recent)
+        avg_response_time = sum(m["metrics"].get(
+            "response_time", 500) for m in recent) / len(recent)
 
         # Better performing instances get higher weight
         if avg_response_time < 100:
@@ -1534,10 +1535,12 @@ class PerformanceOptimizer:
 
         # Check if CPU usage trending up
         recent_cpu = [h["metrics"].get("cpu_usage", 0) for h in history[-10:]]
-        older_cpu = [h["metrics"].get("cpu_usage", 0) for h in history[-20:-10]]
+        older_cpu = [h["metrics"].get("cpu_usage", 0)
+                     for h in history[-20:-10]]
 
         if recent_cpu and older_cpu:
-            cpu_trend = (sum(recent_cpu) / len(recent_cpu)) - (sum(older_cpu) / len(older_cpu))
+            cpu_trend = (sum(recent_cpu) / len(recent_cpu)) - \
+                (sum(older_cpu) / len(older_cpu))
             if cpu_trend > 10:  # 10% increase
                 measures.append(
                     {
@@ -1590,7 +1593,8 @@ class PredictiveScaler:
         predicted_load = self._predict_future_load(service_name, current_load)
 
         # Make scaling decision
-        scaling_action = self._make_scaling_decision(service_name, current_load, predicted_load)
+        scaling_action = self._make_scaling_decision(
+            service_name, current_load, predicted_load)
 
         # Log decision
         if scaling_action:
@@ -1645,7 +1649,8 @@ class PredictiveScaler:
 
         # Combine trend and time-based predictions
         # Weight: 60% time pattern, 40% trend
-        predicted_load = (time_prediction * 0.6) + ((current_load + trend) * 0.4)
+        predicted_load = (time_prediction * 0.6) + \
+            ((current_load + trend) * 0.4)
 
         return max(0, min(100, predicted_load))  # Clamp between 0-100
 
