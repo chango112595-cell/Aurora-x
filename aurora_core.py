@@ -804,7 +804,7 @@ class AuroraCoreIntelligence:
                 "Here's the thing: I should be giving you specific, complete answers tailored to YOUR exact question, "
                 "not generic template responses. If my answers feel templated, "
                 "that means I'm not engaging deeply enough with what you're actually asking.\n\n"
-                "For example, if you ask \"do you remember my name?\" - "
+                'For example, if you ask "do you remember my name?" - '
                 "I shouldn't give you a generic response about memory. I should either:\n"
                 "1. Tell you your actual name if I remember it\n"
                 "2. Admit I don't know it yet and ask you to tell me\n\n"
