@@ -149,7 +149,7 @@ jobs:
 
       - name: Upload all artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: aurora-artifacts-extended
           path: |
@@ -164,7 +164,7 @@ jobs:
 
       - name: Upload runs artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: aurora-runs-extended
           path: |
