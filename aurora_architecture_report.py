@@ -4,9 +4,9 @@ Aurora Server Architecture Report
 Clear identification of what should be running
 """
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print(" 🌌 AURORA SERVER ARCHITECTURE - OFFICIAL SPECIFICATION")
-print("="*70 + "\n")
+print("=" * 70 + "\n")
 
 print("📋 CORRECT ARCHITECTURE:")
 print()
@@ -17,32 +17,32 @@ architecture = {
         "command": "npm run dev",
         "tech": "Express.js (TypeScript) + Vite (React TSX)",
         "purpose": "Backend API + Frontend serving",
-        "note": "Vite integrated as middleware, HMR at port 5000"
+        "note": "Vite integrated as middleware, HMR at port 5000",
     },
     "Bridge Service": {
         "port": 5001,
         "command": "python -m aurora_x.bridge.service",
         "tech": "Python",
-        "purpose": "Service bridging and coordination"
+        "purpose": "Service bridging and coordination",
     },
     "Self-Learning": {
         "port": 5002,
         "command": "python -m aurora_x.self_learn_server",
         "tech": "Python",
-        "purpose": "Autonomous learning and adaptation"
+        "purpose": "Autonomous learning and adaptation",
     },
     "Chat Server": {
         "port": 5003,
         "command": "python aurora_chat_server.py --port 5003",
         "tech": "Python",
-        "purpose": "Chat API and WebSocket connections"
+        "purpose": "Chat API and WebSocket connections",
     },
     "Luminar Dashboard": {
         "port": 5005,
         "command": "python tools/luminar_nexus_v2.py api",
         "tech": "Python",
-        "purpose": "Advanced service orchestration dashboard"
-    }
+        "purpose": "Advanced service orchestration dashboard",
+    },
 }
 
 for service, details in architecture.items():
@@ -51,13 +51,13 @@ for service, details in architecture.items():
     print(f"     Tech:    {details['tech']}")
     print(f"     Command: {details['command']}")
     print(f"     Purpose: {details['purpose']}")
-    if 'note' in details:
+    if "note" in details:
         print(f"     Note:    {details['note']}")
     print()
 
-print("="*70)
+print("=" * 70)
 print(" 🔧 TECHNOLOGY STACK CLARIFICATION")
-print("="*70 + "\n")
+print("=" * 70 + "\n")
 
 print("  ✅ FRONTEND:")
 print("     • React TSX files (NOT HTML)")
@@ -82,9 +82,9 @@ print("     4. Browser connects to port 5000")
 print("     5. All frontend requests handled by Vite through Express")
 print()
 
-print("="*70)
+print("=" * 70)
 print(" 🎯 CORRECT ACCESS POINTS")
-print("="*70 + "\n")
+print("=" * 70 + "\n")
 
 print("  🌐 Frontend/API:  http://localhost:5000")
 print("  🌐 Bridge:        http://localhost:5001")
@@ -93,9 +93,9 @@ print("  🌐 Chat:          http://localhost:5003")
 print("  🌐 Luminar:       http://localhost:5005")
 print()
 
-print("="*70)
+print("=" * 70)
 print(" 💡 BLANK SCREEN TROUBLESHOOTING")
-print("="*70 + "\n")
+print("=" * 70 + "\n")
 
 print("  Possible causes:")
 print("     1. ✅ Import/export mismatches (ALREADY FIXED)")
@@ -111,9 +111,9 @@ print("     3. Check browser developer console (F12) for errors")
 print("     4. Restart services: python x-stop && python x-start")
 print()
 
-print("="*70)
+print("=" * 70)
 print(" ✅ SUMMARY")
-print("="*70 + "\n")
+print("=" * 70 + "\n")
 
 print("  • 5 services total (all should be running)")
 print("  • Primary access: http://localhost:5000")

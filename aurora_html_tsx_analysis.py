@@ -36,12 +36,12 @@ class AuroraHTMLAnalysis:
             print("[Aurora] 🎯 This is the problem - Vite needs index.html!")
             return
 
-        content = index_html.read_text(encoding='utf-8')
+        content = index_html.read_text(encoding="utf-8")
 
         print("[Aurora] 🔍 Current index.html structure:")
 
         # Check for script tag pointing to main.tsx
-        if 'src="/src/main.tsx"' in content or 'main.tsx' in content:
+        if 'src="/src/main.tsx"' in content or "main.tsx" in content:
             print("[Aurora] ✅ Points to main.tsx entry point")
         else:
             print("[Aurora] ⚠️  Does NOT point to main.tsx!")
@@ -56,9 +56,9 @@ class AuroraHTMLAnalysis:
 
     def explain_vite_architecture(self):
         """Explain how Vite works with TSX"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] EXPLAINING VITE + TSX ARCHITECTURE")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         print("[Aurora] 🎯 THE TRUTH ABOUT HTML vs TSX:\n")
 
@@ -104,7 +104,7 @@ class AuroraHTMLAnalysis:
             print("[Aurora] ⚠️  main.tsx MISSING!")
             return
 
-        content = main_tsx.read_text(encoding='utf-8')
+        content = main_tsx.read_text(encoding="utf-8")
 
         if "createRoot" in content or "render" in content:
             print("[Aurora] ✅ main.tsx renders React app")
@@ -145,9 +145,9 @@ class AuroraHTMLAnalysis:
 
     def diagnose_blank_screen(self):
         """Diagnose why the screen is blank"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] DIAGNOSING BLANK SCREEN")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         print("[Aurora] 🔍 Possible causes:\n")
 
@@ -181,7 +181,7 @@ class AuroraHTMLAnalysis:
         """Create a simple test component to verify React is working"""
         print("\n[Aurora] Creating diagnostic test component...")
 
-        test_component = '''import React from 'react';
+        test_component = """import React from 'react';
 
 export default function DiagnosticTest() {
   return (
@@ -206,10 +206,10 @@ export default function DiagnosticTest() {
     </div>
   );
 }
-'''
+"""
 
         test_path = self.root / "client" / "src" / "components" / "DiagnosticTest.tsx"
-        test_path.write_text(test_component, encoding='utf-8')
+        test_path.write_text(test_component, encoding="utf-8")
         print(f"[Aurora] ✅ Created: {test_path}")
 
         # Update App.tsx to use diagnostic
@@ -221,9 +221,9 @@ export default function DiagnosticTest() {
 
     def run(self):
         """Run complete analysis"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] HTML vs TSX INVESTIGATION")
-        print("="*60)
+        print("=" * 60)
 
         self.find_html_files()
         self.analyze_index_html()
@@ -233,9 +233,9 @@ export default function DiagnosticTest() {
         self.diagnose_blank_screen()
         self.create_diagnostic_component()
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] FINAL VERDICT")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         print("[Aurora] ✅ ARCHITECTURE IS CORRECT:")
         print("  • index.html exists (required by Vite)")

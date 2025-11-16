@@ -16,7 +16,7 @@ def test_healthz_implementation():
     # Read serve.py to verify the endpoint exists
     serve_file = Path("aurora_x/serve.py")
     if serve_file.exists():
-        content = serve_file.read_text(encoding='utf-8')
+        content = serve_file.read_text(encoding="utf-8")
 
         # Check for the healthz endpoint
         if '@app.get("/healthz")' in content:
@@ -68,7 +68,7 @@ def test_route_listing():
 
     serve_file = Path("aurora_x/serve.py")
     if serve_file.exists():
-        content = serve_file.read_text(encoding='utf-8')
+        content = serve_file.read_text(encoding="utf-8")
 
         if '"/healthz"' in content and '"routes"' in content:
             print("✅ /healthz is listed in available routes")

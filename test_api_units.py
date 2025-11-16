@@ -54,7 +54,7 @@ def test_api_with_units():
                 f"{base_url}{tc['endpoint']}",
                 json=tc["payload"],
                 headers={"Content-Type": "application/json"},
-                timeout=30
+                timeout=30,
             )
 
             if resp.status_code == 200:
@@ -88,5 +88,4 @@ if __name__ == "__main__":
     print()
     print("  curl -X POST http://localhost:5001/api/solve \\")
     print('    -H "Content-Type: application/json" \\')
-    print(
-        '    -d \'{"problem": "orbital period", "a_km": 7000, "M_kg": 5.972e24}\'')
+    print('    -d \'{"problem": "orbital period", "a_km": 7000, "M_kg": 5.972e24}\'')

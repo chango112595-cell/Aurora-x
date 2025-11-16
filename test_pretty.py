@@ -64,10 +64,7 @@ def test_api():
 
         try:
             resp = requests.post(
-                f"{base_url}/api/solve/pretty",
-                json=tc,
-                headers={"Content-Type": "application/json"},
-                timeout=30
+                f"{base_url}/api/solve/pretty", json=tc, headers={"Content-Type": "application/json"}, timeout=30
             )
 
             if resp.status_code == 200:

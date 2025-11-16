@@ -21,8 +21,8 @@ def run_system_check():
     print("🌐 SERVER STATUS:")
     try:
         result = subprocess.run(
-            ["python", "aurora_server_manager.py", "--status"], capture_output=True, text=True, timeout=10
-        , check=False)
+            ["python", "aurora_server_manager.py", "--status"], capture_output=True, text=True, timeout=10, check=False
+        )
 
         if "✅" in result.stdout:
             print("   ✅ Aurora server is healthy")

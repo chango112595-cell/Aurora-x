@@ -17,15 +17,15 @@ class AuroraImportFixer:
         """Fix dashboard.tsx export"""
         print("[Aurora] Fixing dashboard.tsx export...")
 
-        content = '''import AuroraFuturisticDashboard from '@/components/AuroraFuturisticDashboard';
+        content = """import AuroraFuturisticDashboard from '@/components/AuroraFuturisticDashboard';
 
 export default function Dashboard() {
   return <AuroraFuturisticDashboard />;
 }
-'''
+"""
 
         path = self.pages_dir / "dashboard.tsx"
-        path.write_text(content, encoding='utf-8')
+        path.write_text(content, encoding="utf-8")
         self.fixes.append(str(path))
         print(f"[Aurora] ✅ Fixed: {path}")
 
@@ -33,12 +33,11 @@ export default function Dashboard() {
         """Ensure tasks.tsx has correct export"""
         print("[Aurora] Verifying tasks.tsx export...")
         path = self.pages_dir / "tasks.tsx"
-        content = path.read_text(encoding='utf-8')
+        content = path.read_text(encoding="utf-8")
 
-        if 'export default function TasksPage()' in content:
-            content = content.replace(
-                'export default function TasksPage()', 'export default function Tasks()')
-            path.write_text(content, encoding='utf-8')
+        if "export default function TasksPage()" in content:
+            content = content.replace("export default function TasksPage()", "export default function Tasks()")
+            path.write_text(content, encoding="utf-8")
             self.fixes.append(str(path))
             print(f"[Aurora] ✅ Fixed: {path}")
         else:
@@ -48,12 +47,11 @@ export default function Dashboard() {
         """Ensure tiers.tsx has correct export"""
         print("[Aurora] Verifying tiers.tsx export...")
         path = self.pages_dir / "tiers.tsx"
-        content = path.read_text(encoding='utf-8')
+        content = path.read_text(encoding="utf-8")
 
-        if 'export default function TiersPage()' in content:
-            content = content.replace(
-                'export default function TiersPage()', 'export default function Tiers()')
-            path.write_text(content, encoding='utf-8')
+        if "export default function TiersPage()" in content:
+            content = content.replace("export default function TiersPage()", "export default function Tiers()")
+            path.write_text(content, encoding="utf-8")
             self.fixes.append(str(path))
             print(f"[Aurora] ✅ Fixed: {path}")
         else:
@@ -63,12 +61,13 @@ export default function Dashboard() {
         """Ensure intelligence.tsx has correct export"""
         print("[Aurora] Verifying intelligence.tsx export...")
         path = self.pages_dir / "intelligence.tsx"
-        content = path.read_text(encoding='utf-8')
+        content = path.read_text(encoding="utf-8")
 
-        if 'export default function IntelligencePage()' in content:
+        if "export default function IntelligencePage()" in content:
             content = content.replace(
-                'export default function IntelligencePage()', 'export default function Intelligence()')
-            path.write_text(content, encoding='utf-8')
+                "export default function IntelligencePage()", "export default function Intelligence()"
+            )
+            path.write_text(content, encoding="utf-8")
             self.fixes.append(str(path))
             print(f"[Aurora] ✅ Fixed: {path}")
         else:
@@ -79,9 +78,9 @@ export default function Dashboard() {
         print("[Aurora] Verifying chat.tsx export...")
         path = self.pages_dir / "chat.tsx"
         if path.exists():
-            content = path.read_text(encoding='utf-8')
+            content = path.read_text(encoding="utf-8")
 
-            if 'export default function ChatPage()' in content:
+            if "export default function ChatPage()" in content:
                 print(f"[Aurora] ✓ {path} is correct")
             else:
                 print(f"[Aurora] ✓ {path} needs no changes")
@@ -103,13 +102,13 @@ export default function Dashboard() {
         for route, name in pages:
             path = self.pages_dir / f"{route}.tsx"
             if path.exists():
-                content = path.read_text(encoding='utf-8')
-                old_export = f'export default function {route.capitalize()}Page()'
-                new_export = f'export default function {name}()'
+                content = path.read_text(encoding="utf-8")
+                old_export = f"export default function {route.capitalize()}Page()"
+                new_export = f"export default function {name}()"
 
                 if old_export in content:
                     content = content.replace(old_export, new_export)
-                    path.write_text(content, encoding='utf-8')
+                    path.write_text(content, encoding="utf-8")
                     self.fixes.append(str(path))
                     print(f"[Aurora] ✅ Fixed: {path}")
                 else:
@@ -119,7 +118,7 @@ export default function Dashboard() {
         """Update App.tsx imports to match exports"""
         print("[Aurora] Updating App.tsx imports...")
 
-        content = '''import { Route, Switch } from "wouter";
+        content = """import { Route, Switch } from "wouter";
 import AuroraFuturisticLayout from "./components/AuroraFuturisticLayout";
 import Dashboard from "./pages/dashboard";
 import ChatPage from "./pages/chat";
@@ -162,18 +161,18 @@ function App() {
 }
 
 export default App;
-'''
+"""
 
         path = self.client_dir / "App.tsx"
-        path.write_text(content, encoding='utf-8')
+        path.write_text(content, encoding="utf-8")
         self.fixes.append(str(path))
         print(f"[Aurora] ✅ Updated: {path}")
 
     def run(self):
         """Execute import fixes"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] IMPORT FIXER ACTIVATED")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         print("[Aurora] Fixing page exports...")
         self.fix_dashboard()
@@ -186,9 +185,9 @@ export default App;
         print("\n[Aurora] Updating App.tsx...")
         self.update_app_imports()
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] ✅ IMPORT FIXES COMPLETE")
-        print("="*60)
+        print("=" * 60)
         print("\n[Aurora] 📁 Fixed Files:")
         for fix in self.fixes:
             print(f"  ✅ {fix}")

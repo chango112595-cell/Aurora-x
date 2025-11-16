@@ -73,10 +73,7 @@ def test_api_response_structure():
 
         try:
             resp = requests.post(
-                f"{base_url}/api/solve/pretty",
-                json=tc,
-                headers={"Content-Type": "application/json"},
-                timeout=30
+                f"{base_url}/api/solve/pretty", json=tc, headers={"Content-Type": "application/json"}, timeout=30
             )
 
             if resp.status_code == 200:
@@ -87,8 +84,7 @@ def test_api_response_structure():
                     if "units_info" in data:
                         print("  ✓ Units Info included:")
                         for item in data["units_info"]:
-                            print(
-                                f"    - {item['parameter']}: {item['pretty']}", end="")
+                            print(f"    - {item['parameter']}: {item['pretty']}", end="")
                             if item.get("hint"):
                                 print(f" ({item['hint']})", end="")
                             if item.get("human"):

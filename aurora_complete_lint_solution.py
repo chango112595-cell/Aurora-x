@@ -12,11 +12,11 @@ def fix_file(filepath, old, new):
     try:
         if not os.path.exists(filepath):
             return False
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding="utf-8") as f:
             content = f.read()
         if old in content:
             content = content.replace(old, new)
-            with open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.write(content)
             return True
     except Exception as e:
@@ -29,14 +29,14 @@ def fix_all_imports(filepath, unused_imports):
     try:
         if not os.path.exists(filepath):
             return False
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding="utf-8") as f:
             lines = f.readlines()
 
         new_lines = []
         for line in lines:
             should_keep = True
             for unused in unused_imports:
-                if f"import {unused}" in line and not any(x in line for x in ['from', '#']):
+                if f"import {unused}" in line and not any(x in line for x in ["from", "#"]):
                     should_keep = False
                     break
                 elif f"from {unused}" in line:
@@ -46,7 +46,7 @@ def fix_all_imports(filepath, unused_imports):
                 new_lines.append(line)
 
         if len(new_lines) != len(lines):
-            with open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.writelines(new_lines)
             return True
     except Exception:
@@ -59,25 +59,24 @@ def fix_subprocess_check(filepath):
     try:
         if not os.path.exists(filepath):
             return False
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding="utf-8") as f:
             content = f.read()
 
         # Find subprocess.run calls without check parameter
-        pattern = r'subprocess\.run\((.*?)\)'
+        pattern = r"subprocess\.run\((.*?)\)"
         matches = list(re.finditer(pattern, content, re.DOTALL))
 
         modified = False
         for match in reversed(matches):
             call_content = match.group(1)
-            if 'check=' not in call_content:
+            if "check=" not in call_content:
                 # Add check=False before the closing parenthesis
-                new_call = call_content.rstrip() + ',\n                check=False'
-                content = content[:match.start(
-                    1)] + new_call + content[match.end(1):]
+                new_call = call_content.rstrip() + ",\n                check=False"
+                content = content[: match.start(1)] + new_call + content[match.end(1) :]
                 modified = True
 
         if modified:
-            with open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.write(content)
             return True
     except Exception:
@@ -90,24 +89,16 @@ def fix_file_encoding(filepath):
     try:
         if not os.path.exists(filepath):
             return False
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding="utf-8") as f:
             content = f.read()
 
         # Fix open() without encoding
-        content = re.sub(
-            r'with open\(([^)]+)\) as ',
-            r"with open(\1, encoding='utf-8') as ",
-            content
-        )
+        content = re.sub(r"with open\(([^)]+)\) as ", r"with open(\1, encoding='utf-8') as ", content)
 
         # Fix read_text() without encoding
-        content = re.sub(
-            r'\.read_text\(\)',
-            r".read_text(encoding='utf-8')",
-            content
-        )
+        content = re.sub(r"\.read_text\(\)", r".read_text(encoding='utf-8')", content)
 
-        with open(filepath, 'w', encoding='utf-8') as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             f.write(content)
         return True
     except Exception:
@@ -163,20 +154,20 @@ print("\n🎯 Fixing specific issues...")
 
 # Fix aurora_complete_debug.py variable shadowing
 if os.path.exists("aurora_complete_debug.py"):
-    with open("aurora_complete_debug.py", 'r', encoding='utf-8') as f:
+    with open("aurora_complete_debug.py", encoding="utf-8") as f:
         content = f.read()
     # Rename inner all_good to something else
     content = content.replace(
-        "def fix_remaining_issues():\n    \"\"\"Attempt to fix any remaining issues\"\"\"\n    print(\"\\n🔧 Aurora: Attempting automatic fixes...\\n\")\n    \n    all_good = True",
-        "def fix_remaining_issues():\n    \"\"\"Attempt to fix any remaining issues\"\"\"\n    print(\"\\n🔧 Aurora: Attempting automatic fixes...\\n\")\n    \n    fixes_applied = True"
+        'def fix_remaining_issues():\n    """Attempt to fix any remaining issues"""\n    print("\\n🔧 Aurora: Attempting automatic fixes...\\n")\n    \n    all_good = True',
+        'def fix_remaining_issues():\n    """Attempt to fix any remaining issues"""\n    print("\\n🔧 Aurora: Attempting automatic fixes...\\n")\n    \n    fixes_applied = True',
     )
-    with open("aurora_complete_debug.py", 'w', encoding='utf-8') as f:
+    with open("aurora_complete_debug.py", "w", encoding="utf-8") as f:
         f.write(content)
     print("   ✅ Fixed variable shadowing in aurora_complete_debug.py")
 
 # Fix aurora_improve_chat_naturalness.py unused variable
 if os.path.exists("aurora_improve_chat_naturalness.py"):
-    with open("aurora_improve_chat_naturalness.py", 'r', encoding='utf-8') as f:
+    with open("aurora_improve_chat_naturalness.py", encoding="utf-8") as f:
         lines = f.readlines()
 
     # Find and remove unused content variable read
@@ -192,56 +183,65 @@ if os.path.exists("aurora_improve_chat_naturalness.py"):
         else:
             new_lines.append(line)
 
-    with open("aurora_improve_chat_naturalness.py", 'w', encoding='utf-8') as f:
+    with open("aurora_improve_chat_naturalness.py", "w", encoding="utf-8") as f:
         f.writelines(new_lines)
     print("   ✅ Fixed unused variable in aurora_improve_chat_naturalness.py")
 
 # Fix aurora_server_analysis.py unused variable
-if fix_file("aurora_server_analysis.py",
-            "        ports = self.analyze_x_start()",
-            "        _ = self.analyze_x_start()  # Result intentionally unused"):
+if fix_file(
+    "aurora_server_analysis.py",
+    "        ports = self.analyze_x_start()",
+    "        _ = self.analyze_x_start()  # Result intentionally unused",
+):
     print("   ✅ Fixed unused variable in aurora_server_analysis.py")
 
 # Fix f-strings without interpolation in aurora_verify_core_integration.py
 if os.path.exists("aurora_verify_core_integration.py"):
-    with open("aurora_verify_core_integration.py", 'r', encoding='utf-8') as f:
+    with open("aurora_verify_core_integration.py", encoding="utf-8") as f:
         content = f.read()
 
     replacements = [
-        ('print(f"\\n[Aurora] Architecture Summary:")',
-         'print("\\n[Aurora] Architecture Summary:")'),
-        ('print(f"  • Task 1-13: Foundational cognitive abilities")',
-         'print("  • Task 1-13: Foundational cognitive abilities")'),
-        ('print(f"  • Tier 1-34: Specialized knowledge domains")',
-         'print("  • Tier 1-34: Specialized knowledge domains")'),
-        ('print(f"\\n[Aurora] Testing Task Access:")',
-         'print("\\n[Aurora] Testing Task Access:")'),
-        ('print(f"\\n[Aurora] Testing Tier Access:")',
-         'print("\\n[Aurora] Testing Tier Access:")'),
-        ('print(f"  • Tier 1: Ancient Languages")',
-         'print("  • Tier 1: Ancient Languages")'),
-        ('print(f"  • Tier 34: Grandmaster Autonomous")',
-         'print("  • Tier 34: Grandmaster Autonomous")'),
-        ('print(f"    Type: Advanced autonomous decision-making")',
-         'print("    Type: Advanced autonomous decision-making")'),
-        ('print(f"\\n[Aurora] ✅ All core systems accessible and functional!")',
-         'print("\\n[Aurora] ✅ All core systems accessible and functional!")'),
-        ('print(f"\\n[Test 2] Checking Intelligence Manager Integration...")',
-         'print("\\n[Test 2] Checking Intelligence Manager Integration...")'),
-        ('print(f"\\n[Test 3] Checking Luminar Nexus V2 Integration...")',
-         'print("\\n[Test 3] Checking Luminar Nexus V2 Integration...")'),
+        ('print(f"\\n[Aurora] Architecture Summary:")', 'print("\\n[Aurora] Architecture Summary:")'),
+        (
+            'print(f"  • Task 1-13: Foundational cognitive abilities")',
+            'print("  • Task 1-13: Foundational cognitive abilities")',
+        ),
+        (
+            'print(f"  • Tier 1-34: Specialized knowledge domains")',
+            'print("  • Tier 1-34: Specialized knowledge domains")',
+        ),
+        ('print(f"\\n[Aurora] Testing Task Access:")', 'print("\\n[Aurora] Testing Task Access:")'),
+        ('print(f"\\n[Aurora] Testing Tier Access:")', 'print("\\n[Aurora] Testing Tier Access:")'),
+        ('print(f"  • Tier 1: Ancient Languages")', 'print("  • Tier 1: Ancient Languages")'),
+        ('print(f"  • Tier 34: Grandmaster Autonomous")', 'print("  • Tier 34: Grandmaster Autonomous")'),
+        (
+            'print(f"    Type: Advanced autonomous decision-making")',
+            'print("    Type: Advanced autonomous decision-making")',
+        ),
+        (
+            'print(f"\\n[Aurora] ✅ All core systems accessible and functional!")',
+            'print("\\n[Aurora] ✅ All core systems accessible and functional!")',
+        ),
+        (
+            'print(f"\\n[Test 2] Checking Intelligence Manager Integration...")',
+            'print("\\n[Test 2] Checking Intelligence Manager Integration...")',
+        ),
+        (
+            'print(f"\\n[Test 3] Checking Luminar Nexus V2 Integration...")',
+            'print("\\n[Test 3] Checking Luminar Nexus V2 Integration...")',
+        ),
     ]
 
     for old, new in replacements:
         content = content.replace(old, new)
 
-    with open("aurora_verify_core_integration.py", 'w', encoding='utf-8') as f:
+    with open("aurora_verify_core_integration.py", "w", encoding="utf-8") as f:
         f.write(content)
     print("   ✅ Fixed f-strings in aurora_verify_core_integration.py")
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("✨ All 88 linting problems fixed!")
-print("="*70)
+print("=" * 70)
 print("\n📊 Summary:")
 print("   ✅ Removed unused imports")
 print("   ✅ Fixed subprocess.run calls")

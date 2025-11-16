@@ -79,8 +79,6 @@ def test_demo_cards_locally():
 def test_specific_card(card_id="solve_orbit_units"):
     """Test executing a specific card"""
 
-
-
     app = FastAPI()
     attach_demo(app)
 

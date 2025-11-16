@@ -94,7 +94,7 @@ print(GRANDMASTER_ELEVATION)
 log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/coding_grandmaster_elevation.jsonl")
 log_file.parent.mkdir(exist_ok=True)
 
-with open(log_file, 'a', encoding='utf-8') as f:
+with open(log_file, "a", encoding="utf-8") as f:
     entry = {
         "timestamp": datetime.now().isoformat(),
         "level": "ULTIMATE_GRANDMASTER",

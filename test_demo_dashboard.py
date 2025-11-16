@@ -10,8 +10,7 @@ def test_dashboard_html_exists():
     if dashboard_path.exists():
         print("✅ Dashboard HTML file exists")
         print(f"   Location: {dashboard_path}")
-        print(
-            f"   Size: {len(dashboard_path.read_text(encoding='utf-8'))} bytes")
+        print(f"   Size: {len(dashboard_path.read_text(encoding='utf-8'))} bytes")
         return True
     else:
         print("❌ Dashboard HTML file not found")

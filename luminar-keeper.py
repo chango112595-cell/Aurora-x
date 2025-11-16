@@ -20,6 +20,7 @@ KEEPER_LOG = "/tmp/luminar_keeper.log"
 
 class LuminarKeeper:
     """Luminar process keeper and monitor"""
+
     def __init__(self):
         self.running = True
         self.restart_count = 0
@@ -44,7 +45,7 @@ class LuminarKeeper:
         log_entry = f"[{level}] {timestamp} {message}"
         print(f"{color}{log_entry}{reset}")
 
-        with open(KEEPER_LOG, 'a', encoding='utf-8') as f:
+        with open(KEEPER_LOG, "a", encoding="utf-8") as f:
             f.write(log_entry + "\n")
 
     def check_health(self):
@@ -52,12 +53,14 @@ class LuminarKeeper:
         try:
             # Check backend
             result_backend = subprocess.run(
-                ["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True, timeout=2, check=False)
+                ["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True, timeout=2, check=False
+            )
             backend_ok = result_backend.returncode == 0
 
             # Check frontend
             result_vite = subprocess.run(
-                ["curl", "-s", "-I", "http://localhost:5001"], capture_output=True, text=True, timeout=2, check=False)
+                ["curl", "-s", "-I", "http://localhost:5001"], capture_output=True, text=True, timeout=2, check=False
+            )
             vite_ok = result_vite.returncode == 0
 
             return backend_ok and vite_ok
@@ -71,7 +74,13 @@ class LuminarKeeper:
         try:
             # Use start-dev.sh which is proven to work
             result = subprocess.run(
-                [f"{PROJECT_ROOT}/start-dev.sh", "start"], cwd=PROJECT_ROOT, capture_output=True, text=True, timeout=30, check=False)
+                [f"{PROJECT_ROOT}/start-dev.sh", "start"],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                timeout=30,
+                check=False,
+            )
 
             if result.returncode == 0:
                 self.log("SUCCESS", "Aurora servers started successfully")
@@ -87,7 +96,13 @@ class LuminarKeeper:
         """Get current server status"""
         try:
             result = subprocess.run(
-                [sys.executable, LUMINAR_SCRIPT, "status"], cwd=PROJECT_ROOT, capture_output=True, text=True, timeout=5, check=False)
+                [sys.executable, LUMINAR_SCRIPT, "status"],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                timeout=5,
+                check=False,
+            )
             return result.stdout
         except Exception:
             return "Unable to get status"
@@ -103,7 +118,7 @@ class LuminarKeeper:
         self.log("INFO", "Watching Aurora servers every 30 seconds...")
 
         # Save keeper PID
-        with open(KEEPER_PID_FILE, 'w', encoding='utf-8') as f:
+        with open(KEEPER_PID_FILE, "w", encoding="utf-8") as f:
             f.write(str(os.getpid()))
 
         # Register signal handlers
@@ -131,8 +146,7 @@ class LuminarKeeper:
             else:
                 # Servers unhealthy
                 self.restart_count += 1
-                self.log(
-                    "WARN", f"⚠️  Health check FAILED (attempt #{self.restart_count})")
+                self.log("WARN", f"⚠️  Health check FAILED (attempt #{self.restart_count})")
 
                 # Log full status
                 status = self.get_status()
@@ -147,8 +161,7 @@ class LuminarKeeper:
                         self.log("SUCCESS", "✅ Restart successful!")
                         self.restart_count = 0
                     else:
-                        self.log(
-                            "ERROR", "❌ Restart failed - servers not responding")
+                        self.log("ERROR", "❌ Restart failed - servers not responding")
                 else:
                     self.log("ERROR", "❌ Failed to restart servers")
 
@@ -186,8 +199,7 @@ def main():
     elif command == "stop":
         # Stop keeper and servers
         if Path(KEEPER_PID_FILE).exists():
-            pid = int(Path(KEEPER_PID_FILE).read_text(
-                encoding='utf-8').strip())
+            pid = int(Path(KEEPER_PID_FILE).read_text(encoding="utf-8").strip())
             try:
                 os.kill(pid, signal.SIGTERM)
                 print(f"✅ Stopped Luminar Keeper (PID: {pid})")
@@ -195,15 +207,13 @@ def main():
                 print(f"⚠️  Could not kill PID {pid}")
 
         # Also stop Luminar servers
-        subprocess.run([f"{PROJECT_ROOT}/start-dev.sh", "stop"],
-                       cwd=PROJECT_ROOT, capture_output=True, check=False)
+        subprocess.run([f"{PROJECT_ROOT}/start-dev.sh", "stop"], cwd=PROJECT_ROOT, capture_output=True, check=False)
         print("✅ Aurora servers stopped")
 
     elif command == "status":
         # Show status
         if Path(KEEPER_PID_FILE).exists():
-            pid = int(Path(KEEPER_PID_FILE).read_text(
-                encoding='utf-8').strip())
+            pid = int(Path(KEEPER_PID_FILE).read_text(encoding="utf-8").strip())
             try:
                 os.kill(pid, 0)  # Check if process exists
                 print(f"✅ Keeper: RUNNING (PID: {pid})")
@@ -214,7 +224,8 @@ def main():
 
         print()
         result = subprocess.run(
-            [sys.executable, LUMINAR_SCRIPT, "status"], cwd=PROJECT_ROOT, capture_output=True, text=True, check=False)
+            [sys.executable, LUMINAR_SCRIPT, "status"], cwd=PROJECT_ROOT, capture_output=True, text=True, check=False
+        )
         print(result.stdout)
 
     elif command == "logs":

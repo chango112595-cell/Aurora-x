@@ -175,7 +175,7 @@ def get_latest_report():
     """Read latest diagnostic report"""
     if DIAGNOSTICS_FILE.exists():
         try:
-            with open(DIAGNOSTICS_FILE, encoding='utf-8') as f:
+            with open(DIAGNOSTICS_FILE, encoding="utf-8") as f:
                 return json.load(f)
         except Exception:
             pass

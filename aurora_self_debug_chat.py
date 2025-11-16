@@ -61,8 +61,8 @@ except Exception as e:
 print("\n4️⃣ Checking chat service logs...")
 try:
     result = subprocess.run(
-        ["tmux", "capture-pane", "-t", "aurora-chat", "-p", "-S", "-20"], capture_output=True, text=True
-    , check=False)
+        ["tmux", "capture-pane", "-t", "aurora-chat", "-p", "-S", "-20"], capture_output=True, text=True, check=False
+    )
     if result.returncode == 0:
         print("   Last 20 lines from chat service:")
         print("   " + "\n   ".join(result.stdout.strip().split("\n")[-10:]))
@@ -75,8 +75,8 @@ except Exception as e:
 print("\n5️⃣ Checking backend logs...")
 try:
     result = subprocess.run(
-        ["tmux", "capture-pane", "-t", "aurora-backend", "-p", "-S", "-20"], capture_output=True, text=True
-    , check=False)
+        ["tmux", "capture-pane", "-t", "aurora-backend", "-p", "-S", "-20"], capture_output=True, text=True, check=False
+    )
     if result.returncode == 0:
         print("   Last 20 lines from backend:")
         print("   " + "\n   ".join(result.stdout.strip().split("\n")[-10:]))

@@ -4,9 +4,9 @@ Aurora Autonomous Browser Launcher
 Opens Aurora's dashboard automatically in the default browser
 """
 
-import webbrowser
-import time
 import socket
+import time
+import webbrowser
 
 
 class AuroraBrowserLauncher:
@@ -23,7 +23,7 @@ class AuroraBrowserLauncher:
         """Check if a port is accessible"""
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(1)
-        result = sock.connect_ex(('localhost', port))
+        result = sock.connect_ex(("localhost", port))
         sock.close()
         return result == 0
 
@@ -43,8 +43,7 @@ class AuroraBrowserLauncher:
 
         # Wait for backend to be ready
         if not self.wait_for_service(5000):
-            self.log(
-                "⚠️  Backend not ready, but attempting to open browser anyway...")
+            self.log("⚠️  Backend not ready, but attempting to open browser anyway...")
 
         # Open the dashboard
         try:
@@ -71,8 +70,7 @@ class AuroraBrowserLauncher:
         if success:
             self.log("✅ BROWSER LAUNCHED")
             self.log(f"📍 URL: {self.frontend_url}")
-            self.log(
-                "🎨 You should see Aurora's futuristic quantum neural dashboard")
+            self.log("🎨 You should see Aurora's futuristic quantum neural dashboard")
             self.log("")
             self.log("Features visible:")
             self.log("  • Quantum Coherence Monitor")

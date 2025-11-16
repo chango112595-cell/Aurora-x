@@ -14,11 +14,10 @@ async def test_dashboard_locally():
     dashboard_path = Path("aurora_x/static/demo-dashboard.html")
     if dashboard_path.exists():
         print("✅ Dashboard HTML file exists")
-        print(
-            f"   Size: {len(dashboard_path.read_text(encoding='utf-8'))} bytes")
+        print(f"   Size: {len(dashboard_path.read_text(encoding='utf-8'))} bytes")
 
         # Check content
-        content = dashboard_path.read_text(encoding='utf-8')
+        content = dashboard_path.read_text(encoding="utf-8")
         checks = [
             ("Aurora-X Demo Dashboard", "Dashboard title"),
             ("cards-grid", "Cards grid container"),
@@ -97,8 +96,7 @@ async def test_demo_cards_endpoint():
                 result = await route.endpoint()
                 if result.get("ok"):
                     print(f"   ✅ Returns {result.get('total', 0)} demo cards")
-                    print(
-                        f"   ✅ Categories: {list(result.get('categories', {}).keys())}")
+                    print(f"   ✅ Categories: {list(result.get('categories', {}).keys())}")
                     return True
 
         return False

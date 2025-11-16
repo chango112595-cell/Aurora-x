@@ -14,6 +14,7 @@ async def test_runall_locally():
 
     # pylint: disable=import-outside-toplevel
     from aurora_x.chat.attach_demo import attach_demo
+
     # pylint: disable=import-outside-toplevel
     from aurora_x.chat.attach_demo_runall import attach_demo_runall
 
@@ -50,8 +51,7 @@ async def test_runall_locally():
                 # Simulate results
                 results = []
                 for i, card in enumerate(cards[:5]):  # Just test first 5
-                    print(
-                        f"   [{i + 1}/{min(5, len(cards))}] {card['title']}...")
+                    print(f"   [{i + 1}/{min(5, len(cards))}] {card['title']}...")
                     results.append(
                         {
                             "id": card["id"],
@@ -96,7 +96,7 @@ def test_dashboard_button():
     print("\n🔍 Checking dashboard for Run All button...")
 
     if dashboard_path.exists():
-        content = dashboard_path.read_text(encoding='utf-8')
+        content = dashboard_path.read_text(encoding="utf-8")
 
         checks = [
             ("run-all-btn", "Run All button element"),
@@ -133,8 +133,7 @@ def test_runs_directory():
 
         # Test writing a sample file
         test_file = runs_dir / "test-write.json"
-        test_data = {"test": "data",
-                     "timestamp": datetime.utcnow().isoformat()}
+        test_data = {"test": "data", "timestamp": datetime.utcnow().isoformat()}
         test_file.write_text(json.dumps(test_data, indent=2))
 
         if test_file.exists():

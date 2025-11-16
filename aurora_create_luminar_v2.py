@@ -17,7 +17,7 @@ def main():
     aurora = AuroraIntelligenceManager()
 
     # Load the task
-    with open(".aurora_knowledge/LUMINAR_NEXUS_V2_TASK.json", encoding='utf-8') as f:
+    with open(".aurora_knowledge/LUMINAR_NEXUS_V2_TASK.json", encoding="utf-8") as f:
         task = json.load(f)
 
     aurora.log("=" * 70)

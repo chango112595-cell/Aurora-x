@@ -13,17 +13,16 @@ from pathlib import Path
 def update_file_content(file_path: Path, updates: list[tuple[str, str]]) -> bool:
     """Apply text replacements to a file"""
     try:
-        content = file_path.read_text(encoding='utf-8')
+        content = file_path.read_text(encoding="utf-8")
         modified = content
 
         for old_text, new_text in updates:
             if old_text in modified:
                 modified = modified.replace(old_text, new_text)
-                print(
-                    f"[Aurora] Updated: {old_text[:50]}... -> {new_text[:50]}...")
+                print(f"[Aurora] Updated: {old_text[:50]}... -> {new_text[:50]}...")
 
         if modified != content:
-            file_path.write_text(modified, encoding='utf-8')
+            file_path.write_text(modified, encoding="utf-8")
             print(f"[Aurora] Fixed: {file_path.name}")
             return True
         return False
@@ -55,8 +54,10 @@ def aurora_system_update():
         if file_path.exists():
             updates = [
                 ("32 Grandmaster Tiers", "47 Complete Systems (13 Tasks + 34 Tiers)"),
-                ("Autonomous AI • Complete Project Ownership • 32 Grandmaster Tiers",
-                 "Autonomous AI • 13 Foundation Tasks • 34 Knowledge Tiers • Complete Mastery"),
+                (
+                    "Autonomous AI • Complete Project Ownership • 32 Grandmaster Tiers",
+                    "Autonomous AI • 13 Foundation Tasks • 34 Knowledge Tiers • Complete Mastery",
+                ),
             ]
             if update_file_content(file_path, updates):
                 files_updated += 1
@@ -65,8 +66,10 @@ def aurora_system_update():
     rebuilt_chat = root / "client/src/components/AuroraRebuiltChat.tsx"
     if rebuilt_chat.exists():
         updates = [
-            ("32 Grandmaster Tiers | Ancient → Sci-Fi Mastery",
-             "47 Systems: 13 Foundation Tasks + 34 Knowledge Tiers | Ancient → Autonomous Mastery"),
+            (
+                "32 Grandmaster Tiers | Ancient → Sci-Fi Mastery",
+                "47 Systems: 13 Foundation Tasks + 34 Knowledge Tiers | Ancient → Autonomous Mastery",
+            ),
         ]
         if update_file_content(rebuilt_chat, updates):
             files_updated += 1

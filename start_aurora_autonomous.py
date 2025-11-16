@@ -4,9 +4,9 @@ Start Aurora in Full Autonomous Mode
 Aurora will continuously monitor, detect issues, and fix them autonomously
 """
 
-from tools.aurora_autonomous_system import AuroraAutonomousSystem
-from tools.aurora_autonomous_fixer import AuroraAutonomousFixer
 from aurora_intelligence_manager import AuroraIntelligenceManager
+from tools.aurora_autonomous_fixer import AuroraAutonomousFixer
+from tools.aurora_autonomous_system import AuroraAutonomousSystem
 
 # Add workspace to path
 sys.path.insert(0, "/workspaces/Aurora-x")
@@ -48,31 +48,28 @@ class AuroraAutonomousRunner:
         print(f"{'='*80}\n")
 
         # Check for pending tasks
-        task_file = Path(
-            "/workspaces/Aurora-x/.aurora_knowledge/pending_tasks.json")
+        task_file = Path("/workspaces/Aurora-x/.aurora_knowledge/pending_tasks.json")
         if task_file.exists():
             print("📋 Checking for pending tasks...")
             import json
 
             try:
-                with open(task_file, encoding='utf-8') as f:
+                with open(task_file, encoding="utf-8") as f:
                     tasks = json.load(f)
 
                 if tasks:
                     print(f"📝 Found {len(tasks)} pending tasks")
                     for task in tasks:
-                        print(
-                            f"   ⚡ Task: {task.get('description', 'Unknown')}")
+                        print(f"   ⚡ Task: {task.get('description', 'Unknown')}")
                         # Execute task autonomously
-                        result = self.autonomous_system.autonomous_execute(
-                            task.get("description", ""))
+                        result = self.autonomous_system.autonomous_execute(task.get("description", ""))
                         if result:
                             print("   ✅ Task completed")
                         else:
                             print("   ❌ Task failed")
 
                     # Clear completed tasks
-                    with open(task_file, 'w', encoding='utf-8') as f:
+                    with open(task_file, "w", encoding="utf-8") as f:
                         json.dump([], f)
             except Exception as e:
                 print(f"⚠️  Error reading tasks: {e}")
@@ -111,8 +108,7 @@ class AuroraAutonomousRunner:
         import subprocess
 
         for name, port in servers.items():
-            result = subprocess.run(
-                f"lsof -i :{port} -t", shell=True, capture_output=True, text=True, check=False)
+            result = subprocess.run(f"lsof -i :{port} -t", shell=True, capture_output=True, text=True, check=False)
             if result.returncode != 0:
                 issues.append(f"{name} not running on port {port}")
 
@@ -120,13 +116,11 @@ class AuroraAutonomousRunner:
         log_file = Path("/workspaces/Aurora-x/aurora_ui.log")
         if log_file.exists():
             try:
-                with open(log_file, encoding='utf-8') as f:
+                with open(log_file, encoding="utf-8") as f:
                     logs = f.readlines()
-                    errors = [line for line in logs[-100:]
-                              if "error" in line.lower() or "failed" in line.lower()]
+                    errors = [line for line in logs[-100:] if "error" in line.lower() or "failed" in line.lower()]
                     if errors:
-                        issues.append(
-                            f"Found {len(errors)} error entries in logs")
+                        issues.append(f"Found {len(errors)} error entries in logs")
             except Exception:
                 pass
 
@@ -136,8 +130,7 @@ class AuroraAutonomousRunner:
 
             response = requests.get("http://localhost:5173", timeout=5)
             if response.status_code != 200:
-                issues.append(
-                    f"Frontend returning status {response.status_code}")
+                issues.append(f"Frontend returning status {response.status_code}")
         except Exception as e:
             issues.append(f"Frontend not responding: {e}")
 

@@ -13,11 +13,7 @@ class AuroraServerAnalysis:
 
     def __init__(self):
         self.root = Path(".")
-        self.findings = {
-            "servers": [],
-            "issues": [],
-            "recommendations": []
-        }
+        self.findings = {"servers": [], "issues": [], "recommendations": []}
 
     def analyze_package_json(self):
         """Analyze package.json scripts"""
@@ -25,7 +21,7 @@ class AuroraServerAnalysis:
 
         package_path = self.root / "package.json"
         if package_path.exists():
-            with open(package_path, encoding='utf-8') as f:
+            with open(package_path, encoding="utf-8") as f:
                 data = json.load(f)
                 scripts = data.get("scripts", {})
 
@@ -35,10 +31,8 @@ class AuroraServerAnalysis:
 
                 # Check if we're using TypeScript (tsx)
                 if "tsx" in str(scripts):
-                    self.findings["issues"].append(
-                        "Using tsx (TypeScript execution) not HTML")
-                    print(
-                        "\n[Aurora] ✅ Confirmed: Using TypeScript (.tsx/.ts) not HTML")
+                    self.findings["issues"].append("Using tsx (TypeScript execution) not HTML")
+                    print("\n[Aurora] ✅ Confirmed: Using TypeScript (.tsx/.ts) not HTML")
 
     def scan_server_files(self):
         """Find all server files"""
@@ -69,26 +63,26 @@ class AuroraServerAnalysis:
 
         x_start = self.root / "x-start"
         if x_start.exists():
-            content = x_start.read_text(encoding='utf-8')
+            content = x_start.read_text(encoding="utf-8")
             print("[Aurora] x-start file found")
 
             # Extract port assignments
             ports = {}
-            for line in content.split('\n'):
-                if 'PORT' in line and '=' in line and not line.strip().startswith('#'):
+            for line in content.split("\n"):
+                if "PORT" in line and "=" in line and not line.strip().startswith("#"):
                     print(f"  • {line.strip()}")
-                    if '5000' in line:
-                        ports['backend'] = 5000
-                    elif '5001' in line:
-                        ports['bridge'] = 5001
-                    elif '5002' in line:
-                        ports['self_learn'] = 5002
-                    elif '5003' in line:
-                        ports['chat'] = 5003
-                    elif '5005' in line:
-                        ports['luminar'] = 5005
-                    elif '5173' in line:
-                        ports['vite'] = 5173
+                    if "5000" in line:
+                        ports["backend"] = 5000
+                    elif "5001" in line:
+                        ports["bridge"] = 5001
+                    elif "5002" in line:
+                        ports["self_learn"] = 5002
+                    elif "5003" in line:
+                        ports["chat"] = 5003
+                    elif "5005" in line:
+                        ports["luminar"] = 5005
+                    elif "5173" in line:
+                        ports["vite"] = 5173
 
             return ports
         return {}
@@ -99,22 +93,20 @@ class AuroraServerAnalysis:
 
         vite_config = self.root / "vite.config.js"
         if vite_config.exists():
-            content = vite_config.read_text(encoding='utf-8')
+            content = vite_config.read_text(encoding="utf-8")
 
-            if 'port: 5173' in content:
+            if "port: 5173" in content:
                 print("[Aurora] ✅ Vite configured for port 5173")
-                self.findings["recommendations"].append(
-                    "Vite dev server uses port 5173")
+                self.findings["recommendations"].append("Vite dev server uses port 5173")
 
-            if 'react' in content.lower():
+            if "react" in content.lower():
                 print("[Aurora] ✅ Using React (TSX/JSX)")
-                self.findings["issues"].append(
-                    "Frontend: React TSX components, not HTML")
+                self.findings["issues"].append("Frontend: React TSX components, not HTML")
 
             # Check root directory
-            if 'root:' in content:
-                for line in content.split('\n'):
-                    if 'root:' in line:
+            if "root:" in content:
+                for line in content.split("\n"):
+                    if "root:" in line:
                         print(f"[Aurora] Root directory: {line.strip()}")
 
     def analyze_server_index(self):
@@ -123,29 +115,31 @@ class AuroraServerAnalysis:
 
         server_index = self.root / "server" / "index.ts"
         if server_index.exists():
-            content = server_index.read_text(encoding='utf-8')
+            content = server_index.read_text(encoding="utf-8")
 
             # Check for Vite integration
-            if 'setupVite' in content:
+            if "setupVite" in content:
                 print("[Aurora] ✅ Express + Vite integration detected")
-                self.findings["servers"].append({
-                    "name": "Backend + Frontend",
-                    "port": 5000,
-                    "type": "Express with Vite middleware",
-                    "tech": "TypeScript (tsx) + React (tsx)"
-                })
+                self.findings["servers"].append(
+                    {
+                        "name": "Backend + Frontend",
+                        "port": 5000,
+                        "type": "Express with Vite middleware",
+                        "tech": "TypeScript (tsx) + React (tsx)",
+                    }
+                )
 
             # Check default port
-            if 'PORT' in content:
-                for line in content.split('\n'):
-                    if 'PORT' in line and 'process.env' in line:
+            if "PORT" in content:
+                for line in content.split("\n"):
+                    if "PORT" in line and "process.env" in line:
                         print(f"[Aurora] Port config: {line.strip()}")
 
     def identify_architecture(self):
         """Identify the correct architecture"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] ARCHITECTURE IDENTIFICATION")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         print("[Aurora] CORRECT SERVER ARCHITECTURE:")
         print()
@@ -175,9 +169,9 @@ class AuroraServerAnalysis:
 
     def run(self):
         """Run complete analysis"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] SERVER ARCHITECTURE ANALYSIS")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         self.analyze_package_json()
         self.scan_server_files()
@@ -187,9 +181,9 @@ class AuroraServerAnalysis:
 
         self.identify_architecture()
 
-        print("="*60)
+        print("=" * 60)
         print("[Aurora] SUMMARY")
-        print("="*60)
+        print("=" * 60)
         print()
         print("[Aurora] ✅ PRIMARY ACCESS POINT: http://localhost:5000")
         print("[Aurora] ✅ Frontend tech: React TSX (TypeScript)")

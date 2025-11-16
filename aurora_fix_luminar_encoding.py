@@ -9,24 +9,24 @@ from pathlib import Path
 
 def remove_emojis_from_file(file_path):
     """Remove emoji characters from print statements"""
-    content = file_path.read_text(encoding='utf-8')
+    content = file_path.read_text(encoding="utf-8")
 
     # Map emojis to ASCII replacements
     emoji_replacements = {
-        '✅': '[OK]',
-        '❌': '[ERROR]',
-        '⚠️': '[WARN]',
-        '🌌': '',
-        '🔗': '[LINK]',
-        '🔍': '[SCAN]',
-        '🚀': '[START]',
-        '✨': '[FEATURES]',
-        '🔧': '[FIX]',
-        '📊': '[STATS]',
-        'ℹ️': '[INFO]',
-        '•': '-',
-        '🎯': '[TARGET]',
-        '💬': '[CHAT]',
+        "✅": "[OK]",
+        "❌": "[ERROR]",
+        "⚠️": "[WARN]",
+        "🌌": "",
+        "🔗": "[LINK]",
+        "🔍": "[SCAN]",
+        "🚀": "[START]",
+        "✨": "[FEATURES]",
+        "🔧": "[FIX]",
+        "📊": "[STATS]",
+        "ℹ️": "[INFO]",
+        "•": "-",
+        "🎯": "[TARGET]",
+        "💬": "[CHAT]",
     }
 
     modified = content
@@ -34,7 +34,7 @@ def remove_emojis_from_file(file_path):
         modified = modified.replace(emoji, replacement)
 
     # Write back
-    file_path.write_text(modified, encoding='utf-8')
+    file_path.write_text(modified, encoding="utf-8")
     print(f"[Aurora] Fixed encoding in {file_path.name}")
 
 

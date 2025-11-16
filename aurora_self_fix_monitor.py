@@ -42,7 +42,7 @@ print(AURORA_TASK)
 log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/self_fix_task.jsonl")
 log_file.parent.mkdir(exist_ok=True)
 
-with open(log_file, 'a', encoding='utf-8') as f:
+with open(log_file, "a", encoding="utf-8") as f:
     entry = {
         "timestamp": datetime.now().isoformat(),
         "task": "Port Configuration Consolidation",

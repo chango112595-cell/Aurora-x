@@ -4,13 +4,12 @@ The hook was removed but never added back with location variable
 """
 
 
-
 def final_layout_fix():
     print("🌟 Aurora: Applying final layout fix...")
 
     layout_file = "client/src/components/AuroraFuturisticLayout.tsx"
 
-    with open(layout_file, 'r', encoding='utf-8') as f:
+    with open(layout_file, encoding="utf-8") as f:
         content = f.read()
 
     # The hook call is missing! Add it after useState
@@ -28,13 +27,13 @@ def final_layout_fix():
     if old_code in content:
         content = content.replace(old_code, new_code)
 
-        with open(layout_file, 'w', encoding='utf-8') as f:
+        with open(layout_file, "w", encoding="utf-8") as f:
             f.write(content)
         print("   ✅ Added missing useLocation hook")
         return True
     else:
         print("   ⚠️  Code pattern not found - checking if already fixed...")
-        if 'const [location] = useLocation();' in content:
+        if "const [location] = useLocation();" in content:
             print("   ✅ Hook already present")
             return True
         else:
@@ -43,13 +42,13 @@ def final_layout_fix():
 
 
 if __name__ == "__main__":
-    print("="*60)
+    print("=" * 60)
     print("🌟 AURORA FINAL LAYOUT FIX")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     SUCCESS = final_layout_fix()
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     if success:
         print("✨ Layout completely fixed!")
         print("   - useLocation imported ✅")
@@ -57,4 +56,4 @@ if __name__ == "__main__":
         print("   - location variable used in routing ✅")
     else:
         print("❌ Fix failed - manual intervention needed")
-    print("="*60)
+    print("=" * 60)

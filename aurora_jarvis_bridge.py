@@ -37,8 +37,7 @@ class AuroraJARVIS:
 def health():
     """JARVIS health check"""
     return jsonify(
-        {"status": "online", "message": aurora.speak(
-            "status"), "timestamp": time.time(), "personality": "JARVIS"}
+        {"status": "online", "message": aurora.speak("status"), "timestamp": time.time(), "personality": "JARVIS"}
     )
 
 
