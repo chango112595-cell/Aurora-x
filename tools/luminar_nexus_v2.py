@@ -1042,7 +1042,8 @@ class LuminarNexusV2:
             if session_result and session_name in session_result.stdout:
                 # Check health
                 try:
-                    health_ok = asyncio.run(self._check_service_health(service_name))
+                    health_ok = asyncio.run(
+                        self._check_service_health(service_name))
                 except Exception:
                     health_ok = False
                 status = "RUNNING"
