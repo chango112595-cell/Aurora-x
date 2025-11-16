@@ -1590,7 +1590,7 @@ class PredictiveScaler:
         predicted_load = self._predict_future_load(service_name, current_load)
 
         # Make scaling decision
-        scaling_action = self._make_scaling_decision(service_name,rent_load, predicted_load)
+        scaling_action = self._make_scaling_decision(service_name, current_load, predicted_load)
 
         # Log decision
         if scaling_action:
