@@ -19,7 +19,7 @@ truffleHog==2.2.1                # Find secrets in git history (fixed version)
 
 # Dependency Management
 pipdeptree==2.13.1               # Dependency tree visualization
-pip-licenses==4.3.3              # License checker
+pip-licenses==4.5.1              # License checker
 
 # SAST (Static Application Security Testing)
 semgrep==1.45.0                  # Lightweight SAST tool
