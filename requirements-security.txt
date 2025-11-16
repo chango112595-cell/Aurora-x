@@ -8,7 +8,7 @@ safety==2.3.5                    # Dependency vulnerability scanner
 pip-audit==2.6.1                 # Audit Python packages for vulnerabilities
 
 # Code Quality & Security Analysis
-pylint==3.0.2                    # Python code analysis
+pylint==3.3.9                    # Python code analysis
 flake8==6.1.0                    # Style guide enforcement
 flake8-bandit==4.1.1             # Bandit integration for Flake8
 pyre-check==0.9.18               # Type checker with security focus
