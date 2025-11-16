@@ -976,45 +976,50 @@ class LuminarNexusV2:
         print("\n✅ All services stopped!\n")
 
     def show_status(self):
-        """Show status of all services"""
-        print("\n" + "=" * 70)
+        """Show detailed status of all services"""
+        print("=" * 70)
         print("📊 LUMINAR NEXUS V2 - SERVER STATUS")
-        print("=" * 70 + "\n")
+        print("=" * 70)
 
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
+        # Try to get tmux session info if available
+        try:
+            session_result = subprocess.run(
+                ["tmux", "list-sessions"],
+                capture_output=True,
+                text=True,
+                timeout=2
+            )
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            print("ℹ️  tmux not available - using direct process management")
+            session_result = None
 
-        for server_key in self.servers.keys():
-            server = self.servers[server_key]
+        # Check each service
+        for service_name, config in self.servers.items():
+            port = config["port"]
 
-            # Check if service process exists (cross-platform)
-            session_exists = False
-            if not self.is_windows():
-                # Linux/macOS: Check tmux session
-                session_result = subprocess.run(
-                    ["tmux", "has-session", "-t", server["session"]], capture_output=True, check=False
-                )
-                session_exists = session_result.returncode == 0
+            # Check if service is running via port or process
+            session_name = f"aurora-{service_name}"
+
+            if session_result is None:
+                # No tmux - check by port directly
+                import socket
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.settimeout(1)
+                    running = s.connect_ex(('127.0.0.1', port)) == 0
+                print(f"{'✅' if running else '❌'} {service_name:20} Port {port:5} {'RUNNING' if running else 'STOPPED'}")
+                continue
+
+            # tmux available - check session
+            if session_result and session_name in session_result.stdout:
+                # Check health
+                health_ok = self.loop.run_until_complete(self._check_service_health(service_name))
+                status = "RUNNING"
+                icon = "✅"
+                print(f"{icon} {service_name:20} Port {port:5} {status} (tmux:{session_name}) Health: {'✅ OK' if health_ok else '❌ Not responding'}")
             else:
-                # Windows: Check if port is in use (indicates service running)
-                session_exists = self._is_port_in_use(server["port"])
-
-            # Check health
-            health_ok = loop.run_until_complete(self._check_service_health(server_key))
-
-            status = "running" if (session_exists and health_ok) else "starting" if session_exists else "stopped"
-            icon = "✅" if status == "running" else "⚠️" if status == "starting" else "❌"
-
-            print(f"{icon} {server['name']}")
-            print(f"   Status: {status}")
-            print(f"   Port: {server['port']}")
-            if not self.is_windows():
-                print(f"   Session: {server['session']}")
-            print(f"   Health: {'✅ OK' if health_ok else '❌ Not responding'}")
-            print()
-
-        loop.close()
-        print("=" * 70 + "\n")
+                icon = "❌"
+                status = "STOPPED"
+                print(f"{icon} {service_name:20} Port {port:5} {status} (tmux:{session_name})")
 
     def start_advanced_monitoring(self):
         """Start advanced monitoring with AI analysis"""
@@ -1864,7 +1869,7 @@ def run_luminar_nexus_v2(port: int = 5005):
     nexus.register_service("frontend", 5173, "ui", quantum_state="entangled")
     nexus.register_service("backend", 5000, "api", quantum_state="stable")
     nexus.register_service("bridge", 5001, "middleware", dependencies=["backend"], quantum_state="stable")
-    nexus.register_service("self_learn", 5002, "ai", dependencies=["backend"], quantum_state="superposition")
+    nexus.register_service("self-learn", 5002, "ai", dependencies=["backend"], quantum_state="superposition")
     nexus.register_service("chat", 5003, "ai", dependencies=["bridge"], quantum_state="entangled")
 
     # Create advanced API
