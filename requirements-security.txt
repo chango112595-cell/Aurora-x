@@ -26,7 +26,7 @@ semgrep==1.45.0                  # Lightweight SAST tool
 
 # Web Security (for API testing)
 requests==2.31.0                 # HTTP library
-urllib3==2.1.0                   # HTTP client
+urllib3==2.5.0                   # HTTP client
 
 # Additional Security Tools
 cryptography==41.0.7             # Cryptographic recipes and primitives
