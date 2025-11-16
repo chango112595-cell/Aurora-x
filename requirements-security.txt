@@ -14,7 +14,7 @@ flake8-bandit==4.1.1             # Bandit integration for Flake8
 pyre-check==0.9.18               # Type checker with security focus
 
 # Secrets Detection
-detect-secrets==1.4.0            # Prevent secrets in code
+detect-secrets==1.5.0            # Prevent secrets in code
 truffleHog==2.2.1                # Find secrets in git history (fixed version)
 
 # Dependency Management
