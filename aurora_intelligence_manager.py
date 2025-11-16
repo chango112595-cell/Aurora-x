@@ -200,7 +200,8 @@ class AuroraIntelligenceManager:
         # Match against known patterns
         for pattern_name, pattern_data in self.issue_patterns.items():
             pattern_symptoms = pattern_data["symptoms"]
-            matches = sum(1 for symptom in symptoms if any(ps in symptom.lower() for ps in pattern_symptoms))
+            matches = sum(1 for symptom in symptoms if any(
+                ps in symptom.lower() for ps in pattern_symptoms))
 
             if matches > 0:
                 confidence = matches / len(pattern_symptoms)
@@ -214,7 +215,8 @@ class AuroraIntelligenceManager:
                 )
 
         # Sort by confidence
-        analysis["matched_patterns"].sort(key=lambda x: x["confidence"], reverse=True)
+        analysis["matched_patterns"].sort(
+            key=lambda x: x["confidence"], reverse=True)
 
         # Extract probable causes and solutions
         if analysis["matched_patterns"]:
@@ -234,13 +236,15 @@ class AuroraIntelligenceManager:
                             }
                         )
 
-        self.log(f"Analysis complete: {len(analysis['matched_patterns'])} patterns matched")
+        self.log(
+            f"Analysis complete: {len(analysis['matched_patterns'])} patterns matched")
         return analysis
 
     def request_approval_for_fix(self, analysis: dict) -> bool:
         """Request approval from Aurora's approval system for automated fixes"""
         if not approval_system:
-            self.log("No approval system available, proceeding with user confirmation")
+            self.log(
+                "No approval system available, proceeding with user confirmation")
             return self.get_user_approval(analysis)
 
         # Create change request for Aurora's approval system
@@ -265,7 +269,8 @@ class AuroraIntelligenceManager:
 
             # For demonstration, auto-approve high-confidence fixes
             if analysis["confidence_score"] > 0.8:
-                approval_system.approve_change(request_id, "Auto-approved high confidence server fix")
+                approval_system.approve_change(
+                    request_id, "Auto-approved high confidence server fix")
                 self.log("High confidence fix auto-approved")
                 return True
             else:
@@ -292,18 +297,21 @@ class AuroraIntelligenceManager:
                 print(f"  {i+1}. {solution['description']}")
                 print(f"     Command: {solution['command']}")
 
-        response = input("\nShould Aurora proceed with automated fixes? (y/n): ").lower().strip()
+        response = input(
+            "\nShould Aurora proceed with automated fixes? (y/n): ").lower().strip()
         return response in ["y", "yes", "1", "true"]
 
     def execute_fixes(self, analysis: dict) -> dict:
         """Execute recommended fixes"""
-        results = {"fixes_attempted": 0, "fixes_successful": 0, "errors": [], "outputs": []}
+        results = {"fixes_attempted": 0,
+                   "fixes_successful": 0, "errors": [], "outputs": []}
 
         self.log("Starting automated fix execution")
 
         for solution in analysis["recommended_solutions"]:
             if solution["confidence"] < 0.5:
-                self.log(f"Skipping low confidence solution: {solution['description']}")
+                self.log(
+                    f"Skipping low confidence solution: {solution['description']}")
                 continue
 
             self.log(f"Executing: {solution['command']}")
@@ -312,19 +320,25 @@ class AuroraIntelligenceManager:
             try:
                 import subprocess
 
-                result = subprocess.run(solution["command"], shell=True, capture_output=True, text=True, timeout=30, check=False)
+                result = subprocess.run(
+                    solution["command"], shell=True, capture_output=True, text=True, timeout=30, check=False)
 
                 if result.returncode == 0:
                     results["fixes_successful"] += 1
-                    results["outputs"].append(f"✅ {solution['description']}: Success")
+                    results["outputs"].append(
+                        f"✅ {solution['description']}: Success")
                     self.log(f"Fix successful: {solution['description']}")
                 else:
-                    results["errors"].append(f"❌ {solution['description']}: {result.stderr}")
-                    self.log(f"Fix failed: {solution['description']} - {result.stderr}")
+                    results["errors"].append(
+                        f"❌ {solution['description']}: {result.stderr}")
+                    self.log(
+                        f"Fix failed: {solution['description']} - {result.stderr}")
 
             except Exception as e:
-                results["errors"].append(f"❌ {solution['description']}: Exception - {str(e)}")
-                self.log(f"Fix exception: {solution['description']} - {str(e)}")
+                results["errors"].append(
+                    f"❌ {solution['description']}: Exception - {str(e)}")
+                self.log(
+                    f"Fix exception: {solution['description']} - {str(e)}")
 
         return results
 
@@ -396,12 +410,14 @@ class AuroraIntelligenceManager:
             print(f"\n📚 Training Scenario: {scenario['name']}")
             print("=" * 40)
 
-            analysis = self.analyze_issue(scenario["symptoms"], scenario["context"])
+            analysis = self.analyze_issue(
+                scenario["symptoms"], scenario["context"])
 
             print("🔍 Analysis Results:")
             print(f"   Confidence: {analysis['confidence_score']:.2f}")
             print(f"   Patterns matched: {len(analysis['matched_patterns'])}")
-            print(f"   Solutions available: {len(analysis['recommended_solutions'])}")
+            print(
+                f"   Solutions available: {len(analysis['recommended_solutions'])}")
 
             # This is training, so we don't actually execute fixes
             self.log(f"Training complete for scenario: {scenario['name']}")
@@ -417,10 +433,14 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Aurora Intelligence Manager")
-    parser.add_argument("--train", action="store_true", help="Train Aurora on server management")
-    parser.add_argument("--diagnose", nargs="+", help="Diagnose issues with given symptoms")
-    parser.add_argument("--auto-fix", action="store_true", help="Automatically fix detected issues")
-    parser.add_argument("--learn", action="store_true", help="Enter learning mode")
+    parser.add_argument("--train", action="store_true",
+                        help="Train Aurora on server management")
+    parser.add_argument("--diagnose", nargs="+",
+                        help="Diagnose issues with given symptoms")
+    parser.add_argument("--auto-fix", action="store_true",
+                        help="Automatically fix detected issues")
+    parser.add_argument("--learn", action="store_true",
+                        help="Enter learning mode")
 
     args = parser.parse_args()
 
@@ -461,11 +481,14 @@ def main():
         try:
             import subprocess
 
-            result = subprocess.run(["python", "aurora_server_manager.py", "--status"], capture_output=True, text=True, check=False)
+            result = subprocess.run(["python", "aurora_server_manager.py",
+                                    "--status"], capture_output=True, text=True, check=False)
 
             if "CONFLICTS" in result.stdout:
-                symptoms = ["port conflicts", "multiple processes", "connection issues"]
-                analysis = intelligence.analyze_issue(symptoms, "Current server status check")
+                symptoms = ["port conflicts",
+                            "multiple processes", "connection issues"]
+                analysis = intelligence.analyze_issue(
+                    symptoms, "Current server status check")
                 print("📊 Learning from current system state...")
                 intelligence.save_intelligence()
             else:

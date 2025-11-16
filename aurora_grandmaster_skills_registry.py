@@ -231,7 +231,8 @@ def print_grandmaster_skills():
             print("\nTools:")
             for item in data["tools"]:
                 print(f"  ✓ {item}")
-            total_skills += len(data["frameworks"]) + len(data["languages"]) + len(data["tools"])
+            total_skills += len(data["frameworks"]) + \
+                len(data["languages"]) + len(data["tools"])
         else:
             print(f"\n{data['title']}")
             print("-" * 80)
@@ -258,7 +259,8 @@ if __name__ == "__main__":
     print_grandmaster_skills()
 
     # Save to knowledge base
-    log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/grandmaster_skills_registry.jsonl")
+    log_file = Path(
+        "/workspaces/Aurora-x/.aurora_knowledge/grandmaster_skills_registry.jsonl")
     with open(log_file, "w", encoding="utf-8") as f:
         entry = {
             "timestamp": datetime.now().isoformat(),
