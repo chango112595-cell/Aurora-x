@@ -46,7 +46,7 @@ async def test_chat_endpoint():
     assert response1.file == "app.py"
     if Path("app.py").exists():
         print("   ✅ app.py file created successfully")
-        with open("app.py") as f:
+        with open("app.py", encoding='utf-8') as f:
             content = f.read()
             assert "TITLE = 'Futuristic UI Timer'" in content
             assert "from flask import Flask" in content

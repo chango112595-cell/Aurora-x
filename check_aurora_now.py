@@ -20,7 +20,7 @@ def check_aurora():
             s.close()
             status = "✅ ONLINE"
             results[port] = True
-        except:
+        except Exception:
             status = "❌ OFFLINE"
             results[port] = False
             all_up = False

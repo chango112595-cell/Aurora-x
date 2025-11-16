@@ -10,7 +10,7 @@ import sys
 def test_english_command(command, expected_in_output):
     """Test an English command and check if expected output is present"""
     print(f"\n✨ Testing: '{command}'")
-    result = subprocess.run(f'make say WHAT="{command}"', shell=True, capture_output=True, text=True)
+    result = subprocess.run(f'make say WHAT="{command}"', shell=True, capture_output=True, text=True, check=False)
 
     success = expected_in_output.lower() in result.stdout.lower()
     if success:

@@ -49,7 +49,7 @@ except Exception as e:
 # Test 3: Check tmux sessions
 print("\n3️⃣ Checking tmux sessions...")
 try:
-    result = subprocess.run(["tmux", "list-sessions"], capture_output=True, text=True)
+    result = subprocess.run(["tmux", "list-sessions"], capture_output=True, text=True, check=False, check=False)
     sessions = result.stdout.strip().split("\n")
     aurora_sessions = [s for s in sessions if "aurora" in s.lower()]
     for session in aurora_sessions:
@@ -62,7 +62,7 @@ print("\n4️⃣ Checking chat service logs...")
 try:
     result = subprocess.run(
         ["tmux", "capture-pane", "-t", "aurora-chat", "-p", "-S", "-20"], capture_output=True, text=True
-    )
+    , check=False)
     if result.returncode == 0:
         print("   Last 20 lines from chat service:")
         print("   " + "\n   ".join(result.stdout.strip().split("\n")[-10:]))
@@ -76,7 +76,7 @@ print("\n5️⃣ Checking backend logs...")
 try:
     result = subprocess.run(
         ["tmux", "capture-pane", "-t", "aurora-backend", "-p", "-S", "-20"], capture_output=True, text=True
-    )
+    , check=False)
     if result.returncode == 0:
         print("   Last 20 lines from backend:")
         print("   " + "\n   ".join(result.stdout.strip().split("\n")[-10:]))
@@ -88,7 +88,7 @@ except Exception as e:
 # Test 6: Check for port conflicts
 print("\n6️⃣ Checking for port conflicts...")
 try:
-    result = subprocess.run(["lsof", "-i", ":5003"], capture_output=True, text=True)
+    result = subprocess.run(["lsof", "-i", ":5003"], capture_output=True, text=True, check=False, check=False)
     if result.stdout:
         lines = result.stdout.strip().split("\n")
         print(f"   Port 5003 processes: {len(lines) - 1}")

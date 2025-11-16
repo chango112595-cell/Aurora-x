@@ -29,19 +29,19 @@ def test_chat_endpoint():
 
         # Test 1: Valid web app prompt
         print("\n1. Testing web app prompt:")
-        response = requests.post("http://127.0.0.1:8000/chat", json={"prompt": "Build me a timer UI"})
+        response = requests.post("http://127.0.0.1:8000/chat", json={"prompt": "Build me a timer UI"}, timeout=30)
         print(f"   Status: {response.status_code}")
         print(f"   Response: {json.dumps(response.json(), indent=2)}")
 
         # Test 2: CLI tool prompt
         print("\n2. Testing CLI tool prompt:")
-        response = requests.post("http://127.0.0.1:8000/chat", json={"prompt": "Make a CLI script"})
+        response = requests.post("http://127.0.0.1:8000/chat", json={"prompt": "Make a CLI script"}, timeout=30)
         print(f"   Status: {response.status_code}")
         print(f"   Response: {json.dumps(response.json(), indent=2)}")
 
         # Test 3: Empty prompt
         print("\n3. Testing empty prompt:")
-        response = requests.post("http://127.0.0.1:8000/chat", json={"prompt": ""})
+        response = requests.post("http://127.0.0.1:8000/chat", json={"prompt": ""}, timeout=30)
         print(f"   Status: {response.status_code}")
         print(f"   Response: {json.dumps(response.json(), indent=2)}")
 
@@ -50,7 +50,7 @@ def test_chat_endpoint():
         # Check if app.py was created
         if os.path.exists("app.py"):
             print("✅ app.py file was created successfully")
-            with open("app.py") as f:
+            with open("app.py", encoding='utf-8') as f:
                 lines = f.readlines()[:5]
                 print("   First few lines of generated app.py:")
                 for line in lines:

@@ -175,9 +175,9 @@ def get_latest_report():
     """Read latest diagnostic report"""
     if DIAGNOSTICS_FILE.exists():
         try:
-            with open(DIAGNOSTICS_FILE) as f:
+            with open(DIAGNOSTICS_FILE, encoding='utf-8') as f:
                 return json.load(f)
-        except:
+        except Exception:
             pass
     return None
 
@@ -286,9 +286,8 @@ class DiagnosticHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data.encode("utf-8"))
 
-    def log_message(self, format, *args):
+    def log_message(self, fmt, *args):
         """Suppress default logging"""
-        pass
 
 
 def run_server():

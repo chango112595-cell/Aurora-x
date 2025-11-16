@@ -16,7 +16,7 @@ print("\n1️⃣ Testing backend /api/conversation...")
 try:
     response = requests.post(
         "http://localhost:5000/api/conversation", json={"message": "test", "session_id": "diagnostic"}, timeout=5
-    )
+    , timeout=30)
     if response.status_code == 200:
         print(f"   ✅ Backend responds: {response.status_code}")
         print(f"   Response: {response.json().get('response', '')[:100]}...")
@@ -31,7 +31,7 @@ print("\n2️⃣ Testing Luminar Nexus /api/chat...")
 try:
     response = requests.post(
         "http://localhost:5003/api/chat", json={"message": "test", "session_id": "diagnostic"}, timeout=5
-    )
+    , timeout=30)
     if response.status_code == 200:
         print(f"   ✅ Luminar Nexus responds: {response.status_code}")
         print(f"   Response: {response.json().get('response', '')[:100]}...")
@@ -45,7 +45,7 @@ print("\n3️⃣ Testing Vite frontend proxy...")
 try:
     response = requests.post(
         "http://localhost:5173/api/conversation", json={"message": "test", "session_id": "diagnostic"}, timeout=5
-    )
+    , timeout=30)
     if response.status_code == 200:
         print(f"   ✅ Vite proxy works: {response.status_code}")
         print(f"   Response: {response.json().get('response', '')[:100]}...")
@@ -57,7 +57,7 @@ except Exception as e:
 # Test 4: Check tmux sessions
 print("\n4️⃣ Checking service status...")
 try:
-    result = subprocess.run(["tmux", "list-sessions"], capture_output=True, text=True)
+    result = subprocess.run(["tmux", "list-sessions"], capture_output=True, text=True, check=False)
     sessions = result.stdout
     aurora_sessions = [s for s in sessions.split("\n") if "aurora" in s.lower()]
     print(f"   Found {len(aurora_sessions)} Aurora sessions:")
@@ -78,7 +78,7 @@ print("   5. Response flows back")
 # Test 6: Check if there's a CORS issue
 print("\n6️⃣ Testing CORS headers...")
 try:
-    response = requests.options("http://localhost:5173/api/conversation", headers={"Origin": "http://localhost:5173"})
+    response = requests.options("http://localhost:5173/api/conversation", headers={"Origin": "http://localhost:5173"}, timeout=30)
     print(f"   OPTIONS preflight: {response.status_code}")
     print(f"   CORS headers: {dict(response.headers)}")
 except Exception as e:
@@ -87,7 +87,7 @@ except Exception as e:
 # Test 7: Check vite config for proxy
 print("\n7️⃣ Checking Vite proxy configuration...")
 try:
-    with open("/workspaces/Aurora-x/vite.config.ts") as f:
+    with open("/workspaces/Aurora-x/vite.config.ts", encoding='utf-8') as f:
         config = f.read()
         if "proxy" in config:
             print("   ✅ Vite proxy configuration found")

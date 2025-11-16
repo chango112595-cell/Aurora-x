@@ -6,14 +6,14 @@ import socket
 import sys
 
 
-def check_port(port, timeout=1.0):
+def check_port(port_num, timeout=1.0):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(timeout)
     try:
-        s.connect(("127.0.0.1", port))
+        s.connect(("127.0.0.1", port_num))
         s.close()
         return True
-    except:
+    except (ConnectionRefusedError, OSError, socket.timeout):
         return False
 
 

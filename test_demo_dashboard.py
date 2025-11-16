@@ -10,7 +10,8 @@ def test_dashboard_html_exists():
     if dashboard_path.exists():
         print("✅ Dashboard HTML file exists")
         print(f"   Location: {dashboard_path}")
-        print(f"   Size: {len(dashboard_path.read_text())} bytes")
+        print(
+            f"   Size: {len(dashboard_path.read_text(encoding='utf-8'))} bytes")
         return True
     else:
         print("❌ Dashboard HTML file not found")
@@ -19,8 +20,10 @@ def test_dashboard_html_exists():
 
 def test_dashboard_endpoint():
     """Test the /dashboard/demos endpoint locally"""
+    # pylint: disable=import-outside-toplevel
     from fastapi.testclient import TestClient
 
+    # pylint: disable=import-outside-toplevel
     from aurora_x.serve import app
 
     client = TestClient(app)
@@ -49,8 +52,10 @@ def test_dashboard_endpoint():
 
 def test_demo_cards_api():
     """Test that the demo cards API is accessible"""
+    # pylint: disable=import-outside-toplevel
     from fastapi.testclient import TestClient
 
+    # pylint: disable=import-outside-toplevel
     from aurora_x.serve import app
 
     client = TestClient(app)

@@ -40,7 +40,7 @@ def aurora_knowledge_analysis():
                 content = f.read().lower()
                 if any(kw in content for kw in t13_keywords):
                     files_with_t13.append(py_file.name)
-        except:
+        except (FileNotFoundError, PermissionError):
             pass
 
     if files_with_t13:

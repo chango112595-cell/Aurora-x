@@ -46,7 +46,7 @@ def aurora_review_before_cleanup():
                     comment = next((l for l in first_lines if l.startswith("#") or l.startswith('"""')), "")
                     if comment:
                         comment = comment.replace("#", "").replace('"""', "").strip()[:60]
-            except:
+            except Exception:
                 comment = ""
 
             print(f"\n{i:2d}. {fname:<45} ({size:6.1f} KB)")
@@ -93,7 +93,7 @@ def aurora_review_before_cleanup():
                         "patterns": list(set(found_patterns))[:5],
                         "task_numbers": sorted(set(task_numbers)),
                     }
-        except:
+        except (FileNotFoundError, PermissionError, OSError):
             pass
 
     if files_with_tasks:
@@ -134,7 +134,7 @@ def aurora_review_before_cleanup():
                             "path": str(py_file.relative_to(root)),
                             "line_count": len(foundation_lines),
                         }
-        except:
+        except (FileNotFoundError, PermissionError, OSError):
             pass
 
     if foundation_files:

@@ -56,7 +56,7 @@ def test_demo_cards_api():
     print("=" * 60 + "\n")
 
     try:
-        resp = requests.get(f"{base_url}/api/demo/cards")
+        resp = requests.get(f"{base_url}/api/demo/cards", timeout=30)
 
         if resp.status_code == 200:
             data = resp.json()

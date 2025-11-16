@@ -12,6 +12,9 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+# Initialize Aurora JARVIS instance
+aurora = None
+
 
 class AuroraJARVIS:
     def __init__(self):
@@ -34,7 +37,8 @@ class AuroraJARVIS:
 def health():
     """JARVIS health check"""
     return jsonify(
-        {"status": "online", "message": aurora.speak("status"), "timestamp": time.time(), "personality": "JARVIS"}
+        {"status": "online", "message": aurora.speak(
+            "status"), "timestamp": time.time(), "personality": "JARVIS"}
     )
 
 

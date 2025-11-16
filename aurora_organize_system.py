@@ -32,7 +32,7 @@ def aurora_organize_system():
         "tests": root / "tests" / "archive",
     }
 
-    for name, path in directories.items():
+    for _name, path in directories.items():
         path.mkdir(parents=True, exist_ok=True)
         print(f"  ✓ Created: {path.relative_to(root)}/")
 
@@ -77,7 +77,7 @@ def aurora_organize_system():
 
     for file in sorted(files_to_archive):
         try:
-            dest = directories["legacy"] / file.name
+            _dest = directories["legacy"] / file.name
             # Don't actually move yet, just log
             organization["archived"].append(str(file.relative_to(root)))
             print(f"  📦 Will archive: {file.name}")
@@ -121,7 +121,7 @@ def aurora_organize_system():
             # Check for tier definitions (not just usage)
             if "def _get_tier" in content or "tier_" in content and "=" in content:
                 tier_files[py_file.name] = True
-        except:
+        except (FileNotFoundError, PermissionError, OSError):
             pass
 
     if tier_files:

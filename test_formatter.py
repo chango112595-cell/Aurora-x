@@ -57,6 +57,7 @@ def test_api():
                 f"{base_url}/api/format/seconds",
                 json={"seconds": tc["seconds"]},
                 headers={"Content-Type": "application/json"},
+                timeout=30
             )
 
             if resp.status_code == 200:

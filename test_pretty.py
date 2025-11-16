@@ -67,6 +67,7 @@ def test_api():
                 f"{base_url}/api/solve/pretty",
                 json=tc,
                 headers={"Content-Type": "application/json"},
+                timeout=30
             )
 
             if resp.status_code == 200:

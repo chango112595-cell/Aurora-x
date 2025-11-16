@@ -2,7 +2,7 @@
 """Fix Makefile indentation: convert spaces to tabs for command lines"""
 
 # Read the current Makefile
-with open("Makefile") as f:
+with open("Makefile", encoding='utf-8') as f:
     lines = f.readlines()
 
 # Fix indentation: convert 8 spaces or any leading spaces to tabs for command lines
@@ -24,7 +24,7 @@ for line in lines:
         fixed_lines.append(line)
 
 # Write back the fixed Makefile
-with open("Makefile", "w") as f:
+with open("Makefile", 'w', encoding='utf-8') as f:
     f.writelines(fixed_lines)
 
 print("✅ Fixed Makefile indentation (converted spaces to tabs)")

@@ -17,6 +17,8 @@ Example usage:
 
 from functools import lru_cache
 
+import time
+
 import pytest
 
 
@@ -46,7 +48,8 @@ def factorial(n: int) -> int:
         3628800
     """
     if not isinstance(n, int):
-        raise TypeError(f"factorial() argument must be an integer, not '{type(n).__name__}'")
+        raise TypeError(
+            f"factorial() argument must be an integer, not '{type(n).__name__}'")
 
     if n < 0:
         raise ValueError("factorial() not defined for negative values")
@@ -82,7 +85,8 @@ def factorial_recursive(n: int) -> int:
         raise TypeError("factorial_recursive() argument must be an integer")
 
     if n < 0:
-        raise ValueError("factorial_recursive() not defined for negative values")
+        raise ValueError(
+            "factorial_recursive() not defined for negative values")
 
     if n <= 1:
         return 1
@@ -140,8 +144,6 @@ class TestFactorial:
 
     def test_memoization(self):
         """Test that memoization is working (performance test)"""
-        import time
-
         # Clear cache
         factorial.cache_clear()
 
@@ -194,7 +196,6 @@ def benchmark_factorial(max_n: int = 100):
     Args:
         max_n: Maximum value to test
     """
-    import time
 
     print(f"\nBenchmarking factorial up to {max_n}...")
 
@@ -226,7 +227,6 @@ if __name__ == "__main__":
 
     # Run pytest if available, otherwise run tests manually
     try:
-        import pytest
 
         pytest.main([__file__, "-v", "--tb=short"])
     except ImportError:
@@ -236,7 +236,8 @@ if __name__ == "__main__":
         test_factorial = TestFactorial()
         test_properties = TestFactorialProperties()
 
-        test_methods = [method for method in dir(test_factorial) if method.startswith("test_")]
+        test_methods = [method for method in dir(
+            test_factorial) if method.startswith("test_")]
 
         passed = 0
         failed = 0

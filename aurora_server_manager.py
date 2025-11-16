@@ -40,7 +40,7 @@ class AuroraServerManager:
 
         if self.config_file.exists():
             try:
-                with open(self.config_file) as f:
+                with open(self.config_file, encoding='utf-8') as f:
                     self.config = json.load(f)
             except Exception as e:
                 self.log(f"Config load error: {e}, using defaults")
@@ -52,7 +52,7 @@ class AuroraServerManager:
     def save_config(self):
         """Save current configuration"""
         try:
-            with open(self.config_file, "w") as f:
+            with open(self.config_file, 'w', encoding='utf-8') as f:
                 json.dump(self.config, f, indent=2)
         except Exception as e:
             self.log(f"Config save error: {e}")
@@ -64,7 +64,7 @@ class AuroraServerManager:
         print(log_entry)
 
         try:
-            with open(self.log_file, "a") as f:
+            with open(self.log_file, 'a', encoding='utf-8') as f:
                 f.write(log_entry + "\n")
         except Exception:
             pass  # Don't fail on logging errors
@@ -87,7 +87,8 @@ class AuroraServerManager:
                                 "cmdline": cmdline,
                                 "cpu_percent": proc.info["cpu_percent"],
                                 "memory_mb": (
-                                    proc.info["memory_info"].rss / 1024 / 1024 if proc.info["memory_info"] else 0
+                                    proc.info["memory_info"].rss / 1024 /
+                                    1024 if proc.info["memory_info"] else 0
                                 ),
                                 "create_time": proc.info["create_time"],
                             }
@@ -101,13 +102,14 @@ class AuroraServerManager:
         """Check which ports are in use"""
         port_usage = {}
 
-        for service_name, service_config in self.config["services"].items():
+        for _service_name, service_config in self.config["services"].items():
             port = service_config["port"]
             port_usage[port] = None
 
             try:
                 # Try to connect to the port
-                response = requests.get(f"http://localhost:{port}/healthz", timeout=2)
+                response = requests.get(
+                    f"http://localhost:{port}/healthz", timeout=2)
                 if response.status_code == 200:
                     # Find which process is using this port
                     for conn in psutil.net_connections():
@@ -135,7 +137,8 @@ class AuroraServerManager:
                     proc = psutil.Process(pid)
                     proc.terminate()
                     killed_pids.append(pid)
-                    self.log(f"Terminated conflicting process PID {pid}: {proc_info['cmdline'][:100]}")
+                    self.log(
+                        f"Terminated conflicting process PID {pid}: {proc_info['cmdline'][:100]}")
 
                     # Wait a moment for graceful termination
                     try:
@@ -161,9 +164,11 @@ class AuroraServerManager:
 
         # Check if port is already in use
         try:
-            response = requests.get(f"http://localhost:{port}/healthz", timeout=2)
+            response = requests.get(
+                f"http://localhost:{port}/healthz", timeout=2)
             if response.status_code == 200:
-                self.log(f"Service {service_name} already running on port {port}")
+                self.log(
+                    f"Service {service_name} already running on port {port}")
                 return None
         except Exception:
             pass  # Port available
@@ -181,10 +186,11 @@ class AuroraServerManager:
             time.sleep(2)
 
             if process.poll() is None:  # Still running
-                self.log(f"Started {service_name} on port {port} (PID: {process.pid})")
+                self.log(
+                    f"Started {service_name} on port {port} (PID: {process.pid})")
                 return process
             else:
-                stdout, stderr = process.communicate()
+                _stdout, stderr = process.communicate()
                 self.log(f"Failed to start {service_name}: {stderr.decode()}")
                 return None
 
@@ -192,10 +198,11 @@ class AuroraServerManager:
             self.log(f"Error starting {service_name}: {e}")
             return None
 
-    def health_check(self, service_name: str, port: int) -> tuple[bool, str]:
+    def health_check(self, _service_name: str, port: int) -> tuple[bool, str]:
         """Check if a service is healthy"""
         try:
-            response = requests.get(f"http://localhost:{port}/healthz", timeout=5)
+            response = requests.get(
+                f"http://localhost:{port}/healthz", timeout=5)
             if response.status_code == 200:
                 data = response.json()
                 return True, f"OK - {data.get('service', 'Unknown')}"
@@ -231,18 +238,22 @@ class AuroraServerManager:
 
         # Detect conflicts
         if len(aurora_processes) > self.config["max_concurrent"]:
-            status["conflicts"].append(f"Too many Aurora processes running: {len(aurora_processes)}")
-            status["recommendations"].append("Run 'python aurora_server_manager.py --cleanup' to resolve conflicts")
+            status["conflicts"].append(
+                f"Too many Aurora processes running: {len(aurora_processes)}")
+            status["recommendations"].append(
+                "Run 'python aurora_server_manager.py --cleanup' to resolve conflicts")
 
         # Check for port conflicts
         listening_ports = []
-        for service_name, service_info in status["services"].items():
+        for _service_name, service_info in status["services"].items():
             if service_info["healthy"]:
                 listening_ports.append(service_info["port"])
 
         if len(listening_ports) > 1:
-            status["conflicts"].append(f"Multiple services running on different ports: {listening_ports}")
-            status["recommendations"].append("Stop all services and start only one")
+            status["conflicts"].append(
+                f"Multiple services running on different ports: {listening_ports}")
+            status["recommendations"].append(
+                "Stop all services and start only one")
 
         return status
 
@@ -260,7 +271,8 @@ class AuroraServerManager:
         # Step 3: Start preferred service
         process = self.start_service(preferred_service)
         if process:
-            self.log(f"✅ Successfully restarted Aurora with {preferred_service} service")
+            self.log(
+                f"✅ Successfully restarted Aurora with {preferred_service} service")
             return True
         else:
             self.log(f"❌ Failed to start {preferred_service} service")
@@ -287,7 +299,8 @@ class AuroraServerManager:
                         self.cleanup_and_restart()
 
                 # Health check all services
-                healthy_services = [name for name, info in status["services"].items() if info["healthy"]]
+                healthy_services = [
+                    name for name, info in status["services"].items() if info["healthy"]]
                 if not healthy_services:
                     self.log("❌ No healthy services detected, attempting restart")
                     self.cleanup_and_restart()
@@ -307,11 +320,15 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Aurora Server Manager")
-    parser.add_argument("--status", action="store_true", help="Show system status")
-    parser.add_argument("--cleanup", action="store_true", help="Clean up conflicts and restart")
-    parser.add_argument("--monitor", action="store_true", help="Start monitoring loop")
+    parser.add_argument("--status", action="store_true",
+                        help="Show system status")
+    parser.add_argument("--cleanup", action="store_true",
+                        help="Clean up conflicts and restart")
+    parser.add_argument("--monitor", action="store_true",
+                        help="Start monitoring loop")
     parser.add_argument("--start", type=str, help="Start specific service")
-    parser.add_argument("--kill-all", action="store_true", help="Kill all Aurora processes")
+    parser.add_argument("--kill-all", action="store_true",
+                        help="Kill all Aurora processes")
 
     args = parser.parse_args()
 
@@ -327,7 +344,8 @@ def main():
         print("\n📊 SERVICES:")
         for name, info in status["services"].items():
             status_icon = "✅" if info["healthy"] else "❌"
-            print(f"  {status_icon} {name}: Port {info['port']} - {info['status']}")
+            print(
+                f"  {status_icon} {name}: Port {info['port']} - {info['status']}")
 
         if status["conflicts"]:
             print("\n⚠️  CONFLICTS:")

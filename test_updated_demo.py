@@ -78,11 +78,8 @@ def test_demo_cards_locally():
 
 def test_specific_card(card_id="solve_orbit_units"):
     """Test executing a specific card"""
-    import asyncio
 
-    from fastapi import FastAPI
 
-    from aurora_x.chat.attach_demo import attach_demo
 
     app = FastAPI()
     attach_demo(app)

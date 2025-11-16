@@ -40,7 +40,8 @@ def test_units_formatter_locally():
 
         print(f"  {status_pretty} {value:12.3g} {unit:5} → {pretty:20}")
         if expected_hint:
-            print(f"     {status_hint} Hint: {hint or '(none)'} (expected: {expected_hint})")
+            print(
+                f"     {status_hint} Hint: {hint or '(none)'} (expected: {expected_hint})")
         print()
 
 
@@ -61,6 +62,7 @@ def test_api():
             f"{base_url}/api/format/units",
             json=test_single,
             headers={"Content-Type": "application/json"},
+            timeout=30
         )
 
         if resp.status_code == 200:
@@ -88,6 +90,7 @@ def test_api():
             f"{base_url}/api/format/units",
             json=test_multiple,
             headers={"Content-Type": "application/json"},
+            timeout=30
         )
 
         if resp.status_code == 200:
@@ -95,7 +98,8 @@ def test_api():
             print("  ✓ Response:")
             if result.get("ok") and result.get("items"):
                 for item in result["items"]:
-                    print(f"    - {item['value']:.3g} {item['unit']} → {item['pretty']}", end="")
+                    print(
+                        f"    - {item['value']:.3g} {item['unit']} → {item['pretty']}", end="")
                     if item.get("hint"):
                         print(f" ({item['hint']})", end="")
                     print()
@@ -162,5 +166,6 @@ if __name__ == "__main__":
     print()
     print("curl -X POST http://localhost:5001/api/format/units \\")
     print('  -H "Content-Type: application/json" \\')
-    print('  -d \'{"values": [{"value": 3e8, "unit": "m/s"}, {"value": 5.97e24, "unit": "kg"}]}\'')
+    print(
+        '  -d \'{"values": [{"value": 3e8, "unit": "m/s"}, {"value": 5.97e24, "unit": "kg"}]}\'')
     print("# Returns formatted values with hints for speed of light and Earth's mass")

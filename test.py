@@ -13,6 +13,9 @@ Example usage:
 import logging
 from typing import Any
 
+
+# Function name for templates
+func_name = "test_function"
 # Optional pytest import
 try:
     import pytest
@@ -54,7 +57,7 @@ def test(input_data: Any, **kwargs) -> Any:
         raise ValueError("input_data cannot be None")
 
     # Log the operation
-    logger.debug(f"Processing input: {input_data}")
+    logger.debug("Processing input: {input_data}")
 
     # Process based on type
     if isinstance(input_data, str):
@@ -77,7 +80,7 @@ def test(input_data: Any, **kwargs) -> Any:
         if isinstance(result, str):
             result = result[::-1]
 
-    logger.debug(f"Result: {result}")
+    logger.debug("Result: {result}")
     return result
 
 
@@ -112,7 +115,7 @@ def test_async(input_data: Any, callback: callable | None = None) -> Any:
     """
     result = test(input_data)
 
-    if callback:
+    if callback is not None:
         callback(result)
 
     return result
@@ -140,22 +143,22 @@ def validate_input(data: Any) -> bool:
     return True
 
 
-def transform_output(result: Any, format: str = "default") -> Any:
+def transform_output(result: Any, output_format: str = "default") -> Any:
     """
     Transform output to desired format.
 
     Args:
         result: Result to transform
-        format: Output format
+        output_format: Output format
 
     Returns:
         Transformed result
     """
-    if format == "json":
+    if output_format == "json":
         import json
 
         return json.dumps(result)
-    elif format == "upper":
+    elif output_format == "upper":
         return str(result).upper()
 
     return result
@@ -236,14 +239,14 @@ class TestTestIntegration:
         """Test complete workflow"""
         # Step 1: Validate input
         data = "test data"
-        assert validate_input(data) == True
+        assert validate_input(data)
 
         # Step 2: Process
         result = test(data)
         assert "PROCESSED" in result
 
         # Step 3: Transform output
-        json_output = transform_output(result, format="json")
+        json_output = transform_output(result, output_format="json")
         assert isinstance(json_output, str)
 
     def test_error_handling(self):
@@ -260,8 +263,8 @@ class TestTestIntegration:
                 pass
 
         # Test validation
-        assert validate_input(None) == False
-        assert validate_input("valid") == True
+        assert not validate_input(None)
+        assert validate_input("valid")
 
 
 # ============================================================================
@@ -312,8 +315,8 @@ if __name__ == "__main__":
 
     for example in examples:
         try:
-            result = test(example)
-            print(f"{func_name}({repr(example):20s}) = {repr(result)}")
+            demo_result = test(example)
+            print(f"{func_name}({repr(example):20s}) = {repr(demo_result)}")
         except Exception as e:
             print(f"{func_name}({repr(example):20s}) = Error: {e}")
 
@@ -343,7 +346,8 @@ if __name__ == "__main__":
 
         all_tests = []
         for test_cls in [test_basic, test_integration]:
-            all_tests.extend([(test_cls, method) for method in dir(test_cls) if method.startswith("test_")])
+            all_tests.extend([(test_cls, method) for method in dir(
+                test_cls) if method.startswith("test_")])
 
         passed = 0
         failed = 0

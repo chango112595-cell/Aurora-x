@@ -130,7 +130,7 @@ def test_api_units():
 
     for value in test_values:
         try:
-            response = requests.post(base_url, json={"value": value})
+            response = requests.post(base_url, json={"value": value}, timeout=30)
             if response.status_code == 200:
                 data = response.json()
                 print(f"  {value} -> {data['si_value']} {data['si_unit']} (type: {data['unit_type']})")
@@ -153,7 +153,7 @@ def test_api_solve():
 
     for problem in test_problems:
         try:
-            response = requests.post(base_url, json=problem)
+            response = requests.post(base_url, json=problem, timeout=30)
             if response.status_code == 200:
                 data = response.json()
                 print(f"  Input: {problem}")

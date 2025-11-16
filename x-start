@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """
 Aurora-X Unified Start Command
@@ -6,75 +5,162 @@ Starts all Aurora services
 """
 
 import subprocess
-import sys
 import time
 import os
+import platform
+import socket
 
 print("🌌 Aurora: Starting all services...")
 print("   This will take a moment as services initialize...\n")
 
-# Change to workspace directory
-os.chdir("/home/runner/workspace")
+# Get script directory
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
 
-# Start main backend (Express) - this is the primary service
-print("🚀 Starting Aurora Backend (port 5000)...")
-subprocess.Popen(
-    ["npm", "run", "dev"],
-    stdout=subprocess.DEVNULL,
-    stderr=subprocess.DEVNULL,
-    start_new_session=True
-)
+# Detect platform
+is_windows = platform.system() == "Windows"
+PYTHON_CMD = "python" if is_windows else "python3"
 
-# Wait a moment for backend to start
+# 1. Start Backend + Frontend (npm run dev serves both on port 5000)
+print("🚀 Starting Aurora Backend + Frontend (port 5000)...")
+if is_windows:
+    subprocess.Popen(
+        "npm run dev",
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
+        shell=True
+    )
+else:
+    subprocess.Popen(
+        ["npm", "run", "dev"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True
+    )
 time.sleep(3)
 
-# Start Luminar Nexus V2
-print("🚀 Starting Luminar Nexus V2 (port 5005)...")
-subprocess.Popen(
-    ["python3", "tools/luminar_nexus_v2.py", "serve"],
-    stdout=subprocess.DEVNULL,
-    stderr=subprocess.DEVNULL,
-    start_new_session=True
-)
+# 2. Start Bridge Service
+print("🚀 Starting Bridge Service (port 5001)...")
+if is_windows:
+    subprocess.Popen(
+        [PYTHON_CMD, "-m", "aurora_x.bridge.service"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
+    )
+else:
+    subprocess.Popen(
+        [PYTHON_CMD, "-m", "aurora_x.bridge.service"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True
+    )
+time.sleep(2)
+
+# 3. Start Self-Learning
+print("🚀 Starting Self-Learning Service (port 5002)...")
+if is_windows:
+    subprocess.Popen(
+        [PYTHON_CMD, "-m", "aurora_x.self_learn_server"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
+    )
+else:
+    subprocess.Popen(
+        [PYTHON_CMD, "-m", "aurora_x.self_learn_server"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True
+    )
+time.sleep(2)
+
+# 4. Start Chat Server
+print("🚀 Starting Chat Server (port 5003)...")
+if is_windows:
+    subprocess.Popen(
+        [PYTHON_CMD, "aurora_chat_server.py", "--port", "5003"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
+    )
+else:
+    subprocess.Popen(
+        [PYTHON_CMD, "aurora_chat_server.py", "--port", "5003"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True
+    )
+time.sleep(2)
+
+# 5. Start Luminar Nexus Dashboard
+print("🚀 Starting Luminar Nexus Dashboard (port 5005)...")
+if is_windows:
+    subprocess.Popen(
+        [PYTHON_CMD, "tools\\luminar_nexus_v2.py", "api"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
+    )
+else:
+    subprocess.Popen(
+        [PYTHON_CMD, "tools/luminar_nexus_v2.py", "api"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True
+    )
 
 # Wait for services to initialize
 print("\n⏳ Waiting for services to initialize...")
-time.sleep(5)
+time.sleep(15)
 
-# Verify services started
-print("\n📊 Checking service status...")
+# Check service status
 
-import socket
 
-def check_port(port):
-    """Check if a port is listening"""
+def check_port(port_num):
+    """Check if a port is listening."""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.settimeout(1)
+    sock.settimeout(2)
     try:
-        result = sock.connect_ex(('0.0.0.0', port))
+        result = sock.connect_ex(('127.0.0.1', port_num))
         sock.close()
         return result == 0
-    except:
+    except socket.error:
         return False
 
-# Check critical ports
-critical_ports = {
-    5000: "Aurora Backend",
-    5005: "Luminar Nexus V2",
-}
+
+print("\n📊 Aurora Service Status:")
+print("=" * 60)
+
+services = [
+    ("Backend API + Frontend", 5000),
+    ("Bridge Service", 5001),
+    ("Self-Learning Service", 5002),
+    ("Chat Server", 5003),
+    ("Luminar Dashboard", 5005),
+]
 
 running_count = 0
-for port, name in critical_ports.items():
-    if check_port(port):
-        print(f"   ✅ {name} running on port {port}")
+for name, port in services:
+    is_running = check_port(port)
+    status = "✅ RUNNING" if is_running else "⚠️  starting..."
+    print(f"   {name:25} Port {port:5} {status}")
+    if is_running:
         running_count += 1
-    else:
-        print(f"   ⚠️  {name} not responding on port {port}")
 
-print(f"\n✅ {running_count}/{len(critical_ports)} critical services started")
+print("=" * 60)
+print(f"\n{'✅' if running_count >= 3 else '⚠️'} {running_count}/{len(services)} services running")
 
-if running_count == len(critical_ports):
-    print("🌟 Aurora is fully operational!")
+if running_count >= 3:
+    print("\n🎉 Aurora is ready!")
+    print("   🌐 Frontend:  http://localhost:5000")
+    print("   💬 Chat:      http://localhost:5003")
+    print("   📊 Dashboard: http://localhost:5005")
+    print("\n   Note: Some services may still be initializing.")
+    print("   Give them 10-20 more seconds if not all are ready yet.")
 else:
-    print("⚠️  Some services failed to start. Check logs for details.")
-    sys.exit(1)
+    print("\n⚠️  Some services are still starting...")
+    print("   Wait 20 more seconds and check: netstat -ano | findstr \"5000 5001 5002 5003 5005\"")
+
+print("\n✨ Aurora-X is running!")

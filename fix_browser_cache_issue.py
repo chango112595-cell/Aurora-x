@@ -15,12 +15,15 @@ def clear_browser_caches():
     print("🧹 Clearing frontend caches...")
 
     # Clear Vite cache
-    subprocess.run(["rm", "-rf", "client/node_modules/.vite"], capture_output=True)
-    subprocess.run(["rm", "-rf", "client/dist"], capture_output=True)
-    subprocess.run(["rm", "-rf", ".vite"], capture_output=True)
+    subprocess.run(["rm", "-rf", "client/node_modules/.vite"],
+                   capture_output=True, check=False)
+    subprocess.run(["rm", "-rf", "client/dist"],
+                   capture_output=True, check=False)
+    subprocess.run(["rm", "-rf", ".vite"], capture_output=True, check=False)
 
     # Clear browser-specific caches that might be served
-    subprocess.run(["rm", "-rf", "client/.cache"], capture_output=True)
+    subprocess.run(["rm", "-rf", "client/.cache"],
+                   capture_output=True, check=False)
 
     print("✅ Caches cleared")
 
@@ -30,7 +33,8 @@ def restart_vite_server():
     print("🔄 Restarting Vite server...")
 
     # Kill existing Vite processes
-    subprocess.run(["pkill", "-f", "vite.*5173"], capture_output=True)
+    subprocess.run(["pkill", "-f", "vite.*5173"],
+                   capture_output=True, check=False)
     time.sleep(2)
 
     # Start fresh Vite process
@@ -44,7 +48,7 @@ def test_chat_api_consistency():
     # Test direct API
     try:
         response = requests.post(
-            "http://localhost:5003/api/chat", json={"message": "Direct API test", "session_id": "test"}
+            "http://localhost:5003/api/chat", json={"message": "Direct API test", "session_id": "test"}, timeout=10
         )
         print(f"Direct API: {response.status_code}")
     except Exception as e:
@@ -53,7 +57,7 @@ def test_chat_api_consistency():
     # Test through proxy
     try:
         response = requests.post(
-            "http://localhost:5173/api/chat", json={"message": "Proxy API test", "session_id": "test"}
+            "http://localhost:5173/api/chat", json={"message": "Proxy API test", "session_id": "test"}, timeout=10
         )
         print(f"Proxy API: {response.status_code}")
     except Exception as e:
@@ -78,7 +82,7 @@ if (localStorage.getItem('aurora_ui_version') !== '{timestamp}') {{
 }}
 """
 
-    with open("client/public/cache-buster.js", "w") as f:
+    with open("client/public/cache-buster.js", "w", encoding='utf-8') as f:
         f.write(cache_buster)
 
     print("✅ Cache buster created at client/public/cache-buster.js")

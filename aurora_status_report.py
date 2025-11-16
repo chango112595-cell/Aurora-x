@@ -22,7 +22,7 @@ def run_system_check():
     try:
         result = subprocess.run(
             ["python", "aurora_server_manager.py", "--status"], capture_output=True, text=True, timeout=10
-        )
+        , check=False)
 
         if "✅" in result.stdout:
             print("   ✅ Aurora server is healthy")
@@ -78,7 +78,7 @@ def run_system_check():
     try:
         from aurora_approval_system import AuroraApprovalSystem
 
-        approval_system = AuroraApprovalSystem()
+        _approval_system = AuroraApprovalSystem()
         print("   ✅ Approval system operational")
         print("   ✅ Change tracking and grading active")
     except Exception as e:

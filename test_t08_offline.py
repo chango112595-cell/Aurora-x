@@ -49,7 +49,8 @@ def test_all_templates():
         # Generate code based on language and intent
         if intent.kind == "web_app":
             if lang_choice.lang == "python" or expected_lang == "python":
-                code = render_app(title="Timer UI", subtitle="Futuristic timer application")
+                code = render_app(title="Timer UI",
+                                  subtitle="Futuristic timer application")
                 Path("generated_timer_app.py").write_text(code)
                 print("✅ Generated: generated_timer_app.py")
 
@@ -60,7 +61,7 @@ def test_all_templates():
             elif lang_choice.lang == "go" or expected_lang == "go":
                 result = render_go_service("microservice", "Fast web API")
                 for fname, content in result["files"].items():
-                    Path(fname).write_text(content)
+                    Path(fname).write_text(content, encoding='utf-8')
                     print(f"✅ Generated: {fname}")
 
                     if fname == "main.go":
@@ -86,13 +87,13 @@ def test_all_templates():
                 result = render_rust_cli("cli_tool", "Memory-safe CLI")
                 for fname, content in result["files"].items():
                     Path(fname).parent.mkdir(exist_ok=True, parents=True)
-                    Path(fname).write_text(content)
+                    Path(fname).write_text(content, encoding='utf-8')
                     print(f"✅ Generated: {fname}")
                 print("   ℹ️  CLI tool (not a web service, no PORT)")
             else:
                 code = render_cli(intent.name, intent.brief, intent.fields)
                 fname = f"{intent.name}_cli.py"
-                Path(fname).write_text(code)
+                Path(fname).write_text(code, encoding='utf-8')
                 print(f"✅ Generated: {fname}")
                 print("   ℹ️  CLI tool (not a web service, no PORT)")
 
@@ -118,5 +119,5 @@ def test_all_templates():
 if __name__ == "__main__":
     import sys
 
-    success = test_all_templates()
+    SUCCESS = test_all_templates()
     sys.exit(0 if success else 1)

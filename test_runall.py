@@ -9,9 +9,12 @@ from pathlib import Path
 
 async def test_runall_locally():
     """Test the Run All endpoint locally"""
+    # pylint: disable=import-outside-toplevel
     from fastapi import FastAPI
 
+    # pylint: disable=import-outside-toplevel
     from aurora_x.chat.attach_demo import attach_demo
+    # pylint: disable=import-outside-toplevel
     from aurora_x.chat.attach_demo_runall import attach_demo_runall
 
     # Create a test app
@@ -29,7 +32,6 @@ async def test_runall_locally():
             print("   This will execute cards sequentially (simulated)")
 
             # Mock execution since we can't make real HTTP calls without running server
-            from aurora_x.chat.attach_demo import attach_demo
 
             test_app = FastAPI()
             attach_demo(test_app)
@@ -48,7 +50,8 @@ async def test_runall_locally():
                 # Simulate results
                 results = []
                 for i, card in enumerate(cards[:5]):  # Just test first 5
-                    print(f"   [{i + 1}/{min(5, len(cards))}] {card['title']}...")
+                    print(
+                        f"   [{i + 1}/{min(5, len(cards))}] {card['title']}...")
                     results.append(
                         {
                             "id": card["id"],
@@ -61,7 +64,7 @@ async def test_runall_locally():
 
                 # Create output structure
                 timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
-                {
+                _ = {
                     "generated_utc": datetime.utcnow().isoformat(),
                     "timestamp": timestamp,
                     "total_cards": len(cards),
@@ -93,7 +96,7 @@ def test_dashboard_button():
     print("\n🔍 Checking dashboard for Run All button...")
 
     if dashboard_path.exists():
-        content = dashboard_path.read_text()
+        content = dashboard_path.read_text(encoding='utf-8')
 
         checks = [
             ("run-all-btn", "Run All button element"),
@@ -130,7 +133,8 @@ def test_runs_directory():
 
         # Test writing a sample file
         test_file = runs_dir / "test-write.json"
-        test_data = {"test": "data", "timestamp": datetime.utcnow().isoformat()}
+        test_data = {"test": "data",
+                     "timestamp": datetime.utcnow().isoformat()}
         test_file.write_text(json.dumps(test_data, indent=2))
 
         if test_file.exists():

@@ -238,7 +238,7 @@ class TestTestAuroraResponseDisplayIntegration:
         """Test complete workflow"""
         # Step 1: Validate input
         data = "test data"
-        assert validate_input(data) == True
+        assert validate_input(data) is True
 
         # Step 2: Process
         output = test_aurora_response_display(data)
@@ -262,8 +262,8 @@ class TestTestAuroraResponseDisplayIntegration:
                 pass
 
         # Test validation
-        assert validate_input(None) == False
-        assert validate_input("valid") == True
+        assert validate_input(None) is False
+        assert validate_input("valid") is True
 
 
 # ============================================================================
@@ -302,7 +302,7 @@ def benchmark_test_aurora_response_display(iterations: int = 100):
 # ============================================================================
 
 if __name__ == "__main__":
-    func_name = "test_aurora_response_display"
+    FUNC_NAME = "test_aurora_response_display"
     print(f"{func_name.title().replace('_', ' ')} Function Examples:")
     print("=" * 60)
 
@@ -347,7 +347,8 @@ if __name__ == "__main__":
 
         all_tests = []
         for test_cls in [test_basic, test_integration]:
-            all_tests.extend([(test_cls, method) for method in dir(test_cls) if method.startswith("test_")])
+            all_tests.extend([(test_cls, method) for method in dir(
+                test_cls) if method.startswith("test_")])
 
         passed = 0
         failed = 0

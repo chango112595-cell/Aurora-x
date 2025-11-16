@@ -48,7 +48,7 @@ def create_a_data_processing_fun(input_data: Any, **kwargs) -> Any:
         raise ValueError("input_data cannot be None")
 
     # Log the operation
-    logger.debug(f"Processing input: {input_data}")
+    logger.debug("Processing input: {input_data}")
 
     # Process based on type
     if isinstance(input_data, str):
@@ -71,7 +71,7 @@ def create_a_data_processing_fun(input_data: Any, **kwargs) -> Any:
         if isinstance(result, str):
             result = result[::-1]
 
-    logger.debug(f"Result: {result}")
+    logger.debug("Result: {result}")
     return result
 
 
@@ -106,7 +106,7 @@ def create_a_data_processing_fun_async(input_data: Any, callback: callable | Non
     """
     result = create_a_data_processing_fun(input_data)
 
-    if callback:
+    if callback is not None:
         callback(result)
 
     return result
@@ -134,22 +134,22 @@ def validate_input(data: Any) -> bool:
     return True
 
 
-def transform_output(result: Any, format: str = "default") -> Any:
+def transform_output(result: Any, output_format: str = "default") -> Any:
     """
     Transform output to desired format.
 
     Args:
         result: Result to transform
-        format: Output format
+        output_format: Output format
 
     Returns:
         Transformed result
     """
-    if format == "json":
+    if output_format == "json":
         import json
 
         return json.dumps(result)
-    elif format == "upper":
+    elif output_format == "upper":
         return str(result).upper()
 
     return result
@@ -230,7 +230,7 @@ class TestCreateADataProcessingFunIntegration:
         assert "PROCESSED" in result
 
         # Step 3: Transform output
-        json_output = transform_output(result, format="json")
+        json_output = transform_output(result, output_format="json")
         assert isinstance(json_output, str)
 
     def test_error_handling(self):
@@ -249,12 +249,13 @@ class TestCreateADataProcessingFunIntegration:
 # ============================================================================
 
 
-def benchmark_create_a_data_processing_fun(iterations: int = 1000):
+def benchmark_create_a_data_processing_fun(iterations: int = 1000, func_name: str = "create_a_data_processing_fun"):
     """
     Performance benchmark for create_a_data_processing_fun.
 
     Args:
         iterations: Number of iterations to run
+        func_name: Name of the function being benchmarked
     """
     import time
 
@@ -315,7 +316,6 @@ if __name__ == "__main__":
     print("=" * 60)
 
     try:
-        import pytest
 
         pytest.main([__file__, "-v", "--tb=short"])
     except ImportError:
@@ -326,7 +326,8 @@ if __name__ == "__main__":
 
         all_tests = []
         for test_cls in [test_basic, test_integration]:
-            all_tests.extend([(test_cls, method) for method in dir(test_cls) if method.startswith("test_")])
+            all_tests.extend([(test_cls, method) for method in dir(
+                test_cls) if method.startswith("test_")])
 
         passed = 0
         failed = 0
