@@ -20,15 +20,32 @@ export function log(message: string, source = "express") {
 }
 
 export async function setupVite(app: Express, server: Server) {
+  // Determine the proper HMR host for Replit environment
+  // - REPLIT_DOMAINS: The primary domain for the Repl (may contain multiple comma-separated domains)
+  // - REPL_SLUG + REPL_OWNER: Fallback to construct the domain from slug and owner
+  // - undefined: Local development without Replit environment
+  let hmrHost = process.env.REPLIT_DOMAINS;
+  
+  // Normalize REPLIT_DOMAINS by taking the first domain if multiple are present
+  if (hmrHost && hmrHost.includes(',')) {
+    hmrHost = hmrHost.split(',')[0].trim();
+  } else if (hmrHost) {
+    hmrHost = hmrHost.trim();
+  } else if (process.env.REPL_SLUG && process.env.REPL_OWNER) {
+    hmrHost = `${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`;
+  }
+
   const vite = await createViteServer({
     server: {
       middlewareMode: true,
-      hmr: {
+      hmr: hmrHost ? {
         server,
         protocol: 'wss',
-        host: '0.0.0.0',
+        host: hmrHost,
         port: 5000,
         clientPort: 443,
+      } : {
+        server,
       },
     },
     appType: "spa",
