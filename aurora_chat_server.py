@@ -17,19 +17,19 @@ from flask_cors import CORS
 from aurora_core import create_aurora_core
 
 # Global Aurora Core instance
-AURORA_CORE = None
+_aurora_core = None
 
 
 def initialize_aurora_core():
     """Initialize Aurora Core Intelligence with orchestration"""
-    global AURORA_CORE
-    if AURORA_CORE is None:
+    global _aurora_core
+    if _aurora_core is None:
         print("🧠 Initializing Aurora Core Intelligence...")
         print("🎛️ Loading orchestration capabilities...")
-        AURORA_CORE = create_aurora_core()
+        _aurora_core = create_aurora_core()
         print("✅ Aurora Core ready - Intelligence + Orchestration active")
         print("🌟 Luminar Nexus preserved for utilities")
-    return AURORA_CORE
+    return _aurora_core
 
 
 # Create Flask app

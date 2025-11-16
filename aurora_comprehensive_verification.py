@@ -81,7 +81,8 @@ class AuroraSystemVerification:
             "aurora_intelligence_manager.py": "Intelligence coordination",
         }
 
-        for service_file, description in services.items():
+        for service_file in services:
+            description = services[service_file]
             path = self.root / service_file
             if path.exists():
                 self.successes.append(f"✅ {service_file} found ({description})")

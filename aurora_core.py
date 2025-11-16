@@ -17,6 +17,7 @@ knowledge system lives. Luminar Nexus just orchestrates - this is the brain.
 """
 
 import asyncio
+import platform
 import re
 import subprocess
 from datetime import datetime
@@ -482,8 +483,6 @@ class AuroraOrchestrator:
     """
 
     def __init__(self, project_root: str = None):
-        import platform
-
         # Use actual project root or detect it
         if project_root is None:
             self.project_root = Path(__file__).parent
@@ -502,7 +501,11 @@ class AuroraOrchestrator:
             },
             "backend": {
                 "name": "Aurora Backend API",
-                "command": f"cd {self.project_root} && {'set NODE_ENV=development &&' if platform.system() == 'Windows' else 'NODE_ENV=development'} npx tsx server/index.ts",
+                "command": (
+                    f"cd {self.project_root} && "
+                    f"{'set NODE_ENV=development &&' if platform.system() == 'Windows' else 'NODE_ENV=development'} "
+                    f"npx tsx server/index.ts"
+                ),
                 "preferred_port": 5000,
                 "session": "aurora-backend",
             },
@@ -514,7 +517,11 @@ class AuroraOrchestrator:
             },
             "self_learn": {
                 "name": "Aurora Self-Learning",
-                "command": f"cd {self.project_root} && {python_cmd} -c 'from tools.luminar_nexus import run_self_learning_server; run_self_learning_server({{port}})'",
+                "command": (
+                    f"cd {self.project_root} && {python_cmd} -c "
+                    f"'from tools.luminar_nexus import run_self_learning_server; "
+                    f"run_self_learning_server({{port}})'"
+                ),
                 "preferred_port": 5002,
                 "session": "aurora-self-learn",
             },
@@ -750,7 +757,11 @@ class AuroraCoreIntelligence:
         # Handle memory/name questions
         if analysis.get("asks_about_memory") or analysis.get("asks_about_name"):
             if context.get("user_name"):
-                return f"Yes, I remember you, {context['user_name']}! We've been chatting for {context['message_count']} messages now. How can I help you today?"
+                return (
+                    f"Yes, I remember you, {context['user_name']}! "
+                    f"We've been chatting for {context['message_count']} messages now. "
+                    f"How can I help you today?"
+                )
             else:
                 return "I don't think you've told me your name yet. What should I call you?"
 
@@ -787,43 +798,46 @@ class AuroraCoreIntelligence:
             topic = "fundamentals"
 
         if topic == "templates":
-            return """You're asking if my answers are like templates? That's actually a great observation - and you're right to call it out if they feel that way.
-
-Here's the thing: I should be giving you specific, complete answers tailored to YOUR exact question, not generic template responses. If my answers feel templated, that means I'm not engaging deeply enough with what you're actually asking.
-
-For example, if you ask "do you remember my name?" - I shouldn't give you a generic response about memory. I should either:
-1. Tell you your actual name if I remember it
-2. Admit I don't know it yet and ask you to tell me
-
-The difference is being specific and personal vs. being generic and avoiding the real question.
-
-So let me be direct: What specific question do you have that I haven't fully answered yet? I'll give you a complete, specific response - not a template."""
+            return (
+                "You're asking if my answers are like templates? "
+                "That's actually a great observation - and you're right to call it out if they feel that way.\n\n"
+                "Here's the thing: I should be giving you specific, complete answers tailored to YOUR exact question, "
+                "not generic template responses. If my answers feel templated, "
+                "that means I'm not engaging deeply enough with what you're actually asking.\n\n"
+                "For example, if you ask \"do you remember my name?\" - "
+                "I shouldn't give you a generic response about memory. I should either:\n"
+                "1. Tell you your actual name if I remember it\n"
+                "2. Admit I don't know it yet and ask you to tell me\n\n"
+                "The difference is being specific and personal vs. being generic and avoiding the real question.\n\n"
+                "So let me be direct: What specific question do you have that I haven't fully answered yet? "
+                "I'll give you a complete, specific response - not a template."
+            )
 
         elif "fundamental" in msg_lower:
-            return """You're asking about understanding fundamentals first, then building on them - that's solid thinking.
-
-Here's how I approach that: I always try to understand the core concept before adding complexity. Like building a house - you need a solid foundation before adding the second floor.
-
-What fundamental concept are you trying to understand right now? Give me the specific topic, and I'll:
-1. Explain the core concept clearly
-2. Show you how it connects to what you want to build
-3. Give you practical next steps
-
-No generic overview - just the specific fundamentals YOU need for what YOU'RE trying to do."""
+            return (
+                "You're asking about understanding fundamentals first, then building on them - that's solid thinking.\n\n"
+                "Here's how I approach that: I always try to understand the core concept before adding complexity. "
+                "Like building a house - you need a solid foundation before adding the second floor.\n\n"
+                "What fundamental concept are you trying to understand right now? Give me the specific topic, and I'll:\n"
+                "1. Explain the core concept clearly\n"
+                "2. Show you how it connects to what you want to build\n"
+                "3. Give you practical next steps\n\n"
+                "No generic overview - just the specific fundamentals YOU need for what YOU'RE trying to do."
+            )
 
         # Default detailed response
-        return f"""Let me answer your question completely: {message}
-
-I notice I might have given you a template-style response before. Let me be more direct and specific.
-
-What exactly do you want to know? Give me the specific question, and I'll give you a complete answer - not a generic template. I can:
-
-- Explain technical concepts in depth
-- Remember and reference things from our conversation
-- Give you specific code examples that work
-- Break down complex topics into clear steps
-
-What's the real question you want answered?"""
+        return (
+            f"Let me answer your question completely: {message}\n\n"
+            f"I notice I might have given you a template-style response before. "
+            f"Let me be more direct and specific.\n\n"
+            f"What exactly do you want to know? Give me the specific question, "
+            f"and I'll give you a complete answer - not a generic template. I can:\n\n"
+            f"- Explain technical concepts in depth\n"
+            f"- Remember and reference things from our conversation\n"
+            f"- Give you specific code examples that work\n"
+            f"- Break down complex topics into clear steps\n\n"
+            f"What's the real question you want answered?"
+        )
 
     def _respond_about_self(self, _message: str, context: dict) -> str:
         """Aurora describing herself - conversational and natural"""
