@@ -95,8 +95,8 @@ export function generateAccessToken(user: UserPayload): string {
     };
 
     const token = jwt.sign(payload, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES_IN,
-      algorithm: 'HS256'
+      expiresIn: JWT_EXPIRES_IN as string,
+      algorithm: 'HS256' as const
     });
 
     return token;
@@ -119,8 +119,8 @@ export function generateRefreshToken(user: UserPayload): string {
     };
 
     const token = jwt.sign(payload, JWT_SECRET, {
-      expiresIn: JWT_REFRESH_EXPIRES_IN,
-      algorithm: 'HS256'
+      expiresIn: JWT_REFRESH_EXPIRES_IN as string,
+      algorithm: 'HS256' as const
     });
 
     return token;

@@ -20,6 +20,7 @@ import {
 } from "@shared/schema";
 import authRouter from "./auth-routes";
 import { getChatResponse, searchWeb } from "./aurora-chat";
+import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter } from "./rate-limit";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
@@ -175,7 +176,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ══════════════════════════════════════════════════════════════
   // 🔐 AUTHENTICATION ROUTES
   // ══════════════════════════════════════════════════════════════
-  app.use("/api/auth", authRouter);
+  // 🆕 Apply stricter auth rate limiting (before general API limiter to avoid double-counting)
+  app.use("/api/auth", authLimiter, authRouter);
+  
+  // 🆕 Apply general API rate limiting to remaining API routes
+  app.use("/api/", apiLimiter);
 
   // ══════════════════════════════════════════════════════════════
   // 📊 SYSTEM ROUTES
@@ -221,7 +226,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Note: Conversation memory and web search are now handled in server/aurora-chat.ts
 
   // Chat endpoint - Aurora's conversational interface with Claude AI
-  app.post("/api/chat", async (req, res) => {
+  // 🆕 Apply chat rate limiting
+  app.post("/api/chat", chatLimiter, async (req, res) => {
     try {
       const { message, session_id } = req.body;
 
@@ -2371,7 +2377,8 @@ except Exception as e:
   });
 
   // OLD synthesis endpoint - now using /api/conversation for chat
-  app.post("/api/synthesis", async (req, res) => {
+  // 🆕 Apply synthesis rate limiting
+  app.post("/api/synthesis", synthesisLimiter, async (req, res) => {
     try {
       const { message } = req.body;
 

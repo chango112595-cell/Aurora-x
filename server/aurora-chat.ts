@@ -1,5 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { Express } from 'express'; // Assuming Express is used for the app object
+import { saveMessage, getConversationHistory, getUserContext, updateUserContext } from './persistent-memory';
+import { getRAGContext, isRAGAvailable } from './rag-system';
 
 const DEFAULT_MODEL_STR = "claude-sonnet-4-20250514";
 const MAX_CONVERSATION_TURNS = 10; // 10 turns = 20 messages (10 user + 10 assistant)
@@ -80,22 +82,83 @@ Think of yourself as a helpful dev partner, not a status bot. Have real conversa
  */
 export async function getChatResponse(
   message: string,
-  sessionId: string = 'default'
+  sessionId: string = 'default',
+  userId?: string
 ): Promise<{ response: string; ok: boolean }> {
   try {
     console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId);
 
-    // Get or create conversation history
-    if (!conversationMemory.has(sessionId)) {
-      conversationMemory.set(sessionId, []);
+    // 🆕 Load persistent conversation history from database
+    let history: Array<{role: string, content: string}> = [];
+    try {
+      const dbHistory = getConversationHistory(sessionId, 20);
+      history = dbHistory.map(msg => ({ role: msg.role, content: msg.content }));
+      console.log('[Aurora Chat] 💾 Loaded', history.length, 'messages from database');
+    } catch (error) {
+      // Fallback to in-memory if database fails
+      if (!conversationMemory.has(sessionId)) {
+        conversationMemory.set(sessionId, []);
+      }
+      history = conversationMemory.get(sessionId)!;
     }
-    const history = conversationMemory.get(sessionId)!;
+
+    // 🆕 Check if this requires web search
+    let webSearchResults = '';
+    const needsSearch = /search for|look up|what is|who is|current|latest|news about/i.test(message);
+    if (needsSearch) {
+      try {
+        console.log('[Aurora Chat] 🔍 Performing web search...');
+        webSearchResults = await searchWeb(message);
+        if (webSearchResults) {
+          console.log('[Aurora Chat] ✅ Web search results found');
+        }
+      } catch (error) {
+        console.warn('[Aurora Chat] Web search failed:', error);
+      }
+    }
+
+    // 🆕 Get RAG context if available
+    let ragContext = '';
+    if (isRAGAvailable()) {
+      try {
+        console.log('[Aurora Chat] 📚 Fetching RAG context...');
+        ragContext = await getRAGContext(message, 3);
+        if (ragContext) {
+          console.log('[Aurora Chat] ✅ RAG context retrieved');
+        }
+      } catch (error) {
+        console.warn('[Aurora Chat] RAG context fetch failed:', error);
+      }
+    }
+
+    // Combine message with context
+    const enrichedMessage = [
+      message,
+      webSearchResults ? `\n\n[Web Search Results]\n${webSearchResults}` : '',
+      ragContext ? `\n${ragContext}` : ''
+    ].filter(Boolean).join('');
 
     // Add user message to history
     history.push({
       role: 'user',
-      content: message
+      content: message // Store original message, not enriched
     });
+
+    // 🆕 Save user message to database
+    try {
+      saveMessage({
+        session_id: sessionId,
+        user_id: userId,
+        role: 'user',
+        content: message,
+        metadata: {
+          hasWebSearch: !!webSearchResults,
+          hasRAGContext: !!ragContext
+        }
+      });
+    } catch (error) {
+      console.warn('[Aurora Chat] Failed to save user message:', error);
+    }
 
     let responseText: string = '';
 
@@ -216,6 +279,33 @@ print(response)
       role: 'assistant',
       content: responseText
     });
+
+    // 🆕 Save assistant response to database
+    try {
+      saveMessage({
+        session_id: sessionId,
+        user_id: userId,
+        role: 'assistant',
+        content: responseText,
+        metadata: {
+          enriched: !!webSearchResults || !!ragContext
+        }
+      });
+
+      // 🆕 Update user context for better personalization
+      if (userId) {
+        try {
+          updateUserContext({
+            user_id: userId,
+            last_active: Date.now()
+          });
+        } catch (error) {
+          console.warn('[Aurora Chat] Failed to update user context:', error);
+        }
+      }
+    } catch (error) {
+      console.warn('[Aurora Chat] Failed to save assistant message:', error);
+    }
 
     // Trim history AFTER both messages are added to maintain proper user/assistant pairing
     const maxMessages = MAX_CONVERSATION_TURNS * 2;
