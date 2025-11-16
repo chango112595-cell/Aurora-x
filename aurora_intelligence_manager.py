@@ -45,7 +45,7 @@ class AuroraIntelligenceManager:
 
         if intelligence_file.exists():
             try:
-                with open(intelligence_file) as f:
+                with open(intelligence_file, encoding="utf-8") as f:
                     data = json.load(f)
                     self.knowledge_base = data.get("knowledge_base", {})
                     self.issue_patterns = data.get("issue_patterns", {})
@@ -179,7 +179,7 @@ class AuroraIntelligenceManager:
         print(log_entry)
 
         try:
-            with open(self.learning_log, "a") as f:
+            with open(self.learning_log, "a", encoding="utf-8") as f:
                 f.write(log_entry + "\n")
         except Exception:
             pass
@@ -224,7 +224,7 @@ class AuroraIntelligenceManager:
 
             # Map solutions to executable commands
             for solution_desc in best_match["solutions"]:
-                for cmd_name, cmd_data in self.solution_database.items():
+                for cmd_data in self.solution_database.values():
                     if any(keyword in solution_desc.lower() for keyword in cmd_data["description"].lower().split()):
                         analysis["recommended_solutions"].append(
                             {
@@ -312,7 +312,7 @@ class AuroraIntelligenceManager:
             try:
                 import subprocess
 
-                result = subprocess.run(solution["command"], shell=True, capture_output=True, text=True, timeout=30)
+                result = subprocess.run(solution["command"], shell=True, capture_output=True, text=True, timeout=30, check=False)
 
                 if result.returncode == 0:
                     results["fixes_successful"] += 1
@@ -364,7 +364,7 @@ class AuroraIntelligenceManager:
         }
 
         try:
-            with open("aurora_intelligence.json", "w") as f:
+            with open("aurora_intelligence.json", "w", encoding="utf-8") as f:
                 json.dump(intelligence_data, f, indent=2)
         except Exception as e:
             self.log(f"Could not save intelligence: {e}")
@@ -461,7 +461,7 @@ def main():
         try:
             import subprocess
 
-            result = subprocess.run(["python", "aurora_server_manager.py", "--status"], capture_output=True, text=True)
+            result = subprocess.run(["python", "aurora_server_manager.py", "--status"], capture_output=True, text=True, check=False)
 
             if "CONFLICTS" in result.stdout:
                 symptoms = ["port conflicts", "multiple processes", "connection issues"]

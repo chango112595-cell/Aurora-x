@@ -54,7 +54,7 @@ def test_aurora_response_display(input_data: Any, **kwargs) -> Any:
         raise ValueError("input_data cannot be None")
 
     # Log the operation
-    logger.debug(f"Processing input: {input_data}")
+    logger.debug("Processing input: %s", input_data)
 
     # Process based on type
     if isinstance(input_data, str):
@@ -77,7 +77,7 @@ def test_aurora_response_display(input_data: Any, **kwargs) -> Any:
         if isinstance(result, str):
             result = result[::-1]
 
-    logger.debug(f"Result: {result}")
+    logger.debug("Result: %s", result)
     return result
 
 
@@ -140,25 +140,25 @@ def validate_input(data: Any) -> bool:
     return True
 
 
-def transform_output(result: Any, format: str = "default") -> Any:
+def transform_output(output: Any, output_format: str = "default") -> Any:
     """
     Transform output to desired format.
 
     Args:
-        result: Result to transform
-        format: Output format
+        output: Result to transform
+        output_format: Output format
 
     Returns:
         Transformed result
     """
-    if format == "json":
+    if output_format == "json":
         import json
 
-        return json.dumps(result)
-    elif format == "upper":
-        return str(result).upper()
+        return json.dumps(output)
+    elif output_format == "upper":
+        return str(output).upper()
 
-    return result
+    return output
 
 
 # ============================================================================
@@ -244,7 +244,7 @@ class TestTestAuroraResponseDisplayIntegration:
         assert "PROCESSED" in result
 
         # Step 3: Transform output
-        json_output = transform_output(result, format="json")
+        json_output = transform_output(result, output_format="json")
         assert isinstance(json_output, str)
 
     def test_error_handling(self):
@@ -270,7 +270,7 @@ class TestTestAuroraResponseDisplayIntegration:
 # ============================================================================
 
 
-def benchmark_test_aurora_response_display(iterations: int = 1000):
+def benchmark_test_aurora_response_display(iterations: int = 100):
     """
     Performance benchmark for test_aurora_response_display.
 
@@ -279,6 +279,7 @@ def benchmark_test_aurora_response_display(iterations: int = 1000):
     """
     import time
 
+    func_name = "test_aurora_response_display"
     test_data = [f"test_{i}" for i in range(100)]
 
     print(f"\nBenchmarking {func_name} with {iterations} iterations...")
@@ -300,6 +301,7 @@ def benchmark_test_aurora_response_display(iterations: int = 1000):
 # ============================================================================
 
 if __name__ == "__main__":
+    func_name = "test_aurora_response_display"
     print(f"{func_name.title().replace('_', ' ')} Function Examples:")
     print("=" * 60)
 

@@ -259,7 +259,7 @@ if __name__ == "__main__":
 
     # Save to knowledge base
     log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/grandmaster_skills_registry.jsonl")
-    with open(log_file, "w") as f:
+    with open(log_file, "w", encoding="utf-8") as f:
         entry = {
             "timestamp": datetime.now().isoformat(),
             "registry": AURORA_GRANDMASTER_SKILLS,
