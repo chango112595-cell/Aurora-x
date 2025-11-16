@@ -674,6 +674,7 @@ class AuroraCoreIntelligence:
             "asks_about_name": False,
             "introduces_self": False,
             "asks_to_explain": False,
+            "asks_about_limitations": False,
         }
 
         # Check for name/identity questions
@@ -720,6 +721,11 @@ class AuroraCoreIntelligence:
                 {"intent": "aurora_self_inquiry", "aurora_specific": True, "self_referential": True, "confidence": 0.95}
             )
 
+        # Self-limitation/critique questions (what Aurora lacks/needs/missing)
+        if re.search(r"(what.*you.*(lack|lacking|miss|missing|need|don't have|without))", msg_lower) or \
+           re.search(r"(what.*(are|is).*you.*lacking)", msg_lower):
+            analysis.update({"intent": "self_limitation_inquiry", "asks_about_limitations": True, "self_referential": True, "confidence": 0.95})
+        
         # Enhancement/improvement requests
         if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
             if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
@@ -769,6 +775,10 @@ class AuroraCoreIntelligence:
         if analysis.get("asks_to_explain"):
             return self._provide_detailed_explanation(message, context, analysis)
 
+        # Aurora self-limitation/critique responses
+        if analysis.get("asks_about_limitations"):
+            return self._respond_about_limitations(message, context)
+        
         # Aurora self-awareness responses
         if analysis["aurora_specific"] or analysis["self_referential"]:
             return self._respond_about_self(message, context)
@@ -838,6 +848,64 @@ class AuroraCoreIntelligence:
             f"- Break down complex topics into clear steps\n\n"
             f"What's the real question you want answered?"
         )
+
+    def _respond_about_limitations(self, _message: str, context: dict) -> str:
+        """Aurora honestly assessing what she's lacking"""
+        user_name = context.get("user_name")
+        greeting = f"{user_name}, you're" if user_name else "You're"
+        
+        return f"""{greeting} asking what I'm lacking - that's actually the most important question you could ask.
+
+**🔍 HONEST SELF-ASSESSMENT - What Aurora is Missing:**
+
+**1. Real-Time External Knowledge:**
+- No web search or API integration
+- Can't access live data, current events, or documentation
+- Knowledge frozen at training time
+
+**2. Long-Term Persistent Memory:**
+- Only remember last 15-20 interactions per session
+- No cross-session memory between restarts
+- Can't build long-term relationships with users
+
+**3. Multimodal Capabilities:**
+- Text-only - no image, video, or audio processing
+- Can't generate or analyze visual content
+- No voice interaction
+
+**4. Advanced AI Features:**
+- No vector embeddings for semantic search
+- No RAG (Retrieval Augmented Generation)
+- No access to external models or LLMs
+- Can't switch between different AI models
+
+**5. Production-Ready Infrastructure:**
+- No authentication or authorization
+- No rate limiting or abuse prevention
+- Basic error handling only
+- No monitoring, logging, or telemetry
+- No load balancing or scaling
+
+**6. Real-World Integration:**
+- Can't send emails or notifications
+- No database connections (beyond file storage)
+- No CI/CD integration
+- Can't interact with external services
+
+**7. Collaborative Features:**
+- Single-user only (no multi-user support)
+- No shared workspaces or team collaboration
+- No version control integration for conversations
+
+**8. Learning & Adaptation:**
+- Can't update my own training data
+- No fine-tuning on user-specific patterns
+- Limited pattern recognition across sessions
+
+**💡 What Would Make Me Better:**
+Give me RAG capabilities, persistent vector storage, web search integration, and production-grade infrastructure. Then I'd be truly autonomous.
+
+Want me to prioritize implementing any of these? I can start with the most impactful ones."""
 
     def _respond_about_self(self, _message: str, context: dict) -> str:
         """Aurora describing herself - conversational and natural"""
