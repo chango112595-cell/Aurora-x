@@ -29,7 +29,7 @@ import threading
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import numpy as np
 import psutil
@@ -95,18 +95,18 @@ class ServiceHealth:
     error_rate: float
     uptime: float
     last_check: datetime
-    predictions: Dict[str, float]
-    anomalies: List[str]
+    predictions: dict[str, float]
+    anomalies: list[str]
 
 
 @dataclass
 class QuantumServiceMesh:
     """Quantum-inspired service mesh configuration"""
 
-    entanglement_map: Dict[str, List[str]]  # Service dependencies
-    quantum_states: Dict[str, str]  # Service quantum states
+    entanglement_map: dict[str, list[str]]  # Service dependencies
+    quantum_states: dict[str, str]  # Service quantum states
     coherence_level: float  # System coherence
-    superposition_services: List[str]  # Services in superposition
+    superposition_services: list[str]  # Services in superposition
 
 
 class AIServiceOrchestrator:
@@ -171,7 +171,7 @@ class AIServiceOrchestrator:
 
         return predictions
 
-    def recommend_healing_action(self, service_health: ServiceHealth) -> Optional[str]:
+    def recommend_healing_action(self, service_health: ServiceHealth) -> str | None:
         """AI-recommended healing actions with pattern learning"""
         # Track healing effectiveness
         service_name = getattr(service_health, "service_name", "unknown")
@@ -477,7 +477,7 @@ class LuminarNexusV2:
         name: str,
         port: int,
         service_type: str = "standard",
-        dependencies: Optional[List[str]] = None,
+        dependencies: list[str] | None = None,
         quantum_state: str = "stable",
     ):
         """Register a service with advanced metadata"""
@@ -518,7 +518,7 @@ class LuminarNexusV2:
             anomalies=[],
         )
 
-    async def comprehensive_health_check(self, service_name: str) -> Optional[ServiceHealth]:
+    async def comprehensive_health_check(self, service_name: str) -> ServiceHealth | None:
         """Advanced health check with AI analysis"""
         if service_name not in self.health_monitor:
             return None
@@ -1295,7 +1295,7 @@ class SecurityGuardian:
 
         return len(self.request_tracking[ip]) > threshold
 
-    def _detect_port_scan(self, ip: str, port: Optional[int]) -> bool:
+    def _detect_port_scan(self, ip: str, port: int | None) -> bool:
         """Detect port scanning behavior"""
         if not port:
             return False
@@ -1506,7 +1506,7 @@ class PredictiveScaler:
         self.time_patterns = {}  # Track time-based patterns (e.g., peak hours)
         self.scaling_decisions = {}
 
-    def predict_scaling_needs(self, service_name: str, current_load: float) -> Optional[str]:
+    def predict_scaling_needs(self, service_name: str, current_load: float) -> str | None:
         """Predict if scaling is needed using historical patterns and trend analysis"""
 
         # Initialize tracking for new services
@@ -1550,7 +1550,7 @@ class PredictiveScaler:
 
         return scaling_action
 
-    def _simple_threshold_scaling(self, current_load: float) -> Optional[str]:
+    def _simple_threshold_scaling(self, current_load: float) -> str | None:
         """Simple threshold-based scaling for when insufficient data"""
         if current_load > 80:
             return "scale_up"
@@ -1596,7 +1596,7 @@ class PredictiveScaler:
 
         return max(0, min(100, predicted_load))  # Clamp between 0-100
 
-    def _calculate_trend(self, values: List[float]) -> float:
+    def _calculate_trend(self, values: list[float]) -> float:
         """Calculate linear trend using simple linear regression"""
         n = len(values)
         if n < 2:
@@ -1616,7 +1616,7 @@ class PredictiveScaler:
         slope = numerator / denominator
         return slope  # Trend per time unit
 
-    def _make_scaling_decision(self, service_name: str, current_load: float, predicted_load: float) -> Optional[str]:
+    def _make_scaling_decision(self, service_name: str, current_load: float, predicted_load: float) -> str | None:
         """Make intelligent scaling decision based on current and predicted load"""
 
         # Define thresholds
@@ -1764,7 +1764,7 @@ class NeuralAnomalyDetector:
 
         return anomalies
 
-    def _detect_statistical_anomaly(self, metric_name: str, value: float, baseline: List[float]) -> Optional[str]:
+    def _detect_statistical_anomaly(self, metric_name: str, value: float, baseline: list[float]) -> str | None:
         """Detect anomalies using statistical analysis (Z-score)"""
         if len(baseline) < 20:
             return None

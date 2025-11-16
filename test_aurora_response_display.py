@@ -11,7 +11,8 @@ Example usage:
 """
 
 import logging
-from typing import Any, List, Optional, Callable
+from collections.abc import Callable
+from typing import Any
 
 # Optional pytest import
 try:
@@ -81,7 +82,7 @@ def test_aurora_response_display(input_data: Any, **kwargs) -> Any:
     return output
 
 
-def test_aurora_response_display_batch(items: List[Any], **kwargs) -> List[Any]:
+def test_aurora_response_display_batch(items: list[Any], **kwargs) -> list[Any]:
     """
     Process multiple items in batch.
 
@@ -99,7 +100,7 @@ def test_aurora_response_display_batch(items: List[Any], **kwargs) -> List[Any]:
     return [test_aurora_response_display(item, **kwargs) for item in items]
 
 
-def test_aurora_response_display_async(input_data: Any, callback: Optional[Callable] = None) -> Any:
+def test_aurora_response_display_async(input_data: Any, callback: Callable | None = None) -> Any:
     """
     Process data with optional callback.
 
@@ -346,8 +347,7 @@ if __name__ == "__main__":
 
         all_tests = []
         for test_cls in [test_basic, test_integration]:
-            all_tests.extend([(test_cls, method) for method in dir(
-                test_cls) if method.startswith("test_")])
+            all_tests.extend([(test_cls, method) for method in dir(test_cls) if method.startswith("test_")])
 
         passed = 0
         failed = 0
