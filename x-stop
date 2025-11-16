@@ -1,27 +1,30 @@
 
 #!/usr/bin/env python3
 """
-Aurora-X Unified Stop Command
-Stops all Aurora services by killing processes on their ports
+Aurora X-Stop - Comprehensive Service Shutdown
+Stops all Aurora services, ports, and workflows
 """
 
 import subprocess
 import sys
+import time
+import os
 
 # Aurora's ports
 AURORA_PORTS = [
-    5000,  # Main backend (Express)
-    5001,  # Bridge service
-    5002,  # Self-learning server
-    5003,  # Chat server
+    5000,  # Backend API
+    5001,  # Bridge
+    5002,  # Self-Learn
+    5003,  # Chat/Luminar Nexus
     5005,  # Luminar Nexus V2
-    5173,  # Frontend (Vite)
+    5173,  # Vite frontend
+    8080,  # Alternative chat
 ]
 
 def kill_port(port):
-    """Kill process using a specific port"""
+    """Kill process running on a specific port"""
     try:
-        # Find PID using the port
+        # Find process on port
         result = subprocess.run(
             ["lsof", "-ti", f":{port}"],
             capture_output=True,
@@ -30,25 +33,87 @@ def kill_port(port):
         )
         
         if result.stdout.strip():
-            pid = result.stdout.strip()
-            # Kill the process
-            subprocess.run(["kill", "-9", pid], timeout=5)
+            pids = result.stdout.strip().split('\n')
+            for pid in pids:
+                if pid:
+                    # Kill the process
+                    subprocess.run(["kill", "-9", pid], timeout=5)
             return True
         return False
     except Exception as e:
-        print(f"⚠️  Could not kill port {port}: {e}")
+        print(f"   ⚠️  Error killing port {port}: {e}")
         return False
 
 if __name__ == "__main__":
     print("🛑 Aurora: Stopping all services...")
+    print("   Step 1: Killing processes on all ports...")
     
     stopped_count = 0
     for port in AURORA_PORTS:
         if kill_port(port):
-            print(f"   ✅ Stopped service on port {port}")
+            print(f"   ✓ Stopped service on port {port}")
             stopped_count += 1
         else:
             print(f"   ℹ️  No service running on port {port}")
     
-    print(f"\n✅ Stopped {stopped_count} services")
+    # Give processes time to die
+    time.sleep(2)
+    
+    # Kill any Node.js or Python processes that might restart
+    print("\n   Step 2: Ensuring all Aurora processes are stopped...")
+    try:
+        # Kill all npm/node processes
+        subprocess.run(["pkill", "-9", "-f", "npm"], stderr=subprocess.DEVNULL)
+        subprocess.run(["pkill", "-9", "-f", "node"], stderr=subprocess.DEVNULL)
+        subprocess.run(["pkill", "-9", "-f", "tsx"], stderr=subprocess.DEVNULL)
+        subprocess.run(["pkill", "-9", "-f", "vite"], stderr=subprocess.DEVNULL)
+        
+        # Kill Python Aurora processes
+        subprocess.run(["pkill", "-9", "-f", "luminar_nexus"], stderr=subprocess.DEVNULL)
+        subprocess.run(["pkill", "-9", "-f", "self_learn"], stderr=subprocess.DEVNULL)
+        subprocess.run(["pkill", "-9", "-f", "aurora_x"], stderr=subprocess.DEVNULL)
+        subprocess.run(["pkill", "-9", "-f", "uvicorn"], stderr=subprocess.DEVNULL)
+        
+        print("   ✅ Killed all Aurora processes")
+    except Exception as e:
+        print(f"   ⚠️  Process cleanup: {e}")
+    
+    # Stop tmux sessions if they exist
+    print("\n   Step 3: Stopping tmux sessions...")
+    try:
+        # List of tmux session names used by Aurora
+        sessions = ["aurora-backend", "aurora-vite", "aurora-bridge", "aurora-self-learn", "aurora-chat"]
+        for session in sessions:
+            result = subprocess.run(
+                ["tmux", "has-session", "-t", session],
+                capture_output=True,
+                stderr=subprocess.DEVNULL
+            )
+            if result.returncode == 0:
+                subprocess.run(["tmux", "kill-session", "-t", session], stderr=subprocess.DEVNULL)
+                print(f"   ✓ Killed tmux session: {session}")
+    except Exception as e:
+        print(f"   ℹ️  Tmux cleanup: {e}")
+    
+    # Clean up PID files
+    print("\n   Step 4: Cleaning up PID files...")
+    pid_files = [
+        "/tmp/bridge.pid",
+        "/tmp/self_learn.pid",
+        "/tmp/luminar_keeper.pid",
+        "/tmp/aurora_orch.pid",
+        ".self_learning.pid"
+    ]
+    
+    for pid_file in pid_files:
+        if os.path.exists(pid_file):
+            try:
+                os.remove(pid_file)
+                print(f"   ✓ Removed {pid_file}")
+            except Exception as e:
+                print(f"   ⚠️  Could not remove {pid_file}: {e}")
+    
+    print(f"\n✅ Stopped {stopped_count} services on ports")
     print("🌙 Aurora services are now offline")
+    print("\n💡 Note: The preview should stop within 5-10 seconds.")
+    print("   If it doesn't, wait a moment and refresh your browser.")
