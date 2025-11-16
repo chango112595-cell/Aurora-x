@@ -983,12 +983,7 @@ class LuminarNexusV2:
 
         # Try to get tmux session info if available
         try:
-            session_result = subprocess.run(
-                ["tmux", "list-sessions"],
-                capture_output=True,
-                text=True,
-                timeout=2
-            )
+            session_result = subprocess.run(["tmux", "list-sessions"], capture_output=True, text=True, timeout=2)
         except (FileNotFoundError, subprocess.TimeoutExpired):
             print("ℹ️  tmux not available - using direct process management")
             session_result = None
@@ -1003,10 +998,13 @@ class LuminarNexusV2:
             if session_result is None:
                 # No tmux - check by port directly
                 import socket
+
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     s.settimeout(1)
-                    running = s.connect_ex(('127.0.0.1', port)) == 0
-                print(f"{'✅' if running else '❌'} {service_name:20} Port {port:5} {'RUNNING' if running else 'STOPPED'}")
+                    running = s.connect_ex(("127.0.0.1", port)) == 0
+                print(
+                    f"{'✅' if running else '❌'} {service_name:20} Port {port:5} {'RUNNING' if running else 'STOPPED'}"
+                )
                 continue
 
             # tmux available - check session
@@ -1015,7 +1013,9 @@ class LuminarNexusV2:
                 health_ok = self.loop.run_until_complete(self._check_service_health(service_name))
                 status = "RUNNING"
                 icon = "✅"
-                print(f"{icon} {service_name:20} Port {port:5} {status} (tmux:{session_name}) Health: {'✅ OK' if health_ok else '❌ Not responding'}")
+                print(
+                    f"{icon} {service_name:20} Port {port:5} {status} (tmux:{session_name}) Health: {'✅ OK' if health_ok else '❌ Not responding'}"
+                )
             else:
                 icon = "❌"
                 status = "STOPPED"

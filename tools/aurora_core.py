@@ -13,6 +13,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from aurora_intelligence_manager import AuroraIntelligenceManager
 from tools.aurora_task_manager import AuroraTaskManager
+
 try:
     from luminar_nexus_v2 import LuminarNexusV2
 except Exception as e:
@@ -78,7 +79,7 @@ class AuroraCore:
             self.intelligence.log("🔧 Aurora Core: Autonomous Fixer READY")
 
         # Aurora's tools
-        self.luminar = LuminarNexusV2() if LuminarNexusV2 else None # Server management tool (V2 with AI features)
+        self.luminar = LuminarNexusV2() if LuminarNexusV2 else None  # Server management tool (V2 with AI features)
         self.chat = None  # Will be initialized when needed
 
         # Aurora's Task Management System
@@ -466,7 +467,7 @@ class AuroraCore:
             ("Aurora Bridge Service", self.start_bridge),
             ("Aurora Backend API", self.start_backend),
             ("Aurora Self-Learning Server", self.start_self_learning),
-            ("Aurora Chat Server", self.start_chat)
+            ("Aurora Chat Server", self.start_chat),
         ]
 
         for name, start_func in services:
