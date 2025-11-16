@@ -1,19 +1,54 @@
+
 #!/usr/bin/env python3
 """
 Aurora-X Unified Stop Command
-Simple command to stop all Aurora services
-NOW USING AURORA CORE - Aurora is in control!
+Stops all Aurora services by killing processes on their ports
 """
 
+import subprocess
 import sys
-import os
 
-# Add tools directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'tools'))
+# Aurora's ports
+AURORA_PORTS = [
+    5000,  # Main backend (Express)
+    5001,  # Bridge service
+    5002,  # Self-learning server
+    5003,  # Chat server
+    5005,  # Luminar Nexus V2
+    5173,  # Frontend (Vite)
+]
 
-from aurora_core import AuroraCore
+def kill_port(port):
+    """Kill process using a specific port"""
+    try:
+        # Find PID using the port
+        result = subprocess.run(
+            ["lsof", "-ti", f":{port}"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        
+        if result.stdout.strip():
+            pid = result.stdout.strip()
+            # Kill the process
+            subprocess.run(["kill", "-9", pid], timeout=5)
+            return True
+        return False
+    except Exception as e:
+        print(f"⚠️  Could not kill port {port}: {e}")
+        return False
 
 if __name__ == "__main__":
-    print("🛑 Aurora Core: Stopping all services...\n")
-    aurora = AuroraCore()
-    aurora.stop_all_services()
+    print("🛑 Aurora: Stopping all services...")
+    
+    stopped_count = 0
+    for port in AURORA_PORTS:
+        if kill_port(port):
+            print(f"   ✅ Stopped service on port {port}")
+            stopped_count += 1
+        else:
+            print(f"   ℹ️  No service running on port {port}")
+    
+    print(f"\n✅ Stopped {stopped_count} services")
+    print("🌙 Aurora services are now offline")
