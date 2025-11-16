@@ -174,12 +174,20 @@ async function refreshReadmeBadges(): Promise<void> {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // ══════════════════════════════════════════════════════════════
-  // 🔐 AUTHENTICATION ROUTES
+  // 🔐 RATE LIMITING SETUP
   // ══════════════════════════════════════════════════════════════
-  // 🆕 Apply stricter auth rate limiting (before general API limiter to avoid double-counting)
+  // Apply rate limiters in order of specificity (most specific first)
+  
+  // 1. Authentication endpoints - strict limiting
   app.use("/api/auth", authLimiter, authRouter);
   
-  // 🆕 Apply general API rate limiting to remaining API routes
+  // 2. Chat endpoints - all HTTP methods
+  app.use("/api/chat", chatLimiter);
+  
+  // 3. Synthesis endpoints - all HTTP methods
+  app.use("/api/synthesis", synthesisLimiter);
+  
+  // 4. General API rate limiting for all other routes
   app.use("/api/", apiLimiter);
 
   // ══════════════════════════════════════════════════════════════
@@ -227,7 +235,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Chat endpoint - Aurora's conversational interface with Claude AI
   // 🆕 Apply chat rate limiting
-  app.post("/api/chat", chatLimiter, async (req, res) => {
+  app.post("/api/chat", async (req, res) => {
     try {
       const { message, session_id } = req.body;
 
@@ -2378,7 +2386,7 @@ except Exception as e:
 
   // OLD synthesis endpoint - now using /api/conversation for chat
   // 🆕 Apply synthesis rate limiting
-  app.post("/api/synthesis", synthesisLimiter, async (req, res) => {
+  app.post("/api/synthesis", async (req, res) => {
     try {
       const { message } = req.body;
 
