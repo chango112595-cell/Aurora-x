@@ -487,6 +487,22 @@ class AuroraCore:
         self.intelligence.log("🛑 Aurora Core: Stopping all services Fucking A...")
         return self.luminar.stop_all_servers()
 
+    def start_bridge(self):
+        """Start Aurora Bridge Service"""
+        return self.luminar.start_server("bridge")
+    
+    def start_backend(self):
+        """Start Aurora Backend API"""
+        return self.luminar.start_server("backend")
+    
+    def start_self_learning(self):
+        """Start Aurora Self-Learning Server"""
+        return self.luminar.start_server("self-learn")
+    
+    def start_chat(self):
+        """Start Aurora Chat Server"""
+        return self.luminar.start_server("chat")
+
     def start_service(self, service_name):
         """Aurora commands Luminar to start a specific service"""
         return self.luminar.start_server(service_name)
