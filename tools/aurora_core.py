@@ -490,15 +490,15 @@ class AuroraCore:
     def start_bridge(self):
         """Start Aurora Bridge Service"""
         return self.luminar.start_server("bridge")
-    
+
     def start_backend(self):
         """Start Aurora Backend API"""
         return self.luminar.start_server("backend")
-    
+
     def start_self_learning(self):
         """Start Aurora Self-Learning Server"""
         return self.luminar.start_server("self-learn")
-    
+
     def start_chat(self):
         """Start Aurora Chat Server"""
         return self.luminar.start_server("chat")
