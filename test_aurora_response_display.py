@@ -58,27 +58,27 @@ def test_aurora_response_display(input_data: Any, **kwargs) -> Any:
 
     # Process based on type
     if isinstance(input_data, str):
-        result = f"PROCESSED: {input_data}"
+        output = f"PROCESSED: {input_data}"
     elif isinstance(input_data, (int, float)):
-        result = f"PROCESSED: {input_data}"
+        output = f"PROCESSED: {input_data}"
     elif isinstance(input_data, list):
-        result = [f"PROCESSED: {item}" for item in input_data]
+        output = [f"PROCESSED: {item}" for item in input_data]
     elif isinstance(input_data, dict):
-        result = {k: f"PROCESSED: {v}" for k, v in input_data.items()}
+        output = {k: f"PROCESSED: {v}" for k, v in input_data.items()}
     else:
-        result = f"PROCESSED: {str(input_data)}"
+        output = f"PROCESSED: {str(input_data)}"
 
     # Apply any additional processing from kwargs
     if kwargs.get("uppercase", False):
-        if isinstance(result, str):
-            result = result.upper()
+        if isinstance(output, str):
+            output = output.upper()
 
     if kwargs.get("reverse", False):
-        if isinstance(result, str):
-            result = result[::-1]
+        if isinstance(output, str):
+            output = output[::-1]
 
-    logger.debug("Result: %s", result)
-    return result
+    logger.debug("Result: %s", output)
+    return output
 
 
 def test_aurora_response_display_batch(items: list[Any], **kwargs) -> list[Any]:
@@ -110,12 +110,12 @@ def test_aurora_response_display_async(input_data: Any, callback: callable | Non
     Returns:
         Processed result
     """
-    result = test_aurora_response_display(input_data)
+    output = test_aurora_response_display(input_data)
 
     if callback:
-        callback(result)
+        callback(output)
 
-    return result
+    return output
 
 
 # ============================================================================
@@ -171,8 +171,8 @@ class TestTestAuroraResponseDisplay:
 
     def test_string_input(self):
         """Test with string input"""
-        result = test_aurora_response_display("hello")
-        assert result == "PROCESSED: hello"
+        output = test_aurora_response_display("hello")
+        assert output == "PROCESSED: hello"
 
     def test_numeric_input(self):
         """Test with numeric input"""
@@ -181,13 +181,13 @@ class TestTestAuroraResponseDisplay:
 
     def test_list_input(self):
         """Test with list input"""
-        result = test_aurora_response_display([1, 2, 3])
-        assert result == ["PROCESSED: 1", "PROCESSED: 2", "PROCESSED: 3"]
+        output = test_aurora_response_display([1, 2, 3])
+        assert output == ["PROCESSED: 1", "PROCESSED: 2", "PROCESSED: 3"]
 
     def test_dict_input(self):
         """Test with dictionary input"""
-        result = test_aurora_response_display({"a": 1, "b": 2})
-        assert result == {"a": "PROCESSED: 1", "b": "PROCESSED: 2"}
+        output = test_aurora_response_display({"a": 1, "b": 2})
+        assert output == {"a": "PROCESSED: 1", "b": "PROCESSED: 2"}
 
     def test_none_input(self):
         """Test with None input"""
@@ -203,11 +203,11 @@ class TestTestAuroraResponseDisplay:
 
     def test_with_options(self):
         """Test with additional options"""
-        result = test_aurora_response_display("test", uppercase=True)
-        assert "PROCESSED" in result
+        output = test_aurora_response_display("test", uppercase=True)
+        assert "PROCESSED" in output
 
-        result = test_aurora_response_display("test", reverse=True)
-        assert result[::-1] == "PROCESSED: test"
+        output2 = test_aurora_response_display("test", reverse=True)
+        assert output2[::-1] == "PROCESSED: test"
 
     def test_batch_processing(self):
         """Test batch processing"""
@@ -220,14 +220,14 @@ class TestTestAuroraResponseDisplay:
         """Test async processing with callback"""
         callback_result = []
 
-        def callback(result):
+        def callback(processed_data):
             """Auto-generated: callback function."""
-            callback_result.append(result)
+            callback_result.append(processed_data)
 
-        result = test_aurora_response_display_async("test", callback=callback)
-        assert result == "PROCESSED: test"
+        output = test_aurora_response_display_async("test", callback=callback)
+        assert output == "PROCESSED: test"
         assert len(callback_result) == 1
-        assert callback_result[0] == result
+        assert callback_result[0] == output
 
 
 class TestTestAuroraResponseDisplayIntegration:
@@ -240,11 +240,11 @@ class TestTestAuroraResponseDisplayIntegration:
         assert validate_input(data) == True
 
         # Step 2: Process
-        result = test_aurora_response_display(data)
-        assert "PROCESSED" in result
+        output = test_aurora_response_display(data)
+        assert "PROCESSED" in output
 
         # Step 3: Transform output
-        json_output = transform_output(result, output_format="json")
+        json_output = transform_output(output, output_format="json")
         assert isinstance(json_output, str)
 
     def test_error_handling(self):
@@ -279,10 +279,10 @@ def benchmark_test_aurora_response_display(iterations: int = 100):
     """
     import time
 
-    func_name = "test_aurora_response_display"
+    function_name = "test_aurora_response_display"
     test_data = [f"test_{i}" for i in range(100)]
 
-    print(f"\nBenchmarking {func_name} with {iterations} iterations...")
+    print(f"\nBenchmarking {function_name} with {iterations} iterations...")
 
     start = time.perf_counter()
     for _ in range(iterations):
