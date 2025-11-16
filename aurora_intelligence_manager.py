@@ -9,11 +9,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from aurora_core import AuroraFoundations, AuroraKnowledgeTiers
-
-# Initialize Aurora's complete intelligence
-_aurora_tiers = AuroraKnowledgeTiers()
-_aurora_foundations = AuroraFoundations()
+# Avoid circular import - these will be initialized when needed
+_aurora_tiers = None
+_aurora_foundations = None
 
 # Add Aurora's tools to path
 sys.path.append(str(Path(__file__).parent / "tools"))
