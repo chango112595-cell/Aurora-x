@@ -41,14 +41,11 @@ class AuroraSystemVerification:
                     tasks_found.append(task_name)
 
             if len(tasks_found) == 13:
-                self.successes.append(
-                    f"✅ All 13 foundational tasks present: {', '.join(tasks_found)}")
+                self.successes.append(f"✅ All 13 foundational tasks present: {', '.join(tasks_found)}")
             else:
-                self.issues.append(
-                    f"❌ Only {len(tasks_found)}/13 tasks found: {tasks_found}")
+                self.issues.append(f"❌ Only {len(tasks_found)}/13 tasks found: {tasks_found}")
         else:
-            self.issues.append(
-                "❌ AuroraFoundations class NOT FOUND in aurora_core.py")
+            self.issues.append("❌ AuroraFoundations class NOT FOUND in aurora_core.py")
 
         # Check for Tier1-34 Knowledge
         if "class AuroraKnowledgeTiers:" in content:
@@ -70,11 +67,9 @@ class AuroraSystemVerification:
 
         # Check integration
         if "self.foundations = AuroraFoundations()" in content:
-            self.successes.append(
-                "✅ Foundations properly integrated into AuroraKnowledgeTiers")
+            self.successes.append("✅ Foundations properly integrated into AuroraKnowledgeTiers")
         else:
-            self.issues.append(
-                "❌ Foundations NOT integrated into AuroraKnowledgeTiers.__init__")
+            self.issues.append("❌ Foundations NOT integrated into AuroraKnowledgeTiers.__init__")
 
     def verify_service_files(self):
         """Verify service orchestration files"""
@@ -89,11 +84,9 @@ class AuroraSystemVerification:
         for service_file, description in services.items():
             path = self.root / service_file
             if path.exists():
-                self.successes.append(
-                    f"✅ {service_file} found ({description})")
+                self.successes.append(f"✅ {service_file} found ({description})")
             else:
-                self.issues.append(
-                    f"❌ {service_file} NOT FOUND - {description}")
+                self.issues.append(f"❌ {service_file} NOT FOUND - {description}")
 
     def verify_tools_organization(self):
         """Verify tools directory is properly organized"""
@@ -108,14 +101,12 @@ class AuroraSystemVerification:
 
         # Count tool files
         tool_files = list(tools_dir.glob("aurora_*.py"))
-        self.successes.append(
-            f"✅ Found {len(tool_files)} tool files in tools/")
+        self.successes.append(f"✅ Found {len(tool_files)} tool files in tools/")
 
         # Check for execution plan (Task1-7 execution tasks)
         exec_plan = tools_dir / "aurora_execute_plan.py"
         if exec_plan.exists():
-            self.successes.append(
-                "✅ aurora_execute_plan.py in tools/ (execution tasks)")
+            self.successes.append("✅ aurora_execute_plan.py in tools/ (execution tasks)")
         else:
             self.issues.append("❌ aurora_execute_plan.py NOT in tools/")
 
@@ -139,8 +130,7 @@ class AuroraSystemVerification:
 
         server_dir = self.root / "server"
         if not server_dir.exists():
-            self.issues.append(
-                "❌ server/ directory NOT FOUND (Chango backend)")
+            self.issues.append("❌ server/ directory NOT FOUND (Chango backend)")
             return
 
         self.successes.append("✅ server/ directory exists (Chango backend)")
@@ -174,15 +164,12 @@ class AuroraSystemVerification:
 
                 # Check if it properly imports from aurora_core
                 if "from aurora_core import" in content or "import aurora_core" in content:
-                    self.successes.append(
-                        f"✅ {file_name} properly imports from aurora_core")
+                    self.successes.append(f"✅ {file_name} properly imports from aurora_core")
                 # Check if it defines tier methods (not allowed)
                 elif "def _get_tier_" in content:
-                    self.issues.append(
-                        f"⚠️  {file_name} redefines tier methods (should import from aurora_core)")
+                    self.issues.append(f"⚠️  {file_name} redefines tier methods (should import from aurora_core)")
                 else:
-                    self.recommendations.append(
-                        f"💡 {file_name} might need to import from aurora_core")
+                    self.recommendations.append(f"💡 {file_name} might need to import from aurora_core")
 
     def identify_legacy_files(self):
         """Identify legacy/debug files that should be archived"""
@@ -203,8 +190,7 @@ class AuroraSystemVerification:
                     legacy_files.append((file.name, size_kb))
 
         if legacy_files:
-            self.recommendations.append(
-                f"💡 Found {len(legacy_files)} legacy files ready for archival:")
+            self.recommendations.append(f"💡 Found {len(legacy_files)} legacy files ready for archival:")
             for name, size in sorted(legacy_files):
                 self.recommendations.append(f"   - {name} ({size:.1f} KB)")
         else:
@@ -243,8 +229,7 @@ class AuroraSystemVerification:
                 found_docs.append(doc)
 
         if found_docs:
-            self.successes.append(
-                f"✅ Found {len(found_docs)} key documentation files")
+            self.successes.append(f"✅ Found {len(found_docs)} key documentation files")
 
     def check_imports_consistency(self):
         """Check that files properly import from aurora_core"""
@@ -262,11 +247,9 @@ class AuroraSystemVerification:
             if path.exists():
                 content = path.read_text(encoding="utf-8")
                 if "from aurora_core import" in content or "import aurora_core" in content:
-                    self.successes.append(
-                        f"✅ {file_name} imports from aurora_core")
+                    self.successes.append(f"✅ {file_name} imports from aurora_core")
                 else:
-                    self.recommendations.append(
-                        f"💡 {file_name} might need to import from aurora_core")
+                    self.recommendations.append(f"💡 {file_name} might need to import from aurora_core")
 
     def verify_port_configuration(self):
         """Verify service ports are properly configured"""
@@ -296,8 +279,7 @@ class AuroraSystemVerification:
                         if str(port) in content:
                             ports_found.append(port)
                     if ports_found:
-                        self.successes.append(
-                            f"✅ {file_name} references ports: {ports_found}")
+                        self.successes.append(f"✅ {file_name} references ports: {ports_found}")
                 except:
                     pass
 
@@ -370,8 +352,7 @@ class AuroraSystemVerification:
 
         # Overall status
         if len(self.issues) == 0:
-            print(
-                "\n🎉 SYSTEM STATUS: ✅ ALL CHECKS PASSED - EVERYTHING IS WHERE IT BELONGS")
+            print("\n🎉 SYSTEM STATUS: ✅ ALL CHECKS PASSED - EVERYTHING IS WHERE IT BELONGS")
         elif len(self.issues) <= 3:
             print("\n⚠️  SYSTEM STATUS: MOSTLY ORGANIZED - FEW MINOR ISSUES TO ADDRESS")
         else:
