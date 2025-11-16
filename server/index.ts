@@ -6,6 +6,10 @@ import { registerLuminarRoutes } from "./luminar-routes";
 
 const app = express();
 const server = createServer(app);
+
+// Enable trust proxy for Replit environment (handles X-Forwarded-For correctly)
+app.set('trust proxy', true);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
