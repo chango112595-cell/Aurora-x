@@ -50,7 +50,7 @@ if __name__ == "__main__":
     SUCCESS = final_layout_fix()
 
     print("\n" + "="*60)
-    if success:
+    if SUCCESS:
         print("✨ Layout completely fixed!")
         print("   - useLocation imported ✅")
         print("   - useLocation hook called ✅")

@@ -303,7 +303,7 @@ def benchmark_test_aurora_response_display(iterations: int = 100):
 
 if __name__ == "__main__":
     FUNC_NAME = "test_aurora_response_display"
-    print(f"{func_name.title().replace('_', ' ')} Function Examples:")
+    print(f"{FUNC_NAME.title().replace('_', ' ')} Function Examples:")
     print("=" * 60)
 
     # Demonstrate basic usage
@@ -317,19 +317,17 @@ if __name__ == "__main__":
     for example in examples:
         try:
             result = test_aurora_response_display(example)
-            print(f"{func_name}({repr(example):20s}) = {repr(result)}")
+            print(f"{FUNC_NAME}({repr(example):20s}) = {repr(result)}")
         except Exception as e:
-            print(f"{func_name}({repr(example):20s}) = Error: {e}")
-
-    # Demonstrate with options
+            # Demonstrate with options
+            print(f"{FUNC_NAME}({repr(example):20s}) = Error: {e}")
     print("\nWith options:")
-    print(f"{func_name}('test', uppercase=True) = {repr(test_aurora_response_display('test', uppercase=True))}")
-    print(f"{func_name}('test', reverse=True)   = {repr(test_aurora_response_display('test', reverse=True))}")
-
+    print(f"{FUNC_NAME}('test', uppercase=True) = {repr(test_aurora_response_display('test', uppercase=True))}")
     # Demonstrate batch processing
+    print(f"{FUNC_NAME}('test', reverse=True)   = {repr(test_aurora_response_display('test', reverse=True))}")
     print("\nBatch processing:")
     batch_result = test_aurora_response_display_batch(["a", "b", "c"])
-    print(f"{func_name}_batch(['a', 'b', 'c']) = {batch_result}")
+    print(f"{FUNC_NAME}_batch(['a', 'b', 'c']) = {batch_result}")
 
     # Run unit tests
     print("\nRunning unit tests...")

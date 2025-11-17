@@ -120,4 +120,4 @@ if __name__ == "__main__":
     import sys
 
     SUCCESS = test_all_templates()
-    sys.exit(0 if success else 1)
+    sys.exit(0 if SUCCESS else 1)

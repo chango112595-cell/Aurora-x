@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=redefined-outer-name
 """
 write factorial(n) with tests
 

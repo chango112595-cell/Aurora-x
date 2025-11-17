@@ -1,0 +1,375 @@
+{
+  "version": "1.0.0-GRANDMASTER",
+  "updated": "2025-11-17T13:04:24.023063",
+  "skills": {
+    "F0001": {
+      "code": "F0001",
+      "name": "Fatal error while parsing",
+      "severity": "CRITICAL",
+      "category": "FATAL",
+      "fixes": {
+        "ancient": "Manually check syntax line by line",
+        "classical": "Use IDE syntax checker",
+        "modern": "AST parsing with detailed error reporting",
+        "future": "AI-powered syntax repair with suggestions",
+        "scifi": "Quantum timeline validation across code states"
+      },
+      "learning_points": [
+        "Check for missing colons after if/for/while/def/class",
+        "Verify all brackets match: (), [], {}, '', \"\"",
+        "Ensure consistent indentation (4 spaces or 1 tab)",
+        "Look for invalid escape sequences"
+      ],
+      "examples": {},
+      "confidence": "HIGH"
+    },
+    "E0001": {
+      "code": "E0001",
+      "name": "Syntax error",
+      "severity": "CRITICAL",
+      "category": "ERROR",
+      "fixes": {
+        "ancient": "Manual syntax checking",
+        "classical": "IDE syntax highlighting",
+        "modern": "AST-based error detection and auto-fix suggestions",
+        "future": "Predictive syntax validation before typing",
+        "scifi": "Temporal code validation across execution timelines"
+      },
+      "learning_points": [
+        "Indentation must be consistent (4 spaces recommended)",
+        "Colons required after if/for/while/def/class/try/except",
+        "All brackets must match",
+        "String quotes must close",
+        "Line continuation with \\ or inside brackets"
+      ],
+      "examples": {
+        "missing_colon": "if condition:  # Add colon",
+        "bad_indent": "    # Use 4 spaces consistently",
+        "unclosed_bracket": "]  # Close all brackets"
+      },
+      "confidence": "HIGH"
+    },
+    "E0602": {
+      "code": "E0602",
+      "name": "Undefined variable",
+      "severity": "HIGH",
+      "category": "ERROR",
+      "fixes": {
+        "ancient": "Add variable definition or check typos",
+        "classical": "Use IDE's find references to track variable scope",
+        "modern": "Type hints + static analysis to catch early",
+        "future": "AI suggests correct variable name from context",
+        "scifi": "Quantum variable state inference across timelines"
+      },
+      "learning_points": [
+        "Variables must be defined before use",
+        "Check for typos in variable names (case-sensitive)",
+        "Verify variable is in correct scope",
+        "Exception handlers need 'as': except Exception as e:",
+        "Check if variable should be imported"
+      ],
+      "examples": {
+        "add_import": "from module import variable_name",
+        "fix_typo": "variable_name  # Correct spelling",
+        "add_definition": "variable_name = default_value",
+        "exception": "except Exception as e:  # Add 'as e'"
+      },
+      "confidence": "MEDIUM"
+    },
+    "E0401": {
+      "code": "E0401",
+      "name": "Unable to import",
+      "severity": "HIGH",
+      "category": "ERROR",
+      "fixes": {
+        "ancient": "Check if file exists and is in path",
+        "classical": "Verify PYTHONPATH and module installation",
+        "modern": "Use virtual environment with requirements.txt",
+        "future": "AI auto-install missing dependencies",
+        "scifi": "Multiverse package resolution across realities"
+      },
+      "learning_points": [
+        "Check if module is installed: pip list | grep module",
+        "Verify import path is correct",
+        "Some imports are optional (can disable warning)",
+        "Check PYTHONPATH environment variable",
+        "For local modules, check __init__.py exists"
+      ],
+      "examples": {
+        "install": "pip install module_name",
+        "fix_path": "from correct.path import module",
+        "optional": "try:\\n    import module\\nexcept ImportError:\\n    module = None",
+        "disable": "# pylint: disable=import-error  # Optional dependency"
+      },
+      "confidence": "MEDIUM"
+    },
+    "W0611": {
+      "code": "W0611",
+      "name": "Unused import",
+      "severity": "LOW",
+      "category": "WARNING",
+      "fixes": {
+        "ancient": "Remove the import line",
+        "classical": "Use IDE's organize imports feature",
+        "modern": "Use tools like autoflake or isort",
+        "future": "AI tracks import usage and suggests cleanup",
+        "scifi": "Quantum import optimization across code branches"
+      },
+      "learning_points": [
+        "Remove unused imports to keep code clean",
+        "Some imports are for side effects (keep those)",
+        "Type checking imports can use TYPE_CHECKING",
+        "Import order: stdlib, 3rd-party, local"
+      ],
+      "examples": {
+        "remove": "# Delete: import unused_module",
+        "type_checking": "if TYPE_CHECKING:\\n    import TypeModule",
+        "side_effect": "import module  # pylint: disable=unused-import  # Side effect"
+      },
+      "confidence": "HIGH"
+    },
+    "W0612": {
+      "code": "W0612",
+      "name": "Unused variable",
+      "severity": "LOW",
+      "category": "WARNING",
+      "fixes": {
+        "ancient": "Delete or rename with underscore",
+        "classical": "Prefix with _ to mark intentional",
+        "modern": "Use _ for intentionally unused: _, result = func()",
+        "future": "AI detects if variable might be needed later",
+        "scifi": "Temporal variable usage prediction"
+      },
+      "learning_points": [
+        "Prefix with _ if intentionally unused: _var",
+        "Remove if truly not needed",
+        "Use _ for loop variables: for _ in range(10)",
+        "Unpack with _: _, value = tuple_result"
+      ],
+      "examples": {
+        "prefix": "_unused_var = func()",
+        "loop": "for _ in range(10):",
+        "unpack": "_, result = get_tuple()"
+      },
+      "confidence": "HIGH"
+    },
+    "W0621": {
+      "code": "W0621",
+      "name": "Redefining name from outer scope",
+      "severity": "LOW",
+      "category": "WARNING",
+      "fixes": {
+        "ancient": "Rename inner variable",
+        "classical": "Use different naming convention for inner scope",
+        "modern": "Extract to separate function with clear scope",
+        "future": "AI suggests non-conflicting names",
+        "scifi": "Multidimensional scope isolation"
+      },
+      "learning_points": [
+        "Variable shadows outer scope variable",
+        "Rename inner variable to avoid confusion",
+        "Common in nested functions and loops",
+        "OK in test files (can disable for tests)"
+      ],
+      "examples": {
+        "rename": "inner_name = ...  # Different from outer name",
+        "disable": "# pylint: disable=redefined-outer-name",
+        "refactor": "def helper(param):  # Extract to function"
+      },
+      "confidence": "MEDIUM"
+    },
+    "W1510": {
+      "code": "W1510",
+      "name": "subprocess.run without check parameter",
+      "severity": "MEDIUM",
+      "category": "WARNING",
+      "fixes": {
+        "ancient": "Add manual error checking after run",
+        "classical": "Use try/except around subprocess.run",
+        "modern": "Add check=False or check=True explicitly",
+        "future": "AI determines appropriate check behavior",
+        "scifi": "Quantum process outcome prediction"
+      },
+      "learning_points": [
+        "Add check=False if command failures are expected",
+        "Add check=True if failures should raise exception",
+        "Important for robust error handling",
+        "Default behavior is check=False (no error on failure)"
+      ],
+      "examples": {
+        "expected_failure": "subprocess.run([...], check=False)",
+        "require_success": "subprocess.run([...], check=True)"
+      },
+      "confidence": "HIGH"
+    },
+    "R1705": {
+      "code": "R1705",
+      "name": "Unnecessary else after return",
+      "severity": "LOW",
+      "category": "REFACTORING",
+      "fixes": {
+        "ancient": "Remove else and dedent code",
+        "classical": "Use guard clauses pattern",
+        "modern": "Flatten with early returns",
+        "future": "AI auto-refactors to flat structure",
+        "scifi": "Hyperdimensional code flow optimization"
+      },
+      "learning_points": [
+        "Remove else after return/raise/continue",
+        "Dedent the else block code",
+        "Makes code flatter and easier to read",
+        "Part of guard clause pattern"
+      ],
+      "examples": {
+        "before": "if x:\\n    return True\\nelse:\\n    return False",
+        "after": "if x:\\n    return True\\nreturn False"
+      },
+      "confidence": "HIGH"
+    },
+    "R0913": {
+      "code": "R0913",
+      "name": "Too many arguments",
+      "severity": "MEDIUM",
+      "category": "REFACTORING",
+      "fixes": {
+        "ancient": "Accept fewer parameters",
+        "classical": "Group into config object or dict",
+        "modern": "Use dataclass or TypedDict for grouped params",
+        "future": "AI suggests optimal parameter grouping",
+        "scifi": "Quantum parameter entanglement"
+      },
+      "learning_points": [
+        "Limit to 5-7 parameters max",
+        "Group related params into dataclass/dict",
+        "Use **kwargs for optional parameters",
+        "Consider builder pattern for complex objects"
+      ],
+      "examples": {
+        "dataclass": "@dataclass\\nclass Config:\\n    param1: str\\n    param2: int",
+        "kwargs": "def func(required, **kwargs):",
+        "dict": "def func(config: dict):"
+      },
+      "confidence": "MEDIUM"
+    },
+    "C0103": {
+      "code": "C0103",
+      "name": "Invalid name (naming convention)",
+      "severity": "LOW",
+      "category": "CONVENTION",
+      "fixes": {
+        "ancient": "Rename to match convention",
+        "classical": "Follow PEP 8 naming conventions",
+        "modern": "Use automated renaming tools",
+        "future": "AI auto-suggests compliant names",
+        "scifi": "Universal naming across dimensions"
+      },
+      "learning_points": [
+        "Functions/variables: lowercase_with_underscores",
+        "Classes: PascalCase",
+        "Constants: UPPER_CASE_WITH_UNDERSCORES",
+        "Short names OK for loops: i, j, k, x, y, z",
+        "Private: _leading_underscore"
+      ],
+      "examples": {
+        "function": "def calculate_total():  # snake_case",
+        "class": "class DataProcessor:  # PascalCase",
+        "constant": "MAX_RETRIES = 3  # UPPER_CASE"
+      },
+      "confidence": "HIGH"
+    },
+    "C0114": {
+      "code": "C0114",
+      "name": "Missing module docstring",
+      "severity": "LOW",
+      "category": "CONVENTION",
+      "fixes": {
+        "ancient": "Add comment at top of file",
+        "classical": "Add docstring with module purpose",
+        "modern": "Use docstring template with sections",
+        "future": "AI generates contextual docstrings",
+        "scifi": "Self-documenting quantum code"
+      },
+      "learning_points": [
+        "Add docstring at top of file after shebang",
+        "Describe module purpose and contents",
+        "Use triple quotes: \"\"\"docstring\"\"\"",
+        "Can include author, date, examples"
+      ],
+      "examples": {
+        "basic": "\"\"\"\\nModule for data processing utilities.\\n\"\"\"",
+        "detailed": "\"\"\"\\nData Processing Module\\n\\nProvides utilities for...\\n\"\"\""
+      },
+      "confidence": "HIGH"
+    },
+    "C0116": {
+      "code": "C0116",
+      "name": "Missing function/method docstring",
+      "severity": "LOW",
+      "category": "CONVENTION",
+      "fixes": {
+        "ancient": "Add comment above function",
+        "classical": "Add docstring after def line",
+        "modern": "Use Google/NumPy style docstrings",
+        "future": "AI auto-generates from function signature",
+        "scifi": "Quantum-linked documentation"
+      },
+      "learning_points": [
+        "Add docstring right after def line",
+        "Describe what function does",
+        "Include parameters and return value",
+        "Use consistent style (Google/NumPy/Sphinx)"
+      ],
+      "examples": {
+        "basic": "    \"\"\"Calculate total from items.\"\"\"",
+        "detailed": "    \"\"\"\\n    Calculate total.\\n    \\n    Args:\\n        items: List of values\\n    Returns:\\n        Sum of items\\n    \"\"\""
+      },
+      "confidence": "HIGH"
+    },
+    "C0301": {
+      "code": "C0301",
+      "name": "Line too long",
+      "severity": "LOW",
+      "category": "CONVENTION",
+      "fixes": {
+        "ancient": "Break line manually",
+        "classical": "Break at logical points (commas, operators)",
+        "modern": "Use Black formatter for auto-formatting",
+        "future": "AI optimizes line breaks for readability",
+        "scifi": "Hyperdimensional text folding"
+      },
+      "learning_points": [
+        "Limit to 79-120 characters per line",
+        "Break after commas in function calls",
+        "Use parentheses for implicit continuation",
+        "Black formatter handles this automatically"
+      ],
+      "examples": {
+        "function_call": "result = function(\\n    arg1,\\n    arg2,\\n    arg3\\n)",
+        "string": "message = (\\n    'Long string part 1 '\\n    'part 2'\\n)"
+      },
+      "confidence": "HIGH"
+    }
+  },
+  "mastery_report": {
+    "version": "1.0.0-GRANDMASTER",
+    "tier": "GRANDMASTER",
+    "skills_learned": 14,
+    "fixes_applied": 0,
+    "success_rate": "0.0%",
+    "era_preferences": {
+      "ancient": 0,
+      "classical": 0,
+      "modern": 0,
+      "future": 0,
+      "scifi": 0
+    },
+    "coverage": {
+      "F_FATAL": 1,
+      "E_ERROR": 3,
+      "W_WARNING": 4,
+      "R_REFACTORING": 2,
+      "C_CONVENTION": 4
+    }
+  },
+  "fix_history": []
+}

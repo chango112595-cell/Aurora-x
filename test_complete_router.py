@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=redefined-outer-name
 """
 Complete test of T08 Intent Router with all template types
 """

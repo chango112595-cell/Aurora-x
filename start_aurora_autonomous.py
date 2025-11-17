@@ -4,6 +4,10 @@ Start Aurora in Full Autonomous Mode
 Aurora will continuously monitor, detect issues, and fix them autonomously
 """
 
+import sys
+import signal
+import time
+from pathlib import Path
 from tools.aurora_autonomous_system import AuroraAutonomousSystem
 from tools.aurora_autonomous_fixer import AuroraAutonomousFixer
 from aurora_intelligence_manager import AuroraIntelligenceManager
@@ -89,7 +93,11 @@ class AuroraAutonomousRunner:
             print("\n🔧 Aurora is autonomously fixing issues...")
             # Fix issues autonomously
             for issue in health_issues:
-                self.autonomous_fixer.auto_fix(issue)
+                # pylint: disable=no-member
+                if hasattr(self.autonomous_fixer, 'fix_issue'):
+                    self.autonomous_fixer.fix_issue(issue)
+                elif hasattr(self.autonomous_fixer, 'auto_fix'):
+                    self.autonomous_fixer.auto_fix(issue)
         else:
             print("✅ System healthy - no issues detected")
 

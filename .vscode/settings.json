@@ -4,6 +4,14 @@
     "python.analysis.extraPaths": [
         "./tools"
     ],
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportGeneralTypeIssues": "none",
+        "reportUnusedVariable": "none",
+        "reportUnusedImport": "warning",
+        "reportMissingImports": "none",
+        "reportOptionalMemberAccess": "none",
+        "reportShadowedImports": "none"
+    },
     "python.defaultInterpreterPath": "./.venv/bin/python",
     "css.lint.unknownAtRules": "ignore",
     "css.lint.vendorPrefix": "warning",

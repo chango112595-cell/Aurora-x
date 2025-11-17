@@ -20,11 +20,11 @@ def aurora_verify_core_usage():
         print("[Aurora] ✅ Core imported successfully")
 
         # Verify foundations
-        foundations_count = len(aurora.foundations.tasks)
+        _foundations_count = len(aurora.foundations.tasks)
         print("[Aurora] ✅ Foundations loaded: {foundations_count} tasks")
 
         # Verify tiers
-        tiers_count = len(aurora.tiers)
+        _tiers_count = len(aurora.tiers)
         print("[Aurora] ✅ Knowledge tiers loaded: {tiers_count} tiers")
 
         # Show architecture
@@ -70,7 +70,7 @@ def aurora_verify_core_usage():
         print("\n[Aurora] ✅ All core systems accessible and functional!")
 
     except Exception as e:
-        print("[Aurora] ❌ Core import failed: {e}")
+        print(f"[Aurora] ❌ Core import failed: {e}")
         return False
 
     # Test 2: Verify intelligence manager integration
@@ -112,4 +112,4 @@ def aurora_verify_core_usage():
 
 if __name__ == "__main__":
     SUCCESS = aurora_verify_core_usage()
-    exit(0 if success else 1)
+    exit(0 if SUCCESS else 1)

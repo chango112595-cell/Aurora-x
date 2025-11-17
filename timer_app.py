@@ -1,3 +1,4 @@
+# pylint: disable=redefined-outer-name
 from flask import Flask, render_template_string
 from textwrap import dedent
 

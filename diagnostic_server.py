@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=redefined-outer-name
 """
 Aurora Diagnostic Web Server (No Dependencies)
 - Serves diagnostic reports on a separate port (9999)

@@ -1,3 +1,4 @@
+# pylint: disable=redefined-outer-name
 """
 Aurora's Complete Linting Solution
 Fixes all remaining 88 linting problems across the entire codebase

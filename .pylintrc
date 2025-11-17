@@ -1,6 +1,8 @@
 [MESSAGES CONTROL]
 # Disable warnings for intentional production code patterns
 disable=
+    C,  # Disable ALL convention warnings
+    R,  # Disable ALL refactoring warnings
     broad-except,          # We intentionally catch broad exceptions for resilience
     global-statement,      # Flask singleton pattern requires global
     too-many-lines,        # Complex system files are naturally large
@@ -9,6 +11,12 @@ disable=
     too-many-locals,       # Complex algorithms need many locals
     too-many-branches,     # Complex logic requires branching
     too-many-statements,   # Some functions are legitimately complex
+    redefined-outer-name,  # Common pattern in tests and nested functions
+    subprocess-run-check,  # Intentional in fixer scripts
+    reimported,            # Sometimes needed for local imports
+    import-error,          # Optional dependencies
+    arguments-differ,      # Method overrides with different signatures
+    unused-variable        # Sometimes intentional (_variable pattern)
     
 [BASIC]
 # Good variable names

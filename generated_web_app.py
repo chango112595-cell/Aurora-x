@@ -1,3 +1,4 @@
+# pylint: disable=redefined-outer-name
 from flask import Flask, Response
 
 TITLE = "Futuristic UI Timer"
