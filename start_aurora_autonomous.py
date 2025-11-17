@@ -4,10 +4,11 @@ Start Aurora in Full Autonomous Mode
 Aurora will continuously monitor, detect issues, and fix them autonomously
 """
 
-import sys
 import signal
+import sys
 import time
 from pathlib import Path
+
 from aurora_intelligence_manager import AuroraIntelligenceManager
 from tools.aurora_autonomous_fixer import AuroraAutonomousFixer
 from tools.aurora_autonomous_system import AuroraAutonomousSystem
@@ -52,8 +53,7 @@ class AuroraAutonomousRunner:
         print(f"{'='*80}\n")
 
         # Check for pending tasks
-        task_file = Path(
-            "/workspaces/Aurora-x/.aurora_knowledge/pending_tasks.json")
+        task_file = Path("/workspaces/Aurora-x/.aurora_knowledge/pending_tasks.json")
         if task_file.exists():
             print("📋 Checking for pending tasks...")
             import json
@@ -65,11 +65,9 @@ class AuroraAutonomousRunner:
                 if tasks:
                     print(f"📝 Found {len(tasks)} pending tasks")
                     for task in tasks:
-                        print(
-                            f"   ⚡ Task: {task.get('description', 'Unknown')}")
+                        print(f"   ⚡ Task: {task.get('description', 'Unknown')}")
                         # Execute task autonomously
-                        result = self.autonomous_system.autonomous_execute(
-                            task.get("description", ""))
+                        result = self.autonomous_system.autonomous_execute(task.get("description", ""))
                         if result:
                             print("   ✅ Task completed")
                         else:
@@ -94,9 +92,9 @@ class AuroraAutonomousRunner:
             # Fix issues autonomously
             for issue in health_issues:
                 # pylint: disable=no-member
-                if hasattr(self.autonomous_fixer, 'fix_issue'):
+                if hasattr(self.autonomous_fixer, "fix_issue"):
                     self.autonomous_fixer.fix_issue(issue)
-                elif hasattr(self.autonomous_fixer, 'auto_fix'):
+                elif hasattr(self.autonomous_fixer, "auto_fix"):
                     self.autonomous_fixer.auto_fix(issue)
         else:
             print("✅ System healthy - no issues detected")
@@ -119,8 +117,7 @@ class AuroraAutonomousRunner:
         import subprocess
 
         for name, port in servers.items():
-            result = subprocess.run(
-                f"lsof -i :{port} -t", shell=True, capture_output=True, text=True, check=False)
+            result = subprocess.run(f"lsof -i :{port} -t", shell=True, capture_output=True, text=True, check=False)
             if result.returncode != 0:
                 issues.append(f"{name} not running on port {port}")
 
@@ -130,11 +127,9 @@ class AuroraAutonomousRunner:
             try:
                 with open(log_file, encoding="utf-8") as f:
                     logs = f.readlines()
-                    errors = [line for line in logs[-100:]
-                              if "error" in line.lower() or "failed" in line.lower()]
+                    errors = [line for line in logs[-100:] if "error" in line.lower() or "failed" in line.lower()]
                     if errors:
-                        issues.append(
-                            f"Found {len(errors)} error entries in logs")
+                        issues.append(f"Found {len(errors)} error entries in logs")
             except Exception:
                 pass
 
@@ -144,8 +139,7 @@ class AuroraAutonomousRunner:
 
             response = requests.get("http://localhost:5173", timeout=5)
             if response.status_code != 200:
-                issues.append(
-                    f"Frontend returning status {response.status_code}")
+                issues.append(f"Frontend returning status {response.status_code}")
         except Exception as e:
             issues.append(f"Frontend not responding: {e}")
 

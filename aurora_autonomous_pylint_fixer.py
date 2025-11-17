@@ -13,12 +13,11 @@ Aurora's Autonomous System that:
 This is REAL fixing, not suppression!
 """
 
-import subprocess
 import json
 import re
-from pathlib import Path
-from typing import Dict, List
+import subprocess
 from datetime import datetime
+from pathlib import Path
 
 # Import Aurora's grandmaster knowledge
 from aurora_pylint_grandmaster import AuroraPylintGrandmaster
@@ -37,14 +36,21 @@ class AuroraAutonomousFixer:
         self.fixes_by_type = {}
         self.errors_encountered = []
 
-    def scan_project(self, project_path: str = ".") -> List[str]:
+    def scan_project(self, project_path: str = ".") -> list[str]:
         """Find all Python files in project"""
         python_files = []
 
         exclude_dirs = {
-            "__pycache__", ".git", ".venv", "venv",
-            "node_modules", ".pytest_cache", ".mypy_cache",
-            "build", "dist", ".tox"
+            "__pycache__",
+            ".git",
+            ".venv",
+            "venv",
+            "node_modules",
+            ".pytest_cache",
+            ".mypy_cache",
+            "build",
+            "dist",
+            ".tox",
         }
 
         for py_file in Path(project_path).rglob("*.py"):
@@ -55,41 +61,28 @@ class AuroraAutonomousFixer:
 
         return python_files
 
-    def analyze_file(self, filepath: str) -> Dict:
+    def analyze_file(self, filepath: str) -> dict:
         """Analyze single file for pylint issues"""
         try:
             result = subprocess.run(
-                ["pylint", "--output-format=json", filepath],
-                capture_output=True,
-                text=True,
-                check=False
+                ["pylint", "--output-format=json", filepath], capture_output=True, text=True, check=False
             )
 
             issues = json.loads(result.stdout) if result.stdout else []
 
             # Filter out suppressed categories
-            real_issues = [
-                issue for issue in issues
-                if issue.get("message-id", "")[0] in ["F", "E", "W"]
-            ]
+            real_issues = [issue for issue in issues if issue.get("message-id", "")[0] in ["F", "E", "W"]]
 
-            return {
-                "file": filepath,
-                "issues": real_issues,
-                "total": len(real_issues)
-            }
+            return {"file": filepath, "issues": real_issues, "total": len(real_issues)}
 
         except Exception as e:
-            self.errors_encountered.append({
-                "file": filepath,
-                "error": str(e)
-            })
+            self.errors_encountered.append({"file": filepath, "error": str(e)})
             return {"file": filepath, "issues": [], "total": 0}
 
-    def fix_undefined_variable(self, filepath: str, issue: Dict) -> bool:
+    def fix_undefined_variable(self, filepath: str, issue: dict) -> bool:
         """Fix E0602: Undefined variable"""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 lines = f.readlines()
 
             line_num = issue["line"] - 1
@@ -107,14 +100,10 @@ class AuroraAutonomousFixer:
             # Check for exception handler
             if "except" in line_content and " as " not in line_content:
                 # Fix: except Exception -> except Exception as e
-                fixed_line = re.sub(
-                    r'(except\s+[\w.]+)\s*:',
-                    r'\1 as e:',
-                    line_content
-                )
+                fixed_line = re.sub(r"(except\s+[\w.]+)\s*:", r"\1 as e:", line_content)
                 if fixed_line != line_content:
                     lines[line_num] = fixed_line
-                    with open(filepath, 'w', encoding='utf-8') as f:
+                    with open(filepath, "w", encoding="utf-8") as f:
                         f.writelines(lines)
                     return True
 
@@ -126,7 +115,7 @@ class AuroraAutonomousFixer:
                 "datetime": "from datetime import datetime",
                 "json": "import json",
                 "time": "import time",
-                "signal": "import signal"
+                "signal": "import signal",
             }
 
             if undefined_var in common_imports:
@@ -141,7 +130,7 @@ class AuroraAutonomousFixer:
                         break
 
                 lines.insert(insert_line, common_imports[undefined_var] + "\n")
-                with open(filepath, 'w', encoding='utf-8') as f:
+                with open(filepath, "w", encoding="utf-8") as f:
                     f.writelines(lines)
                 return True
 
@@ -151,10 +140,10 @@ class AuroraAutonomousFixer:
             print(f"  ⚠️  Error fixing {filepath}: {e}")
             return False
 
-    def fix_unused_import(self, filepath: str, issue: Dict) -> bool:
+    def fix_unused_import(self, filepath: str, issue: dict) -> bool:
         """Fix W0611: Unused import"""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 lines = f.readlines()
 
             line_num = issue["line"] - 1
@@ -165,7 +154,7 @@ class AuroraAutonomousFixer:
                 # Check if line has only whitespace and import
                 if "#" not in line_content or line_content.index("#") > line_content.index("import"):
                     del lines[line_num]
-                    with open(filepath, 'w', encoding='utf-8') as f:
+                    with open(filepath, "w", encoding="utf-8") as f:
                         f.writelines(lines)
                     return True
 
@@ -175,10 +164,10 @@ class AuroraAutonomousFixer:
             print(f"  ⚠️  Error fixing {filepath}: {e}")
             return False
 
-    def fix_unused_variable(self, filepath: str, issue: Dict) -> bool:
+    def fix_unused_variable(self, filepath: str, issue: dict) -> bool:
         """Fix W0612: Unused variable"""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 lines = f.readlines()
 
             line_num = issue["line"] - 1
@@ -192,8 +181,8 @@ class AuroraAutonomousFixer:
             # Prefix variable with underscore
             # Handle different patterns
             patterns = [
-                (rf'\b{unused_var}\b\s*=', f'_{unused_var} ='),
-                (rf'for\s+{unused_var}\b', f'for _{unused_var}'),
+                (rf"\b{unused_var}\b\s*=", f"_{unused_var} ="),
+                (rf"for\s+{unused_var}\b", f"for _{unused_var}"),
             ]
 
             for pattern, replacement in patterns:
@@ -201,7 +190,7 @@ class AuroraAutonomousFixer:
                     fixed_line = re.sub(pattern, replacement, line_content)
                     if fixed_line != line_content:
                         lines[line_num] = fixed_line
-                        with open(filepath, 'w', encoding='utf-8') as f:
+                        with open(filepath, "w", encoding="utf-8") as f:
                             f.writelines(lines)
                         return True
 
@@ -211,10 +200,10 @@ class AuroraAutonomousFixer:
             print(f"  ⚠️  Error fixing {filepath}: {e}")
             return False
 
-    def fix_subprocess_check(self, filepath: str, issue: Dict) -> bool:
+    def fix_subprocess_check(self, filepath: str, issue: dict) -> bool:
         """Fix W1510: subprocess.run without check parameter"""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 lines = f.readlines()
 
             line_num = issue["line"] - 1
@@ -223,24 +212,19 @@ class AuroraAutonomousFixer:
             # Add check=False to subprocess.run
             if "subprocess.run(" in line_content and "check=" not in line_content:
                 # Find the closing parenthesis
-                fixed_line = line_content.replace(
-                    "subprocess.run(",
-                    "subprocess.run("
-                )
+                fixed_line = line_content.replace("subprocess.run(", "subprocess.run(")
 
                 # Add check=False before closing paren
                 # This is a simple approach - might need refinement for multi-line calls
                 if line_content.rstrip().endswith(")"):
-                    fixed_line = line_content.rstrip()[
-                        :-1] + ", check=False)\n"
+                    fixed_line = line_content.rstrip()[:-1] + ", check=False)\n"
                 elif line_content.rstrip().endswith("),"):
-                    fixed_line = line_content.rstrip()[
-                        :-2] + ", check=False),\n"
+                    fixed_line = line_content.rstrip()[:-2] + ", check=False),\n"
                 else:
                     return False
 
                 lines[line_num] = fixed_line
-                with open(filepath, 'w', encoding='utf-8') as f:
+                with open(filepath, "w", encoding="utf-8") as f:
                     f.writelines(lines)
                 return True
 
@@ -250,16 +234,16 @@ class AuroraAutonomousFixer:
             print(f"  ⚠️  Error fixing {filepath}: {e}")
             return False
 
-    def fix_line_too_long(self, _filepath: str, _issue: Dict) -> bool:
+    def fix_line_too_long(self, _filepath: str, _issue: dict) -> bool:
         """Fix C0301: Line too long"""
         # This is complex - skip for now
         # Would need context-aware formatting
         return False
 
-    def fix_missing_docstring(self, filepath: str, issue: Dict, doc_type: str) -> bool:
+    def fix_missing_docstring(self, filepath: str, issue: dict, doc_type: str) -> bool:
         """Fix C0114/C0116: Missing docstring"""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 lines = f.readlines()
 
             line_num = issue["line"] - 1
@@ -279,12 +263,11 @@ class AuroraAutonomousFixer:
                 for i in range(line_num, min(line_num + 5, len(lines))):
                     if lines[i].strip().startswith("def "):
                         indent = len(lines[i]) - len(lines[i].lstrip())
-                        docstring = " " * (indent + 4) + \
-                            '"""Function docstring."""\n'
+                        docstring = " " * (indent + 4) + '"""Function docstring."""\n'
                         lines.insert(i + 1, docstring)
                         break
 
-            with open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.writelines(lines)
             return True
 
@@ -292,7 +275,7 @@ class AuroraAutonomousFixer:
             print(f"  ⚠️  Error fixing {filepath}: {e}")
             return False
 
-    def apply_fix(self, filepath: str, issue: Dict) -> bool:
+    def apply_fix(self, filepath: str, issue: dict) -> bool:
         """Apply fix for specific issue"""
         error_code = issue.get("message-id", "")
 
@@ -325,12 +308,11 @@ class AuroraAutonomousFixer:
 
         if success:
             self.fixes_applied += 1
-            self.fixes_by_type[error_code] = self.fixes_by_type.get(
-                error_code, 0) + 1
+            self.fixes_by_type[error_code] = self.fixes_by_type.get(error_code, 0) + 1
 
         return success
 
-    def process_file(self, filepath: str) -> Dict:
+    def process_file(self, filepath: str) -> dict:
         """Process a single file"""
         print(f"\nProcessing: {filepath}")
 
@@ -363,14 +345,9 @@ class AuroraAutonomousFixer:
         new_analysis = self.analyze_file(filepath)
         remaining = new_analysis.get("total", 0)
 
-        print(
-            f"  [DONE] Applied {fixes_count} fixes, {remaining} issues remaining")
+        print(f"  [DONE] Applied {fixes_count} fixes, {remaining} issues remaining")
 
-        return {
-            "file": filepath,
-            "fixes": fixes_count,
-            "remaining": remaining
-        }
+        return {"file": filepath, "fixes": fixes_count, "remaining": remaining}
 
     def run_autonomous_fix(self, project_path: str = "."):
         """Run autonomous fixing across entire project"""
@@ -389,10 +366,10 @@ class AuroraAutonomousFixer:
         for filepath in python_files:
             result = self.process_file(filepath)
             results.append(result)
-            self.files_processed += 1        # Generate report
+            self.files_processed += 1  # Generate report
         self.generate_report(results)
 
-    def generate_report(self, results: List[Dict]):
+    def generate_report(self, results: list[dict]):
         """Generate comprehensive fix report"""
         print("\n" + "=" * 80)
         print("*** AURORA AUTONOMOUS FIX REPORT ***")
@@ -438,11 +415,11 @@ class AuroraAutonomousFixer:
             "fixes_by_type": self.fixes_by_type,
             "remaining_issues": total_remaining,
             "mastery_report": mastery_report,
-            "detailed_results": results
+            "detailed_results": results,
         }
 
         report_file = "AURORA_AUTONOMOUS_FIX_REPORT.json"
-        with open(report_file, 'w', encoding='utf-8') as f:
+        with open(report_file, "w", encoding="utf-8") as f:
             json.dump(report_data, f, indent=2)
 
         print(f"\nFull report saved to: {report_file}")

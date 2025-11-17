@@ -4,8 +4,8 @@ Aurora Smart Syntax Fixer - Fixing the specific docstring removal issue
 Handles the case where function definitions were merged with their first statement
 """
 
-import subprocess
 import re
+import subprocess
 from pathlib import Path
 
 
@@ -19,11 +19,9 @@ class AuroraSmartSyntaxFixer:
 
         # ONLY target root-level project files
         self.target_files = [
-            f for f in self.root.glob("*.py")
-            if f.is_file()
-            and not f.name.startswith('.')
-            and '.venv' not in str(f)
-            and 'node_modules' not in str(f)
+            f
+            for f in self.root.glob("*.py")
+            if f.is_file() and not f.name.startswith(".") and ".venv" not in str(f) and "node_modules" not in str(f)
         ]
 
         print("🤖 Aurora Smart Syntax Fixer - Pattern-Based Repair")
@@ -35,10 +33,7 @@ class AuroraSmartSyntaxFixer:
         """Check if file has valid Python syntax"""
         try:
             result = subprocess.run(
-                ['python', '-m', 'py_compile', str(filepath, check=False)],
-                capture_output=True,
-                text=True,
-                timeout=5
+                ["python", "-m", "py_compile", str(filepath, check=False)], capture_output=True, text=True, timeout=5
             )
             return result.returncode == 0
         except Exception:
@@ -47,7 +42,7 @@ class AuroraSmartSyntaxFixer:
     def fix_merged_function_lines(self, filepath):
         """Fix pattern where 'def func():    statement' is on one line"""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 lines = f.readlines()
 
             modified = False
@@ -56,38 +51,37 @@ class AuroraSmartSyntaxFixer:
             for line in lines:
                 # Pattern 1: def func():    statement
                 # Look for function/method def with multiple spaces and code after :
-                match = re.match(
-                    r'^(\s*)(async\s+)?def\s+\w+\([^)]*\):\s{2,}(.+)$', line)
+                match = re.match(r"^(\s*)(async\s+)?def\s+\w+\([^)]*\):\s{2,}(.+)$", line)
                 if match:
                     indent = match.group(1)
-                    _async_part = match.group(2) or ''
-                    func_part = line[:line.index(':') + 1]  # Get 'def func():'
+                    _async_part = match.group(2) or ""
+                    func_part = line[: line.index(":") + 1]  # Get 'def func():'
                     # Get the code after multiple spaces
                     code_part = match.group(3)
 
                     # Split into two lines
-                    new_lines.append(func_part + '\n')
-                    new_lines.append(indent + '    ' + code_part + '\n')
+                    new_lines.append(func_part + "\n")
+                    new_lines.append(indent + "    " + code_part + "\n")
                     modified = True
                     continue
 
                 # Pattern 2: class Name:    statement
-                match = re.match(r'^(\s*)class\s+\w+.*:\s{2,}(.+)$', line)
+                match = re.match(r"^(\s*)class\s+\w+.*:\s{2,}(.+)$", line)
                 if match:
                     indent = match.group(1)
-                    class_part = line[:line.index(':') + 1]
+                    class_part = line[: line.index(":") + 1]
                     code_part = match.group(2)
 
                     # Split into two lines
-                    new_lines.append(class_part + '\n')
-                    new_lines.append(indent + '    ' + code_part + '\n')
+                    new_lines.append(class_part + "\n")
+                    new_lines.append(indent + "    " + code_part + "\n")
                     modified = True
                     continue
 
                 new_lines.append(line)
 
             if modified:
-                with open(filepath, 'w', encoding='utf-8') as f:
+                with open(filepath, "w", encoding="utf-8") as f:
                     f.writelines(new_lines)
                 return True
             return False
@@ -103,7 +97,7 @@ class AuroraSmartSyntaxFixer:
         # Check if file has syntax errors
         if not self.validate_syntax(filepath):
             # Backup original
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 original = f.read()
 
             # Try the fix
@@ -116,7 +110,7 @@ class AuroraSmartSyntaxFixer:
                     return True
                 else:
                     # Restore if fix didn't work
-                    with open(filepath, 'w', encoding='utf-8') as f:
+                    with open(filepath, "w", encoding="utf-8") as f:
                         f.write(original)
                     print(f"   ❌ Fix didn't work for {filename}")
                     return False
@@ -157,7 +151,7 @@ class AuroraSmartSyntaxFixer:
             if still_broken:
                 problem_file = self.root / still_broken[0]
                 print(f"\n📄 Example from {still_broken[0]}:")
-                with open(problem_file, 'r', encoding='utf-8') as f:
+                with open(problem_file, encoding="utf-8") as f:
                     lines = f.readlines()
                     for i, line in enumerate(lines[:20], 1):
                         print(f"   {i:3}: {line.rstrip()}")
@@ -168,18 +162,19 @@ class AuroraSmartSyntaxFixer:
         print("\n📊 Running pylint...\n")
         try:
             result = subprocess.run(
-                ['python', '-m', 'pylint', '*.py',
-                    '--disable=C,R', '--max-line-length=120'],
+                ["python", "-m", "pylint", "*.py", "--disable=C,R", "--max-line-length=120"],
                 capture_output=True,
                 text=True,
-                timeout=60, check=False)
-            for line in result.stdout.split('\n'):
-                if 'rated at' in line:
+                timeout=60,
+                check=False,
+            )
+            for line in result.stdout.split("\n"):
+                if "rated at" in line:
                     print(f"   {line.strip()}")
         except Exception:
             pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     fixer = AuroraSmartSyntaxFixer()
     fixer.run()
