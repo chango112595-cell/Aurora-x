@@ -19,7 +19,7 @@ class AuroraFullUIRedesign:
         """Create main layout with futuristic sidebar"""
         print("[Aurora] Creating futuristic layout with sidebar...")
 
-        layout_content = '''import React, { useState } from 'react';
+        layout_content = """import React, { useState } from 'react';
 import { Link, useRoute } from 'wouter';
 import { 
   LayoutDashboard, MessageSquare, Brain, Network, Settings, 
@@ -168,10 +168,10 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
     </div>
   );
 }
-'''
+"""
 
         layout_path = self.components_dir / "AuroraFuturisticLayout.tsx"
-        layout_path.write_text(layout_content, encoding='utf-8')
+        layout_path.write_text(layout_content, encoding="utf-8")
         self.updates.append(str(layout_path))
         print(f"[Aurora] ✅ Created: {layout_path}")
 
@@ -179,7 +179,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
         """Create futuristic chat interface"""
         print("[Aurora] Creating futuristic neural chat interface...")
 
-        chat_content = '''import React, { useState, useRef, useEffect } from 'react';
+        chat_content = """import React, { useState, useRef, useEffect } from 'react';
 import { Send, Brain, Sparkles, Zap, Code2, Database, Loader2 } from 'lucide-react';
 
 interface Message {
@@ -383,10 +383,10 @@ export default function AuroraFuturisticChat() {
     </div>
   );
 }
-'''
+"""
 
         chat_path = self.components_dir / "AuroraFuturisticChat.tsx"
-        chat_path.write_text(chat_content, encoding='utf-8')
+        chat_path.write_text(chat_content, encoding="utf-8")
         self.updates.append(str(chat_path))
         print(f"[Aurora] ✅ Created: {chat_path}")
 
@@ -394,15 +394,15 @@ export default function AuroraFuturisticChat() {
         """Create chat page wrapper"""
         print("[Aurora] Creating chat page...")
 
-        page_content = '''import AuroraFuturisticChat from "@/components/AuroraFuturisticChat";
+        page_content = """import AuroraFuturisticChat from "@/components/AuroraFuturisticChat";
 
 export default function ChatPage() {
   return <AuroraFuturisticChat />;
 }
-'''
+"""
 
         page_path = self.pages_dir / "chat.tsx"
-        page_path.write_text(page_content, encoding='utf-8')
+        page_path.write_text(page_content, encoding="utf-8")
         self.updates.append(str(page_path))
         print(f"[Aurora] ✅ Created: {page_path}")
 
@@ -415,7 +415,7 @@ export default function ChatPage() {
         if not app_path.exists():
             print("[Aurora] ⚠️ App.tsx not found, creating new one...")
 
-        app_content = '''import { Route, Switch } from "wouter";
+        app_content = """import { Route, Switch } from "wouter";
 import AuroraFuturisticLayout from "./components/AuroraFuturisticLayout";
 import Dashboard from "./pages/dashboard";
 import ChatPage from "./pages/chat";
@@ -442,9 +442,9 @@ function App() {
 }
 
 export default App;
-'''
+"""
 
-        app_path.write_text(app_content, encoding='utf-8')
+        app_path.write_text(app_content, encoding="utf-8")
         self.updates.append(str(app_path))
         print(f"[Aurora] ✅ Updated: {app_path}")
 
@@ -460,7 +460,7 @@ export default App;
                     "Categorized navigation (Core, Intelligence, Tools)",
                     "Quantum coherence monitor",
                     "Gradient animations and effects",
-                    "47 Complete Systems branding"
+                    "47 Complete Systems branding",
                 ],
                 "chat": [
                     "Neural chat interface",
@@ -468,7 +468,7 @@ export default App;
                     "Thinking animation",
                     "Message timestamps",
                     "13 Tasks + 34 Tiers display",
-                    "Quantum processing indicators"
+                    "Quantum processing indicators",
                 ],
                 "design": [
                     "Glassmorphism effects",
@@ -476,21 +476,21 @@ export default App;
                     "Animated pulse effects",
                     "Smooth transitions",
                     "Responsive layout",
-                    "Dark theme with neon accents"
-                ]
+                    "Dark theme with neon accents",
+                ],
             },
-            "status": "complete"
+            "status": "complete",
         }
 
         report_path = Path("AURORA_UI_REDESIGN_REPORT.json")
-        report_path.write_text(json.dumps(report, indent=2), encoding='utf-8')
+        report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
         print(f"[Aurora] ✅ Report saved: {report_path}")
 
     def run(self):
         """Execute full UI redesign"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] FULL UI REDESIGN SYSTEM ACTIVATED")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         print("[Aurora] Creating futuristic interface components...")
         self.create_futuristic_layout()
@@ -501,9 +501,9 @@ export default App;
         print("\n[Aurora] Creating redesign report...")
         self.create_report()
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] ✅ FULL UI REDESIGN COMPLETE")
-        print("="*60)
+        print("=" * 60)
         print("\n[Aurora] 🎨 New Features:")
         print("  • Futuristic collapsible sidebar with 3 categories")
         print("  • Neural chat interface with quantum effects")

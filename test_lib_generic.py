@@ -327,8 +327,7 @@ if __name__ == "__main__":
 
         all_tests = []
         for test_cls in [test_basic, test_integration]:
-            all_tests.extend([(test_cls, method) for method in dir(
-                test_cls) if method.startswith("test_")])
+            all_tests.extend([(test_cls, method) for method in dir(test_cls) if method.startswith("test_")])
 
         passed = 0
         failed = 0

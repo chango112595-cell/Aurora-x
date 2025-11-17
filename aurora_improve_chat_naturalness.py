@@ -285,7 +285,7 @@ export default function AuroraFuturisticChat() {
 }
 """
 
-    with open(chat_component, 'w', encoding='utf-8') as f:
+    with open(chat_component, "w", encoding="utf-8") as f:
         f.write(enhanced_chat)
 
     print("✅ Enhanced chat component with:")
@@ -306,7 +306,7 @@ def enhance_backend_chat():
         "backend/src/routes/chat.ts",
         "backend/routes/chat.ts",
         "server/routes/chat.ts",
-        "src/routes/chat.ts"
+        "src/routes/chat.ts",
     ]
 
     chat_route = None
@@ -330,16 +330,16 @@ def enhance_backend_chat():
 
 
 if __name__ == "__main__":
-    print("="*60)
+    print("=" * 60)
     print("🌟 AURORA CHAT NATURALNESS ENHANCEMENT")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     FRONTEND_DONE = enhance_chat_component()
     BACKEND_DONE = enhance_backend_chat()
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("✨ CHAT ENHANCEMENT COMPLETE")
-    print("="*60)
+    print("=" * 60)
     print("\n📋 Changes made:")
     print("   ✅ Natural conversation UI")
     print("   ✅ Better message formatting")

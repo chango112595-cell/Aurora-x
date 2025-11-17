@@ -17,7 +17,7 @@ def fix_layout_routing():
         print(f"❌ File not found: {layout_file}")
         return
 
-    with open(layout_file, 'r', encoding='utf-8') as f:
+    with open(layout_file, encoding="utf-8") as f:
         content = f.read()
 
     # Fix 1: Change import to use useLocation instead of useRoute
@@ -27,7 +27,7 @@ def fix_layout_routing():
     print("✅ Updated imports to use useLocation")
 
     # Fix 2: Change hook usage
-    old_hook = "  const [match] = useRoute(\"/:path*\");"
+    old_hook = '  const [match] = useRoute("/:path*");'
     new_hook = "  const [location] = useLocation();"
     content = content.replace(old_hook, new_hook)
     print("✅ Changed to useLocation hook")
@@ -42,7 +42,7 @@ def fix_layout_routing():
     content = content.replace(old_logic, new_logic)
     print("✅ Fixed isActive logic to use location string")
 
-    with open(layout_file, 'w', encoding='utf-8') as f:
+    with open(layout_file, "w", encoding="utf-8") as f:
         f.write(content)
 
     print("✨ Aurora: Layout routing fixed! The error 'match2.startsWith is not a function' should be resolved.")

@@ -8,9 +8,9 @@ import sys
 import signal
 import time
 from pathlib import Path
-from tools.aurora_autonomous_system import AuroraAutonomousSystem
-from tools.aurora_autonomous_fixer import AuroraAutonomousFixer
 from aurora_intelligence_manager import AuroraIntelligenceManager
+from tools.aurora_autonomous_fixer import AuroraAutonomousFixer
+from tools.aurora_autonomous_system import AuroraAutonomousSystem
 
 # Add workspace to path
 sys.path.insert(0, "/workspaces/Aurora-x")
@@ -59,7 +59,7 @@ class AuroraAutonomousRunner:
             import json
 
             try:
-                with open(task_file, encoding='utf-8') as f:
+                with open(task_file, encoding="utf-8") as f:
                     tasks = json.load(f)
 
                 if tasks:
@@ -76,7 +76,7 @@ class AuroraAutonomousRunner:
                             print("   ❌ Task failed")
 
                     # Clear completed tasks
-                    with open(task_file, 'w', encoding='utf-8') as f:
+                    with open(task_file, "w", encoding="utf-8") as f:
                         json.dump([], f)
             except Exception as e:
                 print(f"⚠️  Error reading tasks: {e}")
@@ -128,7 +128,7 @@ class AuroraAutonomousRunner:
         log_file = Path("/workspaces/Aurora-x/aurora_ui.log")
         if log_file.exists():
             try:
-                with open(log_file, encoding='utf-8') as f:
+                with open(log_file, encoding="utf-8") as f:
                     logs = f.readlines()
                     errors = [line for line in logs[-100:]
                               if "error" in line.lower() or "failed" in line.lower()]

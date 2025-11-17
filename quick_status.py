@@ -13,7 +13,7 @@ def check_port(port_num, timeout=1.0):
         s.connect(("127.0.0.1", port_num))
         s.close()
         return True
-    except (ConnectionRefusedError, OSError, socket.timeout):
+    except (TimeoutError, ConnectionRefusedError, OSError):
         return False
 
 

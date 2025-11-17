@@ -55,8 +55,7 @@ def chat_endpoint():
 
         # Reset session context if requested or if it's a greeting to interface
         if should_reset or (
-            session_id == "cosmic-nexus-ui" and any(
-                greeting in message.lower() for greeting in ["hello", "hi", "hey"])
+            session_id == "cosmic-nexus-ui" and any(greeting in message.lower() for greeting in ["hello", "hi", "hey"])
         ):
             if session_id in aurora.conversation_contexts:
                 del aurora.conversation_contexts[session_id]
@@ -78,15 +77,13 @@ def chat_endpoint():
             # Use Aurora's autonomous system management
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
-            response = loop.run_until_complete(
-                aurora.autonomous_system_management(message))
+            response = loop.run_until_complete(aurora.autonomous_system_management(message))
             loop.close()
         else:
             # Process with Aurora Core Intelligence for conversation
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
-            response = loop.run_until_complete(
-                aurora.process_conversation(message, session_id))
+            response = loop.run_until_complete(aurora.process_conversation(message, session_id))
             loop.close()
 
         return jsonify(
@@ -198,8 +195,7 @@ if __name__ == "__main__":
         sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
 
     parser = argparse.ArgumentParser(description="Aurora Chat Server")
-    parser.add_argument("--port", type=int, default=9000,
-                        help="Port to run the server on")
+    parser.add_argument("--port", type=int, default=9000, help="Port to run the server on")
     args = parser.parse_args()
 
     run_aurora_chat_server(args.port)

@@ -18,11 +18,13 @@ def test_english_request(request_text):
 
     # Save spec to file
     spec_file = f"specs/test_{request_text[:20].replace(' ', '_')}.md"
-    with open(spec_file, 'w', encoding='utf-8') as f:
+    with open(spec_file, "w", encoding="utf-8") as f:
         f.write(spec)
 
     # Run synthesis
-    subprocess.run(f"python -m aurora_x.main --spec {spec_file}", shell=True, capture_output=True, text=True, check=False)
+    subprocess.run(
+        f"python -m aurora_x.main --spec {spec_file}", shell=True, capture_output=True, text=True, check=False
+    )
 
     # Find the generated run directory
     import glob
@@ -32,7 +34,7 @@ def test_english_request(request_text):
         latest_run = runs[-1]
         src_files = glob.glob(f"{latest_run}/src/*.py")
         if src_files:
-            with open(src_files[0], encoding='utf-8') as f:
+            with open(src_files[0], encoding="utf-8") as f:
                 code = f.read()
                 print(f"   ✓ Generated code in: {src_files[0]}")
 

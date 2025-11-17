@@ -16,9 +16,8 @@ Example usage:
     2432902008176640000
 """
 
-from functools import lru_cache
-
 import time
+from functools import lru_cache
 
 import pytest
 
@@ -49,8 +48,7 @@ def factorial(n: int) -> int:
         3628800
     """
     if not isinstance(n, int):
-        raise TypeError(
-            f"factorial() argument must be an integer, not '{type(n).__name__}'")
+        raise TypeError(f"factorial() argument must be an integer, not '{type(n).__name__}'")
 
     if n < 0:
         raise ValueError("factorial() not defined for negative values")
@@ -86,8 +84,7 @@ def factorial_recursive(n: int) -> int:
         raise TypeError("factorial_recursive() argument must be an integer")
 
     if n < 0:
-        raise ValueError(
-            "factorial_recursive() not defined for negative values")
+        raise ValueError("factorial_recursive() not defined for negative values")
 
     if n <= 1:
         return 1
@@ -237,8 +234,7 @@ if __name__ == "__main__":
         test_factorial = TestFactorial()
         test_properties = TestFactorialProperties()
 
-        test_methods = [method for method in dir(
-            test_factorial) if method.startswith("test_")]
+        test_methods = [method for method in dir(test_factorial) if method.startswith("test_")]
 
         passed = 0
         failed = 0

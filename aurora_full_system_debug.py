@@ -81,10 +81,8 @@ class AuroraSystemDebugger:
                 print("   ✅ AuroraFoundations: 13/13 tasks")
                 self.successes.append("AuroraFoundations structure valid")
             else:
-                self.errors.append(
-                    f"AuroraFoundations: {len(foundations.tasks)}/13 tasks")
-                print(
-                    f"   ❌ AuroraFoundations: {len(foundations.tasks)}/13 tasks")
+                self.errors.append(f"AuroraFoundations: {len(foundations.tasks)}/13 tasks")
+                print(f"   ❌ AuroraFoundations: {len(foundations.tasks)}/13 tasks")
 
             # Test tiers
             tiers = AuroraKnowledgeTiers()
@@ -92,10 +90,8 @@ class AuroraSystemDebugger:
                 print("   ✅ AuroraKnowledgeTiers: 34/34 tiers")
                 self.successes.append("AuroraKnowledgeTiers structure valid")
             else:
-                self.errors.append(
-                    f"AuroraKnowledgeTiers: {len(tiers.tiers)}/34 tiers")
-                print(
-                    f"   ❌ AuroraKnowledgeTiers: {len(tiers.tiers)}/34 tiers")
+                self.errors.append(f"AuroraKnowledgeTiers: {len(tiers.tiers)}/34 tiers")
+                print(f"   ❌ AuroraKnowledgeTiers: {len(tiers.tiers)}/34 tiers")
 
             # Test integration
             if hasattr(tiers, "foundations"):
@@ -177,15 +173,15 @@ class AuroraSystemDebugger:
 
         try:
             # Check if git repo
-            result = subprocess.run(["git", "status", "--porcelain"],
-                                    capture_output=True, text=True, cwd=self.root, check=False)
+            result = subprocess.run(
+                ["git", "status", "--porcelain"], capture_output=True, text=True, cwd=self.root, check=False
+            )
 
             if result.returncode == 0:
                 changes = result.stdout.strip().split("\n") if result.stdout.strip() else []
                 if changes and changes[0]:
                     print(f"   ℹ️  {len(changes)} files with changes")
-                    self.successes.append(
-                        f"Git status OK: {len(changes)} changes")
+                    self.successes.append(f"Git status OK: {len(changes)} changes")
                 else:
                     print("   ✅ No uncommitted changes")
                     self.successes.append("Git working tree clean")
@@ -225,7 +221,13 @@ class AuroraSystemDebugger:
 
         try:
             result = subprocess.run(
-                ["pylint", "aurora_core.py", "--exit-zero"], capture_output=True, text=True, cwd=self.root, timeout=30, check=False)
+                ["pylint", "aurora_core.py", "--exit-zero"],
+                capture_output=True,
+                text=True,
+                cwd=self.root,
+                timeout=30,
+                check=False,
+            )
 
             if "rated at" in result.stdout.lower():
                 # Extract rating
@@ -302,7 +304,7 @@ class AuroraSystemDebugger:
         }
 
         report_file = self.root / "AURORA_DEBUG_REPORT.json"
-        with open(report_file, 'w', encoding='utf-8') as f:
+        with open(report_file, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2)
 
         print(f"\n💾 Debug report saved to: {report_file}")
@@ -317,8 +319,7 @@ class AuroraSystemDebugger:
         else:
             print("🔧 SYSTEM STATUS: ❌ NEEDS FIXES BEFORE COMMIT")
             print("=" * 80)
-            print(
-                f"\nFound {len(self.errors)} errors that must be fixed before committing.")
+            print(f"\nFound {len(self.errors)} errors that must be fixed before committing.")
             return False
 
 

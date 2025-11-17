@@ -21,8 +21,7 @@ def test_prompt(prompt, expected_lang, description):
 
     try:
         # Make the API call
-        response = requests.post(
-            f"{HOST}/chat", json={"prompt": prompt}, timeout=10)
+        response = requests.post(f"{HOST}/chat", json={"prompt": prompt}, timeout=10)
 
         if response.status_code == 200:
             data = response.json()
@@ -90,7 +89,7 @@ def run_generated_app(file_path, lang, hint):
         return False
 
     # Just verify the file has expected content
-    content = Path(file_path).read_text(encoding='utf-8')
+    content = Path(file_path).read_text(encoding="utf-8")
 
     if lang == "python":
         if "PORT" in content and "8000" in content:
@@ -192,8 +191,7 @@ def main():
         print('   git commit -m "feat(T08): router wired + PORT-aware + /healthz"')
         return 0
     else:
-        print(
-            f"\n⚠️  Some tests failed ({len(results) - success_count}/{len(results)})")
+        print(f"\n⚠️  Some tests failed ({len(results) - success_count}/{len(results)})")
         return 1
 
 

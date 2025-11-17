@@ -5,8 +5,8 @@ Aurora redesigns her own UI to be futuristic and properly organized
 Implements all new architectural updates (13 Tasks + 34 Tiers = 47 Systems)
 """
 
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 
 class AuroraUIRedesigner:
@@ -15,12 +15,7 @@ class AuroraUIRedesigner:
     def __init__(self):
         self.root = Path(".")
         self.updates_log = []
-        self.architecture = {
-            "foundational_tasks": 13,
-            "knowledge_tiers": 34,
-            "total_systems": 47,
-            "services": 5
-        }
+        self.architecture = {"foundational_tasks": 13, "knowledge_tiers": 34, "total_systems": 47, "services": 5}
 
     def log(self, message):
         """Log Aurora's actions"""
@@ -33,7 +28,7 @@ class AuroraUIRedesigner:
         """Aurora creates a new futuristic dashboard component"""
         self.log("🌌 Designing futuristic dashboard interface...")
 
-        dashboard_content = '''import React, { useState, useEffect } from 'react';
+        dashboard_content = """import React, { useState, useEffect } from 'react';
 import { Brain, Cpu, Zap, Network, Shield, Activity, Database, Code2, Sparkles, Terminal, Globe } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -324,21 +319,20 @@ export default function AuroraFuturisticDashboard() {
       </div>
     </div>
   );
-}'''
+}"""
 
         dashboard_file = self.root / "client/src/components/AuroraFuturisticDashboard.tsx"
         dashboard_file.parent.mkdir(parents=True, exist_ok=True)
-        dashboard_file.write_text(dashboard_content, encoding='utf-8')
+        dashboard_file.write_text(dashboard_content, encoding="utf-8")
 
-        self.log(
-            f"✅ Created: {dashboard_file.name} (futuristic quantum neural interface)")
+        self.log(f"✅ Created: {dashboard_file.name} (futuristic quantum neural interface)")
         return True
 
     def create_main_page_route(self):
         """Aurora creates the main page route"""
         self.log("🚀 Creating main dashboard route...")
 
-        page_content = '''import AuroraFuturisticDashboard from '@/components/AuroraFuturisticDashboard';
+        page_content = """import AuroraFuturisticDashboard from '@/components/AuroraFuturisticDashboard';
 
 export default function DashboardPage() {
   return <AuroraFuturisticDashboard />;
@@ -347,11 +341,11 @@ export default function DashboardPage() {
 export const metadata = {
   title: 'Aurora - Quantum Neural Intelligence',
   description: '47 Complete Systems: 13 Foundation Tasks + 34 Knowledge Tiers',
-};'''
+};"""
 
         page_file = self.root / "client/src/pages/dashboard.tsx"
         page_file.parent.mkdir(parents=True, exist_ok=True)
-        page_file.write_text(page_content, encoding='utf-8')
+        page_file.write_text(page_content, encoding="utf-8")
 
         self.log(f"✅ Created: {page_file.name}")
         return True
@@ -363,7 +357,7 @@ export const metadata = {
         # Check if App.tsx exists
         app_file = self.root / "client/src/App.tsx"
         if app_file.exists():
-            content = app_file.read_text(encoding='utf-8')
+            content = app_file.read_text(encoding="utf-8")
 
             # Add import if not present
             if "AuroraFuturisticDashboard" not in content:
@@ -452,7 +446,7 @@ Aurora has autonomously redesigned her user interface with a futuristic quantum 
 """
 
         doc_file = self.root / "AURORA_UI_REDESIGN.md"
-        doc_file.write_text(doc_content, encoding='utf-8')
+        doc_file.write_text(doc_content, encoding="utf-8")
 
         self.log(f"✅ Created: {doc_file.name}")
         return True
@@ -465,8 +459,7 @@ Aurora has autonomously redesigned her user interface with a futuristic quantum 
         self.log("")
 
         steps = [
-            ("Creating Futuristic Dashboard Component",
-             self.create_futuristic_dashboard),
+            ("Creating Futuristic Dashboard Component", self.create_futuristic_dashboard),
             ("Creating Main Page Route", self.create_main_page_route),
             ("Updating Application Routes", self.update_app_routes),
             ("Generating Documentation", self.create_documentation),
@@ -487,12 +480,9 @@ Aurora has autonomously redesigned her user interface with a futuristic quantum 
         self.log("🎉 AURORA UI REDESIGN COMPLETE")
         self.log("=" * 70)
         self.log(f"✅ Steps Completed: {completed}/{len(steps)}")
-        self.log(
-            f"📊 Architecture: {self.architecture['total_systems']} Systems")
-        self.log(
-            f"   • {self.architecture['foundational_tasks']} Foundational Tasks")
-        self.log(
-            f"   • {self.architecture['knowledge_tiers']} Knowledge Tiers")
+        self.log(f"📊 Architecture: {self.architecture['total_systems']} Systems")
+        self.log(f"   • {self.architecture['foundational_tasks']} Foundational Tasks")
+        self.log(f"   • {self.architecture['knowledge_tiers']} Knowledge Tiers")
         self.log(f"🚀 Services: {self.architecture['services']} Active")
         self.log("")
         self.log("🌟 New UI Features:")
@@ -503,14 +493,13 @@ Aurora has autonomously redesigned her user interface with a futuristic quantum 
         self.log("   • Neural Activity Monitor")
         self.log("   • Futuristic gradient effects & animations")
         self.log("")
-        self.log(
-            "📍 Main Component: client/src/components/AuroraFuturisticDashboard.tsx")
+        self.log("📍 Main Component: client/src/components/AuroraFuturisticDashboard.tsx")
         self.log("📄 Documentation: AURORA_UI_REDESIGN.md")
         self.log("=" * 70)
 
         # Save log
         log_file = self.root / "aurora_ui_redesign.log"
-        log_file.write_text("\n".join(self.updates_log), encoding='utf-8')
+        log_file.write_text("\n".join(self.updates_log), encoding="utf-8")
         self.log(f"💾 Saved log to: {log_file.name}")
 
 

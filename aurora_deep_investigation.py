@@ -4,10 +4,10 @@ Aurora Deep System Investigation
 Using all autonomous skills to diagnose the actual problem
 """
 
-import subprocess
 import json
-from pathlib import Path
 import socket
+import subprocess
+from pathlib import Path
 
 
 class AuroraDeepInvestigation:
@@ -28,19 +28,22 @@ class AuroraDeepInvestigation:
 
     def check_what_is_actually_running(self):
         """Check what's ACTUALLY running right now"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] INVESTIGATING ACTUAL RUNNING PROCESSES")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         try:
             # Check node processes
             result = subprocess.run(
-                ['powershell', '-Command',
-                 'Get-Process node -ErrorAction SilentlyContinue | Select-Object Id,Path,@{Name="Port";Expression={(Get-NetTCPConnection -OwningProcess $_.Id -ErrorAction SilentlyContinue).LocalPort}} | Format-Table -AutoSize'],
+                [
+                    "powershell",
+                    "-Command",
+                    'Get-Process node -ErrorAction SilentlyContinue | Select-Object Id,Path,@{Name="Port";Expression={(Get-NetTCPConnection -OwningProcess $_.Id -ErrorAction SilentlyContinue).LocalPort}} | Format-Table -AutoSize',
+                ],
                 capture_output=True,
                 text=True,
                 timeout=10,
-                check=False
+                check=False,
             )
 
             if result.stdout.strip():
@@ -57,12 +60,16 @@ class AuroraDeepInvestigation:
 
         try:
             result = subprocess.run(
-                ['powershell', '-Command',
-                 'Get-Process python* -ErrorAction SilentlyContinue | Select-Object Id,Path,CommandLine | Format-List'],
+                [
+                    "powershell",
+                    "-Command",
+                    "Get-Process python* -ErrorAction SilentlyContinue | Select-Object Id,Path,CommandLine | Format-List",
+                ],
                 capture_output=True,
                 text=True,
                 timeout=10,
-                check=False)
+                check=False,
+            )
 
             if result.stdout.strip():
                 self.fact(f"Python processes:\n{result.stdout[:1000]}")
@@ -80,21 +87,24 @@ class AuroraDeepInvestigation:
         for port in ports:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
-            result = sock.connect_ex(('localhost', port))
+            result = sock.connect_ex(("localhost", port))
 
             if result == 0:
                 # Port is open - find what's using it
                 try:
                     cmd_result = subprocess.run(
-                        ['powershell', '-Command',
-                         f'Get-NetTCPConnection -LocalPort {port} -ErrorAction SilentlyContinue | Select-Object OwningProcess | ForEach-Object {{ Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue | Select-Object ProcessName,Path }}'],
+                        [
+                            "powershell",
+                            "-Command",
+                            f"Get-NetTCPConnection -LocalPort {port} -ErrorAction SilentlyContinue | Select-Object OwningProcess | ForEach-Object {{ Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue | Select-Object ProcessName,Path }}",
+                        ],
                         capture_output=True,
                         text=True,
                         timeout=5,
-                        check=False)
+                        check=False,
+                    )
                     if cmd_result.stdout.strip():
-                        self.fact(
-                            f"Port {port}: LISTENING - {cmd_result.stdout.strip()}")
+                        self.fact(f"Port {port}: LISTENING - {cmd_result.stdout.strip()}")
                     else:
                         self.fact(f"Port {port}: LISTENING (process unknown)")
                 except Exception:
@@ -109,7 +119,7 @@ class AuroraDeepInvestigation:
         print("\n[Aurora] Analyzing package.json dev script...")
 
         try:
-            with open("package.json", encoding='utf-8') as f:
+            with open("package.json", encoding="utf-8") as f:
                 data = json.load(f)
                 dev_script = data.get("scripts", {}).get("dev", "")
 
@@ -136,7 +146,7 @@ class AuroraDeepInvestigation:
         vite_setup = Path("server/vite.ts")
         if vite_setup.exists():
             self.fact("server/vite.ts EXISTS")
-            content = vite_setup.read_text(encoding='utf-8')
+            content = vite_setup.read_text(encoding="utf-8")
 
             if "setupVite" in content:
                 self.fact("setupVite function found")
@@ -162,12 +172,7 @@ class AuroraDeepInvestigation:
             return
 
         # Check critical files
-        critical_files = [
-            "client/src/main.tsx",
-            "client/src/App.tsx",
-            "client/src/index.css",
-            "client/index.html"
-        ]
+        critical_files = ["client/src/main.tsx", "client/src/App.tsx", "client/src/index.css", "client/index.html"]
 
         for file_path in critical_files:
             if Path(file_path).exists():
@@ -183,7 +188,7 @@ class AuroraDeepInvestigation:
             import urllib.request
 
             with urllib.request.urlopen("http://localhost:5000", timeout=5) as response:
-                content = response.read().decode('utf-8')
+                content = response.read().decode("utf-8")
 
                 if "<!DOCTYPE html>" in content or "<html" in content:
                     self.fact("Port 5000 IS serving HTML!")
@@ -219,17 +224,10 @@ class AuroraDeepInvestigation:
 
         app_tsx = Path("client/src/App.tsx")
         if app_tsx.exists():
-            content = app_tsx.read_text(encoding='utf-8')
+            content = app_tsx.read_text(encoding="utf-8")
 
             # Check imports
-            imports = [
-                "AuroraFuturisticLayout",
-                "Dashboard",
-                "ChatPage",
-                "Tasks",
-                "Tiers",
-                "Intelligence"
-            ]
+            imports = ["AuroraFuturisticLayout", "Dashboard", "ChatPage", "Tasks", "Tiers", "Intelligence"]
 
             for imp in imports:
                 if f"import {imp}" in content or f"import.*{imp}" in content:
@@ -249,14 +247,14 @@ class AuroraDeepInvestigation:
             5001: "Bridge (Python)",
             5002: "Self-Learn (Python)",
             5003: "Chat (Python)",
-            5005: "Luminar (Python)"
+            5005: "Luminar (Python)",
         }
 
         print("\n[Aurora] Expected vs Actual:")
         for port, service in expected_services.items():
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
-            is_running = sock.connect_ex(('localhost', port)) == 0
+            is_running = sock.connect_ex(("localhost", port)) == 0
             sock.close()
 
             if is_running:
@@ -266,10 +264,10 @@ class AuroraDeepInvestigation:
 
     def run_diagnosis(self):
         """Run complete diagnosis"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] AUTONOMOUS DEEP SYSTEM INVESTIGATION")
         print("[Aurora] Using all diagnostic skills")
-        print("="*60)
+        print("=" * 60)
 
         self.check_what_is_actually_running()
         self.check_python_servers()
@@ -282,9 +280,9 @@ class AuroraDeepInvestigation:
         self.check_component_imports()
 
         # Final analysis
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] AUTONOMOUS ANALYSIS COMPLETE")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         print(f"[Aurora] Facts discovered: {len(self.facts)}")
         print(f"[Aurora] Issues found: {len(self.issues)}")
@@ -297,8 +295,7 @@ class AuroraDeepInvestigation:
         print("\n[Aurora] 🎯 ROOT CAUSE HYPOTHESIS:")
 
         # Analyze the evidence
-        has_port_5000 = any(
-            "Port 5000" in f and "LISTENING" in f for f in self.facts)
+        has_port_5000 = any("Port 5000" in f and "LISTENING" in f for f in self.facts)
         has_html = any("serving HTML" in f for f in self.facts)
         has_vite_entry = any("Vite entry point found" in f for f in self.facts)
 

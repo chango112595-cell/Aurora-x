@@ -50,7 +50,7 @@ def test_chat_endpoint():
         # Check if app.py was created
         if os.path.exists("app.py"):
             print("✅ app.py file was created successfully")
-            with open("app.py", encoding='utf-8') as f:
+            with open("app.py", encoding="utf-8") as f:
                 lines = f.readlines()[:5]
                 print("   First few lines of generated app.py:")
                 for line in lines:

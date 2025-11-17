@@ -16,6 +16,7 @@ def aurora_verify_core_usage():
     print("\n[Test 1] Importing Aurora Core...")
     try:
         from aurora_core import AuroraKnowledgeTiers
+
         aurora = AuroraKnowledgeTiers()
         print("[Aurora] ✅ Core imported successfully")
 
@@ -78,14 +79,14 @@ def aurora_verify_core_usage():
     try:
         aurora_intelligence_file = Path("aurora_intelligence_manager.py")
         if aurora_intelligence_file.exists():
-            content = aurora_intelligence_file.read_text(encoding='utf-8')
+            content = aurora_intelligence_file.read_text(encoding="utf-8")
             if "aurora_core" in content or "AuroraKnowledgeTiers" in content:
                 print("[Aurora] ✅ Intelligence manager integrated with core")
             else:
                 print("[Aurora] ⚠️  Intelligence manager may need core integration")
         else:
             print("[Aurora] ℹ️  Intelligence manager file not found")
-    except Exception as e:
+    except Exception:
         print("[Aurora] ⚠️  Could not verify intelligence manager: {e}")
 
     # Test 3: Check Luminar Nexus integration
@@ -93,12 +94,12 @@ def aurora_verify_core_usage():
     try:
         luminar_file = Path("tools/luminar_nexus_v2.py")
         if luminar_file.exists():
-            content = luminar_file.read_text(encoding='utf-8')
+            content = luminar_file.read_text(encoding="utf-8")
             if "tier" in content.lower() or "foundation" in content.lower():
                 print("[Aurora] ✅ Luminar Nexus aware of tier architecture")
             else:
                 print("[Aurora] ℹ️  Luminar Nexus focuses on service orchestration")
-    except Exception as e:
+    except Exception:
         print("[Aurora] ⚠️  Could not verify Luminar Nexus: {e}")
 
     print("\n" + "=" * 70)

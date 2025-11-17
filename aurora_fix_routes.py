@@ -25,7 +25,7 @@ class AuroraRouteFixer:
             self.log("❌ App.tsx not found")
             return False
 
-        content = app_file.read_text(encoding='utf-8')
+        content = app_file.read_text(encoding="utf-8")
 
         # Replace the default route from ChatPage to Dashboard
         old_route = '<Route path="/" component={ChatPage} />'
@@ -33,7 +33,7 @@ class AuroraRouteFixer:
 
         if old_route in content:
             updated_content = content.replace(old_route, new_route)
-            app_file.write_text(updated_content, encoding='utf-8')
+            app_file.write_text(updated_content, encoding="utf-8")
             self.log("✅ Changed default route: / → Dashboard")
             self.log("✅ Futuristic dashboard will now open automatically!")
             return True

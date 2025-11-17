@@ -128,7 +128,9 @@ def test_execution():
 
     # Test CLI hash tool help
     try:
-        result = subprocess.run(["python", "test_cli_hash.py", "--help"], capture_output=True, text=True, timeout=5, check=False)
+        result = subprocess.run(
+            ["python", "test_cli_hash.py", "--help"], capture_output=True, text=True, timeout=5, check=False
+        )
         if result.returncode == 0:
             print("✓ CLI hash tool --help runs successfully")
     except Exception as e:
@@ -150,7 +152,9 @@ print("✓ Factorial function tests pass")
 """
         Path("run_factorial_test.py").write_text(test_code)
 
-        result = subprocess.run(["python", "run_factorial_test.py"], capture_output=True, text=True, timeout=5, check=False)
+        result = subprocess.run(
+            ["python", "run_factorial_test.py"], capture_output=True, text=True, timeout=5, check=False
+        )
         if result.returncode == 0:
             print(result.stdout.strip())
         else:

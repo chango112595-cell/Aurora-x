@@ -84,7 +84,7 @@ class CLI:
 
         # Example processing logic
         try:
-            with open(input_path, encoding='utf-8') as f:
+            with open(input_path, encoding="utf-8") as f:
                 lines = f.readlines()
                 self.log(f"Read {len(lines)} lines", "debug")
 
@@ -125,28 +125,23 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-    parser.add_argument("-v", "--verbose", action="store_true",
-                        help="Enable verbose output")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output")
 
-    parser.add_argument("--version", action="version",
-                        version="%(prog)s 1.0.0")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.0.0")
 
     # Subcommands
-    subparsers = parser.add_subparsers(
-        title="Commands", dest="command", help="Available commands")
+    subparsers = parser.add_subparsers(title="Commands", dest="command", help="Available commands")
 
     # Info command
     subparsers.add_parser("info", help="Display system information")
 
     # Process command
-    process_parser = subparsers.add_parser(
-        "process", help="Process input files")
+    process_parser = subparsers.add_parser("process", help="Process input files")
     process_parser.add_argument("input", help="Input file to process")
 
     # Run command
     run_parser = subparsers.add_parser("run", help="Run the application")
-    run_parser.add_argument("-t", "--tasks", nargs="*",
-                            help="Tasks to execute")
+    run_parser.add_argument("-t", "--tasks", nargs="*", help="Tasks to execute")
 
     args = parser.parse_args()
 
@@ -158,8 +153,7 @@ def main():
         parser.print_help()
         return 1
 
-    commands = {"info": cli.cmd_info,
-                "process": cli.cmd_process, "run": cli.cmd_run}
+    commands = {"info": cli.cmd_info, "process": cli.cmd_process, "run": cli.cmd_run}
 
     handler = commands.get(args.command)
     if handler:

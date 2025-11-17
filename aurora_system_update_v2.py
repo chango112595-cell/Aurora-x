@@ -4,39 +4,43 @@ Complete system refresh with all enhancements
 """
 
 
-
 def update_all_pages():
     """Update all pages with enhanced styling and functionality"""
     print("🌟 Aurora: Updating entire system...\n")
 
     # Dashboard page
     print("📊 Updating dashboard...")
-    with open("client/src/pages/dashboard.tsx", 'w', encoding='utf-8') as f:
-        f.write("""import React from 'react';
+    with open("client/src/pages/dashboard.tsx", "w", encoding="utf-8") as f:
+        f.write(
+            """import React from 'react';
 import AuroraFuturisticDashboard from '../components/AuroraFuturisticDashboard';
 
 export default function Dashboard() {
   return <AuroraFuturisticDashboard />;
 }
-""")
+"""
+        )
     print("   ✅ Dashboard updated\n")
 
     # Chat page
     print("💬 Updating chat...")
-    with open("client/src/pages/chat.tsx", 'w', encoding='utf-8') as f:
-        f.write("""import React from 'react';
+    with open("client/src/pages/chat.tsx", "w", encoding="utf-8") as f:
+        f.write(
+            """import React from 'react';
 import AuroraFuturisticChat from '../components/AuroraFuturisticChat';
 
 export default function Chat() {
   return <AuroraFuturisticChat />;
 }
-""")
+"""
+        )
     print("   ✅ Chat updated with natural conversation\n")
 
     # Tasks page with full implementation
     print("📝 Updating tasks (13 Foundation Tasks)...")
-    with open("client/src/pages/tasks.tsx", 'w', encoding='utf-8') as f:
-        f.write("""import React from 'react';
+    with open("client/src/pages/tasks.tsx", "w", encoding="utf-8") as f:
+        f.write(
+            """import React from 'react';
 import { CheckCircle2, Circle, Zap } from 'lucide-react';
 
 export default function Tasks() {
@@ -118,13 +122,15 @@ export default function Tasks() {
     </div>
   );
 }
-""")
+"""
+        )
     print("   ✅ Tasks page updated\n")
 
     # Tiers page
     print("🧠 Updating tiers (34 Knowledge Tiers)...")
-    with open("client/src/pages/tiers.tsx", 'w', encoding='utf-8') as f:
-        f.write("""import React from 'react';
+    with open("client/src/pages/tiers.tsx", "w", encoding="utf-8") as f:
+        f.write(
+            """import React from 'react';
 import { Brain, Network, Zap, Database, Code, Sparkles, Shield, TrendingUp } from 'lucide-react';
 
 export default function Tiers() {
@@ -239,13 +245,15 @@ export default function Tiers() {
     </div>
   );
 }
-""")
+"""
+        )
     print("   ✅ Tiers page updated\n")
 
     # Intelligence page
     print("🧠 Updating intelligence core...")
-    with open("client/src/pages/intelligence.tsx", 'w', encoding='utf-8') as f:
-        f.write("""import React from 'react';
+    with open("client/src/pages/intelligence.tsx", "w", encoding="utf-8") as f:
+        f.write(
+            """import React from 'react';
 import { Brain, Cpu, Activity, Zap, Network, TrendingUp } from 'lucide-react';
 
 export default function Intelligence() {
@@ -328,7 +336,8 @@ export default function Intelligence() {
     </div>
   );
 }
-""")
+"""
+        )
     print("   ✅ Intelligence page updated\n")
 
     print("🔧 Updating placeholder pages...")
@@ -342,7 +351,7 @@ export default function Intelligence() {
     }
 
     for file_path, (title, description) in pages.items():
-        page_name = title.replace(' ', '')
+        page_name = title.replace(" ", "")
         content = f"""import React from 'react';
 import {{ Sparkles }} from 'lucide-react';
 
@@ -368,22 +377,22 @@ export default function {page_name}() {{
   );
 }}
 """
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             f.write(content)
 
     print("   ✅ All placeholder pages updated\n")
 
 
 if __name__ == "__main__":
-    print("="*70)
+    print("=" * 70)
     print("🌟 AURORA COMPLETE SYSTEM UPDATE V2")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     update_all_pages()
 
-    print("="*70)
+    print("=" * 70)
     print("✨ SYSTEM UPDATE COMPLETE")
-    print("="*70)
+    print("=" * 70)
     print("\n📋 All pages updated:")
     print("   ✅ Dashboard - Quantum metrics")
     print("   ✅ Chat - Natural conversation UI")

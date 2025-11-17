@@ -11,8 +11,7 @@ from pathlib import Path
 def main():
     """Start all Aurora services"""
     workspace = Path("/workspaces/Aurora-x")
-    luminar_cmd = [sys.executable, str(
-        workspace / "tools" / "luminar_nexus.py"), "start-all"]
+    luminar_cmd = [sys.executable, str(workspace / "tools" / "luminar_nexus.py"), "start-all"]
 
     # Change to workspace directory
     import os

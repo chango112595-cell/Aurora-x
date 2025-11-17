@@ -5,10 +5,10 @@ Continuously monitors all services and auto-restarts them if they fail.
 This ensures Aurora maintains 100% uptime autonomously.
 """
 
+import platform
 import socket
 import subprocess
 import time
-import platform
 from datetime import datetime
 
 # Service configuration
@@ -27,7 +27,7 @@ def check_port(port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.settimeout(1)
     try:
-        result = sock.connect_ex(('127.0.0.1', port))
+        result = sock.connect_ex(("127.0.0.1", port))
         sock.close()
         return result == 0
     except Exception:
@@ -36,23 +36,29 @@ def check_port(port):
 
 def restart_services():
     """Restart all Aurora services"""
-    print(
-        f"\n🔄 [{datetime.now().strftime('%H:%M:%S')}] Restarting Aurora services...")
+    print(f"\n🔄 [{datetime.now().strftime('%H:%M:%S')}] Restarting Aurora services...")
     python_cmd = "python" if platform.system() == "Windows" else "python3"
 
     try:
         if platform.system() == "Windows":
             subprocess.Popen(
-                ["cmd", "/c", "start", "/min", "powershell", "-Command",
-                 f"{python_cmd} tools\\luminar_nexus_v2.py serve"],
-                creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
+                [
+                    "cmd",
+                    "/c",
+                    "start",
+                    "/min",
+                    "powershell",
+                    "-Command",
+                    f"{python_cmd} tools\\luminar_nexus_v2.py serve",
+                ],
+                creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
             )
         else:
             subprocess.Popen(
                 [python_cmd, "tools/luminar_nexus_v2.py", "serve"],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
-                start_new_session=True
+                start_new_session=True,
             )
         print("   ✅ Restart command issued")
         return True
@@ -87,8 +93,7 @@ def monitor_loop():
 
             # Check if we need to restart
             if critical_failures and (current_time - last_restart) > 60:
-                print(
-                    f"\n⚠️  Critical failures detected: {', '.join(critical_failures)}")
+                print(f"\n⚠️  Critical failures detected: {', '.join(critical_failures)}")
                 if restart_services():
                     last_restart = current_time
                     print("   ⏳ Waiting 30s for services to start...")
@@ -97,8 +102,7 @@ def monitor_loop():
             # Print status every 30 seconds
             if int(current_time) % 30 == 0:
                 running = sum(1 for port in SERVICES if check_port(port))
-                print(
-                    f"[{datetime.now().strftime('%H:%M:%S')}] Status: {running}/{len(SERVICES)} services running")
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] Status: {running}/{len(SERVICES)} services running")
 
             time.sleep(10)
 

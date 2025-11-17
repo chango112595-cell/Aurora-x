@@ -18,7 +18,7 @@ class AuroraCompleteSystemUpdate:
         """Create 13 Foundation Tasks page"""
         print("[Aurora] Creating 13 Foundation Tasks page...")
 
-        content = '''import React from 'react';
+        content = """import React from 'react';
 import { Brain, Zap, Network, Database, Code2, Sparkles, GitBranch, Shield, Rocket, Eye, Lightbulb, TrendingUp, Cpu } from 'lucide-react';
 
 const foundationTasks = [
@@ -115,10 +115,10 @@ export default function TasksPage() {
     </div>
   );
 }
-'''
+"""
 
         path = self.pages_dir / "tasks.tsx"
-        path.write_text(content, encoding='utf-8')
+        path.write_text(content, encoding="utf-8")
         self.updates.append(str(path))
         print(f"[Aurora] ✅ Created: {path}")
 
@@ -126,7 +126,7 @@ export default function TasksPage() {
         """Create 34 Knowledge Tiers page"""
         print("[Aurora] Creating 34 Knowledge Tiers page...")
 
-        content = '''import React from 'react';
+        content = """import React from 'react';
 import { Globe, Code, Database, Brain, Sparkles, Zap } from 'lucide-react';
 
 const knowledgeTiers = {
@@ -279,10 +279,10 @@ export default function TiersPage() {
     </div>
   );
 }
-'''
+"""
 
         path = self.pages_dir / "tiers.tsx"
-        path.write_text(content, encoding='utf-8')
+        path.write_text(content, encoding="utf-8")
         self.updates.append(str(path))
         print(f"[Aurora] ✅ Created: {path}")
 
@@ -290,7 +290,7 @@ export default function TiersPage() {
         """Create Intelligence Core page"""
         print("[Aurora] Creating Intelligence Core page...")
 
-        content = '''import React from 'react';
+        content = """import React from 'react';
 import { Brain, Cpu, Activity, Zap, Database, Network } from 'lucide-react';
 
 export default function IntelligencePage() {
@@ -398,10 +398,10 @@ export default function IntelligencePage() {
     </div>
   );
 }
-'''
+"""
 
         path = self.pages_dir / "intelligence.tsx"
-        path.write_text(content, encoding='utf-8')
+        path.write_text(content, encoding="utf-8")
         self.updates.append(str(path))
         print(f"[Aurora] ✅ Created: {path}")
 
@@ -409,7 +409,7 @@ export default function IntelligencePage() {
         """Update App.tsx with all new routes"""
         print("[Aurora] Updating App.tsx with all routes...")
 
-        content = '''import { Route, Switch } from "wouter";
+        content = """import { Route, Switch } from "wouter";
 import AuroraFuturisticLayout from "./components/AuroraFuturisticLayout";
 import Dashboard from "./pages/dashboard";
 import ChatPage from "./pages/chat";
@@ -442,10 +442,10 @@ function App() {
 }
 
 export default App;
-'''
+"""
 
         path = self.client_dir / "App.tsx"
-        path.write_text(content, encoding='utf-8')
+        path.write_text(content, encoding="utf-8")
         self.updates.append(str(path))
         print(f"[Aurora] ✅ Updated: {path}")
 
@@ -454,19 +454,15 @@ export default App;
         print("[Aurora] Creating placeholder pages...")
 
         placeholders = [
-            ("evolution", "Evolution Monitor",
-             "Track Aurora's continuous growth and adaptation"),
-            ("autonomous", "Autonomous Tools",
-             "Self-directed capabilities and automation"),
-            ("monitoring", "System Monitor",
-             "Real-time performance and health metrics"),
-            ("database", "Knowledge Base",
-             "Comprehensive data storage and retrieval"),
+            ("evolution", "Evolution Monitor", "Track Aurora's continuous growth and adaptation"),
+            ("autonomous", "Autonomous Tools", "Self-directed capabilities and automation"),
+            ("monitoring", "System Monitor", "Real-time performance and health metrics"),
+            ("database", "Knowledge Base", "Comprehensive data storage and retrieval"),
             ("settings", "Configuration", "System settings and preferences"),
         ]
 
         for route, title, description in placeholders:
-            content = f'''import React from 'react';
+            content = f"""import React from 'react';
 import {{ Sparkles }} from 'lucide-react';
 
 export default function {route.capitalize()}Page() {{
@@ -490,10 +486,10 @@ export default function {route.capitalize()}Page() {{
     </div>
   );
 }}
-'''
+"""
 
             path = self.pages_dir / f"{route}.tsx"
-            path.write_text(content, encoding='utf-8')
+            path.write_text(content, encoding="utf-8")
             self.updates.append(str(path))
             print(f"[Aurora] ✅ Created: {path}")
 
@@ -501,7 +497,7 @@ export default function {route.capitalize()}Page() {{
         """Update App.tsx with all routes including placeholders"""
         print("[Aurora] Updating App.tsx with complete routing...")
 
-        content = '''import { Route, Switch } from "wouter";
+        content = """import { Route, Switch } from "wouter";
 import AuroraFuturisticLayout from "./components/AuroraFuturisticLayout";
 import Dashboard from "./pages/dashboard";
 import ChatPage from "./pages/chat";
@@ -544,17 +540,17 @@ function App() {
 }
 
 export default App;
-'''
+"""
 
         path = self.client_dir / "App.tsx"
-        path.write_text(content, encoding='utf-8')
+        path.write_text(content, encoding="utf-8")
         print(f"[Aurora] ✅ Updated: {path}")
 
     def run(self):
         """Execute complete system update"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] COMPLETE SYSTEM UPDATE ACTIVATED")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         print("[Aurora] Phase 1: Creating core pages...")
         self.create_tasks_page()
@@ -567,9 +563,9 @@ export default App;
         print("\n[Aurora] Phase 3: Updating routing system...")
         self.update_app_with_all_routes()
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("[Aurora] ✅ COMPLETE SYSTEM UPDATE FINISHED")
-        print("="*60)
+        print("=" * 60)
         print("\n[Aurora] 🎨 Updated Components:")
         for update in self.updates:
             print(f"  ✅ {update}")

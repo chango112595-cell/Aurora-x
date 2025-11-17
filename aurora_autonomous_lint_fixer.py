@@ -28,9 +28,10 @@ class AuroraLintFixer:
                 capture_output=True,
                 text=True,
                 timeout=30,
-                check=False
+                check=False,
             )
             import json
+
             if result.stdout:
                 return json.loads(result.stdout)
             return []
@@ -40,52 +41,50 @@ class AuroraLintFixer:
 
     def fix_line_too_long(self, file_path):
         """Fix line-too-long issues by wrapping strings"""
-        content = file_path.read_text(encoding='utf-8')
-        lines = content.split('\n')
+        content = file_path.read_text(encoding="utf-8")
+        lines = content.split("\n")
         modified = False
 
         for i, line in enumerate(lines):
-            if len(line) > 120 and not line.strip().startswith('#'):
+            if len(line) > 120 and not line.strip().startswith("#"):
                 # Simple heuristic: if it's a string, try to wrap it
                 if '"""' in line or "'''" in line or '"' in line or "'" in line:
-                    self.log(
-                        f"  Line {i+1} too long ({len(line)} chars) - needs manual review")
+                    self.log(f"  Line {i+1} too long ({len(line)} chars) - needs manual review")
                     modified = True
 
         return modified
 
     def fix_import_order(self, file_path):
         """Fix import ordering: stdlib, third-party, local"""
-        content = file_path.read_text(encoding='utf-8')
-        lines = content.split('\n')
+        content = file_path.read_text(encoding="utf-8")
+        lines = content.split("\n")
 
         # Find import block
         import_start = None
         import_end = None
 
         for i, line in enumerate(lines):
-            if line.strip().startswith(('import ', 'from ')):
+            if line.strip().startswith(("import ", "from ")):
                 if import_start is None:
                     import_start = i
                 import_end = i
-            elif import_start is not None and line.strip() and not line.strip().startswith('#'):
+            elif import_start is not None and line.strip() and not line.strip().startswith("#"):
                 break
 
         if import_start is not None and import_end is not None:
-            self.log(
-                f"  Found imports from line {import_start+1} to {import_end+1}")
+            self.log(f"  Found imports from line {import_start+1} to {import_end+1}")
             return True
 
         return False
 
     def fix_missing_docstrings(self, file_path):
         """Add missing docstrings to functions/methods"""
-        content = file_path.read_text(encoding='utf-8')
-        lines = content.split('\n')
+        content = file_path.read_text(encoding="utf-8")
+        lines = content.split("\n")
         modified = False
 
         for i, line in enumerate(lines):
-            if line.strip().startswith('def ') and ':' in line:
+            if line.strip().startswith("def ") and ":" in line:
                 # Check if next non-empty line is a docstring
                 next_line_idx = i + 1
                 while next_line_idx < len(lines) and not lines[next_line_idx].strip():
@@ -94,9 +93,8 @@ class AuroraLintFixer:
                 if next_line_idx < len(lines):
                     next_line = lines[next_line_idx].strip()
                     if not (next_line.startswith('"""') or next_line.startswith("'''")):
-                        func_name = line.split('def ')[1].split('(')[0]
-                        self.log(
-                            f"  Function '{func_name}' at line {i+1} missing docstring")
+                        func_name = line.split("def ")[1].split("(")[0]
+                        self.log(f"  Function '{func_name}' at line {i+1} missing docstring")
                         modified = True
 
         return modified
@@ -112,7 +110,7 @@ class AuroraLintFixer:
 
         issue_types = {}
         for issue in issues:
-            issue_type = issue.get('type', 'unknown')
+            issue_type = issue.get("type", "unknown")
             issue_types[issue_type] = issue_types.get(issue_type, 0) + 1
 
         self.log(f"  Found {len(issues)} issues: {issue_types}")
@@ -121,18 +119,18 @@ class AuroraLintFixer:
         fixes_needed = []
 
         for issue in issues:
-            msg_id = issue.get('message-id', '')
-            if msg_id in ['C0301', 'line-too-long']:
+            msg_id = issue.get("message-id", "")
+            if msg_id in ["C0301", "line-too-long"]:
                 if self.fix_line_too_long(file_path):
-                    fixes_needed.append('line-too-long')
+                    fixes_needed.append("line-too-long")
 
-            elif msg_id in ['C0411', 'wrong-import-order', 'C0412', 'ungrouped-imports']:
+            elif msg_id in ["C0411", "wrong-import-order", "C0412", "ungrouped-imports"]:
                 if self.fix_import_order(file_path):
-                    fixes_needed.append('import-order')
+                    fixes_needed.append("import-order")
 
-            elif msg_id in ['C0116', 'missing-function-docstring']:
+            elif msg_id in ["C0116", "missing-function-docstring"]:
                 if self.fix_missing_docstrings(file_path):
-                    fixes_needed.append('missing-docstring')
+                    fixes_needed.append("missing-docstring")
 
         if fixes_needed:
             self.log(f"  ⚠️  Needs manual fixes: {set(fixes_needed)}")

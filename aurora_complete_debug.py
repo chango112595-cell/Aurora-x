@@ -15,7 +15,7 @@ import socket
 def check_port(port):
     """Check if a port is listening"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    result = sock.connect_ex(('localhost', port))
+    result = sock.connect_ex(("localhost", port))
     sock.close()
     return result == 0
 
@@ -28,7 +28,7 @@ def check_services():
         5001: "Bridge Service",
         5002: "Self-Learn Service",
         5003: "Chat Server",
-        5005: "Luminar Nexus V2"
+        5005: "Luminar Nexus V2",
     }
 
     all_running = True
@@ -56,17 +56,17 @@ def check_tsx_components():
         "client/src/pages/chat.tsx",
         "client/src/pages/tasks.tsx",
         "client/src/pages/tiers.tsx",
-        "client/src/pages/intelligence.tsx"
+        "client/src/pages/intelligence.tsx",
     ]
 
     all_valid = True
     for comp in components:
         if os.path.exists(comp):
-            with open(comp, 'r', encoding='utf-8') as f:
+            with open(comp, encoding="utf-8") as f:
                 content = f.read()
                 # Basic syntax checks
-                has_import = 'import' in content or 'export' in content
-                has_react = 'React' in content or 'react' in content.lower()
+                has_import = "import" in content or "export" in content
+                has_react = "React" in content or "react" in content.lower()
 
                 if has_import and has_react:
                     print(f"   ✅ {comp}")
@@ -89,11 +89,20 @@ def check_routing():
         print("   ❌ App.tsx not found")
         return False
 
-    with open(app_file, 'r', encoding='utf-8') as f:
+    with open(app_file, encoding="utf-8") as f:
         content = f.read()
 
-    routes = ['/chat', '/tasks', '/tiers', '/intelligence', '/evolution',
-              '/autonomous', '/monitoring', '/database', '/settings']
+    routes = [
+        "/chat",
+        "/tasks",
+        "/tiers",
+        "/intelligence",
+        "/evolution",
+        "/autonomous",
+        "/monitoring",
+        "/database",
+        "/settings",
+    ]
 
     all_routes_present = True
     for route in routes:
@@ -115,15 +124,15 @@ def check_layout_fix():
         print("   ❌ Layout file not found")
         return False
 
-    with open(layout_file, 'r', encoding='utf-8') as f:
+    with open(layout_file, encoding="utf-8") as f:
         content = f.read()
 
     # Check if useLocation is being used (not useRoute)
-    if 'useLocation' in content and 'const [location]' in content:
+    if "useLocation" in content and "const [location]" in content:
         print("   ✅ Layout using useLocation (correct)")
 
         # Check if the buggy startsWith code is gone
-        if 'match?.startsWith' in content or 'match2.startsWith' in content:
+        if "match?.startsWith" in content or "match2.startsWith" in content:
             print("   ⚠️  Old buggy code still present")
             return False
         else:
@@ -156,13 +165,13 @@ def check_index_html():
         print("   ❌ index.html not found")
         return False
 
-    with open(index_file, 'r', encoding='utf-8') as f:
+    with open(index_file, encoding="utf-8") as f:
         content = f.read()
 
     checks = {
-        'Has root div': '<div id="root"' in content,
-        'Has main.tsx script': 'main.tsx' in content,
-        'Has module type': 'type="module"' in content
+        "Has root div": '<div id="root"' in content,
+        "Has main.tsx script": "main.tsx" in content,
+        "Has module type": 'type="module"' in content,
     }
 
     checks_passed = True
@@ -177,9 +186,9 @@ def check_index_html():
 
 def generate_debug_report():
     """Generate comprehensive debug report"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🌟 AURORA COMPLETE SYSTEM DEBUG REPORT")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     results = {
         "services": check_services(),
@@ -187,12 +196,12 @@ def generate_debug_report():
         "routing": check_routing(),
         "layout_fix": check_layout_fix(),
         "vite_config": check_vite_config(),
-        "index_html": check_index_html()
+        "index_html": check_index_html(),
     }
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📊 SUMMARY")
-    print("="*60)
+    print("=" * 60)
 
     all_passed = all(results.values())
 
@@ -200,7 +209,7 @@ def generate_debug_report():
         status = "✅ PASS" if passed else "❌ FAIL"
         print(f"   {check.replace('_', ' ').title()}: {status}")
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
 
     if all_passed:
         print("✨ All systems operational! Ready to open browser.")
@@ -217,22 +226,20 @@ def fix_remaining_issues():
     # Re-run the layout fix to be sure
     layout_file = "client/src/components/AuroraFuturisticLayout.tsx"
     if os.path.exists(layout_file):
-        with open(layout_file, 'r', encoding='utf-8') as f:
+        with open(layout_file, encoding="utf-8") as f:
             content = f.read()
 
         # Ensure useLocation is used
-        if 'useRoute' in content and 'useLocation' not in content:
+        if "useRoute" in content and "useLocation" not in content:
             print("   🔧 Fixing layout to use useLocation...")
-            content = content.replace("import { Link, useRoute } from 'wouter';",
-                                      "import { Link, useLocation } from 'wouter';")
-            content = content.replace('const [match] = useRoute("/:path*");',
-                                      'const [location] = useLocation();')
             content = content.replace(
-                'match === item.path', 'location === item.path')
-            content = content.replace(
-                'match?.startsWith(item.path)', 'location.startsWith(item.path)')
+                "import { Link, useRoute } from 'wouter';", "import { Link, useLocation } from 'wouter';"
+            )
+            content = content.replace('const [match] = useRoute("/:path*");', "const [location] = useLocation();")
+            content = content.replace("match === item.path", "location === item.path")
+            content = content.replace("match?.startsWith(item.path)", "location.startsWith(item.path)")
 
-            with open(layout_file, 'w', encoding='utf-8') as f:
+            with open(layout_file, "w", encoding="utf-8") as f:
                 f.write(content)
             print("   ✅ Layout fixed")
 

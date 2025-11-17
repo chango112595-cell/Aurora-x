@@ -79,7 +79,9 @@ def ci_gate_check() -> bool:
     try:
         import subprocess
 
-        result = subprocess.run([sys.executable, "tests/test_adaptive.py"], capture_output=True, text=True, timeout=30, check=False)
+        result = subprocess.run(
+            [sys.executable, "tests/test_adaptive.py"], capture_output=True, text=True, timeout=30, check=False
+        )
         if result.returncode == 0:
             print("  ✅ All adaptive tests passed")
             checks_passed.append(True)
@@ -93,7 +95,9 @@ def ci_gate_check() -> bool:
     # 3. Run seed tests
     print("\n[3/5] Running seed persistence tests...")
     try:
-        result = subprocess.run([sys.executable, "tests/test_seeds.py"], capture_output=True, text=True, timeout=30, check=False)
+        result = subprocess.run(
+            [sys.executable, "tests/test_seeds.py"], capture_output=True, text=True, timeout=30, check=False
+        )
         if result.returncode == 0:
             print("  ✅ All seed tests passed")
             checks_passed.append(True)
@@ -181,7 +185,7 @@ def save_prod_config():
     config_path = Path(".aurora/prod_config.json")
     config_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(config_path, 'w', encoding='utf-8') as f:
+    with open(config_path, "w", encoding="utf-8") as f:
         json.dump(PROD_CONFIG, f, indent=2)
 
     print(f"Production config saved to: {config_path}")

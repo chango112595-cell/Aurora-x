@@ -15,29 +15,19 @@ def fix_layout():
     print("🔧 Aurora: Fixing layout routing...")
 
     layout_file = "client/src/components/AuroraFuturisticLayout.tsx"
-    with open(layout_file, 'r', encoding='utf-8') as f:
+    with open(layout_file, encoding="utf-8") as f:
         content = f.read()
 
     # Replace useRoute with useLocation
     if "useRoute" in content:
         content = content.replace(
-            "import { Link, useRoute } from 'wouter';",
-            "import { Link, useLocation } from 'wouter';"
+            "import { Link, useRoute } from 'wouter';", "import { Link, useLocation } from 'wouter';"
         )
-        content = content.replace(
-            'const [match] = useRoute("/:path*");',
-            'const [location] = useLocation();'
-        )
-        content = content.replace(
-            'match === item.path',
-            'location === item.path'
-        )
-        content = content.replace(
-            'match?.startsWith(item.path)',
-            'location.startsWith(item.path)'
-        )
+        content = content.replace('const [match] = useRoute("/:path*");', "const [location] = useLocation();")
+        content = content.replace("match === item.path", "location === item.path")
+        content = content.replace("match?.startsWith(item.path)", "location.startsWith(item.path)")
 
-        with open(layout_file, 'w', encoding='utf-8') as f:
+        with open(layout_file, "w", encoding="utf-8") as f:
             f.write(content)
         print("   ✅ Layout routing fixed")
     else:
@@ -48,31 +38,27 @@ def fix_component_imports():
     """Fix React imports in components"""
     print("\n🔧 Aurora: Fixing component imports...")
 
-    files_to_check = [
-        "client/src/App.tsx",
-        "client/src/pages/dashboard.tsx",
-        "client/src/pages/chat.tsx"
-    ]
+    files_to_check = ["client/src/App.tsx", "client/src/pages/dashboard.tsx", "client/src/pages/chat.tsx"]
 
     for file_path in files_to_check:
         if not os.path.exists(file_path):
             continue
 
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         # Check if React import exists
-        if 'import React' not in content and 'react' in content.lower():
+        if "import React" not in content and "react" in content.lower():
             # Add React import at the top
-            lines = content.split('\n')
+            lines = content.split("\n")
             # Find first import line
             for i, line in enumerate(lines):
-                if line.strip().startswith('import'):
+                if line.strip().startswith("import"):
                     lines.insert(i, "import React from 'react';")
                     break
 
-            content = '\n'.join(lines)
-            with open(file_path, 'w', encoding='utf-8') as f:
+            content = "\n".join(lines)
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
             print(f"   ✅ Fixed {file_path}")
 
@@ -109,7 +95,7 @@ export default defineConfig({
 });
 """
 
-    with open(vite_config, 'w', encoding='utf-8') as f:
+    with open(vite_config, "w", encoding="utf-8") as f:
         f.write(config_content)
     print("   ✅ Created vite.config.ts")
 
@@ -120,10 +106,10 @@ def verify_all_fixes():
 
     # Check layout
     layout_file = "client/src/components/AuroraFuturisticLayout.tsx"
-    with open(layout_file, 'r', encoding='utf-8') as f:
+    with open(layout_file, encoding="utf-8") as f:
         layout_content = f.read()
 
-    layout_ok = 'useLocation' in layout_content and 'const [location]' in layout_content
+    layout_ok = "useLocation" in layout_content and "const [location]" in layout_content
     print(f"   Layout routing: {'✅ FIXED' if layout_ok else '❌ STILL BROKEN'}")
 
     # Check vite config
@@ -134,9 +120,9 @@ def verify_all_fixes():
 
 
 if __name__ == "__main__":
-    print("="*60)
+    print("=" * 60)
     print("🌟 AURORA DEEP FIX - ADDRESSING ALL ISSUES")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     fix_layout()
     fix_component_imports()
@@ -144,10 +130,10 @@ if __name__ == "__main__":
 
     all_fixed = verify_all_fixes()
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     if all_fixed:
         print("✨ All issues resolved! System ready.")
-        print("="*60)
+        print("=" * 60)
     else:
         print("⚠️  Some issues remain - manual review needed")
-        print("="*60)
+        print("=" * 60)
