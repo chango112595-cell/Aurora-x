@@ -772,13 +772,13 @@ export default function LuminarNexus() {
         {/* Learning Tab - Aurora's Corpus with Advanced Filtering */}
         {activeTab === 'learning' && (
           <div className="space-y-6">
-            {/* Aurora's 65 Complete Systems Display */}
+            {/* Aurora's 66 Complete Systems Display */}
             <Card className="border-cyan-500/30 bg-gradient-to-br from-cyan-950/20 to-purple-950/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-6 w-6 text-cyan-400" />
-                  Aurora's 65 Complete Systems
-                  <Badge className="ml-auto bg-cyan-500/20 text-cyan-300">2,500+ Skills Active (13 Tasks + 52 Tiers)</Badge>
+                  Aurora's 66 Complete Systems
+                  <Badge className="ml-auto bg-cyan-500/20 text-cyan-300">2,500+ Skills Active (13 Tasks + 53 Tiers)</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent>

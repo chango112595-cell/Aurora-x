@@ -71,6 +71,7 @@ const knowledgeTiers = {
     { id: 50, name: 'Git Master', progress: 100 },
     { id: 51, name: 'Code Quality Enforcer', progress: 100 },
     { id: 52, name: 'RSA Grandmaster', progress: 100 },
+    { id: 53, name: 'Docker Mastery', progress: 100 },
   ],
 };
 
@@ -104,7 +105,7 @@ export default function TiersPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-            52 Knowledge Tiers
+            53 Knowledge Tiers
           </h1>
           <p className="text-purple-400 text-lg">Specialized domain expertise across all fields of knowledge</p>
         </div>

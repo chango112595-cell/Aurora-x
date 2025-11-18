@@ -33,7 +33,7 @@ export default function AuroraDashboard() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
               AURORA SYSTEM NEXUS
             </h1>
-            <p className="text-cyan-300/60 text-sm">Autonomous AI • Complete Project Ownership • 65 Complete Systems (13 Tasks + 52 Tiers)</p>
+            <p className="text-cyan-300/60 text-sm">Autonomous AI • Complete Project Ownership • 66 Complete Systems (13 Tasks + 53 Tiers)</p>
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default function AuroraDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-purple-400">
               <Sparkles className="h-5 w-5" />
-              65 Complete Systems (13 Tasks + 52 Tiers)
+              66 Complete Systems (13 Tasks + 53 Tiers)
             </CardTitle>
           </CardHeader>
           <CardContent>

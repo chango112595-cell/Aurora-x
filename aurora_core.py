@@ -316,6 +316,7 @@ class AuroraKnowledgeTiers:
             "tier_50_git_master": self._get_git_master(),
             "tier_51_code_quality_enforcer": self._get_code_quality_enforcer(),
             "tier_52_rsa_grandmaster": self._get_rsa_grandmaster(),
+            "tier_53_docker_mastery": self._get_docker_mastery(),
         }
 
         # Auto-calculate tier count
@@ -828,6 +829,19 @@ class AuroraKnowledgeTiers:
             "files": ["aurora_rsa_grandmaster.py"]
         }
 
+    def _get_docker_mastery(self):
+        """Tier 53: Docker Infrastructure Mastery"""
+        return {
+            "tier": 53,
+            "name": "Docker Infrastructure Mastery",
+            "category": "infrastructure",
+            "capabilities": ["docker_diagnostics", "autonomous_healing",
+                             "daemon_management", "container_orchestration",
+                             "wsl2_integration", "dev_container_support",
+                             "health_monitoring", "automatic_recovery"],
+            "files": ["aurora_docker_healer.py"]
+        }
+
     def get_all_tiers_summary(self):
         """Get a dynamic summary of all tiers (auto-updates as tiers are added)"""
         return {
@@ -857,6 +871,7 @@ class AuroraKnowledgeTiers:
             "git_master": "Tier 50 (Advanced Git operations and workflow automation)",
             "code_quality_enforcer": "Tier 51 (Automatic code quality detection and fixing)",
             "rsa_grandmaster": "Tier 52 (RSA encryption, decryption, and cryptanalysis mastery)",
+            "docker_mastery": "Tier 53 (Docker diagnostics, autonomous healing, and infrastructure management)",
             "languages_mastered": 55,
             "eras_covered": "Ancient (1940s) → SciFi (2035+)",
             "auto_expanding": True,
@@ -941,7 +956,8 @@ class AuroraOrchestrator:
 
         try:
             # Create tmux session and run command
-            subprocess.run(f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
+            subprocess.run(
+                f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
             self.active_ports[server_name] = port
             return True
         except subprocess.CalledProcessError:
@@ -954,7 +970,8 @@ class AuroraOrchestrator:
 
         session = self.servers[server_name]["session"]
         try:
-            subprocess.run(f"tmux kill-session -t {session}", shell=True, check=True)
+            subprocess.run(
+                f"tmux kill-session -t {session}", shell=True, check=True)
             self.active_ports.pop(server_name, None)
             return True
         except subprocess.CalledProcessError:
@@ -971,7 +988,8 @@ class AuroraOrchestrator:
                 f"tmux list-sessions | grep {session}", shell=True, capture_output=True, text=True, check=False
             )
             if result.returncode == 0:
-                port = self.active_ports.get(server_name, self.servers[server_name]["preferred_port"])
+                port = self.active_ports.get(
+                    server_name, self.servers[server_name]["preferred_port"])
                 return {
                     "status": "running",
                     "port": port,
@@ -1027,7 +1045,8 @@ class AuroraCoreIntelligence:
 
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
-        print(f"⚡ All 33 tiers active | Autonomous mode: {self.autonomous_mode}")
+        print(
+            f"⚡ All 33 tiers active | Autonomous mode: {self.autonomous_mode}")
 
     def get_conversation_context(self, session_id: str) -> dict:
         """Get or create conversation context for a session"""
@@ -1075,24 +1094,30 @@ class AuroraCoreIntelligence:
         # Check for name/identity questions
         if re.search(r"(do you remember|know my name|who am i|remember me)", msg_lower):
             analysis.update(
-                {"intent": "memory_check", "asks_about_memory": True, "asks_about_name": True, "confidence": 0.95}
+                {"intent": "memory_check", "asks_about_memory": True,
+                    "asks_about_name": True, "confidence": 0.95}
             )
 
         # Check for self-introduction
         if re.search(r"(my name is|i'm |i am |call me)", msg_lower):
-            analysis.update({"intent": "user_introduction", "introduces_self": True, "confidence": 0.95})
+            analysis.update({"intent": "user_introduction",
+                            "introduces_self": True, "confidence": 0.95})
             # Extract name
-            name_match = re.search(r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
+            name_match = re.search(
+                r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
 
         # Check for explanation requests
         if re.search(r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower):
-            analysis.update({"intent": "explanation_request", "asks_to_explain": True, "confidence": 0.9})
+            analysis.update({"intent": "explanation_request",
+                            "asks_to_explain": True, "confidence": 0.9})
 
         # Aurora self-referential detection (more precise)
-        aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
-        capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
+        aurora_keywords = re.search(
+            r"(tell me about you|what are you|who are you)", msg_lower)
+        capability_keywords = re.search(
+            r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
 
         # Complex Aurora analysis requests (architectural, debugging, etc.)
         complex_aurora_analysis = re.search(
@@ -1113,7 +1138,8 @@ class AuroraCoreIntelligence:
         elif aurora_keywords and capability_keywords:
             # Simple questions about Aurora's capabilities
             analysis.update(
-                {"intent": "aurora_self_inquiry", "aurora_specific": True, "self_referential": True, "confidence": 0.95}
+                {"intent": "aurora_self_inquiry", "aurora_specific": True,
+                    "self_referential": True, "confidence": 0.95}
             )
 
         # Self-limitation/critique questions (what Aurora lacks/needs/missing)
@@ -1132,7 +1158,8 @@ class AuroraCoreIntelligence:
         # Enhancement/improvement requests
         if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
             if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
+                analysis.update({"intent": "enhancement_request",
+                                "enhancement_request": True, "confidence": 0.9})
 
         # Technical questions
         if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
@@ -1384,7 +1411,8 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         # Check if this is an architectural analysis request about Aurora herself
         msg_lower = message.lower()
         if analysis["intent"] == "technical_aurora_analysis" or (
-            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
+            re.search(
+                r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
             and re.search(r"aurora", msg_lower)
         ):
             return self._aurora_architectural_analysis(message, context)
@@ -1541,7 +1569,8 @@ manage/guard connections while routing properly to Core intelligence.
                     f"Pick a number or tell me the specific problem - I'll "
                     f"execute the solution immediately."
                 )
-            mentioned = [w for w in msg_lower.split() if w in ["chango", "backend", "api", "server"]][0]
+            mentioned = [w for w in msg_lower.split() if w in [
+                "chango", "backend", "api", "server"]][0]
             return (
                 f"{name_prefix}I see you mentioned {mentioned}. I have "
                 f"complete access to the system. What specifically needs "
@@ -1693,7 +1722,8 @@ manage/guard connections while routing properly to Core intelligence.
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
                 status = "✅" if success else "❌"
-                results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
+                results.append(
+                    f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
             return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
 
@@ -1741,7 +1771,8 @@ All systems under Aurora's autonomous control! 🌟"""
             for name, info in status["orchestration"]["servers_status"].items():
                 status_emoji = "🟢" if info["status"] == "running" else "🔴"
                 port = info.get("port", "N/A")
-                server_lines.append(f"{status_emoji} **{name}**: {info['status']} (port {port})")
+                server_lines.append(
+                    f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
             return f"""🌌 **AURORA SYSTEM STATUS**
 
