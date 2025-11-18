@@ -4,19 +4,17 @@
 Aurora's ability to connect to running servers, APIs, and debug in real-time
 """
 
-import asyncio
-import json
 import socket
 import time
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
-import http.client
+from typing import Any
 from urllib.parse import urlparse
 
 
 class ConnectionType(Enum):
     """Types of live connections"""
+
     HTTP_API = "http_api"
     WEBSOCKET = "websocket"
     DATABASE = "database"
@@ -28,13 +26,14 @@ class ConnectionType(Enum):
 @dataclass
 class LiveConnection:
     """Active connection to live system"""
+
     connection_id: str
     connection_type: ConnectionType
     endpoint: str
     status: str
     latency_ms: float
     last_activity: str
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
 
 class AuroraLiveIntegration:
@@ -56,7 +55,7 @@ class AuroraLiveIntegration:
         self.name = "Aurora Live Integration"
         self.tier = 44
         self.version = "1.0.0"
-        self.active_connections: Dict[str, LiveConnection] = {}
+        self.active_connections: dict[str, LiveConnection] = {}
         self.capabilities = [
             "api_connection",
             "real_time_debugging",
@@ -65,7 +64,7 @@ class AuroraLiveIntegration:
             "docker_integration",
             "websocket_support",
             "log_streaming",
-            "health_checks"
+            "health_checks",
         ]
 
         print(f"\n{'='*70}")
@@ -73,10 +72,10 @@ class AuroraLiveIntegration:
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
-        print(f"Status: ACTIVE - Ready for live connections")
+        print("Status: ACTIVE - Ready for live connections")
         print(f"{'='*70}\n")
 
-    def connect_to_api(self, base_url: str, headers: Optional[Dict] = None) -> LiveConnection:
+    def connect_to_api(self, base_url: str, headers: dict | None = None) -> LiveConnection:
         """
         Connect to a running API server
 
@@ -101,11 +100,7 @@ class AuroraLiveIntegration:
             status=status,
             latency_ms=round(latency, 2),
             last_activity=time.strftime("%Y-%m-%d %H:%M:%S"),
-            metadata={
-                "headers": headers or {},
-                "protocol": "HTTP/1.1",
-                "ssl": base_url.startswith("https")
-            }
+            metadata={"headers": headers or {}, "protocol": "HTTP/1.1", "ssl": base_url.startswith("https")},
         )
 
         self.active_connections[connection.connection_id] = connection
@@ -113,8 +108,9 @@ class AuroraLiveIntegration:
         print(f"✅ Connected to {base_url} ({latency:.2f}ms)")
         return connection
 
-    def call_api_endpoint(self, connection_id: str, method: str, endpoint: str,
-                          data: Optional[Dict] = None) -> Dict[str, Any]:
+    def call_api_endpoint(
+        self, connection_id: str, method: str, endpoint: str, data: dict | None = None
+    ) -> dict[str, Any]:
         """
         Call an API endpoint on active connection
 
@@ -134,13 +130,12 @@ class AuroraLiveIntegration:
         print(f"📡 {method} {conn.endpoint}{endpoint}")
 
         # Simulate API call
-        response = self._execute_http_request(
-            conn.endpoint, method, endpoint, data)
+        response = self._execute_http_request(conn.endpoint, method, endpoint, data)
 
         print(f"✅ Response: {response['status_code']}")
         return response
 
-    def monitor_server_health(self, url: str, ___interval_seconds: int = 5) -> Dict[str, Any]:
+    def monitor_server_health(self, url: str, ___interval_seconds: int = 5) -> dict[str, Any]:
         """
         Monitor server health in real-time
 
@@ -160,13 +155,13 @@ class AuroraLiveIntegration:
             "uptime_percentage": 99.9,
             "last_check": time.strftime("%Y-%m-%d %H:%M:%S"),
             "checks_performed": 1,
-            "errors": []
+            "errors": [],
         }
 
         print(f"✅ Server healthy ({health_data['response_time_ms']}ms)")
         return health_data
 
-    def debug_live_application(self, process_id: int) -> Dict[str, Any]:
+    def debug_live_application(self, process_id: int) -> dict[str, Any]:
         """
         Attach to running process for live debugging
 
@@ -187,11 +182,10 @@ class AuroraLiveIntegration:
             "open_files": 42,
             "network_connections": 3,
             "stack_traces": ["main() at app.js:15", "server() at server.js:42"],
-            "variables": {"port": 5000, "env": "development"}
+            "variables": {"port": 5000, "env": "development"},
         }
 
-        print(
-            f"✅ Debugger attached: {debug_info['process_name']} (PID {process_id})")
+        print(f"✅ Debugger attached: {debug_info['process_name']} (PID {process_id})")
         return debug_info
 
     def connect_to_database(self, connection_string: str) -> LiveConnection:
@@ -204,7 +198,7 @@ class AuroraLiveIntegration:
         Returns:
             LiveConnection object
         """
-        print(f"💾 Connecting to database...")
+        print("💾 Connecting to database...")
 
         connection = LiveConnection(
             connection_id=f"db_{int(time.time())}",
@@ -213,11 +207,7 @@ class AuroraLiveIntegration:
             status="connected",
             latency_ms=15.3,
             last_activity=time.strftime("%Y-%m-%d %H:%M:%S"),
-            metadata={
-                "driver": "postgresql",
-                "database": "aurora_db",
-                "pool_size": 10
-            }
+            metadata={"driver": "postgresql", "database": "aurora_db", "pool_size": 10},
         )
 
         self.active_connections[connection.connection_id] = connection
@@ -225,7 +215,7 @@ class AuroraLiveIntegration:
         print(f"✅ Database connected ({connection.latency_ms}ms)")
         return connection
 
-    def execute_query(self, connection_id: str, query: str) -> List[Dict[str, Any]]:
+    def execute_query(self, connection_id: str, query: str) -> list[dict[str, Any]]:
         """
         Execute database query on live connection
 
@@ -242,15 +232,12 @@ class AuroraLiveIntegration:
         print(f"🔍 Executing query: {query[:50]}...")
 
         # Simulate query execution
-        results = [
-            {"id": 1, "name": "Aurora", "tier": 44},
-            {"id": 2, "name": "System", "tier": 45}
-        ]
+        results = [{"id": 1, "name": "Aurora", "tier": 44}, {"id": 2, "name": "System", "tier": 45}]
 
         print(f"✅ Query executed: {len(results)} rows returned")
         return results
 
-    def inspect_docker_container(self, container_id: str) -> Dict[str, Any]:
+    def inspect_docker_container(self, container_id: str) -> dict[str, Any]:
         """
         Inspect running Docker container
 
@@ -273,13 +260,13 @@ class AuroraLiveIntegration:
             "network_rx_mb": 45.2,
             "network_tx_mb": 23.1,
             "volumes": ["/app/data"],
-            "environment": {"NODE_ENV": "production"}
+            "environment": {"NODE_ENV": "production"},
         }
 
         print(f"✅ Container inspected: {container_info['status']}")
         return container_info
 
-    def stream_logs(self, source: str, lines: int = 100) -> List[str]:
+    def stream_logs(self, source: str, lines: int = 100) -> list[str]:
         """
         Stream logs from running application
 
@@ -298,7 +285,7 @@ class AuroraLiveIntegration:
             "[2025-11-18 10:30:16] INFO: Database connected",
             "[2025-11-18 10:30:20] INFO: Aurora Tier 44 initialized",
             "[2025-11-18 10:30:25] INFO: Handling request: GET /api/status",
-            "[2025-11-18 10:30:26] INFO: Response sent: 200 OK"
+            "[2025-11-18 10:30:26] INFO: Response sent: 200 OK",
         ]
 
         print(f"✅ Streaming {len(logs)} log lines")
@@ -323,11 +310,7 @@ class AuroraLiveIntegration:
             status="connected",
             latency_ms=8.5,
             last_activity=time.strftime("%Y-%m-%d %H:%M:%S"),
-            metadata={
-                "protocol": "ws",
-                "messages_sent": 0,
-                "messages_received": 0
-            }
+            metadata={"protocol": "ws", "messages_sent": 0, "messages_received": 0},
         )
 
         self.active_connections[connection.connection_id] = connection
@@ -335,7 +318,7 @@ class AuroraLiveIntegration:
         print(f"✅ WebSocket connected ({connection.latency_ms}ms)")
         return connection
 
-    def send_websocket_message(self, connection_id: str, ___message: Dict[str, Any]) -> bool:
+    def send_websocket_message(self, connection_id: str, ___message: dict[str, Any]) -> bool:
         """
         Send message through WebSocket connection
 
@@ -350,16 +333,16 @@ class AuroraLiveIntegration:
             raise ValueError(f"Connection {connection_id} not found")
 
         conn = self.active_connections[connection_id]
-        print(f"📤 Sending WebSocket message")
+        print("📤 Sending WebSocket message")
 
         # Update metadata
         conn.metadata["messages_sent"] += 1
         conn.last_activity = time.strftime("%Y-%m-%d %H:%M:%S")
 
-        print(f"✅ Message sent")
+        print("✅ Message sent")
         return True
 
-    def get_process_metrics(self, process_name: str) -> Dict[str, Any]:
+    def get_process_metrics(self, process_name: str) -> dict[str, Any]:
         """
         Get metrics from running process
 
@@ -380,11 +363,10 @@ class AuroraLiveIntegration:
             "open_files": 56,
             "connections": 8,
             "status": "running",
-            "uptime_seconds": 86400
+            "uptime_seconds": 86400,
         }
 
-        print(
-            f"✅ Metrics collected: CPU {metrics['cpu_percent']}%, Memory {metrics['memory_mb']}MB")
+        print(f"✅ Metrics collected: CPU {metrics['cpu_percent']}%, Memory {metrics['memory_mb']}MB")
         return metrics
 
     def disconnect(self, connection_id: str) -> bool:
@@ -405,10 +387,10 @@ class AuroraLiveIntegration:
 
         del self.active_connections[connection_id]
 
-        print(f"✅ Disconnected")
+        print("✅ Disconnected")
         return True
 
-    def get_all_connections(self) -> List[LiveConnection]:
+    def get_all_connections(self) -> list[LiveConnection]:
         """Get all active connections"""
         return list(self.active_connections.values())
 
@@ -423,24 +405,25 @@ class AuroraLiveIntegration:
 
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(2)
-            result = sock.connect_ex((host.split(':')[0], port))
+            result = sock.connect_ex((host.split(":")[0], port))
             sock.close()
 
             return "connected" if result == 0 else "connection_failed"
         except Exception:
             return "simulated_connection"
 
-    def _execute_http_request(self, ___base_url: str, ___method: str, ___endpoint: str,
-                              data: Optional[Dict]) -> Dict[str, Any]:
+    def _execute_http_request(
+        self, ___base_url: str, ___method: str, ___endpoint: str, data: dict | None
+    ) -> dict[str, Any]:
         """Execute HTTP request"""
         return {
             "status_code": 200,
             "data": {"message": "Success", "tier": 44},
             "headers": {"content-type": "application/json"},
-            "latency_ms": 42.5
+            "latency_ms": 42.5,
         }
 
-    def get_capabilities_summary(self) -> Dict[str, Any]:
+    def get_capabilities_summary(self) -> dict[str, Any]:
         """Get summary of live integration capabilities"""
         return {
             "tier": self.tier,
@@ -449,15 +432,15 @@ class AuroraLiveIntegration:
             "capabilities": self.capabilities,
             "active_connections": len(self.active_connections),
             "connection_types": [ct.value for ct in ConnectionType],
-            "status": "operational"
+            "status": "operational",
         }
 
 
 def main():
     """Test Tier 44 functionality"""
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("🧪 TESTING TIER 44: LIVE SYSTEM INTEGRATION")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     live = AuroraLiveIntegration()
 
@@ -469,8 +452,7 @@ def main():
 
     # Test 2: API Call
     print("Test 2: API Call")
-    response = live.call_api_endpoint(
-        api_conn.connection_id, "GET", "/api/status")
+    response = live.call_api_endpoint(api_conn.connection_id, "GET", "/api/status")
     print(f"  Status: {response['status_code']}\n")
 
     # Test 3: Server Health
@@ -498,11 +480,11 @@ def main():
 
     # Summary
     summary = live.get_capabilities_summary()
-    print("="*70)
-    print(f"✅ TIER 44 OPERATIONAL")
+    print("=" * 70)
+    print("✅ TIER 44 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
     print(f"Active Connections: {summary['active_connections']}")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":

@@ -4,11 +4,11 @@ Aurora Tier 42: Pylint Prevention System
 Autonomous code quality maintenance - prevents issues before they happen
 """
 
-import time
 import subprocess
-from pathlib import Path
+import time
 from datetime import datetime
-from typing import List, Dict, Any
+from pathlib import Path
+from typing import Any
 
 
 class AuroraPylintPrevention:
@@ -19,11 +19,11 @@ class AuroraPylintPrevention:
 
     def __init__(self):
         self.project_root = Path.cwd()
-        self.python_files: List[Path] = []
+        self.python_files: list[Path] = []
         self.issues_fixed = 0
-        self.prevention_log: List[Dict[str, Any]] = []
+        self.prevention_log: list[dict[str, Any]] = []
 
-    def scan_python_files(self) -> List[Path]:
+    def scan_python_files(self) -> list[Path]:
         """Scan for all Python files in project"""
         print("🔍 Scanning for Python files...")
         files = list(self.project_root.glob("**/*.py"))
@@ -37,11 +37,14 @@ class AuroraPylintPrevention:
         print(f"✅ Found {len(files)} Python files")
         return files
 
-    def run_pylint_check(self, file_path: Path) -> Dict[str, Any]:
+    def run_pylint_check(self, file_path: Path) -> dict[str, Any]:
         """Run pylint on a single file"""
         try:
             result = subprocess.run(
-                ["python", "-m", "pylint", str(file_path), "--output-format=json"], capture_output=True, text=True, timeout=30
+                ["python", "-m", "pylint", str(file_path), "--output-format=json"],
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
 
             if result.stdout:
@@ -58,8 +61,7 @@ class AuroraPylintPrevention:
         try:
             # Use autoflake to remove unused imports
             result = subprocess.run(
-                ["python", "-m", "autoflake", "--remove-all-unused-imports",
-                    "--in-place", str(file_path)],
+                ["python", "-m", "autoflake", "--remove-all-unused-imports", "--in-place", str(file_path)],
                 capture_output=True,
                 timeout=30,
             )
@@ -72,8 +74,7 @@ class AuroraPylintPrevention:
         try:
             # Use autoflake to remove unused variables
             result = subprocess.run(
-                ["python", "-m", "autoflake", "--remove-unused-variables",
-                    "--in-place", str(file_path)],
+                ["python", "-m", "autoflake", "--remove-unused-variables", "--in-place", str(file_path)],
                 capture_output=True,
                 timeout=30,
             )
@@ -113,8 +114,7 @@ class AuroraPylintPrevention:
                 if max_iterations and iteration > max_iterations:
                     break
 
-                print(
-                    f"\n[{datetime.now().strftime('%H:%M:%S')}] Iteration {iteration}")
+                print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Iteration {iteration}")
 
                 # Scan files
                 files = self.scan_python_files()
@@ -156,8 +156,7 @@ class AuroraPylintPrevention:
 
                 # Wait
                 if not max_iterations or iteration < max_iterations:
-                    print(
-                        f"\n⏱️  Waiting {interval_minutes} minutes until next check...")
+                    print(f"\n⏱️  Waiting {interval_minutes} minutes until next check...")
                     time.sleep(interval_minutes * 60)
 
         except KeyboardInterrupt:
@@ -167,8 +166,7 @@ class AuroraPylintPrevention:
         print("📊 FINAL REPORT")
         print("=" * 70)
         print(f"Total iterations: {iteration}")
-        print(
-            f"Total files scanned: {sum(log['files_scanned'] for log in self.prevention_log)}")
+        print(f"Total files scanned: {sum(log['files_scanned'] for log in self.prevention_log)}")
         print(f"Total issues fixed: {self.issues_fixed}")
         print("=" * 70 + "\n")
 
@@ -179,10 +177,10 @@ class AuroraPylintPrevention:
         # Get staged Python files
         try:
             result = subprocess.run(
-                ["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"], capture_output=True, text=True)
+                ["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"], capture_output=True, text=True
+            )
 
-            staged_files = [Path(f) for f in result.stdout.strip().split(
-                "\n") if f.endswith(".py")]
+            staged_files = [Path(f) for f in result.stdout.strip().split("\n") if f.endswith(".py")]
 
             if not staged_files:
                 print("✅ No Python files staged")
@@ -235,8 +233,7 @@ def main():
     else:
         print("Aurora Tier 42: Pylint Prevention System")
         print("\nUsage:")
-        print(
-            "  python aurora_pylint_prevention.py monitor [minutes]  # Continuous monitoring")
+        print("  python aurora_pylint_prevention.py monitor [minutes]  # Continuous monitoring")
         print("  python aurora_pylint_prevention.py pre-commit        # Pre-commit check")
         print("  python aurora_pylint_prevention.py check             # One-time check")
 

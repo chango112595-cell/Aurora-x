@@ -651,10 +651,17 @@ class AuroraKnowledgeTiers:
             "tier": 43,
             "name": "Visual Code Understanding",
             "category": "advanced",
-            "capabilities": ["screenshot_analysis", "diagram_interpretation", "ui_mockup_analysis",
-                             "error_detection_visual", "architecture_visualization", "flowchart_parsing",
-                             "ocr_code_extraction", "visual_bug_detection"],
-            "files": ["aurora_visual_understanding.py"]
+            "capabilities": [
+                "screenshot_analysis",
+                "diagram_interpretation",
+                "ui_mockup_analysis",
+                "error_detection_visual",
+                "architecture_visualization",
+                "flowchart_parsing",
+                "ocr_code_extraction",
+                "visual_bug_detection",
+            ],
+            "files": ["aurora_visual_understanding.py"],
         }
 
     def _get_live_integration(self):
@@ -663,10 +670,17 @@ class AuroraKnowledgeTiers:
             "tier": 44,
             "name": "Live System Integration",
             "category": "advanced",
-            "capabilities": ["api_connection", "real_time_debugging", "server_monitoring",
-                             "database_connectivity", "docker_integration", "websocket_support",
-                             "log_streaming", "health_checks"],
-            "files": ["aurora_live_integration.py"]
+            "capabilities": [
+                "api_connection",
+                "real_time_debugging",
+                "server_monitoring",
+                "database_connectivity",
+                "docker_integration",
+                "websocket_support",
+                "log_streaming",
+                "health_checks",
+            ],
+            "files": ["aurora_live_integration.py"],
         }
 
     def _get_test_generator(self):
@@ -675,10 +689,17 @@ class AuroraKnowledgeTiers:
             "tier": 45,
             "name": "Enhanced Test Generation",
             "category": "advanced",
-            "capabilities": ["unit_test_generation", "integration_tests", "e2e_scenarios",
-                             "edge_case_detection", "100_percent_coverage", "mock_generation",
-                             "fixture_creation", "assertion_intelligence"],
-            "files": ["aurora_test_generator.py"]
+            "capabilities": [
+                "unit_test_generation",
+                "integration_tests",
+                "e2e_scenarios",
+                "edge_case_detection",
+                "100_percent_coverage",
+                "mock_generation",
+                "fixture_creation",
+                "assertion_intelligence",
+            ],
+            "files": ["aurora_test_generator.py"],
         }
 
     def _get_security_auditor(self):
@@ -687,10 +708,17 @@ class AuroraKnowledgeTiers:
             "tier": 46,
             "name": "Security Auditing",
             "category": "advanced",
-            "capabilities": ["owasp_top_10_scan", "sql_injection_detection", "xss_detection",
-                             "secret_detection", "crypto_analysis", "auth_vulnerability_scan",
-                             "dependency_check", "security_best_practices"],
-            "files": ["aurora_security_auditor.py"]
+            "capabilities": [
+                "owasp_top_10_scan",
+                "sql_injection_detection",
+                "xss_detection",
+                "secret_detection",
+                "crypto_analysis",
+                "auth_vulnerability_scan",
+                "dependency_check",
+                "security_best_practices",
+            ],
+            "files": ["aurora_security_auditor.py"],
         }
 
     def _get_doc_generator(self):
@@ -699,10 +727,17 @@ class AuroraKnowledgeTiers:
             "tier": 47,
             "name": "Documentation Generator",
             "category": "advanced",
-            "capabilities": ["api_doc_generation", "readme_creation", "inline_comments",
-                             "tutorial_generation", "changelog_automation", "architecture_docs",
-                             "openapi_specs", "doc_synchronization"],
-            "files": ["aurora_doc_generator.py"]
+            "capabilities": [
+                "api_doc_generation",
+                "readme_creation",
+                "inline_comments",
+                "tutorial_generation",
+                "changelog_automation",
+                "architecture_docs",
+                "openapi_specs",
+                "doc_synchronization",
+            ],
+            "files": ["aurora_doc_generator.py"],
         }
 
     def _get_multi_agent(self):
@@ -711,10 +746,17 @@ class AuroraKnowledgeTiers:
             "tier": 48,
             "name": "Multi-Agent Coordination",
             "category": "advanced",
-            "capabilities": ["agent_spawning", "parallel_execution", "task_distribution",
-                             "result_aggregation", "load_balancing", "agent_communication",
-                             "distributed_intelligence", "orchestration"],
-            "files": ["aurora_multi_agent.py"]
+            "capabilities": [
+                "agent_spawning",
+                "parallel_execution",
+                "task_distribution",
+                "result_aggregation",
+                "load_balancing",
+                "agent_communication",
+                "distributed_intelligence",
+                "orchestration",
+            ],
+            "files": ["aurora_multi_agent.py"],
         }
 
     def _get_ui_generator(self):
@@ -723,9 +765,15 @@ class AuroraKnowledgeTiers:
             "tier": 49,
             "name": "UI/UX Generator",
             "category": "advanced",
-            "capabilities": ["component_generation", "design_system", "responsive_layouts",
-                             "theme_generation", "animation_creation", "accessibility"],
-            "files": ["aurora_ui_generator.py"]
+            "capabilities": [
+                "component_generation",
+                "design_system",
+                "responsive_layouts",
+                "theme_generation",
+                "animation_creation",
+                "accessibility",
+            ],
+            "files": ["aurora_ui_generator.py"],
         }
 
     def _get_git_master(self):
@@ -734,10 +782,17 @@ class AuroraKnowledgeTiers:
             "tier": 50,
             "name": "Git Mastery",
             "category": "advanced",
-            "capabilities": ["smart_branching", "auto_rebase", "conflict_resolution",
-                             "pr_automation", "commit_generation", "branch_strategy",
-                             "history_optimization", "semantic_versioning"],
-            "files": ["aurora_git_master.py"]
+            "capabilities": [
+                "smart_branching",
+                "auto_rebase",
+                "conflict_resolution",
+                "pr_automation",
+                "commit_generation",
+                "branch_strategy",
+                "history_optimization",
+                "semantic_versioning",
+            ],
+            "files": ["aurora_git_master.py"],
         }
 
     def _get_code_quality_enforcer(self):
@@ -746,11 +801,17 @@ class AuroraKnowledgeTiers:
             "tier": 51,
             "name": "Code Quality Enforcer",
             "category": "advanced",
-            "capabilities": ["unused_argument_detection", "unused_variable_detection",
-                             "docstring_enforcement", "naming_convention_check",
-                             "type_hint_validation", "function_length_check",
-                             "complexity_analysis", "duplicate_code_detection"],
-            "files": ["aurora_code_quality_enforcer.py"]
+            "capabilities": [
+                "unused_argument_detection",
+                "unused_variable_detection",
+                "docstring_enforcement",
+                "naming_convention_check",
+                "type_hint_validation",
+                "function_length_check",
+                "complexity_analysis",
+                "duplicate_code_detection",
+            ],
+            "files": ["aurora_code_quality_enforcer.py"],
         }
 
     def get_all_tiers_summary(self):
@@ -865,8 +926,7 @@ class AuroraOrchestrator:
 
         try:
             # Create tmux session and run command
-            subprocess.run(
-                f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
+            subprocess.run(f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
             self.active_ports[server_name] = port
             return True
         except subprocess.CalledProcessError:
@@ -879,8 +939,7 @@ class AuroraOrchestrator:
 
         session = self.servers[server_name]["session"]
         try:
-            subprocess.run(
-                f"tmux kill-session -t {session}", shell=True, check=True)
+            subprocess.run(f"tmux kill-session -t {session}", shell=True, check=True)
             self.active_ports.pop(server_name, None)
             return True
         except subprocess.CalledProcessError:
@@ -897,8 +956,7 @@ class AuroraOrchestrator:
                 f"tmux list-sessions | grep {session}", shell=True, capture_output=True, text=True, check=False
             )
             if result.returncode == 0:
-                port = self.active_ports.get(
-                    server_name, self.servers[server_name]["preferred_port"])
+                port = self.active_ports.get(server_name, self.servers[server_name]["preferred_port"])
                 return {
                     "status": "running",
                     "port": port,
@@ -954,8 +1012,7 @@ class AuroraCoreIntelligence:
 
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
-        print(
-            f"⚡ All 33 tiers active | Autonomous mode: {self.autonomous_mode}")
+        print(f"⚡ All 33 tiers active | Autonomous mode: {self.autonomous_mode}")
 
     def get_conversation_context(self, session_id: str) -> dict:
         """Get or create conversation context for a session"""
@@ -1003,30 +1060,24 @@ class AuroraCoreIntelligence:
         # Check for name/identity questions
         if re.search(r"(do you remember|know my name|who am i|remember me)", msg_lower):
             analysis.update(
-                {"intent": "memory_check", "asks_about_memory": True,
-                    "asks_about_name": True, "confidence": 0.95}
+                {"intent": "memory_check", "asks_about_memory": True, "asks_about_name": True, "confidence": 0.95}
             )
 
         # Check for self-introduction
         if re.search(r"(my name is|i'm |i am |call me)", msg_lower):
-            analysis.update({"intent": "user_introduction",
-                            "introduces_self": True, "confidence": 0.95})
+            analysis.update({"intent": "user_introduction", "introduces_self": True, "confidence": 0.95})
             # Extract name
-            name_match = re.search(
-                r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
+            name_match = re.search(r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
 
         # Check for explanation requests
         if re.search(r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower):
-            analysis.update({"intent": "explanation_request",
-                            "asks_to_explain": True, "confidence": 0.9})
+            analysis.update({"intent": "explanation_request", "asks_to_explain": True, "confidence": 0.9})
 
         # Aurora self-referential detection (more precise)
-        aurora_keywords = re.search(
-            r"(tell me about you|what are you|who are you)", msg_lower)
-        capability_keywords = re.search(
-            r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
+        aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
+        capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
 
         # Complex Aurora analysis requests (architectural, debugging, etc.)
         complex_aurora_analysis = re.search(
@@ -1047,8 +1098,7 @@ class AuroraCoreIntelligence:
         elif aurora_keywords and capability_keywords:
             # Simple questions about Aurora's capabilities
             analysis.update(
-                {"intent": "aurora_self_inquiry", "aurora_specific": True,
-                    "self_referential": True, "confidence": 0.95}
+                {"intent": "aurora_self_inquiry", "aurora_specific": True, "self_referential": True, "confidence": 0.95}
             )
 
         # Self-limitation/critique questions (what Aurora lacks/needs/missing)
@@ -1067,8 +1117,7 @@ class AuroraCoreIntelligence:
         # Enhancement/improvement requests
         if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
             if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                analysis.update({"intent": "enhancement_request",
-                                "enhancement_request": True, "confidence": 0.9})
+                analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
 
         # Technical questions
         if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
@@ -1320,8 +1369,7 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         # Check if this is an architectural analysis request about Aurora herself
         msg_lower = message.lower()
         if analysis["intent"] == "technical_aurora_analysis" or (
-            re.search(
-                r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
+            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
             and re.search(r"aurora", msg_lower)
         ):
             return self._aurora_architectural_analysis(message, context)
@@ -1478,8 +1526,7 @@ manage/guard connections while routing properly to Core intelligence.
                     f"Pick a number or tell me the specific problem - I'll "
                     f"execute the solution immediately."
                 )
-            mentioned = [w for w in msg_lower.split() if w in [
-                "chango", "backend", "api", "server"]][0]
+            mentioned = [w for w in msg_lower.split() if w in ["chango", "backend", "api", "server"]][0]
             return (
                 f"{name_prefix}I see you mentioned {mentioned}. I have "
                 f"complete access to the system. What specifically needs "
@@ -1631,8 +1678,7 @@ manage/guard connections while routing properly to Core intelligence.
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
                 status = "✅" if success else "❌"
-                results.append(
-                    f"{status} {service}: {self.orchestrator.servers[service]['name']}")
+                results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
             return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
 
@@ -1680,8 +1726,7 @@ All systems under Aurora's autonomous control! 🌟"""
             for name, info in status["orchestration"]["servers_status"].items():
                 status_emoji = "🟢" if info["status"] == "running" else "🔴"
                 port = info.get("port", "N/A")
-                server_lines.append(
-                    f"{status_emoji} **{name}**: {info['status']} (port {port})")
+                server_lines.append(f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
             return f"""🌌 **AURORA SYSTEM STATUS**
 

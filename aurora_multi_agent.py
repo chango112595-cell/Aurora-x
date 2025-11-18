@@ -4,16 +4,15 @@
 Aurora's ability to spawn and coordinate specialized AI agents
 """
 
-import asyncio
-import json
-from typing import Dict, List, Any, Optional
+import time
 from dataclasses import dataclass
 from enum import Enum
-import time
+from typing import Any
 
 
 class AgentType(Enum):
     """Types of specialized agents"""
+
     CODE_ANALYZER = "code_analyzer"
     TEST_RUNNER = "test_runner"
     SECURITY_SCANNER = "security_scanner"
@@ -26,11 +25,12 @@ class AgentType(Enum):
 @dataclass
 class Agent:
     """Specialized AI agent"""
+
     agent_id: str
     agent_type: AgentType
     status: str
     task: str
-    result: Optional[Dict] = None
+    result: dict | None = None
     start_time: float = 0
     end_time: float = 0
 
@@ -54,7 +54,7 @@ class AuroraMultiAgent:
         self.name = "Aurora Multi-Agent"
         self.tier = 48
         self.version = "1.0.0"
-        self.agents: Dict[str, Agent] = {}
+        self.agents: dict[str, Agent] = {}
         self.capabilities = [
             "agent_spawning",
             "parallel_execution",
@@ -63,7 +63,7 @@ class AuroraMultiAgent:
             "load_balancing",
             "agent_communication",
             "distributed_intelligence",
-            "orchestration"
+            "orchestration",
         ]
 
         print(f"\n{'='*70}")
@@ -71,24 +71,18 @@ class AuroraMultiAgent:
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
-        print(f"Status: ACTIVE - Multi-agent system ready")
+        print("Status: ACTIVE - Multi-agent system ready")
         print(f"{'='*70}\n")
 
     def spawn_agent(self, agent_type: AgentType, task: str) -> Agent:
         """Spawn a specialized agent"""
         agent_id = f"{agent_type.value}_{int(time.time() * 1000)}"
-        agent = Agent(
-            agent_id=agent_id,
-            agent_type=agent_type,
-            status="spawned",
-            task=task,
-            start_time=time.time()
-        )
+        agent = Agent(agent_id=agent_id, agent_type=agent_type, status="spawned", task=task, start_time=time.time())
         self.agents[agent_id] = agent
         print(f"🤖 Spawned {agent_type.value}: {agent_id}")
         return agent
 
-    def execute_parallel(self, tasks: List[Dict[str, Any]]) -> List[Dict]:
+    def execute_parallel(self, tasks: list[dict[str, Any]]) -> list[dict]:
         """Execute tasks in parallel using multiple agents"""
         print(f"⚡ Executing {len(tasks)} tasks in parallel...")
 
@@ -106,7 +100,7 @@ class AuroraMultiAgent:
         print(f"✅ Completed {len(results)} parallel tasks")
         return results
 
-    def orchestrate_workflow(self, workflow: Dict[str, Any]) -> Dict[str, Any]:
+    def orchestrate_workflow(self, workflow: dict[str, Any]) -> dict[str, Any]:
         """Orchestrate multi-step workflow with agents"""
         print(f"🎯 Orchestrating workflow: {workflow['name']}")
 
@@ -119,19 +113,18 @@ class AuroraMultiAgent:
         print(f"✅ Workflow completed: {len(results)} steps")
         return results
 
-    def _execute_agent_task(self, agent: Agent) -> Dict:
+    def _execute_agent_task(self, agent: Agent) -> dict:
         """Execute agent's task"""
         agent.status = "running"
         # Simulate task execution
         time.sleep(0.1)
-        result = {"status": "success",
-                  "data": f"Result from {agent.agent_type.value}"}
+        result = {"status": "success", "data": f"Result from {agent.agent_type.value}"}
         agent.result = result
         agent.status = "completed"
         agent.end_time = time.time()
         return result
 
-    def get_capabilities_summary(self) -> Dict[str, Any]:
+    def get_capabilities_summary(self) -> dict[str, Any]:
         """Get summary"""
         return {
             "tier": self.tier,
@@ -140,15 +133,15 @@ class AuroraMultiAgent:
             "capabilities": self.capabilities,
             "active_agents": len(self.agents),
             "agent_types": [at.value for at in AgentType],
-            "status": "operational"
+            "status": "operational",
         }
 
 
 def main():
     """Test Tier 48"""
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("🧪 TESTING TIER 48: MULTI-AGENT COORDINATION")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     coordinator = AuroraMultiAgent()
 
@@ -159,16 +152,16 @@ def main():
     print("Test 2: Parallel Execution")
     tasks = [
         {"agent_type": AgentType.TEST_RUNNER, "task": "Run tests"},
-        {"agent_type": AgentType.SECURITY_SCANNER, "task": "Scan security"}
+        {"agent_type": AgentType.SECURITY_SCANNER, "task": "Scan security"},
     ]
     results = coordinator.execute_parallel(tasks)
     print(f"  Results: {len(results)}\n")
 
     summary = coordinator.get_capabilities_summary()
-    print("="*70)
-    print(f"✅ TIER 48 OPERATIONAL")
+    print("=" * 70)
+    print("✅ TIER 48 OPERATIONAL")
     print(f"Active Agents: {summary['active_agents']}")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":

@@ -4,13 +4,14 @@
 Aurora's ability to generate full UI components and designs
 """
 
-from typing import Dict, List, Any
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 
 class Framework(Enum):
     """Supported UI frameworks"""
+
     REACT = "react"
     VUE = "vue"
     ANGULAR = "angular"
@@ -20,11 +21,12 @@ class Framework(Enum):
 @dataclass
 class Component:
     """Generated UI component"""
+
     name: str
     framework: Framework
     code: str
     styles: str
-    props: List[str]
+    props: list[str]
 
 
 class AuroraUIGenerator:
@@ -50,7 +52,7 @@ class AuroraUIGenerator:
             "responsive_layouts",
             "theme_generation",
             "animation_creation",
-            "accessibility"
+            "accessibility",
         ]
 
         print(f"\n{'='*70}")
@@ -58,7 +60,7 @@ class AuroraUIGenerator:
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
-        print(f"Status: ACTIVE - UI generation ready")
+        print("Status: ACTIVE - UI generation ready")
         print(f"{'='*70}\n")
 
     def generate_component(self, description: str, framework: Framework) -> Component:
@@ -70,29 +72,25 @@ class AuroraUIGenerator:
         styles = self._generate_styles(component_name)
 
         component = Component(
-            name=component_name,
-            framework=framework,
-            code=code,
-            styles=styles,
-            props=["value", "onChange"]
+            name=component_name, framework=framework, code=code, styles=styles, props=["value", "onChange"]
         )
 
         print(f"✅ Component generated: {component_name}")
         return component
 
-    def generate_design_system(self, brand_colors: Dict) -> Dict[str, Any]:
+    def generate_design_system(self, brand_colors: dict) -> dict[str, Any]:
         """Generate complete design system"""
-        print(f"🎨 Generating design system...")
+        print("🎨 Generating design system...")
 
         system = {
             "colors": brand_colors,
             "typography": {"heading": "32px", "body": "16px"},
             "spacing": [4, 8, 16, 24, 32],
             "components": ["Button", "Input", "Card"],
-            "tokens": self._generate_tokens(brand_colors)
+            "tokens": self._generate_tokens(brand_colors),
         }
 
-        print(f"✅ Design system generated")
+        print("✅ Design system generated")
         return system
 
     def _generate_code(self, name: str, framework: Framework) -> str:
@@ -119,11 +117,11 @@ export const {name} = ({{ value, onChange }}) => {{
 }}
 """
 
-    def _generate_tokens(self, colors: Dict) -> Dict:
+    def _generate_tokens(self, colors: dict) -> dict:
         """Generate design tokens"""
         return {"primary": colors.get("primary", "#3B82F6")}
 
-    def get_capabilities_summary(self) -> Dict[str, Any]:
+    def get_capabilities_summary(self) -> dict[str, Any]:
         """Get summary"""
         return {
             "tier": self.tier,
@@ -131,15 +129,15 @@ export const {name} = ({{ value, onChange }}) => {{
             "version": self.version,
             "capabilities": self.capabilities,
             "frameworks": [f.value for f in Framework],
-            "status": "operational"
+            "status": "operational",
         }
 
 
 def main():
     """Test Tier 49"""
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("🧪 TESTING TIER 49: UI/UX GENERATOR")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     generator = AuroraUIGenerator()
 
@@ -152,10 +150,10 @@ def main():
     print(f"  Components: {len(system['components'])}\n")
 
     summary = generator.get_capabilities_summary()
-    print("="*70)
-    print(f"✅ TIER 49 OPERATIONAL")
+    print("=" * 70)
+    print("✅ TIER 49 OPERATIONAL")
     print(f"Frameworks: {len(summary['frameworks'])}")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":

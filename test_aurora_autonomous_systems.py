@@ -46,8 +46,7 @@ class AuroraIntegrationTester:
             health = monitor.monitor_system_health()
             assert "cpu_percent" in health, "Should track CPU"
             assert "memory_percent" in health, "Should track memory"
-            assert health["status"] in ["OPTIMAL",
-                                        "WARNING", "CRITICAL"], "Should have status"
+            assert health["status"] in ["OPTIMAL", "WARNING", "CRITICAL"], "Should have status"
             print(
                 f"    ✅ Health: {health['status']}, CPU: {health['cpu_percent']:.1f}%, Memory: {health['memory_percent']:.1f}%"
             )
@@ -56,8 +55,7 @@ class AuroraIntegrationTester:
             print("\n  Test 1.3: Performance metrics...")
             metrics = monitor.get_performance_metrics()
             assert metrics["aurora_capabilities"]["total"] == 55, "Should track 55 capabilities"
-            print(
-                f"    ✅ Metrics collected: {len(metrics['system_health'])} data points")
+            print(f"    ✅ Metrics collected: {len(metrics['system_health'])} data points")
 
             # Test 4: Dashboard generation
             print("\n  Test 1.4: Dashboard generation...")
@@ -73,8 +71,7 @@ class AuroraIntegrationTester:
 
         except Exception as e:
             print(f"\n❌ PHASE 1 FAILED: {e}")
-            self.results.append(
-                {"phase": "Phase 1", "status": "FAIL", "error": str(e)})
+            self.results.append({"phase": "Phase 1", "status": "FAIL", "error": str(e)})
             self.failed += 1
             return False
 
@@ -91,8 +88,7 @@ class AuroraIntegrationTester:
             print("\n  Test 2.1: Codebase pattern analysis...")
             detector = AuroraTierDetector()
             patterns = detector.analyze_codebase()
-            assert isinstance(
-                patterns, dict), "Should return pattern dictionary"
+            assert isinstance(patterns, dict), "Should return pattern dictionary"
             assert len(patterns) > 0, "Should detect patterns"
             print(f"    ✅ Detected {len(patterns)} pattern types")
 
@@ -109,8 +105,7 @@ class AuroraIntegrationTester:
                 assert "tier_name" in spec, "Should have tier name"
                 assert "tier_number" in spec, "Should have tier number"
                 assert "skills" in spec, "Should define skills"
-                print(
-                    f"    ✅ Generated spec for Tier {spec['tier_number']}: {spec['tier_name']}")
+                print(f"    ✅ Generated spec for Tier {spec['tier_number']}: {spec['tier_name']}")
 
             # Test 4: Code generation
             print("\n  Test 2.4: Tier code generation...")
@@ -119,8 +114,7 @@ class AuroraIntegrationTester:
                 spec = detector.generate_tier_spec(gaps[0])
                 code = builder.build_tier_code(spec)
                 assert "def _get_tier_" in code, "Should generate method"
-                assert spec["tier_name"].lower(
-                ) in code.lower(), "Should include tier name"
+                assert spec["tier_name"].lower() in code.lower(), "Should include tier name"
                 print(f"    ✅ Generated {len(code)} characters of Python code")
 
             self.results.append({"phase": "Phase 2", "status": "PASS"})
@@ -130,8 +124,7 @@ class AuroraIntegrationTester:
 
         except Exception as e:
             print(f"\n❌ PHASE 2 FAILED: {e}")
-            self.results.append(
-                {"phase": "Phase 2", "status": "FAIL", "error": str(e)})
+            self.results.append({"phase": "Phase 2", "status": "FAIL", "error": str(e)})
             self.failed += 1
             return False
 
@@ -147,12 +140,10 @@ class AuroraIntegrationTester:
             # Test 1: Problem analysis
             print("\n  Test 3.1: Problem analysis...")
             orchestrator = AuroraTierOrchestrator()
-            analysis = orchestrator.analyze_problem(
-                "Fix pylint errors autonomously")
+            analysis = orchestrator.analyze_problem("Fix pylint errors autonomously")
             assert "required_tiers" in analysis, "Should identify required tiers"
             assert "complexity" in analysis, "Should determine complexity"
-            print(
-                f"    ✅ Analysis: {analysis['complexity']} complexity, {analysis['tier_count']} tiers needed")
+            print(f"    ✅ Analysis: {analysis['complexity']} complexity, {analysis['tier_count']} tiers needed")
 
             # Test 2: Tier selection
             print("\n  Test 3.2: Optimal tier selection...")
@@ -176,10 +167,8 @@ class AuroraIntegrationTester:
             # Test 5: Learning
             print("\n  Test 3.5: Learning from execution...")
             orchestrator.learn_from_execution(result)
-            assert len(
-                orchestrator.success_patterns) > 0, "Should learn patterns"
-            print(
-                f"    ✅ Learned {len(orchestrator.success_patterns)} patterns")
+            assert len(orchestrator.success_patterns) > 0, "Should learn patterns"
+            print(f"    ✅ Learned {len(orchestrator.success_patterns)} patterns")
 
             self.results.append({"phase": "Phase 3", "status": "PASS"})
             self.passed += 1
@@ -188,8 +177,7 @@ class AuroraIntegrationTester:
 
         except Exception as e:
             print(f"\n❌ PHASE 3 FAILED: {e}")
-            self.results.append(
-                {"phase": "Phase 3", "status": "FAIL", "error": str(e)})
+            self.results.append({"phase": "Phase 3", "status": "FAIL", "error": str(e)})
             self.failed += 1
             return False
 
@@ -206,17 +194,14 @@ class AuroraIntegrationTester:
             print("\n  Test 4.1: Issue predictor...")
             predictor = AuroraPredictor()
             predictor.load_historical_data()
-            assert len(
-                predictor.historical_issues) > 0, "Should load historical data"
-            print(
-                f"    ✅ Loaded {len(predictor.historical_issues)} historical patterns")
+            assert len(predictor.historical_issues) > 0, "Should load historical data"
+            print(f"    ✅ Loaded {len(predictor.historical_issues)} historical patterns")
 
             # Test 2: Pattern analysis
             print("\n  Test 4.2: Pattern analysis...")
             patterns = predictor.analyze_patterns()
             assert "most_common_issues" in patterns, "Should identify common issues"
-            print(
-                f"    ✅ Analyzed {len(patterns['most_common_issues'])} issue types")
+            print(f"    ✅ Analyzed {len(patterns['most_common_issues'])} issue types")
 
             # Test 3: Issue prediction
             print("\n  Test 4.3: Issue prediction...")
@@ -230,8 +215,7 @@ class AuroraIntegrationTester:
             profile = optimizer.profile_system()
             assert "operations" in profile, "Should profile operations"
             assert "total_profile_time" in profile, "Should track profile time"
-            print(
-                f"    ✅ Profiled {len(profile['operations'])} operations in {profile['total_profile_time']:.4f}s")
+            print(f"    ✅ Profiled {len(profile['operations'])} operations in {profile['total_profile_time']:.4f}s")
 
             # Test 5: Bottleneck detection
             print("\n  Test 4.5: Bottleneck detection...")
@@ -245,8 +229,7 @@ class AuroraIntegrationTester:
 
         except Exception as e:
             print(f"\n❌ PHASE 4 FAILED: {e}")
-            self.results.append(
-                {"phase": "Phase 4", "status": "FAIL", "error": str(e)})
+            self.results.append({"phase": "Phase 4", "status": "FAIL", "error": str(e)})
             self.failed += 1
             return False
 
@@ -262,15 +245,13 @@ class AuroraIntegrationTester:
             # Test 1: Confidence assessment
             print("\n  Test 5.1: Confidence assessment...")
             autonomy = AuroraAutonomyEngine()
-            confidence = autonomy.assess_confidence(
-                "Fix pylint errors", {"tier_count": 3, "historical_success": 0.9})
+            confidence = autonomy.assess_confidence("Fix pylint errors", {"tier_count": 3, "historical_success": 0.9})
             assert 0.0 <= confidence <= 1.0, "Confidence should be between 0 and 1"
             print(f"    ✅ Confidence: {confidence*100:.0f}%")
 
             # Test 2: Autonomous decision
             print("\n  Test 5.2: Autonomous decision making...")
-            decision = autonomy.make_autonomous_decision(
-                "Test task", confidence)
+            decision = autonomy.make_autonomous_decision("Test task", confidence)
             assert "decision" in decision, "Should make decision"
             assert "reasoning" in decision, "Should provide reasoning"
             print(f"    ✅ Decision: {decision['decision']}")
@@ -279,8 +260,7 @@ class AuroraIntegrationTester:
             print("\n  Test 5.3: Approval gate removal...")
             removed = autonomy.remove_approval_gate("code_quality_fixes")
             assert removed, "Should remove safe gate"
-            print(
-                f"    ✅ Removed gate, total: {autonomy.approval_gates_removed}")
+            print(f"    ✅ Removed gate, total: {autonomy.approval_gates_removed}")
 
             # Test 4: Autonomy level
             print("\n  Test 5.4: Autonomy level calculation...")
@@ -302,8 +282,7 @@ class AuroraIntegrationTester:
 
         except Exception as e:
             print(f"\n❌ PHASE 5 FAILED: {e}")
-            self.results.append(
-                {"phase": "Phase 5", "status": "FAIL", "error": str(e)})
+            self.results.append({"phase": "Phase 5", "status": "FAIL", "error": str(e)})
             self.failed += 1
             return False
 
@@ -322,25 +301,21 @@ class AuroraIntegrationTester:
             context = context_engine.analyze_codebase_context()
             assert "project_name" in context, "Should identify project"
             assert context["capabilities"] == 55, "Should track capabilities"
-            print(
-                f"    ✅ Project: {context['project_name']}, {context['total_files']} Python files")
+            print(f"    ✅ Project: {context['project_name']}, {context['total_files']} Python files")
 
             # Test 2: Knowledge graph
             print("\n  Test 6.2: Knowledge graph building...")
             graph = context_engine.build_knowledge_graph(context)
             assert "nodes" in graph, "Should have nodes"
             assert "connections" in graph, "Should have connections"
-            print(
-                f"    ✅ Graph: {len(graph['nodes'])} node categories, {len(graph['connections'])} connections")
+            print(f"    ✅ Graph: {len(graph['nodes'])} node categories, {len(graph['connections'])} connections")
 
             # Test 3: Intent prediction
             print("\n  Test 6.3: Intent prediction...")
-            prediction = context_engine.predict_intent(
-                "Optimize the system performance")
+            prediction = context_engine.predict_intent("Optimize the system performance")
             assert "primary_intent" in prediction, "Should predict intent"
             assert prediction["confidence"] > 0, "Should have confidence"
-            print(
-                f"    ✅ Intent: {prediction['primary_intent']}, Confidence: {prediction['confidence']*100:.0f}%")
+            print(f"    ✅ Intent: {prediction['primary_intent']}, Confidence: {prediction['confidence']*100:.0f}%")
 
             # Test 4: Strategic planning
             print("\n  Test 6.4: Quarterly plan generation...")
@@ -348,16 +323,14 @@ class AuroraIntegrationTester:
             plan = strategist.generate_quarterly_plan()
             assert "months" in plan, "Should have monthly breakdown"
             assert len(plan["months"]) == 3, "Should have 3 months"
-            print(
-                f"    ✅ Plan: {plan['period']}, {len(plan['months'])} months")
+            print(f"    ✅ Plan: {plan['period']}, {len(plan['months'])} months")
 
             # Test 5: Resource optimization
             print("\n  Test 6.5: Resource allocation...")
             allocation = strategist.optimize_resource_allocation(plan)
             assert "compute_resources" in allocation, "Should allocate compute"
             assert allocation["efficiency_score"] > 0, "Should have efficiency score"
-            print(
-                f"    ✅ Efficiency: {allocation['efficiency_score']*100:.0f}%")
+            print(f"    ✅ Efficiency: {allocation['efficiency_score']*100:.0f}%")
 
             self.results.append({"phase": "Phase 6", "status": "PASS"})
             self.passed += 1
@@ -366,8 +339,7 @@ class AuroraIntegrationTester:
 
         except Exception as e:
             print(f"\n❌ PHASE 6 FAILED: {e}")
-            self.results.append(
-                {"phase": "Phase 6", "status": "FAIL", "error": str(e)})
+            self.results.append({"phase": "Phase 6", "status": "FAIL", "error": str(e)})
             self.failed += 1
             return False
 
@@ -395,8 +367,7 @@ class AuroraIntegrationTester:
         print(f"Total Phases Tested: {len(self.results)}")
         print(f"Passed: {self.passed} ✅")
         print(f"Failed: {self.failed} ❌")
-        print(
-            f"Success Rate: {(self.passed / len(self.results) * 100) if self.results else 0:.0f}%")
+        print(f"Success Rate: {(self.passed / len(self.results) * 100) if self.results else 0:.0f}%")
         print("=" * 60)
 
         if self.failed == 0:

@@ -4,14 +4,14 @@
 Aurora's advanced Git operations and workflow automation
 """
 
-import subprocess
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 
 class BranchStrategy(Enum):
     """Git branching strategies"""
+
     GITFLOW = "gitflow"
     TRUNK_BASED = "trunk_based"
     FEATURE_BRANCH = "feature_branch"
@@ -20,10 +20,11 @@ class BranchStrategy(Enum):
 @dataclass
 class GitOperation:
     """Git operation result"""
+
     operation: str
     success: bool
     message: str
-    details: Dict[str, Any]
+    details: dict[str, Any]
 
 
 class AuroraGitMaster:
@@ -52,7 +53,7 @@ class AuroraGitMaster:
             "commit_generation",
             "branch_strategy",
             "history_optimization",
-            "semantic_versioning"
+            "semantic_versioning",
         ]
 
         print(f"\n{'='*70}")
@@ -60,7 +61,7 @@ class AuroraGitMaster:
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
-        print(f"Status: ACTIVE - Git mastery enabled")
+        print("Status: ACTIVE - Git mastery enabled")
         print(f"{'='*70}\n")
 
     def create_feature_branch(self, feature_name: str) -> GitOperation:
@@ -73,13 +74,13 @@ class AuroraGitMaster:
             operation="create_branch",
             success=True,
             message=f"Created branch: {branch_name}",
-            details={"branch": branch_name, "base": "main"}
+            details={"branch": branch_name, "base": "main"},
         )
 
         print(f"✅ Branch created: {branch_name}")
         return operation
 
-    def generate_commit_message(self, changes: List[str]) -> str:
+    def generate_commit_message(self, changes: list[str]) -> str:
         """Generate semantic commit message"""
         print(f"📝 Generating commit message for {len(changes)} changes...")
 
@@ -103,10 +104,10 @@ class AuroraGitMaster:
             operation="rebase",
             success=True,
             message=f"Rebased {branch} onto {base}",
-            details={"branch": branch, "base": base, "conflicts": 0}
+            details={"branch": branch, "base": base, "conflicts": 0},
         )
 
-        print(f"✅ Rebase completed successfully")
+        print("✅ Rebase completed successfully")
         return operation
 
     def resolve_conflicts(self, file_path: str) -> GitOperation:
@@ -120,13 +121,13 @@ class AuroraGitMaster:
             operation="resolve_conflicts",
             success=True,
             message=f"Resolved conflicts in {file_path}",
-            details=resolution
+            details=resolution,
         )
 
-        print(f"✅ Conflicts resolved")
+        print("✅ Conflicts resolved")
         return operation
 
-    def create_pull_request(self, branch: str, title: str, description: str) -> Dict[str, Any]:
+    def create_pull_request(self, branch: str, title: str, description: str) -> dict[str, Any]:
         """Create pull request with automation"""
         print(f"📤 Creating PR: {title}")
 
@@ -137,7 +138,7 @@ class AuroraGitMaster:
             "base": "main",
             "labels": self._suggest_labels(title, description),
             "reviewers": self._suggest_reviewers(branch),
-            "checks": ["tests", "lint", "security"]
+            "checks": ["tests", "lint", "security"],
         }
 
         print(f"✅ PR created: {title}")
@@ -151,13 +152,13 @@ class AuroraGitMaster:
             operation="optimize_history",
             success=True,
             message="History optimized",
-            details={"squashed_commits": 3, "cleaned_branches": 2}
+            details={"squashed_commits": 3, "cleaned_branches": 2},
         )
 
-        print(f"✅ History optimized")
+        print("✅ History optimized")
         return operation
 
-    def _determine_change_type(self, changes: List[str]) -> str:
+    def _determine_change_type(self, changes: list[str]) -> str:
         """Determine commit type"""
         if any("test" in c.lower() for c in changes):
             return "test"
@@ -165,17 +166,17 @@ class AuroraGitMaster:
             return "fix"
         return "feat"
 
-    def _determine_scope(self, changes: List[str]) -> str:
+    def _determine_scope(self, changes: list[str]) -> str:
         """Determine commit scope"""
         if any("tier" in c.lower() for c in changes):
             return "core"
         return "general"
 
-    def _analyze_and_resolve_conflicts(self, __file_path: str) -> Dict:
+    def _analyze_and_resolve_conflicts(self, __file_path: str) -> dict:
         """Analyze and resolve conflicts"""
         return {"strategy": "keep_both", "resolved_lines": 5}
 
-    def _suggest_labels(self, title: str, __description: str) -> List[str]:
+    def _suggest_labels(self, title: str, __description: str) -> list[str]:
         """Suggest PR labels"""
         labels = []
         if "feature" in title.lower():
@@ -184,11 +185,11 @@ class AuroraGitMaster:
             labels.append("bug")
         return labels
 
-    def _suggest_reviewers(self, __branch: str) -> List[str]:
+    def _suggest_reviewers(self, __branch: str) -> list[str]:
         """Suggest reviewers based on code ownership"""
         return ["reviewer1", "reviewer2"]
 
-    def get_capabilities_summary(self) -> Dict[str, Any]:
+    def get_capabilities_summary(self) -> dict[str, Any]:
         """Get summary"""
         return {
             "tier": self.tier,
@@ -196,15 +197,15 @@ class AuroraGitMaster:
             "version": self.version,
             "capabilities": self.capabilities,
             "strategies": [bs.value for bs in BranchStrategy],
-            "status": "operational"
+            "status": "operational",
         }
 
 
 def main():
     """Test Tier 50"""
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("🧪 TESTING TIER 50: GIT MASTERY")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     git_master = AuroraGitMaster()
 
@@ -214,18 +215,17 @@ def main():
 
     print("Test 2: Generate Commit")
     message = git_master.generate_commit_message(["Add Tier 50"])
-    print(f"  Type: feat\n")
+    print("  Type: feat\n")
 
     print("Test 3: Create PR")
-    pr = git_master.create_pull_request(
-        "feature/tier-50", "Add Git Mastery", "Description")
+    pr = git_master.create_pull_request("feature/tier-50", "Add Git Mastery", "Description")
     print(f"  Labels: {pr['labels']}\n")
 
     summary = git_master.get_capabilities_summary()
-    print("="*70)
-    print(f"✅ TIER 50 OPERATIONAL")
+    print("=" * 70)
+    print("✅ TIER 50 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":
