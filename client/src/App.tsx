@@ -2,14 +2,14 @@ import { Route, Switch } from "wouter";
 import AuroraFuturisticLayout from "./components/AuroraFuturisticLayout";
 import Dashboard from "./pages/dashboard";
 import ChatPage from "./pages/chat";
-import Tasks from "./pages/tasks";
-import Tiers from "./pages/tiers";
-import Intelligence from "./pages/intelligence";
-import Evolution from "./pages/evolution";
-import Autonomous from "./pages/autonomous";
-import Monitoring from "./pages/monitoring";
-import Database from "./pages/database";
-import Settings from "./pages/settings";
+import TasksPage from "./pages/tasks";
+import TiersPage from "./pages/tiers";
+import IntelligencePage from "./pages/intelligence";
+import EvolutionPage from "./pages/evolution";
+import AutonomousPage from "./pages/autonomous";
+import MonitoringPage from "./pages/monitoring";
+import DatabasePage from "./pages/database";
+import SettingsPage from "./pages/settings";
 
 function App() {
   return (
@@ -17,14 +17,14 @@ function App() {
       <Switch>
         <Route path="/" component={Dashboard} />
         <Route path="/chat" component={ChatPage} />
-        <Route path="/tasks" component={Tasks} />
-        <Route path="/tiers" component={Tiers} />
-        <Route path="/intelligence" component={Intelligence} />
-        <Route path="/evolution" component={Evolution} />
-        <Route path="/autonomous" component={Autonomous} />
-        <Route path="/monitoring" component={Monitoring} />
-        <Route path="/database" component={Database} />
-        <Route path="/settings" component={Settings} />
+        <Route path="/tasks" component={TasksPage} />
+        <Route path="/tiers" component={TiersPage} />
+        <Route path="/intelligence" component={IntelligencePage} />
+        <Route path="/evolution" component={EvolutionPage} />
+        <Route path="/autonomous" component={AutonomousPage} />
+        <Route path="/monitoring" component={MonitoringPage} />
+        <Route path="/database" component={DatabasePage} />
+        <Route path="/settings" component={SettingsPage} />
         <Route>
           <div className="flex items-center justify-center h-screen">
             <div className="text-center">

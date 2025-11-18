@@ -1,0 +1,16 @@
+{
+  "current_metrics": {
+    "foundation_tasks": 13,
+    "knowledge_tiers": 41,
+    "total_capabilities": 54,
+    "files_monitored": 24597,
+    "cpu_percent": 12.3,
+    "memory_percent": 80.6,
+    "disk_percent": 18.6,
+    "uptime_seconds": 0,
+    "health_status": "OPTIMAL",
+    "last_check": "2025-11-17T21:13:50.411420"
+  },
+  "health_log": [],
+  "last_updated": "2025-11-17T21:13:50.416805"
+}

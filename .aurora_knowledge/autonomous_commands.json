@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "created": "2025-11-17T20:24:47.024200",
+  "commands": {
+    "monitor": {
+      "command": "python aurora_self_monitor.py",
+      "description": "Launch 24/7 self-monitoring system",
+      "phase": 1
+    },
+    "expand": {
+      "command": "python aurora_tier_expansion.py",
+      "description": "Detect and build new capability tiers",
+      "phase": 2
+    },
+    "orchestrate": {
+      "command": "python aurora_tier_orchestrator.py",
+      "description": "Coordinate multiple tiers for complex tasks",
+      "phase": 3
+    },
+    "optimize": {
+      "command": "python aurora_performance_optimizer.py",
+      "description": "Predict issues and optimize performance",
+      "phase": 4
+    },
+    "autonomous": {
+      "command": "python aurora_full_autonomy.py",
+      "description": "Run in full autonomous mode (100% autonomy)",
+      "phase": 5
+    },
+    "strategize": {
+      "command": "python aurora_strategist.py",
+      "description": "Generate strategic plans and roadmaps",
+      "phase": 6
+    },
+    "test": {
+      "command": "python test_aurora_autonomous_systems.py",
+      "description": "Run integration tests for all phases",
+      "phase": "all"
+    }
+  }
+}

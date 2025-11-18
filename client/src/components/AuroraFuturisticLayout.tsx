@@ -25,7 +25,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
 
     // Intelligence Systems
     { path: '/tasks', label: '13 Foundation Tasks', icon: <Layers className="w-5 h-5" />, category: 'intelligence' },
-    { path: '/tiers', label: '34 Knowledge Tiers', icon: <Network className="w-5 h-5" />, category: 'intelligence' },
+    { path: '/tiers', label: '41 Knowledge Tiers', icon: <Network className="w-5 h-5" />, category: 'intelligence' },
     { path: '/evolution', label: 'Evolution Monitor', icon: <TrendingUp className="w-5 h-5" />, category: 'intelligence' },
 
     // Advanced Tools
@@ -66,7 +66,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                     <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                       Aurora
                     </h1>
-                    <p className="text-xs text-purple-400">47 Complete Systems</p>
+                    <p className="text-xs text-purple-400">54 Complete Systems</p>
                   </div>
                 </div>
               )}
@@ -94,8 +94,8 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                     return (
                       <Link key={item.path} href={item.path}>
                         <a className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${isActive
-                            ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20'
-                            : 'text-purple-300 hover:bg-purple-500/10 hover:text-white'
+                          ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20'
+                          : 'text-purple-300 hover:bg-purple-500/10 hover:text-white'
                           }`}>
                           <div className={isActive ? 'text-purple-400' : 'text-purple-500'}>
                             {item.icon}

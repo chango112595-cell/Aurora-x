@@ -37,7 +37,7 @@ export default function AuroraFuturisticDashboard() {
   const knowledgeTiers = [
     { category: "Languages", tiers: "1-6", count: 55, icon: Code2, color: "cyan" },
     { category: "Technical", tiers: "7-27", count: 21, icon: Cpu, color: "purple" },
-    { category: "Autonomous", tiers: "28-34", count: 7, icon: Brain, color: "pink" }
+    { category: "Autonomous", tiers: "28-41", count: 14, icon: Brain, color: "pink" }
   ];
 
   const systemServices = [
@@ -72,7 +72,7 @@ export default function AuroraFuturisticDashboard() {
               <div className="text-sm text-cyan-300/60">Quantum Coherence</div>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-4 gap-4 mt-6">
             <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
@@ -81,23 +81,23 @@ export default function AuroraFuturisticDashboard() {
               </div>
               <div className="text-3xl font-bold text-cyan-400">13</div>
             </div>
-            
+
             <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/30 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Network className="h-5 w-5 text-purple-400" />
                 <span className="text-purple-300 text-sm">Knowledge Tiers</span>
               </div>
-              <div className="text-3xl font-bold text-purple-400">34</div>
+              <div className="text-3xl font-bold text-purple-400">41</div>
             </div>
-            
+
             <div className="bg-gradient-to-br from-pink-500/10 to-pink-500/5 border border-pink-500/30 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Zap className="h-5 w-5 text-pink-400" />
                 <span className="text-pink-300 text-sm">Total Systems</span>
               </div>
-              <div className="text-3xl font-bold text-pink-400">47</div>
+              <div className="text-3xl font-bold text-pink-400">54</div>
             </div>
-            
+
             <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Activity className="h-5 w-5 text-emerald-400" />
@@ -154,7 +154,7 @@ export default function AuroraFuturisticDashboard() {
           <CardHeader className="border-b border-purple-500/20">
             <CardTitle className="flex items-center gap-2 text-purple-300">
               <Network className="h-6 w-6" />
-              Knowledge Tier Architecture (1-34)
+              Knowledge Tier Architecture (1-41)
               <Badge className="ml-auto bg-purple-500/20 text-purple-300 border-purple-500/50">
                 Domain Layer
               </Badge>
@@ -184,7 +184,7 @@ export default function AuroraFuturisticDashboard() {
                   </div>
                 );
               })}
-              
+
               {/* Tier Breakdown */}
               <div className="bg-gradient-to-br from-purple-500/5 to-pink-500/5 border border-purple-500/20 rounded-xl p-4 mt-4">
                 <div className="text-purple-300 font-semibold mb-3 flex items-center gap-2">
@@ -199,6 +199,13 @@ export default function AuroraFuturisticDashboard() {
                   <div className="text-purple-300/80">• Tier 32: Systems Design</div>
                   <div className="text-purple-300/80">• Tier 33: Network Mastery</div>
                   <div className="text-purple-300/80 col-span-2">• Tier 34: Grandmaster Autonomous</div>
+                  <div className="text-purple-300/80 col-span-2">• Tier 35: Pylint Grandmaster</div>
+                  <div className="text-cyan-300/80 col-span-2">• Tier 36: Self-Monitor (24/7 System Monitoring)</div>
+                  <div className="text-cyan-300/80 col-span-2">• Tier 37: Tier Expansion (Auto-Build Capabilities)</div>
+                  <div className="text-cyan-300/80 col-span-2">• Tier 38: Tier Orchestrator (Multi-Tier Coordination)</div>
+                  <div className="text-cyan-300/80 col-span-2">• Tier 39: Performance Optimizer (Predictive Analysis)</div>
+                  <div className="text-cyan-300/80 col-span-2">• Tier 40: Full Autonomy (100% Autonomous Operation)</div>
+                  <div className="text-cyan-300/80 col-span-2">• Tier 41: Strategist (Strategic Planning & Context)</div>
                 </div>
               </div>
             </div>
@@ -255,13 +262,13 @@ export default function AuroraFuturisticDashboard() {
               <div className="text-cyan-300 text-sm mb-1">Task Processing</div>
               <div className="text-2xl font-bold text-cyan-400">Real-time</div>
             </div>
-            
+
             <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/30 rounded-xl p-4">
               <Globe className="h-8 w-8 text-purple-400 mb-2" />
               <div className="text-purple-300 text-sm mb-1">Learning Mode</div>
               <div className="text-2xl font-bold text-purple-400">Continuous</div>
             </div>
-            
+
             <div className="bg-gradient-to-br from-pink-500/10 to-pink-500/5 border border-pink-500/30 rounded-xl p-4">
               <Sparkles className="h-8 w-8 text-pink-400 mb-2" />
               <div className="text-pink-300 text-sm mb-1">Evolution</div>
@@ -276,7 +283,7 @@ export default function AuroraFuturisticDashboard() {
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-6">
             <div className="text-cyan-300/80">
-              <span className="text-cyan-400 font-semibold">Architecture:</span> 13 Tasks + 34 Tiers = 47 Systems
+              <span className="text-cyan-400 font-semibold">Architecture:</span> 13 Tasks + 41 Tiers = 54 Systems
             </div>
             <div className="text-purple-300/80">
               <span className="text-purple-400 font-semibold">Version:</span> Quantum Neural 2.0

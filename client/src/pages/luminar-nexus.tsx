@@ -56,11 +56,11 @@ export default function LuminarNexus() {
     queryKey: ['/api/luminar-nexus/v2/logs', selectedServiceForLogs],
     queryFn: async () => {
       if (!selectedServiceForLogs) return { logs: [] };
-      
+
       try {
         const encodedServiceName = encodeURIComponent(selectedServiceForLogs);
         const response = await fetch(`/api/luminar-nexus/v2/logs/${encodedServiceName}`);
-        
+
         if (!response.ok) {
           toast({
             title: "Failed to fetch logs",
@@ -69,7 +69,7 @@ export default function LuminarNexus() {
           });
           return { logs: [] };
         }
-        
+
         return response.json();
       } catch (error) {
         toast({
@@ -197,10 +197,10 @@ export default function LuminarNexus() {
   const totalServices = healthData?.services ? Object.keys(healthData.services).length : 5;
   const aiLearningActive = healthData?.ai_learning_active || false;
   const autonomousHealingActive = healthData?.autonomous_healing_active || false;
-  
+
   // Calculate health score from quantum coherence and service health
   const healthScore = Math.round((quantumCoherence * 50) + ((healthyServices / totalServices) * 50));
-  
+
   const uptimeData = [
     { time: '10m', uptime: 98 }, { time: '20m', uptime: 97 }, { time: '30m', uptime: 99 },
     { time: '40m', uptime: 100 }, { time: '50m', uptime: 98 }, { time: '60m', uptime: 99 }
@@ -464,7 +464,7 @@ export default function LuminarNexus() {
                 const statusColor = isHealthy ? 'green' : 'red';
                 const hasAnomalies = service.anomalies && service.anomalies.length > 0;
                 const hasPredictions = service.predictions && Object.keys(service.predictions).length > 0;
-                
+
                 // Helper to format response time
                 const formatResponseTime = (time: number | null) => {
                   if (time === null || time === undefined) return 'N/A';
@@ -478,7 +478,7 @@ export default function LuminarNexus() {
                   if (trend === null || trend === undefined) return null;
                   const isPositive = trend > 0;
                   const isNegative = trend < 0;
-                  
+
                   return (
                     <div className="flex items-center gap-1">
                       {isPositive && <ArrowUp className="h-3 w-3 text-red-500" data-testid={`icon-trend-up-${label}`} />}
@@ -495,7 +495,7 @@ export default function LuminarNexus() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Card 
+                    <Card
                       className={`border-2 ${isHealthy ? 'border-green-500/30' : 'border-red-500/30'} bg-gradient-to-br from-background to-${statusColor}-500/5`}
                       data-testid={`card-service-${serviceName}`}
                     >
@@ -505,7 +505,7 @@ export default function LuminarNexus() {
                             <Server className={`h-5 w-5 text-${statusColor}-500`} data-testid={`icon-service-${serviceName}`} />
                             <CardTitle className="text-lg capitalize">{serviceName}</CardTitle>
                           </div>
-                          <Badge 
+                          <Badge
                             className={`bg-${statusColor}-500/20 text-${statusColor}-300 border-${statusColor}-500/30`}
                             data-testid={`badge-status-${serviceName}`}
                           >
@@ -517,7 +517,7 @@ export default function LuminarNexus() {
                           </Badge>
                         </div>
                       </CardHeader>
-                      
+
                       <CardContent className="space-y-4">
                         {/* Port and Response Time */}
                         <div className="grid grid-cols-2 gap-4">
@@ -547,8 +547,8 @@ export default function LuminarNexus() {
                               {hasPredictions && renderTrend(service.predictions?.cpu_usage_trend, `cpu-${serviceName}`)}
                             </div>
                             <div className="text-xl font-bold" data-testid={`text-cpu-${serviceName}`}>
-                              {service.cpu_usage !== null && service.cpu_usage !== undefined 
-                                ? `${(service.cpu_usage * 100).toFixed(2)}%` 
+                              {service.cpu_usage !== null && service.cpu_usage !== undefined
+                                ? `${(service.cpu_usage * 100).toFixed(2)}%`
                                 : 'N/A'}
                             </div>
                           </div>
@@ -559,8 +559,8 @@ export default function LuminarNexus() {
                               {hasPredictions && renderTrend(service.predictions?.memory_usage_trend, `memory-${serviceName}`)}
                             </div>
                             <div className="text-xl font-bold" data-testid={`text-memory-${serviceName}`}>
-                              {service.memory_usage !== null && service.memory_usage !== undefined 
-                                ? `${(service.memory_usage * 100).toFixed(2)}%` 
+                              {service.memory_usage !== null && service.memory_usage !== undefined
+                                ? `${(service.memory_usage * 100).toFixed(2)}%`
                                 : 'N/A'}
                             </div>
                           </div>
@@ -772,13 +772,13 @@ export default function LuminarNexus() {
         {/* Learning Tab - Aurora's Corpus with Advanced Filtering */}
         {activeTab === 'learning' && (
           <div className="space-y-6">
-            {/* Aurora's 47 Complete Systems Display */}
+            {/* Aurora's 54 Complete Systems Display */}
             <Card className="border-cyan-500/30 bg-gradient-to-br from-cyan-950/20 to-purple-950/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-6 w-6 text-cyan-400" />
-                  Aurora's 47 Complete Systems
-                  <Badge className="ml-auto bg-cyan-500/20 text-cyan-300">2,500+ Skills Active (13 Tasks + 34 Tiers)</Badge>
+                  Aurora's 54 Complete Systems
+                  <Badge className="ml-auto bg-cyan-500/20 text-cyan-300">2,500+ Skills Active (13 Tasks + 41 Tiers)</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -1130,9 +1130,9 @@ export default function LuminarNexus() {
                 )}
               </CardContent>
             </Card>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
 }
