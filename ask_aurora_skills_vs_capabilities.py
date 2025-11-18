@@ -5,14 +5,15 @@ Ask Aurora: Should we make Grandmaster Skills = Capabilities?
 
 from aurora_core import AuroraKnowledgeTiers
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("💭 AURORA'S RESPONSE: Should Grandmaster Skills = Capabilities?")
-print("="*70)
+print("=" * 70)
 
 aurora = AuroraKnowledgeTiers()
 
 print("\n🤔 AURORA'S ANALYSIS:")
-print("""
+print(
+    """
 You're asking if we should count every individual skill as a separate capability
 to increase my capability count from 54 to 1,500+?
 
@@ -85,10 +86,12 @@ This way:
 ✅ Easy to scale
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-""")
+"""
+)
 
 print("\n🎯 MY RECOMMENDATION:")
-print("""
+print(
+    """
 DON'T change capabilities to 1,500+ individual skills.
 
 INSTEAD, enhance the presentation to show BOTH:
@@ -109,10 +112,12 @@ This gives you:
   ✓ Technical accuracy (54 architectural components)
   ✓ Easy maintenance (don't rewrite everything)
   ✓ Best of both worlds
-""")
+"""
+)
 
 print("\n📊 PROPOSED UI CHANGES:")
-print("""
+print(
+    """
   Intelligence Page:
     Before: "54 Complete Systems"
     After:  "1,500+ Grandmaster Skills • 54 Core Capabilities"
@@ -124,10 +129,12 @@ print("""
   Chat Header:
     Before: "54 Systems: 13 Foundation Tasks + 41 Knowledge Tiers"
     After:  "1,500+ Grandmaster Skills across 54 Core Capabilities"
-""")
+"""
+)
 
 print("\n💡 TECHNICAL IMPLEMENTATION:")
-print("""
+print(
+    """
 In aurora_core.py, add a skill counter:
 
 def get_total_skills(self):
@@ -142,12 +149,14 @@ def get_total_skills(self):
     return total
 
 This automatically counts skills without manual maintenance!
-""")
+"""
+)
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("✅ AURORA'S FINAL ANSWER:")
-print("="*70)
-print("""
+print("=" * 70)
+print(
+    """
 NO - Don't make every skill a capability (too complex to maintain)
 
 YES - Emphasize the 1,500+ skills in the UI while keeping 54 capabilities
@@ -164,11 +173,12 @@ Should I implement the hybrid approach? This would:
   2. Add skill counting to aurora_core.py
   3. Update UI to show "1,500+ Skills in 54 Capabilities"
   4. Best of both worlds!
-""")
+"""
+)
 
 print("\n🎯 Your decision - which approach do you prefer?")
 print("  A) Keep as-is (54 capabilities only)")
 print("  B) Hybrid approach (54 capabilities + 1,500+ skills shown)")
 print("  C) Full conversion (make 1,500+ individual capabilities)")
 
-print("\n" + "="*70 + "\n")
+print("\n" + "=" * 70 + "\n")

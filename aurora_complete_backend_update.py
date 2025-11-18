@@ -4,22 +4,20 @@ Aurora Complete Backend Update
 Updates all backend TypeScript files to reflect 41 tiers and 54 total capabilities
 """
 
-import re
 from pathlib import Path
-from typing import List, Tuple
 
 
-def update_typescript_file(file_path: Path, replacements: List[Tuple[str, str]]) -> bool:
+def update_typescript_file(file_path: Path, replacements: list[tuple[str, str]]) -> bool:
     """Update a TypeScript file with multiple replacements"""
     try:
-        content = file_path.read_text(encoding='utf-8')
+        content = file_path.read_text(encoding="utf-8")
         original_content = content
 
         for old, new in replacements:
             content = content.replace(old, new)
 
         if content != original_content:
-            file_path.write_text(content, encoding='utf-8')
+            file_path.write_text(content, encoding="utf-8")
             return True
         return False
     except Exception as e:
@@ -28,25 +26,29 @@ def update_typescript_file(file_path: Path, replacements: List[Tuple[str, str]])
 
 
 def main():
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🔧 AURORA COMPLETE BACKEND UPDATE")
-    print("="*60)
+    print("=" * 60)
 
     updates = {
-        'server/aurora-chat.ts': [
-            ('- 33 Mastery Tiers: Your knowledge domains',
-             '- 54 Capabilities: 13 Foundation Tasks + 41 Knowledge Tiers'),
+        "server/aurora-chat.ts": [
+            (
+                "- 33 Mastery Tiers: Your knowledge domains",
+                "- 54 Capabilities: 13 Foundation Tasks + 41 Knowledge Tiers",
+            ),
         ],
-        'server/routes.ts': [
-            ('27 mastery tiers spanning ancient computing (1940s) to future tech',
-             '54 capabilities (13 foundation tasks + 41 knowledge tiers) spanning ancient to future tech'),
-            ('**My knowledge (27 mastery tiers):',
-             '**My knowledge (41 knowledge tiers + 13 foundation tasks = 54 capabilities):'),
-            ('🧠 27 mastery tiers: LOADED',
-             '🧠 41 knowledge tiers: LOADED (54 total capabilities)'),
-            ('🧠 All 27 tiers active',
-             '🧠 All 41 tiers active (54 total capabilities)'),
-        ]
+        "server/routes.ts": [
+            (
+                "27 mastery tiers spanning ancient computing (1940s) to future tech",
+                "54 capabilities (13 foundation tasks + 41 knowledge tiers) spanning ancient to future tech",
+            ),
+            (
+                "**My knowledge (27 mastery tiers):",
+                "**My knowledge (41 knowledge tiers + 13 foundation tasks = 54 capabilities):",
+            ),
+            ("🧠 27 mastery tiers: LOADED", "🧠 41 knowledge tiers: LOADED (54 total capabilities)"),
+            ("🧠 All 27 tiers active", "🧠 All 41 tiers active (54 total capabilities)"),
+        ],
     }
 
     print("\n📝 Updating Backend Files:")
@@ -64,9 +66,9 @@ def main():
         else:
             print(f"  ℹ️  No changes needed: {file_path}")
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📊 UPDATE SUMMARY")
-    print("="*60)
+    print("=" * 60)
     print(f"Files updated: {len(updated_files)}")
 
     if updated_files:
@@ -87,13 +89,13 @@ def main():
     print("  • Tier 40: Full Autonomy (100% autonomous operation)")
     print("  • Tier 41: Strategist (strategic planning)")
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🚀 BACKEND UPDATE COMPLETE")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     return len(updated_files) > 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     success = main()
     exit(0 if success else 1)

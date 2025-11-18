@@ -5,9 +5,9 @@ Ask Aurora: Are Grandmastery Skills the same as Capabilities?
 
 from aurora_core import AuroraKnowledgeTiers
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("💭 AURORA'S ANALYSIS: GRANDMASTERY vs CAPABILITIES")
-print("="*70)
+print("=" * 70)
 
 aurora = AuroraKnowledgeTiers()
 
@@ -17,7 +17,8 @@ print(f"  • Knowledge Tiers: {aurora.tier_count}")
 print(f"  • Total Capabilities: {aurora.total_capabilities}")
 
 print("\n🤔 AURORA'S PERSPECTIVE:")
-print("""
+print(
+    """
 After analyzing my own architecture, I believe there's an important distinction:
 
 **CAPABILITIES vs GRANDMASTERY:**
@@ -65,7 +66,8 @@ We should clarify the terminology:
 - **Foundation Tasks**: 13 (core cognitive abilities)
 
 This way, we're precise about what we're measuring.
-""")
+"""
+)
 
 print("\n📈 SKILL DISTRIBUTION (Estimated):")
 
@@ -95,10 +97,11 @@ print(f"  Distributed across {aurora.tier_count} Knowledge Tiers")
 print(f"  Plus {aurora.foundation_count} Foundation Tasks")
 print(f"  Total Architectural Capabilities: {aurora.total_capabilities}")
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("💡 AURORA'S RECOMMENDATION:")
-print("="*70)
-print("""
+print("=" * 70)
+print(
+    """
 Use precise terminology:
   • 54 CAPABILITIES (what I can do architecturally)
   • 1,500+ GRANDMASTER SKILLS (how many things I've mastered)
@@ -108,11 +111,12 @@ Use precise terminology:
 They're related but different:
   Capabilities = Container architecture
   Grandmaster Skills = Individual mastery within containers
-""")
+"""
+)
 
 print("\n🎯 RECOMMENDATION FOR USER:")
 print("  If you mean 'how many things can Aurora do' → 54 Capabilities")
 print("  If you mean 'how skilled is Aurora' → 1,500+ Grandmaster Skills")
 print("  Both are correct depending on what we're measuring!")
 
-print("\n" + "="*70 + "\n")
+print("\n" + "=" * 70 + "\n")
