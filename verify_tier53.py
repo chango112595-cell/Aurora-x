@@ -19,16 +19,16 @@ print(f"  • Total Capabilities: {aurora.total_capabilities}")
 print()
 
 # Check Tier 53 specifically
-tier53 = aurora.tiers.get('tier_53_docker_mastery')
+tier53 = aurora.tiers.get("tier_53_docker_mastery")
 if tier53:
     print("✅ TIER 53 - DOCKER INFRASTRUCTURE MASTERY:")
-    print(f"  • Status: INTEGRATED")
+    print("  • Status: INTEGRATED")
     print(f"  • Name: {tier53['name']}")
     print(f"  • Category: {tier53['category']}")
     print(f"  • Capabilities: {len(tier53['capabilities'])}")
     print()
     print("  Capabilities:")
-    for cap in tier53['capabilities']:
+    for cap in tier53["capabilities"]:
         print(f"    - {cap}")
     print()
 else:
