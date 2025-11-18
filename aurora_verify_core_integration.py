@@ -32,8 +32,7 @@ def aurora_verify_core_usage():
         print("\n[Aurora] Architecture Summary:")
         print("  • Task 1-13: Foundational cognitive abilities")
         print("  • Tier 1-34: Specialized knowledge domains")
-        print(
-            "  • Total: {foundations_count + tiers_count} capability systems")
+        print("  • Total: {foundations_count + tiers_count} capability systems")
 
         # Test accessing specific tasks
         print("\n[Aurora] Testing Task Access:")
@@ -53,18 +52,15 @@ def aurora_verify_core_usage():
         if tier1:
             print("  • Tier 1: Ancient Languages")
             if isinstance(tier1, list):
-                print(
-                    "    Languages: {len(tier1)} items ({', '.join(tier1[:3])}...)")
+                print("    Languages: {len(tier1)} items ({', '.join(tier1[:3])}...)")
             elif isinstance(tier1, dict):
-                print(
-                    "    Categories: {len(tier1.get('categories', {}))} language families")
+                print("    Categories: {len(tier1.get('categories', {}))} language families")
 
         tier34 = aurora.tiers.get("tier_34_grandmaster_autonomous")
         if tier34:
             print("  • Tier 34: Grandmaster Autonomous")
             if isinstance(tier34, dict):
-                print(
-                    "    Capability: {tier34.get('capability', 'Decisive execution')}")
+                print("    Capability: {tier34.get('capability', 'Decisive execution')}")
             else:
                 print("    Type: Advanced autonomous decision-making")
 

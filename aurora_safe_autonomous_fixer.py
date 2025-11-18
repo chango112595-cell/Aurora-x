@@ -5,8 +5,8 @@ Fixes only the syntax errors I created, with validation
 """
 
 import ast
-import subprocess
 import re
+import subprocess
 from pathlib import Path
 
 
@@ -21,28 +21,22 @@ class AuroraSafeFixer:
 
         # ONLY target root-level project files (not libraries!)
         self.target_files = [
-            f for f in self.root.glob("*.py")
-            if f.is_file()
-            and not f.name.startswith('.')
-            and '.venv' not in str(f)
-            and 'node_modules' not in str(f)
+            f
+            for f in self.root.glob("*.py")
+            if f.is_file() and not f.name.startswith(".") and ".venv" not in str(f) and "node_modules" not in str(f)
         ]
 
         print("🤖 Aurora Safe Fixer - Fixing My Mistakes")
         print("=" * 80)
         print("📋 I broke these files with my regex docstring removal")
         print("📋 Now I'll fix them properly using AST and validation")
-        print(
-            f"📋 Targeting {len(self.target_files)} root-level Python files\n")
+        print(f"📋 Targeting {len(self.target_files)} root-level Python files\n")
 
     def validate_syntax(self, filepath):
         """Check if file has valid Python syntax"""
         try:
             result = subprocess.run(
-                ['python', '-m', 'py_compile', str(filepath, check=False)],
-                capture_output=True,
-                text=True,
-                timeout=5
+                ["python", "-m", "py_compile", str(filepath, check=False)], capture_output=True, text=True, timeout=5
             )
             return result.returncode == 0
         except Exception:
@@ -51,7 +45,7 @@ class AuroraSafeFixer:
     def get_syntax_error_line(self, filepath):
         """Get the line number of syntax error if any"""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 content = f.read()
             ast.parse(content)
             return None
@@ -63,7 +57,7 @@ class AuroraSafeFixer:
     def fix_empty_function_bodies(self, filepath):
         """Fix empty function/class bodies by adding 'pass'"""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 lines = f.readlines()
 
             modified = False
@@ -75,7 +69,7 @@ class AuroraSafeFixer:
                 new_lines.append(line)
 
                 # Check if this is a function or class definition
-                if re.match(r'^(\s*)(async\s+)?def\s+\w+|^(\s*)class\s+\w+', line):
+                if re.match(r"^(\s*)(async\s+)?def\s+\w+|^(\s*)class\s+\w+", line):
                     indent = len(line) - len(line.lstrip())
 
                     # Check if next line exists and what it is
@@ -84,21 +78,23 @@ class AuroraSafeFixer:
                         next_indent = len(next_line) - len(next_line.lstrip())
 
                         # If next line is not indented more (empty body) or is another def/class
-                        if (next_indent <= indent or
-                            next_line.strip() == '' or
-                                re.match(r'^\s*(def|class|async def)\s+', next_line)):
+                        if (
+                            next_indent <= indent
+                            or next_line.strip() == ""
+                            or re.match(r"^\s*(def|class|async def)\s+", next_line)
+                        ):
                             # Add 'pass' with proper indentation
-                            new_lines.append(' ' * (indent + 4) + 'pass\n')
+                            new_lines.append(" " * (indent + 4) + "pass\n")
                             modified = True
                     else:
                         # Last line in file, add pass
-                        new_lines.append(' ' * (indent + 4) + 'pass\n')
+                        new_lines.append(" " * (indent + 4) + "pass\n")
                         modified = True
 
                 i += 1
 
             if modified:
-                with open(filepath, 'w', encoding='utf-8') as f:
+                with open(filepath, "w", encoding="utf-8") as f:
                     f.writelines(new_lines)
                 return True
             return False
@@ -110,7 +106,7 @@ class AuroraSafeFixer:
     def fix_broken_indentation(self, filepath):
         """Fix indentation issues from docstring removal"""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 lines = f.readlines()
 
             modified = False
@@ -122,9 +118,9 @@ class AuroraSafeFixer:
 
                 # Look for unexpected indent patterns
                 # If line is just whitespace after a def/class, skip it
-                if line.strip() == '':
+                if line.strip() == "":
                     # Check if previous line was a function/class definition
-                    if i > 0 and re.match(r'^\s*(def|class|async def)\s+', new_lines[-1]):
+                    if i > 0 and re.match(r"^\s*(def|class|async def)\s+", new_lines[-1]):
                         # Skip empty line
                         modified = True
                         i += 1
@@ -134,7 +130,7 @@ class AuroraSafeFixer:
                 i += 1
 
             if modified:
-                with open(filepath, 'w', encoding='utf-8') as f:
+                with open(filepath, "w", encoding="utf-8") as f:
                     f.writelines(new_lines)
                 return True
             return False
@@ -152,7 +148,7 @@ class AuroraSafeFixer:
             print(f"🔧 Fixing {filename}...")
 
             # 2. Backup original content
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding="utf-8") as f:
                 original_content = f.read()
 
             # 3. Try fix #1: Empty function bodies
@@ -164,7 +160,7 @@ class AuroraSafeFixer:
                     return True
 
             # 4. Restore and try fix #2: Indentation
-            with open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.write(original_content)
 
             if self.fix_broken_indentation(filepath):
@@ -175,7 +171,7 @@ class AuroraSafeFixer:
                     return True
 
             # 5. Try both fixes together
-            with open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.write(original_content)
 
             self.fix_broken_indentation(filepath)
@@ -188,12 +184,11 @@ class AuroraSafeFixer:
                 return True
 
             # 6. If still broken, restore original and report
-            with open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.write(original_content)
 
             error_line = self.get_syntax_error_line(filepath)
-            print(
-                f"   ❌ Could not auto-fix {filename} (error at line {error_line})")
+            print(f"   ❌ Could not auto-fix {filename} (error at line {error_line})")
             self.files_failed.append((filename, error_line))
             return False
 
@@ -227,12 +222,10 @@ class AuroraSafeFixer:
                 print(f"   • {filename}")
 
         if self.files_failed:
-            print(
-                f"\n❌ Files that need manual review: {len(self.files_failed)}")
+            print(f"\n❌ Files that need manual review: {len(self.files_failed)}")
             for filename, line in self.files_failed:
                 print(f"   • {filename} (error at line {line})")
-            print(
-                "\n💡 These files need manual inspection - my automated fix couldn't handle them")
+            print("\n💡 These files need manual inspection - my automated fix couldn't handle them")
 
         print(f"\n🎯 Total fixes applied: {self.fixes_applied}")
 
@@ -254,21 +247,21 @@ class AuroraSafeFixer:
         print("\n📊 Running pylint to check current score...\n")
         try:
             result = subprocess.run(
-                ['python', '-m', 'pylint', '*.py',
-                    '--disable=C,R', '--max-line-length=120'],
+                ["python", "-m", "pylint", "*.py", "--disable=C,R", "--max-line-length=120"],
                 capture_output=True,
                 text=True,
-                timeout=60
-            , check=False)
+                timeout=60,
+                check=False,
+            )
 
             # Extract score from output
-            for line in result.stdout.split('\n'):
-                if 'rated at' in line:
+            for line in result.stdout.split("\n"):
+                if "rated at" in line:
                     print(f"   {line.strip()}")
         except Exception as e:
             print(f"   Could not run pylint: {e}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     fixer = AuroraSafeFixer()
     fixer.run()

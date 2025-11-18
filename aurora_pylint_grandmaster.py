@@ -17,17 +17,17 @@ Tier: GRANDMASTER
 Status: ACTIVE LEARNING
 """
 
-import subprocess
 import json
 import re
-from typing import Dict, List, Optional
-from datetime import datetime
+import subprocess
 from dataclasses import dataclass, field
+from datetime import datetime
 
 
 @dataclass
 class PylintSkill:
     """Represents a specific pylint fix skill"""
+
     code: str
     name: str
     severity: str
@@ -37,9 +37,9 @@ class PylintSkill:
     modern_fix: str
     future_fix: str
     scifi_fix: str
-    learning_points: List[str] = field(default_factory=list)
-    fix_examples: Dict[str, str] = field(default_factory=dict)
-    common_causes: List[str] = field(default_factory=list)
+    learning_points: list[str] = field(default_factory=list)
+    fix_examples: dict[str, str] = field(default_factory=dict)
+    common_causes: list[str] = field(default_factory=list)
     confidence: str = "MEDIUM"
 
 
@@ -52,17 +52,11 @@ class AuroraPylintGrandmaster:
     VERSION = "1.0.0-GRANDMASTER"
 
     def __init__(self):
-        self.skills: Dict[str, PylintSkill] = {}
-        self.fixes_applied: List[Dict] = []
-        self.patterns_learned: List[str] = []
+        self.skills: dict[str, PylintSkill] = {}
+        self.fixes_applied: list[dict] = []
+        self.patterns_learned: list[str] = []
         self.success_rate = 0.0
-        self.era_preferences = {
-            "ancient": 0,
-            "classical": 0,
-            "modern": 0,
-            "future": 0,
-            "scifi": 0
-        }
+        self.era_preferences = {"ancient": 0, "classical": 0, "modern": 0, "future": 0, "scifi": 0}
         self._initialize_core_skills()
 
     def _initialize_core_skills(self):
@@ -83,9 +77,9 @@ class AuroraPylintGrandmaster:
                 "Check for missing colons after if/for/while/def/class",
                 "Verify all brackets match: (), [], {}, '', \"\"",
                 "Ensure consistent indentation (4 spaces or 1 tab)",
-                "Look for invalid escape sequences"
+                "Look for invalid escape sequences",
             ],
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
         # ERRORS (E-series) - Critical Fixes
@@ -104,14 +98,14 @@ class AuroraPylintGrandmaster:
                 "Colons required after if/for/while/def/class/try/except",
                 "All brackets must match",
                 "String quotes must close",
-                "Line continuation with \\ or inside brackets"
+                "Line continuation with \\ or inside brackets",
             ],
             fix_examples={
                 "missing_colon": "if condition:  # Add colon",
                 "bad_indent": "    # Use 4 spaces consistently",
-                "unclosed_bracket": "]  # Close all brackets"
+                "unclosed_bracket": "]  # Close all brackets",
             },
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
         self.skills["E0602"] = PylintSkill(
@@ -129,22 +123,22 @@ class AuroraPylintGrandmaster:
                 "Check for typos in variable names (case-sensitive)",
                 "Verify variable is in correct scope",
                 "Exception handlers need 'as': except Exception as e:",
-                "Check if variable should be imported"
+                "Check if variable should be imported",
             ],
             common_causes=[
                 "Typo in variable name",
                 "Missing import statement",
                 "Variable in wrong scope (function/class/global)",
                 "Exception handler missing 'as e'",
-                "Variable was deleted or renamed"
+                "Variable was deleted or renamed",
             ],
             fix_examples={
                 "add_import": "from module import variable_name",
                 "fix_typo": "variable_name  # Correct spelling",
                 "add_definition": "variable_name = default_value",
-                "exception": "except Exception as e:  # Add 'as e'"
+                "exception": "except Exception as e:  # Add 'as e'",
             },
-            confidence="MEDIUM"
+            confidence="MEDIUM",
         )
 
         self.skills["E0401"] = PylintSkill(
@@ -162,15 +156,15 @@ class AuroraPylintGrandmaster:
                 "Verify import path is correct",
                 "Some imports are optional (can disable warning)",
                 "Check PYTHONPATH environment variable",
-                "For local modules, check __init__.py exists"
+                "For local modules, check __init__.py exists",
             ],
             fix_examples={
                 "install": "pip install module_name",
                 "fix_path": "from correct.path import module",
                 "optional": "try:\\n    import module\\nexcept ImportError:\\n    module = None",
-                "disable": "# pylint: disable=import-error  # Optional dependency"
+                "disable": "# pylint: disable=import-error  # Optional dependency",
             },
-            confidence="MEDIUM"
+            confidence="MEDIUM",
         )
 
         # WARNINGS (W-series)
@@ -188,14 +182,14 @@ class AuroraPylintGrandmaster:
                 "Remove unused imports to keep code clean",
                 "Some imports are for side effects (keep those)",
                 "Type checking imports can use TYPE_CHECKING",
-                "Import order: stdlib, 3rd-party, local"
+                "Import order: stdlib, 3rd-party, local",
             ],
             fix_examples={
                 "remove": "# Delete: import unused_module",
                 "type_checking": "if TYPE_CHECKING:\\n    import TypeModule",
-                "side_effect": "import module  # pylint: disable=unused-import  # Side effect"
+                "side_effect": "import module  # pylint: disable=unused-import  # Side effect",
             },
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
         self.skills["W0612"] = PylintSkill(
@@ -212,14 +206,14 @@ class AuroraPylintGrandmaster:
                 "Prefix with _ if intentionally unused: _var",
                 "Remove if truly not needed",
                 "Use _ for loop variables: for _ in range(10)",
-                "Unpack with _: _, value = tuple_result"
+                "Unpack with _: _, value = tuple_result",
             ],
             fix_examples={
                 "prefix": "_unused_var = func()",
                 "loop": "for _ in range(10):",
-                "unpack": "_, result = get_tuple()"
+                "unpack": "_, result = get_tuple()",
             },
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
         self.skills["W0621"] = PylintSkill(
@@ -236,14 +230,14 @@ class AuroraPylintGrandmaster:
                 "Variable shadows outer scope variable",
                 "Rename inner variable to avoid confusion",
                 "Common in nested functions and loops",
-                "OK in test files (can disable for tests)"
+                "OK in test files (can disable for tests)",
             ],
             fix_examples={
                 "rename": "inner_name = ...  # Different from outer name",
                 "disable": "# pylint: disable=redefined-outer-name",
-                "refactor": "def helper(param):  # Extract to function"
+                "refactor": "def helper(param):  # Extract to function",
             },
-            confidence="MEDIUM"
+            confidence="MEDIUM",
         )
 
         self.skills["W1510"] = PylintSkill(
@@ -260,13 +254,13 @@ class AuroraPylintGrandmaster:
                 "Add check=False if command failures are expected",
                 "Add check=True if failures should raise exception",
                 "Important for robust error handling",
-                "Default behavior is check=False (no error on failure)"
+                "Default behavior is check=False (no error on failure)",
             ],
             fix_examples={
                 "expected_failure": "subprocess.run([...], check=False)",
-                "require_success": "subprocess.run([...], check=True)"
+                "require_success": "subprocess.run([...], check=True)",
             },
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
         # REFACTORING (R-series)
@@ -284,13 +278,13 @@ class AuroraPylintGrandmaster:
                 "Remove else after return/raise/continue",
                 "Dedent the else block code",
                 "Makes code flatter and easier to read",
-                "Part of guard clause pattern"
+                "Part of guard clause pattern",
             ],
             fix_examples={
                 "before": "if x:\\n    return True\\nelse:\\n    return False",
-                "after": "if x:\\n    return True\\nreturn False"
+                "after": "if x:\\n    return True\\nreturn False",
             },
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
         self.skills["R0913"] = PylintSkill(
@@ -307,14 +301,14 @@ class AuroraPylintGrandmaster:
                 "Limit to 5-7 parameters max",
                 "Group related params into dataclass/dict",
                 "Use **kwargs for optional parameters",
-                "Consider builder pattern for complex objects"
+                "Consider builder pattern for complex objects",
             ],
             fix_examples={
                 "dataclass": "@dataclass\\nclass Config:\\n    param1: str\\n    param2: int",
                 "kwargs": "def func(required, **kwargs):",
-                "dict": "def func(config: dict):"
+                "dict": "def func(config: dict):",
             },
-            confidence="MEDIUM"
+            confidence="MEDIUM",
         )
 
         # CONVENTIONS (C-series)
@@ -333,14 +327,14 @@ class AuroraPylintGrandmaster:
                 "Classes: PascalCase",
                 "Constants: UPPER_CASE_WITH_UNDERSCORES",
                 "Short names OK for loops: i, j, k, x, y, z",
-                "Private: _leading_underscore"
+                "Private: _leading_underscore",
             ],
             fix_examples={
                 "function": "def calculate_total():  # snake_case",
                 "class": "class DataProcessor:  # PascalCase",
-                "constant": "MAX_RETRIES = 3  # UPPER_CASE"
+                "constant": "MAX_RETRIES = 3  # UPPER_CASE",
             },
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
         self.skills["C0114"] = PylintSkill(
@@ -356,14 +350,14 @@ class AuroraPylintGrandmaster:
             learning_points=[
                 "Add docstring at top of file after shebang",
                 "Describe module purpose and contents",
-                "Use triple quotes: \"\"\"docstring\"\"\"",
-                "Can include author, date, examples"
+                'Use triple quotes: """docstring"""',
+                "Can include author, date, examples",
             ],
             fix_examples={
                 "basic": '"""\\nModule for data processing utilities.\\n"""',
-                "detailed": '"""\\nData Processing Module\\n\\nProvides utilities for...\\n"""'
+                "detailed": '"""\\nData Processing Module\\n\\nProvides utilities for...\\n"""',
             },
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
         self.skills["C0116"] = PylintSkill(
@@ -380,13 +374,13 @@ class AuroraPylintGrandmaster:
                 "Add docstring right after def line",
                 "Describe what function does",
                 "Include parameters and return value",
-                "Use consistent style (Google/NumPy/Sphinx)"
+                "Use consistent style (Google/NumPy/Sphinx)",
             ],
             fix_examples={
                 "basic": '    """Calculate total from items."""',
-                "detailed": '    """\\n    Calculate total.\\n    \\n    Args:\\n        items: List of values\\n    Returns:\\n        Sum of items\\n    """'
+                "detailed": '    """\\n    Calculate total.\\n    \\n    Args:\\n        items: List of values\\n    Returns:\\n        Sum of items\\n    """',
             },
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
         self.skills["C0301"] = PylintSkill(
@@ -403,32 +397,27 @@ class AuroraPylintGrandmaster:
                 "Limit to 79-120 characters per line",
                 "Break after commas in function calls",
                 "Use parentheses for implicit continuation",
-                "Black formatter handles this automatically"
+                "Black formatter handles this automatically",
             ],
             fix_examples={
                 "function_call": "result = function(\\n    arg1,\\n    arg2,\\n    arg3\\n)",
-                "string": "message = (\\n    'Long string part 1 '\\n    'part 2'\\n)"
+                "string": "message = (\\n    'Long string part 1 '\\n    'part 2'\\n)",
             },
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
-    def get_all_pylint_messages(self) -> List[Dict]:
+    def get_all_pylint_messages(self) -> list[dict]:
         """Query pylint for all available message types"""
         try:
-            result = subprocess.run(
-                ["pylint", "--list-msgs"],
-                capture_output=True,
-                text=True,
-                check=False
-            )
+            result = subprocess.run(["pylint", "--list-msgs"], capture_output=True, text=True, check=False)
 
             # Parse pylint message list
             messages = []
             current_msg = {}
 
-            for line in result.stdout.split('\n'):
+            for line in result.stdout.split("\n"):
                 # Look for message code patterns like :E0001:
-                match = re.search(r':([CERWF]\d{4}):', line)
+                match = re.search(r":([CERWF]\d{4}):", line)
                 if match:
                     if current_msg:
                         messages.append(current_msg)
@@ -445,14 +434,11 @@ class AuroraPylintGrandmaster:
             print(f"⚠️  Could not query pylint: {e}")
             return []
 
-    def analyze_file(self, filepath: str) -> Dict:
+    def analyze_file(self, filepath: str) -> dict:
         """Analyze a file for pylint issues"""
         try:
             result = subprocess.run(
-                ["pylint", "--output-format=json", filepath],
-                capture_output=True,
-                text=True,
-                check=False
+                ["pylint", "--output-format=json", filepath], capture_output=True, text=True, check=False
             )
 
             issues = json.loads(result.stdout) if result.stdout else []
@@ -461,18 +447,13 @@ class AuroraPylintGrandmaster:
                 "file": filepath,
                 "issues": issues,
                 "total": len(issues),
-                "by_category": self._categorize_issues(issues)
+                "by_category": self._categorize_issues(issues),
             }
 
         except Exception as e:
-            return {
-                "file": filepath,
-                "error": str(e),
-                "issues": [],
-                "total": 0
-            }
+            return {"file": filepath, "error": str(e), "issues": [], "total": 0}
 
-    def _categorize_issues(self, issues: List[Dict]) -> Dict:
+    def _categorize_issues(self, issues: list[dict]) -> dict:
         """Categorize issues by type"""
         categories = {"F": 0, "E": 0, "W": 0, "R": 0, "C": 0}
 
@@ -485,7 +466,7 @@ class AuroraPylintGrandmaster:
 
         return categories
 
-    def suggest_fix(self, error_code: str, context: Dict) -> Optional[Dict]:
+    def suggest_fix(self, error_code: str, context: dict) -> dict | None:
         """Suggest a fix for a specific error"""
         skill = self.skills.get(error_code)
 
@@ -500,7 +481,7 @@ class AuroraPylintGrandmaster:
             "classical": skill.classical_fix,
             "modern": skill.modern_fix,
             "future": skill.future_fix,
-            "scifi": skill.scifi_fix
+            "scifi": skill.scifi_fix,
         }.get(era, skill.modern_fix)
 
         return {
@@ -511,10 +492,10 @@ class AuroraPylintGrandmaster:
             "fix_method": fix_method,
             "learning_points": skill.learning_points,
             "examples": skill.fix_examples,
-            "confidence": skill.confidence
+            "confidence": skill.confidence,
         }
 
-    def _determine_era(self, context: Dict) -> str:
+    def _determine_era(self, context: dict) -> str:
         """Determine which programming era/style to use for fixes"""
         # Look at file characteristics to determine era
         filepath = context.get("file", "")
@@ -532,12 +513,9 @@ class AuroraPylintGrandmaster:
 
     def record_fix(self, error_code: str, success: bool, era: str):
         """Record a fix attempt for learning"""
-        self.fixes_applied.append({
-            "timestamp": datetime.now().isoformat(),
-            "error_code": error_code,
-            "success": success,
-            "era": era
-        })
+        self.fixes_applied.append(
+            {"timestamp": datetime.now().isoformat(), "error_code": error_code, "success": success, "era": era}
+        )
 
         if success:
             self.era_preferences[era] += 1
@@ -550,7 +528,7 @@ class AuroraPylintGrandmaster:
             successful = sum(1 for fix in self.fixes_applied if fix["success"])
             self.success_rate = (successful / len(self.fixes_applied)) * 100
 
-    def get_mastery_report(self) -> Dict:
+    def get_mastery_report(self) -> dict:
         """Generate mastery report"""
         return {
             "version": self.VERSION,
@@ -564,8 +542,8 @@ class AuroraPylintGrandmaster:
                 "E_ERROR": sum(1 for s in self.skills.values() if s.category == "ERROR"),
                 "W_WARNING": sum(1 for s in self.skills.values() if s.category == "WARNING"),
                 "R_REFACTORING": sum(1 for s in self.skills.values() if s.category == "REFACTORING"),
-                "C_CONVENTION": sum(1 for s in self.skills.values() if s.category == "CONVENTION")
-            }
+                "C_CONVENTION": sum(1 for s in self.skills.values() if s.category == "CONVENTION"),
+            },
         }
 
     def save_knowledge(self, filepath: str = "aurora_pylint_knowledge.json"):
@@ -584,19 +562,19 @@ class AuroraPylintGrandmaster:
                         "classical": skill.classical_fix,
                         "modern": skill.modern_fix,
                         "future": skill.future_fix,
-                        "scifi": skill.scifi_fix
+                        "scifi": skill.scifi_fix,
                     },
                     "learning_points": skill.learning_points,
                     "examples": skill.fix_examples,
-                    "confidence": skill.confidence
+                    "confidence": skill.confidence,
                 }
                 for code, skill in self.skills.items()
             },
             "mastery_report": self.get_mastery_report(),
-            "fix_history": self.fixes_applied[-100:]  # Last 100 fixes
+            "fix_history": self.fixes_applied[-100:],  # Last 100 fixes
         }
 
-        with open(filepath, 'w', encoding='utf-8') as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             json.dump(knowledge, f, indent=2)
 
         return filepath
