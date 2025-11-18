@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-11-17T13:04:24.011282",
-  "files_processed": 2007,
+  "timestamp": "2025-11-18T14:58:04.344422",
+  "files_processed": 2033,
   "fixes_applied": 0,
   "fixes_by_type": {},
   "remaining_issues": 0,
@@ -37,7 +37,22 @@
       "remaining": 0
     },
     {
+      "file": "ask_aurora_grandmastery.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "ask_aurora_skills_vs_capabilities.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
       "file": "aurora-master.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_100_percent_check.py",
       "fixes": 0,
       "remaining": 0
     },
@@ -57,12 +72,22 @@
       "remaining": 0
     },
     {
+      "file": "aurora_automatic_system_update.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
       "file": "aurora_autonomous_agent.py",
       "fixes": 0,
       "remaining": 0
     },
     {
       "file": "aurora_autonomous_analyzer.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_autonomous_integration.py",
       "fixes": 0,
       "remaining": 0
     },
@@ -92,6 +117,11 @@
       "remaining": 0
     },
     {
+      "file": "aurora_complete_backend_update.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
       "file": "aurora_complete_debug.py",
       "fixes": 0,
       "remaining": 0
@@ -108,6 +138,11 @@
     },
     {
       "file": "aurora_complete_system_update.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_complete_verification.py",
       "fixes": 0,
       "remaining": 0
     },
@@ -143,6 +178,11 @@
     },
     {
       "file": "aurora_diagnose_chat.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_doc_generator.py",
       "fixes": 0,
       "remaining": 0
     },
@@ -222,12 +262,22 @@
       "remaining": 0
     },
     {
+      "file": "aurora_full_autonomy.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
       "file": "aurora_full_system_debug.py",
       "fixes": 0,
       "remaining": 0
     },
     {
       "file": "aurora_full_ui_redesign.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_git_master.py",
       "fixes": 0,
       "remaining": 0
     },
@@ -277,6 +327,16 @@
       "remaining": 0
     },
     {
+      "file": "aurora_live_integration.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_multi_agent.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
       "file": "aurora_open_browser.py",
       "fixes": 0,
       "remaining": 0
@@ -287,12 +347,27 @@
       "remaining": 0
     },
     {
+      "file": "aurora_performance_optimizer.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
       "file": "aurora_port_diagnostic.py",
       "fixes": 0,
       "remaining": 0
     },
     {
+      "file": "aurora_pylint_analysis.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
       "file": "aurora_pylint_grandmaster.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_pylint_prevention.py",
       "fixes": 0,
       "remaining": 0
     },
@@ -317,12 +392,22 @@
       "remaining": 0
     },
     {
+      "file": "aurora_security_auditor.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
       "file": "aurora_self_debug_chat.py",
       "fixes": 0,
       "remaining": 0
     },
     {
       "file": "aurora_self_fix_monitor.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_self_monitor.py",
       "fixes": 0,
       "remaining": 0
     },
@@ -347,12 +432,42 @@
       "remaining": 0
     },
     {
+      "file": "aurora_strategist.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_system_status.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
       "file": "aurora_system_update.py",
       "fixes": 0,
       "remaining": 0
     },
     {
       "file": "aurora_system_update_v2.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_test_generator.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_tier_expansion.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_tier_orchestrator.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_ui_generator.py",
       "fixes": 0,
       "remaining": 0
     },
@@ -373,6 +488,11 @@
     },
     {
       "file": "aurora_verify_core_integration.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "aurora_visual_understanding.py",
       "fixes": 0,
       "remaining": 0
     },
@@ -513,6 +633,11 @@
     },
     {
       "file": "test_api_units.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "test_aurora_autonomous_systems.py",
       "fixes": 0,
       "remaining": 0
     },
@@ -723,6 +848,11 @@
     },
     {
       "file": "ultimate_final_fix.py",
+      "fixes": 0,
+      "remaining": 0
+    },
+    {
+      "file": "verify_aurora_update.py",
       "fixes": 0,
       "remaining": 0
     },

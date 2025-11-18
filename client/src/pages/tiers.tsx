@@ -58,6 +58,18 @@ const knowledgeTiers = {
     { id: 39, name: 'Performance Optimizer', progress: 100 },
     { id: 40, name: 'Full Autonomy', progress: 100 },
     { id: 41, name: 'Strategist', progress: 100 },
+    { id: 42, name: 'Pylint Prevention', progress: 100 },
+  ],
+  'Advanced Capabilities': [
+    { id: 43, name: 'Visual Understanding', progress: 100 },
+    { id: 44, name: 'Live Integration', progress: 100 },
+    { id: 45, name: 'Test Generator', progress: 100 },
+    { id: 46, name: 'Security Auditor', progress: 100 },
+    { id: 47, name: 'Doc Generator', progress: 100 },
+    { id: 48, name: 'Multi-Agent', progress: 100 },
+    { id: 49, name: 'UI Generator', progress: 100 },
+    { id: 50, name: 'Git Master', progress: 100 },
+    { id: 51, name: 'Code Quality Enforcer', progress: 100 },
   ],
 };
 
@@ -70,6 +82,7 @@ const categoryIcons = {
   'Creative Arts': Sparkles,
   'Sciences': Zap,
   'Autonomous Systems': Brain,
+  'Advanced Capabilities': Sparkles,
 };
 
 const categoryColors = {
@@ -81,6 +94,7 @@ const categoryColors = {
   'Creative Arts': 'from-pink-500 to-fuchsia-500',
   'Sciences': 'from-cyan-500 to-blue-500',
   'Autonomous Systems': 'from-violet-500 to-purple-500',
+  'Advanced Capabilities': 'from-cyan-500 to-purple-500',
 };
 
 export default function TiersPage() {
@@ -89,7 +103,7 @@ export default function TiersPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-            41 Knowledge Tiers
+            51 Knowledge Tiers
           </h1>
           <p className="text-purple-400 text-lg">Specialized domain expertise across all fields of knowledge</p>
         </div>
@@ -137,11 +151,11 @@ export default function TiersPage() {
           <h3 className="text-xl font-bold text-white mb-4">Knowledge Tier Overview</h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">41</div>
+              <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">51</div>
               <div className="text-purple-400 text-sm">Knowledge Tiers</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">8</div>
+              <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">9</div>
               <div className="text-purple-400 text-sm">Categories</div>
             </div>
             <div className="text-center">

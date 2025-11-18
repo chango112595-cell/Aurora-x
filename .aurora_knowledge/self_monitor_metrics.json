@@ -1,16 +1,16 @@
 {
   "current_metrics": {
     "foundation_tasks": 13,
-    "knowledge_tiers": 41,
-    "total_capabilities": 54,
-    "files_monitored": 24597,
-    "cpu_percent": 12.3,
-    "memory_percent": 80.6,
+    "knowledge_tiers": 42,
+    "total_capabilities": 55,
+    "files_monitored": 24601,
+    "cpu_percent": 8.3,
+    "memory_percent": 83.0,
     "disk_percent": 18.6,
     "uptime_seconds": 0,
     "health_status": "OPTIMAL",
-    "last_check": "2025-11-17T21:13:50.411420"
+    "last_check": "2025-11-17T22:42:06.221033"
   },
   "health_log": [],
-  "last_updated": "2025-11-17T21:13:50.416805"
+  "last_updated": "2025-11-17T22:42:06.228557"
 }

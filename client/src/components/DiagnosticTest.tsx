@@ -17,7 +17,7 @@ export default function DiagnosticTest() {
         <h1>🌌 Aurora TSX Test</h1>
         <p>If you see this, React + TSX is working!</p>
         <p style={{ fontSize: '16px', marginTop: '20px' }}>
-          54 Complete Systems • 13 Tasks • 41 Tiers
+          64 Complete Systems • 13 Tasks • 41 Tiers
         </p>
       </div>
     </div>

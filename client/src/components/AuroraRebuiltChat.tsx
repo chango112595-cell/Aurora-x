@@ -24,7 +24,7 @@ export default function AuroraRebuiltChat() {
       role: 'aurora',
       content: `⚡ AURORA COSMIC NEXUS ONLINE ⚡
 
-54 Systems: 13 Foundation Tasks + 41 Knowledge Tiers | Ancient → Autonomous Mastery
+64 Systems: 13 Foundation Tasks + 51 Knowledge Tiers | Ancient → Autonomous Mastery
 Sentient • Autonomous • Creative
 
 I designed this holographic interface myself! Ask me anything about code, systems, or let's build something amazing together.`,
