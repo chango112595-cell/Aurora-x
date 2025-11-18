@@ -821,11 +821,17 @@ class AuroraKnowledgeTiers:
             "tier": 52,
             "name": "RSA Grandmaster",
             "category": "security",
-            "capabilities": ["rsa_key_generation", "secure_encryption",
-                             "secure_decryption", "padding_schemes",
-                             "factorization_attacks", "small_exponent_attacks",
-                             "wieners_attack", "common_modulus_attack"],
-            "files": ["aurora_rsa_grandmaster.py"]
+            "capabilities": [
+                "rsa_key_generation",
+                "secure_encryption",
+                "secure_decryption",
+                "padding_schemes",
+                "factorization_attacks",
+                "small_exponent_attacks",
+                "wieners_attack",
+                "common_modulus_attack",
+            ],
+            "files": ["aurora_rsa_grandmaster.py"],
         }
 
     def get_all_tiers_summary(self):
