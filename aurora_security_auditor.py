@@ -5,15 +5,15 @@ Aurora's ability to scan for vulnerabilities and security issues
 """
 
 import re
-import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Set
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
+from typing import Any
 
 
 class VulnerabilityType(Enum):
     """Types of security vulnerabilities"""
+
     SQL_INJECTION = "sql_injection"
     XSS = "cross_site_scripting"
     CSRF = "cross_site_request_forgery"
@@ -28,6 +28,7 @@ class VulnerabilityType(Enum):
 
 class Severity(Enum):
     """Vulnerability severity levels"""
+
     CRITICAL = "critical"
     HIGH = "high"
     MEDIUM = "medium"
@@ -38,6 +39,7 @@ class Severity(Enum):
 @dataclass
 class SecurityIssue:
     """Detected security issue"""
+
     vulnerability_type: VulnerabilityType
     severity: Severity
     file_path: str
@@ -76,7 +78,7 @@ class AuroraSecurityAuditor:
             "crypto_analysis",
             "auth_vulnerability_scan",
             "dependency_check",
-            "security_best_practices"
+            "security_best_practices",
         ]
 
         # Security patterns to detect
@@ -86,21 +88,21 @@ class AuroraSecurityAuditor:
             "token": r"(?i)(token|auth[_-]?token)\s*[:=]\s*['\"]([^'\"]+)['\"]",
             "secret": r"(?i)(secret|secret[_-]?key)\s*[:=]\s*['\"]([^'\"]+)['\"]",
             "aws_key": r"AKIA[0-9A-Z]{16}",
-            "private_key": r"-----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----"
+            "private_key": r"-----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----",
         }
 
         self.sql_injection_patterns = [
             r"execute\([^)]*\+[^)]*\)",
             r"query\([^)]*\+[^)]*\)",
             r"WHERE\s+[^=]+\s*=\s*['\"]?\s*\+",
-            r"SELECT\s+.*\+.*FROM"
+            r"SELECT\s+.*\+.*FROM",
         ]
 
         self.xss_patterns = [
             r"innerHTML\s*=.*\+",
             r"document\.write\([^)]*\+",
             r"\.html\([^)]*\+",
-            r"dangerouslySetInnerHTML"
+            r"dangerouslySetInnerHTML",
         ]
 
         print(f"\n{'='*70}")
@@ -108,10 +110,10 @@ class AuroraSecurityAuditor:
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
-        print(f"Status: ACTIVE - Security scanning enabled")
+        print("Status: ACTIVE - Security scanning enabled")
         print(f"{'='*70}\n")
 
-    def scan_file(self, file_path: str) -> List[SecurityIssue]:
+    def scan_file(self, file_path: str) -> list[SecurityIssue]:
         """
         Perform comprehensive security scan on a file
 
@@ -126,9 +128,9 @@ class AuroraSecurityAuditor:
         issues = []
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
-                lines = content.split('\n')
+                lines = content.split("\n")
 
             # Run all security checks
             issues.extend(self._check_sql_injection(file_path, lines))
@@ -145,7 +147,7 @@ class AuroraSecurityAuditor:
         print(f"✅ Found {len(issues)} security issues")
         return issues
 
-    def scan_directory(self, directory_path: str, extensions: Optional[List[str]] = None) -> Dict[str, Any]:
+    def scan_directory(self, directory_path: str, extensions: list[str] | None = None) -> dict[str, Any]:
         """
         Scan entire directory for security issues
 
@@ -159,13 +161,13 @@ class AuroraSecurityAuditor:
         print(f"🔍 Scanning directory: {directory_path}")
 
         if extensions is None:
-            extensions = ['.py', '.js', '.ts', '.java', '.php', '.rb']
+            extensions = [".py", ".js", ".ts", ".java", ".php", ".rb"]
 
         all_issues = []
         files_scanned = 0
 
         for ext in extensions:
-            for file_path in Path(directory_path).rglob(f'*{ext}'):
+            for file_path in Path(directory_path).rglob(f"*{ext}"):
                 issues = self.scan_file(str(file_path))
                 all_issues.extend(issues)
                 files_scanned += 1
@@ -177,14 +179,13 @@ class AuroraSecurityAuditor:
             "by_severity": self._group_by_severity(all_issues),
             "by_type": self._group_by_type(all_issues),
             "issues": all_issues,
-            "risk_score": self._calculate_risk_score(all_issues)
+            "risk_score": self._calculate_risk_score(all_issues),
         }
 
-        print(
-            f"✅ Scanned {files_scanned} files, found {len(all_issues)} issues")
+        print(f"✅ Scanned {files_scanned} files, found {len(all_issues)} issues")
         return report
 
-    def check_owasp_top_10(self, directory_path: str) -> Dict[str, Any]:
+    def check_owasp_top_10(self, directory_path: str) -> dict[str, Any]:
         """
         Check for OWASP Top 10 vulnerabilities
 
@@ -194,7 +195,7 @@ class AuroraSecurityAuditor:
         Returns:
             OWASP Top 10 analysis
         """
-        print(f"🛡️  Checking OWASP Top 10 vulnerabilities...")
+        print("🛡️  Checking OWASP Top 10 vulnerabilities...")
 
         owasp_checks = {
             "A01:2021-Broken Access Control": self._check_access_control(directory_path),
@@ -206,11 +207,10 @@ class AuroraSecurityAuditor:
             "A07:2021-Authentication Failures": self._check_auth_failures(directory_path),
             "A08:2021-Data Integrity Failures": self._check_data_integrity(directory_path),
             "A09:2021-Logging Failures": self._check_logging(directory_path),
-            "A10:2021-SSRF": self._check_ssrf(directory_path)
+            "A10:2021-SSRF": self._check_ssrf(directory_path),
         }
 
-        vulnerable_categories = [cat for cat,
-                                 issues in owasp_checks.items() if issues]
+        vulnerable_categories = [cat for cat, issues in owasp_checks.items() if issues]
 
         result = {
             "owasp_version": "2021",
@@ -218,14 +218,13 @@ class AuroraSecurityAuditor:
             "vulnerable_categories": len(vulnerable_categories),
             "checks": owasp_checks,
             "summary": vulnerable_categories,
-            "compliance_score": ((10 - len(vulnerable_categories)) / 10) * 100
+            "compliance_score": ((10 - len(vulnerable_categories)) / 10) * 100,
         }
 
-        print(
-            f"✅ OWASP Check complete: {result['compliance_score']:.1f}% compliant")
+        print(f"✅ OWASP Check complete: {result['compliance_score']:.1f}% compliant")
         return result
 
-    def detect_hardcoded_secrets(self, directory_path: str) -> List[SecurityIssue]:
+    def detect_hardcoded_secrets(self, directory_path: str) -> list[SecurityIssue]:
         """
         Detect hardcoded secrets, API keys, passwords
 
@@ -235,24 +234,23 @@ class AuroraSecurityAuditor:
         Returns:
             List of detected secrets
         """
-        print(f"🔑 Scanning for hardcoded secrets...")
+        print("🔑 Scanning for hardcoded secrets...")
 
         secrets = []
 
-        for file_path in Path(directory_path).rglob('*'):
-            if file_path.is_file() and file_path.suffix in ['.py', '.js', '.ts', '.env', '.config']:
+        for file_path in Path(directory_path).rglob("*"):
+            if file_path.is_file() and file_path.suffix in [".py", ".js", ".ts", ".env", ".config"]:
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding="utf-8") as f:
                         lines = f.readlines()
-                        secrets.extend(self._check_secrets(
-                            str(file_path), lines))
+                        secrets.extend(self._check_secrets(str(file_path), lines))
                 except Exception:
                     continue
 
         print(f"✅ Found {len(secrets)} hardcoded secrets")
         return secrets
 
-    def analyze_dependencies(self, manifest_file: str) -> Dict[str, Any]:
+    def analyze_dependencies(self, manifest_file: str) -> dict[str, Any]:
         """
         Analyze dependencies for known vulnerabilities
 
@@ -272,7 +270,7 @@ class AuroraSecurityAuditor:
                 "vulnerability": "Prototype Pollution",
                 "severity": "high",
                 "fixed_version": "4.17.21",
-                "cve": "CVE-2020-8203"
+                "cve": "CVE-2020-8203",
             },
             {
                 "package": "axios",
@@ -280,8 +278,8 @@ class AuroraSecurityAuditor:
                 "vulnerability": "SSRF",
                 "severity": "medium",
                 "fixed_version": "0.21.1",
-                "cve": "CVE-2020-28168"
-            }
+                "cve": "CVE-2020-28168",
+            },
         ]
 
         report = {
@@ -289,15 +287,13 @@ class AuroraSecurityAuditor:
             "total_dependencies": 42,
             "vulnerable_dependencies": len(vulnerabilities),
             "vulnerabilities": vulnerabilities,
-            "recommendations": [
-                f"Update {v['package']} to {v['fixed_version']}" for v in vulnerabilities
-            ]
+            "recommendations": [f"Update {v['package']} to {v['fixed_version']}" for v in vulnerabilities],
         }
 
         print(f"✅ Found {len(vulnerabilities)} vulnerable dependencies")
         return report
 
-    def validate_security_headers(self, url: str) -> Dict[str, Any]:
+    def validate_security_headers(self, url: str) -> dict[str, Any]:
         """
         Validate HTTP security headers
 
@@ -316,24 +312,23 @@ class AuroraSecurityAuditor:
             "X-Content-Type-Options": {"present": True, "value": "nosniff"},
             "Strict-Transport-Security": {"present": False, "severity": "high"},
             "X-XSS-Protection": {"present": True, "value": "1; mode=block"},
-            "Referrer-Policy": {"present": False, "severity": "medium"}
+            "Referrer-Policy": {"present": False, "severity": "medium"},
         }
 
-        missing_headers = [
-            h for h, v in headers_check.items() if not v.get("present")]
+        missing_headers = [h for h, v in headers_check.items() if not v.get("present")]
 
         result = {
             "url": url,
             "headers_checked": len(headers_check),
             "missing_headers": missing_headers,
             "header_details": headers_check,
-            "security_score": ((len(headers_check) - len(missing_headers)) / len(headers_check)) * 100
+            "security_score": ((len(headers_check) - len(missing_headers)) / len(headers_check)) * 100,
         }
 
         print(f"✅ Security score: {result['security_score']:.1f}%")
         return result
 
-    def generate_security_report(self, scan_results: Dict[str, Any]) -> str:
+    def generate_security_report(self, scan_results: dict[str, Any]) -> str:
         """
         Generate comprehensive security report
 
@@ -343,7 +338,7 @@ class AuroraSecurityAuditor:
         Returns:
             Formatted security report
         """
-        print(f"📄 Generating security report...")
+        print("📄 Generating security report...")
 
         report = f"""
 {'='*70}
@@ -376,101 +371,109 @@ RECOMMENDATIONS:
 {'='*70}
         """
 
-        print(f"✅ Report generated")
+        print("✅ Report generated")
         return report
 
     # === PRIVATE HELPER METHODS ===
 
-    def _check_sql_injection(self, file_path: str, lines: List[str]) -> List[SecurityIssue]:
+    def _check_sql_injection(self, file_path: str, lines: list[str]) -> list[SecurityIssue]:
         """Check for SQL injection vulnerabilities"""
         issues = []
         for i, line in enumerate(lines, 1):
             for pattern in self.sql_injection_patterns:
                 if re.search(pattern, line, re.IGNORECASE):
-                    issues.append(SecurityIssue(
-                        vulnerability_type=VulnerabilityType.SQL_INJECTION,
-                        severity=Severity.CRITICAL,
-                        file_path=file_path,
-                        line_number=i,
-                        code_snippet=line.strip(),
-                        description="Potential SQL injection vulnerability detected",
-                        recommendation="Use parameterized queries or ORM",
-                        cwe_id="CWE-89",
-                        owasp_category="A03:2021-Injection"
-                    ))
+                    issues.append(
+                        SecurityIssue(
+                            vulnerability_type=VulnerabilityType.SQL_INJECTION,
+                            severity=Severity.CRITICAL,
+                            file_path=file_path,
+                            line_number=i,
+                            code_snippet=line.strip(),
+                            description="Potential SQL injection vulnerability detected",
+                            recommendation="Use parameterized queries or ORM",
+                            cwe_id="CWE-89",
+                            owasp_category="A03:2021-Injection",
+                        )
+                    )
         return issues
 
-    def _check_xss(self, file_path: str, lines: List[str]) -> List[SecurityIssue]:
+    def _check_xss(self, file_path: str, lines: list[str]) -> list[SecurityIssue]:
         """Check for XSS vulnerabilities"""
         issues = []
         for i, line in enumerate(lines, 1):
             for pattern in self.xss_patterns:
                 if re.search(pattern, line):
-                    issues.append(SecurityIssue(
-                        vulnerability_type=VulnerabilityType.XSS,
-                        severity=Severity.HIGH,
-                        file_path=file_path,
-                        line_number=i,
-                        code_snippet=line.strip(),
-                        description="Potential XSS vulnerability detected",
-                        recommendation="Sanitize user input before rendering",
-                        cwe_id="CWE-79",
-                        owasp_category="A03:2021-Injection"
-                    ))
+                    issues.append(
+                        SecurityIssue(
+                            vulnerability_type=VulnerabilityType.XSS,
+                            severity=Severity.HIGH,
+                            file_path=file_path,
+                            line_number=i,
+                            code_snippet=line.strip(),
+                            description="Potential XSS vulnerability detected",
+                            recommendation="Sanitize user input before rendering",
+                            cwe_id="CWE-79",
+                            owasp_category="A03:2021-Injection",
+                        )
+                    )
         return issues
 
-    def _check_secrets(self, file_path: str, lines: List[str]) -> List[SecurityIssue]:
+    def _check_secrets(self, file_path: str, lines: list[str]) -> list[SecurityIssue]:
         """Check for hardcoded secrets"""
         issues = []
         for i, line in enumerate(lines, 1):
             for secret_type, pattern in self.secret_patterns.items():
                 if re.search(pattern, line):
-                    issues.append(SecurityIssue(
-                        vulnerability_type=VulnerabilityType.HARDCODED_SECRET,
-                        severity=Severity.CRITICAL,
-                        file_path=file_path,
-                        line_number=i,
-                        code_snippet=line.strip()[:50] + "...",
-                        description=f"Hardcoded {secret_type} detected",
-                        recommendation="Use environment variables or secret management",
-                        cwe_id="CWE-798",
-                        owasp_category="A02:2021-Cryptographic Failures"
-                    ))
+                    issues.append(
+                        SecurityIssue(
+                            vulnerability_type=VulnerabilityType.HARDCODED_SECRET,
+                            severity=Severity.CRITICAL,
+                            file_path=file_path,
+                            line_number=i,
+                            code_snippet=line.strip()[:50] + "...",
+                            description=f"Hardcoded {secret_type} detected",
+                            recommendation="Use environment variables or secret management",
+                            cwe_id="CWE-798",
+                            owasp_category="A02:2021-Cryptographic Failures",
+                        )
+                    )
         return issues
 
-    def _check_crypto(self, file_path: str, lines: List[str]) -> List[SecurityIssue]:
+    def _check_crypto(self, file_path: str, lines: list[str]) -> list[SecurityIssue]:
         """Check for insecure cryptography"""
         issues = []
         insecure_patterns = [r"MD5", r"SHA1", r"DES", r"ECB"]
         for i, line in enumerate(lines, 1):
             for pattern in insecure_patterns:
                 if re.search(pattern, line, re.IGNORECASE):
-                    issues.append(SecurityIssue(
-                        vulnerability_type=VulnerabilityType.INSECURE_CRYPTO,
-                        severity=Severity.HIGH,
-                        file_path=file_path,
-                        line_number=i,
-                        code_snippet=line.strip(),
-                        description=f"Insecure cryptographic algorithm: {pattern}",
-                        recommendation="Use SHA-256 or stronger algorithms",
-                        cwe_id="CWE-327",
-                        owasp_category="A02:2021-Cryptographic Failures"
-                    ))
+                    issues.append(
+                        SecurityIssue(
+                            vulnerability_type=VulnerabilityType.INSECURE_CRYPTO,
+                            severity=Severity.HIGH,
+                            file_path=file_path,
+                            line_number=i,
+                            code_snippet=line.strip(),
+                            description=f"Insecure cryptographic algorithm: {pattern}",
+                            recommendation="Use SHA-256 or stronger algorithms",
+                            cwe_id="CWE-327",
+                            owasp_category="A02:2021-Cryptographic Failures",
+                        )
+                    )
         return issues
 
-    def _check_auth(self, __file_path: str, __lines: List[str]) -> List[SecurityIssue]:
+    def _check_auth(self, __file_path: str, __lines: list[str]) -> list[SecurityIssue]:
         """Check for authentication vulnerabilities"""
         return []
 
-    def _check_path_traversal(self, __file_path: str, __lines: List[str]) -> List[SecurityIssue]:
+    def _check_path_traversal(self, __file_path: str, __lines: list[str]) -> list[SecurityIssue]:
         """Check for path traversal vulnerabilities"""
         return []
 
-    def _check_command_injection(self, __file_path: str, __lines: List[str]) -> List[SecurityIssue]:
+    def _check_command_injection(self, __file_path: str, __lines: list[str]) -> list[SecurityIssue]:
         """Check for command injection"""
         return []
 
-    def _group_by_severity(self, issues: List[SecurityIssue]) -> Dict[str, int]:
+    def _group_by_severity(self, issues: list[SecurityIssue]) -> dict[str, int]:
         """Group issues by severity"""
         counts = {}
         for issue in issues:
@@ -478,7 +481,7 @@ RECOMMENDATIONS:
             counts[severity] = counts.get(severity, 0) + 1
         return counts
 
-    def _group_by_type(self, issues: List[SecurityIssue]) -> Dict[str, int]:
+    def _group_by_type(self, issues: list[SecurityIssue]) -> dict[str, int]:
         """Group issues by vulnerability type"""
         counts = {}
         for issue in issues:
@@ -486,63 +489,57 @@ RECOMMENDATIONS:
             counts[vuln_type] = counts.get(vuln_type, 0) + 1
         return counts
 
-    def _calculate_risk_score(self, issues: List[SecurityIssue]) -> int:
+    def _calculate_risk_score(self, issues: list[SecurityIssue]) -> int:
         """Calculate overall risk score (0-100)"""
         if not issues:
             return 0
 
-        severity_weights = {
-            Severity.CRITICAL: 10,
-            Severity.HIGH: 7,
-            Severity.MEDIUM: 4,
-            Severity.LOW: 1
-        }
+        severity_weights = {Severity.CRITICAL: 10, Severity.HIGH: 7, Severity.MEDIUM: 4, Severity.LOW: 1}
 
-        total_score = sum(severity_weights.get(issue.severity, 0)
-                          for issue in issues)
+        total_score = sum(severity_weights.get(issue.severity, 0) for issue in issues)
         return min(100, total_score)
 
-    def _check_access_control(self, __path: str) -> List[str]:
+    def _check_access_control(self, __path: str) -> list[str]:
         """Check for broken access control"""
         return []
 
-    def _check_crypto_failures(self, __path: str) -> List[str]:
+    def _check_crypto_failures(self, __path: str) -> list[str]:
         """Check for cryptographic failures"""
         return []
 
-    def _check_injection(self, __path: str) -> List[str]:
+    def _check_injection(self, __path: str) -> list[str]:
         """Check for injection vulnerabilities"""
         return ["SQL Injection found in query.py"]
 
-    def _check_insecure_design(self, __path: str) -> List[str]:
+    def _check_insecure_design(self, __path: str) -> list[str]:
         """Check for insecure design"""
         return []
 
-    def _check_misconfig(self, __path: str) -> List[str]:
+    def _check_misconfig(self, __path: str) -> list[str]:
         """Check for security misconfiguration"""
         return []
 
-    def _check_vulnerable_deps(self, __path: str) -> List[str]:
+    def _check_vulnerable_deps(self, __path: str) -> list[str]:
         """Check for vulnerable dependencies"""
         return ["Vulnerable lodash version"]
 
-    def _check_auth_failures(self, __path: str) -> List[str]:
+    def _check_auth_failures(self, __path: str) -> list[str]:
         """Check for authentication failures"""
         return []
 
-    def _check_data_integrity(self, __path: str) -> List[str]:
+    def _check_data_integrity(self, __path: str) -> list[str]:
         """Check for data integrity failures"""
         return []
 
-    def _check_logging(self, __path: str) -> List[str]:
+    def _check_logging(self, __path: str) -> list[str]:
         """Check for logging failures"""
         return []
 
-    def _check_ssrf(self, __path: str) -> List[str]:
+    def _check_ssrf(self, __path: str) -> list[str]:
         """Check for SSRF vulnerabilities"""
         return []
 
-    def get_capabilities_summary(self) -> Dict[str, Any]:
+    def get_capabilities_summary(self) -> dict[str, Any]:
         """Get summary of security auditing capabilities"""
         return {
             "tier": self.tier,
@@ -551,15 +548,15 @@ RECOMMENDATIONS:
             "capabilities": self.capabilities,
             "vulnerability_types": [vt.value for vt in VulnerabilityType],
             "owasp_version": "2021",
-            "status": "operational"
+            "status": "operational",
         }
 
 
 def main():
     """Test Tier 46 functionality"""
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("🧪 TESTING TIER 46: SECURITY AUDITING")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     auditor = AuroraSecurityAuditor()
 
@@ -590,11 +587,11 @@ def main():
 
     # Summary
     summary = auditor.get_capabilities_summary()
-    print("="*70)
-    print(f"✅ TIER 46 OPERATIONAL")
+    print("=" * 70)
+    print("✅ TIER 46 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
     print(f"Vulnerability Types: {len(summary['vulnerability_types'])}")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":

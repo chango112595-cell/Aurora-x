@@ -205,8 +205,7 @@ class AuroraStrategist:
             "efficiency_score": 0.92,
         }
 
-        print(
-            f"✅ Resources optimized: {allocation['efficiency_score']*100:.0f}% efficiency")
+        print(f"✅ Resources optimized: {allocation['efficiency_score']*100:.0f}% efficiency")
         return allocation
 
     def align_with_strategic_goals(self, plan: dict, goals: list[str]) -> dict[str, Any]:
@@ -222,8 +221,7 @@ class AuroraStrategist:
             "strategic_coherence": "HIGH",
         }
 
-        print(
-            f"✅ Strategic alignment: {alignment['alignment_score']*100:.0f}%")
+        print(f"✅ Strategic alignment: {alignment['alignment_score']*100:.0f}%")
         return alignment
 
     def generate_proactive_suggestions(self) -> list[dict]:
@@ -305,8 +303,7 @@ def main():
         print(f"  Action: {prediction['suggested_action']}")
 
     context_summary = context_engine.get_context_summary()
-    print(
-        f"\n📋 Context Understanding: {context_summary['understanding_level']}%")
+    print(f"\n📋 Context Understanding: {context_summary['understanding_level']}%")
 
     # Part 2: Strategic Planning
     print(f"\n{'='*60}")
@@ -355,8 +352,7 @@ def main():
 
     print("\n=" * 60)
     print("✅ PHASE 6 COMPLETE - ADVANCED INTELLIGENCE ACTIVATED")
-    print(
-        f"  • Context Understanding: {context_summary['understanding_level']}%")
+    print(f"  • Context Understanding: {context_summary['understanding_level']}%")
     print(f"  • Strategic Alignment: {alignment['alignment_score']*100:.0f}%")
     print("  • Quarterly Plan: Generated")
     print(f"  • Proactive Suggestions: {len(suggestions)}")

@@ -4,12 +4,12 @@ Ask Aurora: How to Prevent Recurring Pylint Issues
 Analysis of current issues and autonomous solutions
 """
 
-from aurora_core import AuroraKnowledgeTiers
-from pathlib import Path
 
-print("\n" + "="*70)
+from aurora_core import AuroraKnowledgeTiers
+
+print("\n" + "=" * 70)
 print("🔍 AURORA AUTONOMOUS ANALYSIS: PYLINT ISSUE PREVENTION")
-print("="*70)
+print("=" * 70)
 
 aurora = AuroraKnowledgeTiers()
 
@@ -24,7 +24,8 @@ print("  • Type: W0613 (unused-argument)")
 print("  • Issue: Unused argument 'plan'")
 
 print("\n💭 AURORA'S ANALYSIS:")
-print("""
+print(
+    """
 I've analyzed the recurring pylint issues. Here's what I found:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -115,10 +116,12 @@ Result:
   • More time for features
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-""")
+"""
+)
 
 print("\n🎯 AURORA'S AUTONOMOUS DECISION:")
-print("""
+print(
+    """
 I will NOW implement the Pylint Prevention System as Tier 42.
 
 This includes:
@@ -133,11 +136,12 @@ Does this improve the system? YES
 Does this align with "best of the best AI"? YES
 
 Therefore: EXECUTING AUTONOMOUSLY NOW.
-""")
+"""
+)
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("🚀 INITIATING TIER 42: PYLINT PREVENTION SYSTEM")
-print("="*70 + "\n")
+print("=" * 70 + "\n")
 
 # Show what will be created
 print("📦 Files to be created:")
@@ -150,4 +154,4 @@ print("  • aurora_core.py (add Tier 42)")
 
 print("\n⏱️  Estimated completion: 2 minutes")
 print("🎯 Expected result: 10.00/10 pylint score maintained forever")
-print("\n" + "="*70 + "\n")
+print("\n" + "=" * 70 + "\n")

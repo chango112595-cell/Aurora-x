@@ -3,12 +3,13 @@
 Execute Aurora Code Quality Enforcer on entire codebase
 """
 
-from aurora_code_quality_enforcer import AuroraCodeQualityEnforcer
 from pathlib import Path
 
-print("\n" + "="*70)
+from aurora_code_quality_enforcer import AuroraCodeQualityEnforcer
+
+print("\n" + "=" * 70)
 print("🔧 EXECUTING CODE QUALITY ENFORCEMENT - FULL SCAN")
-print("="*70 + "\n")
+print("=" * 70 + "\n")
 
 enforcer = AuroraCodeQualityEnforcer()
 
@@ -27,7 +28,7 @@ tier_files = [
     "aurora_doc_generator.py",
     "aurora_multi_agent.py",
     "aurora_ui_generator.py",
-    "aurora_git_master.py"
+    "aurora_git_master.py",
 ]
 
 for file in tier_files:
@@ -40,9 +41,9 @@ for file in tier_files:
 # Generate report
 report = enforcer.generate_quality_report(all_issues)
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("📊 QUALITY REPORT")
-print("="*70)
+print("=" * 70)
 print(f"Files Scanned: {len(tier_files)}")
 print(f"Total Issues: {report['total_issues']}")
 print(f"Auto-Fixable: {report['auto_fixable']}")
@@ -50,10 +51,10 @@ print(f"By Severity: {report['by_severity']}")
 print(f"By Type: {report['by_type']}")
 
 # Auto-fix all issues
-if report['auto_fixable'] > 0:
-    print("\n" + "="*70)
+if report["auto_fixable"] > 0:
+    print("\n" + "=" * 70)
     print("🔧 AUTO-FIXING ISSUES")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     total_fixed = 0
     for file in files_to_fix:
@@ -63,6 +64,6 @@ if report['auto_fixable'] > 0:
 
     print(f"\n✅ Fixed {total_fixed} issues automatically!")
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("✅ CODE QUALITY ENFORCEMENT COMPLETE")
-print("="*70 + "\n")
+print("=" * 70 + "\n")
