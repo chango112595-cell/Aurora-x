@@ -283,7 +283,7 @@ export default function AuroraFuturisticDashboard() {
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-6">
             <div className="text-cyan-300/80">
-              <span className="text-cyan-400 font-semibold">Architecture:</span> 13 Tasks + 51 Tiers = 54 Systems
+              <span className="text-cyan-400 font-semibold">Architecture:</span> 13 Tasks + 52 Tiers = 54 Systems
             </div>
             <div className="text-purple-300/80">
               <span className="text-purple-400 font-semibold">Version:</span> Quantum Neural 2.0

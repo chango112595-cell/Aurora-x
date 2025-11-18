@@ -56,11 +56,11 @@ export default function IntelligencePage() {
               </div>
               <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl">
                 <span className="text-purple-400">Knowledge Tiers</span>
-                <span className="text-purple-400 font-mono text-lg">51</span>
+                <span className="text-purple-400 font-mono text-lg">52</span>
               </div>
               <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl">
                 <span className="text-purple-400">Total Systems</span>
-                <span className="text-pink-400 font-mono text-lg">64</span>
+                <span className="text-pink-400 font-mono text-lg">65</span>
               </div>
               <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl">
                 <span className="text-purple-400">Active Services</span>

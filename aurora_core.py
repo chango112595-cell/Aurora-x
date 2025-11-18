@@ -315,6 +315,7 @@ class AuroraKnowledgeTiers:
             "tier_49_ui_generator": self._get_ui_generator(),
             "tier_50_git_master": self._get_git_master(),
             "tier_51_code_quality_enforcer": self._get_code_quality_enforcer(),
+            "tier_52_rsa_grandmaster": self._get_rsa_grandmaster(),
         }
 
         # Auto-calculate tier count
@@ -753,6 +754,19 @@ class AuroraKnowledgeTiers:
             "files": ["aurora_code_quality_enforcer.py"]
         }
 
+    def _get_rsa_grandmaster(self):
+        """Tier 52: RSA Cryptography Grandmaster"""
+        return {
+            "tier": 52,
+            "name": "RSA Grandmaster",
+            "category": "security",
+            "capabilities": ["rsa_key_generation", "secure_encryption",
+                             "secure_decryption", "padding_schemes",
+                             "factorization_attacks", "small_exponent_attacks",
+                             "wieners_attack", "common_modulus_attack"],
+            "files": ["aurora_rsa_grandmaster.py"]
+        }
+
     def get_all_tiers_summary(self):
         """Get a dynamic summary of all tiers (auto-updates as tiers are added)"""
         return {
@@ -781,6 +795,7 @@ class AuroraKnowledgeTiers:
             "ui_generator": "Tier 49 (UI component and design system generation)",
             "git_master": "Tier 50 (Advanced Git operations and workflow automation)",
             "code_quality_enforcer": "Tier 51 (Automatic code quality detection and fixing)",
+            "rsa_grandmaster": "Tier 52 (RSA encryption, decryption, and cryptanalysis mastery)",
             "languages_mastered": 55,
             "eras_covered": "Ancient (1940s) → SciFi (2035+)",
             "auto_expanding": True,

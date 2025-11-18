@@ -25,7 +25,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
 
     // Intelligence Systems
     { path: '/tasks', label: '13 Foundation Tasks', icon: <Layers className="w-5 h-5" />, category: 'intelligence' },
-    { path: '/tiers', label: '51 Knowledge Tiers', icon: <Network className="w-5 h-5" />, category: 'intelligence' },
+    { path: '/tiers', label: '52 Knowledge Tiers', icon: <Network className="w-5 h-5" />, category: 'intelligence' },
     { path: '/evolution', label: 'Evolution Monitor', icon: <TrendingUp className="w-5 h-5" />, category: 'intelligence' },
 
     // Advanced Tools
@@ -66,7 +66,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                     <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                       Aurora
                     </h1>
-                    <p className="text-xs text-purple-400">64 Complete Systems</p>
+                    <p className="text-xs text-purple-400">65 Complete Systems</p>
                   </div>
                 </div>
               )}
