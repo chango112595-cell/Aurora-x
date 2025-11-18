@@ -6,13 +6,14 @@ Aurora's mastery of RSA encryption, decryption, and cryptanalysis
 
 import math
 import random
-from typing import Tuple, Optional, Dict, List, Any
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 
 class AttackType(Enum):
     """Types of RSA attacks"""
+
     SMALL_E = "small_exponent"
     SMALL_D = "wiener_attack"
     COMMON_MODULUS = "common_modulus"
@@ -25,6 +26,7 @@ class AttackType(Enum):
 
 class PaddingScheme(Enum):
     """RSA padding schemes"""
+
     NONE = "none"
     PKCS1_V15 = "pkcs1_v1.5"
     OAEP = "oaep"
@@ -33,11 +35,12 @@ class PaddingScheme(Enum):
 @dataclass
 class RSAKey:
     """RSA key structure"""
+
     n: int  # Modulus
     e: int  # Public exponent
-    d: Optional[int] = None  # Private exponent
-    p: Optional[int] = None  # Prime factor 1
-    q: Optional[int] = None  # Prime factor 2
+    d: int | None = None  # Private exponent
+    p: int | None = None  # Prime factor 1
+    q: int | None = None  # Prime factor 2
 
     def is_private(self) -> bool:
         """Check if this is a private key"""
@@ -47,6 +50,7 @@ class RSAKey:
 @dataclass
 class DecryptionResult:
     """RSA decryption result"""
+
     plaintext: bytes
     success: bool
     method: str
@@ -81,7 +85,7 @@ class AuroraRSAGrandmaster:
             "factorization_attacks",
             "small_exponent_attacks",
             "wieners_attack",
-            "common_modulus_attack"
+            "common_modulus_attack",
         ]
 
         print(f"\n{'='*70}")
@@ -89,14 +93,14 @@ class AuroraRSAGrandmaster:
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
-        print(f"Status: ACTIVE - RSA cryptography mastery ready")
+        print("Status: ACTIVE - RSA cryptography mastery ready")
         print(f"{'='*70}\n")
 
     # ============================================================================
     # CORE RSA OPERATIONS
     # ============================================================================
 
-    def generate_keypair(self, bits: int = 2048) -> Tuple[RSAKey, RSAKey]:
+    def generate_keypair(self, bits: int = 2048) -> tuple[RSAKey, RSAKey]:
         """Generate RSA keypair"""
         print(f"🔑 Generating {bits}-bit RSA keypair...")
 
@@ -119,11 +123,10 @@ class AuroraRSAGrandmaster:
         print(f"✅ Keypair generated: {bits} bits")
         return public_key, private_key
 
-    def encrypt(self, plaintext: bytes, public_key: RSAKey,
-                padding: PaddingScheme = PaddingScheme.OAEP) -> int:
+    def encrypt(self, plaintext: bytes, public_key: RSAKey, padding: PaddingScheme = PaddingScheme.OAEP) -> int:
         """Encrypt data with RSA public key"""
         # Convert bytes to integer
-        m = int.from_bytes(plaintext, 'big')
+        m = int.from_bytes(plaintext, "big")
 
         # Apply padding if specified
         if padding == PaddingScheme.OAEP:
@@ -136,10 +139,11 @@ class AuroraRSAGrandmaster:
 
         return ciphertext
 
-    def decrypt(self, ciphertext: int, private_key: RSAKey,
-                padding: PaddingScheme = PaddingScheme.OAEP) -> DecryptionResult:
+    def decrypt(
+        self, ciphertext: int, private_key: RSAKey, padding: PaddingScheme = PaddingScheme.OAEP
+    ) -> DecryptionResult:
         """Decrypt RSA ciphertext"""
-        print(f"🔓 Decrypting RSA ciphertext...")
+        print("🔓 Decrypting RSA ciphertext...")
 
         if not private_key.is_private():
             print("❌ Private key required for decryption")
@@ -148,7 +152,7 @@ class AuroraRSAGrandmaster:
                 success=False,
                 method="failed",
                 key_bits=private_key.n.bit_length(),
-                padding_scheme=padding
+                padding_scheme=padding,
             )
 
         # RSA decryption: m = c^d mod n
@@ -161,43 +165,43 @@ class AuroraRSAGrandmaster:
             m = self._remove_pkcs1_padding(m, private_key.n)
 
         # Convert to bytes
-        plaintext = m.to_bytes((m.bit_length() + 7) // 8, 'big')
+        plaintext = m.to_bytes((m.bit_length() + 7) // 8, "big")
 
-        print(f"✅ Decryption successful")
+        print("✅ Decryption successful")
         return DecryptionResult(
             plaintext=plaintext,
             success=True,
             method="standard_rsa",
             key_bits=private_key.n.bit_length(),
-            padding_scheme=padding
+            padding_scheme=padding,
         )
 
     # ============================================================================
     # CRYPTANALYSIS & ATTACKS
     # ============================================================================
 
-    def factor_modulus(self, n: int) -> Optional[Tuple[int, int]]:
+    def factor_modulus(self, n: int) -> tuple[int, int] | None:
         """Attempt to factor RSA modulus"""
         print(f"🔍 Attempting to factor modulus ({n.bit_length()} bits)...")
 
         # Try Fermat's factorization for close primes
         factors = self._fermat_factorization(n)
         if factors:
-            print(f"✅ Factored using Fermat's method")
+            print("✅ Factored using Fermat's method")
             return factors
 
         # Try Pollard's rho for small factors
         factors = self._pollard_rho(n)
         if factors:
-            print(f"✅ Factored using Pollard's rho")
+            print("✅ Factored using Pollard's rho")
             return factors
 
         print("❌ Factorization failed - modulus is strong")
         return None
 
-    def wieners_attack(self, public_key: RSAKey) -> Optional[int]:
+    def wieners_attack(self, public_key: RSAKey) -> int | None:
         """Wiener's attack for small private exponent"""
-        print(f"🎯 Attempting Wiener's attack...")
+        print("🎯 Attempting Wiener's attack...")
 
         # Get continued fraction convergents
         convergents = self._continued_fraction(public_key.e, public_key.n)
@@ -226,9 +230,9 @@ class AuroraRSAGrandmaster:
         print("❌ Wiener's attack failed")
         return None
 
-    def common_modulus_attack(self, c1: int, c2: int, e1: int, e2: int, n: int) -> Optional[int]:
+    def common_modulus_attack(self, c1: int, c2: int, e1: int, e2: int, n: int) -> int | None:
         """Attack when same plaintext encrypted with different exponents"""
-        print(f"🎯 Attempting common modulus attack...")
+        print("🎯 Attempting common modulus attack...")
 
         # Extended GCD to find coefficients
         gcd, a, b = self._extended_gcd(e1, e2)
@@ -247,10 +251,10 @@ class AuroraRSAGrandmaster:
 
         m = (pow(c1, a, n) * pow(c2, b, n)) % n
 
-        print(f"✅ Common modulus attack successful!")
+        print("✅ Common modulus attack successful!")
         return m
 
-    def small_e_attack(self, ciphertext: int, e: int, n: int) -> Optional[int]:
+    def small_e_attack(self, ciphertext: int, e: int, n: int) -> int | None:
         """Attack for small public exponent with no padding"""
         print(f"🎯 Attempting small exponent attack (e={e})...")
 
@@ -325,7 +329,7 @@ class AuroraRSAGrandmaster:
             raise ValueError("Modular inverse does not exist")
         return (x % m + m) % m
 
-    def _extended_gcd(self, a: int, b: int) -> Tuple[int, int, int]:
+    def _extended_gcd(self, a: int, b: int) -> tuple[int, int, int]:
         """Extended Euclidean Algorithm"""
         if a == 0:
             return b, 0, 1
@@ -334,7 +338,7 @@ class AuroraRSAGrandmaster:
         y = x1
         return gcd, x, y
 
-    def _fermat_factorization(self, n: int, max_iterations: int = 10000) -> Optional[Tuple[int, int]]:
+    def _fermat_factorization(self, n: int, max_iterations: int = 10000) -> tuple[int, int] | None:
         """Fermat's factorization for close primes"""
         a = self._isqrt(n) + 1
         b2 = a * a - n
@@ -351,13 +355,15 @@ class AuroraRSAGrandmaster:
 
         return None
 
-    def _pollard_rho(self, n: int, max_iterations: int = 100000) -> Optional[Tuple[int, int]]:
+    def _pollard_rho(self, n: int, max_iterations: int = 100000) -> tuple[int, int] | None:
         """Pollard's rho factorization"""
         if n % 2 == 0:
             return (2, n // 2)
 
         x, y, d = 2, 2, 1
-        def f(x): return (x * x + 1) % n
+
+        def f(x):
+            return (x * x + 1) % n
 
         for _ in range(max_iterations):
             x = f(x)
@@ -383,7 +389,7 @@ class AuroraRSAGrandmaster:
             y = (x + n // x) // 2
         return x
 
-    def _nth_root(self, n: int, k: int) -> Optional[int]:
+    def _nth_root(self, n: int, k: int) -> int | None:
         """Integer nth root"""
         if k == 1:
             return n
@@ -399,7 +405,7 @@ class AuroraRSAGrandmaster:
 
         return None
 
-    def _continued_fraction(self, e: int, n: int) -> List[Tuple[int, int]]:
+    def _continued_fraction(self, e: int, n: int) -> list[tuple[int, int]]:
         """Generate continued fraction convergents"""
         convergents = []
         a, b = e, n
@@ -441,7 +447,7 @@ class AuroraRSAGrandmaster:
         """Remove PKCS#1 v1.5 padding (simplified)"""
         return m
 
-    def get_capabilities_summary(self) -> Dict[str, Any]:
+    def get_capabilities_summary(self) -> dict[str, Any]:
         """Get summary of RSA capabilities"""
         return {
             "tier": self.tier,
@@ -450,15 +456,15 @@ class AuroraRSAGrandmaster:
             "capabilities": self.capabilities,
             "attack_types": [at.value for at in AttackType],
             "padding_schemes": [ps.value for ps in PaddingScheme],
-            "status": "operational"
+            "status": "operational",
         }
 
 
 def main():
     """Test Tier 52 - RSA Grandmaster"""
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("🧪 TESTING TIER 52: RSA CRYPTOGRAPHY GRANDMASTER")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     rsa = AuroraRSAGrandmaster()
 
@@ -499,11 +505,11 @@ def main():
     print()
 
     summary = rsa.get_capabilities_summary()
-    print("="*70)
-    print(f"✅ TIER 52 OPERATIONAL")
+    print("=" * 70)
+    print("✅ TIER 52 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
     print(f"Attacks Available: {len(summary['attack_types'])}")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":
