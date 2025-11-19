@@ -43,14 +43,21 @@ jobs:
           pip install pytest uvicorn fastapi || echo "Additional packages install failed"
 
       - name: Install Node dependencies
-        working-directory: ./client
         run: |
-          npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo "Node install failed"
+          if [ -d "./client" ]; then
+            cd client && npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo "Node install failed"
+          else
+            npm ci || npm install || echo "Node install failed"
+          fi
+        continue-on-error: true
 
       - name: Build client (if needed)
-        working-directory: ./client
         run: |
-          npm run build || echo "Client build skipped or failed"
+          if [ -d "./client" ]; then
+            cd client && npm run build || echo "Client build skipped or failed"
+          else
+            npm run build || echo "Build skipped or failed"
+          fi
         continue-on-error: true
 
       - name: Launch Aurora server
