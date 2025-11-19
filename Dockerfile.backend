@@ -4,7 +4,7 @@
 # ============================================
 # Stage 1: Dependencies
 # ============================================
-FROM node:20-alpine as deps
+FROM node:20-alpine AS deps
 
 WORKDIR /app
 
@@ -18,7 +18,7 @@ RUN npm ci --only=production && \
 # ============================================
 # Stage 2: Builder
 # ============================================
-FROM node:20-alpine as builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -40,19 +40,13 @@ FROM node:20-alpine
 # Install curl for health checks
 RUN apk add --no-cache curl
 
-# Create non-root user (robust: handles pre-existing UID/GID 1000)
-RUN if ! awk -F: '($3==1000){exit 0} END{exit 1}' /etc/group; then \
-        addgroup -g 1000 aurora; \
-    else \
-        addgroup aurora || true; \
-    fi && \
-    if ! awk -F: '($3==1000){exit 0} END{exit 1}' /etc/passwd; then \
-        adduser -D -u 1000 -G aurora aurora; \
-    else \
-        adduser -D -G aurora aurora || true; \
-    fi && \
-    mkdir -p /app && \
-    chown -R aurora:aurora /app
+# Create non-root user 'aurora' idempotently (do nothing if it already exists)
+RUN set -eux; \
+    if ! id -u aurora >/dev/null 2>&1; then \
+      addgroup -S aurora || true; \
+      adduser -D -G aurora aurora || true; \
+    fi; \
+    mkdir -p /app && chown -R aurora:aurora /app
 
 WORKDIR /app
 

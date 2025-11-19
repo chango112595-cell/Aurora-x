@@ -94,6 +94,22 @@ def selflearn_client(selflearn_app) -> Generator[TestClient, None, None]:
 
 
 @pytest.fixture
+def input_data():
+    """Sample input data for test functions"""
+    return {"text": "test input", "value": 42}
+
+
+@pytest.fixture
+def items():
+    """Sample list of items for batch test functions"""
+    return [
+        {"id": 1, "input": "item1"},
+        {"id": 2, "input": "item2"},
+        {"id": 3, "input": "item3"},
+    ]
+
+
+@pytest.fixture
 def sample_code():
     """Sample Python code for testing"""
     return '''

@@ -742,6 +742,12 @@ class LuminarNexusServerManager:
     # ========== END KNOWLEDGE ENGINE METHODS ==========
 
 
+# Backwards-compatible alias expected by tests
+class LuminarNexus(LuminarNexusServerManager):
+    """Compatibility alias for older API / tests."""
+    pass
+
+
 def main():
     """Luminar Nexus main entry point"""
     import sys
