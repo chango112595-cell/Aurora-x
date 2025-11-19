@@ -55,9 +55,9 @@ class AuroraUIGenerator:
             "accessibility",
         ]
 
-        print("="*70)
+        print("=" * 70)
         print(f"🎨 {self.name} v{self.version} Initialized")
-        print("="*70)
+        print("=" * 70)
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
         print("Status: ACTIVE - UI generation ready")
@@ -72,8 +72,7 @@ class AuroraUIGenerator:
         styles = self._generate_styles(component_name)
 
         component = Component(
-            name=component_name, framework=framework, code=code, styles=styles, props=[
-                "value", "onChange"]
+            name=component_name, framework=framework, code=code, styles=styles, props=["value", "onChange"]
         )
 
         print(f"✅ Component generated: {component_name}")

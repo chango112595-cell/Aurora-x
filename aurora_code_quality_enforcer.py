@@ -78,13 +78,13 @@ class AuroraCodeQualityEnforcer:
             "duplicate_code_detection",
         ]
 
-        print("\n" + "="*70)
+        print("\n" + "=" * 70)
         print(f"🔧 {self.name} v{self.version} Initialized")
-        print("="*70)
+        print("=" * 70)
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
         print("Status: ACTIVE - Code quality enforcement ready")
-        print("="*70 + "\n")
+        print("=" * 70 + "\n")
 
     def scan_file(self, file_path: str) -> list[QualityIssue]:
         """Scan file for code quality issues"""
@@ -224,8 +224,7 @@ class AuroraCodeQualityEnforcer:
                     # Add underscore prefix
                     line_idx = issue.line_number - 1
                     if line_idx < len(lines):
-                        lines[line_idx] = lines[line_idx].replace(
-                            f"{arg_name}:", f"_{arg_name}:")
+                        lines[line_idx] = lines[line_idx].replace(f"{arg_name}:", f"_{arg_name}:")
                         fixed_count += 1
 
         if fixed_count > 0:
@@ -315,8 +314,7 @@ def main():
     enforcer = AuroraCodeQualityEnforcer()
 
     print("Test 1: Scan New Tier Files")
-    files_to_scan = ["aurora_visual_understanding.py",
-                     "aurora_live_integration.py", "aurora_doc_generator.py"]
+    files_to_scan = ["aurora_visual_understanding.py", "aurora_live_integration.py", "aurora_doc_generator.py"]
 
     all_issues = []
     for file in files_to_scan:

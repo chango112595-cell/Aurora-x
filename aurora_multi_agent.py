@@ -72,13 +72,12 @@ class AuroraMultiAgent:
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
         print("Status: ACTIVE - Multi-agent system ready")
-        print("="*70 + "\n")
+        print("=" * 70 + "\n")
 
     def spawn_agent(self, agent_type: AgentType, task: str) -> Agent:
         """Spawn a specialized agent"""
         agent_id = f"{agent_type.value}_{int(time.time() * 1000)}"
-        agent = Agent(agent_id=agent_id, agent_type=agent_type,
-                      status="spawned", task=task, start_time=time.time())
+        agent = Agent(agent_id=agent_id, agent_type=agent_type, status="spawned", task=task, start_time=time.time())
         self.agents[agent_id] = agent
         print(f"🤖 Spawned {agent_type.value}: {agent_id}")
         return agent
@@ -119,8 +118,7 @@ class AuroraMultiAgent:
         agent.status = "running"
         # Simulate task execution
         time.sleep(0.1)
-        result = {"status": "success",
-                  "data": f"Result from {agent.agent_type.value}"}
+        result = {"status": "success", "data": f"Result from {agent.agent_type.value}"}
         agent.result = result
         agent.status = "completed"
         agent.end_time = time.time()

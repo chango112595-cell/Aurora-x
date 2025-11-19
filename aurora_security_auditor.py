@@ -105,9 +105,9 @@ class AuroraSecurityAuditor:
             r"dangerouslySetInnerHTML",
         ]
 
-        print("="*70)
+        print("=" * 70)
         print(f"🔐 {self.name} v{self.version} Initialized")
-        print("="*70)
+        print("=" * 70)
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
         print("Status: ACTIVE - Security scanning enabled")
@@ -182,8 +182,7 @@ class AuroraSecurityAuditor:
             "risk_score": self._calculate_risk_score(all_issues),
         }
 
-        print(
-            f"✅ Scanned {files_scanned} files, found {len(all_issues)} issues")
+        print(f"✅ Scanned {files_scanned} files, found {len(all_issues)} issues")
         return report
 
     def check_owasp_top_10(self, directory_path: str) -> dict[str, Any]:
@@ -211,8 +210,7 @@ class AuroraSecurityAuditor:
             "A10:2021-SSRF": self._check_ssrf(directory_path),
         }
 
-        vulnerable_categories = [cat for cat,
-                                 issues in owasp_checks.items() if issues]
+        vulnerable_categories = [cat for cat, issues in owasp_checks.items() if issues]
 
         result = {
             "owasp_version": "2021",
@@ -223,8 +221,7 @@ class AuroraSecurityAuditor:
             "compliance_score": ((10 - len(vulnerable_categories)) / 10) * 100,
         }
 
-        print(
-            f"✅ OWASP Check complete: {result['compliance_score']:.1f}% compliant")
+        print(f"✅ OWASP Check complete: {result['compliance_score']:.1f}% compliant")
         return result
 
     def detect_hardcoded_secrets(self, directory_path: str) -> list[SecurityIssue]:
@@ -246,8 +243,7 @@ class AuroraSecurityAuditor:
                 try:
                     with open(file_path, encoding="utf-8") as f:
                         lines = f.readlines()
-                        secrets.extend(self._check_secrets(
-                            str(file_path), lines))
+                        secrets.extend(self._check_secrets(str(file_path), lines))
                 except Exception:
                     continue
 
@@ -319,8 +315,7 @@ class AuroraSecurityAuditor:
             "Referrer-Policy": {"present": False, "severity": "medium"},
         }
 
-        missing_headers = [
-            h for h, v in headers_check.items() if not v.get("present")]
+        missing_headers = [h for h, v in headers_check.items() if not v.get("present")]
 
         result = {
             "url": url,
@@ -499,11 +494,9 @@ RECOMMENDATIONS:
         if not issues:
             return 0
 
-        severity_weights = {Severity.CRITICAL: 10,
-                            Severity.HIGH: 7, Severity.MEDIUM: 4, Severity.LOW: 1}
+        severity_weights = {Severity.CRITICAL: 10, Severity.HIGH: 7, Severity.MEDIUM: 4, Severity.LOW: 1}
 
-        total_score = sum(severity_weights.get(issue.severity, 0)
-                          for issue in issues)
+        total_score = sum(severity_weights.get(issue.severity, 0) for issue in issues)
         return min(100, total_score)
 
     def _check_access_control(self, __path: str) -> list[str]:

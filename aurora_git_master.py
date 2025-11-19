@@ -58,11 +58,11 @@ class AuroraGitMaster:
 
         print(f"\n{'='*70}")
         print(f"🔄 {self.name} v{self.version} Initialized")
-        print("="*70)
+        print("=" * 70)
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
         print("Status: ACTIVE - Git mastery enabled")
-        print("="*70 + "\n")
+        print("=" * 70 + "\n")
 
     def create_feature_branch(self, feature_name: str) -> GitOperation:
         """Create optimized feature branch"""
@@ -218,8 +218,7 @@ def main():
     print("  Type: feat\n")
 
     print("Test 3: Create PR")
-    pr = git_master.create_pull_request(
-        "feature/tier-50", "Add Git Mastery", "Description")
+    pr = git_master.create_pull_request("feature/tier-50", "Add Git Mastery", "Description")
     print(f"  Labels: {pr['labels']}\n")
 
     summary = git_master.get_capabilities_summary()
