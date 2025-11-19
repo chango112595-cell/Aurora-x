@@ -12,7 +12,7 @@ Example usage:
 
 import logging
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Optional
 
 # Optional pytest import
 try:
@@ -100,7 +100,7 @@ def test_aurora_response_display_batch(items: list[Any], **kwargs) -> list[Any]:
     return [test_aurora_response_display(item, **kwargs) for item in items]
 
 
-def test_aurora_response_display_async(input_data: Any, callback: Callable | None = None) -> Any:
+def test_aurora_response_display_async(input_data: Any, callback: Optional[Callable] = None) -> Any:
     """
     Process data with optional callback.
 

@@ -11,7 +11,7 @@ Example usage:
 """
 
 import logging
-from typing import Any
+from typing import Any, Callable, Optional
 
 # Function name for templates
 func_name = "test_function"
@@ -101,7 +101,7 @@ def test_aurora_response_batch(items: list[Any], **kwargs) -> list[Any]:
     return [test_aurora_response(item, **kwargs) for item in items]
 
 
-def test_aurora_response_async(input_data: Any, callback: callable | None = None) -> Any:
+def test_aurora_response_async(input_data: Any, callback: Optional[Callable] = None) -> Any:
     """
     Process data with optional callback.
 
@@ -345,7 +345,8 @@ if __name__ == "__main__":
 
         all_tests = []
         for test_cls in [test_basic, test_integration]:
-            all_tests.extend([(test_cls, method) for method in dir(test_cls) if method.startswith("test_")])
+            all_tests.extend([(test_cls, method) for method in dir(
+                test_cls) if method.startswith("test_")])
 
         passed = 0
         failed = 0
