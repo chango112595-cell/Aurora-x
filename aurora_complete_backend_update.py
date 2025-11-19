@@ -46,8 +46,7 @@ def main():
                 "**My knowledge (27 mastery tiers):",
                 "**My knowledge (41 knowledge tiers + 13 foundation tasks = 54 capabilities):",
             ),
-            ("🧠 27 mastery tiers: LOADED",
-             "🧠 41 knowledge tiers: LOADED (54 total capabilities)"),
+            ("🧠 27 mastery tiers: LOADED", "🧠 41 knowledge tiers: LOADED (54 total capabilities)"),
             ("🧠 All 53 tiers active", "🧠 All 53 tiers active (66 total capabilities)"),
         ],
     }
