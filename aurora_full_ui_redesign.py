@@ -88,7 +88,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                     <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                       Aurora
                     </h1>
-                    <p className="text-xs text-purple-400">47 Complete Systems</p>
+                    <p className="text-xs text-purple-400">66 Complete Systems</p>
                   </div>
                 </div>
               )}
@@ -276,7 +276,7 @@ export default function AuroraFuturisticChat() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                   Aurora Neural Chat
                 </h1>
-                <p className="text-sm text-purple-400">47 Complete Systems • Quantum Coherence Active</p>
+                <p className="text-sm text-purple-400">66 Complete Systems • Quantum Coherence Active</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -376,7 +376,7 @@ export default function AuroraFuturisticChat() {
             </button>
           </div>
           <p className="text-xs text-purple-400/60 mt-3 text-center">
-            Neural Interface • Quantum Processing • 47 Complete Systems Online
+            Neural Interface • Quantum Processing • 66 Complete Systems Online
           </p>
         </div>
       </div>
@@ -460,7 +460,7 @@ export default App;
                     "Categorized navigation (Core, Intelligence, Tools)",
                     "Quantum coherence monitor",
                     "Gradient animations and effects",
-                    "47 Complete Systems branding",
+                    "66 Complete Systems branding",
                 ],
                 "chat": [
                     "Neural chat interface",
@@ -507,7 +507,7 @@ export default App;
         print("\n[Aurora] 🎨 New Features:")
         print("  • Futuristic collapsible sidebar with 3 categories")
         print("  • Neural chat interface with quantum effects")
-        print("  • 47 Complete Systems (13 Tasks + 34 Tiers) branding")
+        print("  • 66 Complete Systems (13 Tasks + 34 Tiers) branding")
         print("  • Glassmorphism and gradient animations")
         print("  • Dark theme with cyan-purple-pink accents")
         print("  • Responsive layout for all screen sizes")

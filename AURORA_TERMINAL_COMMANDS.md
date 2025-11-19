@@ -222,7 +222,7 @@ python3
 >>> # Analyze screenshots, UI mockups
 ```
 
-### Security Auditing (Tier 46)
+### Security Auditing (Tier 53)
 ```bash
 python3
 >>> from aurora_security_auditor import AuroraSecurityAuditor

@@ -218,10 +218,10 @@ class AuroraCore:
             self.intelligence.log(f"   📄 Current V2 size: {current_lines} lines")
 
             # ====================================================================
-            # PHASE 2: STRATEGIC PLANNING (Tier 32: Architecture & Design)
+            # PHASE 2: STRATEGIC PLANNING (Tier 53: Architecture & Design)
             # ====================================================================
             self.intelligence.log("\n🎯 PHASE 2: STRATEGIC PLANNING")
-            self.intelligence.log("   🏗️ Using TIER 32: Systems Architecture Mastery")
+            self.intelligence.log("   🏗️ Using TIER 53: Systems Architecture Mastery")
 
             execution_plan = [
                 {

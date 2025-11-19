@@ -36,7 +36,7 @@ This **automatically updates**:
 - **Tier 38:** Tier Orchestrator (multi-tier coordination)
 - **Tier 39:** Performance Optimizer (predictive analysis)
 - **Tier 40:** Full Autonomy (100% autonomous operation)
-- **Tier 41:** Strategist (strategic planning, 95% context)
+- **Tier 53:** Strategist (strategic planning, 95% context)
 
 ---
 
@@ -122,7 +122,7 @@ That's it! The system **automatically**:
 After running updates, verify:
 
 - [ ] `aurora_core.py` has correct tier count
-- [ ] Frontend shows correct numbers (41 tiers, 54 total)
+- [ ] Frontend shows correct numbers (53 tiers, 54 total)
 - [ ] Backend mentions correct capabilities
 - [ ] All autonomous systems exist (Phases 1-6)
 - [ ] Documentation is up to date

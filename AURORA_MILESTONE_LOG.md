@@ -83,7 +83,7 @@
     - Communication, Teamwork/collaboration, Adaptability, Technical writing, Time management
   - **TIER 31:** Data Structures & Algorithms (72 skills)
     - Data structures, Algorithms, Complexity analysis
-  - **TIER 32:** SDLC & Methodologies (136 skills)
+  - **TIER 53:** SDLC & Methodologies (136 skills)
     - Methodologies, Testing/debugging, Version control, IDEs/tools, Architecture design
 - **Key Innovation:** ALL skills span Ancient → Classical → Modern → AI-Native → Future → Sci-Fi
 - **Examples:**
@@ -348,7 +348,7 @@ const response = await fetch('/api/chat', {
 #### **Significance:**
 🌟 **Aurora can now:**
 - ✅ Detect architectural issues (wrong service endpoints)
-- ✅ Apply TIER 32 architecture design mastery
+- ✅ Apply TIER 53 architecture design mastery
 - ✅ Fix multiple different types of bugs autonomously
 - ✅ Enhance her own diagnostic capabilities on-the-fly
 - ✅ Fix issues discovered AFTER initial fix

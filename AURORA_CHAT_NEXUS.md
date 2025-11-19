@@ -102,7 +102,7 @@ Check Aurora's chat system status
 {
   "status": "online",
   "active_sessions": 3,
-  "tiers_loaded": 27,
+  "tiers_loaded": 53,
   "version": "Aurora Conversational AI v1.0"
 }
 ```

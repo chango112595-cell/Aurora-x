@@ -140,7 +140,7 @@
      - TIER 29: Problem-solving, Logic, Mathematics (98 skills)
      - TIER 30: Communication, Teamwork, Adaptability (94 skills)
      - TIER 31: Data Structures & Algorithms (72 skills)
-     - TIER 32: SDLC, Testing, Version Control, Architecture (136 skills)
+     - TIER 53: SDLC, Testing, Version Control, Architecture (136 skills)
    - All skills span Ancient → Sci-Fi
 
 2. **TIER 33: Internet & Network Mastery**

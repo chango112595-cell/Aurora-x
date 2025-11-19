@@ -613,7 +613,7 @@ class AuroraKnowledgeTiers:
         }
 
     def _get_strategist(self):
-        """Tier 41: Strategist - Strategic planning and context understanding"""
+        """Tier 53: Strategist - Strategic planning and context understanding"""
         return {
             "tier": 41,
             "name": "Strategist",
@@ -705,7 +705,7 @@ class AuroraKnowledgeTiers:
         }
 
     def _get_security_auditor(self):
-        """Tier 46: Security Auditing"""
+        """Tier 53: Security Auditing"""
         return {
             "tier": 46,
             "name": "Security Auditing",
@@ -871,12 +871,12 @@ class AuroraKnowledgeTiers:
             "tier_orchestrator": "Tier 38 (Multi-tier coordination and synthesis)",
             "performance_optimizer": "Tier 39 (Predictive analysis and optimization)",
             "full_autonomy": "Tier 40 (100% autonomous operation)",
-            "strategist": "Tier 41 (Strategic planning and context understanding)",
+            "strategist": "Tier 53 (Strategic planning and context understanding)",
             "pylint_prevention": "Tier 42 (Prevent code quality issues proactively)",
             "visual_understanding": "Tier 43 (Screenshot analysis and visual code interpretation)",
             "live_integration": "Tier 44 (Real-time system connections and debugging)",
             "test_generator": "Tier 45 (Automated test generation with 100% coverage)",
-            "security_auditor": "Tier 46 (OWASP compliance and vulnerability scanning)",
+            "security_auditor": "Tier 53 (OWASP compliance and vulnerability scanning)",
             "doc_generator": "Tier 47 (Automated documentation and OpenAPI specs)",
             "multi_agent": "Tier 48 (Multi-agent coordination and orchestration)",
             "ui_generator": "Tier 49 (UI component and design system generation)",

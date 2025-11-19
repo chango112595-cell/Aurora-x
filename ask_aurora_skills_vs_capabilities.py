@@ -62,12 +62,12 @@ Keep the architecture but improve the presentation:
 
 **Current System:**
   • 13 Foundation Tasks
-  • 41 Knowledge Tiers (Capabilities)
+  • 53 Knowledge Tiers (Capabilities)
   • 54 Total Capabilities
 
 **Enhanced Presentation:**
   • 13 Foundation Tasks (each with multiple skills)
-  • 41 Knowledge Tiers (Capabilities)
+  • 53 Knowledge Tiers (Capabilities)
   • 1,500+ Grandmaster Skills (within capabilities)
   • 54 Core Capabilities
 
@@ -80,7 +80,7 @@ Keep the architecture but improve the presentation:
 
 This way:
 ✅ We show both the architecture AND the depth
-✅ Maintainable (54 capability containers)
+✅ Maintainable (66 capability containers)
 ✅ Impressive (1,500+ skills)
 ✅ Accurate representation
 ✅ Easy to scale
@@ -96,16 +96,16 @@ DON'T change capabilities to 1,500+ individual skills.
 
 INSTEAD, enhance the presentation to show BOTH:
 
-1. Keep backend architecture: 54 capabilities (clean, maintainable)
+1. Keep backend architecture: 66 capabilities (clean, maintainable)
 2. Update frontend to emphasize: "1,500+ Grandmaster Skills"
 3. Show the depth: "54 Core Capabilities × 30+ Skills Each"
 
 Example UI updates:
-  Current:  "54 Complete Systems"
+  Current:  "66 Complete Systems"
   Enhanced: "54 Core Systems • 1,500+ Grandmaster Skills"
   
-  Current:  "41 Knowledge Tiers"
-  Enhanced: "41 Knowledge Tiers • 1,500+ Individual Skills"
+  Current:  "53 Knowledge Tiers"
+  Enhanced: "53 Knowledge Tiers • 1,500+ Individual Skills"
 
 This gives you:
   ✓ Marketing power (1,500+ sounds impressive)
@@ -119,7 +119,7 @@ print("\n📊 PROPOSED UI CHANGES:")
 print(
     """
   Intelligence Page:
-    Before: "54 Complete Systems"
+    Before: "66 Complete Systems"
     After:  "1,500+ Grandmaster Skills • 54 Core Capabilities"
   
   Dashboard:
@@ -127,7 +127,7 @@ print(
     After:  "2,500+ Skills in 66 Capabilities (13 Tasks + 53 Tiers)"
   
   Chat Header:
-    Before: "54 Systems: 13 Foundation Tasks + 41 Knowledge Tiers"
+    Before: "66 Systems: 13 Foundation Tasks + 53 Knowledge Tiers"
     After:  "1,500+ Grandmaster Skills across 54 Core Capabilities"
 """
 )
@@ -159,7 +159,7 @@ print(
     """
 NO - Don't make every skill a capability (too complex to maintain)
 
-YES - Emphasize the 1,500+ skills in the UI while keeping 54 capabilities
+YES - Emphasize the 1,500+ skills in the UI while keeping 66 capabilities
 
 This is like saying:
   "Python has 200+ built-in functions" (skills)
@@ -169,7 +169,7 @@ This is like saying:
 We want to show BOTH the organized structure (54) AND the depth (1,500+).
 
 Should I implement the hybrid approach? This would:
-  1. Keep 54 capabilities in backend (clean architecture)
+  1. Keep 66 capabilities in backend (clean architecture)
   2. Add skill counting to aurora_core.py
   3. Update UI to show "1,500+ Skills in 54 Capabilities"
   4. Best of both worlds!
@@ -177,8 +177,8 @@ Should I implement the hybrid approach? This would:
 )
 
 print("\n🎯 Your decision - which approach do you prefer?")
-print("  A) Keep as-is (54 capabilities only)")
-print("  B) Hybrid approach (54 capabilities + 1,500+ skills shown)")
+print("  A) Keep as-is (66 capabilities only)")
+print("  B) Hybrid approach (66 capabilities + 1,500+ skills shown)")
 print("  C) Full conversion (make 1,500+ individual capabilities)")
 
 print("\n" + "=" * 70 + "\n")

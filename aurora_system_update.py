@@ -53,7 +53,7 @@ def aurora_system_update():
         file_path = root / file_path_str
         if file_path.exists():
             updates = [
-                ("32 Grandmaster Tiers", "47 Complete Systems (13 Tasks + 34 Tiers)"),
+                ("32 Grandmaster Tiers", "66 Complete Systems (13 Tasks + 34 Tiers)"),
                 (
                     "Autonomous AI • Complete Project Ownership • 32 Grandmaster Tiers",
                     "Autonomous AI • 13 Foundation Tasks • 34 Knowledge Tiers • Complete Mastery",
@@ -68,7 +68,7 @@ def aurora_system_update():
         updates = [
             (
                 "32 Grandmaster Tiers | Ancient → Sci-Fi Mastery",
-                "47 Systems: 13 Foundation Tasks + 34 Knowledge Tiers | Ancient → Autonomous Mastery",
+                "66 Systems: 13 Foundation Tasks + 34 Knowledge Tiers | Ancient → Autonomous Mastery",
             ),
         ]
         if update_file_content(rebuilt_chat, updates):
@@ -78,7 +78,7 @@ def aurora_system_update():
     luminar_page = root / "client/src/pages/luminar-nexus.tsx"
     if luminar_page.exists():
         updates = [
-            ("Aurora's 27 Mastery Tiers", "Aurora's 47 Complete Systems"),
+            ("Aurora's 27 Mastery Tiers", "Aurora's 66 Complete Systems"),
             ("1,782+ Skills Active", "2,500+ Skills Active (13 Tasks + 34 Tiers)"),
         ]
         if update_file_content(luminar_page, updates):

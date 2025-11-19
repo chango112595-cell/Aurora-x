@@ -28,7 +28,7 @@ class AuroraKnowledgeEngine:
         """Build searchable index from all tier data"""
         self.knowledge_index = {"skills": {}, "specializations": {}}
 
-        # Index TIER 1-27 (Ultimate Grandmaster)
+        # Index TIER 1-53 (Ultimate Grandmaster)
         tier_counter = 1
         for tier_name, tier_data in self.tier_1_27.items():
             if not isinstance(tier_data, dict):

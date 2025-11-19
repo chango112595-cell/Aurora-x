@@ -1,14 +1,146 @@
 {
-  "timestamp": "2025-11-19T05:06:27.741049",
-  "version": "2.0.0-autonomous",
+  "timestamp": "2025-11-19T05:18:26.104037",
+  "version": "3.0.0-deep-search",
   "counts": {
     "foundation_count": 13,
     "tier_count": 53,
     "total_capabilities": 66
   },
-  "files_updated": 1,
+  "files_scanned": 4033,
+  "files_updated": 33,
   "updated_files": [
-    "C:\\Users\\negry\\Aurora-x\\server\\routes.ts"
+    {
+      "file": "ask_aurora_grandmastery.py",
+      "replacements": 2
+    },
+    {
+      "file": "ask_aurora_skills_vs_capabilities.py",
+      "replacements": 4
+    },
+    {
+      "file": "aurora_100_percent_check.py",
+      "replacements": 1
+    },
+    {
+      "file": "AURORA_30_MINUTE_CHALLENGE_COMPLETE.md",
+      "replacements": 2
+    },
+    {
+      "file": "aurora_automatic_system_update.py",
+      "replacements": 10
+    },
+    {
+      "file": "AURORA_CHAT_NEXUS.md",
+      "replacements": 1
+    },
+    {
+      "file": "AURORA_COMPLETE_ARCHITECTURE_2025-11-16.md",
+      "replacements": 9
+    },
+    {
+      "file": "aurora_complete_backend_update.py",
+      "replacements": 5
+    },
+    {
+      "file": "AURORA_COMPLETE_OMNISCIENCE.md",
+      "replacements": 2
+    },
+    {
+      "file": "aurora_core.py",
+      "replacements": 2
+    },
+    {
+      "file": "aurora_cosmic_nexus.html",
+      "replacements": 1
+    },
+    {
+      "file": "AURORA_DAY1_TO_PRESENT_DETAILED.md",
+      "replacements": 1
+    },
+    {
+      "file": "aurora_doc_generator.py",
+      "replacements": 1
+    },
+    {
+      "file": "aurora_full_ui_redesign.py",
+      "replacements": 1
+    },
+    {
+      "file": "aurora_html_tsx_analysis.py",
+      "replacements": 1
+    },
+    {
+      "file": "AURORA_KNOWLEDGE_ENGINE_COMPLETE.md",
+      "replacements": 1
+    },
+    {
+      "file": "AURORA_MILESTONE_LOG.md",
+      "replacements": 1
+    },
+    {
+      "file": "AURORA_OMNISCIENCE_SUMMARY.txt",
+      "replacements": 3
+    },
+    {
+      "file": "AURORA_ROOT_CAUSE_ANALYSIS.md",
+      "replacements": 1
+    },
+    {
+      "file": "aurora_security_auditor.py",
+      "replacements": 2
+    },
+    {
+      "file": "aurora_system_update.py",
+      "replacements": 2
+    },
+    {
+      "file": "AURORA_SYSTEM_UPDATE_PROTOCOL.md",
+      "replacements": 2
+    },
+    {
+      "file": "AURORA_TASK_FOUNDATIONS_INTEGRATED.md",
+      "replacements": 1
+    },
+    {
+      "file": "AURORA_TERMINAL_COMMANDS.md",
+      "replacements": 1
+    },
+    {
+      "file": "AURORA_UI_REDESIGN.md",
+      "replacements": 1
+    },
+    {
+      "file": "aurora_ui_redesign.py",
+      "replacements": 3
+    },
+    {
+      "file": "AURORA_UI_REDESIGN_REPORT.json",
+      "replacements": 1
+    },
+    {
+      "file": "aurora_verify_core_integration.py",
+      "replacements": 1
+    },
+    {
+      "file": ".aurora_knowledge\\FINAL_STATUS_REPORT.md",
+      "replacements": 1
+    },
+    {
+      "file": "tools\\aurora_core.py",
+      "replacements": 2
+    },
+    {
+      "file": "tools\\aurora_knowledge_engine.py",
+      "replacements": 1
+    },
+    {
+      "file": "tools\\luminar_nexus.py",
+      "replacements": 4
+    },
+    {
+      "file": "client\\src\\components\\AuroraFuturisticDashboard.tsx",
+      "replacements": 2
+    }
   ],
   "errors": []
 }

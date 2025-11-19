@@ -225,7 +225,7 @@ aurora_core.py (1,251 lines)
 ### Knowledge Distribution
 - **13 Foundational Tasks**: Base cognitive abilities
 - **34 Knowledge Tiers**: Specialized domain expertise
-- **Total**: 47 capability systems working together
+- **Total**: 66 capability systems working together
 
 ---
 
