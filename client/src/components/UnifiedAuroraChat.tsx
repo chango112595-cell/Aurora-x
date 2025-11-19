@@ -30,7 +30,7 @@ export default function UnifiedAuroraChat({ compact = false, theme = 'profession
     // Aurora welcome message
     const welcomeMessage = compact
       ? "Hey — I'm Aurora. Chat with me from the sidebar. Ask anything!"
-      : "Hey! 👋 Aurora here with all 32 mastery tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?";
+      : "Hey! 👋 Aurora here with all 53 knowledge tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?";
 
     setMessages([{
       id: '0',
@@ -128,7 +128,7 @@ export default function UnifiedAuroraChat({ compact = false, theme = 'profession
               </div>
               <Badge className="bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-4 py-2">
                 <Zap className="h-4 w-4 mr-1" />
-                32 TIERS ACTIVE
+                53 TIERS ACTIVE
               </Badge>
             </div>
           </div>
@@ -206,7 +206,7 @@ export default function UnifiedAuroraChat({ compact = false, theme = 'profession
             <Sparkles className="h-6 w-6 text-cyan-400" />
             Chat with Aurora
             <Badge variant={connected ? "default" : "secondary"} className="ml-auto bg-cyan-500/20 text-cyan-300">
-              {connected ? (compact ? '🌌 Ready' : '🌌 32 Tiers Active') : '○ Offline'}
+              {connected ? (compact ? '🌌 Ready' : '🌌 53 Tiers Active') : '○ Offline'}
             </Badge>
           </CardTitle>
           {!compact && (

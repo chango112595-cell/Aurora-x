@@ -124,7 +124,7 @@ export default function AuroraDashboard() {
               <div className="text-pink-400 font-medium mb-2">🧠 Aurora Core</div>
               <div className="text-xs text-pink-300/60 space-y-1">
                 <div>tools/luminar_nexus.py</div>
-                <div>32 Tiers Intelligence</div>
+                <div>53 Tiers Intelligence</div>
                 <div>✅ Self-modification capable</div>
               </div>
             </div>

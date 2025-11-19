@@ -37,7 +37,8 @@ export default function AuroraFuturisticDashboard() {
   const knowledgeTiers = [
     { category: "Languages", tiers: "1-6", count: 55, icon: Code2, color: "cyan" },
     { category: "Technical", tiers: "7-27", count: 21, icon: Cpu, color: "purple" },
-    { category: "Autonomous", tiers: "28-41", count: 14, icon: Brain, color: "pink" }
+    { category: "Autonomous", tiers: "28-46", count: 19, icon: Brain, color: "pink" },
+    { category: "Advanced", tiers: "47-53", count: 7, icon: Sparkles, color: "cyan" }
   ];
 
   const systemServices = [
@@ -87,7 +88,7 @@ export default function AuroraFuturisticDashboard() {
                 <Network className="h-5 w-5 text-purple-400" />
                 <span className="text-purple-300 text-sm">Knowledge Tiers</span>
               </div>
-              <div className="text-3xl font-bold text-purple-400">41</div>
+              <div className="text-3xl font-bold text-purple-400">53</div>
             </div>
 
             <div className="bg-gradient-to-br from-pink-500/10 to-pink-500/5 border border-pink-500/30 rounded-xl p-4">
@@ -154,7 +155,7 @@ export default function AuroraFuturisticDashboard() {
           <CardHeader className="border-b border-purple-500/20">
             <CardTitle className="flex items-center gap-2 text-purple-300">
               <Network className="h-6 w-6" />
-              Knowledge Tier Architecture (1-41)
+              Knowledge Tier Architecture (1-53)
               <Badge className="ml-auto bg-purple-500/20 text-purple-300 border-purple-500/50">
                 Domain Layer
               </Badge>
@@ -283,7 +284,7 @@ export default function AuroraFuturisticDashboard() {
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-6">
             <div className="text-cyan-300/80">
-              <span className="text-cyan-400 font-semibold">Architecture:</span> 13 Tasks + 53 Tiers = 54 Systems
+              <span className="text-cyan-400 font-semibold">Architecture:</span> 13 Tasks + 53 Tiers = 66 Systems
             </div>
             <div className="text-purple-300/80">
               <span className="text-purple-400 font-semibold">Version:</span> Quantum Neural 2.0

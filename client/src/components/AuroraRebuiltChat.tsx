@@ -100,7 +100,7 @@ I designed this holographic interface myself! Ask me anything about code, system
             </div>
             <Badge className="bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-4 py-2">
               <Zap className="h-4 w-4 mr-1" />
-              32 TIERS ACTIVE
+              53 TIERS ACTIVE
             </Badge>
           </div>
         </div>

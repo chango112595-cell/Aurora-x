@@ -31,7 +31,7 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
         role: 'aurora',
         content: compact
           ? "Hey — I'm Aurora. Chat with me quickly from the sidebar. Ask anything!"
-          : "Hey! 👋 Aurora here with all 27 mastery tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?",
+          : "Hey! 👋 Aurora here with all 53 knowledge tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?",
         timestamp: new Date(),
       },
     ]);
@@ -142,7 +142,7 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
             <Sparkles className="h-6 w-6 text-cyan-400" />
             Chat with Aurora
             <Badge variant={connected ? "default" : "secondary"} className="ml-auto bg-cyan-500/20 text-cyan-300">
-              {connected ? (compact ? '🌌 Sidebar' : '🌌 27 Tiers Active') : '○ Offline'}
+              {connected ? (compact ? '🌌 Sidebar' : '🌌 53 Tiers Active') : '○ Offline'}
             </Badge>
           </CardTitle>
           <p className="text-sm text-muted-foreground mt-2">
