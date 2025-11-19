@@ -26,8 +26,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user for security
-RUN useradd -m -u 1000 aurora && \
+# Create non-root user for security (robust: handles pre-existing UID 1000)
+RUN if ! getent passwd 1000 >/dev/null 2>&1; then \
+        useradd -m -u 1000 aurora; \
+    else \
+        useradd -m aurora || true; \
+    fi && \
     mkdir -p /app && \
     chown -R aurora:aurora /app
 
