@@ -18,7 +18,7 @@ print(f"  • Total Capabilities: {aurora.total_capabilities}")
 print()
 
 # Verify Tier 53
-tier53 = aurora.tiers.get('tier_53_docker_mastery')
+tier53 = aurora.tiers.get("tier_53_docker_mastery")
 if tier53:
     print("✅ TIER 53 - DOCKER INFRASTRUCTURE MASTERY:")
     print("  • Status: INTEGRATED ✓")
