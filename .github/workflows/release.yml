@@ -14,7 +14,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'chore(release)')"
+    if: ${{ !contains(github.event.head_commit.message, 'chore(release)') }}
     
     steps:
       - name: Checkout code
@@ -40,6 +40,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Run Semantic Release
+        id: release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -63,7 +64,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to PyPI (optional)
-        if: steps.release.outputs.released == 'true' && false  # Disabled by default
+        if: false  # Disabled by default - remove this line and set PYPI_TOKEN secret to enable
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
