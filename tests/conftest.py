@@ -18,7 +18,8 @@ from fastapi.testclient import TestClient
 
 def pytest_configure(config):
     """Configure pytest with custom settings"""
-    config.addinivalue_line("markers", "requires_network: Tests that require network access")
+    config.addinivalue_line(
+        "markers", "requires_network: Tests that require network access")
     config.addinivalue_line("markers", "requires_gpu: Tests that require GPU")
 
 
