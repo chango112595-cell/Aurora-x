@@ -107,8 +107,8 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker build -f docker/Dockerfile.backend -t aurora-backend:test . || echo "⚠️ Backend build needs attention"
-          docker build -f docker/Dockerfile.frontend -t aurora-frontend:test . || echo "⚠️ Frontend build needs attention"
+          docker build -f Dockerfile.backend -t aurora-backend:test . || echo "⚠️ Backend build needs attention"
+          docker build -f Dockerfile.frontend -t aurora-frontend:test . || echo "⚠️ Frontend build needs attention"
 
       - name: Run Aurora quality gates
         continue-on-error: true
@@ -182,7 +182,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: docker/Dockerfile.backend
+          file: Dockerfile.backend
           platforms: linux/amd64,linux/arm64
           push: false
           tags: aurora-backend:latest
@@ -191,7 +191,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: docker/Dockerfile.frontend
+          file: Dockerfile.frontend
           platforms: linux/amd64,linux/arm64
           push: false
           tags: aurora-frontend:latest
