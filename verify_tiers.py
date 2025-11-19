@@ -21,8 +21,8 @@ print(
 
 print("\n🔥 Bonus Tiers:")
 print(
-    f"  Tier 51 (Code Quality): {'✅ Loaded' if 'tier_51_code_quality' in a.tiers else '❌ Missing'}")
+    f"  Tier 51 (Code Quality): {'✅ Loaded' if 'tier_51_code_quality_enforcer' in a.tiers else '❌ Missing'}")
 print(
     f"  Tier 52 (RSA Grandmaster): {'✅ Loaded' if 'tier_52_rsa_grandmaster' in a.tiers else '❌ Missing'}")
 print(
-    f"  Tier 53 (Docker Master): {'✅ Loaded' if 'tier_53_docker_master' in a.tiers else '❌ Missing'}")
+    f"  Tier 53 (Docker Master): {'✅ Loaded' if 'tier_53_docker_mastery' in a.tiers else '❌ Missing'}")
