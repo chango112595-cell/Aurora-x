@@ -78,13 +78,13 @@ class AuroraCodeQualityEnforcer:
             "duplicate_code_detection",
         ]
 
-        print(f"\n{'='*70}")
+        print("\n" + "="*70)
         print(f"🔧 {self.name} v{self.version} Initialized")
-        print(f"{'='*70}")
+        print("="*70)
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
         print("Status: ACTIVE - Code quality enforcement ready")
-        print(f"{'='*70}\n")
+        print("="*70 + "\n")
 
     def scan_file(self, file_path: str) -> list[QualityIssue]:
         """Scan file for code quality issues"""
@@ -224,7 +224,8 @@ class AuroraCodeQualityEnforcer:
                     # Add underscore prefix
                     line_idx = issue.line_number - 1
                     if line_idx < len(lines):
-                        lines[line_idx] = lines[line_idx].replace(f"{arg_name}:", f"_{arg_name}:")
+                        lines[line_idx] = lines[line_idx].replace(
+                            f"{arg_name}:", f"_{arg_name}:")
                         fixed_count += 1
 
         if fixed_count > 0:
@@ -314,7 +315,8 @@ def main():
     enforcer = AuroraCodeQualityEnforcer()
 
     print("Test 1: Scan New Tier Files")
-    files_to_scan = ["aurora_visual_understanding.py", "aurora_live_integration.py", "aurora_doc_generator.py"]
+    files_to_scan = ["aurora_visual_understanding.py",
+                     "aurora_live_integration.py", "aurora_doc_generator.py"]
 
     all_issues = []
     for file in files_to_scan:
@@ -330,7 +332,7 @@ def main():
         print(f"  Total issues: {report['total_issues']}")
         print(f"  Auto-fixable: {report['auto_fixable']}")
 
-        print("\nTest 3: Auto-fix Issues")
+        print("Test 3: Auto-fix Issues")
         for file in files_to_scan:
             try:
                 file_issues = [i for i in all_issues if i.file_path == file]
@@ -346,7 +348,7 @@ def main():
     print("\n" + "=" * 70)
     print("✅ TIER 51 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
-    print("=" * 70 + "\n")
+    print("=" * 70)
 
 
 if __name__ == "__main__":

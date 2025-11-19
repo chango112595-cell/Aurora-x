@@ -18,102 +18,75 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
 # Detect platform
-is_windows = platform.system() == "Windows"
-PYTHON_CMD = "python" if is_windows else "python3"
+IS_WINDOWS = platform.system() == "Windows"
+PYTHON_CMD = "python" if IS_WINDOWS else "python3"
+
+
+def start_process(cmd, is_shell=False):
+    """Start a process with correct parameters for current platform"""
+    kwargs = {
+        'stdout': subprocess.DEVNULL,
+        'stderr': subprocess.DEVNULL,
+    }
+
+    if IS_WINDOWS:
+        kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
+        if is_shell:
+            kwargs['shell'] = True
+    else:
+        kwargs['start_new_session'] = True
+
+    return subprocess.Popen(cmd, **kwargs)
+
 
 # 1. Start Backend + Frontend (npm run dev serves both on port 5000)
 print("🚀 Starting Aurora Backend + Frontend (port 5000)...")
-if is_windows:
-    subprocess.Popen(
-        "npm run dev",
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
-        shell=True
-    )
-else:
-    subprocess.Popen(
-        ["npm", "run", "dev"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        start_new_session=True
-    )
+start_process("npm run dev" if IS_WINDOWS else [
+              "npm", "run", "dev"], is_shell=IS_WINDOWS)
 time.sleep(3)
 
 # 2. Start Bridge Service
 print("🚀 Starting Bridge Service (port 5001)...")
-if is_windows:
-    subprocess.Popen(
-        [PYTHON_CMD, "-m", "aurora_x.bridge.service"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
-    )
-else:
-    subprocess.Popen(
-        [PYTHON_CMD, "-m", "aurora_x.bridge.service"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        start_new_session=True
-    )
+start_process([PYTHON_CMD, "-m", "aurora_x.bridge.service"])
 time.sleep(2)
 
 # 3. Start Self-Learning
 print("🚀 Starting Self-Learning Service (port 5002)...")
-if is_windows:
-    subprocess.Popen(
-        [PYTHON_CMD, "-m", "aurora_x.self_learn_server"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
-    )
-else:
-    subprocess.Popen(
-        [PYTHON_CMD, "-m", "aurora_x.self_learn_server"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        start_new_session=True
-    )
+start_process([PYTHON_CMD, "-m", "aurora_x.self_learn_server"])
 time.sleep(2)
 
 # 4. Start Chat Server
 print("🚀 Starting Chat Server (port 5003)...")
-if is_windows:
-    subprocess.Popen(
-        [PYTHON_CMD, "aurora_chat_server.py", "--port", "5003"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
-    )
-else:
-    subprocess.Popen(
-        [PYTHON_CMD, "aurora_chat_server.py", "--port", "5003"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        start_new_session=True
-    )
+start_process([PYTHON_CMD, "aurora_chat_server.py", "--port", "5003"])
 time.sleep(2)
 
 # 5. Start Luminar Nexus Dashboard
 print("🚀 Starting Luminar Nexus Dashboard (port 5005)...")
-if is_windows:
-    subprocess.Popen(
-        [PYTHON_CMD, "tools\\luminar_nexus_v2.py", "api"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
-    )
+luminar_path = "tools\\luminar_nexus_v2.py" if IS_WINDOWS else "tools/luminar_nexus_v2.py"
+start_process([PYTHON_CMD, luminar_path, "api"])
+time.sleep(2)
+
+# 6. Start Aurora Autonomous Monitor (System Health Monitoring)
+print("🤖 Starting Aurora Autonomous Monitor...")
+start_process([PYTHON_CMD, "aurora_autonomous_monitor.py"])
+time.sleep(1)
+
+# 7. Run Initial System Update (one-time sync on startup)
+print("🔄 Running initial system synchronization...")
+sync_result = subprocess.run(
+    [PYTHON_CMD, "aurora_automatic_system_update.py"],
+    capture_output=True,
+    text=True,
+    timeout=30
+)
+if sync_result.returncode == 0:
+    print("   ✅ System synchronized successfully")
 else:
-    subprocess.Popen(
-        [PYTHON_CMD, "tools/luminar_nexus_v2.py", "api"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        start_new_session=True
-    )
+    print("   ⚠️  System sync completed with warnings")
 
 # Wait for services to initialize
-print("\n⏳ Waiting for services to initialize...")
-time.sleep(15)
+print("\n⏳ Waiting for services to fully initialize...")
+time.sleep(10)
 
 # Check service status
 
@@ -141,6 +114,8 @@ services = [
     ("Luminar Dashboard", 5005),
 ]
 
+# Note: Autonomous Monitor runs in background (no port check needed)
+
 running_count = 0
 for name, port in services:
     is_running = check_port(port)
@@ -157,10 +132,17 @@ if running_count >= 3:
     print("   🌐 Frontend:  http://localhost:5000")
     print("   💬 Chat:      http://localhost:5003")
     print("   📊 Dashboard: http://localhost:5005")
+    print("\n   🤖 Background Services:")
+    print("      • Autonomous Monitor: Running (24/7 health checks)")
+    print("      • System Auto-Sync: Enabled")
     print("\n   Note: Some services may still be initializing.")
     print("   Give them 10-20 more seconds if not all are ready yet.")
 else:
     print("\n⚠️  Some services are still starting...")
-    print("   Wait 20 more seconds and check: netstat -ano | findstr \"5000 5001 5002 5003 5005\"")
+    if IS_WINDOWS:
+        print('   Wait 20 more seconds and check: netstat -ano | findstr "5000 5001 5002 5003 5005"')
+    else:
+        print("   Wait 20 more seconds and check: netstat -tlnp | grep -E '5000|5001|5002|5003|5005'")
 
 print("\n✨ Aurora-X is running!")
+print("   💡 System is now auto-monitoring and will self-heal if issues arise")

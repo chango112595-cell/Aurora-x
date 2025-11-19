@@ -98,24 +98,31 @@ class AuroraSystemUpdater:
 
             # Replace any number references to tiers and capabilities
             # Use regex to find and replace dynamically
-            content = re.sub(r"(\d+) Knowledge Tiers", f"{tier_count} Knowledge Tiers", content)
-            content = re.sub(r"(\d+) Complete Systems", f"{total} Complete Systems", content)
-            content = re.sub(r"13 Tasks \+ (\d+) Tiers", f"13 Tasks + {tier_count} Tiers", content)
-            content = re.sub(r"(\d+) Systems: 13 Foundation Tasks", f"{total} Systems: 13 Foundation Tasks", content)
+            content = re.sub(r"(\d+) Knowledge Tiers",
+                             f"{tier_count} Knowledge Tiers", content)
+            content = re.sub(r"(\d+) Complete Systems",
+                             f"{total} Complete Systems", content)
+            content = re.sub(r"13 Tasks \+ (\d+) Tiers",
+                             f"13 Tasks + {tier_count} Tiers", content)
+            content = re.sub(r"(\d+) Systems: 13 Foundation Tasks",
+                             f"{total} Systems: 13 Foundation Tasks", content)
+
+            # Capture original in closures to avoid cell-var-from-loop
+            original_text = original
             content = re.sub(
                 r'<span className="text-purple-400 font-mono text-lg">(\d+)</span>',
-                lambda m: (
+                lambda m, orig=original_text: (
                     f'<span className="text-purple-400 font-mono text-lg">{tier_count}</span>'
-                    if "Knowledge Tiers" in original[max(0, m.start() - 200) : m.start()]
+                    if "Knowledge Tiers" in orig[max(0, m.start() - 200): m.start()]
                     else m.group(0)
                 ),
                 content,
             )
             content = re.sub(
                 r'<span className="text-pink-400 font-mono text-lg">(\d+)</span>',
-                lambda m: (
+                lambda m, orig=original_text: (
                     f'<span className="text-pink-400 font-mono text-lg">{total}</span>'
-                    if "Total Systems" in original[max(0, m.start() - 200) : m.start()]
+                    if "Total Systems" in orig[max(0, m.start() - 200): m.start()]
                     else m.group(0)
                 ),
                 content,
@@ -154,7 +161,8 @@ class AuroraSystemUpdater:
                     r"🧠 \d+ mastery tiers: LOADED",
                     f"🧠 {tier_count} knowledge tiers: LOADED ({total} total capabilities)",
                 ),
-                (r"🧠 All \d+ tiers active", f"🧠 All {tier_count} tiers active ({total} total capabilities)"),
+                (r"🧠 All \d+ tiers active",
+                 f"🧠 All {tier_count} tiers active ({total} total capabilities)"),
             ],
         }
 
@@ -187,7 +195,8 @@ class AuroraSystemUpdater:
             content = re.sub(
                 r"'total_capabilities': \d+", f"'total_capabilities': {counts['total_capabilities']}", content
             )
-            content = re.sub(r"'knowledge_tiers': \d+", f"'knowledge_tiers': {counts['tier_count']}", content)
+            content = re.sub(r"'knowledge_tiers': \d+",
+                             f"'knowledge_tiers': {counts['tier_count']}", content)
 
             if content != original:
                 integration_file.write_text(content, encoding="utf-8")

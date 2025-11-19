@@ -4396,7 +4396,7 @@ What AI system are we building? Or want me to explain a concept?`;
 
       return `All systems operational! ✅\n\n**Live Status:**\n${serviceList}\n\n**My state:**\n🧠 53 knowledge tiers: LOADED (66 total capabilities)\n💬 Conversation depth: ${ctx.conversationDepth} messages\n📚 Technologies we've discussed: ${ctx.mentionedTechs.slice(0,5).join(', ') || 'none yet'}\n\nWhat can I help you with?`;
     } catch {
-      return `I'm online and ready! ✅\n\n🧠 All 53 tiers active (66 total capabilities) (65 total capabilities) (65 total capabilities) (64 total capabilities) (63 total capabilities)\n💬 Chat: connected\n📚 Knowledge base: loaded\n\nWhat do you need help with?`;
+      return `I'm online and ready! ✅\n\n🧠 All 53 tiers active (66 total capabilities) (66 total capabilities) (66 total capabilities) (65 total capabilities) (65 total capabilities) (64 total capabilities) (63 total capabilities)\n💬 Chat: connected\n📚 Knowledge base: loaded\n\nWhat do you need help with?`;
     }
   }
 

@@ -2,14 +2,13 @@
 #!/usr/bin/env python3
 """
 Aurora X-Stop - Comprehensive Service Shutdown
-Stops all Aurora services, ports, and workflows
+Stops all Aurora services, ports, and workflows (Windows & Linux)
 """
 
 import subprocess
-import sys
 import time
 import os
-import glob
+import platform
 
 # Aurora's ports
 AURORA_PORTS = [
@@ -22,8 +21,35 @@ AURORA_PORTS = [
     8080,  # Alternative chat
 ]
 
-def kill_port(port):
-    """Kill process running on a specific port using /proc"""
+IS_WINDOWS = platform.system() == "Windows"
+
+
+def kill_port_windows(port):
+    """Kill process on Windows using netstat and taskkill"""
+    try:
+        result = subprocess.run(
+            ["netstat", "-ano"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        for line in result.stdout.split('\n'):
+            if f':{port}' in line and 'LISTENING' in line:
+                parts = line.split()
+                if parts:
+                    pid = parts[-1]
+                    subprocess.run(["taskkill", "/F", "/PID", pid],
+                                   stdout=subprocess.DEVNULL,
+                                   stderr=subprocess.DEVNULL)
+                    return True
+        return False
+    except Exception as e:
+        print(f"   ⚠️  Error killing port {port}: {e}")
+        return False
+
+
+def kill_port_linux(port):
+    """Kill process running on a specific port using fuser/netstat"""
     try:
         # Use fuser if available (more reliable than lsof)
         result = subprocess.run(
@@ -58,10 +84,19 @@ def kill_port(port):
         print(f"   ⚠️  Error killing port {port}: {e}")
         return False
 
+
+def kill_port(port):
+    """Kill process on port (cross-platform)"""
+    if IS_WINDOWS:
+        return kill_port_windows(port)
+    else:
+        return kill_port_linux(port)
+
+
 if __name__ == "__main__":
     print("🛑 Aurora: Stopping all services...")
     print("   Step 1: Killing processes on all ports...")
-    
+
     stopped_count = 0
     for port in AURORA_PORTS:
         if kill_port(port):
@@ -69,56 +104,105 @@ if __name__ == "__main__":
             stopped_count += 1
         else:
             print(f"   ℹ️  No service running on port {port}")
-    
+
     # Give processes time to die
     time.sleep(2)
-    
+
     # Kill any Node.js or Python processes that might restart
     print("\n   Step 2: Ensuring all Aurora processes are stopped...")
     try:
-        # Kill all npm/node processes
-        subprocess.run(["pkill", "-9", "-f", "npm"], stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "node"], stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "tsx"], stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "vite"], stderr=subprocess.DEVNULL)
-        
-        # Kill Python Aurora processes
-        subprocess.run(["pkill", "-9", "-f", "luminar_nexus"], stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "self_learn"], stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "aurora_x"], stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-f", "uvicorn"], stderr=subprocess.DEVNULL)
-        
-        print("   ✅ Killed all Aurora processes")
+        if IS_WINDOWS:
+            # Windows: Kill processes by name
+            processes_to_kill = [
+                "node.exe",
+                "npm.cmd",
+                "python.exe",
+                "pythonw.exe"
+            ]
+
+            # Get all Aurora-related Python processes
+            result = subprocess.run(
+                ["powershell", "-Command",
+                 "Get-Process | Where-Object {$_.CommandLine -like '*aurora*' -or $_.CommandLine -like '*luminar*'} | Select-Object Id"],
+                capture_output=True,
+                text=True
+            )
+
+            # Kill node/npm processes
+            for proc_name in ["node", "npm"]:
+                subprocess.run(
+                    ["taskkill", "/F", "/IM", f"{proc_name}.exe", "/T"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+
+            print("   ✅ Killed all Aurora processes")
+        else:
+            # Linux/Unix: Use pkill
+            subprocess.run(["pkill", "-9", "-f", "npm"],
+                           stderr=subprocess.DEVNULL)
+            subprocess.run(["pkill", "-9", "-f", "node"],
+                           stderr=subprocess.DEVNULL)
+            subprocess.run(["pkill", "-9", "-f", "tsx"],
+                           stderr=subprocess.DEVNULL)
+            subprocess.run(["pkill", "-9", "-f", "vite"],
+                           stderr=subprocess.DEVNULL)
+            subprocess.run(["pkill", "-9", "-f", "luminar_nexus"],
+                           stderr=subprocess.DEVNULL)
+            subprocess.run(["pkill", "-9", "-f", "self_learn"],
+                           stderr=subprocess.DEVNULL)
+            subprocess.run(["pkill", "-9", "-f", "aurora_x"],
+                           stderr=subprocess.DEVNULL)
+            subprocess.run(
+                ["pkill", "-9", "-f", "aurora_autonomous_monitor"], stderr=subprocess.DEVNULL)
+            subprocess.run(["pkill", "-9", "-f", "uvicorn"],
+                           stderr=subprocess.DEVNULL)
+            print("   ✅ Killed all Aurora processes")
     except Exception as e:
         print(f"   ⚠️  Process cleanup: {e}")
-    
-    # Stop tmux sessions if they exist
-    print("\n   Step 3: Stopping tmux sessions...")
-    try:
-        # List of tmux session names used by Aurora
-        sessions = ["aurora-backend", "aurora-vite", "aurora-bridge", "aurora-self-learn", "aurora-chat"]
-        for session in sessions:
-            result = subprocess.run(
-                ["tmux", "has-session", "-t", session],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
-            )
-            if result.returncode == 0:
-                subprocess.run(["tmux", "kill-session", "-t", session], stderr=subprocess.DEVNULL)
-                print(f"   ✓ Killed tmux session: {session}")
-    except Exception as e:
-        print(f"   ℹ️  Tmux cleanup: {e}")
-    
+
+    # Stop tmux sessions if they exist (Linux/Unix only)
+    if not IS_WINDOWS:
+        print("\n   Step 3: Stopping tmux sessions...")
+        try:
+            # List of tmux session names used by Aurora
+            sessions = ["aurora-backend", "aurora-vite",
+                        "aurora-bridge", "aurora-self-learn", "aurora-chat"]
+            for session in sessions:
+                result = subprocess.run(
+                    ["tmux", "has-session", "-t", session],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+                if result.returncode == 0:
+                    subprocess.run(["tmux", "kill-session", "-t",
+                                   session], stderr=subprocess.DEVNULL)
+                    print(f"   ✓ Killed tmux session: {session}")
+        except Exception as e:
+            print(f"   ℹ️  Tmux cleanup: {e}")
+    else:
+        print("\n   Step 3: Windows cleanup complete")
+
     # Clean up PID files
     print("\n   Step 4: Cleaning up PID files...")
-    pid_files = [
-        "/tmp/bridge.pid",
-        "/tmp/self_learn.pid",
-        "/tmp/luminar_keeper.pid",
-        "/tmp/aurora_orch.pid",
-        ".self_learning.pid"
-    ]
-    
+
+    if IS_WINDOWS:
+        pid_files = [
+            "bridge.pid",
+            "self_learn.pid",
+            "luminar_keeper.pid",
+            "aurora_orch.pid",
+            ".self_learning.pid"
+        ]
+    else:
+        pid_files = [
+            "/tmp/bridge.pid",
+            "/tmp/self_learn.pid",
+            "/tmp/luminar_keeper.pid",
+            "/tmp/aurora_orch.pid",
+            ".self_learning.pid"
+        ]
+
     for pid_file in pid_files:
         if os.path.exists(pid_file):
             try:
@@ -126,8 +210,14 @@ if __name__ == "__main__":
                 print(f"   ✓ Removed {pid_file}")
             except Exception as e:
                 print(f"   ⚠️  Could not remove {pid_file}: {e}")
-    
+
     print(f"\n✅ Stopped {stopped_count} services on ports")
     print("🌙 Aurora services are now offline")
-    print("\n💡 Note: The preview should stop within 5-10 seconds.")
-    print("   If it doesn't, wait a moment and refresh your browser.")
+    print("\n💡 All services stopped:")
+    print("   • Backend API + Frontend")
+    print("   • Bridge Service")
+    print("   • Self-Learning Service")
+    print("   • Chat Server")
+    print("   • Luminar Dashboard")
+    print("   • Autonomous Monitor")
+    print("\n   Aurora is completely shut down.")

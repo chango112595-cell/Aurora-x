@@ -430,20 +430,20 @@ class AuroraRSAGrandmaster:
 
         return convergents
 
-    def _apply_oaep_padding(self, m: int, n: int) -> int:
+    def _apply_oaep_padding(self, m: int, _n: int) -> int:
         """Apply OAEP padding (simplified)"""
         # In production, use proper OAEP with hash functions
         return m
 
-    def _remove_oaep_padding(self, m: int, n: int) -> int:
+    def _remove_oaep_padding(self, m: int, _n: int) -> int:
         """Remove OAEP padding (simplified)"""
         return m
 
-    def _apply_pkcs1_padding(self, m: int, n: int) -> int:
+    def _apply_pkcs1_padding(self, m: int, _n: int) -> int:
         """Apply PKCS#1 v1.5 padding (simplified)"""
         return m
 
-    def _remove_pkcs1_padding(self, m: int, n: int) -> int:
+    def _remove_pkcs1_padding(self, m: int, _n: int) -> int:
         """Remove PKCS#1 v1.5 padding (simplified)"""
         return m
 

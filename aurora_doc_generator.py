@@ -176,7 +176,8 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
 {project_info['contact']}
 """
 
-        doc = Documentation(doc_type=DocType.README, content=readme_content, format="markdown", metadata=project_info)
+        doc = Documentation(doc_type=DocType.README, content=readme_content,
+                            format="markdown", metadata=project_info)
 
         print("✅ README generated")
         return doc
@@ -193,7 +194,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
         """
         print(f"💬 Generating inline comments for: {Path(file_path).name}")
 
-        with open(file_path) as f:
+        with open(file_path, encoding="utf-8") as f:
             code = f.read()
 
         # Parse and add comments
@@ -413,7 +414,8 @@ User → Frontend → API Gateway → Backend Services → Database
 - CI/CD: GitHub Actions
 """
 
-        doc = Documentation(doc_type=DocType.ARCHITECTURE, content=arch_docs, format="markdown", metadata=structure)
+        doc = Documentation(doc_type=DocType.ARCHITECTURE,
+                            content=arch_docs, format="markdown", metadata=structure)
 
         print("✅ Architecture docs generated")
         return doc
@@ -464,7 +466,8 @@ User → Frontend → API Gateway → Backend Services → Database
     def _extract_classes(self, ___file_path: str) -> list[dict]:
         """Extract classes from file"""
         return [
-            {"name": "DataProcessor", "methods": ["process", "validate"], "description": "Main data processing class"}
+            {"name": "DataProcessor", "methods": [
+                "process", "validate"], "description": "Main data processing class"}
         ]
 
     def _document_function(self, func: dict) -> dict:
@@ -575,7 +578,6 @@ result = aurora.process_task("Generate API docs")
 
     def _update_doc_file(self, ___doc_file: str, ___source_dir: str):
         """Update a documentation file"""
-        pass
 
     def get_capabilities_summary(self) -> dict[str, Any]:
         """Get summary of documentation capabilities"""
@@ -612,7 +614,8 @@ def main():
 
     # Test 3: Tutorial
     print("Test 3: Tutorial Generation")
-    tutorial = doc_gen.generate_tutorial("Visual Understanding", ["code1", "code2"])
+    tutorial = doc_gen.generate_tutorial(
+        "Visual Understanding", ["code1", "code2"])
     print(f"  Steps: {tutorial.metadata['steps']}\n")
 
     # Test 4: Changelog

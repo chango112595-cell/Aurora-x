@@ -58,11 +58,11 @@ class AuroraGitMaster:
 
         print(f"\n{'='*70}")
         print(f"🔄 {self.name} v{self.version} Initialized")
-        print(f"{'='*70}")
+        print("="*70)
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
         print("Status: ACTIVE - Git mastery enabled")
-        print(f"{'='*70}\n")
+        print("="*70 + "\n")
 
     def create_feature_branch(self, feature_name: str) -> GitOperation:
         """Create optimized feature branch"""
@@ -107,7 +107,7 @@ class AuroraGitMaster:
             details={"branch": branch, "base": base, "conflicts": 0},
         )
 
-        print("✅ Rebase completed successfully")
+        print("Rebase completed successfully")
         return operation
 
     def resolve_conflicts(self, file_path: str) -> GitOperation:
@@ -124,7 +124,7 @@ class AuroraGitMaster:
             details=resolution,
         )
 
-        print("✅ Conflicts resolved")
+        print("Conflicts resolved")
         return operation
 
     def create_pull_request(self, branch: str, title: str, description: str) -> dict[str, Any]:
@@ -155,7 +155,7 @@ class AuroraGitMaster:
             details={"squashed_commits": 3, "cleaned_branches": 2},
         )
 
-        print("✅ History optimized")
+        print("History optimized")
         return operation
 
     def _determine_change_type(self, changes: list[str]) -> str:
@@ -218,7 +218,8 @@ def main():
     print("  Type: feat\n")
 
     print("Test 3: Create PR")
-    pr = git_master.create_pull_request("feature/tier-50", "Add Git Mastery", "Description")
+    pr = git_master.create_pull_request(
+        "feature/tier-50", "Add Git Mastery", "Description")
     print(f"  Labels: {pr['labels']}\n")
 
     summary = git_master.get_capabilities_summary()
