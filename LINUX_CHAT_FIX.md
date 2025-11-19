@@ -1,4 +1,4 @@
-# 🐧 Aurora Linux Chat Installation Fix
+aaaq# 🐧 Aurora Linux Chat Installation Fix
 
 ## Issue: Chat Failed on Linux
 
