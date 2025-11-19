@@ -83,7 +83,7 @@ export default function AuroraDashboard() {
               <div className="mt-4 p-3 rounded-lg bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
                 <div className="flex items-center gap-2 text-cyan-300 font-medium">
                   <Zap className="h-4 w-4" />
-                  TIER 28-32: Autonomous Execution Active
+                  TIER 28-53: Autonomous Execution Active
                 </div>
                 <div className="text-xs text-cyan-300/60 mt-1">
                   Self-debugging • Autonomous tools • Creative decision-making
@@ -142,7 +142,7 @@ export default function AuroraDashboard() {
 
       {/* Footer */}
       <div className="mt-6 text-center text-cyan-400/60 text-sm">
-        🤖 Built autonomously by Aurora using TIER 28 (Autonomous Tools) + TIER 32 (Architecture Mastery)
+        🤖 Built autonomously by Aurora using TIER 28-53 (Autonomous + Advanced Systems)
       </div>
     </div>
   );

@@ -151,7 +151,7 @@ I designed this holographic interface myself! Ask me anything about code, system
             </Button>
           </div>
           <p className="text-xs text-center text-cyan-400/50 mt-2">
-            ⚡ Designed autonomously by Aurora using TIER 32 creativity
+            ⚡ Designed autonomously by Aurora using TIER 53 creativity
           </p>
         </div>
       </div>
