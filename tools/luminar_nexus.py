@@ -2384,7 +2384,7 @@ What should we build today?`,
             Aurora Chat - Autonomous Rebuild
             <Badge className="ml-auto bg-gradient-to-r from-cyan-500 to-purple-500">
               <Cpu className="h-3 w-3 mr-1" />
-              32 Tiers Active
+              53 Tiers Active
             </Badge>
           </CardTitle>
           <p className="text-sm text-cyan-300/70 mt-2">
@@ -2583,7 +2583,7 @@ I designed this holographic interface myself! Ask me anything about code, system
             </div>
             <Badge className="bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-4 py-2">
               <Zap className="h-4 w-4 mr-1" />
-              32 TIERS ACTIVE
+              53 TIERS ACTIVE
             </Badge>
           </div>
         </div>
@@ -2733,7 +2733,7 @@ Ready for commands >_`,
         <div className="flex items-center gap-3 text-xs">
           <div className="flex items-center gap-1">
             <Cpu className="h-3 w-3" />
-            <span>32 TIERS</span>
+            <span>53 TIERS</span>
           </div>
           <div className="flex items-center gap-1">
             <Wifi className="h-3 w-3" />
@@ -2798,7 +2798,7 @@ Ready for commands >_`,
                 log.append("• Auto-scroll to latest messages")
                 log.append("• Loading states with visual feedback")
                 log.append("• Connects to /api/chat endpoint (port 5003)")
-                log.append("• Shows all 32 tiers badge")
+                log.append("• Shows all 53 tiers badge")
                 log.append("• Conversational welcome message")
                 log.append("\n**✨ AUTONOMOUS CAPABILITIES USED:**")
                 log.append("• ✅ write_file tool executed")
@@ -3223,7 +3223,7 @@ export default function AuroraDashboard() {
               <div className="text-pink-400 font-medium mb-2">🧠 Aurora Core</div>
               <div className="text-xs text-pink-300/60 space-y-1">
                 <div>tools/luminar_nexus.py</div>
-                <div>32 Tiers Intelligence</div>
+                <div>53 Tiers Intelligence</div>
                 <div>✅ Self-modification capable</div>
               </div>
             </div>
