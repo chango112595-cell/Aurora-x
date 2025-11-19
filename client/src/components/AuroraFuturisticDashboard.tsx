@@ -96,7 +96,7 @@ export default function AuroraFuturisticDashboard() {
                 <Zap className="h-5 w-5 text-pink-400" />
                 <span className="text-pink-300 text-sm">Total Systems</span>
               </div>
-              <div className="text-3xl font-bold text-pink-400">54</div>
+              <div className="text-3xl font-bold text-pink-400">66</div>
             </div>
 
             <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-xl p-4">
