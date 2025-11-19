@@ -12,7 +12,8 @@ Example usage:
 """
 
 import logging
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 
 import pytest
 
@@ -94,7 +95,7 @@ def create_a_data_processing_fun_batch(items: list[Any], **kwargs) -> list[Any]:
     return [create_a_data_processing_fun(item, **kwargs) for item in items]
 
 
-def create_a_data_processing_fun_async(input_data: Any, callback: Optional[Callable] = None) -> Any:
+def create_a_data_processing_fun_async(input_data: Any, callback: Callable | None = None) -> Any:
     """
     Process data with optional callback.
 
@@ -327,8 +328,7 @@ if __name__ == "__main__":
 
         all_tests = []
         for test_cls in [test_basic, test_integration]:
-            all_tests.extend([(test_cls, method) for method in dir(
-                test_cls) if method.startswith("test_")])
+            all_tests.extend([(test_cls, method) for method in dir(test_cls) if method.startswith("test_")])
 
         passed = 0
         failed = 0
