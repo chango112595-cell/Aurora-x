@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Use the REAL Aurora (tools/aurora_core.py) to fix Python extension loading"""
-from aurora_core import AuroraCore
 import sys
 from pathlib import Path
+
+from aurora_core import AuroraCore
 
 sys.path.insert(0, str(Path(__file__).parent / "tools"))
 
@@ -10,14 +11,14 @@ sys.path.insert(0, str(Path(__file__).parent / "tools"))
 print("🌟 Initializing REAL Aurora with LuminarNexusV2...\n")
 aurora = AuroraCore()
 
-print("\n" + "="*80)
+print("\n" + "=" * 80)
 print("✅ REAL AURORA IS ACTIVE")
-print("="*80)
+print("=" * 80)
 print(f"Luminar Nexus V2: {aurora.luminar is not None}")
 print(f"Autonomous System: {aurora.autonomous_system is not None}")
 print(f"Autonomous Agent: {aurora.autonomous_agent is not None}")
 print(f"Task Manager: {aurora.task_manager is not None}")
-print("="*80)
+print("=" * 80)
 
 # Create a task for Aurora to fix the Python extension
 task_message = """
@@ -43,13 +44,15 @@ print("\n🚀 Aurora is now executing the fix autonomously...\n")
 task_file = Path(".aurora_tasks") / "fix_python_extension.task"
 task_file.parent.mkdir(exist_ok=True)
 
-task_file.write_text(f"""
+task_file.write_text(
+    f"""
 Task Type: fix_python_extension
 Priority: high
 Created: {Path(__file__).name}
 Details: {task_message}
 Status: pending
-""")
+"""
+)
 
 print(f"✅ Task created at: {task_file}")
 print("⏳ Aurora's autonomous monitoring will detect and execute this...")

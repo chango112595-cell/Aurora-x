@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Ask Aurora to fix Python extension loading issues"""
 import asyncio
+
 from aurora_core import create_aurora_core
 
 
@@ -21,11 +22,12 @@ Check .vscode/settings.json and suggest optimizations."""
 
     response = await aurora.process_conversation(task, "fix_python_extension")
 
-    print("="*80)
+    print("=" * 80)
     print("AURORA'S RESPONSE:")
-    print("="*80)
+    print("=" * 80)
     print(response)
-    print("="*80)
+    print("=" * 80)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
