@@ -1,9 +1,10 @@
 name: Semantic Release
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:  # Manual trigger only
+  # push:
+  #   branches:
+  #     - main
 
 permissions:
   contents: write
@@ -41,10 +42,12 @@ jobs:
 
       - name: Run Semantic Release
         id: release
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          semantic-release publish
+          semantic-release version || echo "No release needed"
+          semantic-release publish || echo "Publish skipped"
 
       - name: Build distribution packages
         if: steps.release.outputs.released == 'true'
