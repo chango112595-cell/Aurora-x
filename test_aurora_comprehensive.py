@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Final comprehensive test of restored Aurora"""
 import asyncio
+
 from aurora_core import create_aurora_core
 
 
@@ -30,8 +31,7 @@ async def comprehensive_test():
 
         try:
             response = await aurora.process_conversation(prompt, session)
-            print(
-                f"RESPONSE: {response[:250]}{'...' if len(response) > 250 else ''}")
+            print(f"RESPONSE: {response[:250]}{'...' if len(response) > 250 else ''}")
 
             if response and len(response) > 10:
                 print("✅ PASS")
@@ -49,7 +49,8 @@ async def comprehensive_test():
     else:
         print(f"\n⚠️ Some issues remain ({len(tests)-passed} failures)")
 
-    print("="*80)
+    print("=" * 80)
+
 
 if __name__ == "__main__":
     asyncio.run(comprehensive_test())

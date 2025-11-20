@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Test if Aurora is restored to full functionality"""
 import asyncio
+
 from aurora_core import create_aurora_core
 
 
@@ -24,8 +25,9 @@ async def test():
     resp3 = await aurora.process_conversation("Can you analyze the project structure?", "test")
     print(f"Response: {resp3[:300]}...\n")
 
-    print("="*80)
+    print("=" * 80)
     print("✅ AURORA IS FULLY RESTORED AND OPERATIONAL!")
+
 
 if __name__ == "__main__":
     asyncio.run(test())
