@@ -43,15 +43,15 @@ def detect_user_tone(message):
 async def interactive_chat():
     # Aurora's enhanced startup
     print("\n" + "🌌" * 40)
-    print("                    ✨ AURORA - ENHANCED INTELLIGENCE ✨")
+    print("                    ✨ AURORA - HYBRID FULL POWER ✨")
     print("              Human-Like Conversation • Full Task Execution")
-    print("                  13 Foundations • 53 Tiers • 66 Capabilities")
+    print("                  13 Foundations • 66 Tiers • 79 Capabilities")
     print("🌌" * 40 + "\n")
 
     print("🧠 Booting Aurora's Neural Core...")
     print("   Loading 13 Foundation Tasks... ✓")
-    print("   Activating 53 Knowledge Tiers... ✓")
-    print("   Initializing 66 Total Capabilities... ✓")
+    print("   Activating 66 Knowledge Tiers... ✓")
+    print("   Initializing 79 Total Capabilities... ✓")
     print("   Enabling Human-Like Conversation Module... ✓")
     print("   Connecting Task Execution Engine... ✓\n")
 
@@ -129,18 +129,21 @@ async def interactive_chat():
                     f"⚡ Power Level: 100% | Session Time: {message_count} messages")
                 print(
                     f"💬 Context Memory: Tracking last {min(len(conversation_history), 15)} interactions")
-                print(f"\n📚 ACTIVE CAPABILITIES (66 Total):")
+                print(f"\n📚 ACTIVE CAPABILITIES (79 Total - HYBRID FULL POWER):")
                 print(
                     f"   • 13 Foundation Tasks: Problem-solving, Logic, Communication, Memory...")
                 print(
-                    f"   • 53 Knowledge Tiers: Languages (1-6), Technical (7-27), Autonomous (28-53)")
-                print(f"   • Tier 47: Documentation Generation ✓")
-                print(f"   • Tier 48: Multi-Agent Coordination ✓")
-                print(f"   • Tier 49: UI/UX Generation ✓")
-                print(f"   • Tier 50: Git Mastery ✓")
-                print(f"   • Tier 51: Code Quality Enforcement ✓")
-                print(f"   • Tier 52: RSA Cryptography ✓")
-                print(f"   • Tier 53: Docker Mastery ✓")
+                    f"   • 66 Knowledge Tiers across 4 Domains:")
+                print(f"     ├─ Technical Mastery (1-27)")
+                print(f"     ├─ Autonomous & Intelligence (28-53)")
+                print(f"     ├─ AI Intelligence (54-57): Quantum, Neural, Language, Vision")
+                print(f"     ├─ Autonomous Perception (58-60): Robotics, Distributed, Performance")
+                print(f"     ├─ Systems Resilience (61-63): Data, API, Microservices")
+                print(f"     └─ Delivery Excellence (64-66): Serverless, Edge, Blockchain")
+                print(f"\n   Latest Advanced Tiers:")
+                print(f"   • Tier 54: Quantum Intelligence Hub ✓")
+                print(f"   • Tier 60: Adaptive Performance Optimizer ✓")
+                print(f"   • Tier 66: Autonomous Blockchain Conductor ✓")
                 print(
                     f"\n🎯 CONVERSATION MODE: {'Task Execution' if is_task else 'Casual Chat'}")
                 print(f"😊 Detected Tone: {user_tone.title()}")
