@@ -166,7 +166,7 @@ class AuroraSystemUpdater:
                 ("(1-53)", "(1-53)", "tier range in parens"),
                 ("(28-53)", "(28-53)", "autonomous range in parens"),
                 ("28-53: Autonomous & Advanced", "28-53: Autonomous & Advanced", "tier category"),
-                ('tiers_loaded": 27', f'tiers_loaded": {tier_count}', "tiers_loaded JSON"),
+                ('tiers_loaded": 66', f'tiers_loaded": {tier_count}', "tiers_loaded JSON"),
             ]
         )
 

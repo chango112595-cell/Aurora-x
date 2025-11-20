@@ -317,6 +317,20 @@ class AuroraKnowledgeTiers:
             "tier_51_code_quality_enforcer": self._get_code_quality_enforcer(),
             "tier_52_rsa_grandmaster": self._get_rsa_grandmaster(),
             "tier_53_docker_mastery": self._get_docker_mastery(),
+            # Hybrid Advanced Tiers (54-66) - Full Power Mode
+            "tier_54_blockchain_mastery": self._get_blockchain_mastery(),
+            "tier_55_quantum_computing": self._get_quantum_computing(),
+            "tier_56_neural_networks": self._get_neural_networks(),
+            "tier_57_natural_language": self._get_natural_language(),
+            "tier_58_computer_vision": self._get_computer_vision(),
+            "tier_59_robotics_control": self._get_robotics_control(),
+            "tier_60_distributed_systems": self._get_distributed_systems(),
+            "tier_61_performance_tuning": self._get_performance_tuning(),
+            "tier_62_database_optimization": self._get_database_optimization(),
+            "tier_63_api_design": self._get_api_design(),
+            "tier_64_microservices": self._get_microservices(),
+            "tier_65_serverless": self._get_serverless(),
+            "tier_66_edge_computing": self._get_edge_computing(),
         }
 
         # Auto-calculate tier count
@@ -852,6 +866,215 @@ class AuroraKnowledgeTiers:
                 "automatic_recovery",
             ],
             "files": ["aurora_docker_healer.py"],
+        }
+
+    # ═══════════════════════════════════════════════════════════════════
+    # HYBRID ADVANCED TIERS (54-66) - FULL POWER MODE
+    # ═══════════════════════════════════════════════════════════════════
+
+    # AI Intelligence Domain (54-57)
+    def _get_blockchain_mastery(self):
+        """Tier 54: Quantum Intelligence Hub"""
+        return {
+            "tier": 54,
+            "name": "Quantum Intelligence Hub",
+            "category": "ai_intelligence",
+            "capabilities": [
+                "quantum_algorithms",
+                "hybrid_classical_quantum_orchestration",
+                "quantum_error_mitigation",
+                "quantum_safe_crypto_bridges",
+                "quantum_circuit_optimization",
+                "quantum_state_simulation",
+            ],
+        }
+
+    def _get_quantum_computing(self):
+        """Tier 55: Hyper-Scale Neural Architect"""
+        return {
+            "tier": 55,
+            "name": "Hyper-Scale Neural Architect",
+            "category": "ai_intelligence",
+            "capabilities": [
+                "neural_architecture_search",
+                "continual_learning",
+                "ai_alignment_safeguards",
+                "model_distillation",
+                "on_device_optimization",
+                "transfer_learning",
+                "meta_learning",
+            ],
+        }
+
+    def _get_neural_networks(self):
+        """Tier 56: Universal Language Orchestrator"""
+        return {
+            "tier": 56,
+            "name": "Universal Language Orchestrator",
+            "category": "ai_intelligence",
+            "capabilities": [
+                "multilingual_reasoning",
+                "domain_ontologies",
+                "code_natural_dialogue_synthesis",
+                "socio_technical_context_modeling",
+                "semantic_parsing",
+                "intent_recognition",
+            ],
+        }
+
+    def _get_natural_language(self):
+        """Tier 57: Cognitive Vision Fabric"""
+        return {
+            "tier": 57,
+            "name": "Cognitive Vision Fabric",
+            "category": "ai_intelligence",
+            "capabilities": [
+                "multimodal_perception",
+                "3d_scene_reasoning",
+                "fine_tuned_object_detection",
+                "safety_critical_validation",
+                "image_segmentation",
+                "visual_question_answering",
+            ],
+        }
+
+    # Autonomous Perception & Action Domain (58-60)
+    def _get_computer_vision(self):
+        """Tier 58: Autonomous Robotics Core"""
+        return {
+            "tier": 58,
+            "name": "Autonomous Robotics Core",
+            "category": "autonomous_perception",
+            "capabilities": [
+                "control_loops",
+                "digital_twins",
+                "sensor_fusion",
+                "reinforcement_learning_policies",
+                "failsafe_planning",
+                "motion_planning",
+            ],
+        }
+
+    def _get_robotics_control(self):
+        """Tier 59: Distributed Intelligence Mesh"""
+        return {
+            "tier": 59,
+            "name": "Distributed Intelligence Mesh",
+            "category": "autonomous_perception",
+            "capabilities": [
+                "multi_agent_consensus",
+                "fault_tolerant_coordination",
+                "federated_learning",
+                "swarm_analytics",
+                "distributed_knowledge_graphs",
+            ],
+        }
+
+    def _get_distributed_systems(self):
+        """Tier 60: Adaptive Performance Optimizer"""
+        return {
+            "tier": 60,
+            "name": "Adaptive Performance Optimizer",
+            "category": "autonomous_perception",
+            "capabilities": [
+                "self_profiling",
+                "auto_scaling_heuristics",
+                "workload_shaping",
+                "energy_aware_orchestration",
+                "predictive_resource_allocation",
+            ],
+        }
+
+    # Systems Resilience Domain (61-63)
+    def _get_performance_tuning(self):
+        """Tier 61: Data Gravity Engineer"""
+        return {
+            "tier": 61,
+            "name": "Data Gravity Engineer",
+            "category": "systems_resilience",
+            "capabilities": [
+                "cross_store_optimization",
+                "data_fabric_governance",
+                "latency_aware_replication",
+                "zero_downtime_migrations",
+                "data_lineage_tracking",
+            ],
+        }
+
+    def _get_database_optimization(self):
+        """Tier 62: API Continuum Designer"""
+        return {
+            "tier": 62,
+            "name": "API Continuum Designer",
+            "category": "systems_resilience",
+            "capabilities": [
+                "evolutionary_api_contracts",
+                "zero_touch_versioning",
+                "resilience_choreography",
+                "api_policy_enforcement",
+                "rate_limiting_strategies",
+            ],
+        }
+
+    def _get_api_design(self):
+        """Tier 63: Microservice Genome Architect"""
+        return {
+            "tier": 63,
+            "name": "Microservice Genome Architect",
+            "category": "systems_resilience",
+            "capabilities": [
+                "service_topology_synthesis",
+                "contract_testing",
+                "chaos_engineering_inoculation",
+                "resilience_scorecards",
+                "service_mesh_configuration",
+            ],
+        }
+
+    # Delivery Excellence Domain (64-66)
+    def _get_microservices(self):
+        """Tier 64: Serverless Intelligence Grid"""
+        return {
+            "tier": 64,
+            "name": "Serverless Intelligence Grid",
+            "category": "delivery_excellence",
+            "capabilities": [
+                "event_mesh_design",
+                "cold_start_mitigation",
+                "cost_aware_scheduling",
+                "observability_automation",
+                "function_composition",
+            ],
+        }
+
+    def _get_serverless(self):
+        """Tier 65: Edge Continuum Strategist"""
+        return {
+            "tier": 65,
+            "name": "Edge Continuum Strategist",
+            "category": "delivery_excellence",
+            "capabilities": [
+                "edge_cloud_continuum_planning",
+                "local_ai_adaptation",
+                "offline_first_recovery",
+                "compliance_zoning",
+                "edge_caching_strategies",
+            ],
+        }
+
+    def _get_edge_computing(self):
+        """Tier 66: Autonomous Blockchain Conductor"""
+        return {
+            "tier": 66,
+            "name": "Autonomous Blockchain Conductor",
+            "category": "delivery_excellence",
+            "capabilities": [
+                "ledger_selection",
+                "smart_contract_assurance",
+                "cross_chain_interoperability",
+                "privacy_preserving_consensus",
+                "decentralized_identity",
+            ],
         }
 
     def get_all_tiers_summary(self):

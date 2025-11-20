@@ -9,7 +9,7 @@ hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["gnupg", "openssl", "postgresql", "xcodebuild", "zlib", "tmux"]
+packages = ["gnupg", "openssl", "postgresql", "tmux", "xcodebuild", "zlib"]
 
 [deployment]
 deploymentTarget = "autoscale"
