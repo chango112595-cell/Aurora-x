@@ -5,13 +5,14 @@ Let Aurora analyze the VS Code performance issues and provide her recommendation
 """
 
 import asyncio
+
 from aurora_core import create_aurora_core
 
 
 async def ask_aurora():
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("🌟 ASKING AURORA: VS Code Performance Analysis")
-    print("="*80 + "\n")
+    print("=" * 80 + "\n")
 
     aurora = create_aurora_core()
 
@@ -59,16 +60,13 @@ async def ask_aurora():
     Give me your honest analysis with pros/cons and your recommended action plan.
     """
 
-    response = await aurora.process_conversation(
-        question,
-        session_id="vscode_performance_analysis"
-    )
+    response = await aurora.process_conversation(question, session_id="vscode_performance_analysis")
 
     print("🧠 Aurora's Analysis:\n")
     print(response)
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("✅ Analysis Complete")
-    print("="*80 + "\n")
+    print("=" * 80 + "\n")
 
 
 if __name__ == "__main__":
