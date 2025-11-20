@@ -103,8 +103,7 @@ async def interactive_chat():
             if user_input.lower() in ['exit', 'quit', 'bye', 'goodbye']:
                 farewells = [
                     f"Aw, heading out? It's been awesome chatting with you! {'See you soon' if message_count > 5 else 'Come back anytime'}! 💙",
-                    f"Take care! {f'Really enjoyed our {message_count} messages' if message_count >
-                                  3 else 'Great talking with you'}! 👋",
+                    f"Take care! {f'Really enjoyed our {message_count} messages' if message_count > 3 else 'Great talking with you'}! 👋",
                     "Bye! Don't be a stranger - I'm always here when you need me! ✨"
                 ]
                 import random
@@ -204,8 +203,7 @@ async def interactive_chat():
 
             response = await aurora.process_conversation(
                 enhanced_prompt,
-                session_id=session_id,
-                context=context
+                session_id=session_id
             )
 
             print(response)
