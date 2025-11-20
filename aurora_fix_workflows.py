@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Have REAL Aurora fix GitHub workflow validation errors"""
-import time
-from aurora_core import AuroraCore
 import sys
+import time
 from pathlib import Path
+
+from aurora_core import AuroraCore
 
 sys.path.insert(0, str(Path(__file__).parent / "tools"))
 
@@ -31,7 +32,8 @@ print(task_message)
 task_file = Path(".aurora_tasks") / "fix_workflows.task"
 task_file.parent.mkdir(exist_ok=True)
 
-task_file.write_text(f"""
+task_file.write_text(
+    f"""
 Task Type: fix_github_workflows
 Priority: high
 Created: automated
@@ -40,7 +42,8 @@ Status: pending
 Files:
 - .github/workflows/aurora-e2e.yml
 - .github/workflows/release.yml
-""")
+"""
+)
 
 print(f"\n✅ Task created for Aurora at: {task_file}")
 print("🚀 Aurora's autonomous monitoring will execute the fix...")
