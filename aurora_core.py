@@ -1436,7 +1436,7 @@ class AuroraCoreIntelligence:
         msg_lower = message.lower()
         if any(cmd in msg_lower for cmd in ["self diagnose", "self-diagnose", "diagnose yourself", "run diagnostic"]):
             return self._perform_self_diagnostic(context)
-        
+
         # PRIORITY 2: Technical questions - use full intelligence
         if analysis["technical_question"]:
             return self._technical_intelligence_response(message, context, analysis)
@@ -1444,7 +1444,7 @@ class AuroraCoreIntelligence:
         # PRIORITY 3: Enhancement requests
         if analysis["enhancement_request"]:
             return self._respond_to_enhancement_request(message, context)
-        
+
         # PRIORITY 4: Aurora self-limitation/critique responses
         if analysis.get("asks_about_limitations"):
             return self._respond_about_limitations(message, context)
@@ -1463,11 +1463,11 @@ class AuroraCoreIntelligence:
     def _provide_detailed_explanation(self, message: str, context: dict, analysis: dict) -> str:
         """Provide complete, detailed explanations - directly answer the question"""
         msg_lower = message.lower()
-        
+
         # Extract the actual topic they're asking about
         entities = analysis.get("entities", [])
         topic = entities[0] if entities else "your question"
-        
+
         # Be direct and specific based on what they actually asked
         if "fundamental" in msg_lower or "basic" in msg_lower:
             return (
@@ -1478,7 +1478,7 @@ class AuroraCoreIntelligence:
                 f"To use it effectively: [concrete steps].\n\n"
                 f"What specific aspect of {topic} should I explain in more detail?"
             )
-        
+
         # Default: answer their actual question directly
         return (
             f"Regarding {topic}: [Direct answer to their specific question]\n\n"
@@ -1548,27 +1548,22 @@ Want me to prioritize implementing any of these? I can start with the most impac
     def _perform_self_diagnostic(self, context: dict) -> str:
         """Run comprehensive self-diagnostic and return detailed status report"""
         try:
-            import subprocess
             import os
-            
+            import subprocess
+
             user_name = context.get("user_name", "")
             greeting = f"{user_name}, here's" if user_name else "Here's"
-            
+
             # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 9000=chat)
             services = []
-            service_map = {
-                5000: "Frontend",
-                5001: "Bridge", 
-                5002: "Self-Learn",
-                9000: "Chat Server"
-            }
+            service_map = {5000: "Frontend", 5001: "Bridge", 5002: "Self-Learn", 9000: "Chat Server"}
             for port, name in service_map.items():
                 try:
                     result = subprocess.run(
                         ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", f"http://localhost:{port}"],
                         capture_output=True,
                         text=True,
-                        timeout=2
+                        timeout=2,
                     )
                     if result.stdout.strip() == "200":
                         services.append(f"✅ Port {port} ({name})")
@@ -1576,18 +1571,18 @@ Want me to prioritize implementing any of these? I can start with the most impac
                         services.append(f"❌ Port {port} ({name})")
                 except:
                     services.append(f"❌ Port {port} ({name})")
-            
+
             operational_pct = (sum(1 for s in services if "✅" in s) / len(services)) * 100
-            
+
             # Check critical files
             critical_files = [
                 "/workspaces/Aurora-x/aurora_core.py",
                 "/workspaces/Aurora-x/chat_with_aurora.py",
                 "/workspaces/Aurora-x/aurora_chat_server.py",
-                "/workspaces/Aurora-x/server/aurora-chat.ts"
+                "/workspaces/Aurora-x/server/aurora-chat.ts",
             ]
             files_ok = sum(1 for f in critical_files if os.path.exists(f))
-            
+
             return f"""{greeting} my complete system diagnostic:
 
 **🔧 SYSTEM STATUS: {operational_pct:.0f}% Operational**
@@ -1621,7 +1616,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
 - Debug and fix issues autonomously
 
 Try asking me a technical question or giving me a coding task to see the full system in action."""
-        
+
         except Exception as e:
             return f"Diagnostic error: {str(e)}\n\nBut I'm still operational and can help you with your questions."
 
