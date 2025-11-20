@@ -3966,7 +3966,7 @@ def chat_status():
         {
             "status": "online",
             "active_sessions": active_sessions,
-            "tiers_loaded": 53,
+            "tiers_loaded": 66,
             "version": "Aurora Conversational AI v1.0",
         }
     )

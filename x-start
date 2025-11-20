@@ -71,18 +71,10 @@ print("🤖 Starting Aurora Autonomous Monitor...")
 start_process([PYTHON_CMD, "aurora_autonomous_monitor.py"])
 time.sleep(1)
 
-# 7. Run Initial System Update (one-time sync on startup)
-print("🔄 Running initial system synchronization...")
-sync_result = subprocess.run(
-    [PYTHON_CMD, "aurora_automatic_system_update.py"],
-    capture_output=True,
-    text=True,
-    timeout=30
-)
-if sync_result.returncode == 0:
-    print("   ✅ System synchronized successfully")
-else:
-    print("   ⚠️  System sync completed with warnings")
+# 7. Run Initial System Update (one-time sync on startup) - Run in background to avoid timeout
+print("🔄 Starting system synchronization in background...")
+start_process([PYTHON_CMD, "aurora_automatic_system_update.py"])
+print("   ⏳ System sync running in background (this may take 1-2 minutes)")
 
 # Wait for services to initialize
 print("\n⏳ Waiting for services to fully initialize...")
