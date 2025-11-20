@@ -21,7 +21,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy only what we need for installation
-COPY pyproject.toml setup.py README.md ./
+COPY pyproject.toml* setup.py* README.md* ./
 COPY aurora_x/ ./aurora_x/
 
 # Install Python dependencies with retries and fallback

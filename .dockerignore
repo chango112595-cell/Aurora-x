@@ -61,10 +61,11 @@ tests/runs/
 .gitignore
 .gitattributes
 
-# Documentation
-*.md
+# Documentation (exclude docs but keep root README.md for builds)
 docs/
-README*
+!README.md
+!pyproject.toml
+!setup.py
 
 # Configuration (keep examples, exclude actual)
 .env
