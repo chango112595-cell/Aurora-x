@@ -5,7 +5,6 @@ Task: Make chat_with_aurora.py use all 66 capabilities with realistic human conv
 """
 
 import asyncio
-
 from aurora_core import create_aurora_core
 
 

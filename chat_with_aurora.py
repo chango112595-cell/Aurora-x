@@ -6,10 +6,12 @@ All 66 Capabilities • Human-Like Conversation • Task Execution
 """
 
 import asyncio
+import sys
+import os
 import re
+import json
+from pathlib import Path
 from datetime import datetime
-
-# Use root aurora_core which now connects to LuminarNexusV2
 from aurora_core import create_aurora_core
 
 
@@ -53,7 +55,7 @@ async def interactive_chat():
     print("   Enabling Human-Like Conversation Module... ✓")
     print("   Connecting Task Execution Engine... ✓\n")
 
-    # Initialize Aurora with FULL capabilities (now connected to LuminarNexusV2)
+    # Initialize Aurora with FULL capabilities
     aurora = create_aurora_core()
 
     # Display full capability loadout
@@ -123,23 +125,23 @@ async def interactive_chat():
                 print("                         🧠 AURORA INTELLIGENCE SYSTEM STATUS")
                 print(
                     "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                print("\n🟢 CORE STATUS: FULLY OPERATIONAL")
+                print(f"\n🟢 CORE STATUS: FULLY OPERATIONAL")
                 print(
                     f"⚡ Power Level: 100% | Session Time: {message_count} messages")
                 print(
                     f"💬 Context Memory: Tracking last {min(len(conversation_history), 15)} interactions")
-                print("\n📚 ACTIVE CAPABILITIES (66 Total):")
+                print(f"\n📚 ACTIVE CAPABILITIES (66 Total):")
                 print(
-                    "   • 13 Foundation Tasks: Problem-solving, Logic, Communication, Memory...")
+                    f"   • 13 Foundation Tasks: Problem-solving, Logic, Communication, Memory...")
                 print(
-                    "   • 53 Knowledge Tiers: Languages (1-6), Technical (7-27), Autonomous (28-53)")
-                print("   • Tier 47: Documentation Generation ✓")
-                print("   • Tier 48: Multi-Agent Coordination ✓")
-                print("   • Tier 49: UI/UX Generation ✓")
-                print("   • Tier 50: Git Mastery ✓")
-                print("   • Tier 51: Code Quality Enforcement ✓")
-                print("   • Tier 52: RSA Cryptography ✓")
-                print("   • Tier 53: Docker Mastery ✓")
+                    f"   • 53 Knowledge Tiers: Languages (1-6), Technical (7-27), Autonomous (28-53)")
+                print(f"   • Tier 47: Documentation Generation ✓")
+                print(f"   • Tier 48: Multi-Agent Coordination ✓")
+                print(f"   • Tier 49: UI/UX Generation ✓")
+                print(f"   • Tier 50: Git Mastery ✓")
+                print(f"   • Tier 51: Code Quality Enforcement ✓")
+                print(f"   • Tier 52: RSA Cryptography ✓")
+                print(f"   • Tier 53: Docker Mastery ✓")
                 print(
                     f"\n🎯 CONVERSATION MODE: {'Task Execution' if is_task else 'Casual Chat'}")
                 print(f"😊 Detected Tone: {user_tone.title()}")
@@ -193,7 +195,7 @@ async def interactive_chat():
             })
 
             # Get Aurora's response
-            print("\nAurora: ", end="", flush=True)
+            print(f"\nAurora: ", end="", flush=True)
 
             # Add instruction for natural conversation
             enhanced_prompt = user_input
@@ -202,7 +204,8 @@ async def interactive_chat():
 
             response = await aurora.process_conversation(
                 enhanced_prompt,
-                session_id=session_id
+                session_id=session_id,
+                context=context
             )
 
             print(response)
