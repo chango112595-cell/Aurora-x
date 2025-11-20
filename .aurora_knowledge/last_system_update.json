@@ -1,17 +1,25 @@
 {
-  "timestamp": "2025-11-20T18:59:06.695308",
+  "timestamp": "2025-11-20T19:21:30.312163",
   "version": "3.0.0-deep-search",
   "counts": {
     "foundation_count": 13,
-    "tier_count": 53,
-    "total_capabilities": 66
+    "tier_count": 66,
+    "total_capabilities": 79
   },
-  "files_scanned": 24499,
-  "files_updated": 1,
+  "files_scanned": 25024,
+  "files_updated": 3,
   "updated_files": [
+    {
+      "file": "AURORA_CHAT_NEXUS.md",
+      "replacements": 1
+    },
     {
       "file": "aurora_automatic_system_update.py",
       "replacements": 11
+    },
+    {
+      "file": "tools/luminar_nexus.py",
+      "replacements": 5
     }
   ],
   "errors": []
