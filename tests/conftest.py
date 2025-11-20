@@ -63,7 +63,7 @@ def bridge_client(bridge_app) -> Generator[TestClient, None, None]:
 
 
 @pytest.fixture
-async def bridge_async_client(bridge_app) -> AsyncGenerator[httpx.AsyncClient, None]:
+async def bridge_async_client(_bridge_app) -> AsyncGenerator[httpx.AsyncClient, None]:
     """Create async Bridge service test client"""
     async with httpx.AsyncClient(base_url="http://test") as client:
         yield client
@@ -200,7 +200,7 @@ def event_loop():
 
 
 @pytest.fixture(autouse=True)
-def cleanup_temp_files(tmp_path, project_root):
+def cleanup_temp_files(_tmp_path, project_root):
     """Clean up temporary test files after each test"""
     yield
     # Cleanup temp test files
@@ -228,7 +228,7 @@ def benchmark_config():
 
 
 @pytest.fixture
-def mock_external_api(monkeypatch):
+def mock_external_api(_monkeypatch):
     """Mock external API calls"""
     from unittest.mock import MagicMock, patch
 

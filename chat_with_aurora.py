@@ -9,6 +9,7 @@ import asyncio
 import re
 from datetime import datetime
 
+# Use root aurora_core which now connects to LuminarNexusV2
 from aurora_core import create_aurora_core
 
 
@@ -52,7 +53,7 @@ async def interactive_chat():
     print("   Enabling Human-Like Conversation Module... ✓")
     print("   Connecting Task Execution Engine... ✓\n")
 
-    # Initialize Aurora with FULL capabilities
+    # Initialize Aurora with FULL capabilities (now connected to LuminarNexusV2)
     aurora = create_aurora_core()
 
     # Display full capability loadout
