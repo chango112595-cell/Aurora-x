@@ -24,8 +24,30 @@
     },
     "python.analysis.indexing": true,
     "python.analysis.memory.keepLibraryAst": false,
+    "python.analysis.autoImportCompletions": false,
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "",
+            "depth": 1
+        }
+    ],
+    "python.analysis.useLibraryCodeForTypes": false,
+    "python.analysis.completeFunctionParens": false,
+    "python.analysis.importFormat": "relative",
+    "python.analysis.enablePytestSupport": false,
+    "python.analysis.gotoDefinitionInStringLiteral": false,
+    "python.analysis.inlayHints.callArgumentNames": "off",
+    "python.analysis.inlayHints.functionReturnTypes": false,
+    "python.analysis.inlayHints.pytestParameters": false,
+    "python.analysis.inlayHints.variableTypes": false,
+    "python.analysis.logLevel": "Error",
+    "python.analysis.stubPath": "",
+    "python.analysis.typeCheckingMode": "off",
     "python.languageServer": "Pylance",
     "python.defaultInterpreterPath": "./.venv/bin/python",
+    "pylint.enabled": false,
+    "python.linting.enabled": false,
+    "python.linting.pylintEnabled": false,
     "files.watcherExclude": {
         "**/.venv/**": true,
         "**/node_modules/**": true,

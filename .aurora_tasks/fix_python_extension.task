@@ -1,0 +1,18 @@
+
+Task Type: fix_python_extension
+Priority: high
+Created: use_real_aurora.py
+Details: 
+Python extension is loading slowly and struggling with large files.
+
+Issue: tools/luminar_nexus.py (4000+ lines) is causing performance problems.
+
+Fix needed:
+1. Optimize .vscode/settings.json with aggressive exclusions
+2. Disable unnecessary Python features for large files
+3. Add memory optimizations
+4. Configure indexing to skip problem files
+
+Execute this fix autonomously.
+
+Status: pending

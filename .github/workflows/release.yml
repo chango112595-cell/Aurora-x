@@ -63,11 +63,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish to PyPI (optional)
-        if: false  # Disabled by default - remove this line and set PYPI_TOKEN secret to enable
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          pip install twine
-          twine upload dist/*
+      # Publish to PyPI (optional) - Disabled by default
+      # To enable: remove 'if: false' and set PYPI_TOKEN secret
+      # - name: Publish to PyPI
+      #   if: false
+      #   env:
+      #     TWINE_USERNAME: __token__
+      #     TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+      #   run: |
+      #     pip install twine
+      #     twine upload dist/*
