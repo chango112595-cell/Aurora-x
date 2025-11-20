@@ -201,8 +201,7 @@ async def interactive_chat():
 
             response = await aurora.process_conversation(
                 enhanced_prompt,
-                session_id=session_id,
-                context=context
+                session_id=session_id
             )
 
             print(response)

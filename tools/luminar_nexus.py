@@ -231,7 +231,7 @@ class LuminarNexusServerManager:
         """Load Aurora's complete project ownership configuration"""
         config_path = self._project_root / ".aurora_project_config.json"
         if config_path.exists():
-            with open(config_path) as f:
+            with open(config_path, encoding='utf-8') as f:
                 return json.load(f)
         return {
             "project_name": "Aurora-X",
@@ -265,7 +265,7 @@ class LuminarNexusServerManager:
             "system": "LUMINAR_NEXUS",
         }
 
-        with open(self.log_file, "a") as f:
+        with open(self.log_file, "a", encoding='utf-8') as f:
             f.write(json.dumps(entry) + "\n")
 
         print(f"🌟 Luminar Nexus: {event_type} - {server}")

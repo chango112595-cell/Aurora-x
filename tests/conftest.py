@@ -18,7 +18,8 @@ from fastapi.testclient import TestClient
 
 def pytest_configure(config):
     """Configure pytest with custom settings"""
-    config.addinivalue_line("markers", "requires_network: Tests that require network access")
+    config.addinivalue_line(
+        "markers", "requires_network: Tests that require network access")
     config.addinivalue_line("markers", "requires_gpu: Tests that require GPU")
 
 
@@ -64,7 +65,7 @@ def bridge_client(bridge_app) -> Generator[TestClient, None, None]:
 @pytest.fixture
 async def bridge_async_client(bridge_app) -> AsyncGenerator[httpx.AsyncClient, None]:
     """Create async Bridge service test client"""
-    async with httpx.AsyncClient(app=bridge_app, base_url="http://test") as client:
+    async with httpx.AsyncClient(base_url="http://test") as client:
         yield client
 
 
