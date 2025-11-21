@@ -72,8 +72,7 @@ class AuroraUIGenerator:
         styles = self._generate_styles(component_name)
 
         component = Component(
-            name=component_name, framework=framework, code=code, styles=styles, props=[
-                "value", "onChange"]
+            name=component_name, framework=framework, code=code, styles=styles, props=["value", "onChange"]
         )
 
         print(f"✅ Component generated: {component_name}")

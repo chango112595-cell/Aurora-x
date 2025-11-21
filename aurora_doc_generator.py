@@ -176,8 +176,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
 {project_info['contact']}
 """
 
-        doc = Documentation(doc_type=DocType.README, content=readme_content,
-                            format="markdown", metadata=project_info)
+        doc = Documentation(doc_type=DocType.README, content=readme_content, format="markdown", metadata=project_info)
 
         print("✅ README generated")
         return doc
@@ -414,8 +413,7 @@ User → Frontend → API Gateway → Backend Services → Database
 - CI/CD: GitHub Actions
 """
 
-        doc = Documentation(doc_type=DocType.ARCHITECTURE,
-                            content=arch_docs, format="markdown", metadata=structure)
+        doc = Documentation(doc_type=DocType.ARCHITECTURE, content=arch_docs, format="markdown", metadata=structure)
 
         print("✅ Architecture docs generated")
         return doc
@@ -466,8 +464,7 @@ User → Frontend → API Gateway → Backend Services → Database
     def _extract_classes(self, ___file_path: str) -> list[dict]:
         """Extract classes from file"""
         return [
-            {"name": "DataProcessor", "methods": [
-                "process", "validate"], "description": "Main data processing class"}
+            {"name": "DataProcessor", "methods": ["process", "validate"], "description": "Main data processing class"}
         ]
 
     def _document_function(self, func: dict) -> dict:
@@ -614,8 +611,7 @@ def main():
 
     # Test 3: Tutorial
     print("Test 3: Tutorial Generation")
-    tutorial = doc_gen.generate_tutorial(
-        "Visual Understanding", ["code1", "code2"])
+    tutorial = doc_gen.generate_tutorial("Visual Understanding", ["code1", "code2"])
     print(f"  Steps: {tutorial.metadata['steps']}\n")
 
     # Test 4: Changelog

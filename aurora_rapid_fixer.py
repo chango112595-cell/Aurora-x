@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # pylint: disable=redefined-outer-name
 """Aurora's Rapid Complete Fixer - Fix all 272 problems NOW"""
-import time
 import re
 import subprocess
 from pathlib import Path

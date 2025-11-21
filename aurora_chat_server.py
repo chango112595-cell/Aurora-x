@@ -18,10 +18,11 @@ from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 
 # Add tools directory for Luminar Nexus V2
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'tools'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "tools"))
 
 try:
     from luminar_nexus_v2 import LuminarNexusV2
+
     NEXUS_V2_AVAILABLE = True
 except ImportError:
     LuminarNexusV2 = None
@@ -38,12 +39,12 @@ _nexus_v2 = None
 def initialize_aurora_system():
     """Initialize complete Aurora system with Nexus V2 orchestration"""
     global _aurora_core, _nexus_v2
-    
+
     if _aurora_core is None:
         print("🧠 Initializing Aurora Core Intelligence...")
         _aurora_core = create_aurora_core()
         print("✅ Aurora Core Intelligence ready")
-    
+
     if NEXUS_V2_AVAILABLE and _nexus_v2 is None:
         print("🌌 Initializing Luminar Nexus V2 Orchestrator...")
         _nexus_v2 = LuminarNexusV2()
@@ -51,7 +52,7 @@ def initialize_aurora_system():
         print("   • AI-driven service management")
         print("   • Security Guardian enabled")
         print("   • Quantum coherence monitoring")
-    
+
     return _aurora_core, _nexus_v2
 
 
@@ -99,9 +100,9 @@ def chat_endpoint():
             if threats:
                 print(f"🛡️ Security Guardian blocked: {threats}")
                 return jsonify({"error": "Security threat detected", "threats": threats}), 403
-            
+
             # AI Orchestrator: Optimize routing based on load
-            if nexus.config.get('ai_learning_enabled'):
+            if nexus.config.get("ai_learning_enabled"):
                 nexus.ai_orchestrator.learn_from_response(message, time.time(), 1.0)
 
         # Check if this is a system management request

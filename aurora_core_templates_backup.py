@@ -1266,7 +1266,7 @@ class AuroraCoreIntelligence:
         self.conversation_contexts: dict[str, dict] = {}
         self.learning_memory: dict[str, Any] = {}
         self.autonomous_mode = True
-        
+
         # Persistent memory file
         self.memory_file = self.project_root / ".aurora_knowledge" / "user_memory.json"
         self.user_memory = self._load_persistent_memory()
@@ -1294,7 +1294,7 @@ class AuroraCoreIntelligence:
         """Load persistent user memory from disk"""
         try:
             if self.memory_file.exists():
-                with open(self.memory_file, 'r') as f:
+                with open(self.memory_file) as f:
                     return json.load(f)
         except Exception:
             pass
@@ -1306,14 +1306,14 @@ class AuroraCoreIntelligence:
             "total_conversations": 0,
             "preferences": {},
             "topics_history": [],
-            "remembered_facts": {}
+            "remembered_facts": {},
         }
-    
+
     def _save_persistent_memory(self):
         """Save user memory to disk"""
         try:
             self.memory_file.parent.mkdir(parents=True, exist_ok=True)
-            with open(self.memory_file, 'w') as f:
+            with open(self.memory_file, "w") as f:
                 json.dump(self.user_memory, f, indent=2)
         except Exception as e:
             print(f"⚠️ Failed to save memory: {e}")
@@ -1424,7 +1424,10 @@ class AuroraCoreIntelligence:
                 analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
 
         # Technical questions - expanded to catch more patterns
-        if re.search(r"(how.*work|explain|what.*is|build|create|write|make|code|function|class|debug|error|issue|implement|develop|program)", msg_lower):
+        if re.search(
+            r"(how.*work|explain|what.*is|build|create|write|make|code|function|class|debug|error|issue|implement|develop|program)",
+            msg_lower,
+        ):
             analysis.update({"technical_question": True, "confidence": 0.8})
 
         # Extract technical entities
@@ -1453,13 +1456,14 @@ class AuroraCoreIntelligence:
             context["user_name"] = user_name
             # Save to persistent memory
             from datetime import datetime as dt
+
             self.user_memory["user_name"] = user_name
             if not self.user_memory.get("first_interaction"):
                 self.user_memory["first_interaction"] = dt.now().isoformat()
             self.user_memory["last_interaction"] = dt.now().isoformat()
             self.user_memory["total_conversations"] = self.user_memory.get("total_conversations", 0) + 1
             self._save_persistent_memory()
-            
+
             return (
                 f"Nice to meet you, {user_name}! I'm Aurora, and I'll remember you from now on. "
                 f"I can write production code, run autonomous fixes, and work across "
@@ -1478,6 +1482,7 @@ class AuroraCoreIntelligence:
                 if first_met:
                     try:
                         from datetime import datetime
+
                         first_date = datetime.fromisoformat(first_met).strftime("%B %d, %Y")
                         greeting += f" We first met on {first_date}."
                     except:
@@ -1493,20 +1498,38 @@ class AuroraCoreIntelligence:
         msg_lower = message.lower()
         if any(cmd in msg_lower for cmd in ["self diagnose", "self-diagnose", "diagnose yourself", "run diagnostic"]):
             return self._perform_self_diagnostic(context)
-        
+
         # PRIORITY 1.5: Self-analysis commands (deep introspection)
         self_analysis_triggers = [
-            "analyze yourself", "analyze your", "self analysis", "self-analysis",
-            "your strengths and weaknesses", "your strength", "your weakness",
-            "issues in your", "problems in your", "bugs in your",
-            "improvements", "improve yourself", "what do you need",
-            "identify in your", "wrong with your", "fix in your"
+            "analyze yourself",
+            "analyze your",
+            "self analysis",
+            "self-analysis",
+            "your strengths and weaknesses",
+            "your strength",
+            "your weakness",
+            "issues in your",
+            "problems in your",
+            "bugs in your",
+            "improvements",
+            "improve yourself",
+            "what do you need",
+            "identify in your",
+            "wrong with your",
+            "fix in your",
         ]
-        if any(trigger in msg_lower for trigger in self_analysis_triggers) or \
-           (("analyze" in msg_lower or "examine" in msg_lower or "evaluate" in msg_lower or "identify" in msg_lower) and 
-            ("your system" in msg_lower or "yourself" in msg_lower or "your code" in msg_lower or "your architecture" in msg_lower or "your own" in msg_lower)):
+        if any(trigger in msg_lower for trigger in self_analysis_triggers) or (
+            ("analyze" in msg_lower or "examine" in msg_lower or "evaluate" in msg_lower or "identify" in msg_lower)
+            and (
+                "your system" in msg_lower
+                or "yourself" in msg_lower
+                or "your code" in msg_lower
+                or "your architecture" in msg_lower
+                or "your own" in msg_lower
+            )
+        ):
             return self._perform_deep_self_analysis(message, context)
-        
+
         # PRIORITY 2: Technical questions - use full intelligence
         if analysis["technical_question"]:
             return self._technical_intelligence_response(message, context, analysis)
@@ -1514,7 +1537,7 @@ class AuroraCoreIntelligence:
         # PRIORITY 3: Enhancement requests
         if analysis["enhancement_request"]:
             return self._respond_to_enhancement_request(message, context)
-        
+
         # PRIORITY 4: Aurora self-limitation/critique responses
         if analysis.get("asks_about_limitations"):
             return self._respond_about_limitations(message, context)
@@ -1533,11 +1556,11 @@ class AuroraCoreIntelligence:
     def _provide_detailed_explanation(self, message: str, context: dict, analysis: dict) -> str:
         """Provide complete, detailed explanations - directly answer the question"""
         msg_lower = message.lower()
-        
+
         # Extract the actual topic they're asking about
         entities = analysis.get("entities", [])
         topic = entities[0] if entities else "your question"
-        
+
         # Be direct and specific based on what they actually asked
         if "fundamental" in msg_lower or "basic" in msg_lower:
             return (
@@ -1548,7 +1571,7 @@ class AuroraCoreIntelligence:
                 f"To use it effectively: [concrete steps].\n\n"
                 f"What specific aspect of {topic} should I explain in more detail?"
             )
-        
+
         # Default: answer their actual question directly
         return (
             f"Regarding {topic}: [Direct answer to their specific question]\n\n"
@@ -1618,20 +1641,20 @@ Want me to prioritize implementing any of these? I can start with the most impac
     def _perform_self_diagnostic(self, context: dict) -> str:
         """Run comprehensive self-diagnostic and return detailed status report"""
         try:
-            import subprocess
             import os
-            
+            import subprocess
+
             user_name = context.get("user_name", "")
             _greeting = f"{user_name}, here's" if user_name else "Here's"
-            
+
             # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 9000=chat)
             services = []
             service_map = {
                 5000: "Frontend",
-                5001: "Bridge", 
+                5001: "Bridge",
                 5002: "Self-Learn",
                 5003: "Chat Server",
-                5005: "Luminar Dashboard"
+                5005: "Luminar Dashboard",
             }
             for port, name in service_map.items():
                 try:
@@ -1639,7 +1662,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
                         ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", f"http://localhost:{port}"],
                         capture_output=True,
                         text=True,
-                        timeout=2
+                        timeout=2,
                     )
                     status_code = result.stdout.strip()
                     # 200, 404, 301 all mean the server is running
@@ -1649,18 +1672,18 @@ Want me to prioritize implementing any of these? I can start with the most impac
                         services.append(f"❌ Port {port} ({name})")
                 except:
                     services.append(f"❌ Port {port} ({name})")
-            
+
             operational_pct = (sum(1 for s in services if "✅" in s) / len(services)) * 100
-            
+
             # Check critical files
             critical_files = [
                 "/workspaces/Aurora-x/aurora_core.py",
                 "/workspaces/Aurora-x/chat_with_aurora.py",
                 "/workspaces/Aurora-x/aurora_chat_server.py",
-                "/workspaces/Aurora-x/server/aurora-chat.ts"
+                "/workspaces/Aurora-x/server/aurora-chat.ts",
             ]
             files_ok = sum(1 for f in critical_files if os.path.exists(f))
-            
+
             return f"""{greeting} my complete system diagnostic:
 
 **🔧 SYSTEM STATUS: {operational_pct:.0f}% Operational**
@@ -1694,7 +1717,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
 - Debug and fix issues autonomously
 
 Try asking me a technical question or giving me a coding task to see the full system in action."""
-        
+
         except Exception as e:
             return f"Diagnostic error: {str(e)}\n\nBut I'm still operational and can help you with your questions."
 
@@ -1702,9 +1725,9 @@ Try asking me a technical question or giving me a coding task to see the full sy
         """Aurora performs deep introspective analysis of her entire system"""
         user_name = context.get("user_name", "")
         _greeting = f"{user_name}, here's" if user_name else "Here's"
-        
+
         msg_lower = message.lower()
-        
+
         # Determine what aspect they want analyzed
         if "strength" in msg_lower and "weakness" in msg_lower:
             return f"""{greeting} my honest strengths and weaknesses analysis:
@@ -1950,29 +1973,29 @@ Just describe what you want to see improved, and I'll implement it autonomously!
             return self._aurora_architectural_analysis(message, context)
 
         # ACTUALLY USE AURORA'S INTELLIGENCE - Analyze and answer the question
-        
+
         # Extract what they're asking about
         if "explain" in msg_lower or "what is" in msg_lower or "what's" in msg_lower:
             # They want an explanation - USE KNOWLEDGE TIERS
             return self._provide_intelligent_explanation(message, entities, context)
-        
+
         if "write" in msg_lower or "create" in msg_lower or "build" in msg_lower or "make" in msg_lower:
             # They want code written - ACTUALLY WRITE IT
             return self._generate_code_solution(message, entities, context)
-        
+
         if "fix" in msg_lower or "debug" in msg_lower or "error" in msg_lower or "issue" in msg_lower:
             # They have a problem - ANALYZE AND FIX IT
             return self._debug_and_fix(message, entities, context)
-        
+
         if "how" in msg_lower and ("work" in msg_lower or "do" in msg_lower):
             # They want process explanation - EXPLAIN THE PROCESS
             return self._explain_how_it_works(message, entities, context)
-        
+
         # Default: Acknowledge and offer specific help based on entities
         _tech_context = ", ".join(entities) if entities else "that"
         user_name = context.get("user_name", "")
         _greeting = f"{user_name}, I" if user_name else "I"
-        
+
         return f"""{greeting} can help with {tech_context}. I have full knowledge across all 66 tiers.
 
 What specifically do you need:
@@ -1991,30 +2014,62 @@ Give me the details and I'll deliver."""
         msg_lower = message.lower()
         user_name = context.get("user_name", "")
         _greeting = f"{user_name}, " if user_name else ""
-        
+
         # DYNAMIC INTELLIGENCE: Analyze what they're asking and create response
         # Extract key concepts from the question
         concepts = []
         technical_terms = [
-            'recursion', 'async', 'closure', 'generator', 'decorator', 'context manager',
-            'polymorphism', 'inheritance', 'encapsulation', 'algorithm', 'data structure',
-            'oop', 'functional', 'class', 'method', 'function', 'variable', 'loop',
-            'condition', 'exception', 'error', 'debug', 'optimize', 'performance',
-            'memory', 'complexity', 'big o', 'sorting', 'searching', 'tree', 'graph',
-            'hash', 'array', 'list', 'dict', 'set', 'tuple', 'string'
+            "recursion",
+            "async",
+            "closure",
+            "generator",
+            "decorator",
+            "context manager",
+            "polymorphism",
+            "inheritance",
+            "encapsulation",
+            "algorithm",
+            "data structure",
+            "oop",
+            "functional",
+            "class",
+            "method",
+            "function",
+            "variable",
+            "loop",
+            "condition",
+            "exception",
+            "error",
+            "debug",
+            "optimize",
+            "performance",
+            "memory",
+            "complexity",
+            "big o",
+            "sorting",
+            "searching",
+            "tree",
+            "graph",
+            "hash",
+            "array",
+            "list",
+            "dict",
+            "set",
+            "tuple",
+            "string",
         ]
-        
+
         for term in technical_terms:
             if term in msg_lower:
                 concepts.append(term)
-        
+
         # If we identified technical concepts, generate dynamic explanation
         if concepts:
             main_concept = concepts[0]
-            
+
             # USE AURORA'S KNOWLEDGE TIERS - don't hardcode, synthesize!
             tier_knowledge = self._query_knowledge_tiers(main_concept, message)
-            
+
             return f"""{greeting}let me break down **{main_concept}** for you:
 
 {tier_knowledge['explanation']}
@@ -2030,7 +2085,7 @@ Give me the details and I'll deliver."""
 **Use this when:** {tier_knowledge['use_cases']}
 
 Want me to dive deeper into any aspect?"""
-        
+
         # FALLBACK: If no specific tech term, analyze intent and create response
         if "explain" in msg_lower or "what is" in msg_lower or "how does" in msg_lower:
             return f"""{greeting}recursion is when a function calls itself to solve a problem.
@@ -2065,7 +2120,7 @@ print(factorial(5))  # 5 * 4 * 3 * 2 * 1 = 120
 **Caution:** Can cause stack overflow with deep recursion - consider iterative alternatives
 
 Need more examples or want to see tail recursion?"""
-        
+
         elif "async" in msg_lower or "asyncio" in msg_lower or "asynchronous" in msg_lower:
             return f"""{greeting}asynchronous programming lets your code handle multiple operations concurrently without blocking.
 
@@ -2105,7 +2160,7 @@ asyncio.run(main())
 **Use Cases:** Web scraping, API calls, database queries, real-time systems
 
 Want to see error handling or async context managers?"""
-        
+
         elif "closure" in msg_lower:
             return f"""{greeting}closures are functions that remember variables from their enclosing scope.
 
@@ -2155,7 +2210,7 @@ def api_call():
 **Use Cases:** Event handlers, decorators, factory functions, private state
 
 Want to see more advanced patterns?"""
-        
+
         elif "generator" in msg_lower:
             return f"""{greeting}generators produce values lazily using `yield` instead of returning all at once.
 
@@ -2201,7 +2256,7 @@ print([next(fib) for _ in range(10)])
 **Use Cases:** Streaming data, large files, infinite sequences
 
 Want to see generator pipelines or `yield from`?"""
-        
+
         elif "decorator" in msg_lower:
             return f"""{greeting}decorators modify or enhance functions without changing their code.
 
@@ -2260,7 +2315,7 @@ def calculate():
 - Rate limiting
 
 Want to see class decorators or property decorators?"""
-        
+
         elif "context manager" in msg_lower or "with statement" in msg_lower:
             return f"""{greeting}context managers handle setup/cleanup automatically using the `with` statement.
 
@@ -2315,7 +2370,7 @@ with database_connection('mydb') as conn:
 - Temporary state changes
 
 Want to see async context managers or exception handling?"""
-        
+
         elif "algorithm" in msg_lower and "complexity" not in msg_lower:
             return f"""{greeting}algorithms are step-by-step procedures for solving computational problems.
 
@@ -2367,7 +2422,7 @@ def binary_search(arr, target):
 - O(n²) - Quadratic (avoid when possible)
 
 Which type would you like to explore?"""
-        
+
         elif "data structure" in msg_lower:
             return f"""{greeting}data structures organize data for efficient access and modification.
 
@@ -2426,7 +2481,7 @@ class TreeNode:
 ```
 
 Which structure would you like to explore in depth?"""
-        
+
         elif "oop" in msg_lower or "object-oriented" in msg_lower or "object oriented" in msg_lower:
             return f"""{greeting}Object-Oriented Programming (OOP) organizes code around objects and their interactions.
 
@@ -2491,7 +2546,7 @@ class Circle(Shape):
 **Benefits:** Code reusability, maintainability, scalability
 
 Want to see design patterns or advanced OOP?"""
-        
+
         elif "polymorphism" in msg_lower:
             return f"""{greeting}polymorphism is one of the core principles of object-oriented programming.
 
@@ -2536,7 +2591,7 @@ make_sound(Robot())  # Also works - polymorphism through duck typing
 **Why it matters:** Polymorphism makes code flexible, extensible, and easier to maintain. You can add new classes without changing existing code.
 
 Want me to show you a real-world example or explain another concept?"""
-        
+
         # Generic intelligent explanation template
         topic = entities[0] if entities else "that concept"
         return f"""{greeting}let me explain {topic}.
@@ -2549,13 +2604,13 @@ Want me to show you a real-world example or explain another concept?"""
 • Best practices and patterns]
 
 Give me more details and I'll provide a comprehensive explanation using my full knowledge base."""
-    
+
     def _generate_code_solution(self, message: str, entities: list, context: dict) -> str:
         """Actually write code based on the request"""
         msg_lower = message.lower()
         user_name = context.get("user_name", "")
         _greeting = f"{user_name}, here's" if user_name else "Here's"
-        
+
         # Fibonacci example
         if "fibonacci" in msg_lower:
             return f"""{greeting} a complete Fibonacci implementation with multiple approaches:
@@ -2594,9 +2649,11 @@ print(list(fibonacci_generator(10)))  # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
 • **Generator**: Best for sequences (memory efficient)
 
 Want me to optimize it further or explain the math behind it?"""
-        
+
         # API call templates
-        elif "api" in msg_lower and ("call" in msg_lower or "request" in msg_lower or "http" in msg_lower or "client" in msg_lower):
+        elif "api" in msg_lower and (
+            "call" in msg_lower or "request" in msg_lower or "http" in msg_lower or "client" in msg_lower
+        ):
             return f"""{greeting} a complete API client implementation:
 
 ```python
@@ -2663,7 +2720,7 @@ new_issue = client.post("repos/owner/repo/issues", {{
 ```
 
 This includes timeout protection, error handling, and reusable client. Need async version?"""
-        
+
         # File I/O templates
         elif "file" in msg_lower and ("read" in msg_lower or "write" in msg_lower or "i/o" in msg_lower):
             return f"""{greeting} comprehensive file I/O operations:
@@ -2756,7 +2813,7 @@ rows = handler.read_csv("users.csv")
 ```
 
 This handles text, JSON, and CSV with proper error handling. Need binary or async I/O?"""
-        
+
         # Sorting algorithms
         elif "sort" in msg_lower and "algorithm" in msg_lower:
             return f"""{greeting} efficient sorting implementations:
@@ -2821,7 +2878,7 @@ print(mergesort(test_array))  # [11, 12, 22, 25, 34, 64, 90]
 - Built-in sorted(): O(n log n) - use this in production!
 
 Need heap sort or radix sort?"""
-        
+
         # Search algorithms
         elif "search" in msg_lower and ("binary" in msg_lower or "algorithm" in msg_lower):
             return f"""{greeting} search algorithm implementations:
@@ -2892,7 +2949,7 @@ print(find_all_occurrences(duplicates, 2))  # [1, 2, 3]
 - Hash lookup: O(1) if using dict
 
 Need A* or graph search?"""
-        
+
         # Class/OOP templates
         elif "class" in msg_lower or ("create" in msg_lower and "object" in msg_lower):
             return f"""{greeting} a complete OOP class structure:
@@ -2987,7 +3044,7 @@ user = User("Alice", "alice@example.com", 30)
 ```
 
 This shows encapsulation, properties, private methods, and magic methods. Need inheritance or abstract classes?"""
-        
+
         # Generic code generation
         task = "that" if not entities else f"a {entities[0]} solution"
         return f"""{greeting} the code for {task}:
@@ -3002,12 +3059,12 @@ This shows encapsulation, properties, private methods, and magic methods. Need i
 ```
 
 Give me the specific requirements and I'll write working, tested code."""
-    
+
     def _debug_and_fix(self, message: str, entities: list, context: dict) -> str:
         """Debug and fix issues"""
         user_name = context.get("user_name", "")
         _greeting = f"{user_name}, I" if user_name else "I"
-        
+
         return f"""{greeting} can debug that. To fix it effectively, I need:
 
 1. **The error message** (full traceback if possible)
@@ -3016,13 +3073,13 @@ Give me the specific requirements and I'll write working, tested code."""
 4. **What actually happened**
 
 Share those details and I'll analyze the root cause and provide a fix."""
-    
+
     def _explain_how_it_works(self, message: str, entities: list, context: dict) -> str:
         """Explain how something works"""
         topic = entities[0] if entities else "that"
         user_name = context.get("user_name", "")
         _greeting = f"{user_name}, " if user_name else ""
-        
+
         return f"""{greeting}I'll explain how {topic} works.
 
 To give you the most helpful explanation, tell me which level you need:
@@ -3041,80 +3098,82 @@ What aspect of {topic} do you want me to dive into?"""
         # Analyze which tiers are relevant
         relevant_tiers = []
         concept_lower = concept.lower()
-        
+
         # Map concepts to tier ranges
         tier_mapping = {
-            'fundamental': range(0, 13),      # Foundation tiers
-            'language': range(13, 30),        # Language-specific
-            'framework': range(30, 45),       # Frameworks/libraries
-            'architecture': range(45, 60),    # System design
-            'advanced': range(60, 79)         # Cutting-edge
+            "fundamental": range(0, 13),  # Foundation tiers
+            "language": range(13, 30),  # Language-specific
+            "framework": range(30, 45),  # Frameworks/libraries
+            "architecture": range(45, 60),  # System design
+            "advanced": range(60, 79),  # Cutting-edge
         }
-        
+
         # Determine complexity level from question
-        if any(word in full_question.lower() for word in ['advanced', 'deep', 'internals', 'optimization']):
-            relevant_tiers = list(tier_mapping['advanced'])
-        elif any(word in full_question.lower() for word in ['design', 'architecture', 'pattern']):
-            relevant_tiers = list(tier_mapping['architecture'])
-        elif any(word in full_question.lower() for word in ['basic', 'simple', 'beginner', 'intro']):
-            relevant_tiers = list(tier_mapping['fundamental'])
+        if any(word in full_question.lower() for word in ["advanced", "deep", "internals", "optimization"]):
+            relevant_tiers = list(tier_mapping["advanced"])
+        elif any(word in full_question.lower() for word in ["design", "architecture", "pattern"]):
+            relevant_tiers = list(tier_mapping["architecture"])
+        elif any(word in full_question.lower() for word in ["basic", "simple", "beginner", "intro"]):
+            relevant_tiers = list(tier_mapping["fundamental"])
         else:
             # Default: use multiple tiers for comprehensive answer
-            relevant_tiers = list(tier_mapping['fundamental']) + list(tier_mapping['language'][:5])
-        
+            relevant_tiers = list(tier_mapping["fundamental"]) + list(tier_mapping["language"][:5])
+
         # SYNTHESIZE KNOWLEDGE from tiers (not templates!)
         knowledge = {
-            'explanation': self._synthesize_explanation(concept, relevant_tiers),
-            'code_example': self._generate_dynamic_code(concept, full_question),
-            'insights': self._extract_insights(concept, relevant_tiers),
-            'use_cases': self._identify_use_cases(concept)
+            "explanation": self._synthesize_explanation(concept, relevant_tiers),
+            "code_example": self._generate_dynamic_code(concept, full_question),
+            "insights": self._extract_insights(concept, relevant_tiers),
+            "use_cases": self._identify_use_cases(concept),
         }
-        
+
         return knowledge
-    
+
     def _synthesize_explanation(self, concept: str, tiers: list) -> str:
         """Synthesize explanation from knowledge tiers"""
         # This is where Aurora creates NEW explanations, not copies templates
         concept_knowledge = {
-            'recursion': 'A function calling itself - each call breaks the problem into smaller pieces until reaching a base case that stops the recursion.',
-            'async': 'Non-blocking execution where operations can run concurrently without waiting for each other - the event loop manages switching between tasks.',
-            'closure': 'A function that captures and remembers variables from its enclosing scope, even after the outer function returns.',
-            'generator': 'A function that yields values one at a time using lazy evaluation, keeping state between yields without storing everything in memory.',
-            'decorator': 'A function that wraps another function to modify or enhance its behavior without changing the original code.',
-            'polymorphism': 'Different types responding to the same interface differently - same method name, different behavior based on the object type.',
-            'oop': 'Organizing code around objects that combine data (attributes) and behavior (methods), using encapsulation, inheritance, and polymorphism.',
-            'algorithm': 'A step-by-step procedure for solving a problem - the logic and efficiency matter more than the specific implementation.',
-            'data structure': 'Ways to organize and store data for efficient access and modification - choosing the right structure affects performance dramatically.',
+            "recursion": "A function calling itself - each call breaks the problem into smaller pieces until reaching a base case that stops the recursion.",
+            "async": "Non-blocking execution where operations can run concurrently without waiting for each other - the event loop manages switching between tasks.",
+            "closure": "A function that captures and remembers variables from its enclosing scope, even after the outer function returns.",
+            "generator": "A function that yields values one at a time using lazy evaluation, keeping state between yields without storing everything in memory.",
+            "decorator": "A function that wraps another function to modify or enhance its behavior without changing the original code.",
+            "polymorphism": "Different types responding to the same interface differently - same method name, different behavior based on the object type.",
+            "oop": "Organizing code around objects that combine data (attributes) and behavior (methods), using encapsulation, inheritance, and polymorphism.",
+            "algorithm": "A step-by-step procedure for solving a problem - the logic and efficiency matter more than the specific implementation.",
+            "data structure": "Ways to organize and store data for efficient access and modification - choosing the right structure affects performance dramatically.",
         }
-        
-        base_explanation = concept_knowledge.get(concept, f'A {concept} is a programming concept that helps solve specific types of problems efficiently.')
-        
+
+        base_explanation = concept_knowledge.get(
+            concept, f"A {concept} is a programming concept that helps solve specific types of problems efficiently."
+        )
+
         # Add depth based on tiers
         if max(tiers) > 45:
-            base_explanation += f'\n\n**Deep Understanding:** At the architectural level, {concept} represents a fundamental pattern in computation theory.'
-        
+            base_explanation += f"\n\n**Deep Understanding:** At the architectural level, {concept} represents a fundamental pattern in computation theory."
+
         return base_explanation
-    
+
     def _generate_dynamic_code(self, concept: str, question: str) -> str:
         """Generate code examples dynamically based on context"""
         # Aurora creates code on the fly, adapting to the question
-        
-        if 'recursion' in concept:
-            if 'tree' in question.lower():
-                return '''def traverse_tree(node):
+
+        if "recursion" in concept:
+            if "tree" in question.lower():
+                return """def traverse_tree(node):
     if node is None:
         return
     print(node.value)
     traverse_tree(node.left)
-    traverse_tree(node.right)'''
+    traverse_tree(node.right)"""
             else:
-                return '''def factorial(n):
+                return """def factorial(n):
     if n <= 1:  # Base case
         return 1
-    return n * factorial(n - 1)  # Recursive case'''
-        
-        elif 'async' in concept:
-            return '''import asyncio
+    return n * factorial(n - 1)  # Recursive case"""
+
+        elif "async" in concept:
+            return """import asyncio
 
 async def fetch_data(source):
     await asyncio.sleep(1)  # Non-blocking wait
@@ -3124,10 +3183,10 @@ async def fetch_data(source):
 results = await asyncio.gather(
     fetch_data("API 1"),
     fetch_data("API 2")
-)'''
-        
-        elif 'generator' in concept:
-            return '''def fibonacci_stream():
+)"""
+
+        elif "generator" in concept:
+            return """def fibonacci_stream():
     a, b = 0, 1
     while True:
         yield a  # Pause here, resume on next()
@@ -3137,38 +3196,40 @@ results = await asyncio.gather(
 for num in fibonacci_stream():
     if num > 100:
         break
-    print(num)'''
-        
+    print(num)"""
+
         # Default: create a generic but useful example
-        return f'''# Example demonstrating {concept}
+        return f"""# Example demonstrating {concept}
 def example():
     # Aurora analyzes context to generate appropriate code
-    pass'''
-    
+    pass"""
+
     def _extract_insights(self, concept: str, tiers: list) -> str:
         """Extract insights from knowledge tiers"""
         insights = {
-            'recursion': '**Key Insight:** Every recursive function can be converted to iteration, but recursion often makes the logic clearer for tree/graph problems.',
-            'async': '**Key Insight:** Async shines with I/O-bound tasks (network, files) but doesn\'t help CPU-bound tasks - use multiprocessing for those.',
-            'generator': '**Key Insight:** Generators are perfect for data pipelines - chain them together to process infinite streams with constant memory.',
-            'closure': '**Key Insight:** Closures enable powerful patterns like decorators, callbacks with state, and factory functions.',
-            'decorator': '**Key Insight:** Decorators are just syntactic sugar - @decorator is equivalent to func = decorator(func).',
+            "recursion": "**Key Insight:** Every recursive function can be converted to iteration, but recursion often makes the logic clearer for tree/graph problems.",
+            "async": "**Key Insight:** Async shines with I/O-bound tasks (network, files) but doesn't help CPU-bound tasks - use multiprocessing for those.",
+            "generator": "**Key Insight:** Generators are perfect for data pipelines - chain them together to process infinite streams with constant memory.",
+            "closure": "**Key Insight:** Closures enable powerful patterns like decorators, callbacks with state, and factory functions.",
+            "decorator": "**Key Insight:** Decorators are just syntactic sugar - @decorator is equivalent to func = decorator(func).",
         }
-        
-        return insights.get(concept, f'**Key Insight:** Understanding {concept} deeply changes how you approach problem-solving.')
-    
+
+        return insights.get(
+            concept, f"**Key Insight:** Understanding {concept} deeply changes how you approach problem-solving."
+        )
+
     def _identify_use_cases(self, concept: str) -> str:
         """Identify practical use cases"""
         use_cases = {
-            'recursion': 'Tree traversal, graph search, divide-and-conquer algorithms, parsing nested structures',
-            'async': 'Web scraping, API calls, real-time systems, handling concurrent connections',
-            'generator': 'Processing large files, infinite sequences, data pipelines, memory-efficient iteration',
-            'closure': 'Event handlers, decorators, factory functions, callbacks with state',
-            'decorator': 'Logging, timing, caching, authentication, rate limiting, input validation',
+            "recursion": "Tree traversal, graph search, divide-and-conquer algorithms, parsing nested structures",
+            "async": "Web scraping, API calls, real-time systems, handling concurrent connections",
+            "generator": "Processing large files, infinite sequences, data pipelines, memory-efficient iteration",
+            "closure": "Event handlers, decorators, factory functions, callbacks with state",
+            "decorator": "Logging, timing, caching, authentication, rate limiting, input validation",
         }
-        
-        return use_cases.get(concept, f'Various applications in modern software development')
-    
+
+        return use_cases.get(concept, "Various applications in modern software development")
+
     def _aurora_architectural_analysis(self, _message: str, context: dict) -> str:
         """Aurora analyzes her own system architecture"""
 
