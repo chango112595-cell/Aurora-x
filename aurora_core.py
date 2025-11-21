@@ -1554,9 +1554,16 @@ Want me to prioritize implementing any of these? I can start with the most impac
             user_name = context.get("user_name", "")
             greeting = f"{user_name}, here's" if user_name else "Here's"
 
-            # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 9000=chat)
+            # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 5003=reserved, 5005=luminar, 5173=vite-dev)
             services = []
-            service_map = {5000: "Frontend", 5001: "Bridge", 5002: "Self-Learn", 9000: "Chat Server"}
+            service_map = {
+                5000: "Frontend/Express",
+                5001: "Bridge Service", 
+                5002: "Self-Learn Module",
+                5003: "Reserved/Auxiliary",
+                5005: "Luminar Nexus V2",
+                5173: "Vite Dev Server"
+            }
             for port, name in service_map.items():
                 try:
                     result = subprocess.run(
@@ -1565,14 +1572,15 @@ Want me to prioritize implementing any of these? I can start with the most impac
                         text=True,
                         timeout=2,
                     )
-                    if result.stdout.strip() == "200":
+                    if result.stdout.strip() in ["200", "301", "302"]:
                         services.append(f"✅ Port {port} ({name})")
                     else:
                         services.append(f"❌ Port {port} ({name})")
                 except:
                     services.append(f"❌ Port {port} ({name})")
 
-            operational_pct = (sum(1 for s in services if "✅" in s) / len(services)) * 100
+            running_count = sum(1 for s in services if "✅" in s)
+            operational_pct = (running_count / len(services)) * 100
 
             # Check critical files
             critical_files = [
