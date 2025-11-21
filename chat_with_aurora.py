@@ -154,11 +154,16 @@ async def interactive_chat():
                 continue
 
             # Extract user name if mentioned
-            if not user_name and any(phrase in user_input.lower() for phrase in ["i'm ", "i am ", "my name is ", "call me "]):
-                name_match = re.search(
-                    r"(?:i'm|i am|my name is|call me)\s+(\w+)", user_input.lower())
-                if name_match:
-                    user_name = name_match.group(1).title()
+            if not user_name:
+                # Check for explicit name phrases
+                if any(phrase in user_input.lower() for phrase in ["i'm ", "i am ", "my name is ", "call me "]):
+                    name_match = re.search(
+                        r"(?:i'm|i am|my name is|call me)\s+(\w+)", user_input.lower())
+                    if name_match:
+                        user_name = name_match.group(1).title()
+                # Also check if input is just a single capitalized word (potential name)
+                elif message_count == 0 and len(user_input.split()) == 1 and user_input[0].isupper():
+                    user_name = user_input.title()
 
             # Build rich context for Aurora
             context = {
