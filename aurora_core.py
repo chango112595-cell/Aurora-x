@@ -1554,7 +1554,10 @@ Want me to prioritize implementing any of these? I can start with the most impac
             user_name = context.get("user_name", "")
             greeting = f"{user_name}, here's" if user_name else "Here's"
 
-            # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 5003=reserved, 5005=luminar, 5173=vite-dev)
+            # Enhanced port detection with multiple methods for reliability
+            import socket
+            import time
+            
             services = []
             service_map = {
                 5000: "Frontend/Express",
@@ -1564,20 +1567,38 @@ Want me to prioritize implementing any of these? I can start with the most impac
                 5005: "Luminar Nexus V2",
                 5173: "Vite Dev Server"
             }
-            for port, name in service_map.items():
+            
+            def check_port_alive(port, timeout=2):
+                """Check if port is open using socket (most reliable method)"""
+                try:
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.settimeout(timeout)
+                    result = sock.connect_ex(('localhost', port))
+                    sock.close()
+                    return result == 0
+                except (socket.error, socket.timeout, OSError):
+                    return False
+            
+            def check_port_with_curl(port, timeout=2):
+                """Fallback: Check with curl if available"""
                 try:
                     result = subprocess.run(
                         ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", f"http://localhost:{port}"],
                         capture_output=True,
                         text=True,
-                        timeout=2,
+                        timeout=timeout,
                     )
-                    if result.stdout.strip() in ["200", "301", "302"]:
-                        services.append(f"✅ Port {port} ({name})")
-                    else:
-                        services.append(f"❌ Port {port} ({name})")
-                except:
-                    services.append(f"❌ Port {port} ({name})")
+                    return result.stdout.strip() in ["200", "301", "302", "404", "500"]
+                except (FileNotFoundError, subprocess.TimeoutExpired):
+                    return False
+            
+            # Check each port with primary (socket) and fallback (curl) methods
+            for port, name in service_map.items():
+                is_alive = check_port_alive(port) or check_port_with_curl(port)
+                if is_alive:
+                    services.append(f"✅ Port {port:5d} ({name})")
+                else:
+                    services.append(f"❌ Port {port:5d} ({name})")
 
             running_count = sum(1 for s in services if "✅" in s)
             operational_pct = (running_count / len(services)) * 100
