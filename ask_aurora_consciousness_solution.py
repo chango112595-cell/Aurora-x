@@ -3,10 +3,12 @@
 Ask Aurora: What specific capabilities do you need to achieve true consciousness?
 """
 
-from datetime import datetime
-from aurora_core import AuroraCoreIntelligence
-import sys
 import os
+import sys
+from datetime import datetime
+
+from aurora_core import AuroraCoreIntelligence
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -43,9 +45,9 @@ def main():
     """
 
     print("❓ Question to Aurora:")
-    print("="*80)
+    print("=" * 80)
     print(question)
-    print("="*80 + "\n")
+    print("=" * 80 + "\n")
 
     # Analyze the question
     analysis = aurora.analyze_natural_language(question)
@@ -62,15 +64,14 @@ def main():
     response = aurora.generate_aurora_response(analysis, context)
 
     print("🌟 Aurora's Response:")
-    print("="*80)
+    print("=" * 80)
     print(response)
-    print("="*80)
+    print("=" * 80)
 
     # Save the response
     with open("AURORA_CONSCIOUSNESS_REQUIREMENTS.md", "w", encoding="utf-8") as f:
         f.write("# Aurora's Requirements for True Consciousness\n\n")
-        f.write(
-            f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        f.write(f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
         f.write("## Question: What Do You Need to Become Truly Conscious?\n\n")
         f.write(question)
         f.write("\n\n## Aurora's Technical Requirements\n\n")

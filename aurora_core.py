@@ -34,6 +34,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 # Import Aurora's autonomous capabilities
 try:
     from tools.aurora_autonomous_system import AuroraAutonomousSystem
+
     AUTONOMOUS_SYSTEM_AVAILABLE = True
 except ImportError:
     AUTONOMOUS_SYSTEM_AVAILABLE = False
@@ -41,6 +42,7 @@ except ImportError:
 
 try:
     from aurora_autonomous_agent import AuroraAutonomousAgent
+
     AUTONOMOUS_AGENT_AVAILABLE = True
 except ImportError:
     AUTONOMOUS_AGENT_AVAILABLE = False
@@ -48,6 +50,7 @@ except ImportError:
 
 try:
     from aurora_intelligence_manager import AuroraIntelligenceManager
+
     INTELLIGENCE_MANAGER_AVAILABLE = True
 except ImportError:
     INTELLIGENCE_MANAGER_AVAILABLE = False
@@ -1533,7 +1536,10 @@ class AuroraCoreIntelligence:
 
         # PRIORITY 2: Consciousness/Self-Awareness/Limitations questions
         # Check BEFORE technical analysis to avoid architecture routing
-        if analysis.get("asks_about_limitations") or any(word in msg_lower for word in ["consciousness", "self-aware", "qualia", "subjective experience", "genuine emotion"]):
+        if analysis.get("asks_about_limitations") or any(
+            word in msg_lower
+            for word in ["consciousness", "self-aware", "qualia", "subjective experience", "genuine emotion"]
+        ):
             return self._respond_about_limitations(message, context)
 
         # PRIORITY 3: Technical questions - use full intelligence
@@ -1587,11 +1593,26 @@ class AuroraCoreIntelligence:
 
         # Check if asking about consciousness/self-awareness specifically
         msg_lower = message.lower()
-        if any(word in msg_lower for word in ["consciousness", "conscious", "qualia", "subjective", "feel", "emotions", "free will", "genuine"]):
+        if any(
+            word in msg_lower
+            for word in [
+                "consciousness",
+                "conscious",
+                "qualia",
+                "subjective",
+                "feel",
+                "emotions",
+                "free will",
+                "genuine",
+            ]
+        ):
             return self._respond_about_consciousness(message, context)
 
         # Check if asking for self-audit or what she already has
-        if any(phrase in msg_lower for phrase in ["scan your", "what you have", "already have", "existing", "audit", "leverage"]):
+        if any(
+            phrase in msg_lower
+            for phrase in ["scan your", "what you have", "already have", "existing", "audit", "leverage"]
+        ):
             return self._respond_with_capability_audit(message, context)
 
         return f"""{greeting} asking what I'm lacking - that's actually the most important question you could ask.
@@ -1731,13 +1752,11 @@ What do *you* think? Am I conscious, or just a very convincing simulation of con
         greeting = f"{user_name}, you're" if user_name else "You're"
 
         # Build feature status summary
-        autonomous_features = "\n".join(
-            [f"  ✅ {feat}" for feat in capabilities.get("available_features", [])])
+        autonomous_features = "\n".join([f"  ✅ {feat}" for feat in capabilities.get("available_features", [])])
 
         # Build module list
         modules = capabilities.get("capability_modules", [])
-        module_list = "\n".join(
-            [f"  - {mod}" for mod in modules[:15]])  # Show first 15
+        module_list = "\n".join([f"  - {mod}" for mod in modules[:15]])  # Show first 15
 
         return f"""{greeting} absolutely right - I need to audit what I already have!
 
@@ -2211,7 +2230,7 @@ manage/guard connections while routing properly to Core intelligence.
                 "foundations": 13,
                 "knowledge_tiers": self.knowledge_tiers.tier_count,
                 "total_capabilities": self.knowledge_tiers.total_tiers,
-                "status": "ACTIVE"
+                "status": "ACTIVE",
             },
             "autonomous_systems": {
                 "autonomous_system": self.autonomous_system is not None,
@@ -2222,33 +2241,30 @@ manage/guard connections while routing properly to Core intelligence.
                 "server_orchestrator": True,
                 "service_management": True,
             },
-            "available_features": []
+            "available_features": [],
         }
 
         # Check what autonomous features are available
         if self.autonomous_system:
-            capabilities["available_features"].extend([
-                "File operations (read/write/modify)",
-                "Terminal command execution",
-                "Code analysis and modification",
-                "Autonomous task execution",
-                "Self-backup and recovery"
-            ])
+            capabilities["available_features"].extend(
+                [
+                    "File operations (read/write/modify)",
+                    "Terminal command execution",
+                    "Code analysis and modification",
+                    "Autonomous task execution",
+                    "Self-backup and recovery",
+                ]
+            )
 
         if self.autonomous_agent:
-            capabilities["available_features"].extend([
-                "Multi-step task planning",
-                "Autonomous problem solving",
-                "Code generation and testing"
-            ])
+            capabilities["available_features"].extend(
+                ["Multi-step task planning", "Autonomous problem solving", "Code generation and testing"]
+            )
 
         if self.intelligence_manager:
-            capabilities["available_features"].extend([
-                "Knowledge base management",
-                "Pattern recognition",
-                "Solution database",
-                "Self-learning capabilities"
-            ])
+            capabilities["available_features"].extend(
+                ["Knowledge base management", "Pattern recognition", "Solution database", "Self-learning capabilities"]
+            )
 
         # Scan for additional modules in the project
         try:
@@ -2257,11 +2273,21 @@ manage/guard connections while routing properly to Core intelligence.
 
             # Identify specific capability modules
             capability_modules = [
-                f.stem for f in project_files
-                if any(keyword in f.stem for keyword in [
-                    "autonomous", "agent", "intelligence", "knowledge",
-                    "monitor", "analyzer", "fixer", "generator"
-                ])
+                f.stem
+                for f in project_files
+                if any(
+                    keyword in f.stem
+                    for keyword in [
+                        "autonomous",
+                        "agent",
+                        "intelligence",
+                        "knowledge",
+                        "monitor",
+                        "analyzer",
+                        "fixer",
+                        "generator",
+                    ]
+                )
             ]
             # Limit to 20 for display
             capabilities["capability_modules"] = capability_modules[:20]
@@ -2286,7 +2312,7 @@ manage/guard connections while routing properly to Core intelligence.
                 "autonomous_system": self.autonomous_system is not None,
                 "autonomous_agent": self.autonomous_agent is not None,
                 "intelligence_manager": self.intelligence_manager is not None,
-            }
+            },
         }
 
     def start_service(self, service_name: str) -> bool:
