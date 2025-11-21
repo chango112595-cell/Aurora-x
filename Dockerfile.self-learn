@@ -1,7 +1,7 @@
 # Aurora-X Self-Learn Server Dockerfile
 # Multi-stage build for optimized image size
 
-FROM python:3.12-slim AS builder
+FROM python:3.14-slim AS builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir --user -r requirements.txt
 # ============================================
 # Final stage - minimal runtime image
 # ============================================
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
