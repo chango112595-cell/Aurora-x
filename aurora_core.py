@@ -1525,8 +1525,7 @@ class AuroraCoreIntelligence:
 **6. Real-World Integration:**
 - Can't send emails or notifications
 - No database connections (beyond file storage)
-- No CI/CD integration
-- Can't interact with external services
+- Limited external service interaction (CI/CD exists in foundation but not fully integrated)
 
 **7. Collaborative Features:**
 - Single-user only (no multi-user support)
