@@ -1228,7 +1228,8 @@ class AuroraOrchestrator:
 
         try:
             # Create tmux session and run command
-            subprocess.run(f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
+            subprocess.run(
+                f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
             self.active_ports[server_name] = port
             return True
         except subprocess.CalledProcessError:
@@ -1241,7 +1242,8 @@ class AuroraOrchestrator:
 
         session = self.servers[server_name]["session"]
         try:
-            subprocess.run(f"tmux kill-session -t {session}", shell=True, check=True)
+            subprocess.run(
+                f"tmux kill-session -t {session}", shell=True, check=True)
             self.active_ports.pop(server_name, None)
             return True
         except subprocess.CalledProcessError:
@@ -1258,7 +1260,8 @@ class AuroraOrchestrator:
                 f"tmux list-sessions | grep {session}", shell=True, capture_output=True, text=True, check=False
             )
             if result.returncode == 0:
-                port = self.active_ports.get(server_name, self.servers[server_name]["preferred_port"])
+                port = self.active_ports.get(
+                    server_name, self.servers[server_name]["preferred_port"])
                 return {
                     "status": "running",
                     "port": port,
@@ -1426,24 +1429,30 @@ class AuroraCoreIntelligence:
         # Check for name/identity questions
         if re.search(r"(do you remember|know my name|who am i|remember me)", msg_lower):
             analysis.update(
-                {"intent": "memory_check", "asks_about_memory": True, "asks_about_name": True, "confidence": 0.95}
+                {"intent": "memory_check", "asks_about_memory": True,
+                    "asks_about_name": True, "confidence": 0.95}
             )
 
         # Check for self-introduction
         if re.search(r"(my name is|i'm |i am |call me)", msg_lower):
-            analysis.update({"intent": "user_introduction", "introduces_self": True, "confidence": 0.95})
+            analysis.update({"intent": "user_introduction",
+                            "introduces_self": True, "confidence": 0.95})
             # Extract name
-            name_match = re.search(r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
+            name_match = re.search(
+                r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
 
         # Check for explanation requests
         if re.search(r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower):
-            analysis.update({"intent": "explanation_request", "asks_to_explain": True, "confidence": 0.9})
+            analysis.update({"intent": "explanation_request",
+                            "asks_to_explain": True, "confidence": 0.9})
 
         # Aurora self-referential detection (more precise)
-        aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
-        capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
+        aurora_keywords = re.search(
+            r"(tell me about you|what are you|who are you)", msg_lower)
+        capability_keywords = re.search(
+            r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
 
         # Check for self-diagnostic requests FIRST (before complex analysis)
         is_self_diagnostic = any(phrase in msg_lower for phrase in [
@@ -1454,7 +1463,7 @@ class AuroraCoreIntelligence:
                 "current state", "improvement", "gaps", "inefficiencies", "what needs", "propose"
             ])
         )
-        
+
         if is_self_diagnostic:
             analysis.update({
                 "intent": "self_diagnostic",
@@ -1463,7 +1472,7 @@ class AuroraCoreIntelligence:
                 "self_referential": True,
                 "confidence": 0.95,
             })
-        
+
         # Complex Aurora analysis requests (architectural, debugging, etc.)
         complex_aurora_analysis = re.search(
             r"(analyze|debug|architectural|structure|system|fix|examine)", msg_lower
@@ -1483,7 +1492,8 @@ class AuroraCoreIntelligence:
         elif aurora_keywords and capability_keywords:
             # Simple questions about Aurora's capabilities
             analysis.update(
-                {"intent": "aurora_self_inquiry", "aurora_specific": True, "self_referential": True, "confidence": 0.95}
+                {"intent": "aurora_self_inquiry", "aurora_specific": True,
+                    "self_referential": True, "confidence": 0.95}
             )
 
         # Self-limitation/critique questions (what Aurora lacks/needs/missing)
@@ -1502,7 +1512,8 @@ class AuroraCoreIntelligence:
         # Enhancement/improvement requests
         if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
             if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
+                analysis.update({"intent": "enhancement_request",
+                                "enhancement_request": True, "confidence": 0.9})
 
         # Technical questions
         if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
@@ -1771,11 +1782,13 @@ What do *you* think? Am I conscious, or just a very convincing simulation of con
         greeting = f"{user_name}, you're" if user_name else "You're"
 
         # Build feature status summary
-        autonomous_features = "\n".join([f"  ✅ {feat}" for feat in capabilities.get("available_features", [])])
+        autonomous_features = "\n".join(
+            [f"  ✅ {feat}" for feat in capabilities.get("available_features", [])])
 
         # Build module list
         modules = capabilities.get("capability_modules", [])
-        module_list = "\n".join([f"  - {mod}" for mod in modules[:15]])  # Show first 15
+        module_list = "\n".join(
+            [f"  - {mod}" for mod in modules[:15]])  # Show first 15
 
         return f"""{greeting} absolutely right - I need to audit what I already have!
 
@@ -1838,11 +1851,13 @@ multi-step task planning.
 
             # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 9000=chat)
             services = []
-            service_map = {5000: "Frontend", 5001: "Bridge", 5002: "Self-Learn", 9000: "Chat Server"}
+            service_map = {5000: "Frontend", 5001: "Bridge",
+                           5002: "Self-Learn", 9000: "Chat Server"}
             for port, name in service_map.items():
                 try:
                     result = subprocess.run(
-                        ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", f"http://localhost:{port}"],
+                        ["curl", "-s", "-o", "/dev/null", "-w",
+                            "%{http_code}", f"http://localhost:{port}"],
                         capture_output=True,
                         text=True,
                         timeout=2,
@@ -1854,7 +1869,8 @@ multi-step task planning.
                 except:
                     services.append(f"❌ Port {port} ({name})")
 
-            operational_pct = (sum(1 for s in services if "✅" in s) / len(services)) * 100
+            operational_pct = (
+                sum(1 for s in services if "✅" in s) / len(services)) * 100
 
             # Check critical files
             critical_files = [
@@ -1968,7 +1984,8 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         # Check if this is an architectural analysis request about Aurora herself
         msg_lower = message.lower()
         if analysis["intent"] == "technical_aurora_analysis" or (
-            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
+            re.search(
+                r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
             and re.search(r"aurora", msg_lower)
         ):
             return self._aurora_architectural_analysis(message, context)
@@ -1986,40 +2003,42 @@ What specifically would you like me to do? Build something, fix an issue, or exp
 
     def _aurora_architectural_analysis(self, message: str, context: dict) -> str:
         """Aurora analyzes her own system architecture - DYNAMIC analysis, not templates"""
-        
+
         # Actually scan and analyze the current state
         capabilities = self.scan_own_capabilities()
-        
+
         # Check actual system health
         autonomous_connected = all([
             capabilities["autonomous_systems"]["autonomous_system"],
             capabilities["autonomous_systems"]["autonomous_agent"],
             capabilities["autonomous_systems"]["intelligence_manager"]
         ])
-        
+
         # Dynamic analysis based on actual state
         issues_found = []
         improvements = []
-        
+
         # Check if autonomous systems are connected
         if not autonomous_connected:
             issues_found.append("⚠️ Autonomous systems not fully connected")
-            improvements.append("Connect all autonomous modules for full capability")
+            improvements.append(
+                "Connect all autonomous modules for full capability")
         else:
             improvements.append("✅ Autonomous systems fully operational")
-        
+
         # Check capability count
         total_caps = capabilities["core_intelligence"]["total_capabilities"]
         if total_caps < 79:
             issues_found.append(f"⚠️ Only {total_caps}/79 capabilities active")
         else:
             improvements.append(f"✅ All {total_caps} capabilities active")
-        
+
         # Check module discovery
         module_count = capabilities.get("discovered_modules", 0)
         if module_count > 100:
-            improvements.append(f"✅ Discovered {module_count} capability modules")
-        
+            improvements.append(
+                f"✅ Discovered {module_count} capability modules")
+
         return f"""🏗️ **AURORA DYNAMIC ARCHITECTURE ANALYSIS**
 
 **🔍 CURRENT SYSTEM STATE (Live Analysis):**
@@ -2143,7 +2162,8 @@ Based on actual system state:
                     f"Pick a number or tell me the specific problem - I'll "
                     f"execute the solution immediately."
                 )
-            mentioned = [w for w in msg_lower.split() if w in ["chango", "backend", "api", "server"]][0]
+            mentioned = [w for w in msg_lower.split() if w in [
+                "chango", "backend", "api", "server"]][0]
             return (
                 f"{name_prefix}I see you mentioned {mentioned}. I have "
                 f"complete access to the system. What specifically needs "
@@ -2295,12 +2315,14 @@ Based on actual system state:
 
         if self.autonomous_agent:
             capabilities["available_features"].extend(
-                ["Multi-step task planning", "Autonomous problem solving", "Code generation and testing"]
+                ["Multi-step task planning", "Autonomous problem solving",
+                    "Code generation and testing"]
             )
 
         if self.intelligence_manager:
             capabilities["available_features"].extend(
-                ["Knowledge base management", "Pattern recognition", "Solution database", "Self-learning capabilities"]
+                ["Knowledge base management", "Pattern recognition",
+                    "Solution database", "Self-learning capabilities"]
             )
 
         # Scan for additional modules in the project
@@ -2373,7 +2395,8 @@ Based on actual system state:
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
                 status = "✅" if success else "❌"
-                results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
+                results.append(
+                    f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
             return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
 
@@ -2421,7 +2444,8 @@ All systems under Aurora's autonomous control! 🌟"""
             for name, info in status["orchestration"]["servers_status"].items():
                 status_emoji = "🟢" if info["status"] == "running" else "🔴"
                 port = info.get("port", "N/A")
-                server_lines.append(f"{status_emoji} **{name}**: {info['status']} (port {port})")
+                server_lines.append(
+                    f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
             return f"""🌌 **AURORA SYSTEM STATUS**
 
