@@ -74,7 +74,8 @@ class AuroraSystemUpdater:
             }
         except Exception as e:
             self.errors.append(f"Failed to load aurora_core: {e}")
-            return {"foundation_count": 13, "tier_count": 66, "total_capabilities": 79}  # Updated to 56
+            # Updated to 56
+            return {"foundation_count": 13, "tier_count": 66, "total_capabilities": 79}
 
     def get_all_files_to_update(self) -> list[Path]:
         """Recursively get all text files in the project (DEEP SEARCH)"""
@@ -112,14 +113,22 @@ class AuroraSystemUpdater:
         for old_tier in old_tier_counts:
             patterns.extend(
                 [
-                    (f"{old_tier} tier", f"{tier_count} tier", f"tier count {old_tier}→{tier_count}"),
-                    (f"{old_tier} Tier", f"{tier_count} Tier", f"Tier count {old_tier}→{tier_count}"),
-                    (f"{old_tier} TIER", f"{tier_count} TIER", f"TIER count {old_tier}→{tier_count}"),
-                    (f"{old_tier} knowledge tier", f"{tier_count} knowledge tier", "knowledge tiers"),
-                    (f"{old_tier} Knowledge Tier", f"{tier_count} Knowledge Tier", "Knowledge Tiers"),
-                    (f"all {old_tier} mastery tier", f"all {tier_count} knowledge tier", "mastery→knowledge tiers"),
-                    (f"TIER {old_tier}", f"TIER {tier_count}", "TIER reference"),
-                    (f"Tier {old_tier}", f"Tier {tier_count}", "Tier reference"),
+                    (f"{old_tier} tier", f"{tier_count} tier",
+                     f"tier count {old_tier}→{tier_count}"),
+                    (f"{old_tier} Tier", f"{tier_count} Tier",
+                     f"Tier count {old_tier}→{tier_count}"),
+                    (f"{old_tier} TIER", f"{tier_count} TIER",
+                     f"TIER count {old_tier}→{tier_count}"),
+                    (f"{old_tier} knowledge tier",
+                     f"{tier_count} knowledge tier", "knowledge tiers"),
+                    (f"{old_tier} Knowledge Tier",
+                     f"{tier_count} Knowledge Tier", "Knowledge Tiers"),
+                    (f"all {old_tier} mastery tier",
+                     f"all {tier_count} knowledge tier", "mastery→knowledge tiers"),
+                    (f"TIER {old_tier}",
+                     f"TIER {tier_count}", "TIER reference"),
+                    (f"Tier {old_tier}",
+                     f"Tier {tier_count}", "Tier reference"),
                 ]
             )
 
@@ -127,9 +136,12 @@ class AuroraSystemUpdater:
         for old_total in old_total_counts:
             patterns.extend(
                 [
-                    (f"{old_total} Complete System", f"{total} Complete System", "complete systems"),
-                    (f"{old_total} total capabilit", f"{total} total capabilit", "total capabilities"),
-                    (f"{old_total} capabilit", f"{total} capabilit", "capabilities"),
+                    (f"{old_total} Complete System",
+                     f"{total} Complete System", "complete systems"),
+                    (f"{old_total} total capabilit",
+                     f"{total} total capabilit", "total capabilities"),
+                    (f"{old_total} capabilit",
+                     f"{total} capabilit", "capabilities"),
                     (f"{old_total} system", f"{total} system", "systems count"),
                     (f"{old_total} System", f"{total} System", "Systems count"),
                 ]
@@ -140,8 +152,10 @@ class AuroraSystemUpdater:
             for old_total in old_total_counts:
                 patterns.extend(
                     [
-                        (f"13 Tasks + {old_tier} Tiers", f"13 Tasks + {tier_count} Tiers", "combined count"),
-                        (f"13 tasks + {old_tier} tiers", f"13 tasks + {tier_count} tiers", "combined count lowercase"),
+                        (f"13 Tasks + {old_tier} Tiers",
+                         f"13 Tasks + {tier_count} Tiers", "combined count"),
+                        (f"13 tasks + {old_tier} tiers",
+                         f"13 tasks + {tier_count} tiers", "combined count lowercase"),
                         (
                             f"{foundation} Tasks + {old_tier} Tiers = {old_total}",
                             f"{foundation} Tasks + {tier_count} Tiers = {total}",
@@ -152,7 +166,8 @@ class AuroraSystemUpdater:
 
         # Skill count patterns
         for old_skills_count in old_skills:
-            patterns.append((f"{old_skills_count}+ Skill", "2500+ Skill", "skills count"))
+            patterns.append((f"{old_skills_count}+ Skill",
+                            "2500+ Skill", "skills count"))
 
         # Tier range patterns (for documentation)
         patterns.extend(
@@ -166,8 +181,10 @@ class AuroraSystemUpdater:
                 ("tier 53", "tier 53", "max tier reference lowercase"),
                 ("(1-53)", "(1-53)", "tier range in parens"),
                 ("(28-53)", "(28-53)", "autonomous range in parens"),
-                ("28-53: Autonomous & Advanced", "28-53: Autonomous & Advanced", "tier category"),
-                ('tiers_loaded": 66', f'tiers_loaded": {tier_count}', "tiers_loaded JSON"),
+                ("28-53: Autonomous & Advanced",
+                 "28-53: Autonomous & Advanced", "tier category"),
+                ('tiers_loaded": 66',
+                 f'tiers_loaded": {tier_count}', "tiers_loaded JSON"),
             ]
         )
 
@@ -195,13 +212,15 @@ class AuroraSystemUpdater:
             if content != original:
                 file_path.write_text(content, encoding="utf-8")
                 self.updates_made.append(
-                    {"file": str(file_path.relative_to(self.project_root)), "replacements": replacements_made}
+                    {"file": str(file_path.relative_to(
+                        self.project_root)), "replacements": replacements_made}
                 )
                 return True, replacements_made
             return False, 0
 
         except Exception as e:
-            self.errors.append(f"Error updating {file_path.name}: {str(e)[:100]}")
+            self.errors.append(
+                f"Error updating {file_path.name}: {str(e)[:100]}")
             return False, 0
 
     def deep_update_all_files(self, counts: dict[str, int]) -> None:
@@ -252,7 +271,8 @@ class AuroraSystemUpdater:
                     categories["Other"].append(rel_path)
 
         # Print categorized results
-        print(f"\n✅ Updated {updated_count} files with {total_replacements} total replacements\n")
+        print(
+            f"\n✅ Updated {updated_count} files with {total_replacements} total replacements\n")
 
         for category, files in categories.items():
             if files:
@@ -310,7 +330,8 @@ class AuroraSystemUpdater:
         print("\n📊 Statistics:")
         print(f"   Files Scanned: {self.files_scanned}")
         print(f"   Files Updated: {len(self.updates_made)}")
-        print(f"   Total Replacements: {sum(f['replacements'] for f in self.updates_made)}")
+        print(
+            f"   Total Replacements: {sum(f['replacements'] for f in self.updates_made)}")
 
         if self.errors:
             print(f"\n⚠️  Errors Encountered: {len(self.errors)}")

@@ -19,7 +19,8 @@ def update_file_content(file_path: Path, updates: list[tuple[str, str]]) -> bool
         for old_text, new_text in updates:
             if old_text in modified:
                 modified = modified.replace(old_text, new_text)
-                print(f"[Aurora] Updated: {old_text[:50]}... -> {new_text[:50]}...")
+                print(
+                    f"[Aurora] Updated: {old_text[:50]}... -> {new_text[:50]}...")
 
         if modified != content:
             file_path.write_text(modified, encoding="utf-8")

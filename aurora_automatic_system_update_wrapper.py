@@ -13,7 +13,7 @@ def main():
     """Run the deep system updater"""
     script_dir = Path(__file__).parent
     deep_updater = script_dir / "aurora_deep_system_updater.py"
-    
+
     if deep_updater.exists():
         print("🌟 Running Aurora Deep System Updater...")
         result = subprocess.run([sys.executable, str(deep_updater)])

@@ -218,7 +218,8 @@ def main():
     print("  Type: feat\n")
 
     print("Test 3: Create PR")
-    pr = git_master.create_pull_request("feature/tier-50", "Add Git Mastery", "Description")
+    pr = git_master.create_pull_request(
+        "feature/tier-50", "Add Git Mastery", "Description")
     print(f"  Labels: {pr['labels']}\n")
 
     summary = git_master.get_capabilities_summary()

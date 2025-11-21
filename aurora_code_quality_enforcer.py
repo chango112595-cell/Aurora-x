@@ -224,7 +224,8 @@ class AuroraCodeQualityEnforcer:
                     # Add underscore prefix
                     line_idx = issue.line_number - 1
                     if line_idx < len(lines):
-                        lines[line_idx] = lines[line_idx].replace(f"{arg_name}:", f"_{arg_name}:")
+                        lines[line_idx] = lines[line_idx].replace(
+                            f"{arg_name}:", f"_{arg_name}:")
                         fixed_count += 1
 
         if fixed_count > 0:
@@ -314,7 +315,8 @@ def main():
     enforcer = AuroraCodeQualityEnforcer()
 
     print("Test 1: Scan New Tier Files")
-    files_to_scan = ["aurora_visual_understanding.py", "aurora_live_integration.py", "aurora_doc_generator.py"]
+    files_to_scan = ["aurora_visual_understanding.py",
+                     "aurora_live_integration.py", "aurora_doc_generator.py"]
 
     all_issues = []
     for file in files_to_scan:
