@@ -402,7 +402,7 @@ class Test{cls['name']}:
             "Test boundary conditions",
         ]
 
-    def _generate_edge_tests_for_type(self, func_name: str, param_name: str, param_type: str) -> list[TestCase]:
+    def _generate_edge_tests_for_type(self, FUNC_NAME: str, param_name: str, param_type: str) -> list[TestCase]:
         """Generate edge tests based on type"""
         edge_cases = {
             "string": ["empty", "null", "special_chars", "very_long"],
@@ -415,10 +415,10 @@ class Test{cls['name']}:
 
         return [
             TestCase(
-                test_name=f"test_{func_name}_{param_name}_{case}",
+                test_name=f"test_{FUNC_NAME}_{param_name}_{case}",
                 test_type=TestType.UNIT,
                 code=f"# Edge case: {case}",
-                description=f"Test {func_name} with {case} {param_name}",
+                description=f"Test {FUNC_NAME} with {case} {param_name}",
                 covered_lines=[],
                 edge_cases=[case],
                 assertions=[],

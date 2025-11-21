@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Self-Improver & Full Autonomy System
 Phase 5: Full Autonomy (Minutes 41-50)
 

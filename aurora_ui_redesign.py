@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Autonomous UI Redesign System
 Aurora redesigns her own UI to be futuristic and properly organized
 Implements all new architectural updates (13 Tasks + 34 Tiers = 66 Systems)
@@ -19,7 +20,7 @@ class AuroraUIRedesigner:
 
     def log(self, message):
         """Log Aurora's actions"""
-        timestamp = datetime.now().strftime("%H:%M:%S")
+        _timestamp = datetime.now().strftime("%H:%M:%S")
         log_msg = f"[Aurora {timestamp}] {message}"
         print(log_msg)
         self.updates_log.append(log_msg)

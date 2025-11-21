@@ -146,13 +146,13 @@ class AuroraLintFixer:
             ("aurora_full_system_debug.py", "ready =", "READY ="),
             ("aurora_improve_chat_naturalness.py", "    frontend_done", "    FRONTEND_DONE"),
             ("aurora_improve_chat_naturalness.py", "    backend_done", "    BACKEND_DONE"),
-            ("aurora_final_layout_fix.py", "    success = ", "    SUCCESS = "),
-            ("aurora_verify_core_integration.py", "    success = ", "    SUCCESS = "),
-            ("test_t08_offline.py", "    success = ", "    SUCCESS = "),
-            ("create_a_simple_hello_world.py", 'func_name = "simple', 'FUNC_NAME = "simple'),
-            ("test.py", 'func_name = "simple', 'FUNC_NAME = "simple'),
-            ("test_aurora_response.py", 'func_name = "simple', 'FUNC_NAME = "simple'),
-            ("test_aurora_response_display.py", "    func_name = ", "    FUNC_NAME = "),
+            ("aurora_final_layout_fix.py", "    success = ", "    _SUCCESS = "),
+            ("aurora_verify_core_integration.py", "    success = ", "    _SUCCESS = "),
+            ("test_t08_offline.py", "    success = ", "    _SUCCESS = "),
+            ("create_a_simple_hello_world.py", 'FUNC_NAME = "simple', '_FUNC_NAME = "simple'),
+            ("test.py", 'FUNC_NAME = "simple', '_FUNC_NAME = "simple'),
+            ("test_aurora_response.py", 'FUNC_NAME = "simple', '_FUNC_NAME = "simple'),
+            ("test_aurora_response_display.py", "    FUNC_NAME = ", "    _FUNC_NAME = "),
         ]
 
         for filepath, old, new in naming_fixes:
@@ -285,7 +285,7 @@ def main():
     fixer = AuroraLintFixer()
     success = fixer.run_all_fixes()
 
-    if success:
+    if SUCCESS:
         print("\n✅ Aurora has completed the autonomous fixes!")
         print("Run 'python -m pylint *.py --disable=C,R' to verify")
     else:

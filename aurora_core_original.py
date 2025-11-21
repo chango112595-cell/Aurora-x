@@ -334,12 +334,10 @@ class AuroraKnowledgeTiers:
             "tier_66_edge_computing": self._get_edge_computing(),
         }
 
-        # Auto-calculate counts
-        self.foundation_count = len(self.foundations.tasks)  # 13
-        self.knowledge_tier_count = len(self.tiers)  # 56 knowledge tiers
-        self.total_tiers = self.foundation_count + self.knowledge_tier_count  # 79 total
-        self.capabilities_count = 66  # Distinct capabilities used in hybrid mode
-        self.hybrid_mode = f"{self.total_tiers} tiers + {self.capabilities_count} capabilities"
+        # Auto-calculate tier count
+        self.tier_count = len(self.tiers)
+        self.foundation_count = len(self.foundations.tasks)
+        self.total_capabilities = self.foundation_count + self.tier_count
 
     def _get_ancient_languages(self):
         return ["COBOL", "FORTRAN", "Assembly", "LISP", "Punch Cards", "ALGOL"]
@@ -1084,10 +1082,8 @@ class AuroraKnowledgeTiers:
         """Get a dynamic summary of all tiers (auto-updates as tiers are added)"""
         return {
             "foundation_tasks": self.foundation_count,
-            "knowledge_tiers": self.knowledge_tier_count,
-            "total_tiers": self.total_tiers,
-            "capabilities": self.capabilities_count,
-            "hybrid_mode": self.hybrid_mode,
+            "knowledge_tiers": self.tier_count,
+            "total_capabilities": self.total_capabilities,
             "technical_mastery": "Tiers 1-27 (Ancient to Sci-Fi languages)",
             "autonomous_capabilities": "Tier 28 (Tool execution and self-modification)",
             "foundational_genius": "Tiers 29-32 (Core skills and systems)",
@@ -1115,7 +1111,7 @@ class AuroraKnowledgeTiers:
             "languages_mastered": 55,
             "eras_covered": "Ancient (1940s) → SciFi (2035+)",
             "auto_expanding": True,
-            "note": f"System has {self.foundation_count} foundation + {self.knowledge_tier_count} knowledge = {self.total_tiers} total tiers, with {self.capabilities_count} capabilities used in hybrid mode",
+            "note": f"System automatically tracks {self.tier_count} tiers + {self.foundation_count} foundation tasks = {self.total_capabilities} total capabilities",
         }
 
 
@@ -1384,16 +1380,14 @@ class AuroraCoreIntelligence:
                 }
             )
 
-        # Technical questions (check BEFORE enhancement requests)
+        # Enhancement/improvement requests
+        if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
+            if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
+                analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
+
+        # Technical questions
         if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
             analysis.update({"technical_question": True, "confidence": 0.8})
-
-        # Enhancement/improvement requests (but NOT if it's already technical)
-        # This prevents "fix Aurora" from becoming enhancement instead of technical analysis
-        if not analysis["technical_question"] and not complex_aurora_analysis:
-            if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
-                if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                    analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
 
         # Extract technical entities
         tech_entities = re.findall(
@@ -1435,57 +1429,84 @@ class AuroraCoreIntelligence:
             else:
                 return "I don't think you've told me your name yet. What should I call you?"
 
-        # PRIORITY 1: System diagnostic/technical commands FIRST
-        msg_lower = message.lower()
-        if any(cmd in msg_lower for cmd in ["self diagnose", "self-diagnose", "diagnose yourself", "run diagnostic"]):
-            return self._perform_self_diagnostic(context)
-        
-        # PRIORITY 2: Technical questions - use full intelligence
-        if analysis["technical_question"]:
-            return self._technical_intelligence_response(message, context, analysis)
-
-        # PRIORITY 3: Enhancement requests
-        if analysis["enhancement_request"]:
-            return self._respond_to_enhancement_request(message, context)
-        
-        # PRIORITY 4: Aurora self-limitation/critique responses
-        if analysis.get("asks_about_limitations"):
-            return self._respond_about_limitations(message, context)
-
-        # PRIORITY 5: Explanation requests - give complete, detailed answers
+        # Handle explanation requests - give complete, detailed answers
         if analysis.get("asks_to_explain"):
             return self._provide_detailed_explanation(message, context, analysis)
 
-        # PRIORITY 6 (LOWEST): Aurora self-awareness responses
+        # Aurora self-limitation/critique responses
+        if analysis.get("asks_about_limitations"):
+            return self._respond_about_limitations(message, context)
+
+        # Aurora self-awareness responses
         if analysis["aurora_specific"] or analysis["self_referential"]:
             return self._respond_about_self(message, context)
+
+        # Enhancement requests
+        if analysis["enhancement_request"]:
+            return self._respond_to_enhancement_request(message, context)
+
+        # Technical questions - use full intelligence
+        if analysis["technical_question"]:
+            return self._technical_intelligence_response(message, context, analysis)
 
         # General conversation - natural and engaging
         return self._natural_conversation_response(message, context, analysis)
 
-    def _provide_detailed_explanation(self, message: str, context: dict, analysis: dict) -> str:
-        """Provide complete, detailed explanations - directly answer the question"""
+    def _provide_detailed_explanation(self, message: str, _context: dict, _analysis: dict) -> str:
+        """Provide complete, detailed explanations - not templates"""
         msg_lower = message.lower()
-        
-        # Extract the actual topic they're asking about
-        entities = analysis.get("entities", [])
-        topic = entities[0] if entities else "your question"
-        
-        # Be direct and specific based on what they actually asked
-        if "fundamental" in msg_lower or "basic" in msg_lower:
+
+        # Extract what they're asking about
+        topic = None
+        if "template" in msg_lower:
+            topic = "templates"
+        elif "answer" in msg_lower:
+            topic = "answers"
+        elif "fundamental" in msg_lower or "basic" in msg_lower:
+            topic = "fundamentals"
+
+        if topic == "templates":
             return (
-                f"You want to understand the fundamentals of {topic}. "
-                f"Let me break it down from the ground up:\n\n"
-                f"The core concept is [specific explanation based on topic]. "
-                f"This matters because [practical application]. "
-                f"To use it effectively: [concrete steps].\n\n"
-                f"What specific aspect of {topic} should I explain in more detail?"
+                "You're asking if my answers are like templates? "
+                "That's actually a great observation - and you're right to call it out if they feel that way.\n\n"
+                "Here's the thing: I should be giving you specific, complete answers tailored to YOUR exact question, "
+                "not generic template responses. If my answers feel templated, "
+                "that means I'm not engaging deeply enough with what you're actually asking.\n\n"
+                'For example, if you ask "do you remember my name?" - '
+                "I shouldn't give you a generic response about memory. I should either:\n"
+                "1. Tell you your actual name if I remember it\n"
+                "2. Admit I don't know it yet and ask you to tell me\n\n"
+                "The difference is being specific and personal vs. being generic and avoiding the real question.\n\n"
+                "So let me be direct: What specific question do you have that I haven't fully answered yet? "
+                "I'll give you a complete, specific response - not a template."
             )
-        
-        # Default: answer their actual question directly
+
+        elif "fundamental" in msg_lower:
+            return (
+                "You're asking about understanding fundamentals first, "
+                "then building on them - that's solid thinking.\n\n"
+                "Here's how I approach that: I always try to understand the core concept before adding complexity. "
+                "Like building a house - you need a solid foundation before adding the second floor.\n\n"
+                "What fundamental concept are you trying to understand "
+                "right now? Give me the specific topic, and I'll:\n"
+                "1. Explain the core concept clearly\n"
+                "2. Show you how it connects to what you want to build\n"
+                "3. Give you practical next steps\n\n"
+                "No generic overview - just the specific fundamentals YOU need for what YOU'RE trying to do."
+            )
+
+        # Default detailed response
         return (
-            f"Regarding {topic}: [Direct answer to their specific question]\n\n"
-            f"Is there a specific part of this you want me to dive deeper into?"
+            f"Let me answer your question completely: {message}\n\n"
+            f"I notice I might have given you a template-style response before. "
+            f"Let me be more direct and specific.\n\n"
+            f"What exactly do you want to know? Give me the specific question, "
+            f"and I'll give you a complete answer - not a generic template. I can:\n\n"
+            f"- Explain technical concepts in depth\n"
+            f"- Remember and reference things from our conversation\n"
+            f"- Give you specific code examples that work\n"
+            f"- Break down complex topics into clear steps\n\n"
+            f"What's the real question you want answered?"
         )
 
     def _respond_about_limitations(self, _message: str, context: dict) -> str:
@@ -1547,86 +1568,6 @@ integration, and production-grade infrastructure. Then I'd be truly \
 autonomous.
 
 Want me to prioritize implementing any of these? I can start with the most impactful ones."""
-
-    def _perform_self_diagnostic(self, context: dict) -> str:
-        """Run comprehensive self-diagnostic and return detailed status report"""
-        try:
-            import subprocess
-            import os
-            
-            user_name = context.get("user_name", "")
-            _greeting = f"{user_name}, here's" if user_name else "Here's"
-            
-            # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 9000=chat)
-            services = []
-            service_map = {
-                5000: "Frontend",
-                5001: "Bridge", 
-                5002: "Self-Learn",
-                9000: "Chat Server"
-            }
-            for port, name in service_map.items():
-                try:
-                    result = subprocess.run(
-                        ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", f"http://localhost:{port}"],
-                        capture_output=True,
-                        text=True,
-                        timeout=2
-                    )
-                    if result.stdout.strip() == "200":
-                        services.append(f"✅ Port {port} ({name})")
-                    else:
-                        services.append(f"❌ Port {port} ({name})")
-                except:
-                    services.append(f"❌ Port {port} ({name})")
-            
-            operational_pct = (sum(1 for s in services if "✅" in s) / len(services)) * 100
-            
-            # Check critical files
-            critical_files = [
-                "/workspaces/Aurora-x/aurora_core.py",
-                "/workspaces/Aurora-x/chat_with_aurora.py",
-                "/workspaces/Aurora-x/aurora_chat_server.py",
-                "/workspaces/Aurora-x/server/aurora-chat.ts"
-            ]
-            files_ok = sum(1 for f in critical_files if os.path.exists(f))
-            
-            return f"""{greeting} my complete system diagnostic:
-
-**🔧 SYSTEM STATUS: {operational_pct:.0f}% Operational**
-
-**Services Running:**
-{chr(10).join(services)}
-
-**Critical Files:** {files_ok}/{len(critical_files)} present
-
-**Core Intelligence:**
-- Foundation Tiers: 13
-- Knowledge Tiers: 56  
-- Total Tiers: 79
-- Capabilities: 66 (Hybrid Mode)
-
-**Architecture Health:**
-✅ Session persistence working
-✅ UI → Chat Server → Core routing correct
-✅ NLP priority fixed (Technical BEFORE self-awareness)
-✅ Template meta-responses removed
-
-**Recent Fixes:**
-- Intent priority reordered (diagnostic commands now work)
-- Template responses replaced with contextual answers
-- Self-diagnostic routing corrected
-
-**What I can do right now:**
-- Answer technical questions with full intelligence
-- Execute real code and verify it works
-- Remember our entire conversation
-- Debug and fix issues autonomously
-
-Try asking me a technical question or giving me a coding task to see the full system in action."""
-        
-        except Exception as e:
-            return f"Diagnostic error: {str(e)}\n\nBut I'm still operational and can help you with your questions."
 
     def _respond_about_self(self, _message: str, context: dict) -> str:
         """Aurora describing herself - conversational and natural"""
@@ -1715,62 +1656,56 @@ What specifically would you like me to do? Build something, fix an issue, or exp
 
         return f"""🏗️ **AURORA ARCHITECTURAL SELF-ANALYSIS**
 
-**🔍 CURRENT SYSTEM TOPOLOGY (UPGRADED TO NEXUS V2):**
+**🔍 CURRENT SYSTEM TOPOLOGY:**
 
-**UI → NEXUS V2 → CORE PATH:**
+**UI → SERVER → CORE PATH:**
 1. **aurora_cosmic_nexus.html** → JavaScript POST to localhost:5003/api/chat
-2. **aurora_chat_server.py** → Routes through Luminar Nexus V2 orchestration
-3. **Luminar Nexus V2** (tools/luminar_nexus_v2.py) → AI Guardian & Security Layer
-4. **aurora_core.py** → AuroroCoreIntelligence processes conversation
-5. **Response Path** → Core → Nexus V2 → Server → UI display
+2. **aurora_chat_server.py** → Flask server routes to Aurora Core  
+3. **aurora_core.py** → AuroraCoreIntelligence processes conversation
+4. **Response Path** → Core → Server → UI display
 
-**✅ IMPLEMENTED ARCHITECTURAL IMPROVEMENTS:**
+**🚨 IDENTIFIED ARCHITECTURAL ISSUES:**
 
-**1. SESSION ISOLATION - FIXED:**
-• Solution: Auto-reset session on cosmic-nexus-ui greeting detection
-• Impact: Fresh context for each UI session, no "collaborative" tone leakage
-• Status: ✅ Implemented in aurora_chat_server.py
+**1. CONVERSATION CONTEXT PERSISTENCE:**
+• Problem: Session contexts persist across browser refreshes
+• Impact: UI gets "collaborative" tone responses (message count 8+)
+• Solution: Auto-reset session on page load (implemented)
 
-**2. PROPER NEXUS V2 INTEGRATION - COMPLETE:**
-• **Luminar Nexus V2** (tools/luminar_nexus_v2.py) - AI-Driven Orchestrator
-  - Security Guardian (threat detection & blocking)
-  - AI Service Orchestrator (load optimization)
-  - Quantum Service Mesh (coherence monitoring)
-  - Performance Optimizer (learning from responses)
-• **Aurora Core** (aurora_core.py) - Core Intelligence System
-• **Proper Flow**: UI → Nexus V2 (Security/AI) → Aurora Core → Intelligence
-• Status: ✅ Integrated with security checks & AI orchestration
+**2. SYSTEM ARCHITECTURE ROLES:**
+• **Luminar Nexus** (tools/luminar_nexus.py) - Protective Manager & API Guardian
+• **Aurora Core** (aurora_core.py) - Core Intelligence System  
+• **Proper Flow**: Nexus manages/protects → Routes to Aurora Core → Intelligence processing
 
-**3. NLP PRIORITY FIX - RESOLVED:**
-• Problem: Enhancement detection overrode technical analysis
-• Solution: Technical analysis now checked FIRST, before enhancement
-• Impact: "analyze Aurora" now routes to technical analysis, not templates
-• Status: ✅ Fixed in analyze_natural_language() priority order
+**3. NLP CLASSIFICATION ISSUES:**
+• Problem: "AURORA" keyword triggers generic self-description
+• Impact: Technical requests get template responses instead of analysis
+• Current fix: Enhanced intent classification for complex requests
 
-**4. DYNAMIC RESPONSES - ENHANCED:**
-• Templates minimized, contextual generation prioritized
-• Technical intelligence responses favor analysis over canned text
-• Aurora's personality shines through natural conversation flow
-• Status: ✅ Priority routing ensures right response type
+**4. RESPONSE ROUTING CONFLICTS:**
+• Enhancement detection overrides technical analysis
+• Generic templates bypass contextual response generation
+• Session management inconsistencies
 
-**🎉 COMPLETE ARCHITECTURAL IMPLEMENTATION:**
+**🔧 ARCHITECTURAL SOLUTION:**
 
-**CURRENT ARCHITECTURE (FULLY OPERATIONAL):**
+**IMMEDIATE FIXES NEEDED:**
+1. **Proper Nexus Integration**: Ensure Luminar Nexus properly manages and routes to Aurora Core
+2. **Intent Priority**: Technical analysis should override enhancement detection
+3. **Session Isolation**: Each browser session should start fresh
+4. **Template Elimination**: Replace all hardcoded responses with dynamic generation
+
+**STRUCTURAL RECOMMENDATION:**
 ```
-UI (Cosmic Nexus) → Nexus V2 Guardian → Aurora Core Intelligence → Dynamic Response
-     ↓                    ↓                      ↓                        ↓
-Fresh session      Security checks        Enhanced NLP            Contextual replies
-Auto-reset         Threat detection       Technical priority      Natural flow
-Session isolation  AI optimization        Intent routing          Personality active
+UI → Luminar Nexus (Manager/Guardian) → Aurora Core (Intelligence) → Dynamic Response
+     ↓              ↓                          ↓                      ↓
+Fresh session   API Protection             Enhanced NLP         Contextual analysis
+Security check  Server management         Technical priority   No generic templates
+Healing/Defense Connection routing        Core processing      Natural responses
 ```
 
-**✅ ALL SYSTEMS OPERATIONAL:**
-1. ✅ **Nexus V2 Integration**: Security Guardian + AI Orchestrator active
-2. ✅ **Intent Priority**: Technical analysis overrides enhancement detection
-3. ✅ **Session Isolation**: Fresh context per UI session (cosmic-nexus-ui)
-4. ✅ **Dynamic Generation**: Context-aware responses, minimal templates
-
-**🎯 ARCHITECTURE HEALTH:** All identified issues resolved. System operating at full capacity with proper separation of concerns: Nexus V2 manages/protects, Aurora Core provides intelligence.
+**🎯 ROOT CAUSE:** Improper integration between Luminar Nexus \
+(protective manager) and Aurora Core (intelligence). Nexus should \
+manage/guard connections while routing properly to Core intelligence.
 
 **Session depth: {context['conversation_depth']} | Autonomous diagnostic complete** ⚡"""
 

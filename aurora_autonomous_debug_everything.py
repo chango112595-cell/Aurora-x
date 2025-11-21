@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Autonomous Debug & Fix Everything
 Self-healing system that finds and fixes ALL errors across the entire project
 """
@@ -51,7 +52,7 @@ class AuroraAutonomousDebugger:
 
     def log(self, message: str, level: str = "INFO"):
         """Log with Aurora's intelligence"""
-        timestamp = datetime.now().strftime("%H:%M:%S")
+        _timestamp = datetime.now().strftime("%H:%M:%S")
         prefix = {"INFO": "ℹ️", "SUCCESS": "✅", "ERROR": "❌", "WARNING": "⚠️", "DEBUG": "🔍", "FIX": "🔧"}.get(
             level, "ℹ️"
         )

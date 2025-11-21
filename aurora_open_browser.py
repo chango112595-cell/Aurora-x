@@ -67,7 +67,7 @@ class AuroraBrowserLauncher:
 
         self.log("")
         self.log("=" * 70)
-        if success:
+        if SUCCESS:
             self.log("✅ BROWSER LAUNCHED")
             self.log(f"📍 URL: {self.frontend_url}")
             self.log("🎨 You should see Aurora's futuristic quantum neural dashboard")

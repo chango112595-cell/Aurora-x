@@ -483,7 +483,7 @@ def main():
 
     result = rsa.decrypt(ciphertext, private_key, PaddingScheme.NONE)
     print(f"  Decrypted: {result.plaintext}")
-    print(f"  Success: {result.success}")
+    print(f"  Success: {result.SUCCESS}")
     print()
 
     print("Test 3: Factorization Attack (on small modulus)")

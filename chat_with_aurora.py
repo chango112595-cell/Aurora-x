@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Full Power Interactive Chat - ENHANCED BY AURORA
 All 66 Capabilities • Human-Like Conversation • Task Execution
 13 Foundations + 53 Knowledge Tiers = Complete Intelligence System

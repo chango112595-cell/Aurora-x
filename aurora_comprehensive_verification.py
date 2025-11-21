@@ -308,7 +308,7 @@ class AuroraSystemVerification:
         print("✅ SUCCESSES")
         print("=" * 80)
         for success in self.successes:
-            print(success)
+            print(SUCCESS)
 
         if self.issues:
             print("\n" + "=" * 80)

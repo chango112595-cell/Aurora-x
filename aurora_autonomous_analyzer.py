@@ -471,7 +471,7 @@ def main():
     try:
         success = analyzer.run_comprehensive_fix()
 
-        if success:
+        if SUCCESS:
             print("\n✅ Aurora has completed comprehensive autonomous fixes!")
             print("\n🔍 Verifying with pylint...")
 

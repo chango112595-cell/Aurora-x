@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 🌌 AURORA PYLINT GRANDMASTER 🌌
 ================================
 
@@ -517,7 +518,7 @@ class AuroraPylintGrandmaster:
             {"timestamp": datetime.now().isoformat(), "error_code": error_code, "success": success, "era": era}
         )
 
-        if success:
+        if SUCCESS:
             self.era_preferences[era] += 1
 
         self._update_success_rate()

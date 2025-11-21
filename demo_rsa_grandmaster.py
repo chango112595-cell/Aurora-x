@@ -43,7 +43,7 @@ for i, msg in enumerate(messages, 1):
 
     result = rsa.decrypt(ciphertext, private_1024, PaddingScheme.NONE)
     print(f"  Decrypted: {result.plaintext.decode()}")
-    print(f"  Success: {result.success} | Method: {result.method}")
+    print(f"  Success: {result.SUCCESS} | Method: {result.method}")
 
 # ============================================================================
 # DEMONSTRATION 3: CRYPTANALYSIS - FACTORIZATION

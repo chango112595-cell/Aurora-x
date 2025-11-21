@@ -8,7 +8,7 @@ import os
 import re
 
 
-def fix_file(filepath, old, new):
+def fix_file(filepath, old_val, new_val):
     """Fix a specific pattern in a file"""
     try:
         if not os.path.exists(filepath):

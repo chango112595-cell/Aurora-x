@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Auto-Fix: Organize Everything Properly
 Automatically fixes all identified organization issues
 """

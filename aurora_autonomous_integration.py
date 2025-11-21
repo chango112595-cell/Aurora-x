@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Autonomous System Integration Update
 Integrates all 6 new autonomous evolution phases into the Aurora system
 """
@@ -183,4 +184,4 @@ def integrate_autonomous_systems():
 
 if __name__ == "__main__":
     success = integrate_autonomous_systems()
-    exit(0 if success else 1)
+    exit(0 if SUCCESS else 1)

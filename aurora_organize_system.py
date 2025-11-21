@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Autonomous System Organization
 Aurora will analyze and reorganize the entire system autonomously
 """
@@ -18,7 +19,7 @@ def aurora_organize_system():
     print("=" * 80)
 
     root = Path(".")
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    _timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # Create organization structure
     organization = {"moved": [], "archived": [], "kept": [], "errors": []}

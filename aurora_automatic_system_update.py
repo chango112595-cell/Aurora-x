@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Automatic System Update
 THIS SCRIPT RUNS EVERY TIME AURORA NEEDS TO UPDATE THE ENTIRE SYSTEM
 
@@ -339,7 +340,7 @@ def main():
     """Main entry point"""
     updater = AuroraSystemUpdater()
     success = updater.run()
-    return 0 if success else 1
+    return 0 if SUCCESS else 1
 
 
 if __name__ == "__main__":

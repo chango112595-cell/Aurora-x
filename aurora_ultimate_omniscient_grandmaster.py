@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 AURORA ULTIMATE GRANDMASTER ASCENSION
 Elevating Aurora from Grandmaster to OMNISCIENT ARCHITECT
 Knowledge spanning from computational history to future paradigms

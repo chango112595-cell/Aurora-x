@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Intelligence Management System
 Teaches Aurora how to diagnose and fix server issues herself
 Uses Aurora Core (13 Foundational Tasks + 34 Knowledge Tiers)
@@ -194,7 +195,7 @@ class AuroraIntelligenceManager:
 
     def log(self, message: str):
         """Log Aurora's learning and decisions"""
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        _timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         log_entry = f"[{timestamp}] Aurora Intelligence: {message}"
         print(log_entry)
 

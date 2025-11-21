@@ -15,7 +15,7 @@ from collections.abc import Callable
 from typing import Any
 
 # Function name for templates
-func_name = "create_a_simple_hello_world"
+FUNC_NAME = "create_a_simple_hello_world"
 
 # Optional pytest import
 try:
@@ -224,7 +224,7 @@ class TestCreateASimpleHelloWorld:
         """Test async processing with callback"""
         callback_result = []
 
-        def callback(result):
+        def callback(result_val):
             callback_result.append(result)
 
         result = create_a_simple_hello_world_async("test", callback=callback)
@@ -284,7 +284,7 @@ def benchmark_create_a_simple_hello_world(iterations: int = 1000):
 
     test_data = [f"test_{i}" for i in range(100)]
 
-    print(f"\nBenchmarking {func_name} with {iterations} iterations...")
+    print(f"\nBenchmarking {FUNC_NAME} with {iterations} iterations...")
 
     start = time.perf_counter()
     for _ in range(iterations):
@@ -303,7 +303,7 @@ def benchmark_create_a_simple_hello_world(iterations: int = 1000):
 # ============================================================================
 
 if __name__ == "__main__":
-    print(f"{func_name.title().replace('_', ' ')} Function Examples:")
+    print(f"{FUNC_NAME.title().replace('_', ' ')} Function Examples:")
     print("=" * 60)
 
     # Demonstrate basic usage
@@ -317,19 +317,19 @@ if __name__ == "__main__":
     for example in examples:
         try:
             demo_result = create_a_simple_hello_world(example)
-            print(f"{func_name}({repr(example):20s}) = {repr(demo_result)}")
+            print(f"{FUNC_NAME}({repr(example):20s}) = {repr(demo_result)}")
         except Exception as e:
-            print(f"{func_name}({repr(example):20s}) = Error: {e}")
+            print(f"{FUNC_NAME}({repr(example):20s}) = Error: {e}")
 
     # Demonstrate with options
     print("\nWith options:")
-    print(f"{func_name}('test', uppercase=True) = {repr(create_a_simple_hello_world('test', uppercase=True))}")
-    print(f"{func_name}('test', reverse=True)   = {repr(create_a_simple_hello_world('test', reverse=True))}")
+    print(f"{FUNC_NAME}('test', uppercase=True) = {repr(create_a_simple_hello_world('test', uppercase=True))}")
+    print(f"{FUNC_NAME}('test', reverse=True)   = {repr(create_a_simple_hello_world('test', reverse=True))}")
 
     # Demonstrate batch processing
     print("\nBatch processing:")
     batch_result = create_a_simple_hello_world_batch(["a", "b", "c"])
-    print(f"{func_name}_batch(['a', 'b', 'c']) = {batch_result}")
+    print(f"{FUNC_NAME}_batch(['a', 'b', 'c']) = {batch_result}")
 
     # Run unit tests
     print("\nRunning unit tests...")

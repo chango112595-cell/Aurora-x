@@ -108,5 +108,5 @@ def aurora_verify_core_usage():
 
 
 if __name__ == "__main__":
-    SUCCESS = aurora_verify_core_usage()
+    _SUCCESS = aurora_verify_core_usage()
     exit(0 if SUCCESS else 1)
