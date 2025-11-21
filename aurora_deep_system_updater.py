@@ -12,11 +12,10 @@ This is the ultimate system synchronization tool that:
 - Finds and updates EVERY single reference
 """
 
-import re
 import json
-from pathlib import Path
+import re
 from datetime import datetime
-from typing import List, Dict, Tuple, Set
+from pathlib import Path
 
 
 class AuroraDeepSystemUpdater:
@@ -24,54 +23,72 @@ class AuroraDeepSystemUpdater:
 
     def __init__(self):
         self.project_root = Path(__file__).parent
-        self.updates_made: List[str] = []
+        self.updates_made: list[str] = []
         self.files_scanned = 0
         self.patterns_found = 0
-        self.errors: List[str] = []
+        self.errors: list[str] = []
 
         # Extensions to scan - EVERYTHING
         self.extensions = {
-            '.py', '.ts', '.tsx', '.js', '.jsx',
-            '.md', '.txt', '.json', '.html', '.css',
-            '.yaml', '.yml', '.sh', '.ps1', '.bat'
+            ".py",
+            ".ts",
+            ".tsx",
+            ".js",
+            ".jsx",
+            ".md",
+            ".txt",
+            ".json",
+            ".html",
+            ".css",
+            ".yaml",
+            ".yml",
+            ".sh",
+            ".ps1",
+            ".bat",
         }
 
         # Directories to skip
         self.skip_dirs = {
-            'node_modules', '.git', '__pycache__',
-            'dist', 'build', '.venv', 'venv',
-            '.next', 'out', 'coverage', '.pytest_cache',
-            '.mypy_cache', 'egg-info'
+            "node_modules",
+            ".git",
+            "__pycache__",
+            "dist",
+            "build",
+            ".venv",
+            "venv",
+            ".next",
+            "out",
+            "coverage",
+            ".pytest_cache",
+            ".mypy_cache",
+            "egg-info",
         }
 
-    def get_tier_counts(self) -> Dict[str, int]:
+    def get_tier_counts(self) -> dict[str, int]:
         """Get current tier counts from aurora_core.py"""
         print("\n📊 Reading tier counts from aurora_core.py...")
 
         try:
             # Try importing first
             from aurora_core import AuroraKnowledgeTiers
+
             aurora = AuroraKnowledgeTiers()
             counts = {
-                "foundation": getattr(aurora, 'foundation_count', 13),
-                "tiers": len(aurora.tiers) if hasattr(aurora, 'tiers') else 53,
-                "total": 0
+                "foundation": getattr(aurora, "foundation_count", 13),
+                "tiers": len(aurora.tiers) if hasattr(aurora, "tiers") else 53,
+                "total": 0,
             }
             counts["total"] = counts["foundation"] + counts["tiers"]
-            print(
-                f"   ✅ Loaded from aurora_core: {counts['tiers']} tiers, {counts['total']} total")
+            print(f"   ✅ Loaded from aurora_core: {counts['tiers']} tiers, {counts['total']} total")
             return counts
         except Exception as e:
             print(f"   ⚠️  Import failed: {e}")
             print("   📝 Parsing directly from file...")
 
             # Parse directly from file
-            for core_path in [
-                self.project_root / "aurora_core.py",
-                self.project_root / "tools" / "aurora_core.py"
-            ]:
+            for core_path in [self.project_root / "aurora_core.py", self.project_root / "tools" / "aurora_core.py"]:
                 if core_path.exists():
-                    content = core_path.read_text(encoding='utf-8')
+                    content = core_path.read_text(encoding="utf-8")
 
                     # Count tier entries
                     tier_pattern = r'"tier_\d+_[^"]+"\s*:'
@@ -79,20 +96,15 @@ class AuroraDeepSystemUpdater:
                     tier_count = len(tiers)
 
                     if tier_count > 0:
-                        counts = {
-                            "foundation": 13,
-                            "tiers": tier_count,
-                            "total": 13 + tier_count
-                        }
-                        print(
-                            f"   ✅ Parsed from file: {counts['tiers']} tiers, {counts['total']} total")
+                        counts = {"foundation": 13, "tiers": tier_count, "total": 13 + tier_count}
+                        print(f"   ✅ Parsed from file: {counts['tiers']} tiers, {counts['total']} total")
                         return counts
 
         # Fallback
         print("   ⚠️  Using fallback values")
         return {"foundation": 13, "tiers": 53, "total": 66}
 
-    def get_all_files(self) -> List[Path]:
+    def get_all_files(self) -> list[Path]:
         """Get ALL files to scan - complete deep search"""
         print("\n🔍 Deep scanning ENTIRE project...")
         files = []
@@ -113,7 +125,7 @@ class AuroraDeepSystemUpdater:
         print(f"   Found {len(files)} files to scan")
         return files
 
-    def generate_patterns(self, counts: Dict[str, int]) -> List[Tuple[re.Pattern, str, str]]:
+    def generate_patterns(self, counts: dict[str, int]) -> list[tuple[re.Pattern, str, str]]:
         """Generate ALL possible patterns to find and replace"""
         tiers = counts["tiers"]
         total = counts["total"]
@@ -123,71 +135,83 @@ class AuroraDeepSystemUpdater:
         patterns = []
 
         # Pattern format: (regex_pattern, replacement_template, description)
-        patterns.extend([
-            # Tier counts
-            (re.compile(r'(\d+)\s+Knowledge Tiers'),
-             f'{tiers} Knowledge Tiers', 'Knowledge Tiers text'),
-            (re.compile(r'(\d+)\s+knowledge tiers'),
-             f'{tiers} knowledge tiers', 'knowledge tiers lowercase'),
-            (re.compile(r'(\d+)\s+tiers'), f'{tiers} tiers', 'tiers generic'),
-            (re.compile(r'tier_count["\']?\s*:\s*(\d+)'),
-             f'tier_count": {tiers}', 'tier_count JSON'),
-            (re.compile(r'Tier[s]?\s+(\d+)(?![\d])'), lambda m: f'Tiers {tiers}' if int(
-                m.group(1)) != tiers and int(m.group(1)) > 40 else m.group(0), 'Tiers count'),
-
-            # Total capabilities
-            (re.compile(r'(\d+)\s+capabilities'),
-             f'{total} capabilities', 'capabilities'),
-            (re.compile(r'(\d+)\s+total capabilities'),
-             f'{total} total capabilities', 'total capabilities'),
-            (re.compile(r'(\d+)\s+Complete Systems'),
-             f'{total} Complete Systems', 'Complete Systems'),
-            (re.compile(r'total_capabilities["\']?\s*:\s*(\d+)'),
-             f'total_capabilities": {total}', 'total_capabilities JSON'),
-
-            # Combined expressions
-            (re.compile(r'(\d+)\s+\(\s*13\s+foundation\s+tasks\s+\+\s+(\d+)\s+knowledge\s+tiers\s*\)'),
-             f'{total} (13 foundation tasks + {tiers} knowledge tiers)',
-             'full expression'),
-            (re.compile(r'13\s+foundation\s+tasks\s+\+\s+(\d+)\s+knowledge\s+tiers\s+=\s+(\d+)\s+capabilities'),
-             f'13 foundation tasks + {tiers} knowledge tiers = {total} capabilities',
-             'equation format'),
-            (re.compile(r'(\d+)\s+knowledge\s+tiers\s+\+\s+13\s+foundation\s+tasks\s+=\s+(\d+)\s+capabilities'),
-             f'{tiers} knowledge tiers + 13 foundation tasks = {total} capabilities',
-             'reverse equation'),
-
-            # Frontend specific
-            (re.compile(r'<span[^>]*>(\d+)</span>.*Knowledge Tiers', re.DOTALL),
-             lambda m: m.group(0).replace(m.group(1), str(tiers)),
-             'HTML span Knowledge Tiers'),
-            (re.compile(r'<span[^>]*>(\d+)</span>.*Total Systems', re.DOTALL),
-             lambda m: m.group(0).replace(m.group(1), str(total)),
-             'HTML span Total Systems'),
-
-            # Backend specific
-            (re.compile(r'🧠\s+(\d+)\s+knowledge\s+tiers:\s+LOADED\s+\((\d+)\s+total\s+capabilities\)'),
-             f'🧠 {tiers} knowledge tiers: LOADED ({total} total capabilities)',
-             'backend status message'),
-            (re.compile(r'All\s+(\d+)\s+tiers\s+active\s+\((\d+)\s+total\s+capabilities\)'),
-             f'All {tiers} tiers active ({total} total capabilities)',
-             'all tiers active'),
-
-            # Documentation specific
-            (re.compile(r'\*\*(\d+)\s+Knowledge\s+Tiers\*\*'),
-             f'**{tiers} Knowledge Tiers**', 'bold tiers'),
-            (re.compile(r'\*\*(\d+)\s+Total\s+Capabilities\*\*'),
-             f'**{total} Total Capabilities**', 'bold capabilities'),
-            (re.compile(r'`(\d+)\s+tiers`'), f'`{tiers} tiers`', 'code tiers'),
-            (re.compile(r'`(\d+)\s+capabilities`'),
-             f'`{total} capabilities`', 'code capabilities'),
-        ])
+        patterns.extend(
+            [
+                # Tier counts
+                (re.compile(r"(\d+)\s+Knowledge Tiers"), f"{tiers} Knowledge Tiers", "Knowledge Tiers text"),
+                (re.compile(r"(\d+)\s+knowledge tiers"), f"{tiers} knowledge tiers", "knowledge tiers lowercase"),
+                (re.compile(r"(\d+)\s+tiers"), f"{tiers} tiers", "tiers generic"),
+                (re.compile(r'tier_count["\']?\s*:\s*(\d+)'), f'tier_count": {tiers}', "tier_count JSON"),
+                (
+                    re.compile(r"Tier[s]?\s+(\d+)(?![\d])"),
+                    lambda m: f"Tiers {tiers}" if int(m.group(1)) != tiers and int(m.group(1)) > 40 else m.group(0),
+                    "Tiers count",
+                ),
+                # Total capabilities
+                (re.compile(r"(\d+)\s+capabilities"), f"{total} capabilities", "capabilities"),
+                (re.compile(r"(\d+)\s+total capabilities"), f"{total} total capabilities", "total capabilities"),
+                (re.compile(r"(\d+)\s+Complete Systems"), f"{total} Complete Systems", "Complete Systems"),
+                (
+                    re.compile(r'total_capabilities["\']?\s*:\s*(\d+)'),
+                    f'total_capabilities": {total}',
+                    "total_capabilities JSON",
+                ),
+                # Combined expressions
+                (
+                    re.compile(r"(\d+)\s+\(\s*13\s+foundation\s+tasks\s+\+\s+(\d+)\s+knowledge\s+tiers\s*\)"),
+                    f"{total} (13 foundation tasks + {tiers} knowledge tiers)",
+                    "full expression",
+                ),
+                (
+                    re.compile(r"13\s+foundation\s+tasks\s+\+\s+(\d+)\s+knowledge\s+tiers\s+=\s+(\d+)\s+capabilities"),
+                    f"13 foundation tasks + {tiers} knowledge tiers = {total} capabilities",
+                    "equation format",
+                ),
+                (
+                    re.compile(r"(\d+)\s+knowledge\s+tiers\s+\+\s+13\s+foundation\s+tasks\s+=\s+(\d+)\s+capabilities"),
+                    f"{tiers} knowledge tiers + 13 foundation tasks = {total} capabilities",
+                    "reverse equation",
+                ),
+                # Frontend specific
+                (
+                    re.compile(r"<span[^>]*>(\d+)</span>.*Knowledge Tiers", re.DOTALL),
+                    lambda m: m.group(0).replace(m.group(1), str(tiers)),
+                    "HTML span Knowledge Tiers",
+                ),
+                (
+                    re.compile(r"<span[^>]*>(\d+)</span>.*Total Systems", re.DOTALL),
+                    lambda m: m.group(0).replace(m.group(1), str(total)),
+                    "HTML span Total Systems",
+                ),
+                # Backend specific
+                (
+                    re.compile(r"🧠\s+(\d+)\s+knowledge\s+tiers:\s+LOADED\s+\((\d+)\s+total\s+capabilities\)"),
+                    f"🧠 {tiers} knowledge tiers: LOADED ({total} total capabilities)",
+                    "backend status message",
+                ),
+                (
+                    re.compile(r"All\s+(\d+)\s+tiers\s+active\s+\((\d+)\s+total\s+capabilities\)"),
+                    f"All {tiers} tiers active ({total} total capabilities)",
+                    "all tiers active",
+                ),
+                # Documentation specific
+                (re.compile(r"\*\*(\d+)\s+Knowledge\s+Tiers\*\*"), f"**{tiers} Knowledge Tiers**", "bold tiers"),
+                (
+                    re.compile(r"\*\*(\d+)\s+Total\s+Capabilities\*\*"),
+                    f"**{total} Total Capabilities**",
+                    "bold capabilities",
+                ),
+                (re.compile(r"`(\d+)\s+tiers`"), f"`{tiers} tiers`", "code tiers"),
+                (re.compile(r"`(\d+)\s+capabilities`"), f"`{total} capabilities`", "code capabilities"),
+            ]
+        )
 
         return patterns
 
-    def update_file(self, file_path: Path, patterns: List[Tuple[re.Pattern, str, str]], counts: Dict[str, int]) -> bool:
+    def update_file(self, file_path: Path, patterns: list[tuple[re.Pattern, str, str]], counts: dict[str, int]) -> bool:
         """Update a single file with all patterns"""
         try:
-            content = file_path.read_text(encoding='utf-8')
+            content = file_path.read_text(encoding="utf-8")
             original_content = content
             changes_made = []
 
@@ -209,9 +233,8 @@ class AuroraDeepSystemUpdater:
 
             # Write if changed
             if content != original_content:
-                file_path.write_text(content, encoding='utf-8')
-                self.updates_made.append(
-                    f"{file_path.relative_to(self.project_root)} ({len(changes_made)} changes)")
+                file_path.write_text(content, encoding="utf-8")
+                self.updates_made.append(f"{file_path.relative_to(self.project_root)} ({len(changes_made)} changes)")
                 return True
 
             return False
@@ -222,15 +245,15 @@ class AuroraDeepSystemUpdater:
 
     def run(self) -> bool:
         """Run complete deep system update"""
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("🌟 AURORA DEEP SYSTEM UPDATER - COMPLETE SCAN")
-        print("="*80)
+        print("=" * 80)
         print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        print("="*80)
+        print("=" * 80)
 
         # Get current tier counts
         counts = self.get_tier_counts()
-        print(f"\n📊 Current System State:")
+        print("\n📊 Current System State:")
         print(f"   • Foundation Tasks: {counts['foundation']}")
         print(f"   • Knowledge Tiers: {counts['tiers']}")
         print(f"   • Total Capabilities: {counts['total']}")
@@ -239,7 +262,7 @@ class AuroraDeepSystemUpdater:
         files = self.get_all_files()
 
         # Generate patterns
-        print(f"\n🔧 Generating update patterns...")
+        print("\n🔧 Generating update patterns...")
         patterns = self.generate_patterns(counts)
         print(f"   Generated {len(patterns)} pattern types")
 
@@ -259,10 +282,10 @@ class AuroraDeepSystemUpdater:
         self.generate_report(counts)
 
         # Summary
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("✅ DEEP SYSTEM UPDATE COMPLETE")
-        print("="*80)
-        print(f"\n📊 Statistics:")
+        print("=" * 80)
+        print("\n📊 Statistics:")
         print(f"   • Files Scanned: {self.files_scanned}")
         print(f"   • Files Updated: {len(self.updates_made)}")
         print(f"   • Patterns Found & Fixed: {self.patterns_found}")
@@ -280,19 +303,19 @@ class AuroraDeepSystemUpdater:
             for error in self.errors[:10]:
                 print(f"   ❌ {error}")
 
-        print(f"\n🎯 Final System State:")
+        print("\n🎯 Final System State:")
         print(f"   • {counts['foundation']} Foundation Tasks")
         print(f"   • {counts['tiers']} Knowledge Tiers")
         print(f"   • {counts['total']} Total Capabilities")
-        print(f"   • ALL files synchronized across ENTIRE project")
+        print("   • ALL files synchronized across ENTIRE project")
 
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("🚀 AURORA SYSTEM FULLY SYNCHRONIZED - EVERY FILE UPDATED")
-        print("="*80 + "\n")
+        print("=" * 80 + "\n")
 
         return len(self.errors) == 0
 
-    def generate_report(self, counts: Dict[str, int]):
+    def generate_report(self, counts: dict[str, int]):
         """Generate detailed update report"""
         report = {
             "timestamp": datetime.now().isoformat(),
@@ -302,17 +325,17 @@ class AuroraDeepSystemUpdater:
                 "files_scanned": self.files_scanned,
                 "files_updated": len(self.updates_made),
                 "patterns_found": self.patterns_found,
-                "errors": len(self.errors)
+                "errors": len(self.errors),
             },
             "updated_files": self.updates_made,
-            "errors": self.errors
+            "errors": self.errors,
         }
 
         report_dir = self.project_root / ".aurora_knowledge"
         report_dir.mkdir(exist_ok=True)
 
         report_file = report_dir / "last_deep_update.json"
-        with open(report_file, 'w', encoding='utf-8') as f:
+        with open(report_file, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2)
 
         print(f"\n📄 Report saved to: {report_file}")

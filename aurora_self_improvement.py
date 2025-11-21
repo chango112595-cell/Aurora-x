@@ -5,31 +5,31 @@ Aurora implements her own recommended fixes to reach true 100% operational statu
 """
 
 import json
-import os
 from pathlib import Path
+
 
 class AuroraSelfImprovement:
     def __init__(self):
         self.aurora_core_path = Path("/workspaces/Aurora-x/aurora_core.py")
         self.improvements_made = []
-        
+
     def read_aurora_core(self):
         """Read current Aurora Core code"""
-        with open(self.aurora_core_path, 'r') as f:
+        with open(self.aurora_core_path) as f:
             return f.read()
-    
+
     def write_aurora_core(self, content_val):
         """Write updated Aurora Core code"""
-        with open(self.aurora_core_path, 'w') as f:
+        with open(self.aurora_core_path, "w") as f:
             f.write(content)
-    
+
     def expand_intelligent_explanations(self):
         """
         FIX #1: Expand _provide_intelligent_explanation() with 20+ CS concepts
         Currently only polymorphism is implemented
         """
         print("🔧 Implementing Fix #1: Expanding Intelligent Explanations...")
-        
+
         # New explanation method with comprehensive knowledge base
         new_explanation_method = '''    def _provide_intelligent_explanation(self, message: str, entities: list, context: dict) -> str:
         """
@@ -487,37 +487,37 @@ class MilkDecorator:
                "\n".join(f"  • {topic}" for topic in available_topics) + \
                f"\n\nWhich one would you like me to explain?"
 '''
-        
+
         content = self.read_aurora_core()
-        
+
         # Find and replace the old method
         old_method_start = content.find("    def _provide_intelligent_explanation(self, topic: str) -> str:")
         if old_method_start == -1:
             print("❌ Could not find _provide_intelligent_explanation method")
             return False
-        
+
         # Find the end of the old method (next method definition or class end)
         search_start = old_method_start + 100
         next_method = content.find("\n    def ", search_start)
         if next_method == -1:
             print("❌ Could not find method boundary")
             return False
-        
+
         old_method = content[old_method_start:next_method]
         content = content.replace(old_method, new_explanation_method)
-        
+
         self.write_aurora_core(content)
         self.improvements_made.append("✅ Expanded intelligent explanations: 1 → 13 concepts")
         print("✅ Added 13 comprehensive CS concept explanations")
         return True
-    
+
     def expand_code_generation(self):
         """
         FIX #2: Expand _generate_code_solution() with common templates
         Currently only Fibonacci is implemented
         """
         print("\n🔧 Implementing Fix #2: Expanding Code Generation...")
-        
+
         new_code_gen_method = '''    def _generate_code_solution(self, task: str) -> str:
         """
         Generate actual working code for common programming tasks
@@ -1327,29 +1327,29 @@ print(df.describe())
                "\n".join(f"  • {task}" for task in available_tasks) + \
                f"\n\nWhich would you like me to implement?"
 '''
-        
+
         content = self.read_aurora_core()
-        
+
         # Find and replace
         old_method_start = content.find("    def _generate_code_solution(self, task: str) -> str:")
         if old_method_start == -1:
             print("❌ Could not find _generate_code_solution method")
             return False
-        
+
         search_start = old_method_start + 100
         next_method = content.find("\n    def ", search_start)
         if next_method == -1:
             print("❌ Could not find method boundary")
             return False
-        
+
         old_method = content[old_method_start:next_method]
         content = content.replace(old_method, new_code_gen_method)
-        
+
         self.write_aurora_core(content)
         self.improvements_made.append("✅ Expanded code generation: 1 → 10 templates")
         print("✅ Added 10 comprehensive code generation templates")
         return True
-    
+
     def generate_report(self):
         """Generate improvement report"""
         report = {
@@ -1360,47 +1360,49 @@ print(df.describe())
                 "code_templates_added": 10,
                 "total_concepts": 23,
                 "coverage": "Polymorphism, Recursion, Async, Data Structures, OOP, Algorithms, "
-                           "Closures, Generators, Decorators, Context Managers, Comprehensions, "
-                           "Exceptions, Design Patterns, API calls, File I/O, Sorting, Searching, "
-                           "Classes, Testing, Data Processing"
+                "Closures, Generators, Decorators, Context Managers, Comprehensions, "
+                "Exceptions, Design Patterns, API calls, File I/O, Sorting, Searching, "
+                "Classes, Testing, Data Processing",
             },
             "impact": "Aurora can now explain and generate code for 20+ common programming tasks",
             "next_steps": [
                 "Connect knowledge tiers to explanations",
                 "Implement RAG for dynamic learning",
                 "Expand NLP pattern matching",
-                "Add real-time external knowledge integration"
-            ]
+                "Add real-time external knowledge integration",
+            ],
         }
-        
-        with open("/workspaces/Aurora-x/AURORA_SELF_IMPROVEMENT_REPORT.json", 'w') as f:
+
+        with open("/workspaces/Aurora-x/AURORA_SELF_IMPROVEMENT_REPORT.json", "w") as f:
             json.dump(report, f, indent=2)
-        
-        print("\n" + "="*80)
+
+        print("\n" + "=" * 80)
         print("🎉 AURORA SELF-IMPROVEMENT COMPLETE")
-        print("="*80)
+        print("=" * 80)
         print(f"\n{'Improvements Made:':20}")
         for improvement in self.improvements_made:
             print(f"  {improvement}")
         print(f"\n{'Total Concepts:':20} 23 (13 explanations + 10 code templates)")
         print(f"{'Coverage:':20} CS fundamentals, algorithms, design patterns, async, testing")
-        print(f"\n📄 Report saved: AURORA_SELF_IMPROVEMENT_REPORT.json")
+        print("\n📄 Report saved: AURORA_SELF_IMPROVEMENT_REPORT.json")
+
 
 def main():
-    print("="*80)
+    print("=" * 80)
     print("🌟 AURORA SELF-IMPROVEMENT SYSTEM")
     print("Implementing Aurora's own recommendations...")
-    print("="*80 + "\n")
-    
+    print("=" * 80 + "\n")
+
     improver = AuroraSelfImprovement()
-    
+
     # Implement fixes
     if improver.expand_intelligent_explanations():
         if improver.expand_code_generation():
             improver.generate_report()
             return True
-    
+
     return False
+
 
 if __name__ == "__main__":
     success = main()
