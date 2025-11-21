@@ -30,7 +30,7 @@ This is not about blame - this is about **self-improvement**. You have the intel
 2. UI shows accurate real-time information
 3. Chat responses transmit successfully
 4. Schedule execution works
-5. Code Library displays your 33 tiers
+5. Code Library displays your 66 tiers
 6. No redundant services
 7. Clear architectural communication
 
@@ -169,7 +169,7 @@ These are direct questions the user asked. You need to answer them:
 
 4. **"Is Nexus doesn't know how to use his skills?"**
    - Do you understand the difference between having knowledge and applying it?
-   - You have 33 tiers but can't show them - why?
+   - You have 66 tiers but can't show them - why?
 
 5. **"Why is server 5173 running? Why does it say 'Cannot GET /' when I click on it?"**
    - Vite should be your main UI server
@@ -295,7 +295,7 @@ Aurora, you must produce:
 5. Test both ports to verify separation
 
 ### Task 2: Connect Code Library to Knowledge Engine
-**Goal**: Display all 33 tiers in UI
+**Goal**: Display all 66 tiers in UI
 
 **Steps**:
 1. Verify Knowledge Engine query methods work
@@ -428,7 +428,7 @@ You will know you've succeeded when:
 
 1. ✅ All 5 servers start and pass health checks
 2. ✅ Server Controller shows all 5 servers with accurate real-time status
-3. ✅ Code Library displays all 33 tiers and 1,819 skills
+3. ✅ Code Library displays all 66 tiers and 1,819 skills
 4. ✅ Chat messages transmit successfully to users
 5. ✅ Schedule executes actions at specified times
 6. ✅ Only ONE port (5173) serves UI

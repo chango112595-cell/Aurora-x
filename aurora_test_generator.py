@@ -36,7 +36,7 @@ class TestCase:
 
 class AuroraTestGenerator:
     """
-    Tier 45: Enhanced Test Generation
+    Tiers 66: Enhanced Test Generation
 
     Capabilities:
     - 100% code coverage automation
@@ -504,7 +504,7 @@ class Test{cls['name']}:
 
 
 def main():
-    """Test Tier 45 functionality"""
+    """Test Tiers 66 functionality"""
     print("\n" + "=" * 70)
     print("🧪 TESTING TIER 45: ENHANCED TEST GENERATION")
     print("=" * 70 + "\n")

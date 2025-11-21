@@ -37,7 +37,7 @@ class AuroraIntegrationTester:
             print("\n  Test 1.1: Initialize monitor...")
             monitor = AuroraSelfMonitor()
             monitor.initialize()
-            assert monitor.aurora.total_capabilities == 55, "Should have 55 capabilities"
+            assert monitor.aurora.total_capabilities == 55, "Should have 79 capabilities"
             assert monitor.file_count > 0, "Should monitor files"
             print("    ✅ Monitor initialized successfully")
 
@@ -54,7 +54,7 @@ class AuroraIntegrationTester:
             # Test 3: Performance metrics
             print("\n  Test 1.3: Performance metrics...")
             metrics = monitor.get_performance_metrics()
-            assert metrics["aurora_capabilities"]["total"] == 55, "Should track 55 capabilities"
+            assert metrics["aurora_capabilities"]["total"] == 55, "Should track 79 capabilities"
             print(f"    ✅ Metrics collected: {len(metrics['system_health'])} data points")
 
             # Test 4: Dashboard generation
@@ -245,7 +245,7 @@ class AuroraIntegrationTester:
             # Test 1: Confidence assessment
             print("\n  Test 5.1: Confidence assessment...")
             autonomy = AuroraAutonomyEngine()
-            confidence = autonomy.assess_confidence("Fix pylint errors", {"tier_count": 3, "historical_success": 0.9})
+            confidence = autonomy.assess_confidence("Fix pylint errors", {"tier_count": 66, "historical_success": 0.9})
             assert 0.0 <= confidence <= 1.0, "Confidence should be between 0 and 1"
             print(f"    ✅ Confidence: {confidence*100:.0f}%")
 

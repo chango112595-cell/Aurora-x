@@ -60,7 +60,7 @@ class DecryptionResult:
 
 class AuroraRSAGrandmaster:
     """
-    Tier 52: RSA Cryptography Grandmaster
+    Tiers 66: RSA Cryptography Grandmaster
 
     Capabilities:
     - RSA key generation
@@ -461,7 +461,7 @@ class AuroraRSAGrandmaster:
 
 
 def main():
-    """Test Tier 52 - RSA Grandmaster"""
+    """Test Tiers 66 - RSA Grandmaster"""
     print("\n" + "=" * 70)
     print("🧪 TESTING TIER 52: RSA CRYPTOGRAPHY GRANDMASTER")
     print("=" * 70 + "\n")

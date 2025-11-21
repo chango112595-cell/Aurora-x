@@ -50,7 +50,7 @@ class QualityIssue:
 
 class AuroraCodeQualityEnforcer:
     """
-    Tier 51: Code Quality Enforcer
+    Tiers 66: Code Quality Enforcer
 
     Capabilities:
     - Detect unused arguments
@@ -306,7 +306,7 @@ class AuroraCodeQualityEnforcer:
 
 
 def main():
-    """Test Tier 51"""
+    """Test Tiers 66"""
     print("\n" + "=" * 70)
     print("🧪 TESTING TIER 51: CODE QUALITY ENFORCER")
     print("=" * 70 + "\n")

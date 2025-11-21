@@ -51,7 +51,7 @@ class AuroraSystemVerification:
         if "class AuroraKnowledgeTiers:" in content:
             self.successes.append("✅ AuroraKnowledgeTiers class found")
 
-            # Verify all 34 tiers
+            # Verify all 66 tiers
             tiers_found = []
             for i in range(1, 35):
                 tier_name = f"tier_{i:02d}"
@@ -59,9 +59,9 @@ class AuroraSystemVerification:
                     tiers_found.append(tier_name)
 
             if len(tiers_found) == 34:
-                self.successes.append("✅ All 34 knowledge tiers present")
+                self.successes.append("✅ All 66 knowledge tiers present")
             else:
-                self.issues.append(f"❌ Only {len(tiers_found)}/34 tiers found")
+                self.issues.append(f"❌ Only {len(tiers_found)}/66 tiers found")
         else:
             self.issues.append("❌ AuroraKnowledgeTiers class NOT FOUND")
 

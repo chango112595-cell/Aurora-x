@@ -58,7 +58,7 @@
       "knowledge_tier_count": 66,
       "total_tiers": 79,
       "capabilities_count": 66,
-      "hybrid_mode": "79 tiers + 66 capabilities"
+      "hybrid_mode": "66 tiers + 79 capabilities"
     },
     "python_packages": {
       "installed": {

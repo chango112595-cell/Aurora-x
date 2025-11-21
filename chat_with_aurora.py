@@ -2,7 +2,7 @@
 """
 Aurora Full Power Interactive Chat - ENHANCED BY AURORA
 All 66 Capabilities • Human-Like Conversation • Task Execution
-13 Foundations + 53 Knowledge Tiers = Complete Intelligence System
+13 Foundations + 66 Knowledge Tiers = Complete Intelligence System
 """
 
 import asyncio
@@ -155,8 +155,8 @@ async def interactive_chat():
                 print("     ├─ Systems Resilience (61-63): Data, API, Microservices")
                 print("     └─ Delivery Excellence (64-66): Serverless, Edge, Blockchain")
                 print("\n   Latest Advanced Tiers:")
-                print("   • Tier 54: Quantum Intelligence Hub ✓")
-                print("   • Tier 60: Adaptive Performance Optimizer ✓")
+                print("   • Tiers 66: Quantum Intelligence Hub ✓")
+                print("   • Tiers 66: Adaptive Performance Optimizer ✓")
                 print("   • Tier 66: Autonomous Blockchain Conductor ✓")
                 print(f"\n🎯 CONVERSATION MODE: {'Task Execution' if is_task else 'Casual Chat'}")
                 print(f"😊 Detected Tone: {user_tone.title()}")

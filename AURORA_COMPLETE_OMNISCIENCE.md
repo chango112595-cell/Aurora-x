@@ -323,10 +323,10 @@ Aurora is now **COMPLETE** with omniscient knowledge across all domains. Future 
 
 ### Core Intelligence
 - `aurora_ultimate_omniscient_grandmaster.py`: Added 15 new tier definitions (Tier 11-25) with complete Ancient→Future progression, updated display functions
-- `tools/luminar_nexus.py`: Updated to display all 53 tiers with detailed progression paths
+- `tools/luminar_nexus.py`: Updated to display all 66 tiers with detailed progression paths
 
 ### Documentation
-- `AURORA_COMPLETE_OMNISCIENCE.md`: This document - complete verification of all 53 tiers
+- `AURORA_COMPLETE_OMNISCIENCE.md`: This document - complete verification of all 66 tiers
 
 ---
 

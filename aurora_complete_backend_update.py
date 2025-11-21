@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora Complete Backend Update
-Updates all backend TypeScript files to reflect 53 tiers and 66 total capabilities
+Updates all backend TypeScript files to reflect 66 tiers and 79 total capabilities
 """
 
 from pathlib import Path
@@ -34,20 +34,20 @@ def main():
         "server/aurora-chat.ts": [
             (
                 "- 33 Mastery Tiers: Your knowledge domains",
-                "- 54 Capabilities: 13 Foundation Tasks + 53 Knowledge Tiers",
+                "- 54 Capabilities: 13 Foundation Tasks + 66 Knowledge Tiers",
             ),
         ],
         "server/routes.ts": [
             (
                 "27 mastery tiers spanning ancient computing (1940s) to future tech",
-                "66 capabilities (13 foundation tasks + 53 knowledge tiers) spanning ancient to future tech",
+                "79 capabilities (13 foundation tasks + 66 knowledge tiers) spanning ancient to future tech",
             ),
             (
                 "**My knowledge (27 mastery tiers):",
-                "**My knowledge (53 knowledge tiers + 13 foundation tasks = 66 capabilities):",
+                "**My knowledge (66 knowledge tiers + 13 foundation tasks = 79 capabilities):",
             ),
-            ("🧠 27 mastery tiers: LOADED", "🧠 53 knowledge tiers: LOADED (66 total capabilities)"),
-            ("🧠 All 53 tiers active", "🧠 All 53 tiers active (66 total capabilities)"),
+            ("🧠 27 mastery tiers: LOADED", "🧠 66 knowledge tiers: LOADED (79 total capabilities)"),
+            ("🧠 All 66 tiers active", "🧠 All 66 tiers active (79 total capabilities)"),
         ],
     }
 
@@ -78,7 +78,7 @@ def main():
 
     print("\n✅ Backend now reflects:")
     print("  • 13 Foundation Tasks")
-    print("  • 53 Knowledge Tiers (including 6 new autonomous tiers)")
+    print("  • 66 Knowledge Tiers (including 6 new autonomous tiers)")
     print("  • 54 Total Capabilities")
     print()
     print("New Autonomous Tiers (36-41):")
@@ -87,7 +87,7 @@ def main():
     print("  • Tier 38: Tier Orchestrator (multi-tier coordination)")
     print("  • Tier 39: Performance Optimizer (predictive analysis)")
     print("  • Tier 40: Full Autonomy (100% autonomous operation)")
-    print("  • Tier 53: Strategist (strategic planning)")
+    print("  • Tiers 66: Strategist (strategic planning)")
 
     print("\n" + "=" * 60)
     print("🚀 BACKEND UPDATE COMPLETE")

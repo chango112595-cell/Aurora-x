@@ -52,7 +52,7 @@ export default function IntelligencePage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl">
                 <span className="text-purple-400">Foundation Tasks</span>
-                <span className="text-cyan-400 font-mono text-lg">13</span>
+                <span className="text-cyan-400 font-mono text-lg">79</span>
               </div>
               <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl">
                 <span className="text-purple-400">Knowledge Tiers</span>

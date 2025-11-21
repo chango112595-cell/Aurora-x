@@ -72,9 +72,10 @@ start_process([PYTHON_CMD, "aurora_autonomous_monitor.py"])
 time.sleep(1)
 
 # 7. Run Initial System Update (one-time sync on startup) - Run in background to avoid timeout
-print("🔄 Starting system synchronization in background...")
-start_process([PYTHON_CMD, "aurora_automatic_system_update.py"])
-print("   ⏳ System sync running in background (this may take 1-2 minutes)")
+print("🔄 Starting DEEP system synchronization...")
+print("   (Scans 4000+ files across entire project)")
+start_process([PYTHON_CMD, "aurora_deep_system_updater.py"])
+print("   ⏳ Deep sync running in background (may take 1-2 minutes)")
 
 # Wait for services to initialize
 print("\n⏳ Waiting for services to fully initialize...")

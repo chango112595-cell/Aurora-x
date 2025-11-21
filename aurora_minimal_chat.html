@@ -226,7 +226,7 @@
     <div class="header">
         <h1>🌌 Aurora Chat</h1>
         <div class="status" id="status">
-            ✅ Connected to Aurora Intelligence • All 33 tiers active
+            ✅ Connected to Aurora Intelligence • All 66 tiers active
         </div>
     </div>
 
@@ -341,7 +341,7 @@
                     const data = await response.json();
                     hideLoading();
                     addMessage(data.response || 'No response received', 'aurora');
-                    status.innerHTML = '✅ Connected to Aurora Intelligence • All 33 tiers active';
+                    status.innerHTML = '✅ Connected to Aurora Intelligence • All 66 tiers active';
                 } else {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }

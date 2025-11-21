@@ -53,7 +53,7 @@ class SecurityIssue:
 
 class AuroraSecurityAuditor:
     """
-    Tier 53: Security Auditing System
+    Tiers 66: Security Auditing System
 
     Capabilities:
     - OWASP Top 10 vulnerability scanning
@@ -553,7 +553,7 @@ RECOMMENDATIONS:
 
 
 def main():
-    """Test Tier 53 functionality"""
+    """Test Tiers 66 functionality"""
     print("\n" + "=" * 70)
     print("🧪 TESTING TIER 53: SECURITY AUDITING")
     print("=" * 70 + "\n")

@@ -74,7 +74,7 @@ class AuroraSystemUpdater:
             }
         except Exception as e:
             self.errors.append(f"Failed to load aurora_core: {e}")
-            return {"foundation_count": 13, "tier_count": 56, "total_capabilities": 66}  # Updated to 56
+            return {"foundation_count": 13, "tier_count": 66, "total_capabilities": 79}  # Updated to 56
 
     def get_all_files_to_update(self) -> list[Path]:
         """Recursively get all text files in the project (DEEP SEARCH)"""

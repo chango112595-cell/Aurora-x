@@ -37,7 +37,7 @@ class Agent:
 
 class AuroraMultiAgent:
     """
-    Tier 48: Multi-Agent Coordination System
+    Tiers 66: Multi-Agent Coordination System
 
     Capabilities:
     - Spawn specialized agents for tasks
@@ -138,7 +138,7 @@ class AuroraMultiAgent:
 
 
 def main():
-    """Test Tier 48"""
+    """Test Tiers 66"""
     print("\n" + "=" * 70)
     print("🧪 TESTING TIER 48: MULTI-AGENT COORDINATION")
     print("=" * 70 + "\n")

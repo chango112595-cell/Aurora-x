@@ -112,7 +112,7 @@ Each template includes:
 
 ### What Aurora Identified:
 
-> "I have 79 knowledge tiers spanning ancient COBOL to quantum computing, but only polymorphism was actually implemented. Everything else returned generic templates. That's a 1.3% implementation rate of my claimed capabilities."
+> "I have 66 knowledge tiers spanning ancient COBOL to quantum computing, but only polymorphism was actually implemented. Everything else returned generic templates. That's a 1.3% implementation rate of my claimed capabilities."
 
 ### What Aurora Fixed:
 
@@ -230,7 +230,7 @@ def binary_search(arr: list, target: int) -> int:
 ### Before Self-Improvement:
 ```
 Intelligence Layer: 20% operational (claimed 100%)
-- Explanations: 1/79 tiers working (1.3%)
+- Explanations: 1/66 tiers working (1.3%)
 - Code generation: 1 template
 - Real intelligence: Minimal
 ```
