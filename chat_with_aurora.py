@@ -6,39 +6,20 @@ All 66 Capabilities • Human-Like Conversation • Task Execution
 """
 
 import asyncio
+import sys
+import os
 import re
+import json
+from pathlib import Path
 from datetime import datetime
-
 from aurora_core import create_aurora_core
 
 
 def detect_user_intent(message):
     """Detect if user wants chat vs task execution"""
-    action_words = [
-        "create",
-        "build",
-        "make",
-        "fix",
-        "debug",
-        "analyze",
-        "run",
-        "execute",
-        "write",
-        "code",
-        "generate",
-        "update",
-        "change",
-        "modify",
-        "add",
-        "remove",
-        "check",
-        "test",
-        "find",
-        "search",
-        "show me",
-        "can you",
-        "could you",
-    ]
+    action_words = ['create', 'build', 'make', 'fix', 'debug', 'analyze', 'run', 'execute',
+                    'write', 'code', 'generate', 'update', 'change', 'modify', 'add', 'remove',
+                    'check', 'test', 'find', 'search', 'show me', 'can you', 'could you']
     message_lower = message.lower()
     return any(word in message_lower for word in action_words)
 
@@ -47,16 +28,16 @@ def detect_user_tone(message):
     """Detect user's emotional tone"""
     message_lower = message.lower()
 
-    if any(word in message_lower for word in ["!", "awesome", "great", "love", "amazing", "perfect", "🎉", "🔥"]):
-        return "excited"
-    elif any(word in message_lower for word in ["help", "stuck", "error", "broken", "issue", "problem", "wrong"]):
-        return "frustrated"
-    elif any(word in message_lower for word in ["please", "thank", "appreciate", "thanks"]):
-        return "polite"
+    if any(word in message_lower for word in ['!', 'awesome', 'great', 'love', 'amazing', 'perfect', '🎉', '🔥']):
+        return 'excited'
+    elif any(word in message_lower for word in ['help', 'stuck', 'error', 'broken', 'issue', 'problem', 'wrong']):
+        return 'frustrated'
+    elif any(word in message_lower for word in ['please', 'thank', 'appreciate', 'thanks']):
+        return 'polite'
     elif len(message) < 10:
-        return "casual"
+        return 'casual'
     else:
-        return "neutral"
+        return 'neutral'
 
 
 async def interactive_chat():
@@ -119,18 +100,17 @@ async def interactive_chat():
             user_tone = detect_user_tone(user_input)
 
             # Handle special commands with Aurora's personality
-            if user_input.lower() in ["exit", "quit", "bye", "goodbye"]:
+            if user_input.lower() in ['exit', 'quit', 'bye', 'goodbye']:
                 farewells = [
                     f"Aw, heading out? It's been awesome chatting with you! {'See you soon' if message_count > 5 else 'Come back anytime'}! 💙",
                     f"Take care! {f'Really enjoyed our {message_count} messages' if message_count > 3 else 'Great talking with you'}! 👋",
-                    "Bye! Don't be a stranger - I'm always here when you need me! ✨",
+                    "Bye! Don't be a stranger - I'm always here when you need me! ✨"
                 ]
                 import random
-
                 print(f"\nAurora: {random.choice(farewells)}\n")
                 break
 
-            if user_input.lower() == "clear":
+            if user_input.lower() == 'clear':
                 session_id = f"enhanced_interactive_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
                 conversation_history = []
                 last_topic = None
@@ -138,38 +118,45 @@ async def interactive_chat():
                 print("-" * 80 + "\n")
                 continue
 
-            if user_input.lower() == "status":
-                print("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            if user_input.lower() == 'status':
+                print(
+                    "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
                 print("                         🧠 AURORA INTELLIGENCE SYSTEM STATUS")
-                print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                print("\n🟢 CORE STATUS: FULLY OPERATIONAL")
-                print(f"⚡ Power Level: 100% | Session Time: {message_count} messages")
-                print(f"💬 Context Memory: Tracking last {min(len(conversation_history), 15)} interactions")
-                print("\n📚 ACTIVE CAPABILITIES (79 Total - HYBRID FULL POWER):")
-                print("   • 13 Foundation Tasks: Problem-solving, Logic, Communication, Memory...")
-                print("   • 66 Knowledge Tiers across 4 Domains:")
-                print("     ├─ Technical Mastery (1-27)")
-                print("     ├─ Autonomous & Intelligence (28-53)")
-                print("     ├─ AI Intelligence (54-57): Quantum, Neural, Language, Vision")
-                print("     ├─ Autonomous Perception (58-60): Robotics, Distributed, Performance")
-                print("     ├─ Systems Resilience (61-63): Data, API, Microservices")
-                print("     └─ Delivery Excellence (64-66): Serverless, Edge, Blockchain")
-                print("\n   Latest Advanced Tiers:")
-                print("   • Tier 54: Quantum Intelligence Hub ✓")
-                print("   • Tier 60: Adaptive Performance Optimizer ✓")
-                print("   • Tier 66: Autonomous Blockchain Conductor ✓")
-                print(f"\n🎯 CONVERSATION MODE: {'Task Execution' if is_task else 'Casual Chat'}")
+                print(
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+                print(f"\n🟢 CORE STATUS: FULLY OPERATIONAL")
+                print(
+                    f"⚡ Power Level: 100% | Session Time: {message_count} messages")
+                print(
+                    f"💬 Context Memory: Tracking last {min(len(conversation_history), 15)} interactions")
+                print(f"\n📚 ACTIVE CAPABILITIES (79 Total - HYBRID FULL POWER):")
+                print(
+                    f"   • 13 Foundation Tasks: Problem-solving, Logic, Communication, Memory...")
+                print(
+                    f"   • 66 Knowledge Tiers across 4 Domains:")
+                print(f"     ├─ Technical Mastery (1-27)")
+                print(f"     ├─ Autonomous & Intelligence (28-53)")
+                print(f"     ├─ AI Intelligence (54-57): Quantum, Neural, Language, Vision")
+                print(f"     ├─ Autonomous Perception (58-60): Robotics, Distributed, Performance")
+                print(f"     ├─ Systems Resilience (61-63): Data, API, Microservices")
+                print(f"     └─ Delivery Excellence (64-66): Serverless, Edge, Blockchain")
+                print(f"\n   Latest Advanced Tiers:")
+                print(f"   • Tier 54: Quantum Intelligence Hub ✓")
+                print(f"   • Tier 60: Adaptive Performance Optimizer ✓")
+                print(f"   • Tier 66: Autonomous Blockchain Conductor ✓")
+                print(
+                    f"\n🎯 CONVERSATION MODE: {'Task Execution' if is_task else 'Casual Chat'}")
                 print(f"😊 Detected Tone: {user_tone.title()}")
                 print(f"🔧 Last Topic: {last_topic or 'Just getting started'}")
-                print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+                print(
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
                 print("-" * 80 + "\n")
                 continue
 
             # Extract user name if mentioned
-            if not user_name and any(
-                phrase in user_input.lower() for phrase in ["i'm ", "i am ", "my name is ", "call me "]
-            ):
-                name_match = re.search(r"(?:i'm|i am|my name is|call me)\s+(\w+)", user_input.lower())
+            if not user_name and any(phrase in user_input.lower() for phrase in ["i'm ", "i am ", "my name is ", "call me "]):
+                name_match = re.search(
+                    r"(?:i'm|i am|my name is|call me)\s+(\w+)", user_input.lower())
                 if name_match:
                     user_name = name_match.group(1).title()
 
@@ -187,41 +174,52 @@ async def interactive_chat():
                 # Aurora's personality settings
                 "personality": {
                     "style": "friendly_and_intelligent",
-                    "use_emojis": user_tone in ["casual", "excited"],
-                    "be_empathetic": user_tone == "frustrated",
-                    "be_encouraging": user_tone == "polite",
+                    "use_emojis": user_tone in ['casual', 'excited'],
+                    "be_empathetic": user_tone == 'frustrated',
+                    "be_encouraging": user_tone == 'polite',
                     "casual_language": True,
-                    "show_personality": True,
+                    "show_personality": True
                 },
                 # Capability flags
                 "can_execute_code": True,
                 "can_modify_files": True,
                 "can_analyze_codebase": True,
                 "autonomous_mode": True,
-                "all_tiers_active": True,
+                "all_tiers_active": True
             }
 
             # Store user message
-            conversation_history.append({"role": "user", "content": user_input, "tone": user_tone, "is_task": is_task})
+            conversation_history.append({
+                "role": "user",
+                "content": user_input,
+                "tone": user_tone,
+                "is_task": is_task
+            })
 
             # Get Aurora's response
-            print("\nAurora: ", end="", flush=True)
+            print(f"\nAurora: ", end="", flush=True)
 
             # Add instruction for natural conversation
             enhanced_prompt = user_input
             if message_count == 0:
                 enhanced_prompt += "\n\n[Respond naturally and casually, like texting a friend. Use contractions, emojis when appropriate, and show personality. If this is a task, confirm you'll do it and show progress.]"
 
-            response = await aurora.process_conversation(enhanced_prompt, session_id=session_id)
+            response = await aurora.process_conversation(
+                enhanced_prompt,
+                session_id=session_id
+            )
 
             print(response)
 
             # Extract topic from conversation
             if len(user_input.split()) > 3:
-                last_topic = " ".join(user_input.split()[:5]) + "..."
+                last_topic = ' '.join(user_input.split()[:5]) + "..."
 
             # Store Aurora's response
-            conversation_history.append({"role": "assistant", "content": response})
+            conversation_history.append({
+                "role": "assistant",
+                "content": response
+            })
 
             print("\n" + "-" * 80 + "\n")
             message_count += 1
@@ -231,7 +229,8 @@ async def interactive_chat():
             break
         except Exception as e:
             error_msg = str(e)
-            print(f"\n⚠️ Aurora: Hmm, hit a little snag there: {error_msg[:100]}...")
+            print(
+                f"\n⚠️ Aurora: Hmm, hit a little snag there: {error_msg[:100]}...")
             print("          But hey, I'm still here! What else can I help with? 🤔\n")
             continue
 
