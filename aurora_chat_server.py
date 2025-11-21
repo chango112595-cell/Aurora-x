@@ -9,6 +9,7 @@ AI-driven orchestration layer to Aurora Core Intelligence.
 Architecture: UI → Nexus V2 (Guardian/Manager) → Aurora Core (Intelligence)
 """
 
+from aurora_core import create_aurora_core
 import asyncio
 import os
 import sys
@@ -29,7 +30,6 @@ except ImportError:
     NEXUS_V2_AVAILABLE = False
     print("[WARN] Luminar Nexus V2 not available - falling back to direct Aurora Core")
 
-from aurora_core import create_aurora_core
 
 # Global instances
 _aurora_core = None
@@ -82,7 +82,8 @@ def chat_endpoint():
 
         # Session isolation - always reset on page load (cosmic-nexus-ui greeting detection)
         if should_reset or (
-            session_id == "cosmic-nexus-ui" and any(greeting in message.lower() for greeting in ["hello", "hi", "hey"])
+            session_id == "cosmic-nexus-ui" and any(
+                greeting in message.lower() for greeting in ["hello", "hi", "hey"])
         ):
             if session_id in aurora.conversation_contexts:
                 print(f"🔄 Session reset: {session_id}")
@@ -103,7 +104,8 @@ def chat_endpoint():
 
             # AI Orchestrator: Optimize routing based on load
             if nexus.config.get("ai_learning_enabled"):
-                nexus.ai_orchestrator.learn_from_response(message, time.time(), 1.0)
+                nexus.ai_orchestrator.learn_from_response(
+                    message, time.time(), 1.0)
 
         # Check if this is a system management request
         msg_lower = message.lower()
@@ -122,14 +124,16 @@ def chat_endpoint():
             # Use Aurora's autonomous system management
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
-            response = loop.run_until_complete(aurora.autonomous_system_management(message))
+            response = loop.run_until_complete(
+                aurora.autonomous_system_management(message))
             loop.close()
         else:
             # Process with Aurora Core Intelligence for conversation
             # PRIORITY FIX: Pass fresh context to avoid "collaborative" tone
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
-            response = loop.run_until_complete(aurora.process_conversation(message, session_id))
+            response = loop.run_until_complete(
+                aurora.process_conversation(message, session_id))
             loop.close()
 
         return jsonify(
@@ -242,7 +246,8 @@ if __name__ == "__main__":
         sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
 
     parser = argparse.ArgumentParser(description="Aurora Chat Server")
-    parser.add_argument("--port", type=int, default=9000, help="Port to run the server on")
+    parser.add_argument("--port", type=int, default=9000,
+                        help="Port to run the server on")
     args = parser.parse_args()
 
     run_aurora_chat_server(args.port)
