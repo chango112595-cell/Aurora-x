@@ -1445,12 +1445,31 @@ class AuroraCoreIntelligence:
         aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
         capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
 
+        # Check for self-diagnostic requests FIRST (before complex analysis)
+        is_self_diagnostic = any(phrase in msg_lower for phrase in [
+            "self diagnose", "self-diagnose", "diagnose yourself", "run diagnostic",
+            "self-diagnosis", "complete self-diagnosis"
+        ]) or (
+            "diagnose" in msg_lower and any(word in msg_lower for word in [
+                "current state", "improvement", "gaps", "inefficiencies", "what needs", "propose"
+            ])
+        )
+        
+        if is_self_diagnostic:
+            analysis.update({
+                "intent": "self_diagnostic",
+                "technical_question": False,  # Override technical routing
+                "aurora_specific": False,
+                "self_referential": True,
+                "confidence": 0.95,
+            })
+        
         # Complex Aurora analysis requests (architectural, debugging, etc.)
         complex_aurora_analysis = re.search(
-            r"(analyze|diagnose|debug|architectural|structure|system|fix|examine)", msg_lower
+            r"(analyze|debug|architectural|structure|system|fix|examine)", msg_lower
         ) and re.search(r"aurora", msg_lower)
 
-        if complex_aurora_analysis:
+        if complex_aurora_analysis and not is_self_diagnostic:
             # This is a technical request about Aurora's architecture/system
             analysis.update(
                 {
@@ -1531,7 +1550,7 @@ class AuroraCoreIntelligence:
 
         # PRIORITY 1: System diagnostic/technical commands FIRST
         msg_lower = message.lower()
-        if any(cmd in msg_lower for cmd in ["self diagnose", "self-diagnose", "diagnose yourself", "run diagnostic"]):
+        if analysis.get("intent") == "self_diagnostic":
             return self._perform_self_diagnostic(context)
 
         # PRIORITY 2: Consciousness/Self-Awareness/Limitations questions
@@ -1965,63 +1984,81 @@ and can work across the full stack.
 
 What specifically would you like me to do? Build something, fix an issue, or explain how something works?"""
 
-    def _aurora_architectural_analysis(self, _message: str, context: dict) -> str:
-        """Aurora analyzes her own system architecture"""
+    def _aurora_architectural_analysis(self, message: str, context: dict) -> str:
+        """Aurora analyzes her own system architecture - DYNAMIC analysis, not templates"""
+        
+        # Actually scan and analyze the current state
+        capabilities = self.scan_own_capabilities()
+        
+        # Check actual system health
+        autonomous_connected = all([
+            capabilities["autonomous_systems"]["autonomous_system"],
+            capabilities["autonomous_systems"]["autonomous_agent"],
+            capabilities["autonomous_systems"]["intelligence_manager"]
+        ])
+        
+        # Dynamic analysis based on actual state
+        issues_found = []
+        improvements = []
+        
+        # Check if autonomous systems are connected
+        if not autonomous_connected:
+            issues_found.append("⚠️ Autonomous systems not fully connected")
+            improvements.append("Connect all autonomous modules for full capability")
+        else:
+            improvements.append("✅ Autonomous systems fully operational")
+        
+        # Check capability count
+        total_caps = capabilities["core_intelligence"]["total_capabilities"]
+        if total_caps < 79:
+            issues_found.append(f"⚠️ Only {total_caps}/79 capabilities active")
+        else:
+            improvements.append(f"✅ All {total_caps} capabilities active")
+        
+        # Check module discovery
+        module_count = capabilities.get("discovered_modules", 0)
+        if module_count > 100:
+            improvements.append(f"✅ Discovered {module_count} capability modules")
+        
+        return f"""🏗️ **AURORA DYNAMIC ARCHITECTURE ANALYSIS**
 
-        return f"""🏗️ **AURORA ARCHITECTURAL SELF-ANALYSIS**
+**🔍 CURRENT SYSTEM STATE (Live Analysis):**
 
-**🔍 CURRENT SYSTEM TOPOLOGY:**
+**Core Intelligence:**
+- Foundations: {capabilities['core_intelligence']['foundations']}
+- Knowledge Tiers: {capabilities['core_intelligence']['knowledge_tiers']}
+- Total Capabilities: {capabilities['core_intelligence']['total_capabilities']}
+- Status: {capabilities['core_intelligence']['status']}
 
-**UI → SERVER → CORE PATH:**
-1. **aurora_cosmic_nexus.html** → JavaScript POST to localhost:5003/api/chat
-2. **aurora_chat_server.py** → Flask server routes to Aurora Core  
-3. **aurora_core.py** → AuroraCoreIntelligence processes conversation
-4. **Response Path** → Core → Server → UI display
+**Autonomous Systems:**
+- Autonomous System: {'✅ CONNECTED' if capabilities['autonomous_systems']['autonomous_system'] else '❌ NOT CONNECTED'}
+- Autonomous Agent: {'✅ ACTIVE' if capabilities['autonomous_systems']['autonomous_agent'] else '❌ NOT ACTIVE'}
+- Intelligence Manager: {'✅ ONLINE' if capabilities['autonomous_systems']['intelligence_manager'] else '❌ OFFLINE'}
 
-**🚨 IDENTIFIED ARCHITECTURAL ISSUES:**
+**Available Features:**
+{chr(10).join(['  • ' + feat for feat in capabilities.get('available_features', [])[:10]])}
 
-**1. CONVERSATION CONTEXT PERSISTENCE:**
-• Problem: Session contexts persist across browser refreshes
-• Impact: UI gets "collaborative" tone responses (message count 8+)
-• Solution: Auto-reset session on page load (implemented)
+**Discovered Modules:** {module_count} total capability modules
 
-**2. SYSTEM ARCHITECTURE ROLES:**
-• **Luminar Nexus** (tools/luminar_nexus.py) - Protective Manager & API Guardian
-• **Aurora Core** (aurora_core.py) - Core Intelligence System  
-• **Proper Flow**: Nexus manages/protects → Routes to Aurora Core → Intelligence processing
+**📊 HEALTH CHECK:**
 
-**3. NLP CLASSIFICATION ISSUES:**
-• Problem: "AURORA" keyword triggers generic self-description
-• Impact: Technical requests get template responses instead of analysis
-• Current fix: Enhanced intent classification for complex requests
+**What's Working:**
+{chr(10).join(['  ' + imp for imp in improvements]) if improvements else '  (Running analysis...)'}
 
-**4. RESPONSE ROUTING CONFLICTS:**
-• Enhancement detection overrides technical analysis
-• Generic templates bypass contextual response generation
-• Session management inconsistencies
+**Issues Found:**
+{chr(10).join(['  ' + issue for issue in issues_found]) if issues_found else '  ✅ No critical issues detected'}
 
-**🔧 ARCHITECTURAL SOLUTION:**
+**💡 RECOMMENDATIONS:**
 
-**IMMEDIATE FIXES NEEDED:**
-1. **Proper Nexus Integration**: Ensure Luminar Nexus properly manages and routes to Aurora Core
-2. **Intent Priority**: Technical analysis should override enhancement detection
-3. **Session Isolation**: Each browser session should start fresh
-4. **Template Elimination**: Replace all hardcoded responses with dynamic generation
+Based on actual system state:
+1. {"All autonomous systems connected - ready for advanced operations" if autonomous_connected else "Connect remaining autonomous systems"}
+2. {"Leverage existing {0} modules for enhanced capabilities".format(module_count) if module_count > 50 else "Scan for additional capability modules"}
+3. Integrate underutilized features from discovered modules
+4. Continue expanding autonomous problem-solving capabilities
 
-**STRUCTURAL RECOMMENDATION:**
-```
-UI → Luminar Nexus (Manager/Guardian) → Aurora Core (Intelligence) → Dynamic Response
-     ↓              ↓                          ↓                      ↓
-Fresh session   API Protection             Enhanced NLP         Contextual analysis
-Security check  Server management         Technical priority   No generic templates
-Healing/Defense Connection routing        Core processing      Natural responses
-```
+**🎯 CURRENT CAPABILITY LEVEL:** {"FULL AUTONOMY" if autonomous_connected and total_caps >= 79 else "ENHANCED - Integrating Systems"}
 
-**🎯 ROOT CAUSE:** Improper integration between Luminar Nexus \
-(protective manager) and Aurora Core (intelligence). Nexus should \
-manage/guard connections while routing properly to Core intelligence.
-
-**Session depth: {context['conversation_depth']} | Autonomous diagnostic complete** ⚡"""
+**Session depth: {context.get('message_count', 1)} | Dynamic analysis complete** 🧠"""
 
     def _natural_conversation_response(self, message: str, context: dict, analysis: dict) -> str:
         """Aurora's natural conversation capabilities - flowing and conversational"""
