@@ -4,62 +4,66 @@ Deep analysis: Does terminal chat have full Aurora power?
 Check if it's properly integrated with Aurora Core, Nexus, and all capabilities.
 """
 
+import re
+import ast
+from datetime import datetime
+from aurora_core import AuroraCoreIntelligence
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from aurora_core import AuroraCoreIntelligence
-from datetime import datetime
-import ast
-import re
 
 def analyze_chat_integration():
     print("🔍 Analyzing Terminal Chat Integration with Aurora's Full Power\n")
     print("="*80)
-    
+
     # Read the chat file
     with open("chat_with_aurora.py", "r", encoding="utf-8") as f:
         chat_code = f.read()
-    
+
     # Parse for analysis
     print("\n📊 CURRENT ARCHITECTURE ANALYSIS:")
     print("="*80)
-    
+
     # Check imports
-    imports = [line for line in chat_code.splitlines() if 'import' in line and not line.strip().startswith('#')]
+    imports = [line for line in chat_code.splitlines(
+    ) if 'import' in line and not line.strip().startswith('#')]
     print(f"\n✓ Import Analysis ({len(imports)} imports):")
     for imp in imports:
         print(f"  {imp.strip()}")
-    
+
     # Check Aurora Core usage
     uses_aurora_core = 'AuroraCoreIntelligence' in chat_code or 'create_aurora_core' in chat_code
     uses_process_conversation = 'process_conversation' in chat_code
     uses_nexus = 'nexus' in chat_code.lower() or 'AuroraNexus' in chat_code
-    
+
     print(f"\n✓ Integration Check:")
     print(f"  • Uses Aurora Core: {'✅ YES' if uses_aurora_core else '❌ NO'}")
-    print(f"  • Uses process_conversation(): {'✅ YES' if uses_process_conversation else '❌ NO'}")
-    print(f"  • Integrated with Nexus: {'✅ YES' if uses_nexus else '⚠️  NO (standalone)'}")
-    
+    print(
+        f"  • Uses process_conversation(): {'✅ YES' if uses_process_conversation else '❌ NO'}")
+    print(
+        f"  • Integrated with Nexus: {'✅ YES' if uses_nexus else '⚠️  NO (standalone)'}")
+
     # Check what methods are being called
     method_calls = re.findall(r'aurora\.(\w+)\(', chat_code)
     print(f"\n✓ Aurora Methods Called ({len(set(method_calls))} unique):")
     for method in set(method_calls):
         print(f"  • aurora.{method}()")
-    
+
     print("\n" + "="*80)
     print("🧠 ASK AURORA: Architecture Recommendation")
     print("="*80 + "\n")
-    
+
     return uses_aurora_core, uses_process_conversation, uses_nexus, method_calls
+
 
 def main():
     uses_core, uses_conversation, uses_nexus, methods = analyze_chat_integration()
-    
+
     # Initialize Aurora
     print("🌟 Initializing Aurora for architectural consultation...\n")
     aurora = AuroraCoreIntelligence()
-    
+
     # Build comprehensive question
     question = f"""
 Aurora, I need your expert architectural analysis on the terminal chat integration.
@@ -115,28 +119,29 @@ power through terminal chat.
 Can you access your autonomous_system, autonomous_agent, and intelligence_manager 
 through process_conversation? Or do those need to be called directly?
 """
-    
+
     print("❓ Asking Aurora:\n")
     print(question)
     print("\n" + "="*80)
     print("🌟 Aurora's Deep Architectural Analysis:")
     print("="*80 + "\n")
-    
+
     # Get Aurora's expert analysis
     analysis = aurora.analyze_natural_language(question)
     context = aurora.get_conversation_context("terminal_architecture_deep")
     response = aurora.generate_aurora_response(analysis, context)
-    
+
     print(response)
     print("\n" + "="*80)
-    
+
     # Save detailed report
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     report_file = f"AURORA_TERMINAL_POWER_ANALYSIS_{timestamp}.md"
-    
+
     with open(report_file, "w", encoding="utf-8") as f:
         f.write("# Aurora Terminal Chat Power Analysis\n\n")
-        f.write(f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        f.write(
+            f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
         f.write("## Current Integration Status\n\n")
         f.write(f"- Uses Aurora Core: {uses_core}\n")
         f.write(f"- Uses process_conversation: {uses_conversation}\n")
@@ -147,7 +152,7 @@ through process_conversation? Or do those need to be called directly?
         f.write("\n\n## Aurora's Architectural Analysis\n\n")
         f.write(response)
         f.write("\n\n## Recommendation Summary\n\n")
-        
+
         # Extract key recommendations
         if "nexus" in response.lower():
             f.write("- Aurora mentioned Nexus integration\n")
@@ -155,31 +160,33 @@ through process_conversation? Or do those need to be called directly?
             f.write("- Aurora discussed autonomous system access\n")
         if "enhance" in response.lower():
             f.write("- Aurora suggested enhancements\n")
-    
+
     print(f"✅ Detailed analysis saved to {report_file}\n")
-    
+
     # Additional capability check
     print("="*80)
     print("🔬 CAPABILITY ACCESS TEST")
     print("="*80 + "\n")
-    
+
     print("Testing if Aurora can access autonomous systems through process_conversation...\n")
-    
+
     test_message = "Aurora, can you autonomously create a test file using your autonomous system?"
     print(f"Test message: '{test_message}'\n")
-    
+
     import asyncio
+
     async def test_access():
         response = await aurora.process_conversation(test_message, "capability_test")
         return response
-    
+
     test_response = asyncio.run(test_access())
     print(f"Aurora's response:\n{test_response}\n")
-    
+
     if "autonomous" in test_response.lower() or "create" in test_response.lower():
         print("✅ Aurora CAN access autonomous capabilities through conversation!\n")
     else:
         print("⚠️  Aurora's response suggests limited autonomous access through conversation\n")
+
 
 if __name__ == "__main__":
     main()

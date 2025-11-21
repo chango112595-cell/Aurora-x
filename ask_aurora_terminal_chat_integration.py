@@ -6,17 +6,17 @@ Ask Aurora: Where should terminal chat integration live?
 - What architecture would give Aurora the most capability through terminal chat?
 """
 
+from datetime import datetime
+from aurora_core import AuroraCoreIntelligence
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from aurora_core import AuroraCoreIntelligence
-from datetime import datetime
 
 def main():
     print("🌟 Aurora Terminal Chat Integration Analysis\n")
     aurora = AuroraCoreIntelligence()
-    
+
     question = """
     Aurora, analyze the current terminal chat system (chat_with_aurora.py) and determine the optimal architecture:
     
@@ -54,64 +54,68 @@ def main():
     
     What architecture would allow you to use ALL your power through terminal chat?
     """
-    
+
     print("❓ Question to Aurora:")
     print("="*80)
     print(question)
     print("="*80 + "\n")
-    
+
     print("🧠 Aurora analyzing terminal chat architecture...\n")
-    
+
     # Analyze with Aurora's full intelligence
     analysis = aurora.analyze_natural_language(question)
     analysis["original_message"] = question
     context = aurora.get_conversation_context("terminal_chat_architecture")
     response = aurora.generate_aurora_response(analysis, context)
-    
+
     print("🌟 Aurora's Architectural Recommendation:")
     print("="*80)
     print(response)
     print("="*80)
-    
+
     # Save analysis
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     report_file = f"AURORA_TERMINAL_CHAT_ARCHITECTURE_{timestamp}.md"
-    
+
     with open(report_file, "w", encoding="utf-8") as f:
         f.write("# Aurora Terminal Chat Architecture Analysis\n\n")
-        f.write(f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        f.write(
+            f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
         f.write("## Question\n\n")
         f.write(question)
         f.write("\n\n## Aurora's Recommendation\n\n")
         f.write(response)
-    
+
     print(f"\n✅ Analysis saved to {report_file}")
-    
+
     # Also check current terminal chat implementation
     print("\n" + "="*80)
     print("📋 Current Terminal Chat Analysis")
     print("="*80)
-    
+
     try:
         with open("chat_with_aurora.py", "r", encoding="utf-8") as f:
             chat_code = f.read()
-            
+
         print(f"\n📊 Current Implementation Stats:")
         print(f"   - Lines of code: {len(chat_code.splitlines())}")
-        print(f"   - Uses Aurora Core: {'AuroraCoreIntelligence' in chat_code}")
+        print(
+            f"   - Uses Aurora Core: {'AuroraCoreIntelligence' in chat_code}")
         print(f"   - Uses Nexus: {'nexus' in chat_code.lower()}")
         print(f"   - Autonomous access: {'autonomous' in chat_code.lower()}")
-        
+
         # Check what imports it uses
-        imports = [line for line in chat_code.splitlines() if line.strip().startswith('import') or line.strip().startswith('from')]
+        imports = [line for line in chat_code.splitlines() if line.strip(
+        ).startswith('import') or line.strip().startswith('from')]
         print(f"\n📦 Current Imports ({len(imports)}):")
         for imp in imports[:10]:  # Show first 10
             print(f"   {imp}")
         if len(imports) > 10:
             print(f"   ... and {len(imports) - 10} more")
-            
+
     except Exception as e:
         print(f"⚠️  Could not analyze current chat implementation: {e}")
+
 
 if __name__ == "__main__":
     main()
