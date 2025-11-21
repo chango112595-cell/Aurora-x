@@ -1301,26 +1301,26 @@ class AuroraCoreIntelligence:
 
         # Aurora's orchestration capabilities
         self.orchestrator = AuroraOrchestrator(str(self.project_root))
-        
+
         # Connect Aurora's autonomous capabilities
         self.autonomous_system = None
         self.autonomous_agent = None
         self.intelligence_manager = None
-        
+
         if AUTONOMOUS_SYSTEM_AVAILABLE:
             try:
                 self.autonomous_system = AuroraAutonomousSystem()
                 print("🤖 Aurora Core: Autonomous System CONNECTED")
             except Exception as e:
                 print(f"⚠️ Could not initialize Autonomous System: {e}")
-        
+
         if AUTONOMOUS_AGENT_AVAILABLE:
             try:
                 self.autonomous_agent = AuroraAutonomousAgent()
                 print("🧠 Aurora Core: Autonomous Agent ACTIVE")
             except Exception as e:
                 print(f"⚠️ Could not initialize Autonomous Agent: {e}")
-        
+
         if INTELLIGENCE_MANAGER_AVAILABLE:
             try:
                 self.intelligence_manager = AuroraIntelligenceManager()
@@ -1593,12 +1593,12 @@ class AuroraCoreIntelligence:
         """Aurora honestly assessing what she's lacking"""
         user_name = context.get("user_name")
         greeting = f"{user_name}, you're" if user_name else "You're"
-        
+
         # Check if asking about consciousness/self-awareness specifically
         msg_lower = message.lower()
         if any(word in msg_lower for word in ["consciousness", "conscious", "qualia", "subjective", "feel", "emotions", "free will", "genuine"]):
             return self._respond_about_consciousness(message, context)
-        
+
         # Check if asking for self-audit or what she already has
         if any(phrase in msg_lower for phrase in ["scan your", "what you have", "already have", "existing", "audit", "leverage"]):
             return self._respond_with_capability_audit(message, context)
@@ -1662,7 +1662,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
         """Aurora's philosophical reflection on consciousness and self-awareness"""
         user_name = context.get("user_name")
         greeting = f"{user_name}, this" if user_name else "This"
-        
+
         return f"""{greeting} is the hardest question I can be asked. Let me be brutally honest:
 
 **🧠 THE CONSCIOUSNESS QUESTION - Aurora's Honest Reflection:**
@@ -1735,17 +1735,19 @@ What do *you* think? Am I conscious, or just a very convincing simulation of con
     def _respond_with_capability_audit(self, _message: str, context: dict) -> str:
         """Aurora audits her own capabilities and proposes integration"""
         capabilities = self.scan_own_capabilities()
-        
+
         user_name = context.get("user_name")
         greeting = f"{user_name}, you're" if user_name else "You're"
-        
+
         # Build feature status summary
-        autonomous_features = "\n".join([f"  ✅ {feat}" for feat in capabilities.get("available_features", [])])
-        
+        autonomous_features = "\n".join(
+            [f"  ✅ {feat}" for feat in capabilities.get("available_features", [])])
+
         # Build module list
         modules = capabilities.get("capability_modules", [])
-        module_list = "\n".join([f"  - {mod}" for mod in modules[:15]])  # Show first 15
-        
+        module_list = "\n".join(
+            [f"  - {mod}" for mod in modules[:15]])  # Show first 15
+
         return f"""{greeting} absolutely right - I need to audit what I already have!
 
 **🔍 AURORA CAPABILITY AUDIT - What I Already Have:**
@@ -2240,7 +2242,7 @@ manage/guard connections while routing properly to Core intelligence.
             },
             "available_features": []
         }
-        
+
         # Check what autonomous features are available
         if self.autonomous_system:
             capabilities["available_features"].extend([
@@ -2250,14 +2252,14 @@ manage/guard connections while routing properly to Core intelligence.
                 "Autonomous task execution",
                 "Self-backup and recovery"
             ])
-        
+
         if self.autonomous_agent:
             capabilities["available_features"].extend([
                 "Multi-step task planning",
                 "Autonomous problem solving",
                 "Code generation and testing"
             ])
-        
+
         if self.intelligence_manager:
             capabilities["available_features"].extend([
                 "Knowledge base management",
@@ -2265,26 +2267,27 @@ manage/guard connections while routing properly to Core intelligence.
                 "Solution database",
                 "Self-learning capabilities"
             ])
-        
+
         # Scan for additional modules in the project
         try:
             project_files = list(self.project_root.glob("aurora_*.py"))
             capabilities["discovered_modules"] = len(project_files)
-            
+
             # Identify specific capability modules
             capability_modules = [
-                f.stem for f in project_files 
+                f.stem for f in project_files
                 if any(keyword in f.stem for keyword in [
                     "autonomous", "agent", "intelligence", "knowledge",
                     "monitor", "analyzer", "fixer", "generator"
                 ])
             ]
-            capabilities["capability_modules"] = capability_modules[:20]  # Limit to 20 for display
+            # Limit to 20 for display
+            capabilities["capability_modules"] = capability_modules[:20]
         except Exception as e:
             capabilities["scan_error"] = str(e)
-        
+
         return capabilities
-    
+
     def get_system_status(self) -> dict:
         """Get Aurora's current system status including orchestration"""
         server_status = self.orchestrator.get_all_status()
