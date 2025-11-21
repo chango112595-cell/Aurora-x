@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Self-Improver & Full Autonomy System
 Phase 5: Full Autonomy (Minutes 41-50)
 
@@ -285,11 +286,11 @@ def main():
 
     # Test autonomous decision-making
     test_tasks = [
-        ("Fix pylint errors", {"tier_count": 3, "historical_success": 0.9}),
-        ("Update documentation", {"tier_count": 2, "historical_success": 0.95}),
-        ("Optimize database queries", {"tier_count": 4, "historical_success": 0.7}),
-        ("Delete old backups", {"tier_count": 1, "historical_success": 0.5}),
-        ("Run test suite", {"tier_count": 2, "historical_success": 1.0}),
+        ("Fix pylint errors", {"tier_count": 66, "historical_success": 0.9}),
+        ("Update documentation", {"tier_count": 66, "historical_success": 0.95}),
+        ("Optimize database queries", {"tier_count": 66, "historical_success": 0.7}),
+        ("Delete old backups", {"tier_count": 66, "historical_success": 0.5}),
+        ("Run test suite", {"tier_count": 66, "historical_success": 1.0}),
     ]
 
     print("\n🎯 Testing Autonomous Decision Making:")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Final system verification after Tier 52 integration"""
+"""Final system verification after Tiers 66 integration"""
 
 from aurora_core import AuroraKnowledgeTiers
 

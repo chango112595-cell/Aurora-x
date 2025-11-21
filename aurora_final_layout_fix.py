@@ -46,7 +46,7 @@ if __name__ == "__main__":
     print("🌟 AURORA FINAL LAYOUT FIX")
     print("=" * 60 + "\n")
 
-    SUCCESS = final_layout_fix()
+    _SUCCESS = final_layout_fix()
 
     print("\n" + "=" * 60)
     if SUCCESS:

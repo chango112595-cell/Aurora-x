@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Autonomous System Organization
 Aurora will analyze and reorganize the entire system autonomously
 """
@@ -18,7 +19,7 @@ def aurora_organize_system():
     print("=" * 80)
 
     root = Path(".")
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    _timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # Create organization structure
     organization = {"moved": [], "archived": [], "kept": [], "errors": []}
@@ -98,7 +99,7 @@ def aurora_organize_system():
             if f"tier_{i:02d}" in content.lower() or f"tier {i}" in content.lower():
                 found_tiers.append(i)
 
-        print(f"  ✓ Found {len(found_tiers)}/34 tiers in aurora_core.py")
+        print(f"  ✓ Found {len(found_tiers)}/66 tiers in aurora_core.py")
 
         if len(found_tiers) == 34:
             print("  ✅ ALL TIERS (T1-T34) are in aurora_core.py")

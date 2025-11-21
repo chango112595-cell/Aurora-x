@@ -29,7 +29,7 @@ class GitOperation:
 
 class AuroraGitMaster:
     """
-    Tier 50: Git Mastery System
+    Tiers 66: Git Mastery System
 
     Capabilities:
     - Smart branching
@@ -202,7 +202,7 @@ class AuroraGitMaster:
 
 
 def main():
-    """Test Tier 50"""
+    """Test Tiers 66"""
     print("\n" + "=" * 70)
     print("🧪 TESTING TIER 50: GIT MASTERY")
     print("=" * 70 + "\n")
@@ -214,11 +214,12 @@ def main():
     print(f"  Branch: {result.details['branch']}\n")
 
     print("Test 2: Generate Commit")
-    message = git_master.generate_commit_message(["Add Tier 50"])
+    message = git_master.generate_commit_message(["Add Tiers 66"])
     print("  Type: feat\n")
 
     print("Test 3: Create PR")
-    pr = git_master.create_pull_request("feature/tier-50", "Add Git Mastery", "Description")
+    pr = git_master.create_pull_request(
+        "feature/tier-50", "Add Git Mastery", "Description")
     print(f"  Labels: {pr['labels']}\n")
 
     summary = git_master.get_capabilities_summary()

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Autonomous Agent
 Self-debugging, self-fixing, autonomous AI system
 Supervisor: GitHub Copilot (monitoring only)

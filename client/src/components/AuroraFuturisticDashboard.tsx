@@ -197,7 +197,7 @@ export default function AuroraFuturisticDashboard() {
                   <div className="text-purple-300/80">• Tier 7-27: Technical Mastery</div>
                   <div className="text-purple-300/80">• Tier 28: Autonomous Tools</div>
                   <div className="text-purple-300/80">• Tier 29-31: Professional Skills</div>
-                  <div className="text-purple-300/80">• Tier 53: Systems Design</div>
+                  <div className="text-purple-300/80">• Tiers 66: Systems Design</div>
                   <div className="text-purple-300/80">• Tier 33: Network Mastery</div>
                   <div className="text-purple-300/80 col-span-2">• Tier 34: Grandmaster Autonomous</div>
                   <div className="text-purple-300/80 col-span-2">• Tier 35: Pylint Grandmaster</div>
@@ -206,7 +206,7 @@ export default function AuroraFuturisticDashboard() {
                   <div className="text-cyan-300/80 col-span-2">• Tier 38: Tier Orchestrator (Multi-Tier Coordination)</div>
                   <div className="text-cyan-300/80 col-span-2">• Tier 39: Performance Optimizer (Predictive Analysis)</div>
                   <div className="text-cyan-300/80 col-span-2">• Tier 40: Full Autonomy (100% Autonomous Operation)</div>
-                  <div className="text-cyan-300/80 col-span-2">• Tier 53: Strategist (Strategic Planning & Context)</div>
+                  <div className="text-cyan-300/80 col-span-2">• Tiers 66: Strategist (Strategic Planning & Context)</div>
                 </div>
               </div>
             </div>

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Status Report - Server Issues Resolved
 Summary of fixes and capabilities implemented
 """

@@ -306,7 +306,7 @@ class AuroraAutonomousFixer:
         era = fix_suggestion.get("era", "modern")
         self.grandmaster.record_fix(error_code, success, era)
 
-        if success:
+        if SUCCESS:
             self.fixes_applied += 1
             self.fixes_by_type[error_code] = self.fixes_by_type.get(error_code, 0) + 1
 

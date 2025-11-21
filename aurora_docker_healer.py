@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora Docker Healer - Autonomous Docker Issue Resolution
-Tier 53: Docker Infrastructure Mastery
+Tiers 66: Docker Infrastructure Mastery
 """
 
 import json
@@ -40,7 +40,8 @@ class AuroraDockerHealer:
         """Check if Docker Desktop is running"""
         try:
             result = subprocess.run(
-                ["powershell", "-Command", "Get-Process | Where-Object {$_.ProcessName -eq 'Docker Desktop'}"],
+                ["powershell", "-Command",
+                    "Get-Process | Where-Object {$_.ProcessName -eq 'Docker Desktop'}"],
                 capture_output=True,
                 text=True,
                 timeout=5,
@@ -53,7 +54,8 @@ class AuroraDockerHealer:
     def check_docker_daemon(self) -> bool:
         """Check if Docker daemon is accessible"""
         try:
-            result = subprocess.run(["docker", "version"], capture_output=True, text=True, timeout=10)
+            result = subprocess.run(
+                ["docker", "version"], capture_output=True, text=True, timeout=10)
             return result.returncode == 0
         except Exception as e:
             self.log(f"Docker daemon not accessible: {e}", "WARNING")
@@ -76,7 +78,8 @@ class AuroraDockerHealer:
                     self.log(f"Docker Desktop started from: {path}", "INFO")
                     return True
 
-            self.log("Docker Desktop executable not found in standard locations", "WARNING")
+            self.log(
+                "Docker Desktop executable not found in standard locations", "WARNING")
             return False
 
         except Exception as e:
@@ -85,7 +88,8 @@ class AuroraDockerHealer:
 
     def wait_for_docker_ready(self, timeout: int = 60) -> bool:
         """Wait for Docker daemon to be ready"""
-        self.log(f"Waiting for Docker daemon to be ready (timeout: {timeout}s)...", "INFO")
+        self.log(
+            f"Waiting for Docker daemon to be ready (timeout: {timeout}s)...", "INFO")
 
         start_time = time.time()
         while time.time() - start_time < timeout:
@@ -121,7 +125,8 @@ class AuroraDockerHealer:
         else:
             diagnosis["docker_desktop_running"] = False
             diagnosis["issues"].append("Docker Desktop is not running")
-            diagnosis["recommendations"].append("Start Docker Desktop application")
+            diagnosis["recommendations"].append(
+                "Start Docker Desktop application")
             self.log("❌ Docker Desktop is not running", "WARNING")
 
         # Check 2: Docker daemon
@@ -131,7 +136,8 @@ class AuroraDockerHealer:
         else:
             diagnosis["docker_daemon_accessible"] = False
             diagnosis["issues"].append("Docker daemon is not accessible")
-            diagnosis["recommendations"].append("Wait for Docker Desktop to fully initialize")
+            diagnosis["recommendations"].append(
+                "Wait for Docker Desktop to fully initialize")
             self.log("❌ Docker daemon is not accessible", "WARNING")
 
         # Check 3: WSL2 status (for Windows)
@@ -144,13 +150,15 @@ class AuroraDockerHealer:
                 self.log("✅ WSL2 is available", "INFO")
             else:
                 diagnosis["wsl2_status"] = "not_available"
-                diagnosis["issues"].append("WSL2 may not be properly configured")
+                diagnosis["issues"].append(
+                    "WSL2 may not be properly configured")
         except Exception:
             diagnosis["wsl2_status"] = "unknown"
 
         # Check 4: Docker version
         try:
-            result = subprocess.run(["docker", "--version"], capture_output=True, text=True, timeout=5)
+            result = subprocess.run(
+                ["docker", "--version"], capture_output=True, text=True, timeout=5)
             if result.returncode == 0:
                 diagnosis["docker_version"] = result.stdout.strip()
                 self.log(f"Docker version: {result.stdout.strip()}", "INFO")
@@ -171,8 +179,10 @@ class AuroraDockerHealer:
         print("\n" + "=" * 80)
         print("📊 DIAGNOSIS RESULTS")
         print("=" * 80)
-        print(f"Docker Desktop Running: {'✅' if diagnosis['docker_desktop_running'] else '❌'}")
-        print(f"Docker Daemon Accessible: {'✅' if diagnosis['docker_daemon_accessible'] else '❌'}")
+        print(
+            f"Docker Desktop Running: {'✅' if diagnosis['docker_desktop_running'] else '❌'}")
+        print(
+            f"Docker Daemon Accessible: {'✅' if diagnosis['docker_daemon_accessible'] else '❌'}")
         print(f"WSL2 Status: {diagnosis['wsl2_status']}")
 
         if diagnosis["issues"]:
@@ -193,7 +203,8 @@ class AuroraDockerHealer:
 
                 # Wait for Docker to be ready
                 if self.wait_for_docker_ready(timeout=90):
-                    self.fixes_applied.append("Docker daemon is now accessible")
+                    self.fixes_applied.append(
+                        "Docker daemon is now accessible")
                     self.log("✅ Docker is now fully operational!", "INFO")
 
                     # Verify fix
@@ -210,8 +221,10 @@ class AuroraDockerHealer:
                         print("Please wait a few more seconds and try again")
                         return False
                 else:
-                    self.log("Docker Desktop started but daemon not ready yet", "WARNING")
-                    print("\n⚠️  Docker Desktop is starting (this may take 30-60 seconds)")
+                    self.log(
+                        "Docker Desktop started but daemon not ready yet", "WARNING")
+                    print(
+                        "\n⚠️  Docker Desktop is starting (this may take 30-60 seconds)")
                     print("Please run this script again in a moment")
                     return False
             else:
@@ -262,7 +275,8 @@ class AuroraDockerHealer:
             for fix in self.fixes_applied:
                 print(f"   ✅ {fix}")
 
-        print(f"\nFinal Status: {'🟢 OPERATIONAL' if report['status'] == 'healed' else '🟡 NEEDS ATTENTION'}")
+        print(
+            f"\nFinal Status: {'🟢 OPERATIONAL' if report['status'] == 'healed' else '🟡 NEEDS ATTENTION'}")
         print("=" * 80 + "\n")
 
         return json.dumps(report, indent=2)
@@ -275,7 +289,7 @@ def main():
     success = healer.autonomous_heal()
     healer.generate_report()
 
-    if success:
+    if SUCCESS:
         print("\n🎉 Aurora has successfully healed Docker!")
         print("You can now use Docker and Dev Containers.")
         return 0

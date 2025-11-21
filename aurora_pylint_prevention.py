@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Aurora Tier 42: Pylint Prevention System
+Aurora Tiers 66: Pylint Prevention System
 Autonomous code quality maintenance - prevents issues before they happen
 """
 
@@ -13,7 +13,7 @@ from typing import Any
 
 class AuroraPylintPrevention:
     """
-    Tier 42: Pylint Prevention System
+    Tiers 66: Pylint Prevention System
     Prevents code quality issues instead of reacting to them
     """
 
@@ -231,7 +231,7 @@ def main():
                 total_issues += check["count"]
             print(f"\nTotal issues found: {total_issues}")
     else:
-        print("Aurora Tier 42: Pylint Prevention System")
+        print("Aurora Tiers 66: Pylint Prevention System")
         print("\nUsage:")
         print("  python aurora_pylint_prevention.py monitor [minutes]  # Continuous monitoring")
         print("  python aurora_pylint_prevention.py pre-commit        # Pre-commit check")

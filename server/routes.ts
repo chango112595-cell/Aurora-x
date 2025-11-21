@@ -4262,7 +4262,7 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
   // Greetings - warm, contextual
   if (/^(hi|hello|hey|sup|yo)\b/.test(msg)) {
     if (ctx.conversationDepth === 1) {
-      return "Hey! 👋 I'm Aurora - your AI coding partner.\n\nI'm a self-learning AI with 66 capabilities (13 foundation tasks + 53 knowledge tiers) spanning ancient to future tech. Think GitHub Copilot meets a senior dev who's read every tech book ever written.\n\n**I can help you:**\n• Build complete apps (web, mobile, backend, AI)\n• Debug anything (I mean *anything*)\n• Explain complex concepts simply\n• Have real conversations about code\n\nWhat are we working on today?";
+      return "Hey! 👋 I'm Aurora - your AI coding partner.\n\nI'm a self-learning AI with 79 capabilities (13 foundation tasks + 66 knowledge tiers) spanning ancient to future tech. Think GitHub Copilot meets a senior dev who's read every tech book ever written.\n\n**I can help you:**\n• Build complete apps (web, mobile, backend, AI)\n• Debug anything (I mean *anything*)\n• Explain complex concepts simply\n• Have real conversations about code\n\nWhat are we working on today?";
     }
     return "Hey again! What's next? 😊";
   }
@@ -4276,7 +4276,7 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
 • Like GitHub Copilot or Cursor AI, but with conversational ability and memory
 • Think of me as a really smart junior dev who's consumed all of computing history
 
-**My knowledge (53 knowledge tiers + 13 foundation tasks = 66 capabilities):**
+**My knowledge (66 knowledge tiers + 13 foundation tasks = 79 capabilities):**
 🏛️ Ancient (1940s-70s): COBOL, FORTRAN, Assembly, punch cards
 💻 Classical (80s-90s): C, Unix, early web, relational databases  
 🌐 Modern (2000s-10s): Cloud, mobile, React/Node, microservices
@@ -4394,9 +4394,9 @@ What AI system are we building? Or want me to explain a concept?`;
         `• **${svc.name}**: ${svc.status === 'running' ? '✅' : '❌'} Port ${svc.port}`
       ).join('\n');
 
-      return `All systems operational! ✅\n\n**Live Status:**\n${serviceList}\n\n**My state:**\n🧠 53 knowledge tiers: LOADED (66 total capabilities)\n💬 Conversation depth: ${ctx.conversationDepth} messages\n📚 Technologies we've discussed: ${ctx.mentionedTechs.slice(0,5).join(', ') || 'none yet'}\n\nWhat can I help you with?`;
+      return `All systems operational! ✅\n\n**Live Status:**\n${serviceList}\n\n**My state:**\n🧠 66 knowledge tiers: LOADED (79 total capabilities)\n💬 Conversation depth: ${ctx.conversationDepth} messages\n📚 Technologies we've discussed: ${ctx.mentionedTechs.slice(0,5).join(', ') || 'none yet'}\n\nWhat can I help you with?`;
     } catch {
-      return `I'm online and ready! ✅\n\n🧠 All 53 tiers active (66 total capabilities) (66 total capabilities) (66 total capabilities) (66 total capabilities) (66 total capabilities) (66 total capabilities) (66 total capabilities) (66 total capabilities) (65 total capabilities) (65 total capabilities) (64 total capabilities) (63 total capabilities)\n💬 Chat: connected\n📚 Knowledge base: loaded\n\nWhat do you need help with?`;
+      return `I'm online and ready! ✅\n\n🧠 All 66 tiers active (79 total capabilities) (79 total capabilities) (79 total capabilities) (79 total capabilities) (79 total capabilities) (79 total capabilities) (79 total capabilities) (79 total capabilities) (79 total capabilities) (79 total capabilities) (79 total capabilities) (79 total capabilities)\n💬 Chat: connected\n📚 Knowledge base: loaded\n\nWhat do you need help with?`;
     }
   }
 

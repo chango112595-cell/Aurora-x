@@ -322,7 +322,7 @@ Result:
 ### Success Metrics:
 - [ ] All 5 servers start and pass health checks
 - [ ] Server Controller shows all 5 servers
-- [ ] Code Library displays 33 tiers
+- [ ] Code Library displays 66 tiers
 - [ ] Chat messages transmit successfully
 - [ ] Schedule executes actions on time
 - [ ] Only port 5173 serves UI

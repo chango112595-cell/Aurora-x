@@ -1,7 +1,7 @@
 # Aurora-X Chat Server Dockerfile
 # Multi-stage build for optimized image size
 
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \

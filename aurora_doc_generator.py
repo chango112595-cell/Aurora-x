@@ -35,7 +35,7 @@ class Documentation:
 
 class AuroraDocGenerator:
     """
-    Tier 47: Documentation Generator
+    Tiers 66: Documentation Generator
 
     Capabilities:
     - Auto-generate API documentation
@@ -176,7 +176,8 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
 {project_info['contact']}
 """
 
-        doc = Documentation(doc_type=DocType.README, content=readme_content, format="markdown", metadata=project_info)
+        doc = Documentation(doc_type=DocType.README, content=readme_content,
+                            format="markdown", metadata=project_info)
 
         print("✅ README generated")
         return doc
@@ -306,11 +307,11 @@ All notable changes to this project will be documented in this file.
 ## [2.0.0] - 2025-11-18
 
 ### Added
-- Tier 43: Visual Code Understanding
-- Tier 44: Live System Integration
-- Tier 45: Enhanced Test Generation
-- Tier 53: Security Auditing
-- Tier 47: Documentation Generator
+- Tiers 66: Visual Code Understanding
+- Tiers 66: Live System Integration
+- Tiers 66: Enhanced Test Generation
+- Tiers 66: Security Auditing
+- Tiers 66: Documentation Generator
 
 """
 
@@ -413,7 +414,8 @@ User → Frontend → API Gateway → Backend Services → Database
 - CI/CD: GitHub Actions
 """
 
-        doc = Documentation(doc_type=DocType.ARCHITECTURE, content=arch_docs, format="markdown", metadata=structure)
+        doc = Documentation(doc_type=DocType.ARCHITECTURE,
+                            content=arch_docs, format="markdown", metadata=structure)
 
         print("✅ Architecture docs generated")
         return doc
@@ -464,7 +466,8 @@ User → Frontend → API Gateway → Backend Services → Database
     def _extract_classes(self, ___file_path: str) -> list[dict]:
         """Extract classes from file"""
         return [
-            {"name": "DataProcessor", "methods": ["process", "validate"], "description": "Main data processing class"}
+            {"name": "DataProcessor", "methods": [
+                "process", "validate"], "description": "Main data processing class"}
         ]
 
     def _document_function(self, func: dict) -> dict:
@@ -495,7 +498,7 @@ User → Frontend → API Gateway → Backend Services → Database
         """Analyze project structure"""
         return {
             "name": "Aurora-x",
-            "description": "Advanced AI Code System with 50 knowledge tiers",
+            "description": "Advanced AI Code System with 66 knowledge tiers",
             "features": ["Visual Understanding", "Live Integration", "Test Generation"],
             "install_command": "npm install && pip install -r requirements.txt",
             "dev_command": "npm run dev",
@@ -590,7 +593,7 @@ result = aurora.process_task("Generate API docs")
 
 
 def main():
-    """Test Tier 47 functionality"""
+    """Test Tiers 66 functionality"""
     print("\n" + "=" * 70)
     print("🧪 TESTING TIER 47: DOCUMENTATION GENERATOR")
     print("=" * 70 + "\n")
@@ -611,12 +614,13 @@ def main():
 
     # Test 3: Tutorial
     print("Test 3: Tutorial Generation")
-    tutorial = doc_gen.generate_tutorial("Visual Understanding", ["code1", "code2"])
+    tutorial = doc_gen.generate_tutorial(
+        "Visual Understanding", ["code1", "code2"])
     print(f"  Steps: {tutorial.metadata['steps']}\n")
 
     # Test 4: Changelog
     print("Test 4: Changelog")
-    commits = [{"type": "feat", "message": "Add Tier 47"}]
+    commits = [{"type": "feat", "message": "Add Tiers 66"}]
     changelog = doc_gen.generate_changelog(commits)
     print(f"  Commits: {changelog.metadata['commits']}\n")
 

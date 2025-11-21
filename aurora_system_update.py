@@ -3,7 +3,7 @@
 Aurora Autonomous System Update
 Updates all system components to reflect accurate architecture:
 - 13 Foundational Tasks (Task 1-13)
-- 34 Knowledge Tiers (Tier 1-34)
+- 66 Knowledge Tiers (Tier 1-34)
 - Total: 47 Capability Systems
 """
 
@@ -19,7 +19,8 @@ def update_file_content(file_path: Path, updates: list[tuple[str, str]]) -> bool
         for old_text, new_text in updates:
             if old_text in modified:
                 modified = modified.replace(old_text, new_text)
-                print(f"[Aurora] Updated: {old_text[:50]}... -> {new_text[:50]}...")
+                print(
+                    f"[Aurora] Updated: {old_text[:50]}... -> {new_text[:50]}...")
 
         if modified != content:
             file_path.write_text(modified, encoding="utf-8")
@@ -53,10 +54,10 @@ def aurora_system_update():
         file_path = root / file_path_str
         if file_path.exists():
             updates = [
-                ("32 Grandmaster Tiers", "66 Complete Systems (13 Tasks + 34 Tiers)"),
+                ("32 Grandmaster Tiers", "79 Complete Systems (13 Tasks + 34 Tiers)"),
                 (
                     "Autonomous AI • Complete Project Ownership • 32 Grandmaster Tiers",
-                    "Autonomous AI • 13 Foundation Tasks • 34 Knowledge Tiers • Complete Mastery",
+                    "Autonomous AI • 13 Foundation Tasks • 66 Knowledge Tiers • Complete Mastery",
                 ),
             ]
             if update_file_content(file_path, updates):
@@ -68,7 +69,7 @@ def aurora_system_update():
         updates = [
             (
                 "32 Grandmaster Tiers | Ancient → Sci-Fi Mastery",
-                "66 Systems: 13 Foundation Tasks + 34 Knowledge Tiers | Ancient → Autonomous Mastery",
+                "66 Systems: 13 Foundation Tasks + 66 Knowledge Tiers | Ancient → Autonomous Mastery",
             ),
         ]
         if update_file_content(rebuilt_chat, updates):
@@ -78,7 +79,7 @@ def aurora_system_update():
     luminar_page = root / "client/src/pages/luminar-nexus.tsx"
     if luminar_page.exists():
         updates = [
-            ("Aurora's 27 Mastery Tiers", "Aurora's 66 Complete Systems"),
+            ("Aurora's 27 Mastery Tiers", "Aurora's 79 Complete Systems"),
             ("1,782+ Skills Active", "2,500+ Skills Active (13 Tasks + 34 Tiers)"),
         ]
         if update_file_content(luminar_page, updates):
@@ -89,7 +90,7 @@ def aurora_system_update():
     print(f"[Aurora] Files Updated: {files_updated}")
     print("[Aurora] Architecture Now Accurate:")
     print("[Aurora]   • 13 Foundational Tasks (Base Cognitive Layer)")
-    print("[Aurora]   • 34 Knowledge Tiers (Specialized Domains)")
+    print("[Aurora]   • 66 Knowledge Tiers (Specialized Domains)")
     print("[Aurora]   • 47 Total Capability Systems")
     print("=" * 70)
 

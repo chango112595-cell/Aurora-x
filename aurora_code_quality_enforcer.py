@@ -50,7 +50,7 @@ class QualityIssue:
 
 class AuroraCodeQualityEnforcer:
     """
-    Tier 51: Code Quality Enforcer
+    Tiers 66: Code Quality Enforcer
 
     Capabilities:
     - Detect unused arguments
@@ -224,7 +224,8 @@ class AuroraCodeQualityEnforcer:
                     # Add underscore prefix
                     line_idx = issue.line_number - 1
                     if line_idx < len(lines):
-                        lines[line_idx] = lines[line_idx].replace(f"{arg_name}:", f"_{arg_name}:")
+                        lines[line_idx] = lines[line_idx].replace(
+                            f"{arg_name}:", f"_{arg_name}:")
                         fixed_count += 1
 
         if fixed_count > 0:
@@ -306,7 +307,7 @@ class AuroraCodeQualityEnforcer:
 
 
 def main():
-    """Test Tier 51"""
+    """Test Tiers 66"""
     print("\n" + "=" * 70)
     print("🧪 TESTING TIER 51: CODE QUALITY ENFORCER")
     print("=" * 70 + "\n")
@@ -314,7 +315,8 @@ def main():
     enforcer = AuroraCodeQualityEnforcer()
 
     print("Test 1: Scan New Tier Files")
-    files_to_scan = ["aurora_visual_understanding.py", "aurora_live_integration.py", "aurora_doc_generator.py"]
+    files_to_scan = ["aurora_visual_understanding.py",
+                     "aurora_live_integration.py", "aurora_doc_generator.py"]
 
     all_issues = []
     for file in files_to_scan:

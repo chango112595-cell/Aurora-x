@@ -1,35 +1,58 @@
 #!/usr/bin/env python3
 """
-Aurora Chat Server - Enhanced with Aurora Core
-==============================================
+Aurora Chat Server - Integrated with Luminar Nexus V2
+=====================================================
 
-Simple, focused chat server that uses Aurora Core Intelligence
-for all conversation processing. No more complex luminar_nexus dependencies.
+Chat server that properly routes through Luminar Nexus V2's
+AI-driven orchestration layer to Aurora Core Intelligence.
+
+Architecture: UI → Nexus V2 (Guardian/Manager) → Aurora Core (Intelligence)
 """
 
 import asyncio
 import os
+import sys
 import time
 
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 
+# Add tools directory for Luminar Nexus V2
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'tools'))
+
+try:
+    from luminar_nexus_v2 import LuminarNexusV2
+    NEXUS_V2_AVAILABLE = True
+except ImportError:
+    LuminarNexusV2 = None
+    NEXUS_V2_AVAILABLE = False
+    print("[WARN] Luminar Nexus V2 not available - falling back to direct Aurora Core")
+
 from aurora_core import create_aurora_core
 
-# Global Aurora Core instance
+# Global instances
 _aurora_core = None
+_nexus_v2 = None
 
 
-def initialize_aurora_core():
-    """Initialize Aurora Core Intelligence with orchestration"""
-    global _aurora_core
+def initialize_aurora_system():
+    """Initialize complete Aurora system with Nexus V2 orchestration"""
+    global _aurora_core, _nexus_v2
+    
     if _aurora_core is None:
         print("🧠 Initializing Aurora Core Intelligence...")
-        print("🎛️ Loading orchestration capabilities...")
         _aurora_core = create_aurora_core()
-        print("✅ Aurora Core ready - Intelligence + Orchestration active")
-        print("🌟 Luminar Nexus preserved for utilities")
-    return _aurora_core
+        print("✅ Aurora Core Intelligence ready")
+    
+    if NEXUS_V2_AVAILABLE and _nexus_v2 is None:
+        print("🌌 Initializing Luminar Nexus V2 Orchestrator...")
+        _nexus_v2 = LuminarNexusV2()
+        print("✅ Nexus V2 orchestration layer active")
+        print("   • AI-driven service management")
+        print("   • Security Guardian enabled")
+        print("   • Quantum coherence monitoring")
+    
+    return _aurora_core, _nexus_v2
 
 
 # Create Flask app
@@ -39,10 +62,13 @@ CORS(app)  # Enable CORS for frontend access
 
 @app.route("/api/chat", methods=["POST"])
 def chat_endpoint():
-    """Aurora's enhanced chat endpoint using Aurora Core"""
+    """
+    Aurora's chat endpoint - Routes through Nexus V2 orchestration
+    Architecture: Request → Nexus V2 Security/AI Layer → Aurora Core → Response
+    """
     try:
-        # Initialize Aurora Core if needed
-        aurora = initialize_aurora_core()
+        # Initialize Aurora system with Nexus V2
+        aurora, nexus = initialize_aurora_system()
 
         # Get request data
         data = request.get_json()
@@ -53,12 +79,30 @@ def chat_endpoint():
         if not message:
             return jsonify({"error": "No message provided"}), 400
 
-        # Reset session context if requested or if it's a greeting to interface
+        # Session isolation - always reset on page load (cosmic-nexus-ui greeting detection)
         if should_reset or (
             session_id == "cosmic-nexus-ui" and any(greeting in message.lower() for greeting in ["hello", "hi", "hey"])
         ):
             if session_id in aurora.conversation_contexts:
+                print(f"🔄 Session reset: {session_id}")
                 del aurora.conversation_contexts[session_id]
+
+        # NEXUS V2 ROUTING: Security check and AI orchestration
+        if nexus:
+            # Security Guardian: Threat detection
+            request_data = {
+                "ip": request.remote_addr,
+                "path": request.path,
+                "body": data,
+            }
+            threats = nexus.security_guardian.detect_threats(request_data)
+            if threats:
+                print(f"🛡️ Security Guardian blocked: {threats}")
+                return jsonify({"error": "Security threat detected", "threats": threats}), 403
+            
+            # AI Orchestrator: Optimize routing based on load
+            if nexus.config.get('ai_learning_enabled'):
+                nexus.ai_orchestrator.learn_from_response(message, time.time(), 1.0)
 
         # Check if this is a system management request
         msg_lower = message.lower()
@@ -81,6 +125,7 @@ def chat_endpoint():
             loop.close()
         else:
             # Process with Aurora Core Intelligence for conversation
+            # PRIORITY FIX: Pass fresh context to avoid "collaborative" tone
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             response = loop.run_until_complete(aurora.process_conversation(message, session_id))
@@ -92,9 +137,10 @@ def chat_endpoint():
                 "session_id": session_id,
                 "timestamp": time.time(),
                 "aurora_version": "2.0",
-                "core_intelligence": True,
-                "orchestration_active": True,
-                "luminar_nexus_preserved": True,
+                "nexus_version": nexus.version if nexus else "N/A",
+                "quantum_coherence": nexus.quantum_mesh.coherence_level if nexus else None,
+                "security_guardian_active": True if nexus else False,
+                "ai_orchestration_active": True if nexus else False,
             }
         )
 

@@ -31,7 +31,7 @@ class Component:
 
 class AuroraUIGenerator:
     """
-    Tier 49: UI/UX Generator
+    Tiers 66: UI/UX Generator
 
     Capabilities:
     - React/Vue component generation
@@ -72,7 +72,8 @@ class AuroraUIGenerator:
         styles = self._generate_styles(component_name)
 
         component = Component(
-            name=component_name, framework=framework, code=code, styles=styles, props=["value", "onChange"]
+            name=component_name, framework=framework, code=code, styles=styles, props=[
+                "value", "onChange"]
         )
 
         print(f"✅ Component generated: {component_name}")
@@ -134,7 +135,7 @@ export const {name} = ({{ value, onChange }}) => {{
 
 
 def main():
-    """Test Tier 49"""
+    """Test Tiers 66"""
     print("\n" + "=" * 70)
     print("🧪 TESTING TIER 49: UI/UX GENERATOR")
     print("=" * 70 + "\n")

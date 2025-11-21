@@ -36,7 +36,7 @@ class TestCase:
 
 class AuroraTestGenerator:
     """
-    Tier 45: Enhanced Test Generation
+    Tiers 66: Enhanced Test Generation
 
     Capabilities:
     - 100% code coverage automation
@@ -127,10 +127,12 @@ class AuroraTestGenerator:
         covered_lines = self._get_covered_lines(test_file)
         uncovered = set(source_lines) - set(covered_lines)
 
-        coverage_percent = (len(covered_lines) / len(source_lines)) * 100 if source_lines else 100
+        coverage_percent = (len(covered_lines) /
+                            len(source_lines)) * 100 if source_lines else 100
 
         # Generate tests for uncovered code
-        missing_tests = self._generate_tests_for_lines(source_file, list(uncovered))
+        missing_tests = self._generate_tests_for_lines(
+            source_file, list(uncovered))
 
         analysis = {
             "source_file": source_file,
@@ -142,7 +144,8 @@ class AuroraTestGenerator:
             "recommendations": self._generate_coverage_recommendations(uncovered),
         }
 
-        print(f"✅ Coverage: {coverage_percent:.2f}% ({len(uncovered)} lines uncovered)")
+        print(
+            f"✅ Coverage: {coverage_percent:.2f}% ({len(uncovered)} lines uncovered)")
         return analysis
 
     def generate_edge_cases(self, function_name: str, parameters: list[dict]) -> list[TestCase]:
@@ -163,7 +166,8 @@ class AuroraTestGenerator:
         # Generate edge cases based on parameter types
         for param in parameters:
             param_type = param.get("type", "any")
-            edge_tests = self._generate_edge_tests_for_type(function_name, param["name"], param_type)
+            edge_tests = self._generate_edge_tests_for_type(
+                function_name, param["name"], param_type)
             edge_cases.extend(edge_tests)
 
         print(f"✅ Generated {len(edge_cases)} edge case tests")
@@ -179,14 +183,16 @@ class AuroraTestGenerator:
         Returns:
             Integration test cases
         """
-        print(f"🔗 Generating integration tests for {len(components)} components")
+        print(
+            f"🔗 Generating integration tests for {len(components)} components")
 
         test_cases = []
 
         # Generate tests for component interactions
         for i in range(len(components)):
             for j in range(i + 1, len(components)):
-                test = self._generate_integration_test(components[i], components[j])
+                test = self._generate_integration_test(
+                    components[i], components[j])
                 test_cases.append(test)
 
         print(f"✅ Generated {len(test_cases)} integration tests")
@@ -254,7 +260,8 @@ class AuroraTestGenerator:
 
         fixtures = self._generate_fixtures(dependencies)
 
-        result = {"mocks": mocks, "fixtures": fixtures, "setup_code": self._generate_setup_code(mocks, fixtures)}
+        result = {"mocks": mocks, "fixtures": fixtures,
+                  "setup_code": self._generate_setup_code(mocks, fixtures)}
 
         print(f"✅ Generated {len(mocks)} mocks and {len(fixtures)} fixtures")
         return result
@@ -310,7 +317,8 @@ class AuroraTestGenerator:
             "potential_speedup": "35%",
         }
 
-        print(f"✅ Found {len(redundant_tests)} redundant, {len(slow_tests)} slow, {len(flaky_tests)} flaky tests")
+        print(
+            f"✅ Found {len(redundant_tests)} redundant, {len(slow_tests)} slow, {len(flaky_tests)} flaky tests")
         return optimization
 
     # === PRIVATE HELPER METHODS ===
@@ -318,7 +326,8 @@ class AuroraTestGenerator:
     def _extract_functions(self, __file_path: str) -> list[dict[str, Any]]:
         """Extract functions from source file"""
         return [
-            {"name": "calculate_total", "params": ["items"], "returns": "float"},
+            {"name": "calculate_total", "params": [
+                "items"], "returns": "float"},
             {"name": "validate_input", "params": ["data"], "returns": "bool"},
         ]
 
@@ -402,7 +411,7 @@ class Test{cls['name']}:
             "Test boundary conditions",
         ]
 
-    def _generate_edge_tests_for_type(self, func_name: str, param_name: str, param_type: str) -> list[TestCase]:
+    def _generate_edge_tests_for_type(self, FUNC_NAME: str, param_name: str, param_type: str) -> list[TestCase]:
         """Generate edge tests based on type"""
         edge_cases = {
             "string": ["empty", "null", "special_chars", "very_long"],
@@ -415,10 +424,10 @@ class Test{cls['name']}:
 
         return [
             TestCase(
-                test_name=f"test_{func_name}_{param_name}_{case}",
+                test_name=f"test_{FUNC_NAME}_{param_name}_{case}",
                 test_type=TestType.UNIT,
                 code=f"# Edge case: {case}",
-                description=f"Test {func_name} with {case} {param_name}",
+                description=f"Test {FUNC_NAME} with {case} {param_name}",
                 covered_lines=[],
                 edge_cases=[case],
                 assertions=[],
@@ -504,7 +513,7 @@ class Test{cls['name']}:
 
 
 def main():
-    """Test Tier 45 functionality"""
+    """Test Tiers 66 functionality"""
     print("\n" + "=" * 70)
     print("🧪 TESTING TIER 45: ENHANCED TEST GENERATION")
     print("=" * 70 + "\n")
@@ -524,12 +533,14 @@ def main():
 
     # Test 3: Edge cases
     print("Test 3: Edge Case Generation")
-    edge_cases = generator.generate_edge_cases("calculate", [{"name": "value", "type": "number"}])
+    edge_cases = generator.generate_edge_cases(
+        "calculate", [{"name": "value", "type": "number"}])
     print(f"  Generated: {len(edge_cases)} edge cases\n")
 
     # Test 4: Integration tests
     print("Test 4: Integration Tests")
-    integration = generator.generate_integration_tests(["ComponentA", "ComponentB", "ComponentC"])
+    integration = generator.generate_integration_tests(
+        ["ComponentA", "ComponentB", "ComponentC"])
     print(f"  Generated: {len(integration)} integration tests\n")
 
     # Test 5: Test data

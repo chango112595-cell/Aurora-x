@@ -30,7 +30,7 @@ export default function UnifiedAuroraChat({ compact = false, theme = 'profession
     // Aurora welcome message
     const welcomeMessage = compact
       ? "Hey — I'm Aurora. Chat with me from the sidebar. Ask anything!"
-      : "Hey! 👋 Aurora here with all 53 knowledge tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?";
+      : "Hey! 👋 Aurora here with all 66 knowledge tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?";
 
     setMessages([{
       id: '0',

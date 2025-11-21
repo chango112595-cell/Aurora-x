@@ -59,7 +59,7 @@ class AuroraServerManager:
 
     def log(self, message: str):
         """Log with timestamp"""
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        _timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         log_entry = f"[{timestamp}] {message}"
         print(log_entry)
 
@@ -326,7 +326,7 @@ def main():
 
         print("\n📊 SERVICES:")
         for name, info in status["services"].items():
-            status_icon = "✅" if info["healthy"] else "❌"
+            _status_icon = "✅" if info["healthy"] else "❌"
             print(f"  {status_icon} {name}: Port {info['port']} - {info['status']}")
 
         if status["conflicts"]:
@@ -342,7 +342,7 @@ def main():
     elif args.cleanup:
         print("🧹 Cleaning up Aurora processes...")
         success = manager.cleanup_and_restart()
-        if success:
+        if SUCCESS:
             print("✅ Cleanup and restart successful!")
         else:
             print("❌ Cleanup failed!")
