@@ -1344,6 +1344,7 @@ class AuroraCoreIntelligence:
 
     def analyze_natural_language(self, message: str) -> dict:
         """
+        # PRIORITY SYSTEM: Technical analysis > Aurora self-reference
         Enhanced natural language analysis with Aurora's intelligence
 
         Returns:
