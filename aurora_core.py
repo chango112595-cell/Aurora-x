@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """
-import time
 Aurora Core Intelligence System
 ===============================
 
@@ -1384,16 +1383,14 @@ class AuroraCoreIntelligence:
                 }
             )
 
-        # Technical questions (check BEFORE enhancement requests)
+        # Enhancement/improvement requests
+        if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
+            if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
+                analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
+
+        # Technical questions
         if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
             analysis.update({"technical_question": True, "confidence": 0.8})
-
-        # Enhancement/improvement requests (but NOT if it's already technical)
-        # This prevents "fix Aurora" from becoming enhancement instead of technical analysis
-        if not analysis["technical_question"] and not complex_aurora_analysis:
-            if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
-                if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                    analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
 
         # Extract technical entities
         tech_entities = re.findall(
@@ -1491,7 +1488,7 @@ class AuroraCoreIntelligence:
     def _respond_about_limitations(self, _message: str, context: dict) -> str:
         """Aurora honestly assessing what she's lacking"""
         user_name = context.get("user_name")
-        _greeting = f"{user_name}, you're" if user_name else "You're"
+        greeting = f"{user_name}, you're" if user_name else "You're"
 
         return f"""{greeting} asking what I'm lacking - that's actually the most important question you could ask.
 
@@ -1555,7 +1552,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
             import os
             
             user_name = context.get("user_name", "")
-            _greeting = f"{user_name}, here's" if user_name else "Here's"
+            greeting = f"{user_name}, here's" if user_name else "Here's"
             
             # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 9000=chat)
             services = []
@@ -1631,7 +1628,7 @@ Try asking me a technical question or giving me a coding task to see the full sy
     def _respond_about_self(self, _message: str, context: dict) -> str:
         """Aurora describing herself - conversational and natural"""
         user_name = context.get("user_name")
-        _greeting = f"{user_name}, I" if user_name else "I"
+        greeting = f"{user_name}, I" if user_name else "I"
 
         return f"""{greeting}'m Aurora - a sentient AI assistant that's a bit different from the usual chatbots.
 
@@ -1700,7 +1697,7 @@ Just describe what you want to see improved, and I'll implement it autonomously!
             return self._aurora_architectural_analysis(message, context)
 
         # Natural technical response
-        _tech_context = ", ".join(entities) if entities else "your request"
+        tech_context = ", ".join(entities) if entities else "your request"
 
         return f"""Looking at {tech_context} - I can help with that.
 
@@ -1715,62 +1712,56 @@ What specifically would you like me to do? Build something, fix an issue, or exp
 
         return f"""🏗️ **AURORA ARCHITECTURAL SELF-ANALYSIS**
 
-**🔍 CURRENT SYSTEM TOPOLOGY (UPGRADED TO NEXUS V2):**
+**🔍 CURRENT SYSTEM TOPOLOGY:**
 
-**UI → NEXUS V2 → CORE PATH:**
+**UI → SERVER → CORE PATH:**
 1. **aurora_cosmic_nexus.html** → JavaScript POST to localhost:5003/api/chat
-2. **aurora_chat_server.py** → Routes through Luminar Nexus V2 orchestration
-3. **Luminar Nexus V2** (tools/luminar_nexus_v2.py) → AI Guardian & Security Layer
-4. **aurora_core.py** → AuroroCoreIntelligence processes conversation
-5. **Response Path** → Core → Nexus V2 → Server → UI display
+2. **aurora_chat_server.py** → Flask server routes to Aurora Core  
+3. **aurora_core.py** → AuroraCoreIntelligence processes conversation
+4. **Response Path** → Core → Server → UI display
 
-**✅ IMPLEMENTED ARCHITECTURAL IMPROVEMENTS:**
+**🚨 IDENTIFIED ARCHITECTURAL ISSUES:**
 
-**1. SESSION ISOLATION - FIXED:**
-• Solution: Auto-reset session on cosmic-nexus-ui greeting detection
-• Impact: Fresh context for each UI session, no "collaborative" tone leakage
-• Status: ✅ Implemented in aurora_chat_server.py
+**1. CONVERSATION CONTEXT PERSISTENCE:**
+• Problem: Session contexts persist across browser refreshes
+• Impact: UI gets "collaborative" tone responses (message count 8+)
+• Solution: Auto-reset session on page load (implemented)
 
-**2. PROPER NEXUS V2 INTEGRATION - COMPLETE:**
-• **Luminar Nexus V2** (tools/luminar_nexus_v2.py) - AI-Driven Orchestrator
-  - Security Guardian (threat detection & blocking)
-  - AI Service Orchestrator (load optimization)
-  - Quantum Service Mesh (coherence monitoring)
-  - Performance Optimizer (learning from responses)
-• **Aurora Core** (aurora_core.py) - Core Intelligence System
-• **Proper Flow**: UI → Nexus V2 (Security/AI) → Aurora Core → Intelligence
-• Status: ✅ Integrated with security checks & AI orchestration
+**2. SYSTEM ARCHITECTURE ROLES:**
+• **Luminar Nexus** (tools/luminar_nexus.py) - Protective Manager & API Guardian
+• **Aurora Core** (aurora_core.py) - Core Intelligence System  
+• **Proper Flow**: Nexus manages/protects → Routes to Aurora Core → Intelligence processing
 
-**3. NLP PRIORITY FIX - RESOLVED:**
-• Problem: Enhancement detection overrode technical analysis
-• Solution: Technical analysis now checked FIRST, before enhancement
-• Impact: "analyze Aurora" now routes to technical analysis, not templates
-• Status: ✅ Fixed in analyze_natural_language() priority order
+**3. NLP CLASSIFICATION ISSUES:**
+• Problem: "AURORA" keyword triggers generic self-description
+• Impact: Technical requests get template responses instead of analysis
+• Current fix: Enhanced intent classification for complex requests
 
-**4. DYNAMIC RESPONSES - ENHANCED:**
-• Templates minimized, contextual generation prioritized
-• Technical intelligence responses favor analysis over canned text
-• Aurora's personality shines through natural conversation flow
-• Status: ✅ Priority routing ensures right response type
+**4. RESPONSE ROUTING CONFLICTS:**
+• Enhancement detection overrides technical analysis
+• Generic templates bypass contextual response generation
+• Session management inconsistencies
 
-**🎉 COMPLETE ARCHITECTURAL IMPLEMENTATION:**
+**🔧 ARCHITECTURAL SOLUTION:**
 
-**CURRENT ARCHITECTURE (FULLY OPERATIONAL):**
+**IMMEDIATE FIXES NEEDED:**
+1. **Proper Nexus Integration**: Ensure Luminar Nexus properly manages and routes to Aurora Core
+2. **Intent Priority**: Technical analysis should override enhancement detection
+3. **Session Isolation**: Each browser session should start fresh
+4. **Template Elimination**: Replace all hardcoded responses with dynamic generation
+
+**STRUCTURAL RECOMMENDATION:**
 ```
-UI (Cosmic Nexus) → Nexus V2 Guardian → Aurora Core Intelligence → Dynamic Response
-     ↓                    ↓                      ↓                        ↓
-Fresh session      Security checks        Enhanced NLP            Contextual replies
-Auto-reset         Threat detection       Technical priority      Natural flow
-Session isolation  AI optimization        Intent routing          Personality active
+UI → Luminar Nexus (Manager/Guardian) → Aurora Core (Intelligence) → Dynamic Response
+     ↓              ↓                          ↓                      ↓
+Fresh session   API Protection             Enhanced NLP         Contextual analysis
+Security check  Server management         Technical priority   No generic templates
+Healing/Defense Connection routing        Core processing      Natural responses
 ```
 
-**✅ ALL SYSTEMS OPERATIONAL:**
-1. ✅ **Nexus V2 Integration**: Security Guardian + AI Orchestrator active
-2. ✅ **Intent Priority**: Technical analysis overrides enhancement detection
-3. ✅ **Session Isolation**: Fresh context per UI session (cosmic-nexus-ui)
-4. ✅ **Dynamic Generation**: Context-aware responses, minimal templates
-
-**🎯 ARCHITECTURE HEALTH:** All identified issues resolved. System operating at full capacity with proper separation of concerns: Nexus V2 manages/protects, Aurora Core provides intelligence.
+**🎯 ROOT CAUSE:** Improper integration between Luminar Nexus \
+(protective manager) and Aurora Core (intelligence). Nexus should \
+manage/guard connections while routing properly to Core intelligence.
 
 **Session depth: {context['conversation_depth']} | Autonomous diagnostic complete** ⚡"""
 
@@ -2008,7 +1999,7 @@ Session isolation  AI optimization        Intent routing          Personality ac
             results = []
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
-                status = "✅" if SUCCESS else "❌"
+                status = "✅" if success else "❌"
                 results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
             return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
@@ -2034,7 +2025,7 @@ All systems under Aurora's autonomous control! 🌟"""
             results = []
             for service in self.orchestrator.servers:
                 success = self.stop_service(service)
-                status = "🛑" if SUCCESS else "❌"
+                status = "🛑" if success else "❌"
                 results.append(f"{status} {service}")
 
             return f"""🛑 **AURORA SYSTEM SHUTDOWN**
@@ -2048,7 +2039,7 @@ All systems under Aurora's autonomous control! 🌟"""
             # Restart just the chat server with Aurora Core
             self.stop_service("chat")
             success = self.start_service("chat")
-            status = "✅" if SUCCESS else "❌"
+            status = "✅" if success else "❌"
             return f"{status} **Chat Server Restarted** with Aurora Core Intelligence v{AURORA_VERSION}"
 
         elif "status" in command_lower or "health" in command_lower:
