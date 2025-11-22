@@ -1849,10 +1849,10 @@ multi-step task planning.
             user_name = context.get("user_name", "")
             greeting = f"{user_name}, here's" if user_name else "Here's"
 
-            # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 9000=chat)
+            # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 5003=chat, 5005=dashboard)
             services = []
             service_map = {5000: "Frontend", 5001: "Bridge",
-                           5002: "Self-Learn", 9000: "Chat Server"}
+                           5002: "Self-Learn", 5003: "Chat Server", 5005: "Luminar Dashboard"}
             for port, name in service_map.items():
                 try:
                     result = subprocess.run(
@@ -2327,8 +2327,24 @@ Based on actual system state:
 
         # Scan for additional modules in the project
         try:
+            # Scan root directory
             project_files = list(self.project_root.glob("aurora_*.py"))
-            capabilities["discovered_modules"] = len(project_files)
+
+            # Scan tools/ directory
+            tools_dir = self.project_root / "tools"
+            if tools_dir.exists():
+                tool_files = list(tools_dir.glob("aurora_*.py"))
+                project_files.extend(tool_files)
+
+            # Scan .aurora/ directory
+            aurora_dir = self.project_root / ".aurora"
+            if aurora_dir.exists():
+                aurora_files = list(aurora_dir.glob("aurora_*.py"))
+                project_files.extend(aurora_files)
+
+            capabilities["module_count"] = len(project_files)
+            capabilities["discovered_modules"] = len(
+                project_files)  # Keep for backwards compatibility
 
             # Identify specific capability modules
             capability_modules = [
@@ -2345,6 +2361,9 @@ Based on actual system state:
                         "analyzer",
                         "fixer",
                         "generator",
+                        "update",
+                        "improve",
+                        "enhance",
                     ]
                 )
             ]
@@ -2358,7 +2377,30 @@ Based on actual system state:
     def get_system_status(self) -> dict:
         """Get Aurora's current system status including orchestration"""
         server_status = self.orchestrator.get_all_status()
+
+        # Calculate operational status
+        systems_active = sum([
+            self.autonomous_system is not None,
+            self.autonomous_agent is not None,
+            self.intelligence_manager is not None
+        ])
+
+        if systems_active == 3:
+            status = "Fully Operational"
+            health = "100%"
+        elif systems_active == 2:
+            status = "Operational"
+            health = "80%"
+        elif systems_active == 1:
+            status = "Limited Operation"
+            health = "50%"
+        else:
+            status = "Core Only"
+            health = "30%"
+
         return {
+            "status": status,
+            "health": health,
             "aurora_core_version": AURORA_VERSION,
             "intelligence_tiers_active": 34,
             "autonomous_mode": self.autonomous_mode,
