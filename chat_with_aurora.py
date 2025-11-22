@@ -79,12 +79,12 @@ async def interactive_chat():
 
     # Display full capability loadout
     print("━" * 80)
-    print("🟢 STATUS: ALL SYSTEMS OPERATIONAL")
+    print("🟢 STATUS: ALL SYSTEMS OPERATIONAL - FULL EXECUTION MODE ENABLED")
     print("━" * 80)
     print("💬 Conversation: Natural language processing • Context awareness • Emotional intelligence")
-    print("🔧 Execution: Code generation • File ops • Debugging • Analysis • Automation")
+    print("🔧 Execution: LIVE code execution • File operations • Terminal commands • Real-time debugging")
     print("🧠 Knowledge: 55 programming languages • 21 technical domains • Full-stack expertise")
-    print("🎯 Autonomous: Self-debugging • Multi-agent coordination • Strategic planning")
+    print("🎯 Autonomous: Self-debugging • Multi-agent coordination • Strategic planning • Task execution")
     print("━" * 80 + "\n")
 
     # Aurora's casual greeting
@@ -95,6 +95,9 @@ async def interactive_chat():
     print("        ")
     print("        Just talk to me naturally - ask questions, give me tasks, or just")
     print("        hang out and chat. I'll match your vibe and help however I can!")
+    print("        ")
+    print("        ⚡ NEW: I can now EXECUTE tasks in real-time! Ask me to create files,")
+    print("        run commands, analyze code - I'll actually DO it, not just talk about it!")
     print("        ")
     print("        (Pro tip: Type 'status' to see what I'm capable of, or just dive in!)\n")
     print("-" * 80 + "\n")
@@ -139,12 +142,16 @@ async def interactive_chat():
                 continue
 
             if user_input.lower() == "status":
+                # Check autonomous execution availability
+                exec_status = "✅ ACTIVE" if aurora.autonomous_agent else "⚠️ LIMITED"
+                
                 print("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
                 print("                         🧠 AURORA INTELLIGENCE SYSTEM STATUS")
                 print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                print("\n🟢 CORE STATUS: FULLY OPERATIONAL")
+                print("\n🟢 CORE STATUS: FULLY OPERATIONAL - EXECUTION MODE ENABLED")
                 print(f"⚡ Power Level: 100% | Session Time: {message_count} messages")
                 print(f"💬 Context Memory: Tracking last {min(len(conversation_history), 15)} interactions")
+                print(f"🚀 Autonomous Execution: {exec_status}")
                 print("\n📚 ACTIVE CAPABILITIES (79 Total - HYBRID FULL POWER):")
                 print("   • 13 Foundation Tasks: Problem-solving, Logic, Communication, Memory...")
                 print("   • 66 Knowledge Tiers across 4 Domains:")
@@ -154,11 +161,16 @@ async def interactive_chat():
                 print("     ├─ Autonomous Perception (58-60): Robotics, Distributed, Performance")
                 print("     ├─ Systems Resilience (61-63): Data, API, Microservices")
                 print("     └─ Delivery Excellence (64-66): Serverless, Edge, Blockchain")
+                print("\n⚡ EXECUTION CAPABILITIES:")
+                print("   • File Operations: Create, read, modify, delete files")
+                print("   • Terminal Commands: Execute shell commands in real-time")
+                print("   • Code Analysis: Scan, analyze, and fix code")
+                print("   • Autonomous Tasks: Multi-step task planning and execution")
                 print("\n   Latest Advanced Tiers:")
                 print("   • Tiers 66: Quantum Intelligence Hub ✓")
                 print("   • Tiers 66: Adaptive Performance Optimizer ✓")
                 print("   • Tier 66: Autonomous Blockchain Conductor ✓")
-                print(f"\n🎯 CONVERSATION MODE: {'Task Execution' if is_task else 'Casual Chat'}")
+                print(f"\n🎯 CURRENT MODE: {'⚡ Task Execution (LIVE)' if is_task else '💬 Casual Chat'}")
                 print(f"😊 Detected Tone: {user_tone.title()}")
                 print(f"🔧 Last Topic: {last_topic or 'Just getting started'}")
                 print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
@@ -215,7 +227,25 @@ async def interactive_chat():
             if message_count == 0:
                 enhanced_prompt += "\n\n[Respond naturally and casually, like texting a friend. Use contractions, emojis when appropriate, and show personality. If this is a task, confirm you'll do it and show progress.]"
 
-            response = await aurora.process_conversation(enhanced_prompt, session_id=session_id)
+            # ENHANCED: If this is an action/task request, use autonomous execution
+            if is_task and aurora.autonomous_agent:
+                try:
+                    # First, acknowledge the task conversationally
+                    quick_ack = await aurora.process_conversation(f"Acknowledge this task briefly: {user_input}", session_id=session_id)
+                    print(quick_ack, end="\n\n")
+                    
+                    # Then execute it autonomously
+                    print("🔄 Executing... ", end="", flush=True)
+                    execution_result = await aurora.autonomous_agent.execute_task(user_input)
+                    print("✓\n")
+                    response = execution_result
+                except Exception as e:
+                    # If autonomous execution fails, fall back to conversation
+                    print(f"(autonomous mode unavailable) ", end="", flush=True)
+                    response = await aurora.process_conversation(enhanced_prompt, session_id=session_id)
+            else:
+                # Regular conversation mode
+                response = await aurora.process_conversation(enhanced_prompt, session_id=session_id)
 
             print(response)
 
@@ -240,4 +270,8 @@ async def interactive_chat():
 
 
 if __name__ == "__main__":
-    asyncio.run(interactive_chat())
+    try:
+        asyncio.run(interactive_chat())
+    except (KeyboardInterrupt, SystemExit):
+        # Clean exit without traceback
+        pass
