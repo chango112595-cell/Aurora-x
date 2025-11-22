@@ -1,0 +1,1100 @@
+{
+  "intelligence_manager": [
+    {
+      "name": "aurora_approval_system",
+      "path": "tools\\aurora_approval_system.py",
+      "size": 12873,
+      "lines": 370,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraApprovalSystem"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "intelligence_manager",
+      "purpose": "intelligence_enhancement",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_retry_until_aplus",
+      "path": "tools\\aurora_retry_until_aplus.py",
+      "size": 7140,
+      "lines": 222,
+      "has_class": false,
+      "has_main": true,
+      "classes": [],
+      "functions": [
+        "notify_aurora",
+        "show_grading_loop",
+        "provide_immediate_actions",
+        "main"
+      ],
+      "integration_point": "intelligence_manager",
+      "purpose": "intelligence_enhancement",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_self_diagnostic",
+      "path": "tools\\aurora_self_diagnostic.py",
+      "size": 8702,
+      "lines": 256,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraSelfDiagnostic"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "intelligence_manager",
+      "purpose": "intelligence_enhancement",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_teacher",
+      "path": "tools\\aurora_teacher.py",
+      "size": 5719,
+      "lines": 149,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraTeacher"
+      ],
+      "functions": [],
+      "integration_point": "intelligence_manager",
+      "purpose": "intelligence_enhancement",
+      "priority": "high"
+    }
+  ],
+  "autonomous_system": [
+    {
+      "name": "aurora_autonomous_fixer",
+      "path": "tools\\aurora_autonomous_fixer.py",
+      "size": 21890,
+      "lines": 616,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraAutonomousFixer",
+        "AuroraSelfMonitor"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_autonomy_v2",
+      "path": "tools\\aurora_autonomy_v2.py",
+      "size": 10740,
+      "lines": 303,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraAutonom"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_auto_fix",
+      "path": "tools\\aurora_auto_fix.py",
+      "size": 8902,
+      "lines": 258,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraAutoFixer"
+      ],
+      "functions": [
+        "test_luminar_nexus_imports",
+        "test_luminar_nexus_has_start_all",
+        "test_serve_imports",
+        "test_serve_health_endpoint"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_consolidate_knowledge",
+      "path": "tools\\aurora_consolidate_knowledge.py",
+      "size": 4359,
+      "lines": 131,
+      "has_class": false,
+      "has_main": true,
+      "classes": [],
+      "functions": [
+        "consolidate_to_corpus"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_context_loader",
+      "path": "tools\\aurora_context_loader.py",
+      "size": 5070,
+      "lines": 121,
+      "has_class": false,
+      "has_main": true,
+      "classes": [],
+      "functions": [
+        "verify_aurora_memory"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_core",
+      "path": "tools\\aurora_core.py",
+      "size": 24612,
+      "lines": 542,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraCore"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_debug_grandmaster",
+      "path": "tools\\aurora_debug_grandmaster.py",
+      "size": 24446,
+      "lines": 643,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraDebugGrandmaster",
+        "AuroraDebugger"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_design_ui",
+      "path": "tools\\aurora_design_ui.py",
+      "size": 12759,
+      "lines": 299,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraUIDesigner"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_direct_telemetry",
+      "path": "tools\\aurora_direct_telemetry.py",
+      "size": 7040,
+      "lines": 182,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraDirectTelemetry"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_enhanced_core",
+      "path": "tools\\aurora_enhanced_core.py",
+      "size": 23400,
+      "lines": 604,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "CreativeEngine",
+        "Solution",
+        "AutonomousDecisionEngine",
+        "SelfImprovementEngine",
+        "AuroraEnhancedCore"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_execute_plan",
+      "path": "tools\\aurora_execute_plan.py",
+      "size": 21816,
+      "lines": 707,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraSelfImprovement",
+        "SynthesisTask",
+        "UnifiedLearningTracker"
+      ],
+      "functions": [
+        "_synthesize_one",
+        "generate_function_ast",
+        "generate_class_ast",
+        "quick_add_function",
+        "quick_fibonacci_function",
+        "record",
+        "get_best_method",
+        "get_stats"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_expert_knowledge",
+      "path": "tools\\aurora_expert_knowledge.py",
+      "size": 86921,
+      "lines": 1782,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "LanguageExpertise",
+        "AuroraExpertKnowledge"
+      ],
+      "functions": [
+        "main",
+        "process_data"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_fix_backend",
+      "path": "tools\\aurora_fix_backend.py",
+      "size": 3286,
+      "lines": 97,
+      "has_class": false,
+      "has_main": false,
+      "classes": [],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_health_dashboard",
+      "path": "tools\\aurora_health_dashboard.py",
+      "size": 15571,
+      "lines": 457,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "HealthDashboardHandler"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_instant_generator",
+      "path": "tools\\aurora_instant_generator.py",
+      "size": 22983,
+      "lines": 496,
+      "has_class": true,
+      "has_main": false,
+      "classes": [
+        "AuroraCodeGenerator"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_learning_engine",
+      "path": "tools\\aurora_learning_engine.py",
+      "size": 6781,
+      "lines": 178,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraLearningEngine"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_parallel_executor",
+      "path": "tools\\aurora_parallel_executor.py",
+      "size": 11080,
+      "lines": 350,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "Task",
+        "TaskResult",
+        "AuroraParallelExecutor",
+        "AuroraMassProduction",
+        "AuroraAdvancedIdeas"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_port_manager",
+      "path": "tools\\aurora_port_manager.py",
+      "size": 15014,
+      "lines": 396,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "PortInfo",
+        "AuroraPortManager"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_process_grandmaster",
+      "path": "tools\\aurora_process_grandmaster.py",
+      "size": 22044,
+      "lines": 590,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraProcessGrandmaster",
+        "LuminarNexusServerManager"
+      ],
+      "functions": [
+        "main",
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_safety_protocol",
+      "path": "tools\\aurora_safety_protocol.py",
+      "size": 23440,
+      "lines": 660,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "SystemState",
+        "DiagnosticReport",
+        "CrashEvent",
+        "AuroraSafetyProtocol"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_self_analysis",
+      "path": "tools\\aurora_self_analysis.py",
+      "size": 12904,
+      "lines": 305,
+      "has_class": false,
+      "has_main": true,
+      "classes": [],
+      "functions": [
+        "analyze_architecture"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_self_heal",
+      "path": "tools\\aurora_self_heal.py",
+      "size": 11057,
+      "lines": 290,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraSelfHealer"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_self_monitor",
+      "path": "tools\\aurora_self_monitor.py",
+      "size": 7227,
+      "lines": 207,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraSelfMonitor"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_self_repair",
+      "path": "tools\\aurora_self_repair.py",
+      "size": 11402,
+      "lines": 329,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraSelfRepair"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_server_grandmaster",
+      "path": "tools\\aurora_server_grandmaster.py",
+      "size": 21470,
+      "lines": 524,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraServerGrandmaster"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_strict_supervisor",
+      "path": "tools\\aurora_strict_supervisor.py",
+      "size": 9713,
+      "lines": 241,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraStrictSupervisor"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_supervisor",
+      "path": "tools\\aurora_supervisor.py",
+      "size": 15895,
+      "lines": 466,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "ServiceConfig",
+        "ServiceState",
+        "AuroraSupervisor"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_tab_diagnostics",
+      "path": "tools\\aurora_tab_diagnostics.py",
+      "size": 5781,
+      "lines": 150,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraTabDiagnostics"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_ultimate_autonomous_controller",
+      "path": "tools\\aurora_ultimate_autonomous_controller.py",
+      "size": 8201,
+      "lines": 229,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraUltimateAutonomousController"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_ultra_engine",
+      "path": "tools\\aurora_ultra_engine.py",
+      "size": 13654,
+      "lines": 406,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraGrandmasterKnowledge",
+        "AuroraUltraEngine"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_system",
+      "purpose": "proactive_monitoring",
+      "priority": "critical"
+    }
+  ],
+  "autonomous_agent": [
+    {
+      "name": "aurora_autonomous_system",
+      "path": "tools\\aurora_autonomous_system.py",
+      "size": 12455,
+      "lines": 351,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraAutonomousSystem"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_blank_page_autofix",
+      "path": "tools\\aurora_blank_page_autofix.py",
+      "size": 11960,
+      "lines": 347,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraBlankPageAutoFixer"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_blank_page_fixer",
+      "path": "tools\\aurora_blank_page_fixer.py",
+      "size": 13538,
+      "lines": 350,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraBlankPageFixer"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_complete_assignment",
+      "path": "tools\\aurora_complete_assignment.py",
+      "size": 22245,
+      "lines": 630,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraAssignment"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_conversation_intelligence",
+      "path": "tools\\aurora_conversation_intelligence.py",
+      "size": 12756,
+      "lines": 303,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "ConversationContext",
+        "AuroraConversationIntelligence"
+      ],
+      "functions": [
+        "create_chango_memory_fix"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_dashboard_tutorial",
+      "path": "tools\\aurora_dashboard_tutorial.py",
+      "size": 8283,
+      "lines": 238,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraDashboardLoader",
+        "MyDashboardLoader"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_debug_chat",
+      "path": "tools\\aurora_debug_chat.py",
+      "size": 13160,
+      "lines": 373,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraChatDebugger"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_debug_toolkit",
+      "path": "tools\\aurora_debug_toolkit.py",
+      "size": 4593,
+      "lines": 144,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraDebugger"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_emergency_debug",
+      "path": "tools\\aurora_emergency_debug.py",
+      "size": 7226,
+      "lines": 202,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraEmergencyDebug"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_find_replace_chango",
+      "path": "tools\\aurora_find_replace_chango.py",
+      "size": 11979,
+      "lines": 326,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraUIReplacer"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_instant_execute",
+      "path": "tools\\aurora_instant_execute.py",
+      "size": 3537,
+      "lines": 103,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraInstantExecutor"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_knowledge_engine",
+      "path": "tools\\aurora_knowledge_engine.py",
+      "size": 6846,
+      "lines": 168,
+      "has_class": true,
+      "has_main": false,
+      "classes": [
+        "AuroraKnowledgeEngine"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_language_grandmaster",
+      "path": "tools\\aurora_language_grandmaster.py",
+      "size": 32669,
+      "lines": 644,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraProgrammingLanguageMastery"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_load_dashboard",
+      "path": "tools\\aurora_load_dashboard.py",
+      "size": 3594,
+      "lines": 117,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraDashboardLoader"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_logger",
+      "path": "tools\\aurora_logger.py",
+      "size": 4734,
+      "lines": 151,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraLogger"
+      ],
+      "functions": [
+        "get_logger",
+        "log_service_start",
+        "log_service_stop",
+        "log_api_request",
+        "log_error",
+        "log_autonomous_action"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_nexus_bridge",
+      "path": "tools\\aurora_nexus_bridge.py",
+      "size": 3369,
+      "lines": 89,
+      "has_class": true,
+      "has_main": true,
+      "classes": [],
+      "functions": [
+        "route_to_enhanced_aurora_core"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_performance_review",
+      "path": "tools\\aurora_performance_review.py",
+      "size": 14449,
+      "lines": 320,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraPerformanceReview"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_redesign_all_ui",
+      "path": "tools\\aurora_redesign_all_ui.py",
+      "size": 8053,
+      "lines": 246,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraUIRedesigner"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_routing_diagnostics",
+      "path": "tools\\aurora_routing_diagnostics.py",
+      "size": 4153,
+      "lines": 122,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraRouterDiagnostics"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_self_reload",
+      "path": "tools\\aurora_self_reload.py",
+      "size": 3745,
+      "lines": 114,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraSelfReload"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_tab_fixer",
+      "path": "tools\\aurora_tab_fixer.py",
+      "size": 6626,
+      "lines": 183,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraTabFixer"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_task_from_user",
+      "path": "tools\\aurora_task_from_user.py",
+      "size": 8651,
+      "lines": 274,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraTaskExecutor"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_task_manager",
+      "path": "tools\\aurora_task_manager.py",
+      "size": 9647,
+      "lines": 265,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraTaskManager"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_transform_all_ui",
+      "path": "tools\\aurora_transform_all_ui.py",
+      "size": 7091,
+      "lines": 197,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraUITransformer"
+      ],
+      "functions": [],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_true_autonomy",
+      "path": "tools\\aurora_true_autonomy.py",
+      "size": 15404,
+      "lines": 455,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraTrueAutonomy",
+        "AuroraDashboardLoader"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_ui_chat_bug_analyzer",
+      "path": "tools\\aurora_ui_chat_bug_analyzer.py",
+      "size": 11116,
+      "lines": 277,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraUIBugAnalyzer"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_ui_chat_bug_fixer",
+      "path": "tools\\aurora_ui_chat_bug_fixer.py",
+      "size": 11386,
+      "lines": 280,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraUIBugFixer"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    },
+    {
+      "name": "aurora_ultimate_grandmaster",
+      "path": "tools\\aurora_ultimate_grandmaster.py",
+      "size": 20832,
+      "lines": 548,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraUltimateGrandmaster"
+      ],
+      "functions": [
+        "main"
+      ],
+      "integration_point": "autonomous_agent",
+      "purpose": "task_execution",
+      "priority": "high"
+    }
+  ],
+  "testing_system": [
+    {
+      "name": "aurora_chat",
+      "path": "tools\\aurora_chat.py",
+      "size": 1518,
+      "lines": 51,
+      "has_class": true,
+      "has_main": false,
+      "classes": [
+        "AuroraChatInterface"
+      ],
+      "functions": [
+        "run_aurora_chat_server"
+      ],
+      "integration_point": "testing_system",
+      "purpose": "automated_testing",
+      "priority": "critical"
+    },
+    {
+      "name": "aurora_meta_analysis",
+      "path": "tools\\aurora_meta_analysis.py",
+      "size": 12948,
+      "lines": 352,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraMetaAnalyzer"
+      ],
+      "functions": [],
+      "integration_point": "testing_system",
+      "purpose": "automated_testing",
+      "priority": "critical"
+    }
+  ],
+  "ui_system": [
+    {
+      "name": "aurora_replace_chango",
+      "path": "tools\\aurora_replace_chango.py",
+      "size": 3751,
+      "lines": 116,
+      "has_class": true,
+      "has_main": true,
+      "classes": [
+        "AuroraReplaceChango"
+      ],
+      "functions": [],
+      "integration_point": "ui_system",
+      "purpose": "user_interface",
+      "priority": "low"
+    }
+  ],
+  "unknown": [
+    {
+      "name": "aurora_universal_expert",
+      "path": "tools\\aurora_universal_expert.py",
+      "size": 0,
+      "lines": 1,
+      "has_class": false,
+      "has_main": false,
+      "classes": [],
+      "functions": [],
+      "integration_point": "unknown",
+      "purpose": "unknown",
+      "priority": "low"
+    }
+  ]
+}

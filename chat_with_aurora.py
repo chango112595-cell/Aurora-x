@@ -11,8 +11,101 @@ from datetime import datetime
 
 from aurora_core import create_aurora_core
 
+try:
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.table import Table
+    from rich.markdown import Markdown
+    RICH_AVAILABLE = True
+except ImportError:
+    RICH_AVAILABLE = False
+    print("⚠️  Rich library not installed. Run: pip install rich")
 
-def detect_user_intent(message):
+
+
+
+def handle_command(command, aurora):
+    """Handle special commands like /help, /capabilities, etc."""
+    cmd = command.lower().strip()
+    
+    if cmd == "/help":
+        return """
+🌟 AURORA TERMINAL CHAT COMMANDS:
+
+/help          - Show this help message
+/capabilities  - List all Aurora's capabilities and integrated modules
+/status        - Show Aurora's current system status and health
+/mode          - Toggle between chat and execution mode
+/clear         - Clear conversation history
+/modules       - Show newly integrated proactive modules
+/quit or /exit - Exit the chat
+
+💡 TIP: Just talk naturally! Aurora detects when you want her to DO something
+        vs just chatting. No need to use commands unless you want specific info.
+"""
+    
+    elif cmd == "/capabilities":
+        caps = aurora.scan_own_capabilities()
+        result = f"""
+🧠 AURORA'S CAPABILITIES:
+
+Core Intelligence:
+  • Foundations: {caps.get('core_intelligence', {}).get('foundations', 0)}
+  • Knowledge Tiers: {caps.get('core_intelligence', {}).get('knowledge_tiers', 0)}
+  • Total Capabilities: {caps.get('core_intelligence', {}).get('total_capabilities', 0)}
+  
+Discovered Modules: {caps.get('module_count', 0)}
+
+Available Features:
+"""
+        for feature in caps.get('available_features', []):
+            result += f"  ✓ {feature}\n"
+        
+        return result
+    
+    elif cmd == "/status":
+        status = aurora.get_system_status()
+        result = f"""
+⚡ AURORA SYSTEM STATUS:
+
+Status: {status.get('status', 'Unknown')}
+Health: {status.get('health', 'Unknown')}
+Autonomous Mode: {status.get('autonomous_mode', False)}
+
+Autonomous Systems:
+"""
+        for system, active in status.get('autonomous_systems_connected', {}).items():
+            icon = "✅" if active else "❌"
+            result += f"  {icon} {system}\n"
+        
+        return result
+    
+    elif cmd == "/modules":
+        if hasattr(aurora, 'integrated_modules'):
+            result = f"""
+🔧 NEWLY INTEGRATED PROACTIVE MODULES:
+
+Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
+
+"""
+            for name, module in aurora.integrated_modules.items():
+                result += f"  ✅ {module.__class__.__name__} - Proactive monitoring and auto-fixing\n"
+            
+            result += "\n💡 These modules enable Aurora to proactively monitor and fix issues!"
+            return result
+        else:
+            return "No integrated modules information available."
+    
+    elif cmd == "/clear":
+        return "CLEAR_HISTORY"
+    
+    elif cmd in ["/quit", "/exit"]:
+        return "EXIT"
+    
+    else:
+        return f"Unknown command: {command}\nType /help to see available commands."
+
+\n\ndef detect_user_intent(message):
     """Detect if user wants chat vs task execution"""
     action_words = [
         "create",
@@ -85,7 +178,7 @@ async def interactive_chat():
     print("🔧 Execution: LIVE code execution • File operations • Terminal commands • Real-time debugging")
     print("🧠 Knowledge: 55 programming languages • 21 technical domains • Full-stack expertise")
     print("🎯 Autonomous: Self-debugging • Multi-agent coordination • Strategic planning • Task execution")
-    print("━" * 80 + "\n")
+        print("🔥 Proactive: 30+ monitoring modules • Auto-fixing • Self-healing • Continuous improvement")\nprint("━" * 80 + "\n")
 
     # Aurora's casual greeting
     print("Aurora: Hey there! 👋 I'm Aurora, and I'm genuinely excited to chat with you!")
@@ -99,7 +192,9 @@ async def interactive_chat():
     print("        ⚡ NEW: I can now EXECUTE tasks in real-time! Ask me to create files,")
     print("        run commands, analyze code - I'll actually DO it, not just talk about it!")
     print("        ")
-    print("        (Pro tip: Type 'status' to see what I'm capable of, or just dive in!)\n")
+    print("        (Pro tip: Type 'status' to see what I'm capable of, or just dive in!)\
+    print("        💡 Type /help anytime to see commands, /capabilities to see my powers!")
+n")
     print("-" * 80 + "\n")
 
     session_id = "enhanced_interactive_" + datetime.now().strftime("%Y%m%d_%H%M%S")
