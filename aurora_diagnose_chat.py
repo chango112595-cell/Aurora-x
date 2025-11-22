@@ -17,7 +17,6 @@ try:
     response = requests.post(
         "http://localhost:5000/api/conversation",
         json={"message": "test", "session_id": "diagnostic"},
-        timeout=5,
         timeout=30,
     )
     if response.status_code == 200:
@@ -33,7 +32,7 @@ except Exception as e:
 print("\n2️⃣ Testing Luminar Nexus /api/chat...")
 try:
     response = requests.post(
-        "http://localhost:5003/api/chat", json={"message": "test", "session_id": "diagnostic"}, timeout=5, timeout=30
+        "http://localhost:5003/api/chat", json={"message": "test", "session_id": "diagnostic"}, timeout=30
     )
     if response.status_code == 200:
         print(f"   ✅ Luminar Nexus responds: {response.status_code}")
@@ -49,7 +48,6 @@ try:
     response = requests.post(
         "http://localhost:5173/api/conversation",
         json={"message": "test", "session_id": "diagnostic"},
-        timeout=5,
         timeout=30,
     )
     if response.status_code == 200:
