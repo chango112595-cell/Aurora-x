@@ -340,7 +340,10 @@ class AuroraKnowledgeTiers:
         self.tier_count = self.knowledge_tier_count  # Alias for compatibility
         self.total_tiers = self.foundation_count + self.knowledge_tier_count  # 79 total
         self.total_capabilities = self.total_tiers  # Alias for compatibility
-        self.capabilities_count = 66  # Distinct capabilities used in hybrid mode
+
+        # Hybrid mode: 79 knowledge tiers + 109 capability modules = 188 total power
+        self.capabilities_count = 109  # Autonomous capability modules
+        self.total_power = self.total_tiers + self.capabilities_count  # 79 + 109 = 188
         self.hybrid_mode = f"{self.total_tiers} tiers + {self.capabilities_count} capabilities"
 
     def _get_ancient_languages(self):
@@ -1198,7 +1201,8 @@ class AuroraOrchestrator:
 
         try:
             # Create tmux session and run command
-            subprocess.run(f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
+            subprocess.run(
+                f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
             self.active_ports[server_name] = port
             return True
         except subprocess.CalledProcessError:
@@ -1211,7 +1215,8 @@ class AuroraOrchestrator:
 
         session = self.servers[server_name]["session"]
         try:
-            subprocess.run(f"tmux kill-session -t {session}", shell=True, check=True)
+            subprocess.run(
+                f"tmux kill-session -t {session}", shell=True, check=True)
             self.active_ports.pop(server_name, None)
             return True
         except subprocess.CalledProcessError:
@@ -1228,7 +1233,8 @@ class AuroraOrchestrator:
                 f"tmux list-sessions | grep {session}", shell=True, capture_output=True, text=True, check=False
             )
             if result.returncode == 0:
-                port = self.active_ports.get(server_name, self.servers[server_name]["preferred_port"])
+                port = self.active_ports.get(
+                    server_name, self.servers[server_name]["preferred_port"])
                 return {
                     "status": "running",
                     "port": port,
@@ -1367,24 +1373,30 @@ class AuroraCoreIntelligence:
         # Check for name/identity questions
         if re.search(r"(do you remember|know my name|who am i|remember me)", msg_lower):
             analysis.update(
-                {"intent": "memory_check", "asks_about_memory": True, "asks_about_name": True, "confidence": 0.95}
+                {"intent": "memory_check", "asks_about_memory": True,
+                    "asks_about_name": True, "confidence": 0.95}
             )
 
         # Check for self-introduction
         if re.search(r"(my name is|i'm |i am |call me)", msg_lower):
-            analysis.update({"intent": "user_introduction", "introduces_self": True, "confidence": 0.95})
+            analysis.update({"intent": "user_introduction",
+                            "introduces_self": True, "confidence": 0.95})
             # Extract name
-            name_match = re.search(r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
+            name_match = re.search(
+                r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
 
         # Check for explanation requests
         if re.search(r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower):
-            analysis.update({"intent": "explanation_request", "asks_to_explain": True, "confidence": 0.9})
+            analysis.update({"intent": "explanation_request",
+                            "asks_to_explain": True, "confidence": 0.9})
 
         # Aurora self-referential detection (more precise)
-        aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
-        capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
+        aurora_keywords = re.search(
+            r"(tell me about you|what are you|who are you)", msg_lower)
+        capability_keywords = re.search(
+            r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
 
         # Complex Aurora analysis requests (architectural, debugging, etc.)
         complex_aurora_analysis = re.search(
@@ -1405,7 +1417,8 @@ class AuroraCoreIntelligence:
         elif aurora_keywords and capability_keywords:
             # Simple questions about Aurora's capabilities
             analysis.update(
-                {"intent": "aurora_self_inquiry", "aurora_specific": True, "self_referential": True, "confidence": 0.95}
+                {"intent": "aurora_self_inquiry", "aurora_specific": True,
+                    "self_referential": True, "confidence": 0.95}
             )
 
         # Self-limitation/critique questions (what Aurora lacks/needs/missing)
@@ -1424,7 +1437,8 @@ class AuroraCoreIntelligence:
         # Enhancement/improvement requests
         if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
             if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
+                analysis.update({"intent": "enhancement_request",
+                                "enhancement_request": True, "confidence": 0.9})
 
         # Technical questions
         if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
@@ -1474,7 +1488,7 @@ class AuroraCoreIntelligence:
         msg_lower = message.lower()
         if any(cmd in msg_lower for cmd in ["self diagnose", "self-diagnose", "diagnose yourself", "run diagnostic"]):
             return self._perform_self_diagnostic(context)
-        
+
         # PRIORITY 2: Technical questions - use full intelligence
         if analysis["technical_question"]:
             return self._technical_intelligence_response(message, context, analysis)
@@ -1482,7 +1496,7 @@ class AuroraCoreIntelligence:
         # PRIORITY 3: Enhancement requests
         if analysis["enhancement_request"]:
             return self._respond_to_enhancement_request(message, context)
-        
+
         # PRIORITY 4: Aurora self-limitation/critique responses
         if analysis.get("asks_about_limitations"):
             return self._respond_about_limitations(message, context)
@@ -1501,11 +1515,11 @@ class AuroraCoreIntelligence:
     def _provide_detailed_explanation(self, message: str, context: dict, analysis: dict) -> str:
         """Provide complete, detailed explanations - directly answer the question"""
         msg_lower = message.lower()
-        
+
         # Extract the actual topic they're asking about
         entities = analysis.get("entities", [])
         topic = entities[0] if entities else "your question"
-        
+
         # Be direct and specific based on what they actually asked
         if "fundamental" in msg_lower or "basic" in msg_lower:
             return (
@@ -1516,7 +1530,7 @@ class AuroraCoreIntelligence:
                 f"To use it effectively: [concrete steps].\n\n"
                 f"What specific aspect of {topic} should I explain in more detail?"
             )
-        
+
         # Default: answer their actual question directly
         return (
             f"Regarding {topic}: [Direct answer to their specific question]\n\n"
@@ -1588,22 +1602,23 @@ Want me to prioritize implementing any of these? I can start with the most impac
         try:
             import subprocess
             import os
-            
+
             user_name = context.get("user_name", "")
             greeting = f"{user_name}, here's" if user_name else "Here's"
-            
+
             # Check running services (5000=frontend, 5001=bridge, 5002=self-learn, 9000=chat)
             services = []
             service_map = {
                 5000: "Frontend",
-                5001: "Bridge", 
+                5001: "Bridge",
                 5002: "Self-Learn",
                 9000: "Chat Server"
             }
             for port, name in service_map.items():
                 try:
                     result = subprocess.run(
-                        ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", f"http://localhost:{port}"],
+                        ["curl", "-s", "-o", "/dev/null", "-w",
+                            "%{http_code}", f"http://localhost:{port}"],
                         capture_output=True,
                         text=True,
                         timeout=2
@@ -1614,9 +1629,10 @@ Want me to prioritize implementing any of these? I can start with the most impac
                         services.append(f"❌ Port {port} ({name})")
                 except:
                     services.append(f"❌ Port {port} ({name})")
-            
-            operational_pct = (sum(1 for s in services if "✅" in s) / len(services)) * 100
-            
+
+            operational_pct = (
+                sum(1 for s in services if "✅" in s) / len(services)) * 100
+
             # Check critical files
             critical_files = [
                 "/workspaces/Aurora-x/aurora_core.py",
@@ -1625,7 +1641,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
                 "/workspaces/Aurora-x/server/aurora-chat.ts"
             ]
             files_ok = sum(1 for f in critical_files if os.path.exists(f))
-            
+
             return f"""{greeting} my complete system diagnostic:
 
 **🔧 SYSTEM STATUS: {operational_pct:.0f}% Operational**
@@ -1659,7 +1675,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
 - Debug and fix issues autonomously
 
 Try asking me a technical question or giving me a coding task to see the full system in action."""
-        
+
         except Exception as e:
             return f"Diagnostic error: {str(e)}\n\nBut I'm still operational and can help you with your questions."
 
@@ -1729,7 +1745,8 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         # Check if this is an architectural analysis request about Aurora herself
         msg_lower = message.lower()
         if analysis["intent"] == "technical_aurora_analysis" or (
-            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
+            re.search(
+                r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
             and re.search(r"aurora", msg_lower)
         ):
             return self._aurora_architectural_analysis(message, context)
@@ -1886,7 +1903,8 @@ manage/guard connections while routing properly to Core intelligence.
                     f"Pick a number or tell me the specific problem - I'll "
                     f"execute the solution immediately."
                 )
-            mentioned = [w for w in msg_lower.split() if w in ["chango", "backend", "api", "server"]][0]
+            mentioned = [w for w in msg_lower.split() if w in [
+                "chango", "backend", "api", "server"]][0]
             return (
                 f"{name_prefix}I see you mentioned {mentioned}. I have "
                 f"complete access to the system. What specifically needs "
@@ -2038,7 +2056,8 @@ manage/guard connections while routing properly to Core intelligence.
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
                 status = "✅" if success else "❌"
-                results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
+                results.append(
+                    f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
             return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
 
@@ -2086,7 +2105,8 @@ All systems under Aurora's autonomous control! 🌟"""
             for name, info in status["orchestration"]["servers_status"].items():
                 status_emoji = "🟢" if info["status"] == "running" else "🔴"
                 port = info.get("port", "N/A")
-                server_lines.append(f"{status_emoji} **{name}**: {info['status']} (port {port})")
+                server_lines.append(
+                    f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
             return f"""🌌 **AURORA SYSTEM STATUS**
 

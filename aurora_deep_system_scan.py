@@ -76,7 +76,7 @@ class AuroraDeepScanner:
         return result
 
     def scan_all_claimed_gaps(self):
-        """Scan for all 79 capabilities Aurora claims are missing"""
+        """Scan for all 109 capabilities Aurora claims are missing"""
         print("🔍 Deep scanning for claimed missing capabilities...\n")
 
         gaps = [

@@ -32,7 +32,7 @@
 
 #### 5. **Enhanced Status Command**
 - Beautiful ASCII art status display
-- Shows all 79 capabilities (13 Foundations + 53 Tiers)
+- Shows all 109 capabilities (13 Foundations + 53 Tiers)
 - Displays Tiers 66-53 specifically (newest capabilities)
 - Shows current conversation mode (Task vs Chat)
 - Displays detected user tone
@@ -90,7 +90,7 @@ python chat_with_aurora.py
 - Intent-aware conversation routing
 - Tone-matched responses with personality
 - Deep context (15 messages + metadata)
-- Rich status display with all 79 capabilities
+- Rich status display with all 109 capabilities
 - Human-like error messages with humor
 - Learns user name and tracks topics
 - Varied farewells based on conversation
@@ -196,7 +196,7 @@ context = {
 
 4. **Test Status Command:**
    - Type: `status`
-   - Verify shows all 79 capabilities
+   - Verify shows all 109 capabilities
 
 5. **Test Context Memory:**
    - Have 5+ message conversation

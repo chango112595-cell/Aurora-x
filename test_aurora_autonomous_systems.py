@@ -37,7 +37,7 @@ class AuroraIntegrationTester:
             print("\n  Test 1.1: Initialize monitor...")
             monitor = AuroraSelfMonitor()
             monitor.initialize()
-            assert monitor.aurora.total_capabilities == 55, "Should have 79 capabilities"
+            assert monitor.aurora.total_capabilities == 55, "Should have 109 capabilities"
             assert monitor.file_count > 0, "Should monitor files"
             print("    ✅ Monitor initialized successfully")
 
@@ -54,7 +54,7 @@ class AuroraIntegrationTester:
             # Test 3: Performance metrics
             print("\n  Test 1.3: Performance metrics...")
             metrics = monitor.get_performance_metrics()
-            assert metrics["aurora_capabilities"]["total"] == 55, "Should track 79 capabilities"
+            assert metrics["aurora_capabilities"]["total"] == 55, "Should track 109 capabilities"
             print(f"    ✅ Metrics collected: {len(metrics['system_health'])} data points")
 
             # Test 4: Dashboard generation

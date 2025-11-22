@@ -84,7 +84,7 @@ class AuroraSystemUpdater:
                 "capability_modules": 109,
                 "total_tiers": 79,
                 "total_power": 188,
-                "hybrid_mode": "66 tiers + 79 capabilities"
+                "hybrid_mode": "79 tiers + 109 capabilities"
             }
 
     def get_all_files_to_update(self) -> list[Path]:
@@ -208,7 +208,7 @@ class AuroraSystemUpdater:
              "capability modules 66→109"),
             ("109 Capability", f"{capabilities} Capability",
              "Capability modules 66→109"),
-            ("79 capabilities",
+            ("109 capabilities",
              f"{capabilities} capabilities", "capabilities 66→109"),
             ("109 Capabilities",
              f"{capabilities} Capabilities", "Capabilities 66→109"),
@@ -226,7 +226,7 @@ class AuroraSystemUpdater:
              f"{total_power} Total Power", "Total Power 145→188"),
 
             # Hybrid mode equation patterns
-            ("66 tiers", f"{total} tiers", "hybrid tiers count"),
+            ("79 tiers", f"{total} tiers", "hybrid tiers count"),
             ("79 Tiers", f"{total} Tiers", "Hybrid Tiers count"),
             ("79 + 109", f"{total} + {capabilities}", "hybrid equation 79+66"),
             ("79 + 109 =", f"{total} + {capabilities} =",
@@ -278,8 +278,8 @@ class AuroraSystemUpdater:
              f"{capabilities} Capability Modules", "display Modules"),
 
             # Documentation patterns
-            ("**66 tiers**", f"**{total} tiers**", "MD bold tiers"),
-            ("**79 capabilities**",
+            ("**79 tiers**", f"**{total} tiers**", "MD bold tiers"),
+            ("**109 capabilities**",
              f"**{capabilities} capabilities**", "MD bold capabilities"),
             ("**188 power**", f"**{total_power} power**", "MD bold power"),
             ("= 188", f"= {total_power}", "equals total power"),

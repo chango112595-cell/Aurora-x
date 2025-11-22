@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-22T07:42:27.468756",
+  "timestamp": "2025-11-22T15:10:13.055836",
   "version": "3.0.0-deep-search",
   "counts": {
     "foundation_count": 13,
@@ -7,59 +7,10 @@
     "capability_modules": 109,
     "total_tiers": 79,
     "total_power": 188,
-    "hybrid_mode": "66 tiers + 79 capabilities"
+    "hybrid_mode": "79 tiers + 109 capabilities"
   },
-  "files_scanned": 4410,
-  "files_updated": 12,
-  "updated_files": [
-    {
-      "file": "ask_aurora_skills_vs_capabilities.py",
-      "replacements": 2
-    },
-    {
-      "file": "aurora_automatic_system_update.py",
-      "replacements": 51
-    },
-    {
-      "file": "AURORA_COMPLETE_ARCHITECTURE_2025-11-16.md",
-      "replacements": 3
-    },
-    {
-      "file": "aurora_core_templates_backup.py",
-      "replacements": 1
-    },
-    {
-      "file": "aurora_enhance_system_updater.py",
-      "replacements": 51
-    },
-    {
-      "file": "AURORA_SELF_UPDATE_COMPLETE.md",
-      "replacements": 2
-    },
-    {
-      "file": "AURORA_TASK_FOUNDATIONS_INTEGRATED.md",
-      "replacements": 1
-    },
-    {
-      "file": "aurora_verify_core_integration.py",
-      "replacements": 1
-    },
-    {
-      "file": "chat_with_aurora.py",
-      "replacements": 2
-    },
-    {
-      "file": "test_aurora_full_system.py",
-      "replacements": 2
-    },
-    {
-      "file": "TIER_53_DOCKER_MASTERY.md",
-      "replacements": 1
-    },
-    {
-      "file": "backups\\aurora_full_update_20251122_060737\\aurora_core.py",
-      "replacements": 1
-    }
-  ],
+  "files_scanned": 4413,
+  "files_updated": 0,
+  "updated_files": [],
   "errors": []
 }

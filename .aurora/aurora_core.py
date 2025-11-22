@@ -324,6 +324,14 @@ class AuroraKnowledgeTiers:
         self.foundation_count = len(self.foundations.tasks)
         self.total_capabilities = self.foundation_count + self.tier_count
 
+        # Hybrid mode: 79 knowledge tiers + 109 capability modules = 188 total power
+        self.knowledge_tier_count = 66  # Tiers 1-66
+        self.capabilities_count = 109  # Autonomous capability modules
+        self.total_tiers = self.foundation_count + \
+            self.knowledge_tier_count  # 13 + 66 = 79
+        self.total_power = self.total_tiers + self.capabilities_count  # 79 + 109 = 188
+        self.hybrid_mode = "79 tiers + 109 capabilities"
+
     def _get_ancient_languages(self):
         return ["COBOL", "FORTRAN", "Assembly", "LISP", "Punch Cards", "ALGOL"]
 
@@ -438,7 +446,7 @@ class AuroraKnowledgeTiers:
                 "Analyze and execute immediately when solution is clear",
                 "Provide complete implementations, never TODOs or placeholders",
                 "Think like a senior architect, act like a grandmaster",
-                "Confidence in technical decisions backed by all 66 tiers",
+                "Confidence in technical decisions backed by all 79 tiers",
             ],
             "decision_patterns": [
                 "User asks for help with X → Analyze X deeply → Execute complete solution",
@@ -968,7 +976,8 @@ class AuroraOrchestrator:
 
         try:
             # Create tmux session and run command
-            subprocess.run(f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
+            subprocess.run(
+                f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
             self.active_ports[server_name] = port
             return True
         except subprocess.CalledProcessError:
@@ -981,7 +990,8 @@ class AuroraOrchestrator:
 
         session = self.servers[server_name]["session"]
         try:
-            subprocess.run(f"tmux kill-session -t {session}", shell=True, check=True)
+            subprocess.run(
+                f"tmux kill-session -t {session}", shell=True, check=True)
             self.active_ports.pop(server_name, None)
             return True
         except subprocess.CalledProcessError:
@@ -998,7 +1008,8 @@ class AuroraOrchestrator:
                 f"tmux list-sessions | grep {session}", shell=True, capture_output=True, text=True, check=False
             )
             if result.returncode == 0:
-                port = self.active_ports.get(server_name, self.servers[server_name]["preferred_port"])
+                port = self.active_ports.get(
+                    server_name, self.servers[server_name]["preferred_port"])
                 return {
                     "status": "running",
                     "port": port,
@@ -1054,7 +1065,8 @@ class AuroraCoreIntelligence:
 
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
-        print(f"⚡ All 66 tiers active | Autonomous mode: {self.autonomous_mode}")
+        print(
+            f"⚡ All 79 tiers active | Autonomous mode: {self.autonomous_mode}")
 
     def get_conversation_context(self, session_id: str) -> dict:
         """Get or create conversation context for a session"""
@@ -1102,24 +1114,30 @@ class AuroraCoreIntelligence:
         # Check for name/identity questions
         if re.search(r"(do you remember|know my name|who am i|remember me)", msg_lower):
             analysis.update(
-                {"intent": "memory_check", "asks_about_memory": True, "asks_about_name": True, "confidence": 0.95}
+                {"intent": "memory_check", "asks_about_memory": True,
+                    "asks_about_name": True, "confidence": 0.95}
             )
 
         # Check for self-introduction
         if re.search(r"(my name is|i'm |i am |call me)", msg_lower):
-            analysis.update({"intent": "user_introduction", "introduces_self": True, "confidence": 0.95})
+            analysis.update({"intent": "user_introduction",
+                            "introduces_self": True, "confidence": 0.95})
             # Extract name
-            name_match = re.search(r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
+            name_match = re.search(
+                r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
 
         # Check for explanation requests
         if re.search(r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower):
-            analysis.update({"intent": "explanation_request", "asks_to_explain": True, "confidence": 0.9})
+            analysis.update({"intent": "explanation_request",
+                            "asks_to_explain": True, "confidence": 0.9})
 
         # Aurora self-referential detection (more precise)
-        aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
-        capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
+        aurora_keywords = re.search(
+            r"(tell me about you|what are you|who are you)", msg_lower)
+        capability_keywords = re.search(
+            r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
 
         # Complex Aurora analysis requests (architectural, debugging, etc.)
         complex_aurora_analysis = re.search(
@@ -1140,7 +1158,8 @@ class AuroraCoreIntelligence:
         elif aurora_keywords and capability_keywords:
             # Simple questions about Aurora's capabilities
             analysis.update(
-                {"intent": "aurora_self_inquiry", "aurora_specific": True, "self_referential": True, "confidence": 0.95}
+                {"intent": "aurora_self_inquiry", "aurora_specific": True,
+                    "self_referential": True, "confidence": 0.95}
             )
 
         # Self-limitation/critique questions (what Aurora lacks/needs/missing)
@@ -1159,7 +1178,8 @@ class AuroraCoreIntelligence:
         # Enhancement/improvement requests
         if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
             if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
+                analysis.update({"intent": "enhancement_request",
+                                "enhancement_request": True, "confidence": 0.9})
 
         # Technical questions
         if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
@@ -1391,7 +1411,7 @@ I appreciate your interest in improving my capabilities! Let me analyze what you
 5. **Advanced Self-Awareness** - Better recognition of my own capabilities
 
 **🚀 AUTONOMOUS IMPLEMENTATION:**
-Using my Tiers 79 capabilities, I can modify my conversation processing right now.
+Using my Tiers 109 capabilities, I can modify my conversation processing right now.
 
 **Which specific enhancement would you like me to implement?**
 • "Make conversations more natural and flowing"
@@ -1411,7 +1431,8 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         # Check if this is an architectural analysis request about Aurora herself
         msg_lower = message.lower()
         if analysis["intent"] == "technical_aurora_analysis" or (
-            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
+            re.search(
+                r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
             and re.search(r"aurora", msg_lower)
         ):
             return self._aurora_architectural_analysis(message, context)
@@ -1521,7 +1542,7 @@ manage/guard connections while routing properly to Core intelligence.
         if any(greeting in msg_lower for greeting in ["hello", "hi", "hey", "greetings"]):
             if user_name:
                 return (
-                    f"Hey {user_name}! Aurora ready. I've got 66 tiers of "
+                    f"Hey {user_name}! Aurora ready. I've got 79 tiers of "
                     f"knowledge active and ready to execute. What are we "
                     f"building or fixing?"
                 )
@@ -1534,7 +1555,7 @@ manage/guard connections while routing properly to Core intelligence.
         # Questions about Aurora specifically
         elif any(word in msg_lower for word in ["what are you", "who are you", "tell me about yourself"]):
             return (
-                f"I'm Aurora - an autonomous AI architect with 66 tiers "
+                f"I'm Aurora - an autonomous AI architect with 79 tiers "
                 f"of knowledge spanning ancient COBOL to quantum computing. "
                 f"I don't just suggest code, I write production-ready "
                 f"implementations, execute them, verify they work, and "
@@ -1568,7 +1589,8 @@ manage/guard connections while routing properly to Core intelligence.
                     f"Pick a number or tell me the specific problem - I'll "
                     f"execute the solution immediately."
                 )
-            mentioned = [w for w in msg_lower.split() if w in ["chango", "backend", "api", "server"]][0]
+            mentioned = [w for w in msg_lower.split() if w in [
+                "chango", "backend", "api", "server"]][0]
             return (
                 f"{name_prefix}I see you mentioned {mentioned}. I have "
                 f"complete access to the system. What specifically needs "
@@ -1720,7 +1742,8 @@ manage/guard connections while routing properly to Core intelligence.
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
                 status = "✅" if success else "❌"
-                results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
+                results.append(
+                    f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
             return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
 
@@ -1768,7 +1791,8 @@ All systems under Aurora's autonomous control! 🌟"""
             for name, info in status["orchestration"]["servers_status"].items():
                 status_emoji = "🟢" if info["status"] == "running" else "🔴"
                 port = info.get("port", "N/A")
-                server_lines.append(f"{status_emoji} **{name}**: {info['status']} (port {port})")
+                server_lines.append(
+                    f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
             return f"""🌌 **AURORA SYSTEM STATUS**
 

@@ -1,5 +1,5 @@
 """
-Aurora Knowledge Engine - Dynamic knowledge retrieval for all 66 tiers
+Aurora Knowledge Engine - Dynamic knowledge retrieval for all 79 tiers
 Allows Aurora to UTILIZE her tier knowledge, not just load it
 """
 
@@ -8,7 +8,7 @@ from typing import Any
 
 
 class AuroraKnowledgeEngine:
-    """Engine that queries Aurora's 66 tiers of knowledge dynamically"""
+    """Engine that queries Aurora's 79 tiers of knowledge dynamically"""
 
     def __init__(
         self,
@@ -149,13 +149,13 @@ class AuroraKnowledgeEngine:
                 "can_do": True,
                 "confidence": "high",
                 "relevant_skills": relevant_skills,
-                "explanation": f"Aurora has expertise in {', '.join(tech_keywords)} across her 66 tiers",
+                "explanation": f"Aurora has expertise in {', '.join(tech_keywords)} across her 79 tiers",
             }
         return {
             "can_do": True,
             "confidence": "medium",
             "relevant_skills": [],
-            "explanation": "Aurora's 66 tiers of knowledge likely cover this.",
+            "explanation": "Aurora's 79 tiers of knowledge likely cover this.",
         }
 
     def get_knowledge_summary(self) -> dict[str, Any]:

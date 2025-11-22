@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora Complete Backend Update
-Updates all backend TypeScript files to reflect 66 tiers and 79 total capabilities
+Updates all backend TypeScript files to reflect 79 tiers and 79 total capabilities
 """
 
 from pathlib import Path
@@ -40,14 +40,14 @@ def main():
         "server/routes.ts": [
             (
                 "27 mastery tiers spanning ancient computing (1940s) to future tech",
-                "79 capabilities (13 foundation tasks + 66 knowledge tiers) spanning ancient to future tech",
+                "109 capabilities (13 foundation tasks + 66 knowledge tiers) spanning ancient to future tech",
             ),
             (
                 "**My knowledge (27 mastery tiers):",
-                "**My knowledge (66 knowledge tiers + 13 foundation tasks = 79 capabilities):",
+                "**My knowledge (66 knowledge tiers + 13 foundation tasks = 109 capabilities):",
             ),
             ("🧠 27 mastery tiers: LOADED", "🧠 66 knowledge tiers: LOADED (79 total capabilities)"),
-            ("🧠 All 66 tiers active", "🧠 All 66 tiers active (79 total capabilities)"),
+            ("🧠 All 79 tiers active", "🧠 All 79 tiers active (79 total capabilities)"),
         ],
     }
 

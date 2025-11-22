@@ -34,7 +34,7 @@ def main():
     - Cons: May be overly complex for simple terminal interaction
     
     Option B: Be integrated directly into Aurora Core?
-    - Pros: Direct access to all 79 capabilities, autonomous systems
+    - Pros: Direct access to all 109 capabilities, autonomous systems
     - Cons: May bypass some integration layers
     
     Option C: Stay standalone but enhance connections?

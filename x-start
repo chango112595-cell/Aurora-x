@@ -101,7 +101,11 @@ print("   ⏳ Deep sync running in background (may take 1-2 minutes)")
 
 # Wait for services to initialize
 print("\n⏳ Waiting for services to fully initialize...")
-time.sleep(10)
+try:
+    time.sleep(10)
+except KeyboardInterrupt:
+    print("\n⚠️  Startup interrupted - services may still be starting in background")
+    pass
 
 # Check service status
 
@@ -114,7 +118,11 @@ def check_port(port_num):
         result = sock.connect_ex(('127.0.0.1', port_num))
         sock.close()
         return result == 0
-    except socket.error:
+    except (socket.error, KeyboardInterrupt, Exception):
+        try:
+            sock.close()
+        except:
+            pass
         return False
 
 
@@ -132,12 +140,16 @@ services = [
 # Note: Autonomous Monitor runs in background (no port check needed)
 
 running_count = 0
-for name, port in services:
-    is_running = check_port(port)
-    status = "✅ RUNNING" if is_running else "⚠️  starting..."
-    print(f"   {name:25} Port {port:5} {status}")
-    if is_running:
-        running_count += 1
+try:
+    for name, port in services:
+        is_running = check_port(port)
+        status = "✅ RUNNING" if is_running else "⚠️  starting..."
+        print(f"   {name:25} Port {port:5} {status}")
+        if is_running:
+            running_count += 1
+except KeyboardInterrupt:
+    print("\n⚠️  Service check interrupted")
+    pass
 
 print("=" * 60)
 print(f"\n{'✅' if running_count >= 3 else '⚠️'} {running_count}/{len(services)} services running")
