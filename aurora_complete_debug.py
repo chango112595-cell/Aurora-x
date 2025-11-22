@@ -64,11 +64,13 @@ def check_tsx_components():
         if os.path.exists(comp):
             with open(comp, encoding="utf-8") as f:
                 content = f.read()
-                # Basic syntax checks
-                has_import = "import" in content or "export" in content
-                has_react = "React" in content or "react" in content.lower()
+                # Basic syntax checks - modern React/TSX
+                has_import = "import" in content
+                has_export = "export" in content or "export default" in content
+                has_tsx_content = (
+                    "<" in content and ">" in content) or "function" in content or "const" in content
 
-                if has_import and has_react:
+                if has_import and (has_export or has_tsx_content):
                     print(f"   ✅ {comp}")
                 else:
                     print(f"   ⚠️  {comp} - might have issues")
@@ -235,9 +237,12 @@ def fix_remaining_issues():
             content = content.replace(
                 "import { Link, useRoute } from 'wouter';", "import { Link, useLocation } from 'wouter';"
             )
-            content = content.replace('const [match] = useRoute("/:path*");', "const [location] = useLocation();")
-            content = content.replace("match === item.path", "location === item.path")
-            content = content.replace("match?.startsWith(item.path)", "location.startsWith(item.path)")
+            content = content.replace(
+                'const [match] = useRoute("/:path*");', "const [location] = useLocation();")
+            content = content.replace(
+                "match === item.path", "location === item.path")
+            content = content.replace(
+                "match?.startsWith(item.path)", "location.startsWith(item.path)")
 
             with open(layout_file, "w", encoding="utf-8") as f:
                 f.write(content)
