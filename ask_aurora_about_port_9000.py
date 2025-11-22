@@ -3,17 +3,17 @@
 Ask Aurora: Do we need the chat server on port 9000?
 """
 
+import asyncio
+from aurora_core import AuroraCoreIntelligence
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from aurora_core import AuroraCoreIntelligence
-import asyncio
 
 async def main():
     print("🌟 Asking Aurora About Port 9000 Chat Server\n")
     aurora = AuroraCoreIntelligence()
-    
+
     question = """
     Aurora, analyze port 9000 and the aurora_chat_server.py:
     
@@ -34,30 +34,33 @@ async def main():
     
     Give me your architectural analysis: Should port 9000 be running, or is it obsolete?
     """
-    
+
     print("❓ Question to Aurora:")
     print("="*80)
     print(question)
     print("="*80 + "\n")
-    
-    # Use process_conversation 
+
+    # Use process_conversation
     response = await aurora.process_conversation(question, "port_9000_analysis")
-    
+
     print("🌟 Aurora's Analysis:")
     print("="*80)
     print(response)
     print("="*80)
-    
+
     # Also check if the file exists and what it does
     print("\n📋 Quick File Check:")
     try:
         with open("aurora_chat_server.py", "r") as f:
             content = f.read()
             print(f"✓ aurora_chat_server.py exists ({len(content)} bytes)")
-            print(f"✓ Imports: {'luminar_nexus_v2' if 'luminar_nexus_v2' in content else 'aurora_core only'}")
-            print(f"✓ Default port: {9000 if '9000' in content else 'variable'}")
+            print(
+                f"✓ Imports: {'luminar_nexus_v2' if 'luminar_nexus_v2' in content else 'aurora_core only'}")
+            print(
+                f"✓ Default port: {9000 if '9000' in content else 'variable'}")
             print(f"✓ Flask server: {'Yes' if 'Flask' in content else 'No'}")
-            print(f"✓ API endpoints: {content.count('@app.route')} routes defined")
+            print(
+                f"✓ API endpoints: {content.count('@app.route')} routes defined")
     except FileNotFoundError:
         print("✗ aurora_chat_server.py not found")
 
