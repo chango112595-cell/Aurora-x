@@ -69,13 +69,23 @@ class AuroraSystemUpdater:
             aurora = AuroraKnowledgeTiers()
             return {
                 "foundation_count": aurora.foundation_count,
-                "tier_count": aurora.knowledge_tier_count,  # Fixed: use knowledge_tier_count
-                "total_capabilities": aurora.capabilities_count,  # Fixed: use capabilities_count
+                "tier_count": aurora.knowledge_tier_count,
+                "capability_modules": aurora.capabilities_count,
+                "total_tiers": aurora.total_tiers,
+                "total_power": aurora.total_power,
+                "hybrid_mode": aurora.hybrid_mode,
             }
         except Exception as e:
             self.errors.append(f"Failed to load aurora_core: {e}")
-            # Updated to 56
-            return {"foundation_count": 13, "tier_count": 66, "total_capabilities": 79}
+            # Fallback values
+            return {
+                "foundation_count": 13,
+                "tier_count": 66,
+                "capability_modules": 109,
+                "total_tiers": 79,
+                "total_power": 188,
+                "hybrid_mode": "79 tiers + 109 capabilities"
+            }
 
     def get_all_files_to_update(self) -> list[Path]:
         """Recursively get all text files in the project (DEEP SEARCH)"""
