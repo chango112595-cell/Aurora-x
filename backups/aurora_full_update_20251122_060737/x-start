@@ -87,8 +87,7 @@ time.sleep(1)
 print("🧠 Activating Aurora Core Intelligence...")
 if os.path.exists("aurora_core.py"):
     # This loads all integrated autonomous modules
-    core_activation_script = os.path.join(
-        script_dir, "activate_aurora_core.py")
+    core_activation_script = os.path.join(script_dir, "activate_aurora_core.py")
     if os.path.exists(core_activation_script):
         start_process([PYTHON_CMD, core_activation_script])
 time.sleep(1)

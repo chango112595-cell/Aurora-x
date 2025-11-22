@@ -1,0 +1,24 @@
+# Aurora-X project dependencies
+# These dependencies are also specified in pyproject.toml
+fastapi>=0.118.2
+flask>=3.0.3
+flask-cors>=5.0.0
+httpx>=0.28.1
+pytest>=8.3.5
+requests>=2.32.4
+uvicorn[standard]>=0.33.0
+bandit
+lxml
+pytest-cov
+ruff
+semgrep
+email_validator
+flask
+flask-sqlalchemy
+gunicorn
+psycopg2-binary
+psutil
+flask
+flask-cors
+numpy
+psutil
