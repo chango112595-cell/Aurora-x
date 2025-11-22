@@ -1,12 +1,12 @@
 {
-  "timestamp": "2025-11-22T03:43:31.958682",
+  "timestamp": "2025-11-22T07:16:55.549150",
   "version": "3.0.0-deep-search",
   "counts": {
     "foundation_count": 13,
     "tier_count": 66,
     "total_capabilities": 66
   },
-  "files_scanned": 4096,
+  "files_scanned": 4407,
   "files_updated": 0,
   "updated_files": [],
   "errors": []

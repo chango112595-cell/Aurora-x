@@ -91,7 +91,6 @@ except ImportError:
     AURORA_META_ANALYSIS_AVAILABLE = False
 
 
-
 # Add tools directory to path for autonomous modules
 sys.path.insert(0, str(Path(__file__).parent / "tools"))
 sys.path.insert(0, str(Path(__file__).parent))
@@ -435,8 +434,10 @@ class AuroraKnowledgeTiers:
         self.tier_count = self.knowledge_tier_count  # Alias for compatibility
         self.total_tiers = self.foundation_count + self.knowledge_tier_count  # 79 total
         self.total_capabilities = self.total_tiers  # Alias for compatibility
-        self.capabilities_count = 66  # Distinct capabilities used in hybrid mode
+        self.capabilities_count = 109  # Distinct capability modules used in hybrid mode
         self.hybrid_mode = f"{self.total_tiers} tiers + {self.capabilities_count} capabilities"
+        self.total_power = self.total_tiers + \
+            self.capabilities_count  # 188 total combined power
 
     def _get_ancient_languages(self):
         return ["COBOL", "FORTRAN", "Assembly", "LISP", "Punch Cards", "ALGOL"]
@@ -1412,8 +1413,9 @@ class AuroraCoreIntelligence:
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
         print(
-            f"⚡ {self.knowledge_tiers.total_tiers} capabilities active ({self.knowledge_tiers.foundation_count} foundations + {self.knowledge_tiers.tier_count} tiers) | Autonomous mode: {self.autonomous_mode}"
+            f"⚡ {self.knowledge_tiers.total_power} total power ({self.knowledge_tiers.total_tiers} tiers + {self.knowledge_tiers.capabilities_count} capability modules) | Autonomous mode: {self.autonomous_mode}"
         )
+        print(f"🎯 Hybrid Mode: {self.knowledge_tiers.hybrid_mode}")
         if self.persistent_memory.get("user_name"):
             print(f"👋 Welcome back, {self.persistent_memory['user_name']}!")
 
@@ -1423,7 +1425,8 @@ class AuroraCoreIntelligence:
 
         if AURORA_AUTONOMOUS_FIXER_AVAILABLE:
             try:
-                self.integrated_modules['autonomous_fixer'] = AuroraAutonomousFixer()
+                self.integrated_modules['autonomous_fixer'] = AuroraAutonomousFixer(
+                )
                 print(f'✅ Integrated: AuroraAutonomousFixer')
             except Exception as e:
                 print(f'⚠️  AuroraAutonomousFixer init failed: {e}')
@@ -1451,12 +1454,11 @@ class AuroraCoreIntelligence:
 
         if AURORA_DEBUG_GRANDMASTER_AVAILABLE:
             try:
-                self.integrated_modules['debug_grandmaster'] = AuroraDebugGrandmaster()
+                self.integrated_modules['debug_grandmaster'] = AuroraDebugGrandmaster(
+                )
                 print(f'✅ Integrated: AuroraDebugGrandmaster')
             except Exception as e:
                 print(f'⚠️  AuroraDebugGrandmaster init failed: {e}')
-
-
 
     def _load_persistent_memory(self) -> dict:
         """Load persistent memory from disk"""
