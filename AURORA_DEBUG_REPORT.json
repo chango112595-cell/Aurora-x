@@ -1,16 +1,10 @@
 {
-  "timestamp": "2025-11-21T06:06:17.647929",
-  "total_files_scanned": 2062,
-  "issues_found": 32,
-  "fixes_applied": 4,
+  "timestamp": "2025-11-22T07:48:34.880277",
+  "total_files_scanned": 2108,
+  "issues_found": 28,
+  "fixes_applied": 0,
   "errors_by_type": {
-    "SyntaxError": 28,
-    "DockerfileError": 4
+    "SyntaxError": 28
   },
-  "files_fixed": [
-    "C:\\Users\\negry\\Aurora-x\\Dockerfile.chat",
-    "C:\\Users\\negry\\Aurora-x\\Dockerfile.frontend",
-    "C:\\Users\\negry\\Aurora-x\\Dockerfile.self-learn",
-    "C:\\Users\\negry\\Aurora-x\\aurora_x\\bridge\\Dockerfile"
-  ]
+  "files_fixed": []
 }

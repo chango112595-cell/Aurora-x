@@ -57,7 +57,7 @@ class AuroraAutonomousDebugger:
             level, "ℹ️"
         )
 
-        print(f"[{timestamp}] {prefix} {message}")
+        print(f"[{_timestamp}] {prefix} {message}")
 
     def scan_python_files(self) -> list[Path]:
         """Scan all Python files for syntax and import errors"""
@@ -114,27 +114,40 @@ class AuroraAutonomousDebugger:
         issues = []
 
         try:
+            # Try to import pylint to verify it's available
+            import pylint
+            
             result = subprocess.run(
-                ["pylint", str(file_path), "--output-format=json"], capture_output=True, text=True, timeout=30
+                ["python", "-m", "pylint", str(file_path), "--output-format=json"], 
+                capture_output=True, 
+                text=True, 
+                timeout=30
             )
 
             if result.stdout:
-                pylint_issues = json.loads(result.stdout)
-                for issue in pylint_issues:
-                    if issue["type"] in ["error", "fatal"]:
-                        issues.append(
-                            {
-                                "file": str(file_path),
-                                "line": issue.get("line", 0),
-                                "type": f"pylint-{issue['type']}",
-                                "message": issue["message"],
-                                "symbol": issue.get("symbol", ""),
-                            }
-                        )
+                try:
+                    pylint_issues = json.loads(result.stdout)
+                    for issue in pylint_issues:
+                        if issue["type"] in ["error", "fatal"]:
+                            issues.append(
+                                {
+                                    "file": str(file_path),
+                                    "line": issue.get("line", 0),
+                                    "type": f"pylint-{issue['type']}",
+                                    "message": issue["message"],
+                                    "symbol": issue.get("symbol", ""),
+                                }
+                            )
+                except json.JSONDecodeError:
+                    # If JSON parsing fails, just skip this file
+                    pass
+        except ImportError:
+            # Pylint not available, skip silently (only log once)
+            if not hasattr(self, '_pylint_unavailable_logged'):
+                self.log("Pylint not available in Python environment", "WARNING")
+                self._pylint_unavailable_logged = True
         except subprocess.TimeoutExpired:
             self.log(f"Pylint timeout on {file_path.name}", "WARNING")
-        except FileNotFoundError:
-            self.log("Pylint not installed, skipping pylint checks", "WARNING")
         except Exception as e:
             self.log(f"Pylint error on {file_path.name}: {e}", "WARNING")
 
