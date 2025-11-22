@@ -102,10 +102,12 @@ class AuroraAutonomousDebugger:
 
         except SyntaxError as e:
             issues.append(
-                {"file": str(file_path), "line": e.lineno, "type": "SyntaxError", "message": str(e.msg), "text": e.text}
+                {"file": str(file_path), "line": e.lineno, "type": "SyntaxError", "message": str(
+                    e.msg), "text": e.text}
             )
         except Exception as e:
-            issues.append({"file": str(file_path), "type": "CompileError", "message": str(e)})
+            issues.append(
+                {"file": str(file_path), "type": "CompileError", "message": str(e)})
 
         return issues
 
@@ -116,11 +118,12 @@ class AuroraAutonomousDebugger:
         try:
             # Try to import pylint to verify it's available
             import pylint
-            
+
             result = subprocess.run(
-                ["python", "-m", "pylint", str(file_path), "--output-format=json"], 
-                capture_output=True, 
-                text=True, 
+                ["python", "-m", "pylint",
+                    str(file_path), "--output-format=json"],
+                capture_output=True,
+                text=True,
                 timeout=30
             )
 
@@ -172,7 +175,8 @@ class AuroraAutonomousDebugger:
                 # Parse TypeScript errors
                 for line in result.stdout.split("\n"):
                     if line.strip():
-                        match = re.match(r"(.+?)\((\d+),(\d+)\): error (.+?):", line)
+                        match = re.match(
+                            r"(.+?)\((\d+),(\d+)\): error (.+?):", line)
                         if match:
                             issues.append(
                                 {
@@ -222,7 +226,8 @@ class AuroraAutonomousDebugger:
                             )
 
                 except Exception as e:
-                    self.log(f"Error checking {dockerfile.name}: {e}", "WARNING")
+                    self.log(
+                        f"Error checking {dockerfile.name}: {e}", "WARNING")
 
         return issues
 
@@ -234,7 +239,8 @@ class AuroraAutonomousDebugger:
                 content = f.read()
 
             # Fix the casing
-            fixed_content = re.sub(r"FROM\s+(.+?)\s+as\s+", r"FROM \1 AS ", content)
+            fixed_content = re.sub(
+                r"FROM\s+(.+?)\s+as\s+", r"FROM \1 AS ", content)
 
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(fixed_content)
@@ -261,7 +267,8 @@ class AuroraAutonomousDebugger:
             for i, line in enumerate(lines):
                 # Fix relative imports
                 if "from test import" in line and "tests/" in str(file_path):
-                    lines[i] = line.replace("from test import", "from ..test import")
+                    lines[i] = line.replace(
+                        "from test import", "from ..test import")
                     fixed = True
 
                 # Add missing Optional import
@@ -325,13 +332,15 @@ class AuroraAutonomousDebugger:
         self.scan_report["issues_found"] = len(self.issues_found)
 
         self.log("=" * 80, "INFO")
-        self.log(f"SCAN COMPLETE: Found {len(self.issues_found)} issues", "INFO")
+        self.log(
+            f"SCAN COMPLETE: Found {len(self.issues_found)} issues", "INFO")
         self.log("=" * 80, "INFO")
 
         # Categorize issues
         for issue in self.issues_found:
             issue_type = issue.get("type", "Unknown")
-            self.scan_report["errors_by_type"][issue_type] = self.scan_report["errors_by_type"].get(issue_type, 0) + 1
+            self.scan_report["errors_by_type"][issue_type] = self.scan_report["errors_by_type"].get(
+                issue_type, 0) + 1
 
         # Display issues by type
         for issue_type, count in self.scan_report["errors_by_type"].items():
@@ -379,7 +388,8 @@ class AuroraAutonomousDebugger:
                 print(f"  • {file}")
 
         if self.scan_report["issues_found"] > self.scan_report["fixes_applied"]:
-            remaining = self.scan_report["issues_found"] - self.scan_report["fixes_applied"]
+            remaining = self.scan_report["issues_found"] - \
+                self.scan_report["fixes_applied"]
             print(f"\n⚠️ {remaining} issues require manual review")
             print("Check aurora_debug_report.json for details")
 
