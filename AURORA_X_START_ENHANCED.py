@@ -32,7 +32,7 @@ Aurora has enhanced the x-start script to activate ALL systems:
 📊 CURRENT SYSTEM STATUS:
 
 🎯 HYBRID MODE ACTIVE:
-  • 79 Knowledge Tiers (13 foundations + 66 tiers)
+  • 66 Knowledge Tiers (13 foundations + 66 tiers)
   • 109 Capability Modules (autonomous tools)
   • = 188 TOTAL POWER
 

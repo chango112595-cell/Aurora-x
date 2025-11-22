@@ -158,7 +158,7 @@
 - Self-improvement cycles
 - Zero-intervention mode
 
-### Tier 41: Strategist
+### Tier 66: Strategist
 **Includes:**
 - Strategic planning (95% context)
 - Long-term roadmap execution
@@ -190,7 +190,7 @@
 
 ### Autonomous UI Generation
 - `aurora_ui_redesign.py` - Auto-redesign interfaces
-- `aurora_ui_generator.py` (Tier 49) - Generate UIs autonomously
+- `aurora_ui_generator.py` (Tiers 66) - Generate UIs autonomously
 - `AuroraFuturisticDashboard.tsx` - Self-created quantum interface
 
 **Recent Autonomous UI Updates:**

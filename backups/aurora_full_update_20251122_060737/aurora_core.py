@@ -435,7 +435,7 @@ class AuroraKnowledgeTiers:
         self.tier_count = self.knowledge_tier_count  # Alias for compatibility
         self.total_tiers = self.foundation_count + self.knowledge_tier_count  # 79 total
         self.total_capabilities = self.total_tiers  # Alias for compatibility
-        self.capabilities_count = 66  # Distinct capabilities used in hybrid mode
+        self.capabilities_count = 109  # Distinct capabilities used in hybrid mode
         self.hybrid_mode = f"{self.total_tiers} tiers + {self.capabilities_count} capabilities"
 
     def _get_ancient_languages(self):

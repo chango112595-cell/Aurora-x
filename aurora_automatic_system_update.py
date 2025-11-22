@@ -84,7 +84,7 @@ class AuroraSystemUpdater:
                 "capability_modules": 109,
                 "total_tiers": 79,
                 "total_power": 188,
-                "hybrid_mode": "79 tiers + 109 capabilities"
+                "hybrid_mode": "66 tiers + 79 capabilities"
             }
 
     def get_all_files_to_update(self) -> list[Path]:
@@ -109,8 +109,11 @@ class AuroraSystemUpdater:
     def generate_replacement_patterns(self, counts: dict[str, int]) -> list[tuple[str, str, str]]:
         """Generate all possible replacement patterns (old_value, new_value, description)"""
         tier_count = counts["tier_count"]
-        total = counts["total_capabilities"]
+        # Use total_tiers (79) not total_power (188)
+        total = counts["total_tiers"]
         foundation = counts["foundation_count"]
+        capabilities = counts["capability_modules"]  # 109 capability modules
+        total_power = counts["total_power"]  # 188 total power
 
         # All possible old values that need updating
         old_tier_counts = [27, 32, 41, 46]
@@ -123,14 +126,22 @@ class AuroraSystemUpdater:
         for old_tier in old_tier_counts:
             patterns.extend(
                 [
-                    (f"{old_tier} tier", f"{tier_count} tier", f"tier count {old_tier}→{tier_count}"),
-                    (f"{old_tier} Tier", f"{tier_count} Tier", f"Tier count {old_tier}→{tier_count}"),
-                    (f"{old_tier} TIER", f"{tier_count} TIER", f"TIER count {old_tier}→{tier_count}"),
-                    (f"{old_tier} knowledge tier", f"{tier_count} knowledge tier", "knowledge tiers"),
-                    (f"{old_tier} Knowledge Tier", f"{tier_count} Knowledge Tier", "Knowledge Tiers"),
-                    (f"all {old_tier} mastery tier", f"all {tier_count} knowledge tier", "mastery→knowledge tiers"),
-                    (f"TIER {old_tier}", f"TIER {tier_count}", "TIER reference"),
-                    (f"Tier {old_tier}", f"Tier {tier_count}", "Tier reference"),
+                    (f"{old_tier} tier", f"{tier_count} tier",
+                     f"tier count {old_tier}→{tier_count}"),
+                    (f"{old_tier} Tier", f"{tier_count} Tier",
+                     f"Tier count {old_tier}→{tier_count}"),
+                    (f"{old_tier} TIER", f"{tier_count} TIER",
+                     f"TIER count {old_tier}→{tier_count}"),
+                    (f"{old_tier} knowledge tier",
+                     f"{tier_count} knowledge tier", "knowledge tiers"),
+                    (f"{old_tier} Knowledge Tier",
+                     f"{tier_count} Knowledge Tier", "Knowledge Tiers"),
+                    (f"all {old_tier} mastery tier",
+                     f"all {tier_count} knowledge tier", "mastery→knowledge tiers"),
+                    (f"TIER {old_tier}",
+                     f"TIER {tier_count}", "TIER reference"),
+                    (f"Tier {old_tier}",
+                     f"Tier {tier_count}", "Tier reference"),
                 ]
             )
 
@@ -138,9 +149,12 @@ class AuroraSystemUpdater:
         for old_total in old_total_counts:
             patterns.extend(
                 [
-                    (f"{old_total} Complete System", f"{total} Complete System", "complete systems"),
-                    (f"{old_total} total capabilit", f"{total} total capabilit", "total capabilities"),
-                    (f"{old_total} capabilit", f"{total} capabilit", "capabilities"),
+                    (f"{old_total} Complete System",
+                     f"{total} Complete System", "complete systems"),
+                    (f"{old_total} total capabilit",
+                     f"{total} total capabilit", "total capabilities"),
+                    (f"{old_total} capabilit",
+                     f"{total} capabilit", "capabilities"),
                     (f"{old_total} system", f"{total} system", "systems count"),
                     (f"{old_total} System", f"{total} System", "Systems count"),
                 ]
@@ -151,8 +165,10 @@ class AuroraSystemUpdater:
             for old_total in old_total_counts:
                 patterns.extend(
                     [
-                        (f"13 Tasks + {old_tier} Tiers", f"13 Tasks + {tier_count} Tiers", "combined count"),
-                        (f"13 tasks + {old_tier} tiers", f"13 tasks + {tier_count} tiers", "combined count lowercase"),
+                        (f"13 Tasks + {old_tier} Tiers",
+                         f"13 Tasks + {tier_count} Tiers", "combined count"),
+                        (f"13 tasks + {old_tier} tiers",
+                         f"13 tasks + {tier_count} tiers", "combined count lowercase"),
                         (
                             f"{foundation} Tasks + {old_tier} Tiers = {old_total}",
                             f"{foundation} Tasks + {tier_count} Tiers = {total}",
@@ -163,7 +179,8 @@ class AuroraSystemUpdater:
 
         # Skill count patterns
         for old_skills_count in old_skills:
-            patterns.append((f"{old_skills_count}+ Skill", "2500+ Skill", "skills count"))
+            patterns.append((f"{old_skills_count}+ Skill",
+                            "2500+ Skill", "skills count"))
 
         # Tier range patterns (for documentation)
         patterns.extend(
@@ -177,10 +194,104 @@ class AuroraSystemUpdater:
                 ("tier 53", "tier 53", "max tier reference lowercase"),
                 ("(1-53)", "(1-53)", "tier range in parens"),
                 ("(28-53)", "(28-53)", "autonomous range in parens"),
-                ("28-53: Autonomous & Advanced", "28-53: Autonomous & Advanced", "tier category"),
-                ('tiers_loaded": 66', f'tiers_loaded": {tier_count}', "tiers_loaded JSON"),
+                ("28-53: Autonomous & Advanced",
+                 "28-53: Autonomous & Advanced", "tier category"),
+                ('tiers_loaded": 66',
+                 f'tiers_loaded": {tier_count}', "tiers_loaded JSON"),
             ]
         )
+
+        # ========== HYBRID MODE PATTERNS - Enhanced by Aurora ==========
+        patterns.extend([
+            # Capability module count patterns (66 → 109)
+            ("109 capability", f"{capabilities} capability",
+             "capability modules 66→109"),
+            ("109 Capability", f"{capabilities} Capability",
+             "Capability modules 66→109"),
+            ("79 capabilities",
+             f"{capabilities} capabilities", "capabilities 66→109"),
+            ("109 Capabilities",
+             f"{capabilities} Capabilities", "Capabilities 66→109"),
+            ("109 modules", f"{capabilities} modules", "modules 66→109"),
+            ("109 Modules", f"{capabilities} Modules", "Modules 66→109"),
+
+            # Total power patterns (79 → 188 or variations)
+            ("188 total power",
+             f"{total_power} total power", "total power update"),
+            ("188 Total Power",
+             f"{total_power} Total Power", "Total Power update"),
+            ("188 total power",
+             f"{total_power} total power", "total power 145→188"),
+            ("188 Total Power",
+             f"{total_power} Total Power", "Total Power 145→188"),
+
+            # Hybrid mode equation patterns
+            ("66 tiers", f"{total} tiers", "hybrid tiers count"),
+            ("79 Tiers", f"{total} Tiers", "Hybrid Tiers count"),
+            ("79 + 109", f"{total} + {capabilities}", "hybrid equation 79+66"),
+            ("79 + 109 =", f"{total} + {capabilities} =",
+             "hybrid equation with equals"),
+            ("79 + 109 = 188",
+             f"{total} + {capabilities} = {total_power}", "complete hybrid display"),
+            ("13 + 66 = 79",
+             f"{foundation} + {tier_count} = {total}", "tier calculation"),
+
+            # JSON patterns for config files
+            ('"capability_modules": 109',
+             f'"capability_modules": {capabilities}', "JSON capability_modules"),
+            ('"capabilities": 109',
+             f'"capabilities": {capabilities}', "JSON capabilities"),
+            ('"total_power": 188',
+             f'"total_power": {total_power}', "JSON total_power"),
+            ('"total_power": 188',
+             f'"total_power": {total_power}', "JSON total_power alt"),
+            ('"totalPower": 188',
+             f'"totalPower": {total_power}', "JSON camelCase totalPower"),
+            ('"totalPower": 188',
+             f'"totalPower": {total_power}', "JSON camelCase alt"),
+
+            # TypeScript/JavaScript patterns
+            ("capabilityModules: 109",
+             f"capabilityModules: {capabilities}", "TS capability modules"),
+            ("capabilities: 109",
+             f"capabilities: {capabilities}", "TS capabilities"),
+            ("totalPower: 188",
+             f"totalPower: {total_power}", "TS total power"),
+            ("totalPower: 188",
+             f"totalPower: {total_power}", "TS total power alt"),
+            ("const capabilities = 109",
+             f"const capabilities = {capabilities}", "TS const capabilities"),
+            ("const totalPower = 188",
+             f"const totalPower = {total_power}", "TS const totalPower"),
+            ("const totalPower = 188",
+             f"const totalPower = {total_power}", "TS const alt"),
+
+            # Display/UI patterns
+            ("188 TOTAL POWER",
+             f"{total_power} TOTAL POWER", "display total power"),
+            ("188 Total Power",
+             f"{total_power} Total Power", "display Total Power"),
+            ("188 power", f"{total_power} power", "display power"),
+            ("109 capability modules",
+             f"{capabilities} capability modules", "display modules"),
+            ("109 Capability Modules",
+             f"{capabilities} Capability Modules", "display Modules"),
+
+            # Documentation patterns
+            ("**66 tiers**", f"**{total} tiers**", "MD bold tiers"),
+            ("**79 capabilities**",
+             f"**{capabilities} capabilities**", "MD bold capabilities"),
+            ("**188 power**", f"**{total_power} power**", "MD bold power"),
+            ("= 188", f"= {total_power}", "equals total power"),
+
+            # Python variable patterns
+            ("capabilities_count = 109",
+             f"capabilities_count = {capabilities}", "Python capabilities var"),
+            ("total_power = 188",
+             f"total_power = {total_power}", "Python total_power var"),
+            ("total_power = 188",
+             f"total_power = {total_power}", "Python total_power alt"),
+        ])
 
         return patterns
 
@@ -206,13 +317,15 @@ class AuroraSystemUpdater:
             if content != original:
                 file_path.write_text(content, encoding="utf-8")
                 self.updates_made.append(
-                    {"file": str(file_path.relative_to(self.project_root)), "replacements": replacements_made}
+                    {"file": str(file_path.relative_to(
+                        self.project_root)), "replacements": replacements_made}
                 )
                 return True, replacements_made
             return False, 0
 
         except Exception as e:
-            self.errors.append(f"Error updating {file_path.name}: {str(e)[:100]}")
+            self.errors.append(
+                f"Error updating {file_path.name}: {str(e)[:100]}")
             return False, 0
 
     def deep_update_all_files(self, counts: dict[str, int]) -> None:
@@ -263,7 +376,8 @@ class AuroraSystemUpdater:
                     categories["Other"].append(rel_path)
 
         # Print categorized results
-        print(f"\n✅ Updated {updated_count} files with {total_replacements} total replacements\n")
+        print(
+            f"\n✅ Updated {updated_count} files with {total_replacements} total replacements\n")
 
         for category, files in categories.items():
             if files:
@@ -306,7 +420,9 @@ class AuroraSystemUpdater:
         counts = self.get_current_tier_count()
         print(f"   Foundation Tasks: {counts['foundation_count']}")
         print(f"   Knowledge Tiers: {counts['tier_count']}")
-        print(f"   Total Capabilities: {counts['total_capabilities']}")
+        print(f"   Capability Modules: {counts['capability_modules']}")
+        print(f"   Total Power: {counts['total_power']}")
+        print(f"   Hybrid Mode: {counts['hybrid_mode']}")
 
         # Deep update ALL files
         self.deep_update_all_files(counts)
@@ -321,7 +437,8 @@ class AuroraSystemUpdater:
         print("\n📊 Statistics:")
         print(f"   Files Scanned: {self.files_scanned}")
         print(f"   Files Updated: {len(self.updates_made)}")
-        print(f"   Total Replacements: {sum(f['replacements'] for f in self.updates_made)}")
+        print(
+            f"   Total Replacements: {sum(f['replacements'] for f in self.updates_made)}")
 
         if self.errors:
             print(f"\n⚠️  Errors Encountered: {len(self.errors)}")
@@ -333,7 +450,9 @@ class AuroraSystemUpdater:
         print("\n🎯 Final System State:")
         print(f"   • {counts['foundation_count']} Foundation Tasks")
         print(f"   • {counts['tier_count']} Knowledge Tiers")
-        print(f"   • {counts['total_capabilities']} Total Capabilities")
+        print(f"   • {counts['capability_modules']} Capability Modules")
+        print(f"   • {counts['total_power']} TOTAL POWER (Hybrid Mode)")
+        print(f"   • {counts['hybrid_mode']}")
         print("   • ALL frontend components synchronized")
         print("   • ALL backend TypeScript files synchronized")
         print("   • ALL Python tools synchronized")
@@ -351,7 +470,7 @@ def main():
     """Main entry point"""
     updater = AuroraSystemUpdater()
     success = updater.run()
-    return 0 if SUCCESS else 1
+    return 0 if success else 1
 
 
 if __name__ == "__main__":
