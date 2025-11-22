@@ -20,16 +20,19 @@ AURORA_POWER = "188 Total Power: 79 Knowledge Tiers + 109 Capability Modules"
 print(f"⚡ {AURORA_POWER}")
 print()
 
+
 def find_all_python_files():
     """Find all Python files in the repository"""
     python_files = []
     for root, dirs, files in os.walk('.'):
         # Skip venv, node_modules, .git
-        dirs[:] = [d for d in dirs if d not in ['.venv', 'venv', 'node_modules', '.git', '__pycache__']]
+        dirs[:] = [d for d in dirs if d not in [
+            '.venv', 'venv', 'node_modules', '.git', '__pycache__']]
         for file in files:
             if file.endswith('.py'):
                 python_files.append(os.path.join(root, file))
     return python_files
+
 
 def check_syntax(filepath):
     """Check if a Python file has syntax errors"""
@@ -39,26 +42,27 @@ def check_syntax(filepath):
     except py_compile.PyCompileError as e:
         return str(e)
 
+
 def fix_duplicate_keyword_args(content):
     """Fix duplicate keyword arguments in function calls"""
     fixed = False
     lines = content.split('\n')
-    
+
     for i, line in enumerate(lines):
         # Look for patterns like: timeout=5, timeout=30
         # or: check=False, check=False
-        
+
         # Find all keyword=value pairs in the line
         keyword_pattern = r'(\w+)=([^,\)]+)'
         matches = list(re.finditer(keyword_pattern, line))
-        
+
         if len(matches) < 2:
             continue
-        
+
         # Check for duplicates
         seen_keywords = {}
         duplicates = []
-        
+
         for match in matches:
             keyword = match.group(1)
             if keyword in seen_keywords:
@@ -66,7 +70,7 @@ def fix_duplicate_keyword_args(content):
                 duplicates.append(seen_keywords[keyword])
             else:
                 seen_keywords[keyword] = match
-        
+
         # Remove duplicates (keep the last occurrence)
         if duplicates:
             new_line = line
@@ -74,45 +78,47 @@ def fix_duplicate_keyword_args(content):
                 # Remove the duplicate keyword=value and its trailing comma/space
                 start = dup_match.start()
                 end = dup_match.end()
-                
+
                 # Check if there's a comma and space after
                 if end < len(new_line) and new_line[end:end+2] in [', ', ',\n']:
                     end += 2
                 elif end < len(new_line) and new_line[end:end+1] == ',':
                     end += 1
-                
+
                 new_line = new_line[:start] + new_line[end:]
-            
+
             lines[i] = new_line
             fixed = True
-    
+
     return '\n'.join(lines) if fixed else content
+
 
 def fix_common_syntax_errors(filepath):
     """Attempt to fix common syntax errors"""
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
-        
+
         # Fix 1: Duplicate keyword arguments
         content = fix_duplicate_keyword_args(content)
-        
+
         # Fix 2: Missing colons (common in if/for/while/def/class)
         # This is harder to fix automatically without breaking code
-        
+
         # Fix 3: Mismatched quotes (very difficult to fix automatically)
-        
+
         if content != original_content:
             with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(content)
             return True
-        
+
         return False
     except Exception as e:
         print(f"   ⚠️  Could not auto-fix: {e}")
         return False
+
 
 # Scan all Python files
 print("📁 Scanning repository for Python files...")
@@ -143,7 +149,7 @@ failed_fixes = []
 for filepath, error in files_with_errors:
     print(f"\n📄 {filepath}")
     print(f"   Error: {error[:100]}...")
-    
+
     # Try to fix
     if fix_common_syntax_errors(filepath):
         # Verify fix
