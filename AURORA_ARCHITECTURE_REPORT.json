@@ -1,0 +1,196 @@
+{
+  "layers": {
+    "presentation": {
+      "paths": [
+        "frontend/",
+        "src/",
+        "client/"
+      ],
+      "purpose": "User interface and visualization",
+      "components": [
+        "frontend/",
+        "src/",
+        "client/"
+      ],
+      "component_count": 3
+    },
+    "orchestration": {
+      "paths": [
+        "tools/ultimate_api_manager.py",
+        "tools/luminar_nexus*.py",
+        "x-start"
+      ],
+      "purpose": "Service coordination and management",
+      "components": [
+        "tools/ultimate_api_manager.py",
+        "tools\\luminar_nexus.py",
+        "tools\\luminar_nexus_v1_backup.py",
+        "tools\\luminar_nexus_v2.py",
+        "x-start"
+      ],
+      "component_count": 5
+    },
+    "business_logic": {
+      "paths": [
+        "aurora_core.py",
+        "aurora_x/",
+        "tools/aurora_*.py"
+      ],
+      "purpose": "Core intelligence and capabilities",
+      "components": [
+        "aurora_core.py",
+        "aurora_x/",
+        "tools\\aurora_approval_system.py",
+        "tools\\aurora_autonomous_fixer.py",
+        "tools\\aurora_autonomous_system.py"
+      ],
+      "component_count": 68
+    },
+    "data": {
+      "paths": [
+        "*.db",
+        "data/",
+        "aurora_knowledge/"
+      ],
+      "purpose": "Data storage and persistence",
+      "components": [
+        "aurora.db",
+        "corpus.db",
+        "data/"
+      ],
+      "component_count": 3
+    },
+    "integration": {
+      "paths": [
+        "aurora_chat_server.py",
+        "aurora_x/bridge/",
+        "tools/aurora_nexus*.py"
+      ],
+      "purpose": "External communication and APIs",
+      "components": [
+        "aurora_chat_server.py",
+        "aurora_x/bridge/",
+        "tools\\aurora_nexus_bridge.py"
+      ],
+      "component_count": 3
+    }
+  },
+  "components": {},
+  "services": {
+    "count": 10,
+    "ports": [
+      5
+    ],
+    "service_map": {
+      "Backend + Frontend": 5000,
+      "Bridge Service": 5001,
+      "Self-Learning Service": 5002,
+      "Chat Server": 5003,
+      "Luminar Dashboard": 5005
+    }
+  },
+  "orchestration": {
+    "orchestrators": [
+      {
+        "name": "Ultimate API Manager",
+        "file": "tools/ultimate_api_manager.py",
+        "role": "Master orchestrator - coordinates all services",
+        "activated_by": "x-start --autonomous"
+      },
+      {
+        "name": "Luminar Nexus",
+        "file": "tools/luminar_nexus.py",
+        "role": "Advanced coordination and monitoring",
+        "activated_by": "x-start monitor"
+      },
+      {
+        "name": "Aurora Autonomous Monitor",
+        "file": "aurora_autonomous_monitor.py",
+        "role": "Health checks and auto-restart",
+        "activated_by": "x-start (automatic)"
+      },
+      {
+        "name": "Aurora Core Activator",
+        "file": "activate_aurora_core.py",
+        "role": "Activates integrated modules",
+        "activated_by": "x-start (automatic)"
+      }
+    ],
+    "entry_point": "x-start",
+    "hierarchy_levels": 4
+  },
+  "data_flow": {
+    "user_request": [
+      "Frontend (Port 5000/5173)",
+      "Backend API (Port 5000)",
+      "Aurora Core (Intelligence)",
+      "Service Execution",
+      "Response to Frontend"
+    ],
+    "autonomous_operation": [
+      "Autonomous Monitor",
+      "Health Check Detection",
+      "Ultimate API Manager",
+      "Service Auto-restart",
+      "Log to System"
+    ],
+    "learning_cycle": [
+      "User Interaction",
+      "Aurora Core Processing",
+      "Self-Learning Service (Port 5002)",
+      "Knowledge Update",
+      "Capability Enhancement"
+    ]
+  },
+  "integration_points": [
+    {
+      "type": "Bridge Service",
+      "mechanism": "Cross-service communication",
+      "status": "\u2705"
+    },
+    {
+      "type": "Chat Interface",
+      "mechanism": "WebSocket/HTTP API",
+      "status": "\u2705"
+    },
+    {
+      "type": "Module Integration",
+      "mechanism": "Aurora Core integrated_modules",
+      "status": "\u2705"
+    }
+  ],
+  "issues": [],
+  "recommendations": [],
+  "scalability": {
+    "score": 40,
+    "max_score": 50,
+    "percentage": 80.0,
+    "factors": {
+      "Service Isolation": {
+        "score": 9,
+        "description": "Services run on separate ports with independent processes",
+        "evidence": "5 services on ports 5000-5005"
+      },
+      "Orchestration Layer": {
+        "score": 8,
+        "description": "Dedicated orchestrators manage coordination",
+        "evidence": "Ultimate API Manager + Luminar Nexus"
+      },
+      "Autonomous Operation": {
+        "score": 9,
+        "description": "Self-monitoring and auto-healing capabilities",
+        "evidence": "Autonomous Monitor + integrated modules"
+      },
+      "Modular Design": {
+        "score": 8,
+        "description": "Components can be updated independently",
+        "evidence": "100+ autonomous systems, 91 orchestrators"
+      },
+      "Load Distribution": {
+        "score": 6,
+        "description": "Services distributed across ports",
+        "evidence": "Multi-port architecture"
+      }
+    }
+  }
+}

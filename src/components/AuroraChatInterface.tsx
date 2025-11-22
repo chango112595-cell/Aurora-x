@@ -10,24 +10,24 @@ export default function AuroraChatInterface() {
   useEffect(() => {
     // Aurora connects to her backend using WebSocket (TIER_19: Real-time)
     const ws = new WebSocket('ws://localhost:5000/aurora/chat');
-    
+
     ws.onopen = () => {
       setConnected(true);
       addMessage('system', 'Connected to Aurora');
     };
-    
+
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       addMessage('aurora', data.message);
     };
-    
+
     ws.onerror = () => {
       setConnected(false);
       addMessage('system', 'Connection error');
     };
-    
+
     wsRef.current = ws;
-    
+
     return () => ws.close();
   }, []);
 
@@ -38,7 +38,7 @@ export default function AuroraChatInterface() {
 
   const sendMessage = () => {
     if (!input.trim() || !connected) return;
-    
+
     addMessage('user', input);
     wsRef.current?.send(JSON.stringify({ message: input }));
     setInput('');
@@ -52,20 +52,20 @@ export default function AuroraChatInterface() {
           {connected ? '● Connected' : '○ Disconnected'}
         </div>
       </div>
-      
+
       <div className="messages">
         {messages.map((msg, i) => (
           <div key={i} className={`message ${msg.sender}`}>
             <div className="sender">
-              {msg.sender === 'aurora' ? '🌌 Aurora' : 
-               msg.sender === 'user' ? '👤 You' : '⚙️ System'}
+              {msg.sender === 'aurora' ? '🌌 Aurora' :
+                msg.sender === 'user' ? '👤 You' : '⚙️ System'}
             </div>
             <div className="text">{msg.text}</div>
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
-      
+
       <div className="input-area">
         <input
           value={input}
@@ -78,7 +78,7 @@ export default function AuroraChatInterface() {
           Send
         </button>
       </div>
-      
+
       <style jsx>{`
         .aurora-chat-container {
           display: flex;
