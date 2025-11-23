@@ -1,0 +1,50 @@
+[
+  {
+    "branch": "badges",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "copilot/fix-ci-cd-linting-issues",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "copilot/fix-e2e-workflow-issue",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "copilot/fix-linting-issues-in-ci-workflow",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "copilot/fix-semgrep-yaml-issue",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "copilot/replace-insecure-hash-algorithms",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "fix/remaining-linting-errors",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "integration-branch",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "local-features-backup",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "main",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "remote-features-backup",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  },
+  {
+    "branch": "replit-agent",
+    "error": "Failed to checkout: fatal: Unable to create '/home/runner/workspace/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+  }
+]

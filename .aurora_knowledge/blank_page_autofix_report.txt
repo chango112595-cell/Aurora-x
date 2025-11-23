@@ -1,7 +1,0 @@
-Aurora Blank Page Auto-Fix Report
-Generated: 2025-11-03T08:35:37.970319
-
-Fixes Applied: 1
-  • service_worker_cleanup
-
-Status: ✅ COMPLETE
