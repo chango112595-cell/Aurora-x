@@ -29,6 +29,7 @@ data/corpus.jsonl
 
 # Aurora runtime state files
 .aurora/seeds.json
+.aurora_knowledge/
 
 # Logs
 logs
