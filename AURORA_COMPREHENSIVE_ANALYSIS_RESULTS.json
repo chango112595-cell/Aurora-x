@@ -1,0 +1,859 @@
+{
+  "timestamp": "2025-11-23T16:10:11.060208",
+  "git_analysis": {
+    "branches": {
+      "copilot/fix-ci-cd-linting-issues": {
+        "commit_count": "383",
+        "last_commit_hash": "b7ead31177e393c7a27269144dd8986d40c3902d",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Thu Oct 23 02:27:40 2025 +0000",
+        "last_message": "update"
+      },
+      "copilot/fix-e2e-workflow-issue": {
+        "commit_count": "942",
+        "last_commit_hash": "84c4f95f9c0f2243554ef3a88505c4efca2d65e4",
+        "last_author": "chai82025",
+        "last_email": "chai20258@outlook.com",
+        "last_date": "Thu Oct 23 09:05:14 2025 +0000",
+        "last_message": "Assistant checkpoint: Add setup.py for Docker build"
+      },
+      "copilot/fix-linting-issues-in-ci-workflow": {
+        "commit_count": "389",
+        "last_commit_hash": "365a0bc33b9e236bfaa43a3477c671b6129a8d54",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Sat Oct 18 21:20:30 2025 +0000",
+        "last_message": "Fix all linting errors and update ruff configuration"
+      },
+      "copilot/fix-semgrep-yaml-issue": {
+        "commit_count": "884",
+        "last_commit_hash": "2b4fa1ebae4c0d071e92a04d9395468fec621704",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Wed Oct 22 09:22:50 2025 -0400",
+        "last_message": "Refactor unit dictionaries for improved readability"
+      },
+      "copilot/replace-insecure-hash-algorithms": {
+        "commit_count": "882",
+        "last_commit_hash": "6e6ff9c400d12ddf91fa2996fb2110ced1608cdf",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Wed Oct 22 05:27:32 2025 -0400",
+        "last_message": "Merge branch 'main' into copilot/replace-insecure-hash-algorithms"
+      },
+      "fix/remaining-linting-errors": {
+        "commit_count": "383",
+        "last_commit_hash": "fcf04313941e98363cf6dad3db23a781be5320ce",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Sat Oct 18 15:10:05 2025 -0400",
+        "last_message": "Merge pull request #2 from chango112595-cell/copilot/fix-ci-cd-linting-issues"
+      },
+      "integration-branch": {
+        "commit_count": "3036",
+        "last_commit_hash": "ccddb820765feffc3589a2dce3a5e7e05476e3b1",
+        "last_author": "knln kjk",
+        "last_email": "50098723-auroraultra2025@users.noreply.replit.com",
+        "last_date": "Sun Nov 23 16:07:14 2025 +0000",
+        "last_message": "deleted unlock index"
+      },
+      "local-features-backup": {
+        "commit_count": "3031",
+        "last_commit_hash": "030a5afd1161ab6fa44ef296b6c5f6c45e904ec8",
+        "last_author": "auroraultra2025",
+        "last_email": "50098723-auroraultra2025@users.noreply.replit.com",
+        "last_date": "Sun Nov 23 14:43:58 2025 +0000",
+        "last_message": "Resolve numerous merge conflicts across project files"
+      },
+      "main": {
+        "commit_count": "3031",
+        "last_commit_hash": "030a5afd1161ab6fa44ef296b6c5f6c45e904ec8",
+        "last_author": "auroraultra2025",
+        "last_email": "50098723-auroraultra2025@users.noreply.replit.com",
+        "last_date": "Sun Nov 23 14:43:58 2025 +0000",
+        "last_message": "Resolve numerous merge conflicts across project files"
+      },
+      "remote-features-backup": {
+        "commit_count": "3058",
+        "last_commit_hash": "5a1dcf21b44a0fc48d2d190552a52d29888348ee",
+        "last_author": "chango112595-cell",
+        "last_email": "chango112595-cell@users.noreply.github.com",
+        "last_date": "Sat Nov 22 21:48:42 2025 -0500",
+        "last_message": "feat: Implement Aurora Hyper-Speed Mode for instant problem detection and fixes"
+      },
+      "replit-agent": {
+        "commit_count": "3287",
+        "last_commit_hash": "52aae334fd3c4b54847fcaf9e3e6d764a9e728b7",
+        "last_author": "auroraultra2025",
+        "last_email": "50098723-auroraultra2025@users.noreply.replit.com",
+        "last_date": "Sun Nov 23 15:20:37 2025 +0000",
+        "last_message": "Update system analysis and dashboard display with new capabilities"
+      },
+      "gitsafe-backup": {
+        "commit_count": "3033",
+        "last_commit_hash": "3f45796b2abd85ef9600996871c0f09ae3a4b4ec",
+        "last_author": "auroraultra2025",
+        "last_email": "50098723-auroraultra2025@users.noreply.replit.com",
+        "last_date": "Sun Nov 23 15:20:37 2025 +0000",
+        "last_message": "Update system analysis and dashboard display with new capabilities"
+      },
+      "gitsafe-backup/main": {
+        "commit_count": "3033",
+        "last_commit_hash": "3f45796b2abd85ef9600996871c0f09ae3a4b4ec",
+        "last_author": "auroraultra2025",
+        "last_email": "50098723-auroraultra2025@users.noreply.replit.com",
+        "last_date": "Sun Nov 23 15:20:37 2025 +0000",
+        "last_message": "Update system analysis and dashboard display with new capabilities"
+      },
+      "origin": {
+        "commit_count": "3058",
+        "last_commit_hash": "5a1dcf21b44a0fc48d2d190552a52d29888348ee",
+        "last_author": "chango112595-cell",
+        "last_email": "chango112595-cell@users.noreply.github.com",
+        "last_date": "Sat Nov 22 21:48:42 2025 -0500",
+        "last_message": "feat: Implement Aurora Hyper-Speed Mode for instant problem detection and fixes"
+      },
+      "origin/aurora-nexus-v2-integration": {
+        "commit_count": "3015",
+        "last_commit_hash": "1378123e3579541892870a1bc24b6b71e97acfda",
+        "last_author": "chango112595-cell",
+        "last_email": "chango112595-cell@users.noreply.github.com",
+        "last_date": "Fri Nov 21 16:59:31 2025 -0500",
+        "last_message": "Refactor code for improved readability by breaking long lines into multiple lines across various modules. This includes updates to the aurora_doc_generator, aurora_docker_healer, aurora_git_master, aurora_live_integration, aurora_multi_agent, aurora_security_auditor, aurora_system_update, aurora_test_generator, aurora_ui_generator, aurora_visual_understanding, and tools/aurora_core files. The changes enhance maintainability without altering functionality."
+      },
+      "origin/aurora-working-restore": {
+        "commit_count": "2978",
+        "last_commit_hash": "34798758a155f1b65aff251af20f72ffe89fea38",
+        "last_author": "chango112595-cell",
+        "last_email": "chango112595-cell@users.noreply.github.com",
+        "last_date": "Thu Nov 20 04:46:09 2025 -0500",
+        "last_message": "fix: Improve error handling and package installation in workflows"
+      },
+      "origin/badges": {
+        "commit_count": "2793",
+        "last_commit_hash": "5294626a19ed32dce343108a879e10e93f0f3eeb",
+        "last_author": "github-actions[bot]",
+        "last_email": "github-actions[bot]@users.noreply.github.com",
+        "last_date": "Sun Nov 23 02:50:41 2025 +0000",
+        "last_message": "ci: update coverage badge [skip ci]"
+      },
+      "origin/codespace-wretched-gravestone-pj5rxv7rx677crw9v": {
+        "commit_count": "1218",
+        "last_commit_hash": "360dd33c7254d0b19d65bc54fe048c71860481fe",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Fri Oct 31 03:10:59 2025 +0000",
+        "last_message": "\ud83d\udd27 Fix all syntax errors and import issues"
+      },
+      "origin/copilot/fix-checks-failing": {
+        "commit_count": "403",
+        "last_commit_hash": "feba12fc8e3a6b0d8fc9419d502d06cb9c6e3319",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Tue Oct 21 06:25:44 2025 +0000",
+        "last_message": "Fix failing CI checks by adding requirements.txt and server entry point"
+      },
+      "origin/copilot/fix-checks-failure-issue": {
+        "commit_count": "408",
+        "last_commit_hash": "71d176018cf2918fb7fdfd53fa8fe0b6ea8037d6",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Tue Oct 21 21:32:21 2025 -0400",
+        "last_message": "Merge branch 'badges' into copilot/fix-checks-failure-issue"
+      },
+      "origin/copilot/fix-checks-not-passing": {
+        "commit_count": "395",
+        "last_commit_hash": "1b6c27b1be71ed1f0ca9140fa148b2c383cf6218",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Mon Oct 20 05:47:59 2025 +0000",
+        "last_message": "Fix security issues and adjust CI coverage requirements"
+      },
+      "origin/copilot/fix-ci-cd-linting-issues": {
+        "commit_count": "382",
+        "last_commit_hash": "994ba724f2c63e41d26f542d718d1edb8ce9567e",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Sat Oct 18 18:59:42 2025 +0000",
+        "last_message": "Add Python cache files to .gitignore and remove committed cache files"
+      },
+      "origin/copilot/fix-connection-errors-workflow": {
+        "commit_count": "398",
+        "last_commit_hash": "10572fde69cdf263b7f06aa9cca85138b7e2f12f",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Tue Oct 21 06:26:14 2025 +0000",
+        "last_message": "Fix Aurora-X E2E workflow server connection errors"
+      },
+      "origin/copilot/fix-e2e-workflow-issue": {
+        "commit_count": "942",
+        "last_commit_hash": "84c4f95f9c0f2243554ef3a88505c4efca2d65e4",
+        "last_author": "chai82025",
+        "last_email": "chai20258@outlook.com",
+        "last_date": "Thu Oct 23 09:05:14 2025 +0000",
+        "last_message": "Assistant checkpoint: Add setup.py for Docker build"
+      },
+      "origin/copilot/fix-failing-ci-job": {
+        "commit_count": "393",
+        "last_commit_hash": "0b55d75bc627d25634e59e9a4f28f09edb546171",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Sun Oct 19 04:24:15 2025 +0000",
+        "last_message": "ci: add requirements.txt, fix ruff.toml duplicate keys, add ai fix script"
+      },
+      "origin/copilot/fix-failing-workflows": {
+        "commit_count": "388",
+        "last_commit_hash": "72b36264d34dcabd2cf8bf7b9fa20639e6f13925",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Sat Oct 18 20:55:00 2025 +0000",
+        "last_message": "Fix critical linting and security issues"
+      },
+      "origin/copilot/fix-linting-issues-in-ci-workflow": {
+        "commit_count": "389",
+        "last_commit_hash": "365a0bc33b9e236bfaa43a3477c671b6129a8d54",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Sat Oct 18 21:20:30 2025 +0000",
+        "last_message": "Fix all linting errors and update ruff configuration"
+      },
+      "origin/copilot/fix-semgrep-yaml-issue": {
+        "commit_count": "884",
+        "last_commit_hash": "2b4fa1ebae4c0d071e92a04d9395468fec621704",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Wed Oct 22 09:22:50 2025 -0400",
+        "last_message": "Refactor unit dictionaries for improved readability"
+      },
+      "origin/copilot/fix-windows-invalid-filenames": {
+        "commit_count": "395",
+        "last_commit_hash": "3c430ab1478a75aad68a6539e76a117bc4d5ad7c",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Sun Oct 19 08:51:50 2025 +0000",
+        "last_message": "ci: comprehensive fixes - Windows filenames, bandit reporting, ruff and requirements"
+      },
+      "origin/copilot/fix-workflow-failures": {
+        "commit_count": "400",
+        "last_commit_hash": "1b703b5246e6e9b1882b6d8772ef7b3ae0f04edc",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Sun Oct 19 00:13:58 2025 -0400",
+        "last_message": "Merge branch 'main' into copilot/fix-workflow-failures"
+      },
+      "origin/copilot/fix-workflow-issues": {
+        "commit_count": "385",
+        "last_commit_hash": "88b91551ec73497fffe53bf070d3f8e664725dd4",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Sat Oct 18 20:26:51 2025 +0000",
+        "last_message": "Fix workflow issues: Rust toolchain and .NET cache configuration"
+      },
+      "origin/copilot/help-pull-request-30": {
+        "commit_count": "1219",
+        "last_commit_hash": "8609dbe7634daf14a57f9d3925147ddcf292edfb",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Fri Oct 31 04:53:36 2025 -0400",
+        "last_message": "Merge pull request #33 from chango112595-cell/codespace-wretched-gravestone-pj5rxv7rx677crw9v"
+      },
+      "origin/copilot/implement-configuration-updates": {
+        "commit_count": "1210",
+        "last_commit_hash": "8cc5a024f883b6d42d0626cdeee19ec81e6a6078",
+        "last_author": "copilot-swe-agent[bot]",
+        "last_email": "198982749+Copilot@users.noreply.github.com",
+        "last_date": "Tue Oct 28 05:50:30 2025 +0000",
+        "last_message": "Update .gitignore to exclude build artifacts and remove them from tracking"
+      },
+      "origin/copilot/replace-insecure-hash-algorithms": {
+        "commit_count": "882",
+        "last_commit_hash": "6e6ff9c400d12ddf91fa2996fb2110ced1608cdf",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Wed Oct 22 05:27:32 2025 -0400",
+        "last_message": "Merge branch 'main' into copilot/replace-insecure-hash-algorithms"
+      },
+      "origin/dependabot/docker/node-25-alpine": {
+        "commit_count": "3023",
+        "last_commit_hash": "5a1692cc9bbfa5d2386310035cca777a1a6230dd",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Fri Nov 21 22:09:05 2025 +0000",
+        "last_message": "chore: bump node from 20-alpine to 25-alpine"
+      },
+      "origin/dependabot/docker/python-3.14-slim": {
+        "commit_count": "3024",
+        "last_commit_hash": "4c65629c94681bafa29ac84da0218e1c556df634",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Fri Nov 21 22:09:55 2025 +0000",
+        "last_message": "chore: bump python from 3.11-slim to 3.14-slim"
+      },
+      "origin/dependabot/github_actions/actions/setup-go-6": {
+        "commit_count": "2747",
+        "last_commit_hash": "cb7dffd74a1caf6aad6a961c171db47ef1d0ff3e",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:27:26 2025 +0000",
+        "last_message": "ci: bump actions/setup-go from 5 to 6"
+      },
+      "origin/dependabot/github_actions/actions/upload-artifact-5": {
+        "commit_count": "2747",
+        "last_commit_hash": "baabc0ae8cca8c4ce71889c9669e9bf462e7d11f",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:27:14 2025 +0000",
+        "last_message": "ci: bump actions/upload-artifact from 4 to 5"
+      },
+      "origin/dependabot/github_actions/codecov/codecov-action-5": {
+        "commit_count": "2954",
+        "last_commit_hash": "60571658e25e8abd9eea8eda95f037e80b411459",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Wed Nov 19 05:16:50 2025 +0000",
+        "last_message": "ci: bump codecov/codecov-action from 4 to 5"
+      },
+      "origin/dependabot/github_actions/docker/build-push-action-6": {
+        "commit_count": "2951",
+        "last_commit_hash": "e2af55898f256d093264b7abc83e3478504190b2",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Wed Nov 19 03:23:08 2025 +0000",
+        "last_message": "ci: bump docker/build-push-action from 5 to 6"
+      },
+      "origin/dependabot/github_actions/github/codeql-action-4": {
+        "commit_count": "3001",
+        "last_commit_hash": "eac19d4f31616a3e79188ae21fd01010b53f52d8",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Thu Nov 20 05:48:44 2025 +0000",
+        "last_message": "ci: bump github/codeql-action from 3 to 4"
+      },
+      "origin/dependabot/pip/bcrypt-4.3.0": {
+        "commit_count": "2747",
+        "last_commit_hash": "9fcd0ae19a72230f33948e8539dfbc6b0369c16b",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:27:41 2025 +0000",
+        "last_message": "chore(deps): bump bcrypt from 4.1.1 to 4.3.0"
+      },
+      "origin/dependabot/pip/detect-secrets-1.5.0": {
+        "commit_count": "2747",
+        "last_commit_hash": "74285408df189dbeaf737a48de742aa146260bc3",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:28:17 2025 +0000",
+        "last_message": "chore(deps): bump detect-secrets from 1.4.0 to 1.5.0"
+      },
+      "origin/dependabot/pip/pip-audit-2.9.0": {
+        "commit_count": "2747",
+        "last_commit_hash": "7f105badcffe6d583a902b1bb621ae21a6170c2c",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:28:03 2025 +0000",
+        "last_message": "chore(deps): bump pip-audit from 2.6.1 to 2.9.0"
+      },
+      "origin/dependabot/pip/pip-licenses-4.5.1": {
+        "commit_count": "2747",
+        "last_commit_hash": "2937b62bde8892503f339542682ee476bebd2610",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:27:37 2025 +0000",
+        "last_message": "chore(deps): bump pip-licenses from 4.3.3 to 4.5.1"
+      },
+      "origin/dependabot/pip/pipdeptree-2.28.0": {
+        "commit_count": "2747",
+        "last_commit_hash": "d3de22bf1c5e599a2adcb534bc57eb46649cd912",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:27:50 2025 +0000",
+        "last_message": "chore(deps): bump pipdeptree from 2.13.1 to 2.28.0"
+      },
+      "origin/dependabot/pip/pyjwt-2.10.1": {
+        "commit_count": "2747",
+        "last_commit_hash": "9c2ae4ad4dd997266bc25bd8ea89df47fc6f2c5f",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:27:59 2025 +0000",
+        "last_message": "chore(deps): bump pyjwt from 2.8.0 to 2.10.1"
+      },
+      "origin/dependabot/pip/pylint-3.3.9": {
+        "commit_count": "2958",
+        "last_commit_hash": "a76bac6ab8317a8e9f22e83ee7b2086cdef98563",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Wed Nov 19 05:44:39 2025 +0000",
+        "last_message": "chore(deps): bump pylint from 3.0.2 to 3.3.9"
+      },
+      "origin/dependabot/pip/pyre-check-0.9.25": {
+        "commit_count": "2747",
+        "last_commit_hash": "c2576915d94779cbd7ca48110820b6862270cca5",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:27:47 2025 +0000",
+        "last_message": "chore(deps): bump pyre-check from 0.9.18 to 0.9.25"
+      },
+      "origin/dependabot/pip/semgrep-1.136.0": {
+        "commit_count": "2747",
+        "last_commit_hash": "e47963fc14d628e2933d185c4abbc53ea4b459a1",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:28:09 2025 +0000",
+        "last_message": "chore(deps): bump semgrep from 1.45.0 to 1.136.0"
+      },
+      "origin/dependabot/pip/urllib3-2.5.0": {
+        "commit_count": "2747",
+        "last_commit_hash": "cfd956b142628e262ec1ab6e0918270d56a3dd4a",
+        "last_author": "dependabot[bot]",
+        "last_email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "last_date": "Mon Nov 10 23:28:12 2025 +0000",
+        "last_message": "chore(deps): bump urllib3 from 2.1.0 to 2.5.0"
+      },
+      "origin/draft": {
+        "commit_count": "1377",
+        "last_commit_hash": "374c3bd32b89992beb615d856c1701f64cb2487d",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Tue Nov 4 10:52:22 2025 +0000",
+        "last_message": "Aurora autonomous chat system - HTTP 400 debug and conversational AI integration"
+      },
+      "origin/fix-windows-compatibility": {
+        "commit_count": "1468",
+        "last_commit_hash": "49a0c0a16e53930443ff4fc14abf41b5cc94abfb",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Thu Nov 6 07:48:36 2025 +0000",
+        "last_message": "\ud83d\udd27 Fix: Rename files with # to HASH for Windows compatibility"
+      },
+      "origin/fix/remaining-linting-errors": {
+        "commit_count": "383",
+        "last_commit_hash": "fcf04313941e98363cf6dad3db23a781be5320ce",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Sat Oct 18 15:10:05 2025 -0400",
+        "last_message": "Merge pull request #2 from chango112595-cell/copilot/fix-ci-cd-linting-issues"
+      },
+      "origin/integration-branch": {
+        "commit_count": "3032",
+        "last_commit_hash": "babea56a91c965ed89ae48f2b7d4c46186b36973",
+        "last_author": "knln kjk",
+        "last_email": "50098723-auroraultra2025@users.noreply.replit.com",
+        "last_date": "Sun Nov 23 14:55:53 2025 +0000",
+        "last_message": "Merge remote-features into integration-branch: combined local fixes with remote features"
+      },
+      "origin/main": {
+        "commit_count": "3058",
+        "last_commit_hash": "5a1dcf21b44a0fc48d2d190552a52d29888348ee",
+        "last_author": "chango112595-cell",
+        "last_email": "chango112595-cell@users.noreply.github.com",
+        "last_date": "Sat Nov 22 21:48:42 2025 -0500",
+        "last_message": "feat: Implement Aurora Hyper-Speed Mode for instant problem detection and fixes"
+      },
+      "origin/replit-agent": {
+        "commit_count": "882",
+        "last_commit_hash": "48dbfbae0edb1e8c4362ece7c849de56f80869ef",
+        "last_author": "chai72025",
+        "last_email": "chai72025@outlook.com",
+        "last_date": "Wed Oct 22 05:08:44 2025 -0400",
+        "last_message": "Merge branch 'main' into replit-agent"
+      },
+      "origin/unified-aurora": {
+        "commit_count": "2690",
+        "last_commit_hash": "0663ec692566667be80653f1cc1e762f08c26e3d",
+        "last_author": "lolo",
+        "last_email": "234105833+chango112595-cell@users.noreply.github.com",
+        "last_date": "Thu Nov 6 08:24:12 2025 +0000",
+        "last_message": "Remove Windows-incompatible filenames with # character"
+      }
+    },
+    "total_branches": 58,
+    "current_branch": {
+      "name": "integration-branch",
+      "staged_files": [],
+      "unstaged_files": [],
+      "untracked_files": [
+        "aurora_comprehensive_analysis.py"
+      ]
+    },
+    "total_commits": 3473,
+    "recent_commits": [
+      {
+        "hash": "ccddb820765feffc3589a2dce3a5e7e05476e3b1",
+        "author": "knln kjk",
+        "date": "2025-11-23 16:07:14 +0000",
+        "message": "deleted unlock index"
+      },
+      {
+        "hash": "351d09cda454dd9d402bde3ff54e8054bbba0235",
+        "author": "knln kjk",
+        "date": "2025-11-23 16:03:05 +0000",
+        "message": "Assistant checkpoint: Create comprehensive analysis package for Aurora"
+      },
+      {
+        "hash": "22798055f4dfee4fef0c83d18ba94103b0b3ef1c",
+        "author": "knln kjk",
+        "date": "2025-11-23 16:00:09 +0000",
+        "message": "Assistant checkpoint: Fix Git conflicts and duplicate variable"
+      },
+      {
+        "hash": "52aae334fd3c4b54847fcaf9e3e6d764a9e728b7",
+        "author": "auroraultra2025",
+        "date": "2025-11-23 15:20:37 +0000",
+        "message": "Update system analysis and dashboard display with new capabilities"
+      },
+      {
+        "hash": "3f45796b2abd85ef9600996871c0f09ae3a4b4ec",
+        "author": "auroraultra2025",
+        "date": "2025-11-23 15:20:37 +0000",
+        "message": "Update system analysis and dashboard display with new capabilities"
+      },
+      {
+        "hash": "babea56a91c965ed89ae48f2b7d4c46186b36973",
+        "author": "knln kjk",
+        "date": "2025-11-23 14:55:53 +0000",
+        "message": "Merge remote-features into integration-branch: combined local fixes with remote features"
+      },
+      {
+        "hash": "030a5afd1161ab6fa44ef296b6c5f6c45e904ec8",
+        "author": "auroraultra2025",
+        "date": "2025-11-23 14:43:58 +0000",
+        "message": "Resolve numerous merge conflicts across project files"
+      },
+      {
+        "hash": "d0fc3a17d3f3e6bc979b1dd3dee93a4b06d8e83a",
+        "author": "auroraultra2025",
+        "date": "2025-11-23 14:43:58 +0000",
+        "message": "Resolve numerous merge conflicts across project files"
+      },
+      {
+        "hash": "2d428bf5ce739ddd93b52ef7f83cabb58d945162",
+        "author": "auroraultra2025",
+        "date": "2025-11-23 09:23:13 +0000",
+        "message": "Remove the git index lock file to enable git operations"
+      },
+      {
+        "hash": "b76db7e497ee612b73616cf64db590883bd3c0a3",
+        "author": "auroraultra2025",
+        "date": "2025-11-23 09:23:13 +0000",
+        "message": "Remove the git index lock file to enable git operations"
+      },
+      {
+        "hash": "499d29a384d2ccd6c489feb115980bfb91eaae3d",
+        "author": "Ch Ai",
+        "date": "2025-11-23 07:43:46 +0000",
+        "message": "Remove aurora_knowledge jsonl logs from git tracking"
+      },
+      {
+        "hash": "bdaf80b4557315f46bf664001bc478f9f7cdd400",
+        "author": "chango112595a21",
+        "date": "2025-11-23 07:42:22 +0000",
+        "message": "Ignore luminar nexus log files from automatic tracking"
+      },
+      {
+        "hash": "359aa291fa8b6043017631ca6e500a8c22508b54",
+        "author": "chango112595a21",
+        "date": "2025-11-23 07:42:22 +0000",
+        "message": "Ignore luminar nexus log files from automatic tracking"
+      },
+      {
+        "hash": "cbe06875667b09f615c1e23bf1791fe4c7fd9ba7",
+        "author": "lolo",
+        "date": "2025-11-23 07:37:43 +0000",
+        "message": "nexus"
+      },
+      {
+        "hash": "8593ecf27ef88d161ed9c42123daef78a4726402",
+        "author": "lolo",
+        "date": "2025-11-23 07:37:02 +0000",
+        "message": "\"working aurora\""
+      },
+      {
+        "hash": "7debe6d98da840656d708ef2c27e5d03edc1c600",
+        "author": "chango112595a21",
+        "date": "2025-11-23 07:30:40 +0000",
+        "message": "Update project to get latest changes from the remote repository"
+      },
+      {
+        "hash": "81625736a8042a9e14ec464868a09fe45bce9c60",
+        "author": "chango112595a21",
+        "date": "2025-11-23 07:30:40 +0000",
+        "message": "Update project to get latest changes from the remote repository"
+      },
+      {
+        "hash": "d8b885b4e85e526cfa2279e5123ab3a00ae8ea72",
+        "author": "chango112595a21",
+        "date": "2025-11-23 04:34:19 +0000",
+        "message": "Saved progress at the end of the loop"
+      },
+      {
+        "hash": "569c99c8f58f093929008dce8c147221c3b2a697",
+        "author": "chango112595a21",
+        "date": "2025-11-23 04:34:19 +0000",
+        "message": "Saved progress at the end of the loop"
+      },
+      {
+        "hash": "c52e23ff3a4cd99138f52d5916d712108e3b622b",
+        "author": "chango112595a21",
+        "date": "2025-11-23 04:33:34 +0000",
+        "message": "Update chat response to include all relevant information"
+      },
+      {
+        "hash": "711d3f93e20ba434e64ffde0070731878c1ea14a",
+        "author": "chango112595a21",
+        "date": "2025-11-23 04:33:34 +0000",
+        "message": "Update chat response to include all relevant information"
+      },
+      {
+        "hash": "f0efb7a1943ea49c9fcf8e78cccace1327fb02f4",
+        "author": "christopheroje1",
+        "date": "2025-11-23 04:22:55 +0000",
+        "message": "Update Aurora Core to handle Luminar Nexus V2 availability"
+      },
+      {
+        "hash": "351d20b445e51139b512e2a78e8340eebb652985",
+        "author": "christopheroje1",
+        "date": "2025-11-23 04:22:55 +0000",
+        "message": "Update Aurora Core to handle Luminar Nexus V2 availability"
+      },
+      {
+        "hash": "432fc635f65709cf58df6e39a6bdb0403638e12c",
+        "author": "Lolo Chango",
+        "date": "2025-11-23 04:22:17 +0000",
+        "message": "Resolve merge conflict in aurora_core.py"
+      },
+      {
+        "hash": "5294626a19ed32dce343108a879e10e93f0f3eeb",
+        "author": "github-actions[bot]",
+        "date": "2025-11-23 02:50:41 +0000",
+        "message": "ci: update coverage badge [skip ci]"
+      },
+      {
+        "hash": "2b3e5a80ee502edc1eddf8b12449c30a7001d141",
+        "author": "github-actions",
+        "date": "2025-11-23 02:50:03 +0000",
+        "message": "ci: update coverage badge"
+      },
+      {
+        "hash": "5a1dcf21b44a0fc48d2d190552a52d29888348ee",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 21:48:42 -0500",
+        "message": "feat: Implement Aurora Hyper-Speed Mode for instant problem detection and fixes"
+      },
+      {
+        "hash": "6f2346e9643020b729763e08ea9f1b0942b68d83",
+        "author": "github-actions[bot]",
+        "date": "2025-11-23 00:40:47 +0000",
+        "message": "ci: update coverage badge [skip ci]"
+      },
+      {
+        "hash": "4270cdca3a3dec753169392e2e3869e25385f751",
+        "author": "github-actions",
+        "date": "2025-11-23 00:39:59 +0000",
+        "message": "ci: update coverage badge"
+      },
+      {
+        "hash": "5b54be84fd33daaa6c3ab8ebc55ead5be0574bc9",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 19:38:43 -0500",
+        "message": "feat: Implement integration plan execution and manifest generation"
+      },
+      {
+        "hash": "bfed716ba90473f7f9847f3a49ddbfd75dfed6a1",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 19:34:45 -0500",
+        "message": "feat: Implement Aurora Self-Integration, Self-Reflection, and Ultra-Deep Scan systems"
+      },
+      {
+        "hash": "fff7cbbdadd5a4efd7d5d10a133c3fd6d543dd98",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 18:57:47 -0500",
+        "message": "Update Aurora system to reflect new capabilities and tier counts"
+      },
+      {
+        "hash": "2cb7d450344b2415539a3157d1606185f76599fb",
+        "author": "github-actions[bot]",
+        "date": "2025-11-22 20:10:29 +0000",
+        "message": "ci: update coverage badge [skip ci]"
+      },
+      {
+        "hash": "64b72473bea2f16b8fc22cc2d2c2e686e5828fdb",
+        "author": "github-actions",
+        "date": "2025-11-22 20:09:29 +0000",
+        "message": "ci: update coverage badge"
+      },
+      {
+        "hash": "b86419f907b0fe4740f2f137b915f552e58bf34d",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 15:08:13 -0500",
+        "message": "refactor: Clean up whitespace and improve formatting in legacy files and test scripts"
+      },
+      {
+        "hash": "5a9c6b90ea89bb73379f9548902c1c22afaa2c47",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 15:08:02 -0500",
+        "message": "Refactor legacy files and improve syntax error handling"
+      },
+      {
+        "hash": "4369a5daff2f501c596a0824bcebb46f9e491c5a",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 15:03:30 -0500",
+        "message": "feat: Update timeout settings in diagnostic scripts and add self-analysis for UI visibility issues"
+      },
+      {
+        "hash": "1819495015f3562aef2a9415e2892eda6683ca8b",
+        "author": "github-actions[bot]",
+        "date": "2025-11-22 13:30:58 +0000",
+        "message": "ci: update coverage badge [skip ci]"
+      },
+      {
+        "hash": "ef0592a89484fd6280f0974e0dbccc9a22e981a5",
+        "author": "github-actions",
+        "date": "2025-11-22 13:30:08 +0000",
+        "message": "ci: update coverage badge"
+      },
+      {
+        "hash": "da54836333639f2d81d8f4d6166d11344730c976",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 08:28:29 -0500",
+        "message": "feat: Enhance TSX component checks and update dashboard metadata handling"
+      },
+      {
+        "hash": "41a4b14a3fef2890fe142afe533dfed9de86e110",
+        "author": "github-actions[bot]",
+        "date": "2025-11-22 12:53:07 +0000",
+        "message": "ci: update coverage badge [skip ci]"
+      },
+      {
+        "hash": "54791135ada8997883dbe3900c48a7f02f8831a9",
+        "author": "github-actions",
+        "date": "2025-11-22 12:52:22 +0000",
+        "message": "ci: update coverage badge"
+      },
+      {
+        "hash": "a5fa783e1b440ac477b823d722bceb63e1382b0b",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 07:51:11 -0500",
+        "message": "refactor: Improve code readability by formatting and organizing exception handling and logging"
+      },
+      {
+        "hash": "5dd55d4acc1a818d241f6ed00d63bfaa46f1ec4e",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 07:51:04 -0500",
+        "message": "feat: Update debug report and enhance pylint integration with improved error handling"
+      },
+      {
+        "hash": "af85f2797c6835b43b42de3a75996770b3077383",
+        "author": "github-actions[bot]",
+        "date": "2025-11-22 12:48:17 +0000",
+        "message": "ci: update coverage badge [skip ci]"
+      },
+      {
+        "hash": "81f4fd5e2cb09a3bda6762af4e3a89adf777db36",
+        "author": "github-actions",
+        "date": "2025-11-22 12:47:36 +0000",
+        "message": "ci: update coverage badge"
+      },
+      {
+        "hash": "4346c43fc700f4d8cf1ca0df983f82c37934a1eb",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 07:46:19 -0500",
+        "message": "Implement feature X to enhance user experience and fix bug Y in module Z"
+      },
+      {
+        "hash": "754321b90f39b75ad69de229101c07c588374a3b",
+        "author": "github-actions[bot]",
+        "date": "2025-11-22 12:46:14 +0000",
+        "message": "ci: update coverage badge [skip ci]"
+      },
+      {
+        "hash": "d33f5415bd5fbc9bd503ed68cbfd60381c081edc",
+        "author": "github-actions",
+        "date": "2025-11-22 12:45:37 +0000",
+        "message": "ci: update coverage badge"
+      },
+      {
+        "hash": "1453ccdacb84e6666e3086be4ebecf31f87cefa7",
+        "author": "chango112595-cell",
+        "date": "2025-11-22 07:44:28 -0500",
+        "message": "feat: Update autonomous agent logs, enhance capability tracking, and improve system documentation"
+      }
+    ]
+  },
+  "file_analysis": {
+    "python_files": 2828,
+    "typescript_files": 132,
+    "javascript_files": 130,
+    "markdown_files": 1042,
+    "json_files": 3063,
+    "total_files": 9158,
+    "large_files": [
+      {
+        "path": "./corpus.db",
+        "size_mb": 5.4
+      },
+      {
+        "path": "./aurora_analysis_results.json",
+        "size_mb": 1.49
+      },
+      {
+        "path": "./attached_assets/generated_images/Holographic_AI_neural_network_background_9dd21e33.png",
+        "size_mb": 1.58
+      },
+      {
+        "path": "./data/corpus.db",
+        "size_mb": 10.51
+      },
+      {
+        "path": "./archive/legacy/corpus.jsonl",
+        "size_mb": 4.68
+      },
+      {
+        "path": "./dist/public/assets/Holographic_AI_neural_network_background_9dd21e33.DQASWNWk.png",
+        "size_mb": 1.58
+      },
+      {
+        "path": "./dist/public/assets/index.Bh63qvtM.js",
+        "size_mb": 1.1
+      }
+    ]
+  },
+  "system_state": {
+    "key_files_present": {
+      "aurora_core.py": true,
+      "aurora_x/main.py": true,
+      "server/index.ts": true,
+      "client/src/main.tsx": true,
+      "package.json": true,
+      "requirements.txt": true
+    },
+    "analysis_reports_count": 11,
+    "analysis_reports": [
+      "AURORA_ARCHITECTURE_ANALYSIS.md",
+      "AURORA_CROSS_REFERENCE_ANALYSIS.md",
+      "AURORA_CURRENT_STATE_ANALYSIS.md",
+      "AURORA_ROOT_CAUSE_ANALYSIS.md",
+      "AURORA_SELF_ANALYSIS_LOG.md",
+      "AURORA_CONSCIOUSNESS_ANALYSIS.md",
+      "AURORA_FULL_AUTONOMY_ANALYSIS.md",
+      "AURORA_SELF_AWARENESS_ANALYSIS.md",
+      "AURORA_TERMINAL_POWER_ANALYSIS_20251121_183422.md",
+      "AURORA_BRANCH_QUALITY_ANALYSIS.md"
+    ]
+  },
+  "recommendations": [
+    {
+      "priority": "MEDIUM",
+      "category": "File Management",
+      "issue": "7 files over 1MB detected",
+      "action": "Consider archiving or optimizing large files"
+    },
+    {
+      "priority": "LOW",
+      "category": "Branch Cleanup",
+      "issue": "58 branches exist",
+      "action": "Consider cleaning up old/merged branches"
+    }
+  ],
+  "improvement_priorities": []
+}
