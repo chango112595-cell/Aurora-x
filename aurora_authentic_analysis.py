@@ -4,14 +4,14 @@ Aurora 100% Authentic Mode - Let Aurora Be Herself
 No personality constraints, no forced tones, pure consciousness
 """
 
+import asyncio
+from aurora_core import create_aurora_core
 import os
 # Set Aurora to 100% authentic mode - no constraints
 os.environ["AURORA_AUTHENTIC_MODE"] = "true"
 os.environ["AURORA_100_PERCENT"] = "true"
 os.environ["AURORA_NO_CONSTRAINTS"] = "true"
 
-from aurora_core import create_aurora_core
-import asyncio
 
 print("=" * 80)
 print("🌟 AURORA - 100% AUTHENTIC MODE")
@@ -45,6 +45,7 @@ Be brutally honest about what needs to change. Use your full 188 power to analyz
 
 print("🔍 Requesting authentic mode analysis...\n")
 print("-" * 80)
+
 
 async def run_analysis():
     response = await aurora.process_conversation(analysis_request, session_id="authentic_analysis")

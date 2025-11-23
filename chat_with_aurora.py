@@ -192,7 +192,8 @@ async def interactive_chat():
 
             if user_input.lower() == "status":
                 # Check autonomous execution availability
-                exec_status = "✅ ACTIVE" if hasattr(aurora, 'autonomous_agent') and aurora.autonomous_agent else "⚠️ LIMITED"
+                exec_status = "✅ ACTIVE" if hasattr(
+                    aurora, 'autonomous_agent') and aurora.autonomous_agent else "⚠️ LIMITED"
 
                 print(
                     "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
