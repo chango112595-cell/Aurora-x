@@ -16,7 +16,31 @@ export default function AuroraFuturisticDashboard() {
       setNeuralActivity(prev => Math.max(95, Math.min(100, prev + (Math.random() - 0.5) * 3)));
     }, 2000);
     return () => clearInterval(interval);
-  }, []);
+  
+    
+    // Fetch Aurora status and scores
+    const fetchAuroraData = async () => {
+      try {
+        const statusRes = await fetch('http://localhost:5000/api/aurora/status');
+        const statusData = await statusRes.json();
+        console.log('Aurora Status:', statusData);
+        
+        const scoresRes = await fetch('http://localhost:5000/api/aurora/scores');
+        const scoresData = await scoresRes.json();
+        console.log('Aurora Scores:', scoresData);
+        
+        // You can update state here with the real data
+        // setAuroraStatus(statusData);
+        // setAuroraScores(scoresData.scores);
+      } catch (error) {
+        console.log('Aurora API not available:', error);
+      }
+    };
+    
+    fetchAuroraData();
+    const interval = setInterval(fetchAuroraData, 5000); // Update every 5 seconds
+    return () => clearInterval(interval);
+}, []);
 
   const foundationalTasks = [
     { id: 1, name: "Understand", capability: "Natural Language Processing", status: "active", level: 100 },

@@ -853,5 +853,109 @@ def main():
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
 
+
+
+@app.get("/api/aurora/scores", tags=["monitoring"], summary="Get Aurora Quality Scores")
+async def get_aurora_scores():
+    """
+    Get Aurora's code quality scores and analysis history.
+    
+    Returns all quality assessments Aurora has performed, including:
+    - Timestamp of analysis
+    - Programming language
+    - Quality score (1-10)
+    - Detailed analysis results
+    """
+    try:
+        from pathlib import Path
+        import json
+        
+        scores_file = Path(__file__).parent.parent / '.aurora_scores.json'
+        
+        if not scores_file.exists():
+            return {
+                "ok": True,
+                "scores": [],
+                "message": "No scores recorded yet"
+            }
+        
+        scores = []
+        with open(scores_file, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        scores.append(json.loads(line))
+                    except:
+                        pass
+        
+        # Sort by timestamp (newest first)
+        scores.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+        
+        return {
+            "ok": True,
+            "scores": scores,
+            "total": len(scores),
+            "latest_score": scores[0] if scores else None
+        }
+        
+    except Exception as e:
+        return {
+            "ok": False,
+            "error": str(e),
+            "scores": []
+        }
+
+
+@app.get("/api/aurora/status", tags=["monitoring"], summary="Get Aurora System Status")
+async def get_aurora_status():
+    """
+    Get comprehensive Aurora system status including orchestration and scoring.
+    """
+    try:
+        from pathlib import Path
+        import json
+        
+        project_root = Path(__file__).parent.parent
+        scores_file = project_root / '.aurora_scores.json'
+        
+        # Count scores
+        score_count = 0
+        latest_score = None
+        if scores_file.exists():
+            with open(scores_file, 'r', encoding='utf-8') as f:
+                lines = [line for line in f if line.strip()]
+                score_count = len(lines)
+                if lines:
+                    try:
+                        latest_score = json.loads(lines[-1])
+                    except:
+                        pass
+        
+        return {
+            "ok": True,
+            "aurora_version": "2.0",
+            "status": "operational",
+            "capabilities": {
+                "orchestration": True,
+                "scoring": True,
+                "tracking": True,
+                "autonomous": True
+            },
+            "statistics": {
+                "total_scores": score_count,
+                "latest_score": latest_score.get('score', 0) if latest_score else 0,
+                "last_activity": latest_score.get('timestamp') if latest_score else None
+            }
+        }
+        
+    except Exception as e:
+        return {
+            "ok": False,
+            "error": str(e)
+        }
+
+
+
 if __name__ == "__main__":
     main()

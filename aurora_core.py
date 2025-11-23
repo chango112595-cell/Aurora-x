@@ -26,6 +26,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+# Aurora's orchestration system
+try:
+    from tools.ultimate_api_manager import UltimateAPIManager
+    ORCHESTRATION_AVAILABLE = True
+except ImportError:
+    ORCHESTRATION_AVAILABLE = False
+    print("⚠️ Ultimate API Manager not available - running without orchestration")
+
 # ============================================================================
 # AURORA'S CORE CONFIGURATION
 # ============================================================================
@@ -1275,6 +1283,16 @@ class AuroraCoreIntelligence:
         self.learning_memory: dict[str, Any] = {}
         self.autonomous_mode = True
 
+        # Activate orchestration system
+        if ORCHESTRATION_AVAILABLE:
+            print("🚀 Activating Ultimate API Manager orchestration...")
+            self.orchestrator_manager = UltimateAPIManager(auto_start=True)
+            self.orchestrator_manager.start_autonomous_mode()
+            print("✅ Orchestration system activated - autonomous management enabled")
+        else:
+            self.orchestrator_manager = None
+            print("⚠️ Running without orchestration system")
+
         # Aurora's orchestration capabilities
         self.orchestrator = AuroraOrchestrator(str(self.project_root))
 
@@ -1316,6 +1334,51 @@ class AuroraCoreIntelligence:
             "topics_history": [],
             "remembered_facts": [],
         }
+
+    def analyze_and_score(self, code: str, language: str = "python") -> dict:
+        """
+        Analyze code quality and score it 1-10 using Aurora Expert Knowledge
+        
+        Args:
+            code: The code to analyze
+            language: Programming language (python, javascript, typescript, etc.)
+        
+        Returns:
+            Dict with score, analysis, and recommendations
+        """
+        try:
+            from tools.aurora_expert_knowledge import AuroraExpertKnowledge
+            
+            expert = AuroraExpertKnowledge()
+            analysis = expert.get_expert_analysis(code, language)
+            
+            # Save to persistent storage
+            score_data = {
+                'timestamp': datetime.now().isoformat(),
+                'language': language,
+                'score': analysis.get('code_quality_score', 0),
+                'analysis': analysis,
+                'code_length': len(code)
+            }
+            
+            # Append to scores file
+            scores_file = self.project_root / '.aurora_scores.json'
+            with open(scores_file, 'a', encoding='utf-8') as f:
+                json.dump(score_data, f)
+                f.write('\n')
+            
+            print(f"📊 Code scored: {score_data['score']}/10")
+            
+            return analysis
+            
+        except Exception as e:
+            print(f"⚠️ Scoring error: {e}")
+            return {
+                'code_quality_score': 0,
+                'error': str(e),
+                'status': 'failed'
+            }
+
 
     def _save_persistent_memory(self):
         """Save persistent memory to disk"""
