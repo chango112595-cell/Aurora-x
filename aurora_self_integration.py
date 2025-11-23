@@ -64,17 +64,18 @@ found_tracking = {}
 
 for system_name, keywords in tracking_keywords.items():
     found_tracking[system_name] = []
-    
+
     for py_file in all_py_files:
         if py_file.stat().st_size > 10_000_000:
             continue
-        
+
         try:
             content = py_file.read_text(encoding='utf-8', errors='ignore')
-            
+
             # Check if file has tracking functionality
-            matches = sum(1 for keyword in keywords if keyword.lower() in content.lower())
-            
+            matches = sum(
+                1 for keyword in keywords if keyword.lower() in content.lower())
+
             if matches >= 2:  # At least 2 keywords match
                 found_tracking[system_name].append({
                     'file': str(py_file),
@@ -92,12 +93,13 @@ for system, files in found_tracking.items():
         # Sort by matches and size
         files.sort(key=lambda x: (x['matches'], x['size']), reverse=True)
         best_match = files[0]
-        
+
         print(f"✅ {system}")
-        print(f"   Best Match: {best_match['name']} ({best_match['matches']} keyword matches)")
+        print(
+            f"   Best Match: {best_match['name']} ({best_match['matches']} keyword matches)")
         print(f"   Location: {best_match['file']}")
         print(f"   Size: {best_match['size']:,} bytes")
-        
+
         integration_plan["phase_1_tracking"]["actions"].append({
             "system": system,
             "file": best_match['file'],
@@ -116,7 +118,7 @@ print("=" * 120)
 
 if tools_dir.exists():
     tool_files = list(tools_dir.glob("*.py"))
-    
+
     # Priority tools based on size and functionality
     priority_tools = {
         "Conversation Intelligence": "aurora_conversation_intelligence.py",
@@ -130,15 +132,15 @@ if tools_dir.exists():
         "Emergency Debug": "aurora_emergency_debug.py",
         "Dashboard Tutorial": "aurora_dashboard_tutorial.py"
     }
-    
+
     print("\n📋 HIGH-PRIORITY TOOLS TO ACTIVATE:\n")
-    
+
     for tool_name, tool_file in priority_tools.items():
         tool_path = tools_dir / tool_file
         if tool_path.exists():
             size = tool_path.stat().st_size
             print(f"✅ {tool_name}: {tool_file} ({size:,} bytes)")
-            
+
             integration_plan["phase_2_tools"]["actions"].append({
                 "tool": tool_name,
                 "file": str(tool_path),
@@ -157,7 +159,7 @@ print("=" * 120)
 
 components_dir = Path("client/src/components")
 if components_dir.exists():
-    
+
     priority_components = [
         "AuroraChatInterface",
         "AuroraMonitor",
@@ -165,17 +167,17 @@ if components_dir.exists():
         "AuroraControl",
         "AuroraPanel"
     ]
-    
+
     print("\n📋 PRIORITY COMPONENTS TO INTEGRATE:\n")
-    
+
     for comp_name in priority_components:
         # Look for the component file
         comp_files = list(components_dir.glob(f"**/{comp_name}.*"))
-        
+
         if comp_files:
             comp_file = comp_files[0]
             print(f"✅ {comp_name}: {comp_file.name}")
-            
+
             integration_plan["phase_3_components"]["actions"].append({
                 "component": comp_name,
                 "file": str(comp_file),
@@ -215,14 +217,14 @@ print("\n📋 DORMANT SERVICES:\n")
 
 for service_name, details in dormant_services.items():
     print(f"\n🔌 {service_name} (Port {details['port']})")
-    
+
     found_files = []
     for filename in details['files']:
         matches = list(Path('.').rglob(filename))
         if matches:
             found_files.append(str(matches[0]))
             print(f"   ✅ Found: {matches[0]}")
-    
+
     if found_files:
         integration_plan["phase_4_services"]["actions"].append({
             "service": service_name,
@@ -255,7 +257,8 @@ print("\n" + "=" * 120)
 print("📊 INTEGRATION SUMMARY")
 print("=" * 120)
 
-total_actions = sum(len(phase["actions"]) for phase in integration_plan.values())
+total_actions = sum(len(phase["actions"])
+                    for phase in integration_plan.values())
 
 print(f"""
 🎯 TOTAL INTEGRATION ACTIONS IDENTIFIED: {total_actions}
