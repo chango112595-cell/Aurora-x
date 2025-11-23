@@ -48,7 +48,7 @@ Aurora has autonomously redesigned her user interface with a futuristic quantum 
 2. `dashboard.tsx` - Page route
 
 ### Data Integration
-- Uses real architecture data (13 tasks, 79 tiers)
+- Uses real architecture data (13 tasks, 66 tiers)
 - Dynamic service status
 - Simulated quantum coherence (realistic fluctuations)
 

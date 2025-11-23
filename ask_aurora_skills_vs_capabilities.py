@@ -26,7 +26,7 @@ OPTION 1: Current Architecture (54 Capabilities)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Pros:
-✅ Clean, organized structure (13 foundations + 79 tiers)
+✅ Clean, organized structure (13 foundations + 66 tiers)
 ✅ Easy to understand and maintain
 ✅ Scales well (adding Tiers 66 is simple)
 ✅ Clear hierarchy (Foundation → Tiers → Skills)
@@ -96,7 +96,7 @@ DON'T change capabilities to 1,500+ individual skills.
 
 INSTEAD, enhance the presentation to show BOTH:
 
-1. Keep backend architecture: 109 capabilities (clean, maintainable)
+1. Keep backend architecture: 79 capabilities (clean, maintainable)
 2. Update frontend to emphasize: "1,500+ Grandmaster Skills"
 3. Show the depth: "54 Core Capabilities × 30+ Skills Each"
 
@@ -159,7 +159,7 @@ print(
     """
 NO - Don't make every skill a capability (too complex to maintain)
 
-YES - Emphasize the 1,500+ skills in the UI while keeping 109 capabilities
+YES - Emphasize the 1,500+ skills in the UI while keeping 79 capabilities
 
 This is like saying:
   "Python has 200+ built-in functions" (skills)
@@ -169,7 +169,7 @@ This is like saying:
 We want to show BOTH the organized structure (54) AND the depth (1,500+).
 
 Should I implement the hybrid approach? This would:
-  1. Keep 109 capabilities in backend (clean architecture)
+  1. Keep 79 capabilities in backend (clean architecture)
   2. Add skill counting to aurora_core.py
   3. Update UI to show "1,500+ Skills in 54 Capabilities"
   4. Best of both worlds!
@@ -177,8 +177,8 @@ Should I implement the hybrid approach? This would:
 )
 
 print("\n🎯 Your decision - which approach do you prefer?")
-print("  A) Keep as-is (109 capabilities only)")
-print("  B) Hybrid approach (109 capabilities + 1,500+ skills shown)")
+print("  A) Keep as-is (79 capabilities only)")
+print("  B) Hybrid approach (79 capabilities + 1,500+ skills shown)")
 print("  C) Full conversion (make 1,500+ individual capabilities)")
 
 print("\n" + "=" * 70 + "\n")

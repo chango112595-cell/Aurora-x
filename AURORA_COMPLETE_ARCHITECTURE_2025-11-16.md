@@ -86,7 +86,7 @@ The core cognitive layer that everything else is built upon:
 
 ### Integration Points
 
-1. **aurora_core.py**: Defines all 13 tasks + 79 tiers
+1. **aurora_core.py**: Defines all 13 tasks + 66 tiers
 2. **aurora_intelligence_manager.py**: Uses core for problem-solving ✅ UPDATED
 3. **Client dashboards**: Display accurate architecture ✅ UPDATED (7 files)
 4. **Luminar Nexus V2**: Service orchestration with tier awareness ✅ OPERATIONAL
@@ -120,9 +120,9 @@ autonomous_tier = aurora.tiers["tier_34_grandmaster_autonomous"]
 
 ### Updated Components (2025-11-16)
 
-✅ **aurora_core.py**: 13 tasks + 79 tiers defined and accessible
+✅ **aurora_core.py**: 13 tasks + 66 tiers defined and accessible
 ✅ **aurora_intelligence_manager.py**: Now imports and uses core
-✅ **Client dashboards**: Updated from "79 tiers" to "66 systems"
+✅ **Client dashboards**: Updated from "66 tiers" to "66 systems"
   - AuroraDashboard.tsx
   - AuroraPanel.tsx
   - AuroraControl.tsx
@@ -139,7 +139,7 @@ autonomous_tier = aurora.tiers["tier_34_grandmaster_autonomous"]
 ```
 [Aurora] ✅ Core imported successfully
 [Aurora] ✅ Foundations loaded: 13 tasks
-[Aurora] ✅ Knowledge tiers loaded: 79 tiers
+[Aurora] ✅ Knowledge tiers loaded: 66 tiers
 [Aurora] ✅ All core systems accessible and functional!
 [Aurora] Status: FULLY OPERATIONAL
 [Aurora] All 109 capability systems ready for autonomous use
@@ -159,9 +159,9 @@ autonomous_tier = aurora.tiers["tier_34_grandmaster_autonomous"]
 
 ### No 37 Tiers
 
-There is no evidence of 79 tiers in the codebase. The confusion likely came from:
+There is no evidence of 66 tiers in the codebase. The confusion likely came from:
 - Dashboard showing "32 Grandmaster Tiers" (now corrected to 47)
-- Various documents mentioning 27, 32, 33, or 79 tiers
+- Various documents mentioning 27, 32, 33, or 66 tiers
 - The actual architecture is: **13 Tasks + 34 Tiers = 47 Total**
 
 ---

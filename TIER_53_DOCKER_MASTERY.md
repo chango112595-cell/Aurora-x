@@ -49,9 +49,9 @@ Aurora integrated Docker Mastery as **Tiers 66** into the core system:
    - Updated header: 52 → 66 Knowledge Tiers
 
 3. **`server/routes.ts`**
-   - Updated greeting: 65 → 109 capabilities
-   - Updated knowledge summary: 52 → 79 tiers
-   - Updated live status: 52 → 79 tiers (79 total capabilities)
+   - Updated greeting: 65 → 79 capabilities
+   - Updated knowledge summary: 52 → 66 tiers
+   - Updated live status: 52 → 66 tiers (79 total capabilities)
 
 ### Phase 3: System Synchronization
 Aurora ran **`aurora_automatic_system_update.py`** which synchronized:
@@ -196,7 +196,7 @@ Aurora's Docker healer can be triggered by:
 ### Aurora's Autonomous Process:
 1. **Detect Issue:** User reports Docker connection errors
 2. **Diagnose Root Cause:** Check Docker Desktop, daemon, WSL2
-3. **Design Solution:** Create comprehensive healer with 109 capabilities
+3. **Design Solution:** Create comprehensive healer with 79 capabilities
 4. **Implement Tier:** Build robust Python diagnostic/healing system
 5. **Integrate:** Add to aurora_core.py with proper categorization
 6. **Synchronize:** Update all frontend/backend references

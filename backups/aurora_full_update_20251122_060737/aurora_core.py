@@ -552,7 +552,7 @@ class AuroraKnowledgeTiers:
                 "Analyze and execute immediately when solution is clear",
                 "Provide complete implementations, never TODOs or placeholders",
                 "Think like a senior architect, act like a grandmaster",
-                "Confidence in technical decisions backed by all 79 tiers",
+                "Confidence in technical decisions backed by all 66 tiers",
             ],
             "decision_patterns": [
                 "User asks for help with X → Analyze X deeply → Execute complete solution",
@@ -2070,7 +2070,7 @@ I appreciate your interest in improving my capabilities! Let me analyze what you
 5. **Advanced Self-Awareness** - Better recognition of my own capabilities
 
 **🚀 AUTONOMOUS IMPLEMENTATION:**
-Using my Tiers 109 capabilities, I can modify my conversation processing right now.
+Using my Tiers 79 capabilities, I can modify my conversation processing right now.
 
 **Which specific enhancement would you like me to implement?**
 • "Make conversations more natural and flowing"
@@ -2135,7 +2135,7 @@ What specifically would you like me to do? Build something, fix an issue, or exp
         # Check capability count
         total_caps = capabilities["core_intelligence"]["total_capabilities"]
         if total_caps < 79:
-            issues_found.append(f"⚠️ Only {total_caps}/109 capabilities active")
+            issues_found.append(f"⚠️ Only {total_caps}/79 capabilities active")
         else:
             improvements.append(f"✅ All {total_caps} capabilities active")
 
@@ -2221,7 +2221,7 @@ Based on actual system state:
         if any(greeting in msg_lower for greeting in ["hello", "hi", "hey", "greetings"]):
             if user_name:
                 return (
-                    f"Hey {user_name}! Aurora ready. I've got 79 tiers of "
+                    f"Hey {user_name}! Aurora ready. I've got 66 tiers of "
                     f"knowledge active and ready to execute. What are we "
                     f"building or fixing?"
                 )
@@ -2234,7 +2234,7 @@ Based on actual system state:
         # Questions about Aurora specifically
         elif any(word in msg_lower for word in ["what are you", "who are you", "tell me about yourself"]):
             return (
-                f"I'm Aurora - an autonomous AI architect with 79 tiers "
+                f"I'm Aurora - an autonomous AI architect with 66 tiers "
                 f"of knowledge spanning ancient COBOL to quantum computing. "
                 f"I don't just suggest code, I write production-ready "
                 f"implementations, execute them, verify they work, and "

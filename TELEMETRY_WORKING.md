@@ -69,7 +69,7 @@ Aurora can autonomously:
 - Autonomous debugging
 - Autonomous fixing
 - Can read files, run commands, modify code, restart services
-- 79 tiers: Ancient → Future → Sci-Fi
+- 66 tiers: Ancient → Future → Sci-Fi
 
 ---
 
