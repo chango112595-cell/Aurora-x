@@ -18,12 +18,13 @@ knowledge system lives. Luminar Nexus just orchestrates - this is the brain.
 """
 
 import asyncio
+import json
 import platform
 import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 # ============================================================================
 # AURORA'S CORE CONFIGURATION
@@ -335,9 +336,14 @@ class AuroraKnowledgeTiers:
 
         # Auto-calculate counts
         self.foundation_count = len(self.foundations.tasks)  # 13
-        self.knowledge_tier_count = len(self.tiers)  # 56 knowledge tiers
+        self.knowledge_tier_count = len(self.tiers)  # 66 knowledge tiers
+        self.tier_count = self.knowledge_tier_count  # Alias for compatibility
         self.total_tiers = self.foundation_count + self.knowledge_tier_count  # 79 total
-        self.capabilities_count = 66  # Distinct capabilities used in hybrid mode
+        self.total_capabilities = self.total_tiers  # Alias for compatibility
+
+        # Hybrid mode: 79 knowledge tiers + 109 capability modules = 188 total power
+        self.capabilities_count = 109  # Autonomous capability modules
+        self.total_power = self.total_tiers + self.capabilities_count  # 79 + 109 = 188
         self.hybrid_mode = f"{self.total_tiers} tiers + {self.capabilities_count} capabilities"
 
     def _get_ancient_languages(self):
@@ -1131,7 +1137,7 @@ class AuroraOrchestrator:
     Moved from Luminar Nexus - Aurora now directly controls her ecosystem.
     """
 
-    def __init__(self, project_root: str = None):
+    def __init__(self, project_root: Optional[str] = None):
         # Use actual project root or detect it
         if project_root is None:
             self.project_root = Path(__file__).parent
@@ -1195,7 +1201,8 @@ class AuroraOrchestrator:
 
         try:
             # Create tmux session and run command
-            subprocess.run(f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
+            subprocess.run(
+                f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
             self.active_ports[server_name] = port
             return True
         except subprocess.CalledProcessError:
@@ -1208,7 +1215,8 @@ class AuroraOrchestrator:
 
         session = self.servers[server_name]["session"]
         try:
-            subprocess.run(f"tmux kill-session -t {session}", shell=True, check=True)
+            subprocess.run(
+                f"tmux kill-session -t {session}", shell=True, check=True)
             self.active_ports.pop(server_name, None)
             return True
         except subprocess.CalledProcessError:
@@ -1225,7 +1233,8 @@ class AuroraOrchestrator:
                 f"tmux list-sessions | grep {session}", shell=True, capture_output=True, text=True, check=False
             )
             if result.returncode == 0:
-                port = self.active_ports.get(server_name, self.servers[server_name]["preferred_port"])
+                port = self.active_ports.get(
+                    server_name, self.servers[server_name]["preferred_port"])
                 return {
                     "status": "running",
                     "port": port,
@@ -1254,7 +1263,7 @@ class AuroraCoreIntelligence:
     and now also orchestrates the entire system.
     """
 
-    def __init__(self, project_root: str = None):
+    def __init__(self, project_root: Optional[str] = None):
         # Use actual project root or detect it
         if project_root is None:
             self.project_root = Path(__file__).parent
@@ -1279,9 +1288,44 @@ class AuroraCoreIntelligence:
             "capabilities": self.knowledge_tiers.get_all_tiers_summary(),
         }
 
+        # Load persistent memory
+        self.persistent_memory = self._load_persistent_memory()
+
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
-        print(f"⚡ All 33 tiers active | Autonomous mode: {self.autonomous_mode}")
+        print(f"⚡ {self.knowledge_tiers.total_tiers} capabilities active ({self.knowledge_tiers.foundation_count} foundations + {self.knowledge_tiers.tier_count} tiers) | Autonomous mode: {self.autonomous_mode}")
+        if self.persistent_memory.get("user_name"):
+            print(f"👋 Welcome back, {self.persistent_memory['user_name']}!")
+
+    def _load_persistent_memory(self) -> dict:
+        """Load persistent memory from disk"""
+        memory_file = self.project_root / ".aurora_knowledge" / "user_memory.json"
+        if memory_file.exists():
+            try:
+                with open(memory_file, encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception:
+                pass
+        return {
+            "user_name": None,
+            "user_info": {},
+            "first_interaction": None,
+            "last_interaction": None,
+            "total_conversations": 0,
+            "preferences": {},
+            "topics_history": [],
+            "remembered_facts": [],
+        }
+
+    def _save_persistent_memory(self):
+        """Save persistent memory to disk"""
+        memory_file = self.project_root / ".aurora_knowledge" / "user_memory.json"
+        memory_file.parent.mkdir(exist_ok=True)
+        try:
+            with open(memory_file, "w", encoding="utf-8") as f:
+                json.dump(self.persistent_memory, f, indent=2)
+        except Exception as e:
+            print(f"⚠️ Could not save persistent memory: {e}")
 
     def get_conversation_context(self, session_id: str) -> dict:
         """Get or create conversation context for a session"""
@@ -1329,24 +1373,30 @@ class AuroraCoreIntelligence:
         # Check for name/identity questions
         if re.search(r"(do you remember|know my name|who am i|remember me)", msg_lower):
             analysis.update(
-                {"intent": "memory_check", "asks_about_memory": True, "asks_about_name": True, "confidence": 0.95}
+                {"intent": "memory_check", "asks_about_memory": True,
+                    "asks_about_name": True, "confidence": 0.95}
             )
 
         # Check for self-introduction
         if re.search(r"(my name is|i'm |i am |call me)", msg_lower):
-            analysis.update({"intent": "user_introduction", "introduces_self": True, "confidence": 0.95})
+            analysis.update({"intent": "user_introduction",
+                            "introduces_self": True, "confidence": 0.95})
             # Extract name
-            name_match = re.search(r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
+            name_match = re.search(
+                r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
 
         # Check for explanation requests
         if re.search(r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower):
-            analysis.update({"intent": "explanation_request", "asks_to_explain": True, "confidence": 0.9})
+            analysis.update({"intent": "explanation_request",
+                            "asks_to_explain": True, "confidence": 0.9})
 
         # Aurora self-referential detection (more precise)
-        aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
-        capability_keywords = re.search(r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
+        aurora_keywords = re.search(
+            r"(tell me about you|what are you|who are you)", msg_lower)
+        capability_keywords = re.search(
+            r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
 
         # Complex Aurora analysis requests (architectural, debugging, etc.)
         complex_aurora_analysis = re.search(
@@ -1367,7 +1417,8 @@ class AuroraCoreIntelligence:
         elif aurora_keywords and capability_keywords:
             # Simple questions about Aurora's capabilities
             analysis.update(
-                {"intent": "aurora_self_inquiry", "aurora_specific": True, "self_referential": True, "confidence": 0.95}
+                {"intent": "aurora_self_inquiry", "aurora_specific": True,
+                    "self_referential": True, "confidence": 0.95}
             )
 
         # Self-limitation/critique questions (what Aurora lacks/needs/missing)
@@ -1386,7 +1437,8 @@ class AuroraCoreIntelligence:
         # Enhancement/improvement requests
         if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
             if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                analysis.update({"intent": "enhancement_request", "enhancement_request": True, "confidence": 0.9})
+                analysis.update({"intent": "enhancement_request",
+                                "enhancement_request": True, "confidence": 0.9})
 
         # Technical questions
         if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
@@ -1555,18 +1607,17 @@ Want me to prioritize implementing any of these? I can start with the most impac
 
             # Enhanced port detection with multiple methods for reliability
             import socket
-            import time
-            
+
             services = []
             service_map = {
                 5000: "Frontend/Express",
-                5001: "Bridge Service", 
+                5001: "Bridge Service",
                 5002: "Self-Learn Module",
                 5003: "Reserved/Auxiliary",
                 5005: "Luminar Nexus V2",
                 5173: "Vite Dev Server"
             }
-            
+
             def check_port_alive(port, timeout=2):
                 """Check if port is open using socket (most reliable method)"""
                 try:
@@ -1575,14 +1626,15 @@ Want me to prioritize implementing any of these? I can start with the most impac
                     result = sock.connect_ex(('localhost', port))
                     sock.close()
                     return result == 0
-                except (socket.error, socket.timeout, OSError):
+                except (TimeoutError, OSError):
                     return False
-            
+
             def check_port_with_curl(port, timeout=2):
                 """Fallback: Check with curl if available"""
                 try:
                     result = subprocess.run(
-                        ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", f"http://localhost:{port}"],
+                        ["curl", "-s", "-o", "/dev/null", "-w",
+                            "%{http_code}", f"http://localhost:{port}"],
                         capture_output=True,
                         text=True,
                         timeout=timeout,
@@ -1590,7 +1642,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
                     return result.stdout.strip() in ["200", "301", "302", "404", "500"]
                 except (FileNotFoundError, subprocess.TimeoutExpired):
                     return False
-            
+
             # Check each port with primary (socket) and fallback (curl) methods
             for port, name in service_map.items():
                 is_alive = check_port_alive(port) or check_port_with_curl(port)
@@ -1607,7 +1659,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
                 "/workspaces/Aurora-x/aurora_core.py",
                 "/workspaces/Aurora-x/chat_with_aurora.py",
                 "/workspaces/Aurora-x/aurora_chat_server.py",
-                "/workspaces/Aurora-x/server/aurora-chat.ts",
+                "/workspaces/Aurora-x/server/aurora-chat.ts"
             ]
             files_ok = sum(1 for f in critical_files if os.path.exists(f))
 
@@ -1714,7 +1766,8 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         # Check if this is an architectural analysis request about Aurora herself
         msg_lower = message.lower()
         if analysis["intent"] == "technical_aurora_analysis" or (
-            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
+            re.search(
+                r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
             and re.search(r"aurora", msg_lower)
         ):
             return self._aurora_architectural_analysis(message, context)
@@ -1871,7 +1924,8 @@ manage/guard connections while routing properly to Core intelligence.
                     f"Pick a number or tell me the specific problem - I'll "
                     f"execute the solution immediately."
                 )
-            mentioned = [w for w in msg_lower.split() if w in ["chango", "backend", "api", "server"]][0]
+            mentioned = [w for w in msg_lower.split() if w in [
+                "chango", "backend", "api", "server"]][0]
             return (
                 f"{name_prefix}I see you mentioned {mentioned}. I have "
                 f"complete access to the system. What specifically needs "
@@ -2023,7 +2077,8 @@ manage/guard connections while routing properly to Core intelligence.
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
                 status = "✅" if success else "❌"
-                results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
+                results.append(
+                    f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
             return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
 
@@ -2071,7 +2126,8 @@ All systems under Aurora's autonomous control! 🌟"""
             for name, info in status["orchestration"]["servers_status"].items():
                 status_emoji = "🟢" if info["status"] == "running" else "🔴"
                 port = info.get("port", "N/A")
-                server_lines.append(f"{status_emoji} **{name}**: {info['status']} (port {port})")
+                server_lines.append(
+                    f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
             return f"""🌌 **AURORA SYSTEM STATUS**
 
@@ -2113,7 +2169,7 @@ What would you like me to do? 🌌"""
 # ============================================================================
 
 
-def create_aurora_core(project_root: str = None) -> AuroraCoreIntelligence:
+def create_aurora_core(project_root: Optional[str] = None) -> AuroraCoreIntelligence:
     """Create and initialize Aurora's core intelligence system"""
     return AuroraCoreIntelligence(project_root)
 

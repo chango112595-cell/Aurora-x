@@ -1,5 +1,5 @@
 import unittest
-from src.# SpecV3: Fibonacci import # SpecV3: Fibonacci
+# SpecV3: Fibonacci
 from src.fib import fib
 class Test_fib_0(unittest.TestCase):
     def test_0(self):

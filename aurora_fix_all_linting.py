@@ -51,8 +51,8 @@ def main():
                 'print("[Aurora]   • 13 Foundational Tasks (Base Cognitive Layer)")',
             ),
             (
-                'print(f"[Aurora]   • 34 Knowledge Tiers (Specialized Domains)")',
-                'print("[Aurora]   • 34 Knowledge Tiers (Specialized Domains)")',
+                'print(f"[Aurora]   • 66 Knowledge Tiers (Specialized Domains)")',
+                'print("[Aurora]   • 66 Knowledge Tiers (Specialized Domains)")',
             ),
             ('print(f"[Aurora]   • 47 Total Capability Systems")', 'print("[Aurora]   • 47 Total Capability Systems")'),
         ],

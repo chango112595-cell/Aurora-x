@@ -3,7 +3,7 @@
 Aurora Self-Monitor System
 Phase 1: Self-Awareness & Monitoring (Minutes 1-10)
 
-Real-time monitoring of all 48 capabilities:
+Real-time monitoring of all 109 capabilities:
 - Track system health 24/7
 - Monitor 2,007+ files for changes
 - Log performance metrics
@@ -23,7 +23,7 @@ from aurora_core import AuroraKnowledgeTiers
 
 
 class AuroraSelfMonitor:
-    """Aurora's central nervous system - monitors all 48 capabilities"""
+    """Aurora's central nervous system - monitors all 109 capabilities"""
 
     def __init__(self):
         self.aurora = AuroraKnowledgeTiers()

@@ -1,5 +1,5 @@
 import unittest
-from src.# SpecV3: Palindrome Checker import # SpecV3: Palindrome Checker
+# SpecV3: Palindrome Checker
 from src.reverse_string import reverse_string
 class Test_reverse_string_0(unittest.TestCase):
     def test_0(self):

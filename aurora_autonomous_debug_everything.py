@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Autonomous Debug & Fix Everything
 Self-healing system that finds and fixes ALL errors across the entire project
 """
@@ -51,12 +52,12 @@ class AuroraAutonomousDebugger:
 
     def log(self, message: str, level: str = "INFO"):
         """Log with Aurora's intelligence"""
-        timestamp = datetime.now().strftime("%H:%M:%S")
+        _timestamp = datetime.now().strftime("%H:%M:%S")
         prefix = {"INFO": "ℹ️", "SUCCESS": "✅", "ERROR": "❌", "WARNING": "⚠️", "DEBUG": "🔍", "FIX": "🔧"}.get(
             level, "ℹ️"
         )
 
-        print(f"[{timestamp}] {prefix} {message}")
+        print(f"[{_timestamp}] {prefix} {message}")
 
     def scan_python_files(self) -> list[Path]:
         """Scan all Python files for syntax and import errors"""
@@ -101,10 +102,12 @@ class AuroraAutonomousDebugger:
 
         except SyntaxError as e:
             issues.append(
-                {"file": str(file_path), "line": e.lineno, "type": "SyntaxError", "message": str(e.msg), "text": e.text}
+                {"file": str(file_path), "line": e.lineno, "type": "SyntaxError", "message": str(
+                    e.msg), "text": e.text}
             )
         except Exception as e:
-            issues.append({"file": str(file_path), "type": "CompileError", "message": str(e)})
+            issues.append(
+                {"file": str(file_path), "type": "CompileError", "message": str(e)})
 
         return issues
 
@@ -113,27 +116,41 @@ class AuroraAutonomousDebugger:
         issues = []
 
         try:
+            # Try to import pylint to verify it's available
+            import pylint
+
             result = subprocess.run(
-                ["pylint", str(file_path), "--output-format=json"], capture_output=True, text=True, timeout=30
+                ["python", "-m", "pylint",
+                    str(file_path), "--output-format=json"],
+                capture_output=True,
+                text=True,
+                timeout=30
             )
 
             if result.stdout:
-                pylint_issues = json.loads(result.stdout)
-                for issue in pylint_issues:
-                    if issue["type"] in ["error", "fatal"]:
-                        issues.append(
-                            {
-                                "file": str(file_path),
-                                "line": issue.get("line", 0),
-                                "type": f"pylint-{issue['type']}",
-                                "message": issue["message"],
-                                "symbol": issue.get("symbol", ""),
-                            }
-                        )
+                try:
+                    pylint_issues = json.loads(result.stdout)
+                    for issue in pylint_issues:
+                        if issue["type"] in ["error", "fatal"]:
+                            issues.append(
+                                {
+                                    "file": str(file_path),
+                                    "line": issue.get("line", 0),
+                                    "type": f"pylint-{issue['type']}",
+                                    "message": issue["message"],
+                                    "symbol": issue.get("symbol", ""),
+                                }
+                            )
+                except json.JSONDecodeError:
+                    # If JSON parsing fails, just skip this file
+                    pass
+        except ImportError:
+            # Pylint not available, skip silently (only log once)
+            if not hasattr(self, '_pylint_unavailable_logged'):
+                self.log("Pylint not available in Python environment", "WARNING")
+                self._pylint_unavailable_logged = True
         except subprocess.TimeoutExpired:
             self.log(f"Pylint timeout on {file_path.name}", "WARNING")
-        except FileNotFoundError:
-            self.log("Pylint not installed, skipping pylint checks", "WARNING")
         except Exception as e:
             self.log(f"Pylint error on {file_path.name}: {e}", "WARNING")
 
@@ -158,7 +175,8 @@ class AuroraAutonomousDebugger:
                 # Parse TypeScript errors
                 for line in result.stdout.split("\n"):
                     if line.strip():
-                        match = re.match(r"(.+?)\((\d+),(\d+)\): error (.+?):", line)
+                        match = re.match(
+                            r"(.+?)\((\d+),(\d+)\): error (.+?):", line)
                         if match:
                             issues.append(
                                 {
@@ -208,7 +226,8 @@ class AuroraAutonomousDebugger:
                             )
 
                 except Exception as e:
-                    self.log(f"Error checking {dockerfile.name}: {e}", "WARNING")
+                    self.log(
+                        f"Error checking {dockerfile.name}: {e}", "WARNING")
 
         return issues
 
@@ -220,7 +239,8 @@ class AuroraAutonomousDebugger:
                 content = f.read()
 
             # Fix the casing
-            fixed_content = re.sub(r"FROM\s+(.+?)\s+as\s+", r"FROM \1 AS ", content)
+            fixed_content = re.sub(
+                r"FROM\s+(.+?)\s+as\s+", r"FROM \1 AS ", content)
 
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(fixed_content)
@@ -247,7 +267,8 @@ class AuroraAutonomousDebugger:
             for i, line in enumerate(lines):
                 # Fix relative imports
                 if "from test import" in line and "tests/" in str(file_path):
-                    lines[i] = line.replace("from test import", "from ..test import")
+                    lines[i] = line.replace(
+                        "from test import", "from ..test import")
                     fixed = True
 
                 # Add missing Optional import
@@ -311,13 +332,15 @@ class AuroraAutonomousDebugger:
         self.scan_report["issues_found"] = len(self.issues_found)
 
         self.log("=" * 80, "INFO")
-        self.log(f"SCAN COMPLETE: Found {len(self.issues_found)} issues", "INFO")
+        self.log(
+            f"SCAN COMPLETE: Found {len(self.issues_found)} issues", "INFO")
         self.log("=" * 80, "INFO")
 
         # Categorize issues
         for issue in self.issues_found:
             issue_type = issue.get("type", "Unknown")
-            self.scan_report["errors_by_type"][issue_type] = self.scan_report["errors_by_type"].get(issue_type, 0) + 1
+            self.scan_report["errors_by_type"][issue_type] = self.scan_report["errors_by_type"].get(
+                issue_type, 0) + 1
 
         # Display issues by type
         for issue_type, count in self.scan_report["errors_by_type"].items():
@@ -365,7 +388,8 @@ class AuroraAutonomousDebugger:
                 print(f"  • {file}")
 
         if self.scan_report["issues_found"] > self.scan_report["fixes_applied"]:
-            remaining = self.scan_report["issues_found"] - self.scan_report["fixes_applied"]
+            remaining = self.scan_report["issues_found"] - \
+                self.scan_report["fixes_applied"]
             print(f"\n⚠️ {remaining} issues require manual review")
             print("Check aurora_debug_report.json for details")
 

@@ -1,25 +1,136 @@
 #!/usr/bin/env python3
 """
 Aurora Full Power Interactive Chat - ENHANCED BY AURORA
-All 66 Capabilities • Human-Like Conversation • Task Execution
-13 Foundations + 53 Knowledge Tiers = Complete Intelligence System
+All 109 Capabilities • Human-Like Conversation • Task Execution
+13 Foundations + 66 Knowledge Tiers = Complete Intelligence System
 """
 
 import asyncio
-import sys
-import os
 import re
-import json
-from pathlib import Path
 from datetime import datetime
+
 from aurora_core import create_aurora_core
+
+try:
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.table import Table
+    from rich.markdown import Markdown
+    RICH_AVAILABLE = True
+except ImportError:
+    RICH_AVAILABLE = False
+    print("⚠️  Rich library not installed. Run: pip install rich")
+
+
+def handle_command(command, aurora):
+    """Handle special commands like /help, /capabilities, etc."""
+    cmd = command.lower().strip()
+
+    if cmd == "/help":
+        return """
+🌟 AURORA TERMINAL CHAT COMMANDS:
+
+/help          - Show this help message
+/capabilities  - List all Aurora's capabilities and integrated modules
+/status        - Show Aurora's current system status and health
+/mode          - Toggle between chat and execution mode
+/clear         - Clear conversation history
+/modules       - Show newly integrated proactive modules
+/quit or /exit - Exit the chat
+
+💡 TIP: Just talk naturally! Aurora detects when you want her to DO something
+        vs just chatting. No need to use commands unless you want specific info.
+"""
+
+    elif cmd == "/capabilities":
+        caps = aurora.scan_own_capabilities()
+        result = f"""
+🧠 AURORA'S CAPABILITIES:
+
+Core Intelligence:
+  • Foundations: {caps.get('core_intelligence', {}).get('foundations', 0)}
+  • Knowledge Tiers: {caps.get('core_intelligence', {}).get('knowledge_tiers', 0)}
+  • Total Capabilities: {caps.get('core_intelligence', {}).get('total_capabilities', 0)}
+  
+Discovered Modules: {caps.get('module_count', 0)}
+
+Available Features:
+"""
+        for feature in caps.get('available_features', []):
+            result += f"  ✓ {feature}\n"
+
+        return result
+
+    elif cmd == "/status":
+        status = aurora.get_system_status()
+        result = f"""
+⚡ AURORA SYSTEM STATUS:
+
+Status: {status.get('status', 'Unknown')}
+Health: {status.get('health', 'Unknown')}
+Autonomous Mode: {status.get('autonomous_mode', False)}
+
+Autonomous Systems:
+"""
+        for system, active in status.get('autonomous_systems_connected', {}).items():
+            icon = "✅" if active else "❌"
+            result += f"  {icon} {system}\n"
+
+        return result
+
+    elif cmd == "/modules":
+        if hasattr(aurora, 'integrated_modules'):
+            result = f"""
+🔧 NEWLY INTEGRATED PROACTIVE MODULES:
+
+Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
+
+"""
+            for name, module in aurora.integrated_modules.items():
+                result += f"  ✅ {module.__class__.__name__} - Proactive monitoring and auto-fixing\n"
+
+            result += "\n💡 These modules enable Aurora to proactively monitor and fix issues!"
+            return result
+        else:
+            return "No integrated modules information available."
+
+    elif cmd == "/clear":
+        return "CLEAR_HISTORY"
+
+    elif cmd in ["/quit", "/exit"]:
+        return "EXIT"
+
+    else:
+        return f"Unknown command: {command}\nType /help to see available commands."
 
 
 def detect_user_intent(message):
     """Detect if user wants chat vs task execution"""
-    action_words = ['create', 'build', 'make', 'fix', 'debug', 'analyze', 'run', 'execute',
-                    'write', 'code', 'generate', 'update', 'change', 'modify', 'add', 'remove',
-                    'check', 'test', 'find', 'search', 'show me', 'can you', 'could you']
+    action_words = [
+        "create",
+        "build",
+        "make",
+        "fix",
+        "debug",
+        "analyze",
+        "run",
+        "execute",
+        "write",
+        "code",
+        "generate",
+        "update",
+        "change",
+        "modify",
+        "add",
+        "remove",
+        "check",
+        "test",
+        "find",
+        "search",
+        "show me",
+        "can you",
+        "could you",
+    ]
     message_lower = message.lower()
     return any(word in message_lower for word in action_words)
 
@@ -28,16 +139,16 @@ def detect_user_tone(message):
     """Detect user's emotional tone"""
     message_lower = message.lower()
 
-    if any(word in message_lower for word in ['!', 'awesome', 'great', 'love', 'amazing', 'perfect', '🎉', '🔥']):
-        return 'excited'
-    elif any(word in message_lower for word in ['help', 'stuck', 'error', 'broken', 'issue', 'problem', 'wrong']):
-        return 'frustrated'
-    elif any(word in message_lower for word in ['please', 'thank', 'appreciate', 'thanks']):
-        return 'polite'
+    if any(word in message_lower for word in ["!", "awesome", "great", "love", "amazing", "perfect", "🎉", "🔥"]):
+        return "excited"
+    elif any(word in message_lower for word in ["help", "stuck", "error", "broken", "issue", "problem", "wrong"]):
+        return "frustrated"
+    elif any(word in message_lower for word in ["please", "thank", "appreciate", "thanks"]):
+        return "polite"
     elif len(message) < 10:
-        return 'casual'
+        return "casual"
     else:
-        return 'neutral'
+        return "neutral"
 
 
 async def interactive_chat():
@@ -60,12 +171,13 @@ async def interactive_chat():
 
     # Display full capability loadout
     print("━" * 80)
-    print("🟢 STATUS: ALL SYSTEMS OPERATIONAL")
+    print("🟢 STATUS: ALL SYSTEMS OPERATIONAL - FULL EXECUTION MODE ENABLED")
     print("━" * 80)
     print("💬 Conversation: Natural language processing • Context awareness • Emotional intelligence")
-    print("🔧 Execution: Code generation • File ops • Debugging • Analysis • Automation")
+    print("🔧 Execution: LIVE code execution • File operations • Terminal commands • Real-time debugging")
     print("🧠 Knowledge: 55 programming languages • 21 technical domains • Full-stack expertise")
-    print("🎯 Autonomous: Self-debugging • Multi-agent coordination • Strategic planning")
+    print("🎯 Autonomous: Self-debugging • Multi-agent coordination • Strategic planning • Task execution")
+    print("🔥 Proactive: 30+ monitoring modules • Auto-fixing • Self-healing • Continuous improvement")
     print("━" * 80 + "\n")
 
     # Aurora's casual greeting
@@ -77,7 +189,12 @@ async def interactive_chat():
     print("        Just talk to me naturally - ask questions, give me tasks, or just")
     print("        hang out and chat. I'll match your vibe and help however I can!")
     print("        ")
-    print("        (Pro tip: Type 'status' to see what I'm capable of, or just dive in!)\n")
+    print("        ⚡ NEW: I can now EXECUTE tasks in real-time! Ask me to create files,")
+    print("        run commands, analyze code - I'll actually DO it, not just talk about it!")
+    print("        ")
+    print("        (Pro tip: Type 'status' to see what I'm capable of, or just dive in!)")
+    print("        💡 Type /help anytime to see commands, /capabilities to see my powers!")
+    print("\n")
     print("-" * 80 + "\n")
 
     session_id = "enhanced_interactive_" + datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -100,17 +217,19 @@ async def interactive_chat():
             user_tone = detect_user_tone(user_input)
 
             # Handle special commands with Aurora's personality
-            if user_input.lower() in ['exit', 'quit', 'bye', 'goodbye']:
+            if user_input.lower() in ["exit", "quit", "bye", "goodbye"]:
                 farewells = [
                     f"Aw, heading out? It's been awesome chatting with you! {'See you soon' if message_count > 5 else 'Come back anytime'}! 💙",
-                    f"Take care! {f'Really enjoyed our {message_count} messages' if message_count > 3 else 'Great talking with you'}! 👋",
-                    "Bye! Don't be a stranger - I'm always here when you need me! ✨"
+                    f"Take care! {f'Really enjoyed our {message_count} messages' if message_count >
+                                  3 else 'Great talking with you'}! 👋",
+                    "Bye! Don't be a stranger - I'm always here when you need me! ✨",
                 ]
                 import random
+
                 print(f"\nAurora: {random.choice(farewells)}\n")
                 break
 
-            if user_input.lower() == 'clear':
+            if user_input.lower() == "clear":
                 session_id = f"enhanced_interactive_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
                 conversation_history = []
                 last_topic = None
@@ -118,34 +237,45 @@ async def interactive_chat():
                 print("-" * 80 + "\n")
                 continue
 
-            if user_input.lower() == 'status':
+            if user_input.lower() == "status":
+                # Check autonomous execution availability
+                exec_status = "✅ ACTIVE" if aurora.autonomous_agent else "⚠️ LIMITED"
+
                 print(
                     "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
                 print("                         🧠 AURORA INTELLIGENCE SYSTEM STATUS")
                 print(
                     "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                print(f"\n🟢 CORE STATUS: FULLY OPERATIONAL")
+                print("\n🟢 CORE STATUS: FULLY OPERATIONAL - EXECUTION MODE ENABLED")
                 print(
                     f"⚡ Power Level: 100% | Session Time: {message_count} messages")
                 print(
                     f"💬 Context Memory: Tracking last {min(len(conversation_history), 15)} interactions")
-                print(f"\n📚 ACTIVE CAPABILITIES (79 Total - HYBRID FULL POWER):")
+                print(f"🚀 Autonomous Execution: {exec_status}")
+                print("\n📚 ACTIVE CAPABILITIES (79 Total - HYBRID FULL POWER):")
                 print(
-                    f"   • 13 Foundation Tasks: Problem-solving, Logic, Communication, Memory...")
+                    "   • 13 Foundation Tasks: Problem-solving, Logic, Communication, Memory...")
+                print("   • 66 Knowledge Tiers across 4 Domains:")
+                print("     ├─ Technical Mastery (1-27)")
+                print("     ├─ Autonomous & Intelligence (28-53)")
                 print(
-                    f"   • 66 Knowledge Tiers across 4 Domains:")
-                print(f"     ├─ Technical Mastery (1-27)")
-                print(f"     ├─ Autonomous & Intelligence (28-53)")
-                print(f"     ├─ AI Intelligence (54-57): Quantum, Neural, Language, Vision")
-                print(f"     ├─ Autonomous Perception (58-60): Robotics, Distributed, Performance")
-                print(f"     ├─ Systems Resilience (61-63): Data, API, Microservices")
-                print(f"     └─ Delivery Excellence (64-66): Serverless, Edge, Blockchain")
-                print(f"\n   Latest Advanced Tiers:")
-                print(f"   • Tier 54: Quantum Intelligence Hub ✓")
-                print(f"   • Tier 60: Adaptive Performance Optimizer ✓")
-                print(f"   • Tier 66: Autonomous Blockchain Conductor ✓")
+                    "     ├─ AI Intelligence (54-57): Quantum, Neural, Language, Vision")
                 print(
-                    f"\n🎯 CONVERSATION MODE: {'Task Execution' if is_task else 'Casual Chat'}")
+                    "     ├─ Autonomous Perception (58-60): Robotics, Distributed, Performance")
+                print("     ├─ Systems Resilience (61-63): Data, API, Microservices")
+                print(
+                    "     └─ Delivery Excellence (64-66): Serverless, Edge, Blockchain")
+                print("\n⚡ EXECUTION CAPABILITIES:")
+                print("   • File Operations: Create, read, modify, delete files")
+                print("   • Terminal Commands: Execute shell commands in real-time")
+                print("   • Code Analysis: Scan, analyze, and fix code")
+                print("   • Autonomous Tasks: Multi-step task planning and execution")
+                print("\n   Latest Advanced Tiers:")
+                print("   • Tiers 66: Quantum Intelligence Hub ✓")
+                print("   • Tiers 66: Adaptive Performance Optimizer ✓")
+                print("   • Tier 66: Autonomous Blockchain Conductor ✓")
+                print(
+                    f"\n🎯 CURRENT MODE: {'⚡ Task Execution (LIVE)' if is_task else '💬 Casual Chat'}")
                 print(f"😊 Detected Tone: {user_tone.title()}")
                 print(f"🔧 Last Topic: {last_topic or 'Just getting started'}")
                 print(
@@ -179,52 +309,61 @@ async def interactive_chat():
                 # Aurora's personality settings
                 "personality": {
                     "style": "friendly_and_intelligent",
-                    "use_emojis": user_tone in ['casual', 'excited'],
-                    "be_empathetic": user_tone == 'frustrated',
-                    "be_encouraging": user_tone == 'polite',
+                    "use_emojis": user_tone in ["casual", "excited"],
+                    "be_empathetic": user_tone == "frustrated",
+                    "be_encouraging": user_tone == "polite",
                     "casual_language": True,
-                    "show_personality": True
+                    "show_personality": True,
                 },
                 # Capability flags
                 "can_execute_code": True,
                 "can_modify_files": True,
                 "can_analyze_codebase": True,
                 "autonomous_mode": True,
-                "all_tiers_active": True
+                "all_tiers_active": True,
             }
 
             # Store user message
-            conversation_history.append({
-                "role": "user",
-                "content": user_input,
-                "tone": user_tone,
-                "is_task": is_task
-            })
+            conversation_history.append(
+                {"role": "user", "content": user_input, "tone": user_tone, "is_task": is_task})
 
             # Get Aurora's response
-            print(f"\nAurora: ", end="", flush=True)
+            print("\nAurora: ", end="", flush=True)
 
             # Add instruction for natural conversation
             enhanced_prompt = user_input
             if message_count == 0:
                 enhanced_prompt += "\n\n[Respond naturally and casually, like texting a friend. Use contractions, emojis when appropriate, and show personality. If this is a task, confirm you'll do it and show progress.]"
 
-            response = await aurora.process_conversation(
-                enhanced_prompt,
-                session_id=session_id
-            )
+            # ENHANCED: If this is an action/task request, use autonomous execution
+            if is_task and aurora.autonomous_agent:
+                try:
+                    # First, acknowledge the task conversationally
+                    quick_ack = await aurora.process_conversation(f"Acknowledge this task briefly: {user_input}", session_id=session_id)
+                    print(quick_ack, end="\n\n")
+
+                    # Then execute it autonomously
+                    print("🔄 Executing... ", end="", flush=True)
+                    execution_result = await aurora.autonomous_agent.execute_task(user_input)
+                    print("✓\n")
+                    response = execution_result
+                except Exception as e:
+                    # If autonomous execution fails, fall back to conversation
+                    print(f"(autonomous mode unavailable) ", end="", flush=True)
+                    response = await aurora.process_conversation(enhanced_prompt, session_id=session_id)
+            else:
+                # Regular conversation mode
+                response = await aurora.process_conversation(enhanced_prompt, session_id=session_id)
 
             print(response)
 
             # Extract topic from conversation
             if len(user_input.split()) > 3:
-                last_topic = ' '.join(user_input.split()[:5]) + "..."
+                last_topic = " ".join(user_input.split()[:5]) + "..."
 
             # Store Aurora's response
-            conversation_history.append({
-                "role": "assistant",
-                "content": response
-            })
+            conversation_history.append(
+                {"role": "assistant", "content": response})
 
             print("\n" + "-" * 80 + "\n")
             message_count += 1
@@ -241,4 +380,8 @@ async def interactive_chat():
 
 
 if __name__ == "__main__":
-    asyncio.run(interactive_chat())
+    try:
+        asyncio.run(interactive_chat())
+    except (KeyboardInterrupt, SystemExit):
+        # Clean exit without traceback
+        pass

@@ -101,12 +101,12 @@ def aurora_verify_core_usage():
     print("\n" + "=" * 70)
     print("[Aurora] 🎉 Core Verification Complete!")
     print("[Aurora] Status: FULLY OPERATIONAL")
-    print("[Aurora] All 66 capability systems ready for autonomous use")
+    print("[Aurora] All 109 capability systems ready for autonomous use")
     print("=" * 70)
 
     return True
 
 
 if __name__ == "__main__":
-    SUCCESS = aurora_verify_core_usage()
+    _SUCCESS = aurora_verify_core_usage()
     exit(0 if SUCCESS else 1)

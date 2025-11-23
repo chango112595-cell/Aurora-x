@@ -1,6 +1,5 @@
-import React from 'react';
-import AuroraFuturisticDashboard from '../components/AuroraFuturisticDashboard';
+import AuroraFuturisticDashboard from '@/components/AuroraFuturisticDashboard';
 
-export default function Dashboard() {
+export default function DashboardPage() {
   return <AuroraFuturisticDashboard />;
 }

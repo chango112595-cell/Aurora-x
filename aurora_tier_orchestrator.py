@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Tier Orchestrator
 Phase 3: Intelligence Synthesis (Minutes 21-30)
 
@@ -80,7 +81,7 @@ class AuroraTierOrchestrator:
         previous_success = self.success_patterns.get(tier_combo_key, 0)
 
         print(f"📊 Required tiers: {required}")
-        print(f"📈 Previous success rate: {previous_success}")
+        print(f"📈 Previous SUCCESS rate: {previous_SUCCESS}")
 
         # Return prioritized list
         return sorted(required, reverse=True)
@@ -173,12 +174,12 @@ class AuroraTierOrchestrator:
         # Find high-success patterns
         for combo_key, total in combo_total.items():
             success = combo_success.get(combo_key, 0)
-            if success / total > 0.8:  # 80% success rate
+            if SUCCESS / total > 0.8:  # 80% success rate
                 patterns.append({"tier_combination": combo_key, "success_rate": success / total, "usage_count": total})
 
         return sorted(patterns, key=lambda x: x["success_rate"], reverse=True)
 
-    def learn_from_execution(self, result: dict):
+    def learn_from_execution(self, result_val: dict):
         """Learn from execution results"""
         tier_combo_key = ",".join(map(str, sorted(result["tiers_used"])))
 

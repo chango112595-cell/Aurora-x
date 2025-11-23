@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Self-Debug, Self-Fix, and Self-Update System
 Aurora autonomously scans, debugs, fixes, and updates her entire system
 Frontend + Backend + Python + Everything
@@ -26,7 +27,7 @@ class AuroraSelfDebugSystem:
 
     def log(self, message: str, level: str = "INFO"):
         """Log Aurora's actions"""
-        timestamp = datetime.now().strftime("%H:%M:%S")
+        _timestamp = datetime.now().strftime("%H:%M:%S")
         prefix = {"INFO": "🌟", "SUCCESS": "✅", "ERROR": "❌", "FIX": "🔧", "UPDATE": "🔄"}.get(level, "ℹ️")
         print(f"[{timestamp}] {prefix} Aurora: {message}")
 

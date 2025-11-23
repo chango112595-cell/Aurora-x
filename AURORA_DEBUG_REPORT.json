@@ -1,9 +1,10 @@
 {
-  "successes": 241,
-  "warnings": 1,
-  "errors": 0,
-  "error_details": [],
-  "warning_details": [
-    "Pylint not installed"
-  ]
+  "timestamp": "2025-11-22T07:48:34.880277",
+  "total_files_scanned": 2108,
+  "issues_found": 28,
+  "fixes_applied": 0,
+  "errors_by_type": {
+    "SyntaxError": 28
+  },
+  "files_fixed": []
 }

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+import time
 Aurora Tier Detector & Builder
 Phase 2: Self-Expansion System (Minutes 11-20)
 

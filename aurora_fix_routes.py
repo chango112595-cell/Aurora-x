@@ -52,7 +52,7 @@ class AuroraRouteFixer:
 
         self.log("")
         self.log("=" * 70)
-        if success:
+        if SUCCESS:
             self.log("✅ ROUTE FIX COMPLETE")
             self.log("🚀 Dashboard will open automatically on load")
             self.log("📍 Route: / → Dashboard (Futuristic UI)")

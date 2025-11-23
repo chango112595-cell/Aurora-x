@@ -35,10 +35,10 @@ export default function AuroraFuturisticDashboard() {
   ];
 
   const knowledgeTiers = [
-    { category: "Languages", tiers: "1-6", count: 55, icon: Code2, color: "cyan" },
+    { category: "Languages", tiers: "1-6", count: 6, icon: Code2, color: "cyan" },
     { category: "Technical", tiers: "7-27", count: 21, icon: Cpu, color: "purple" },
-    { category: "Autonomous", tiers: "28-46", count: 19, icon: Brain, color: "pink" },
-    { category: "Advanced", tiers: "47-53", count: 7, icon: Sparkles, color: "cyan" }
+    { category: "Autonomous", tiers: "28-53", count: 26, icon: Brain, color: "pink" },
+    { category: "Advanced", tiers: "54-66", count: 13, icon: Sparkles, color: "violet" }
   ];
 
   const systemServices = [
@@ -74,6 +74,22 @@ export default function AuroraFuturisticDashboard() {
             </div>
           </div>
 
+          {/* Hybrid Mode Power Banner */}
+          <div className="bg-gradient-to-r from-violet-500/20 via-fuchsia-500/20 to-pink-500/20 border border-violet-500/50 rounded-xl p-4 mb-4">
+            <div className="flex items-center justify-center gap-4">
+              <Sparkles className="h-8 w-8 text-violet-400 animate-pulse" />
+              <div className="text-center">
+                <div className="text-5xl font-bold bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
+                  188 TOTAL POWER
+                </div>
+                <div className="text-violet-300/80 text-sm mt-1">
+                  Hybrid Mode: 79 Knowledge Tiers + 109 Capability Modules
+                </div>
+              </div>
+              <Sparkles className="h-8 w-8 text-pink-400 animate-pulse" />
+            </div>
+          </div>
+
           <div className="grid grid-cols-4 gap-4 mt-6">
             <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
@@ -88,15 +104,15 @@ export default function AuroraFuturisticDashboard() {
                 <Network className="h-5 w-5 text-purple-400" />
                 <span className="text-purple-300 text-sm">Knowledge Tiers</span>
               </div>
-              <div className="text-3xl font-bold text-purple-400">53</div>
+              <div className="text-3xl font-bold text-purple-400">66</div>
             </div>
 
             <div className="bg-gradient-to-br from-pink-500/10 to-pink-500/5 border border-pink-500/30 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Zap className="h-5 w-5 text-pink-400" />
-                <span className="text-pink-300 text-sm">Total Systems</span>
+                <span className="text-pink-300 text-sm">Capability Modules</span>
               </div>
-              <div className="text-3xl font-bold text-pink-400">66</div>
+              <div className="text-3xl font-bold text-pink-400">109</div>
             </div>
 
             <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-xl p-4">
@@ -155,7 +171,7 @@ export default function AuroraFuturisticDashboard() {
           <CardHeader className="border-b border-purple-500/20">
             <CardTitle className="flex items-center gap-2 text-purple-300">
               <Network className="h-6 w-6" />
-              Knowledge Tier Architecture (1-53)
+              Knowledge Tier Architecture (1-34)
               <Badge className="ml-auto bg-purple-500/20 text-purple-300 border-purple-500/50">
                 Domain Layer
               </Badge>
@@ -197,16 +213,9 @@ export default function AuroraFuturisticDashboard() {
                   <div className="text-purple-300/80">• Tier 7-27: Technical Mastery</div>
                   <div className="text-purple-300/80">• Tier 28: Autonomous Tools</div>
                   <div className="text-purple-300/80">• Tier 29-31: Professional Skills</div>
-                  <div className="text-purple-300/80">• Tier 53: Systems Design</div>
+                  <div className="text-purple-300/80">• Tiers 66: Systems Design</div>
                   <div className="text-purple-300/80">• Tier 33: Network Mastery</div>
                   <div className="text-purple-300/80 col-span-2">• Tier 34: Grandmaster Autonomous</div>
-                  <div className="text-purple-300/80 col-span-2">• Tier 35: Pylint Grandmaster</div>
-                  <div className="text-cyan-300/80 col-span-2">• Tier 36: Self-Monitor (24/7 System Monitoring)</div>
-                  <div className="text-cyan-300/80 col-span-2">• Tier 37: Tier Expansion (Auto-Build Capabilities)</div>
-                  <div className="text-cyan-300/80 col-span-2">• Tier 38: Tier Orchestrator (Multi-Tier Coordination)</div>
-                  <div className="text-cyan-300/80 col-span-2">• Tier 39: Performance Optimizer (Predictive Analysis)</div>
-                  <div className="text-cyan-300/80 col-span-2">• Tier 40: Full Autonomy (100% Autonomous Operation)</div>
-                  <div className="text-cyan-300/80 col-span-2">• Tier 53: Strategist (Strategic Planning & Context)</div>
                 </div>
               </div>
             </div>
@@ -284,7 +293,7 @@ export default function AuroraFuturisticDashboard() {
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-6">
             <div className="text-cyan-300/80">
-              <span className="text-cyan-400 font-semibold">Architecture:</span> 13 Tasks + 53 Tiers = 66 Systems
+              <span className="text-cyan-400 font-semibold">Architecture:</span> 13 Tasks + 34 Tiers = 66 Systems
             </div>
             <div className="text-purple-300/80">
               <span className="text-purple-400 font-semibold">Version:</span> Quantum Neural 2.0

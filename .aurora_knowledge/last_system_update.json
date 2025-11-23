@@ -1,12 +1,15 @@
 {
-  "timestamp": "2025-11-21T14:56:30.026154",
+  "timestamp": "2025-11-22T19:05:08.480720",
   "version": "3.0.0-deep-search",
   "counts": {
     "foundation_count": 13,
     "tier_count": 66,
-    "total_capabilities": 66
+    "capability_modules": 109,
+    "total_tiers": 79,
+    "total_power": 188,
+    "hybrid_mode": "79 tiers + 109 capabilities"
   },
-  "files_scanned": 25028,
+  "files_scanned": 4417,
   "files_updated": 0,
   "updated_files": [],
   "errors": []

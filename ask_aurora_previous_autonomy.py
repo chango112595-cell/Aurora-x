@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+"""
+Ask Aurora: What capabilities did you have in previous commits?
+"""
+
+import asyncio
+from aurora_core import AuroraCoreIntelligence
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+
+async def main():
+    print("🔍 Asking Aurora About Her Previous Autonomous Capabilities\n")
+    aurora = AuroraCoreIntelligence()
+
+    question = """
+    Aurora, the user says you were at 100% autonomous capability in a previous commit.
+    
+    Right now, your autonomous_agent has these methods:
+    - self_diagnose()
+    - analyze_chat_ui()
+    - create_chat_interface()
+    - create_backend_chat_endpoint()
+    - integrate_to_main_ui()
+    - execute_assignment()
+    
+    But you're missing a general execute_task() method for arbitrary tasks.
+    
+    QUESTION:
+    What did you have in previous commits that made you truly 100% autonomous?
+    Did you have:
+    - An execute_task() method?
+    - General purpose task execution?
+    - The ability to read your own code and fix it?
+    - Different autonomous capabilities?
+    
+    Search your memory/knowledge base - what autonomous features did you used to have
+    that you don't have now?
+    """
+
+    print("❓ Question:")
+    print("="*80)
+    print(question)
+    print("="*80 + "\n")
+
+    response = await aurora.process_conversation(question, "previous_autonomy")
+
+    print("🌟 Aurora's Response:")
+    print("="*80)
+    print(response)
+    print("="*80)
+
+if __name__ == "__main__":
+    asyncio.run(main())

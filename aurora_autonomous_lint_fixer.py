@@ -93,8 +93,8 @@ class AuroraLintFixer:
                 if next_line_idx < len(lines):
                     next_line = lines[next_line_idx].strip()
                     if not (next_line.startswith('"""') or next_line.startswith("'''")):
-                        func_name = line.split("def ")[1].split("(")[0]
-                        self.log(f"  Function '{func_name}' at line {i+1} missing docstring")
+                        FUNC_NAME = line.split("def ")[1].split("(")[0]
+                        self.log(f"  Function '{FUNC_NAME}' at line {i+1} missing docstring")
                         modified = True
 
         return modified

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Verify Tier 53: Docker Infrastructure Mastery Integration
+Verify Tiers 66: Docker Infrastructure Mastery Integration
 """
 
 from aurora_core import AuroraKnowledgeTiers
@@ -18,7 +18,7 @@ print(f"  • Knowledge Tiers: {aurora.tier_count}")
 print(f"  • Total Capabilities: {aurora.total_capabilities}")
 print()
 
-# Check Tier 53 specifically
+# Check Tiers 66 specifically
 tier53 = aurora.tiers.get("tier_53_docker_mastery")
 if tier53:
     print("✅ TIER 53 - DOCKER INFRASTRUCTURE MASTERY:")

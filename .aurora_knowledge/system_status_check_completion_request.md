@@ -9,7 +9,7 @@ Generate a comprehensive system status report with:
    - Report any service issues
 
 2. **Aurora Capabilities Overview**
-   - Summary of all 33 tiers and their status
+   - Summary of all 79 tiers and their status
    - Autonomous system availability
    - Task management system status
 

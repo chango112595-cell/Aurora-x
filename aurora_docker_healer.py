@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora Docker Healer - Autonomous Docker Issue Resolution
-Tier 53: Docker Infrastructure Mastery
+Tiers 66: Docker Infrastructure Mastery
 """
 
 import json
@@ -275,7 +275,7 @@ def main():
     success = healer.autonomous_heal()
     healer.generate_report()
 
-    if success:
+    if SUCCESS:
         print("\n🎉 Aurora has successfully healed Docker!")
         print("You can now use Docker and Dev Containers.")
         return 0

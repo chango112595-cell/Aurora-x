@@ -4,6 +4,7 @@ Aurora Device Programming Demonstration
 Shows Aurora's expert-level knowledge in ALL device programming languages
 """
 
+from aurora_expert_knowledge import AuroraExpertKnowledge
 import sys
 from pathlib import Path
 
@@ -11,7 +12,6 @@ from pathlib import Path
 tools_dir = Path(__file__).parent / "tools"
 sys.path.insert(0, str(tools_dir))
 
-from aurora_expert_knowledge import AuroraExpertKnowledge
 
 def generate_applescript_wifi_fix() -> None:
     """Generate AppleScript to fix iPhone WiFi issues"""
@@ -23,41 +23,42 @@ tell application "System Events"
     try
         -- Check if iPhone is connected via USB or wirelessly
         display notification "Starting iPhone WiFi fix..." with title "Aurora WiFi Helper"
-        
+
         -- Open System Preferences to Network
         tell application "System Preferences"
             activate
             set current pane to pane "com.apple.preference.network"
             delay 2
         end tell
-        
+
         -- Toggle WiFi off and on
         tell application "System Events"
             tell process "System Preferences"
                 -- Click on WiFi in sidebar
                 click button "Wi-Fi" of scroll area 1 of group 1 of tab group 1 of window 1
                 delay 1
-                
+
                 -- Turn WiFi off
                 click button "Turn Wi-Fi Off" of group 1 of tab group 1 of window 1
                 delay 3
-                
+
                 -- Turn WiFi back on
                 click button "Turn Wi-Fi On" of group 1 of tab group 1 of window 1
                 delay 5
             end tell
         end tell
-        
+
         -- Close System Preferences
         tell application "System Preferences" to quit
-        
+
         display notification "WiFi reset complete! Check your connection." with title "Aurora WiFi Helper"
-        
+
     on error errMsg
         display alert "WiFi Fix Error" message errMsg
     end try
 end tell
 '''
+
 
 def generate_kotlin_camera_app() -> None:
     """Generate Kotlin Android app with camera and ML"""
@@ -88,7 +89,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
     private val detectionResults = MutableStateFlow<List<String>>(emptyList())
-    
+
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -99,11 +100,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         setContent {
             CameraMLApp()
         }
-        
+
         // Request camera permission
         when {
             ContextCompat.checkSelfPermission(
@@ -120,7 +121,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun CameraMLApp() {
         val detections by detectionResults.collectAsStateWithLifecycle()
-        
+
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.Center,
@@ -138,9 +139,9 @@ class MainActivity : ComponentActivity() {
                     Text("Camera Preview Area")
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             Card(
                 modifier = Modifier.fillMaxWidth().height(200.dp)
             ) {
@@ -158,10 +159,10 @@ class MainActivity : ComponentActivity() {
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        
+
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
-            
+
             val preview = Preview.Builder().build()
             val imageAnalyzer = ImageAnalysis.Builder()
                 .setTargetAspectRatio(AspectRatio.RATIO_16_9)
@@ -172,9 +173,9 @@ class MainActivity : ComponentActivity() {
                         processImageForML(image)
                     }
                 }
-            
+
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-            
+
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
@@ -185,7 +186,7 @@ class MainActivity : ComponentActivity() {
             }
         }, ContextCompat.getMainExecutor(this))
     }
-    
+
     private fun processImageForML(image: ImageProxy) {
         // Aurora Expert Knowledge: ML object detection implementation
         // This would integrate with TensorFlow Lite or ML Kit
@@ -195,6 +196,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 '''
+
 
 def generate_arduino_iot_sensor() -> None:
     """Generate Arduino ESP32 IoT temperature sensor code"""
@@ -232,20 +234,20 @@ PubSubClient mqttClient(wifiClient);
 void setup() {
     Serial.begin(115200);
     Serial.println("🌡️ Aurora IoT Temperature Sensor Starting...");
-    
+
     // Initialize hardware
     pinMode(LED_PIN, OUTPUT);
     dht.begin();
-    
+
     // Connect to WiFi with retry logic
     connectToWiFi();
-    
+
     // Connect to MQTT broker
     connectToMQTT();
-    
+
     // Read and publish sensor data
     publishSensorData();
-    
+
     // Aurora Best Practice: Use deep sleep for battery efficiency
     Serial.println("💤 Entering deep sleep for 5 minutes...");
     esp_deep_sleep_start();
@@ -258,7 +260,7 @@ void loop() {
 void connectToWiFi() {
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     Serial.print("Connecting to WiFi");
-    
+
     int attempts = 0;
     while (WiFi.status() != WL_CONNECTED && attempts < 20) {
         delay(500);
@@ -266,7 +268,7 @@ void connectToWiFi() {
         digitalWrite(LED_PIN, !digitalRead(LED_PIN));  // Blink LED
         attempts++;
     }
-    
+
     if (WiFi.status() == WL_CONNECTED) {
         Serial.println("✅ WiFi connected!");
         Serial.print("IP address: ");
@@ -280,11 +282,11 @@ void connectToWiFi() {
 
 void connectToMQTT() {
     mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
-    
+
     int attempts = 0;
     while (!mqttClient.connected() && attempts < 5) {
         Serial.print("Connecting to MQTT broker...");
-        
+
         if (mqttClient.connect(MQTT_CLIENT_ID)) {
             Serial.println("✅ MQTT connected!");
         } else {
@@ -301,13 +303,13 @@ void publishSensorData() {
     // Aurora Expert Knowledge: Proper sensor reading with validation
     float temperature = dht.readTemperature();
     float humidity = dht.readHumidity();
-    
+
     // Validate sensor readings
     if (isnan(temperature) || isnan(humidity)) {
         Serial.println("❌ Failed to read from DHT sensor!");
         return;
     }
-    
+
     // Create JSON payload
     StaticJsonDocument<200> doc;
     doc["sensor_id"] = MQTT_CLIENT_ID;
@@ -315,14 +317,15 @@ void publishSensorData() {
     doc["humidity"] = humidity;
     doc["timestamp"] = millis();
     doc["battery_voltage"] = getBatteryVoltage();
-    
+
     String jsonString;
     serializeJson(doc, jsonString);
-    
+
     // Publish to MQTT
     if (mqttClient.publish(MQTT_TOPIC, jsonString.c_str())) {
         Serial.println("✅ Sensor data published successfully!");
-        Serial.printf("🌡️ Temperature: %.2f°C, Humidity: %.2f%%\\n", temperature, humidity);
+        Serial.printf("🌡️ Temperature: %.2f°C, Humidity: %.2f%%\\n",
+                      temperature, humidity);
     } else {
         Serial.println("❌ Failed to publish sensor data!");
     }
@@ -334,6 +337,7 @@ float getBatteryVoltage() {
     return (rawValue / 4095.0) * 3.3 * 2;  // Voltage divider assumption
 }
 '''
+
 
 def generate_raspberry_pi_automation() -> None:
     """Generate Raspberry Pi home automation code"""
@@ -367,23 +371,23 @@ class AuroraHomeAutomation:
         self.setup_gpio()
         self.sensor_data = {}
         self.automation_rules = []
-        
+
     def setup_gpio(self) -> None:
         """Aurora Best Practice: Proper GPIO initialization"""
         # Setup relay pins as outputs
         for pin in RELAY_PINS:
             GPIO.setup(pin, GPIO.OUT)
             GPIO.output(pin, GPIO.LOW)
-        
+
         # Setup sensor pins as inputs with pull-up resistors
         for sensor, pin in SENSOR_PINS.items():
             GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-            
+
         # Setup status LED
         GPIO.setup(LED_PIN, GPIO.OUT)
-        
+
         print("✅ GPIO initialized successfully")
-    
+
     def read_sensors(self) -> None:
         """Read all connected sensors"""
         data = {
@@ -394,7 +398,7 @@ class AuroraHomeAutomation:
         }
         self.sensor_data = data
         return data
-    
+
     def control_relay(self, relay_num, state) -> None:
         """Control individual relay (0-3)"""
         if 0 <= relay_num < len(RELAY_PINS):
@@ -402,21 +406,21 @@ class AuroraHomeAutomation:
             print(f"🔌 Relay {relay_num} turned {'ON' if state else 'OFF'}")
             return True
         return False
-    
+
     def automation_loop(self) -> None:
         """Main automation logic loop"""
         print("🤖 Aurora automation engine started")
-        
+
         while True:
             try:
                 # Read current sensor state
                 data = self.read_sensors()
-                
+
                 # Aurora Expert Knowledge: Event-driven automation
                 if data['motion_detected']:
                     print("👋 Motion detected! Turning on lights...")
                     self.control_relay(0, True)  # Turn on lights
-                    
+
                 if data['door_open']:
                     print("🚪 Door opened! Security alert...")
                     # Blink LED for security notification
@@ -425,21 +429,21 @@ class AuroraHomeAutomation:
                         time.sleep(0.2)
                         GPIO.output(LED_PIN, False)
                         time.sleep(0.2)
-                
+
                 # Status LED heartbeat
                 GPIO.output(LED_PIN, True)
                 time.sleep(0.1)
                 GPIO.output(LED_PIN, False)
-                
+
                 time.sleep(1)  # Check every second
-                
+
             except KeyboardInterrupt:
                 print("🛑 Automation stopped by user")
                 break
             except Exception as e:
                 print(f"❌ Automation error: {e}")
                 time.sleep(5)  # Wait before retrying
-    
+
     def cleanup(self) -> None:
         """Aurora Best Practice: Always cleanup GPIO resources"""
         GPIO.cleanup()
@@ -450,65 +454,34 @@ app = Flask(__name__)
 automation = AuroraHomeAutomation()
 
 @app.route('/')
-def dashboard() -> None:
+def dashboard():
     """Simple web dashboard"""
-    return render_template_string('''
+    html = """
     <!DOCTYPE html>
     <html>
     <head>
         <title>Aurora Home Automation</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            body { font-family: Arial; margin: 20px; background: #f0f0f0; }
-            .card { background: white; padding: 20px; margin: 10px 0; border-radius: 8px; }
-            .sensor { display: inline-block; margin: 10px; padding: 10px; border-radius: 5px; }
-            .active { background: #4CAF50; color: white; }
-            .inactive { background: #f44336; color: white; }
-            .button { background: #008CBA; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin: 5px; cursor: pointer; }
-        </style>
     </head>
     <body>
-        <h1>🏠 Aurora Home Automation Dashboard</h1>
-        
-        <div class="card">
-            <h2>📊 Sensor Status</h2>
-            <div id="sensors"></div>
-        </div>
-        
-        <div class="card">
-            <h2>🔌 Relay Controls</h2>
-            <div id="relays"></div>
-        </div>
-        
+        <h1>Aurora Home Automation Dashboard</h1>
+        <div id="sensors"></div>
+        <div id="relays"></div>
         <script>
             function updateDashboard() {
                 fetch('/api/status')
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('sensors').innerHTML = 
-                            `<div class="sensor ${data.motion_detected ? 'active' : 'inactive'}">Motion: ${data.motion_detected ? 'Detected' : 'Clear'}</div>` +
-                            `<div class="sensor ${data.door_open ? 'active' : 'inactive'}">Door: ${data.door_open ? 'Open' : 'Closed'}</div>`;
-                        
-                        let relayHtml = '';
-                        for (let i = 0; i < data.relays.length; i++) {
-                            relayHtml += `<button class="button" onclick="toggleRelay(${i})">Relay ${i+1}: ${data.relays[i] ? 'ON' : 'OFF'}</button>`;
-                        }
-                        document.getElementById('relays').innerHTML = relayHtml;
+                        document.getElementById('sensors').innerHTML = 'Motion: ' + data.motion_detected + ', Door: ' + data.door_open;
                     });
             }
-            
-            function toggleRelay(num) {
-                fetch(`/api/relay/${num}/toggle`, {method: 'POST'})
-                    .then(() => updateDashboard());
-            }
-            
-            // Update every 2 seconds
             setInterval(updateDashboard, 2000);
             updateDashboard();
         </script>
     </body>
     </html>
-    ''')
+    """
+    return render_template_string(html)
 
 @app.route('/api/status')
 def api_status() -> None:
@@ -525,16 +498,16 @@ def api_toggle_relay(relay_num) -> None:
 def main() -> None:
     try:
         print("🚀 Aurora Home Automation System Starting...")
-        
+
         # Start automation in background thread
         automation_thread = threading.Thread(target=automation.automation_loop)
         automation_thread.daemon = True
         automation_thread.start()
-        
+
         # Start web server
         print("🌐 Web dashboard available at http://localhost:5000")
         app.run(host='0.0.0.0', port=5000, debug=False)
-        
+
     except KeyboardInterrupt:
         print("🛑 System shutdown requested")
     finally:
@@ -544,16 +517,18 @@ if __name__ == '__main__':
     main()
 '''
 
+
 def main() -> None:
     """Main demonstration function"""
     print("🚀 AURORA DEVICE PROGRAMMING DEMONSTRATION")
     print("=" * 60)
-    
+
     aurora_expert = AuroraExpertKnowledge()
-    
-    print(f"📊 Aurora has expert knowledge in {len(aurora_expert.languages)} programming languages")
+
+    print(
+        f"📊 Aurora has expert knowledge in {len(aurora_expert.languages)} programming languages")
     print()
-    
+
     # Generate device-specific code examples
     examples = [
         ("AppleScript for iPhone WiFi Fix", generate_applescript_wifi_fix),
@@ -561,25 +536,26 @@ def main() -> None:
         ("Arduino ESP32 IoT Temperature Sensor", generate_arduino_iot_sensor),
         ("Raspberry Pi Home Automation", generate_raspberry_pi_automation)
     ]
-    
+
     for title, generator in examples:
         print(f"🎯 {title}:")
         print("─" * 40)
         code = generator()
         print(code[:500] + "..." if len(code) > 500 else code)
         print("\n" + "═" * 60 + "\n")
-    
+
     print("✅ AURORA DEVICE PROGRAMMING CAPABILITIES VERIFIED!")
     print()
     print("🏆 Aurora can generate expert-level code for:")
     print("• iPhone/Mac automation (AppleScript)")
-    print("• Android applications (Kotlin/Java)")  
+    print("• Android applications (Kotlin/Java)")
     print("• IoT devices (Arduino, ESP32, Raspberry Pi)")
     print("• System automation (Bash, PowerShell, Python)")
     print("• Cloud deployments (Docker, Kubernetes)")
     print("• And ALL other programming languages!")
     print()
     print("🎉 Aurora is fully loaded and ready for ANY programming task!")
+
 
 if __name__ == "__main__":
     main()

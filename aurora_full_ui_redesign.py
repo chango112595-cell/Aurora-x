@@ -46,7 +46,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
     
     // Intelligence Systems
     { path: '/tasks', label: '13 Foundation Tasks', icon: <Layers className="w-5 h-5" />, category: 'intelligence' },
-    { path: '/tiers', label: '34 Knowledge Tiers', icon: <Network className="w-5 h-5" />, category: 'intelligence' },
+    { path: '/tiers', label: '66 Knowledge Tiers', icon: <Network className="w-5 h-5" />, category: 'intelligence' },
     { path: '/evolution', label: 'Evolution Monitor', icon: <TrendingUp className="w-5 h-5" />, category: 'intelligence' },
     
     // Advanced Tools
@@ -88,7 +88,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                     <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                       Aurora
                     </h1>
-                    <p className="text-xs text-purple-400">66 Complete Systems</p>
+                    <p className="text-xs text-purple-400">79 Complete Systems</p>
                   </div>
                 </div>
               )}
@@ -195,7 +195,7 @@ export default function AuroraFuturisticChat() {
     {
       id: '1',
       type: 'aurora',
-      content: 'Aurora Neural Interface Online. I have 13 foundational tasks and 34 knowledge tiers at your service. How may I assist you?',
+      content: 'Aurora Neural Interface Online. I have 13 foundational tasks and 66 knowledge tiers at your service. How may I assist you?',
       timestamp: new Date()
     }
   ]);
@@ -276,7 +276,7 @@ export default function AuroraFuturisticChat() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                   Aurora Neural Chat
                 </h1>
-                <p className="text-sm text-purple-400">66 Complete Systems • Quantum Coherence Active</p>
+                <p className="text-sm text-purple-400">79 Complete Systems • Quantum Coherence Active</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -376,7 +376,7 @@ export default function AuroraFuturisticChat() {
             </button>
           </div>
           <p className="text-xs text-purple-400/60 mt-3 text-center">
-            Neural Interface • Quantum Processing • 66 Complete Systems Online
+            Neural Interface • Quantum Processing • 79 Complete Systems Online
           </p>
         </div>
       </div>
@@ -460,7 +460,7 @@ export default App;
                     "Categorized navigation (Core, Intelligence, Tools)",
                     "Quantum coherence monitor",
                     "Gradient animations and effects",
-                    "66 Complete Systems branding",
+                    "79 Complete Systems branding",
                 ],
                 "chat": [
                     "Neural chat interface",
@@ -507,7 +507,7 @@ export default App;
         print("\n[Aurora] 🎨 New Features:")
         print("  • Futuristic collapsible sidebar with 3 categories")
         print("  • Neural chat interface with quantum effects")
-        print("  • 66 Complete Systems (13 Tasks + 34 Tiers) branding")
+        print("  • 79 Complete Systems (13 Tasks + 34 Tiers) branding")
         print("  • Glassmorphism and gradient animations")
         print("  • Dark theme with cyan-purple-pink accents")
         print("  • Responsive layout for all screen sizes")

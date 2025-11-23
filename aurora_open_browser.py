@@ -67,7 +67,7 @@ class AuroraBrowserLauncher:
 
         self.log("")
         self.log("=" * 70)
-        if success:
+        if SUCCESS:
             self.log("✅ BROWSER LAUNCHED")
             self.log(f"📍 URL: {self.frontend_url}")
             self.log("🎨 You should see Aurora's futuristic quantum neural dashboard")
@@ -75,7 +75,7 @@ class AuroraBrowserLauncher:
             self.log("Features visible:")
             self.log("  • Quantum Coherence Monitor")
             self.log("  • 13 Foundational Tasks Matrix")
-            self.log("  • 34 Knowledge Tiers Architecture")
+            self.log("  • 66 Knowledge Tiers Architecture")
             self.log("  • 5 Service Status Grid")
             self.log("  • Neural Activity Monitor")
         else:

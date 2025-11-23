@@ -17,7 +17,6 @@ try:
     response = requests.post(
         "http://localhost:5000/api/conversation",
         json={"message": "test", "session_id": "diagnostic"},
-        timeout=5,
         timeout=30,
     )
     if response.status_code == 200:
@@ -33,7 +32,7 @@ except Exception as e:
 print("\n2️⃣ Testing Luminar Nexus /api/chat...")
 try:
     response = requests.post(
-        "http://localhost:5003/api/chat", json={"message": "test", "session_id": "diagnostic"}, timeout=5, timeout=30
+        "http://localhost:5003/api/chat", json={"message": "test", "session_id": "diagnostic"}, timeout=30
     )
     if response.status_code == 200:
         print(f"   ✅ Luminar Nexus responds: {response.status_code}")
@@ -49,7 +48,6 @@ try:
     response = requests.post(
         "http://localhost:5173/api/conversation",
         json={"message": "test", "session_id": "diagnostic"},
-        timeout=5,
         timeout=30,
     )
     if response.status_code == 200:
@@ -63,9 +61,11 @@ except Exception as e:
 # Test 4: Check tmux sessions
 print("\n4️⃣ Checking service status...")
 try:
-    result = subprocess.run(["tmux", "list-sessions"], capture_output=True, text=True, check=False)
+    result = subprocess.run(["tmux", "list-sessions"],
+                            capture_output=True, text=True, check=False)
     sessions = result.stdout
-    aurora_sessions = [s for s in sessions.split("\n") if "aurora" in s.lower()]
+    aurora_sessions = [s for s in sessions.split(
+        "\n") if "aurora" in s.lower()]
     print(f"   Found {len(aurora_sessions)} Aurora sessions:")
     for sess in aurora_sessions[:5]:
         print(f"   • {sess}")
@@ -100,7 +100,8 @@ try:
         if "proxy" in config:
             print("   ✅ Vite proxy configuration found")
             # Extract proxy config
-            proxy_section = config[config.find("proxy") : config.find("proxy") + 500]
+            proxy_section = config[config.find(
+                "proxy"): config.find("proxy") + 500]
             print(f"   {proxy_section[:300]}...")
         else:
             print("   ❌ No proxy configuration in vite.config.ts")

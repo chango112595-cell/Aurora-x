@@ -127,7 +127,7 @@ class AuroraPylintFixer:
                 # Find definition and change it
                 for i, line in enumerate(lines):
                     if "success =" in line:
-                        lines[i] = line.replace("success =", "SUCCESS =")
+                        lines[i] = line.replace("success =", "_SUCCESS =")
                         break
             elif var_name == "ready":
                 # Add ready variable before usage
@@ -138,9 +138,9 @@ class AuroraPylintFixer:
                     if "for" in lines[i] and "in" in lines[i]:
                         # Already has a loop, might be indentation issue
                         return False
-            elif var_name == "func_name":
-                # Add func_name definition
-                lines.insert(line_num - 1, '        func_name = "test_function"\n')
+            elif var_name == "FUNC_NAME":
+                # Add FUNC_NAME definition
+                lines.insert(line_num - 1, '        FUNC_NAME = "test_function"\n')
 
             with open(filepath, "w", encoding="utf-8") as f:
                 f.writelines(lines)

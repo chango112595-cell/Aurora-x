@@ -127,7 +127,7 @@ export default function Tasks() {
     print("   ✅ Tasks page updated\n")
 
     # Tiers page
-    print("🧠 Updating tiers (34 Knowledge Tiers)...")
+    print("🧠 Updating tiers (66 Knowledge Tiers)...")
     with open("client/src/pages/tiers.tsx", "w", encoding="utf-8") as f:
         f.write(
             """import React from 'react';
@@ -192,7 +192,7 @@ export default function Tiers() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-            34 Knowledge Tiers
+            66 Knowledge Tiers
           </h1>
           <p className="text-purple-300">Organized intelligence across 8 core categories</p>
         </div>
@@ -397,7 +397,7 @@ if __name__ == "__main__":
     print("   ✅ Dashboard - Quantum metrics")
     print("   ✅ Chat - Natural conversation UI")
     print("   ✅ Tasks - 13 Foundation Tasks with progress")
-    print("   ✅ Tiers - 34 Knowledge Tiers organized")
+    print("   ✅ Tiers - 66 Knowledge Tiers organized")
     print("   ✅ Intelligence - Real-time metrics")
     print("   ✅ All placeholder pages - Consistent design")
     print("\n🚀 Entire system refreshed and ready!")

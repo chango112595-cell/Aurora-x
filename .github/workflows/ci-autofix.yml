@@ -1,9 +1,11 @@
-name: Python Lint & Auto-Fix / Lint + Fix Python
+name: Python Lint & Auto-Fix / Lint + Fix Python (DISABLED)
 
+# DISABLED: Auto-linting was causing sync conflicts with local changes
 on:
-  push:
-    branches: [main, dev]
-  pull_request:
+  workflow_dispatch: # Only runs manually, never automatically
+  # push:
+  #   branches: [main, dev]
+  # pull_request:
 
 permissions:
   contents: write
@@ -18,7 +20,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
       - name: Install tools
         run: pip install ruff black
       - name: Auto-fix

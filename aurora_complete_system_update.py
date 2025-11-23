@@ -123,8 +123,8 @@ export default function TasksPage() {
         print(f"[Aurora] ✅ Created: {path}")
 
     def create_tiers_page(self):
-        """Create 34 Knowledge Tiers page"""
-        print("[Aurora] Creating 34 Knowledge Tiers page...")
+        """Create 66 Knowledge Tiers page"""
+        print("[Aurora] Creating 66 Knowledge Tiers page...")
 
         content = """import React from 'react';
 import { Globe, Code, Database, Brain, Sparkles, Zap } from 'lucide-react';
@@ -210,7 +210,7 @@ export default function TiersPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-            34 Knowledge Tiers
+            66 Knowledge Tiers
           </h1>
           <p className="text-purple-400 text-lg">Specialized domain expertise across all fields of knowledge</p>
         </div>
@@ -344,7 +344,7 @@ export default function IntelligencePage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl">
                 <span className="text-purple-400">Foundation Tasks</span>
-                <span className="text-cyan-400 font-mono text-lg">13</span>
+                <span className="text-cyan-400 font-mono text-lg">79</span>
               </div>
               <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl">
                 <span className="text-purple-400">Knowledge Tiers</span>
@@ -570,8 +570,8 @@ export default App;
         for update in self.updates:
             print(f"  ✅ {update}")
         print("\n[Aurora] 📊 System Status:")
-        print("  • 13 Foundation Tasks Page - Complete")
-        print("  • 34 Knowledge Tiers Page - Complete")
+        print("  • 66 Foundation Tasks Page - Complete")
+        print("  • 66 Knowledge Tiers Page - Complete")
         print("  • Intelligence Core Page - Complete")
         print("  • Evolution Monitor - Placeholder")
         print("  • Autonomous Tools - Placeholder")

@@ -1,0 +1,1380 @@
+{
+  "timestamp": "2025-11-22",
+  "total_converted": 274,
+  "total_failed": 0,
+  "total_skipped": 0,
+  "converted_files": [
+    {
+      "html": "aurora_chat_test.html",
+      "tsx": "src\\components\\aurora_chat_test.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "AURORA_COMPREHENSIVE_COMPARISON_DASHBOARD.html",
+      "tsx": "src\\components\\Dashboard\\AURORA_COMPREHENSIVE_COMPARISON_DASHBOARD.tsx",
+      "purpose": "Dashboard"
+    },
+    {
+      "html": "aurora_cosmic_nexus.html",
+      "tsx": "src\\components\\aurora_cosmic_nexus.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "aurora_minimal_chat.html",
+      "tsx": "src\\components\\aurora_minimal_chat.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "CHANGE_DASHBOARD.html",
+      "tsx": "src\\components\\CHANGE_DASHBOARD.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "COMPARISON_DASHBOARD.html",
+      "tsx": "src\\components\\COMPARISON_DASHBOARD.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "comparison_dashboard_v2.html",
+      "tsx": "src\\components\\comparison_dashboard_v2.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "GIT_HISTORY_COMPARISON.html",
+      "tsx": "src\\components\\GIT_HISTORY_COMPARISON.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "LUMINAR_NEXUS_DASHBOARD.html",
+      "tsx": "src\\components\\LUMINAR_NEXUS_DASHBOARD.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "preview.html",
+      "tsx": "src\\components\\preview.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "PROFESSIONAL_COMPARISON_DASHBOARD.html",
+      "tsx": "src\\components\\PROFESSIONAL_COMPARISON_DASHBOARD.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "tracker.html",
+      "tsx": "src\\components\\tracker.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "tracker_visual.html",
+      "tsx": "src\\components\\tracker_visual.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "attached_assets\\report_1760045804245.html",
+      "tsx": "src\\components\\report_1760045804245.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "attached_assets\\report_1760048876157.html",
+      "tsx": "src\\components\\report_1760048876157.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "attached_assets\\spec_runs_1760050963508.html",
+      "tsx": "src\\components\\Dashboard\\spec_runs_1760050963508.tsx",
+      "purpose": "Dashboard"
+    },
+    {
+      "html": "public\\aurora.html",
+      "tsx": "src\\components\\aurora.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "public\\monitoring.html",
+      "tsx": "src\\components\\Dashboard\\monitoring.tsx",
+      "purpose": "Dashboard"
+    },
+    {
+      "html": "runs\\run-20251006-081837\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251006-082801\\graph_diff.html",
+      "tsx": "src\\components\\graph_diff.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251006-082801\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251006-084421\\graph_diff.html",
+      "tsx": "src\\components\\graph_diff.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251006-084421\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251006-102821\\graph_diff.html",
+      "tsx": "src\\components\\graph_diff.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251006-102821\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-212809\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-223233\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-223904\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-223905\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-224247\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-224257\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-224258\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-224259\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-224333\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-224744\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-224757\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-230508\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-230511\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-230537\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-230554\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-230604\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-230606\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-231411\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-231441\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-232903\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251009-232904\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-001400\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-001401\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-021708\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-021752\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-021806\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-021817\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-025042\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-025052\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054355\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054401\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054447\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054519\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054624\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054636\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054708\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054709\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054711\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054712\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054713\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054715\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054716\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054718\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054719\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-054720\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-055725\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-060029\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-060150\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063457\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063458\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063459\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063500\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063501\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063502\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063552\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063553\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063554\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063555\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063556\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063557\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063558\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063559\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063600\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063640\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063641\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063642\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063644\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063645\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063646\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063647\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063648\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063649\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063650\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063652\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063653\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063654\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063655\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063656\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063657\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063658\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063659\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063700\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063701\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063702\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063703\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063704\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063705\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063745\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063746\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063747\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063748\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063749\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063750\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063751\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063752\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063753\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-063754\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-165503\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-170117\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251010-170147\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-014843\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-014904\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-015031\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-015231\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-015947\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-020002\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-020015\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-020044\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-020051\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-020134\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-020214\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-020215\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-020327\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-020418\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-020457\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-021102\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-021145\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-021224\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-021505\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-023117\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-023524\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-023741\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-025025\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-025105\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-025437\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-025503\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-025843\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-025900\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-030150\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-030151\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-030152\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-030216\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-030217\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-030219\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-030226\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-030248\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-030249\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-030632\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-065523\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251011-171523\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-031656\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-034250\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-034434\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-034716\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-034747\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-034748\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-034859\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-035605\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-040427\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-084111\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-084121\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-084611\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-090804\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-090815\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-090920\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-091122\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-141235\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-141356\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-141414\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-142356\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-205905\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-205906\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-205907\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-210515\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-210516\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-210517\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-211755\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-211756\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-211757\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-211822\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-211823\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-211934\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-211935\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-230449\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-230450\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-230508\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-230509\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-230603\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-230604\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-232048\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-232049\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251013-053906\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251013-053907\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251013-054131\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251013-054132\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251014-215716\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251014-220039\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251014-220048\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251014-220156\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251014-220320\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251015-223826\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193434\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193449\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193504\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193519\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193534\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193549\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193604\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193619\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193634\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193649\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193704\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193719\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193734\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193749\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193804\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193819\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193834\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193849\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193904\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193919\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193934\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-193950\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194005\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194020\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194035\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194050\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194105\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194120\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194135\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194150\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194205\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194220\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194235\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194250\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194305\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194320\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194336\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194351\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194406\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194421\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194436\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194451\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194506\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194521\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194536\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251115-194551\\report.html",
+      "tsx": "src\\components\\report.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "runs\\run-20251012-150539\\public\\index.html",
+      "tsx": "src\\components\\Dashboard\\index.tsx",
+      "purpose": "Dashboard"
+    },
+    {
+      "html": "client\\public\\api-test.html",
+      "tsx": "src\\components\\api-test.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "client\\public\\chat-test-fixed.html",
+      "tsx": "src\\components\\chat-test-fixed.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "client\\public\\comparison_dashboard_v2.html",
+      "tsx": "src\\components\\comparison_dashboard_v2.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "client\\public\\GIT_HISTORY_COMPARISON.html",
+      "tsx": "src\\components\\GIT_HISTORY_COMPARISON.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "client\\public\\offline.html",
+      "tsx": "src\\components\\offline.tsx",
+      "purpose": "unknown"
+    },
+    {
+      "html": "client\\public\\PROFESSIONAL_COMPARISON_DASHBOARD.html",
+      "tsx": "src\\components\\PROFESSIONAL_COMPARISON_DASHBOARD.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "client\\templates\\spec_runs.html",
+      "tsx": "src\\components\\Dashboard\\spec_runs.tsx",
+      "purpose": "Dashboard"
+    },
+    {
+      "html": "aurora_x\\static\\dashboard.html",
+      "tsx": "src\\components\\Dashboard\\dashboard.tsx",
+      "purpose": "Dashboard"
+    },
+    {
+      "html": "aurora_x\\static\\demo-dashboard.html",
+      "tsx": "src\\components\\demo-dashboard.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "aurora_x\\templates\\control_center.html",
+      "tsx": "src\\components\\control_center.tsx",
+      "purpose": "Aurora Chat Interface"
+    },
+    {
+      "html": "aurora_x\\templates\\spec_runs.html",
+      "tsx": "src\\components\\spec_runs.tsx",
+      "purpose": "unknown"
+    }
+  ],
+  "failed_files": [],
+  "skipped_files": []
+}

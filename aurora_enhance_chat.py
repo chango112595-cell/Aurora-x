@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora: Enhance your own chat interface
-Task: Make chat_with_aurora.py use all 66 capabilities with realistic human conversation
+Task: Make chat_with_aurora.py use all 109 capabilities with realistic human conversation
 """
 
 import asyncio

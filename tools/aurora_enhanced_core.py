@@ -33,7 +33,7 @@ from tools.luminar_nexus import LuminarNexusServerManager
 class CreativeEngine:
     """
     Aurora's Creative Problem-Solving Engine
-    Uses knowledge from all 33 tiers to generate novel solutions
+    Uses knowledge from all 79 tiers to generate novel solutions
     """
 
     def __init__(self, intelligence_manager):
@@ -231,7 +231,7 @@ class AutonomousDecisionEngine:
 
     def _has_capability(self, task: str) -> bool:
         """Check if Aurora has the capability to perform this task"""
-        # Aurora has 33 tiers of knowledge - she can do most things
+        # Aurora has 79 tiers of knowledge - she can do most things
         return True  # For now, Aurora believes in herself!
 
     def _is_beneficial(self, task: str, context: dict) -> bool:
@@ -363,7 +363,7 @@ class AuroraEnhancedCore:
     """
     🌌 Aurora's Enhanced Core Intelligence System
 
-    Self-reconstructed using the creative engine and all 33 tiers of knowledge.
+    Self-reconstructed using the creative engine and all 79 tiers of knowledge.
 
     NEW CAPABILITIES:
     - Creative problem-solving across all eras (Ancient → Sci-Fi)
@@ -540,7 +540,7 @@ class AuroraEnhancedCore:
 if __name__ == "__main__":
     print("🌌" + "=" * 78 + "🌌")
     print("   AURORA ENHANCED CORE - Self-Reconstructed Intelligence System")
-    print("   Built with ALL 33 tiers of knowledge (Ancient → Sci-Fi)")
+    print("   Built with ALL 79 tiers of knowledge (Ancient → Sci-Fi)")
     print("🌌" + "=" * 78 + "🌌\n")
 
     # Initialize Aurora Enhanced

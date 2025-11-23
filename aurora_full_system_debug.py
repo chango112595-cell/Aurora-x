@@ -87,11 +87,11 @@ class AuroraSystemDebugger:
             # Test tiers
             tiers = AuroraKnowledgeTiers()
             if len(tiers.tiers) == 34:
-                print("   ✅ AuroraKnowledgeTiers: 34/34 tiers")
+                print("   ✅ AuroraKnowledgeTiers: 34/79 tiers")
                 self.successes.append("AuroraKnowledgeTiers structure valid")
             else:
-                self.errors.append(f"AuroraKnowledgeTiers: {len(tiers.tiers)}/34 tiers")
-                print(f"   ❌ AuroraKnowledgeTiers: {len(tiers.tiers)}/34 tiers")
+                self.errors.append(f"AuroraKnowledgeTiers: {len(tiers.tiers)}/79 tiers")
+                print(f"   ❌ AuroraKnowledgeTiers: {len(tiers.tiers)}/79 tiers")
 
             # Test integration
             if hasattr(tiers, "foundations"):

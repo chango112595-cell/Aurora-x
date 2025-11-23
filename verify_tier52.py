@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify Tier 52 Integration"""
+"""Verify Tiers 66 Integration"""
 
 from aurora_core import AuroraKnowledgeTiers
 
