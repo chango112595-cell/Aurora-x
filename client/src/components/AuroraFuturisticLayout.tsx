@@ -93,7 +93,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                     const isActive = location === item.path || (item.path !== '/' && location.startsWith(item.path));
                     return (
                       <Link key={item.path} href={item.path}>
-                        <a className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${isActive
+                        <div className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 cursor-pointer ${isActive
                           ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20'
                           : 'text-purple-300 hover:bg-purple-500/10 hover:text-white'
                           }`}>
@@ -106,7 +106,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                           {isActive && sidebarOpen && (
                             <div className="ml-auto w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-purple-400 animate-pulse" />
                           )}
-                        </a>
+                        </div>
                       </Link>
                     );
                   })}

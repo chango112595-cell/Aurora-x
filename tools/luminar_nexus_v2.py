@@ -445,7 +445,7 @@ class LuminarNexusV2:
                 ),
                 "session": "aurora-backend",
                 "port": 5000,
-                "health_check": "http://localhost:5000/health",
+                "health_check": "http://localhost:5000/api/health",
             },
             "self-learn": {
                 "name": "Aurora Self-Learning Server",

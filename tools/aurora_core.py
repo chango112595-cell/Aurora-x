@@ -29,6 +29,7 @@ try:
 
     AUTONOMOUS_SYSTEM_AVAILABLE = True
 except ImportError:
+    AuroraAutonomousSystem = None  # type: ignore
     AUTONOMOUS_SYSTEM_AVAILABLE = False
     print("⚠️ Aurora Autonomous System not found - limited capabilities")
 
@@ -38,6 +39,7 @@ try:
 
     AUTONOMOUS_AGENT_AVAILABLE = True
 except ImportError:
+    AuroraAutonomousAgent = None  # type: ignore
     AUTONOMOUS_AGENT_AVAILABLE = False
     print("⚠️ Aurora Autonomous Agent not found")
 
@@ -47,6 +49,7 @@ try:
 
     AUTONOMOUS_FIXER_AVAILABLE = True
 except ImportError:
+    AuroraAutonomousFixer = None  # type: ignore
     AUTONOMOUS_FIXER_AVAILABLE = False
     print("⚠️ Aurora Autonomous Fixer not found")
 
@@ -493,35 +496,59 @@ class AuroraCore:
     def stop_all_services(self):
         """Aurora commands Luminar to stop all services"""
         self.intelligence.log("🛑 Aurora Core: Stopping all services Fucking A...")
-        return self.luminar.stop_all_servers()
+        if self.luminar:
+            return self.luminar.stop_all_servers()
+        self.intelligence.log("⚠️ Luminar Nexus not available")
+        return False
 
     def start_bridge(self):
         """Start Aurora Bridge Service"""
-        return self.luminar.start_server("bridge")
+        if self.luminar:
+            return self.luminar.start_server("bridge")
+        self.intelligence.log("⚠️ Luminar Nexus not available")
+        return False
 
     def start_backend(self):
         """Start Aurora Backend API"""
-        return self.luminar.start_server("backend")
+        if self.luminar:
+            return self.luminar.start_server("backend")
+        self.intelligence.log("⚠️ Luminar Nexus not available")
+        return False
 
     def start_self_learning(self):
         """Start Aurora Self-Learning Server"""
-        return self.luminar.start_server("self-learn")
+        if self.luminar:
+            return self.luminar.start_server("self-learn")
+        self.intelligence.log("⚠️ Luminar Nexus not available")
+        return False
 
     def start_chat(self):
         """Start Aurora Chat Server"""
-        return self.luminar.start_server("chat")
+        if self.luminar:
+            return self.luminar.start_server("chat")
+        self.intelligence.log("⚠️ Luminar Nexus not available")
+        return False
 
     def start_service(self, service_name):
         """Aurora commands Luminar to start a specific service"""
-        return self.luminar.start_server(service_name)
+        if self.luminar:
+            return self.luminar.start_server(service_name)
+        self.intelligence.log("⚠️ Luminar Nexus not available")
+        return False
 
     def stop_service(self, service_name):
         """Aurora commands Luminar to stop a specific service"""
-        return self.luminar.stop_server(service_name)
+        if self.luminar:
+            return self.luminar.stop_server(service_name)
+        self.intelligence.log("⚠️ Luminar Nexus not available")
+        return False
 
     def get_status(self):
         """Get status of all systems"""
-        return self.luminar.show_status()
+        if self.luminar:
+            return self.luminar.show_status()
+        self.intelligence.log("⚠️ Luminar Nexus not available")
+        return {"status": "unavailable", "message": "Luminar Nexus V2 not loaded"}
 
     def start_chat_server(self, port=5003):
         """Start Aurora's chat interface"""
