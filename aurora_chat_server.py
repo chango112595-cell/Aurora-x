@@ -76,19 +76,27 @@ def chat_endpoint():
         data = request.get_json()
         message = data.get("message", "")
         session_id = data.get("session_id", "default")
+        
+        # AURORA FIX: Always start fresh context (no persistent session)
+        if session_id in aurora.conversation_contexts:
+            current_count = aurora.conversation_contexts[session_id].get("message_count", 0)
+            if current_count == 0:  # New session or refresh
+                del aurora.conversation_contexts[session_id]
+                print(f"🔄 Fresh session started: {session_id}")
         should_reset = data.get("reset_session", False)
 
         if not message:
             return jsonify({"error": "No message provided"}), 400
 
-        # Session isolation - always reset on page load (cosmic-nexus-ui greeting detection)
-        if should_reset or (
-            session_id == "cosmic-nexus-ui" and any(
-                greeting in message.lower() for greeting in ["hello", "hi", "hey"])
-        ):
+        # FIX 3: SESSION ISOLATION - Fresh context for every browser session
+        # Always start fresh if message count is low (prevents "collaborative" tone)
+        context = aurora.get_conversation_context(session_id)
+        if should_reset or context.get("message_count", 0) == 0:
             if session_id in aurora.conversation_contexts:
                 print(f"🔄 Session reset: {session_id}")
                 del aurora.conversation_contexts[session_id]
+                # Recreate fresh context
+                context = aurora.get_conversation_context(session_id)
 
         # NEXUS V2 ROUTING: Security check and AI orchestration
         if nexus:

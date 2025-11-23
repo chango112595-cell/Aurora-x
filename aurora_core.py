@@ -19,6 +19,7 @@ knowledge system lives. Luminar Nexus just orchestrates - this is the brain.
 
 import asyncio
 import json
+import os
 import platform
 import re
 import subprocess
@@ -1308,15 +1309,16 @@ class AuroraCoreIntelligence:
         self.learning_memory: dict[str, Any] = {}
         self.autonomous_mode = True
 
-        # Activate orchestration system
-        if ORCHESTRATION_AVAILABLE:
+        # Activate orchestration system (skip in chat mode for instant startup)
+        if ORCHESTRATION_AVAILABLE and not os.getenv("AURORA_NO_ORCHESTRATION"):
             print("🚀 Activating Ultimate API Manager orchestration...")
             self.orchestrator_manager = UltimateAPIManager(auto_start=True)
             self.orchestrator_manager.start_autonomous_mode()
             print("✅ Orchestration system activated - autonomous management enabled")
         else:
             self.orchestrator_manager = None
-            print("⚠️ Running without orchestration system")
+            if os.getenv("AURORA_CHAT_MODE"):
+                print("💬 Chat Mode: Lightweight startup (no service orchestration)")
 
         # Aurora's orchestration capabilities
         self.orchestrator = AuroraOrchestrator(str(self.project_root))
@@ -1334,9 +1336,23 @@ class AuroraCoreIntelligence:
         # Load persistent memory
         self.persistent_memory = self._load_persistent_memory()
 
+        # Activate autonomous code quality monitoring (Tier 42: Pylint Prevention)
+        self.pylint_prevention_active = False
+        if self.autonomous_mode and not os.getenv("AURORA_CHAT_MODE"):
+            try:
+                from aurora_pylint_prevention import AuroraPylintPrevention
+                self.code_quality_monitor = AuroraPylintPrevention()
+                self.pylint_prevention_active = True
+                print(
+                    "🛡️ Pylint Prevention System activated - continuous quality monitoring")
+            except ImportError:
+                self.code_quality_monitor = None
+
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
         print(f"⚡ {self.knowledge_tiers.total_tiers} capabilities active ({self.knowledge_tiers.foundation_count} foundations + {self.knowledge_tiers.tier_count} tiers) | Autonomous mode: {self.autonomous_mode}")
+        if self.pylint_prevention_active:
+            print(f"🎯 Code Quality: AUTO-FIX enabled | Target: 10.00/10")
         if self.persistent_memory.get("user_name"):
             print(f"👋 Welcome back, {self.persistent_memory['user_name']}!")
 
@@ -1363,20 +1379,20 @@ class AuroraCoreIntelligence:
     def analyze_and_score(self, code: str, language: str = "python") -> dict:
         """
         Analyze code quality and score it 1-10 using Aurora Expert Knowledge
-        
+
         Args:
             code: The code to analyze
             language: Programming language (python, javascript, typescript, etc.)
-        
+
         Returns:
             Dict with score, analysis, and recommendations
         """
         try:
             from tools.aurora_expert_knowledge import AuroraExpertKnowledge
-            
+
             expert = AuroraExpertKnowledge()
             analysis = expert.get_expert_analysis(code, language)
-            
+
             # Save to persistent storage
             score_data = {
                 'timestamp': datetime.now().isoformat(),
@@ -1385,17 +1401,17 @@ class AuroraCoreIntelligence:
                 'analysis': analysis,
                 'code_length': len(code)
             }
-            
+
             # Append to scores file
             scores_file = self.project_root / '.aurora_scores.json'
             with open(scores_file, 'a', encoding='utf-8') as f:
                 json.dump(score_data, f)
                 f.write('\n')
-            
+
             print(f"📊 Code scored: {score_data['score']}/10")
-            
+
             return analysis
-            
+
         except Exception as e:
             print(f"⚠️ Scoring error: {e}")
             return {
@@ -1404,6 +1420,89 @@ class AuroraCoreIntelligence:
                 'status': 'failed'
             }
 
+    def run_code_quality_scan(self, file_path: str = None) -> dict:
+        """
+        Run code quality analysis and scoring on a file or entire project
+        Uses Aurora's 188 intelligence for instant analysis
+
+        Args:
+            file_path: Optional specific file to analyze. If None, analyzes project
+
+        Returns:
+            Dict with analysis results, score, and recommendations
+        """
+        print("\n🔍 AURORA CODE QUALITY ANALYSIS")
+        print("=" * 60)
+
+        if file_path:
+            # Analyze specific file
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    code = f.read()
+
+                analysis = self.analyze_and_score(code, "python")
+                score = analysis.get('code_quality_score', 0)
+
+                print(f"\n📊 {Path(file_path).name}: {score}/10")
+
+                if score < 7:
+                    print("⚠️  Needs improvement")
+                    if analysis.get('recommendations'):
+                        print("💡 Recommendations:")
+                        for rec in analysis['recommendations'][:3]:
+                            print(f"   • {rec}")
+                elif score < 9:
+                    print("✅ Good quality")
+                else:
+                    print("✨ Excellent quality!")
+
+                return analysis
+
+            except Exception as e:
+                print(f"❌ Error analyzing {file_path}: {e}")
+                return {"status": "error", "error": str(e)}
+
+        else:
+            # Quick project scan (first 5 Python files)
+            python_files = [f for f in self.project_root.glob("*.py")
+                            if f.is_file() and not f.name.startswith('.')][:5]
+
+            total_score = 0
+            analyzed = 0
+
+            for file in python_files:
+                try:
+                    with open(file, 'r', encoding='utf-8') as f:
+                        code = f.read()
+
+                    analysis = self.analyze_and_score(code, "python")
+                    score = analysis.get('code_quality_score', 0)
+                    total_score += score
+                    analyzed += 1
+
+                    print(f"📝 {file.name}: {score}/10")
+
+                except Exception:
+                    continue
+
+            avg_score = total_score / analyzed if analyzed > 0 else 0
+
+            print(f"\n📊 Project Average: {avg_score:.1f}/10")
+            print(f"   Files analyzed: {analyzed}")
+
+            if avg_score >= 9:
+                print("✨ Outstanding code quality!")
+            elif avg_score >= 7:
+                print("✅ Good code quality")
+            else:
+                print("⚠️  Needs improvement - run Aurora's auto-fixer")
+
+            return {
+                "status": "complete",
+                "files_analyzed": analyzed,
+                "average_score": avg_score,
+                "total_score": total_score
+            }
 
     def _save_persistent_memory(self):
         """Save persistent memory to disk"""
@@ -1435,6 +1534,7 @@ class AuroraCoreIntelligence:
 
     def analyze_natural_language(self, message: str) -> dict:
         """
+        # PRIORITY SYSTEM: Technical analysis > Aurora self-reference
         Enhanced natural language analysis with Aurora's intelligence
 
         Returns:
@@ -1572,17 +1672,21 @@ class AuroraCoreIntelligence:
             else:
                 return "I don't think you've told me your name yet. What should I call you?"
 
-        # PRIORITY 1: System diagnostic/technical commands FIRST
+        # FIX 2: INTENT PRIORITY - Technical analysis FIRST, enhancement LAST
         msg_lower = message.lower()
+
+        # PRIORITY 1: System diagnostic/technical commands
         if any(cmd in msg_lower for cmd in ["self diagnose", "self-diagnose", "diagnose yourself", "run diagnostic"]):
             return self._perform_self_diagnostic(context)
 
-        # PRIORITY 2: Technical questions - use full intelligence
-        if analysis["technical_question"]:
+        # PRIORITY 2: Technical questions - HIGHEST PRIORITY (overrides enhancement)
+        # Check for technical keywords that indicate analysis request
+        if analysis["technical_question"] or any(kw in msg_lower for kw in
+                                                 ["architecture", "topology", "flow", "system", "integration", "route", "fix"]):
             return self._technical_intelligence_response(message, context, analysis)
 
-        # PRIORITY 3: Enhancement requests
-        if analysis["enhancement_request"]:
+        # PRIORITY 3: Enhancement requests - ONLY if not technical
+        if analysis["enhancement_request"] and not analysis["technical_question"]:
             return self._respond_to_enhancement_request(message, context)
 
         # PRIORITY 4: Aurora self-limitation/critique responses
@@ -1593,8 +1697,12 @@ class AuroraCoreIntelligence:
         if analysis.get("asks_to_explain"):
             return self._provide_detailed_explanation(message, context, analysis)
 
-        # PRIORITY 6 (LOWEST): Aurora self-awareness responses
+        # PRIORITY 6 (LOWEST): Aurora self-awareness - BUT NO TEMPLATES
+        # FIX 4: TEMPLATE ELIMINATION - Always use dynamic contextual responses
         if analysis["aurora_specific"] or analysis["self_referential"]:
+            # Check if it's actually a technical question about Aurora's architecture
+            if any(tech in msg_lower for tech in ["architecture", "system", "topology", "flow", "integration"]):
+                return self._technical_intelligence_response(message, context, analysis)
             return self._respond_about_self(message, context)
 
         # General conversation - natural and engaging
