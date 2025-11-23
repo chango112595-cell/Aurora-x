@@ -273,9 +273,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const chatResult = await getChatResponse(message, sessionId);
 
       res.json({
-        ok: chatResult.ok,
-        response: chatResult.response,
-        message: chatResult.response,
+        ok: true,
+        response: chatResult,
+        message: chatResult,
         session_id: sessionId,
         ai_powered: true
       });
