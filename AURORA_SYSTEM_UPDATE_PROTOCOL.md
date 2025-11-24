@@ -122,7 +122,7 @@ That's it! The system **automatically**:
 After running updates, verify:
 
 - [ ] `aurora_core.py` has correct tier count
-- [ ] Frontend shows correct numbers (79 tiers, 54 total)
+- [ ] Frontend shows correct numbers (66 tiers, 54 total)
 - [ ] Backend mentions correct capabilities
 - [ ] All autonomous systems exist (Phases 1-6)
 - [ ] Documentation is up to date

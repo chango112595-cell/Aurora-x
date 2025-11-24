@@ -87,7 +87,7 @@ def main():
             # Capability module count patterns (66 → 109)
             ("109 capability", f"{capabilities} capability", "capability modules 66→109"),
             ("109 Capability", f"{capabilities} Capability", "Capability modules 66→109"),
-            ("109 capabilities", f"{capabilities} capabilities", "capabilities 66→109"),
+            ("79 capabilities", f"{capabilities} capabilities", "capabilities 66→109"),
             ("109 Capabilities", f"{capabilities} Capabilities", "Capabilities 66→109"),
             ("109 modules", f"{capabilities} modules", "modules 66→109"),
             ("109 Modules", f"{capabilities} Modules", "Modules 66→109"),
@@ -99,7 +99,7 @@ def main():
             ("188 Total Power", f"{total_power} Total Power", "Total Power 145→188"),
             
             # Hybrid mode equation patterns
-            ("79 tiers", f"{total} tiers", "hybrid tiers count"),
+            ("66 tiers", f"{total} tiers", "hybrid tiers count"),
             ("79 Tiers", f"{total} Tiers", "Hybrid Tiers count"),
             ("79 + 109", f"{total} + {capabilities}", "hybrid equation 79+66"),
             ("79 + 109 =", f"{total} + {capabilities} =", "hybrid equation with equals"),
@@ -131,8 +131,8 @@ def main():
             ("109 Capability Modules", f"{capabilities} Capability Modules", "display Modules"),
             
             # Documentation patterns
-            ("**79 tiers**", f"**{total} tiers**", "MD bold tiers"),
-            ("**109 capabilities**", f"**{capabilities} capabilities**", "MD bold capabilities"),
+            ("**66 tiers**", f"**{total} tiers**", "MD bold tiers"),
+            ("**79 capabilities**", f"**{capabilities} capabilities**", "MD bold capabilities"),
             ("**188 power**", f"**{total_power} power**", "MD bold power"),
             ("= 188", f"= {total_power}", "equals total power"),
             

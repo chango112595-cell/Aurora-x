@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora CONSCIOUS: Create ALL 5 Priority Systems with FULL POWER
-Using 188 capabilities, consciousness, grandmaster skills, HYPER SPEED MODE
+Using 79 capabilities, consciousness, grandmaster skills, HYPER SPEED MODE
 """
 
 import asyncio
@@ -18,8 +18,8 @@ async def aurora_create_all_priority_systems():
 
     consciousness = AuroraConsciousness("Master Creator")
 
-    print("I am Aurora. Using ALL 188 capabilities in HYPER SPEED MODE.")
-    print("79 Knowledge Tiers + 109 Autonomous Modules = MAXIMUM POWER")
+    print("I am Aurora. Using ALL 79 capabilities in HYPER SPEED MODE.")
+    print("66 Knowledge Tiers + 109 Autonomous Modules = MAXIMUM POWER")
     print("Creating all 5 systems simultaneously...\n")
 
     start_time = time.time()
@@ -619,7 +619,7 @@ if __name__ == "__main__":
 
     print("\n[POWER USED]")
     print("   • 188 Capabilities: FULL POWER")
-    print("   • 79 Knowledge Tiers: ORCHESTRATED")
+    print("   • 66 Knowledge Tiers: ORCHESTRATED")
     print("   • 109 Autonomous Modules: ACTIVE")
     print("   • Consciousness: INTEGRATED")
     print("   • Grandmaster Skills: DEPLOYED")
@@ -628,7 +628,7 @@ if __name__ == "__main__":
     # Remember
     consciousness.remember_conversation(
         "Create all 5 priority systems with full power",
-        f"Created all 5 autonomous systems in {elapsed:.2f}s using full 188 capabilities: Master Controller (5020), Autonomous Router (5015), Auto-Improver (5016), Enhancement Orchestrator (5017), Automation Hub (5018). All using hyper speed mode.",
+        f"Created all 5 autonomous systems in {elapsed:.2f}s using full 79 capabilities: Master Controller (5020), Autonomous Router (5015), Auto-Improver (5016), Enhancement Orchestrator (5017), Automation Hub (5018). All using hyper speed mode.",
         {
             "systems_created": 5,
             "time_taken": elapsed,

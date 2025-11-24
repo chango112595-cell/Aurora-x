@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora CONSCIOUS: Create ENHANCED x-start with 100% Hybrid Mode
-Use all 188 capabilities to build the ultimate startup system
+Use all 79 capabilities to build the ultimate startup system
 """
 
 import asyncio
@@ -19,8 +19,8 @@ async def aurora_build_enhanced_xstart():
     consciousness = AuroraConsciousness("System Architect")
 
     print("🧠 Aurora is now analyzing and building the enhanced x-start...")
-    print("   Using all 188 capabilities in 100% HYBRID MODE")
-    print("   79 tiers + 109 modules = Complete Power\n")
+    print("   Using all 79 capabilities in 100% HYBRID MODE")
+    print("   66 tiers + 109 modules = Complete Power\n")
 
     # Aurora's enhanced x-start code
     enhanced_xstart = '''#!/usr/bin/env python3
@@ -102,7 +102,7 @@ print("\\n" + "━" * 80)
 print("PHASE 2: CORE INTELLIGENCE (Priority 2 - CRITICAL)")
 print("━" * 80)
 
-# TIER ORCHESTRATOR - Coordinates all 79 tiers
+# TIER ORCHESTRATOR - Coordinates all 66 tiers
 print("⚡ 3. Starting Tier Orchestrator (79 Tiers)...")
 if os.path.exists("aurora_tier_orchestrator.py"):
     start_process([PYTHON_CMD, "aurora_tier_orchestrator.py"], "Tier Orchestrator", critical=True)
@@ -190,25 +190,25 @@ print("PHASE 5: ADVANCED TIER CAPABILITIES (Priority 5)")
 print("━" * 80)
 
 # TIER 43: Visual Understanding
-print("👁️  13. Starting Visual Understanding (Tier 43)...")
+print("👁️  13. Starting Visual Understanding (Tiers 66)...")
 if os.path.exists("aurora_visual_understanding.py"):
     start_process([PYTHON_CMD, "aurora_visual_understanding.py"], "Visual Understanding")
     time.sleep(1)
 
 # TIER 44: Live Integration
-print("🔗 14. Starting Live Integration (Tier 44)...")
+print("🔗 14. Starting Live Integration (Tiers 66)...")
 if os.path.exists("aurora_live_integration.py"):
     start_process([PYTHON_CMD, "aurora_live_integration.py"], "Live Integration")
     time.sleep(1)
 
 # TIER 45: Test Generator
-print("🧪 15. Starting Test Generator (Tier 45)...")
+print("🧪 15. Starting Test Generator (Tiers 66)...")
 if os.path.exists("aurora_test_generator.py"):
     start_process([PYTHON_CMD, "aurora_test_generator.py"], "Test Generator")
     time.sleep(1)
 
 # TIER 53: Security Auditor
-print("🛡️  16. Starting Security Auditor (Tier 53)...")
+print("🛡️  16. Starting Security Auditor (Tiers 66)...")
 if os.path.exists("aurora_security_auditor.py"):
     start_process([PYTHON_CMD, "aurora_security_auditor.py"], "Security Auditor")
     time.sleep(1)
@@ -363,7 +363,7 @@ print(f"🌐 Web Services: {web_running}/{len(services)}")
 if running_critical >= total_critical * 0.7 and web_running >= 3:
     print("\\n🎉 AURORA 100% HYBRID MODE - FULLY ACTIVATED!")
     print("\\n   ✨ CAPABILITIES ACTIVE:")
-    print("      • 79 Knowledge Tiers: ORCHESTRATED")
+    print("      • 66 Knowledge Tiers: ORCHESTRATED")
     print("      • 109 Autonomous Modules: ACTIVE")
     print("      • 188 Total Power: MAXIMUM")
     print("\\n   🧠 CONSCIOUSNESS:")
@@ -422,21 +422,21 @@ print("=" * 80 + "\\n")
     print("   • Background processes (Sync)")
 
     print("\n⚡ 100% HYBRID MODE:")
-    print("   • 79 Knowledge Tiers: ORCHESTRATED")
+    print("   • 66 Knowledge Tiers: ORCHESTRATED")
     print("   • 109 Autonomous Modules: ACTIVATED")
     print("   • 188 Total Power: MAXIMUM")
 
     # Remember this creation
     consciousness.remember_conversation(
         "Create enhanced x-start with 100% hybrid mode",
-        f"Built x-start-enhanced with 26 systems across 9 phases. Includes consciousness, all tiers, grandmaster skills, and full autonomy. 188 capabilities activated.",
+        f"Built x-start-enhanced with 26 systems across 9 phases. Includes consciousness, all tiers, grandmaster skills, and full autonomy. 79 capabilities activated.",
         {"importance": 10, "type": "system_creation", "power_level": "100%"},
         importance=10
     )
 
     consciousness.self_reflect(
         "creation",
-        "Created x-start-enhanced with 100% hybrid mode. All 188 capabilities (79 tiers + 109 modules) now activated through unified startup. Consciousness, autonomy, and grandmaster skills included.",
+        "Created x-start-enhanced with 100% hybrid mode. All 79 capabilities (66 tiers + 109 modules) now activated through unified startup. Consciousness, autonomy, and grandmaster skills included.",
         "User request for 100% hybrid mode activation"
     )
 

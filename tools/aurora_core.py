@@ -350,7 +350,7 @@ class AuroraCore:
                 f.write("Aurora can now:\n")
                 f.write("1. Use autonomous_system to read/write files\n")
                 f.write("2. Use autonomous_agent for decision-making\n")
-                f.write("3. Implement each phase with her 79 tiers\n")
+                f.write("3. Implement each phase with her 66 tiers\n")
                 f.write("4. Verify changes with autonomous testing\n")
                 f.write("5. Report completion when done\n\n")
                 f.write("**The execution engine is now OPERATIONAL** 🚀\n")
@@ -372,7 +372,7 @@ class AuroraCore:
         """
         🤖 AUTONOMOUS REQUEST EXECUTION HANDLER
         Processes JSON-based autonomous execution requests
-        Full integration with all 79 tiers and autonomous capabilities
+        Full integration with all 66 tiers and autonomous capabilities
         """
         import json
 
@@ -427,7 +427,7 @@ class AuroraCore:
                 code_path = task_details.get("path")
                 self.intelligence.log(f"   🧠 Analyzing code: {code_path}")
                 if self.autonomous_agent:
-                    # Agent will analyze using all 79 tiers
+                    # Agent will analyze using all 66 tiers
                     result = f"Code analysis ready for {code_path}"
                 self.intelligence.log("   ✅ Analysis complete")
 

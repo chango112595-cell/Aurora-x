@@ -300,9 +300,9 @@ c8d3a65d7d0e458f30ee527f429d914c83e72e95|HEAD@{103}|commit: Fix: Update quantum 
 d9d80b7863eb96c2196f25b92c1af5b1641a3ed2|origin/badges@{43}|fetch: fast-forward|ci: update coverage badge [skip ci]
 976e904570ab8a17d171e29145819d786701e4a4|origin/main@{47}|fetch: fast-forward|chore: auto-fix linting issues [skip ci]
 253c66278997664f173d9d7e287b13b54ec8f54a|origin/badges@{44}|fetch: fast-forward|ci: update coverage badge
-c35ddf3b8d879e4d0280cdbf00cb345c06df2634|origin/main@{48}|update by push|Merge: Resolve conflicts - keep deep search updates (53 tiers, 66 capabilities)
-c35ddf3b8d879e4d0280cdbf00cb345c06df2634|main@{70}|commit (merge): Merge: Resolve conflicts - keep deep search updates (53 tiers, 66 capabilities)|Merge: Resolve conflicts - keep deep search updates (53 tiers, 66 capabilities)
-c35ddf3b8d879e4d0280cdbf00cb345c06df2634|HEAD@{104}|commit (merge): Merge: Resolve conflicts - keep deep search updates (53 tiers, 66 capabilities)|Merge: Resolve conflicts - keep deep search updates (53 tiers, 66 capabilities)
+c35ddf3b8d879e4d0280cdbf00cb345c06df2634|origin/main@{48}|update by push|Merge: Resolve conflicts - keep deep search updates (66 tiers, 79 capabilities)
+c35ddf3b8d879e4d0280cdbf00cb345c06df2634|main@{70}|commit (merge): Merge: Resolve conflicts - keep deep search updates (66 tiers, 79 capabilities)|Merge: Resolve conflicts - keep deep search updates (66 tiers, 79 capabilities)
+c35ddf3b8d879e4d0280cdbf00cb345c06df2634|HEAD@{104}|commit (merge): Merge: Resolve conflicts - keep deep search updates (66 tiers, 79 capabilities)|Merge: Resolve conflicts - keep deep search updates (66 tiers, 79 capabilities)
 145881cb3b642dbce0c38139d2745e391c588dd0|main@{71}|commit: Aurora: Implement DEEP SEARCH auto-updater + synchronize entire codebase|Aurora: Implement DEEP SEARCH auto-updater + synchronize entire codebase
 145881cb3b642dbce0c38139d2745e391c588dd0|HEAD@{105}|commit: Aurora: Implement DEEP SEARCH auto-updater + synchronize entire codebase|Aurora: Implement DEEP SEARCH auto-updater + synchronize entire codebase
 2cdfc45a43644ff4ad5fceda608f8e769e375d6a|origin/badges@{45}|fetch: fast-forward|ci: update coverage badge [skip ci]
@@ -315,13 +315,13 @@ b9c264de945078a543b35e74face8c7214586c27|origin/main@{49}|fetch: fast-forward|ch
 2e98f4fbcd0152c2a2afa796727f1fa38db495a8|main@{73}|commit: Refactor code structure for improved readability and maintainability|Refactor code structure for improved readability and maintainability
 2e98f4fbcd0152c2a2afa796727f1fa38db495a8|HEAD@{107}|commit: Refactor code structure for improved readability and maintainability|Refactor code structure for improved readability and maintainability
 5d7638519d52b9793a01334138dc238ea7a22bef|origin/badges@{48}|fetch: fast-forward|ci: update coverage badge [skip ci]
-8df069b5702666fa92285f3898ca68188c59e87d|origin/main@{51}|update by push|Aurora: Update backend Python files to show 53 tiers and 66 capabilities
-8df069b5702666fa92285f3898ca68188c59e87d|main@{74}|commit: Aurora: Update backend Python files to show 53 tiers and 66 capabilities|Aurora: Update backend Python files to show 53 tiers and 66 capabilities
-8df069b5702666fa92285f3898ca68188c59e87d|HEAD@{108}|commit: Aurora: Update backend Python files to show 53 tiers and 66 capabilities|Aurora: Update backend Python files to show 53 tiers and 66 capabilities
+8df069b5702666fa92285f3898ca68188c59e87d|origin/main@{51}|update by push|Aurora: Update backend Python files to show 66 tiers and 79 capabilities
+8df069b5702666fa92285f3898ca68188c59e87d|main@{74}|commit: Aurora: Update backend Python files to show 66 tiers and 79 capabilities|Aurora: Update backend Python files to show 66 tiers and 79 capabilities
+8df069b5702666fa92285f3898ca68188c59e87d|HEAD@{108}|commit: Aurora: Update backend Python files to show 66 tiers and 79 capabilities|Aurora: Update backend Python files to show 66 tiers and 79 capabilities
 8a795b1749f0c333730064e3c97a7fb9a0cc8bd5|origin/badges@{49}|fetch: fast-forward|ci: update coverage badge
-fcf5ea75a65fc71d42093d63987979475ea79440|origin/main@{52}|update by push|Aurora: Update entire UI to show correct 53 tiers and 66 total capabilities
-fcf5ea75a65fc71d42093d63987979475ea79440|main@{75}|commit: Aurora: Update entire UI to show correct 53 tiers and 66 total capabilities|Aurora: Update entire UI to show correct 53 tiers and 66 total capabilities
-fcf5ea75a65fc71d42093d63987979475ea79440|HEAD@{109}|commit: Aurora: Update entire UI to show correct 53 tiers and 66 total capabilities|Aurora: Update entire UI to show correct 53 tiers and 66 total capabilities
+fcf5ea75a65fc71d42093d63987979475ea79440|origin/main@{52}|update by push|Aurora: Update entire UI to show correct 66 tiers and 79 total capabilities
+fcf5ea75a65fc71d42093d63987979475ea79440|main@{75}|commit: Aurora: Update entire UI to show correct 66 tiers and 79 total capabilities|Aurora: Update entire UI to show correct 66 tiers and 79 total capabilities
+fcf5ea75a65fc71d42093d63987979475ea79440|HEAD@{109}|commit: Aurora: Update entire UI to show correct 66 tiers and 79 total capabilities|Aurora: Update entire UI to show correct 66 tiers and 79 total capabilities
 d33cf9a36e062e3862fa60c4cef744b08187b2f9|origin/badges@{50}|fetch: fast-forward|ci: update coverage badge [skip ci]
 58952729fcce98fe033c65ae354d70063c73e5b3|main@{76}|pull --tags origin main: Fast-forward|chore: auto-fix linting issues [skip ci]
 58952729fcce98fe033c65ae354d70063c73e5b3|HEAD@{110}|pull --tags origin main: Fast-forward|chore: auto-fix linting issues [skip ci]
@@ -409,8 +409,8 @@ fec7dbb7950bfec249deca5df57279992497e239|origin/main@{75}|fetch: fast-forward|ch
 1ae6aa66acaaaae28b41287f3009f4e05583d6d5|origin/main@{76}|update by push|Merge branch 'main' of https://github.com/chango112595-cell/Aurora-x
 1ae6aa66acaaaae28b41287f3009f4e05583d6d5|main@{99}|pull --tags origin main: Merge made by the 'ort' strategy.|Merge branch 'main' of https://github.com/chango112595-cell/Aurora-x
 1ae6aa66acaaaae28b41287f3009f4e05583d6d5|HEAD@{136}|pull --tags origin main: Merge made by the 'ort' strategy.|Merge branch 'main' of https://github.com/chango112595-cell/Aurora-x
-b8ad6aba2c62573e0ad8c3fcfe8f3e3b38d1318e|main@{100}|commit: feat: Update system capabilities to 66 complete systems and 53 knowledge tiers|feat: Update system capabilities to 66 complete systems and 53 knowledge tiers
-b8ad6aba2c62573e0ad8c3fcfe8f3e3b38d1318e|HEAD@{137}|commit: feat: Update system capabilities to 66 complete systems and 53 knowledge tiers|feat: Update system capabilities to 66 complete systems and 53 knowledge tiers
+b8ad6aba2c62573e0ad8c3fcfe8f3e3b38d1318e|main@{100}|commit: feat: Update system capabilities to 66 complete systems and 66 knowledge tiers|feat: Update system capabilities to 66 complete systems and 66 knowledge tiers
+b8ad6aba2c62573e0ad8c3fcfe8f3e3b38d1318e|HEAD@{137}|commit: feat: Update system capabilities to 66 complete systems and 66 knowledge tiers|feat: Update system capabilities to 66 complete systems and 66 knowledge tiers
 326fb776daa3033cec0f5cafc0905ca75ed96cca|origin/main@{77}|fetch: fast-forward|chore: auto-fix linting issues [skip ci]
 a7451b9399ba88099d507db7c69321b4ad90faba|origin/main@{78}|update by push|Merge branch 'main' of https://github.com/chango112595-cell/Aurora-x
 a7451b9399ba88099d507db7c69321b4ad90faba|main@{101}|pull --tags origin main: Merge made by the 'ort' strategy.|Merge branch 'main' of https://github.com/chango112595-cell/Aurora-x

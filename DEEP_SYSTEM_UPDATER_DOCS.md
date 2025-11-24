@@ -159,8 +159,8 @@ files = get_all_files()  # Returns 4000+ files
 ## Aurora has 66 Knowledge Tiers
 → ## Aurora has 66 Knowledge Tiers
 
-Total: 109 capabilities
-→ Total: 109 capabilities
+Total: 79 capabilities
+→ Total: 79 capabilities
 ```
 
 **TypeScript Frontend:**
@@ -229,7 +229,7 @@ cat .aurora_knowledge/last_deep_update.json
 The updater automatically generates patterns based on current tier count, so it always finds outdated references regardless of what the old values were.
 
 ### Smart Context Awareness
-- Knows the difference between "Tiers 66" (specific tier) vs "79 tiers" (total count)
+- Knows the difference between "Tiers 66" (specific tier) vs "66 tiers" (total count)
 - Handles HTML tags without breaking markup
 - Preserves JSON structure
 - Maintains code formatting

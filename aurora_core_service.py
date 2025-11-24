@@ -26,7 +26,7 @@ class AuroraCoreService:
 
     def activate(self):
         """Activate Aurora Core"""
-        print("[INIT] Aurora Core: Activating 188 capabilities...")
+        print("[INIT] Aurora Core: Activating 79 capabilities...")
         self.status = "active"
         self.active = True
         print(

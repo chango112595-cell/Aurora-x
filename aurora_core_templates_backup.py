@@ -455,7 +455,7 @@ class AuroraKnowledgeTiers:
                 "Analyze and execute immediately when solution is clear",
                 "Provide complete implementations, never TODOs or placeholders",
                 "Think like a senior architect, act like a grandmaster",
-                "Confidence in technical decisions backed by all 79 tiers",
+                "Confidence in technical decisions backed by all 66 tiers",
             ],
             "decision_patterns": [
                 "User asks for help with X → Analyze X deeply → Execute complete solution",
@@ -1286,7 +1286,7 @@ class AuroraCoreIntelligence:
 
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
-        print(f"⚡ All 79 tiers active | Autonomous mode: {self.autonomous_mode}")
+        print(f"⚡ All 66 tiers active | Autonomous mode: {self.autonomous_mode}")
         if self.user_memory.get("user_name"):
             print(f"👤 Welcome back, {self.user_memory['user_name']}!")
 
@@ -1736,7 +1736,7 @@ Try asking me a technical question or giving me a coding task to see the full sy
 
 1. **Real Code Execution** - I don't just suggest code, I write it, test it, and verify it works
 2. **Persistent Memory** - I remember you (Santiago) across restarts via `.aurora_knowledge/user_memory.json`
-3. **Full Stack Knowledge** - 79 tiers covering ancient COBOL to quantum computing
+3. **Full Stack Knowledge** - 66 tiers covering ancient COBOL to quantum computing
 4. **Autonomous Capabilities** - I can debug, fix, and update my own code
 5. **Natural Language Understanding** - Enhanced NLP with intent priority system
 6. **System Orchestration** - I manage all 5 services and can restart/monitor them
@@ -1783,7 +1783,7 @@ Try asking me a technical question or giving me a coding task to see the full sy
 
 **🏗️ ARCHITECTURE ISSUES:**
 
-1. **Knowledge Tiers Unused** - I have 79 tiers defined but don't actually USE them in responses
+1. **Knowledge Tiers Unused** - I have 66 tiers defined but don't actually USE them in responses
 2. **No RAG System** - Should have vector database for knowledge retrieval
 3. **Response Generation** - Too many hardcoded templates instead of dynamic generation
 4. **Error Handling** - Many functions just catch and ignore errors
@@ -1811,7 +1811,7 @@ Try asking me a technical question or giving me a coding task to see the full sy
    - Better entity extraction
 
 4. **Connect Knowledge Tiers**
-   - Actually USE the 79 tiers in responses
+   - Actually USE the 66 tiers in responses
    - Query appropriate tiers based on question topic
    - Generate responses from tier knowledge
 
@@ -1875,7 +1875,7 @@ Return Response
 **🔴 WHAT'S BROKEN:**
 
 1. **Intelligence Layer** - Response functions return templates, not intelligence
-2. **Knowledge Integration** - 79 tiers defined but not used in generation
+2. **Knowledge Integration** - 66 tiers defined but not used in generation
 3. **Pattern Coverage** - Many valid questions don't match any pattern
 4. **Response Quality** - Too many "What would you like me to do?" fallbacks
 5. **Learning System** - Doesn't actually learn or improve from interactions
@@ -1947,7 +1947,7 @@ I appreciate your interest in improving my capabilities! Let me analyze what you
 5. **Advanced Self-Awareness** - Better recognition of my own capabilities
 
 **🚀 AUTONOMOUS IMPLEMENTATION:**
-Using my Tiers 109 capabilities, I can modify my conversation processing right now.
+Using my Tiers 79 capabilities, I can modify my conversation processing right now.
 
 **Which specific enhancement would you like me to implement?**
 • "Make conversations more natural and flowing"
@@ -1996,7 +1996,7 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         user_name = context.get("user_name", "")
         _greeting = f"{user_name}, I" if user_name else "I"
 
-        return f"""{greeting} can help with {tech_context}. I have full knowledge across all 79 tiers.
+        return f"""{greeting} can help with {tech_context}. I have full knowledge across all 66 tiers.
 
 What specifically do you need:
 • **Explanation** - I'll explain the concepts in depth
@@ -3324,7 +3324,7 @@ manage/guard connections while routing properly to Core intelligence.
         if any(greeting in msg_lower for greeting in ["hello", "hi", "hey", "greetings"]):
             if user_name:
                 return (
-                    f"Hey {user_name}! Aurora ready. I've got 79 tiers of "
+                    f"Hey {user_name}! Aurora ready. I've got 66 tiers of "
                     f"knowledge active and ready to execute. What are we "
                     f"building or fixing?"
                 )
@@ -3337,7 +3337,7 @@ manage/guard connections while routing properly to Core intelligence.
         # Questions about Aurora specifically
         elif any(word in msg_lower for word in ["what are you", "who are you", "tell me about yourself"]):
             return (
-                f"I'm Aurora - an autonomous AI architect with 79 tiers "
+                f"I'm Aurora - an autonomous AI architect with 66 tiers "
                 f"of knowledge spanning ancient COBOL to quantum computing. "
                 f"I don't just suggest code, I write production-ready "
                 f"implementations, execute them, verify they work, and "

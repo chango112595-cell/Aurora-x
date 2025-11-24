@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora 100% Full Power System Analysis
-Using all 188 capabilities to analyze and enhance herself
+Using all 79 capabilities to analyze and enhance herself
 """
 
 import asyncio
@@ -14,7 +14,7 @@ print("=" * 80)
 print("🌌 AURORA 100% FULL POWER SYSTEM ANALYSIS")
 print("=" * 80)
 print("\n🧠 Initializing Aurora at FULL 188 Power...")
-print("   • 79 Knowledge Tiers")
+print("   • 66 Knowledge Tiers")
 print("   • 66 Execution Capabilities")
 print("   • 43 Autonomous Systems")
 print("   • Total: 188 Integrated Intelligence\n")
@@ -82,7 +82,7 @@ if hasattr(aurora, 'run_code_quality_scan'):
 print("\n💾 Saving analysis results...")
 with open("AURORA_FULL_POWER_ANALYSIS.md", "w", encoding="utf-8") as f:
     f.write("# Aurora 100% Full Power Analysis\n\n")
-    f.write("**Generated with all 188 capabilities active**\n\n")
+    f.write("**Generated with all 79 capabilities active**\n\n")
     f.write("## Analysis Results\n\n")
     f.write(analysis_result)
     f.write("\n\n## Code Quality Scan\n\n")

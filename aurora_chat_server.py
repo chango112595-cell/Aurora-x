@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Aurora Enhanced Chat Server - 100% HYBRID POWER
-Full integration with all 188 capabilities, consciousness, and services
+Full integration with all 79 capabilities, consciousness, and services
 """
 
 import json

@@ -107,7 +107,7 @@ export default function AuroraFuturisticDashboard() {
                   188 TOTAL POWER
                 </div>
                 <div className="text-violet-300/80 text-sm mt-1">
-                  Hybrid Mode: 79 Knowledge Tiers + 109 Capability Modules
+                  Hybrid Mode: 66 Knowledge Tiers + 109 Capability Modules
                 </div>
               </div>
               <Sparkles className="h-8 w-8 text-pink-400 animate-pulse" />

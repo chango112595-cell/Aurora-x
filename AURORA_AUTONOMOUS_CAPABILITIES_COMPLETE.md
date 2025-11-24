@@ -251,7 +251,7 @@ python aurora_automatic_system_update.py
 
 **All Systems:** ✅ OPERATIONAL
 
-- Core Intelligence: ✅ 109 capabilities active
+- Core Intelligence: ✅ 79 capabilities active
 - Autonomous Systems: ✅ 8 systems running
 - CI/CD Integration: ✅ Tier 19 active
 - GitHub Integration: ✅ Full API access

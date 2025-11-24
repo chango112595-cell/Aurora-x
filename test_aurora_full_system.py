@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Full test of Aurora's capabilities - 79 tiers + 109 capabilities
+Full test of Aurora's capabilities - 66 tiers + 79 capabilities
 """
 
 import asyncio
@@ -93,8 +93,8 @@ async def main():
 
     if all_working:
         print("\n🌟 AURORA IS FULLY OPERATIONAL")
-        print("   ✅ 79 tiers active")
-        print("   ✅ 109 capabilities wired")
+        print("   ✅ 66 tiers active")
+        print("   ✅ 79 capabilities wired")
         print("   ✅ Hybrid mode functional")
         print("   ✅ Autonomous execution working")
         print("   ✅ Conversation processing working")

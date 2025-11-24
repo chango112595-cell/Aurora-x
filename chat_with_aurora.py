@@ -130,7 +130,7 @@ async def interactive_chat():
     print("🌌" * 40 + "\n")
 
     print("🧠 Booting Aurora at 100% Full Power...")
-    print("   Loading 79 Knowledge Tiers... ✓")
+    print("   Loading 66 Knowledge Tiers... ✓")
     print("   Activating 66 Execution Systems... ✓")
     print("   Initializing 43 Autonomous Agents... ✓")
     print("   Total: 188 Capabilities ACTIVE... ✓")
@@ -144,7 +144,7 @@ async def interactive_chat():
     print("🟢 STATUS: 100% FULL POWER - ALL 188 CAPABILITIES OPERATIONAL")
     print("━" * 80)
     print("⚡ Power Level: 188/188 (MAXIMUM)")
-    print("🧠 Knowledge: 79 tiers - Complete intelligence across all domains")
+    print("🧠 Knowledge: 66 tiers - Complete intelligence across all domains")
     print("🔧 Execution: 66 systems - Real-time code, files, terminal, debugging")
     print("🤖 Autonomous: 43 agents - Self-healing, auto-fixing, continuous evolution")
     print("🎯 Capabilities: Code analysis, system management, autonomous improvements")

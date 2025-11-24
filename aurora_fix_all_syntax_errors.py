@@ -16,7 +16,7 @@ print(f"🕐 Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 print("=" * 80)
 
 # Aurora's hybrid power
-AURORA_POWER = "188 Total Power: 79 Knowledge Tiers + 109 Capability Modules"
+AURORA_POWER = "188 Total Power: 66 Knowledge Tiers + 109 Capability Modules"
 print(f"⚡ {AURORA_POWER}")
 print()
 

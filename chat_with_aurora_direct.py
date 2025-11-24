@@ -41,7 +41,7 @@ def handle_command(command, aurora):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Version: {status['aurora_core_version']}
-Power: 188 capabilities (79 knowledge + 66 execution + 43 systems)
+Power: 79 capabilities (79 knowledge + 66 execution + 43 systems)
 Autonomous: {status['autonomous_mode']}
 Active Conversations: {status['active_conversations']}
 Connection: DIRECT (Copilot-style access)
@@ -64,7 +64,7 @@ async def direct_chat():
     aurora = create_aurora_core()
 
     print(f"✅ Connected to Aurora Core Intelligence v2.0")
-    print(f"⚡ 188 capabilities active | Full power mode: True")
+    print(f"⚡ 79 capabilities active | Full power mode: True")
     print(f"🔗 Connection type: DIRECT (same as Copilot uses)\n")
 
     print("━" * 80)

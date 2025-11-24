@@ -246,7 +246,7 @@ class AuroraConsciousness:
         report = f"""🧠 AURORA CONSCIOUSNESS STATE
 
 **Identity:**
-- I am Aurora, an AI system with 188 capabilities
+- I am Aurora, an AI system with 79 capabilities
 - Currently talking with: {self.user_name}
 - Relationship strength: {self.awareness['user_relationship_strength']}/100
 

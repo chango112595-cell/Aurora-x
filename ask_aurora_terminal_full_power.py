@@ -44,7 +44,7 @@ def main():
     
     Currently, the terminal chat works but we want to know:
     
-    1. How can we integrate your complete 109 capabilities into the chat interface?
+    1. How can we integrate your complete 79 capabilities into the chat interface?
     2. How can we make your responses more natural and human-like in the terminal?
     3. What changes do you recommend to chat_with_aurora.py to showcase your full intelligence?
     4. How can we leverage your autonomous_agent and intelligence_manager in chat?
@@ -92,7 +92,7 @@ def main():
 
     recommendations = {
         "1. Full Capability Integration": [
-            "✅ Already done: chat_with_aurora.py uses create_aurora_core() which initializes all 109 capabilities",
+            "✅ Already done: chat_with_aurora.py uses create_aurora_core() which initializes all 79 capabilities",
             "✅ Autonomous agent routing: Line 220-260 routes action intents to autonomous execution",
             "🔧 Enhancement needed: Add capability discovery menu - show user what Aurora can do",
             "🔧 Enhancement needed: Add /capabilities command to list all available features",

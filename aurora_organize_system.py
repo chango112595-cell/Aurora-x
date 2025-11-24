@@ -99,7 +99,7 @@ def aurora_organize_system():
             if f"tier_{i:02d}" in content.lower() or f"tier {i}" in content.lower():
                 found_tiers.append(i)
 
-        print(f"  ✓ Found {len(found_tiers)}/79 tiers in aurora_core.py")
+        print(f"  ✓ Found {len(found_tiers)}/66 tiers in aurora_core.py")
 
         if len(found_tiers) == 34:
             print("  ✅ ALL TIERS (T1-T34) are in aurora_core.py")

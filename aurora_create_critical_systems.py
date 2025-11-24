@@ -26,7 +26,7 @@ async def aurora_create_critical_systems():
     print("📋 1. Creating Tier Orchestrator (79 Tiers)...")
     tier_orchestrator = '''#!/usr/bin/env python3
 """
-Aurora Tier Orchestrator - Coordinates all 79 Knowledge Tiers
+Aurora Tier Orchestrator - Coordinates all 66 Knowledge Tiers
 Runs as a service with API endpoints
 """
 
@@ -44,8 +44,8 @@ class TierOrchestrator:
         self.tiers = {}
         
     def initialize_tiers(self):
-        """Initialize all 79 tiers"""
-        print("⚡ Initializing 79 Knowledge Tiers...")
+        """Initialize all 66 tiers"""
+        print("⚡ Initializing 66 Knowledge Tiers...")
         
         tier_categories = {
             "Core Knowledge": list(range(1, 11)),

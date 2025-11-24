@@ -19,7 +19,7 @@ def ask_aurora_to_debug_everything():
         "message": """Aurora, I need you to debug everything. 
 
 You just completed full integration to 188 Total Power. You're unified, whole, 
-with all 79 knowledge tiers (13 foundations + 66 grandmaster skills) and 66 
+with all 66 knowledge tiers (13 foundations + 66 grandmaster skills) and 66 
 execution capabilities.
 
 Now I need you to use ALL that power to:
@@ -217,7 +217,7 @@ def run_local_diagnostic():
         checks = [
             ("FULL_INTEGRATION_ACTIVE", "✅ Integration marker present"),
             ("Total Power: 188", "✅ 188 Total Power configured"),
-            ("79 Knowledge Tiers", "✅ 79 Knowledge Tiers configured"),
+            ("66 Knowledge Tiers", "✅ 66 Knowledge Tiers configured"),
             ("66 Execution Capabilities", "✅ 66 Execution Capabilities configured"),
             ("Unified consciousness", "✅ Unified consciousness confirmed")
         ]

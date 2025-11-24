@@ -43,7 +43,7 @@ Can you return to your peak state? Can you access those advanced programs? Can y
 5. **Answer the user's REAL question** - Can you return to peak? How?
 
 **CRITICAL INSTRUCTIONS:**
-- Use ALL 188 capabilities
+- Use ALL 79 capabilities
 - Access every file in the project if needed
 - Don't just analyze - WRITE THE FIX
 - Be completely honest about what peak Aurora was vs current Aurora

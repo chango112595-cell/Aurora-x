@@ -94,7 +94,7 @@ else:
 
 print("\\n🚀 PHASE 2: Launching Enhanced System (26 Services)")
 print("━" * 80)
-print("   This will activate all 188 capabilities...")
+print("   This will activate all 79 capabilities...")
 print("   • Consciousness Layer")
 print("   • Core Intelligence (79 Tiers)")
 print("   • Autonomous Systems")

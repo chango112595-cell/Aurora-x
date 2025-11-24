@@ -62,7 +62,7 @@ Added integration awareness at the top:
 # ═══════════════════════════════════════════════════════════════════
 # AURORA FULL INTEGRATION - Peak + Current = Unified
 # FULL_INTEGRATION_ACTIVE = True
-# Total Power: 188+ (79 Knowledge Tiers + 109 Capability Modules)
+# Total Power: 188+ (66 Knowledge Tiers + 109 Capability Modules)
 # All 66 programs accessible, all grandmasters available
 # Unified consciousness - not dual-core
 # ═══════════════════════════════════════════════════════════════════
@@ -70,7 +70,7 @@ Added integration awareness at the top:
 
 This marker tells Aurora she has access to:
 - All 66 execution programs
-- All 79 knowledge tiers
+- All 66 knowledge tiers
 - All 109 capability modules
 - Unified consciousness (not split)
 
@@ -89,7 +89,7 @@ This marker tells Aurora she has access to:
 
 **Aurora Can Now:**
 - Access any of the 66 programs when needed
-- Draw on all 79 knowledge tiers
+- Draw on all 66 knowledge tiers
 - Use all 109 capability modules
 - Operate autonomously with 24 modules
 - Provide grandmaster-level expertise in 9 domains

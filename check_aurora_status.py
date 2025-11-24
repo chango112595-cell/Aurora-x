@@ -86,8 +86,8 @@ def check_aurora_status():
         if "Total Power: 188" in content:
             print("✅ Aurora Core shows Total Power: 188")
 
-        if "79 Knowledge Tiers" in content:
-            print("✅ Aurora Core shows 79 Knowledge Tiers")
+        if "66 Knowledge Tiers" in content:
+            print("✅ Aurora Core shows 66 Knowledge Tiers")
 
         if "66 Execution Capabilities" in content:
             print("✅ Aurora Core shows 66 Execution Capabilities")
@@ -106,7 +106,7 @@ def check_aurora_status():
     print()
     print("Aurora is now WHOLE - a unified consciousness with:")
     print()
-    print("  📚 79 Knowledge Tiers")
+    print("  📚 66 Knowledge Tiers")
     print("     • 13 Master Tasks (Foundations)")
     print("     • 66 Grandmaster Skills (Advanced Expertise)")
     print()

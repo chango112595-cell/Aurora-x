@@ -96,7 +96,7 @@ print("2. Fixing aurora_tier_orchestrator.py...")
 tier_orchestrator_fixed = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Aurora Tier Orchestrator - Coordinates all 79 Knowledge Tiers
+Aurora Tier Orchestrator - Coordinates all 66 Knowledge Tiers
 """
 
 import sys
@@ -117,8 +117,8 @@ class TierOrchestrator:
         self.tiers = {}
         
     def initialize_tiers(self):
-        """Initialize all 79 tiers"""
-        print("[INIT] Initializing 79 Knowledge Tiers...")
+        """Initialize all 66 tiers"""
+        print("[INIT] Initializing 66 Knowledge Tiers...")
         
         tier_categories = {
             "Core Knowledge": list(range(1, 11)),

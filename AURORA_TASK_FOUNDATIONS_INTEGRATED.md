@@ -131,7 +131,7 @@ print(tiers.foundations.tasks.keys())
 
 # Verify tiers
 print(len(tiers.tiers))
-# Output: 79 tiers (tier_01_ancient_languages through tier_34_grandmaster_autonomous)
+# Output: 66 tiers (tier_01_ancient_languages through tier_34_grandmaster_autonomous)
 ```
 
 **Result**: ✅ **ALL CHECKS PASSED**

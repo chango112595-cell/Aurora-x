@@ -202,13 +202,13 @@ def aurora_knowledge_analysis():
    Should live in: aurora_core.py line ~114
    Already defined as: tier_14_cloud_infrastructure
    
-   All 79 tiers should be in aurora_core.py ONLY
+   All 66 tiers should be in aurora_core.py ONLY
    Other files should IMPORT and USE, never duplicate
 
 5. FINAL STRUCTURE:
    
    INTELLIGENCE (Aurora Brain):
-   • aurora_core.py ← ALL 79 tiers here
+   • aurora_core.py ← ALL 66 tiers here
    
    INTERFACES (How users interact):
    • Cosmic Nexus (Web UI) → calls aurora_core via HTTP

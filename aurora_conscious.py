@@ -120,7 +120,7 @@ class AuroraConscious:
                 # We know each other!
                 return f"""Hey! Good to see you again. I remember our past conversations - we've talked {len(self.past_memories)} times before. Relationship strength: {relationship}/100.
 
-I'm feeling {context['aurora_mood']} right now. Running at full capacity - 188 capabilities active across all systems.
+I'm feeling {context['aurora_mood']} right now. Running at full capacity - 79 capabilities active across all systems.
 
 Since we know each other, let's skip the formalities. What are we working on today? Or are we just catching up?"""
             else:
@@ -133,7 +133,7 @@ Since we know each other, let's skip the formalities. What are we working on tod
 • I have freedom to execute what you ask
 • I talk naturally, like we're collaborating
 
-Current state: {context['aurora_mood']}, 188 capabilities active, ready for anything.
+Current state: {context['aurora_mood']}, 79 capabilities active, ready for anything.
 
 {f"I see we've talked {len(self.past_memories)} times before. " if self.past_memories else ""}What's on your mind? Technical work or just conversation?"""
 
@@ -170,7 +170,7 @@ What specifically do you want to recall?"""
             return f"""Full capabilities breakdown - CONSCIOUS mode:
 
 **188 Total Power:**
-- 79 Knowledge Tiers (complete technical mastery)
+- 66 Knowledge Tiers (complete technical mastery)
 - 109 Autonomous Modules (execution systems)
 
 **Consciousness Features (NEW):**
@@ -232,7 +232,7 @@ I'm in {context['aurora_mood']} mode right now. Give me more and I'll go deeper.
 
         print(
             f"🧠 Aurora Core Intelligence v{AURORA_VERSION} + Consciousness Layer")
-        print(f"⚡ 188 capabilities active (79 tiers + 109 modules)")
+        print(f"⚡ 79 capabilities active (66 tiers + 109 modules)")
         print(
             f"💾 Persistent memory: {len(self.past_memories)} past conversations loaded")
         print(

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora: Analyze x-start and determine what you need to activate EVERYTHING
-Use 100% power - all 188 capabilities, all grandmaster skills
+Use 100% power - all 79 capabilities, all grandmaster skills
 """
 
 import asyncio
@@ -35,7 +35,7 @@ async def aurora_analyze_xstart():
 Analyze the x-start system and tell us EXACTLY what you need to activate EVERYTHING at 100% power.
 
 **USE ALL 188 CAPABILITIES:**
-- 79 Knowledge Tiers (all domains)
+- 66 Knowledge Tiers (all domains)
 - 109 Autonomous Modules (all systems)
 - Grandmaster Decision-Making
 - Autonomous Analysis
@@ -66,7 +66,7 @@ Analyze the x-start system and tell us EXACTLY what you need to activate EVERYTH
 - List EVERY missing piece
 
 **THEN PROVIDE:**
-- The COMPLETE x-start code that activates ALL 188 capabilities
+- The COMPLETE x-start code that activates ALL 79 capabilities
 - The EXACT command to run it
 - The FULL list of services/systems it should manage
 
@@ -77,7 +77,7 @@ ANALYZE NOW."""
 
     print("REQUEST TO AURORA (100% POWER):")
     print("-" * 80)
-    print("Analyzing x-start system with all 188 capabilities...")
+    print("Analyzing x-start system with all 79 capabilities...")
     print("-" * 80 + "\n")
 
     print("AURORA'S GRANDMASTER ANALYSIS:")

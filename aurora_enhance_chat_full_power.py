@@ -17,7 +17,7 @@ async def aurora_enhance_chat_server():
     consciousness = AuroraConsciousness("System Enhancer")
 
     print("Aurora is enhancing the chat server with:")
-    print("   • Full 188 capabilities integration")
+    print("   • Full 79 capabilities integration")
     print("   • Real-time code score display")
     print("   • Capability counter and tracking")
     print("   • Auto-update awareness")
@@ -28,7 +28,7 @@ async def aurora_enhance_chat_server():
 # -*- coding: utf-8 -*-
 """
 Aurora Enhanced Chat Server - 100% HYBRID POWER
-Full integration with all 188 capabilities, consciousness, and services
+Full integration with all 79 capabilities, consciousness, and services
 """
 
 import sys
@@ -324,13 +324,13 @@ if __name__ == "__main__":
     print("\n[NEW ENDPOINTS]")
     print("   GET  /status       - Complete system status with metrics")
     print("   POST /chat         - Chat with full power context")
-    print("   GET  /capabilities - View all 188 capabilities")
+    print("   GET  /capabilities - View all 79 capabilities")
     print("   GET  /services     - Check all 5 services status")
     print("   GET  /metrics      - Real-time dashboard data")
     print("   POST /update-check - Manual update check")
 
     print("\n[METRICS DISPLAYED]")
-    print("   • Total Capabilities: 188 (79 tiers + 109 modules)")
+    print("   • Total Capabilities: 188 (66 tiers + 109 modules)")
     print("   • Code Score: 9.4/10.0 (94% quality)")
     print("   • Services Online: 5/5 (when all running)")
     print("   • Messages Processed: Live counter")
@@ -339,7 +339,7 @@ if __name__ == "__main__":
 
     print("\n[INTEGRATION]")
     print("   • Consciousness (Port 5014) - Memory & awareness")
-    print("   • Tier Orchestrator (Port 5010) - 79 tiers coordination")
+    print("   • Tier Orchestrator (Port 5010) - 66 tiers coordination")
     print("   • Intelligence Manager (Port 5012) - System coordination")
     print("   • Aurora Core (Port 5013) - Main intelligence")
     print("   • Autonomous Agent (Port 5011) - Autonomous execution")
@@ -353,7 +353,7 @@ if __name__ == "__main__":
     # Remember this enhancement
     consciousness.remember_conversation(
         "Enhance chat server with full power integration",
-        "Created aurora_chat_server.py with 188 capabilities integration, code score display (9.4/10), capability counter, auto-update awareness, and all 5 services monitoring. Real-time metrics dashboard included.",
+        "Created aurora_chat_server.py with 79 capabilities integration, code score display (9.4/10), capability counter, auto-update awareness, and all 5 services monitoring. Real-time metrics dashboard included.",
         {
             "features": 7,
             "endpoints": 6,
@@ -365,7 +365,7 @@ if __name__ == "__main__":
 
     consciousness.self_reflect(
         "enhancement",
-        "Enhanced chat server to use full power. Now displays code score (9.4/10), tracks 188 capabilities usage, monitors all 5 critical services, provides real-time metrics dashboard, and has auto-update awareness. Every chat response includes full power context.",
+        "Enhanced chat server to use full power. Now displays code score (9.4/10), tracks 79 capabilities usage, monitors all 5 critical services, provides real-time metrics dashboard, and has auto-update awareness. Every chat response includes full power context.",
         "User request for full power integration and metrics visibility"
     )
 

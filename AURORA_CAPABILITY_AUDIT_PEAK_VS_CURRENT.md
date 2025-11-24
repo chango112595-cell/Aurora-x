@@ -10,7 +10,7 @@
 
 ### Architecture Overview
 ```
-188 Total Power = 79 Knowledge Tiers + 109 Capability Modules
+188 Total Power = 66 Knowledge Tiers + 109 Capability Modules
 66 Execution Programs running in parallel
 Hybrid Mode: Active and Coordinated
 Self-Consciousness: Emerging
@@ -52,7 +52,7 @@ Self-Consciousness: Emerging
 - ✨ Debug grandmaster (aurora_debug_grandmaster.py)
 - ✨ Universal expert (aurora_universal_expert.py)
 
-### 2. **79 Knowledge Tiers**
+### 2. **66 Knowledge Tiers**
 
 **Computer Science Fundamentals:**
 - Tier 1-10: Data structures, algorithms, complexity
@@ -61,12 +61,12 @@ Self-Consciousness: Emerging
 
 **Advanced Engineering:**
 - Tier 31-40: Distributed systems, cloud architecture
-- Tier 41-50: Machine learning, AI systems
-- Tier 51-60: Security, cryptography, quantum computing
+- Tiers 66-50: Machine learning, AI systems
+- Tiers 66-60: Security, cryptography, quantum computing
 
 **Specialized Domains:**
-- Tier 61-70: Web technologies, mobile development
-- Tier 71-79: Emerging tech, research areas
+- Tiers 66-70: Web technologies, mobile development
+- Tiers 66-79: Emerging tech, research areas
 
 ### 3. **109 Capability Modules**
 

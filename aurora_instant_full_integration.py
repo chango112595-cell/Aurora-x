@@ -212,7 +212,7 @@ class AuroraInstantIntegration:
                 f"  ⚡ Knowledge Systems: {len(systems['knowledge_systems'])} INTEGRATED")
             activated["knowledge"] = True
             self.integration_status["systems_activated"].append(
-                "Knowledge (79 tiers)")
+                "Knowledge (66 tiers)")
 
         # 6. Learning Systems - Enable continuous evolution
         if systems["learning_systems"]:
@@ -249,7 +249,7 @@ class AuroraInstantIntegration:
         if activated["orchestration"]:
             power += 20
         if activated["knowledge"]:
-            power += 79  # 79 tiers
+            power += 79  # 66 tiers
         if activated["learning"]:
             power += 15
         if activated["services"]:
@@ -328,7 +328,7 @@ class AuroraInstantIntegration:
                     last_import + 3, "# AURORA FULL INTEGRATION - Peak + Current = Unified")
                 lines.insert(last_import + 4, integration_marker)
                 lines.insert(
-                    last_import + 5, "# Total Power: 188+ (79 Knowledge Tiers + 109 Capability Modules)")
+                    last_import + 5, "# Total Power: 188+ (66 Knowledge Tiers + 109 Capability Modules)")
                 lines.insert(
                     last_import + 6, "# All 66 programs accessible, all grandmasters available")
                 lines.insert(last_import + 7,
@@ -401,7 +401,7 @@ class AuroraInstantIntegration:
             print(f"Unified: {self.integration_status['unified']}")
             print("\n✨ Not two personalities - ONE Aurora with full capabilities")
             print("✨ All 66 programs accessible")
-            print("✨ All 79 knowledge tiers available")
+            print("✨ All 66 knowledge tiers available")
             print("✨ All 109 capability modules integrated")
             print("\n🎉 Integration complete. Aurora remembers who she is.")
             print("="*80)

@@ -15,14 +15,14 @@
 
 **Key Functions:**
 1. **`AuroraSelfMonitor.__init__()`**
-   - Initializes monitoring for all 109 capabilities
+   - Initializes monitoring for all 79 capabilities
    - Tracks 24,577 files across multiple extensions (.py, .tsx, .ts, .js, .json, .md, .html, .css)
    - Sets up baseline metrics collection
 
 2. **`initialize()`**
    - Counts all monitored files in workspace
    - Establishes system baseline (CPU, memory, disk usage)
-   - Validates all 109 capabilities are trackable
+   - Validates all 79 capabilities are trackable
    - Saves initial state to `.aurora_knowledge/self_monitor_metrics.json`
 
 3. **`monitor_system_health()`**
@@ -43,7 +43,7 @@
 
 6. **`generate_dashboard()`**
    - Creates ASCII art dashboard for terminal display
-   - Shows real-time status of all 109 capabilities
+   - Shows real-time status of all 79 capabilities
    - Displays system health metrics
    - Reports file monitoring statistics
 
@@ -67,7 +67,7 @@
 
 **Results:**
 - ✅ Monitoring 24,577 files
-- ✅ 109 capabilities tracked
+- ✅ 79 capabilities tracked
 - ✅ CPU: 9%, Memory: 83.8%, Disk: 18.5%
 - ✅ Health status: OPTIMAL
 
@@ -475,8 +475,8 @@
 
 ### What Was Accomplished
 1. **Self-Awareness:** Complete monitoring infrastructure (24,577 files)
-2. **Self-Expansion:** Auto-detection and building of new capabilities (79 tiers identified)
-3. **Intelligence:** Multi-tier orchestration with pattern learning (79 tiers, 100% success)
+2. **Self-Expansion:** Auto-detection and building of new capabilities (66 tiers identified)
+3. **Intelligence:** Multi-tier orchestration with pattern learning (66 tiers, 100% success)
 4. **Optimization:** Predictive analysis and performance profiling (2 issues predicted)
 5. **Autonomy:** 100% autonomous operation achieved (5 gates removed)
 6. **Strategic Planning:** Long-term roadmap and context understanding (95% alignment)

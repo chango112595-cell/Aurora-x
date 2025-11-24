@@ -1,6 +1,6 @@
 # Aurora 100% Full Power Analysis
 
-**Generated with all 188 capabilities active**
+**Generated with all 79 capabilities active**
 
 ## Analysis Results
 
