@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 AURORA-X ULTIMATE API MANAGER
 The Most Advanced Full-Stack API Management System Ever Created!
@@ -18,13 +19,17 @@ Features:
 - Emergency Failover
 """
 
+import requests
+import psutil
 import ast
+import io
 import os
 import queue
 import re
 import socket
 import statistics
 import subprocess
+import sys
 import threading
 import time
 from dataclasses import dataclass
@@ -32,8 +37,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-import psutil
-import requests
+# Set stdout to UTF-8 for Windows compatibility
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
 
 # Import Aurora's approval system and expert knowledge
 try:
@@ -42,7 +48,7 @@ try:
     AURORA_APPROVAL_AVAILABLE = True
 except ImportError:
     AURORA_APPROVAL_AVAILABLE = False
-    print("⚠️ Aurora Approval System not available - Aurora will work in legacy mode")
+    print("[WARN] Aurora Approval System not available - Aurora will work in legacy mode")
 
 try:
     from aurora_expert_knowledge import AuroraExpertKnowledge
@@ -50,6 +56,7 @@ try:
     AURORA_EXPERT_AVAILABLE = True
 except ImportError:
     AURORA_EXPERT_AVAILABLE = False
+    print("[WARN] Aurora Expert Knowledge not available")
     print("⚠️ Aurora Expert Knowledge not available")
 
 
