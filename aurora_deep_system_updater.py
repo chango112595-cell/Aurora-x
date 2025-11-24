@@ -15,6 +15,7 @@ from pathlib import Path
 app = Flask(__name__)
 CORS(app)
 
+
 class DeepSystemUpdater:
     def __init__(self):
         self.root = Path(__file__).parent.absolute()
@@ -22,7 +23,7 @@ class DeepSystemUpdater:
         self.updates_applied = 0
         self.scanning = False
         self.last_scan = None
-        
+
     def scan_files(self):
         """Scan project files"""
         try:
@@ -32,19 +33,21 @@ class DeepSystemUpdater:
             return self.files_scanned
         except Exception as e:
             return 0
-    
+
     def apply_updates(self):
         """Apply system updates"""
         self.updates_applied += 1
         return {"updates": self.updates_applied}
-    
+
     def background_scan(self):
         """Background scanning loop"""
         while self.scanning:
             self.scan_files()
             time.sleep(60)  # Scan every minute
 
+
 updater = DeepSystemUpdater()
+
 
 @app.route("/")
 def index():
@@ -57,9 +60,11 @@ def index():
         "last_scan": updater.last_scan
     })
 
+
 @app.route("/health")
 def health():
     return jsonify({"status": "healthy"})
+
 
 @app.route("/scan", methods=["POST"])
 def scan():
@@ -67,11 +72,13 @@ def scan():
     count = updater.scan_files()
     return jsonify({"files_scanned": count})
 
+
 @app.route("/update", methods=["POST"])
 def update():
     """Apply updates"""
     result = updater.apply_updates()
     return jsonify(result)
+
 
 @app.route("/stats")
 def stats():
@@ -80,6 +87,7 @@ def stats():
         "updates_applied": updater.updates_applied,
         "scanning": updater.scanning
     })
+
 
 if __name__ == "__main__":
     print("[UPDATER] Aurora Deep System Updater starting on port 5008...")

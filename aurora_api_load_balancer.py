@@ -16,6 +16,7 @@ from collections import defaultdict
 app = Flask(__name__)
 CORS(app)
 
+
 class LoadBalancer:
     def __init__(self):
         self.backends = [
@@ -27,22 +28,22 @@ class LoadBalancer:
         self.health_status = {url: True for url in self.backends}
         self.request_counts = defaultdict(int)
         self.monitoring = False
-        
+
     def get_next_backend(self):
         """Round-robin selection with health check"""
         attempts = 0
         while attempts < len(self.backends):
             backend = self.backends[self.current_index]
             self.current_index = (self.current_index + 1) % len(self.backends)
-            
+
             if self.health_status.get(backend, False):
                 self.request_counts[backend] += 1
                 return backend
-            
+
             attempts += 1
-        
+
         return None
-    
+
     def check_health(self):
         """Check health of all backends"""
         for backend in self.backends:
@@ -51,21 +52,24 @@ class LoadBalancer:
                 self.health_status[backend] = response.status_code == 200
             except:
                 self.health_status[backend] = False
-    
+
     def health_monitor_loop(self):
         """Continuous health monitoring"""
         while self.monitoring:
             self.check_health()
             time.sleep(5)
-    
+
     def start_monitoring(self):
         """Start background health monitoring"""
         if not self.monitoring:
             self.monitoring = True
-            thread = threading.Thread(target=self.health_monitor_loop, daemon=True)
+            thread = threading.Thread(
+                target=self.health_monitor_loop, daemon=True)
             thread.start()
 
+
 balancer = LoadBalancer()
+
 
 @app.route("/")
 def index():
@@ -79,12 +83,14 @@ def index():
         "total_backends": len(balancer.backends)
     })
 
+
 @app.route("/health")
 def health():
     return jsonify({
         "status": "healthy",
         "backends": balancer.health_status
     })
+
 
 @app.route("/stats")
 def stats():
@@ -93,17 +99,19 @@ def stats():
         "health_status": balancer.health_status
     })
 
+
 @app.route("/balance", methods=["POST"])
 def balance_request():
     """Balance a request to a backend"""
     backend = balancer.get_next_backend()
     if not backend:
         return jsonify({"error": "No healthy backends available"}), 503
-    
+
     return jsonify({
         "backend": backend,
         "requests_to_this_backend": balancer.request_counts[backend]
     })
+
 
 if __name__ == "__main__":
     print("[BALANCER] Aurora API Load Balancer starting on port 5029...")

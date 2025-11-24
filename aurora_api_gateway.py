@@ -14,6 +14,7 @@ import time
 app = Flask(__name__)
 CORS(app)
 
+
 class APIGateway:
     def __init__(self):
         self.routes = {
@@ -26,17 +27,17 @@ class APIGateway:
         }
         self.request_count = 0
         self.start_time = time.time()
-    
+
     def route_request(self, path, method="GET", **kwargs):
         """Route request to appropriate service"""
         self.request_count += 1
-        
+
         # Find matching route
         for route_prefix, target_url in self.routes.items():
             if path.startswith(route_prefix):
                 target_path = path.replace(route_prefix, "", 1)
                 full_url = f"{target_url}{target_path}"
-                
+
                 try:
                     if method == "GET":
                         response = requests.get(full_url, **kwargs)
@@ -48,14 +49,16 @@ class APIGateway:
                         response = requests.delete(full_url, **kwargs)
                     else:
                         return None
-                    
+
                     return response
                 except:
                     return None
-        
+
         return None
 
+
 gateway = APIGateway()
+
 
 @app.route("/")
 def index():
@@ -69,9 +72,11 @@ def index():
         "routes": list(gateway.routes.keys())
     })
 
+
 @app.route("/health")
 def health():
     return jsonify({"status": "healthy"})
+
 
 @app.route("/stats")
 def stats():
@@ -80,6 +85,7 @@ def stats():
         "uptime": time.time() - gateway.start_time,
         "routes_count": len(gateway.routes)
     })
+
 
 @app.route("/<path:path>", methods=["GET", "POST", "PUT", "DELETE"])
 def proxy(path):
@@ -90,15 +96,16 @@ def proxy(path):
         json=request.get_json() if request.is_json else None,
         params=request.args
     )
-    
+
     if response:
         return Response(
             response.content,
             status=response.status_code,
             headers=dict(response.headers)
         )
-    
+
     return jsonify({"error": "Route not found"}), 404
+
 
 if __name__ == "__main__":
     print("[GATEWAY] Aurora API Gateway starting on port 5028...")

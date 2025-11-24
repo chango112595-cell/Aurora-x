@@ -16,6 +16,7 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
+
 class WebHealthMonitor:
     def __init__(self):
         self.services = {
@@ -29,7 +30,7 @@ class WebHealthMonitor:
         }
         self.health_history = []
         self.monitoring = False
-        
+
     def check_service(self, name, info):
         """Check if service is healthy"""
         try:
@@ -40,11 +41,11 @@ class WebHealthMonitor:
                 return True
         except:
             pass
-        
+
         info["status"] = "unhealthy"
         info["last_check"] = datetime.now().isoformat()
         return False
-    
+
     def monitor_loop(self):
         """Continuous monitoring loop"""
         while self.monitoring:
@@ -52,19 +53,19 @@ class WebHealthMonitor:
             for name, info in self.services.items():
                 if self.check_service(name, info):
                     healthy_count += 1
-            
+
             self.health_history.append({
                 "timestamp": datetime.now().isoformat(),
                 "healthy": healthy_count,
                 "total": len(self.services)
             })
-            
+
             # Keep last 100 entries
             if len(self.health_history) > 100:
                 self.health_history = self.health_history[-100:]
-            
+
             time.sleep(10)  # Check every 10 seconds
-    
+
     def start_monitoring(self):
         """Start background monitoring"""
         if not self.monitoring:
@@ -72,7 +73,9 @@ class WebHealthMonitor:
             thread = threading.Thread(target=self.monitor_loop, daemon=True)
             thread.start()
 
+
 monitor = WebHealthMonitor()
+
 
 @app.route("/")
 def index():
@@ -82,6 +85,7 @@ def index():
         "status": "operational",
         "monitoring": monitor.monitoring
     })
+
 
 @app.route("/health")
 def health():
@@ -94,16 +98,19 @@ def health():
         }
     })
 
+
 @app.route("/history")
 def history():
     """Get health history"""
     return jsonify({"history": monitor.health_history})
+
 
 @app.route("/start", methods=["POST"])
 def start_monitoring():
     """Start monitoring"""
     monitor.start_monitoring()
     return jsonify({"message": "Monitoring started"})
+
 
 if __name__ == "__main__":
     print("[HEALTH] Aurora Web Health Monitor starting on port 5004...")

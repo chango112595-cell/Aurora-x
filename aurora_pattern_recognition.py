@@ -14,30 +14,31 @@ from collections import defaultdict
 app = Flask(__name__)
 CORS(app)
 
+
 class PatternRecognitionEngine:
     def __init__(self):
         self.patterns = defaultdict(int)
         self.anomalies = []
         self.learned_patterns = 0
         self.detection_accuracy = 0.95
-        
+
     def learn_pattern(self, pattern):
         """Learn a new pattern"""
         pattern_key = str(pattern)
         self.patterns[pattern_key] += 1
         self.learned_patterns += 1
-        
+
         return {
             "pattern": pattern_key,
             "occurrences": self.patterns[pattern_key],
             "total_learned": self.learned_patterns
         }
-    
+
     def detect_anomaly(self, data):
         """Detect anomalies in data"""
         pattern_key = str(data)
         is_known = pattern_key in self.patterns
-        
+
         if not is_known:
             anomaly = {
                 "timestamp": time.time(),
@@ -48,9 +49,9 @@ class PatternRecognitionEngine:
             if len(self.anomalies) > 100:
                 self.anomalies = self.anomalies[-100:]
             return True, anomaly
-        
+
         return False, None
-    
+
     def get_top_patterns(self, limit=10):
         """Get most common patterns"""
         sorted_patterns = sorted(
@@ -60,7 +61,9 @@ class PatternRecognitionEngine:
         )
         return sorted_patterns[:limit]
 
+
 engine = PatternRecognitionEngine()
+
 
 @app.route("/")
 def index():
@@ -74,9 +77,11 @@ def index():
         "accuracy": engine.detection_accuracy
     })
 
+
 @app.route("/health")
 def health():
     return jsonify({"status": "healthy"})
+
 
 @app.route("/learn", methods=["POST"])
 def learn():
@@ -85,16 +90,18 @@ def learn():
     result = engine.learn_pattern(data)
     return jsonify(result)
 
+
 @app.route("/detect", methods=["POST"])
 def detect():
     """Detect if data is anomalous"""
     data = request.get_json() or {}
     is_anomaly, anomaly_info = engine.detect_anomaly(data)
-    
+
     return jsonify({
         "is_anomaly": is_anomaly,
         "anomaly": anomaly_info
     })
+
 
 @app.route("/patterns")
 def get_patterns():
@@ -102,10 +109,12 @@ def get_patterns():
     top = engine.get_top_patterns()
     return jsonify({"top_patterns": top})
 
+
 @app.route("/anomalies")
 def get_anomalies():
     """Get recent anomalies"""
     return jsonify({"anomalies": engine.anomalies})
+
 
 if __name__ == "__main__":
     print("[PATTERN] Aurora Pattern Recognition Engine starting on port 5014...")

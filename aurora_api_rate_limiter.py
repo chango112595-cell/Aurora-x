@@ -14,6 +14,7 @@ from collections import defaultdict, deque
 app = Flask(__name__)
 CORS(app)
 
+
 class RateLimiter:
     def __init__(self):
         self.requests = defaultdict(deque)  # IP -> deque of timestamps
@@ -25,43 +26,45 @@ class RateLimiter:
         self.blocked_ips = set()
         self.total_requests = 0
         self.blocked_requests = 0
-    
+
     def is_allowed(self, ip, endpoint_type="default"):
         """Check if request is allowed"""
         self.total_requests += 1
-        
+
         if ip in self.blocked_ips:
             self.blocked_requests += 1
             return False, "IP blocked"
-        
+
         limit_config = self.limits.get(endpoint_type, self.limits["default"])
         now = time.time()
         window = limit_config["window"]
         max_requests = limit_config["requests"]
-        
+
         # Clean old requests
         req_times = self.requests[ip]
         while req_times and now - req_times[0] > window:
             req_times.popleft()
-        
+
         # Check limit
         if len(req_times) >= max_requests:
             self.blocked_requests += 1
             return False, f"Rate limit exceeded: {max_requests} requests per {window}s"
-        
+
         # Allow request
         req_times.append(now)
         return True, "OK"
-    
+
     def block_ip(self, ip):
         """Block an IP address"""
         self.blocked_ips.add(ip)
-    
+
     def unblock_ip(self, ip):
         """Unblock an IP address"""
         self.blocked_ips.discard(ip)
 
+
 limiter = RateLimiter()
+
 
 @app.route("/")
 def index():
@@ -75,9 +78,11 @@ def index():
         "blocked_requests": limiter.blocked_requests
     })
 
+
 @app.route("/health")
 def health():
     return jsonify({"status": "healthy"})
+
 
 @app.route("/check", methods=["POST"])
 def check_rate_limit():
@@ -85,14 +90,15 @@ def check_rate_limit():
     data = request.get_json() or {}
     ip = data.get("ip", request.remote_addr)
     endpoint_type = data.get("type", "default")
-    
+
     allowed, message = limiter.is_allowed(ip, endpoint_type)
-    
+
     return jsonify({
         "allowed": allowed,
         "message": message,
         "ip": ip
     }), 200 if allowed else 429
+
 
 @app.route("/block", methods=["POST"])
 def block_ip():
@@ -104,6 +110,7 @@ def block_ip():
         return jsonify({"message": f"IP {ip} blocked"})
     return jsonify({"error": "No IP provided"}), 400
 
+
 @app.route("/unblock", methods=["POST"])
 def unblock_ip():
     """Unblock an IP address"""
@@ -114,6 +121,7 @@ def unblock_ip():
         return jsonify({"message": f"IP {ip} unblocked"})
     return jsonify({"error": "No IP provided"}), 400
 
+
 @app.route("/stats")
 def stats():
     return jsonify({
@@ -122,6 +130,7 @@ def stats():
         "blocked_ips": len(limiter.blocked_ips),
         "active_ips": len(limiter.requests)
     })
+
 
 if __name__ == "__main__":
     print("[LIMITER] Aurora API Rate Limiter starting on port 5030...")
