@@ -24,6 +24,7 @@ os.chdir(script_dir)
 IS_WINDOWS = platform.system() == "Windows"
 PYTHON_CMD = "python" if IS_WINDOWS else "python3"
 
+
 def check_port(port):
     """Quick port check"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -39,12 +40,13 @@ def check_port(port):
             pass
         return False
 
+
 def start_service(cmd, name, port):
     """Start service if not already running"""
     if check_port(port):
         print(f"   ✅ {name} (Port {port}) - Already running")
         return True
-    
+
     kwargs = {'stdout': subprocess.DEVNULL, 'stderr': subprocess.DEVNULL}
     if IS_WINDOWS:
         kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
@@ -52,7 +54,7 @@ def start_service(cmd, name, port):
             kwargs['shell'] = True
     else:
         kwargs['start_new_session'] = True
-    
+
     try:
         subprocess.Popen(cmd, **kwargs)
         print(f"   ⚡ {name} (Port {port}) - STARTED")
@@ -60,6 +62,7 @@ def start_service(cmd, name, port):
     except Exception as e:
         print(f"   ❌ {name} (Port {port}) - Failed: {e}")
         return False
+
 
 print("━" * 80)
 print("🔍 AURORA ANALYSIS - Current Active Services")
@@ -130,7 +133,7 @@ for port in sorted(missing_services):
     if cmd is None:
         print(f"   ⏭️  {name} (Port {port}) - Skipped (special service)")
         continue
-    
+
     # Check if file exists
     if isinstance(cmd, list) and len(cmd) > 1:
         file_path = cmd[1]
@@ -141,7 +144,7 @@ for port in sorted(missing_services):
             print(f"   ⏭️  {name} (Port {port}) - File not found: {file_path}")
             failed += 1
             continue
-    
+
     if start_service(cmd, name, port):
         started += 1
         time.sleep(0.2)  # Small delay for process initialization
@@ -161,7 +164,8 @@ print("\n🔍 Final Status Check:\n")
 
 active_final = 0
 web_api_active = 0
-web_api_ports = [5000, 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5028, 5029, 5030]
+web_api_ports = [5000, 5001, 5002, 5003, 5004,
+                 5005, 5006, 5007, 5008, 5028, 5029, 5030]
 
 for port, (name, _) in services_map.items():
     if check_port(port):
