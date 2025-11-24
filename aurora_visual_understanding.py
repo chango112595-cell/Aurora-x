@@ -249,24 +249,24 @@ class AuroraVisualUnderstanding:
 
     # === PRIVATE HELPER METHODS ===
 
-    def _detect_ui_elements(self, ___image_path: str) -> list[str]:
+    def _detect_ui_elements(self, ______image_path: str) -> list[str]:
         """Detect UI elements in screenshot"""
         # Simulated detection (use CV models in production)
         return ["Button", "Input Field", "Header", "Navigation", "Footer", "Card"]
 
-    def _detect_visual_issues(self, elements: list[str], ___context: str) -> list[str]:
+    def _detect_visual_issues(self, elements: list[str], ______context: str) -> list[str]:
         """Detect visual issues like misalignment, overlap"""
         issues = []
         if "Button" in elements and "Input Field" in elements:
             issues.append("Button alignment may need adjustment")
         return issues
 
-    def _extract_text_ocr(self, ___image_path: str) -> str:
+    def _extract_text_ocr(self, ______image_path: str) -> str:
         """Extract text from image using OCR"""
         # Simulated OCR (use Tesseract/EasyOCR in production)
         return "Sample error text extracted from image"
 
-    def _extract_code_from_text(self, ___text: str) -> list[str]:
+    def _extract_code_from_text(self, ______text: str) -> list[str]:
         """Extract code references from OCR text"""
         return ["app.py:line 42", "server.ts:line 156"]
 
@@ -274,7 +274,7 @@ class AuroraVisualUnderstanding:
         """Generate suggestions based on issues"""
         return [f"Fix: {issue}" for issue in issues]
 
-    def _extract_diagram_components(self, ___path: str, dtype: VisualType) -> list[str]:
+    def _extract_diagram_components(self, ______path: str, dtype: VisualType) -> list[str]:
         """Extract components from diagram"""
         if dtype == VisualType.ARCHITECTURE:
             return ["Frontend", "Backend", "Database", "Cache", "API Gateway"]
@@ -288,15 +288,15 @@ class AuroraVisualUnderstanding:
         """Map diagram components to actual codebase files"""
         return [f"src/{comp.lower()}.py" for comp in components]
 
-    def _validate_diagram_consistency(self, ___components: list[str], ___relationships: list[tuple]) -> list[str]:
+    def _validate_diagram_consistency(self, ______components: list[str], ______relationships: list[tuple]) -> list[str]:
         """Validate diagram consistency"""
         return []
 
-    def _suggest_improvements(self, ___components: list[str], ___relationships: list[tuple]) -> list[str]:
+    def _suggest_improvements(self, ______components: list[str], ______relationships: list[tuple]) -> list[str]:
         """Suggest diagram improvements"""
         return ["Add error handling paths", "Include retry logic"]
 
-    def _detect_ui_components(self, ___path: str) -> list[dict[str, Any]]:
+    def _detect_ui_components(self, ______path: str) -> list[dict[str, Any]]:
         """Detect UI components in mockup"""
         return [
             {"type": "Header", "position": (0, 0), "size": (1920, 80)},
@@ -304,11 +304,11 @@ class AuroraVisualUnderstanding:
             {"type": "Input", "position": (100, 300), "size": (300, 40)},
         ]
 
-    def _analyze_layout(self, ___components: list[dict]) -> dict[str, Any]:
+    def _analyze_layout(self, ______components: list[dict]) -> dict[str, Any]:
         """Analyze layout structure"""
         return {"type": "flex", "direction": "column", "gap": 20}
 
-    def _suggest_framework(self, ___components: list[dict]) -> str:
+    def _suggest_framework(self, ______components: list[dict]) -> str:
         """Suggest best framework for mockup"""
         return "React with Tailwind CSS"
 
@@ -316,23 +316,23 @@ class AuroraVisualUnderstanding:
         """Build component hierarchy"""
         return {"root": "App", "children": [c["type"] for c in components]}
 
-    def _extract_styling(self, ___path: str) -> dict[str, str]:
+    def _extract_styling(self, ______path: str) -> dict[str, str]:
         """Extract color scheme and styling"""
         return {"primary": "#3B82F6", "background": "#FFFFFF", "text": "#1F2937"}
 
-    def _check_accessibility(self, ___components: list[dict]) -> list[str]:
+    def _check_accessibility(self, ______components: list[dict]) -> list[str]:
         """Check accessibility issues"""
         return ["Add ARIA labels", "Ensure keyboard navigation"]
 
-    def _suggest_breakpoints(self, ___layout: dict) -> list[int]:
+    def _suggest_breakpoints(self, ______layout: dict) -> list[int]:
         """Suggest responsive breakpoints"""
         return [640, 768, 1024, 1280]
 
-    def _classify_error(self, ___text: str) -> str:
+    def _classify_error(self, ______text: str) -> str:
         """Classify error type"""
         return "SyntaxError"
 
-    def _extract_stack_trace(self, ___text: str) -> list[str]:
+    def _extract_stack_trace(self, ______text: str) -> list[str]:
         """Extract stack trace from error text"""
         return ["File app.py, line 42", "File server.ts, line 156"]
 
@@ -348,19 +348,19 @@ class AuroraVisualUnderstanding:
         """Identify files related to error"""
         return [line.split(",")[0].replace("File ", "") for line in stack_trace]
 
-    def _analyze_code_structure(self, ___path: str) -> dict[str, Any]:
+    def _analyze_code_structure(self, ______path: str) -> dict[str, Any]:
         """Analyze code structure for visualization"""
         return {"classes": ["Main", "Helper"], "functions": ["init", "process"]}
 
-    def _generate_ascii_tree(self, ___structure: dict) -> str:
+    def _generate_ascii_tree(self, ______structure: dict) -> str:
         """Generate ASCII tree visualization"""
         return "├── Main\n│   ├── init()\n│   └── process()\n└── Helper"
 
-    def _detect_visual_differences(self, ___before: str, ___after: str) -> list[dict]:
+    def _detect_visual_differences(self, ______before: str, ______after: str) -> list[dict]:
         """Detect visual differences between images"""
         return [{"area": "button", "change": "color", "severity": "low"}]
 
-    def _calculate_similarity(self, ___before: str, ___after: str) -> float:
+    def _calculate_similarity(self, ______before: str, ______after: str) -> float:
         """Calculate similarity score"""
         return 0.95
 
