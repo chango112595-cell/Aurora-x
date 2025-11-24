@@ -36,7 +36,7 @@ def check_port(port):
 
 def restart_services():
     """Restart all Aurora services"""
-    print(f"\n🔄 [{datetime.now().strftime('%H:%M:%S')}] Restarting Aurora services...")
+    print(f"\n[RESTART] [{datetime.now().strftime('%H:%M:%S')}] Restarting Aurora services...")
     python_cmd = "python" if platform.system() == "Windows" else "python3"
 
     try:
@@ -60,16 +60,16 @@ def restart_services():
                 stderr=subprocess.DEVNULL,
                 start_new_session=True,
             )
-        print("   ✅ Restart command issued")
+        print("   [OK] Restart command issued")
         return True
     except Exception as e:
-        print(f"   ❌ Restart failed: {e}")
+        print(f"   [ERROR] Restart failed: {e}")
         return False
 
 
 def monitor_loop():
     """Main monitoring loop"""
-    print("🌌 Aurora Autonomous Monitor starting...")
+    print("[MONITOR] Aurora Autonomous Monitor starting...")
     print("   Monitoring all services for failures")
     print("   Will auto-restart if critical services fail\n")
 
@@ -93,7 +93,7 @@ def monitor_loop():
 
             # Check if we need to restart
             if critical_failures and (current_time - last_restart) > 60:
-                print(f"\n⚠️  Critical failures detected: {', '.join(critical_failures)}")
+                print(f"\n[WARN]  Critical failures detected: {', '.join(critical_failures)}")
                 if restart_services():
                     last_restart = current_time
                     print("   ⏳ Waiting 30s for services to start...")
@@ -107,10 +107,10 @@ def monitor_loop():
             time.sleep(10)
 
         except KeyboardInterrupt:
-            print("\n\n🛑 Monitor stopped by user")
+            print("\n\n[EMOJI] Monitor stopped by user")
             break
         except Exception as e:
-            print(f"\n❌ Monitor error: {e}")
+            print(f"\n[ERROR] Monitor error: {e}")
             time.sleep(10)
 
 

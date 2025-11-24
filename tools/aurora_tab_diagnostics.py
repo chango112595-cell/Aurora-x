@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora Comprehensive Tab Diagnostics
-🌟 Autonomous analysis of all UI tabs for issues
+[STAR] Autonomous analysis of all UI tabs for issues
 """
 
 import json
@@ -22,7 +22,7 @@ class AuroraTabDiagnostics:
     def log(self, level: str, message: str):
         """Aurora's logging"""
         timestamp = datetime.now().strftime("%H:%M:%S")
-        icons = {"INFO": "🌟", "OK": "✅", "ISSUE": "🐛", "WARN": "⚠️"}
+        icons = {"INFO": "[STAR]", "OK": "[OK]", "ISSUE": "[EMOJI]", "WARN": "[WARN]"}
         icon = icons.get(level, "→")
         print(f"[{timestamp}] {icon} Aurora: {message}")
 
@@ -124,7 +124,7 @@ def main():
     """Aurora's autonomous diagnostics"""
 
     print("\n" + "=" * 80)
-    print("🌟 AURORA COMPREHENSIVE TAB DIAGNOSTICS")
+    print("[STAR] AURORA COMPREHENSIVE TAB DIAGNOSTICS")
     print("=" * 80 + "\n")
 
     diagnostics = AuroraTabDiagnostics()

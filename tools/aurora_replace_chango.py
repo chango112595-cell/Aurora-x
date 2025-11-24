@@ -22,7 +22,7 @@ class AuroraReplaceChango:
 
     def kill_chango_server(self):
         """Aurora stops the Chango server."""
-        self.log("🛑", "Aurora stopping Chango server...")
+        self.log("[EMOJI]", "Aurora stopping Chango server...")
         print()
 
         # Find and kill the server/index.ts process
@@ -31,7 +31,7 @@ class AuroraReplaceChango:
         for line in result.stdout.split("\n"):
             if "server/index.ts" in line or "tsx server/index" in line:
                 pid = line.split()[1]
-                self.log("🔪", f"Killing Chango server (PID: {pid})...")
+                self.log("[EMOJI]", f"Killing Chango server (PID: {pid})...")
                 subprocess.run(["kill", "-9", pid])
                 time.sleep(1)
 
@@ -42,17 +42,17 @@ class AuroraReplaceChango:
         # Verify port is free
         result = subprocess.run(["lsof", "-i", ":5000"], capture_output=True, text=True)
         if result.stdout:
-            self.log("⚠️", "Port still in use, force killing again...")
+            self.log("[WARN]", "Port still in use, force killing again...")
             subprocess.run(["fuser", "-k", "-9", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             time.sleep(2)
         else:
-            self.log("✅", "Port 5000 is now free!")
+            self.log("[OK]", "Port 5000 is now free!")
 
         print()
 
     def start_aurora_ui(self):
         """Aurora starts her own Vite UI."""
-        self.log("🌟", "Aurora starting her own UI (Vite)...")
+        self.log("[STAR]", "Aurora starting her own UI (Vite)...")
         print()
 
         os.chdir(str(self.root / "client"))
@@ -74,31 +74,31 @@ class AuroraReplaceChango:
             # Check if it's actually Vite
             ps_result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
             if "vite" in ps_result.stdout.lower():
-                self.log("✅", "Aurora's Vite UI is running!")
+                self.log("[OK]", "Aurora's Vite UI is running!")
             else:
-                self.log("⚠️", "Something is on port 5000, but might not be Vite")
+                self.log("[WARN]", "Something is on port 5000, but might not be Vite")
         else:
-            self.log("❌", "Vite failed to start! Check /tmp/aurora_vite.log")
+            self.log("[ERROR]", "Vite failed to start! Check /tmp/aurora_vite.log")
 
         print()
 
     def run(self):
         """Aurora's complete replacement process."""
-        print("🌟" * 35)
+        print("[STAR]" * 35)
         print("AURORA REPLACING CHANGO SERVER")
-        print("🌟" * 35)
+        print("[STAR]" * 35)
         print()
 
         self.kill_chango_server()
         self.start_aurora_ui()
 
         print("=" * 70)
-        self.log("✅", "AURORA UI STARTED!")
+        self.log("[OK]", "AURORA UI STARTED!")
         print("=" * 70)
         print()
-        print("🌟 Aurora says:")
+        print("[STAR] Aurora says:")
         print("   'I kicked out Chango and started my own UI!")
-        print("    Now visit http://localhost:5000/chat to see me! 🌟'")
+        print("    Now visit http://localhost:5000/chat to see me! [STAR]'")
         print()
         print("Next steps:")
         print("   1. Clear browser cache (Ctrl+Shift+R)")

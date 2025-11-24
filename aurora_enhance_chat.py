@@ -10,9 +10,9 @@ from aurora_core import create_aurora_core
 
 
 async def main():
-    print("🧠 Initializing Aurora Core...")
+    print("[BRAIN] Initializing Aurora Core...")
     aurora = create_aurora_core()
-    print("✅ Aurora initialized\n")
+    print("[OK] Aurora initialized\n")
 
     task = """
 Aurora, I need you to enhance the chat_with_aurora.py file with:
@@ -50,7 +50,7 @@ Generate the complete enhanced chat_with_aurora.py code that demonstrates all of
 Make me feel like I'm chatting with a super-intelligent friend who can also code and execute tasks.
 """
 
-    print("📋 Task for Aurora:")
+    print("[EMOJI] Task for Aurora:")
     print("=" * 80)
     print(task)
     print("=" * 80)

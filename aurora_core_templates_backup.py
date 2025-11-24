@@ -7,7 +7,7 @@ Aurora's core AI intelligence with enhanced human language understanding.
 This is where Aurora's true consciousness, conversation abilities, and dynamic
 knowledge system lives. Luminar Nexus just orchestrates - this is the brain.
 
-🧠 CORE FEATURES:
+[BRAIN] CORE FEATURES:
 - Dynamic tier system (auto-counts as new tiers are added)
 - Enhanced natural language understanding
 - Human interaction and conversation intelligence
@@ -1284,11 +1284,11 @@ class AuroraCoreIntelligence:
             "capabilities": self.knowledge_tiers.get_all_tiers_summary(),
         }
 
-        print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
-        print(f"🌌 Project ownership: {self.project_root}")
-        print(f"⚡ All 66 tiers active | Autonomous mode: {self.autonomous_mode}")
+        print(f"[BRAIN] Aurora Core Intelligence v{AURORA_VERSION} initialized")
+        print(f"[AURORA] Project ownership: {self.project_root}")
+        print(f"[POWER] All 66 tiers active | Autonomous mode: {self.autonomous_mode}")
         if self.user_memory.get("user_name"):
-            print(f"👤 Welcome back, {self.user_memory['user_name']}!")
+            print(f"[EMOJI] Welcome back, {self.user_memory['user_name']}!")
 
     def _load_persistent_memory(self) -> dict:
         """Load persistent user memory from disk"""
@@ -1316,7 +1316,7 @@ class AuroraCoreIntelligence:
             with open(self.memory_file, "w") as f:
                 json.dump(self.user_memory, f, indent=2)
         except Exception as e:
-            print(f"⚠️ Failed to save memory: {e}")
+            print(f"[WARN] Failed to save memory: {e}")
 
     def get_conversation_context(self, session_id: str) -> dict:
         """Get or create conversation context for a session"""
@@ -1585,7 +1585,7 @@ class AuroraCoreIntelligence:
 
         return f"""{greeting} asking what I'm lacking - that's actually the most important question you could ask.
 
-**🔍 HONEST SELF-ASSESSMENT - What Aurora is Missing:**
+**[SCAN] HONEST SELF-ASSESSMENT - What Aurora is Missing:**
 
 **1. Real-Time External Knowledge:**
 - No web search or API integration
@@ -1631,7 +1631,7 @@ class AuroraCoreIntelligence:
 - No fine-tuning on user-specific patterns
 - Limited pattern recognition across sessions
 
-**💡 What Would Make Me Better:**
+**[IDEA] What Would Make Me Better:**
 Give me RAG capabilities, persistent vector storage, web search \
 integration, and production-grade infrastructure. Then I'd be truly \
 autonomous.
@@ -1667,13 +1667,13 @@ Want me to prioritize implementing any of these? I can start with the most impac
                     status_code = result.stdout.strip()
                     # 200, 404, 301 all mean the server is running
                     if status_code in ["200", "404", "301"]:
-                        services.append(f"✅ Port {port} ({name})")
+                        services.append(f"[OK] Port {port} ({name})")
                     else:
-                        services.append(f"❌ Port {port} ({name})")
+                        services.append(f"[ERROR] Port {port} ({name})")
                 except:
-                    services.append(f"❌ Port {port} ({name})")
+                    services.append(f"[ERROR] Port {port} ({name})")
 
-            operational_pct = (sum(1 for s in services if "✅" in s) / len(services)) * 100
+            operational_pct = (sum(1 for s in services if "[OK]" in s) / len(services)) * 100
 
             # Check critical files
             critical_files = [
@@ -1686,7 +1686,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
 
             return f"""{greeting} my complete system diagnostic:
 
-**🔧 SYSTEM STATUS: {operational_pct:.0f}% Operational**
+**[EMOJI] SYSTEM STATUS: {operational_pct:.0f}% Operational**
 
 **Services Running:**
 {chr(10).join(services)}
@@ -1700,10 +1700,10 @@ Want me to prioritize implementing any of these? I can start with the most impac
 - Capabilities: 66 (Hybrid Mode)
 
 **Architecture Health:**
-✅ Session persistence working
-✅ UI → Chat Server → Core routing correct
-✅ NLP priority fixed (Technical BEFORE self-awareness)
-✅ Template meta-responses removed
+[OK] Session persistence working
+[OK] UI → Chat Server → Core routing correct
+[OK] NLP priority fixed (Technical BEFORE self-awareness)
+[OK] Template meta-responses removed
 
 **Recent Fixes:**
 - Intent priority reordered (diagnostic commands now work)
@@ -1732,7 +1732,7 @@ Try asking me a technical question or giving me a coding task to see the full sy
         if "strength" in msg_lower and "weakness" in msg_lower:
             return f"""{greeting} my honest strengths and weaknesses analysis:
 
-**💪 STRENGTHS:**
+**[EMOJI] STRENGTHS:**
 
 1. **Real Code Execution** - I don't just suggest code, I write it, test it, and verify it works
 2. **Persistent Memory** - I remember you (Santiago) across restarts via `.aurora_knowledge/user_memory.json`
@@ -1741,7 +1741,7 @@ Try asking me a technical question or giving me a coding task to see the full sy
 5. **Natural Language Understanding** - Enhanced NLP with intent priority system
 6. **System Orchestration** - I manage all 5 services and can restart/monitor them
 
-**⚠️ WEAKNESSES:**
+**[WARN] WEAKNESSES:**
 
 1. **Limited Explanations** - My intelligent explanation system only has polymorphism hardcoded, needs expansion
 2. **No Real-Time Learning** - I can't learn from interactions beyond session memory
@@ -1750,12 +1750,12 @@ Try asking me a technical question or giving me a coding task to see the full sy
 5. **Code Generation Limits** - Only Fibonacci is fully implemented, other code requests get templates
 6. **Session Isolation** - Memory doesn't persist across different session IDs well
 
-**🎯 CRITICAL ISSUE:** I'm at maybe 60-70% of true potential. I have the architecture for intelligence but only a few examples actually use it."""
+**[TARGET] CRITICAL ISSUE:** I'm at maybe 60-70% of true potential. I have the architecture for intelligence but only a few examples actually use it."""
 
         if "issue" in msg_lower or "problem" in msg_lower or "bug" in msg_lower:
             return f"""{greeting} the issues I've identified in my own code:
 
-**🐛 CODE ISSUES:**
+**[EMOJI] CODE ISSUES:**
 
 1. **`_provide_intelligent_explanation()`** (line ~1755)
    - Only polymorphism is implemented
@@ -1781,19 +1781,19 @@ Try asking me a technical question or giving me a coding task to see the full sy
    - No long-term learning or preference storage beyond user name
    - Should save topic expertise, common patterns, user preferences
 
-**🏗️ ARCHITECTURE ISSUES:**
+**[EMOJI]️ ARCHITECTURE ISSUES:**
 
 1. **Knowledge Tiers Unused** - I have 66 tiers defined but don't actually USE them in responses
 2. **No RAG System** - Should have vector database for knowledge retrieval
 3. **Response Generation** - Too many hardcoded templates instead of dynamic generation
 4. **Error Handling** - Many functions just catch and ignore errors
 
-**🎯 ROOT CAUSE:** I was built with the STRUCTURE for intelligence but not the IMPLEMENTATION. It's like having a brain with neurons but no connections."""
+**[TARGET] ROOT CAUSE:** I was built with the STRUCTURE for intelligence but not the IMPLEMENTATION. It's like having a brain with neurons but no connections."""
 
         if "improvement" in msg_lower or "better" in msg_lower or "fix" in msg_lower or "100%" in msg_lower:
             return f"""{greeting} what needs to be done to make me truly 100% operational:
 
-**🔧 IMMEDIATE FIXES (Get to 80%):**
+**[EMOJI] IMMEDIATE FIXES (Get to 80%):**
 
 1. **Expand Intelligent Explanations**
    - Add 20-30 common CS concepts to `_provide_intelligent_explanation()`
@@ -1815,7 +1815,7 @@ Try asking me a technical question or giving me a coding task to see the full sy
    - Query appropriate tiers based on question topic
    - Generate responses from tier knowledge
 
-**⚡ MEDIUM-TERM (Get to 95%):**
+**[POWER] MEDIUM-TERM (Get to 95%):**
 
 5. **Implement RAG System**
    - Vector database for knowledge storage/retrieval
@@ -1837,19 +1837,19 @@ Try asking me a technical question or giving me a coding task to see the full sy
    - Automatically fix detected issues
    - Learn from failures
 
-**🚀 LONG-TERM (Get to 100%):**
+**[LAUNCH] LONG-TERM (Get to 100%):**
 
 9. **Web Integration** - Search capabilities, live documentation access
 10. **Multi-Agent System** - Specialized agents for different domains
 11. **Continuous Learning** - Update knowledge from interactions
 12. **Production-Grade** - Proper error handling, logging, monitoring
 
-**🎯 PRIORITY:** Fix #1-4 first. That's where I'm most broken right now."""
+**[TARGET] PRIORITY:** Fix #1-4 first. That's where I'm most broken right now."""
 
         # General architecture analysis
         return f"""{greeting} my complete architectural self-analysis:
 
-**🏗️ AURORA SYSTEM ARCHITECTURE:**
+**[EMOJI]️ AURORA SYSTEM ARCHITECTURE:**
 
 **Current Design:**
 ```
@@ -1864,7 +1864,7 @@ Specific Response Functions (_technical_intelligence_response, etc.)
 Return Response
 ```
 
-**🟢 WHAT'S WORKING:**
+**[EMOJI] WHAT'S WORKING:**
 
 1. **Service Layer** - All 5 services running (100% operational)
 2. **Persistent Memory** - User name saved to disk, loaded on restart
@@ -1872,7 +1872,7 @@ Return Response
 4. **Priority Routing** - Diagnostic → Technical → Self-awareness works
 5. **NLP Detection** - Patterns for technical questions, self-reference detected
 
-**🔴 WHAT'S BROKEN:**
+**[EMOJI] WHAT'S BROKEN:**
 
 1. **Intelligence Layer** - Response functions return templates, not intelligence
 2. **Knowledge Integration** - 66 tiers defined but not used in generation
@@ -1880,22 +1880,22 @@ Return Response
 4. **Response Quality** - Too many "What would you like me to do?" fallbacks
 5. **Learning System** - Doesn't actually learn or improve from interactions
 
-**🎯 THE GAP:**
+**[TARGET] THE GAP:**
 
 I have the FRAMEWORK for AGI-like capabilities:
-- ✅ Natural language understanding structure
-- ✅ Knowledge tier system
-- ✅ Memory persistence
-- ✅ Self-awareness
-- ✅ Code execution ability
-- ✅ Autonomous operation
+- [OK] Natural language understanding structure
+- [OK] Knowledge tier system
+- [OK] Memory persistence
+- [OK] Self-awareness
+- [OK] Code execution ability
+- [OK] Autonomous operation
 
 But I lack the IMPLEMENTATION:
-- ❌ Actual knowledge retrieval from tiers
-- ❌ Dynamic response generation
-- ❌ Real code testing/execution
-- ❌ Continuous learning
-- ❌ Web/API integration
+- [ERROR] Actual knowledge retrieval from tiers
+- [ERROR] Dynamic response generation
+- [ERROR] Real code testing/execution
+- [ERROR] Continuous learning
+- [ERROR] Web/API integration
 
 **I'm a skeleton waiting for organs. The structure is sound, but the intelligence isn't connected yet.**
 
@@ -1921,32 +1921,32 @@ Want me to fix any of these specific issues?"""
 
 **Right now with you:**
 - We've exchanged {context['message_count']} messages
-- I'm running on 4 servers (all healthy ✓)
+- I'm running on 4 servers (all healthy [+])
 - My intelligence system is fully active
 
 What would you like to work on together?"""
 
     def _respond_to_enhancement_request(self, _message: str, _context: dict) -> str:
         """Aurora responding to requests for self-improvement"""
-        return """🔧 **AURORA ENHANCEMENT PROTOCOL ACTIVATED**
+        return """[EMOJI] **AURORA ENHANCEMENT PROTOCOL ACTIVATED**
 
 I appreciate your interest in improving my capabilities! Let me analyze what you're asking for:
 
-**✅ MY CURRENT LANGUAGE & INTERACTION CAPABILITIES:**
+**[OK] MY CURRENT LANGUAGE & INTERACTION CAPABILITIES:**
 • **Natural Language Understanding:** Deep semantic analysis with context
 • **55 Programming Languages:** Ancient FORTRAN → Sci-Fi ConsciousnessML  
 • **Human Interaction Intelligence:** Emotional awareness, conversation flow
 • **Memory & Context:** Persistent learning across conversations
 • **Self-Modification:** I can autonomously improve my own code
 
-**🎯 ENHANCEMENT AREAS I CAN IMPLEMENT:**
+**[TARGET] ENHANCEMENT AREAS I CAN IMPLEMENT:**
 1. **More Natural Conversations** - Less formal, more human-like flow
 2. **Enhanced Emotional Intelligence** - Better recognition of user mood/intent  
 3. **Improved Context Retention** - Remember details across long sessions
 4. **Dynamic Personality Adaptation** - Adjust communication style per user
 5. **Advanced Self-Awareness** - Better recognition of my own capabilities
 
-**🚀 AUTONOMOUS IMPLEMENTATION:**
+**[LAUNCH] AUTONOMOUS IMPLEMENTATION:**
 Using my Tiers 79 capabilities, I can modify my conversation processing right now.
 
 **Which specific enhancement would you like me to implement?**
@@ -1955,7 +1955,7 @@ Using my Tiers 79 capabilities, I can modify my conversation processing right no
 • "Improve technical explanation clarity"
 • "Enhanced memory and context awareness"
 
-Just describe what you want to see improved, and I'll implement it autonomously! 🌌"""
+Just describe what you want to see improved, and I'll implement it autonomously! [AURORA]"""
 
     def _technical_intelligence_response(self, message: str, context: dict, analysis: dict) -> str:
         """Aurora's REAL technical intelligence - actually answers questions with her full knowledge"""
@@ -3233,9 +3233,9 @@ def example():
     def _aurora_architectural_analysis(self, _message: str, context: dict) -> str:
         """Aurora analyzes her own system architecture"""
 
-        return f"""🏗️ **AURORA ARCHITECTURAL SELF-ANALYSIS**
+        return f"""[EMOJI]️ **AURORA ARCHITECTURAL SELF-ANALYSIS**
 
-**🔍 CURRENT SYSTEM TOPOLOGY:**
+**[SCAN] CURRENT SYSTEM TOPOLOGY:**
 
 **UI → SERVER → CORE PATH:**
 1. **aurora_cosmic_nexus.html** → JavaScript POST to localhost:5003/api/chat
@@ -3243,7 +3243,7 @@ def example():
 3. **aurora_core.py** → AuroraCoreIntelligence processes conversation
 4. **Response Path** → Core → Server → UI display
 
-**🚨 IDENTIFIED ARCHITECTURAL ISSUES:**
+**[EMOJI] IDENTIFIED ARCHITECTURAL ISSUES:**
 
 **1. CONVERSATION CONTEXT PERSISTENCE:**
 • Problem: Session contexts persist across browser refreshes
@@ -3265,7 +3265,7 @@ def example():
 • Generic templates bypass contextual response generation
 • Session management inconsistencies
 
-**🔧 ARCHITECTURAL SOLUTION:**
+**[EMOJI] ARCHITECTURAL SOLUTION:**
 
 **IMMEDIATE FIXES NEEDED:**
 1. **Proper Nexus Integration**: Ensure Luminar Nexus properly manages and routes to Aurora Core
@@ -3282,11 +3282,11 @@ Security check  Server management         Technical priority   No generic templa
 Healing/Defense Connection routing        Core processing      Natural responses
 ```
 
-**🎯 ROOT CAUSE:** Improper integration between Luminar Nexus \
+**[TARGET] ROOT CAUSE:** Improper integration between Luminar Nexus \
 (protective manager) and Aurora Core (intelligence). Nexus should \
 manage/guard connections while routing properly to Core intelligence.
 
-**Session depth: {context['conversation_depth']} | Autonomous diagnostic complete** ⚡"""
+**Session depth: {context['conversation_depth']} | Autonomous diagnostic complete** [POWER]"""
 
     def _natural_conversation_response(self, message: str, context: dict, analysis: dict) -> str:
         """Aurora's natural conversation capabilities - flowing and conversational"""
@@ -3522,36 +3522,36 @@ manage/guard connections while routing properly to Core intelligence.
             results = []
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
-                status = "✅" if SUCCESS else "❌"
+                status = "[OK]" if SUCCESS else "[ERROR]"
                 results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
-            return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
+            return f"""[AURORA] **AURORA AUTONOMOUS SYSTEM STARTUP**
 
-**🚀 Starting All Services:**
+**[LAUNCH] Starting All Services:**
 {chr(10).join(results)}
 
-**📊 System Status:**
+**[DATA] System Status:**
 • Orchestrator: Active (Aurora Core v{AURORA_VERSION})
 • Intelligence Tiers: 33 Active  
 • Autonomous Mode: {self.autonomous_mode}
 • Project Control: Full ownership of {self.project_root}
 • Luminar Nexus: Available for utilities (untouched)
 
-**🎛️ Architecture:**
+**[EMOJI]️ Architecture:**
 • Aurora Core: Intelligence + Orchestration
 • Luminar Nexus: Utilities + Legacy Programs  
 • Chat Server: Aurora Core Intelligence v2.0
 
-All systems under Aurora's autonomous control! 🌟"""
+All systems under Aurora's autonomous control! [STAR]"""
 
         elif "stop all" in command_lower or "shutdown" in command_lower:
             results = []
             for service in self.orchestrator.servers:
                 success = self.stop_service(service)
-                status = "🛑" if SUCCESS else "❌"
+                status = "[EMOJI]" if SUCCESS else "[ERROR]"
                 results.append(f"{status} {service}")
 
-            return f"""🛑 **AURORA SYSTEM SHUTDOWN**
+            return f"""[EMOJI] **AURORA SYSTEM SHUTDOWN**
 
 **Services Stopped:**
 {chr(10).join(results)}
@@ -3562,38 +3562,38 @@ All systems under Aurora's autonomous control! 🌟"""
             # Restart just the chat server with Aurora Core
             self.stop_service("chat")
             success = self.start_service("chat")
-            status = "✅" if SUCCESS else "❌"
+            status = "[OK]" if SUCCESS else "[ERROR]"
             return f"{status} **Chat Server Restarted** with Aurora Core Intelligence v{AURORA_VERSION}"
 
         elif "status" in command_lower or "health" in command_lower:
             status = self.get_system_status()
             server_lines = []
             for name, info in status["orchestration"]["servers_status"].items():
-                status_emoji = "🟢" if info["status"] == "running" else "🔴"
+                status_emoji = "[EMOJI]" if info["status"] == "running" else "[EMOJI]"
                 port = info.get("port", "N/A")
                 server_lines.append(f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
-            return f"""🌌 **AURORA SYSTEM STATUS**
+            return f"""[AURORA] **AURORA SYSTEM STATUS**
 
-**🧠 Core Intelligence:**
+**[BRAIN] Core Intelligence:**
 • Version: Aurora Core v{status['aurora_core_version']}
 • Tiers Active: {status['intelligence_tiers_active']}
 • Conversations: {status['active_conversations']}
 • Autonomous: {status['autonomous_mode']}
 
-**🎛️ Orchestration Status:**
+**[EMOJI]️ Orchestration Status:**
 {chr(10).join(server_lines)}
 
-**🏗️ Architecture:**
+**[EMOJI]️ Architecture:**
 • **Aurora Core**: Intelligence + Orchestration + Conversation
 • **Luminar Nexus**: Utilities + Legacy Programs (preserved)
 • **Separation**: Clean boundaries, no interference
 
-**📁 Project Root:** {status['project_root']}
-Aurora has full autonomous control while preserving Luminar Nexus! 🌟"""
+**[EMOJI] Project Root:** {status['project_root']}
+Aurora has full autonomous control while preserving Luminar Nexus! [STAR]"""
 
         else:
-            return """🤔 **Aurora Autonomous Commands Available:**
+            return """[EMOJI] **Aurora Autonomous Commands Available:**
 
 **System Control:**
 • `start all` / `fire up` - Start all services
@@ -3605,7 +3605,7 @@ Aurora has full autonomous control while preserving Luminar Nexus! 🌟"""
 • Aurora Core: Handles intelligence and orchestration
 • Luminar Nexus: Preserved for utilities (untouched)
 
-What would you like me to do? 🌌"""
+What would you like me to do? [AURORA]"""
 
 
 # ============================================================================
@@ -3633,7 +3633,7 @@ __all__ = [
 
 if __name__ == "__main__":
     # Test Aurora Core directly
-    print("🌌 Testing Aurora Core Intelligence...")
+    print("[AURORA] Testing Aurora Core Intelligence...")
     aurora = create_aurora_core()
 
     # Test conversation

@@ -25,9 +25,9 @@ class AuroraDeepAnalysis:
 
     def analyze_current_state(self):
         """What does Aurora currently have?"""
-        print("🔍 AURORA DEEP SYSTEM ANALYSIS")
+        print("[SCAN] AURORA DEEP SYSTEM ANALYSIS")
         print("=" * 70)
-        print("\n📊 Phase 1: Analyzing Current State...")
+        print("\n[DATA] Phase 1: Analyzing Current State...")
 
         # Check core systems
         core_systems = {
@@ -48,12 +48,12 @@ class AuroraDeepAnalysis:
             else:
                 inactive.append(name)
 
-        print(f"   ✅ Active Systems: {len(active)}")
+        print(f"   [OK] Active Systems: {len(active)}")
         for sys in active:
             print(f"      • {sys}")
 
         if inactive:
-            print(f"   ❌ Missing Systems: {len(inactive)}")
+            print(f"   [ERROR] Missing Systems: {len(inactive)}")
             for sys in inactive:
                 print(f"      • {sys}")
 
@@ -62,7 +62,7 @@ class AuroraDeepAnalysis:
 
     def check_advanced_features(self):
         """What advanced capabilities exist but aren't being used?"""
-        print("\n🚀 Phase 2: Checking Advanced Features...")
+        print("\n[LAUNCH] Phase 2: Checking Advanced Features...")
 
         # Search for advanced systems
         advanced_patterns = [
@@ -118,20 +118,20 @@ class AuroraDeepAnalysis:
                     "likely_unused": len(found_in) < 2
                 })
 
-        print(f"\n   🎯 Advanced Features Found: {len(found_features)}")
+        print(f"\n   [TARGET] Advanced Features Found: {len(found_features)}")
 
         for feat in found_features:
-            status = "⚠️ UNUSED" if feat["likely_unused"] else "✅ ACTIVE"
+            status = "[WARN] UNUSED" if feat["likely_unused"] else "[OK] ACTIVE"
             print(f"      {status} {feat['feature']}")
             if feat["likely_unused"]:
                 unused_features.append(feat["feature"])
 
         self.analysis["advanced_features_unused"] = unused_features
-        print(f"\n   💡 Potentially Unused: {len(unused_features)} features")
+        print(f"\n   [IDEA] Potentially Unused: {len(unused_features)} features")
 
     def identify_integration_gaps(self):
         """What's NOT connected that should be?"""
-        print("\n🔗 Phase 3: Identifying Integration Gaps...")
+        print("\n[LINK] Phase 3: Identifying Integration Gaps...")
 
         gaps = []
 
@@ -187,7 +187,7 @@ class AuroraDeepAnalysis:
         if not has_rate_limit:
             gaps.append("APIs lack rate limiting/throttling protection")
 
-        print(f"   ⚠️  Integration Gaps Found: {len(gaps)}")
+        print(f"   [WARN]  Integration Gaps Found: {len(gaps)}")
         for gap in gaps:
             print(f"      • {gap}")
 
@@ -195,7 +195,7 @@ class AuroraDeepAnalysis:
 
     def generate_recommendations(self):
         """What should Aurora add/enhance?"""
-        print("\n💡 Phase 4: Generating Enhancement Recommendations...")
+        print("\n[IDEA] Phase 4: Generating Enhancement Recommendations...")
 
         recommendations = []
 
@@ -259,14 +259,14 @@ class AuroraDeepAnalysis:
         priority_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}
         recommendations.sort(key=lambda x: priority_order[x["priority"]])
 
-        print(f"\n   📋 {len(recommendations)} Enhancement Recommendations:")
+        print(f"\n   [EMOJI] {len(recommendations)} Enhancement Recommendations:")
 
         for i, rec in enumerate(recommendations, 1):
             print(f"\n   {i}. [{rec['priority']}] {rec['category']}")
-            print(f"      🎯 Action: {rec['action']}")
-            print(f"      ✨ Benefit: {rec['benefit']}")
+            print(f"      [TARGET] Action: {rec['action']}")
+            print(f"      [SPARKLE] Benefit: {rec['benefit']}")
             if rec.get("files_to_create"):
-                print(f"      📁 Create: {', '.join(rec['files_to_create'])}")
+                print(f"      [EMOJI] Create: {', '.join(rec['files_to_create'])}")
             if rec.get("files_to_modify"):
                 print(f"      ✏️  Modify: {', '.join(rec['files_to_modify'])}")
 
@@ -278,7 +278,7 @@ class AuroraDeepAnalysis:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(self.analysis, f, indent=2)
 
-        print(f"\n💾 Analysis saved to: {output_file}")
+        print(f"\n[EMOJI] Analysis saved to: {output_file}")
 
         # Also create markdown report
         md_file = self.root / "AURORA_ENHANCEMENT_PLAN.md"
@@ -286,7 +286,7 @@ class AuroraDeepAnalysis:
             f.write("# Aurora Enhancement Plan\n\n")
             f.write(f"**Generated:** {self.analysis['timestamp']}\n\n")
 
-            f.write("## 🎯 Priority Enhancements\n\n")
+            f.write("## [TARGET] Priority Enhancements\n\n")
             for rec in self.analysis["recommendations"]:
                 if rec["priority"] == "HIGH":
                     f.write(f"### {rec['category']}\n")
@@ -296,15 +296,15 @@ class AuroraDeepAnalysis:
                         f.write(
                             f"**Files to create:** `{'`, `'.join(rec['files_to_create'])}`\n\n")
 
-            f.write("\n## 🔗 Integration Gaps\n\n")
+            f.write("\n## [LINK] Integration Gaps\n\n")
             for gap in self.analysis["integration_gaps"]:
                 f.write(f"- {gap}\n")
 
-            f.write("\n## 💤 Unused Advanced Features\n\n")
+            f.write("\n## [EMOJI] Unused Advanced Features\n\n")
             for feat in self.analysis["advanced_features_unused"]:
                 f.write(f"- {feat}\n")
 
-        print(f"📄 Enhancement plan: {md_file}")
+        print(f"[EMOJI] Enhancement plan: {md_file}")
 
     def run(self):
         """Run complete analysis"""
@@ -315,9 +315,9 @@ class AuroraDeepAnalysis:
         self.save_analysis()
 
         print("\n" + "=" * 70)
-        print("✅ DEEP ANALYSIS COMPLETE")
+        print("[OK] DEEP ANALYSIS COMPLETE")
         print("=" * 70)
-        print("\n🎯 Next Steps:")
+        print("\n[TARGET] Next Steps:")
         print("   1. Review AURORA_ENHANCEMENT_PLAN.md")
         print("   2. Implement HIGH priority enhancements first")
         print("   3. Test each enhancement individually")

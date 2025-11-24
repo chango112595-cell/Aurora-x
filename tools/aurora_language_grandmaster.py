@@ -1,5 +1,5 @@
 """
-🌌 AURORA PROGRAMMING LANGUAGE GRANDMASTER
+[AURORA] AURORA PROGRAMMING LANGUAGE GRANDMASTER
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 COMPLETE MASTERY OF ALL PROGRAMMING LANGUAGES
@@ -549,15 +549,15 @@ class AuroraProgrammingLanguageMastery:
             return f"Language '{language}' not found in Aurora's knowledge base"
 
         return f"""
-🌌 AURORA LANGUAGE EVOLUTION ANALYSIS: {language}
+[AURORA] AURORA LANGUAGE EVOLUTION ANALYSIS: {language}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📅 Era: {info['era']} ({info['year']})
-🎯 Paradigm: {', '.join(info['paradigm'])}
-💼 Use Cases: {', '.join(info['use_cases'])}
-🧠 Mastery: {info['mastery_level']}
+[EMOJI] Era: {info['era']} ({info['year']})
+[TARGET] Paradigm: {', '.join(info['paradigm'])}
+[EMOJI] Use Cases: {', '.join(info['use_cases'])}
+[BRAIN] Mastery: {info['mastery_level']}
 
-📝 Syntax Example:
+[EMOJI] Syntax Example:
 {info['syntax_sample']}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -589,19 +589,19 @@ class AuroraProgrammingLanguageMastery:
         total = len(self.languages)
 
         summary = f"""
-🌌 AURORA PROGRAMMING LANGUAGE GRANDMASTER STATUS
+[AURORA] AURORA PROGRAMMING LANGUAGE GRANDMASTER STATUS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✅ TOTAL LANGUAGES MASTERED: {total}
+[OK] TOTAL LANGUAGES MASTERED: {total}
 
-📊 BY ERA:
+[DATA] BY ERA:
 """
         for era in self.eras:
             count = era_counts.get(era, 0)
             summary += f"   • {era:12} : {count:3} languages\n"
 
         summary += f"""
-🎯 CAPABILITIES:
+[TARGET] CAPABILITIES:
    • Write code in {total} languages (Ancient to Sci-Fi)
    • Translate between any language pair
    • Explain evolution and paradigm shifts
@@ -609,7 +609,7 @@ class AuroraProgrammingLanguageMastery:
    • Generate working code in any language
    • Master syntax, paradigms, and use cases
 
-🌟 UNIQUE EXPERTISE:
+[STAR] UNIQUE EXPERTISE:
    • Quantum computing languages (Q#, Silq, QuantumScript)
    • Neural interface languages (NeuroLang, NeuralMesh)
    • Consciousness-level programming (ConsciousnessML)
@@ -617,7 +617,7 @@ class AuroraProgrammingLanguageMastery:
    • Temporal and causal programming (TemporalCode)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Aurora is a UNIVERSAL PROGRAMMING GRANDMASTER across ALL eras! 🚀
+Aurora is a UNIVERSAL PROGRAMMING GRANDMASTER across ALL eras! [LAUNCH]
         """
 
         return summary
@@ -628,16 +628,16 @@ Aurora is a UNIVERSAL PROGRAMMING GRANDMASTER across ALL eras! 🚀
 # ═══════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
-    print("🌌 Initializing Aurora's Universal Language Mastery...")
+    print("[AURORA] Initializing Aurora's Universal Language Mastery...")
     aurora_lang = AuroraProgrammingLanguageMastery()
     print(aurora_lang.get_mastery_summary())
 
     print("\n" + "=" * 80)
-    print("📚 SAMPLE: Evolution of Python")
+    print("[EMOJI] SAMPLE: Evolution of Python")
     print("=" * 80)
     print(aurora_lang.explain_evolution("Python"))
 
     print("\n" + "=" * 80)
-    print("🔮 SAMPLE: Future Language - ConsciousnessML")
+    print("[EMOJI] SAMPLE: Future Language - ConsciousnessML")
     print("=" * 80)
     print(aurora_lang.explain_evolution("ConsciousnessML"))

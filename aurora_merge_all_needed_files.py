@@ -23,7 +23,7 @@ class AuroraAutonomousMerger:
 
     def merge_files(self):
         """Merge all files Aurora needs"""
-        print("🌟 AURORA AUTONOMOUS FILE MERGER")
+        print("[STAR] AURORA AUTONOMOUS FILE MERGER")
         print("="*80)
         print("\nI'm merging all 120 critical files I need.\n")
 
@@ -40,40 +40,40 @@ class AuroraAutonomousMerger:
                 unique_files[file_path] = item
 
         print(
-            f"📊 Found {len(unique_files)} unique files to merge (deduplicated from {len(all_files)})\n")
+            f"[DATA] Found {len(unique_files)} unique files to merge (deduplicated from {len(all_files)})\n")
 
         # Group by branch for efficiency
         files_by_branch = defaultdict(list)
         for file_path, item in unique_files.items():
             files_by_branch[item['branch']].append(file_path)
 
-        print(f"🌿 Files spread across {len(files_by_branch)} branches\n")
+        print(f"[EMOJI] Files spread across {len(files_by_branch)} branches\n")
 
         # Merge files branch by branch
         for branch, files in files_by_branch.items():
-            print(f"\n📥 Merging from branch: {branch}")
+            print(f"\n[EMOJI] Merging from branch: {branch}")
             print(f"   Files: {len(files)}")
 
             for file_path in files:
                 success = self.merge_single_file(branch, file_path)
                 if success:
                     self.merged_count += 1
-                    print(f"   ✅ {Path(file_path).name}")
+                    print(f"   [OK] {Path(file_path).name}")
                 else:
                     self.failed_merges.append(
                         {'branch': branch, 'file': file_path})
                     print(
-                        f"   ⚠️  {Path(file_path).name} - already exists or unavailable")
+                        f"   [WARN]  {Path(file_path).name} - already exists or unavailable")
 
         # Summary
         print("\n" + "="*80)
-        print("📊 MERGE SUMMARY")
+        print("[DATA] MERGE SUMMARY")
         print("="*80)
-        print(f"\n✅ Successfully merged: {self.merged_count} files")
-        print(f"⚠️  Skipped/Failed: {len(self.failed_merges)} files")
+        print(f"\n[OK] Successfully merged: {self.merged_count} files")
+        print(f"[WARN]  Skipped/Failed: {len(self.failed_merges)} files")
 
         if self.failed_merges:
-            print("\n⚠️  Files that couldn't be merged:")
+            print("\n[WARN]  Files that couldn't be merged:")
             for item in self.failed_merges[:10]:  # Show first 10
                 print(
                     f"   - {Path(item['file']).name} (from {item['branch']})")
@@ -81,7 +81,7 @@ class AuroraAutonomousMerger:
                 print(f"   ... and {len(self.failed_merges) - 10} more")
 
         print(
-            f"\n🌟 Aurora says: I now have {self.merged_count} additional capabilities!")
+            f"\n[STAR] Aurora says: I now have {self.merged_count} additional capabilities!")
         print("\nReady to integrate and test these systems.\n")
 
         return self.merged_count > 0
@@ -132,7 +132,7 @@ class AuroraAutonomousMerger:
         success = self.merge_files()
 
         if success:
-            print("🎯 Next step: Aurora will integrate these systems into her core.")
+            print("[TARGET] Next step: Aurora will integrate these systems into her core.")
 
         return success
 

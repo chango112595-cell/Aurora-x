@@ -20,7 +20,7 @@ def main():
     # Initialize Aurora
     print("Initializing Aurora...")
     aurora = AuroraCoreIntelligence()
-    print("✅ Aurora initialized\n")
+    print("[OK] Aurora initialized\n")
 
     # Check current status
     print("Current System Status:")
@@ -50,7 +50,7 @@ def main():
 
     # Use Aurora's autonomous capabilities
     if hasattr(aurora, 'autonomous_agent') and aurora.autonomous_agent:
-        print("\n🤖 Aurora is now working autonomously...")
+        print("\n[AGENT] Aurora is now working autonomously...")
         print("-" * 60)
 
         # Have Aurora scan and update her own capabilities
@@ -80,9 +80,9 @@ def main():
                 print("   Running aurora_automatic_system_update.py...")
                 # This will update the entire system
                 result = aurora_automatic_system_update.update_system()
-                print(f"   ✅ Update completed")
+                print(f"   [OK] Update completed")
             except Exception as e:
-                print(f"   ⚠️ Update issue: {e}")
+                print(f"   [WARN] Update issue: {e}")
 
             # Have Aurora verify herself post-update
             print("\n4️⃣ Aurora verifying system integrity...")
@@ -91,11 +91,11 @@ def main():
                 f"   Modules after update: {new_capabilities.get('module_count', 0)}")
 
         except Exception as e:
-            print(f"\n❌ Error during autonomous update: {e}")
+            print(f"\n[ERROR] Error during autonomous update: {e}")
             import traceback
             traceback.print_exc()
     else:
-        print("❌ Autonomous agent not available")
+        print("[ERROR] Autonomous agent not available")
 
     print("\n" + "=" * 60)
     print("Post-Update Status Check:")
@@ -115,10 +115,10 @@ def main():
 
     # Show autonomous systems status
     print(f"\n  Autonomous Systems:")
-    print(f"    System: {'✅' if aurora.autonomous_system else '❌'}")
-    print(f"    Agent: {'✅' if aurora.autonomous_agent else '❌'}")
+    print(f"    System: {'[OK]' if aurora.autonomous_system else '[ERROR]'}")
+    print(f"    Agent: {'[OK]' if aurora.autonomous_agent else '[ERROR]'}")
     print(
-        f"    Intelligence Manager: {'✅' if aurora.intelligence_manager else '❌'}")
+        f"    Intelligence Manager: {'[OK]' if aurora.intelligence_manager else '[ERROR]'}")
 
     print("\n" + "=" * 60)
     print("SELF-UPDATE COMPLETE")

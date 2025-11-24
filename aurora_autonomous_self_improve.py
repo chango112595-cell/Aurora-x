@@ -26,7 +26,7 @@ class AuroraSelfImprover:
 
     def analyze_system(self) -> dict:
         """Aurora analyzes her own system for improvements"""
-        print("🔍 Aurora analyzing own system...")
+        print("[SCAN] Aurora analyzing own system...")
 
         analysis = {
             "timestamp": datetime.now().isoformat(),
@@ -77,7 +77,7 @@ class AuroraSelfImprover:
 
     def improve_scan_own_capabilities(self) -> bool:
         """Improve the scan_own_capabilities method to actually find modules"""
-        print("🔧 Improving module discovery...")
+        print("[EMOJI] Improving module discovery...")
 
         try:
             core_file = self.project_root / "aurora_core.py"
@@ -85,7 +85,7 @@ class AuroraSelfImprover:
 
             # Check if scan_own_capabilities exists and works
             if 'def scan_own_capabilities' in content:
-                print("   ✅ scan_own_capabilities method exists")
+                print("   [OK] scan_own_capabilities method exists")
 
                 # The issue is it's not finding modules - let's check why
                 # It should scan the project root for aurora_*.py files
@@ -99,23 +99,23 @@ class AuroraSelfImprover:
 
                 return True
             else:
-                print("   ❌ scan_own_capabilities method not found")
+                print("   [ERROR] scan_own_capabilities method not found")
                 return False
 
         except Exception as e:
-            print(f"   ❌ Error analyzing: {e}")
+            print(f"   [ERROR] Error analyzing: {e}")
             return False
 
     def improve_system_status(self) -> bool:
         """Improve the get_system_status method to return actual status"""
-        print("🔧 Improving system status reporting...")
+        print("[EMOJI] Improving system status reporting...")
 
         try:
             core_file = self.project_root / "aurora_core.py"
             content = core_file.read_text(encoding='utf-8')
 
             if 'def get_system_status' in content:
-                print("   ✅ get_system_status method exists")
+                print("   [OK] get_system_status method exists")
 
                 # Check what it returns
                 import re
@@ -129,7 +129,7 @@ class AuroraSelfImprover:
                     method_code = method_match.group(0)
 
                     if '"status"' in method_code:
-                        print("   ✅ Method returns status dict")
+                        print("   [OK] Method returns status dict")
 
                         # Check if it actually calculates status or just returns Unknown
                         if 'Unknown' in method_code or not any(x in method_code for x in ['100%', 'operational', 'healthy']):
@@ -142,25 +142,25 @@ class AuroraSelfImprover:
 
                 return True
             else:
-                print("   ❌ get_system_status method not found")
+                print("   [ERROR] get_system_status method not found")
                 return False
 
         except Exception as e:
-            print(f"   ❌ Error analyzing: {e}")
+            print(f"   [ERROR] Error analyzing: {e}")
             return False
 
     def verify_autonomous_integration(self) -> bool:
         """Verify all autonomous systems are properly integrated"""
-        print("🔧 Verifying autonomous integration...")
+        print("[EMOJI] Verifying autonomous integration...")
 
         checks_passed = 0
         checks_total = 3
 
         if self.aurora.autonomous_system:
-            print("   ✅ Autonomous System connected")
+            print("   [OK] Autonomous System connected")
             checks_passed += 1
         else:
-            print("   ❌ Autonomous System not connected")
+            print("   [ERROR] Autonomous System not connected")
             self.improvements_made.append({
                 "type": "critical_issue",
                 "component": "autonomous_system",
@@ -169,14 +169,14 @@ class AuroraSelfImprover:
             })
 
         if self.aurora.autonomous_agent:
-            print("   ✅ Autonomous Agent active")
+            print("   [OK] Autonomous Agent active")
             checks_passed += 1
 
             # Check if execute_task is available
             if hasattr(self.aurora.autonomous_agent, 'execute_task'):
-                print("   ✅ execute_task() method available")
+                print("   [OK] execute_task() method available")
             else:
-                print("   ❌ execute_task() method missing")
+                print("   [ERROR] execute_task() method missing")
                 self.improvements_made.append({
                     "type": "critical_issue",
                     "component": "autonomous_agent.execute_task",
@@ -184,7 +184,7 @@ class AuroraSelfImprover:
                     "fix": "Add execute_task method to aurora_autonomous_agent.py"
                 })
         else:
-            print("   ❌ Autonomous Agent not active")
+            print("   [ERROR] Autonomous Agent not active")
             self.improvements_made.append({
                 "type": "critical_issue",
                 "component": "autonomous_agent",
@@ -193,10 +193,10 @@ class AuroraSelfImprover:
             })
 
         if self.aurora.intelligence_manager:
-            print("   ✅ Intelligence Manager online")
+            print("   [OK] Intelligence Manager online")
             checks_passed += 1
         else:
-            print("   ❌ Intelligence Manager not online")
+            print("   [ERROR] Intelligence Manager not online")
 
         return checks_passed == checks_total
 
@@ -214,7 +214,7 @@ class AuroraSelfImprover:
         # Autonomous Systems Status
         report.append("Autonomous Systems:")
         for system, status in analysis['autonomous_systems'].items():
-            status_icon = "✅" if status else "❌"
+            status_icon = "[OK]" if status else "[ERROR]"
             report.append(f"  {status_icon} {system}")
         report.append("")
 
@@ -227,7 +227,7 @@ class AuroraSelfImprover:
                 report.append(f"     Impact: {issue['impact']}")
                 report.append(f"     Fix: {issue['fix']}")
         else:
-            report.append("Issues Found: None ✅")
+            report.append("Issues Found: None [OK]")
         report.append("")
 
         # Improvements Made
@@ -277,25 +277,25 @@ def main():
     # Initialize Aurora
     print("Initializing Aurora...")
     aurora = AuroraCoreIntelligence()
-    print("✅ Aurora initialized\n")
+    print("[OK] Aurora initialized\n")
 
     # Create self-improver
     improver = AuroraSelfImprover(aurora)
 
     # Phase 1: Analyze
-    print("\n📊 PHASE 1: SYSTEM ANALYSIS")
+    print("\n[DATA] PHASE 1: SYSTEM ANALYSIS")
     print("-" * 70)
     analysis = improver.analyze_system()
 
     # Phase 2: Investigate specific components
-    print("\n🔍 PHASE 2: COMPONENT INVESTIGATION")
+    print("\n[SCAN] PHASE 2: COMPONENT INVESTIGATION")
     print("-" * 70)
     improver.improve_scan_own_capabilities()
     improver.improve_system_status()
     improver.verify_autonomous_integration()
 
     # Phase 3: Generate report
-    print("\n📝 PHASE 3: IMPROVEMENT REPORT")
+    print("\n[EMOJI] PHASE 3: IMPROVEMENT REPORT")
     print("-" * 70)
     report = improver.generate_improvement_report(analysis)
     print(report)
@@ -305,7 +305,7 @@ def main():
     with open(report_file, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"\n💾 Report saved to: {report_file}")
+    print(f"\n[EMOJI] Report saved to: {report_file}")
 
 
 if __name__ == "__main__":

@@ -28,7 +28,7 @@ class AuroraSelfImprovement:
         FIX #1: Expand _provide_intelligent_explanation() with 20+ CS concepts
         Currently only polymorphism is implemented
         """
-        print("🔧 Implementing Fix #1: Expanding Intelligent Explanations...")
+        print("[EMOJI] Implementing Fix #1: Expanding Intelligent Explanations...")
 
         # New explanation method with comprehensive knowledge base
         new_explanation_method = '''    def _provide_intelligent_explanation(self, message: str, entities: list, context: dict) -> str:
@@ -493,22 +493,22 @@ class MilkDecorator:
         # Find and replace the old method
         old_method_start = content.find("    def _provide_intelligent_explanation(self, topic: str) -> str:")
         if old_method_start == -1:
-            print("❌ Could not find _provide_intelligent_explanation method")
+            print("[ERROR] Could not find _provide_intelligent_explanation method")
             return False
 
         # Find the end of the old method (next method definition or class end)
         search_start = old_method_start + 100
         next_method = content.find("\n    def ", search_start)
         if next_method == -1:
-            print("❌ Could not find method boundary")
+            print("[ERROR] Could not find method boundary")
             return False
 
         old_method = content[old_method_start:next_method]
         content = content.replace(old_method, new_explanation_method)
 
         self.write_aurora_core(content)
-        self.improvements_made.append("✅ Expanded intelligent explanations: 1 → 13 concepts")
-        print("✅ Added 13 comprehensive CS concept explanations")
+        self.improvements_made.append("[OK] Expanded intelligent explanations: 1 → 13 concepts")
+        print("[OK] Added 13 comprehensive CS concept explanations")
         return True
 
     def expand_code_generation(self):
@@ -516,7 +516,7 @@ class MilkDecorator:
         FIX #2: Expand _generate_code_solution() with common templates
         Currently only Fibonacci is implemented
         """
-        print("\n🔧 Implementing Fix #2: Expanding Code Generation...")
+        print("\n[EMOJI] Implementing Fix #2: Expanding Code Generation...")
 
         new_code_gen_method = '''    def _generate_code_solution(self, task: str) -> str:
         """
@@ -1333,21 +1333,21 @@ print(df.describe())
         # Find and replace
         old_method_start = content.find("    def _generate_code_solution(self, task: str) -> str:")
         if old_method_start == -1:
-            print("❌ Could not find _generate_code_solution method")
+            print("[ERROR] Could not find _generate_code_solution method")
             return False
 
         search_start = old_method_start + 100
         next_method = content.find("\n    def ", search_start)
         if next_method == -1:
-            print("❌ Could not find method boundary")
+            print("[ERROR] Could not find method boundary")
             return False
 
         old_method = content[old_method_start:next_method]
         content = content.replace(old_method, new_code_gen_method)
 
         self.write_aurora_core(content)
-        self.improvements_made.append("✅ Expanded code generation: 1 → 10 templates")
-        print("✅ Added 10 comprehensive code generation templates")
+        self.improvements_made.append("[OK] Expanded code generation: 1 → 10 templates")
+        print("[OK] Added 10 comprehensive code generation templates")
         return True
 
     def generate_report(self):
@@ -1377,19 +1377,19 @@ print(df.describe())
             json.dump(report, f, indent=2)
 
         print("\n" + "=" * 80)
-        print("🎉 AURORA SELF-IMPROVEMENT COMPLETE")
+        print("[EMOJI] AURORA SELF-IMPROVEMENT COMPLETE")
         print("=" * 80)
         print(f"\n{'Improvements Made:':20}")
         for improvement in self.improvements_made:
             print(f"  {improvement}")
         print(f"\n{'Total Concepts:':20} 23 (13 explanations + 10 code templates)")
         print(f"{'Coverage:':20} CS fundamentals, algorithms, design patterns, async, testing")
-        print("\n📄 Report saved: AURORA_SELF_IMPROVEMENT_REPORT.json")
+        print("\n[EMOJI] Report saved: AURORA_SELF_IMPROVEMENT_REPORT.json")
 
 
 def main():
     print("=" * 80)
-    print("🌟 AURORA SELF-IMPROVEMENT SYSTEM")
+    print("[STAR] AURORA SELF-IMPROVEMENT SYSTEM")
     print("Implementing Aurora's own recommendations...")
     print("=" * 80 + "\n")
 

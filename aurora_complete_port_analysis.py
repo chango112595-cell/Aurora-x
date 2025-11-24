@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
 async def main():
-    print("🔍 Aurora System-Wide Port & Service Analysis\n")
+    print("[SCAN] Aurora System-Wide Port & Service Analysis\n")
     aurora = AuroraCoreIntelligence()
 
     question = """
@@ -55,7 +55,7 @@ async def main():
     print(question)
     print("="*80 + "\n")
 
-    print("🧠 Aurora analyzing system with autonomous capabilities...\n")
+    print("[BRAIN] Aurora analyzing system with autonomous capabilities...\n")
 
     # Analyze with full intelligence
     analysis = aurora.analyze_natural_language(question)
@@ -64,7 +64,7 @@ async def main():
     # This should be treated as a technical analysis task
     response = aurora.generate_aurora_response(analysis, context)
 
-    print("🌟 Aurora's Complete Port Analysis:")
+    print("[STAR] Aurora's Complete Port Analysis:")
     print("="*80)
     print(response)
     print("="*80)

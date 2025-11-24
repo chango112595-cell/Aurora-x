@@ -31,7 +31,7 @@ class AuroraInstantExecutor:
         """Execute task in milliseconds"""
         start_time = time.time()
 
-        print("\n⚡ AURORA INSTANT EXECUTION")
+        print("\n[POWER] AURORA INSTANT EXECUTION")
         print(f"Task: {task}")
         print("=" * 60)
 
@@ -45,17 +45,17 @@ class AuroraInstantExecutor:
             if "server control" in task.lower() or "landing page" in task.lower():
                 code = self.generator.generate_react_server_control()
                 success = self.system.write_file("client/src/pages/server-control.tsx", code)
-                print("✅ Generated server-control.tsx")
+                print("[OK] Generated server-control.tsx")
 
             elif "luminar nexus" in task.lower() or "dashboard" in task.lower():
                 code = self.generator.generate_luminar_nexus_dashboard()
                 success = self.system.write_file("client/src/pages/luminar-nexus.tsx", code)
-                print("✅ Generated luminar-nexus.tsx")
+                print("[OK] Generated luminar-nexus.tsx")
 
             elif "safety protocol" in task.lower():
                 # Safety protocol already exists
                 success = True
-                print("✅ Safety protocol already implemented")
+                print("[OK] Safety protocol already implemented")
 
             elif "update routing" in task.lower():
                 # Modify App.tsx
@@ -63,10 +63,10 @@ class AuroraInstantExecutor:
                 new_route = '<Route path="/" component={ServerControl} />'
                 success = self.system.modify_file("client/src/App.tsx", old_route, new_route)
                 if success:
-                    print("✅ Updated routing")
+                    print("[OK] Updated routing")
 
             else:
-                print("⚠️  Task type not recognized, using autonomous system")
+                print("[WARN]  Task type not recognized, using autonomous system")
                 success = self.system.autonomous_execute(task)
 
             # Calculate execution time
@@ -78,15 +78,15 @@ class AuroraInstantExecutor:
             # Report results
             print("=" * 60)
             if success:
-                print(f"✅ COMPLETED IN {exec_time_ms:.2f}ms")
+                print(f"[OK] COMPLETED IN {exec_time_ms:.2f}ms")
             else:
-                print(f"❌ FAILED after {exec_time_ms:.2f}ms")
+                print(f"[ERROR] FAILED after {exec_time_ms:.2f}ms")
 
             return success
 
         except Exception as e:
             exec_time_ms = (time.time() - start_time) * 1000
-            print(f"❌ ERROR: {e}")
+            print(f"[ERROR] ERROR: {e}")
             self.learning.learn_from_execution(task, False, exec_time_ms, {"error": str(e)})
             return False
 

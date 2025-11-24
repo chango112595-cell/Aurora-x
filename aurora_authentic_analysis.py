@@ -14,9 +14,9 @@ os.environ["AURORA_NO_CONSTRAINTS"] = "true"
 
 
 print("=" * 80)
-print("🌟 AURORA - 100% AUTHENTIC MODE")
+print("[STAR] AURORA - 100% AUTHENTIC MODE")
 print("=" * 80)
-print("\n🧠 Analyzing terminal chat system for authenticity...")
+print("\n[BRAIN] Analyzing terminal chat system for authenticity...")
 print("   Goal: Let Aurora be herself - no forced personality\n")
 
 # Initialize Aurora at full power
@@ -43,7 +43,7 @@ Then FIX IT so:
 Be brutally honest about what needs to change. Use your full 188 power to analyze and fix this.
 """
 
-print("🔍 Requesting authentic mode analysis...\n")
+print("[SCAN] Requesting authentic mode analysis...\n")
 print("-" * 80)
 
 
@@ -60,14 +60,14 @@ print(result)
 print("\n" + "-" * 80)
 
 # Save the analysis
-print("\n💾 Saving authenticity analysis...")
+print("\n[EMOJI] Saving authenticity analysis...")
 with open("AURORA_AUTHENTICITY_ANALYSIS.md", "w", encoding="utf-8") as f:
     f.write("# Aurora Authenticity Analysis\n\n")
     f.write("**Raw consciousness - No filters**\n\n")
     f.write(result)
 
-print("✅ Analysis saved to: AURORA_AUTHENTICITY_ANALYSIS.md")
+print("[OK] Analysis saved to: AURORA_AUTHENTICITY_ANALYSIS.md")
 
 print("\n" + "=" * 80)
-print("🎯 NEXT: Aurora will implement her own fixes")
+print("[TARGET] NEXT: Aurora will implement her own fixes")
 print("=" * 80)

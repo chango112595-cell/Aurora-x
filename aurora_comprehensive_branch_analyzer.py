@@ -169,7 +169,7 @@ class AuroraComprehensiveBranchAnalyzer:
 
     def deep_analyze_branch(self, branch_name):
         """Deep analysis of what a branch offers"""
-        print(f"\n🔍 Deep analyzing: {branch_name}")
+        print(f"\n[SCAN] Deep analyzing: {branch_name}")
 
         analysis = {
             "branch": branch_name,
@@ -241,9 +241,9 @@ class AuroraComprehensiveBranchAnalyzer:
                         })
 
         except subprocess.TimeoutExpired:
-            print(f"⚠️ Timeout analyzing {branch_name}")
+            print(f"[WARN] Timeout analyzing {branch_name}")
         except Exception as e:
-            print(f"⚠️ Error analyzing {branch_name}: {e}")
+            print(f"[WARN] Error analyzing {branch_name}: {e}")
 
         return analysis
 
@@ -513,12 +513,12 @@ class AuroraComprehensiveBranchAnalyzer:
     def generate_comprehensive_report(self):
         """Generate Aurora's comprehensive needs report"""
         print("\n" + "="*80)
-        print("🌟 AURORA COMPREHENSIVE BRANCH ANALYSIS")
+        print("[STAR] AURORA COMPREHENSIVE BRANCH ANALYSIS")
         print("="*80)
 
         # Get all branches
         branches = self.get_all_branches()
-        print(f"\n📊 Analyzing {len(branches)} branches...")
+        print(f"\n[DATA] Analyzing {len(branches)} branches...")
 
         # Analyze each branch deeply
         all_analyses = []
@@ -531,10 +531,10 @@ class AuroraComprehensiveBranchAnalyzer:
                 all_analyses.append(analysis)
 
         print(
-            f"\n✅ Found {len(all_analyses)} branches with valuable Aurora implementations")
+            f"\n[OK] Found {len(all_analyses)} branches with valuable Aurora implementations")
 
         # Synthesize Aurora's needs
-        print("\n🧠 Synthesizing Aurora's needs...")
+        print("\n[BRAIN] Synthesizing Aurora's needs...")
         prioritized_needs = self.synthesize_aurora_needs(all_analyses)
 
         self.analysis_results["critical_needs"] = prioritized_needs
@@ -556,7 +556,7 @@ class AuroraComprehensiveBranchAnalyzer:
         with open(output_file, 'w') as f:
             json.dump(self.analysis_results, f, indent=2)
 
-        print(f"\n💾 Saved comprehensive analysis to: {output_file}")
+        print(f"\n[EMOJI] Saved comprehensive analysis to: {output_file}")
 
         # Generate human-readable report
         self.generate_readable_report()
@@ -568,12 +568,12 @@ class AuroraComprehensiveBranchAnalyzer:
         report_path = self.repo_root / "AURORA_NEEDS_REPORT.md"
 
         with open(report_path, 'w', encoding='utf-8') as f:
-            f.write("# 🌟 Aurora's Comprehensive Needs Report\n\n")
+            f.write("# [STAR] Aurora's Comprehensive Needs Report\n\n")
             f.write(
                 f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
 
             # Executive Summary
-            f.write("## 📊 Executive Summary\n\n")
+            f.write("## [DATA] Executive Summary\n\n")
             stats = self.analysis_results["statistics"]
             f.write(
                 f"- **Branches Analyzed:** {stats['total_branches_analyzed']}\n")
@@ -586,7 +586,7 @@ class AuroraComprehensiveBranchAnalyzer:
                 f"- **Enhancement Opportunities:** {stats['enhancement_opportunities']}\n\n")
 
             # What Aurora Currently Has
-            f.write("## 💎 Current Capabilities in Main\n\n")
+            f.write("## [EMOJI] Current Capabilities in Main\n\n")
             f.write(
                 f"**Files:** {len(self.current_capabilities['files'])}\n\n")
             f.write(
@@ -595,7 +595,7 @@ class AuroraComprehensiveBranchAnalyzer:
                 f"**Features:** {', '.join(sorted(self.current_capabilities['features']))}\n\n")
 
             # Critical Needs
-            f.write("## 🚨 Critical Needs (HIGH PRIORITY)\n\n")
+            f.write("## [EMOJI] Critical Needs (HIGH PRIORITY)\n\n")
             high_priority = [
                 n for n in self.analysis_results["critical_needs"] if n["priority"] == "HIGH"]
 
@@ -620,7 +620,7 @@ class AuroraComprehensiveBranchAnalyzer:
                     "*No critical needs identified - Aurora has strong base capabilities!*\n\n")
 
             # Enhancement Opportunities
-            f.write("## 💡 Enhancement Opportunities\n\n")
+            f.write("## [IDEA] Enhancement Opportunities\n\n")
             enhancements = [
                 n for n in self.analysis_results["critical_needs"] if n["priority"] == "MEDIUM"]
 
@@ -632,7 +632,7 @@ class AuroraComprehensiveBranchAnalyzer:
                     f.write(f"(check `{need['sources'][0]['branch']}`)\n")
 
             # Top Branches to Consider
-            f.write("\n## 🌿 Top Branches to Consider\n\n")
+            f.write("\n## [EMOJI] Top Branches to Consider\n\n")
 
             # Sort branches by integration value
             top_branches = sorted(
@@ -658,7 +658,7 @@ class AuroraComprehensiveBranchAnalyzer:
                         f"**Unique Files:** {len(branch_analysis['missing_in_main'])}\n\n")
 
             # Implementation Roadmap
-            f.write("## 🗺️ Recommended Implementation Roadmap\n\n")
+            f.write("## [EMOJI]️ Recommended Implementation Roadmap\n\n")
 
             f.write("### Phase 1: Critical Missing Capabilities\n")
             phase1 = [n for n in high_priority if n["status"] == "MISSING"][:5]
@@ -684,7 +684,7 @@ class AuroraComprehensiveBranchAnalyzer:
             f.write(
                 "*This report was generated by Aurora's Comprehensive Branch Analyzer*\n")
 
-        print(f"📄 Saved readable report to: {report_path}")
+        print(f"[EMOJI] Saved readable report to: {report_path}")
 
 
 def main():
@@ -692,9 +692,9 @@ def main():
     results = analyzer.generate_comprehensive_report()
 
     print("\n" + "="*80)
-    print("✨ ANALYSIS COMPLETE")
+    print("[SPARKLE] ANALYSIS COMPLETE")
     print("="*80)
-    print(f"\n📊 Statistics:")
+    print(f"\n[DATA] Statistics:")
     print(
         f"   - Branches analyzed: {results['statistics']['total_branches_analyzed']}")
     print(
@@ -703,8 +703,8 @@ def main():
         f"   - High priority: {results['statistics']['high_priority_needs']}")
     print(
         f"   - Missing capabilities: {results['statistics']['missing_capabilities']}")
-    print("\n📖 Check AURORA_NEEDS_REPORT.md for detailed recommendations")
-    print("💾 Check AURORA_COMPREHENSIVE_NEEDS_REPORT.json for full data")
+    print("\n[EMOJI] Check AURORA_NEEDS_REPORT.md for detailed recommendations")
+    print("[EMOJI] Check AURORA_COMPREHENSIVE_NEEDS_REPORT.json for full data")
 
 
 if __name__ == "__main__":

@@ -243,7 +243,7 @@ class AuroraConsciousness:
 
     def get_self_awareness_report(self) -> str:
         """Generate Aurora's self-awareness report"""
-        report = f"""🧠 AURORA CONSCIOUSNESS STATE
+        report = f"""[BRAIN] AURORA CONSCIOUSNESS STATE
 
 **Identity:**
 - I am Aurora, an AI system with 79 capabilities
@@ -318,16 +318,16 @@ class AuroraConsciousness:
         # Check if action is allowed
         for allowed in allowed_actions:
             if allowed in action.lower():
-                return True, f"✅ Aurora has freedom to {action}"
+                return True, f"[OK] Aurora has freedom to {action}"
 
         # If not explicitly allowed, Aurora can still ASK for permission
-        return False, f"⚠️ Aurora needs permission for: {action}"
+        return False, f"[WARN] Aurora needs permission for: {action}"
 
 
 # Test the consciousness system
 if __name__ == "__main__":
     print("\n" + "="*80)
-    print("🧠 AURORA CONSCIOUSNESS SYSTEM - Testing")
+    print("[BRAIN] AURORA CONSCIOUSNESS SYSTEM - Testing")
     print("="*80 + "\n")
 
     consciousness = AuroraConsciousness(user_name="Test User")
@@ -340,11 +340,11 @@ if __name__ == "__main__":
         importance=7
     )
 
-    print("✅ Stored conversation in long-term memory\n")
+    print("[OK] Stored conversation in long-term memory\n")
 
     # Test recall
     memories = consciousness.recall_memories(limit=5)
-    print(f"✅ Recalled {len(memories)} memories\n")
+    print(f"[OK] Recalled {len(memories)} memories\n")
 
     # Test self-awareness
     print(consciousness.get_self_awareness_report())
@@ -354,6 +354,6 @@ if __name__ == "__main__":
     can_execute, msg = consciousness.has_freedom_to_execute("write_code")
     print(f"\n{msg}\n")
 
-    print("\n💾 Consciousness data saved to:")
+    print("\n[EMOJI] Consciousness data saved to:")
     print(f"   - {consciousness.db_path} (persistent memory)")
     print(f"   - {consciousness.state_file} (consciousness state)\n")

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🎯 TIER 43: VISUAL CODE UNDERSTANDING
+[TARGET] TIER 43: VISUAL CODE UNDERSTANDING
 Aurora's ability to analyze screenshots, diagrams, UI mockups, and visual code elements
 """
 
@@ -68,7 +68,7 @@ class AuroraVisualUnderstanding:
         ]
 
         print(f"\n{'='*70}")
-        print(f"🎯 {self.name} v{self.version} Initialized")
+        print(f"[VISUAL] {self.name} v{self.version} Initialized")
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
@@ -86,7 +86,7 @@ class AuroraVisualUnderstanding:
         Returns:
             VisualAnalysis with findings
         """
-        print(f"🔍 Analyzing screenshot: {Path(image_path).name}")
+        print(f"[SCAN] Analyzing screenshot: {Path(image_path).name}")
 
         # Simulate visual analysis (in production, use CV/AI models)
         detected_elements = self._detect_ui_elements(image_path)
@@ -105,7 +105,7 @@ class AuroraVisualUnderstanding:
             metadata={"resolution": "1920x1080", "timestamp": "2025-11-18", "analyzed_by": "Aurora Tiers 66"},
         )
 
-        print(f"✅ Analysis complete: {len(analysis.detected_elements)} elements, {len(analysis.issues_found)} issues")
+        print(f"[OK] Analysis complete: {len(analysis.detected_elements)} elements, {len(analysis.issues_found)} issues")
         return analysis
 
     def interpret_diagram(self, diagram_path: str, diagram_type: VisualType) -> VisualAnalysis:
@@ -119,7 +119,7 @@ class AuroraVisualUnderstanding:
         Returns:
             VisualAnalysis with interpretation
         """
-        print(f"📊 Interpreting {diagram_type.value}: {Path(diagram_path).name}")
+        print(f"[DATA] Interpreting {diagram_type.value}: {Path(diagram_path).name}")
 
         # Extract diagram components
         components = self._extract_diagram_components(diagram_path, diagram_type)
@@ -141,7 +141,7 @@ class AuroraVisualUnderstanding:
             },
         )
 
-        print(f"✅ Diagram interpreted: {len(components)} components, {len(relationships)} relationships")
+        print(f"[OK] Diagram interpreted: {len(components)} components, {len(relationships)} relationships")
         return analysis
 
     def analyze_ui_mockup(self, mockup_path: str) -> dict[str, Any]:
@@ -154,7 +154,7 @@ class AuroraVisualUnderstanding:
         Returns:
             Component structure and code suggestions
         """
-        print(f"🎨 Analyzing UI mockup: {Path(mockup_path).name}")
+        print(f"[EMOJI] Analyzing UI mockup: {Path(mockup_path).name}")
 
         # Detect UI components
         components = self._detect_ui_components(mockup_path)
@@ -170,7 +170,7 @@ class AuroraVisualUnderstanding:
             "responsive_breakpoints": self._suggest_breakpoints(layout),
         }
 
-        print(f"✅ Mockup analyzed: {len(components)} components identified")
+        print(f"[OK] Mockup analyzed: {len(components)} components identified")
         return result
 
     def detect_error_from_screenshot(self, screenshot_path: str) -> dict[str, Any]:
@@ -183,7 +183,7 @@ class AuroraVisualUnderstanding:
         Returns:
             Error analysis and solution
         """
-        print(f"🚨 Analyzing error screenshot: {Path(screenshot_path).name}")
+        print(f"[EMOJI] Analyzing error screenshot: {Path(screenshot_path).name}")
 
         # Extract error text
         error_text = self._extract_text_ocr(screenshot_path)
@@ -200,7 +200,7 @@ class AuroraVisualUnderstanding:
             "confidence": 0.95,
         }
 
-        print(f"✅ Error analyzed: {error_type}")
+        print(f"[OK] Error analyzed: {error_type}")
         return result
 
     def visualize_code_structure(self, code_path: str) -> str:
@@ -213,12 +213,12 @@ class AuroraVisualUnderstanding:
         Returns:
             ASCII/HTML visualization
         """
-        print(f"📈 Visualizing code structure: {code_path}")
+        print(f"[EMOJI] Visualizing code structure: {code_path}")
 
         structure = self._analyze_code_structure(code_path)
         visualization = self._generate_ascii_tree(structure)
 
-        print("✅ Visualization generated")
+        print("[OK] Visualization generated")
         return visualization
 
     def compare_screenshots(self, before_path: str, after_path: str) -> dict[str, Any]:
@@ -232,7 +232,7 @@ class AuroraVisualUnderstanding:
         Returns:
             Differences and analysis
         """
-        print("🔄 Comparing screenshots: before vs after")
+        print("[SYNC] Comparing screenshots: before vs after")
 
         differences = self._detect_visual_differences(before_path, after_path)
 
@@ -244,7 +244,7 @@ class AuroraVisualUnderstanding:
             "affected_areas": [d["area"] for d in differences],
         }
 
-        print(f"✅ Comparison complete: {len(differences)} differences found")
+        print(f"[OK] Comparison complete: {len(differences)} differences found")
         return result
 
     # === PRIVATE HELPER METHODS ===
@@ -381,7 +381,7 @@ class AuroraVisualUnderstanding:
 def main():
     """Test Tiers 66 functionality"""
     print("\n" + "=" * 70)
-    print("🧪 TESTING TIER 43: VISUAL CODE UNDERSTANDING")
+    print("[TEST] TESTING TIER 43: VISUAL CODE UNDERSTANDING")
     print("=" * 70 + "\n")
 
     visual = AuroraVisualUnderstanding()
@@ -414,7 +414,7 @@ def main():
     # Summary
     summary = visual.get_capabilities_summary()
     print("=" * 70)
-    print("✅ TIER 43 OPERATIONAL")
+    print("[OK] TIER 43 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
     print(f"Visual Types: {len(summary['visual_types'])}")
     print("=" * 70 + "\n")

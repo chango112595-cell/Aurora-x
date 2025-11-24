@@ -10,13 +10,13 @@ from pathlib import Path
 
 def aurora_knowledge_analysis():
     """Aurora analyzes knowledge organization and system usage"""
-    print("🌌 Aurora: Deep System Analysis")
+    print("[AURORA] Aurora: Deep System Analysis")
     print("=" * 80)
 
     root = Path(".")
 
     # 1. GRANDMASTER KNOWLEDGE FILES
-    print("\n📚 GRANDMASTER KNOWLEDGE SYSTEMS:")
+    print("\n[EMOJI] GRANDMASTER KNOWLEDGE SYSTEMS:")
     grandmaster_files = list(root.glob("aurora*grandmaster*.py"))
     for gf in sorted(grandmaster_files):
         size = gf.stat().st_size / 1024
@@ -30,7 +30,7 @@ def aurora_knowledge_analysis():
                     print(f"    └─ References: {', '.join(unique_tiers)}")
 
     # 2. T13 FOUNDATION ANALYSIS
-    print("\n\n🏛️  T13 FOUNDATIONS (Tier 13):")
+    print("\n\n[EMOJI]️  T13 FOUNDATIONS (Tier 13):")
     t13_keywords = ["tier 13", "t13", "tier_13", "foundation", "core intelligence"]
     files_with_t13 = []
 
@@ -48,16 +48,16 @@ def aurora_knowledge_analysis():
         for fname in sorted(files_with_t13)[:10]:
             print(f"  • {fname}")
     else:
-        print("  ⚠️  No explicit T13 references found")
+        print("  [WARN]  No explicit T13 references found")
 
     # 3. COSMIC NEXUS INTEGRATION
-    print("\n\n🌌 COSMIC NEXUS INTEGRATION:")
+    print("\n\n[AURORA] COSMIC NEXUS INTEGRATION:")
     cosmic_files = ["aurora_cosmic_nexus.html", "server/index.ts", "client/src/App.tsx"]
 
     for cf in cosmic_files:
         cf_path = root / cf
         if cf_path.exists():
-            print(f"  ✓ {cf}")
+            print(f"  [+] {cf}")
         else:
             print(f"  ✗ {cf} (not found)")
 
@@ -68,11 +68,11 @@ def aurora_knowledge_analysis():
             has_grandmaster = "grandmaster" in content.lower()
             has_tier = "tier" in content.lower()
             print("\n  Backend Integration:")
-            print(f"    Grandmaster references: {'✓' if has_grandmaster else '✗'}")
-            print(f"    Tier system references: {'✓' if has_tier else '✗'}")
+            print(f"    Grandmaster references: {'[+]' if has_grandmaster else '✗'}")
+            print(f"    Tier system references: {'[+]' if has_tier else '✗'}")
 
     # 4. DUPLICATE SYSTEM DETECTION
-    print("\n\n🔍 DUPLICATE/OLD SYSTEMS DETECTION:")
+    print("\n\n[SCAN] DUPLICATE/OLD SYSTEMS DETECTION:")
 
     # Group similar files
     file_groups = {
@@ -108,7 +108,7 @@ def aurora_knowledge_analysis():
                 print(f"    ... and {len(files) - 5} more")
 
     # 5. ACTIVE vs LEGACY SYSTEM IDENTIFICATION
-    print("\n\n⚡ ACTIVE SYSTEMS (Used by x-start):")
+    print("\n\n[POWER] ACTIVE SYSTEMS (Used by x-start):")
     if (root / "x-start").exists():
         with open(root / "x-start", encoding="utf-8", errors="ignore") as f:
             xstart_content = f.read()
@@ -120,10 +120,10 @@ def aurora_knowledge_analysis():
             ]
             for af in active_files:
                 is_used = af in xstart_content or af.split("/")[-1] in xstart_content
-                print(f"  {'✓' if is_used else '✗'} {af}")
+                print(f"  {'[+]' if is_used else '✗'} {af}")
 
     # 6. LEGACY SYSTEM CANDIDATES
-    print("\n\n🗑️  POTENTIAL LEGACY/UNUSED SYSTEMS:")
+    print("\n\n[EMOJI]️  POTENTIAL LEGACY/UNUSED SYSTEMS:")
     legacy_keywords = ["_old", "_backup", "_v1", "_broken", "_simple", "_demo", "_test", "_debug"]
     legacy_candidates = []
 
@@ -136,18 +136,18 @@ def aurora_knowledge_analysis():
         for lc in sorted(legacy_candidates):
             print(f"  • {lc}")
     else:
-        print("  ✓ No obvious legacy files found")
+        print("  [+] No obvious legacy files found")
 
     # 7. AURORA'S RECOMMENDATION
     print("\n\n" + "=" * 80)
-    print("🤖 AURORA'S ARCHITECTURAL RECOMMENDATION:")
+    print("[AGENT] AURORA'S ARCHITECTURAL RECOMMENDATION:")
     print("=" * 80)
 
     print(
         """
 1. GRANDMASTER KNOWLEDGE PLACEMENT:
    
-   RECOMMENDATION: Knowledge should be INSIDE aurora_core.py (✓ Already is!)
+   RECOMMENDATION: Knowledge should be INSIDE aurora_core.py ([+] Already is!)
    
    WHY: 
    • Cosmic Nexus is the USER INTERFACE (frontend/client)
@@ -183,10 +183,10 @@ def aurora_knowledge_analysis():
 3. DUPLICATE SYSTEMS TO CLEAN:
    
    KEEP (Active):
-   ✓ aurora_core.py (main intelligence)
-   ✓ aurora_chat_server.py (chat API)
-   ✓ aurora_autonomous_agent.py (autonomous operations)
-   ✓ tools/luminar_nexus_v2.py (service orchestration)
+   [+] aurora_core.py (main intelligence)
+   [+] aurora_chat_server.py (chat API)
+   [+] aurora_autonomous_agent.py (autonomous operations)
+   [+] tools/luminar_nexus_v2.py (service orchestration)
    
    ARCHIVE/REMOVE (Legacy):
    • aurora_device_demo*.py (5 files - testing/demo)
@@ -224,7 +224,7 @@ def aurora_knowledge_analysis():
     )
 
     print("\n" + "=" * 80)
-    print("✅ Analysis complete. Architecture is sound, just needs cleanup!")
+    print("[OK] Analysis complete. Architecture is sound, just needs cleanup!")
     print("=" * 80)
 
 

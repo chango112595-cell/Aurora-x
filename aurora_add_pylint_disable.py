@@ -20,7 +20,7 @@ files_to_fix = [
 for filename in files_to_fix:
     filepath = Path(filename)
     if not filepath.exists():
-        print(f"⚠️  {filename} not found")
+        print(f"[WARN]  {filename} not found")
         continue
 
     with open(filepath, encoding="utf-8") as f:
@@ -28,7 +28,7 @@ for filename in files_to_fix:
 
     # Check if already has the disable comment
     if "disable=redefined-outer-name" in content:
-        print(f"✓ {filename} already has disable comment")
+        print(f"[+] {filename} already has disable comment")
         continue
 
     # Add after shebang if present, otherwise at the top
@@ -43,6 +43,6 @@ for filename in files_to_fix:
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(new_content)
 
-    print(f"✅ Added disable comment to {filename}")
+    print(f"[OK] Added disable comment to {filename}")
 
-print("\n✨ Done!")
+print("\n[SPARKLE] Done!")

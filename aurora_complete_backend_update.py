@@ -21,13 +21,13 @@ def update_typescript_file(file_path: Path, replacements: list[tuple[str, str]])
             return True
         return False
     except Exception as e:
-        print(f"  ❌ Error updating {file_path}: {e}")
+        print(f"  [ERROR] Error updating {file_path}: {e}")
         return False
 
 
 def main():
     print("\n" + "=" * 60)
-    print("🔧 AURORA COMPLETE BACKEND UPDATE")
+    print("[EMOJI] AURORA COMPLETE BACKEND UPDATE")
     print("=" * 60)
 
     updates = {
@@ -46,28 +46,28 @@ def main():
                 "**My knowledge (27 mastery tiers):",
                 "**My knowledge (66 knowledge tiers + 13 foundation tasks = 79 capabilities):",
             ),
-            ("🧠 27 mastery tiers: LOADED", "🧠 66 knowledge tiers: LOADED (79 total capabilities)"),
-            ("🧠 All 66 tiers active", "🧠 All 66 tiers active (79 total capabilities)"),
+            ("[BRAIN] 27 mastery tiers: LOADED", "[BRAIN] 66 knowledge tiers: LOADED (79 total capabilities)"),
+            ("[BRAIN] All 66 tiers active", "[BRAIN] All 66 tiers active (79 total capabilities)"),
         ],
     }
 
-    print("\n📝 Updating Backend Files:")
+    print("\n[EMOJI] Updating Backend Files:")
     updated_files = []
 
     for file_path_str, replacements in updates.items():
         file_path = Path(file_path_str)
         if not file_path.exists():
-            print(f"  ⚠️  File not found: {file_path}")
+            print(f"  [WARN]  File not found: {file_path}")
             continue
 
         if update_typescript_file(file_path, replacements):
-            print(f"  ✅ Updated: {file_path}")
+            print(f"  [OK] Updated: {file_path}")
             updated_files.append(file_path_str)
         else:
             print(f"  ℹ️  No changes needed: {file_path}")
 
     print("\n" + "=" * 60)
-    print("📊 UPDATE SUMMARY")
+    print("[DATA] UPDATE SUMMARY")
     print("=" * 60)
     print(f"Files updated: {len(updated_files)}")
 
@@ -76,7 +76,7 @@ def main():
         for f in updated_files:
             print(f"  • {f}")
 
-    print("\n✅ Backend now reflects:")
+    print("\n[OK] Backend now reflects:")
     print("  • 13 Foundation Tasks")
     print("  • 66 Knowledge Tiers (including 6 new autonomous tiers)")
     print("  • 54 Total Capabilities")
@@ -90,7 +90,7 @@ def main():
     print("  • Tiers 66: Strategist (strategic planning)")
 
     print("\n" + "=" * 60)
-    print("🚀 BACKEND UPDATE COMPLETE")
+    print("[LAUNCH] BACKEND UPDATE COMPLETE")
     print("=" * 60 + "\n")
 
     return len(updated_files) > 0

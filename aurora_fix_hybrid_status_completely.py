@@ -162,7 +162,7 @@ print("=" * 80)
 
 print(f"\n[ACTIVE SERVICES] {len(active_services)} confirmed running:")
 for sys_info in active_services:
-    print(f"  ✓ {sys_info['name']} (Port {sys_info['port']})")
+    print(f"  [+] {sys_info['name']} (Port {sys_info['port']})")
 
 print(
     f"\n[OFFLINE SERVICES] {len(inactive_services)} with ports not responding:")

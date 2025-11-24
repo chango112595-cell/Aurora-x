@@ -10,14 +10,14 @@ import py_compile
 from pathlib import Path
 from datetime import datetime
 
-print("🔧 Aurora Autonomous Syntax Error Fixer")
+print("[EMOJI] Aurora Autonomous Syntax Error Fixer")
 print("=" * 80)
-print(f"🕐 Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+print(f"[EMOJI] Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 print("=" * 80)
 
 # Aurora's hybrid power
 AURORA_POWER = "188 Total Power: 66 Knowledge Tiers + 109 Capability Modules"
-print(f"⚡ {AURORA_POWER}")
+print(f"[POWER] {AURORA_POWER}")
 print()
 
 
@@ -116,17 +116,17 @@ def fix_common_syntax_errors(filepath):
 
         return False
     except Exception as e:
-        print(f"   ⚠️  Could not auto-fix: {e}")
+        print(f"   [WARN]  Could not auto-fix: {e}")
         return False
 
 
 # Scan all Python files
-print("📁 Scanning repository for Python files...")
+print("[EMOJI] Scanning repository for Python files...")
 all_files = find_all_python_files()
 print(f"   Found {len(all_files)} Python files\n")
 
 # Check for syntax errors
-print("🔍 Checking syntax errors...")
+print("[SCAN] Checking syntax errors...")
 files_with_errors = []
 for filepath in all_files:
     error = check_syntax(filepath)
@@ -136,18 +136,18 @@ for filepath in all_files:
 print(f"   Found {len(files_with_errors)} files with syntax errors\n")
 
 if not files_with_errors:
-    print("✅ No syntax errors found!")
+    print("[OK] No syntax errors found!")
     exit(0)
 
 # Attempt to fix errors
-print("🔧 Aurora attempting automatic fixes...")
+print("[EMOJI] Aurora attempting automatic fixes...")
 print("=" * 80)
 
 fixed_count = 0
 failed_fixes = []
 
 for filepath, error in files_with_errors:
-    print(f"\n📄 {filepath}")
+    print(f"\n[EMOJI] {filepath}")
     print(f"   Error: {error[:100]}...")
 
     # Try to fix
@@ -155,30 +155,30 @@ for filepath, error in files_with_errors:
         # Verify fix
         new_error = check_syntax(filepath)
         if new_error is None:
-            print("   ✅ FIXED!")
+            print("   [OK] FIXED!")
             fixed_count += 1
         else:
-            print("   ⚠️  Partial fix - still has errors")
+            print("   [WARN]  Partial fix - still has errors")
             failed_fixes.append((filepath, new_error))
     else:
-        print("   ⚠️  Could not auto-fix")
+        print("   [WARN]  Could not auto-fix")
         failed_fixes.append((filepath, error))
 
 # Summary
 print("\n" + "=" * 80)
-print("📊 AURORA FIX SUMMARY")
+print("[DATA] AURORA FIX SUMMARY")
 print("=" * 80)
-print(f"✅ Fixed: {fixed_count} files")
-print(f"⚠️  Remaining errors: {len(failed_fixes)} files")
+print(f"[OK] Fixed: {fixed_count} files")
+print(f"[WARN]  Remaining errors: {len(failed_fixes)} files")
 
 if failed_fixes:
-    print("\n❌ Files still with errors (require manual review):")
+    print("\n[ERROR] Files still with errors (require manual review):")
     for filepath, error in failed_fixes:
         print(f"   • {filepath}")
         if "backup" in filepath or "archive" in filepath or "unused" in filepath:
             print("     (Legacy/backup file - not critical)")
 
 print("\n" + "=" * 80)
-print(f"🕐 Completed: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-print("⚡ Aurora autonomous syntax fixing complete!")
+print(f"[EMOJI] Completed: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+print("[POWER] Aurora autonomous syntax fixing complete!")
 print("=" * 80)

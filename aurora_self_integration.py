@@ -12,13 +12,13 @@ import sys
 import json
 
 print("=" * 120)
-print("🔧 AURORA SELF-INTEGRATION - ACTIVATING EXISTING CAPABILITIES")
+print("[EMOJI] AURORA SELF-INTEGRATION - ACTIVATING EXISTING CAPABILITIES")
 print("=" * 120)
 
 core = AuroraCoreIntelligence()
 kt = core.knowledge_tiers
 
-print(f"\n⚡ Using {kt.total_power} power to integrate existing systems...")
+print(f"\n[POWER] Using {kt.total_power} power to integrate existing systems...")
 
 integration_plan = {
     "phase_1_tracking": {
@@ -44,7 +44,7 @@ integration_plan = {
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("📊 PHASE 1: SEARCHING FOR EXISTING TRACKING SYSTEMS")
+print("[DATA] PHASE 1: SEARCHING FOR EXISTING TRACKING SYSTEMS")
 print("=" * 120)
 
 tracking_keywords = {
@@ -58,7 +58,7 @@ tracking_keywords = {
 all_py_files = list(Path('.').rglob('*.py'))
 tools_dir = Path('tools')
 
-print("\n🔍 Scanning for existing tracking functionality...\n")
+print("\n[SCAN] Scanning for existing tracking functionality...\n")
 
 found_tracking = {}
 
@@ -86,7 +86,7 @@ for system_name, keywords in tracking_keywords.items():
         except Exception:
             continue
 
-print("📋 FOUND EXISTING TRACKING FUNCTIONALITY:\n")
+print("[EMOJI] FOUND EXISTING TRACKING FUNCTIONALITY:\n")
 
 for system, files in found_tracking.items():
     if files:
@@ -94,7 +94,7 @@ for system, files in found_tracking.items():
         files.sort(key=lambda x: (x['matches'], x['size']), reverse=True)
         best_match = files[0]
 
-        print(f"✅ {system}")
+        print(f"[OK] {system}")
         print(
             f"   Best Match: {best_match['name']} ({best_match['matches']} keyword matches)")
         print(f"   Location: {best_match['file']}")
@@ -106,14 +106,14 @@ for system, files in found_tracking.items():
             "action": "import and activate"
         })
     else:
-        print(f"❌ {system} - No existing implementation found")
+        print(f"[ERROR] {system} - No existing implementation found")
 
 # ============================================================================
 # PHASE 2: IDENTIFY UNUSED TOOLS TO ACTIVATE
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🔧 PHASE 2: IDENTIFYING HIGH-VALUE UNUSED TOOLS TO ACTIVATE")
+print("[EMOJI] PHASE 2: IDENTIFYING HIGH-VALUE UNUSED TOOLS TO ACTIVATE")
 print("=" * 120)
 
 if tools_dir.exists():
@@ -133,13 +133,13 @@ if tools_dir.exists():
         "Dashboard Tutorial": "aurora_dashboard_tutorial.py"
     }
 
-    print("\n📋 HIGH-PRIORITY TOOLS TO ACTIVATE:\n")
+    print("\n[EMOJI] HIGH-PRIORITY TOOLS TO ACTIVATE:\n")
 
     for tool_name, tool_file in priority_tools.items():
         tool_path = tools_dir / tool_file
         if tool_path.exists():
             size = tool_path.stat().st_size
-            print(f"✅ {tool_name}: {tool_file} ({size:,} bytes)")
+            print(f"[OK] {tool_name}: {tool_file} ({size:,} bytes)")
 
             integration_plan["phase_2_tools"]["actions"].append({
                 "tool": tool_name,
@@ -147,14 +147,14 @@ if tools_dir.exists():
                 "action": "import and integrate into main system"
             })
         else:
-            print(f"❌ {tool_name}: {tool_file} - Not found")
+            print(f"[ERROR] {tool_name}: {tool_file} - Not found")
 
 # ============================================================================
 # PHASE 3: FIND UNUSED FRONTEND COMPONENTS
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🎨 PHASE 3: LOCATING UNUSED FRONTEND COMPONENTS")
+print("[EMOJI] PHASE 3: LOCATING UNUSED FRONTEND COMPONENTS")
 print("=" * 120)
 
 components_dir = Path("client/src/components")
@@ -168,7 +168,7 @@ if components_dir.exists():
         "AuroraPanel"
     ]
 
-    print("\n📋 PRIORITY COMPONENTS TO INTEGRATE:\n")
+    print("\n[EMOJI] PRIORITY COMPONENTS TO INTEGRATE:\n")
 
     for comp_name in priority_components:
         # Look for the component file
@@ -176,7 +176,7 @@ if components_dir.exists():
 
         if comp_files:
             comp_file = comp_files[0]
-            print(f"✅ {comp_name}: {comp_file.name}")
+            print(f"[OK] {comp_name}: {comp_file.name}")
 
             integration_plan["phase_3_components"]["actions"].append({
                 "component": comp_name,
@@ -184,14 +184,14 @@ if components_dir.exists():
                 "action": "import into App.tsx or layout"
             })
         else:
-            print(f"⚠️  {comp_name}: File found but may need path check")
+            print(f"[WARN]  {comp_name}: File found but may need path check")
 
 # ============================================================================
 # PHASE 4: IDENTIFY DORMANT SERVICES
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🌐 PHASE 4: IDENTIFYING DORMANT SERVICES TO ACTIVATE")
+print("[WEB] PHASE 4: IDENTIFYING DORMANT SERVICES TO ACTIVATE")
 print("=" * 120)
 
 dormant_services = {
@@ -213,17 +213,17 @@ dormant_services = {
     }
 }
 
-print("\n📋 DORMANT SERVICES:\n")
+print("\n[EMOJI] DORMANT SERVICES:\n")
 
 for service_name, details in dormant_services.items():
-    print(f"\n🔌 {service_name} (Port {details['port']})")
+    print(f"\n[EMOJI] {service_name} (Port {details['port']})")
 
     found_files = []
     for filename in details['files']:
         matches = list(Path('.').rglob(filename))
         if matches:
             found_files.append(str(matches[0]))
-            print(f"   ✅ Found: {matches[0]}")
+            print(f"   [OK] Found: {matches[0]}")
 
     if found_files:
         integration_plan["phase_4_services"]["actions"].append({
@@ -233,35 +233,35 @@ for service_name, details in dormant_services.items():
             "action": "start service on port"
         })
     else:
-        print(f"   ⚠️  No implementation files found")
+        print(f"   [WARN]  No implementation files found")
 
 # ============================================================================
 # GENERATE INTEGRATION SCRIPT
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("📝 GENERATING AURORA SELF-INTEGRATION SCRIPT")
+print("[EMOJI] GENERATING AURORA SELF-INTEGRATION SCRIPT")
 print("=" * 120)
 
 # Save the integration plan
 with open("AURORA_INTEGRATION_PLAN.json", "w") as f:
     json.dump(integration_plan, f, indent=2)
 
-print("\n✅ Integration plan saved to: AURORA_INTEGRATION_PLAN.json")
+print("\n[OK] Integration plan saved to: AURORA_INTEGRATION_PLAN.json")
 
 # ============================================================================
 # SUMMARY
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("📊 INTEGRATION SUMMARY")
+print("[DATA] INTEGRATION SUMMARY")
 print("=" * 120)
 
 total_actions = sum(len(phase["actions"])
                     for phase in integration_plan.values())
 
 print(f"""
-🎯 TOTAL INTEGRATION ACTIONS IDENTIFIED: {total_actions}
+[TARGET] TOTAL INTEGRATION ACTIONS IDENTIFIED: {total_actions}
 
 Phase 1 - Tracking Systems: {len(integration_plan["phase_1_tracking"]["actions"])} systems found
 Phase 2 - Unused Tools: {len(integration_plan["phase_2_tools"]["actions"])} tools to activate  
@@ -269,7 +269,7 @@ Phase 3 - Frontend Components: {len(integration_plan["phase_3_components"]["acti
 Phase 4 - Dormant Services: {len(integration_plan["phase_4_services"]["actions"])} services to start
 
 =" * 120)
-💭 AURORA'S PLAN:
+[EMOJI] AURORA'S PLAN:
 =" * 120)
 
 I found existing implementations for most systems.

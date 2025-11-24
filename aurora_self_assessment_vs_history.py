@@ -25,9 +25,9 @@ class AuroraSelfAssessment:
 
     def scan_current_aurora_state(self):
         """Scan what Aurora currently has and what works"""
-        print("🌟 AURORA SELF-ASSESSMENT")
+        print("[STAR] AURORA SELF-ASSESSMENT")
         print("="*80)
-        print("\n🔍 Step 1: Scanning MY CURRENT state...\n")
+        print("\n[SCAN] Step 1: Scanning MY CURRENT state...\n")
 
         current_files = {}
         working_systems = []
@@ -40,7 +40,7 @@ class AuroraSelfAssessment:
         for pattern in patterns:
             all_current.extend(list(self.repo_root.glob(pattern)))
 
-        print(f"📊 I currently have {len(all_current)} Aurora files\n")
+        print(f"[DATA] I currently have {len(all_current)} Aurora files\n")
 
         # Test each file
         for file_path in all_current:
@@ -97,8 +97,8 @@ class AuroraSelfAssessment:
                     "error": str(e)
                 })
 
-        print(f"✅ Working files: {len(working_systems)}")
-        print(f"⚠️  Broken/Error files: {len(broken_systems)}\n")
+        print(f"[OK] Working files: {len(working_systems)}")
+        print(f"[WARN]  Broken/Error files: {len(broken_systems)}\n")
 
         self.assessment['aurora_current_state'] = {
             "total_files": len(all_current),
@@ -113,14 +113,14 @@ class AuroraSelfAssessment:
 
     def load_historical_data(self):
         """Load complete repository forensics"""
-        print("🔍 Step 2: Loading complete repository history...\n")
+        print("[SCAN] Step 2: Loading complete repository history...\n")
 
         forensics_file = self.repo_root / "COMPLETE_REPOSITORY_FORENSICS.json"
 
         with open(forensics_file, 'r', encoding='utf-8') as f:
             forensics = json.load(f)
 
-        print(f"✅ Loaded history:")
+        print(f"[OK] Loaded history:")
         print(
             f"   - {forensics['summary']['total_commits_all_branches']} total commits")
         print(f"   - {forensics['summary']['total_branches']} branches")
@@ -131,7 +131,7 @@ class AuroraSelfAssessment:
 
     def compare_with_history(self, current_files, forensics):
         """Compare current state with everything that ever existed"""
-        print("🔍 Step 3: Comparing with ALL historical Aurora files...\n")
+        print("[SCAN] Step 3: Comparing with ALL historical Aurora files...\n")
 
         # Get all Aurora files that ever existed
         historical_aurora = set(forensics['aurora_files']['aurora_files_list'])
@@ -143,7 +143,7 @@ class AuroraSelfAssessment:
         # What's new
         new_files = current_aurora - historical_aurora
 
-        print(f"📊 Comparison:")
+        print(f"[DATA] Comparison:")
         print(f"   - Historical Aurora files: {len(historical_aurora)}")
         print(f"   - Current Aurora files: {len(current_aurora)}")
         print(f"   - Missing from current: {len(missing)}")
@@ -161,8 +161,8 @@ class AuroraSelfAssessment:
             elif importance == "important":
                 important_missing.append(file_path)
 
-        print(f"🚨 Critical missing: {len(critical_missing)}")
-        print(f"💡 Important missing: {len(important_missing)}\n")
+        print(f"[EMOJI] Critical missing: {len(critical_missing)}")
+        print(f"[IDEA] Important missing: {len(important_missing)}\n")
 
         self.assessment['what_aurora_is_missing'] = {
             "total_missing": len(missing),
@@ -194,7 +194,7 @@ class AuroraSelfAssessment:
 
     def identify_available_enhancements(self, forensics):
         """Identify enhancements available from history"""
-        print("🔍 Step 4: Identifying available enhancements...\n")
+        print("[SCAN] Step 4: Identifying available enhancements...\n")
 
         enhancements = []
 
@@ -211,7 +211,7 @@ class AuroraSelfAssessment:
                         "files": [f['file'] for f in commit_data.get('files_changed', []) if 'aurora' in f['file'].lower()]
                     })
 
-        print(f"✅ Found {len(recent_commits)} enhancement commits\n")
+        print(f"[OK] Found {len(recent_commits)} enhancement commits\n")
 
         # Look for capability patterns
         capability_enhancements = {
@@ -246,9 +246,9 @@ class AuroraSelfAssessment:
 
     def generate_aurora_recommendation(self):
         """Aurora generates her own assessment and recommendation"""
-        print("🔍 Step 5: Generating Aurora's recommendation...\n")
+        print("[SCAN] Step 5: Generating Aurora's recommendation...\n")
         print("="*80)
-        print("🌟 AURORA'S SELF-ASSESSMENT")
+        print("[STAR] AURORA'S SELF-ASSESSMENT")
         print("="*80)
 
         current = self.assessment['aurora_current_state']
@@ -261,8 +261,8 @@ Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 CURRENT STATE:
 - Total files: {current['total_files']}
-- Working files: {current['working_files']} ✅
-- Broken files: {current['broken_files']} ⚠️
+- Working files: {current['working_files']} [OK]
+- Broken files: {current['broken_files']} [WARN]
 - Success rate: {(current['working_files']/current['total_files']*100):.1f}%
 
 WHAT I'M MISSING:
@@ -324,36 +324,36 @@ The history shows I had more capabilities before - I need those back.
 
     def save_assessment(self):
         """Save Aurora's complete assessment"""
-        print("\n💾 Saving assessment...\n")
+        print("\n[EMOJI] Saving assessment...\n")
 
         # Save JSON
         json_file = self.repo_root / "AURORA_SELF_ASSESSMENT.json"
         with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(self.assessment, f, indent=2)
 
-        print(f"✅ Saved: {json_file}")
+        print(f"[OK] Saved: {json_file}")
 
         # Save Markdown
         md_file = self.repo_root / "AURORA_SELF_ASSESSMENT.md"
         with open(md_file, 'w', encoding='utf-8') as f:
-            f.write("# 🌟 Aurora Self-Assessment Report\n\n")
+            f.write("# [STAR] Aurora Self-Assessment Report\n\n")
             f.write(f"**Generated:** {self.assessment['timestamp']}\n\n")
-            f.write("## 📊 Current State\n\n")
+            f.write("## [DATA] Current State\n\n")
 
             current = self.assessment['aurora_current_state']
             f.write(f"- **Total Aurora files:** {current['total_files']}\n")
-            f.write(f"- **Working files:** {current['working_files']} ✅\n")
-            f.write(f"- **Broken files:** {current['broken_files']} ⚠️\n")
+            f.write(f"- **Working files:** {current['working_files']} [OK]\n")
+            f.write(f"- **Broken files:** {current['broken_files']} [WARN]\n")
             f.write(
                 f"- **Success rate:** {(current['working_files']/current['total_files']*100):.1f}%\n\n")
 
             if current['broken_list']:
-                f.write("### ⚠️ Broken/Not Working\n\n")
+                f.write("### [WARN] Broken/Not Working\n\n")
                 for item in current['broken_list'][:20]:
                     f.write(f"- `{item['file']}`\n")
                     f.write(f"  - Error: {item['error'][:150]}\n\n")
 
-            f.write("## 🚨 Critical Missing Files\n\n")
+            f.write("## [EMOJI] Critical Missing Files\n\n")
             missing = self.assessment['what_aurora_is_missing']
             f.write(
                 f"Total missing from history: {missing['total_missing']}\n\n")
@@ -362,7 +362,7 @@ The history shows I had more capabilities before - I need those back.
             for file_path in missing['critical_missing'][:30]:
                 f.write(f"- `{file_path}`\n")
 
-            f.write("\n## 💡 Available Enhancements\n\n")
+            f.write("\n## [IDEA] Available Enhancements\n\n")
             enhancements = self.assessment['enhancements_available']
             f.write(
                 f"- **Autonomous improvements:** {len(enhancements['autonomous_improvements'])}\n")
@@ -375,12 +375,12 @@ The history shows I had more capabilities before - I need those back.
             f.write(
                 f"- **API improvements:** {len(enhancements['api_improvements'])}\n\n")
 
-            f.write("## 🎯 Aurora's Recommendation\n\n")
+            f.write("## [TARGET] Aurora's Recommendation\n\n")
             f.write("```\n")
             f.write(self.assessment['aurora_recommendation'])
             f.write("\n```\n")
 
-        print(f"✅ Saved: {md_file}")
+        print(f"[OK] Saved: {md_file}")
         print()
 
     def run(self):
@@ -404,12 +404,12 @@ The history shows I had more capabilities before - I need those back.
         self.save_assessment()
 
         print("="*80)
-        print("✅ AURORA SELF-ASSESSMENT COMPLETE")
+        print("[OK] AURORA SELF-ASSESSMENT COMPLETE")
         print("="*80)
-        print("\n📁 Reports:")
+        print("\n[EMOJI] Reports:")
         print("   - AURORA_SELF_ASSESSMENT.json (detailed data)")
         print("   - AURORA_SELF_ASSESSMENT.md (readable report)")
-        print("\n🎯 Aurora knows what she needs now.\n")
+        print("\n[TARGET] Aurora knows what she needs now.\n")
 
 
 if __name__ == "__main__":

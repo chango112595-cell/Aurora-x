@@ -257,14 +257,14 @@ INTERNET_MASTERY_EXAMPLES = {
 }
 
 if __name__ == "__main__":
-    print("🌐 TIER 33: Internet & Network Mastery")
+    print("[WEB] TIER 33: Internet & Network Mastery")
     print(
         f"Era span: {AURORA_INTERNET_MASTERY['sub_tiers'][0]['era']} to {AURORA_INTERNET_MASTERY['sub_tiers'][-1]['era']}"
     )
     print(f"Total sub-tiers: {len(AURORA_INTERNET_MASTERY['sub_tiers'])}")
     print(f"Mastery level: {AURORA_INTERNET_MASTERY['mastery_level']}")
-    print(f"\n🎓 Skill categories: {sum(len(tier['skills']) for tier in AURORA_INTERNET_MASTERY['sub_tiers'])} skills")
+    print(f"\n[EMOJI] Skill categories: {sum(len(tier['skills']) for tier in AURORA_INTERNET_MASTERY['sub_tiers'])} skills")
 
-    print("\n📚 Era breakdown:")
+    print("\n[EMOJI] Era breakdown:")
     for tier in AURORA_INTERNET_MASTERY["sub_tiers"]:
         print(f"  • {tier['era']}: {tier['name']} ({len(tier['skills'])} skills)")

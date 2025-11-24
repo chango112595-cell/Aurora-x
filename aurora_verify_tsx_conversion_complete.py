@@ -18,7 +18,7 @@ class AuroraTSXVerification:
 
     def check_frontend_tsx_files(self) -> Dict:
         """Check all frontend TSX files exist and are properly formatted"""
-        print("\n🔍 CHECKING FRONTEND TSX FILES")
+        print("\n[SCAN] CHECKING FRONTEND TSX FILES")
         print("=" * 60)
 
         src_path = self.root / "src"
@@ -29,8 +29,8 @@ class AuroraTSXVerification:
         tsx_files = list(src_path.rglob("*.tsx"))
         ts_files = list(src_path.rglob("*.ts"))
 
-        print(f"✅ Found {len(tsx_files)} TSX files")
-        print(f"✅ Found {len(ts_files)} TS files")
+        print(f"[OK] Found {len(tsx_files)} TSX files")
+        print(f"[OK] Found {len(ts_files)} TS files")
 
         # Check for any remaining HTML in src/
         html_files = list(src_path.rglob("*.html"))
@@ -38,9 +38,9 @@ class AuroraTSXVerification:
             self.warnings.append(f"Found {len(html_files)} HTML files in src/")
             for html_file in html_files:
                 print(
-                    f"⚠️  HTML file in src/: {html_file.relative_to(self.root)}")
+                    f"[WARN]  HTML file in src/: {html_file.relative_to(self.root)}")
         else:
-            print("✅ No HTML files in src/ directory")
+            print("[OK] No HTML files in src/ directory")
             self.successes.append("src/ is HTML-free")
 
         # Check for old JSX files (should be TSX now)
@@ -50,9 +50,9 @@ class AuroraTSXVerification:
                 f"Found {len(jsx_files)} JSX files (should be TSX)")
             for jsx_file in jsx_files:
                 print(
-                    f"⚠️  JSX file (should be TSX): {jsx_file.relative_to(self.root)}")
+                    f"[WARN]  JSX file (should be TSX): {jsx_file.relative_to(self.root)}")
         else:
-            print("✅ No JSX files (all converted to TSX)")
+            print("[OK] No JSX files (all converted to TSX)")
             self.successes.append("No legacy JSX files")
 
         return {
@@ -64,13 +64,13 @@ class AuroraTSXVerification:
 
     def check_converted_components(self) -> Dict:
         """Verify all converted HTML->TSX components"""
-        print("\n🔍 CHECKING CONVERTED COMPONENTS")
+        print("\n[SCAN] CHECKING CONVERTED COMPONENTS")
         print("=" * 60)
 
         report_file = self.root / "AURORA_HTML_TSX_CONVERSION_REPORT.json"
         if not report_file.exists():
             self.warnings.append("Conversion report not found")
-            print("⚠️  Conversion report not found")
+            print("[WARN]  Conversion report not found")
             return {"status": "unknown"}
 
         with open(report_file, "r", encoding="utf-8") as f:
@@ -80,8 +80,8 @@ class AuroraTSXVerification:
         total_failed = report.get("total_failed", 0)
         converted_files = report.get("converted_files", [])
 
-        print(f"✅ Total conversions: {total_converted}")
-        print(f"{'✅' if total_failed == 0 else '❌'} Failed conversions: {total_failed}")
+        print(f"[OK] Total conversions: {total_converted}")
+        print(f"{'[OK]' if total_failed == 0 else '[ERROR]'} Failed conversions: {total_failed}")
 
         # Verify the TSX files actually exist
         missing = []
@@ -93,9 +93,9 @@ class AuroraTSXVerification:
         if missing:
             self.issues.append(
                 f"{len(missing)} converted TSX files are missing")
-            print(f"❌ {len(missing)} converted files missing!")
+            print(f"[ERROR] {len(missing)} converted files missing!")
         else:
-            print("✅ All sampled converted files exist")
+            print("[OK] All sampled converted files exist")
             self.successes.append("All converted TSX files exist")
 
         return {
@@ -106,7 +106,7 @@ class AuroraTSXVerification:
 
     def check_component_structure(self) -> Dict:
         """Check that components follow TSX best practices"""
-        print("\n🔍 CHECKING COMPONENT STRUCTURE")
+        print("\n[SCAN] CHECKING COMPONENT STRUCTURE")
         print("=" * 60)
 
         components_path = self.root / "src" / "components"
@@ -127,13 +127,13 @@ class AuroraTSXVerification:
 
         if proper_imports == sample_size:
             print(
-                f"✅ All sampled components have React imports ({sample_size}/{sample_size})")
+                f"[OK] All sampled components have React imports ({sample_size}/{sample_size})")
             self.successes.append("Components have proper React imports")
         else:
             self.warnings.append(
                 f"Some components missing React imports ({proper_imports}/{sample_size})")
             print(
-                f"⚠️  Only {proper_imports}/{sample_size} components have React imports")
+                f"[WARN]  Only {proper_imports}/{sample_size} components have React imports")
 
         return {
             "total_components": len(tsx_files),
@@ -143,16 +143,16 @@ class AuroraTSXVerification:
 
     def check_typescript_config(self) -> Dict:
         """Verify TypeScript configuration is set up"""
-        print("\n🔍 CHECKING TYPESCRIPT CONFIGURATION")
+        print("\n[SCAN] CHECKING TYPESCRIPT CONFIGURATION")
         print("=" * 60)
 
         tsconfig = self.root / "tsconfig.json"
         if not tsconfig.exists():
             self.issues.append("tsconfig.json not found!")
-            print("❌ tsconfig.json not found!")
+            print("[ERROR] tsconfig.json not found!")
             return {"status": "error"}
 
-        print("✅ tsconfig.json exists")
+        print("[OK] tsconfig.json exists")
         self.successes.append("TypeScript configured")
 
         # Check for proper JSX settings
@@ -161,12 +161,12 @@ class AuroraTSXVerification:
 
         jsx_setting = tsx_config.get("compilerOptions", {}).get("jsx")
         if jsx_setting in ["react", "react-jsx", "react-jsxdev"]:
-            print(f"✅ JSX configured: {jsx_setting}")
+            print(f"[OK] JSX configured: {jsx_setting}")
             self.successes.append(f"JSX mode: {jsx_setting}")
         else:
             self.warnings.append(
                 f"JSX setting might need review: {jsx_setting}")
-            print(f"⚠️  JSX setting: {jsx_setting}")
+            print(f"[WARN]  JSX setting: {jsx_setting}")
 
         return {
             "exists": True,
@@ -175,13 +175,13 @@ class AuroraTSXVerification:
 
     def check_package_json_dependencies(self) -> Dict:
         """Check that React and TypeScript dependencies are installed"""
-        print("\n🔍 CHECKING PACKAGE DEPENDENCIES")
+        print("\n[SCAN] CHECKING PACKAGE DEPENDENCIES")
         print("=" * 60)
 
         package_json = self.root / "package.json"
         if not package_json.exists():
             self.warnings.append("package.json not found")
-            print("⚠️  package.json not found")
+            print("[WARN]  package.json not found")
             return {"status": "not_found"}
 
         with open(package_json, "r", encoding="utf-8") as f:
@@ -200,10 +200,10 @@ class AuroraTSXVerification:
         missing = []
         for dep, name in required.items():
             if dep in all_deps:
-                print(f"✅ {name}: {all_deps[dep]}")
+                print(f"[OK] {name}: {all_deps[dep]}")
             else:
                 missing.append(name)
-                print(f"❌ {name} not found")
+                print(f"[ERROR] {name} not found")
 
         if missing:
             self.issues.append(f"Missing dependencies: {', '.join(missing)}")
@@ -219,7 +219,7 @@ class AuroraTSXVerification:
 
     def check_vite_config(self) -> Dict:
         """Verify Vite is configured for React + TypeScript"""
-        print("\n🔍 CHECKING VITE CONFIGURATION")
+        print("\n[SCAN] CHECKING VITE CONFIGURATION")
         print("=" * 60)
 
         vite_config = self.root / "vite.config.js"
@@ -228,23 +228,23 @@ class AuroraTSXVerification:
         config_file = None
         if vite_config_ts.exists():
             config_file = vite_config_ts
-            print("✅ vite.config.ts exists (TypeScript)")
+            print("[OK] vite.config.ts exists (TypeScript)")
         elif vite_config.exists():
             config_file = vite_config
-            print("✅ vite.config.js exists")
+            print("[OK] vite.config.js exists")
         else:
             self.warnings.append("Vite config not found")
-            print("⚠️  Vite config not found")
+            print("[WARN]  Vite config not found")
             return {"status": "not_found"}
 
         content = config_file.read_text(encoding="utf-8")
 
         if "@vitejs/plugin-react" in content or "plugin-react" in content:
-            print("✅ Vite React plugin configured")
+            print("[OK] Vite React plugin configured")
             self.successes.append("Vite configured for React")
         else:
             self.warnings.append("Vite React plugin not detected")
-            print("⚠️  Vite React plugin not detected")
+            print("[WARN]  Vite React plugin not detected")
 
         return {
             "exists": True,
@@ -253,7 +253,7 @@ class AuroraTSXVerification:
 
     def check_important_tsx_components(self) -> Dict:
         """Check that critical TSX components exist"""
-        print("\n🔍 CHECKING CRITICAL COMPONENTS")
+        print("\n[SCAN] CHECKING CRITICAL COMPONENTS")
         print("=" * 60)
 
         critical_components = [
@@ -266,16 +266,16 @@ class AuroraTSXVerification:
         for component in critical_components:
             path = self.root / component
             if path.exists():
-                print(f"✅ {component}")
+                print(f"[OK] {component}")
             else:
                 missing.append(component)
-                print(f"❌ {component} MISSING!")
+                print(f"[ERROR] {component} MISSING!")
 
         if missing:
             self.issues.append(
                 f"Critical components missing: {', '.join(missing)}")
         else:
-            print("\n✅ All critical components present")
+            print("\n[OK] All critical components present")
             self.successes.append("All critical TSX components exist")
 
         return {
@@ -286,39 +286,39 @@ class AuroraTSXVerification:
     def generate_final_report(self) -> Dict:
         """Generate final verification report"""
         print("\n" + "=" * 60)
-        print("📊 FINAL VERIFICATION REPORT")
+        print("[DATA] FINAL VERIFICATION REPORT")
         print("=" * 60 + "\n")
 
         if self.issues:
-            print(f"❌ ISSUES FOUND ({len(self.issues)}):")
+            print(f"[ERROR] ISSUES FOUND ({len(self.issues)}):")
             for issue in self.issues:
                 print(f"   • {issue}")
             print()
 
         if self.warnings:
-            print(f"⚠️  WARNINGS ({len(self.warnings)}):")
+            print(f"[WARN]  WARNINGS ({len(self.warnings)}):")
             for warning in self.warnings:
                 print(f"   • {warning}")
             print()
 
-        print(f"✅ SUCCESSES ({len(self.successes)}):")
+        print(f"[OK] SUCCESSES ({len(self.successes)}):")
         for success in self.successes:
             print(f"   • {success}")
         print()
 
         status = "COMPLETE" if not self.issues else "NEEDS_ATTENTION"
 
-        print(f"\n🎯 OVERALL STATUS: {status}")
+        print(f"\n[TARGET] OVERALL STATUS: {status}")
 
         if status == "COMPLETE":
-            print("\n✨ Everything is properly converted to advanced TSX format!")
+            print("\n[SPARKLE] Everything is properly converted to advanced TSX format!")
             print("   • All HTML files converted to TSX")
             print("   • TypeScript configured")
             print("   • React dependencies present")
             print("   • Vite configured for React + TypeScript")
             print("   • Critical components exist")
         else:
-            print("\n⚠️  Some items need attention (see issues above)")
+            print("\n[WARN]  Some items need attention (see issues above)")
 
         report = {
             "timestamp": "2025-11-22",
@@ -335,13 +335,13 @@ class AuroraTSXVerification:
         with open(report_file, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2)
 
-        print(f"\n💾 Report saved: {report_file}")
+        print(f"\n[EMOJI] Report saved: {report_file}")
 
         return report
 
     def run(self):
         """Run complete verification"""
-        print("\n🌟 AURORA TSX CONVERSION VERIFICATION")
+        print("\n[STAR] AURORA TSX CONVERSION VERIFICATION")
         print("=" * 60)
         print("Checking that everything is converted to advanced TSX format...")
 

@@ -39,9 +39,9 @@ class AuroraLogger:
         if config_file.exists():
             try:
                 logging.config.fileConfig(config_file)
-                print("✅ Loaded logging configuration from logging.conf")
+                print("[OK] Loaded logging configuration from logging.conf")
             except Exception as e:
-                print(f"⚠️  Failed to load logging.conf: {e}")
+                print(f"[WARN]  Failed to load logging.conf: {e}")
                 self.setup_default_logging()
         else:
             self.setup_default_logging()
@@ -53,7 +53,7 @@ class AuroraLogger:
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
             handlers=[logging.StreamHandler(), logging.FileHandler("logs/aurora.log")],
         )
-        print("✅ Using default logging configuration")
+        print("[OK] Using default logging configuration")
 
     @staticmethod
     def get_logger(name: str) -> logging.Logger:
@@ -87,13 +87,13 @@ def get_logger(name: str = "aurora") -> logging.Logger:
 def log_service_start(service_name: str, port: int, **kwargs):
     """Log service startup"""
     logger = get_logger("services")
-    logger.info(f"🚀 {service_name} starting on port {port}", extra=kwargs)
+    logger.info(f"[LAUNCH] {service_name} starting on port {port}", extra=kwargs)
 
 
 def log_service_stop(service_name: str, **kwargs):
     """Log service shutdown"""
     logger = get_logger("services")
-    logger.info(f"🛑 {service_name} stopping", extra=kwargs)
+    logger.info(f"[EMOJI] {service_name} stopping", extra=kwargs)
 
 
 def log_api_request(method: str, endpoint: str, status_code: int, response_time_ms: float, **kwargs):
@@ -115,7 +115,7 @@ def log_error(error: Exception, context: dict | None = None, **kwargs):
     """Log an error with context"""
     logger = get_logger("aurora")
     logger.error(
-        f"❌ Error: {str(error)}",
+        f"[ERROR] Error: {str(error)}",
         extra={"error_type": type(error).__name__, "error_message": str(error), "context": context or {}, **kwargs},
         exc_info=True,
     )
@@ -124,7 +124,7 @@ def log_error(error: Exception, context: dict | None = None, **kwargs):
 def log_autonomous_action(action: str, details: dict, **kwargs):
     """Log an autonomous action taken by Aurora"""
     logger = get_logger("aurora")
-    logger.info(f"🌌 Autonomous: {action}", extra={"action": action, "details": details, **kwargs})
+    logger.info(f"[AURORA] Autonomous: {action}", extra={"action": action, "details": details, **kwargs})
 
 
 # Example usage
@@ -147,4 +147,4 @@ if __name__ == "__main__":
     except Exception as e:
         log_error(e, context={"test": "error_logging"})
 
-    print("\n✅ Logging tests complete. Check logs/aurora.log")
+    print("\n[OK] Logging tests complete. Check logs/aurora.log")

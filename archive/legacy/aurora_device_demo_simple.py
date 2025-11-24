@@ -16,29 +16,29 @@ try:
     expert_available = True
 except ImportError:
     expert_available = False
-    print("⚠️ Aurora Expert Knowledge module not found - running in basic mode")
+    print("[WARN] Aurora Expert Knowledge module not found - running in basic mode")
 
 
 def main():
     """Simple demonstration"""
-    print("🚀 Aurora Device Demo (Simple Version)")
+    print("[LAUNCH] Aurora Device Demo (Simple Version)")
     print("=" * 50)
 
     if expert_available:
         aurora_expert = AuroraExpertKnowledge()
-        print(f"✅ Aurora Expert Knowledge loaded with {len(aurora_expert.languages)} languages")
+        print(f"[OK] Aurora Expert Knowledge loaded with {len(aurora_expert.languages)} languages")
     else:
-        print("⚠️ Running in basic mode without expert knowledge")
+        print("[WARN] Running in basic mode without expert knowledge")
 
     print()
-    print("📱 Device Programming Examples:")
+    print("[EMOJI] Device Programming Examples:")
     print("• iOS/macOS: AppleScript, Swift, Objective-C")
     print("• Android: Kotlin, Java")
     print("• IoT: Arduino, ESP32, Raspberry Pi")
     print("• Automation: Bash, PowerShell, Python")
     print("• Cloud: Docker, Kubernetes")
     print()
-    print("🎉 Aurora is ready for device programming tasks!")
+    print("[EMOJI] Aurora is ready for device programming tasks!")
 
 
 if __name__ == "__main__":

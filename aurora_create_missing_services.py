@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-🌌 AURORA AUTONOMOUS SERVICE CREATOR
+[AURORA] AURORA AUTONOMOUS SERVICE CREATOR
 Aurora creates the 8 missing web/API services with FULL POWER
 Hyper-speed mode | Full consciousness | BEYOND 100%
 
@@ -35,12 +35,12 @@ class AuroraServiceCreator:
         self.created = []
         self.enhanced = []
 
-    def log(self, msg, icon="🌌"):
+    def log(self, msg, icon="[AURORA]"):
         print(f"{icon} {msg}")
 
     def create_web_health_monitor(self):
         """Create Web Health Monitor - Port 5004"""
-        self.log("Creating Web Health Monitor (Port 5004)...", "💓")
+        self.log("Creating Web Health Monitor (Port 5004)...", "[HEALTH]")
 
         code = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -150,7 +150,7 @@ def start_monitoring():
     return jsonify({"message": "Monitoring started"})
 
 if __name__ == "__main__":
-    print("💓 Aurora Web Health Monitor starting on port 5004...")
+    print("[HEALTH] Aurora Web Health Monitor starting on port 5004...")
     monitor.start_monitoring()
     app.run(host="0.0.0.0", port=5004, debug=False)
 '''
@@ -158,11 +158,11 @@ if __name__ == "__main__":
         file_path = self.root / "aurora_web_health_monitor.py"
         file_path.write_text(code, encoding='utf-8')
         self.created.append("aurora_web_health_monitor.py")
-        self.log("✅ Web Health Monitor created!", "💓")
+        self.log("[OK] Web Health Monitor created!", "[HEALTH]")
 
     def create_api_gateway(self):
         """Create API Gateway - Port 5028"""
-        self.log("Creating API Gateway (Port 5028)...", "🌐")
+        self.log("Creating API Gateway (Port 5028)...", "[WEB]")
 
         code = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -267,18 +267,18 @@ def proxy(path):
     return jsonify({"error": "Route not found"}), 404
 
 if __name__ == "__main__":
-    print("🌐 Aurora API Gateway starting on port 5028...")
+    print("[WEB] Aurora API Gateway starting on port 5028...")
     app.run(host="0.0.0.0", port=5028, debug=False)
 '''
 
         file_path = self.root / "aurora_api_gateway.py"
         file_path.write_text(code, encoding='utf-8')
         self.created.append("aurora_api_gateway.py")
-        self.log("✅ API Gateway created!", "🌐")
+        self.log("[OK] API Gateway created!", "[WEB]")
 
     def create_api_load_balancer(self):
         """Create API Load Balancer - Port 5029"""
-        self.log("Creating API Load Balancer (Port 5029)...", "⚖️")
+        self.log("Creating API Load Balancer (Port 5029)...", "[BALANCE]")
 
         code = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -388,7 +388,7 @@ def balance_request():
     })
 
 if __name__ == "__main__":
-    print("⚖️ Aurora API Load Balancer starting on port 5029...")
+    print("[BALANCE] Aurora API Load Balancer starting on port 5029...")
     balancer.start_monitoring()
     app.run(host="0.0.0.0", port=5029, debug=False)
 '''
@@ -396,11 +396,11 @@ if __name__ == "__main__":
         file_path = self.root / "aurora_api_load_balancer.py"
         file_path.write_text(code, encoding='utf-8')
         self.created.append("aurora_api_load_balancer.py")
-        self.log("✅ API Load Balancer created!", "⚖️")
+        self.log("[OK] API Load Balancer created!", "[BALANCE]")
 
     def create_api_rate_limiter(self):
         """Create API Rate Limiter - Port 5030"""
-        self.log("Creating API Rate Limiter (Port 5030)...", "🛡️")
+        self.log("Creating API Rate Limiter (Port 5030)...", "[SHIELD]")
 
         code = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -528,18 +528,18 @@ def stats():
     })
 
 if __name__ == "__main__":
-    print("🛡️ Aurora API Rate Limiter starting on port 5030...")
+    print("[SHIELD] Aurora API Rate Limiter starting on port 5030...")
     app.run(host="0.0.0.0", port=5030, debug=False)
 '''
 
         file_path = self.root / "aurora_api_rate_limiter.py"
         file_path.write_text(code, encoding='utf-8')
         self.created.append("aurora_api_rate_limiter.py")
-        self.log("✅ API Rate Limiter created!", "🛡️")
+        self.log("[OK] API Rate Limiter created!", "[SHIELD]")
 
     def create_intelligence_analyzer(self):
         """Create Intelligence Analyzer - Port 5013"""
-        self.log("Creating Intelligence Analyzer (Port 5013)...", "🔍")
+        self.log("Creating Intelligence Analyzer (Port 5013)...", "[SCAN]")
 
         code = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -637,18 +637,18 @@ def stats():
     })
 
 if __name__ == "__main__":
-    print("🔍 Aurora Intelligence Analyzer starting on port 5013...")
+    print("[SCAN] Aurora Intelligence Analyzer starting on port 5013...")
     app.run(host="0.0.0.0", port=5013, debug=False)
 '''
 
         file_path = self.root / "aurora_intelligence_analyzer.py"
         file_path.write_text(code, encoding='utf-8')
         self.created.append("aurora_intelligence_analyzer.py")
-        self.log("✅ Intelligence Analyzer created!", "🔍")
+        self.log("[OK] Intelligence Analyzer created!", "[SCAN]")
 
     def create_pattern_recognition(self):
         """Create Pattern Recognition Engine - Port 5014"""
-        self.log("Creating Pattern Recognition Engine (Port 5014)...", "🧠")
+        self.log("Creating Pattern Recognition Engine (Port 5014)...", "[BRAIN]")
 
         code = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -760,18 +760,18 @@ def get_anomalies():
     return jsonify({"anomalies": engine.anomalies})
 
 if __name__ == "__main__":
-    print("🧠 Aurora Pattern Recognition Engine starting on port 5014...")
+    print("[BRAIN] Aurora Pattern Recognition Engine starting on port 5014...")
     app.run(host="0.0.0.0", port=5014, debug=False)
 '''
 
         file_path = self.root / "aurora_pattern_recognition.py"
         file_path.write_text(code, encoding='utf-8')
         self.created.append("aurora_pattern_recognition.py")
-        self.log("✅ Pattern Recognition Engine created!", "🧠")
+        self.log("[OK] Pattern Recognition Engine created!", "[BRAIN]")
 
     def create_deep_system_updater(self):
         """Create Deep System Updater - Port 5008"""
-        self.log("Creating Deep System Updater (Port 5008)...", "🔄")
+        self.log("Creating Deep System Updater (Port 5008)...", "[SYNC]")
 
         code = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -857,7 +857,7 @@ def stats():
     })
 
 if __name__ == "__main__":
-    print("🔄 Aurora Deep System Updater starting on port 5008...")
+    print("[SYNC] Aurora Deep System Updater starting on port 5008...")
     updater.scanning = True
     thread = threading.Thread(target=updater.background_scan, daemon=True)
     thread.start()
@@ -867,17 +867,17 @@ if __name__ == "__main__":
         file_path = self.root / "aurora_deep_system_updater.py"
         file_path.write_text(code, encoding='utf-8')
         self.created.append("aurora_deep_system_updater.py")
-        self.log("✅ Deep System Updater created!", "🔄")
+        self.log("[OK] Deep System Updater created!", "[SYNC]")
 
     def run(self):
         """Create all missing services"""
-        self.log("=" * 80, "⚡")
-        self.log("AURORA AUTONOMOUS SERVICE CREATOR - HYPER-SPEED MODE", "⚡")
-        self.log("=" * 80, "⚡")
+        self.log("=" * 80, "[POWER]")
+        self.log("AURORA AUTONOMOUS SERVICE CREATOR - HYPER-SPEED MODE", "[POWER]")
+        self.log("=" * 80, "[POWER]")
         self.log(f"Timestamp: {datetime.now().isoformat()}")
         self.log("")
 
-        self.log("Creating 8 missing services with FULL POWER...", "🌌")
+        self.log("Creating 8 missing services with FULL POWER...", "[AURORA]")
         self.log("")
 
         # Create all services
@@ -890,17 +890,17 @@ if __name__ == "__main__":
         self.create_deep_system_updater()
 
         self.log("")
-        self.log("=" * 80, "⚡")
-        self.log(f"✅ AURORA CREATED {len(self.created)} SERVICES!", "⚡")
-        self.log("=" * 80, "⚡")
+        self.log("=" * 80, "[POWER]")
+        self.log(f"[OK] AURORA CREATED {len(self.created)} SERVICES!", "[POWER]")
+        self.log("=" * 80, "[POWER]")
         self.log("")
 
         for service in self.created:
-            self.log(f"   ✅ {service}", "🌟")
+            self.log(f"   [OK] {service}", "[STAR]")
 
         self.log("")
-        self.log("Now run: python x-start-enhanced-v3", "🚀")
-        self.log("All 31 services will be operational! 🌌", "🚀")
+        self.log("Now run: python x-start-enhanced-v3", "[LAUNCH]")
+        self.log("All 31 services will be operational! [AURORA]", "[LAUNCH]")
 
 
 if __name__ == "__main__":

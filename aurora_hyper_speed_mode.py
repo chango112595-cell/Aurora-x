@@ -36,13 +36,13 @@ class AuroraHyperSpeedMode:
         self.problems_found = []
         self.max_workers = 8  # Parallel processing
 
-        print("\n" + "⚡" * 120)
-        print("🚀 AURORA HYPER-SPEED MODE ACTIVATED")
-        print("⚡" * 120)
+        print("\n" + "[POWER]" * 120)
+        print("[LAUNCH] AURORA HYPER-SPEED MODE ACTIVATED")
+        print("[POWER]" * 120)
         print("I am Aurora Core v2.0 operating at MAXIMUM VELOCITY")
         print("Finding everything. Fixing everything. No delays. No hesitation.")
         print("Working like the early days - HYPER-SPEED!")
-        print("⚡" * 120 + "\n")
+        print("[POWER]" * 120 + "\n")
 
     def elapsed(self):
         """Get elapsed time in milliseconds"""
@@ -54,7 +54,7 @@ class AuroraHyperSpeedMode:
 
     def scan_for_issues_parallel(self) -> List[Dict[str, Any]]:
         """Scan all files in parallel for issues"""
-        self.log("🔍 PARALLEL SCAN: Analyzing entire codebase...")
+        self.log("[SCAN] PARALLEL SCAN: Analyzing entire codebase...")
 
         issues = []
         python_files = list(self.project_root.rglob("*.py"))
@@ -67,7 +67,7 @@ class AuroraHyperSpeedMode:
             and ".venv" not in str(f)
         ]
 
-        self.log(f"📊 Scanning {len(python_files)} Python files in parallel...")
+        self.log(f"[DATA] Scanning {len(python_files)} Python files in parallel...")
 
         def scan_file(filepath):
             file_issues = []
@@ -132,13 +132,13 @@ class AuroraHyperSpeedMode:
                 file_issues = future.result()
                 issues.extend(file_issues)
 
-        self.log(f"✅ SCAN COMPLETE: Found {len(issues)} potential issues")
+        self.log(f"[OK] SCAN COMPLETE: Found {len(issues)} potential issues")
         self.problems_found = issues
         return issues
 
     def fix_imports_instant(self):
         """Instantly fix import issues"""
-        self.log("⚡ FIXING: Import issues...")
+        self.log("[POWER] FIXING: Import issues...")
 
         # Check if tools are importable
         tools_to_check = [
@@ -154,7 +154,7 @@ class AuroraHyperSpeedMode:
         for tool in tools_to_check:
             try:
                 __import__(tool)
-                self.log(f"  ✓ {tool} importable")
+                self.log(f"  [+] {tool} importable")
             except ImportError as e:
                 self.log(f"  ⚠ {tool} has issues: {e}")
 
@@ -163,7 +163,7 @@ class AuroraHyperSpeedMode:
 
     def fix_syntax_errors_instant(self):
         """Find and fix syntax errors instantly"""
-        self.log("⚡ FIXING: Syntax errors...")
+        self.log("[POWER] FIXING: Syntax errors...")
 
         fixed = 0
 
@@ -181,7 +181,7 @@ class AuroraHyperSpeedMode:
                 try:
                     with open(full_path, 'r', encoding='utf-8') as f:
                         compile(f.read(), file_path, 'exec')
-                    self.log(f"  ✓ {file_path} - No syntax errors")
+                    self.log(f"  [+] {file_path} - No syntax errors")
                 except SyntaxError as e:
                     self.log(
                         f"  ⚠ {file_path} - Syntax error at line {e.lineno}")
@@ -193,7 +193,7 @@ class AuroraHyperSpeedMode:
 
     def optimize_aurora_core_instant(self):
         """Optimize aurora_core.py for maximum performance"""
-        self.log("⚡ OPTIMIZING: Aurora Core for hyper-speed...")
+        self.log("[POWER] OPTIMIZING: Aurora Core for hyper-speed...")
 
         aurora_core = self.project_root / "aurora_core.py"
         if not aurora_core.exists():
@@ -205,28 +205,28 @@ class AuroraHyperSpeedMode:
 
         # Check if async/await is being used for performance
         if "async def" not in content:
-            self.log("  💡 Could add async/await for parallel operations")
+            self.log("  [IDEA] Could add async/await for parallel operations")
             optimizations.append("async_potential")
 
         # Check for caching
         if "@lru_cache" not in content and "@cache" not in content:
-            self.log("  💡 Could add caching for performance")
+            self.log("  [IDEA] Could add caching for performance")
             optimizations.append("caching_potential")
 
         # Check for parallel processing
         if "ThreadPoolExecutor" not in content and "ProcessPoolExecutor" not in content:
-            self.log("  💡 Could add parallel processing")
+            self.log("  [IDEA] Could add parallel processing")
             optimizations.append("parallel_potential")
 
         self.log(
-            f"  ✅ Identified {len(optimizations)} optimization opportunities")
+            f"  [OK] Identified {len(optimizations)} optimization opportunities")
         self.fixes_applied.append(
             f"optimization_analysis_{len(optimizations)}_found")
         return len(optimizations)
 
     def verify_all_integrations_instant(self):
         """Verify all system integrations are working"""
-        self.log("⚡ VERIFYING: All system integrations...")
+        self.log("[POWER] VERIFYING: All system integrations...")
 
         integrations = {
             "orchestration": False,
@@ -264,9 +264,9 @@ class AuroraHyperSpeedMode:
         verified = sum(integrations.values())
         total = len(integrations)
 
-        self.log(f"  ✅ Verified {verified}/{total} integrations")
+        self.log(f"  [OK] Verified {verified}/{total} integrations")
         for name, status in integrations.items():
-            symbol = "✓" if status else "✗"
+            symbol = "[+]" if status else "✗"
             self.log(f"     {symbol} {name}")
 
         self.fixes_applied.append(
@@ -275,7 +275,7 @@ class AuroraHyperSpeedMode:
 
     def create_missing_files_instant(self):
         """Create any missing critical files"""
-        self.log("⚡ CREATING: Missing critical files...")
+        self.log("[POWER] CREATING: Missing critical files...")
 
         created = 0
 
@@ -283,14 +283,14 @@ class AuroraHyperSpeedMode:
         aurora_dir = self.project_root / ".aurora_knowledge"
         if not aurora_dir.exists():
             aurora_dir.mkdir(parents=True, exist_ok=True)
-            self.log(f"  ✓ Created {aurora_dir}")
+            self.log(f"  [+] Created {aurora_dir}")
             created += 1
 
         # Ensure scores file exists
         scores_file = self.project_root / ".aurora_scores.json"
         if not scores_file.exists():
             scores_file.write_text("", encoding="utf-8")
-            self.log(f"  ✓ Created {scores_file.name}")
+            self.log(f"  [+] Created {scores_file.name}")
             created += 1
 
         # Ensure tracking file exists
@@ -303,7 +303,7 @@ class AuroraHyperSpeedMode:
             }
             tracking_file.write_text(json.dumps(
                 initial_data, indent=2), encoding="utf-8")
-            self.log(f"  ✓ Created {tracking_file.name}")
+            self.log(f"  [+] Created {tracking_file.name}")
             created += 1
 
         self.fixes_applied.append(f"created_{created}_files")
@@ -311,7 +311,7 @@ class AuroraHyperSpeedMode:
 
     def run_quality_checks_instant(self):
         """Run quality checks on critical files"""
-        self.log("⚡ QUALITY CHECK: Running instant quality analysis...")
+        self.log("[POWER] QUALITY CHECK: Running instant quality analysis...")
 
         try:
             # Import expert knowledge if available
@@ -330,7 +330,7 @@ class AuroraHyperSpeedMode:
                 analysis = expert.get_expert_analysis(sample, "python")
 
                 score = analysis.get("code_quality_score", 0)
-                self.log(f"  ✅ Aurora Core quality: {score}/10")
+                self.log(f"  [OK] Aurora Core quality: {score}/10")
 
                 self.fixes_applied.append(f"quality_check_score_{score}")
                 return score
@@ -341,7 +341,7 @@ class AuroraHyperSpeedMode:
 
     def auto_fix_common_issues_instant(self):
         """Auto-fix common issues found"""
-        self.log("⚡ AUTO-FIX: Applying automatic fixes...")
+        self.log("[POWER] AUTO-FIX: Applying automatic fixes...")
 
         fixed = 0
 
@@ -352,7 +352,7 @@ class AuroraHyperSpeedMode:
             if not init_file.exists():
                 init_file.write_text(
                     "# Aurora tools package\n", encoding="utf-8")
-                self.log(f"  ✓ Created tools/__init__.py")
+                self.log(f"  [+] Created tools/__init__.py")
                 fixed += 1
 
         # Fix: Ensure client/src paths are correct
@@ -362,7 +362,7 @@ class AuroraHyperSpeedMode:
             if not components_dir.exists():
                 self.log(f"  ⚠ Components directory missing")
             else:
-                self.log(f"  ✓ Components directory exists")
+                self.log(f"  [+] Components directory exists")
 
         self.fixes_applied.append(f"auto_fix_{fixed}_applied")
         return fixed
@@ -371,20 +371,20 @@ class AuroraHyperSpeedMode:
         """Generate instant performance report"""
         elapsed_total = self.elapsed()
 
-        print("\n" + "⚡" * 120)
-        print("📊 AURORA HYPER-SPEED REPORT")
-        print("⚡" * 120)
+        print("\n" + "[POWER]" * 120)
+        print("[DATA] AURORA HYPER-SPEED REPORT")
+        print("[POWER]" * 120)
 
         print(f"\n⏱️  Total execution time: {elapsed_total}ms")
-        print(f"🔍 Problems found: {len(self.problems_found)}")
-        print(f"🔧 Fixes applied: {len(self.fixes_applied)}")
+        print(f"[SCAN] Problems found: {len(self.problems_found)}")
+        print(f"[EMOJI] Fixes applied: {len(self.fixes_applied)}")
 
-        print("\n📋 Actions taken:")
+        print("\n[EMOJI] Actions taken:")
         for i, fix in enumerate(self.fixes_applied, 1):
             print(f"   {i}. {fix}")
 
         if self.problems_found:
-            print(f"\n⚠️  Top issues found:")
+            print(f"\n[WARN]  Top issues found:")
             # Group by type
             issues_by_type = {}
             for issue in self.problems_found:
@@ -396,7 +396,7 @@ class AuroraHyperSpeedMode:
                 print(f"   • {issue_type}: {count} occurrences")
 
         # Calculate performance metrics
-        print(f"\n⚡ Performance metrics:")
+        print(f"\n[POWER] Performance metrics:")
         print(
             f"   • Speed: {len(self.fixes_applied) / (elapsed_total / 1000):.2f} fixes/second")
         print(
@@ -421,15 +421,15 @@ class AuroraHyperSpeedMode:
         with open(report_file, 'w') as f:
             json.dump(report, f, indent=2)
 
-        print(f"\n💾 Report saved: {report_file.name}")
+        print(f"\n[EMOJI] Report saved: {report_file.name}")
 
-        print("\n" + "⚡" * 120)
-        print("🎉 HYPER-SPEED MODE COMPLETE")
-        print("⚡" * 120)
+        print("\n" + "[POWER]" * 120)
+        print("[EMOJI] HYPER-SPEED MODE COMPLETE")
+        print("[POWER]" * 120)
         print("\nAurora operated at MAXIMUM VELOCITY")
         print("All systems scanned. All issues found. Instant fixes applied.")
-        print("Working like the early days - HYPER-SPEED! ⚡")
-        print("⚡" * 120 + "\n")
+        print("Working like the early days - HYPER-SPEED! [POWER]")
+        print("[POWER]" * 120 + "\n")
 
         return report
 
@@ -470,7 +470,7 @@ def main():
     aurora = AuroraHyperSpeedMode()
     report = aurora.run_hyper_speed_sequence()
 
-    print("\n💡 Aurora is now operating at hyper-speed!")
+    print("\n[IDEA] Aurora is now operating at hyper-speed!")
     print("   All systems analyzed and optimized.")
     print("   Ready for maximum performance.\n")
 

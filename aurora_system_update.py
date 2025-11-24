@@ -33,7 +33,7 @@ def update_file_content(file_path: Path, updates: list[tuple[str, str]]) -> bool
 
 def aurora_system_update():
     """Aurora autonomously updates the entire system"""
-    print("[Aurora] 🌌 Autonomous System Update Starting...")
+    print("[Aurora] [AURORA] Autonomous System Update Starting...")
     print("[Aurora] Architecture: 13 Tasks + 34 Tiers = 47 Total Systems")
     print("=" * 70)
 
@@ -85,7 +85,7 @@ def aurora_system_update():
             files_updated += 1
 
     print("\n" + "=" * 70)
-    print("[Aurora] ✅ System Update Complete!")
+    print("[Aurora] [OK] System Update Complete!")
     print(f"[Aurora] Files Updated: {files_updated}")
     print("[Aurora] Architecture Now Accurate:")
     print("[Aurora]   • 13 Foundational Tasks (Base Cognitive Layer)")

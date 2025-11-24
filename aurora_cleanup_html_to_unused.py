@@ -26,20 +26,20 @@ class AuroraHTMLCleanup:
 
     def check_unused_folder_safety(self) -> bool:
         """Check if unused/ folder is safe to use for archiving"""
-        print("\n🔍 CHECKING UNUSED FOLDER")
+        print("\n[SCAN] CHECKING UNUSED FOLDER")
         print("=" * 60)
 
         unused = self.root / "unused"
 
         if not unused.exists():
-            print("✅ unused/ folder does not exist - safe to create")
+            print("[OK] unused/ folder does not exist - safe to create")
             return True
 
         # Check what's in unused/
         items = list(unused.rglob("*"))
         files = [f for f in items if f.is_file()]
 
-        print(f"📁 unused/ folder exists with {len(files)} files")
+        print(f"[EMOJI] unused/ folder exists with {len(files)} files")
 
         # Check if it's being imported or referenced
         important_extensions = ['.py', '.ts', '.tsx', '.js', '.jsx']
@@ -47,12 +47,12 @@ class AuroraHTMLCleanup:
             f for f in files if f.suffix in important_extensions]
 
         if important_files:
-            print(f"⚠️  Found {len(important_files)} code files in unused/")
+            print(f"[WARN]  Found {len(important_files)} code files in unused/")
             for f in important_files[:5]:
                 print(f"   • {f.relative_to(self.root)}")
 
             # Check if any Python files import from unused
-            print("\n🔍 Checking for imports from unused/...")
+            print("\n[SCAN] Checking for imports from unused/...")
             py_files = list(self.root.glob("*.py"))
             imports_found = False
 
@@ -60,21 +60,21 @@ class AuroraHTMLCleanup:
                 try:
                     content = py_file.read_text(encoding="utf-8")
                     if "from unused" in content or "import unused" in content:
-                        print(f"⚠️  {py_file.name} imports from unused/")
+                        print(f"[WARN]  {py_file.name} imports from unused/")
                         imports_found = True
                 except:
                     pass
 
             if not imports_found:
-                print("✅ No active imports from unused/ folder")
+                print("[OK] No active imports from unused/ folder")
         else:
-            print("✅ No important code files in unused/")
+            print("[OK] No important code files in unused/")
 
         return True
 
     def find_all_html_files(self) -> List[Path]:
         """Find all HTML files (excluding protected paths)"""
-        print("\n🔍 FINDING ALL HTML FILES")
+        print("\n[SCAN] FINDING ALL HTML FILES")
         print("=" * 60)
 
         html_files = []
@@ -119,7 +119,7 @@ class AuroraHTMLCleanup:
 
     def move_html_files(self, html_files: List[Path]):
         """Move HTML files to unused/html_archive/ maintaining structure"""
-        print(f"\n📦 MOVING HTML FILES TO unused/html_archive/")
+        print(f"\n[PACKAGE] MOVING HTML FILES TO unused/html_archive/")
         print("=" * 60)
 
         # Create archive folder
@@ -143,13 +143,13 @@ class AuroraHTMLCleanup:
                 })
 
                 if len(self.moved) <= 10:  # Show first 10
-                    print(f"✅ {rel_path}")
+                    print(f"[OK] {rel_path}")
                 elif len(self.moved) == 11:
                     print(f"   ... ({len(html_files) - 10} more files)")
 
             except Exception as e:
                 print(
-                    f"❌ Failed to move {html_file.relative_to(self.root)}: {e}")
+                    f"[ERROR] Failed to move {html_file.relative_to(self.root)}: {e}")
                 self.skipped.append(str(html_file.relative_to(self.root)))
 
     def create_readme(self):
@@ -172,7 +172,7 @@ This folder contains archived files that are not actively used in the project.
   - Legacy frontend files
 
 ## Important
-⚠️ This folder should NOT be imported or used by active code.
+[WARN] This folder should NOT be imported or used by active code.
 - Do not add this folder to build processes
 - Do not import from this folder in active code
 - Files here are for historical reference only
@@ -185,22 +185,22 @@ This folder contains archived files that are not actively used in the project.
 """
 
         readme_path.write_text(readme_content, encoding="utf-8")
-        print(f"\n📝 Created: {readme_path.relative_to(self.root)}")
+        print(f"\n[EMOJI] Created: {readme_path.relative_to(self.root)}")
 
     def generate_report(self):
         """Generate final report"""
         print("\n" + "=" * 60)
-        print("📊 HTML CLEANUP SUMMARY")
+        print("[DATA] HTML CLEANUP SUMMARY")
         print("=" * 60)
 
-        print(f"\n✅ Successfully moved: {len(self.moved)} files")
-        print(f"❌ Failed to move: {len(self.skipped)} files")
-        print(f"\n📁 All HTML files archived to: unused/html_archive/")
+        print(f"\n[OK] Successfully moved: {len(self.moved)} files")
+        print(f"[ERROR] Failed to move: {len(self.skipped)} files")
+        print(f"\n[EMOJI] All HTML files archived to: unused/html_archive/")
         print(f"   • Original folder structure maintained")
         print(f"   • TSX versions remain in place")
 
         if self.skipped:
-            print(f"\n⚠️  Skipped files:")
+            print(f"\n[WARN]  Skipped files:")
             for skipped in self.skipped[:5]:
                 print(f"   • {skipped}")
 
@@ -217,8 +217,8 @@ This folder contains archived files that are not actively used in the project.
         with open(report_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2)
 
-        print(f"\n💾 Detailed report: {report_path.name}")
-        print("\n✅ CLEANUP COMPLETE!")
+        print(f"\n[EMOJI] Detailed report: {report_path.name}")
+        print("\n[OK] CLEANUP COMPLETE!")
         print("   • All HTML files archived")
         print("   • TSX versions active")
         print("   • unused/ folder documented")
@@ -226,26 +226,26 @@ This folder contains archived files that are not actively used in the project.
 
     def run(self):
         """Run the cleanup"""
-        print("\n🌟 AURORA HTML CLEANUP")
+        print("\n[STAR] AURORA HTML CLEANUP")
         print("=" * 60)
         print("Moving all HTML files to unused/html_archive/")
         print("=" * 60)
 
         # Check safety
         if not self.check_unused_folder_safety():
-            print("❌ Cannot proceed - unused/ folder needs review")
+            print("[ERROR] Cannot proceed - unused/ folder needs review")
             return
 
         # Find HTML files
         html_files = self.find_all_html_files()
 
         if not html_files:
-            print("\n✅ No HTML files found to move!")
+            print("\n[OK] No HTML files found to move!")
             return
 
         # Confirm
         print(
-            f"\n📋 Ready to move {len(html_files)} HTML files to unused/html_archive/")
+            f"\n[EMOJI] Ready to move {len(html_files)} HTML files to unused/html_archive/")
         print("   Original folder structure will be maintained")
         print("   TSX versions will remain in place\n")
 

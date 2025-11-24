@@ -28,11 +28,11 @@ class AuroraLintFixer:
                 self.fixes_applied += 1
                 if filepath not in self.files_modified:
                     self.files_modified.append(filepath)
-                print(f"✅ {description}: {filepath}")
+                print(f"[OK] {description}: {filepath}")
                 return True
             return False
         except Exception as e:
-            print(f"❌ Error fixing {filepath}: {e}")
+            print(f"[ERROR] Error fixing {filepath}: {e}")
             return False
 
     def fix_regex(self, filepath, pattern, replacement, description):
@@ -48,20 +48,20 @@ class AuroraLintFixer:
                 self.fixes_applied += 1
                 if filepath not in self.files_modified:
                     self.files_modified.append(filepath)
-                print(f"✅ {description}: {filepath}")
+                print(f"[OK] {description}: {filepath}")
                 return True
             return False
         except Exception as e:
-            print(f"❌ Error with regex fix {filepath}: {e}")
+            print(f"[ERROR] Error with regex fix {filepath}: {e}")
             return False
 
     def run_all_fixes(self):
         """Execute all fixes"""
-        print("🤖 Aurora Autonomous Lint Fixer Starting...")
+        print("[AGENT] Aurora Autonomous Lint Fixer Starting...")
         print("=" * 80)
 
         # Fix 1: Remove unused imports
-        print("\n📦 Fixing unused imports...")
+        print("\n[PACKAGE] Fixing unused imports...")
         self.fix_file("aurora_final_layout_fix.py", "import os\nimport sys", "import sys", "Remove unused os import")
         self.fix_file("aurora_final_lint_fix.py", "import glob\nimport os", "import os", "Remove unused glob import")
         self.fix_file("aurora_system_update_v2.py", "import os\nimport sys", "import sys", "Remove unused os import")
@@ -70,7 +70,7 @@ class AuroraLintFixer:
         )
 
         # Fix 2: Fix f-strings without interpolation
-        print("\n🔤 Fixing f-strings without interpolation...")
+        print("\n[EMOJI] Fixing f-strings without interpolation...")
         for filepath in ["aurora_verify_core_integration.py"]:
             if os.path.exists(filepath):
                 with open(filepath, encoding="utf-8") as f:
@@ -81,18 +81,18 @@ class AuroraLintFixer:
                 if new_content != content:
                     with open(filepath, "w", encoding="utf-8") as f:
                         f.write(new_content)
-                    print(f"✅ Fixed f-strings: {filepath}")
+                    print(f"[OK] Fixed f-strings: {filepath}")
                     self.fixes_applied += 1
 
         # Fix 3: Fix singleton comparisons (== True/False)
-        print("\n⚖️  Fixing singleton comparisons...")
+        print("\n[BALANCE]  Fixing singleton comparisons...")
         for filepath in ["test.py", "test_aurora_response.py", "create_a_simple_hello_world.py"]:
             if os.path.exists(filepath):
                 self.fix_regex(filepath, r"(\w+\([^)]*\))\s*==\s*True", r"\1", "Fix == True comparison")
                 self.fix_regex(filepath, r"(\w+\([^)]*\))\s*==\s*False", r"not \1", "Fix == False comparison")
 
         # Fix 4: Fix wrong import order
-        print("\n📥 Fixing import order...")
+        print("\n[EMOJI] Fixing import order...")
         # start_aurora_autonomous.py - move standard imports to top
         if os.path.exists("start_aurora_autonomous.py"):
             with open("start_aurora_autonomous.py", encoding="utf-8") as f:
@@ -126,7 +126,7 @@ class AuroraLintFixer:
 
             with open("start_aurora_autonomous.py", "w", encoding="utf-8") as f:
                 f.writelines(other_lines)
-            print("✅ Fixed import order: start_aurora_autonomous.py")
+            print("[OK] Fixed import order: start_aurora_autonomous.py")
             self.fixes_applied += 1
 
         # test_lib_factorial.py - move time import before pytest
@@ -136,11 +136,11 @@ class AuroraLintFixer:
             content = content.replace("import pytest\nimport time", "import time\n\nimport pytest")
             with open("test_lib_factorial.py", "w", encoding="utf-8") as f:
                 f.write(content)
-            print("✅ Fixed import order: test_lib_factorial.py")
+            print("[OK] Fixed import order: test_lib_factorial.py")
             self.fixes_applied += 1
 
         # Fix 5: Fix invalid names (constants should be UPPER_CASE)
-        print("\n🏷️  Fixing invalid naming conventions...")
+        print("\n[EMOJI]️  Fixing invalid naming conventions...")
         naming_fixes = [
             ("aurora_full_system_debug.py", "    ready = ", "    READY = "),
             ("aurora_full_system_debug.py", "ready =", "READY ="),
@@ -160,7 +160,7 @@ class AuroraLintFixer:
                 self.fix_file(filepath, old, new, "Fix naming convention")
 
         # Fix 6: Add missing docstrings
-        print("\n📝 Adding missing docstrings...")
+        print("\n[EMOJI] Adding missing docstrings...")
         docstring_fixes = {
             "aurora_complete_system_update.py": {
                 "line": "class AuroraSystemUpdate:",
@@ -198,11 +198,11 @@ class AuroraLintFixer:
                     content = content.replace(target + "\n", target + "\n" + fix_data["add_after"] + "\n")
                     with open(filepath, "w", encoding="utf-8") as f:
                         f.write(content)
-                    print(f"✅ Added docstring: {filepath}")
+                    print(f"[OK] Added docstring: {filepath}")
                     self.fixes_applied += 1
 
         # Fix 7: Break long lines
-        print("\n📏 Fixing line-too-long issues...")
+        print("\n[EMOJI] Fixing line-too-long issues...")
         # This is complex - Aurora will handle case by case
         long_line_files = [
             "aurora_complete_lint_solution.py",
@@ -235,11 +235,11 @@ class AuroraLintFixer:
                 if modified:
                     with open(filepath, "w", encoding="utf-8") as f:
                         f.writelines(lines)
-                    print(f"✅ Fixed long lines: {filepath}")
+                    print(f"[OK] Fixed long lines: {filepath}")
                     self.fixes_applied += 1
 
         # Fix 8: Suppress import-outside-toplevel where intentional
-        print("\n🔧 Handling import-outside-toplevel (adding # pylint: disable)...")
+        print("\n[EMOJI] Handling import-outside-toplevel (adding # pylint: disable)...")
         import_suppress_files = [
             "test_dashboard_simple.py",
             "test_demo_dashboard.py",
@@ -262,22 +262,22 @@ class AuroraLintFixer:
                 if new_content != content:
                     with open(filepath, "w", encoding="utf-8") as f:
                         f.write(new_content)
-                    print(f"✅ Added pylint disable comments: {filepath}")
+                    print(f"[OK] Added pylint disable comments: {filepath}")
                     self.fixes_applied += 1
 
         # Final Report
         print("\n" + "=" * 80)
-        print(f"✨ Aurora has applied {self.fixes_applied} fixes!")
-        print(f"📁 Modified {len(self.files_modified)} files")
+        print(f"[SPARKLE] Aurora has applied {self.fixes_applied} fixes!")
+        print(f"[EMOJI] Modified {len(self.files_modified)} files")
         print("=" * 80)
-        print("\n🔍 Running pylint to verify...")
+        print("\n[SCAN] Running pylint to verify...")
 
         return self.fixes_applied > 0
 
 
 def main():
     """Main execution"""
-    print("🌟 Aurora Autonomous Lint Fixer")
+    print("[STAR] Aurora Autonomous Lint Fixer")
     print("=" * 80)
     print("Fixing all 170 pylint problems autonomously...")
     print()
@@ -286,10 +286,10 @@ def main():
     success = fixer.run_all_fixes()
 
     if SUCCESS:
-        print("\n✅ Aurora has completed the autonomous fixes!")
+        print("\n[OK] Aurora has completed the autonomous fixes!")
         print("Run 'python -m pylint *.py --disable=C,R' to verify")
     else:
-        print("\n⚠️  No fixes applied - files may already be fixed")
+        print("\n[WARN]  No fixes applied - files may already be fixed")
 
     return 0
 

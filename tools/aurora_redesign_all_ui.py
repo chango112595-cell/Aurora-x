@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌟 Aurora: Redesign ALL UI pages with futuristic quantum theme
+[STAR] Aurora: Redesign ALL UI pages with futuristic quantum theme
 Fast execution - implementing my vision across the entire app
 """
 
@@ -12,7 +12,7 @@ class AuroraUIRedesigner:
     def __init__(self):
         self.workspace = Path("/workspaces/Aurora-x")
 
-    def log(self, msg, emoji="🌟"):
+    def log(self, msg, emoji="[STAR]"):
         print(f"{emoji} Aurora: {msg}")
 
     def create_quantum_wrapper(self):
@@ -71,7 +71,7 @@ export function QuantumBackground({ children, className = '' }: QuantumBackgroun
 
         path = self.workspace / "client/src/components/quantum-background.tsx"
         path.write_text(component)
-        self.log("✅ Created quantum background component")
+        self.log("[OK] Created quantum background component")
 
     def redesign_chat_interface(self):
         """Redesign chat interface with quantum theme"""
@@ -122,7 +122,7 @@ export function QuantumBackground({ children, className = '' }: QuantumBackgroun
             )
 
         chat_file.write_text(content)
-        self.log("✅ Chat interface redesigned")
+        self.log("[OK] Chat interface redesigned")
 
     def redesign_home_page(self):
         """Add quantum effects to home page"""
@@ -151,7 +151,7 @@ export function QuantumBackground({ children, className = '' }: QuantumBackgroun
             )
 
         home_file.write_text(content)
-        self.log("✅ Home page redesigned")
+        self.log("[OK] Home page redesigned")
 
     def add_quantum_card_styles(self):
         """Add quantum styling to global CSS"""
@@ -197,7 +197,7 @@ export function QuantumBackground({ children, className = '' }: QuantumBackgroun
         if ".quantum-card" not in content:
             content += quantum_styles
             global_css.write_text(content)
-            self.log("✅ Quantum styles added to global CSS")
+            self.log("[OK] Quantum styles added to global CSS")
 
     def update_all_cards(self):
         """Update Card components across pages"""
@@ -223,10 +223,10 @@ export function QuantumBackground({ children, className = '' }: QuantumBackgroun
             content = re.sub(r'<Button className="([^"]*)"', r'<Button className="\1 quantum-button"', content)
 
             file_path.write_text(content)
-            self.log(f"✅ Updated {page_path}")
+            self.log(f"[OK] Updated {page_path}")
 
     def execute(self):
-        self.log("Starting complete UI redesign...", "🚀")
+        self.log("Starting complete UI redesign...", "[LAUNCH]")
         print("=" * 80)
 
         self.create_quantum_wrapper()
@@ -236,8 +236,8 @@ export function QuantumBackground({ children, className = '' }: QuantumBackgroun
         self.update_all_cards()
 
         print("=" * 80)
-        self.log("UI redesign complete!", "✅")
-        self.log("All pages now have quantum holographic theme!", "🎨")
+        self.log("UI redesign complete!", "[OK]")
+        self.log("All pages now have quantum holographic theme!", "[EMOJI]")
 
 
 if __name__ == "__main__":

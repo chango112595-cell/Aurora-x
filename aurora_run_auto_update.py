@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
 def main():
-    print("🌟 Aurora Running Advanced Auto-Update System\n")
+    print("[STAR] Aurora Running Advanced Auto-Update System\n")
     aurora = AuroraCoreIntelligence()
 
     question = """
@@ -34,17 +34,17 @@ def main():
     print("="*80 + "\n")
 
     # Try to run the automatic updater directly
-    print("🔄 Attempting to run automatic system updater...\n")
+    print("[SYNC] Attempting to run automatic system updater...\n")
 
     try:
         from aurora_automatic_system_update import AuroraSystemUpdater
 
         updater = AuroraSystemUpdater()
-        print("✅ Automatic updater loaded\n")
+        print("[OK] Automatic updater loaded\n")
 
         # Get current counts
         counts = updater.get_current_tier_count()
-        print(f"📊 Current system state:")
+        print(f"[DATA] Current system state:")
         print(f"   - Foundation Tasks: {counts['foundation_count']}")
         print(f"   - Knowledge Tiers: {counts['tier_count']}")
         print(f"   - Total Capabilities: {counts['total_capabilities']}")
@@ -57,7 +57,7 @@ def main():
         report = updater.generate_update_report(counts)
 
         print("\n" + "="*80)
-        print("🌟 Aurora's Update Report:")
+        print("[STAR] Aurora's Update Report:")
         print("="*80)
         print(report)
         print("="*80)
@@ -70,10 +70,10 @@ def main():
             f.write("## Update Results\n\n")
             f.write(report)
 
-        print("\n✅ Report saved to AURORA_AUTO_UPDATE_REPORT.md")
+        print("\n[OK] Report saved to AURORA_AUTO_UPDATE_REPORT.md")
 
     except Exception as e:
-        print(f"❌ Error running automatic updater: {e}")
+        print(f"[ERROR] Error running automatic updater: {e}")
         print(f"\nAsking Aurora to analyze the issue...\n")
 
         # Fall back to asking Aurora
@@ -82,7 +82,7 @@ def main():
         context = aurora.get_conversation_context("auto_update")
         response = aurora.generate_aurora_response(analysis, context)
 
-        print("🌟 Aurora's Response:")
+        print("[STAR] Aurora's Response:")
         print("="*80)
         print(response)
         print("="*80)

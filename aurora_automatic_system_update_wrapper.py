@@ -15,11 +15,11 @@ def main():
     deep_updater = script_dir / "aurora_deep_system_updater.py"
 
     if deep_updater.exists():
-        print("🌟 Running Aurora Deep System Updater...")
+        print("[STAR] Running Aurora Deep System Updater...")
         result = subprocess.run([sys.executable, str(deep_updater)])
         return result.returncode
     else:
-        print("❌ Deep updater not found!")
+        print("[ERROR] Deep updater not found!")
         return 1
 
 

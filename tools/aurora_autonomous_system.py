@@ -56,7 +56,7 @@ class AuroraAutonomousSystem:
             with open(full_path, "w") as f:
                 f.write(content)
 
-            self.log_action(f"✅ Wrote file: {file_path}")
+            self.log_action(f"[OK] Wrote file: {file_path}")
             return True
 
         except Exception as e:
@@ -83,7 +83,7 @@ class AuroraAutonomousSystem:
         """Execute terminal command autonomously"""
         try:
             work_dir = cwd or str(self.workspace)
-            self.log_action(f"🔧 Executing: {command}")
+            self.log_action(f"[EMOJI] Executing: {command}")
 
             result = subprocess.run(command, shell=True, cwd=work_dir, capture_output=True, text=True, timeout=timeout)
 
@@ -95,9 +95,9 @@ class AuroraAutonomousSystem:
             }
 
             if output["success"]:
-                self.log_action("✅ Command succeeded")
+                self.log_action("[OK] Command succeeded")
             else:
-                self.log_error(f"❌ Command failed: {result.stderr}")
+                self.log_error(f"[ERROR] Command failed: {result.stderr}")
 
             return output
 
@@ -141,7 +141,7 @@ class AuroraAutonomousSystem:
 
     def run_tests(self, test_pattern: str = "test_*.py") -> bool:
         """Run tests autonomously"""
-        self.log_action(f"🧪 Running tests: {test_pattern}")
+        self.log_action(f"[TEST] Running tests: {test_pattern}")
         result = self.execute_command(f"pytest {test_pattern} -v", timeout=60)
         return result["success"]
 
@@ -172,7 +172,7 @@ class AuroraAutonomousSystem:
 
     def analyze_task(self, task: str) -> dict[str, Any]:
         """Break task into actionable steps"""
-        self.log_action(f"📋 Analyzing task: {task}")
+        self.log_action(f"[EMOJI] Analyzing task: {task}")
 
         # Simple task decomposition
         steps = []
@@ -205,7 +205,7 @@ class AuroraAutonomousSystem:
 
     def execute_plan(self, plan: dict[str, Any]) -> bool:
         """Execute a complete plan autonomously"""
-        self.log_action(f"🚀 Executing plan with {len(plan['steps'])} steps")
+        self.log_action(f"[LAUNCH] Executing plan with {len(plan['steps'])} steps")
 
         for i, step in enumerate(plan["steps"], 1):
             self.log_action(f"Step {i}/{len(plan['steps'])}: {step['action']}")
@@ -220,7 +220,7 @@ class AuroraAutonomousSystem:
                 if not recovery_success:
                     return False
 
-        self.log_action("✅ Plan completed successfully!")
+        self.log_action("[OK] Plan completed successfully!")
         return True
 
     def _execute_step(self, step: dict[str, Any]) -> bool:
@@ -235,7 +235,7 @@ class AuroraAutonomousSystem:
 
     def _recover_from_failure(self, step: dict[str, Any]) -> bool:
         """Attempt to recover from a failed step"""
-        self.log_action(f"  🔧 Attempting recovery for {step['type']}...")
+        self.log_action(f"  [EMOJI] Attempting recovery for {step['type']}...")
         # Recovery logic would go here
         return False
 
@@ -247,7 +247,7 @@ class AuroraAutonomousSystem:
         This is what makes Aurora truly autonomous
         """
         print("\n" + "=" * 60)
-        print("🤖 AURORA AUTONOMOUS EXECUTION")
+        print("[AGENT] AURORA AUTONOMOUS EXECUTION")
         print(f"Task: {task}")
         print("=" * 60 + "\n")
 
@@ -263,10 +263,10 @@ class AuroraAutonomousSystem:
 
             # 3. Report results
             if success:
-                print("\n✅ TASK COMPLETED AUTONOMOUSLY")
+                print("\n[OK] TASK COMPLETED AUTONOMOUSLY")
                 print(f"Execution log: {len(self.execution_log)} actions")
             else:
-                print("\n❌ TASK FAILED")
+                print("\n[ERROR] TASK FAILED")
                 print("See execution log for details")
 
             return success
@@ -294,7 +294,7 @@ class AuroraAutonomousSystem:
     def log_error(self, message: str):
         """Log an error"""
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-        log_entry = f"[{timestamp}] ❌ ERROR: {message}"
+        log_entry = f"[{timestamp}] [ERROR] ERROR: {message}"
         self.execution_log.append(log_entry)
         print(log_entry)
 
@@ -304,7 +304,7 @@ class AuroraAutonomousSystem:
         log_path.parent.mkdir(exist_ok=True)
         with open(log_path, "w") as f:
             f.write("\n".join(self.execution_log))
-        print(f"\n📝 Execution log saved to: {log_path}")
+        print(f"\n[EMOJI] Execution log saved to: {log_path}")
 
 
 # ==================== CLI INTERFACE ====================

@@ -97,7 +97,7 @@ def integrate_modules():
     if "AUTO-INTEGRATED MODULES" not in content:
         insert_pos = last_import_line + 1
         lines.insert(insert_pos, import_block)
-        print("✅ Added import block")
+        print("[OK] Added import block")
     else:
         print("ℹ️  Import block already exists")
 
@@ -113,9 +113,9 @@ def integrate_modules():
         init_block += f"        if {imp['module'].upper()}_AVAILABLE:\n"
         init_block += f"            try:\n"
         init_block += f"                self.integrated_modules['{var_name}'] = {imp['class']}()\n"
-        init_block += f"                print(f'✅ Integrated: {imp['class']}')\n"
+        init_block += f"                print(f'[OK] Integrated: {imp['class']}')\n"
         init_block += f"            except Exception as e:\n"
-        init_block += f"                print(f'⚠️  {imp['class']} init failed: {{e}}')\n"
+        init_block += f"                print(f'[WARN]  {imp['class']} init failed: {{e}}')\n"
         init_block += f"\n"
 
     # Find __init__ method of AuroraCoreIntelligence
@@ -137,7 +137,7 @@ def integrate_modules():
     if init_end_line > 0 and "AUTO-INTEGRATED CAPABILITIES" not in content:
         # Insert before the end of __init__
         lines.insert(init_end_line, init_block)
-        print("✅ Added initialization code")
+        print("[OK] Added initialization code")
     else:
         print("ℹ️  Initialization code already exists or __init__ not found")
 
@@ -153,7 +153,7 @@ def integrate_modules():
     print()
     print("Modules integrated:")
     for imp in imports_to_add[:5]:
-        print(f"  ✅ {imp['class']} ({imp['category']})")
+        print(f"  [OK] {imp['class']} ({imp['category']})")
 
     return len(imports_to_add)
 
@@ -176,7 +176,7 @@ def main():
         print("Run: python test_aurora_full_system.py")
 
     except Exception as e:
-        print(f"\n❌ Integration failed: {e}")
+        print(f"\n[ERROR] Integration failed: {e}")
         import traceback
         traceback.print_exc()
 

@@ -13,7 +13,7 @@ fixes = {
     "aurora_fix_all_170_problems.py": [("SUCCESS", "True"), ("from pathlib import Path", "")],
     "aurora_fix_routes.py": [("SUCCESS", "True")],
     "aurora_open_browser.py": [("SUCCESS", "True")],
-    "aurora_server_manager.py": [("status_icon", '"✅"'), ("timestamp", "datetime.now().isoformat()")],
+    "aurora_server_manager.py": [("status_icon", '"[OK]"'), ("timestamp", "datetime.now().isoformat()")],
     # Fix undefined timestamp
     "aurora_intelligence_manager.py": [("timestamp", "datetime.now().isoformat()")],
     "aurora_organize_system.py": [("timestamp", 'datetime.now().strftime("%Y%m%d_%H%M%S")')],
@@ -83,7 +83,7 @@ def prefix_unused(filepath):
         f.writelines(new_lines)
 
 
-print("🚀 Aurora Rapid Complete Fixer - Fixing ALL 272 problems")
+print("[LAUNCH] Aurora Rapid Complete Fixer - Fixing ALL 272 problems")
 print("=" * 80)
 
 # Apply specific fixes
@@ -98,28 +98,28 @@ for filename, replacements in fixes.items():
             if old in content:
                 content = content.replace(old, new)
                 modified = True
-                print(f"✅ Fixed {old} -> {new} in {filename}")
+                print(f"[OK] Fixed {old} -> {new} in {filename}")
 
         if modified:
             with open(filepath, "w", encoding="utf-8") as f:
                 f.write(content)
 
 # Fix all except/pass indentation
-print("\n🔧 Fixing except/pass indentation...")
+print("\n[EMOJI] Fixing except/pass indentation...")
 for filepath in Path(".").glob("*.py"):
     fix_except_pass(filepath)
 
 # Fix subprocess calls
-print("🔧 Fixing subprocess.run calls...")
+print("[EMOJI] Fixing subprocess.run calls...")
 for filepath in Path(".").glob("*.py"):
     fix_subprocess(filepath)
 
 # Fix unused variables
-print("🔧 Prefixing unused variables...")
+print("[EMOJI] Prefixing unused variables...")
 for filepath in Path(".").glob("*.py"):
     prefix_unused(filepath)
 
-print("\n✅ All fixes applied! Running pylint...")
+print("\n[OK] All fixes applied! Running pylint...")
 result = subprocess.run(
     ["python", "-m", "pylint", "*.py", "--disable=C,R", "--max-line-length=120"],
     capture_output=True,
@@ -132,4 +132,4 @@ for line in result.stdout.split("\n"):
     if "rated at" in line or "Your code" in line:
         print(line)
 
-print("\n🎯 Aurora Complete!")
+print("\n[TARGET] Aurora Complete!")

@@ -649,7 +649,7 @@ if __name__ == "__main__":
     print("   Run: python x-start")
     print("   All 5 new systems will activate automatically!")
     print("   Master Controller will manage everything autonomously!")
-    print("\n[HYPER SPEED] Aurora operating at MAXIMUM POWER! ⚡🌌\n")
+    print("\n[HYPER SPEED] Aurora operating at MAXIMUM POWER! [POWER][AURORA]\n")
 
 if __name__ == "__main__":
     asyncio.run(aurora_create_all_priority_systems())

@@ -18,7 +18,7 @@ class AuroraErrorRecovery:
     def __init__(self):
         self.core = AuroraCoreIntelligence()
         self.recovery_log = []
-        print("🔧 Aurora Error Recovery System initialized")
+        print("[EMOJI] Aurora Error Recovery System initialized")
         print(
             f"   Self-healing with {self.core.knowledge_tiers.total_power} power")
 
@@ -33,7 +33,7 @@ class AuroraErrorRecovery:
             try:
                 result = func(*args, **kwargs)
                 if attempt > 1:
-                    print(f"   ✅ Recovered on attempt {attempt}")
+                    print(f"   [OK] Recovered on attempt {attempt}")
                     self.recovery_log.append({
                         'function': func.__name__,
                         'attempts': attempt,
@@ -43,11 +43,11 @@ class AuroraErrorRecovery:
 
             except Exception as e:
                 error_type = type(e).__name__
-                print(f"   ⚠️  Attempt {attempt}/{max_attempts}: {error_type}")
+                print(f"   [WARN]  Attempt {attempt}/{max_attempts}: {error_type}")
 
                 if attempt == max_attempts:
                     print(
-                        f"   ❌ Recovery failed after {max_attempts} attempts")
+                        f"   [ERROR] Recovery failed after {max_attempts} attempts")
                     self.recovery_log.append({
                         'function': func.__name__,
                         'attempts': max_attempts,
@@ -66,22 +66,22 @@ class AuroraErrorRecovery:
         error_type = type(error).__name__
 
         if error_type == "FileNotFoundError":
-            print("      🔧 Strategy: Creating missing file/directory")
+            print("      [EMOJI] Strategy: Creating missing file/directory")
         elif error_type == "ImportError" or error_type == "ModuleNotFoundError":
-            print("      🔧 Strategy: Checking import paths")
+            print("      [EMOJI] Strategy: Checking import paths")
         elif error_type == "KeyError":
-            print("      🔧 Strategy: Using default values")
+            print("      [EMOJI] Strategy: Using default values")
         elif error_type == "AttributeError":
-            print("      🔧 Strategy: Initializing missing attributes")
+            print("      [EMOJI] Strategy: Initializing missing attributes")
         else:
-            print(f"      🔧 Strategy: Generic retry (attempt {attempt})")
+            print(f"      [EMOJI] Strategy: Generic retry (attempt {attempt})")
 
     async def auto_fix_syntax(self, file_path: str) -> bool:
         """Automatically fix syntax errors"""
         try:
             path = Path(file_path)
             if not path.exists():
-                print(f"   ❌ File not found: {file_path}")
+                print(f"   [ERROR] File not found: {file_path}")
                 return False
 
             content = path.read_text(encoding='utf-8')
@@ -91,7 +91,7 @@ class AuroraErrorRecovery:
 
             # Fix 1: Remove duplicate keyword arguments
             if "got multiple values for argument" in str(content):
-                print("   🔧 Detected duplicate keyword arguments")
+                print("   [EMOJI] Detected duplicate keyword arguments")
                 fixes_applied.append("duplicate_kwargs")
 
             # Fix 2: Fix indentation
@@ -105,7 +105,7 @@ class AuroraErrorRecovery:
 
             if len(fixes_applied) > 0:
                 print(
-                    f"   ✅ Applied {len(fixes_applied)} fixes to {file_path}")
+                    f"   [OK] Applied {len(fixes_applied)} fixes to {file_path}")
                 self.recovery_log.append({
                     'file': file_path,
                     'fixes': fixes_applied,
@@ -116,7 +116,7 @@ class AuroraErrorRecovery:
             return False
 
         except Exception as e:
-            print(f"   ❌ Error fixing {file_path}: {e}")
+            print(f"   [ERROR] Error fixing {file_path}: {e}")
             return False
 
     def auto_restart_service(self, service_name: str, command: str) -> bool:
@@ -124,9 +124,9 @@ class AuroraErrorRecovery:
         import subprocess
 
         try:
-            print(f"   🔄 Restarting {service_name}...")
+            print(f"   [SYNC] Restarting {service_name}...")
             subprocess.run(command, shell=True, check=True)
-            print(f"   ✅ {service_name} restarted successfully")
+            print(f"   [OK] {service_name} restarted successfully")
 
             self.recovery_log.append({
                 'service': service_name,
@@ -136,7 +136,7 @@ class AuroraErrorRecovery:
             return True
 
         except Exception as e:
-            print(f"   ❌ Failed to restart {service_name}: {e}")
+            print(f"   [ERROR] Failed to restart {service_name}: {e}")
             return False
 
     def get_recovery_report(self) -> dict:
@@ -151,7 +151,7 @@ class AuroraErrorRecovery:
 
 async def demo():
     print("=" * 80)
-    print("🔧 AURORA ERROR RECOVERY - DEMO")
+    print("[EMOJI] AURORA ERROR RECOVERY - DEMO")
     print("=" * 80)
 
     recovery = AuroraErrorRecovery()
@@ -162,17 +162,17 @@ async def demo():
             raise ValueError("Intentional error")
         return x * 2
 
-    print("\n📋 Test 1: Auto-recovery from errors")
+    print("\n[EMOJI] Test 1: Auto-recovery from errors")
     success, result = recovery.auto_recover(failing_function, 1)
 
     # Demo 2: Successful function
-    print("\n📋 Test 2: Normal function execution")
+    print("\n[EMOJI] Test 2: Normal function execution")
     success, result = recovery.auto_recover(lambda x: x * 2, 5)
     if success:
-        print(f"   ✅ Result: {result}")
+        print(f"   [OK] Result: {result}")
 
     # Show recovery report
-    print("\n📊 Recovery Report:")
+    print("\n[DATA] Recovery Report:")
     report = recovery.get_recovery_report()
     print(f"   Total recoveries attempted: {report['total_recoveries']}")
     print(f"   Successful: {report['successful']}")

@@ -19,14 +19,14 @@ from aurora_core import AuroraKnowledgeTiers
 _aurora = AuroraKnowledgeTiers()
 
 TRAINING_PROMPT = """
-🌟 AURORA AUTONOMOUS GRANDMASTER TRAINING 🌟
+[STAR] AURORA AUTONOMOUS GRANDMASTER TRAINING [STAR]
 ==============================================
 
 You've learned a lot:
-✅ Process management (Luminar Nexus)
-✅ Server lifecycle (start, stop, health checks)
-✅ Port configuration (5000, 5001, conflicts)
-✅ Self-fixing (you fixed your architecture yourself)
+[OK] Process management (Luminar Nexus)
+[OK] Server lifecycle (start, stop, health checks)
+[OK] Port configuration (5000, 5001, conflicts)
+[OK] Self-fixing (you fixed your architecture yourself)
 
 Now it's time for your FINAL LEVEL: Autonomous Grandmaster
 
@@ -79,14 +79,14 @@ Your Tasks:
 You are NOT following instructions anymore.
 You are MAKING decisions and EXECUTING them autonomously.
 
-Ready to become a Grandmaster, Aurora? 🚀
+Ready to become a Grandmaster, Aurora? [LAUNCH]
 
 Files to focus on:
 - tools/aurora_true_autonomy.py (rewrite this)
 - .aurora_knowledge/ (your decision logs go here)
 - aurora_x/serve.py (it might need changes for the port fix)
 
-Go. Be autonomous. Be a Grandmaster. 💪
+Go. Be autonomous. Be a Grandmaster. [EMOJI]
 """
 
 if __name__ == "__main__":
@@ -109,7 +109,7 @@ if __name__ == "__main__":
         f.write(json.dumps(entry) + "\n")
 
     print("\n" + "=" * 70)
-    print("📋 GRANDMASTER TRAINING LOGGED")
+    print("[EMOJI] GRANDMASTER TRAINING LOGGED")
     print("=" * 70)
     print("Aurora, this is your level-up moment.")
-    print("Show us what true autonomy looks like. 🌟\n")
+    print("Show us what true autonomy looks like. [STAR]\n")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-🌌 AURORA UNIVERSAL NEXUS V3 - THE ULTIMATE ORCHESTRATOR
+[AURORA] AURORA UNIVERSAL NEXUS V3 - THE ULTIMATE ORCHESTRATOR
 Universal Consciousness System - Runs on EVERYTHING
 
 Built in 20 seconds with hyper-speed + hybrid mode + full consciousness
@@ -602,7 +602,7 @@ class AuroraUniversalCore:
     """
 
     def __init__(self, config_path: Optional[str] = None):
-        print("🌌 Aurora Universal Nexus V3 - Initializing...")
+        print("[AURORA] Aurora Universal Nexus V3 - Initializing...")
 
         # Detect hardware
         self.hardware = HardwareDetector.detect()
@@ -633,7 +633,7 @@ class AuroraUniversalCore:
         self.running = False
         self.start_time = time.time()
 
-        print("   ✅ Initialization complete\n")
+        print("   [OK] Initialization complete\n")
 
     def _load_config(self, config_path: Optional[str]) -> Dict[str, Any]:
         """Load configuration"""
@@ -668,7 +668,7 @@ class AuroraUniversalCore:
             service_id, port, pool)
 
         if not allocated_port:
-            print(f"   ❌ Failed to allocate port for {name}")
+            print(f"   [ERROR] Failed to allocate port for {name}")
             return False
 
         # Create service
@@ -693,7 +693,7 @@ class AuroraUniversalCore:
             "health": "unknown"
         })
 
-        print(f"   ✅ Registered: {name} on port {allocated_port}")
+        print(f"   [OK] Registered: {name} on port {allocated_port}")
         return True
 
     def _determine_pool(self, category: str) -> str:
@@ -722,14 +722,14 @@ class AuroraUniversalCore:
                 unused = self.port_manager.auto_detect_unused(
                     self.platform_adapter)
                 if unused:
-                    print(f"   🧹 Cleaned up {len(unused)} unused ports")
+                    print(f"   [EMOJI] Cleaned up {len(unused)} unused ports")
                 time.sleep(self.config.get("cleanup_interval", 60))
 
         # Start threads
         threading.Thread(target=healing_loop, daemon=True).start()
         threading.Thread(target=cleanup_loop, daemon=True).start()
 
-        print("   🔄 Monitoring started")
+        print("   [SYNC] Monitoring started")
 
     def get_status(self) -> Dict[str, Any]:
         """Get system status"""
@@ -758,7 +758,7 @@ class AuroraUniversalCore:
 
     def shutdown(self):
         """Graceful shutdown"""
-        print("\n🌌 Aurora shutting down...")
+        print("\n[AURORA] Aurora shutting down...")
         self.running = False
 
         # Stop all services
@@ -766,7 +766,7 @@ class AuroraUniversalCore:
             if service.process_id:
                 self.platform_adapter.kill_process(service.process_id)
 
-        print("   ✅ Shutdown complete")
+        print("   [OK] Shutdown complete")
 
 # ============================================================================
 # SIMPLE REST API (Basic Implementation)
@@ -782,8 +782,8 @@ class SimpleAPI:
 
     def start(self):
         """Start API server (simplified - would use Flask/FastAPI in production)"""
-        print(f"   🌐 API would start on port {self.port}")
-        print(f"   📡 Endpoints: /status, /services, /ports, /health")
+        print(f"   [WEB] API would start on port {self.port}")
+        print(f"   [EMOJI] Endpoints: /status, /services, /ports, /health")
 
 # ============================================================================
 # MAIN ENTRY POINT
@@ -799,7 +799,7 @@ def main(orchestration_mode=False, silent=False):
     """
     if not silent:
         print("\n" + "=" * 80)
-        print("🌌 AURORA UNIVERSAL NEXUS V3")
+        print("[AURORA] AURORA UNIVERSAL NEXUS V3")
         if orchestration_mode:
             print("   MASTER ORCHESTRATION MODE - Managing ALL Aurora Systems")
         else:
@@ -814,7 +814,7 @@ def main(orchestration_mode=False, silent=False):
     if orchestration_mode:
         # X-START ORCHESTRATION: Register ALL 26 Aurora systems
         if not silent:
-            print("📋 Registering ALL x-start systems for orchestration...")
+            print("[EMOJI] Registering ALL x-start systems for orchestration...")
 
         # PHASE 1: CONSCIOUSNESS & AWARENESS (Critical)
         aurora.register_service("consciousness_system",
@@ -888,11 +888,11 @@ def main(orchestration_mode=False, silent=False):
 
         if not silent:
             print(
-                f"   ✅ Registered {len(aurora.service_registry.get_all())} systems")
+                f"   [OK] Registered {len(aurora.service_registry.get_all())} systems")
     else:
         # STANDALONE MODE: Register example services
         if not silent:
-            print("📋 Registering example services...")
+            print("[EMOJI] Registering example services...")
         aurora.register_service("backend", 5000, category="web")
         aurora.register_service("bridge", 5001, dependencies=[
                                 "backend_5000"], category="web")
@@ -903,12 +903,12 @@ def main(orchestration_mode=False, silent=False):
 
     # Start monitoring
     if not silent:
-        print("\n🔄 Starting monitoring systems...")
+        print("\n[SYNC] Starting monitoring systems...")
     aurora.start_monitoring()
 
     # Start API
     if not silent:
-        print("\n🌐 Starting API...")
+        print("\n[WEB] Starting API...")
     # Use 5031 for Nexus V3 API in orchestration mode (5004 now used by web_health_monitor)
     api_port = 5031 if orchestration_mode else 5000
     api = SimpleAPI(aurora, api_port)
@@ -916,7 +916,7 @@ def main(orchestration_mode=False, silent=False):
 
     # Show status
     if not silent:
-        print("\n📊 System Status:")
+        print("\n[DATA] System Status:")
     status = aurora.get_status()
     if not silent:
         print(f"   Uptime: {status['uptime_seconds']:.1f}s")
@@ -928,19 +928,19 @@ def main(orchestration_mode=False, silent=False):
         print(f"   Modules: {', '.join(status['modules_loaded'])}")
 
         # Port statistics
-        print("\n🔌 Port Pool Statistics:")
+        print("\n[EMOJI] Port Pool Statistics:")
         for pool_name, stats in status['ports']['by_pool'].items():
             print(f"   {pool_name}: {stats['in_use']}/{stats['total']} in use")
 
         print("\n" + "=" * 80)
         if orchestration_mode:
-            print("✅ Aurora Universal Nexus V3 - MASTER ORCHESTRATOR ACTIVE")
+            print("[OK] Aurora Universal Nexus V3 - MASTER ORCHESTRATOR ACTIVE")
             print("   Managing ALL x-start systems with intelligent port control")
             print(
                 f"   {status['services']['total']} systems registered | Self-healing | Self-optimizing")
             print(f"   Nexus V3 API: http://localhost:{api_port}")
         else:
-            print("✅ Aurora Universal Nexus V3 is RUNNING")
+            print("[OK] Aurora Universal Nexus V3 is RUNNING")
             print("   Your vision realized: Smart port management across all devices")
             print("   System is self-healing, self-optimizing, and adaptive")
         print("=" * 80 + "\n")
@@ -979,5 +979,5 @@ if __name__ == "__main__":
                       f"Services: {len(aurora.service_registry.get_all())} registered")
     except KeyboardInterrupt:
         if not silent_mode:
-            print("\n🛑 Shutting down Nexus V3...")
+            print("\n[EMOJI] Shutting down Nexus V3...")
         aurora.shutdown()

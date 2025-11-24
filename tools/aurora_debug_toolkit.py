@@ -39,7 +39,7 @@ class AuroraDebugger:
         line = frame.f_lineno
         function = frame.f_code.co_name
 
-        print(f"🔍 [{filename}:{line} in {function}()]")
+        print(f"[SCAN] [{filename}:{line} in {function}()]")
         print("   ", *args, **kwargs)
 
     def trace_calls(self, func):
@@ -100,7 +100,7 @@ class AuroraDebugger:
 
     def inspect_object(self, obj, name="object"):
         """Thoroughly inspect any object"""
-        print(f"\n🔍 Inspecting {name}:")
+        print(f"\n[SCAN] Inspecting {name}:")
         print(f"   Type: {type(obj)}")
         print(f"   Value: {obj}")
         print(f"   Dir: {[x for x in dir(obj) if not x.startswith('_')]}")
@@ -110,14 +110,14 @@ class AuroraDebugger:
 
     def check_types(self, **variables):
         """Check types of multiple variables"""
-        print("\n📊 Type Check:")
+        print("\n[DATA] Type Check:")
         for name, value in variables.items():
             print(f"   {name}: {type(value).__name__} = {value}")
 
     def breakpoint_here(self, condition=True):
         """Conditional breakpoint"""
         if condition:
-            self.logger.warning("⚠️  Breakpoint hit!")
+            self.logger.warning("[WARN]  Breakpoint hit!")
             breakpoint()
 
 
@@ -133,7 +133,7 @@ inspect = aurora_debug.inspect_object
 check_types = aurora_debug.check_types
 
 if __name__ == "__main__":
-    print("🧰 Aurora's Debug Toolkit loaded!")
+    print("[EMOJI] Aurora's Debug Toolkit loaded!")
     print("\nAvailable tools:")
     print("  dprint()       - Enhanced debug printing")
     print("  @trace         - Trace function calls")

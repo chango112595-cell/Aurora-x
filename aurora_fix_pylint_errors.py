@@ -26,7 +26,7 @@ class AuroraPylintFixer:
             errors = json.loads(result.stdout)
             return [e for e in errors if e["message-id"] in ["E0602", "E0401"]]
         except Exception as e:
-            print(f"❌ Error getting pylint errors: {e}")
+            print(f"[ERROR] Error getting pylint errors: {e}")
             return []
 
     def fix_exception_handlers(self, filepath):
@@ -52,12 +52,12 @@ class AuroraPylintFixer:
             if content != original:
                 with open(filepath, "w", encoding="utf-8") as f:
                     f.write(content)
-                print(f"✅ Fixed exception handlers in {filepath}")
+                print(f"[OK] Fixed exception handlers in {filepath}")
                 self.fixes_applied += 1
                 self.files_modified.append(filepath)
                 return True
         except Exception as ex:
-            print(f"❌ Error fixing {filepath}: {ex}")
+            print(f"[ERROR] Error fixing {filepath}: {ex}")
         return False
 
     def fix_missing_imports(self, filepath, missing_modules):
@@ -106,12 +106,12 @@ class AuroraPylintFixer:
                 with open(filepath, "w", encoding="utf-8") as f:
                     f.writelines(lines)
 
-                print(f"✅ Added imports to {filepath}: {', '.join(missing_modules)}")
+                print(f"[OK] Added imports to {filepath}: {', '.join(missing_modules)}")
                 self.fixes_applied += 1
                 self.files_modified.append(filepath)
                 return True
         except Exception as e:
-            print(f"❌ Error adding imports to {filepath}: {e}")
+            print(f"[ERROR] Error adding imports to {filepath}: {e}")
         return False
 
     def fix_variable_names(self, filepath, line_num, var_name):
@@ -145,21 +145,21 @@ class AuroraPylintFixer:
             with open(filepath, "w", encoding="utf-8") as f:
                 f.writelines(lines)
 
-            print(f"✅ Fixed variable '{var_name}' in {filepath}:{line_num}")
+            print(f"[OK] Fixed variable '{var_name}' in {filepath}:{line_num}")
             self.fixes_applied += 1
             if filepath not in self.files_modified:
                 self.files_modified.append(filepath)
             return True
         except Exception as e:
-            print(f"❌ Error fixing variable in {filepath}: {e}")
+            print(f"[ERROR] Error fixing variable in {filepath}: {e}")
         return False
 
     def fix_all_errors(self):
         """Main function to fix all pylint errors"""
-        print("🔍 Aurora analyzing pylint errors...")
+        print("[SCAN] Aurora analyzing pylint errors...")
 
         errors = self.get_pylint_errors()
-        print(f"📊 Found {len(errors)} errors to fix\n")
+        print(f"[DATA] Found {len(errors)} errors to fix\n")
 
         # Group errors by file
         errors_by_file = {}
@@ -171,7 +171,7 @@ class AuroraPylintFixer:
 
         # Fix each file
         for filepath, file_errors in errors_by_file.items():
-            print(f"\n📝 Fixing {filepath}:")
+            print(f"\n[EMOJI] Fixing {filepath}:")
 
             # Check for exception handler issues
             exception_errors = [e for e in file_errors if e["symbol"] == "undefined-variable" and "'e'" in e["message"]]
@@ -191,7 +191,7 @@ class AuroraPylintFixer:
                 self.fix_variable_names(filepath, error["line"], var_name)
 
         # Verify fixes
-        print("\n\n🧪 Verifying fixes...")
+        print("\n\n[TEST] Verifying fixes...")
         result = subprocess.run(
             ["python", "-m", "pylint", "*.py", "--disable=C,R,W", "--max-line-length=120"],
             capture_output=True,
@@ -204,8 +204,8 @@ class AuroraPylintFixer:
             if "rated at" in line:
                 print(f"\n{line}")
 
-        print(f"\n✨ Aurora applied {self.fixes_applied} fixes to {len(self.files_modified)} files")
-        print(f"📁 Modified files: {', '.join(self.files_modified)}")
+        print(f"\n[SPARKLE] Aurora applied {self.fixes_applied} fixes to {len(self.files_modified)} files")
+        print(f"[EMOJI] Modified files: {', '.join(self.files_modified)}")
 
 
 if __name__ == "__main__":

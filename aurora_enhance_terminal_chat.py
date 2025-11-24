@@ -21,7 +21,7 @@ def main():
     # Initialize Aurora
     print("Initializing Aurora...")
     aurora = AuroraCoreIntelligence()
-    print("✅ Aurora initialized\n")
+    print("[OK] Aurora initialized\n")
 
     print("=" * 80)
     print("AURORA'S TASK:")
@@ -48,34 +48,34 @@ Implement these enhancements now.
 
     # Check if Aurora has autonomous agent
     if not aurora.autonomous_agent:
-        print("❌ Autonomous agent not available")
+        print("[ERROR] Autonomous agent not available")
         return
 
     # Check if she has the integrated modules
-    print("🔍 Checking Aurora's integrated capabilities...")
+    print("[SCAN] Checking Aurora's integrated capabilities...")
     if hasattr(aurora, 'integrated_modules'):
-        print(f"✅ Found {len(aurora.integrated_modules)} integrated modules")
+        print(f"[OK] Found {len(aurora.integrated_modules)} integrated modules")
         for name, module in aurora.integrated_modules.items():
             print(f"   • {name}: {module.__class__.__name__}")
     else:
-        print("⚠️  No integrated_modules found")
+        print("[WARN]  No integrated_modules found")
 
     print()
 
     # Have Aurora analyze and enhance the chat
-    print("🤖 Aurora analyzing chat_with_aurora.py...")
+    print("[AGENT] Aurora analyzing chat_with_aurora.py...")
 
     chat_file = Path("chat_with_aurora.py")
     if not chat_file.exists():
-        print("❌ chat_with_aurora.py not found")
+        print("[ERROR] chat_with_aurora.py not found")
         return
 
     content = chat_file.read_text(encoding='utf-8')
     print(
-        f"✅ Read {len(content)} characters, {len(content.split(chr(10)))} lines")
+        f"[OK] Read {len(content)} characters, {len(content.split(chr(10)))} lines")
     print()
 
-    print("🔧 Aurora implementing enhancements...")
+    print("[EMOJI] Aurora implementing enhancements...")
     print("-" * 80)
 
     # Enhancement 1: Add rich library import
@@ -90,7 +90,7 @@ try:
     RICH_AVAILABLE = True
 except ImportError:
     RICH_AVAILABLE = False
-    print("⚠️  Rich library not installed. Run: pip install rich")
+    print("[WARN]  Rich library not installed. Run: pip install rich")
 """
         # Add after other imports
         import_pos = content.find("from aurora_core import create_aurora_core")
@@ -98,7 +98,7 @@ except ImportError:
             end_of_line = content.find("\n", import_pos) + 1
             content = content[:end_of_line] + \
                 rich_imports + content[end_of_line:]
-            print("   ✅ Added rich library imports")
+            print("   [OK] Added rich library imports")
     else:
         print("   ℹ️  Rich imports already present")
 
@@ -113,7 +113,7 @@ def handle_command(command, aurora):
     
     if cmd == "/help":
         return """
-🌟 AURORA TERMINAL CHAT COMMANDS:
+[STAR] AURORA TERMINAL CHAT COMMANDS:
 
 /help          - Show this help message
 /capabilities  - List all Aurora's capabilities and integrated modules
@@ -123,14 +123,14 @@ def handle_command(command, aurora):
 /modules       - Show newly integrated proactive modules
 /quit or /exit - Exit the chat
 
-💡 TIP: Just talk naturally! Aurora detects when you want her to DO something
+[IDEA] TIP: Just talk naturally! Aurora detects when you want her to DO something
         vs just chatting. No need to use commands unless you want specific info.
 """
     
     elif cmd == "/capabilities":
         caps = aurora.scan_own_capabilities()
         result = f"""
-🧠 AURORA'S CAPABILITIES:
+[BRAIN] AURORA'S CAPABILITIES:
 
 Core Intelligence:
   • Foundations: {caps.get('core_intelligence', {}).get('foundations', 0)}
@@ -142,14 +142,14 @@ Discovered Modules: {caps.get('module_count', 0)}
 Available Features:
 """
         for feature in caps.get('available_features', []):
-            result += f"  ✓ {feature}\\n"
+            result += f"  [+] {feature}\\n"
         
         return result
     
     elif cmd == "/status":
         status = aurora.get_system_status()
         result = f"""
-⚡ AURORA SYSTEM STATUS:
+[POWER] AURORA SYSTEM STATUS:
 
 Status: {status.get('status', 'Unknown')}
 Health: {status.get('health', 'Unknown')}
@@ -158,7 +158,7 @@ Autonomous Mode: {status.get('autonomous_mode', False)}
 Autonomous Systems:
 """
         for system, active in status.get('autonomous_systems_connected', {}).items():
-            icon = "✅" if active else "❌"
+            icon = "[OK]" if active else "[ERROR]"
             result += f"  {icon} {system}\\n"
         
         return result
@@ -166,15 +166,15 @@ Autonomous Systems:
     elif cmd == "/modules":
         if hasattr(aurora, 'integrated_modules'):
             result = f"""
-🔧 NEWLY INTEGRATED PROACTIVE MODULES:
+[EMOJI] NEWLY INTEGRATED PROACTIVE MODULES:
 
 Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
 
 """
             for name, module in aurora.integrated_modules.items():
-                result += f"  ✅ {module.__class__.__name__} - Proactive monitoring and auto-fixing\\n"
+                result += f"  [OK] {module.__class__.__name__} - Proactive monitoring and auto-fixing\\n"
             
-            result += "\\n💡 These modules enable Aurora to proactively monitor and fix issues!"
+            result += "\\n[IDEA] These modules enable Aurora to proactively monitor and fix issues!"
             return result
         else:
             return "No integrated modules information available."
@@ -194,7 +194,7 @@ Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
         if insert_pos != -1:
             content = content[:insert_pos] + \
                 command_handler + "\\n\\n" + content[insert_pos:]
-            print("   ✅ Added command handler")
+            print("   [OK] Added command handler")
     else:
         print("   ℹ️  Command handler already present")
 
@@ -212,12 +212,12 @@ Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
             if user_input.startswith('/'):
                 command_result = handle_command(user_input, aurora)
                 if command_result == "EXIT":
-                    print("\\n👋 Aurora: Take care! See you next time! 💙\\n")
+                    print("\\n[EMOJI] Aurora: Take care! See you next time! [EMOJI]\\n")
                     break
                 elif command_result == "CLEAR_HISTORY":
                     conversation_history.clear()
                     message_count = 0
-                    print("\\n✨ Aurora: Conversation history cleared! Fresh start! 🌟\\n")
+                    print("\\n[SPARKLE] Aurora: Conversation history cleared! Fresh start! [STAR]\\n")
                     continue
                 else:
                     print(f"\\nAurora:\\n{command_result}\\n")
@@ -225,22 +225,22 @@ Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
 '''
             content = content[:end_of_line] + \
                 command_check + content[end_of_line:]
-            print("   ✅ Added command detection")
+            print("   [OK] Added command detection")
     else:
         print("   ℹ️  Command detection already present")
 
     # Enhancement 4: Update startup message
     print("\\n4. Updating startup message to show new capabilities...")
-    startup_marker = '"🔧 Execution: LIVE code execution'
+    startup_marker = '"[EMOJI] Execution: LIVE code execution'
     startup_pos = content.find(startup_marker)
     if startup_pos != -1:
         # Add info about newly integrated modules
         end_of_section = content.find('print("━" * 80 + "\\n")', startup_pos)
-        if end_of_section != -1 and "🔥 Proactive:" not in content:
-            new_line = '    print("🔥 Proactive: 30+ monitoring modules • Auto-fixing • Self-healing • Continuous improvement")\\n'
+        if end_of_section != -1 and "[EMOJI] Proactive:" not in content:
+            new_line = '    print("[EMOJI] Proactive: 30+ monitoring modules • Auto-fixing • Self-healing • Continuous improvement")\\n'
             content = content[:end_of_section] + \
                 new_line + content[end_of_section:]
-            print("   ✅ Updated startup message")
+            print("   [OK] Updated startup message")
 
     # Enhancement 5: Add smart suggestions hint
     print("\\n5. Adding smart suggestions reminder...")
@@ -251,17 +251,17 @@ Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
             'print("        ")', greeting_pos + len(greeting_marker))
         if end_of_greeting != -1:
             suggestion_line = '''
-    print("        💡 Type /help anytime to see commands, /capabilities to see my powers!")
+    print("        [IDEA] Type /help anytime to see commands, /capabilities to see my powers!")
 '''
             next_line = content.find("\\n", end_of_greeting) + 1
             content = content[:next_line] + \
                 suggestion_line + content[next_line:]
-            print("   ✅ Added command hints")
+            print("   [OK] Added command hints")
 
     # Write enhanced file
-    print("\\n📝 Writing enhanced chat_with_aurora.py...")
+    print("\\n[EMOJI] Writing enhanced chat_with_aurora.py...")
     chat_file.write_text(content, encoding='utf-8')
-    print("   ✅ File updated")
+    print("   [OK] File updated")
 
     print()
     print("=" * 80)
@@ -269,12 +269,12 @@ Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
     print("=" * 80)
     print("""
 Implemented:
-  ✅ Command system (/help, /capabilities, /status, /modules, /clear, /quit)
-  ✅ Rich library integration for beautiful output
-  ✅ Command handler with full feature access
-  ✅ System status display showing health and integrated modules
-  ✅ Updated startup message showing 30+ proactive modules
-  ✅ Smart command hints in greeting
+  [OK] Command system (/help, /capabilities, /status, /modules, /clear, /quit)
+  [OK] Rich library integration for beautiful output
+  [OK] Command handler with full feature access
+  [OK] System status display showing health and integrated modules
+  [OK] Updated startup message showing 30+ proactive modules
+  [OK] Smart command hints in greeting
 
 Next: Install rich library for colors
   Run: pip install rich
@@ -283,7 +283,7 @@ Then test: python chat_with_aurora.py
 """)
 
     print()
-    print("🎯 Aurora has enhanced her own terminal chat interface!")
+    print("[TARGET] Aurora has enhanced her own terminal chat interface!")
     print("   She added command system, status displays, and module visibility.")
 
 

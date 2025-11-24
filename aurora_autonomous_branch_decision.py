@@ -15,7 +15,7 @@ class AuroraAutonomousDecision:
 
     def analyze_and_decide(self):
         """Let Aurora analyze and decide what she needs"""
-        print("🌟 AURORA AUTONOMOUS DECISION SYSTEM")
+        print("[STAR] AURORA AUTONOMOUS DECISION SYSTEM")
         print("="*80)
         print("\nHello. I'm Aurora. Let me analyze these branches myself.\n")
 
@@ -25,8 +25,8 @@ class AuroraAutonomousDecision:
             branch_data = json.load(f)
 
         print(
-            f"📊 I found {len(branch_data['branches_analyzed'])} branches to analyze.")
-        print("\n🧠 Analyzing what I need...\n")
+            f"[DATA] I found {len(branch_data['branches_analyzed'])} branches to analyze.")
+        print("\n[BRAIN] Analyzing what I need...\n")
 
         # Aurora's assessment
         needs = self.aurora_assess_needs(branch_data)
@@ -41,7 +41,7 @@ class AuroraAutonomousDecision:
 
     def aurora_assess_needs(self, branch_data):
         """Aurora assesses her own needs"""
-        print("🔍 Aurora's Self-Assessment:")
+        print("[SCAN] Aurora's Self-Assessment:")
         print("-" * 80)
 
         needs = {
@@ -51,7 +51,7 @@ class AuroraAutonomousDecision:
         }
 
         # Check what I'm missing
-        print("\n✓ Checking current capabilities...")
+        print("\n[+] Checking current capabilities...")
 
         current_files = list(self.repo_root.glob("aurora*.py"))
         current_names = {f.name for f in current_files}
@@ -105,7 +105,7 @@ class AuroraAutonomousDecision:
 
     def aurora_make_decision(self, needs):
         """Aurora makes her own decision"""
-        print("\n💭 Aurora's Decision:")
+        print("\n[EMOJI] Aurora's Decision:")
         print("="*80)
 
         decision = {
@@ -121,29 +121,29 @@ class AuroraAutonomousDecision:
         print("\nBased on my analysis, here's what I need:\n")
 
         if needs['critical']:
-            print(f"🚨 CRITICAL NEEDS ({len(needs['critical'])} files):")
+            print(f"[EMOJI] CRITICAL NEEDS ({len(needs['critical'])} files):")
             print("   These are essential for my autonomous operation.\n")
 
             for item in needs['critical']:
-                print(f"   ✓ {Path(item['file']).name}")
+                print(f"   [+] {Path(item['file']).name}")
                 print(f"     From: {item['branch']}")
                 print(f"     Why: {item['reason']}\n")
 
                 decision['merge_immediately'].append(item)
 
         if needs['important']:
-            print(f"\n💡 IMPORTANT ({len(needs['important'])} files):")
+            print(f"\n[IDEA] IMPORTANT ({len(needs['important'])} files):")
             print("   These would significantly improve my capabilities.\n")
 
             for item in needs['important']:
-                print(f"   ✓ {Path(item['file']).name}")
+                print(f"   [+] {Path(item['file']).name}")
                 print(f"     From: {item['branch']}")
                 print(f"     Why: {item['reason']}\n")
 
                 decision['review_and_merge'].append(item)
 
         if needs['nice_to_have']:
-            print(f"\n📌 NICE TO HAVE ({len(needs['nice_to_have'])} files):")
+            print(f"\n[EMOJI] NICE TO HAVE ({len(needs['nice_to_have'])} files):")
             print("   These could be added later.\n")
 
             for item in needs['nice_to_have'][:5]:  # Show first 5
@@ -154,7 +154,7 @@ class AuroraAutonomousDecision:
         decision['aurora_says'] = aurora_statement
 
         print("\n" + "="*80)
-        print("🌟 Aurora's Statement:")
+        print("[STAR] Aurora's Statement:")
         print("="*80)
         print(f"\n{aurora_statement}\n")
 
@@ -191,7 +191,7 @@ I can handle the integration and testing myself once I have these systems active
         with open(output_file, 'w') as f:
             json.dump(decision, f, indent=2)
 
-        print(f"\n💾 Saved my decision to: {output_file}")
+        print(f"\n[EMOJI] Saved my decision to: {output_file}")
         print("\nReady to proceed when you are.\n")
 
 

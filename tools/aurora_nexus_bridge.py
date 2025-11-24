@@ -77,7 +77,7 @@ def route_to_enhanced_aurora_core(message: str, session_id: str = "default") -> 
             sys.modules.update(original_modules)
 
     except Exception as e:
-        print(f"🔄 Enhanced Aurora Core bridge error: {e}")
+        print(f"[SYNC] Enhanced Aurora Core bridge error: {e}")
         return f"Enhanced Aurora Core temporarily unavailable: {str(e)[:100]}... Using fallback response."
 
 

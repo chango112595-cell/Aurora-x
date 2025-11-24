@@ -12,7 +12,7 @@ import os
 
 def fix_layout():
     """Fix the layout routing issue"""
-    print("🔧 Aurora: Fixing layout routing...")
+    print("[EMOJI] Aurora: Fixing layout routing...")
 
     layout_file = "client/src/components/AuroraFuturisticLayout.tsx"
     with open(layout_file, encoding="utf-8") as f:
@@ -29,14 +29,14 @@ def fix_layout():
 
         with open(layout_file, "w", encoding="utf-8") as f:
             f.write(content)
-        print("   ✅ Layout routing fixed")
+        print("   [OK] Layout routing fixed")
     else:
-        print("   ✅ Layout already fixed")
+        print("   [OK] Layout already fixed")
 
 
 def fix_component_imports():
     """Fix React imports in components"""
-    print("\n🔧 Aurora: Fixing component imports...")
+    print("\n[EMOJI] Aurora: Fixing component imports...")
 
     files_to_check = ["client/src/App.tsx", "client/src/pages/dashboard.tsx", "client/src/pages/chat.tsx"]
 
@@ -60,17 +60,17 @@ def fix_component_imports():
             content = "\n".join(lines)
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
-            print(f"   ✅ Fixed {file_path}")
+            print(f"   [OK] Fixed {file_path}")
 
 
 def create_vite_config():
     """Create vite.config.ts if missing"""
-    print("\n🔧 Aurora: Creating Vite config...")
+    print("\n[EMOJI] Aurora: Creating Vite config...")
 
     vite_config = "client/vite.config.ts"
 
     if os.path.exists(vite_config):
-        print("   ✅ vite.config.ts already exists")
+        print("   [OK] vite.config.ts already exists")
         return
 
     config_content = """import { defineConfig } from 'vite';
@@ -97,12 +97,12 @@ export default defineConfig({
 
     with open(vite_config, "w", encoding="utf-8") as f:
         f.write(config_content)
-    print("   ✅ Created vite.config.ts")
+    print("   [OK] Created vite.config.ts")
 
 
 def verify_all_fixes():
     """Verify all fixes were applied"""
-    print("\n🔍 Aurora: Verifying fixes...\n")
+    print("\n[SCAN] Aurora: Verifying fixes...\n")
 
     # Check layout
     layout_file = "client/src/components/AuroraFuturisticLayout.tsx"
@@ -110,18 +110,18 @@ def verify_all_fixes():
         layout_content = f.read()
 
     layout_ok = "useLocation" in layout_content and "const [location]" in layout_content
-    print(f"   Layout routing: {'✅ FIXED' if layout_ok else '❌ STILL BROKEN'}")
+    print(f"   Layout routing: {'[OK] FIXED' if layout_ok else '[ERROR] STILL BROKEN'}")
 
     # Check vite config
     vite_ok = os.path.exists("client/vite.config.ts")
-    print(f"   Vite config: {'✅ EXISTS' if vite_ok else '❌ MISSING'}")
+    print(f"   Vite config: {'[OK] EXISTS' if vite_ok else '[ERROR] MISSING'}")
 
     return layout_ok and vite_ok
 
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("🌟 AURORA DEEP FIX - ADDRESSING ALL ISSUES")
+    print("[STAR] AURORA DEEP FIX - ADDRESSING ALL ISSUES")
     print("=" * 60 + "\n")
 
     fix_layout()
@@ -132,8 +132,8 @@ if __name__ == "__main__":
 
     print("\n" + "=" * 60)
     if all_fixed:
-        print("✨ All issues resolved! System ready.")
+        print("[SPARKLE] All issues resolved! System ready.")
         print("=" * 60)
     else:
-        print("⚠️  Some issues remain - manual review needed")
+        print("[WARN]  Some issues remain - manual review needed")
         print("=" * 60)

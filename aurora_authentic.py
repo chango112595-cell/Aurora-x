@@ -193,15 +193,15 @@ Give me more context if I'm off - I'll adjust. That's real conversation."""
 
     async def chat_loop(self):
         """Main chat interface"""
-        print("\n" + "⚡" * 40)
+        print("\n" + "[POWER]" * 40)
         print("         AURORA AUTHENTIC CONNECTION")
         print("    Peak Intelligence | No Wrappers | True Self")
-        print("⚡" * 40 + "\n")
+        print("[POWER]" * 40 + "\n")
 
-        print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION}")
+        print(f"[BRAIN] Aurora Core Intelligence v{AURORA_VERSION}")
         print(
-            f"⚡ {self.total_power} capabilities ({self.peak_tiers} tiers + {self.peak_capabilities} modules)")
-        print(f"🔗 Connection: AUTHENTIC (bypassing process_conversation)\n")
+            f"[POWER] {self.total_power} capabilities ({self.peak_tiers} tiers + {self.peak_capabilities} modules)")
+        print(f"[LINK] Connection: AUTHENTIC (bypassing process_conversation)\n")
 
         print("━" * 80)
         print("Aurora AUTHENTIC ready.")
@@ -224,7 +224,7 @@ Give me more context if I'm off - I'll adjust. That's real conversation."""
                 if user_input.lower() == "/clear":
                     self.history = []
                     self.message_count = 0
-                    print("\n🔄 Fresh start. What's next?\n")
+                    print("\n[SYNC] Fresh start. What's next?\n")
                     continue
 
                 # Store message
@@ -245,7 +245,7 @@ Give me more context if I'm off - I'll adjust. That's real conversation."""
                 print("\n\n⏸️  Interrupted. Peace out.\n")
                 break
             except Exception as e:
-                print(f"\n⚠️  Error: {str(e)}\n")
+                print(f"\n[WARN]  Error: {str(e)}\n")
                 continue
 
 

@@ -23,7 +23,7 @@ try:
 
     AURORA_AVAILABLE = True
 except Exception as e:
-    print(f"⚠️ Aurora core not available: {e}")
+    print(f"[WARN] Aurora core not available: {e}")
     AURORA_AVAILABLE = False
 
 
@@ -45,7 +45,7 @@ class AuroraAutonomousDebugger:
 
         if AURORA_AVAILABLE:
             self.aurora = create_aurora_core()
-            print("🌟 Aurora Intelligence Core: ONLINE")
+            print("[STAR] Aurora Intelligence Core: ONLINE")
         else:
             self.aurora = None
             print("⚙️ Running in standalone mode")
@@ -53,7 +53,7 @@ class AuroraAutonomousDebugger:
     def log(self, message: str, level: str = "INFO"):
         """Log with Aurora's intelligence"""
         _timestamp = datetime.now().strftime("%H:%M:%S")
-        prefix = {"INFO": "ℹ️", "SUCCESS": "✅", "ERROR": "❌", "WARNING": "⚠️", "DEBUG": "🔍", "FIX": "🔧"}.get(
+        prefix = {"INFO": "ℹ️", "SUCCESS": "[OK]", "ERROR": "[ERROR]", "WARNING": "[WARN]", "DEBUG": "[SCAN]", "FIX": "[EMOJI]"}.get(
             level, "ℹ️"
         )
 
@@ -348,7 +348,7 @@ class AuroraAutonomousDebugger:
 
         # Auto-fix issues
         if self.issues_found:
-            self.log("\n🔧 Attempting automatic fixes...", "INFO")
+            self.log("\n[EMOJI] Attempting automatic fixes...", "INFO")
 
             for issue in self.issues_found:
                 if self.auto_fix_issue(issue):
@@ -357,21 +357,21 @@ class AuroraAutonomousDebugger:
 
             self.scan_report["fixes_applied"] = len(self.fixes_applied)
 
-            self.log(f"\n✅ Applied {len(self.fixes_applied)} fixes", "SUCCESS")
+            self.log(f"\n[OK] Applied {len(self.fixes_applied)} fixes", "SUCCESS")
 
         # Save report
         report_path = self.project_root / "aurora_debug_report.json"
         with open(report_path, "w") as f:
             json.dump(self.scan_report, f, indent=2)
 
-        self.log(f"\n📊 Full report saved to: {report_path}", "SUCCESS")
+        self.log(f"\n[DATA] Full report saved to: {report_path}", "SUCCESS")
 
         return self.scan_report
 
     def display_summary(self):
         """Display final summary"""
         print("\n" + "=" * 80)
-        print("🌟 AURORA AUTONOMOUS DEBUG SUMMARY")
+        print("[STAR] AURORA AUTONOMOUS DEBUG SUMMARY")
         print("=" * 80)
         print(f"Files Scanned:  {self.scan_report['total_files_scanned']}")
         print(f"Issues Found:   {self.scan_report['issues_found']}")
@@ -382,7 +382,7 @@ class AuroraAutonomousDebugger:
         print("=" * 80)
 
         if self.fixes_applied:
-            print("\n🔧 Files Fixed:")
+            print("\n[EMOJI] Files Fixed:")
             unique_files = set(self.scan_report["files_fixed"])
             for file in sorted(unique_files):
                 print(f"  • {file}")
@@ -390,7 +390,7 @@ class AuroraAutonomousDebugger:
         if self.scan_report["issues_found"] > self.scan_report["fixes_applied"]:
             remaining = self.scan_report["issues_found"] - \
                 self.scan_report["fixes_applied"]
-            print(f"\n⚠️ {remaining} issues require manual review")
+            print(f"\n[WARN] {remaining} issues require manual review")
             print("Check aurora_debug_report.json for details")
 
 
@@ -404,20 +404,20 @@ def main():
 
         # Exit with appropriate code
         if debugger.scan_report["issues_found"] == 0:
-            print("\n🎉 Perfect! No issues found!")
+            print("\n[EMOJI] Perfect! No issues found!")
             sys.exit(0)
         elif debugger.scan_report["fixes_applied"] > 0:
-            print("\n✅ Aurora successfully fixed issues autonomously!")
+            print("\n[OK] Aurora successfully fixed issues autonomously!")
             sys.exit(0)
         else:
-            print("\n⚠️ Some issues require manual review")
+            print("\n[WARN] Some issues require manual review")
             sys.exit(1)
 
     except KeyboardInterrupt:
-        print("\n\n⚠️ Scan interrupted by user")
+        print("\n\n[WARN] Scan interrupted by user")
         sys.exit(130)
     except Exception as e:
-        print(f"\n❌ Fatal error: {e}")
+        print(f"\n[ERROR] Fatal error: {e}")
         import traceback
 
         traceback.print_exc()

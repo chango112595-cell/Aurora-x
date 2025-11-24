@@ -122,10 +122,10 @@ class AuroraIntegrationAnalyzer:
 
     def scan_all_dormant_modules(self):
         """Scan all modules in tools/ directory"""
-        print("🔍 Analyzing dormant modules in tools/...\n")
+        print("[SCAN] Analyzing dormant modules in tools/...\n")
 
         if not self.tools_dir.exists():
-            print("❌ tools/ directory not found")
+            print("[ERROR] tools/ directory not found")
             return
 
         tool_files = list(self.tools_dir.glob("aurora_*.py"))
@@ -297,10 +297,10 @@ class AuroraIntegrationAnalyzer:
                         code.append(
                             f"        self.{var_name} = {class_name}()")
                         code.append(
-                            f"        print(f'✅ {category}: {class_name} loaded')")
+                            f"        print(f'[OK] {category}: {class_name} loaded')")
                         code.append(f"    except Exception as e:")
                         code.append(
-                            f"        print(f'⚠️ {category} initialization failed: {{e}}')")
+                            f"        print(f'[WARN] {category} initialization failed: {{e}}')")
                         code.append("")
 
         return "\n".join(code)
@@ -316,7 +316,7 @@ def main():
     # Initialize Aurora
     print("Initializing Aurora...")
     aurora = AuroraCoreIntelligence()
-    print("✅ Aurora initialized\n")
+    print("[OK] Aurora initialized\n")
 
     # Create analyzer
     analyzer = AuroraIntegrationAnalyzer(aurora)
@@ -337,20 +337,20 @@ def main():
     report_file = Path(__file__).parent / "AURORA_INTEGRATION_PLAN.md"
     with open(report_file, 'w', encoding='utf-8') as f:
         f.write(report)
-    print(f"\n💾 Report saved to: {report_file}")
+    print(f"\n[EMOJI] Report saved to: {report_file}")
 
     # Generate integration code
     integration_code = analyzer.generate_integration_code()
     code_file = Path(__file__).parent / "aurora_integration_code.py"
     with open(code_file, 'w', encoding='utf-8') as f:
         f.write(integration_code)
-    print(f"💾 Integration code saved to: {code_file}")
+    print(f"[EMOJI] Integration code saved to: {code_file}")
 
     # Save JSON plan
     json_file = Path(__file__).parent / "aurora_integration_plan.json"
     with open(json_file, 'w', encoding='utf-8') as f:
         json.dump(integration_plan, f, indent=2)
-    print(f"💾 JSON plan saved to: {json_file}")
+    print(f"[EMOJI] JSON plan saved to: {json_file}")
 
     print("\n" + "=" * 80)
     print("READY TO INTEGRATE")

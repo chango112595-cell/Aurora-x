@@ -330,7 +330,7 @@ class AuroraSystemUpdater:
 
     def deep_update_all_files(self, counts: dict[str, int]) -> None:
         """DEEP SEARCH: Update ALL files in the entire program"""
-        print("\n🔍 DEEP SEARCH: Scanning entire program...")
+        print("\n[SCAN] DEEP SEARCH: Scanning entire program...")
 
         # Get all files
         all_files = self.get_all_files_to_update()
@@ -341,7 +341,7 @@ class AuroraSystemUpdater:
         print(f"   Generated {len(patterns)} replacement patterns")
 
         # Update each file
-        print("\n📝 Updating files...")
+        print("\n[EMOJI] Updating files...")
         updated_count = 0
         total_replacements = 0
 
@@ -377,13 +377,13 @@ class AuroraSystemUpdater:
 
         # Print categorized results
         print(
-            f"\n✅ Updated {updated_count} files with {total_replacements} total replacements\n")
+            f"\n[OK] Updated {updated_count} files with {total_replacements} total replacements\n")
 
         for category, files in categories.items():
             if files:
                 print(f"   {category} ({len(files)} files):")
                 for f in sorted(files)[:5]:  # Show first 5
-                    print(f"      ✓ {f}")
+                    print(f"      [+] {f}")
                 if len(files) > 5:
                     print(f"      ... and {len(files) - 5} more")
                 print()
@@ -409,14 +409,14 @@ class AuroraSystemUpdater:
     def run(self) -> bool:
         """Run complete DEEP system update"""
         print("\n" + "=" * 80)
-        print("🌟 AURORA AUTOMATIC SYSTEM UPDATE - DEEP SEARCH MODE")
+        print("[STAR] AURORA AUTOMATIC SYSTEM UPDATE - DEEP SEARCH MODE")
         print("=" * 80)
         print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("Mode: COMPREHENSIVE - Scanning EVERY file in the entire program")
         print("=" * 80)
 
         # Get current counts from aurora_core.py
-        print("\n📊 Reading Current System State from aurora_core.py...")
+        print("\n[DATA] Reading Current System State from aurora_core.py...")
         counts = self.get_current_tier_count()
         print(f"   Foundation Tasks: {counts['foundation_count']}")
         print(f"   Knowledge Tiers: {counts['tier_count']}")
@@ -432,22 +432,22 @@ class AuroraSystemUpdater:
 
         # Summary
         print("\n" + "=" * 80)
-        print("✅ DEEP SYSTEM UPDATE COMPLETE")
+        print("[OK] DEEP SYSTEM UPDATE COMPLETE")
         print("=" * 80)
-        print("\n📊 Statistics:")
+        print("\n[DATA] Statistics:")
         print(f"   Files Scanned: {self.files_scanned}")
         print(f"   Files Updated: {len(self.updates_made)}")
         print(
             f"   Total Replacements: {sum(f['replacements'] for f in self.updates_made)}")
 
         if self.errors:
-            print(f"\n⚠️  Errors Encountered: {len(self.errors)}")
+            print(f"\n[WARN]  Errors Encountered: {len(self.errors)}")
             for e in self.errors[:5]:  # Show first 5 errors
                 print(f"   • {e}")
             if len(self.errors) > 5:
                 print(f"   ... and {len(self.errors) - 5} more errors")
 
-        print("\n🎯 Final System State:")
+        print("\n[TARGET] Final System State:")
         print(f"   • {counts['foundation_count']} Foundation Tasks")
         print(f"   • {counts['tier_count']} Knowledge Tiers")
         print(f"   • {counts['capability_modules']} Capability Modules")
@@ -460,7 +460,7 @@ class AuroraSystemUpdater:
         print("   • ENTIRE program updated")
 
         print("\n" + "=" * 80)
-        print("🚀 AURORA SYSTEM IS FULLY SYNCHRONIZED ACROSS ENTIRE CODEBASE")
+        print("[LAUNCH] AURORA SYSTEM IS FULLY SYNCHRONIZED ACROSS ENTIRE CODEBASE")
         print("=" * 80 + "\n")
 
         return len(self.errors) == 0

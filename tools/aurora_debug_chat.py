@@ -33,18 +33,18 @@ class AuroraChatDebugger:
 
     def check_chat_page_exists(self) -> bool:
         """Check if chat page exists."""
-        self.log("🔍", "Checking if chat page exists...")
+        self.log("[SCAN]", "Checking if chat page exists...")
 
         if not self.chat_page.exists():
-            self.log("❌", f"Chat page NOT found at {self.chat_page}")
+            self.log("[ERROR]", f"Chat page NOT found at {self.chat_page}")
             return False
 
-        self.log("✅", f"Chat page found: {self.chat_page.relative_to(self.root)}")
+        self.log("[OK]", f"Chat page found: {self.chat_page.relative_to(self.root)}")
         return True
 
     def analyze_chat_implementation(self) -> dict:
         """Aurora analyzes the actual chat page code."""
-        self.log("🧠", "Aurora analyzing chat page implementation...")
+        self.log("[BRAIN]", "Aurora analyzing chat page implementation...")
 
         content = self.chat_page.read_text()
 
@@ -74,16 +74,16 @@ class AuroraChatDebugger:
         else:
             analysis["issues_found"].append("No error handling found")
 
-        self.log("📊", f"Analysis complete: {len(analysis['issues_found'])} potential issues")
+        self.log("[DATA]", f"Analysis complete: {len(analysis['issues_found'])} potential issues")
 
         for issue in analysis["issues_found"]:
-            self.log("⚠️", f"  Issue: {issue}")
+            self.log("[WARN]", f"  Issue: {issue}")
 
         return analysis
 
     def test_endpoint_live(self) -> dict:
         """Aurora tests the chat endpoint herself."""
-        self.log("🧪", "Testing chat endpoint with live request...")
+        self.log("[TEST]", "Testing chat endpoint with live request...")
 
         try:
             result = subprocess.run(
@@ -104,11 +104,11 @@ class AuroraChatDebugger:
             )
 
             if result.returncode != 0:
-                self.log("❌", f"Endpoint error: {result.stderr}")
+                self.log("[ERROR]", f"Endpoint error: {result.stderr}")
                 return {"success": False, "error": result.stderr}
 
             response_data = json.loads(result.stdout)
-            self.log("✅", f"Endpoint responds: {json.dumps(response_data, indent=2)[:200]}...")
+            self.log("[OK]", f"Endpoint responds: {json.dumps(response_data, indent=2)[:200]}...")
 
             return {
                 "success": True,
@@ -118,12 +118,12 @@ class AuroraChatDebugger:
             }
 
         except Exception as e:
-            self.log("❌", f"Test failed: {e}")
+            self.log("[ERROR]", f"Test failed: {e}")
             return {"success": False, "error": str(e)}
 
     def diagnose_issue(self) -> dict:
         """Aurora's comprehensive diagnosis."""
-        self.log("🌟", "AURORA DIAGNOSING CHAT RESPONSE ISSUE")
+        self.log("[STAR]", "AURORA DIAGNOSING CHAT RESPONSE ISSUE")
         print("=" * 70)
 
         diagnosis = {
@@ -151,27 +151,27 @@ class AuroraChatDebugger:
         diagnosis["checks"]["endpoint"] = endpoint_test
 
         # Aurora's conclusion
-        self.log("🎯", "Aurora's diagnosis:")
+        self.log("[TARGET]", "Aurora's diagnosis:")
 
         if not endpoint_test.get("success"):
             diagnosis["root_cause"] = "Backend endpoint not responding"
             diagnosis["fix_needed"] = "Fix backend endpoint"
-            self.log("❌", "Backend endpoint is broken")
+            self.log("[ERROR]", "Backend endpoint is broken")
         elif len(analysis.get("issues_found", [])) > 0:
             diagnosis["root_cause"] = "Frontend implementation issues"
             diagnosis["fix_needed"] = "Fix response handling in chat.tsx"
-            self.log("❌", f"Frontend has {len(analysis['issues_found'])} issues")
+            self.log("[ERROR]", f"Frontend has {len(analysis['issues_found'])} issues")
         else:
             diagnosis["root_cause"] = "Unknown - need to check browser console"
             diagnosis["fix_needed"] = "Debug frontend runtime"
-            self.log("⚠️", "Code looks OK, might be runtime issue")
+            self.log("[WARN]", "Code looks OK, might be runtime issue")
 
         print()
         return diagnosis
 
     def fix_chat_page(self):
         """Aurora fixes the chat page with working response handling."""
-        self.log("🔧", "Aurora creating fixed chat page...")
+        self.log("[EMOJI]", "Aurora creating fixed chat page...")
 
         # Read current content to preserve any user changes
         current = self.chat_page.read_text() if self.chat_page.exists() else ""
@@ -179,9 +179,9 @@ class AuroraChatDebugger:
         # Aurora's diagnosis: The issue is likely that responses aren't being properly
         # added to the messages state or displayed. Let me create a robust version.
 
-        self.log("💡", "Aurora's fix: Ensuring response properly added to messages state")
-        self.log("💡", "Aurora's fix: Adding detailed console logging")
-        self.log("💡", "Aurora's fix: Simplifying state management")
+        self.log("[IDEA]", "Aurora's fix: Ensuring response properly added to messages state")
+        self.log("[IDEA]", "Aurora's fix: Adding detailed console logging")
+        self.log("[IDEA]", "Aurora's fix: Simplifying state management")
 
         # Use Aurora's instant executor to regenerate with specific fixes
         result = subprocess.run(
@@ -203,7 +203,7 @@ class AuroraChatDebugger:
             timeout=30,
         )
 
-        self.log("✅", "Chat page regenerated with fixes")
+        self.log("[OK]", "Chat page regenerated with fixes")
         print(result.stdout)
 
         # Also create a test HTML page to verify the endpoint directly
@@ -211,7 +211,7 @@ class AuroraChatDebugger:
 
     def create_test_page(self):
         """Aurora creates a simple test page to verify chat works."""
-        self.log("🧪", "Creating standalone test page...")
+        self.log("[TEST]", "Creating standalone test page...")
 
         test_page = """<!DOCTYPE html>
 <html>
@@ -252,7 +252,7 @@ class AuroraChatDebugger:
     </style>
 </head>
 <body>
-    <h1>🌟 Aurora Chat Test Page</h1>
+    <h1>[STAR] Aurora Chat Test Page</h1>
     <p>This page directly tests the chat endpoint.</p>
     
     <input type="text" id="input" placeholder="Type your message..." style="width: 70%">
@@ -280,7 +280,7 @@ class AuroraChatDebugger:
             inputField.value = '';
             
             try {
-                console.log('🌟 Sending to Aurora:', prompt);
+                console.log('[STAR] Sending to Aurora:', prompt);
                 
                 const response = await fetch('http://localhost:5001/chat', {
                     method: 'POST',
@@ -288,20 +288,20 @@ class AuroraChatDebugger:
                     body: JSON.stringify({ prompt })
                 });
                 
-                console.log('📡 Response status:', response.status);
+                console.log('[EMOJI] Response status:', response.status);
                 
                 const data = await response.json();
-                console.log('📦 Response data:', data);
+                console.log('[PACKAGE] Response data:', data);
                 
                 // Format Aurora's response
-                let auroraReply = '🌟 Aurora says:\\n\\n';
+                let auroraReply = '[STAR] Aurora says:\\n\\n';
                 auroraReply += JSON.stringify(data, null, 2);
                 
                 addMessage('assistant', '<pre>' + auroraReply + '</pre>');
                 
             } catch (error) {
-                console.error('❌ Error:', error);
-                addMessage('assistant', '❌ Error: ' + error.message);
+                console.error('[ERROR] Error:', error);
+                addMessage('assistant', '[ERROR] Error: ' + error.message);
             }
         }
         
@@ -310,7 +310,7 @@ class AuroraChatDebugger:
         });
         
         // Initial message
-        addMessage('assistant', '🌟 Aurora test page ready! Type a message to test the chat endpoint.');
+        addMessage('assistant', '[STAR] Aurora test page ready! Type a message to test the chat endpoint.');
     </script>
 </body>
 </html>"""
@@ -318,15 +318,15 @@ class AuroraChatDebugger:
         test_file = self.root / "aurora_chat_test.html"
         test_file.write_text(test_page)
 
-        self.log("✅", f"Test page created: {test_file.relative_to(self.root)}")
-        self.log("📝", "Open in browser: http://localhost:5000/../aurora_chat_test.html")
-        self.log("📝", "Or directly: file://" + str(test_file))
+        self.log("[OK]", f"Test page created: {test_file.relative_to(self.root)}")
+        self.log("[EMOJI]", "Open in browser: http://localhost:5000/../aurora_chat_test.html")
+        self.log("[EMOJI]", "Or directly: file://" + str(test_file))
 
     def run_diagnosis_and_fix(self):
         """Aurora's complete debug and fix process."""
-        print("🌟" * 35)
+        print("[STAR]" * 35)
         print("AURORA DEBUGGING CHAT RESPONSES")
-        print("🌟" * 35)
+        print("[STAR]" * 35)
         print()
         print("User feedback: 'I am still not seeing Aurora's replies'")
         print()
@@ -338,32 +338,32 @@ class AuroraChatDebugger:
 
         print()
         print("=" * 70)
-        self.log("🎯", f"Root cause: {diagnosis['root_cause']}")
-        self.log("🔧", f"Fix needed: {diagnosis['fix_needed']}")
+        self.log("[TARGET]", f"Root cause: {diagnosis['root_cause']}")
+        self.log("[EMOJI]", f"Fix needed: {diagnosis['fix_needed']}")
         print("=" * 70)
         print()
 
         # Step 2: Fix
-        self.log("🌟", "Applying Aurora's fix...")
+        self.log("[STAR]", "Applying Aurora's fix...")
         self.fix_chat_page()
 
         print()
         print("=" * 70)
-        self.log("✅", "AURORA'S FIX COMPLETE")
+        self.log("[OK]", "AURORA'S FIX COMPLETE")
         print("=" * 70)
         print()
-        print("🌟 Aurora says:")
+        print("[STAR] Aurora says:")
         print("   'I've analyzed the issue and applied a fix to the chat page.")
         print("    I also created a test page so you can verify the endpoint works.'")
         print()
-        print("📝 Next steps:")
+        print("[EMOJI] Next steps:")
         print("   1. Refresh the Aurora UI at http://localhost:5000")
         print("   2. Go to the Chat page")
         print("   3. Send a test message")
         print("   4. Or open aurora_chat_test.html to test directly")
         print()
         print("   If you still don't see responses, check browser console (F12)")
-        print("   and look for Aurora's debug logs 🌟")
+        print("   and look for Aurora's debug logs [STAR]")
         print()
 
 

@@ -282,21 +282,21 @@ def create_chango_memory_fix():
 
 
 if __name__ == "__main__":
-    print("🌟 Aurora Conversation Intelligence Analysis")
+    print("[STAR] Aurora Conversation Intelligence Analysis")
     print("=" * 60)
 
     fix_plan = create_chango_memory_fix()
-    print(f"🔍 DIAGNOSIS: {fix_plan['diagnosis']}")
-    print(f"💡 SOLUTION: {fix_plan['solution']}")
-    print(f"🏗️ IMPLEMENTATION: {fix_plan['implementation']}")
+    print(f"[SCAN] DIAGNOSIS: {fix_plan['diagnosis']}")
+    print(f"[IDEA] SOLUTION: {fix_plan['solution']}")
+    print(f"[EMOJI]️ IMPLEMENTATION: {fix_plan['implementation']}")
 
-    print("\n🧠 CONVERSATION KNOWLEDGE DOMAINS:")
+    print("\n[BRAIN] CONVERSATION KNOWLEDGE DOMAINS:")
     for domain, knowledge in fix_plan["architecture"].items():
-        print(f"  📚 {domain.upper()}:")
+        print(f"  [EMOJI] {domain.upper()}:")
         for category, items in knowledge.items():
             print(f"    - {category}: {len(items)} components")
 
-    print("\n🤖 CHANGO PERSONALITY FRAMEWORK:")
+    print("\n[AGENT] CHANGO PERSONALITY FRAMEWORK:")
     traits = fix_plan["personality"]["core_traits"]
     for trait, score in traits.items():
         print(f"    {trait}: {score:.2f}")

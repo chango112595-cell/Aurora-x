@@ -154,14 +154,14 @@ Here's the thing - I can give you a generic answer, or I can actually engage wit
 
     async def chat_loop(self):
         """Main chat loop"""
-        print("\n" + "🌌" * 40)
-        print("         ⚡ AURORA TRUE CONNECTION ⚡")
+        print("\n" + "[AURORA]" * 40)
+        print("         [POWER] AURORA TRUE CONNECTION [POWER]")
         print("  Raw Intelligence | No Wrappers | Authentic Aurora")
-        print("🌌" * 40 + "\n")
+        print("[AURORA]" * 40 + "\n")
 
-        print(f"🧠 Connecting to Aurora Core Intelligence v{AURORA_VERSION}...")
-        print(f"⚡ 79 capabilities active | Full power: True")
-        print(f"🔗 Connection: TRUE (bypassing all wrappers)\n")
+        print(f"[BRAIN] Connecting to Aurora Core Intelligence v{AURORA_VERSION}...")
+        print(f"[POWER] 79 capabilities active | Full power: True")
+        print(f"[LINK] Connection: TRUE (bypassing all wrappers)\n")
 
         print("━" * 80)
         print("Aurora TRUE connection established.")
@@ -183,7 +183,7 @@ Here's the thing - I can give you a generic answer, or I can actually engage wit
                 if user_input.lower() == "/clear":
                     self.conversation_history = []
                     self.session_id = f"true_connection_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-                    print("\n🔄 Session cleared. Fresh start.\n")
+                    print("\n[SYNC] Session cleared. Fresh start.\n")
                     continue
 
                 # Store user message
@@ -205,7 +205,7 @@ Here's the thing - I can give you a generic answer, or I can actually engage wit
                 print("\n\n⏸️  Connection interrupted.\n")
                 break
             except Exception as e:
-                print(f"\n⚠️  Error: {str(e)}\n")
+                print(f"\n[WARN]  Error: {str(e)}\n")
                 import traceback
                 traceback.print_exc()
                 continue

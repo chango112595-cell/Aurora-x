@@ -146,10 +146,10 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxWidth().height(200.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("🤖 ML Detection Results:")
+                    Text("[AGENT] ML Detection Results:")
                     LazyColumn {
                         items(detections) { detection ->
-                            Text("✅ $detection")
+                            Text("[OK] $detection")
                         }
                     }
                 }
@@ -233,7 +233,7 @@ PubSubClient mqttClient(wifiClient);
 // Aurora Expert Knowledge: Proper error handling and retry logic
 void setup() {
     Serial.begin(115200);
-    Serial.println("🌡️ Aurora IoT Temperature Sensor Starting...");
+    Serial.println("[EMOJI]️ Aurora IoT Temperature Sensor Starting...");
 
     // Initialize hardware
     pinMode(LED_PIN, OUTPUT);
@@ -249,7 +249,7 @@ void setup() {
     publishSensorData();
 
     // Aurora Best Practice: Use deep sleep for battery efficiency
-    Serial.println("💤 Entering deep sleep for 5 minutes...");
+    Serial.println("[EMOJI] Entering deep sleep for 5 minutes...");
     esp_deep_sleep_start();
 }
 
@@ -270,12 +270,12 @@ void connectToWiFi() {
     }
 
     if (WiFi.status() == WL_CONNECTED) {
-        Serial.println("✅ WiFi connected!");
+        Serial.println("[OK] WiFi connected!");
         Serial.print("IP address: ");
         Serial.println(WiFi.localIP());
         digitalWrite(LED_PIN, HIGH);
     } else {
-        Serial.println("❌ WiFi connection failed!");
+        Serial.println("[ERROR] WiFi connection failed!");
         esp_deep_sleep_start();  // Sleep and retry later
     }
 }
@@ -288,9 +288,9 @@ void connectToMQTT() {
         Serial.print("Connecting to MQTT broker...");
 
         if (mqttClient.connect(MQTT_CLIENT_ID)) {
-            Serial.println("✅ MQTT connected!");
+            Serial.println("[OK] MQTT connected!");
         } else {
-            Serial.print("❌ MQTT connection failed, rc=");
+            Serial.print("[ERROR] MQTT connection failed, rc=");
             Serial.print(mqttClient.state());
             Serial.println(" Retrying in 5 seconds...");
             delay(5000);
@@ -306,7 +306,7 @@ void publishSensorData() {
 
     // Validate sensor readings
     if (isnan(temperature) || isnan(humidity)) {
-        Serial.println("❌ Failed to read from DHT sensor!");
+        Serial.println("[ERROR] Failed to read from DHT sensor!");
         return;
     }
 
@@ -323,11 +323,11 @@ void publishSensorData() {
 
     // Publish to MQTT
     if (mqttClient.publish(MQTT_TOPIC, jsonString.c_str())) {
-        Serial.println("✅ Sensor data published successfully!");
-        Serial.printf("🌡️ Temperature: %.2f°C, Humidity: %.2f%%\\n",
+        Serial.println("[OK] Sensor data published successfully!");
+        Serial.printf("[EMOJI]️ Temperature: %.2f°C, Humidity: %.2f%%\\n",
                       temperature, humidity);
     } else {
-        Serial.println("❌ Failed to publish sensor data!");
+        Serial.println("[ERROR] Failed to publish sensor data!");
     }
 }
 
@@ -386,7 +386,7 @@ class AuroraHomeAutomation:
         # Setup status LED
         GPIO.setup(LED_PIN, GPIO.OUT)
 
-        print("✅ GPIO initialized successfully")
+        print("[OK] GPIO initialized successfully")
 
     def read_sensors(self) -> None:
         """Read all connected sensors"""
@@ -403,13 +403,13 @@ class AuroraHomeAutomation:
         """Control individual relay (0-3)"""
         if 0 <= relay_num < len(RELAY_PINS):
             GPIO.output(RELAY_PINS[relay_num], state)
-            print(f"🔌 Relay {relay_num} turned {'ON' if state else 'OFF'}")
+            print(f"[EMOJI] Relay {relay_num} turned {'ON' if state else 'OFF'}")
             return True
         return False
 
     def automation_loop(self) -> None:
         """Main automation logic loop"""
-        print("🤖 Aurora automation engine started")
+        print("[AGENT] Aurora automation engine started")
 
         while True:
             try:
@@ -418,11 +418,11 @@ class AuroraHomeAutomation:
 
                 # Aurora Expert Knowledge: Event-driven automation
                 if data['motion_detected']:
-                    print("👋 Motion detected! Turning on lights...")
+                    print("[EMOJI] Motion detected! Turning on lights...")
                     self.control_relay(0, True)  # Turn on lights
 
                 if data['door_open']:
-                    print("🚪 Door opened! Security alert...")
+                    print("[EMOJI] Door opened! Security alert...")
                     # Blink LED for security notification
                     for _ in range(5):
                         GPIO.output(LED_PIN, True)
@@ -438,16 +438,16 @@ class AuroraHomeAutomation:
                 time.sleep(1)  # Check every second
 
             except KeyboardInterrupt:
-                print("🛑 Automation stopped by user")
+                print("[EMOJI] Automation stopped by user")
                 break
             except Exception as e:
-                print(f"❌ Automation error: {e}")
+                print(f"[ERROR] Automation error: {e}")
                 time.sleep(5)  # Wait before retrying
 
     def cleanup(self) -> None:
         """Aurora Best Practice: Always cleanup GPIO resources"""
         GPIO.cleanup()
-        print("🧹 GPIO cleanup completed")
+        print("[EMOJI] GPIO cleanup completed")
 
 # Flask web interface
 app = Flask(__name__)
@@ -497,7 +497,7 @@ def api_toggle_relay(relay_num) -> None:
 
 def main() -> None:
     try:
-        print("🚀 Aurora Home Automation System Starting...")
+        print("[LAUNCH] Aurora Home Automation System Starting...")
 
         # Start automation in background thread
         automation_thread = threading.Thread(target=automation.automation_loop)
@@ -505,11 +505,11 @@ def main() -> None:
         automation_thread.start()
 
         # Start web server
-        print("🌐 Web dashboard available at http://localhost:5000")
+        print("[WEB] Web dashboard available at http://localhost:5000")
         app.run(host='0.0.0.0', port=5000, debug=False)
 
     except KeyboardInterrupt:
-        print("🛑 System shutdown requested")
+        print("[EMOJI] System shutdown requested")
     finally:
         automation.cleanup()
 
@@ -520,13 +520,13 @@ if __name__ == '__main__':
 
 def main() -> None:
     """Main demonstration function"""
-    print("🚀 AURORA DEVICE PROGRAMMING DEMONSTRATION")
+    print("[LAUNCH] AURORA DEVICE PROGRAMMING DEMONSTRATION")
     print("=" * 60)
 
     aurora_expert = AuroraExpertKnowledge()
 
     print(
-        f"📊 Aurora has expert knowledge in {len(aurora_expert.languages)} programming languages")
+        f"[DATA] Aurora has expert knowledge in {len(aurora_expert.languages)} programming languages")
     print()
 
     # Generate device-specific code examples
@@ -538,15 +538,15 @@ def main() -> None:
     ]
 
     for title, generator in examples:
-        print(f"🎯 {title}:")
+        print(f"[TARGET] {title}:")
         print("─" * 40)
         code = generator()
         print(code[:500] + "..." if len(code) > 500 else code)
         print("\n" + "═" * 60 + "\n")
 
-    print("✅ AURORA DEVICE PROGRAMMING CAPABILITIES VERIFIED!")
+    print("[OK] AURORA DEVICE PROGRAMMING CAPABILITIES VERIFIED!")
     print()
-    print("🏆 Aurora can generate expert-level code for:")
+    print("[EMOJI] Aurora can generate expert-level code for:")
     print("• iPhone/Mac automation (AppleScript)")
     print("• Android applications (Kotlin/Java)")
     print("• IoT devices (Arduino, ESP32, Raspberry Pi)")
@@ -554,7 +554,7 @@ def main() -> None:
     print("• Cloud deployments (Docker, Kubernetes)")
     print("• And ALL other programming languages!")
     print()
-    print("🎉 Aurora is fully loaded and ready for ANY programming task!")
+    print("[EMOJI] Aurora is fully loaded and ready for ANY programming task!")
 
 
 if __name__ == "__main__":

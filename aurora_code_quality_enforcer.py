@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🔧 TIER 51: CODE QUALITY ENFORCER
+[EMOJI] TIER 51: CODE QUALITY ENFORCER
 Aurora's ability to automatically detect and fix code quality issues
 """
 
@@ -79,7 +79,7 @@ class AuroraCodeQualityEnforcer:
         ]
 
         print("\n" + "=" * 70)
-        print(f"🔧 {self.name} v{self.version} Initialized")
+        print(f"[EMOJI] {self.name} v{self.version} Initialized")
         print("=" * 70)
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
@@ -88,7 +88,7 @@ class AuroraCodeQualityEnforcer:
 
     def scan_file(self, file_path: str) -> list[QualityIssue]:
         """Scan file for code quality issues"""
-        print(f"🔍 Scanning: {file_path}")
+        print(f"[SCAN] Scanning: {file_path}")
 
         issues = []
 
@@ -110,9 +110,9 @@ class AuroraCodeQualityEnforcer:
             print(f"  Found {len(issues)} issues")
 
         except SyntaxError as e:
-            print(f"  ❌ Syntax error: {e}")
+            print(f"  [ERROR] Syntax error: {e}")
         except Exception as e:
-            print(f"  ⚠️  Error: {e}")
+            print(f"  [WARN]  Error: {e}")
 
         return issues
 
@@ -208,7 +208,7 @@ class AuroraCodeQualityEnforcer:
 
     def fix_unused_arguments(self, file_path: str, issues: list[QualityIssue]) -> int:
         """Automatically fix unused argument issues"""
-        print(f"🔧 Fixing unused arguments in: {file_path}")
+        print(f"[EMOJI] Fixing unused arguments in: {file_path}")
 
         with open(file_path, encoding="utf-8") as f:
             lines = f.readlines()
@@ -230,7 +230,7 @@ class AuroraCodeQualityEnforcer:
         if fixed_count > 0:
             with open(file_path, "w", encoding="utf-8") as f:
                 f.writelines(lines)
-            print(f"  ✅ Fixed {fixed_count} unused arguments")
+            print(f"  [OK] Fixed {fixed_count} unused arguments")
 
         return fixed_count
 
@@ -268,7 +268,7 @@ class AuroraCodeQualityEnforcer:
         if extensions is None:
             extensions = [".py"]
 
-        print(f"📂 Scanning directory: {directory}")
+        print(f"[EMOJI] Scanning directory: {directory}")
 
         all_issues = []
         files_scanned = 0
@@ -285,7 +285,7 @@ class AuroraCodeQualityEnforcer:
         report = self.generate_quality_report(all_issues)
         report["files_scanned"] = files_scanned
 
-        print("\n📊 Quality Report:")
+        print("\n[DATA] Quality Report:")
         print(f"  Files scanned: {files_scanned}")
         print(f"  Total issues: {report['total_issues']}")
         print(f"  Auto-fixable: {report['auto_fixable']}")
@@ -308,7 +308,7 @@ class AuroraCodeQualityEnforcer:
 def main():
     """Test Tiers 66"""
     print("\n" + "=" * 70)
-    print("🧪 TESTING TIER 51: CODE QUALITY ENFORCER")
+    print("[QUALITY] TESTING TIER 54: CODE QUALITY ENFORCER")
     print("=" * 70 + "\n")
 
     enforcer = AuroraCodeQualityEnforcer()
@@ -322,7 +322,7 @@ def main():
             issues = enforcer.scan_file(file)
             all_issues.extend(issues)
         except FileNotFoundError:
-            print(f"  ⚠️  File not found: {file}")
+            print(f"  [WARN]  File not found: {file}")
 
     print("\nTest 2: Generate Report")
     if all_issues:
@@ -340,11 +340,11 @@ def main():
             except FileNotFoundError:
                 pass
     else:
-        print("  ✅ No issues found - code is clean!")
+        print("  [OK] No issues found - code is clean!")
 
     summary = enforcer.get_capabilities_summary()
     print("\n" + "=" * 70)
-    print("✅ TIER 51 OPERATIONAL")
+    print("[OK] TIER 51 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
     print("=" * 70)
 

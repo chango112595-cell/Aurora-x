@@ -130,5 +130,5 @@ for filepath in ["aurora_full_system_debug.py", "aurora_self_debug_chat.py"]:
             f.write(content)
         count += 1
 
-print(f"✅ Applied {count} fixes!")
-print("🎉 All critical errors resolved!")
+print(f"[OK] Applied {count} fixes!")
+print("[EMOJI] All critical errors resolved!")

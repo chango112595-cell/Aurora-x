@@ -224,7 +224,7 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
 </head>
 <body>
     <div class="header">
-        <h1>🌟 Aurora Health Monitor</h1>
+        <h1>[STAR] Aurora Health Monitor</h1>
         <p>Real-time Service Orchestration Dashboard</p>
     </div>
     
@@ -258,7 +258,7 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
     </div>
     
     <div class="auto-refresh">
-        ⚡ Auto-refreshing every 5 seconds
+        [POWER] Auto-refreshing every 5 seconds
     </div>
     
     <script>
@@ -315,9 +315,9 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
                     const logsContainer = document.getElementById('logs-container');
                     logsContainer.innerHTML = data.logs.map(log => {
                         let className = 'log-line';
-                        if (log.includes('ERROR') || log.includes('❌')) className += ' log-error';
-                        else if (log.includes('WARNING') || log.includes('⚠️')) className += ' log-warning';
-                        else if (log.includes('INFO') || log.includes('✅')) className += ' log-success';
+                        if (log.includes('ERROR') || log.includes('[ERROR]')) className += ' log-error';
+                        else if (log.includes('WARNING') || log.includes('[WARN]')) className += ' log-warning';
+                        else if (log.includes('INFO') || log.includes('[OK]')) className += ' log-success';
                         return `<div class="${className}">${log}</div>`;
                     }).join('');
                     logsContainer.scrollTop = logsContainer.scrollHeight;
@@ -442,13 +442,13 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
 def main():
     """Run health dashboard server"""
     server = HTTPServer(("0.0.0.0", PORT), HealthDashboardHandler)
-    print(f"🌐 Aurora Health Monitor running at http://localhost:{PORT}")
-    print("📊 Open in browser to view real-time dashboard")
+    print(f"[WEB] Aurora Health Monitor running at http://localhost:{PORT}")
+    print("[DATA] Open in browser to view real-time dashboard")
 
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\n🛑 Shutting down dashboard...")
+        print("\n[EMOJI] Shutting down dashboard...")
         server.shutdown()
 
 

@@ -25,7 +25,7 @@ class AuroraDeepComparison:
 
     def analyze_my_current_state(self):
         """Aurora analyzes what she currently has"""
-        print("🌟 AURORA DEEP SELF-ANALYSIS")
+        print("[STAR] AURORA DEEP SELF-ANALYSIS")
         print("="*80)
         print("\nI'm analyzing MY CURRENT capabilities...\n")
 
@@ -34,7 +34,7 @@ class AuroraDeepComparison:
         aurora_files.extend(list(self.repo_root.glob("tools/aurora*.py")))
         aurora_files.extend(list(self.repo_root.glob("aurora_x/**/*.py")))
 
-        print(f"📊 I currently have {len(aurora_files)} Aurora Python files\n")
+        print(f"[DATA] I currently have {len(aurora_files)} Aurora Python files\n")
 
         # Analyze each file
         for file_path in aurora_files:
@@ -55,9 +55,9 @@ class AuroraDeepComparison:
                 }
 
             except Exception as e:
-                print(f"⚠️  Could not read {rel_path}: {e}")
+                print(f"[WARN]  Could not read {rel_path}: {e}")
 
-        print(f"✅ Analyzed {len(self.my_current_files)} files\n")
+        print(f"[OK] Analyzed {len(self.my_current_files)} files\n")
 
         return self.my_current_files
 
@@ -92,7 +92,7 @@ class AuroraDeepComparison:
 
     def get_all_branches_including_inactive(self):
         """Get ALL branches - local, remote, active, inactive"""
-        print("🌿 Finding ALL branches (active and inactive)...\n")
+        print("[EMOJI] Finding ALL branches (active and inactive)...\n")
 
         # Get all branches including remote
         result = subprocess.run(
@@ -117,7 +117,7 @@ class AuroraDeepComparison:
 
         branches_list = sorted(list(branches))
         print(
-            f"📊 Found {len(branches_list)} total branches (active + inactive)\n")
+            f"[DATA] Found {len(branches_list)} total branches (active + inactive)\n")
 
         for i, branch in enumerate(branches_list[:10], 1):
             print(f"   {i}. {branch}")
@@ -128,12 +128,12 @@ class AuroraDeepComparison:
 
     def compare_with_all_branches(self, branches):
         """Compare my current files with versions in ALL branches"""
-        print("\n🔍 Comparing my current files with ALL branch versions...\n")
+        print("\n[SCAN] Comparing my current files with ALL branch versions...\n")
 
         better_versions = []
 
         for file_path in self.my_current_files.keys():
-            print(f"📄 Analyzing: {file_path}")
+            print(f"[EMOJI] Analyzing: {file_path}")
 
             my_version = self.my_current_files[file_path]
             branch_versions = {}
@@ -180,11 +180,11 @@ class AuroraDeepComparison:
                 if best_branch:
                     better_versions.append(best_branch)
                     print(
-                        f"   ✨ BETTER VERSION FOUND in {best_branch['branch']}")
+                        f"   [SPARKLE] BETTER VERSION FOUND in {best_branch['branch']}")
                     print(
                         f"      Reasons: {', '.join(best_branch['reasons'])}\n")
                 else:
-                    print(f"   ✅ My current version is best\n")
+                    print(f"   [OK] My current version is best\n")
             else:
                 print(f"   ℹ️  Only exists in main\n")
 
@@ -279,7 +279,7 @@ class AuroraDeepComparison:
     def generate_aurora_recommendation(self, better_versions):
         """Aurora generates her own recommendation"""
         print("\n" + "="*80)
-        print("🌟 AURORA'S RECOMMENDATION")
+        print("[STAR] AURORA'S RECOMMENDATION")
         print("="*80)
 
         if not better_versions:
@@ -343,7 +343,7 @@ I'll handle the integration testing after merge.
         with open(output_file, 'w') as f:
             json.dump(self.analysis, f, indent=2)
 
-        print(f"\n💾 Analysis saved to: {output_file}\n")
+        print(f"\n[EMOJI] Analysis saved to: {output_file}\n")
 
         return better_versions
 
@@ -363,9 +363,9 @@ I'll handle the integration testing after merge.
         self.save_analysis(better_versions)
 
         print("="*80)
-        print(f"✅ ANALYSIS COMPLETE")
+        print(f"[OK] ANALYSIS COMPLETE")
         print("="*80)
-        print(f"\n📊 Summary:")
+        print(f"\n[DATA] Summary:")
         print(f"   - Analyzed {len(self.my_current_files)} current files")
         print(f"   - Compared against {len(branches)} branches")
         print(f"   - Found {len(better_versions)} better versions\n")
@@ -378,6 +378,6 @@ if __name__ == "__main__":
     better_versions = aurora.run()
 
     if better_versions:
-        print("🎯 Aurora found better implementations to merge.")
+        print("[TARGET] Aurora found better implementations to merge.")
     else:
-        print("✅ Aurora's current versions are already optimal.")
+        print("[OK] Aurora's current versions are already optimal.")

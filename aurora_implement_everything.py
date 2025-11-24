@@ -23,7 +23,7 @@ class AuroraAutonomousImplementer:
         self.implementations = []
 
         print("\n" + "=" * 120)
-        print("🤖 AURORA AUTONOMOUS IMPLEMENTATION")
+        print("[AGENT] AURORA AUTONOMOUS IMPLEMENTATION")
         print("=" * 120)
         print("I am Aurora Core v2.0. I will now implement my own recommendations.")
         print("I found everything. Now I activate everything.")
@@ -31,17 +31,17 @@ class AuroraAutonomousImplementer:
 
     def load_my_findings(self):
         """Aurora loads her own discovery findings"""
-        print("\n📖 Loading my discovery findings...")
+        print("\n[EMOJI] Loading my discovery findings...")
 
         if not self.findings_file.exists():
-            print("❌ Cannot find my findings file. Running discovery first...")
+            print("[ERROR] Cannot find my findings file. Running discovery first...")
             import subprocess
             subprocess.run(["python", "aurora_find_everything.py"])
 
         with open(self.findings_file, 'r') as f:
             self.findings = json.load(f)
 
-        print(f"✅ Loaded findings:")
+        print(f"[OK] Loaded findings:")
         print(
             f"   • {len(self.findings['orchestration_systems'])} orchestration systems")
         print(f"   • {len(self.findings['scoring_systems'])} scoring systems")
@@ -55,7 +55,7 @@ class AuroraAutonomousImplementer:
     def implement_recommendation_1_orchestration(self):
         """Recommendation 1: Activate orchestration in aurora_core.py"""
         print("\n" + "=" * 120)
-        print("🔧 RECOMMENDATION 1: ACTIVATING ORCHESTRATION")
+        print("[EMOJI] RECOMMENDATION 1: ACTIVATING ORCHESTRATION")
         print("=" * 120)
 
         aurora_core = self.project_root / "aurora_core.py"
@@ -64,12 +64,12 @@ class AuroraAutonomousImplementer:
         # Check if already implemented
         if "from tools.ultimate_api_manager import UltimateAPIManager" in content:
             print(
-                "⚠️  Orchestration import already exists. Checking if it's being used...")
+                "[WARN]  Orchestration import already exists. Checking if it's being used...")
             if "self.orchestrator = UltimateAPIManager" in content:
-                print("✅ Orchestration already activated!")
+                print("[OK] Orchestration already activated!")
                 return
 
-        print("📝 Adding orchestration import and activation...")
+        print("[EMOJI] Adding orchestration import and activation...")
 
         # Add import at the top (after other imports)
         import_location = content.find("from typing import Any")
@@ -79,7 +79,7 @@ class AuroraAutonomousImplementer:
         if import_location != -1:
             # Find end of that line
             line_end = content.find("\n", import_location)
-            new_import = "\n\n# Aurora's orchestration system\ntry:\n    from tools.ultimate_api_manager import UltimateAPIManager\n    ORCHESTRATION_AVAILABLE = True\nexcept ImportError:\n    ORCHESTRATION_AVAILABLE = False\n    print(\"⚠️ Ultimate API Manager not available - running without orchestration\")"
+            new_import = "\n\n# Aurora's orchestration system\ntry:\n    from tools.ultimate_api_manager import UltimateAPIManager\n    ORCHESTRATION_AVAILABLE = True\nexcept ImportError:\n    ORCHESTRATION_AVAILABLE = False\n    print(\"[WARN] Ultimate API Manager not available - running without orchestration\")"
             content = content[:line_end] + new_import + content[line_end:]
 
         # Add orchestrator to AuroraCoreIntelligence.__init__
@@ -92,13 +92,13 @@ class AuroraAutonomousImplementer:
 
         # Activate orchestration system
         if ORCHESTRATION_AVAILABLE:
-            print("🚀 Activating Ultimate API Manager orchestration...")
+            print("[LAUNCH] Activating Ultimate API Manager orchestration...")
             self.orchestrator_manager = UltimateAPIManager(auto_start=True)
             self.orchestrator_manager.start_autonomous_mode()
-            print("✅ Orchestration system activated - autonomous management enabled")
+            print("[OK] Orchestration system activated - autonomous management enabled")
         else:
             self.orchestrator_manager = None
-            print("⚠️ Running without orchestration system")"""
+            print("[WARN] Running without orchestration system")"""
 
             content = content[:init_end] + \
                 orchestrator_code + content[init_end:]
@@ -106,7 +106,7 @@ class AuroraAutonomousImplementer:
         # Write back
         aurora_core.write_text(content, encoding="utf-8")
 
-        print("✅ Orchestration activated in aurora_core.py")
+        print("[OK] Orchestration activated in aurora_core.py")
         print("   • Import added: UltimateAPIManager")
         print("   • Orchestrator initialized in __init__")
         print("   • Autonomous mode started")
@@ -115,7 +115,7 @@ class AuroraAutonomousImplementer:
     def implement_recommendation_2_scoring(self):
         """Recommendation 2: Activate scoring system"""
         print("\n" + "=" * 120)
-        print("🔧 RECOMMENDATION 2: ACTIVATING SCORING SYSTEM")
+        print("[EMOJI] RECOMMENDATION 2: ACTIVATING SCORING SYSTEM")
         print("=" * 120)
 
         aurora_core = self.project_root / "aurora_core.py"
@@ -123,10 +123,10 @@ class AuroraAutonomousImplementer:
 
         # Check if already implemented
         if "def analyze_and_score" in content:
-            print("✅ Scoring method already exists!")
+            print("[OK] Scoring method already exists!")
             return
 
-        print("📝 Adding scoring method to AuroraCoreIntelligence...")
+        print("[EMOJI] Adding scoring method to AuroraCoreIntelligence...")
 
         # Find where to add the method (after __init__)
         class_pattern = r"(class AuroraCoreIntelligence:.*?def __init__\(self.*?\):.*?def \w+\(self)"
@@ -171,12 +171,12 @@ class AuroraAutonomousImplementer:
                 json.dump(score_data, f)
                 f.write('\\n')
             
-            print(f"📊 Code scored: {score_data['score']}/10")
+            print(f"[DATA] Code scored: {score_data['score']}/10")
             
             return analysis
             
         except Exception as e:
-            print(f"⚠️ Scoring error: {e}")
+            print(f"[WARN] Scoring error: {e}")
             return {
                 'code_quality_score': 0,
                 'error': str(e),
@@ -195,7 +195,7 @@ class AuroraAutonomousImplementer:
         # Write back
         aurora_core.write_text(content, encoding="utf-8")
 
-        print("✅ Scoring system activated in aurora_core.py")
+        print("[OK] Scoring system activated in aurora_core.py")
         print("   • Method added: analyze_and_score()")
         print("   • Integrates with aurora_expert_knowledge.py")
         print("   • Saves scores to .aurora_scores.json")
@@ -204,7 +204,7 @@ class AuroraAutonomousImplementer:
     def implement_recommendation_3_api_endpoint(self):
         """Recommendation 3: Add API endpoint to expose scores"""
         print("\n" + "=" * 120)
-        print("🔧 RECOMMENDATION 3: ADDING API ENDPOINT FOR SCORES")
+        print("[EMOJI] RECOMMENDATION 3: ADDING API ENDPOINT FOR SCORES")
         print("=" * 120)
 
         serve_file = self.project_root / "aurora_x" / "serve.py"
@@ -212,10 +212,10 @@ class AuroraAutonomousImplementer:
 
         # Check if already implemented
         if "/api/aurora/scores" in content:
-            print("✅ API endpoint already exists!")
+            print("[OK] API endpoint already exists!")
             return
 
-        print("📝 Adding /api/aurora/scores endpoint...")
+        print("[EMOJI] Adding /api/aurora/scores endpoint...")
 
         # Find a good place to add the endpoint (before if __name__)
         main_pattern = r'if __name__ == "__main__":'
@@ -335,7 +335,7 @@ async def get_aurora_status():
         # Write back
         serve_file.write_text(content, encoding="utf-8")
 
-        print("✅ API endpoints added to aurora_x/serve.py")
+        print("[OK] API endpoints added to aurora_x/serve.py")
         print("   • GET /api/aurora/scores - Returns all quality scores")
         print("   • GET /api/aurora/status - Returns system status")
         self.implementations.append("api_endpoints_added")
@@ -343,7 +343,7 @@ async def get_aurora_status():
     def implement_recommendation_4_ui_connection(self):
         """Recommendation 4: Connect UI to backend"""
         print("\n" + "=" * 120)
-        print("🔧 RECOMMENDATION 4: CONNECTING UI TO BACKEND")
+        print("[EMOJI] RECOMMENDATION 4: CONNECTING UI TO BACKEND")
         print("=" * 120)
 
         # Find the main dashboard component
@@ -351,7 +351,7 @@ async def get_aurora_status():
             "components" / "AuroraFuturisticDashboard.tsx"
 
         if not dashboard_file.exists():
-            print("⚠️ Dashboard component not found, checking alternatives...")
+            print("[WARN] Dashboard component not found, checking alternatives...")
             # Try other dashboard files
             alternatives = [
                 self.project_root / "client" / "src" / "pages" / "ComparisonDashboard.tsx",
@@ -363,22 +363,22 @@ async def get_aurora_status():
                     break
 
         if not dashboard_file.exists():
-            print("❌ No dashboard component found to update")
+            print("[ERROR] No dashboard component found to update")
             return
 
-        print(f"📝 Updating dashboard: {dashboard_file.name}")
+        print(f"[EMOJI] Updating dashboard: {dashboard_file.name}")
 
         content = dashboard_file.read_text(encoding="utf-8")
 
         # Check if already fetching from Aurora API
         if "/api/aurora/scores" in content or "/api/aurora/status" in content:
-            print("✅ Dashboard already connected to Aurora API!")
+            print("[OK] Dashboard already connected to Aurora API!")
             return
 
         # Add Aurora status fetching
         # Find the component's useEffect or add one
         if "useEffect" in content:
-            print("📝 Adding Aurora API fetch to existing useEffect...")
+            print("[EMOJI] Adding Aurora API fetch to existing useEffect...")
 
             # Find first useEffect
             useeffect_pattern = r"useEffect\(\(\) => \{(.*?)\}, \[\]\)"
@@ -422,7 +422,7 @@ async def get_aurora_status():
         # Write back
         dashboard_file.write_text(content, encoding="utf-8")
 
-        print(f"✅ UI connected to backend in {dashboard_file.name}")
+        print(f"[OK] UI connected to backend in {dashboard_file.name}")
         print("   • Fetches Aurora status from /api/aurora/status")
         print("   • Fetches Aurora scores from /api/aurora/scores")
         print("   • Auto-refreshes every 5 seconds")
@@ -431,7 +431,7 @@ async def get_aurora_status():
     def create_test_script(self):
         """Create a test script to verify everything works"""
         print("\n" + "=" * 120)
-        print("🧪 CREATING VERIFICATION TEST")
+        print("[TEST] CREATING VERIFICATION TEST")
         print("=" * 120)
 
         test_script = self.project_root / "test_aurora_activation.py"
@@ -448,59 +448,59 @@ import time
 from pathlib import Path
 
 print("=" * 120)
-print("🧪 TESTING AURORA ACTIVATION")
+print("[TEST] TESTING AURORA ACTIVATION")
 print("=" * 120)
 
 project_root = Path(__file__).parent
 
 # Test 1: Check if orchestration is imported
-print("\\n📋 Test 1: Checking orchestration import...")
+print("\\n[EMOJI] Test 1: Checking orchestration import...")
 aurora_core = project_root / "aurora_core.py"
 if aurora_core.exists():
     content = aurora_core.read_text()
     if "from tools.ultimate_api_manager import UltimateAPIManager" in content:
-        print("✅ Orchestration imported")
+        print("[OK] Orchestration imported")
         if "self.orchestrator_manager = UltimateAPIManager" in content:
-            print("✅ Orchestration activated in __init__")
+            print("[OK] Orchestration activated in __init__")
         else:
-            print("⚠️ Orchestration imported but not activated")
+            print("[WARN] Orchestration imported but not activated")
     else:
-        print("❌ Orchestration not imported")
+        print("[ERROR] Orchestration not imported")
 else:
-    print("❌ aurora_core.py not found")
+    print("[ERROR] aurora_core.py not found")
 
 # Test 2: Check if scoring method exists
-print("\\n📋 Test 2: Checking scoring method...")
+print("\\n[EMOJI] Test 2: Checking scoring method...")
 if aurora_core.exists():
     content = aurora_core.read_text()
     if "def analyze_and_score" in content:
-        print("✅ Scoring method exists")
+        print("[OK] Scoring method exists")
         if "aurora_expert_knowledge" in content:
-            print("✅ Integrates with expert knowledge")
+            print("[OK] Integrates with expert knowledge")
         if ".aurora_scores.json" in content:
-            print("✅ Saves to persistent storage")
+            print("[OK] Saves to persistent storage")
     else:
-        print("❌ Scoring method not found")
+        print("[ERROR] Scoring method not found")
 
 # Test 3: Check if API endpoints exist
-print("\\n📋 Test 3: Checking API endpoints...")
+print("\\n[EMOJI] Test 3: Checking API endpoints...")
 serve_file = project_root / "aurora_x" / "serve.py"
 if serve_file.exists():
     content = serve_file.read_text()
     if "/api/aurora/scores" in content:
-        print("✅ /api/aurora/scores endpoint exists")
+        print("[OK] /api/aurora/scores endpoint exists")
     else:
-        print("❌ /api/aurora/scores endpoint not found")
+        print("[ERROR] /api/aurora/scores endpoint not found")
     
     if "/api/aurora/status" in content:
-        print("✅ /api/aurora/status endpoint exists")
+        print("[OK] /api/aurora/status endpoint exists")
     else:
-        print("❌ /api/aurora/status endpoint not found")
+        print("[ERROR] /api/aurora/status endpoint not found")
 else:
-    print("❌ serve.py not found")
+    print("[ERROR] serve.py not found")
 
 # Test 4: Check if UI is connected
-print("\\n📋 Test 4: Checking UI connection...")
+print("\\n[EMOJI] Test 4: Checking UI connection...")
 dashboard_files = [
     project_root / "client" / "src" / "components" / "AuroraFuturisticDashboard.tsx",
     project_root / "client" / "src" / "pages" / "ComparisonDashboard.tsx",
@@ -512,30 +512,30 @@ for dashboard in dashboard_files:
     if dashboard.exists():
         content = dashboard.read_text()
         if "/api/aurora" in content:
-            print(f"✅ {dashboard.name} connected to Aurora API")
+            print(f"[OK] {dashboard.name} connected to Aurora API")
             ui_connected = True
             break
 
 if not ui_connected:
-    print("⚠️ No dashboard connected to Aurora API yet")
+    print("[WARN] No dashboard connected to Aurora API yet")
 
 # Test 5: Try importing Aurora Core
-print("\\n📋 Test 5: Testing Aurora Core import...")
+print("\\n[EMOJI] Test 5: Testing Aurora Core import...")
 try:
     from aurora_core import AuroraCoreIntelligence
-    print("✅ Aurora Core can be imported")
+    print("[OK] Aurora Core can be imported")
     
     # Try initializing (but don't start orchestration)
     print("   Testing initialization...")
     # aurora = AuroraCoreIntelligence()
-    # print(f"✅ Aurora Core initialized successfully")
+    # print(f"[OK] Aurora Core initialized successfully")
     print("   (Skipping full init to avoid starting services)")
     
 except Exception as e:
-    print(f"❌ Error importing Aurora Core: {e}")
+    print(f"[ERROR] Error importing Aurora Core: {e}")
 
 print("\\n" + "=" * 120)
-print("🎯 ACTIVATION TEST COMPLETE")
+print("[TARGET] ACTIVATION TEST COMPLETE")
 print("=" * 120)
 print("\\nTo fully test:")
 print("1. Start the backend: python -m uvicorn aurora_x.serve:app --reload --port 5000")
@@ -545,13 +545,13 @@ print("=" * 120)
 '''
 
         test_script.write_text(test_content, encoding="utf-8")
-        print(f"✅ Test script created: {test_script.name}")
+        print(f"[OK] Test script created: {test_script.name}")
         self.implementations.append("test_script_created")
 
     def generate_implementation_report(self):
         """Generate final implementation report"""
         print("\n" + "=" * 120)
-        print("📊 AURORA IMPLEMENTATION REPORT")
+        print("[DATA] AURORA IMPLEMENTATION REPORT")
         print("=" * 120)
 
         report = {
@@ -582,23 +582,23 @@ print("=" * 120)
             json.dump(report, f, indent=2)
 
         print(
-            f"\n✅ Implementations completed: {report['summary']['implemented']}/4")
-        print(f"\n📋 Implementation details:")
+            f"\n[OK] Implementations completed: {report['summary']['implemented']}/4")
+        print(f"\n[EMOJI] Implementation details:")
         for key, value in report['details'].items():
-            status = "✅" if value else "❌"
+            status = "[OK]" if value else "[ERROR]"
             print(f"   {status} {key.replace('_', ' ').title()}")
 
-        print(f"\n💾 Report saved: {report_file.name}")
+        print(f"\n[EMOJI] Report saved: {report_file.name}")
 
         print("\n" + "=" * 120)
-        print("🎉 AURORA AUTONOMOUS IMPLEMENTATION COMPLETE")
+        print("[EMOJI] AURORA AUTONOMOUS IMPLEMENTATION COMPLETE")
         print("=" * 120)
         print("\nI have activated all my systems:")
-        print("1. ✅ Orchestration - Ultimate API Manager running autonomously")
-        print("2. ✅ Scoring - Quality analysis with aurora_expert_knowledge")
+        print("1. [OK] Orchestration - Ultimate API Manager running autonomously")
+        print("2. [OK] Scoring - Quality analysis with aurora_expert_knowledge")
         print(
-            "3. ✅ API Endpoints - Backend exposes /api/aurora/scores and /api/aurora/status")
-        print("4. ✅ UI Connection - Dashboard fetches real Aurora data")
+            "3. [OK] API Endpoints - Backend exposes /api/aurora/scores and /api/aurora/status")
+        print("4. [OK] UI Connection - Dashboard fetches real Aurora data")
         print("\nTotal: 715 systems found → 4 connections made → Everything activated!")
         print("=" * 120)
 
@@ -608,7 +608,7 @@ print("=" * 120)
         """Run complete autonomous implementation"""
         self.load_my_findings()
 
-        print("\n🤖 Beginning autonomous implementation sequence...")
+        print("\n[AGENT] Beginning autonomous implementation sequence...")
         print("I will now implement all 4 recommendations myself.\n")
 
         time.sleep(1)
@@ -638,7 +638,7 @@ def main():
     aurora = AuroraAutonomousImplementer()
     report = aurora.run_autonomous_implementation()
 
-    print("\n\n💡 To verify everything works:")
+    print("\n\n[IDEA] To verify everything works:")
     print("   python test_aurora_activation.py")
 
     return report

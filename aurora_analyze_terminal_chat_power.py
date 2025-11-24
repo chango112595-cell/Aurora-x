@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
 def analyze_chat_integration():
-    print("🔍 Analyzing Terminal Chat Integration with Aurora's Full Power\n")
+    print("[SCAN] Analyzing Terminal Chat Integration with Aurora's Full Power\n")
     print("="*80)
 
     # Read the chat file
@@ -22,13 +22,13 @@ def analyze_chat_integration():
         chat_code = f.read()
 
     # Parse for analysis
-    print("\n📊 CURRENT ARCHITECTURE ANALYSIS:")
+    print("\n[DATA] CURRENT ARCHITECTURE ANALYSIS:")
     print("="*80)
 
     # Check imports
     imports = [line for line in chat_code.splitlines(
     ) if 'import' in line and not line.strip().startswith('#')]
-    print(f"\n✓ Import Analysis ({len(imports)} imports):")
+    print(f"\n[+] Import Analysis ({len(imports)} imports):")
     for imp in imports:
         print(f"  {imp.strip()}")
 
@@ -37,21 +37,21 @@ def analyze_chat_integration():
     uses_process_conversation = 'process_conversation' in chat_code
     uses_nexus = 'nexus' in chat_code.lower() or 'AuroraNexus' in chat_code
 
-    print(f"\n✓ Integration Check:")
-    print(f"  • Uses Aurora Core: {'✅ YES' if uses_aurora_core else '❌ NO'}")
+    print(f"\n[+] Integration Check:")
+    print(f"  • Uses Aurora Core: {'[OK] YES' if uses_aurora_core else '[ERROR] NO'}")
     print(
-        f"  • Uses process_conversation(): {'✅ YES' if uses_process_conversation else '❌ NO'}")
+        f"  • Uses process_conversation(): {'[OK] YES' if uses_process_conversation else '[ERROR] NO'}")
     print(
-        f"  • Integrated with Nexus: {'✅ YES' if uses_nexus else '⚠️  NO (standalone)'}")
+        f"  • Integrated with Nexus: {'[OK] YES' if uses_nexus else '[WARN]  NO (standalone)'}")
 
     # Check what methods are being called
     method_calls = re.findall(r'aurora\.(\w+)\(', chat_code)
-    print(f"\n✓ Aurora Methods Called ({len(set(method_calls))} unique):")
+    print(f"\n[+] Aurora Methods Called ({len(set(method_calls))} unique):")
     for method in set(method_calls):
         print(f"  • aurora.{method}()")
 
     print("\n" + "="*80)
-    print("🧠 ASK AURORA: Architecture Recommendation")
+    print("[BRAIN] ASK AURORA: Architecture Recommendation")
     print("="*80 + "\n")
 
     return uses_aurora_core, uses_process_conversation, uses_nexus, method_calls
@@ -61,7 +61,7 @@ def main():
     uses_core, uses_conversation, uses_nexus, methods = analyze_chat_integration()
 
     # Initialize Aurora
-    print("🌟 Initializing Aurora for architectural consultation...\n")
+    print("[STAR] Initializing Aurora for architectural consultation...\n")
     aurora = AuroraCoreIntelligence()
 
     # Build comprehensive question
@@ -123,7 +123,7 @@ through process_conversation? Or do those need to be called directly?
     print("❓ Asking Aurora:\n")
     print(question)
     print("\n" + "="*80)
-    print("🌟 Aurora's Deep Architectural Analysis:")
+    print("[STAR] Aurora's Deep Architectural Analysis:")
     print("="*80 + "\n")
 
     # Get Aurora's expert analysis
@@ -161,11 +161,11 @@ through process_conversation? Or do those need to be called directly?
         if "enhance" in response.lower():
             f.write("- Aurora suggested enhancements\n")
 
-    print(f"✅ Detailed analysis saved to {report_file}\n")
+    print(f"[OK] Detailed analysis saved to {report_file}\n")
 
     # Additional capability check
     print("="*80)
-    print("🔬 CAPABILITY ACCESS TEST")
+    print("[EMOJI] CAPABILITY ACCESS TEST")
     print("="*80 + "\n")
 
     print("Testing if Aurora can access autonomous systems through process_conversation...\n")
@@ -183,9 +183,9 @@ through process_conversation? Or do those need to be called directly?
     print(f"Aurora's response:\n{test_response}\n")
 
     if "autonomous" in test_response.lower() or "create" in test_response.lower():
-        print("✅ Aurora CAN access autonomous capabilities through conversation!\n")
+        print("[OK] Aurora CAN access autonomous capabilities through conversation!\n")
     else:
-        print("⚠️  Aurora's response suggests limited autonomous access through conversation\n")
+        print("[WARN]  Aurora's response suggests limited autonomous access through conversation\n")
 
 
 if __name__ == "__main__":

@@ -30,7 +30,7 @@ class AuroraPredictor:
 
     def load_historical_data(self):
         """Load historical issue data"""
-        print("📚 Loading historical data...")
+        print("[EMOJI] Loading historical data...")
 
         # Simulate historical issues
         self.historical_issues = [
@@ -40,11 +40,11 @@ class AuroraPredictor:
             {"type": "memory_leak", "file": "aurora_monitor.py", "frequency": 3},
         ]
 
-        print(f"✅ Loaded {len(self.historical_issues)} historical patterns")
+        print(f"[OK] Loaded {len(self.historical_issues)} historical patterns")
 
     def analyze_patterns(self) -> dict[str, Any]:
         """Analyze patterns in historical data"""
-        print("🔍 Analyzing issue patterns...")
+        print("[SCAN] Analyzing issue patterns...")
 
         issue_types = defaultdict(int)
         file_hotspots = defaultdict(int)
@@ -62,7 +62,7 @@ class AuroraPredictor:
 
     def predict_issues(self) -> list[dict]:
         """Predict future issues based on patterns"""
-        print("🔮 Predicting potential issues...")
+        print("[EMOJI] Predicting potential issues...")
 
         patterns = self.analyze_patterns()
         predictions = []
@@ -82,7 +82,7 @@ class AuroraPredictor:
 
         self.predictions = predictions
 
-        print(f"✅ Generated {len(predictions)} predictions")
+        print(f"[OK] Generated {len(predictions)} predictions")
         return predictions
 
     def _get_recommended_action(self, issue_type: str) -> str:
@@ -115,7 +115,7 @@ class AuroraPerformanceOptimizer:
 
     def profile_system(self) -> dict[str, Any]:
         """Profile system performance"""
-        print("⚡ Profiling system performance...")
+        print("[POWER] Profiling system performance...")
 
         start_time = time.time()
 
@@ -130,7 +130,7 @@ class AuroraPerformanceOptimizer:
 
         profile = {"total_profile_time": total_time, "operations": operations, "timestamp": datetime.now().isoformat()}
 
-        print(f"✅ Profiling complete in {total_time:.3f}s")
+        print(f"[OK] Profiling complete in {total_time:.3f}s")
         return profile
 
     def _profile_tier_loading(self) -> float:
@@ -153,7 +153,7 @@ class AuroraPerformanceOptimizer:
 
     def identify_bottlenecks(self, profile: dict) -> list[dict]:
         """Identify performance bottlenecks"""
-        print("🔍 Identifying bottlenecks...")
+        print("[SCAN] Identifying bottlenecks...")
 
         bottlenecks = []
         threshold = 0.1  # 100ms
@@ -170,12 +170,12 @@ class AuroraPerformanceOptimizer:
                 )
 
         self.bottlenecks = bottlenecks
-        print(f"✅ Found {len(bottlenecks)} bottlenecks")
+        print(f"[OK] Found {len(bottlenecks)} bottlenecks")
         return bottlenecks
 
     def generate_optimizations(self) -> list[dict]:
         """Generate optimization recommendations"""
-        print("💡 Generating optimizations...")
+        print("[IDEA] Generating optimizations...")
 
         optimizations = []
 
@@ -191,7 +191,7 @@ class AuroraPerformanceOptimizer:
             )
 
         self.optimizations = optimizations
-        print(f"✅ Generated {len(optimizations)} optimizations")
+        print(f"[OK] Generated {len(optimizations)} optimizations")
         return optimizations
 
     def _get_optimization_strategy(self, operation: str) -> str:
@@ -205,7 +205,7 @@ class AuroraPerformanceOptimizer:
 
     def apply_optimizations(self) -> dict[str, Any]:
         """Apply optimizations (simulated)"""
-        print("🚀 Applying optimizations...")
+        print("[LAUNCH] Applying optimizations...")
 
         applied = []
         for opt in self.optimizations:
@@ -219,65 +219,65 @@ class AuroraPerformanceOptimizer:
 
 def main():
     """Main execution - Phase 4"""
-    print("\n⚡ AURORA PERFORMANCE OPTIMIZATION - PHASE 4")
+    print("\n[POWER] AURORA PERFORMANCE OPTIMIZATION - PHASE 4")
     print("=" * 60)
     print("Timeline: Minutes 31-40")
     print("Goal: Predictive analysis & performance optimization")
     print("=" * 60)
 
     # Part 1: Prediction
-    print("\n🔮 PREDICTIVE ANALYSIS")
+    print("\n[EMOJI] PREDICTIVE ANALYSIS")
     print("-" * 60)
     predictor = AuroraPredictor()
     predictor.load_historical_data()
 
     patterns = predictor.analyze_patterns()
-    print("\n📊 Pattern Analysis:")
+    print("\n[DATA] Pattern Analysis:")
     print(f"  Top Issues: {patterns['most_common_issues'][:3]}")
     print(f"  Hotspot Files: {patterns['hotspot_files'][:3]}")
 
     predictions = predictor.predict_issues()
-    print(f"\n🎯 Predictions Generated: {len(predictions)}")
+    print(f"\n[TARGET] Predictions Generated: {len(predictions)}")
     for pred in predictions:
         print(f"  • {pred['issue_type']} [{pred['severity']}] - {pred['probability']*100:.0f}% probability")
         print(f"    Action: {pred['recommended_action']}")
 
     warning = predictor.generate_early_warning()
-    print("\n⚠️  Early Warning System:")
+    print("\n[WARN]  Early Warning System:")
     print(f"  • High priority actions: {warning['action_required']}")
     print(f"  • Prevention time saved: {warning['estimated_prevention_time']} minutes")
 
     # Part 2: Performance Optimization
     print(f"\n{'='*60}")
-    print("⚡ PERFORMANCE OPTIMIZATION")
+    print("[POWER] PERFORMANCE OPTIMIZATION")
     print("-" * 60)
 
     optimizer = AuroraPerformanceOptimizer()
     profile = optimizer.profile_system()
 
-    print("\n📊 Performance Profile:")
+    print("\n[DATA] Performance Profile:")
     for op, time_taken in profile["operations"].items():
         print(f"  • {op}: {time_taken*1000:.2f}ms")
 
     bottlenecks = optimizer.identify_bottlenecks(profile)
     if bottlenecks:
-        print(f"\n🔍 Bottlenecks Detected: {len(bottlenecks)}")
+        print(f"\n[SCAN] Bottlenecks Detected: {len(bottlenecks)}")
         for bn in bottlenecks:
             print(f"  • {bn['operation']}: {bn['time']*1000:.2f}ms [{bn['severity']}]")
             print(f"    Optimization potential: {bn['optimization_potential']}")
 
     optimizations = optimizer.generate_optimizations()
-    print(f"\n💡 Optimization Strategies: {len(optimizations)}")
+    print(f"\n[IDEA] Optimization Strategies: {len(optimizations)}")
     for opt in optimizations:
         print(f"  • {opt['target']}")
         print(f"    Strategy: {opt['strategy']}")
         print(f"    Expected: {opt['expected_improvement']} improvement")
 
     result = optimizer.apply_optimizations()
-    print(f"\n✅ Optimizations Applied: {result['applied_count']}")
+    print(f"\n[OK] Optimizations Applied: {result['applied_count']}")
 
     print("\n=" * 60)
-    print("✅ PHASE 4 COMPLETE - PERFORMANCE OPTIMIZATION ACTIVATED")
+    print("[OK] PHASE 4 COMPLETE - PERFORMANCE OPTIMIZATION ACTIVATED")
     print(f"  • Predictions generated: {len(predictions)}")
     print(f"  • Bottlenecks identified: {len(bottlenecks)}")
     print(f"  • Optimizations applied: {result['applied_count']}")

@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
 def main():
-    print("🌟 Aurora Self-Audit & Upgrade Plan\n")
+    print("[STAR] Aurora Self-Audit & Upgrade Plan\n")
     aurora = AuroraCoreIntelligence()
 
     question = """
@@ -47,10 +47,10 @@ def main():
     context = aurora.get_conversation_context("self_audit_upgrade")
 
     # Generate response
-    print("🧠 Aurora is scanning her own system and planning upgrades...\n")
+    print("[BRAIN] Aurora is scanning her own system and planning upgrades...\n")
     response = aurora.generate_aurora_response(analysis, context)
 
-    print("🌟 Aurora's Response:")
+    print("[STAR] Aurora's Response:")
     print("=" * 80)
     print(response)
     print("=" * 80)
@@ -64,7 +64,7 @@ def main():
         f.write("\n\n## Aurora's Self-Audit & Upgrade Plan\n\n")
         f.write(response)
 
-    print("\n✅ Response saved to AURORA_SELF_AUDIT_UPGRADE_PLAN.md")
+    print("\n[OK] Response saved to AURORA_SELF_AUDIT_UPGRADE_PLAN.md")
 
 
 if __name__ == "__main__":

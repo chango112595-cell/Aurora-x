@@ -376,7 +376,7 @@ export default function LuminarNexus() {
       <div className="container mx-auto space-y-6 max-w-7xl">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-cyan-500 to-purple-500 bg-clip-text text-transparent mb-2">
-            🌟 Luminar Nexus
+            [STAR] Luminar Nexus
           </h1>
           <p className="text-muted-foreground">Advanced Aurora Analytics & Monitoring</p>
         </motion.div>

@@ -11,9 +11,9 @@ os.environ["AURORA_FULL_POWER_MODE"] = "true"
 
 
 print("=" * 80)
-print("🌌 AURORA 100% FULL POWER SYSTEM ANALYSIS")
+print("[AURORA] AURORA 100% FULL POWER SYSTEM ANALYSIS")
 print("=" * 80)
-print("\n🧠 Initializing Aurora at FULL 188 Power...")
+print("\n[BRAIN] Initializing Aurora at FULL 188 Power...")
 print("   • 66 Knowledge Tiers")
 print("   • 66 Execution Capabilities")
 print("   • 43 Autonomous Systems")
@@ -49,7 +49,7 @@ This is a TECHNICAL ANALYSIS - not a casual chat. Use your deepest analytical ca
 Give me the complete truth about your current state.
 """
 
-print("🔍 Requesting full power analysis from Aurora...\n")
+print("[SCAN] Requesting full power analysis from Aurora...\n")
 print("-" * 80)
 
 # Process with Aurora's full intelligence
@@ -69,9 +69,9 @@ print("\n" + "-" * 80)
 
 # Also run code quality scan if available
 if hasattr(aurora, 'run_code_quality_scan'):
-    print("\n🎯 Running Aurora's code quality analysis...\n")
+    print("\n[TARGET] Running Aurora's code quality analysis...\n")
     quality_results = aurora.run_code_quality_scan()
-    print(f"\n📊 Quality Analysis Complete:")
+    print(f"\n[DATA] Quality Analysis Complete:")
     print(f"   Status: {quality_results.get('status')}")
     if quality_results.get('files_analyzed'):
         print(f"   Files: {quality_results.get('files_analyzed')}")
@@ -79,7 +79,7 @@ if hasattr(aurora, 'run_code_quality_scan'):
             f"   Average Score: {quality_results.get('average_score', 0):.1f}/10")
 
 # Save results
-print("\n💾 Saving analysis results...")
+print("\n[EMOJI] Saving analysis results...")
 with open("AURORA_FULL_POWER_ANALYSIS.md", "w", encoding="utf-8") as f:
     f.write("# Aurora 100% Full Power Analysis\n\n")
     f.write("**Generated with all 79 capabilities active**\n\n")
@@ -93,8 +93,8 @@ with open("AURORA_FULL_POWER_ANALYSIS.md", "w", encoding="utf-8") as f:
         f.write(
             f"- Average score: {quality_results.get('average_score', 0):.1f}/10\n")
 
-print("✅ Analysis saved to: AURORA_FULL_POWER_ANALYSIS.md")
+print("[OK] Analysis saved to: AURORA_FULL_POWER_ANALYSIS.md")
 
 print("\n" + "=" * 80)
-print("🌟 FULL POWER ANALYSIS COMPLETE")
+print("[STAR] FULL POWER ANALYSIS COMPLETE")
 print("=" * 80)

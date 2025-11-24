@@ -248,7 +248,7 @@ class AuroraServerManager:
 
     def cleanup_and_restart(self, preferred_service: str = "bridge") -> bool:
         """Clean up all conflicts and start preferred service"""
-        self.log("🧹 Starting Aurora cleanup and restart process")
+        self.log("[EMOJI] Starting Aurora cleanup and restart process")
 
         # Step 1: Kill all Aurora processes
         killed_pids = self.kill_conflicting_processes()
@@ -260,10 +260,10 @@ class AuroraServerManager:
         # Step 3: Start preferred service
         process = self.start_service(preferred_service)
         if process:
-            self.log(f"✅ Successfully restarted Aurora with {preferred_service} service")
+            self.log(f"[OK] Successfully restarted Aurora with {preferred_service} service")
             return True
         else:
-            self.log(f"❌ Failed to start {preferred_service} service")
+            self.log(f"[ERROR] Failed to start {preferred_service} service")
             return False
 
     def diagnose_problems(self):
@@ -272,7 +272,7 @@ class AuroraServerManager:
 
     def monitor_loop(self):
         """Continuous monitoring loop"""
-        self.log("🔍 Starting Aurora monitoring loop")
+        self.log("[SCAN] Starting Aurora monitoring loop")
 
         while True:
             try:
@@ -280,7 +280,7 @@ class AuroraServerManager:
 
                 # Check for problems
                 if status["conflicts"]:
-                    self.log(f"⚠️ Detected conflicts: {status['conflicts']}")
+                    self.log(f"[WARN] Detected conflicts: {status['conflicts']}")
 
                     if self.config["auto_restart"]:
                         self.log("� Auto-restarting to resolve conflicts")
@@ -289,16 +289,16 @@ class AuroraServerManager:
                 # Health check all services
                 healthy_services = [name for name, info in status["services"].items() if info["healthy"]]
                 if not healthy_services:
-                    self.log("❌ No healthy services detected, attempting restart")
+                    self.log("[ERROR] No healthy services detected, attempting restart")
                     self.cleanup_and_restart()
 
                 time.sleep(self.config["health_check_interval"])
 
             except KeyboardInterrupt:
-                self.log("🛑 Monitoring stopped by user")
+                self.log("[EMOJI] Monitoring stopped by user")
                 break
             except Exception as e:
-                self.log(f"❌ Monitor error: {e}")
+                self.log(f"[ERROR] Monitor error: {e}")
                 time.sleep(10)  # Wait before retrying
 
 
@@ -319,58 +319,58 @@ def main():
 
     if args.status:
         status = manager.get_system_status()
-        print("\n🔍 AURORA SYSTEM STATUS")
+        print("\n[SCAN] AURORA SYSTEM STATUS")
         print("=" * 40)
         print(f"Timestamp: {status['timestamp']}")
         print(f"Aurora Processes: {status['processes']}")
 
-        print("\n📊 SERVICES:")
+        print("\n[DATA] SERVICES:")
         for name, info in status["services"].items():
-            _status_icon = "✅" if info["healthy"] else "❌"
+            _status_icon = "[OK]" if info["healthy"] else "[ERROR]"
             print(f"  {status_icon} {name}: Port {info['port']} - {info['status']}")
 
         if status["conflicts"]:
-            print("\n⚠️  CONFLICTS:")
+            print("\n[WARN]  CONFLICTS:")
             for conflict in status["conflicts"]:
                 print(f"  • {conflict}")
 
         if status["recommendations"]:
-            print("\n💡 RECOMMENDATIONS:")
+            print("\n[IDEA] RECOMMENDATIONS:")
             for rec in status["recommendations"]:
                 print(f"  • {rec}")
 
     elif args.cleanup:
-        print("🧹 Cleaning up Aurora processes...")
+        print("[EMOJI] Cleaning up Aurora processes...")
         success = manager.cleanup_and_restart()
         if SUCCESS:
-            print("✅ Cleanup and restart successful!")
+            print("[OK] Cleanup and restart successful!")
         else:
-            print("❌ Cleanup failed!")
+            print("[ERROR] Cleanup failed!")
 
     elif args.monitor:
-        print("🔍 Starting Aurora monitoring...")
+        print("[SCAN] Starting Aurora monitoring...")
         manager.monitor_loop()
 
     elif args.start:
-        print(f"🚀 Starting {args.start} service...")
+        print(f"[LAUNCH] Starting {args.start} service...")
         process = manager.start_service(args.start)
         if process:
-            print(f"✅ {args.start} started successfully!")
+            print(f"[OK] {args.start} started successfully!")
         else:
-            print(f"❌ Failed to start {args.start}")
+            print(f"[ERROR] Failed to start {args.start}")
 
     elif args.kill_all:
-        print("🔥 Killing all Aurora processes...")
+        print("[EMOJI] Killing all Aurora processes...")
         killed_pids = manager.kill_conflicting_processes()
-        print(f"✅ Killed {len(killed_pids)} processes")
+        print(f"[OK] Killed {len(killed_pids)} processes")
 
     else:
         # Default: Show status
         status = manager.get_system_status()
         if status["conflicts"]:
-            print("⚠️ Aurora has conflicts! Run with --cleanup to fix.")
+            print("[WARN] Aurora has conflicts! Run with --cleanup to fix.")
         else:
-            print("✅ Aurora is running smoothly!")
+            print("[OK] Aurora is running smoothly!")
 
 
 if __name__ == "__main__":

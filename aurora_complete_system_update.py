@@ -120,7 +120,7 @@ export default function TasksPage() {
         path = self.pages_dir / "tasks.tsx"
         path.write_text(content, encoding="utf-8")
         self.updates.append(str(path))
-        print(f"[Aurora] ✅ Created: {path}")
+        print(f"[Aurora] [OK] Created: {path}")
 
     def create_tiers_page(self):
         """Create 66 Knowledge Tiers page"""
@@ -284,7 +284,7 @@ export default function TiersPage() {
         path = self.pages_dir / "tiers.tsx"
         path.write_text(content, encoding="utf-8")
         self.updates.append(str(path))
-        print(f"[Aurora] ✅ Created: {path}")
+        print(f"[Aurora] [OK] Created: {path}")
 
     def create_intelligence_page(self):
         """Create Intelligence Core page"""
@@ -403,7 +403,7 @@ export default function IntelligencePage() {
         path = self.pages_dir / "intelligence.tsx"
         path.write_text(content, encoding="utf-8")
         self.updates.append(str(path))
-        print(f"[Aurora] ✅ Created: {path}")
+        print(f"[Aurora] [OK] Created: {path}")
 
     def update_app_routes(self):
         """Update App.tsx with all new routes"""
@@ -447,7 +447,7 @@ export default App;
         path = self.client_dir / "App.tsx"
         path.write_text(content, encoding="utf-8")
         self.updates.append(str(path))
-        print(f"[Aurora] ✅ Updated: {path}")
+        print(f"[Aurora] [OK] Updated: {path}")
 
     def create_placeholder_pages(self):
         """Create placeholder pages for remaining routes"""
@@ -491,7 +491,7 @@ export default function {route.capitalize()}Page() {{
             path = self.pages_dir / f"{route}.tsx"
             path.write_text(content, encoding="utf-8")
             self.updates.append(str(path))
-            print(f"[Aurora] ✅ Created: {path}")
+            print(f"[Aurora] [OK] Created: {path}")
 
     def update_app_with_all_routes(self):
         """Update App.tsx with all routes including placeholders"""
@@ -544,7 +544,7 @@ export default App;
 
         path = self.client_dir / "App.tsx"
         path.write_text(content, encoding="utf-8")
-        print(f"[Aurora] ✅ Updated: {path}")
+        print(f"[Aurora] [OK] Updated: {path}")
 
     def run(self):
         """Execute complete system update"""
@@ -564,12 +564,12 @@ export default App;
         self.update_app_with_all_routes()
 
         print("\n" + "=" * 60)
-        print("[Aurora] ✅ COMPLETE SYSTEM UPDATE FINISHED")
+        print("[Aurora] [OK] COMPLETE SYSTEM UPDATE FINISHED")
         print("=" * 60)
-        print("\n[Aurora] 🎨 Updated Components:")
+        print("\n[Aurora] [EMOJI] Updated Components:")
         for update in self.updates:
-            print(f"  ✅ {update}")
-        print("\n[Aurora] 📊 System Status:")
+            print(f"  [OK] {update}")
+        print("\n[Aurora] [DATA] System Status:")
         print("  • 66 Foundation Tasks Page - Complete")
         print("  • 66 Knowledge Tiers Page - Complete")
         print("  • Intelligence Core Page - Complete")
@@ -579,8 +579,8 @@ export default App;
         print("  • Knowledge Base - Placeholder")
         print("  • Configuration - Placeholder")
         print("  • Complete Routing System - Active")
-        print("\n[Aurora] 🚀 All 10 navigation routes are now functional!")
-        print("[Aurora] 💫 The entire system has been updated!\n")
+        print("\n[Aurora] [LAUNCH] All 10 navigation routes are now functional!")
+        print("[Aurora] [EMOJI] The entire system has been updated!\n")
 
 
 if __name__ == "__main__":

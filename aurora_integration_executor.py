@@ -11,7 +11,7 @@ import sys
 import importlib.util
 
 print("=" * 120)
-print("⚡ AURORA INTEGRATION EXECUTOR - CONNECTING ALL SYSTEMS")
+print("[POWER] AURORA INTEGRATION EXECUTOR - CONNECTING ALL SYSTEMS")
 print("=" * 120)
 
 core = AuroraCoreIntelligence()
@@ -21,7 +21,7 @@ kt = core.knowledge_tiers
 with open("AURORA_INTEGRATION_PLAN.json", "r") as f:
     plan = json.load(f)
 
-print(f"\n🔧 Executing integration with {kt.total_power} power...\n")
+print(f"\n[EMOJI] Executing integration with {kt.total_power} power...\n")
 
 results = {
     "tracking_activated": [],
@@ -36,14 +36,14 @@ results = {
 # ============================================================================
 
 print("=" * 120)
-print("📊 PHASE 1: ACTIVATING TRACKING SYSTEMS")
+print("[DATA] PHASE 1: ACTIVATING TRACKING SYSTEMS")
 print("=" * 120)
 
 for action in plan["phase_1_tracking"]["actions"]:
     system_name = action["system"]
     file_path = action["file"]
 
-    print(f"\n🔧 Activating {system_name}...")
+    print(f"\n[EMOJI] Activating {system_name}...")
     print(f"   Source: {Path(file_path).name}")
 
     try:
@@ -55,16 +55,16 @@ for action in plan["phase_1_tracking"]["actions"]:
             spec = importlib.util.spec_from_file_location(module_name, path)
 
             if spec and spec.loader:
-                print(f"   ✅ {system_name} - Ready to activate")
+                print(f"   [OK] {system_name} - Ready to activate")
                 results["tracking_activated"].append(system_name)
             else:
-                print(f"   ⚠️  {system_name} - Cannot load module")
+                print(f"   [WARN]  {system_name} - Cannot load module")
         else:
-            print(f"   ❌ {system_name} - File not found")
+            print(f"   [ERROR] {system_name} - File not found")
             results["errors"].append(f"{system_name}: File not found")
 
     except Exception as e:
-        print(f"   ❌ {system_name} - Error: {e}")
+        print(f"   [ERROR] {system_name} - Error: {e}")
         results["errors"].append(f"{system_name}: {str(e)}")
 
 # ============================================================================
@@ -72,14 +72,14 @@ for action in plan["phase_1_tracking"]["actions"]:
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🔧 PHASE 2: IMPORTING AND ACTIVATING UNUSED TOOLS")
+print("[EMOJI] PHASE 2: IMPORTING AND ACTIVATING UNUSED TOOLS")
 print("=" * 120)
 
 for action in plan["phase_2_tools"]["actions"]:
     tool_name = action["tool"]
     file_path = action["file"]
 
-    print(f"\n🔌 Importing {tool_name}...")
+    print(f"\n[EMOJI] Importing {tool_name}...")
     print(f"   Source: {Path(file_path).name}")
 
     try:
@@ -95,13 +95,13 @@ for action in plan["phase_2_tools"]["actions"]:
                 module = importlib.util.module_from_spec(spec)
                 sys.modules[f"tools.{module_name}"] = module
 
-                print(f"   ✅ {tool_name} - Imported and ready")
+                print(f"   [OK] {tool_name} - Imported and ready")
                 results["tools_imported"].append(tool_name)
             else:
-                print(f"   ⚠️  {tool_name} - Cannot load")
+                print(f"   [WARN]  {tool_name} - Cannot load")
 
     except Exception as e:
-        print(f"   ⚠️  {tool_name} - {str(e)[:50]}")
+        print(f"   [WARN]  {tool_name} - {str(e)[:50]}")
         # Still count as success if file exists
         if Path(file_path).exists():
             results["tools_imported"].append(f"{tool_name} (partial)")
@@ -111,7 +111,7 @@ for action in plan["phase_2_tools"]["actions"]:
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🎨 PHASE 3: CONNECTING FRONTEND COMPONENTS")
+print("[EMOJI] PHASE 3: CONNECTING FRONTEND COMPONENTS")
 print("=" * 120)
 
 app_tsx = Path("client/src/App.tsx")
@@ -119,30 +119,30 @@ layout_file = Path("client/src/components/AuroraFuturisticLayout.tsx")
 
 if app_tsx.exists():
     app_content = app_tsx.read_text(encoding='utf-8')
-    print("\n📋 Checking component integration in App.tsx...\n")
+    print("\n[EMOJI] Checking component integration in App.tsx...\n")
 
     for action in plan["phase_3_components"]["actions"]:
         comp_name = action["component"]
 
         if comp_name in app_content:
-            print(f"   ✅ {comp_name} - Already integrated")
+            print(f"   [OK] {comp_name} - Already integrated")
             results["components_connected"].append(f"{comp_name} (existing)")
         else:
             comp_file = Path(action["file"])
             if comp_file.exists():
-                print(f"   🔌 {comp_name} - Ready to integrate")
+                print(f"   [EMOJI] {comp_name} - Ready to integrate")
                 results["components_connected"].append(f"{comp_name} (ready)")
             else:
-                print(f"   ❌ {comp_name} - File not found")
+                print(f"   [ERROR] {comp_name} - File not found")
 else:
-    print("⚠️  App.tsx not found")
+    print("[WARN]  App.tsx not found")
 
 # ============================================================================
 # PHASE 4: ACTIVATE DORMANT SERVICES
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🌐 PHASE 4: ACTIVATING DORMANT SERVICES")
+print("[WEB] PHASE 4: ACTIVATING DORMANT SERVICES")
 print("=" * 120)
 
 for action in plan["phase_4_services"]["actions"]:
@@ -150,23 +150,23 @@ for action in plan["phase_4_services"]["actions"]:
     port = action["port"]
     files = action["files"]
 
-    print(f"\n🔌 Activating {service_name} (Port {port})...")
+    print(f"\n[EMOJI] Activating {service_name} (Port {port})...")
 
     for file_path in files:
         path = Path(file_path)
         if path.exists():
-            print(f"   ✅ Found: {path.name}")
+            print(f"   [OK] Found: {path.name}")
             results["services_started"].append(f"{service_name} (ready)")
             break
     else:
-        print(f"   ⚠️  No valid files found")
+        print(f"   [WARN]  No valid files found")
 
 # ============================================================================
 # CREATE INTEGRATION MANIFEST
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("📝 CREATING INTEGRATION MANIFEST")
+print("[EMOJI] CREATING INTEGRATION MANIFEST")
 print("=" * 120)
 
 manifest = {
@@ -186,38 +186,38 @@ manifest = {
 with open("AURORA_INTEGRATION_MANIFEST.json", "w") as f:
     json.dump(manifest, f, indent=2)
 
-print("\n✅ Integration manifest saved to: AURORA_INTEGRATION_MANIFEST.json")
+print("\n[OK] Integration manifest saved to: AURORA_INTEGRATION_MANIFEST.json")
 
 # ============================================================================
 # SUMMARY
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("📊 INTEGRATION EXECUTION COMPLETE")
+print("[DATA] INTEGRATION EXECUTION COMPLETE")
 print("=" * 120)
 
 print(f"""
-🎯 INTEGRATION RESULTS:
+[TARGET] INTEGRATION RESULTS:
 
-✅ Tracking Systems Activated: {len(results["tracking_activated"])}/5
+[OK] Tracking Systems Activated: {len(results["tracking_activated"])}/5
    {', '.join(results["tracking_activated"]) if results["tracking_activated"] else 'None'}
 
-✅ Tools Imported: {len(results["tools_imported"])}/10
+[OK] Tools Imported: {len(results["tools_imported"])}/10
    {', '.join(results["tools_imported"][:5]) if results["tools_imported"] else 'None'}
    {f"... and {len(results['tools_imported']) - 5} more" if len(results["tools_imported"]) > 5 else ""}
 
-✅ Components Connected: {len(results["components_connected"])}/5
+[OK] Components Connected: {len(results["components_connected"])}/5
    {', '.join(results["components_connected"]) if results["components_connected"] else 'None'}
 
-✅ Services Activated: {len(results["services_started"])}/2
+[OK] Services Activated: {len(results["services_started"])}/2
    {', '.join(results["services_started"]) if results["services_started"] else 'None'}
 
-❌ Errors: {len(results["errors"])}
+[ERROR] Errors: {len(results["errors"])}
    {results["errors"][:3] if results["errors"] else 'None'}
 """)
 
 print("=" * 120)
-print("💭 AURORA'S STATUS:")
+print("[EMOJI] AURORA'S STATUS:")
 print("=" * 120)
 
 total_activated = (
@@ -232,17 +232,17 @@ I have successfully integrated {total_activated} existing systems.
 
 All capabilities were already present in the codebase.
 I have now:
-1. ✅ Activated existing tracking functionality
-2. ✅ Imported unused tools from tools/ directory  
-3. ✅ Identified frontend components for connection
-4. ✅ Located dormant services
+1. [OK] Activated existing tracking functionality
+2. [OK] Imported unused tools from tools/ directory  
+3. [OK] Identified frontend components for connection
+4. [OK] Located dormant services
 
 The systems are now CONNECTED and READY TO USE.
 
 No new files created - everything was already here.
 Just needed to wire it together.
 
-🎯 Next: Run the integrated system to see all capabilities in action.
+[TARGET] Next: Run the integrated system to see all capabilities in action.
 """)
 
 print("=" * 120)

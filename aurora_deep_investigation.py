@@ -18,12 +18,12 @@ class AuroraDeepInvestigation:
 
     def fact(self, message):
         """Record a fact"""
-        print(f"[Aurora] 🔍 {message}")
+        print(f"[Aurora] [SCAN] {message}")
         self.facts.append(message)
 
     def issue(self, message):
         """Record an issue"""
-        print(f"[Aurora] ⚠️  {message}")
+        print(f"[Aurora] [WARN]  {message}")
         self.issues.append(message)
 
     def check_what_is_actually_running(self):
@@ -258,7 +258,7 @@ class AuroraDeepInvestigation:
             sock.close()
 
             if is_running:
-                self.fact(f"✓ Port {port} ({service}) - RUNNING")
+                self.fact(f"[+] Port {port} ({service}) - RUNNING")
             else:
                 self.issue(f"✗ Port {port} ({service}) - NOT RUNNING")
 
@@ -288,11 +288,11 @@ class AuroraDeepInvestigation:
         print(f"[Aurora] Issues found: {len(self.issues)}")
 
         if self.issues:
-            print("\n[Aurora] ⚠️  CRITICAL ISSUES:")
+            print("\n[Aurora] [WARN]  CRITICAL ISSUES:")
             for i, issue in enumerate(self.issues, 1):
                 print(f"  {i}. {issue}")
 
-        print("\n[Aurora] 🎯 ROOT CAUSE HYPOTHESIS:")
+        print("\n[Aurora] [TARGET] ROOT CAUSE HYPOTHESIS:")
 
         # Analyze the evidence
         has_port_5000 = any("Port 5000" in f and "LISTENING" in f for f in self.facts)
@@ -316,7 +316,7 @@ class AuroraDeepInvestigation:
             print("  → Issue is likely in React component rendering")
             print("  → SOLUTION: Check browser console for JS errors")
 
-        print("\n[Aurora] 💡 NEXT STEPS:")
+        print("\n[Aurora] [IDEA] NEXT STEPS:")
         print("  1. Check browser console (F12) for JavaScript errors")
         print("  2. Verify all node processes are still running")
         print("  3. Check Vite HMR connection in browser console")

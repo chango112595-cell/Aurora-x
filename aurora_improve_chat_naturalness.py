@@ -12,12 +12,12 @@ import os
 
 def enhance_chat_component():
     """Improve the chat component for more natural conversation"""
-    print("🌟 Aurora: Enhancing chat naturalness and execution...\n")
+    print("[STAR] Aurora: Enhancing chat naturalness and execution...\n")
 
     chat_component = "client/src/components/AuroraFuturisticChat.tsx"
 
     if not os.path.exists(chat_component):
-        print(f"❌ {chat_component} not found")
+        print(f"[ERROR] {chat_component} not found")
         return False
 
     # Create enhanced natural chat component
@@ -288,7 +288,7 @@ export default function AuroraFuturisticChat() {
     with open(chat_component, "w", encoding="utf-8") as f:
         f.write(enhanced_chat)
 
-    print("✅ Enhanced chat component with:")
+    print("[OK] Enhanced chat component with:")
     print("   - More natural conversation flow")
     print("   - Better message formatting (code blocks, bold, bullets)")
     print("   - Status indicators (thinking, executing, complete)")
@@ -299,7 +299,7 @@ export default function AuroraFuturisticChat() {
 
 def enhance_backend_chat():
     """Enhance backend to return more natural responses"""
-    print("\n🌟 Aurora: Enhancing backend chat responses...\n")
+    print("\n[STAR] Aurora: Enhancing backend chat responses...\n")
 
     # Check if backend chat route exists
     backend_files = [
@@ -316,38 +316,38 @@ def enhance_backend_chat():
             break
 
     if not chat_route:
-        print("⚠️  Backend chat route not found - creating recommendation")
-        print("\n💡 Recommendation: Update your chat API endpoint to:")
+        print("[WARN]  Backend chat route not found - creating recommendation")
+        print("\n[IDEA] Recommendation: Update your chat API endpoint to:")
         print("   1. Return natural, conversational responses")
         print("   2. Include 'executing' flag when running commands")
         print("   3. Use casual, helpful tone")
         print("   4. Break down complex responses with formatting")
         return False
 
-    print(f"✅ Found backend chat route: {chat_route}")
+    print(f"[OK] Found backend chat route: {chat_route}")
     print("   Consider updating responses to be more conversational")
     return True
 
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("🌟 AURORA CHAT NATURALNESS ENHANCEMENT")
+    print("[STAR] AURORA CHAT NATURALNESS ENHANCEMENT")
     print("=" * 60 + "\n")
 
     FRONTEND_DONE = enhance_chat_component()
     BACKEND_DONE = enhance_backend_chat()
 
     print("\n" + "=" * 60)
-    print("✨ CHAT ENHANCEMENT COMPLETE")
+    print("[SPARKLE] CHAT ENHANCEMENT COMPLETE")
     print("=" * 60)
-    print("\n📋 Changes made:")
-    print("   ✅ Natural conversation UI")
-    print("   ✅ Better message formatting")
-    print("   ✅ Status indicators (thinking/executing/complete)")
-    print("   ✅ Code block highlighting")
-    print("   ✅ Smooth animations and feedback")
-    print("   ✅ Natural language input prompts")
-    print("\n💬 Chat now feels more like talking to a real person!")
+    print("\n[EMOJI] Changes made:")
+    print("   [OK] Natural conversation UI")
+    print("   [OK] Better message formatting")
+    print("   [OK] Status indicators (thinking/executing/complete)")
+    print("   [OK] Code block highlighting")
+    print("   [OK] Smooth animations and feedback")
+    print("   [OK] Natural language input prompts")
+    print("\n[EMOJI] Chat now feels more like talking to a real person!")
     print("   - Responses flow naturally")
     print("   - Visual feedback during processing")
     print("   - Code and text properly formatted")

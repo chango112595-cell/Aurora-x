@@ -40,34 +40,34 @@ class AuroraSmartMerger:
 
     def merge_files(self):
         """Merge all critical files"""
-        print("🌟 AURORA SMART MERGER")
+        print("[STAR] AURORA SMART MERGER")
         print("="*80)
         print("\nMerging critical files Aurora needs from aurora-working-restore\n")
 
         all_files = self.critical_files + self.knowledge_files
 
         for file_path in all_files:
-            print(f"📥 {file_path}... ", end="")
+            print(f"[EMOJI] {file_path}... ", end="")
             success = self.merge_file("aurora-working-restore", file_path)
             if success:
                 self.merged.append(file_path)
-                print("✅")
+                print("[OK]")
             else:
                 self.skipped.append(file_path)
-                print("⚠️  (exists or unavailable)")
+                print("[WARN]  (exists or unavailable)")
 
         print("\n" + "="*80)
-        print("📊 MERGE COMPLETE")
+        print("[DATA] MERGE COMPLETE")
         print("="*80)
-        print(f"\n✅ Merged: {len(self.merged)} files")
-        print(f"⚠️  Skipped: {len(self.skipped)} files")
+        print(f"\n[OK] Merged: {len(self.merged)} files")
+        print(f"[WARN]  Skipped: {len(self.skipped)} files")
 
         if self.merged:
-            print("\n🎯 Successfully merged:")
+            print("\n[TARGET] Successfully merged:")
             for f in self.merged:
                 print(f"   • {f}")
 
-        print(f"\n🌟 Aurora now has {len(self.merged)} new capabilities!")
+        print(f"\n[STAR] Aurora now has {len(self.merged)} new capabilities!")
 
         return len(self.merged) > 0
 
@@ -116,6 +116,6 @@ if __name__ == "__main__":
     success = merger.merge_files()
 
     if success:
-        print("\n🎯 Files merged and staged. Aurora can now integrate them.")
+        print("\n[TARGET] Files merged and staged. Aurora can now integrate them.")
     else:
-        print("\n⚠️  No new files were merged.")
+        print("\n[WARN]  No new files were merged.")

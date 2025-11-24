@@ -44,9 +44,9 @@ for filepath in root.glob("*.py"):
         continue
     if fix_file(filepath):
         fixed += 1
-        print(f"✅ Fixed {filepath.name}")
+        print(f"[OK] Fixed {filepath.name}")
 
-print(f"\n🎯 Fixed {fixed} files")
+print(f"\n[TARGET] Fixed {fixed} files")
 
 # Run final check
 result = subprocess.run(

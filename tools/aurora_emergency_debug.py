@@ -27,14 +27,14 @@ class AuroraEmergencyDebug:
         with open(self.log_file, "a") as f:
             f.write(json.dumps(response) + "\n")
 
-        print(f"🌟 Aurora: {message}")
+        print(f"[STAR] Aurora: {message}")
 
     def start_debug(self):
         """Aurora starts emergency debugging"""
         self.log_response("Emergency debug mode activated! Analyzing all systems...")
 
         print("\n" + "=" * 60)
-        print("🌟 AURORA EMERGENCY DEBUG MODE")
+        print("[STAR] AURORA EMERGENCY DEBUG MODE")
         print("=" * 60)
 
         # Step 1: Check Vite server
@@ -61,15 +61,15 @@ class AuroraEmergencyDebug:
             )
 
             if "200 OK" in result.stdout:
-                self.log_response("✅ Vite server responding normally")
+                self.log_response("[OK] Vite server responding normally")
                 return True
             else:
-                self.log_response("❌ Vite server not responding - restarting...")
+                self.log_response("[ERROR] Vite server not responding - restarting...")
                 self.restart_vite_server()
                 return False
 
         except Exception as e:
-            self.log_response(f"❌ Error checking Vite server: {e}")
+            self.log_response(f"[ERROR] Error checking Vite server: {e}")
             self.restart_vite_server()
             return False
 
@@ -98,11 +98,11 @@ class AuroraEmergencyDebug:
                 ["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True, timeout=5
             )
             if "200 OK" in result.stdout:
-                self.log_response("✅ Vite server restarted successfully")
+                self.log_response("[OK] Vite server restarted successfully")
             else:
-                self.log_response("⚠️ Vite server may still be starting...")
+                self.log_response("[WARN] Vite server may still be starting...")
         except:
-            self.log_response("⚠️ Vite server restart in progress...")
+            self.log_response("[WARN] Vite server restart in progress...")
 
     def check_compilation_errors(self):
         """Check for React/JSX compilation errors"""
@@ -130,12 +130,12 @@ class AuroraEmergencyDebug:
                     errors_found.append(f"Mismatched JSX tags in {file.name}")
 
         if errors_found:
-            self.log_response(f"❌ Found {len(errors_found)} compilation errors")
+            self.log_response(f"[ERROR] Found {len(errors_found)} compilation errors")
             for error in errors_found:
                 self.log_response(f"   - {error}")
             return False
         else:
-            self.log_response("✅ No obvious compilation errors found")
+            self.log_response("[OK] No obvious compilation errors found")
             return True
 
     def check_component_integrity(self):
@@ -149,17 +149,17 @@ class AuroraEmergencyDebug:
 
             # Check for required exports
             if "export" in content and "ChatInterface" in content:
-                self.log_response("✅ ChatInterface component exports correctly")
+                self.log_response("[OK] ChatInterface component exports correctly")
             else:
-                self.log_response("❌ ChatInterface component export issue")
+                self.log_response("[ERROR] ChatInterface component export issue")
 
             # Check for React imports
             if "import React" in content or "import {" in content:
-                self.log_response("✅ React imports present")
+                self.log_response("[OK] React imports present")
             else:
-                self.log_response("❌ Missing React imports")
+                self.log_response("[ERROR] Missing React imports")
         else:
-            self.log_response("❌ ChatInterface component missing!")
+            self.log_response("[ERROR] ChatInterface component missing!")
 
     def apply_autonomous_fixes(self):
         """Apply autonomous fixes for common issues"""
@@ -188,12 +188,12 @@ class AuroraEmergencyDebug:
 
                 fixed_content = "\n".join(fixed_lines)
                 chat_file.write_text(fixed_content)
-                self.log_response("✅ Fixed JSX tag issues")
+                self.log_response("[OK] Fixed JSX tag issues")
 
         # Fix 2: Ensure proper component structure
         self.log_response("Verifying component structure...")
 
-        self.log_response("🔧 All autonomous fixes applied")
+        self.log_response("[EMOJI] All autonomous fixes applied")
 
 
 if __name__ == "__main__":

@@ -22,8 +22,8 @@ class AuroraDebugHTTP400:
         print(f"[Aurora] {message}")
 
     def diagnose_and_fix(self):
-        self.log("🔍 TIER_2 DEBUGGING: HTTP 400 Error in Chat Interface")
-        self.log("📋 User Error: 'Something went wrong. HTTP error! status: 400 Try again!'")
+        self.log("[SCAN] TIER_2 DEBUGGING: HTTP 400 Error in Chat Interface")
+        self.log("[EMOJI] User Error: 'Something went wrong. HTTP error! status: 400 Try again!'")
         self.log("")
 
         # Step 1: Check if backend is responding
@@ -45,10 +45,10 @@ class AuroraDebugHTTP400:
         )
 
         if result.returncode == 0 and "response" in result.stdout:
-            self.log("✅ Backend endpoint working! Returns 200 OK")
-            self.log("🔍 Issue is NOT the backend endpoint")
+            self.log("[OK] Backend endpoint working! Returns 200 OK")
+            self.log("[SCAN] Issue is NOT the backend endpoint")
         else:
-            self.log("❌ Backend endpoint failed!")
+            self.log("[ERROR] Backend endpoint failed!")
             return
 
         # Step 2: Check frontend fetch call
@@ -59,9 +59,9 @@ class AuroraDebugHTTP400:
         if chat_component.exists():
             content = chat_component.read_text()
             if "fetch('/api/conversation'" in content:
-                self.log("✅ Frontend using correct endpoint: /api/conversation")
+                self.log("[OK] Frontend using correct endpoint: /api/conversation")
             else:
-                self.log("❌ Frontend NOT using /api/conversation")
+                self.log("[ERROR] Frontend NOT using /api/conversation")
 
         # Step 3: Check Vite proxy configuration
         self.log("")
@@ -71,9 +71,9 @@ class AuroraDebugHTTP400:
         if vite_config.exists():
             content = vite_config.read_text()
             if "'/api'" in content and "'http://localhost:5000'" in content:
-                self.log("✅ Vite proxy configured: /api -> http://localhost:5000")
+                self.log("[OK] Vite proxy configured: /api -> http://localhost:5000")
             else:
-                self.log("❌ Vite proxy NOT configured correctly")
+                self.log("[ERROR] Vite proxy NOT configured correctly")
 
         # Step 4: Test from Vite dev server
         self.log("")
@@ -98,24 +98,24 @@ class AuroraDebugHTTP400:
 
         if result.returncode == 0 and ("response" in result.stdout or result.stdout.strip()):
             if "<!DOCTYPE" in result.stdout:
-                self.log("❌ FOUND THE BUG! Vite is returning HTML instead of proxying to API")
-                self.log("🔧 FIX: Need to ensure Vite dev server proxy is active")
+                self.log("[ERROR] FOUND THE BUG! Vite is returning HTML instead of proxying to API")
+                self.log("[EMOJI] FIX: Need to ensure Vite dev server proxy is active")
                 self.apply_fix()
             elif "response" in result.stdout:
-                self.log("✅ Vite proxy works! HTTP 400 might be transient")
+                self.log("[OK] Vite proxy works! HTTP 400 might be transient")
         else:
-            self.log("❌ Vite proxy not working")
+            self.log("[ERROR] Vite proxy not working")
             self.apply_fix()
 
     def apply_fix(self):
         self.log("")
-        self.log("🔧 APPLYING FIX: Restarting Vite with correct proxy configuration...")
+        self.log("[EMOJI] APPLYING FIX: Restarting Vite with correct proxy configuration...")
 
         # Kill existing Vite
         subprocess.run(["pkill", "-f", "vite"], stderr=subprocess.DEVNULL)
 
         # Restart Vite
-        self.log("🔄 Restarting Vite dev server...")
+        self.log("[SYNC] Restarting Vite dev server...")
         subprocess.Popen(
             ["npx", "vite", "--host", "0.0.0.0", "--port", "5173"],
             cwd="/workspaces/Aurora-x",
@@ -123,11 +123,11 @@ class AuroraDebugHTTP400:
             stderr=subprocess.DEVNULL,
         )
 
-        self.log("✅ Vite restarted on port 5173")
+        self.log("[OK] Vite restarted on port 5173")
         self.log("")
-        self.log("🌌 Aurora Fix Complete!")
-        self.log("📍 Access Aurora Chat at: http://localhost:5173/luminar-nexus")
-        self.log("📍 Click the 'Aurora Chat' tab")
+        self.log("[AURORA] Aurora Fix Complete!")
+        self.log("[EMOJI] Access Aurora Chat at: http://localhost:5173/luminar-nexus")
+        self.log("[EMOJI] Click the 'Aurora Chat' tab")
 
 
 if __name__ == "__main__":

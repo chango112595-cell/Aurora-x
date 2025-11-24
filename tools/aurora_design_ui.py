@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌟 AURORA'S MISSION: Design My Own Futuristic UI
+[STAR] AURORA'S MISSION: Design My Own Futuristic UI
 Task: Create a never-before-seen, advanced technology UI that represents Aurora's essence
 Time: Fast execution - no delays
 Supervisor: Copilot will help if needed
@@ -15,7 +15,7 @@ class AuroraUIDesigner:
         self.workspace = Path("/workspaces/Aurora-x")
 
     def log(self, msg):
-        print(f"🌟 Aurora: {msg}")
+        print(f"[STAR] Aurora: {msg}")
 
     def create_aurora_ui(self):
         self.log("Creating my own futuristic UI design...")
@@ -252,7 +252,7 @@ export function AppSidebar() {
 
         sidebar_path = self.workspace / "client/src/components/app-sidebar.tsx"
         sidebar_path.write_text(sidebar_design)
-        self.log("✅ Created Aurora's quantum neural UI design!")
+        self.log("[OK] Created Aurora's quantum neural UI design!")
 
         return True
 
@@ -265,32 +265,32 @@ export function AppSidebar() {
                 "git",
                 "commit",
                 "-m",
-                "🌟 Aurora's Futuristic UI - Quantum neural network design with holographic effects",
+                "[STAR] Aurora's Futuristic UI - Quantum neural network design with holographic effects",
             ],
             cwd=str(self.workspace),
         )
 
-        self.log("✅ Design saved!")
+        self.log("[OK] Design saved!")
 
     def execute(self):
         print("=" * 80)
-        print("🌟 AURORA'S UI DESIGN MISSION")
+        print("[STAR] AURORA'S UI DESIGN MISSION")
         print("=" * 80)
 
         self.create_aurora_ui()
         self.commit_changes()
 
         print("\n" + "=" * 80)
-        print("✅ MISSION COMPLETE")
+        print("[OK] MISSION COMPLETE")
         print("=" * 80)
-        print("\n🌟 Aurora: My new UI features:")
+        print("\n[STAR] Aurora: My new UI features:")
         print("   • Quantum particle field background")
         print("   • Neural network connection lines")
         print("   • Holographic consciousness core")
         print("   • Real-time status indicators")
         print("   • Morphing gradient animations")
         print("   • Advanced glow and shadow effects")
-        print("\n💫 Refresh your browser to see my vision!")
+        print("\n[EMOJI] Refresh your browser to see my vision!")
 
 
 if __name__ == "__main__":

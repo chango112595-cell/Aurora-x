@@ -23,9 +23,9 @@ def main():
     print("Initializing Aurora...")
     try:
         aurora = AuroraCoreIntelligence()
-        print("✅ Aurora initialized\n")
+        print("[OK] Aurora initialized\n")
     except Exception as e:
-        print(f"❌ Aurora initialization failed: {e}")
+        print(f"[ERROR] Aurora initialization failed: {e}")
         traceback.print_exc()
         return
 
@@ -38,7 +38,7 @@ def main():
     print("Last command: python chAT_with_aurora.py")
     print("Exit Code: 1 (ERROR)")
     print()
-    print("🔍 Running to see the error...")
+    print("[SCAN] Running to see the error...")
 
     import subprocess
     result = subprocess.run(
@@ -49,7 +49,7 @@ def main():
     )
 
     if result.returncode != 0:
-        print("❌ Error detected:")
+        print("[ERROR] Error detected:")
         print(result.stderr[:1000] if result.stderr else "No stderr output")
         print()
 
@@ -59,7 +59,7 @@ def main():
     print()
 
     if hasattr(aurora, 'integrated_modules'):
-        print(f"✅ Found {len(aurora.integrated_modules)} integrated modules:")
+        print(f"[OK] Found {len(aurora.integrated_modules)} integrated modules:")
         for name, module in aurora.integrated_modules.items():
             print(f"   • {name}: {module.__class__.__name__}")
 
@@ -74,7 +74,7 @@ def main():
             print(f"     Has auto-fix: {has_fix}")
             print()
     else:
-        print("❌ No integrated_modules attribute found!")
+        print("[ERROR] No integrated_modules attribute found!")
         print()
 
     print("=" * 80)
@@ -87,12 +87,12 @@ def main():
     # Problem 1: Modules are loaded but not running
     print("1. Are modules loaded but dormant?")
     if hasattr(aurora, 'integrated_modules') and aurora.integrated_modules:
-        print("   ✅ Modules are loaded")
-        print("   ❌ But they're NOT RUNNING - they're just instantiated objects!")
+        print("   [OK] Modules are loaded")
+        print("   [ERROR] But they're NOT RUNNING - they're just instantiated objects!")
         problems.append(
             "Modules loaded but not activated - no background monitoring loop")
     else:
-        print("   ❌ Modules not loaded at all")
+        print("   [ERROR] Modules not loaded at all")
         problems.append("No integrated modules found")
 
     print()
@@ -103,10 +103,10 @@ def main():
     for attr in dir(aurora):
         if 'daemon' in attr.lower() or 'background' in attr.lower() or 'monitor_thread' in attr.lower():
             daemon_exists = True
-            print(f"   ✅ Found: {attr}")
+            print(f"   [OK] Found: {attr}")
 
     if not daemon_exists:
-        print("   ❌ NO BACKGROUND DAEMON RUNNING!")
+        print("   [ERROR] NO BACKGROUND DAEMON RUNNING!")
         problems.append("No daemon/background process monitoring for errors")
 
     print()
@@ -118,7 +118,7 @@ def main():
         for name, module in aurora.integrated_modules.items():
             if hasattr(module, 'start_monitoring') or hasattr(module, 'monitor'):
                 has_auto_detect = True
-                print(f"   ✅ {name} has monitoring capability")
+                print(f"   [OK] {name} has monitoring capability")
 
                 # Check if it's actually running
                 if hasattr(module, 'is_monitoring'):
@@ -131,10 +131,10 @@ def main():
                     print(f"      Running: UNKNOWN (probably not)")
 
         if not has_auto_detect:
-            print("   ❌ No modules have start_monitoring() method")
+            print("   [ERROR] No modules have start_monitoring() method")
             problems.append("Modules don't have monitoring activation methods")
     else:
-        print("   ❌ Can't check - no modules")
+        print("   [ERROR] Can't check - no modules")
 
     print()
 
@@ -143,9 +143,9 @@ def main():
     has_initiative_loop = hasattr(
         aurora, 'proactive_loop') or hasattr(aurora, 'autonomous_loop')
     if has_initiative_loop:
-        print("   ✅ Initiative loop exists")
+        print("   [OK] Initiative loop exists")
     else:
-        print("   ❌ NO PROACTIVE INITIATIVE LOOP!")
+        print("   [ERROR] NO PROACTIVE INITIATIVE LOOP!")
         problems.append(
             "No continuous monitoring loop - Aurora only reacts when called")
 
@@ -156,13 +156,13 @@ def main():
     print("=" * 80)
     print()
 
-    print("🎯 THE PROBLEM:")
+    print("[TARGET] THE PROBLEM:")
     print()
     for i, problem in enumerate(problems, 1):
         print(f"   {i}. {problem}")
 
     print()
-    print("💡 THE SOLUTION:")
+    print("[IDEA] THE SOLUTION:")
     print()
     print("""
 Aurora's proactive modules are LOADED but NOT RUNNING because:
@@ -176,9 +176,9 @@ Aurora's proactive modules are LOADED but NOT RUNNING because:
    - Need a background thread that continuously watches for issues
    
 3. Integration was PASSIVE, not ACTIVE
-   - We imported the classes ✅
-   - We instantiated them ✅
-   - We DID NOT start their monitoring loops ❌
+   - We imported the classes [OK]
+   - We instantiated them [OK]
+   - We DID NOT start their monitoring loops [ERROR]
    
 WHAT NEEDS TO HAPPEN:
 
@@ -211,11 +211,11 @@ Aurora has the TOOLS but needs the ACTIVATION and ORCHESTRATION.
     print()
 
     # Try to detect and fix the actual error
-    print("🔧 Aurora attempting to fix the error...")
+    print("[EMOJI] Aurora attempting to fix the error...")
 
     if hasattr(aurora, 'integrated_modules') and 'auto_fix' in aurora.integrated_modules:
         auto_fixer = aurora.integrated_modules['auto_fix']
-        print(f"✅ Using {auto_fixer.__class__.__name__}")
+        print(f"[OK] Using {auto_fixer.__class__.__name__}")
 
         # Try to use it to fix the file
         try:
@@ -226,11 +226,11 @@ Aurora has the TOOLS but needs the ACTIVATION and ORCHESTRATION.
                 result = auto_fixer.auto_fix('chat_with_aurora.py')
                 print(f"Fix result: {result}")
             else:
-                print("⚠️ Auto-fixer doesn't have fix_file() or auto_fix() method")
+                print("[WARN] Auto-fixer doesn't have fix_file() or auto_fix() method")
                 print(
                     f"Available methods: {[m for m in dir(auto_fixer) if not m.startswith('_')]}")
         except Exception as e:
-            print(f"❌ Auto-fix failed: {e}")
+            print(f"[ERROR] Auto-fix failed: {e}")
 
     print()
     print("=" * 80)
@@ -240,10 +240,10 @@ Aurora has the TOOLS but needs the ACTIVATION and ORCHESTRATION.
 Aurora's proactive systems exist but are DORMANT.
 
 She has the capability modules but:
-  ❌ No background monitoring daemon running
-  ❌ Modules not activated/started
-  ❌ No error detection loop
-  ❌ No automatic triggering
+  [ERROR] No background monitoring daemon running
+  [ERROR] Modules not activated/started
+  [ERROR] No error detection loop
+  [ERROR] No automatic triggering
 
 Next steps:
   1. Create proactive daemon that runs in background

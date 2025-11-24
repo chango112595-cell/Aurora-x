@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora Sidebar Tab Router Diagnostics
-🌟 Autonomous verification of sidebar tab connections
+[STAR] Autonomous verification of sidebar tab connections
 """
 
 import json
@@ -19,7 +19,7 @@ class AuroraRouterDiagnostics:
     def log(self, level: str, message: str):
         """Aurora's logging"""
         timestamp = datetime.now().strftime("%H:%M:%S")
-        icons = {"INFO": "🌟", "OK": "✅", "WARN": "⚠️", "ERROR": "❌"}
+        icons = {"INFO": "[STAR]", "OK": "[OK]", "WARN": "[WARN]", "ERROR": "[ERROR]"}
         icon = icons.get(level, "→")
         print(f"[{timestamp}] {icon} Aurora: {message}")
 
@@ -59,7 +59,7 @@ class AuroraRouterDiagnostics:
             page_path = pages_dir / page_file
 
             if page_path.exists():
-                self.log("OK", f"✓ {tab_name} → {route} → {page_file}")
+                self.log("OK", f"[+] {tab_name} → {route} → {page_file}")
                 verified += 1
                 self.results[tab_name] = {"route": route, "status": "connected", "page_file": page_file}
             else:
@@ -101,7 +101,7 @@ def main():
     """Aurora's autonomous routing verification"""
 
     print("\n" + "=" * 80)
-    print("🌟 AURORA SIDEBAR TAB ROUTER DIAGNOSTICS")
+    print("[STAR] AURORA SIDEBAR TAB ROUTER DIAGNOSTICS")
     print("=" * 80 + "\n")
 
     diagnostics = AuroraRouterDiagnostics()

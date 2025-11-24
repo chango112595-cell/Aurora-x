@@ -61,7 +61,7 @@ class AuroraWarningFixer:
                 self.files_modified.add(filepath)
                 return True
         except Exception as e:
-            print(f"  ⚠️  Error: {e}")
+            print(f"  [WARN]  Error: {e}")
         return False
 
     def fix_unused_variables(self, filepath, variables):
@@ -84,7 +84,7 @@ class AuroraWarningFixer:
                 self.files_modified.add(filepath)
                 return True
         except Exception as e:
-            print(f"  ⚠️  Error: {e}")
+            print(f"  [WARN]  Error: {e}")
         return False
 
     def fix_subprocess_check(self, filepath):
@@ -114,7 +114,7 @@ class AuroraWarningFixer:
                 self.files_modified.add(filepath)
                 return True
         except Exception as e:
-            print(f"  ⚠️  Error: {e}")
+            print(f"  [WARN]  Error: {e}")
         return False
 
     def fix_f_strings(self, filepath, line_numbers):
@@ -139,7 +139,7 @@ class AuroraWarningFixer:
                 self.files_modified.add(filepath)
                 return True
         except Exception as e:
-            print(f"  ⚠️  Error: {e}")
+            print(f"  [WARN]  Error: {e}")
         return False
 
     def fix_bare_except(self, filepath):
@@ -158,15 +158,15 @@ class AuroraWarningFixer:
                 self.files_modified.add(filepath)
                 return True
         except Exception as e:
-            print(f"  ⚠️  Error: {e}")
+            print(f"  [WARN]  Error: {e}")
         return False
 
     def fix_all(self):
         """Main fix function"""
-        print("🔍 Aurora scanning all warnings...\n")
+        print("[SCAN] Aurora scanning all warnings...\n")
 
         errors = self.get_all_errors()
-        print(f"📊 Found {len(errors)} issues\n")
+        print(f"[DATA] Found {len(errors)} issues\n")
 
         # Group by file and type
         by_file = {}
@@ -204,7 +204,7 @@ class AuroraWarningFixer:
 
         # Fix each file
         for filepath, issues in sorted(by_file.items()):
-            print(f"📝 {Path(filepath).name}:")
+            print(f"[EMOJI] {Path(filepath).name}:")
 
             if issues["unused-import"]:
                 print(f"  Removing {len(issues['unused-import'])} unused imports...")
@@ -227,7 +227,7 @@ class AuroraWarningFixer:
                 self.fix_bare_except(filepath)
 
         # Verify
-        print("\n\n🧪 Running final check...\n")
+        print("\n\n[TEST] Running final check...\n")
         result = subprocess.run(
             ["python", "-m", "pylint", "*.py", "--disable=C,R", "--max-line-length=120"],
             capture_output=True,
@@ -240,7 +240,7 @@ class AuroraWarningFixer:
             if "rated at" in line:
                 print(line)
 
-        print(f"\n✨ Aurora applied {self.fixes} fixes to {len(self.files_modified)} files")
+        print(f"\n[SPARKLE] Aurora applied {self.fixes} fixes to {len(self.files_modified)} files")
 
 
 if __name__ == "__main__":

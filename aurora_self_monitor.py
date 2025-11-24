@@ -47,7 +47,7 @@ class AuroraSelfMonitor:
 
     def initialize(self):
         """Initialize monitoring system"""
-        print("🌟 Aurora Self-Monitor Initializing...")
+        print("[STAR] Aurora Self-Monitor Initializing...")
         print("=" * 60)
 
         # Count all monitored files
@@ -67,15 +67,15 @@ class AuroraSelfMonitor:
             "last_check": datetime.now().isoformat(),
         }
 
-        print(f"✅ Foundation Tasks: {self.aurora.foundation_count}")
-        print(f"✅ Knowledge Tiers: {self.aurora.tier_count}")
-        print(f"✅ Total Capabilities: {self.aurora.total_capabilities}")
-        print(f"✅ Files Monitored: {self.file_count}")
-        print(f"✅ CPU Usage: {self.metrics['cpu_percent']}%")
-        print(f"✅ Memory Usage: {self.metrics['memory_percent']}%")
-        print(f"✅ Disk Usage: {self.metrics['disk_percent']}%")
+        print(f"[OK] Foundation Tasks: {self.aurora.foundation_count}")
+        print(f"[OK] Knowledge Tiers: {self.aurora.tier_count}")
+        print(f"[OK] Total Capabilities: {self.aurora.total_capabilities}")
+        print(f"[OK] Files Monitored: {self.file_count}")
+        print(f"[OK] CPU Usage: {self.metrics['cpu_percent']}%")
+        print(f"[OK] Memory Usage: {self.metrics['memory_percent']}%")
+        print(f"[OK] Disk Usage: {self.metrics['disk_percent']}%")
         print("=" * 60)
-        print("🚀 Self-Monitor: ACTIVE")
+        print("[LAUNCH] Self-Monitor: ACTIVE")
 
         # Save initial state
         self._save_metrics()
@@ -150,19 +150,19 @@ class AuroraSelfMonitor:
 ║           AURORA SELF-MONITOR DASHBOARD                  ║
 ╚══════════════════════════════════════════════════════════╝
 
-🌟 CAPABILITIES STATUS
+[STAR] CAPABILITIES STATUS
   • Foundation Tasks: {self.aurora.foundation_count}
   • Knowledge Tiers: {self.aurora.tier_count}
   • Total Capabilities: {self.aurora.total_capabilities}
   • Status: ACTIVE
 
-📊 SYSTEM HEALTH
+[DATA] SYSTEM HEALTH
   • CPU Usage: {health['cpu_percent']:.1f}%
   • Memory Usage: {health['memory_percent']:.1f}%
   • Disk Usage: {health['disk_percent']:.1f}%
   • Health Status: {health['status']}
 
-📁 FILE MONITORING
+[EMOJI] FILE MONITORING
   • Files Monitored: {health['files_monitored']}
   • Python Files: {metrics['file_monitoring'].get('.py', 0)}
   • TypeScript/TSX: {metrics['file_monitoring'].get('.tsx', 0) + metrics['file_monitoring'].get('.ts', 0)}
@@ -173,7 +173,7 @@ class AuroraSelfMonitor:
   • Health Checks: {metrics['metrics_collected']}
   • Last Check: {health['timestamp']}
 
-✅ STATUS: MONITORING ACTIVE - ALL SYSTEMS OPERATIONAL
+[OK] STATUS: MONITORING ACTIVE - ALL SYSTEMS OPERATIONAL
         """
         return dashboard
 
@@ -195,7 +195,7 @@ class AuroraSelfMonitor:
 
     def continuous_monitor(self, duration_seconds: int = 60):
         """Run continuous monitoring for specified duration"""
-        print(f"\n⚡ Starting continuous monitoring for {duration_seconds} seconds...")
+        print(f"\n[POWER] Starting continuous monitoring for {duration_seconds} seconds...")
         print("=" * 60)
 
         end_time = time.time() + duration_seconds
@@ -214,7 +214,7 @@ class AuroraSelfMonitor:
             time.sleep(check_interval)
 
         print("=" * 60)
-        print("✅ Monitoring session complete")
+        print("[OK] Monitoring session complete")
         self._save_metrics()
 
     def get_summary(self) -> dict[str, Any]:
@@ -236,7 +236,7 @@ class AuroraSelfMonitor:
 
 def main():
     """Main execution - Initialize and run monitoring"""
-    print("\n🌟 AURORA SELF-MONITOR - PHASE 1 EXECUTION")
+    print("\n[STAR] AURORA SELF-MONITOR - PHASE 1 EXECUTION")
     print("=" * 60)
     print("Timeline: Minutes 1-10")
     print("Goal: Real-time system awareness")
@@ -250,12 +250,12 @@ def main():
     print(monitor.generate_dashboard())
 
     # Run continuous monitoring for 60 seconds (1 minute demo)
-    print("\n⚡ Running 1-minute continuous monitoring demo...")
+    print("\n[POWER] Running 1-minute continuous monitoring demo...")
     monitor.continuous_monitor(duration_seconds=60)
 
     # Display final summary
     summary = monitor.get_summary()
-    print("\n📊 MONITORING SUMMARY")
+    print("\n[DATA] MONITORING SUMMARY")
     print("=" * 60)
     print(f"Total Capabilities: {summary['total_capabilities']}")
     print(f"Files Monitored: {summary['files_monitored']}")
@@ -264,7 +264,7 @@ def main():
     print(f"Average CPU: {summary['average_cpu']:.1f}%")
     print(f"Average Memory: {summary['average_memory']:.1f}%")
     print("=" * 60)
-    print("✅ PHASE 1 COMPLETE - SELF-AWARENESS ACTIVATED")
+    print("[OK] PHASE 1 COMPLETE - SELF-AWARENESS ACTIVATED")
 
     return monitor
 

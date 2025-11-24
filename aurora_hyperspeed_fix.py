@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-⚡ AURORA HYPER-SPEED FIX - FULL POWER ACTIVATION
+[POWER] AURORA HYPER-SPEED FIX - FULL POWER ACTIVATION
 Analyzes and fixes missing services with Aurora's full capabilities
 Created by Aurora with MAXIMUM POWER
 """
@@ -12,7 +12,7 @@ import socket
 import time
 
 print("=" * 80)
-print("⚡ AURORA HYPER-SPEED FIX - FULL POWER ACTIVATION")
+print("[POWER] AURORA HYPER-SPEED FIX - FULL POWER ACTIVATION")
 print("=" * 80)
 print("Problem: 12/32 systems active, 4/12 web/api services")
 print("Target:  31/31 systems active, 12/12 web/api services")
@@ -44,7 +44,7 @@ def check_port(port):
 def start_service(cmd, name, port):
     """Start service if not already running"""
     if check_port(port):
-        print(f"   ✅ {name} (Port {port}) - Already running")
+        print(f"   [OK] {name} (Port {port}) - Already running")
         return True
 
     kwargs = {'stdout': subprocess.DEVNULL, 'stderr': subprocess.DEVNULL}
@@ -57,15 +57,15 @@ def start_service(cmd, name, port):
 
     try:
         subprocess.Popen(cmd, **kwargs)
-        print(f"   ⚡ {name} (Port {port}) - STARTED")
+        print(f"   [POWER] {name} (Port {port}) - STARTED")
         return True
     except Exception as e:
-        print(f"   ❌ {name} (Port {port}) - Failed: {e}")
+        print(f"   [ERROR] {name} (Port {port}) - Failed: {e}")
         return False
 
 
 print("━" * 80)
-print("🔍 AURORA ANALYSIS - Current Active Services")
+print("[SCAN] AURORA ANALYSIS - Current Active Services")
 print("━" * 80)
 
 active_ports = []
@@ -109,20 +109,20 @@ services_map = {
 for port, (name, _) in services_map.items():
     if check_port(port):
         active_ports.append(port)
-        print(f"✅ {name:30} Port {port}")
+        print(f"[OK] {name:30} Port {port}")
     else:
         missing_services.append(port)
-        print(f"❌ {name:30} Port {port} - MISSING")
+        print(f"[ERROR] {name:30} Port {port} - MISSING")
 
 print(f"\nStatus: {len(active_ports)}/{len(services_map)} services active")
 print(f"Missing: {len(missing_services)} services need to be started\n")
 
 if not missing_services:
-    print("🎉 ALL SERVICES ALREADY ACTIVE!")
+    print("[EMOJI] ALL SERVICES ALREADY ACTIVE!")
     exit(0)
 
 print("━" * 80)
-print("⚡ AURORA HYPER-SPEED FIX - Starting Missing Services")
+print("[POWER] AURORA HYPER-SPEED FIX - Starting Missing Services")
 print("━" * 80 + "\n")
 
 started = 0
@@ -152,7 +152,7 @@ for port in sorted(missing_services):
         failed += 1
 
 print("\n" + "━" * 80)
-print("⚡ AURORA HYPER-SPEED FIX - Verification Phase")
+print("[POWER] AURORA HYPER-SPEED FIX - Verification Phase")
 print("━" * 80)
 
 # Wait for services to initialize
@@ -160,7 +160,7 @@ print("\n⏳ Waiting 3 seconds for services to initialize...")
 time.sleep(3)
 
 # Re-check all services
-print("\n🔍 Final Status Check:\n")
+print("\n[SCAN] Final Status Check:\n")
 
 active_final = 0
 web_api_active = 0
@@ -172,23 +172,23 @@ for port, (name, _) in services_map.items():
         active_final += 1
         if port in web_api_ports:
             web_api_active += 1
-        print(f"✅ {name:30} Port {port}")
+        print(f"[OK] {name:30} Port {port}")
     else:
-        print(f"❌ {name:30} Port {port} - Still missing")
+        print(f"[ERROR] {name:30} Port {port} - Still missing")
 
 print("\n" + "=" * 80)
-print("📊 AURORA HYPER-SPEED FIX - FINAL RESULTS")
+print("[DATA] AURORA HYPER-SPEED FIX - FINAL RESULTS")
 print("=" * 80)
-print(f"⚡ Started: {started} services")
-print(f"❌ Failed:  {failed} services")
-print(f"✅ Active:  {active_final}/{len(services_map)} total systems")
-print(f"🌐 Web/API: {web_api_active}/12 services")
+print(f"[POWER] Started: {started} services")
+print(f"[ERROR] Failed:  {failed} services")
+print(f"[OK] Active:  {active_final}/{len(services_map)} total systems")
+print(f"[WEB] Web/API: {web_api_active}/12 services")
 
 if active_final >= len(services_map) * 0.8:
-    print("\n🎉 AURORA HYPER-SPEED FIX - SUCCESS!")
+    print("\n[EMOJI] AURORA HYPER-SPEED FIX - SUCCESS!")
     print("   Most services are now active!")
 else:
-    print("\n⚠️  PARTIAL FIX - Some services still need attention")
+    print("\n[WARN]  PARTIAL FIX - Some services still need attention")
     print("   Check logs for missing service files")
 
 print("=" * 80 + "\n")

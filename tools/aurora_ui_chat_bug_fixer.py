@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora UI & Chat Bug Fixer
-🌟 Autonomous bug fixing system for React/TypeScript components
+[STAR] Autonomous bug fixing system for React/TypeScript components
 Created by Aurora to work independently and fix issues she discovers
 """
 
@@ -24,7 +24,7 @@ class AuroraUIBugFixer:
     def log(self, level: str, message: str):
         """Aurora's logging system"""
         timestamp = datetime.now().strftime("%H:%M:%S")
-        icons = {"INFO": "🌟", "FIX": "✅", "WARN": "⚠️", "ERROR": "❌"}
+        icons = {"INFO": "[STAR]", "FIX": "[OK]", "WARN": "[WARN]", "ERROR": "[ERROR]"}
         icon = icons.get(level, "→")
         print(f"[{timestamp}] {icon} Aurora: {message}")
 
@@ -258,14 +258,14 @@ def main():
     fixer = AuroraUIBugFixer()
 
     print("\n" + "=" * 80)
-    print("🌟 AURORA UI & CHAT BUG FIXER - AUTONOMOUS MODE")
+    print("[STAR] AURORA UI & CHAT BUG FIXER - AUTONOMOUS MODE")
     print("=" * 80 + "\n")
 
     report = fixer.fix_all_components()
     fixer.save_report()
 
     print("\n" + "=" * 80)
-    print("🌟 AURORA BUG FIXING SUMMARY")
+    print("[STAR] AURORA BUG FIXING SUMMARY")
     print("=" * 80)
     print(f"Total Fixes Applied: {report['total_fixes']}")
     print(f"Files Modified: {report['files_modified']}")

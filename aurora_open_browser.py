@@ -32,34 +32,34 @@ class AuroraBrowserLauncher:
         self.log(f"Waiting for service on port {port}...")
         for _i in range(max_wait):
             if self.check_port(port):
-                self.log(f"✅ Port {port} is ready!")
+                self.log(f"[OK] Port {port} is ready!")
                 return True
             time.sleep(1)
         return False
 
     def open_dashboard(self):
         """Open Aurora's dashboard in browser"""
-        self.log("🌌 Opening Aurora Dashboard...")
+        self.log("[AURORA] Opening Aurora Dashboard...")
 
         # Wait for backend to be ready
         if not self.wait_for_service(5000):
-            self.log("⚠️  Backend not ready, but attempting to open browser anyway...")
+            self.log("[WARN]  Backend not ready, but attempting to open browser anyway...")
 
         # Open the dashboard
         try:
             webbrowser.open(self.frontend_url)
-            self.log(f"🚀 Opened: {self.frontend_url}")
-            self.log("✅ Aurora's futuristic dashboard should now be visible!")
+            self.log(f"[LAUNCH] Opened: {self.frontend_url}")
+            self.log("[OK] Aurora's futuristic dashboard should now be visible!")
             return True
         except Exception as e:
-            self.log(f"❌ Could not open browser: {e}")
-            self.log(f"💡 Please manually open: {self.frontend_url}")
+            self.log(f"[ERROR] Could not open browser: {e}")
+            self.log(f"[IDEA] Please manually open: {self.frontend_url}")
             return False
 
     def execute(self):
         """Execute browser launch"""
         self.log("=" * 70)
-        self.log("🌌 AURORA AUTONOMOUS BROWSER LAUNCHER")
+        self.log("[AURORA] AURORA AUTONOMOUS BROWSER LAUNCHER")
         self.log("=" * 70)
         self.log("")
 
@@ -68,9 +68,9 @@ class AuroraBrowserLauncher:
         self.log("")
         self.log("=" * 70)
         if SUCCESS:
-            self.log("✅ BROWSER LAUNCHED")
-            self.log(f"📍 URL: {self.frontend_url}")
-            self.log("🎨 You should see Aurora's futuristic quantum neural dashboard")
+            self.log("[OK] BROWSER LAUNCHED")
+            self.log(f"[EMOJI] URL: {self.frontend_url}")
+            self.log("[EMOJI] You should see Aurora's futuristic quantum neural dashboard")
             self.log("")
             self.log("Features visible:")
             self.log("  • Quantum Coherence Monitor")
@@ -79,14 +79,14 @@ class AuroraBrowserLauncher:
             self.log("  • 5 Service Status Grid")
             self.log("  • Neural Activity Monitor")
         else:
-            self.log(f"💡 Manual access: {self.frontend_url}")
+            self.log(f"[IDEA] Manual access: {self.frontend_url}")
         self.log("=" * 70)
 
         return success
 
 
 if __name__ == "__main__":
-    print("\n🌌 Aurora: Autonomous Browser Launcher\n")
+    print("\n[AURORA] Aurora: Autonomous Browser Launcher\n")
     launcher = AuroraBrowserLauncher()
     launcher.execute()
-    print("\n✨ Aurora has launched her interface!")
+    print("\n[SPARKLE] Aurora has launched her interface!")

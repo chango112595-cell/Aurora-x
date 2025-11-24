@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌟 Aurora's Comprehensive Chango UI Replacement
+[STAR] Aurora's Comprehensive Chango UI Replacement
 Aurora will:
 1. Find ALL Chango UI references in the project
 2. Analyze what needs to be replaced
@@ -23,12 +23,12 @@ class AuroraUIReplacer:
             "replacements_made": [],
         }
 
-    def log(self, message: str, emoji: str = "🌟"):
+    def log(self, message: str, emoji: str = "[STAR]"):
         print(f"{emoji} Aurora: {message}")
 
     def find_chango_references(self):
         """Find all references to Chango in the codebase"""
-        self.log("Searching for all Chango references...", "🔍")
+        self.log("Searching for all Chango references...", "[SCAN]")
 
         # Search in TypeScript/React files
         search_patterns = [
@@ -63,11 +63,11 @@ class AuroraUIReplacer:
                     except:
                         pass
 
-        self.log(f"Found {len(self.findings['chango_references'])} Chango references", "📊")
+        self.log(f"Found {len(self.findings['chango_references'])} Chango references", "[DATA]")
 
     def analyze_ui_structure(self):
         """Analyze the UI file structure"""
-        self.log("Analyzing UI structure...", "🏗️")
+        self.log("Analyzing UI structure...", "[EMOJI]️")
 
         # Find main UI entry points
         important_files = [
@@ -85,9 +85,9 @@ class AuroraUIReplacer:
             file_path = self.workspace / file_rel
             if file_path.exists():
                 self.findings["ui_files"].append({"file": file_rel, "exists": True, "size": file_path.stat().st_size})
-                self.log(f"  ✓ {file_rel} ({file_path.stat().st_size} bytes)", "📄")
+                self.log(f"  [+] {file_rel} ({file_path.stat().st_size} bytes)", "[EMOJI]")
             else:
-                self.log(f"  ✗ {file_rel} (not found)", "⚠️")
+                self.log(f"  ✗ {file_rel} (not found)", "[WARN]")
 
     def replace_in_file(self, file_path: Path, replacements: list[tuple[str, str]]) -> int:
         """Replace patterns in a file"""
@@ -107,24 +107,24 @@ class AuroraUIReplacer:
 
             return 0
         except Exception as e:
-            self.log(f"Error replacing in {file_path}: {e}", "❌")
+            self.log(f"Error replacing in {file_path}: {e}", "[ERROR]")
             return 0
 
     def fix_chat_interface(self):
         """Fix the chat interface file"""
-        self.log("Fixing chat-interface.tsx...", "🔧")
+        self.log("Fixing chat-interface.tsx...", "[EMOJI]")
 
         chat_file = self.workspace / "client/src/components/chat-interface.tsx"
 
         if not chat_file.exists():
-            self.log("chat-interface.tsx not found!", "❌")
+            self.log("chat-interface.tsx not found!", "[ERROR]")
             return False
 
         replacements = [
             # Fix placeholder
             (
                 'placeholder="Ask Chango to generate code..."',
-                'placeholder="Ask Aurora to create something amazing... ✨"',
+                'placeholder="Ask Aurora to create something amazing... [SPARKLE]"',
             ),
             ('placeholder="Ask Chango', 'placeholder="Ask Aurora'),
             # Fix avatar fallback
@@ -143,7 +143,7 @@ class AuroraUIReplacer:
         changes = self.replace_in_file(chat_file, replacements)
 
         if changes > 0:
-            self.log(f"✅ Made {changes} replacements in chat-interface.tsx", "✅")
+            self.log(f"[OK] Made {changes} replacements in chat-interface.tsx", "[OK]")
             self.findings["replacements_made"].append(
                 {"file": "client/src/components/chat-interface.tsx", "changes": changes}
             )
@@ -154,7 +154,7 @@ class AuroraUIReplacer:
 
     def fix_server_references(self):
         """Fix server-side Chango references"""
-        self.log("Checking server files...", "🔧")
+        self.log("Checking server files...", "[EMOJI]")
 
         server_file = self.workspace / "server/index.ts"
 
@@ -163,7 +163,7 @@ class AuroraUIReplacer:
 
             # Check if it references Chango
             if "chango" in content.lower():
-                self.log("Found Chango references in server/index.ts", "⚠️")
+                self.log("Found Chango references in server/index.ts", "[WARN]")
 
                 replacements = [
                     ('"service":"chango"', '"service":"aurora"'),
@@ -175,12 +175,12 @@ class AuroraUIReplacer:
                 changes = self.replace_in_file(server_file, replacements)
 
                 if changes > 0:
-                    self.log(f"✅ Fixed {changes} server references", "✅")
+                    self.log(f"[OK] Fixed {changes} server references", "[OK]")
                     self.findings["replacements_made"].append({"file": "server/index.ts", "changes": changes})
 
     def check_which_ui_is_loading(self):
         """Determine which UI is actually being served"""
-        self.log("Analyzing which UI is loading...", "🔍")
+        self.log("Analyzing which UI is loading...", "[SCAN]")
 
         # Check App.tsx
         app_file = self.workspace / "client/src/App.tsx"
@@ -189,26 +189,26 @@ class AuroraUIReplacer:
 
             # Check for chat route
             if "/chat" in content and "ChatPage" in content:
-                self.log("✓ Chat route exists in App.tsx", "✅")
+                self.log("[+] Chat route exists in App.tsx", "[OK]")
             else:
-                self.log("✗ Chat route missing in App.tsx", "⚠️")
+                self.log("✗ Chat route missing in App.tsx", "[WARN]")
 
             # Check which components are imported
             if "chat-interface" in content:
-                self.log("✓ chat-interface component referenced", "✅")
+                self.log("[+] chat-interface component referenced", "[OK]")
 
             # Check for service worker
             if "serviceWorker" in content:
                 if "unregister" in content:
-                    self.log("✓ Service worker disabled", "✅")
+                    self.log("[+] Service worker disabled", "[OK]")
                 else:
-                    self.log("⚠️ Service worker may be active", "⚠️")
+                    self.log("[WARN] Service worker may be active", "[WARN]")
 
         # Check main.tsx
         main_file = self.workspace / "client/src/main.tsx"
         if main_file.exists():
             content = main_file.read_text()
-            self.log("✓ main.tsx exists", "✅")
+            self.log("[+] main.tsx exists", "[OK]")
 
         # Check vite.config
         vite_config = self.workspace / "vite.config.js"
@@ -216,17 +216,17 @@ class AuroraUIReplacer:
             content = vite_config.read_text()
 
             if "root:" in content and "client" in content:
-                self.log("✓ Vite configured with client root", "✅")
+                self.log("[+] Vite configured with client root", "[OK]")
 
             if "/api" in content and "proxy" in content:
-                self.log("✓ API proxy configured", "✅")
+                self.log("[+] API proxy configured", "[OK]")
 
     def generate_report(self):
         """Generate comprehensive report"""
-        self.log("Generating analysis report...", "📊")
+        self.log("Generating analysis report...", "[DATA]")
 
         report = """
-# 🌟 Aurora's Chango UI Replacement Report
+# [STAR] Aurora's Chango UI Replacement Report
 
 ## Chango References Found
 """
@@ -253,7 +253,7 @@ class AuroraUIReplacer:
 
         if self.findings["replacements_made"]:
             for replacement in self.findings["replacements_made"]:
-                report += f"- ✅ {replacement['file']}: {replacement['changes']} changes\n"
+                report += f"- [OK] {replacement['file']}: {replacement['changes']} changes\n"
         else:
             report += "- No replacements made yet\n"
 
@@ -266,13 +266,13 @@ class AuroraUIReplacer:
         report_file = self.workspace / "AURORA_UI_REPLACEMENT_REPORT.md"
         report_file.write_text(report)
 
-        self.log(f"Report saved to: {report_file}", "💾")
+        self.log(f"Report saved to: {report_file}", "[EMOJI]")
 
         return report
 
     def execute_all(self):
         """Execute complete analysis and replacement"""
-        self.log("Starting comprehensive UI replacement...", "🚀")
+        self.log("Starting comprehensive UI replacement...", "[LAUNCH]")
 
         print("\n" + "=" * 80)
         print("STEP 1: Finding Chango References")
@@ -305,11 +305,11 @@ class AuroraUIReplacer:
         report = self.generate_report()
 
         print("\n" + "=" * 80)
-        print("✅ ANALYSIS COMPLETE")
+        print("[OK] ANALYSIS COMPLETE")
         print("=" * 80)
 
         # Summary
-        print("\n📊 Summary:")
+        print("\n[DATA] Summary:")
         print(f"   - Chango references found: {len(self.findings['chango_references'])}")
         print(f"   - Files analyzed: {len(self.findings['ui_files'])}")
         print(f"   - Replacements made: {len(self.findings['replacements_made'])}")
@@ -321,5 +321,5 @@ if __name__ == "__main__":
     aurora = AuroraUIReplacer()
     results = aurora.execute_all()
 
-    print("\n🌟 Aurora has completed the UI replacement analysis!")
-    print("📄 Check AURORA_UI_REPLACEMENT_REPORT.md for details")
+    print("\n[STAR] Aurora has completed the UI replacement analysis!")
+    print("[EMOJI] Check AURORA_UI_REPLACEMENT_REPORT.md for details")

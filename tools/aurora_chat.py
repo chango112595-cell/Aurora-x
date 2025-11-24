@@ -46,5 +46,5 @@ def run_aurora_chat_server(port=5003, aurora_core=None):
 
         return jsonify({"response": response, "session_id": session_id})
 
-    print(f"🌌 Aurora Chat Interface starting on port {port}...")
+    print(f"[AURORA] Aurora Chat Interface starting on port {port}...")
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)

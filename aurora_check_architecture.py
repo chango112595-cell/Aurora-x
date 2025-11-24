@@ -34,7 +34,7 @@ class AuroraArchitectureChecker:
 
     def check_layered_architecture(self):
         """Verify proper layered architecture"""
-        print("\n🏗️  CHECKING LAYERED ARCHITECTURE")
+        print("\n[EMOJI]️  CHECKING LAYERED ARCHITECTURE")
         print("=" * 70)
 
         layers = {
@@ -67,7 +67,7 @@ class AuroraArchitectureChecker:
 
         # Check each layer
         for layer_name, layer_info in layers.items():
-            print(f"\n  📊 {layer_name.upper().replace('_', ' ')} LAYER:")
+            print(f"\n  [DATA] {layer_name.upper().replace('_', ' ')} LAYER:")
             print(f"     Purpose: {layer_info['purpose']}")
 
             found = 0
@@ -78,7 +78,7 @@ class AuroraArchitectureChecker:
                     matches = list(self.root.glob(path_pattern))
                     found += len(matches)
                     for match in matches[:3]:
-                        print(f"     ✅ {match.relative_to(self.root)}")
+                        print(f"     [OK] {match.relative_to(self.root)}")
                         layer_info['components'].append(
                             str(match.relative_to(self.root)))
                     if len(matches) > 3:
@@ -88,11 +88,11 @@ class AuroraArchitectureChecker:
                     full_path = self.root / path_pattern
                     if full_path.exists():
                         found += 1
-                        print(f"     ✅ {path_pattern}")
+                        print(f"     [OK] {path_pattern}")
                         layer_info['components'].append(path_pattern)
 
             if found == 0:
-                print(f"     ⚠️  No components found")
+                print(f"     [WARN]  No components found")
                 self.architecture['issues'].append(
                     f"{layer_name} layer has no components")
 
@@ -108,7 +108,7 @@ class AuroraArchitectureChecker:
         # Read x-start to understand service structure
         x_start = self.root / "x-start"
         if not x_start.exists():
-            print("  ❌ x-start not found - cannot verify service architecture")
+            print("  [ERROR] x-start not found - cannot verify service architecture")
             return
 
         content = x_start.read_text(encoding='utf-8')
@@ -121,8 +121,8 @@ class AuroraArchitectureChecker:
         port_pattern = r'(?:port|Port)\s*[=:]\s*(\d+)'
         ports = [int(p) for p in re.findall(port_pattern, content)]
 
-        print(f"  📋 Services Defined: {len(services)}")
-        print(f"  🔌 Ports Configured: {len(set(ports))}")
+        print(f"  [EMOJI] Services Defined: {len(services)}")
+        print(f"  [EMOJI] Ports Configured: {len(set(ports))}")
 
         # Map services to ports
         service_port_map = {
@@ -133,7 +133,7 @@ class AuroraArchitectureChecker:
             'Luminar Dashboard': 5005
         }
 
-        print("\n  📊 Service Architecture Map:")
+        print("\n  [DATA] Service Architecture Map:")
         for service, port in service_port_map.items():
             print(f"     {service:30} → Port {port}")
 
@@ -150,9 +150,9 @@ class AuroraArchitectureChecker:
 
             if service_file and service_file.exists():
                 print(
-                    f"        ✅ Implementation: {service_file.relative_to(self.root)}")
+                    f"        [OK] Implementation: {service_file.relative_to(self.root)}")
             else:
-                print(f"        ⚠️  Implementation not verified")
+                print(f"        [WARN]  Implementation not verified")
 
         self.architecture['services'] = {
             'count': len(services),
@@ -162,7 +162,7 @@ class AuroraArchitectureChecker:
 
     def check_orchestration_flow(self):
         """Check orchestration and coordination flow"""
-        print("\n\n🎯 CHECKING ORCHESTRATION FLOW")
+        print("\n\n[TARGET] CHECKING ORCHESTRATION FLOW")
         print("=" * 70)
 
         orchestrators = [
@@ -207,11 +207,11 @@ class AuroraArchitectureChecker:
         print("  │  Nexus   │  │ (5 services) │  │   Systems   │")
         print("  └──────────┘  └──────────────┘  └─────────────┘")
 
-        print("\n  📋 Orchestrator Details:")
+        print("\n  [EMOJI] Orchestrator Details:")
         for orch in orchestrators:
             full_path = self.root / orch['file']
             exists = full_path.exists()
-            status = "✅" if exists else "❌"
+            status = "[OK]" if exists else "[ERROR]"
 
             print(f"\n     {status} {orch['name']}")
             print(f"        Role: {orch['role']}")
@@ -225,9 +225,9 @@ class AuroraArchitectureChecker:
                 content = full_path.read_text(
                     encoding='utf-8', errors='ignore')
                 if 'def start' in content or 'def run' in content:
-                    print(f"        ✅ Has startup methods")
+                    print(f"        [OK] Has startup methods")
                 if 'def monitor' in content or 'monitoring' in content:
-                    print(f"        ✅ Has monitoring capability")
+                    print(f"        [OK] Has monitoring capability")
 
         self.architecture['orchestration'] = {
             'orchestrators': orchestrators,
@@ -237,7 +237,7 @@ class AuroraArchitectureChecker:
 
     def check_data_flow(self):
         """Check data flow patterns"""
-        print("\n\n📊 CHECKING DATA FLOW PATTERNS")
+        print("\n\n[DATA] CHECKING DATA FLOW PATTERNS")
         print("=" * 70)
 
         data_flows = {
@@ -265,7 +265,7 @@ class AuroraArchitectureChecker:
         }
 
         for flow_name, flow_steps in data_flows.items():
-            print(f"\n  🔄 {flow_name.upper().replace('_', ' ')} FLOW:")
+            print(f"\n  [SYNC] {flow_name.upper().replace('_', ' ')} FLOW:")
             for i, step in enumerate(flow_steps, 1):
                 arrow = "└──→" if i == len(flow_steps) else "├──→"
                 print(f"     {arrow} {i}. {step}")
@@ -274,7 +274,7 @@ class AuroraArchitectureChecker:
 
     def check_integration_points(self):
         """Check integration and communication points"""
-        print("\n\n🔗 CHECKING INTEGRATION POINTS")
+        print("\n\n[LINK] CHECKING INTEGRATION POINTS")
         print("=" * 70)
 
         integrations = []
@@ -289,10 +289,10 @@ class AuroraArchitectureChecker:
                     integrations.append({
                         'type': 'Frontend → Backend',
                         'mechanism': f'Proxy: {proxy}',
-                        'status': '✅'
+                        'status': '[OK]'
                     })
                     print(
-                        f"  ✅ Frontend → Backend: Proxy configured ({proxy})")
+                        f"  [OK] Frontend → Backend: Proxy configured ({proxy})")
 
         # Service-to-Service integration
         bridge_service = self.root / 'aurora_x' / 'bridge' / 'service.py'
@@ -300,9 +300,9 @@ class AuroraArchitectureChecker:
             integrations.append({
                 'type': 'Bridge Service',
                 'mechanism': 'Cross-service communication',
-                'status': '✅'
+                'status': '[OK]'
             })
-            print(f"  ✅ Bridge Service: Inter-service communication")
+            print(f"  [OK] Bridge Service: Inter-service communication")
 
         # Chat integration
         chat_server = self.root / 'aurora_chat_server.py'
@@ -310,9 +310,9 @@ class AuroraArchitectureChecker:
             integrations.append({
                 'type': 'Chat Interface',
                 'mechanism': 'WebSocket/HTTP API',
-                'status': '✅'
+                'status': '[OK]'
             })
-            print(f"  ✅ Chat Interface: Real-time communication")
+            print(f"  [OK] Chat Interface: Real-time communication")
 
         # Aurora Core integration
         aurora_core = self.root / 'aurora_core.py'
@@ -322,15 +322,15 @@ class AuroraArchitectureChecker:
                 integrations.append({
                     'type': 'Module Integration',
                     'mechanism': 'Aurora Core integrated_modules',
-                    'status': '✅'
+                    'status': '[OK]'
                 })
-                print(f"  ✅ Module Integration: Aurora Core coordination")
+                print(f"  [OK] Module Integration: Aurora Core coordination")
 
         self.architecture['integration_points'] = integrations
 
     def assess_scalability(self):
         """Assess architecture scalability"""
-        print("\n\n📈 ASSESSING SCALABILITY")
+        print("\n\n[EMOJI] ASSESSING SCALABILITY")
         print("=" * 70)
 
         scalability_factors = {
@@ -386,7 +386,7 @@ class AuroraArchitectureChecker:
 
     def identify_issues_and_recommendations(self):
         """Identify architectural issues and provide recommendations"""
-        print("\n\n🔍 ARCHITECTURAL ANALYSIS")
+        print("\n\n[SCAN] ARCHITECTURAL ANALYSIS")
         print("=" * 70)
 
         # Check for common architectural issues
@@ -395,7 +395,7 @@ class AuroraArchitectureChecker:
 
         # Check if npm is accessible (frontend build capability)
         if 'npm' not in str(self.architecture.get('issues', [])):
-            print("  ✅ Frontend build system operational")
+            print("  [OK] Frontend build system operational")
         else:
             issues.append("npm not accessible - frontend builds may fail")
             recommendations.append(
@@ -418,13 +418,13 @@ class AuroraArchitectureChecker:
                 f"Missing service implementations: {', '.join(missing_services)}")
             recommendations.append("Verify all service files are present")
         else:
-            print("  ✅ All core services implemented")
+            print("  [OK] All core services implemented")
 
         # Check orchestration
         if self.architecture.get('orchestration', {}).get('orchestrators'):
             orchestrator_count = len(
                 self.architecture['orchestration']['orchestrators'])
-            print(f"  ✅ {orchestrator_count} orchestrators configured")
+            print(f"  [OK] {orchestrator_count} orchestrators configured")
         else:
             issues.append("Orchestration layer incomplete")
             recommendations.append(
@@ -433,24 +433,24 @@ class AuroraArchitectureChecker:
         # Check data persistence
         db_files = list(self.root.glob('*.db'))
         if db_files:
-            print(f"  ✅ Data persistence: {len(db_files)} database(s)")
+            print(f"  [OK] Data persistence: {len(db_files)} database(s)")
         else:
             recommendations.append(
                 "Consider adding database for persistent storage")
 
         # Overall assessment
-        print(f"\n  📊 Issues Found: {len(issues)}")
+        print(f"\n  [DATA] Issues Found: {len(issues)}")
         if issues:
             for issue in issues:
-                print(f"     ⚠️  {issue}")
+                print(f"     [WARN]  {issue}")
 
-        print(f"\n  💡 Recommendations: {len(recommendations)}")
+        print(f"\n  [IDEA] Recommendations: {len(recommendations)}")
         if recommendations:
             for rec in recommendations:
                 print(f"     • {rec}")
 
         if not issues:
-            print("\n  ✅ Architecture is well-structured and operational")
+            print("\n  [OK] Architecture is well-structured and operational")
 
         self.architecture['issues'] = issues
         self.architecture['recommendations'] = recommendations
@@ -458,10 +458,10 @@ class AuroraArchitectureChecker:
     def generate_architecture_report(self):
         """Generate comprehensive architecture report"""
         print("\n\n" + "=" * 70)
-        print("📋 ARCHITECTURE REPORT SUMMARY")
+        print("[EMOJI] ARCHITECTURE REPORT SUMMARY")
         print("=" * 70)
 
-        print("\n🏗️  ARCHITECTURE LAYERS:")
+        print("\n[EMOJI]️  ARCHITECTURE LAYERS:")
         for layer_name, layer_info in self.architecture.get('layers', {}).items():
             count = layer_info.get('component_count', 0)
             print(f"   {layer_name:20} {count:3} components")
@@ -472,48 +472,48 @@ class AuroraArchitectureChecker:
         print(
             f"   Active Ports: {', '.join(map(str, services.get('ports', [])))}")
 
-        print("\n🎯 ORCHESTRATION:")
+        print("\n[TARGET] ORCHESTRATION:")
         orch = self.architecture.get('orchestration', {})
         print(f"   Entry Point: {orch.get('entry_point', 'N/A')}")
         print(f"   Orchestrators: {len(orch.get('orchestrators', []))}")
         print(f"   Hierarchy Levels: {orch.get('hierarchy_levels', 0)}")
 
-        print("\n📊 SCALABILITY:")
+        print("\n[DATA] SCALABILITY:")
         scale = self.architecture.get('scalability', {})
         print(
             f"   Overall Score: {scale.get('score', 0)}/{scale.get('max_score', 0)} ({scale.get('percentage', 0):.1f}%)")
 
-        print("\n🔗 INTEGRATION POINTS:")
+        print("\n[LINK] INTEGRATION POINTS:")
         integrations = self.architecture.get('integration_points', [])
         print(f"   Total Integrations: {len(integrations)}")
 
-        print("\n⚠️  ISSUES:")
+        print("\n[WARN]  ISSUES:")
         issues = self.architecture.get('issues', [])
         if issues:
             for issue in issues:
                 print(f"   • {issue}")
         else:
-            print("   ✅ No critical issues found")
+            print("   [OK] No critical issues found")
 
-        print("\n💡 RECOMMENDATIONS:")
+        print("\n[IDEA] RECOMMENDATIONS:")
         recs = self.architecture.get('recommendations', [])
         if recs:
             for rec in recs:
                 print(f"   • {rec}")
         else:
-            print("   ✅ Architecture is optimized")
+            print("   [OK] Architecture is optimized")
 
         # Save detailed report
         report_file = self.root / "AURORA_ARCHITECTURE_REPORT.json"
         with open(report_file, 'w', encoding='utf-8') as f:
             json.dump(self.architecture, f, indent=2, default=str)
 
-        print(f"\n💾 Detailed report saved: {report_file.name}")
+        print(f"\n[EMOJI] Detailed report saved: {report_file.name}")
 
     def run_complete_check(self):
         """Run complete architecture check"""
         print("=" * 70)
-        print("🏛️  AURORA ARCHITECTURE VERIFICATION")
+        print("[EMOJI]️  AURORA ARCHITECTURE VERIFICATION")
         print("=" * 70)
         print("\nChecking entire system architecture...\n")
 
@@ -527,15 +527,15 @@ class AuroraArchitectureChecker:
         self.generate_architecture_report()
 
         print("\n" + "=" * 70)
-        print("✅ ARCHITECTURE CHECK COMPLETE")
+        print("[OK] ARCHITECTURE CHECK COMPLETE")
         print("=" * 70)
-        print("\n🎯 Aurora's architecture is well-designed with:")
+        print("\n[TARGET] Aurora's architecture is well-designed with:")
         print("   • Layered organization")
         print("   • Service-oriented design")
         print("   • Orchestration coordination")
         print("   • Scalable patterns")
         print("   • Multiple integration points")
-        print("\n✨ System ready for autonomous operation!")
+        print("\n[SPARKLE] System ready for autonomous operation!")
 
         return self.architecture
 

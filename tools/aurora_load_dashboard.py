@@ -20,18 +20,18 @@ class AuroraDashboardLoader:
             result = subprocess.run(["curl", "-s", "-I", self.vite_url], capture_output=True, text=True, timeout=5)
 
             if "200 OK" in result.stdout:
-                print("✅ Server is running")
+                print("[OK] Server is running")
                 return True
             else:
-                print("❌ Server not responding")
+                print("[ERROR] Server not responding")
                 return False
         except Exception as e:
-            print(f"❌ Server check failed: {e}")
+            print(f"[ERROR] Server check failed: {e}")
             return False
 
     def start_server(self):
         """Start Vite development server if not running"""
-        print("🚀 Starting Vite server...")
+        print("[LAUNCH] Starting Vite server...")
 
         # Kill any existing processes
         subprocess.run(["pkill", "-f", "vite"], capture_output=True)
@@ -51,10 +51,10 @@ class AuroraDashboardLoader:
 
         # Verify it started
         if self.check_server_status():
-            print("✅ Server started successfully")
+            print("[OK] Server started successfully")
             return True
         else:
-            print("⚠️  Server may still be starting...")
+            print("[WARN]  Server may still be starting...")
             return False
 
     def find_dashboard_route(self):
@@ -66,7 +66,7 @@ class AuroraDashboardLoader:
 
             for route in self.dashboard_routes:
                 if route in content.lower():
-                    print(f"✅ Found dashboard route: {route}")
+                    print(f"[OK] Found dashboard route: {route}")
                     return route
 
         # Default to home page
@@ -76,27 +76,27 @@ class AuroraDashboardLoader:
     def open_dashboard(self, route="/"):
         """Open dashboard in browser"""
         url = f"{self.vite_url}{route}"
-        print(f"🌐 Opening dashboard at: {url}")
+        print(f"[WEB] Opening dashboard at: {url}")
 
         try:
             webbrowser.open(url)
-            print("✅ Dashboard opened")
+            print("[OK] Dashboard opened")
             return True
         except Exception as e:
-            print(f"❌ Failed to open browser: {e}")
+            print(f"[ERROR] Failed to open browser: {e}")
             return False
 
     def load_dashboard(self):
         """Main method to load Aurora's dashboard"""
         print("\n" + "=" * 60)
-        print("🌟 AURORA DASHBOARD LOADER")
+        print("[STAR] AURORA DASHBOARD LOADER")
         print("=" * 60 + "\n")
 
         # Step 1: Check if server is running
         if not self.check_server_status():
             # Step 2: Start server if needed
             if not self.start_server():
-                print("❌ Failed to start server")
+                print("[ERROR] Failed to start server")
                 return False
 
         # Step 3: Find dashboard route
@@ -104,10 +104,10 @@ class AuroraDashboardLoader:
 
         # Step 4: Open dashboard
         if self.open_dashboard(route):
-            print("\n✅ Aurora Dashboard loaded successfully!")
+            print("\n[OK] Aurora Dashboard loaded successfully!")
             return True
         else:
-            print("\n❌ Failed to load dashboard")
+            print("\n[ERROR] Failed to load dashboard")
             return False
 
 

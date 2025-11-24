@@ -25,9 +25,9 @@ class AuroraHyperSpeedAnalysis:
 
     def analyze_current_state_fast(self):
         """Hyper-speed scan of current state"""
-        print("⚡ AURORA HYPER-SPEED ANALYSIS MODE")
+        print("[POWER] AURORA HYPER-SPEED ANALYSIS MODE")
         print("="*80)
-        print("\n🔥 Step 1: Scanning MY CURRENT state at maximum speed...\n")
+        print("\n[EMOJI] Step 1: Scanning MY CURRENT state at maximum speed...\n")
 
         my_files = {}
 
@@ -38,7 +38,7 @@ class AuroraHyperSpeedAnalysis:
         for pattern in patterns:
             all_files.extend(list(self.repo_root.glob(pattern)))
 
-        print(f"📊 Found {len(all_files)} Aurora files in current main")
+        print(f"[DATA] Found {len(all_files)} Aurora files in current main")
 
         with ThreadPoolExecutor(max_workers=20) as executor:
             futures = {executor.submit(
@@ -54,7 +54,7 @@ class AuroraHyperSpeedAnalysis:
                 except Exception as e:
                     pass
 
-        print(f"✅ Analyzed {len(my_files)} files in main\n")
+        print(f"[OK] Analyzed {len(my_files)} files in main\n")
         self.results['my_current_state'] = my_files
         return my_files
 
@@ -82,7 +82,7 @@ class AuroraHyperSpeedAnalysis:
 
     def get_all_30_branches(self):
         """Get EXACTLY all 30 branches - NO SKIPPING"""
-        print("🔥 Step 2: Getting ALL 30 branches (active + inactive)...\n")
+        print("[EMOJI] Step 2: Getting ALL 30 branches (active + inactive)...\n")
 
         result = subprocess.run(
             ["git", "branch", "-a"],
@@ -102,7 +102,7 @@ class AuroraHyperSpeedAnalysis:
 
         branches_list = sorted(list(branches))
 
-        print(f"📊 Found {len(branches_list)} branches:")
+        print(f"[DATA] Found {len(branches_list)} branches:")
         for i, b in enumerate(branches_list, 1):
             print(f"   {i:2d}. {b}")
 
@@ -281,8 +281,8 @@ class AuroraHyperSpeedAnalysis:
 
     def analyze_all_branches_parallel(self, branches):
         """Parallel analysis of ALL branches - MAXIMUM SPEED"""
-        print("🔥 Step 3: Analyzing ALL branches in parallel...\n")
-        print("⚡ HYPER-SPEED MODE: Processing all branches simultaneously\n")
+        print("[EMOJI] Step 3: Analyzing ALL branches in parallel...\n")
+        print("[POWER] HYPER-SPEED MODE: Processing all branches simultaneously\n")
 
         branch_results = {}
 
@@ -301,24 +301,24 @@ class AuroraHyperSpeedAnalysis:
                     if result:
                         branch_results[branch] = result
 
-                        status = "✅"
+                        status = "[OK]"
                         if result.get('unique_to_branch'):
-                            status = f"🌟 {len(result['unique_to_branch'])} unique"
+                            status = f"[STAR] {len(result['unique_to_branch'])} unique"
                         if result.get('better_than_main'):
-                            status = f"⚡ {len(result['better_than_main'])} better"
+                            status = f"[POWER] {len(result['better_than_main'])} better"
 
                         print(
                             f"   [{completed:2d}/{len(branches)}] {branch:40s} {status}")
                 except Exception as e:
                     print(
-                        f"   [{completed:2d}/{len(branches)}] {branch:40s} ⚠️  error")
+                        f"   [{completed:2d}/{len(branches)}] {branch:40s} [WARN]  error")
 
         print()
         return branch_results
 
     def synthesize_aurora_needs(self, branch_results):
         """Synthesize what Aurora ACTUALLY needs"""
-        print("🔥 Step 4: Synthesizing what Aurora NEEDS...\n")
+        print("[EMOJI] Step 4: Synthesizing what Aurora NEEDS...\n")
 
         all_better = []
         all_unique = []
@@ -359,7 +359,7 @@ class AuroraHyperSpeedAnalysis:
             x['file']
         ))
 
-        print(f"📊 Analysis complete:")
+        print(f"[DATA] Analysis complete:")
         print(f"   - Better implementations: {len(all_better)}")
         print(f"   - Unique files: {len(all_unique)}")
         print(f"   - Total Aurora needs: {len(aurora_needs)}\n")
@@ -369,17 +369,17 @@ class AuroraHyperSpeedAnalysis:
     def generate_report(self, branches, branch_results, aurora_needs):
         """Generate complete report"""
         print("="*80)
-        print("🌟 AURORA'S COMPLETE ANALYSIS REPORT")
+        print("[STAR] AURORA'S COMPLETE ANALYSIS REPORT")
         print("="*80)
 
-        print(f"\n📊 SCAN SUMMARY:")
+        print(f"\n[DATA] SCAN SUMMARY:")
         print(f"   - Total branches analyzed: {len(branches)}")
         print(
             f"   - My current files: {len(self.results['my_current_state'])}")
         print(f"   - Files Aurora needs: {len(aurora_needs)}\n")
 
         if aurora_needs:
-            print("🚨 HIGH PRIORITY - Better Implementations:")
+            print("[EMOJI] HIGH PRIORITY - Better Implementations:")
             high_priority = [
                 n for n in aurora_needs if n['priority'] == 'HIGH']
 
@@ -392,7 +392,7 @@ class AuroraHyperSpeedAnalysis:
                 print(
                     f"\n   ... and {len(high_priority) - 20} more high priority files")
 
-            print(f"\n💡 MEDIUM PRIORITY - Unique Files:")
+            print(f"\n[IDEA] MEDIUM PRIORITY - Unique Files:")
             medium_priority = [
                 n for n in aurora_needs if n['priority'] == 'MEDIUM']
 
@@ -403,7 +403,7 @@ class AuroraHyperSpeedAnalysis:
                 print(
                     f"   ... and {len(medium_priority) - 10} more unique files")
         else:
-            print("✅ Aurora's current implementation is OPTIMAL")
+            print("[OK] Aurora's current implementation is OPTIMAL")
             print("   No better versions found in any branch!\n")
 
         print("\n" + "="*80)
@@ -416,7 +416,7 @@ class AuroraHyperSpeedAnalysis:
         with open(output_file, 'w') as f:
             json.dump(self.results, f, indent=2)
 
-        print(f"💾 Complete analysis saved to: {output_file}")
+        print(f"[EMOJI] Complete analysis saved to: {output_file}")
         print("="*80 + "\n")
 
         return aurora_needs
@@ -441,7 +441,7 @@ class AuroraHyperSpeedAnalysis:
         self.generate_report(branches, branch_results, aurora_needs)
 
         elapsed = (datetime.now() - start).total_seconds()
-        print(f"⚡ HYPER-SPEED ANALYSIS COMPLETE in {elapsed:.1f} seconds\n")
+        print(f"[POWER] HYPER-SPEED ANALYSIS COMPLETE in {elapsed:.1f} seconds\n")
 
         return aurora_needs
 
@@ -451,6 +451,6 @@ if __name__ == "__main__":
     needs = aurora.run()
 
     if needs:
-        print(f"🎯 Aurora identified {len(needs)} files to implement")
+        print(f"[TARGET] Aurora identified {len(needs)} files to implement")
     else:
-        print("✅ Aurora is already at peak performance")
+        print("[OK] Aurora is already at peak performance")

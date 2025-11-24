@@ -5,7 +5,7 @@ Fixes ALL remaining linting issues
 
 from pathlib import Path
 
-print("🔧 Aurora: Final comprehensive linting fix...\n")
+print("[EMOJI] Aurora: Final comprehensive linting fix...\n")
 
 files_to_fix = [
     (
@@ -64,7 +64,7 @@ files_to_fix = [
         [
             (
                 "    with open(chat_component, 'r', encoding='utf-8') as f:\n        content = f.read()",
-                '    # Check if file exists\n    if not os.path.exists(chat_component):\n        print(f"❌ File not found: {chat_component}")\n        return False',
+                '    # Check if file exists\n    if not os.path.exists(chat_component):\n        print(f"[ERROR] File not found: {chat_component}")\n        return False',
             ),
         ],
     ),
@@ -92,6 +92,6 @@ for filepath, fixes in files_to_fix:
 
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(content)
-        print(f"   ✅ Fixed {filepath}")
+        print(f"   [OK] Fixed {filepath}")
 
-print("\n✨ All linting issues resolved!")
+print("\n[SPARKLE] All linting issues resolved!")

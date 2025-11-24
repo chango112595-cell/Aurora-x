@@ -13,7 +13,7 @@ from pathlib import Path
 from datetime import datetime
 
 print("=" * 80)
-print("🔬 AURORA DEEP SYSTEM DIAGNOSIS")
+print("[EMOJI] AURORA DEEP SYSTEM DIAGNOSIS")
 print("Scanning EVERYTHING - this may take a few minutes...")
 print("=" * 80)
 
@@ -27,12 +27,12 @@ def add_issue(category, issue, severity="ERROR"):
         issues_found.append(f"[{category}] {issue}")
     else:
         warnings_found.append(f"[{category}] {issue}")
-    print(f"   {'❌' if severity == 'ERROR' else '⚠️'} {issue}")
+    print(f"   {'[ERROR]' if severity == 'ERROR' else '[WARN]'} {issue}")
 
 
 def add_success(message):
     """Track successes"""
-    print(f"   ✅ {message}")
+    print(f"   [OK] {message}")
 
 
 # ============================================================================
@@ -293,7 +293,7 @@ except Exception as e:
 # ============================================================================
 # 10. FILE PERMISSIONS CHECK
 # ============================================================================
-print("\n🔟 CHECKING CRITICAL FILE PERMISSIONS...")
+print("\n[EMOJI] CHECKING CRITICAL FILE PERMISSIONS...")
 
 critical_scripts = ["x-start", "x-stop"]
 for script in critical_scripts:
@@ -369,15 +369,15 @@ if main_tsx.exists():
 # SUMMARY
 # ============================================================================
 print("\n" + "=" * 80)
-print("📊 DEEP DIAGNOSIS COMPLETE")
+print("[DATA] DEEP DIAGNOSIS COMPLETE")
 print("=" * 80)
 
-print(f"\n🔴 CRITICAL ERRORS: {len(issues_found)}")
+print(f"\n[EMOJI] CRITICAL ERRORS: {len(issues_found)}")
 if issues_found:
     for issue in issues_found:
         print(f"   {issue}")
 
-print(f"\n⚠️  WARNINGS: {len(warnings_found)}")
+print(f"\n[WARN]  WARNINGS: {len(warnings_found)}")
 if warnings_found:
     for warning in warnings_found:
         print(f"   {warning}")
@@ -394,11 +394,11 @@ report_file = Path("AURORA_DEEP_DIAGNOSIS_REPORT.json")
 with open(report_file, 'w', encoding='utf-8') as f:
     json.dump(report, f, indent=2)
 
-print(f"\n📄 Detailed report saved to: {report_file}")
+print(f"\n[EMOJI] Detailed report saved to: {report_file}")
 
 print("\n" + "=" * 80)
 if len(issues_found) == 0:
-    print("✅ NO CRITICAL ERRORS FOUND - System is healthy!")
+    print("[OK] NO CRITICAL ERRORS FOUND - System is healthy!")
 else:
-    print("⚠️  CRITICAL ISSUES DETECTED - See above for details")
+    print("[WARN]  CRITICAL ISSUES DETECTED - See above for details")
 print("=" * 80)

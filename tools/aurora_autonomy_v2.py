@@ -54,7 +54,7 @@ class AuroraAutonom:
         with open(self.execution_log, "a") as f:
             f.write(json.dumps(entry) + "\n")
 
-        print(f"🌟 [{status}] {event_type}: {details}")
+        print(f"[STAR] [{status}] {event_type}: {details}")
 
     def monitor_ports(self) -> dict[int, bool]:
         """Check what ports are actually running"""
@@ -69,7 +69,7 @@ class AuroraAutonom:
 
     def detect_port_conflict(self) -> dict | None:
         """Detect if there's a port conflict by analyzing configs"""
-        print("\n🔍 DETECTING PROBLEMS...")
+        print("\n[SCAN] DETECTING PROBLEMS...")
 
         # Check by analyzing config files (not needing running services)
         serve_file = self.workspace / "aurora_x" / "serve.py"
@@ -101,7 +101,7 @@ class AuroraAutonom:
 
     def analyze_architecture(self) -> dict:
         """Analyze serve.py vs server/index.ts to understand the architecture"""
-        print("\n📋 ANALYZING ARCHITECTURE...")
+        print("\n[EMOJI] ANALYZING ARCHITECTURE...")
 
         analysis = {"serve_py": None, "server_index_ts": None, "recommendation": None}
 
@@ -142,7 +142,7 @@ class AuroraAutonom:
 
     def fix_port_conflict(self, problem: dict, analysis: dict) -> bool:
         """Execute the fix for port conflict"""
-        print("\n🔧 EXECUTING FIX...")
+        print("\n[EMOJI] EXECUTING FIX...")
 
         try:
             # Decision: Change serve.py to port 5000, keep Vite on 5001
@@ -177,7 +177,7 @@ class AuroraAutonom:
 
     def test_fix(self) -> bool:
         """Test if the fix worked"""
-        print("\n✅ TESTING FIX...")
+        print("\n[OK] TESTING FIX...")
 
         time.sleep(2)
 
@@ -192,7 +192,7 @@ class AuroraAutonom:
 
             if is_html and is_json:
                 self.log_event(
-                    "TESTS_PASSED", {"port_5001": "✓ HTML (Vite UI)", "port_5000": "✓ JSON (API)"}, "SUCCESS"
+                    "TESTS_PASSED", {"port_5001": "[+] HTML (Vite UI)", "port_5000": "[+] JSON (API)"}, "SUCCESS"
                 )
                 return True
             else:
@@ -204,7 +204,7 @@ class AuroraAutonom:
 
     def commit_fix(self, problem: dict, fix_description: str) -> bool:
         """Commit the fix with professional message"""
-        print("\n📝 COMMITTING FIX...")
+        print("\n[EMOJI] COMMITTING FIX...")
 
         try:
             os.chdir(self.workspace)
@@ -234,10 +234,10 @@ Architecture Decision:
 - Keeps system simple and manageable
 
 Verified:
-✓ Port 5001 returns HTML (Vite UI)
-✓ Port 5000 returns JSON (Backend API)
-✓ No port conflicts
-✓ Luminar Nexus manages core services
+[+] Port 5001 returns HTML (Vite UI)
+[+] Port 5000 returns JSON (Backend API)
+[+] No port conflicts
+[+] Luminar Nexus manages core services
 
 This fix was generated and tested autonomously by Aurora."""
 
@@ -260,14 +260,14 @@ This fix was generated and tested autonomously by Aurora."""
     def run_autonomous_cycle(self):
         """Run one complete autonomous cycle"""
         print("\n" + "=" * 70)
-        print("🌟 AURORA AUTONOMOUS V2 - STARTING CYCLE")
+        print("[STAR] AURORA AUTONOMOUS V2 - STARTING CYCLE")
         print("=" * 70)
 
         # Step 1: Detect problems
         problem = self.detect_port_conflict()
 
         if not problem:
-            print("✅ No problems detected. System healthy.")
+            print("[OK] No problems detected. System healthy.")
             return
 
         self.log_event("PROBLEM_DETECTED", problem, "WARNING")
@@ -281,10 +281,10 @@ This fix was generated and tested autonomously by Aurora."""
             if self.test_fix():
                 # Step 5: Commit
                 self.commit_fix(problem, "Port conflict resolved")
-                print("\n🎉 AUTONOMOUS CYCLE COMPLETE - FIX SUCCESSFUL!")
+                print("\n[EMOJI] AUTONOMOUS CYCLE COMPLETE - FIX SUCCESSFUL!")
                 return True
 
-        print("\n❌ AUTONOMOUS CYCLE FAILED - Manual intervention needed")
+        print("\n[ERROR] AUTONOMOUS CYCLE FAILED - Manual intervention needed")
         return False
 
 

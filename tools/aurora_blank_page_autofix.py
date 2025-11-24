@@ -21,7 +21,7 @@ class AuroraBlankPageAutoFixer:
 
     def print_fix(self, msg: str, status: str = "FIX"):
         """Print fix status"""
-        icons = {"FIX": "🔧", "SUCCESS": "✅", "ERROR": "❌", "CHECK": "🔍", "WARN": "⚠️"}
+        icons = {"FIX": "[EMOJI]", "SUCCESS": "[OK]", "ERROR": "[ERROR]", "CHECK": "[SCAN]", "WARN": "[WARN]"}
         print(f"{icons.get(status, '•')} {msg}")
 
     def fix_index_css_body_styles(self) -> bool:
@@ -86,20 +86,20 @@ class AuroraBlankPageAutoFixer:
 import App from "./App";
 import "./index.css";
 
-console.log('🌟 Aurora: Starting React app...');
+console.log('[STAR] Aurora: Starting React app...');
 
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {
-  console.error('❌ Aurora: Root element not found! Cannot mount React app.');
+  console.error('[ERROR] Aurora: Root element not found! Cannot mount React app.');
   document.body.innerHTML = '<h1>ERROR: React root element not found</h1>';
 } else {
   try {
-    console.log('🌟 Aurora: Mounting React app to root element...');
+    console.log('[STAR] Aurora: Mounting React app to root element...');
     createRoot(rootElement).render(<App />);
-    console.log('✅ Aurora: React app mounted successfully!');
+    console.log('[OK] Aurora: React app mounted successfully!');
   } catch (error) {
-    console.error('❌ Aurora: Failed to render app:', error);
+    console.error('[ERROR] Aurora: Failed to render app:', error);
     rootElement.innerHTML = `<div style="padding: 20px; color: red;"><h1>Application Error</h1><p>${error instanceof Error ? error.message : 'Unknown error'}</p></div>`;
   }
 }
@@ -147,10 +147,10 @@ if (!rootElement) {
             # Check for export
             if "export default" not in content and "export const" not in content:
                 issues.append(f"{page_file.name}: Missing export")
-                self.print_fix(f"  ⚠️  {page_file.name} doesn't export component", "WARN")
+                self.print_fix(f"  [WARN]  {page_file.name} doesn't export component", "WARN")
             elif "return" not in content and "<" not in content:
                 issues.append(f"{page_file.name}: Might not return JSX")
-                self.print_fix(f"  ⚠️  {page_file.name} might not return JSX", "WARN")
+                self.print_fix(f"  [WARN]  {page_file.name} might not return JSX", "WARN")
 
         if issues:
             self.print_fix(f"Found {len(issues)} page export issues", "WARN")
@@ -205,7 +205,7 @@ if (!rootElement) {
         navigator.serviceWorker.getRegistrations().then(registrations => {
           registrations.forEach(reg => {
             reg.unregister();
-            console.log('🌟 Aurora: Service worker unregistered');
+            console.log('[STAR] Aurora: Service worker unregistered');
           });
         });
       }
@@ -214,7 +214,7 @@ if (!rootElement) {
         caches.keys().then(names => {
           names.forEach(name => {
             caches.delete(name);
-            console.log('🌟 Aurora: Cache cleared:', name);
+            console.log('[STAR] Aurora: Cache cleared:', name);
           });
         });
       }
@@ -264,7 +264,7 @@ if (!rootElement) {
     def run_full_autofix(self):
         """Execute complete blank page auto-fix"""
         print("\n" + "=" * 90)
-        print("🔧 AURORA BLANK PAGE AUTO-FIX ENGINE v2".center(90))
+        print("[EMOJI] AURORA BLANK PAGE AUTO-FIX ENGINE v2".center(90))
         print("=" * 90 + "\n")
 
         self.print_fix("Starting comprehensive blank page fixes...", "FIX")
@@ -280,20 +280,20 @@ if (!rootElement) {
         self.verify_dependencies()
 
         print("\n" + "-" * 90)
-        print("✨ AUTO-FIX SUMMARY".center(90))
+        print("[SPARKLE] AUTO-FIX SUMMARY".center(90))
         print("-" * 90)
 
-        print(f"\n🔧 Fixes Applied: {len(self.fixes_applied)}")
+        print(f"\n[EMOJI] Fixes Applied: {len(self.fixes_applied)}")
         for fix in self.fixes_applied:
-            print(f"   ✅ {fix}")
+            print(f"   [OK] {fix}")
 
         print("\n" + "-" * 90)
-        print("🚀 NEXT STEPS".center(90))
+        print("[LAUNCH] NEXT STEPS".center(90))
         print("-" * 90)
 
         print(
             """
-✅ Aurora has applied all automatic fixes!
+[OK] Aurora has applied all automatic fixes!
 
 TO VERIFY THE FIX WORKS:
 
@@ -316,16 +316,16 @@ TO VERIFY THE FIX WORKS:
    • Or: Ctrl+Shift+Delete and select "All time"
 
 ROOT CAUSES OF BLANK PAGE (FIXED):
-✅ CSS not loading body/root correctly
-✅ React not mounting properly (error handling added)
-✅ Service worker caching old UI (cleanup added)
-✅ Vite configuration issues (verified)
-✅ Missing component exports (verified)
+[OK] CSS not loading body/root correctly
+[OK] React not mounting properly (error handling added)
+[OK] Service worker caching old UI (cleanup added)
+[OK] Vite configuration issues (verified)
+[OK] Missing component exports (verified)
 """
         )
 
         print("-" * 90)
-        print("✅ AURORA BLANK PAGE FIX COMPLETE".center(90))
+        print("[OK] AURORA BLANK PAGE FIX COMPLETE".center(90))
         print("=" * 90 + "\n")
 
         # Save fix report
@@ -336,9 +336,9 @@ ROOT CAUSES OF BLANK PAGE (FIXED):
             f.write(f"Fixes Applied: {len(self.fixes_applied)}\n")
             for fix in self.fixes_applied:
                 f.write(f"  • {fix}\n")
-            f.write("\nStatus: ✅ COMPLETE\n")
+            f.write("\nStatus: [OK] COMPLETE\n")
 
-        print("📄 Report saved to: .aurora_knowledge/blank_page_autofix_report.txt")
+        print("[EMOJI] Report saved to: .aurora_knowledge/blank_page_autofix_report.txt")
 
 
 if __name__ == "__main__":

@@ -6,10 +6,10 @@ Complete system refresh with all enhancements
 
 def update_all_pages():
     """Update all pages with enhanced styling and functionality"""
-    print("🌟 Aurora: Updating entire system...\n")
+    print("[STAR] Aurora: Updating entire system...\n")
 
     # Dashboard page
-    print("📊 Updating dashboard...")
+    print("[DATA] Updating dashboard...")
     with open("client/src/pages/dashboard.tsx", "w", encoding="utf-8") as f:
         f.write(
             """import React from 'react';
@@ -20,10 +20,10 @@ export default function Dashboard() {
 }
 """
         )
-    print("   ✅ Dashboard updated\n")
+    print("   [OK] Dashboard updated\n")
 
     # Chat page
-    print("💬 Updating chat...")
+    print("[EMOJI] Updating chat...")
     with open("client/src/pages/chat.tsx", "w", encoding="utf-8") as f:
         f.write(
             """import React from 'react';
@@ -34,10 +34,10 @@ export default function Chat() {
 }
 """
         )
-    print("   ✅ Chat updated with natural conversation\n")
+    print("   [OK] Chat updated with natural conversation\n")
 
     # Tasks page with full implementation
-    print("📝 Updating tasks (13 Foundation Tasks)...")
+    print("[EMOJI] Updating tasks (13 Foundation Tasks)...")
     with open("client/src/pages/tasks.tsx", "w", encoding="utf-8") as f:
         f.write(
             """import React from 'react';
@@ -124,10 +124,10 @@ export default function Tasks() {
 }
 """
         )
-    print("   ✅ Tasks page updated\n")
+    print("   [OK] Tasks page updated\n")
 
     # Tiers page
-    print("🧠 Updating tiers (66 Knowledge Tiers)...")
+    print("[BRAIN] Updating tiers (66 Knowledge Tiers)...")
     with open("client/src/pages/tiers.tsx", "w", encoding="utf-8") as f:
         f.write(
             """import React from 'react';
@@ -247,10 +247,10 @@ export default function Tiers() {
 }
 """
         )
-    print("   ✅ Tiers page updated\n")
+    print("   [OK] Tiers page updated\n")
 
     # Intelligence page
-    print("🧠 Updating intelligence core...")
+    print("[BRAIN] Updating intelligence core...")
     with open("client/src/pages/intelligence.tsx", "w", encoding="utf-8") as f:
         f.write(
             """import React from 'react';
@@ -338,9 +338,9 @@ export default function Intelligence() {
 }
 """
         )
-    print("   ✅ Intelligence page updated\n")
+    print("   [OK] Intelligence page updated\n")
 
-    print("🔧 Updating placeholder pages...")
+    print("[EMOJI] Updating placeholder pages...")
     # Placeholder pages
     pages = {
         "client/src/pages/evolution.tsx": ("Evolution Monitor", "Track system growth and capability expansion"),
@@ -380,24 +380,24 @@ export default function {page_name}() {{
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(content)
 
-    print("   ✅ All placeholder pages updated\n")
+    print("   [OK] All placeholder pages updated\n")
 
 
 if __name__ == "__main__":
     print("=" * 70)
-    print("🌟 AURORA COMPLETE SYSTEM UPDATE V2")
+    print("[STAR] AURORA COMPLETE SYSTEM UPDATE V2")
     print("=" * 70 + "\n")
 
     update_all_pages()
 
     print("=" * 70)
-    print("✨ SYSTEM UPDATE COMPLETE")
+    print("[SPARKLE] SYSTEM UPDATE COMPLETE")
     print("=" * 70)
-    print("\n📋 All pages updated:")
-    print("   ✅ Dashboard - Quantum metrics")
-    print("   ✅ Chat - Natural conversation UI")
-    print("   ✅ Tasks - 13 Foundation Tasks with progress")
-    print("   ✅ Tiers - 66 Knowledge Tiers organized")
-    print("   ✅ Intelligence - Real-time metrics")
-    print("   ✅ All placeholder pages - Consistent design")
-    print("\n🚀 Entire system refreshed and ready!")
+    print("\n[EMOJI] All pages updated:")
+    print("   [OK] Dashboard - Quantum metrics")
+    print("   [OK] Chat - Natural conversation UI")
+    print("   [OK] Tasks - 13 Foundation Tasks with progress")
+    print("   [OK] Tiers - 66 Knowledge Tiers organized")
+    print("   [OK] Intelligence - Real-time metrics")
+    print("   [OK] All placeholder pages - Consistent design")
+    print("\n[LAUNCH] Entire system refreshed and ready!")

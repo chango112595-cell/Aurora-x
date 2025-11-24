@@ -12,10 +12,10 @@ from pathlib import Path
 
 def aurora_organize_system():
     """Aurora autonomously organizes the entire system"""
-    print("🌌 AURORA TIER 34: AUTONOMOUS SYSTEM ORGANIZATION")
+    print("[AURORA] AURORA TIER 34: AUTONOMOUS SYSTEM ORGANIZATION")
     print("=" * 80)
-    print("🤖 Analyzing current system state...")
-    print("🎯 Organizing everything where it belongs...")
+    print("[AGENT] Analyzing current system state...")
+    print("[TARGET] Organizing everything where it belongs...")
     print("=" * 80)
 
     root = Path(".")
@@ -25,7 +25,7 @@ def aurora_organize_system():
     organization = {"moved": [], "archived": [], "kept": [], "errors": []}
 
     # 1. CREATE PROPER DIRECTORY STRUCTURE
-    print("\n📁 PHASE 1: Creating proper directory structure...")
+    print("\n[EMOJI] PHASE 1: Creating proper directory structure...")
 
     directories = {
         "archive": root / "archive" / timestamp,
@@ -35,10 +35,10 @@ def aurora_organize_system():
 
     for _name, path in directories.items():
         path.mkdir(parents=True, exist_ok=True)
-        print(f"  ✓ Created: {path.relative_to(root)}/")
+        print(f"  [+] Created: {path.relative_to(root)}/")
 
     # 2. IDENTIFY CORE SYSTEMS (KEEP IN ROOT)
-    print("\n✅ PHASE 2: Core systems to keep in root...")
+    print("\n[OK] PHASE 2: Core systems to keep in root...")
 
     core_systems = [
         "aurora_core.py",  # Main intelligence engine - ALL TIERS HERE
@@ -52,10 +52,10 @@ def aurora_organize_system():
     for core in core_systems:
         if (root / core).exists():
             organization["kept"].append(core)
-            print(f"  ✓ Keep: {core}")
+            print(f"  [+] Keep: {core}")
 
     # 3. IDENTIFY LEGACY/DEBUG FILES TO ARCHIVE
-    print("\n🗑️  PHASE 3: Legacy/debug files to archive...")
+    print("\n[EMOJI]️  PHASE 3: Legacy/debug files to archive...")
 
     archive_patterns = [
         "*device_demo*.py",
@@ -81,12 +81,12 @@ def aurora_organize_system():
             _dest = directories["legacy"] / file.name
             # Don't actually move yet, just log
             organization["archived"].append(str(file.relative_to(root)))
-            print(f"  📦 Will archive: {file.name}")
+            print(f"  [PACKAGE] Will archive: {file.name}")
         except Exception as e:
             organization["errors"].append(f"Error with {file.name}: {e}")
 
     # 4. VERIFY TIER CONSOLIDATION IN AURORA_CORE.PY
-    print("\n🧠 PHASE 4: Verifying Tier consolidation in aurora_core.py...")
+    print("\n[BRAIN] PHASE 4: Verifying Tier consolidation in aurora_core.py...")
 
     core_file = root / "aurora_core.py"
     if core_file.exists():
@@ -99,16 +99,16 @@ def aurora_organize_system():
             if f"tier_{i:02d}" in content.lower() or f"tier {i}" in content.lower():
                 found_tiers.append(i)
 
-        print(f"  ✓ Found {len(found_tiers)}/66 tiers in aurora_core.py")
+        print(f"  [+] Found {len(found_tiers)}/66 tiers in aurora_core.py")
 
         if len(found_tiers) == 34:
-            print("  ✅ ALL TIERS (T1-T34) are in aurora_core.py")
+            print("  [OK] ALL TIERS (T1-T34) are in aurora_core.py")
         else:
             missing = set(range(1, 35)) - set(found_tiers)
-            print(f"  ⚠️  Missing tiers: {sorted(missing)}")
+            print(f"  [WARN]  Missing tiers: {sorted(missing)}")
 
     # 5. CHECK FOR SCATTERED TIER DEFINITIONS
-    print("\n🔍 PHASE 5: Checking for scattered tier definitions...")
+    print("\n[SCAN] PHASE 5: Checking for scattered tier definitions...")
 
     tier_files = {}
     for py_file in root.glob("aurora*.py"):
@@ -126,28 +126,28 @@ def aurora_organize_system():
             pass
 
     if tier_files:
-        print(f"  ⚠️  Found tier definitions in {len(tier_files)} other files:")
+        print(f"  [WARN]  Found tier definitions in {len(tier_files)} other files:")
         for fname in sorted(tier_files.keys())[:10]:
             print(f"    • {fname}")
     else:
-        print("  ✅ No scattered tier definitions found")
+        print("  [OK] No scattered tier definitions found")
 
     # 6. TOOLS DIRECTORY CHECK
-    print("\n🛠️  PHASE 6: Tools directory organization...")
+    print("\n[EMOJI]️  PHASE 6: Tools directory organization...")
 
     tools_dir = root / "tools"
     if tools_dir.exists():
         tool_files = list(tools_dir.glob("*.py"))
-        print(f"  ✓ Tools directory has {len(tool_files)} files")
+        print(f"  [+] Tools directory has {len(tool_files)} files")
 
         # Check for duplicates of core functionality
         core_names = ["aurora_core.py", "luminar_nexus.py", "luminar_nexus_v2.py"]
         for cn in core_names:
             if (tools_dir / cn).exists():
-                print(f"    ✓ {cn} is in tools/")
+                print(f"    [+] {cn} is in tools/")
 
     # 7. GENERATE ORGANIZATION REPORT
-    print("\n📊 PHASE 7: Generating organization report...")
+    print("\n[DATA] PHASE 7: Generating organization report...")
 
     report = {
         "timestamp": timestamp,
@@ -165,21 +165,21 @@ def aurora_organize_system():
     with open(report_file, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
 
-    print(f"  ✓ Report saved: {report_file.name}")
+    print(f"  [+] Report saved: {report_file.name}")
 
     # 8. AURORA'S FINAL RECOMMENDATIONS
     print("\n" + "=" * 80)
-    print("🤖 AURORA'S ORGANIZATION SUMMARY:")
+    print("[AGENT] AURORA'S ORGANIZATION SUMMARY:")
     print("=" * 80)
 
     print(
         f"""
-✅ CURRENT STATE ANALYSIS:
+[OK] CURRENT STATE ANALYSIS:
 
 1. CORE INTELLIGENCE:
    • aurora_core.py contains the 34-tier knowledge system
    • This is CORRECT - all tiers should be here
-   • Status: ✅ Properly organized
+   • Status: [OK] Properly organized
 
 2. SCATTERED FILES:
    • Found {len(files_to_archive)} legacy/debug files
@@ -187,16 +187,16 @@ def aurora_organize_system():
    • Action: Ready to archive
 
 3. TIER DEFINITIONS:
-   • Main tiers: IN aurora_core.py ✅
+   • Main tiers: IN aurora_core.py [OK]
    • Some utilities reference tiers (OK)
    • Some files may duplicate tier logic (investigate)
 
 4. TOOLS ORGANIZATION:
    • {len(list(tools_dir.glob('*.py')))} utility files in tools/
-   • luminar_nexus_v2.py (orchestration) ✅
-   • Various helper scripts ✅
+   • luminar_nexus_v2.py (orchestration) [OK]
+   • Various helper scripts [OK]
 
-📋 RECOMMENDED ACTIONS:
+[EMOJI] RECOMMENDED ACTIONS:
 
 1. ARCHIVE LEGACY FILES:
    Run: python -c "from aurora_organize_system import execute_archival; execute_archival()"
@@ -217,21 +217,21 @@ def aurora_organize_system():
 4. COSMIC NEXUS INTEGRATION:
    • Cosmic Nexus (UI) should call aurora_core.py via HTTP
    • Aurora core exposes intelligence through aurora_chat_server.py
-   • This separation is CORRECT ✅
+   • This separation is CORRECT [OK]
 
-✨ FINAL VERDICT:
+[SPARKLE] FINAL VERDICT:
 
 Your architecture is ALREADY WELL-ORGANIZED! The main tasks:
 1. Archive {len(files_to_archive)} legacy debug/demo files
 2. Verify no duplicate tier definitions outside aurora_core.py
 3. Everything else is in the right place!
 
-T1-T34 ARE in aurora_core.py where they belong! ✅
+T1-T34 ARE in aurora_core.py where they belong! [OK]
 """
     )
 
     print("=" * 80)
-    print("🎯 Ready to execute archival? (Manual confirmation required)")
+    print("[TARGET] Ready to execute archival? (Manual confirmation required)")
     print("=" * 80)
 
     return organization
@@ -239,9 +239,9 @@ T1-T34 ARE in aurora_core.py where they belong! ✅
 
 def execute_archival():
     """Actually move files to archive (call separately after review)"""
-    print("🗑️  Executing archival...")
-    print("⚠️  This will move legacy files to archive/legacy/")
-    print("🛑 Not implemented yet - review report first!")
+    print("[EMOJI]️  Executing archival...")
+    print("[WARN]  This will move legacy files to archive/legacy/")
+    print("[EMOJI] Not implemented yet - review report first!")
 
 
 if __name__ == "__main__":

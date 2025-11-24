@@ -22,7 +22,7 @@ class AuroraProjectAnalyzer:
 
     def discover_python_files(self):
         """Discover all Python files in the project"""
-        print("🔍 Discovering Python files...")
+        print("[SCAN] Discovering Python files...")
 
         # Get all .py files recursively
         for pattern in ["*.py", "**/*.py"]:
@@ -35,7 +35,7 @@ class AuroraProjectAnalyzer:
 
     def run_pylint_analysis(self):
         """Run pylint and capture all errors"""
-        print("\n📊 Running comprehensive pylint analysis...")
+        print("\n[DATA] Running comprehensive pylint analysis...")
 
         try:
             result = subprocess.run(
@@ -68,7 +68,7 @@ class AuroraProjectAnalyzer:
                 return self.errors_by_type
 
         except Exception as e:
-            print(f"   ⚠️  Could not parse JSON, running text mode: {e}")
+            print(f"   [WARN]  Could not parse JSON, running text mode: {e}")
             # Fallback to text mode
             result = subprocess.run(
                 ["python", "-m", "pylint", "*.py", "--disable=C,R", "--max-line-length=120"],
@@ -83,7 +83,7 @@ class AuroraProjectAnalyzer:
 
     def fix_unused_imports(self):
         """Fix W0611: unused imports"""
-        print("\n🗑️  Fixing unused imports...")
+        print("\n[EMOJI]️  Fixing unused imports...")
         count = 0
 
         for filepath in self.all_python_files:
@@ -109,15 +109,15 @@ class AuroraProjectAnalyzer:
                     self.files_modified.add(filepath)
 
             except Exception as e:
-                print(f"   ⚠️  Error processing {filepath}: {e}")
+                print(f"   [WARN]  Error processing {filepath}: {e}")
 
         if count > 0:
-            print(f"   ✅ Fixed unused imports in {count} files")
+            print(f"   [OK] Fixed unused imports in {count} files")
             self.fixes_applied += count
 
     def fix_redefined_outer_name(self):
         """Fix W0621: redefined outer name"""
-        print("\n🔄 Fixing redefined outer names...")
+        print("\n[SYNC] Fixing redefined outer names...")
         count = 0
 
         # Common variable names that get redefined
@@ -169,12 +169,12 @@ class AuroraProjectAnalyzer:
                                 pass
 
         if count > 0:
-            print(f"   ✅ Fixed {count} redefined names")
+            print(f"   [OK] Fixed {count} redefined names")
             self.fixes_applied += count
 
     def fix_import_outside_toplevel(self):
         """Add pylint disable comments for intentional import-outside-toplevel"""
-        print("\n📥 Handling import-outside-toplevel...")
+        print("\n[EMOJI] Handling import-outside-toplevel...")
         count = 0
 
         for error_type, errors in self.errors_by_type.items():
@@ -208,12 +208,12 @@ class AuroraProjectAnalyzer:
                         pass
 
         if count > 0:
-            print(f"   ✅ Added disable comments for {count} imports")
+            print(f"   [OK] Added disable comments for {count} imports")
             self.fixes_applied += count
 
     def fix_singleton_comparison(self):
         """Fix W0123: singleton comparison (== True/False)"""
-        print("\n⚖️  Fixing singleton comparisons...")
+        print("\n[BALANCE]  Fixing singleton comparisons...")
         count = 0
 
         for filepath in self.all_python_files:
@@ -239,12 +239,12 @@ class AuroraProjectAnalyzer:
                 pass
 
         if count > 0:
-            print(f"   ✅ Fixed singleton comparisons in {count} files")
+            print(f"   [OK] Fixed singleton comparisons in {count} files")
             self.fixes_applied += count
 
     def fix_invalid_names(self):
         """Fix C0103: invalid naming"""
-        print("\n🏷️  Fixing invalid naming conventions...")
+        print("\n[EMOJI]️  Fixing invalid naming conventions...")
         count = 0
 
         # Variables that should be constants (UPPER_CASE)
@@ -277,12 +277,12 @@ class AuroraProjectAnalyzer:
                 pass
 
         if count > 0:
-            print(f"   ✅ Fixed naming conventions in {count} files")
+            print(f"   [OK] Fixed naming conventions in {count} files")
             self.fixes_applied += count
 
     def fix_line_too_long(self):
         """Fix W0301: line too long"""
-        print("\n📏 Fixing lines too long...")
+        print("\n[EMOJI] Fixing lines too long...")
         count = 0
 
         for filepath in self.all_python_files:
@@ -334,12 +334,12 @@ class AuroraProjectAnalyzer:
                 pass
 
         if count > 0:
-            print(f"   ✅ Fixed long lines in {count} files")
+            print(f"   [OK] Fixed long lines in {count} files")
             self.fixes_applied += count
 
     def add_missing_docstrings(self):
         """Add missing docstrings to classes and functions"""
-        print("\n📝 Adding missing docstrings...")
+        print("\n[EMOJI] Adding missing docstrings...")
         count = 0
 
         for filepath in self.all_python_files:
@@ -385,12 +385,12 @@ class AuroraProjectAnalyzer:
                 pass
 
         if count > 0:
-            print(f"   ✅ Added docstrings to {count} files")
+            print(f"   [OK] Added docstrings to {count} files")
             self.fixes_applied += count
 
     def fix_f_string_without_interpolation(self):
         """Fix W1309: f-string without interpolation"""
-        print("\n🔤 Fixing f-strings without interpolation...")
+        print("\n[EMOJI] Fixing f-strings without interpolation...")
         count = 0
 
         for filepath in self.all_python_files:
@@ -415,20 +415,20 @@ class AuroraProjectAnalyzer:
                 pass
 
         if count > 0:
-            print(f"   ✅ Fixed f-strings in {count} files")
+            print(f"   [OK] Fixed f-strings in {count} files")
             self.fixes_applied += count
 
     def generate_report(self):
         """Generate final report"""
         print("\n" + "=" * 80)
-        print("📋 AURORA'S AUTONOMOUS FIX REPORT")
+        print("[EMOJI] AURORA'S AUTONOMOUS FIX REPORT")
         print("=" * 80)
-        print(f"\n✨ Total fixes applied: {self.fixes_applied}")
-        print(f"📁 Files modified: {len(self.files_modified)}")
-        print(f"🐍 Python files analyzed: {len(self.all_python_files)}")
+        print(f"\n[SPARKLE] Total fixes applied: {self.fixes_applied}")
+        print(f"[EMOJI] Files modified: {len(self.files_modified)}")
+        print(f"[EMOJI] Python files analyzed: {len(self.all_python_files)}")
 
         if self.files_modified:
-            print("\n📝 Modified files:")
+            print("\n[EMOJI] Modified files:")
             for filepath in sorted(self.files_modified)[:20]:
                 print(f"   • {Path(filepath).name}")
             if len(self.files_modified) > 20:
@@ -438,7 +438,7 @@ class AuroraProjectAnalyzer:
 
     def run_comprehensive_fix(self):
         """Execute all fixes in order"""
-        print("🌟 Aurora Autonomous Project Analyzer")
+        print("[STAR] Aurora Autonomous Project Analyzer")
         print("=" * 80)
         print("Starting comprehensive analysis and fixing...\n")
 
@@ -472,8 +472,8 @@ def main():
         success = analyzer.run_comprehensive_fix()
 
         if SUCCESS:
-            print("\n✅ Aurora has completed comprehensive autonomous fixes!")
-            print("\n🔍 Verifying with pylint...")
+            print("\n[OK] Aurora has completed comprehensive autonomous fixes!")
+            print("\n[SCAN] Verifying with pylint...")
 
             # Run final verification
             result = subprocess.run(
@@ -491,14 +491,14 @@ def main():
 
             return 0
         else:
-            print("\n⚠️  No fixes applied")
+            print("\n[WARN]  No fixes applied")
             return 1
 
     except KeyboardInterrupt:
-        print("\n\n⚠️  Interrupted by user")
+        print("\n\n[WARN]  Interrupted by user")
         return 1
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n[ERROR] Error: {e}")
         import traceback
 
         traceback.print_exc()

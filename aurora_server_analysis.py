@@ -32,7 +32,7 @@ class AuroraServerAnalysis:
                 # Check if we're using TypeScript (tsx)
                 if "tsx" in str(scripts):
                     self.findings["issues"].append("Using tsx (TypeScript execution) not HTML")
-                    print("\n[Aurora] ✅ Confirmed: Using TypeScript (.tsx/.ts) not HTML")
+                    print("\n[Aurora] [OK] Confirmed: Using TypeScript (.tsx/.ts) not HTML")
 
     def scan_server_files(self):
         """Find all server files"""
@@ -46,13 +46,13 @@ class AuroraServerAnalysis:
             for file in server_dir.rglob("*.ts"):
                 if "index" in file.name.lower():
                     server_files.append(file)
-                    print(f"  📁 Found: {file}")
+                    print(f"  [EMOJI] Found: {file}")
 
         # Check for Python servers
         for file in self.root.glob("*.py"):
             if any(keyword in file.name.lower() for keyword in ["server", "bridge", "chat", "learn"]):
                 server_files.append(file)
-                print(f"  📁 Found: {file}")
+                print(f"  [EMOJI] Found: {file}")
 
         self.findings["servers"].extend([str(f) for f in server_files])
         return server_files
@@ -96,11 +96,11 @@ class AuroraServerAnalysis:
             content = vite_config.read_text(encoding="utf-8")
 
             if "port: 5173" in content:
-                print("[Aurora] ✅ Vite configured for port 5173")
+                print("[Aurora] [OK] Vite configured for port 5173")
                 self.findings["recommendations"].append("Vite dev server uses port 5173")
 
             if "react" in content.lower():
-                print("[Aurora] ✅ Using React (TSX/JSX)")
+                print("[Aurora] [OK] Using React (TSX/JSX)")
                 self.findings["issues"].append("Frontend: React TSX components, not HTML")
 
             # Check root directory
@@ -119,7 +119,7 @@ class AuroraServerAnalysis:
 
             # Check for Vite integration
             if "setupVite" in content:
-                print("[Aurora] ✅ Express + Vite integration detected")
+                print("[Aurora] [OK] Express + Vite integration detected")
                 self.findings["servers"].append(
                     {
                         "name": "Backend + Frontend",
@@ -143,19 +143,19 @@ class AuroraServerAnalysis:
 
         print("[Aurora] CORRECT SERVER ARCHITECTURE:")
         print()
-        print("  🎯 PRIMARY SERVER:")
+        print("  [TARGET] PRIMARY SERVER:")
         print("     • Port 5000: Express.js + Vite (Development)")
         print("     • Tech Stack: TypeScript (server) + React TSX (frontend)")
         print("     • Purpose: Backend API + Frontend serving")
         print("     • Vite integrates HMR at port 5000")
         print()
-        print("  🎯 SUPPORT SERVICES:")
+        print("  [TARGET] SUPPORT SERVICES:")
         print("     • Port 5001: Bridge Service (Python)")
         print("     • Port 5002: Self-Learning Service (Python)")
         print("     • Port 5003: Chat Server (Python)")
         print("     • Port 5005: Luminar Dashboard (Python)")
         print()
-        print("  ⚠️  PORT 5173 NOTE:")
+        print("  [WARN]  PORT 5173 NOTE:")
         print("     • Vite's default standalone port")
         print("     • NOT used in this setup")
         print("     • Vite runs as middleware through Express (port 5000)")
@@ -185,17 +185,17 @@ class AuroraServerAnalysis:
         print("[Aurora] SUMMARY")
         print("=" * 60)
         print()
-        print("[Aurora] ✅ PRIMARY ACCESS POINT: http://localhost:5000")
-        print("[Aurora] ✅ Frontend tech: React TSX (TypeScript)")
-        print("[Aurora] ✅ Build system: Vite (integrated with Express)")
-        print("[Aurora] ✅ All 5 services should run simultaneously")
+        print("[Aurora] [OK] PRIMARY ACCESS POINT: http://localhost:5000")
+        print("[Aurora] [OK] Frontend tech: React TSX (TypeScript)")
+        print("[Aurora] [OK] Build system: Vite (integrated with Express)")
+        print("[Aurora] [OK] All 5 services should run simultaneously")
         print()
-        print("[Aurora] 🎨 The blank screen issue is likely:")
+        print("[Aurora] [EMOJI] The blank screen issue is likely:")
         print("     1. Component import/export mismatch (FIXED)")
         print("     2. Browser cache needs hard refresh")
         print("     3. Vite HMR connection issue")
         print()
-        print("[Aurora] 💡 Try: Ctrl+Shift+R (hard refresh) in browser")
+        print("[Aurora] [IDEA] Try: Ctrl+Shift+R (hard refresh) in browser")
         print()
 
 

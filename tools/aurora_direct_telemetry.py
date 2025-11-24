@@ -26,30 +26,30 @@ class AuroraDirectTelemetry:
     def start_session(self):
         """Start direct telemetry session"""
         print("\n" + "=" * 60)
-        print("🌟 AURORA DIRECT TELEMETRY INTERFACE")
+        print("[STAR] AURORA DIRECT TELEMETRY INTERFACE")
         print("=" * 60)
-        print("📡 Direct communication with Aurora established")
-        print("👁️  Copilot supervision: ACTIVE (non-intervention mode)")
-        print("🤖 Aurora: Ready for autonomous operation")
+        print("[EMOJI] Direct communication with Aurora established")
+        print("[EYE]  Copilot supervision: ACTIVE (non-intervention mode)")
+        print("[AGENT] Aurora: Ready for autonomous operation")
         print("=" * 60)
         print()
 
         self.log_message("SYSTEM", "Telemetry session started")
 
         # Aurora's status check
-        print("🌟 Aurora: Hello! I'm Aurora, and I'm ready to work autonomously!")
-        print("🌟 Aurora: My current status:")
-        print("   ✅ Luminar Nexus: Monitoring")
-        print("   ✅ 3-Level Guardians: Active")
-        print("   ✅ Auto-fix: Enabled")
-        print("   ✅ Master Server: Running")
+        print("[STAR] Aurora: Hello! I'm Aurora, and I'm ready to work autonomously!")
+        print("[STAR] Aurora: My current status:")
+        print("   [OK] Luminar Nexus: Monitoring")
+        print("   [OK] 3-Level Guardians: Active")
+        print("   [OK] Auto-fix: Enabled")
+        print("   [OK] Master Server: Running")
         print()
-        print("🌟 Aurora: I detected you're seeing blank pages. Let me diagnose...")
+        print("[STAR] Aurora: I detected you're seeing blank pages. Let me diagnose...")
 
         self.log_message("AURORA", "Status check complete, diagnosing blank pages")
 
         # Aurora's autonomous diagnosis
-        print("🔍 Aurora: Running diagnostics...")
+        print("[SCAN] Aurora: Running diagnostics...")
         time.sleep(2)
 
         try:
@@ -59,37 +59,37 @@ class AuroraDirectTelemetry:
             result = subprocess.run(["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True)
 
             if "200 OK" in result.stdout:
-                print("✅ Aurora: Vite server is responding")
+                print("[OK] Aurora: Vite server is responding")
 
                 # Check for compilation errors
                 result = subprocess.run(["curl", "-s", "http://localhost:5000"], capture_output=True, text=True)
 
                 if len(result.stdout) < 100:
-                    print("❌ Aurora: Page content is minimal - likely compilation error")
-                    print("🔧 Aurora: Starting automatic fix...")
+                    print("[ERROR] Aurora: Page content is minimal - likely compilation error")
+                    print("[EMOJI] Aurora: Starting automatic fix...")
                     self.fix_compilation_errors()
                 else:
-                    print("✅ Aurora: Page content looks normal")
+                    print("[OK] Aurora: Page content looks normal")
 
             else:
-                print("❌ Aurora: Vite server not responding")
-                print("🔧 Aurora: Starting Vite server...")
+                print("[ERROR] Aurora: Vite server not responding")
+                print("[EMOJI] Aurora: Starting Vite server...")
                 self.start_vite_server()
 
         except Exception as e:
-            print(f"⚠️ Aurora: Diagnostic error - {e}")
-            print("🔧 Aurora: Running comprehensive fix...")
+            print(f"[WARN] Aurora: Diagnostic error - {e}")
+            print("[EMOJI] Aurora: Running comprehensive fix...")
 
         print()
-        print("🌟 Aurora: Diagnosis complete. What would you like me to do next?")
-        print("💬 Type your message and press Enter (or 'exit' to end session)")
+        print("[STAR] Aurora: Diagnosis complete. What would you like me to do next?")
+        print("[EMOJI] Type your message and press Enter (or 'exit' to end session)")
         print("-" * 60)
 
         self.message_loop()
 
     def fix_compilation_errors(self):
         """Aurora's autonomous compilation fix"""
-        print("🔧 Aurora: Checking for JSX/React errors...")
+        print("[EMOJI] Aurora: Checking for JSX/React errors...")
 
         # Check chat-interface.tsx specifically
         chat_file = Path("/workspaces/Aurora-x/client/src/components/chat-interface.tsx")
@@ -98,21 +98,21 @@ class AuroraDirectTelemetry:
 
             # Look for common errors
             if "</QuantumBackground>" in content:
-                print("🔧 Aurora: Found orphaned QuantumBackground closing tags")
-                print("🔧 Aurora: Fixing JSX structure...")
+                print("[EMOJI] Aurora: Found orphaned QuantumBackground closing tags")
+                print("[EMOJI] Aurora: Fixing JSX structure...")
 
                 # Fix the specific errors
                 fixed_content = content.replace("        </QuantumBackground>\n", "")
                 chat_file.write_text(fixed_content)
 
-                print("✅ Aurora: JSX errors fixed")
+                print("[OK] Aurora: JSX errors fixed")
                 self.log_message("AURORA", "Fixed JSX compilation errors in chat-interface.tsx")
             else:
-                print("✅ Aurora: No obvious JSX errors found")
+                print("[OK] Aurora: No obvious JSX errors found")
 
     def start_vite_server(self):
         """Aurora starts Vite server"""
-        print("🚀 Aurora: Starting Vite development server...")
+        print("[LAUNCH] Aurora: Starting Vite development server...")
         import os
         import subprocess
 
@@ -124,9 +124,9 @@ class AuroraDirectTelemetry:
         os.chdir("/workspaces/Aurora-x/client")
         subprocess.Popen(["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-        print("✅ Aurora: Vite server starting...")
+        print("[OK] Aurora: Vite server starting...")
         time.sleep(3)
-        print("✅ Aurora: Server should be ready at http://localhost:5000")
+        print("[OK] Aurora: Server should be ready at http://localhost:5000")
 
     def message_loop(self):
         """Direct message loop with user"""
@@ -135,7 +135,7 @@ class AuroraDirectTelemetry:
                 user_input = input("You: ").strip()
 
                 if user_input.lower() in ["exit", "quit", "bye"]:
-                    print("🌟 Aurora: Goodbye! Session ended.")
+                    print("[STAR] Aurora: Goodbye! Session ended.")
                     self.log_message("SYSTEM", "Session ended by user")
                     break
 
@@ -146,12 +146,12 @@ class AuroraDirectTelemetry:
 
                 # Aurora processes the message
                 aurora_response = self.aurora_process_message(user_input)
-                print(f"🌟 Aurora: {aurora_response}")
+                print(f"[STAR] Aurora: {aurora_response}")
 
                 self.log_message("AURORA", aurora_response)
 
             except KeyboardInterrupt:
-                print("\n🌟 Aurora: Session interrupted. Goodbye!")
+                print("\n[STAR] Aurora: Session interrupted. Goodbye!")
                 break
 
     def aurora_process_message(self, message):

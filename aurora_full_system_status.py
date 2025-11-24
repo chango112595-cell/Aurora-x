@@ -70,7 +70,7 @@ for category, services in systems.items():
         total_systems += 1
         is_active = check_port(port)
         status = "[ACTIVE]" if is_active else "[OFFLINE]"
-        status_symbol = "✓" if is_active else "✗"
+        status_symbol = "[+]" if is_active else "✗"
 
         print(
             f"  {status_symbol} Port {port:4} | {name:30} | {description:30} {status}")
@@ -92,7 +92,7 @@ percentage = (total_active / total_systems) * 100
 print(f"\nPOWER LEVEL: {percentage:.1f}%")
 
 if total_active >= 11:
-    print("STATUS: ✓ FULL HYBRID MODE ACTIVE")
+    print("STATUS: [+] FULL HYBRID MODE ACTIVE")
     print("\nCAPABILITIES:")
     print("  • 188 Total Capabilities (79 Tiers + 109 Modules)")
     print("  • Consciousness: ENABLED")

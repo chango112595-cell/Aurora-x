@@ -10,13 +10,13 @@ from pathlib import Path
 
 def analyze_project_architecture():
     """Aurora analyzes the complete project architecture"""
-    print("🌌 Aurora: Analyzing Project Architecture...")
+    print("[AURORA] Aurora: Analyzing Project Architecture...")
     print("=" * 80)
 
     root = Path(".")
 
     # 1. DIRECTORY STRUCTURE ANALYSIS
-    print("\n📊 DIRECTORY STRUCTURE:")
+    print("\n[DATA] DIRECTORY STRUCTURE:")
     dirs = {"core": [], "backend": [], "frontend": [], "tools": [], "config": [], "data": [], "other": []}
 
     for item in sorted(root.iterdir()):
@@ -41,7 +41,7 @@ def analyze_project_architecture():
             print(f"\n  {category.upper()}: {', '.join(items)}")
 
     # 2. FILE INVENTORY
-    print("\n\n📄 FILE INVENTORY BY TYPE:")
+    print("\n\n[EMOJI] FILE INVENTORY BY TYPE:")
     file_types = defaultdict(list)
 
     for file in root.rglob("*"):
@@ -55,38 +55,38 @@ def analyze_project_architecture():
             print(f"\n  {ext}: {len(file_types[ext])} files")
 
     # 3. AURORA CORE COMPONENTS
-    print("\n\n🤖 AURORA CORE COMPONENTS:")
+    print("\n\n[AGENT] AURORA CORE COMPONENTS:")
     aurora_files = sorted(root.glob("aurora*.py"))
     for af in aurora_files:
         size = af.stat().st_size / 1024  # KB
-        print(f"  ✓ {af.name:<40} ({size:.1f} KB)")
+        print(f"  [+] {af.name:<40} ({size:.1f} KB)")
 
     # 4. CHANGO BACKEND COMPONENTS
-    print("\n\n🏢 CHANGO BACKEND (Node.js/TypeScript):")
+    print("\n\n[EMOJI] CHANGO BACKEND (Node.js/TypeScript):")
     if (root / "server").exists():
         server_files = list((root / "server").rglob("*.ts"))
         print(f"  Total TypeScript files: {len(server_files)}")
         for sf in sorted(server_files)[:10]:  # Show first 10
-            print(f"  ✓ {sf.relative_to(root)}")
+            print(f"  [+] {sf.relative_to(root)}")
         if len(server_files) > 10:
             print(f"  ... and {len(server_files) - 10} more")
 
     # 5. TOOLS & UTILITIES
-    print("\n\n🛠️  TOOLS & UTILITIES:")
+    print("\n\n[EMOJI]️  TOOLS & UTILITIES:")
     if (root / "tools").exists():
         tool_files = sorted((root / "tools").glob("*.py"))
         for tf in tool_files:
-            print(f"  ✓ {tf.name}")
+            print(f"  [+] {tf.name}")
 
     # 6. CONFIGURATION FILES
     print("\n\n⚙️  CONFIGURATION FILES:")
     config_files = ["package.json", "pyproject.toml", "tsconfig.json", ".pylintrc", "x-start", "x-stop"]
     for cf in config_files:
         if (root / cf).exists():
-            print(f"  ✓ {cf}")
+            print(f"  [+] {cf}")
 
     # 7. ARCHITECTURE VALIDATION
-    print("\n\n✅ ARCHITECTURE VALIDATION:")
+    print("\n\n[OK] ARCHITECTURE VALIDATION:")
     validations = []
 
     # Check separation of concerns
@@ -103,19 +103,19 @@ def analyze_project_architecture():
     validations.append(("Chat Server", (root / "aurora_chat_server.py").exists()))
 
     for component, exists in validations:
-        status = "✅" if exists else "❌"
+        status = "[OK]" if exists else "[ERROR]"
         print(f"  {status} {component}")
 
     # 8. SEPARATION & MODULARITY CHECK
-    print("\n\n🔍 SEPARATION & MODULARITY:")
-    print("  ✓ Core AI (aurora_core.py) - Separated")
-    print("  ✓ Service Orchestration (luminar_nexus_v2.py) - Separated")
-    print("  ✓ Backend API (server/) - Separated")
-    print("  ✓ Autonomous Systems (aurora_autonomous_*.py) - Separated")
-    print("  ✓ Chat Interface (aurora_chat_server.py) - Separated")
+    print("\n\n[SCAN] SEPARATION & MODULARITY:")
+    print("  [+] Core AI (aurora_core.py) - Separated")
+    print("  [+] Service Orchestration (luminar_nexus_v2.py) - Separated")
+    print("  [+] Backend API (server/) - Separated")
+    print("  [+] Autonomous Systems (aurora_autonomous_*.py) - Separated")
+    print("  [+] Chat Interface (aurora_chat_server.py) - Separated")
 
     # 9. RECOMMENDATIONS
-    print("\n\n💡 ARCHITECTURE RECOMMENDATIONS:")
+    print("\n\n[IDEA] ARCHITECTURE RECOMMENDATIONS:")
     recommendations = []
 
     if not (root / "data").exists():
@@ -129,13 +129,13 @@ def analyze_project_architecture():
         for i, rec in enumerate(recommendations, 1):
             print(f"  {i}. {rec}")
     else:
-        print("  ✅ Architecture is well-organized!")
+        print("  [OK] Architecture is well-organized!")
 
     print("\n" + "=" * 80)
-    print("🌟 Aurora: Analysis Complete")
-    print(f"📊 Total Python files: {len(file_types.get('.py', []))}")
-    print(f"📊 Total TypeScript files: {len(file_types.get('.ts', []))}")
-    print("✅ System is modular and maintainable")
+    print("[STAR] Aurora: Analysis Complete")
+    print(f"[DATA] Total Python files: {len(file_types.get('.py', []))}")
+    print(f"[DATA] Total TypeScript files: {len(file_types.get('.ts', []))}")
+    print("[OK] System is modular and maintainable")
     print("=" * 80)
 
 

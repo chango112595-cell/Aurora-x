@@ -17,7 +17,7 @@ class AuroraHTMLChecker:
 
     def scan_for_html(self):
         """Find all HTML files in the project"""
-        print("🔍 Scanning for HTML files...")
+        print("[SCAN] Scanning for HTML files...")
         print("=" * 70)
 
         # Skip these directories
@@ -38,14 +38,14 @@ class AuroraHTMLChecker:
                 'size': size
             })
 
-            print(f"  📄 {rel_path} ({size} bytes)")
+            print(f"  [EMOJI] {rel_path} ({size} bytes)")
 
         print(f"\n  Total HTML files found: {len(self.html_files)}")
         return self.html_files
 
     def analyze_html_files(self):
         """Analyze each HTML file to determine if it needs conversion"""
-        print("\n📊 Analyzing HTML files...")
+        print("\n[DATA] Analyzing HTML files...")
         print("=" * 70)
 
         for html_info in self.html_files:
@@ -89,7 +89,7 @@ class AuroraHTMLChecker:
 
                 self.conversions_needed.append(conversion_info)
 
-                status = "🔄 CONVERT" if needs_conversion else "✅ KEEP"
+                status = "[SYNC] CONVERT" if needs_conversion else "[OK] KEEP"
                 print(f"\n  {status} {html_info['path']}")
                 print(f"     Purpose: {purpose}")
                 if needs_conversion:
@@ -97,7 +97,7 @@ class AuroraHTMLChecker:
                         f"     → Suggested TSX: {conversion_info.get('suggested_tsx', 'N/A')}")
 
             except Exception as e:
-                print(f"  ⚠️  Error reading {html_info['path']}: {e}")
+                print(f"  [WARN]  Error reading {html_info['path']}: {e}")
 
         return self.conversions_needed
 
@@ -116,7 +116,7 @@ class AuroraHTMLChecker:
     def generate_conversion_plan(self):
         """Generate conversion plan"""
         print("\n" + "=" * 70)
-        print("📋 CONVERSION PLAN")
+        print("[EMOJI] CONVERSION PLAN")
         print("=" * 70)
 
         files_to_convert = [
@@ -124,20 +124,20 @@ class AuroraHTMLChecker:
         files_to_keep = [
             c for c in self.conversions_needed if not c['needs_conversion']]
 
-        print(f"\n✅ Files to keep as HTML: {len(files_to_keep)}")
+        print(f"\n[OK] Files to keep as HTML: {len(files_to_keep)}")
         for file_info in files_to_keep:
             print(f"   • {file_info['file']} - {file_info['purpose']}")
 
-        print(f"\n🔄 Files to convert to TSX: {len(files_to_convert)}")
+        print(f"\n[SYNC] Files to convert to TSX: {len(files_to_convert)}")
         for file_info in files_to_convert:
             print(f"   • {file_info['file']}")
             print(f"     → {file_info['suggested_tsx']}")
 
         if not files_to_convert:
-            print("\n✨ No HTML files need conversion!")
+            print("\n[SPARKLE] No HTML files need conversion!")
             print("   All HTML is either necessary (index.html) or test files")
         else:
-            print(f"\n💡 RECOMMENDATION:")
+            print(f"\n[IDEA] RECOMMENDATION:")
             print(
                 f"   Convert {len(files_to_convert)} HTML files to modern TSX components")
             print(f"   This will make the codebase fully TypeScript/React based")
@@ -157,12 +157,12 @@ class AuroraHTMLChecker:
         with open(report_file, 'w', encoding='utf-8') as f:
             json.dump(report, f, indent=2)
 
-        print(f"\n💾 Report saved: {report_file.name}")
+        print(f"\n[EMOJI] Report saved: {report_file.name}")
 
     def run_analysis(self):
         """Run complete analysis"""
         print("=" * 70)
-        print("🌟 AURORA HTML TO TSX ANALYSIS")
+        print("[STAR] AURORA HTML TO TSX ANALYSIS")
         print("=" * 70)
         print("\nChecking for HTML files that should be TSX...\n")
 
@@ -172,15 +172,15 @@ class AuroraHTMLChecker:
         self.save_report()
 
         print("\n" + "=" * 70)
-        print("✅ ANALYSIS COMPLETE")
+        print("[OK] ANALYSIS COMPLETE")
         print("=" * 70)
 
         if files_to_convert:
             print(
-                f"\n🎯 Found {len(files_to_convert)} HTML files to convert to TSX")
+                f"\n[TARGET] Found {len(files_to_convert)} HTML files to convert to TSX")
             print("   Run conversion to modernize the codebase")
         else:
-            print("\n✨ Codebase is already using TSX/React!")
+            print("\n[SPARKLE] Codebase is already using TSX/React!")
             print("   No HTML conversions needed")
 
         return files_to_convert

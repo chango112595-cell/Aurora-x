@@ -9,13 +9,13 @@ from pathlib import Path
 
 def aurora_review_before_cleanup():
     """Aurora shows what will be archived and searches for Task foundations"""
-    print("🌌 AURORA: Pre-Cleanup Review & Task Foundation Analysis")
+    print("[AURORA] AURORA: Pre-Cleanup Review & Task Foundation Analysis")
     print("=" * 80)
 
     root = Path(".")
 
     # 1. SHOW LEGACY FILES BEFORE ARCHIVAL
-    print("\n📦 LEGACY FILES TO ARCHIVE (14 files):")
+    print("\n[PACKAGE] LEGACY FILES TO ARCHIVE (14 files):")
     print("=" * 80)
 
     legacy_files = [
@@ -57,7 +57,7 @@ def aurora_review_before_cleanup():
 
     # 2. SEARCH FOR TASK1-TASK13 FOUNDATIONS
     print("\n\n" + "=" * 80)
-    print("🏛️  SEARCHING FOR TASK1-TASK13 FOUNDATIONS:")
+    print("[EMOJI]️  SEARCHING FOR TASK1-TASK13 FOUNDATIONS:")
     print("=" * 80)
 
     task_patterns = [r"task[_\s]*\d+", r"task\d+", r"t\d+\s*foundation", r"foundation.*task", r"fundamental.*task"]
@@ -97,10 +97,10 @@ def aurora_review_before_cleanup():
             pass
 
     if files_with_tasks:
-        print(f"\n✅ Found Task references in {len(files_with_tasks)} files:\n")
+        print(f"\n[OK] Found Task references in {len(files_with_tasks)} files:\n")
 
         for fname, info in sorted(files_with_tasks.items()):
-            print(f"📄 {fname}")
+            print(f"[EMOJI] {fname}")
             print(f"   Path: {info['path']}")
             if info["task_numbers"]:
                 print(f"   Tasks: {', '.join(f'Task{n}' for n in info['task_numbers'])}")
@@ -108,12 +108,12 @@ def aurora_review_before_cleanup():
                 print(f"   Patterns: {', '.join(info['patterns'][:3])}")
             print()
     else:
-        print("\n⚠️  No explicit Task1-Task13 foundation references found")
+        print("\n[WARN]  No explicit Task1-Task13 foundation references found")
         print("    Searching for alternative naming patterns...")
 
     # 3. SEARCH FOR "FOUNDATION" REFERENCES
     print("\n" + "=" * 80)
-    print("🔍 SEARCHING FOR 'FOUNDATION' REFERENCES:")
+    print("[SCAN] SEARCHING FOR 'FOUNDATION' REFERENCES:")
     print("=" * 80)
 
     foundation_files = {}
@@ -138,42 +138,42 @@ def aurora_review_before_cleanup():
             pass
 
     if foundation_files:
-        print(f"\n✅ Found 'foundation' in {len(foundation_files)} files:\n")
+        print(f"\n[OK] Found 'foundation' in {len(foundation_files)} files:\n")
         for fname, info in sorted(foundation_files.items()):
             print(f"  • {fname} ({info['line_count']} references)")
             print(f"    {info['path']}")
 
     # 4. AURORA'S ANALYSIS & RECOMMENDATION
     print("\n\n" + "=" * 80)
-    print("🤖 AURORA'S TASK FOUNDATION ANALYSIS:")
+    print("[AGENT] AURORA'S TASK FOUNDATION ANALYSIS:")
     print("=" * 80)
 
     print(
         """
-📊 FINDINGS:
+[DATA] FINDINGS:
 
 Based on my search, here's what I found about Task1-Task13 foundations:
 """
     )
 
     if files_with_tasks:
-        print(f"✅ Found Task references in {len(files_with_tasks)} files")
+        print(f"[OK] Found Task references in {len(files_with_tasks)} files")
         core_has_tasks = "aurora_core.py" in files_with_tasks
 
         if core_has_tasks:
-            print("✅ aurora_core.py contains Task references")
+            print("[OK] aurora_core.py contains Task references")
             if files_with_tasks["aurora_core.py"]["task_numbers"]:
                 tasks = files_with_tasks["aurora_core.py"]["task_numbers"]
                 print(f"   Tasks in core: {', '.join(f'Task{n}' for n in tasks)}")
         else:
-            print("⚠️  aurora_core.py does NOT contain Task references")
+            print("[WARN]  aurora_core.py does NOT contain Task references")
     else:
-        print("⚠️  No explicit Task1-Task13 foundation system found")
+        print("[WARN]  No explicit Task1-Task13 foundation system found")
 
     print(
         """
 
-💡 RECOMMENDATION FOR TASK1-TASK13 FOUNDATIONS:
+[IDEA] RECOMMENDATION FOR TASK1-TASK13 FOUNDATIONS:
 
 1. WHAT ARE THEY?
    Task1-Task13 appear to be your ORIGINAL foundational system - the core
@@ -181,7 +181,7 @@ Based on my search, here's what I found about Task1-Task13 foundations:
 
 2. WHERE SHOULD THEY BE?
    
-   ✅ YES - They should be INSIDE aurora_core.py!
+   [OK] YES - They should be INSIDE aurora_core.py!
    
    REASONING:
    • Task1-Task13 = Foundational fundamentals
@@ -208,12 +208,12 @@ Based on my search, here's what I found about Task1-Task13 foundations:
     )
 
     if files_with_tasks and "aurora_core.py" in files_with_tasks:
-        print("   ✅ Task foundations ARE in aurora_core.py")
-        print("   ✅ This is CORRECT - keep them there!")
+        print("   [OK] Task foundations ARE in aurora_core.py")
+        print("   [OK] This is CORRECT - keep them there!")
     else:
-        print("   ⚠️  Task foundations may be scattered or renamed")
-        print("   📋 ACTION: Consolidate Task1-Task13 into aurora_core.py")
-        print("   📋 ACTION: Make them the BASE layer (before Tier1-Tier34)")
+        print("   [WARN]  Task foundations may be scattered or renamed")
+        print("   [EMOJI] ACTION: Consolidate Task1-Task13 into aurora_core.py")
+        print("   [EMOJI] ACTION: Make them the BASE layer (before Tier1-Tier34)")
 
     print(
         """
@@ -234,7 +234,7 @@ Based on my search, here's what I found about Task1-Task13 foundations:
     )
 
     print("=" * 80)
-    print("📋 NEXT STEPS:")
+    print("[EMOJI] NEXT STEPS:")
     print("=" * 80)
     print(
         """

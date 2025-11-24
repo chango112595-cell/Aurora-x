@@ -29,7 +29,7 @@ class AuroraBranchAnalyzer:
         }
 
         print("\n" + "=" * 120)
-        print("🔍 AURORA BRANCH ANALYZER")
+        print("[SCAN] AURORA BRANCH ANALYZER")
         print("=" * 120)
         print(f"Current branch: {self.current_branch}")
         print("Analyzing ALL branches for useful implementations...")
@@ -110,7 +110,7 @@ class AuroraBranchAnalyzer:
 
     def analyze_branch(self, branch):
         """Analyze a single branch for useful implementations"""
-        print(f"\n🔍 Analyzing: {branch}")
+        print(f"\n[SCAN] Analyzing: {branch}")
 
         branch_info = {
             "name": branch,
@@ -125,11 +125,11 @@ class AuroraBranchAnalyzer:
         # Get commits
         commits = self.get_branch_commits(branch)
         branch_info["commits"] = commits[:5]  # First 5
-        print(f"   📝 {len(commits)} commits")
+        print(f"   [EMOJI] {len(commits)} commits")
 
         # Get files
         files = self.get_branch_files(branch)
-        print(f"   📁 {len(files)} files")
+        print(f"   [EMOJI] {len(files)} files")
 
         # Analyze interesting patterns
         aurora_patterns = [
@@ -162,7 +162,7 @@ class AuroraBranchAnalyzer:
 
         # Find unique Aurora features
         if interesting_files:
-            print(f"   ✨ Found {len(interesting_files)} Aurora-related files:")
+            print(f"   [SPARKLE] Found {len(interesting_files)} Aurora-related files:")
             for file in interesting_files[:10]:
                 print(f"      • {file}")
 
@@ -219,7 +219,7 @@ class AuroraBranchAnalyzer:
     def generate_recommendations(self):
         """Generate recommendations based on analysis"""
         print("\n" + "=" * 120)
-        print("💡 AURORA'S RECOMMENDATIONS")
+        print("[IDEA] AURORA'S RECOMMENDATIONS")
         print("=" * 120)
 
         recommendations = []
@@ -246,7 +246,7 @@ class AuroraBranchAnalyzer:
                 }
                 recommendations.append(recommendation)
 
-                print(f"\n🎯 Feature: {feature}")
+                print(f"\n[TARGET] Feature: {feature}")
                 print(f"   Priority: {recommendation['priority']}")
                 print(f"   Found in: {len(instances)} branches")
                 print(
@@ -258,7 +258,7 @@ class AuroraBranchAnalyzer:
     def create_merge_script(self):
         """Create a script to selectively merge useful features"""
         print("\n" + "=" * 120)
-        print("📝 CREATING MERGE HELPER SCRIPT")
+        print("[EMOJI] CREATING MERGE HELPER SCRIPT")
         print("=" * 120)
 
         script_content = """#!/usr/bin/env python3
@@ -285,13 +285,13 @@ def cherry_pick_file(branch, filepath):
             # Write to current branch
             Path(filepath).parent.mkdir(parents=True, exist_ok=True)
             Path(filepath).write_text(result.stdout, encoding='utf-8')
-            print(f'✅ Merged {filepath} from {branch}')
+            print(f'[OK] Merged {filepath} from {branch}')
             return True
         else:
-            print(f'❌ Could not get {filepath} from {branch}')
+            print(f'[ERROR] Could not get {filepath} from {branch}')
             return False
     except Exception as e:
-        print(f'❌ Error: {e}')
+        print(f'[ERROR] Error: {e}')
         return False
 
 # Usage example:
@@ -300,13 +300,13 @@ def cherry_pick_file(branch, filepath):
 
         merge_script = self.project_root / "aurora_merge_helper.py"
         merge_script.write_text(script_content, encoding="utf-8")
-        print(f"✅ Created: {merge_script.name}")
+        print(f"[OK] Created: {merge_script.name}")
 
     def run_complete_analysis(self):
         """Run complete branch analysis"""
         # Get all branches
         branches = self.get_all_branches()
-        print(f"📊 Found {len(branches)} branches to analyze\n")
+        print(f"[DATA] Found {len(branches)} branches to analyze\n")
 
         # Analyze each branch
         for branch in branches:
@@ -336,7 +336,7 @@ def cherry_pick_file(branch, filepath):
                 self.analysis["branches_analyzed"].append(branch_info)
 
             except Exception as e:
-                print(f"   ⚠️  Error analyzing {branch}: {e}")
+                print(f"   [WARN]  Error analyzing {branch}: {e}")
 
         # Generate recommendations
         recommendations = self.generate_recommendations()
@@ -356,7 +356,7 @@ def cherry_pick_file(branch, filepath):
         with open(output_file, 'w') as f:
             json.dump(self.analysis, f, indent=2)
 
-        print(f"\n💾 Analysis saved: {output_file.name}")
+        print(f"\n[EMOJI] Analysis saved: {output_file.name}")
 
         # Create summary
         self.create_summary_report()
@@ -364,19 +364,19 @@ def cherry_pick_file(branch, filepath):
     def create_summary_report(self):
         """Create human-readable summary"""
         print("\n" + "=" * 120)
-        print("📊 ANALYSIS SUMMARY")
+        print("[DATA] ANALYSIS SUMMARY")
         print("=" * 120)
 
         print(
-            f"\n✅ Analyzed {len(self.analysis['branches_analyzed'])} branches")
+            f"\n[OK] Analyzed {len(self.analysis['branches_analyzed'])} branches")
         print(
-            f"✅ Found {len(self.analysis['useful_implementations'])} branches with useful implementations")
+            f"[OK] Found {len(self.analysis['useful_implementations'])} branches with useful implementations")
         print(
-            f"✅ Generated {len(self.analysis['recommendations'])} recommendations")
+            f"[OK] Generated {len(self.analysis['recommendations'])} recommendations")
 
         # Top recommendations
         if self.analysis["recommendations"]:
-            print("\n🎯 TOP 5 RECOMMENDATIONS:")
+            print("\n[TARGET] TOP 5 RECOMMENDATIONS:")
             for i, rec in enumerate(self.analysis["recommendations"][:5], 1):
                 print(f"\n{i}. {rec['feature'].upper()}")
                 print(f"   Priority: {rec['priority']}")
@@ -384,7 +384,7 @@ def cherry_pick_file(branch, filepath):
                 print(f"   File: {rec['best_source']['file']}")
 
         print("\n" + "=" * 120)
-        print("🎉 AURORA BRANCH ANALYSIS COMPLETE")
+        print("[EMOJI] AURORA BRANCH ANALYSIS COMPLETE")
         print("=" * 120)
         print("\nNext steps:")
         print("1. Review AURORA_BRANCH_ANALYSIS.json for details")

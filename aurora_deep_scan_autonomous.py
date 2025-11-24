@@ -220,9 +220,9 @@ async def aurora_deep_scan():
 
     if missing:
         for m in missing:
-            print(f"   ❌ MISSING: {m}")
+            print(f"   [ERROR] MISSING: {m}")
     else:
-        print("   ✅ All critical components present")
+        print("   [OK] All critical components present")
 
     # What needs routing
     print("\n[2] SYSTEMS THAT NEED ROUTING/ACTIVATION")
@@ -239,11 +239,11 @@ async def aurora_deep_scan():
 
     if needs_routing:
         for nr in needs_routing[:10]:
-            print(f"   🔌 NEEDS ROUTE: {nr}")
+            print(f"   [EMOJI] NEEDS ROUTE: {nr}")
         if len(needs_routing) > 10:
             print(f"   ... and {len(needs_routing) - 10} more")
     else:
-        print("   ✅ All agents properly routed")
+        print("   [OK] All agents properly routed")
 
     # What needs orchestration
     print("\n[3] SYSTEMS THAT NEED ORCHESTRATION")
@@ -268,7 +268,7 @@ async def aurora_deep_scan():
         plan["needs_orchestration"].append("Coordinate monitors")
 
     for no in needs_orchestration:
-        print(f"   🎯 NEEDS ORCHESTRATION: {no}")
+        print(f"   [TARGET] NEEDS ORCHESTRATION: {no}")
 
     # What needs automation
     print("\n[4] PROCESSES THAT NEED AUTOMATION")
@@ -290,7 +290,7 @@ async def aurora_deep_scan():
     plan["needs_automation"] = automation_needed
 
     for an in automation_needed:
-        print(f"   ⚡ NEEDS AUTOMATION: {an}")
+        print(f"   [POWER] NEEDS AUTOMATION: {an}")
 
     # AURORA'S RECOMMENDATIONS
     print("\n" + "="*80)

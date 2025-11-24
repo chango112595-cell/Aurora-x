@@ -173,7 +173,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
         layout_path = self.components_dir / "AuroraFuturisticLayout.tsx"
         layout_path.write_text(layout_content, encoding="utf-8")
         self.updates.append(str(layout_path))
-        print(f"[Aurora] ✅ Created: {layout_path}")
+        print(f"[Aurora] [OK] Created: {layout_path}")
 
     def create_futuristic_chat(self):
         """Create futuristic chat interface"""
@@ -388,7 +388,7 @@ export default function AuroraFuturisticChat() {
         chat_path = self.components_dir / "AuroraFuturisticChat.tsx"
         chat_path.write_text(chat_content, encoding="utf-8")
         self.updates.append(str(chat_path))
-        print(f"[Aurora] ✅ Created: {chat_path}")
+        print(f"[Aurora] [OK] Created: {chat_path}")
 
     def create_chat_page(self):
         """Create chat page wrapper"""
@@ -404,7 +404,7 @@ export default function ChatPage() {
         page_path = self.pages_dir / "chat.tsx"
         page_path.write_text(page_content, encoding="utf-8")
         self.updates.append(str(page_path))
-        print(f"[Aurora] ✅ Created: {page_path}")
+        print(f"[Aurora] [OK] Created: {page_path}")
 
     def update_app_with_layout(self):
         """Update App.tsx to use the new layout"""
@@ -413,7 +413,7 @@ export default function ChatPage() {
         app_path = self.client_dir / "App.tsx"
 
         if not app_path.exists():
-            print("[Aurora] ⚠️ App.tsx not found, creating new one...")
+            print("[Aurora] [WARN] App.tsx not found, creating new one...")
 
         app_content = """import { Route, Switch } from "wouter";
 import AuroraFuturisticLayout from "./components/AuroraFuturisticLayout";
@@ -446,7 +446,7 @@ export default App;
 
         app_path.write_text(app_content, encoding="utf-8")
         self.updates.append(str(app_path))
-        print(f"[Aurora] ✅ Updated: {app_path}")
+        print(f"[Aurora] [OK] Updated: {app_path}")
 
     def create_report(self):
         """Create redesign report"""
@@ -484,7 +484,7 @@ export default App;
 
         report_path = Path("AURORA_UI_REDESIGN_REPORT.json")
         report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
-        print(f"[Aurora] ✅ Report saved: {report_path}")
+        print(f"[Aurora] [OK] Report saved: {report_path}")
 
     def run(self):
         """Execute full UI redesign"""
@@ -502,20 +502,20 @@ export default App;
         self.create_report()
 
         print("\n" + "=" * 60)
-        print("[Aurora] ✅ FULL UI REDESIGN COMPLETE")
+        print("[Aurora] [OK] FULL UI REDESIGN COMPLETE")
         print("=" * 60)
-        print("\n[Aurora] 🎨 New Features:")
+        print("\n[Aurora] [EMOJI] New Features:")
         print("  • Futuristic collapsible sidebar with 3 categories")
         print("  • Neural chat interface with quantum effects")
         print("  • 79 Complete Systems (13 Tasks + 34 Tiers) branding")
         print("  • Glassmorphism and gradient animations")
         print("  • Dark theme with cyan-purple-pink accents")
         print("  • Responsive layout for all screen sizes")
-        print("\n[Aurora] 📁 Files Updated:")
+        print("\n[Aurora] [EMOJI] Files Updated:")
         for update in self.updates:
-            print(f"  ✅ {update}")
-        print("\n[Aurora] 🚀 Restart the frontend to see the new design!")
-        print("[Aurora] 💫 The interface is now quantum-ready!\n")
+            print(f"  [OK] {update}")
+        print("\n[Aurora] [LAUNCH] Restart the frontend to see the new design!")
+        print("[Aurora] [EMOJI] The interface is now quantum-ready!\n")
 
 
 if __name__ == "__main__":

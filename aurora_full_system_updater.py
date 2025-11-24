@@ -14,7 +14,7 @@ from pathlib import Path
 from datetime import datetime
 
 print("=" * 70)
-print("🌟 AURORA FULL SYSTEM UPDATE")
+print("[STAR] AURORA FULL SYSTEM UPDATE")
 print("=" * 70)
 print("\nStarting complete system update based on analysis...\n")
 
@@ -25,9 +25,9 @@ analysis_file = root / "AURORA_PRE_UPDATE_ANALYSIS.json"
 if analysis_file.exists():
     with open(analysis_file, encoding='utf-8') as f:
         analysis = json.load(f)
-    print("✅ Loaded pre-update analysis\n")
+    print("[OK] Loaded pre-update analysis\n")
 else:
-    print("⚠️  No pre-update analysis found, proceeding with standard update\n")
+    print("[WARN]  No pre-update analysis found, proceeding with standard update\n")
     analysis = {}
 
 results = {
@@ -39,7 +39,7 @@ results = {
 # ==============================================================================
 # STEP 1: BACKUP
 # ==============================================================================
-print("📦 STEP 1: BACKING UP CONFIGURATION")
+print("[PACKAGE] STEP 1: BACKING UP CONFIGURATION")
 print("-" * 70)
 
 backup_dir = root / "backups" / \
@@ -53,19 +53,19 @@ for config in config_files:
     if src.exists():
         import shutil
         shutil.copy2(src, backup_dir / config)
-        print(f"  ✅ Backed up: {config}")
+        print(f"  [OK] Backed up: {config}")
 
-print(f"\n  📁 Backup: {backup_dir.relative_to(root)}\n")
+print(f"\n  [EMOJI] Backup: {backup_dir.relative_to(root)}\n")
 
 # ==============================================================================
 # STEP 2: UPDATE FRONTEND
 # ==============================================================================
-print("🎨 STEP 2: UPDATING FRONTEND DEPENDENCIES")
+print("[EMOJI] STEP 2: UPDATING FRONTEND DEPENDENCIES")
 print("-" * 70)
 
 if (root / "package.json").exists():
     try:
-        print("  📦 Running npm install...")
+        print("  [PACKAGE] Running npm install...")
         result = subprocess.run(
             ["npm", "install"],
             cwd=root,
@@ -75,33 +75,33 @@ if (root / "package.json").exists():
         )
 
         if result.returncode == 0:
-            print("  ✅ npm install complete")
+            print("  [OK] npm install complete")
             results['updates'].append("Frontend: npm install success")
         else:
-            print(f"  ⚠️  npm install warnings (continuing)")
+            print(f"  [WARN]  npm install warnings (continuing)")
             results['updates'].append("Frontend: npm install with warnings")
 
-        print("  🔒 Running npm audit fix...")
+        print("  [EMOJI] Running npm audit fix...")
         subprocess.run(["npm", "audit", "fix"], cwd=root,
                        capture_output=True, timeout=120)
-        print("  ✅ npm audit fix complete\n")
+        print("  [OK] npm audit fix complete\n")
 
     except subprocess.TimeoutExpired:
-        print("  ⚠️  npm timed out\n")
+        print("  [WARN]  npm timed out\n")
     except Exception as e:
-        print(f"  ⚠️  npm error: {e}\n")
+        print(f"  [WARN]  npm error: {e}\n")
 else:
-    print("  ⚠️  package.json not found\n")
+    print("  [WARN]  package.json not found\n")
 
 # ==============================================================================
 # STEP 3: UPDATE BACKEND
 # ==============================================================================
-print("🐍 STEP 3: UPDATING BACKEND DEPENDENCIES")
+print("[EMOJI] STEP 3: UPDATING BACKEND DEPENDENCIES")
 print("-" * 70)
 
 if (root / "requirements.txt").exists():
     try:
-        print("  📦 Upgrading pip packages...")
+        print("  [PACKAGE] Upgrading pip packages...")
         result = subprocess.run(
             [sys.executable, "-m", "pip", "install",
                 "-U", "-r", "requirements.txt"],
@@ -112,25 +112,25 @@ if (root / "requirements.txt").exists():
         )
 
         if result.returncode == 0:
-            print("  ✅ pip packages upgraded")
+            print("  [OK] pip packages upgraded")
             results['updates'].append("Backend: pip upgrade success")
         else:
-            print(f"  ⚠️  pip upgrade warnings (continuing)")
+            print(f"  [WARN]  pip upgrade warnings (continuing)")
             results['updates'].append("Backend: pip upgrade with warnings")
 
     except subprocess.TimeoutExpired:
-        print("  ⚠️  pip timed out")
+        print("  [WARN]  pip timed out")
     except Exception as e:
-        print(f"  ⚠️  pip error: {e}")
+        print(f"  [WARN]  pip error: {e}")
 else:
-    print("  ⚠️  requirements.txt not found")
+    print("  [WARN]  requirements.txt not found")
 
 print()
 
 # ==============================================================================
 # STEP 4: STANDARDIZE PORTS
 # ==============================================================================
-print("🔌 STEP 4: STANDARDIZING PORT CONFIGURATION")
+print("[EMOJI] STEP 4: STANDARDIZING PORT CONFIGURATION")
 print("-" * 70)
 
 standard_ports = {
@@ -143,7 +143,7 @@ standard_ports = {
     'dashboard': 5005
 }
 
-print("  📋 Standard Port Map:")
+print("  [EMOJI] Standard Port Map:")
 for service, port in standard_ports.items():
     print(f"     {service:20} → Port {port}")
 
@@ -159,14 +159,14 @@ with open(port_doc, 'w', encoding='utf-8') as f:
     f.write("- **Development**: `npm run dev` → http://localhost:5173\n")
     f.write("- **Production**: `python x-start` → http://localhost:5000\n")
 
-print(f"  ✅ Port configuration documented: {port_doc.name}")
+print(f"  [OK] Port configuration documented: {port_doc.name}")
 results['updates'].append("Ports: standardized and documented")
 print()
 
 # ==============================================================================
 # STEP 5: VERIFY ORCHESTRATION
 # ==============================================================================
-print("🎯 STEP 5: VERIFYING ORCHESTRATION SYSTEMS")
+print("[TARGET] STEP 5: VERIFYING ORCHESTRATION SYSTEMS")
 print("-" * 70)
 
 orchestrators = [
@@ -182,16 +182,16 @@ for orch_path, orch_name in orchestrators:
     if full_path.exists():
         content = full_path.read_text(encoding='utf-8', errors='ignore')
         has_main = 'if __name__' in content
-        status = "✅" if has_main else "⚠️ "
+        status = "[OK]" if has_main else "[WARN] "
         print(f"  {status} {orch_name}")
     else:
-        print(f"  ❌ {orch_name} (not found)")
+        print(f"  [ERROR] {orch_name} (not found)")
 
 # Check x-start integration
 x_start = root / "x-start"
 if x_start.exists():
     content = x_start.read_text(encoding='utf-8')
-    print("\n  📜 x-start orchestrator integration:")
+    print("\n  [EMOJI] x-start orchestrator integration:")
 
     checks = [
         ('ultimate_api_manager', 'Ultimate API Manager'),
@@ -201,7 +201,7 @@ if x_start.exists():
     ]
 
     for check, name in checks:
-        status = "✅" if check in content else "⚠️ "
+        status = "[OK]" if check in content else "[WARN] "
         print(f"     {status} {name}")
 
 results['updates'].append("Orchestration: verified all systems")
@@ -210,7 +210,7 @@ print()
 # ==============================================================================
 # STEP 6: VERIFY AURORA CORE
 # ==============================================================================
-print("🧠 STEP 6: VERIFYING AURORA CORE")
+print("[BRAIN] STEP 6: VERIFYING AURORA CORE")
 print("-" * 70)
 
 aurora_core = root / "aurora_core.py"
@@ -218,12 +218,12 @@ if aurora_core.exists():
     content = aurora_core.read_text(encoding='utf-8', errors='ignore')
 
     if 'integrated_modules' in content:
-        print("  ✅ integrated_modules found")
+        print("  [OK] integrated_modules found")
 
         import re
         modules = re.findall(
             r'self\.integrated_modules\[["\']([^"\']+)["\']\]', content)
-        print(f"  📦 Integrated modules: {len(modules)}")
+        print(f"  [PACKAGE] Integrated modules: {len(modules)}")
         for mod in modules[:5]:
             print(f"     • {mod}")
         if len(modules) > 5:
@@ -232,16 +232,16 @@ if aurora_core.exists():
         results['updates'].append(
             f"Aurora Core: {len(modules)} modules integrated")
     else:
-        print("  ⚠️  integrated_modules not found")
+        print("  [WARN]  integrated_modules not found")
 else:
-    print("  ❌ aurora_core.py not found")
+    print("  [ERROR] aurora_core.py not found")
 
 print()
 
 # ==============================================================================
 # STEP 7: FINAL VERIFICATION
 # ==============================================================================
-print("✅ STEP 7: FINAL SYSTEM VERIFICATION")
+print("[OK] STEP 7: FINAL SYSTEM VERIFICATION")
 print("-" * 70)
 
 all_checks = []
@@ -251,7 +251,7 @@ print("  Configuration Files:")
 for config in ['package.json', 'vite.config.js', 'requirements.txt', 'x-start']:
     exists = (root / config).exists()
     all_checks.append(exists)
-    status = "✅" if exists else "❌"
+    status = "[OK]" if exists else "[ERROR]"
     print(f"    {status} {config}")
 
 # Orchestrators
@@ -259,7 +259,7 @@ print("\n  Orchestration Systems:")
 for orch_path, orch_name in orchestrators[:3]:
     exists = (root / orch_path).exists()
     all_checks.append(exists)
-    status = "✅" if exists else "❌"
+    status = "[OK]" if exists else "[ERROR]"
     print(f"    {status} {orch_name}")
 
 # Backend
@@ -267,7 +267,7 @@ print("\n  Backend Systems:")
 for backend in ['aurora_core.py', 'aurora_chat_server.py']:
     exists = (root / backend).exists()
     all_checks.append(exists)
-    status = "✅" if exists else "❌"
+    status = "[OK]" if exists else "[ERROR]"
     print(f"    {status} {backend}")
 
 success = all(all_checks)
@@ -278,14 +278,14 @@ print()
 # ==============================================================================
 # SAVE REPORT
 # ==============================================================================
-print("📊 GENERATING UPDATE REPORT")
+print("[DATA] GENERATING UPDATE REPORT")
 print("-" * 70)
 
 report_file = root / "AURORA_FULL_UPDATE_REPORT.json"
 with open(report_file, 'w', encoding='utf-8') as f:
     json.dump(results, f, indent=2)
 
-print(f"  💾 Report saved: {report_file.name}")
+print(f"  [EMOJI] Report saved: {report_file.name}")
 
 print(f"\n  Updates Applied: {len(results['updates'])}")
 for update in results['updates']:
@@ -301,9 +301,9 @@ if results['errors']:
 # ==============================================================================
 print("\n" + "=" * 70)
 if success:
-    print("✅ AURORA FULL SYSTEM UPDATE COMPLETE")
+    print("[OK] AURORA FULL SYSTEM UPDATE COMPLETE")
     print("=" * 70)
-    print("\n🎯 NEXT STEPS:")
+    print("\n[TARGET] NEXT STEPS:")
     print("  1. Stop any running services (close terminal windows)")
     print("  2. Start Aurora with full orchestration:")
     print("     python x-start")
@@ -312,9 +312,9 @@ if success:
     print("     • Frontend: http://localhost:5000")
     print("     • Chat: http://localhost:5003")
     print("     • Dashboard: http://localhost:5005")
-    print("\n✨ Aurora-X is now fully updated and autonomous!")
+    print("\n[SPARKLE] Aurora-X is now fully updated and autonomous!")
 else:
-    print("⚠️  SYSTEM UPDATE COMPLETED WITH WARNINGS")
+    print("[WARN]  SYSTEM UPDATE COMPLETED WITH WARNINGS")
     print("=" * 70)
     print("\n  Review AURORA_FULL_UPDATE_REPORT.json for details")
     print("  System should still be operational")

@@ -14,7 +14,7 @@ os.environ["AURORA_NO_ORCHESTRATION"] = "true"
 
 async def aurora_self_fix():
     print("\n" + "="*80)
-    print("🔧 AURORA SELF-DEBUGGING SESSION - 100% POWER")
+    print("[EMOJI] AURORA SELF-DEBUGGING SESSION - 100% POWER")
     print("="*80 + "\n")
 
     aurora = create_aurora_core()
@@ -83,7 +83,7 @@ DO IT NOW. Full code. Complete fix."""
         f.write(response)
         f.write("\n")
 
-    print(f"\n💾 Saved to: AURORA_SELF_FIX.md")
+    print(f"\n[EMOJI] Saved to: AURORA_SELF_FIX.md")
     print("\nNow let me extract any code Aurora provided and create the fixed file...\n")
 
 if __name__ == "__main__":

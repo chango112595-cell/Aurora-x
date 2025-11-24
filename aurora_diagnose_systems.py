@@ -10,7 +10,7 @@ import os
 from pathlib import Path
 
 print("\n" + "="*80)
-print("🔍 AURORA CONSCIOUS - Diagnosing Critical System Failures")
+print("[SCAN] AURORA CONSCIOUS - Diagnosing Critical System Failures")
 print("="*80 + "\n")
 
 script_dir = Path(__file__).parent
@@ -24,13 +24,13 @@ critical_systems = [
     ("aurora_autonomous_agent.py", "Autonomous Agent")
 ]
 
-print("📋 Checking which files exist:")
+print("[EMOJI] Checking which files exist:")
 for file, name in critical_systems:
     exists = (script_dir / file).exists()
-    status = "✅ EXISTS" if exists else "❌ MISSING"
+    status = "[OK] EXISTS" if exists else "[ERROR] MISSING"
     print(f"   {status} - {file}")
 
-print("\n🧪 Testing each system individually:\n")
+print("\n[TEST] Testing each system individually:\n")
 
 for file, name in critical_systems:
     filepath = script_dir / file
@@ -38,7 +38,7 @@ for file, name in critical_systems:
         print(f"⏭️  Skipping {name} - file doesn't exist\n")
         continue
 
-    print(f"🔍 Testing {name} ({file})...")
+    print(f"[SCAN] Testing {name} ({file})...")
     print("   Running: python " + file)
 
     try:
@@ -51,28 +51,28 @@ for file, name in critical_systems:
         )
 
         if result.returncode == 0:
-            print(f"   ✅ {name} started successfully!")
+            print(f"   [OK] {name} started successfully!")
             if result.stdout:
-                print(f"   📄 Output: {result.stdout[:200]}")
+                print(f"   [EMOJI] Output: {result.stdout[:200]}")
         else:
-            print(f"   ❌ {name} failed with exit code {result.returncode}")
+            print(f"   [ERROR] {name} failed with exit code {result.returncode}")
             if result.stderr:
-                print(f"   🐛 Error: {result.stderr[:500]}")
+                print(f"   [EMOJI] Error: {result.stderr[:500]}")
             if result.stdout:
-                print(f"   📄 Output: {result.stdout[:200]}")
+                print(f"   [EMOJI] Output: {result.stdout[:200]}")
 
     except subprocess.TimeoutExpired:
         print(
             f"   ⏱️  {name} is running (timed out after 5s - this is GOOD for services!)")
     except Exception as e:
-        print(f"   ❌ {name} crashed: {e}")
+        print(f"   [ERROR] {name} crashed: {e}")
 
     print()
 
 print("="*80)
-print("🎯 DIAGNOSIS COMPLETE")
+print("[TARGET] DIAGNOSIS COMPLETE")
 print("="*80)
-print("\n💡 WHAT TO LOOK FOR:")
+print("\n[IDEA] WHAT TO LOOK FOR:")
 print("   • Services that timeout = GOOD (they're running)")
 print("   • Exit code 0 with output = GOOD")
 print("   • Import errors = Need to fix dependencies")

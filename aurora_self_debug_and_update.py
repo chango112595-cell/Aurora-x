@@ -28,7 +28,7 @@ class AuroraSelfDebugSystem:
     def log(self, message: str, level: str = "INFO"):
         """Log Aurora's actions"""
         _timestamp = datetime.now().strftime("%H:%M:%S")
-        prefix = {"INFO": "🌟", "SUCCESS": "✅", "ERROR": "❌", "FIX": "🔧", "UPDATE": "🔄"}.get(level, "ℹ️")
+        prefix = {"INFO": "[STAR]", "SUCCESS": "[OK]", "ERROR": "[ERROR]", "FIX": "[EMOJI]", "UPDATE": "[SYNC]"}.get(level, "ℹ️")
         print(f"[{timestamp}] {prefix} Aurora: {message}")
 
     def run_command(self, command: str, cwd: Path = None) -> dict[str, Any]:
@@ -259,11 +259,11 @@ class AuroraSelfDebugSystem:
 
     def run_comprehensive_debug(self):
         """Run complete system-wide debug"""
-        self.log("🚀 Starting Aurora's Comprehensive Self-Debug System", "INFO")
+        self.log("[LAUNCH] Starting Aurora's Comprehensive Self-Debug System", "INFO")
         self.log("=" * 80)
 
         # Phase 1: Scan
-        self.log("\n📊 PHASE 1: SCANNING", "INFO")
+        self.log("\n[DATA] PHASE 1: SCANNING", "INFO")
         self.log("-" * 80)
 
         python_errors = self.scan_python_errors()
@@ -272,35 +272,35 @@ class AuroraSelfDebugSystem:
         ide_issues = self.scan_for_red_squiggles()
 
         # Phase 2: Fix
-        self.log("\n🔧 PHASE 2: FIXING", "INFO")
+        self.log("\n[EMOJI] PHASE 2: FIXING", "INFO")
         self.log("-" * 80)
 
         self.fix_common_python_issues()
         self.fix_typescript_issues()
 
         # Phase 3: Update
-        self.log("\n🔄 PHASE 3: UPDATING", "INFO")
+        self.log("\n[SYNC] PHASE 3: UPDATING", "INFO")
         self.log("-" * 80)
 
         updates = self.update_dependencies()
 
         # Phase 4: Final Report
-        self.log("\n📋 FINAL REPORT", "INFO")
+        self.log("\n[EMOJI] FINAL REPORT", "INFO")
         self.log("=" * 80)
 
         total_errors = len(python_errors) + len(ts_errors) + len(eslint_issues) + len(ide_issues)
 
-        print(f"\n🔍 Errors Found: {total_errors}")
+        print(f"\n[SCAN] Errors Found: {total_errors}")
         print(f"   • Python errors: {len(python_errors)}")
         print(f"   • TypeScript errors: {len(ts_errors)}")
         print(f"   • ESLint issues: {len(eslint_issues)}")
         print(f"   • IDE issues: {len(ide_issues)}")
 
-        print(f"\n✅ Fixes Applied: {len(self.fixes_applied)}")
+        print(f"\n[OK] Fixes Applied: {len(self.fixes_applied)}")
         for fix in self.fixes_applied:
             print(f"   • {fix}")
 
-        print(f"\n🔄 Updates Available: {len(updates)}")
+        print(f"\n[SYNC] Updates Available: {len(updates)}")
         for update in updates:
             print(f"   • {update}")
 
@@ -326,15 +326,15 @@ class AuroraSelfDebugSystem:
         with open(report_file, "w") as f:
             json.dump(report, f, indent=2)
 
-        self.log(f"\n📄 Detailed report saved to: {report_file.name}", "SUCCESS")
+        self.log(f"\n[EMOJI] Detailed report saved to: {report_file.name}", "SUCCESS")
 
         if total_errors == 0:
-            self.log("\n🎉 Aurora is running clean! No errors detected.", "SUCCESS")
+            self.log("\n[EMOJI] Aurora is running clean! No errors detected.", "SUCCESS")
         else:
-            self.log(f"\n⚠️  {total_errors} issues need attention", "ERROR")
+            self.log(f"\n[WARN]  {total_errors} issues need attention", "ERROR")
 
         self.log("=" * 80)
-        self.log("🌟 Aurora Self-Debug Complete!", "SUCCESS")
+        self.log("[STAR] Aurora Self-Debug Complete!", "SUCCESS")
 
         return report
 
@@ -345,7 +345,7 @@ def main():
         """
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                              ║
-║                   🌟 AURORA SELF-DEBUG & UPDATE SYSTEM 🌟                   ║
+║                   [STAR] AURORA SELF-DEBUG & UPDATE SYSTEM [STAR]                   ║
 ║                                                                              ║
 ║                    Aurora Autonomously Debugging Herself                     ║
 ║                   Frontend • Backend • Python • Everything                   ║

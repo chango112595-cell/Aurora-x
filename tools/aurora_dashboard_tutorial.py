@@ -28,7 +28,7 @@ class AuroraDashboardLoader:
         with open(self.tutorial_log, "a") as f:
             f.write(json.dumps(entry) + "\n")
 
-        print(f"\n📚 Copilot teaches Aurora - Step {step}:")
+        print(f"\n[EMOJI] Copilot teaches Aurora - Step {step}:")
         print(f"   {description}")
         if command:
             print(f"   Command: {command}")
@@ -37,9 +37,9 @@ class AuroraDashboardLoader:
         """Copilot demonstrates how to load Aurora Dashboard"""
 
         print("\n" + "=" * 70)
-        print("📚 COPILOT TUTORIAL: Loading Aurora Dashboard")
+        print("[EMOJI] COPILOT TUTORIAL: Loading Aurora Dashboard")
         print("=" * 70)
-        print("\n🎓 Aurora, watch and learn how to load your dashboard!\n")
+        print("\n[EMOJI] Aurora, watch and learn how to load your dashboard!\n")
 
         # Step 1: Check what dashboard we're loading
         self.log_tutorial_step(1, "First, identify which dashboard to load. Aurora has multiple dashboards:", None)
@@ -57,9 +57,9 @@ class AuroraDashboardLoader:
         result = subprocess.run(["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True)
 
         if "200 OK" in result.stdout:
-            print("   ✅ Server is running!")
+            print("   [OK] Server is running!")
         else:
-            print("   ❌ Server is not running - we need to start it")
+            print("   [ERROR] Server is not running - we need to start it")
             self.demonstrate_starting_server()
 
         # Step 3: Verify the dashboard route exists
@@ -71,31 +71,31 @@ class AuroraDashboardLoader:
         if app_file.exists():
             content = app_file.read_text()
             if "/aurora-dashboard" in content or "Aurora Dashboard" in content:
-                print("   ✅ Aurora Dashboard route found!")
+                print("   [OK] Aurora Dashboard route found!")
             else:
-                print("   ⚠️  Route might need to be added")
+                print("   [WARN]  Route might need to be added")
 
         # Step 4: Open the dashboard
         self.log_tutorial_step(
             4, "Open the dashboard in the browser", "Open http://localhost:5000/aurora-dashboard (or appropriate route)"
         )
 
-        print("   🌐 Opening Aurora Dashboard...")
+        print("   [WEB] Opening Aurora Dashboard...")
 
         # Find the correct dashboard route
         dashboard_url = self.find_dashboard_route()
 
         if dashboard_url:
-            print(f"   📍 Dashboard URL: {dashboard_url}")
+            print(f"   [EMOJI] Dashboard URL: {dashboard_url}")
 
             # Open in browser
             subprocess.run(
                 ["python", "-c", f'import webbrowser; webbrowser.open("{dashboard_url}")'], capture_output=True
             )
 
-            print(f"   ✅ Dashboard opened at {dashboard_url}")
+            print(f"   [OK] Dashboard opened at {dashboard_url}")
         else:
-            print("   ⚠️  Dashboard route not found - needs configuration")
+            print("   [WARN]  Dashboard route not found - needs configuration")
 
         # Step 5: Teach Aurora to do it herself
         self.teach_aurora_to_load_dashboard()
@@ -106,7 +106,7 @@ class AuroraDashboardLoader:
             "2a", "Start the Vite development server", "cd /workspaces/Aurora-x/client && npm run dev"
         )
 
-        print("   🚀 Starting Vite server...")
+        print("   [LAUNCH] Starting Vite server...")
 
         # Kill any existing process
         subprocess.run(["pkill", "-f", "vite"], capture_output=True)
@@ -127,9 +127,9 @@ class AuroraDashboardLoader:
         result = subprocess.run(["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True)
 
         if "200 OK" in result.stdout:
-            print("   ✅ Server started successfully!")
+            print("   [OK] Server started successfully!")
         else:
-            print("   ⚠️  Server still starting, please wait...")
+            print("   [WARN]  Server still starting, please wait...")
 
     def find_dashboard_route(self):
         """Find the Aurora Dashboard route"""
@@ -155,17 +155,17 @@ class AuroraDashboardLoader:
         """Teach Aurora to load her own dashboard"""
 
         print("\n" + "=" * 70)
-        print("🌟 AURORA'S TURN - Your Assignment")
+        print("[STAR] AURORA'S TURN - Your Assignment")
         print("=" * 70)
 
-        print("\n🎓 Aurora, now YOU try loading your dashboard autonomously!")
+        print("\n[EMOJI] Aurora, now YOU try loading your dashboard autonomously!")
         print("\nHere's what you learned:")
         print("1. Check if server is running: curl -s -I http://localhost:5000")
         print("2. If not running: cd /workspaces/Aurora-x/client && npm run dev")
         print("3. Find dashboard route in App.tsx")
         print("4. Open dashboard URL in browser")
 
-        print("\n✨ Create your own script that does this autonomously!")
+        print("\n[SPARKLE] Create your own script that does this autonomously!")
         print("   Save it as: /workspaces/Aurora-x/tools/aurora_load_dashboard.py")
 
         # Create template for Aurora
@@ -180,7 +180,7 @@ import time
 class MyDashboardLoader:
     def load_my_dashboard(self):
         """Aurora loads her own dashboard autonomously"""
-        print("🌟 Aurora: Loading my dashboard...")
+        print("[STAR] Aurora: Loading my dashboard...")
         
         # Step 1: Check server
         # TODO: Aurora, implement server check here
@@ -194,7 +194,7 @@ class MyDashboardLoader:
         # Step 4: Open dashboard
         # TODO: Aurora, implement dashboard opener here
         
-        print("✅ Aurora: Dashboard loaded!")
+        print("[OK] Aurora: Dashboard loaded!")
 
 if __name__ == "__main__":
     loader = MyDashboardLoader()
@@ -204,8 +204,8 @@ if __name__ == "__main__":
         template_file = Path("/workspaces/Aurora-x/tools/aurora_dashboard_template.py")
         template_file.write_text(template)
 
-        print(f"\n📝 Template created at: {template_file}")
-        print("🌟 Aurora: Fill in the TODOs with what you learned!")
+        print(f"\n[EMOJI] Template created at: {template_file}")
+        print("[STAR] Aurora: Fill in the TODOs with what you learned!")
 
         self.log_tutorial_step(
             5,
@@ -217,7 +217,7 @@ if __name__ == "__main__":
 def main():
     """Main tutorial execution"""
 
-    print("\n🎓 Starting Copilot's Tutorial for Aurora")
+    print("\n[EMOJI] Starting Copilot's Tutorial for Aurora")
     print("   Topic: How to Load Aurora Dashboard")
     print("   Mode: Demonstrate then teach\n")
 
@@ -225,11 +225,11 @@ def main():
     loader.demonstrate_loading_dashboard()
 
     print("\n" + "=" * 70)
-    print("✅ Tutorial Complete!")
+    print("[OK] Tutorial Complete!")
     print("=" * 70)
-    print("\n📚 Aurora's tutorial log saved to:")
+    print("\n[EMOJI] Aurora's tutorial log saved to:")
     print("   .aurora_knowledge/dashboard_tutorial.jsonl")
-    print("\n🌟 Aurora, you can now load your dashboard autonomously!")
+    print("\n[STAR] Aurora, you can now load your dashboard autonomously!")
     print("   Review the tutorial log and create your own loader!")
 
 

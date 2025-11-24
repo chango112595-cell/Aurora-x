@@ -1745,11 +1745,11 @@ def main():
     """Test Aurora's expert knowledge system"""
     aurora = AuroraExpertKnowledge()
 
-    print("🧠 AURORA EXPERT KNOWLEDGE ENGINE")
+    print("[BRAIN] AURORA EXPERT KNOWLEDGE ENGINE")
     print("=" * 50)
-    print(f"🎯 Aurora's Expertise Level: {aurora.expert_level}/10 (MASTER)")
-    print(f"📚 Languages Mastered: {len(aurora.languages)}")
-    print(f"🔧 Frameworks Known: {sum(len(category) for category in aurora.frameworks.values())}")
+    print(f"[TARGET] Aurora's Expertise Level: {aurora.expert_level}/10 (MASTER)")
+    print(f"[EMOJI] Languages Mastered: {len(aurora.languages)}")
+    print(f"[EMOJI] Frameworks Known: {sum(len(category) for category in aurora.frameworks.values())}")
     print()
 
     # Test code analysis
@@ -1763,15 +1763,15 @@ def process_data(data):
     """
 
     analysis = aurora.get_expert_analysis(test_code, "python")
-    print("🔍 AURORA'S EXPERT CODE ANALYSIS:")
+    print("[SCAN] AURORA'S EXPERT CODE ANALYSIS:")
     print(f"   Quality Score: {analysis['code_quality_score']}/10")
     print(f"   Performance Issues: {len(analysis['performance_issues'])}")
     print(f"   Security Issues: {len(analysis['security_vulnerabilities'])}")
 
     for issue in analysis["performance_issues"][:2]:
-        print(f"   ⚡ {issue}")
+        print(f"   [POWER] {issue}")
 
-    print("\n🎯 LANGUAGE RECOMMENDATIONS:")
+    print("\n[TARGET] LANGUAGE RECOMMENDATIONS:")
     for project_type in ["web_backend", "mobile", "data_science"]:
         suggestions = aurora.get_language_suggestions(project_type)
         print(f"   {project_type}: {suggestions[0]}")

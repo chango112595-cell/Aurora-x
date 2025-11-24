@@ -14,7 +14,7 @@ sys.path.insert(0, str(tools_dir))
 try:
     from aurora_expert_knowledge import AuroraExpertKnowledge
 except ImportError:
-    print("⚠️ Aurora Expert Knowledge module not found. Creating mock...")
+    print("[WARN] Aurora Expert Knowledge module not found. Creating mock...")
 
     class AuroraExpertKnowledge:
         def __init__(self) -> None:
@@ -87,15 +87,15 @@ if __name__ == '__main__':
 
 def main() -> None:
     """Main demonstration function"""
-    print("🚀 AURORA DEVICE PROGRAMMING DEMONSTRATION")
+    print("[LAUNCH] AURORA DEVICE PROGRAMMING DEMONSTRATION")
     print("=" * 60)
 
     try:
         aurora_expert = AuroraExpertKnowledge()
-        print(f"📊 Aurora has expert knowledge in {len(aurora_expert.languages)} programming languages")
+        print(f"[DATA] Aurora has expert knowledge in {len(aurora_expert.languages)} programming languages")
     except Exception as e:
-        print(f"⚠️ Error loading Aurora Expert Knowledge: {e}")
-        print("📊 Aurora demonstration running in simplified mode")
+        print(f"[WARN] Error loading Aurora Expert Knowledge: {e}")
+        print("[DATA] Aurora demonstration running in simplified mode")
 
     print()
 
@@ -107,18 +107,18 @@ def main() -> None:
     ]
 
     for title, generator in examples:
-        print(f"🎯 {title}:")
+        print(f"[TARGET] {title}:")
         print("─" * 40)
         try:
             code = generator()
             print(code[:300] + "..." if len(code) > 300 else code)
         except Exception as e:
-            print(f"❌ Error generating {title}: {e}")
+            print(f"[ERROR] Error generating {title}: {e}")
         print("\n" + "═" * 60 + "\n")
 
-    print("✅ AURORA DEVICE PROGRAMMING CAPABILITIES VERIFIED!")
+    print("[OK] AURORA DEVICE PROGRAMMING CAPABILITIES VERIFIED!")
     print()
-    print("🏆 Aurora can generate expert-level code for:")
+    print("[EMOJI] Aurora can generate expert-level code for:")
     print("• iPhone/Mac automation (AppleScript)")
     print("• Android applications (Kotlin/Java)")
     print("• IoT devices (Arduino, ESP32, Raspberry Pi)")
@@ -126,7 +126,7 @@ def main() -> None:
     print("• Cloud deployments (Docker, Kubernetes)")
     print("• And ALL other programming languages!")
     print()
-    print("🎉 Aurora is fully loaded and ready for ANY programming task!")
+    print("[EMOJI] Aurora is fully loaded and ready for ANY programming task!")
 
 
 if __name__ == "__main__":

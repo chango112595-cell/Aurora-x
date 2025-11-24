@@ -30,7 +30,7 @@ class AuroraContextEngine:
 
     def analyze_codebase_context(self) -> dict[str, Any]:
         """Analyze complete codebase context"""
-        print("🧠 Analyzing codebase context...")
+        print("[BRAIN] Analyzing codebase context...")
 
         workspace = Path.cwd()
 
@@ -46,12 +46,12 @@ class AuroraContextEngine:
             "technology_stack": ["Python", "TypeScript", "React", "FastAPI"],
         }
 
-        print(f"✅ Context analyzed: {context['project_name']}")
+        print(f"[OK] Context analyzed: {context['project_name']}")
         return context
 
     def build_knowledge_graph(self, context: dict) -> dict[str, Any]:
         """Build knowledge graph of entire system"""
-        print("🕸️  Building knowledge graph...")
+        print("[EMOJI]️  Building knowledge graph...")
 
         graph = {
             "nodes": {
@@ -71,7 +71,7 @@ class AuroraContextEngine:
             "total_nodes": sum(len(v) if isinstance(v, list) else 1 for v in context.values()),
         }
 
-        print(f"✅ Knowledge graph built: {len(graph['nodes'])} categories")
+        print(f"[OK] Knowledge graph built: {len(graph['nodes'])} categories")
         return graph
 
     def predict_intent(self, user_request: str) -> dict[str, Any]:
@@ -133,7 +133,7 @@ class AuroraStrategist:
 
     def analyze_project_goals(self) -> list[str]:
         """Analyze and identify project goals"""
-        print("🎯 Analyzing project goals...")
+        print("[TARGET] Analyzing project goals...")
 
         goals = [
             "Achieve full autonomous operation",
@@ -144,12 +144,12 @@ class AuroraStrategist:
             "Strategic planning and execution",
         ]
 
-        print(f"✅ Identified {len(goals)} project goals")
+        print(f"[OK] Identified {len(goals)} project goals")
         return goals
 
     def generate_quarterly_plan(self) -> dict[str, Any]:
         """Generate 3-month development plan"""
-        print("📅 Generating quarterly plan...")
+        print("[EMOJI] Generating quarterly plan...")
 
         now = datetime.now()
 
@@ -193,7 +193,7 @@ class AuroraStrategist:
             },
         }
 
-        print("✅ Quarterly plan generated")
+        print("[OK] Quarterly plan generated")
         return plan
 
     def optimize_resource_allocation(self, _plan: dict) -> dict[str, Any]:
@@ -207,12 +207,12 @@ class AuroraStrategist:
             "efficiency_score": 0.92,
         }
 
-        print(f"✅ Resources optimized: {allocation['efficiency_score']*100:.0f}% efficiency")
+        print(f"[OK] Resources optimized: {allocation['efficiency_score']*100:.0f}% efficiency")
         return allocation
 
     def align_with_strategic_goals(self, plan: dict, goals: list[str]) -> dict[str, Any]:
         """Align plan with strategic goals"""
-        print("🎯 Aligning with strategic goals...")
+        print("[TARGET] Aligning with strategic goals...")
 
         alignment = {
             "plan_period": plan["period"],
@@ -223,12 +223,12 @@ class AuroraStrategist:
             "strategic_coherence": "HIGH",
         }
 
-        print(f"✅ Strategic alignment: {alignment['alignment_score']*100:.0f}%")
+        print(f"[OK] Strategic alignment: {alignment['alignment_score']*100:.0f}%")
         return alignment
 
     def generate_proactive_suggestions(self) -> list[dict]:
         """Generate proactive feature suggestions"""
-        print("💡 Generating proactive suggestions...")
+        print("[IDEA] Generating proactive suggestions...")
 
         suggestions = [
             {
@@ -254,27 +254,27 @@ class AuroraStrategist:
             },
         ]
 
-        print(f"✅ Generated {len(suggestions)} suggestions")
+        print(f"[OK] Generated {len(suggestions)} suggestions")
         return suggestions
 
 
 def main():
     """Main execution - Phase 6"""
-    print("\n🌟 AURORA ADVANCED INTELLIGENCE - PHASE 6")
+    print("\n[STAR] AURORA ADVANCED INTELLIGENCE - PHASE 6")
     print("=" * 60)
     print("Timeline: Minutes 51-60")
     print("Goal: Context understanding & strategic planning")
     print("=" * 60)
 
     # Part 1: Context Understanding
-    print("\n🧠 CONTEXT UNDERSTANDING ENGINE")
+    print("\n[BRAIN] CONTEXT UNDERSTANDING ENGINE")
     print("-" * 60)
 
     context_engine = AuroraContextEngine()
 
     # Analyze context
     context = context_engine.analyze_codebase_context()
-    print("\n📊 Project Context:")
+    print("\n[DATA] Project Context:")
     print(f"  • Project: {context['project_name']}")
     print(f"  • Python Files: {context['total_files']}")
     print(f"  • Frontend Files: {context['frontend_files']}")
@@ -283,7 +283,7 @@ def main():
 
     # Build knowledge graph
     graph = context_engine.build_knowledge_graph(context)
-    print("\n🕸️  Knowledge Graph:")
+    print("\n[EMOJI]️  Knowledge Graph:")
     print(f"  • Categories: {len(graph['nodes'])}")
     print(f"  • Connections: {len(graph['connections'])}")
     print(f"  • Graph Depth: {graph['depth']}")
@@ -296,7 +296,7 @@ def main():
         "Analyze current system status",
     ]
 
-    print("\n🎯 Intent Prediction Tests:")
+    print("\n[TARGET] Intent Prediction Tests:")
     for request in test_requests:
         prediction = context_engine.predict_intent(request)
         print(f"\n  Request: {request}")
@@ -305,24 +305,24 @@ def main():
         print(f"  Action: {prediction['suggested_action']}")
 
     context_summary = context_engine.get_context_summary()
-    print(f"\n📋 Context Understanding: {context_summary['understanding_level']}%")
+    print(f"\n[EMOJI] Context Understanding: {context_summary['understanding_level']}%")
 
     # Part 2: Strategic Planning
     print(f"\n{'='*60}")
-    print("🎯 STRATEGIC PLANNING ENGINE")
+    print("[TARGET] STRATEGIC PLANNING ENGINE")
     print("-" * 60)
 
     strategist = AuroraStrategist()
 
     # Analyze goals
     goals = strategist.analyze_project_goals()
-    print("\n📍 Project Goals:")
+    print("\n[EMOJI] Project Goals:")
     for i, goal in enumerate(goals, 1):
         print(f"  {i}. {goal}")
 
     # Generate quarterly plan
     plan = strategist.generate_quarterly_plan()
-    print(f"\n📅 Quarterly Plan ({plan['period']}):")
+    print(f"\n[EMOJI] Quarterly Plan ({plan['period']}):")
     for month, details in plan["months"].items():
         print(f"\n  {month}: {details['focus']}")
         print("    Milestones:")
@@ -339,21 +339,21 @@ def main():
 
     # Align with goals
     alignment = strategist.align_with_strategic_goals(plan, goals)
-    print("\n🎯 Strategic Alignment:")
+    print("\n[TARGET] Strategic Alignment:")
     print(f"  • Score: {alignment['alignment_score']*100:.0f}%")
     print(f"  • Goals Addressed: {alignment['goals_addressed']}")
     print(f"  • Coherence: {alignment['strategic_coherence']}")
 
     # Proactive suggestions
     suggestions = strategist.generate_proactive_suggestions()
-    print("\n💡 Proactive Suggestions:")
+    print("\n[IDEA] Proactive Suggestions:")
     for sugg in suggestions:
         print(f"\n  {sugg['suggestion']} [{sugg['priority']}]")
         print(f"    Reason: {sugg['reason']}")
         print(f"    Impact: {sugg['estimated_impact']}")
 
     print("\n=" * 60)
-    print("✅ PHASE 6 COMPLETE - ADVANCED INTELLIGENCE ACTIVATED")
+    print("[OK] PHASE 6 COMPLETE - ADVANCED INTELLIGENCE ACTIVATED")
     print(f"  • Context Understanding: {context_summary['understanding_level']}%")
     print(f"  • Strategic Alignment: {alignment['alignment_score']*100:.0f}%")
     print("  • Quarterly Plan: Generated")
@@ -361,16 +361,16 @@ def main():
     print("=" * 60)
 
     print("\n" + "=" * 60)
-    print("🌟 ALL 6 PHASES COMPLETE - FULL AUTONOMY ACHIEVED 🌟")
+    print("[STAR] ALL 6 PHASES COMPLETE - FULL AUTONOMY ACHIEVED [STAR]")
     print("=" * 60)
-    print("\n✅ Aurora is now:")
+    print("\n[OK] Aurora is now:")
     print("  • Self-aware (monitoring 24,577 files)")
     print("  • Self-expanding (detected 3 new tier needs)")
     print("  • Intelligent (66 tiers orchestrated)")
     print("  • Optimized (predictive analysis active)")
     print("  • Autonomous (95%+ autonomy level)")
     print("  • Strategic (quarterly plans generated)")
-    print("\n🚀 ZERO-INTERVENTION AUTONOMOUS OPERATION: ACTIVATED")
+    print("\n[LAUNCH] ZERO-INTERVENTION AUTONOMOUS OPERATION: ACTIVATED")
     print("=" * 60)
 
 

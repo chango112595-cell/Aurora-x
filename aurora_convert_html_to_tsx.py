@@ -22,7 +22,7 @@ class AuroraHTMLToTSXConverter:
     def load_analysis(self) -> Dict:
         """Load the HTML analysis report"""
         if not self.analysis_file.exists():
-            print("❌ AURORA_HTML_ANALYSIS.json not found!")
+            print("[ERROR] AURORA_HTML_ANALYSIS.json not found!")
             print("   Run aurora_check_html_files.py first")
             return None
 
@@ -195,7 +195,7 @@ export default function {component_name}(props: {component_name}Props) {{
             return True
 
         except Exception as e:
-            print(f"   ❌ Error: {e}")
+            print(f"   [ERROR] Error: {e}")
             return False
 
     def convert_all(self, analysis: Dict):
@@ -203,10 +203,10 @@ export default function {component_name}(props: {component_name}Props) {{
         files_to_convert = analysis.get("files_to_convert", [])
 
         if not files_to_convert:
-            print("❌ No files to convert found in analysis")
+            print("[ERROR] No files to convert found in analysis")
             return
 
-        print(f"\n🚀 AURORA HTML TO TSX CONVERSION")
+        print(f"\n[LAUNCH] AURORA HTML TO TSX CONVERSION")
         print(f"   Converting {len(files_to_convert)} files...\n")
 
         for file_info in files_to_convert:
@@ -215,22 +215,22 @@ export default function {component_name}(props: {component_name}Props) {{
             purpose = file_info["purpose"]
 
             if not html_file.exists():
-                print(f"⚠️  SKIP {html_file} (not found)")
+                print(f"[WARN]  SKIP {html_file} (not found)")
                 self.skipped.append(str(html_file))
                 continue
 
-            print(f"🔄 Converting {html_file.name}...")
+            print(f"[SYNC] Converting {html_file.name}...")
             print(f"   → {tsx_file}")
 
             if self.convert_file(html_file, tsx_file, purpose):
-                print(f"   ✅ Converted successfully")
+                print(f"   [OK] Converted successfully")
                 self.converted.append({
                     "html": str(html_file),
                     "tsx": str(tsx_file),
                     "purpose": purpose
                 })
             else:
-                print(f"   ❌ Failed to convert")
+                print(f"   [ERROR] Failed to convert")
                 self.failed.append(str(html_file))
 
             print()
@@ -252,15 +252,15 @@ export default function {component_name}(props: {component_name}Props) {{
             json.dump(report, f, indent=2)
 
         print("\n" + "=" * 60)
-        print("📊 CONVERSION SUMMARY")
+        print("[DATA] CONVERSION SUMMARY")
         print("=" * 60)
-        print(f"✅ Converted: {len(self.converted)}")
-        print(f"❌ Failed: {len(self.failed)}")
-        print(f"⚠️  Skipped: {len(self.skipped)}")
-        print(f"\n💾 Report saved: {report_file}")
+        print(f"[OK] Converted: {len(self.converted)}")
+        print(f"[ERROR] Failed: {len(self.failed)}")
+        print(f"[WARN]  Skipped: {len(self.skipped)}")
+        print(f"\n[EMOJI] Report saved: {report_file}")
 
         if self.converted:
-            print(f"\n🎯 Next Steps:")
+            print(f"\n[TARGET] Next Steps:")
             print(f"   1. Review converted TSX files in src/components/")
             print(f"   2. Update imports in your main components")
             print(f"   3. Add proper TypeScript interfaces for props")
@@ -269,7 +269,7 @@ export default function {component_name}(props: {component_name}Props) {{
 
     def run(self):
         """Run the conversion"""
-        print("\n🌟 AURORA HTML TO TSX CONVERTER")
+        print("\n[STAR] AURORA HTML TO TSX CONVERTER")
         print("=" * 60)
 
         # Load analysis
@@ -283,7 +283,7 @@ export default function {component_name}(props: {component_name}Props) {{
         # Generate report
         self.generate_report()
 
-        print("\n✅ CONVERSION COMPLETE!")
+        print("\n[OK] CONVERSION COMPLETE!")
 
 
 if __name__ == "__main__":

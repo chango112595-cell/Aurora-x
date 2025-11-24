@@ -22,7 +22,7 @@ class AuroraParallelProcessor:
         self.process_executor = ProcessPoolExecutor(
             max_workers=min(8, self.max_workers))
 
-        print(f"🔄 Aurora Parallel Processor initialized")
+        print(f"[SYNC] Aurora Parallel Processor initialized")
         print(f"   Max Workers: {self.max_workers}")
         print(f"   Total Power: {self.core.knowledge_tiers.total_power}")
 
@@ -32,7 +32,7 @@ class AuroraParallelProcessor:
         results = await asyncio.gather(*[task() for task in tasks])
         elapsed = time.perf_counter() - start
 
-        print(f"⚡ Executed {len(tasks)} tasks in {elapsed:.3f}s (parallel)")
+        print(f"[POWER] Executed {len(tasks)} tasks in {elapsed:.3f}s (parallel)")
         return results
 
     def parallel_execute_threads(self, func: Callable, items: List[Any]) -> List[Any]:
@@ -43,7 +43,7 @@ class AuroraParallelProcessor:
         results = [future.result() for future in as_completed(futures)]
 
         elapsed = time.perf_counter() - start
-        print(f"⚡ Processed {len(items)} items in {elapsed:.3f}s (threads)")
+        print(f"[POWER] Processed {len(items)} items in {elapsed:.3f}s (threads)")
 
         return results
 
@@ -55,7 +55,7 @@ class AuroraParallelProcessor:
         results = [future.result() for future in as_completed(futures)]
 
         elapsed = time.perf_counter() - start
-        print(f"⚡ Processed {len(items)} items in {elapsed:.3f}s (processes)")
+        print(f"[POWER] Processed {len(items)} items in {elapsed:.3f}s (processes)")
 
         return results
 
@@ -80,7 +80,7 @@ class AuroraParallelProcessor:
 
 async def demo():
     print("=" * 80)
-    print("🔄 AURORA PARALLEL PROCESSOR - DEMO")
+    print("[SYNC] AURORA PARALLEL PROCESSOR - DEMO")
     print("=" * 80)
 
     processor = AuroraParallelProcessor()
@@ -92,12 +92,12 @@ async def demo():
 
     tasks = [lambda i=i: task(i) for i in range(10)]
     results1 = await processor.parallel_execute_async(tasks)
-    print(f"✅ Async results: {len(results1)} tasks completed")
+    print(f"[OK] Async results: {len(results1)} tasks completed")
 
     # Demo 2: Parallel file scanning
     patterns = ["*.py", "*.tsx", "*.json", "*.md"]
     results2 = await processor.parallel_scan_files(patterns)
-    print(f"\n✅ File scan results:")
+    print(f"\n[OK] File scan results:")
     for pattern, count in results2.items():
         print(f"   {pattern}: {count} files")
 

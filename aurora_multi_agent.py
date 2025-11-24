@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🤖 TIER 48: MULTI-AGENT COORDINATION
+[AGENT] TIER 48: MULTI-AGENT COORDINATION
 Aurora's ability to spawn and coordinate specialized AI agents
 """
 
@@ -67,7 +67,7 @@ class AuroraMultiAgent:
         ]
 
         print(f"\n{'='*70}")
-        print(f"🤖 {self.name} v{self.version} Initialized")
+        print(f"[AGENT] {self.name} v{self.version} Initialized")
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
@@ -79,12 +79,12 @@ class AuroraMultiAgent:
         agent_id = f"{agent_type.value}_{int(time.time() * 1000)}"
         agent = Agent(agent_id=agent_id, agent_type=agent_type, status="spawned", task=task, start_time=time.time())
         self.agents[agent_id] = agent
-        print(f"🤖 Spawned {agent_type.value}: {agent_id}")
+        print(f"[AGENT] Spawned {agent_type.value}: {agent_id}")
         return agent
 
     def execute_parallel(self, tasks: list[dict[str, Any]]) -> list[dict]:
         """Execute tasks in parallel using multiple agents"""
-        print(f"⚡ Executing {len(tasks)} tasks in parallel...")
+        print(f"[POWER] Executing {len(tasks)} tasks in parallel...")
 
         agents = []
         for task in tasks:
@@ -97,12 +97,12 @@ class AuroraMultiAgent:
             result = self._execute_agent_task(agent)
             results.append(result)
 
-        print(f"✅ Completed {len(results)} parallel tasks")
+        print(f"[OK] Completed {len(results)} parallel tasks")
         return results
 
     def orchestrate_workflow(self, workflow: dict[str, Any]) -> dict[str, Any]:
         """Orchestrate multi-step workflow with agents"""
-        print(f"🎯 Orchestrating workflow: {workflow['name']}")
+        print(f"[TARGET] Orchestrating workflow: {workflow['name']}")
 
         results = {}
         for step in workflow["steps"]:
@@ -110,7 +110,7 @@ class AuroraMultiAgent:
             result = self._execute_agent_task(agent)
             results[step["name"]] = result
 
-        print(f"✅ Workflow completed: {len(results)} steps")
+        print(f"[OK] Workflow completed: {len(results)} steps")
         return results
 
     def _execute_agent_task(self, agent: Agent) -> dict:
@@ -140,7 +140,7 @@ class AuroraMultiAgent:
 def main():
     """Test Tiers 66"""
     print("\n" + "=" * 70)
-    print("🧪 TESTING TIER 48: MULTI-AGENT COORDINATION")
+    print("[MULTI-AGENT] TESTING TIER 48: MULTI-AGENT COORDINATION")
     print("=" * 70 + "\n")
 
     coordinator = AuroraMultiAgent()
@@ -159,7 +159,7 @@ def main():
 
     summary = coordinator.get_capabilities_summary()
     print("=" * 70)
-    print("✅ TIER 48 OPERATIONAL")
+    print("[OK] TIER 48 OPERATIONAL")
     print(f"Active Agents: {summary['active_agents']}")
     print("=" * 70 + "\n")
 

@@ -32,7 +32,7 @@ class AuroraDeepAnalysis:
     def analyze_services(self):
         """Check all Aurora services and their status"""
         print("\n" + "=" * 80)
-        print("🔍 ANALYZING SERVICES")
+        print("[SCAN] ANALYZING SERVICES")
         print("=" * 80)
 
         services = {5000: "Frontend Server", 5001: "Bridge Service", 5002: "Self-Learn Service", 9000: "Chat Server"}
@@ -50,14 +50,14 @@ class AuroraDeepAnalysis:
                 )
                 status = result.stdout.strip()
                 if status == "200":
-                    running_services.append(f"✅ {name} (Port {port})")
-                    print(f"✅ {name} (Port {port}): RUNNING")
+                    running_services.append(f"[OK] {name} (Port {port})")
+                    print(f"[OK] {name} (Port {port}): RUNNING")
                 else:
-                    failed_services.append(f"❌ {name} (Port {port}): HTTP {status}")
-                    print(f"❌ {name} (Port {port}): HTTP {status}")
+                    failed_services.append(f"[ERROR] {name} (Port {port}): HTTP {status}")
+                    print(f"[ERROR] {name} (Port {port}): HTTP {status}")
             except Exception as e:
-                failed_services.append(f"❌ {name} (Port {port}): {str(e)}")
-                print(f"❌ {name} (Port {port}): ERROR - {str(e)}")
+                failed_services.append(f"[ERROR] {name} (Port {port}): {str(e)}")
+                print(f"[ERROR] {name} (Port {port}): ERROR - {str(e)}")
 
         self.analysis_results["services"] = {
             "running": running_services,
@@ -66,13 +66,13 @@ class AuroraDeepAnalysis:
         }
 
         print(
-            f"\n📊 Service Status: {len(running_services)}/{len(services)} running ({self.analysis_results['services']['operational_percentage']:.0f}%)"
+            f"\n[DATA] Service Status: {len(running_services)}/{len(services)} running ({self.analysis_results['services']['operational_percentage']:.0f}%)"
         )
 
     def analyze_code_structure(self):
         """Analyze Aurora's code structure and organization"""
         print("\n" + "=" * 80)
-        print("🏗️  ANALYZING CODE STRUCTURE")
+        print("[EMOJI]️  ANALYZING CODE STRUCTURE")
         print("=" * 80)
 
         critical_files = {
@@ -95,10 +95,10 @@ class AuroraDeepAnalysis:
                     "size": size,
                     "size_kb": f"{size/1024:.1f}KB",
                 }
-                print(f"✅ {file} ({size/1024:.1f}KB) - {description}")
+                print(f"[OK] {file} ({size/1024:.1f}KB) - {description}")
             else:
                 file_status[file] = {"exists": False, "description": description}
-                print(f"❌ {file} - MISSING - {description}")
+                print(f"[ERROR] {file} - MISSING - {description}")
                 self.analysis_results["issues"].append(f"Critical file missing: {file}")
 
         self.analysis_results["code_quality"]["critical_files"] = file_status
@@ -106,7 +106,7 @@ class AuroraDeepAnalysis:
     def analyze_aurora_core(self):
         """Deep analysis of aurora_core.py"""
         print("\n" + "=" * 80)
-        print("🧠 ANALYZING AURORA CORE INTELLIGENCE")
+        print("[BRAIN] ANALYZING AURORA CORE INTELLIGENCE")
         print("=" * 80)
 
         try:
@@ -123,28 +123,28 @@ class AuroraDeepAnalysis:
                 "hybrid_mode": tiers.hybrid_mode,
             }
 
-            print(f"📊 Foundation Tasks: {core_analysis['foundation_count']}")
-            print(f"📊 Knowledge Tiers: {core_analysis['knowledge_tier_count']}")
-            print(f"📊 Total Tiers: {core_analysis['total_tiers']}")
-            print(f"📊 Capabilities: {core_analysis['capabilities_count']}")
-            print(f"📊 Hybrid Mode: {core_analysis['hybrid_mode']}")
+            print(f"[DATA] Foundation Tasks: {core_analysis['foundation_count']}")
+            print(f"[DATA] Knowledge Tiers: {core_analysis['knowledge_tier_count']}")
+            print(f"[DATA] Total Tiers: {core_analysis['total_tiers']}")
+            print(f"[DATA] Capabilities: {core_analysis['capabilities_count']}")
+            print(f"[DATA] Hybrid Mode: {core_analysis['hybrid_mode']}")
 
             self.analysis_results["architecture"]["core_intelligence"] = core_analysis
 
             # Test core functionality
-            print("\n🧪 Testing Core Functions...")
+            print("\n[TEST] Testing Core Functions...")
             intelligence = AuroraCoreIntelligence()
-            print("✅ AuroraCoreIntelligence initialized successfully")
+            print("[OK] AuroraCoreIntelligence initialized successfully")
 
         except Exception as e:
             error_msg = f"Aurora Core Error: {str(e)}\n{traceback.format_exc()}"
-            print(f"❌ {error_msg}")
+            print(f"[ERROR] {error_msg}")
             self.analysis_results["issues"].append(error_msg)
 
     def analyze_python_environment(self):
         """Check Python packages and dependencies"""
         print("\n" + "=" * 80)
-        print("🐍 ANALYZING PYTHON ENVIRONMENT")
+        print("[EMOJI] ANALYZING PYTHON ENVIRONMENT")
         print("=" * 80)
 
         try:
@@ -162,10 +162,10 @@ class AuroraDeepAnalysis:
                     found = next((p for p in packages if p["name"].lower() == pkg), None)
                     if found:
                         installed[pkg] = found["version"]
-                        print(f"✅ {pkg} {found['version']}")
+                        print(f"[OK] {pkg} {found['version']}")
                     else:
                         missing.append(pkg)
-                        print(f"❌ {pkg} - NOT INSTALLED")
+                        print(f"[ERROR] {pkg} - NOT INSTALLED")
 
                 self.analysis_results["architecture"]["python_packages"] = {
                     "installed": installed,
@@ -178,13 +178,13 @@ class AuroraDeepAnalysis:
 
         except Exception as e:
             error_msg = f"Python environment check failed: {str(e)}"
-            print(f"❌ {error_msg}")
+            print(f"[ERROR] {error_msg}")
             self.analysis_results["issues"].append(error_msg)
 
     def analyze_performance(self):
         """Analyze system performance and resource usage"""
         print("\n" + "=" * 80)
-        print("⚡ ANALYZING PERFORMANCE")
+        print("[POWER] ANALYZING PERFORMANCE")
         print("=" * 80)
 
         try:
@@ -203,7 +203,7 @@ class AuroraDeepAnalysis:
                             }
                         )
                         print(
-                            f"🔹 PID {proc.info['pid']}: {cmdline[:80]} ({proc.info['memory_info'].rss / 1024 / 1024:.1f}MB)"
+                            f"[EMOJI] PID {proc.info['pid']}: {cmdline[:80]} ({proc.info['memory_info'].rss / 1024 / 1024:.1f}MB)"
                         )
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
                     pass
@@ -213,12 +213,12 @@ class AuroraDeepAnalysis:
             memory = psutil.virtual_memory()
             disk = psutil.disk_usage("/")
 
-            print(f"\n💻 System CPU: {cpu_percent}%")
+            print(f"\n[CODE] System CPU: {cpu_percent}%")
             print(
-                f"💾 System Memory: {memory.percent}% used ({memory.used/1024/1024/1024:.1f}GB / {memory.total/1024/1024/1024:.1f}GB)"
+                f"[EMOJI] System Memory: {memory.percent}% used ({memory.used/1024/1024/1024:.1f}GB / {memory.total/1024/1024/1024:.1f}GB)"
             )
             print(
-                f"💿 Disk Usage: {disk.percent}% used ({disk.used/1024/1024/1024:.1f}GB / {disk.total/1024/1024/1024:.1f}GB)"
+                f"[EMOJI] Disk Usage: {disk.percent}% used ({disk.used/1024/1024/1024:.1f}GB / {disk.total/1024/1024/1024:.1f}GB)"
             )
 
             self.analysis_results["performance"] = {
@@ -231,13 +231,13 @@ class AuroraDeepAnalysis:
 
         except Exception as e:
             error_msg = f"Performance analysis failed: {str(e)}"
-            print(f"❌ {error_msg}")
+            print(f"[ERROR] {error_msg}")
             self.analysis_results["issues"].append(error_msg)
 
     def check_recent_errors(self):
         """Check for recent errors in log files"""
         print("\n" + "=" * 80)
-        print("🔍 CHECKING FOR ERRORS")
+        print("[SCAN] CHECKING FOR ERRORS")
         print("=" * 80)
 
         log_files = ["/tmp/aurora_chat.log", "/tmp/aurora_bridge.log", "/tmp/aurora_self_learn.log"]
@@ -253,19 +253,19 @@ class AuroraDeepAnalysis:
                                 keyword in line.lower() for keyword in ["error", "exception", "traceback", "failed"]
                             ):
                                 errors_found.append(f"{log_file}: {line.strip()}")
-                                print(f"⚠️  {log_file}: {line.strip()}")
+                                print(f"[WARN]  {log_file}: {line.strip()}")
                 except Exception as e:
-                    print(f"⚠️  Could not read {log_file}: {str(e)}")
+                    print(f"[WARN]  Could not read {log_file}: {str(e)}")
 
         if not errors_found:
-            print("✅ No recent errors found in log files")
+            print("[OK] No recent errors found in log files")
 
         self.analysis_results["issues"].extend(errors_found)
 
     def generate_recommendations(self):
         """Generate recommendations based on analysis"""
         print("\n" + "=" * 80)
-        print("💡 GENERATING RECOMMENDATIONS")
+        print("[IDEA] GENERATING RECOMMENDATIONS")
         print("=" * 80)
 
         recommendations = []
@@ -290,25 +290,25 @@ class AuroraDeepAnalysis:
         self.analysis_results["recommendations"] = recommendations
 
         for rec in recommendations:
-            print(f"💡 {rec}")
+            print(f"[IDEA] {rec}")
 
     def generate_summary(self):
         """Generate final summary"""
         print("\n" + "=" * 80)
-        print("📋 AURORA SYSTEM ANALYSIS SUMMARY")
+        print("[EMOJI] AURORA SYSTEM ANALYSIS SUMMARY")
         print("=" * 80)
 
         operational = self.analysis_results["services"]["operational_percentage"]
         issues_count = len(self.analysis_results["issues"])
 
         if operational == 100 and issues_count == 0:
-            status = "🟢 EXCELLENT"
+            status = "[EMOJI] EXCELLENT"
         elif operational >= 75 and issues_count < 3:
-            status = "🟡 GOOD"
+            status = "[EMOJI] GOOD"
         elif operational >= 50:
-            status = "🟠 FAIR"
+            status = "[EMOJI] FAIR"
         else:
-            status = "🔴 CRITICAL"
+            status = "[EMOJI] CRITICAL"
 
         print(f"\n**OVERALL STATUS: {status}**")
         print(f"**Operational: {operational:.0f}%**")
@@ -348,12 +348,12 @@ class AuroraDeepAnalysis:
         output_file = self.project_root / "AURORA_SELF_ANALYSIS_REPORT.json"
         with open(output_file, "w") as f:
             json.dump(self.analysis_results, f, indent=2)
-        print(f"\n📄 Full report saved to: {output_file}")
+        print(f"\n[EMOJI] Full report saved to: {output_file}")
 
     def run_complete_analysis(self):
         """Run all analysis components"""
         print("\n" + "=" * 80)
-        print("🌟 AURORA DEEP SELF-ANALYSIS INITIATED")
+        print("[STAR] AURORA DEEP SELF-ANALYSIS INITIATED")
         print("=" * 80)
         print(f"Timestamp: {self.analysis_results['timestamp']}")
 
@@ -367,7 +367,7 @@ class AuroraDeepAnalysis:
         self.generate_summary()
 
         print("\n" + "=" * 80)
-        print("✅ AURORA DEEP SELF-ANALYSIS COMPLETE")
+        print("[OK] AURORA DEEP SELF-ANALYSIS COMPLETE")
         print("=" * 80)
 
 

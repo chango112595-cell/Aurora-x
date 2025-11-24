@@ -157,14 +157,14 @@ export default function {component_name}(props: {component_name}Props) {{
         runs_path = self.root / "runs"
 
         if not runs_path.exists():
-            print("❌ runs/ folder not found")
+            print("[ERROR] runs/ folder not found")
             return
 
         # Find all HTML files in runs/
         html_files = list(runs_path.rglob("*.html"))
 
-        print(f"\n🔍 Found {len(html_files)} HTML files in runs/")
-        print("🚀 Converting to TSX in respective directories...\n")
+        print(f"\n[SCAN] Found {len(html_files)} HTML files in runs/")
+        print("[LAUNCH] Converting to TSX in respective directories...\n")
 
         for html_file in html_files:
             try:
@@ -188,7 +188,7 @@ export default function {component_name}(props: {component_name}Props) {{
                 tsx_file.write_text(tsx_content, encoding="utf-8")
 
                 print(
-                    f"✅ {html_file.relative_to(self.root)} → {tsx_file.relative_to(self.root)}")
+                    f"[OK] {html_file.relative_to(self.root)} → {tsx_file.relative_to(self.root)}")
 
                 self.converted.append({
                     "html": str(html_file.relative_to(self.root)),
@@ -197,29 +197,29 @@ export default function {component_name}(props: {component_name}Props) {{
                 })
 
             except Exception as e:
-                print(f"❌ Failed: {html_file.relative_to(self.root)} - {e}")
+                print(f"[ERROR] Failed: {html_file.relative_to(self.root)} - {e}")
                 self.failed.append(str(html_file.relative_to(self.root)))
 
         # Summary
         print(f"\n{'='*60}")
-        print("📊 CONVERSION SUMMARY")
+        print("[DATA] CONVERSION SUMMARY")
         print(f"{'='*60}")
-        print(f"✅ Converted: {len(self.converted)}")
-        print(f"❌ Failed: {len(self.failed)}")
-        print(f"\n💡 TSX files created in their respective run directories")
+        print(f"[OK] Converted: {len(self.converted)}")
+        print(f"[ERROR] Failed: {len(self.failed)}")
+        print(f"\n[IDEA] TSX files created in their respective run directories")
         print(f"   Original HTML files remain unchanged")
         print(f"{'='*60}\n")
 
     def run(self):
         """Run the conversion"""
-        print("\n🌟 AURORA RUNS CONVERTER")
+        print("\n[STAR] AURORA RUNS CONVERTER")
         print("="*60)
         print("Converting HTML test reports to TSX in runs/ directories")
         print("="*60)
 
         self.convert_runs_folder()
 
-        print("✅ CONVERSION COMPLETE!\n")
+        print("[OK] CONVERSION COMPLETE!\n")
 
 
 if __name__ == "__main__":

@@ -20,7 +20,7 @@ class AuroraJARVIS:
     def __init__(self):
         self.status = "ONLINE"
         self.personality = "JARVIS-LIKE"
-        print("🤖 Aurora JARVIS Bridge initializing...")
+        print("[AGENT] Aurora JARVIS Bridge initializing...")
 
     def speak(self, message):
         """JARVIS-style responses"""
@@ -75,6 +75,6 @@ def status():
 
 if __name__ == "__main__":
     aurora = AuroraJARVIS()
-    print("🌟 Aurora JARVIS Bridge starting on port 5001...")
-    print("🤖 'Good morning. Aurora systems online and ready.'")
+    print("[STAR] Aurora JARVIS Bridge starting on port 5001...")
+    print("[AGENT] 'Good morning. Aurora systems online and ready.'")
     app.run(host="0.0.0.0", port=5001, debug=False)

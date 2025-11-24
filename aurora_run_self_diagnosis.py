@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
 def main():
-    print("🌟 Aurora Self-Diagnosis\n")
+    print("[STAR] Aurora Self-Diagnosis\n")
     aurora = AuroraCoreIntelligence()
 
     question = """
@@ -45,12 +45,12 @@ def main():
     # Check if we should use the diagnostic command
     msg_lower = question.lower()
     if "diagnose" in msg_lower or "diagnostic" in msg_lower:
-        print("🔍 Aurora is running comprehensive self-diagnosis...\n")
+        print("[SCAN] Aurora is running comprehensive self-diagnosis...\n")
         response = aurora.generate_aurora_response(analysis, context)
     else:
         response = aurora.generate_aurora_response(analysis, context)
 
-    print("🌟 Aurora's Self-Diagnosis:")
+    print("[STAR] Aurora's Self-Diagnosis:")
     print("="*80)
     print(response)
     print("="*80)
@@ -65,7 +65,7 @@ def main():
         f.write("\n\n## Aurora's Analysis & Improvement Plan\n\n")
         f.write(response)
 
-    print("\n✅ Self-diagnosis saved to AURORA_SELF_DIAGNOSIS.md")
+    print("\n[OK] Self-diagnosis saved to AURORA_SELF_DIAGNOSIS.md")
 
 
 if __name__ == "__main__":

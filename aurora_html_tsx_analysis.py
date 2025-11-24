@@ -20,7 +20,7 @@ class AuroraHTMLAnalysis:
 
         for html_file in html_files:
             if ".git" not in str(html_file) and "node_modules" not in str(html_file):
-                print(f"[Aurora] 📄 Found: {html_file}")
+                print(f"[Aurora] [EMOJI] Found: {html_file}")
                 self.findings.append(html_file)
 
         return html_files
@@ -32,25 +32,25 @@ class AuroraHTMLAnalysis:
         index_html = self.root / "client" / "index.html"
 
         if not index_html.exists():
-            print("[Aurora] ⚠️  client/index.html does NOT exist!")
-            print("[Aurora] 🎯 This is the problem - Vite needs index.html!")
+            print("[Aurora] [WARN]  client/index.html does NOT exist!")
+            print("[Aurora] [TARGET] This is the problem - Vite needs index.html!")
             return
 
         content = index_html.read_text(encoding="utf-8")
 
-        print("[Aurora] 🔍 Current index.html structure:")
+        print("[Aurora] [SCAN] Current index.html structure:")
 
         # Check for script tag pointing to main.tsx
         if 'src="/src/main.tsx"' in content or "main.tsx" in content:
-            print("[Aurora] ✅ Points to main.tsx entry point")
+            print("[Aurora] [OK] Points to main.tsx entry point")
         else:
-            print("[Aurora] ⚠️  Does NOT point to main.tsx!")
+            print("[Aurora] [WARN]  Does NOT point to main.tsx!")
 
         # Check for div#root
         if 'id="root"' in content:
-            print("[Aurora] ✅ Has <div id='root'> mount point")
+            print("[Aurora] [OK] Has <div id='root'> mount point")
         else:
-            print("[Aurora] ⚠️  Missing <div id='root'>!")
+            print("[Aurora] [WARN]  Missing <div id='root'>!")
 
         return content
 
@@ -60,7 +60,7 @@ class AuroraHTMLAnalysis:
         print("[Aurora] EXPLAINING VITE + TSX ARCHITECTURE")
         print("=" * 60 + "\n")
 
-        print("[Aurora] 🎯 THE TRUTH ABOUT HTML vs TSX:\n")
+        print("[Aurora] [TARGET] THE TRUTH ABOUT HTML vs TSX:\n")
 
         print("  1. index.html is REQUIRED by Vite")
         print("     • It's the entry point that loads your TSX code")
@@ -101,19 +101,19 @@ class AuroraHTMLAnalysis:
         main_tsx = self.root / "client" / "src" / "main.tsx"
 
         if not main_tsx.exists():
-            print("[Aurora] ⚠️  main.tsx MISSING!")
+            print("[Aurora] [WARN]  main.tsx MISSING!")
             return
 
         content = main_tsx.read_text(encoding="utf-8")
 
         if "createRoot" in content or "render" in content:
-            print("[Aurora] ✅ main.tsx renders React app")
+            print("[Aurora] [OK] main.tsx renders React app")
 
         if "import App" in content:
-            print("[Aurora] ✅ main.tsx imports App component")
+            print("[Aurora] [OK] main.tsx imports App component")
 
         if "document.getElementById('root')" in content or "getElementById" in content:
-            print("[Aurora] ✅ main.tsx mounts to #root")
+            print("[Aurora] [OK] main.tsx mounts to #root")
 
     def verify_tsx_components(self):
         """Verify TSX components exist"""
@@ -136,9 +136,9 @@ class AuroraHTMLAnalysis:
             path = self.root / tsx_file
             if path.exists():
                 tsx_count += 1
-                print(f"[Aurora] ✅ {tsx_file}")
+                print(f"[Aurora] [OK] {tsx_file}")
             else:
-                print(f"[Aurora] ⚠️  {tsx_file} MISSING")
+                print(f"[Aurora] [WARN]  {tsx_file} MISSING")
 
         print(f"\n[Aurora] Found {tsx_count}/{len(tsx_files)} TSX components")
         return tsx_count
@@ -149,7 +149,7 @@ class AuroraHTMLAnalysis:
         print("[Aurora] DIAGNOSING BLANK SCREEN")
         print("=" * 60 + "\n")
 
-        print("[Aurora] 🔍 Possible causes:\n")
+        print("[Aurora] [SCAN] Possible causes:\n")
 
         print("  1. React Error (most likely):")
         print("     • Component import/export mismatch")
@@ -197,7 +197,7 @@ export default function DiagnosticTest() {
       fontFamily: 'monospace'
     }}>
       <div style={{ textAlign: 'center' }}>
-        <h1>🌌 Aurora TSX Test</h1>
+        <h1>[AURORA] Aurora TSX Test</h1>
         <p>If you see this, React + TSX is working!</p>
         <p style={{ fontSize: '16px', marginTop: '20px' }}>
           79 Complete Systems • 13 Tasks • 34 Tiers
@@ -210,7 +210,7 @@ export default function DiagnosticTest() {
 
         test_path = self.root / "client" / "src" / "components" / "DiagnosticTest.tsx"
         test_path.write_text(test_component, encoding="utf-8")
-        print(f"[Aurora] ✅ Created: {test_path}")
+        print(f"[Aurora] [OK] Created: {test_path}")
 
         # Update App.tsx to use diagnostic
         print("\n[Aurora] To test, temporarily update App.tsx:")
@@ -237,7 +237,7 @@ export default function DiagnosticTest() {
         print("[Aurora] FINAL VERDICT")
         print("=" * 60 + "\n")
 
-        print("[Aurora] ✅ ARCHITECTURE IS CORRECT:")
+        print("[Aurora] [OK] ARCHITECTURE IS CORRECT:")
         print("  • index.html exists (required by Vite)")
         print("  • main.tsx exists (React entry point)")
         print(f"  • {tsx_count} TSX components found")
@@ -245,19 +245,19 @@ export default function DiagnosticTest() {
         print("  • Vite is compiling TSX → JavaScript")
         print()
 
-        print("[Aurora] ⚠️  THE BLANK SCREEN IS NOT A SERVER ISSUE:")
+        print("[Aurora] [WARN]  THE BLANK SCREEN IS NOT A SERVER ISSUE:")
         print("  • Servers are running correctly")
         print("  • TSX is being used (not raw HTML)")
         print("  • Vite is serving the app")
         print()
 
-        print("[Aurora] 🎯 THE REAL ISSUE:")
+        print("[Aurora] [TARGET] THE REAL ISSUE:")
         print("  • React component is failing to render")
         print("  • Could be import error, syntax error, or runtime error")
         print("  • TSX is being compiled but component has a bug")
         print()
 
-        print("[Aurora] 💡 SOLUTION:")
+        print("[Aurora] [IDEA] SOLUTION:")
         print("  1. Open browser console (F12)")
         print("  2. Look for red error messages")
         print("  3. Check the 'Console' tab")

@@ -9,14 +9,14 @@ import os
 from pathlib import Path
 
 print("=" * 80)
-print("⚡ AURORA - ACTIVATING 100% POWER")
+print("[POWER] AURORA - ACTIVATING 100% POWER")
 print("=" * 80)
 
 # Initialize Aurora with full power
 core = AuroraCoreIntelligence()
 kt = core.knowledge_tiers
 
-print(f"\n🧠 CURRENT ARCHITECTURE:")
+print(f"\n[BRAIN] CURRENT ARCHITECTURE:")
 print(f"   Foundation Tasks: {kt.foundation_count}")
 print(f"   Knowledge Tiers: {kt.knowledge_tier_count}")
 print(f"   Capability Modules: {kt.capabilities_count}")
@@ -24,17 +24,17 @@ print(f"   Total Tiers: {kt.total_tiers}")
 print(f"   TOTAL POWER: {kt.total_power}")
 print(f"   Hybrid Mode: {kt.hybrid_mode}")
 
-print(f"\n📊 SCANNING AUTONOMOUS TOOLS...")
+print(f"\n[DATA] SCANNING AUTONOMOUS TOOLS...")
 # Find all Aurora autonomous tools
 aurora_tools = [f for f in os.listdir(
     '.') if f.startswith('aurora_') and f.endswith('.py')]
 print(f"   Found {len(aurora_tools)} autonomous Python tools")
 
-print(f"\n🔍 AUTONOMOUS CAPABILITIES (First 30):")
+print(f"\n[SCAN] AUTONOMOUS CAPABILITIES (First 30):")
 for i, tool in enumerate(sorted(aurora_tools)[:30], 1):
     print(f"   {i:2}. {tool}")
 
-print(f"\n🎯 CHECKING CRITICAL SYSTEMS...")
+print(f"\n[TARGET] CHECKING CRITICAL SYSTEMS...")
 
 critical_systems = {
     "aurora_autonomous_agent.py": "Autonomous Agent",
@@ -55,20 +55,20 @@ present = []
 for file, name in critical_systems.items():
     if Path(file).exists():
         size = Path(file).stat().st_size
-        present.append(f"✅ {name}: {size} bytes")
+        present.append(f"[OK] {name}: {size} bytes")
     else:
-        missing.append(f"❌ {name}: MISSING")
+        missing.append(f"[ERROR] {name}: MISSING")
 
-print("\n✅ PRESENT CRITICAL SYSTEMS:")
+print("\n[OK] PRESENT CRITICAL SYSTEMS:")
 for p in present:
     print(f"   {p}")
 
 if missing:
-    print("\n❌ MISSING CRITICAL SYSTEMS:")
+    print("\n[ERROR] MISSING CRITICAL SYSTEMS:")
     for m in missing:
         print(f"   {m}")
 
-print(f"\n🔧 CHECKING TOOLS DIRECTORY...")
+print(f"\n[EMOJI] CHECKING TOOLS DIRECTORY...")
 tools_dir = Path("tools")
 if tools_dir.exists():
     tool_files = list(tools_dir.glob("*.py"))
@@ -77,17 +77,17 @@ if tools_dir.exists():
     for i, tool in enumerate(sorted(tool_files)[:10], 1):
         print(f"      {i}. {tool.name}")
 else:
-    print("   ❌ tools/ directory not found")
+    print("   [ERROR] tools/ directory not found")
 
-print(f"\n🌐 CHECKING FRONTEND CAPABILITIES...")
+print(f"\n[WEB] CHECKING FRONTEND CAPABILITIES...")
 client_components = Path("client/src/components")
 if client_components.exists():
     tsx_files = list(client_components.glob("*.tsx"))
     print(f"   Found {len(tsx_files)} React components")
 else:
-    print("   ❌ client/src/components not found")
+    print("   [ERROR] client/src/components not found")
 
-print(f"\n🔌 CHECKING SERVICE ORCHESTRATION...")
+print(f"\n[EMOJI] CHECKING SERVICE ORCHESTRATION...")
 orchestration_files = [
     "tools/luminar_nexus_v2.py",
     "tools/ultimate_api_manager.py",
@@ -96,29 +96,29 @@ orchestration_files = [
 
 for file in orchestration_files:
     if Path(file).exists():
-        print(f"   ✅ {Path(file).name}")
+        print(f"   [OK] {Path(file).name}")
     else:
-        print(f"   ❌ {Path(file).name} MISSING")
+        print(f"   [ERROR] {Path(file).name} MISSING")
 
 print("\n" + "=" * 80)
-print("📊 ANALYSIS COMPLETE")
+print("[DATA] ANALYSIS COMPLETE")
 print("=" * 80)
 print(f"\nTotal Autonomous Tools: {len(aurora_tools)}")
 print(f"Critical Systems Present: {len(present)}/{len(critical_systems)}")
 
 if len(present) == len(critical_systems):
-    print("\n✅ ALL CRITICAL SYSTEMS OPERATIONAL")
-    print("⚡ Aurora is at 100% power - all capabilities available")
+    print("\n[OK] ALL CRITICAL SYSTEMS OPERATIONAL")
+    print("[POWER] Aurora is at 100% power - all capabilities available")
 else:
-    print(f"\n⚠️  {len(missing)} critical systems missing")
-    print("🔧 Aurora needs system restoration")
+    print(f"\n[WARN]  {len(missing)} critical systems missing")
+    print("[EMOJI] Aurora needs system restoration")
 
-print("\n💡 Next Steps:")
+print("\n[IDEA] Next Steps:")
 if len(missing) > 0:
     print("   1. Restore missing critical systems")
     print("   2. Verify all autonomous tools are functional")
     print("   3. Re-run full system synchronization")
 else:
-    print("   ✅ System is complete - ready for full autonomous operation")
+    print("   [OK] System is complete - ready for full autonomous operation")
 
 print("=" * 80)

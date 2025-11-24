@@ -9,12 +9,12 @@ import os
 
 
 def fix_layout_routing():
-    print("🌟 Aurora: Fixing layout routing logic...")
+    print("[STAR] Aurora: Fixing layout routing logic...")
 
     layout_file = "client/src/components/AuroraFuturisticLayout.tsx"
 
     if not os.path.exists(layout_file):
-        print(f"❌ File not found: {layout_file}")
+        print(f"[ERROR] File not found: {layout_file}")
         return
 
     with open(layout_file, encoding="utf-8") as f:
@@ -24,13 +24,13 @@ def fix_layout_routing():
     old_import = "import { Link, useRoute } from 'wouter';"
     new_import = "import { Link, useLocation } from 'wouter';"
     content = content.replace(old_import, new_import)
-    print("✅ Updated imports to use useLocation")
+    print("[OK] Updated imports to use useLocation")
 
     # Fix 2: Change hook usage
     old_hook = '  const [match] = useRoute("/:path*");'
     new_hook = "  const [location] = useLocation();"
     content = content.replace(old_hook, new_hook)
-    print("✅ Changed to useLocation hook")
+    print("[OK] Changed to useLocation hook")
 
     # Fix 3: Fix the active route detection logic
     old_logic = """                  {navItems.filter(item => item.category === category).map(item => {
@@ -40,13 +40,13 @@ def fix_layout_routing():
                     const isActive = location === item.path || (item.path !== '/' && location.startsWith(item.path));"""
 
     content = content.replace(old_logic, new_logic)
-    print("✅ Fixed isActive logic to use location string")
+    print("[OK] Fixed isActive logic to use location string")
 
     with open(layout_file, "w", encoding="utf-8") as f:
         f.write(content)
 
-    print("✨ Aurora: Layout routing fixed! The error 'match2.startsWith is not a function' should be resolved.")
-    print("📍 Changes made:")
+    print("[SPARKLE] Aurora: Layout routing fixed! The error 'match2.startsWith is not a function' should be resolved.")
+    print("[EMOJI] Changes made:")
     print("   - Switched from useRoute to useLocation")
     print("   - Fixed route matching logic to use string comparison")
     print("   - Active route detection now works correctly")

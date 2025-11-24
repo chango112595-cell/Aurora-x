@@ -22,13 +22,13 @@ def cherry_pick_file(branch, filepath):
             # Write to current branch
             Path(filepath).parent.mkdir(parents=True, exist_ok=True)
             Path(filepath).write_text(result.stdout, encoding='utf-8')
-            print(f'✅ Merged {filepath} from {branch}')
+            print(f'[OK] Merged {filepath} from {branch}')
             return True
         else:
-            print(f'❌ Could not get {filepath} from {branch}')
+            print(f'[ERROR] Could not get {filepath} from {branch}')
             return False
     except Exception as e:
-        print(f'❌ Error: {e}')
+        print(f'[ERROR] Error: {e}')
         return False
 
 # Usage example:

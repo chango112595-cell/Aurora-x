@@ -94,13 +94,13 @@ class AuroraCriticalRestoration:
 
     def restore_all_critical(self):
         """Restore all critical missing files"""
-        print("🌟 AURORA CRITICAL FILES RESTORATION")
+        print("[STAR] AURORA CRITICAL FILES RESTORATION")
         print("="*80)
-        print("\n⚡ Restoring critical missing capabilities...\n")
+        print("\n[POWER] Restoring critical missing capabilities...\n")
 
         critical_files = self.load_critical_files()
 
-        print(f"📊 {len(critical_files)} critical files to restore\n")
+        print(f"[DATA] {len(critical_files)} critical files to restore\n")
 
         for i, file_path in enumerate(critical_files, 1):
             print(f"[{i:2d}/{len(critical_files)}] {file_path:60s} ", end="")
@@ -109,29 +109,29 @@ class AuroraCriticalRestoration:
 
             if result['status'] == 'restored':
                 self.restored.append(result)
-                print(f"✅ Restored from {result['from']}")
+                print(f"[OK] Restored from {result['from']}")
             elif result['status'] == 'exists':
-                print("⚠️  Already exists")
+                print("[WARN]  Already exists")
             else:
                 self.failed.append(result)
-                print("❌ Not found in history")
+                print("[ERROR] Not found in history")
 
         print("\n" + "="*80)
-        print("📊 RESTORATION SUMMARY")
+        print("[DATA] RESTORATION SUMMARY")
         print("="*80)
-        print(f"\n✅ Successfully restored: {len(self.restored)} files")
+        print(f"\n[OK] Successfully restored: {len(self.restored)} files")
         print(
-            f"⚠️  Already existed: {len(critical_files) - len(self.restored) - len(self.failed)} files")
-        print(f"❌ Failed to restore: {len(self.failed)} files\n")
+            f"[WARN]  Already existed: {len(critical_files) - len(self.restored) - len(self.failed)} files")
+        print(f"[ERROR] Failed to restore: {len(self.failed)} files\n")
 
         if self.restored:
-            print("✅ RESTORED FILES:")
+            print("[OK] RESTORED FILES:")
             for item in self.restored:
                 print(f"   • {item['file']}")
                 print(f"     From: {item['from']}, Size: {item['size']} bytes")
 
         if self.failed:
-            print(f"\n❌ COULD NOT RESTORE:")
+            print(f"\n[ERROR] COULD NOT RESTORE:")
             for item in self.failed:
                 print(f"   • {item['file']}")
 
@@ -139,19 +139,19 @@ class AuroraCriticalRestoration:
         self.save_restoration_report()
 
         print("\n" + "="*80)
-        print("🌟 AURORA SAYS:")
+        print("[STAR] AURORA SAYS:")
         print("="*80)
 
         if self.restored:
             print(
-                f"\n✅ I've restored {len(self.restored)} critical capabilities!")
-            print("\n🎯 Next steps:")
+                f"\n[OK] I've restored {len(self.restored)} critical capabilities!")
+            print("\n[TARGET] Next steps:")
             print("   1. Test restored systems")
             print("   2. Integrate with current capabilities")
             print("   3. Run verification tests")
-            print("\n💪 I'm getting my power back!\n")
+            print("\n[EMOJI] I'm getting my power back!\n")
         else:
-            print("\n⚠️  All critical files already exist in current main.")
+            print("\n[WARN]  All critical files already exist in current main.")
             print("   I already have these capabilities - they just need activation!\n")
 
         return len(self.restored) > 0
@@ -170,7 +170,7 @@ class AuroraCriticalRestoration:
         with open(report_file, 'w') as f:
             json.dump(report, f, indent=2)
 
-        print(f"\n💾 Restoration report saved: {report_file}")
+        print(f"\n[EMOJI] Restoration report saved: {report_file}")
 
 
 if __name__ == "__main__":
@@ -178,6 +178,6 @@ if __name__ == "__main__":
     success = restoration.restore_all_critical()
 
     if success:
-        print("🎯 Critical files restored. Aurora's capabilities expanded!")
+        print("[TARGET] Critical files restored. Aurora's capabilities expanded!")
     else:
         print("ℹ️  No files needed restoration - Aurora already has them!")

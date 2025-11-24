@@ -65,7 +65,7 @@ LEARNING_SOURCES = [
 def consolidate_to_corpus():
     """Add all learning sources to Aurora's corpus"""
 
-    print("🧠 AURORA KNOWLEDGE CONSOLIDATION")
+    print("[BRAIN] AURORA KNOWLEDGE CONSOLIDATION")
     print("=" * 70)
     print("Converting duplicate/unfinished code into learning corpus...\n")
 
@@ -75,7 +75,7 @@ def consolidate_to_corpus():
         filepath = Path(source["file"])
 
         if not filepath.exists():
-            print(f"⚠️  {source['file']} not found, skipping")
+            print(f"[WARN]  {source['file']} not found, skipping")
             continue
 
         # Read the source code
@@ -96,7 +96,7 @@ def consolidate_to_corpus():
         }
 
         corpus_entries.append(entry)
-        print(f"✅ Added: {source['title']}")
+        print(f"[OK] Added: {source['title']}")
         print(f"   Category: {source['category']}")
         print(f"   Lessons: {len(source['lessons'])}")
         print()
@@ -118,9 +118,9 @@ def consolidate_to_corpus():
         )
 
     print("=" * 70)
-    print(f"✅ Consolidated {len(corpus_entries)} sources into corpus")
-    print(f"📁 Saved to: {knowledge_file}")
-    print("\n🎓 Aurora now has these as reference patterns!")
+    print(f"[OK] Consolidated {len(corpus_entries)} sources into corpus")
+    print(f"[EMOJI] Saved to: {knowledge_file}")
+    print("\n[EMOJI] Aurora now has these as reference patterns!")
     print("   She can learn from them without code duplication")
 
     return knowledge_file

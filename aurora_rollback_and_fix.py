@@ -22,7 +22,7 @@ class AuroraFocusedFixer:
 
     def run_fixes(self):
         """Run targeted fixes on project files only"""
-        print("🎯 Aurora Focused Fixer - Project Files Only")
+        print("[TARGET] Aurora Focused Fixer - Project Files Only")
         print("=" * 80)
         print(f"Targeting {len(self.target_files)} root-level Python files\n")
 
@@ -59,12 +59,12 @@ class AuroraFocusedFixer:
                         f.write(content)
                     self.fixes_applied += 1
                     self.files_modified.add(str(filepath))
-                    print(f"✅ Fixed: {filepath.name}")
+                    print(f"[OK] Fixed: {filepath.name}")
 
             except Exception as e:
-                print(f"⚠️  Error with {filepath.name}: {e}")
+                print(f"[WARN]  Error with {filepath.name}: {e}")
 
-        print(f"\n✨ Applied {self.fixes_applied} fixes to {len(self.files_modified)} files")
+        print(f"\n[SPARKLE] Applied {self.fixes_applied} fixes to {len(self.files_modified)} files")
 
 
 def main():
@@ -72,7 +72,7 @@ def main():
     fixer = AuroraFocusedFixer()
     fixer.run_fixes()
 
-    print("\n🔍 Running pylint verification...")
+    print("\n[SCAN] Running pylint verification...")
     result = subprocess.run(
         ["python", "-m", "pylint", "*.py", "--disable=C,R", "--max-line-length=120"],
         capture_output=True,

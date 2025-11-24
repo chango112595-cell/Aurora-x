@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🔐 TIER 52: RSA CRYPTOGRAPHY GRANDMASTER
+[SECURITY] TIER 52: RSA CRYPTOGRAPHY GRANDMASTER
 Aurora's mastery of RSA encryption, decryption, and cryptanalysis
 """
 
@@ -89,7 +89,7 @@ class AuroraRSAGrandmaster:
         ]
 
         print(f"\n{'='*70}")
-        print(f"🔐 {self.name} v{self.version} Initialized")
+        print(f"[SECURITY] {self.name} v{self.version} Initialized")
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
@@ -102,7 +102,7 @@ class AuroraRSAGrandmaster:
 
     def generate_keypair(self, bits: int = 2048) -> tuple[RSAKey, RSAKey]:
         """Generate RSA keypair"""
-        print(f"🔑 Generating {bits}-bit RSA keypair...")
+        print(f"[EMOJI] Generating {bits}-bit RSA keypair...")
 
         # Generate two large primes
         p = self._generate_prime(bits // 2)
@@ -120,7 +120,7 @@ class AuroraRSAGrandmaster:
         public_key = RSAKey(n=n, e=e)
         private_key = RSAKey(n=n, e=e, d=d, p=p, q=q)
 
-        print(f"✅ Keypair generated: {bits} bits")
+        print(f"[OK] Keypair generated: {bits} bits")
         return public_key, private_key
 
     def encrypt(self, plaintext: bytes, public_key: RSAKey, padding: PaddingScheme = PaddingScheme.OAEP) -> int:
@@ -143,10 +143,10 @@ class AuroraRSAGrandmaster:
         self, ciphertext: int, private_key: RSAKey, padding: PaddingScheme = PaddingScheme.OAEP
     ) -> DecryptionResult:
         """Decrypt RSA ciphertext"""
-        print("🔓 Decrypting RSA ciphertext...")
+        print("[EMOJI] Decrypting RSA ciphertext...")
 
         if not private_key.is_private():
-            print("❌ Private key required for decryption")
+            print("[ERROR] Private key required for decryption")
             return DecryptionResult(
                 plaintext=b"",
                 success=False,
@@ -167,7 +167,7 @@ class AuroraRSAGrandmaster:
         # Convert to bytes
         plaintext = m.to_bytes((m.bit_length() + 7) // 8, "big")
 
-        print("✅ Decryption successful")
+        print("[OK] Decryption successful")
         return DecryptionResult(
             plaintext=plaintext,
             success=True,
@@ -182,26 +182,26 @@ class AuroraRSAGrandmaster:
 
     def factor_modulus(self, n: int) -> tuple[int, int] | None:
         """Attempt to factor RSA modulus"""
-        print(f"🔍 Attempting to factor modulus ({n.bit_length()} bits)...")
+        print(f"[SCAN] Attempting to factor modulus ({n.bit_length()} bits)...")
 
         # Try Fermat's factorization for close primes
         factors = self._fermat_factorization(n)
         if factors:
-            print("✅ Factored using Fermat's method")
+            print("[OK] Factored using Fermat's method")
             return factors
 
         # Try Pollard's rho for small factors
         factors = self._pollard_rho(n)
         if factors:
-            print("✅ Factored using Pollard's rho")
+            print("[OK] Factored using Pollard's rho")
             return factors
 
-        print("❌ Factorization failed - modulus is strong")
+        print("[ERROR] Factorization failed - modulus is strong")
         return None
 
     def wieners_attack(self, public_key: RSAKey) -> int | None:
         """Wiener's attack for small private exponent"""
-        print("🎯 Attempting Wiener's attack...")
+        print("[TARGET] Attempting Wiener's attack...")
 
         # Get continued fraction convergents
         convergents = self._continued_fraction(public_key.e, public_key.n)
@@ -224,21 +224,21 @@ class AuroraRSAGrandmaster:
                     q = (b - sqrt_d) // 2
 
                     if p * q == public_key.n:
-                        print(f"✅ Wiener's attack successful! Found d={d}")
+                        print(f"[OK] Wiener's attack successful! Found d={d}")
                         return d
 
-        print("❌ Wiener's attack failed")
+        print("[ERROR] Wiener's attack failed")
         return None
 
     def common_modulus_attack(self, c1: int, c2: int, e1: int, e2: int, n: int) -> int | None:
         """Attack when same plaintext encrypted with different exponents"""
-        print("🎯 Attempting common modulus attack...")
+        print("[TARGET] Attempting common modulus attack...")
 
         # Extended GCD to find coefficients
         gcd, a, b = self._extended_gcd(e1, e2)
 
         if gcd != 1:
-            print("❌ Attack failed - exponents not coprime")
+            print("[ERROR] Attack failed - exponents not coprime")
             return None
 
         # m = (c1^a * c2^b) mod n
@@ -251,15 +251,15 @@ class AuroraRSAGrandmaster:
 
         m = (pow(c1, a, n) * pow(c2, b, n)) % n
 
-        print("✅ Common modulus attack successful!")
+        print("[OK] Common modulus attack successful!")
         return m
 
     def small_e_attack(self, ciphertext: int, e: int, n: int) -> int | None:
         """Attack for small public exponent with no padding"""
-        print(f"🎯 Attempting small exponent attack (e={e})...")
+        print(f"[TARGET] Attempting small exponent attack (e={e})...")
 
         if e > 5:
-            print("❌ Exponent too large for this attack")
+            print("[ERROR] Exponent too large for this attack")
             return None
 
         # Try to take e-th root directly
@@ -267,14 +267,14 @@ class AuroraRSAGrandmaster:
         while True:
             m = self._nth_root(ciphertext + k * n, e)
             if m is not None and pow(m, e) == ciphertext + k * n:
-                print(f"✅ Small e attack successful! (k={k})")
+                print(f"[OK] Small e attack successful! (k={k})")
                 return m
 
             k += 1
             if k > 1000:  # Reasonable limit
                 break
 
-        print("❌ Small e attack failed")
+        print("[ERROR] Small e attack failed")
         return None
 
     # ============================================================================
@@ -463,7 +463,7 @@ class AuroraRSAGrandmaster:
 def main():
     """Test Tiers 66 - RSA Grandmaster"""
     print("\n" + "=" * 70)
-    print("🧪 TESTING TIER 52: RSA CRYPTOGRAPHY GRANDMASTER")
+    print("[TEST] TESTING TIER 52: RSA CRYPTOGRAPHY GRANDMASTER")
     print("=" * 70 + "\n")
 
     rsa = AuroraRSAGrandmaster()
@@ -506,7 +506,7 @@ def main():
 
     summary = rsa.get_capabilities_summary()
     print("=" * 70)
-    print("✅ TIER 52 OPERATIONAL")
+    print("[OK] TIER 52 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
     print(f"Attacks Available: {len(summary['attack_types'])}")
     print("=" * 70 + "\n")

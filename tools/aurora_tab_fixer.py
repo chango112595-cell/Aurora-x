@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora Tab Issues Auto-Fixer
-🌟 Autonomous fixes for all identified tab issues
+[STAR] Autonomous fixes for all identified tab issues
 """
 
 import json
@@ -21,7 +21,7 @@ class AuroraTabFixer:
     def log(self, level: str, message: str):
         """Aurora's logging"""
         timestamp = datetime.now().strftime("%H:%M:%S")
-        icons = {"INFO": "🌟", "FIX": "✅", "ISSUE": "🐛", "PLAN": "📋"}
+        icons = {"INFO": "[STAR]", "FIX": "[OK]", "ISSUE": "[EMOJI]", "PLAN": "[EMOJI]"}
         icon = icons.get(level, "→")
         print(f"[{timestamp}] {icon} Aurora: {message}")
 
@@ -30,33 +30,33 @@ class AuroraTabFixer:
 
         fixes = {
             "Self-Learning": [
-                "✓ Add error handling for polling operations",
-                "✓ Display recent learning activities list",
-                "✓ Add real-time progress indicators",
-                "✓ Reroute to Luminar Nexus for learning control",
+                "[+] Add error handling for polling operations",
+                "[+] Display recent learning activities list",
+                "[+] Add real-time progress indicators",
+                "[+] Reroute to Luminar Nexus for learning control",
             ],
             "Server Control": [
-                "✓ Fix API endpoint references",
-                "✓ Add real-time server status display",
-                "✓ Reroute to Luminar Nexus (all servers managed there)",
+                "[+] Fix API endpoint references",
+                "[+] Add real-time server status display",
+                "[+] Reroute to Luminar Nexus (all servers managed there)",
             ],
             "Luminar Nexus": [
-                "✓ Fix clickable tab handlers for Active Services",
-                "✓ Add real-time data display for each tab",
-                "✓ Implement WebSocket connection for live updates",
+                "[+] Fix clickable tab handlers for Active Services",
+                "[+] Add real-time data display for each tab",
+                "[+] Implement WebSocket connection for live updates",
             ],
             "Comparison": [
-                "✓ Fix API endpoints for branch data",
-                "✓ Add real-time branch comparison display",
-                "✓ Implement live branch tracking",
+                "[+] Fix API endpoints for branch data",
+                "[+] Add real-time branch comparison display",
+                "[+] Implement live branch tracking",
             ],
             "Chat": [
-                "✓ Fix /api/chat endpoint handling (remove 404 errors)",
-                "✓ Add proper error state UI with user messaging",
-                "✓ Implement real-time message response capability",
+                "[+] Fix /api/chat endpoint handling (remove 404 errors)",
+                "[+] Add proper error state UI with user messaging",
+                "[+] Implement real-time message response capability",
             ],
-            "Aurora Dashboard": ["✓ Already working - no critical issues"],
-            "Code Library": ["✓ Already working - corpus loading functional"],
+            "Aurora Dashboard": ["[+] Already working - no critical issues"],
+            "Code Library": ["[+] Already working - corpus loading functional"],
         }
 
         return fixes
@@ -141,7 +141,7 @@ def main():
     """Aurora's autonomous fix planning"""
 
     print("\n" + "=" * 80)
-    print("🌟 AURORA TAB ISSUES - COMPREHENSIVE FIX PLAN")
+    print("[STAR] AURORA TAB ISSUES - COMPREHENSIVE FIX PLAN")
     print("=" * 80 + "\n")
 
     fixer = AuroraTabFixer()

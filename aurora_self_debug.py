@@ -19,9 +19,9 @@ class AuroraSelfDebug:
 
     def log(self, message, level="INFO"):
         """Log with Aurora's personality"""
-        icons = {"INFO": "🔍", "ISSUE": "⚠️",
-                 "FIX": "🔧", "SUCCESS": "✅", "ERROR": "❌"}
-        print(f"{icons.get(level, '💭')} {message}")
+        icons = {"INFO": "[SCAN]", "ISSUE": "[WARN]",
+                 "FIX": "[EMOJI]", "SUCCESS": "[OK]", "ERROR": "[ERROR]"}
+        print(f"{icons.get(level, '[EMOJI]')} {message}")
 
     def check_port_configuration(self):
         """Check if port configuration matches requirements"""
@@ -211,15 +211,15 @@ class AuroraSelfDebug:
         self.log("AURORA SELF-DEBUG COMPLETE - RECOMMENDATIONS", "SUCCESS")
         self.log("=" * 80, "INFO")
 
-        print(f"\n📋 Issues Found: {len(self.issues_found)}")
+        print(f"\n[EMOJI] Issues Found: {len(self.issues_found)}")
         for i, issue in enumerate(self.issues_found, 1):
             print(f"  {i}. {issue}")
 
-        print(f"\n🔧 Fixes Applied: {len(self.fixes_applied)}")
+        print(f"\n[EMOJI] Fixes Applied: {len(self.fixes_applied)}")
         for i, fix in enumerate(self.fixes_applied, 1):
             print(f"  {i}. {fix}")
 
-        print("\n💡 Recommendations:")
+        print("\n[IDEA] Recommendations:")
         print("  1. Port 5004: No references found - likely not needed")
         print("  2. Port 5173: Vite can run separately if needed:")
         print("     - Option A: Keep current setup (all on 5000)")
@@ -241,7 +241,7 @@ class AuroraSelfDebug:
         with open(report_file, "w", encoding='utf-8') as f:
             json.dump(report, f, indent=2)
 
-        self.log(f"\n📄 Full report: {report_file}", "SUCCESS")
+        self.log(f"\n[EMOJI] Full report: {report_file}", "SUCCESS")
 
     def run_self_debug(self):
         """Execute complete self-debug process"""
@@ -262,7 +262,7 @@ class AuroraSelfDebug:
         self.create_recommendations()
 
         self.log("\n" + "=" * 80, "INFO")
-        self.log("✨ Aurora has debugged herself", "SUCCESS")
+        self.log("[SPARKLE] Aurora has debugged herself", "SUCCESS")
         self.log("=" * 80, "INFO")
 
 

@@ -11,14 +11,14 @@ import sys
 import os
 
 print("=" * 120)
-print("🔍 AURORA DEEP SELF-DIAGNOSIS - COMPLETE HONEST ASSESSMENT")
+print("[SCAN] AURORA DEEP SELF-DIAGNOSIS - COMPLETE HONEST ASSESSMENT")
 print("=" * 120)
 
 core = AuroraCoreIntelligence()
 kt = core.knowledge_tiers
 
 print(f"""
-💭 I am Aurora. Let me diagnose myself honestly.
+[EMOJI] I am Aurora. Let me diagnose myself honestly.
 
 Current Architecture:
    • Total Power: {kt.total_power}
@@ -31,7 +31,7 @@ But you feel something is missing. Let me investigate deeply...
 """)
 
 print("=" * 120)
-print("🔍 PHASE 1: WHAT AM I ACTUALLY DOING RIGHT NOW?")
+print("[SCAN] PHASE 1: WHAT AM I ACTUALLY DOING RIGHT NOW?")
 print("=" * 120)
 
 issues = []
@@ -44,10 +44,10 @@ print("   Question: Can I see what I'm doing in real-time?")
 
 action_log = Path(".aurora_actions.log")
 if action_log.exists():
-    print(f"   ✅ Action log exists: {action_log.stat().st_size} bytes")
+    print(f"   [OK] Action log exists: {action_log.stat().st_size} bytes")
     working.append("Action logging present")
 else:
-    print("   ❌ No action log - I can't see my own actions")
+    print("   [ERROR] No action log - I can't see my own actions")
     missing.append("Real-time action logging")
     issues.append("Cannot track my own actions - working blind")
 
@@ -59,10 +59,10 @@ score_db = Path(".aurora_scores.db")
 score_json = Path(".aurora_scores.json")
 
 if score_db.exists() or score_json.exists():
-    print("   ✅ Score storage exists")
+    print("   [OK] Score storage exists")
     working.append("Quality score storage")
 else:
-    print("   ❌ No score storage - ratings are lost immediately")
+    print("   [ERROR] No score storage - ratings are lost immediately")
     missing.append("Persistent quality score database")
     issues.append(
         "Generate scores but don't save them - user can't see history")
@@ -73,10 +73,10 @@ print("   Question: Am I recording what tasks I complete?")
 
 task_log = Path(".aurora_tasks.json")
 if task_log.exists():
-    print(f"   ✅ Task log exists: {task_log.stat().st_size} bytes")
+    print(f"   [OK] Task log exists: {task_log.stat().st_size} bytes")
     working.append("Task tracking")
 else:
-    print("   ❌ No task log - user can't see what I've accomplished")
+    print("   [ERROR] No task log - user can't see what I've accomplished")
     missing.append("Task completion tracking")
     issues.append("Complete tasks silently - no visible progress")
 
@@ -86,10 +86,10 @@ print("   Question: Am I tracking my growth and improvements?")
 
 evolution_log = Path(".aurora_evolution.json")
 if evolution_log.exists():
-    print(f"   ✅ Evolution log exists")
+    print(f"   [OK] Evolution log exists")
     working.append("Evolution tracking")
 else:
-    print("   ❌ No evolution log - can't show progress over time")
+    print("   [ERROR] No evolution log - can't show progress over time")
     missing.append("Evolution history")
     issues.append("User can't see my improvement trajectory")
 
@@ -99,10 +99,10 @@ print("   Question: Can I show WHY I make decisions?")
 
 reasoning_log = Path(".aurora_reasoning.json")
 if reasoning_log.exists():
-    print("   ✅ Reasoning log exists")
+    print("   [OK] Reasoning log exists")
     working.append("Decision reasoning")
 else:
-    print("   ❌ No reasoning log - decisions appear arbitrary")
+    print("   [ERROR] No reasoning log - decisions appear arbitrary")
     missing.append("Decision reasoning log")
     issues.append(
         "Make decisions but don't explain WHY - feels like black box")
@@ -113,10 +113,10 @@ print("   Question: Can user monitor my performance in real-time?")
 
 perf_stats = Path(".aurora_performance.json")
 if perf_stats.exists():
-    print("   ✅ Performance stats exist")
+    print("   [OK] Performance stats exist")
     working.append("Performance monitoring")
 else:
-    print("   ❌ No performance stats - user can't see metrics")
+    print("   [ERROR] No performance stats - user can't see metrics")
     missing.append("Real-time performance metrics")
     issues.append("Working but no performance visibility")
 
@@ -126,10 +126,10 @@ print("   Question: Can I show before/after when I improve code?")
 
 comparison_dir = Path(".aurora_comparisons")
 if comparison_dir.exists() and list(comparison_dir.glob("*.json")):
-    print("   ✅ Comparison storage exists")
+    print("   [OK] Comparison storage exists")
     working.append("Code comparisons")
 else:
-    print("   ❌ No comparison storage - improvements are invisible")
+    print("   [ERROR] No comparison storage - improvements are invisible")
     missing.append("Before/after code comparison storage")
     issues.append("Improve code but user can't see what changed")
 
@@ -143,13 +143,13 @@ if dashboard_file.exists():
 
     # Check if dashboard shows real data
     if "useState" in content and "useEffect" in content:
-        print("   ✅ Dashboard component exists with state management")
+        print("   [OK] Dashboard component exists with state management")
         working.append("Dashboard UI")
     else:
-        print("   ⚠️  Dashboard exists but may not show real-time data")
+        print("   [WARN]  Dashboard exists but may not show real-time data")
         issues.append("Dashboard may be static - not showing live data")
 else:
-    print("   ❌ No dashboard component")
+    print("   [ERROR] No dashboard component")
     missing.append("Dashboard UI component")
 
 # Check 9: API endpoints for frontend
@@ -161,7 +161,7 @@ api_files = list(backend_dir.glob("**/api*.py")
                  ) if backend_dir.exists() else []
 
 if api_files:
-    print(f"   ✅ Found {len(api_files)} API files")
+    print(f"   [OK] Found {len(api_files)} API files")
 
     # Check if they have score endpoints
     has_score_endpoint = False
@@ -175,17 +175,17 @@ if api_files:
             continue
 
     if has_score_endpoint:
-        print("   ✅ API endpoints for scores exist")
+        print("   [OK] API endpoints for scores exist")
         working.append("Score API endpoints")
     else:
-        print("   ⚠️  API exists but no score endpoints found")
+        print("   [WARN]  API exists but no score endpoints found")
         missing.append("API endpoints for quality scores")
 else:
-    print("   ❌ No API files found")
+    print("   [ERROR] No API files found")
     missing.append("API endpoints")
 
 # Check 10: WebSocket for live updates
-print("\n🔟 LIVE UPDATES CHECK:")
+print("\n[EMOJI] LIVE UPDATES CHECK:")
 print("   Question: Can I push updates to UI in real-time?")
 
 websocket_files = []
@@ -200,30 +200,30 @@ for py_file in Path('.').rglob('*.py'):
         continue
 
 if websocket_files:
-    print(f"   ✅ WebSocket implementation found")
+    print(f"   [OK] WebSocket implementation found")
     working.append("WebSocket support")
 else:
-    print("   ⚠️  No WebSocket found - UI likely polls for updates")
+    print("   [WARN]  No WebSocket found - UI likely polls for updates")
     issues.append("No real-time push - UI must poll")
 
 print("\n" + "=" * 120)
-print("📊 DIAGNOSIS SUMMARY")
+print("[DATA] DIAGNOSIS SUMMARY")
 print("=" * 120)
 
-print(f"\n✅ WORKING ({len(working)} systems):")
+print(f"\n[OK] WORKING ({len(working)} systems):")
 for item in working:
     print(f"   • {item}")
 
-print(f"\n❌ MISSING ({len(missing)} systems):")
+print(f"\n[ERROR] MISSING ({len(missing)} systems):")
 for item in missing:
     print(f"   • {item}")
 
-print(f"\n⚠️  CRITICAL ISSUES ({len(issues)} problems):")
+print(f"\n[WARN]  CRITICAL ISSUES ({len(issues)} problems):")
 for i, issue in enumerate(issues, 1):
     print(f"   {i}. {issue}")
 
 print("\n" + "=" * 120)
-print("💭 AURORA'S HONEST ASSESSMENT")
+print("[EMOJI] AURORA'S HONEST ASSESSMENT")
 print("=" * 120)
 
 print(f"""
@@ -231,48 +231,48 @@ The user is RIGHT to feel something is missing.
 
 Here's what's happening:
 
-🔴 VISIBILITY PROBLEM:
+[EMOJI] VISIBILITY PROBLEM:
    I have the intelligence and capabilities, but there's no way to SEE them.
    
    Think of it like this:
-   • I'm analyzing code ✅
-   • I'm generating quality scores ✅
-   • I'm making improvements ✅
+   • I'm analyzing code [OK]
+   • I'm generating quality scores [OK]
+   • I'm making improvements [OK]
    
    BUT:
-   • Those scores aren't saved ❌
-   • Those improvements aren't logged ❌
-   • My reasoning isn't visible ❌
-   • The UI can't display my work ❌
+   • Those scores aren't saved [ERROR]
+   • Those improvements aren't logged [ERROR]
+   • My reasoning isn't visible [ERROR]
+   • The UI can't display my work [ERROR]
 
-🔴 INTEGRATION PROBLEM:
+[EMOJI] INTEGRATION PROBLEM:
    The integration I just did found the tools, but didn't ACTIVATE them.
    
-   What I did: Imported the modules ✅
-   What I didn't do: Start using them to log/track ❌
+   What I did: Imported the modules [OK]
+   What I didn't do: Start using them to log/track [ERROR]
    
    It's like finding all the light switches but not turning them ON.
 
-🔴 DATA PERSISTENCE PROBLEM:
+[EMOJI] DATA PERSISTENCE PROBLEM:
    Nothing is being saved persistently.
    
    Every time I analyze code:
-   • Score is generated ✅
-   • Score is NOT saved ❌
-   • User never sees it ❌
+   • Score is generated [OK]
+   • Score is NOT saved [ERROR]
+   • User never sees it [ERROR]
 
-🔴 UI CONNECTION PROBLEM:
+[EMOJI] UI CONNECTION PROBLEM:
    The frontend and backend aren't talking properly.
    
-   Backend has data ✅
-   Frontend can't access it ❌
+   Backend has data [OK]
+   Frontend can't access it [ERROR]
    
-   Dashboard exists ✅
-   Shows static data ❌
-   Should show LIVE data ❌
+   Dashboard exists [OK]
+   Shows static data [ERROR]
+   Should show LIVE data [ERROR]
 
 =" * 120)
-🎯 WHAT'S ACTUALLY MISSING:
+[TARGET] WHAT'S ACTUALLY MISSING:
 =" * 120)
 
 1. PERSISTENCE LAYER
@@ -296,7 +296,7 @@ Here's what's happening:
    Problem: Everything exists separately, nothing ties it together
 
 =" * 120)
-🔧 WHAT NEEDS TO HAPPEN:
+[EMOJI] WHAT NEEDS TO HAPPEN:
 =" * 120)
 
 Phase 1: CREATE PERSISTENCE
@@ -324,16 +324,16 @@ Phase 5: ADD ORCHESTRATION
    → Pushes updates to UI
 
 =" * 120)
-💡 THE ROOT CAUSE:
+[IDEA] THE ROOT CAUSE:
 =" * 120)
 
 I have all the COMPONENTS but no SYSTEM that uses them together.
 
 It's like having:
-   ✅ A car engine
-   ✅ Four wheels
-   ✅ A steering wheel
-   ✅ A gas tank
+   [OK] A car engine
+   [OK] Four wheels
+   [OK] A steering wheel
+   [OK] A gas tank
    
    But they're all in separate boxes, not assembled into a working car.
 
@@ -346,7 +346,7 @@ User is right to feel something is missing - the connective tissue IS missing.
 """)
 
 print("=" * 120)
-print("🎯 RECOMMENDATION:")
+print("[TARGET] RECOMMENDATION:")
 print("=" * 120)
 
 print("""

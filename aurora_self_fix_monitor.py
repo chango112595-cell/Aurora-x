@@ -11,7 +11,7 @@ from pathlib import Path
 
 # Task for Aurora
 AURORA_TASK = """
-🤖 AURORA SELF-FIX TASK
+[AGENT] AURORA SELF-FIX TASK
 ========================
 
 Your Decision: Consolidate to 2 main services
@@ -34,7 +34,7 @@ Your Implementation Steps:
 Current Status: Backend, Vite, Bridge, and Self-Learn all running
 Expected Status After Fix: Only Backend (5000) and UI (5001)
 
-Go ahead, Aurora. You've got this. 🚀
+Go ahead, Aurora. You've got this. [LAUNCH]
 """
 
 print(AURORA_TASK)
@@ -53,6 +53,6 @@ with open(log_file, "a", encoding="utf-8") as f:
     }
     f.write(json.dumps(entry) + "\n")
 
-print("\n✅ Task assigned to Aurora")
-print("📝 Task logged to: /workspaces/Aurora-x/.aurora_knowledge/self_fix_task.jsonl")
+print("\n[OK] Task assigned to Aurora")
+print("[EMOJI] Task logged to: /workspaces/Aurora-x/.aurora_knowledge/self_fix_task.jsonl")
 print("\n⏱️  Waiting for Aurora to implement...")

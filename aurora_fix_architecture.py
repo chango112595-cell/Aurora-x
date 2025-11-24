@@ -13,7 +13,7 @@ from aurora_core import AuroraCoreIntelligence
 
 
 def main():
-    print("🌟 Aurora Autonomous Architecture Fix\n")
+    print("[STAR] Aurora Autonomous Architecture Fix\n")
     aurora = AuroraCoreIntelligence()
 
     task = """
@@ -38,7 +38,7 @@ def main():
     Execute autonomously and report what you fixed.
     """
 
-    print("📋 Task for Aurora:")
+    print("[EMOJI] Task for Aurora:")
     print("=" * 80)
     print(task)
     print("=" * 80 + "\n")
@@ -51,10 +51,10 @@ def main():
     context = aurora.get_conversation_context("architecture_fix")
 
     # Generate and execute response
-    print("🔧 Aurora is analyzing and fixing...\n")
+    print("[EMOJI] Aurora is analyzing and fixing...\n")
     response = aurora.generate_aurora_response(analysis, context)
 
-    print("🌟 Aurora's Response:")
+    print("[STAR] Aurora's Response:")
     print("=" * 80)
     print(response)
     print("=" * 80)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-📚 TIER 47: DOCUMENTATION GENERATOR
+[EMOJI] TIER 47: DOCUMENTATION GENERATOR
 Aurora's ability to auto-generate and maintain documentation from code
 """
 
@@ -64,7 +64,7 @@ class AuroraDocGenerator:
         ]
 
         print(f"\n{'='*70}")
-        print(f"📚 {self.name} v{self.version} Initialized")
+        print(f"[EMOJI] {self.name} v{self.version} Initialized")
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
@@ -81,7 +81,7 @@ class AuroraDocGenerator:
         Returns:
             API documentation
         """
-        print(f"📖 Generating API docs for {len(source_files)} files...")
+        print(f"[EMOJI] Generating API docs for {len(source_files)} files...")
 
         api_docs = []
 
@@ -108,7 +108,7 @@ class AuroraDocGenerator:
             },
         )
 
-        print(f"✅ Generated API docs: {len(api_docs)} endpoints")
+        print(f"[OK] Generated API docs: {len(api_docs)} endpoints")
         return doc
 
     def generate_readme(self, project_path: str) -> Documentation:
@@ -121,7 +121,7 @@ class AuroraDocGenerator:
         Returns:
             README documentation
         """
-        print("📄 Generating README for project...")
+        print("[EMOJI] Generating README for project...")
 
         project_info = self._analyze_project(project_path)
 
@@ -178,7 +178,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
 
         doc = Documentation(doc_type=DocType.README, content=readme_content, format="markdown", metadata=project_info)
 
-        print("✅ README generated")
+        print("[OK] README generated")
         return doc
 
     def generate_inline_comments(self, file_path: str) -> str:
@@ -191,7 +191,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
         Returns:
             Code with added comments
         """
-        print(f"💬 Generating inline comments for: {Path(file_path).name}")
+        print(f"[EMOJI] Generating inline comments for: {Path(file_path).name}")
 
         with open(file_path, encoding="utf-8") as f:
             code = f.read()
@@ -199,7 +199,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
         # Parse and add comments
         commented_code = self._add_intelligent_comments(code)
 
-        print("✅ Comments generated")
+        print("[OK] Comments generated")
         return commented_code
 
     def generate_tutorial(self, feature: str, code_examples: list[str]) -> Documentation:
@@ -213,7 +213,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
         Returns:
             Tutorial documentation
         """
-        print(f"📖 Generating tutorial for: {feature}")
+        print(f"[EMOJI] Generating tutorial for: {feature}")
 
         tutorial = f"""# {feature} Tutorial
 
@@ -268,7 +268,7 @@ Learn how to use {feature} in your application.
             doc_type=DocType.TUTORIAL, content=tutorial, format="markdown", metadata={"feature": feature, "steps": 3}
         )
 
-        print("✅ Tutorial generated")
+        print("[OK] Tutorial generated")
         return doc
 
     def generate_changelog(self, git_log: list[dict]) -> Documentation:
@@ -281,7 +281,7 @@ Learn how to use {feature} in your application.
         Returns:
             Changelog documentation
         """
-        print(f"📝 Generating changelog from {len(git_log)} commits...")
+        print(f"[EMOJI] Generating changelog from {len(git_log)} commits...")
 
         grouped = self._group_commits_by_type(git_log)
 
@@ -318,7 +318,7 @@ All notable changes to this project will be documented in this file.
             doc_type=DocType.CHANGELOG, content=changelog, format="markdown", metadata={"commits": len(git_log)}
         )
 
-        print("✅ Changelog generated")
+        print("[OK] Changelog generated")
         return doc
 
     def generate_openapi_spec(self, api_routes: list[dict]) -> Documentation:
@@ -331,7 +331,7 @@ All notable changes to this project will be documented in this file.
         Returns:
             OpenAPI spec
         """
-        print(f"🔧 Generating OpenAPI spec for {len(api_routes)} routes...")
+        print(f"[EMOJI] Generating OpenAPI spec for {len(api_routes)} routes...")
 
         openapi = {
             "openapi": "3.0.0",
@@ -351,7 +351,7 @@ All notable changes to this project will be documented in this file.
             metadata={"routes": len(api_routes)},
         )
 
-        print("✅ OpenAPI spec generated")
+        print("[OK] OpenAPI spec generated")
         return doc
 
     def generate_architecture_docs(self, project_path: str) -> Documentation:
@@ -364,7 +364,7 @@ All notable changes to this project will be documented in this file.
         Returns:
             Architecture documentation
         """
-        print("🏗️  Generating architecture docs...")
+        print("[EMOJI]️  Generating architecture docs...")
 
         structure = self._analyze_architecture(project_path)
 
@@ -415,7 +415,7 @@ User → Frontend → API Gateway → Backend Services → Database
 
         doc = Documentation(doc_type=DocType.ARCHITECTURE, content=arch_docs, format="markdown", metadata=structure)
 
-        print("✅ Architecture docs generated")
+        print("[OK] Architecture docs generated")
         return doc
 
     def sync_docs_with_code(self, docs_dir: str, source_dir: str) -> dict[str, Any]:
@@ -429,7 +429,7 @@ User → Frontend → API Gateway → Backend Services → Database
         Returns:
             Sync report
         """
-        print("🔄 Synchronizing docs with code...")
+        print("[SYNC] Synchronizing docs with code...")
 
         outdated_docs = self._find_outdated_docs(docs_dir, source_dir)
 
@@ -445,7 +445,7 @@ User → Frontend → API Gateway → Backend Services → Database
             "updated_files": updated,
         }
 
-        print(f"✅ Synchronized {len(updated)} doc files")
+        print(f"[OK] Synchronized {len(updated)} doc files")
         return report
 
     # === PRIVATE HELPER METHODS ===
@@ -506,7 +506,7 @@ User → Frontend → API Gateway → Backend Services → Database
 
     def _format_features(self, features: list[str]) -> str:
         """Format features list"""
-        return "\n".join([f"- ✅ {f}" for f in features])
+        return "\n".join([f"- [OK] {f}" for f in features])
 
     def _generate_usage_examples(self, _______info: dict) -> str:
         """Generate usage examples"""
@@ -592,7 +592,7 @@ result = aurora.process_task("Generate API docs")
 def main():
     """Test Tiers 66 functionality"""
     print("\n" + "=" * 70)
-    print("🧪 TESTING TIER 47: DOCUMENTATION GENERATOR")
+    print("[TEST] TESTING TIER 47: DOCUMENTATION GENERATOR")
     print("=" * 70 + "\n")
 
     doc_gen = AuroraDocGenerator()
@@ -629,7 +629,7 @@ def main():
     # Summary
     summary = doc_gen.get_capabilities_summary()
     print("=" * 70)
-    print("✅ TIER 47 OPERATIONAL")
+    print("[OK] TIER 47 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
     print(f"Doc Types: {len(summary['doc_types'])}")
     print("=" * 70 + "\n")

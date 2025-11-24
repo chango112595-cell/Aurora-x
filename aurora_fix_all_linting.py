@@ -26,7 +26,7 @@ def fix_file(filepath, fixes):
 
 
 def main():
-    print("🔧 Aurora: Fixing all linting issues...\n")
+    print("[EMOJI] Aurora: Fixing all linting issues...\n")
 
     fixes = {
         # aurora_autonomous_lint_fixer.py
@@ -44,7 +44,7 @@ def main():
                 "import subprocess\nimport sys\nimport json\nfrom pathlib import Path",
                 "import subprocess\nimport sys\nimport json\nfrom pathlib import Path",
             ),
-            ('print(f"[Aurora] ✅ System Update Complete!")', 'print("[Aurora] ✅ System Update Complete!")'),
+            ('print(f"[Aurora] [OK] System Update Complete!")', 'print("[Aurora] [OK] System Update Complete!")'),
             ('print(f"[Aurora] Architecture Now Accurate:")', 'print("[Aurora] Architecture Now Accurate:")'),
             (
                 'print(f"[Aurora]   • 13 Foundational Tasks (Base Cognitive Layer)")',
@@ -81,10 +81,10 @@ def main():
                 "import socket\nimport subprocess\nimport urllib.request",
                 "import socket\nimport subprocess\nimport urllib.request",
             ),
-            ('print(f"    📄 Serving HTML content")', 'print("    📄 Serving HTML content")'),
-            ('print(f"    📄 Serving markup/XML")', 'print("    📄 Serving markup/XML")'),
-            ('print(f"    📊 Serving JSON")', 'print("    📊 Serving JSON")'),
-            ('print(f"    📝 Serving content")', 'print("    📝 Serving content")'),
+            ('print(f"    [EMOJI] Serving HTML content")', 'print("    [EMOJI] Serving HTML content")'),
+            ('print(f"    [EMOJI] Serving markup/XML")', 'print("    [EMOJI] Serving markup/XML")'),
+            ('print(f"    [DATA] Serving JSON")', 'print("    [DATA] Serving JSON")'),
+            ('print(f"    [EMOJI] Serving content")', 'print("    [EMOJI] Serving content")'),
         ],
         # aurora_server_analysis.py
         "aurora_server_analysis.py": [
@@ -95,10 +95,10 @@ def main():
             ('print(f"[Aurora] Found scripts:")', 'print("[Aurora] Found scripts:")'),
             ('print(f"[Aurora] x-start file found")', 'print("[Aurora] x-start file found")'),
             (
-                'print(f"[Aurora] ✅ Vite configured for port 5173")',
-                'print("[Aurora] ✅ Vite configured for port 5173")',
+                'print(f"[Aurora] [OK] Vite configured for port 5173")',
+                'print("[Aurora] [OK] Vite configured for port 5173")',
             ),
-            ('print(f"[Aurora] ✅ Using React (TSX/JSX)")', 'print("[Aurora] ✅ Using React (TSX/JSX)")'),
+            ('print(f"[Aurora] [OK] Using React (TSX/JSX)")', 'print("[Aurora] [OK] Using React (TSX/JSX)")'),
             ("        ports = self.analyze_x_start()", "        _ = self.analyze_x_start()"),
         ],
         # aurora_deep_investigation.py
@@ -121,13 +121,13 @@ def main():
     fixed_count = 0
     for filename, file_fixes in fixes.items():
         if fix_file(filename, file_fixes):
-            print(f"   ✅ Fixed {filename}")
+            print(f"   [OK] Fixed {filename}")
             fixed_count += 1
         else:
-            print(f"   ⚠️  Skipped {filename}")
+            print(f"   [WARN]  Skipped {filename}")
 
-    print(f"\n✨ Fixed {fixed_count} files")
-    print("🔍 Remaining issues are minor and don't affect functionality")
+    print(f"\n[SPARKLE] Fixed {fixed_count} files")
+    print("[SCAN] Remaining issues are minor and don't affect functionality")
 
 
 if __name__ == "__main__":

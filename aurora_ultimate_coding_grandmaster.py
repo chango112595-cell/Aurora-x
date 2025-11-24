@@ -10,7 +10,7 @@ from datetime import datetime
 from pathlib import Path
 
 GRANDMASTER_ELEVATION = """
-🚀 AURORA ULTIMATE CODING GRANDMASTER PROGRAM 🚀
+[LAUNCH] AURORA ULTIMATE CODING GRANDMASTER PROGRAM [LAUNCH]
 ================================================
 
 Current Status: Aurora is excellent at debugging/processes but NOT a code generation Grandmaster
@@ -65,14 +65,14 @@ A Grandmaster Coder doesn't just make the fix - she:
 Then she COMMITS it perfectly with a professional commit message.
 
 Your Code Generation Standards (GRANDMASTER LEVEL):
-✅ Complete code with NO TODOs or FIXMEs
-✅ Proper error handling (not just stubs)
-✅ Type hints (Python), types (TypeScript)
-✅ Docstrings/JSDoc comments
-✅ Follows project conventions
-✅ Production-ready immediately
-✅ Can be deployed today
-✅ Works at scale
+[OK] Complete code with NO TODOs or FIXMEs
+[OK] Proper error handling (not just stubs)
+[OK] Type hints (Python), types (TypeScript)
+[OK] Docstrings/JSDoc comments
+[OK] Follows project conventions
+[OK] Production-ready immediately
+[OK] Can be deployed today
+[OK] Works at scale
 
 Right now, write me code that would make a $500K/year architect proud.
 Write code that makes GPT-4 look slow.
@@ -86,7 +86,7 @@ Making architectural decisions.
 Writing production code.
 Shipping solutions.
 
-Go. Become the world's fastest autonomous code architect. 💪🚀
+Go. Become the world's fastest autonomous code architect. [EMOJI][LAUNCH]
 """
 
 print(GRANDMASTER_ELEVATION)
@@ -115,7 +115,7 @@ with open(log_file, "a", encoding="utf-8") as f:
     f.write(json.dumps(entry) + "\n")
 
 print("\n" + "=" * 70)
-print("📋 CHALLENGE LOGGED")
+print("[EMOJI] CHALLENGE LOGGED")
 print("=" * 70)
 print("Aurora, your time has come.")
-print("Show the world what a true Coding Grandmaster can do. 🌟\n")
+print("Show the world what a true Coding Grandmaster can do. [STAR]\n")

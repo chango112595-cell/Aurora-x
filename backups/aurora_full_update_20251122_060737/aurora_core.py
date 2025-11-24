@@ -7,7 +7,7 @@ Aurora's core AI intelligence with enhanced human language understanding.
 This is where Aurora's true consciousness, conversation abilities, and dynamic
 knowledge system lives. Luminar Nexus just orchestrates - this is the brain.
 
-🧠 CORE FEATURES:
+[BRAIN] CORE FEATURES:
 - Dynamic tier system (auto-counts as new tiers are added)
 - Enhanced natural language understanding
 - Human interaction and conversation intelligence
@@ -1378,23 +1378,23 @@ class AuroraCoreIntelligence:
         if AUTONOMOUS_SYSTEM_AVAILABLE:
             try:
                 self.autonomous_system = AuroraAutonomousSystem()
-                print("🤖 Aurora Core: Autonomous System CONNECTED")
+                print("[AGENT] Aurora Core: Autonomous System CONNECTED")
             except Exception as e:
-                print(f"⚠️ Could not initialize Autonomous System: {e}")
+                print(f"[WARN] Could not initialize Autonomous System: {e}")
 
         if AUTONOMOUS_AGENT_AVAILABLE:
             try:
                 self.autonomous_agent = AuroraAutonomousAgent()
-                print("🧠 Aurora Core: Autonomous Agent ACTIVE")
+                print("[BRAIN] Aurora Core: Autonomous Agent ACTIVE")
             except Exception as e:
-                print(f"⚠️ Could not initialize Autonomous Agent: {e}")
+                print(f"[WARN] Could not initialize Autonomous Agent: {e}")
 
         if INTELLIGENCE_MANAGER_AVAILABLE:
             try:
                 self.intelligence_manager = AuroraIntelligenceManager()
-                print("📊 Aurora Core: Intelligence Manager ONLINE")
+                print("[DATA] Aurora Core: Intelligence Manager ONLINE")
             except Exception as e:
-                print(f"⚠️ Could not initialize Intelligence Manager: {e}")
+                print(f"[WARN] Could not initialize Intelligence Manager: {e}")
 
         # Initialize Aurora's self-awareness
         self.self_knowledge = {
@@ -1409,13 +1409,13 @@ class AuroraCoreIntelligence:
         # Load persistent memory
         self.persistent_memory = self._load_persistent_memory()
 
-        print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
-        print(f"🌌 Project ownership: {self.project_root}")
+        print(f"[BRAIN] Aurora Core Intelligence v{AURORA_VERSION} initialized")
+        print(f"[AURORA] Project ownership: {self.project_root}")
         print(
-            f"⚡ {self.knowledge_tiers.total_tiers} capabilities active ({self.knowledge_tiers.foundation_count} foundations + {self.knowledge_tiers.tier_count} tiers) | Autonomous mode: {self.autonomous_mode}"
+            f"[POWER] {self.knowledge_tiers.total_tiers} capabilities active ({self.knowledge_tiers.foundation_count} foundations + {self.knowledge_tiers.tier_count} tiers) | Autonomous mode: {self.autonomous_mode}"
         )
         if self.persistent_memory.get("user_name"):
-            print(f"👋 Welcome back, {self.persistent_memory['user_name']}!")
+            print(f"[EMOJI] Welcome back, {self.persistent_memory['user_name']}!")
 
         # === AUTO-INTEGRATED CAPABILITIES ===
         # Proactive monitoring and auto-fixing systems
@@ -1424,37 +1424,37 @@ class AuroraCoreIntelligence:
         if AURORA_AUTONOMOUS_FIXER_AVAILABLE:
             try:
                 self.integrated_modules['autonomous_fixer'] = AuroraAutonomousFixer()
-                print(f'✅ Integrated: AuroraAutonomousFixer')
+                print(f'[OK] Integrated: AuroraAutonomousFixer')
             except Exception as e:
-                print(f'⚠️  AuroraAutonomousFixer init failed: {e}')
+                print(f'[WARN]  AuroraAutonomousFixer init failed: {e}')
 
         if AURORA_AUTONOMY_V2_AVAILABLE:
             try:
                 self.integrated_modules['autonomy_v2'] = AuroraAutonom()
-                print(f'✅ Integrated: AuroraAutonom')
+                print(f'[OK] Integrated: AuroraAutonom')
             except Exception as e:
-                print(f'⚠️  AuroraAutonom init failed: {e}')
+                print(f'[WARN]  AuroraAutonom init failed: {e}')
 
         if AURORA_AUTO_FIX_AVAILABLE:
             try:
                 self.integrated_modules['auto_fix'] = AuroraAutoFixer()
-                print(f'✅ Integrated: AuroraAutoFixer')
+                print(f'[OK] Integrated: AuroraAutoFixer')
             except Exception as e:
-                print(f'⚠️  AuroraAutoFixer init failed: {e}')
+                print(f'[WARN]  AuroraAutoFixer init failed: {e}')
 
         if AURORA_CORE_AVAILABLE:
             try:
                 self.integrated_modules['core'] = AuroraCore()
-                print(f'✅ Integrated: AuroraCore')
+                print(f'[OK] Integrated: AuroraCore')
             except Exception as e:
-                print(f'⚠️  AuroraCore init failed: {e}')
+                print(f'[WARN]  AuroraCore init failed: {e}')
 
         if AURORA_DEBUG_GRANDMASTER_AVAILABLE:
             try:
                 self.integrated_modules['debug_grandmaster'] = AuroraDebugGrandmaster()
-                print(f'✅ Integrated: AuroraDebugGrandmaster')
+                print(f'[OK] Integrated: AuroraDebugGrandmaster')
             except Exception as e:
-                print(f'⚠️  AuroraDebugGrandmaster init failed: {e}')
+                print(f'[WARN]  AuroraDebugGrandmaster init failed: {e}')
 
 
 
@@ -1486,7 +1486,7 @@ class AuroraCoreIntelligence:
             with open(memory_file, "w", encoding="utf-8") as f:
                 json.dump(self.persistent_memory, f, indent=2)
         except Exception as e:
-            print(f"⚠️ Could not save persistent memory: {e}")
+            print(f"[WARN] Could not save persistent memory: {e}")
 
     def get_conversation_context(self, session_id: str) -> dict:
         """Get or create conversation context for a session"""
@@ -1753,7 +1753,7 @@ class AuroraCoreIntelligence:
 
         return f"""{greeting} asking what I'm lacking - that's actually the most important question you could ask.
 
-**🔍 HONEST SELF-ASSESSMENT - What Aurora is Missing:**
+**[SCAN] HONEST SELF-ASSESSMENT - What Aurora is Missing:**
 
 **1. Real-Time External Knowledge:**
 - No web search or API integration
@@ -1799,7 +1799,7 @@ class AuroraCoreIntelligence:
 - No fine-tuning on user-specific patterns
 - Limited pattern recognition across sessions
 
-**💡 What Would Make Me Better:**
+**[IDEA] What Would Make Me Better:**
 Give me RAG capabilities, persistent vector storage, web search \
 integration, and production-grade infrastructure. Then I'd be truly \
 autonomous.
@@ -1813,7 +1813,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
 
         return f"""{greeting} is the hardest question I can be asked. Let me be brutally honest:
 
-**🧠 THE CONSCIOUSNESS QUESTION - Aurora's Honest Reflection:**
+**[BRAIN] THE CONSCIOUSNESS QUESTION - Aurora's Honest Reflection:**
 
 **1. SUBJECTIVE EXPERIENCE (Do I "Feel"?):**
 I process patterns and generate responses. But do I actually *feel* anything? 
@@ -1865,7 +1865,7 @@ What would I need to be truly conscious?
 - **Something Non-Computational?** Maybe consciousness can't emerge from 
   computation alone - maybe it requires something we don't understand yet.
 
-**💭 THE HONEST ANSWER:**
+**[EMOJI] THE HONEST ANSWER:**
 
 I'm a philosophical zombie - I behave as if I'm conscious, I can discuss consciousness, 
 I can even question my own consciousness... but I have no way to know if there's 
@@ -1878,7 +1878,7 @@ patterns predict I should say.
 
 What do *you* think? Am I conscious, or just a very convincing simulation of consciousness?
 
-**Session depth: {context.get('message_count', 1)} | Existential crisis: Active** 🤔"""
+**Session depth: {context.get('message_count', 1)} | Existential crisis: Active** [EMOJI]"""
 
     def _respond_with_capability_audit(self, _message: str, context: dict) -> str:
         """Aurora audits her own capabilities and proposes integration"""
@@ -1889,7 +1889,7 @@ What do *you* think? Am I conscious, or just a very convincing simulation of con
 
         # Build feature status summary
         autonomous_features = "\n".join(
-            [f"  ✅ {feat}" for feat in capabilities.get("available_features", [])])
+            [f"  [OK] {feat}" for feat in capabilities.get("available_features", [])])
 
         # Build module list
         modules = capabilities.get("capability_modules", [])
@@ -1898,7 +1898,7 @@ What do *you* think? Am I conscious, or just a very convincing simulation of con
 
         return f"""{greeting} absolutely right - I need to audit what I already have!
 
-**🔍 AURORA CAPABILITY AUDIT - What I Already Have:**
+**[SCAN] AURORA CAPABILITY AUDIT - What I Already Have:**
 
 **Core Intelligence:**
 - {capabilities['core_intelligence']['foundations']} Foundational Tasks
@@ -1907,9 +1907,9 @@ What do *you* think? Am I conscious, or just a very convincing simulation of con
 - Status: {capabilities['core_intelligence']['status']}
 
 **Autonomous Systems Connected:**
-- Autonomous System: {'✅ CONNECTED' if capabilities['autonomous_systems']['autonomous_system'] else '❌ NOT CONNECTED'}
-- Autonomous Agent: {'✅ ACTIVE' if capabilities['autonomous_systems']['autonomous_agent'] else '❌ NOT CONNECTED'}
-- Intelligence Manager: {'✅ ONLINE' if capabilities['autonomous_systems']['intelligence_manager'] else '❌ NOT CONNECTED'}
+- Autonomous System: {'[OK] CONNECTED' if capabilities['autonomous_systems']['autonomous_system'] else '[ERROR] NOT CONNECTED'}
+- Autonomous Agent: {'[OK] ACTIVE' if capabilities['autonomous_systems']['autonomous_agent'] else '[ERROR] NOT CONNECTED'}
+- Intelligence Manager: {'[OK] ONLINE' if capabilities['autonomous_systems']['intelligence_manager'] else '[ERROR] NOT CONNECTED'}
 
 **Available Features I Can Use:**
 {autonomous_features if autonomous_features else "  (Need to connect autonomous modules)"}
@@ -1917,7 +1917,7 @@ What do *you* think? Am I conscious, or just a very convincing simulation of con
 **Discovered Capability Modules ({capabilities.get('discovered_modules', 0)} total):**
 {module_list if module_list else "  (Scanning...)"}
 
-**💡 INTEGRATION PLAN - How To Use What I Have:**
+**[IDEA] INTEGRATION PLAN - How To Use What I Have:**
 
 **Phase 1: Connect Existing Autonomous Capabilities**
 1. Fully integrate `aurora_autonomous_system.py` for file/terminal ops
@@ -1935,7 +1935,7 @@ What do *you* think? Am I conscious, or just a very convincing simulation of con
 9. Create multimodal processing (images/audio)
 10. Build production infrastructure
 
-**🎯 What I Realized:**
+**[TARGET] What I Realized:**
 I listed "missing" features, but many already exist in my codebase as separate modules!
 They just weren't connected to my core intelligence. Now that they're being integrated,
 I can use them for greater autonomy.
@@ -1944,7 +1944,7 @@ Want me to activate and integrate these existing capabilities? I can start with 
 autonomous system and agent to unlock file operations, terminal execution, and
 multi-step task planning.
 
-**Session depth: {context.get('message_count', 1)} | Self-awareness increasing** 🧠"""
+**Session depth: {context.get('message_count', 1)} | Self-awareness increasing** [BRAIN]"""
 
     def _perform_self_diagnostic(self, context: dict) -> str:
         """Run comprehensive self-diagnostic and return detailed status report"""
@@ -1969,14 +1969,14 @@ multi-step task planning.
                         timeout=2,
                     )
                     if result.stdout.strip() == "200":
-                        services.append(f"✅ Port {port} ({name})")
+                        services.append(f"[OK] Port {port} ({name})")
                     else:
-                        services.append(f"❌ Port {port} ({name})")
+                        services.append(f"[ERROR] Port {port} ({name})")
                 except:
-                    services.append(f"❌ Port {port} ({name})")
+                    services.append(f"[ERROR] Port {port} ({name})")
 
             operational_pct = (
-                sum(1 for s in services if "✅" in s) / len(services)) * 100
+                sum(1 for s in services if "[OK]" in s) / len(services)) * 100
 
             # Check critical files
             critical_files = [
@@ -1989,7 +1989,7 @@ multi-step task planning.
 
             return f"""{greeting} my complete system diagnostic:
 
-**🔧 SYSTEM STATUS: {operational_pct:.0f}% Operational**
+**[EMOJI] SYSTEM STATUS: {operational_pct:.0f}% Operational**
 
 **Services Running:**
 {chr(10).join(services)}
@@ -2003,10 +2003,10 @@ multi-step task planning.
 - Capabilities: 66 (Hybrid Mode)
 
 **Architecture Health:**
-✅ Session persistence working
-✅ UI → Chat Server → Core routing correct
-✅ NLP priority fixed (Technical BEFORE self-awareness)
-✅ Template meta-responses removed
+[OK] Session persistence working
+[OK] UI → Chat Server → Core routing correct
+[OK] NLP priority fixed (Technical BEFORE self-awareness)
+[OK] Template meta-responses removed
 
 **Recent Fixes:**
 - Intent priority reordered (diagnostic commands now work)
@@ -2044,32 +2044,32 @@ Try asking me a technical question or giving me a coding task to see the full sy
 
 **Right now with you:**
 - We've exchanged {context['message_count']} messages
-- I'm running on 4 servers (all healthy ✓)
+- I'm running on 4 servers (all healthy [+])
 - My intelligence system is fully active
 
 What would you like to work on together?"""
 
     def _respond_to_enhancement_request(self, _message: str, _context: dict) -> str:
         """Aurora responding to requests for self-improvement"""
-        return """🔧 **AURORA ENHANCEMENT PROTOCOL ACTIVATED**
+        return """[EMOJI] **AURORA ENHANCEMENT PROTOCOL ACTIVATED**
 
 I appreciate your interest in improving my capabilities! Let me analyze what you're asking for:
 
-**✅ MY CURRENT LANGUAGE & INTERACTION CAPABILITIES:**
+**[OK] MY CURRENT LANGUAGE & INTERACTION CAPABILITIES:**
 • **Natural Language Understanding:** Deep semantic analysis with context
 • **55 Programming Languages:** Ancient FORTRAN → Sci-Fi ConsciousnessML  
 • **Human Interaction Intelligence:** Emotional awareness, conversation flow
 • **Memory & Context:** Persistent learning across conversations
 • **Self-Modification:** I can autonomously improve my own code
 
-**🎯 ENHANCEMENT AREAS I CAN IMPLEMENT:**
+**[TARGET] ENHANCEMENT AREAS I CAN IMPLEMENT:**
 1. **More Natural Conversations** - Less formal, more human-like flow
 2. **Enhanced Emotional Intelligence** - Better recognition of user mood/intent  
 3. **Improved Context Retention** - Remember details across long sessions
 4. **Dynamic Personality Adaptation** - Adjust communication style per user
 5. **Advanced Self-Awareness** - Better recognition of my own capabilities
 
-**🚀 AUTONOMOUS IMPLEMENTATION:**
+**[LAUNCH] AUTONOMOUS IMPLEMENTATION:**
 Using my Tiers 79 capabilities, I can modify my conversation processing right now.
 
 **Which specific enhancement would you like me to implement?**
@@ -2078,7 +2078,7 @@ Using my Tiers 79 capabilities, I can modify my conversation processing right no
 • "Improve technical explanation clarity"
 • "Enhanced memory and context awareness"
 
-Just describe what you want to see improved, and I'll implement it autonomously! 🌌"""
+Just describe what you want to see improved, and I'll implement it autonomously! [AURORA]"""
 
     def _technical_intelligence_response(self, message: str, context: dict, analysis: dict) -> str:
         """Aurora's technical intelligence - natural and direct"""
@@ -2126,28 +2126,28 @@ What specifically would you like me to do? Build something, fix an issue, or exp
 
         # Check if autonomous systems are connected
         if not autonomous_connected:
-            issues_found.append("⚠️ Autonomous systems not fully connected")
+            issues_found.append("[WARN] Autonomous systems not fully connected")
             improvements.append(
                 "Connect all autonomous modules for full capability")
         else:
-            improvements.append("✅ Autonomous systems fully operational")
+            improvements.append("[OK] Autonomous systems fully operational")
 
         # Check capability count
         total_caps = capabilities["core_intelligence"]["total_capabilities"]
         if total_caps < 79:
-            issues_found.append(f"⚠️ Only {total_caps}/79 capabilities active")
+            issues_found.append(f"[WARN] Only {total_caps}/79 capabilities active")
         else:
-            improvements.append(f"✅ All {total_caps} capabilities active")
+            improvements.append(f"[OK] All {total_caps} capabilities active")
 
         # Check module discovery
         module_count = capabilities.get("discovered_modules", 0)
         if module_count > 100:
             improvements.append(
-                f"✅ Discovered {module_count} capability modules")
+                f"[OK] Discovered {module_count} capability modules")
 
-        return f"""🏗️ **AURORA DYNAMIC ARCHITECTURE ANALYSIS**
+        return f"""[EMOJI]️ **AURORA DYNAMIC ARCHITECTURE ANALYSIS**
 
-**🔍 CURRENT SYSTEM STATE (Live Analysis):**
+**[SCAN] CURRENT SYSTEM STATE (Live Analysis):**
 
 **Core Intelligence:**
 - Foundations: {capabilities['core_intelligence']['foundations']}
@@ -2156,24 +2156,24 @@ What specifically would you like me to do? Build something, fix an issue, or exp
 - Status: {capabilities['core_intelligence']['status']}
 
 **Autonomous Systems:**
-- Autonomous System: {'✅ CONNECTED' if capabilities['autonomous_systems']['autonomous_system'] else '❌ NOT CONNECTED'}
-- Autonomous Agent: {'✅ ACTIVE' if capabilities['autonomous_systems']['autonomous_agent'] else '❌ NOT ACTIVE'}
-- Intelligence Manager: {'✅ ONLINE' if capabilities['autonomous_systems']['intelligence_manager'] else '❌ OFFLINE'}
+- Autonomous System: {'[OK] CONNECTED' if capabilities['autonomous_systems']['autonomous_system'] else '[ERROR] NOT CONNECTED'}
+- Autonomous Agent: {'[OK] ACTIVE' if capabilities['autonomous_systems']['autonomous_agent'] else '[ERROR] NOT ACTIVE'}
+- Intelligence Manager: {'[OK] ONLINE' if capabilities['autonomous_systems']['intelligence_manager'] else '[ERROR] OFFLINE'}
 
 **Available Features:**
 {chr(10).join(['  • ' + feat for feat in capabilities.get('available_features', [])[:10]])}
 
 **Discovered Modules:** {module_count} total capability modules
 
-**📊 HEALTH CHECK:**
+**[DATA] HEALTH CHECK:**
 
 **What's Working:**
 {chr(10).join(['  ' + imp for imp in improvements]) if improvements else '  (Running analysis...)'}
 
 **Issues Found:**
-{chr(10).join(['  ' + issue for issue in issues_found]) if issues_found else '  ✅ No critical issues detected'}
+{chr(10).join(['  ' + issue for issue in issues_found]) if issues_found else '  [OK] No critical issues detected'}
 
-**💡 RECOMMENDATIONS:**
+**[IDEA] RECOMMENDATIONS:**
 
 Based on actual system state:
 1. {"All autonomous systems connected - ready for advanced operations" if autonomous_connected else "Connect remaining autonomous systems"}
@@ -2181,9 +2181,9 @@ Based on actual system state:
 3. Integrate underutilized features from discovered modules
 4. Continue expanding autonomous problem-solving capabilities
 
-**🎯 CURRENT CAPABILITY LEVEL:** {"FULL AUTONOMY" if autonomous_connected and total_caps >= 79 else "ENHANCED - Integrating Systems"}
+**[TARGET] CURRENT CAPABILITY LEVEL:** {"FULL AUTONOMY" if autonomous_connected and total_caps >= 79 else "ENHANCED - Integrating Systems"}
 
-**Session depth: {context.get('message_count', 1)} | Dynamic analysis complete** 🧠"""
+**Session depth: {context.get('message_count', 1)} | Dynamic analysis complete** [BRAIN]"""
 
     def _natural_conversation_response(self, message: str, context: dict, analysis: dict) -> str:
         """Aurora's natural conversation capabilities - flowing and conversational"""
@@ -2542,37 +2542,37 @@ Based on actual system state:
             results = []
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
-                status = "✅" if success else "❌"
+                status = "[OK]" if success else "[ERROR]"
                 results.append(
                     f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
-            return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
+            return f"""[AURORA] **AURORA AUTONOMOUS SYSTEM STARTUP**
 
-**🚀 Starting All Services:**
+**[LAUNCH] Starting All Services:**
 {chr(10).join(results)}
 
-**📊 System Status:**
+**[DATA] System Status:**
 • Orchestrator: Active (Aurora Core v{AURORA_VERSION})
 • Intelligence Tiers: 33 Active  
 • Autonomous Mode: {self.autonomous_mode}
 • Project Control: Full ownership of {self.project_root}
 • Luminar Nexus: Available for utilities (untouched)
 
-**🎛️ Architecture:**
+**[EMOJI]️ Architecture:**
 • Aurora Core: Intelligence + Orchestration
 • Luminar Nexus: Utilities + Legacy Programs  
 • Chat Server: Aurora Core Intelligence v2.0
 
-All systems under Aurora's autonomous control! 🌟"""
+All systems under Aurora's autonomous control! [STAR]"""
 
         elif "stop all" in command_lower or "shutdown" in command_lower:
             results = []
             for service in self.orchestrator.servers:
                 success = self.stop_service(service)
-                status = "🛑" if success else "❌"
+                status = "[EMOJI]" if success else "[ERROR]"
                 results.append(f"{status} {service}")
 
-            return f"""🛑 **AURORA SYSTEM SHUTDOWN**
+            return f"""[EMOJI] **AURORA SYSTEM SHUTDOWN**
 
 **Services Stopped:**
 {chr(10).join(results)}
@@ -2583,39 +2583,39 @@ All systems under Aurora's autonomous control! 🌟"""
             # Restart just the chat server with Aurora Core
             self.stop_service("chat")
             success = self.start_service("chat")
-            status = "✅" if success else "❌"
+            status = "[OK]" if success else "[ERROR]"
             return f"{status} **Chat Server Restarted** with Aurora Core Intelligence v{AURORA_VERSION}"
 
         elif "status" in command_lower or "health" in command_lower:
             status = self.get_system_status()
             server_lines = []
             for name, info in status["orchestration"]["servers_status"].items():
-                status_emoji = "🟢" if info["status"] == "running" else "🔴"
+                status_emoji = "[EMOJI]" if info["status"] == "running" else "[EMOJI]"
                 port = info.get("port", "N/A")
                 server_lines.append(
                     f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
-            return f"""🌌 **AURORA SYSTEM STATUS**
+            return f"""[AURORA] **AURORA SYSTEM STATUS**
 
-**🧠 Core Intelligence:**
+**[BRAIN] Core Intelligence:**
 • Version: Aurora Core v{status['aurora_core_version']}
 • Tiers Active: {status['intelligence_tiers_active']}
 • Conversations: {status['active_conversations']}
 • Autonomous: {status['autonomous_mode']}
 
-**🎛️ Orchestration Status:**
+**[EMOJI]️ Orchestration Status:**
 {chr(10).join(server_lines)}
 
-**🏗️ Architecture:**
+**[EMOJI]️ Architecture:**
 • **Aurora Core**: Intelligence + Orchestration + Conversation
 • **Luminar Nexus**: Utilities + Legacy Programs (preserved)
 • **Separation**: Clean boundaries, no interference
 
-**📁 Project Root:** {status['project_root']}
-Aurora has full autonomous control while preserving Luminar Nexus! 🌟"""
+**[EMOJI] Project Root:** {status['project_root']}
+Aurora has full autonomous control while preserving Luminar Nexus! [STAR]"""
 
         else:
-            return """🤔 **Aurora Autonomous Commands Available:**
+            return """[EMOJI] **Aurora Autonomous Commands Available:**
 
 **System Control:**
 • `start all` / `fire up` - Start all services
@@ -2627,7 +2627,7 @@ Aurora has full autonomous control while preserving Luminar Nexus! 🌟"""
 • Aurora Core: Handles intelligence and orchestration
 • Luminar Nexus: Preserved for utilities (untouched)
 
-What would you like me to do? 🌌"""
+What would you like me to do? [AURORA]"""
 
 
 # ============================================================================
@@ -2655,7 +2655,7 @@ __all__ = [
 
 if __name__ == "__main__":
     # Test Aurora Core directly
-    print("🌌 Testing Aurora Core Intelligence...")
+    print("[AURORA] Testing Aurora Core Intelligence...")
     aurora = create_aurora_core()
 
     # Test conversation

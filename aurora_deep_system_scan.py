@@ -77,7 +77,7 @@ class AuroraDeepScanner:
 
     def scan_all_claimed_gaps(self):
         """Scan for all 79 capabilities Aurora claims are missing"""
-        print("🔍 Deep scanning for claimed missing capabilities...\n")
+        print("[SCAN] Deep scanning for claimed missing capabilities...\n")
 
         gaps = [
             {
@@ -127,16 +127,16 @@ class AuroraDeepScanner:
             result = self.scan_for_capability(gap['name'], gap['keywords'])
 
             if result["status"] == "FOUND":
-                print(f"  ✅ FOUND! In {len(result['found_in_files'])} files")
+                print(f"  [OK] FOUND! In {len(result['found_in_files'])} files")
                 self.findings["found_in_system"].append(result)
             else:
-                print(f"  ❌ Not found")
+                print(f"  [ERROR] Not found")
                 self.findings["claimed_missing"].append(result)
             print()
 
     def scan_unused_modules(self):
         """Find modules that exist but might not be used"""
-        print("🔍 Scanning for unused/dormant modules...\n")
+        print("[SCAN] Scanning for unused/dormant modules...\n")
 
         # Check tools/ directory
         tools_dir = self.project_root / "tools"
@@ -161,7 +161,7 @@ class AuroraDeepScanner:
 
     def scan_git_history_for_removed_features(self):
         """Check git history for features that were removed"""
-        print("🔍 Checking git history for removed capabilities...\n")
+        print("[SCAN] Checking git history for removed capabilities...\n")
 
         try:
             # Get list of deleted files
@@ -186,7 +186,7 @@ class AuroraDeepScanner:
 
     def find_hidden_capabilities(self):
         """Find capabilities in comments, docstrings, TODO markers"""
-        print("🔍 Searching for hidden/commented capabilities...\n")
+        print("[SCAN] Searching for hidden/commented capabilities...\n")
 
         hidden = []
 
@@ -242,7 +242,7 @@ class AuroraDeepScanner:
             report.append("=" * 80)
 
             for cap in self.findings["found_in_system"]:
-                report.append(f"\n✅ {cap['capability']}")
+                report.append(f"\n[OK] {cap['capability']}")
                 report.append(f"   Status: {cap['status']}")
                 report.append(
                     f"   Found in {len(cap['found_in_files'])} files:")
@@ -264,7 +264,7 @@ class AuroraDeepScanner:
             report.append("=" * 80)
 
             for cap in self.findings["claimed_missing"]:
-                report.append(f"\n❌ {cap['capability']}")
+                report.append(f"\n[ERROR] {cap['capability']}")
                 report.append(f"   Searched for: {', '.join(cap['keywords'])}")
                 report.append(
                     f"   Status: NOT FOUND in codebase or git history")
@@ -303,7 +303,7 @@ class AuroraDeepScanner:
         missing_count = len(self.findings["claimed_missing"])
 
         if found_count > missing_count:
-            report.append("\n🎯 AURORA HAS MORE THAN SHE THINKS!")
+            report.append("\n[TARGET] AURORA HAS MORE THAN SHE THINKS!")
             report.append(
                 f"   She found {found_count} 'missing' capabilities that actually EXIST.")
             report.append(
@@ -311,11 +311,11 @@ class AuroraDeepScanner:
             report.append(
                 "   Solution: Improve self-awareness and module discovery.")
         elif missing_count > found_count:
-            report.append("\n⚠️  CAPABILITIES ARE TRULY MISSING")
+            report.append("\n[WARN]  CAPABILITIES ARE TRULY MISSING")
             report.append(f"   {missing_count} claimed gaps are real.")
             report.append("   These need to be built from scratch.")
         else:
-            report.append("\n✅ ACCURATE SELF-ASSESSMENT")
+            report.append("\n[OK] ACCURATE SELF-ASSESSMENT")
             report.append(
                 "   Aurora correctly identified what she has and lacks.")
 
@@ -335,7 +335,7 @@ def main():
     # Initialize Aurora
     print("Initializing Aurora...")
     aurora = AuroraCoreIntelligence()
-    print("✅ Aurora initialized\n")
+    print("[OK] Aurora initialized\n")
 
     # Create scanner
     scanner = AuroraDeepScanner(aurora)
@@ -360,14 +360,14 @@ def main():
     with open(report_file, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"\n💾 Full report saved to: {report_file}")
+    print(f"\n[EMOJI] Full report saved to: {report_file}")
 
     # Save JSON data
     json_file = Path(__file__).parent / "aurora_deep_scan_data.json"
     with open(json_file, 'w', encoding='utf-8') as f:
         json.dump(scanner.findings, f, indent=2)
 
-    print(f"💾 Raw data saved to: {json_file}")
+    print(f"[EMOJI] Raw data saved to: {json_file}")
 
 
 if __name__ == "__main__":

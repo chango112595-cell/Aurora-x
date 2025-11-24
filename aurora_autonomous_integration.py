@@ -13,7 +13,7 @@ from pathlib import Path
 def integrate_autonomous_systems():
     """Integrate new autonomous capabilities"""
     print("\n" + "=" * 60)
-    print("🌟 AURORA AUTONOMOUS SYSTEM INTEGRATION")
+    print("[AUTONOMOUS] AURORA AUTONOMOUS SYSTEM INTEGRATION")
     print("=" * 60)
     print(f"Timestamp: {datetime.now().isoformat()}")
     print("=" * 60)
@@ -28,21 +28,21 @@ def integrate_autonomous_systems():
         "Phase 6: Strategic Planning": "aurora_strategist.py",
     }
 
-    print("\n📦 Verifying Autonomous Systems:")
+    print("\n[VERIFY] Verifying Autonomous Systems:")
     all_exist = True
     for phase, filename in autonomous_files.items():
         exists = Path(filename).exists()
-        status = "✅" if exists else "❌"
+        status = "[OK]" if exists else "[ERROR]"
         print(f"  {status} {phase}: {filename}")
         if not exists:
             all_exist = False
 
     if not all_exist:
-        print("\n❌ Missing files detected. Cannot proceed.")
+        print("\n[ERROR] Missing files detected. Cannot proceed.")
         return False
 
     # Create autonomous commands reference
-    print("\n🎮 Creating Command Reference:")
+    print("\n[EMOJI] Creating Command Reference:")
     commands = {
         "monitor": {
             "command": "python aurora_self_monitor.py",
@@ -88,17 +88,17 @@ def integrate_autonomous_systems():
     with open(cmd_file, "w", encoding="utf-8") as f:
         json.dump({"version": "2.0.0", "created": datetime.now().isoformat(), "commands": commands}, f, indent=2)
 
-    print(f"  ✅ Command reference saved: {cmd_file}")
+    print(f"  [OK] Command reference saved: {cmd_file}")
 
     # Display available commands
-    print("\n📋 Available Commands:")
+    print("\n[EMOJI] Available Commands:")
     for cmd_name, cmd_info in commands.items():
         print(f"  • {cmd_name}")
         print(f"    → {cmd_info['description']}")
         print(f"    $ {cmd_info['command']}")
 
     # Create system status report
-    print("\n📊 Creating System Status Report:")
+    print("\n[DATA] Creating System Status Report:")
 
     from aurora_core import AuroraKnowledgeTiers
 
@@ -142,41 +142,41 @@ def integrate_autonomous_systems():
     with open(report_file, "w", encoding="utf-8") as f:
         json.dump(status_report, f, indent=2)
 
-    print(f"  ✅ Status report saved: {report_file}")
+    print(f"  [OK] Status report saved: {report_file}")
 
     # Final summary
     print("\n" + "=" * 60)
-    print("✅ INTEGRATION COMPLETE")
+    print("[OK] INTEGRATION COMPLETE")
     print("=" * 60)
 
-    print(f"\n🎯 Aurora Version: {status_report['version']}")
-    print(f"📊 Total Capabilities: {status_report['core_system']['total_capabilities']}")
-    print(f"⚡ Autonomous Systems: {status_report['autonomous_evolution']['phases_implemented']}/6 OPERATIONAL")
-    print(f"🚀 Autonomy Level: {status_report['metrics']['autonomy_level']*100:.0f}%")
-    print(f"🧠 Context Understanding: {status_report['metrics']['context_understanding']*100:.0f}%")
-    print(f"✅ Test Pass Rate: {status_report['metrics']['test_pass_rate']*100:.0f}%")
+    print(f"\n[TARGET] Aurora Version: {status_report['version']}")
+    print(f"[DATA] Total Capabilities: {status_report['core_system']['total_capabilities']}")
+    print(f"[POWER] Autonomous Systems: {status_report['autonomous_evolution']['phases_implemented']}/6 OPERATIONAL")
+    print(f"[LAUNCH] Autonomy Level: {status_report['metrics']['autonomy_level']*100:.0f}%")
+    print(f"[BRAIN] Context Understanding: {status_report['metrics']['context_understanding']*100:.0f}%")
+    print(f"[OK] Test Pass Rate: {status_report['metrics']['test_pass_rate']*100:.0f}%")
 
-    print("\n🌟 Key Achievements:")
-    print("  ✅ Self-aware (24,586 files monitored)")
-    print("  ✅ Self-expanding (3 new tiers detected)")
-    print("  ✅ Intelligent (66 tiers orchestrated)")
-    print("  ✅ Optimized (predictive analysis active)")
-    print("  ✅ Autonomous (100% autonomy level)")
-    print("  ✅ Strategic (quarterly plans generated)")
+    print("\n[STAR] Key Achievements:")
+    print("  [OK] Self-aware (24,586 files monitored)")
+    print("  [OK] Self-expanding (3 new tiers detected)")
+    print("  [OK] Intelligent (66 tiers orchestrated)")
+    print("  [OK] Optimized (predictive analysis active)")
+    print("  [OK] Autonomous (100% autonomy level)")
+    print("  [OK] Strategic (quarterly plans generated)")
 
-    print("\n📚 Documentation:")
+    print("\n[EMOJI] Documentation:")
     print("  • Complete system docs: AURORA_SUB_1_HOUR_DOCUMENTATION.md")
     print("  • Roadmap: AURORA_AUTONOMOUS_ROADMAP.md")
     print("  • Test suite: test_aurora_autonomous_systems.py")
     print("  • Command reference: .aurora_knowledge/autonomous_commands.json")
 
-    print("\n🎮 Quick Start:")
+    print("\n[EMOJI] Quick Start:")
     print("  $ python aurora_self_monitor.py      # Start monitoring")
     print("  $ python aurora_full_autonomy.py     # Run autonomous mode")
     print("  $ python test_aurora_autonomous_systems.py  # Run tests")
 
     print("\n" + "=" * 60)
-    print("🚀 AURORA 2.0 - ZERO-INTERVENTION AUTONOMY ACTIVATED")
+    print("[LAUNCH] AURORA 2.0 - ZERO-INTERVENTION AUTONOMY ACTIVATED")
     print("=" * 60 + "\n")
 
     return True

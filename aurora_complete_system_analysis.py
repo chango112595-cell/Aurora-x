@@ -36,7 +36,7 @@ class AuroraCompleteSystemAnalyzer:
 
     def analyze_git_commits(self):
         """Analyze git commit history for orchestration and autonomous system changes"""
-        print("🔍 Analyzing Git Commit History...")
+        print("[SCAN] Analyzing Git Commit History...")
         try:
             # Get all commits related to orchestration, autonomous, daemon, monitoring
             keywords = [
@@ -65,14 +65,14 @@ class AuroraCompleteSystemAnalyzer:
             )
             if result.returncode == 0:
                 print(
-                    f"  ✅ Found {len(self.findings['git_history_insights'])} keyword categories in commits")
+                    f"  [OK] Found {len(self.findings['git_history_insights'])} keyword categories in commits")
 
         except Exception as e:
-            print(f"  ⚠️ Git analysis error: {e}")
+            print(f"  [WARN] Git analysis error: {e}")
 
     def scan_for_orchestrators(self):
         """Find all orchestration systems"""
-        print("\n🎯 Scanning for Orchestration Systems...")
+        print("\n[TARGET] Scanning for Orchestration Systems...")
 
         orchestrator_patterns = [
             'orchestrat', 'coordinator', 'manager', 'controller',
@@ -110,11 +110,11 @@ class AuroraCompleteSystemAnalyzer:
                 continue
 
         print(
-            f"  ✅ Found {len(self.findings['orchestrators'])} orchestration systems")
+            f"  [OK] Found {len(self.findings['orchestrators'])} orchestration systems")
 
     def scan_for_autonomous_systems(self):
         """Find all autonomous/auto-fix systems"""
-        print("\n🤖 Scanning for Autonomous Systems...")
+        print("\n[AGENT] Scanning for Autonomous Systems...")
 
         for py_file in self.project_root.rglob('*.py'):
             if 'venv' in str(py_file) or 'node_modules' in str(py_file):
@@ -150,11 +150,11 @@ class AuroraCompleteSystemAnalyzer:
                 continue
 
         print(
-            f"  ✅ Found {len(self.findings['autonomous_systems'])} autonomous systems")
+            f"  [OK] Found {len(self.findings['autonomous_systems'])} autonomous systems")
 
     def scan_for_daemon_systems(self):
         """Find daemon/background monitoring systems"""
-        print("\n⚡ Scanning for Daemon/Monitoring Systems...")
+        print("\n[POWER] Scanning for Daemon/Monitoring Systems...")
 
         for py_file in self.project_root.rglob('*.py'):
             if 'venv' in str(py_file) or 'node_modules' in str(py_file):
@@ -187,11 +187,11 @@ class AuroraCompleteSystemAnalyzer:
                 continue
 
         print(
-            f"  ✅ Found {len(self.findings['daemon_systems'])} daemon/monitoring systems")
+            f"  [OK] Found {len(self.findings['daemon_systems'])} daemon/monitoring systems")
 
     def scan_for_activation_mechanisms(self):
         """Find how systems are supposed to be started/activated"""
-        print("\n🚀 Scanning for Activation Mechanisms...")
+        print("\n[LAUNCH] Scanning for Activation Mechanisms...")
 
         activation_patterns = [
             r'if __name__ == ["\']__main__["\']',
@@ -227,11 +227,11 @@ class AuroraCompleteSystemAnalyzer:
                 continue
 
         print(
-            f"  ✅ Found {len(self.findings['activation_mechanisms'])} files with activation mechanisms")
+            f"  [OK] Found {len(self.findings['activation_mechanisms'])} files with activation mechanisms")
 
     def analyze_ultimate_api_manager(self):
         """Deep analysis of ultimate_api_manager.py"""
-        print("\n🌟 Analyzing Ultimate API Manager...")
+        print("\n[STAR] Analyzing Ultimate API Manager...")
 
         uam_path = self.project_root / 'tools' / 'ultimate_api_manager.py'
         if uam_path.exists():
@@ -260,15 +260,15 @@ class AuroraCompleteSystemAnalyzer:
                 }
 
                 print(
-                    f"  ✅ Ultimate API Manager: {len(classes)} classes, {len(functions)} methods")
+                    f"  [OK] Ultimate API Manager: {len(classes)} classes, {len(functions)} methods")
             except Exception as e:
-                print(f"  ⚠️ Error parsing: {e}")
+                print(f"  [WARN] Error parsing: {e}")
         else:
-            print(f"  ❌ Ultimate API Manager not found")
+            print(f"  [ERROR] Ultimate API Manager not found")
 
     def identify_missing_connections(self):
         """Identify what's not connected/activated"""
-        print("\n🔗 Identifying Missing Connections...")
+        print("\n[LINK] Identifying Missing Connections...")
 
         # Check if autonomous systems are imported/used in orchestrators
         orchestrator_files = [o['file']
@@ -297,16 +297,16 @@ class AuroraCompleteSystemAnalyzer:
                 continue
 
         print(
-            f"  ✅ Analyzed {len(self.findings['missing_connections'])} orchestrators for connections")
+            f"  [OK] Analyzed {len(self.findings['missing_connections'])} orchestrators for connections")
 
     def generate_comprehensive_report(self):
         """Generate detailed report"""
         print("\n" + "="*70)
-        print("📊 AURORA COMPLETE SYSTEM ANALYSIS REPORT")
+        print("[DATA] AURORA COMPLETE SYSTEM ANALYSIS REPORT")
         print("="*70)
 
         print(
-            f"\n🎯 ORCHESTRATION SYSTEMS: {len(self.findings['orchestrators'])}")
+            f"\n[TARGET] ORCHESTRATION SYSTEMS: {len(self.findings['orchestrators'])}")
         for orch in sorted(self.findings['orchestrators'], key=lambda x: x['size'], reverse=True)[:10]:
             size_kb = orch['size'] / 1024
             print(f"  • {orch['file']}")
@@ -316,7 +316,7 @@ class AuroraCompleteSystemAnalyzer:
                 print(f"    Methods: {', '.join(orch['key_methods'][:5])}")
 
         print(
-            f"\n🤖 AUTONOMOUS SYSTEMS: {len(self.findings['autonomous_systems'])}")
+            f"\n[AGENT] AUTONOMOUS SYSTEMS: {len(self.findings['autonomous_systems'])}")
         for auto in sorted(self.findings['autonomous_systems'], key=lambda x: x['size'], reverse=True)[:10]:
             size_kb = auto['size'] / 1024
             print(f"  • {auto['file']}")
@@ -327,7 +327,7 @@ class AuroraCompleteSystemAnalyzer:
                     f"    Methods: {', '.join(auto['autonomous_methods'][:5])}")
 
         print(
-            f"\n⚡ DAEMON/MONITORING SYSTEMS: {len(self.findings['daemon_systems'])}")
+            f"\n[POWER] DAEMON/MONITORING SYSTEMS: {len(self.findings['daemon_systems'])}")
         for daemon in sorted(self.findings['daemon_systems'], key=lambda x: x['size'], reverse=True)[:10]:
             size_kb = daemon['size'] / 1024
             print(f"  • {daemon['file']}")
@@ -335,14 +335,14 @@ class AuroraCompleteSystemAnalyzer:
                 f"    Size: {size_kb:.1f}KB | Daemon Methods: {', '.join(daemon['daemon_methods'][:5])}")
 
         print(
-            f"\n🚀 ACTIVATION MECHANISMS: {len(self.findings['activation_mechanisms'])}")
+            f"\n[LAUNCH] ACTIVATION MECHANISMS: {len(self.findings['activation_mechanisms'])}")
         for act in self.findings['activation_mechanisms'][:10]:
             print(f"  • {act['file']}")
             print(f"    Patterns: {', '.join(act['activation_patterns'][:3])}")
 
         if 'ultimate_api_manager' in self.findings:
             uam = self.findings['ultimate_api_manager']
-            print(f"\n🌟 ULTIMATE API MANAGER:")
+            print(f"\n[STAR] ULTIMATE API MANAGER:")
             print(f"  Size: {uam['size']/1024:.1f}KB")
             print(f"  Classes: {', '.join(uam['classes'][:5])}")
             print(f"  Total Methods: {uam['total_methods']}")
@@ -352,13 +352,13 @@ class AuroraCompleteSystemAnalyzer:
             print(f"  Uses Threading: {uam['uses_threading']}")
             print(f"  Uses Multiprocessing: {uam['uses_multiprocessing']}")
 
-        print(f"\n🔗 CONNECTION ANALYSIS:")
+        print(f"\n[LINK] CONNECTION ANALYSIS:")
         for conn in self.findings['missing_connections']:
             print(f"  • {conn['orchestrator']}")
             print(
                 f"    Connected: {len(conn['connected_autonomous'])}/{conn['total_autonomous_systems']} autonomous systems ({conn['connection_percentage']:.1f}%)")
 
-        print(f"\n📜 GIT HISTORY INSIGHTS:")
+        print(f"\n[EMOJI] GIT HISTORY INSIGHTS:")
         for insight in self.findings['git_history_insights'][:5]:
             print(
                 f"  • '{insight['keyword']}': {insight['commit_count']} commits")
@@ -367,10 +367,10 @@ class AuroraCompleteSystemAnalyzer:
 
         # Critical findings
         print("\n" + "="*70)
-        print("🚨 CRITICAL FINDINGS")
+        print("[EMOJI] CRITICAL FINDINGS")
         print("="*70)
 
-        print("\n✅ WHAT AURORA HAS:")
+        print("\n[OK] WHAT AURORA HAS:")
         print(
             f"  • {len(self.findings['orchestrators'])} orchestration systems")
         print(
@@ -379,7 +379,7 @@ class AuroraCompleteSystemAnalyzer:
             f"  • {len(self.findings['daemon_systems'])} daemon/monitoring systems")
         print(f"  • Ultimate API Manager (154KB orchestrator)")
 
-        print("\n❌ WHAT'S MISSING/DORMANT:")
+        print("\n[ERROR] WHAT'S MISSING/DORMANT:")
         dormant_count = len(
             self.findings['autonomous_systems']) + len(self.findings['daemon_systems'])
         print(f"  • {dormant_count} systems exist but are NOT RUNNING")
@@ -387,7 +387,7 @@ class AuroraCompleteSystemAnalyzer:
         print(f"  • Autonomous systems loaded but not activated")
         print(f"  • No background monitoring daemon running")
 
-        print("\n🔧 WHAT NEEDS TO HAPPEN:")
+        print("\n[EMOJI] WHAT NEEDS TO HAPPEN:")
         print("  1. START Ultimate API Manager as master orchestrator")
         print("  2. ACTIVATE all autonomous systems through orchestrator")
         print("  3. START monitoring daemons in background")
@@ -398,13 +398,13 @@ class AuroraCompleteSystemAnalyzer:
         report_path = self.project_root / 'AURORA_COMPLETE_SYSTEM_ANALYSIS.json'
         with open(report_path, 'w', encoding='utf-8') as f:
             json.dump(self.findings, f, indent=2)
-        print(f"\n💾 Detailed report saved: {report_path}")
+        print(f"\n[EMOJI] Detailed report saved: {report_path}")
 
         return self.findings
 
     def run_complete_analysis(self):
         """Run all analysis steps"""
-        print("🚀 Starting Aurora Complete System Analysis...")
+        print("[LAUNCH] Starting Aurora Complete System Analysis...")
         print("="*70)
 
         self.analyze_git_commits()
@@ -423,5 +423,5 @@ if __name__ == '__main__':
     findings = analyzer.run_complete_analysis()
 
     print("\n" + "="*70)
-    print("✨ Analysis complete! Aurora now knows what she has and what's dormant.")
+    print("[SPARKLE] Analysis complete! Aurora now knows what she has and what's dormant.")
     print("="*70)

@@ -42,7 +42,7 @@ class AuroraPreUpdateAnalyzer:
 
     def analyze_frontend(self):
         """Analyze entire frontend structure"""
-        print("\n🎨 ANALYZING FRONTEND...")
+        print("\n[EMOJI] ANALYZING FRONTEND...")
         print("=" * 70)
 
         frontend_paths = [
@@ -58,12 +58,12 @@ class AuroraPreUpdateAnalyzer:
                 break
 
         if not frontend_dir:
-            print("  ⚠️ Frontend directory not found")
+            print("  [WARN] Frontend directory not found")
             self.analysis['issues_found'].append(
                 "Frontend directory not found")
             return
 
-        print(f"  📁 Frontend location: {frontend_dir.relative_to(self.root)}")
+        print(f"  [EMOJI] Frontend location: {frontend_dir.relative_to(self.root)}")
 
         # Check package.json
         package_json = self.root / "package.json"
@@ -76,20 +76,20 @@ class AuroraPreUpdateAnalyzer:
                 deps = pkg_data.get('dependencies', {})
                 dev_deps = pkg_data.get('devDependencies', {})
 
-                print(f"  📦 Dependencies: {len(deps)}")
-                print(f"  🔧 DevDependencies: {len(dev_deps)}")
+                print(f"  [PACKAGE] Dependencies: {len(deps)}")
+                print(f"  [EMOJI] DevDependencies: {len(dev_deps)}")
 
                 # Check for React/TypeScript
                 if 'react' in deps:
                     print(f"  ⚛️  React: {deps['react']}")
                 if 'typescript' in dev_deps:
-                    print(f"  📘 TypeScript: {dev_deps['typescript']}")
+                    print(f"  [EMOJI] TypeScript: {dev_deps['typescript']}")
                 if 'vite' in dev_deps:
-                    print(f"  ⚡ Vite: {dev_deps['vite']}")
+                    print(f"  [POWER] Vite: {dev_deps['vite']}")
 
                 # Check scripts
                 scripts = pkg_data.get('scripts', {})
-                print(f"  🏃 Scripts: {', '.join(scripts.keys())}")
+                print(f"  [EMOJI] Scripts: {', '.join(scripts.keys())}")
 
                 self.analysis['frontend']['dependencies'] = deps
                 self.analysis['frontend']['scripts'] = scripts
@@ -97,7 +97,7 @@ class AuroraPreUpdateAnalyzer:
         # Check TypeScript config
         tsconfig = self.root / "tsconfig.json"
         if tsconfig.exists():
-            print("  ✅ TypeScript config found")
+            print("  [OK] TypeScript config found")
             with open(tsconfig, encoding='utf-8') as f:
                 ts_data = json.load(f)
                 self.analysis['frontend']['typescript'] = ts_data
@@ -107,7 +107,7 @@ class AuroraPreUpdateAnalyzer:
         for config_name in vite_configs:
             vite_config = self.root / config_name
             if vite_config.exists():
-                print(f"  ⚡ Vite config: {config_name}")
+                print(f"  [POWER] Vite config: {config_name}")
                 content = vite_config.read_text(encoding='utf-8')
                 # Extract port from Vite config
                 port_match = re.search(r'port:\s*(\d+)', content)
@@ -123,7 +123,7 @@ class AuroraPreUpdateAnalyzer:
         for ext in extensions:
             frontend_files.extend(frontend_dir.rglob(f'*{ext}'))
 
-        print(f"  📄 Frontend files: {len(frontend_files)}")
+        print(f"  [EMOJI] Frontend files: {len(frontend_files)}")
 
         # Check for main entry points
         entry_points = ['main.tsx', 'main.ts',
@@ -134,14 +134,14 @@ class AuroraPreUpdateAnalyzer:
                 found_entries.append(entry)
 
         if found_entries:
-            print(f"  🚪 Entry points: {', '.join(found_entries)}")
+            print(f"  [EMOJI] Entry points: {', '.join(found_entries)}")
 
         self.analysis['frontend']['file_count'] = len(frontend_files)
         self.analysis['frontend']['entry_points'] = found_entries
 
     def analyze_backend(self):
         """Analyze entire backend structure"""
-        print("\n🐍 ANALYZING BACKEND...")
+        print("\n[EMOJI] ANALYZING BACKEND...")
         print("=" * 70)
 
         # Find Python files
@@ -149,7 +149,7 @@ class AuroraPreUpdateAnalyzer:
         python_files = [f for f in python_files if 'venv' not in str(
             f) and 'node_modules' not in str(f)]
 
-        print(f"  📄 Python files: {len(python_files)}")
+        print(f"  [EMOJI] Python files: {len(python_files)}")
 
         # Find Flask/FastAPI applications
         backend_servers = []
@@ -171,7 +171,7 @@ class AuroraPreUpdateAnalyzer:
             except:
                 continue
 
-        print(f"  🌐 Backend servers found: {len(backend_servers)}")
+        print(f"  [WEB] Backend servers found: {len(backend_servers)}")
         for server in backend_servers:
             print(f"     • {server['file']} ({server['framework']})")
 
@@ -183,7 +183,7 @@ class AuroraPreUpdateAnalyzer:
         for req_file in req_files:
             req_path = self.root / req_file
             if req_path.exists():
-                print(f"  📋 Dependencies: {req_file}")
+                print(f"  [EMOJI] Dependencies: {req_file}")
                 if req_file == 'requirements.txt':
                     deps = req_path.read_text(
                         encoding='utf-8').strip().split('\n')
@@ -200,7 +200,7 @@ class AuroraPreUpdateAnalyzer:
 
         for core_path in aurora_core_paths:
             if core_path.exists():
-                print(f"  🧠 Aurora Core: {core_path.relative_to(self.root)}")
+                print(f"  [BRAIN] Aurora Core: {core_path.relative_to(self.root)}")
                 size = core_path.stat().st_size / 1024
                 print(f"     Size: {size:.1f}KB")
                 self.analysis['backend']['aurora_core'] = {
@@ -211,7 +211,7 @@ class AuroraPreUpdateAnalyzer:
 
     def analyze_ports(self):
         """Analyze all port configurations"""
-        print("\n🔌 ANALYZING PORTS...")
+        print("\n[EMOJI] ANALYZING PORTS...")
         print("=" * 70)
 
         port_configs = defaultdict(list)
@@ -225,7 +225,7 @@ class AuroraPreUpdateAnalyzer:
                 r'(?:localhost|127\.0\.0\.1):(\d+)', content))
 
             unique_ports = sorted(set(int(p) for p in ports))
-            print(f"  📜 x-start configured ports: {unique_ports}")
+            print(f"  [EMOJI] x-start configured ports: {unique_ports}")
 
             for port in unique_ports:
                 port_configs[port].append('x-start')
@@ -263,7 +263,7 @@ class AuroraPreUpdateAnalyzer:
                 continue
 
         # Consolidate and report
-        print(f"\n  📊 PORT CONFIGURATION MAP:")
+        print(f"\n  [DATA] PORT CONFIGURATION MAP:")
         for port in sorted(port_configs.keys()):
             sources = port_configs[port]
             print(f"     Port {port}: {len(sources)} sources")
@@ -278,7 +278,7 @@ class AuroraPreUpdateAnalyzer:
         conflicts = {port: sources for port,
                      sources in port_configs.items() if len(sources) > 2}
         if conflicts:
-            print(f"\n  ⚠️  Potential port conflicts: {len(conflicts)}")
+            print(f"\n  [WARN]  Potential port conflicts: {len(conflicts)}")
             for port, sources in conflicts.items():
                 print(
                     f"     Port {port}: {len(sources)} different configurations")
@@ -308,7 +308,7 @@ class AuroraPreUpdateAnalyzer:
                 services.extend(matches)
 
         services = list(set(services))
-        print(f"  📋 Services defined: {len(services)}")
+        print(f"  [EMOJI] Services defined: {len(services)}")
         for service in services:
             print(f"     • {service}")
 
@@ -317,7 +317,7 @@ class AuroraPreUpdateAnalyzer:
 
     def analyze_orchestrators(self):
         """Quick check of orchestration systems"""
-        print("\n🎯 ANALYZING ORCHESTRATION SYSTEMS...")
+        print("\n[TARGET] ANALYZING ORCHESTRATION SYSTEMS...")
         print("=" * 70)
 
         # Key orchestrators
@@ -339,9 +339,9 @@ class AuroraPreUpdateAnalyzer:
                     'size': size,
                     'exists': True
                 })
-                print(f"  ✅ {orch} ({size:.1f}KB)")
+                print(f"  [OK] {orch} ({size:.1f}KB)")
             else:
-                print(f"  ❌ {orch} (not found)")
+                print(f"  [ERROR] {orch} (not found)")
                 self.analysis['issues_found'].append(
                     f"Orchestrator not found: {orch}")
 
@@ -369,15 +369,15 @@ class AuroraPreUpdateAnalyzer:
             config_path = self.root / config
             if config_path.exists():
                 found_configs.append(config)
-                print(f"  ✅ {config}")
+                print(f"  [OK] {config}")
             else:
-                print(f"  ⚠️  {config} (not found)")
+                print(f"  [WARN]  {config} (not found)")
 
         self.analysis['configuration']['files'] = found_configs
 
     def check_current_state(self):
         """Check what's currently running"""
-        print("\n🔍 CHECKING CURRENT STATE...")
+        print("\n[SCAN] CHECKING CURRENT STATE...")
         print("=" * 70)
 
         # Check if services are running on ports
@@ -393,11 +393,11 @@ class AuroraPreUpdateAnalyzer:
                 result = sock.connect_ex(('127.0.0.1', port))
                 if result == 0:
                     running_services.append(port)
-                    print(f"  ✅ Port {port}: RUNNING")
+                    print(f"  [OK] Port {port}: RUNNING")
                 else:
-                    print(f"  ⚠️  Port {port}: not running")
+                    print(f"  [WARN]  Port {port}: not running")
             except:
-                print(f"  ❌ Port {port}: error checking")
+                print(f"  [ERROR] Port {port}: error checking")
             finally:
                 sock.close()
 
@@ -407,7 +407,7 @@ class AuroraPreUpdateAnalyzer:
     def generate_update_plan(self):
         """Generate comprehensive update plan"""
         print("\n" + "=" * 70)
-        print("📋 GENERATING UPDATE PLAN")
+        print("[EMOJI] GENERATING UPDATE PLAN")
         print("=" * 70)
 
         # Frontend updates
@@ -488,7 +488,7 @@ class AuroraPreUpdateAnalyzer:
 
         # Recommendations
         print("\n" + "=" * 70)
-        print("💡 RECOMMENDATIONS")
+        print("[IDEA] RECOMMENDATIONS")
         print("=" * 70)
 
         recommendations = [
@@ -512,7 +512,7 @@ class AuroraPreUpdateAnalyzer:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(self.analysis, f, indent=2)
 
-        print(f"\n💾 Complete analysis saved: {output_file}")
+        print(f"\n[EMOJI] Complete analysis saved: {output_file}")
 
         # Save summary
         summary_file = self.root / "AURORA_PRE_UPDATE_SUMMARY.txt"
@@ -542,12 +542,12 @@ class AuroraPreUpdateAnalyzer:
             for rec in self.analysis['recommendations']:
                 f.write(f"  {rec}\n")
 
-        print(f"💾 Summary saved: {summary_file}")
+        print(f"[EMOJI] Summary saved: {summary_file}")
 
     def run_complete_analysis(self):
         """Run all analysis steps"""
         print("=" * 70)
-        print("🌟 AURORA PRE-UPDATE COMPLETE ANALYSIS")
+        print("[STAR] AURORA PRE-UPDATE COMPLETE ANALYSIS")
         print("=" * 70)
         print("\nAnalyzing EVERYTHING before system update...\n")
 
@@ -562,12 +562,12 @@ class AuroraPreUpdateAnalyzer:
         self.save_analysis()
 
         print("\n" + "=" * 70)
-        print("✅ PRE-UPDATE ANALYSIS COMPLETE")
+        print("[OK] PRE-UPDATE ANALYSIS COMPLETE")
         print("=" * 70)
-        print("\n🎯 Aurora is ready to update the entire system")
+        print("\n[TARGET] Aurora is ready to update the entire system")
         print("   All configurations analyzed and documented")
         print("   Update plan generated and saved")
-        print("\n📁 Review these files before proceeding:")
+        print("\n[EMOJI] Review these files before proceeding:")
         print("   • AURORA_PRE_UPDATE_ANALYSIS.json (detailed)")
         print("   • AURORA_PRE_UPDATE_SUMMARY.txt (summary)")
 

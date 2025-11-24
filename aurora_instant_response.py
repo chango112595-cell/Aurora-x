@@ -17,7 +17,7 @@ class AuroraInstantResponse:
     def __init__(self):
         self.core = AuroraCoreIntelligence()
         self.executor = ThreadPoolExecutor(max_workers=10)
-        print("⚡ Aurora Instant Response System initialized")
+        print("[POWER] Aurora Instant Response System initialized")
         print(f"   Using {self.core.knowledge_tiers.total_power} total power")
 
     async def instant_analyze(self, target: str) -> dict:
@@ -76,24 +76,24 @@ class AuroraInstantResponse:
 
 async def main():
     print("=" * 80)
-    print("⚡ AURORA INSTANT RESPONSE SYSTEM - DEMO")
+    print("[POWER] AURORA INSTANT RESPONSE SYSTEM - DEMO")
     print("=" * 80)
 
     instant = AuroraInstantResponse()
 
     # Test instant analyze
     result1 = await instant.instant_analyze("system")
-    print(f"\n✅ Instant Analyze: {result1['response_time_ms']:.2f}ms")
+    print(f"\n[OK] Instant Analyze: {result1['response_time_ms']:.2f}ms")
 
     # Test instant fix
     result2 = await instant.instant_fix("sample issue")
-    print(f"✅ Instant Fix: {result2['response_time_ms']:.2f}ms")
+    print(f"[OK] Instant Fix: {result2['response_time_ms']:.2f}ms")
 
     # Test instant scan
     result3 = await instant.instant_scan()
-    print(f"✅ Instant Scan: {result3['response_time_ms']:.2f}ms")
+    print(f"[OK] Instant Scan: {result3['response_time_ms']:.2f}ms")
 
-    print(f"\n⚡ All operations completed in milliseconds")
+    print(f"\n[POWER] All operations completed in milliseconds")
     print("=" * 80)
 
 if __name__ == "__main__":

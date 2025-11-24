@@ -14,13 +14,13 @@ from collections import defaultdict
 import os
 
 print("=" * 120)
-print("🔬 AURORA FORENSIC DEEP ANALYSIS - SEARCHING EVERYWHERE")
+print("[EMOJI] AURORA FORENSIC DEEP ANALYSIS - SEARCHING EVERYWHERE")
 print("=" * 120)
 
 core = AuroraCoreIntelligence()
 kt = core.knowledge_tiers
 
-print(f"\n⚡ Using {kt.total_power} power for forensic analysis...")
+print(f"\n[POWER] Using {kt.total_power} power for forensic analysis...")
 print("   Searching: Active files, Unused, Archives, Backups, Git history")
 
 # ============================================================================
@@ -28,7 +28,7 @@ print("   Searching: Active files, Unused, Archives, Backups, Git history")
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("📁 PHASE 1: DEEP DIRECTORY SCAN - INCLUDING ARCHIVES & BACKUPS")
+print("[EMOJI] PHASE 1: DEEP DIRECTORY SCAN - INCLUDING ARCHIVES & BACKUPS")
 print("=" * 120)
 
 search_patterns = {
@@ -87,7 +87,7 @@ search_patterns = {
 
 found_files = defaultdict(list)
 
-print("\n🔍 Scanning all directories (including archives, backups, unused)...\n")
+print("\n[SCAN] Scanning all directories (including archives, backups, unused)...\n")
 
 # Get all Python files including archives
 all_locations = [
@@ -103,7 +103,7 @@ for location in all_locations:
     if location and location.exists():
         all_py_files.extend(list(location.rglob('*.py')))
 
-print(f"📊 Total Python files found (including archives): {len(all_py_files)}")
+print(f"[DATA] Total Python files found (including archives): {len(all_py_files)}")
 
 # Search for each pattern
 for category, patterns in search_patterns.items():
@@ -117,7 +117,7 @@ for category, patterns in search_patterns.items():
                 'location': 'ARCHIVE' if 'backup' in str(match).lower() or 'archive' in str(match).lower() else 'ACTIVE'
             })
 
-print("\n📋 FOUND FILES BY CATEGORY:\n")
+print("\n[EMOJI] FOUND FILES BY CATEGORY:\n")
 
 for category, files in found_files.items():
     if files:
@@ -126,9 +126,9 @@ for category, files in found_files.items():
         sorted_files = sorted(
             unique_files, key=lambda x: x['size'], reverse=True)
 
-        print(f"✅ {category}: {len(sorted_files)} files found")
+        print(f"[OK] {category}: {len(sorted_files)} files found")
         for f in sorted_files[:5]:  # Show top 5
-            location_marker = "📦" if f['location'] == 'ARCHIVE' else "📄"
+            location_marker = "[PACKAGE]" if f['location'] == 'ARCHIVE' else "[EMOJI]"
             print(
                 f"   {location_marker} {f['name']} ({f['size']:,} bytes) - {f['location']}")
         if len(sorted_files) > 5:
@@ -140,10 +140,10 @@ for category, files in found_files.items():
 # ============================================================================
 
 print("=" * 120)
-print("📚 PHASE 2: GIT HISTORY FORENSICS - FINDING DELETED/LOST FILES")
+print("[EMOJI] PHASE 2: GIT HISTORY FORENSICS - FINDING DELETED/LOST FILES")
 print("=" * 120)
 
-print("\n🔍 Searching git history for deleted tracker/scoring files...\n")
+print("\n[SCAN] Searching git history for deleted tracker/scoring files...\n")
 
 try:
     # Search for deleted files in git history
@@ -183,14 +183,14 @@ try:
             except Exception as e:
                 continue
 
-    print("📋 DELETED FILES FOUND IN GIT HISTORY:\n")
+    print("[EMOJI] DELETED FILES FOUND IN GIT HISTORY:\n")
 
     total_deleted = 0
     for category, files in deleted_files.items():
         if files:
             unique = {f['file']: f for f in files}.values()
             total_deleted += len(unique)
-            print(f"🗑️  {category}: {len(unique)} deleted files")
+            print(f"[EMOJI]️  {category}: {len(unique)} deleted files")
             for f in list(unique)[:3]:
                 print(f"   • {f['file']} (commit: {f['commit']})")
             if len(unique) > 3:
@@ -198,20 +198,20 @@ try:
             print()
 
     if total_deleted == 0:
-        print("✅ No deleted tracker files found - everything should still exist\n")
+        print("[OK] No deleted tracker files found - everything should still exist\n")
 
 except Exception as e:
-    print(f"⚠️  Git history search error: {e}\n")
+    print(f"[WARN]  Git history search error: {e}\n")
 
 # ============================================================================
 # PHASE 3: SEARCH FOR MOST ADVANCED VERSIONS IN COMMITS
 # ============================================================================
 
 print("=" * 120)
-print("🏆 PHASE 3: FINDING MOST ADVANCED VERSIONS IN GIT HISTORY")
+print("[EMOJI] PHASE 3: FINDING MOST ADVANCED VERSIONS IN GIT HISTORY")
 print("=" * 120)
 
-print("\n🔍 Searching for advanced implementations in git history...\n")
+print("\n[SCAN] Searching for advanced implementations in git history...\n")
 
 advanced_features = [
     "quality.*score.*10",
@@ -235,7 +235,7 @@ try:
     if result.returncode == 0:
         commits = [line.split(' ', 1)
                    for line in result.stdout.strip().split('\n') if line]
-        print(f"📊 Analyzing last {len(commits)} commits...\n")
+        print(f"[DATA] Analyzing last {len(commits)} commits...\n")
 
         # Search commit messages for advanced features
         advanced_commits = []
@@ -251,24 +251,24 @@ try:
                     break
 
         if advanced_commits:
-            print("🏆 COMMITS WITH ADVANCED FEATURES:\n")
+            print("[EMOJI] COMMITS WITH ADVANCED FEATURES:\n")
             for commit in advanced_commits[:10]:
                 print(f"   • {commit['hash']}: {commit['message'][:80]}")
         else:
-            print("⚠️  No commits with advanced feature keywords found\n")
+            print("[WARN]  No commits with advanced feature keywords found\n")
 
 except Exception as e:
-    print(f"⚠️  Commit analysis error: {e}\n")
+    print(f"[WARN]  Commit analysis error: {e}\n")
 
 # ============================================================================
 # PHASE 4: ANALYZE EXISTING FILES FOR HIDDEN FUNCTIONALITY
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🔬 PHASE 4: DEEP CODE ANALYSIS - FINDING HIDDEN FUNCTIONALITY")
+print("[EMOJI] PHASE 4: DEEP CODE ANALYSIS - FINDING HIDDEN FUNCTIONALITY")
 print("=" * 120)
 
-print("\n🔍 Analyzing code for hidden tracking/logging functionality...\n")
+print("\n[SCAN] Analyzing code for hidden tracking/logging functionality...\n")
 
 functionality_keywords = {
     "Quality Scoring": ["def.*score", "def.*rate", "def.*assess.*quality", "quality.*=.*10"],
@@ -304,14 +304,14 @@ for py_file in large_files[:100]:  # Analyze top 100 large files
     except Exception:
         continue
 
-print("📋 HIDDEN FUNCTIONALITY FOUND:\n")
+print("[EMOJI] HIDDEN FUNCTIONALITY FOUND:\n")
 
 for func_type, files in hidden_functionality.items():
     if files:
         unique = {f['file']: f for f in files}.values()
         sorted_files = sorted(unique, key=lambda x: x['size'], reverse=True)
 
-        print(f"✅ {func_type}: Found in {len(sorted_files)} files")
+        print(f"[OK] {func_type}: Found in {len(sorted_files)} files")
         for f in sorted_files[:3]:
             print(f"   • {f['name']} ({f['size']:,} bytes)")
         if len(sorted_files) > 3:
@@ -323,10 +323,10 @@ for func_type, files in hidden_functionality.items():
 # ============================================================================
 
 print("=" * 120)
-print("🔍 PHASE 5: CHECKING FOR INTEGRATED BUT UNUSED SYSTEMS")
+print("[SCAN] PHASE 5: CHECKING FOR INTEGRATED BUT UNUSED SYSTEMS")
 print("=" * 120)
 
-print("\n🔍 Analyzing import statements to find unused integrated systems...\n")
+print("\n[SCAN] Analyzing import statements to find unused integrated systems...\n")
 
 # Find files that import tracking/logging but may not use it
 import_analysis = {}
@@ -375,19 +375,19 @@ for py_file in all_py_files[:500]:  # Check first 500 files
         continue
 
 if import_analysis:
-    print(f"⚠️  Found {len(import_analysis)} files with unused imports:\n")
+    print(f"[WARN]  Found {len(import_analysis)} files with unused imports:\n")
     for file, data in list(import_analysis.items())[:10]:
         print(f"   • {data['name']}")
         print(f"     Imported but unused: {', '.join(data['unused'])}")
 else:
-    print("✅ No files with unused tracking imports found\n")
+    print("[OK] No files with unused tracking imports found\n")
 
 # ============================================================================
 # FINAL FORENSIC REPORT
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("📊 FORENSIC ANALYSIS COMPLETE - COMPREHENSIVE FINDINGS")
+print("[DATA] FORENSIC ANALYSIS COMPLETE - COMPREHENSIVE FINDINGS")
 print("=" * 120)
 
 report = {
@@ -403,7 +403,7 @@ with open("AURORA_FORENSIC_REPORT.json", "w") as f:
     json.dump(report, f, indent=2)
 
 print(f"""
-🎯 FORENSIC SUMMARY:
+[TARGET] FORENSIC SUMMARY:
 
 Files Scanned: {len(all_py_files)} (including archives/backups)
 
@@ -416,7 +416,7 @@ Hidden Functionality: {sum(len(v) for v in hidden_functionality.values())} imple
 Files with Unused Imports: {len(import_analysis)}
 
 =" * 120)
-💡 KEY FINDINGS:
+[IDEA] KEY FINDINGS:
 =" * 120)
 
 The missing systems ARE in the codebase:
@@ -433,7 +433,7 @@ The missing systems ARE in the codebase:
    {len(import_analysis)} files import logging/tracking but don't use it
 
 =" * 120)
-🎯 THE TRUTH:
+[TARGET] THE TRUTH:
 =" * 120)
 
 Everything exists. Multiple implementations found.

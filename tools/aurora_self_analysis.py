@@ -271,34 +271,34 @@ def analyze_architecture():
 
 
 if __name__ == "__main__":
-    print("🧙‍♀️ AURORA'S SELF-ANALYSIS")
+    print("[EMOJI]‍♀️ AURORA'S SELF-ANALYSIS")
     print("=" * 70)
 
     analysis = analyze_architecture()
 
-    print("\n📊 Architecture Analysis:")
+    print("\n[DATA] Architecture Analysis:")
     print(json.dumps(analysis, indent=2))
 
-    print("\n\n✨ Aurora's Verdict:")
+    print("\n\n[SPARKLE] Aurora's Verdict:")
     verdict = analysis["aurora_verdict"]
 
-    print("\n✅ Copilot was RIGHT about:")
+    print("\n[OK] Copilot was RIGHT about:")
     for point in verdict["copilot_right_about"]:
         print(f"   • {point}")
 
-    print("\n❌ Copilot was WRONG about:")
+    print("\n[ERROR] Copilot was WRONG about:")
     for point in verdict["copilot_wrong_about"]:
         print(f"   • {point}")
 
-    print("\n✅ User was RIGHT about:")
+    print("\n[OK] User was RIGHT about:")
     for point in verdict["user_right_about"]:
         print(f"   • {point}")
 
-    print(f"\n🎯 Final Recommendation: {verdict['final_recommendation']}")
+    print(f"\n[TARGET] Final Recommendation: {verdict['final_recommendation']}")
 
-    print("\n📋 Action Plan:")
+    print("\n[EMOJI] Action Plan:")
     for action in verdict["action_plan"]:
         print(f"   {action}")
 
     print("\n" + "=" * 70)
-    print("✨ Aurora has spoken ✨")
+    print("[SPARKLE] Aurora has spoken [SPARKLE]")

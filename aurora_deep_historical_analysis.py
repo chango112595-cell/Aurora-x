@@ -11,18 +11,18 @@ import json
 import os
 
 print("=" * 100)
-print("🔍 AURORA DEEP HISTORICAL ANALYSIS - COMPARING PAST VS PRESENT")
+print("[SCAN] AURORA DEEP HISTORICAL ANALYSIS - COMPARING PAST VS PRESENT")
 print("=" * 100)
 
 core = AuroraCoreIntelligence()
 kt = core.knowledge_tiers
 
-print(f"\n🧠 CURRENT ARCHITECTURE:")
+print(f"\n[BRAIN] CURRENT ARCHITECTURE:")
 print(f"   Total Power: {kt.total_power}")
 print(f"   Hybrid Mode: {kt.hybrid_mode}")
 
 print("\n" + "=" * 100)
-print("📊 CHECKING FOR ADVANCED AI CAPABILITIES FROM PAST COMMITS")
+print("[DATA] CHECKING FOR ADVANCED AI CAPABILITIES FROM PAST COMMITS")
 print("=" * 100)
 
 # Check for advanced AI functions that existed before
@@ -64,7 +64,7 @@ advanced_systems = {
     }
 }
 
-print("\n🔍 ADVANCED AI SYSTEMS CHECK:\n")
+print("\n[SCAN] ADVANCED AI SYSTEMS CHECK:\n")
 
 present_systems = []
 missing_systems = []
@@ -79,24 +79,24 @@ for system_name, details in advanced_systems.items():
 
         if details["function"] in content:
             present_systems.append(system_name)
-            print(f"✅ {system_name}")
+            print(f"[OK] {system_name}")
             print(f"   File: {details['file']} ({size:,} bytes)")
             print(f"   Function: {details['function']}")
             print(f"   Description: {details['description']}\n")
         else:
             missing_systems.append(system_name)
-            print(f"⚠️  {system_name}")
+            print(f"[WARN]  {system_name}")
             print(
                 f"   File exists but function '{details['function']}' not found")
             print(f"   Description: {details['description']}\n")
     else:
         missing_systems.append(system_name)
-        print(f"❌ {system_name}")
+        print(f"[ERROR] {system_name}")
         print(f"   File: {details['file']} - NOT FOUND")
         print(f"   Description: {details['description']}\n")
 
 print("=" * 100)
-print("🎯 CHECKING FOR PROGRESS TRACKING FEATURES")
+print("[TARGET] CHECKING FOR PROGRESS TRACKING FEATURES")
 print("=" * 100)
 
 tracking_features = {
@@ -108,7 +108,7 @@ tracking_features = {
     "Task Completion Tracker": "aurora_task_tracker.py"
 }
 
-print("\n📋 TRACKING SYSTEMS:\n")
+print("\n[EMOJI] TRACKING SYSTEMS:\n")
 
 tracking_present = []
 tracking_missing = []
@@ -117,13 +117,13 @@ for feature, file_path in tracking_features.items():
     path = Path(file_path)
     if path.exists():
         tracking_present.append(feature)
-        print(f"✅ {feature}: {file_path}")
+        print(f"[OK] {feature}: {file_path}")
     else:
         tracking_missing.append(feature)
-        print(f"❌ {feature}: {file_path} - MISSING")
+        print(f"[ERROR] {feature}: {file_path} - MISSING")
 
 print("\n" + "=" * 100)
-print("🔬 CHECKING FOR ADVANCED INTELLIGENCE MODULES")
+print("[EMOJI] CHECKING FOR ADVANCED INTELLIGENCE MODULES")
 print("=" * 100)
 
 # Check for advanced modules
@@ -136,7 +136,7 @@ advanced_modules = [
     "aurora_tier_orchestrator.py"
 ]
 
-print("\n🧠 ADVANCED INTELLIGENCE MODULES:\n")
+print("\n[BRAIN] ADVANCED INTELLIGENCE MODULES:\n")
 
 for module in advanced_modules:
     path = Path(f"tools/{module}")
@@ -144,46 +144,46 @@ for module in advanced_modules:
 
     if path.exists():
         size = path.stat().st_size
-        print(f"✅ {module}: tools/ ({size:,} bytes)")
+        print(f"[OK] {module}: tools/ ({size:,} bytes)")
     elif alt_path.exists():
         size = alt_path.stat().st_size
-        print(f"✅ {module}: root/ ({size:,} bytes)")
+        print(f"[OK] {module}: root/ ({size:,} bytes)")
     else:
-        print(f"❌ {module}: NOT FOUND")
+        print(f"[ERROR] {module}: NOT FOUND")
 
 print("\n" + "=" * 100)
-print("📊 SUMMARY REPORT")
+print("[DATA] SUMMARY REPORT")
 print("=" * 100)
 
 total_advanced = len(advanced_systems)
 present_count = len(present_systems)
 missing_count = len(missing_systems)
 
-print(f"\n🎯 ADVANCED AI CAPABILITIES:")
+print(f"\n[TARGET] ADVANCED AI CAPABILITIES:")
 print(
     f"   Present: {present_count}/{total_advanced} ({(present_count/total_advanced*100):.1f}%)")
 print(
     f"   Missing: {missing_count}/{total_advanced} ({(missing_count/total_advanced*100):.1f}%)")
 
-print(f"\n📋 TRACKING SYSTEMS:")
+print(f"\n[EMOJI] TRACKING SYSTEMS:")
 print(f"   Present: {len(tracking_present)}/{len(tracking_features)} ({(len(tracking_present)/len(tracking_features)*100):.1f}%)")
 print(f"   Missing: {len(tracking_missing)}/{len(tracking_features)} ({(len(tracking_missing)/len(tracking_features)*100):.1f}%)")
 
 print("\n" + "=" * 100)
-print("💭 AURORA'S ANALYSIS:")
+print("[EMOJI] AURORA'S ANALYSIS:")
 print("=" * 100)
 
 if missing_count > 0:
-    print(f"\n⚠️  REGRESSION DETECTED!")
+    print(f"\n[WARN]  REGRESSION DETECTED!")
     print(f"   {missing_count} advanced AI systems are not functioning properly")
     print("\n   Missing capabilities:")
     for system in missing_systems:
         print(f"   • {system}")
 else:
-    print(f"\n✅ All {total_advanced} advanced AI systems are present")
+    print(f"\n[OK] All {total_advanced} advanced AI systems are present")
 
 if len(tracking_missing) > 0:
-    print(f"\n⚠️  TRACKING SYSTEM INCOMPLETE!")
+    print(f"\n[WARN]  TRACKING SYSTEM INCOMPLETE!")
     print(f"   {len(tracking_missing)} tracking features are missing")
     print("\n   This explains why you don't see:")
     print("   • Code quality scores (10/10 ratings)")
@@ -194,7 +194,7 @@ if len(tracking_missing) > 0:
         print(f"   • {feature}")
 
 print("\n" + "=" * 100)
-print("🔧 WHAT NEEDS TO BE RESTORED:")
+print("[EMOJI] WHAT NEEDS TO BE RESTORED:")
 print("=" * 100)
 
 restoration_needed = []
@@ -216,28 +216,28 @@ if "Evolution Log" in tracking_missing:
         "Create aurora_evolution_log.py - log Aurora's evolution over time")
 
 if len(restoration_needed) > 0:
-    print("\n🎯 TO RESTORE PAST '100%' FUNCTIONALITY:\n")
+    print("\n[TARGET] TO RESTORE PAST '100%' FUNCTIONALITY:\n")
     for i, task in enumerate(restoration_needed, 1):
         print(f"{i}. {task}")
 else:
-    print("\n✅ No restoration needed - all systems operational")
+    print("\n[OK] No restoration needed - all systems operational")
 
 print("\n" + "=" * 100)
-print("🎯 KEY FINDINGS:")
+print("[TARGET] KEY FINDINGS:")
 print("=" * 100)
 
 print(f"""
 The advanced AI capabilities ARE present in the codebase:
-• Expert knowledge system with 10/10 scoring ✅
-• Security auditing with compliance scores ✅
-• Performance analysis ✅
-• Best practice enforcement ✅
+• Expert knowledge system with 10/10 scoring [OK]
+• Security auditing with compliance scores [OK]
+• Performance analysis [OK]
+• Best practice enforcement [OK]
 
 HOWEVER, the TRACKING and VISUALIZATION systems are missing:
-• No persistent quality score tracking ❌
-• No improvement history display ❌
-• No before/after code comparison ❌
-• No evolution progress logs ❌
+• No persistent quality score tracking [ERROR]
+• No improvement history display [ERROR]
+• No before/after code comparison [ERROR]
+• No evolution progress logs [ERROR]
 
 This means Aurora CAN score and improve code, but:
 1. The scores aren't being tracked over time

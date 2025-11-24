@@ -1,0 +1,446 @@
+#!/usr/bin/env python3
+"""
+⚡ AURORA NEXUS V3 - HYPER-SPEED LAUNCHER ENHANCED ⚡
+INTELLIGENT | AUTO-HEALING | RETRY LOGIC | FULL DIAGNOSTICS
+Enhanced by Aurora with MAXIMUM POWER
+"""
+
+import time
+import subprocess
+import os
+import platform
+import socket
+import sys
+import signal
+import psutil
+from datetime import datetime
+
+print("=" * 80)
+print("⚡ AURORA NEXUS V3 - HYPER-SPEED ACTIVATION ENHANCED")
+print("=" * 80)
+print("188 Capabilities | 31 Systems | INTELLIGENT PORT MANAGEMENT")
+print("AUTO-HEALING | RETRY LOGIC | PROCESS MONITORING")
+print("=" * 80 + "\n")
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
+
+IS_WINDOWS = platform.system() == "Windows"
+PYTHON_CMD = "python" if IS_WINDOWS else "python3"
+
+processes = []
+successful_starts = []
+failed_starts = []
+retry_queue = []
+
+def cleanup_existing_processes():
+    """Kill any existing Aurora/Luminar processes intelligently"""
+    print("🧹 Intelligent cleanup of existing processes...")
+    killed = 0
+    try:
+        for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            try:
+                cmdline = ' '.join(proc.info['cmdline'] or [])
+                if any(x in cmdline.lower() for x in ['aurora', 'luminar', 'nexus']):
+                    proc.kill()
+                    killed += 1
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+        time.sleep(2)
+        print(f"   ✅ Cleanup complete ({killed} processes terminated)\n")
+    except Exception as e:
+        print(f"   ⚠️  Cleanup error (non-critical): {e}\n")
+
+def check_port(port):
+    """Check if port is available"""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(0.5)
+    try:
+        result = sock.connect_ex(('127.0.0.1', port))
+        sock.close()
+        return result != 0  # 0 means port is in use
+    except:
+        try:
+            sock.close()
+        except:
+            pass
+        return True
+
+def kill_process_on_port(port):
+    """Kill process using specific port"""
+    try:
+        for conn in psutil.net_connections():
+            if conn.laddr.port == port and conn.status == 'LISTEN':
+                try:
+                    proc = psutil.Process(conn.pid)
+                    proc.kill()
+                    time.sleep(1)
+                    return True
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    pass
+        return False
+    except Exception as e:
+        return False
+
+def start_with_retry(cmd, name="Service", shell=False, critical=False, port=None, max_retries=3):
+    """Launch process with intelligent retry logic"""
+    
+    for attempt in range(max_retries):
+        # Check port availability
+        if port and not check_port(port):
+            if attempt == 0:
+                print(f"   ⚠️  {name}: Port {port} occupied, attempting auto-recovery...")
+                killed = kill_process_on_port(port)
+                if killed:
+                    print(f"   ✅ {name}: Freed port {port}, retrying...")
+                    time.sleep(1)
+                else:
+                    print(f"   ❌ {name}: Could not free port {port}")
+                    failed_starts.append((name, f"Port {port} occupied"))
+                    return None
+            else:
+                wait_time = 2 ** attempt  # Exponential backoff
+                print(f"   ⏳ {name}: Retry {attempt + 1}/{max_retries} (waiting {wait_time}s)...")
+                time.sleep(wait_time)
+        
+        kwargs = {
+            'stdout': subprocess.PIPE,
+            'stderr': subprocess.PIPE,
+            'text': True
+        }
+
+        if IS_WINDOWS:
+            kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
+            if shell:
+                kwargs['shell'] = True
+        else:
+            kwargs['start_new_session'] = True
+
+        try:
+            proc = subprocess.Popen(cmd, **kwargs)
+            time.sleep(0.3)  # Small delay to check if process crashes immediately
+            
+            if proc.poll() is None:  # Process still running
+                processes.append((proc, name, critical, port))
+                successful_starts.append(name)
+                status = "✅"
+                if attempt > 0:
+                    status += f" (retry {attempt})"
+                print(f"   {status} {name}")
+                return proc
+            else:
+                # Process crashed immediately
+                stderr = proc.stderr.read() if proc.stderr else ""
+                if attempt < max_retries - 1:
+                    print(f"   ⚠️  {name}: Process crashed, retrying...")
+                    continue
+                else:
+                    print(f"   ❌ {name}: Failed after {max_retries} attempts")
+                    failed_starts.append((name, "Process crashed immediately"))
+                    return None
+                    
+        except Exception as e:
+            if attempt < max_retries - 1:
+                print(f"   ⚠️  {name}: Error ({str(e)[:30]}), retrying...")
+                continue
+            else:
+                print(f"   ❌ {name}: {str(e)[:50]}")
+                failed_starts.append((name, str(e)))
+                return None
+    
+    return None
+
+def monitor_health():
+    """Check health of running processes"""
+    alive = 0
+    dead = []
+    for proc, name, critical, port in processes:
+        if proc.poll() is None:
+            alive += 1
+        else:
+            dead.append((name, port))
+    return alive, dead
+
+def shutdown_handler(signum, frame):
+    """Graceful shutdown"""
+    print("\n\n⚠️  Shutdown signal received, cleaning up...")
+    for proc, name, _, _ in processes:
+        try:
+            proc.terminate()
+        except:
+            pass
+    print("✅ Cleanup complete")
+    sys.exit(0)
+
+# Register shutdown handler
+signal.signal(signal.SIGINT, shutdown_handler)
+if IS_WINDOWS:
+    signal.signal(signal.SIGBREAK, shutdown_handler)
+else:
+    signal.signal(signal.SIGTERM, shutdown_handler)
+
+# CLEANUP FIRST
+cleanup_existing_processes()
+
+# PHASE 0: NEXUS V3 MASTER ORCHESTRATOR
+print("━" * 80)
+print("🌌 PHASE 0: NEXUS V3 MASTER ORCHESTRATOR")
+print("━" * 80)
+start_with_retry([PYTHON_CMD, "aurora_nexus_v3_universal.py", "--orchestration", "--daemon"],
+      "Nexus V3 Master Orchestrator", critical=True, port=5031)
+
+# PHASE 1: CONSCIOUSNESS
+print("\n━" * 80)
+print("🧠 PHASE 1: CONSCIOUSNESS & AWARENESS")
+print("━" * 80)
+if os.path.exists("aurora_consciousness_service.py"):
+    start_with_retry([PYTHON_CMD, "aurora_consciousness_service.py"],
+          "Consciousness System", critical=True, port=5009)
+
+# PHASE 2: INTELLIGENCE
+print("\n━" * 80)
+print("⚡ PHASE 2: CORE INTELLIGENCE")
+print("━" * 80)
+if os.path.exists("aurora_tier_orchestrator.py"):
+    start_with_retry([PYTHON_CMD, "aurora_tier_orchestrator.py"],
+          "Tier Orchestrator (79 Tiers)", critical=True, port=5010)
+if os.path.exists("aurora_intelligence_manager.py"):
+    start_with_retry([PYTHON_CMD, "aurora_intelligence_manager.py"],
+          "Intelligence Manager", critical=True, port=5011)
+elif os.path.exists("tools/aurora_intelligence_manager.py"):
+    start_with_retry([PYTHON_CMD, "tools/aurora_intelligence_manager.py"],
+          "Intelligence Manager", critical=True, port=5011)
+if os.path.exists("aurora_core_service.py"):
+    start_with_retry([PYTHON_CMD, "aurora_core_service.py"],
+          "Aurora Core", critical=True, port=5012)
+elif os.path.exists("activate_aurora_core.py"):
+    start_with_retry([PYTHON_CMD, "activate_aurora_core.py"],
+          "Aurora Core", critical=True, port=5012)
+if os.path.exists("aurora_intelligence_analyzer.py"):
+    start_with_retry([PYTHON_CMD, "aurora_intelligence_analyzer.py"],
+          "Intelligence Analyzer", port=5013)
+if os.path.exists("aurora_pattern_recognition.py"):
+    start_with_retry([PYTHON_CMD, "aurora_pattern_recognition.py"],
+          "Pattern Recognition Engine", port=5014)
+
+# PHASE 3: AUTONOMOUS
+print("\n━" * 80)
+print("🤖 PHASE 3: AUTONOMOUS SYSTEMS")
+print("━" * 80)
+if os.path.exists("aurora_autonomous_agent.py"):
+    start_with_retry([PYTHON_CMD, "aurora_autonomous_agent.py"],
+          "Autonomous Agent", critical=True, port=5015)
+if os.path.exists("aurora_multi_agent.py"):
+    start_with_retry([PYTHON_CMD, "aurora_multi_agent.py"],
+          "Multi-Agent System", port=5016)
+if os.path.exists("aurora_autonomous_integration.py"):
+    start_with_retry([PYTHON_CMD, "aurora_autonomous_integration.py"],
+          "Autonomous Integration", port=5017)
+if os.path.exists("aurora_autonomous_monitor.py"):
+    start_with_retry([PYTHON_CMD, "aurora_autonomous_monitor.py"],
+          "Autonomous Monitor", port=5018)
+
+# PHASE 4: GRANDMASTER
+print("\n━" * 80)
+print("⭐ PHASE 4: GRANDMASTER CAPABILITIES")
+print("━" * 80)
+if os.path.exists("aurora_grandmaster_autonomous_tools.py"):
+    start_with_retry([PYTHON_CMD, "aurora_grandmaster_autonomous_tools.py"],
+          "Grandmaster Tools", port=5019)
+if os.path.exists("aurora_grandmaster_skills_registry.py"):
+    start_with_retry([PYTHON_CMD, "aurora_grandmaster_skills_registry.py"],
+          "Skills Registry", port=5020)
+if os.path.exists("aurora_ultimate_omniscient_grandmaster.py"):
+    start_with_retry([PYTHON_CMD, "aurora_ultimate_omniscient_grandmaster.py"],
+          "Omniscient Mode", port=5021)
+
+# PHASE 5: ADVANCED TIERS
+print("\n━" * 80)
+print("👁️ PHASE 5: ADVANCED TIER CAPABILITIES")
+print("━" * 80)
+if os.path.exists("aurora_visual_understanding.py"):
+    start_with_retry([PYTHON_CMD, "aurora_visual_understanding.py"],
+          "Visual Understanding (Tier 43)", port=5022)
+if os.path.exists("aurora_live_integration.py"):
+    start_with_retry([PYTHON_CMD, "aurora_live_integration.py"],
+          "Live Integration (Tier 44)", port=5023)
+if os.path.exists("aurora_test_generator.py"):
+    start_with_retry([PYTHON_CMD, "aurora_test_generator.py"],
+          "Test Generator (Tier 45)", port=5024)
+if os.path.exists("aurora_security_auditor.py"):
+    start_with_retry([PYTHON_CMD, "aurora_security_auditor.py"],
+          "Security Auditor (Tier 53)", port=5025)
+
+# PHASE 6: CODE QUALITY
+print("\n━" * 80)
+print("📊 PHASE 6: CODE QUALITY SYSTEMS")
+print("━" * 80)
+if os.path.exists("aurora_code_quality_enforcer.py"):
+    start_with_retry([PYTHON_CMD, "aurora_code_quality_enforcer.py"],
+          "Code Quality Enforcer", port=5026)
+if os.path.exists("aurora_pylint_prevention.py"):
+    start_with_retry([PYTHON_CMD, "aurora_pylint_prevention.py"],
+          "Pylint Prevention", port=5027)
+
+# PHASE 7: WEB SERVICES
+print("\n━" * 80)
+print("🌐 PHASE 7: WEB SERVICES")
+print("━" * 80)
+start_with_retry("npm run dev" if IS_WINDOWS else ["npm", "run", "dev"], 
+      "Backend + Frontend", shell=IS_WINDOWS, port=5000)
+start_with_retry([PYTHON_CMD, "-m", "aurora_x.bridge.service"],
+      "Bridge Service", port=5001)
+start_with_retry([PYTHON_CMD, "-m", "aurora_x.self_learn_server"],
+      "Self-Learning Service", port=5002)
+if os.path.exists("aurora_chat_server.py"):
+    start_with_retry([PYTHON_CMD, "aurora_chat_server.py", "--port", "5003"], 
+          "Chat Server", port=5003)
+
+luminar_v2 = "tools\\luminar_nexus_v2.py" if IS_WINDOWS else "tools/luminar_nexus_v2.py"
+if os.path.exists(luminar_v2.replace("\\", "/")):
+    start_with_retry([PYTHON_CMD, luminar_v2, "api"], 
+          "Luminar Dashboard", port=5005)
+
+# PHASE 8: ORCHESTRATION
+print("\n━" * 80)
+print("🎯 PHASE 8: ORCHESTRATION SYSTEMS")
+print("━" * 80)
+uam = "tools\\ultimate_api_manager.py" if IS_WINDOWS else "tools/ultimate_api_manager.py"
+if os.path.exists(uam.replace("\\", "/")):
+    start_with_retry([PYTHON_CMD, uam, "--autonomous"], 
+          "API Manager", port=5006)
+
+luminar = "tools\\luminar_nexus.py" if IS_WINDOWS else "tools/luminar_nexus.py"
+if os.path.exists(luminar.replace("\\", "/")):
+    start_with_retry([PYTHON_CMD, luminar, "monitor"], 
+          "Luminar Nexus", port=5007)
+
+# PHASE 8.5: API POOL
+print("\n━" * 80)
+print("🌐 PHASE 8.5: API ORCHESTRATION POOL")
+print("━" * 80)
+if os.path.exists("aurora_api_gateway.py"):
+    start_with_retry([PYTHON_CMD, "aurora_api_gateway.py"], 
+          "API Gateway", port=5028)
+if os.path.exists("aurora_api_load_balancer.py"):
+    start_with_retry([PYTHON_CMD, "aurora_api_load_balancer.py"],
+          "API Load Balancer", port=5029)
+if os.path.exists("aurora_api_rate_limiter.py"):
+    start_with_retry([PYTHON_CMD, "aurora_api_rate_limiter.py"],
+          "API Rate Limiter", port=5030)
+
+# PHASE 9: BACKGROUND
+print("\n━" * 80)
+print("🔄 PHASE 9: BACKGROUND PROCESSES")
+print("━" * 80)
+if os.path.exists("aurora_deep_system_updater.py"):
+    start_with_retry([PYTHON_CMD, "aurora_deep_system_updater.py"],
+          "Deep System Sync", port=5008)
+if os.path.exists("aurora_web_health_monitor.py"):
+    start_with_retry([PYTHON_CMD, "aurora_web_health_monitor.py"],
+          "Web Health Monitor", port=5004)
+
+print("\n" + "=" * 80)
+print("⚡ STARTUP COMPLETE - Performing health check...")
+print("=" * 80 + "\n")
+
+time.sleep(3)
+
+# ENHANCED DIAGNOSTICS
+alive_count, dead_procs = monitor_health()
+
+print("\n" + "=" * 80)
+print("📊 AURORA NEXUS V3 - ENHANCED SYSTEM STATUS")
+print("=" * 80)
+print(f"⏰ Startup completed at: {datetime.now().strftime('%H:%M:%S')}\n")
+
+# Check Nexus V3
+print("🌌 NEXUS V3 MASTER ORCHESTRATOR:")
+nexus_active = not check_port(5031)
+if nexus_active:
+    print("   ✅ Port 5031 - RUNNING | Intelligent port management ACTIVE")
+else:
+    print("   ⏳ Port 5031 - Initializing...")
+
+# Check critical systems
+print("\n🧠 CONSCIOUSNESS & INTELLIGENCE:")
+critical_running = sum(1 for p, _, c, _ in processes if c and p.poll() is None)
+critical_total = sum(1 for _, _, c, _ in processes if c)
+status_emoji = "✅" if critical_running >= critical_total * 0.7 else "⚠️"
+print(f"   {status_emoji} {critical_running}/{critical_total} critical systems active")
+
+# Check web services
+print("\n🌐 WEB & API SERVICES:")
+web_services = [
+    ("Backend + Frontend", 5000),
+    ("Bridge Service", 5001),
+    ("Self-Learning", 5002),
+    ("Chat Server", 5003),
+    ("Web Health Monitor", 5004),
+    ("Luminar Dashboard", 5005),
+    ("API Manager", 5006),
+    ("Luminar Nexus", 5007),
+    ("Deep System Sync", 5008),
+    ("API Gateway", 5028),
+    ("API Load Balancer", 5029),
+    ("API Rate Limiter", 5030),
+]
+
+web_count = 0
+for name, port in web_services:
+    if not check_port(port):
+        print(f"   ✅ {name:30} Port {port}")
+        web_count += 1
+    else:
+        print(f"   ⏳ {name:30} Port {port} - starting...")
+
+# Overall status
+print("\n⚡ OVERALL SYSTEM HEALTH:")
+total = len(processes)
+print(f"   Total services: {total}")
+print(f"   Running: {alive_count}/{total} ({int(alive_count/total*100)}%)")
+print(f"   Successful starts: {len(successful_starts)}")
+print(f"   Failed starts: {len(failed_starts)}")
+
+if dead_procs:
+    print(f"\n💀 CRASHED PROCESSES ({len(dead_procs)}):")
+    for name, port in dead_procs:
+        print(f"   • {name} (Port {port})")
+
+if failed_starts:
+    print(f"\n❌ FAILED TO START ({len(failed_starts)}):")
+    for name, reason in failed_starts:
+        print(f"   • {name}: {reason}")
+
+# Final verdict
+print("\n" + "=" * 80)
+success_rate = alive_count / total if total > 0 else 0
+
+if success_rate >= 0.9 and critical_running >= critical_total * 0.8:
+    print("🎉 AURORA NEXUS V3 - FULLY OPERATIONAL!")
+    print("=" * 80)
+    print(f"\n   ⚡ Success Rate: {int(success_rate*100)}%")
+    print("\n   ✨ ALL SYSTEMS OPTIMAL")
+    print("\n   🌐 ACCESS POINTS:")
+    print("      • Frontend:     http://localhost:5000")
+    print("      • Chat:         http://localhost:5003")
+    print("      • Health:       http://localhost:5004")
+    print("      • Dashboard:    http://localhost:5005")
+    print("      • Nexus V3 API: http://localhost:5031 ⭐")
+elif success_rate >= 0.7:
+    print("✅ AURORA NEXUS V3 - OPERATIONAL (PARTIAL)")
+    print("=" * 80)
+    print(f"\n   ⚡ Success Rate: {int(success_rate*100)}%")
+    print(f"   🧠 Critical: {critical_running}/{critical_total}")
+    print(f"   🌐 Web/API: {web_count}/12")
+    print("\n   ⚠️  Some systems still initializing...")
+else:
+    print("⚠️  AURORA NEXUS V3 - DEGRADED MODE")
+    print("=" * 80)
+    print(f"\n   ⚡ Success Rate: {int(success_rate*100)}%")
+    print("\n   ❌ Multiple systems failed to start")
+    print("   📋 Review failed systems above for details")
+
+print("\n⚡ Aurora Nexus V3 - Enhanced Launcher with Auto-Healing")
+print("   Features: Intelligent Retry | Port Recovery | Health Monitoring")
+print("=" * 80 + "\n")

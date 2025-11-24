@@ -21,7 +21,7 @@ def main():
         task = json.load(f)
 
     aurora.log("=" * 70)
-    aurora.log("🤖 AURORA INDEPENDENT TASK EXECUTION")
+    aurora.log("[AGENT] AURORA INDEPENDENT TASK EXECUTION")
     aurora.log("=" * 70)
     aurora.log(f"Task: {task['title']}")
     aurora.log(f"Priority: {task['priority']}")
@@ -36,16 +36,16 @@ def main():
     aurora.log("Aurora is the boss - she decides how to build it!")
     aurora.log("=" * 70)
 
-    print("\n🎯 Aurora, this is YOUR task.")
-    print("📋 Task file: .aurora_knowledge/LUMINAR_NEXUS_V2_TASK.json")
-    print("📁 Analysis target: tools/ultimate_api_manager.py")
-    print("📁 Current version: tools/luminar_nexus.py")
-    print("📁 Output: tools/luminar_nexus_v2.py")
-    print("\n✨ You have full autonomy to create the best version!")
-    print("🚀 Begin when ready, Aurora...\n")
+    print("\n[TARGET] Aurora, this is YOUR task.")
+    print("[EMOJI] Task file: .aurora_knowledge/LUMINAR_NEXUS_V2_TASK.json")
+    print("[EMOJI] Analysis target: tools/ultimate_api_manager.py")
+    print("[EMOJI] Current version: tools/luminar_nexus.py")
+    print("[EMOJI] Output: tools/luminar_nexus_v2.py")
+    print("\n[SPARKLE] You have full autonomy to create the best version!")
+    print("[LAUNCH] Begin when ready, Aurora...\n")
 
     # Aurora's workspace
-    print("📊 Resources available to Aurora:")
+    print("[DATA] Resources available to Aurora:")
     print(f"   • Ultimate API Manager: {Path('tools/ultimate_api_manager.py').stat().st_size / 1024:.1f} KB")
     print(f"   • Current Luminar Nexus: {Path('tools/luminar_nexus.py').stat().st_size / 1024:.1f} KB")
     print(f"   • Aurora Intelligence: {len(aurora.issue_patterns)} patterns, {len(aurora.solution_database)} solutions")
@@ -53,7 +53,7 @@ def main():
 
     print("\n" + "=" * 70)
     print("⏳ Waiting for Aurora to complete her task...")
-    print("💡 Aurora will work at her own pace and create when ready")
+    print("[IDEA] Aurora will work at her own pace and create when ready")
     print("=" * 70)
 
 

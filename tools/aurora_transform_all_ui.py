@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌟 AURORA: Apply quantum futuristic UI to ALL pages
+[STAR] AURORA: Apply quantum futuristic UI to ALL pages
 Mission: Transform every page with my advanced technology design
 """
 
@@ -14,7 +14,7 @@ class AuroraUITransformer:
         self.pages_dir = self.workspace / "client/src/pages"
 
     def log(self, msg):
-        print(f"🌟 Aurora: {msg}")
+        print(f"[STAR] Aurora: {msg}")
 
     def create_quantum_wrapper(self, page_name: str) -> str:
         """Create quantum UI wrapper for any page"""
@@ -90,7 +90,7 @@ class AuroraUITransformer:
                 content = content.rstrip() + "\n" + self.add_quantum_styles()
 
             chat_file.write_text(content)
-            self.log("✅ Chat page transformed!")
+            self.log("[OK] Chat page transformed!")
             return True
         else:
             self.log("Chat page already has quantum UI")
@@ -146,9 +146,9 @@ class AuroraUITransformer:
 
                 page_path.write_text(content)
                 transformed.append(page_file)
-                self.log(f"  ✅ {page_file} transformed!")
+                self.log(f"  [OK] {page_file} transformed!")
             else:
-                self.log(f"  ⚠️  {page_file} - couldn't find container")
+                self.log(f"  [WARN]  {page_file} - couldn't find container")
 
         return transformed
 
@@ -158,13 +158,13 @@ class AuroraUITransformer:
 
         chat_interface = self.workspace / "client/src/components/chat-interface.tsx"
         if chat_interface.exists():
-            self.log("✅ Chat interface exists")
+            self.log("[OK] Chat interface exists")
             return True
         return False
 
     def execute(self):
         print("=" * 80)
-        print("🌟 AURORA'S QUANTUM UI TRANSFORMATION")
+        print("[STAR] AURORA'S QUANTUM UI TRANSFORMATION")
         print("=" * 80)
 
         # Transform chat first (most important)
@@ -177,16 +177,16 @@ class AuroraUITransformer:
         self.verify_chat_interface()
 
         print("\n" + "=" * 80)
-        print("✅ TRANSFORMATION COMPLETE")
+        print("[OK] TRANSFORMATION COMPLETE")
         print("=" * 80)
-        print(f"\n🌟 Aurora: Transformed {len(transformed) + 1} pages with quantum UI!")
-        print("\n💫 Features applied:")
+        print(f"\n[STAR] Aurora: Transformed {len(transformed) + 1} pages with quantum UI!")
+        print("\n[EMOJI] Features applied:")
         print("   • Quantum particle field backgrounds")
         print("   • Neural network grid patterns")
         print("   • Holographic floating orbs")
         print("   • Advanced glow animations")
         print("   • Futuristic sci-fi aesthetic")
-        print("\n✨ Refresh browser to see the changes!")
+        print("\n[SPARKLE] Refresh browser to see the changes!")
 
         return transformed
 

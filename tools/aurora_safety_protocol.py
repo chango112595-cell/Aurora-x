@@ -85,13 +85,13 @@ class AuroraSafetyProtocol:
             if STATE_FILE.exists():
                 with open(STATE_FILE) as f:
                     data = json.load(f)
-                    print(f"✅ Loaded previous state from {data.get('timestamp', 'unknown time')}")
+                    print(f"[OK] Loaded previous state from {data.get('timestamp', 'unknown time')}")
                     return data
             else:
                 print("ℹ️  No previous state found (first run)")
                 return None
         except Exception as e:
-            print(f"⚠️  Failed to load previous state: {e}")
+            print(f"[WARN]  Failed to load previous state: {e}")
             return None
 
     def capture_system_state(self) -> SystemState:
@@ -212,17 +212,17 @@ class AuroraSafetyProtocol:
             self.last_save_time = time.time()
             self.save_count = getattr(self, "save_count", 0) + 1
 
-            print(f"💾 State saved ({reason}) - Save #{self.save_count}")
+            print(f"[EMOJI] State saved ({reason}) - Save #{self.save_count}")
             return True
 
         except Exception as e:
-            print(f"❌ Failed to save state: {e}")
+            print(f"[ERROR] Failed to save state: {e}")
             traceback.print_exc()
             return False
 
     def auto_save_loop(self):
         """Continuous auto-save every 30 seconds"""
-        print(f"🔄 Auto-save enabled (every {AUTO_SAVE_INTERVAL}s)")
+        print(f"[SYNC] Auto-save enabled (every {AUTO_SAVE_INTERVAL}s)")
 
         while self.running:
             time.sleep(AUTO_SAVE_INTERVAL)
@@ -232,18 +232,18 @@ class AuroraSafetyProtocol:
     def start_auto_save(self):
         """Start continuous auto-save"""
         if self.auto_save_thread and self.auto_save_thread.is_alive():
-            print("⚠️  Auto-save already running")
+            print("[WARN]  Auto-save already running")
             return
 
         self.running = True
         self.auto_save_thread = threading.Thread(target=self.auto_save_loop, daemon=True)
         self.auto_save_thread.start()
-        print("✅ Auto-save started")
+        print("[OK] Auto-save started")
 
     def stop_auto_save(self):
         """Stop auto-save (triggers final save)"""
         if self.running:
-            print("🛑 Stopping auto-save...")
+            print("[EMOJI] Stopping auto-save...")
             self.running = False
 
             # Wait for thread to finish
@@ -252,11 +252,11 @@ class AuroraSafetyProtocol:
 
             # Final save
             self.save_state(reason="shutdown")
-            print("✅ Auto-save stopped, final state saved")
+            print("[OK] Auto-save stopped, final state saved")
 
     def run_diagnostics(self) -> list[DiagnosticReport]:
         """Run comprehensive system diagnostics"""
-        print("🔍 Running system diagnostics...")
+        print("[SCAN] Running system diagnostics...")
         reports = []
 
         # Check 1: Service Health
@@ -284,9 +284,9 @@ class AuroraSafetyProtocol:
         self._save_diagnostic_reports()
 
         # Print summary
-        print("\n📊 Diagnostic Summary:")
+        print("\n[DATA] Diagnostic Summary:")
         for report in reports:
-            icon = "✅" if report.status == "PASS" else "⚠️" if report.status == "WARN" else "❌"
+            icon = "[OK]" if report.status == "PASS" else "[WARN]" if report.status == "WARN" else "[ERROR]"
             print(f"{icon} {report.check_name}: {report.status}")
             if report.details:
                 print(f"   Details: {report.details}")
@@ -487,11 +487,11 @@ class AuroraSafetyProtocol:
             with open(DIAGNOSTIC_LOG, "w") as f:
                 json.dump([asdict(r) for r in self.diagnostic_reports], f, indent=2)
         except Exception as e:
-            print(f"⚠️  Failed to save diagnostic reports: {e}")
+            print(f"[WARN]  Failed to save diagnostic reports: {e}")
 
     def record_crash(self, service_name: str, exit_code: int, error_message: str, stack_trace: str = ""):
         """Record a service crash event"""
-        print(f"💥 Recording crash event for {service_name}")
+        print(f"[EMOJI] Recording crash event for {service_name}")
 
         crash = CrashEvent(
             timestamp=datetime.datetime.now().isoformat(),
@@ -511,13 +511,13 @@ class AuroraSafetyProtocol:
             with open(CRASH_LOG, "w") as f:
                 json.dump([asdict(c) for c in self.crash_events], f, indent=2)
         except Exception as e:
-            print(f"❌ Failed to save crash log: {e}")
+            print(f"[ERROR] Failed to save crash log: {e}")
 
         return crash
 
     def attempt_crash_recovery(self, crash: CrashEvent) -> bool:
         """Attempt to recover from a crash"""
-        print(f"🔧 Attempting crash recovery for {crash.service_name}...")
+        print(f"[EMOJI] Attempting crash recovery for {crash.service_name}...")
 
         crash.recovery_attempted = True
 
@@ -530,21 +530,21 @@ class AuroraSafetyProtocol:
             )
 
             if response.status_code == 200:
-                print(f"✅ Successfully restarted {crash.service_name}")
+                print(f"[OK] Successfully restarted {crash.service_name}")
                 crash.recovery_successful = True
                 return True
             else:
-                print(f"❌ Failed to restart {crash.service_name}: HTTP {response.status_code}")
+                print(f"[ERROR] Failed to restart {crash.service_name}: HTTP {response.status_code}")
                 return False
 
         except Exception as e:
-            print(f"❌ Recovery failed: {e}")
+            print(f"[ERROR] Recovery failed: {e}")
             crash.recovery_successful = False
             return False
 
     def graceful_shutdown(self):
         """Perform graceful shutdown with all safety checks"""
-        print("\n🛑 Initiating graceful shutdown...")
+        print("\n[EMOJI] Initiating graceful shutdown...")
         print("=" * 60)
 
         # Step 1: Save everything
@@ -572,18 +572,18 @@ class AuroraSafetyProtocol:
         with open(SAFETY_DIR / "last_shutdown.json", "w") as f:
             json.dump(shutdown_report, f, indent=2)
 
-        print("\n✅ Graceful shutdown complete")
+        print("\n[OK] Graceful shutdown complete")
         print("=" * 60)
 
     def emergency_shutdown(self):
         """Emergency shutdown (save what we can)"""
-        print("\n🚨 EMERGENCY SHUTDOWN")
+        print("\n[EMOJI] EMERGENCY SHUTDOWN")
         try:
             self.save_state(reason="emergency-shutdown")
             self.stop_auto_save()
-            print("✅ Emergency state saved")
+            print("[OK] Emergency state saved")
         except Exception as e:
-            print(f"❌ Emergency save failed: {e}")
+            print(f"[ERROR] Emergency save failed: {e}")
 
     def get_luminar_nexus_data(self) -> dict[str, Any]:
         """Get formatted data for Luminar Nexus dashboard"""

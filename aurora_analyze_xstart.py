@@ -15,7 +15,7 @@ os.environ["AURORA_NO_ORCHESTRATION"] = "true"
 
 async def aurora_analyze_xstart():
     print("\n" + "="*80)
-    print("⚡ AURORA 100% POWER ANALYSIS - x-start System")
+    print("[POWER] AURORA 100% POWER ANALYSIS - x-start System")
     print("="*80 + "\n")
 
     aurora = create_aurora_core()
@@ -23,7 +23,7 @@ async def aurora_analyze_xstart():
     # Read x-start file
     xstart_path = Path("x-start")
     if not xstart_path.exists():
-        print("❌ x-start file not found!")
+        print("[ERROR] x-start file not found!")
         return
 
     with open(xstart_path, 'r', encoding='utf-8') as f:
@@ -106,11 +106,11 @@ ANALYZE NOW."""
         f.write(response)
         f.write("\n")
 
-    print(f"\n💾 Saved to: AURORA_XSTART_ANALYSIS.md")
+    print(f"\n[EMOJI] Saved to: AURORA_XSTART_ANALYSIS.md")
 
     # Also analyze what files x-start should be managing
     print("\n" + "="*80)
-    print("📊 SCANNING PROJECT FOR ALL AURORA SYSTEMS...")
+    print("[DATA] SCANNING PROJECT FOR ALL AURORA SYSTEMS...")
     print("="*80 + "\n")
 
     # Find all Aurora services/systems
@@ -127,7 +127,7 @@ ANALYZE NOW."""
     for service in sorted(services):
         print(f"  • {service}")
 
-    print(f"\n💡 Aurora should analyze if ALL of these should be in x-start\n")
+    print(f"\n[IDEA] Aurora should analyze if ALL of these should be in x-start\n")
 
 if __name__ == "__main__":
     asyncio.run(aurora_analyze_xstart())

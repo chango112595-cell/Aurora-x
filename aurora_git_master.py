@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🔄 TIER 50: GIT MASTERY
+[SYNC] TIER 50: GIT MASTERY
 Aurora's advanced Git operations and workflow automation
 """
 
@@ -57,7 +57,7 @@ class AuroraGitMaster:
         ]
 
         print(f"\n{'='*70}")
-        print(f"🔄 {self.name} v{self.version} Initialized")
+        print(f"[SYNC] {self.name} v{self.version} Initialized")
         print("=" * 70)
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
@@ -66,7 +66,7 @@ class AuroraGitMaster:
 
     def create_feature_branch(self, feature_name: str) -> GitOperation:
         """Create optimized feature branch"""
-        print(f"🌿 Creating feature branch: {feature_name}")
+        print(f"[EMOJI] Creating feature branch: {feature_name}")
 
         branch_name = f"feature/{feature_name.lower().replace(' ', '-')}"
 
@@ -77,12 +77,12 @@ class AuroraGitMaster:
             details={"branch": branch_name, "base": "main"},
         )
 
-        print(f"✅ Branch created: {branch_name}")
+        print(f"[OK] Branch created: {branch_name}")
         return operation
 
     def generate_commit_message(self, changes: list[str]) -> str:
         """Generate semantic commit message"""
-        print(f"📝 Generating commit message for {len(changes)} changes...")
+        print(f"[EMOJI] Generating commit message for {len(changes)} changes...")
 
         # Analyze changes
         change_type = self._determine_change_type(changes)
@@ -93,12 +93,12 @@ class AuroraGitMaster:
         for change in changes[:3]:
             message += f"- {change}\n"
 
-        print(f"✅ Message generated: {change_type}({scope})")
+        print(f"[OK] Message generated: {change_type}({scope})")
         return message
 
     def auto_rebase(self, branch: str, base: str = "main") -> GitOperation:
         """Automatically rebase branch"""
-        print(f"🔄 Auto-rebasing {branch} onto {base}...")
+        print(f"[SYNC] Auto-rebasing {branch} onto {base}...")
 
         operation = GitOperation(
             operation="rebase",
@@ -112,7 +112,7 @@ class AuroraGitMaster:
 
     def resolve_conflicts(self, file_path: str) -> GitOperation:
         """Intelligently resolve merge conflicts"""
-        print(f"🔧 Resolving conflicts in: {file_path}")
+        print(f"[EMOJI] Resolving conflicts in: {file_path}")
 
         # Simulate conflict resolution
         resolution = self._analyze_and_resolve_conflicts(file_path)
@@ -129,7 +129,7 @@ class AuroraGitMaster:
 
     def create_pull_request(self, branch: str, title: str, description: str) -> dict[str, Any]:
         """Create pull request with automation"""
-        print(f"📤 Creating PR: {title}")
+        print(f"[EMOJI] Creating PR: {title}")
 
         pr = {
             "title": title,
@@ -141,12 +141,12 @@ class AuroraGitMaster:
             "checks": ["tests", "lint", "security"],
         }
 
-        print(f"✅ PR created: {title}")
+        print(f"[OK] PR created: {title}")
         return pr
 
     def optimize_history(self, branch: str) -> GitOperation:
         """Optimize git history"""
-        print(f"⚡ Optimizing history for: {branch}")
+        print(f"[POWER] Optimizing history for: {branch}")
 
         operation = GitOperation(
             operation="optimize_history",
@@ -204,7 +204,7 @@ class AuroraGitMaster:
 def main():
     """Test Tiers 66"""
     print("\n" + "=" * 70)
-    print("🧪 TESTING TIER 50: GIT MASTERY")
+    print("[TEST] TESTING TIER 50: GIT MASTERY")
     print("=" * 70 + "\n")
 
     git_master = AuroraGitMaster()
@@ -223,7 +223,7 @@ def main():
 
     summary = git_master.get_capabilities_summary()
     print("=" * 70)
-    print("✅ TIER 50 OPERATIONAL")
+    print("[OK] TIER 50 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
     print("=" * 70 + "\n")
 

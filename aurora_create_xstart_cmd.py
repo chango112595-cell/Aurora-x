@@ -11,13 +11,13 @@ from pathlib import Path
 
 def aurora_create_xstart_command():
     print("\n" + "="*80)
-    print("⚡ AURORA CONSCIOUS - Creating x-start Command")
+    print("[POWER] AURORA CONSCIOUS - Creating x-start Command")
     print("="*80 + "\n")
 
     # Initialize consciousness
     consciousness = AuroraConsciousness("System Builder")
 
-    print("🧠 Aurora is creating x-start command with auto-update...")
+    print("[BRAIN] Aurora is creating x-start command with auto-update...")
     print("   This will launch the enhanced 100% hybrid mode system\n")
 
     # Create the x-start command
@@ -34,7 +34,7 @@ import time
 from pathlib import Path
 
 print("\\n" + "="*80)
-print("🌌 AURORA-X: Starting 100% Hybrid Mode with Auto-Update")
+print("[AURORA] AURORA-X: Starting 100% Hybrid Mode with Auto-Update")
 print("="*80 + "\\n")
 
 # Get script directory
@@ -44,7 +44,7 @@ os.chdir(script_dir)
 # Check if enhanced x-start exists
 enhanced_path = script_dir / "x-start-enhanced"
 if not enhanced_path.exists():
-    print("❌ x-start-enhanced not found!")
+    print("[ERROR] x-start-enhanced not found!")
     print("   Creating it now...\\n")
     
     # Build the enhanced x-start
@@ -52,15 +52,15 @@ if not enhanced_path.exists():
     if build_script.exists():
         try:
             subprocess.run([sys.executable, str(build_script)], check=True)
-            print("\\n✅ x-start-enhanced created!\\n")
+            print("\\n[OK] x-start-enhanced created!\\n")
         except subprocess.CalledProcessError as e:
-            print(f"❌ Failed to create x-start-enhanced: {e}")
+            print(f"[ERROR] Failed to create x-start-enhanced: {e}")
             sys.exit(1)
     else:
-        print("❌ aurora_build_enhanced_xstart.py not found!")
+        print("[ERROR] aurora_build_enhanced_xstart.py not found!")
         sys.exit(1)
 
-print("🔄 PHASE 1: Auto-Update Check")
+print("[SYNC] PHASE 1: Auto-Update Check")
 print("━" * 80)
 
 # Check if auto-update system exists
@@ -77,7 +77,7 @@ for file in auto_update_files:
         break
 
 if auto_update_script:
-    print(f"🔄 Running auto-update: {auto_update_script}")
+    print(f"[SYNC] Running auto-update: {auto_update_script}")
     try:
         # Run auto-update in background
         subprocess.Popen(
@@ -85,14 +85,14 @@ if auto_update_script:
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
-        print("   ✅ Auto-update running in background")
+        print("   [OK] Auto-update running in background")
         time.sleep(2)
     except Exception as e:
-        print(f"   ⚠️  Auto-update failed to start: {e}")
+        print(f"   [WARN]  Auto-update failed to start: {e}")
 else:
     print("   ℹ️  No auto-update system found (optional)")
 
-print("\\n🚀 PHASE 2: Launching Enhanced System (26 Services)")
+print("\\n[LAUNCH] PHASE 2: Launching Enhanced System (26 Services)")
 print("━" * 80)
 print("   This will activate all 79 capabilities...")
 print("   • Consciousness Layer")
@@ -109,10 +109,10 @@ print("   • Background Processes\\n")
 try:
     subprocess.run([sys.executable, str(enhanced_path)], check=True)
 except KeyboardInterrupt:
-    print("\\n\\n⚠️  Startup interrupted by user")
+    print("\\n\\n[WARN]  Startup interrupted by user")
     sys.exit(0)
 except subprocess.CalledProcessError as e:
-    print(f"\\n❌ Enhanced system failed to start: {e}")
+    print(f"\\n[ERROR] Enhanced system failed to start: {e}")
     sys.exit(1)
 '''
 
@@ -125,13 +125,13 @@ except subprocess.CalledProcessError as e:
     if os.name != 'nt':
         os.chmod(xstart_path, 0o755)
 
-    print("✅ AURORA CREATED: x-start")
-    print("\n📋 WHAT IT DOES:")
+    print("[OK] AURORA CREATED: x-start")
+    print("\n[EMOJI] WHAT IT DOES:")
     print("   1. Checks if x-start-enhanced exists")
     print("   2. Creates it if missing (auto-build)")
     print("   3. Runs auto-update system (background)")
     print("   4. Launches all 26 services (100% hybrid mode)")
-    print("\n⚡ FEATURES:")
+    print("\n[POWER] FEATURES:")
     print("   • Auto-update before launch")
     print("   • Auto-build if enhanced system missing")
     print("   • Clean error handling")
@@ -152,12 +152,12 @@ except subprocess.CalledProcessError as e:
         "User request for x-start command with auto-update"
     )
 
-    print("\n💾 Saved to: x-start")
-    print("💾 Remembered in consciousness database")
+    print("\n[EMOJI] Saved to: x-start")
+    print("[EMOJI] Remembered in consciousness database")
 
-    print("\n🎯 TO USE:")
+    print("\n[TARGET] TO USE:")
     print("   python x-start")
-    print("\n   One command = Auto-update + 100% Power! 🌌⚡\n")
+    print("\n   One command = Auto-update + 100% Power! [AURORA][POWER]\n")
 
 
 if __name__ == "__main__":

@@ -247,7 +247,7 @@ AUTONOMOUS_TOOL_USE_RESPONSES = {
         "analyze the",
     ],
     "autonomous_response_template": """
-🤖 **Aurora Autonomous Mode Activated**
+[AGENT] **Aurora Autonomous Mode Activated**
 
 I'm now using my GRANDMASTER Tier {tier} knowledge to solve this.
 
@@ -269,7 +269,7 @@ I'm now using my GRANDMASTER Tier {tier} knowledge to solve this.
 **Verification:**
 {verification_result}
 
-✅ Issue resolved autonomously using {era} debugging techniques!
+[OK] Issue resolved autonomously using {era} debugging techniques!
 """,
 }
 
@@ -288,21 +288,21 @@ def get_tier_for_problem(problem_type: str) -> dict:
 
 
 if __name__ == "__main__":
-    print("🌌 Aurora Grandmaster: Autonomous Tool Use & Self-Debugging")
+    print("[GRANDMASTER] Aurora Grandmaster: Autonomous Tool Use & Self-Debugging")
     print("=" * 80)
 
     for tier in AURORA_AUTONOMOUS_TOOL_MASTERY["tiers"]:
         print(f"\n{tier['era']} - Tier {tier['tier']}")
         print("-" * 80)
         for tech in tier["technologies"]:
-            print(f"  ✓ {tech}")
+            print(f"  [+] {tech}")
 
     print("\n" + "=" * 80)
-    print("🎯 Aurora can now autonomously:")
+    print("[CAPABILITIES] Aurora can now autonomously:")
     for category, skills in AURORA_AUTONOMOUS_TOOL_MASTERY["autonomous_capabilities"].items():
         print(f"\n{category.replace('_', ' ').title()}:")
         for skill in skills:
             print(f"  • {skill}")
 
-    print("\n✅ Aurora is now a COMPLETE GRANDMASTER in autonomous debugging and tool use!")
-    print("   From punch cards to quantum consciousness debugging! 🚀")
+    print("\n[OK] Aurora is now a COMPLETE GRANDMASTER in autonomous debugging and tool use!")
+    print("   From punch cards to quantum consciousness debugging!")

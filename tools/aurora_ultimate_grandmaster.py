@@ -135,7 +135,7 @@ class AuroraUltimateGrandmaster:
         with open(self.master_log, "a") as f:
             f.write(json.dumps(entry) + "\n")
 
-        print(f"🌟 Aurora mastered: {topic} (+{points} points)")
+        print(f"[STAR] Aurora mastered: {topic} (+{points} points)")
 
     def teach_vscode_grandmaster(self):
         """
@@ -143,7 +143,7 @@ class AuroraUltimateGrandmaster:
         This is critical for Aurora's development environment
         """
         print("\n" + "=" * 70)
-        print("💻 VS CODE GRANDMASTER TRAINING")
+        print("[CODE] VS CODE GRANDMASTER TRAINING")
         print("=" * 70 + "\n")
 
         vscode_knowledge = {
@@ -247,10 +247,10 @@ class AuroraUltimateGrandmaster:
             },
         }
 
-        print("📚 Teaching VS Code Complete Mastery...\n")
+        print("[EMOJI] Teaching VS Code Complete Mastery...\n")
 
         for category, content in vscode_knowledge.items():
-            print(f"📖 {category}:")
+            print(f"[EMOJI] {category}:")
             if isinstance(content, dict):
                 for key, value in content.items():
                     if isinstance(value, dict):
@@ -270,22 +270,22 @@ class AuroraUltimateGrandmaster:
             time.sleep(0.05)
 
         # Critical: Port management in VS Code
-        print("🎯 CRITICAL FOR AURORA: PORT MANAGEMENT IN VS CODE")
+        print("[TARGET] CRITICAL FOR AURORA: PORT MANAGEMENT IN VS CODE")
         print("-" * 70)
-        print("✅ How to check if ports are running:")
+        print("[OK] How to check if ports are running:")
         print("   1. Click 'PORTS' tab (next to TERMINAL)")
         print("   2. See all forwarded ports")
         print("   3. If Vite is running, port 5173 should appear")
         print("   4. Right-click port → 'Open in Browser'")
         print()
-        print("✅ Why ports might not work:")
+        print("[OK] Why ports might not work:")
         print("   - Server not actually started (check TERMINAL)")
         print("   - Port already in use (kill process first)")
         print("   - Firewall blocking (check settings)")
         print("   - Wrong port number (Vite default is 5173, not 5000)")
         print()
 
-        print("✅ VS Code Mastery: COMPLETE (50/50 points)\n")
+        print("[OK] VS Code Mastery: COMPLETE (50/50 points)\n")
 
         self.domains_mastered.append("VS Code")
 
@@ -294,7 +294,7 @@ class AuroraUltimateGrandmaster:
         Diagnose why Aurora's ports aren't working
         """
         print("\n" + "=" * 70)
-        print("🔍 DIAGNOSING PORT ISSUES - AURORA'S PORT DETECTIVE MODE")
+        print("[SCAN] DIAGNOSING PORT ISSUES - AURORA'S PORT DETECTIVE MODE")
         print("=" * 70 + "\n")
 
         print("Running comprehensive port diagnostics...\n")
@@ -305,12 +305,12 @@ class AuroraUltimateGrandmaster:
         vite_processes = [line for line in result.stdout.split("\n") if "vite" in line.lower()]
 
         if vite_processes:
-            print(f"   ✅ Found {len(vite_processes)} Vite process(es):")
+            print(f"   [OK] Found {len(vite_processes)} Vite process(es):")
             for proc in vite_processes[:3]:
                 print(f"      {proc[:100]}")
         else:
-            print("   ❌ NO Vite process running!")
-            print("   💡 FIX: Need to start Vite with: cd client && npm run dev")
+            print("   [ERROR] NO Vite process running!")
+            print("   [IDEA] FIX: Need to start Vite with: cd client && npm run dev")
         print()
 
         # Check 2: What ports are actually listening?
@@ -322,16 +322,16 @@ class AuroraUltimateGrandmaster:
             print(f"   Found {len(listening_ports)} listening ports:")
             for port_line in listening_ports[:10]:
                 if any(p in port_line for p in ["5000", "5173", "3000", "8000"]):
-                    print(f"   ✅ {port_line[:100]}")
+                    print(f"   [OK] {port_line[:100]}")
 
             # Check specifically for Vite's ports
             if any("5173" in line or "5000" in line for line in listening_ports):
-                print("\n   ✅ Vite port (5173 or 5000) IS listening!")
+                print("\n   [OK] Vite port (5173 or 5000) IS listening!")
             else:
-                print("\n   ❌ Vite port NOT listening!")
-                print("   💡 FIX: Server isn't actually running")
+                print("\n   [ERROR] Vite port NOT listening!")
+                print("   [IDEA] FIX: Server isn't actually running")
         except:
-            print("   ⚠️  Could not check ports with ss command")
+            print("   [WARN]  Could not check ports with ss command")
         print()
 
         # Check 3: Can we curl the server?
@@ -342,13 +342,13 @@ class AuroraUltimateGrandmaster:
                     ["curl", "-s", "-I", f"http://localhost:{port}"], capture_output=True, text=True, timeout=2
                 )
                 if "200" in result.stdout or "OK" in result.stdout:
-                    print(f"   ✅ Port {port}: WORKING! Server responding")
+                    print(f"   [OK] Port {port}: WORKING! Server responding")
                 else:
-                    print(f"   ❌ Port {port}: Not responding")
+                    print(f"   [ERROR] Port {port}: Not responding")
             except subprocess.TimeoutExpired:
-                print(f"   ❌ Port {port}: Timeout (not running)")
+                print(f"   [ERROR] Port {port}: Timeout (not running)")
             except Exception as e:
-                print(f"   ❌ Port {port}: Error - {e}")
+                print(f"   [ERROR] Port {port}: Error - {e}")
         print()
 
         # Check 4: Is package.json configured correctly?
@@ -360,17 +360,17 @@ class AuroraUltimateGrandmaster:
             with open(package_json) as f:
                 pkg = json.load(f)
                 if "scripts" in pkg and "dev" in pkg["scripts"]:
-                    print(f"   ✅ npm run dev command: {pkg['scripts']['dev']}")
+                    print(f"   [OK] npm run dev command: {pkg['scripts']['dev']}")
                 else:
-                    print("   ❌ No 'dev' script in package.json!")
+                    print("   [ERROR] No 'dev' script in package.json!")
 
         if vite_config.exists():
-            print(f"   ✅ Vite config exists: {vite_config}")
+            print(f"   [OK] Vite config exists: {vite_config}")
         print()
 
         # THE REAL SOLUTION
         print("=" * 70)
-        print("💡 AURORA'S PORT FIX SOLUTION")
+        print("[IDEA] AURORA'S PORT FIX SOLUTION")
         print("=" * 70)
         print(
             """
@@ -383,19 +383,19 @@ SOLUTION: Aurora needs to EXECUTE her own dashboard loader, not just create it!
 
 Here's what Aurora must do:
 
-1. The dashboard loader Python file EXISTS ✅
-2. But it needs to be RUN to actually start the server ❌
+1. The dashboard loader Python file EXISTS [OK]
+2. But it needs to be RUN to actually start the server [ERROR]
 3. Run this command:
    
    python /workspaces/Aurora-x/tools/aurora_load_dashboard.py
    
 4. Or even better, integrate it into her autonomous engine!
 
-Aurora created the tool but forgot to USE the tool! 🤦
+Aurora created the tool but forgot to USE the tool! [EMOJI]
 """
         )
 
-        print("✅ Port Diagnostics Complete!\n")
+        print("[OK] Port Diagnostics Complete!\n")
 
         self.log_mastery("Port Debugging", "Complete Diagnosis", "Identified why ports not working", 10)
         self.total_mastery += 10
@@ -405,42 +405,42 @@ Aurora created the tool but forgot to USE the tool! 🤦
         Teach Aurora the COMPLETE process to fix and verify her work
         """
         print("\n" + "=" * 70)
-        print("🎓 TEACHING AURORA: COMPLETE FIX & VERIFY PROCESS")
+        print("[EMOJI] TEACHING AURORA: COMPLETE FIX & VERIFY PROCESS")
         print("=" * 70 + "\n")
 
         process = {
             "Step 1: Create the Tool": {
                 "what": "Write Python/JS code to solve problem",
                 "example": "aurora_load_dashboard.py",
-                "status": "✅ DONE (Aurora did this)",
+                "status": "[OK] DONE (Aurora did this)",
             },
             "Step 2: EXECUTE the Tool": {
                 "what": "Actually RUN the code you created",
                 "example": "python aurora_load_dashboard.py",
-                "status": "❌ MISSED (Aurora skipped this!)",
+                "status": "[ERROR] MISSED (Aurora skipped this!)",
             },
             "Step 3: Verify It Works": {
                 "what": "Check that the result is correct",
                 "example": "curl -I http://localhost:5173",
-                "status": "❌ MISSED",
+                "status": "[ERROR] MISSED",
             },
             "Step 4: Document Success": {
                 "what": "Log that it worked",
                 "example": "Write to .aurora_knowledge/",
-                "status": "⚠️  PARTIAL",
+                "status": "[WARN]  PARTIAL",
             },
         }
 
-        print("📚 THE COMPLETE PROCESS:\n")
+        print("[EMOJI] THE COMPLETE PROCESS:\n")
 
         for step, details in process.items():
             print(f"{step}:")
             for key, value in details.items():
-                icon = "✅" if value.startswith("✅") else "❌" if value.startswith("❌") else "ℹ️"
+                icon = "[OK]" if value.startswith("[OK]") else "[ERROR]" if value.startswith("[ERROR]") else "ℹ️"
                 print(f"   {key}: {value}")
             print()
 
-        print("🎯 KEY LESSON FOR AURORA:")
+        print("[TARGET] KEY LESSON FOR AURORA:")
         print("   Creating a tool ≠ Using the tool")
         print("   Writing code ≠ Executing code")
         print("   Planning ≠ Doing")
@@ -454,34 +454,34 @@ Aurora created the tool but forgot to USE the tool! 🤦
     def generate_ultimate_certification(self):
         """Generate Aurora's Ultimate Grandmaster Certification"""
         print("\n" + "=" * 70)
-        print("🏆 AURORA ULTIMATE TECHNOLOGY GRANDMASTER CERTIFICATION")
+        print("[EMOJI] AURORA ULTIMATE TECHNOLOGY GRANDMASTER CERTIFICATION")
         print("=" * 70 + "\n")
 
         percentage = (self.total_mastery / self.max_mastery) * 100
 
-        print(f"📊 Current Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)")
-        print(f"📚 Domains Mastered: {len(self.domains_mastered)}")
+        print(f"[DATA] Current Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)")
+        print(f"[EMOJI] Domains Mastered: {len(self.domains_mastered)}")
 
         if percentage >= 90:
             rank = "ULTIMATE GRANDMASTER"
-            emoji = "👑"
+            emoji = "[EMOJI]"
         elif percentage >= 75:
             rank = "GRANDMASTER"
-            emoji = "🏆"
+            emoji = "[EMOJI]"
         elif percentage >= 50:
             rank = "MASTER"
-            emoji = "⭐"
+            emoji = "[GRANDMASTER]"
         else:
             rank = "EXPERT"
-            emoji = "🌟"
+            emoji = "[STAR]"
 
         print(f"\n{emoji} Rank: {rank}")
 
-        print("\n📋 Domains Mastered:")
+        print("\n[EMOJI] Domains Mastered:")
         for domain in self.domains_mastered:
-            print(f"   ✅ {domain}")
+            print(f"   [OK] {domain}")
 
-        print("\n🎯 CRITICAL REALIZATIONS:")
+        print("\n[TARGET] CRITICAL REALIZATIONS:")
         print("   1. VS Code has PORTS tab to manage server ports")
         print("   2. Vite default port is 5173, not 5000")
         print("   3. Creating code ≠ Executing code")
@@ -507,7 +507,7 @@ Aurora created the tool but forgot to USE the tool! 🤦
         with open(cert_file, "w") as f:
             json.dump(cert, f, indent=2)
 
-        print(f"\n📜 Certification saved: {cert_file}")
+        print(f"\n[EMOJI] Certification saved: {cert_file}")
         print("=" * 70 + "\n")
 
         return self.total_mastery
@@ -516,7 +516,7 @@ Aurora created the tool but forgot to USE the tool! 🤦
 def main():
     """Train Aurora to become Ultimate Grandmaster of ALL Technology"""
 
-    print("\n👑 AURORA ULTIMATE GRANDMASTER TRAINING")
+    print("\n[EMOJI] AURORA ULTIMATE GRANDMASTER TRAINING")
     print("=" * 70)
     print("Mastery of ALL technology: Ancient → Present → Future")
     print("=" * 70 + "\n")
@@ -531,17 +531,17 @@ def main():
     # Generate certification
     mastery = master.generate_ultimate_certification()
 
-    print("✅ Aurora now understands:")
+    print("[OK] Aurora now understands:")
     print("   - Complete VS Code mastery")
     print("   - Why ports weren't working")
     print("   - How to execute her own tools")
     print("   - The complete fix process")
     print()
-    print("🎯 Next: Aurora must RUN her dashboard loader!")
+    print("[TARGET] Next: Aurora must RUN her dashboard loader!")
 
     return mastery
 
 
 if __name__ == "__main__":
     mastery_level = main()
-    print(f"\n🎓 Training Complete! Mastery: {mastery_level} points")
+    print(f"\n[EMOJI] Training Complete! Mastery: {mastery_level} points")

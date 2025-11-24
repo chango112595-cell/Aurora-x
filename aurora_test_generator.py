@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🧪 TIER 45: ENHANCED TEST GENERATION
+[TEST] TIER 45: ENHANCED TEST GENERATION
 Aurora's ability to generate comprehensive test suites with 100% coverage
 """
 
@@ -65,7 +65,7 @@ class AuroraTestGenerator:
         ]
 
         print(f"\n{'='*70}")
-        print(f"🧪 {self.name} v{self.version} Initialized")
+        print(f"[TEST-GEN] {self.name} v{self.version} Initialized")
         print(f"{'='*70}")
         print(f"Tier: {self.tier}")
         print(f"Capabilities: {len(self.capabilities)}")
@@ -83,7 +83,7 @@ class AuroraTestGenerator:
         Returns:
             List of generated test cases
         """
-        print(f"🧪 Generating tests for: {Path(file_path).name}")
+        print(f"[TEST] Generating tests for: {Path(file_path).name}")
 
         if test_types is None:
             test_types = [TestType.UNIT]
@@ -106,7 +106,7 @@ class AuroraTestGenerator:
                 tests = self._generate_class_tests(cls, test_type)
                 test_cases.extend(tests)
 
-        print(f"✅ Generated {len(test_cases)} test cases")
+        print(f"[OK] Generated {len(test_cases)} test cases")
         return test_cases
 
     def analyze_coverage_gaps(self, source_file: str, test_file: str) -> dict[str, Any]:
@@ -120,7 +120,7 @@ class AuroraTestGenerator:
         Returns:
             Coverage analysis and missing tests
         """
-        print("📊 Analyzing coverage gaps...")
+        print("[DATA] Analyzing coverage gaps...")
 
         # Parse source and tests
         source_lines = self._get_executable_lines(source_file)
@@ -142,7 +142,7 @@ class AuroraTestGenerator:
             "recommendations": self._generate_coverage_recommendations(uncovered),
         }
 
-        print(f"✅ Coverage: {coverage_percent:.2f}% ({len(uncovered)} lines uncovered)")
+        print(f"[OK] Coverage: {coverage_percent:.2f}% ({len(uncovered)} lines uncovered)")
         return analysis
 
     def generate_edge_cases(self, function_name: str, parameters: list[dict]) -> list[TestCase]:
@@ -156,7 +156,7 @@ class AuroraTestGenerator:
         Returns:
             List of edge case tests
         """
-        print(f"🎯 Generating edge cases for: {function_name}")
+        print(f"[TARGET] Generating edge cases for: {function_name}")
 
         edge_cases = []
 
@@ -166,7 +166,7 @@ class AuroraTestGenerator:
             edge_tests = self._generate_edge_tests_for_type(function_name, param["name"], param_type)
             edge_cases.extend(edge_tests)
 
-        print(f"✅ Generated {len(edge_cases)} edge case tests")
+        print(f"[OK] Generated {len(edge_cases)} edge case tests")
         return edge_cases
 
     def generate_integration_tests(self, components: list[str]) -> list[TestCase]:
@@ -179,7 +179,7 @@ class AuroraTestGenerator:
         Returns:
             Integration test cases
         """
-        print(f"🔗 Generating integration tests for {len(components)} components")
+        print(f"[LINK] Generating integration tests for {len(components)} components")
 
         test_cases = []
 
@@ -189,7 +189,7 @@ class AuroraTestGenerator:
                 test = self._generate_integration_test(components[i], components[j])
                 test_cases.append(test)
 
-        print(f"✅ Generated {len(test_cases)} integration tests")
+        print(f"[OK] Generated {len(test_cases)} integration tests")
         return test_cases
 
     def generate_e2e_scenarios(self, user_flows: list[dict[str, Any]]) -> list[TestCase]:
@@ -202,7 +202,7 @@ class AuroraTestGenerator:
         Returns:
             E2E test cases
         """
-        print(f"🎬 Generating E2E tests for {len(user_flows)} user flows")
+        print(f"[EMOJI] Generating E2E tests for {len(user_flows)} user flows")
 
         test_cases = []
 
@@ -210,7 +210,7 @@ class AuroraTestGenerator:
             test = self._generate_e2e_test(flow)
             test_cases.append(test)
 
-        print(f"✅ Generated {len(test_cases)} E2E tests")
+        print(f"[OK] Generated {len(test_cases)} E2E tests")
         return test_cases
 
     def generate_performance_tests(self, functions: list[str], performance_criteria: dict) -> list[TestCase]:
@@ -224,7 +224,7 @@ class AuroraTestGenerator:
         Returns:
             Performance test cases
         """
-        print(f"⚡ Generating performance tests for {len(functions)} functions")
+        print(f"[POWER] Generating performance tests for {len(functions)} functions")
 
         test_cases = []
 
@@ -232,7 +232,7 @@ class AuroraTestGenerator:
             test = self._generate_performance_test(func, performance_criteria)
             test_cases.append(test)
 
-        print(f"✅ Generated {len(test_cases)} performance tests")
+        print(f"[OK] Generated {len(test_cases)} performance tests")
         return test_cases
 
     def generate_mocks_and_fixtures(self, dependencies: list[str]) -> dict[str, Any]:
@@ -245,7 +245,7 @@ class AuroraTestGenerator:
         Returns:
             Mock and fixture code
         """
-        print(f"🎭 Generating mocks for {len(dependencies)} dependencies")
+        print(f"[EMOJI] Generating mocks for {len(dependencies)} dependencies")
 
         mocks = {}
 
@@ -256,7 +256,7 @@ class AuroraTestGenerator:
 
         result = {"mocks": mocks, "fixtures": fixtures, "setup_code": self._generate_setup_code(mocks, fixtures)}
 
-        print(f"✅ Generated {len(mocks)} mocks and {len(fixtures)} fixtures")
+        print(f"[OK] Generated {len(mocks)} mocks and {len(fixtures)} fixtures")
         return result
 
     def generate_test_data(self, schema: dict[str, Any], count: int = 10) -> list[dict]:
@@ -270,7 +270,7 @@ class AuroraTestGenerator:
         Returns:
             List of test data records
         """
-        print(f"📊 Generating {count} test data records")
+        print(f"[DATA] Generating {count} test data records")
 
         test_data = []
 
@@ -278,7 +278,7 @@ class AuroraTestGenerator:
             record = self._generate_test_record(schema, i)
             test_data.append(record)
 
-        print(f"✅ Generated {len(test_data)} test records")
+        print(f"[OK] Generated {len(test_data)} test records")
         return test_data
 
     def optimize_test_suite(self, test_file: str) -> dict[str, Any]:
@@ -291,7 +291,7 @@ class AuroraTestGenerator:
         Returns:
             Optimization suggestions
         """
-        print(f"🔧 Optimizing test suite: {Path(test_file).name}")
+        print(f"[EMOJI] Optimizing test suite: {Path(test_file).name}")
 
         # Analyze tests
         redundant_tests = self._find_redundant_tests(test_file)
@@ -310,7 +310,7 @@ class AuroraTestGenerator:
             "potential_speedup": "35%",
         }
 
-        print(f"✅ Found {len(redundant_tests)} redundant, {len(slow_tests)} slow, {len(flaky_tests)} flaky tests")
+        print(f"[OK] Found {len(redundant_tests)} redundant, {len(slow_tests)} slow, {len(flaky_tests)} flaky tests")
         return optimization
 
     # === PRIVATE HELPER METHODS ===
@@ -506,7 +506,7 @@ class Test{cls['name']}:
 def main():
     """Test Tiers 66 functionality"""
     print("\n" + "=" * 70)
-    print("🧪 TESTING TIER 45: ENHANCED TEST GENERATION")
+    print("[TEST] TESTING TIER 45: ENHANCED TEST GENERATION")
     print("=" * 70 + "\n")
 
     generator = AuroraTestGenerator()
@@ -540,7 +540,7 @@ def main():
     # Summary
     summary = generator.get_capabilities_summary()
     print("=" * 70)
-    print("✅ TIER 45 OPERATIONAL")
+    print("[OK] TIER 45 OPERATIONAL")
     print(f"Capabilities: {len(summary['capabilities'])}")
     print(f"Coverage Target: {summary['coverage_target']}")
     print("=" * 70 + "\n")

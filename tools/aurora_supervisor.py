@@ -216,16 +216,16 @@ class AuroraSupervisor:
                 state.status = "running"
                 state.pid = self.get_process_for_port(service.port)
                 state.uptime_seconds = 0
-                logger.info(f"✅ Service {service_name} started successfully on port {service.port}")
+                logger.info(f"[OK] Service {service_name} started successfully on port {service.port}")
                 return True
             else:
                 state.status = "failed"
-                logger.error(f"❌ Service {service_name} failed to start")
+                logger.error(f"[ERROR] Service {service_name} failed to start")
                 return False
 
         except Exception as e:
             state.status = "failed"
-            logger.error(f"❌ Error starting {service_name}: {e}")
+            logger.error(f"[ERROR] Error starting {service_name}: {e}")
             return False
 
     def stop_service(self, service_name: str, graceful: bool = True, pause: bool = True):
@@ -287,7 +287,7 @@ class AuroraSupervisor:
 
         # Exponential backoff
         delay = service.restart_delay * (2**state.restart_count)
-        logger.info(f"🔄 Restarting {service_name} in {delay}s (attempt {state.restart_count + 1})")
+        logger.info(f"[SYNC] Restarting {service_name} in {delay}s (attempt {state.restart_count + 1})")
         time.sleep(delay)
 
         # Stop and start - don't pause on restart
@@ -305,7 +305,7 @@ class AuroraSupervisor:
         service = self.services[service_name]
         state = self.states[service_name]
 
-        logger.info(f"👁️ Monitoring started for {service_name}")
+        logger.info(f"[EYE] Monitoring started for {service_name}")
 
         while not self.shutdown_event.is_set():
             time.sleep(10)  # Check every 10 seconds
@@ -327,7 +327,7 @@ class AuroraSupervisor:
                 state.uptime_seconds += 10
             else:
                 state.health_status = "unhealthy"
-                logger.warning(f"⚠️ Service {service_name} failed health check")
+                logger.warning(f"[WARN] Service {service_name} failed health check")
 
                 # Only attempt restart if NOT paused
                 if not state.paused:
@@ -336,7 +336,7 @@ class AuroraSupervisor:
 
     def start_all(self):
         """Start all services in dependency order"""
-        logger.info("🚀 Starting all services...")
+        logger.info("[LAUNCH] Starting all services...")
 
         # Build dependency graph and start in order
         started = set()
@@ -364,11 +364,11 @@ class AuroraSupervisor:
 
             time.sleep(2)
 
-        logger.info(f"✅ Started {len(started)}/{len(self.services)} services")
+        logger.info(f"[OK] Started {len(started)}/{len(self.services)} services")
 
     def stop_all(self):
         """Stop all services"""
-        logger.info("🛑 Stopping all services...")
+        logger.info("[EMOJI] Stopping all services...")
         self.shutdown_event.set()
 
         for service_name in list(self.services.keys()):
@@ -397,7 +397,7 @@ class AuroraSupervisor:
 
     def run_forever(self):
         """Run supervisor indefinitely"""
-        logger.info("🎯 Aurora Supervisor running...")
+        logger.info("[TARGET] Aurora Supervisor running...")
 
         try:
             while not self.shutdown_event.is_set():

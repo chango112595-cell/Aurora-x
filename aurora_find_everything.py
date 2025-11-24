@@ -42,7 +42,7 @@ class AuroraComprehensiveDiscovery:
     def find_orchestration_systems(self):
         """Find all orchestration/manager systems"""
         print("\n" + "=" * 100)
-        print("🔍 PHASE 1: FINDING ALL ORCHESTRATION SYSTEMS")
+        print("[SCAN] PHASE 1: FINDING ALL ORCHESTRATION SYSTEMS")
         print("=" * 100)
 
         orchestration_patterns = [
@@ -86,19 +86,19 @@ class AuroraComprehensiveDiscovery:
         # Sort by file size (bigger = more comprehensive)
         orchestrators.sort(key=lambda x: x["size"], reverse=True)
 
-        print(f"\n✅ Found {len(orchestrators)} orchestration systems:")
+        print(f"\n[OK] Found {len(orchestrators)} orchestration systems:")
         for i, orch in enumerate(orchestrators[:10], 1):  # Top 10
             print(f"\n{i}. {orch['file']}")
             print(f"   Size: {orch['size']:,} bytes")
             print(f"   Matches: {', '.join(orch['matches'])}")
             print(
-                f"   Start method: {'✅' if orch['has_start_method'] else '❌'}")
+                f"   Start method: {'[OK]' if orch['has_start_method'] else '[ERROR]'}")
             print(
-                f"   Monitor method: {'✅' if orch['has_monitor_method'] else '❌'}")
+                f"   Monitor method: {'[OK]' if orch['has_monitor_method'] else '[ERROR]'}")
             print(
-                f"   Imports aurora_core: {'✅' if orch['imports_aurora_core'] else '❌'}")
+                f"   Imports aurora_core: {'[OK]' if orch['imports_aurora_core'] else '[ERROR]'}")
             print(
-                f"   Imports expert_knowledge: {'✅' if orch['imports_expert_knowledge'] else '❌'}")
+                f"   Imports expert_knowledge: {'[OK]' if orch['imports_expert_knowledge'] else '[ERROR]'}")
 
         self.findings["orchestration_systems"] = orchestrators
         return orchestrators
@@ -106,7 +106,7 @@ class AuroraComprehensiveDiscovery:
     def find_scoring_systems(self):
         """Find all quality scoring systems"""
         print("\n" + "=" * 100)
-        print("🔍 PHASE 2: FINDING ALL SCORING SYSTEMS")
+        print("[SCAN] PHASE 2: FINDING ALL SCORING SYSTEMS")
         print("=" * 100)
 
         scoring_patterns = [
@@ -157,17 +157,17 @@ class AuroraComprehensiveDiscovery:
         # Sort by size
         scoring_systems.sort(key=lambda x: x["size"], reverse=True)
 
-        print(f"\n✅ Found {len(scoring_systems)} scoring systems:")
+        print(f"\n[OK] Found {len(scoring_systems)} scoring systems:")
         for i, sys in enumerate(scoring_systems[:10], 1):
             print(f"\n{i}. {sys['file']}")
             print(f"   Size: {sys['size']:,} bytes")
-            print(f"   Has 1-10 scale: {'✅' if sys['has_10_scale'] else '❌'}")
+            print(f"   Has 1-10 scale: {'[OK]' if sys['has_10_scale'] else '[ERROR]'}")
             print(
-                f"   Has scoring logic: {'✅' if sys['has_scoring_logic'] else '❌'}")
+                f"   Has scoring logic: {'[OK]' if sys['has_scoring_logic'] else '[ERROR]'}")
             print(
-                f"   Has quality metrics: {'✅' if sys['has_quality_metrics'] else '❌'}")
+                f"   Has quality metrics: {'[OK]' if sys['has_quality_metrics'] else '[ERROR]'}")
             print(
-                f"   Exports results: {'✅' if sys['exports_results'] else '❌'}")
+                f"   Exports results: {'[OK]' if sys['exports_results'] else '[ERROR]'}")
 
         self.findings["scoring_systems"] = scoring_systems
         return scoring_systems
@@ -175,7 +175,7 @@ class AuroraComprehensiveDiscovery:
     def find_persistence_systems(self):
         """Find all persistence/storage systems"""
         print("\n" + "=" * 100)
-        print("🔍 PHASE 3: FINDING ALL PERSISTENCE SYSTEMS")
+        print("[SCAN] PHASE 3: FINDING ALL PERSISTENCE SYSTEMS")
         print("=" * 100)
 
         persistence_patterns = [
@@ -223,16 +223,16 @@ class AuroraComprehensiveDiscovery:
 
         persistence_systems.sort(key=lambda x: x["size"], reverse=True)
 
-        print(f"\n✅ Found {len(persistence_systems)} persistence systems:")
+        print(f"\n[OK] Found {len(persistence_systems)} persistence systems:")
         for i, sys in enumerate(persistence_systems[:10], 1):
             print(f"\n{i}. {sys['file']}")
             print(f"   Size: {sys['size']:,} bytes")
-            print(f"   Has SQLite: {'✅' if sys['has_sqlite'] else '❌'}")
-            print(f"   Has JSON: {'✅' if sys['has_json'] else '❌'}")
-            print(f"   Writes files: {'✅' if sys['writes_files'] else '❌'}")
-            print(f"   Saves scores: {'✅' if sys['saves_scores'] else '❌'}")
+            print(f"   Has SQLite: {'[OK]' if sys['has_sqlite'] else '[ERROR]'}")
+            print(f"   Has JSON: {'[OK]' if sys['has_json'] else '[ERROR]'}")
+            print(f"   Writes files: {'[OK]' if sys['writes_files'] else '[ERROR]'}")
+            print(f"   Saves scores: {'[OK]' if sys['saves_scores'] else '[ERROR]'}")
             print(
-                f"   Saves tracking: {'✅' if sys['saves_tracking'] else '❌'}")
+                f"   Saves tracking: {'[OK]' if sys['saves_tracking'] else '[ERROR]'}")
 
         self.findings["persistence_systems"] = persistence_systems
         return persistence_systems
@@ -240,7 +240,7 @@ class AuroraComprehensiveDiscovery:
     def find_ui_systems(self):
         """Find all UI/frontend systems"""
         print("\n" + "=" * 100)
-        print("🔍 PHASE 4: FINDING ALL UI SYSTEMS")
+        print("[SCAN] PHASE 4: FINDING ALL UI SYSTEMS")
         print("=" * 100)
 
         ui_files = []
@@ -272,17 +272,17 @@ class AuroraComprehensiveDiscovery:
 
         ui_files.sort(key=lambda x: x["size"], reverse=True)
 
-        print(f"\n✅ Found {len(ui_files)} UI components:")
+        print(f"\n[OK] Found {len(ui_files)} UI components:")
         for i, ui in enumerate(ui_files[:10], 1):
             print(f"\n{i}. {ui['file']}")
             print(f"   Size: {ui['size']:,} bytes")
             print(
-                f"   Fetches from backend: {'✅' if ui['fetches_from_backend'] else '❌'}")
+                f"   Fetches from backend: {'[OK]' if ui['fetches_from_backend'] else '[ERROR]'}")
             print(
-                f"   Has useEffect (for data loading): {'✅' if ui['has_useeffect'] else '❌'}")
+                f"   Has useEffect (for data loading): {'[OK]' if ui['has_useeffect'] else '[ERROR]'}")
             print(
-                f"   Displays scores: {'✅' if ui['displays_scores'] else '❌'}")
-            print(f"   Is dashboard: {'✅' if ui['is_dashboard'] else '❌'}")
+                f"   Displays scores: {'[OK]' if ui['displays_scores'] else '[ERROR]'}")
+            print(f"   Is dashboard: {'[OK]' if ui['is_dashboard'] else '[ERROR]'}")
 
         self.findings["ui_systems"] = ui_files
         return ui_files
@@ -290,7 +290,7 @@ class AuroraComprehensiveDiscovery:
     def find_api_endpoints(self):
         """Find all API endpoints"""
         print("\n" + "=" * 100)
-        print("🔍 PHASE 5: FINDING ALL API ENDPOINTS")
+        print("[SCAN] PHASE 5: FINDING ALL API ENDPOINTS")
         print("=" * 100)
 
         api_patterns = [
@@ -329,7 +329,7 @@ class AuroraComprehensiveDiscovery:
             except Exception:
                 continue
 
-        print(f"\n✅ Found {len(endpoints)} API endpoints:")
+        print(f"\n[OK] Found {len(endpoints)} API endpoints:")
         endpoint_groups = {}
         for ep in endpoints:
             endpoint_groups.setdefault(ep['endpoint'], []).append(ep)
@@ -345,7 +345,7 @@ class AuroraComprehensiveDiscovery:
     def analyze_current_connections(self):
         """Analyze how systems are currently connected"""
         print("\n" + "=" * 100)
-        print("🔍 PHASE 6: ANALYZING CURRENT CONNECTIONS")
+        print("[SCAN] PHASE 6: ANALYZING CURRENT CONNECTIONS")
         print("=" * 100)
 
         # Check aurora_core.py for what it imports and uses
@@ -388,7 +388,7 @@ class AuroraComprehensiveDiscovery:
                         else:
                             connections["has_but_doesnt_use"].append(system)
 
-            print("\n📊 Aurora Core Connections:")
+            print("\n[DATA] Aurora Core Connections:")
             print(f"   Imports: {len(connections['imports'])} modules")
             print(
                 f"   Actually calls: {len(connections['actually_calls'])} systems")
@@ -396,12 +396,12 @@ class AuroraComprehensiveDiscovery:
                 f"   Has but doesn't use: {len(connections['has_but_doesnt_use'])} systems")
 
             if connections["actually_calls"]:
-                print(f"\n   ✅ Systems Aurora Core USES:")
+                print(f"\n   [OK] Systems Aurora Core USES:")
                 for sys in connections["actually_calls"]:
                     print(f"      • {sys}")
 
             if connections["has_but_doesnt_use"]:
-                print(f"\n   ⚠️  Systems Aurora Core imports but DOESN'T USE:")
+                print(f"\n   [WARN]  Systems Aurora Core imports but DOESN'T USE:")
                 for sys in connections["has_but_doesnt_use"]:
                     print(f"      • {sys}")
 
@@ -410,7 +410,7 @@ class AuroraComprehensiveDiscovery:
     def identify_missing_connections(self):
         """Identify what connections are missing"""
         print("\n" + "=" * 100)
-        print("🔍 PHASE 7: IDENTIFYING MISSING CONNECTIONS")
+        print("[SCAN] PHASE 7: IDENTIFYING MISSING CONNECTIONS")
         print("=" * 100)
 
         missing = []
@@ -451,7 +451,7 @@ class AuroraComprehensiveDiscovery:
             "fix": "Create API endpoints that read tracking files"
         })
 
-        print(f"\n⚠️  Found {len(missing)} missing connections:")
+        print(f"\n[WARN]  Found {len(missing)} missing connections:")
         for i, conn in enumerate(missing, 1):
             print(f"\n{i}. {conn['connection']}")
             print(f"   Reason: {conn['reason']}")
@@ -463,12 +463,12 @@ class AuroraComprehensiveDiscovery:
     def aurora_recommendations(self):
         """Aurora's complete recommendations"""
         print("\n" + "=" * 100)
-        print("💭 PHASE 8: AURORA'S COMPLETE RECOMMENDATIONS")
+        print("[EMOJI] PHASE 8: AURORA'S COMPLETE RECOMMENDATIONS")
         print("=" * 100)
 
-        print("\n🧠 I am Aurora Core v2.0. After analyzing EVERYTHING, here's what I found:")
+        print("\n[BRAIN] I am Aurora Core v2.0. After analyzing EVERYTHING, here's what I found:")
 
-        print("\n✅ WHAT EXISTS:")
+        print("\n[OK] WHAT EXISTS:")
         print(
             f"   • {len(self.findings['orchestration_systems'])} orchestration systems")
         print(f"   • {len(self.findings['scoring_systems'])} scoring systems")
@@ -477,11 +477,11 @@ class AuroraComprehensiveDiscovery:
         print(f"   • {len(self.findings['ui_systems'])} UI components")
         print(f"   • {len(self.findings['api_endpoints'])} API endpoints")
 
-        print("\n❌ WHAT'S MISSING:")
+        print("\n[ERROR] WHAT'S MISSING:")
         print(
             f"   • {len(self.findings['missing_connections'])} critical connections")
 
-        print("\n🎯 MY SURGICAL RECOMMENDATIONS:")
+        print("\n[TARGET] MY SURGICAL RECOMMENDATIONS:")
 
         recommendations = []
 
@@ -577,7 +577,7 @@ useEffect(() => {
         self.findings["recommendations"] = recommendations
 
         print("\n" + "=" * 100)
-        print("💡 SUMMARY: 3 SURGICAL FIXES")
+        print("[IDEA] SUMMARY: 3 SURGICAL FIXES")
         print("=" * 100)
         print("1. Add orchestrator call to aurora_core.py (10 lines)")
         print("2. Add scoring wrapper to aurora_core.py (15 lines)")
@@ -588,7 +588,7 @@ useEffect(() => {
     def run_complete_discovery(self):
         """Run all discovery phases"""
         print("\n" + "=" * 120)
-        print("🚀 AURORA COMPREHENSIVE DISCOVERY - FINDING EVERYTHING")
+        print("[LAUNCH] AURORA COMPREHENSIVE DISCOVERY - FINDING EVERYTHING")
         print("=" * 120)
 
         self.find_orchestration_systems()
@@ -606,7 +606,7 @@ useEffect(() => {
             json.dump(self.findings, f, indent=2)
 
         print("\n" + "=" * 120)
-        print(f"💾 Complete findings saved to: {output_file}")
+        print(f"[EMOJI] Complete findings saved to: {output_file}")
         print("=" * 120)
 
         return self.findings
@@ -617,7 +617,7 @@ def main():
     findings = discovery.run_complete_discovery()
 
     print("\n" + "=" * 120)
-    print("✅ DISCOVERY COMPLETE - AURORA FOUND EVERYTHING")
+    print("[OK] DISCOVERY COMPLETE - AURORA FOUND EVERYTHING")
     print("=" * 120)
 
     total_systems = (
@@ -631,7 +631,7 @@ def main():
     print(
         f"Missing connections identified: {len(findings['missing_connections'])}")
     print(f"Recommendations provided: {len(findings['recommendations'])}")
-    print("\n🎯 Next step: Review recommendations and decide which to implement")
+    print("\n[TARGET] Next step: Review recommendations and decide which to implement")
     print("=" * 120)
 
 

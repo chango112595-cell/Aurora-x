@@ -9,14 +9,14 @@ from datetime import datetime
 from pathlib import Path
 
 AURORA_DEBUG_TASK = """
-🤖 AURORA DEBUG TASK: PORT 5001 CONFLICT
+[AGENT] AURORA DEBUG TASK: PORT 5001 CONFLICT
 ==========================================
 
 Problem: When you run `python3 -m aurora_x.serve`, port 5001 shows backend API JSON
 Expected: Port 5001 should show the Vite UI (HTML frontend)
 
 Current Architecture:
-- Luminar Nexus wants Vite on port 5001 ✓ (correct)
+- Luminar Nexus wants Vite on port 5001 [+] (correct)
 - But `aurora_x/serve.py` also wants port 5001 ✗ (conflict!)
 
 Questions for Aurora to Answer:
@@ -42,7 +42,7 @@ Your Task:
 4. Test: Verify port 5001 shows HTML (Vite UI), not JSON (API)
 5. Commit: Explain your reasoning
 
-Think about it, Aurora. What's your diagnosis? 🔍
+Think about it, Aurora. What's your diagnosis? [SCAN]
 """
 
 print(AURORA_DEBUG_TASK)
@@ -61,5 +61,5 @@ with open(log_file, "a") as f:
     }
     f.write(json.dumps(entry) + "\n")
 
-print("\n📋 Task logged to: /workspaces/Aurora-x/.aurora_knowledge/aurora_debug_task.jsonl")
+print("\n[EMOJI] Task logged to: /workspaces/Aurora-x/.aurora_knowledge/aurora_debug_task.jsonl")
 print("⏳ Aurora is investigating...\n")

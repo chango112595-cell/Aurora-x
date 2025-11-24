@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌟 AURORA AUTONOMOUS PYLINT FIXER 🌟
+[STAR] AURORA AUTONOMOUS PYLINT FIXER [STAR]
 ====================================
 
 Aurora's Autonomous System that:
@@ -137,7 +137,7 @@ class AuroraAutonomousFixer:
             return False
 
         except Exception as e:
-            print(f"  ⚠️  Error fixing {filepath}: {e}")
+            print(f"  [WARN]  Error fixing {filepath}: {e}")
             return False
 
     def fix_unused_import(self, filepath: str, issue: dict) -> bool:
@@ -161,7 +161,7 @@ class AuroraAutonomousFixer:
             return False
 
         except Exception as e:
-            print(f"  ⚠️  Error fixing {filepath}: {e}")
+            print(f"  [WARN]  Error fixing {filepath}: {e}")
             return False
 
     def fix_unused_variable(self, filepath: str, issue: dict) -> bool:
@@ -197,7 +197,7 @@ class AuroraAutonomousFixer:
             return False
 
         except Exception as e:
-            print(f"  ⚠️  Error fixing {filepath}: {e}")
+            print(f"  [WARN]  Error fixing {filepath}: {e}")
             return False
 
     def fix_subprocess_check(self, filepath: str, issue: dict) -> bool:
@@ -231,7 +231,7 @@ class AuroraAutonomousFixer:
             return False
 
         except Exception as e:
-            print(f"  ⚠️  Error fixing {filepath}: {e}")
+            print(f"  [WARN]  Error fixing {filepath}: {e}")
             return False
 
     def fix_line_too_long(self, _filepath: str, _issue: dict) -> bool:
@@ -272,7 +272,7 @@ class AuroraAutonomousFixer:
             return True
 
         except Exception as e:
-            print(f"  ⚠️  Error fixing {filepath}: {e}")
+            print(f"  [WARN]  Error fixing {filepath}: {e}")
             return False
 
     def apply_fix(self, filepath: str, issue: dict) -> bool:

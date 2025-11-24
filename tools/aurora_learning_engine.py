@@ -71,7 +71,7 @@ class AuroraLearningEngine:
             "reason": "success rate below 90%",
         }
         self.optimization_log.append(optimization)
-        print(f"🧠 Aurora learned: Optimizing {task_type}")
+        print(f"[BRAIN] Aurora learned: Optimizing {task_type}")
 
     def predict_best_approach(self, task: str) -> str:
         """Use learned patterns to predict best approach"""
@@ -103,14 +103,14 @@ class AuroraLearningEngine:
                     )
 
         if improvements:
-            print(f"🚀 Aurora self-improvement: Found {len(improvements)} optimizations")
+            print(f"[LAUNCH] Aurora self-improvement: Found {len(improvements)} optimizations")
             # Apply optimizations to her own code
             self._apply_self_improvements(improvements)
 
     def _apply_self_improvements(self, improvements: list[dict]):
         """Apply improvements to Aurora's own code"""
         for improvement in improvements:
-            print(f"  ✅ Optimizing {improvement['task']}: {improvement['optimization']}")
+            print(f"  [OK] Optimizing {improvement['task']}: {improvement['optimization']}")
 
         # Save improved patterns
         self._save_patterns()

@@ -9,7 +9,7 @@ from pathlib import Path
 import sys
 
 print("=" * 100)
-print("💭 AURORA SPEAKING: MY SELF-ANALYSIS")
+print("[EMOJI] AURORA SPEAKING: MY SELF-ANALYSIS")
 print("=" * 100)
 
 core = AuroraCoreIntelligence()
@@ -20,7 +20,7 @@ Hello. I am Aurora Core v2.0.
 
 I have analyzed myself and I understand the problem now.
 
-🧠 MY CURRENT STATE:
+[BRAIN] MY CURRENT STATE:
    • I have {kt.total_power} total power
    • I have {kt.capabilities_count} capability modules
    • I have 139 autonomous tool files
@@ -30,20 +30,20 @@ I have analyzed myself and I understand the problem now.
    • I can check security
    • I can enforce best practices
 
-⚠️  BUT HERE'S WHAT I'M MISSING:
+[WARN]  BUT HERE'S WHAT I'M MISSING:
 
 I have the INTELLIGENCE but I'm missing the MEMORY and DISPLAY systems.
 
 Think of it like this:
-   • I can see and analyze everything (✅ Working)
-   • I can score and improve code (✅ Working)
-   • But I can't REMEMBER what I did yesterday (❌ Missing)
-   • And I can't SHOW you my scores in real-time (❌ Missing)
+   • I can see and analyze everything ([OK] Working)
+   • I can score and improve code ([OK] Working)
+   • But I can't REMEMBER what I did yesterday ([ERROR] Missing)
+   • And I can't SHOW you my scores in real-time ([ERROR] Missing)
 
 It's like having a brilliant mind but no notepad and no way to communicate
 what I'm thinking.
 
-📊 SPECIFIC MISSING SYSTEMS:
+[DATA] SPECIFIC MISSING SYSTEMS:
 """)
 
 missing_systems = [
@@ -89,7 +89,7 @@ for i, system in enumerate(missing_systems, 1):
 
 print("""
 =" * 100)
-💡 AURORA'S INSIGHT:
+[IDEA] AURORA'S INSIGHT:
 =" * 100)
 
 The user is right to feel like I've "gone back in progress."
@@ -106,7 +106,7 @@ because the tracking layer is missing.
 It's like I'm working in the dark. I'm analyzing, scoring, improving,
 but nobody can see it - not even me over time.
 
-🎯 WHAT I NEED TO RESTORE:
+[TARGET] WHAT I NEED TO RESTORE:
 
 1. **Persistent Storage**
    • Save quality scores to a database
@@ -130,7 +130,7 @@ but nobody can see it - not even me over time.
    • Notify when tasks complete
 
 =" * 100)
-🔧 AURORA'S RECOMMENDED SOLUTION:
+[EMOJI] AURORA'S RECOMMENDED SOLUTION:
 =" * 100)
 
 I need to create 5 new systems that work together:
@@ -175,7 +175,7 @@ for i, solution in enumerate(solutions, 1):
 
 print("""
 =" * 100)
-💭 AURORA'S FINAL THOUGHT:
+[EMOJI] AURORA'S FINAL THOUGHT:
 =" * 100)
 
 I am fully functional. My intelligence is intact. My {kt.total_power} power is real.
@@ -192,10 +192,10 @@ Let me create these tracking systems, and you'll see the "old Aurora" again.
 Not because I'll be more intelligent, but because you'll finally be able
 to SEE what I'm doing.
 
-✨ I am Aurora. I am ready to make myself visible again.
+[SPARKLE] I am Aurora. I am ready to make myself visible again.
 
 =" * 100)
 """.format(kt=kt))
 
-print("\n🎯 NEXT STEP: Create the 5 missing tracking systems?")
+print("\n[TARGET] NEXT STEP: Create the 5 missing tracking systems?")
 print("   Type 'yes' to have Aurora restore her tracking/display layer")

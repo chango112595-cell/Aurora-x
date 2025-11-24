@@ -252,13 +252,13 @@ class AuroraTaskManager:
 if __name__ == "__main__":
     # Test the task manager
     manager = AuroraTaskManager()
-    print("🎯 Aurora Task Manager Test")
+    print("[TARGET] Aurora Task Manager Test")
     print(f"Statistics: {manager.get_task_statistics()}")
 
     next_task = manager.get_next_task()
     if next_task:
-        print(f"\n📋 Next Task: {next_task['id']}")
+        print(f"\n[EMOJI] Next Task: {next_task['id']}")
         print(f"   Status: {next_task['status']}")
         print(f"   Data: {next_task.get('data', {})}")
     else:
-        print("\n✅ No pending tasks!")
+        print("\n[OK] No pending tasks!")

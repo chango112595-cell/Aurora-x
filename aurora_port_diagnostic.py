@@ -69,7 +69,7 @@ class AuroraPortDiagnostic:
         active_ports = []
         for port, description in self.ports.items():
             is_open = self.check_port(port)
-            status = "✅ LISTENING" if is_open else "❌ NOT LISTENING"
+            status = "[OK] LISTENING" if is_open else "[ERROR] NOT LISTENING"
             print(f"  Port {port}: {status}")
             print(f"    {description}")
 
@@ -78,15 +78,15 @@ class AuroraPortDiagnostic:
                 can_fetch, content = self.fetch_content(port)
                 if can_fetch:
                     if "<html" in content.lower():
-                        print("    📄 Serving HTML content")
+                        print("    [EMOJI] Serving HTML content")
                     elif "<" in content and ">" in content:
-                        print("    📄 Serving markup/XML")
+                        print("    [EMOJI] Serving markup/XML")
                     elif "json" in content.lower():
-                        print("    📊 Serving JSON")
+                        print("    [DATA] Serving JSON")
                     else:
-                        print("    📝 Serving content")
+                        print("    [EMOJI] Serving content")
                 else:
-                    print(f"    ⚠️ Port open but can't fetch: {content[:50]}")
+                    print(f"    [WARN] Port open but can't fetch: {content[:50]}")
             print()
 
         print("[Aurora] Node Process Status:")
@@ -101,14 +101,14 @@ class AuroraPortDiagnostic:
         print()
 
         if 5000 in active_ports:
-            print("[Aurora] ✅ Primary frontend port (5000) is active")
-            print("[Aurora] 🌐 Access at: http://localhost:5000")
+            print("[Aurora] [OK] Primary frontend port (5000) is active")
+            print("[Aurora] [WEB] Access at: http://localhost:5000")
         elif 5173 in active_ports:
-            print("[Aurora] ⚠️ Only Vite dev server (5173) is running")
-            print("[Aurora] 🌐 Access at: http://localhost:5173")
+            print("[Aurora] [WARN] Only Vite dev server (5173) is running")
+            print("[Aurora] [WEB] Access at: http://localhost:5173")
         else:
-            print("[Aurora] ❌ No frontend server detected")
-            print("[Aurora] 💡 Run: python x-start")
+            print("[Aurora] [ERROR] No frontend server detected")
+            print("[Aurora] [IDEA] Run: python x-start")
 
         print()
 

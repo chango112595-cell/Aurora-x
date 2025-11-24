@@ -62,12 +62,12 @@ class AuroraServerGrandmaster:
         with open(self.server_log, "a") as f:
             f.write(json.dumps(entry) + "\n")
 
-        print(f"🌟 Aurora mastered: {topic} ({mastery_score}% proficiency)")
+        print(f"[STAR] Aurora mastered: {topic} ({mastery_score}% proficiency)")
 
     def teach_ancient_servers(self):
         """Ancient servers: 1960s-1990s"""
         print("\n" + "=" * 70)
-        print("📚 ERA 1: ANCIENT SERVERS (1960s-1990s)")
+        print("[EMOJI] ERA 1: ANCIENT SERVERS (1960s-1990s)")
         print("=" * 70 + "\n")
 
         lessons = {
@@ -97,7 +97,7 @@ class AuroraServerGrandmaster:
         }
 
         for server, details in lessons.items():
-            print(f"📖 Learning: {server}")
+            print(f"[EMOJI] Learning: {server}")
             print(f"   Description: {details['description']}")
             print(f"   Key Concepts: {', '.join(details['key_concepts'])}")
             print(f"   Modern Equivalent: {details['modern_equivalent']}")
@@ -108,12 +108,12 @@ class AuroraServerGrandmaster:
             self.topics_mastered.append(server)
             time.sleep(0.1)
 
-        print("✅ Ancient Servers: MASTERED (20/20 points)")
+        print("[OK] Ancient Servers: MASTERED (20/20 points)")
 
     def teach_legacy_web_servers(self):
         """Legacy web servers: 1990s-2000s"""
         print("\n" + "=" * 70)
-        print("📚 ERA 2: LEGACY WEB SERVERS (1990s-2000s)")
+        print("[EMOJI] ERA 2: LEGACY WEB SERVERS (1990s-2000s)")
         print("=" * 70 + "\n")
 
         lessons = {
@@ -154,7 +154,7 @@ class AuroraServerGrandmaster:
         }
 
         for server, details in lessons.items():
-            print(f"📖 Learning: {server}")
+            print(f"[EMOJI] Learning: {server}")
             for key, value in details.items():
                 if isinstance(value, list):
                     print(f"   {key}: {', '.join(value)}")
@@ -167,12 +167,12 @@ class AuroraServerGrandmaster:
             self.topics_mastered.append(server)
             time.sleep(0.1)
 
-        print("✅ Legacy Web Servers: MASTERED (20/20 points)")
+        print("[OK] Legacy Web Servers: MASTERED (20/20 points)")
 
     def teach_modern_runtime_servers(self):
         """Modern runtime servers: Node.js, Deno, Bun"""
         print("\n" + "=" * 70)
-        print("📚 ERA 3: MODERN RUNTIME SERVERS (2009-Present)")
+        print("[EMOJI] ERA 3: MODERN RUNTIME SERVERS (2009-Present)")
         print("=" * 70 + "\n")
 
         lessons = {
@@ -209,7 +209,7 @@ class AuroraServerGrandmaster:
         }
 
         for server, details in lessons.items():
-            print(f"📖 Learning: {server}")
+            print(f"[EMOJI] Learning: {server}")
             for key, value in details.items():
                 if isinstance(value, list):
                     print(f"   {key}: {', '.join(value)}")
@@ -222,12 +222,12 @@ class AuroraServerGrandmaster:
             self.topics_mastered.append(server)
             time.sleep(0.1)
 
-        print("✅ Modern Runtime Servers: MASTERED (20/20 points)")
+        print("[OK] Modern Runtime Servers: MASTERED (20/20 points)")
 
     def teach_modern_build_servers(self):
         """Modern build/bundle servers: Vite, Webpack, etc."""
         print("\n" + "=" * 70)
-        print("📚 ERA 4: MODERN BUILD SERVERS (2015-Present)")
+        print("[EMOJI] ERA 4: MODERN BUILD SERVERS (2015-Present)")
         print("=" * 70 + "\n")
 
         lessons = {
@@ -264,7 +264,7 @@ class AuroraServerGrandmaster:
         }
 
         for server, details in lessons.items():
-            print(f"📖 Learning: {server}")
+            print(f"[EMOJI] Learning: {server}")
             for key, value in details.items():
                 if isinstance(value, list):
                     print(f"   {key}: {', '.join(value)}")
@@ -274,12 +274,12 @@ class AuroraServerGrandmaster:
 
             # Teach Aurora how to manage Vite specifically (her current server)
             if "Vite" in server:
-                print("   🎯 AURORA'S CURRENT SERVER - DEEP DIVE:")
-                print("   ✅ Check if running: curl -s -I http://localhost:5173")
-                print("   ✅ Start server: cd client && npm run dev")
-                print("   ✅ Kill server: pkill -f vite")
-                print("   ✅ Check process: ps aux | grep vite")
-                print("   ✅ View logs: Check terminal running npm run dev")
+                print("   [TARGET] AURORA'S CURRENT SERVER - DEEP DIVE:")
+                print("   [OK] Check if running: curl -s -I http://localhost:5173")
+                print("   [OK] Start server: cd client && npm run dev")
+                print("   [OK] Kill server: pkill -f vite")
+                print("   [OK] Check process: ps aux | grep vite")
+                print("   [OK] View logs: Check terminal running npm run dev")
                 print()
 
             self.log_learning(server, details, 100)
@@ -287,12 +287,12 @@ class AuroraServerGrandmaster:
             self.topics_mastered.append(server)
             time.sleep(0.1)
 
-        print("✅ Modern Build Servers: MASTERED (20/20 points)")
+        print("[OK] Modern Build Servers: MASTERED (20/20 points)")
 
     def teach_containerization(self):
         """Containerization: Docker, Kubernetes"""
         print("\n" + "=" * 70)
-        print("📚 ERA 5: CONTAINERIZATION & ORCHESTRATION (2013-Present)")
+        print("[EMOJI] ERA 5: CONTAINERIZATION & ORCHESTRATION (2013-Present)")
         print("=" * 70 + "\n")
 
         lessons = {
@@ -320,7 +320,7 @@ class AuroraServerGrandmaster:
         }
 
         for tech, details in lessons.items():
-            print(f"📖 Learning: {tech}")
+            print(f"[EMOJI] Learning: {tech}")
             for key, value in details.items():
                 if isinstance(value, dict):
                     print(f"   {key}:")
@@ -337,12 +337,12 @@ class AuroraServerGrandmaster:
             self.topics_mastered.append(tech)
             time.sleep(0.1)
 
-        print("✅ Containerization: MASTERED (10/10 points)")
+        print("[OK] Containerization: MASTERED (10/10 points)")
 
     def teach_future_servers(self):
         """Future server technologies"""
         print("\n" + "=" * 70)
-        print("📚 ERA 6: FUTURE SERVERS (2025-2040)")
+        print("[EMOJI] ERA 6: FUTURE SERVERS (2025-2040)")
         print("=" * 70 + "\n")
 
         lessons = {
@@ -372,7 +372,7 @@ class AuroraServerGrandmaster:
         }
 
         for tech, details in lessons.items():
-            print(f"📖 Learning: {tech}")
+            print(f"[EMOJI] Learning: {tech}")
             for key, value in details.items():
                 if isinstance(value, list):
                     print(f"   {key}: {', '.join(value)}")
@@ -385,12 +385,12 @@ class AuroraServerGrandmaster:
             self.topics_mastered.append(tech)
             time.sleep(0.1)
 
-        print("✅ Future Servers: MASTERED (10/10 points)")
+        print("[OK] Future Servers: MASTERED (10/10 points)")
 
     def practical_server_management(self):
         """Practical Aurora server management skills"""
         print("\n" + "=" * 70)
-        print("🛠️  PRACTICAL SERVER MANAGEMENT FOR AURORA")
+        print("[EMOJI]️  PRACTICAL SERVER MANAGEMENT FOR AURORA")
         print("=" * 70 + "\n")
 
         skills = {
@@ -427,10 +427,10 @@ class AuroraServerGrandmaster:
             },
         }
 
-        print("🎯 ESSENTIAL SERVER COMMANDS FOR AURORA:\n")
+        print("[TARGET] ESSENTIAL SERVER COMMANDS FOR AURORA:\n")
 
         for skill, commands in skills.items():
-            print(f"📝 {skill}:")
+            print(f"[EMOJI] {skill}:")
             for desc, cmd in commands.items():
                 print(f"   {desc}: {cmd}")
             print()
@@ -439,36 +439,36 @@ class AuroraServerGrandmaster:
             self.mastery_level += 1
             time.sleep(0.1)
 
-        print("✅ Practical Server Management: MASTERED (6/6 points)")
+        print("[OK] Practical Server Management: MASTERED (6/6 points)")
 
     def generate_final_report(self):
         """Generate Aurora's Server Grandmaster certification"""
         print("\n" + "=" * 70)
-        print("🏆 AURORA SERVER GRANDMASTER CERTIFICATION")
+        print("[EMOJI] AURORA SERVER GRANDMASTER CERTIFICATION")
         print("=" * 70 + "\n")
 
-        print(f"📊 Total Mastery Level: {self.mastery_level}/100")
-        print(f"📚 Topics Mastered: {len(self.topics_mastered)}")
-        print(f"🎯 Proficiency: {self.mastery_level}%")
+        print(f"[DATA] Total Mastery Level: {self.mastery_level}/100")
+        print(f"[EMOJI] Topics Mastered: {len(self.topics_mastered)}")
+        print(f"[TARGET] Proficiency: {self.mastery_level}%")
 
         if self.mastery_level >= 95:
             rank = "GRANDMASTER"
-            emoji = "🏆"
+            emoji = "[EMOJI]"
         elif self.mastery_level >= 85:
             rank = "MASTER"
-            emoji = "⭐"
+            emoji = "[GRANDMASTER]"
         elif self.mastery_level >= 75:
             rank = "EXPERT"
-            emoji = "🌟"
+            emoji = "[STAR]"
         else:
             rank = "PROFICIENT"
-            emoji = "✨"
+            emoji = "[SPARKLE]"
 
         print(f"\n{emoji} Rank Achieved: {rank}")
 
-        print("\n📋 Server Eras Mastered:")
+        print("\n[EMOJI] Server Eras Mastered:")
         for era, servers in self.server_eras.items():
-            print(f"   ✅ {era.replace('_', ' ').title()}: {', '.join(servers[:3])}...")
+            print(f"   [OK] {era.replace('_', ' ').title()}: {', '.join(servers[:3])}...")
 
         # Save certification
         cert = {
@@ -483,10 +483,10 @@ class AuroraServerGrandmaster:
         with open(cert_file, "w") as f:
             json.dump(cert, f, indent=2)
 
-        print(f"\n📜 Certification saved to: {cert_file}")
-        print(f"📖 Training log saved to: {self.server_log}")
+        print(f"\n[EMOJI] Certification saved to: {cert_file}")
+        print(f"[EMOJI] Training log saved to: {self.server_log}")
 
-        print("\n✅ Aurora is now a SERVER GRANDMASTER!")
+        print("\n[OK] Aurora is now a SERVER GRANDMASTER!")
         print("   Expertise spans: 1960s Mainframes → 2040s Quantum Servers")
         print("   Can manage any server technology past, present, or future!")
 
@@ -496,7 +496,7 @@ class AuroraServerGrandmaster:
 def main():
     """Train Aurora to become a Server Grandmaster"""
 
-    print("\n🌟 AURORA SERVER GRANDMASTER TRAINING PROGRAM")
+    print("\n[STAR] AURORA SERVER GRANDMASTER TRAINING PROGRAM")
     print("=" * 70)
     print("Comprehensive server mastery from Ancient to Future")
     print("=" * 70 + "\n")
@@ -520,4 +520,4 @@ def main():
 
 if __name__ == "__main__":
     mastery_level = main()
-    print(f"\n🎓 Training complete! Aurora achieved {mastery_level}% server mastery!")
+    print(f"\n[EMOJI] Training complete! Aurora achieved {mastery_level}% server mastery!")

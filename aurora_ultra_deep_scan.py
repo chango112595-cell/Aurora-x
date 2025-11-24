@@ -12,24 +12,24 @@ import re
 import os
 
 print("=" * 120)
-print("🔍 ULTRA-DEEP COMPREHENSIVE SCAN - AURORA + COPILOT")
+print("[SCAN] ULTRA-DEEP COMPREHENSIVE SCAN - AURORA + COPILOT")
 print("=" * 120)
 
 core = AuroraCoreIntelligence()
 kt = core.knowledge_tiers
 
-print(f"\n⚡ Scanning with {kt.total_power} power...")
+print(f"\n[POWER] Scanning with {kt.total_power} power...")
 
 # ============================================================================
 # PHASE 1: SCAN ALL PYTHON FILES FOR UNUSED CAPABILITIES
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("📁 PHASE 1: SCANNING ALL PYTHON FILES FOR ADVANCED FEATURES")
+print("[EMOJI] PHASE 1: SCANNING ALL PYTHON FILES FOR ADVANCED FEATURES")
 print("=" * 120)
 
 all_py_files = list(Path('.').rglob('*.py'))
-print(f"\n📊 Total Python files: {len(all_py_files)}")
+print(f"\n[DATA] Total Python files: {len(all_py_files)}")
 
 # Look for advanced patterns that might not be used
 advanced_patterns = {
@@ -103,7 +103,7 @@ advanced_patterns = {
 found_capabilities = {}
 files_with_capabilities = {}
 
-print("\n🔍 Scanning for advanced capabilities in Python files...")
+print("\n[SCAN] Scanning for advanced capabilities in Python files...")
 
 for category, patterns in advanced_patterns.items():
     found_capabilities[category] = []
@@ -127,13 +127,13 @@ for category, patterns in advanced_patterns.items():
         except Exception:
             continue
 
-print("\n📋 FOUND ADVANCED CAPABILITIES:\n")
+print("\n[EMOJI] FOUND ADVANCED CAPABILITIES:\n")
 
 total_advanced_files = 0
 for category, files in files_with_capabilities.items():
     if files:
         total_advanced_files += len(files)
-        print(f"✅ {category}: {len(files)} files")
+        print(f"[OK] {category}: {len(files)} files")
         for f in files[:3]:  # Show first 3
             print(f"   • {f.name}")
         if len(files) > 3:
@@ -144,7 +144,7 @@ for category, files in files_with_capabilities.items():
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🌐 PHASE 2: SCANNING FOR SERVER CONFIGURATIONS AND PORTS")
+print("[WEB] PHASE 2: SCANNING FOR SERVER CONFIGURATIONS AND PORTS")
 print("=" * 120)
 
 server_patterns = {
@@ -158,7 +158,7 @@ servers_found = {}
 ports_found = set()
 api_endpoints = []
 
-print("\n🔍 Scanning for server configurations...")
+print("\n[SCAN] Scanning for server configurations...")
 
 for py_file in all_py_files:
     try:
@@ -186,7 +186,7 @@ for py_file in all_py_files:
     except Exception:
         continue
 
-print(f"\n📊 FOUND SERVER INFRASTRUCTURE:\n")
+print(f"\n[DATA] FOUND SERVER INFRASTRUCTURE:\n")
 print(f"   Total Ports Configured: {len(ports_found)}")
 print(f"   Ports: {sorted(ports_found)}")
 print(f"   Files with Server Config: {len(servers_found)}")
@@ -197,7 +197,7 @@ print(f"   API Endpoints: {len(api_endpoints)}")
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🤖 PHASE 3: SCANNING FOR AI/AUTONOMOUS FEATURES")
+print("[AGENT] PHASE 3: SCANNING FOR AI/AUTONOMOUS FEATURES")
 print("=" * 120)
 
 ai_features = {
@@ -243,7 +243,7 @@ ai_features = {
 
 ai_files = {}
 
-print("\n🔍 Scanning for AI/Autonomous features...")
+print("\n[SCAN] Scanning for AI/Autonomous features...")
 
 for category, patterns in ai_features.items():
     ai_files[category] = []
@@ -262,11 +262,11 @@ for category, patterns in ai_features.items():
         except Exception:
             continue
 
-print("\n📋 FOUND AI/AUTONOMOUS FEATURES:\n")
+print("\n[EMOJI] FOUND AI/AUTONOMOUS FEATURES:\n")
 
 for category, files in ai_files.items():
     if files:
-        print(f"✅ {category}: {len(files)} files")
+        print(f"[OK] {category}: {len(files)} files")
         for f in files[:3]:
             print(f"   • {f.name}")
         if len(files) > 3:
@@ -277,13 +277,13 @@ for category, files in ai_files.items():
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🔧 PHASE 4: SCANNING tools/ DIRECTORY FOR UNUSED CAPABILITIES")
+print("[EMOJI] PHASE 4: SCANNING tools/ DIRECTORY FOR UNUSED CAPABILITIES")
 print("=" * 120)
 
 tools_dir = Path("tools")
 if tools_dir.exists():
     tool_files = list(tools_dir.glob("*.py"))
-    print(f"\n📊 Total tools: {len(tool_files)}")
+    print(f"\n[DATA] Total tools: {len(tool_files)}")
 
     # Check which tools are imported elsewhere
     tools_imported = set()
@@ -315,12 +315,12 @@ if tools_dir.exists():
                 'size': tool.stat().st_size
             })
 
-    print(f"\n📋 TOOL USAGE ANALYSIS:")
+    print(f"\n[EMOJI] TOOL USAGE ANALYSIS:")
     print(f"   Tools Imported: {len(tools_imported)}")
     print(f"   Tools NOT Imported: {len(tools_not_imported)}")
 
     if tools_not_imported:
-        print(f"\n⚠️  UNUSED TOOLS IN tools/ DIRECTORY:")
+        print(f"\n[WARN]  UNUSED TOOLS IN tools/ DIRECTORY:")
         for tool in tools_not_imported[:20]:
             print(f"   • {tool['name']}.py ({tool['size']:,} bytes)")
 
@@ -340,11 +340,11 @@ config_files = {
     "Config Dirs": list(Path('.').glob('config/*')) if Path('config').exists() else []
 }
 
-print("\n📋 CONFIGURATION FILES:\n")
+print("\n[EMOJI] CONFIGURATION FILES:\n")
 
 for config_type, files in config_files.items():
     if files:
-        print(f"✅ {config_type}: {len(files)} files")
+        print(f"[OK] {config_type}: {len(files)} files")
         for f in files[:5]:
             if f.is_file():
                 print(f"   • {f.name}")
@@ -354,7 +354,7 @@ for config_type, files in config_files.items():
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("🎨 PHASE 6: SCANNING FRONTEND COMPONENTS")
+print("[EMOJI] PHASE 6: SCANNING FRONTEND COMPONENTS")
 print("=" * 120)
 
 frontend_files = {
@@ -363,15 +363,15 @@ frontend_files = {
     "TypeScript": list(Path('client').rglob('*.ts')) if Path('client').exists() else [],
 }
 
-print("\n📋 FRONTEND FILES:\n")
+print("\n[EMOJI] FRONTEND FILES:\n")
 
 for file_type, files in frontend_files.items():
     if files:
-        print(f"✅ {file_type}: {len(files)} files")
+        print(f"[OK] {file_type}: {len(files)} files")
 
 # Check for unused components
 if frontend_files["TSX Components"]:
-    print(f"\n🔍 Checking component usage...")
+    print(f"\n[SCAN] Checking component usage...")
 
     all_tsx = []
     for ftype in frontend_files.values():
@@ -398,7 +398,7 @@ if frontend_files["TSX Components"]:
             unused_components.append(component_name)
 
     if unused_components:
-        print(f"\n⚠️  POTENTIALLY UNUSED COMPONENTS:")
+        print(f"\n[WARN]  POTENTIALLY UNUSED COMPONENTS:")
         for comp in unused_components[:10]:
             print(f"   • {comp}")
 
@@ -407,7 +407,7 @@ if frontend_files["TSX Components"]:
 # ============================================================================
 
 print("\n" + "=" * 120)
-print("📊 COMPREHENSIVE SCAN RESULTS")
+print("[DATA] COMPREHENSIVE SCAN RESULTS")
 print("=" * 120)
 
 missing_or_unused = []
@@ -454,7 +454,7 @@ missing_or_unused.append({
     ]
 })
 
-print("\n🎯 MISSING OR UNDERUTILIZED SYSTEMS:\n")
+print("\n[TARGET] MISSING OR UNDERUTILIZED SYSTEMS:\n")
 
 for i, item in enumerate(missing_or_unused, 1):
     print(f"{i}. {item['category']} - {item['status']}")
@@ -464,7 +464,7 @@ for i, item in enumerate(missing_or_unused, 1):
     print()
 
 print("=" * 120)
-print("💡 KEY FINDINGS:")
+print("[IDEA] KEY FINDINGS:")
 print("=" * 120)
 
 print(f"""
@@ -515,4 +515,4 @@ report = {
 with open("AURORA_COMPREHENSIVE_SCAN_REPORT.json", "w") as f:
     json.dump(report, f, indent=2, default=str)
 
-print("\n✅ Detailed report saved to: AURORA_COMPREHENSIVE_SCAN_REPORT.json")
+print("\n[OK] Detailed report saved to: AURORA_COMPREHENSIVE_SCAN_REPORT.json")

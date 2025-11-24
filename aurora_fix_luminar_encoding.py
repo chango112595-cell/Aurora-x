@@ -13,20 +13,20 @@ def remove_emojis_from_file(file_path):
 
     # Map emojis to ASCII replacements
     emoji_replacements = {
-        "✅": "[OK]",
-        "❌": "[ERROR]",
-        "⚠️": "[WARN]",
-        "🌌": "",
-        "🔗": "[LINK]",
-        "🔍": "[SCAN]",
-        "🚀": "[START]",
-        "✨": "[FEATURES]",
-        "🔧": "[FIX]",
-        "📊": "[STATS]",
+        "[OK]": "[OK]",
+        "[ERROR]": "[ERROR]",
+        "[WARN]": "[WARN]",
+        "[AURORA]": "",
+        "[LINK]": "[LINK]",
+        "[SCAN]": "[SCAN]",
+        "[LAUNCH]": "[START]",
+        "[SPARKLE]": "[FEATURES]",
+        "[EMOJI]": "[FIX]",
+        "[DATA]": "[STATS]",
         "ℹ️": "[INFO]",
         "•": "-",
-        "🎯": "[TARGET]",
-        "💬": "[CHAT]",
+        "[TARGET]": "[TARGET]",
+        "[EMOJI]": "[CHAT]",
     }
 
     modified = content

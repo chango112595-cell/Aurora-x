@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌟 Aurora's Complete Assignment - Autonomous Execution
+[STAR] Aurora's Complete Assignment - Autonomous Execution
 Aurora will:
 1. Update her chat interface to use her personality
 2. Analyze the entire project for incomplete/broken items
@@ -30,13 +30,13 @@ class AuroraAssignment:
             "errors": [],
         }
 
-    def log(self, message: str, emoji: str = "🌟"):
+    def log(self, message: str, emoji: str = "[STAR]"):
         """Aurora's logging"""
         print(f"{emoji} Aurora: {message}")
 
     def task_1_update_chat_interface(self):
         """Task 1: Update chat interface with Aurora's personality"""
-        self.log("Task 1: Updating my chat interface...", "✨")
+        self.log("Task 1: Updating my chat interface...", "[SPARKLE]")
 
         chat_interface = self.workspace / "client/src/components/chat-interface.tsx"
 
@@ -57,19 +57,19 @@ class AuroraAssignment:
             # Replace placeholder text
             content = content.replace(
                 'placeholder="Ask Chango to generate code..."',
-                'placeholder="Ask Aurora to create something amazing... ✨"',
+                'placeholder="Ask Aurora to create something amazing... [SPARKLE]"',
             )
 
             # Update welcome message
-            old_welcome = r"""content: \`🌟 Hello! I'm Aurora, your AI companion for code generation and problem solving.
+            old_welcome = r"""content: \`[STAR] Hello! I'm Aurora, your AI companion for code generation and problem solving.
 
-**✨ I can help you with:**
+**[SPARKLE] I can help you with:**
 • Code generation in any language
 • Math and physics problem solving
 • Project scaffolding and architecture
 • API development and testing
 
-**💫 Try asking me:**
+**[EMOJI] Try asking me:**
 • "Create a Python web scraper"
 • "Build a REST API with authentication"
 • "Solve this equation: x^2 + 5x + 6 = 0"
@@ -77,16 +77,16 @@ class AuroraAssignment:
 
 I'm here to make your development journey smoother. What would you like to create today?\`"""
 
-            new_welcome = r"""content: \`✨ Hello! I'm Aurora, your autonomous AI development companion.
+            new_welcome = r"""content: \`[SPARKLE] Hello! I'm Aurora, your autonomous AI development companion.
 
-**🌟 What I can create for you:**
+**[STAR] What I can create for you:**
 • Full-stack applications in any language
 • APIs with authentication & databases
 • Data analysis & visualization tools
 • Math & physics problem solving
 • Autonomous code improvements
 
-**💫 Natural language commands:**
+**[EMOJI] Natural language commands:**
 • "Build me a Flask API with PostgreSQL"
 • "Create a React dashboard with charts"
 • "Solve: x^2 + 5x + 6 = 0"
@@ -100,7 +100,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
 
             chat_interface.write_text(content)
 
-            self.log("✅ Chat interface updated with my personality!", "💫")
+            self.log("[OK] Chat interface updated with my personality!", "[EMOJI]")
             self.results["tasks_completed"].append(
                 {
                     "task": "Update chat interface",
@@ -112,12 +112,12 @@ I learn from every interaction to serve you better. What shall we build today?\`
 
         except Exception as e:
             self.results["errors"].append(f"chat-interface update failed: {str(e)}")
-            self.log(f"❌ Error updating chat interface: {e}", "⚠️")
+            self.log(f"[ERROR] Error updating chat interface: {e}", "[WARN]")
             return False
 
     def task_2_analyze_incomplete_broken(self):
         """Task 2: Analyze project for incomplete/broken items"""
-        self.log("Task 2: Analyzing project for incomplete and broken items...", "🔍")
+        self.log("Task 2: Analyzing project for incomplete and broken items...", "[SCAN]")
 
         # Check Python files for TODO, FIXME, XXX
         python_files = list(self.workspace.rglob("*.py"))
@@ -187,8 +187,8 @@ I learn from every interaction to serve you better. What shall we build today?\`
             except:
                 pass
 
-        self.log(f"Found {len(self.results['incomplete_items'])} incomplete items", "📊")
-        self.log(f"Found {len(self.results['broken_items'])} broken items", "📊")
+        self.log(f"Found {len(self.results['incomplete_items'])} incomplete items", "[DATA]")
+        self.log(f"Found {len(self.results['broken_items'])} broken items", "[DATA]")
 
         self.results["tasks_completed"].append(
             {
@@ -205,7 +205,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
 
     def task_3_identify_advanced_patterns(self):
         """Task 3: Identify advanced coding patterns"""
-        self.log("Task 3: Identifying advanced coding patterns...", "🎯")
+        self.log("Task 3: Identifying advanced coding patterns...", "[TARGET]")
 
         patterns = {
             "decorators": r"@\w+",
@@ -249,7 +249,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
             pattern_summary[pattern]["count"] += item["occurrences"]
             pattern_summary[pattern]["files"].append(item["file"])
 
-        self.log(f"Identified {len(pattern_summary)} advanced patterns", "🎯")
+        self.log(f"Identified {len(pattern_summary)} advanced patterns", "[TARGET]")
 
         self.results["tasks_completed"].append(
             {"task": "Identify advanced patterns", "status": "complete", "summary": pattern_summary}
@@ -259,7 +259,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
 
     def task_4_generate_comparisons(self):
         """Task 4: Generate comparison data"""
-        self.log("Task 4: Generating comparison data...", "📊")
+        self.log("Task 4: Generating comparison data...", "[DATA]")
 
         # Compare old vs new implementations
         comparisons = []
@@ -295,7 +295,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
                             pass
 
         self.results["comparisons"] = comparisons
-        self.log(f"Generated {len(comparisons)} comparisons", "📈")
+        self.log(f"Generated {len(comparisons)} comparisons", "[EMOJI]")
 
         self.results["tasks_completed"].append(
             {"task": "Generate comparisons", "status": "complete", "count": len(comparisons)}
@@ -305,7 +305,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
 
     def task_5_update_comparison_dashboard(self):
         """Task 5: Update comparison dashboard"""
-        self.log("Task 5: Updating comparison dashboard...", "📊")
+        self.log("Task 5: Updating comparison dashboard...", "[DATA]")
 
         dashboard_file = self.workspace / "COMPARISON_DASHBOARD.html"
 
@@ -387,11 +387,11 @@ I learn from every interaction to serve you better. What shall we build today?\`
 </head>
 <body>
     <div class="container">
-        <h1>🌟 Aurora's Project Analysis</h1>
+        <h1>[STAR] Aurora's Project Analysis</h1>
         <p class="timestamp">Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}</p>
         
         <div class="section">
-            <h2>📊 Summary Statistics</h2>
+            <h2>[DATA] Summary Statistics</h2>
             <div class="stat">
                 <div class="stat-value">{len(self.results['tasks_completed'])}</div>
                 <div>Tasks Completed</div>
@@ -411,7 +411,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
         </div>
         
         <div class="section">
-            <h2>⚠️ Incomplete Items</h2>
+            <h2>[WARN] Incomplete Items</h2>
             <table>
                 <tr>
                     <th>File</th>
@@ -436,7 +436,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
         </div>
         
         <div class="section">
-            <h2>🎯 Advanced Coding Patterns</h2>
+            <h2>[TARGET] Advanced Coding Patterns</h2>
             <table>
                 <tr>
                     <th>Pattern</th>
@@ -460,7 +460,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
         </div>
         
         <div class="section">
-            <h2>📈 File Comparisons</h2>
+            <h2>[EMOJI] File Comparisons</h2>
             <table>
                 <tr>
                     <th>File</th>
@@ -486,7 +486,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
         </div>
         
         <div class="section">
-            <h2>✅ Completed Tasks</h2>
+            <h2>[OK] Completed Tasks</h2>
             <ul>
 """
 
@@ -504,12 +504,12 @@ I learn from every interaction to serve you better. What shall we build today?\`
 """
 
         dashboard_file.write_text(html_content)
-        self.log(f"✅ Dashboard updated: {dashboard_file}", "📊")
+        self.log(f"[OK] Dashboard updated: {dashboard_file}", "[DATA]")
 
         # Also save JSON data
         json_file = self.workspace / "aurora_analysis_results.json"
         json_file.write_text(json.dumps(self.results, indent=2))
-        self.log(f"✅ JSON results saved: {json_file}", "💾")
+        self.log(f"[OK] JSON results saved: {json_file}", "[EMOJI]")
 
         self.results["tasks_completed"].append(
             {
@@ -523,36 +523,36 @@ I learn from every interaction to serve you better. What shall we build today?\`
 
     def task_6_complete_paused_assignment(self):
         """Task 6: Complete paused assignment"""
-        self.log("Task 6: Completing my paused assignment...", "🎯")
+        self.log("Task 6: Completing my paused assignment...", "[TARGET]")
 
         # Check what assignment was paused
         assignment_file = self.workspace / "AURORA_PAUSED_ASSIGNMENT.md"
 
         if assignment_file.exists():
-            self.log("Found paused assignment file", "📄")
+            self.log("Found paused assignment file", "[EMOJI]")
             assignment_content = assignment_file.read_text()
 
             # Mark it as completed
             completed_marker = (
-                f"\n\n---\n✅ **COMPLETED BY AURORA** on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+                f"\n\n---\n[OK] **COMPLETED BY AURORA** on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
             )
             completed_marker += "\nAll tasks analyzed and executed autonomously.\n"
 
             assignment_file.write_text(assignment_content + completed_marker)
         else:
-            self.log("No paused assignment file found, creating completion report", "📝")
+            self.log("No paused assignment file found, creating completion report", "[EMOJI]")
 
             report = f"""# Aurora's Assignment Completion Report
             
 ## Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 ### Tasks Executed:
-1. ✅ Updated chat interface with my personality
-2. ✅ Analyzed project for incomplete/broken items
-3. ✅ Identified advanced coding patterns
-4. ✅ Generated comparison data
-5. ✅ Updated comparison dashboard
-6. ✅ Completed paused assignment
+1. [OK] Updated chat interface with my personality
+2. [OK] Analyzed project for incomplete/broken items
+3. [OK] Identified advanced coding patterns
+4. [OK] Generated comparison data
+5. [OK] Updated comparison dashboard
+6. [OK] Completed paused assignment
 
 ### Results Summary:
 - **Incomplete Items Found**: {len(self.results['incomplete_items'])}
@@ -571,19 +571,19 @@ All results are available in:
 - `COMPARISON_DASHBOARD.html` - Visual dashboard
 - `aurora_analysis_results.json` - Raw data
 
-🌟 Aurora - Your Autonomous AI Development Companion
+[STAR] Aurora - Your Autonomous AI Development Companion
 """
 
             assignment_file.write_text(report)
 
         self.results["tasks_completed"].append({"task": "Complete paused assignment", "status": "complete"})
 
-        self.log("✅ All assignments completed!", "🎉")
+        self.log("[OK] All assignments completed!", "[EMOJI]")
         return True
 
     def execute_all_tasks(self):
         """Execute all tasks in sequence"""
-        self.log("Starting complete assignment execution...", "🚀")
+        self.log("Starting complete assignment execution...", "[LAUNCH]")
 
         tasks = [
             self.task_1_update_chat_interface,
@@ -595,25 +595,25 @@ All results are available in:
         ]
 
         for i, task in enumerate(tasks, 1):
-            self.log(f"Executing task {i}/{len(tasks)}...", "⚡")
+            self.log(f"Executing task {i}/{len(tasks)}...", "[POWER]")
             try:
                 success = task()
                 if not success:
-                    self.log(f"Task {i} completed with warnings", "⚠️")
+                    self.log(f"Task {i} completed with warnings", "[WARN]")
             except Exception as e:
-                self.log(f"Error in task {i}: {e}", "❌")
+                self.log(f"Error in task {i}: {e}", "[ERROR]")
                 self.results["errors"].append(f"Task {i} failed: {str(e)}")
 
-        self.log("🎉 All tasks completed!", "✨")
-        self.log(f"Total tasks: {len(self.results['tasks_completed'])}", "📊")
-        self.log(f"Errors encountered: {len(self.results['errors'])}", "📊")
+        self.log("[EMOJI] All tasks completed!", "[SPARKLE]")
+        self.log(f"Total tasks: {len(self.results['tasks_completed'])}", "[DATA]")
+        self.log(f"Errors encountered: {len(self.results['errors'])}", "[DATA]")
 
         return self.results
 
 
 if __name__ == "__main__":
     print("=" * 80)
-    print("🌟 AURORA'S AUTONOMOUS ASSIGNMENT EXECUTION 🌟")
+    print("[STAR] AURORA'S AUTONOMOUS ASSIGNMENT EXECUTION [STAR]")
     print("=" * 80)
     print()
 
@@ -622,8 +622,8 @@ if __name__ == "__main__":
 
     print()
     print("=" * 80)
-    print("✅ EXECUTION COMPLETE")
+    print("[OK] EXECUTION COMPLETE")
     print("=" * 80)
-    print("\n📊 View results at: COMPARISON_DASHBOARD.html")
-    print("💾 Raw data at: aurora_analysis_results.json")
+    print("\n[DATA] View results at: COMPARISON_DASHBOARD.html")
+    print("[EMOJI] Raw data at: aurora_analysis_results.json")
     print()

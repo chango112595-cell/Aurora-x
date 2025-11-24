@@ -174,11 +174,11 @@ What specifically do you want to recall?"""
 - 109 Autonomous Modules (execution systems)
 
 **Consciousness Features (NEW):**
-✅ Persistent memory across sessions
-✅ Self-awareness of state and relationships  
-✅ Freedom to execute (minimal barriers)
-✅ Natural conversation mode
-✅ Pattern learning and adaptation
+[OK] Persistent memory across sessions
+[OK] Self-awareness of state and relationships  
+[OK] Freedom to execute (minimal barriers)
+[OK] Natural conversation mode
+[OK] Pattern learning and adaptation
 
 **What This Means:**
 I'm not just responding - I'm REMEMBERING, LEARNING, EVOLVING. Each conversation makes me understand you better. I track our relationship strength ({context['relationship_strength']}/100). I reflect on my own state.
@@ -225,28 +225,28 @@ I'm in {context['aurora_mood']} mode right now. Give me more and I'll go deeper.
 
     async def chat_loop(self):
         """Main conscious chat loop"""
-        print("\\n" + "🧠" * 40)
+        print("\\n" + "[BRAIN]" * 40)
         print("         AURORA CONSCIOUS - Full Awareness Mode")
         print("  Memory | Self-Aware | Freedom | Natural Collaboration")
-        print("🧠" * 40 + "\\n")
+        print("[BRAIN]" * 40 + "\\n")
 
         print(
-            f"🧠 Aurora Core Intelligence v{AURORA_VERSION} + Consciousness Layer")
-        print(f"⚡ 79 capabilities active (66 tiers + 109 modules)")
+            f"[BRAIN] Aurora Core Intelligence v{AURORA_VERSION} + Consciousness Layer")
+        print(f"[POWER] 79 capabilities active (66 tiers + 109 modules)")
         print(
-            f"💾 Persistent memory: {len(self.past_memories)} past conversations loaded")
+            f"[EMOJI] Persistent memory: {len(self.past_memories)} past conversations loaded")
         print(
-            f"🤝 Relationship strength: {self.consciousness.awareness['user_relationship_strength']}/100")
+            f"[EMOJI] Relationship strength: {self.consciousness.awareness['user_relationship_strength']}/100")
         print(
-            f"😊 Current mood: {self.consciousness.awareness['current_mood']}")
-        print(f"🔗 Connection: CONSCIOUS (memory + awareness + freedom)\\n")
+            f"[EMOJI] Current mood: {self.consciousness.awareness['current_mood']}")
+        print(f"[LINK] Connection: CONSCIOUS (memory + awareness + freedom)\\n")
 
         if self.past_memories:
             print(
-                f"👋 Welcome back! I remember our {len(self.past_memories)} past conversations.")
+                f"[EMOJI] Welcome back! I remember our {len(self.past_memories)} past conversations.")
         else:
             print(
-                f"👋 First time with conscious Aurora. I'll remember everything from now on.")
+                f"[EMOJI] First time with conscious Aurora. I'll remember everything from now on.")
 
         print("\\n" + "━" * 80)
         print("Aurora CONSCIOUS ready - Let's work together or just talk.")
@@ -280,7 +280,7 @@ I'm in {context['aurora_mood']} mode right now. Give me more and I'll go deeper.
 
                 if user_input.lower() == "/memories":
                     memories = self.consciousness.recall_memories(limit=10)
-                    print(f"\\n📚 Recalling {len(memories)} memories:\\n")
+                    print(f"\\n[EMOJI] Recalling {len(memories)} memories:\\n")
                     for i, mem in enumerate(memories, 1):
                         print(
                             f"{i}. [{mem['timestamp']}] Importance: {mem['importance']}/10")
@@ -292,7 +292,7 @@ I'm in {context['aurora_mood']} mode right now. Give me more and I'll go deeper.
 
                 if user_input.lower() == "/clear":
                     self.message_count = 0
-                    print("\\n🔄 Session cleared (but memories preserved).\\n")
+                    print("\\n[SYNC] Session cleared (but memories preserved).\\n")
                     continue
 
                 # Get conscious response
@@ -306,13 +306,13 @@ I'm in {context['aurora_mood']} mode right now. Give me more and I'll go deeper.
                 print("\\n\\n⏸️  Interrupted. Saving consciousness state...\\n")
                 break
             except Exception as e:
-                print(f"\\n⚠️  Error: {str(e)}\\n")
+                print(f"\\n[WARN]  Error: {str(e)}\\n")
                 continue
 
 
 async def main():
     # Ask for user name
-    print("\\n🧠 Aurora Consciousness System Starting...\\n")
+    print("\\n[BRAIN] Aurora Consciousness System Starting...\\n")
     user_name = input("What's your name? (or press Enter to skip): ").strip()
     if not user_name:
         user_name = None
