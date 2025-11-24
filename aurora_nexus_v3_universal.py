@@ -792,7 +792,7 @@ class SimpleAPI:
 
 def main(orchestration_mode=False, silent=False):
     """Main entry point
-    
+
     Args:
         orchestration_mode: If True, runs as master orchestrator for x-start systems
         silent: If True, minimal output for daemon mode
@@ -815,61 +815,91 @@ def main(orchestration_mode=False, silent=False):
         # X-START ORCHESTRATION: Register ALL 26 Aurora systems
         if not silent:
             print("📋 Registering ALL x-start systems for orchestration...")
-        
+
         # PHASE 1: CONSCIOUSNESS & AWARENESS (Critical)
-        aurora.register_service("consciousness_system", 5009, category="consciousness")
-        
+        aurora.register_service("consciousness_system",
+                                5009, category="consciousness")
+
         # PHASE 2: CORE INTELLIGENCE (Critical)
-        aurora.register_service("tier_orchestrator", 5010, category="intelligence")
-        aurora.register_service("intelligence_manager", 5011, category="intelligence")
+        aurora.register_service("tier_orchestrator",
+                                5010, category="intelligence")
+        aurora.register_service("intelligence_manager",
+                                5011, category="intelligence")
         aurora.register_service("aurora_core", 5012, category="intelligence")
-        
+        aurora.register_service("intelligence_analyzer", 5013,
+                                category="intelligence", dependencies=["aurora_core_5012"])
+        aurora.register_service("pattern_recognition", 5014, category="intelligence", dependencies=[
+                                "intelligence_analyzer_5013"])
+
         # PHASE 3: AUTONOMOUS SYSTEMS (Critical)
-        aurora.register_service("autonomous_agent", 5015, category="autonomous", dependencies=["aurora_core_5012"])
-        aurora.register_service("multi_agent", 5016, category="autonomous", dependencies=["autonomous_agent_5015"])
-        aurora.register_service("autonomous_integration", 5017, category="autonomous")
-        aurora.register_service("autonomous_monitor", 5018, category="autonomous")
-        
+        aurora.register_service(
+            "autonomous_agent", 5015, category="autonomous", dependencies=["aurora_core_5012"])
+        aurora.register_service("multi_agent", 5016, category="autonomous", dependencies=[
+                                "autonomous_agent_5015"])
+        aurora.register_service("autonomous_integration",
+                                5017, category="autonomous")
+        aurora.register_service("autonomous_monitor",
+                                5018, category="autonomous")
+
         # PHASE 4: GRANDMASTER CAPABILITIES (Peak Power)
-        aurora.register_service("grandmaster_tools", 5019, category="grandmaster", dependencies=["autonomous_agent_5015"])
-        aurora.register_service("skills_registry", 5020, category="grandmaster")
-        aurora.register_service("omniscient_mode", 5021, category="grandmaster")
-        
+        aurora.register_service("grandmaster_tools", 5019, category="grandmaster", dependencies=[
+                                "autonomous_agent_5015"])
+        aurora.register_service("skills_registry", 5020,
+                                category="grandmaster")
+        aurora.register_service("omniscient_mode", 5021,
+                                category="grandmaster")
+
         # PHASE 5: ADVANCED TIER CAPABILITIES
         aurora.register_service("visual_understanding", 5022, category="tier")
         aurora.register_service("live_integration", 5023, category="tier")
         aurora.register_service("test_generator", 5024, category="tier")
         aurora.register_service("security_auditor", 5025, category="tier")
-        
+
         # PHASE 6: CODE QUALITY SYSTEMS
         aurora.register_service("code_quality", 5026, category="quality")
         aurora.register_service("pylint_prevention", 5027, category="quality")
-        
+
         # PHASE 7: WEB SERVICES
         aurora.register_service("backend", 5000, category="web")
-        aurora.register_service("bridge", 5001, dependencies=["backend_5000"], category="web")
+        aurora.register_service("bridge", 5001, dependencies=[
+                                "backend_5000"], category="web")
         aurora.register_service("self_learn", 5002, category="web")
-        aurora.register_service("chat_server", 5003, dependencies=["backend_5000"], category="web")
+        aurora.register_service("chat_server", 5003, dependencies=[
+                                "backend_5000"], category="web")
         aurora.register_service("luminar_dashboard", 5005, category="web")
-        
+
         # PHASE 8: ORCHESTRATION SYSTEMS
         aurora.register_service("api_manager", 5006, category="orchestration")
-        aurora.register_service("luminar_nexus", 5007, category="orchestration")
-        
+        aurora.register_service("luminar_nexus", 5007,
+                                category="orchestration")
+
+        # PHASE 8.5: API ORCHESTRATION (Complete API Pool 10/10)
+        aurora.register_service(
+            "api_gateway", 5028, category="api", dependencies=["api_manager_5006"])
+        aurora.register_service("api_load_balancer", 5029,
+                                category="api", dependencies=["api_gateway_5028"])
+        aurora.register_service(
+            "api_rate_limiter", 5030, category="api", dependencies=["api_manager_5006"])
+
         # PHASE 9: BACKGROUND PROCESSES
         aurora.register_service("deep_sync", 5008, category="background")
-        
+        # Complete web pool 10/10
+        aurora.register_service("web_health_monitor", 5004, category="web")
+
         if not silent:
-            print(f"   ✅ Registered {len(aurora.service_registry.get_all())} systems")
+            print(
+                f"   ✅ Registered {len(aurora.service_registry.get_all())} systems")
     else:
         # STANDALONE MODE: Register example services
         if not silent:
             print("📋 Registering example services...")
         aurora.register_service("backend", 5000, category="web")
-        aurora.register_service("bridge", 5001, dependencies=["backend_5000"], category="web")
+        aurora.register_service("bridge", 5001, dependencies=[
+                                "backend_5000"], category="web")
         aurora.register_service("self_learn", 5002, category="intelligence")
         aurora.register_service("cognition", 5010, category="intelligence")
-        aurora.register_service("master_controller", 5020, category="autonomous")
+        aurora.register_service("master_controller",
+                                5020, category="autonomous")
 
     # Start monitoring
     if not silent:
@@ -879,7 +909,8 @@ def main(orchestration_mode=False, silent=False):
     # Start API
     if not silent:
         print("\n🌐 Starting API...")
-    api_port = 5004 if orchestration_mode else 5000  # Use 5004 for Nexus V3 API in orchestration mode
+    # Use 5031 for Nexus V3 API in orchestration mode (5004 now used by web_health_monitor)
+    api_port = 5031 if orchestration_mode else 5000
     api = SimpleAPI(aurora, api_port)
     api.start()
 
@@ -905,7 +936,8 @@ def main(orchestration_mode=False, silent=False):
         if orchestration_mode:
             print("✅ Aurora Universal Nexus V3 - MASTER ORCHESTRATOR ACTIVE")
             print("   Managing ALL x-start systems with intelligent port control")
-            print(f"   {status['services']['total']} systems registered | Self-healing | Self-optimizing")
+            print(
+                f"   {status['services']['total']} systems registered | Self-healing | Self-optimizing")
             print(f"   Nexus V3 API: http://localhost:{api_port}")
         else:
             print("✅ Aurora Universal Nexus V3 is RUNNING")
@@ -926,10 +958,10 @@ if __name__ == "__main__":
     parser.add_argument('--daemon', action='store_true',
                         help='Daemon mode - runs in background (implies --silent)')
     args = parser.parse_args()
-    
+
     silent_mode = args.silent or args.daemon
     orchestration_mode = args.orchestration
-    
+
     # Initialize Nexus V3
     aurora = main(orchestration_mode=orchestration_mode, silent=silent_mode)
 

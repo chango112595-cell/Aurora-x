@@ -13,13 +13,14 @@ from pathlib import Path
 
 class AuroraSelfDebug:
     def __init__(self):
-        self.project_root = Path("/workspaces/Aurora-x")
+        self.project_root = Path(__file__).parent.absolute()
         self.issues_found = []
         self.fixes_applied = []
 
     def log(self, message, level="INFO"):
         """Log with Aurora's personality"""
-        icons = {"INFO": "🔍", "ISSUE": "⚠️", "FIX": "🔧", "SUCCESS": "✅", "ERROR": "❌"}
+        icons = {"INFO": "🔍", "ISSUE": "⚠️",
+                 "FIX": "🔧", "SUCCESS": "✅", "ERROR": "❌"}
         print(f"{icons.get(level, '💭')} {message}")
 
     def check_port_configuration(self):
@@ -34,11 +35,13 @@ class AuroraSelfDebug:
 
         if missing:
             self.log(f"Missing port configurations: {missing}", "ISSUE")
-            self.issues_found.append(f"Ports {missing} not configured in x-start")
+            self.issues_found.append(
+                f"Ports {missing} not configured in x-start")
 
             # Determine what should be on these ports
             if 5004 in missing:
-                self.log("Port 5004: Need to determine service requirement", "ISSUE")
+                self.log(
+                    "Port 5004: Need to determine service requirement", "ISSUE")
             if 5173 in missing:
                 self.log("Port 5173: Vite frontend should run separately", "ISSUE")
                 self.issues_found.append("Vite frontend (5173) not configured")
@@ -61,7 +64,8 @@ class AuroraSelfDebug:
         for port in ports_to_check:
             try:
                 result = subprocess.run(
-                    ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", f"http://localhost:{port}"],
+                    ["curl", "-s", "-o", "/dev/null", "-w",
+                        "%{http_code}", f"http://localhost:{port}"],
                     capture_output=True,
                     text=True,
                     timeout=2,
@@ -69,7 +73,8 @@ class AuroraSelfDebug:
                 status = result.stdout.strip()
                 if status in ["200", "404"]:  # 404 means server running but no route
                     running.append(port)
-                    self.log(f"Port {port}: Running (HTTP {status})", "SUCCESS")
+                    self.log(
+                        f"Port {port}: Running (HTTP {status})", "SUCCESS")
                 else:
                     not_running.append(port)
                     self.log(f"Port {port}: Not running ({status})", "ISSUE")
@@ -78,7 +83,8 @@ class AuroraSelfDebug:
                 self.log(f"Port {port}: Not running (Error)", "ISSUE")
 
         if not_running:
-            self.issues_found.append(f"Services not running on ports: {not_running}")
+            self.issues_found.append(
+                f"Services not running on ports: {not_running}")
 
         return running, not_running
 
@@ -88,12 +94,13 @@ class AuroraSelfDebug:
 
         vite_config = self.project_root / "vite.config.js"
         if vite_config.exists():
-            with open(vite_config) as f:
+            with open(vite_config, encoding='utf-8') as f:
                 content = f.read()
                 if "5173" in content:
                     self.log("Vite configured for port 5173", "INFO")
                     if "port: 5173" in content:
-                        self.issues_found.append("Vite config has port 5173 but x-start doesn't use it")
+                        self.issues_found.append(
+                            "Vite config has port 5173 but x-start doesn't use it")
                         return True
         return False
 
@@ -107,7 +114,8 @@ class AuroraSelfDebug:
                 data = json.load(f)
                 scripts = data.get("scripts", {})
 
-                self.log(f"Available npm scripts: {list(scripts.keys())}", "INFO")
+                self.log(
+                    f"Available npm scripts: {list(scripts.keys())}", "INFO")
 
                 # Check if there's a separate frontend script
                 if "dev" in scripts:
@@ -115,7 +123,8 @@ class AuroraSelfDebug:
                 if "dev:frontend" in scripts or "vite" in scripts:
                     self.log("Separate frontend script found", "INFO")
                 else:
-                    self.log("No separate frontend script - Vite bundled in dev", "INFO")
+                    self.log(
+                        "No separate frontend script - Vite bundled in dev", "INFO")
 
     def fix_self_diagnostic_ports(self):
         """Fix Aurora's self-diagnostic to check correct ports"""
@@ -126,7 +135,7 @@ class AuroraSelfDebug:
             self.log("aurora_core.py not found", "ERROR")
             return False
 
-        with open(aurora_core) as f:
+        with open(aurora_core, encoding='utf-8') as f:
             content = f.read()
 
         # Check if diagnostic still references wrong ports
@@ -151,10 +160,11 @@ class AuroraSelfDebug:
 
                 if old_map in content:
                     content = content.replace(old_map, new_map)
-                    with open(aurora_core, "w") as f:
+                    with open(aurora_core, "w", encoding='utf-8') as f:
                         f.write(content)
                     self.log("Updated self-diagnostic ports", "SUCCESS")
-                    self.fixes_applied.append("Fixed self-diagnostic to check ports 5000-5005")
+                    self.fixes_applied.append(
+                        "Fixed self-diagnostic to check ports 5000-5005")
                     return True
 
         self.log("Self-diagnostic ports already correct or section not found", "INFO")
@@ -184,12 +194,14 @@ class AuroraSelfDebug:
 
             if result.stdout:
                 self.log("Found references to port 5004:", "INFO")
-                lines = result.stdout.strip().split("\n")[:10]  # First 10 matches
+                lines = result.stdout.strip().split(
+                    "\n")[:10]  # First 10 matches
                 for line in lines:
                     self.log(f"  {line[:100]}", "INFO")
             else:
                 self.log("No references to port 5004 found in codebase", "INFO")
-                self.log("Port 5004 may be a mistake or external requirement", "INFO")
+                self.log(
+                    "Port 5004 may be a mistake or external requirement", "INFO")
         except Exception as e:
             self.log(f"Error searching for 5004: {e}", "ERROR")
 
@@ -226,7 +238,7 @@ class AuroraSelfDebug:
         }
 
         report_file = self.project_root / "AURORA_SELF_DEBUG_REPORT.json"
-        with open(report_file, "w") as f:
+        with open(report_file, "w", encoding='utf-8') as f:
             json.dump(report, f, indent=2)
 
         self.log(f"\n📄 Full report: {report_file}", "SUCCESS")
