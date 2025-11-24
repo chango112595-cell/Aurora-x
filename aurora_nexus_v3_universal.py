@@ -30,11 +30,16 @@ from pathlib import Path
 from collections import defaultdict
 import hashlib
 import asyncio
+import argparse
 
 # UTF-8 encoding fix for Windows
 if sys.platform == "win32":
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
+# ORCHESTRATION MODE - Set by x-start-enhanced
+ORCHESTRATION_MODE = False
+X_START_SYSTEMS = []
 
 # ============================================================================
 # ENUMS & DATA CLASSES
@@ -785,72 +790,162 @@ class SimpleAPI:
 # ============================================================================
 
 
-def main():
-    """Main entry point"""
-    print("\n" + "=" * 80)
-    print("🌌 AURORA UNIVERSAL NEXUS V3")
-    print("   Universal Consciousness System - Built in 20 seconds")
-    print("   Hyper-Speed | Hybrid Mode | Full Consciousness | BEYOND 100%")
-    print("=" * 80 + "\n")
+def main(orchestration_mode=False, silent=False):
+    """Main entry point
+    
+    Args:
+        orchestration_mode: If True, runs as master orchestrator for x-start systems
+        silent: If True, minimal output for daemon mode
+    """
+    if not silent:
+        print("\n" + "=" * 80)
+        print("🌌 AURORA UNIVERSAL NEXUS V3")
+        if orchestration_mode:
+            print("   MASTER ORCHESTRATION MODE - Managing ALL Aurora Systems")
+        else:
+            print("   Universal Consciousness System - Built in 20 seconds")
+        print("   Hyper-Speed | Hybrid Mode | Full Consciousness | BEYOND 100%")
+        print("=" * 80 + "\n")
 
     # Initialize Aurora
     aurora = AuroraUniversalCore()
 
-    # Register example services
-    print("📋 Registering services...")
-    aurora.register_service("backend", 5000, category="web")
-    aurora.register_service("bridge", 5001, dependencies=[
-                            "backend_5000"], category="web")
-    aurora.register_service("self_learn", 5002, category="intelligence")
-    aurora.register_service("cognition", 5010, category="intelligence")
-    aurora.register_service("master_controller", 5020, category="autonomous")
+    # Register services based on mode
+    if orchestration_mode:
+        # X-START ORCHESTRATION: Register ALL 26 Aurora systems
+        if not silent:
+            print("📋 Registering ALL x-start systems for orchestration...")
+        
+        # PHASE 1: CONSCIOUSNESS & AWARENESS (Critical)
+        aurora.register_service("consciousness_system", 5009, category="consciousness")
+        
+        # PHASE 2: CORE INTELLIGENCE (Critical)
+        aurora.register_service("tier_orchestrator", 5010, category="intelligence")
+        aurora.register_service("intelligence_manager", 5011, category="intelligence")
+        aurora.register_service("aurora_core", 5012, category="intelligence")
+        
+        # PHASE 3: AUTONOMOUS SYSTEMS (Critical)
+        aurora.register_service("autonomous_agent", 5015, category="autonomous", dependencies=["aurora_core_5012"])
+        aurora.register_service("multi_agent", 5016, category="autonomous", dependencies=["autonomous_agent_5015"])
+        aurora.register_service("autonomous_integration", 5017, category="autonomous")
+        aurora.register_service("autonomous_monitor", 5018, category="autonomous")
+        
+        # PHASE 4: GRANDMASTER CAPABILITIES (Peak Power)
+        aurora.register_service("grandmaster_tools", 5019, category="grandmaster", dependencies=["autonomous_agent_5015"])
+        aurora.register_service("skills_registry", 5020, category="grandmaster")
+        aurora.register_service("omniscient_mode", 5021, category="grandmaster")
+        
+        # PHASE 5: ADVANCED TIER CAPABILITIES
+        aurora.register_service("visual_understanding", 5022, category="tier")
+        aurora.register_service("live_integration", 5023, category="tier")
+        aurora.register_service("test_generator", 5024, category="tier")
+        aurora.register_service("security_auditor", 5025, category="tier")
+        
+        # PHASE 6: CODE QUALITY SYSTEMS
+        aurora.register_service("code_quality", 5026, category="quality")
+        aurora.register_service("pylint_prevention", 5027, category="quality")
+        
+        # PHASE 7: WEB SERVICES
+        aurora.register_service("backend", 5000, category="web")
+        aurora.register_service("bridge", 5001, dependencies=["backend_5000"], category="web")
+        aurora.register_service("self_learn", 5002, category="web")
+        aurora.register_service("chat_server", 5003, dependencies=["backend_5000"], category="web")
+        aurora.register_service("luminar_dashboard", 5005, category="web")
+        
+        # PHASE 8: ORCHESTRATION SYSTEMS
+        aurora.register_service("api_manager", 5006, category="orchestration")
+        aurora.register_service("luminar_nexus", 5007, category="orchestration")
+        
+        # PHASE 9: BACKGROUND PROCESSES
+        aurora.register_service("deep_sync", 5008, category="background")
+        
+        if not silent:
+            print(f"   ✅ Registered {len(aurora.service_registry.get_all())} systems")
+    else:
+        # STANDALONE MODE: Register example services
+        if not silent:
+            print("📋 Registering example services...")
+        aurora.register_service("backend", 5000, category="web")
+        aurora.register_service("bridge", 5001, dependencies=["backend_5000"], category="web")
+        aurora.register_service("self_learn", 5002, category="intelligence")
+        aurora.register_service("cognition", 5010, category="intelligence")
+        aurora.register_service("master_controller", 5020, category="autonomous")
 
     # Start monitoring
-    print("\n🔄 Starting monitoring systems...")
+    if not silent:
+        print("\n🔄 Starting monitoring systems...")
     aurora.start_monitoring()
 
     # Start API
-    print("\n🌐 Starting API...")
-    api = SimpleAPI(aurora, 5000)
+    if not silent:
+        print("\n🌐 Starting API...")
+    api_port = 5004 if orchestration_mode else 5000  # Use 5004 for Nexus V3 API in orchestration mode
+    api = SimpleAPI(aurora, api_port)
     api.start()
 
     # Show status
-    print("\n📊 System Status:")
+    if not silent:
+        print("\n📊 System Status:")
     status = aurora.get_status()
-    print(f"   Uptime: {status['uptime_seconds']:.1f}s")
-    print(f"   Device: {status['device']['type']}")
-    print(f"   Services: {status['services']['total']} registered")
-    print(f"   Ports: {status['ports']['in_use']} in use, "
-          f"{status['ports']['available']} available")
-    print(f"   Quantum Coherence: {status['quantum_coherence']:.1%}")
-    print(f"   Modules: {', '.join(status['modules_loaded'])}")
+    if not silent:
+        print(f"   Uptime: {status['uptime_seconds']:.1f}s")
+        print(f"   Device: {status['device']['type']}")
+        print(f"   Services: {status['services']['total']} registered")
+        print(f"   Ports: {status['ports']['in_use']} in use, "
+              f"{status['ports']['available']} available")
+        print(f"   Quantum Coherence: {status['quantum_coherence']:.1%}")
+        print(f"   Modules: {', '.join(status['modules_loaded'])}")
 
-    # Port statistics
-    print("\n🔌 Port Pool Statistics:")
-    for pool_name, stats in status['ports']['by_pool'].items():
-        print(f"   {pool_name}: {stats['in_use']}/{stats['total']} in use")
+        # Port statistics
+        print("\n🔌 Port Pool Statistics:")
+        for pool_name, stats in status['ports']['by_pool'].items():
+            print(f"   {pool_name}: {stats['in_use']}/{stats['total']} in use")
 
-    print("\n" + "=" * 80)
-    print("✅ Aurora Universal Nexus V3 is RUNNING")
-    print("   Your vision realized: Smart port management across all devices")
-    print("   System is self-healing, self-optimizing, and adaptive")
-    print("=" * 80 + "\n")
+        print("\n" + "=" * 80)
+        if orchestration_mode:
+            print("✅ Aurora Universal Nexus V3 - MASTER ORCHESTRATOR ACTIVE")
+            print("   Managing ALL x-start systems with intelligent port control")
+            print(f"   {status['services']['total']} systems registered | Self-healing | Self-optimizing")
+            print(f"   Nexus V3 API: http://localhost:{api_port}")
+        else:
+            print("✅ Aurora Universal Nexus V3 is RUNNING")
+            print("   Your vision realized: Smart port management across all devices")
+            print("   System is self-healing, self-optimizing, and adaptive")
+        print("=" * 80 + "\n")
 
     return aurora
 
 
 if __name__ == "__main__":
-    aurora = main()
+    # Parse arguments
+    parser = argparse.ArgumentParser(description='Aurora Universal Nexus V3')
+    parser.add_argument('--orchestration', action='store_true',
+                        help='Run in orchestration mode (for x-start integration)')
+    parser.add_argument('--silent', action='store_true',
+                        help='Silent mode - minimal output for daemon mode')
+    parser.add_argument('--daemon', action='store_true',
+                        help='Daemon mode - runs in background (implies --silent)')
+    args = parser.parse_args()
+    
+    silent_mode = args.silent or args.daemon
+    orchestration_mode = args.orchestration
+    
+    # Initialize Nexus V3
+    aurora = main(orchestration_mode=orchestration_mode, silent=silent_mode)
 
     # Keep running
     try:
-        print("Press Ctrl+C to shutdown...\n")
+        if not silent_mode:
+            print("Press Ctrl+C to shutdown...\n")
         while True:
             time.sleep(10)
-            # Show periodic stats
-            stats = aurora.port_manager.get_statistics()
-            print(f"[{datetime.now().strftime('%H:%M:%S')}] "
-                  f"Ports: {stats['in_use']} in use | "
-                  f"Services: {len(aurora.service_registry.get_all())} registered")
+            # Show periodic stats (only in non-silent mode)
+            if not silent_mode:
+                stats = aurora.port_manager.get_statistics()
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] "
+                      f"Ports: {stats['in_use']} in use | "
+                      f"Services: {len(aurora.service_registry.get_all())} registered")
     except KeyboardInterrupt:
+        if not silent_mode:
+            print("\n🛑 Shutting down Nexus V3...")
         aurora.shutdown()
