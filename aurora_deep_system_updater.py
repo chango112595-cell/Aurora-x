@@ -82,7 +82,7 @@ def stats():
     })
 
 if __name__ == "__main__":
-    print("🔄 Aurora Deep System Updater starting on port 5008...")
+    print("[UPDATER] Aurora Deep System Updater starting on port 5008...")
     updater.scanning = True
     thread = threading.Thread(target=updater.background_scan, daemon=True)
     thread.start()

@@ -106,6 +106,6 @@ def balance_request():
     })
 
 if __name__ == "__main__":
-    print("⚖️ Aurora API Load Balancer starting on port 5029...")
+    print("[BALANCER] Aurora API Load Balancer starting on port 5029...")
     balancer.start_monitoring()
     app.run(host="0.0.0.0", port=5029, debug=False)

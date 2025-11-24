@@ -124,5 +124,5 @@ def stats():
     })
 
 if __name__ == "__main__":
-    print("🛡️ Aurora API Rate Limiter starting on port 5030...")
+    print("[LIMITER] Aurora API Rate Limiter starting on port 5030...")
     app.run(host="0.0.0.0", port=5030, debug=False)

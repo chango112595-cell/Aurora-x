@@ -101,5 +101,5 @@ def proxy(path):
     return jsonify({"error": "Route not found"}), 404
 
 if __name__ == "__main__":
-    print("🌐 Aurora API Gateway starting on port 5028...")
+    print("[GATEWAY] Aurora API Gateway starting on port 5028...")
     app.run(host="0.0.0.0", port=5028, debug=False)

@@ -94,5 +94,5 @@ def stats():
     })
 
 if __name__ == "__main__":
-    print("🔍 Aurora Intelligence Analyzer starting on port 5013...")
+    print("[ANALYZER] Aurora Intelligence Analyzer starting on port 5013...")
     app.run(host="0.0.0.0", port=5013, debug=False)

@@ -106,6 +106,6 @@ def start_monitoring():
     return jsonify({"message": "Monitoring started"})
 
 if __name__ == "__main__":
-    print("💓 Aurora Web Health Monitor starting on port 5004...")
+    print("[HEALTH] Aurora Web Health Monitor starting on port 5004...")
     monitor.start_monitoring()
     app.run(host="0.0.0.0", port=5004, debug=False)

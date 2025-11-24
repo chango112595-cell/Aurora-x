@@ -108,5 +108,5 @@ def get_anomalies():
     return jsonify({"anomalies": engine.anomalies})
 
 if __name__ == "__main__":
-    print("🧠 Aurora Pattern Recognition Engine starting on port 5014...")
+    print("[PATTERN] Aurora Pattern Recognition Engine starting on port 5014...")
     app.run(host="0.0.0.0", port=5014, debug=False)
