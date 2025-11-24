@@ -86,7 +86,8 @@ def integrate_autonomous_systems():
     cmd_file.parent.mkdir(exist_ok=True)
 
     with open(cmd_file, "w", encoding="utf-8") as f:
-        json.dump({"version": "2.0.0", "created": datetime.now().isoformat(), "commands": commands}, f, indent=2)
+        json.dump({"version": "2.0.0", "created": datetime.now(
+        ).isoformat(), "commands": commands}, f, indent=2)
 
     print(f"  [OK] Command reference saved: {cmd_file}")
 
@@ -150,11 +151,16 @@ def integrate_autonomous_systems():
     print("=" * 60)
 
     print(f"\n[TARGET] Aurora Version: {status_report['version']}")
-    print(f"[DATA] Total Capabilities: {status_report['core_system']['total_capabilities']}")
-    print(f"[POWER] Autonomous Systems: {status_report['autonomous_evolution']['phases_implemented']}/6 OPERATIONAL")
-    print(f"[LAUNCH] Autonomy Level: {status_report['metrics']['autonomy_level']*100:.0f}%")
-    print(f"[BRAIN] Context Understanding: {status_report['metrics']['context_understanding']*100:.0f}%")
-    print(f"[OK] Test Pass Rate: {status_report['metrics']['test_pass_rate']*100:.0f}%")
+    print(
+        f"[DATA] Total Capabilities: {status_report['core_system']['total_capabilities']}")
+    print(
+        f"[POWER] Autonomous Systems: {status_report['autonomous_evolution']['phases_implemented']}/6 OPERATIONAL")
+    print(
+        f"[LAUNCH] Autonomy Level: {status_report['metrics']['autonomy_level']*100:.0f}%")
+    print(
+        f"[BRAIN] Context Understanding: {status_report['metrics']['context_understanding']*100:.0f}%")
+    print(
+        f"[OK] Test Pass Rate: {status_report['metrics']['test_pass_rate']*100:.0f}%")
 
     print("\n[STAR] Key Achievements:")
     print("  [OK] Self-aware (24,586 files monitored)")

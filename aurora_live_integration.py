@@ -100,7 +100,8 @@ class AuroraLiveIntegration:
             status=status,
             latency_ms=round(latency, 2),
             last_activity=time.strftime("%Y-%m-%d %H:%M:%S"),
-            metadata={"headers": headers or {}, "protocol": "HTTP/1.1", "ssl": base_url.startswith("https")},
+            metadata={"headers": headers or {}, "protocol": "HTTP/1.1",
+                      "ssl": base_url.startswith("https")},
         )
 
         self.active_connections[connection.connection_id] = connection
@@ -130,7 +131,8 @@ class AuroraLiveIntegration:
         print(f"[EMOJI] {method} {conn.endpoint}{endpoint}")
 
         # Simulate API call
-        response = self._execute_http_request(conn.endpoint, method, endpoint, data)
+        response = self._execute_http_request(
+            conn.endpoint, method, endpoint, data)
 
         print(f"[OK] Response: {response['status_code']}")
         return response
@@ -185,7 +187,8 @@ class AuroraLiveIntegration:
             "variables": {"port": 5000, "env": "development"},
         }
 
-        print(f"[OK] Debugger attached: {debug_info['process_name']} (PID {process_id})")
+        print(
+            f"[OK] Debugger attached: {debug_info['process_name']} (PID {process_id})")
         return debug_info
 
     def connect_to_database(self, connection_string: str) -> LiveConnection:
@@ -207,7 +210,8 @@ class AuroraLiveIntegration:
             status="connected",
             latency_ms=15.3,
             last_activity=time.strftime("%Y-%m-%d %H:%M:%S"),
-            metadata={"driver": "postgresql", "database": "aurora_db", "pool_size": 10},
+            metadata={"driver": "postgresql",
+                      "database": "aurora_db", "pool_size": 10},
         )
 
         self.active_connections[connection.connection_id] = connection
@@ -232,7 +236,8 @@ class AuroraLiveIntegration:
         print(f"[SCAN] Executing query: {query[:50]}...")
 
         # Simulate query execution
-        results = [{"id": 1, "name": "Aurora", "tier": 44}, {"id": 2, "name": "System", "tier": 45}]
+        results = [{"id": 1, "name": "Aurora", "tier": 44},
+                   {"id": 2, "name": "System", "tier": 45}]
 
         print(f"[OK] Query executed: {len(results)} rows returned")
         return results
@@ -310,7 +315,8 @@ class AuroraLiveIntegration:
             status="connected",
             latency_ms=8.5,
             last_activity=time.strftime("%Y-%m-%d %H:%M:%S"),
-            metadata={"protocol": "ws", "messages_sent": 0, "messages_received": 0},
+            metadata={"protocol": "ws", "messages_sent": 0,
+                      "messages_received": 0},
         )
 
         self.active_connections[connection.connection_id] = connection
@@ -366,7 +372,8 @@ class AuroraLiveIntegration:
             "uptime_seconds": 86400,
         }
 
-        print(f"[OK] Metrics collected: CPU {metrics['cpu_percent']}%, Memory {metrics['memory_mb']}MB")
+        print(
+            f"[OK] Metrics collected: CPU {metrics['cpu_percent']}%, Memory {metrics['memory_mb']}MB")
         return metrics
 
     def disconnect(self, connection_id: str) -> bool:
@@ -452,7 +459,8 @@ def main():
 
     # Test 2: API Call
     print("Test 2: API Call")
-    response = live.call_api_endpoint(api_conn.connection_id, "GET", "/api/status")
+    response = live.call_api_endpoint(
+        api_conn.connection_id, "GET", "/api/status")
     print(f"  Status: {response['status_code']}\n")
 
     # Test 3: Server Health

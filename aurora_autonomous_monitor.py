@@ -36,7 +36,8 @@ def check_port(port):
 
 def restart_services():
     """Restart all Aurora services"""
-    print(f"\n[RESTART] [{datetime.now().strftime('%H:%M:%S')}] Restarting Aurora services...")
+    print(
+        f"\n[RESTART] [{datetime.now().strftime('%H:%M:%S')}] Restarting Aurora services...")
     python_cmd = "python" if platform.system() == "Windows" else "python3"
 
     try:
@@ -93,7 +94,8 @@ def monitor_loop():
 
             # Check if we need to restart
             if critical_failures and (current_time - last_restart) > 60:
-                print(f"\n[WARN]  Critical failures detected: {', '.join(critical_failures)}")
+                print(
+                    f"\n[WARN]  Critical failures detected: {', '.join(critical_failures)}")
                 if restart_services():
                     last_restart = current_time
                     print("   ⏳ Waiting 30s for services to start...")
@@ -102,7 +104,8 @@ def monitor_loop():
             # Print status every 30 seconds
             if int(current_time) % 30 == 0:
                 running = sum(1 for port in SERVICES if check_port(port))
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] Status: {running}/{len(SERVICES)} services running")
+                print(
+                    f"[{datetime.now().strftime('%H:%M:%S')}] Status: {running}/{len(SERVICES)} services running")
 
             time.sleep(10)
 

@@ -33,6 +33,7 @@ successful_starts = []
 failed_starts = []
 retry_queue = []
 
+
 def cleanup_existing_processes():
     """Kill any existing Aurora/Luminar processes intelligently"""
     print("🧹 Intelligent cleanup of existing processes...")
@@ -51,6 +52,7 @@ def cleanup_existing_processes():
     except Exception as e:
         print(f"   ⚠️  Cleanup error (non-critical): {e}\n")
 
+
 def check_port(port):
     """Check if port is available"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -65,6 +67,7 @@ def check_port(port):
         except:
             pass
         return True
+
 
 def kill_process_on_port(port):
     """Kill process using specific port"""
@@ -82,14 +85,16 @@ def kill_process_on_port(port):
     except Exception as e:
         return False
 
+
 def start_with_retry(cmd, name="Service", shell=False, critical=False, port=None, max_retries=3):
     """Launch process with intelligent retry logic"""
-    
+
     for attempt in range(max_retries):
         # Check port availability
         if port and not check_port(port):
             if attempt == 0:
-                print(f"   ⚠️  {name}: Port {port} occupied, attempting auto-recovery...")
+                print(
+                    f"   ⚠️  {name}: Port {port} occupied, attempting auto-recovery...")
                 killed = kill_process_on_port(port)
                 if killed:
                     print(f"   ✅ {name}: Freed port {port}, retrying...")
@@ -100,9 +105,10 @@ def start_with_retry(cmd, name="Service", shell=False, critical=False, port=None
                     return None
             else:
                 wait_time = 2 ** attempt  # Exponential backoff
-                print(f"   ⏳ {name}: Retry {attempt + 1}/{max_retries} (waiting {wait_time}s)...")
+                print(
+                    f"   ⏳ {name}: Retry {attempt + 1}/{max_retries} (waiting {wait_time}s)...")
                 time.sleep(wait_time)
-        
+
         kwargs = {
             'stdout': subprocess.PIPE,
             'stderr': subprocess.PIPE,
@@ -118,8 +124,9 @@ def start_with_retry(cmd, name="Service", shell=False, critical=False, port=None
 
         try:
             proc = subprocess.Popen(cmd, **kwargs)
-            time.sleep(0.3)  # Small delay to check if process crashes immediately
-            
+            # Small delay to check if process crashes immediately
+            time.sleep(0.3)
+
             if proc.poll() is None:  # Process still running
                 processes.append((proc, name, critical, port))
                 successful_starts.append(name)
@@ -138,7 +145,7 @@ def start_with_retry(cmd, name="Service", shell=False, critical=False, port=None
                     print(f"   ❌ {name}: Failed after {max_retries} attempts")
                     failed_starts.append((name, "Process crashed immediately"))
                     return None
-                    
+
         except Exception as e:
             if attempt < max_retries - 1:
                 print(f"   ⚠️  {name}: Error ({str(e)[:30]}), retrying...")
@@ -147,8 +154,9 @@ def start_with_retry(cmd, name="Service", shell=False, critical=False, port=None
                 print(f"   ❌ {name}: {str(e)[:50]}")
                 failed_starts.append((name, str(e)))
                 return None
-    
+
     return None
+
 
 def monitor_health():
     """Check health of running processes"""
@@ -161,6 +169,7 @@ def monitor_health():
             dead.append((name, port))
     return alive, dead
 
+
 def shutdown_handler(signum, frame):
     """Graceful shutdown"""
     print("\n\n⚠️  Shutdown signal received, cleaning up...")
@@ -171,6 +180,7 @@ def shutdown_handler(signum, frame):
             pass
     print("✅ Cleanup complete")
     sys.exit(0)
+
 
 # Register shutdown handler
 signal.signal(signal.SIGINT, shutdown_handler)
@@ -187,7 +197,7 @@ print("━" * 80)
 print("🌌 PHASE 0: NEXUS V3 MASTER ORCHESTRATOR")
 print("━" * 80)
 start_with_retry([PYTHON_CMD, "aurora_nexus_v3_universal.py", "--orchestration", "--daemon"],
-      "Nexus V3 Master Orchestrator", critical=True, port=5031)
+                 "Nexus V3 Master Orchestrator", critical=True, port=5031)
 
 # PHASE 1: CONSCIOUSNESS
 print("\n━" * 80)
@@ -195,7 +205,7 @@ print("🧠 PHASE 1: CONSCIOUSNESS & AWARENESS")
 print("━" * 80)
 if os.path.exists("aurora_consciousness_service.py"):
     start_with_retry([PYTHON_CMD, "aurora_consciousness_service.py"],
-          "Consciousness System", critical=True, port=5009)
+                     "Consciousness System", critical=True, port=5009)
 
 # PHASE 2: INTELLIGENCE
 print("\n━" * 80)
@@ -203,25 +213,25 @@ print("⚡ PHASE 2: CORE INTELLIGENCE")
 print("━" * 80)
 if os.path.exists("aurora_tier_orchestrator.py"):
     start_with_retry([PYTHON_CMD, "aurora_tier_orchestrator.py"],
-          "Tier Orchestrator (79 Tiers)", critical=True, port=5010)
+                     "Tier Orchestrator (79 Tiers)", critical=True, port=5010)
 if os.path.exists("aurora_intelligence_manager.py"):
     start_with_retry([PYTHON_CMD, "aurora_intelligence_manager.py"],
-          "Intelligence Manager", critical=True, port=5011)
+                     "Intelligence Manager", critical=True, port=5011)
 elif os.path.exists("tools/aurora_intelligence_manager.py"):
     start_with_retry([PYTHON_CMD, "tools/aurora_intelligence_manager.py"],
-          "Intelligence Manager", critical=True, port=5011)
+                     "Intelligence Manager", critical=True, port=5011)
 if os.path.exists("aurora_core_service.py"):
     start_with_retry([PYTHON_CMD, "aurora_core_service.py"],
-          "Aurora Core", critical=True, port=5012)
+                     "Aurora Core", critical=True, port=5012)
 elif os.path.exists("activate_aurora_core.py"):
     start_with_retry([PYTHON_CMD, "activate_aurora_core.py"],
-          "Aurora Core", critical=True, port=5012)
+                     "Aurora Core", critical=True, port=5012)
 if os.path.exists("aurora_intelligence_analyzer.py"):
     start_with_retry([PYTHON_CMD, "aurora_intelligence_analyzer.py"],
-          "Intelligence Analyzer", port=5013)
+                     "Intelligence Analyzer", port=5013)
 if os.path.exists("aurora_pattern_recognition.py"):
     start_with_retry([PYTHON_CMD, "aurora_pattern_recognition.py"],
-          "Pattern Recognition Engine", port=5014)
+                     "Pattern Recognition Engine", port=5014)
 
 # PHASE 3: AUTONOMOUS
 print("\n━" * 80)
@@ -229,16 +239,16 @@ print("🤖 PHASE 3: AUTONOMOUS SYSTEMS")
 print("━" * 80)
 if os.path.exists("aurora_autonomous_agent.py"):
     start_with_retry([PYTHON_CMD, "aurora_autonomous_agent.py"],
-          "Autonomous Agent", critical=True, port=5015)
+                     "Autonomous Agent", critical=True, port=5015)
 if os.path.exists("aurora_multi_agent.py"):
     start_with_retry([PYTHON_CMD, "aurora_multi_agent.py"],
-          "Multi-Agent System", port=5016)
+                     "Multi-Agent System", port=5016)
 if os.path.exists("aurora_autonomous_integration.py"):
     start_with_retry([PYTHON_CMD, "aurora_autonomous_integration.py"],
-          "Autonomous Integration", port=5017)
+                     "Autonomous Integration", port=5017)
 if os.path.exists("aurora_autonomous_monitor.py"):
     start_with_retry([PYTHON_CMD, "aurora_autonomous_monitor.py"],
-          "Autonomous Monitor", port=5018)
+                     "Autonomous Monitor", port=5018)
 
 # PHASE 4: GRANDMASTER
 print("\n━" * 80)
@@ -246,13 +256,13 @@ print("⭐ PHASE 4: GRANDMASTER CAPABILITIES")
 print("━" * 80)
 if os.path.exists("aurora_grandmaster_autonomous_tools.py"):
     start_with_retry([PYTHON_CMD, "aurora_grandmaster_autonomous_tools.py"],
-          "Grandmaster Tools", port=5019)
+                     "Grandmaster Tools", port=5019)
 if os.path.exists("aurora_grandmaster_skills_registry.py"):
     start_with_retry([PYTHON_CMD, "aurora_grandmaster_skills_registry.py"],
-          "Skills Registry", port=5020)
+                     "Skills Registry", port=5020)
 if os.path.exists("aurora_ultimate_omniscient_grandmaster.py"):
     start_with_retry([PYTHON_CMD, "aurora_ultimate_omniscient_grandmaster.py"],
-          "Omniscient Mode", port=5021)
+                     "Omniscient Mode", port=5021)
 
 # PHASE 5: ADVANCED TIERS
 print("\n━" * 80)
@@ -260,16 +270,16 @@ print("👁️ PHASE 5: ADVANCED TIER CAPABILITIES")
 print("━" * 80)
 if os.path.exists("aurora_visual_understanding.py"):
     start_with_retry([PYTHON_CMD, "aurora_visual_understanding.py"],
-          "Visual Understanding (Tier 43)", port=5022)
+                     "Visual Understanding (Tier 43)", port=5022)
 if os.path.exists("aurora_live_integration.py"):
     start_with_retry([PYTHON_CMD, "aurora_live_integration.py"],
-          "Live Integration (Tier 44)", port=5023)
+                     "Live Integration (Tier 44)", port=5023)
 if os.path.exists("aurora_test_generator.py"):
     start_with_retry([PYTHON_CMD, "aurora_test_generator.py"],
-          "Test Generator (Tier 45)", port=5024)
+                     "Test Generator (Tier 45)", port=5024)
 if os.path.exists("aurora_security_auditor.py"):
     start_with_retry([PYTHON_CMD, "aurora_security_auditor.py"],
-          "Security Auditor (Tier 53)", port=5025)
+                     "Security Auditor (Tier 53)", port=5025)
 
 # PHASE 6: CODE QUALITY
 print("\n━" * 80)
@@ -277,29 +287,29 @@ print("📊 PHASE 6: CODE QUALITY SYSTEMS")
 print("━" * 80)
 if os.path.exists("aurora_code_quality_enforcer.py"):
     start_with_retry([PYTHON_CMD, "aurora_code_quality_enforcer.py"],
-          "Code Quality Enforcer", port=5026)
+                     "Code Quality Enforcer", port=5026)
 if os.path.exists("aurora_pylint_prevention.py"):
     start_with_retry([PYTHON_CMD, "aurora_pylint_prevention.py"],
-          "Pylint Prevention", port=5027)
+                     "Pylint Prevention", port=5027)
 
 # PHASE 7: WEB SERVICES
 print("\n━" * 80)
 print("🌐 PHASE 7: WEB SERVICES")
 print("━" * 80)
-start_with_retry("npm run dev" if IS_WINDOWS else ["npm", "run", "dev"], 
-      "Backend + Frontend", shell=IS_WINDOWS, port=5000)
+start_with_retry("npm run dev" if IS_WINDOWS else ["npm", "run", "dev"],
+                 "Backend + Frontend", shell=IS_WINDOWS, port=5000)
 start_with_retry([PYTHON_CMD, "-m", "aurora_x.bridge.service"],
-      "Bridge Service", port=5001)
+                 "Bridge Service", port=5001)
 start_with_retry([PYTHON_CMD, "-m", "aurora_x.self_learn_server"],
-      "Self-Learning Service", port=5002)
+                 "Self-Learning Service", port=5002)
 if os.path.exists("aurora_chat_server.py"):
-    start_with_retry([PYTHON_CMD, "aurora_chat_server.py", "--port", "5003"], 
-          "Chat Server", port=5003)
+    start_with_retry([PYTHON_CMD, "aurora_chat_server.py", "--port", "5003"],
+                     "Chat Server", port=5003)
 
 luminar_v2 = "tools\\luminar_nexus_v2.py" if IS_WINDOWS else "tools/luminar_nexus_v2.py"
 if os.path.exists(luminar_v2.replace("\\", "/")):
-    start_with_retry([PYTHON_CMD, luminar_v2, "api"], 
-          "Luminar Dashboard", port=5005)
+    start_with_retry([PYTHON_CMD, luminar_v2, "api"],
+                     "Luminar Dashboard", port=5005)
 
 # PHASE 8: ORCHESTRATION
 print("\n━" * 80)
@@ -307,27 +317,27 @@ print("🎯 PHASE 8: ORCHESTRATION SYSTEMS")
 print("━" * 80)
 uam = "tools\\ultimate_api_manager.py" if IS_WINDOWS else "tools/ultimate_api_manager.py"
 if os.path.exists(uam.replace("\\", "/")):
-    start_with_retry([PYTHON_CMD, uam, "--autonomous"], 
-          "API Manager", port=5006)
+    start_with_retry([PYTHON_CMD, uam, "--autonomous"],
+                     "API Manager", port=5006)
 
 luminar = "tools\\luminar_nexus.py" if IS_WINDOWS else "tools/luminar_nexus.py"
 if os.path.exists(luminar.replace("\\", "/")):
-    start_with_retry([PYTHON_CMD, luminar, "monitor"], 
-          "Luminar Nexus", port=5007)
+    start_with_retry([PYTHON_CMD, luminar, "monitor"],
+                     "Luminar Nexus", port=5007)
 
 # PHASE 8.5: API POOL
 print("\n━" * 80)
 print("🌐 PHASE 8.5: API ORCHESTRATION POOL")
 print("━" * 80)
 if os.path.exists("aurora_api_gateway.py"):
-    start_with_retry([PYTHON_CMD, "aurora_api_gateway.py"], 
-          "API Gateway", port=5028)
+    start_with_retry([PYTHON_CMD, "aurora_api_gateway.py"],
+                     "API Gateway", port=5028)
 if os.path.exists("aurora_api_load_balancer.py"):
     start_with_retry([PYTHON_CMD, "aurora_api_load_balancer.py"],
-          "API Load Balancer", port=5029)
+                     "API Load Balancer", port=5029)
 if os.path.exists("aurora_api_rate_limiter.py"):
     start_with_retry([PYTHON_CMD, "aurora_api_rate_limiter.py"],
-          "API Rate Limiter", port=5030)
+                     "API Rate Limiter", port=5030)
 
 # PHASE 9: BACKGROUND
 print("\n━" * 80)
@@ -335,10 +345,10 @@ print("🔄 PHASE 9: BACKGROUND PROCESSES")
 print("━" * 80)
 if os.path.exists("aurora_deep_system_updater.py"):
     start_with_retry([PYTHON_CMD, "aurora_deep_system_updater.py"],
-          "Deep System Sync", port=5008)
+                     "Deep System Sync", port=5008)
 if os.path.exists("aurora_web_health_monitor.py"):
     start_with_retry([PYTHON_CMD, "aurora_web_health_monitor.py"],
-          "Web Health Monitor", port=5004)
+                     "Web Health Monitor", port=5004)
 
 print("\n" + "=" * 80)
 print("⚡ STARTUP COMPLETE - Performing health check...")

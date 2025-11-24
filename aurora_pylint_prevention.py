@@ -41,7 +41,8 @@ class AuroraPylintPrevention:
         """Run pylint on a single file"""
         try:
             result = subprocess.run(
-                ["python", "-m", "pylint", str(file_path), "--output-format=json"],
+                ["python", "-m", "pylint",
+                    str(file_path), "--output-format=json"],
                 capture_output=True,
                 text=True,
                 timeout=30,
@@ -61,7 +62,8 @@ class AuroraPylintPrevention:
         try:
             # Use autoflake to remove unused imports
             result = subprocess.run(
-                ["python", "-m", "autoflake", "--remove-all-unused-imports", "--in-place", str(file_path)],
+                ["python", "-m", "autoflake", "--remove-all-unused-imports",
+                    "--in-place", str(file_path)],
                 capture_output=True,
                 timeout=30,
             )
@@ -74,7 +76,8 @@ class AuroraPylintPrevention:
         try:
             # Use autoflake to remove unused variables
             result = subprocess.run(
-                ["python", "-m", "autoflake", "--remove-unused-variables", "--in-place", str(file_path)],
+                ["python", "-m", "autoflake", "--remove-unused-variables",
+                    "--in-place", str(file_path)],
                 capture_output=True,
                 timeout=30,
             )
@@ -114,7 +117,8 @@ class AuroraPylintPrevention:
                 if max_iterations and iteration > max_iterations:
                     break
 
-                print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Iteration {iteration}")
+                print(
+                    f"\n[{datetime.now().strftime('%H:%M:%S')}] Iteration {iteration}")
 
                 # Scan files
                 files = self.scan_python_files()
@@ -127,12 +131,14 @@ class AuroraPylintPrevention:
                     check = self.run_pylint_check(file)
 
                     if check["count"] > 0:
-                        print(f"  [WARN]  {file.name}: {check['count']} issues")
+                        print(
+                            f"  [WARN]  {file.name}: {check['count']} issues")
                         fixes = self.auto_fix_common_issues(file)
                         if fixes > 0:
                             files_fixed += 1
                             self.issues_fixed += fixes
-                            print(f"  [OK] Fixed {fixes} issues in {file.name}")
+                            print(
+                                f"  [OK] Fixed {fixes} issues in {file.name}")
 
                     total_issues += check["count"]
 
@@ -156,7 +162,8 @@ class AuroraPylintPrevention:
 
                 # Wait
                 if not max_iterations or iteration < max_iterations:
-                    print(f"\n⏱️  Waiting {interval_minutes} minutes until next check...")
+                    print(
+                        f"\n⏱️  Waiting {interval_minutes} minutes until next check...")
                     time.sleep(interval_minutes * 60)
 
         except KeyboardInterrupt:
@@ -166,7 +173,8 @@ class AuroraPylintPrevention:
         print("[DATA] FINAL REPORT")
         print("=" * 70)
         print(f"Total iterations: {iteration}")
-        print(f"Total files scanned: {sum(log['files_scanned'] for log in self.prevention_log)}")
+        print(
+            f"Total files scanned: {sum(log['files_scanned'] for log in self.prevention_log)}")
         print(f"Total issues fixed: {self.issues_fixed}")
         print("=" * 70 + "\n")
 
@@ -180,7 +188,8 @@ class AuroraPylintPrevention:
                 ["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"], capture_output=True, text=True
             )
 
-            staged_files = [Path(f) for f in result.stdout.strip().split("\n") if f.endswith(".py")]
+            staged_files = [Path(f) for f in result.stdout.strip().split(
+                "\n") if f.endswith(".py")]
 
             if not staged_files:
                 print("[OK] No Python files staged")
@@ -233,7 +242,8 @@ def main():
     else:
         print("Aurora Tiers 66: Pylint Prevention System")
         print("\nUsage:")
-        print("  python aurora_pylint_prevention.py monitor [minutes]  # Continuous monitoring")
+        print(
+            "  python aurora_pylint_prevention.py monitor [minutes]  # Continuous monitoring")
         print("  python aurora_pylint_prevention.py pre-commit        # Pre-commit check")
         print("  python aurora_pylint_prevention.py check             # One-time check")
 
