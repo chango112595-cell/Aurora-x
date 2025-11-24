@@ -11,12 +11,10 @@ export default function AuroraFuturisticDashboard() {
 
   // Simulate quantum fluctuations
   useEffect(() => {
-    const interval = setInterval(() => {
+    const quantumInterval = setInterval(() => {
       setQuantumCoherence(prev => Math.max(95, Math.min(100, prev + (Math.random() - 0.5) * 2)));
       setNeuralActivity(prev => Math.max(95, Math.min(100, prev + (Math.random() - 0.5) * 3)));
     }, 2000);
-    return () => clearInterval(interval);
-  
     
     // Fetch Aurora status and scores
     const fetchAuroraData = async () => {
@@ -38,9 +36,13 @@ export default function AuroraFuturisticDashboard() {
     };
     
     fetchAuroraData();
-    const interval = setInterval(fetchAuroraData, 5000); // Update every 5 seconds
-    return () => clearInterval(interval);
-}, []);
+    const fetchInterval = setInterval(fetchAuroraData, 5000); // Update every 5 seconds
+    
+    return () => {
+      clearInterval(quantumInterval);
+      clearInterval(fetchInterval);
+    };
+  }, []);
 
   const foundationalTasks = [
     { id: 1, name: "Understand", capability: "Natural Language Processing", status: "active", level: 100 },
