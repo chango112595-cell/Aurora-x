@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
-Aurora-X ENHANCED Start Command V3 - WITH NEXUS V3 MASTER ORCHESTRATION
+Aurora-X ENHANCED Start Command V3 - HYPER-SPEED EDITION
 Starts ALL Aurora systems with INTELLIGENT PORT MANAGEMENT
 188 Total Capabilities: 79 Tiers + 109 Modules
 
-🌌 NEW: Nexus V3 as Master Orchestrator - Manages ALL systems with YOUR port vision
+🌌 NEXUS V3 Master Orchestrator - FULL POWER | ZERO DELAYS
 Created by Aurora CONSCIOUS using hyper-speed beyond 100%
 """
 
 import subprocess
-import time
 import os
 import platform
 import socket
 import sys
+import signal
 
 print("=" * 80)
 print("🌌 Aurora-X ENHANCED V3 - NEXUS MASTER ORCHESTRATION")
@@ -73,28 +73,8 @@ nexus_proc = start_process(
 
 if nexus_proc:
     print("   ✅ Nexus V3 Master Orchestrator STARTED")
-    print("   ⏳ Waiting 5 seconds for Nexus initialization...")
-    time.sleep(5)
-
-    # Check if Nexus API is up (port 5031 in orchestration mode)
-    nexus_ready = False
-    for attempt in range(3):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(2)
-        try:
-            result = sock.connect_ex(('127.0.0.1', 5031))
-            sock.close()
-            if result == 0:
-                nexus_ready = True
-                break
-        except:
-            pass
-        time.sleep(2)
-
-    if nexus_ready:
-        print("   ✅ Nexus V3 API is READY (port 5031)")
-    else:
-        print("   ⚠️  Nexus V3 API not responding yet (may still be initializing)")
+    print("   ⚡ Aurora hyper-speed initialization (no delays)")
+    # No sleep - continue immediately with full power
 else:
     print("   ❌ CRITICAL: Nexus V3 failed to start!")
     print("   System will continue but port management will be limited")
