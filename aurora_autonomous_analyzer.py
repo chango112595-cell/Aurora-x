@@ -482,7 +482,7 @@ class AuroraProjectAnalyzer:
         return self.fixes_applied > 0
 
 
-def main():
+def main() -> Any:
     """Main execution"""
     analyzer = AuroraProjectAnalyzer()
 

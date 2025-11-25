@@ -18,8 +18,15 @@ import json
 
 import requests
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
-def test_api_with_units():
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
+
+def test_api_with_units() -> None:
     """Test /api/solve with inline unit conversion"""
 
     base_url = "http://localhost:5001"

@@ -24,6 +24,13 @@ import socket
 import time
 from pathlib import Path
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 PORTS = {
     5000: "Aurora UI (frontend)",
     5001: "Aurora backend (uvicorn)",
@@ -43,7 +50,7 @@ RECOMMENDED_COMMANDS = {
 LOG_FILE = Path(__file__).parent / "services_status.log"
 
 
-def check_port(port, host="127.0.0.1", timeout=1.0):
+def check_port(port, host="127.0.0.1", timeout=1.0) -> Any:
     """
         Check Port
         

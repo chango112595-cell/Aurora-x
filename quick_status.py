@@ -18,8 +18,15 @@ from typing import Dict, List, Tuple, Optional, Any, Union
 import socket
 import sys
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
-def check_port(port_num, timeout=1.0):
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
+
+def check_port(port_num, timeout=1.0) -> Any:
     """
         Check Port
         

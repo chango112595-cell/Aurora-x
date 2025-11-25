@@ -19,7 +19,7 @@ import json
 import requests
 
 
-def test_demo_cards_locally():
+def test_demo_cards_locally() -> Any:
     """Test the demo cards structure locally"""
     from fastapi import FastAPI
 

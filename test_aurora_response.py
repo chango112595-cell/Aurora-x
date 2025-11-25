@@ -26,6 +26,13 @@ import logging
 from collections.abc import Callable
 from typing import Any
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 # Function name for templates
 func_name = "test_function"
 # Optional pytest import

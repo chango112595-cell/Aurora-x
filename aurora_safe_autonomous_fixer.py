@@ -26,7 +26,7 @@ from pathlib import Path
 class AuroraSafeFixer:
     """Aurora's new smart fixer with validation - fixing my own mistakes"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
               Init  
             

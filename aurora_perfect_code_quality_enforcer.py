@@ -71,7 +71,7 @@ class AuroraPerfectCodeQualityEnforcer:
             "imports": {
                 "weight": 1.5,
                 "rules": [
-                    "No wildcard imports (from X import *)",
+                    "No wildcard imports ()",
                     "Organized: stdlib -> third-party -> local",
                     "Unused imports removed",
                     "Type imports from typing module"

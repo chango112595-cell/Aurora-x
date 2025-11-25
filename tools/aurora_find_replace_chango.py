@@ -24,6 +24,13 @@ from typing import Dict, List, Tuple, Optional, Any, Union
 import re
 from pathlib import Path
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 class AuroraUIReplacer:
     """

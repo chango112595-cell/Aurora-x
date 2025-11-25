@@ -5,6 +5,13 @@ import annotations
 
 import re
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 _LEN = {
     "m": 1.0,
     "km": 1e3,

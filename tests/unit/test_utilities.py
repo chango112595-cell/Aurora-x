@@ -6,11 +6,18 @@ Tests core utility functions and helpers
 from typing import Dict, List, Tuple, Optional, Any, Union
 import pytest
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 class TestPathUtilities:
     """Test path and file utilities"""
 
-    def test_project_root_exists(self, project_root):
+    def test_project_root_exists(self, project_root) -> None:
         """Test project root path exists"""
         assert project_root.exists()
         assert project_root.is_dir()

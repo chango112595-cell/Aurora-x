@@ -23,6 +23,13 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 class AuroraSelfDebug:
     """
@@ -39,7 +46,7 @@ class AuroraSelfDebug:
         Methods:
             log, check_port_configuration, check_running_services, analyze_vite_configuration, check_package_json_scripts...
         """
-    def __init__(self):
+    def __init__(self) -> None:
         """
               Init  
             

@@ -20,8 +20,15 @@ import sys
 
 import requests
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
-def test_health_endpoints():
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
+
+def test_health_endpoints() -> Any:
     """Test all health check and monitoring endpoints."""
     base_url = "http://localhost:5001"
 

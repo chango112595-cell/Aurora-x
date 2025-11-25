@@ -19,8 +19,15 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
-def get_workflow_runs():
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
+
+def get_workflow_runs() -> Any:
     """Get recent workflow runs via GitHub CLI."""
     try:
         result = subprocess.run(

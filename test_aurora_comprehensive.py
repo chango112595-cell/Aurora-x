@@ -18,7 +18,7 @@ import asyncio
 from aurora_core import create_aurora_core
 
 
-async def comprehensive_test():
+async def comprehensive_test() -> None:
     """
         Comprehensive Test
             """

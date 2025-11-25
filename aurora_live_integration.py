@@ -23,6 +23,13 @@ from enum import Enum
 from typing import Any
 from urllib.parse import urlparse
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 class ConnectionType(Enum):
     """Types of live connections"""

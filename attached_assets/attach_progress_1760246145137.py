@@ -18,6 +18,13 @@ from pathlib import Path
 
 from flask import Response, jsonify
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 PROGRESS_PATH = Path("progress.json")
 
 DASH_HTML = r"""<!doctype html><html><head>
@@ -109,3 +116,5 @@ def attach_progress(app):
     @app.get("/dashboard/progress")
     def dashboard_progress():
         return Response(DASH_HTML, mimetype="text/html")
+
+# Type annotations: str, int -> bool

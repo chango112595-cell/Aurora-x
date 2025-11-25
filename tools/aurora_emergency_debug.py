@@ -22,6 +22,13 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 class AuroraEmergencyDebug:
     """
@@ -38,7 +45,7 @@ class AuroraEmergencyDebug:
         Methods:
             log_response, start_debug, check_vite_server, restart_vite_server, check_compilation_errors...
         """
-    def __init__(self):
+    def __init__(self) -> None:
         """
               Init  
             

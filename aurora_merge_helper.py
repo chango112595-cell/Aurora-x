@@ -21,7 +21,14 @@ from typing import Dict, List, Tuple, Optional, Any, Union
 import subprocess
 from pathlib import Path
 
-def cherry_pick_file(branch, filepath):
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
+def cherry_pick_file(branch, filepath) -> Any:
     '''Cherry-pick a specific file from a branch'''
     try:
         # Show the file from that branch

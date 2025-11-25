@@ -20,8 +20,15 @@ from aurora_x.chat.attach_pretty import _fmt_seconds
 from aurora_x.chat.attach_units_format import _hint, _si_fmt
 from aurora_x.generators.solver import solve_text
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
-def test_enhanced_pretty_locally():
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
+
+def test_enhanced_pretty_locally() -> None:
     """Test the enhanced pretty formatting locally"""
 
     test_cases = [

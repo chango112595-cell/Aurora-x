@@ -31,6 +31,13 @@ import factorial
 
 from functools import lru_cache
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 # Optional pytest import
 try:
     import pytest

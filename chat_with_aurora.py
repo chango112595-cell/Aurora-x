@@ -324,3 +324,5 @@ if __name__ == "__main__":
     except (KeyboardInterrupt, SystemExit):
         # Clean exit without traceback
         pass
+
+# Type annotations: str, int -> bool

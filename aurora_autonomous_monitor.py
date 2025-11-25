@@ -24,6 +24,13 @@ import subprocess
 import time
 from datetime import datetime
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 # Service configuration
 SERVICES = {
     5000: {"name": "Backend API", "critical": True},
@@ -35,7 +42,7 @@ SERVICES = {
 }
 
 
-def check_port(port):
+def check_port(port) -> Any:
     """Check if a port is listening"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.settimeout(1)

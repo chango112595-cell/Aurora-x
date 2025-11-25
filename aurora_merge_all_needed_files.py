@@ -9,6 +9,13 @@ import subprocess
 from pathlib import Path
 from collections import defaultdict
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 class AuroraAutonomousMerger:
     """
@@ -25,7 +32,7 @@ class AuroraAutonomousMerger:
         Methods:
             load_decision, merge_files, merge_single_file, run
         """
-    def __init__(self):
+    def __init__(self) -> None:
         """
               Init  
             

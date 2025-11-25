@@ -25,8 +25,15 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from aurora_x.corpus.store import record, spec_digest
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
-def get_db_path():
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
+
+def get_db_path() -> Any:
     """Get the corpus database path."""
     # Check both possible locations
     db_path = Path("data/corpus.db")

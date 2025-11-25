@@ -22,7 +22,7 @@ from aurora_consciousness import AuroraConsciousness
 from pathlib import Path
 
 
-async def aurora_enhance_chat_server():
+async def aurora_enhance_chat_server() -> None:
     """
         Aurora Enhance Chat Server
             """

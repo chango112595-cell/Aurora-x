@@ -22,8 +22,15 @@ import time
 
 import requests
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
-def clear_browser_caches():
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
+
+def clear_browser_caches() -> None:
     """Force clear all cached frontend builds"""
     print("[EMOJI] Clearing frontend caches...")
 

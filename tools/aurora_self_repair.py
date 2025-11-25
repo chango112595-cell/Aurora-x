@@ -332,7 +332,7 @@ async def healthz():
         return True
 
 
-async def main():
+async def main() -> None:
     """Let Aurora repair herself."""
     aurora = AuroraSelfRepair()
     await aurora.repair()

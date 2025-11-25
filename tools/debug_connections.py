@@ -18,8 +18,15 @@ import sys
 
 import requests
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
-def test_endpoint(name, method, url, data=None):
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
+
+def test_endpoint(name, method, url, data=None) -> Any:
     """Test a single endpoint"""
     print(f"\n[SCAN] Testing {name}...")
     try:

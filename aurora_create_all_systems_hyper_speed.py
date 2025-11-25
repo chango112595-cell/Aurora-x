@@ -23,7 +23,7 @@ from pathlib import Path
 import time
 
 
-async def aurora_create_all_priority_systems():
+async def aurora_create_all_priority_systems() -> None:
     """
         Aurora Create All Priority Systems
             """

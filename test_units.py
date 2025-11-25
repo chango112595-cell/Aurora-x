@@ -27,6 +27,13 @@ from aurora_x.reasoners.units import (
 )
 from aurora_x.router.domain_router import classify_domain
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 def test_unit_parser():
     """Test the parse_value_with_unit function"""

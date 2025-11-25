@@ -24,6 +24,13 @@ import platform
 import socket
 import time
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 print("=" * 80)
 print("[POWER] AURORA HYPER-SPEED FIX - FULL POWER ACTIVATION")
 print("=" * 80)
@@ -38,7 +45,7 @@ IS_WINDOWS = platform.system() == "Windows"
 PYTHON_CMD = "python" if IS_WINDOWS else "python3"
 
 
-def check_port(port):
+def check_port(port) -> Any:
     """Quick port check"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.settimeout(0.5)

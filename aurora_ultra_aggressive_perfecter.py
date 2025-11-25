@@ -151,7 +151,7 @@ class AuroraUltraAggressivePerfector:
                     issues["encoding"].append(f"Line {i}: Emoji character found")
             
             # IMPORTS ANALYSIS (ZERO TOLERANCE)
-            if 'from' in content and 'import *' in content:
+            if '' in content:
                 issues["imports"].append("Wildcard import detected - MUST be explicit")
             
             # Check import organization

@@ -25,6 +25,13 @@ import socket
 from pathlib import Path
 from datetime import datetime
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 print("=" * 80)
 print("[EMOJI] AURORA DEEP SYSTEM DIAGNOSIS")
 print("Scanning EVERYTHING - this may take a few minutes...")
@@ -34,7 +41,7 @@ issues_found = []
 warnings_found = []
 
 
-def add_issue(category, issue, severity="ERROR"):
+def add_issue(category, issue, severity="ERROR") -> None:
     """Track issues found"""
     if severity == "ERROR":
         issues_found.append(f"[{category}] {issue}")

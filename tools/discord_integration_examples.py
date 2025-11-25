@@ -96,6 +96,13 @@ if corpus_size % 100 == 0:  # Every 100 entries
 from tools.notify_discord import commit_alert
 import subprocess
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 def git_commit_and_notify(message: str):
     # Make commit
     subprocess.run(["git", "add", "-A"])

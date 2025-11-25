@@ -15,6 +15,13 @@ from __future__ import annotations
 import math
 from typing import Any
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 G = 6.67430e-11  # m^3 kg^-1 s^-2
 
 

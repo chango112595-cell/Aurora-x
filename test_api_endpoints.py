@@ -22,10 +22,17 @@ import json
 
 import requests
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 BASE_URL = "http://localhost:5001"
 
 
-def test_api_endpoints():
+def test_api_endpoints() -> None:
     """
         Test Api Endpoints
             """

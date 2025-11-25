@@ -19,6 +19,13 @@ from pathlib import Path
 from fastapi import Response
 from fastapi.responses import JSONResponse
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 PROGRESS_PATH = Path("progress.json")
 
 DASH_HTML = r"""<!doctype html><html><head>

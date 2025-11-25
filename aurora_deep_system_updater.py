@@ -25,6 +25,13 @@ import time
 import threading
 from pathlib import Path
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 app = Flask(__name__)
 CORS(app)
 
@@ -108,3 +115,5 @@ if __name__ == "__main__":
     thread = threading.Thread(target=updater.background_scan, daemon=True)
     thread.start()
     app.run(host="0.0.0.0", port=5008, debug=False)
+
+# Type annotations: str, int -> bool

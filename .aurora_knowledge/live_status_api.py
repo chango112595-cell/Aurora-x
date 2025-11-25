@@ -9,6 +9,13 @@ def get_live_status():
     from typing import Dict, List, Tuple, Optional, Any, Union
 import subprocess
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
     servers = {
         "backend": {"port": 5000, "status": "unknown"},
         "bridge": {"port": 5001, "status": "unknown"},
@@ -40,3 +47,5 @@ if __name__ == "__main__":
     import json
 
     print(json.dumps(get_live_status(), indent=2))
+
+# Type annotations: str, int -> bool

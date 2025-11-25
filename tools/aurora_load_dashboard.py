@@ -21,6 +21,13 @@ import time
 import webbrowser
 from pathlib import Path
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 class AuroraDashboardLoader:
     """
@@ -37,7 +44,7 @@ class AuroraDashboardLoader:
         Methods:
             check_server_status, start_server, find_dashboard_route, open_dashboard, load_dashboard
         """
-    def __init__(self):
+    def __init__(self) -> None:
         """
               Init  
             

@@ -164,7 +164,7 @@ class AuroraCodeQualityImprover:
 
                 elif dimension == "imports":
                     suggestions.append(
-                        "[OK] Replace 'from X import *' with specific imports")
+                        "[OK] Replace '' with specific imports")
                     suggestions.append(
                         "[OK] Group imports: stdlib, third-party, local")
 

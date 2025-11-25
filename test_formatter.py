@@ -19,6 +19,13 @@ def test_formatter_locally():
     from aurora_x.chat.attach_format from typing import Dict, List, Tuple, Optional, Any, Union
 import _fmt_seconds
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
     test_cases = [
         (45, "45.00 s"),
         (60, "1.00 min"),

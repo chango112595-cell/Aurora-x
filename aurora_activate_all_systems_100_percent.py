@@ -24,6 +24,13 @@ import os
 import sys
 import io
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 # Fix Windows encoding
 if sys.platform == "win32":
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -39,7 +46,7 @@ os.chdir(script_dir)
 processes = []
 
 
-def start_service(script_name, service_name, port=None):
+def start_service(script_name, service_name, port=None) -> Any:
     """Start a service with full error handling"""
     if not os.path.exists(script_name):
         print(f"[SKIP] {service_name} - {script_name} not found")

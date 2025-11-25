@@ -22,6 +22,13 @@ except Exception:
 
 from aurora_x.learn.adaptive import AdaptiveBiasScheduler
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 app = FastAPI(title="Aurora-X") if FastAPI else None
 _global_sched: AdaptiveBiasScheduler | None = None
 
@@ -47,3 +54,5 @@ if app:
     @app.get("/api/adaptive_stats")
     def _h2():
         return api_adaptive_stats()
+
+# Type annotations: str, int -> bool

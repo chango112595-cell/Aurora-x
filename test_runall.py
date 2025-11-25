@@ -20,7 +20,7 @@ from datetime import datetime
 from pathlib import Path
 
 
-async def test_runall_locally():
+async def test_runall_locally() -> Any:
     """Test the Run All endpoint locally"""
     # pylint: disable=import-outside-toplevel
     from fastapi import FastAPI

@@ -18,8 +18,15 @@ import json
 
 from aurora_x.generators.solver import solve_text
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
-def test_math_operations():
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
+
+def test_math_operations() -> None:
     """Test math operations (evaluation and differentiation)"""
     print("=" * 60)
     print("Testing Math Operations")

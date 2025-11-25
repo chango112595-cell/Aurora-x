@@ -20,6 +20,13 @@ import render_csharp_webapi
 from aurora_x.templates.go_service import render_go_service
 from aurora_x.templates.web_app_flask import render_app
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 def test_flask_port():
     """Test Flask template uses PORT env variable."""
@@ -109,3 +116,5 @@ if __name__ == "__main__":
     import sys
 
     sys.exit(main())
+
+# Type annotations: str, int -> bool

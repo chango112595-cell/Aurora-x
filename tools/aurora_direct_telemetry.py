@@ -23,6 +23,13 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 class AuroraDirectTelemetry:
     """
@@ -39,7 +46,7 @@ class AuroraDirectTelemetry:
         Methods:
             log_message, start_session, fix_compilation_errors, start_vite_server, message_loop...
         """
-    def __init__(self):
+    def __init__(self) -> None:
         """
               Init  
             

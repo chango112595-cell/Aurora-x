@@ -27,6 +27,13 @@ import socketserver
 from pathlib import Path
 from urllib.parse import urlparse
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 DIAGNOSTICS_FILE = Path(__file__).parent / "tools" / "diagnostics.json"
 LOG_FILE = Path(__file__).parent / "tools" / "services_status.log"
 PORT = 9999
@@ -185,7 +192,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 
-def get_latest_report():
+def get_latest_report() -> Any:
     """Read latest diagnostic report"""
     if DIAGNOSTICS_FILE.exists():
         try:

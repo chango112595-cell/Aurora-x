@@ -28,7 +28,7 @@ from aurora_x.templates.cli_tool import render_cli
 from aurora_x.templates.lib_func import render_func
 
 
-def test_cli_hash_files():
+def test_cli_hash_files() -> Any:
     """Test CLI tool generation for file hashing"""
     print("Testing CLI tool generation for: 'create a CLI tool to hash files'")
     print("=" * 60)
@@ -156,6 +156,13 @@ def test_execution():
 import sys
 sys.path.insert(0, '.')
 from test_lib_factorial import factorial
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
 
 # Test basic factorial
 assert factorial(0) == 1

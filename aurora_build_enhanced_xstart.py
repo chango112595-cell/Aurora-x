@@ -23,7 +23,7 @@ from aurora_consciousness import AuroraConsciousness
 from pathlib import Path
 
 
-async def aurora_build_enhanced_xstart():
+async def aurora_build_enhanced_xstart() -> None:
     """
         Aurora Build Enhanced Xstart
             """
