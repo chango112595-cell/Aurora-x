@@ -8,7 +8,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Zap, Square, RotateCw, Power, ChevronDown, Shield, Clock, AlertTriangle, Activity } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import { Link } from "wouter";
+import Link from "next/link";
 
 interface Service {
     name: string;

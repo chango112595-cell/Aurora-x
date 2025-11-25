@@ -95,9 +95,9 @@ export function generateAccessToken(user: UserPayload): string {
     };
 
     const token = jwt.sign(payload, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES_IN as string,
-      algorithm: 'HS256' as const
-    });
+      expiresIn: JWT_EXPIRES_IN,
+      algorithm: 'HS256'
+    } as jwt.SignOptions);
 
     return token;
   } catch (error: any) {
@@ -119,9 +119,9 @@ export function generateRefreshToken(user: UserPayload): string {
     };
 
     const token = jwt.sign(payload, JWT_SECRET, {
-      expiresIn: JWT_REFRESH_EXPIRES_IN as string,
-      algorithm: 'HS256' as const
-    });
+      expiresIn: JWT_REFRESH_EXPIRES_IN,
+      algorithm: 'HS256'
+    } as jwt.SignOptions);
 
     return token;
   } catch (error: any) {

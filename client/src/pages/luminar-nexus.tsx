@@ -14,7 +14,7 @@ import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Cartesia
 import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpen, Code2, Search, XCircle, ChevronDown, Copy, Eye, MessageSquare, ArrowUp, ArrowDown, AlertTriangle, Server, Cpu, Zap, RotateCw, Maximize2, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import AuroraRebuiltChat from '@/components/AuroraRebuiltChat';
-import { useLocation } from 'wouter';
+import { usePathname } from 'next/navigation';
 
 type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics' | 'learning';
 type Category = 'all' | 'hard' | 'soft' | 'medium';

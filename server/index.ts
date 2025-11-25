@@ -2,7 +2,12 @@ import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { registerLuminarRoutes } from "./luminar-routes";
+import AuroraCore from "./aurora-core";
+
+// Initialize Aurora Core Intelligence with 188 power units
+const aurora = AuroraCore.getInstance();
+console.log("[AURORA] ✅ Aurora initialized with 188 power units");
+console.log(`[AURORA] Status: ${JSON.stringify(aurora.getStatus(), null, 2)}`);
 
 const app = express();
 const server = createServer(app);
@@ -48,8 +53,7 @@ app.use((req, res, next) => {
   // Register application routes
   registerRoutes(app);
 
-  // Register Luminar Nexus V2 routes
-  registerLuminarRoutes(app);
+  // Luminar Nexus V2 removed - using Nexus V3 routing in Aurora Core
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
@@ -85,9 +89,58 @@ app.use((req, res, next) => {
     }
   });
 
+  // Aurora API Routes - Phase 2 Implementation
+  // Route 1: GET /api/aurora/status
+  app.get('/api/aurora/status', (_req: Request, res: Response) => {
+    res.json(aurora.getStatus());
+  });
+
+  // Route 2: POST /api/aurora/analyze
+  app.post('/api/aurora/analyze', async (req: Request, res: Response) => {
+    try {
+      const { input, context } = req.body;
+      if (!input) {
+        return res.status(400).json({ error: 'Input is required' });
+      }
+      const result = await aurora.analyze(input, context);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Route 3: POST /api/aurora/execute
+  app.post('/api/aurora/execute', async (req: Request, res: Response) => {
+    try {
+      const { command, parameters } = req.body;
+      if (!command) {
+        return res.status(400).json({ error: 'Command is required' });
+      }
+      const result = await aurora.execute(command, parameters);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Route 4: POST /api/aurora/fix
+  app.post('/api/aurora/fix', async (req: Request, res: Response) => {
+    try {
+      const { code, issue } = req.body;
+      if (!code || !issue) {
+        return res.status(400).json({ error: 'Code and issue are required' });
+      }
+      const result = await aurora.fix(code, issue);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Handle process termination
   process.on('SIGTERM', () => {
     console.log('SIGTERM received, closing server...');
+    aurora.shutdown();
     server.close(() => {
       console.log('Server closed');
       process.exit(0);
@@ -96,6 +149,7 @@ app.use((req, res, next) => {
 
   process.on('SIGINT', () => {
     console.log('SIGINT received, closing server...');
+    aurora.shutdown();
     server.close(() => {
       console.log('Server closed');
       process.exit(0);

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Brain, Cpu, Activity, Zap, Database, Network } from 'lucide-react';
 

@@ -19,8 +19,8 @@ import authRoutes from "./auth-routes";
 // Add this right after: app.use(express.urlencoded({ extended: false }));
 
 // Mount authentication routes
-app.use("/api/auth", authRoutes);
-console.log("[Auth] Authentication routes mounted at /api/auth");
+// app.use("/api/auth", authRoutes);
+// console.log("[Auth] Authentication routes mounted at /api/auth");
 
 // ══════════════════════════════════════════════════════════════
 // Step 3: (Optional) Protect existing routes

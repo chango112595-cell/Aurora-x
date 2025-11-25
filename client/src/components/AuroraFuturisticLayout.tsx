@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useState } from 'react';
-import { Link, useLocation } from 'wouter';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, MessageSquare, Brain, Network, Settings,
   Zap, Activity, Database, Layers, GitBranch, Code2,
@@ -15,7 +18,7 @@ interface NavItem {
 
 export default function AuroraFuturisticLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [location] = useLocation();
+  const location = usePathname();
 
   const navItems: NavItem[] = [
     // Core Systems

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Brain, Zap, Network, Database, Code2, Sparkles, GitBranch, Shield, Rocket, Eye, Lightbulb, TrendingUp, Cpu } from 'lucide-react';
 

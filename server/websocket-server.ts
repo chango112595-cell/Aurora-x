@@ -1,11 +1,15 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { Server } from 'http';
 import { progressStore, type ProgressEntry } from './progress-store';
+import AuroraCore from './aurora-core';
 
 interface WSClient {
   ws: WebSocket;
   synthesisIds: Set<string>;
+  auroraSubscribed: boolean;
 }
+
+const aurora = AuroraCore.getInstance();
 
 export class SynthesisWebSocketServer {
   private wss: WebSocketServer;
@@ -29,7 +33,8 @@ export class SynthesisWebSocketServer {
 
       const client: WSClient = {
         ws,
-        synthesisIds: new Set()
+        synthesisIds: new Set(),
+        auroraSubscribed: false
       };
 
       this.clients.set(ws, client);
@@ -98,6 +103,23 @@ export class SynthesisWebSocketServer {
     if (!client) {
       console.warn('[WebSocket] Received message from unknown client, closing connection.');
       ws.close(1008, 'Unknown client'); // 1008: Policy Violation
+      return;
+    }
+
+    // Handle Aurora subscriptions
+    if (data.type === 'subscribe_aurora') {
+      client.auroraSubscribed = true;
+      ws.send(JSON.stringify({
+        type: 'aurora_subscribed',
+        message: 'Subscribed to Aurora real-time updates'
+      }));
+      
+      // Send initial status
+      const status = aurora.getStatus();
+      ws.send(JSON.stringify({
+        type: 'aurora_status',
+        data: status
+      }));
       return;
     }
 
@@ -178,6 +200,57 @@ export class SynthesisWebSocketServer {
             console.error(`[WebSocket] Error sending message to client for synthesis ${synthesisId}:`, error);
           }
         });
+      }
+    });
+  }
+
+  // Aurora real-time status broadcasting
+  public broadcastAuroraStatus(): void {
+    const status = aurora.getStatus();
+    const message = JSON.stringify({
+      type: 'aurora_status',
+      data: status,
+      timestamp: new Date().toISOString()
+    });
+
+    this.clients.forEach((client) => {
+      if (client.auroraSubscribed && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(message);
+      }
+    });
+  }
+
+  // Aurora analysis streaming
+  public streamAuroraAnalysis(analysisId: string, progress: number, data: any): void {
+    const message = JSON.stringify({
+      type: 'aurora_analysis',
+      analysisId,
+      progress,
+      data,
+      timestamp: new Date().toISOString()
+    });
+
+    this.clients.forEach((client) => {
+      if (client.auroraSubscribed && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(message);
+      }
+    });
+  }
+
+  // Aurora fix progress streaming
+  public streamAuroraFix(jobId: string, workerId: number, progress: number, status: string): void {
+    const message = JSON.stringify({
+      type: 'aurora_fix',
+      jobId,
+      workerId,
+      progress,
+      status,
+      timestamp: new Date().toISOString()
+    });
+
+    this.clients.forEach((client) => {
+      if (client.auroraSubscribed && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(message);
       }
     });
   }

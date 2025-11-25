@@ -1,0 +1,5 @@
+{
+  "/database/page": "app/database/page.js",
+  "/intelligence/page": "app/intelligence/page.js",
+  "/settings/page": "app/settings/page.js"
+}

@@ -30,22 +30,7 @@ if (!rootElement) {
     console.log('🌟 Aurora: Mounting React app to root element...');
     createRoot(rootElement).render(
       <QueryClientProvider client={queryClient}>
-        <App>
-          <Switch>
-            <Route path="/" component={Home} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/chat" component={Chat} />
-            <Route path="/corpus" component={Corpus} />
-            <Route path="/self-learning" component={SelfLearning} />
-            <Route path="/server-control" component={ServerControl} />
-            <Route path="/library" component={Library} />
-            <Route path="/settings" component={Settings} />
-            <Route path="/aurora-ui" component={AuroraUI} />
-            <Route path="/comparison" component={ComparisonDashboard} />
-            <Route path="/luminar-nexus" component={LuminarNexus} />
-            <Route component={NotFound} />
-          </Switch>
-        </App>
+        <App />
         <Toaster />
       </QueryClientProvider>
     );
