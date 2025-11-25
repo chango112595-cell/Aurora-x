@@ -25,6 +25,10 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
+localPort = 33949
+externalPort = 6000
+
+[[ports]]
 localPort = 34273
 externalPort = 3003
 
@@ -130,13 +134,13 @@ args = "Aurora Analysis Viewer"
 name = "Aurora Analysis Viewer"
 author = "agent"
 
-[workflows.workflow.metadata]
-outputType = "webview"
-
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python3 -m http.server 5000"
 waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
