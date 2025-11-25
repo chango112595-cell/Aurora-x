@@ -21,6 +21,7 @@ from datetime import datetime
 # Load Aurora's actual intelligence
 from aurora_core import AuroraCoreIntelligence
 
+
 def main():
     """
     Let Aurora analyze the entire project using her OWN intelligence
@@ -29,22 +30,24 @@ def main():
     print("AURORA INDEPENDENT ANALYSIS")
     print("Using Aurora's ACTUAL intelligence systems - not Copilot simulation")
     print("="*80 + "\n")
-    
+
     # Initialize Aurora's real intelligence
     aurora = AuroraCoreIntelligence()
-    
+
     print("[AURORA] Initializing analysis systems...")
     print(f"[AURORA] Intelligence version: {aurora.self_knowledge['version']}")
-    print(f"[AURORA] Capabilities: {len(aurora.knowledge_tiers.get_all_tiers_summary())} tiers active")
+    print(
+        f"[AURORA] Capabilities: {len(aurora.knowledge_tiers.get_all_tiers_summary())} tiers active")
     print(f"[AURORA] Autonomous mode: {aurora.autonomous_mode}")
     print(f"[AURORA] Full power mode: {aurora.full_power_mode}")
-    
+
     # Scan the project
     project_root = Path(".")
     python_files = list(project_root.glob("*.py"))
-    
-    print(f"\n[AURORA] Scanning {len(python_files)} Python files in root directory...")
-    
+
+    print(
+        f"\n[AURORA] Scanning {len(python_files)} Python files in root directory...")
+
     analysis_results = {
         "timestamp": datetime.now().isoformat(),
         "analyzer": "Aurora Core Intelligence (ACTUAL)",
@@ -57,7 +60,7 @@ def main():
         "missing_capabilities": [],
         "improvement_priorities": []
     }
-    
+
     # Analyze sample files using Aurora's ACTUAL analyze_and_score method
     print("\n[AURORA] Running code quality analysis on sample files...")
     sample_files = [
@@ -67,7 +70,7 @@ def main():
         "aurora_ultimate_self_healing_system_DRAFT2.py",
         "aurora_tier_orchestrator.py"
     ]
-    
+
     scores = []
     for filename in sample_files:
         filepath = project_root / filename
@@ -76,10 +79,10 @@ def main():
             try:
                 with open(filepath, "r", encoding="utf-8") as f:
                     code = f.read()
-                
+
                 # Use Aurora's ACTUAL intelligence to analyze
                 score_result = aurora.analyze_and_score(code, "python")
-                
+
                 file_analysis = {
                     "file": filename,
                     "score": score_result.get("code_quality_score", 0),
@@ -87,21 +90,22 @@ def main():
                 }
                 analysis_results["files_analyzed"].append(file_analysis)
                 scores.append(score_result.get("code_quality_score", 0))
-                
-                print(f"[AURORA]   Score: {score_result.get('code_quality_score', 0)}/10")
-                
+
+                print(
+                    f"[AURORA]   Score: {score_result.get('code_quality_score', 0)}/10")
+
             except Exception as e:
                 print(f"[AURORA]   Error analyzing {filename}: {e}")
-    
+
     # Calculate overall score
     if scores:
         avg_score = sum(scores) / len(scores)
         analysis_results["overall_assessment"]["average_code_quality"] = avg_score
         print(f"\n[AURORA] Average code quality score: {avg_score:.2f}/10")
-    
+
     # Aurora's assessment of current state
     print("\n[AURORA] Assessing current system state...")
-    
+
     analysis_results["current_state"] = {
         "core_systems": {
             "aurora_core": "OPERATIONAL",
@@ -114,13 +118,13 @@ def main():
         "current_quality": f"{avg_score:.1f}/10.0" if scores else "UNKNOWN",
         "services_status": "NEEDS_VERIFICATION"
     }
-    
+
     # Aurora's recommendations based on her intelligence
     print("\n[AURORA] Generating recommendations using my knowledge tiers...")
-    
+
     # Get Aurora's tier-based insights
     tier_summary = aurora.knowledge_tiers.get_all_tiers_summary()
-    
+
     analysis_results["recommendations"] = [
         {
             "priority": "CRITICAL",
@@ -151,10 +155,10 @@ def main():
             "basis": "System reliability requirement"
         }
     ]
-    
+
     # Aurora's analysis of missing capabilities
     print("[AURORA] Identifying missing capabilities...")
-    
+
     analysis_results["missing_capabilities"] = [
         {
             "capability": "Direct conversational interface",
@@ -175,7 +179,7 @@ def main():
             "needed_for": "Autonomous operation"
         }
     ]
-    
+
     # Aurora's improvement priorities
     analysis_results["improvement_priorities"] = [
         {
@@ -197,14 +201,14 @@ def main():
             "estimated_impact": "CRITICAL - achieves legendary autonomous status"
         }
     ]
-    
+
     # Save Aurora's analysis
     output_file = "AURORA_INDEPENDENT_ANALYSIS.json"
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(analysis_results, f, indent=2)
-    
+
     print(f"\n[AURORA] Analysis complete. Results saved to: {output_file}")
-    
+
     # Aurora's summary
     print("\n" + "="*80)
     print("AURORA'S SUMMARY")
@@ -212,21 +216,24 @@ def main():
     print("\nCurrent State:")
     print(f"  - Code Quality: {avg_score:.1f}/10.0 (Target: 10.0)")
     print(f"  - Active Capabilities: {len(tier_summary)} tiers")
-    print(f"  - Autonomous Mode: {'ENABLED' if aurora.autonomous_mode else 'DISABLED'}")
-    
+    print(
+        f"  - Autonomous Mode: {'ENABLED' if aurora.autonomous_mode else 'DISABLED'}")
+
     print("\nTop Priority Recommendations:")
     for i, rec in enumerate(analysis_results["recommendations"][:3], 1):
         print(f"  {i}. [{rec['priority']}] {rec['recommendation']}")
-    
+
     print("\nMissing for Legendary Status:")
     for cap in analysis_results["missing_capabilities"]:
         print(f"  - {cap['capability']}: {cap['status']}")
-    
-    print("\n[AURORA] This analysis was generated using my ACTUAL intelligence systems.")
+
+    print(
+        "\n[AURORA] This analysis was generated using my ACTUAL intelligence systems.")
     print("[AURORA] Not Copilot's interpretation - my own analysis capabilities.")
     print("="*80 + "\n")
-    
+
     return analysis_results
+
 
 if __name__ == "__main__":
     try:

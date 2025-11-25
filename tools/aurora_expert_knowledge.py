@@ -27,11 +27,11 @@ Aurora is now a MASTER-LEVEL EXPERT in:
 - Code quality and maintainability standards
 """
 
-from dataclasses import dataclass
 from typing import Any
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -66,7 +66,7 @@ class AuroraExpertKnowledge:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.expert_level = 10  # MAXIMUM EXPERTISE
@@ -83,7 +83,8 @@ class AuroraExpertKnowledge:
             # MAINSTREAM LANGUAGES (Aurora is MASTER level)
             "python": LanguageExpertise(
                 name="Python",
-                paradigms=["Object-Oriented", "Functional", "Imperative", "Reflective"],
+                paradigms=["Object-Oriented", "Functional",
+                           "Imperative", "Reflective"],
                 syntax_patterns={
                     "list_comprehension": "[x for x in iterable if condition]",
                     "generator_expression": "(x for x in iterable if condition)",
@@ -121,14 +122,18 @@ class AuroraExpertKnowledge:
                     "Validate file paths to prevent directory traversal",
                     "Use parameterized queries to prevent SQL injection",
                 ],
-                frameworks=["Django", "Flask", "FastAPI", "Tornado", "Pyramid", "Bottle"],
-                testing_approaches=["pytest", "unittest", "doctest", "hypothesis", "tox"],
-                code_smells=["God classes", "Long parameter lists", "Duplicated code"],
+                frameworks=["Django", "Flask", "FastAPI",
+                            "Tornado", "Pyramid", "Bottle"],
+                testing_approaches=["pytest", "unittest",
+                                    "doctest", "hypothesis", "tox"],
+                code_smells=["God classes",
+                             "Long parameter lists", "Duplicated code"],
                 expert_level=10,
             ),
             "javascript": LanguageExpertise(
                 name="JavaScript",
-                paradigms=["Functional", "Object-Oriented", "Event-Driven", "Prototype-based"],
+                paradigms=["Functional", "Object-Oriented",
+                           "Event-Driven", "Prototype-based"],
                 syntax_patterns={
                     "arrow_function": "(params) => expression",
                     "destructuring": "const {prop1, prop2} = object",
@@ -166,14 +171,18 @@ class AuroraExpertKnowledge:
                     "Validate all inputs",
                     "Avoid eval() function",
                 ],
-                frameworks=["React", "Vue", "Angular", "Svelte", "Express", "Next.js"],
-                testing_approaches=["Jest", "Mocha", "Jasmine", "Cypress", "Playwright"],
-                code_smells=["Callback hell", "Magic numbers", "Long functions"],
+                frameworks=["React", "Vue", "Angular",
+                            "Svelte", "Express", "Next.js"],
+                testing_approaches=["Jest", "Mocha",
+                                    "Jasmine", "Cypress", "Playwright"],
+                code_smells=["Callback hell",
+                             "Magic numbers", "Long functions"],
                 expert_level=10,
             ),
             "typescript": LanguageExpertise(
                 name="TypeScript",
-                paradigms=["Static Typing", "Object-Oriented", "Functional", "Generic"],
+                paradigms=["Static Typing", "Object-Oriented",
+                           "Functional", "Generic"],
                 syntax_patterns={
                     "interface": "interface Name { prop: type }",
                     "generic": "<T extends BaseType>",
@@ -208,15 +217,19 @@ class AuroraExpertKnowledge:
                     "Validate external data at boundaries",
                     "Use branded types for sensitive data",
                 ],
-                frameworks=["Angular", "Next.js", "NestJS", "TypeORM", "Prisma"],
-                testing_approaches=["Jest", "Vitest", "Playwright", "Testing Library"],
-                code_smells=["Excessive any usage", "Complex conditional types"],
+                frameworks=["Angular", "Next.js",
+                            "NestJS", "TypeORM", "Prisma"],
+                testing_approaches=["Jest", "Vitest",
+                                    "Playwright", "Testing Library"],
+                code_smells=["Excessive any usage",
+                             "Complex conditional types"],
                 expert_level=10,
             ),
             # SYSTEMS LANGUAGES
             "rust": LanguageExpertise(
                 name="Rust",
-                paradigms=["Systems", "Memory Safe", "Functional", "Concurrent"],
+                paradigms=["Systems", "Memory Safe",
+                           "Functional", "Concurrent"],
                 syntax_patterns={
                     "ownership": 'let owned = String::from("value");',
                     "borrowing": "&variable",
@@ -257,7 +270,8 @@ class AuroraExpertKnowledge:
             ),
             "go": LanguageExpertise(
                 name="Go",
-                paradigms=["Concurrent", "Compiled", "Garbage Collected", "Minimalist"],
+                paradigms=["Concurrent", "Compiled",
+                           "Garbage Collected", "Minimalist"],
                 syntax_patterns={
                     "goroutine": "go func() { }()",
                     "channel": "ch := make(chan Type)",
@@ -299,7 +313,8 @@ class AuroraExpertKnowledge:
             # FUNCTIONAL LANGUAGES
             "haskell": LanguageExpertise(
                 name="Haskell",
-                paradigms=["Pure Functional", "Lazy", "Static Typed", "Immutable"],
+                paradigms=["Pure Functional", "Lazy",
+                           "Static Typed", "Immutable"],
                 syntax_patterns={
                     "function_def": "functionName :: Type -> Type",
                     "pattern_matching": "case x of Pattern -> result",
@@ -367,9 +382,11 @@ class AuroraExpertKnowledge:
                     "Use vector instructions when possible",
                     "Understand CPU pipeline",
                 ],
-                security_guidelines=["Prevent buffer overflows", "Use stack canaries", "Implement ASLR considerations"],
+                security_guidelines=[
+                    "Prevent buffer overflows", "Use stack canaries", "Implement ASLR considerations"],
                 frameworks=["NASM", "MASM", "GAS"],
-                testing_approaches=["Unit testing with C wrappers", "Debugger testing"],
+                testing_approaches=[
+                    "Unit testing with C wrappers", "Debugger testing"],
                 code_smells=["Spaghetti jumps", "Magic numbers"],
                 expert_level=10,
             ),
@@ -410,15 +427,19 @@ class AuroraExpertKnowledge:
                     "Audit database access",
                     "Encrypt sensitive data",
                 ],
-                frameworks=["PostgreSQL", "MySQL", "SQLite", "SQL Server", "Oracle"],
-                testing_approaches=["Unit testing with test data", "Performance testing"],
-                code_smells=["Magic numbers in queries", "Overly complex joins"],
+                frameworks=["PostgreSQL", "MySQL",
+                            "SQLite", "SQL Server", "Oracle"],
+                testing_approaches=[
+                    "Unit testing with test data", "Performance testing"],
+                code_smells=["Magic numbers in queries",
+                             "Overly complex joins"],
                 expert_level=10,
             ),
             # MOBILE & DEVICE PROGRAMMING LANGUAGES (Aurora masters ALL devices!)
             "swift": LanguageExpertise(
                 name="Swift (iOS/macOS)",
-                paradigms=["Protocol-Oriented", "Object-Oriented", "Functional", "Type-Safe"],
+                paradigms=["Protocol-Oriented",
+                           "Object-Oriented", "Functional", "Type-Safe"],
                 syntax_patterns={
                     "optional": "var optional: String?",
                     "guard_let": "guard let value = optional else { return }",
@@ -453,14 +474,16 @@ class AuroraExpertKnowledge:
                     "Validate all user inputs",
                     "Use biometric authentication",
                 ],
-                frameworks=["UIKit", "SwiftUI", "Core Data", "Combine", "AVFoundation"],
+                frameworks=["UIKit", "SwiftUI",
+                            "Core Data", "Combine", "AVFoundation"],
                 testing_approaches=["XCTest", "Quick/Nimble", "UI Testing"],
                 code_smells=["Force unwrapping", "Massive view controllers"],
                 expert_level=10,
             ),
             "kotlin": LanguageExpertise(
                 name="Kotlin (Android/JVM)",
-                paradigms=["Object-Oriented", "Functional", "Null-Safe", "Coroutines"],
+                paradigms=["Object-Oriented", "Functional",
+                           "Null-Safe", "Coroutines"],
                 syntax_patterns={
                     "null_safety": "var nullable: String?",
                     "data_class": "data class User(val name: String)",
@@ -495,8 +518,10 @@ class AuroraExpertKnowledge:
                     "Validate all inputs",
                     "Use encrypted shared preferences",
                 ],
-                frameworks=["Android Jetpack", "Retrofit", "Room", "Dagger/Hilt", "Compose"],
-                testing_approaches=["JUnit", "Mockito", "Espresso", "Robolectric"],
+                frameworks=["Android Jetpack", "Retrofit",
+                            "Room", "Dagger/Hilt", "Compose"],
+                testing_approaches=["JUnit", "Mockito",
+                                    "Espresso", "Robolectric"],
                 code_smells=["God activities", "Callback hell"],
                 expert_level=10,
             ),
@@ -537,8 +562,10 @@ class AuroraExpertKnowledge:
                     "Use secure password handling",
                     "Implement user confirmation for critical actions",
                 ],
-                frameworks=["System Events", "Finder", "Mail", "Safari", "Automator"],
-                testing_approaches=["Manual testing", "AppleScript Editor debugging"],
+                frameworks=["System Events", "Finder",
+                            "Mail", "Safari", "Automator"],
+                testing_approaches=["Manual testing",
+                                    "AppleScript Editor debugging"],
                 code_smells=["Hardcoded paths", "No error handling"],
                 expert_level=10,
             ),
@@ -581,7 +608,8 @@ class AuroraExpertKnowledge:
                     "Implement access controls",
                 ],
                 frameworks=["Arduino IDE", "PlatformIO", "ESP-IDF"],
-                testing_approaches=["Hardware-in-the-loop", "Unit testing with simulators"],
+                testing_approaches=["Hardware-in-the-loop",
+                                    "Unit testing with simulators"],
                 code_smells=["Magic numbers", "Blocking code in main loop"],
                 expert_level=10,
             ),
@@ -622,8 +650,10 @@ class AuroraExpertKnowledge:
                     "Encrypt sensitive communications",
                     "Validate all external inputs",
                 ],
-                frameworks=["ESP32", "ESP8266", "Raspberry Pi Pico", "PyBoard"],
-                testing_approaches=["Hardware simulation", "Integration testing"],
+                frameworks=["ESP32", "ESP8266",
+                            "Raspberry Pi Pico", "PyBoard"],
+                testing_approaches=[
+                    "Hardware simulation", "Integration testing"],
                 code_smells=["Busy waiting", "No error handling"],
                 expert_level=10,
             ),
@@ -663,14 +693,17 @@ class AuroraExpertKnowledge:
                     "Protect quantum keys",
                 ],
                 frameworks=["Qiskit", "Cirq", "Q#", "PennyLane"],
-                testing_approaches=["Quantum simulators", "Statistical testing"],
-                code_smells=["Inefficient quantum gates", "Unnecessary measurements"],
+                testing_approaches=[
+                    "Quantum simulators", "Statistical testing"],
+                code_smells=["Inefficient quantum gates",
+                             "Unnecessary measurements"],
                 expert_level=10,
             ),
             # APPLE ECOSYSTEM PROGRAMMING (iOS, macOS, watchOS, tvOS)
             "swift": LanguageExpertise(
                 name="Swift",
-                paradigms=["Object-Oriented", "Protocol-Oriented", "Functional", "Memory Safe"],
+                paradigms=["Object-Oriented", "Protocol-Oriented",
+                           "Functional", "Memory Safe"],
                 syntax_patterns={
                     "optional": "var value: String?",
                     "guard": "guard let value = optional else { return }",
@@ -705,14 +738,17 @@ class AuroraExpertKnowledge:
                     "Implement App Transport Security",
                     "Use biometric authentication",
                 ],
-                frameworks=["UIKit", "SwiftUI", "Combine", "Core Data", "CloudKit", "WidgetKit"],
+                frameworks=["UIKit", "SwiftUI", "Combine",
+                            "Core Data", "CloudKit", "WidgetKit"],
                 testing_approaches=["XCTest", "Quick", "Nimble", "UI Testing"],
-                code_smells=["Massive view controllers", "Force unwrapping", "God objects"],
+                code_smells=["Massive view controllers",
+                             "Force unwrapping", "God objects"],
                 expert_level=10,
             ),
             "applescript": LanguageExpertise(
                 name="AppleScript",
-                paradigms=["Natural Language", "Event-Driven", "Object-Oriented"],
+                paradigms=["Natural Language",
+                           "Event-Driven", "Object-Oriented"],
                 syntax_patterns={
                     "tell_block": 'tell application "Application Name" to do something',
                     "if_statement": "if condition then do something",
@@ -747,9 +783,12 @@ class AuroraExpertKnowledge:
                     "Use secure communication methods",
                     "Handle privacy settings properly",
                 ],
-                frameworks=["System Events", "Finder", "Mail", "Calendar", "Contacts", "Shortcuts"],
-                testing_approaches=["Script Editor testing", "Automated UI testing"],
-                code_smells=["Long monolithic scripts", "Hardcoded values", "No error handling"],
+                frameworks=["System Events", "Finder", "Mail",
+                            "Calendar", "Contacts", "Shortcuts"],
+                testing_approaches=[
+                    "Script Editor testing", "Automated UI testing"],
+                code_smells=["Long monolithic scripts",
+                             "Hardcoded values", "No error handling"],
                 expert_level=10,
             ),
             "objective_c": LanguageExpertise(
@@ -789,15 +828,18 @@ class AuroraExpertKnowledge:
                     "Handle sensitive data properly",
                     "Implement proper authentication",
                 ],
-                frameworks=["Foundation", "UIKit", "Core Data", "Core Animation", "AVFoundation"],
+                frameworks=["Foundation", "UIKit", "Core Data",
+                            "Core Animation", "AVFoundation"],
                 testing_approaches=["XCTest", "OCMock", "Unit testing"],
-                code_smells=["Massive view controllers", "Spaghetti code", "Memory leaks"],
+                code_smells=["Massive view controllers",
+                             "Spaghetti code", "Memory leaks"],
                 expert_level=10,
             ),
             # ANDROID ECOSYSTEM PROGRAMMING
             "kotlin": LanguageExpertise(
                 name="Kotlin",
-                paradigms=["Object-Oriented", "Functional", "Coroutines", "Null Safe"],
+                paradigms=["Object-Oriented", "Functional",
+                           "Coroutines", "Null Safe"],
                 syntax_patterns={
                     "null_safe": "val value: String?",
                     "data_class": "data class Person(val name: String)",
@@ -832,14 +874,18 @@ class AuroraExpertKnowledge:
                     "Implement proper authentication",
                     "Follow Android security guidelines",
                 ],
-                frameworks=["Android SDK", "Jetpack Compose", "Room", "Retrofit", "Dagger", "Coroutines"],
-                testing_approaches=["JUnit", "Mockito", "Espresso", "Robolectric"],
-                code_smells=["God activities", "Memory leaks", "Blocking operations"],
+                frameworks=["Android SDK", "Jetpack Compose",
+                            "Room", "Retrofit", "Dagger", "Coroutines"],
+                testing_approaches=["JUnit", "Mockito",
+                                    "Espresso", "Robolectric"],
+                code_smells=["God activities",
+                             "Memory leaks", "Blocking operations"],
                 expert_level=10,
             ),
             "java_android": LanguageExpertise(
                 name="Java (Android)",
-                paradigms=["Object-Oriented", "Android Framework", "Event-Driven"],
+                paradigms=["Object-Oriented",
+                           "Android Framework", "Event-Driven"],
                 syntax_patterns={
                     "activity": "public class MainActivity extends AppCompatActivity",
                     "intent": "Intent intent = new Intent(this, Activity.class)",
@@ -874,9 +920,12 @@ class AuroraExpertKnowledge:
                     "Implement proper permissions",
                     "Secure sensitive data storage",
                 ],
-                frameworks=["Android SDK", "Support Library", "Architecture Components", "Firebase"],
-                testing_approaches=["JUnit", "Mockito", "Espresso", "UI Automator"],
-                code_smells=["Massive activities", "Memory leaks", "Poor separation of concerns"],
+                frameworks=["Android SDK", "Support Library",
+                            "Architecture Components", "Firebase"],
+                testing_approaches=["JUnit", "Mockito",
+                                    "Espresso", "UI Automator"],
+                code_smells=["Massive activities", "Memory leaks",
+                             "Poor separation of concerns"],
                 expert_level=10,
             ),
             # EMBEDDED SYSTEMS & IoT PROGRAMMING
@@ -917,9 +966,12 @@ class AuroraExpertKnowledge:
                     "Implement proper authentication",
                     "Protect against physical attacks",
                 ],
-                frameworks=["Arduino IDE", "PlatformIO", "Various sensor libraries"],
-                testing_approaches=["Hardware-in-the-loop testing", "Simulation"],
-                code_smells=["Blocking loops", "Memory leaks", "Poor error handling"],
+                frameworks=["Arduino IDE", "PlatformIO",
+                            "Various sensor libraries"],
+                testing_approaches=[
+                    "Hardware-in-the-loop testing", "Simulation"],
+                code_smells=["Blocking loops",
+                             "Memory leaks", "Poor error handling"],
                 expert_level=10,
             ),
             "micropython": LanguageExpertise(
@@ -959,15 +1011,19 @@ class AuroraExpertKnowledge:
                     "Implement secure boot",
                     "Validate all inputs",
                 ],
-                frameworks=["ESP32", "Raspberry Pi Pico", "PyBoard", "BBC micro:bit"],
-                testing_approaches=["Unit testing on device", "Simulation environments"],
-                code_smells=["Blocking operations", "Memory leaks", "Poor exception handling"],
+                frameworks=["ESP32", "Raspberry Pi Pico",
+                            "PyBoard", "BBC micro:bit"],
+                testing_approaches=[
+                    "Unit testing on device", "Simulation environments"],
+                code_smells=["Blocking operations",
+                             "Memory leaks", "Poor exception handling"],
                 expert_level=10,
             ),
             # CROSS-PLATFORM MOBILE DEVELOPMENT
             "dart": LanguageExpertise(
                 name="Dart (Flutter)",
-                paradigms=["Object-Oriented", "Functional", "Reactive", "Cross-platform"],
+                paradigms=["Object-Oriented", "Functional",
+                           "Reactive", "Cross-platform"],
                 syntax_patterns={
                     "widget": "class MyWidget extends StatelessWidget",
                     "build_method": "Widget build(BuildContext context)",
@@ -1002,15 +1058,19 @@ class AuroraExpertKnowledge:
                     "Implement proper authentication",
                     "Use HTTPS for network calls",
                 ],
-                frameworks=["Flutter", "Provider", "Riverpod", "Bloc", "GetX", "Dio"],
-                testing_approaches=["flutter_test", "Integration tests", "Widget tests"],
-                code_smells=["Massive widgets", "Poor separation of concerns", "Callback hell"],
+                frameworks=["Flutter", "Provider",
+                            "Riverpod", "Bloc", "GetX", "Dio"],
+                testing_approaches=["flutter_test",
+                                    "Integration tests", "Widget tests"],
+                code_smells=["Massive widgets",
+                             "Poor separation of concerns", "Callback hell"],
                 expert_level=10,
             ),
             # WINDOWS PLATFORM PROGRAMMING
             "powershell": LanguageExpertise(
                 name="PowerShell",
-                paradigms=["Object-Oriented", "Pipeline", "Administrative", "Automation"],
+                paradigms=["Object-Oriented", "Pipeline",
+                           "Administrative", "Automation"],
                 syntax_patterns={
                     "cmdlet": "Get-Process | Where-Object {$_.CPU -gt 100}",
                     "function": "function Get-Something { param($Name) }",
@@ -1045,14 +1105,18 @@ class AuroraExpertKnowledge:
                     "Use secure string for passwords",
                     "Implement proper authentication",
                 ],
-                frameworks=["Windows PowerShell", "PowerShell Core", "Azure PowerShell", "Exchange PowerShell"],
-                testing_approaches=["Pester", "Unit testing", "Integration testing"],
-                code_smells=["Monolithic scripts", "Poor error handling", "Hard-coded values"],
+                frameworks=["Windows PowerShell", "PowerShell Core",
+                            "Azure PowerShell", "Exchange PowerShell"],
+                testing_approaches=[
+                    "Pester", "Unit testing", "Integration testing"],
+                code_smells=["Monolithic scripts",
+                             "Poor error handling", "Hard-coded values"],
                 expert_level=10,
             ),
             "csharp": LanguageExpertise(
                 name="C#",
-                paradigms=["Object-Oriented", ".NET Ecosystem", "Type-Safe", "Garbage Collected"],
+                paradigms=["Object-Oriented", ".NET Ecosystem",
+                           "Type-Safe", "Garbage Collected"],
                 syntax_patterns={
                     "class": "public class ClassName { }",
                     "property": "public string Name { get; set; }",
@@ -1087,7 +1151,8 @@ class AuroraExpertKnowledge:
                     "Implement proper authentication",
                     "Follow OWASP guidelines",
                 ],
-                frameworks=[".NET Core", "ASP.NET", "Entity Framework", "Xamarin", "Blazor", "MAUI"],
+                frameworks=[".NET Core", "ASP.NET",
+                            "Entity Framework", "Xamarin", "Blazor", "MAUI"],
                 testing_approaches=["MSTest", "NUnit", "xUnit", "Moq"],
                 code_smells=["God classes", "Long methods", "Feature envy"],
                 expert_level=10,
@@ -1138,7 +1203,8 @@ class AuroraExpertKnowledge:
             # IOT & EMBEDDED SYSTEMS PROGRAMMING
             "raspberry_pi": LanguageExpertise(
                 name="Raspberry Pi Programming",
-                paradigms=["GPIO Control", "Linux Embedded", "IoT", "Real-time"],
+                paradigms=["GPIO Control",
+                           "Linux Embedded", "IoT", "Real-time"],
                 syntax_patterns={
                     "gpio_setup": "GPIO.setup(18, GPIO.OUT)",
                     "pwm": "pwm = GPIO.PWM(18, 1000)",
@@ -1173,14 +1239,18 @@ class AuroraExpertKnowledge:
                     "Validate sensor data",
                     "Encrypt communication channels",
                 ],
-                frameworks=["RPi.GPIO", "gpiozero", "pigpio", "Adafruit CircuitPython"],
-                testing_approaches=["Hardware simulation", "Unit testing with mocks"],
-                code_smells=["Hardcoded pin numbers", "No error handling", "Blocking loops"],
+                frameworks=["RPi.GPIO", "gpiozero",
+                            "pigpio", "Adafruit CircuitPython"],
+                testing_approaches=["Hardware simulation",
+                                    "Unit testing with mocks"],
+                code_smells=["Hardcoded pin numbers",
+                             "No error handling", "Blocking loops"],
                 expert_level=10,
             ),
             "esp32_esp8266": LanguageExpertise(
                 name="ESP32/ESP8266 Programming",
-                paradigms=["WiFi IoT", "Real-time", "Low Power", "Microcontroller"],
+                paradigms=["WiFi IoT", "Real-time",
+                           "Low Power", "Microcontroller"],
                 syntax_patterns={
                     "wifi_connect": "WiFi.begin(ssid, password)",
                     "deep_sleep": "ESP.deepSleep(sleepTime)",
@@ -1215,15 +1285,19 @@ class AuroraExpertKnowledge:
                     "Validate all inputs",
                     "Implement secure boot",
                 ],
-                frameworks=["Arduino ESP32", "ESP-IDF", "MicroPython", "NodeMCU"],
-                testing_approaches=["Serial monitor debugging", "Hardware simulation"],
-                code_smells=["Hardcoded credentials", "No error handling", "Blocking delays"],
+                frameworks=["Arduino ESP32", "ESP-IDF",
+                            "MicroPython", "NodeMCU"],
+                testing_approaches=[
+                    "Serial monitor debugging", "Hardware simulation"],
+                code_smells=["Hardcoded credentials",
+                             "No error handling", "Blocking delays"],
                 expert_level=10,
             ),
             # AUTOMATION & DEVICE SCRIPTING
             "bash_scripting": LanguageExpertise(
                 name="Bash Scripting",
-                paradigms=["Shell Scripting", "System Administration", "Automation"],
+                paradigms=["Shell Scripting",
+                           "System Administration", "Automation"],
                 syntax_patterns={
                     "shebang": "#!/bin/bash",
                     "variable": 'VARIABLE="value"',
@@ -1259,13 +1333,16 @@ class AuroraExpertKnowledge:
                     "Set proper file permissions",
                 ],
                 frameworks=["GNU Bash", "Zsh", "Fish shell", "POSIX shell"],
-                testing_approaches=["Bats testing framework", "Manual testing"],
-                code_smells=["Hardcoded paths", "No error checking", "Complex one-liners"],
+                testing_approaches=[
+                    "Bats testing framework", "Manual testing"],
+                code_smells=["Hardcoded paths",
+                             "No error checking", "Complex one-liners"],
                 expert_level=10,
             ),
             "python_automation": LanguageExpertise(
                 name="Python Automation",
-                paradigms=["Scripting", "Task Automation", "System Integration"],
+                paradigms=["Scripting", "Task Automation",
+                           "System Integration"],
                 syntax_patterns={
                     "file_operations": "with open('file.txt', 'r') as f:",
                     "subprocess": "subprocess.run(['command', 'arg'])",
@@ -1300,15 +1377,19 @@ class AuroraExpertKnowledge:
                     "Encrypt sensitive data",
                     "Follow principle of least privilege",
                 ],
-                frameworks=["Schedule", "Celery", "Requests", "BeautifulSoup", "Selenium", "PyAutoGUI"],
-                testing_approaches=["pytest", "unittest", "Integration testing"],
-                code_smells=["Hardcoded values", "No error handling", "Monolithic scripts"],
+                frameworks=["Schedule", "Celery", "Requests",
+                            "BeautifulSoup", "Selenium", "PyAutoGUI"],
+                testing_approaches=[
+                    "pytest", "unittest", "Integration testing"],
+                code_smells=["Hardcoded values",
+                             "No error handling", "Monolithic scripts"],
                 expert_level=10,
             ),
             # CLOUD & CONTAINER PLATFORMS
             "docker_scripting": LanguageExpertise(
                 name="Docker & Container Automation",
-                paradigms=["Containerization", "DevOps", "Microservices", "Infrastructure"],
+                paradigms=["Containerization", "DevOps",
+                           "Microservices", "Infrastructure"],
                 syntax_patterns={
                     "dockerfile": "FROM ubuntu:20.04",
                     "docker_run": "docker run -d --name app -p 80:80 image",
@@ -1343,14 +1424,18 @@ class AuroraExpertKnowledge:
                     "Implement proper secrets management",
                     "Use security contexts",
                 ],
-                frameworks=["Docker", "Docker Compose", "Kubernetes", "Podman"],
-                testing_approaches=["Container testing", "Integration testing"],
-                code_smells=["Monolithic containers", "Hardcoded secrets", "Poor resource limits"],
+                frameworks=["Docker", "Docker Compose",
+                            "Kubernetes", "Podman"],
+                testing_approaches=[
+                    "Container testing", "Integration testing"],
+                code_smells=["Monolithic containers",
+                             "Hardcoded secrets", "Poor resource limits"],
                 expert_level=10,
             ),
             "kubernetes_yaml": LanguageExpertise(
                 name="Kubernetes YAML",
-                paradigms=["Container Orchestration", "Declarative Configuration", "Cloud Native"],
+                paradigms=["Container Orchestration",
+                           "Declarative Configuration", "Cloud Native"],
                 syntax_patterns={
                     "deployment": "apiVersion: apps/v1\\nkind: Deployment",
                     "service": "apiVersion: v1\\nkind: Service",
@@ -1386,8 +1471,10 @@ class AuroraExpertKnowledge:
                     "Scan container images",
                 ],
                 frameworks=["Kubernetes", "Helm", "Kustomize", "OpenShift"],
-                testing_approaches=["Manifest validation", "End-to-end testing"],
-                code_smells=["Hardcoded configurations", "No resource limits", "Poor security contexts"],
+                testing_approaches=[
+                    "Manifest validation", "End-to-end testing"],
+                code_smells=["Hardcoded configurations",
+                             "No resource limits", "Poor security contexts"],
                 expert_level=10,
             ),
         }
@@ -1646,7 +1733,8 @@ class AuroraExpertKnowledge:
             score -= 1
 
         # Check for proper commenting
-        comment_ratio = sum(1 for line in lines if line.strip().startswith("#")) / max(len(lines), 1)
+        comment_ratio = sum(1 for line in lines if line.strip(
+        ).startswith("#")) / max(len(lines), 1)
         if comment_ratio < 0.1:  # Less than 10% comments
             score -= 1
 
@@ -1659,18 +1747,22 @@ class AuroraExpertKnowledge:
         if lang.name.lower() == "python":
             # Python-specific performance issues Aurora catches
             if "for i in range(len(" in code:
-                issues.append("Use enumerate() instead of range(len()) for better performance")
+                issues.append(
+                    "Use enumerate() instead of range(len()) for better performance")
             if "+=" in code and "str" in code:
-                issues.append("Consider using join() for string concatenation in loops")
+                issues.append(
+                    "Consider using join() for string concatenation in loops")
             if "global " in code:
-                issues.append("Global variables can hurt performance, consider alternatives")
+                issues.append(
+                    "Global variables can hurt performance, consider alternatives")
 
         elif lang.name.lower() == "javascript":
             # JavaScript-specific performance issues
             if "document.getElementById" in code and code.count("document.getElementById") > 3:
                 issues.append("Cache DOM queries to avoid repeated lookups")
             if "innerHTML +=" in code:
-                issues.append("Use DocumentFragment for multiple DOM insertions")
+                issues.append(
+                    "Use DocumentFragment for multiple DOM insertions")
 
         return issues
 
@@ -1684,17 +1776,22 @@ class AuroraExpertKnowledge:
 
         if lang.name.lower() == "python":
             if "eval(" in code:
-                vulnerabilities.append("eval() usage detected - major security risk")
+                vulnerabilities.append(
+                    "eval() usage detected - major security risk")
             if "exec(" in code:
-                vulnerabilities.append("exec() usage detected - potential code injection")
+                vulnerabilities.append(
+                    "exec() usage detected - potential code injection")
             if "pickle.loads(" in code:
-                vulnerabilities.append("pickle.loads() can execute arbitrary code")
+                vulnerabilities.append(
+                    "pickle.loads() can execute arbitrary code")
 
         elif lang.name.lower() == "javascript":
             if "eval(" in code:
-                vulnerabilities.append("eval() usage - XSS and code injection risk")
+                vulnerabilities.append(
+                    "eval() usage - XSS and code injection risk")
             if "innerHTML" in code and "sanitize" not in code.lower():
-                vulnerabilities.append("innerHTML without sanitization - XSS risk")
+                vulnerabilities.append(
+                    "innerHTML without sanitization - XSS risk")
 
         return vulnerabilities
 
@@ -1705,7 +1802,8 @@ class AuroraExpertKnowledge:
         for practice in lang.best_practices:
             if "type hints" in practice.lower() and lang.name.lower() == "python":
                 if "def " in code and "->" not in code:
-                    violations.append("Missing type hints in function definitions")
+                    violations.append(
+                        "Missing type hints in function definitions")
 
         return violations
 
@@ -1716,7 +1814,8 @@ class AuroraExpertKnowledge:
         for tip in lang.performance_tips:
             # Add specific optimization suggestions based on detected patterns
             if "list comprehension" in tip.lower() and "for " in code and "append(" in code:
-                optimizations.append("Replace for loop with list comprehension for better performance")
+                optimizations.append(
+                    "Replace for loop with list comprehension for better performance")
 
         return optimizations
 
@@ -1724,9 +1823,12 @@ class AuroraExpertKnowledge:
         """Aurora's expert-level recommendations"""
         recommendations = []
 
-        recommendations.append(f"Code follows {lang.paradigms[0]} paradigm well")
-        recommendations.append(f"Consider using {lang.frameworks[0]} framework for production")
-        recommendations.append(f"Implement {lang.testing_approaches[0]} for comprehensive testing")
+        recommendations.append(
+            f"Code follows {lang.paradigms[0]} paradigm well")
+        recommendations.append(
+            f"Consider using {lang.frameworks[0]} framework for production")
+        recommendations.append(
+            f"Implement {lang.testing_approaches[0]} for comprehensive testing")
 
         return recommendations
 
@@ -1771,9 +1873,11 @@ def main():
 
     print("[BRAIN] AURORA EXPERT KNOWLEDGE ENGINE")
     print("=" * 50)
-    print(f"[TARGET] Aurora's Expertise Level: {aurora.expert_level}/10 (MASTER)")
+    print(
+        f"[TARGET] Aurora's Expertise Level: {aurora.expert_level}/10 (MASTER)")
     print(f"[EMOJI] Languages Mastered: {len(aurora.languages)}")
-    print(f"[EMOJI] Frameworks Known: {sum(len(category) for category in aurora.frameworks.values())}")
+    print(
+        f"[EMOJI] Frameworks Known: {sum(len(category) for category in aurora.frameworks.values())}")
     print()
 
     # Test code analysis

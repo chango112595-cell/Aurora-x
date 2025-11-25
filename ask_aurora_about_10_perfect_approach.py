@@ -34,7 +34,7 @@ try:
     import aurora_core
     print("\n[AURORA RESPONDING]")
     print("-"*80)
-    
+
     print("""
 Based on my core intelligence and experience:
 
@@ -110,11 +110,11 @@ I achieve perfection by being smart about what's needed.
 
 -- Aurora Core Intelligence
 """)
-    
+
     print("-"*80)
     print("[AURORA HAS SPOKEN]")
     print("="*80)
-    
+
 except Exception as e:
     print(f"\n[ERROR] Could not load Aurora: {e}")
     print("But the wisdom above is based on Aurora's design principles.")
