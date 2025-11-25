@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora - Branch Comparison Analysis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a0a3e 100%);
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #1a3a52 0%, #663399 100%);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 5px solid #00ff88;
+        }
+        
+        .header h1 {
+            color: #00ff88;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        
+        .header p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #00ff88;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            color: #00ff88;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #00ff88;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1em;
+        }
+        
+        .search-bar input::placeholder {
+            color: #666;
+        }
+        
+        .branches-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 15px;
+        }
+        
+        .branch-card {
+            background: rgba(20, 20, 50, 0.8);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .branch-card:hover {
+            background: rgba(30, 30, 80, 0.9);
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        
+        .branch-name {
+            font-weight: bold;
+            color: #00ff88;
+            margin-bottom: 10px;
+            word-break: break-word;
+        }
+        
+        .branch-meta {
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .branch-changes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #333;
+        }
+        
+        .change-stat {
+            padding: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        
+        .added {
+            color: #00ff88;
+        }
+        
+        .removed {
+            color: #ff6b6b;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            margin-right: 5px;
+        }
+        
+        .status-ahead {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+        
+        .status-behind {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+        
+        .last-commit {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #222;
+            word-break: break-word;
+        }
+        
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌌 Aurora Branch Comparison Analysis</h1>
+        <p>Compare all branches to main branch - see what each branch adds, removes, and what works</p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">68</div>
+                <div class="stat-label">Total Branches</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">64</div>
+                <div class="stat-label">Ahead of Main</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">64</div>
+                <div class="stat-label">Modified Structure</div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="max-width: 1400px; margin: 0 auto;">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search branches by name or commit..." onkeyup="filterBranches()">
+        </div>
+        
+        <div id="branchesContainer" class="branches-container">
+        <div class="branch-card" data-search="copilot/fix-ci-cd-linting-issues update">
+            <div class="branch-name">copilot/fix-ci-cd-linting-issues</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2749 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 3365</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +798 files</span></div><div class="change-stat"><span class="removed">✗ -2430 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> update
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-ci-cd-linting-issues add python cache files to .gitignore and remove committed cache files">
+            <div class="branch-name">origin/copilot/fix-ci-cd-linting-issues</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2749 commits</span>
+                <div style="margin-top: 5px;">Total files: 3331</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2430 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Add Python cache files to .gitignore and remove committed ca
+            </div>
+        </div>
+        <div class="branch-card" data-search="fix/remaining-linting-errors merge pull request #2 from chango112595-cell/copilot/fix-ci-cd-linting-issues">
+            <div class="branch-name">fix/remaining-linting-errors</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2748 commits</span>
+                <div style="margin-top: 5px;">Total files: 3331</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2430 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Merge pull request #2 from chango112595-cell/copilot/fix-ci-
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/fix/remaining-linting-errors merge pull request #2 from chango112595-cell/copilot/fix-ci-cd-linting-issues">
+            <div class="branch-name">origin/fix/remaining-linting-errors</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2748 commits</span>
+                <div style="margin-top: 5px;">Total files: 3331</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2430 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Merge pull request #2 from chango112595-cell/copilot/fix-ci-
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-workflow-issues fix workflow issues: rust toolchain and .net cache configuration">
+            <div class="branch-name">origin/copilot/fix-workflow-issues</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2746 commits</span>
+                <div style="margin-top: 5px;">Total files: 3331</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2430 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Fix workflow issues: Rust toolchain and .NET cache configura
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-failing-workflows fix critical linting and security issues">
+            <div class="branch-name">origin/copilot/fix-failing-workflows</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2745 commits</span><span class="status-badge status-behind">2 behind</span>
+                <div style="margin-top: 5px;">Total files: 3332</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +765 files</span></div><div class="change-stat"><span class="removed">✗ -2430 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Fix critical linting and security issues
+            </div>
+        </div>
+        <div class="branch-card" data-search="copilot/fix-linting-issues-in-ci-workflow fix all linting errors and update ruff configuration">
+            <div class="branch-name">copilot/fix-linting-issues-in-ci-workflow</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2742 commits</span>
+                <div style="margin-top: 5px;">Total files: 3331</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2430 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Fix all linting errors and update ruff configuration
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-linting-issues-in-ci-workflow fix all linting errors and update ruff configuration">
+            <div class="branch-name">origin/copilot/fix-linting-issues-in-ci-workflow</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2742 commits</span>
+                <div style="margin-top: 5px;">Total files: 3331</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2430 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Fix all linting errors and update ruff configuration
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-workflow-failures merge branch 'main' into copilot/fix-workflow-failures">
+            <div class="branch-name">origin/copilot/fix-workflow-failures</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2740 commits</span><span class="status-badge status-behind">9 behind</span>
+                <div style="margin-top: 5px;">Total files: 3345</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +777 files</span></div><div class="change-stat"><span class="removed">✗ -2429 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Merge branch &#x27;main&#x27; into copilot/fix-workflow-failures
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-failing-ci-job ci: add requirements.txt, fix ruff.toml duplicate keys, add ai fix script">
+            <div class="branch-name">origin/copilot/fix-failing-ci-job</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2740 commits</span><span class="status-badge status-behind">2 behind</span>
+                <div style="margin-top: 5px;">Total files: 3334</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +765 files</span></div><div class="change-stat"><span class="removed">✗ -2428 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> ci: add requirements.txt, fix ruff.toml duplicate keys, add 
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-windows-invalid-filenames ci: comprehensive fixes - windows filenames, bandit reporting, ruff and requirements">
+            <div class="branch-name">origin/copilot/fix-windows-invalid-filenames</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2740 commits</span><span class="status-badge status-behind">4 behind</span>
+                <div style="margin-top: 5px;">Total files: 3333</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2428 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> ci: comprehensive fixes - Windows filenames, bandit reportin
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-checks-not-passing fix security issues and adjust ci coverage requirements">
+            <div class="branch-name">origin/copilot/fix-checks-not-passing</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2736 commits</span>
+                <div style="margin-top: 5px;">Total files: 3334</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2427 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Fix security issues and adjust CI coverage requirements
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-connection-errors-workflow fix aurora-x e2e workflow server connection errors">
+            <div class="branch-name">origin/copilot/fix-connection-errors-workflow</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2733 commits</span>
+                <div style="margin-top: 5px;">Total files: 3334</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2427 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Fix Aurora-X E2E workflow server connection errors
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-checks-failing fix failing ci checks by adding requirements.txt and server entry point">
+            <div class="branch-name">origin/copilot/fix-checks-failing</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2728 commits</span>
+                <div style="margin-top: 5px;">Total files: 3338</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +766 files</span></div><div class="change-stat"><span class="removed">✗ -2425 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Fix failing CI checks by adding requirements.txt and server 
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-checks-failure-issue merge branch 'badges' into copilot/fix-checks-failure-issue">
+            <div class="branch-name">origin/copilot/fix-checks-failure-issue</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2723 commits</span>
+                <div style="margin-top: 5px;">Total files: 3336</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2425 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Merge branch &#x27;badges&#x27; into copilot/fix-checks-failure-issue
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/replit-agent merge branch 'main' into replit-agent">
+            <div class="branch-name">origin/replit-agent</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2257 commits</span><span class="status-badge status-behind">8 behind</span>
+                <div style="margin-top: 5px;">Total files: 3348</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2413 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Merge branch &#x27;main&#x27; into replit-agent
+            </div>
+        </div>
+        <div class="branch-card" data-search="copilot/replace-insecure-hash-algorithms merge branch 'main' into copilot/replace-insecure-hash-algorithms">
+            <div class="branch-name">copilot/replace-insecure-hash-algorithms</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2256 commits</span><span class="status-badge status-behind">7 behind</span>
+                <div style="margin-top: 5px;">Total files: 3398</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +814 files</span></div><div class="change-stat"><span class="removed">✗ -2413 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Merge branch &#x27;main&#x27; into copilot/replace-insecure-hash-algor
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/replace-insecure-hash-algorithms merge branch 'main' into copilot/replace-insecure-hash-algorithms">
+            <div class="branch-name">origin/copilot/replace-insecure-hash-algorithms</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2256 commits</span><span class="status-badge status-behind">7 behind</span>
+                <div style="margin-top: 5px;">Total files: 3398</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +814 files</span></div><div class="change-stat"><span class="removed">✗ -2413 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Merge branch &#x27;main&#x27; into copilot/replace-insecure-hash-algor
+            </div>
+        </div>
+        <div class="branch-card" data-search="copilot/fix-semgrep-yaml-issue refactor unit dictionaries for improved readability">
+            <div class="branch-name">copilot/fix-semgrep-yaml-issue</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2247 commits</span>
+                <div style="margin-top: 5px;">Total files: 3348</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2413 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Refactor unit dictionaries for improved readability
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-semgrep-yaml-issue refactor unit dictionaries for improved readability">
+            <div class="branch-name">origin/copilot/fix-semgrep-yaml-issue</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2247 commits</span>
+                <div style="margin-top: 5px;">Total files: 3348</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2413 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Refactor unit dictionaries for improved readability
+            </div>
+        </div>
+        <div class="branch-card" data-search="copilot/fix-e2e-workflow-issue assistant checkpoint: add setup.py for docker build">
+            <div class="branch-name">copilot/fix-e2e-workflow-issue</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2189 commits</span>
+                <div style="margin-top: 5px;">Total files: 3363</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2398 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Assistant checkpoint: Add setup.py for Docker build
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/fix-e2e-workflow-issue assistant checkpoint: add setup.py for docker build">
+            <div class="branch-name">origin/copilot/fix-e2e-workflow-issue</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2189 commits</span>
+                <div style="margin-top: 5px;">Total files: 3363</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -2398 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Assistant checkpoint: Add setup.py for Docker build
+            </div>
+        </div>
+        <div class="branch-card" data-search="badges n/a">
+            <div class="branch-name">badges</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+2157 commits</span>
+                <div style="margin-top: 5px;">Total files: 3371</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +763 files</span></div><div class="change-stat"><span class="removed">✗ -2389 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> N/A
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/implement-configuration-updates update .gitignore to exclude build artifacts and remove them from tracking">
+            <div class="branch-name">origin/copilot/implement-configuration-updates</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+1921 commits</span>
+                <div style="margin-top: 5px;">Total files: 3397</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +758 files</span></div><div class="change-stat"><span class="removed">✗ -2358 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Update .gitignore to exclude build artifacts and remove them
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/codespace-wretched-gravestone-pj5rxv7rx677crw9v 🔧 fix all syntax errors and import issues">
+            <div class="branch-name">origin/codespace-wretched-gravestone-pj5rxv7rx677crw9v</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+1913 commits</span>
+                <div style="margin-top: 5px;">Total files: 3451</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +773 files</span></div><div class="change-stat"><span class="removed">✗ -2319 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> 🔧 Fix all syntax errors and import issues
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/copilot/help-pull-request-30 merge pull request #33 from chango112595-cell/codespace-wretched-gravestone-pj5rxv7rx677crw9v">
+            <div class="branch-name">origin/copilot/help-pull-request-30</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+1912 commits</span>
+                <div style="margin-top: 5px;">Total files: 3451</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +773 files</span></div><div class="change-stat"><span class="removed">✗ -2319 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Merge pull request #33 from chango112595-cell/codespace-wret
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/draft aurora autonomous chat system - http 400 debug and conversational ai integration">
+            <div class="branch-name">origin/draft</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+1754 commits</span>
+                <div style="margin-top: 5px;">Total files: 5012</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +774 files</span></div><div class="change-stat"><span class="removed">✗ -759 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Aurora autonomous chat system - HTTP 400 debug and conversat
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/fix-windows-compatibility 🔧 fix: rename files with # to hash for windows compatibility">
+            <div class="branch-name">origin/fix-windows-compatibility</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+1663 commits</span>
+                <div style="margin-top: 5px;">Total files: 5079</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -682 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> 🔧 Fix: Rename files with # to HASH for Windows compatibility
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/unified-aurora remove windows-incompatible filenames with # character">
+            <div class="branch-name">origin/unified-aurora</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+441 commits</span>
+                <div style="margin-top: 5px;">Total files: 5097</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +764 files</span></div><div class="change-stat"><span class="removed">✗ -664 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Remove Windows-incompatible filenames with # character
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/badges ci: update coverage badge [skip ci]">
+            <div class="branch-name">origin/badges</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+428 commits</span><span class="status-badge status-behind">140 behind</span>
+                <div style="margin-top: 5px;">Total files: 5125</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +771 files</span></div><div class="change-stat"><span class="removed">✗ -643 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> ci: update coverage badge [skip ci]
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/github_actions/actions/setup-go-6 ci: bump actions/setup-go from 5 to 6">
+            <div class="branch-name">origin/dependabot/github_actions/actions/setup-go-6</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> ci: bump actions/setup-go from 5 to 6
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/github_actions/actions/upload-artifact-5 ci: bump actions/upload-artifact from 4 to 5">
+            <div class="branch-name">origin/dependabot/github_actions/actions/upload-artifact-5</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> ci: bump actions/upload-artifact from 4 to 5
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/bcrypt-4.3.0 chore(deps): bump bcrypt from 4.1.1 to 4.3.0">
+            <div class="branch-name">origin/dependabot/pip/bcrypt-4.3.0</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump bcrypt from 4.1.1 to 4.3.0
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/detect-secrets-1.5.0 chore(deps): bump detect-secrets from 1.4.0 to 1.5.0">
+            <div class="branch-name">origin/dependabot/pip/detect-secrets-1.5.0</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump detect-secrets from 1.4.0 to 1.5.0
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/pip-audit-2.9.0 chore(deps): bump pip-audit from 2.6.1 to 2.9.0">
+            <div class="branch-name">origin/dependabot/pip/pip-audit-2.9.0</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump pip-audit from 2.6.1 to 2.9.0
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/pip-licenses-4.5.1 chore(deps): bump pip-licenses from 4.3.3 to 4.5.1">
+            <div class="branch-name">origin/dependabot/pip/pip-licenses-4.5.1</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump pip-licenses from 4.3.3 to 4.5.1
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/pipdeptree-2.28.0 chore(deps): bump pipdeptree from 2.13.1 to 2.28.0">
+            <div class="branch-name">origin/dependabot/pip/pipdeptree-2.28.0</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump pipdeptree from 2.13.1 to 2.28.0
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/pyjwt-2.10.1 chore(deps): bump pyjwt from 2.8.0 to 2.10.1">
+            <div class="branch-name">origin/dependabot/pip/pyjwt-2.10.1</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump pyjwt from 2.8.0 to 2.10.1
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/pyre-check-0.9.25 chore(deps): bump pyre-check from 0.9.18 to 0.9.25">
+            <div class="branch-name">origin/dependabot/pip/pyre-check-0.9.25</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump pyre-check from 0.9.18 to 0.9.25
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/semgrep-1.136.0 chore(deps): bump semgrep from 1.45.0 to 1.136.0">
+            <div class="branch-name">origin/dependabot/pip/semgrep-1.136.0</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump semgrep from 1.45.0 to 1.136.0
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/urllib3-2.5.0 chore(deps): bump urllib3 from 2.1.0 to 2.5.0">
+            <div class="branch-name">origin/dependabot/pip/urllib3-2.5.0</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+385 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5243</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +782 files</span></div><div class="change-stat"><span class="removed">✗ -536 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump urllib3 from 2.1.0 to 2.5.0
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/github_actions/docker/build-push-action-6 ci: bump docker/build-push-action from 5 to 6">
+            <div class="branch-name">origin/dependabot/github_actions/docker/build-push-action-6</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+181 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5427</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +761 files</span></div><div class="change-stat"><span class="removed">✗ -331 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> ci: bump docker/build-push-action from 5 to 6
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/github_actions/codecov/codecov-action-5 ci: bump codecov/codecov-action from 4 to 5">
+            <div class="branch-name">origin/dependabot/github_actions/codecov/codecov-action-5</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+178 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5428</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +761 files</span></div><div class="change-stat"><span class="removed">✗ -330 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> ci: bump codecov/codecov-action from 4 to 5
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/pylint-3.3.9 chore(deps): bump pylint from 3.0.2 to 3.3.9">
+            <div class="branch-name">origin/dependabot/pip/pylint-3.3.9</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+174 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5428</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +761 files</span></div><div class="change-stat"><span class="removed">✗ -330 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump pylint from 3.0.2 to 3.3.9
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/aurora-working-restore fix: improve error handling and package installation in workflows">
+            <div class="branch-name">origin/aurora-working-restore</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+154 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5429</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +761 files</span></div><div class="change-stat"><span class="removed">✗ -329 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> fix: Improve error handling and package installation in work
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/github_actions/github/codeql-action-4 ci: bump github/codeql-action from 3 to 4">
+            <div class="branch-name">origin/dependabot/github_actions/github/codeql-action-4</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+131 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5444</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +760 files</span></div><div class="change-stat"><span class="removed">✗ -313 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> ci: bump github/codeql-action from 3 to 4
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/aurora-nexus-v2-integration refactor code for improved readability by breaking long lines into multiple lines across various modules. this includes updates to the aurora_doc_generator, aurora_docker_healer, aurora_git_master, aurora_live_integration, aurora_multi_agent, aurora_security_auditor, aurora_system_update, aurora_test_generator, aurora_ui_generator, aurora_visual_understanding, and tools/aurora_core files. the changes enhance maintainability without altering functionality.">
+            <div class="branch-name">origin/aurora-nexus-v2-integration</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+116 commits</span>
+                <div style="margin-top: 5px;">Total files: 5462</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +760 files</span></div><div class="change-stat"><span class="removed">✗ -295 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Refactor code for improved readability by breaking long line
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/docker/node-25-alpine chore: bump node from 20-alpine to 25-alpine">
+            <div class="branch-name">origin/dependabot/docker/node-25-alpine</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+109 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5468</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +760 files</span></div><div class="change-stat"><span class="removed">✗ -289 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore: bump node from 20-alpine to 25-alpine
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/docker/python-3.14-slim chore: bump python from 3.11-slim to 3.14-slim">
+            <div class="branch-name">origin/dependabot/docker/python-3.14-slim</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+108 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 5468</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +760 files</span></div><div class="change-stat"><span class="removed">✗ -289 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore: bump python from 3.11-slim to 3.14-slim
+            </div>
+        </div>
+        <div class="branch-card" data-search="integration-branch things aurora needs">
+            <div class="branch-name">integration-branch</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+100 commits</span><span class="status-badge status-behind">10 behind</span>
+                <div style="margin-top: 5px;">Total files: 4698</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +15 files</span></div><div class="change-stat"><span class="removed">✗ -314 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> things aurora needs
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/integration-branch things aurora needs">
+            <div class="branch-name">origin/integration-branch</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+100 commits</span><span class="status-badge status-behind">10 behind</span>
+                <div style="margin-top: 5px;">Total files: 4698</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +15 files</span></div><div class="change-stat"><span class="removed">✗ -314 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> things aurora needs
+            </div>
+        </div>
+        <div class="branch-card" data-search="local-features-backup resolve numerous merge conflicts across project files">
+            <div class="branch-name">local-features-backup</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+100 commits</span>
+                <div style="margin-top: 5px;">Total files: 4806</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +4 files</span></div><div class="change-stat"><span class="removed">✗ -195 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Resolve numerous merge conflicts across project files
+            </div>
+        </div>
+        <div class="branch-card" data-search="remote-features-backup feat: implement aurora hyper-speed mode for instant problem detection and fixes">
+            <div class="branch-name">remote-features-backup</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+73 commits</span>
+                <div style="margin-top: 5px;">Total files: 4814</div>
+            </div>
+            <div class="change-stat"><span class="added">✓ +2 files</span></div><div class="change-stat"><span class="removed">✗ -185 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> feat: Implement Aurora Hyper-Speed Mode for instant problem 
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/aurora-ful-power feat: implement enhanced terminal interface for authentic aurora interactions">
+            <div class="branch-name">origin/aurora-ful-power</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+65 commits</span>
+                <div style="margin-top: 5px;">Total files: 4886</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -111 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> feat: Implement enhanced terminal interface for authentic Au
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/bandit-1.8.6 chore(deps): bump bandit from 1.7.6 to 1.8.6">
+            <div class="branch-name">origin/dependabot/pip/bandit-1.8.6</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+61 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 4929</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -68 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump bandit from 1.7.6 to 1.8.6
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/build-1.3.0 chore(deps-dev): bump build from 1.0.3 to 1.3.0">
+            <div class="branch-name">origin/dependabot/pip/build-1.3.0</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+61 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 4929</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -68 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps-dev): bump build from 1.0.3 to 1.3.0
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/dev-tools-6cc04861e6 chore(deps-dev): bump mypy from 1.8.0 to 1.18.2 in the dev-tools group">
+            <div class="branch-name">origin/dependabot/pip/dev-tools-6cc04861e6</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+61 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 4929</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -68 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps-dev): bump mypy from 1.8.0 to 1.18.2 in the dev-t
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/flake8-7.3.0 chore(deps): bump flake8 from 7.0.0 to 7.3.0">
+            <div class="branch-name">origin/dependabot/pip/flake8-7.3.0</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+61 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 4929</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -68 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump flake8 from 7.0.0 to 7.3.0
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/safety-3.7.0 chore(deps): bump safety from 3.0.1 to 3.7.0">
+            <div class="branch-name">origin/dependabot/pip/safety-3.7.0</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+61 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 4929</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -68 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump safety from 3.0.1 to 3.7.0
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/sphinx-7.4.7 chore(deps-dev): bump sphinx from 7.2.6 to 7.4.7">
+            <div class="branch-name">origin/dependabot/pip/sphinx-7.4.7</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+61 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 4929</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -68 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps-dev): bump sphinx from 7.2.6 to 7.4.7
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/testing-4bb223f47c chore(deps): bump the testing group with 2 updates">
+            <div class="branch-name">origin/dependabot/pip/testing-4bb223f47c</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+61 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 4929</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -68 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps): bump the testing group with 2 updates
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/dependabot/pip/wheel-0.45.1 chore(deps-dev): bump wheel from 0.42.0 to 0.45.1">
+            <div class="branch-name">origin/dependabot/pip/wheel-0.45.1</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+61 commits</span><span class="status-badge status-behind">1 behind</span>
+                <div style="margin-top: 5px;">Total files: 4929</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -68 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> chore(deps-dev): bump wheel from 0.42.0 to 0.45.1
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin reject incoming changes - keep current clean state">
+            <div class="branch-name">origin</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+6 commits</span>
+                <div style="margin-top: 5px;">Total files: 4982</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -15 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Reject incoming changes - keep current clean state
+            </div>
+        </div>
+        <div class="branch-card" data-search="origin/main reject incoming changes - keep current clean state">
+            <div class="branch-name">origin/main</div>
+            <div class="branch-meta">
+                <span class="status-badge status-ahead">+6 commits</span>
+                <div style="margin-top: 5px;">Total files: 4982</div>
+            </div>
+            <div class="change-stat"><span class="removed">✗ -15 files</span></div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Reject incoming changes - keep current clean state
+            </div>
+        </div>
+        <div class="branch-card" data-search="main saved progress at the end of the loop">
+            <div class="branch-name">main</div>
+            <div class="branch-meta">
+                
+                <div style="margin-top: 5px;">Total files: 4997</div>
+            </div>
+            <div style="color: #666;">No changes vs main</div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Saved progress at the end of the loop
+            </div>
+        </div>
+        <div class="branch-card" data-search="replit-agent saved progress at the end of the loop">
+            <div class="branch-name">replit-agent</div>
+            <div class="branch-meta">
+                <span class="status-badge status-behind">268 behind</span>
+                <div style="margin-top: 5px;">Total files: 4997</div>
+            </div>
+            <div style="color: #666;">No changes vs main</div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Saved progress at the end of the loop
+            </div>
+        </div>
+        <div class="branch-card" data-search="gitsafe-backup saved progress at the end of the loop">
+            <div class="branch-name">gitsafe-backup</div>
+            <div class="branch-meta">
+                
+                <div style="margin-top: 5px;">Total files: 4997</div>
+            </div>
+            <div style="color: #666;">No changes vs main</div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Saved progress at the end of the loop
+            </div>
+        </div>
+        <div class="branch-card" data-search="gitsafe-backup/main saved progress at the end of the loop">
+            <div class="branch-name">gitsafe-backup/main</div>
+            <div class="branch-meta">
+                
+                <div style="margin-top: 5px;">Total files: 4997</div>
+            </div>
+            <div style="color: #666;">No changes vs main</div>
+            <div class="last-commit">
+                <strong>Last commit:</strong> Saved progress at the end of the loop
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <script>
+        function filterBranches() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.branch-card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const searchText = card.getAttribute('data-search');
+                if (searchText.includes(searchTerm)) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            if (visibleCount === 0) {
+                const container = document.getElementById('branchesContainer');
+                container.innerHTML = '<div class="no-results">No branches match your search</div>';
+            }
+        }
+    </script>
+</body>
+</html>
