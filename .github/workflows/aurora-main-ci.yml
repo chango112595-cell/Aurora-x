@@ -179,7 +179,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build backend (multi-arch)
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile.backend
@@ -188,7 +188,7 @@ jobs:
           tags: aurora-backend:latest
 
       - name: Build frontend (multi-arch)
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile.frontend
