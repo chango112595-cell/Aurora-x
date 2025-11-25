@@ -35,30 +35,31 @@ print("Mode: FULL POWER + HYPERSPEED + ALL CAPABILITIES")
 print("Analyzing: Enforcer, Auto-Fixer, and Corruption Patterns")
 print("="*80 + "\n")
 
+
 class AuroraEnforcerAnalyzer:
     """Aurora's ultimate analysis using all 188+ capabilities"""
-    
+
     def __init__(self):
         self.issues_found = []
         self.analysis_complete = False
-        
+
     def analyze_enforcer_code(self, filepath: str) -> Dict[str, Any]:
         """Analyze enforcer code for logic errors"""
-        
+
         print(f"[ANALYZING] {filepath}...")
-        
+
         if not os.path.exists(filepath):
             return {
                 "file": filepath,
                 "exists": False,
                 "error": "File not found"
             }
-        
+
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
-        
+
         issues = []
-        
+
         # ISSUE 1: Check if enforcer modifies imports blindly
         if 'from typing import' in content and 'import' in content:
             # Check for pattern that adds typing import
@@ -71,7 +72,7 @@ class AuroraEnforcerAnalyzer:
                     "line_pattern": "from typing import",
                     "fix_needed": "Parse existing imports first, don't blindly insert"
                 })
-        
+
         # ISSUE 2: Check if enforcer adds code templates
         if 'Aurora Perfect' in content or 'aurora_perfect_function' in content:
             issues.append({
@@ -81,7 +82,7 @@ class AuroraEnforcerAnalyzer:
                 "problem": "Templates may conflict with existing code structure",
                 "fix_needed": "Only add minimal comments, not full code blocks"
             })
-        
+
         # ISSUE 3: Check indentation handling
         if 'lines.insert' in content or 'content += ' in content:
             issues.append({
@@ -91,7 +92,7 @@ class AuroraEnforcerAnalyzer:
                 "problem": "Creates 'expected indented block' errors",
                 "fix_needed": "Use AST-aware insertion that respects indentation"
             })
-        
+
         # ISSUE 4: Check if it validates syntax after changes
         has_syntax_check = 'compile(' in content or 'ast.parse' in content
         if not has_syntax_check:
@@ -102,7 +103,7 @@ class AuroraEnforcerAnalyzer:
                 "problem": "Saves broken files without detecting errors",
                 "fix_needed": "Add compile() or ast.parse() validation before saving"
             })
-        
+
         # ISSUE 5: Check if it has rollback mechanism
         has_rollback = 'original' in content and 'rollback' in content.lower()
         if not has_rollback:
@@ -113,21 +114,21 @@ class AuroraEnforcerAnalyzer:
                 "problem": "Broken files stay broken",
                 "fix_needed": "Keep original content and restore on validation failure"
             })
-        
+
         return {
             "file": filepath,
             "exists": True,
             "total_issues": len(issues),
             "issues": issues
         }
-    
+
     def analyze_corruption_pattern(self) -> Dict[str, Any]:
         """Analyze what corruption patterns the enforcer created"""
-        
+
         print("[ANALYZING] Corruption patterns from enforcer run...")
-        
+
         patterns = []
-        
+
         # Pattern 1: Corrupted imports
         patterns.append({
             "pattern": "from X from typing import",
@@ -138,7 +139,7 @@ class AuroraEnforcerAnalyzer:
             "correct": "from typing import Dict, List",
             "root_cause": "Blind string insertion without parsing imports"
         })
-        
+
         # Pattern 2: Indentation errors
         patterns.append({
             "pattern": "try: at wrong indentation after if statement",
@@ -148,7 +149,7 @@ class AuroraEnforcerAnalyzer:
             "correct": "if __name__ == '__main__':\n    try:",
             "root_cause": "No AST-aware indentation handling"
         })
-        
+
         # Pattern 3: Template conflicts
         patterns.append({
             "pattern": "Code templates injected into existing code",
@@ -158,25 +159,25 @@ class AuroraEnforcerAnalyzer:
             "correct": "Add only minimal comments or type hints",
             "root_cause": "Over-aggressive pattern insertion"
         })
-        
+
         return {
             "total_patterns": len(patterns),
             "patterns": patterns
         }
-    
+
     def analyze_autofixer(self, filepath: str) -> Dict[str, Any]:
         """Analyze why auto-fixer didn't catch the syntax errors"""
-        
+
         print(f"[ANALYZING] Auto-fixer: {filepath}...")
-        
+
         if not os.path.exists(filepath):
             return {"file": filepath, "exists": False}
-        
+
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
-        
+
         issues = []
-        
+
         # Check if auto-fixer has syntax error detection
         has_syntax_detection = 'SyntaxError' in content or 'compile(' in content
         if not has_syntax_detection:
@@ -187,7 +188,7 @@ class AuroraEnforcerAnalyzer:
                 "problem": "Only fixes encoding, imports, dependencies - not syntax",
                 "fix_needed": "Add syntax error detection and fixing phase"
             })
-        
+
         # Check if it fixes corrupted imports
         fixes_imports = 'import' in content and 'fix' in content.lower()
         if not fixes_imports or 'from.*from typing' not in content:
@@ -198,7 +199,7 @@ class AuroraEnforcerAnalyzer:
                 "problem": "Leaves corrupted imports unfixed",
                 "fix_needed": "Add regex pattern to detect and fix corrupted imports"
             })
-        
+
         # Check if it fixes indentation
         fixes_indentation = 'indent' in content.lower()
         if not fixes_indentation:
@@ -209,22 +210,22 @@ class AuroraEnforcerAnalyzer:
                 "problem": "Leaves 'expected indented block' errors unfixed",
                 "fix_needed": "Add indentation error detection and fixing"
             })
-        
+
         return {
             "file": filepath,
             "exists": True,
             "total_issues": len(issues),
             "issues": issues
         }
-    
+
     def generate_task_list(self, analyses: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Generate comprehensive task list to fix everything"""
-        
+
         print("\n[GENERATING] Comprehensive task list...")
-        
+
         tasks = []
         task_id = 1
-        
+
         # ENFORCER FIXES
         for analysis in analyses['enforcer_analyses']:
             if analysis.get('exists'):
@@ -240,7 +241,7 @@ class AuroraEnforcerAnalyzer:
                         "status": "TODO"
                     })
                     task_id += 1
-        
+
         # CORRUPTION PATTERN FIXES
         for pattern in analyses['corruption_patterns']['patterns']:
             tasks.append({
@@ -253,7 +254,7 @@ class AuroraEnforcerAnalyzer:
                 "status": "TODO"
             })
             task_id += 1
-        
+
         # AUTO-FIXER ENHANCEMENTS
         for issue in analyses['autofixer_analysis'].get('issues', []):
             tasks.append({
@@ -267,7 +268,7 @@ class AuroraEnforcerAnalyzer:
                 "status": "TODO"
             })
             task_id += 1
-        
+
         # STRATEGIC IMPROVEMENTS
         tasks.append({
             "id": task_id,
@@ -279,7 +280,7 @@ class AuroraEnforcerAnalyzer:
             "status": "TODO"
         })
         task_id += 1
-        
+
         tasks.append({
             "id": task_id,
             "priority": "HIGH",
@@ -290,7 +291,7 @@ class AuroraEnforcerAnalyzer:
             "status": "TODO"
         })
         task_id += 1
-        
+
         tasks.append({
             "id": task_id,
             "priority": "CRITICAL",
@@ -300,7 +301,7 @@ class AuroraEnforcerAnalyzer:
             "fix_needed": "Add service startup test after enforcer runs",
             "status": "TODO"
         })
-        
+
         return tasks
 
 
@@ -329,7 +330,8 @@ for enforcer in enforcers:
 # Analyze corruption patterns
 print("\n[PHASE 2] Analyzing corruption patterns...\n")
 analyses["corruption_patterns"] = analyzer.analyze_corruption_pattern()
-print(f"  Identified {analyses['corruption_patterns']['total_patterns']} corruption patterns")
+print(
+    f"  Identified {analyses['corruption_patterns']['total_patterns']} corruption patterns")
 
 # Analyze auto-fixer
 print("\n[PHASE 3] Analyzing auto-fixer...\n")
@@ -337,7 +339,8 @@ analyses["autofixer_analysis"] = analyzer.analyze_autofixer(
     "aurora_ultimate_self_healing_system_DRAFT2.py"
 )
 if analyses["autofixer_analysis"].get('exists'):
-    print(f"  Found {analyses['autofixer_analysis']['total_issues']} issues in auto-fixer")
+    print(
+        f"  Found {analyses['autofixer_analysis']['total_issues']} issues in auto-fixer")
 
 # Generate task list
 print("\n[PHASE 4] Generating comprehensive task list...\n")
@@ -378,7 +381,8 @@ print("="*80)
 for task in critical_tasks:
     issue_name = task.get('issue', task.get('pattern', 'UNKNOWN'))
     print(f"\n[{task['id']}] {task['category']}: {issue_name}")
-    print(f"    Description: {task.get('description', task.get('root_cause', 'N/A'))}")
+    print(
+        f"    Description: {task.get('description', task.get('root_cause', 'N/A'))}")
     print(f"    Fix Needed: {task['fix_needed']}")
 
 print("\n" + "="*80)
@@ -387,7 +391,8 @@ print("="*80)
 for task in high_tasks:
     issue_name = task.get('issue', task.get('pattern', 'UNKNOWN'))
     print(f"\n[{task['id']}] {task['category']}: {issue_name}")
-    print(f"    Description: {task.get('description', task.get('root_cause', 'N/A'))}")
+    print(
+        f"    Description: {task.get('description', task.get('root_cause', 'N/A'))}")
     print(f"    Fix Needed: {task['fix_needed']}")
 
 print("\n" + "="*80)
