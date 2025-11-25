@@ -1,0 +1,314 @@
+[
+  {
+    "id": "13f087c17aa8",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/PROJECT_ANALYSIS.flag",
+    "created_at": "2025-11-08T22:26:32.264960",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-08T22:26:32.265498",
+    "completed_at": "2025-11-08T22:26:32.271068",
+    "result": {
+      "status": "success",
+      "timestamp": 1762640792.2710648
+    }
+  },
+  {
+    "id": "8cb630f6bdff",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/HEALTH_CHECK.flag",
+    "created_at": "2025-11-08T22:28:48.896822",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-08T22:28:48.897204",
+    "completed_at": "2025-11-08T22:28:48.904808",
+    "result": {
+      "status": "success",
+      "timestamp": 1762640928.9048023
+    }
+  },
+  {
+    "id": "5fdf42df466f",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/SYSTEM_STATUS_CHECK.flag",
+    "created_at": "2025-11-08T22:32:12.191679",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-08T22:32:12.192398",
+    "completed_at": "2025-11-08T22:32:12.205811",
+    "result": {
+      "status": "success",
+      "timestamp": 1762641132.2058065
+    }
+  },
+  {
+    "id": "aefb10eba258",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/PORT_ANALYSIS_FIX.flag",
+    "created_at": "2025-11-08T22:44:24.428639",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-08T22:44:24.428959",
+    "completed_at": "2025-11-08T22:44:24.434403",
+    "result": {
+      "status": "success",
+      "timestamp": 1762641864.4344
+    }
+  },
+  {
+    "id": "0ba085fe0cad",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/FIX_V2_PYTHON_PATHS.flag",
+    "created_at": "2025-11-08T22:52:44.060991",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-08T22:52:44.061388",
+    "completed_at": "2025-11-08T22:52:44.066794",
+    "result": {
+      "status": "success",
+      "timestamp": 1762642364.066791
+    }
+  },
+  {
+    "id": "fbf81dcc3368",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/V2_VERIFICATION_TEST.flag",
+    "created_at": "2025-11-08T23:00:22.684777",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-08T23:00:22.685375",
+    "completed_at": "2025-11-08T23:00:22.693651",
+    "result": {
+      "status": "success",
+      "timestamp": 1762642822.6936479
+    }
+  },
+  {
+    "id": "648a3326e2a3",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/FIX_ENDPOINT_ISSUES.flag",
+    "created_at": "2025-11-09T03:49:34.479257",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-09T03:49:34.479778",
+    "completed_at": "2025-11-09T03:49:34.500615",
+    "result": {
+      "status": "success",
+      "timestamp": 1762660174.50061
+    }
+  },
+  {
+    "id": "c3a713cfb848",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/FIX_ENDPOINT_CONNECTIONS.flag",
+    "created_at": "2025-11-09T03:49:39.503201",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-09T03:49:39.503733",
+    "completed_at": "2025-11-09T03:49:39.510617",
+    "result": {
+      "status": "success",
+      "timestamp": 1762660179.5106127
+    }
+  },
+  {
+    "id": "d41d8cd98f00",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/FIX_ENDPOINT_CONNECTIONS.flag",
+    "created_at": "2025-11-09T03:49:44.512031",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-09T03:49:44.512471",
+    "completed_at": "2025-11-09T03:49:44.517594",
+    "result": {
+      "status": "success",
+      "timestamp": 1762660184.5175903
+    }
+  },
+  {
+    "id": "7cd7a9b85ca3",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/IMPLEMENT_ENDPOINT_FIXES.flag",
+    "created_at": "2025-11-09T03:57:34.857273",
+    "status": "completed",
+    "data": {
+      "@app.route('/chat', methods": "['GET', 'POST'])",
+      "if request.method": "= 'POST':"
+    },
+    "attempts": 1,
+    "started_at": "2025-11-10T13:16:41.415815",
+    "completed_at": "2025-11-10T13:16:41.423905",
+    "result": {
+      "status": "success",
+      "timestamp": 1762780601.4239006
+    }
+  },
+  {
+    "id": "122f97c092fa",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/IMPLEMENT_AUTHENTICATION_AUTHORIZATION.flag",
+    "created_at": "2025-11-10T23:45:38.236190",
+    "status": "completed",
+    "data": {
+      "Next Priority": "#4 from comprehensive analysis: Authentication & Authorization"
+    },
+    "attempts": 1,
+    "started_at": "2025-11-10T23:45:38.236565",
+    "completed_at": "2025-11-10T23:45:38.246722",
+    "result": {
+      "status": "success",
+      "timestamp": 1762818338.2467177
+    }
+  },
+  {
+    "id": "2a45b06ad4a7",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/IMPLEMENT_BACKUP_DISASTER_RECOVERY.flag",
+    "created_at": "2025-11-10T23:45:43.248910",
+    "status": "completed",
+    "data": {
+      "Next Priority": "#5 from comprehensive analysis: Backup & Disaster Recovery"
+    },
+    "attempts": 1,
+    "started_at": "2025-11-10T23:45:43.249306",
+    "completed_at": "2025-11-10T23:45:43.254985",
+    "result": {
+      "status": "success",
+      "timestamp": 1762818343.2549806
+    }
+  },
+  {
+    "id": "7c25835f170a",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/IMPLEMENT_PERFORMANCE_OPTIMIZATION.flag",
+    "created_at": "2025-11-10T23:45:48.256427",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-10T23:45:48.256934",
+    "completed_at": "2025-11-10T23:45:48.266152",
+    "result": {
+      "status": "success",
+      "timestamp": 1762818348.266148
+    }
+  },
+  {
+    "id": "f5b3d8771ab0",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/IMPLEMENT_DATABASE_MIGRATION_SYSTEM.flag",
+    "created_at": "2025-11-10T23:45:53.268204",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-10T23:45:53.268722",
+    "completed_at": "2025-11-10T23:45:53.278795",
+    "result": {
+      "status": "success",
+      "timestamp": 1762818353.2787905
+    }
+  },
+  {
+    "id": "93d617a88488",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/FINALIZE_CICD_AUTOMATION.flag",
+    "created_at": "2025-11-10T23:45:58.281488",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-10T23:45:58.281971",
+    "completed_at": "2025-11-10T23:45:58.288893",
+    "result": {
+      "status": "success",
+      "timestamp": 1762818358.2888894
+    }
+  },
+  {
+    "id": "927b58cea8d9",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/CREATE_DOCKERFILE.flag",
+    "created_at": "2025-11-10T23:46:03.292572",
+    "status": "completed",
+    "data": {
+      "Next thing": "Priority #1 from comprehensive analysis: Containerization",
+      "- Consistent environments (dev": "staging = prod)"
+    },
+    "attempts": 1,
+    "started_at": "2025-11-10T23:46:03.293223",
+    "completed_at": "2025-11-10T23:46:03.299549",
+    "result": {
+      "status": "success",
+      "timestamp": 1762818363.2995455
+    }
+  },
+  {
+    "id": "28246b891ed2",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/IMPLEMENT_COMPREHENSIVE_TEST_SUITE.flag",
+    "created_at": "2025-11-11T02:57:26.499043",
+    "status": "completed",
+    "data": {
+      "Next Priority": "#2 from comprehensive analysis: Comprehensive Testing"
+    },
+    "attempts": 1,
+    "started_at": "2025-11-11T02:57:26.500004",
+    "completed_at": "2025-11-11T02:57:26.519282",
+    "result": {
+      "status": "success",
+      "timestamp": 1762829846.5192766
+    }
+  },
+  {
+    "id": "9f8cd88576e3",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/FIX_PORT_CONNECTION_ISSUES.flag",
+    "created_at": "2025-11-11T02:57:31.548595",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-11T02:57:31.549026",
+    "completed_at": "2025-11-11T02:57:31.555339",
+    "result": {
+      "status": "success",
+      "timestamp": 1762829851.555334
+    }
+  },
+  {
+    "id": "b8cf32c94203",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/CLEANUP_TECHNICAL_DEBT.flag",
+    "created_at": "2025-11-11T02:57:36.561976",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-11T02:57:36.562449",
+    "completed_at": "2025-11-11T02:57:36.569631",
+    "result": {
+      "status": "success",
+      "timestamp": 1762829856.5696273
+    }
+  },
+  {
+    "id": "60f4ab5bddc4",
+    "type": "creative",
+    "flag_file": "/workspaces/Aurora-x/.aurora_knowledge/IMPLEMENT_MONITORING_ALERTING.flag",
+    "created_at": "2025-11-11T02:57:41.571638",
+    "status": "completed",
+    "data": {},
+    "attempts": 1,
+    "started_at": "2025-11-11T02:57:41.572506",
+    "completed_at": "2025-11-11T02:57:41.587168",
+    "result": {
+      "status": "success",
+      "timestamp": 1762829861.5871644
+    }
+  }
+]

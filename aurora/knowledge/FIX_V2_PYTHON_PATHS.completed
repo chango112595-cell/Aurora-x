@@ -1,0 +1,31 @@
+# Fix Luminar Nexus V2 Port Configuration
+Task Type: autonomous_request
+Priority: HIGH
+Requested: Apply same Python path fixes to V2
+
+Description:
+Aurora needs to fix the same Python path issues in luminar_nexus_v2.py that were just fixed in luminar_nexus.py.
+
+Problem:
+- luminar_nexus.py was just fixed: hardcoded /workspaces/Aurora-x/env/bin/python3 → python3
+- luminar_nexus_v2.py likely has the same broken paths
+- V2 will fail to start Python services (bridge, self-learn, chat) with incorrect paths
+
+Required Actions:
+1. Scan luminar_nexus_v2.py for hardcoded Python paths
+2. Find all instances of "/workspaces/Aurora-x/env/bin/python3"
+3. Replace with "python3" (system Python finds .venv automatically)
+4. Verify the same 3 services are fixed:
+   - bridge service command
+   - self-learn service command
+   - chat service command
+5. Ensure command templates match the fixes in luminar_nexus.py
+6. Test that V2 configuration is now correct
+
+Context from V1 Fix:
+The following changes were made in luminar_nexus.py:
+- Line 140: bridge command updated to use "python3" instead of hardcoded path
+- Line 164: self-learn command updated to use "python3"
+- Line 172: chat command updated to use "python3"
+
+Apply identical fixes to luminar_nexus_v2.py so V2 will work when we switch to it.

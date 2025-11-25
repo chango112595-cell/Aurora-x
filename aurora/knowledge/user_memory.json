@@ -1,0 +1,16 @@
+{
+  "user_name": null,
+  "user_info": {},
+  "first_interaction": "2025-11-23T12:33:40.947840",
+  "last_interaction": "2025-11-23T12:33:40.947840",
+  "total_conversations": 1,
+  "preferences": {},
+  "topics_history": [],
+  "remembered_facts": {
+    "full_integration_date": "2025-11-23T12:33:40.947840",
+    "total_power": 188,
+    "integration_type": "instant_unified",
+    "user_pushed_for_instant": true,
+    "peak_state_restored": true
+  }
+}
