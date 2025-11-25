@@ -8,6 +8,7 @@ Aurora's Complete System Debug & Verification
 - Open browser when ready
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import os
 import socket
 

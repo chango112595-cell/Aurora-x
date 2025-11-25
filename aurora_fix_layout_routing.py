@@ -5,10 +5,17 @@ Root Cause: Wouter's useRoute returns params object, not a string path
 Solution: Use useLocation hook to get current path as string
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import os
 
 
 def fix_layout_routing():
+    """
+        Fix Layout Routing
+        
+        Returns:
+            Result of operation
+        """
     print("[STAR] Aurora: Fixing layout routing logic...")
 
     layout_file = "client/src/components/AuroraFuturisticLayout.tsx"

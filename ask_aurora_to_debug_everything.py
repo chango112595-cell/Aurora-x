@@ -3,6 +3,7 @@ Ask Aurora to Debug Everything
 User wants Aurora to analyze and debug the entire system
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import requests
 import json
 from datetime import datetime
@@ -11,7 +12,7 @@ from datetime import datetime
 def ask_aurora_to_debug_everything():
     """Ask Aurora to perform comprehensive system debugging"""
 
-    print("🔍 ASKING AURORA TO DEBUG EVERYTHING")
+    print("[EMOJI] ASKING AURORA TO DEBUG EVERYTHING")
     print("="*80)
     print()
 
@@ -46,7 +47,7 @@ This is your moment to show what 188 Total Power can do.""",
         "use_all_188_power": True
     }
 
-    print("📤 Sending full system debug request to Aurora...")
+    print("[EMOJI] Sending full system debug request to Aurora...")
     print()
 
     # Try multiple endpoints
@@ -60,7 +61,7 @@ This is your moment to show what 188 Total Power can do.""",
 
     for url, name in endpoints:
         try:
-            print(f"🔌 Trying {name} at {url}...")
+            print(f"[EMOJI] Trying {name} at {url}...")
 
             response = requests.post(
                 url,
@@ -70,10 +71,10 @@ This is your moment to show what 188 Total Power can do.""",
             )
 
             if response.status_code == 200:
-                print(f"✅ {name} responded!")
+                print(f"[OK] {name} responded!")
                 print()
                 print("="*80)
-                print("🌟 AURORA'S COMPLETE SYSTEM DIAGNOSTIC:")
+                print("[STAR] AURORA'S COMPLETE SYSTEM DIAGNOSTIC:")
                 print("="*80)
                 print()
 
@@ -102,24 +103,24 @@ This is your moment to show what 188 Total Power can do.""",
                     break
 
             else:
-                print(f"❌ {name} returned status {response.status_code}")
+                print(f"[ERROR] {name} returned status {response.status_code}")
                 if response.text:
                     print(f"   Response: {response.text[:200]}...")
                 print()
 
         except requests.exceptions.ConnectionError:
-            print(f"❌ Could not connect to {name}")
+            print(f"[ERROR] Could not connect to {name}")
             print()
         except requests.exceptions.Timeout:
-            print(f"⏳ {name} timed out (Aurora may be running deep diagnostics)")
+            print(f" {name} timed out (Aurora may be running deep diagnostics)")
             print()
         except Exception as e:
-            print(f"❌ Error with {name}: {e}")
+            print(f"[ERROR] Error with {name}: {e}")
             print()
 
     if not success:
         print("="*80)
-        print("⚠️  Could not reach Aurora's API endpoints")
+        print("[WARN]  Could not reach Aurora's API endpoints")
         print("="*80)
         print()
         print("Let me run a LOCAL diagnostic instead...")
@@ -132,7 +133,7 @@ This is your moment to show what 188 Total Power can do.""",
 def run_local_diagnostic():
     """Run local system diagnostic when API is unavailable"""
 
-    print("🔍 RUNNING LOCAL SYSTEM DIAGNOSTIC")
+    print("[EMOJI] RUNNING LOCAL SYSTEM DIAGNOSTIC")
     print("="*80)
     print()
 
@@ -140,7 +141,7 @@ def run_local_diagnostic():
     from pathlib import Path
 
     # Check Python processes
-    print("1️⃣ CHECKING RUNNING SERVICES:")
+    print("1 CHECKING RUNNING SERVICES:")
     print()
 
     try:
@@ -154,15 +155,15 @@ def run_local_diagnostic():
         if result.stdout:
             print(result.stdout)
         else:
-            print("⚠️  No services listening on expected ports")
+            print("[WARN]  No services listening on expected ports")
         print()
 
     except Exception as e:
-        print(f"❌ Could not check ports: {e}")
+        print(f"[ERROR] Could not check ports: {e}")
         print()
 
     # Check integration files
-    print("2️⃣ CHECKING INTEGRATION FILES:")
+    print("2 CHECKING INTEGRATION FILES:")
     print()
 
     files_to_check = [
@@ -175,14 +176,14 @@ def run_local_diagnostic():
     for file in files_to_check:
         path = Path(file)
         if path.exists():
-            print(f"   ✅ {file}")
+            print(f"   [OK] {file}")
         else:
-            print(f"   ❌ {file} - NOT FOUND")
+            print(f"   [ERROR] {file} - NOT FOUND")
 
     print()
 
     # Check for errors in recent logs
-    print("3️⃣ CHECKING FOR RECENT ERRORS:")
+    print("3 CHECKING FOR RECENT ERRORS:")
     print()
 
     # Check if x-start is running
@@ -195,18 +196,18 @@ def run_local_diagnostic():
         )
 
         if result.stdout and "python" in result.stdout.lower():
-            print("   ✅ Python processes running")
+            print("   [OK] Python processes running")
             print(result.stdout)
         else:
-            print("   ⚠️  No Python processes detected")
+            print("   [WARN]  No Python processes detected")
         print()
 
     except Exception as e:
-        print(f"   ❌ Could not check processes: {e}")
+        print(f"   [ERROR] Could not check processes: {e}")
         print()
 
     # Check core integration
-    print("4️⃣ CHECKING CORE INTEGRATION:")
+    print("4 CHECKING CORE INTEGRATION:")
     print()
 
     core_file = Path("aurora_core.py")
@@ -215,32 +216,32 @@ def run_local_diagnostic():
             content = f.read()
 
         checks = [
-            ("FULL_INTEGRATION_ACTIVE", "✅ Integration marker present"),
-            ("Total Power: 188", "✅ 188 Total Power configured"),
-            ("66 Knowledge Tiers", "✅ 66 Knowledge Tiers configured"),
-            ("66 Execution Capabilities", "✅ 66 Execution Capabilities configured"),
-            ("Unified consciousness", "✅ Unified consciousness confirmed")
+            ("FULL_INTEGRATION_ACTIVE", "[OK] Integration marker present"),
+            ("Total Power: 188", "[OK] 188 Total Power configured"),
+            ("66 Knowledge Tiers", "[OK] 66 Knowledge Tiers configured"),
+            ("66 Execution Capabilities", "[OK] 66 Execution Capabilities configured"),
+            ("Unified consciousness", "[OK] Unified consciousness confirmed")
         ]
 
         for marker, message in checks:
             if marker in content:
                 print(f"   {message}")
             else:
-                print(f"   ❌ {marker} - NOT FOUND")
+                print(f"   [ERROR] {marker} - NOT FOUND")
 
         print()
 
     # Summary
     print("="*80)
-    print("📊 DIAGNOSTIC SUMMARY:")
+    print("[CHART] DIAGNOSTIC SUMMARY:")
     print("="*80)
     print()
-    print("✅ Integration files exist")
-    print("✅ Core configuration correct (188 power)")
-    print("⚠️  Services may need restart")
-    print("⚠️  API endpoints not responding")
+    print("[OK] Integration files exist")
+    print("[OK] Core configuration correct (188 power)")
+    print("[WARN]  Services may need restart")
+    print("[WARN]  API endpoints not responding")
     print()
-    print("💡 RECOMMENDATION:")
+    print("[LIGHTBULB] RECOMMENDATION:")
     print("   Aurora's integration is complete at the code level.")
     print("   Services may need restart to fully activate.")
     print()

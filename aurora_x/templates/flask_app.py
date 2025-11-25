@@ -319,7 +319,7 @@ TIMER_HTML = """
 </head>
 <body>
     <div class="timer-container">
-        <h1>⏱ Aurora Timer</h1>
+        <h1> Aurora Timer</h1>
 
         <div class="timer-display" id="display">00:00</div>
 
@@ -487,7 +487,7 @@ TIMER_HTML = """
 
             complete() {
                 this.isRunning = false;
-                this.status.textContent = '✨ Time\'s Up!';
+                this.status.textContent = '[SPARKLES] Time\'s Up!';
                 this.display.style.color = '#00ffcc';
 
                 // Reset buttons
@@ -578,7 +578,7 @@ if __name__ == '__main__':
         # Run the Flask application
         app = create_app()
         port = int(os.environ.get('PORT', '5000'))
-        print(f"🚀 Aurora Timer UI starting on http://localhost:{port}")
+        print(f"[ROCKET] Aurora Timer UI starting on http://localhost:{port}")
         app.run(host='0.0.0.0', port=port, debug=True)
 '''
 
@@ -677,7 +677,7 @@ def create_app() -> Flask:
 if __name__ == '__main__':
     app = create_app()
     port = int(os.environ.get('PORT', '5000'))
-    print(f"🚀 Flask API starting on http://localhost:{{port}}")
+    print(f"[ROCKET] Flask API starting on http://localhost:{{port}}")
     app.run(host='0.0.0.0', port=port, debug=True)
 '''
 
@@ -827,7 +827,7 @@ def create_app() -> Flask:
 if __name__ == '__main__':
     app = create_app()
     port = int(os.environ.get('PORT', '5000'))
-    print(f"🚀 Flask Web App starting on http://localhost:{{port}}")
+    print(f"[ROCKET] Flask Web App starting on http://localhost:{{port}}")
     app.run(host='0.0.0.0', port=port, debug=True)
 '''
 
@@ -877,6 +877,6 @@ def create_app() -> Flask:
 if __name__ == '__main__':
     app = create_app()
     port = int(os.environ.get('PORT', '5000'))
-    print(f"🚀 Flask App starting on http://localhost:{{port}}")
+    print(f"[ROCKET] Flask App starting on http://localhost:{{port}}")
     app.run(host='0.0.0.0', port=port, debug=True)
 '''

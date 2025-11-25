@@ -42,6 +42,11 @@ class AuroraConversationIntelligence:
     """Advanced conversational AI knowledge for teaching Chango"""
 
     def __init__(self):
+        """
+              Init  
+            
+            Args:
+            """
         self.conversations: dict[str, ConversationContext] = {}
         self.knowledge_domains = self._initialize_knowledge()
         self.personality_traits = self._initialize_personality()
@@ -288,7 +293,7 @@ if __name__ == "__main__":
     fix_plan = create_chango_memory_fix()
     print(f"[SCAN] DIAGNOSIS: {fix_plan['diagnosis']}")
     print(f"[IDEA] SOLUTION: {fix_plan['solution']}")
-    print(f"[EMOJI]️ IMPLEMENTATION: {fix_plan['implementation']}")
+    print(f"[EMOJI] IMPLEMENTATION: {fix_plan['implementation']}")
 
     print("\n[BRAIN] CONVERSATION KNOWLEDGE DOMAINS:")
     for domain, knowledge in fix_plan["architecture"].items():

@@ -1,8 +1,9 @@
 """
 Unit Tests for Bridge Service
-Tests the Factory Bridge NL→Project generation service
+Tests the Factory Bridge NL->Project generation service
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import pytest
 
 

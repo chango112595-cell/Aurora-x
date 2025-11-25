@@ -315,7 +315,7 @@ class CLI:
 
         for i, task in enumerate(tasks, 1):
             self.log(f"Running task {{i}}/{{len(tasks)}}: {{task}}", "debug")
-            print(f"  {{Fore.GREEN}}✓{{Fore.RESET}} Task '{{task}}' completed")
+            print(f"  {{Fore.GREEN}}{{Fore.RESET}} Task '{{task}}' completed")
 
         self.log("All tasks completed successfully", "success")
         return 0

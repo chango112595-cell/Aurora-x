@@ -3,7 +3,8 @@ Language-aware chat router that auto-selects Python/Go/Rust/C# based on prompt.
 Integrates with FastAPI to provide polyglot code generation.
 """
 
-from pathlib import Path
+from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+import Path
 
 from aurora_x.router.intent_router import classify
 from aurora_x.router.lang_select import pick_language
@@ -153,7 +154,7 @@ def _handle_cli_tool(intent, lang_choice):
 
     # Default to Python (C# CLIs need more boilerplate)
     if lang_choice.lang not in ("python", "go", "rust"):
-        lang_choice.reason += " → Python for CLI"
+        lang_choice.reason += " -> Python for CLI"
 
     code = render_cli(intent.name, intent.brief, intent.fields)
     fname = f"{intent.name}.py" if intent.name else "cli_tool.py"
@@ -175,7 +176,7 @@ def _handle_lib_func(intent, lang_choice):
     # Library functions default to Python for now
     # (Other languages would need more complex test frameworks)
     if lang_choice.lang != "python":
-        lang_choice.reason += " → Python for library functions with tests"
+        lang_choice.reason += " -> Python for library functions with tests"
 
     code = render_func(intent.name, intent.brief, intent.fields)
     fname = f"{intent.name}.py" if intent.name else "lib_func.py"
@@ -189,7 +190,6 @@ def _handle_lib_func(intent, lang_choice):
     test_content = f'''"""Tests for {intent.name}"""
 import sys
 sys.path.insert(0, "..")
-from {intent.name} import *
 
 # Run the main function to execute built-in tests
 if __name__ == "__main__":

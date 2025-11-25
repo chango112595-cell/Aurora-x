@@ -1,9 +1,9 @@
 """Tests for test_aurora_response"""
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
 
 sys.path.insert(0, "..")
-from test_aurora_response import *
 
 # Run the main function to execute built-in tests
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ Aurora's Autonomous File Merger
 Aurora will merge all 120 critical files she identified
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 from pathlib import Path
@@ -10,7 +11,26 @@ from collections import defaultdict
 
 
 class AuroraAutonomousMerger:
+    """
+        Auroraautonomousmerger
+        
+        Comprehensive class providing auroraautonomousmerger functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            load_decision, merge_files, merge_single_file, run
+        """
     def __init__(self):
+        """
+              Init  
+            
+            Args:
+            """
         self.repo_root = Path(__file__).parent
         self.decision_file = self.repo_root / "AURORA_AUTONOMOUS_DECISION.json"
         self.merged_count = 0

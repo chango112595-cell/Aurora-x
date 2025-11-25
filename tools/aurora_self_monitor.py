@@ -28,6 +28,11 @@ class AuroraSelfMonitor:
     """
 
     def __init__(self):
+        """
+              Init  
+            
+            Args:
+            """
         self.root = Path(__file__).parent.parent
         self.health_log = self.root / ".aurora_knowledge" / "health_log.jsonl"
         self.auto_fixes_log = self.root / ".aurora_knowledge" / "auto_fixes.jsonl"

@@ -3,7 +3,8 @@ Aurora-X English Mode API Addons
 Provides chat and approval endpoints for natural language synthesis
 """
 
-from __future__ import annotations
+from __future__ from typing import Dict, List, Tuple, Optional, Any, Union
+import annotations
 
 import hashlib
 import subprocess
@@ -194,7 +195,7 @@ def attach(app: FastAPI) -> None:
         }
 
     # Log that addons have been attached
-    print("✅ Aurora-X English Mode API addons attached")
+    print("[OK] Aurora-X English Mode API addons attached")
     print("   - POST /api/chat - Accept English prompts")
     print("   - GET/POST /api/approve - Approval mechanism")
     print("   - GET /api/english/status - English mode status")

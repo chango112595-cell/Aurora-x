@@ -4,7 +4,8 @@ Analyze where each dormant capability should be integrated
 Then automatically integrate them into aurora_core.py
 """
 
-from aurora_core import AuroraCoreIntelligence
+from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+import AuroraCoreIntelligence
 import sys
 import os
 from pathlib import Path
@@ -195,7 +196,7 @@ class AuroraIntegrationAnalyzer:
                     report.append("-" * 80)
 
                     for module in priority_modules:
-                        report.append(f"\n  • {module['name']}")
+                        report.append(f"\n   {module['name']}")
                         report.append(f"    Purpose: {module['purpose']}")
                         report.append(f"    Path: {module['path']}")
                         report.append(

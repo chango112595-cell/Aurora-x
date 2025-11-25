@@ -5,6 +5,7 @@ Generates a complete Go web service with health and echo endpoints.
 
 GO_MAIN = """package main
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import (
         "encoding/json"
         "fmt"
@@ -90,8 +91,8 @@ func main() {
         if port == "" {
                 port = "8080"
         }
-        log.Printf("🚀 Aurora Go Service starting on port %s", port)
-        log.Printf("📍 Endpoints: GET /health, POST /echo")
+        log.Printf("[ROCKET] Aurora Go Service starting on port %s", port)
+        log.Printf("[EMOJI] Endpoints: GET /health, POST /echo")
 
         if err := http.ListenAndServe(":"+port, mux); err != nil {
                 log.Fatal(err)

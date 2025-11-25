@@ -26,6 +26,14 @@ class CacheManager:
     """
 
     def __init__(
+        """
+              Init  
+            
+            Args:
+                redis_url: redis url
+                default_ttl: default ttl
+                max_memory_items: max memory items
+            """
         self,
         redis_url: str = "redis://localhost:6379/0",
         default_ttl: int = 300,  # 5 minutes
@@ -182,8 +190,23 @@ def cached(ttl: int = 300, key_prefix: str = ""):
     """
 
     def decorator(func: Callable) -> Callable:
+        """
+            Decorator
+            
+            Args:
+                func: func
+        
+            Returns:
+                Result of operation
+            """
         @wraps(func)
         def wrapper(*args, **kwargs):
+            """
+                Wrapper
+                
+                Returns:
+                    Result of operation
+                """
             cache = get_cache()
 
             # Build cache key

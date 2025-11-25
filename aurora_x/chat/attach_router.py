@@ -3,7 +3,8 @@ FastAPI router for T08 Intent-based chat endpoint
 Classifies prompts and generates appropriate Flask app code
 """
 
-from pathlib import Path
+from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+import Path
 
 from fastapi import APIRouter
 from pydantic import BaseModel

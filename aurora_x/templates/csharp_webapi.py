@@ -3,6 +3,9 @@ C# WebAPI template for enterprise-grade web APIs.
 Generates a complete .NET 8 Web API project.
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
+
+
 PROGRAM_CS = """using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -114,7 +117,7 @@ app.MapGet("/api/items/{id}", (int id) =>
 
 // Run the application
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5080";
-Console.WriteLine($"🚀 Starting C# Web API on port {port}...");
+Console.WriteLine($"[ROCKET] Starting C# Web API on port {port}...");
 app.Run($"http://0.0.0.0:{port}");
 
 // Data models

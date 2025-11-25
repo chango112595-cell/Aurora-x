@@ -3,7 +3,8 @@ Aurora Self-Update Request
 This script asks Aurora to autonomously update her own system
 """
 
-from aurora_core import AuroraCoreIntelligence
+from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+import AuroraCoreIntelligence
 import sys
 import os
 
@@ -56,7 +57,7 @@ def main():
         # Have Aurora scan and update her own capabilities
         try:
             # First, have Aurora scan herself
-            print("\n1️⃣ Aurora scanning own capabilities...")
+            print("\n1 Aurora scanning own capabilities...")
             capabilities = aurora.scan_own_capabilities()
 
             print(f"   Found {capabilities.get('module_count', 0)} modules")
@@ -64,7 +65,7 @@ def main():
                 f"   Available features: {len(capabilities.get('available_features', []))}")
 
             # Check for update tools
-            print("\n2️⃣ Looking for autonomous update tools...")
+            print("\n2 Looking for autonomous update tools...")
             tools_dir = aurora.project_root / "tools"
             update_tools = []
 
@@ -74,7 +75,7 @@ def main():
                     print(f"   Found: {tool_file.name}")
 
             # Execute system update
-            print("\n3️⃣ Executing system update...")
+            print("\n3 Executing system update...")
             try:
                 import aurora_automatic_system_update
                 print("   Running aurora_automatic_system_update.py...")
@@ -85,7 +86,7 @@ def main():
                 print(f"   [WARN] Update issue: {e}")
 
             # Have Aurora verify herself post-update
-            print("\n4️⃣ Aurora verifying system integrity...")
+            print("\n4 Aurora verifying system integrity...")
             new_capabilities = aurora.scan_own_capabilities()
             print(
                 f"   Modules after update: {new_capabilities.get('module_count', 0)}")

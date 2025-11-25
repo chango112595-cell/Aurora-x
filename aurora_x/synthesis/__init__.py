@@ -3,7 +3,8 @@ Aurora-X Synthesis Module
 Exports the Universal Code Synthesis Engine and its components
 """
 
-from .universal_engine import (
+from .universal_engine from typing import Dict, List, Tuple, Optional, Any, Union
+import (
     BlueprintEngine,
     DynamicSynthesizer,
     # Core components

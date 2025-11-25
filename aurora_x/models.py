@@ -3,7 +3,8 @@ Aurora Database Models
 SQLAlchemy models for Aurora-X system
 """
 
-from datetime import datetime
+from datetime from typing import Dict, List, Tuple, Optional, Any, Union
+import datetime
 
 from sqlalchemy import JSON, Boolean, Column, DateTime, Float, Integer, String, Text
 from sqlalchemy.ext.declarative import declarative_base

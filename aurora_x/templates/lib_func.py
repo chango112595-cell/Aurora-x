@@ -301,10 +301,10 @@ if __name__ == "__main__":
             try:
                 method = getattr(test_factorial, method_name)
                 method()
-                print(f"✓ {{method_name}}")
+                print(f" {{method_name}}")
                 passed += 1
             except Exception as e:
-                print(f"✗ {{method_name}}: {{e}}")
+                print(f" {{method_name}}: {{e}}")
                 failed += 1
 
         print(f"\\nResults: {{passed}} passed, {{failed}} failed")
@@ -470,9 +470,9 @@ if __name__ == "__main__":
             if method.startswith('test_'):
                 try:
                     getattr(test, method)()
-                    print(f"✓ {{method}}")
+                    print(f" {{method}}")
                 except Exception as e:
-                    print(f"✗ {{method}}: {{e}}")
+                    print(f" {{method}}: {{e}}")
 '''
 
 
@@ -599,9 +599,9 @@ if __name__ == "__main__":
             if method.startswith('test_'):
                 try:
                     getattr(test, method)()
-                    print(f"✓ {{method}}")
+                    print(f" {{method}}")
                 except Exception as e:
-                    print(f"✗ {{method}}: {{e}}")
+                    print(f" {{method}}: {{e}}")
 '''
 
 
@@ -733,9 +733,9 @@ if __name__ == "__main__":
             if method.startswith('test_'):
                 try:
                     getattr(test, method)()
-                    print(f"✓ {{method}}")
+                    print(f" {{method}}")
                 except Exception as e:
-                    print(f"✗ {{method}}: {{e}}")
+                    print(f" {{method}}: {{e}}")
 '''
 
 
@@ -1096,10 +1096,10 @@ if __name__ == "__main__":
             try:
                 method = getattr(test_obj, method_name)
                 method()
-                print(f"✓ {{test_obj.__class__.__name__}}.{{method_name}}")
+                print(f" {{test_obj.__class__.__name__}}.{{method_name}}")
                 passed += 1
             except Exception as e:
-                print(f"✗ {{test_obj.__class__.__name__}}.{{method_name}}: {{e}}")
+                print(f" {{test_obj.__class__.__name__}}.{{method_name}}: {{e}}")
                 failed += 1
 
         print(f"\\nResults: {{passed}} passed, {{failed}} failed")

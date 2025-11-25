@@ -3,7 +3,8 @@ Aurora Self-Enhancement: Terminal Chat Full Power
 Aurora implements her own recommendations for chat_with_aurora.py
 """
 
-from aurora_core import AuroraCoreIntelligence
+from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+import AuroraCoreIntelligence
 import sys
 import os
 from pathlib import Path
@@ -56,7 +57,7 @@ Implement these enhancements now.
     if hasattr(aurora, 'integrated_modules'):
         print(f"[OK] Found {len(aurora.integrated_modules)} integrated modules")
         for name, module in aurora.integrated_modules.items():
-            print(f"   • {name}: {module.__class__.__name__}")
+            print(f"    {name}: {module.__class__.__name__}")
     else:
         print("[WARN]  No integrated_modules found")
 
@@ -100,7 +101,7 @@ except ImportError:
                 rich_imports + content[end_of_line:]
             print("   [OK] Added rich library imports")
     else:
-        print("   ℹ️  Rich imports already present")
+        print("     Rich imports already present")
 
     # Enhancement 2: Add command handler
     print("\n2. Adding command system...")
@@ -133,9 +134,9 @@ def handle_command(command, aurora):
 [BRAIN] AURORA'S CAPABILITIES:
 
 Core Intelligence:
-  • Foundations: {caps.get('core_intelligence', {}).get('foundations', 0)}
-  • Knowledge Tiers: {caps.get('core_intelligence', {}).get('knowledge_tiers', 0)}
-  • Total Capabilities: {caps.get('core_intelligence', {}).get('total_capabilities', 0)}
+   Foundations: {caps.get('core_intelligence', {}).get('foundations', 0)}
+   Knowledge Tiers: {caps.get('core_intelligence', {}).get('knowledge_tiers', 0)}
+   Total Capabilities: {caps.get('core_intelligence', {}).get('total_capabilities', 0)}
   
 Discovered Modules: {caps.get('module_count', 0)}
 
@@ -196,7 +197,7 @@ Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
                 command_handler + "\\n\\n" + content[insert_pos:]
             print("   [OK] Added command handler")
     else:
-        print("   ℹ️  Command handler already present")
+        print("     Command handler already present")
 
     # Enhancement 3: Add command detection in main loop
     print("\n3. Integrating command detection into chat loop...")
@@ -227,7 +228,7 @@ Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
                 command_check + content[end_of_line:]
             print("   [OK] Added command detection")
     else:
-        print("   ℹ️  Command detection already present")
+        print("     Command detection already present")
 
     # Enhancement 4: Update startup message
     print("\\n4. Updating startup message to show new capabilities...")
@@ -235,9 +236,9 @@ Aurora now has {len(aurora.integrated_modules)} proactive capabilities:
     startup_pos = content.find(startup_marker)
     if startup_pos != -1:
         # Add info about newly integrated modules
-        end_of_section = content.find('print("━" * 80 + "\\n")', startup_pos)
+        end_of_section = content.find('print("" * 80 + "\\n")', startup_pos)
         if end_of_section != -1 and "[EMOJI] Proactive:" not in content:
-            new_line = '    print("[EMOJI] Proactive: 30+ monitoring modules • Auto-fixing • Self-healing • Continuous improvement")\\n'
+            new_line = '    print("[EMOJI] Proactive: 30+ monitoring modules  Auto-fixing  Self-healing  Continuous improvement")\\n'
             content = content[:end_of_section] + \
                 new_line + content[end_of_section:]
             print("   [OK] Updated startup message")

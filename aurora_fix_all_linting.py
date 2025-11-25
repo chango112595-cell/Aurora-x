@@ -3,6 +3,7 @@ Aurora's Complete Linting Fix
 Fixes all 108+ linting issues across the codebase
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import os
 
 
@@ -26,6 +27,9 @@ def fix_file(filepath, fixes):
 
 
 def main():
+    """
+        Main
+            """
     print("[EMOJI] Aurora: Fixing all linting issues...\n")
 
     fixes = {
@@ -47,14 +51,14 @@ def main():
             ('print(f"[Aurora] [OK] System Update Complete!")', 'print("[Aurora] [OK] System Update Complete!")'),
             ('print(f"[Aurora] Architecture Now Accurate:")', 'print("[Aurora] Architecture Now Accurate:")'),
             (
-                'print(f"[Aurora]   • 13 Foundational Tasks (Base Cognitive Layer)")',
-                'print("[Aurora]   • 13 Foundational Tasks (Base Cognitive Layer)")',
+                'print(f"[Aurora]    13 Foundational Tasks (Base Cognitive Layer)")',
+                'print("[Aurora]    13 Foundational Tasks (Base Cognitive Layer)")',
             ),
             (
-                'print(f"[Aurora]   • 66 Knowledge Tiers (Specialized Domains)")',
-                'print("[Aurora]   • 66 Knowledge Tiers (Specialized Domains)")',
+                'print(f"[Aurora]    66 Knowledge Tiers (Specialized Domains)")',
+                'print("[Aurora]    66 Knowledge Tiers (Specialized Domains)")',
             ),
-            ('print(f"[Aurora]   • 47 Total Capability Systems")', 'print("[Aurora]   • 47 Total Capability Systems")'),
+            ('print(f"[Aurora]    47 Total Capability Systems")', 'print("[Aurora]    47 Total Capability Systems")'),
         ],
         # aurora_ui_redesign.py
         "aurora_ui_redesign.py": [

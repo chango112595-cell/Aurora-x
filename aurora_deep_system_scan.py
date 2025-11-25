@@ -4,7 +4,8 @@ Scan entire system including git history, unused files, tools/, etc.
 Check if "missing" capabilities actually exist
 """
 
-from aurora_core import AuroraCoreIntelligence
+from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+import AuroraCoreIntelligence
 import sys
 import os
 from pathlib import Path
@@ -248,7 +249,7 @@ class AuroraDeepScanner:
                     f"   Found in {len(cap['found_in_files'])} files:")
 
                 for file_info in cap['found_in_files'][:5]:
-                    report.append(f"     • {file_info['file']}")
+                    report.append(f"      {file_info['file']}")
                     report.append(
                         f"       Keywords: {', '.join(file_info['matched_keywords'])}")
 
@@ -277,7 +278,7 @@ class AuroraDeepScanner:
             report.append("=" * 80)
 
             for module in self.findings["unused_modules"]:
-                report.append(f"  • {module}")
+                report.append(f"   {module}")
             report.append("")
             report.append(
                 f"These {len(self.findings['unused_modules'])} modules exist but aren't imported in aurora_core.py")

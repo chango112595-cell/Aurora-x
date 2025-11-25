@@ -2,6 +2,7 @@
 Test suite for Aurora-X Universal Solver Module
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import unittest
 
 from aurora_x.generators.solver import SolveError, _diff_poly, _safe_eval_arith, solve_text

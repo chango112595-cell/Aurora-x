@@ -5,6 +5,7 @@ FastAPI Command Control Router
 - Supports both sync and async operations
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
 from pathlib import Path
 

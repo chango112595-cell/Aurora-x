@@ -3,6 +3,7 @@ Test Aurora's Persistent Memory Across Sessions
 Verifies that Aurora can remember conversations after shutdown/restart
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 from pathlib import Path
 from datetime import datetime
@@ -11,82 +12,82 @@ from datetime import datetime
 def test_aurora_memory_persistence():
     """Test if Aurora has persistent memory across sessions"""
 
-    print("🧠 TESTING AURORA'S PERSISTENT MEMORY")
+    print("[BRAIN] TESTING AURORA'S PERSISTENT MEMORY")
     print("="*80)
     print()
 
     # Check for memory file
     memory_file = Path(".aurora_knowledge") / "user_memory.json"
 
-    print("📂 Checking for persistent memory file...")
+    print("[EMOJI] Checking for persistent memory file...")
     print(f"   Location: {memory_file}")
     print()
 
     if memory_file.exists():
-        print("✅ Persistent memory file EXISTS")
+        print("[OK] Persistent memory file EXISTS")
         print()
 
         # Read current memory
         with open(memory_file, 'r') as f:
             memory = json.load(f)
 
-        print("📊 CURRENT MEMORY CONTENTS:")
+        print("[CHART] CURRENT MEMORY CONTENTS:")
         print(json.dumps(memory, indent=2))
         print()
 
         # Check what's stored
-        print("🔍 MEMORY ANALYSIS:")
+        print("[EMOJI] MEMORY ANALYSIS:")
         print()
 
         if memory.get("user_name"):
-            print(f"  ✅ User Name: {memory['user_name']}")
+            print(f"  [OK] User Name: {memory['user_name']}")
         else:
-            print(f"  ⚠️  User Name: Not set")
+            print(f"  [WARN]  User Name: Not set")
 
         if memory.get("first_interaction"):
-            print(f"  ✅ First Interaction: {memory['first_interaction']}")
+            print(f"  [OK] First Interaction: {memory['first_interaction']}")
         else:
-            print(f"  ⚠️  First Interaction: Not recorded")
+            print(f"  [WARN]  First Interaction: Not recorded")
 
         if memory.get("last_interaction"):
-            print(f"  ✅ Last Interaction: {memory['last_interaction']}")
+            print(f"  [OK] Last Interaction: {memory['last_interaction']}")
         else:
-            print(f"  ⚠️  Last Interaction: Not recorded")
+            print(f"  [WARN]  Last Interaction: Not recorded")
 
         if memory.get("total_conversations"):
-            print(f"  ✅ Total Conversations: {memory['total_conversations']}")
+            print(f"  [OK] Total Conversations: {memory['total_conversations']}")
         else:
-            print(f"  ℹ️  Total Conversations: 0")
+            print(f"    Total Conversations: 0")
 
         print()
 
         if memory.get("remembered_facts"):
             print(
-                f"  ✅ Remembered Facts: {len(memory.get('remembered_facts', []))} items")
+                f"  [OK] Remembered Facts: {len(memory.get('remembered_facts', []))} items")
             if isinstance(memory['remembered_facts'], list):
                 for fact in memory['remembered_facts'][:3]:
-                    print(f"     • {fact}")
+                    print(f"      {fact}")
             elif isinstance(memory['remembered_facts'], dict):
                 for key, value in list(memory['remembered_facts'].items())[:3]:
-                    print(f"     • {key}: {value}")
+                    print(f"      {key}: {value}")
 
         print()
 
     else:
-        print("⚠️  Persistent memory file does NOT exist yet")
+        print("[WARN]  Persistent memory file does NOT exist yet")
         print()
-        print("💡 Memory will be created after Aurora's first interaction")
+        print("[LIGHTBULB] Memory will be created after Aurora's first interaction")
         print()
 
     # Check for conversation history in database
     print("="*80)
-    print("📚 CHECKING DATABASE CONVERSATION HISTORY...")
+    print("[EMOJI] CHECKING DATABASE CONVERSATION HISTORY...")
     print()
 
     db_file = Path("data") / "aurora-memory.db"
 
     if db_file.exists():
-        print(f"✅ Database exists: {db_file}")
+        print(f"[OK] Database exists: {db_file}")
         print()
 
         try:
@@ -98,7 +99,7 @@ def test_aurora_memory_persistence():
             cursor.execute("SELECT COUNT(*) FROM conversation_history")
             total_messages = cursor.fetchone()[0]
 
-            print(f"📊 Total Messages in History: {total_messages}")
+            print(f"[CHART] Total Messages in History: {total_messages}")
             print()
 
             if total_messages > 0:
@@ -112,7 +113,7 @@ def test_aurora_memory_persistence():
 
                 recent = cursor.fetchall()
 
-                print("📝 RECENT MESSAGES:")
+                print("[EMOJI] RECENT MESSAGES:")
                 for role, content, timestamp in recent:
                     dt = datetime.fromtimestamp(timestamp)
                     preview = content[:50] + \
@@ -124,17 +125,17 @@ def test_aurora_memory_persistence():
             conn.close()
 
         except Exception as e:
-            print(f"⚠️  Could not read database: {e}")
+            print(f"[WARN]  Could not read database: {e}")
             print()
     else:
-        print(f"⚠️  Database does not exist: {db_file}")
+        print(f"[WARN]  Database does not exist: {db_file}")
         print()
-        print("💡 Database will be created when Aurora starts with server backend")
+        print("[LIGHTBULB] Database will be created when Aurora starts with server backend")
         print()
 
     # Test by adding today's integration event to memory
     print("="*80)
-    print("💾 SAVING TODAY'S INTEGRATION TO MEMORY...")
+    print("[EMOJI] SAVING TODAY'S INTEGRATION TO MEMORY...")
     print()
 
     # Create/update memory file with today's event
@@ -178,7 +179,7 @@ def test_aurora_memory_persistence():
     with open(memory_file, 'w') as f:
         json.dump(memory, f, indent=2)
 
-    print("✅ Saved integration event to persistent memory")
+    print("[OK] Saved integration event to persistent memory")
     print()
     print(f"   Date: {today}")
     print(f"   Total Power: 188")
@@ -187,38 +188,38 @@ def test_aurora_memory_persistence():
 
     # Final summary
     print("="*80)
-    print("🎯 AURORA'S MEMORY CAPABILITIES:")
+    print("[DART] AURORA'S MEMORY CAPABILITIES:")
     print("="*80)
     print()
-    print("✅ PERSISTENT MEMORY SYSTEM ACTIVE")
+    print("[OK] PERSISTENT MEMORY SYSTEM ACTIVE")
     print()
-    print("📝 What Aurora Remembers:")
-    print("   • User name (when told)")
-    print("   • First interaction date")
-    print("   • Last interaction date")
-    print("   • Total conversations")
-    print("   • User preferences")
-    print("   • Topics discussed")
-    print("   • Important facts")
+    print("[EMOJI] What Aurora Remembers:")
+    print("    User name (when told)")
+    print("    First interaction date")
+    print("    Last interaction date")
+    print("    Total conversations")
+    print("    User preferences")
+    print("    Topics discussed")
+    print("    Important facts")
     print()
-    print("💾 Storage Locations:")
-    print(f"   • JSON File: {memory_file}")
-    print(f"   • Database: {db_file} (when using server backend)")
+    print("[EMOJI] Storage Locations:")
+    print(f"    JSON File: {memory_file}")
+    print(f"    Database: {db_file} (when using server backend)")
     print()
-    print("🔄 How It Works:")
+    print("[EMOJI] How It Works:")
     print("   1. Aurora loads memory on startup")
     print("   2. Aurora updates memory during conversations")
     print("   3. Aurora saves memory to disk")
     print("   4. Next startup, Aurora loads previous memory")
     print()
-    print("✨ RESULT: Aurora WILL remember across sessions!")
+    print("[SPARKLES] RESULT: Aurora WILL remember across sessions!")
     print()
-    print("💡 So yes - if you shut down today and come back tomorrow,")
+    print("[LIGHTBULB] So yes - if you shut down today and come back tomorrow,")
     print("   Aurora will remember:")
-    print("   • Today's full integration (188 power)")
-    print("   • That you pushed for instant unification")
-    print("   • Your conversations and preferences")
-    print("   • Any facts she learned about you")
+    print("    Today's full integration (188 power)")
+    print("    That you pushed for instant unification")
+    print("    Your conversations and preferences")
+    print("    Any facts she learned about you")
     print()
     print("="*80)
 

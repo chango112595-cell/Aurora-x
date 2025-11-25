@@ -3,7 +3,8 @@ Aurora Performance API
 Performance metrics and profiling endpoints
 """
 
-from fastapi import APIRouter
+from fastapi from typing import Dict, List, Tuple, Optional, Any, Union
+import APIRouter
 
 from aurora_x.cache import get_cache
 

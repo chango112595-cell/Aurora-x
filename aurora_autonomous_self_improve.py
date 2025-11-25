@@ -3,7 +3,8 @@ Aurora Autonomous Self-Improvement System
 Aurora analyzes and improves her own codebase autonomously
 """
 
-from aurora_core import AuroraCoreIntelligence
+from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+import AuroraCoreIntelligence
 import sys
 import os
 from pathlib import Path

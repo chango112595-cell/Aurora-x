@@ -3,6 +3,9 @@ Aurora's Authentic Chat - Implementation Guide
 Based on Aurora's own design at 100% power
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
+
+
 # TODO: Implement based on Aurora's specifications above
 # Key principles:
 # 1. No forced personality

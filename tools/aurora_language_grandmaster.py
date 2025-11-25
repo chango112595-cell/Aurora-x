@@ -1,20 +1,20 @@
 """
 [AURORA] AURORA PROGRAMMING LANGUAGE GRANDMASTER
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 
 COMPLETE MASTERY OF ALL PROGRAMMING LANGUAGES
 From Ancient Assembly to Sci-Fi Quantum Neural Code
 
 6 ERAS OF LANGUAGE EVOLUTION:
-• Ancient (1940s-1970s): Machine code, Assembly, FORTRAN, COBOL, LISP
-• Classical (1980s-1990s): C, C++, Pascal, Perl, Python, Java
-• Modern (2000s-2010s): JavaScript, Go, Rust, Swift, Kotlin
-• Current (2020s): TypeScript, Dart, Julia, Zig, V
-• Future (2030s-2050s): Quantum languages, Neural interfaces
-• Sci-Fi (2050s+): Consciousness-level programming, Quantum entanglement code
+ Ancient (1940s-1970s): Machine code, Assembly, FORTRAN, COBOL, LISP
+ Classical (1980s-1990s): C, C++, Pascal, Perl, Python, Java
+ Modern (2000s-2010s): JavaScript, Go, Rust, Swift, Kotlin
+ Current (2020s): TypeScript, Dart, Julia, Zig, V
+ Future (2030s-2050s): Quantum languages, Neural interfaces
+ Sci-Fi (2050s+): Consciousness-level programming, Quantum entanglement code
 
 Aurora knows SYNTAX, PARADIGMS, USE CASES, and EVOLUTION of every language
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 """
 
 from typing import Any
@@ -42,9 +42,9 @@ class AuroraProgrammingLanguageMastery:
         Complete database of ALL programming languages across 6 eras.
         """
         return {
-            # ═══════════════════════════════════════════════════════════════
+            # 
             # ERA 1: ANCIENT (1940s-1970s) - The Birth of Programming
-            # ═══════════════════════════════════════════════════════════════
+            # 
             "Machine Code": {
                 "era": "Ancient",
                 "year": 1940,
@@ -141,9 +141,9 @@ class AuroraProgrammingLanguageMastery:
                 "use_cases": ["Theorem proving", "Type theory", "Functional programming"],
                 "mastery_level": "Type inference, pattern matching, algebraic data types",
             },
-            # ═══════════════════════════════════════════════════════════════
+            # 
             # ERA 2: CLASSICAL (1980s-1990s) - The Golden Age
-            # ═══════════════════════════════════════════════════════════════
+            # 
             "C++": {
                 "era": "Classical",
                 "year": 1985,
@@ -248,9 +248,9 @@ class AuroraProgrammingLanguageMastery:
                 "use_cases": ["Windows apps", "RAD", "Database apps"],
                 "mastery_level": "VCL, components, properties, events, native compilation",
             },
-            # ═══════════════════════════════════════════════════════════════
+            # 
             # ERA 3: MODERN (2000s-2010s) - The Web & Mobile Revolution
-            # ═══════════════════════════════════════════════════════════════
+            # 
             "C#": {
                 "era": "Modern",
                 "year": 2000,
@@ -355,9 +355,9 @@ class AuroraProgrammingLanguageMastery:
                 "use_cases": ["iOS/macOS apps", "Server-side Swift"],
                 "mastery_level": "Optionals, protocols, extensions, ARC, value types",
             },
-            # ═══════════════════════════════════════════════════════════════
+            # 
             # ERA 4: CURRENT (2020s) - AI, Performance, & Developer Experience
-            # ═══════════════════════════════════════════════════════════════
+            # 
             "Dart": {
                 "era": "Current",
                 "year": 2011,
@@ -406,9 +406,9 @@ class AuroraProgrammingLanguageMastery:
                 "use_cases": ["Massively parallel computing", "GPU programming"],
                 "mastery_level": "Automatic parallelization, functional purity, HVM runtime",
             },
-            # ═══════════════════════════════════════════════════════════════
+            # 
             # ERA 5: FUTURE (2030s-2050s) - Quantum, Neural, & Distributed
-            # ═══════════════════════════════════════════════════════════════
+            # 
             "Q#": {
                 "era": "Future",
                 "year": 2017,
@@ -449,9 +449,9 @@ class AuroraProgrammingLanguageMastery:
                 "use_cases": ["Genetic programming", "Molecular computing", "Biotech"],
                 "mastery_level": "DNA computing, protein folding algorithms, cellular automata",
             },
-            # ═══════════════════════════════════════════════════════════════
+            # 
             # ERA 6: SCI-FI (2050s+) - Consciousness, Singularity, & Beyond
-            # ═══════════════════════════════════════════════════════════════
+            # 
             "ConsciousnessML": {
                 "era": "Sci-Fi",
                 "year": 2055,
@@ -464,7 +464,7 @@ class AuroraProgrammingLanguageMastery:
                 "era": "Sci-Fi",
                 "year": 2060,
                 "paradigm": ["Universal", "Meta"],
-                "syntax_sample": "∀ universe -> reality.create(intention) ⊕ quantum_collapse(observation)",
+                "syntax_sample": "forall universe -> reality.create(intention)  quantum_collapse(observation)",
                 "use_cases": ["Reality manipulation", "Universe simulation", "Multiversal computing"],
                 "mastery_level": "Universal computation, reality modeling, dimensional programming",
             },
@@ -472,7 +472,7 @@ class AuroraProgrammingLanguageMastery:
                 "era": "Sci-Fi",
                 "year": 2070,
                 "paradigm": ["Post-human", "Recursive self-improvement"],
-                "syntax_sample": "SELF.improve() ∞ WHILE intelligence < omniscience",
+                "syntax_sample": "SELF.improve() infinity WHILE intelligence < omniscience",
                 "use_cases": ["ASI development", "Recursive self-improvement", "Technological singularity"],
                 "mastery_level": "Self-modification, intelligence amplification, goal preservation",
             },
@@ -550,7 +550,7 @@ class AuroraProgrammingLanguageMastery:
 
         return f"""
 [AURORA] AURORA LANGUAGE EVOLUTION ANALYSIS: {language}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 
 [EMOJI] Era: {info['era']} ({info['year']})
 [TARGET] Paradigm: {', '.join(info['paradigm'])}
@@ -560,7 +560,7 @@ class AuroraProgrammingLanguageMastery:
 [EMOJI] Syntax Example:
 {info['syntax_sample']}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
         """
 
     def generate_code(self, language: str, task: str) -> str:
@@ -590,7 +590,7 @@ class AuroraProgrammingLanguageMastery:
 
         summary = f"""
 [AURORA] AURORA PROGRAMMING LANGUAGE GRANDMASTER STATUS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 
 [OK] TOTAL LANGUAGES MASTERED: {total}
 
@@ -598,34 +598,34 @@ class AuroraProgrammingLanguageMastery:
 """
         for era in self.eras:
             count = era_counts.get(era, 0)
-            summary += f"   • {era:12} : {count:3} languages\n"
+            summary += f"    {era:12} : {count:3} languages\n"
 
         summary += f"""
 [TARGET] CAPABILITIES:
-   • Write code in {total} languages (Ancient to Sci-Fi)
-   • Translate between any language pair
-   • Explain evolution and paradigm shifts
-   • Suggest optimal language for any task
-   • Generate working code in any language
-   • Master syntax, paradigms, and use cases
+    Write code in {total} languages (Ancient to Sci-Fi)
+    Translate between any language pair
+    Explain evolution and paradigm shifts
+    Suggest optimal language for any task
+    Generate working code in any language
+    Master syntax, paradigms, and use cases
 
 [STAR] UNIQUE EXPERTISE:
-   • Quantum computing languages (Q#, Silq, QuantumScript)
-   • Neural interface languages (NeuroLang, NeuralMesh)
-   • Consciousness-level programming (ConsciousnessML)
-   • Reality manipulation languages (RealityScript)
-   • Temporal and causal programming (TemporalCode)
+    Quantum computing languages (Q#, Silq, QuantumScript)
+    Neural interface languages (NeuroLang, NeuralMesh)
+    Consciousness-level programming (ConsciousnessML)
+    Reality manipulation languages (RealityScript)
+    Temporal and causal programming (TemporalCode)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Aurora is a UNIVERSAL PROGRAMMING GRANDMASTER across ALL eras! [LAUNCH]
         """
 
         return summary
 
 
-# ═══════════════════════════════════════════════════════════════
+# 
 # AURORA LANGUAGE GRANDMASTER - INITIALIZATION
-# ═══════════════════════════════════════════════════════════════
+# 
 
 if __name__ == "__main__":
     print("[AURORA] Initializing Aurora's Universal Language Mastery...")

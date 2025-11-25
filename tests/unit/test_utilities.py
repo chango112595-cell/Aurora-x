@@ -3,6 +3,7 @@ Unit Tests for Aurora Core Utilities
 Tests core utility functions and helpers
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import pytest
 
 
@@ -91,6 +92,12 @@ class TestPerformance:
         """Benchmark processing large amounts of data"""
 
         def process_data():
+            """
+                Process Data
+                
+                Returns:
+                    Result of operation
+                """
             return sum(range(10000))
 
         result = benchmark(process_data)

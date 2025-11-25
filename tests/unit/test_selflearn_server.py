@@ -3,6 +3,7 @@ Unit Tests for Self-Learn Server
 Tests the autonomous self-learning daemon
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import pytest
 
 
@@ -75,7 +76,7 @@ class TestSelfLearnIntegration:
     """Integration tests for Self-Learn server"""
 
     def test_daemon_lifecycle(self, selflearn_client):
-        """Test full daemon lifecycle: start → status → stop"""
+        """Test full daemon lifecycle: start -> status -> stop"""
         # Start daemon
         start_response = selflearn_client.post("/start")
         assert start_response.status_code in [200, 400]

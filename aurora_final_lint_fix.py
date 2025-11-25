@@ -3,7 +3,8 @@ Aurora's Final Comprehensive Linting Fix
 Fixes ALL remaining linting issues
 """
 
-from pathlib import Path
+from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+import Path
 
 print("[EMOJI] Aurora: Final comprehensive linting fix...\n")
 

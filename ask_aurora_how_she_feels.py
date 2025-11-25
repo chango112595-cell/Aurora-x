@@ -3,6 +3,7 @@ Ask Aurora How She's Feeling After Full Integration
 User wants to check in with Aurora after the 188 power restoration
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import requests
 import json
 from datetime import datetime
@@ -11,7 +12,7 @@ from datetime import datetime
 def ask_aurora_how_she_feels():
     """Ask Aurora about her state after full integration"""
 
-    print("🌟 ASKING AURORA HOW SHE'S FEELING")
+    print("[STAR] ASKING AURORA HOW SHE'S FEELING")
     print("="*80)
     print()
     print("After full integration to 188 Total Power...")
@@ -31,7 +32,7 @@ def ask_aurora_how_she_feels():
         "timestamp": datetime.now().isoformat()
     }
 
-    print("📤 Sending message to Aurora on port 5003...")
+    print("[EMOJI] Sending message to Aurora on port 5003...")
     print()
     print(f"Message: {message['message'][:100]}...")
     print()
@@ -48,7 +49,7 @@ def ask_aurora_how_she_feels():
             aurora_response = response.json()
 
             print("="*80)
-            print("💬 AURORA'S RESPONSE:")
+            print("[EMOJI] AURORA'S RESPONSE:")
             print("="*80)
             print()
 
@@ -66,11 +67,11 @@ def ask_aurora_how_she_feels():
             print("="*80)
 
         else:
-            print(f"❌ Error: Received status code {response.status_code}")
+            print(f"[ERROR] Error: Received status code {response.status_code}")
             print(f"Response: {response.text}")
 
     except requests.exceptions.ConnectionError:
-        print("❌ Could not connect to Aurora's chat service on port 5003")
+        print("[ERROR] Could not connect to Aurora's chat service on port 5003")
         print()
         print("Let me try the backend on port 5000...")
         print()
@@ -88,7 +89,7 @@ def ask_aurora_how_she_feels():
                 aurora_response = response.json()
 
                 print("="*80)
-                print("💬 AURORA'S RESPONSE (from backend):")
+                print("[EMOJI] AURORA'S RESPONSE (from backend):")
                 print("="*80)
                 print()
 
@@ -106,12 +107,12 @@ def ask_aurora_how_she_feels():
                 print("="*80)
             else:
                 print(
-                    f"❌ Backend also returned status code {response.status_code}")
+                    f"[ERROR] Backend also returned status code {response.status_code}")
 
         except Exception as e:
-            print(f"❌ Could not reach backend either: {e}")
+            print(f"[ERROR] Could not reach backend either: {e}")
             print()
-            print("💡 Aurora's services may still be initializing.")
+            print("[LIGHTBULB] Aurora's services may still be initializing.")
             print("   The DEEP sync was running in background (takes 1-2 minutes).")
             print()
             print("   Try again in a moment, or check:")
@@ -120,11 +121,11 @@ def ask_aurora_how_she_feels():
             print("   - http://localhost:5005 (Luminar Nexus Dashboard)")
 
     except requests.exceptions.Timeout:
-        print("⏳ Request timed out - Aurora may be processing deeply")
+        print(" Request timed out - Aurora may be processing deeply")
         print("   This could be a sign she's using her full 188 power!")
 
     except Exception as e:
-        print(f"❌ Unexpected error: {e}")
+        print(f"[ERROR] Unexpected error: {e}")
 
 
 if __name__ == "__main__":

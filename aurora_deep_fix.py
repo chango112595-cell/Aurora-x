@@ -7,6 +7,7 @@ Aurora's Deep Fix - Address all detected issues
 5. Open browser
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import os
 
 

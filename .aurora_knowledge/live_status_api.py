@@ -6,7 +6,8 @@ Provides real-time server status data for dashboard
 
 def get_live_status():
     """Get current status of all Aurora servers"""
-    import subprocess
+    from typing import Dict, List, Tuple, Optional, Any, Union
+import subprocess
 
     servers = {
         "backend": {"port": 5000, "status": "unknown"},
@@ -29,7 +30,7 @@ def get_live_status():
             status_code = result.stdout.strip()
             info["status"] = "online" if status_code in ["200", "404"] else "offline"
             info["http_code"] = status_code
-        except:
+        except Exception as e:
             info["status"] = "offline"
 
     return servers

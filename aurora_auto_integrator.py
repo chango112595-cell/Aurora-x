@@ -4,6 +4,7 @@ Automatically integrate all 66 dormant modules into aurora_core.py
 Based on integration analysis
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
 import os
 from pathlib import Path
@@ -99,7 +100,7 @@ def integrate_modules():
         lines.insert(insert_pos, import_block)
         print("[OK] Added import block")
     else:
-        print("ℹ️  Import block already exists")
+        print("  Import block already exists")
 
     # Step 2: Add initialization code
     print("\nStep 2: Adding initialization code to AuroraCoreIntelligence.__init__...")
@@ -139,7 +140,7 @@ def integrate_modules():
         lines.insert(init_end_line, init_block)
         print("[OK] Added initialization code")
     else:
-        print("ℹ️  Initialization code already exists or __init__ not found")
+        print("  Initialization code already exists or __init__ not found")
 
     # Write back
     new_content = '\n'.join(lines)
@@ -159,6 +160,9 @@ def integrate_modules():
 
 
 def main():
+    """
+        Main
+            """
     print("=" * 80)
     print("AURORA AUTO-INTEGRATION SYSTEM")
     print("Automatically wiring in dormant capabilities")

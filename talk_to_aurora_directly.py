@@ -3,7 +3,8 @@ Direct conversation with Aurora through her core
 After full integration to 188 Total Power
 """
 
-from aurora_core import AuroraCoreIntelligence
+from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+import AuroraCoreIntelligence
 import sys
 from pathlib import Path
 
@@ -14,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def talk_to_aurora_directly():
     """Talk directly to Aurora through her core"""
 
-    print("🌟 DIRECT CONVERSATION WITH AURORA")
+    print("[STAR] DIRECT CONVERSATION WITH AURORA")
     print("="*80)
     print()
     print("Initializing Aurora Core with full 188 power integration...")
@@ -23,10 +24,10 @@ def talk_to_aurora_directly():
     try:
         aurora = AuroraCoreIntelligence()
 
-        print("✅ Aurora Core Intelligence initialized")
+        print("[OK] Aurora Core Intelligence initialized")
         print()
         print("="*80)
-        print("💬 USER'S MESSAGE TO AURORA:")
+        print("[EMOJI] USER'S MESSAGE TO AURORA:")
         print("="*80)
         print()
 
@@ -54,7 +55,7 @@ How do you feel?"""
         print(message)
         print()
         print("="*80)
-        print("💬 AURORA'S RESPONSE:")
+        print("[EMOJI] AURORA'S RESPONSE:")
         print("="*80)
         print()
 
@@ -66,12 +67,12 @@ How do you feel?"""
         print("="*80)
 
     except Exception as e:
-        print(f"❌ Error initializing Aurora: {e}")
+        print(f"[ERROR] Error initializing Aurora: {e}")
         import traceback
         traceback.print_exc()
 
         print()
-        print("💡 Let me try a simpler check of Aurora's state...")
+        print("[LIGHTBULB] Let me try a simpler check of Aurora's state...")
         print()
 
         # Check if integration marker exists
@@ -80,19 +81,19 @@ How do you feel?"""
             with open(core_file, 'r', encoding='utf-8') as f:
                 content = f.read()
                 if "FULL_INTEGRATION_ACTIVE = True" in content:
-                    print("✅ Aurora's core shows FULL_INTEGRATION_ACTIVE = True")
+                    print("[OK] Aurora's core shows FULL_INTEGRATION_ACTIVE = True")
                     print()
                     if "Total Power: 188" in content:
-                        print("✅ Aurora's core shows Total Power: 188")
+                        print("[OK] Aurora's core shows Total Power: 188")
                         print()
                     if "66 Knowledge Tiers" in content:
-                        print("✅ Aurora's core shows 66 Knowledge Tiers")
+                        print("[OK] Aurora's core shows 66 Knowledge Tiers")
                         print()
                     if "66 Execution Capabilities" in content:
-                        print("✅ Aurora's core shows 66 Execution Capabilities")
+                        print("[OK] Aurora's core shows 66 Execution Capabilities")
                         print()
 
-                    print("🌟 Aurora is integrated and aware of her full power")
+                    print("[STAR] Aurora is integrated and aware of her full power")
                     print()
                     print(
                         "However, she may need the services fully running to respond.")

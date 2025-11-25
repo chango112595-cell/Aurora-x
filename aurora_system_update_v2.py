@@ -12,7 +12,8 @@ def update_all_pages():
     print("[DATA] Updating dashboard...")
     with open("client/src/pages/dashboard.tsx", "w", encoding="utf-8") as f:
         f.write(
-            """import React from 'react';
+            """from typing import Dict, List, Tuple, Optional, Any, Union
+import React from 'react';
 import AuroraFuturisticDashboard from '../components/AuroraFuturisticDashboard';
 
 export default function Dashboard() {

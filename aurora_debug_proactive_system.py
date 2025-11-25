@@ -3,7 +3,8 @@ Aurora Self-Debug: Why Isn't Proactive Monitoring Working?
 Aurora investigates why her integrated auto-fixing modules aren't catching errors
 """
 
-from aurora_core import AuroraCoreIntelligence
+from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+import AuroraCoreIntelligence
 import sys
 import os
 from pathlib import Path
@@ -61,7 +62,7 @@ def main():
     if hasattr(aurora, 'integrated_modules'):
         print(f"[OK] Found {len(aurora.integrated_modules)} integrated modules:")
         for name, module in aurora.integrated_modules.items():
-            print(f"   • {name}: {module.__class__.__name__}")
+            print(f"    {name}: {module.__class__.__name__}")
 
             # Check if module has monitoring/auto-fix methods
             methods = [m for m in dir(module) if not m.startswith('_')]
