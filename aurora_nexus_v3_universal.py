@@ -199,25 +199,22 @@ class PlatformAdapter:
 
     def start_process(self, command: List[str], cwd: Optional[str] = None) -> subprocess.Popen:
         """Start process in platform-native way"""
+        kwargs = {
+            'cwd': cwd,
+            'stdout': subprocess.PIPE,
+            'stderr': subprocess.PIPE
+        }
+        
         if self.is_windows:
-            return subprocess.Popen(
-                command,
-                cwd=cwd,
-                creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
-            )
+            kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP  # type: ignore
         else:
-            return subprocess.Popen(
-                command,
-                cwd=cwd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                start_new_session=True
-            )
+            kwargs['start_new_session'] = True
+        
+        return subprocess.Popen(command, **kwargs)
 
     def kill_process(self, pid: int) -> bool:
         """Kill process by PID"""
+        proc = None
         try:
             proc = psutil.Process(pid)
             proc.terminate()
@@ -225,7 +222,8 @@ class PlatformAdapter:
             return True
         except:
             try:
-                proc.kill()
+                if proc:
+                    proc.kill()
                 return True
             except:
                 return False
@@ -657,7 +655,7 @@ class AuroraUniversalCore:
         return default_config
 
     def register_service(self, name: str, port: int,
-                         dependencies: List[str] = None,
+                         dependencies: Optional[List[str]] = None,
                          category: str = "general") -> bool:
         """Register a service with Aurora"""
         service_id = f"{name}_{port}"
