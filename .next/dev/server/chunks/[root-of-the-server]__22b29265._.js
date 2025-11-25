@@ -173,7 +173,9 @@ async function processWithAuroraIntelligence(userMessage, sessionId = 'default')
     try {
         // Use Aurora's analyze method which routes through Nexus V3
         const result = await aurora.analyze(userMessage, sessionId);
-        return result.response || result.analysis || 'Aurora processed your request successfully.';
+        const response = result.response || result.analysis || 'Aurora processed your request successfully.';
+        // Aurora's autonomous type safety: ensure string response
+        return typeof response === 'string' ? response : JSON.stringify(response);
     } catch (error) {
         console.error('[Aurora Chat] Intelligence error:', error);
         // Fallback: Try Python bridge directly
@@ -182,7 +184,9 @@ async function processWithAuroraIntelligence(userMessage, sessionId = 'default')
                 input: userMessage,
                 context: 'chat'
             });
-            return pythonResult.response || pythonResult.analysis || 'Aurora is thinking...';
+            const response = pythonResult.response || pythonResult.analysis || 'Aurora is thinking...';
+            // Aurora's autonomous type safety
+            return typeof response === 'string' ? response : JSON.stringify(response);
         } catch (pythonError) {
             console.error('[Aurora Chat] Python bridge error:', pythonError);
             return `I'm Aurora with 188 power units. I received: "${userMessage}". My intelligence system is connecting. Please try again.`;

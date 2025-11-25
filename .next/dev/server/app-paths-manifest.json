@@ -1,5 +1,8 @@
 {
+  "/api/chat/route": "app/api/chat/route.js",
+  "/chat/page": "app/chat/page.js",
   "/database/page": "app/database/page.js",
   "/intelligence/page": "app/intelligence/page.js",
+  "/page": "app/page.js",
   "/settings/page": "app/settings/page.js"
 }

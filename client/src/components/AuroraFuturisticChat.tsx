@@ -125,7 +125,7 @@ export default function AuroraFuturisticChat() {
   const formatMessage = (content: string) => {
     // Aurora's autonomous error detection: null safety + type coercion
     if (!content) return <span className="text-slate-500">Empty message</span>;
-    
+
     // Ensure content is a string (Aurora's autonomous type safety)
     const safeContent = typeof content === 'string' ? content : String(content);
 
@@ -210,8 +210,8 @@ export default function AuroraFuturisticChat() {
                 >
                   <div
                     className={`max-w-[80%] rounded-2xl p-4 ${msg.role === 'user'
-                        ? 'bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30'
-                        : 'bg-slate-800/50 border border-purple-500/20'
+                      ? 'bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30'
+                      : 'bg-slate-800/50 border border-purple-500/20'
                       }`}
                   >
                     {/* Message Header */}
