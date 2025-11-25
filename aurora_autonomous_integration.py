@@ -190,4 +190,4 @@ def integrate_autonomous_systems():
 
 if __name__ == "__main__":
     success = integrate_autonomous_systems()
-    exit(0 if SUCCESS else 1)
+    exit(0 if success else 1)
