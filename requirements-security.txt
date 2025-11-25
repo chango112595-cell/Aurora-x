@@ -3,9 +3,9 @@
 # Purpose: Tools for security analysis, vulnerability scanning, and code quality
 
 # Security Scanning
-bandit>=1.7.6                    # Python AST-based security linter
-safety>=3.0.0                    # Dependency vulnerability scanner
-pip-audit>=2.7.3                 # Audit Python packages for vulnerabilities
+bandit==1.7.5                    # Python AST-based security linter
+safety==2.3.5                    # Dependency vulnerability scanner
+pip-audit==2.9.0                 # Audit Python packages for vulnerabilities
 
 # Code Quality & Security Analysis
 pylint>=3.0.3                    # Python code analysis
