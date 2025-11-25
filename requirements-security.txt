@@ -29,7 +29,7 @@ requests>=2.32.0                 # HTTP library
 urllib3>=2.2.0                   # HTTP client
 
 # Additional Security Tools
-cryptography>=42.0.0             # Cryptographic recipes and primitives
-PyJWT>=2.8.0                     # JSON Web Token implementation
-bcrypt>=4.1.2                    # Password hashing
+cryptography==41.0.7             # Cryptographic recipes and primitives
+PyJWT==2.8.0                     # JSON Web Token implementation
+bcrypt==4.3.0                    # Password hashing
  
