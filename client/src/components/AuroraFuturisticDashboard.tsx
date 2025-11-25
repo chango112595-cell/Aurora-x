@@ -19,17 +19,13 @@ export default function AuroraFuturisticDashboard() {
     // Fetch Aurora status and scores
     const fetchAuroraData = async () => {
       try {
-        const statusRes = await fetch('http://localhost:5000/api/aurora/status');
+        const statusRes = await fetch('/api/health');
+        if (!statusRes.ok) throw new Error('Health check failed');
         const statusData = await statusRes.json();
-        console.log('Aurora Status:', statusData);
-        
-        const scoresRes = await fetch('http://localhost:5000/api/aurora/scores');
-        const scoresData = await scoresRes.json();
-        console.log('Aurora Scores:', scoresData);
+        console.log('Aurora Health Status:', statusData);
         
         // You can update state here with the real data
         // setAuroraStatus(statusData);
-        // setAuroraScores(scoresData.scores);
       } catch (error) {
         console.log('Aurora API not available:', error);
       }

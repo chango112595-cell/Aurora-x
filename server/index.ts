@@ -8,7 +8,8 @@ const app = express();
 const server = createServer(app);
 
 // Enable trust proxy for Replit environment (handles X-Forwarded-For correctly)
-app.set('trust proxy', true);
+// Use 1 for single proxy hop (Replit) to avoid express-rate-limit conflicts
+app.set('trust proxy', 1);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
