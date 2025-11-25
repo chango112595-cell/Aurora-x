@@ -1802,12 +1802,10 @@ def process_data(data):
 
 
 if __name__ == "__main__":
-
-# Aurora Perfect Error Handling
-try:
-    # Main execution with complete error coverage
-    pass
-except Exception as e:
-    # Handle all exceptions gracefully
-    pass
-    main()
+    # Aurora Perfect Error Handling
+    try:
+        # Main execution with complete error coverage
+        main()
+    except Exception as e:
+        # Handle all exceptions gracefully
+        print(f"Error: {e}")
