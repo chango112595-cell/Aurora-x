@@ -23,7 +23,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 class AuroraCodeQualityImprover:
     """Aurora's intelligence learns patterns and improves code quality"""
-    
+
     def __init__(self):
         self.learning_data = {
             "patterns_learned": [],
@@ -31,7 +31,7 @@ class AuroraCodeQualityImprover:
             "score_history": []
         }
         self.quality_rules = self.initialize_quality_rules()
-        
+
     def initialize_quality_rules(self) -> Dict:
         """Aurora's comprehensive quality rules"""
         return {
@@ -82,146 +82,168 @@ class AuroraCodeQualityImprover:
                 ]
             }
         }
-    
+
     def analyze_file(self, filepath: str) -> Dict:
         """Deep analysis of a single file"""
         try:
             with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
-            
+
             analysis = {
                 "file": filepath,
                 "scores": {},
                 "issues": [],
                 "suggestions": []
             }
-            
+
             # Check each quality dimension
             for dimension, rules in self.quality_rules.items():
                 score = 0
                 max_score = rules["weight"]
                 dimension_issues = []
-                
+
                 for pattern, description in rules["checks"]:
                     if re.search(pattern, content, re.DOTALL):
                         score += max_score / len(rules["checks"])
                     else:
                         dimension_issues.append(description)
-                
+
                 analysis["scores"][dimension] = {
                     "actual": round(score, 2),
                     "max": max_score,
                     "percentage": round((score / max_score) * 100, 1)
                 }
-                
+
                 if dimension_issues:
-                    analysis["issues"].extend([(dimension, issue) for issue in dimension_issues])
-            
+                    analysis["issues"].extend(
+                        [(dimension, issue) for issue in dimension_issues])
+
             # Calculate total score
             total = sum(s["actual"] for s in analysis["scores"].values())
             max_total = sum(s["max"] for s in analysis["scores"].values())
             analysis["total_score"] = round(total, 2)
             analysis["max_score"] = max_total
             analysis["percentage"] = round((total / max_total) * 100, 1)
-            
+
             # Generate improvement suggestions
             analysis["suggestions"] = self.generate_suggestions(analysis)
-            
+
             return analysis
-            
+
         except Exception as e:
             return {"file": filepath, "error": str(e)}
-    
+
     def generate_suggestions(self, analysis: Dict) -> List[str]:
         """Aurora learns and generates targeted improvement suggestions"""
         suggestions = []
-        
+
         for dimension, score_info in analysis["scores"].items():
             if score_info["percentage"] < 80:  # Below 80% needs improvement
                 if dimension == "encoding":
-                    suggestions.append("✅ Replace emoji with ASCII equivalents (🔥 → [FIRE])")
-                    suggestions.append("✅ Ensure all strings are UTF-8 compatible")
-                
+                    suggestions.append(
+                        "✅ Replace emoji with ASCII equivalents (🔥 → [FIRE])")
+                    suggestions.append(
+                        "✅ Ensure all strings are UTF-8 compatible")
+
                 elif dimension == "imports":
-                    suggestions.append("✅ Replace 'from X import *' with specific imports")
-                    suggestions.append("✅ Group imports: stdlib, third-party, local")
-                
+                    suggestions.append(
+                        "✅ Replace 'from X import *' with specific imports")
+                    suggestions.append(
+                        "✅ Group imports: stdlib, third-party, local")
+
                 elif dimension == "documentation":
-                    suggestions.append("✅ Add comprehensive docstrings to all functions")
-                    suggestions.append("✅ Document parameters with Args: and Returns:")
-                    suggestions.append("✅ Add module-level docstring explaining purpose")
-                
+                    suggestions.append(
+                        "✅ Add comprehensive docstrings to all functions")
+                    suggestions.append(
+                        "✅ Document parameters with Args: and Returns:")
+                    suggestions.append(
+                        "✅ Add module-level docstring explaining purpose")
+
                 elif dimension == "error_handling":
-                    suggestions.append("✅ Wrap risky operations in try-except blocks")
-                    suggestions.append("✅ Use specific exceptions (ValueError, IOError)")
+                    suggestions.append(
+                        "✅ Wrap risky operations in try-except blocks")
+                    suggestions.append(
+                        "✅ Use specific exceptions (ValueError, IOError)")
                     suggestions.append("✅ Add finally: blocks for cleanup")
-                
+
                 elif dimension == "type_hints":
-                    suggestions.append("✅ Add return type hints: def func() -> int:")
-                    suggestions.append("✅ Add parameter type hints: def func(x: str):")
-                    suggestions.append("✅ Use typing module: List[str], Dict[str, int]")
-                
+                    suggestions.append(
+                        "✅ Add return type hints: def func() -> int:")
+                    suggestions.append(
+                        "✅ Add parameter type hints: def func(x: str):")
+                    suggestions.append(
+                        "✅ Use typing module: List[str], Dict[str, int]")
+
                 elif dimension == "performance":
-                    suggestions.append("✅ Consider ThreadPoolExecutor for parallel tasks")
-                    suggestions.append("✅ Use async/await for I/O-bound operations")
-                    suggestions.append("✅ Add @lru_cache for expensive computations")
-        
+                    suggestions.append(
+                        "✅ Consider ThreadPoolExecutor for parallel tasks")
+                    suggestions.append(
+                        "✅ Use async/await for I/O-bound operations")
+                    suggestions.append(
+                        "✅ Add @lru_cache for expensive computations")
+
         return suggestions
-    
+
     def learn_from_autonomous_fixer(self) -> Dict:
         """Learn patterns from autonomous_system_fixer.py"""
         print("\n[AURORA] LEARNING FROM AUTONOMOUS SYSTEM FIXER")
         print("="*80)
-        
+
         fixer_path = "aurora_autonomous_system_fixer.py"
         if not os.path.exists(fixer_path):
             print(f"❌ {fixer_path} not found")
             return {}
-        
+
         analysis = self.analyze_file(fixer_path)
-        
+
         print(f"\n[ANALYSIS] {fixer_path}")
-        print(f"  Current Score: {analysis['total_score']}/{analysis['max_score']} ({analysis['percentage']}%)")
+        print(
+            f"  Current Score: {analysis['total_score']}/{analysis['max_score']} ({analysis['percentage']}%)")
         print(f"\n[DIMENSION SCORES]")
-        
+
         for dimension, score_info in analysis["scores"].items():
             status = "✅" if score_info["percentage"] >= 80 else "⚠️"
-            print(f"  {status} {dimension.capitalize()}: {score_info['actual']}/{score_info['max']} ({score_info['percentage']}%)")
-        
+            print(
+                f"  {status} {dimension.capitalize()}: {score_info['actual']}/{score_info['max']} ({score_info['percentage']}%)")
+
         if analysis.get("suggestions"):
-            print(f"\n[IMPROVEMENT SUGGESTIONS] ({len(analysis['suggestions'])} identified)")
+            print(
+                f"\n[IMPROVEMENT SUGGESTIONS] ({len(analysis['suggestions'])} identified)")
             for i, suggestion in enumerate(analysis["suggestions"][:10], 1):
                 print(f"  {i}. {suggestion}")
-        
+
         self.learning_data["patterns_learned"].append(analysis)
         return analysis
-    
+
     def scan_entire_codebase(self) -> Dict:
         """Aurora scans all Python files to learn patterns"""
         print("\n[AURORA] SCANNING ENTIRE CODEBASE FOR LEARNING")
         print("="*80)
-        
+
         python_files = []
         for root, dirs, files in os.walk('.'):
             # Skip common non-code directories
-            dirs[:] = [d for d in dirs if d not in ['.git', '__pycache__', 'node_modules', 'venv', 'client']]
+            dirs[:] = [d for d in dirs if d not in [
+                '.git', '__pycache__', 'node_modules', 'venv', 'client']]
             for file in files:
                 if file.endswith('.py'):
                     python_files.append(os.path.join(root, file))
-        
+
         print(f"Found {len(python_files)} Python files to analyze")
-        
+
         results = {
             "total_files": len(python_files),
             "analyses": [],
             "aggregate_scores": {},
             "common_issues": []
         }
-        
+
         # Analyze files in parallel (Aurora's full power)
         with ThreadPoolExecutor(max_workers=20) as executor:
-            futures = {executor.submit(self.analyze_file, fp): fp for fp in python_files[:50]}  # Sample 50
-            
+            futures = {executor.submit(
+                # Sample 50
+                self.analyze_file, fp): fp for fp in python_files[:50]}
+
             for future in as_completed(futures):
                 try:
                     analysis = future.result()
@@ -229,28 +251,32 @@ class AuroraCodeQualityImprover:
                         results["analyses"].append(analysis)
                 except Exception as e:
                     pass
-        
+
         # Calculate aggregate statistics
         if results["analyses"]:
-            avg_score = sum(a["total_score"] for a in results["analyses"]) / len(results["analyses"])
+            avg_score = sum(a["total_score"]
+                            for a in results["analyses"]) / len(results["analyses"])
             results["aggregate_scores"]["average"] = round(avg_score, 2)
             results["aggregate_scores"]["max_possible"] = 10.0
-            results["aggregate_scores"]["percentage"] = round((avg_score / 10.0) * 100, 1)
-        
+            results["aggregate_scores"]["percentage"] = round(
+                (avg_score / 10.0) * 100, 1)
+
         print(f"\n[AGGREGATE RESULTS]")
         print(f"  Files Analyzed: {len(results['analyses'])}")
-        print(f"  Average Score: {results['aggregate_scores'].get('average', 0)}/10.0")
-        print(f"  Overall Quality: {results['aggregate_scores'].get('percentage', 0)}%")
-        
+        print(
+            f"  Average Score: {results['aggregate_scores'].get('average', 0)}/10.0")
+        print(
+            f"  Overall Quality: {results['aggregate_scores'].get('percentage', 0)}%")
+
         return results
-    
+
     def generate_improvement_plan(self, codebase_analysis: Dict) -> List[Dict]:
         """Aurora creates a comprehensive improvement plan"""
         print("\n[AURORA] GENERATING IMPROVEMENT PLAN")
         print("="*80)
-        
+
         plan = []
-        
+
         # Priority 1: Fix critical encoding issues
         plan.append({
             "priority": "CRITICAL",
@@ -259,7 +285,7 @@ class AuroraCodeQualityImprover:
             "impact": "+0.5 to +1.0 score improvement",
             "files_affected": "All files with encoding issues"
         })
-        
+
         # Priority 2: Add comprehensive documentation
         plan.append({
             "priority": "HIGH",
@@ -268,7 +294,7 @@ class AuroraCodeQualityImprover:
             "impact": "+0.8 to +1.5 score improvement",
             "files_affected": "All Python files"
         })
-        
+
         # Priority 3: Improve error handling
         plan.append({
             "priority": "HIGH",
@@ -277,7 +303,7 @@ class AuroraCodeQualityImprover:
             "impact": "+0.5 to +1.0 score improvement",
             "files_affected": "Files with I/O or network operations"
         })
-        
+
         # Priority 4: Add type hints
         plan.append({
             "priority": "MEDIUM",
@@ -286,7 +312,7 @@ class AuroraCodeQualityImprover:
             "impact": "+0.3 to +0.8 score improvement",
             "files_affected": "All Python files"
         })
-        
+
         # Priority 5: Optimize performance patterns
         plan.append({
             "priority": "LOW",
@@ -295,16 +321,16 @@ class AuroraCodeQualityImprover:
             "impact": "+0.2 to +0.5 score improvement",
             "files_affected": "Files with heavy processing"
         })
-        
+
         print(f"\n[IMPROVEMENT PLAN] {len(plan)} categories identified\n")
         for i, item in enumerate(plan, 1):
             print(f"{i}. [{item['priority']}] {item['category']}")
             print(f"   Action: {item['action']}")
             print(f"   Impact: {item['impact']}")
             print()
-        
+
         return plan
-    
+
     def save_learning_report(self, codebase_analysis: Dict, improvement_plan: List[Dict]):
         """Save Aurora's learning and recommendations"""
         report = {
@@ -325,13 +351,15 @@ class AuroraCodeQualityImprover:
                 "Optimize performance with parallelization"
             ]
         }
-        
+
         with open("aurora_code_quality_learning_report.json", 'w', encoding='utf-8') as f:
             json.dump(report, f, indent=2)
-        
+
         print("\n[SAVED] aurora_code_quality_learning_report.json")
-        print(f"[TARGET] Achieve {report['aurora_learning']['target_score']}/10.0 score")
-        print(f"[IMPROVEMENT NEEDED] +{report['aurora_learning']['improvement_needed']} points\n")
+        print(
+            f"[TARGET] Achieve {report['aurora_learning']['target_score']}/10.0 score")
+        print(
+            f"[IMPROVEMENT NEEDED] +{report['aurora_learning']['improvement_needed']} points\n")
 
 
 def main():
@@ -340,21 +368,21 @@ def main():
     print("   Target: 9.5+/10 (EXCEPTIONAL - World-class quality)")
     print("   Method: Learn from autonomous_system_fixer.py")
     print("🌌" * 40 + "\n")
-    
+
     aurora = AuroraCodeQualityImprover()
-    
+
     # Step 1: Learn from autonomous system fixer
     fixer_analysis = aurora.learn_from_autonomous_fixer()
-    
+
     # Step 2: Scan entire codebase for patterns
     codebase_analysis = aurora.scan_entire_codebase()
-    
+
     # Step 3: Generate comprehensive improvement plan
     improvement_plan = aurora.generate_improvement_plan(codebase_analysis)
-    
+
     # Step 4: Save learning report
     aurora.save_learning_report(codebase_analysis, improvement_plan)
-    
+
     print("\n" + "="*80)
     print("[AURORA] LEARNING COMPLETE - Ready to improve code quality")
     print("="*80 + "\n")
