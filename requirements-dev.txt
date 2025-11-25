@@ -4,7 +4,7 @@
 # Code Quality
 black==23.12.1
 isort==5.13.2
-flake8==7.0.0
+flake8==7.3.0
 pylint==3.0.3
 mypy==1.18.2
 
