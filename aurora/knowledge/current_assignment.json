@@ -1,0 +1,23 @@
+{
+  "assignment": "Fix Port 5001 Conflict",
+  "description": "Port 5001 is running backend API (JSON) but should run Vite UI (HTML). Diagnose why serve.py conflicts with Luminar Nexus and fix it.",
+  "problem": "When running `python3 -m aurora_x.serve`, port 5001 shows JSON API routes instead of Vite HTML UI",
+  "root_cause_investigation": [
+    "Check what aurora_x/serve.py does - what port does it default to?",
+    "Check if there are TWO backend servers (serve.py and server/index.ts)",
+    "Determine: should serve.py exist, or is it redundant?"
+  ],
+  "success_criteria": [
+    "Port 5001 serves Vite UI (HTML page)",
+    "Port 5000 serves Backend API (JSON endpoints)",
+    "No port conflicts",
+    "Both services start cleanly"
+  ],
+  "files_to_modify": [
+    "aurora_x/serve.py (probably - check the port logic)",
+    "possibly tools/luminar_nexus.py (if config needs adjustment)"
+  ],
+  "expected_outcome": "Users open http://localhost:5001 and see Aurora UI, not JSON",
+  "priority": "HIGH",
+  "difficulty": "MEDIUM"
+}

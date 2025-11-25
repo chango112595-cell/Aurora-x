@@ -1,0 +1,7 @@
+# Health Check Task
+Task Type: creative
+Priority: MEDIUM
+Requested: System health check
+
+Description:
+Check the health of all Aurora services and generate a status report.
