@@ -21,6 +21,7 @@ import {
 import authRouter from "./auth-routes";
 import { getChatResponse, searchWeb } from "./aurora-chat";
 import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter } from "./rate-limit";
+import Aurora from "./aurora-core";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
