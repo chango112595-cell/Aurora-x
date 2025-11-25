@@ -8,7 +8,7 @@ import requests
 
 def test_endpoint(name, method, url, data=None):
     """Test a single endpoint"""
-    print(f"\n🔍 Testing {name}...")
+    print(f"\n[SCAN] Testing {name}...")
     try:
         if method == "GET":
             response = requests.get(url, timeout=5)
@@ -19,19 +19,19 @@ def test_endpoint(name, method, url, data=None):
         print(f"   Response: {response.text[:200]}")
 
         if response.status_code < 400:
-            print(f"   ✅ {name} OK")
+            print(f"   [OK] {name} OK")
             return True
         else:
-            print(f"   ❌ {name} FAILED")
+            print(f"   [ERROR] {name} FAILED")
             return False
     except Exception as e:
-        print(f"   ❌ {name} ERROR: {e}")
+        print(f"   [ERROR] {name} ERROR: {e}")
         return False
 
 
 def main():
     """Run all connection tests"""
-    print("🌟 Aurora Connection Debug Tool")
+    print("[EMOJI] Aurora Connection Debug Tool")
     print("=" * 50)
 
     base_url = "http://0.0.0.0:5000"
@@ -48,13 +48,13 @@ def main():
         results.append(test_endpoint(*test))
 
     print("\n" + "=" * 50)
-    print(f"📊 Results: {sum(results)}/{len(results)} tests passed")
+    print(f"[DATA] Results: {sum(results)}/{len(results)} tests passed")
 
     if all(results):
-        print("✅ All connections working!")
+        print("[OK] All connections working!")
         return 0
     else:
-        print("⚠️  Some connections failed - check logs above")
+        print("[WARN]  Some connections failed - check logs above")
         return 1
 
 

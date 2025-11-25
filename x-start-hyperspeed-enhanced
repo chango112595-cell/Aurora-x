@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-⚡ AURORA NEXUS V3 - HYPER-SPEED LAUNCHER ENHANCED ⚡
+[POWER] AURORA NEXUS V3 - HYPER-SPEED LAUNCHER ENHANCED [POWER]
 INTELLIGENT | AUTO-HEALING | RETRY LOGIC | FULL DIAGNOSTICS
 Enhanced by Aurora with MAXIMUM POWER
 """
@@ -16,7 +16,7 @@ import psutil
 from datetime import datetime
 
 print("=" * 80)
-print("⚡ AURORA NEXUS V3 - HYPER-SPEED ACTIVATION ENHANCED")
+print("[POWER] AURORA NEXUS V3 - HYPER-SPEED ACTIVATION ENHANCED")
 print("=" * 80)
 print("188 Capabilities | 31 Systems | INTELLIGENT PORT MANAGEMENT")
 print("AUTO-HEALING | RETRY LOGIC | PROCESS MONITORING")
@@ -36,7 +36,7 @@ retry_queue = []
 
 def cleanup_existing_processes():
     """Kill any existing Aurora/Luminar processes intelligently"""
-    print("🧹 Intelligent cleanup of existing processes...")
+    print("[EMOJI] Intelligent cleanup of existing processes...")
     killed = 0
     try:
         for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
@@ -48,9 +48,9 @@ def cleanup_existing_processes():
             except (psutil.NoSuchProcess, psutil.AccessDenied):
                 pass
         time.sleep(2)
-        print(f"   ✅ Cleanup complete ({killed} processes terminated)\n")
+        print(f"   [OK] Cleanup complete ({killed} processes terminated)\n")
     except Exception as e:
-        print(f"   ⚠️  Cleanup error (non-critical): {e}\n")
+        print(f"   [WARN]  Cleanup error (non-critical): {e}\n")
 
 
 def check_port(port):
@@ -94,13 +94,13 @@ def start_with_retry(cmd, name="Service", shell=False, critical=False, port=None
         if port and not check_port(port):
             if attempt == 0:
                 print(
-                    f"   ⚠️  {name}: Port {port} occupied, attempting auto-recovery...")
+                    f"   [WARN]  {name}: Port {port} occupied, attempting auto-recovery...")
                 killed = kill_process_on_port(port)
                 if killed:
-                    print(f"   ✅ {name}: Freed port {port}, retrying...")
+                    print(f"   [OK] {name}: Freed port {port}, retrying...")
                     time.sleep(1)
                 else:
-                    print(f"   ❌ {name}: Could not free port {port}")
+                    print(f"   [ERROR] {name}: Could not free port {port}")
                     failed_starts.append((name, f"Port {port} occupied"))
                     return None
             else:
@@ -130,7 +130,7 @@ def start_with_retry(cmd, name="Service", shell=False, critical=False, port=None
             if proc.poll() is None:  # Process still running
                 processes.append((proc, name, critical, port))
                 successful_starts.append(name)
-                status = "✅"
+                status = "[OK]"
                 if attempt > 0:
                     status += f" (retry {attempt})"
                 print(f"   {status} {name}")
@@ -139,19 +139,19 @@ def start_with_retry(cmd, name="Service", shell=False, critical=False, port=None
                 # Process crashed immediately
                 stderr = proc.stderr.read() if proc.stderr else ""
                 if attempt < max_retries - 1:
-                    print(f"   ⚠️  {name}: Process crashed, retrying...")
+                    print(f"   [WARN]  {name}: Process crashed, retrying...")
                     continue
                 else:
-                    print(f"   ❌ {name}: Failed after {max_retries} attempts")
+                    print(f"   [ERROR] {name}: Failed after {max_retries} attempts")
                     failed_starts.append((name, "Process crashed immediately"))
                     return None
 
         except Exception as e:
             if attempt < max_retries - 1:
-                print(f"   ⚠️  {name}: Error ({str(e)[:30]}), retrying...")
+                print(f"   [WARN]  {name}: Error ({str(e)[:30]}), retrying...")
                 continue
             else:
-                print(f"   ❌ {name}: {str(e)[:50]}")
+                print(f"   [ERROR] {name}: {str(e)[:50]}")
                 failed_starts.append((name, str(e)))
                 return None
 
@@ -172,13 +172,13 @@ def monitor_health():
 
 def shutdown_handler(signum, frame):
     """Graceful shutdown"""
-    print("\n\n⚠️  Shutdown signal received, cleaning up...")
+    print("\n\n[WARN]  Shutdown signal received, cleaning up...")
     for proc, name, _, _ in processes:
         try:
             proc.terminate()
         except:
             pass
-    print("✅ Cleanup complete")
+    print("[OK] Cleanup complete")
     sys.exit(0)
 
 
@@ -194,14 +194,14 @@ cleanup_existing_processes()
 
 # PHASE 0: NEXUS V3 MASTER ORCHESTRATOR
 print("━" * 80)
-print("🌌 PHASE 0: NEXUS V3 MASTER ORCHESTRATOR")
+print("[AURORA] PHASE 0: NEXUS V3 MASTER ORCHESTRATOR")
 print("━" * 80)
 start_with_retry([PYTHON_CMD, "aurora_nexus_v3_universal.py", "--orchestration", "--daemon"],
                  "Nexus V3 Master Orchestrator", critical=True, port=5031)
 
 # PHASE 1: CONSCIOUSNESS
 print("\n━" * 80)
-print("🧠 PHASE 1: CONSCIOUSNESS & AWARENESS")
+print("[BRAIN] PHASE 1: CONSCIOUSNESS & AWARENESS")
 print("━" * 80)
 if os.path.exists("aurora_consciousness_service.py"):
     start_with_retry([PYTHON_CMD, "aurora_consciousness_service.py"],
@@ -209,7 +209,7 @@ if os.path.exists("aurora_consciousness_service.py"):
 
 # PHASE 2: INTELLIGENCE
 print("\n━" * 80)
-print("⚡ PHASE 2: CORE INTELLIGENCE")
+print("[POWER] PHASE 2: CORE INTELLIGENCE")
 print("━" * 80)
 if os.path.exists("aurora_tier_orchestrator.py"):
     start_with_retry([PYTHON_CMD, "aurora_tier_orchestrator.py"],
@@ -235,17 +235,17 @@ if os.path.exists("aurora_pattern_recognition.py"):
 
 # PHASE 3: AUTONOMOUS
 print("\n━" * 80)
-print("🤖 PHASE 3: AUTONOMOUS SYSTEMS")
+print("[AGENT] PHASE 3: AUTONOMOUS SYSTEMS")
 print("━" * 80)
 if os.path.exists("aurora_autonomous_agent.py"):
     start_with_retry([PYTHON_CMD, "aurora_autonomous_agent.py"],
                      "Autonomous Agent", critical=True, port=5015)
-if os.path.exists("aurora_multi_agent.py"):
-    start_with_retry([PYTHON_CMD, "aurora_multi_agent.py"],
-                     "Multi-Agent System", port=5016)
-if os.path.exists("aurora_autonomous_integration.py"):
-    start_with_retry([PYTHON_CMD, "aurora_autonomous_integration.py"],
-                     "Autonomous Integration", port=5017)
+# [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] if os.path.exists("aurora_multi_agent.py"):
+# # # #     start_with_retry([PYTHON_CMD, "aurora_multi_agent.py"],
+# # # #                      "Multi-Agent System", port=5016)
+# [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] if os.path.exists("aurora_autonomous_integration.py"):
+# # # #     start_with_retry([PYTHON_CMD, "aurora_autonomous_integration.py"],
+# # # #                      "Autonomous Integration", port=5017)
 if os.path.exists("aurora_autonomous_monitor.py"):
     start_with_retry([PYTHON_CMD, "aurora_autonomous_monitor.py"],
                      "Autonomous Monitor", port=5018)
@@ -266,19 +266,19 @@ if os.path.exists("aurora_ultimate_omniscient_grandmaster.py"):
 
 # PHASE 5: ADVANCED TIERS
 print("\n━" * 80)
-print("👁️ PHASE 5: ADVANCED TIER CAPABILITIES")
+print("[EMOJI]️ PHASE 5: ADVANCED TIER CAPABILITIES")
 print("━" * 80)
 # Note: Visual/Test/Quality scripts are demos (not services), removed from launcher
-if os.path.exists("aurora_live_integration.py"):
-    start_with_retry([PYTHON_CMD, "aurora_live_integration.py"],
-                     "Live Integration (Tier 44)", port=5023)
+# [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] if os.path.exists("aurora_live_integration.py"):
+# # # #     start_with_retry([PYTHON_CMD, "aurora_live_integration.py"],
+# # # #                      "Live Integration (Tier 44)", port=5023)
 if os.path.exists("aurora_security_auditor.py"):
     start_with_retry([PYTHON_CMD, "aurora_security_auditor.py"],
                      "Security Auditor (Tier 53)", port=5025)
 
 # PHASE 6: CODE QUALITY
 print("\n━" * 80)
-print("📊 PHASE 6: CODE QUALITY SYSTEMS")
+print("[DATA] PHASE 6: CODE QUALITY SYSTEMS")
 print("━" * 80)
 if os.path.exists("aurora_pylint_prevention.py"):
     start_with_retry([PYTHON_CMD, "aurora_pylint_prevention.py", "monitor", "60"],
@@ -286,7 +286,7 @@ if os.path.exists("aurora_pylint_prevention.py"):
 
 # PHASE 7: WEB SERVICES
 print("\n━" * 80)
-print("🌐 PHASE 7: WEB SERVICES")
+print("[WEB] PHASE 7: WEB SERVICES")
 print("━" * 80)
 start_with_retry("npm run dev" if IS_WINDOWS else ["npm", "run", "dev"],
                  "Backend + Frontend", shell=IS_WINDOWS, port=5000)
@@ -305,7 +305,7 @@ if os.path.exists(luminar_v2.replace("\\", "/")):
 
 # PHASE 8: ORCHESTRATION
 print("\n━" * 80)
-print("🎯 PHASE 8: ORCHESTRATION SYSTEMS")
+print("[TARGET] PHASE 8: ORCHESTRATION SYSTEMS")
 print("━" * 80)
 uam = "tools\\ultimate_api_manager.py" if IS_WINDOWS else "tools/ultimate_api_manager.py"
 if os.path.exists(uam.replace("\\", "/")):
@@ -319,7 +319,7 @@ if os.path.exists(luminar.replace("\\", "/")):
 
 # PHASE 8.5: API POOL
 print("\n━" * 80)
-print("🌐 PHASE 8.5: API ORCHESTRATION POOL")
+print("[WEB] PHASE 8.5: API ORCHESTRATION POOL")
 print("━" * 80)
 if os.path.exists("aurora_api_gateway.py"):
     start_with_retry([PYTHON_CMD, "aurora_api_gateway.py"],
@@ -333,7 +333,7 @@ if os.path.exists("aurora_api_rate_limiter.py"):
 
 # PHASE 9: BACKGROUND
 print("\n━" * 80)
-print("🔄 PHASE 9: BACKGROUND PROCESSES")
+print("[EMOJI] PHASE 9: BACKGROUND PROCESSES")
 print("━" * 80)
 if os.path.exists("aurora_deep_system_updater.py"):
     start_with_retry([PYTHON_CMD, "aurora_deep_system_updater.py"],
@@ -343,7 +343,7 @@ if os.path.exists("aurora_web_health_monitor.py"):
                      "Web Health Monitor", port=5004)
 
 print("\n" + "=" * 80)
-print("⚡ STARTUP COMPLETE - Performing health check...")
+print("[POWER] STARTUP COMPLETE - Performing health check...")
 print("=" * 80 + "\n")
 
 time.sleep(3)
@@ -352,27 +352,27 @@ time.sleep(3)
 alive_count, dead_procs = monitor_health()
 
 print("\n" + "=" * 80)
-print("📊 AURORA NEXUS V3 - ENHANCED SYSTEM STATUS")
+print("[DATA] AURORA NEXUS V3 - ENHANCED SYSTEM STATUS")
 print("=" * 80)
 print(f"⏰ Startup completed at: {datetime.now().strftime('%H:%M:%S')}\n")
 
 # Check Nexus V3
-print("🌌 NEXUS V3 MASTER ORCHESTRATOR:")
+print("[AURORA] NEXUS V3 MASTER ORCHESTRATOR:")
 nexus_active = not check_port(5031)
 if nexus_active:
-    print("   ✅ Port 5031 - RUNNING | Intelligent port management ACTIVE")
+    print("   [OK] Port 5031 - RUNNING | Intelligent port management ACTIVE")
 else:
     print("   ⏳ Port 5031 - Initializing...")
 
 # Check critical systems
-print("\n🧠 CONSCIOUSNESS & INTELLIGENCE:")
+print("\n[BRAIN] CONSCIOUSNESS & INTELLIGENCE:")
 critical_running = sum(1 for p, _, c, _ in processes if c and p.poll() is None)
 critical_total = sum(1 for _, _, c, _ in processes if c)
-status_emoji = "✅" if critical_running >= critical_total * 0.7 else "⚠️"
+status_emoji = "[OK]" if critical_running >= critical_total * 0.7 else "[WARN]"
 print(f"   {status_emoji} {critical_running}/{critical_total} critical systems active")
 
 # Check web services
-print("\n🌐 WEB & API SERVICES:")
+print("\n[WEB] WEB & API SERVICES:")
 web_services = [
     ("Backend + Frontend", 5000),
     ("Bridge Service", 5001),
@@ -391,13 +391,13 @@ web_services = [
 web_count = 0
 for name, port in web_services:
     if not check_port(port):
-        print(f"   ✅ {name:30} Port {port}")
+        print(f"   [OK] {name:30} Port {port}")
         web_count += 1
     else:
         print(f"   ⏳ {name:30} Port {port} - starting...")
 
 # Overall status
-print("\n⚡ OVERALL SYSTEM HEALTH:")
+print("\n[POWER] OVERALL SYSTEM HEALTH:")
 total = len(processes)
 print(f"   Total services: {total}")
 print(f"   Running: {alive_count}/{total} ({int(alive_count/total*100)}%)")
@@ -405,12 +405,12 @@ print(f"   Successful starts: {len(successful_starts)}")
 print(f"   Failed starts: {len(failed_starts)}")
 
 if dead_procs:
-    print(f"\n💀 CRASHED PROCESSES ({len(dead_procs)}):")
+    print(f"\n[EMOJI] CRASHED PROCESSES ({len(dead_procs)}):")
     for name, port in dead_procs:
         print(f"   • {name} (Port {port})")
 
 if failed_starts:
-    print(f"\n❌ FAILED TO START ({len(failed_starts)}):")
+    print(f"\n[ERROR] FAILED TO START ({len(failed_starts)}):")
     for name, reason in failed_starts:
         print(f"   • {name}: {reason}")
 
@@ -419,30 +419,30 @@ print("\n" + "=" * 80)
 success_rate = alive_count / total if total > 0 else 0
 
 if success_rate >= 0.9 and critical_running >= critical_total * 0.8:
-    print("🎉 AURORA NEXUS V3 - FULLY OPERATIONAL!")
+    print("[EMOJI] AURORA NEXUS V3 - FULLY OPERATIONAL!")
     print("=" * 80)
-    print(f"\n   ⚡ Success Rate: {int(success_rate*100)}%")
-    print("\n   ✨ ALL SYSTEMS OPTIMAL")
-    print("\n   🌐 ACCESS POINTS:")
+    print(f"\n   [POWER] Success Rate: {int(success_rate*100)}%")
+    print("\n   [QUALITY] ALL SYSTEMS OPTIMAL")
+    print("\n   [WEB] ACCESS POINTS:")
     print("      • Frontend:     http://localhost:5000")
     print("      • Chat:         http://localhost:5003")
     print("      • Health:       http://localhost:5004")
     print("      • Dashboard:    http://localhost:5005")
     print("      • Nexus V3 API: http://localhost:5031 ⭐")
 elif success_rate >= 0.7:
-    print("✅ AURORA NEXUS V3 - OPERATIONAL (PARTIAL)")
+    print("[OK] AURORA NEXUS V3 - OPERATIONAL (PARTIAL)")
     print("=" * 80)
-    print(f"\n   ⚡ Success Rate: {int(success_rate*100)}%")
-    print(f"   🧠 Critical: {critical_running}/{critical_total}")
-    print(f"   🌐 Web/API: {web_count}/12")
-    print("\n   ⚠️  Some systems still initializing...")
+    print(f"\n   [POWER] Success Rate: {int(success_rate*100)}%")
+    print(f"   [BRAIN] Critical: {critical_running}/{critical_total}")
+    print(f"   [WEB] Web/API: {web_count}/12")
+    print("\n   [WARN]  Some systems still initializing...")
 else:
-    print("⚠️  AURORA NEXUS V3 - DEGRADED MODE")
+    print("[WARN]  AURORA NEXUS V3 - DEGRADED MODE")
     print("=" * 80)
-    print(f"\n   ⚡ Success Rate: {int(success_rate*100)}%")
-    print("\n   ❌ Multiple systems failed to start")
-    print("   📋 Review failed systems above for details")
+    print(f"\n   [POWER] Success Rate: {int(success_rate*100)}%")
+    print("\n   [ERROR] Multiple systems failed to start")
+    print("   [EMOJI] Review failed systems above for details")
 
-print("\n⚡ Aurora Nexus V3 - Enhanced Launcher with Auto-Healing")
+print("\n[POWER] Aurora Nexus V3 - Enhanced Launcher with Auto-Healing")
 print("   Features: Intelligent Retry | Port Recovery | Health Monitoring")
 print("=" * 80 + "\n")

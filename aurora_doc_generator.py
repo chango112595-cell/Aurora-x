@@ -391,7 +391,7 @@ All notable changes to this project will be documented in this file.
 ## Data Flow
 
 ```
-User → Frontend → API Gateway → Backend Services → Database
+User -> Frontend -> API Gateway -> Backend Services -> Database
 ```
 
 ## Key Design Decisions

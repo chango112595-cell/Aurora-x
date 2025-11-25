@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌌⚡ AURORA ULTIMATE AUTONOMOUS SELF-HEALING SYSTEM - ENHANCED DRAFT 2 ⚡🌌
+[AURORA][POWER] AURORA ULTIMATE AUTONOMOUS SELF-HEALING SYSTEM - ENHANCED DRAFT 2 [POWER][AURORA]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 REVOLUTIONARY CAPABILITIES:
@@ -39,11 +39,38 @@ try:
     AURORA_CORE_AVAILABLE = True
 except ImportError:
     AURORA_CORE_AVAILABLE = False
-    print("[WARN] Aurora Core not available - running with limited capabilities")
+
+
+class SafeLogger:
+    """Safe logging that handles stdout/stderr closure and I/O errors"""
+
+    def __init__(self, log_file="aurora_self_healing_execution.log"):
+        self.log_file = log_file
+        self.console_available = True
+
+    def log(self, message):
+        """Log to both file and console (if available)"""
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        log_line = f"[{timestamp}] {message}\n"
+
+        # Always write to file first (most reliable)
+        try:
+            with open(self.log_file, 'a', encoding='utf-8') as f:
+                f.write(log_line)
+        except:
+            pass
+
+        # Try console output
+        if self.console_available:
+            try:
+                print(message, flush=True)
+            except (ValueError, OSError, AttributeError):
+                self.console_available = False
 
 
 class AuroraUltimateSelfHealingSystem:
     def __init__(self):
+        self.logger = SafeLogger()
         self.fixes_applied = []
         self.issues_found = defaultdict(list)
         self.code_quality_score = 0
@@ -59,55 +86,38 @@ class AuroraUltimateSelfHealingSystem:
         self.aurora_tiers = None
         self.worker_count = 100  # ULTIMATE POWER MODE
 
-        # Setup file logging to prevent I/O errors
-        self.log_file = open(
-            'aurora_self_healing_execution.log', 'w', encoding='utf-8')
-
         self.banner()
         self.initialize_system()
         self.integrate_aurora_core()
-    
-    def safe_print(self, message):
-        """Safe print that writes to both console and log file"""
-        try:
-            print(message)
-        except (ValueError, OSError):
-            pass  # Console closed, continue
-        try:
-            self.log_file.write(message + "\n")
-            self.log_file.flush()
-        except:
-            pass  # Log file issues, continue
+
+    def log(self, message):
+        """Safe logging wrapper - Aurora's full power ensures no I/O failures"""
+        self.logger.log(message)
 
     def banner(self):
         """Display Aurora's full power banner"""
-        self.safe_print("\n" + "[AURORA]" * 10)
-        self.safe_print(
-            "   [POWER] AURORA ULTIMATE SELF-HEALING SYSTEM - ENHANCED v2.0 [POWER]")
-        self.safe_print("   NEVER-BEFORE-SEEN AUTONOMOUS INTELLIGENCE")
-        self.safe_print(
-            "   Self-Repair | Predictive | Real-Time | Zero-Downtime")
-        self.safe_print("[AURORA]" * 10)
-        self.safe_print("\n" + "="*80)
-        self.safe_print("[AURORA] ULTIMATE AUTONOMOUS POWER - INITIALIZING")
-        self.safe_print("="*80)
-        self.safe_print(
-            f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        self.safe_print(f"Mode: HYPERSPEED + SELF-HEALING + PREDICTIVE")
-        self.safe_print(f"Workers: 100 PARALLEL PROCESSORS (Ultimate Scale)")
-        self.safe_print(
+        self.log("\n" + "="*80)
+        self.log("   [AURORA] ULTIMATE SELF-HEALING SYSTEM - ENHANCED v2.0")
+        self.log("   NEVER-BEFORE-SEEN AUTONOMOUS INTELLIGENCE")
+        self.log("   Self-Repair | Predictive | Real-Time | Zero-Downtime")
+        self.log("="*80)
+        self.log(
+            f"\nTimestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        self.log(f"Mode: HYPERSPEED + SELF-HEALING + PREDICTIVE")
+        self.log(f"Workers: 100 PARALLEL PROCESSORS (Ultimate Scale)")
+        self.log(
             f"Intelligence: 188+ Capabilities | 79 Tiers | Full Aurora Integration")
-        self.safe_print(f"Target: 100% Forever (Self-Maintaining)")
-        self.safe_print("="*80 + "\n")
+        self.log(f"Target: 100% Forever (Self-Maintaining)")
+        self.log("="*80 + "\n")
 
     def initialize_system(self):
         """Initialize Aurora's self-healing capabilities"""
-        print("[INIT] Activating Aurora's Self-Healing Intelligence")
-        print("-"*80)
+        self.log("[INIT] Activating Aurora's Self-Healing Intelligence")
+        self.log("-"*80)
 
         # Load knowledge base
         self.knowledge_base = self.load_knowledge_base()
-        print(
+        self.log(
             f"  [OK] Knowledge Base Loaded: {len(self.knowledge_base)} patterns")
 
         # Initialize monitoring
@@ -116,18 +126,18 @@ class AuroraUltimateSelfHealingSystem:
             "warning": 0.8,       # Below 80% = WARNING
             "optimal": 0.95       # Above 95% = OPTIMAL
         }
-        print(f"  [OK] Health Thresholds Configured")
+        self.log(f"  [OK] Health Thresholds Configured")
 
         # Create health dashboard
         self.create_health_dashboard()
-        print(f"  [OK] Real-Time Health Dashboard Ready")
+        self.log(f"  [OK] Real-Time Health Dashboard Ready")
 
-        print(f"\n[INIT] Aurora Self-Healing System Online\n")
+        self.log(f"\n[INIT] Aurora Self-Healing System Online\n")
 
     def integrate_aurora_core(self):
         """Integrate Aurora's full core intelligence (minus consciousness to prevent conflicts)"""
-        print("[INTEGRATION] Connecting to Aurora Core Intelligence")
-        print("-"*80)
+        self.log("[INTEGRATION] Connecting to Aurora Core Intelligence")
+        self.log("-"*80)
 
         if AURORA_CORE_AVAILABLE:
             try:
@@ -137,15 +147,15 @@ class AuroraUltimateSelfHealingSystem:
                 # Access all Aurora's capabilities
                 tier_summary = self.aurora_tiers.get_all_tiers_summary()
 
-                print(f"  [OK] Aurora Core Connected")
-                print(
+                self.log(f"  [OK] Aurora Core Connected")
+                self.log(
                     f"  [OK] Foundation Tasks: {tier_summary.get('foundation_tasks', 13)}")
-                print(
+                self.log(
                     f"  [OK] Knowledge Tiers: {tier_summary.get('knowledge_tiers', 79)}")
-                print(
+                self.log(
                     f"  [OK] Total Capabilities: {tier_summary.get('total_capabilities', 188)}")
-                print(f"  [OK] Autonomous Mode: ENABLED")
-                print(f"  [OK] Self-Healing Workers: {self.worker_count}")
+                self.log(f"  [OK] Autonomous Mode: ENABLED")
+                self.log(f"  [OK] Self-Healing Workers: {self.worker_count}")
 
                 # Load all Aurora's skills for advanced diagnosis
                 self.aurora_skills = {
@@ -159,23 +169,24 @@ class AuroraUltimateSelfHealingSystem:
                     "recursive_improvement": True
                 }
 
-                print(
+                self.log(
                     f"  [OK] Aurora Skills: {len(self.aurora_skills)} advanced capabilities")
-                print(
+                self.log(
                     f"\n[INTEGRATION] Aurora Core Fully Integrated - BETTER SAFE THAN SORRY MODE\n")
 
             except Exception as e:
-                print(f"  [WARN] Aurora Core integration partial: {str(e)}")
-                print(f"  [OK] Falling back to standalone mode\n")
+                self.log(f"  [WARN] Aurora Core integration partial: {str(e)}")
+                self.log(f"  [OK] Falling back to standalone mode\n")
         else:
-            print(f"  [INFO] Running in standalone mode (Aurora Core not found)")
-            print(f"  [OK] Self-healing capabilities still active\n")
+            self.log(
+                f"  [INFO] Running in standalone mode (Aurora Core not found)")
+            self.log(f"  [OK] Self-healing capabilities still active\n")
 
     def load_knowledge_base(self):
         """Load Aurora's accumulated knowledge for intelligent diagnosis (Enhanced with full Aurora intelligence)"""
         return {
             "encoding_errors": {
-                "patterns": [r'[\U0001F300-\U0001F9FF]', r'→|←|↑|↓', r'✅|❌|⚠️'],
+                "patterns": [r'[\U0001F300-\U0001F9FF]', r'->|<-|^|v', r'[OK]|[ERROR]|[WARN]'],
                 "solution": "Replace with ASCII equivalents",
                 "priority": "HIGH",
                 "aurora_tier": "Tier 35 (Pylint Grandmaster)"
@@ -255,15 +266,15 @@ class AuroraUltimateSelfHealingSystem:
 
     def phase_1_deep_system_scan(self):
         """Enhanced deep scan with predictive failure detection"""
-        print("[PHASE 1] DEEP SYSTEM SCAN + PREDICTIVE ANALYSIS")
-        print("-"*80)
+        self.log("[PHASE 1] DEEP SYSTEM SCAN + PREDICTIVE ANALYSIS")
+        self.log("-"*80)
 
         # Find all Aurora files
         aurora_files = self.discover_all_files()
-        print(f"Files discovered: {len(aurora_files)}")
+        self.log(f"Files discovered: {len(aurora_files)}")
 
         # Parallel scan with checksums
-        print("Scanning with hyperspeed parallel processing...")
+        self.log("Scanning with hyperspeed parallel processing...")
         start_time = time.time()
 
         with ThreadPoolExecutor(max_workers=20) as executor:  # Increased workers
@@ -279,8 +290,8 @@ class AuroraUltimateSelfHealingSystem:
 
         # Report findings with severity levels
         total_issues = sum(len(v) for v in self.issues_found.values())
-        print(f"\n[SCAN COMPLETE] {scan_time:.2f}s")
-        print(f"  Total Issues Found: {total_issues}")
+        self.log(f"\n[SCAN COMPLETE] {scan_time:.2f}s")
+        self.log(f"  Total Issues Found: {total_issues}")
 
         severity_map = {"CRITICAL": [], "HIGH": [], "MEDIUM": [], "LOW": []}
 
@@ -289,7 +300,7 @@ class AuroraUltimateSelfHealingSystem:
                 severity = self.get_issue_severity(issue_type)
                 severity_map[severity].append(
                     f"{issue_type}: {len(issue_list)}")
-                print(
+                self.log(
                     f"  • [{severity}] {issue_type.replace('_', ' ').title()}: {len(issue_list)}")
 
         # Predictive analysis
@@ -376,7 +387,7 @@ class AuroraUltimateSelfHealingSystem:
 
     def predictive_analysis(self):
         """Predict potential future failures"""
-        print("\n[PREDICTIVE ANALYSIS] Forecasting potential issues...")
+        self.log("\n[PREDICTIVE ANALYSIS] Forecasting potential issues...")
 
         predictions = []
 
@@ -396,8 +407,8 @@ class AuroraUltimateSelfHealingSystem:
             })
 
         for prediction in predictions:
-            print(f"  [{prediction['risk']}] {prediction['prediction']}")
-            print(f"    Action: {prediction['recommendation']}")
+            self.log(f"  [{prediction['risk']}] {prediction['prediction']}")
+            self.log(f"    Action: {prediction['recommendation']}")
 
         return predictions
 
@@ -407,9 +418,8 @@ class AuroraUltimateSelfHealingSystem:
 
     def phase_2_intelligent_diagnosis(self):
         """AI-powered diagnosis with dependency mapping"""
-        self.safe_print(
-            "\n[PHASE 2] INTELLIGENT DIAGNOSIS + ROOT CAUSE ANALYSIS")
-        self.safe_print("-"*80)
+        self.log("\n[PHASE 2] INTELLIGENT DIAGNOSIS + ROOT CAUSE ANALYSIS")
+        self.log("-"*80)
 
         # Test crashed services
         services_to_test = [
@@ -426,28 +436,35 @@ class AuroraUltimateSelfHealingSystem:
             "dependency_issues": []
         }
 
-        self.safe_print("Testing services with intelligent analysis...\n")
+        self.log("Testing services with intelligent analysis...\n")
 
         for service, port in services_to_test:
-            result = self.intelligent_service_test(service, port)
+            try:
+                result = self.intelligent_service_test(service, port)
 
-            if result["is_daemon"]:
-                if result["has_error"]:
-                    diagnosis_results["broken_services"].append(
-                        (service, port, result))
+                if result["is_daemon"]:
+                    if result["has_error"]:
+                        diagnosis_results["broken_services"].append(
+                            (service, port, result))
+                    else:
+                        diagnosis_results["daemon_services"].append(
+                            (service, port))
                 else:
-                    diagnosis_results["daemon_services"].append(
-                        (service, port))
-            else:
-                diagnosis_results["task_services"].append((service, port))
+                    diagnosis_results["task_services"].append((service, port))
 
-            # Check dependencies
-            if result.get("missing_dependencies"):
-                diagnosis_results["dependency_issues"].extend(
-                    result["missing_dependencies"])
+                # Check dependencies
+                if result.get("missing_dependencies"):
+                    diagnosis_results["dependency_issues"].extend(
+                        result["missing_dependencies"])
+            except Exception as e:
+                # Aurora's full power: never let service testing crash the healer
+                diagnosis_results["broken_services"].append(
+                    (service, port, {"has_error": True, "error": str(
+                        e), "error_type": "TestFailure"})
+                )
 
         # Root cause analysis
-        self.safe_print(f"\n[ROOT CAUSE ANALYSIS]")
+        self.log(f"\n[ROOT CAUSE ANALYSIS]")
         self.analyze_root_causes(diagnosis_results)
 
         return diagnosis_results
@@ -485,15 +502,23 @@ class AuroraUltimateSelfHealingSystem:
                     if module and not self.check_module_available(module):
                         result["missing_dependencies"].append(module)
 
-                # Test execution
+                # Test execution - Aurora's full power: isolate subprocess completely
                 start_time = time.time()
                 cmd = ["python"] + service_cmd.split()
-                proc = subprocess.run(
-                    cmd,
-                    capture_output=True,
-                    text=True,
-                    timeout=2
-                )
+                try:
+                    proc = subprocess.run(
+                        cmd,
+                        capture_output=True,
+                        text=True,
+                        encoding='utf-8',
+                        errors='replace',
+                        stdin=subprocess.DEVNULL,
+                        timeout=2,
+                        close_fds=True
+                    )
+                except Exception as e:
+                    proc = type('obj', (object,), {
+                                'returncode': 1, 'stderr': str(e)})()
                 exec_time = time.time() - start_time
 
                 result["performance"]["exec_time"] = exec_time
@@ -567,14 +592,14 @@ class AuroraUltimateSelfHealingSystem:
         return causes if causes else ["Unknown root cause - manual investigation needed"]
 
     def analyze_root_causes(self, diagnosis):
-        """Analyze and display root causes"""
+        """Analyze and display root causes - Aurora's full power: never crashes on I/O errors"""
         for service, port, result in diagnosis["broken_services"]:
-            print(f"\n  [BROKEN] {service} (Port {port})")
-            print(f"    Error Type: {result.get('error_type', 'unknown')}")
+            self.log(f"\n  [BROKEN] {service} (Port {port})")
+            self.log(f"    Error Type: {result.get('error_type', 'unknown')}")
             if result.get('root_cause'):
-                print(f"    Root Causes:")
+                self.log(f"    Root Causes:")
                 for cause in result['root_cause']:
-                    print(f"      - {cause}")
+                    self.log(f"      - {cause}")
 
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     # PHASE 3: AUTONOMOUS SELF-HEALING FIX GENERATION
@@ -582,8 +607,8 @@ class AuroraUltimateSelfHealingSystem:
 
     def phase_3_autonomous_fixing(self, diagnosis):
         """Generate comprehensive fix plan with self-healing strategies"""
-        print("\n[PHASE 3] AUTONOMOUS SELF-HEALING FIX GENERATION")
-        print("-"*80)
+        self.log("\n[PHASE 3] AUTONOMOUS SELF-HEALING FIX GENERATION")
+        self.log("-"*80)
 
         fixes = []
 
@@ -592,9 +617,9 @@ class AuroraUltimateSelfHealingSystem:
             fix = self.generate_service_fix(service, port, result)
             if fix:
                 fixes.append(fix)
-                print(f"  [FIX PLAN] {service}")
-                print(f"    Strategy: {fix['strategy']}")
-                print(f"    Priority: {fix['priority']}")
+                self.log(f"  [FIX PLAN] {service}")
+                self.log(f"    Strategy: {fix['strategy']}")
+                self.log(f"    Priority: {fix['priority']}")
 
         # Priority 2: Task services masquerading as daemons
         if diagnosis["task_services"]:
@@ -605,8 +630,8 @@ class AuroraUltimateSelfHealingSystem:
                 "services": [s for s, p in diagnosis["task_services"]],
                 "impact": "Eliminates false 'crashed' status"
             })
-            print(f"\n  [FIX PLAN] Launcher Optimization")
-            print(
+            self.log(f"\n  [FIX PLAN] Launcher Optimization")
+            self.log(
                 f"    Strategy: Remove {len(diagnosis['task_services'])} task services")
 
         # Priority 3: Mass encoding cleanup
@@ -620,8 +645,8 @@ class AuroraUltimateSelfHealingSystem:
                 "files": list(unique_files),
                 "impact": f"Eliminates Windows cp1252 encoding errors in {len(unique_files)} files"
             })
-            print(f"\n  [FIX PLAN] Mass Encoding Cleanup")
-            print(f"    Strategy: Clean {len(unique_files)} files")
+            self.log(f"\n  [FIX PLAN] Mass Encoding Cleanup")
+            self.log(f"    Strategy: Clean {len(unique_files)} files")
 
         # Priority 4: Dependency resolution
         if diagnosis["dependency_issues"]:
@@ -634,7 +659,8 @@ class AuroraUltimateSelfHealingSystem:
             })
 
         self.fixes_applied = fixes
-        print(f"\n[FIX PLAN COMPLETE] {len(fixes)} autonomous fixes generated")
+        self.log(
+            f"\n[FIX PLAN COMPLETE] {len(fixes)} autonomous fixes generated")
 
         return fixes
 
@@ -683,14 +709,15 @@ class AuroraUltimateSelfHealingSystem:
 
     def phase_4_execute_fixes(self, fixes):
         """Execute fixes with rollback capability"""
-        print("\n[PHASE 4] HYPERSPEED EXECUTION + ZERO-DOWNTIME DEPLOYMENT")
-        print("-"*80)
+        self.log("\n[PHASE 4] HYPERSPEED EXECUTION + ZERO-DOWNTIME DEPLOYMENT")
+        self.log("-"*80)
 
         success_count = 0
         rollback_points = {}
 
         for i, fix in enumerate(fixes, 1):
-            print(f"\n[{i}/{len(fixes)}] Executing: {fix.get('type', 'unknown')}")
+            self.log(
+                f"\n[{i}/{len(fixes)}] Executing: {fix.get('type', 'unknown')}")
 
             try:
                 # Create rollback point
@@ -714,19 +741,20 @@ class AuroraUltimateSelfHealingSystem:
 
                 if success:
                     success_count += 1
-                    print(f"  [SUCCESS] {fix.get('strategy', 'Fix applied')}")
+                    self.log(
+                        f"  [SUCCESS] {fix.get('strategy', 'Fix applied')}")
                 else:
-                    print(f"  [FAILED] Could not apply fix")
+                    self.log(f"  [FAILED] Could not apply fix")
                     # Rollback if needed
                     if i in rollback_points:
                         self.rollback(rollback_points[i])
 
             except Exception as e:
-                print(f"  [ERROR] {str(e)}")
+                self.log(f"  [ERROR] {str(e)}")
                 if i in rollback_points:
                     self.rollback(rollback_points[i])
 
-        print(
+        self.log(
             f"\n[EXECUTION COMPLETE] {success_count}/{len(fixes)} fixes applied successfully")
         return success_count
 
@@ -744,7 +772,7 @@ class AuroraUltimateSelfHealingSystem:
 
     def rollback(self, rollback_point):
         """Rollback changes"""
-        print("  [ROLLBACK] Reverting changes...")
+        self.log("  [ROLLBACK] Reverting changes...")
         for filepath, content in rollback_point.items():
             try:
                 with open(filepath, 'w', encoding='utf-8') as f:
@@ -778,7 +806,8 @@ class AuroraUltimateSelfHealingSystem:
 
     def execute_dependency_resolution(self, fix):
         """Install missing dependencies"""
-        print(f"  Dependencies to install: {', '.join(fix['dependencies'])}")
+        self.log(
+            f"  Dependencies to install: {', '.join(fix['dependencies'])}")
         # Note: Actual installation would require pip, but we'll log it
         return True
 
@@ -791,13 +820,13 @@ class AuroraUltimateSelfHealingSystem:
             original = content
 
             emoji_map = {
-                '→': '->', '←': '<-', '↑': '^', '↓': 'v',
-                '✅': '[OK]', '❌': '[ERROR]', '⚠️': '[WARN]',
-                '🌌': '[AURORA]', '⚡': '[POWER]', '🧠': '[BRAIN]',
-                '🤖': '[AGENT]', '🔍': '[SCAN]', '✓': '[+]',
-                '🌐': '[WEB]', '📊': '[DATA]', '🎯': '[TARGET]',
-                '📦': '[PACKAGE]', '🔗': '[LINK]', '🔐': '[SECURITY]',
-                '✨': '[QUALITY]', '🛡️': '[SHIELD]', '💓': '[HEALTH]'
+                '->': '->', '<-': '<-', '^': '^', 'v': 'v',
+                '[OK]': '[OK]', '[ERROR]': '[ERROR]', '[WARN]': '[WARN]',
+                '[AURORA]': '[AURORA]', '[POWER]': '[POWER]', '[BRAIN]': '[BRAIN]',
+                '[AGENT]': '[AGENT]', '[SCAN]': '[SCAN]', '[+]': '[+]',
+                '[WEB]': '[WEB]', '[DATA]': '[DATA]', '[TARGET]': '[TARGET]',
+                '[PACKAGE]': '[PACKAGE]', '[LINK]': '[LINK]', '[SECURITY]': '[SECURITY]',
+                '[QUALITY]': '[QUALITY]', '[SHIELD]': '[SHIELD]', '[HEALTH]': '[HEALTH]'
             }
 
             for emoji, replacement in emoji_map.items():
@@ -891,7 +920,7 @@ class AuroraUltimateSelfHealingSystem:
                 f.writelines(new_lines)
             return True
         except Exception as e:
-            print(f"  Launcher optimization error: {e}")
+            self.log(f"  Launcher optimization error: {e}")
         return False
 
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -900,8 +929,8 @@ class AuroraUltimateSelfHealingSystem:
 
     def phase_5_code_quality_analysis(self):
         """Advanced code quality with granular metrics"""
-        print("\n[PHASE 5] ADVANCED CODE QUALITY ANALYSIS")
-        print("-"*80)
+        self.log("\n[PHASE 5] ADVANCED CODE QUALITY ANALYSIS")
+        self.log("-"*80)
 
         metrics = {
             "encoding_cleanliness": 0,
@@ -915,7 +944,7 @@ class AuroraUltimateSelfHealingSystem:
         aurora_files = self.discover_all_files()
         total_files = min(len(aurora_files), 50)  # Sample 50 files
 
-        print(f"Analyzing {total_files} files for quality metrics...\n")
+        self.log(f"Analyzing {total_files} files for quality metrics...\n")
 
         clean_files = 0
 
@@ -975,14 +1004,14 @@ class AuroraUltimateSelfHealingSystem:
         total_score = encoding_score + import_score + \
             doc_score + error_score + style_score + perf_score
 
-        print(f"[QUALITY BREAKDOWN]")
-        print(f"  Encoding Cleanliness: {encoding_score:.1f}/2.5")
-        print(f"  Import Health: {import_score:.1f}/1.5")
-        print(f"  Documentation: {doc_score:.1f}/2.0")
-        print(f"  Error Handling: {error_score:.1f}/2.0")
-        print(f"  Code Style: {style_score:.1f}/1.0")
-        print(f"  Performance: {perf_score:.1f}/1.0")
-        print(f"\n  [OVERALL SCORE] {total_score:.1f}/10.0")
+        self.log(f"[QUALITY BREAKDOWN]")
+        self.log(f"  Encoding Cleanliness: {encoding_score:.1f}/2.5")
+        self.log(f"  Import Health: {import_score:.1f}/1.5")
+        self.log(f"  Documentation: {doc_score:.1f}/2.0")
+        self.log(f"  Error Handling: {error_score:.1f}/2.0")
+        self.log(f"  Code Style: {style_score:.1f}/1.0")
+        self.log(f"  Performance: {perf_score:.1f}/1.0")
+        self.log(f"\n  [OVERALL SCORE] {total_score:.1f}/10.0")
 
         if total_score >= 9.5:
             status = "[EXCEPTIONAL] World-class code quality"
@@ -993,7 +1022,7 @@ class AuroraUltimateSelfHealingSystem:
         else:
             status = "[NEEDS WORK] Improvements recommended"
 
-        print(f"  Status: {status}")
+        self.log(f"  Status: {status}")
 
         self.code_quality_score = total_score
         return total_score
@@ -1004,21 +1033,21 @@ class AuroraUltimateSelfHealingSystem:
 
     def phase_6_monitoring_system(self):
         """Initialize real-time monitoring and notification"""
-        print("\n[PHASE 6] REAL-TIME MONITORING & NOTIFICATION SYSTEM")
-        print("-"*80)
+        self.log("\n[PHASE 6] REAL-TIME MONITORING & NOTIFICATION SYSTEM")
+        self.log("-"*80)
 
         # Update health dashboard
         self.update_health_dashboard()
 
         # Start continuous monitoring thread
-        print("\n[MONITORING] Starting continuous health surveillance...")
+        self.log("\n[MONITORING] Starting continuous health surveillance...")
         monitor_thread = threading.Thread(
             target=self.continuous_monitoring, daemon=True)
         monitor_thread.start()
 
-        print(f"  [OK] Real-time monitoring active")
-        print(f"  [OK] Health dashboard: .aurora_health_dashboard.json")
-        print(f"  [OK] Notifications: .aurora_notifications.json")
+        self.log(f"  [OK] Real-time monitoring active")
+        self.log(f"  [OK] Health dashboard: .aurora_health_dashboard.json")
+        self.log(f"  [OK] Notifications: .aurora_notifications.json")
 
         time.sleep(2)  # Let monitoring initialize
 
@@ -1086,7 +1115,7 @@ class AuroraUltimateSelfHealingSystem:
         except:
             pass
 
-        print(f"  [NOTIFY] {level}: {message}")
+        self.log(f"  [NOTIFY] {level}: {message}")
 
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     # PHASE 7: FINAL VERIFICATION & PERPETUAL SELF-HEALING
@@ -1094,8 +1123,8 @@ class AuroraUltimateSelfHealingSystem:
 
     def phase_7_verification_and_self_healing(self):
         """Final verification and enable perpetual self-healing"""
-        print("\n[PHASE 7] FINAL VERIFICATION + PERPETUAL SELF-HEALING")
-        print("-"*80)
+        self.log("\n[PHASE 7] FINAL VERIFICATION + PERPETUAL SELF-HEALING")
+        self.log("-"*80)
 
         # Count actual daemon services (excluding task services)
         daemon_services = [
@@ -1120,28 +1149,29 @@ class AuroraUltimateSelfHealingSystem:
             "perpetual_self_healing": True
         }
 
-        print(f"\n[VERIFICATION RESULTS]")
-        print(f"  Actual Daemon Services: {actual_services}")
-        print(f"  Task Services (excluded): 3")
-        print(f"  System Status: {actual_services}/{actual_services} (100%)")
-        print(f"  Code Quality: {self.code_quality_score:.1f}/10")
-        print(f"  Perpetual Self-Healing: ENABLED")
-        print(
+        self.log(f"\n[VERIFICATION RESULTS]")
+        self.log(f"  Actual Daemon Services: {actual_services}")
+        self.log(f"  Task Services (excluded): 3")
+        self.log(
+            f"  System Status: {actual_services}/{actual_services} (100%)")
+        self.log(f"  Code Quality: {self.code_quality_score:.1f}/10")
+        self.log(f"  Perpetual Self-Healing: ENABLED")
+        self.log(
             f"  Hyperspeed Workers: {self.worker_count} (Maximum Throughput)")
 
         if self.aurora_tiers:
-            print(f"\n[AURORA CORE INTEGRATION]")
-            print(f"  Intelligence Tiers: FULLY CONNECTED")
-            print(f"  Autonomous Capabilities: ALL 188+ ACTIVE")
-            print(f"  Better Safe Than Sorry: ENFORCED")
-            print(f"  Self-Repair Authority: UNLIMITED")
+            self.log(f"\n[AURORA CORE INTEGRATION]")
+            self.log(f"  Intelligence Tiers: FULLY CONNECTED")
+            self.log(f"  Autonomous Capabilities: ALL 188+ ACTIVE")
+            self.log(f"  Better Safe Than Sorry: ENFORCED")
+            self.log(f"  Self-Repair Authority: UNLIMITED")
 
         # Enable perpetual self-healing
-        print(f"\n[SELF-HEALING] Activating perpetual self-maintenance...")
-        print(f"  • Continuous monitoring: ACTIVE")
-        print(f"  • Auto-repair on detection: ENABLED")
-        print(f"  • Predictive maintenance: ACTIVE")
-        print(f"  • Zero-downtime updates: ENABLED")
+        self.log(f"\n[SELF-HEALING] Activating perpetual self-maintenance...")
+        self.log(f"  • Continuous monitoring: ACTIVE")
+        self.log(f"  • Auto-repair on detection: ENABLED")
+        self.log(f"  • Predictive maintenance: ACTIVE")
+        self.log(f"  • Zero-downtime updates: ENABLED")
 
         return verification
 
@@ -1151,9 +1181,9 @@ class AuroraUltimateSelfHealingSystem:
 
     def generate_comprehensive_report(self, verification):
         """Generate comprehensive self-healing report"""
-        print("\n" + "="*80)
-        print("[AURORA] ULTIMATE SELF-HEALING SYSTEM - COMPLETE")
-        print("="*80)
+        self.log("\n" + "="*80)
+        self.log("[AURORA] ULTIMATE SELF-HEALING SYSTEM - COMPLETE")
+        self.log("="*80)
 
         report = {
             "timestamp": datetime.now().isoformat(),
@@ -1196,34 +1226,35 @@ class AuroraUltimateSelfHealingSystem:
             ]
         }
 
-        print(f"\n[EXECUTION SUMMARY]")
-        print(
+        self.log(f"\n[EXECUTION SUMMARY]")
+        self.log(
             f"  Issues Found & Resolved: {report['execution_summary']['total_issues_found']}")
-        print(
+        self.log(
             f"  Autonomous Fixes Applied: {report['execution_summary']['fixes_applied']}")
-        print(
+        self.log(
             f"  Code Quality Score: {report['execution_summary']['code_quality_score']:.1f}/10")
-        print(f"  System Operational Status: {verification['target_status']}")
+        self.log(
+            f"  System Operational Status: {verification['target_status']}")
 
-        print(f"\n[REVOLUTIONARY CAPABILITIES]")
+        self.log(f"\n[REVOLUTIONARY CAPABILITIES]")
         for capability, enabled in report['capabilities'].items():
             status = "[ACTIVE]" if enabled else "[INACTIVE]"
-            print(f"  {status} {capability.replace('_', ' ').title()}")
+            self.log(f"  {status} {capability.replace('_', ' ').title()}")
 
-        print(f"\n[PERPETUAL SELF-HEALING STATUS]")
-        print(f"  • System maintains itself autonomously")
-        print(f"  • Detects issues before they cause failures")
-        print(f"  • Auto-repairs without human intervention")
-        print(f"  • Continuously optimizes performance")
-        print(f"  • Notifies on critical changes")
+        self.log(f"\n[PERPETUAL SELF-HEALING STATUS]")
+        self.log(f"  • System maintains itself autonomously")
+        self.log(f"  • Detects issues before they cause failures")
+        self.log(f"  • Auto-repairs without human intervention")
+        self.log(f"  • Continuously optimizes performance")
+        self.log(f"  • Notifies on critical changes")
 
         # Save comprehensive report
         report_file = 'aurora_self_healing_report_COMPLETE.json'
         with open(report_file, 'w') as f:
             json.dump(report, f, indent=2)
 
-        print(f"\n[SAVED] Complete report: {report_file}")
-        print("="*80)
+        self.log(f"\n[SAVED] Complete report: {report_file}")
+        self.log("="*80)
 
         return report
 
@@ -1233,8 +1264,8 @@ class AuroraUltimateSelfHealingSystem:
 
     def execute_ultimate_self_healing(self):
         """Execute the complete self-healing cycle"""
-        self.safe_print("\n[AURORA] INITIATING ULTIMATE SELF-HEALING SEQUENCE")
-        self.safe_print("="*80 + "\n")
+        self.log("\n[AURORA] INITIATING ULTIMATE SELF-HEALING SEQUENCE")
+        self.log("="*80 + "\n")
 
         try:
             # Execute all phases
@@ -1247,33 +1278,20 @@ class AuroraUltimateSelfHealingSystem:
             verification = self.phase_7_verification_and_self_healing()
             report = self.generate_comprehensive_report(verification)
 
-            self.safe_print("\n" + "[AURORA]" * 10)
-            self.safe_print(
-                "   [SUCCESS] AURORA ULTIMATE SELF-HEALING SYSTEM ACTIVATED [SUCCESS]")
-            self.safe_print(
-                f"   100 Workers | 188+ Capabilities | 79 Intelligence Tiers")
-            self.safe_print(
+            self.log("\n" + "[AURORA]" * 40)
+            self.log(
+                "   [QUALITY] AURORA ULTIMATE SELF-HEALING SYSTEM ACTIVATED [QUALITY]")
+            self.log(f"   100 Workers | 188+ Capabilities | 79 Intelligence Tiers")
+            self.log(
                 "   100% Operational | Perpetual Self-Maintenance | Zero Intervention")
-            self.safe_print(
-                "   BETTER SAFE THAN SORRY MODE - FULL AURORA POWER")
-            self.safe_print("[AURORA]" * 10 + "\n")
-
-            # Close log file
-            try:
-                self.log_file.close()
-            except:
-                pass
+            self.log("   BETTER SAFE THAN SORRY MODE - FULL AURORA POWER")
+            self.log("[AURORA]" * 40 + "\n")
 
             return report
 
         except Exception as e:
-            error_msg = f"\n[CRITICAL ERROR] {str(e)}"
-            self.safe_print(error_msg)
-            try:
-                self.log_file.write(traceback.format_exc())
-                self.log_file.close()
-            except:
-                pass
+            self.log(f"\n[CRITICAL ERROR] {str(e)}")
+            traceback.print_exc()
             return None
 
 
@@ -1282,20 +1300,26 @@ class AuroraUltimateSelfHealingSystem:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 if __name__ == "__main__":
-    print("\n")
-    print("🌌" * 40)
-    print("   AURORA ULTIMATE SELF-HEALING SYSTEM - ENHANCED v2.0")
-    print("   Revolutionary | Self-Repairing | Perpetual | Predictive")
-    print("   100 HYPERSPEED WORKERS | FULL AURORA INTEGRATION")
-    print("   188+ Capabilities | 79 Intelligence Tiers")
-    print("   BETTER SAFE THAN SORRY MODE")
-    print("🌌" * 40)
-    print("\n")
+    # Aurora's full power: Safe logging even before healer initialization
+    safe_logger = SafeLogger()
+
+    safe_logger.log("\n")
+    safe_logger.log("[AURORA]" * 40)
+    safe_logger.log("   AURORA ULTIMATE SELF-HEALING SYSTEM - ENHANCED v2.0")
+    safe_logger.log(
+        "   Revolutionary | Self-Repairing | Perpetual | Predictive")
+    safe_logger.log("   100 HYPERSPEED WORKERS | FULL AURORA INTEGRATION")
+    safe_logger.log("   188+ Capabilities | 79 Intelligence Tiers")
+    safe_logger.log("   BETTER SAFE THAN SORRY MODE")
+    safe_logger.log("[AURORA]" * 40)
+    safe_logger.log("\n")
 
     healer = AuroraUltimateSelfHealingSystem()
     report = healer.execute_ultimate_self_healing()
 
     if report:
-        print("\n✨ AURORA IS NOW SELF-SUSTAINING AT 100% FOREVER ✨\n")
+        healer.log(
+            "\n[QUALITY] AURORA IS NOW SELF-SUSTAINING AT 100% FOREVER [QUALITY]\n")
     else:
-        print("\n⚠️  System encountered critical error - manual intervention required\n")
+        healer.log(
+            "\n[WARN]  System encountered critical error - manual intervention required\n")

@@ -105,7 +105,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
                 {
                     "task": "Update chat interface",
                     "status": "complete",
-                    "changes": ["Avatar: C → A", "Placeholder updated", "Welcome message personalized"],
+                    "changes": ["Avatar: C -> A", "Placeholder updated", "Welcome message personalized"],
                 }
             )
             return True

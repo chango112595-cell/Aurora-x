@@ -162,8 +162,8 @@ def main():
     with open(spec_path, "w") as f:
         f.write(spec_content)
 
-    print(f"✅ Spec generated: {spec_path}")
-    print(f"📝 Function name: {infer_function_details(text)['name']}")
+    print(f"[OK] Spec generated: {spec_path}")
+    print(f"[EMOJI] Function name: {infer_function_details(text)['name']}")
 
     # Also output the path for scripting
     print(f"SPEC_PATH={spec_path}")

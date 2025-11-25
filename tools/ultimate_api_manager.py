@@ -57,7 +57,7 @@ try:
 except ImportError:
     AURORA_EXPERT_AVAILABLE = False
     print("[WARN] Aurora Expert Knowledge not available")
-    print("⚠️ Aurora Expert Knowledge not available")
+    print("[WARN] Aurora Expert Knowledge not available")
 
 
 class AdvancedCodingKnowledge:
@@ -339,7 +339,7 @@ class UltimateAPIManager:
         if AURORA_EXPERT_AVAILABLE:
             self.expert_knowledge = AuroraExpertKnowledge()
             print(
-                "🧠 Aurora Expert Knowledge System loaded - Master level in ALL programming languages!")
+                "[BRAIN] Aurora Expert Knowledge System loaded - Master level in ALL programming languages!")
         else:
             self.expert_knowledge = None
 
@@ -382,7 +382,7 @@ class UltimateAPIManager:
                     {"service": "bridge_api", "endpoint": "/api/bridge/nl",
                         "port": 5001, "method": "POST"},
                 ],
-                "data_flow": "Frontend POST /api/chat → Learning API → synthesis_id → Bridge API processing",
+                "data_flow": "Frontend POST /api/chat -> Learning API -> synthesis_id -> Bridge API processing",
                 "expected_responses": {
                     "/api/chat": {"synthesis_id": "string", "status": "string"},
                     "/api/bridge/nl": {"ok": True, "spec": "string", "message": "string"},
@@ -412,7 +412,7 @@ class UltimateAPIManager:
                     {"service": "bridge_api", "endpoint": "/api/bridge/spec",
                         "port": 5001, "method": "POST"},
                 ],
-                "data_flow": "Dashboard GET /dashboard/spec_runs → Display data → POST /api/bridge/spec for generation",
+                "data_flow": "Dashboard GET /dashboard/spec_runs -> Display data -> POST /api/bridge/spec for generation",
                 "expected_responses": {
                     "/dashboard/spec_runs": {"runs": "array", "total": "number"},
                     "/api/bridge/spec": {"ok": True, "generated": True, "files": "array"},
@@ -441,7 +441,7 @@ class UltimateAPIManager:
                     {"service": "bridge_api", "endpoint": "/api/bridge/deploy",
                         "port": 5001, "method": "POST"},
                 ],
-                "data_flow": "File Explorer → GET / (file listing) → POST /api/bridge/deploy for processing",
+                "data_flow": "File Explorer -> GET / (file listing) -> POST /api/bridge/deploy for processing",
                 "expected_responses": {
                     "/": "text/html with file listing",
                     "/api/bridge/deploy": {"ok": True, "deployed": True, "url": "string"},
@@ -748,7 +748,7 @@ class UltimateAPIManager:
 
         # Auto-start if enabled
         if self.auto_start_enabled:
-            print("🚀 AUTO-START MODE ENABLED - Starting autonomous operation...")
+            print("[EMOJI] AUTO-START MODE ENABLED - Starting autonomous operation...")
             self.start_autonomous_mode()
 
     def check_dependencies(self, service_name: str) -> dict[str, bool]:
@@ -1005,7 +1005,7 @@ class UltimateAPIManager:
 
     def auto_fix_frontend_routing(self) -> bool:
         """Fix frontend routing to serve HTML instead of JSON"""
-        self.log("🔧 Fixing frontend routing issue")
+        self.log("[EMOJI] Fixing frontend routing issue")
         try:
             # Kill any processes on port 5000
             self.kill_port_advanced(5000)
@@ -1035,19 +1035,19 @@ class UltimateAPIManager:
             time.sleep(10)
             response = requests.get("http://localhost:5000", timeout=5)
             if "<!DOCTYPE html>" in response.text:
-                self.log("✅ Frontend routing fixed - now serving HTML")
+                self.log("[OK] Frontend routing fixed - now serving HTML")
                 return True
             else:
-                self.log("❌ Frontend routing fix failed")
+                self.log("[ERROR] Frontend routing fix failed")
                 return False
 
         except Exception as e:
-            self.log(f"❌ Error fixing frontend routing: {e}")
+            self.log(f"[ERROR] Error fixing frontend routing: {e}")
             return False
 
     def auto_fix_cors_headers(self) -> bool:
         """Fix CORS configuration for all backend services"""
-        self.log("🔧 Fixing CORS headers across all services")
+        self.log("[EMOJI] Fixing CORS headers across all services")
         try:
             # Restart all backend services with CORS enabled
             for service_name in ["learning_api", "bridge_api"]:
@@ -1057,29 +1057,29 @@ class UltimateAPIManager:
                     self.start_service_advanced(
                         service_name, force_restart=True)
 
-            self.log("✅ CORS headers configured")
+            self.log("[OK] CORS headers configured")
             return True
         except Exception as e:
-            self.log(f"❌ Error fixing CORS: {e}")
+            self.log(f"[ERROR] Error fixing CORS: {e}")
             return False
 
     def auto_fix_api_response_format(self, service_name: str) -> bool:
         """Fix API response format issues"""
-        self.log(f"🔧 Fixing API response format for {service_name}")
+        self.log(f"[EMOJI] Fixing API response format for {service_name}")
         try:
             # Restart the specific service
             success = self.start_service_advanced(
                 service_name, force_restart=True)
             if success:
-                self.log(f"✅ {service_name} response format fixed")
+                self.log(f"[OK] {service_name} response format fixed")
             return success
         except Exception as e:
-            self.log(f"❌ Error fixing {service_name} response format: {e}")
+            self.log(f"[ERROR] Error fixing {service_name} response format: {e}")
             return False
 
     def auto_fix_missing_dependencies(self) -> bool:
         """Automatically install missing dependencies"""
-        self.log("🔧 Installing missing dependencies")
+        self.log("[EMOJI] Installing missing dependencies")
         try:
             # Install Python dependencies
             subprocess.run(["pip3", "install", "fastapi",
@@ -1089,15 +1089,15 @@ class UltimateAPIManager:
             subprocess.run(["npm", "install"],
                            cwd="/workspaces/Aurora-x/client", check=True)
 
-            self.log("✅ Dependencies installed")
+            self.log("[OK] Dependencies installed")
             return True
         except Exception as e:
-            self.log(f"❌ Error installing dependencies: {e}")
+            self.log(f"[ERROR] Error installing dependencies: {e}")
             return False
 
     def auto_fix_file_permissions(self) -> bool:
         """Fix file permission issues"""
-        self.log("🔧 Fixing file permissions")
+        self.log("[EMOJI] Fixing file permissions")
         try:
             # Fix common permission issues
             subprocess.run(
@@ -1107,15 +1107,15 @@ class UltimateAPIManager:
             subprocess.run(
                 ["chmod", "-R", "644", "/workspaces/Aurora-x/client/src"], check=False)
 
-            self.log("✅ File permissions fixed")
+            self.log("[OK] File permissions fixed")
             return True
         except Exception as e:
-            self.log(f"❌ Error fixing permissions: {e}")
+            self.log(f"[ERROR] Error fixing permissions: {e}")
             return False
 
     def comprehensive_auto_heal(self) -> dict[str, Any]:
         """Comprehensive auto-healing with full frontend-backend awareness"""
-        self.log("🚀 Starting comprehensive auto-healing with full system knowledge")
+        self.log("[EMOJI] Starting comprehensive auto-healing with full system knowledge")
 
         healing_results = {
             "timestamp": datetime.now().isoformat(),
@@ -1166,7 +1166,7 @@ class UltimateAPIManager:
                 healing_results["fixes_failed"] += 1
 
         # Step 3: Restart all services to ensure clean state
-        self.log("🔄 Performing system-wide service restart for clean state")
+        self.log("[EMOJI] Performing system-wide service restart for clean state")
         restart_results = self.restart_all_services()
 
         # Step 4: Final validation
@@ -1182,7 +1182,7 @@ class UltimateAPIManager:
         healing_results["total_services"] = len(final_health)
 
         self.log(
-            f"🎉 Comprehensive healing complete: {healing_results['services_healthy']}/{healing_results['total_services']} services healthy"
+            f"[EMOJI] Comprehensive healing complete: {healing_results['services_healthy']}/{healing_results['total_services']} services healthy"
         )
 
         return healing_results
@@ -1198,7 +1198,7 @@ class UltimateAPIManager:
                     for conn in proc.connections():
                         if conn.laddr.port == port:
                             print(
-                                f"🔪 Killing process {proc.info['pid']} ({proc.info['name']}) on port {port}")
+                                f"[EMOJI] Killing process {proc.info['pid']} ({proc.info['name']}) on port {port}")
                             proc.kill()
                             killed = True
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
@@ -1214,7 +1214,7 @@ class UltimateAPIManager:
                         for pid in pids:
                             subprocess.run(["kill", "-9", pid])
                             killed = True
-                            print(f"🔪 Killed process {pid} on port {port}")
+                            print(f"[EMOJI] Killed process {pid} on port {port}")
                 except Exception:
                     pass
 
@@ -1230,19 +1230,19 @@ class UltimateAPIManager:
                                 pid = parts[6].split("/")[0]
                                 subprocess.run(["kill", "-9", pid])
                                 killed = True
-                                print(f"🔪 Killed process {pid} on port {port}")
+                                print(f"[EMOJI] Killed process {pid} on port {port}")
                 except Exception:
                     pass
 
         except Exception as e:
-            print(f"❌ Error killing port {port}: {e}")
+            print(f"[ERROR] Error killing port {port}: {e}")
 
         return killed
 
     def start_service_advanced(self, service_name: str, force_restart: bool = False) -> bool:
         """Advanced service startup with multiple strategies"""
         if service_name not in self.services:
-            print(f"❌ Unknown service: {service_name}")
+            print(f"[ERROR] Unknown service: {service_name}")
             return False
 
         service = self.services[service_name]
@@ -1257,7 +1257,7 @@ class UltimateAPIManager:
                 health = self.advanced_health_check(service_name)
                 if health["healthy"]:
                     print(
-                        f"✅ {service['description']} is already running and healthy")
+                        f"[OK] {service['description']} is already running and healthy")
                     return True
 
         # Check dependencies
@@ -1265,11 +1265,11 @@ class UltimateAPIManager:
         missing_deps = [dep for dep,
                         info in deps.items() if not info["available"]]
         if missing_deps:
-            print(f"❌ Missing dependencies for {service_name}: {missing_deps}")
+            print(f"[ERROR] Missing dependencies for {service_name}: {missing_deps}")
             return False
 
         print(
-            f"🚀 Starting {service['description']} ({service['technology']}) on port {service['port']}...")
+            f"[EMOJI] Starting {service['description']} ({service['technology']}) on port {service['port']}...")
 
         # Kill any process using the port
         self.kill_port_advanced(service["port"])
@@ -1280,7 +1280,7 @@ class UltimateAPIManager:
             if service["type"] == "frontend":
                 # Ensure npm dependencies are installed
                 try:
-                    print("📦 Ensuring npm dependencies...")
+                    print("[PACKAGE] Ensuring npm dependencies...")
                     subprocess.run(
                         ["npm", "install"],
                         cwd=service["cwd"],
@@ -1289,7 +1289,7 @@ class UltimateAPIManager:
                         stderr=subprocess.DEVNULL,
                     )
                 except subprocess.CalledProcessError:
-                    print("⚠️  npm install failed, continuing anyway...")
+                    print("[WARN]  npm install failed, continuing anyway...")
 
             # Start the process with enhanced environment
             env = os.environ.copy()
@@ -1331,13 +1331,13 @@ class UltimateAPIManager:
                 health = self.advanced_health_check(service_name)
 
                 if health["healthy"] and health["content_valid"]:
-                    print(f"✅ {service['description']} started successfully")
+                    print(f"[OK] {service['description']} started successfully")
                     if health["alerts"]:
-                        print(f"⚠️  Alerts: {', '.join(health['alerts'])}")
+                        print(f"[WARN]  Alerts: {', '.join(health['alerts'])}")
                     return True
                 elif health["port_listening"]:
                     print(
-                        f"🔄 {service['description']} port listening, waiting for healthy response... ({attempt+1}/{max_attempts})"
+                        f"[EMOJI] {service['description']} port listening, waiting for healthy response... ({attempt+1}/{max_attempts})"
                     )
                 else:
                     print(
@@ -1347,18 +1347,18 @@ class UltimateAPIManager:
             final_health = self.advanced_health_check(service_name)
             if final_health["port_listening"]:
                 print(
-                    f"⚠️  {service['description']} started but may have issues:")
+                    f"[WARN]  {service['description']} started but may have issues:")
                 if final_health["error"]:
                     print(f"   Error: {final_health['error']}")
                 if final_health["alerts"]:
                     print(f"   Alerts: {', '.join(final_health['alerts'])}")
                 return True  # Consider it started even with issues
             else:
-                print(f"❌ {service['description']} failed to start properly")
+                print(f"[ERROR] {service['description']} failed to start properly")
                 return False
 
         except Exception as e:
-            print(f"❌ Failed to start {service['description']}: {e}")
+            print(f"[ERROR] Failed to start {service['description']}: {e}")
             return False
 
     def stop_service(self, service_name: str) -> bool:
@@ -1371,7 +1371,7 @@ class UltimateAPIManager:
             if process and process.poll() is None:  # Still running
                 # Try graceful shutdown first
                 print(
-                    f"🛑 Stopping {self.services[service_name]['description']}...")
+                    f"[EMOJI] Stopping {self.services[service_name]['description']}...")
                 process.terminate()
 
                 try:
@@ -1379,14 +1379,14 @@ class UltimateAPIManager:
                 except subprocess.TimeoutExpired:
                     # Force kill if graceful shutdown fails
                     print(
-                        f"⚡ Force killing {self.services[service_name]['description']}...")
+                        f"[POWER] Force killing {self.services[service_name]['description']}...")
                     process.kill()
                     process.wait()
 
             del self.processes[service_name]
             return True
         except Exception as e:
-            print(f"❌ Error stopping {service_name}: {e}")
+            print(f"[ERROR] Error stopping {service_name}: {e}")
             return False
 
     def restart_all_services(self) -> dict[str, bool]:
@@ -1394,7 +1394,7 @@ class UltimateAPIManager:
         results = {}
 
         # Stop all services first
-        print("🛑 Stopping all services...")
+        print("[EMOJI] Stopping all services...")
         for service_name in self.services:
             self.stop_service(service_name)
 
@@ -1408,7 +1408,7 @@ class UltimateAPIManager:
             priority = service.get("priority", "medium")
             service_priority[priority].append(service_name)
 
-        print("🚀 Starting services in priority order...")
+        print("[EMOJI] Starting services in priority order...")
         for priority in ["critical", "high", "medium", "low"]:
             for service_name in service_priority[priority]:
                 print(f"  Priority {priority.upper()}: {service_name}")
@@ -1420,7 +1420,7 @@ class UltimateAPIManager:
 
     def fix_frontend_backend_routing(self) -> bool:
         """Fix the frontend/backend routing issue"""
-        print("🔧 FIXING FRONTEND/BACKEND ROUTING ISSUE")
+        print("[EMOJI] FIXING FRONTEND/BACKEND ROUTING ISSUE")
         print("=" * 60)
 
         # The issue: Frontend is serving API JSON instead of HTML
@@ -1430,36 +1430,36 @@ class UltimateAPIManager:
         try:
             response = requests.get("http://localhost:5000", timeout=5)
             if response.headers.get("content-type", "").startswith("application/json"):
-                print("❌ Port 5000 is serving JSON API instead of HTML frontend")
-                print("🔧 Restarting frontend service with proper configuration...")
+                print("[ERROR] Port 5000 is serving JSON API instead of HTML frontend")
+                print("[EMOJI] Restarting frontend service with proper configuration...")
 
                 # Force restart the frontend
                 success = self.start_service_advanced(
                     "aurora_ui", force_restart=True)
                 if success:
-                    print("✅ Frontend service restarted")
+                    print("[OK] Frontend service restarted")
 
                     # Verify it's now serving HTML
                     time.sleep(5)
                     response = requests.get("http://localhost:5000", timeout=5)
                     if "<!DOCTYPE html>" in response.text:
-                        print("✅ Frontend now serving HTML correctly")
+                        print("[OK] Frontend now serving HTML correctly")
                         return True
                     else:
-                        print("❌ Frontend still not serving HTML properly")
+                        print("[ERROR] Frontend still not serving HTML properly")
                         return False
             else:
-                print("✅ Frontend appears to be serving HTML correctly")
+                print("[OK] Frontend appears to be serving HTML correctly")
                 return True
 
         except Exception as e:
-            print(f"❌ Error checking frontend routing: {e}")
+            print(f"[ERROR] Error checking frontend routing: {e}")
             return False
 
     def ultimate_system_health_report(self) -> None:
         """Generate the ultimate system health report"""
         print("\n" + "=" * 80)
-        print("🌟 AURORA-X ULTIMATE API MANAGER - SYSTEM HEALTH REPORT")
+        print("[EMOJI] AURORA-X ULTIMATE API MANAGER - SYSTEM HEALTH REPORT")
         print("=" * 80)
 
         # Get health for all services
@@ -1472,18 +1472,18 @@ class UltimateAPIManager:
         total_services = len(all_health)
         system_health = (healthy_services / total_services) * 100
 
-        print("\n🎯 SYSTEM OVERVIEW:")
+        print("\n[TARGET] SYSTEM OVERVIEW:")
         print(
             f"   Overall Health: {system_health:.1f}% ({healthy_services}/{total_services} services healthy)")
 
         if system_health == 100:
-            print("   Status: 🟢 EXCELLENT - All systems operational")
+            print("   Status: [EMOJI] EXCELLENT - All systems operational")
         elif system_health >= 80:
-            print("   Status: 🟡 GOOD - Minor issues detected")
+            print("   Status: [EMOJI] GOOD - Minor issues detected")
         elif system_health >= 60:
-            print("   Status: 🟠 DEGRADED - Service issues present")
+            print("   Status: [EMOJI] DEGRADED - Service issues present")
         else:
-            print("   Status: 🔴 CRITICAL - Major service failures")
+            print("   Status: [EMOJI] CRITICAL - Major service failures")
 
         # Service details by category
         categories = {"frontend": [], "backend": [], "utility": []}
@@ -1493,12 +1493,12 @@ class UltimateAPIManager:
 
         for category, services in categories.items():
             if services:
-                print(f"\n📊 {category.upper()} SERVICES:")
+                print(f"\n[DATA] {category.upper()} SERVICES:")
                 for service_name, health in services:
                     service = self.services[service_name]
                     metrics = self.metrics[service_name]
 
-                    status_icon = "🟢" if health["healthy"] else "🔴"
+                    status_icon = "[EMOJI]" if health["healthy"] else "[EMOJI]"
                     print(
                         f"   {status_icon} {service['description']} (Port {service['port']})")
                     print(f"      Technology: {service['technology']}")
@@ -1508,7 +1508,7 @@ class UltimateAPIManager:
                             f"      Status: HEALTHY ({health['status_code']}) - {health['response_time_ms']:.1f}ms")
                         if health.get("content_valid") is False:
                             print(
-                                "      ⚠️  Content validation failed - may be serving wrong content type")
+                                "      [WARN]  Content validation failed - may be serving wrong content type")
                     else:
                         print(
                             f"      Status: UNHEALTHY - {health.get('error', 'Unknown error')}")
@@ -1531,14 +1531,14 @@ class UltimateAPIManager:
                                if not v["available"]]
                     if missing:
                         print(
-                            f"      Dependencies: ❌ Missing: {', '.join(missing)}")
+                            f"      Dependencies: [ERROR] Missing: {', '.join(missing)}")
                     else:
-                        print("      Dependencies: ✅ All available")
+                        print("      Dependencies: [OK] All available")
 
                     # Alerts
                     if health["alerts"]:
                         print(
-                            f"      Alerts: ⚠️  {', '.join(health['alerts'])}")
+                            f"      Alerts: [WARN]  {', '.join(health['alerts'])}")
 
         print(
             f"\n⏰ Report generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -1548,7 +1548,7 @@ class UltimateAPIManager:
         """Start fully autonomous operation with auto-scanning and auto-healing"""
 
         def autonomous_operation():
-            print("🤖 AUTONOMOUS MODE ACTIVATED - Full self-management enabled")
+            print("[AGENT] AUTONOMOUS MODE ACTIVATED - Full self-management enabled")
             print("   • Auto-scanning every 15 seconds")
             print("   • Auto-healing unhealthy services")
             print("   • Auto-starting missing services")
@@ -1562,7 +1562,7 @@ class UltimateAPIManager:
                 try:
                     cycle_count += 1
                     print(
-                        f"\n🔄 Autonomous Cycle #{cycle_count} - {datetime.now().strftime('%H:%M:%S')}")
+                        f"\n[EMOJI] Autonomous Cycle #{cycle_count} - {datetime.now().strftime('%H:%M:%S')}")
 
                     # Comprehensive system scan
                     scan_results = self.autonomous_system_scan()
@@ -1589,7 +1589,7 @@ class UltimateAPIManager:
                     time.sleep(sleep_time)
 
                 except Exception as e:
-                    print(f"❌ Autonomous operation error: {e}")
+                    print(f"[ERROR] Autonomous operation error: {e}")
                     time.sleep(15)  # Recovery interval
 
         if not self.monitoring_active:
@@ -1597,17 +1597,17 @@ class UltimateAPIManager:
             self.auto_start_thread = threading.Thread(
                 target=autonomous_operation, daemon=True)
             self.auto_start_thread.start()
-            print("✅ Autonomous mode started")
+            print("[OK] Autonomous mode started")
         else:
-            print("⚠️  Autonomous mode already active")
+            print("[WARN]  Autonomous mode already active")
 
     def initial_system_startup(self) -> None:
         """Perform initial system startup and validation"""
-        print("🚀 INITIAL SYSTEM STARTUP SEQUENCE")
+        print("[EMOJI] INITIAL SYSTEM STARTUP SEQUENCE")
         print("-" * 50)
 
         # Step 1: Check what's already running
-        print("📊 Step 1: Scanning existing services...")
+        print("[DATA] Step 1: Scanning existing services...")
         existing_healthy = []
         needs_starting = []
 
@@ -1615,27 +1615,27 @@ class UltimateAPIManager:
             health = self.advanced_health_check(service_name)
             if health["healthy"]:
                 existing_healthy.append(service_name)
-                print(f"   ✅ {service_name} already healthy")
+                print(f"   [OK] {service_name} already healthy")
             else:
                 needs_starting.append(service_name)
                 print(
-                    f"   🔧 {service_name} needs starting: {health.get('error', 'Not running')}")
+                    f"   [EMOJI] {service_name} needs starting: {health.get('error', 'Not running')}")
 
         # Step 2: Start missing services
         if needs_starting:
-            print(f"\n🚀 Step 2: Starting {len(needs_starting)} services...")
+            print(f"\n[EMOJI] Step 2: Starting {len(needs_starting)} services...")
             for service_name in needs_starting:
                 success = self.start_service_advanced(
                     service_name, force_restart=False)
                 if success:
-                    print(f"   ✅ Started {service_name}")
+                    print(f"   [OK] Started {service_name}")
                 else:
-                    print(f"   ❌ Failed to start {service_name}")
+                    print(f"   [ERROR] Failed to start {service_name}")
         else:
-            print("✅ Step 2: All services already running")
+            print("[OK] Step 2: All services already running")
 
         # Step 3: Final validation
-        print("\n📋 Step 3: Final system validation...")
+        print("\n[EMOJI] Step 3: Final system validation...")
         time.sleep(5)  # Let services stabilize
 
         final_health = {}
@@ -1648,15 +1648,15 @@ class UltimateAPIManager:
         startup_success = (healthy_count / total_count) * 100
 
         print(
-            f"\n🎯 STARTUP COMPLETE: {startup_success:.1f}% success ({healthy_count}/{total_count} services)")
+            f"\n[TARGET] STARTUP COMPLETE: {startup_success:.1f}% success ({healthy_count}/{total_count} services)")
 
         if startup_success >= 80:
-            print("🟢 Startup Status: EXCELLENT - System ready for autonomous operation")
+            print("[EMOJI] Startup Status: EXCELLENT - System ready for autonomous operation")
         elif startup_success >= 60:
-            print("🟡 Startup Status: GOOD - Minor issues, will auto-heal")
+            print("[EMOJI] Startup Status: GOOD - Minor issues, will auto-heal")
         else:
             print(
-                "🔴 Startup Status: DEGRADED - Multiple issues, aggressive healing enabled")
+                "[EMOJI] Startup Status: DEGRADED - Multiple issues, aggressive healing enabled")
 
         self.startup_complete = True
         print("-" * 50)
@@ -1735,14 +1735,14 @@ class UltimateAPIManager:
         # Handle critical issues immediately
         if scan_results["critical_issues"]:
             print(
-                f"🚨 CRITICAL ISSUES DETECTED: {len(scan_results['critical_issues'])}")
+                f"[EMOJI] CRITICAL ISSUES DETECTED: {len(scan_results['critical_issues'])}")
             for issue in scan_results["critical_issues"]:
                 print(f"   {issue}")
 
             # Restart critical services
             for service_name, service_data in scan_results["services"].items():
                 if not service_data["healthy"] and self.services[service_name].get("priority") == "critical":
-                    print(f"🔧 Emergency restart: {service_name}")
+                    print(f"[EMOJI] Emergency restart: {service_name}")
                     success = self.start_service_advanced(
                         service_name, force_restart=True)
                     actions_taken.append(
@@ -1754,7 +1754,7 @@ class UltimateAPIManager:
         # Don't overlap with critical handling
         if unhealthy_services and not scan_results["critical_issues"]:
             print(
-                f"🏥 Auto-healing {len(unhealthy_services)} services: {', '.join(unhealthy_services)}")
+                f"[EMOJI] Auto-healing {len(unhealthy_services)} services: {', '.join(unhealthy_services)}")
             for service_name in unhealthy_services:
                 # Already handled above
                 if self.services[service_name].get("priority") != "critical":
@@ -1770,7 +1770,7 @@ class UltimateAPIManager:
         ]
         if slow_services:
             print(
-                f"⚡ Performance optimization for slow services: {', '.join(slow_services)}")
+                f"[POWER] Performance optimization for slow services: {', '.join(slow_services)}")
             actions_taken.append(
                 f"performance_alert_{len(slow_services)}_services")
 
@@ -1782,13 +1782,13 @@ class UltimateAPIManager:
         # Aurora analyzes every 5 cycles (instant intelligence check)
         if self._aurora_cycle >= 5:
             try:
-                # ⚡ INSTANT - Aurora uses intelligence, NOT file I/O
+                # [POWER] INSTANT - Aurora uses intelligence, NOT file I/O
                 aurora_results = self.aurora_intelligent_code_assistant()
                 if aurora_results["fixes_applied"] > 0:
                     actions_taken.append(
                         f"aurora_analyzed_{aurora_results['issues_detected']}_issues")
                     print(
-                        f"   ✨ Aurora: {aurora_results['success_rate']:.0f}% system health")
+                        f"   [QUALITY] Aurora: {aurora_results['success_rate']:.0f}% system health")
                 self._aurora_cycle = 0
             except Exception as e:
                 self._aurora_cycle = 0  # Reset on error, don't block
@@ -1801,7 +1801,7 @@ class UltimateAPIManager:
             self._maintenance_cycle += 1
 
             if self._maintenance_cycle >= 10:
-                print("🔧 Proactive maintenance check...")
+                print("[EMOJI] Proactive maintenance check...")
                 actions_taken.append("proactive_maintenance")
                 self._maintenance_cycle = 0
 
@@ -1814,20 +1814,20 @@ class UltimateAPIManager:
 
         scan = self.last_full_scan
         print(
-            f"\n📊 AUTONOMOUS STATUS - {scan['timestamp'].strftime('%H:%M:%S')}")
+            f"\n[DATA] AUTONOMOUS STATUS - {scan['timestamp'].strftime('%H:%M:%S')}")
         print(f"   System Health: {scan['system_health']:.1f}%")
         print(
             f"   Avg Response: {scan['performance_metrics']['avg_response_time']:.1f}ms")
 
         if scan["critical_issues"]:
-            print(f"   🚨 Critical: {len(scan['critical_issues'])} issues")
+            print(f"   [EMOJI] Critical: {len(scan['critical_issues'])} issues")
         if scan["warnings"]:
-            print(f"   ⚠️  Warnings: {len(scan['warnings'])}")
+            print(f"   [WARN]  Warnings: {len(scan['warnings'])}")
 
         # Service summary
         services_status = []
         for name, data in scan["services"].items():
-            icon = "🟢" if data["healthy"] else "🔴"
+            icon = "[EMOJI]" if data["healthy"] else "[EMOJI]"
             services_status.append(f"{icon}{name}")
         print(f"   Services: {' '.join(services_status)}")
 
@@ -1836,7 +1836,7 @@ class UltimateAPIManager:
         Self-learning import error detection and automatic fixing
         Scans Python files for import errors and intelligently fixes them
         """
-        print("🧠 SELF-LEARNING IMPORT ERROR DETECTION & FIXING")
+        print("[BRAIN] SELF-LEARNING IMPORT ERROR DETECTION & FIXING")
         print("=" * 60)
 
         results = {
@@ -1861,7 +1861,7 @@ class UltimateAPIManager:
                 continue
 
             results["files_scanned"] += 1
-            print(f"\n🔍 Scanning: {file_path.name}")
+            print(f"\n[SCAN] Scanning: {file_path.name}")
 
             try:
                 # Read file content
@@ -1871,9 +1871,9 @@ class UltimateAPIManager:
                 # Detect import errors by attempting to compile
                 try:
                     compile(content, str(file_path), "exec")
-                    print("   ✅ No syntax errors detected")
+                    print("   [OK] No syntax errors detected")
                 except SyntaxError as e:
-                    print(f"   ❌ Syntax error: {e}")
+                    print(f"   [ERROR] Syntax error: {e}")
                     continue
 
                 # Check for specific missing imports we know about
@@ -1889,23 +1889,23 @@ class UltimateAPIManager:
                     # Apply fixes
                     if import_fixes["fixes"]:
                         print(
-                            f"   🔧 Applying {len(import_fixes['fixes'])} fixes...")
+                            f"   [EMOJI] Applying {len(import_fixes['fixes'])} fixes...")
                         success = self._apply_import_fixes(
                             file_path, import_fixes["fixes"])
                         if success:
                             results["fixes_successful"] += 1
                             print(
-                                f"   ✅ Successfully fixed imports in {file_path.name}")
+                                f"   [OK] Successfully fixed imports in {file_path.name}")
                         else:
                             print(
-                                f"   ❌ Failed to apply fixes to {file_path.name}")
+                                f"   [ERROR] Failed to apply fixes to {file_path.name}")
 
             except Exception as e:
-                print(f"   ❌ Error scanning {file_path.name}: {e}")
+                print(f"   [ERROR] Error scanning {file_path.name}: {e}")
 
         # Test the fixes by restarting affected services
         if results["fixes_successful"] > 0:
-            print("\n🔄 Testing fixes by restarting services...")
+            print("\n[EMOJI] Testing fixes by restarting services...")
             affected_services = []
 
             # Map files to services
@@ -1916,11 +1916,11 @@ class UltimateAPIManager:
 
             for service in affected_services:
                 if service in self.services:
-                    print(f"   🔄 Restarting {service}...")
+                    print(f"   [EMOJI] Restarting {service}...")
                     self.start_service_advanced(service, force_restart=True)
 
         # Report results
-        print("\n📊 IMPORT FIXING RESULTS:")
+        print("\n[DATA] IMPORT FIXING RESULTS:")
         print(f"   Files Scanned: {results['files_scanned']}")
         print(f"   Import Errors Found: {results['import_errors_found']}")
         print(f"   Fixes Applied: {results['fixes_applied']}")
@@ -2138,7 +2138,7 @@ class UltimateAPIManager:
         ADVANCED INTELLIGENT SYSTEM ANALYSIS
         Uses coding knowledge to deeply analyze the entire system
         """
-        print("🧠 INTELLIGENT SYSTEM ANALYSIS WITH ADVANCED CODING KNOWLEDGE")
+        print("[BRAIN] INTELLIGENT SYSTEM ANALYSIS WITH ADVANCED CODING KNOWLEDGE")
         print("=" * 70)
 
         analysis_results = {
@@ -2154,7 +2154,7 @@ class UltimateAPIManager:
         }
 
         # 1. COMPREHENSIVE CODE ANALYSIS
-        print("🔍 Phase 1: Comprehensive Code Analysis...")
+        print("[SCAN] Phase 1: Comprehensive Code Analysis...")
 
         code_files = [
             {"path": Path("/workspaces/Aurora-x/aurora_x/serve.py"),
@@ -2184,7 +2184,7 @@ class UltimateAPIManager:
                 continue
 
             print(
-                f"   📄 Analyzing {file_info['path'].name} ({file_info['type']})...")
+                f"   [EMOJI] Analyzing {file_info['path'].name} ({file_info['type']})...")
 
             try:
                 with open(file_info["path"], encoding="utf-8") as f:
@@ -2212,14 +2212,14 @@ class UltimateAPIManager:
                     f"     Quality Score: {file_analysis['quality_score']}/100")
 
             except Exception as e:
-                print(f"     ❌ Error analyzing {file_info['path'].name}: {e}")
+                print(f"     [ERROR] Error analyzing {file_info['path'].name}: {e}")
 
         # Calculate overall code quality
         analysis_results["code_quality_score"] = total_quality_score / \
             files_analyzed if files_analyzed > 0 else 0
 
         # 2. SERVICE ARCHITECTURE ANALYSIS
-        print("\n🏗️ Phase 2: Service Architecture Analysis...")
+        print("\n[EMOJI]️ Phase 2: Service Architecture Analysis...")
 
         service_health = {}
         for service_name in self.services:
@@ -2237,7 +2237,7 @@ class UltimateAPIManager:
             healthy_services / len(self.services)) * 100 if self.services else 0
 
         # 3. INTELLIGENT PATTERN RECOGNITION
-        print("\n🎯 Phase 3: Intelligent Pattern Recognition...")
+        print("\n[TARGET] Phase 3: Intelligent Pattern Recognition...")
 
         # Learn from historical data
         if self.learning_history:
@@ -2245,20 +2245,20 @@ class UltimateAPIManager:
             analysis_results["learning_insights"] = patterns
 
         # 4. PREDICTIVE ISSUE DETECTION
-        print("\n🔮 Phase 4: Predictive Issue Detection...")
+        print("\n[EMOJI] Phase 4: Predictive Issue Detection...")
 
         predictive_insights = self._predict_potential_issues()
         analysis_results["predicted_issues"] = predictive_insights
 
         # 5. GENERATE INTELLIGENT RECOMMENDATIONS
-        print("\n💡 Phase 5: Generating Intelligent Recommendations...")
+        print("\n[EMOJI] Phase 5: Generating Intelligent Recommendations...")
 
         smart_recommendations = self._generate_smart_recommendations(
             analysis_results)
         analysis_results["intelligent_recommendations"] = smart_recommendations
 
         # Report results
-        print("\n📊 INTELLIGENT ANALYSIS COMPLETE")
+        print("\n[DATA] INTELLIGENT ANALYSIS COMPLETE")
         print(
             f"   Overall System Health: {analysis_results['overall_health']:.1f}%")
         print(
@@ -2486,7 +2486,7 @@ class UltimateAPIManager:
 
     def intelligent_connection_monitor(self) -> dict[str, Any]:
         """Continuously monitor and auto-fix connection issues"""
-        print("🔍 INTELLIGENT CONNECTION MONITORING - Auto-fixing issues...")
+        print("[SCAN] INTELLIGENT CONNECTION MONITORING - Auto-fixing issues...")
 
         connection_issues = {
             "fixed_issues": [],
@@ -2501,7 +2501,7 @@ class UltimateAPIManager:
                 health = self.advanced_health_check(service_name)
 
                 if not health.get("healthy"):
-                    print(f"\n🚨 Connection issue detected: {service_name}")
+                    print(f"\n[EMOJI] Connection issue detected: {service_name}")
                     print(f"   Error: {health.get('error', 'Unknown error')}")
 
                     # Determine fix strategy based on error type
@@ -2527,60 +2527,60 @@ class UltimateAPIManager:
                         connection_issues["services_recovered"].append(
                             service_name)
                         connection_issues["total_fixes_applied"] += 1
-                        print(f"   ✅ Successfully fixed {service_name}")
+                        print(f"   [OK] Successfully fixed {service_name}")
                     else:
                         connection_issues["persistent_issues"].append(
                             service_name)
                         print(
-                            f"   ❌ Could not fix {service_name} - may need manual intervention")
+                            f"   [ERROR] Could not fix {service_name} - may need manual intervention")
 
             except Exception as e:
-                print(f"   ❌ Error monitoring {service_name}: {e}")
+                print(f"   [ERROR] Error monitoring {service_name}: {e}")
 
         # Report results
         if connection_issues["total_fixes_applied"] > 0:
-            print("\n🎉 CONNECTION MONITOR RESULTS:")
+            print("\n[EMOJI] CONNECTION MONITOR RESULTS:")
             print(
-                f"   ✅ Issues Fixed: {len(connection_issues['fixed_issues'])}")
+                f"   [OK] Issues Fixed: {len(connection_issues['fixed_issues'])}")
             print(
-                f"   🔧 Total Fixes Applied: {connection_issues['total_fixes_applied']}")
+                f"   [EMOJI] Total Fixes Applied: {connection_issues['total_fixes_applied']}")
             print(
-                f"   🏥 Services Recovered: {', '.join(connection_issues['services_recovered'])}")
+                f"   [EMOJI] Services Recovered: {', '.join(connection_issues['services_recovered'])}")
 
             if connection_issues["persistent_issues"]:
                 print(
-                    f"   ⚠️  Persistent Issues: {', '.join(connection_issues['persistent_issues'])}")
+                    f"   [WARN]  Persistent Issues: {', '.join(connection_issues['persistent_issues'])}")
         else:
-            print("✅ No connection issues detected - all services healthy!")
+            print("[OK] No connection issues detected - all services healthy!")
 
         return connection_issues
 
     def _fix_refused_connection(self, service_name: str, error_details: dict) -> bool:
         """Intelligently fix 'Connection Refused' errors"""
-        print(f"🔧 AUTO-FIXING: Connection refused for {service_name}")
+        print(f"[EMOJI] AUTO-FIXING: Connection refused for {service_name}")
 
         service_config = self.services.get(service_name, {})
         port = service_config.get("port")
 
         # Strategy 1: Check if service process is running
         if not self._is_port_listening(port):
-            print(f"   📡 Port {port} not listening - restarting service...")
+            print(f"   [EMOJI] Port {port} not listening - restarting service...")
             success = self._restart_service_intelligent(service_name)
             if success:
                 return True
 
         # Strategy 2: Check for port conflicts
         if self._check_port_conflict(port):
-            print(f"   ⚠️ Port conflict detected on {port} - resolving...")
+            print(f"   [WARN] Port conflict detected on {port} - resolving...")
             success = self._resolve_port_conflict(service_name, port)
             if success:
                 return True
 
         # Strategy 3: Check service dependencies
-        print(f"   🔗 Checking dependencies for {service_name}...")
+        print(f"   [LINK] Checking dependencies for {service_name}...")
         missing_deps = self._check_service_dependencies(service_name)
         if missing_deps:
-            print(f"   📦 Installing missing dependencies: {missing_deps}")
+            print(f"   [PACKAGE] Installing missing dependencies: {missing_deps}")
             self._install_dependencies(missing_deps)
             return self._restart_service_intelligent(service_name)
 
@@ -2592,7 +2592,7 @@ class UltimateAPIManager:
 
     def _fix_timeout_error(self, service_name: str, error_details: dict) -> bool:
         """Fix timeout errors with intelligent strategies"""
-        print(f"🔧 AUTO-FIXING: Timeout error for {service_name}")
+        print(f"[EMOJI] AUTO-FIXING: Timeout error for {service_name}")
 
         # Strategy 1: Increase timeout and retry
         success = self._retry_with_backoff(service_name)
@@ -2601,19 +2601,19 @@ class UltimateAPIManager:
 
         # Strategy 2: Check service load and restart if overloaded
         if self._is_service_overloaded(service_name):
-            print("   🔄 Service overloaded - restarting...")
+            print("   [EMOJI] Service overloaded - restarting...")
             return self._restart_service_intelligent(service_name)
 
         return False
 
     def _fix_port_not_listening(self, service_name: str, error_details: dict) -> bool:
         """Fix port not listening issues"""
-        print(f"🔧 AUTO-FIXING: Port not listening for {service_name}")
+        print(f"[EMOJI] AUTO-FIXING: Port not listening for {service_name}")
         return self._restart_service_intelligent(service_name)
 
     def _fix_service_not_responding(self, service_name: str, error_details: dict) -> bool:
         """Fix unresponsive services"""
-        print(f"🔧 AUTO-FIXING: Service not responding for {service_name}")
+        print(f"[EMOJI] AUTO-FIXING: Service not responding for {service_name}")
         return self._force_restart_service(service_name)
 
     def _is_port_listening(self, port: int) -> bool:
@@ -2629,7 +2629,7 @@ class UltimateAPIManager:
 
     def _restart_service_intelligent(self, service_name: str) -> bool:
         """Intelligently restart a service with proper error handling"""
-        print(f"   🔄 Intelligently restarting {service_name}...")
+        print(f"   [EMOJI] Intelligently restarting {service_name}...")
 
         try:
             # Use the existing advanced restart method
@@ -2642,23 +2642,23 @@ class UltimateAPIManager:
                 health = self.advanced_health_check(service_name)
                 if health.get("healthy"):
                     print(
-                        f"   ✅ {service_name} successfully restarted and healthy")
+                        f"   [OK] {service_name} successfully restarted and healthy")
                     return True
                 else:
                     print(
-                        f"   ❌ {service_name} restarted but not healthy: {health.get('error')}")
+                        f"   [ERROR] {service_name} restarted but not healthy: {health.get('error')}")
                     # Try alternative startup method
                     return self._try_alternative_startup(service_name)
 
             return False
 
         except Exception as e:
-            print(f"   ❌ Error restarting {service_name}: {e}")
+            print(f"   [ERROR] Error restarting {service_name}: {e}")
             return False
 
     def _try_alternative_startup(self, service_name: str) -> bool:
         """Try alternative startup methods for stubborn services"""
-        print(f"   🔄 Trying alternative startup for {service_name}...")
+        print(f"   [EMOJI] Trying alternative startup for {service_name}...")
 
         # Alternative startup commands for different services
         alt_commands = {
@@ -2699,13 +2699,13 @@ class UltimateAPIManager:
                 health = self.advanced_health_check(service_name)
                 return health.get("healthy", False)
             except Exception as e:
-                print(f"   ❌ Alternative startup failed: {e}")
+                print(f"   [ERROR] Alternative startup failed: {e}")
 
         return False
 
     def _force_restart_service(self, service_name: str) -> bool:
         """Force restart a service that's completely stuck"""
-        print(f"   💪 Force restarting {service_name}...")
+        print(f"   [EMOJI] Force restarting {service_name}...")
 
         service_config = self.services.get(service_name, {})
         port = service_config.get("port")
@@ -2726,12 +2726,12 @@ class UltimateAPIManager:
 
         for i, delay in enumerate(strategy["delay"]):
             print(
-                f"   🔄 Retry {i+1}/{len(strategy['delay'])} after {delay}s...")
+                f"   [EMOJI] Retry {i+1}/{len(strategy['delay'])} after {delay}s...")
             time.sleep(delay)
 
             health = self.advanced_health_check(service_name)
             if health.get("healthy"):
-                print(f"   ✅ Service recovered on retry {i+1}")
+                print(f"   [OK] Service recovered on retry {i+1}")
                 return True
 
         return False
@@ -2800,16 +2800,16 @@ class UltimateAPIManager:
                 if dep in ["fastapi", "uvicorn", "pydantic", "requests"]:
                     subprocess.run(["pip", "install", dep],
                                    capture_output=True, check=True)
-                    print(f"   ✅ Installed {dep}")
+                    print(f"   [OK] Installed {dep}")
             except:
-                print(f"   ❌ Failed to install {dep}")
+                print(f"   [ERROR] Failed to install {dep}")
 
     def _request_aurora_assistance(self, service_name: str, issue_type: str, error_details: dict) -> bool:
         """Request assistance from Aurora AI to fix complex issues"""
         if not self.aurora_assistance_enabled:
             return False
 
-        print(f"   🤖 Requesting Aurora AI assistance for {service_name}...")
+        print(f"   [AGENT] Requesting Aurora AI assistance for {service_name}...")
 
         try:
             prompt = f"URGENT: Service {service_name} has {issue_type}. Error: {error_details}. Provide fix steps."
@@ -2818,17 +2818,17 @@ class UltimateAPIManager:
                                      "message": prompt}, timeout=10)
 
             if response.status_code == 200:
-                print("   🤖 Aurora provided assistance - applying fix...")
+                print("   [AGENT] Aurora provided assistance - applying fix...")
                 return self._restart_service_intelligent(service_name)
 
         except Exception as e:
-            print(f"   ❌ Aurora assistance failed: {e}")
+            print(f"   [ERROR] Aurora assistance failed: {e}")
 
         return False
 
     def _fix_cors_error(self, service_name: str, error_details: dict) -> bool:
         """Fix CORS errors by updating service configuration"""
-        print(f"🔧 AUTO-FIXING: CORS error for {service_name}")
+        print(f"[EMOJI] AUTO-FIXING: CORS error for {service_name}")
         # For now, restart the service which should load proper CORS settings
         return self._restart_service_intelligent(service_name)
 
@@ -2845,7 +2845,7 @@ class UltimateAPIManager:
             "success_rate": 100,
         }
 
-        # ⚡ INSTANT CHECK - Aurora uses intelligence, not file scanning
+        # [POWER] INSTANT CHECK - Aurora uses intelligence, not file scanning
         # Only flag if there are ACTUAL runtime issues detected
         critical_count = len(self.last_full_scan.get(
             "critical_issues", [])) if self.last_full_scan else 0
@@ -3006,19 +3006,19 @@ except ImportError as e:
         Aurora learns step by step by working alongside humans
         Now requires approval for all changes!
         """
-        print("🌟 AURORA'S LEARNING SESSION - WORKING WITH HUMANS (APPROVAL MODE)")
+        print("[EMOJI] AURORA'S LEARNING SESSION - WORKING WITH HUMANS (APPROVAL MODE)")
         print("=" * 70)
-        print("👩‍💻 Aurora: Hello! I'm ready to learn alongside you.")
-        print("📚 Aurora: I will now ask for approval before making any changes.")
-        print("🎓 Aurora: This will help me learn what's right and wrong!")
+        print("[EMOJI]‍[EMOJI] Aurora: Hello! I'm ready to learn alongside you.")
+        print("[EMOJI] Aurora: I will now ask for approval before making any changes.")
+        print("[EMOJI] Aurora: This will help me learn what's right and wrong!")
         print()
 
         # Initialize approval system
         if AURORA_APPROVAL_AVAILABLE:
             self.approval_system = AuroraApprovalSystem()
-            print("✅ Aurora Approval System activated!")
+            print("[OK] Aurora Approval System activated!")
         else:
-            print("⚠️ Approval system unavailable - working in observation mode only")
+            print("[WARN] Approval system unavailable - working in observation mode only")
 
         learning_results = {
             "session_type": "collaborative_learning_with_approval",
@@ -3034,35 +3034,35 @@ except ImportError as e:
         }
 
         # Aurora observes the current state
-        print("👀 Aurora: Observing current system state...")
+        print("[EMOJI] Aurora: Observing current system state...")
         current_issues = self._aurora_observe_issues()
         learning_results["observations"] = current_issues
 
         print(
-            f"📊 Aurora: I can see {len(current_issues)} issues that need attention:")
+            f"[DATA] Aurora: I can see {len(current_issues)} issues that need attention:")
         for i, issue in enumerate(current_issues[:5], 1):
             print(f"   {i}. {issue['type']}: {issue['description']}")
 
         # Aurora analyzes her previous mistakes
-        print("\n🤔 Aurora: Let me analyze what I did wrong before...")
+        print("\n[EMOJI] Aurora: Let me analyze what I did wrong before...")
         mistakes = self._aurora_analyze_mistakes()
         learning_results["mistakes_identified"] = mistakes
 
         for mistake in mistakes:
-            print(f"   ❌ Mistake: {mistake['error']}")
-            print(f"      🧠 Lesson: {mistake['lesson']}")
+            print(f"   [ERROR] Mistake: {mistake['error']}")
+            print(f"      [BRAIN] Lesson: {mistake['lesson']}")
 
         # Aurora learns proper techniques
-        print("\n📖 Aurora: Learning proper coding techniques from you...")
+        print("\n[EMOJI] Aurora: Learning proper coding techniques from you...")
         techniques = self._aurora_learn_techniques()
         learning_results["knowledge_gained"] = techniques
 
         for technique in techniques:
-            print(f"   ✅ Learned: {technique['skill']}")
-            print(f"      📝 Application: {technique['usage']}")
+            print(f"   [OK] Learned: {technique['skill']}")
+            print(f"      [EMOJI] Application: {technique['usage']}")
 
         # Aurora applies learning carefully
-        print("\n🎯 Aurora: Applying what I learned (carefully this time)...")
+        print("\n[TARGET] Aurora: Applying what I learned (carefully this time)...")
         improvements = self._aurora_apply_learning()
         learning_results["improvements_made"] = improvements
 
@@ -3071,7 +3071,7 @@ except ImportError as e:
         learning_results["success_rate"] = (
             success_count / len(improvements) * 100) if improvements else 0
 
-        print("\n📈 Aurora: Learning Session Results:")
+        print("\n[EMOJI] Aurora: Learning Session Results:")
         print(f"   Issues Observed: {len(current_issues)}")
         print(f"   Mistakes Analyzed: {len(mistakes)}")
         print(f"   Techniques Learned: {len(techniques)}")
@@ -3080,7 +3080,7 @@ except ImportError as e:
 
         # Aurora reflects on learning
         if learning_results["success_rate"] < 80:
-            print("\n🤖 Aurora: I need more practice! Let me observe more carefully.")
+            print("\n[AGENT] Aurora: I need more practice! Let me observe more carefully.")
             learning_results["areas_for_improvement"] = [
                 "More careful code analysis",
                 "Better understanding of import resolution",
@@ -3088,7 +3088,7 @@ except ImportError as e:
                 "More testing before applying fixes",
             ]
         else:
-            print("\n🌟 Aurora: Great progress! I'm learning to code better.")
+            print("\n[EMOJI] Aurora: Great progress! I'm learning to code better.")
 
         return learning_results
 
@@ -3110,10 +3110,10 @@ except ImportError as e:
         """
         if not AURORA_APPROVAL_AVAILABLE or not self.approval_system:
             print(
-                "🤖 Aurora: I would like to make a change, but approval system is not available.")
-            print(f"📁 File: {file_path}")
-            print(f"💭 Reasoning: {reason}")
-            print(f"✨ Proposed: {proposed_change}")
+                "[AGENT] Aurora: I would like to make a change, but approval system is not available.")
+            print(f"[EMOJI] File: {file_path}")
+            print(f"[EMOJI] Reasoning: {reason}")
+            print(f"[QUALITY] Proposed: {proposed_change}")
             return "no-approval-system"
 
         # Aurora now uses her expert knowledge to enhance the request
@@ -3125,7 +3125,7 @@ except ImportError as e:
 
                 if language:
                     print(
-                        f"🧠 Aurora: Analyzing with my expert knowledge of {language}...")
+                        f"[BRAIN] Aurora: Analyzing with my expert knowledge of {language}...")
 
                     # Read current file content for expert analysis
                     with open(file_path) as f:
@@ -3136,7 +3136,7 @@ except ImportError as e:
                         current_code, language)
 
                     # Enhanced reasoning with expert insights
-                    enhanced_reason = f"{reason}\n\n🧠 EXPERT ANALYSIS:\n"
+                    enhanced_reason = f"{reason}\n\n[BRAIN] EXPERT ANALYSIS:\n"
                     enhanced_reason += f"Code Quality Score: {analysis.get('code_quality_score', 'N/A')}/10\n"
 
                     if analysis.get("performance_issues"):
@@ -3150,7 +3150,7 @@ except ImportError as e:
 
             except Exception as e:
                 print(
-                    f"🤖 Aurora: Expert analysis failed ({e}), proceeding with basic reasoning")
+                    f"[AGENT] Aurora: Expert analysis failed ({e}), proceeding with basic reasoning")
 
         return self.approval_system.submit_change_request(file_path, proposed_change, enhanced_reason, change_type)
 
@@ -3317,7 +3317,7 @@ except ImportError as e:
         """Aurora carefully applies what she learned - NOW WITH APPROVAL SYSTEM"""
         improvements = []
 
-        print("🤖 Aurora: Now I will request approval for any changes I want to make!")
+        print("[AGENT] Aurora: Now I will request approval for any changes I want to make!")
 
         # Aurora validates current state first
         serve_file = Path("/workspaces/Aurora-x/aurora_x/serve.py")
@@ -3331,7 +3331,7 @@ except ImportError as e:
 
                 improvements.append(
                     {"type": "syntax_validation",
-                        "description": "✅ serve.py has correct syntax", "success": True}
+                        "description": "[OK] serve.py has correct syntax", "success": True}
                 )
 
                 # Instead of making changes directly, Aurora now requests approval
@@ -3349,7 +3349,7 @@ except ImportError as e:
                     improvements.append(
                         {
                             "type": "documentation_request",
-                            "description": f"📝 Requested approval for documentation (ID: {request_id})",
+                            "description": f"[EMOJI] Requested approval for documentation (ID: {request_id})",
                             "success": True,
                             "request_id": request_id,
                         }
@@ -3360,7 +3360,7 @@ except ImportError as e:
                     improvements.append(
                         {
                             "type": "error_handling",
-                            "description": "✅ Import error handling is present",
+                            "description": "[OK] Import error handling is present",
                             "success": True,
                         }
                     )
@@ -3370,7 +3370,7 @@ except ImportError as e:
                     improvements.append(
                         {
                             "type": "path_configuration",
-                            "description": "✅ Tools directory is being added to Python path",
+                            "description": "[OK] Tools directory is being added to Python path",
                             "success": True,
                         }
                     )
@@ -3388,7 +3388,7 @@ except ImportError as e:
                     improvements.append(
                         {
                             "type": "improvement_suggestions",
-                            "description": f"💡 Aurora suggests: {'; '.join(suggestions)}",
+                            "description": f"[EMOJI] Aurora suggests: {'; '.join(suggestions)}",
                             "success": True,
                             "actionable": True,
                         }
@@ -3398,7 +3398,7 @@ except ImportError as e:
                 improvements.append(
                     {
                         "type": "syntax_error",
-                        "description": f"❌ Syntax error found: {e}",
+                        "description": f"[ERROR] Syntax error found: {e}",
                         "success": False,
                         "needs_human_help": True,
                     }
@@ -3408,7 +3408,7 @@ except ImportError as e:
 
     def start_continuous_monitoring(self) -> None:
         """Legacy monitoring function - now redirects to autonomous mode"""
-        print("🔄 Redirecting to enhanced autonomous mode...")
+        print("[EMOJI] Redirecting to enhanced autonomous mode...")
         self.start_autonomous_mode()
 
     def stop_continuous_monitoring(self) -> None:
@@ -3416,7 +3416,7 @@ except ImportError as e:
         self.monitoring_active = False
         if self.monitoring_thread:
             self.monitoring_thread.join(timeout=5)
-        print("🛑 Continuous monitoring stopped")
+        print("[EMOJI] Continuous monitoring stopped")
 
 
 def main():
@@ -3484,7 +3484,7 @@ def main():
             if args.start in manager.services:
                 manager.start_service_advanced(args.start)
             else:
-                print(f"❌ Unknown service: {args.start}")
+                print(f"[ERROR] Unknown service: {args.start}")
                 print(
                     f"Available services: {', '.join(manager.services.keys())}")
 
@@ -3496,18 +3496,18 @@ def main():
                 manager.start_service_advanced(
                     args.restart, force_restart=True)
             else:
-                print(f"❌ Unknown service: {args.restart}")
+                print(f"[ERROR] Unknown service: {args.restart}")
 
         elif args.restart_all:
             results = manager.restart_all_services()
-            print("\n📊 Restart Results:")
+            print("\n[DATA] Restart Results:")
             for service, success in results.items():
-                status = "✅ SUCCESS" if success else "❌ FAILED"
+                status = "[OK] SUCCESS" if success else "[ERROR] FAILED"
                 print(
                     f"   {manager.services[service]['description']}: {status}")
 
         elif args.auto_heal:
-            print("🏥 Running auto-heal for all services...")
+            print("[EMOJI] Running auto-heal for all services...")
             unhealthy = []
             for service_name in manager.services:
                 health = manager.advanced_health_check(service_name)
@@ -3516,12 +3516,12 @@ def main():
 
             if unhealthy:
                 print(
-                    f"🔧 Healing {len(unhealthy)} services: {', '.join(unhealthy)}")
+                    f"[EMOJI] Healing {len(unhealthy)} services: {', '.join(unhealthy)}")
                 for service_name in unhealthy:
                     manager.start_service_advanced(
                         service_name, force_restart=True)
             else:
-                print("✅ All services are healthy!")
+                print("[OK] All services are healthy!")
 
             manager.ultimate_system_health_report()
 
@@ -3542,17 +3542,17 @@ def main():
                 manager.stop_continuous_monitoring()
 
         elif args.auto_fix_imports:
-            print("🔧 RUNNING INTELLIGENT IMPORT FIXER...")
+            print("[EMOJI] RUNNING INTELLIGENT IMPORT FIXER...")
             manager.auto_fix_import_errors()
 
         elif args.intelligent_analysis:
-            print("🧠 RUNNING COMPREHENSIVE INTELLIGENT ANALYSIS...")
+            print("[BRAIN] RUNNING COMPREHENSIVE INTELLIGENT ANALYSIS...")
             analysis = manager.intelligent_system_analysis()
 
             # Display detailed results
-            print("\n🎯 INTELLIGENT RECOMMENDATIONS:")
+            print("\n[TARGET] INTELLIGENT RECOMMENDATIONS:")
             for rec in analysis.get("intelligent_recommendations", []):
-                print(f"   📋 {rec['category'].upper()} ({rec['priority']}):")
+                print(f"   [EMOJI] {rec['category'].upper()} ({rec['priority']}):")
                 print(f"      {rec['description']}")
                 for action in rec.get("actions", []):
                     print(f"      • {action}")
@@ -3560,47 +3560,47 @@ def main():
             # Auto-apply critical fixes if available
             if analysis.get("auto_fix_recommendations"):
                 print(
-                    f"\n🔧 APPLYING {len(analysis['auto_fix_recommendations'])} AUTOMATIC FIXES...")
+                    f"\n[EMOJI] APPLYING {len(analysis['auto_fix_recommendations'])} AUTOMATIC FIXES...")
                 for fix in analysis["auto_fix_recommendations"]:
                     print(f"   • {fix}")
 
         elif args.aurora_learn:
-            print("🌟 STARTING AURORA'S COLLABORATIVE LEARNING SESSION...")
+            print("[EMOJI] STARTING AURORA'S COLLABORATIVE LEARNING SESSION...")
             learning_results = manager.aurora_learning_session()
 
-            print("\n🎓 AURORA'S LEARNING SUMMARY:")
+            print("\n[EMOJI] AURORA'S LEARNING SUMMARY:")
             print(
-                f"   👀 Issues Observed: {len(learning_results['observations'])}")
+                f"   [EMOJI] Issues Observed: {len(learning_results['observations'])}")
             print(
-                f"   🤔 Mistakes Analyzed: {len(learning_results['mistakes_identified'])}")
+                f"   [EMOJI] Mistakes Analyzed: {len(learning_results['mistakes_identified'])}")
             print(
-                f"   📚 Techniques Learned: {len(learning_results['knowledge_gained'])}")
+                f"   [EMOJI] Techniques Learned: {len(learning_results['knowledge_gained'])}")
             print(
-                f"   📈 Success Rate: {learning_results['success_rate']:.1f}%")
+                f"   [EMOJI] Success Rate: {learning_results['success_rate']:.1f}%")
 
             if learning_results["areas_for_improvement"]:
-                print("\n🎯 Aurora's Improvement Goals:")
+                print("\n[TARGET] Aurora's Improvement Goals:")
                 for area in learning_results["areas_for_improvement"]:
                     print(f"   • {area}")
 
             if learning_results.get("change_requests_submitted"):
                 print(
-                    f"\n📝 Aurora submitted {len(learning_results['change_requests_submitted'])} change requests")
+                    f"\n[EMOJI] Aurora submitted {len(learning_results['change_requests_submitted'])} change requests")
                 print("   Use: python tools/aurora_approval_system.py pending")
                 print("   To review and approve/reject Aurora's requests")
 
         elif args.aurora_approval:
-            print("🎓 STARTING AURORA IN APPROVAL-ONLY MODE")
+            print("[EMOJI] STARTING AURORA IN APPROVAL-ONLY MODE")
             print("=" * 50)
-            print("🤖 Aurora: I am now in learning mode!")
-            print("📝 Aurora: I will ask for approval before making any changes.")
-            print("🎯 Aurora: This helps me learn what's right and wrong!")
+            print("[AGENT] Aurora: I am now in learning mode!")
+            print("[EMOJI] Aurora: I will ask for approval before making any changes.")
+            print("[TARGET] Aurora: This helps me learn what's right and wrong!")
             print()
 
             if AURORA_APPROVAL_AVAILABLE:
                 approval_system = AuroraApprovalSystem()
                 approval_system.show_pending_requests()
-                print("\n💡 Commands:")
+                print("\n[EMOJI] Commands:")
                 print("   python tools/aurora_approval_system.py pending")
                 print(
                     "   python tools/aurora_approval_system.py approve <id> <grade> [feedback]")
@@ -3608,48 +3608,48 @@ def main():
                     "   python tools/aurora_approval_system.py reject <id> <grade> <feedback>")
                 print("   python tools/aurora_approval_system.py grades")
             else:
-                print("❌ Aurora Approval System not available!")
+                print("[ERROR] Aurora Approval System not available!")
 
         elif args.aurora_assistant:
-            print("🤖 ACTIVATING AURORA'S INTELLIGENT CODE ASSISTANT...")
+            print("[AGENT] ACTIVATING AURORA'S INTELLIGENT CODE ASSISTANT...")
             aurora_results = manager.aurora_intelligent_code_assistant()
 
             # Check if Aurora helped
             if aurora_results["fixes_applied"]:
                 print(
-                    f"\n✨ AURORA SUCCESS! Applied {len(aurora_results['fixes_applied'])} fixes")
+                    f"\n[QUALITY] AURORA SUCCESS! Applied {len(aurora_results['fixes_applied'])} fixes")
 
                 # Restart affected services to load the fixes
-                print("🔄 Restarting services to apply Aurora's fixes...")
+                print("[EMOJI] Restarting services to apply Aurora's fixes...")
                 manager.start_service_advanced(
                     "learning_api", force_restart=True)
 
                 # Verify the fixes worked
                 time.sleep(3)
-                print("🔍 Verifying Aurora's fixes...")
+                print("[SCAN] Verifying Aurora's fixes...")
 
             elif aurora_results["issues_detected"]:
                 print(
-                    f"\n⚠️ Aurora detected {len(aurora_results['issues_detected'])} issues but couldn't fix them all")
+                    f"\n[WARN] Aurora detected {len(aurora_results['issues_detected'])} issues but couldn't fix them all")
                 print("   Aurora is learning and will improve her strategies")
             else:
-                print("\n✅ Aurora found no persistent issues - system is clean!")
+                print("\n[OK] Aurora found no persistent issues - system is clean!")
 
         elif args.fix_connections:
-            print("🔧 INTELLIGENT CONNECTION MONITOR - Auto-fixing issues...")
+            print("[EMOJI] INTELLIGENT CONNECTION MONITOR - Auto-fixing issues...")
             results = manager.intelligent_connection_monitor()
 
             if results["total_fixes_applied"] > 0:
                 print(
-                    f"\n🎉 SUCCESS: Fixed {results['total_fixes_applied']} connection issues!")
-                print("🔄 Running final health check...")
+                    f"\n[EMOJI] SUCCESS: Fixed {results['total_fixes_applied']} connection issues!")
+                print("[EMOJI] Running final health check...")
                 time.sleep(5)
                 manager.ultimate_system_health_report()
             else:
-                print("✅ All connections healthy - no fixes needed!")
+                print("[OK] All connections healthy - no fixes needed!")
 
         elif args.autonomous:
-            print("🤖 STARTING FULLY AUTONOMOUS MODE")
+            print("[AGENT] STARTING FULLY AUTONOMOUS MODE")
             print("=" * 60)
             print("Features:")
             print("• Automatic service startup and monitoring")
@@ -3666,33 +3666,33 @@ def main():
                     if hasattr(manager, "last_full_scan") and manager.last_full_scan:
                         scan = manager.last_full_scan
                         print(
-                            f"\n🤖 AUTONOMOUS STATUS: {scan['system_health']:.1f}% health | {scan['performance_metrics']['healthy_services']}/{scan['performance_metrics']['total_services']} services"
+                            f"\n[AGENT] AUTONOMOUS STATUS: {scan['system_health']:.1f}% health | {scan['performance_metrics']['healthy_services']}/{scan['performance_metrics']['total_services']} services"
                         )
                     else:
-                        print("\n🤖 AUTONOMOUS MODE: Initializing...")
+                        print("\n[AGENT] AUTONOMOUS MODE: Initializing...")
                     print("   Press Ctrl+C to stop autonomous operation")
             except KeyboardInterrupt:
                 manager.stop_continuous_monitoring()
-                print("\n🛑 Autonomous mode stopped")
+                print("\n[EMOJI] Autonomous mode stopped")
 
         elif args.comprehensive_heal:
-            print("🧠 COMPREHENSIVE AUTO-HEALING - FULL SYSTEM KNOWLEDGE MODE!")
+            print("[BRAIN] COMPREHENSIVE AUTO-HEALING - FULL SYSTEM KNOWLEDGE MODE!")
             print("=" * 80)
             results = manager.comprehensive_auto_heal()
 
-            print("\n📊 COMPREHENSIVE HEALING RESULTS:")
-            print("   🔍 Issues Detected Categories:")
+            print("\n[DATA] COMPREHENSIVE HEALING RESULTS:")
+            print("   [SCAN] Issues Detected Categories:")
             for category, issues in results["issues_detected"].items():
                 if issues:
                     print(f"     • {category}: {len(issues)} issues")
                     for issue in issues:
                         print(f"       - {issue}")
 
-            print(f"\n   🔧 Fixes Applied: {len(results['fixes_applied'])}")
-            print(f"   ✅ Successful: {results['fixes_successful']}")
-            print(f"   ❌ Failed: {results['fixes_failed']}")
+            print(f"\n   [EMOJI] Fixes Applied: {len(results['fixes_applied'])}")
+            print(f"   [OK] Successful: {results['fixes_successful']}")
+            print(f"   [ERROR] Failed: {results['fixes_failed']}")
             print(
-                f"   🏥 Final Health: {results['services_healthy']}/{results['total_services']} services healthy")
+                f"   [EMOJI] Final Health: {results['services_healthy']}/{results['total_services']} services healthy")
 
         elif args.detect_issues:
             print("� INTELLIGENT ISSUE DETECTION")
@@ -3707,45 +3707,45 @@ def main():
                         print(f"  • {issue}")
 
             if not any(issues.values()):
-                print("✅ No issues detected!")
+                print("[OK] No issues detected!")
 
         elif args.ultimate_fix:
-            print("�🚀 ULTIMATE FIX MODE - MAXIMUM CAPABILITY ACTIVATION!")
+            print("�[EMOJI] ULTIMATE FIX MODE - MAXIMUM CAPABILITY ACTIVATION!")
             print("=" * 70)
 
             # Step 1: Comprehensive healing first
-            print("🧠 Step 1: Comprehensive auto-healing...")
+            print("[BRAIN] Step 1: Comprehensive auto-healing...")
             manager.comprehensive_auto_heal()
 
             # Step 2: Fix routing issues
-            print("\n🔧 Step 2: Fixing frontend/backend routing...")
+            print("\n[EMOJI] Step 2: Fixing frontend/backend routing...")
             manager.fix_frontend_backend_routing()
 
             # Step 3: Restart all services
-            print("\n🔄 Step 3: Restarting all services...")
+            print("\n[EMOJI] Step 3: Restarting all services...")
             manager.restart_all_services()
 
             # Step 4: Start monitoring
-            print("\n🔍 Step 4: Starting continuous monitoring...")
+            print("\n[SCAN] Step 4: Starting continuous monitoring...")
             manager.start_continuous_monitoring()
 
             # Step 5: Final health report
-            print("\n📊 Step 5: Final health verification...")
+            print("\n[DATA] Step 5: Final health verification...")
             time.sleep(10)  # Let services stabilize
             manager.ultimate_system_health_report()
 
-            print("\n🎉 ULTIMATE FIX COMPLETE!")
+            print("\n[EMOJI] ULTIMATE FIX COMPLETE!")
 
         else:
             # Default: show status and offer autonomous mode
             manager.ultimate_system_health_report()
-            print("\n💡 TIP: Run with --autonomous for fully automatic operation!")
+            print("\n[EMOJI] TIP: Run with --autonomous for fully automatic operation!")
             print("   python3 tools/ultimate_api_manager.py --autonomous")
 
     except KeyboardInterrupt:
-        print("\n👋 Operation cancelled")
+        print("\n[EMOJI] Operation cancelled")
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n[ERROR] Error: {e}")
 
 
 if __name__ == "__main__":

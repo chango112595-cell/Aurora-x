@@ -54,12 +54,12 @@ def main():
 
     # print summary and recommendations
     print(f"\n{'='*70}")
-    print(f"🔍 Aurora Service Status Check ({timestamp})")
+    print(f"[SCAN] Aurora Service Status Check ({timestamp})")
     print(f"{'='*70}\n")
 
     for port in sorted(PORTS.keys()):
         entry = results[port]
-        status = "✅ UP" if entry["up"] else "❌ DOWN"
+        status = "[OK] UP" if entry["up"] else "[ERROR] DOWN"
         print(f"[PORT {port}] {entry['service']}: {status}")
         if not entry["up"]:
             cmd = RECOMMENDED_COMMANDS.get(port)
@@ -67,7 +67,7 @@ def main():
                 print(f"         └─ Try: {cmd}")
 
     print(f"\n{'='*70}")
-    print(f"📋 Log file: {LOG_FILE}")
+    print(f"[EMOJI] Log file: {LOG_FILE}")
     print(f"{'='*70}\n")
 
     # exit code

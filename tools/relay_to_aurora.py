@@ -12,7 +12,7 @@ from pathlib import Path
 def relay_debug_message():
     """Relay debug request to Aurora"""
 
-    print("📡 Copilot: Relaying debug request to Aurora...")
+    print("[EMOJI] Copilot: Relaying debug request to Aurora...")
 
     # Create message for Aurora's debugging system
     message = {
@@ -31,7 +31,7 @@ def relay_debug_message():
     with open(aurora_messages, "a") as f:
         f.write(json.dumps(message) + "\n")
 
-    print("✅ Copilot: Message delivered to Aurora's debug queue")
+    print("[OK] Copilot: Message delivered to Aurora's debug queue")
 
     # Trigger Aurora's Luminar Nexus to check for new debug requests
     try:
@@ -41,18 +41,18 @@ def relay_debug_message():
         result = subprocess.run(["pgrep", "-f", "luminar"], capture_output=True, text=True)
 
         if result.stdout:
-            print("✅ Copilot: Aurora's Luminar Nexus is running - she should receive the debug request")
+            print("[OK] Copilot: Aurora's Luminar Nexus is running - she should receive the debug request")
         else:
-            print("⚠️ Copilot: Aurora's Luminar Nexus not detected - starting emergency debug mode")
+            print("[WARN] Copilot: Aurora's Luminar Nexus not detected - starting emergency debug mode")
 
             # Emergency: directly call Aurora's debug system
             subprocess.Popen(["python", "/workspaces/Aurora-x/tools/aurora_emergency_debug.py"])
 
     except Exception as e:
-        print(f"⚠️ Copilot: Error contacting Aurora - {e}")
+        print(f"[WARN] Copilot: Error contacting Aurora - {e}")
 
-    print("\n🌟 Aurora should now be debugging the issue...")
-    print("📊 Monitoring Aurora's response...")
+    print("\n[EMOJI] Aurora should now be debugging the issue...")
+    print("[DATA] Monitoring Aurora's response...")
 
     # Monitor for Aurora's response
     monitor_aurora_response()
@@ -62,7 +62,7 @@ def monitor_aurora_response():
     """Monitor Aurora's debug response"""
     response_file = Path("/workspaces/Aurora-x/.aurora_knowledge/debug_responses.jsonl")
 
-    print("👁️ Copilot: Waiting for Aurora's response (30 seconds max)...")
+    print("[EMOJI]️ Copilot: Waiting for Aurora's response (30 seconds max)...")
 
     start_time = time.time()
     while time.time() - start_time < 30:
@@ -71,16 +71,16 @@ def monitor_aurora_response():
                 lines = f.readlines()
                 if lines:
                     latest = json.loads(lines[-1])
-                    print(f"🌟 Aurora responded: {latest.get('message', 'Debug in progress')}")
+                    print(f"[EMOJI] Aurora responded: {latest.get('message', 'Debug in progress')}")
                     if latest.get("status") == "COMPLETE":
-                        print("✅ Copilot: Aurora completed debugging")
+                        print("[OK] Copilot: Aurora completed debugging")
                         return
 
         time.sleep(2)
         print("⏳ Copilot: Still waiting for Aurora...")
 
-    print("⚠️ Copilot: Aurora didn't respond within 30 seconds")
-    print("📋 Copilot: Aurora may be working on complex debugging - check her logs")
+    print("[WARN] Copilot: Aurora didn't respond within 30 seconds")
+    print("[EMOJI] Copilot: Aurora may be working on complex debugging - check her logs")
 
 
 if __name__ == "__main__":

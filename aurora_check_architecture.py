@@ -135,7 +135,7 @@ class AuroraArchitectureChecker:
 
         print("\n  [DATA] Service Architecture Map:")
         for service, port in service_port_map.items():
-            print(f"     {service:30} → Port {port}")
+            print(f"     {service:30} -> Port {port}")
 
             # Check if service implementation exists
             service_file = None
@@ -196,12 +196,12 @@ class AuroraArchitectureChecker:
         print("  ┌─────────────────────────────────────────┐")
         print("  │         x-start (Entry Point)           │")
         print("  └─────────────────────────────────────────┘")
-        print("              ↓")
+        print("              v")
         print("  ┌─────────────────────────────────────────┐")
         print("  │    Ultimate API Manager (Master)        │")
         print("  │         Coordinates Everything          │")
         print("  └─────────────────────────────────────────┘")
-        print("         ↓              ↓              ↓")
+        print("         v              v              v")
         print("  ┌──────────┐  ┌──────────────┐  ┌─────────────┐")
         print("  │ Luminar  │  │   Services   │  │  Monitoring │")
         print("  │  Nexus   │  │ (5 services) │  │   Systems   │")
@@ -267,7 +267,7 @@ class AuroraArchitectureChecker:
         for flow_name, flow_steps in data_flows.items():
             print(f"\n  [SYNC] {flow_name.upper().replace('_', ' ')} FLOW:")
             for i, step in enumerate(flow_steps, 1):
-                arrow = "└──→" if i == len(flow_steps) else "├──→"
+                arrow = "└──->" if i == len(flow_steps) else "├──->"
                 print(f"     {arrow} {i}. {step}")
 
         self.architecture['data_flow'] = data_flows
@@ -287,12 +287,12 @@ class AuroraArchitectureChecker:
                 proxy = pkg.get('proxy')
                 if proxy:
                     integrations.append({
-                        'type': 'Frontend → Backend',
+                        'type': 'Frontend -> Backend',
                         'mechanism': f'Proxy: {proxy}',
                         'status': '[OK]'
                     })
                     print(
-                        f"  [OK] Frontend → Backend: Proxy configured ({proxy})")
+                        f"  [OK] Frontend -> Backend: Proxy configured ({proxy})")
 
         # Service-to-Service integration
         bridge_service = self.root / 'aurora_x' / 'bridge' / 'service.py'

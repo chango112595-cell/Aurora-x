@@ -197,7 +197,7 @@ WHAT NEEDS TO HAPPEN:
    - Check process health continuously
    
 4. Wire auto-fixing into error detection
-   - When error detected → trigger appropriate fixer
+   - When error detected -> trigger appropriate fixer
    - AuroraAutonomousFixer for syntax errors
    - AuroraAutoFixer for runtime errors
    

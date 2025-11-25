@@ -375,7 +375,7 @@ if __name__ == "__main__":
     def autonomous_execution_loop(self):
         """
         Aurora's main autonomous execution loop
-        Read assignment → Execute tasks → Verify → Grade → Repeat if needed
+        Read assignment -> Execute tasks -> Verify -> Grade -> Repeat if needed
         """
 
         print("\n" + "=" * 70)

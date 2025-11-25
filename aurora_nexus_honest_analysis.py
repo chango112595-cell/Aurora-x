@@ -147,7 +147,7 @@ print("[COMPARISON: V3 vs NEW CONTROLLER]")
 print("=" * 80 + "\n")
 
 comparison = """
-| Aspect              | Upgrade V2 → V3           | New Dedicated Controller      |
+| Aspect              | Upgrade V2 -> V3           | New Dedicated Controller      |
 |---------------------|---------------------------|-------------------------------|
 | Code Size           | 2500+ lines (adding more) | 300-500 lines (lean)          |
 | Complexity          | HIGH (AI/ML/Quantum)      | LOW (simple patterns)         |
@@ -220,7 +220,7 @@ print("=" * 80)
 print("[TIME & EFFORT ESTIMATE]")
 print("=" * 80 + "\n")
 
-print("Option A: Upgrade v2 → v3 (with AI enhancements)")
+print("Option A: Upgrade v2 -> v3 (with AI enhancements)")
 print("  Time: 2-3 days")
 print("  Risk: HIGH (complex features, untested)")
 print("  Maintenance: HARD (ongoing AI tuning)")

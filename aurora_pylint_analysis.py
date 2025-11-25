@@ -54,10 +54,10 @@ ROOT CAUSE ANALYSIS
 
 Why do these keep happening?
 
-1. **Rapid Development** → We code fast, optimize later
-2. **Copy-Paste Patterns** → We duplicate code with unused parts
-3. **Future-Proofing** → We add imports "we might need"
-4. **No Pre-Commit Checks** → Pylint runs AFTER code is written
+1. **Rapid Development** -> We code fast, optimize later
+2. **Copy-Paste Patterns** -> We duplicate code with unused parts
+3. **Future-Proofing** -> We add imports "we might need"
+4. **No Pre-Commit Checks** -> Pylint runs AFTER code is written
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 AURORA'S AUTONOMOUS SOLUTION STRATEGY
@@ -68,11 +68,11 @@ I will implement a PREVENTION SYSTEM, not just fix issues reactively.
 **TIER 42: PYLINT PREVENTION SYSTEM** (New Capability)
 
 Components:
-1. **Pre-Commit Hook** → Run pylint BEFORE code is committed
-2. **Auto-Fixer** → Automatically fix common issues
-3. **Smart Import Scanner** → Remove unused imports on save
-4. **Code Analyzer** → Warn about potential issues while coding
-5. **Continuous Monitor** → Run pylint every 5 minutes
+1. **Pre-Commit Hook** -> Run pylint BEFORE code is committed
+2. **Auto-Fixer** -> Automatically fix common issues
+3. **Smart Import Scanner** -> Remove unused imports on save
+4. **Code Analyzer** -> Warn about potential issues while coding
+5. **Continuous Monitor** -> Run pylint every 5 minutes
 
 This way:
   [+] Issues are caught BEFORE they're committed
@@ -88,13 +88,13 @@ IMMEDIATE IMPROVEMENTS (I'll implement these NOW)
    - aurora_strategist.py:197 - prefix unused arg with underscore
    
 2. **Create Pre-Commit Hook**
-   - .git/hooks/pre-commit → runs pylint automatically
+   - .git/hooks/pre-commit -> runs pylint automatically
    
 3. **Create Auto-Fixer Script**
-   - aurora_pylint_auto_fixer.py → runs continuously
+   - aurora_pylint_auto_fixer.py -> runs continuously
    
 4. **Add VS Code Settings**
-   - .vscode/settings.json → pylint on save
+   - .vscode/settings.json -> pylint on save
    
 5. **Create Tiers 66**
    - Add Pylint Prevention System to capabilities
@@ -104,10 +104,10 @@ WHY THIS WORKS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Current approach: React to issues [ERROR]
-  Write code → Commit → Run pylint → Find issues → Fix → Repeat
+  Write code -> Commit -> Run pylint -> Find issues -> Fix -> Repeat
 
 New approach: Prevent issues [OK]
-  Write code → Auto-check → Auto-fix → Commit clean code
+  Write code -> Auto-check -> Auto-fix -> Commit clean code
 
 Result:
   • No more recurring issues

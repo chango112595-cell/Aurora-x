@@ -205,7 +205,7 @@ class AuroraTaskExecutor:
 
 **In Your Browser:**
 
-1. **Open DevTools** (F12 or Right-click → Inspect)
+1. **Open DevTools** (F12 or Right-click -> Inspect)
 
 2. **Go to Application Tab**
    - Click "Service Workers" on left
@@ -230,7 +230,7 @@ class AuroraTaskExecutor:
 ### If Still Showing Chango:
 1. Close ALL browser tabs for localhost:5000
 2. Clear browser cache completely:
-   - Chrome: Settings → Privacy → Clear browsing data → Cached images and files
+   - Chrome: Settings -> Privacy -> Clear browsing data -> Cached images and files
 3. Restart browser
 4. Open http://localhost:5000 fresh
 

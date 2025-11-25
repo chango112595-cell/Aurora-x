@@ -12,7 +12,7 @@ from pathlib import Path
 class AuroraTaskManager:
     """
     Advanced task management system for Aurora
-    - Tracks task lifecycle (pending → in_progress → completed → archived)
+    - Tracks task lifecycle (pending -> in_progress -> completed -> archived)
     - Prevents re-execution of completed tasks
     - Maintains task history and statistics
     - Supports task priorities and dependencies

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌌 AURORA ULTIMATE AUTONOMOUS SYSTEM FIXER - FULL POWER MODE 🌌
+[AURORA] AURORA ULTIMATE AUTONOMOUS SYSTEM FIXER - FULL POWER MODE [AURORA]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CAPABILITIES:
@@ -99,7 +99,7 @@ class AuroraUltimateAutonomousFixer:
                 content = f.read()
 
             # Check for unicode/emoji issues
-            if re.search(r'[\U0001F300-\U0001F9FF]|→|←|↑|↓|✅|❌|⚠️', content):
+            if re.search(r'[\U0001F300-\U0001F9FF]|->|<-|^|v|[OK]|[ERROR]|[WARN]', content):
                 issues["encoding_issues"].append(str(filepath))
 
             # Check for common errors
@@ -299,11 +299,11 @@ class AuroraUltimateAutonomousFixer:
 
             # Replace common emojis
             emoji_map = {
-                '→': '->', '←': '<-', '↑': '^', '↓': 'v',
-                '✅': '[OK]', '❌': '[ERROR]', '⚠️': '[WARN]',
-                '🌌': '[AURORA]', '⚡': '[POWER]', '🧠': '[BRAIN]',
-                '🤖': '[AGENT]', '🔍': '[SCAN]', '✓': '[+]',
-                '🌐': '[WEB]', '📊': '[DATA]', '🎯': '[TARGET]'
+                '->': '->', '<-': '<-', '^': '^', 'v': 'v',
+                '[OK]': '[OK]', '[ERROR]': '[ERROR]', '[WARN]': '[WARN]',
+                '[AURORA]': '[AURORA]', '[POWER]': '[POWER]', '[BRAIN]': '[BRAIN]',
+                '[AGENT]': '[AGENT]', '[SCAN]': '[SCAN]', '[+]': '[+]',
+                '[WEB]': '[WEB]', '[DATA]': '[DATA]', '[TARGET]': '[TARGET]'
             }
 
             for emoji, replacement in emoji_map.items():
@@ -516,13 +516,13 @@ class AuroraUltimateAutonomousFixer:
 
 if __name__ == "__main__":
     print("\n")
-    print("🌌" * 40)
+    print("[AURORA]" * 40)
     print("   AURORA ULTIMATE AUTONOMOUS SYSTEM FIXER")
     print("   Full Power Mode | Hyperspeed Processing | Zero Intervention")
-    print("🌌" * 40)
+    print("[AURORA]" * 40)
     print("\n")
 
     fixer = AuroraUltimateAutonomousFixer()
     report = fixer.execute_full_autonomous_fix()
 
-    print("\n✨ AURORA IS NOW OPERATING AT FULL POWER ✨\n")
+    print("\n[QUALITY] AURORA IS NOW OPERATING AT FULL POWER [QUALITY]\n")

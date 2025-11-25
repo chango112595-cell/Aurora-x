@@ -94,7 +94,7 @@ class AuroraHTMLChecker:
                 print(f"     Purpose: {purpose}")
                 if needs_conversion:
                     print(
-                        f"     → Suggested TSX: {conversion_info.get('suggested_tsx', 'N/A')}")
+                        f"     -> Suggested TSX: {conversion_info.get('suggested_tsx', 'N/A')}")
 
             except Exception as e:
                 print(f"  [WARN]  Error reading {html_info['path']}: {e}")
@@ -131,7 +131,7 @@ class AuroraHTMLChecker:
         print(f"\n[SYNC] Files to convert to TSX: {len(files_to_convert)}")
         for file_info in files_to_convert:
             print(f"   • {file_info['file']}")
-            print(f"     → {file_info['suggested_tsx']}")
+            print(f"     -> {file_info['suggested_tsx']}")
 
         if not files_to_convert:
             print("\n[SPARKLE] No HTML files need conversion!")

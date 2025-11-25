@@ -67,8 +67,8 @@ def aurora_system_update():
     if rebuilt_chat.exists():
         updates = [
             (
-                "32 Grandmaster Tiers | Ancient → Sci-Fi Mastery",
-                "66 Systems: 13 Foundation Tasks + 66 Knowledge Tiers | Ancient → Autonomous Mastery",
+                "32 Grandmaster Tiers | Ancient -> Sci-Fi Mastery",
+                "66 Systems: 13 Foundation Tasks + 66 Knowledge Tiers | Ancient -> Autonomous Mastery",
             ),
         ]
         if update_file_content(rebuilt_chat, updates):

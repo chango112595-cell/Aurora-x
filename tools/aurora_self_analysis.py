@@ -27,7 +27,7 @@ def analyze_architecture():
             },
             "strengths": [
                 "Proven and stable (works RIGHT NOW)",
-                "Complete pipeline: NL → Spec → Code → Tests",
+                "Complete pipeline: NL -> Spec -> Code -> Tests",
                 "Learning corpus already built-in",
                 "Adaptive optimization over time",
                 "Integration with rest of Aurora-X ecosystem",

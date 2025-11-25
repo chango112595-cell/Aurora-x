@@ -37,17 +37,17 @@ def print_dashboard():
     enabled = [w for w in all_workflows if "DISABLED" not in w.read_text()]
     disabled = [w for w in all_workflows if "DISABLED" in w.read_text()]
 
-    print(f"📊 Status: {len(enabled)}/{len(all_workflows)} workflows enabled")
+    print(f"[DATA] Status: {len(enabled)}/{len(all_workflows)} workflows enabled")
     print()
 
     # Recent runs
     runs = get_workflow_runs()
     if runs:
-        print("🏃 Recent Runs:")
+        print("[EMOJI] Recent Runs:")
         for run in runs[:5]:
             status_icon = {
-                "completed": "✅" if run.get("conclusion") == "success" else "❌",
-                "in_progress": "🔄",
+                "completed": "[OK]" if run.get("conclusion") == "success" else "[ERROR]",
+                "in_progress": "[EMOJI]",
                 "queued": "⏳",
             }.get(run.get("status"), "❓")
 
@@ -56,20 +56,20 @@ def print_dashboard():
         print("ℹ️  No recent runs found (gh CLI may not be configured)")
 
     print()
-    print("📋 Available Workflows:")
+    print("[EMOJI] Available Workflows:")
     for workflow in sorted(enabled, key=lambda w: w.name):
-        print(f"  ✅ {workflow.name}")
+        print(f"  [OK] {workflow.name}")
 
     if disabled:
         print()
-        print("💤 Disabled Workflows:")
+        print("[EMOJI] Disabled Workflows:")
         for workflow in sorted(disabled, key=lambda w: w.name):
-            print(f"  ❌ {workflow.name}")
+            print(f"  [ERROR] {workflow.name}")
 
 
 if __name__ == "__main__":
     try:
         print_dashboard()
     except KeyboardInterrupt:
-        print("\n\n👋 Dashboard closed")
+        print("\n\n[EMOJI] Dashboard closed")
         sys.exit(0)

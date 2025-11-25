@@ -101,17 +101,17 @@ for issue in issues_found:
             # Fix remaining emoji/unicode issues
             print("    [FIX] Removing unicode characters...")
             emoji_map = {
-                '→': '->',
-                '←': '<-',
-                '↑': '^',
-                '↓': 'v',
-                '✅': '[OK]',
-                '❌': '[ERROR]',
-                '⚠️': '[WARN]',
-                '🌌': '[AURORA]',
-                '⚡': '[POWER]',
-                '🧠': '[BRAIN]',
-                '🤖': '[AGENT]',
+                '->': '->',
+                '<-': '<-',
+                '^': '^',
+                'v': 'v',
+                '[OK]': '[OK]',
+                '[ERROR]': '[ERROR]',
+                '[WARN]': '[WARN]',
+                '[AURORA]': '[AURORA]',
+                '[POWER]': '[POWER]',
+                '[BRAIN]': '[BRAIN]',
+                '[AGENT]': '[AGENT]',
             }
             for emoji, replacement in emoji_map.items():
                 content = content.replace(emoji, replacement)

@@ -80,13 +80,13 @@ def populate_from_runs():
                 record(run_root, entry)
 
                 recorded += 1
-                print(f"✅ Recorded: {func_name} from {run_dir.name}")
+                print(f"[OK] Recorded: {func_name} from {run_dir.name}")
 
             except Exception as e:
-                print(f"⚠️  Error processing {py_file}: {e}")
+                print(f"[WARN]  Error processing {py_file}: {e}")
                 skipped += 1
 
-    print("\n📊 Summary:")
+    print("\n[DATA] Summary:")
     print(f"   Recorded: {recorded}")
     print(f"   Skipped: {skipped}")
 

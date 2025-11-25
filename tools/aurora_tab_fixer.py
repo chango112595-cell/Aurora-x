@@ -22,7 +22,7 @@ class AuroraTabFixer:
         """Aurora's logging"""
         timestamp = datetime.now().strftime("%H:%M:%S")
         icons = {"INFO": "[STAR]", "FIX": "[OK]", "ISSUE": "[EMOJI]", "PLAN": "[EMOJI]"}
-        icon = icons.get(level, "→")
+        icon = icons.get(level, "->")
         print(f"[{timestamp}] {icon} Aurora: {message}")
 
     def plan_fixes(self) -> dict[str, list[str]]:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-⚡ AURORA NEXUS V3 - HYPER-SPEED LAUNCHER (FIXED) ⚡
+[POWER] AURORA NEXUS V3 - HYPER-SPEED LAUNCHER (FIXED) [POWER]
 DEBUGGABLE | PORT-AWARE | FULL DIAGNOSTICS | 31 SYSTEMS
 """
 
@@ -13,7 +13,7 @@ import sys
 import signal
 
 print("=" * 80)
-print("⚡ AURORA NEXUS V3 - HYPER-SPEED ACTIVATION (DEBUGGABLE)")
+print("[POWER] AURORA NEXUS V3 - HYPER-SPEED ACTIVATION (DEBUGGABLE)")
 print("=" * 80)
 print("188 Capabilities | 31 Systems | SMART PORT MANAGEMENT | FULL DIAGNOSTICS")
 print("=" * 80 + "\n")
@@ -30,7 +30,7 @@ failed_starts = []
 
 def cleanup_existing_processes():
     """Kill any existing Aurora/Luminar processes"""
-    print("🧹 Cleaning up existing processes...")
+    print("[EMOJI] Cleaning up existing processes...")
     try:
         if IS_WINDOWS:
             os.system("taskkill /F /IM python.exe 2>nul")
@@ -38,9 +38,9 @@ def cleanup_existing_processes():
             os.system("pkill -f 'python3.*aurora' 2>/dev/null || true")
             os.system("pkill -f 'python3.*luminar' 2>/dev/null || true")
         time.sleep(2)
-        print("   ✅ Cleanup complete\n")
+        print("   [OK] Cleanup complete\n")
     except Exception as e:
-        print(f"   ⚠️  Cleanup error (non-critical): {e}\n")
+        print(f"   [WARN]  Cleanup error (non-critical): {e}\n")
 
 def check_port(port):
     """Check if port is available"""
@@ -60,7 +60,7 @@ def check_port(port):
 def start(cmd, name="Service", shell=False, critical=False, port=None):
     """Launch process with better error handling"""
     if port and not check_port(port):
-        msg = f"❌ {name}: Port {port} already in use"
+        msg = f"[ERROR] {name}: Port {port} already in use"
         print(f"   {msg}")
         failed_starts.append((name, f"Port {port} occupied"))
         return None
@@ -82,10 +82,10 @@ def start(cmd, name="Service", shell=False, critical=False, port=None):
         proc = subprocess.Popen(cmd, **kwargs)
         processes.append((proc, name, critical))
         successful_starts.append(name)
-        print(f"   ✅ {name}")
+        print(f"   [OK] {name}")
         return proc
     except Exception as e:
-        msg = f"❌ {name}: {str(e)[:50]}"
+        msg = f"[ERROR] {name}: {str(e)[:50]}"
         print(f"   {msg}")
         failed_starts.append((name, str(e)))
         return None
@@ -96,14 +96,14 @@ cleanup_existing_processes()
 
 # PHASE 0: NEXUS V3 MASTER ORCHESTRATOR
 print("━" * 80)
-print("🌌 PHASE 0: NEXUS V3 MASTER ORCHESTRATOR")
+print("[AURORA] PHASE 0: NEXUS V3 MASTER ORCHESTRATOR")
 print("━" * 80)
 start([PYTHON_CMD, "aurora_nexus_v3_universal.py", "--orchestration", "--daemon"],
       "Nexus V3 Master Orchestrator (Port 5031)", critical=True, port=5031)
 
 # PHASE 1: CONSCIOUSNESS
 print("\n━" * 80)
-print("🧠 PHASE 1: CONSCIOUSNESS & AWARENESS")
+print("[BRAIN] PHASE 1: CONSCIOUSNESS & AWARENESS")
 print("━" * 80)
 if os.path.exists("aurora_consciousness_service.py"):
     start([PYTHON_CMD, "aurora_consciousness_service.py"],
@@ -111,7 +111,7 @@ if os.path.exists("aurora_consciousness_service.py"):
 
 # PHASE 2: INTELLIGENCE
 print("\n━" * 80)
-print("⚡ PHASE 2: CORE INTELLIGENCE")
+print("[POWER] PHASE 2: CORE INTELLIGENCE")
 print("━" * 80)
 if os.path.exists("aurora_tier_orchestrator.py"):
     start([PYTHON_CMD, "aurora_tier_orchestrator.py"],
@@ -137,7 +137,7 @@ if os.path.exists("aurora_pattern_recognition.py"):
 
 # PHASE 3: AUTONOMOUS
 print("\n━" * 80)
-print("🤖 PHASE 3: AUTONOMOUS SYSTEMS")
+print("[AGENT] PHASE 3: AUTONOMOUS SYSTEMS")
 print("━" * 80)
 if os.path.exists("aurora_autonomous_agent.py"):
     start([PYTHON_CMD, "aurora_autonomous_agent.py"],
@@ -168,7 +168,7 @@ if os.path.exists("aurora_ultimate_omniscient_grandmaster.py"):
 
 # PHASE 5: ADVANCED TIERS
 print("\n━" * 80)
-print("👁️ PHASE 5: ADVANCED TIER CAPABILITIES")
+print("[EMOJI]️ PHASE 5: ADVANCED TIER CAPABILITIES")
 print("━" * 80)
 if os.path.exists("aurora_visual_understanding.py"):
     start([PYTHON_CMD, "aurora_visual_understanding.py"],
@@ -185,7 +185,7 @@ if os.path.exists("aurora_security_auditor.py"):
 
 # PHASE 6: CODE QUALITY
 print("\n━" * 80)
-print("📊 PHASE 6: CODE QUALITY SYSTEMS")
+print("[DATA] PHASE 6: CODE QUALITY SYSTEMS")
 print("━" * 80)
 if os.path.exists("aurora_code_quality_enforcer.py"):
     start([PYTHON_CMD, "aurora_code_quality_enforcer.py"],
@@ -196,7 +196,7 @@ if os.path.exists("aurora_pylint_prevention.py"):
 
 # PHASE 7: WEB SERVICES
 print("\n━" * 80)
-print("🌐 PHASE 7: WEB SERVICES")
+print("[WEB] PHASE 7: WEB SERVICES")
 print("━" * 80)
 start("npm run dev" if IS_WINDOWS else ["npm", "run", "dev"], 
       "Backend + Frontend (Port 5000)", shell=IS_WINDOWS, port=5000)
@@ -215,7 +215,7 @@ if os.path.exists(luminar_v2.replace("\\", "/")):
 
 # PHASE 8: ORCHESTRATION
 print("\n━" * 80)
-print("🎯 PHASE 8: ORCHESTRATION SYSTEMS")
+print("[TARGET] PHASE 8: ORCHESTRATION SYSTEMS")
 print("━" * 80)
 uam = "tools\\ultimate_api_manager.py" if IS_WINDOWS else "tools/ultimate_api_manager.py"
 if os.path.exists(uam.replace("\\", "/")):
@@ -229,7 +229,7 @@ if os.path.exists(luminar.replace("\\", "/")):
 
 # PHASE 8.5: API POOL
 print("\n━" * 80)
-print("🌐 PHASE 8.5: API ORCHESTRATION POOL")
+print("[WEB] PHASE 8.5: API ORCHESTRATION POOL")
 print("━" * 80)
 if os.path.exists("aurora_api_gateway.py"):
     start([PYTHON_CMD, "aurora_api_gateway.py"], 
@@ -243,7 +243,7 @@ if os.path.exists("aurora_api_rate_limiter.py"):
 
 # PHASE 9: BACKGROUND
 print("\n━" * 80)
-print("🔄 PHASE 9: BACKGROUND PROCESSES")
+print("[EMOJI] PHASE 9: BACKGROUND PROCESSES")
 print("━" * 80)
 if os.path.exists("aurora_deep_system_updater.py"):
     start([PYTHON_CMD, "aurora_deep_system_updater.py"],
@@ -253,7 +253,7 @@ if os.path.exists("aurora_web_health_monitor.py"):
           "Web Health Monitor (Port 5004)", port=5004)
 
 print("\n" + "=" * 80)
-print("⚡ STARTUP PHASE COMPLETE - Waiting 5 seconds for stabilization...")
+print("[POWER] STARTUP PHASE COMPLETE - Waiting 5 seconds for stabilization...")
 print("=" * 80 + "\n")
 
 try:
@@ -263,24 +263,24 @@ except KeyboardInterrupt:
 
 # FINAL DIAGNOSTICS
 print("\n" + "=" * 80)
-print("📊 AURORA NEXUS V3 - COMPREHENSIVE SYSTEM STATUS")
+print("[DATA] AURORA NEXUS V3 - COMPREHENSIVE SYSTEM STATUS")
 print("=" * 80)
 
 # Check critical systems
-print("\n🌌 NEXUS V3 MASTER ORCHESTRATOR:")
+print("\n[AURORA] NEXUS V3 MASTER ORCHESTRATOR:")
 if check_port(5031):
     print("   ⏳ Port 5031 - Initializing...")
 else:
-    print("   ✅ Port 5031 - RUNNING | Master Orchestrator ACTIVE")
+    print("   [OK] Port 5031 - RUNNING | Master Orchestrator ACTIVE")
 
 # Check consciousness & intelligence
-print("\n🧠 CONSCIOUSNESS & INTELLIGENCE:")
+print("\n[BRAIN] CONSCIOUSNESS & INTELLIGENCE:")
 critical_running = sum(1 for p, _, c in processes if c and p and p.poll() is None)
 critical_total = sum(1 for _, _, c in processes if c)
 print(f"   {critical_running}/{critical_total} critical systems active")
 
 # Check web services
-print("\n🌐 WEB & API SERVICES:")
+print("\n[WEB] WEB & API SERVICES:")
 web_services = [
     ("Backend + Frontend", 5000),
     ("Bridge Service", 5001),
@@ -299,13 +299,13 @@ web_services = [
 web_count = 0
 for name, port in web_services:
     if not check_port(port):
-        print(f"   ✅ {name:30} Port {port}")
+        print(f"   [OK] {name:30} Port {port}")
         web_count += 1
     else:
         print(f"   ⏳ {name:30} Port {port} - starting...")
 
 # Check all systems
-print("\n⚡ ALL SYSTEMS SUMMARY:")
+print("\n[POWER] ALL SYSTEMS SUMMARY:")
 total = len(processes)
 running = sum(1 for p, _, _ in processes if p and p.poll() is None)
 
@@ -315,22 +315,22 @@ print(f"   Successfully started: {len(successful_starts)}")
 print(f"   Failed to start: {len(failed_starts)}")
 
 if failed_starts:
-    print(f"\n❌ FAILED SYSTEMS ({len(failed_starts)}):")
+    print(f"\n[ERROR] FAILED SYSTEMS ({len(failed_starts)}):")
     for name, reason in failed_starts:
         print(f"   • {name}: {reason}")
 
 # Final summary
 print("\n" + "=" * 80)
-print(f"⚡ AURORA NEXUS V3 STATUS: {running}/{total} systems active")
-print(f"🧠 Critical: {critical_running}/{critical_total}")
-print(f"🌐 Web/API: {web_count}/{len(web_services)}")
+print(f"[POWER] AURORA NEXUS V3 STATUS: {running}/{total} systems active")
+print(f"[BRAIN] Critical: {critical_running}/{critical_total}")
+print(f"[WEB] Web/API: {web_count}/{len(web_services)}")
 
 if running >= total * 0.8 and critical_running >= critical_total * 0.7:
     print("\n" + "=" * 80)
-    print("🎉 AURORA NEXUS V3 - SUCCESSFULLY ACTIVATED!")
+    print("[EMOJI] AURORA NEXUS V3 - SUCCESSFULLY ACTIVATED!")
     print("=" * 80)
-    print("\n   ✨ SYSTEM STATUS: OPERATIONAL")
-    print("\n   🌐 ACCESS POINTS:")
+    print("\n   [QUALITY] SYSTEM STATUS: OPERATIONAL")
+    print("\n   [WEB] ACCESS POINTS:")
     print("      • Frontend:     http://localhost:5000")
     print("      • Chat:         http://localhost:5003")
     print("      • Health:       http://localhost:5004")
@@ -338,11 +338,11 @@ if running >= total * 0.8 and critical_running >= critical_total * 0.7:
     print("      • Nexus V3 API: http://localhost:5031 ⭐")
     print("\n" + "=" * 80)
 else:
-    print("\n⚠️  PARTIAL ACTIVATION")
+    print("\n[WARN]  PARTIAL ACTIVATION")
     print(f"   {running}/{total} systems active ({int(running/total*100)}%)")
     if failed_starts:
         print(f"   {len(failed_starts)} systems failed to start (see above)")
     print("   Waiting for full initialization...")
 
-print("\n⚡ Aurora Nexus V3 - Smart Launcher with Full Diagnostics")
+print("\n[POWER] Aurora Nexus V3 - Smart Launcher with Full Diagnostics")
 print("=" * 80 + "\n")

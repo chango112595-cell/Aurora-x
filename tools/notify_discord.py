@@ -22,7 +22,7 @@ PURPLE = 0x8E44AD
 
 def _post(payload: dict[str, Any], retries: int = 3):
     if not WEBHOOK:
-        print("❌ DISCORD_WEBHOOK_URL not set")
+        print("[ERROR] DISCORD_WEBHOOK_URL not set")
         return False
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
@@ -47,13 +47,13 @@ def _post(payload: dict[str, Any], retries: int = 3):
             if 500 <= e.code < 600 and i < retries:
                 time.sleep(1.0 * (i + 1))
                 continue
-            print("❌ Discord HTTPError:", e)
+            print("[ERROR] Discord HTTPError:", e)
             return False
         except Exception as e:
             if i < retries:
                 time.sleep(1.0 * (i + 1))
                 continue
-            print("❌ Discord error:", e)
+            print("[ERROR] Discord error:", e)
             return False
 
 
@@ -79,15 +79,15 @@ def send_embed(
 
 # Convenience styles
 def success(msg: str, **kw) -> bool:
-    return send_embed("✅ Success", msg, GREEN, **kw) or False
+    return send_embed("[OK] Success", msg, GREEN, **kw) or False
 
 
 def warning(msg: str, **kw) -> bool:
-    return send_embed("⚠️ Warning", msg, YELLOW, **kw) or False
+    return send_embed("[WARN] Warning", msg, YELLOW, **kw) or False
 
 
 def error(msg: str, **kw) -> bool:
-    return send_embed("❌ Failure", msg, RED, **kw) or False
+    return send_embed("[ERROR] Failure", msg, RED, **kw) or False
 
 
 def info(msg: str, **kw) -> bool:
@@ -97,7 +97,7 @@ def info(msg: str, **kw) -> bool:
 # Domain-specific helpers
 def commit_alert(repo: str, branch: str, commit_url: str, files: int, message: str) -> bool:
     return send_embed(
-        "🚀 Commit pushed",
+        "[EMOJI] Commit pushed",
         f"`{repo}@{branch}`\n{message}",
         PURPLE,
         fields=[
@@ -109,7 +109,7 @@ def commit_alert(repo: str, branch: str, commit_url: str, files: int, message: s
 
 
 def snapshot_alert(path: str, kept: int) -> bool:
-    return success(f"🗂️ Snapshot complete\n`{path}` (retained: {kept})")
+    return success(f"[EMOJI]️ Snapshot complete\n`{path}` (retained: {kept})")
 
 
 def drift_warning(bias: str, value: float, cap: float) -> bool:
@@ -125,9 +125,9 @@ def synthesis_report(iteration: int, wins: int, losses: int, top_summary: dict) 
     top_items = list(top_summary.items())[:10]
     summary = "\n".join(f"- `{k}`: {v:.3f}" for k, v in top_items)
     summary = summary or "(no biases yet)"
-    return send_embed("🧠 Synthesis Update", summary, BLUE, fields=fields)
+    return send_embed("[BRAIN] Synthesis Update", summary, BLUE, fields=fields)
 
 
 if __name__ == "__main__":
-    ok = success("Aurora-X notifier wired successfully ✨")
+    ok = success("Aurora-X notifier wired successfully [QUALITY]")
     print("Test sent:", ok)

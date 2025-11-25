@@ -20,7 +20,7 @@ class AuroraRouterDiagnostics:
         """Aurora's logging"""
         timestamp = datetime.now().strftime("%H:%M:%S")
         icons = {"INFO": "[STAR]", "OK": "[OK]", "WARN": "[WARN]", "ERROR": "[ERROR]"}
-        icon = icons.get(level, "→")
+        icon = icons.get(level, "->")
         print(f"[{timestamp}] {icon} Aurora: {message}")
 
     def verify_routing(self):
@@ -59,11 +59,11 @@ class AuroraRouterDiagnostics:
             page_path = pages_dir / page_file
 
             if page_path.exists():
-                self.log("OK", f"[+] {tab_name} → {route} → {page_file}")
+                self.log("OK", f"[+] {tab_name} -> {route} -> {page_file}")
                 verified += 1
                 self.results[tab_name] = {"route": route, "status": "connected", "page_file": page_file}
             else:
-                self.log("ERROR", f"✗ {tab_name} → {route} (missing: {page_file})")
+                self.log("ERROR", f"✗ {tab_name} -> {route} (missing: {page_file})")
                 issues.append({"tab": tab_name, "route": route, "issue": f"Page file not found: {page_file}"})
                 self.results[tab_name] = {"route": route, "status": "broken", "issue": f"Missing {page_file}"}
 

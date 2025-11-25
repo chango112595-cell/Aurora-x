@@ -124,7 +124,7 @@ def generate_badges(progress_data):
     in_dev_count = sum(1 for t in tasks if "in-development" in t.get("status", "").lower())
 
     # Tasks Status Badge
-    status_badge = f"![Tasks](https://img.shields.io/badge/Tasks-✅{complete_count}_🚀{in_progress_count}_🔧{in_dev_count}-informational)"
+    status_badge = f"![Tasks](https://img.shields.io/badge/Tasks-[OK]{complete_count}_[EMOJI]{in_progress_count}_[EMOJI]{in_dev_count}-informational)"
     badges.append(status_badge)
 
     return badges

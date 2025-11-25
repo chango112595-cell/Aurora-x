@@ -300,21 +300,21 @@ class AuroraDeepInvestigation:
         has_vite_entry = any("Vite entry point found" in f for f in self.facts)
 
         if not has_port_5000:
-            print("  → Port 5000 is NOT running")
-            print("  → npm run dev failed to start or crashed")
-            print("  → SOLUTION: Check if Node.js process died after x-start")
+            print("  -> Port 5000 is NOT running")
+            print("  -> npm run dev failed to start or crashed")
+            print("  -> SOLUTION: Check if Node.js process died after x-start")
         elif not has_html:
-            print("  → Port 5000 is open but not serving HTML")
-            print("  → Server might be running but Vite not integrated")
-            print("  → SOLUTION: Check server/vite.ts integration")
+            print("  -> Port 5000 is open but not serving HTML")
+            print("  -> Server might be running but Vite not integrated")
+            print("  -> SOLUTION: Check server/vite.ts integration")
         elif not has_vite_entry:
-            print("  → HTML is served but Vite entry point missing")
-            print("  → Frontend code not being loaded")
-            print("  → SOLUTION: Check client/index.html and main.tsx")
+            print("  -> HTML is served but Vite entry point missing")
+            print("  -> Frontend code not being loaded")
+            print("  -> SOLUTION: Check client/index.html and main.tsx")
         else:
-            print("  → All systems appear functional")
-            print("  → Issue is likely in React component rendering")
-            print("  → SOLUTION: Check browser console for JS errors")
+            print("  -> All systems appear functional")
+            print("  -> Issue is likely in React component rendering")
+            print("  -> SOLUTION: Check browser console for JS errors")
 
         print("\n[Aurora] [IDEA] NEXT STEPS:")
         print("  1. Check browser console (F12) for JavaScript errors")

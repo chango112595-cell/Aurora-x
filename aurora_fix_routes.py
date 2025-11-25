@@ -34,7 +34,7 @@ class AuroraRouteFixer:
         if old_route in content:
             updated_content = content.replace(old_route, new_route)
             app_file.write_text(updated_content, encoding="utf-8")
-            self.log("[OK] Changed default route: / → Dashboard")
+            self.log("[OK] Changed default route: / -> Dashboard")
             self.log("[OK] Futuristic dashboard will now open automatically!")
             return True
         else:
@@ -55,7 +55,7 @@ class AuroraRouteFixer:
         if SUCCESS:
             self.log("[OK] ROUTE FIX COMPLETE")
             self.log("[LAUNCH] Dashboard will open automatically on load")
-            self.log("[EMOJI] Route: / → Dashboard (Futuristic UI)")
+            self.log("[EMOJI] Route: / -> Dashboard (Futuristic UI)")
         else:
             self.log("ℹ️  No changes needed")
         self.log("=" * 70)

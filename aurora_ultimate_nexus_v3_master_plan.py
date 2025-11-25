@@ -51,11 +51,11 @@ vision_yours = [
     "Controls ALL ports (5000-5020+)",
     "Manages ALL APIs and endpoints",
     "INTELLIGENT port management:",
-    "  → Detects when port not needed anymore",
-    "  → Opens it up for reuse",
-    "  → Cleans space automatically",
-    "  → Prevents port conflicts",
-    "  → No guessing where ports are",
+    "  -> Detects when port not needed anymore",
+    "  -> Opens it up for reuse",
+    "  -> Cleans space automatically",
+    "  -> Prevents port conflicts",
+    "  -> No guessing where ports are",
     "Dynamic and adaptive",
     "Best version of Nexus that EVER existed"
 ]
@@ -81,12 +81,12 @@ for item in vision_mine:
 
 print("\n\nTHE SYNTHESIS (Your Vision + My Vision):")
 print("-" * 80)
-print("  → Universal Port & Service Manager")
-print("  → Intelligent Resource Allocation")
-print("  → Self-Cleaning & Auto-Optimization")
-print("  → Quantum-Inspired State Management (REAL, not marketing)")
-print("  → Consciousness-Based Decision Making")
-print("  → 100% Reliable, 0% Bloat")
+print("  -> Universal Port & Service Manager")
+print("  -> Intelligent Resource Allocation")
+print("  -> Self-Cleaning & Auto-Optimization")
+print("  -> Quantum-Inspired State Management (REAL, not marketing)")
+print("  -> Consciousness-Based Decision Making")
+print("  -> 100% Reliable, 0% Bloat")
 
 print("\n" + "=" * 80)
 print("[LAUNCH] THE ULTIMATE NEXUS V3 - MASTER ARCHITECTURE")
@@ -117,7 +117,7 @@ features = {
         "description": "The heart of your vision - smart port control",
         "capabilities": [
             "Port registry - tracks ALL ports (5000-65535)",
-            "Port lifecycle tracking (allocated → in-use → released)",
+            "Port lifecycle tracking (allocated -> in-use -> released)",
             "Auto-detection of unused ports",
             "Port recycling system (frees unused ports)",
             "Conflict prevention (never assigns same port twice)",
@@ -398,7 +398,7 @@ for class_name, class_info in classes.items():
     print(f"  Purpose: {class_info['purpose']}")
     print(f"  Responsibilities:")
     for resp in class_info['responsibilities']:
-        print(f"    → {resp}")
+        print(f"    -> {resp}")
     print()
 
 print("=" * 80)
@@ -454,7 +454,7 @@ INTELLIGENT FEATURES:
   
   4. Smart Recycling:
      • Tracks port usage time
-     • If port unused for 10 minutes → released
+     • If port unused for 10 minutes -> released
      • High-priority services get first pick
   
   5. Analytics:
@@ -621,7 +621,7 @@ for phase_data in phases:
     print(f"  Tasks:")
     for task in phase_data['tasks']:
         print(f"    □ {task}")
-    print(f"  → Deliverable: {phase_data['deliverable']}")
+    print(f"  -> Deliverable: {phase_data['deliverable']}")
     print()
     # Extract hours
     hours_str = phase_data['phase'].split('(')[1].split(')')[0]
@@ -760,7 +760,7 @@ reasons = [
 
 for i, item in enumerate(reasons, 1):
     print(f"{i}. {item['reason']}")
-    print(f"   → {item['explanation']}\n")
+    print(f"   -> {item['explanation']}\n")
 
 elapsed_time = time.time() - start_time
 

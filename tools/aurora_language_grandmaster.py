@@ -464,7 +464,7 @@ class AuroraProgrammingLanguageMastery:
                 "era": "Sci-Fi",
                 "year": 2060,
                 "paradigm": ["Universal", "Meta"],
-                "syntax_sample": "∀ universe → reality.create(intention) ⊕ quantum_collapse(observation)",
+                "syntax_sample": "∀ universe -> reality.create(intention) ⊕ quantum_collapse(observation)",
                 "use_cases": ["Reality manipulation", "Universe simulation", "Multiversal computing"],
                 "mastery_level": "Universal computation, reality modeling, dimensional programming",
             },

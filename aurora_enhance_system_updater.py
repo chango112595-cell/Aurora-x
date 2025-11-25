@@ -34,8 +34,8 @@ def main():
     print("   [+] Missing: JSON/TypeScript hybrid patterns\n")
 
     print("[EMOJI] Aurora Enhancement Plan:")
-    print("   1. Add 66→109 capability module patterns")
-    print("   2. Add 79→188 total power patterns")
+    print("   1. Add 66->109 capability module patterns")
+    print("   2. Add 79->188 total power patterns")
     print("   3. Add hybrid equation patterns (79 + 109 = 188)")
     print("   4. Add JSON config patterns")
     print("   5. Add TypeScript/JavaScript patterns")
@@ -84,19 +84,19 @@ def main():
 
         # ========== HYBRID MODE PATTERNS - Enhanced by Aurora ==========
         patterns.extend([
-            # Capability module count patterns (66 → 109)
-            ("109 capability", f"{capabilities} capability", "capability modules 66→109"),
-            ("109 Capability", f"{capabilities} Capability", "Capability modules 66→109"),
-            ("79 capabilities", f"{capabilities} capabilities", "capabilities 66→109"),
-            ("109 Capabilities", f"{capabilities} Capabilities", "Capabilities 66→109"),
-            ("109 modules", f"{capabilities} modules", "modules 66→109"),
-            ("109 Modules", f"{capabilities} Modules", "Modules 66→109"),
+            # Capability module count patterns (66 -> 109)
+            ("109 capability", f"{capabilities} capability", "capability modules 66->109"),
+            ("109 Capability", f"{capabilities} Capability", "Capability modules 66->109"),
+            ("79 capabilities", f"{capabilities} capabilities", "capabilities 66->109"),
+            ("109 Capabilities", f"{capabilities} Capabilities", "Capabilities 66->109"),
+            ("109 modules", f"{capabilities} modules", "modules 66->109"),
+            ("109 Modules", f"{capabilities} Modules", "Modules 66->109"),
             
-            # Total power patterns (79 → 188 or variations)
+            # Total power patterns (79 -> 188 or variations)
             ("188 total power", f"{total_power} total power", "total power update"),
             ("188 Total Power", f"{total_power} Total Power", "Total Power update"),
-            ("188 total power", f"{total_power} total power", "total power 145→188"),
-            ("188 Total Power", f"{total_power} Total Power", "Total Power 145→188"),
+            ("188 total power", f"{total_power} total power", "total power 145->188"),
+            ("188 Total Power", f"{total_power} Total Power", "Total Power 145->188"),
             
             # Hybrid mode equation patterns
             ("66 tiers", f"{total} tiers", "hybrid tiers count"),
@@ -152,8 +152,8 @@ def main():
         print("[OK] Aurora Enhancement Complete!\n")
         print("[DATA] Enhancement Summary:")
         print("   [+] Added 40+ new hybrid mode patterns")
-        print("   [+] Added capability module tracking (66→109)")
-        print("   [+] Added total power patterns (79/145→188)")
+        print("   [+] Added capability module tracking (66->109)")
+        print("   [+] Added total power patterns (79/145->188)")
         print("   [+] Added hybrid equations (79 + 109 = 188)")
         print("   [+] Added JSON config patterns")
         print("   [+] Added TypeScript/JavaScript patterns")

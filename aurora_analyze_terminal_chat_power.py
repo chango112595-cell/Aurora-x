@@ -85,11 +85,11 @@ ANALYSIS NEEDED:
 2. **Architecture Evaluation:**
    Based on your self-knowledge of your own code:
    
-   Option A: **Terminal chat → Aurora Core directly** (CURRENT)
+   Option A: **Terminal chat -> Aurora Core directly** (CURRENT)
    - Is this giving full power access?
    - What capabilities might be missing?
    
-   Option B: **Terminal chat → Aurora Nexus → Aurora Core**
+   Option B: **Terminal chat -> Aurora Nexus -> Aurora Core**
    - Would this add more power?
    - What would Nexus integration provide?
    - Is there even an Aurora Nexus integration layer?

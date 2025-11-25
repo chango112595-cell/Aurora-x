@@ -102,7 +102,7 @@ class AuroraReplaceChango:
         print()
         print("Next steps:")
         print("   1. Clear browser cache (Ctrl+Shift+R)")
-        print("   2. F12 → Application → Service Workers → Unregister")
+        print("   2. F12 -> Application -> Service Workers -> Unregister")
         print("   3. Reload the page")
         print()
         print("Logs:")

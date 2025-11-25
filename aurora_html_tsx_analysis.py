@@ -79,7 +79,7 @@ class AuroraHTMLAnalysis:
         print("     • Browser requests http://localhost:5000")
         print("     • Vite serves index.html (minimal HTML)")
         print("     • index.html loads main.tsx via <script type='module'>")
-        print("     • Vite compiles TSX → JavaScript on-the-fly")
+        print("     • Vite compiles TSX -> JavaScript on-the-fly")
         print("     • React renders TSX components into the DOM")
         print("     • User sees the TSX content (not HTML content)")
         print()
@@ -156,25 +156,25 @@ class AuroraHTMLAnalysis:
         print("     • Missing dependency in component")
         print("     • Syntax error in TSX file")
         print("     • Runtime error preventing render")
-        print("     → Check browser console for red errors")
+        print("     -> Check browser console for red errors")
         print()
 
         print("  2. CSS/Styling Issue:")
         print("     • Content rendering but invisible (wrong colors)")
         print("     • Background matching text color")
-        print("     → Check if elements exist in DOM (F12 inspector)")
+        print("     -> Check if elements exist in DOM (F12 inspector)")
         print()
 
         print("  3. Routing Issue:")
         print("     • No component matches the route")
         print("     • Component exists but returns null")
-        print("     → Check if <div id='root'> has children in DOM")
+        print("     -> Check if <div id='root'> has children in DOM")
         print()
 
         print("  4. Build Issue:")
         print("     • Vite not compiling TSX")
         print("     • Import path errors")
-        print("     → Check terminal where npm run dev is running")
+        print("     -> Check terminal where npm run dev is running")
         print()
 
     def create_diagnostic_component(self):
@@ -242,7 +242,7 @@ export default function DiagnosticTest() {
         print("  • main.tsx exists (React entry point)")
         print(f"  • {tsx_count} TSX components found")
         print("  • All 5 services running")
-        print("  • Vite is compiling TSX → JavaScript")
+        print("  • Vite is compiling TSX -> JavaScript")
         print()
 
         print("[Aurora] [WARN]  THE BLANK SCREEN IS NOT A SERVER ISSUE:")

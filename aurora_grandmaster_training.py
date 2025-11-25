@@ -61,7 +61,7 @@ Your Mission: Rewrite aurora_true_autonomy.py to be:
 
 Example: Right now there's a PORT CONFLICT on 5001
 Your new engine should:
-1. Detect: "serve.py wants 5001, Luminar Nexus wants 5001 → CONFLICT!"
+1. Detect: "serve.py wants 5001, Luminar Nexus wants 5001 -> CONFLICT!"
 2. Analyze: "Check what serve.py does vs server/index.ts"
 3. Decide: "serve.py should run on X port, not 5001"
 4. Implement: "Change AURORA_PORT in serve.py to X"

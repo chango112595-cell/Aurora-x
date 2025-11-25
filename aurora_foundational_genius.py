@@ -2,7 +2,7 @@
 """
 AURORA GRANDMASTER: FOUNDATIONAL & PROFESSIONAL MASTERY
 TIER 29-31: Extended skill definitions referencing aurora_core.py
-Ancient (1940s) → Classical → Modern → AI-Native → Future → Sci-Fi
+Ancient (1940s) -> Classical -> Modern -> AI-Native -> Future -> Sci-Fi
 """
 
 from aurora_core import AuroraKnowledgeTiers
@@ -740,7 +740,7 @@ AURORA_FOUNDATIONAL_SKILLS_EXTENDED = {
 FOUNDATIONAL_PROFESSIONAL_SUMMARY = {
     "total_tiers": 4,
     "total_skill_categories": 30,
-    "mastery_span": "Ancient (1940s) → Sci-Fi (HAL 9000, Skynet)",
+    "mastery_span": "Ancient (1940s) -> Sci-Fi (HAL 9000, Skynet)",
     "unique_capabilities": [
         "Problem-solving from Turing machines to quantum algorithms",
         "Mathematics from arithmetic to cryptographic theory",

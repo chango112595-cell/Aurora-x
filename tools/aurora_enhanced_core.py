@@ -366,7 +366,7 @@ class AuroraEnhancedCore:
     Self-reconstructed using the creative engine and all 66 tiers of knowledge.
 
     NEW CAPABILITIES:
-    - Creative problem-solving across all eras (Ancient → Sci-Fi)
+    - Creative problem-solving across all eras (Ancient -> Sci-Fi)
     - Autonomous decision-making without human intervention
     - Continuous self-improvement and evolution
     - Full mastery of 55 programming languages
@@ -523,7 +523,7 @@ class AuroraEnhancedCore:
             "language_mastery": f"{len(self.language_master.languages)} languages mastered",
             "project_root": str(self.project_root),
             "capabilities": [
-                "Creative problem-solving (Ancient → Sci-Fi)",
+                "Creative problem-solving (Ancient -> Sci-Fi)",
                 "Autonomous decision-making",
                 "Continuous self-improvement",
                 "55 programming languages",
@@ -540,7 +540,7 @@ class AuroraEnhancedCore:
 if __name__ == "__main__":
     print("[AURORA]" + "=" * 78 + "[AURORA]")
     print("   AURORA ENHANCED CORE - Self-Reconstructed Intelligence System")
-    print("   Built with ALL 66 tiers of knowledge (Ancient → Sci-Fi)")
+    print("   Built with ALL 66 tiers of knowledge (Ancient -> Sci-Fi)")
     print("[AURORA]" + "=" * 78 + "[AURORA]\n")
 
     # Initialize Aurora Enhanced
@@ -583,7 +583,7 @@ if __name__ == "__main__":
     ]
     for task in test_tasks:
         route = aurora.route_task(task)
-        print(f"   '{task}' → {route}")
+        print(f"   '{task}' -> {route}")
 
     # Final status
     print("\n" + "=" * 80)

@@ -21,40 +21,40 @@ def check_workflow_syntax():
                 timeout=2,  # Reduced timeout
             )
             if result.returncode != 0:
-                errors.append(f"❌ {workflow_file.name}: Validation failed")
+                errors.append(f"[ERROR] {workflow_file.name}: Validation failed")
             else:
-                print(f"✅ {workflow_file.name}: Valid")
+                print(f"[OK] {workflow_file.name}: Valid")
         except subprocess.TimeoutExpired:
             # gh CLI is hanging - skip it
             try:
                 workflow_file.read_text()
-                print(f"⚠️  {workflow_file.name}: Syntax OK (gh CLI timeout)")
+                print(f"[WARN]  {workflow_file.name}: Syntax OK (gh CLI timeout)")
             except Exception as e:
-                errors.append(f"❌ {workflow_file.name}: {e}")
+                errors.append(f"[ERROR] {workflow_file.name}: {e}")
         except FileNotFoundError:
             # gh CLI not installed - just validate YAML
             try:
                 workflow_file.read_text()
-                print(f"⚠️  {workflow_file.name}: Syntax OK (gh CLI not available)")
+                print(f"[WARN]  {workflow_file.name}: Syntax OK (gh CLI not available)")
             except Exception as e:
-                errors.append(f"❌ {workflow_file.name}: {e}")
+                errors.append(f"[ERROR] {workflow_file.name}: {e}")
 
     return errors
 
 
 def main():
     """Main entry point."""
-    print("🔍 Checking GitHub Actions workflows...\n")
+    print("[SCAN] Checking GitHub Actions workflows...\n")
 
     errors = check_workflow_syntax()
 
     if errors:
-        print("\n❌ Issues found:")
+        print("\n[ERROR] Issues found:")
         for error in errors:
             print(f"  {error}")
         return 1
     else:
-        print("\n✅ All workflows validated successfully!")
+        print("\n[OK] All workflows validated successfully!")
         return 0
 
 

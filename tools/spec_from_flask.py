@@ -108,8 +108,8 @@ if __name__ == '__main__':
 </head>
 <body>
     <div class="container">
-        <h1>✨ Aurora-X Flask App Generated</h1>
-        <p class="success">✅ Flask application successfully synthesized!</p>
+        <h1>[QUALITY] Aurora-X Flask App Generated</h1>
+        <p class="success">[OK] Flask application successfully synthesized!</p>
         <div class="info">
             <h2>Generated Files:</h2>
             <ul>
@@ -132,9 +132,9 @@ python -m unittest tests/test_{app_name}_app.py</pre>
     report_file = run_dir / "report.html"
     report_file.write_text(report_html, encoding="utf-8")
 
-    print(f"✅ Flask app generated: {app_file}")
-    print(f"✅ Tests generated: {test_file}")
-    print(f"✅ Report: {report_file}")
+    print(f"[OK] Flask app generated: {app_file}")
+    print(f"[OK] Tests generated: {test_file}")
+    print(f"[OK] Report: {report_file}")
 
     return app_file
 

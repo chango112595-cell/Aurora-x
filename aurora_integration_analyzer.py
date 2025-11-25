@@ -241,8 +241,8 @@ class AuroraIntegrationAnalyzer:
             for i, module in enumerate(all_critical, 1):
                 report.append(f"\n{i}. {module['name']}")
                 report.append(
-                    f"   → Integrate into: {module['integration_point']}")
-                report.append(f"   → Purpose: {module['purpose']}")
+                    f"   -> Integrate into: {module['integration_point']}")
+                report.append(f"   -> Purpose: {module['purpose']}")
         else:
             report.append("\nNo critical modules found.")
 

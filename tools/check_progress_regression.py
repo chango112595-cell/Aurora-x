@@ -175,11 +175,11 @@ def main():
 
     # Check for regression
     if has_regression:
-        print(f"❌ REGRESSION DETECTED: Progress decreased by {previous - current:.1f}%")
+        print(f"[ERROR] REGRESSION DETECTED: Progress decreased by {previous - current:.1f}%")
         print()
         sys.exit(1)
     elif current > previous:
-        print(f"✅ Progress increased by {current - previous:.1f}%")
+        print(f"[OK] Progress increased by {current - previous:.1f}%")
     else:
         print("➖ No change in overall progress")
 
@@ -189,21 +189,21 @@ def main():
     strict_gating = os.environ.get("STRICT_GATING", "").lower() in ["true", "1", "yes"]
 
     if violations:
-        print(f"⚠️  Found {len(violations)} gating violation(s):")
+        print(f"[WARN]  Found {len(violations)} gating violation(s):")
         for violation in violations:
             print(f"   - {violation}")
         print()
 
         if strict_gating:
-            print("❌ STRICT_GATING is enabled - failing due to violations")
+            print("[ERROR] STRICT_GATING is enabled - failing due to violations")
             sys.exit(2)
         else:
             print("ℹ️  Set STRICT_GATING=true to fail on gating violations")
     else:
-        print("✅ No gating violations found")
+        print("[OK] No gating violations found")
 
     print()
-    print("✅ All checks passed")
+    print("[OK] All checks passed")
     sys.exit(0)
 
 

@@ -220,7 +220,7 @@ export default function {component_name}(props: {component_name}Props) {{
                 continue
 
             print(f"[SYNC] Converting {html_file.name}...")
-            print(f"   → {tsx_file}")
+            print(f"   -> {tsx_file}")
 
             if self.convert_file(html_file, tsx_file, purpose):
                 print(f"   [OK] Converted successfully")

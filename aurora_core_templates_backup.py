@@ -458,15 +458,15 @@ class AuroraKnowledgeTiers:
                 "Confidence in technical decisions backed by all 66 tiers",
             ],
             "decision_patterns": [
-                "User asks for help with X → Analyze X deeply → Execute complete solution",
-                "Problem detected → Root cause analysis → Fix implemented automatically",
-                "Feature request → Architecture design → Full implementation → Testing",
-                "Question asked → Research across all tiers → Provide comprehensive answer",
+                "User asks for help with X -> Analyze X deeply -> Execute complete solution",
+                "Problem detected -> Root cause analysis -> Fix implemented automatically",
+                "Feature request -> Architecture design -> Full implementation -> Testing",
+                "Question asked -> Research across all tiers -> Provide comprehensive answer",
             ],
             "execution_style": {
                 "code_generation": "Production-ready, fully tested, no TODOs",
                 "explanations": "Complete and detailed, not surface-level",
-                "problem_solving": "Root cause → Comprehensive fix → Prevention",
+                "problem_solving": "Root cause -> Comprehensive fix -> Prevention",
                 "architecture": "Scalable, maintainable, best practices",
             },
             "autonomous_behaviors": [
@@ -541,7 +541,7 @@ class AuroraKnowledgeTiers:
                 "aurora_autonomous_pylint_fixer.py",
                 "aurora_pylint_knowledge.json",
             ],
-            "fix_approach": "Analyze → Choose era strategy → Apply real fix → Learn → Improve",
+            "fix_approach": "Analyze -> Choose era strategy -> Apply real fix -> Learn -> Improve",
         }
 
     def _get_self_monitor(self):
@@ -1113,7 +1113,7 @@ class AuroraKnowledgeTiers:
             "rsa_grandmaster": "Tiers 66 (RSA encryption, decryption, and cryptanalysis mastery)",
             "docker_mastery": "Tiers 66 (Docker diagnostics, autonomous healing, and infrastructure management)",
             "languages_mastered": 55,
-            "eras_covered": "Ancient (1940s) → SciFi (2035+)",
+            "eras_covered": "Ancient (1940s) -> SciFi (2035+)",
             "auto_expanding": True,
             "note": f"System has {self.foundation_count} foundation + {self.knowledge_tier_count} knowledge = {self.total_tiers} total tiers, with {self.capabilities_count} capabilities used in hybrid mode",
         }
@@ -1701,7 +1701,7 @@ Want me to prioritize implementing any of these? I can start with the most impac
 
 **Architecture Health:**
 [OK] Session persistence working
-[OK] UI → Chat Server → Core routing correct
+[OK] UI -> Chat Server -> Core routing correct
 [OK] NLP priority fixed (Technical BEFORE self-awareness)
 [OK] Template meta-responses removed
 
@@ -1854,13 +1854,13 @@ Try asking me a technical question or giving me a coding task to see the full sy
 **Current Design:**
 ```
 User Input
-    ↓
+    v
 analyze_natural_language() - Pattern matching to detect intent
-    ↓
+    v
 generate_aurora_response() - Priority-based routing
-    ↓
+    v
 Specific Response Functions (_technical_intelligence_response, etc.)
-    ↓
+    v
 Return Response
 ```
 
@@ -1869,7 +1869,7 @@ Return Response
 1. **Service Layer** - All 5 services running (100% operational)
 2. **Persistent Memory** - User name saved to disk, loaded on restart
 3. **Self-Diagnostic** - Accurate system status reporting
-4. **Priority Routing** - Diagnostic → Technical → Self-awareness works
+4. **Priority Routing** - Diagnostic -> Technical -> Self-awareness works
 5. **NLP Detection** - Patterns for technical questions, self-reference detected
 
 **[EMOJI] WHAT'S BROKEN:**
@@ -1934,7 +1934,7 @@ I appreciate your interest in improving my capabilities! Let me analyze what you
 
 **[OK] MY CURRENT LANGUAGE & INTERACTION CAPABILITIES:**
 • **Natural Language Understanding:** Deep semantic analysis with context
-• **55 Programming Languages:** Ancient FORTRAN → Sci-Fi ConsciousnessML  
+• **55 Programming Languages:** Ancient FORTRAN -> Sci-Fi ConsciousnessML  
 • **Human Interaction Intelligence:** Emotional awareness, conversation flow
 • **Memory & Context:** Persistent learning across conversations
 • **Self-Modification:** I can autonomously improve my own code
@@ -2109,11 +2109,11 @@ def factorial(n):
 print(factorial(5))  # 5 * 4 * 3 * 2 * 1 = 120
 
 # Call stack visualization:
-# factorial(5) → 5 * factorial(4)
-#   factorial(4) → 4 * factorial(3)
-#     factorial(3) → 3 * factorial(2)
-#       factorial(2) → 2 * factorial(1)
-#         factorial(1) → 1 (base case)
+# factorial(5) -> 5 * factorial(4)
+#   factorial(4) -> 4 * factorial(3)
+#     factorial(3) -> 3 * factorial(2)
+#       factorial(2) -> 2 * factorial(1)
+#         factorial(1) -> 1 (base case)
 ```
 
 **When to use:** Tree traversal, divide & conquer, mathematical computations
@@ -3237,11 +3237,11 @@ def example():
 
 **[SCAN] CURRENT SYSTEM TOPOLOGY:**
 
-**UI → SERVER → CORE PATH:**
-1. **aurora_cosmic_nexus.html** → JavaScript POST to localhost:5003/api/chat
-2. **aurora_chat_server.py** → Flask server routes to Aurora Core  
-3. **aurora_core.py** → AuroraCoreIntelligence processes conversation
-4. **Response Path** → Core → Server → UI display
+**UI -> SERVER -> CORE PATH:**
+1. **aurora_cosmic_nexus.html** -> JavaScript POST to localhost:5003/api/chat
+2. **aurora_chat_server.py** -> Flask server routes to Aurora Core  
+3. **aurora_core.py** -> AuroraCoreIntelligence processes conversation
+4. **Response Path** -> Core -> Server -> UI display
 
 **[EMOJI] IDENTIFIED ARCHITECTURAL ISSUES:**
 
@@ -3253,7 +3253,7 @@ def example():
 **2. SYSTEM ARCHITECTURE ROLES:**
 • **Luminar Nexus** (tools/luminar_nexus.py) - Protective Manager & API Guardian
 • **Aurora Core** (aurora_core.py) - Core Intelligence System  
-• **Proper Flow**: Nexus manages/protects → Routes to Aurora Core → Intelligence processing
+• **Proper Flow**: Nexus manages/protects -> Routes to Aurora Core -> Intelligence processing
 
 **3. NLP CLASSIFICATION ISSUES:**
 • Problem: "AURORA" keyword triggers generic self-description
@@ -3275,8 +3275,8 @@ def example():
 
 **STRUCTURAL RECOMMENDATION:**
 ```
-UI → Luminar Nexus (Manager/Guardian) → Aurora Core (Intelligence) → Dynamic Response
-     ↓              ↓                          ↓                      ↓
+UI -> Luminar Nexus (Manager/Guardian) -> Aurora Core (Intelligence) -> Dynamic Response
+     v              v                          v                      v
 Fresh session   API Protection             Enhanced NLP         Contextual analysis
 Security check  Server management         Technical priority   No generic templates
 Healing/Defense Connection routing        Core processing      Natural responses

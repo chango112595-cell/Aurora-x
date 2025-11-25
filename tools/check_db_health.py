@@ -9,7 +9,7 @@ def check_corpus_db():
     db_path = Path("data/corpus.db")
 
     if not db_path.exists():
-        print("⚠️  corpus.db does not exist")
+        print("[WARN]  corpus.db does not exist")
         return False
 
     try:
@@ -19,18 +19,18 @@ def check_corpus_db():
         # Check if table exists
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='corpus'")
         if not cursor.fetchone():
-            print("❌ corpus table missing")
+            print("[ERROR] corpus table missing")
             return False
 
         # Count entries
         cursor.execute("SELECT COUNT(*) FROM corpus")
         count = cursor.fetchone()[0]
-        print(f"✅ corpus.db healthy with {count} entries")
+        print(f"[OK] corpus.db healthy with {count} entries")
 
         conn.close()
         return True
     except Exception as e:
-        print(f"❌ Database error: {e}")
+        print(f"[ERROR] Database error: {e}")
         return False
 
 

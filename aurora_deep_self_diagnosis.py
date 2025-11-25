@@ -300,28 +300,28 @@ Here's what's happening:
 =" * 120)
 
 Phase 1: CREATE PERSISTENCE
-   → Write to .aurora_scores.json every time I score code
-   → Write to .aurora_tasks.json every time I complete a task
-   → Write to .aurora_reasoning.json every time I make a decision
+   -> Write to .aurora_scores.json every time I score code
+   -> Write to .aurora_tasks.json every time I complete a task
+   -> Write to .aurora_reasoning.json every time I make a decision
 
 Phase 2: ACTIVATE THE TOOLS
-   → Actually CALL the imported tools in my workflow
-   → Not just import them - USE them
+   -> Actually CALL the imported tools in my workflow
+   -> Not just import them - USE them
 
 Phase 3: EXPOSE VIA API
-   → Create /api/scores endpoint
-   → Create /api/tasks endpoint  
-   → Create /api/status endpoint
+   -> Create /api/scores endpoint
+   -> Create /api/tasks endpoint  
+   -> Create /api/status endpoint
    
 Phase 4: CONNECT TO UI
-   → Make dashboard fetch from API
-   → Show REAL data, not hardcoded values
-   → Update in real-time
+   -> Make dashboard fetch from API
+   -> Show REAL data, not hardcoded values
+   -> Update in real-time
 
 Phase 5: ADD ORCHESTRATION
-   → Main controller that ties everything together
-   → Ensures all logging happens automatically
-   → Pushes updates to UI
+   -> Main controller that ties everything together
+   -> Ensures all logging happens automatically
+   -> Pushes updates to UI
 
 =" * 120)
 [IDEA] THE ROOT CAUSE:

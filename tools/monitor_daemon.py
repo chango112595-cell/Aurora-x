@@ -16,17 +16,17 @@ def monitor_services():
     }
 
     while True:
-        print(f"\n🕐 {datetime.now().strftime('%H:%M:%S')} - Health Check")
+        print(f"\n[EMOJI] {datetime.now().strftime('%H:%M:%S')} - Health Check")
 
         for port, name in services.items():
             try:
                 response = requests.get(f"http://localhost:{port}", timeout=5)
                 if response.status_code == 200:
-                    print(f"✅ {name} (:{port}): HEALTHY")
+                    print(f"[OK] {name} (:{port}): HEALTHY")
                 else:
-                    print(f"⚠️  {name} (:{port}): Status {response.status_code}")
+                    print(f"[WARN]  {name} (:{port}): Status {response.status_code}")
             except Exception as e:
-                print(f"❌ {name} (:{port}): DOWN - {str(e)[:50]}")
+                print(f"[ERROR] {name} (:{port}): DOWN - {str(e)[:50]}")
                 # Auto-restart logic here
                 if port == 5001:
                     subprocess.run(

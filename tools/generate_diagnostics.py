@@ -35,13 +35,13 @@ def generate_diagnostics():
     report = {"timestamp": datetime.now().isoformat(), "services": {}}
 
     print(f"\n{'='*70}")
-    print("📊 GENERATING AURORA DIAGNOSTICS")
+    print("[DATA] GENERATING AURORA DIAGNOSTICS")
     print(f"{'='*70}\n")
 
     for port, name in PORTS.items():
         up = check_port(port)
         status = "UP" if up else "DOWN"
-        icon = "✅" if up else "❌"
+        icon = "[OK]" if up else "[ERROR]"
 
         print(f"{icon} [PORT {port}] {name}: {status}")
 
@@ -53,7 +53,7 @@ def generate_diagnostics():
     with open(DIAGNOSTICS_FILE, "w") as f:
         json.dump(report, f, indent=2)
 
-    print(f"✅ Diagnostic data saved to: {DIAGNOSTICS_FILE}\n")
+    print(f"[OK] Diagnostic data saved to: {DIAGNOSTICS_FILE}\n")
     return report
 
 

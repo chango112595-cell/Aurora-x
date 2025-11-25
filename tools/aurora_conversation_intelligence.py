@@ -73,10 +73,10 @@ class AuroraConversationIntelligence:
             },
             "human_communication": {
                 "conversation_patterns": [
-                    "Greeting → Exchange → Closing",
-                    "Question → Answer → Follow-up",
-                    "Statement → Acknowledgment → Elaboration",
-                    "Problem → Discussion → Solution",
+                    "Greeting -> Exchange -> Closing",
+                    "Question -> Answer -> Follow-up",
+                    "Statement -> Acknowledgment -> Elaboration",
+                    "Problem -> Discussion -> Solution",
                 ],
                 "emotional_intelligence": [
                     "Emotion recognition in text/speech",

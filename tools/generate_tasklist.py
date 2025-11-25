@@ -10,9 +10,9 @@ from datetime import datetime
 def status_emoji(status):
     """Convert status to emoji."""
     if status == "complete":
-        return "✅"
+        return "[OK]"
     elif status == "in-progress":
-        return "🚧"
+        return "[EMOJI]"
     else:
         return "⬜"
 
@@ -36,14 +36,14 @@ def generate_tasklist():
     in_progress = sum(1 for p in data["phases"] if p.get("overall") == "in-progress")
     not_started = total_phases - complete - in_progress
 
-    lines.append("## 📊 Overall Progress")
+    lines.append("## [DATA] Overall Progress")
     lines.append(f"- **Completed:** {complete}/{total_phases} phases")
     lines.append(f"- **In Progress:** {in_progress} phases")
     lines.append(f"- **Not Started:** {not_started} phases")
     lines.append("")
 
     # Phase details
-    lines.append("## 📋 Phase Breakdown\n")
+    lines.append("## [EMOJI] Phase Breakdown\n")
 
     for phase in data["phases"]:
         phase_id = phase.get("id", "Unknown")
@@ -89,9 +89,9 @@ def generate_tasklist():
         lines.append("")
 
     # Key milestones
-    lines.append("## 🎯 Key Milestones\n")
-    lines.append("1. **T01-T07:** Core Engine & Infrastructure ✅")
-    lines.append("2. **T08:** Natural Language → Code Pipeline 🚧")
+    lines.append("## [TARGET] Key Milestones\n")
+    lines.append("1. **T01-T07:** Core Engine & Infrastructure [OK]")
+    lines.append("2. **T08:** Natural Language -> Code Pipeline [EMOJI]")
     lines.append("3. **T09/T09x:** Template Systems & Multi-Language ⬜")
     lines.append("4. **T10-T13:** Automation & Polish ⬜")
     lines.append("5. **T14:** Telemetry (Last) ⬜")
@@ -100,7 +100,7 @@ def generate_tasklist():
     lines.append("")
 
     # Active work
-    lines.append("## 🔥 Currently Active\n")
+    lines.append("## [EMOJI] Currently Active\n")
     for phase in data["phases"]:
         if phase.get("overall") == "in-progress":
             lines.append(f"- **{phase['id']}:** {phase['name']}")
@@ -114,7 +114,7 @@ def generate_tasklist():
     with open("MASTER_TASK_LIST.md", "w") as f:
         f.write("\n".join(lines))
 
-    print("✅ MASTER_TASK_LIST.md generated successfully!")
+    print("[OK] MASTER_TASK_LIST.md generated successfully!")
     print(f"   - {total_phases} phases tracked")
     print(f"   - {complete} completed, {in_progress} in progress")
     return True

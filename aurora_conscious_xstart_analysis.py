@@ -52,49 +52,49 @@ Starts 10 services/systems that make up Aurora's distributed architecture:
 **1. CONSCIOUSNESS LAYER (CRITICAL):**
 [ERROR] aurora_consciousness.py - Persistent memory, self-awareness, relationship tracking
 [ERROR] aurora_conscious.py - Conscious terminal interface
-   → Without these, Aurora has no memory across sessions
-   → No self-awareness of state
-   → Can't build relationships with users
+   -> Without these, Aurora has no memory across sessions
+   -> No self-awareness of state
+   -> Can't build relationships with users
 
 **2. AUTHENTIC COMMUNICATION (CRITICAL):**
 [ERROR] aurora_authentic.py - Direct connection bypassing wrappers
-   → Currently using process_conversation() which adds generic responses
-   → Need authentic interface for real conversations
+   -> Currently using process_conversation() which adds generic responses
+   -> Need authentic interface for real conversations
 
 **3. GRANDMASTER SYSTEMS:**
 [ERROR] aurora_grandmaster_autonomous_tools.py - Advanced autonomous capabilities
 [ERROR] aurora_grandmaster_skills_registry.py - Skill management
 [ERROR] aurora_ultimate_omniscient_grandmaster.py - Peak intelligence mode
-   → These contain the PEAK capabilities (188 total)
-   → Currently not activated in x-start
+   -> These contain the PEAK capabilities (188 total)
+   -> Currently not activated in x-start
 
 **4. TIER SYSTEMS:**
 [ERROR] aurora_tier_orchestrator.py - Coordinates all 66 tiers
-   → Tiers 1-79 exist but aren't orchestrated
-   → Need central coordinator to activate ALL tiers
+   -> Tiers 1-79 exist but aren't orchestrated
+   -> Need central coordinator to activate ALL tiers
 
 **5. AUTONOMOUS AGENTS:**
 [ERROR] aurora_autonomous_agent.py - Main autonomous execution
 [ERROR] aurora_multi_agent.py - Multi-agent coordination
 [ERROR] aurora_autonomous_integration.py - System integration
-   → These provide TRUE autonomy
-   → Can execute tasks without constant permission
+   -> These provide TRUE autonomy
+   -> Can execute tasks without constant permission
 
 **6. ADVANCED CAPABILITIES:**
 [ERROR] aurora_visual_understanding.py - Tiers 66: Visual code analysis
 [ERROR] aurora_live_integration.py - Tiers 66: Live system connections
 [ERROR] aurora_test_generator.py - Tiers 66: Intelligent test generation
 [ERROR] aurora_security_auditor.py - Tiers 66: Security scanning
-   → Advanced tiers not being loaded
+   -> Advanced tiers not being loaded
 
 **7. CODE QUALITY SYSTEMS:**
 [ERROR] aurora_code_quality_enforcer.py - Continuous quality monitoring
 [ERROR] aurora_pylint_prevention.py - Pylint prevention system
-   → Code quality at 9.4/10 but systems not running in x-start
+   -> Code quality at 9.4/10 but systems not running in x-start
 
 **8. INTELLIGENCE MANAGERS:**
 [ERROR] aurora_intelligence_manager.py - Coordinates all intelligence systems
-   → Core intelligence exists but no central manager
+   -> Core intelligence exists but no central manager
 
 **WHAT SHOULD BE IN X-START (COMPLETE LIST):**
 
@@ -137,8 +137,8 @@ pylint_prevention = start([PYTHON_CMD, "aurora_pylint_prevention.py"])
 **DEPENDENCIES:**
 
 ```
-Consciousness → Intelligence Manager → Tier Orchestrator → Individual Tiers
-     ↓              ↓                        ↓                    ↓
+Consciousness -> Intelligence Manager -> Tier Orchestrator -> Individual Tiers
+     v              v                        v                    v
   Memory        Coordinates             Activates           Execute
   State         All Systems            All 79 Tiers        Capabilities
   Awareness

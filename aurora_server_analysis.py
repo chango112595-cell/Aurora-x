@@ -164,7 +164,7 @@ class AuroraServerAnalysis:
         print("     • Frontend: .tsx (TypeScript + JSX)")
         print("     • Components: React TSX files")
         print("     • NOT using plain HTML files")
-        print("     • TSX is compiled by Vite → served at port 5000")
+        print("     • TSX is compiled by Vite -> served at port 5000")
         print()
 
     def run(self):

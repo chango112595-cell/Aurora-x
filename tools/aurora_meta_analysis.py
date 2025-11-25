@@ -36,9 +36,9 @@ class AuroraMetaAnalyzer:
         print("  • User CANNOT see Aurora's responses (in browser UI)")
         print()
         print("CONCLUSION:")
-        print("  → Backend is working perfectly [OK]")
-        print("  → API returns correct data [OK]")
-        print("  → Problem is FRONTEND DISPLAY [ERROR]")
+        print("  -> Backend is working perfectly [OK]")
+        print("  -> API returns correct data [OK]")
+        print("  -> Problem is FRONTEND DISPLAY [ERROR]")
         print()
         print("=" * 70)
         print()
@@ -183,7 +183,7 @@ class AuroraMetaAnalyzer:
         elif diagnostics.get("cors_uncertain"):
             self.log("[IDEA]", "POSSIBLE CAUSE: CORS")
             print()
-            print("CORS might be blocking frontend → backend requests")
+            print("CORS might be blocking frontend -> backend requests")
             print("FIX: Ensure CORS is configured in backend")
             print()
             return "fix_cors"

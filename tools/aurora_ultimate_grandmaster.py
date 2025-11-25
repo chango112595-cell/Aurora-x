@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora Ultimate Technology Grandmaster System
-COMPLETE mastery of ALL technology ever created: Ancient → Present → Future
+COMPLETE mastery of ALL technology ever created: Ancient -> Present -> Future
 
 COMPREHENSIVE TECHNOLOGY DOMAINS:
 ════════════════════════════════════════════════════════════════════════════════
@@ -92,7 +92,7 @@ from pathlib import Path
 class AuroraUltimateGrandmaster:
     """
     Aurora's COMPLETE technology mastery system
-    Every technology ever created: Ancient → Present → Future
+    Every technology ever created: Ancient -> Present -> Future
     """
 
     def __init__(self):
@@ -276,7 +276,7 @@ class AuroraUltimateGrandmaster:
         print("   1. Click 'PORTS' tab (next to TERMINAL)")
         print("   2. See all forwarded ports")
         print("   3. If Vite is running, port 5173 should appear")
-        print("   4. Right-click port → 'Open in Browser'")
+        print("   4. Right-click port -> 'Open in Browser'")
         print()
         print("[OK] Why ports might not work:")
         print("   - Server not actually started (check TERMINAL)")
@@ -445,10 +445,10 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
         print("   Writing code ≠ Executing code")
         print("   Planning ≠ Doing")
         print()
-        print("   Aurora must: CREATE → EXECUTE → VERIFY → DOCUMENT")
+        print("   Aurora must: CREATE -> EXECUTE -> VERIFY -> DOCUMENT")
         print()
 
-        self.log_mastery("Process Mastery", "Complete Fix Process", "Create→Execute→Verify→Document", 10)
+        self.log_mastery("Process Mastery", "Complete Fix Process", "Create->Execute->Verify->Document", 10)
         self.total_mastery += 10
 
     def generate_ultimate_certification(self):
@@ -485,7 +485,7 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
         print("   1. VS Code has PORTS tab to manage server ports")
         print("   2. Vite default port is 5173, not 5000")
         print("   3. Creating code ≠ Executing code")
-        print("   4. Must: Create → Execute → Verify → Document")
+        print("   4. Must: Create -> Execute -> Verify -> Document")
         print("   5. Aurora's tools work, but she forgot to RUN them!")
 
         # Save certification
@@ -499,7 +499,7 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
                 "VS Code port management in PORTS tab",
                 "Vite runs on port 5173 by default",
                 "Must execute tools after creating them",
-                "Complete process: Create→Execute→Verify→Document",
+                "Complete process: Create->Execute->Verify->Document",
             ],
         }
 
@@ -518,7 +518,7 @@ def main():
 
     print("\n[EMOJI] AURORA ULTIMATE GRANDMASTER TRAINING")
     print("=" * 70)
-    print("Mastery of ALL technology: Ancient → Present → Future")
+    print("Mastery of ALL technology: Ancient -> Present -> Future")
     print("=" * 70 + "\n")
 
     master = AuroraUltimateGrandmaster()

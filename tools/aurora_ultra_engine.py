@@ -11,7 +11,7 @@ Combines:
 4. Speculative execution (predict next request)
 5. Parallel execution (10+ tasks simultaneously)
 6. Continuous learning (every code teaches her)
-7. Grandmaster knowledge (ancient → cutting edge)
+7. Grandmaster knowledge (ancient -> cutting edge)
 8. Self-optimization (gets faster over time)
 
 Aurora designed this herself to be THE FASTEST, most ADVANCED coding AI ever created.

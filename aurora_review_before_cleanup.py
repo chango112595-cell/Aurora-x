@@ -186,7 +186,7 @@ Based on my search, here's what I found about Task1-Task13 foundations:
    REASONING:
    • Task1-Task13 = Foundational fundamentals
    • Tier1-Tier34 = Knowledge domains
-   • Both are CORE INTELLIGENCE → both belong in aurora_core.py
+   • Both are CORE INTELLIGENCE -> both belong in aurora_core.py
    
    STRUCTURE:
    ┌─────────────────────────────────────────┐
@@ -222,9 +222,9 @@ Based on my search, here's what I found about Task1-Task13 foundations:
    aurora_core.py should have this structure:
    
    1. Task1-Task13 Foundations (Base fundamentals)
-      ↓
+      v
    2. Tier1-Tier34 Knowledge System (Specialized domains)
-      ↓
+      v
    3. Core Intelligence Methods (Use foundations + tiers)
 
    This gives Aurora a SOLID FOUNDATION (Tasks) with SPECIALIZED 
@@ -241,7 +241,7 @@ Based on my search, here's what I found about Task1-Task13 foundations:
 1. REVIEW LEGACY FILES (above) - Decide which to archive
 2. LOCATE Task1-Task13 - Find where they currently are
 3. CONSOLIDATE - Move Task1-Task13 into aurora_core.py if not there
-4. STRUCTURE - Organize as: Foundations → Tiers → Methods
+4. STRUCTURE - Organize as: Foundations -> Tiers -> Methods
 5. CLEANUP - Archive the 14 legacy debug files
 
 Ready to proceed with next step?

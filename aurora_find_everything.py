@@ -415,37 +415,37 @@ class AuroraComprehensiveDiscovery:
 
         missing = []
 
-        # 1. Orchestration → Core connection
+        # 1. Orchestration -> Core connection
         if self.findings["orchestration_systems"]:
             top_orchestrator = self.findings["orchestration_systems"][0]
             missing.append({
-                "connection": "aurora_core.py → ultimate_api_manager.py",
+                "connection": "aurora_core.py -> ultimate_api_manager.py",
                 "reason": "Core doesn't call orchestration",
                 "impact": "No automatic service management",
                 "fix": "Add orchestrator call in aurora_core.py"
             })
 
-        # 2. Scoring → Persistence connection
+        # 2. Scoring -> Persistence connection
         if self.findings["scoring_systems"] and self.findings["persistence_systems"]:
             missing.append({
-                "connection": "scoring systems → persistence systems",
+                "connection": "scoring systems -> persistence systems",
                 "reason": "Scores calculated but not saved",
                 "impact": "No persistent quality tracking",
                 "fix": "Add json.dump() after scoring"
             })
 
-        # 3. Backend → UI connection
+        # 3. Backend -> UI connection
         if self.findings["api_endpoints"] and self.findings["ui_systems"]:
             missing.append({
-                "connection": "API endpoints → UI components",
+                "connection": "API endpoints -> UI components",
                 "reason": "UI fetches static data, not real API",
                 "impact": "Dashboard shows fake data",
                 "fix": "Update UI fetch URLs to hit backend"
             })
 
-        # 4. Tracking → Display connection
+        # 4. Tracking -> Display connection
         missing.append({
-            "connection": "tracking systems → UI display",
+            "connection": "tracking systems -> UI display",
             "reason": "Tracking happens but not exposed to UI",
             "impact": "User can't see Aurora's progress",
             "fix": "Create API endpoints that read tracking files"

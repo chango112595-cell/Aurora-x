@@ -127,17 +127,17 @@ class AuroraSystemUpdater:
             patterns.extend(
                 [
                     (f"{old_tier} tier", f"{tier_count} tier",
-                     f"tier count {old_tier}→{tier_count}"),
+                     f"tier count {old_tier}->{tier_count}"),
                     (f"{old_tier} Tier", f"{tier_count} Tier",
-                     f"Tier count {old_tier}→{tier_count}"),
+                     f"Tier count {old_tier}->{tier_count}"),
                     (f"{old_tier} TIER", f"{tier_count} TIER",
-                     f"TIER count {old_tier}→{tier_count}"),
+                     f"TIER count {old_tier}->{tier_count}"),
                     (f"{old_tier} knowledge tier",
                      f"{tier_count} knowledge tier", "knowledge tiers"),
                     (f"{old_tier} Knowledge Tier",
                      f"{tier_count} Knowledge Tier", "Knowledge Tiers"),
                     (f"all {old_tier} mastery tier",
-                     f"all {tier_count} knowledge tier", "mastery→knowledge tiers"),
+                     f"all {tier_count} knowledge tier", "mastery->knowledge tiers"),
                     (f"TIER {old_tier}",
                      f"TIER {tier_count}", "TIER reference"),
                     (f"Tier {old_tier}",
@@ -203,27 +203,27 @@ class AuroraSystemUpdater:
 
         # ========== HYBRID MODE PATTERNS - Enhanced by Aurora ==========
         patterns.extend([
-            # Capability module count patterns (66 → 109)
+            # Capability module count patterns (66 -> 109)
             ("109 capability", f"{capabilities} capability",
-             "capability modules 66→109"),
+             "capability modules 66->109"),
             ("109 Capability", f"{capabilities} Capability",
-             "Capability modules 66→109"),
+             "Capability modules 66->109"),
             ("79 capabilities",
-             f"{capabilities} capabilities", "capabilities 66→109"),
+             f"{capabilities} capabilities", "capabilities 66->109"),
             ("109 Capabilities",
-             f"{capabilities} Capabilities", "Capabilities 66→109"),
-            ("109 modules", f"{capabilities} modules", "modules 66→109"),
-            ("109 Modules", f"{capabilities} Modules", "Modules 66→109"),
+             f"{capabilities} Capabilities", "Capabilities 66->109"),
+            ("109 modules", f"{capabilities} modules", "modules 66->109"),
+            ("109 Modules", f"{capabilities} Modules", "Modules 66->109"),
 
-            # Total power patterns (79 → 188 or variations)
+            # Total power patterns (79 -> 188 or variations)
             ("188 total power",
              f"{total_power} total power", "total power update"),
             ("188 Total Power",
              f"{total_power} Total Power", "Total Power update"),
             ("188 total power",
-             f"{total_power} total power", "total power 145→188"),
+             f"{total_power} total power", "total power 145->188"),
             ("188 Total Power",
-             f"{total_power} Total Power", "Total Power 145→188"),
+             f"{total_power} Total Power", "Total Power 145->188"),
 
             # Hybrid mode equation patterns
             ("66 tiers", f"{total} tiers", "hybrid tiers count"),

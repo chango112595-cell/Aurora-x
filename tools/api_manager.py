@@ -145,7 +145,7 @@ class AuroraAPIManager:
     def start_api(self, api_name: str, force_restart: bool = False) -> bool:
         """Start or restart an API service"""
         if api_name not in self.apis:
-            print(f"❌ Unknown API: {api_name}")
+            print(f"[ERROR] Unknown API: {api_name}")
             return False
 
         api = self.apis[api_name]
@@ -156,17 +156,17 @@ class AuroraAPIManager:
 
         # Check if already running
         if api_name in self.processes and self.processes[api_name].poll() is None:
-            print(f"✅ {api['description']} is already running")
+            print(f"[OK] {api['description']} is already running")
             return True
 
         # Check dependencies
         deps = self.check_dependencies(api_name)
         missing_deps = [dep for dep, available in deps.items() if not available]
         if missing_deps:
-            print(f"❌ Missing dependencies for {api_name}: {missing_deps}")
+            print(f"[ERROR] Missing dependencies for {api_name}: {missing_deps}")
             return False
 
-        print(f"🚀 Starting {api['description']} on port {api['port']}...")
+        print(f"[EMOJI] Starting {api['description']} on port {api['port']}...")
 
         try:
             # Kill any process using the port
@@ -190,14 +190,14 @@ class AuroraAPIManager:
             # Verify it's running
             health = self.get_api_health(api_name)
             if health["healthy"] or health["port_listening"]:
-                print(f"✅ {api['description']} started successfully")
+                print(f"[OK] {api['description']} started successfully")
                 return True
             else:
-                print(f"❌ {api['description']} failed to start properly")
+                print(f"[ERROR] {api['description']} failed to start properly")
                 return False
 
         except Exception as e:
-            print(f"❌ Failed to start {api['description']}: {e}")
+            print(f"[ERROR] Failed to start {api['description']}: {e}")
             return False
 
     def stop_api(self, api_name: str) -> bool:
@@ -217,12 +217,12 @@ class AuroraAPIManager:
                     process.kill()
                     process.wait()
 
-                print(f"🛑 Stopped {self.apis[api_name]['description']}")
+                print(f"[EMOJI] Stopped {self.apis[api_name]['description']}")
 
             del self.processes[api_name]
             return True
         except Exception as e:
-            print(f"❌ Error stopping {api_name}: {e}")
+            print(f"[ERROR] Error stopping {api_name}: {e}")
             return False
 
     def kill_port(self, port: int) -> bool:
@@ -232,19 +232,19 @@ class AuroraAPIManager:
                 try:
                     for conn in proc.connections():
                         if conn.laddr.port == port:
-                            print(f"🔪 Killing process {proc.info['pid']} ({proc.info['name']}) on port {port}")
+                            print(f"[EMOJI] Killing process {proc.info['pid']} ({proc.info['name']}) on port {port}")
                             proc.kill()
                             return True
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
                     continue
         except Exception as e:
-            print(f"❌ Error killing port {port}: {e}")
+            print(f"[ERROR] Error killing port {port}: {e}")
         return False
 
     def restart_all_apis(self) -> dict[str, bool]:
         """Restart all API services"""
         results = {}
-        print("🔄 Restarting all API services...")
+        print("[EMOJI] Restarting all API services...")
 
         # Stop all first
         for api_name in self.apis:
@@ -267,14 +267,14 @@ class AuroraAPIManager:
 
     def auto_heal(self) -> dict[str, str]:
         """Automatically heal unhealthy APIs"""
-        print("🏥 Running auto-heal for all APIs...")
+        print("[EMOJI] Running auto-heal for all APIs...")
         results = {}
 
         health_results = self.health_check_all()
 
         for api_name, health in health_results.items():
             if not health["healthy"] and not health["port_listening"]:
-                print(f"🔧 Auto-healing {api_name}...")
+                print(f"[EMOJI] Auto-healing {api_name}...")
                 if self.start_api(api_name, force_restart=True):
                     results[api_name] = "healed"
                 else:
@@ -287,15 +287,15 @@ class AuroraAPIManager:
     def status_report(self) -> None:
         """Print comprehensive status report"""
         print("\n" + "=" * 70)
-        print("🔍 AURORA-X API MANAGER STATUS")
+        print("[SCAN] AURORA-X API MANAGER STATUS")
         print("=" * 70)
 
         health_results = self.health_check_all()
 
-        print("\n📊 API HEALTH SUMMARY:")
+        print("\n[DATA] API HEALTH SUMMARY:")
         for api_name, health in health_results.items():
             api = self.apis[api_name]
-            status_icon = "🟢" if health["healthy"] else "🔴"
+            status_icon = "[EMOJI]" if health["healthy"] else "[EMOJI]"
             print(f"  {status_icon} {api['description']} (Port {api['port']})")
 
             if health["healthy"]:
@@ -310,9 +310,9 @@ class AuroraAPIManager:
             deps = health["dependencies"]
             missing = [k for k, v in deps.items() if not v]
             if missing:
-                print(f"     Dependencies: ❌ Missing: {', '.join(missing)}")
+                print(f"     Dependencies: [ERROR] Missing: {', '.join(missing)}")
             else:
-                print("     Dependencies: ✅ All available")
+                print("     Dependencies: [OK] All available")
 
         print(f"\n⏰ Last checked: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("=" * 70)
@@ -346,23 +346,23 @@ def main():
         api_manager.start_api(args.restart, force_restart=True)
     elif args.restart_all:
         results = api_manager.restart_all_apis()
-        print(f"\n📊 Restart Results: {results}")
+        print(f"\n[DATA] Restart Results: {results}")
     elif args.auto_heal:
         results = api_manager.auto_heal()
-        print(f"\n🏥 Auto-heal Results: {results}")
+        print(f"\n[EMOJI] Auto-heal Results: {results}")
         api_manager.status_report()
     elif args.health:
         results = api_manager.health_check_all()
         for api_name, health in results.items():
             print(f"{api_name}: {'HEALTHY' if health['healthy'] else 'UNHEALTHY'}")
     elif args.monitor:
-        print("🔍 Starting continuous monitoring mode (Ctrl+C to stop)...")
+        print("[SCAN] Starting continuous monitoring mode (Ctrl+C to stop)...")
         try:
             while True:
                 api_manager.auto_heal()
                 time.sleep(30)  # Check every 30 seconds
         except KeyboardInterrupt:
-            print("\n👋 Monitoring stopped")
+            print("\n[EMOJI] Monitoring stopped")
     else:
         # Default: show status
         api_manager.status_report()

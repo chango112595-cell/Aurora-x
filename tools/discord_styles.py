@@ -13,7 +13,7 @@ URL = os.getenv("DISCORD_WEBHOOK_URL")
 def send_embed(title: str, description: str, color: int, fields: list = None):
     """Send a rich Discord embed notification."""
     if not URL:
-        print("❌ No DISCORD_WEBHOOK_URL found")
+        print("[ERROR] No DISCORD_WEBHOOK_URL found")
         return False
 
     embed = {
@@ -41,37 +41,37 @@ def send_embed(title: str, description: str, color: int, fields: list = None):
         req = urllib.request.Request(URL, data=data, headers={"Content-Type": "application/json"})
         with urllib.request.urlopen(req, timeout=10) as response:
             if response.status in [200, 204]:
-                print(f"✅ Sent: {title}")
+                print(f"[OK] Sent: {title}")
                 return True
     except urllib.error.HTTPError as e:
-        print(f"❌ HTTP Error {e.code}: {e.reason}")
+        print(f"[ERROR] HTTP Error {e.code}: {e.reason}")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[ERROR] Error: {e}")
     return False
 
 
 def success(title: str, message: str, **kwargs):
     """Send a success notification (green)."""
     fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} for k, v in kwargs.items()]
-    return send_embed(f"✅ {title}", message, 0x00FF00, fields)
+    return send_embed(f"[OK] {title}", message, 0x00FF00, fields)
 
 
 def warning(title: str, message: str, **kwargs):
     """Send a warning notification (amber)."""
     fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} for k, v in kwargs.items()]
-    return send_embed(f"⚠️ {title}", message, 0xFFA500, fields)
+    return send_embed(f"[WARN] {title}", message, 0xFFA500, fields)
 
 
 def failure(title: str, message: str, **kwargs):
     """Send a failure notification (red)."""
     fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} for k, v in kwargs.items()]
-    return send_embed(f"❌ {title}", message, 0xFF0000, fields)
+    return send_embed(f"[ERROR] {title}", message, 0xFF0000, fields)
 
 
 def milestone(title: str, message: str, **kwargs):
     """Send a milestone notification (cyan)."""
     fields = [{"name": k.replace("_", " ").title(), "value": str(v), "inline": True} for k, v in kwargs.items()]
-    return send_embed(f"🌌 {title}", message, 0x00FFFF, fields)
+    return send_embed(f"[AURORA] {title}", message, 0x00FFFF, fields)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora Server Grandmaster Training System
-Complete mastery of all server technologies: Ancient → Present → Future
+Complete mastery of all server technologies: Ancient -> Present -> Future
 
 Topics Covered:
 - Ancient: Mainframes, ARPANET, UNIX servers (1960s-1990s)
@@ -487,7 +487,7 @@ class AuroraServerGrandmaster:
         print(f"[EMOJI] Training log saved to: {self.server_log}")
 
         print("\n[OK] Aurora is now a SERVER GRANDMASTER!")
-        print("   Expertise spans: 1960s Mainframes → 2040s Quantum Servers")
+        print("   Expertise spans: 1960s Mainframes -> 2040s Quantum Servers")
         print("   Can manage any server technology past, present, or future!")
 
         return self.mastery_level

@@ -145,7 +145,7 @@ standard_ports = {
 
 print("  [EMOJI] Standard Port Map:")
 for service, port in standard_ports.items():
-    print(f"     {service:20} → Port {port}")
+    print(f"     {service:20} -> Port {port}")
 
 # Document ports
 port_doc = root / "PORT_CONFIGURATION.md"
@@ -156,8 +156,8 @@ with open(port_doc, 'w', encoding='utf-8') as f:
     for service, port in standard_ports.items():
         f.write(f"| {service} | {port} | Auto-configured |\n")
     f.write("\n## Commands\n\n")
-    f.write("- **Development**: `npm run dev` → http://localhost:5173\n")
-    f.write("- **Production**: `python x-start` → http://localhost:5000\n")
+    f.write("- **Development**: `npm run dev` -> http://localhost:5173\n")
+    f.write("- **Production**: `python x-start` -> http://localhost:5000\n")
 
 print(f"  [OK] Port configuration documented: {port_doc.name}")
 results['updates'].append("Ports: standardized and documented")

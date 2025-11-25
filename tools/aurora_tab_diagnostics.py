@@ -23,7 +23,7 @@ class AuroraTabDiagnostics:
         """Aurora's logging"""
         timestamp = datetime.now().strftime("%H:%M:%S")
         icons = {"INFO": "[STAR]", "OK": "[OK]", "ISSUE": "[EMOJI]", "WARN": "[WARN]"}
-        icon = icons.get(level, "→")
+        icon = icons.get(level, "->")
         print(f"[{timestamp}] {icon} Aurora: {message}")
 
     def analyze_tab(self, tab_name: str, file_path: Path) -> dict[str, Any]:

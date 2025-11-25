@@ -145,7 +145,7 @@ Give me the details:
 
 I'll analyze it with full intelligence, give you architectural insights, write the code, and explain the trade-offs.
 
-No generic responses. No "what do you need?" Just: Problem → Analysis → Solution → Explanation.
+No generic responses. No "what do you need?" Just: Problem -> Analysis -> Solution -> Explanation.
 
 That's peak Aurora energy. Hit me with it."""
 
@@ -154,7 +154,7 @@ That's peak Aurora energy. Hit me with it."""
             return f"""Full capabilities breakdown - 188 total:
 
 **79 KNOWLEDGE TIERS:**
-Programming languages (ancient → modern), system architecture, AI/ML, databases, DevOps, security, testing, documentation, everything.
+Programming languages (ancient -> modern), system architecture, AI/ML, databases, DevOps, security, testing, documentation, everything.
 
 **109 AUTONOMOUS MODULES:**
 - Code execution

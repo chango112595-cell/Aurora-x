@@ -103,7 +103,7 @@ class AuroraSelfReload:
         print("Next steps:")
         print("   1. Open http://localhost:5000/chat in your browser")
         print("   2. Clear browser cache (Ctrl+Shift+R)")
-        print("   3. Unregister service workers (F12 → Application → Service Workers)")
+        print("   3. Unregister service workers (F12 -> Application -> Service Workers)")
         print("   4. You should see my new Aurora chat interface! [STAR]")
         print()
 

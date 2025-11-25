@@ -121,7 +121,7 @@ def show_grading_loop():
     print("-" * 70)
 
     print("\n[IDEA] THIS MEANS:")
-    print("   - Work → Test → Grade → If not A+, REPEAT")
+    print("   - Work -> Test -> Grade -> If not A+, REPEAT")
     print("   - No shortcuts, no excuses")
     print("   - Keep improving until perfect")
     print("   - Learn from each iteration")

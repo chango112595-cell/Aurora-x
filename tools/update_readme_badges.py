@@ -71,7 +71,7 @@ _Offline Autonomous Code Synthesis Engine_
 
     # Write updated README
     readme_path.write_text(updated_content)
-    print("✅ README.md updated with new badges")
+    print("[OK] README.md updated with new badges")
     return True
 
 

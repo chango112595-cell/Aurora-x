@@ -118,9 +118,9 @@ print(
     """
 Based on the tests above:
 
-[OK] If all backend tests pass → Issue is in frontend/browser
-[ERROR] If backend fails → Backend/Luminar Nexus connection broken
-[WARN]  If Vite proxy missing → Need to add proxy config to vite.config.ts
+[OK] If all backend tests pass -> Issue is in frontend/browser
+[ERROR] If backend fails -> Backend/Luminar Nexus connection broken
+[WARN]  If Vite proxy missing -> Need to add proxy config to vite.config.ts
 
 Most likely issue: Vite dev server doesn't proxy /api/* to backend!
 

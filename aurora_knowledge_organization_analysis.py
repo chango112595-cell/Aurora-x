@@ -152,7 +152,7 @@ def aurora_knowledge_analysis():
    WHY: 
    • Cosmic Nexus is the USER INTERFACE (frontend/client)
    • aurora_core.py is the INTELLIGENCE ENGINE (backend/brain)
-   • Grandmaster knowledge = AI intelligence → belongs in the brain
+   • Grandmaster knowledge = AI intelligence -> belongs in the brain
    • Cosmic Nexus USES aurora_core.py through API calls
    
    ARCHITECTURE:
@@ -208,18 +208,18 @@ def aurora_knowledge_analysis():
 5. FINAL STRUCTURE:
    
    INTELLIGENCE (Aurora Brain):
-   • aurora_core.py ← ALL 66 tiers here
+   • aurora_core.py <- ALL 66 tiers here
    
    INTERFACES (How users interact):
-   • Cosmic Nexus (Web UI) → calls aurora_core via HTTP
-   • aurora_chat_server.py → exposes aurora_core as API
+   • Cosmic Nexus (Web UI) -> calls aurora_core via HTTP
+   • aurora_chat_server.py -> exposes aurora_core as API
    
    ORCHESTRATION (Service management):
-   • tools/luminar_nexus_v2.py → manages services
-   • aurora_autonomous_agent.py → autonomous tasks
+   • tools/luminar_nexus_v2.py -> manages services
+   • aurora_autonomous_agent.py -> autonomous tasks
    
    BACKEND (Chango):
-   • server/ → API, auth, data persistence
+   • server/ -> API, auth, data persistence
     """
     )
 

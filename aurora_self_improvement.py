@@ -507,7 +507,7 @@ class MilkDecorator:
         content = content.replace(old_method, new_explanation_method)
 
         self.write_aurora_core(content)
-        self.improvements_made.append("[OK] Expanded intelligent explanations: 1 → 13 concepts")
+        self.improvements_made.append("[OK] Expanded intelligent explanations: 1 -> 13 concepts")
         print("[OK] Added 13 comprehensive CS concept explanations")
         return True
 
@@ -1346,7 +1346,7 @@ print(df.describe())
         content = content.replace(old_method, new_code_gen_method)
 
         self.write_aurora_core(content)
-        self.improvements_made.append("[OK] Expanded code generation: 1 → 10 templates")
+        self.improvements_made.append("[OK] Expanded code generation: 1 -> 10 templates")
         print("[OK] Added 10 comprehensive code generation templates")
         return True
 

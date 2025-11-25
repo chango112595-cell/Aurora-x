@@ -188,7 +188,7 @@ export default function {component_name}(props: {component_name}Props) {{
                 tsx_file.write_text(tsx_content, encoding="utf-8")
 
                 print(
-                    f"[OK] {html_file.relative_to(self.root)} → {tsx_file.relative_to(self.root)}")
+                    f"[OK] {html_file.relative_to(self.root)} -> {tsx_file.relative_to(self.root)}")
 
                 self.converted.append({
                     "html": str(html_file.relative_to(self.root)),

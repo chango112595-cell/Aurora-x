@@ -637,7 +637,7 @@ class LuminarNexusV2:
         service_info = self.service_registry[service_name]
         service_info["restart_count"] += 1
 
-        print(f"🔄 Restarting service '{service_name}' (restart #{service_info['restart_count']})")
+        print(f"[EMOJI] Restarting service '{service_name}' (restart #{service_info['restart_count']})")
 
         # Stop the service first
         await self._stop_service_internal(service_name)
@@ -651,7 +651,7 @@ class LuminarNexusV2:
         if service_name not in self.service_registry:
             return
 
-        print(f"📈 Scaling service '{service_name}' for better performance")
+        print(f"[EMOJI] Scaling service '{service_name}' for better performance")
 
         try:
             # Get service process and adjust priority
@@ -672,7 +672,7 @@ class LuminarNexusV2:
         if service_name not in self.service_registry:
             return
 
-        print(f"🧠 Optimizing memory for service '{service_name}'")
+        print(f"[BRAIN] Optimizing memory for service '{service_name}'")
 
         try:
             # For Python processes, we can send signals to trigger GC
@@ -765,8 +765,8 @@ class LuminarNexusV2:
                     )
 
                 print("   [OK] Started in background")
-                print(f"   🔌 Port: {server['port']}")
-                print(f"   📝 Logs: {log_file}")
+                print(f"   [EMOJI] Port: {server['port']}")
+                print(f"   [EMOJI] Logs: {log_file}")
 
                 # Wait and check health with retries
                 max_retries = 5
@@ -816,7 +816,7 @@ class LuminarNexusV2:
 
             if result.returncode == 0:
                 print(f"   [OK] Started in tmux session: {session}")
-                print(f"   🔌 Port: {server['port']}")
+                print(f"   [EMOJI] Port: {server['port']}")
 
                 # Wait and check health
                 await asyncio.sleep(3)
@@ -840,7 +840,7 @@ class LuminarNexusV2:
         session = server["session"]
         port = server["port"]
 
-        print(f"🛑 Stopping {server['name']}...")
+        print(f"[EMOJI] Stopping {server['name']}...")
 
         if self.is_windows():
             # Windows: Find and kill process using the port
@@ -974,7 +974,7 @@ class LuminarNexusV2:
 
     def stop_all_servers(self):
         """Stop all Aurora services"""
-        print("\n🛑 Luminar Nexus V2: Stopping ALL services...\n")
+        print("\n[EMOJI] Luminar Nexus V2: Stopping ALL services...\n")
 
         for server_key in self.servers.keys():
             self.stop_server(server_key)
@@ -1190,7 +1190,7 @@ class LuminarNexusV2:
 
                 # Advanced routing through Aurora Bridge
                 if AURORA_BRIDGE_AVAILABLE and route_to_enhanced_aurora_core is not None:
-                    print(f" Nexus v2 → Aurora Bridge: {message[:50]}...")
+                    print(f" Nexus v2 -> Aurora Bridge: {message[:50]}...")
                     response = route_to_enhanced_aurora_core(message, session_id)
                 else:
                     response = "Nexus v2 operational, but Aurora Bridge unavailable. Please check system configuration."
@@ -1211,7 +1211,7 @@ class LuminarNexusV2:
 
         @app.route("/chat", methods=["GET", "POST"])
         def chat_alias():
-            """Route alias for /chat → /api/chat compatibility (Aurora autonomous fix)"""
+            """Route alias for /chat -> /api/chat compatibility (Aurora autonomous fix)"""
             if request.method == "POST":
                 return intelligent_chat_routing()
             return (

@@ -14,7 +14,7 @@ TARGET = ROOT / "aurora_X.md"  # change if your target file differs
 
 BEGIN = "<!-- AURORA_TRACKER_BEGIN -->"
 END = "<!-- AURORA_TRACKER_END -->"
-HEADER = "### ✅ Task Tracker Status (Authoritative, from progress.json)"
+HEADER = "### [OK] Task Tracker Status (Authoritative, from progress.json)"
 
 
 def ensure_master_uptodate():

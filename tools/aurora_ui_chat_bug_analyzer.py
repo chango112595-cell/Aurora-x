@@ -26,7 +26,7 @@ class AuroraUIBugAnalyzer:
         """Aurora's logging system"""
         timestamp = datetime.now().strftime("%H:%M:%S")
         icons = {"INFO": "[STAR]", "BUG": "[EMOJI]", "FIX": "[OK]", "WARN": "[WARN]", "ERROR": "[ERROR]"}
-        icon = icons.get(level, "→")
+        icon = icons.get(level, "->")
         print(f"[{timestamp}] {icon} Aurora: {message}")
 
     def analyze_tsx_file(self, filepath: Path) -> list[dict[str, Any]]:

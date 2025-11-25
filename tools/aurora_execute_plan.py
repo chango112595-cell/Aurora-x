@@ -577,7 +577,7 @@ __all__ = ["record", "get_best_method", "get_stats", "UnifiedLearningTracker"]
         print("   • Real-time performance optimization")
 
         # Create Chango integration readme
-        chango_readme = """# Aurora → Chango Integration
+        chango_readme = """# Aurora -> Chango Integration
 
 Aurora is ready to help build Chango with enhanced capabilities:
 

@@ -256,7 +256,7 @@ v3_design = {
             "Flask API structure"
         ],
         "NEW_FOR_AUTONOMOUS": [
-            "Dependency-aware startup (Master Controller → Router → Others)",
+            "Dependency-aware startup (Master Controller -> Router -> Others)",
             "Exponential backoff restart logic",
             "Inter-system communication monitoring",
             "Windows PowerShell native support",
@@ -388,7 +388,7 @@ for category, details in improvements.items():
     print(f"  v1: {details['v1']}")
     print(f"  v2: {details['v2']}")
     print(f"  v3: {details['v3']}")
-    print(f"  → {details['improvement']}\n")
+    print(f"  -> {details['improvement']}\n")
 
 print("=" * 80)
 print("[TARGET] AURORA'S FINAL RECOMMENDATIONS")

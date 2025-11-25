@@ -599,7 +599,7 @@ print("=" * 120)
         print(
             "3. [OK] API Endpoints - Backend exposes /api/aurora/scores and /api/aurora/status")
         print("4. [OK] UI Connection - Dashboard fetches real Aurora data")
-        print("\nTotal: 715 systems found → 4 connections made → Everything activated!")
+        print("\nTotal: 715 systems found -> 4 connections made -> Everything activated!")
         print("=" * 120)
 
         return report

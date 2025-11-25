@@ -62,7 +62,7 @@ class DiagnosticViewer:
         report = self.save_diagnostic_report()
 
         print("\n" + "=" * 70)
-        print("🔍 AURORA-X DIAGNOSTIC REPORT")
+        print("[SCAN] AURORA-X DIAGNOSTIC REPORT")
         print("=" * 70)
         print(f"\n⏰ Generated: {report['timestamp']}\n")
 
@@ -71,7 +71,7 @@ class DiagnosticViewer:
 
         for port in sorted(report["services"].keys()):
             service = report["services"][port]
-            status_icon = "✅" if service["status"] == "UP" else "❌"
+            status_icon = "[OK]" if service["status"] == "UP" else "[ERROR]"
             print(f"{status_icon} [PORT {port}] {service['name']}")
             print(f"   Status: {service['status']}")
             print(f"   URL: {service['url']}")
@@ -82,9 +82,9 @@ class DiagnosticViewer:
         # Check if all up
         all_up = all(s["status"] == "UP" for s in report["services"].values())
         if all_up:
-            print("✨ ALL SERVICES OPERATIONAL\n")
+            print("[QUALITY] ALL SERVICES OPERATIONAL\n")
         else:
-            print("⚠️  SOME SERVICES OFFLINE\n")
+            print("[WARN]  SOME SERVICES OFFLINE\n")
             offline = [p for p, s in report["services"].items() if s["status"] == "DOWN"]
             print(f"Offline ports: {offline}\n")
 
@@ -95,7 +95,7 @@ class DiagnosticViewer:
     def diagnose_port_5000(self):
         """Diagnose why port 5000 is offline"""
         print("\n" + "=" * 70)
-        print("🔧 DIAGNOSING PORT 5000 (Aurora UI)")
+        print("[EMOJI] DIAGNOSING PORT 5000 (Aurora UI)")
         print("=" * 70 + "\n")
 
         # Check if process is running
@@ -106,41 +106,41 @@ class DiagnosticViewer:
             result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
             node_processes = [line for line in result.stdout.split("\n") if "node" in line.lower()]
             if node_processes:
-                print(f"   ✅ Found {len(node_processes)} Node.js process(es):")
+                print(f"   [OK] Found {len(node_processes)} Node.js process(es):")
                 for proc in node_processes[:3]:
                     print(f"      {proc.strip()[:80]}")
             else:
-                print("   ❌ No Node.js processes found")
+                print("   [ERROR] No Node.js processes found")
         except:
-            print("   ⚠️  Could not check processes")
+            print("   [WARN]  Could not check processes")
 
         print("\n2️⃣  Checking port 5000 specifically...")
         try:
             result = subprocess.run(["netstat", "-tlnp"], capture_output=True, text=True)
             port_5000 = [line for line in result.stdout.split("\n") if ":5000" in line]
             if port_5000:
-                print("   ✅ Port 5000 is LISTENING:")
+                print("   [OK] Port 5000 is LISTENING:")
                 for line in port_5000:
                     print(f"      {line.strip()}")
             else:
-                print("   ❌ Port 5000 is NOT LISTENING")
+                print("   [ERROR] Port 5000 is NOT LISTENING")
         except:
-            print("   ⚠️  Could not check with netstat, trying lsof...")
+            print("   [WARN]  Could not check with netstat, trying lsof...")
             try:
                 result = subprocess.run(["lsof", "-i", ":5000"], capture_output=True, text=True)
                 if result.stdout:
-                    print(f"   ✅ Process on port 5000: {result.stdout}")
+                    print(f"   [OK] Process on port 5000: {result.stdout}")
                 else:
-                    print("   ❌ Port 5000 is FREE (not in use)")
+                    print("   [ERROR] Port 5000 is FREE (not in use)")
             except:
-                print("   ⚠️  Could not check with lsof either")
+                print("   [WARN]  Could not check with lsof either")
 
         print("\n3️⃣  Checking Express server file...")
         server_file = Path("/workspaces/Aurora-x/server.js")
         if server_file.exists():
-            print("   ✅ server.js exists")
+            print("   [OK] server.js exists")
         else:
-            print(f"   ❌ server.js NOT FOUND at {server_file}")
+            print(f"   [ERROR] server.js NOT FOUND at {server_file}")
 
         print("\n4️⃣  Recommended Actions:")
         print("   • Start Express: cd /workspaces/Aurora-x && node server.js")
@@ -160,7 +160,7 @@ def main():
     viewer.diagnose_port_5000()
 
     # Save for web access
-    print("📁 Report saved to: tools/diagnostics.json")
+    print("[EMOJI] Report saved to: tools/diagnostics.json")
     print("   Can be viewed via web interface\n")
 
 

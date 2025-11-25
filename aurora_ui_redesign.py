@@ -224,7 +224,7 @@ export default function AuroraFuturisticDashboard() {
                   Complete Tier Breakdown
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="text-purple-300/80">• Tier 1-6: Languages (Ancient → Sci-Fi)</div>
+                  <div className="text-purple-300/80">• Tier 1-6: Languages (Ancient -> Sci-Fi)</div>
                   <div className="text-purple-300/80">• Tier 7-27: Technical Mastery</div>
                   <div className="text-purple-300/80">• Tier 28: Autonomous Tools</div>
                   <div className="text-purple-300/80">• Tier 29-31: Professional Skills</div>

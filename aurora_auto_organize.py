@@ -44,7 +44,7 @@ class AuroraAutoOrganizer:
             if src.exists():
                 dst = self.archive_dir / file_name
                 shutil.move(str(src), str(dst))
-                print(f"   [EMOJI] Archived: {file_name} → archive/legacy/")
+                print(f"   [EMOJI] Archived: {file_name} -> archive/legacy/")
                 self.actions_taken.append(f"Archived {file_name}")
             else:
                 print(f"   [WARN]  Not found: {file_name}")
@@ -174,7 +174,7 @@ python aurora_comprehensive_verification.py
 **EVERYTHING IS WHERE IT BELONGS** [LAUNCH]
 
 Aurora's architecture is now:
-1. [OK] Properly layered (Foundations → Tiers → Services)
+1. [OK] Properly layered (Foundations -> Tiers -> Services)
 2. [OK] Well organized (tools/, server/, archive/)
 3. [OK] Clean codebase (legacy files archived)
 4. [OK] Production ready (all checks pass)
