@@ -15,7 +15,7 @@ Quality: 10/10 (Perfect)
 Ask Aurora: Are Grandmastery Skills the same as Capabilities?
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraKnowledgeTiers
 
 # Aurora Performance Optimization

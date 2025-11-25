@@ -4,7 +4,7 @@ Analyze where each dormant capability should be integrated
 Then automatically integrate them into aurora_core.py
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 import sys
 import os

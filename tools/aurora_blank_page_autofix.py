@@ -17,7 +17,7 @@ Aurora autonomously fixes the blank page issue
 Checks and fixes rendering, CSS, and React issues
 """
 
-from datetime from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
 from pathlib import Path
 

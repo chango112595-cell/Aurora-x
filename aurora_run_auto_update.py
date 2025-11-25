@@ -15,7 +15,7 @@ Quality: 10/10 (Perfect)
 Have Aurora run her advanced automatic system update
 """
 
-from datetime from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
 from aurora_core import AuroraCoreIntelligence
 import sys

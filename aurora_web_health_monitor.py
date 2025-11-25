@@ -18,7 +18,7 @@ Real-time health monitoring for all web services
 Port: 5004
 """
 
-from flask from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Flask, jsonify, request
 from flask_cors import CORS
 import requests

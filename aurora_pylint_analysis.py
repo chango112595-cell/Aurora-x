@@ -17,7 +17,7 @@ Analysis of current issues and autonomous solutions
 """
 
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraKnowledgeTiers
 
 # Aurora Performance Optimization

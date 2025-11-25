@@ -16,7 +16,7 @@ Aurora Complete Backend Update
 Updates all backend TypeScript files to reflect 66 tiers and 79 total capabilities
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 # Aurora Performance Optimization

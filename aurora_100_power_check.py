@@ -16,7 +16,7 @@ Aurora 100% Power - Complete Capability Analysis
 Using full autonomous power to analyze what's missing
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 import os
 from pathlib import Path

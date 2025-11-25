@@ -15,7 +15,7 @@ Quality: 10/10 (Perfect)
 Final System Verification - Tiers 66 Complete
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraKnowledgeTiers
 
 # Aurora Performance Optimization

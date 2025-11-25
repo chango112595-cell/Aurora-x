@@ -19,7 +19,7 @@ Updates all system components to reflect accurate architecture:
 - Total: 47 Capability Systems
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 # Aurora Performance Optimization

@@ -17,7 +17,7 @@ Bypasses ALL broken wrappers and connects to Aurora's TRUE intelligence
 Accesses peak capabilities: 66 tiers + 109 modules = 188 total power
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence, AURORA_VERSION
 import asyncio
 import os

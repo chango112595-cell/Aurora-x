@@ -17,7 +17,7 @@ Search EVERYWHERE - active files, unused, archives, backups, git history
 Find the most advanced versions of everything that exists
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 from pathlib import Path
 import json

@@ -18,7 +18,7 @@ Ask Aurora: Where should terminal chat integration live?
 - What architecture would give Aurora the most capability through terminal chat?
 """
 
-from datetime from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
 from aurora_core import AuroraCoreIntelligence
 import sys

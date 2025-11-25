@@ -16,7 +16,7 @@ Aurora Autonomous Core Integration Verification
 Ensures Aurora is actively using her foundational tasks and knowledge tiers
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 # Aurora Performance Optimization

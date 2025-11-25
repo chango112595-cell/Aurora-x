@@ -11,7 +11,7 @@ Quality: 10/10 (Perfect)
 """
 
 #!/usr/bin/env python3
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 from aurora_x.spec.parser_v3 import parse_v3

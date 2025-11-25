@@ -11,7 +11,7 @@ Quality: 10/10 (Perfect)
 """
 
 # Minimal setup.py shim - all metadata is in pyproject.toml
-from setuptools from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import setup
 
 # Aurora Performance Optimization

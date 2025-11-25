@@ -11,7 +11,7 @@ Quality: 10/10 (Perfect)
 """
 
 # aurora_x/serve.py  FastAPI app with Aurora-X v3 dashboard mounted
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 from fastapi import FastAPI

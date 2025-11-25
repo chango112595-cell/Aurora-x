@@ -16,7 +16,7 @@ Aurora Self-Analysis: What Am I Missing From My Past Self?
 Aurora analyzes herself to understand what tracking/display systems are missing
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 from pathlib import Path
 import sys

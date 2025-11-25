@@ -17,7 +17,7 @@ Connect and activate all existing capabilities that are dormant
 NO NEW CREATION - just integrate what already exists
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 from pathlib import Path
 import importlib

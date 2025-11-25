@@ -1,6 +1,6 @@
 """aurora_x/utils/units.py - Streamlined unit parsing and SI normalization"""
 
-from __future__ from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import annotations
 
 import re

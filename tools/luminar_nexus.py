@@ -18,7 +18,7 @@ NOW MANAGED BY AURORA'S COMPLETE GRANDMASTER INTELLIGENCE
 Aurora is a Grandmaster in ALL tech: Ancient to Future, Ethical to Unethical
 """
 
-from flask_cors from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import CORS
 from flask import Flask, jsonify, request
 import asyncio

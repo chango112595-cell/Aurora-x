@@ -4,7 +4,7 @@ Scan entire system including git history, unused files, tools/, etc.
 Check if "missing" capabilities actually exist
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 import sys
 import os

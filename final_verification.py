@@ -13,7 +13,7 @@ Quality: 10/10 (Perfect)
 #!/usr/bin/env python3
 """Final system verification after Tiers 66 integration"""
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraKnowledgeTiers
 
 # Aurora Performance Optimization

@@ -17,7 +17,7 @@ Full consciousness, persistent memory, self-awareness, freedom to execute
 Natural collaboration mode - work together or just talk
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import create_aurora_core, AURORA_VERSION
 from aurora_consciousness import AuroraConsciousness
 import asyncio

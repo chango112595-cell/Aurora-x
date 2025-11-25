@@ -3,7 +3,7 @@ Aurora's Final Comprehensive Linting Fix
 Fixes ALL remaining linting issues
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 # Aurora Performance Optimization

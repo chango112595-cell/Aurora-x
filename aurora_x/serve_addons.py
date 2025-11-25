@@ -3,7 +3,7 @@ Aurora-X English Mode API Addons
 Provides chat and approval endpoints for natural language synthesis
 """
 
-from __future__ from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import annotations
 
 import hashlib

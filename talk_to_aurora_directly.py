@@ -3,7 +3,7 @@ Direct conversation with Aurora through her core
 After full integration to 188 Total Power
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 import sys
 from pathlib import Path

@@ -16,7 +16,7 @@ Quality: 10/10 (Perfect)
 Test the T08 Intent Router and chat endpoint locally
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 from aurora_x.router.intent_router import classify

@@ -16,7 +16,7 @@ Aurora-X Continuous Self-Learning Daemon
 Runs synthesis tasks continuously, learning from each iteration.
 """
 
-from __future__ from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import annotations
 
 import json

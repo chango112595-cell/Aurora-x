@@ -16,7 +16,7 @@ Ask Aurora: What Should We Do?
 Aurora analyzes all findings and provides her recommendation
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 from pathlib import Path
 import json

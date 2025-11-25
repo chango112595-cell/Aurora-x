@@ -3,7 +3,7 @@ Aurora Self-Debug: Why Isn't Proactive Monitoring Working?
 Aurora investigates why her integrated auto-fixing modules aren't catching errors
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 import sys
 import os

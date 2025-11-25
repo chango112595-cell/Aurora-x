@@ -16,7 +16,7 @@ Aurora 100% Power Verification
 Final comprehensive check that all systems are operational
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 from pathlib import Path
 import json

@@ -16,7 +16,7 @@ Aurora Device Programming Demonstration
 Shows Aurora's expert-level knowledge in ALL device programming languages
 """
 
-from aurora_expert_knowledge from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraExpertKnowledge
 import sys
 from pathlib import Path

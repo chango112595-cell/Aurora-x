@@ -16,7 +16,7 @@ Adaptive Learning Engine for Aurora-X
 Implements epsilon-greedy exploration with decay and cooldown
 """
 
-from __future__ from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import annotations
 
 import math

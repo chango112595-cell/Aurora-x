@@ -17,7 +17,7 @@ What am I really missing? What's not working?
 Complete honest assessment of current state vs expected capabilities
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 from pathlib import Path
 import sys

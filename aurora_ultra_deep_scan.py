@@ -17,7 +17,7 @@ Scan EVERYTHING - files, scripts, ports, servers, capabilities
 Find what exists but isn't being used properly
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 from pathlib import Path
 import json

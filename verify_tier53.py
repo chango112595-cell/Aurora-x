@@ -15,7 +15,7 @@ Quality: 10/10 (Perfect)
 Verify Tiers 66: Docker Infrastructure Mastery Integration
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraKnowledgeTiers
 
 # Aurora Performance Optimization

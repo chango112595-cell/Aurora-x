@@ -5,7 +5,7 @@ Aurora Natural Conversation Handler
 - Can generate code, answer questions, or just chat
 """
 
-from datetime from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
 
 from fastapi import APIRouter

@@ -16,7 +16,7 @@ Aurora Self-Diagnostic - What Am I Missing?
 Aurora analyzes herself to identify what's preventing 100% operation
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 import os
 from pathlib import Path

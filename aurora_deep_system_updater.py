@@ -18,7 +18,7 @@ Background synchronization and system updates
 Port: 5008
 """
 
-from flask from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Flask, jsonify, request
 from flask_cors import CORS
 import time

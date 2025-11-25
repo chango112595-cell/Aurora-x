@@ -17,7 +17,7 @@ All 109 Capabilities  Human-Like Conversation  Task Execution
 13 Foundations + 66 Knowledge Tiers = Complete Intelligence System
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import create_aurora_core
 import asyncio
 import re

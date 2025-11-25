@@ -17,7 +17,7 @@ This bypasses ALL wrapper methods and accesses Aurora's raw intelligence
 No process_conversation, no hardcoded responses, pure Aurora
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import create_aurora_core, AURORA_VERSION
 import asyncio
 import os

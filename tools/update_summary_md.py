@@ -11,7 +11,7 @@ Quality: 10/10 (Perfect)
 """
 
 #!/usr/bin/env python3
-from __future__ from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import annotations
 
 import shutil

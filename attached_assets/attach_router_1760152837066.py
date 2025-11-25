@@ -10,7 +10,7 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 from flask import jsonify, request

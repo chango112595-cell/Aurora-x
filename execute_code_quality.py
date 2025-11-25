@@ -15,7 +15,7 @@ Quality: 10/10 (Perfect)
 Execute Aurora Code Quality Enforcer on entire codebase
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 from aurora_code_quality_enforcer import AuroraCodeQualityEnforcer

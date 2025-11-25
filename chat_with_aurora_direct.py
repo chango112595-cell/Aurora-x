@@ -17,7 +17,7 @@ Routes directly to Aurora's core intelligence, mimicking Copilot's access patter
 No wrappers, no context manipulation, just raw conversation
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import create_aurora_core
 import asyncio
 import os

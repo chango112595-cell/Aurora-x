@@ -13,7 +13,7 @@ Quality: 10/10 (Perfect)
 #!/usr/bin/env python3
 """Quick verification that tiers 47-50 are loaded"""
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraKnowledgeTiers
 
 # Aurora Performance Optimization

@@ -17,7 +17,7 @@ Compare current state vs past "100% power" commits
 Check for missing advanced AI functions and tracking systems
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 from pathlib import Path
 import json
