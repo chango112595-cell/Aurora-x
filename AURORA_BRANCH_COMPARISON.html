@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aurora - Branch vs Main Comparison</title>
+    <title>Aurora - Branch vs Main Deep Comparison</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -73,13 +73,9 @@
             font-size: 1em;
         }
         
-        .search-bar input::placeholder {
-            color: #666;
-        }
-        
         .branches-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 15px;
         }
         
@@ -107,30 +103,24 @@
             font-size: 1.1em;
         }
         
-        .comparison-summary {
+        .summary {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin: 10px 0;
-        }
-        
-        .comp-item {
-            padding: 8px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 4px;
             font-size: 0.9em;
         }
         
-        .added {
-            color: #00ff88;
+        .summary-item {
+            padding: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
             border-left: 3px solid #00ff88;
-            padding-left: 10px;
         }
         
-        .removed {
+        .summary-item.removed {
+            border-left-color: #ff6b6b;
             color: #ff6b6b;
-            border-left: 3px solid #ff6b6b;
-            padding-left: 10px;
         }
         
         .click-hint {
@@ -140,7 +130,7 @@
             font-style: italic;
         }
         
-        /* Modal Styles */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -159,13 +149,13 @@
         
         .modal-content {
             background: linear-gradient(135deg, #0a0e27 0%, #1a0a3e 100%);
-            margin: 3% auto;
+            margin: 2% auto;
             padding: 30px;
             border: 2px solid #00ff88;
             border-radius: 12px;
             width: 95%;
-            max-width: 1000px;
-            max-height: 90vh;
+            max-width: 1200px;
+            max-height: 95vh;
             overflow-y: auto;
             box-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
         }
@@ -176,7 +166,6 @@
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
-            transition: color 0.3s;
         }
         
         .close-btn:hover {
@@ -196,7 +185,7 @@
             margin-bottom: 20px;
         }
         
-        .comparison-table {
+        .comparison-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
@@ -223,58 +212,62 @@
             border-bottom-color: #ffaa00;
         }
         
-        .stat-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 10px 0;
-            padding: 10px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 4px;
-        }
-        
-        .stat-label {
-            font-size: 0.9em;
-            color: #888;
-        }
-        
-        .stat-value {
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
             font-weight: bold;
-            font-size: 1.1em;
         }
         
-        .stat-value.added {
+        .status-working {
+            background: rgba(0, 255, 136, 0.2);
             color: #00ff88;
         }
         
-        .stat-value.removed {
+        .status-issues {
+            background: rgba(255, 107, 107, 0.2);
             color: #ff6b6b;
         }
         
-        .files-list {
-            margin-top: 15px;
-            max-height: 200px;
-            overflow-y: auto;
+        .feature-list {
+            list-style: none;
+            margin: 10px 0;
         }
         
-        .file-item {
+        .feature-list li {
             padding: 8px;
             margin: 5px 0;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.2);
             border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.85em;
-            word-break: break-all;
-        }
-        
-        .file-item.added {
-            color: #00ff88;
             border-left: 3px solid #00ff88;
+            font-size: 0.9em;
         }
         
-        .file-item.removed {
-            color: #ff6b6b;
-            border-left: 3px solid #ff6b6b;
+        .feature-list li.missing {
+            border-left-color: #ff6b6b;
+            color: #999;
+            opacity: 0.6;
+        }
+        
+        .summary-box {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid #00ff88;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .summary-box h4 {
+            color: #00ff88;
+            margin-bottom: 10px;
+        }
+        
+        .summary-box p {
+            margin: 5px 0;
+            color: #b0b0b0;
+            line-height: 1.6;
         }
         
         .no-results {
@@ -287,21 +280,17 @@
 </head>
 <body>
     <div class="header">
-        <h1>🌌 Aurora: Branch vs Main Comparison</h1>
-        <p>Click any branch to see exactly what changed compared to the main branch</p>
+        <h1>🌌 Aurora: Deep Branch vs Main Comparison</h1>
+        <p>Click any branch to see detailed comparison - what it has, what it's missing, and working status</p>
         
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-value" id="totalBranches">68</div>
+                <div class="stat-value">68</div>
                 <div class="stat-label">Total Branches</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value" id="aheadCount">64</div>
-                <div class="stat-label">Ahead of Main</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="modifiedCount">64</div>
-                <div class="stat-label">Changed vs Main</div>
+                <div class="stat-value">64</div>
+                <div class="stat-label">Modified vs Main</div>
             </div>
         </div>
     </div>
@@ -315,177 +304,203 @@
         </div>
     </div>
     
-    <!-- Modal for detailed comparison -->
-    <div id="branchModal" class="modal">
+    <!-- Detailed Comparison Modal -->
+    <div id="comparisonModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2 id="modalBranchName"></h2>
-            <p class="vs-label">Comparing: <strong>Main Branch</strong> ← → <strong id="branchNameComparison"></strong></p>
+            <h2 id="modalTitle"></h2>
+            <p class="vs-label">Comparing: <strong>Main Branch</strong> ← → <strong id="branchTitle2"></strong></p>
             
-            <div class="comparison-table">
-                <!-- MAIN BRANCH SECTION -->
+            <!-- COMPARISON GRID -->
+            <div class="comparison-grid">
+                <!-- MAIN BRANCH -->
                 <div class="comp-section">
                     <h3>📦 Main Branch</h3>
-                    <div class="stat-row">
-                        <div class="stat-label">Total Files:</div>
-                        <div class="stat-value" id="mainTotalFiles">-</div>
-                    </div>
-                    <div class="stat-row">
-                        <div class="stat-label">Commits:</div>
-                        <div class="stat-value" id="mainCommits">-</div>
-                    </div>
+                    <div class="status-badge status-working" id="mainStatus">Working</div>
+                    <div style="font-size: 0.9em; color: #999; margin: 10px 0;" id="mainStats"></div>
+                    
+                    <h4 style="color: #888; margin-top: 15px; margin-bottom: 10px;">Features:</h4>
+                    <ul class="feature-list" id="mainFeatures"></ul>
                 </div>
                 
-                <!-- BRANCH SECTION -->
+                <!-- BRANCH -->
                 <div class="comp-section branch">
-                    <h3 id="branchTitle" style="color: #ffaa00; border-bottom-color: #ffaa00;">🌿 Branch Name</h3>
-                    <div class="stat-row">
-                        <div class="stat-label">Total Files:</div>
-                        <div class="stat-value" id="branchTotalFiles">-</div>
-                    </div>
-                    <div class="stat-row">
-                        <div class="stat-label">Status:</div>
-                        <div class="stat-value" id="branchStatus">-</div>
-                    </div>
+                    <h3 id="branchSectionTitle">🌿 Branch</h3>
+                    <div class="status-badge" id="branchStatus">Working</div>
+                    <div style="font-size: 0.9em; color: #999; margin: 10px 0;" id="branchStats"></div>
+                    
+                    <h4 style="color: #ffaa00; margin-top: 15px; margin-bottom: 10px;">Features:</h4>
+                    <ul class="feature-list" id="branchFeatures"></ul>
                 </div>
             </div>
             
-            <!-- WHAT CHANGED -->
-            <div class="comparison-table">
-                <!-- FILES ADDED -->
+            <!-- WHAT'S DIFFERENT -->
+            <div class="comparison-grid">
+                <!-- UNIQUE FEATURES -->
                 <div class="comp-section">
-                    <h3>✅ Files Branch Added (Not in Main)</h3>
-                    <div class="stat-row">
-                        <div class="stat-label">New Files:</div>
-                        <div class="stat-value added" id="filesAddedCount">0</div>
-                    </div>
-                    <div class="files-list" id="filesAddedList"></div>
+                    <h3>✨ What This Branch HAS (Not in Main)</h3>
+                    <ul class="feature-list" id="uniqueFeatures"></ul>
                 </div>
                 
-                <!-- FILES REMOVED -->
-                <div class="comp-section">
-                    <h3>❌ Files Branch Removed (Deleted from Main)</h3>
-                    <div class="stat-row">
-                        <div class="stat-label">Removed Files:</div>
-                        <div class="stat-value removed" id="filesRemovedCount">0</div>
-                    </div>
-                    <div class="files-list" id="filesRemovedList"></div>
+                <!-- MISSING FEATURES -->
+                <div class="comp-section branch">
+                    <h3 style="color: #ff9999; border-bottom-color: #ff9999;">❌ What This Branch DOESN'T HAVE (Missing from Main)</h3>
+                    <ul class="feature-list missing" id="missingFeatures"></ul>
                 </div>
             </div>
             
-            <!-- COMMIT INFO -->
-            <div class="comp-section" style="margin-top: 20px;">
-                <h3>📝 Last Commit in Branch</h3>
-                <div class="file-item" id="lastCommitText" style="border-left: none; color: #b0b0b0;"></div>
+            <!-- FILES SUMMARY -->
+            <div class="comparison-grid">
+                <div class="comp-section">
+                    <h3>📊 Files Added</h3>
+                    <div id="filesAddedSummary" style="font-size: 0.9em;"></div>
+                </div>
+                <div class="comp-section">
+                    <h3>📊 Files Removed</h3>
+                    <div id="filesRemovedSummary" style="font-size: 0.9em;"></div>
+                </div>
             </div>
+            
+            <!-- ISSUES / RECOMMENDATIONS -->
+            <div class="summary-box" id="issuesBox"></div>
+            <div class="summary-box" id="recommendationBox"></div>
         </div>
     </div>
     
     <script>
         let branchData = {};
-        let mainStats = { total_files: 0 };
+        let mainFeatures = {};
+        let branchFeatures = {};
         
-        fetch('/branch_analysis.json')
-            .then(r => r.json())
-            .then(data => {
-                branchData = data;
-                // Main branch is the reference
-                if (data.main) {
-                    mainStats = data.main;
-                } else {
-                    // Calculate from first branch if main not explicitly listed
-                    mainStats.total_files = 3331; // Approximate based on most branches
-                }
-                renderBranches();
-            })
-            .catch(e => console.error('Error loading branch data:', e));
+        // Load all analysis data
+        Promise.all([
+            fetch('/branch_analysis.json').then(r => r.json()),
+            fetch('/main_features.json').then(r => r.json()),
+            fetch('/branch_features.json').then(r => r.json()),
+        ]).then(([branches, main, features]) => {
+            branchData = branches;
+            mainFeatures = main;
+            branchFeatures = features;
+            renderBranches();
+        }).catch(e => console.error('Load error:', e));
         
         function renderBranches() {
             const container = document.getElementById('branchesContainer');
             const branches = Object.entries(branchData)
-                .filter(([name]) => name !== 'main')
-                .sort((a, b) => {
-                    const aAhead = parseInt(a[1].ahead || 0);
-                    const bAhead = parseInt(b[1].ahead || 0);
-                    return bAhead - aAhead;
-                });
-            
-            if (branches.length === 0) {
-                container.innerHTML = '<div class="no-results">No branches found</div>';
-                return;
-            }
+                .filter(([name]) => branchFeatures[name])
+                .sort((a, b) => parseInt(b[1].ahead || 0) - parseInt(a[1].ahead || 0));
             
             container.innerHTML = branches.map(([name, data]) => {
-                const ahead = parseInt(data.ahead || 0);
-                const behind = parseInt(data.behind || 0);
+                const features = branchFeatures[name] || {};
                 const added = data.added_files || 0;
                 const removed = data.removed_files || 0;
                 
-                let statusText = '';
-                if (ahead > 0 && behind === 0) statusText = `+${ahead} new commits`;
-                else if (ahead > 0 && behind > 0) statusText = `+${ahead} new, ${behind} behind`;
-                else if (behind > 0) statusText = `${behind} behind main`;
-                else statusText = 'Even with main';
-                
                 return `
-                    <div class="branch-card" onclick="openModal('${name.replace(/'/g, "\\'")}', ${JSON.stringify(data).replace(/"/g, '&quot;')})" data-search="${name.toLowerCase()} ${(data.last_commit || '').toLowerCase()}">
+                    <div class="branch-card" onclick="openComparison('${name.replace(/'/g, "\\'")}')">
                         <div class="branch-name">${escapeHtml(name)}</div>
-                        <div class="comparison-summary">
-                            <div class="comp-item added">+${added} new files</div>
-                            <div class="comp-item removed">−${removed} deleted</div>
+                        <div class="summary">
+                            <div class="summary-item">+${added} added</div>
+                            <div class="summary-item removed">−${removed} removed</div>
                         </div>
                         <div style="font-size: 0.85em; color: #999; margin: 8px 0;">
-                            ${statusText}
+                            Status: <strong style="color: ${features.status === 'Working' ? '#00ff88' : '#ff6b6b'}">${features.status}</strong>
                         </div>
-                        <div class="click-hint">→ Click to compare with main</div>
+                        <div class="click-hint">→ Click for detailed comparison</div>
                     </div>
                 `;
             }).join('');
         }
         
-        function openModal(branchName, data) {
-            document.getElementById('modalBranchName').textContent = branchName;
-            document.getElementById('branchNameComparison').textContent = branchName;
-            document.getElementById('branchTitle').textContent = `🌿 ${branchName}`;
+        function openComparison(branchName) {
+            const data = branchData[branchName] || {};
+            const branch = branchFeatures[branchName] || {};
+            const main = mainFeatures || {};
+            
+            // Set header
+            document.getElementById('modalTitle').textContent = `Detailed Comparison: ${branchName}`;
+            document.getElementById('branchTitle2').textContent = branchName;
+            document.getElementById('branchSectionTitle').textContent = `🌿 ${branchName}`;
             
             // Main branch stats
-            document.getElementById('mainTotalFiles').textContent = mainStats.total_files || 3331;
-            document.getElementById('mainCommits').textContent = 'reference';
+            document.getElementById('mainStats').innerHTML = `
+                <strong>Total Files:</strong> ${main.total_files || 'N/A'}<br>
+                <strong>Status:</strong> ${main.status}
+            `;
             
             // Branch stats
-            document.getElementById('branchTotalFiles').textContent = data.total_files || 0;
-            const ahead = parseInt(data.ahead || 0);
-            const behind = parseInt(data.behind || 0);
-            let statusText = `+${ahead} commits`;
-            if (behind > 0) statusText += `, ${behind} behind`;
-            document.getElementById('branchStatus').textContent = statusText;
+            document.getElementById('branchStats').innerHTML = `
+                <strong>Total Files:</strong> ${data.total_files || 'N/A'}<br>
+                <strong>Commits ahead:</strong> ${data.ahead || 0}<br>
+                <strong>Commits behind:</strong> ${data.behind || 0}
+            `;
             
-            // Files changed
-            const added = data.added_files || 0;
-            const removed = data.removed_files || 0;
+            // Status badges
+            const mainStatusEl = document.querySelector('.status-working');
+            mainStatusEl.textContent = main.status;
+            mainStatusEl.className = `status-badge status-${main.status === 'Working' ? 'working' : 'issues'}`;
             
-            document.getElementById('filesAddedCount').textContent = added;
-            document.getElementById('filesRemovedCount').textContent = removed;
+            const branchStatusEl = document.getElementById('branchStatus');
+            branchStatusEl.textContent = branch.status;
+            branchStatusEl.className = `status-badge status-${branch.status === 'Working' ? 'working' : 'issues'}`;
             
-            // File samples
-            const addedFiles = data.added_sample || [];
-            document.getElementById('filesAddedList').innerHTML = addedFiles.length > 0
-                ? addedFiles.map(f => `<div class="file-item added">+ ${escapeHtml(f)}</div>`).join('')
-                : '<div style="color: #666; padding: 10px;">No new files (uses main\'s structure)</div>';
+            // Features lists
+            const mainFeaturesList = (main.features || {});
+            const branchFeaturesList = (branch.features || {});
             
-            const removedFiles = data.removed_sample || [];
-            document.getElementById('filesRemovedList').innerHTML = removedFiles.length > 0
-                ? removedFiles.map(f => `<div class="file-item removed">− ${escapeHtml(f)}</div>`).join('')
-                : '<div style="color: #666; padding: 10px;">No files removed (keeps main\'s structure)</div>';
+            document.getElementById('mainFeatures').innerHTML = Object.entries(mainFeaturesList)
+                .map(([name, has]) => `<li ${has ? '' : 'class="missing"'}>${has ? '✓' : '✗'} ${name}</li>`)
+                .join('');
             
-            // Commit info
-            document.getElementById('lastCommitText').textContent = data.last_commit || 'No commits';
+            document.getElementById('branchFeatures').innerHTML = Object.entries(branchFeaturesList)
+                .map(([name, has]) => `<li ${has ? '' : 'class="missing"'}>${has ? '✓' : '✗'} ${name}</li>`)
+                .join('');
             
-            document.getElementById('branchModal').classList.add('active');
+            // Unique features
+            const unique = branch.unique_features || [];
+            document.getElementById('uniqueFeatures').innerHTML = unique.length > 0
+                ? unique.map(f => `<li style="border-left-color: #ffaa00; color: #ffaa00;">+ ${f}</li>`).join('')
+                : '<li style="color: #666;">No unique features (same as main)</li>';
+            
+            // Missing features
+            const missing = branch.missing_features || [];
+            document.getElementById('missingFeatures').innerHTML = missing.length > 0
+                ? missing.map(f => `<li>− ${f}</li>`).join('')
+                : '<li style="color: #666;">Has all main features</li>';
+            
+            // Files summary
+            document.getElementById('filesAddedSummary').innerHTML = `
+                <strong style="color: #00ff88;">${data.added_files || 0} files added</strong><br>
+                <span style="color: #888;">Sample: ${(data.added_sample || []).slice(0, 3).join(', ') || 'N/A'}</span>
+            `;
+            
+            document.getElementById('filesRemovedSummary').innerHTML = `
+                <strong style="color: #ff6b6b;">${data.removed_files || 0} files removed</strong><br>
+                <span style="color: #888;">Sample: ${(data.removed_sample || []).slice(0, 3).join(', ') || 'N/A'}</span>
+            `;
+            
+            // Issues
+            const issues = branch.issues || [];
+            document.getElementById('issuesBox').innerHTML = `
+                <h4>⚠️ Status Issues</h4>
+                <p>${issues.length > 0 ? issues.map(i => `• ${i}`).join('<br>') : 'No issues detected'}</p>
+            `;
+            
+            // Recommendation
+            let rec = 'This branch ';
+            if (unique.length > 0) rec += `adds ${unique.length} new features. `;
+            if (missing.length > 0) rec += `but is missing ${missing.length} from main. `;
+            rec += `Status: ${branch.status}. `;
+            
+            document.getElementById('recommendationBox').innerHTML = `
+                <h4>💡 Summary</h4>
+                <p>${rec}</p>
+            `;
+            
+            document.getElementById('comparisonModal').classList.add('active');
         }
         
         function closeModal() {
-            document.getElementById('branchModal').classList.remove('active');
+            document.getElementById('comparisonModal').classList.remove('active');
         }
         
         function escapeHtml(text) {
@@ -495,24 +510,15 @@
         }
         
         function filterBranches() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const search = document.getElementById('searchInput').value.toLowerCase();
             const cards = document.querySelectorAll('.branch-card');
-            let visibleCount = 0;
-            
             cards.forEach(card => {
-                const searchText = card.getAttribute('data-search');
-                if (searchText.includes(searchTerm)) {
-                    card.style.display = '';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = card.textContent.toLowerCase().includes(search) ? '' : 'none';
             });
         }
         
         window.onclick = function(event) {
-            const modal = document.getElementById('branchModal');
-            if (event.target === modal) closeModal();
+            if (event.target === document.getElementById('comparisonModal')) closeModal();
         }
     </script>
 </body>

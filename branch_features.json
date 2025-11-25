@@ -1,0 +1,1685 @@
+{
+  "badges": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "copilot/fix-ci-cd-linting-issues": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "copilot/fix-e2e-workflow-issue": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "copilot/fix-linting-issues-in-ci-workflow": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "copilot/fix-semgrep-yaml-issue": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "copilot/replace-insecure-hash-algorithms": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "fix/remaining-linting-errors": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "integration-branch": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "local-features-backup": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "main": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "remote-features-backup": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3"
+    ]
+  },
+  "replit-agent": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "gitsafe-backup": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "gitsafe-backup/main": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin/aurora-ful-power": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3"
+    ]
+  },
+  "origin/aurora-nexus-v2-integration": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/aurora-working-restore": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/badges": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/codespace-wretched-gravestone-pj5rxv7rx677crw9v": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-checks-failing": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-checks-failure-issue": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-checks-not-passing": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-ci-cd-linting-issues": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-connection-errors-workflow": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-e2e-workflow-issue": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-failing-ci-job": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-failing-workflows": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-linting-issues-in-ci-workflow": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-semgrep-yaml-issue": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-windows-invalid-filenames": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-workflow-failures": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/fix-workflow-issues": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/help-pull-request-30": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/implement-configuration-updates": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/copilot/replace-insecure-hash-algorithms": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/dependabot/docker/node-25-alpine": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/docker/python-3.14-slim": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/github_actions/actions/setup-go-6": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/github_actions/actions/upload-artifact-5": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/github_actions/codecov/codecov-action-5": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/github_actions/docker/build-push-action-6": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/github_actions/github/codeql-action-4": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/bandit-1.8.6": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin/dependabot/pip/bcrypt-4.3.0": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/build-1.3.0": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin/dependabot/pip/detect-secrets-1.5.0": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/dev-tools-6cc04861e6": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin/dependabot/pip/flake8-7.3.0": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin/dependabot/pip/pip-audit-2.9.0": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/pip-licenses-4.5.1": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/pipdeptree-2.28.0": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/pyjwt-2.10.1": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/pylint-3.3.9": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/pyre-check-0.9.25": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/safety-3.7.0": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin/dependabot/pip/semgrep-1.136.0": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/sphinx-7.4.7": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin/dependabot/pip/testing-4bb223f47c": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin/dependabot/pip/urllib3-2.5.0": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/dependabot/pip/wheel-0.45.1": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin/draft": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/fix-windows-compatibility": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/fix/remaining-linting-errors": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/integration-branch": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  },
+  "origin/main": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": []
+  },
+  "origin/replit-agent": {
+    "status": "Issues",
+    "issues": [
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ]
+  },
+  "origin/unified-aurora": {
+    "status": "Issues",
+    "issues": [
+      "Virtual env/cache bloat",
+      "Contains backups/old files"
+    ],
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true,
+      "Documentation": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ]
+  }
+}
