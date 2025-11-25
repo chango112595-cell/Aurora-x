@@ -25,8 +25,8 @@ pip-licenses==4.3.3              # License checker
 semgrep==1.136.0                  # Lightweight SAST tool
 
 # Web Security (for API testing)
-requests>=2.32.0                 # HTTP library
-urllib3>=2.2.0                   # HTTP client
+requests==2.31.0                 # HTTP library
+urllib3==2.5.0                   # HTTP client
 
 # Additional Security Tools
 cryptography==41.0.7             # Cryptographic recipes and primitives
