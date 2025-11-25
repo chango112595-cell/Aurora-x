@@ -19,7 +19,7 @@ bandit==1.7.6
 safety==3.7.0
 
 # Documentation
-sphinx==7.2.6
+sphinx==7.4.7
 sphinx-rtd-theme==2.0.0
 
 # Build Tools
