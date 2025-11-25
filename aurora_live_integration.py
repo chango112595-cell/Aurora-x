@@ -137,7 +137,7 @@ class AuroraLiveIntegration:
         print(f"[OK] Response: {response['status_code']}")
         return response
 
-    def monitor_server_health(self, url: str, _______interval_seconds: int = 5) -> dict[str, Any]:
+    def monitor_server_health(self, url: str, ________________interval_seconds: int = 5) -> dict[str, Any]:
         """
         Monitor server health in real-time
 
@@ -324,7 +324,7 @@ class AuroraLiveIntegration:
         print(f"[OK] WebSocket connected ({connection.latency_ms}ms)")
         return connection
 
-    def send_websocket_message(self, connection_id: str, _______message: dict[str, Any]) -> bool:
+    def send_websocket_message(self, connection_id: str, ________________message: dict[str, Any]) -> bool:
         """
         Send message through WebSocket connection
 

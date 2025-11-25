@@ -95,7 +95,7 @@ def integrate_autonomous_systems():
     print("\n[EMOJI] Available Commands:")
     for cmd_name, cmd_info in commands.items():
         print(f"  • {cmd_name}")
-        print(f"    → {cmd_info['description']}")
+        print(f"    -> {cmd_info['description']}")
         print(f"    $ {cmd_info['command']}")
 
     # Create system status report

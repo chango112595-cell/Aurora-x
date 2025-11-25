@@ -1016,7 +1016,7 @@ def print_ultimate_grandmaster() -> None:
 
     print("\n" + "=" * 90)
     print("[AURORA] AURORA ULTIMATE OMNISCIENT GRANDMASTER [AURORA]")
-    print("Knowledge Spanning: Ancient Computational Era → Future Post-Singularity")
+    print("Knowledge Spanning: Ancient Computational Era -> Future Post-Singularity")
     print("COMPLETE OMNISCIENCE: 25 MASTERY TIERS - EVERY DOMAIN FROM ANCIENT TO FUTURE")
     print("=" * 90)
     print(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")

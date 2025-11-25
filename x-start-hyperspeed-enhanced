@@ -268,15 +268,10 @@ if os.path.exists("aurora_ultimate_omniscient_grandmaster.py"):
 print("\n━" * 80)
 print("👁️ PHASE 5: ADVANCED TIER CAPABILITIES")
 print("━" * 80)
-if os.path.exists("aurora_visual_understanding.py"):
-    start_with_retry([PYTHON_CMD, "aurora_visual_understanding.py"],
-                     "Visual Understanding (Tier 43)", port=5022)
+# Note: Visual/Test/Quality scripts are demos (not services), removed from launcher
 if os.path.exists("aurora_live_integration.py"):
     start_with_retry([PYTHON_CMD, "aurora_live_integration.py"],
                      "Live Integration (Tier 44)", port=5023)
-if os.path.exists("aurora_test_generator.py"):
-    start_with_retry([PYTHON_CMD, "aurora_test_generator.py"],
-                     "Test Generator (Tier 45)", port=5024)
 if os.path.exists("aurora_security_auditor.py"):
     start_with_retry([PYTHON_CMD, "aurora_security_auditor.py"],
                      "Security Auditor (Tier 53)", port=5025)
@@ -285,11 +280,8 @@ if os.path.exists("aurora_security_auditor.py"):
 print("\n━" * 80)
 print("📊 PHASE 6: CODE QUALITY SYSTEMS")
 print("━" * 80)
-if os.path.exists("aurora_code_quality_enforcer.py"):
-    start_with_retry([PYTHON_CMD, "aurora_code_quality_enforcer.py"],
-                     "Code Quality Enforcer", port=5026)
 if os.path.exists("aurora_pylint_prevention.py"):
-    start_with_retry([PYTHON_CMD, "aurora_pylint_prevention.py"],
+    start_with_retry([PYTHON_CMD, "aurora_pylint_prevention.py", "monitor", "60"],
                      "Pylint Prevention", port=5027)
 
 # PHASE 7: WEB SERVICES

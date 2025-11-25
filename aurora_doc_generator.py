@@ -450,7 +450,7 @@ User → Frontend → API Gateway → Backend Services → Database
 
     # === PRIVATE HELPER METHODS ===
 
-    def _extract_functions(self, _______file_path: str) -> list[dict]:
+    def _extract_functions(self, ________________file_path: str) -> list[dict]:
         """Extract functions from file"""
         return [
             {
@@ -461,7 +461,7 @@ User → Frontend → API Gateway → Backend Services → Database
             }
         ]
 
-    def _extract_classes(self, _______file_path: str) -> list[dict]:
+    def _extract_classes(self, ________________file_path: str) -> list[dict]:
         """Extract classes from file"""
         return [
             {"name": "DataProcessor", "methods": ["process", "validate"], "description": "Main data processing class"}
@@ -491,7 +491,7 @@ User → Frontend → API Gateway → Backend Services → Database
                 docs += f"```python\n{item['signature']}\n```\n\n"
         return docs
 
-    def _analyze_project(self, _______path: str) -> dict:
+    def _analyze_project(self, ________________path: str) -> dict:
         """Analyze project structure"""
         return {
             "name": "Aurora-x",
@@ -508,7 +508,7 @@ User → Frontend → API Gateway → Backend Services → Database
         """Format features list"""
         return "\n".join([f"- [OK] {f}" for f in features])
 
-    def _generate_usage_examples(self, _______info: dict) -> str:
+    def _generate_usage_examples(self, ________________info: dict) -> str:
         """Generate usage examples"""
         return """```python
 from aurora_core import AuroraCoreIntelligence
@@ -517,7 +517,7 @@ aurora = AuroraCoreIntelligence()
 result = aurora.process_task("Generate API docs")
 ```"""
 
-    def _document_config(self, _______info: dict) -> str:
+    def _document_config(self, ________________info: dict) -> str:
         """Document configuration"""
         return """Configuration options:
 - `PORT`: Server port (default: 5000)
@@ -556,11 +556,11 @@ result = aurora.process_task("Generate API docs")
             }
         return paths
 
-    def _generate_schemas(self, _______routes: list[dict]) -> dict:
+    def _generate_schemas(self, ________________routes: list[dict]) -> dict:
         """Generate OpenAPI schemas"""
         return {"Error": {"type": "object", "properties": {"message": {"type": "string"}}}}
 
-    def _analyze_architecture(self, _______path: str) -> dict:
+    def _analyze_architecture(self, ________________path: str) -> dict:
         """Analyze project architecture"""
         return {
             "overview": "Aurora is a modular AI code system",
@@ -569,11 +569,11 @@ result = aurora.process_task("Generate API docs")
             "database": {"type": "PostgreSQL", "schema_files": 15},
         }
 
-    def _find_outdated_docs(self, _______docs_dir: str, _______source_dir: str) -> list[str]:
+    def _find_outdated_docs(self, ________________docs_dir: str, ________________source_dir: str) -> list[str]:
         """Find outdated documentation files"""
         return ["api.md", "readme.md"]
 
-    def _update_doc_file(self, _______doc_file: str, _______source_dir: str):
+    def _update_doc_file(self, ________________doc_file: str, ________________source_dir: str):
         """Update a documentation file"""
 
     def get_capabilities_summary(self) -> dict[str, Any]:
