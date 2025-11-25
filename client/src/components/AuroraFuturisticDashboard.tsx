@@ -11,11 +11,33 @@ export default function AuroraFuturisticDashboard() {
 
   // Simulate quantum fluctuations
   useEffect(() => {
-    const interval = setInterval(() => {
+    const quantumInterval = setInterval(() => {
       setQuantumCoherence(prev => Math.max(95, Math.min(100, prev + (Math.random() - 0.5) * 2)));
       setNeuralActivity(prev => Math.max(95, Math.min(100, prev + (Math.random() - 0.5) * 3)));
     }, 2000);
-    return () => clearInterval(interval);
+    
+    // Fetch Aurora status and scores
+    const fetchAuroraData = async () => {
+      try {
+        const statusRes = await fetch('/api/health');
+        if (!statusRes.ok) throw new Error('Health check failed');
+        const statusData = await statusRes.json();
+        console.log('Aurora Health Status:', statusData);
+        
+        // You can update state here with the real data
+        // setAuroraStatus(statusData);
+      } catch (error) {
+        console.log('Aurora API not available:', error);
+      }
+    };
+    
+    fetchAuroraData();
+    const fetchInterval = setInterval(fetchAuroraData, 5000); // Update every 5 seconds
+    
+    return () => {
+      clearInterval(quantumInterval);
+      clearInterval(fetchInterval);
+    };
   }, []);
 
   const foundationalTasks = [

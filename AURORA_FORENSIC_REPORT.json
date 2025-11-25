@@ -1,0 +1,24 @@
+{
+  "analysis_date": "2025-11-22",
+  "total_files_scanned": 4260,
+  "found_by_category": {
+    "Quality Tracker/Scoring": 2,
+    "Evolution/Progress": 13,
+    "Performance Metrics": 8,
+    "Reasoning/Decision Log": 1,
+    "API Endpoints": 56,
+    "Orchestration/Controller": 21
+  },
+  "hidden_functionality": {
+    "Code Comparison": 13,
+    "Quality Scoring": 48,
+    "Database/Persistence": 67,
+    "Real-time Updates": 17,
+    "API Endpoints": 16,
+    "Evolution Tracking": 11,
+    "Performance Metrics": 19,
+    "Task Tracking": 4
+  },
+  "unused_imports": 28,
+  "categories_analyzed": 8
+}

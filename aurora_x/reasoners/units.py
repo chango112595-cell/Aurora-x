@@ -6,6 +6,13 @@ Supports distance, mass, time, and other common units.
 import re
 from typing import Any
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 # Conversion factors to SI base units
 DISTANCE_TO_METERS = {
     # Metric

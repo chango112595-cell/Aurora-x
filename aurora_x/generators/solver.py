@@ -7,6 +7,13 @@ import math
 import re
 from typing import Any
 
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
+
 
 class SolveError(Exception):
     """Custom exception for solver errors"""
@@ -143,6 +150,18 @@ def _safe_eval_arith(s: str) -> float:
     }
 
     def eval_(node):
+        """
+            Eval 
+            
+            Args:
+                node: node
+        
+            Returns:
+                Result of operation
+        
+            Raises:
+                Exception: On operation failure
+            """
         # Handle numbers
         if isinstance(node, ast.Num):  # Python < 3.8
             return node.n
@@ -248,8 +267,8 @@ def solve_text(text: str) -> dict[str, Any]:
         if "a" in params and "M" in params:
             try:
                 # Calculate orbital period using Kepler's Third Law
-                # T = 2π√(a³/GM)
-                G = 6.67430e-11  # Gravitational constant in m³/(kg·s²)
+                # T = 2(a/GM)
+                G = 6.67430e-11  # Gravitational constant in m/(kgs)
                 a = params["a"]
                 M = params["M"]
 

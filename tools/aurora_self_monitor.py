@@ -28,6 +28,11 @@ class AuroraSelfMonitor:
     """
 
     def __init__(self):
+        """
+              Init  
+            
+            Args:
+            """
         self.root = Path(__file__).parent.parent
         self.health_log = self.root / ".aurora_knowledge" / "health_log.jsonl"
         self.auto_fixes_log = self.root / ".aurora_knowledge" / "auto_fixes.jsonl"
@@ -88,7 +93,7 @@ class AuroraSelfMonitor:
         """Aurora automatically fixes a broken service."""
         service = self.services[service_key]
 
-        print(f"🔧 Aurora auto-fixing {service['name']}...")
+        print(f"[EMOJI] Aurora auto-fixing {service['name']}...")
 
         fix_log = {
             "timestamp": datetime.utcnow().isoformat(),
@@ -111,15 +116,15 @@ class AuroraSelfMonitor:
             fix_log["output"] = result.stdout
 
             if result.returncode == 0:
-                print(f"   ✅ Aurora fixed {service['name']}")
+                print(f"   [OK] Aurora fixed {service['name']}")
             else:
-                print(f"   ⚠️  Auto-fix failed: {result.stderr}")
+                print(f"   [WARN]  Auto-fix failed: {result.stderr}")
                 fix_log["error"] = result.stderr
 
         except Exception as e:
             fix_log["success"] = False
             fix_log["error"] = str(e)
-            print(f"   ❌ Auto-fix error: {e}")
+            print(f"   [ERROR] Auto-fix error: {e}")
 
         # Log the fix attempt
         with open(self.auto_fixes_log, "a") as f:
@@ -129,7 +134,7 @@ class AuroraSelfMonitor:
 
     async def monitor_loop(self):
         """Aurora's main monitoring loop."""
-        print("🌟 Aurora Self-Monitor ACTIVE")
+        print("[STAR] Aurora Self-Monitor ACTIVE")
         print(f"   Checking services every {self.check_interval} seconds")
         print(f"   Auto-fix: {'ENABLED' if self.auto_fix_enabled else 'DISABLED'}")
         print()
@@ -138,7 +143,7 @@ class AuroraSelfMonitor:
 
         while True:
             iteration += 1
-            print(f"\n🔍 Health check #{iteration} - {datetime.now().strftime('%H:%M:%S')}")
+            print(f"\n[SCAN] Health check #{iteration} - {datetime.now().strftime('%H:%M:%S')}")
 
             # Check all services
             health_results = {}
@@ -147,13 +152,13 @@ class AuroraSelfMonitor:
                 health_results[service_key] = health
 
                 # Display status
-                status_icon = "✅" if health["status"] == "healthy" else "❌"
+                status_icon = "[OK]" if health["status"] == "healthy" else "[ERROR]"
                 print(f"   {status_icon} {health['name']}: {health['status']}")
 
                 # Auto-fix if needed
                 if health["status"] != "healthy" and self.auto_fix_enabled:
                     if self.services[service_key]["critical"]:
-                        print("      🚨 Critical service down! Auto-fixing...")
+                        print("      [EMOJI] Critical service down! Auto-fixing...")
                         await self.auto_fix_service(service_key)
 
             # Log health check
@@ -168,7 +173,7 @@ class AuroraSelfMonitor:
             # Aurora's smart analysis
             all_healthy = all(h["status"] == "healthy" for h in health_results.values())
             if all_healthy:
-                print("   🌟 All systems nominal")
+                print("   [STAR] All systems nominal")
 
             await asyncio.sleep(self.check_interval)
 

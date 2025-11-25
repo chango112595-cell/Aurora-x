@@ -3,6 +3,7 @@ Integration Tests for Aurora Services
 Tests service-to-service communication and workflows
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import httpx
 import pytest
 
@@ -67,7 +68,7 @@ class TestEndToEndWorkflow:
 
     @pytest.mark.asyncio
     async def test_nl_to_project_workflow(self, sample_nl_input):
-        """Test full NL → Spec → Project workflow"""
+        """Test full NL -> Spec -> Project workflow"""
         async with httpx.AsyncClient(timeout=30.0) as client:
             try:
                 # Step 1: Submit NL input to Bridge
@@ -117,7 +118,7 @@ class TestHealthCheckPropagation:
                 try:
                     response = await client.get(f"http://localhost:{port}/api/health")
                     health_statuses.append((port, response.status_code == 200))
-                except:
+                except Exception as e:
                     health_statuses.append((port, False))
 
             # If any service is running, test passes (we're just checking connectivity)

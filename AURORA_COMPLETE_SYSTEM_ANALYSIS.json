@@ -1,6 +1,7 @@
 {
   "orchestrators": [
     {
+<<<<<<< HEAD
       "file": "aurora_autonomous_agent.py",
       "size": 20408,
       "classes": [
@@ -13,6 +14,44 @@
     {
       "file": "aurora_autonomous_lint_fixer.py",
       "size": 6778,
+=======
+      "file": "aurora_analyze_all_branches.py",
+      "size": 15138,
+      "classes": [
+        "AuroraBranchAnalyzer"
+      ],
+      "key_methods": [
+        "run_complete_analysis"
+      ]
+    },
+    {
+      "file": "aurora_analyze_enforcer_full_power.py",
+      "size": 15915,
+      "classes": [
+        "AuroraEnforcerAnalyzer"
+      ],
+      "key_methods": []
+    },
+    {
+      "file": "aurora_api_gateway.py",
+      "size": 3925,
+      "classes": [
+        "APIGateway"
+      ],
+      "key_methods": []
+    },
+    {
+      "file": "aurora_authentic.py",
+      "size": 11518,
+      "classes": [
+        "AuroraAuthentic"
+      ],
+      "key_methods": []
+    },
+    {
+      "file": "aurora_autonomous_lint_fixer.py",
+      "size": 7571,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraLintFixer"
       ],
@@ -23,7 +62,11 @@
     },
     {
       "file": "aurora_autonomous_pylint_fixer.py",
+<<<<<<< HEAD
       "size": 16399,
+=======
+      "size": 17169,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutonomousFixer"
       ],
@@ -33,23 +76,60 @@
     },
     {
       "file": "aurora_autonomous_self_improve.py",
+<<<<<<< HEAD
       "size": 12266,
+=======
+      "size": 12655,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfImprover"
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "aurora_auto_organize.py",
       "size": 8964,
       "classes": [
         "AuroraAutoOrganizer"
+=======
+      "file": "aurora_chat_server.py",
+      "size": 12307,
+      "classes": [
+        "AuroraFullPowerChat"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "aurora_complete_system_analysis.py",
       "size": 19013,
+=======
+      "file": "aurora_check_architecture.py",
+      "size": 22683,
+      "classes": [
+        "AuroraArchitectureChecker"
+      ],
+      "key_methods": [
+        "check_orchestration_flow",
+        "run_complete_check"
+      ]
+    },
+    {
+      "file": "aurora_complete_problem_fixer.py",
+      "size": 16381,
+      "classes": [
+        "AuroraCompleteFixer"
+      ],
+      "key_methods": [
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_complete_system_analysis.py",
+      "size": 20508,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraCompleteSystemAnalyzer"
       ],
@@ -60,6 +140,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_complete_system_update.py",
       "size": 27757,
       "classes": [
@@ -72,14 +153,39 @@
     {
       "file": "aurora_comprehensive_verification.py",
       "size": 14066,
+=======
+      "file": "aurora_comprehensive_branch_analyzer.py",
+      "size": 28491,
+      "classes": [
+        "AuroraComprehensiveBranchAnalyzer"
+      ],
+      "key_methods": []
+    },
+    {
+      "file": "aurora_comprehensive_verification.py",
+      "size": 14963,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSystemVerification"
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "aurora_core.py",
       "size": 111786,
+=======
+      "file": "aurora_conscious.py",
+      "size": 15104,
+      "classes": [
+        "AuroraConscious"
+      ],
+      "key_methods": []
+    },
+    {
+      "file": "aurora_core.py",
+      "size": 101136,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraFoundations",
         "AuroraKnowledgeTiers",
@@ -90,12 +196,20 @@
         "_get_task_execute",
         "_get_tier_orchestrator",
         "start_server",
+<<<<<<< HEAD
+=======
+        "run_code_quality_scan",
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
         "start_service"
       ]
     },
     {
       "file": "aurora_core_original.py",
+<<<<<<< HEAD
       "size": 88460,
+=======
+      "size": 88809,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraFoundations",
         "AuroraKnowledgeTiers",
@@ -111,7 +225,11 @@
     },
     {
       "file": "aurora_core_templates_backup.py",
+<<<<<<< HEAD
       "size": 143261,
+=======
+      "size": 144065,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraFoundations",
         "AuroraKnowledgeTiers",
@@ -126,8 +244,33 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_deep_investigation.py",
       "size": 12732,
+=======
+      "file": "aurora_correct_power_and_activate.py",
+      "size": 17017,
+      "classes": [
+        "AuroraRealPowerActivation"
+      ],
+      "key_methods": [
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_create_missing_services.py",
+      "size": 29330,
+      "classes": [
+        "AuroraServiceCreator"
+      ],
+      "key_methods": [
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_deep_investigation.py",
+      "size": 14035,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDeepInvestigation"
       ],
@@ -139,7 +282,11 @@
     },
     {
       "file": "aurora_deep_self_analysis.py",
+<<<<<<< HEAD
       "size": 15290,
+=======
+      "size": 16727,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDeepAnalysis"
       ],
@@ -148,16 +295,24 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_deep_system_updater.py",
       "size": 13955,
       "classes": [
         "AuroraDeepSystemUpdater"
+=======
+      "file": "aurora_deep_self_comparison.py",
+      "size": 14705,
+      "classes": [
+        "AuroraDeepComparison"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ],
       "key_methods": [
         "run"
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_doc_generator.py",
       "size": 18397,
       "classes": [
@@ -170,6 +325,51 @@
     {
       "file": "aurora_fix_all_170_problems.py",
       "size": 13375,
+=======
+      "file": "aurora_deep_system_analysis.py",
+      "size": 14406,
+      "classes": [
+        "AuroraDeepAnalysis"
+      ],
+      "key_methods": [
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_enhancement_orchestrator.py",
+      "size": 4288,
+      "classes": [
+        "AuroraEnhancementOrchestrator"
+      ],
+      "key_methods": [
+        "execute"
+      ]
+    },
+    {
+      "file": "aurora_final_absolute_10_enforcer.py",
+      "size": 17705,
+      "classes": [
+        "AuroraFinalAbsolute10Enforcer"
+      ],
+      "key_methods": [
+        "execute_final_absolute_10_enforcement"
+      ]
+    },
+    {
+      "file": "aurora_find_everything.py",
+      "size": 26101,
+      "classes": [
+        "AuroraComprehensiveDiscovery"
+      ],
+      "key_methods": [
+        "find_orchestration_systems",
+        "run_complete_discovery"
+      ]
+    },
+    {
+      "file": "aurora_fix_all_170_problems.py",
+      "size": 14201,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraLintFixer"
       ],
@@ -178,6 +378,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_full_autonomy.py",
       "size": 13128,
       "classes": [
@@ -189,6 +390,10 @@
     {
       "file": "aurora_full_system_debug.py",
       "size": 12860,
+=======
+      "file": "aurora_full_system_debug.py",
+      "size": 13718,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSystemDebugger"
       ],
@@ -197,14 +402,73 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_integration_analyzer.py",
       "size": 15166,
+=======
+      "file": "aurora_hyper_speed_complete_analysis.py",
+      "size": 18061,
+      "classes": [
+        "AuroraHyperSpeedAnalysis"
+      ],
+      "key_methods": [
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_hyper_speed_mode.py",
+      "size": 19156,
+      "classes": [
+        "AuroraHyperSpeedMode"
+      ],
+      "key_methods": [
+        "run_quality_checks_instant",
+        "run_hyper_speed_sequence"
+      ]
+    },
+    {
+      "file": "aurora_implement_all_fixes.py",
+      "size": 9621,
+      "classes": [
+        "AuroraFullPowerFixer"
+      ],
+      "key_methods": [
+        "run_autonomous_improvements",
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_implement_everything.py",
+      "size": 24966,
+      "classes": [
+        "AuroraAutonomousImplementer"
+      ],
+      "key_methods": [
+        "implement_recommendation_1_orchestration",
+        "run_autonomous_implementation"
+      ]
+    },
+    {
+      "file": "aurora_instant_full_integration.py",
+      "size": 17756,
+      "classes": [
+        "AuroraInstantIntegration"
+      ],
+      "key_methods": [
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_integration_analyzer.py",
+      "size": 15500,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraIntegrationAnalyzer"
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "aurora_intelligence_manager.py",
       "size": 24425,
       "classes": [
@@ -220,10 +484,27 @@
       "size": 2456,
       "classes": [
         "AuroraJARVIS"
+=======
+      "file": "aurora_intelligent_perfect_enforcer_v2.py",
+      "size": 23864,
+      "classes": [
+        "AuroraIntelligentPerfectEnforcerV2"
+      ],
+      "key_methods": [
+        "execute_intelligent_perfection"
+      ]
+    },
+    {
+      "file": "aurora_master_controller.py",
+      "size": 10064,
+      "classes": [
+        "AuroraMasterController"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "aurora_multi_agent.py",
       "size": 5227,
       "classes": [
@@ -235,11 +516,44 @@
         "execute_parallel",
         "orchestrate_workflow",
         "_execute_agent_task"
+=======
+      "file": "aurora_maximum_power_perfecter.py",
+      "size": 23079,
+      "classes": [
+        "AuroraMaximumPowerPerfector"
+      ],
+      "key_methods": [
+        "execute_maximum_power_transformation"
+      ]
+    },
+    {
+      "file": "aurora_omniscient_nuclear_perfecter.py",
+      "size": 40387,
+      "classes": [
+        "AuroraOmniscientTranscendentPerfecterV2"
+      ],
+      "key_methods": [
+        "execute_nuclear_transformation"
+      ]
+    },
+    {
+      "file": "aurora_perfect_code_quality_enforcer.py",
+      "size": 21115,
+      "classes": [
+        "AuroraPerfectCodeQualityEnforcer"
+      ],
+      "key_methods": [
+        "execute_perfect_transformation"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     },
     {
       "file": "aurora_port_diagnostic.py",
+<<<<<<< HEAD
       "size": 4098,
+=======
+      "size": 4889,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraPortDiagnostic"
       ],
@@ -248,8 +562,24 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_pylint_grandmaster.py",
       "size": 26085,
+=======
+      "file": "aurora_pre_update_complete_analysis.py",
+      "size": 22895,
+      "classes": [
+        "AuroraPreUpdateAnalyzer"
+      ],
+      "key_methods": [
+        "analyze_orchestrators",
+        "run_complete_analysis"
+      ]
+    },
+    {
+      "file": "aurora_pylint_grandmaster.py",
+      "size": 26943,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "PylintSkill",
         "AuroraPylintGrandmaster"
@@ -257,6 +587,7 @@
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "aurora_rsa_grandmaster.py",
       "size": 15798,
       "classes": [
@@ -265,12 +596,33 @@
         "RSAKey",
         "DecryptionResult",
         "AuroraRSAGrandmaster"
+=======
+      "file": "aurora_restore_critical_files.py",
+      "size": 7260,
+      "classes": [
+        "AuroraCriticalRestoration"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "aurora_self_debug.py",
       "size": 10338,
+=======
+      "file": "aurora_self_assessment_vs_history.py",
+      "size": 17334,
+      "classes": [
+        "AuroraSelfAssessment"
+      ],
+      "key_methods": [
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_self_debug.py",
+      "size": 12035,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfDebug"
       ],
@@ -281,13 +633,18 @@
     },
     {
       "file": "aurora_self_improvement.py",
+<<<<<<< HEAD
       "size": 42034,
+=======
+      "size": 43282,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfImprovement"
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "aurora_server_analysis.py",
       "size": 7974,
       "classes": [
@@ -301,6 +658,10 @@
     {
       "file": "aurora_server_manager.py",
       "size": 14491,
+=======
+      "file": "aurora_server_manager.py",
+      "size": 15295,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraServerManager"
       ],
@@ -310,17 +671,28 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_strategist.py",
       "size": 15257,
       "classes": [
         "AuroraContextEngine",
         "AuroraStrategist"
+=======
+      "file": "aurora_smart_merger.py",
+      "size": 4720,
+      "classes": [
+        "AuroraSmartMerger"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ],
       "key_methods": []
     },
     {
       "file": "aurora_tier_expansion.py",
+<<<<<<< HEAD
       "size": 13311,
+=======
+      "size": 14125,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraTierDetector",
         "AuroraTierBuilder"
@@ -329,6 +701,7 @@
     },
     {
       "file": "aurora_tier_orchestrator.py",
+<<<<<<< HEAD
       "size": 11019,
       "classes": [
         "AuroraTierOrchestrator"
@@ -341,6 +714,25 @@
     {
       "file": "aurora_ui_redesign.py",
       "size": 23913,
+=======
+      "size": 2746,
+      "classes": [
+        "TierOrchestrator"
+      ],
+      "key_methods": []
+    },
+    {
+      "file": "aurora_true_connection.py",
+      "size": 11969,
+      "classes": [
+        "AuroraTrueConnection"
+      ],
+      "key_methods": []
+    },
+    {
+      "file": "aurora_ui_redesign.py",
+      "size": 24793,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraUIRedesigner"
       ],
@@ -349,8 +741,61 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "luminar-keeper.py",
       "size": 8002,
+=======
+      "file": "aurora_ultimate_absolute_10_guarantee.py",
+      "size": 25044,
+      "classes": [
+        "AuroraUltimateAbsolute10GuaranteeEnforcer"
+      ],
+      "key_methods": [
+        "execute_ultimate_absolute_10_guarantee"
+      ]
+    },
+    {
+      "file": "aurora_ultimate_autonomous_fixer_DRAFT.py",
+      "size": 20756,
+      "classes": [
+        "AuroraUltimateAutonomousFixer"
+      ],
+      "key_methods": [
+        "phase_4_execute_fixes",
+        "execute_full_autonomous_fix"
+      ]
+    },
+    {
+      "file": "aurora_ultimate_self_healing_system_DRAFT2.py",
+      "size": 58032,
+      "classes": [
+        "SafeLogger",
+        "AuroraUltimateSelfHealingSystem"
+      ],
+      "key_methods": [
+        "phase_4_execute_fixes",
+        "execute_service_repair",
+        "execute_launcher_optimization",
+        "execute_mass_encoding_cleanup",
+        "execute_dependency_resolution",
+        "execute_ultimate_self_healing"
+      ]
+    },
+    {
+      "file": "aurora_web_health_monitor.py",
+      "size": 4336,
+      "classes": [
+        "WebHealthMonitor"
+      ],
+      "key_methods": [
+        "start_monitoring",
+        "start_monitoring"
+      ]
+    },
+    {
+      "file": "luminar-keeper.py",
+      "size": 8790,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "LuminarKeeper"
       ],
@@ -361,7 +806,11 @@
     },
     {
       "file": "start_aurora_autonomous.py",
+<<<<<<< HEAD
       "size": 7544,
+=======
+      "size": 7798,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutonomousRunner"
       ],
@@ -371,7 +820,11 @@
     },
     {
       "file": "test_aurora_autonomous_systems.py",
+<<<<<<< HEAD
       "size": 17485,
+=======
+      "size": 18340,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraIntegrationTester"
       ],
@@ -382,7 +835,11 @@
     },
     {
       "file": ".aurora\\aurora_core.py",
+<<<<<<< HEAD
       "size": 79972,
+=======
+      "size": 81514,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraFoundations",
         "AuroraKnowledgeTiers",
@@ -398,7 +855,11 @@
     },
     {
       "file": "attached_assets\\attach_bridge_1760299894800.py",
+<<<<<<< HEAD
       "size": 933,
+=======
+      "size": 1776,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "NLBody",
         "SpecBody"
@@ -407,7 +868,11 @@
     },
     {
       "file": "attached_assets\\lang_select_1760155081216.py",
+<<<<<<< HEAD
       "size": 1103,
+=======
+      "size": 2547,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "LangChoice"
       ],
@@ -415,7 +880,11 @@
     },
     {
       "file": "attached_assets\\lang_select_1760164876901.py",
+<<<<<<< HEAD
       "size": 1065,
+=======
+      "size": 2509,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "LangChoice"
       ],
@@ -423,7 +892,11 @@
     },
     {
       "file": "attached_assets\\pipeline_1760299894800.py",
+<<<<<<< HEAD
       "size": 3052,
+=======
+      "size": 3721,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "BridgeResult"
       ],
@@ -433,13 +906,18 @@
     },
     {
       "file": "aurora_x\\auth.py",
+<<<<<<< HEAD
       "size": 11669,
+=======
+      "size": 11197,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "UserPayload"
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "aurora_x\\cache.py",
       "size": 7560,
       "classes": [
@@ -468,6 +946,10 @@
     {
       "file": "aurora_x\\serve.py",
       "size": 30960,
+=======
+      "file": "aurora_x\\serve.py",
+      "size": 35528,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "NLCompileRequest",
         "NLCompileResponse",
@@ -479,7 +961,11 @@
     },
     {
       "file": "tools\\api_manager.py",
+<<<<<<< HEAD
       "size": 14191,
+=======
+      "size": 14944,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAPIManager"
       ],
@@ -490,7 +976,11 @@
     },
     {
       "file": "tools\\aurora_autonomy_v2.py",
+<<<<<<< HEAD
       "size": 11081,
+=======
+      "size": 11874,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutonom"
       ],
@@ -500,7 +990,11 @@
     },
     {
       "file": "tools\\aurora_auto_fix.py",
+<<<<<<< HEAD
       "size": 9218,
+=======
+      "size": 10454,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutoFixer"
       ],
@@ -510,7 +1004,11 @@
     },
     {
       "file": "tools\\aurora_chat.py",
+<<<<<<< HEAD
       "size": 1571,
+=======
+      "size": 2400,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraChatInterface"
       ],
@@ -520,7 +1018,11 @@
     },
     {
       "file": "tools\\aurora_complete_assignment.py",
+<<<<<<< HEAD
       "size": 23068,
+=======
+      "size": 24653,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAssignment"
       ],
@@ -530,7 +1032,11 @@
     },
     {
       "file": "tools\\aurora_core.py",
+<<<<<<< HEAD
       "size": 25418,
+=======
+      "size": 26273,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraCore"
       ],
@@ -549,7 +1055,11 @@
     },
     {
       "file": "tools\\aurora_dashboard_tutorial.py",
+<<<<<<< HEAD
       "size": 8592,
+=======
+      "size": 10173,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDashboardLoader"
       ],
@@ -559,13 +1069,18 @@
     },
     {
       "file": "tools\\aurora_debug_grandmaster.py",
+<<<<<<< HEAD
       "size": 25247,
+=======
+      "size": 26163,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDebugGrandmaster"
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_design_ui.py",
       "size": 13093,
       "classes": [
@@ -578,6 +1093,10 @@
     {
       "file": "tools\\aurora_direct_telemetry.py",
       "size": 7311,
+=======
+      "file": "tools\\aurora_direct_telemetry.py",
+      "size": 8684,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDirectTelemetry"
       ],
@@ -588,7 +1107,11 @@
     },
     {
       "file": "tools\\aurora_enhanced_core.py",
+<<<<<<< HEAD
       "size": 24707,
+=======
+      "size": 24991,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "CreativeEngine",
         "AutonomousDecisionEngine",
@@ -601,7 +1124,11 @@
     },
     {
       "file": "tools\\aurora_execute_plan.py",
+<<<<<<< HEAD
       "size": 22665,
+=======
+      "size": 23114,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfImprovement"
       ],
@@ -609,7 +1136,11 @@
     },
     {
       "file": "tools\\aurora_expert_knowledge.py",
+<<<<<<< HEAD
       "size": 88722,
+=======
+      "size": 89652,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "LanguageExpertise",
         "AuroraExpertKnowledge"
@@ -618,7 +1149,11 @@
     },
     {
       "file": "tools\\aurora_health_dashboard.py",
+<<<<<<< HEAD
       "size": 16049,
+=======
+      "size": 16755,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "HealthDashboardHandler"
       ],
@@ -626,7 +1161,11 @@
     },
     {
       "file": "tools\\aurora_instant_execute.py",
+<<<<<<< HEAD
       "size": 3659,
+=======
+      "size": 4434,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraInstantExecutor"
       ],
@@ -636,7 +1175,11 @@
     },
     {
       "file": "tools\\aurora_instant_generator.py",
+<<<<<<< HEAD
       "size": 23487,
+=======
+      "size": 24041,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraCodeGenerator"
       ],
@@ -644,13 +1187,18 @@
     },
     {
       "file": "tools\\aurora_knowledge_engine.py",
+<<<<<<< HEAD
       "size": 7013,
+=======
+      "size": 7470,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraKnowledgeEngine"
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_language_grandmaster.py",
       "size": 35971,
       "classes": [
@@ -661,6 +1209,10 @@
     {
       "file": "tools\\aurora_port_manager.py",
       "size": 15461,
+=======
+      "file": "tools\\aurora_port_manager.py",
+      "size": 17331,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "PortInfo",
         "AuroraPortManager"
@@ -671,7 +1223,11 @@
     },
     {
       "file": "tools\\aurora_process_grandmaster.py",
+<<<<<<< HEAD
       "size": 22795,
+=======
+      "size": 23664,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraProcessGrandmaster"
       ],
@@ -680,6 +1236,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_routing_diagnostics.py",
       "size": 4303,
       "classes": [
@@ -690,6 +1247,10 @@
     {
       "file": "tools\\aurora_safety_protocol.py",
       "size": 24188,
+=======
+      "file": "tools\\aurora_safety_protocol.py",
+      "size": 24951,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "SystemState",
         "DiagnosticReport",
@@ -703,7 +1264,11 @@
     },
     {
       "file": "tools\\aurora_self_diagnostic.py",
+<<<<<<< HEAD
       "size": 9035,
+=======
+      "size": 9888,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfDiagnostic"
       ],
@@ -711,7 +1276,11 @@
     },
     {
       "file": "tools\\aurora_self_heal.py",
+<<<<<<< HEAD
       "size": 11438,
+=======
+      "size": 12259,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfHealer"
       ],
@@ -720,6 +1289,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_server_grandmaster.py",
       "size": 22117,
       "classes": [
@@ -733,6 +1303,10 @@
     {
       "file": "tools\\aurora_supervisor.py",
       "size": 16399,
+=======
+      "file": "tools\\aurora_supervisor.py",
+      "size": 17305,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "ServiceConfig",
         "ServiceState",
@@ -747,7 +1321,11 @@
     },
     {
       "file": "tools\\aurora_tab_diagnostics.py",
+<<<<<<< HEAD
       "size": 5952,
+=======
+      "size": 6656,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraTabDiagnostics"
       ],
@@ -756,6 +1334,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_tab_fixer.py",
       "size": 6865,
       "classes": [
@@ -766,12 +1345,17 @@
     {
       "file": "tools\\aurora_task_manager.py",
       "size": 9925,
+=======
+      "file": "tools\\aurora_task_manager.py",
+      "size": 10731,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraTaskManager"
       ],
       "key_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_transform_all_ui.py",
       "size": 7330,
       "classes": [
@@ -784,6 +1368,10 @@
     {
       "file": "tools\\aurora_ultimate_autonomous_controller.py",
       "size": 8698,
+=======
+      "file": "tools\\aurora_ultimate_autonomous_controller.py",
+      "size": 8917,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraUltimateAutonomousController"
       ],
@@ -794,7 +1382,11 @@
     },
     {
       "file": "tools\\aurora_ultimate_grandmaster.py",
+<<<<<<< HEAD
       "size": 21744,
+=======
+      "size": 22370,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraUltimateGrandmaster"
       ],
@@ -802,7 +1394,11 @@
     },
     {
       "file": "tools\\aurora_ultra_engine.py",
+<<<<<<< HEAD
       "size": 14091,
+=======
+      "size": 14643,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraGrandmasterKnowledge",
         "AuroraUltraEngine"
@@ -811,7 +1407,11 @@
     },
     {
       "file": "tools\\luminar_nexus.py",
+<<<<<<< HEAD
       "size": 186188,
+=======
+      "size": 193778,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "LuminarNexusServerManager",
         "LuminarNexus",
@@ -827,7 +1427,11 @@
     },
     {
       "file": "tools\\luminar_nexus_v1_backup.py",
+<<<<<<< HEAD
       "size": 185880,
+=======
+      "size": 183558,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "LuminarNexusServerManager",
         "AuroraConversationalAI"
@@ -842,7 +1446,11 @@
     },
     {
       "file": "tools\\luminar_nexus_v2.py",
+<<<<<<< HEAD
       "size": 84533,
+=======
+      "size": 86373,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "ServiceHealth",
         "QuantumServiceMesh",
@@ -863,7 +1471,11 @@
     },
     {
       "file": "tools\\server_manager.py",
+<<<<<<< HEAD
       "size": 119428,
+=======
+      "size": 121531,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AdvancedServerManager"
       ],
@@ -882,7 +1494,11 @@
     },
     {
       "file": "tools\\ultimate_api_manager.py",
+<<<<<<< HEAD
       "size": 158423,
+=======
+      "size": 165294,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AdvancedCodingKnowledge",
         "ServiceMetrics",
@@ -901,7 +1517,11 @@
     },
     {
       "file": "tests\\integration\\test_service_integration.py",
+<<<<<<< HEAD
       "size": 4838,
+=======
+      "size": 4911,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "TestServiceConnectivity",
         "TestBridgeToBackend",
@@ -913,7 +1533,11 @@
     },
     {
       "file": "tests\\unit\\test_bridge_service.py",
+<<<<<<< HEAD
       "size": 4430,
+=======
+      "size": 4667,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "TestBridgeHealth",
         "TestBridgeNLEndpoint",
@@ -927,8 +1551,29 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_x\\api\\commands.py",
       "size": 2323,
+=======
+      "file": "backups\\aurora_full_update_20251122_060737\\aurora_core.py",
+      "size": 112279,
+      "classes": [
+        "AuroraFoundations",
+        "AuroraKnowledgeTiers",
+        "AuroraOrchestrator",
+        "AuroraCoreIntelligence"
+      ],
+      "key_methods": [
+        "_get_task_execute",
+        "_get_tier_orchestrator",
+        "start_server",
+        "start_service"
+      ]
+    },
+    {
+      "file": "aurora_x\\api\\commands.py",
+      "size": 2383,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "CommandRequest"
       ],
@@ -936,7 +1581,11 @@
     },
     {
       "file": "aurora_x\\bridge\\attach_bridge.py",
+<<<<<<< HEAD
       "size": 47358,
+=======
+      "size": 50318,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "NLBody",
         "SpecBody",
@@ -949,7 +1598,11 @@
     },
     {
       "file": "aurora_x\\bridge\\pipeline.py",
+<<<<<<< HEAD
       "size": 5489,
+=======
+      "size": 6974,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "BridgeResult"
       ],
@@ -959,7 +1612,11 @@
     },
     {
       "file": "aurora_x\\router\\lang_select.py",
+<<<<<<< HEAD
       "size": 2249,
+=======
+      "size": 3518,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "LangChoice"
       ],
@@ -967,7 +1624,11 @@
     },
     {
       "file": "aurora_x\\synthesis\\universal_engine.py",
+<<<<<<< HEAD
       "size": 61807,
+=======
+      "size": 61978,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "ProjectType",
         "ParsedIntent",
@@ -979,6 +1640,7 @@
         "ProjectResult"
       ],
       "key_methods": []
+<<<<<<< HEAD
     },
     {
       "file": "archive\\legacy\\aurora_debug_http400.py",
@@ -987,10 +1649,13 @@
         "AuroraDebugHTTP400"
       ],
       "key_methods": []
+=======
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
     }
   ],
   "autonomous_systems": [
     {
+<<<<<<< HEAD
       "file": "aurora_analyze_terminal_chat_power.py",
       "size": 7293,
       "classes": [],
@@ -1009,6 +1674,41 @@
     {
       "file": "aurora_automatic_system_update.py",
       "size": 13808,
+=======
+      "file": "aurora_analyze_all_branches.py",
+      "size": 15138,
+      "classes": [
+        "AuroraBranchAnalyzer"
+      ],
+      "autonomous_methods": [
+        "analyze_branch",
+        "analyze_file_for_features"
+      ]
+    },
+    {
+      "file": "aurora_analyze_enforcer_full_power.py",
+      "size": 15915,
+      "classes": [
+        "AuroraEnforcerAnalyzer"
+      ],
+      "autonomous_methods": [
+        "analyze_enforcer_code",
+        "analyze_corruption_pattern",
+        "analyze_autofixer"
+      ]
+    },
+    {
+      "file": "aurora_authentic.py",
+      "size": 11518,
+      "classes": [
+        "AuroraAuthentic"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_automatic_system_update.py",
+      "size": 20324,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSystemUpdater"
       ],
@@ -1016,17 +1716,31 @@
     },
     {
       "file": "aurora_autonomous_agent.py",
+<<<<<<< HEAD
       "size": 20408,
       "classes": [
         "AuroraAutonomousAgent"
       ],
       "autonomous_methods": [
         "analyze_chat_ui"
+=======
+      "size": 2896,
+      "classes": [
+        "AutonomousAgent"
+      ],
+      "autonomous_methods": [
+        "health",
+        "start_autonomous_mode"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     },
     {
       "file": "aurora_autonomous_analyzer.py",
+<<<<<<< HEAD
       "size": 19152,
+=======
+      "size": 19692,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraProjectAnalyzer"
       ],
@@ -1043,7 +1757,11 @@
     },
     {
       "file": "aurora_autonomous_debug_everything.py",
+<<<<<<< HEAD
       "size": 14841,
+=======
+      "size": 16329,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutonomousDebugger"
       ],
@@ -1055,7 +1773,11 @@
     },
     {
       "file": "aurora_autonomous_integration.py",
+<<<<<<< HEAD
       "size": 7045,
+=======
+      "size": 7172,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [],
       "autonomous_methods": [
         "integrate_autonomous_systems"
@@ -1063,7 +1785,11 @@
     },
     {
       "file": "aurora_autonomous_lint_fixer.py",
+<<<<<<< HEAD
       "size": 6778,
+=======
+      "size": 7571,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraLintFixer"
       ],
@@ -1077,7 +1803,11 @@
     },
     {
       "file": "aurora_autonomous_monitor.py",
+<<<<<<< HEAD
       "size": 3872,
+=======
+      "size": 4628,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [],
       "autonomous_methods": [
         "monitor_loop"
@@ -1085,7 +1815,11 @@
     },
     {
       "file": "aurora_autonomous_pylint_fixer.py",
+<<<<<<< HEAD
       "size": 16399,
+=======
+      "size": 17169,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutonomousFixer"
       ],
@@ -1103,7 +1837,11 @@
     },
     {
       "file": "aurora_autonomous_self_improve.py",
+<<<<<<< HEAD
       "size": 12266,
+=======
+      "size": 12655,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfImprover"
       ],
@@ -1113,6 +1851,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_auto_organize.py",
       "size": 8964,
       "classes": [
@@ -1133,6 +1872,29 @@
     {
       "file": "aurora_code_quality_enforcer.py",
       "size": 12110,
+=======
+      "file": "aurora_chat_server.py",
+      "size": 12307,
+      "classes": [
+        "AuroraFullPowerChat"
+      ],
+      "autonomous_methods": [
+        "health",
+        "_monitor_services"
+      ]
+    },
+    {
+      "file": "aurora_check_architecture.py",
+      "size": 22683,
+      "classes": [
+        "AuroraArchitectureChecker"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_code_quality_enforcer.py",
+      "size": 12894,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "IssueType",
         "Severity",
@@ -1144,17 +1906,32 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_complete_debug.py",
       "size": 8179,
       "classes": [],
       "autonomous_methods": [
         "check_layout_fix",
         "fix_remaining_issues"
+=======
+      "file": "aurora_code_quality_improver.py",
+      "size": 16019,
+      "classes": [
+        "AuroraCodeQualityImprover"
+      ],
+      "autonomous_methods": [
+        "analyze_file",
+        "learn_from_autonomous_fixer"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     },
     {
       "file": "aurora_complete_lint_solution.py",
+<<<<<<< HEAD
       "size": 9471,
+=======
+      "size": 10184,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [],
       "autonomous_methods": [
         "fix_file",
@@ -1165,7 +1942,11 @@
     },
     {
       "file": "aurora_complete_problem_fixer.py",
+<<<<<<< HEAD
       "size": 15568,
+=======
+      "size": 16381,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraCompleteFixer"
       ],
@@ -1181,7 +1962,11 @@
     },
     {
       "file": "aurora_complete_system_analysis.py",
+<<<<<<< HEAD
       "size": 19013,
+=======
+      "size": 20508,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraCompleteSystemAnalyzer"
       ],
@@ -1192,16 +1977,38 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_complete_system_update.py",
       "size": 27757,
       "classes": [
         "AuroraCompleteSystemUpdate"
+=======
+      "file": "aurora_comprehensive_branch_analyzer.py",
+      "size": 28491,
+      "classes": [
+        "AuroraComprehensiveBranchAnalyzer"
+      ],
+      "autonomous_methods": [
+        "deep_analyze_branch",
+        "analyze_file_deeply"
+      ]
+    },
+    {
+      "file": "aurora_conscious.py",
+      "size": 15104,
+      "classes": [
+        "AuroraConscious"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ],
       "autonomous_methods": []
     },
     {
       "file": "aurora_core.py",
+<<<<<<< HEAD
       "size": 111786,
+=======
+      "size": 101136,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraFoundations",
         "AuroraKnowledgeTiers",
@@ -1215,12 +2022,20 @@
         "_get_grandmaster_autonomous",
         "_get_self_monitor",
         "_get_full_autonomy",
+<<<<<<< HEAD
+=======
+        "analyze_and_score",
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
         "analyze_natural_language"
       ]
     },
     {
       "file": "aurora_core_original.py",
+<<<<<<< HEAD
       "size": 88460,
+=======
+      "size": 88809,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraFoundations",
         "AuroraKnowledgeTiers",
@@ -1239,7 +2054,11 @@
     },
     {
       "file": "aurora_core_templates_backup.py",
+<<<<<<< HEAD
       "size": 143261,
+=======
+      "size": 144065,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraFoundations",
         "AuroraKnowledgeTiers",
@@ -1258,8 +2077,32 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_deep_investigation.py",
       "size": 12732,
+=======
+      "file": "aurora_correct_power_and_activate.py",
+      "size": 17017,
+      "classes": [
+        "AuroraRealPowerActivation"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_create_missing_services.py",
+      "size": 29330,
+      "classes": [
+        "AuroraServiceCreator"
+      ],
+      "autonomous_methods": [
+        "create_web_health_monitor",
+        "create_intelligence_analyzer"
+      ]
+    },
+    {
+      "file": "aurora_deep_investigation.py",
+      "size": 14035,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDeepInvestigation"
       ],
@@ -1268,8 +2111,34 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_deep_system_scan.py",
       "size": 14346,
+=======
+      "file": "aurora_deep_self_comparison.py",
+      "size": 14705,
+      "classes": [
+        "AuroraDeepComparison"
+      ],
+      "autonomous_methods": [
+        "analyze_my_current_state",
+        "analyze_file_capabilities"
+      ]
+    },
+    {
+      "file": "aurora_deep_system_analysis.py",
+      "size": 14406,
+      "classes": [
+        "AuroraDeepAnalysis"
+      ],
+      "autonomous_methods": [
+        "analyze_current_state"
+      ]
+    },
+    {
+      "file": "aurora_deep_system_scan.py",
+      "size": 14692,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDeepScanner"
       ],
@@ -1277,7 +2146,11 @@
     },
     {
       "file": "aurora_docker_healer.py",
+<<<<<<< HEAD
       "size": 11634,
+=======
+      "size": 12389,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDockerHealer"
       ],
@@ -1286,8 +2159,24 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_execute_architecture_fix.py",
       "size": 5152,
+=======
+      "file": "aurora_error_recovery.py",
+      "size": 7545,
+      "classes": [
+        "AuroraErrorRecovery"
+      ],
+      "autonomous_methods": [
+        "auto_recover",
+        "auto_restart_service"
+      ]
+    },
+    {
+      "file": "aurora_execute_architecture_fix.py",
+      "size": 5904,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [],
       "autonomous_methods": [
         "fix_conversation_context_persistence",
@@ -1297,8 +2186,31 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_fix_all_170_problems.py",
       "size": 13375,
+=======
+      "file": "aurora_final_absolute_10_enforcer.py",
+      "size": 17705,
+      "classes": [
+        "AuroraFinalAbsolute10Enforcer"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_find_everything.py",
+      "size": 26101,
+      "classes": [
+        "AuroraComprehensiveDiscovery"
+      ],
+      "autonomous_methods": [
+        "analyze_current_connections"
+      ]
+    },
+    {
+      "file": "aurora_fix_all_170_problems.py",
+      "size": 14201,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraLintFixer"
       ],
@@ -1309,6 +2221,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_fix_all_linting.py",
       "size": 5668,
       "classes": [],
@@ -1368,12 +2281,80 @@
       "size": 22075,
       "classes": [
         "AuroraFullUIRedesign"
+=======
+      "file": "aurora_fix_all_syntax_errors.py",
+      "size": 6500,
+      "classes": [],
+      "autonomous_methods": [
+        "fix_duplicate_keyword_args",
+        "fix_common_syntax_errors"
+      ]
+    },
+    {
+      "file": "aurora_hyper_speed_complete_analysis.py",
+      "size": 18061,
+      "classes": [
+        "AuroraHyperSpeedAnalysis"
+      ],
+      "autonomous_methods": [
+        "analyze_current_state_fast",
+        "quick_analyze_file",
+        "analyze_branch_complete",
+        "analyze_all_branches_parallel"
+      ]
+    },
+    {
+      "file": "aurora_hyper_speed_mode.py",
+      "size": 19156,
+      "classes": [
+        "AuroraHyperSpeedMode"
+      ],
+      "autonomous_methods": [
+        "fix_imports_instant",
+        "fix_syntax_errors_instant",
+        "auto_fix_common_issues_instant"
+      ]
+    },
+    {
+      "file": "aurora_implement_all_fixes.py",
+      "size": 9621,
+      "classes": [
+        "AuroraFullPowerFixer"
+      ],
+      "autonomous_methods": [
+        "fix_session_isolation",
+        "fix_intent_priority",
+        "fix_template_elimination",
+        "fix_nexus_integration",
+        "run_autonomous_improvements"
+      ]
+    },
+    {
+      "file": "aurora_implement_everything.py",
+      "size": 24966,
+      "classes": [
+        "AuroraAutonomousImplementer"
+      ],
+      "autonomous_methods": [
+        "run_autonomous_implementation"
+      ]
+    },
+    {
+      "file": "aurora_instant_full_integration.py",
+      "size": 17756,
+      "classes": [
+        "AuroraInstantIntegration"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ],
       "autonomous_methods": []
     },
     {
       "file": "aurora_integration_analyzer.py",
+<<<<<<< HEAD
       "size": 15166,
+=======
+      "size": 15500,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraIntegrationAnalyzer"
       ],
@@ -1382,6 +2363,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_intelligence_manager.py",
       "size": 24425,
       "classes": [
@@ -1396,12 +2378,66 @@
     {
       "file": "aurora_open_browser.py",
       "size": 3103,
+=======
+      "file": "aurora_intelligent_perfect_enforcer_v2.py",
+      "size": 23864,
+      "classes": [
+        "AuroraIntelligentPerfectEnforcerV2"
+      ],
+      "autonomous_methods": [
+        "analyze_file_needs"
+      ]
+    },
+    {
+      "file": "aurora_master_controller.py",
+      "size": 10064,
+      "classes": [
+        "AuroraMasterController"
+      ],
+      "autonomous_methods": [
+        "health",
+        "toggle_autonomous",
+        "_monitor_all_systems",
+        "_auto_activate_agent",
+        "_make_autonomous_decisions",
+        "_self_healing"
+      ]
+    },
+    {
+      "file": "aurora_maximum_power_perfecter.py",
+      "size": 23079,
+      "classes": [
+        "AuroraMaximumPowerPerfector"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_merge_all_needed_files.py",
+      "size": 5712,
+      "classes": [
+        "AuroraAutonomousMerger"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_omniscient_nuclear_perfecter.py",
+      "size": 40387,
+      "classes": [
+        "AuroraOmniscientTranscendentPerfecterV2"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_open_browser.py",
+      "size": 4004,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraBrowserLauncher"
       ],
       "autonomous_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "aurora_performance_optimizer.py",
       "size": 10958,
       "classes": [
@@ -1410,11 +2446,39 @@
       ],
       "autonomous_methods": [
         "analyze_patterns"
+=======
+      "file": "aurora_perfect_code_quality_enforcer.py",
+      "size": 21115,
+      "classes": [
+        "AuroraPerfectCodeQualityEnforcer"
+      ],
+      "autonomous_methods": [
+        "fix_encoding_to_perfection"
+      ]
+    },
+    {
+      "file": "aurora_pre_update_complete_analysis.py",
+      "size": 22895,
+      "classes": [
+        "AuroraPreUpdateAnalyzer"
+      ],
+      "autonomous_methods": [
+        "analyze_frontend",
+        "analyze_backend",
+        "analyze_ports",
+        "analyze_services",
+        "analyze_orchestrators",
+        "analyze_configuration"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     },
     {
       "file": "aurora_pylint_grandmaster.py",
+<<<<<<< HEAD
       "size": 26085,
+=======
+      "size": 26943,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "PylintSkill",
         "AuroraPylintGrandmaster"
@@ -1427,7 +2491,11 @@
     },
     {
       "file": "aurora_pylint_prevention.py",
+<<<<<<< HEAD
       "size": 9052,
+=======
+      "size": 9986,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraPylintPrevention"
       ],
@@ -1440,7 +2508,11 @@
     },
     {
       "file": "aurora_rapid_fixer.py",
+<<<<<<< HEAD
       "size": 4533,
+=======
+      "size": 5709,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [],
       "autonomous_methods": [
         "fix_except_pass",
@@ -1450,7 +2522,11 @@
     },
     {
       "file": "aurora_safe_autonomous_fixer.py",
+<<<<<<< HEAD
       "size": 9988,
+=======
+      "size": 10518,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSafeFixer"
       ],
@@ -1461,8 +2537,21 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_self_debug.py",
       "size": 10338,
+=======
+      "file": "aurora_self_assessment_vs_history.py",
+      "size": 17334,
+      "classes": [
+        "AuroraSelfAssessment"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_self_debug.py",
+      "size": 12035,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfDebug"
       ],
@@ -1473,7 +2562,11 @@
     },
     {
       "file": "aurora_self_debug_and_update.py",
+<<<<<<< HEAD
       "size": 14094,
+=======
+      "size": 14337,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfDebugSystem"
       ],
@@ -1483,8 +2576,21 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_server_manager.py",
       "size": 14491,
+=======
+      "file": "aurora_self_repair.py",
+      "size": 5570,
+      "classes": [],
+      "autonomous_methods": [
+        "aurora_self_repair"
+      ]
+    },
+    {
+      "file": "aurora_server_manager.py",
+      "size": 15295,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraServerManager"
       ],
@@ -1494,6 +2600,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_strategist.py",
       "size": 15257,
       "classes": [
@@ -1518,14 +2625,86 @@
     {
       "file": "aurora_ui_redesign.py",
       "size": 23913,
+=======
+      "file": "aurora_smart_merger.py",
+      "size": 4720,
+      "classes": [
+        "AuroraSmartMerger"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_true_connection.py",
+      "size": 11969,
+      "classes": [
+        "AuroraTrueConnection"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_ui_redesign.py",
+      "size": 24793,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraUIRedesigner"
       ],
       "autonomous_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "chat_with_aurora.py",
       "size": 17094,
+=======
+      "file": "aurora_ultimate_absolute_10_guarantee.py",
+      "size": 25044,
+      "classes": [
+        "AuroraUltimateAbsolute10GuaranteeEnforcer"
+      ],
+      "autonomous_methods": []
+    },
+    {
+      "file": "aurora_ultimate_autonomous_fixer_DRAFT.py",
+      "size": 20756,
+      "classes": [
+        "AuroraUltimateAutonomousFixer"
+      ],
+      "autonomous_methods": [
+        "phase_3_autonomous_fixing",
+        "phase_4_execute_fixes",
+        "fix_encoding",
+        "fix_windows_compatibility",
+        "fix_launcher",
+        "execute_full_autonomous_fix"
+      ]
+    },
+    {
+      "file": "aurora_ultimate_self_healing_system_DRAFT2.py",
+      "size": 58032,
+      "classes": [
+        "SafeLogger",
+        "AuroraUltimateSelfHealingSystem"
+      ],
+      "autonomous_methods": [
+        "create_health_dashboard",
+        "analyze_root_causes",
+        "phase_3_autonomous_fixing",
+        "generate_service_fix",
+        "phase_4_execute_fixes",
+        "execute_service_repair",
+        "fix_encoding",
+        "fix_windows_compatibility",
+        "fix_variable_issues",
+        "phase_6_monitoring_system",
+        "update_health_dashboard",
+        "continuous_monitoring",
+        "phase_7_verification_and_self_healing",
+        "execute_ultimate_self_healing"
+      ]
+    },
+    {
+      "file": "chat_with_aurora.py",
+      "size": 13607,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [],
       "autonomous_methods": [
         "detect_user_intent",
@@ -1534,7 +2713,11 @@
     },
     {
       "file": "fix_all_pylint_errors_complete.py",
+<<<<<<< HEAD
       "size": 18985,
+=======
+      "size": 19753,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [],
       "autonomous_methods": [
         "fix_file_content"
@@ -1542,7 +2725,11 @@
     },
     {
       "file": "start_aurora_autonomous.py",
+<<<<<<< HEAD
       "size": 7544,
+=======
+      "size": 7798,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutonomousRunner"
       ],
@@ -1553,7 +2740,11 @@
     },
     {
       "file": "test_aurora_autonomous_systems.py",
+<<<<<<< HEAD
       "size": 17485,
+=======
+      "size": 18340,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraIntegrationTester"
       ],
@@ -1564,7 +2755,11 @@
     },
     {
       "file": ".aurora\\aurora_core.py",
+<<<<<<< HEAD
       "size": 79972,
+=======
+      "size": 81514,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraFoundations",
         "AuroraKnowledgeTiers",
@@ -1583,7 +2778,11 @@
     },
     {
       "file": "aurora_x\\serve.py",
+<<<<<<< HEAD
       "size": 30960,
+=======
+      "size": 35528,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "NLCompileRequest",
         "NLCompileResponse",
@@ -1597,7 +2796,11 @@
     },
     {
       "file": "tools\\aurora_autonomous_fixer.py",
+<<<<<<< HEAD
       "size": 22673,
+=======
+      "size": 23152,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutonomousFixer"
       ],
@@ -1605,7 +2808,11 @@
     },
     {
       "file": "tools\\aurora_autonomous_system.py",
+<<<<<<< HEAD
       "size": 12840,
+=======
+      "size": 13617,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutonomousSystem"
       ],
@@ -1616,7 +2823,11 @@
     },
     {
       "file": "tools\\aurora_autonomy_v2.py",
+<<<<<<< HEAD
       "size": 11081,
+=======
+      "size": 11874,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutonom"
       ],
@@ -1632,7 +2843,11 @@
     },
     {
       "file": "tools\\aurora_auto_fix.py",
+<<<<<<< HEAD
       "size": 9218,
+=======
+      "size": 10454,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAutoFixer"
       ],
@@ -1643,7 +2858,11 @@
     },
     {
       "file": "tools\\aurora_blank_page_autofix.py",
+<<<<<<< HEAD
       "size": 12392,
+=======
+      "size": 13088,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraBlankPageAutoFixer"
       ],
@@ -1658,7 +2877,11 @@
     },
     {
       "file": "tools\\aurora_blank_page_fixer.py",
+<<<<<<< HEAD
       "size": 13993,
+=======
+      "size": 14791,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraBlankPageFixer"
       ],
@@ -1668,7 +2891,11 @@
     },
     {
       "file": "tools\\aurora_complete_assignment.py",
+<<<<<<< HEAD
       "size": 23068,
+=======
+      "size": 24653,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraAssignment"
       ],
@@ -1678,7 +2905,11 @@
     },
     {
       "file": "tools\\aurora_core.py",
+<<<<<<< HEAD
       "size": 25418,
+=======
+      "size": 26273,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraCore"
       ],
@@ -1690,7 +2921,11 @@
     },
     {
       "file": "tools\\aurora_dashboard_tutorial.py",
+<<<<<<< HEAD
       "size": 8592,
+=======
+      "size": 10173,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDashboardLoader"
       ],
@@ -1698,7 +2933,11 @@
     },
     {
       "file": "tools\\aurora_direct_telemetry.py",
+<<<<<<< HEAD
       "size": 7311,
+=======
+      "size": 8684,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDirectTelemetry"
       ],
@@ -1708,7 +2947,11 @@
     },
     {
       "file": "tools\\aurora_emergency_debug.py",
+<<<<<<< HEAD
       "size": 7468,
+=======
+      "size": 8833,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraEmergencyDebug"
       ],
@@ -1718,7 +2961,11 @@
     },
     {
       "file": "tools\\aurora_enhanced_core.py",
+<<<<<<< HEAD
       "size": 24707,
+=======
+      "size": 24991,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "CreativeEngine",
         "AutonomousDecisionEngine",
@@ -1733,7 +2980,11 @@
     },
     {
       "file": "tools\\aurora_execute_plan.py",
+<<<<<<< HEAD
       "size": 22665,
+=======
+      "size": 23114,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfImprovement"
       ],
@@ -1741,7 +2992,11 @@
     },
     {
       "file": "tools\\aurora_instant_execute.py",
+<<<<<<< HEAD
       "size": 3659,
+=======
+      "size": 4434,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraInstantExecutor"
       ],
@@ -1749,13 +3004,18 @@
     },
     {
       "file": "tools\\aurora_knowledge_engine.py",
+<<<<<<< HEAD
       "size": 7013,
+=======
+      "size": 7470,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraKnowledgeEngine"
       ],
       "autonomous_methods": []
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_learning_engine.py",
       "size": 6966,
       "classes": [
@@ -1766,6 +3026,10 @@
     {
       "file": "tools\\aurora_load_dashboard.py",
       "size": 3749,
+=======
+      "file": "tools\\aurora_load_dashboard.py",
+      "size": 5079,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraDashboardLoader"
       ],
@@ -1773,7 +3037,11 @@
     },
     {
       "file": "tools\\aurora_logger.py",
+<<<<<<< HEAD
       "size": 4905,
+=======
+      "size": 5985,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraLogger"
       ],
@@ -1782,6 +3050,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_meta_analysis.py",
       "size": 13471,
       "classes": [
@@ -1796,6 +3065,10 @@
     {
       "file": "tools\\aurora_performance_review.py",
       "size": 14973,
+=======
+      "file": "tools\\aurora_performance_review.py",
+      "size": 16395,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraPerformanceReview"
       ],
@@ -1803,7 +3076,11 @@
     },
     {
       "file": "tools\\aurora_port_manager.py",
+<<<<<<< HEAD
       "size": 15461,
+=======
+      "size": 17331,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "PortInfo",
         "AuroraPortManager"
@@ -1816,6 +3093,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_routing_diagnostics.py",
       "size": 4303,
       "classes": [
@@ -1826,6 +3104,10 @@
     {
       "file": "tools\\aurora_safety_protocol.py",
       "size": 24188,
+=======
+      "file": "tools\\aurora_safety_protocol.py",
+      "size": 24951,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "SystemState",
         "DiagnosticReport",
@@ -1841,6 +3123,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_self_analysis.py",
       "size": 13250,
       "classes": [],
@@ -1851,6 +3134,10 @@
     {
       "file": "tools\\aurora_self_diagnostic.py",
       "size": 9035,
+=======
+      "file": "tools\\aurora_self_diagnostic.py",
+      "size": 9888,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfDiagnostic"
       ],
@@ -1861,7 +3148,11 @@
     },
     {
       "file": "tools\\aurora_self_heal.py",
+<<<<<<< HEAD
       "size": 11438,
+=======
+      "size": 12259,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfHealer"
       ],
@@ -1869,7 +3160,11 @@
     },
     {
       "file": "tools\\aurora_self_monitor.py",
+<<<<<<< HEAD
       "size": 7460,
+=======
+      "size": 7567,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraSelfMonitor"
       ],
@@ -1878,6 +3173,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_self_reload.py",
       "size": 3905,
       "classes": [
@@ -1888,6 +3184,10 @@
     {
       "file": "tools\\aurora_supervisor.py",
       "size": 16399,
+=======
+      "file": "tools\\aurora_supervisor.py",
+      "size": 17305,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "ServiceConfig",
         "ServiceState",
@@ -1900,7 +3200,11 @@
     },
     {
       "file": "tools\\aurora_tab_diagnostics.py",
+<<<<<<< HEAD
       "size": 5952,
+=======
+      "size": 6656,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraTabDiagnostics"
       ],
@@ -1909,6 +3213,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_tab_fixer.py",
       "size": 6865,
       "classes": [
@@ -1923,6 +3228,10 @@
     {
       "file": "tools\\aurora_task_manager.py",
       "size": 9925,
+=======
+      "file": "tools\\aurora_task_manager.py",
+      "size": 10731,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraTaskManager"
       ],
@@ -1930,7 +3239,11 @@
     },
     {
       "file": "tools\\aurora_true_autonomy.py",
+<<<<<<< HEAD
       "size": 15982,
+=======
+      "size": 16853,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraTrueAutonomy"
       ],
@@ -1941,7 +3254,11 @@
     },
     {
       "file": "tools\\aurora_ui_chat_bug_analyzer.py",
+<<<<<<< HEAD
       "size": 11419,
+=======
+      "size": 12134,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraUIBugAnalyzer"
       ],
@@ -1951,7 +3268,11 @@
     },
     {
       "file": "tools\\aurora_ui_chat_bug_fixer.py",
+<<<<<<< HEAD
       "size": 11689,
+=======
+      "size": 12398,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraUIBugFixer"
       ],
@@ -1963,7 +3284,11 @@
     },
     {
       "file": "tools\\aurora_ultimate_autonomous_controller.py",
+<<<<<<< HEAD
       "size": 8698,
+=======
+      "size": 8917,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraUltimateAutonomousController"
       ],
@@ -1974,7 +3299,11 @@
     },
     {
       "file": "tools\\aurora_ultimate_grandmaster.py",
+<<<<<<< HEAD
       "size": 21744,
+=======
+      "size": 22370,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraUltimateGrandmaster"
       ],
@@ -1984,7 +3313,11 @@
     },
     {
       "file": "tools\\copilot_grade_aurora.py",
+<<<<<<< HEAD
       "size": 12227,
+=======
+      "size": 13634,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AuroraGrader"
       ],
@@ -1994,7 +3327,11 @@
     },
     {
       "file": "tools\\luminar_nexus.py",
+<<<<<<< HEAD
       "size": 186188,
+=======
+      "size": 193778,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "LuminarNexusServerManager",
         "LuminarNexus",
@@ -2009,7 +3346,11 @@
     },
     {
       "file": "tools\\luminar_nexus_v1_backup.py",
+<<<<<<< HEAD
       "size": 185880,
+=======
+      "size": 183558,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "LuminarNexusServerManager",
         "AuroraConversationalAI"
@@ -2023,7 +3364,11 @@
     },
     {
       "file": "tools\\luminar_nexus_v2.py",
+<<<<<<< HEAD
       "size": 84533,
+=======
+      "size": 86373,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "ServiceHealth",
         "QuantumServiceMesh",
@@ -2054,7 +3399,11 @@
     },
     {
       "file": "tools\\relay_to_aurora.py",
+<<<<<<< HEAD
       "size": 3140,
+=======
+      "size": 3828,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [],
       "autonomous_methods": [
         "monitor_aurora_response"
@@ -2062,7 +3411,11 @@
     },
     {
       "file": "tools\\server_manager.py",
+<<<<<<< HEAD
       "size": 119428,
+=======
+      "size": 121531,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AdvancedServerManager"
       ],
@@ -2086,7 +3439,11 @@
     },
     {
       "file": "tools\\ultimate_api_manager.py",
+<<<<<<< HEAD
       "size": 158423,
+=======
+      "size": 165294,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "AdvancedCodingKnowledge",
         "ServiceMetrics",
@@ -2112,7 +3469,11 @@
     },
     {
       "file": "tests\\unit\\test_selflearn_server.py",
+<<<<<<< HEAD
       "size": 4043,
+=======
+      "size": 4558,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "TestSelfLearnHealth",
         "TestSelfLearnStats",
@@ -2127,12 +3488,37 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_x\\api\\commands.py",
       "size": 2323,
+=======
+      "file": "backups\\aurora_full_update_20251122_060737\\aurora_core.py",
+      "size": 112279,
+      "classes": [
+        "AuroraFoundations",
+        "AuroraKnowledgeTiers",
+        "AuroraOrchestrator",
+        "AuroraCoreIntelligence"
+      ],
+      "autonomous_methods": [
+        "_get_task_analyze",
+        "_get_browser_automation",
+        "_get_autonomous_tools",
+        "_get_grandmaster_autonomous",
+        "_get_self_monitor",
+        "_get_full_autonomy",
+        "analyze_natural_language"
+      ]
+    },
+    {
+      "file": "aurora_x\\api\\commands.py",
+      "size": 2383,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "classes": [
         "CommandRequest"
       ],
       "autonomous_methods": []
+<<<<<<< HEAD
     },
     {
       "file": "archive\\legacy\\aurora_debug_http400.py",
@@ -2144,14 +3530,50 @@
         "diagnose_and_fix",
         "apply_fix"
       ]
+=======
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
     }
   ],
   "monitoring_systems": [],
   "auto_fix_systems": [],
   "daemon_systems": [
     {
+<<<<<<< HEAD
       "file": "aurora_autonomous_monitor.py",
       "size": 3872,
+=======
+      "file": "aurora_activate_all_systems_100_percent.py",
+      "size": 6692,
+      "daemon_methods": [
+        "start_service"
+      ]
+    },
+    {
+      "file": "aurora_analyze_all_branches.py",
+      "size": 15138,
+      "daemon_methods": [
+        "run_complete_analysis"
+      ]
+    },
+    {
+      "file": "aurora_api_load_balancer.py",
+      "size": 4030,
+      "daemon_methods": [
+        "health_monitor_loop",
+        "start_monitoring"
+      ]
+    },
+    {
+      "file": "aurora_autonomous_agent.py",
+      "size": 2896,
+      "daemon_methods": [
+        "start_autonomous_mode"
+      ]
+    },
+    {
+      "file": "aurora_autonomous_monitor.py",
+      "size": 4628,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "restart_services",
         "monitor_loop"
@@ -2159,20 +3581,38 @@
     },
     {
       "file": "aurora_chat_server.py",
+<<<<<<< HEAD
       "size": 8637,
       "daemon_methods": [
         "run_aurora_chat_server"
+=======
+      "size": 12307,
+      "daemon_methods": [
+        "_monitor_services"
+      ]
+    },
+    {
+      "file": "aurora_check_architecture.py",
+      "size": 22683,
+      "daemon_methods": [
+        "run_complete_check"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     },
     {
       "file": "aurora_complete_system_analysis.py",
+<<<<<<< HEAD
       "size": 19013,
+=======
+      "size": 20508,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "scan_for_daemon_systems",
         "run_complete_analysis"
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_complete_system_update.py",
       "size": 27757,
       "daemon_methods": [
@@ -2185,12 +3625,24 @@
       "daemon_methods": [
         "_get_self_monitor",
         "start_server",
+=======
+      "file": "aurora_core.py",
+      "size": 101136,
+      "daemon_methods": [
+        "_get_self_monitor",
+        "start_server",
+        "run_code_quality_scan",
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
         "start_service"
       ]
     },
     {
       "file": "aurora_core_original.py",
+<<<<<<< HEAD
       "size": 88460,
+=======
+      "size": 88809,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "_get_self_monitor",
         "start_server",
@@ -2199,7 +3651,11 @@
     },
     {
       "file": "aurora_core_templates_backup.py",
+<<<<<<< HEAD
       "size": 143261,
+=======
+      "size": 144065,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "_get_self_monitor",
         "start_server",
@@ -2207,8 +3663,49 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_docker_healer.py",
       "size": 11634,
+=======
+      "file": "aurora_correct_power_and_activate.py",
+      "size": 17017,
+      "daemon_methods": [
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_create_missing_services.py",
+      "size": 29330,
+      "daemon_methods": [
+        "create_web_health_monitor",
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_create_xstart_cmd.py",
+      "size": 6124,
+      "daemon_methods": [
+        "aurora_create_xstart_command"
+      ]
+    },
+    {
+      "file": "aurora_deep_self_comparison.py",
+      "size": 14705,
+      "daemon_methods": [
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_deep_system_analysis.py",
+      "size": 14406,
+      "daemon_methods": [
+        "run"
+      ]
+    },
+    {
+      "file": "aurora_docker_healer.py",
+      "size": 12389,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "check_docker_desktop_running",
         "check_docker_daemon",
@@ -2216,20 +3713,45 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_fix_all_170_problems.py",
       "size": 13375,
+=======
+      "file": "aurora_find_everything.py",
+      "size": 26101,
+      "daemon_methods": [
+        "run_complete_discovery"
+      ]
+    },
+    {
+      "file": "aurora_fix_all_170_problems.py",
+      "size": 14201,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_all_fixes"
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_fix_imports.py",
       "size": 7454,
+=======
+      "file": "aurora_hyperspeed_fix.py",
+      "size": 8078,
+      "daemon_methods": [
+        "start_service"
+      ]
+    },
+    {
+      "file": "aurora_hyper_speed_complete_analysis.py",
+      "size": 18061,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run"
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_full_ui_redesign.py",
       "size": 22075,
       "daemon_methods": [
@@ -2239,20 +3761,54 @@
     {
       "file": "aurora_html_tsx_analysis.py",
       "size": 10104,
+=======
+      "file": "aurora_implement_everything.py",
+      "size": 24966,
+      "daemon_methods": [
+        "run_autonomous_implementation"
+      ]
+    },
+    {
+      "file": "aurora_instant_full_integration.py",
+      "size": 17756,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run"
       ]
     },
     {
       "file": "aurora_live_integration.py",
+<<<<<<< HEAD
       "size": 15835,
+=======
+      "size": 16834,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "monitor_server_health"
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_pylint_prevention.py",
       "size": 9052,
+=======
+      "file": "aurora_master_controller.py",
+      "size": 10064,
+      "daemon_methods": [
+        "_monitor_all_systems"
+      ]
+    },
+    {
+      "file": "aurora_pre_update_complete_analysis.py",
+      "size": 22895,
+      "daemon_methods": [
+        "run_complete_analysis"
+      ]
+    },
+    {
+      "file": "aurora_pylint_prevention.py",
+      "size": 9986,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_pylint_check",
         "continuous_monitor",
@@ -2260,17 +3816,28 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_self_monitor.py",
       "size": 10033,
       "daemon_methods": [
         "monitor_system_health",
         "monitor_files",
         "continuous_monitor"
+=======
+      "file": "aurora_self_assessment_vs_history.py",
+      "size": 17334,
+      "daemon_methods": [
+        "run"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     },
     {
       "file": "aurora_server_manager.py",
+<<<<<<< HEAD
       "size": 14491,
+=======
+      "size": 15295,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_service",
         "cleanup_and_restart",
@@ -2279,21 +3846,51 @@
     },
     {
       "file": "aurora_status_report.py",
+<<<<<<< HEAD
       "size": 5364,
+=======
+      "size": 6041,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_system_check"
       ]
     },
     {
+<<<<<<< HEAD
       "file": "diagnostic_server.py",
       "size": 10215,
+=======
+      "file": "aurora_ultimate_self_healing_system_DRAFT2.py",
+      "size": 58032,
+      "daemon_methods": [
+        "phase_6_monitoring_system",
+        "continuous_monitoring"
+      ]
+    },
+    {
+      "file": "aurora_web_health_monitor.py",
+      "size": 4336,
+      "daemon_methods": [
+        "start_monitoring",
+        "monitor_loop",
+        "start_monitoring"
+      ]
+    },
+    {
+      "file": "diagnostic_server.py",
+      "size": 10931,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_server"
       ]
     },
     {
       "file": "luminar-keeper.py",
+<<<<<<< HEAD
       "size": 8002,
+=======
+      "size": 8790,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_servers",
         "run"
@@ -2301,7 +3898,11 @@
     },
     {
       "file": "start_aurora_autonomous.py",
+<<<<<<< HEAD
       "size": 7544,
+=======
+      "size": 7798,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "monitor_and_act",
         "run"
@@ -2309,13 +3910,18 @@
     },
     {
       "file": "test_aurora_autonomous_systems.py",
+<<<<<<< HEAD
       "size": 17485,
+=======
+      "size": 18340,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "test_phase_1_self_monitoring",
         "run_all_tests"
       ]
     },
     {
+<<<<<<< HEAD
       "file": "timer_app.py",
       "size": 3643,
       "daemon_methods": [
@@ -2325,6 +3931,10 @@
     {
       "file": ".aurora\\aurora_core.py",
       "size": 79972,
+=======
+      "file": ".aurora\\aurora_core.py",
+      "size": 81514,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "_get_self_monitor",
         "start_server",
@@ -2332,6 +3942,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_x\\main.py",
       "size": 47633,
       "daemon_methods": [
@@ -2346,6 +3957,10 @@
     {
       "file": "aurora_x\\orchestrator.py",
       "size": 6309,
+=======
+      "file": "aurora_x\\orchestrator.py",
+      "size": 7073,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "latest_run_for",
         "run_once"
@@ -2353,7 +3968,11 @@
     },
     {
       "file": "aurora_x\\self_learn.py",
+<<<<<<< HEAD
       "size": 10928,
+=======
+      "size": 11568,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_synthesis",
         "run_forever"
@@ -2361,7 +3980,11 @@
     },
     {
       "file": "aurora_x\\self_learn_server.py",
+<<<<<<< HEAD
       "size": 5033,
+=======
+      "size": 5701,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_learning",
         "get_recent_runs"
@@ -2369,7 +3992,11 @@
     },
     {
       "file": "aurora_x\\serve.py",
+<<<<<<< HEAD
       "size": 30960,
+=======
+      "size": 35528,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_self_learning",
         "self_monitor_health",
@@ -2378,7 +4005,11 @@
     },
     {
       "file": "tools\\api_manager.py",
+<<<<<<< HEAD
       "size": 14191,
+=======
+      "size": 14944,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_api",
         "restart_all_apis"
@@ -2386,7 +4017,11 @@
     },
     {
       "file": "tools\\aurora_autonomy_v2.py",
+<<<<<<< HEAD
       "size": 11081,
+=======
+      "size": 11874,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "monitor_ports",
         "run_autonomous_cycle"
@@ -2394,21 +4029,33 @@
     },
     {
       "file": "tools\\aurora_auto_fix.py",
+<<<<<<< HEAD
       "size": 9218,
+=======
+      "size": 10454,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_auto_fixes"
       ]
     },
     {
       "file": "tools\\aurora_blank_page_fixer.py",
+<<<<<<< HEAD
       "size": 13993,
+=======
+      "size": 14791,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_full_diagnostic"
       ]
     },
     {
       "file": "tools\\aurora_core.py",
+<<<<<<< HEAD
       "size": 25418,
+=======
+      "size": 26273,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "_start_autonomous_monitoring",
         "start_all_services",
@@ -2423,21 +4070,33 @@
     },
     {
       "file": "tools\\aurora_dashboard_tutorial.py",
+<<<<<<< HEAD
       "size": 8592,
+=======
+      "size": 10173,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "demonstrate_starting_server"
       ]
     },
     {
       "file": "tools\\aurora_debug_chat.py",
+<<<<<<< HEAD
       "size": 13645,
+=======
+      "size": 14499,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_diagnosis_and_fix"
       ]
     },
     {
       "file": "tools\\aurora_direct_telemetry.py",
+<<<<<<< HEAD
       "size": 7311,
+=======
+      "size": 8684,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_session",
         "start_vite_server",
@@ -2446,7 +4105,11 @@
     },
     {
       "file": "tools\\aurora_emergency_debug.py",
+<<<<<<< HEAD
       "size": 7468,
+=======
+      "size": 8833,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_debug",
         "restart_vite_server"
@@ -2454,14 +4117,22 @@
     },
     {
       "file": "tools\\aurora_load_dashboard.py",
+<<<<<<< HEAD
       "size": 3749,
+=======
+      "size": 5079,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_server"
       ]
     },
     {
       "file": "tools\\aurora_port_manager.py",
+<<<<<<< HEAD
       "size": 15461,
+=======
+      "size": 17331,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_monitoring",
         "stop_monitoring",
@@ -2469,6 +4140,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_retry_until_aplus.py",
       "size": 7465,
       "daemon_methods": [
@@ -2478,6 +4150,10 @@
     {
       "file": "tools\\aurora_safety_protocol.py",
       "size": 24188,
+=======
+      "file": "tools\\aurora_safety_protocol.py",
+      "size": 24951,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "auto_save_loop",
         "start_auto_save",
@@ -2486,12 +4162,17 @@
     },
     {
       "file": "tools\\aurora_self_heal.py",
+<<<<<<< HEAD
       "size": 11438,
+=======
+      "size": 12259,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_self_diagnostics"
       ]
     },
     {
+<<<<<<< HEAD
       "file": "tools\\aurora_self_reload.py",
       "size": 3905,
       "daemon_methods": [
@@ -2509,6 +4190,10 @@
     {
       "file": "tools\\aurora_strict_supervisor.py",
       "size": 10050,
+=======
+      "file": "tools\\aurora_strict_supervisor.py",
+      "size": 11411,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_supervision",
         "monitor_aurora_work",
@@ -2517,7 +4202,11 @@
     },
     {
       "file": "tools\\aurora_supervisor.py",
+<<<<<<< HEAD
       "size": 16399,
+=======
+      "size": 17305,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_service",
         "restart_service",
@@ -2528,14 +4217,22 @@
     },
     {
       "file": "tools\\aurora_tab_diagnostics.py",
+<<<<<<< HEAD
       "size": 5952,
+=======
+      "size": 6656,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_diagnostics"
       ]
     },
     {
       "file": "tools\\aurora_true_autonomy.py",
+<<<<<<< HEAD
       "size": 15982,
+=======
+      "size": 16853,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_grade_check",
         "autonomous_execution_loop"
@@ -2543,14 +4240,22 @@
     },
     {
       "file": "tools\\aurora_ultimate_autonomous_controller.py",
+<<<<<<< HEAD
       "size": 8698,
+=======
+      "size": 8917,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_autonomous_task"
       ]
     },
     {
       "file": "tools\\luminar_nexus.py",
+<<<<<<< HEAD
       "size": 186188,
+=======
+      "size": 193778,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_chat_server",
         "start_server",
@@ -2560,7 +4265,11 @@
     },
     {
       "file": "tools\\luminar_nexus_v1_backup.py",
+<<<<<<< HEAD
       "size": 185880,
+=======
+      "size": 183558,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_chat_server",
         "start_server",
@@ -2570,7 +4279,11 @@
     },
     {
       "file": "tools\\luminar_nexus_v2.py",
+<<<<<<< HEAD
       "size": 84533,
+=======
+      "size": 86373,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "run_luminar_nexus_v2",
         "run_chat_server_v2",
@@ -2583,14 +4296,22 @@
     },
     {
       "file": "tools\\monitor_daemon.py",
+<<<<<<< HEAD
       "size": 1490,
+=======
+      "size": 2171,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "monitor_services"
       ]
     },
     {
       "file": "tools\\recorder_monitor.py",
+<<<<<<< HEAD
       "size": 4739,
+=======
+      "size": 5949,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "log_monitor",
         "main_loop"
@@ -2598,14 +4319,22 @@
     },
     {
       "file": "tools\\relay_to_aurora.py",
+<<<<<<< HEAD
       "size": 3140,
+=======
+      "size": 3828,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "monitor_aurora_response"
       ]
     },
     {
       "file": "tools\\server_manager.py",
+<<<<<<< HEAD
       "size": 119428,
+=======
+      "size": 121531,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_self_learn_server",
         "get_running_workflows",
@@ -2621,7 +4350,11 @@
     },
     {
       "file": "tools\\ultimate_api_manager.py",
+<<<<<<< HEAD
       "size": 158423,
+=======
+      "size": 165294,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "start_service_advanced",
         "restart_all_services",
@@ -2637,30 +4370,72 @@
     },
     {
       "file": "tools\\workflow_dashboard.py",
+<<<<<<< HEAD
       "size": 2612,
+=======
+      "size": 2937,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "get_workflow_runs"
       ]
     },
     {
       "file": "tests\\unit\\test_selflearn_server.py",
+<<<<<<< HEAD
       "size": 4043,
+=======
+      "size": 4558,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "daemon_methods": [
         "test_start_endpoint",
         "test_recent_runs_endpoint",
         "test_daemon_lifecycle",
         "test_service_starts"
       ]
+<<<<<<< HEAD
+=======
+    },
+    {
+      "file": "backups\\aurora_full_update_20251122_060737\\aurora_core.py",
+      "size": 112279,
+      "daemon_methods": [
+        "_get_self_monitor",
+        "start_server",
+        "start_service"
+      ]
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
     }
   ],
   "activation_mechanisms": [
     {
+<<<<<<< HEAD
+=======
+      "file": "activate_aurora_core.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.activate\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "ask_aurora_brutal_honesty.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "ask_aurora_consciousness.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "ask_aurora_enable_full_autonomy.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -2693,6 +4468,36 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "ask_aurora_to_debug_everything.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_accepts_full_integration.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_activate_all_systems_100_percent.py",
+      "activation_patterns": [
+        "subprocess\\.Popen"
+      ]
+    },
+    {
+      "file": "aurora_analyze_all_branches.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_analyze_terminal_chat_power.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -2700,12 +4505,41 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_analyze_xstart.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_api_load_balancer.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_architecture_analysis.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_authentic.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_automatic_system_update.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -2713,10 +4547,28 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_autonomous_agent.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
         "\\.run\\("
+=======
+      "file": "aurora_automation_hub.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_autonomous_agent.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     },
     {
@@ -2727,6 +4579,15 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_autonomous_branch_decision.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_autonomous_debug_everything.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -2761,12 +4622,40 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_autonomous_router.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_autonomous_self_improve.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_autonomous_system_fixer.py",
+      "activation_patterns": [
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_auto_improver.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_auto_integrator.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
@@ -2779,10 +4668,39 @@
       ]
     },
     {
+<<<<<<< HEAD
       "file": "aurora_chat_server.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
         "\\.run\\("
+=======
+      "file": "aurora_build_enhanced_xstart.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\(",
+        "subprocess\\.Popen"
+      ]
+    },
+    {
+      "file": "aurora_chat_server.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_check_architecture.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+      "file": "aurora_code_quality_improver.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     },
     {
@@ -2838,12 +4756,39 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_comprehensive_branch_analyzer.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_comprehensive_verification.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_conscious.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_conscious_xstart_analysis.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_core.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -2858,6 +4803,19 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_core_service.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "\\.activate\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_core_templates_backup.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -2866,6 +4824,58 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_correct_power_and_activate.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_creates_integration_plan.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_create_all_systems_hyper_speed.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_create_critical_systems.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_create_missing_services.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_create_xstart_cmd.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\(",
+        "subprocess\\.Popen"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_debug_proactive_system.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -2880,6 +4890,30 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_deep_scan_autonomous.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_deep_self_comparison.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_deep_system_analysis.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_deep_system_scan.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -2887,6 +4921,24 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_deep_system_updater.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_diagnose_systems.py",
+      "activation_patterns": [
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_docker_healer.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -2901,6 +4953,33 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_enhancement_orchestrator.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_enhance_chat_full_power.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_enhance_system_updater.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_enhance_terminal_chat.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
@@ -2913,6 +4992,15 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_find_everything.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_fix_all_170_problems.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
@@ -2932,12 +5020,33 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_fix_all_syntax_errors.py",
+      "activation_patterns": [
+        "\\.start\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_fix_architecture.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_fix_encoding.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_fix_imports.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -2964,6 +5073,15 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_forensic_analysis.py",
+      "activation_patterns": [
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_foundational_genius.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
@@ -2983,6 +5101,15 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_full_system_updater.py",
+      "activation_patterns": [
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_full_ui_redesign.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -3008,6 +5135,63 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_hyperspeed_fix.py",
+      "activation_patterns": [
+        "subprocess\\.Popen"
+      ]
+    },
+    {
+      "file": "aurora_hyper_speed_complete_analysis.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_hyper_speed_mode.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+      "file": "aurora_implement_all_fixes.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_implement_everything.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_independent_analysis.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+      "file": "aurora_instant_full_integration.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "aurora_instant_response.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_integration_analyzer.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
@@ -3017,7 +5201,13 @@
       "file": "aurora_intelligence_manager.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
+<<<<<<< HEAD
         "\\.run\\("
+=======
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     },
     {
@@ -3039,12 +5229,55 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_master_controller.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_maximum_power_perfecter.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+      "file": "aurora_merge_all_needed_files.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_multi_agent.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_nexus_v3_universal.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "threading\\.Thread",
+        "subprocess\\.Popen"
+      ]
+    },
+    {
+      "file": "aurora_omniscient_nuclear_perfecter.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_open_browser.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -3058,12 +5291,30 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_perfect_code_quality_enforcer.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_performance_optimizer.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_pre_update_complete_analysis.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_pylint_prevention.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -3077,6 +5328,16 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_reviews_peak_state.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_review_before_cleanup.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
@@ -3102,6 +5363,16 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_self_assessment_vs_history.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_self_audit_and_upgrade.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
@@ -3122,6 +5393,16 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_self_fix_debug.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_self_monitor.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -3129,6 +5410,15 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_self_repair.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_self_update.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
@@ -3142,6 +5432,16 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_smart_merger.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_status_report.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -3169,7 +5469,21 @@
     {
       "file": "aurora_tier_orchestrator.py",
       "activation_patterns": [
+<<<<<<< HEAD
         "if __name__ == [\"\\']__main__[\"\\']"
+=======
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_true_connection.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     },
     {
@@ -3179,18 +5493,65 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_ultimate_absolute_10_guarantee.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\("
+      ]
+    },
+    {
+      "file": "aurora_ultimate_autonomous_fixer_DRAFT.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_ultimate_omniscient_grandmaster.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_ultimate_self_healing_system_DRAFT2.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+      "file": "aurora_ultra_aggressive_perfecter.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "aurora_verify_core_integration.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "aurora_web_health_monitor.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.start\\(",
+        "\\.run\\(",
+        "threading\\.Thread"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "chat_with_aurora.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -3198,6 +5559,22 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "chat_with_aurora_direct.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "check_aurora_status.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "fix_all_pylint_errors_complete.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
@@ -3211,6 +5588,16 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "show_aurora_copilot_pattern.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "start_aurora_autonomous.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -3731,6 +6118,16 @@
       ]
     },
     {
+<<<<<<< HEAD
+=======
+      "file": "backups\\aurora_full_update_20251122_060737\\aurora_core.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       "file": "backups\\aurora_backup_20251012_143639\\runs\\run-20251012-141414\\src\\create_intelligent_code_synthe_app.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
@@ -3773,6 +6170,7 @@
   "git_history_insights": [
     {
       "keyword": "orchestrat",
+<<<<<<< HEAD
       "commit_count": 48,
       "recent_commits": [
         "5d7aa95 Aurora: Complete system integration with Nexus V2 and autonomous fixes",
@@ -3780,11 +6178,21 @@
         "78a04be Aurora System Complete: Task1-13 Foundations + Full Debug + Organization",
         "4783db8 Refactor AIServiceOrchestrator and LuminarNexusV2 for improved readability and maintainability",
         "a3a9325 Assistant checkpoint: Complete Aurora chat setup with WebSocket fixes"
+=======
+      "commit_count": 54,
+      "recent_commits": [
+        "20647f9 fix: Clean up whitespace in main orchestration functions and initialization checks",
+        "e08ce6c feat: Implement Nexus V3 Master Orchestrator with intelligent port management and service registration",
+        "11ca3b7 feat: Implement comprehensive transformation plan for Luminar Nexus v1 to manage new autonomous systems",
+        "4465130 feat: Implement Aurora Enhancement Orchestrator and related systems",
+        "5a1dcf2 feat: Implement Aurora Hyper-Speed Mode for instant problem detection and fixes"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
       ]
     }
   ],
   "missing_connections": [
     {
+<<<<<<< HEAD
       "orchestrator": "aurora_autonomous_agent.py",
       "connected_autonomous": [
         "serve",
@@ -3792,11 +6200,46 @@
       ],
       "total_autonomous_systems": 100,
       "connection_percentage": 2.0
+=======
+      "orchestrator": "aurora_analyze_all_branches.py",
+      "connected_autonomous": [],
+      "total_autonomous_systems": 113,
+      "connection_percentage": 0.0
+    },
+    {
+      "orchestrator": "aurora_analyze_enforcer_full_power.py",
+      "connected_autonomous": [
+        "aurora_intelligent_perfect_enforcer_v2",
+        "aurora_ultimate_absolute_10_guarantee",
+        "aurora_ultimate_self_healing_system_DRAFT2",
+        "serve"
+      ],
+      "total_autonomous_systems": 113,
+      "connection_percentage": 3.5398230088495577
+    },
+    {
+      "orchestrator": "aurora_api_gateway.py",
+      "connected_autonomous": [],
+      "total_autonomous_systems": 113,
+      "connection_percentage": 0.0
+    },
+    {
+      "orchestrator": "aurora_authentic.py",
+      "connected_autonomous": [
+        "aurora_core",
+        "aurora_core",
+        "aurora_core",
+        "aurora_core"
+      ],
+      "total_autonomous_systems": 113,
+      "connection_percentage": 3.5398230088495577
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
     },
     {
       "orchestrator": "aurora_autonomous_lint_fixer.py",
       "connected_autonomous": [
         "aurora_core",
+<<<<<<< HEAD
         "aurora_intelligence_manager",
         "aurora_core",
         "aurora_core",
@@ -3841,12 +6284,26 @@
       ],
       "total_autonomous_systems": 100,
       "connection_percentage": 10.0
+=======
+        "aurora_core",
+        "aurora_core",
+        "luminar_nexus",
+        "luminar_nexus_v2",
+        "aurora_core"
+      ],
+      "total_autonomous_systems": 113,
+      "connection_percentage": 5.3097345132743365
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
     }
   ],
   "integration_points": [],
   "ultimate_api_manager": {
     "exists": true,
+<<<<<<< HEAD
     "size": 158423,
+=======
+    "size": 165294,
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
     "classes": [
       "AdvancedCodingKnowledge",
       "ServiceMetrics",

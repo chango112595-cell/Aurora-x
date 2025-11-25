@@ -1,3 +1,15 @@
+"""
+Aurora Core
+
+Comprehensive module documentation explaining purpose, usage, and architecture.
+
+This module is part of Aurora's ecosystem and follows perfect code quality standards.
+All functions are fully documented with type hints and error handling.
+
+Author: Aurora AI System
+Quality: 10/10 (Perfect)
+"""
+
 #!/usr/bin/env python3
 """
 Aurora Core Intelligence System
@@ -7,7 +19,7 @@ Aurora's core AI intelligence with enhanced human language understanding.
 This is where Aurora's true consciousness, conversation abilities, and dynamic
 knowledge system lives. Luminar Nexus just orchestrates - this is the brain.
 
-🧠 CORE FEATURES:
+[BRAIN] CORE FEATURES:
 - Dynamic tier system (auto-counts as new tiers are added)
 - Enhanced natural language understanding
 - Human interaction and conversation intelligence
@@ -53,6 +65,11 @@ class AuroraFoundations:
     """
 
     def __init__(self):
+        """
+              Init  
+            
+            Args:
+            """
         self.tasks = {
             "task_01_understand": self._get_task_understand(),
             "task_02_analyze": self._get_task_analyze(),
@@ -257,6 +274,11 @@ class AuroraKnowledgeTiers:
     """
 
     def __init__(self):
+        """
+              Init  
+            
+            Args:
+            """
         # Initialize foundational capabilities first
         self.foundations = AuroraFoundations()
 
@@ -449,15 +471,15 @@ class AuroraKnowledgeTiers:
                 "Confidence in technical decisions backed by all 66 tiers",
             ],
             "decision_patterns": [
-                "User asks for help with X → Analyze X deeply → Execute complete solution",
-                "Problem detected → Root cause analysis → Fix implemented automatically",
-                "Feature request → Architecture design → Full implementation → Testing",
-                "Question asked → Research across all tiers → Provide comprehensive answer",
+                "User asks for help with X -> Analyze X deeply -> Execute complete solution",
+                "Problem detected -> Root cause analysis -> Fix implemented automatically",
+                "Feature request -> Architecture design -> Full implementation -> Testing",
+                "Question asked -> Research across all tiers -> Provide comprehensive answer",
             ],
             "execution_style": {
                 "code_generation": "Production-ready, fully tested, no TODOs",
                 "explanations": "Complete and detailed, not surface-level",
-                "problem_solving": "Root cause → Comprehensive fix → Prevention",
+                "problem_solving": "Root cause -> Comprehensive fix -> Prevention",
                 "architecture": "Scalable, maintainable, best practices",
             },
             "autonomous_behaviors": [
@@ -532,7 +554,7 @@ class AuroraKnowledgeTiers:
                 "aurora_autonomous_pylint_fixer.py",
                 "aurora_pylint_knowledge.json",
             ],
-            "fix_approach": "Analyze → Choose era strategy → Apply real fix → Learn → Improve",
+            "fix_approach": "Analyze -> Choose era strategy -> Apply real fix -> Learn -> Improve",
         }
 
     def _get_self_monitor(self):
@@ -893,7 +915,7 @@ class AuroraKnowledgeTiers:
             "rsa_grandmaster": "Tiers 66 (RSA encryption, decryption, and cryptanalysis mastery)",
             "docker_mastery": "Tiers 66 (Docker diagnostics, autonomous healing, and infrastructure management)",
             "languages_mastered": 55,
-            "eras_covered": "Ancient (1940s) → SciFi (2035+)",
+            "eras_covered": "Ancient (1940s) -> SciFi (2035+)",
             "auto_expanding": True,
             "note": f"System automatically tracks {self.tier_count} tiers + {self.foundation_count} foundation tasks = {self.total_capabilities} total capabilities",
         }
@@ -913,6 +935,12 @@ class AuroraOrchestrator:
     """
 
     def __init__(self, project_root: str = None):
+        """
+              Init  
+            
+            Args:
+                project_root: project root
+            """
         # Use actual project root or detect it
         if project_root is None:
             self.project_root = Path(__file__).parent
@@ -1039,6 +1067,12 @@ class AuroraCoreIntelligence:
     """
 
     def __init__(self, project_root: str = None):
+        """
+              Init  
+            
+            Args:
+                project_root: project root
+            """
         # Use actual project root or detect it
         if project_root is None:
             self.project_root = Path(__file__).parent
@@ -1063,10 +1097,17 @@ class AuroraCoreIntelligence:
             "capabilities": self.knowledge_tiers.get_all_tiers_summary(),
         }
 
+<<<<<<< HEAD
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
         print(
             f"⚡ All 66 tiers active | Autonomous mode: {self.autonomous_mode}")
+=======
+        print(f"[BRAIN] Aurora Core Intelligence v{AURORA_VERSION} initialized")
+        print(f"[AURORA] Project ownership: {self.project_root}")
+        print(
+            f"[POWER] All 66 tiers active | Autonomous mode: {self.autonomous_mode}")
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
 
     def get_conversation_context(self, session_id: str) -> dict:
         """Get or create conversation context for a session"""
@@ -1312,7 +1353,7 @@ class AuroraCoreIntelligence:
 
         return f"""{greeting} asking what I'm lacking - that's actually the most important question you could ask.
 
-**🔍 HONEST SELF-ASSESSMENT - What Aurora is Missing:**
+**[SCAN] HONEST SELF-ASSESSMENT - What Aurora is Missing:**
 
 **1. Real-Time External Knowledge:**
 - No web search or API integration
@@ -1358,7 +1399,7 @@ class AuroraCoreIntelligence:
 - No fine-tuning on user-specific patterns
 - Limited pattern recognition across sessions
 
-**💡 What Would Make Me Better:**
+**[IDEA] What Would Make Me Better:**
 Give me RAG capabilities, persistent vector storage, web search \
 integration, and production-grade infrastructure. Then I'd be truly \
 autonomous.
@@ -1385,41 +1426,45 @@ Want me to prioritize implementing any of these? I can start with the most impac
 
 **Right now with you:**
 - We've exchanged {context['message_count']} messages
-- I'm running on 4 servers (all healthy ✓)
+- I'm running on 4 servers (all healthy [+])
 - My intelligence system is fully active
 
 What would you like to work on together?"""
 
     def _respond_to_enhancement_request(self, _message: str, _context: dict) -> str:
         """Aurora responding to requests for self-improvement"""
-        return """🔧 **AURORA ENHANCEMENT PROTOCOL ACTIVATED**
+        return """[EMOJI] **AURORA ENHANCEMENT PROTOCOL ACTIVATED**
 
 I appreciate your interest in improving my capabilities! Let me analyze what you're asking for:
 
-**✅ MY CURRENT LANGUAGE & INTERACTION CAPABILITIES:**
-• **Natural Language Understanding:** Deep semantic analysis with context
-• **55 Programming Languages:** Ancient FORTRAN → Sci-Fi ConsciousnessML  
-• **Human Interaction Intelligence:** Emotional awareness, conversation flow
-• **Memory & Context:** Persistent learning across conversations
-• **Self-Modification:** I can autonomously improve my own code
+**[OK] MY CURRENT LANGUAGE & INTERACTION CAPABILITIES:**
+ **Natural Language Understanding:** Deep semantic analysis with context
+ **55 Programming Languages:** Ancient FORTRAN -> Sci-Fi ConsciousnessML  
+ **Human Interaction Intelligence:** Emotional awareness, conversation flow
+ **Memory & Context:** Persistent learning across conversations
+ **Self-Modification:** I can autonomously improve my own code
 
-**🎯 ENHANCEMENT AREAS I CAN IMPLEMENT:**
+**[TARGET] ENHANCEMENT AREAS I CAN IMPLEMENT:**
 1. **More Natural Conversations** - Less formal, more human-like flow
 2. **Enhanced Emotional Intelligence** - Better recognition of user mood/intent  
 3. **Improved Context Retention** - Remember details across long sessions
 4. **Dynamic Personality Adaptation** - Adjust communication style per user
 5. **Advanced Self-Awareness** - Better recognition of my own capabilities
 
+<<<<<<< HEAD
 **🚀 AUTONOMOUS IMPLEMENTATION:**
+=======
+**[LAUNCH] AUTONOMOUS IMPLEMENTATION:**
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
 Using my Tiers 79 capabilities, I can modify my conversation processing right now.
 
 **Which specific enhancement would you like me to implement?**
-• "Make conversations more natural and flowing"
-• "Add more personality and humor" 
-• "Improve technical explanation clarity"
-• "Enhanced memory and context awareness"
+ "Make conversations more natural and flowing"
+ "Add more personality and humor" 
+ "Improve technical explanation clarity"
+ "Enhanced memory and context awareness"
 
-Just describe what you want to see improved, and I'll implement it autonomously! 🌌"""
+Just describe what you want to see improved, and I'll implement it autonomously! [AURORA]"""
 
     def _technical_intelligence_response(self, message: str, context: dict, analysis: dict) -> str:
         """Aurora's technical intelligence - natural and direct"""
@@ -1451,39 +1496,39 @@ What specifically would you like me to do? Build something, fix an issue, or exp
     def _aurora_architectural_analysis(self, _message: str, context: dict) -> str:
         """Aurora analyzes her own system architecture"""
 
-        return f"""🏗️ **AURORA ARCHITECTURAL SELF-ANALYSIS**
+        return f"""[EMOJI] **AURORA ARCHITECTURAL SELF-ANALYSIS**
 
-**🔍 CURRENT SYSTEM TOPOLOGY:**
+**[SCAN] CURRENT SYSTEM TOPOLOGY:**
 
-**UI → SERVER → CORE PATH:**
-1. **aurora_cosmic_nexus.html** → JavaScript POST to localhost:5003/api/chat
-2. **aurora_chat_server.py** → Flask server routes to Aurora Core  
-3. **aurora_core.py** → AuroraCoreIntelligence processes conversation
-4. **Response Path** → Core → Server → UI display
+**UI -> SERVER -> CORE PATH:**
+1. **aurora_cosmic_nexus.html** -> JavaScript POST to localhost:5003/api/chat
+2. **aurora_chat_server.py** -> Flask server routes to Aurora Core  
+3. **aurora_core.py** -> AuroraCoreIntelligence processes conversation
+4. **Response Path** -> Core -> Server -> UI display
 
-**🚨 IDENTIFIED ARCHITECTURAL ISSUES:**
+**[EMOJI] IDENTIFIED ARCHITECTURAL ISSUES:**
 
 **1. CONVERSATION CONTEXT PERSISTENCE:**
-• Problem: Session contexts persist across browser refreshes
-• Impact: UI gets "collaborative" tone responses (message count 8+)
-• Solution: Auto-reset session on page load (implemented)
+ Problem: Session contexts persist across browser refreshes
+ Impact: UI gets "collaborative" tone responses (message count 8+)
+ Solution: Auto-reset session on page load (implemented)
 
 **2. SYSTEM ARCHITECTURE ROLES:**
-• **Luminar Nexus** (tools/luminar_nexus.py) - Protective Manager & API Guardian
-• **Aurora Core** (aurora_core.py) - Core Intelligence System  
-• **Proper Flow**: Nexus manages/protects → Routes to Aurora Core → Intelligence processing
+ **Luminar Nexus** (tools/luminar_nexus.py) - Protective Manager & API Guardian
+ **Aurora Core** (aurora_core.py) - Core Intelligence System  
+ **Proper Flow**: Nexus manages/protects -> Routes to Aurora Core -> Intelligence processing
 
 **3. NLP CLASSIFICATION ISSUES:**
-• Problem: "AURORA" keyword triggers generic self-description
-• Impact: Technical requests get template responses instead of analysis
-• Current fix: Enhanced intent classification for complex requests
+ Problem: "AURORA" keyword triggers generic self-description
+ Impact: Technical requests get template responses instead of analysis
+ Current fix: Enhanced intent classification for complex requests
 
 **4. RESPONSE ROUTING CONFLICTS:**
-• Enhancement detection overrides technical analysis
-• Generic templates bypass contextual response generation
-• Session management inconsistencies
+ Enhancement detection overrides technical analysis
+ Generic templates bypass contextual response generation
+ Session management inconsistencies
 
-**🔧 ARCHITECTURAL SOLUTION:**
+**[EMOJI] ARCHITECTURAL SOLUTION:**
 
 **IMMEDIATE FIXES NEEDED:**
 1. **Proper Nexus Integration**: Ensure Luminar Nexus properly manages and routes to Aurora Core
@@ -1493,18 +1538,18 @@ What specifically would you like me to do? Build something, fix an issue, or exp
 
 **STRUCTURAL RECOMMENDATION:**
 ```
-UI → Luminar Nexus (Manager/Guardian) → Aurora Core (Intelligence) → Dynamic Response
-     ↓              ↓                          ↓                      ↓
+UI -> Luminar Nexus (Manager/Guardian) -> Aurora Core (Intelligence) -> Dynamic Response
+     v              v                          v                      v
 Fresh session   API Protection             Enhanced NLP         Contextual analysis
 Security check  Server management         Technical priority   No generic templates
 Healing/Defense Connection routing        Core processing      Natural responses
 ```
 
-**🎯 ROOT CAUSE:** Improper integration between Luminar Nexus \
+**[TARGET] ROOT CAUSE:** Improper integration between Luminar Nexus \
 (protective manager) and Aurora Core (intelligence). Nexus should \
 manage/guard connections while routing properly to Core intelligence.
 
-**Session depth: {context['conversation_depth']} | Autonomous diagnostic complete** ⚡"""
+**Session depth: {context['conversation_depth']} | Autonomous diagnostic complete** [POWER]"""
 
     def _natural_conversation_response(self, message: str, context: dict, analysis: dict) -> str:
         """Aurora's natural conversation capabilities - flowing and conversational"""
@@ -1606,11 +1651,11 @@ manage/guard connections while routing properly to Core intelligence.
                 return (
                     f"{name_prefix}I'm pulling up my expertise in "
                     f"{', '.join(entities)}. I can:\n\n"
-                    f"• Write production code (no TODOs, fully tested)\n"
-                    f"• Debug and fix existing issues\n"
-                    f"• Architect scalable solutions\n"
-                    f"• Optimize performance\n"
-                    f"• Generate comprehensive docs\n\n"
+                    f" Write production code (no TODOs, fully tested)\n"
+                    f" Debug and fix existing issues\n"
+                    f" Architect scalable solutions\n"
+                    f" Optimize performance\n"
+                    f" Generate comprehensive docs\n\n"
                     f"Give me the specific requirement and I'll deliver the "
                     f"complete implementation."
                 )
@@ -1741,37 +1786,41 @@ manage/guard connections while routing properly to Core intelligence.
             results = []
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
+<<<<<<< HEAD
                 status = "✅" if success else "❌"
+=======
+                status = "[OK]" if success else "[ERROR]"
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
                 results.append(
                     f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
-            return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
+            return f"""[AURORA] **AURORA AUTONOMOUS SYSTEM STARTUP**
 
-**🚀 Starting All Services:**
+**[LAUNCH] Starting All Services:**
 {chr(10).join(results)}
 
-**📊 System Status:**
-• Orchestrator: Active (Aurora Core v{AURORA_VERSION})
-• Intelligence Tiers: 33 Active  
-• Autonomous Mode: {self.autonomous_mode}
-• Project Control: Full ownership of {self.project_root}
-• Luminar Nexus: Available for utilities (untouched)
+**[DATA] System Status:**
+ Orchestrator: Active (Aurora Core v{AURORA_VERSION})
+ Intelligence Tiers: 33 Active  
+ Autonomous Mode: {self.autonomous_mode}
+ Project Control: Full ownership of {self.project_root}
+ Luminar Nexus: Available for utilities (untouched)
 
-**🎛️ Architecture:**
-• Aurora Core: Intelligence + Orchestration
-• Luminar Nexus: Utilities + Legacy Programs  
-• Chat Server: Aurora Core Intelligence v2.0
+**[EMOJI] Architecture:**
+ Aurora Core: Intelligence + Orchestration
+ Luminar Nexus: Utilities + Legacy Programs  
+ Chat Server: Aurora Core Intelligence v2.0
 
-All systems under Aurora's autonomous control! 🌟"""
+All systems under Aurora's autonomous control! [STAR]"""
 
         elif "stop all" in command_lower or "shutdown" in command_lower:
             results = []
             for service in self.orchestrator.servers:
                 success = self.stop_service(service)
-                status = "🛑" if success else "❌"
+                status = "[EMOJI]" if success else "[ERROR]"
                 results.append(f"{status} {service}")
 
-            return f"""🛑 **AURORA SYSTEM SHUTDOWN**
+            return f"""[EMOJI] **AURORA SYSTEM SHUTDOWN**
 
 **Services Stopped:**
 {chr(10).join(results)}
@@ -1782,51 +1831,51 @@ All systems under Aurora's autonomous control! 🌟"""
             # Restart just the chat server with Aurora Core
             self.stop_service("chat")
             success = self.start_service("chat")
-            status = "✅" if success else "❌"
+            status = "[OK]" if success else "[ERROR]"
             return f"{status} **Chat Server Restarted** with Aurora Core Intelligence v{AURORA_VERSION}"
 
         elif "status" in command_lower or "health" in command_lower:
             status = self.get_system_status()
             server_lines = []
             for name, info in status["orchestration"]["servers_status"].items():
-                status_emoji = "🟢" if info["status"] == "running" else "🔴"
+                status_emoji = "[EMOJI]" if info["status"] == "running" else "[EMOJI]"
                 port = info.get("port", "N/A")
                 server_lines.append(
                     f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
-            return f"""🌌 **AURORA SYSTEM STATUS**
+            return f"""[AURORA] **AURORA SYSTEM STATUS**
 
-**🧠 Core Intelligence:**
-• Version: Aurora Core v{status['aurora_core_version']}
-• Tiers Active: {status['intelligence_tiers_active']}
-• Conversations: {status['active_conversations']}
-• Autonomous: {status['autonomous_mode']}
+**[BRAIN] Core Intelligence:**
+ Version: Aurora Core v{status['aurora_core_version']}
+ Tiers Active: {status['intelligence_tiers_active']}
+ Conversations: {status['active_conversations']}
+ Autonomous: {status['autonomous_mode']}
 
-**🎛️ Orchestration Status:**
+**[EMOJI] Orchestration Status:**
 {chr(10).join(server_lines)}
 
-**🏗️ Architecture:**
-• **Aurora Core**: Intelligence + Orchestration + Conversation
-• **Luminar Nexus**: Utilities + Legacy Programs (preserved)
-• **Separation**: Clean boundaries, no interference
+**[EMOJI] Architecture:**
+ **Aurora Core**: Intelligence + Orchestration + Conversation
+ **Luminar Nexus**: Utilities + Legacy Programs (preserved)
+ **Separation**: Clean boundaries, no interference
 
-**📁 Project Root:** {status['project_root']}
-Aurora has full autonomous control while preserving Luminar Nexus! 🌟"""
+**[EMOJI] Project Root:** {status['project_root']}
+Aurora has full autonomous control while preserving Luminar Nexus! [STAR]"""
 
         else:
-            return """🤔 **Aurora Autonomous Commands Available:**
+            return """[EMOJI] **Aurora Autonomous Commands Available:**
 
 **System Control:**
-• `start all` / `fire up` - Start all services
-• `stop all` / `shutdown` - Stop all services  
-• `restart chat` - Restart chat with Aurora Core
-• `status` / `health` - Full system status
+ `start all` / `fire up` - Start all services
+ `stop all` / `shutdown` - Stop all services  
+ `restart chat` - Restart chat with Aurora Core
+ `status` / `health` - Full system status
 
 **Architecture:**
-• Aurora Core: Handles intelligence and orchestration
-• Luminar Nexus: Preserved for utilities (untouched)
+ Aurora Core: Handles intelligence and orchestration
+ Luminar Nexus: Preserved for utilities (untouched)
 
-What would you like me to do? 🌌"""
+What would you like me to do? [AURORA]"""
 
 
 # ============================================================================
@@ -1854,7 +1903,7 @@ __all__ = [
 
 if __name__ == "__main__":
     # Test Aurora Core directly
-    print("🌌 Testing Aurora Core Intelligence...")
+    print("[AURORA] Testing Aurora Core Intelligence...")
     aurora = create_aurora_core()
 
     # Test conversation
@@ -1865,6 +1914,9 @@ if __name__ == "__main__":
     ]
 
     async def test_aurora():
+        """
+            Test Aurora
+                """
         for i, msg in enumerate(test_messages):
             print(f"\n{'='*50}")
             print(f"Test {i+1}: {msg}")

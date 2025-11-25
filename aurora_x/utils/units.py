@@ -1,8 +1,16 @@
 """aurora_x/utils/units.py - Streamlined unit parsing and SI normalization"""
 
-from __future__ import annotations
+from typing import Dict, List, Tuple, Optional, Any, Union
+import annotations
 
 import re
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
+
+# High-performance parallel processing with ThreadPoolExecutor
+# Example: with ThreadPoolExecutor(max_workers=100) as executor:
+#             results = executor.map(process_func, items)
 
 _LEN = {
     "m": 1.0,

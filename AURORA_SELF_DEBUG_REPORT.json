@@ -1,14 +1,22 @@
 {
+<<<<<<< HEAD
   "timestamp": "2025-11-21T04:01:27.648516",
+=======
+  "timestamp": "2025-11-24T08:27:58.077623",
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
   "issues_found": [
     "Ports {5004, 5173} not configured in x-start",
     "Vite frontend (5173) not configured",
     "Services not running on ports: [5004, 5173]",
     "Vite config has port 5173 but x-start doesn't use it"
   ],
+<<<<<<< HEAD
   "fixes_applied": [
     "Fixed self-diagnostic to check ports 5000-5005"
   ],
+=======
+  "fixes_applied": [],
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
   "running_ports": [
     5000,
     5001,

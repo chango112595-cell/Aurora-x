@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
+<<<<<<< HEAD
 import time
 Aurora Tier Orchestrator
 Phase 3: Intelligence Synthesis (Minutes 21-30)
@@ -10,45 +12,43 @@ Coordinates multiple tiers to solve complex problems:
 - Pattern recognition
 - Optimal tier selection
 - Learning from combinations
+=======
+Aurora Tier Orchestrator - Coordinates all 66 Knowledge Tiers
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
 """
 
-import json
-from datetime import datetime
-from pathlib import Path
-from typing import Any
+import sys
+import io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-from aurora_core import AuroraKnowledgeTiers
+from flask import Flask, jsonify
+import threading
+import time
 
+app = Flask(__name__)
 
-class AuroraTierOrchestrator:
-    """Coordinates multiple tiers for complex problem solving"""
-
+class TierOrchestrator:
     def __init__(self):
-        self.aurora = AuroraKnowledgeTiers()
-        self.tier_combinations: list[dict] = []
-        self.success_patterns: dict[str, int] = {}
-        self.execution_history: list[dict] = []
-
-    def analyze_problem(self, problem_description: str) -> dict[str, Any]:
-        """Analyze problem and determine required tiers"""
-        print(f"🧠 Analyzing problem: {problem_description[:50]}...")
-
-        # Keyword mapping to tiers
-        tier_keywords = {
-            "pylint": [35],  # Tier 35: Pylint Grandmaster
-            "code quality": [35],
-            # Tier 34: Grandmaster Autonomous, Tier 28: Autonomous Tools
-            "autonomous": [34, 28],
-            "network": [33],  # Tier 33: Network Mastery
-            "testing": [36],  # Tier 36: Testing (if added)
-            "security": [39],  # Tier 39: Security (if added)
-            "api": [38],  # Tier 38: API Integration (if added)
-            "python": [1, 2, 3, 4, 5],  # Python eras
-            "javascript": [6, 7, 8],
-            "database": [37],  # Database tier
-            "debug": [29, 30],  # Foundational genius tiers
-            "optimize": [31, 32],
+        self.active_tiers = 0
+        self.total_tiers = 79
+        self.status = "initializing"
+        self.tiers = {}
+        
+    def initialize_tiers(self):
+        """Initialize all 66 tiers"""
+        print("[INIT] Initializing 66 Knowledge Tiers...")
+        
+        tier_categories = {
+            "Core Knowledge": list(range(1, 11)),
+            "Advanced Analysis": list(range(11, 21)),
+            "Specialized Skills": list(range(21, 31)),
+            "Expert Domains": list(range(31, 41)),
+            "Master Capabilities": list(range(41, 51)),
+            "Grandmaster Tier": list(range(51, 61)),
+            "Omniscient Level": list(range(61, 71)),
+            "Transcendent Power": list(range(71, 80))
         }
+<<<<<<< HEAD
 
         # Find matching tiers
         required_tiers: set[int] = set()
@@ -207,80 +207,51 @@ class AuroraTierOrchestrator:
 
     def get_orchestration_summary(self) -> dict[str, Any]:
         """Get summary of orchestration capabilities"""
+=======
+        
+        for category, tier_range in tier_categories.items():
+            for tier_num in tier_range:
+                self.tiers[f"tier_{tier_num}"] = {
+                    "status": "active",
+                    "category": category,
+                    "tier": tier_num
+                }
+                self.active_tiers += 1
+        
+        self.status = "active"
+        print(f"[OK] All {self.total_tiers} tiers orchestrated and active!")
+        
+    def get_status(self):
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
         return {
-            "total_capabilities": self.aurora.total_capabilities,
-            "executions_performed": len(self.execution_history),
-            "patterns_learned": len(self.success_patterns),
-            "best_combinations": sorted(self.success_patterns.items(), key=lambda x: x[1], reverse=True)[:5],
+            "status": self.status,
+            "active_tiers": self.active_tiers,
+            "total_tiers": self.total_tiers,
+            "percentage": (self.active_tiers / self.total_tiers) * 100
         }
 
+orchestrator = TierOrchestrator()
 
-def main():
-    """Main execution - Phase 3"""
-    print("\n🧠 AURORA TIER ORCHESTRATION - PHASE 3")
-    print("=" * 60)
-    print("Timeline: Minutes 21-30")
-    print("Goal: Multi-tier coordination & knowledge synthesis")
-    print("=" * 60)
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({"status": "healthy", "service": "tier_orchestrator"})
 
-    orchestrator = AuroraTierOrchestrator()
+@app.route('/status', methods=['GET'])
+def status():
+    return jsonify(orchestrator.get_status())
 
-    # Test problem scenarios
-    test_problems = [
-        "Fix all pylint errors in the codebase autonomously",
-        "Optimize network performance for API endpoints",
-        "Debug Python code and improve code quality",
-        "Implement security measures for authentication system",
-        "Test and validate all database operations",
-    ]
+@app.route('/tiers', methods=['GET'])
+def get_tiers():
+    return jsonify(orchestrator.tiers)
 
-    print(f"\n🎯 Testing orchestration with {len(test_problems)} scenarios...")
-
-    for i, problem in enumerate(test_problems, 1):
-        print(f"\n{'='*60}")
-        print(f"Scenario {i}: {problem}")
-        print("=" * 60)
-
-        # Analyze problem
-        analysis = orchestrator.analyze_problem(problem)
-        print(f"  Complexity: {analysis['complexity']}")
-        print(f"  Tiers needed: {analysis['tier_count']}")
-
-        # Select optimal tiers
-        optimal_tiers = orchestrator.select_optimal_tiers(analysis)
-
-        # Execute
-        result = orchestrator.execute_tier_combination(optimal_tiers, problem)
-
-        # Learn
-        orchestrator.learn_from_execution(result)
-
-    # Synthesize knowledge
-    print(f"\n{'='*60}")
-    synthesis = orchestrator.synthesize_knowledge(orchestrator.execution_history)
-
-    print("\n🔬 Knowledge Synthesis Results:")
-    print(json.dumps(synthesis, indent=2))
-
-    # Summary
-    summary = orchestrator.get_orchestration_summary()
-    print("\n📊 Orchestration Summary:")
-    print(f"  • Total Capabilities: {summary['total_capabilities']}")
-    print(f"  • Executions: {summary['executions_performed']}")
-    print(f"  • Patterns Learned: {summary['patterns_learned']}")
-
-    if summary["best_combinations"]:
-        print("  • Best Combinations:")
-        for combo, count in summary["best_combinations"]:
-            print(f"    - Tiers {combo}: {count} successes")
-
-    print("\n=" * 60)
-    print("✅ PHASE 3 COMPLETE - INTELLIGENCE SYNTHESIS ACTIVATED")
-    print("  • Multi-tier coordination: OPERATIONAL")
-    print("  • Knowledge synthesis: ACTIVE")
-    print("  • Pattern learning: ENABLED")
-    print("=" * 60)
-
+@app.route('/activate', methods=['POST'])
+def activate():
+    if orchestrator.status == "initializing":
+        threading.Thread(target=orchestrator.initialize_tiers, daemon=True).start()
+        return jsonify({"message": "Tier initialization started"})
+    return jsonify({"message": "Already active", "status": orchestrator.status})
 
 if __name__ == "__main__":
-    main()
+    print("[STARTING] Aurora Tier Orchestrator on port 5010...")
+    orchestrator.initialize_tiers()
+    app.run(host='0.0.0.0', port=5010, debug=False)

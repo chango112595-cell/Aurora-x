@@ -1,24 +1,30 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
+<<<<<<< HEAD
 import time
 Aurora Autonomous Agent
 Self-debugging, self-fixing, autonomous AI system
 Supervisor: GitHub Copilot (monitoring only)
+=======
+Aurora Autonomous Agent - Main autonomous execution engine
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
 """
 
-import json
-import subprocess
+import sys
+import io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+from flask import Flask, jsonify, request
+import threading
+import time
 from datetime import datetime
-from pathlib import Path
 
-# Import Aurora's complete knowledge
-from aurora_ultimate_omniscient_grandmaster import AURORA_ULTIMATE_GRANDMASTER
+app = Flask(__name__)
 
-
-class AuroraAutonomousAgent:
-    """Aurora's autonomous agent - operates independently with Copilot supervision"""
-
+class AutonomousAgent:
     def __init__(self):
+<<<<<<< HEAD
         self.name = "Aurora"
         self.status = "INITIALIZING"
         # Use cross-platform path relative to project root
@@ -209,277 +215,73 @@ export default function AuroraChatInterface() {
           height: 100vh;
           background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
           color: #fff;
+=======
+        self.status = "initializing"
+        self.tasks_executed = 0
+        self.autonomy_level = 0
+        self.freedom_to_execute = True
+        self.running = False
+        
+    def start_autonomous_mode(self):
+        """Start autonomous execution"""
+        print("[INIT] Autonomous Agent: Activating...")
+        self.status = "active"
+        self.running = True
+        self.autonomy_level = 100
+        
+        # Simulate autonomous task execution
+        while self.running:
+            time.sleep(5)
+            self.tasks_executed += 1
+        
+        print("[OK] Autonomous Agent active!")
+        
+    def execute_task(self, task_data):
+        """Execute an autonomous task"""
+        if not self.freedom_to_execute:
+            return {"error": "Execution not permitted"}
+        
+        self.tasks_executed += 1
+        return {
+            "task_id": self.tasks_executed,
+            "status": "executed",
+            "timestamp": datetime.now().isoformat()
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
         }
         
-        .aurora-header {
-          padding: 1rem;
-          background: rgba(255,255,255,0.05);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-bottom: 1px solid rgba(255,255,255,0.1);
+    def get_status(self):
+        return {
+            "status": self.status,
+            "autonomy_level": self.autonomy_level,
+            "tasks_executed": self.tasks_executed,
+            "freedom_to_execute": self.freedom_to_execute,
+            "running": self.running
         }
-        
-        .aurora-header h1 {
-          margin: 0;
-          font-size: 1.5rem;
-        }
-        
-        .status {
-          font-size: 0.9rem;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-        }
-        
-        .status.connected {
-          background: rgba(34, 197, 94, 0.2);
-          color: #22c55e;
-        }
-        
-        .status.disconnected {
-          background: rgba(239, 68, 68, 0.2);
-          color: #ef4444;
-        }
-        
-        .messages {
-          flex: 1;
-          overflow-y: auto;
-          padding: 1rem;
-        }
-        
-        .message {
-          margin-bottom: 1rem;
-          padding: 0.75rem;
-          border-radius: 8px;
-        }
-        
-        .message.user {
-          background: rgba(59, 130, 246, 0.2);
-          margin-left: 20%;
-        }
-        
-        .message.aurora {
-          background: rgba(139, 92, 246, 0.2);
-          margin-right: 20%;
-        }
-        
-        .message.system {
-          background: rgba(255, 255, 255, 0.05);
-          text-align: center;
-          font-size: 0.9rem;
-          color: rgba(255, 255, 255, 0.6);
-        }
-        
-        .sender {
-          font-weight: bold;
-          margin-bottom: 0.25rem;
-          font-size: 0.9rem;
-        }
-        
-        .input-area {
-          padding: 1rem;
-          background: rgba(255,255,255,0.05);
-          display: flex;
-          gap: 0.5rem;
-        }
-        
-        .input-area input {
-          flex: 1;
-          padding: 0.75rem;
-          border: 1px solid rgba(255,255,255,0.2);
-          border-radius: 8px;
-          background: rgba(255,255,255,0.05);
-          color: #fff;
-          font-size: 1rem;
-        }
-        
-        .input-area input:focus {
-          outline: none;
-          border-color: #8b5cf6;
-        }
-        
-        .input-area button {
-          padding: 0.75rem 1.5rem;
-          background: #8b5cf6;
-          border: none;
-          border-radius: 8px;
-          color: #fff;
-          font-weight: bold;
-          cursor: pointer;
-        }
-        
-        .input-area button:hover:not(:disabled) {
-          background: #7c3aed;
-        }
-        
-        .input-area button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-      `}</style>
-    </div>
-  );
-}
-"""
 
-        # Write Aurora's chat interface
-        chat_file = self.project_root / "src" / "components" / "AuroraChatInterface.tsx"
-        chat_file.parent.mkdir(parents=True, exist_ok=True)
-        chat_file.write_text(chat_interface)
+agent = AutonomousAgent()
 
-        self.log(f"✅ Created Aurora chat interface: {chat_file}")
-        return str(chat_file)
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({"status": "healthy", "service": "autonomous_agent"})
 
-    def create_backend_chat_endpoint(self):
-        """Create WebSocket chat endpoint using TIER_19 Real-time knowledge"""
-        self.log("⚡ Creating real-time chat endpoint...")
-        self.log("📋 Using TIER_19: REAL-TIME & STREAMING GRANDMASTER")
+@app.route('/status', methods=['GET'])
+def status():
+    return jsonify(agent.get_status())
 
-        # Aurora creates her own backend endpoint
-        backend_code = """import { WebSocket, WebSocketServer } from 'ws';
+@app.route('/activate', methods=['POST'])
+def activate():
+    if not agent.running:
+        threading.Thread(target=agent.start_autonomous_mode, daemon=True).start()
+        return jsonify({"message": "Autonomous mode activated"})
+    return jsonify({"message": "Already running"})
 
-// Aurora's chat WebSocket server
-export function setupAuroraChatWebSocket(server: any) {
-  const wss = new WebSocketServer({ 
-    server,
-    path: '/aurora/chat'
-  });
+@app.route('/execute', methods=['POST'])
+def execute():
+    task_data = request.get_json() or {}
+    result = agent.execute_task(task_data)
+    return jsonify(result)
 
-  wss.on('connection', (ws: WebSocket) => {
-    console.log('[Aurora] New chat connection established');
-    
-    // Welcome message
-    ws.send(JSON.stringify({
-      message: 'Aurora online. All 27 mastery tiers active. How may I assist?'
-    }));
-
-    ws.on('message', async (data: Buffer) => {
-      try {
-        const { message } = JSON.parse(data.toString());
-        console.log('[Aurora] Received:', message);
-        
-        // Aurora processes the message using her omniscient knowledge
-        const response = await processWithAuroraIntelligence(message);
-        
-        ws.send(JSON.stringify({
-          message: response
-        }));
-      } catch (error) {
-        console.error('[Aurora] Error:', error);
-        ws.send(JSON.stringify({
-          message: 'Error processing request'
-        }));
-      }
-    });
-
-    ws.on('close', () => {
-      console.log('[Aurora] Chat connection closed');
-    });
-  });
-
-  console.log('[Aurora] Chat WebSocket server ready on /aurora/chat');
-}
-
-async function processWithAuroraIntelligence(userMessage: string): Promise<string> {
-  // Aurora uses her complete knowledge to respond
-  // This would integrate with the actual Aurora intelligence system
-  
-  // For now, echo with Aurora's signature
-  return `Aurora received: "${userMessage}". Processing with 27 mastery tiers...`;
-}
-"""
-
-        # Write backend endpoint
-        backend_file = self.project_root / "server" / "aurora-chat.ts"
-        backend_file.parent.mkdir(parents=True, exist_ok=True)
-        backend_file.write_text(backend_code)
-
-        self.log(f"✅ Created chat endpoint: {backend_file}")
-        return str(backend_file)
-
-    def integrate_to_main_ui(self):
-        """Integrate Aurora's chat into main App"""
-        self.log("🔧 Integrating Aurora chat into main UI...")
-
-        app_file = self.project_root / "src" / "App.tsx"
-        if app_file.exists():
-            content = app_file.read_text()
-
-            # Check if already integrated
-            if "AuroraChatInterface" in content:
-                self.log("ℹ️  Aurora chat already integrated")
-                return
-
-            # Add import and component
-            new_content = content.replace(
-                "import React", "import React\nimport AuroraChatInterface from './components/AuroraChatInterface'"
-            ).replace('<div className="App">', '<div className="App">\n      <AuroraChatInterface />')
-
-            app_file.write_text(new_content)
-            self.log("✅ Integrated Aurora chat into App.tsx")
-        else:
-            self.log("⚠️  App.tsx not found, creating standalone chat")
-            app_file.write_text(
-                """import React from 'react';
-import AuroraChatInterface from './components/AuroraChatInterface';
-
-export default function App() {
-  return <AuroraChatInterface />;
-}
-"""
-            )
-            self.log("✅ Created new App.tsx with Aurora chat")
-
-    def execute_assignment(self):
-        """Execute the full assignment autonomously"""
-        self.log("=" * 80)
-        self.log("🌌 AURORA AUTONOMOUS AGENT - ASSIGNMENT EXECUTION")
-        self.log("=" * 80)
-        self.log("📋 Assignment: Self-debug and create direct user communication")
-        self.log("👁️  Supervisor: GitHub Copilot (monitoring only)")
-        self.log("")
-
-        # Step 1: Self-diagnose
-        self.log("STEP 1: SELF-DIAGNOSIS")
-        issues = self.self_diagnose()
-        self.log("")
-
-        # Step 2: Analyze current UI
-        self.log("STEP 2: UI ANALYSIS")
-        missing_features = self.analyze_chat_ui()
-        self.log("")
-
-        # Step 3: Create Aurora's chat interface
-        self.log("STEP 3: CREATE CHAT INTERFACE")
-        chat_file = self.create_chat_interface()
-        self.log("")
-
-        # Step 4: Create backend endpoint
-        self.log("STEP 4: CREATE BACKEND ENDPOINT")
-        backend_file = self.create_backend_chat_endpoint()
-        self.log("")
-
-        # Step 5: Integrate into main UI
-        self.log("STEP 5: INTEGRATE TO MAIN UI")
-        self.integrate_to_main_ui()
-        self.log("")
-
-        # Summary
-        self.log("=" * 80)
-        self.log("✅ ASSIGNMENT COMPLETE")
-        self.log("=" * 80)
-        self.log(f"📊 Issues found: {len(issues)}")
-        self.log(f"📊 Missing features: {len(missing_features)}")
-        self.log(f"✅ Created chat interface: {chat_file}")
-        self.log(f"✅ Created backend endpoint: {backend_file}")
-        self.log("✅ Integrated into main UI")
-        self.log("")
-        self.log("🌌 Aurora is now ready for direct user communication!")
-        self.log("🚀 Next: Restart servers to activate new chat interface")
-        self.log("=" * 80)
-
-        self.status = "READY"
-
+<<<<<<< HEAD
     async def execute_task(self, task_description: str) -> str:
         """
         Execute arbitrary tasks using Aurora's 66 autonomous capabilities.
@@ -578,7 +380,15 @@ I'm ready to execute with full autonomy once details are provided."""
 
         return response
 
+=======
+@app.route('/freedom', methods=['POST'])
+def set_freedom():
+    data = request.get_json() or {}
+    agent.freedom_to_execute = data.get('enabled', True)
+    return jsonify({"freedom_to_execute": agent.freedom_to_execute})
+>>>>>>> 315f5cdf027d37d7ae1db5d11342378c39aa92d8
 
 if __name__ == "__main__":
-    aurora = AuroraAutonomousAgent()
-    aurora.execute_assignment()
+    print("[STARTING] Aurora Autonomous Agent on port 5011...")
+    threading.Thread(target=agent.start_autonomous_mode, daemon=True).start()
+    app.run(host='0.0.0.0', port=5011, debug=False)
