@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aurora - Branch vs Main Deep Comparison</title>
+    <title>Aurora - Unified Branch Comparison</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -22,16 +22,8 @@
             border-left: 5px solid #00ff88;
         }
         
-        .header h1 {
-            color: #00ff88;
-            margin-bottom: 10px;
-            font-size: 2.2em;
-        }
-        
-        .header p {
-            color: #b0b0b0;
-            margin-bottom: 15px;
-        }
+        .header h1 { color: #00ff88; margin-bottom: 10px; font-size: 2.2em; }
+        .header p { color: #b0b0b0; margin-bottom: 15px; }
         
         .stats-grid {
             display: grid;
@@ -47,22 +39,10 @@
             border-left: 3px solid #00ff88;
         }
         
-        .stat-value {
-            font-size: 1.8em;
-            color: #00ff88;
-            font-weight: bold;
-        }
+        .stat-value { font-size: 1.8em; color: #00ff88; font-weight: bold; }
+        .stat-label { color: #888; font-size: 0.9em; margin-top: 5px; }
         
-        .stat-label {
-            color: #888;
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-        
-        .search-bar {
-            margin-bottom: 20px;
-        }
-        
+        .search-bar { margin-bottom: 20px; }
         .search-bar input {
             width: 100%;
             padding: 12px;
@@ -73,13 +53,13 @@
             font-size: 1em;
         }
         
-        .branches-container {
+        .groups-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 15px;
         }
         
-        .branch-card {
+        .group-card {
             background: rgba(20, 20, 50, 0.8);
             border: 1px solid #333;
             border-radius: 8px;
@@ -88,39 +68,54 @@
             transition: all 0.3s ease;
         }
         
-        .branch-card:hover {
+        .group-card:hover {
             background: rgba(30, 30, 80, 0.9);
             border-color: #00ff88;
             box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
             transform: translateY(-2px);
         }
         
-        .branch-name {
-            font-weight: bold;
-            color: #00ff88;
-            margin-bottom: 10px;
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .group-name { font-weight: bold; color: #00ff88; font-size: 1.1em; }
+        .group-badge { background: #663399; color: #00ff88; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        
+        .group-rep {
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 8px;
             word-break: break-word;
-            font-size: 1.1em;
         }
         
-        .summary {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 10px 0;
+        .group-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .status-working { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+        .status-issues { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+        
+        .features-summary {
             font-size: 0.9em;
+            color: #b0b0b0;
+            margin: 8px 0;
         }
         
-        .summary-item {
-            padding: 8px;
+        .features-summary span {
+            display: inline-block;
+            margin-right: 15px;
+            padding: 4px 8px;
             background: rgba(255,255,255,0.05);
             border-radius: 4px;
-            border-left: 3px solid #00ff88;
-        }
-        
-        .summary-item.removed {
-            border-left-color: #ff6b6b;
-            color: #ff6b6b;
         }
         
         .click-hint {
@@ -172,25 +167,30 @@
             cursor: pointer;
             background: none;
             border: none;
-            padding: 0;
-            margin: -10px 0 0 0;
+            margin: 0;
         }
         
-        .close-btn:hover {
-            color: #ff6b6b;
-        }
+        .close-btn:hover { color: #ff6b6b; }
         
-        .modal h2 {
-            color: #00ff88;
-            margin-bottom: 10px;
-            clear: both;
-            font-size: 1.8em;
-        }
+        .modal h2 { color: #00ff88; margin-bottom: 5px; font-size: 1.8em; clear: both; }
         
-        .vs-label {
-            color: #666;
-            font-size: 0.9em;
+        .modal-subtitle { color: #00ff88; margin: 15px 0 20px 0; font-weight: bold; }
+        .branch-list {
+            background: rgba(255,255,255,0.05);
+            padding: 12px;
+            border-radius: 6px;
             margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        
+        .branch-list span {
+            display: inline-block;
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin: 4px 4px 4px 0;
+            font-family: monospace;
         }
         
         .comparison-grid {
@@ -215,30 +215,6 @@
             padding-bottom: 10px;
         }
         
-        .comp-section.branch h3 {
-            color: #ffaa00;
-            border-bottom-color: #ffaa00;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        
-        .status-working {
-            background: rgba(0, 255, 136, 0.2);
-            color: #00ff88;
-        }
-        
-        .status-issues {
-            background: rgba(255, 107, 107, 0.2);
-            color: #ff6b6b;
-        }
-        
         .feature-list {
             list-style: none;
             margin: 10px 0;
@@ -253,11 +229,8 @@
             font-size: 0.9em;
         }
         
-        .feature-list li.missing {
-            border-left-color: #ff6b6b;
-            color: #999;
-            opacity: 0.6;
-        }
+        .feature-list li.unique { border-left-color: #ffaa00; color: #ffaa00; }
+        .feature-list li.missing { border-left-color: #ff6b6b; color: #999; opacity: 0.6; }
         
         .summary-box {
             background: rgba(0, 255, 136, 0.1);
@@ -267,278 +240,209 @@
             margin: 20px 0;
         }
         
-        .summary-box h4 {
-            color: #00ff88;
-            margin-bottom: 10px;
-        }
-        
-        .summary-box p {
-            margin: 5px 0;
-            color: #b0b0b0;
-            line-height: 1.6;
-        }
-        
-        .no-results {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
+        .summary-box h4 { color: #00ff88; margin-bottom: 10px; }
+        .summary-box p { color: #b0b0b0; line-height: 1.6; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🌌 Aurora: Deep Branch vs Main Comparison</h1>
-        <p>Click any branch to see detailed comparison - what it has, what it's missing, and working status</p>
+        <h1>🌌 Aurora: Unified Branch Groups</h1>
+        <p>Identical branches are grouped together for faster comparison</p>
         
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-value">68</div>
+                <div class="stat-value" id="totalBranches">68</div>
                 <div class="stat-label">Total Branches</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">64</div>
-                <div class="stat-label">Modified vs Main</div>
+                <div class="stat-value" id="totalGroups">-</div>
+                <div class="stat-label">Unified Groups</div>
             </div>
         </div>
     </div>
     
     <div style="max-width: 1400px; margin: 0 auto;">
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="🔍 Search branches..." onkeyup="filterBranches()">
+            <input type="text" id="searchInput" placeholder="🔍 Search groups..." onkeyup="filterGroups()">
         </div>
         
-        <div id="branchesContainer" class="branches-container">
-        </div>
+        <div id="groupsContainer" class="groups-container"></div>
     </div>
     
-    <!-- Detailed Comparison Modal -->
+    <!-- Comparison Modal -->
     <div id="comparisonModal" class="modal">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()" aria-label="Close">&times;</button>
+            <button class="close-btn" onclick="closeModal()">&times;</button>
             <h2 id="modalTitle"></h2>
-            <p class="vs-label">Comparing: <strong>Main Branch</strong> ← → <strong id="branchTitle2"></strong></p>
             
-            <!-- COMPARISON GRID -->
+            <div class="modal-subtitle">Branches in this group:</div>
+            <div class="branch-list" id="branchesInGroup"></div>
+            
             <div class="comparison-grid">
-                <!-- MAIN BRANCH -->
                 <div class="comp-section">
                     <h3>📦 Main Branch</h3>
-                    <div class="status-badge status-working" id="mainStatus">Working</div>
                     <div style="font-size: 0.9em; color: #999; margin: 10px 0;" id="mainStats"></div>
-                    
                     <h4 style="color: #888; margin-top: 15px; margin-bottom: 10px;">Features:</h4>
                     <ul class="feature-list" id="mainFeatures"></ul>
                 </div>
                 
-                <!-- BRANCH -->
-                <div class="comp-section branch">
-                    <h3 id="branchSectionTitle">🌿 Branch</h3>
-                    <div class="status-badge" id="branchStatus">Working</div>
-                    <div style="font-size: 0.9em; color: #999; margin: 10px 0;" id="branchStats"></div>
-                    
+                <div class="comp-section">
+                    <h3 style="color: #ffaa00; border-bottom-color: #ffaa00;">🌿 This Group</h3>
+                    <div style="font-size: 0.9em; color: #999; margin: 10px 0;" id="groupStats"></div>
                     <h4 style="color: #ffaa00; margin-top: 15px; margin-bottom: 10px;">Features:</h4>
-                    <ul class="feature-list" id="branchFeatures"></ul>
+                    <ul class="feature-list" id="groupFeatures"></ul>
                 </div>
             </div>
             
-            <!-- WHAT'S DIFFERENT -->
             <div class="comparison-grid">
-                <!-- UNIQUE FEATURES -->
                 <div class="comp-section">
-                    <h3>✨ What This Branch HAS (Not in Main)</h3>
+                    <h3>✨ What This Group HAS (Not in Main)</h3>
                     <ul class="feature-list" id="uniqueFeatures"></ul>
                 </div>
                 
-                <!-- MISSING FEATURES -->
-                <div class="comp-section branch">
-                    <h3 style="color: #ff9999; border-bottom-color: #ff9999;">❌ What This Branch DOESN'T HAVE (Missing from Main)</h3>
+                <div class="comp-section">
+                    <h3 style="color: #ff9999; border-bottom-color: #ff9999;">❌ What This Group DOESN'T HAVE</h3>
                     <ul class="feature-list missing" id="missingFeatures"></ul>
                 </div>
             </div>
             
-            <!-- FILES SUMMARY -->
-            <div class="comparison-grid">
-                <div class="comp-section">
-                    <h3>📊 Files Added</h3>
-                    <div id="filesAddedSummary" style="font-size: 0.9em;"></div>
-                </div>
-                <div class="comp-section">
-                    <h3>📊 Files Removed</h3>
-                    <div id="filesRemovedSummary" style="font-size: 0.9em;"></div>
-                </div>
-            </div>
-            
-            <!-- ISSUES / RECOMMENDATIONS -->
             <div class="summary-box" id="issuesBox"></div>
             <div class="summary-box" id="recommendationBox"></div>
         </div>
     </div>
     
     <script>
-        let branchData = {};
+        let unifiedData = {};
         let mainFeatures = {};
-        let branchFeatures = {};
         let modalOpen = false;
         
-        // Load all analysis data
         Promise.all([
-            fetch('/branch_analysis.json').then(r => r.json()),
+            fetch('/unified_branches.json').then(r => r.json()),
             fetch('/main_features.json').then(r => r.json()),
-            fetch('/branch_features.json').then(r => r.json()),
-        ]).then(([branches, main, features]) => {
-            branchData = branches;
+        ]).then(([unified, main]) => {
+            unifiedData = unified;
             mainFeatures = main;
-            branchFeatures = features;
-            renderBranches();
+            renderGroups();
         }).catch(e => console.error('Load error:', e));
         
-        function renderBranches() {
-            const container = document.getElementById('branchesContainer');
-            const branches = Object.entries(branchData)
-                .filter(([name]) => branchFeatures[name])
-                .sort((a, b) => parseInt(b[1].ahead || 0) - parseInt(a[1].ahead || 0));
+        function renderGroups() {
+            const container = document.getElementById('groupsContainer');
+            const groups = Object.entries(unifiedData);
             
-            container.innerHTML = branches.map(([name, data]) => {
-                const features = branchFeatures[name] || {};
-                const added = data.added_files || 0;
-                const removed = data.removed_files || 0;
+            document.getElementById('totalGroups').textContent = groups.length;
+            
+            container.innerHTML = groups.map(([groupId, data]) => {
+                const hasUnique = data.unique_features.length > 0;
+                const hasMissing = data.missing_features.length > 0;
                 
                 return `
-                    <div class="branch-card" onclick="openComparison(event, '${name.replace(/'/g, "\\'")}')">
-                        <div class="branch-name">${escapeHtml(name)}</div>
-                        <div class="summary">
-                            <div class="summary-item">+${added} added</div>
-                            <div class="summary-item removed">−${removed} removed</div>
+                    <div class="group-card" onclick="openComparison(event, '${groupId}')">
+                        <div class="group-header">
+                            <div class="group-name">${data.representative.substring(0, 30)}</div>
+                            <div class="group-badge">${data.count} branches</div>
                         </div>
-                        <div style="font-size: 0.85em; color: #999; margin: 8px 0;">
-                            Status: <strong style="color: ${features.status === 'Working' ? '#00ff88' : '#ff6b6b'}">${features.status}</strong>
+                        
+                        <div class="group-rep">Group: ${data.branches.length} identical branches</div>
+                        
+                        <div class="group-status status-${data.status === 'Working' ? 'working' : 'issues'}">
+                            ${data.status}
                         </div>
-                        <div class="click-hint">→ Click for detailed comparison</div>
+                        
+                        <div class="features-summary">
+                            <span style="color: #00ff88;">✓ ${Object.values(data.features).filter(v => v).length}/10</span>
+                            ${hasUnique ? `<span style="color: #ffaa00;">+ ${data.unique_features.length} unique</span>` : ''}
+                            ${hasMissing ? `<span style="color: #ff6b6b;">− ${data.missing_features.length} missing</span>` : ''}
+                        </div>
+                        
+                        <div class="click-hint">→ Click to see details</div>
                     </div>
                 `;
             }).join('');
         }
         
-        function openComparison(event, branchName) {
+        function openComparison(event, groupId) {
             event.stopPropagation();
             if (modalOpen) return;
             modalOpen = true;
             
-            const data = branchData[branchName] || {};
-            const branch = branchFeatures[branchName] || {};
-            const main = mainFeatures || {};
+            const group = unifiedData[groupId];
+            const main = mainFeatures;
             
-            // Set header
-            document.getElementById('modalTitle').textContent = `Detailed Comparison: ${branchName}`;
-            document.getElementById('branchTitle2').textContent = branchName;
-            document.getElementById('branchSectionTitle').textContent = `🌿 ${branchName}`;
+            document.getElementById('modalTitle').textContent = `Group: ${group.representative}`;
             
-            // Main branch stats
+            // Branches in group
+            document.getElementById('branchesInGroup').innerHTML = group.branches
+                .map(b => `<span>${b}</span>`)
+                .join('');
+            
+            // Main stats
             document.getElementById('mainStats').innerHTML = `
-                <strong>Total Files:</strong> ${main.total_files || 'N/A'}<br>
+                <strong>Total Files:</strong> ${main.total_files}<br>
                 <strong>Status:</strong> ${main.status}
             `;
             
-            // Branch stats
-            document.getElementById('branchStats').innerHTML = `
-                <strong>Total Files:</strong> ${data.total_files || 'N/A'}<br>
-                <strong>Commits ahead:</strong> ${data.ahead || 0}<br>
-                <strong>Commits behind:</strong> ${data.behind || 0}
+            // Group stats
+            document.getElementById('groupStats').innerHTML = `
+                <strong>Count:</strong> ${group.count} identical branches<br>
+                <strong>Status:</strong> ${group.status}
             `;
             
-            // Status badges
-            const mainStatusEl = document.getElementById('mainStatus');
-            mainStatusEl.textContent = main.status;
-            mainStatusEl.className = `status-badge status-${main.status === 'Working' ? 'working' : 'issues'}`;
-            
-            const branchStatusEl = document.getElementById('branchStatus');
-            branchStatusEl.textContent = branch.status;
-            branchStatusEl.className = `status-badge status-${branch.status === 'Working' ? 'working' : 'issues'}`;
-            
-            // Features lists
-            const mainFeaturesList = (main.features || {});
-            const branchFeaturesList = (branch.features || {});
-            
-            document.getElementById('mainFeatures').innerHTML = Object.entries(mainFeaturesList)
+            // Main features
+            document.getElementById('mainFeatures').innerHTML = Object.entries(main.features)
                 .map(([name, has]) => `<li ${has ? '' : 'class="missing"'}>${has ? '✓' : '✗'} ${name}</li>`)
                 .join('');
             
-            document.getElementById('branchFeatures').innerHTML = Object.entries(branchFeaturesList)
+            // Group features
+            document.getElementById('groupFeatures').innerHTML = Object.entries(group.features)
                 .map(([name, has]) => `<li ${has ? '' : 'class="missing"'}>${has ? '✓' : '✗'} ${name}</li>`)
                 .join('');
             
             // Unique features
-            const unique = branch.unique_features || [];
-            document.getElementById('uniqueFeatures').innerHTML = unique.length > 0
-                ? unique.map(f => `<li style="border-left-color: #ffaa00; color: #ffaa00;">+ ${f}</li>`).join('')
-                : '<li style="color: #666;">No unique features (same as main)</li>';
+            document.getElementById('uniqueFeatures').innerHTML = group.unique_features.length > 0
+                ? group.unique_features.map(f => `<li class="unique">+ ${f}</li>`).join('')
+                : '<li style="color: #666;">No unique features</li>';
             
             // Missing features
-            const missing = branch.missing_features || [];
-            document.getElementById('missingFeatures').innerHTML = missing.length > 0
-                ? missing.map(f => `<li>− ${f}</li>`).join('')
+            document.getElementById('missingFeatures').innerHTML = group.missing_features.length > 0
+                ? group.missing_features.map(f => `<li>− ${f}</li>`).join('')
                 : '<li style="color: #666;">Has all main features</li>';
             
-            // Files summary
-            document.getElementById('filesAddedSummary').innerHTML = `
-                <strong style="color: #00ff88;">${data.added_files || 0} files added</strong><br>
-                <span style="color: #888;">Sample: ${(data.added_sample || []).slice(0, 3).map(f => f.split('/').pop()).join(', ') || 'N/A'}</span>
-            `;
-            
-            document.getElementById('filesRemovedSummary').innerHTML = `
-                <strong style="color: #ff6b6b;">${data.removed_files || 0} files removed</strong><br>
-                <span style="color: #888;">Sample: ${(data.removed_sample || []).slice(0, 3).map(f => f.split('/').pop()).join(', ') || 'N/A'}</span>
-            `;
-            
             // Issues
-            const issues = branch.issues || [];
             document.getElementById('issuesBox').innerHTML = `
-                <h4>⚠️ Status Issues</h4>
-                <p>${issues.length > 0 ? issues.map(i => `• ${i}`).join('<br>') : '✓ No issues detected'}</p>
+                <h4>⚠️ Status</h4>
+                <p>${group.issues.length > 0 ? group.issues.map(i => `• ${i}`).join('<br>') : '✓ No issues detected'}</p>
             `;
             
-            // Recommendation
-            let rec = 'This branch ';
-            if (unique.length > 0) rec += `adds ${unique.length} new feature(s). `;
-            if (missing.length > 0) rec += `but is missing ${missing.length} from main. `;
-            rec += `Overall status: ${branch.status}. `;
+            // Summary
+            let summary = `<strong>${group.count} identical branches</strong> with the same features. `;
+            if (group.unique_features.length > 0) summary += `Adds ${group.unique_features.length} new features. `;
+            if (group.missing_features.length > 0) summary += `Missing ${group.missing_features.length} from main. `;
             
             document.getElementById('recommendationBox').innerHTML = `
                 <h4>💡 Summary</h4>
-                <p>${rec}</p>
+                <p>${summary}</p>
             `;
             
-            const modal = document.getElementById('comparisonModal');
-            modal.classList.add('active');
+            document.getElementById('comparisonModal').classList.add('active');
         }
         
         function closeModal() {
-            const modal = document.getElementById('comparisonModal');
-            modal.classList.remove('active');
+            document.getElementById('comparisonModal').classList.remove('active');
             modalOpen = false;
         }
         
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        function filterBranches() {
+        function filterGroups() {
             const search = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.branch-card');
+            const cards = document.querySelectorAll('.group-card');
             cards.forEach(card => {
                 card.style.display = card.textContent.toLowerCase().includes(search) ? '' : 'none';
             });
         }
         
-        // Close modal on escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape' && modalOpen) closeModal();
         });
         
-        // Close modal when clicking outside (on the dark background)
         document.getElementById('comparisonModal').addEventListener('click', function(event) {
             if (event.target === this && modalOpen) closeModal();
         });
