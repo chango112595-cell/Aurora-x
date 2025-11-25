@@ -16,7 +16,7 @@ Aurora Architecture Analysis Script
 Analyzes the entire project structure and validates organization
 """
 
-from collections from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import defaultdict
 from pathlib import Path
 

@@ -17,7 +17,7 @@ TIER 29-31: Extended skill definitions referencing aurora_core.py
 Ancient (1940s) -> Classical -> Modern -> AI-Native -> Future -> Sci-Fi
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraKnowledgeTiers
 
 # Aurora Performance Optimization

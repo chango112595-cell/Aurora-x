@@ -18,7 +18,7 @@ Request throttling and DDoS protection
 Port: 5030
 """
 
-from flask from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Flask, jsonify, request
 from flask_cors import CORS
 import time

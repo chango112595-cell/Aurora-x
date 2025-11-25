@@ -16,7 +16,7 @@ Aurora Autonomous Route Fixer
 Updates default route to open futuristic dashboard automatically
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 # Aurora Performance Optimization

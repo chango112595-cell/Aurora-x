@@ -13,7 +13,7 @@ Quality: 10/10 (Perfect)
 # --- Aurora-X serve (T03 endpoints) ---
 # If you already have a server, lift these handlers into it.
 try:
-    from fastapi from typing import Dict, List, Tuple, Optional, Any, Union
+    from typing import Dict, List, Tuple, Optional, Any, Union
 import FastAPI
     from fastapi.responses import JSONResponse
 except Exception:

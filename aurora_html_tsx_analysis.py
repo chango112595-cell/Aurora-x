@@ -16,7 +16,7 @@ Aurora HTML to TSX Investigation
 Finding and analyzing why HTML is being served when it should be TSX
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 # Aurora Performance Optimization

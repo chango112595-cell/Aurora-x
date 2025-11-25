@@ -16,7 +16,7 @@ Aurora Self-Diagnosis and Improvement Plan
 Have Aurora diagnose herself and propose improvements
 """
 
-from datetime from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
 from aurora_core import AuroraCoreIntelligence
 import sys

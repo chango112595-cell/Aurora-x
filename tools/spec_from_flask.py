@@ -16,7 +16,7 @@ Flask App Synthesis from Natural Language
 Directly generates Flask application code from parsed metadata
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 from aurora_x.spec.parser_nl import parse_english

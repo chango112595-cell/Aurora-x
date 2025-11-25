@@ -12,7 +12,7 @@ Quality: 10/10 (Perfect)
 
 #!/usr/bin/env python3
 
-from fastapi from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 

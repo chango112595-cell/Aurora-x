@@ -11,7 +11,7 @@ Quality: 10/10 (Perfect)
 """
 
 # pylint: disable=redefined-outer-name
-from flask from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Flask, render_template_string
 from textwrap import dedent
 

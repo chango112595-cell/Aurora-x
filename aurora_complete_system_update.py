@@ -16,7 +16,7 @@ Aurora Complete System Update
 Autonomously updates all remaining UI components to match the new futuristic design
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 

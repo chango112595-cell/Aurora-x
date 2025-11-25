@@ -16,7 +16,7 @@ Aurora System Verification
 Verifies that all systems are properly updated and synchronized
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 from aurora_core import AuroraKnowledgeTiers

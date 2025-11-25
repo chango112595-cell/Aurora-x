@@ -15,7 +15,7 @@ Quality: 10/10 (Perfect)
 T08 Offline Test - Test templates directly without server
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 from aurora_x.router.intent_router import classify

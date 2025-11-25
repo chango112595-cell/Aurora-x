@@ -17,7 +17,7 @@ Target: aurora_automatic_system_update.py
 Objective: Add comprehensive hybrid mode tracking patterns
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 import sys
 from pathlib import Path

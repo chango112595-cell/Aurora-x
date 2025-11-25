@@ -2,7 +2,7 @@
 Ask Aurora: How to implement full power and natural language in terminal chat
 """
 
-from aurora_core from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import AuroraCoreIntelligence
 import sys
 import os

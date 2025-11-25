@@ -240,12 +240,12 @@ print("━" * 80)
 if os.path.exists("aurora_autonomous_agent.py"):
     start_with_retry([PYTHON_CMD, "aurora_autonomous_agent.py"],
                      "Autonomous Agent", critical=True, port=5015)
-# [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] if os.path.exists("aurora_multi_agent.py"):
-# # # # # #     start_with_retry([PYTHON_CMD, "aurora_multi_agent.py"],
-# # # # # #                      "Multi-Agent System", port=5016)
-# [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] if os.path.exists("aurora_autonomous_integration.py"):
-# # # # # #     start_with_retry([PYTHON_CMD, "aurora_autonomous_integration.py"],
-# # # # # #                      "Autonomous Integration", port=5017)
+# [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] if os.path.exists("aurora_multi_agent.py"):
+# # # # # # # #     start_with_retry([PYTHON_CMD, "aurora_multi_agent.py"],
+# # # # # # # #                      "Multi-Agent System", port=5016)
+# [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] if os.path.exists("aurora_autonomous_integration.py"):
+# # # # # # # #     start_with_retry([PYTHON_CMD, "aurora_autonomous_integration.py"],
+# # # # # # # #                      "Autonomous Integration", port=5017)
 if os.path.exists("aurora_autonomous_monitor.py"):
     start_with_retry([PYTHON_CMD, "aurora_autonomous_monitor.py"],
                      "Autonomous Monitor", port=5018)
@@ -269,9 +269,9 @@ print("\n━" * 80)
 print("[EMOJI]️ PHASE 5: ADVANCED TIER CAPABILITIES")
 print("━" * 80)
 # Note: Visual/Test/Quality scripts are demos (not services), removed from launcher
-# [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] if os.path.exists("aurora_live_integration.py"):
-# # # # # #     start_with_retry([PYTHON_CMD, "aurora_live_integration.py"],
-# # # # # #                      "Live Integration (Tier 44)", port=5023)
+# [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] # [TASK SERVICE - Removed by Aurora] if os.path.exists("aurora_live_integration.py"):
+# # # # # # # #     start_with_retry([PYTHON_CMD, "aurora_live_integration.py"],
+# # # # # # # #                      "Live Integration (Tier 44)", port=5023)
 if os.path.exists("aurora_security_auditor.py"):
     start_with_retry([PYTHON_CMD, "aurora_security_auditor.py"],
                      "Security Auditor (Tier 53)", port=5025)

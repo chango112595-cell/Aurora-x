@@ -16,7 +16,7 @@ Aurora Import Fixer
 Autonomously fixes component import/export mismatches
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 

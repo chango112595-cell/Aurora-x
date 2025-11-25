@@ -19,7 +19,7 @@ This module provides an optimized factorial implementation with memoization,
 input validation, and comprehensive unit tests.
 
 Example usage:
-    >>> from lib_function from typing import Dict, List, Tuple, Optional, Any, Union
+    >>> from typing import Dict, List, Tuple, Optional, Any, Union
 import factorial
     >>> factorial(5)
     120

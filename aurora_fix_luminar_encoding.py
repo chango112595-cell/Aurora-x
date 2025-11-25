@@ -16,7 +16,7 @@ Aurora Autonomous Fix: Remove all Unicode emojis from Luminar Nexus V2
 to fix Windows encoding issues
 """
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 # Aurora Performance Optimization

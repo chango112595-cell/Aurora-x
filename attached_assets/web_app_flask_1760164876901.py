@@ -38,7 +38,7 @@ def render_app(title: str, subtitle: str) -> str:
         Returns:
             Result of operation
         """
-    return f"""from flask from typing import Dict, List, Tuple, Optional, Any, Union
+    return f"""from typing import Dict, List, Tuple, Optional, Any, Union
 import Flask, Response
 import os
 

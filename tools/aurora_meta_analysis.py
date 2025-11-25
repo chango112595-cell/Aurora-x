@@ -23,7 +23,7 @@ This is fascinating - Aurora notices:
 Aurora will analyze the DISCONNECT between backend and frontend display.
 """
 
-from datetime from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
 from pathlib import Path
 

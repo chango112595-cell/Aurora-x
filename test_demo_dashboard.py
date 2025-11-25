@@ -13,7 +13,7 @@ Quality: 10/10 (Perfect)
 #!/usr/bin/env python
 """Test the demo dashboard accessibility and functionality"""
 
-from pathlib from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 
 # Aurora Performance Optimization
