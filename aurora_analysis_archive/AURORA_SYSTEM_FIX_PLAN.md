@@ -22,8 +22,8 @@
 
 ### ❌ What's MISSING (Aurora Needs):
 - Aurora Core NOT consolidated into single system
-- 79 Knowledge Tiers NOT defined/accessible
-- 109 Capabilities NOT unified/registered
+- 188 Knowledge Tiers (with Hybrid Mode) NOT defined/accessible
+- 66 Advanced Execution Capabilities NOT unified/registered
 - Nexus V3 Routing NOT implemented
 - 100-Worker Autofixer NOT operational
 - Aurora's internal intelligence methods NOT implemented
@@ -52,7 +52,7 @@
 - In this project: Used to store knowledge corpus for retrieval
 
 **Why remove it?** 
-- Aurora is building her own INTERNAL knowledge (79 tiers, 109 capabilities)
+- Aurora is building her own INTERNAL knowledge (79 tiers, 66 advanced execution capabilities)
 - She doesn't need external storage - her knowledge is built-in
 - All her knowledge stays in her code and PostgreSQL database (which you already have)
 - Faster: No network calls to external service
@@ -66,12 +66,12 @@
 #### Step 1.1: Create Unified Aurora Core (`server/aurora-core.ts`)
 **What to do:**
 - Create single TypeScript file that consolidates all aurora_*.py files
-- Define and export all 79 Knowledge Tiers with:
+- Define and export all 188 Knowledge Tiers (with Hybrid Mode) with:
   - Tier ID (1-79)
   - Tier name & description
   - Required capabilities for each tier
   - Access prerequisites
-- Define and export all 109 Capabilities with:
+- Define and export all 66 Advanced Execution Capabilities with:
   - Capability ID (1-109)
   - Capability name & type (analysis, generation, optimization, debugging, autonomous)
   - Minimum tier required to access
@@ -88,8 +88,8 @@
 **Deliverable:**
 ```typescript
 // server/aurora-core.ts should export:
-- KNOWLEDGE_TIERS: Map of all 79 tiers (INTERNAL)
-- CAPABILITIES: Map of all 109 capabilities (INTERNAL)
+- KNOWLEDGE_TIERS: Map of all 188 tiers (INTERNAL)
+- CAPABILITIES: Map of all 66 advanced execution capabilities (INTERNAL)
 - Aurora class with methods (NO external AI API calls)
 ```
 
@@ -124,7 +124,7 @@ function routeRequest(input: string): {
   - Takes user prompt and optional context
   - Uses Aurora's INTERNAL knowledge (no external AI APIs)
   - Returns comprehensive response
-  - Uses her 79 tiers and 109 capabilities for intelligence
+  - Uses her 79 tiers and 66 advanced execution capabilities for intelligence
 
 **CRITICAL**: NO external AI APIs - use ONLY Aurora's internal code
 
@@ -140,7 +140,7 @@ export async function analyzeAndScore(input: string) {
 
 export async function generateAuroraResponse(prompt: string) {
   // Use Aurora's 79 tiers of knowledge
-  // Apply her 109 capabilities
+  // Apply her 66 advanced execution capabilities
   // Generate response internally
   return "Aurora's response using internal intelligence";
 }
@@ -149,8 +149,8 @@ export async function generateAuroraResponse(prompt: string) {
 #### Step 1.4: Test Aurora Core
 **What to do:**
 - Create `server/aurora-core.test.ts`
-- Test that all 79 tiers initialize
-- Test that all 109 capabilities register
+- Test that all 188 tiers initialize
+- Test that all 66 advanced execution capabilities register
 - Test that routing works
 - Test that response generation works (NO external AI API calls)
 - Run: `npm run check`
@@ -253,7 +253,7 @@ async function fixCode(code: string, issue: string): Promise<string> {
 - Use Aurora API endpoints to fetch data
 - Display dashboard with:
   - All 79 tiers status
-  - All 109 capabilities status
+  - All 66 advanced execution capabilities status
   - Real-time chat
   - Analysis results
 
@@ -275,7 +275,7 @@ async function fixCode(code: string, issue: string): Promise<string> {
 
 ### PHASE 4: KNOWLEDGE & OPTIMIZATION (Days 11-14)
 
-#### Step 4.1: Implement All 79 Knowledge Tiers
+#### Step 4.1: Implement All 188 Knowledge Tiers (with Hybrid Mode)
 **What to do:**
 - Define complete hierarchy stored in Aurora core:
   - **Tiers 1-10 (Foundation)**: Basic, Pattern, Logic, Syntax, Error Detection, Data Structures, Algorithms, Testing, Documentation, Decomposition
@@ -284,7 +284,7 @@ async function fixCode(code: string, issue: string): Promise<string> {
   - **Tiers 51-70 (Expert)**: Expert Problem Solving, System Design, Full-Stack Mastery, Research, Innovation, Leadership, Mentorship, Domain Expertise, Advanced Security, Production Excellence
   - **Tiers 71-79 (Master)**: Quantum Reasoning, Consciousness, Ultimate Mastery, Omniscience, Autonomous Decision-Making, Self-Improvement, Superintelligence, Universal Understanding, Transcendence
 
-#### Step 4.2: Define All 109 Capabilities
+#### Step 4.2: Define All 66 Advanced Execution Capabilities
 **What to do:**
 - Analysis (1-20): Code analysis, pattern detection, complexity scoring, bug detection, performance analysis, security analysis, etc.
 - Generation (21-40): Code generation, documentation, tests, specifications, architecture, UI/UX, etc.
@@ -311,8 +311,8 @@ async function fixCode(code: string, issue: string): Promise<string> {
 
 #### Step 5.1: Create Test Suite
 **What to do:**
-- Unit tests for all 79 tiers
-- Unit tests for all 109 capabilities
+- Unit tests for all 188 tiers
+- Unit tests for all 66 advanced execution capabilities
 - Integration tests for routing
 - E2E tests for full pipeline
 - Load tests for 100-worker autofixer
@@ -333,8 +333,8 @@ async function fixCode(code: string, issue: string): Promise<string> {
 
 ### Core System (INTERNAL ONLY)
 - [ ] Create `server/aurora-core.ts`
-- [ ] Define all 79 Knowledge Tiers (internal)
-- [ ] Define all 109 Capabilities (internal)
+- [ ] Define all 188 Knowledge Tiers (with Hybrid Mode) (internal)
+- [ ] Define all 66 Advanced Execution Capabilities (internal)
 - [ ] Implement Nexus V3 routing (internal logic)
 - [ ] Implement `analyzeAndScore()` (Aurora's internal logic)
 - [ ] Implement `generateAuroraResponse()` (Aurora's internal logic)
@@ -361,7 +361,7 @@ async function fixCode(code: string, issue: string): Promise<string> {
 
 ### Knowledge & Optimization
 - [ ] Implement complete 79-tier hierarchy
-- [ ] Implement all 109 capabilities
+- [ ] Implement all 66 advanced execution capabilities
 - [ ] Store knowledge internally (no Pinecone)
 - [ ] Optimize response time < 1ms
 - [ ] Add internal caching layers
@@ -378,7 +378,7 @@ async function fixCode(code: string, issue: string): Promise<string> {
 ## 🔑 KEY SUCCESS METRICS
 
 - ✅ All 79 knowledge tiers accessible
-- ✅ All 109 capabilities operational
+- ✅ All 66 advanced execution capabilities operational
 - ✅ Response time < 1ms
 - ✅ 100-worker autofixer functional
 - ✅ ZERO external AI APIs (no Anthropic, no Pinecone)
@@ -393,7 +393,7 @@ async function fixCode(code: string, issue: string): Promise<string> {
 
 ## 🚀 NEXT STEPS
 
-1. **Start with Step 1.1**: Create `server/aurora-core.ts` with all 79 tiers and 109 capabilities (INTERNAL ONLY)
+1. **Start with Step 1.1**: Create `server/aurora-core.ts` with all 188 tiers and 66 advanced execution capabilities (INTERNAL ONLY)
 2. **Then Step 1.3**: Add Aurora's internal intelligence methods (NO external AI APIs!)
 3. **Then Step 2.1-2.2**: Wire into server and add routes
 4. **Then Step 3.1-3.2**: Build frontend
