@@ -9,13 +9,12 @@
     "Backend API": true,
     "Frontend (React/Vite)": true,
     "Database Integration": true,
-    "Tests": true,
-    "Documentation": true
+    "Tests": true
   },
   "status": "Issues",
   "issues": [
-    "Virtual env/cache bloat",
-    "Contains backups/old files"
+    "Bloated with venv/cache files",
+    "Many backup files"
   ],
-  "total_files": 5001
+  "total_files": 5004
 }

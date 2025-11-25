@@ -132,7 +132,7 @@
         
         /* Modal */
         .modal {
-            display: none;
+            display: none !important;
             position: fixed;
             z-index: 1000;
             left: 0;
@@ -141,15 +141,19 @@
             height: 100%;
             background-color: rgba(0,0,0,0.9);
             overflow-y: auto;
+            pointer-events: none;
         }
         
         .modal.active {
-            display: block;
+            display: flex !important;
+            pointer-events: auto;
+            align-items: flex-start;
+            justify-content: center;
         }
         
         .modal-content {
             background: linear-gradient(135deg, #0a0e27 0%, #1a0a3e 100%);
-            margin: 2% auto;
+            margin-top: 2%;
             padding: 30px;
             border: 2px solid #00ff88;
             border-radius: 12px;
@@ -166,6 +170,10 @@
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            margin: -10px 0 0 0;
         }
         
         .close-btn:hover {
@@ -307,7 +315,7 @@
     <!-- Detailed Comparison Modal -->
     <div id="comparisonModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <button class="close-btn" onclick="closeModal()" aria-label="Close">&times;</button>
             <h2 id="modalTitle"></h2>
             <p class="vs-label">Comparing: <strong>Main Branch</strong> ← → <strong id="branchTitle2"></strong></p>
             
@@ -371,6 +379,7 @@
         let branchData = {};
         let mainFeatures = {};
         let branchFeatures = {};
+        let modalOpen = false;
         
         // Load all analysis data
         Promise.all([
@@ -396,7 +405,7 @@
                 const removed = data.removed_files || 0;
                 
                 return `
-                    <div class="branch-card" onclick="openComparison('${name.replace(/'/g, "\\'")}')">
+                    <div class="branch-card" onclick="openComparison(event, '${name.replace(/'/g, "\\'")}')">
                         <div class="branch-name">${escapeHtml(name)}</div>
                         <div class="summary">
                             <div class="summary-item">+${added} added</div>
@@ -411,7 +420,11 @@
             }).join('');
         }
         
-        function openComparison(branchName) {
+        function openComparison(event, branchName) {
+            event.stopPropagation();
+            if (modalOpen) return;
+            modalOpen = true;
+            
             const data = branchData[branchName] || {};
             const branch = branchFeatures[branchName] || {};
             const main = mainFeatures || {};
@@ -435,7 +448,7 @@
             `;
             
             // Status badges
-            const mainStatusEl = document.querySelector('.status-working');
+            const mainStatusEl = document.getElementById('mainStatus');
             mainStatusEl.textContent = main.status;
             mainStatusEl.className = `status-badge status-${main.status === 'Working' ? 'working' : 'issues'}`;
             
@@ -470,37 +483,40 @@
             // Files summary
             document.getElementById('filesAddedSummary').innerHTML = `
                 <strong style="color: #00ff88;">${data.added_files || 0} files added</strong><br>
-                <span style="color: #888;">Sample: ${(data.added_sample || []).slice(0, 3).join(', ') || 'N/A'}</span>
+                <span style="color: #888;">Sample: ${(data.added_sample || []).slice(0, 3).map(f => f.split('/').pop()).join(', ') || 'N/A'}</span>
             `;
             
             document.getElementById('filesRemovedSummary').innerHTML = `
                 <strong style="color: #ff6b6b;">${data.removed_files || 0} files removed</strong><br>
-                <span style="color: #888;">Sample: ${(data.removed_sample || []).slice(0, 3).join(', ') || 'N/A'}</span>
+                <span style="color: #888;">Sample: ${(data.removed_sample || []).slice(0, 3).map(f => f.split('/').pop()).join(', ') || 'N/A'}</span>
             `;
             
             // Issues
             const issues = branch.issues || [];
             document.getElementById('issuesBox').innerHTML = `
                 <h4>⚠️ Status Issues</h4>
-                <p>${issues.length > 0 ? issues.map(i => `• ${i}`).join('<br>') : 'No issues detected'}</p>
+                <p>${issues.length > 0 ? issues.map(i => `• ${i}`).join('<br>') : '✓ No issues detected'}</p>
             `;
             
             // Recommendation
             let rec = 'This branch ';
-            if (unique.length > 0) rec += `adds ${unique.length} new features. `;
+            if (unique.length > 0) rec += `adds ${unique.length} new feature(s). `;
             if (missing.length > 0) rec += `but is missing ${missing.length} from main. `;
-            rec += `Status: ${branch.status}. `;
+            rec += `Overall status: ${branch.status}. `;
             
             document.getElementById('recommendationBox').innerHTML = `
                 <h4>💡 Summary</h4>
                 <p>${rec}</p>
             `;
             
-            document.getElementById('comparisonModal').classList.add('active');
+            const modal = document.getElementById('comparisonModal');
+            modal.classList.add('active');
         }
         
         function closeModal() {
-            document.getElementById('comparisonModal').classList.remove('active');
+            const modal = document.getElementById('comparisonModal');
+            modal.classList.remove('active');
+            modalOpen = false;
         }
         
         function escapeHtml(text) {
@@ -517,9 +533,15 @@
             });
         }
         
-        window.onclick = function(event) {
-            if (event.target === document.getElementById('comparisonModal')) closeModal();
-        }
+        // Close modal on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modalOpen) closeModal();
+        });
+        
+        // Close modal when clicking outside (on the dark background)
+        document.getElementById('comparisonModal').addEventListener('click', function(event) {
+            if (event.target === this && modalOpen) closeModal();
+        });
     </script>
 </body>
 </html>
