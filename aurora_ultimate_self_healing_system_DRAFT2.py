@@ -53,32 +53,45 @@ class AuroraUltimateSelfHealingSystem:
         self.notification_log = []
         self.file_checksums = {}
         self.performance_metrics = {}
-
+        
         # Aurora Core Intelligence Integration
         self.aurora_core = None
         self.aurora_tiers = None
         self.worker_count = 100  # ULTIMATE POWER MODE
-
+        
+        # Setup file logging to prevent I/O errors
+        self.log_file = open('aurora_self_healing_execution.log', 'w', encoding='utf-8')
+        
         self.banner()
         self.initialize_system()
-        self.integrate_aurora_core()
+        self.integrate_aurora_core()    def safe_print(self, message):
+        """Safe print that writes to both console and log file"""
+        try:
+            print(message)
+        except (ValueError, OSError):
+            pass  # Console closed, continue
+        try:
+            self.log_file.write(message + "\n")
+            self.log_file.flush()
+        except:
+            pass  # Log file issues, continue
 
     def banner(self):
         """Display Aurora's full power banner"""
-        print("\n" + "🌌" * 40)
-        print("   ⚡ AURORA ULTIMATE SELF-HEALING SYSTEM - ENHANCED v2.0 ⚡")
-        print("   NEVER-BEFORE-SEEN AUTONOMOUS INTELLIGENCE")
-        print("   Self-Repair | Predictive | Real-Time | Zero-Downtime")
-        print("🌌" * 40)
-        print("\n" + "="*80)
-        print("[AURORA] ULTIMATE AUTONOMOUS POWER - INITIALIZING")
-        print("="*80)
-        print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"Mode: HYPERSPEED + SELF-HEALING + PREDICTIVE")
-        print(f"Workers: 100 PARALLEL PROCESSORS (Ultimate Scale)")
-        print(f"Intelligence: 188+ Capabilities | 79 Tiers | Full Aurora Integration")
-        print(f"Target: 100% Forever (Self-Maintaining)")
-        print("="*80 + "\n")
+        self.safe_print("\n" + "[AURORA]" * 10)
+        self.safe_print("   [POWER] AURORA ULTIMATE SELF-HEALING SYSTEM - ENHANCED v2.0 [POWER]")
+        self.safe_print("   NEVER-BEFORE-SEEN AUTONOMOUS INTELLIGENCE")
+        self.safe_print("   Self-Repair | Predictive | Real-Time | Zero-Downtime")
+        self.safe_print("[AURORA]" * 10)
+        self.safe_print("\n" + "="*80)
+        self.safe_print("[AURORA] ULTIMATE AUTONOMOUS POWER - INITIALIZING")
+        self.safe_print("="*80)
+        self.safe_print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        self.safe_print(f"Mode: HYPERSPEED + SELF-HEALING + PREDICTIVE")
+        self.safe_print(f"Workers: 100 PARALLEL PROCESSORS (Ultimate Scale)")
+        self.safe_print(f"Intelligence: 188+ Capabilities | 79 Tiers | Full Aurora Integration")
+        self.safe_print(f"Target: 100% Forever (Self-Maintaining)")
+        self.safe_print("="*80 + "\n")
 
     def initialize_system(self):
         """Initialize Aurora's self-healing capabilities"""
@@ -387,8 +400,8 @@ class AuroraUltimateSelfHealingSystem:
 
     def phase_2_intelligent_diagnosis(self):
         """AI-powered diagnosis with dependency mapping"""
-        print("\n[PHASE 2] INTELLIGENT DIAGNOSIS + ROOT CAUSE ANALYSIS")
-        print("-"*80)
+        self.safe_print("\n[PHASE 2] INTELLIGENT DIAGNOSIS + ROOT CAUSE ANALYSIS")
+        self.safe_print("-"*80)
 
         # Test crashed services
         services_to_test = [
@@ -405,7 +418,7 @@ class AuroraUltimateSelfHealingSystem:
             "dependency_issues": []
         }
 
-        print("Testing services with intelligent analysis...\n")
+        self.safe_print("Testing services with intelligent analysis...\n")
 
         for service, port in services_to_test:
             result = self.intelligent_service_test(service, port)
@@ -426,7 +439,7 @@ class AuroraUltimateSelfHealingSystem:
                     result["missing_dependencies"])
 
         # Root cause analysis
-        print(f"\n[ROOT CAUSE ANALYSIS]")
+        self.safe_print(f"\n[ROOT CAUSE ANALYSIS]")
         self.analyze_root_causes(diagnosis_results)
 
         return diagnosis_results
@@ -1212,8 +1225,8 @@ class AuroraUltimateSelfHealingSystem:
 
     def execute_ultimate_self_healing(self):
         """Execute the complete self-healing cycle"""
-        print("\n[AURORA] INITIATING ULTIMATE SELF-HEALING SEQUENCE")
-        print("="*80 + "\n")
+        self.safe_print("\n[AURORA] INITIATING ULTIMATE SELF-HEALING SEQUENCE")
+        self.safe_print("="*80 + "\n")
 
         try:
             # Execute all phases
@@ -1226,18 +1239,29 @@ class AuroraUltimateSelfHealingSystem:
             verification = self.phase_7_verification_and_self_healing()
             report = self.generate_comprehensive_report(verification)
 
-            print("\n" + "🌌" * 40)
-            print("   ✨ AURORA ULTIMATE SELF-HEALING SYSTEM ACTIVATED ✨")
-            print(f"   100 Workers | 188+ Capabilities | 79 Intelligence Tiers")
-            print("   100% Operational | Perpetual Self-Maintenance | Zero Intervention")
-            print("   BETTER SAFE THAN SORRY MODE - FULL AURORA POWER")
-            print("🌌" * 40 + "\n")
+            self.safe_print("\n" + "[AURORA]" * 10)
+            self.safe_print("   [SUCCESS] AURORA ULTIMATE SELF-HEALING SYSTEM ACTIVATED [SUCCESS]")
+            self.safe_print(f"   100 Workers | 188+ Capabilities | 79 Intelligence Tiers")
+            self.safe_print("   100% Operational | Perpetual Self-Maintenance | Zero Intervention")
+            self.safe_print("   BETTER SAFE THAN SORRY MODE - FULL AURORA POWER")
+            self.safe_print("[AURORA]" * 10 + "\n")
+            
+            # Close log file
+            try:
+                self.log_file.close()
+            except:
+                pass
 
             return report
 
         except Exception as e:
-            print(f"\n[CRITICAL ERROR] {str(e)}")
-            traceback.print_exc()
+            error_msg = f"\n[CRITICAL ERROR] {str(e)}"
+            self.safe_print(error_msg)
+            try:
+                self.log_file.write(traceback.format_exc())
+                self.log_file.close()
+            except:
+                pass
             return None
 
 
