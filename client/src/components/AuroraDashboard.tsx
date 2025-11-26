@@ -49,7 +49,7 @@ export default function AuroraDashboard() {
           </CardHeader>
           <CardContent className="space-y-3">
             {services.map((service, i) => (
-              <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-{service.color}-500/10 to-transparent border border-{service.color}-500/30">
+              <div key={`service-${service.name}-${i}`} className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-{service.color}-500/10 to-transparent border border-{service.color}-500/30">
                 <div className="flex items-center gap-3">
                   <Activity className="h-4 w-4 text-{service.color}-400" />
                   <div>

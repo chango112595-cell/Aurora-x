@@ -155,7 +155,7 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
             <div className="space-y-4">
               {messages.map((msg) => (
                 <div
-                  key={msg.id}
+                  key={`msg-${msg.id}`}
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div

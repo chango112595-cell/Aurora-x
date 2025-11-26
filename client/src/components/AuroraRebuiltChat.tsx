@@ -108,7 +108,7 @@ I designed this holographic interface myself! Ask me anything about code, system
         {/* Messages holographic display */}
         <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2">
           {messages.map((msg) => (
-            <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div key={`msg-${msg.id}`} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[80%] rounded-lg p-4 backdrop-blur-sm border ${msg.role === 'user'
                 ? 'bg-cyan-500/20 border-cyan-400/50 text-cyan-100'
                 : 'bg-purple-500/20 border-purple-400/50 text-purple-100'

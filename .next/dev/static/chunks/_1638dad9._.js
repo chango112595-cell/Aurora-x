@@ -980,7 +980,7 @@ function AuroraFuturisticChat() {
                                 columnNumber: 15
                             }, this)
                         ]
-                    }, i, true, {
+                    }, `code-${i}`, true, {
                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
                         lineNumber: 144,
                         columnNumber: 13
@@ -1003,7 +1003,7 @@ function AuroraFuturisticChat() {
                                         lineNumber: 166,
                                         columnNumber: 37
                                     }, this) : p)
-                            }, j, false, {
+                            }, `line-${j}`, false, {
                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
                                 lineNumber: 164,
                                 columnNumber: 19
@@ -1033,7 +1033,7 @@ function AuroraFuturisticChat() {
                             columnNumber: 77
                         }, this);
                     })
-                }, i, false, {
+                }, `text-${i}`, false, {
                     fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
                     lineNumber: 158,
                     columnNumber: 11
@@ -1137,7 +1137,7 @@ function AuroraFuturisticChat() {
                                                 lineNumber: 212,
                                                 columnNumber: 19
                                             }, this)
-                                        }, idx, false, {
+                                        }, `msg-${idx}-${msg.timestamp.getTime()}`, false, {
                                             fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
                                             lineNumber: 208,
                                             columnNumber: 17

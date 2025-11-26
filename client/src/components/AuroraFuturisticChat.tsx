@@ -141,7 +141,7 @@ export default function AuroraFuturisticChat() {
           const code = lines.slice(1).join('\n');
 
           return (
-            <div key={i} className="my-3 rounded-lg bg-slate-900/80 border border-purple-500/20 overflow-hidden">
+            <div key={`code-${i}`} className="my-3 rounded-lg bg-slate-900/80 border border-purple-500/20 overflow-hidden">
               <div className="px-3 py-1 bg-purple-500/10 border-b border-purple-500/20 flex items-center gap-2">
                 <Code className="w-3 h-3 text-purple-400" />
                 <span className="text-xs text-purple-400 font-mono">{language}</span>
@@ -155,13 +155,13 @@ export default function AuroraFuturisticChat() {
 
         // Regular text - make it more natural with proper formatting
         return (
-          <div key={i} className="whitespace-pre-wrap leading-relaxed">
+          <div key={`text-${i}`} className="whitespace-pre-wrap leading-relaxed">
             {part.split('\n').map((line, j) => {
               // Bold text
               if (line.includes('**')) {
                 const boldParts = line.split('**');
                 return (
-                  <p key={j} className="mb-2">
+                  <p key={`line-${j}`} className="mb-2">
                     {boldParts.map((p, k) =>
                       k % 2 === 1 ? <strong key={k} className="text-white font-semibold">{p}</strong> : p
                     )}
@@ -206,7 +206,7 @@ export default function AuroraFuturisticChat() {
             <div className="h-[600px] overflow-y-auto p-6 space-y-4">
               {messages?.map((msg, idx) => (
                 <div
-                  key={idx}
+                  key={`msg-${idx}-${msg.timestamp.getTime()}`}
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn`}
                 >
                   <div

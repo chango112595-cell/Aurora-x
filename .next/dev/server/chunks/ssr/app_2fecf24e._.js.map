@@ -2,5 +2,5 @@
   "version": 3,
   "sources": [],
   "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/negry/Aurora-x/app/icon.svg.mjs%20%28structured%20image%20object%29"],"sourcesContent":["import src from \"IMAGE\";\nexport default { src, width: 32, height: 32 }\n"],"names":[],"mappings":";;;;AAAA;;uCACe;IAAE,KAAA,gIAAG;IAAE,OAAO;IAAI,QAAQ;AAAG"}}]
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/negry/Aurora-x/app/icon.svg.mjs%20%28structured%20image%20object%29"],"sourcesContent":["import src from \"IMAGE\";\nexport default { src, width: 100, height: 100 }\n"],"names":[],"mappings":";;;;AAAA;;uCACe;IAAE,KAAA,gIAAG;IAAE,OAAO;IAAK,QAAQ;AAAI"}}]
 }

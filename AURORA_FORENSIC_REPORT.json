@@ -1,26 +1,13 @@
 {
-  "timestamp": "1764194149.4610114",
-  "total_findings": 4,
-  "critical_issues": [
-    {
-      "category": "TypeScript",
-      "severity": "CRITICAL",
-      "description": "@shared/* path mapping missing in tsconfig.json",
-      "file": "C:\\Users\\negry\\Aurora-x\\tsconfig.json"
-    }
-  ],
+  "timestamp": "1764194581.6000414",
+  "total_findings": 2,
+  "critical_issues": [],
   "high_issues": [
     {
       "category": "TypeScript",
       "severity": "HIGH",
       "description": "@/* maps to non-existent path: ./client/src/*",
       "file": "C:\\Users\\negry\\Aurora-x\\tsconfig.json"
-    },
-    {
-      "category": "Runtime",
-      "severity": "HIGH",
-      "description": "No services running on expected ports",
-      "file": null
     }
   ],
   "medium_issues": [],

@@ -153,7 +153,7 @@ export function ChatInterface() {
           <div className="space-y-6">
             {messages.map((message) => (
               <div
-                key={message.id}
+                key={`message-${message.id}`}
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
@@ -172,7 +172,7 @@ export function ChatInterface() {
                           if (line.includes('**')) {
                             const parts = line.split('**');
                             return (
-                              <div key={i}>
+                              <div key={`line-${message.id}-${i}`}>
                                 {parts.map((part, j) =>
                                   j % 2 === 1 ? <strong key={j}>{part}</strong> : part
                                 )}

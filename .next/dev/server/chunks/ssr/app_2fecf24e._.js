@@ -1,7 +1,7 @@
 module.exports = [
 "[project]/app/icon.svg (static in ecmascript, tag client)", ((__turbopack_context__) => {
 
-__turbopack_context__.v("/_next/static/media/icon.f7424795.svg");}),
+__turbopack_context__.v("/_next/static/media/icon.5cdc17f7.svg");}),
 "[project]/app/icon.svg.mjs { IMAGE => \"[project]/app/icon.svg (static in ecmascript, tag client)\" } [app-rsc] (structured image object, ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
@@ -13,8 +13,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$icon$2e$svg__$28$stat
 ;
 const __TURBOPACK__default__export__ = {
     src: __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$icon$2e$svg__$28$static__in__ecmascript$2c$__tag__client$29$__["default"],
-    width: 32,
-    height: 32
+    width: 100,
+    height: 100
 };
 }),
 ];

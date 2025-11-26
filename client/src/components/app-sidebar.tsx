@@ -109,7 +109,7 @@ export function AppSidebar() {
           <SidebarGroupContent className="mt-2">
             <SidebarMenu>
               {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={`menu-${item.title}`}>
                   <SidebarMenuButton
                     asChild
                     isActive={location === item.url}
