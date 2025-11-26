@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 46, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/negry/Aurora-x/app/api/health/route.ts"],"sourcesContent":["/**\r\n * Health Check API Route - Next.js App Router\r\n */\r\nimport { NextResponse } from 'next/server';\r\n\r\nexport async function GET() {\r\n  return NextResponse.json({\r\n    status: 'healthy',\r\n    timestamp: new Date().toISOString(),\r\n    service: 'Aurora Next.js 16',\r\n    version: '2.0.0',\r\n  });\r\n}\r\n"],"names":[],"mappings":"AAAA;;CAEC;;;;AACD;;AAEO,eAAe;IACpB,OAAO,gJAAY,CAAC,IAAI,CAAC;QACvB,QAAQ;QACR,WAAW,IAAI,OAAO,WAAW;QACjC,SAAS;QACT,SAAS;IACX;AACF"}}]
-}
