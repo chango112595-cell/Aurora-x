@@ -33,65 +33,77 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 def main():
-    """
-        Main
-            """
-    print("[STAR] Aurora Autonomous Architecture Fix\n")
+    """Main function to fix Aurora's architecture"""
+    print("\n🌟 Aurora Autonomous Architecture Fix\n")
     aurora = AuroraCoreIntelligence()
 
+    # The REAL problem from Next.js chat
     task = """
-    Aurora, you identified these architectural issues in your self-analysis:
+    Aurora, here's the REAL architectural problem:
     
-    1. CONVERSATION CONTEXT PERSISTENCE - Session contexts persist across browser refreshes
-    2. SYSTEM ARCHITECTURE ROLES - Improper Luminar Nexus integration with Aurora Core
-    3. NLP CLASSIFICATION ISSUES - "AURORA" keyword triggers generic responses instead of analysis
-    4. RESPONSE ROUTING CONFLICTS - Enhancement detection overrides technical analysis
+    **CURRENT SITUATION:**
+    - Next.js app (port 5000) calls server/aurora-chat.ts
+    - aurora-chat.ts calls Python bridge with analyze()
+    - Python returns structured JSON: {"issues":[],"suggestions":[],"recommendations":[]}
+    - This gets formatted badly: "Analysis of: hey" + "Using fallback analysis system"
     
-    Your task: FIX ALL OF THESE ISSUES NOW.
+    **BUT YOU ALREADY HAVE:**
+    - AuroraCoreIntelligence with natural language processing
+    - analyze_natural_language() method
+    - generate_aurora_response() method
+    - Full conversational capabilities
     
-    Implement the architectural solutions you recommended:
-    - Proper Nexus Integration
-    - Intent Priority system
-    - Session Isolation
-    - Template Elimination
+    **THE REAL FIX:**
+    Update server/aurora-chat.ts to:
+    1. Call your analyze_natural_language() method instead of analyze()
+    2. Call your generate_aurora_response() for natural responses
+    3. Handle "what are your specs?" naturally
+    4. No more structured JSON fallbacks
     
-    Update the necessary files (aurora_core.py, aurora_chat_server.py, aurora_cosmic_nexus.html, 
-    tools/luminar_nexus.py) to fix these issues.
-    
-    Execute autonomously and report what you fixed.
+    Generate the COMPLETE FIXED CODE for server/aurora-chat.ts that properly uses your natural language system.
     """
 
-    print("[EMOJI] Task for Aurora:")
-    print("=" * 80)
+    print("[🧠] Asking Aurora to fix her architecture:\n")
+    print("="*80)
     print(task)
-    print("=" * 80 + "\n")
+    print("="*80 + "\n")
 
-    # Analyze the task
+    # Get Aurora's analysis and fix
+    print("[⚡] Aurora analyzing and generating fix...\n")
     analysis = aurora.analyze_natural_language(task)
-    analysis["original_message"] = task
-
-    # Get context
     context = aurora.get_conversation_context("architecture_fix")
-
-    # Generate and execute response
-    print("[EMOJI] Aurora is analyzing and fixing...\n")
     response = aurora.generate_aurora_response(analysis, context)
 
-    print("[STAR] Aurora's Response:")
-    print("=" * 80)
+    print("="*80)
+    print("🌟 AURORA'S FIX:")
+    print("="*80)
     print(response)
-    print("=" * 80)
+    print("="*80 + "\n")
+    
+    # Save the fix
+    from pathlib import Path
+    Path("AURORA_ARCHITECTURE_FIX.md").write_text(f"""# Aurora's Architecture Fix
+
+## Problem Analysis
+
+{task}
+
+## Aurora's Solution
+
+{response}
+
+---
+Generated: 2025-11-25
+Status: Ready to implement
+""", encoding='utf-8')
+    
+    print("✅ Fix saved to AURORA_ARCHITECTURE_FIX.md\n")
 
 
 if __name__ == "__main__":
-
-# Aurora Perfect Error Handling
-try:
-    # Main execution with complete error coverage
-    pass
-except Exception as e:
-    # Handle all exceptions gracefully
-    pass
-    main()
-
-# Type annotations: str, int -> bool
+    try:
+        main()
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        import traceback
+        traceback.print_exc()
