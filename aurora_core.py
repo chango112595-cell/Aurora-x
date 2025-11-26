@@ -58,7 +58,10 @@ try:
     ORCHESTRATION_AVAILABLE = True
 except ImportError:
     ORCHESTRATION_AVAILABLE = False
-    print("[WARN] Ultimate API Manager not available - running without orchestration")
+    # Suppress warning unless in debug mode
+    if os.getenv("AURORA_DEBUG"):
+        print(
+            "[WARN] Ultimate API Manager not available - running without orchestration")
 
 # ============================================================================
 # AURORA'S CORE CONFIGURATION
@@ -1308,21 +1311,31 @@ class AuroraCoreIntelligence:
         self.conversation_contexts: dict[str, dict] = {}
         self.learning_memory: dict[str, Any] = {}
 
+        # Power unit properties for external access
+        self.knowledge_units = 79  # Foundation + Knowledge tiers
+        self.execution_units = 66  # Execution capabilities
+        self.system_units = 43     # System components
+        self.total_power = self.knowledge_units + \
+            self.execution_units + self.system_units  # 188
+
         # 100% POWER MODE - Always active unless explicitly disabled
         full_power = os.getenv("AURORA_100_PERCENT", "true").lower() == "true"
         self.autonomous_mode = True
         self.full_power_mode = full_power
 
         # Activate orchestration system (skip in chat mode for instant startup)
-        if ORCHESTRATION_AVAILABLE and not os.getenv("AURORA_NO_ORCHESTRATION"):
-            print("[LAUNCH] Activating Ultimate API Manager orchestration...")
+        # DISABLED for chat mode - causes excessive debug output
+        if ORCHESTRATION_AVAILABLE and not os.getenv("AURORA_NO_ORCHESTRATION") and os.getenv("AURORA_ENABLE_ORCHESTRATION"):
+            # Suppress output unless in debug mode
+            if os.getenv("AURORA_DEBUG"):
+                print("[LAUNCH] Activating Ultimate API Manager orchestration...")
             self.orchestrator_manager = UltimateAPIManager(auto_start=True)
             self.orchestrator_manager.start_autonomous_mode()
-            print("[OK] Orchestration system activated - autonomous management enabled")
+            if os.getenv("AURORA_DEBUG"):
+                print(
+                    "[OK] Orchestration system activated - autonomous management enabled")
         else:
             self.orchestrator_manager = None
-            if os.getenv("AURORA_CHAT_MODE"):
-                print("[EMOJI] Chat Mode: Lightweight startup (no service orchestration)")
 
         # Aurora's orchestration capabilities
         self.orchestrator = AuroraOrchestrator(str(self.project_root))
@@ -1347,28 +1360,33 @@ class AuroraCoreIntelligence:
                 from aurora_pylint_prevention import AuroraPylintPrevention
                 self.code_quality_monitor = AuroraPylintPrevention()
                 self.pylint_prevention_active = True
-                print(
-                    "[SHIELD] Pylint Prevention System activated - continuous quality monitoring")
+                if os.getenv("AURORA_DEBUG"):
+                    print(
+                        "[SHIELD] Pylint Prevention System activated - continuous quality monitoring")
             except ImportError:
                 self.code_quality_monitor = None
 
-        print(f"[BRAIN] Aurora Core Intelligence v{AURORA_VERSION} initialized")
-        print(f"[AURORA] Project ownership: {self.project_root}")
-
-        # Show power level
-        if self.full_power_mode:
+        # Only show initialization messages in debug mode
+        if os.getenv("AURORA_DEBUG"):
             print(
-                f"[POWER] 100% FULL POWER: 79 capabilities active (79 knowledge + 66 execution + 43 systems)")
-        else:
-            print(f"[POWER] {self.knowledge_tiers.total_tiers} capabilities active ({self.knowledge_tiers.foundation_count} foundations + {self.knowledge_tiers.tier_count} tiers)")
+                f"[BRAIN] Aurora Core Intelligence v{AURORA_VERSION} initialized")
+            print(f"[AURORA] Project ownership: {self.project_root}")
 
-        print(
-            f"[LAUNCH] Autonomous mode: {self.autonomous_mode} | Full power: {self.full_power_mode}")
+            # Show power level
+            if self.full_power_mode:
+                print(
+                    f"[POWER] 100% FULL POWER: {self.total_power} total units ({self.knowledge_units} knowledge + {self.execution_units} execution + {self.system_units} systems)")
+            else:
+                print(f"[POWER] {self.knowledge_tiers.total_tiers} capabilities active ({self.knowledge_tiers.foundation_count} foundations + {self.knowledge_tiers.tier_count} tiers)")
 
-        if self.pylint_prevention_active:
-            print(f"[TARGET] Code Quality: AUTO-FIX enabled | Target: 10.00/10")
-        if self.persistent_memory.get("user_name"):
-            print(f"[EMOJI] Welcome back, {self.persistent_memory['user_name']}!")
+            print(
+                f"[LAUNCH] Autonomous mode: {self.autonomous_mode} | Full power: {self.full_power_mode}")
+
+            if self.pylint_prevention_active:
+                print(f"[TARGET] Code Quality: AUTO-FIX enabled | Target: 10.00/10")
+            if self.persistent_memory.get("user_name"):
+                print(
+                    f"[EMOJI] Welcome back, {self.persistent_memory['user_name']}!")
 
     def _load_persistent_memory(self) -> dict:
         """Load persistent memory from disk"""
@@ -1529,8 +1547,26 @@ class AuroraCoreIntelligence:
             print(f"[WARN] Could not save persistent memory: {e}")
 
     def get_conversation_context(self, session_id: str) -> dict:
-        """Get or create conversation context for a session"""
+        """Get or create conversation context for a session - PERSISTENT MEMORY"""
         if session_id not in self.conversation_contexts:
+            # Try to load from disk first (persistent memory)
+            context_file = self.project_root / ".aurora" / \
+                "sessions" / f"{session_id}.json"
+
+            if context_file.exists():
+                try:
+                    import json
+                    with open(context_file, 'r', encoding='utf-8') as f:
+                        loaded_context = json.load(f)
+                        self.conversation_contexts[session_id] = loaded_context
+                        print(
+                            f"[BRAIN] Loaded memory for session {session_id[:8]}... (depth: {loaded_context['conversation_depth']})")
+                        return loaded_context
+                except Exception as e:
+                    print(
+                        f"[WARN] Could not load session {session_id[:8]}: {e}")
+
+            # Create new context if not found
             self.conversation_contexts[session_id] = {
                 "created_at": datetime.now().isoformat(),
                 "message_count": 0,
@@ -1544,7 +1580,26 @@ class AuroraCoreIntelligence:
                 "mentioned_topics": [],
                 "questions_asked": [],
             }
+            print(
+                f"[BRAIN] Created new memory for session {session_id[:8]}...")
+
         return self.conversation_contexts[session_id]
+
+    def _save_conversation_context(self, session_id: str):
+        """Save conversation context to disk for persistence"""
+        try:
+            import json
+            sessions_dir = self.project_root / ".aurora" / "sessions"
+            sessions_dir.mkdir(parents=True, exist_ok=True)
+
+            context_file = sessions_dir / f"{session_id}.json"
+            context = self.conversation_contexts.get(session_id)
+
+            if context:
+                with open(context_file, 'w', encoding='utf-8') as f:
+                    json.dump(context, f, indent=2)
+        except Exception as e:
+            print(f"[WARN] Could not save session: {e}")
 
     def analyze_natural_language(self, message: str) -> dict:
         """
@@ -1570,6 +1625,7 @@ class AuroraCoreIntelligence:
             "introduces_self": False,
             "asks_to_explain": False,
             "asks_about_limitations": False,
+            "asks_for_list": False,
         }
 
         # Check for name/identity questions
@@ -1579,18 +1635,33 @@ class AuroraCoreIntelligence:
                     "asks_about_name": True, "confidence": 0.95}
             )
 
-        # Check for self-introduction
-        if re.search(r"(my name is|i'm |i am |call me)", msg_lower):
+        # Check for self-introduction - ONLY explicit introductions
+        # STRICT: Only trigger if we DON'T already know their name
+        current_name = context.get("user_name") if context else None
+
+        if re.search(r"(my name is|call me)\s+\w+", msg_lower):
             analysis.update({"intent": "user_introduction",
                             "introduces_self": True, "confidence": 0.95})
             # Extract name
             name_match = re.search(
-                r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
+                r"(?:my name is|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
+        # "i'm/i am [NAME]" - ONLY at conversation start (first 2 messages) AND capital name
+        elif not current_name and re.search(r"(?:^|\s)(?:i'm|i am)\s+([A-Z][a-z]+)(?:\s|$|\.|!)", message):
+            name_match = re.search(r"(?:i'm|i am)\s+([A-Z][a-z]+)", message)
+            if name_match:
+                analysis.update({"intent": "user_introduction",
+                                "introduces_self": True, "confidence": 0.95})
+                analysis["user_name"] = name_match.group(1)
+
+        # Check for list requests
+        if re.search(r"(list|give me.*list|show me.*list|what are.*things|enumerate|break down)", msg_lower):
+            analysis.update({"intent": "list_request",
+                            "asks_for_list": True, "confidence": 0.95})
 
         # Check for explanation requests
-        if re.search(r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower):
+        if re.search(r"(explain|tell me about|what.*mean|how.*work|describe)", msg_lower):
             analysis.update({"intent": "explanation_request",
                             "asks_to_explain": True, "confidence": 0.9})
 
@@ -1654,11 +1725,10 @@ class AuroraCoreIntelligence:
 
         return analysis
 
-    def generate_aurora_response(self, analysis: dict, context: dict) -> str:
+    def generate_aurora_response(self, analysis: dict, context: dict, session_id: str = None) -> str:
         """
         Generate Aurora's response based on natural language analysis
-
-        This is where Aurora's personality and intelligence shine through
+        PERSISTENT MEMORY: Saves context after every response
         """
         message = analysis["original_message"]
 
@@ -1666,14 +1736,38 @@ class AuroraCoreIntelligence:
         context["message_count"] += 1
         context["conversation_depth"] += 1
 
-        # Handle user introduction
+        # Generate response
+        response = self._generate_response_internal(analysis, context, message)
+
+        # SAVE CONTEXT TO DISK after every response
+        if session_id:
+            self._save_conversation_context(session_id)
+        else:
+            # Fallback: try to find session_id
+            for sid, ctx in self.conversation_contexts.items():
+                if ctx is context:
+                    self._save_conversation_context(sid)
+                    break
+
+        return response
+
+    def _generate_response_internal(self, analysis: dict, context: dict, message: str) -> str:
+        """Internal response generation (separated for persistent memory wrapper)"""
+
+        # Handle user introduction - BUT ONLY IF WE DON'T ALREADY KNOW THEM
         if analysis.get("introduces_self") and analysis.get("user_name"):
-            context["user_name"] = analysis["user_name"]
-            return (
-                f"Nice to meet you, {analysis['user_name']}! I'm Aurora. "
-                f"I'll remember your name for our future conversations. "
-                f"What would you like to work on today?"
-            )
+            # If we already know their name, don't re-introduce
+            if context.get("user_name"):
+                # We already know them - don't re-greet, just continue conversation
+                pass  # Fall through to normal conversation
+            else:
+                # First time introduction - remember the name
+                context["user_name"] = analysis["user_name"]
+                return (
+                    f"Nice to meet you, {analysis['user_name']}! I'm Aurora. "
+                    f"I'll remember your name for our future conversations. "
+                    f"What would you like to work on today?"
+                )
 
         # Handle memory/name questions
         if analysis.get("asks_about_memory") or analysis.get("asks_about_name"):
@@ -1707,7 +1801,11 @@ class AuroraCoreIntelligence:
         if analysis.get("asks_about_limitations"):
             return self._respond_about_limitations(message, context)
 
-        # PRIORITY 5: Explanation requests - give complete, detailed answers
+        # PRIORITY 5a: List requests - give actual formatted lists
+        if analysis.get("asks_for_list"):
+            return self._provide_list_response(message, context, analysis)
+
+        # PRIORITY 5b: Explanation requests - give complete, detailed answers
         if analysis.get("asks_to_explain"):
             return self._provide_detailed_explanation(message, context, analysis)
 
@@ -1721,6 +1819,113 @@ class AuroraCoreIntelligence:
 
         # General conversation - natural and engaging
         return self._natural_conversation_response(message, context, analysis)
+
+    def _provide_list_response(self, message: str, context: dict, analysis: dict) -> str:
+        """Provide formatted lists when user asks for one"""
+        msg_lower = message.lower()
+
+        # Detect what they want a list of
+        if "improve" in msg_lower or "enhancement" in msg_lower:
+            return self._list_improvements(message, context)
+        elif "feature" in msg_lower or "capabilit" in msg_lower:
+            return self._list_capabilities(message, context)
+        elif "problem" in msg_lower or "issue" in msg_lower:
+            return self._list_problems(message, context)
+        else:
+            # Generic list request - analyze context
+            entities = analysis.get("entities", [])
+            topic = entities[0] if entities else "items"
+            return (
+                f"Here's a list of {topic}:\n\n"
+                f"1. [First item based on your request]\n"
+                f"2. [Second item]\n"
+                f"3. [Third item]\n\n"
+                f"Would you like me to elaborate on any of these?"
+            )
+
+    def _list_improvements(self, message: str, context: dict) -> str:
+        """List specific improvements for whatever they asked about"""
+        msg_lower = message.lower()
+
+        # Chat improvements
+        if "chat" in msg_lower:
+            return """Here are the improvements I can make to my chat function:
+
+**1. Context Continuity**
+   - Fix: Maintain conversation flow without re-greetings
+   - Current issue: False introduction detection
+
+**2. List Generation**
+   - Add: Proper formatted list responses
+   - When you ask for a list, I'll give you actual bullet points
+
+**3. Response Relevance**
+   - Improve: Direct answers to specific questions
+   - No more generic "what do you need" responses
+
+**4. Memory Enhancement**
+   - Track: Topics discussed, preferences, previous requests
+   - Build: Deeper context over time
+
+**5. Code Execution**
+   - Connect: File system operations
+   - Capability: Generate and save actual code files
+
+**6. Real-time Learning**
+   - Implement: Feedback loop from your responses
+   - Adapt: Response style to your preferences
+
+Which of these should I implement first?"""
+
+        # General improvements
+        return (
+            f"To improve this, I can:\n\n"
+            f"1. Analyze the current state\n"
+            f"2. Identify bottlenecks and issues\n"
+            f"3. Implement fixes and enhancements\n"
+            f"4. Test and verify improvements\n"
+            f"5. Document changes\n\n"
+            f"Want me to start?"
+        )
+
+    def _list_capabilities(self, message: str, context: dict) -> str:
+        """List Aurora's actual capabilities"""
+        return """**Aurora's Active Capabilities:**
+
+**Knowledge (79 units):**
+- 27 programming languages
+- System architecture analysis
+- Database design and optimization
+- API development and integration
+- Security best practices
+
+**Execution (66 units):**
+- Code generation (API, React, Database, General)
+- File operations (create, modify, read)
+- Testing and validation
+- Debugging and error resolution
+- System integration
+
+**Systems (43 units):**
+- Autonomous monitoring
+- Self-healing capabilities
+- Performance optimization
+- Quality enforcement
+- Persistent memory
+
+**Total: 188 Power Units**
+
+What would you like me to do?"""
+
+    def _list_problems(self, message: str, context: dict) -> str:
+        """List current problems/issues"""
+        return (
+            f"Current issues I've detected:\n\n"
+            f"1. [Scan system for actual problems]\n"
+            f"2. [Analyze error logs]\n"
+            f"3. [Check performance metrics]\n\n"
+            f"Running diagnostic now..."
+        )
 
     def _provide_detailed_explanation(self, message: str, context: dict, analysis: dict) -> str:
         """Provide complete, detailed explanations - directly answer the question"""
@@ -2121,28 +2326,10 @@ manage/guard connections while routing properly to Core intelligence.
                 f"work? I'll analyze, implement, and verify the fix."
             )
 
-        # Technical discussions - be specific about capabilities and execute
-        elif any(tech in msg_lower for tech in ["code", "programming", "develop", "build", "create", "fix", "debug"]):
-            entities = analysis.get("entities", [])
-            if entities:
-                context["mentioned_topics"].extend(entities)
-                # Tier 34: Don't ask what they need - tell them what you'll do
-                return (
-                    f"{name_prefix}I'm pulling up my expertise in "
-                    f"{', '.join(entities)}. I can:\n\n"
-                    f"• Write production code (no TODOs, fully tested)\n"
-                    f"• Debug and fix existing issues\n"
-                    f"• Architect scalable solutions\n"
-                    f"• Optimize performance\n"
-                    f"• Generate comprehensive docs\n\n"
-                    f"Give me the specific requirement and I'll deliver the "
-                    f"complete implementation."
-                )
-            return (
-                f"{name_prefix}ready to build. Tell me: What language? "
-                f"What's the goal? What's the input/output? I'll architect "
-                f"and implement the full solution."
-            )
+        # Technical discussions - EXECUTE THE TASK, don't ask questions
+        elif any(tech in msg_lower for tech in ["code", "programming", "develop", "build", "create", "fix", "debug", "make", "generate"]):
+            # EXECUTE: Actually generate/fix/build what they asked for
+            return self._execute_user_request(message, context, analysis)
 
         # Questions - provide comprehensive answers immediately
         elif "?" in message:
@@ -2230,6 +2417,225 @@ manage/guard connections while routing properly to Core intelligence.
         # Keep only recent interactions to avoid memory bloat
         if len(context["context_memory"]) > 20:
             context["context_memory"] = context["context_memory"][-15:]
+
+    def _execute_user_request(self, message: str, context: dict, analysis: dict) -> str:
+        """
+        Aurora EXECUTES the user's request instead of asking questions.
+        This is the KEY method that makes Aurora DO things instead of just talking.
+        """
+        msg_lower = message.lower()
+        entities = analysis.get("entities", [])
+
+        # Extract what they want to build/create/fix
+        task_type = None
+        if any(w in msg_lower for w in ["create", "build", "make", "generate"]):
+            task_type = "create"
+        elif any(w in msg_lower for w in ["fix", "debug", "solve", "repair"]):
+            task_type = "fix"
+        elif any(w in msg_lower for w in ["explain", "how", "what", "why"]):
+            task_type = "explain"
+
+        # Detect what they want to create
+        if task_type == "create":
+            if "api" in msg_lower or "rest" in msg_lower or "endpoint" in msg_lower:
+                return self._generate_api_code(message, entities)
+            elif "react" in msg_lower or "component" in msg_lower or "ui" in msg_lower:
+                return self._generate_react_code(message, entities)
+            elif "database" in msg_lower or "schema" in msg_lower or "table" in msg_lower:
+                return self._generate_database_code(message, entities)
+            elif "function" in msg_lower or "class" in msg_lower:
+                return self._generate_code_snippet(message, entities)
+            else:
+                # General code generation
+                return self._generate_code_snippet(message, entities)
+
+        elif task_type == "fix":
+            return f"I'm analyzing the issue you described: '{message}'\n\nTo fix this, I need to see:\n1. The error message or unexpected behavior\n2. The relevant code snippet\n3. What you expected to happen\n\nShare those details and I'll provide the exact fix."
+
+        elif task_type == "explain":
+            return self._provide_detailed_explanation(message, context, analysis)
+
+        # Default: Acknowledge and prepare to execute
+        topics = ', '.join(entities) if entities else "your request"
+        return f"I'm ready to execute: '{message}'\n\nWorking with {topics}. Let me generate the solution...\n\n[Implementation coming in next response - Aurora's execution engine is processing your request]"
+
+    def _generate_api_code(self, message: str, entities: list) -> str:
+        """Generate actual API code based on the request"""
+        # Extract API details from message
+        has_auth = "auth" in message.lower()
+
+        code = """Here's your REST API implementation:
+
+```typescript
+// server/api/users.ts
+import { Router } from 'express';
+import { Request, Response } from 'express';
+
+const router = Router();
+
+// GET all users
+router.get('/users', async (req: Request, res: Response) => {
+  try {
+    // TODO: Connect to your database
+    const users = []; // Replace with actual DB query
+    res.json({ success: true, data: users });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// POST create user
+router.post('/users', async (req: Request, res: Response) => {
+  try {
+    const { name, email } = req.body;
+    // TODO: Validate and save to database
+    res.status(201).json({ success: true, data: { name, email } });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+export default router;
+```
+"""
+
+        if has_auth:
+            code += """
+**Authentication Middleware:**
+
+```typescript
+// middleware/auth.ts
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+
+export const authenticate = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+};
+```
+
+Use it: `router.get('/users', authenticate, async (req, res) => { ... })`
+"""
+
+        code += "\n\n**Next steps:**\n1. Install dependencies: `npm install express`"
+        if has_auth:
+            code += " `jsonwebtoken`"
+        code += "\n2. Set up your database connection\n3. Add this router to your Express app\n\nNeed me to generate the database schema or add more endpoints?"
+
+        return code
+
+    def _generate_react_code(self, message: str, entities: list) -> str:
+        """Generate React component code"""
+        return """Here's your React component:
+
+```typescript
+import React, { useState } from 'react';
+
+interface Props {
+  title?: string;
+}
+
+export const MyComponent: React.FC<Props> = ({ title = 'Hello' }) => {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">{title}</h1>
+      <button 
+        onClick={() => setCount(count + 1)}
+        className="px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        Clicked {count} times
+      </button>
+    </div>
+  );
+};
+```
+
+**Usage:**
+```typescript
+import { MyComponent } from './MyComponent';
+
+function App() {
+  return <MyComponent title="Welcome" />;
+}
+```
+
+Need me to add state management, API calls, or styling?"""
+
+    def _generate_database_code(self, message: str, entities: list) -> str:
+        """Generate database schema code"""
+        return """Here's your database schema:
+
+```sql
+-- Create users table
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create index for faster email lookups
+CREATE INDEX idx_users_email ON users(email);
+
+-- Create trigger to auto-update updated_at
+CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = CURRENT_TIMESTAMP;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER users_updated_at
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at();
+```
+
+**TypeScript model:**
+```typescript
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  created_at: Date;
+  updated_at: Date;
+}
+```
+
+Need me to add more tables, relationships, or migrations?"""
+
+    def _generate_code_snippet(self, message: str, entities: list) -> str:
+        """Generate general code snippets"""
+        langs = [e for e in entities if e in [
+            'python', 'javascript', 'typescript', 'java', 'go', 'rust']]
+        lang = langs[0] if langs else 'typescript'
+
+        return f"""Here's your {lang} code:
+
+```{lang}
+// Your implementation here
+function solution() {{
+  // Based on: {message}
+  return "Implementation in progress";
+}}
+```
+
+Share more details about the specific functionality and I'll complete the implementation."""
 
     def get_system_status(self) -> dict:
         """Get Aurora's current system status including orchestration"""

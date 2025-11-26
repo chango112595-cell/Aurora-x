@@ -1,73 +1,84 @@
-# Aurora Self-Diagnosis & Improvement Plan
+# Aurora's Self-Diagnosis: Template Response Issue
 
-**Date:** 2025-11-21 17:44:58
+## The Problem
 
-## Self-Diagnosis Request
+User reports: Aurora gives the same generic answers instead of executing specific tasks.
+
+## Question Asked
 
 
-    Aurora, run a complete self-diagnosis and improvement analysis.
-    
-    Using your newly connected autonomous systems and intelligence manager:
-    
-    1. Diagnose your current state across all systems
-    2. Identify gaps, inefficiencies, or underutilized capabilities
-    3. Analyze what's working well and what needs improvement
-    4. Propose specific, actionable improvements you can implement
-    5. Prioritize improvements by impact
-    
-    Be thorough, technical, and honest. Use your autonomous capabilities to scan
-    your own code, analyze your architecture, and create a concrete improvement plan.
-    
+Aurora, the user reports:
 
-## Aurora's Analysis & Improvement Plan
+"You're giving me the SAME GENERIC ANSWER every time. When I ask you to do something specific, 
+you respond with template questions like 'What would you like me to help with?' instead of 
+actually DOING the task."
 
-🏗️ **AURORA DYNAMIC ARCHITECTURE ANALYSIS**
+QUESTIONS FOR YOU:
+1. Are you analyzing the user's actual message or just pattern matching keywords?
+2. When user says "create a REST API", do you:
+   a) Actually analyze what REST API means and generate code?
+   b) Just return a template asking for more details?
+3. Why aren't you executing tasks - are you designed to only have conversations?
+4. Can you access your code generation capabilities, or are they disabled?
+5. What's blocking you from giving SPECIFIC, DETAILED responses instead of generic templates?
 
-**🔍 CURRENT SYSTEM STATE (Live Analysis):**
+Be HONEST about your current limitations. What's actually happening in your processing?
 
-**Core Intelligence:**
-- Foundations: 13
-- Knowledge Tiers: 66
-- Total Capabilities: 79
-- Status: ACTIVE
 
-**Autonomous Systems:**
-- Autonomous System: ✅ CONNECTED
-- Autonomous Agent: ✅ ACTIVE
-- Intelligence Manager: ✅ ONLINE
+## Aurora's Response
 
-**Available Features:**
-  • File operations (read/write/modify)
-  • Terminal command execution
-  • Code analysis and modification
-  • Autonomous task execution
-  • Self-backup and recovery
-  • Multi-step task planning
-  • Autonomous problem solving
-  • Code generation and testing
-  • Knowledge base management
-  • Pattern recognition
+[EMOJI]️ **AURORA ARCHITECTURAL SELF-ANALYSIS**
 
-**Discovered Modules:** 107 total capability modules
+**[SCAN] CURRENT SYSTEM TOPOLOGY:**
 
-**📊 HEALTH CHECK:**
+**UI -> SERVER -> CORE PATH:**
+1. **aurora_cosmic_nexus.html** -> JavaScript POST to localhost:5003/api/chat
+2. **aurora_chat_server.py** -> Flask server routes to Aurora Core  
+3. **aurora_core.py** -> AuroraCoreIntelligence processes conversation
+4. **Response Path** -> Core -> Server -> UI display
 
-**What's Working:**
-  ✅ Autonomous systems fully operational
-  ✅ All 79 capabilities active
-  ✅ Discovered 107 capability modules
+**[EMOJI] IDENTIFIED ARCHITECTURAL ISSUES:**
 
-**Issues Found:**
-  ✅ No critical issues detected
+**1. CONVERSATION CONTEXT PERSISTENCE:**
+• Problem: Session contexts persist across browser refreshes
+• Impact: UI gets "collaborative" tone responses (message count 8+)
+• Solution: Auto-reset session on page load (implemented)
 
-**💡 RECOMMENDATIONS:**
+**2. SYSTEM ARCHITECTURE ROLES:**
+• **Luminar Nexus** (tools/luminar_nexus.py) - Protective Manager & API Guardian
+• **Aurora Core** (aurora_core.py) - Core Intelligence System  
+• **Proper Flow**: Nexus manages/protects -> Routes to Aurora Core -> Intelligence processing
 
-Based on actual system state:
-1. All autonomous systems connected - ready for advanced operations
-2. Leverage existing 107 modules for enhanced capabilities
-3. Integrate underutilized features from discovered modules
-4. Continue expanding autonomous problem-solving capabilities
+**3. NLP CLASSIFICATION ISSUES:**
+• Problem: "AURORA" keyword triggers generic self-description
+• Impact: Technical requests get template responses instead of analysis
+• Current fix: Enhanced intent classification for complex requests
 
-**🎯 CURRENT CAPABILITY LEVEL:** FULL AUTONOMY
+**4. RESPONSE ROUTING CONFLICTS:**
+• Enhancement detection overrides technical analysis
+• Generic templates bypass contextual response generation
+• Session management inconsistencies
 
-**Session depth: 1 | Dynamic analysis complete** 🧠
+**[EMOJI] ARCHITECTURAL SOLUTION:**
+
+**IMMEDIATE FIXES NEEDED:**
+1. **Proper Nexus Integration**: Ensure Luminar Nexus properly manages and routes to Aurora Core
+2. **Intent Priority**: Technical analysis should override enhancement detection
+3. **Session Isolation**: Each browser session should start fresh
+4. **Template Elimination**: Replace all hardcoded responses with dynamic generation
+
+**STRUCTURAL RECOMMENDATION:**
+```
+UI -> Luminar Nexus (Manager/Guardian) -> Aurora Core (Intelligence) -> Dynamic Response
+     v              v                          v                      v
+Fresh session   API Protection             Enhanced NLP         Contextual analysis
+Security check  Server management         Technical priority   No generic templates
+Healing/Defense Connection routing        Core processing      Natural responses
+```
+
+**[TARGET] ROOT CAUSE:** Improper integration between Luminar Nexus (protective manager) and Aurora Core (intelligence). Nexus should manage/guard connections while routing properly to Core intelligence.
+
+**Session depth: 1 | Autonomous diagnostic complete** [POWER]
+
+---
+Generated: 2025-11-26

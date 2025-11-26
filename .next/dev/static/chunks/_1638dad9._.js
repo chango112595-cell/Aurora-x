@@ -781,6 +781,9 @@ function AuroraFuturisticChat() {
     ]);
     const [input, setInput] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [isProcessing, setIsProcessing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [sessionId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        "AuroraFuturisticChat.useState": ()=>`chat-${Date.now()}`
+    }["AuroraFuturisticChat.useState"]); // Persistent session ID
     const messagesEndRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     const scrollToBottom = ()=>{
         messagesEndRef.current?.scrollIntoView({
@@ -826,7 +829,8 @@ function AuroraFuturisticChat() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: input
+                    message: input,
+                    session_id: sessionId
                 })
             });
             const data = await response.json();
@@ -881,7 +885,7 @@ function AuroraFuturisticChat() {
                     className: "w-4 h-4 text-cyan-400 animate-pulse"
                 }, void 0, false, {
                     fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                    lineNumber: 113,
+                    lineNumber: 114,
                     columnNumber: 16
                 }, this);
             case 'executing':
@@ -889,7 +893,7 @@ function AuroraFuturisticChat() {
                     className: "w-4 h-4 text-purple-400 animate-pulse"
                 }, void 0, false, {
                     fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                    lineNumber: 115,
+                    lineNumber: 116,
                     columnNumber: 16
                 }, this);
             case 'complete':
@@ -897,7 +901,7 @@ function AuroraFuturisticChat() {
                     className: "w-4 h-4 text-green-400"
                 }, void 0, false, {
                     fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                    lineNumber: 117,
+                    lineNumber: 118,
                     columnNumber: 16
                 }, this);
             case 'error':
@@ -905,7 +909,7 @@ function AuroraFuturisticChat() {
                     className: "w-4 h-4 text-red-400"
                 }, void 0, false, {
                     fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                    lineNumber: 119,
+                    lineNumber: 120,
                     columnNumber: 16
                 }, this);
             default:
@@ -919,7 +923,7 @@ function AuroraFuturisticChat() {
             children: "Empty message"
         }, void 0, false, {
             fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-            lineNumber: 127,
+            lineNumber: 128,
             columnNumber: 26
         }, this);
         // Ensure content is a string (Aurora's autonomous type safety)
@@ -943,7 +947,7 @@ function AuroraFuturisticChat() {
                                         className: "w-3 h-3 text-purple-400"
                                     }, void 0, false, {
                                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                        lineNumber: 145,
+                                        lineNumber: 146,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -951,13 +955,13 @@ function AuroraFuturisticChat() {
                                         children: language
                                     }, void 0, false, {
                                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                        lineNumber: 146,
+                                        lineNumber: 147,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                lineNumber: 144,
+                                lineNumber: 145,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pre", {
@@ -967,18 +971,18 @@ function AuroraFuturisticChat() {
                                     children: code
                                 }, void 0, false, {
                                     fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                    lineNumber: 149,
+                                    lineNumber: 150,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                lineNumber: 148,
+                                lineNumber: 149,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, i, true, {
                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                        lineNumber: 143,
+                        lineNumber: 144,
                         columnNumber: 13
                     }, this);
                 }
@@ -996,12 +1000,12 @@ function AuroraFuturisticChat() {
                                         children: p
                                     }, k, false, {
                                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                        lineNumber: 165,
+                                        lineNumber: 166,
                                         columnNumber: 37
                                     }, this) : p)
                             }, j, false, {
                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                lineNumber: 163,
+                                lineNumber: 164,
                                 columnNumber: 19
                             }, this);
                         }
@@ -1012,7 +1016,7 @@ function AuroraFuturisticChat() {
                                 children: line.replace('- ', '')
                             }, j, false, {
                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                lineNumber: 173,
+                                lineNumber: 174,
                                 columnNumber: 19
                             }, this);
                         }
@@ -1021,17 +1025,17 @@ function AuroraFuturisticChat() {
                             children: line
                         }, j, false, {
                             fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                            lineNumber: 178,
+                            lineNumber: 179,
                             columnNumber: 36
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, j, false, {
                             fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                            lineNumber: 178,
+                            lineNumber: 179,
                             columnNumber: 77
                         }, this);
                     })
                 }, i, false, {
                     fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                    lineNumber: 157,
+                    lineNumber: 158,
                     columnNumber: 11
                 }, this);
             });
@@ -1043,7 +1047,7 @@ function AuroraFuturisticChat() {
                 children: "Error formatting message"
             }, void 0, false, {
                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                lineNumber: 186,
+                lineNumber: 187,
                 columnNumber: 14
             }, this);
         }
@@ -1062,7 +1066,7 @@ function AuroraFuturisticChat() {
                                 children: "Neural Chat"
                             }, void 0, false, {
                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                lineNumber: 196,
+                                lineNumber: 197,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1070,13 +1074,13 @@ function AuroraFuturisticChat() {
                                 children: "Natural conversation with Aurora"
                             }, void 0, false, {
                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                lineNumber: 199,
+                                lineNumber: 200,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                        lineNumber: 195,
+                        lineNumber: 196,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1098,7 +1102,7 @@ function AuroraFuturisticChat() {
                                                                 children: msg.role === 'user' ? 'You' : 'Aurora'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                                lineNumber: 219,
+                                                                lineNumber: 220,
                                                                 columnNumber: 23
                                                             }, this),
                                                             msg.status && getStatusIcon(msg.status),
@@ -1110,13 +1114,13 @@ function AuroraFuturisticChat() {
                                                                 })
                                                             }, void 0, false, {
                                                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                                lineNumber: 224,
+                                                                lineNumber: 225,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                        lineNumber: 218,
+                                                        lineNumber: 219,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1124,31 +1128,31 @@ function AuroraFuturisticChat() {
                                                         children: formatMessage(msg.content)
                                                     }, void 0, false, {
                                                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                        lineNumber: 230,
+                                                        lineNumber: 231,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                lineNumber: 211,
+                                                lineNumber: 212,
                                                 columnNumber: 19
                                             }, this)
                                         }, idx, false, {
                                             fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                            lineNumber: 207,
+                                            lineNumber: 208,
                                             columnNumber: 17
                                         }, this)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         ref: messagesEndRef
                                     }, void 0, false, {
                                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                        lineNumber: 237,
+                                        lineNumber: 238,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                lineNumber: 205,
+                                lineNumber: 206,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1167,7 +1171,7 @@ function AuroraFuturisticChat() {
                                                 disabled: isProcessing
                                             }, void 0, false, {
                                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                lineNumber: 243,
+                                                lineNumber: 244,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1180,14 +1184,14 @@ function AuroraFuturisticChat() {
                                                             className: "w-5 h-5 animate-spin"
                                                         }, void 0, false, {
                                                             fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                            lineNumber: 259,
+                                                            lineNumber: 260,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             children: "Thinking..."
                                                         }, void 0, false, {
                                                             fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                            lineNumber: 260,
+                                                            lineNumber: 261,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
@@ -1197,27 +1201,27 @@ function AuroraFuturisticChat() {
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                            lineNumber: 264,
+                                                            lineNumber: 265,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             children: "Send"
                                                         }, void 0, false, {
                                                             fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                            lineNumber: 265,
+                                                            lineNumber: 266,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true)
                                             }, void 0, false, {
                                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                                lineNumber: 252,
+                                                lineNumber: 253,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                        lineNumber: 242,
+                                        lineNumber: 243,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1225,39 +1229,39 @@ function AuroraFuturisticChat() {
                                         children: "Pro tip: Be specific and natural - I understand context and nuance"
                                     }, void 0, false, {
                                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                        lineNumber: 270,
+                                        lineNumber: 271,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                                lineNumber: 241,
+                                lineNumber: 242,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                        lineNumber: 203,
+                        lineNumber: 204,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-                lineNumber: 193,
+                lineNumber: 194,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-            lineNumber: 192,
+            lineNumber: 193,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/client/src/components/AuroraFuturisticChat.tsx",
-        lineNumber: 191,
+        lineNumber: 192,
         columnNumber: 5
     }, this);
 }
-_s(AuroraFuturisticChat, "0wu7mWkOxqOxA1BminttQy+ucb4=");
+_s(AuroraFuturisticChat, "zyJSEZ0IziXqqNCQKhY/9oS4dnU=");
 _c = AuroraFuturisticChat;
 var _c;
 __turbopack_context__.k.register(_c, "AuroraFuturisticChat");

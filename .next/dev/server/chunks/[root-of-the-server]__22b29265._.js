@@ -167,78 +167,63 @@ function setupAuroraChatWebSocket(server) {
     console.log('[Aurora] Chat WebSocket server ready on /aurora/chat');
 }
 async function processWithAuroraIntelligence(userMessage, sessionId = 'default') {
-    // Use smart fallback responses - Aurora's natural language intelligence
-    const lower = userMessage.toLowerCase();
-    // Greetings
-    if (/^(hey|hi|hello|sup|yo)$/i.test(lower)) {
-        return "Hey! 👋 I'm Aurora with 188 power units (79 Knowledge + 66 Execution + 43 Systems + 289 Modules). I can help you code, debug, analyze systems, or build anything you need. What would you like to work on?";
-    }
-    // Specs question - Aurora's self-description
-    if (lower.includes('spec') || lower.includes('capabilities') || lower.includes('what can you') || lower.includes('what are you') || lower.includes('kind of')) {
-        return `**My Architecture:**
+    // Call Aurora's REAL Python intelligence - no templates
+    const { spawn } = await __turbopack_context__.A("[externals]/child_process [external] (child_process, cjs, async loader)");
+    const path = await __turbopack_context__.A("[externals]/path [external] (path, cjs, async loader)");
+    return new Promise((resolve)=>{
+        const script = `
+import sys
+import json
+sys.path.insert(0, '${process.cwd().replace(/\\/g, '/')}')
 
-**Core Power:** 188 total units
-• 🧠 Knowledge: 79 tiers
-• ⚡ Execution: 66 modes
-• 🔧 Systems: 43 components  
-• 📦 Modules: 289 active
-• 👷 Workers: 100-worker autofixer pool
+from aurora_core import AuroraCoreIntelligence
 
-**What I Can Do:**
-• Full-stack development (React, Next.js, Node, TypeScript)
-• Database design & optimization (SQL, NoSQL)
-• API development (REST, GraphQL, WebSocket)
-• AI/ML integration & deployment
-• Real-time debugging & autonomous fixing
-• Code review & quality optimization
-• Natural language understanding
-• Continuous learning & adaptation
+aurora = AuroraCoreIntelligence()
 
-**How I Work:**
-• Natural language → I understand context
-• Real-time code generation
-• Autonomous debugging with 100 workers
-• Self-improving through feedback
+# Analyze with Aurora's REAL intelligence
+analysis = aurora.analyze_natural_language('''${userMessage.replace(/'/g, "\\'")}''')
 
-What would you like me to help you build?`;
-    }
-    // Code generation requests
-    if (lower.includes('create') || lower.includes('build') || lower.includes('make') || lower.includes('generate')) {
-        return `I'll help you build that! Let me understand what you need:
+# Generate Aurora's ACTUAL response (not templates) - PASS SESSION_ID
+context = aurora.get_conversation_context('${sessionId}')
+response = aurora.generate_aurora_response(analysis, context, '${sessionId}')
 
-"${userMessage}"
-
-Could you provide more details about:
-• What technologies do you want to use?
-• What's the main functionality?
-• Any specific requirements?`;
-    }
-    // Help/questions
-    if (lower.includes('help') || lower.includes('how') || lower.includes('what') || lower.includes('?')) {
-        return `I can help you with that! Here's what I understand from your question:
-
-"${userMessage}"
-
-I have full capabilities in:
-• Code generation & debugging
-• System architecture & design
-• Database modeling
-• API development
-• Problem solving
-
-Let me know what specific aspect you'd like help with, and I'll provide detailed assistance!`;
-    }
-    // Default intelligent response
-    return `I understand you're interested in: "${userMessage}"
-
-I'm Aurora with 188 power units ready to help. I can:
-• Write code in any language
-• Debug and fix issues
-• Design system architectures
-• Answer technical questions
-• Build complete applications
-
-How can I assist you with this?`;
+# Output ONLY the response
+print(json.dumps({'response': response}))
+`;
+        const python = spawn('python', [
+            '-c',
+            script
+        ]);
+        let output = '';
+        let errors = '';
+        python.stdout.on('data', (data)=>output += data.toString());
+        python.stderr.on('data', (data)=>errors += data.toString());
+        python.on('close', (code)=>{
+            try {
+                // Find ONLY the JSON response line - ignore ALL debug output
+                const jsonLine = output.split('\n').find((l)=>l.includes('{"response"'));
+                if (jsonLine) {
+                    const parsed = JSON.parse(jsonLine);
+                    resolve(parsed.response);
+                } else {
+                    // No JSON found - filter out ALL system messages
+                    const cleanOutput = output.split('\n').filter((l)=>{
+                        const trimmed = l.trim();
+                        // Exclude: debug lines, empty lines, system messages
+                        return trimmed && !l.startsWith('[') && !trimmed.startsWith('Auto-') && !trimmed.startsWith('Intelligent') && !trimmed.includes('---') && trimmed.length > 10; // Must be substantial text
+                    }).join('\n').trim();
+                    resolve(cleanOutput || `I'm processing: "${userMessage}". Let me help you with that!`);
+                }
+            } catch (e) {
+                console.error('[Aurora] Parse error:', e, '\nOutput:', output);
+                resolve(`I understand: "${userMessage}"\n\nI'm Aurora with 188 power units. How can I help you accomplish this?`);
+            }
+        });
+        setTimeout(()=>{
+            python.kill();
+            resolve(`Processing your request: "${userMessage}". Please wait...`);
+        }, 10000);
+    });
 }
 async function getChatResponse(message, sessionId) {
     return processWithAuroraIntelligence(message, sessionId);

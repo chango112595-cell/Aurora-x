@@ -31,23 +31,23 @@ Features:
 - Emergency Failover
 """
 
+from typing import Any
+from pathlib import Path
+from datetime import datetime
+from dataclasses import dataclass
+import time
+import threading
+import sys
+import subprocess
+import statistics
+import socket
+import re
+import queue
+import os
+import io
+import ast
 import requests
 import psutil
-import ast
-import io
-import os
-import queue
-import re
-import socket
-import statistics
-import subprocess
-import sys
-import threading
-import time
-from dataclasses import dataclass
-from datetime import datetime
-from pathlib import Path
-from typing import Any
 
 # Set stdout to UTF-8 for Windows compatibility
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -60,7 +60,10 @@ try:
     AURORA_APPROVAL_AVAILABLE = True
 except ImportError:
     AURORA_APPROVAL_AVAILABLE = False
-    print("[WARN] Aurora Approval System not available - Aurora will work in legacy mode")
+    # Suppress warning unless in debug mode
+    if os.getenv("AURORA_DEBUG"):
+        print(
+            "[WARN] Aurora Approval System not available - Aurora will work in legacy mode")
 
 try:
     from aurora_expert_knowledge import AuroraExpertKnowledge
@@ -68,8 +71,9 @@ try:
     AURORA_EXPERT_AVAILABLE = True
 except ImportError:
     AURORA_EXPERT_AVAILABLE = False
-    print("[WARN] Aurora Expert Knowledge not available")
-    print("[WARN] Aurora Expert Knowledge not available")
+    # Suppress duplicate warnings
+    if os.getenv("AURORA_DEBUG"):
+        print("[WARN] Aurora Expert Knowledge not available")
 
 
 class AdvancedCodingKnowledge:
@@ -82,9 +86,9 @@ class AdvancedCodingKnowledge:
     def __init__(self):
         """
               Init  
-            
+
             Args:
-        
+
             Raises:
                 Exception: On operation failure
             """
@@ -320,12 +324,12 @@ class ServiceMetrics:
     def avg_response_time(self) -> float:
         """
             Avg Response Time
-            
+
             Args:
-        
+
             Returns:
                 Result of operation
-        
+
             Raises:
                 Exception: On operation failure
             """
@@ -335,12 +339,12 @@ class ServiceMetrics:
     def uptime_seconds(self) -> float:
         """
             Uptime Seconds
-            
+
             Args:
-        
+
             Returns:
                 Result of operation
-        
+
             Raises:
                 Exception: On operation failure
             """
@@ -350,12 +354,12 @@ class ServiceMetrics:
     def success_rate(self) -> float:
         """
             Success Rate
-            
+
             Args:
-        
+
             Returns:
                 Result of operation
-        
+
             Raises:
                 Exception: On operation failure
             """
@@ -370,10 +374,10 @@ class UltimateAPIManager:
     def __init__(self, auto_start=True):
         """
               Init  
-            
+
             Args:
                 auto_start: auto start
-        
+
             Raises:
                 Exception: On operation failure
             """
@@ -1136,7 +1140,8 @@ class UltimateAPIManager:
                 self.log(f"[OK] {service_name} response format fixed")
             return success
         except Exception as e:
-            self.log(f"[ERROR] Error fixing {service_name} response format: {e}")
+            self.log(
+                f"[ERROR] Error fixing {service_name} response format: {e}")
             return False
 
     def auto_fix_missing_dependencies(self) -> bool:
@@ -1177,7 +1182,8 @@ class UltimateAPIManager:
 
     def comprehensive_auto_heal(self) -> dict[str, Any]:
         """Comprehensive auto-healing with full frontend-backend awareness"""
-        self.log("[EMOJI] Starting comprehensive auto-healing with full system knowledge")
+        self.log(
+            "[EMOJI] Starting comprehensive auto-healing with full system knowledge")
 
         healing_results = {
             "timestamp": datetime.now().isoformat(),
@@ -1276,7 +1282,8 @@ class UltimateAPIManager:
                         for pid in pids:
                             subprocess.run(["kill", "-9", pid])
                             killed = True
-                            print(f"[EMOJI] Killed process {pid} on port {port}")
+                            print(
+                                f"[EMOJI] Killed process {pid} on port {port}")
                 except Exception:
                     pass
 
@@ -1292,7 +1299,8 @@ class UltimateAPIManager:
                                 pid = parts[6].split("/")[0]
                                 subprocess.run(["kill", "-9", pid])
                                 killed = True
-                                print(f"[EMOJI] Killed process {pid} on port {port}")
+                                print(
+                                    f"[EMOJI] Killed process {pid} on port {port}")
                 except Exception:
                     pass
 
@@ -1327,7 +1335,8 @@ class UltimateAPIManager:
         missing_deps = [dep for dep,
                         info in deps.items() if not info["available"]]
         if missing_deps:
-            print(f"[ERROR] Missing dependencies for {service_name}: {missing_deps}")
+            print(
+                f"[ERROR] Missing dependencies for {service_name}: {missing_deps}")
             return False
 
         print(
@@ -1393,7 +1402,8 @@ class UltimateAPIManager:
                 health = self.advanced_health_check(service_name)
 
                 if health["healthy"] and health["content_valid"]:
-                    print(f"[OK] {service['description']} started successfully")
+                    print(
+                        f"[OK] {service['description']} started successfully")
                     if health["alerts"]:
                         print(f"[WARN]  Alerts: {', '.join(health['alerts'])}")
                     return True
@@ -1416,7 +1426,8 @@ class UltimateAPIManager:
                     print(f"   Alerts: {', '.join(final_health['alerts'])}")
                 return True  # Consider it started even with issues
             else:
-                print(f"[ERROR] {service['description']} failed to start properly")
+                print(
+                    f"[ERROR] {service['description']} failed to start properly")
                 return False
 
         except Exception as e:
@@ -1492,8 +1503,10 @@ class UltimateAPIManager:
         try:
             response = requests.get("http://localhost:5000", timeout=5)
             if response.headers.get("content-type", "").startswith("application/json"):
-                print("[ERROR] Port 5000 is serving JSON API instead of HTML frontend")
-                print("[EMOJI] Restarting frontend service with proper configuration...")
+                print(
+                    "[ERROR] Port 5000 is serving JSON API instead of HTML frontend")
+                print(
+                    "[EMOJI] Restarting frontend service with proper configuration...")
 
                 # Force restart the frontend
                 success = self.start_service_advanced(
@@ -1612,7 +1625,7 @@ class UltimateAPIManager:
         def autonomous_operation():
             """
                 Autonomous Operation
-                
+
                 Raises:
                     Exception: On operation failure
                 """
@@ -1691,7 +1704,8 @@ class UltimateAPIManager:
 
         # Step 2: Start missing services
         if needs_starting:
-            print(f"\n[EMOJI] Step 2: Starting {len(needs_starting)} services...")
+            print(
+                f"\n[EMOJI] Step 2: Starting {len(needs_starting)} services...")
             for service_name in needs_starting:
                 success = self.start_service_advanced(
                     service_name, force_restart=False)
@@ -1719,7 +1733,8 @@ class UltimateAPIManager:
             f"\n[TARGET] STARTUP COMPLETE: {startup_success:.1f}% success ({healthy_count}/{total_count} services)")
 
         if startup_success >= 80:
-            print("[EMOJI] Startup Status: EXCELLENT - System ready for autonomous operation")
+            print(
+                "[EMOJI] Startup Status: EXCELLENT - System ready for autonomous operation")
         elif startup_success >= 60:
             print("[EMOJI] Startup Status: GOOD - Minor issues, will auto-heal")
         else:
@@ -1888,7 +1903,8 @@ class UltimateAPIManager:
             f"   Avg Response: {scan['performance_metrics']['avg_response_time']:.1f}ms")
 
         if scan["critical_issues"]:
-            print(f"   [EMOJI] Critical: {len(scan['critical_issues'])} issues")
+            print(
+                f"   [EMOJI] Critical: {len(scan['critical_issues'])} issues")
         if scan["warnings"]:
             print(f"   [WARN]  Warnings: {len(scan['warnings'])}")
 
@@ -2280,7 +2296,8 @@ class UltimateAPIManager:
                     f"     Quality Score: {file_analysis['quality_score']}/100")
 
             except Exception as e:
-                print(f"     [ERROR] Error analyzing {file_info['path'].name}: {e}")
+                print(
+                    f"     [ERROR] Error analyzing {file_info['path'].name}: {e}")
 
         # Calculate overall code quality
         analysis_results["code_quality_score"] = total_quality_score / \
@@ -2569,7 +2586,8 @@ class UltimateAPIManager:
                 health = self.advanced_health_check(service_name)
 
                 if not health.get("healthy"):
-                    print(f"\n[EMOJI] Connection issue detected: {service_name}")
+                    print(
+                        f"\n[EMOJI] Connection issue detected: {service_name}")
                     print(f"   Error: {health.get('error', 'Unknown error')}")
 
                     # Determine fix strategy based on error type
@@ -2632,7 +2650,8 @@ class UltimateAPIManager:
 
         # Strategy 1: Check if service process is running
         if not self._is_port_listening(port):
-            print(f"   [EMOJI] Port {port} not listening - restarting service...")
+            print(
+                f"   [EMOJI] Port {port} not listening - restarting service...")
             success = self._restart_service_intelligent(service_name)
             if success:
                 return True
@@ -2648,7 +2667,8 @@ class UltimateAPIManager:
         print(f"   [LINK] Checking dependencies for {service_name}...")
         missing_deps = self._check_service_dependencies(service_name)
         if missing_deps:
-            print(f"   [PACKAGE] Installing missing dependencies: {missing_deps}")
+            print(
+                f"   [PACKAGE] Installing missing dependencies: {missing_deps}")
             self._install_dependencies(missing_deps)
             return self._restart_service_intelligent(service_name)
 
@@ -2681,7 +2701,8 @@ class UltimateAPIManager:
 
     def _fix_service_not_responding(self, service_name: str, error_details: dict) -> bool:
         """Fix unresponsive services"""
-        print(f"[EMOJI] AUTO-FIXING: Service not responding for {service_name}")
+        print(
+            f"[EMOJI] AUTO-FIXING: Service not responding for {service_name}")
         return self._force_restart_service(service_name)
 
     def _is_port_listening(self, port: int) -> bool:
@@ -2877,7 +2898,8 @@ class UltimateAPIManager:
         if not self.aurora_assistance_enabled:
             return False
 
-        print(f"   [AGENT] Requesting Aurora AI assistance for {service_name}...")
+        print(
+            f"   [AGENT] Requesting Aurora AI assistance for {service_name}...")
 
         try:
             prompt = f"URGENT: Service {service_name} has {issue_type}. Error: {error_details}. Provide fix steps."
@@ -3093,7 +3115,8 @@ except ImportError as e:
             self.approval_system = AuroraApprovalSystem()
             print("[OK] Aurora Approval System activated!")
         else:
-            print("[WARN] Approval system unavailable - working in observation mode only")
+            print(
+                "[WARN] Approval system unavailable - working in observation mode only")
 
         learning_results = {
             "session_type": "collaborative_learning_with_approval",
@@ -3155,7 +3178,8 @@ except ImportError as e:
 
         # Aurora reflects on learning
         if learning_results["success_rate"] < 80:
-            print("\n[AGENT] Aurora: I need more practice! Let me observe more carefully.")
+            print(
+                "\n[AGENT] Aurora: I need more practice! Let me observe more carefully.")
             learning_results["areas_for_improvement"] = [
                 "More careful code analysis",
                 "Better understanding of import resolution",
@@ -3392,7 +3416,8 @@ except ImportError as e:
         """Aurora carefully applies what she learned - NOW WITH APPROVAL SYSTEM"""
         improvements = []
 
-        print("[AGENT] Aurora: Now I will request approval for any changes I want to make!")
+        print(
+            "[AGENT] Aurora: Now I will request approval for any changes I want to make!")
 
         # Aurora validates current state first
         serve_file = Path("/workspaces/Aurora-x/aurora_x/serve.py")
@@ -3627,7 +3652,8 @@ def main():
             # Display detailed results
             print("\n[TARGET] INTELLIGENT RECOMMENDATIONS:")
             for rec in analysis.get("intelligent_recommendations", []):
-                print(f"   [EMOJI] {rec['category'].upper()} ({rec['priority']}):")
+                print(
+                    f"   [EMOJI] {rec['category'].upper()} ({rec['priority']}):")
                 print(f"      {rec['description']}")
                 for action in rec.get("actions", []):
                     print(f"       {action}")
@@ -3763,7 +3789,8 @@ def main():
                     for issue in issues:
                         print(f"       - {issue}")
 
-            print(f"\n   [EMOJI] Fixes Applied: {len(results['fixes_applied'])}")
+            print(
+                f"\n   [EMOJI] Fixes Applied: {len(results['fixes_applied'])}")
             print(f"   [OK] Successful: {results['fixes_successful']}")
             print(f"   [ERROR] Failed: {results['fixes_failed']}")
             print(
@@ -3814,7 +3841,8 @@ def main():
         else:
             # Default: show status and offer autonomous mode
             manager.ultimate_system_health_report()
-            print("\n[EMOJI] TIP: Run with --autonomous for fully automatic operation!")
+            print(
+                "\n[EMOJI] TIP: Run with --autonomous for fully automatic operation!")
             print("   python3 tools/ultimate_api_manager.py --autonomous")
 
     except KeyboardInterrupt:
