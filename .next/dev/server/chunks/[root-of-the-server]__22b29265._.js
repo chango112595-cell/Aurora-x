@@ -173,9 +173,32 @@ async function processWithAuroraIntelligence(userMessage, sessionId = 'default')
     try {
         // Use Aurora's analyze method which routes through Nexus V3
         const result = await aurora.analyze(userMessage, sessionId);
-        const response = result.response || result.analysis || 'Aurora processed your request successfully.';
-        // Aurora's autonomous type safety: ensure string response
-        return typeof response === 'string' ? response : JSON.stringify(response);
+        // Aurora's autonomous response formatter
+        if (result.response && typeof result.response === 'string') {
+            return result.response;
+        }
+        // Convert structured analysis to conversational response
+        if (result.analysis) {
+            const analysis = result.analysis;
+            let response = '';
+            // Natural greeting if simple message
+            if (userMessage.toLowerCase().match(/^(hey|hi|hello|sup|yo)$/i)) {
+                return "Hey! 👋 I'm Aurora, your AI assistant with 188 total power units. I can help you code, debug, analyze systems, or build anything you need. What would you like to work on?";
+            }
+            // Build conversational response from structured data
+            if (analysis.suggestions && analysis.suggestions.length > 0) {
+                response += analysis.suggestions.join('\n\n') + '\n\n';
+            }
+            if (analysis.recommendations && analysis.recommendations.length > 0) {
+                response += 'I recommend:\n' + analysis.recommendations.map((r)=>`• ${r}`).join('\n');
+            }
+            if (analysis.issues && analysis.issues.length > 0) {
+                response = 'I found some issues:\n' + analysis.issues.map((i)=>`• ${i}`).join('\n') + '\n\n' + response;
+            }
+            return response.trim() || 'I processed your request successfully. What else can I help with?';
+        }
+        // Last resort: stringify
+        return JSON.stringify(result);
     } catch (error) {
         console.error('[Aurora Chat] Intelligence error:', error);
         // Fallback: Try Python bridge directly
