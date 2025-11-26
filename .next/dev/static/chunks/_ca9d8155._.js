@@ -1805,7 +1805,7 @@ function AuroraFuturisticDashboard() {
                                             columnNumber: 17
                                         }, this)
                                     ]
-                                }, idx, true, {
+                                }, `service-${service.name}-${idx}`, true, {
                                     fileName: "[project]/client/src/components/AuroraFuturisticDashboard.tsx",
                                     lineNumber: 262,
                                     columnNumber: 15
