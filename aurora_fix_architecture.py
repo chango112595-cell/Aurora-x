@@ -16,16 +16,16 @@ Aurora: Fix Your Own Architecture
 Let Aurora autonomously fix the issues she identified.
 """
 
+from concurrent.futures import ThreadPoolExecutor
+from aurora_core import AuroraCoreIntelligence
+import sys
 from typing import Dict, List, Tuple, Optional, Any, Union
 import os
-import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from aurora_core import AuroraCoreIntelligence
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -79,7 +79,7 @@ def main():
     print("="*80)
     print(response)
     print("="*80 + "\n")
-    
+
     # Save the fix
     from pathlib import Path
     Path("AURORA_ARCHITECTURE_FIX.md").write_text(f"""# Aurora's Architecture Fix
@@ -96,7 +96,7 @@ def main():
 Generated: 2025-11-25
 Status: Ready to implement
 """, encoding='utf-8')
-    
+
     print("✅ Fix saved to AURORA_ARCHITECTURE_FIX.md\n")
 
 
