@@ -1,24 +1,35 @@
 {
-  "analysis_date": "2025-11-22",
-  "total_files_scanned": 4260,
-  "found_by_category": {
-    "Quality Tracker/Scoring": 2,
-    "Evolution/Progress": 13,
-    "Performance Metrics": 8,
-    "Reasoning/Decision Log": 1,
-    "API Endpoints": 56,
-    "Orchestration/Controller": 21
-  },
-  "hidden_functionality": {
-    "Code Comparison": 13,
-    "Quality Scoring": 48,
-    "Database/Persistence": 67,
-    "Real-time Updates": 17,
-    "API Endpoints": 16,
-    "Evolution Tracking": 11,
-    "Performance Metrics": 19,
-    "Task Tracking": 4
-  },
-  "unused_imports": 28,
-  "categories_analyzed": 8
+  "timestamp": "1764194149.4610114",
+  "total_findings": 4,
+  "critical_issues": [
+    {
+      "category": "TypeScript",
+      "severity": "CRITICAL",
+      "description": "@shared/* path mapping missing in tsconfig.json",
+      "file": "C:\\Users\\negry\\Aurora-x\\tsconfig.json"
+    }
+  ],
+  "high_issues": [
+    {
+      "category": "TypeScript",
+      "severity": "HIGH",
+      "description": "@/* maps to non-existent path: ./client/src/*",
+      "file": "C:\\Users\\negry\\Aurora-x\\tsconfig.json"
+    },
+    {
+      "category": "Runtime",
+      "severity": "HIGH",
+      "description": "No services running on expected ports",
+      "file": null
+    }
+  ],
+  "medium_issues": [],
+  "low_issues": [
+    {
+      "category": "Architecture",
+      "severity": "LOW",
+      "description": "Legacy Express server (server/index.ts) still present",
+      "file": "C:\\Users\\negry\\Aurora-x\\server\\index.ts"
+    }
+  ]
 }

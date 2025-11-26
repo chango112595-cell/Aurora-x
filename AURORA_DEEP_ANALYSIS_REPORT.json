@@ -1,0 +1,106 @@
+{
+  "python_imports": [
+    {
+      "file": "ask_aurora_brutal_honesty.py",
+      "module": "AuroraCoreIntelligence"
+    },
+    {
+      "file": "ask_aurora_folder_structure_decision.py",
+      "module": "Path"
+    },
+    {
+      "file": "ask_aurora_grandmastery.py",
+      "module": "AuroraKnowledgeTiers"
+    }
+  ],
+  "react": [
+    {
+      "file": "app-sidebar.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "aurora-status.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "AuroraChatInterface.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "AuroraControl.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "AuroraDashboard.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "AuroraFuturisticChat.tsx",
+      "issue": "useState not imported"
+    },
+    {
+      "file": "AuroraFuturisticChat.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "AuroraFuturisticDashboard.tsx",
+      "issue": "useState not imported"
+    },
+    {
+      "file": "AuroraFuturisticDashboard.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "AuroraFuturisticLayout.tsx",
+      "issue": "useState not imported"
+    },
+    {
+      "file": "AuroraFuturisticLayout.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "AuroraMonitor.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "AuroraPage.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "AuroraPanel.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "AuroraRebuiltChat.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "chat-interface.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "function-library.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "run-status.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "synthesis-progress.tsx",
+      "issue": "useState not imported"
+    },
+    {
+      "file": "synthesis-progress.tsx",
+      "issue": "map without key"
+    },
+    {
+      "file": "theme-provider.tsx",
+      "issue": "useState not imported"
+    },
+    {
+      "file": "UnifiedAuroraChat.tsx",
+      "issue": "map without key"
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import { Activity, TrendingUp, AlertCircle, CheckCircle2, Clock, Shield, BookOpe
 import { motion } from "framer-motion";
 import AuroraRebuiltChat from '@/components/AuroraRebuiltChat';
 import { usePathname } from 'next/navigation';
+import { useLocation } from 'wouter';
 
 type TabType = 'overview' | 'services' | 'metrics' | 'diagnostics' | 'learning';
 type Category = 'all' | 'hard' | 'soft' | 'medium';
