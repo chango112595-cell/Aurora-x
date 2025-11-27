@@ -200,23 +200,29 @@ print(json.dumps({'response': response}))
         python.stderr.on('data', (data)=>errors += data.toString());
         python.on('close', (code)=>{
             try {
-                // Find ONLY the JSON response line - ignore ALL debug output
-                const jsonLine = output.split('\n').find((l)=>l.includes('{"response"'));
+                // Find the JSON response line
+                const jsonLine = output.split('\n').find((l)=>l.trim().startsWith('{"response"'));
                 if (jsonLine) {
-                    const parsed = JSON.parse(jsonLine);
+                    const parsed = JSON.parse(jsonLine.trim());
                     resolve(parsed.response);
                 } else {
-                    // No JSON found - filter out ALL system messages
+                    // Check if we have valid output from Python
                     const cleanOutput = output.split('\n').filter((l)=>{
                         const trimmed = l.trim();
-                        // Exclude: debug lines, empty lines, system messages
-                        return trimmed && !l.startsWith('[') && !trimmed.startsWith('Auto-') && !trimmed.startsWith('Intelligent') && !trimmed.includes('---') && trimmed.length > 10; // Must be substantial text
+                        // Keep lines that look like real responses, exclude debug output
+                        return trimmed && !trimmed.startsWith('[') && !trimmed.startsWith('Auto-') && !trimmed.startsWith('Intelligent') && !trimmed.includes('---') && !trimmed.includes('sys.path') && trimmed.length > 10;
                     }).join('\n').trim();
-                    resolve(cleanOutput || `I'm processing: "${userMessage}". Let me help you with that!`);
+                    if (cleanOutput) {
+                        resolve(cleanOutput);
+                    } else {
+                        // Genuine fallback - Aurora should never get here
+                        console.error('[Aurora] No valid output. Raw:', output);
+                        resolve(`I received your message: "${userMessage}"\n\nLet me analyze this and provide a complete response. What specifically would you like me to help you with?`);
+                    }
                 }
             } catch (e) {
-                console.error('[Aurora] Parse error:', e, '\nOutput:', output);
-                resolve(`I understand: "${userMessage}"\n\nI'm Aurora with 188 power units. How can I help you accomplish this?`);
+                console.error('[Aurora] Parse error:', e, '\nRaw output:', output);
+                resolve(`Hello! I'm Aurora. I understand you said: "${userMessage}"\n\nI have full access to 188 power units. How can I help you today?`);
             }
         });
         setTimeout(()=>{

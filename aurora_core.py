@@ -1601,7 +1601,7 @@ class AuroraCoreIntelligence:
         except Exception as e:
             print(f"[WARN] Could not save session: {e}")
 
-    def analyze_natural_language(self, message: str) -> dict:
+    def analyze_natural_language(self, message: str, context: dict = None) -> dict:
         """
         # PRIORITY SYSTEM: Technical analysis > Aurora self-reference
         Enhanced natural language analysis with Aurora's intelligence
@@ -1647,13 +1647,16 @@ class AuroraCoreIntelligence:
                 r"(?:my name is|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
-        # "i'm/i am [NAME]" - ONLY at conversation start (first 2 messages) AND capital name
-        elif not current_name and re.search(r"(?:^|\s)(?:i'm|i am)\s+([A-Z][a-z]+)(?:\s|$|\.|!)", message):
-            name_match = re.search(r"(?:i'm|i am)\s+([A-Z][a-z]+)", message)
+        # "i'm/i am [NAME]" - Accept any capitalized word after "i'm" or "i am"
+        elif not current_name and re.search(r"(?:^|\s)(?:i'?m|i am)\s+([A-Z]\w+)", message, re.IGNORECASE):
+            name_match = re.search(r"(?:i'?m|i am)\s+(\w+)", msg_lower)
             if name_match:
-                analysis.update({"intent": "user_introduction",
-                                "introduces_self": True, "confidence": 0.95})
-                analysis["user_name"] = name_match.group(1)
+                potential_name = name_match.group(1).capitalize()
+                # Only accept if it looks like a name (not common words)
+                if potential_name not in ['Going', 'Working', 'Trying', 'Looking', 'Asking', 'Thinking']:
+                    analysis.update({"intent": "user_introduction",
+                                    "introduces_self": True, "confidence": 0.95})
+                    analysis["user_name"] = potential_name
 
         # Check for list requests
         if re.search(r"(list|give me.*list|show me.*list|what are.*things|enumerate|break down)", msg_lower):
@@ -2387,8 +2390,8 @@ manage/guard connections while routing properly to Core intelligence.
         # Get conversation context
         context = self.get_conversation_context(session_id)
 
-        # Analyze the natural language
-        analysis = self.analyze_natural_language(message)
+        # Analyze the natural language (pass context for name checking)
+        analysis = self.analyze_natural_language(message, context)
 
         # Generate Aurora's response using full intelligence
         response = self.generate_aurora_response(analysis, context)
