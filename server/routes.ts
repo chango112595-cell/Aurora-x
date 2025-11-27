@@ -334,11 +334,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Use Aurora's autonomous problem-solving for conversational responses
-      let chatResult = await getChatResponse(message, sessionId);
+      const chatResult = await getChatResponse(message, sessionId, req.body.context);
+      let response = typeof chatResult === 'string' ? chatResult : (chatResult as any).response || '';
       
       // Format response for terminal clients (strip HTML)
       if (isTerminalClient) {
-        chatResult = chatResult
+        response = response
           .replace(/<[^>]*>/g, '')
           .replace(/&nbsp;/g, ' ')
           .replace(/&lt;/g, '<')
@@ -348,8 +349,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         ok: true,
-        response: chatResult,
-        message: chatResult,
+        response,
+        message: response,
         session_id: sessionId,
         ai_powered: true,
         client: client || 'web'

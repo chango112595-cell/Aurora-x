@@ -1,4 +1,5 @@
 import { WebSocket, WebSocketServer } from 'ws';
+import { conversationDetector, type ConversationDetection } from './conversation-detector';
 
 // Aurora's chat WebSocket server
 export function setupAuroraChatWebSocket(server: any) {
@@ -17,14 +18,19 @@ export function setupAuroraChatWebSocket(server: any) {
 
     ws.on('message', async (data: Buffer) => {
       try {
-        const { message, sessionId } = JSON.parse(data.toString());
+        const { message, sessionId, context } = JSON.parse(data.toString());
         console.log('[Aurora] Received:', message);
         
-        // Aurora processes the message using her omniscient knowledge
-        const response = await processWithAuroraIntelligence(message, sessionId || 'websocket');
+        // Aurora processes the message with auto-detection
+        const { response, detection } = await processWithAuroraIntelligence(message, sessionId || 'websocket', context);
         
         ws.send(JSON.stringify({
-          message: response
+          message: response,
+          detection: {
+            type: detection.type,
+            confidence: detection.confidence,
+            executionMode: detection.executionMode
+          }
         }));
       } catch (error) {
         console.error('[Aurora] Error:', error);
@@ -42,12 +48,36 @@ export function setupAuroraChatWebSocket(server: any) {
   console.log('[Aurora] Chat WebSocket server ready on /aurora/chat');
 }
 
-async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default'): Promise<string> {
-  // Call Aurora's REAL Python intelligence - no templates
+async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default', context: any[] = []): Promise<{ response: string; detection: ConversationDetection }> {
+  // Auto-detect conversation type and adapt strategy
+  const previousMessages = context
+    .filter((msg: any) => typeof msg === 'object' && 'content' in msg)
+    .slice(-4)
+    .map((msg: any) => msg.content)
+    .filter(Boolean);
+  
+  const detection = conversationDetector.detect(userMessage, previousMessages);
+  conversationDetector.addMessageToHistory(userMessage);
+
+  console.log(`[Aurora] 🔍 Detected: ${detection.type} (confidence: ${detection.confidence}%)`);
+  console.log(`[Aurora] 📋 Format: ${detection.suggestedFormat} | Mode: ${detection.executionMode}`);
+
+  // Call Aurora's REAL Python intelligence with detection parameters
   const { spawn } = await import('child_process');
-  const path = await import('path');
   
   return new Promise((resolve) => {
+    // Include detection info in the Python context
+    const detectionContext = JSON.stringify({
+      type: detection.type,
+      executionMode: detection.executionMode,
+      suggestedFormat: detection.suggestedFormat,
+      keywords: detection.keywords,
+      tone: detection.tone
+    }).replace(/'/g, "\\'");
+
+    // Generate format instructions based on detection
+    const formatInstructions = conversationDetector.generateFormatInstructions(detection);
+
     const script = `
 import sys
 import json
@@ -65,10 +95,13 @@ try:
     # Get context FIRST
     context = aurora.get_conversation_context('${sessionId}')
     
-    # Analyze message
+    # Add detection info to context
+    context['detection'] = json.loads('''${detectionContext}''')
+    
+    # Analyze message with detection awareness
     analysis = aurora.analyze_natural_language('''${userMessage.replace(/'/g, "\\'")}''', context)
     
-    # Generate response
+    # Generate response with format instructions
     response = aurora.generate_aurora_response(analysis, context, '${sessionId}')
     
     # Output ONLY clean JSON
@@ -93,14 +126,16 @@ except Exception as e:
         
         if (jsonLine) {
           const parsed = JSON.parse(jsonLine.trim());
-          resolve(parsed.response);
+          resolve({ 
+            response: parsed.response,
+            detection
+          });
         } else {
           // Check if we have valid output from Python
           const cleanOutput = output
             .split('\n')
             .filter(l => {
               const trimmed = l.trim();
-              // Keep lines that look like real responses, exclude debug output
               return trimmed && 
                      !trimmed.startsWith('[') && 
                      !trimmed.startsWith('Auto-') &&
@@ -113,29 +148,40 @@ except Exception as e:
             .trim();
           
           if (cleanOutput) {
-            resolve(cleanOutput);
+            resolve({ 
+              response: cleanOutput,
+              detection
+            });
           } else {
-            // Genuine fallback - Aurora should never get here
             console.error('[Aurora] No valid output. Raw:', output);
-            resolve(`I received your message: "${userMessage}"\n\nLet me analyze this and provide a complete response. What specifically would you like me to help you with?`);
+            resolve({ 
+              response: `I received your message: "${userMessage}"\n\nLet me analyze this and provide a complete response. What specifically would you like me to help you with?`,
+              detection
+            });
           }
         }
       } catch (e) {
         console.error('[Aurora] Parse error:', e, '\nRaw output:', output);
-        resolve(`Hello! I'm Aurora. I understand you said: "${userMessage}"\n\nI have full access to 188 power units. How can I help you today?`);
+        resolve({ 
+          response: `Hello! I'm Aurora. I understand you said: "${userMessage}"\n\nI have full access to 188 power units. How can I help you today?`,
+          detection
+        });
       }
     });
 
     setTimeout(() => {
       python.kill();
-      resolve(`Processing your request: "${userMessage}". Please wait...`);
+      resolve({ 
+        response: `Processing your request: "${userMessage}". Please wait...`,
+        detection
+      });
     }, 10000);
   });
 }
 
 // Export functions needed by routes
-export async function getChatResponse(message: string, sessionId: string): Promise<string> {
-  return processWithAuroraIntelligence(message, sessionId);
+export async function getChatResponse(message: string, sessionId: string, context: any[] = []): Promise<{ response: string; detection: ConversationDetection }> {
+  return processWithAuroraIntelligence(message, sessionId, context);
 }
 
 export async function searchWeb(query: string): Promise<any> {

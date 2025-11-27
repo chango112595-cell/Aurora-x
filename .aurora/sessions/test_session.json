@@ -1,7 +1,8 @@
 {
   "created_at": "2025-11-27T22:30:58.081345",
-  "message_count": 18,
+  "message_count": 21,
   "topics_discussed": [
+    "api",
     "api",
     "api",
     "api",
@@ -10,7 +11,7 @@
     "api"
   ],
   "user_preferences": {},
-  "conversation_depth": 18,
+  "conversation_depth": 21,
   "last_intent": null,
   "context_memory": [
     {
@@ -96,6 +97,20 @@
       "aurora_response_type": "enhancement_request",
       "entities": [],
       "conversation_depth": 17
+    },
+    {
+      "timestamp": "2025-11-27T23:09:55.579631",
+      "user_message": "Hello Aurora, what are your capabilities?",
+      "aurora_response_type": "aurora_self_inquiry",
+      "entities": [],
+      "conversation_depth": 19
+    },
+    {
+      "timestamp": "2025-11-27T23:09:55.580397",
+      "user_message": "I want to improve your natural language processing",
+      "aurora_response_type": "enhancement_request",
+      "entities": [],
+      "conversation_depth": 20
     }
   ],
   "user_name": null,
