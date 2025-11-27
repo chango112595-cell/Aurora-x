@@ -20,6 +20,7 @@ import {
 } from "../shared/schema";
 import authRouter from "./auth-routes";
 import { getChatResponse, searchWeb } from "./aurora-chat";
+import { ResponseAdapter } from "./response-adapter";
 import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter } from "./rate-limit";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
@@ -336,6 +337,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Use Aurora's autonomous problem-solving for conversational responses
       const chatResult = await getChatResponse(message, sessionId, req.body.context);
       let response = typeof chatResult === 'string' ? chatResult : (chatResult as any).response || '';
+      const detection = typeof chatResult === 'object' && (chatResult as any).detection ? (chatResult as any).detection : null;
+      
+      // Adapt response based on detected conversation type
+      if (detection) {
+        response = ResponseAdapter.adaptResponse(response, detection);
+        console.log(`[Aurora] ✨ Response adapted for: ${detection.type}`);
+      }
       
       // Format response for terminal clients (strip HTML)
       if (isTerminalClient) {
@@ -353,7 +361,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: response,
         session_id: sessionId,
         ai_powered: true,
-        client: client || 'web'
+        client: client || 'web',
+        detection: detection ? { type: detection.type, confidence: detection.confidence } : undefined
       });
 
     } catch (error: any) {

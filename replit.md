@@ -43,6 +43,41 @@ Preferred communication style: Simple, everyday language.
 - **Health Monitoring**: Socket-based connectivity checks with AI analysis for performance classification. "Down" services skip AI analysis.
 - **Quantum Coherence**: System health metric based on `healthy_services / total_services` ratio.
 
+## Recent Updates
+
+**November 27, 2025 (Aurora Auto-Detector System - LIVE & WORKING)**:
+- **Intelligent Conversation Classification**: Aurora now automatically detects and adapts to 10 conversation types
+  - Types: code_generation, debugging, explanation, architecture, optimization, testing, refactoring, analysis, question_answering, general_chat
+  - Confidence scoring (0-100%) with keyword analysis and error detection
+  - Auto-detected response prefixes with emojis (🔧 code, 🔍 debugging, 📚 explanation, etc.)
+- **Core Implementation Files**:
+  - `server/conversation-detector.ts` (310 lines): Intelligent keyword analysis, tone detection, confidence scoring
+  - `server/response-adapter.ts` (260 lines): NEW - Enhances responses based on conversation type
+  - `server/aurora-chat.ts`: Enhanced with detection metadata passing to Python
+  - `server/routes.ts`: Integrated response adaptation pipeline
+- **Execution Mode Adaptation**: fast, detailed, experimental, standard - automatically selected per conversation type
+- **Response Format Optimization**: Selects best format (code, bullet_points, step_by_step, mixed) for conversation type
+- **Status**: Tested and verified working - responses now adapt in real-time based on detected conversation classification
+- **API Response Enhancement**: Returns detection metadata (`{"type": "...", "confidence": ...}`) for frontend awareness
+
+**November 27, 2025 (Chat Improvements - Enhanced Formatting & Context)**:
+- Improved welcome message with 5 key capabilities listed with bullet points
+- Enhanced message formatting: code blocks with language detection, bold text, numbered lists, links
+- Context-aware responses sending last 4 messages for better conversation understanding
+- Better error messages that acknowledge user requests and offer alternatives
+- Responsive code block styling for mobile and desktop
+
+**November 27, 2025 (Routing & Chat Fix)**:
+- **Routing System Fixed**: Implemented complete routing fix per ROUTING_FIX_GUIDE.md
+  - Moved routing from `main.tsx` to `App.tsx` using wouter's `Switch` and `Route` components
+  - Added 18 routes matching sidebar navigation paths
+  - Sidebar navigation now properly changes page content (not just URL)
+- **Aurora Chat Fixed**: Changed hardcoded `http://localhost:5000/api/chat` to relative `/api/chat`
+  - Enables hosted environment compatibility (Replit, cloud deployments)
+  - Allows browser to automatically use correct domain
+- **Restored AuroraFuturisticChat**: Reverted to original chat component on home page
+- **System Verification**: 188 power units operational, 100-worker autofixer pool active, WebSocket ready
+
 ## External Dependencies
 
 - **Aurora-X Integration**: Aurora-X Ultra (Python-based autonomous code synthesis engine).
@@ -50,3 +85,20 @@ Preferred communication style: Simple, everyday language.
 - **UI Component Dependencies**: Radix UI primitives.
 - **Build and Development Tools**: Vite, esbuild, tsx, Tailwind CSS, PostCSS.
 - **AI SDK**: `@anthropic-ai/sdk` (for Claude Sonnet 4 integration in Aurora Chat AI).
+
+## Key Files & Structures
+
+**Conversation Detection System**:
+- `server/conversation-detector.ts` - Analyzes messages, detects type, calculates confidence
+- `server/response-adapter.ts` - Adapts responses with type-specific formatting and prefixes
+- `server/aurora-chat.ts` - WebSocket + HTTP chat endpoints with detection integration
+- `client/src/components/AuroraFuturisticChat.tsx` - Frontend chat UI with message formatting
+
+**Routing**:
+- `client/src/App.tsx` - Main router with 18 pages (Switch/Route from wouter)
+- `client/src/pages/` - Page components for each sidebar item
+
+**Authentication & Users**:
+- `server/auth.ts` - JWT and session authentication
+- `server/auth-routes.ts` - Login/register/logout endpoints
+- `server/users.ts` - User store and management

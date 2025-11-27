@@ -41,7 +41,7 @@ export class ConversationDetector {
 
     // Keyword sets for classification
     const codeGenKeywords = ['write', 'create', 'generate', 'build', 'implement', 'code', 'function', 'class', 'app', 'script'];
-    const debugKeywords = ['bug', 'error', 'fix', 'crash', 'problem', 'why', 'not working', 'issue', 'fail', 'broken'];
+    const debugKeywords = ['bug', 'error', 'fix', 'crash', 'problem', 'why', 'not working', 'issue', 'fail', 'broken', 'exception', 'null pointer', 'undefined', 'doesn\'t work', 'can\'t'];
     const explainKeywords = ['explain', 'how', 'what is', 'describe', 'tell me', 'teach', 'understand', 'mean', 'does it work'];
     const archKeywords = ['architecture', 'design', 'structure', 'pattern', 'system', 'flow', 'diagram', 'component', 'layer'];
     const optimizeKeywords = ['optimize', 'faster', 'performance', 'improve', 'speed', 'efficient', 'scale', 'reduce'];
@@ -82,6 +82,11 @@ export class ConversationDetector {
     // Code block patterns
     if (userMessage.includes('```') || userMessage.includes('function') || userMessage.includes('class ')) {
       scores.code_generation += 10;
+    }
+
+    // Error stack traces detection
+    if (userMessage.includes('Error') || userMessage.includes('Exception') || userMessage.includes('Traceback')) {
+      scores.debugging += 20;
     }
 
     // Context-based adjustment
