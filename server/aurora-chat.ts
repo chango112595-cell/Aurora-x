@@ -51,21 +51,32 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
     const script = `
 import sys
 import json
+import os
 sys.path.insert(0, '${process.cwd().replace(/\\/g, '/')}')
+
+# Suppress ALL debug output
+os.environ['AURORA_DEBUG'] = '0'
 
 from aurora_core import AuroraCoreIntelligence
 
-aurora = AuroraCoreIntelligence()
-
-# Analyze with Aurora's REAL intelligence
-analysis = aurora.analyze_natural_language('''${userMessage.replace(/'/g, "\\'")}''')
-
-# Generate Aurora's ACTUAL response (not templates) - PASS SESSION_ID
-context = aurora.get_conversation_context('${sessionId}')
-response = aurora.generate_aurora_response(analysis, context, '${sessionId}')
-
-# Output ONLY the response
-print(json.dumps({'response': response}))
+try:
+    aurora = AuroraCoreIntelligence()
+    
+    # Get context FIRST
+    context = aurora.get_conversation_context('${sessionId}')
+    
+    # Analyze message
+    analysis = aurora.analyze_natural_language('''${userMessage.replace(/'/g, "\\'")}''', context)
+    
+    # Generate response
+    response = aurora.generate_aurora_response(analysis, context, '${sessionId}')
+    
+    # Output ONLY clean JSON
+    print(json.dumps({'response': response}, ensure_ascii=False))
+    
+except Exception as e:
+    # Error response
+    print(json.dumps({'response': f'I encountered an error: {str(e)}. Let me try again...'}, ensure_ascii=False))
 `;
 
     const python = spawn('python', ['-c', script]);
