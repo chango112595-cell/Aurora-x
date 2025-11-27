@@ -13,14 +13,14 @@ export default function AuroraFuturisticChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Hey! I'm Aurora. What would you like to work on today? I can help you code, debug, analyze, or build anything you need.",
+      content: "Hey! I'm Aurora. I have all 188 power units active and can help you with:\n\n• Write and debug code in any language\n• Explain complex concepts clearly\n• Design system architectures\n• Solve technical problems\n• Review and optimize code\n\nWhat would you like to work on today?",
       timestamp: new Date(),
       status: 'complete'
     }
   ]);
   const [input, setInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [sessionId] = useState(() => `chat-${Date.now()}`); // Persistent session ID
+  const [sessionId] = useState(() => `chat-${Date.now()}`);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -41,14 +41,15 @@ export default function AuroraFuturisticChat() {
       status: 'complete'
     };
 
+    const userInput = input;
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsProcessing(true);
 
-    // Add thinking message
+    // Add thinking message with visual feedback
     const thinkingMessage: Message = {
       role: 'assistant',
-      content: 'Analyzing your request...',
+      content: 'Processing your request with all 188 power units...',
       timestamp: new Date(),
       status: 'thinking'
     };
@@ -58,7 +59,11 @@ export default function AuroraFuturisticChat() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input, session_id: sessionId }),
+        body: JSON.stringify({ 
+          message: userInput, 
+          session_id: sessionId,
+          context: messages.slice(-4) // Send last 4 messages as context
+        }),
       });
 
       if (!response.ok) {
@@ -67,41 +72,31 @@ export default function AuroraFuturisticChat() {
 
       const data = await response.json();
 
-      // Aurora's autonomous null check
       if (!data || !data.response) {
         throw new Error('Invalid response from Aurora');
       }
 
-      // Update with response
+      // Update with response - replace thinking message
       setMessages(prev => {
         const newMessages = [...prev];
         const lastIndex = newMessages.length - 1;
 
-        // If response indicates execution
-        if (data.executing) {
-          newMessages[lastIndex] = {
-            role: 'assistant',
-            content: data.response,
-            timestamp: new Date(),
-            status: 'executing'
-          };
-        } else {
-          newMessages[lastIndex] = {
-            role: 'assistant',
-            content: data.response,
-            timestamp: new Date(),
-            status: 'complete'
-          };
-        }
+        newMessages[lastIndex] = {
+          role: 'assistant',
+          content: data.response,
+          timestamp: new Date(),
+          status: 'complete'
+        };
 
         return newMessages;
       });
     } catch (error) {
+      console.error('[Aurora Chat] Error:', error);
       setMessages(prev => {
         const newMessages = [...prev];
         newMessages[newMessages.length - 1] = {
           role: 'assistant',
-          content: 'Oops, something went wrong. Let me try that again.',
+          content: `I encountered an issue processing your request. You asked: "${userInput}"\n\nLet me provide you with information on that topic or try a different approach. What aspect would you like to explore?`,
           timestamp: new Date(),
           status: 'error'
         };
@@ -128,10 +123,8 @@ export default function AuroraFuturisticChat() {
   };
 
   const formatMessage = (content: string) => {
-    // Aurora's autonomous error detection: null safety + type coercion
     if (!content) return <span className="text-slate-500">Empty message</span>;
 
-    // Ensure content is a string (Aurora's autonomous type safety)
     const safeContent = typeof content === 'string' ? content : String(content);
 
     try {
@@ -141,27 +134,32 @@ export default function AuroraFuturisticChat() {
         if (i % 2 === 1) {
           // Code block
           const lines = part.split('\n');
-          const language = lines[0] || 'code';
+          const language = lines[0]?.trim() || 'code';
           const code = lines.slice(1).join('\n');
 
           return (
             <div key={`code-${i}`} className="my-3 rounded-lg bg-slate-900/80 border border-purple-500/20 overflow-hidden">
-              <div className="px-3 py-1 bg-purple-500/10 border-b border-purple-500/20 flex items-center gap-2">
+              <div className="px-3 py-2 bg-purple-500/10 border-b border-purple-500/20 flex items-center gap-2">
                 <Code className="w-3 h-3 text-purple-400" />
                 <span className="text-xs text-purple-400 font-mono">{language}</span>
               </div>
-              <pre className="p-3 overflow-x-auto">
-                <code className="text-sm text-cyan-300 font-mono">{code}</code>
+              <pre className="p-3 overflow-x-auto text-xs sm:text-sm">
+                <code className="text-cyan-300 font-mono">{code}</code>
               </pre>
             </div>
           );
         }
 
-        // Regular text - make it more natural with proper formatting
+        // Regular text - enhanced formatting
         return (
           <div key={`text-${i}`} className="whitespace-pre-wrap leading-relaxed">
             {part.split('\n').map((line, j) => {
-              // Bold text
+              const trimmed = line.trim();
+              
+              // Skip empty lines for cleaner display
+              if (!trimmed) return <br key={j} />;
+              
+              // Bold text with ** markers
               if (line.includes('**')) {
                 const boldParts = line.split('**');
                 return (
@@ -172,22 +170,46 @@ export default function AuroraFuturisticChat() {
                   </p>
                 );
               }
+              
+              // Numbered lists
+              if (/^\d+\.\s/.test(trimmed)) {
+                return (
+                  <p key={j} className="ml-4 mb-1 text-purple-200">
+                    {trimmed}
+                  </p>
+                );
+              }
+              
               // Bullet points
-              if (line.trim().startsWith('- ')) {
+              if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
+                const content = trimmed.replace(/^[•-]\s+/, '');
                 return (
                   <li key={j} className="ml-4 mb-1 text-purple-200">
-                    {line.replace('- ', '')}
+                    {content}
                   </li>
                 );
               }
-              return line.trim() ? <p key={j} className="mb-2">{line}</p> : <br key={j} />;
+              
+              // Links and emphasis
+              if (line.includes('http')) {
+                return (
+                  <p key={j} className="mb-2 break-words">
+                    {line.split(/(\bhttps?:\/\/[^\s]+)/g).map((segment, idx) => 
+                      segment.startsWith('http') ? 
+                        <a key={idx} href={segment} target="_blank" rel="noopener" className="text-cyan-400 hover:text-cyan-300 underline">{segment}</a> :
+                        segment
+                    )}
+                  </p>
+                );
+              }
+              
+              return <p key={j} className="mb-2">{line}</p>;
             })}
           </div>
         );
       });
     } catch (error) {
-      // Aurora's autonomous error handler
-      console.error('[AURORA] Format error:', error);
+      console.error('[Aurora] Format error:', error);
       return <span className="text-red-400">Error formatting message</span>;
     }
   };
