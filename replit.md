@@ -47,6 +47,28 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Updates
 
+**November 27, 2025**:
+- **Aurora 4-File Experimental Integration**: Completed integration of 4 experimental Aurora modules following the AURORA_INTEGRATION_DETAILED_FIX_GUIDE.md:
+  - **Self-Learning Diagnostics** (`aurora_x/self_learn_diagnostics.py`): 
+    - Honest 0-100 quality scoring with true zero on failures
+    - Persistent state tracking via `.aurora_diagnostics.json`
+    - Failure pattern analysis and learning progress metrics
+    - Integrated with `aurora_x/self_learn.py` for quality tracking
+  - **Autonomous Healing** (`tools/aurora_autonomous_fixer.py`):
+    - AutonomousHealer class with 6 health check systems
+    - Checks: self_learn, chat_server, corpus_db, frontend, diagnostics, state_files
+    - Before/after health comparison during healing
+    - API endpoint: `POST /api/heal` for triggering autonomous healing
+  - **Emergency Recovery** (`tools/aurora_recovery_system.py`):
+    - Backup/restore with integrity verification
+    - Health report with critical file and state file checks
+    - Preview restore functionality before actual restore
+  - **Terminal Chat Client** (`tools/aurora_terminal_client.py`):
+    - Interactive terminal interface for Aurora chat
+    - Dependency checking with clear install instructions
+    - Enhanced error handling for various HTTP status codes
+    - Usage: `python3 tools/aurora_terminal_client.py`
+
 **November 15, 2025**:
 - **System-Wide Debugging and Optimization**: Comprehensive system health check and fixes
   - Fixed Luminar Nexus V2 Aurora Bridge warning being printed unconditionally
