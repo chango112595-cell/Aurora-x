@@ -174,6 +174,19 @@ async function refreshReadmeBadges(): Promise<void> {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // ══════════════════════════════════════════════════════════════
+  // 📊 SYSTEM ROUTES (BEFORE RATE LIMITING)
+  // ══════════════════════════════════════════════════════════════
+  
+  // Health check endpoint - EXEMPT from rate limiting (critical for monitoring)
+  app.get("/api/health", (req, res) => {
+    res.status(200).json({ 
+      status: "ok",
+      service: "chango",
+      uptime: Math.floor((Date.now() - serverStartTime) / 1000)
+    });
+  });
+
+  // ══════════════════════════════════════════════════════════════
   // 🔐 RATE LIMITING SETUP
   // ══════════════════════════════════════════════════════════════
   // Apply rate limiters in order of specificity (most specific first)
@@ -189,19 +202,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // 4. General API rate limiting for all other routes
   app.use("/api/", apiLimiter);
-
-  // ══════════════════════════════════════════════════════════════
-  // 📊 SYSTEM ROUTES
-  // ══════════════════════════════════════════════════════════════
-
-  // Simple health check endpoint for container health checks
-  app.get("/api/health", (req, res) => {
-    res.status(200).json({ 
-      status: "ok",
-      service: "chango",
-      uptime: Math.floor((Date.now() - serverStartTime) / 1000)
-    });
-  });
 
   // Autonomous healing trigger endpoint
   app.post("/api/heal", async (req, res) => {
@@ -1548,10 +1548,6 @@ except Exception as e:
     res.sendStatus(204); // No content for OPTIONS
   });
 
-  // Simple health check endpoint
-  app.get("/api/health", async (_req, res) => {
-    res.json({ status: "ok", timestamp: new Date().toISOString() });
-  });
 
   // System diagnostics endpoint
   app.get("/api/diagnostics", async (_req, res) => {
