@@ -23,7 +23,7 @@ import {
 import { RefreshCw, Power, RotateCw, Square, ExternalLink, Zap, ChevronDown, AlertTriangle, Shield, Clock, Activity, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "wouter";
 
 interface Service {
     name: string;

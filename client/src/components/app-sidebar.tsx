@@ -1,7 +1,6 @@
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Home, MessageSquare, BookOpen, BarChart3, Settings, Zap, Activity, TrendingUp, Database, Network, Cpu, Sparkles } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "wouter";
 import {
   Sidebar,
   SidebarContent,
@@ -25,7 +24,7 @@ const menuItems = [
 ];
 
 export function AppSidebar() {
-  const location = usePathname();
+  const [location] = useLocation();
 
   return (
     <Sidebar className="border-r-0 relative overflow-hidden">
