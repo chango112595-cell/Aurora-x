@@ -19,14 +19,20 @@ from typing import Dict, List, Optional, Any
 os.environ["AURORA_CHAT_MODE"] = "true"
 os.environ["AURORA_NO_ORCHESTRATION"] = "true"
 
+Console = None
+Panel = None
+RICH_AVAILABLE = False
+
 try:
-    from rich.console import Console
-    from rich.panel import Panel
+    from rich.console import Console as RichConsole
+    from rich.panel import Panel as RichPanel
     from rich.table import Table
     from rich.markdown import Markdown
+    Console = RichConsole
+    Panel = RichPanel
     RICH_AVAILABLE = True
 except ImportError:
-    RICH_AVAILABLE = False
+    pass
 
 
 class AuroraTerminalChat:
@@ -34,13 +40,13 @@ class AuroraTerminalChat:
     
     def __init__(self):
         """Initialize terminal chat."""
-        self.console = Console() if RICH_AVAILABLE else None
+        self.console = Console() if (RICH_AVAILABLE and Console) else None
         self.history: List[Dict[str, str]] = []
         self.context: Dict[str, Any] = {}
         
     def display(self, message: str, style: str = "default") -> None:
         """Display message in terminal."""
-        if self.console:
+        if self.console and Panel:
             if style == "aurora":
                 self.console.print(Panel(message, title="Aurora", border_style="cyan"))
             elif style == "user":
