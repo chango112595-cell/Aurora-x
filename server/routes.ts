@@ -296,7 +296,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Note: Conversation memory and web search are now handled in server/aurora-chat.ts
 
-  // Chat endpoint - Aurora's conversational interface with Claude AI
+  // Chat endpoint - Aurora's autonomous conversational interface
   // Supports both web and terminal clients
   app.post("/api/chat", async (req, res) => {
     try {
@@ -329,11 +329,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
             return res.json(v2Data);
           }
         } catch (v2Error) {
-          console.warn('[Aurora Chat] Luminar V2 unavailable, using Claude AI');
+          console.warn('[Aurora Chat] Luminar V2 unavailable, using Aurora autonomous synthesis');
         }
       }
 
-      // Use Claude AI for human-like conversational responses
+      // Use Aurora's autonomous problem-solving for conversational responses
       let chatResult = await getChatResponse(message, sessionId);
       
       // Format response for terminal clients (strip HTML)

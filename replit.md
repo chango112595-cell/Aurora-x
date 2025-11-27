@@ -26,7 +26,7 @@ Preferred communication style: Simple, everyday language.
 - **Language Router**: Automatic language selection (Python, Go, Rust, C#) based on prompts.
 - **Progress Tracking**: Real-time synthesis progress via WebSockets.
 - **Bridge Protocol**: API bridge endpoints (`/api/bridge/nl`, `/api/bridge/spec`, `/api/bridge/deploy`, `/api/bridge/nl/project`) for natural language and spec compilation, Git integration with automatic commits/pushes, Discord webhooks, and Replit ping support. Includes features for signed commits, preview/diff endpoints, and automatic GitHub Pull Request creation and rollback controls.
-- **Aurora Chat AI**: Anthropic Claude-powered conversational AI with natural language processing, conversation memory management (10 turn history with pair-wise trimming), web search capabilities via DuckDuckGo API, and graceful fallback mode when Claude is unavailable. Located in `server/aurora-chat.ts`.
+- **Aurora Chat AI**: Advanced autonomous conversational system with natural language processing, conversation memory management (10 turn history with pair-wise trimming), autonomous code synthesis capabilities, and intelligent problem-solving. Aurora is fully self-sufficient for code generation and analysis. Located in `server/aurora-chat.ts` and `server/aurora-core.ts`.
 
 **Data Storage Solutions**:
 - **Corpus Database**: SQLite (better-sqlite3) with WAL for function synthesis metadata, including advanced querying and similarity scoring (Jaccard distance).

@@ -1,3 +1,0 @@
-{"service": "bridge", "issue": "Service not running (status: stopped)", "action": "restart", "success": true, "timestamp": "2025-11-03T14:28:13.274341"}
-{"service": "backend", "issue": "Service not running (status: stopped)", "action": "restart", "success": true, "timestamp": "2025-11-03T14:28:16.297516"}
-{"service": "self-learn", "issue": "Service not running (status: stopped)", "action": "restart", "success": true, "timestamp": "2025-11-03T14:28:19.317658"}
