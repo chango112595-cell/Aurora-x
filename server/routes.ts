@@ -203,6 +203,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Autonomous healing trigger endpoint
+  app.post("/api/heal", async (req, res) => {
+    try {
+      console.log('[Aurora Heal] Autonomous Healing Requested');
+      
+      // Execute the Python healing system
+      const healerProcess = spawn('python3', ['tools/aurora_autonomous_fixer.py', '--heal'], {
+        cwd: process.cwd(),
+        timeout: 30000
+      });
+      
+      let stdout = '';
+      let stderr = '';
+      
+      healerProcess.stdout.on('data', (data) => {
+        stdout += data.toString();
+      });
+      
+      healerProcess.stderr.on('data', (data) => {
+        stderr += data.toString();
+      });
+      
+      healerProcess.on('close', (code) => {
+        if (code === 0) {
+          try {
+            const result = JSON.parse(stdout);
+            res.json({
+              status: 'healing_complete',
+              message: 'Autonomous healing finished',
+              report: result
+            });
+          } catch {
+            res.json({
+              status: 'healing_complete',
+              message: 'Autonomous healing finished',
+              output: stdout
+            });
+          }
+        } else {
+          res.status(500).json({
+            status: 'healing_failed',
+            error: stderr || 'Healing process failed'
+          });
+        }
+      });
+      
+      healerProcess.on('error', (error) => {
+        console.error('[Aurora Heal] Process error:', error);
+        res.status(500).json({
+          status: 'healing_error',
+          error: error.message
+        });
+      });
+      
+    } catch (error: any) {
+      console.error('[Aurora Heal] Error:', error);
+      res.status(500).json({ 
+        status: 'healing_error',
+        error: error.message || 'Healing failed'
+      });
+    }
+  });
+
   // Luminar Nexus V2 Status Proxy - forwards requests to port 5005
   app.get("/api/luminar-nexus/v2/status", async (req, res) => {
     try {
@@ -234,17 +297,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Note: Conversation memory and web search are now handled in server/aurora-chat.ts
 
   // Chat endpoint - Aurora's conversational interface with Claude AI
-  // 🆕 Apply chat rate limiting
+  // Supports both web and terminal clients
   app.post("/api/chat", async (req, res) => {
     try {
-      const { message, session_id } = req.body;
+      const { message, session_id, client } = req.body;
 
       if (!message) {
         return res.status(400).json({ error: "Message is required" });
       }
 
       const sessionId = session_id || 'default';
-      console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId);
+      const isTerminalClient = client === 'terminal';
+      console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId, 'Client:', client || 'web');
 
       // Try routing to Luminar Nexus V2 first for specific system commands
       const msgLower = message.toLowerCase().trim();
@@ -270,14 +334,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Use Claude AI for human-like conversational responses
-      const chatResult = await getChatResponse(message, sessionId);
+      let chatResult = await getChatResponse(message, sessionId);
+      
+      // Format response for terminal clients (strip HTML)
+      if (isTerminalClient) {
+        chatResult = chatResult
+          .replace(/<[^>]*>/g, '')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&');
+      }
 
       res.json({
         ok: true,
         response: chatResult,
         message: chatResult,
         session_id: sessionId,
-        ai_powered: true
+        ai_powered: true,
+        client: client || 'web'
       });
 
     } catch (error: any) {

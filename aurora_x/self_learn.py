@@ -17,7 +17,6 @@ Runs synthesis tasks continuously, learning from each iteration.
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
-import annotations
 
 import json
 import random
@@ -31,6 +30,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from aurora_x.learn import get_seed_store
 from aurora_x.main import AuroraX
+from aurora_x.self_learn_diagnostics import SelfLearningDiagnostics
 
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor
@@ -60,6 +60,7 @@ class SelfLearningDaemon:
         self.seed_store = get_seed_store()
         self.state_file = Path(".self_learning_state.json")
         self.processed_specs = self._load_state()
+        self.diagnostics = SelfLearningDiagnostics()
 
     def _load_state(self) -> dict:
         """Load learning state from disk."""
@@ -144,6 +145,19 @@ class SelfLearningDaemon:
             # Run synthesis
             repo, success = aurora.run(spec_text)
 
+            # Capture diagnosis for quality feedback
+            diagnosis = self.diagnostics.diagnose_synthesis_run(
+                spec_name=spec_path.name,
+                success=success,
+                output_repo=repo.root if success else None,
+                error_msg=None if success else "Synthesis incomplete"
+            )
+            
+            # Log the quality score
+            self.log(f"Quality Score: {diagnosis['quality_score']:.1f}/100")
+            if diagnosis['recommendations']:
+                self.log(f"Recommendation: {diagnosis['recommendations'][0]}")
+
             # Log results
             if success:
                 self.log(f" Synthesis successful: {repo.root}")
@@ -152,6 +166,7 @@ class SelfLearningDaemon:
                     "timestamp": datetime.now().isoformat(),
                     "success": True,
                     "run_dir": str(repo.root),
+                    "quality_score": diagnosis['quality_score'],
                 }
                 self._save_state()
 
@@ -214,6 +229,12 @@ class SelfLearningDaemon:
 
         except Exception as e:
             self.log(f"Error during synthesis: {e}")
+            # Capture error diagnosis
+            self.diagnostics.diagnose_synthesis_run(
+                spec_name=spec_path.name,
+                success=False,
+                error_msg=str(e)
+            )
             # Mark as attempted but errored
             self.processed_specs[spec_path.name] = {
                 "timestamp": datetime.now().isoformat(),
@@ -266,6 +287,11 @@ class SelfLearningDaemon:
                     progress_pct = (processed_count / total_specs * 100) if total_specs > 0 else 0
                     self.log(f"Seed store: {summary['total_seeds']} seeds, avg bias: {summary['avg_bias']:.4f}")
                     self.log(f"Progress: {processed_count}/{total_specs} specs ({progress_pct:.1f}%)")
+                    
+                    # Save diagnostics and log learning progress
+                    progress = self.diagnostics.get_learning_progress()
+                    self.log(f"Learning Progress: {progress['success_rate']:.1f}% success, {progress['avg_quality']:.1f} avg quality")
+                    self.diagnostics.save_diagnostics()
 
                 # Sleep before next run
                 self.log(f"Sleeping {self.sleep_seconds}s before next run...")
@@ -273,6 +299,7 @@ class SelfLearningDaemon:
 
             except KeyboardInterrupt:
                 self.log("Received interrupt signal, shutting down...")
+                self.diagnostics.save_diagnostics()
                 break
             except Exception as e:
                 self.log(f"Unexpected error in main loop: {e}")
