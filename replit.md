@@ -47,6 +47,27 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Updates
 
+**November 27, 2025 (Routing & Chat Fix)**:
+- **Routing System Fixed**: Implemented complete routing fix per ROUTING_FIX_GUIDE.md
+  - Moved routing from `main.tsx` to `App.tsx` using wouter's `Switch` and `Route` components
+  - Added 18 routes matching sidebar navigation paths
+  - Sidebar navigation now properly changes page content (not just URL)
+  - Cleaned up dead imports from main.tsx
+  - Removed unused `app-sidebar.tsx` component
+- **Aurora Chat Fixed**: Critical connectivity issue resolved
+  - **Root Cause**: `AuroraFuturisticChat.tsx` used hardcoded `http://localhost:5000/api/chat` which fails in hosted environments
+  - **Solution**: Changed to relative URL `/api/chat` for proper browser-to-backend connectivity
+  - Fixed both `client/src/components/AuroraFuturisticChat.tsx` and `aurora/frontend/AuroraFuturisticChat.tsx`
+  - Added HTTP response status checking for better error handling
+- **Terminal Client Fixed**: LSP errors resolved in `tools/aurora_terminal_client.py`
+  - Fixed type checking issues with conditional `requests` import
+  - Renamed to `requests_lib` for proper type inference
+- **System Status**: All systems operational and verified
+  - API Health: `{"status":"ok","service":"chango"}`
+  - Chat API: Responding correctly with `{"ok":true,"response":"..."}`
+  - Aurora: 188 power units operational
+  - LSP: Clean (0 diagnostics)
+
 **November 27, 2025 (Final Debug)**:
 - **Critical Bug Fixed**: Rate limiter was blocking `/api/health` endpoint
   - Problem: Health checks called every 5 seconds hit 100 request/15 minute limit, returning 429 errors

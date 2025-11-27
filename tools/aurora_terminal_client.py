@@ -21,10 +21,10 @@ from pathlib import Path
 from typing import Optional
 
 try:
-    import requests
+    import requests as requests_lib
     REQUESTS_AVAILABLE = True
 except ImportError:
-    requests = None
+    requests_lib = None  # type: ignore
     REQUESTS_AVAILABLE = False
 
 
@@ -65,11 +65,11 @@ class AuroraTerminalClient:
     
     async def send_message(self, message: str) -> Optional[str]:
         """Send message to Aurora and get response with streaming support"""
-        if not REQUESTS_AVAILABLE:
+        if not REQUESTS_AVAILABLE or requests_lib is None:
             return "Error: requests library not installed. Run: pip install requests"
         
         try:
-            response = requests.post(
+            response = requests_lib.post(
                 f"{self.server_url}/api/chat",
                 json={
                     "message": message,
@@ -99,20 +99,20 @@ class AuroraTerminalClient:
                 except Exception:
                     pass
                 return f"Error ({response.status_code}): {error_msg}"
-        except requests.exceptions.ConnectionError:
+        except requests_lib.exceptions.ConnectionError:
             return "Cannot connect to Aurora server. Is it running? Try: npm run dev"
-        except requests.exceptions.Timeout:
+        except requests_lib.exceptions.Timeout:
             return "Request timed out. Aurora might be processing a complex request. Try again."
         except Exception as e:
             return f"Error: {str(e)}"
     
     def send_message_sync(self, message: str) -> Optional[str]:
         """Synchronous version of send_message for single-shot requests"""
-        if not REQUESTS_AVAILABLE:
+        if not REQUESTS_AVAILABLE or requests_lib is None:
             return "Error: requests library not installed. Run: pip install requests"
         
         try:
-            response = requests.post(
+            response = requests_lib.post(
                 f"{self.server_url}/api/chat",
                 json={
                     "message": message,
@@ -133,7 +133,7 @@ class AuroraTerminalClient:
                 except Exception:
                     pass
                 return f"Error ({response.status_code}): {error_msg}"
-        except requests.exceptions.ConnectionError:
+        except requests_lib.exceptions.ConnectionError:
             return "Cannot connect to Aurora server. Is it running?"
         except Exception as e:
             return f"Error: {str(e)}"
@@ -202,12 +202,12 @@ class AuroraTerminalClient:
     
     async def show_status(self):
         """Show Aurora server status"""
-        if requests is None:
+        if requests_lib is None:
             print("\nStatus: Cannot check (requests library not installed)\n")
             return
             
         try:
-            response = requests.get(f"{self.server_url}/api/health", timeout=5)
+            response = requests_lib.get(f"{self.server_url}/api/health", timeout=5)
             if response.status_code == 200:
                 data = response.json()
                 print(f"\nServer Status: {data.get('status', 'unknown')}")
