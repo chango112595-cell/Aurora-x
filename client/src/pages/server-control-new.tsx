@@ -23,7 +23,7 @@ import {
 import { RefreshCw, Power, RotateCw, Square, ExternalLink, Zap, ChevronDown, AlertTriangle, Shield, Clock, Activity, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "wouter";
 
 interface Service {
     name: string;
@@ -395,7 +395,7 @@ export default function ServerControl() {
                     transition={{ delay: 0.2 }}
                     className="flex justify-center gap-4"
                 >
-                    <Link href="/luminar">
+                    <Link to="/luminar">
                         <Button variant="outline" className="gap-2">
                             <TrendingUp className="h-4 w-4" />
                             Luminar Nexus Analytics

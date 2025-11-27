@@ -8,7 +8,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Zap, Square, RotateCw, Power, ChevronDown, Shield, Clock, AlertTriangle, Activity } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "wouter";
 
 interface Service {
     name: string;
@@ -142,7 +142,7 @@ export default function ServerControl() {
                                     <Button onClick={restartAllServices} size="lg" variant="outline" className="h-16 text-lg font-semibold gap-3 border-2">
                                         <RotateCw className="h-6 w-6" /> Restart All
                                     </Button>
-                                    <Link href="/luminar">
+                                    <Link to="/luminar">
                                         <Button size="lg" variant="outline" className="h-16 text-lg font-semibold gap-3 border-2 w-full">
                                             <Activity className="h-6 w-6" /> View All
                                         </Button>
