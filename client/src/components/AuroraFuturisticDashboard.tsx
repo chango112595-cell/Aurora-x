@@ -105,7 +105,7 @@ export default function AuroraFuturisticDashboard() {
                   188 TOTAL POWER
                 </div>
                 <div className="text-violet-300/80 text-sm mt-1">
-                  Hybrid Mode: 66 Knowledge Tiers + 109 Capability Modules
+                  Hyper Speed: 188 Knowledge Tiers + 66 Autonomous Execution + 500+ Modules
                 </div>
               </div>
               <Sparkles className="h-8 w-8 text-pink-400 animate-pulse" />
@@ -126,23 +126,23 @@ export default function AuroraFuturisticDashboard() {
                 <Network className="h-5 w-5 text-purple-400" />
                 <span className="text-purple-300 text-sm">Knowledge Tiers</span>
               </div>
-              <div className="text-3xl font-bold text-purple-400">66</div>
+              <div className="text-3xl font-bold text-purple-400">188</div>
             </div>
 
             <div className="bg-gradient-to-br from-pink-500/10 to-pink-500/5 border border-pink-500/30 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Zap className="h-5 w-5 text-pink-400" />
-                <span className="text-pink-300 text-sm">Capability Modules</span>
+                <span className="text-pink-300 text-sm">Execution Modes</span>
               </div>
-              <div className="text-3xl font-bold text-pink-400">109</div>
+              <div className="text-3xl font-bold text-pink-400">66</div>
             </div>
 
             <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Activity className="h-5 w-5 text-emerald-400" />
-                <span className="text-emerald-300 text-sm">Services Active</span>
+                <span className="text-emerald-300 text-sm">Active Modules</span>
               </div>
-              <div className="text-3xl font-bold text-emerald-400">{activeServices}/5</div>
+              <div className="text-3xl font-bold text-emerald-400">500+</div>
             </div>
           </div>
         </div>

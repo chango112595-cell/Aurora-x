@@ -17,7 +17,7 @@ import {
   similarityQuerySchema,
   runMetaSchema,
   usedSeedSchema,
-} from "@shared/schema";
+} from "../shared/schema";
 import authRouter from "./auth-routes";
 import { getChatResponse, searchWeb } from "./aurora-chat";
 import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter } from "./rate-limit";

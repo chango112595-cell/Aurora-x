@@ -68,6 +68,7 @@ interface ComparisonItem {
 }
 
 export default function ComparisonDashboard() {
+    const [tabValue, setTabValue] = useState<string>('git-comparison');
     const [approvedItems, setApprovedItems] = useState<Set<string>>(new Set());
     const [commits, setCommits] = useState<Commit[]>([]);
     const [auroraRuns, setAuroraRuns] = useState<AuroraRun[]>([]);
@@ -293,7 +294,7 @@ export default function ComparisonDashboard() {
                     </p>
                 </div>
 
-                <Tabs defaultValue="git-comparison" className="space-y-6">
+                <Tabs value={tabValue} onValueChange={setTabValue} className="space-y-6">
                     <TabsList className="grid w-full grid-cols-8 bg-slate-800/50 backdrop-blur-sm">
                         <TabsTrigger value="git-comparison" className="text-cyan-400">Git Comparison</TabsTrigger>
                         <TabsTrigger value="branch-analysis" className="text-cyan-400">Branch Analysis</TabsTrigger>
