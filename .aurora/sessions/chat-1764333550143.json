@@ -1,0 +1,20 @@
+{
+  "created_at": "2025-11-28T12:39:15.789949",
+  "message_count": 3,
+  "topics_discussed": [],
+  "user_preferences": {},
+  "conversation_depth": 3,
+  "last_intent": null,
+  "context_memory": [],
+  "user_name": null,
+  "user_info": {},
+  "mentioned_topics": [],
+  "questions_asked": [],
+  "detection": {
+    "type": "analysis",
+    "executionMode": "standard",
+    "suggestedFormat": "bullet_points",
+    "keywords": [],
+    "tone": "technical"
+  }
+}
