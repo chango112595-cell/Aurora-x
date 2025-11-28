@@ -1,8 +1,14 @@
-# Chango - AI-Powered Autonomous Code Synthesis Platform
+# Aurora-X Ultra - AI-Powered Autonomous Code Synthesis Platform
 
 ## Overview
 
-Chango is a JARVIS-inspired web application that serves as the interface for Aurora-X Ultra, an offline autonomous code synthesis engine. It provides a chat interface for requesting complex code generation, monitoring real-time synthesis progress, exploring generated code libraries, and analyzing corpus learning data. Chango aims to deliver a professional, developer-first experience for AI-assisted code generation, with significant market potential as a leading autonomous code synthesis platform.
+Aurora is a JARVIS-inspired autonomous code synthesis engine featuring 188 intelligence tiers, 66 advanced execution programs, and 200+ hybrid mode modules with hyperspeed capabilities. It provides a chat interface for requesting complex code generation, monitoring real-time synthesis progress, exploring generated code libraries, and analyzing corpus learning data. Aurora aims to deliver a professional, developer-first experience for AI-assisted code generation with significant market potential as a leading autonomous code synthesis platform.
+
+**Aurora Specifications**:
+- **188 Intelligence Tiers**: Full hierarchical knowledge structure for context-aware synthesis
+- **66 Advanced Execution Programs**: Specialized execution engines for optimization, parallelization, and domain-specific synthesis
+- **200+ Hybrid Mode Modules**: Extensible modules supporting multi-language compilation, framework integration, and cross-platform deployment
+- **Hyperspeed Mode**: Accelerated synthesis with intelligent caching and pattern recognition
 
 ## User Preferences
 

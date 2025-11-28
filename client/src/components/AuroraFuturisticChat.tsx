@@ -13,7 +13,7 @@ export default function AuroraFuturisticChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Hey! I'm Aurora. I have all 188 power units active and can help you with:\n\n• Write and debug code in any language\n• Explain complex concepts clearly\n• Design system architectures\n• Solve technical problems\n• Review and optimize code\n\nWhat would you like to work on today?",
+      content: "Hey! I'm Aurora. I have 188 intelligence tiers with 66 advanced execution programs and 200+ hybrid mode modules active. I can help you with:\n\n• Write and debug code in any language\n• Explain complex concepts clearly\n• Design system architectures\n• Solve technical problems\n• Review and optimize code\n\nWhat would you like to work on today?",
       timestamp: new Date(),
       status: 'complete'
     }
@@ -49,7 +49,7 @@ export default function AuroraFuturisticChat() {
     // Add thinking message with visual feedback
     const thinkingMessage: Message = {
       role: 'assistant',
-      content: 'Processing your request with all 188 power units...',
+      content: 'Processing your request with 188 intelligence tiers and 66 advanced execution programs...',
       timestamp: new Date(),
       status: 'thinking'
     };
