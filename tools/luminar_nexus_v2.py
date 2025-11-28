@@ -137,6 +137,94 @@ class AIServiceOrchestrator:
         self.anomaly_patterns = {}
         self.learning_model = None
         self.healing_strategies = {}
+        self.conversation_patterns = {}
+        self.keyword_correlations = {}
+
+    def learn_conversation_patterns(self, conv_type: str, keywords: list, confidence: float, user_message: str = "", context: str = ""):
+        """Machine learning-based conversation pattern recognition"""
+        if conv_type not in self.conversation_patterns:
+            self.conversation_patterns[conv_type] = []
+
+        self.conversation_patterns[conv_type].append({
+            "timestamp": time.time(),
+            "keywords": keywords,
+            "confidence": confidence,
+            "user_message": user_message[:200],
+            "context": context[:100],
+            "pattern_score": self._calculate_pattern_score(keywords, confidence)
+        })
+
+        if len(self.conversation_patterns[conv_type]) > 1000:
+            self.conversation_patterns[conv_type] = self.conversation_patterns[conv_type][-1000:]
+
+        self._update_keyword_correlations(conv_type, keywords)
+
+    def _calculate_pattern_score(self, keywords: list, confidence: float) -> float:
+        """Calculate unified pattern score for conversation"""
+        keyword_weight = min(len(keywords) * 0.1, 0.5)
+        confidence_weight = confidence / 100.0 * 0.5
+        return min(1.0, keyword_weight + confidence_weight)
+
+    def _update_keyword_correlations(self, conv_type: str, keywords: list):
+        """Track keyword correlations for each conversation type"""
+        if conv_type not in self.keyword_correlations:
+            self.keyword_correlations[conv_type] = {}
+
+        for keyword in keywords:
+            keyword_lower = keyword.lower()
+            if keyword_lower not in self.keyword_correlations[conv_type]:
+                self.keyword_correlations[conv_type][keyword_lower] = 0
+            self.keyword_correlations[conv_type][keyword_lower] += 1
+
+    def get_learned_patterns(self, conv_type: str) -> dict:
+        """Get learned patterns for a conversation type"""
+        if conv_type not in self.conversation_patterns or len(self.conversation_patterns[conv_type]) < 5:
+            return {"status": "insufficient_data", "pattern_count": len(self.conversation_patterns.get(conv_type, []))}
+
+        patterns = self.conversation_patterns[conv_type]
+        confidences = [p["confidence"] for p in patterns]
+        avg_confidence = sum(confidences) / len(confidences)
+
+        keyword_freq = self.keyword_correlations.get(conv_type, {})
+        sorted_keywords = sorted(keyword_freq.items(), key=lambda x: x[1], reverse=True)
+        common_keywords = [k for k, _ in sorted_keywords[:10]]
+
+        improved_multiplier = 1.0 + (avg_confidence / 100.0) * 0.5
+
+        return {
+            "status": "patterns_available",
+            "type": conv_type,
+            "avg_confidence": avg_confidence,
+            "common_keywords": common_keywords,
+            "pattern_count": len(patterns),
+            "improved_multiplier": improved_multiplier,
+            "last_updated": patterns[-1]["timestamp"] if patterns else None
+        }
+
+    def get_all_learned_patterns(self) -> dict:
+        """Get learned patterns for all conversation types"""
+        result = {}
+        for conv_type in self.conversation_patterns:
+            result[conv_type] = self.get_learned_patterns(conv_type)
+        return result
+
+    def analyze_keyword_correlations(self, type_a: str, type_b: str) -> dict:
+        """Analyze correlations between keywords of two conversation types"""
+        keywords_a = set(self.keyword_correlations.get(type_a, {}).keys())
+        keywords_b = set(self.keyword_correlations.get(type_b, {}).keys())
+
+        overlap = keywords_a & keywords_b
+        unique_a = keywords_a - keywords_b
+        unique_b = keywords_b - keywords_a
+
+        return {
+            "type_a": type_a,
+            "type_b": type_b,
+            "overlapping_keywords": list(overlap),
+            "unique_to_a": list(unique_a)[:10],
+            "unique_to_b": list(unique_b)[:10],
+            "overlap_percentage": len(overlap) / max(len(keywords_a | keywords_b), 1) * 100
+        }
 
     def learn_service_patterns(self, service_name: str, metrics: dict):
         """Machine learning-based pattern recognition"""
@@ -1281,6 +1369,47 @@ class LuminarNexusV2:
                 405,
             )
 
+        @app.route("/api/nexus/learn-conversation", methods=["POST"])
+        def learn_conversation():
+            """Receive and learn from conversation patterns"""
+            try:
+                data = request.get_json()
+                conv_type = data.get("type", "general_chat")
+                keywords = data.get("keywords", [])
+                confidence = data.get("confidence", 50)
+                user_message = data.get("userMessage", "")
+                context = data.get("context", "")
+
+                self.ai_orchestrator.learn_conversation_patterns(
+                    conv_type, keywords, confidence, user_message, context
+                )
+
+                return jsonify({
+                    "success": True,
+                    "message": f"Pattern learned for {conv_type}",
+                    "total_patterns": len(self.ai_orchestrator.conversation_patterns.get(conv_type, []))
+                })
+            except Exception as e:
+                return jsonify({"error": str(e), "success": False}), 500
+
+        @app.route("/api/nexus/learned-conversation-patterns", methods=["GET"])
+        def get_all_learned_patterns():
+            """Get all learned conversation patterns"""
+            patterns = self.ai_orchestrator.get_all_learned_patterns()
+            return jsonify(sanitize_for_json(patterns))
+
+        @app.route("/api/nexus/learned-conversation-patterns/<conv_type>", methods=["GET"])
+        def get_learned_patterns(conv_type):
+            """Get learned patterns for a specific conversation type"""
+            patterns = self.ai_orchestrator.get_learned_patterns(conv_type)
+            return jsonify(sanitize_for_json(patterns))
+
+        @app.route("/api/nexus/keyword-correlations/<type_a>/<type_b>", methods=["GET"])
+        def get_keyword_correlations(type_a, type_b):
+            """Analyze keyword correlations between two conversation types"""
+            correlations = self.ai_orchestrator.analyze_keyword_correlations(type_a, type_b)
+            return jsonify(sanitize_for_json(correlations))
+
         return app
 
 
@@ -2075,7 +2204,7 @@ def serve():
     app = nexus.create_advanced_api()
 
     print("\nLuminar Nexus V2 API Server Starting...")
-    print("   Port: 5005")
+    print("   Port: 8000")
     print(f"   Quantum Coherence: {nexus.quantum_mesh.coherence_level:.2f}")
     print(f"   Services Registered: {len(nexus.service_registry)}")
     print("\n[FEATURES] Advanced Features Active:")
@@ -2085,7 +2214,7 @@ def serve():
     print("   - Neural anomaly detection")
     print("\n")
 
-    app.run(host="0.0.0.0", port=5005, debug=False, threaded=True)
+    app.run(host="0.0.0.0", port=8000, debug=False, threaded=True)
 
 
 if __name__ == "__main__":

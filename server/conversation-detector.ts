@@ -40,7 +40,7 @@ export class ConversationDetector {
     const messageUpper = userMessage.toUpperCase();
 
     // Keyword sets for classification - prioritize specific keywords
-    const codeGenKeywords = ['write', 'create', 'generate', 'build', 'implement', 'code', 'app', 'script', 'module', 'library', 'method', 'routine'];
+    const codeGenKeywords = ['write', 'create', 'generate', 'build', 'implement', 'code', 'app', 'script', 'module', 'library', 'method', 'routine', 'function', 'class', 'algorithm', 'api', 'component', 'program', 'service', 'endpoint', 'handler'];
     const debugKeywords = ['bug', 'error', 'fix', 'crash', 'problem', 'issue', 'fail', 'broken', 'exception', 'null pointer', 'undefined', 'doesn\'t work', 'can\'t', 'throw'];
     const explainKeywords = ['explain', 'how does', 'what is', 'describe', 'tell me', 'teach', 'understand', 'learning', 'learn', 'works', 'tutorial', 'how it', 'what does'];
     const archKeywords = ['architecture', 'design', 'structure', 'pattern', 'system', 'schema', 'layer', 'component', 'diagram', 'database schema'];
@@ -65,7 +65,7 @@ export class ConversationDetector {
     };
 
     // Calculate keyword match scores with boost multipliers
-    scores.code_generation = this.calculateKeywordScore(messageUpper, codeGenKeywords) * 1.8;
+    scores.code_generation = this.calculateKeywordScore(messageUpper, codeGenKeywords) * 2.3;
     scores.debugging = this.calculateKeywordScore(messageUpper, debugKeywords) * 2.5; // Boost debugging
     scores.explanation = this.calculateKeywordScore(messageUpper, explainKeywords) * 2.0; // Boost explanation
     scores.architecture = this.calculateKeywordScore(messageUpper, archKeywords) * 2.0; // Boost architecture
@@ -82,6 +82,25 @@ export class ConversationDetector {
     // Code block patterns
     if (userMessage.includes('```')) {
       scores.code_generation += 15;
+    }
+
+    // Strong code generation patterns - boost significantly
+    if (messageUpper.includes('FUNCTION') || messageUpper.includes('CLASS')) {
+      scores.code_generation += 25;
+    }
+    if (messageUpper.includes('ALGORITHM')) {
+      scores.code_generation += 20;
+    }
+    if (messageUpper.includes('API') || messageUpper.includes('ENDPOINT')) {
+      scores.code_generation += 20;
+    }
+    if (messageUpper.includes('COMPONENT') || messageUpper.includes('MODULE')) {
+      scores.code_generation += 15;
+    }
+
+    // De-prioritize question_answering when code context is strong
+    if (scores.code_generation > 15) {
+      scores.question_answering = Math.max(0, scores.question_answering - 10);
     }
 
     // Error stack traces detection - strong debugging signal

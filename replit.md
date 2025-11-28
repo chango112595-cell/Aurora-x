@@ -38,12 +38,33 @@ Preferred communication style: Simple, everyday language.
 
 **Luminar Nexus V2 Integration**:
 - **Service Monitoring**: AI-driven service orchestration and monitoring system with quantum-inspired architecture.
-- **Port Configuration**: Luminar Nexus V2 API runs on port 5005, backend/frontend on port 5000. Frontend is served via Vite middleware through the backend.
+- **Port Configuration**: Luminar Nexus V2 API runs on port 8000, backend/frontend on port 5000. Frontend is served via Vite middleware through the backend.
 - **Service Registry**: Monitors backend:5000 (fullstack service) only, avoiding monitoring of non-existent or middleware services.
 - **Health Monitoring**: Socket-based connectivity checks with AI analysis for performance classification. "Down" services skip AI analysis.
 - **Quantum Coherence**: System health metric based on `healthy_services / total_services` ratio.
+- **Conversation Pattern Learning**: V2 now includes ML-based conversation pattern learning via `AIServiceOrchestrator`:
+  - POST `/api/nexus/learn-conversation` - Learn from detected conversation patterns
+  - GET `/api/nexus/learned-conversation-patterns` - Get all learned patterns
+  - GET `/api/nexus/learned-conversation-patterns/:type` - Get patterns for specific type
+  - GET `/api/nexus/keyword-correlations/:typeA/:typeB` - Analyze keyword correlations
 
 ## Recent Updates
+
+**November 28, 2025 (Luminar Nexus V2 Integration & Conversation Learning)**:
+- **V2 Re-enabled**: Luminar Nexus V2 now runs on port 8000 as a background ML service
+- **Conversation Pattern Learning**: V2's AIServiceOrchestrator repurposed for ML-based conversation pattern learning
+  - Stores last 1000 patterns per conversation type
+  - Tracks keyword correlations for improved detection
+  - Calculates improved multipliers based on learned patterns
+- **Detection Improvements**: Boosted code_generation detection from 1.8x to 2.3x multiplier
+  - Added keywords: function, class, algorithm, api, component, program, service, endpoint, handler
+  - Added pattern detection for FUNCTION, CLASS, ALGORITHM, API, ENDPOINT patterns (+20-25 boost)
+  - De-prioritized question_answering when code context is strong
+- **New Files**:
+  - `server/conversation-pattern-adapter.ts` - Bridges V3 detection with V2 ML learning
+  - Updated `server/luminar-routes.ts` with conversation learning proxy endpoints
+  - Updated `tools/luminar_nexus_v2.py` with conversation learning methods and endpoints
+- **V3-V2 Communication**: V3 proxies conversation patterns to V2 asynchronously for learning
 
 **November 27, 2025 (Aurora Auto-Detector System - LIVE & WORKING)**:
 - **Intelligent Conversation Classification**: Aurora now automatically detects and adapts to 10 conversation types

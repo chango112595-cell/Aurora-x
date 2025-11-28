@@ -6,7 +6,7 @@ import type { Express } from "express";
  * Proxies requests to the Luminar Nexus V2 service running on port 5005
  */
 export function registerLuminarRoutes(app: Express) {
-  const LUMINAR_V2_BASE = "http://0.0.0.0:5005";
+  const LUMINAR_V2_BASE = "http://0.0.0.0:8000";
 
   // Health check for Luminar Nexus V2
   app.get("/api/luminar-nexus/v2/health", async (req, res) => {
@@ -168,5 +168,67 @@ export function registerLuminarRoutes(app: Express) {
     }
   });
 
-  console.log("✅ Luminar Nexus V2 routes registered");
+  // Conversation Pattern Learning - POST pattern to V2
+  app.post("/api/luminar-nexus/v2/learn-conversation", async (req, res) => {
+    try {
+      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/learn-conversation`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body)
+      });
+      const data = await response.json();
+      res.json(data);
+    } catch (error: any) {
+      res.status(503).json({ 
+        error: "V2 conversation learning unavailable",
+        message: error.message 
+      });
+    }
+  });
+
+  // Get all learned conversation patterns
+  app.get("/api/luminar-nexus/v2/learned-patterns", async (req, res) => {
+    try {
+      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/learned-conversation-patterns`);
+      const data = await response.json();
+      res.json(data);
+    } catch (error: any) {
+      res.status(503).json({ 
+        error: "Learned patterns unavailable",
+        message: error.message 
+      });
+    }
+  });
+
+  // Get learned patterns for specific type
+  app.get("/api/luminar-nexus/v2/learned-patterns/:type", async (req, res) => {
+    try {
+      const { type } = req.params;
+      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/learned-conversation-patterns/${type}`);
+      const data = await response.json();
+      res.json(data);
+    } catch (error: any) {
+      res.status(503).json({ 
+        error: "Learned patterns unavailable",
+        message: error.message 
+      });
+    }
+  });
+
+  // Analyze keyword correlations between types
+  app.get("/api/luminar-nexus/v2/keyword-correlations/:typeA/:typeB", async (req, res) => {
+    try {
+      const { typeA, typeB } = req.params;
+      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/keyword-correlations/${typeA}/${typeB}`);
+      const data = await response.json();
+      res.json(data);
+    } catch (error: any) {
+      res.status(503).json({ 
+        error: "Keyword correlation analysis unavailable",
+        message: error.message 
+      });
+    }
+  });
+
+  console.log("✅ Luminar Nexus V2 routes registered (with conversation learning)");
 }

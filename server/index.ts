@@ -3,6 +3,7 @@ import { createServer } from "http";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import AuroraCore from "./aurora-core";
+import { registerLuminarRoutes } from "./luminar-routes";
 
 // Initialize Aurora Core Intelligence with 188 power units
 const aurora = AuroraCore.getInstance();
@@ -53,7 +54,8 @@ app.use((req, res, next) => {
   // Register application routes
   registerRoutes(app);
 
-  // Luminar Nexus V2 removed - using Nexus V3 routing in Aurora Core
+  // Luminar Nexus V2 enabled for ML conversation learning
+  registerLuminarRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;

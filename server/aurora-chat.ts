@@ -1,5 +1,6 @@
 import { WebSocket, WebSocketServer } from 'ws';
 import { conversationDetector, type ConversationDetection } from './conversation-detector';
+import { conversationPatternAdapter } from './conversation-pattern-adapter';
 
 // Aurora's chat WebSocket server
 export function setupAuroraChatWebSocket(server: any) {
@@ -61,6 +62,8 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
 
   console.log(`[Aurora] 🔍 Detected: ${detection.type} (confidence: ${detection.confidence}%)`);
   console.log(`[Aurora] 📋 Format: ${detection.suggestedFormat} | Mode: ${detection.executionMode}`);
+
+  conversationPatternAdapter.sendPatternToV2(detection, userMessage, previousMessages.join(' ')).catch(() => {});
 
   // Call Aurora's REAL Python intelligence with detection parameters
   const { spawn } = await import('child_process');
