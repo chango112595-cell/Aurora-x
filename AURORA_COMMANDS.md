@@ -1,525 +1,229 @@
-# 🚀 Aurora-X Quick Commands Reference
+# Aurora Terminal Commands Reference
 
-**Last Updated:** November 6, 2025  
-**Project:** Aurora-X Autonomous AI System
+**Last Updated:** November 28, 2025 | **Active Services:** Aurora V3 + Luminar Nexus V2
 
 ---
 
-## 🔥 Start Aurora (Simplified Commands)
+## Quick Start
 
-### ⭐ Start All Services (EASIEST WAY)
 ```bash
-python3 x-start
-```
-
-### ⭐ Stop All Services
-```bash
-python3 x-stop
-```
-
-### ⭐ Check Status
-```bash
-python3 x-nexus status
+# Both services are already running in workflows!
+# Just use the commands below to interact with them.
 ```
 
 ---
 
-## 🎯 Individual Service Control
+## Chat & Conversations
 
-### Start Individual Service
+### Send a Chat Message
 ```bash
-python3 x-nexus start <service>
-
-# Examples:
-python3 x-nexus start vite       # Frontend
-python3 x-nexus start chat       # Chat server
-python3 x-nexus start backend    # Backend API
-python3 x-nexus start bridge     # Bridge service
-python3 x-nexus start self-learn # Self-learning server
-```
-
-### Stop Individual Service
-```bash
-python3 x-nexus stop <service>
-
-# Examples:
-python3 x-nexus stop vite
-python3 x-nexus stop chat
-```
-
-### Restart Individual Service
-```bash
-python3 x-nexus restart <service>
-
-# Examples:
-python3 x-nexus restart backend
-python3 x-nexus restart chat
-```
-
----
-
-## 🔧 Advanced/Legacy Commands
-
-### Start All Services (Legacy Method)
-```bash
-python tools/luminar_nexus.py start-all
-```
-
-### Start Chat Server Directly
-```bash
-python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(5003)"
-```
-
-### Start in Background (Detached)
-```bash
-python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(5003)" > /tmp/aurora_chat.log 2>&1 &
-```
-
----
-
-## 📊 Check Status
-
-### ⭐ Check All Services (Simplified)
-```bash
-python3 x-nexus status
-```
-
-### Check Individual Service Health
-```bash
-# Backend
-curl http://localhost:5000/health
-
-# Bridge
-curl http://localhost:5001/health
-
-# Self-Learn
-curl http://localhost:5002/health
-
-# Chat (Aurora)
-curl http://localhost:5003/api/chat -d '{"message":"hello"}'
-```
-
-### Check Running Processes
-```bash
-ps aux | grep -E "uvicorn|luminar|aurora" | grep -v grep
-```
-
----
-
-## 🛑 Stop Services
-
-### ⭐ Stop All Services (Simplified)
-```bash
-python3 x-stop
-```
-
-### Stop Individual Service (Simplified)
-```bash
-python3 x-nexus stop <service>
-
-# Examples:
-python3 x-nexus stop chat
-python3 x-nexus stop vite
-python3 x-nexus stop backend
-```
-
-### Emergency Stop (Kill All)
-```bash
-# Kill chat server
-pkill -f "python.*luminar_nexus.*5003"
-
-# Kill backend
-pkill -f "uvicorn.*5000"
-
-# Kill bridge
-pkill -f "uvicorn.*5001"
-
-# Kill self-learn
-pkill -f "uvicorn.*5002"
-
-# Kill vite
-pkill -f "vite.*5173"
-```
-
----
-
-## 🔄 Restart Services
-
-### ⭐ Restart All (Simplified)
-```bash
-python3 x-stop
-sleep 2
-python3 x-start
-```
-
-### ⭐ Restart Individual Service
-```bash
-python3 x-nexus restart <service>
-
-# Examples:
-python3 x-nexus restart chat
-python3 x-nexus restart backend
-python3 x-nexus restart vite
-```
-
-### Legacy Restart Method
-```bash
-python tools/luminar_nexus.py stop-all
-sleep 2
-python tools/luminar_nexus.py start-all
-```
-
----
-
-## 💬 Talk to Aurora
-
-### Simple Chat
-```bash
-curl -X POST http://localhost:5003/api/chat \
+curl -X POST http://localhost:5000/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message":"Hello Aurora!"}'
+  -d '{"message":"your message here"}'
 ```
 
-### Aurora Self-Healing
+### Code Generation
 ```bash
-curl -X POST http://localhost:5003/api/chat \
+curl -X POST http://localhost:5000/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message":"Aurora, fix yourself"}'
+  -d '{"message":"write a sorting algorithm in python"}'
 ```
 
-### Ask Aurora for Status
+### Debugging Help
 ```bash
-curl -X POST http://localhost:5003/api/chat \
+curl -X POST http://localhost:5000/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message":"show status"}' | jq -r '.response'
+  -d '{"message":"why is my function returning undefined"}'
 ```
 
-### Pretty Print Response
+### Get Explanations
 ```bash
-curl -s -X POST http://localhost:5003/api/chat \
+curl -X POST http://localhost:5000/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message":"Hello Aurora!"}' | jq -r '.response'
+  -d '{"message":"explain how REST APIs work"}'
 ```
 
----
-
-## 📝 Monitoring & Logs
-
-### Watch Autonomous Monitoring (Live)
+### Architecture Advice
 ```bash
-tail -f .aurora_knowledge/autonomous_monitoring_$(date +%Y%m%d).log
-```
-
-### View Recent Monitoring Activity
-```bash
-tail -50 .aurora_knowledge/autonomous_monitoring_$(date +%Y%m%d).log
-```
-
-### Check Chat Server Logs
-```bash
-tail -f /tmp/aurora_chat.log
-```
-
-### View All Aurora Logs
-```bash
-ls -lh .aurora_knowledge/*.log
-```
-
----
-
-## 🧪 Testing Commands
-
-### Test Self-Healing
-```bash
-# 1. Kill a service
-pkill -f "uvicorn.*5000"
-
-# 2. Wait 10 seconds for auto-restart
-sleep 10
-
-# 3. Check if restored
-curl http://localhost:5000/health
-```
-
-### Test Manual Healing
-```bash
-curl -s -X POST http://localhost:5003/api/chat \
-  -d '{"message":"Aurora, fix yourself"}' | jq -r '.response'
-```
-
----
-
-## 🔧 Individual Service Management (Legacy)
-
-> **Note:** Use the simplified `python3 x-nexus` commands above instead!
-
-### Start Individual Services (Old Way)
-```bash
-# Backend
-python tools/luminar_nexus.py start backend
-
-# Bridge
-python tools/luminar_nexus.py start bridge
-
-# Self-Learn
-python tools/luminar_nexus.py start self-learn
-
-# Vite
-python tools/luminar_nexus.py start vite
-
-# Chat
-python tools/luminar_nexus.py start chat
-```
-
-### Stop Individual Services (Old Way)
-```bash
-python tools/luminar_nexus.py stop backend
-python tools/luminar_nexus.py stop bridge
-python tools/luminar_nexus.py stop self-learn
-python tools/luminar_nexus.py stop vite
-python tools/luminar_nexus.py stop chat
-```
-
-### Restart Individual Services (Old Way)
-```bash
-python tools/luminar_nexus.py restart backend
-python tools/luminar_nexus.py restart bridge
-python tools/luminar_nexus.py restart self-learn
-python tools/luminar_nexus.py restart vite
-python tools/luminar_nexus.py restart chat
-```
-
----
-
-## 🌐 Access Points
-
-| Service | Port | URL |
-|---------|------|-----|
-| Backend API | 5000 | http://localhost:5000 |
-| Bridge | 5001 | http://localhost:5001 |
-| Self-Learn | 5002 | http://localhost:5002 |
-| Chat (Aurora) | 5003 | http://localhost:5003 |
-| Vite Frontend | 5173 | http://localhost:5173 |
-
----
-
-## 🤖 Aurora Autonomous Features
-
-### What Aurora Does Automatically
-- ✅ Monitors all services every 5 seconds
-- ✅ Auto-restarts failed services (backend, bridge, self-learn, vite)
-- ✅ Logs all activity to `.aurora_knowledge/autonomous_monitoring_*.log`
-- ✅ Self-heals on command ("Aurora, fix yourself")
-- ✅ Runs 24/7 in background (daemon thread)
-
-### Aurora Voice Commands
-```bash
-# Self-healing
-"Aurora, fix yourself"
-"Aurora, restart yourself"
-"Aurora, heal yourself"
-"Fix yourself Aurora"
-
-# Status
-"show status"
-"check health"
-
-# Server management
-"start all servers"
-"stop all servers"
-"restart servers"
-```
-
----
-
-## 🐛 Debugging
-
-### Check if Services are Running
-```bash
-curl http://localhost:5000/health && echo "✅ Backend OK" || echo "❌ Backend DOWN"
-curl http://localhost:5001/health && echo "✅ Bridge OK" || echo "❌ Bridge DOWN"
-curl http://localhost:5002/health && echo "✅ Self-Learn OK" || echo "❌ Self-Learn DOWN"
-curl http://localhost:5003/api/chat -d '{"message":"ping"}' && echo "✅ Chat OK" || echo "❌ Chat DOWN"
-```
-
-### View All Running Aurora Processes
-```bash
-ps aux | grep -E "python.*aurora|uvicorn.*500[0-2]|vite" | grep -v grep
-```
-
-### Kill All Aurora Processes (Emergency)
-```bash
-pkill -f "luminar_nexus"
-pkill -f "uvicorn.*aurora"
-pkill -f "vite"
-```
-
-### Clean Start (Kill Everything and Restart)
-```bash
-pkill -f "luminar_nexus"
-pkill -f "uvicorn.*500[0-2]"
-pkill -f "vite"
-sleep 3
-python tools/luminar_nexus.py start-all
-```
-
----
-
-## 📦 Quick Setup (First Time)
-
-### 1. Install Dependencies
-```bash
-pip install -r requirements.txt
-npm install
-```
-
-### 2. Start Aurora
-```bash
-python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(5003)"
-```
-
-### 3. Verify It's Working
-```bash
-curl -s http://localhost:5003/api/chat -d '{"message":"Hello"}' | jq -r '.response'
-```
-
----
-
-## 💡 Tips & Tricks
-
-### Run Aurora in Background and Forget
-```bash
-nohup python3 -c "from tools.luminar_nexus import run_chat_server; run_chat_server(5003)" > /tmp/aurora.log 2>&1 &
-```
-
-### Watch Logs While Chatting
-```bash
-# Terminal 1
-tail -f .aurora_knowledge/autonomous_monitoring_$(date +%Y%m%d).log
-
-# Terminal 2
-curl -X POST http://localhost:5003/api/chat -d '{"message":"Aurora, fix yourself"}'
-```
-
-### Quick Health Check All Services
-```bash
-for port in 5000 5001 5002 5003; do
-  curl -s http://localhost:$port/health 2>/dev/null && echo "✅ Port $port OK" || echo "❌ Port $port DOWN"
-done
-```
-
-### JSON Pretty Print Aurora Response
-```bash
-curl -s http://localhost:5003/api/chat \
+curl -X POST http://localhost:5000/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message":"Hello Aurora"}' | jq '.'
+  -d '{"message":"how should i structure a microservices architecture"}'
+```
+
+### Build Components
+```bash
+curl -X POST http://localhost:5000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"build a react form component with validation"}'
 ```
 
 ---
 
-## 🎯 Common Workflows
+## Status & Health Checks
 
-### ⭐ Daily Startup (Simplified)
+### Check Aurora Status
 ```bash
-python3 x-start
+curl http://localhost:5000/api/status
 ```
 
-### ⭐ Check Everything is Running
+### Check Luminar Nexus V2 Status
 ```bash
-python3 x-nexus status
+curl http://localhost:8000/api/nexus/status
 ```
 
-### ⭐ Restart a Single Service
+### Health Check
 ```bash
-python3 x-nexus restart chat
+curl http://localhost:5000/api/health
 ```
 
-### Aurora Self-Heal
+### Pretty Print with jq
 ```bash
-curl -X POST http://localhost:5003/api/chat -d '{"message":"Aurora, fix yourself"}'
-```
-
-### View Monitoring Activity
-```bash
-tail -30 .aurora_knowledge/autonomous_monitoring_$(date +%Y%m%d).log
-```
-
-### ⭐ Clean Shutdown
-```bash
-python3 x-stop
+curl -s http://localhost:5000/api/status | jq
+curl -s http://localhost:8000/api/nexus/status | jq
 ```
 
 ---
 
-## 🆘 Emergency Commands
+## Luminar Nexus V2 - ML Learning System
 
-### Aurora Not Responding?
+### View All Learned Patterns
 ```bash
-# Quick restart
-python3 x-nexus restart chat
+curl http://localhost:8000/api/nexus/learned-conversation-patterns
 ```
 
-### All Services Down?
+### View Patterns for Specific Type
 ```bash
-python3 x-stop
-sleep 3
-python3 x-start
+curl http://localhost:8000/api/nexus/learned-conversation-patterns/code_generation
 ```
 
-### Port Already in Use?
+### Analyze Keyword Correlations
 ```bash
-# Find what's using the port
-lsof -i :5003
-
-# Kill it
-kill -9 $(lsof -t -i :5003)
-
-# Restart
-python3 x-nexus start chat
+curl http://localhost:8000/api/nexus/keyword-correlations/code_generation/debugging
 ```
 
-### Nuclear Option (Kill Everything)
+### Pretty Print ML Data
 ```bash
-pkill -f luminar_nexus
-pkill -f "uvicorn.*500[0-2]"
-pkill -f vite
-sleep 3
-python3 x-start
+curl -s http://localhost:8000/api/nexus/learned-conversation-patterns | jq
 ```
 
 ---
 
-## 📚 Documentation References
+## Bridge Service
 
-- **Full Phase 1 Summary:** `.aurora_knowledge/PHASE1_FINAL_100_PERCENT.md`
-- **Implementation Log:** `.aurora_knowledge/AURORA_PHASE1_IMPLEMENTATION_LOG.md`
-- **Project Analysis:** `.aurora_knowledge/AURORA_CROSS_REFERENCE_ANALYSIS.md`
-- **Test Results:** `.aurora_knowledge/PHASE1_TEST_RESULTS.md`
-
----
-
-**Quick Start (Copy-Paste):**
+### Natural Language to Spec
 ```bash
-# ⭐ Start Aurora (EASIEST WAY)
-python3 x-start
-
-# Check status
-python3 x-nexus status
-
-# Test Aurora
-curl -s http://localhost:5003/api/chat -d '{"message":"Hello Aurora!"}' | jq -r '.response'
-
-# Stop everything
-python3 x-stop
+curl -X POST http://localhost:5000/api/bridge/nl \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"create a user authentication system"}'
 ```
 
-**Available Services:**
-- `vite` - Frontend (port 5173)
-- `backend` - Backend API (port 5000)
-- `bridge` - Bridge service (port 5001)
-- `self-learn` - Self-learning server (port 5002)
-- `chat` - Aurora chat AI (port 5003)
+### Open Rollback for PR
+```bash
+curl -X POST http://localhost:5000/api/bridge/rollback/open \
+  -H "Content-Type: application/json" \
+  -d '{"pr_number":123,"reason":"feature not working"}'
+```
+
+### Rollback Merged Code
+```bash
+curl -X POST http://localhost:5000/api/bridge/rollback/merged \
+  -H "Content-Type: application/json" \
+  -d '{"commit_hash":"abc123","reason":"critical bug"}'
+```
 
 ---
 
-**Need Help?** Check the documentation in `.aurora_knowledge/` or talk to Aurora directly! 🚀
+## Conversation Types Aurora Detects
+
+Aurora automatically classifies conversations into:
+- `code_generation` - Write code, functions, components
+- `debugging` - Fix bugs, troubleshoot issues
+- `explanation` - Learn concepts, understand code
+- `architecture` - System design, planning
+- `optimization` - Performance improvements
+- `testing` - Test writing, QA strategies
+- `refactoring` - Code reorganization
+- `analysis` - Code analysis, patterns
+- `question_answering` - Knowledge questions
+- `general_chat` - Casual conversation
+
+---
+
+## Pretty Print Responses
+
+### Format JSON Output
+```bash
+curl -s -X POST http://localhost:5000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"build a react component"}' | jq
+```
+
+### Extract Just the Response
+```bash
+curl -s -X POST http://localhost:5000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"write a function"}' | jq -r '.response'
+```
+
+### Save Response to File
+```bash
+curl -s -X POST http://localhost:5000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"create a database schema"}' > response.json
+```
+
+---
+
+## One-Liners for Quick Testing
+
+```bash
+# Test chat is working
+curl -s http://localhost:5000/api/chat -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"message":"test"}' | jq '.type'
+
+# Check both services alive
+curl -s http://localhost:5000/api/status && echo "✓ V3" && \
+curl -s http://localhost:8000/api/nexus/status && echo "✓ V2"
+
+# View latest learned patterns
+curl -s http://localhost:8000/api/nexus/learned-conversation-patterns | jq '.code_generation'
+
+# Test code detection
+curl -s http://localhost:5000/api/chat -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"message":"write a hello world function"}' | jq '.type'
+```
+
+---
+
+## Services Overview
+
+| Service | Port | Status | Purpose |
+|---------|------|--------|---------|
+| Aurora V3 Backend | 5000 | Running | Express + Frontend, Chat API |
+| Luminar Nexus V2 | 8000 | Running | ML Learning, Pattern Analysis |
+
+---
+
+## Quick Reference
+
+**Browser Access:**
+- Open: http://localhost:5000
+
+**Test Aurora:**
+```bash
+curl -X POST http://localhost:5000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"hello"}'
+```
+
+**Test V2:**
+```bash
+curl http://localhost:8000/api/nexus/status | jq
+```
+
+**View ML Patterns:**
+```bash
+curl http://localhost:8000/api/nexus/learned-conversation-patterns | jq
+```
