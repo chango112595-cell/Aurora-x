@@ -39,15 +39,15 @@ export class ConversationDetector {
     const context = allMessages.slice(-this.contextWindow).join(' ');
     const messageUpper = userMessage.toUpperCase();
 
-    // Keyword sets for classification
-    const codeGenKeywords = ['write', 'create', 'generate', 'build', 'implement', 'code', 'function', 'class', 'app', 'script'];
-    const debugKeywords = ['bug', 'error', 'fix', 'crash', 'problem', 'why', 'not working', 'issue', 'fail', 'broken', 'exception', 'null pointer', 'undefined', 'doesn\'t work', 'can\'t'];
-    const explainKeywords = ['explain', 'how', 'what is', 'describe', 'tell me', 'teach', 'understand', 'mean', 'does it work'];
-    const archKeywords = ['architecture', 'design', 'structure', 'pattern', 'system', 'flow', 'diagram', 'component', 'layer'];
-    const optimizeKeywords = ['optimize', 'faster', 'performance', 'improve', 'speed', 'efficient', 'scale', 'reduce'];
-    const testKeywords = ['test', 'unit test', 'integration', 'jest', 'mocha', 'coverage', 'validate', 'verify'];
-    const refactorKeywords = ['refactor', 'clean up', 'reorganize', 'simplify', 'improve code', 'rewrite'];
-    const analysisKeywords = ['analyze', 'review', 'examine', 'compare', 'evaluate', 'assess', 'look at'];
+    // Keyword sets for classification - prioritize specific keywords
+    const codeGenKeywords = ['write', 'create', 'generate', 'build', 'implement', 'code', 'app', 'script', 'module', 'library', 'method', 'routine'];
+    const debugKeywords = ['bug', 'error', 'fix', 'crash', 'problem', 'issue', 'fail', 'broken', 'exception', 'null pointer', 'undefined', 'doesn\'t work', 'can\'t', 'throw'];
+    const explainKeywords = ['explain', 'how does', 'what is', 'describe', 'tell me', 'teach', 'understand', 'learning', 'learn', 'works', 'tutorial', 'how it', 'what does'];
+    const archKeywords = ['architecture', 'design', 'structure', 'pattern', 'system', 'schema', 'layer', 'component', 'diagram', 'database schema'];
+    const optimizeKeywords = ['optimize', 'faster', 'performance', 'improve', 'speed', 'efficient', 'scale', 'reduce', 'accelerate'];
+    const testKeywords = ['test', 'unit test', 'integration', 'jest', 'mocha', 'coverage', 'validate', 'verify', 'assert'];
+    const refactorKeywords = ['refactor', 'clean up', 'reorganize', 'simplify', 'rewrite', 'cleanup'];
+    const analysisKeywords = ['analyze', 'review', 'examine', 'compare', 'evaluate', 'assess', 'audit', 'inspection', 'analyze'];
 
     let detectedType: ConversationType = 'general_chat';
     let maxScore = 0;
@@ -64,15 +64,15 @@ export class ConversationDetector {
       general_chat: 1
     };
 
-    // Calculate keyword match scores
-    scores.code_generation = this.calculateKeywordScore(messageUpper, codeGenKeywords);
-    scores.debugging = this.calculateKeywordScore(messageUpper, debugKeywords);
-    scores.explanation = this.calculateKeywordScore(messageUpper, explainKeywords);
-    scores.architecture = this.calculateKeywordScore(messageUpper, archKeywords);
-    scores.optimization = this.calculateKeywordScore(messageUpper, optimizeKeywords);
-    scores.testing = this.calculateKeywordScore(messageUpper, testKeywords);
-    scores.refactoring = this.calculateKeywordScore(messageUpper, refactorKeywords);
-    scores.analysis = this.calculateKeywordScore(messageUpper, analysisKeywords);
+    // Calculate keyword match scores with boost multipliers
+    scores.code_generation = this.calculateKeywordScore(messageUpper, codeGenKeywords) * 1.8;
+    scores.debugging = this.calculateKeywordScore(messageUpper, debugKeywords) * 2.5; // Boost debugging
+    scores.explanation = this.calculateKeywordScore(messageUpper, explainKeywords) * 2.0; // Boost explanation
+    scores.architecture = this.calculateKeywordScore(messageUpper, archKeywords) * 2.0; // Boost architecture
+    scores.optimization = this.calculateKeywordScore(messageUpper, optimizeKeywords) * 2.0; // Boost optimization
+    scores.testing = this.calculateKeywordScore(messageUpper, testKeywords) * 2.2; // Boost testing
+    scores.refactoring = this.calculateKeywordScore(messageUpper, refactorKeywords) * 2.0; // Boost refactoring
+    scores.analysis = this.calculateKeywordScore(messageUpper, analysisKeywords) * 2.0; // Boost analysis
 
     // Question detection
     if (messageUpper.includes('?')) {
@@ -80,13 +80,43 @@ export class ConversationDetector {
     }
 
     // Code block patterns
-    if (userMessage.includes('```') || userMessage.includes('function') || userMessage.includes('class ')) {
-      scores.code_generation += 10;
+    if (userMessage.includes('```')) {
+      scores.code_generation += 15;
     }
 
-    // Error stack traces detection
-    if (userMessage.includes('Error') || userMessage.includes('Exception') || userMessage.includes('Traceback')) {
-      scores.debugging += 20;
+    // Error stack traces detection - strong debugging signal
+    if (userMessage.includes('Error') || userMessage.includes('Exception') || userMessage.includes('Traceback') || messageUpper.includes('THROW')) {
+      scores.debugging += 30;
+    }
+
+    // Testing patterns
+    if (messageUpper.includes('TEST') && messageUpper.includes('WRITE')) {
+      scores.testing += 20;
+    }
+
+    // Refactoring patterns
+    if (messageUpper.includes('CLEAN') || messageUpper.includes('SIMPLIF')) {
+      scores.refactoring += 20;
+    }
+
+    // Optimization patterns
+    if (messageUpper.includes('FAST') || messageUpper.includes('SLOW')) {
+      scores.optimization += 15;
+    }
+
+    // Explanation patterns
+    if (messageUpper.includes('HOW') || messageUpper.includes('WHAT')) {
+      scores.explanation += 10;
+    }
+
+    // Architecture patterns
+    if (messageUpper.includes('SCHEMA') || messageUpper.includes('STRUCTURE')) {
+      scores.architecture += 20;
+    }
+
+    // Analysis patterns
+    if (messageUpper.includes('ANALYZE') || messageUpper.includes('REVIEW')) {
+      scores.analysis += 25;
     }
 
     // Context-based adjustment
