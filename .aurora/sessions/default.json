@@ -1,12 +1,12 @@
 {
   "created_at": "2025-11-28T09:49:12.172536",
-  "message_count": 6,
+  "message_count": 7,
   "topics_discussed": [
     "api",
     "react"
   ],
   "user_preferences": {},
-  "conversation_depth": 6,
+  "conversation_depth": 7,
   "last_intent": null,
   "context_memory": [],
   "user_name": null,
@@ -14,9 +14,9 @@
   "mentioned_topics": [],
   "questions_asked": [],
   "detection": {
-    "type": "code_generation",
-    "executionMode": "fast",
-    "suggestedFormat": "code",
+    "type": "general_chat",
+    "executionMode": "standard",
+    "suggestedFormat": "mixed",
     "keywords": [],
     "tone": "technical"
   }
