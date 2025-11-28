@@ -1,6 +1,7 @@
 import { WebSocket, WebSocketServer } from 'ws';
 import { conversationDetector, type ConversationDetection } from './conversation-detector';
 import { conversationPatternAdapter } from './conversation-pattern-adapter';
+import { executeWithProgram } from './execution-dispatcher';
 
 // Aurora's chat WebSocket server
 export function setupAuroraChatWebSocket(server: any) {
@@ -65,7 +66,18 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
 
   conversationPatternAdapter.sendPatternToV2(detection, userMessage, previousMessages.join(' ')).catch(() => {});
 
-  // Call Aurora's REAL Python intelligence with detection parameters
+  // Route through execution dispatcher
+  try {
+    const dispatchedResponse = await executeWithProgram(userMessage, detection, sessionId, context);
+    return {
+      response: dispatchedResponse,
+      detection
+    };
+  } catch (dispatchError) {
+    console.log('[Aurora] Dispatcher fallback to core intelligence');
+  }
+
+  // Fallback: Call Aurora's REAL Python intelligence with detection parameters
   const { spawn } = await import('child_process');
   
   return new Promise((resolve) => {
