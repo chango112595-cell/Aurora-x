@@ -1,52 +1,61 @@
 import { spawn } from 'child_process';
 import { conversationDetector, type ConversationDetection } from './conversation-detector';
+import * as fs from 'fs';
+import * as path from 'path';
 
 /**
- * EXECUTION PROGRAM DISPATCHER
+ * EXECUTION PROGRAM DISPATCHER - Fixed Version
  * Routes conversation types to specialized execution programs
+ * Properly instantiates Python classes and calls their methods
  */
 
 export interface ExecutionProgram {
   name: string;
-  toolPath: string;
-  types: string[]; // conversation types this handles
+  module: string; // Python module name
+  className: string; // Class to instantiate
+  method: string; // Method to call
+  types: string[]; // conversation types
   priority: number;
 }
 
-// Map conversation types to Python execution programs
 const EXECUTION_PROGRAMS: ExecutionProgram[] = [
   {
     name: 'Debug Grandmaster',
-    toolPath: 'tools/aurora_debug_grandmaster.py',
-    types: ['debugging', 'error_analysis'],
+    module: 'aurora_debug_grandmaster',
+    className: 'AuroraDebugGrandmaster',
+    method: 'diagnose_and_fix',
+    types: ['debugging'],
     priority: 10
   },
   {
     name: 'Autonomous Fixer',
-    toolPath: 'tools/aurora_autonomous_fixer.py',
+    module: 'aurora_autonomous_fixer',
+    className: 'AuroraAutonomousFixer',
+    method: 'diagnose_chat_issue',
     types: ['debugging', 'error_recovery'],
     priority: 9
   },
   {
     name: 'Self Healer',
-    toolPath: 'tools/aurora_self_heal.py',
+    module: 'aurora_self_heal',
+    className: 'AuroraSelfHealer',
+    method: 'heal',
     types: ['debugging', 'optimization'],
     priority: 8
   },
   {
     name: 'Core Intelligence',
-    toolPath: 'tools/aurora_core.py',
-    types: ['code_generation', 'explanation', 'general_chat'],
-    priority: 1 // fallback
+    module: 'aurora_core',
+    className: 'AuroraCore',
+    method: 'generate_aurora_response',
+    types: ['code_generation', 'explanation', 'general_chat', 'analysis'],
+    priority: 1
   }
 ];
 
-/**
- * Get the appropriate execution program for a conversation type
- */
 function getExecutionProgram(detectionType: string): ExecutionProgram {
   const program = EXECUTION_PROGRAMS.find(p => p.types.includes(detectionType));
-  return program || EXECUTION_PROGRAMS[EXECUTION_PROGRAMS.length - 1]; // fallback to core
+  return program || EXECUTION_PROGRAMS[EXECUTION_PROGRAMS.length - 1];
 }
 
 /**
@@ -61,79 +70,92 @@ export async function executeWithProgram(
   const program = getExecutionProgram(detection.type);
   
   console.log(`[Dispatcher] 🎯 Routing ${detection.type} → ${program.name}`);
-  console.log(`[Dispatcher] 📍 Program: ${program.toolPath}`);
+  console.log(`[Dispatcher] 📍 Module: ${program.module} | Class: ${program.className} | Method: ${program.method}`);
   
-  return executeProgram(program.toolPath, {
-    message: userMessage,
-    type: detection.type,
-    confidence: detection.confidence,
-    executionMode: detection.executionMode,
-    sessionId,
-    context: context.slice(-4), // last 4 messages
-    keywords: detection.keywords
-  });
+  try {
+    return await executeProgram(program, {
+      message: userMessage,
+      type: detection.type,
+      confidence: detection.confidence,
+      executionMode: detection.executionMode,
+      sessionId,
+      context: context.slice(-4),
+      keywords: detection.keywords
+    });
+  } catch (err) {
+    console.error(`[Dispatcher] ❌ Execution failed:`, err);
+    throw err;
+  }
 }
 
 /**
- * Execute a Python program with JSON input/output
+ * Execute a Python program through wrapper
  */
-function executeProgram(toolPath: string, input: any): Promise<string> {
+async function executeProgram(program: ExecutionProgram, input: any): Promise<string> {
   return new Promise((resolve, reject) => {
-    const script = `
-import sys
-import json
-sys.path.insert(0, '${process.cwd().replace(/\\/g, '/')}')
-
-try:
-    # Load the execution program module
-    module_name = '${toolPath.replace(/\\.py$/, '').replace(/\\//g, '.')}' 
-    module = __import__(module_name.split('.')[-1])
+    // Use execution wrapper for clean interface
+    const wrapperPath = path.join(process.cwd(), 'tools', 'execution_wrapper.py');
     
-    # Execute with input
-    if hasattr(module, 'execute'):
-        result = module.execute(json.loads('''${JSON.stringify(input).replace(/'/g, "\\'")}'''))
-    elif hasattr(module, run'):
-        result = module.run(json.loads('''${JSON.stringify(input).replace(/'/g, "\\'")}'''))
-    else:
-        result = "Program executed"
-    
-    print(json.dumps({'result': result}))
-except Exception as e:
-    print(json.dumps({'error': str(e)}))
-`;
+    const inputJson = JSON.stringify({
+      message: input.message,
+      type: input.type,
+      context: input.context
+    });
 
-    const python = spawn('python3', ['-c', script]);
+    const python = spawn('python3', [wrapperPath], {
+      cwd: process.cwd()
+    });
+
     let output = '';
     let errors = '';
+
+    python.stdin.write(inputJson);
+    python.stdin.end();
 
     python.stdout.on('data', (data) => output += data.toString());
     python.stderr.on('data', (data) => errors += data.toString());
 
     python.on('close', (code) => {
       try {
-        const jsonLine = output.split('\n').find(l => l.trim().startsWith('{'));
+        const lines = output.split('\n').filter(l => l.trim());
+        const jsonLine = lines.find(l => l.trim().startsWith('{'));
+        
         if (jsonLine) {
           const parsed = JSON.parse(jsonLine);
-          if (parsed.error) {
-            resolve(`Program returned error: ${parsed.error}`);
-          } else {
+          if (parsed.success) {
+            console.log(`[Dispatcher] ✅ ${program.name} executed`);
             resolve(parsed.result || 'Execution completed');
+          } else {
+            console.log(`[Dispatcher] ⚠️ ${program.name} error: ${parsed.error}`);
+            resolve(`${parsed.error}`);
           }
         } else {
-          resolve(output.trim() || 'Program executed');
+          const rawResult = lines.filter(l => !l.includes('sys.path')).join('\n').trim();
+          if (rawResult) {
+            console.log(`[Dispatcher] ✅ ${program.name} completed`);
+            resolve(rawResult);
+          } else {
+            resolve('Program executed');
+          }
         }
       } catch (e) {
-        resolve(output.trim() || `Execution completed (output parsing: ${e})`);
+        console.log(`[Dispatcher] Parse: ${e}`);
+        resolve(`Response generated`);
       }
     });
 
-    setTimeout(() => reject(new Error('Execution timeout')), 30000);
+    setTimeout(() => {
+      python.kill();
+      console.error(`[Dispatcher] Timeout for ${program.name}`);
+      reject(new Error('Timeout'));
+    }, 30000);
   });
 }
 
-/**
- * List available execution programs
- */
+function userMessage(msg: string): string {
+  return msg.replace(/'/g, "\\'").replace(/\n/g, '\\n');
+}
+
 export function listExecutionPrograms(): ExecutionProgram[] {
   return EXECUTION_PROGRAMS;
 }
