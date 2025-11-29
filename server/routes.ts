@@ -311,7 +311,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isTerminalClient = client === 'terminal';
       console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId, 'Client:', client || 'web');
 
-      // Try routing to Luminar Nexus V2 first for specific system commands
+      // Try routing to Aurora AI Backend first (port 8000)
+      try {
+        const aiResponse = await fetch('http://0.0.0.0:8000/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            text: message, 
+            session_id: sessionId,
+            context: req.body.context || {} 
+          }),
+          signal: AbortSignal.timeout(30000) // 30 second timeout
+        });
+
+        if (aiResponse.ok) {
+          const aiData = await aiResponse.json();
+          console.log('[Aurora Chat] Routed to Aurora AI Backend successfully');
+          
+          return res.json({
+            ok: true,
+            response: aiData.response,
+            message: aiData.response,
+            session_id: sessionId,
+            ai_powered: true,
+            client: client || 'web',
+            intent: aiData.intent,
+            entities: aiData.entities
+          });
+        }
+      } catch (aiError) {
+        console.warn('[Aurora Chat] Aurora AI Backend unavailable, falling back to Express handler:', aiError);
+      }
+
+      // Fallback: Try routing to Luminar Nexus V2 for system commands
       const msgLower = message.toLowerCase().trim();
       const isSystemCommand = msgLower.includes('activate tier') || 
                               (msgLower.includes('luminar') && msgLower.includes('nexus') && msgLower.includes('integrate'));
@@ -334,7 +366,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
-      // Use Aurora's autonomous problem-solving for conversational responses
+      // Final fallback: Use Aurora's autonomous problem-solving
       const chatResult = await getChatResponse(message, sessionId, req.body.context);
       let response = typeof chatResult === 'string' ? chatResult : (chatResult as any).response || '';
       const detection = typeof chatResult === 'object' && (chatResult as any).detection ? (chatResult as any).detection : null;
