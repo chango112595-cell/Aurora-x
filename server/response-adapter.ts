@@ -196,15 +196,15 @@ export class ResponseAdapter {
 
     if (result && typeof result === 'object') {
       // Check for common response fields
-      if (result.response) return String(result.response);
-      if (result.message) return String(result.message);
-      if (result.answer) return String(result.answer);
-      if (result.result) return String(result.result);
+      if (result.response) return String(result.response).trim();
+      if (result.message) return String(result.message).trim();
+      if (result.answer) return String(result.answer).trim();
+      if (result.result) return String(result.result).trim();
 
       // Fallback to JSON
       return JSON.stringify(result, null, 2);
     }
 
-    return `Aurora processed: ${String(result)}`;
+    return String(result).trim() || 'I processed your request. How can I help further?';
   }
 }

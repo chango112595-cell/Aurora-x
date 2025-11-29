@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-11-29T13:46:36.747450",
+  "timestamp": "2025-11-29T13:48:33.446886",
   "health_before": {
-    "timestamp": "2025-11-29T13:46:36.747453",
+    "timestamp": "2025-11-29T13:48:33.446889",
     "systems": {
       "self_learn": {
         "name": "Self-Learning",
@@ -53,5 +53,5 @@
   "issues_found": [],
   "fixes_attempted": [],
   "fixes_successful": [],
-  "healing_duration_ms": 27.993000000000002
+  "healing_duration_ms": 35.623000000000005
 }

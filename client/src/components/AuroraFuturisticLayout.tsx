@@ -92,7 +92,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                   {navItems.filter(item => item.category === category).map(item => {
                     const isActive = location === item.path || (item.path !== '/' && location.startsWith(item.path));
                     return (
-                      <Link key={item.path} href={item.path} className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 block ${isActive
+                      <Link key={item.path} href={item.path} data-testid={`nav-link-${item.label.toLowerCase().replace(/\s+/g, '-')}`} className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 block cursor-pointer ${isActive
                         ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20'
                         : 'text-purple-300 hover:bg-purple-500/10 hover:text-white'
                         }`}>

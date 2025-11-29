@@ -102,10 +102,10 @@ sys.path.insert(0, '${process.cwd().replace(/\\/g, '/')}')
 # Suppress ALL debug output
 os.environ['AURORA_DEBUG'] = '0'
 
-from aurora_core import AuroraCoreIntelligence
+from aurora_core import AuroraCore
 
 try:
-    aurora = AuroraCoreIntelligence()
+    aurora = AuroraCore()
 
     # Get context FIRST
     context = aurora.get_conversation_context('${sessionId}')
