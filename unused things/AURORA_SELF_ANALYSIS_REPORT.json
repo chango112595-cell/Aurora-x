@@ -1,0 +1,152 @@
+{
+  "timestamp": "2025-11-21T03:53:06.166896",
+  "system_health": {},
+  "services": {
+    "running": [
+      "\u2705 Frontend Server (Port 5000)",
+      "\u2705 Bridge Service (Port 5001)",
+      "\u2705 Self-Learn Service (Port 5002)"
+    ],
+    "failed": [
+      "\u274c Chat Server (Port 9000): HTTP 000"
+    ],
+    "operational_percentage": 75.0
+  },
+  "code_quality": {
+    "critical_files": {
+      "aurora_core.py": {
+        "exists": true,
+        "description": "Core Intelligence System",
+        "size": 88038,
+        "size_kb": "86.0KB"
+      },
+      "aurora_chat_server.py": {
+        "exists": true,
+        "description": "Chat Server",
+        "size": 6490,
+        "size_kb": "6.3KB"
+      },
+      "chat_with_aurora.py": {
+        "exists": true,
+        "description": "Interactive Chat Interface",
+        "size": 10828,
+        "size_kb": "10.6KB"
+      },
+      "x-start": {
+        "exists": true,
+        "description": "Service Launcher",
+        "size": 4481,
+        "size_kb": "4.4KB"
+      },
+      "server/index.ts": {
+        "exists": true,
+        "description": "Backend Server",
+        "size": 3210,
+        "size_kb": "3.1KB"
+      },
+      "server/aurora-chat.ts": {
+        "exists": true,
+        "description": "Chat Routes",
+        "size": 1872,
+        "size_kb": "1.8KB"
+      }
+    }
+  },
+  "architecture": {
+    "core_intelligence": {
+      "foundation_count": 13,
+      "knowledge_tier_count": 66,
+      "total_tiers": 79,
+      "capabilities_count": 66,
+      "hybrid_mode": "66 tiers + 79 capabilities"
+    },
+    "python_packages": {
+      "installed": {
+        "flask": "3.1.2",
+        "fastapi": "0.121.3",
+        "uvicorn": "0.38.0",
+        "flask-cors": "6.0.1"
+      },
+      "missing": [],
+      "total_packages": 137
+    }
+  },
+  "performance": {
+    "aurora_processes": 11,
+    "cpu_percent": 14.0,
+    "memory_percent": 60.7,
+    "disk_percent": 3.5,
+    "processes": [
+      {
+        "pid": 4193,
+        "name": "node",
+        "cmdline": "node /workspaces/Aurora-x/node_modules/.bin/cross-env NODE_ENV=development tsx server/index.ts",
+        "memory_mb": 54.0625
+      },
+      {
+        "pid": 4211,
+        "name": "node",
+        "cmdline": "node /workspaces/Aurora-x/node_modules/.bin/tsx server/index.ts",
+        "memory_mb": 58.98046875
+      },
+      {
+        "pid": 4222,
+        "name": "node",
+        "cmdline": "/usr/local/share/nvm/versions/node/v22.15.0/bin/node --require /workspaces/Aurora-x/node_modules/tsx",
+        "memory_mb": 222.60546875
+      },
+      {
+        "pid": 4266,
+        "name": "python3",
+        "cmdline": "python3 -m aurora_x.bridge.service",
+        "memory_mb": 44.21875
+      },
+      {
+        "pid": 4273,
+        "name": "esbuild",
+        "cmdline": "/workspaces/Aurora-x/node_modules/@esbuild/linux-x64/bin/esbuild --service=0.25.12 --ping",
+        "memory_mb": 13.2734375
+      },
+      {
+        "pid": 4322,
+        "name": "python3",
+        "cmdline": "python3 -m aurora_x.self_learn_server",
+        "memory_mb": 44.84375
+      },
+      {
+        "pid": 4351,
+        "name": "python3",
+        "cmdline": "python3 aurora_chat_server.py --port 5003",
+        "memory_mb": 32.1875
+      },
+      {
+        "pid": 4409,
+        "name": "python3",
+        "cmdline": "python3 aurora_autonomous_monitor.py",
+        "memory_mb": 12.8125
+      },
+      {
+        "pid": 4460,
+        "name": "python3",
+        "cmdline": "python3 aurora_automatic_system_update.py",
+        "memory_mb": 21.25
+      },
+      {
+        "pid": 4613,
+        "name": "esbuild",
+        "cmdline": "/workspaces/Aurora-x/node_modules/vite/node_modules/@esbuild/linux-x64/bin/esbuild --service=0.21.5 ",
+        "memory_mb": 10.44140625
+      },
+      {
+        "pid": 6012,
+        "name": "python3",
+        "cmdline": "python3 aurora_deep_self_analysis.py",
+        "memory_mb": 21.40625
+      }
+    ]
+  },
+  "issues": [],
+  "recommendations": [
+    "Some services are not running - check service logs and restart failed services"
+  ]
+}

@@ -1,0 +1,31 @@
+# Aurora-X Test Dependencies
+# Install with: pip install -r requirements-test.txt
+
+# Testing Framework
+pytest>=8.3.5
+pytest-cov>=4.1.0
+pytest-asyncio>=0.23.0
+pytest-mock>=3.12.0
+pytest-xdist>=3.5.0
+pytest-timeout>=2.2.0
+pytest-html>=4.1.1
+
+# Test Coverage
+coverage>=7.4.0
+
+# Mocking and Fixtures
+faker>=22.0.0
+factory-boy>=3.3.0
+responses>=0.24.1
+
+# HTTP Testing
+httpx>=0.28.1
+
+# Database Testing
+pytest-postgresql>=5.0.0
+
+# Async Testing (Python 3.11+ compatible)
+# asynctest is for Python <3.8, not needed for 3.11+
+
+# Test Utilities
+freezegun>=1.4.0

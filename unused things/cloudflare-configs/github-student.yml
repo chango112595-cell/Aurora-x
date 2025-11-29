@@ -1,0 +1,14 @@
+# Option 3: GitHub Student Pack (Free .me domain)
+# Get yours at: https://education.github.com/pack
+# Includes free domain from Namecheap
+
+tunnel: YOUR-TUNNEL-UUID  # Run: cloudflared tunnel create aurora
+credentials-file: /home/$USER/.cloudflared/YOUR-TUNNEL-UUID.json
+
+ingress:
+  - hostname: aurora.yourname.me  # Your free .me domain
+    service: http://localhost:8000
+    originRequest:
+      httpHostHeader: aurora.yourname.me
+      noTLSVerify: true
+  - service: http_status:404

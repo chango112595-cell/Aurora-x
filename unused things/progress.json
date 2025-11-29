@@ -1,0 +1,150 @@
+{
+  "project": "AURORA-X Ultra",
+  "updated_utc": "2025-10-12T16:04:33Z",
+  "ui_thresholds": {
+    "ok": 90,
+    "warn": 60
+  },
+  "tasks": [
+    {
+      "id": "T01",
+      "name": "Foundation Core",
+      "percent": 100,
+      "status": "complete",
+      "category": "Core",
+      "notes": [
+        "Isolation architecture, CLI, Makefile, progress tracker, CI checks"
+      ]
+    },
+    {
+      "id": "T02",
+      "name": "Learning & Memory Core",
+      "percent": 100,
+      "status": "complete",
+      "category": "Core",
+      "notes": [
+        "Persistent corpus, bias seeds, telemetry scaffolding, regression gates"
+      ]
+    },
+    {
+      "id": "T03",
+      "name": "Adaptive Learning Engine",
+      "percent": 100,
+      "status": "complete",
+      "category": "Core",
+      "notes": [
+        "\u03b5-greedy bias scheduler, drift tracking, sparklines"
+      ]
+    },
+    {
+      "id": "T04",
+      "name": "Production Hardening",
+      "percent": 100,
+      "status": "complete",
+      "category": "Ops",
+      "notes": [
+        "CI gates, daily snapshot, drift caps, Makefile.prod"
+      ]
+    },
+    {
+      "id": "T05",
+      "name": "Live Dashboard",
+      "percent": 100,
+      "status": "complete",
+      "category": "UI",
+      "notes": [
+        "Real-time bias history & stats widgets"
+      ]
+    },
+    {
+      "id": "T06",
+      "name": "English \u2192 Code Synthesis Engine",
+      "percent": 100,
+      "status": "complete",
+      "category": "Core",
+      "notes": [
+        "Natural language spec parsing, auto-type detection, fallbacks"
+      ]
+    },
+    {
+      "id": "T07",
+      "name": "Orchestrator",
+      "percent": 100,
+      "status": "complete",
+      "category": "Ops",
+      "notes": [
+        "Auto-synthesis on spec changes, Git auto-commit/push, Discord alerts"
+      ]
+    },
+    {
+      "id": "T08",
+      "name": "Universal Code Intelligence Layer",
+      "percent": 100,
+      "status": "complete",
+      "category": "Core Learning",
+      "notes": [
+        "All known languages supported; math/physics/quantum/space integration underway"
+      ]
+    },
+    {
+      "id": "T09",
+      "name": "Template Expansion System",
+      "percent": 100,
+      "status": "complete",
+      "category": "Core",
+      "notes": [
+        "UI/API/Data templates; fallback recovery; code quality analyzer"
+      ]
+    },
+    {
+      "id": "T10",
+      "name": "Cross-Platform Runtime (OS Matrix)",
+      "percent": 100,
+      "status": "in-progress",
+      "category": "Runtime",
+      "notes": [
+        "Linux/Windows/macOS matrix; ARM64 container; phone-friendly PWA"
+      ]
+    },
+    {
+      "id": "T11",
+      "name": "Deployment Infrastructure",
+      "percent": 100,
+      "status": "complete",
+      "category": "Ops",
+      "notes": [
+        "Auto-updater cron, SSH deploy, GHCR pipeline, Cloudflare Tunnel, health gates"
+      ]
+    },
+    {
+      "id": "T12",
+      "name": "Aurora Factory Protocol (Bridge)",
+      "percent": 100,
+      "status": "in-development",
+      "category": "Automation",
+      "notes": [
+        "Internal bridge: Chat \u2192 GitHub \u2192 Replit \u2192 Deploy \u2192 Test"
+      ]
+    },
+    {
+      "id": "T13",
+      "name": "Universal Code Synthesis Engine (UCSE)",
+      "percent": 100,
+      "status": "complete",
+      "category": "Core",
+      "notes": [
+        "Accept any English request; auto-scope to full code or staged scaffold; safety & logic gating; session memory"
+      ]
+    }
+  ],
+  "active": [
+    "T08",
+    "T10",
+    "T12"
+  ],
+  "rules": [
+    "progress.json is the single source of truth",
+    "MASTER_TASK_LIST.md is generated; do not edit manually",
+    "STRICT_GATING: only advance when acceptance criteria are met"
+  ]
+}

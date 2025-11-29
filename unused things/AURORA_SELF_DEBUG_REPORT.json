@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-11-24T08:27:58.077623",
+  "issues_found": [
+    "Ports {5004, 5173} not configured in x-start",
+    "Vite frontend (5173) not configured",
+    "Services not running on ports: [5004, 5173]",
+    "Vite config has port 5173 but x-start doesn't use it"
+  ],
+  "fixes_applied": [],
+  "running_ports": [
+    5000,
+    5001,
+    5002,
+    5003,
+    5005
+  ],
+  "missing_ports": [
+    5004,
+    5173
+  ],
+  "recommendation": "Port 5004 not needed. Port 5173 optional for separate Vite dev server."
+}

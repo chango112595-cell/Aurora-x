@@ -1,0 +1,257 @@
+************* Module aurora_complete_lint_solution
+aurora_complete_lint_solution.py:10:13: W0621: Redefining name 'filepath' from outer scope (line 135) (redefined-outer-name)
+aurora_complete_lint_solution.py:10:23: W0621: Redefining name 'old' from outer scope (line 235) (redefined-outer-name)
+aurora_complete_lint_solution.py:10:28: W0621: Redefining name 'new' from outer scope (line 235) (redefined-outer-name)
+aurora_complete_lint_solution.py:15:54: W0621: Redefining name 'f' from outer scope (line 166) (redefined-outer-name)
+aurora_complete_lint_solution.py:16:12: W0621: Redefining name 'content' from outer scope (line 167) (redefined-outer-name)
+aurora_complete_lint_solution.py:27:20: W0621: Redefining name 'filepath' from outer scope (line 135) (redefined-outer-name)
+aurora_complete_lint_solution.py:32:54: W0621: Redefining name 'f' from outer scope (line 166) (redefined-outer-name)
+aurora_complete_lint_solution.py:33:12: W0621: Redefining name 'lines' from outer scope (line 180) (redefined-outer-name)
+aurora_complete_lint_solution.py:35:8: W0621: Redefining name 'new_lines' from outer scope (line 183) (redefined-outer-name)
+aurora_complete_lint_solution.py:36:12: W0621: Redefining name 'line' from outer scope (line 185) (redefined-outer-name)
+aurora_complete_lint_solution.py:38:16: W0621: Redefining name 'unused' from outer scope (line 135) (redefined-outer-name)
+aurora_complete_lint_solution.py:57:25: W0621: Redefining name 'filepath' from outer scope (line 135) (redefined-outer-name)
+aurora_complete_lint_solution.py:62:54: W0621: Redefining name 'f' from outer scope (line 166) (redefined-outer-name)
+aurora_complete_lint_solution.py:63:12: W0621: Redefining name 'content' from outer scope (line 167) (redefined-outer-name)
+aurora_complete_lint_solution.py:88:22: W0621: Redefining name 'filepath' from outer scope (line 135) (redefined-outer-name)
+aurora_complete_lint_solution.py:93:54: W0621: Redefining name 'f' from outer scope (line 166) (redefined-outer-name)
+aurora_complete_lint_solution.py:94:12: W0621: Redefining name 'content' from outer scope (line 167) (redefined-outer-name)
+************* Module aurora_create_luminar_v2
+aurora_create_luminar_v2.py:20:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module aurora_diagnose_chat
+aurora_diagnose_chat.py:60:13: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+aurora_diagnose_chat.py:81:15: W3101: Missing timeout argument for method 'requests.options' can cause your program to hang indefinitely (missing-timeout)
+aurora_diagnose_chat.py:90:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module aurora_full_system_debug
+aurora_full_system_debug.py:64:16: W0612: Unused variable 'module' (unused-variable)
+aurora_full_system_debug.py:176:21: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+aurora_full_system_debug.py:221:21: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+aurora_full_system_debug.py:300:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module aurora_organize_system
+aurora_organize_system.py:35:8: W0612: Unused variable 'name' (unused-variable)
+************* Module aurora_review_before_cleanup
+aurora_review_before_cleanup.py:49:12: W0702: No exception type(s) specified (bare-except)
+************* Module aurora_self_debug_chat
+aurora_self_debug_chat.py:63:13: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+aurora_self_debug_chat.py:77:13: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+************* Module aurora_self_fix_monitor
+aurora_self_fix_monitor.py:41:11: E0602: Undefined variable 'Path' (undefined-variable)
+aurora_self_fix_monitor.py:44:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module aurora_server_manager
+aurora_server_manager.py:55:17: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+aurora_server_manager.py:67:17: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+aurora_server_manager.py:104:12: W0612: Unused variable 'service_name' (unused-variable)
+aurora_server_manager.py:195:27: W0613: Unused argument 'service_name' (unused-argument)
+************* Module aurora_status_report
+aurora_status_report.py:23:17: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+aurora_status_report.py:54:8: E0401: Unable to import 'aurora_expert_knowledge' (import-error)
+aurora_status_report.py:79:8: E0401: Unable to import 'aurora_approval_system' (import-error)
+************* Module aurora_ultimate_coding_grandmaster
+aurora_ultimate_coding_grandmaster.py:97:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module aurora_ultimate_omniscient_grandmaster
+aurora_ultimate_omniscient_grandmaster.py:1555:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module check_aurora_now
+check_aurora_now.py:23:8: W0702: No exception type(s) specified (bare-except)
+************* Module create_a_simple_hello_world
+create_a_simple_hello_world.py:64:8: W0621: Redefining name 'result' from outer scope (line 318) (redefined-outer-name)
+create_a_simple_hello_world.py:60:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+create_a_simple_hello_world.py:83:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+create_a_simple_hello_world.py:116:4: W0621: Redefining name 'result' from outer scope (line 318) (redefined-outer-name)
+create_a_simple_hello_world.py:146:21: W0621: Redefining name 'result' from outer scope (line 318) (redefined-outer-name)
+create_a_simple_hello_world.py:146:34: W0622: Redefining built-in 'format' (redefined-builtin)
+create_a_simple_hello_world.py:177:8: W0621: Redefining name 'result' from outer scope (line 318) (redefined-outer-name)
+create_a_simple_hello_world.py:187:8: W0621: Redefining name 'result' from outer scope (line 318) (redefined-outer-name)
+create_a_simple_hello_world.py:192:8: W0621: Redefining name 'result' from outer scope (line 318) (redefined-outer-name)
+create_a_simple_hello_world.py:209:8: W0621: Redefining name 'result' from outer scope (line 318) (redefined-outer-name)
+create_a_simple_hello_world.py:229:8: W0621: Redefining name 'result' from outer scope (line 318) (redefined-outer-name)
+create_a_simple_hello_world.py:226:21: W0621: Redefining name 'result' from outer scope (line 318) (redefined-outer-name)
+create_a_simple_hello_world.py:245:8: W0621: Redefining name 'result' from outer scope (line 318) (redefined-outer-name)
+************* Module diagnostic_server
+diagnostic_server.py:180:8: W0702: No exception type(s) specified (bare-except)
+diagnostic_server.py:178:17: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+diagnostic_server.py:289:26: W0622: Redefining built-in 'format' (redefined-builtin)
+diagnostic_server.py:291:8: W0107: Unnecessary pass statement (unnecessary-pass)
+************* Module fix_makefile_tabs
+fix_makefile_tabs.py:27:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module generated_lib_func
+generated_lib_func.py:30:14: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+generated_lib_func.py:71:24: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+generated_lib_func.py:185:12: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+generated_lib_func.py:194:12: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+generated_lib_func.py:199:12: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+generated_lib_func.py:222:8: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+************* Module generated_timer_app
+generated_timer_app.py:10:4: W0621: Redefining name 'app' from outer scope (line 22) (redefined-outer-name)
+************* Module generated_web_app
+generated_web_app.py:10:4: W0621: Redefining name 'app' from outer scope (line 22) (redefined-outer-name)
+************* Module luminar-keeper
+luminar-keeper.py:46:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+luminar-keeper.py:95:8: W0702: No exception type(s) specified (bare-except)
+luminar-keeper.py:98:29: W0613: Unused argument 'sig' (unused-argument)
+luminar-keeper.py:98:34: W0613: Unused argument 'frame' (unused-argument)
+luminar-keeper.py:109:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+luminar-keeper.py:190:22: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+luminar-keeper.py:194:12: W0702: No exception type(s) specified (bare-except)
+luminar-keeper.py:204:22: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+luminar-keeper.py:208:12: W0702: No exception type(s) specified (bare-except)
+************* Module new_lib_factorial
+new_lib_factorial.py:30:14: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+new_lib_factorial.py:71:24: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+new_lib_factorial.py:185:12: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+new_lib_factorial.py:194:12: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+new_lib_factorial.py:199:12: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+new_lib_factorial.py:222:8: W0621: Redefining name 'n' from outer scope (line 240) (redefined-outer-name)
+************* Module prod_config
+prod_config.py:184:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module setup
+setup.py:2:0: E0401: Unable to import 'setuptools' (import-error)
+************* Module start_aurora_autonomous
+start_aurora_autonomous.py:42:23: W0613: Unused argument 'signum' (unused-argument)
+start_aurora_autonomous.py:42:31: W0613: Unused argument 'frame' (unused-argument)
+start_aurora_autonomous.py:62:21: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+start_aurora_autonomous.py:77:25: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+start_aurora_autonomous.py:94:16: E1101: Instance of 'AuroraAutonomousFixer' has no 'auto_fix' member (no-member)
+start_aurora_autonomous.py:116:21: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+start_aurora_autonomous.py:129:12: W0702: No exception type(s) specified (bare-except)
+start_aurora_autonomous.py:124:21: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test
+test.py:61:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test.py:57:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+test.py:80:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+test.py:113:4: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test.py:143:21: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test.py:143:34: W0622: Redefining built-in 'format' (redefined-builtin)
+test.py:174:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test.py:184:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test.py:189:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test.py:206:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test.py:226:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test.py:223:21: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test.py:242:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test.py:283:28: E0602: Undefined variable 'func_name' (undefined-variable)
+test.py:302:13: E0602: Undefined variable 'func_name' (undefined-variable)
+test.py:316:21: E0602: Undefined variable 'func_name' (undefined-variable)
+test.py:318:21: E0602: Undefined variable 'func_name' (undefined-variable)
+test.py:322:13: E0602: Undefined variable 'func_name' (undefined-variable)
+test.py:323:13: E0602: Undefined variable 'func_name' (undefined-variable)
+test.py:328:13: E0602: Undefined variable 'func_name' (undefined-variable)
+************* Module test_api_endpoints
+test_api_endpoints.py:21:15: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+test_api_endpoints.py:27:15: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+test_api_endpoints.py:33:15: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+test_api_endpoints.py:39:15: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+************* Module test_api_units
+test_api_units.py:53:19: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+************* Module test_aurora_english
+test_aurora_english.py:13:13: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+************* Module test_aurora_response
+test_aurora_response.py:61:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test_aurora_response.py:57:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+test_aurora_response.py:80:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+test_aurora_response.py:113:4: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test_aurora_response.py:143:21: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test_aurora_response.py:143:34: W0622: Redefining built-in 'format' (redefined-builtin)
+test_aurora_response.py:174:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test_aurora_response.py:184:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test_aurora_response.py:189:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test_aurora_response.py:206:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test_aurora_response.py:226:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test_aurora_response.py:223:21: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test_aurora_response.py:242:8: W0621: Redefining name 'result' from outer scope (line 315) (redefined-outer-name)
+test_aurora_response.py:283:28: E0602: Undefined variable 'func_name' (undefined-variable)
+test_aurora_response.py:302:13: E0602: Undefined variable 'func_name' (undefined-variable)
+test_aurora_response.py:316:21: E0602: Undefined variable 'func_name' (undefined-variable)
+test_aurora_response.py:318:21: E0602: Undefined variable 'func_name' (undefined-variable)
+test_aurora_response.py:322:13: E0602: Undefined variable 'func_name' (undefined-variable)
+test_aurora_response.py:323:13: E0602: Undefined variable 'func_name' (undefined-variable)
+test_aurora_response.py:328:13: E0602: Undefined variable 'func_name' (undefined-variable)
+************* Module test_chat_router
+test_chat_router.py:12:23: W0621: Redefining name 'prompt' from outer scope (line 67) (redefined-outer-name)
+test_chat_router.py:31:8: W0621: Redefining name 'result' from outer scope (line 68) (redefined-outer-name)
+************* Module test_chat_simple
+test_chat_simple.py:32:19: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+test_chat_simple.py:38:19: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+test_chat_simple.py:44:19: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+test_chat_simple.py:53:17: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test_cli_generic
+test_cli_generic.py:61:23: W0613: Unused argument 'args' (unused-argument)
+test_cli_generic.py:87:17: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test_complete_router
+test_complete_router.py:14:25: W0621: Redefining name 'prompt' from outer scope (line 64) (redefined-outer-name)
+test_complete_router.py:29:8: W0621: Redefining name 'filename' from outer scope (line 65) (redefined-outer-name)
+************* Module test_dashboard_simple
+test_dashboard_simple.py:17:30: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+test_dashboard_simple.py:20:18: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test_demo_cards
+test_demo_cards.py:59:15: W3101: Missing timeout argument for method 'requests.get' can cause your program to hang indefinitely (missing-timeout)
+************* Module test_demo_dashboard
+test_demo_dashboard.py:13:30: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test_english_synthesis
+test_english_synthesis.py:21:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+test_english_synthesis.py:25:4: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+test_english_synthesis.py:35:17: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test_enhanced_pretty
+test_enhanced_pretty.py:75:19: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+************* Module test_fastapi_chat_complete
+test_fastapi_chat_complete.py:49:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test_formatter
+test_formatter.py:56:19: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+************* Module test_healthz
+test_healthz.py:19:18: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+test_healthz.py:71:18: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test_lib_factorial
+test_lib_factorial.py:24:14: W0621: Redefining name 'n' from outer scope (line 220) (redefined-outer-name)
+test_lib_factorial.py:65:24: W0621: Redefining name 'n' from outer scope (line 220) (redefined-outer-name)
+test_lib_factorial.py:165:12: W0621: Redefining name 'n' from outer scope (line 220) (redefined-outer-name)
+test_lib_factorial.py:174:12: W0621: Redefining name 'n' from outer scope (line 220) (redefined-outer-name)
+test_lib_factorial.py:179:12: W0621: Redefining name 'n' from outer scope (line 220) (redefined-outer-name)
+test_lib_factorial.py:202:8: W0621: Redefining name 'n' from outer scope (line 220) (redefined-outer-name)
+test_lib_factorial.py:229:8: W0404: Reimport 'pytest' (imported line 20) (reimported)
+************* Module test_lib_generic
+test_lib_generic.py:55:8: W0621: Redefining name 'result' from outer scope (line 296) (redefined-outer-name)
+test_lib_generic.py:51:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+test_lib_generic.py:74:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+test_lib_generic.py:107:4: W0621: Redefining name 'result' from outer scope (line 296) (redefined-outer-name)
+test_lib_generic.py:137:21: W0621: Redefining name 'result' from outer scope (line 296) (redefined-outer-name)
+test_lib_generic.py:137:34: W0622: Redefining built-in 'format' (redefined-builtin)
+test_lib_generic.py:168:8: W0621: Redefining name 'result' from outer scope (line 296) (redefined-outer-name)
+test_lib_generic.py:178:8: W0621: Redefining name 'result' from outer scope (line 296) (redefined-outer-name)
+test_lib_generic.py:183:8: W0621: Redefining name 'result' from outer scope (line 296) (redefined-outer-name)
+test_lib_generic.py:193:8: W0621: Redefining name 'result' from outer scope (line 296) (redefined-outer-name)
+test_lib_generic.py:213:8: W0621: Redefining name 'result' from outer scope (line 296) (redefined-outer-name)
+test_lib_generic.py:210:21: W0621: Redefining name 'result' from outer scope (line 296) (redefined-outer-name)
+test_lib_generic.py:229:8: W0621: Redefining name 'result' from outer scope (line 296) (redefined-outer-name)
+test_lib_generic.py:263:28: E0606: Possibly using variable 'func_name' before assignment (possibly-used-before-assignment)
+test_lib_generic.py:318:8: W0404: Reimport 'pytest' (imported line 16) (reimported)
+************* Module test_pretty
+test_pretty.py:66:19: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+************* Module test_runall
+test_runall.py:32:12: W0404: Reimport 'attach_demo' (imported line 14) (reimported)
+test_runall.py:64:16: W0106: Expression "{'generated_utc': datetime.utcnow().isoformat(), 'timestamp': timestamp, 'total_cards': len(cards), 'successful': len(results), 'failed': 0, 'results': results}" is assigned to nothing (expression-not-assigned)
+test_runall.py:96:18: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test_t08_e2e
+test_t08_e2e.py:92:14: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test_t08_offline
+test_t08_offline.py:89:20: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module test_templates
+test_templates.py:131:17: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+test_templates.py:153:17: W1510: 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+************* Module test_timer_app
+test_timer_app.py:480:4: W0621: Redefining name 'app' from outer scope (line 540) (redefined-outer-name)
+************* Module test_units
+test_units.py:133:23: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+test_units.py:156:23: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+************* Module test_units_formatter
+test_units_formatter.py:60:15: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+test_units_formatter.py:87:15: W3101: Missing timeout argument for method 'requests.post' can cause your program to hang indefinitely (missing-timeout)
+************* Module test_updated_demo
+test_updated_demo.py:24:4: W0621: Redefining name 'result' from outer scope (line 178) (redefined-outer-name)
+test_updated_demo.py:81:4: W0621: Redefining name 'asyncio' from outer scope (line 4) (redefined-outer-name)
+test_updated_demo.py:96:4: W0621: Redefining name 'result' from outer scope (line 178) (redefined-outer-name)
+test_updated_demo.py:81:4: W0404: Reimport 'asyncio' (imported line 4) (reimported)
+************* Module timer_app
+timer_app.py:129:4: W0621: Redefining name 'app' from outer scope (line 152) (redefined-outer-name)
+
+------------------------------------------------------------------
+Your code has been rated at 9.72/10 (previous run: 9.82/10, -0.10)
+
