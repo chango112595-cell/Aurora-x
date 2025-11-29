@@ -88,6 +88,10 @@ externalPort = 3000
 localPort = 45603
 externalPort = 6800
 
+[[ports]]
+localPort = 6000
+externalPort = 6000
+
 [env]
 PORT = "5000"
 
@@ -142,6 +146,10 @@ args = "Start application"
 task = "workflow.run"
 args = "Luminar Nexus V2"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Aurora Nexus V3"
+
 [[workflows.workflow]]
 name = "Start application"
 author = "agent"
@@ -165,6 +173,17 @@ outputType = "console"
 task = "shell.exec"
 args = "python3 tools/luminar_nexus_v2.py serve"
 waitForPort = 8000
+
+[[workflows.workflow]]
+name = "Aurora Nexus V3"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 aurora_nexus_v3/main.py"
+
+[workflows.workflow.metadata]
+outputType = "console"
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]

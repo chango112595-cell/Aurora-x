@@ -6,10 +6,13 @@ Main entry point for starting the Aurora Nexus server
 
 import asyncio
 import sys
+import os
 import signal
 from typing import Optional
 
-from .core import AuroraUniversalCore, NexusConfig
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from aurora_nexus_v3.core import AuroraUniversalCore, NexusConfig
 
 
 class NexusServer:
