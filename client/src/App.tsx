@@ -20,6 +20,7 @@ import Evolution from "./pages/evolution";
 import Tasks from "./pages/tasks";
 import Tiers from "./pages/tiers";
 import Intelligence from "./pages/intelligence";
+import AuroraAITest from "@/pages/aurora-ai-test";
 import NotFound from "./pages/not-found";
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <Route path="/evolution" component={Evolution} />
         <Route path="/intelligence" component={Intelligence} />
         <Route path="/aurora-ui" component={AuroraUI} />
+        <Route path="/aurora-ai-test" component={AuroraAITest} />
         <Route component={NotFound} />
       </Switch>
     </AuroraFuturisticLayout>
