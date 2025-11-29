@@ -13,9 +13,9 @@ export async function executeWithProgram(
   sessionId: string,
   context: any[]
 ): Promise<string> {
-  
+
   console.log(`[Dispatcher] 🎯 Routing ${detection.type} (confidence: ${detection.confidence}%)`);
-  
+
   try {
     return await callExecutionWrapper({
       message: userMessage,
@@ -50,17 +50,35 @@ function callExecutionWrapper(input: any): Promise<string> {
         if (jsonLine) {
           const parsed = JSON.parse(jsonLine);
           if (parsed.success) {
-            console.log(`[Dispatcher] ✅ Execution completed`);
-            resolve(parsed.result || 'Done');
+            console.log('[Dispatcher] ✅ Execution completed');
+
+            // Ensure result is valid and returned
+            if (!parsed.result || typeof parsed.result !== 'object') {
+              resolve({
+                status: 'success',
+                result: 'Task completed',
+                timestamp: new Date().toISOString()
+              });
+            } else {
+              resolve(parsed.result);
+            }
           } else {
-            resolve(parsed.error || 'Executed');
+            resolve({
+              status: 'error',
+              error: parsed.error || 'Execution failed',
+              timestamp: new Date().toISOString()
+            });
           }
         } else {
           resolve(output.trim() || 'Response generated');
         }
       } catch (e) {
-        resolve('Response generated');
+        reject(new Error('Failed to parse response'));
       }
+    });
+
+    python.stderr.on('data', (data) => {
+      console.error(`[Dispatcher] Python stderr: ${data}`);
     });
 
     setTimeout(() => {

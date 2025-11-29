@@ -151,4 +151,55 @@ export class ResponseAdapter {
       return `${response}\n\n❓ Not entirely sure what you're asking - could you clarify?`;
     }
   }
+
+  // The following 'adapt' method seems to be from a different context or an older version.
+  // It's replaced by the 'adaptResponse' method above which handles string and ConversationDetection.
+  // Keeping it here for context but it should ideally be removed or reconciled if it's meant to be used.
+  // If this method IS intended to be used, it would need to be correctly integrated or its purpose clarified.
+  // For now, assuming 'adaptResponse' is the correct method for the current use case.
+
+  // static adapt(result: any, pattern: ConversationPattern): string {
+  //   console.log('[Aurora] ✨ Response adapted for:', pattern.intent);
+  //
+  //   // Return the result or a default message
+  //   if (typeof result === 'string') {
+  //     return result;
+  //   }
+  //
+  //   if (result && typeof result === 'object') {
+  //     return JSON.stringify(result, null, 2);
+  //   }
+  //
+  //   return 'Aurora processed: ' + JSON.stringify(result);
+  // }
+
+  /**
+   * Adapts a raw result into a string response, ensuring a valid string is always returned.
+   * This method is intended to handle various result types from Aurora's processing.
+   */
+  static adapt(result: any, pattern: ConversationPattern): string {
+    console.log('[Aurora] ✨ Response adapted for:', pattern.intent);
+
+    // Always return a valid string response
+    if (!result) {
+      return `Aurora processed your request (${pattern.intent}) but generated no output. Please try rephrasing your question.`;
+    }
+
+    if (typeof result === 'string') {
+      return result.trim() || 'Aurora received your message but has no response.';
+    }
+
+    if (result && typeof result === 'object') {
+      // Check for common response fields
+      if (result.response) return String(result.response);
+      if (result.message) return String(result.message);
+      if (result.answer) return String(result.answer);
+      if (result.result) return String(result.result);
+
+      // Fallback to JSON
+      return JSON.stringify(result, null, 2);
+    }
+
+    return `Aurora processed: ${String(result)}`;
+  }
 }
