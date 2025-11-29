@@ -5,6 +5,12 @@ Part of Aurora's 35-file Universal Deployment system
 This module provides terminal-based chat interface for Aurora.
 Derived from chat_with_aurora.py for tools integration.
 
+NOTE: For FULL POWER mode with all 188 tiers, 66 execution modes, 
+550+ modules, persistent memory, and autonomous execution, use:
+    python3 tools/aurora_terminal_chat_full_power.py
+or run:
+    ./aurora-terminal-chat
+
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """

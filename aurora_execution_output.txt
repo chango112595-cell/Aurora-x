@@ -1,4 +1,0 @@
-  File "C:\Users\negry\Aurora-x\aurora_ultimate_self_healing_system_DRAFT2.py", line 67
-    self.integrate_aurora_core()    def safe_print(self, message):
-                                    ^^^
-SyntaxError: invalid syntax

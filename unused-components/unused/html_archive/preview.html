@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora-X Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0a0e17, #131925);
+            color: #e0e8f0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            background: #1a2332;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid #2a3441;
+        }
+
+        .header h1 {
+            color: #00ffff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            background: #1a2332;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #2a3441;
+        }
+
+        .endpoint {
+            background: #131925;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00ffff;
+        }
+
+        .endpoint h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+
+        .endpoint code {
+            background: #0a0e17;
+            color: #10b981;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #00ffff, #9333ea);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+
+        .test-button:hover {
+            opacity: 0.8;
+        }
+
+        .result {
+            background: #0a0e17;
+            border: 1px solid #2a3441;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .status.online {
+            background: #10b981;
+            color: #000;
+        }
+
+        .status.offline {
+            background: #ef4444;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Aurora-X Preview</h1>
+            <p>AI-powered code synthesis and problem-solving platform</p>
+            <p id="server-status">Checking server status...</p>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Quick Tests</h2>
+
+            <div class="endpoint">
+                <h3>Math Solver</h3>
+                <p>Solve mathematical expressions and equations</p>
+                <button class="test-button" onclick="testMath()">Test: 2 + 3 * 4</button>
+                <button class="test-button" onclick="testDiff()">Test: Differentiate x²</button>
+                <div id="math-result" class="result" style="display: none;"></div>
+            </div>
+
+            <div class="endpoint">
+                <h3>Code Generation (Chat)</h3>
+                <p>Generate code in multiple languages from natural language</p>
+                <button class="test-button" onclick="testChat()">Test: Python Timer</button>
+                <div id="chat-result" class="result" style="display: none;"></div>
+            </div>
+
+            <div class="endpoint">
+                <h3>Unit Conversions</h3>
+                <p>Convert between different units</p>
+                <button class="test-button" onclick="testUnits()">Test: 7000 km → m</button>
+                <div id="units-result" class="result" style="display: none;"></div>
+            </div>
+
+            <div class="endpoint">
+                <h3>Time Formatting</h3>
+                <p>Format seconds into human-readable time</p>
+                <button class="test-button" onclick="testTime()">Test: 3600 seconds</button>
+                <div id="time-result" class="result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📋 Available Endpoints</h2>
+            <ul>
+                <li><code>GET /healthz</code> - Health check</li>
+                <li><code>GET /dashboard/demos</code> - Interactive demo dashboard</li>
+                <li><code>POST /chat</code> - Code generation</li>
+                <li><code>POST /api/solve</code> - Math/physics solver</li>
+                <li><code>POST /api/solve/pretty</code> - Formatted solver output</li>
+                <li><code>POST /api/units</code> - Unit conversions</li>
+                <li><code>POST /api/format/seconds</code> - Time formatting</li>
+                <li><code>GET /api/demo/cards</code> - Demo test cards</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Access Methods</h2>
+            <p><strong>Full Dashboard:</strong> <a href="http://localhost:5001/dashboard/demos"
+                    style="color: #00ffff;">http://localhost:5001/dashboard/demos</a></p>
+            <p><strong>API Root:</strong> <a href="http://localhost:5001/"
+                    style="color: #00ffff;">http://localhost:5001/</a></p>
+            <p><strong>Health Check:</strong> <a href="http://localhost:5001/healthz"
+                    style="color: #00ffff;">http://localhost:5001/healthz</a></p>
+        </div>
+    </div>
+
+    <script>
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('http://localhost:5001/healthz');
+                const data = await response.json();
+                if (data.ok) {
+                    document.getElementById('server-status').innerHTML =
+                        '<span class="status online">🟢 Server Online</span> Port 5001';
+                } else {
+                    throw new Error('Server not ready');
+                }
+            } catch (error) {
+                document.getElementById('server-status').innerHTML =
+                    '<span class="status offline">🔴 Server Offline</span> Start with: python -m aurora_x.serve';
+            }
+        }
+
+        async function testMath() {
+            const resultDiv = document.getElementById('math-result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Testing...';
+
+            try {
+                const response = await fetch('http://localhost:5001/api/solve/pretty', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ problem: '2 + 3 * 4' })
+                });
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testDiff() {
+            const resultDiv = document.getElementById('math-result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Testing differentiation...';
+
+            try {
+                const response = await fetch('http://localhost:5001/api/solve/pretty', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ problem: 'differentiate x^2' })
+                });
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testChat() {
+            const resultDiv = document.getElementById('chat-result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Generating code...';
+
+            try {
+                const response = await fetch('http://localhost:5001/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: 'simple timer countdown', lang: 'python' })
+                });
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testUnits() {
+            const resultDiv = document.getElementById('units-result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Converting units...';
+
+            try {
+                const response = await fetch('http://localhost:5001/api/units', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ value: '7000 km' })
+                });
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testTime() {
+            const resultDiv = document.getElementById('time-result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Formatting time...';
+
+            try {
+                const response = await fetch('http://localhost:5001/api/format/seconds', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ seconds: 3600 })
+                });
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        // Check server status on load
+        checkServerStatus();
+    </script>
+</body>
+
+</html>

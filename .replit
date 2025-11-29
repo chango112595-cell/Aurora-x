@@ -185,6 +185,15 @@ args = "python3 aurora_nexus_v3/main.py"
 [workflows.workflow.metadata]
 outputType = "console"
 
+[[workflows.workflow]]
+name = "Aurora V3 Autonomous"
+author = 50347865
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 aurora/core/aurora_nexus_v3_controller.py"
+
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
 expertMode = true

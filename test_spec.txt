@@ -1,5 +1,0 @@
-add(a: int, b: int) -> int:
-  '''Add two numbers'''
-  # examples
-  add(1, 2) == 3
-  add(0, 0) == 0
