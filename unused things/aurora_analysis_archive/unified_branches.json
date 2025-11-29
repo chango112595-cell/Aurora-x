@@ -1,0 +1,238 @@
+{
+  "Group_1": {
+    "representative": "integration-branch",
+    "branches": [
+      "integration-branch",
+      "local-features-backup",
+      "origin/aurora-nexus-v2-integration",
+      "origin/aurora-working-restore",
+      "origin/badges",
+      "origin/dependabot/docker/node-25-alpine",
+      "origin/dependabot/docker/python-3.14-slim",
+      "origin/dependabot/github_actions/actions/setup-go-6",
+      "origin/dependabot/github_actions/actions/upload-artifact-5",
+      "origin/dependabot/github_actions/codecov/codecov-action-5",
+      "origin/dependabot/github_actions/docker/build-push-action-6",
+      "origin/dependabot/github_actions/github/codeql-action-4",
+      "origin/dependabot/pip/bcrypt-4.3.0",
+      "origin/dependabot/pip/detect-secrets-1.5.0",
+      "origin/dependabot/pip/pip-audit-2.9.0",
+      "origin/dependabot/pip/pip-licenses-4.5.1",
+      "origin/dependabot/pip/pipdeptree-2.28.0",
+      "origin/dependabot/pip/pyjwt-2.10.1",
+      "origin/dependabot/pip/pylint-3.3.9",
+      "origin/dependabot/pip/pyre-check-0.9.25",
+      "origin/dependabot/pip/semgrep-1.136.0",
+      "origin/dependabot/pip/urllib3-2.5.0",
+      "origin/fix-windows-compatibility",
+      "origin/integration-branch",
+      "origin/unified-aurora"
+    ],
+    "count": 25,
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ],
+    "status": "Issues",
+    "issues": [
+      "Bloated with venv/cache files",
+      "Many backup files"
+    ]
+  },
+  "Group_0": {
+    "representative": "badges",
+    "branches": [
+      "badges",
+      "copilot/fix-ci-cd-linting-issues",
+      "copilot/fix-e2e-workflow-issue",
+      "copilot/fix-linting-issues-in-ci-workflow",
+      "copilot/fix-semgrep-yaml-issue",
+      "copilot/replace-insecure-hash-algorithms",
+      "fix/remaining-linting-errors",
+      "origin/copilot/fix-checks-failing",
+      "origin/copilot/fix-checks-failure-issue",
+      "origin/copilot/fix-checks-not-passing",
+      "origin/copilot/fix-ci-cd-linting-issues",
+      "origin/copilot/fix-connection-errors-workflow",
+      "origin/copilot/fix-e2e-workflow-issue",
+      "origin/copilot/fix-failing-ci-job",
+      "origin/copilot/fix-failing-workflows",
+      "origin/copilot/fix-linting-issues-in-ci-workflow",
+      "origin/copilot/fix-semgrep-yaml-issue",
+      "origin/copilot/fix-windows-invalid-filenames",
+      "origin/copilot/fix-workflow-failures",
+      "origin/copilot/fix-workflow-issues",
+      "origin/copilot/implement-configuration-updates",
+      "origin/copilot/replace-insecure-hash-algorithms",
+      "origin/fix/remaining-linting-errors",
+      "origin/replit-agent"
+    ],
+    "count": 24,
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": false,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)",
+      "Autonomous Mode"
+    ],
+    "status": "Issues",
+    "issues": [
+      "Many backup files"
+    ]
+  },
+  "Group_2": {
+    "representative": "gitsafe-backup",
+    "branches": [
+      "gitsafe-backup",
+      "gitsafe-backup/main",
+      "main",
+      "origin",
+      "origin/dependabot/pip/bandit-1.8.6",
+      "origin/dependabot/pip/build-1.3.0",
+      "origin/dependabot/pip/dev-tools-6cc04861e6",
+      "origin/dependabot/pip/flake8-7.3.0",
+      "origin/dependabot/pip/safety-3.7.0",
+      "origin/dependabot/pip/sphinx-7.4.7",
+      "origin/dependabot/pip/testing-4bb223f47c",
+      "origin/dependabot/pip/wheel-0.45.1",
+      "origin/main",
+      "replit-agent"
+    ],
+    "count": 14,
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": true,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true
+    },
+    "unique_features": [],
+    "missing_features": [],
+    "status": "Issues",
+    "issues": [
+      "Bloated with venv/cache files",
+      "Many backup files"
+    ]
+  },
+  "Group_3": {
+    "representative": "origin/aurora-ful-power",
+    "branches": [
+      "origin/aurora-ful-power",
+      "remote-features-backup"
+    ],
+    "count": 2,
+    "features": {
+      "Aurora Core": true,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": true,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Nexus V3"
+    ],
+    "status": "Issues",
+    "issues": [
+      "Bloated with venv/cache files",
+      "Many backup files"
+    ]
+  },
+  "Group_4": {
+    "representative": "origin/codespace-wretched-gravestone-pj5rxv7rx677crw9v",
+    "branches": [
+      "origin/codespace-wretched-gravestone-pj5rxv7rx677crw9v",
+      "origin/copilot/help-pull-request-30"
+    ],
+    "count": 2,
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": false,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode",
+      "Autofixer (100-worker)"
+    ],
+    "status": "Issues",
+    "issues": [
+      "Many backup files"
+    ]
+  },
+  "Group_5": {
+    "representative": "origin/draft",
+    "branches": [
+      "origin/draft"
+    ],
+    "count": 1,
+    "features": {
+      "Aurora Core": false,
+      "Nexus V3": false,
+      "Hyper-Speed Mode": false,
+      "Autofixer (100-worker)": true,
+      "Autonomous Mode": true,
+      "Intelligence System": true,
+      "Backend API": true,
+      "Frontend (React/Vite)": true,
+      "Database Integration": true,
+      "Tests": true
+    },
+    "unique_features": [],
+    "missing_features": [
+      "Aurora Core",
+      "Nexus V3",
+      "Hyper-Speed Mode"
+    ],
+    "status": "Issues",
+    "issues": [
+      "Bloated with venv/cache files",
+      "Many backup files"
+    ]
+  }
+}

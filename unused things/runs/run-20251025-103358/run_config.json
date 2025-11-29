@@ -1,0 +1,11 @@
+{
+  "seed": 2147483648,
+  "max_iters": 50,
+  "beam": 20,
+  "temperature": 0.9,
+  "top_k": 50,
+  "top_p": 0.95,
+  "weights": {
+    "seed_bias": 0.0
+  }
+}
