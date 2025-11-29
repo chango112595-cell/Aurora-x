@@ -38,9 +38,24 @@ class AuroraIntelligenceManager:
     def add_knowledge(self, topic: str, content: str):
         """Add knowledge to Aurora's knowledge base"""
         self.log(f"[LEARN] Aurora learned about: {topic}")
+        # Store knowledge in knowledge directory
+        knowledge_file = self.knowledge_dir / f"{topic}.json"
+        try:
+            with open(knowledge_file, "w") as f:
+                json.dumps({"topic": topic, "content": content, "timestamp": datetime.utcnow().isoformat()})
+        except Exception:
+            pass
 
     def get_knowledge(self, topic: str) -> str:
         """Retrieve knowledge on a topic"""
+        knowledge_file = self.knowledge_dir / f"{topic}.json"
+        if knowledge_file.exists():
+            try:
+                with open(knowledge_file, "r") as f:
+                    data = json.load(f)
+                    return data.get("content", f"Knowledge on {topic}")
+            except Exception:
+                pass
         return f"Knowledge on {topic}"
 
     def analyze(self, data: str) -> dict:
