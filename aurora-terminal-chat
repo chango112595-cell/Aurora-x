@@ -1,0 +1,17 @@
+
+#!/bin/bash
+# Aurora Terminal Chat - Full Power Mode Launcher
+
+echo "🌟 Starting Aurora Terminal Chat - Full Power Mode..."
+echo ""
+
+# Activate virtual environment if it exists
+if [ -d "venv" ]; then
+    source venv/bin/activate
+fi
+
+# Run the full-power terminal chat
+python3 tools/aurora_terminal_chat_full_power.py
+
+echo ""
+echo "Aurora Terminal Chat session ended."
