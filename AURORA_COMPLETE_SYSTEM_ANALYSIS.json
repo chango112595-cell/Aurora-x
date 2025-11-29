@@ -130,7 +130,7 @@
     },
     {
       "file": "aurora_core.py",
-      "size": 101136,
+      "size": 116343,
       "classes": [
         "AuroraFoundations",
         "AuroraKnowledgeTiers",
@@ -142,6 +142,7 @@
         "_get_tier_orchestrator",
         "start_server",
         "run_code_quality_scan",
+        "_execute_user_request",
         "start_service"
       ]
     },
@@ -237,6 +238,16 @@
       ],
       "key_methods": [
         "run"
+      ]
+    },
+    {
+      "file": "aurora_diagnostic_whats_wrong.py",
+      "size": 10289,
+      "classes": [
+        "AuroraDiagnostic"
+      ],
+      "key_methods": [
+        "run_full_diagnostic"
       ]
     },
     {
@@ -377,6 +388,17 @@
       ],
       "key_methods": [
         "execute_maximum_power_transformation"
+      ]
+    },
+    {
+      "file": "aurora_nexus_v3_activation.py",
+      "size": 14405,
+      "classes": [
+        "AuroraFullSystemActivation"
+      ],
+      "key_methods": [
+        "start_nexus_v3_system",
+        "run_full_activation"
       ]
     },
     {
@@ -566,6 +588,16 @@
       "key_methods": [
         "start_monitoring",
         "start_monitoring"
+      ]
+    },
+    {
+      "file": "FORENSIC_ANALYSIS_REPORT.py",
+      "size": 12104,
+      "classes": [
+        "AuroraForensicAnalyzer"
+      ],
+      "key_methods": [
+        "analyze_runtime_state"
       ]
     },
     {
@@ -1034,7 +1066,7 @@
     },
     {
       "file": "tools\\ultimate_api_manager.py",
-      "size": 165294,
+      "size": 165755,
       "classes": [
         "AdvancedCodingKnowledge",
         "ServiceMetrics",
@@ -1709,7 +1741,7 @@
     },
     {
       "file": "aurora_core.py",
-      "size": 101136,
+      "size": 116343,
       "classes": [
         "AuroraFoundations",
         "AuroraKnowledgeTiers",
@@ -2742,7 +2774,7 @@
     },
     {
       "file": "tools\\ultimate_api_manager.py",
-      "size": 165294,
+      "size": 165755,
       "classes": [
         "AdvancedCodingKnowledge",
         "ServiceMetrics",
@@ -3265,7 +3297,7 @@
     },
     {
       "file": "aurora_core.py",
-      "size": 101136,
+      "size": 116343,
       "daemon_methods": [
         "_get_self_monitor",
         "start_server",
@@ -3325,6 +3357,13 @@
       "size": 14406,
       "daemon_methods": [
         "run"
+      ]
+    },
+    {
+      "file": "aurora_diagnostic_whats_wrong.py",
+      "size": 10289,
+      "daemon_methods": [
+        "run_full_diagnostic"
       ]
     },
     {
@@ -3390,6 +3429,14 @@
       "size": 10064,
       "daemon_methods": [
         "_monitor_all_systems"
+      ]
+    },
+    {
+      "file": "aurora_nexus_v3_activation.py",
+      "size": 14405,
+      "daemon_methods": [
+        "start_nexus_v3_system",
+        "run_full_activation"
       ]
     },
     {
@@ -3744,7 +3791,7 @@
     },
     {
       "file": "tools\\ultimate_api_manager.py",
-      "size": 165294,
+      "size": 165755,
       "daemon_methods": [
         "start_service_advanced",
         "restart_all_services",
@@ -3998,6 +4045,13 @@
     },
     {
       "file": "ask_aurora_previous_autonomy.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
+      ]
+    },
+    {
+      "file": "ask_aurora_smart_interface.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']",
         "\\.run\\("
@@ -4727,6 +4781,13 @@
       "file": "aurora_multi_agent.py",
       "activation_patterns": [
         "if __name__ == [\"\\']__main__[\"\\']"
+      ]
+    },
+    {
+      "file": "aurora_nexus_v3_activation.py",
+      "activation_patterns": [
+        "if __name__ == [\"\\']__main__[\"\\']",
+        "\\.run\\("
       ]
     },
     {
@@ -6009,7 +6070,7 @@
   "integration_points": [],
   "ultimate_api_manager": {
     "exists": true,
-    "size": 165294,
+    "size": 165755,
     "classes": [
       "AdvancedCodingKnowledge",
       "ServiceMetrics",

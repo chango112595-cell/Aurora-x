@@ -62,7 +62,11 @@
         "**/node_modules": true,
         "**/__pycache__": true,
         "**/dist": true,
-        "**/build": true
+        "**/build": true,
+        "**/$Recycle.Bin": true
+    },
+    "files.exclude": {
+        "**/$Recycle.Bin": true
     },
     "css.lint.unknownAtRules": "ignore",
     "css.lint.vendorPrefix": "warning",

@@ -1,8 +1,6 @@
 # Aurora-X Complete Development and Production Stack
 # Multi-service architecture with all 5 services
 
-version: '3.8'
-
 services:
   # Backend API Service (Node.js/Express)
   backend:
