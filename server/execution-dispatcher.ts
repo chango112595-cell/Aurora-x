@@ -49,31 +49,21 @@ function callExecutionWrapper(input: any): Promise<string> {
         const jsonLine = output.split('\n').find(l => l.trim().startsWith('{'));
         if (jsonLine) {
           const parsed = JSON.parse(jsonLine);
-          if (parsed.success) {
+          if (parsed.success && parsed.result) {
             console.log('[Dispatcher] ✅ Execution completed');
-
-            // Ensure result is valid and returned
-            if (!parsed.result || typeof parsed.result !== 'object') {
-              resolve({
-                status: 'success',
-                result: 'Task completed',
-                timestamp: new Date().toISOString()
-              });
-            } else {
-              resolve(parsed.result);
-            }
+            // Return the actual result string or content
+            resolve(typeof parsed.result === 'string' ? parsed.result : JSON.stringify(parsed.result, null, 2));
           } else {
-            resolve({
-              status: 'error',
-              error: parsed.error || 'Execution failed',
-              timestamp: new Date().toISOString()
-            });
+            resolve(parsed.error || 'Execution failed');
           }
         } else {
-          resolve(output.trim() || 'Response generated');
+          // Return raw output if no JSON found
+          const cleanOutput = output.trim();
+          resolve(cleanOutput || 'Response generated');
         }
       } catch (e) {
-        reject(new Error('Failed to parse response'));
+        // On parse error, return the raw output
+        resolve(output.trim() || 'Failed to parse response');
       }
     });
 

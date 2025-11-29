@@ -41,13 +41,13 @@ export class ConversationDetector {
 
     // Keyword sets for classification - prioritize specific keywords
     const codeGenKeywords = ['write', 'create', 'generate', 'build', 'implement', 'code', 'app', 'script', 'module', 'library', 'method', 'routine', 'function', 'class', 'algorithm', 'api', 'component', 'program', 'service', 'endpoint', 'handler'];
-    const debugKeywords = ['bug', 'error', 'fix', 'crash', 'problem', 'issue', 'fail', 'broken', 'exception', 'null pointer', 'undefined', 'doesn\'t work', 'can\'t', 'throw'];
+    const debugKeywords = ['bug', 'error', 'fix', 'crash', 'problem', 'issue', 'fail', 'broken', 'exception', 'null pointer', 'undefined', 'doesn\'t work', 'can\'t', 'throw', 'debug', 'debugging', 'troubleshoot'];
     const explainKeywords = ['explain', 'how does', 'what is', 'describe', 'tell me', 'teach', 'understand', 'learning', 'learn', 'works', 'tutorial', 'how it', 'what does'];
     const archKeywords = ['architecture', 'design', 'structure', 'pattern', 'system', 'schema', 'layer', 'component', 'diagram', 'database schema'];
     const optimizeKeywords = ['optimize', 'faster', 'performance', 'improve', 'speed', 'efficient', 'scale', 'reduce', 'accelerate'];
     const testKeywords = ['test', 'unit test', 'integration', 'jest', 'mocha', 'coverage', 'validate', 'verify', 'assert'];
     const refactorKeywords = ['refactor', 'clean up', 'reorganize', 'simplify', 'rewrite', 'cleanup'];
-    const analysisKeywords = ['analyze', 'review', 'examine', 'compare', 'evaluate', 'assess', 'audit', 'inspection', 'analyze'];
+    const analysisKeywords = ['analyze', 'review', 'examine', 'compare', 'evaluate', 'assess', 'audit', 'inspection', 'analyze', 'diagnose', 'diagnostic', 'self diagnose', 'self-diagnose', 'check', 'scan', 'health check'];
 
     let detectedType: ConversationType = 'general_chat';
     let maxScore = 0;

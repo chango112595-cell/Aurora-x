@@ -14,9 +14,14 @@ export class ResponseAdapter {
       return this.getDefaultResponse(detection.type);
     }
 
+    // If response is substantial (>100 chars), it's likely already good - don't wrap it
+    if (response.length > 100) {
+      return response;
+    }
+
     let enhanced = response;
 
-    // Add type-specific prefix/enhancement
+    // Add type-specific prefix/enhancement only for short responses
     switch (detection.type) {
       case 'code_generation':
         enhanced = this.enhanceCodeResponse(response, detection);

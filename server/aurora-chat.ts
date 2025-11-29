@@ -136,7 +136,7 @@ except Exception as e:
 
     python.on('close', (code) => {
       try {
-        // Find the JSON response line
+        // First try to find JSON response
         const jsonLine = output.split('\n').find(l => l.trim().startsWith('{"response"'));
 
         if (jsonLine) {
@@ -146,21 +146,20 @@ except Exception as e:
             detection
           });
         } else {
-          // Check if we have valid output from Python
-          const cleanOutput = output
-            .split('\n')
-            .filter(l => {
-              const trimmed = l.trim();
-              return trimmed && 
-                     !trimmed.startsWith('[') && 
-                     !trimmed.startsWith('Auto-') &&
-                     !trimmed.startsWith('Intelligent') &&
-                     !trimmed.includes('---') &&
-                     !trimmed.includes('sys.path') &&
-                     trimmed.length > 10;
-            })
-            .join('\n')
-            .trim();
+          // Extract clean output, excluding debug lines
+          const lines = output.split('\n');
+          const cleanLines = lines.filter(l => {
+            const trimmed = l.trim();
+            // Exclude debug markers and very short lines
+            return trimmed && 
+                   !trimmed.startsWith('[') && 
+                   !trimmed.includes('sys.path') &&
+                   !trimmed.startsWith('Auto-') &&
+                   !trimmed.startsWith('Intelligent') &&
+                   trimmed.length > 5;
+          });
+
+          const cleanOutput = cleanLines.join('\n').trim();
 
           if (cleanOutput) {
             resolve({ 
@@ -168,17 +167,28 @@ except Exception as e:
               detection
             });
           } else {
-            console.error('[Aurora] No valid output. Raw:', output);
-            resolve({ 
-              response: `I received your message: "${userMessage}"\n\nLet me analyze this and provide a complete response. What specifically would you like me to help you with?`,
-              detection
-            });
+            // Last resort: return raw output if we got something
+            const rawOutput = output.trim();
+            if (rawOutput) {
+              resolve({ 
+                response: rawOutput,
+                detection
+              });
+            } else {
+              console.error('[Aurora] No output from Python. Stderr:', errors);
+              resolve({ 
+                response: `I'm processing your request: "${userMessage}"\n\nPlease try rephrasing or let me know what you need help with.`,
+                detection
+              });
+            }
           }
         }
       } catch (e) {
-        console.error('[Aurora] Parse error:', e, '\nRaw output:', output);
+        console.error('[Aurora] Parse error:', e, '\nRaw output:', output, '\nStderr:', errors);
+        // Return what we have rather than a generic message
+        const fallbackOutput = output.trim() || errors.trim();
         resolve({ 
-          response: `Hello! I'm Aurora. I understand you said: "${userMessage}"\n\nI have full access to 188 power units. How can I help you today?`,
+          response: fallbackOutput || `Error processing your request. Please try again.`,
           detection
         });
       }
