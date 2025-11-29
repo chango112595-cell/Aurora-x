@@ -1,0 +1,123 @@
+{
+  "timestamp": "2025-11-29T13:43:36.578803",
+  "health_before": {
+    "timestamp": "2025-11-29T13:43:36.578807",
+    "systems": {
+      "self_learn": {
+        "name": "Self-Learning",
+        "healthy": true,
+        "status": "Not running (normal)",
+        "issue": null
+      },
+      "chat_server": {
+        "name": "Chat Server",
+        "healthy": true,
+        "status": "Server files found",
+        "issue": null
+      },
+      "corpus_db": {
+        "name": "Corpus Database",
+        "healthy": false,
+        "status": "Database error",
+        "issue": "invalid syntax (__init__.py, line 14)"
+      },
+      "frontend": {
+        "name": "Frontend",
+        "healthy": true,
+        "status": "Frontend ready",
+        "issue": null
+      },
+      "diagnostics": {
+        "name": "Diagnostics",
+        "healthy": true,
+        "status": "No diagnostics yet (normal for fresh start)",
+        "issue": null
+      },
+      "state_files": {
+        "name": "State Files",
+        "healthy": true,
+        "status": "0/3 valid",
+        "issue": null,
+        "details": {
+          ".self_learning_state.json": false,
+          ".aurora_diagnostics.json": false,
+          ".aurora_healing_log.json": false
+        }
+      }
+    },
+    "overall_health": 83.3,
+    "healthy_systems": 5,
+    "total_systems": 6
+  },
+  "overall_health_before": 83.3,
+  "issues_found": [
+    {
+      "system": "corpus_db",
+      "issue": "invalid syntax (__init__.py, line 14)",
+      "status": "Database error"
+    }
+  ],
+  "fixes_attempted": [
+    {
+      "system": "corpus_db",
+      "fix_type": "missing_corpus_db",
+      "attempted": true,
+      "success": false,
+      "message": "Failed to fix corpus db: invalid syntax (__init__.py, line 14)",
+      "timestamp": "2025-11-29T13:43:36.583784"
+    }
+  ],
+  "fixes_successful": [],
+  "healing_duration_ms": 6.023,
+  "health_after": {
+    "timestamp": "2025-11-29T13:43:36.583792",
+    "systems": {
+      "self_learn": {
+        "name": "Self-Learning",
+        "healthy": true,
+        "status": "Not running (normal)",
+        "issue": null
+      },
+      "chat_server": {
+        "name": "Chat Server",
+        "healthy": true,
+        "status": "Server files found",
+        "issue": null
+      },
+      "corpus_db": {
+        "name": "Corpus Database",
+        "healthy": false,
+        "status": "Database error",
+        "issue": "invalid syntax (__init__.py, line 14)"
+      },
+      "frontend": {
+        "name": "Frontend",
+        "healthy": true,
+        "status": "Frontend ready",
+        "issue": null
+      },
+      "diagnostics": {
+        "name": "Diagnostics",
+        "healthy": true,
+        "status": "No diagnostics yet (normal for fresh start)",
+        "issue": null
+      },
+      "state_files": {
+        "name": "State Files",
+        "healthy": true,
+        "status": "0/3 valid",
+        "issue": null,
+        "details": {
+          ".self_learning_state.json": false,
+          ".aurora_diagnostics.json": false,
+          ".aurora_healing_log.json": false
+        }
+      }
+    },
+    "overall_health": 83.3,
+    "healthy_systems": 5,
+    "total_systems": 6
+  },
+  "overall_health_after": 83.3,
+  "health_improved": false
+}
