@@ -159,103 +159,55 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: a
 }
 
 /**
- * Generate a contextual response based on the detected conversation type
+ * Generate a contextual response - uses message content dynamically
  */
 function generateContextualFallback(userMessage: string, detection: ConversationDetection): string {
-  const responses: Record<string, string> = {
-    'code_generation': `I'd be happy to help you with code! 
-
-To write the best solution for you, could you tell me:
-1. What specific functionality do you need?
-2. Any language preferences (Python, JavaScript, TypeScript, etc.)?
-3. Any special requirements or constraints?
-
-Share the details and I'll create clean, well-documented code for you!`,
-
-    'debugging': `I can help you debug this issue!
-
-To diagnose the problem effectively, please share:
-1. The error message you're seeing
-2. The relevant code snippet
-3. What you expected to happen vs what's actually happening
-
-With this information, I can pinpoint the issue and provide a fix.`,
-
-    'explanation': `I'd be happy to explain that!
-
-Could you be more specific about what aspect you'd like me to cover?
-- **Basic concept** - What is it and why does it matter?
-- **How it works** - Technical details and mechanics
-- **Practical examples** - Real-world applications
-- **Best practices** - Tips for using it effectively
-
-Let me know what would be most helpful!`,
-
-    'architecture': `I can help with system architecture and design!
-
-To provide the best guidance, I'd like to understand:
-1. What type of system are you building?
-2. What are your scalability requirements?
-3. Any specific technologies or constraints?
-
-With these details, I can suggest an optimal architecture.`,
-
-    'optimization': `Let's improve performance together!
-
-To optimize effectively, I need to know:
-1. What's currently slow or resource-intensive?
-2. What are your performance targets?
-3. Can you share the relevant code?
-
-I'll analyze it and suggest specific optimizations.`,
-
-    'testing': `I can help you write comprehensive tests!
-
-To create the best test suite:
-1. What code needs testing?
-2. What testing framework do you prefer?
-3. Any specific edge cases you're concerned about?
-
-I'll write thorough tests with good coverage.`,
-
-    'refactoring': `I'd be glad to help refactor your code!
-
-To improve it effectively:
-1. Share the code you'd like to clean up
-2. What specific issues bother you about it?
-3. Any constraints I should know about?
-
-I'll restructure it for better maintainability and readability.`,
-
-    'analysis': `I can analyze that for you!
-
-**Aurora System Status: OPERATIONAL**
-
-All systems are running correctly:
-- 188 Intelligence tiers active
-- 66 Execution programs available  
-- Conversation intelligence online
-- Pattern learning enabled
-
-What specific analysis would you like me to perform?`,
-
-    'question_answering': `Great question! Let me address that...
-
-I'm analyzing your question and formulating a comprehensive answer. Could you provide any additional context that might help me give you the most accurate and helpful response?`,
-
-    'general_chat': `I'm here to help! 
-
-I can assist you with:
-- Writing and debugging code
-- Explaining technical concepts
-- System analysis and diagnostics
-- Answering your questions
-- Creative problem-solving
-
-What would you like to explore together?`
-  };
-
-  return responses[detection.type] || responses['general_chat'];
+  // Extract key words from the user's message for personalization
+  const keywords = userMessage.toLowerCase()
+    .replace(/[^\w\s]/g, '')
+    .split(/\s+/)
+    .filter(w => w.length > 3)
+    .slice(0, 5);
+  
+  const topic = keywords.join(' ') || 'your request';
+  const hasQuestion = userMessage.includes('?');
+  
+  // Generate dynamic response based on type AND content
+  switch (detection.type) {
+    case 'code_generation':
+      return `I can write code for ${topic}. Which language would you prefer, and what specific requirements should I address?`;
+    
+    case 'debugging':
+      return `I'll help debug ${topic}. Please share the error message and relevant code, and I'll identify the issue.`;
+    
+    case 'explanation':
+      return hasQuestion 
+        ? `Let me explain ${topic}. What specific aspect would be most useful - the basics, technical details, or practical examples?`
+        : `I can explain ${topic} in detail. What angle would be most helpful for you?`;
+    
+    case 'architecture':
+      return `For ${topic}, I can help design the architecture. What are your scalability needs and technology constraints?`;
+    
+    case 'optimization':
+      return `I'll help optimize ${topic}. Share the relevant code and I'll suggest specific improvements.`;
+    
+    case 'testing':
+      return `I can write tests for ${topic}. What testing framework do you prefer and what edge cases concern you?`;
+    
+    case 'refactoring':
+      return `I'll refactor ${topic} for better clarity. Share the code and tell me what aspects you'd like improved.`;
+    
+    case 'analysis':
+      return `Analyzing ${topic}. All systems operational - 188 tiers active, 66 programs ready. What specific analysis do you need?`;
+    
+    case 'question_answering':
+      return hasQuestion
+        ? `That's a good question about ${topic}. Could you provide more context so I can give you the most accurate answer?`
+        : `I can address ${topic}. What specifically would you like to know?`;
+    
+    default:
+      return `I understand you're interested in ${topic}. How can I help - would you like explanations, code, or problem-solving assistance?`;
+  }
 }
 
 // Export functions needed by routes

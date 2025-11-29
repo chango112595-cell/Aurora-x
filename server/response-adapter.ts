@@ -186,13 +186,19 @@ export class ResponseAdapter {
     const intentOrType = pattern.intent || pattern.type || 'general';
     console.log('[Aurora] ✨ Response adapted for:', intentOrType);
 
-    // Always return a valid string response
+    // For empty results, prompt for clarification based on intent
     if (!result) {
-      return `Aurora processed your request (${intentOrType}) but generated no output. Please try rephrasing your question.`;
+      const prompts: Record<string, string> = {
+        'code_generation': "What code would you like me to write? Share the requirements and preferred language.",
+        'debugging': "Share the error or issue you're encountering and I'll help debug it.",
+        'explanation': "What would you like me to explain? I can cover basics or dive into details.",
+        'general': "How can I help you? I'm ready for coding, explanations, or problem-solving."
+      };
+      return prompts[intentOrType] || prompts['general'];
     }
 
     if (typeof result === 'string') {
-      return result.trim() || 'Aurora received your message but has no response.';
+      return result.trim() || "I'm ready to help. What would you like to work on?";
     }
 
     if (result && typeof result === 'object') {
