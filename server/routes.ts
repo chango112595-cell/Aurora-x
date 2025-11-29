@@ -1645,6 +1645,35 @@ except Exception as e:
     }
   });
 
+  // Aurora AI Backend health check proxy
+  app.get("/api/aurora-ai/health", async (req, res) => {
+    try {
+      const response = await fetch('http://0.0.0.0:8000/healthz', {
+        signal: AbortSignal.timeout(5000)
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        return res.json({
+          status: "ok",
+          aurora_ai_backend: data,
+          message: "Aurora AI Backend is accessible"
+        });
+      } else {
+        return res.status(503).json({
+          status: "degraded",
+          message: "Aurora AI Backend returned non-OK status"
+        });
+      }
+    } catch (error: any) {
+      return res.status(503).json({
+        status: "unavailable",
+        message: "Aurora AI Backend is not reachable",
+        error: error.message
+      });
+    }
+  });
+
   // Health check endpoint for auto-updater monitoring
   app.get("/healthz", async (req, res) => {
     const providedToken = req.query.token as string | undefined;
