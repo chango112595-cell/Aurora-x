@@ -194,6 +194,15 @@ mode = "sequential"
 task = "shell.exec"
 args = "python3 aurora/core/aurora_nexus_v3_controller.py"
 
+[[workflows.workflow]]
+name = "Start Aurora AI Backend"
+author = 50376670
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd aurora_backend && pip install -r requirements.txt && python3 main.py"
+
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
 expertMode = true

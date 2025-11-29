@@ -1,8 +1,12 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import path from 'path';
+import { componentTagger } from 'lovable-tagger';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  define: {
+    'process.env': {},
+  },
   plugins: [react()],
   resolve: {
     alias: {
@@ -17,4 +21,4 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
   },
-});
+}));
