@@ -207,11 +207,13 @@ export class ConversationDetector {
 
   /**
    * Calculate keyword match score
+   * Keywords are compared case-insensitively for robust matching
    */
   private calculateKeywordScore(message: string, keywords: string[]): number {
     let score = 0;
+    const messageUpper = message.toUpperCase();
     keywords.forEach(keyword => {
-      if (message.includes(keyword)) {
+      if (messageUpper.includes(keyword.toUpperCase())) {
         score += 5;
       }
     });
@@ -220,9 +222,11 @@ export class ConversationDetector {
 
   /**
    * Extract relevant keywords from message
+   * Uses case-insensitive matching for robust detection
    */
   private extractKeywords(message: string, possibleKeywords: string[]): string[] {
-    return possibleKeywords.filter(keyword => message.includes(keyword));
+    const messageUpper = message.toUpperCase();
+    return possibleKeywords.filter(keyword => messageUpper.includes(keyword.toUpperCase()));
   }
 
   /**

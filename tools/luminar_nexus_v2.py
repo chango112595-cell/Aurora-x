@@ -102,7 +102,7 @@ class ServiceHealth:
 
     service_name: str
     port: int
-    status: str  # 'healthy', 'degraded', 'critical', 'down'
+    status: str  # 'healthy', 'degraded', 'critical', 'down', 'initializing'
     response_time: float
     cpu_usage: float
     memory_usage: float
@@ -111,6 +111,7 @@ class ServiceHealth:
     last_check: datetime
     predictions: dict[str, float]
     anomalies: list[str]
+    registered_at: datetime | None = None
 
 
 @dataclass
@@ -629,18 +630,31 @@ class LuminarNexusV2:
 
     def _initialize_health_monitoring(self, service_name: str, port: int):
         """Initialize comprehensive health monitoring for a service"""
+        initial_status = "healthy"
+        now = datetime.now()
+        
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(1)
+            result = sock.connect_ex(("localhost", port))
+            sock.close()
+            initial_status = "healthy" if result == 0 else "initializing"
+        except Exception:
+            initial_status = "initializing"
+        
         self.health_monitor[service_name] = ServiceHealth(
             service_name=service_name,
             port=port,
-            status="unknown",
+            status=initial_status,
             response_time=0.0,
             cpu_usage=0.0,
             memory_usage=0.0,
             error_rate=0.0,
             uptime=0.0,
-            last_check=datetime.now(),
+            last_check=now,
             predictions={},
             anomalies=[],
+            registered_at=now,
         )
 
     async def comprehensive_health_check(self, service_name: str) -> ServiceHealth | None:
@@ -650,20 +664,31 @@ class LuminarNexusV2:
 
         start_time = time.time()
         health = self.health_monitor[service_name]
+        
+        time_since_registered = (datetime.now() - health.registered_at).total_seconds() if health.registered_at else 0
+        is_newly_registered = time_since_registered < 60
 
         try:
-            # Network connectivity check
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(1)
-            result = sock.connect_ex(("localhost", health.port))
-            sock.close()
+            port_available = False
+            for attempt in range(3):
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.settimeout(2)
+                result = sock.connect_ex(("localhost", health.port))
+                sock.close()
+                if result == 0:
+                    port_available = True
+                    break
+                await asyncio.sleep(0.5)
 
-            if result == 0:
+            if port_available:
                 health.status = "healthy"
                 health.response_time = time.time() - start_time
             else:
-                health.status = "down"
-                health.response_time = None  # Don't use infinity - service is down
+                if is_newly_registered:
+                    health.status = "initializing"
+                else:
+                    health.status = "down"
+                health.response_time = None
 
             # System resource monitoring
             try:
@@ -1231,21 +1256,23 @@ class LuminarNexusV2:
 
     def _update_quantum_coherence(self):
         """Update system quantum coherence level"""
-        # Only count services that have been checked (not in "unknown" state)
-        checked_services = [h for h in self.health_monitor.values() if h.status != "unknown"]
-
-        if checked_services:
+        stable_statuses = {"healthy", "initializing"}
+        now = datetime.now()
+        system_uptime = (now - self.initialized_at).total_seconds()
+        is_startup_phase = system_uptime < 60
+        
+        checked_services = [h for h in self.health_monitor.values() if h.status not in {"unknown", "initializing"}]
+        
+        if is_startup_phase:
+            self.quantum_mesh.coherence_level = 1.0
+        elif checked_services:
             healthy_services = sum(1 for health in checked_services if health.status == "healthy")
             total_checked = len(checked_services)
-            self.quantum_mesh.coherence_level = healthy_services / total_checked
+            self.quantum_mesh.coherence_level = healthy_services / total_checked if total_checked > 0 else 1.0
         else:
-            # Keep initial coherence of 1.0 until first health check completes
             self.quantum_mesh.coherence_level = 1.0
 
-        # If coherence is low, trigger system-wide healing
-        # Skip warning only if all services are still in unknown state (initial health check not complete)
-        all_unknown = all(health.status == "unknown" for health in self.health_monitor.values())
-        if self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"] and not all_unknown:
+        if not is_startup_phase and self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"] and checked_services:
             print(f"[WARN]  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
 
     def get_system_status(self) -> dict[str, Any]:
