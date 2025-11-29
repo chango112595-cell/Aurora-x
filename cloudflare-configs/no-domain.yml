@@ -1,5 +1,0 @@
-# Option 1: Free Cloudflare Quick Tunnel (No Domain Needed!)
-# Just run: cloudflared tunnel --url http://localhost:8000
-# You'll get a free URL like: https://random-name.trycloudflare.com
-
-# No config file needed for quick tunnels!
