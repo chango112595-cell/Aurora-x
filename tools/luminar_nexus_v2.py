@@ -112,6 +112,7 @@ class ServiceHealth:
     predictions: dict[str, float]
     anomalies: list[str]
     registered_at: datetime | None = None
+    last_healthy_at: datetime | None = None
 
 
 @dataclass
@@ -683,6 +684,7 @@ class LuminarNexusV2:
             if port_available:
                 health.status = "healthy"
                 health.response_time = time.time() - start_time
+                health.last_healthy_at = datetime.now()
             else:
                 if is_newly_registered:
                     health.status = "initializing"
@@ -1256,23 +1258,21 @@ class LuminarNexusV2:
 
     def _update_quantum_coherence(self):
         """Update system quantum coherence level"""
-        stable_statuses = {"healthy", "initializing"}
         now = datetime.now()
-        system_uptime = (now - self.initialized_at).total_seconds()
-        is_startup_phase = system_uptime < 60
         
-        checked_services = [h for h in self.health_monitor.values() if h.status not in {"unknown", "initializing"}]
+        established_services = [
+            h for h in self.health_monitor.values() 
+            if h.last_healthy_at is not None
+        ]
         
-        if is_startup_phase:
-            self.quantum_mesh.coherence_level = 1.0
-        elif checked_services:
-            healthy_services = sum(1 for health in checked_services if health.status == "healthy")
-            total_checked = len(checked_services)
-            self.quantum_mesh.coherence_level = healthy_services / total_checked if total_checked > 0 else 1.0
+        if established_services:
+            healthy_count = sum(1 for h in established_services if h.status in {"healthy", "degraded"})
+            total = len(established_services)
+            self.quantum_mesh.coherence_level = healthy_count / total
         else:
             self.quantum_mesh.coherence_level = 1.0
 
-        if not is_startup_phase and self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"] and checked_services:
+        if established_services and self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"]:
             print(f"[WARN]  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
 
     def get_system_status(self) -> dict[str, Any]:
