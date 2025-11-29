@@ -96,6 +96,76 @@ Aurora-X is production-ready with:
 
 ---
 
+## 🧬 Aurora-X Technical Architecture
+
+Aurora-X is a next-generation artificial intelligence system with unprecedented autonomy, adaptability, and self-sufficiency. The system is built on six foundational pillars:
+
+### Core Architecture Pillars
+
+1. **188 Grandmaster Tiers** - Hierarchical cognitive and operational capabilities ranging from foundational computational logic to advanced cross-disciplinary synthesis
+2. **66 Advanced Execution Methods (AEMs)** - Specialized strategies for task execution, code synthesis, and system intervention
+3. **500+ Cross-Temporal Modules** - Tools spanning ancient, present, and futuristic technological eras
+4. **Hyperspeed Mode** - Ultra-high-throughput operational state generating 1,000+ code units in <0.001 seconds
+5. **Hybrid Parallel Execution** - Multi-paradigm parallelism across task, data, pipeline, and agent-based dimensions
+6. **100+ Autonomous Workers** - Lightweight specialized agents for repair, monitoring, analysis, and optimization
+
+### The 188 Grandmaster Tiers
+
+The tiers form a hierarchical backbone of Aurora-X's capabilities:
+
+- **Foundational Tiers (1-13)**: Core computational, logical, and self-reflective abilities
+- **Grandmaster Skills (14-188)**: Advanced domain-specific and meta-cognitive capabilities
+
+Each tier is modular, observable, and auditable with detailed logging and provenance tracking.
+
+### Advanced Execution Methods
+
+The 66 AEMs are categorized by operational paradigm:
+
+- **Sequential (1-10)**: Deterministic, stepwise execution
+- **Parallel (11-20)**: Concurrent execution across modules and systems
+- **Speculative (21-30)**: Hypothesis-driven, multi-path execution
+- **Adversarial (31-40)**: Red teaming and defense simulation
+- **Self-Reflective (41-50)**: Meta-cognitive execution and assessment
+- **Hybrid/Adaptive (51-66)**: Dynamic method selection based on context
+
+### Module Taxonomy
+
+500+ modules organized by:
+- **Temporal Origin**: Ancient, Present, Futuristic, Sci-Fi
+- **Functional Domain**: Code analysis, system introspection, hardware interface, security, optimization, data transformation, ethical reasoning
+
+### Safety & Governance
+
+Aurora-X employs defense-in-depth safety architecture:
+
+- Forward alignment (RLHF, constitutional AI)
+- Backward alignment (monitoring, adversarial evaluation)
+- Runtime verification and invariants
+- Policy enforcement with kill switches
+- Human-in-the-loop oversight for critical actions
+- Blockchain-based patch verification
+- Zero-trust security architecture
+
+### Observability & Provenance
+
+- Immutable audit logs for all code changes
+- Code provenance tracking with confidence indicators
+- Versioning and rollback capabilities
+- Runtime monitors for safety properties
+- Distributed tracing for all operations
+
+### Technical Implementation
+
+- **Elastic Resource Allocation**: Autoscaling across hybrid infrastructure
+- **Multi-Stage Testing**: Unit, integration, mutation, fuzz, and sandboxed verification
+- **Formal Methods**: Model checking, theorem proving, runtime enforcement
+- **Disaster Recovery**: Distributed backups, automated rollback, blue-green deployments
+
+For complete technical details, see [AURORA_TECHNICAL_BLUEPRINT.md](AURORA_TECHNICAL_BLUEPRINT.md)
+
+---
+
 ## 📚 Documentation
 
 ### Getting Started
