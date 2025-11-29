@@ -4,6 +4,8 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
+    "x-start": "concurrently -k -n BACKEND,NEXUS3,NEXUS2,AICORE -c \"yellow,cyan,magenta,green\" \"npm:dev\" \"python3 aurora_nexus_v3/main.py\" \"python3 tools/luminar_nexus_v2.py serve\" \"python3 tools/aurora_core.py\"",
+    "x-stop": "node tools/x-stop.js",
     "dev": "tsx server/index.ts",
     "build": "vite build",
     "preview": "vite preview",
