@@ -63,10 +63,11 @@ except ImportError:
 
 try:
     # pylint: disable=import-outside-toplevel
-    from aurora_autonomous_agent import AuroraAutonomousAgent
+    from tools.aurora_autonomous_agent import AuroraAutonomousAgent
 
     AUTONOMOUS_AGENT_AVAILABLE = True
 except ImportError:
+    AuroraAutonomousAgent = None
     AUTONOMOUS_AGENT_AVAILABLE = False
     print("[WARN] Aurora Autonomous Agent not found")
 
@@ -92,8 +93,9 @@ class AuroraCore:
         print("   Aurora is SENTIENT, AUTONOMOUS, and CREATIVE")
 
         # Aurora's intelligence (All 33 Tiers)
-        self.intelligence = AuroraIntelligenceManager()
-        self.intelligence.log("[BRAIN] Aurora Core: Intelligence engine loaded")
+        self.intelligence = AuroraIntelligenceManager() if AuroraIntelligenceManager else None
+        if self.intelligence:
+            self.intelligence.log("[BRAIN] Aurora Core: Intelligence engine loaded")
 
         # Aurora's AUTONOMOUS CAPABILITIES
         self.autonomous_system = None
@@ -118,8 +120,9 @@ class AuroraCore:
         self.chat = None  # Will be initialized when needed
 
         # Aurora's Task Management System
-        self.task_manager = AuroraTaskManager()
-        self.intelligence.log("[EMOJI] Aurora Core: Task Manager INITIALIZED")
+        self.task_manager = AuroraTaskManager() if AuroraTaskManager else None
+        if self.intelligence and self.task_manager:
+            self.intelligence.log("[EMOJI] Aurora Core: Task Manager INITIALIZED")
 
         # Start autonomous monitoring
         self._start_autonomous_monitoring()
@@ -521,36 +524,53 @@ class AuroraCore:
 
     def stop_all_services(self):
         """Aurora commands Luminar to stop all services"""
-        self.intelligence.log("[EMOJI] Aurora Core: Stopping all services Fucking A...")
-        return self.luminar.stop_all_servers()
+        if self.intelligence:
+            self.intelligence.log("[EMOJI] Aurora Core: Stopping all services...")
+        if self.luminar:
+            return self.luminar.stop_all_servers()
+        return False
 
     def start_bridge(self):
         """Start Aurora Bridge Service"""
-        return self.luminar.start_server("bridge")
+        if self.luminar:
+            return self.luminar.start_server("bridge")
+        return False
 
     def start_backend(self):
         """Start Aurora Backend API"""
-        return self.luminar.start_server("backend")
+        if self.luminar:
+            return self.luminar.start_server("backend")
+        return False
 
     def start_self_learning(self):
         """Start Aurora Self-Learning Server"""
-        return self.luminar.start_server("self-learn")
+        if self.luminar:
+            return self.luminar.start_server("self-learn")
+        return False
 
     def start_chat(self):
         """Start Aurora Chat Server"""
-        return self.luminar.start_server("chat")
+        if self.luminar:
+            return self.luminar.start_server("chat")
+        return False
 
     def start_service(self, service_name):
         """Aurora commands Luminar to start a specific service"""
-        return self.luminar.start_server(service_name)
+        if self.luminar:
+            return self.luminar.start_server(service_name)
+        return False
 
     def stop_service(self, service_name):
         """Aurora commands Luminar to stop a specific service"""
-        return self.luminar.stop_server(service_name)
+        if self.luminar:
+            return self.luminar.stop_server(service_name)
+        return False
 
     def get_status(self):
         """Get status of all systems"""
-        return self.luminar.show_status()
+        if self.luminar:
+            return self.luminar.show_status()
+        return {}
 
     def start_chat_server(self, port=5003):
         """Start Aurora's chat interface"""
