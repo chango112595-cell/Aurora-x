@@ -1,0 +1,15 @@
+#!/bin/bash
+# Aurora-X - Single Unified Start Command
+# Starts ONLY the essentials: Backend + Frontend + Chat
+
+echo "🚀 Aurora-X Starting..."
+echo ""
+echo "Essential Services:"
+echo "  ✓ Backend API (Express)"
+echo "  ✓ Frontend (React + Vite)"
+echo "  ✓ Chat System"
+echo ""
+echo "Running on: http://localhost:5000"
+echo ""
+
+npm run dev

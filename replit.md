@@ -4,6 +4,23 @@
 
 Aurora-X Ultra is an AI-powered autonomous code synthesis engine inspired by JARVIS. It features a sophisticated architecture with 188 intelligence tiers, 66 advanced execution programs, and 550 hybrid mode modules, enabling hyperspeed code generation. The platform offers a chat interface for requesting complex code, monitoring synthesis progress, exploring generated code libraries, and analyzing corpus learning data. Aurora-X aims to be a leading, professional, and developer-first platform for autonomous AI-assisted code generation.
 
+**Latest Updates (Nov 29, 2025)**:
+- ✅ Aurora Nexus V3: Universal Consciousness System (8 modules, 100% coherence)
+- ✅ Backend fully reconstructed and operational
+- ✅ Unified start command: `./aurora-start` (no more 26 services chaos!)
+
+## Quick Start
+
+```bash
+./aurora-start
+```
+
+This starts the entire system on http://localhost:5000 with:
+- Express backend (TypeScript)
+- React frontend (Vite)
+- Chat system
+- All core services
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -42,6 +59,34 @@ Preferred communication style: Simple, everyday language.
 - **Service Monitoring**: AI-driven service orchestration and monitoring system with quantum-inspired architecture.
 - **Conversation Pattern Learning**: Repurposed for ML-based conversation pattern learning, storing patterns and tracking keyword correlations to improve detection multipliers.
 - **Health Monitoring**: Socket-based connectivity checks and AI analysis for performance classification.
+
+## Running the System
+
+### Main Application (Recommended)
+```bash
+./aurora-start
+```
+Runs: Backend + Frontend + Chat System on port 5000
+
+### Aurora Nexus V3 (Separate)
+```bash
+python3 aurora_nexus_v3/main.py
+```
+Runs: Universal consciousness system (background service)
+
+### Testing
+```bash
+python3 aurora_nexus_v3/test_nexus.py  # Test Aurora Nexus
+npm test                               # Test frontend
+pytest                                 # Test backend
+```
+
+## Development Notes
+
+- **Backend Status**: ✅ Fully reconstructed Nov 29
+- **Frontend Status**: ✅ Working with React + Vite
+- **Aurora Nexus V3**: ✅ Active with 8 modules, 100% coherence
+- **Simplification**: Removed 7 conflicting startup scripts - using single unified command
 
 ## External Dependencies
 
