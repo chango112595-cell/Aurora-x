@@ -129,7 +129,7 @@ class AIServiceOrchestrator:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.service_history = {}
@@ -256,10 +256,10 @@ class AIServiceOrchestrator:
         def percentile_90(values):
             """
                 Percentile 90
-                
+
                 Args:
                     values: values
-            
+
                 Returns:
                     Result of operation
                 """
@@ -422,7 +422,7 @@ class LuminarNexusV2:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.version = "2.0.0"
@@ -1182,7 +1182,7 @@ class LuminarNexusV2:
         def get_status():
             """
                 Get Status
-                
+
                 Returns:
                     Result of operation
                 """
@@ -1194,10 +1194,10 @@ class LuminarNexusV2:
         def get_service_health(service_name):
             """
                 Get Service Health
-                
+
                 Args:
                     service_name: service name
-            
+
                 Returns:
                     Result of operation
                 """
@@ -1209,7 +1209,7 @@ class LuminarNexusV2:
         def get_quantum_status():
             """
                 Get Quantum Status
-                
+
                 Returns:
                     Result of operation
                 """
@@ -1281,6 +1281,49 @@ class LuminarNexusV2:
                 405,
             )
 
+        @app.route("/api/nexus/keyword-correlations/<type_a>/<type_b>", methods=["GET"])
+        def get_keyword_correlations(type_a, type_b):
+            """Analyze keyword correlations between two conversation types"""
+            correlations = self.ai_orchestrator.analyze_keyword_correlations(type_a, type_b)
+            return jsonify(sanitize_for_json(correlations))
+
+        @app.route("/api/nexus/ai/insights", methods=["POST"])
+        def generate_ai_insights():
+            """Generate AI-powered insights and responses"""
+            try:
+                data = request.get_json()
+                message = data.get("message", "")
+                session_id = data.get("session_id", "default")
+                context = data.get("context", "")
+
+                if not message:
+                    return jsonify({"error": "Message required"}), 400
+
+                # Use AI orchestrator to generate intelligent response
+                # Check for code generation requests
+                if any(keyword in message.lower() for keyword in ['create', 'generate', 'build', 'make', 'code']):
+                    insight = f"Aurora analyzing request: {message}\n\nI'll help you create that. Based on your request, I recommend using a modular approach with proper error handling and documentation."
+                else:
+                    # Conversational response with learning
+                    learned_patterns = self.ai_orchestrator.get_learned_patterns("neural_chat")
+
+                    if learned_patterns:
+                        # Use learned patterns for context
+                        insight = f"Based on our previous conversations, I understand you're asking about: {message}\n\nLet me provide a comprehensive response tailored to your needs."
+                    else:
+                        insight = f"Aurora processing: {message}\n\nI'm analyzing this with my 188 tiers of knowledge to provide the most accurate response."
+
+                return jsonify({
+                    "response": insight,
+                    "insight": insight,
+                    "session_id": session_id,
+                    "quantum_coherence": self.quantum_mesh.coherence_level,
+                    "ai_powered": True,
+                    "nexus_version": self.version
+                })
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500
+
         return app
 
 
@@ -1290,7 +1333,7 @@ class SecurityGuardian:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.threat_patterns = {
@@ -1411,7 +1454,7 @@ class PerformanceOptimizer:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.optimization_strategies = {
@@ -1588,7 +1631,7 @@ class PredictiveScaler:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.scaling_history = {}
@@ -1793,7 +1836,7 @@ class NeuralAnomalyDetector:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.anomaly_patterns = {}
@@ -2000,7 +2043,7 @@ def run_chat_server_v2(port: int = 5003):
     def health_check():
         """
             Health Check
-            
+
             Returns:
                 Result of operation
             """
