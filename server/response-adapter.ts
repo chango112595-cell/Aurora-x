@@ -182,12 +182,13 @@ export class ResponseAdapter {
    * Adapts a raw result into a string response, ensuring a valid string is always returned.
    * This method is intended to handle various result types from Aurora's processing.
    */
-  static adapt(result: any, pattern: ConversationPattern): string {
-    console.log('[Aurora] ✨ Response adapted for:', pattern.intent);
+  static adapt(result: any, pattern: { intent?: string; type?: string }): string {
+    const intentOrType = pattern.intent || pattern.type || 'general';
+    console.log('[Aurora] ✨ Response adapted for:', intentOrType);
 
     // Always return a valid string response
     if (!result) {
-      return `Aurora processed your request (${pattern.intent}) but generated no output. Please try rephrasing your question.`;
+      return `Aurora processed your request (${intentOrType}) but generated no output. Please try rephrasing your question.`;
     }
 
     if (typeof result === 'string') {
