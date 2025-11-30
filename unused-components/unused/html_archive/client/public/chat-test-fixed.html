@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Chat Test - Post-Fix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .test-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #results {
+            white-space: pre-wrap;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .chat-test {
+            margin: 20px 0;
+        }
+
+        input {
+            padding: 10px;
+            width: 300px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🤝 Aurora + Copilot: Post-Fix Chat Test</h1>
+    <p><strong>Status:</strong> Cache cleared, API verified, Vite restarted</p>
+
+    <div class="test-container">
+        <h2>Quick API Test</h2>
+        <button onclick="testAPI()">Test Aurora API</button>
+        <div id="api-results"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>Interactive Chat Test</h2>
+        <input type="text" id="chat-input" placeholder="Type a message to Aurora..." />
+        <button onclick="sendChatMessage()">Send to Aurora</button>
+        <div id="chat-results"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>Cache Check</h2>
+        <p>UI Version: <span id="cache-version">Checking...</span></p>
+        <p>Cache Timestamp: <span id="cache-timestamp"></span></p>
+    </div>
+
+    <script>
+        // Check cache version
+        document.getElementById('cache-version').textContent = window.AURORA_CACHE_BUSTER || 'Not set';
+        document.getElementById('cache-timestamp').textContent = new Date().toLocaleString();
+
+        async function testAPI() {
+            const results = document.getElementById('api-results');
+            results.innerHTML = 'Testing...';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: 'Test after cache fix',
+                        session_id: 'post-fix-test'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    results.innerHTML = `✅ SUCCESS!\nStatus: ${response.status}\nResponse: ${data.response.substring(0, 200)}...`;
+                    results.className = 'success';
+                } else {
+                    results.innerHTML = `❌ FAILED!\nStatus: ${response.status}\nError: ${JSON.stringify(data)}`;
+                    results.className = 'error';
+                }
+            } catch (error) {
+                results.innerHTML = `❌ NETWORK ERROR!\n${error.message}`;
+                results.className = 'error';
+            }
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const results = document.getElementById('chat-results');
+            const message = input.value || 'Hello Aurora, are you working now?';
+
+            results.innerHTML = 'Sending...';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        session_id: 'interactive-test'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    results.innerHTML = `🌟 Aurora says:\n${data.response}`;
+                    results.className = 'success';
+                } else {
+                    results.innerHTML = `❌ Chat failed:\n${JSON.stringify(data)}`;
+                    results.className = 'error';
+                }
+            } catch (error) {
+                results.innerHTML = `❌ Chat error:\n${error.message}`;
+                results.className = 'error';
+            }
+
+            input.value = '';
+        }
+
+        // Auto-test on page load
+        window.addEventListener('load', () => {
+            setTimeout(testAPI, 1000);
+        });
+    </script>
+</body>
+
+</html>

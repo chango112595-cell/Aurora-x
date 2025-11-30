@@ -1,0 +1,23 @@
+{
+  "created_at": "2025-11-28T12:40:08.415717",
+  "message_count": 3,
+  "topics_discussed": [],
+  "user_preferences": {},
+  "conversation_depth": 3,
+  "last_intent": null,
+  "context_memory": [],
+  "user_name": null,
+  "user_info": {},
+  "mentioned_topics": [],
+  "questions_asked": [
+    "tell me what programs are broken?",
+    "tell me what programs are broken?"
+  ],
+  "detection": {
+    "type": "general_chat",
+    "executionMode": "standard",
+    "suggestedFormat": "mixed",
+    "keywords": [],
+    "tone": "technical"
+  }
+}

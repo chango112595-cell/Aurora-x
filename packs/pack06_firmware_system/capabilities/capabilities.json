@@ -1,0 +1,23 @@
+{
+  "pack_id": "pack06_firmware_system",
+  "capabilities": [
+    {
+      "id": "pack06_firmware_system.read",
+      "name": "Read Access",
+      "description": "Read access to Firmware packager, flasher, hotswap flow",
+      "level": "basic"
+    },
+    {
+      "id": "pack06_firmware_system.write",
+      "name": "Write Access",
+      "description": "Write access to Firmware packager, flasher, hotswap flow",
+      "level": "elevated"
+    },
+    {
+      "id": "pack06_firmware_system.admin",
+      "name": "Admin Access",
+      "description": "Administrative access to Firmware packager, flasher, hotswap flow",
+      "level": "privileged"
+    }
+  ]
+}

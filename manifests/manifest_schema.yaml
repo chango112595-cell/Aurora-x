@@ -1,0 +1,32 @@
+# manifests/manifest_schema.yaml
+# Hybrid manifest schema for PACKs and artifacts.
+# Supports YAML or JSON representation (tools auto-detect).
+schema_version: "aurora-manifest-v1"
+pack:
+  id: string               # pack01_unified_process
+  name: string             # Human-friendly name
+  version: string          # semver
+  description: string
+  entrypoint:
+    install: string        # relative path to install.sh or CLI
+    start: string
+    stop: string
+    health: string
+  dependencies:
+    - pack_id: string
+      version_constraint: string
+  artifacts:
+    - path: string         # files to include in .axf or tarball
+      sha256: string
+  env:
+    required:
+      - name: string
+        type: string
+        default: any
+  autoscan:
+    manifest_preference: ["yaml","json"]   # preferred order
+    auto_detect_device: true              # whether to let installer pick mode
+  safety:
+    dry_run_supported: true
+    operator_approval_required: true
+    health_check_timeout_seconds: 30

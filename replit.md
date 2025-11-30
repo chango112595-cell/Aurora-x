@@ -1,131 +1,178 @@
-# Chango - AI-Powered Autonomous Code Synthesis Platform
+# Aurora-X Ultra - AI-Powered Autonomous Code Synthesis Platform
 
 ## Overview
 
-Chango is a JARVIS-inspired web application serving as the interface for Aurora-X Ultra, an offline autonomous code synthesis engine. It enables users to request complex code generation via a chat interface, monitor real-time synthesis progress, explore generated code libraries, and analyze corpus learning data. Chango aims to deliver a professional, developer-first experience for AI-assisted code generation, with significant market potential as a leading autonomous code synthesis platform.
+Aurora-X Ultra is an AI-powered autonomous code synthesis engine inspired by JARVIS. It features a sophisticated architecture with 188 intelligence tiers, 66 advanced execution methods, and 550 hybrid mode modules, enabling hyperspeed code generation. The platform offers a chat interface for requesting complex code, monitoring synthesis progress, exploring generated code libraries, and analyzing corpus learning data.
+
+**Latest Updates (Nov 29, 2025)**:
+- **PEAK AUTONOMY RESTORED**: Aurora Nexus V3 now operates at full power
+- 300 Autonomous Workers (non-conscious task executors)
+- 188 Grandmaster Tiers fully integrated
+- 66 Advanced Execution Methods loaded
+- 550 Cross-Temporal Modules loaded
+- Hyperspeed Mode with hybrid parallel execution
+- Autonomous self-healing with NO human interaction required
+- Organized folder structure for peak systems
+
+## Quick Start
+
+```bash
+./aurora-start
+```
+
+This starts the entire system on http://localhost:5000 with:
+- Express backend (TypeScript)
+- React frontend (Vite)
+- Chat system
+- All core services
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
 
+## Peak Autonomous Architecture
+
+### The Six Foundational Pillars
+
+| Pillar | Specification | Location |
+|--------|---------------|----------|
+| **188 Grandmaster Tiers** | Foundational (1-13) + Grandmaster Skills (14-188) | `manifests/tiers.manifest.json` |
+| **66 Advanced Execution Methods** | Sequential, Parallel, Speculative, Adversarial, Self-Reflective, Hybrid | `manifests/executions.manifest.json` |
+| **550 Cross-Temporal Modules** | Ancient → Present → Futuristic tools | `manifests/modules.manifest.json` |
+| **Hyperspeed Mode** | 1,000+ code units in <0.001 seconds | `hyperspeed/` |
+| **Hybrid Parallel Execution** | Task + Data + Pipeline + Agent parallelism | `controllers/` |
+| **300 Autonomous Workers** | Non-conscious task executors for fixing, coding, analysis | `aurora_nexus_v3/workers/` |
+
+### Organized Folder Structure
+
+```
+Aurora-x/
+├── manifests/                    # 188 Tiers, 66 AEMs, 550 Modules
+│   ├── tiers.manifest.json       # 188 Grandmaster Tiers
+│   ├── executions.manifest.json  # 66 Advanced Execution Methods
+│   └── modules.manifest.json     # 550 Cross-Temporal Modules
+├── hyperspeed/                   # Ultra-high-throughput operations
+│   └── aurora_hyper_speed_mode.py
+├── controllers/                  # Master Controller & Self-Healing
+│   ├── aurora_master_controller.py
+│   ├── aurora_nexus_v3_universal.py
+│   └── aurora_ultimate_self_healing_system_DRAFT2.py
+├── aurora_nexus_v3/              # Universal Consciousness System
+│   ├── core/                     # Core modules
+│   │   ├── universal_core.py     # Main consciousness engine (v3.1.0)
+│   │   ├── manifest_integrator.py # Manifest loader
+│   │   └── config.py
+│   ├── workers/                  # 300 Autonomous Workers
+│   │   ├── worker.py             # Single task executor
+│   │   ├── worker_pool.py        # Worker pool manager
+│   │   ├── task_dispatcher.py    # Task routing
+│   │   └── issue_detector.py     # Automatic issue detection
+│   └── modules/                  # 8 Core modules
+└── tools/                        # Luminar Nexus V2 & utilities
+    └── luminar_nexus_v2.py       # Chat + ML pattern learning
+```
+
+### Aurora Nexus V3 - Universal Consciousness System
+
+**Version**: 3.1.0 "Peak Autonomy"
+
+**Core Modules (8 total)**:
+1. AuroraUniversalCore - Main consciousness engine
+2. PlatformAdapter - Multi-platform support
+3. HardwareDetector - Capability scoring (0-100)
+4. ResourceManager - CPU/memory allocation
+5. PortManager - Universal port allocation
+6. ServiceRegistry - Service discovery
+7. APIGateway - REST API endpoints
+8. AutoHealer - Self-healing recovery
+
+**Peak Systems**:
+- **300 Autonomous Workers**: Non-conscious task executors that handle fixing, coding, and analysis when ordered or when system issues occur
+- **Manifest Integrator**: Loads and coordinates 188 tiers, 66 AEMs, 550 modules
+- **Issue Detector**: Monitors system health and triggers autonomous workers
+- **Task Dispatcher**: Routes tasks based on priority and capability
+
+### Luminar Nexus Systems
+
+| System | Purpose | Status |
+|--------|---------|--------|
+| **Luminar Nexus V3** | Universal Consciousness (300 workers) | Active |
+| **Luminar Nexus V2** | Chat + ML pattern learning | Active |
+
 ## System Architecture
 
-**Frontend Architecture**:
-- **Technology Stack**: React 18 with TypeScript, Vite, Wouter for routing.
-- **UI Framework**: Shadcn/ui (Radix UI + Tailwind CSS) with a "New York" style variant.
-- **Design System**: Custom HSL-based dark mode theme with cinematic tech colors (cyan, emerald, amber, purple), Inter font for UI, and JetBrains Mono for code.
-- **State Management**: TanStack Query for server state management.
-- **Dashboard Features**: Real-time progress tracking with 13 tasks, visual task cards, and interactive graph visualizations.
+**Frontend**:
+- **Technology**: React 18, TypeScript, Vite, Wouter for routing.
+- **UI/UX**: Shadcn/ui (Radix UI + Tailwind CSS) with a "New York" style variant.
+- **State Management**: TanStack Query for server state.
 
-**Backend Architecture**:
-- **Framework**: Express.js server with TypeScript, ESM modules.
-- **API Design**: RESTful API for corpus management, real-time synthesis progress (`/api/synthesis/*`), domain-specific problem solving (`/api/solve`, `/api/explain`), and unit conversion (`/api/units`).
-- **Request Validation**: Zod schemas.
-- **Deployment**: Production-grade CI/CD with GitHub Actions, multi-architecture Docker builds, automatic backups, health-gated rollouts, and rollback capabilities.
-- **Auto-Updater**: Zero-maintenance update system with automatic git pull, Docker rebuilds, and health checks.
-- **Language Router**: Automatic language selection (Python, Go, Rust, C#) based on prompts.
-- **Progress Tracking**: Real-time synthesis progress via WebSockets.
-- **Bridge Protocol**: API bridge endpoints (`/api/bridge/nl`, `/api/bridge/spec`, `/api/bridge/deploy`, `/api/bridge/nl/project`) for natural language and spec compilation, Git integration with automatic commits/pushes, Discord webhooks, and Replit ping support. Includes features for signed commits, preview/diff endpoints, and automatic GitHub Pull Request creation and rollback controls.
-- **Aurora Chat AI**: Anthropic Claude-powered conversational AI with natural language processing, conversation memory management (10 turn history with pair-wise trimming), web search capabilities via DuckDuckGo API, and graceful fallback mode when Claude is unavailable. Located in `server/aurora-chat.ts`.
+**Backend**:
+- **Framework**: Express.js with TypeScript and ESM modules.
+- **API**: RESTful API for corpus management, real-time synthesis, domain-specific problem solving.
+- **Core AI**: Aurora Chat AI with 10-turn conversation memory, autonomous code synthesis.
 
-**Data Storage Solutions**:
-- **Corpus Database**: SQLite (better-sqlite3) with WAL for function synthesis metadata, including advanced querying and similarity scoring (Jaccard distance).
-- **Schema Design**: `corpus` table with 18 fields, UUID primary keys, ISO 8601 timestamps, and JSON-serialized arrays.
-- **Migration Strategy**: Drizzle ORM configured for PostgreSQL migrations.
+**Data Storage**:
+- **Corpus**: SQLite (better-sqlite3) with WAL for function synthesis metadata.
+- **ORM**: Drizzle ORM configured for PostgreSQL migrations.
 
-**Authentication and Authorization**:
-- **API Security**: Header-based API key authentication (`x-api-key`) for corpus ingestion.
-- **User Authentication**: Schema prepared for username/password authentication with Drizzle ORM and PostgreSQL-backed sessions.
+## Running the System
 
-**Luminar Nexus V2 Integration**:
-- **Service Monitoring**: AI-driven service orchestration and monitoring system with quantum-inspired architecture.
-- **Port Configuration**: Luminar Nexus V2 API runs on port 5005, backend/frontend on port 5000.
-- **Architecture Note**: Frontend is served via Vite middleware through backend on port 5000 (not separate port 5173). Only backend:5000 requires monitoring as it serves both API and frontend.
-- **Service Registry**: Monitors backend:5000 (fullstack service) only. Services that don't exist (bridge, chat, self-learn) or run as middleware (Vite) are not monitored to prevent false healing triggers.
-- **Health Monitoring**: Socket-based connectivity checks with AI analysis for performance classification. "Down" services skip AI analysis to prevent healing loops.
-- **Quantum Coherence**: System health metric based on healthy_services / total_services ratio (100% = all services healthy).
+### Main Application (Recommended)
+```bash
+./aurora-start
+```
+Runs: Backend + Frontend + Chat System on port 5000
 
-## Recent Updates
+### Aurora Nexus V3 (Separate)
+```bash
+python3 aurora_nexus_v3/main.py
+```
+Runs: Universal consciousness system with 300 workers
 
-**November 27, 2025**:
-- **Aurora 4-File Experimental Integration**: Completed integration of 4 experimental Aurora modules following the AURORA_INTEGRATION_DETAILED_FIX_GUIDE.md:
-  - **Self-Learning Diagnostics** (`aurora_x/self_learn_diagnostics.py`): 
-    - Honest 0-100 quality scoring with true zero on failures
-    - Persistent state tracking via `.aurora_diagnostics.json`
-    - Failure pattern analysis and learning progress metrics
-    - Integrated with `aurora_x/self_learn.py` for quality tracking
-  - **Autonomous Healing** (`tools/aurora_autonomous_fixer.py`):
-    - AutonomousHealer class with 6 health check systems
-    - Checks: self_learn, chat_server, corpus_db, frontend, diagnostics, state_files
-    - Before/after health comparison during healing
-    - API endpoint: `POST /api/heal` for triggering autonomous healing
-  - **Emergency Recovery** (`tools/aurora_recovery_system.py`):
-    - Backup/restore with integrity verification
-    - Health report with critical file and state file checks
-    - Preview restore functionality before actual restore
-  - **Terminal Chat Client** (`tools/aurora_terminal_client.py`):
-    - Interactive terminal interface for Aurora chat
-    - Dependency checking with clear install instructions
-    - Enhanced error handling for various HTTP status codes
-    - Usage: `python3 tools/aurora_terminal_client.py`
+### Testing
+```bash
+python3 aurora_nexus_v3/test_nexus.py  # Test Aurora Nexus
+npm test                               # Test frontend
+pytest                                 # Test backend
+```
 
-**November 15, 2025**:
-- **System-Wide Debugging and Optimization**: Comprehensive system health check and fixes
-  - Fixed Luminar Nexus V2 Aurora Bridge warning being printed unconditionally
-  - Fixed CREATE_NEW_PROCESS_GROUP cross-platform compatibility issue in luminar_nexus_v2.py (Windows/Linux)
-  - Fixed quantum coherence initialization showing 0.0 at startup - now maintains 1.0 until first health check completes
-  - Updated @replit/vite-plugin-cartographer from 0.3.2 to 0.4.3
-  - All LSP errors resolved - codebase is clean
-- **Security Configuration Notes**:
-  - `ANTHROPIC_API_KEY`: Required for Aurora Chat AI with Claude Sonnet 4. System falls back to conversational mode when unavailable
-  - `JWT_SECRET`: Currently using default development secret. Set custom value in production for enhanced security
-  - `ADMIN_PASSWORD`: Set via environment variable. Default development password is in use
-- **Corpus Database Git Issue**: 
-  - File `data/corpus.db` is properly listed in `.gitignore`
-  - If still appearing in git status, it was likely committed before being ignored
-  - **To remove from git tracking** (user action required):
-    ```bash
-    git rm --cached data/corpus.db
-    git rm --cached data/corpus.db-shm
-    git rm --cached data/corpus.db-wal
-    git commit -m "Remove corpus database from git tracking"
-    ```
-  - This removes files from git index while preserving them on disk
+## Development Notes
 
-**November 13, 2025**:
-- **Aurora Chat AI Enhanced**: Integrated Anthropic Claude Sonnet 4 for natural, human-like conversations
-  - Conversation memory management with proper user/assistant pairing (10 turn history, 20 messages total)
-  - Pair-wise trimming logic ensures conversation structure is always maintained
-  - Safety guards prevent orphaned assistant messages
-  - Web search capability via DuckDuckGo API for real-time information access
-  - Graceful fallback mode with friendly responses when Claude API is unavailable
-  - Robust error handling with multiple fallback layers
-- **Fixed Luminar Nexus V2 Routing**: Updated sidebar URL from `/luminar` to `/luminar-nexus` to match route definition
-- **Fixed HTTP Server Creation**: Added proper `createServer` initialization and corrected import paths
-- **Fixed Luminar Nexus V2 Healing Loops**: Reduced service registry from 5 phantom services to 1 actual service (backend:5000), eliminating false healing triggers
-- **Quantum Coherence Restored**: Improved from 20% to 100% by monitoring only actually running services
-- **Health Check Logic**: Fixed to properly handle "down" services without triggering autonomous healing loops. Down services now skip AI analysis
-- **LSP Errors Fixed**: Resolved serviceName scope issue in server/routes.ts error handling
+- **Backend Status**: Fully operational
+- **Frontend Status**: Working with React + Vite
+- **Aurora Nexus V3**: v3.1.0 "Peak Autonomy" with 300 workers
+- **Manifests**: 188 tiers, 66 AEMs, 550 modules loaded
+- **Autonomous Mode**: Enabled - workers fix issues automatically
 
-**October 14, 2024**:
-- **Enhanced CI/CD Pipeline**: 
-  - Upgraded GitHub Actions workflow with SARIF output for GitHub Security tab integration
-  - Coverage badge generation as SVG with color coding (red <60%, orange <80%, yellow <85%, green ≥85%)
-  - Auto-publishing of coverage badge to separate 'badges' branch
-  - Coverage calculation using lxml for accurate XML parsing
-- **PR Rollback Controls**: 
-  - Added rollback endpoints to manage Aurora-generated pull requests
-  - Dashboard UI integration with "Rollback Open PR" and "Revert Last Merged PR" buttons
-  - Requires AURORA_GH_TOKEN environment variable with repo permissions
-- **Coverage Badge**: Added coverage badge to README.md for real-time coverage visibility
-- **GPG Signing**: Generated new GPG key for verified commits
-- **Aurora Chat Fixed**: Natural language processing now handles English commands correctly
-- **Dashboard Generate Button**: Integrated for PR creation via Aurora Bridge
+## Aurora EdgeOS Runtimes (PACK 3B-3J)
+
+Edge runtimes with both offline (fully internal) and cloud-assisted modes. Default is offline.
+
+| Runtime | Description | Location |
+|---------|-------------|----------|
+| **3B - Automotive** | CAN/UDS/OBD-II bridge, ECU suggestion workflow | `automotive/` |
+| **3C - Aviation** | RTOS partitioning, companion gateway, signed uplink | `aviation/` |
+| **3D - Maritime** | NMEA2000/NMEA0183/AIS bridge | `maritime/` |
+| **3E - IoT** | ESP32 MicroPython, OTA updates | `iot/esp32/` |
+| **3F - Router** | OpenWRT/EdgeOS agent | `router/` |
+| **3G - Satellite** | Ground uplink, companion agent | `satellite/` |
+| **3H - Smart TV** | Android TV/WebOS/Tizen agents | `tv/` |
+| **3I - Mobile** | Android/iOS companion, Termux | `mobile/` |
+| **3J - Cross-Build** | Multi-arch tooling, firmware packaging | `build/` |
+
+### Mode Toggle
+```bash
+AURORA_MODE=offline  # Default - fully local
+AURORA_MODE=cloud    # Cloud-assisted via AURORA_BUILDER_URL
+```
+
+### Safety Pattern
+All edge runtimes use companion-computer pattern with human-signed approval for safety-critical operations.
 
 ## External Dependencies
 
-- **Aurora-X Integration**: Aurora-X Ultra (Python-based autonomous code synthesis engine).
-- **Database Providers**: Neon Serverless PostgreSQL (`@neondatabase/serverless`) for production, SQLite (`better-sqlite3`) for local development and corpus storage.
-- **UI Component Dependencies**: Radix UI primitives.
-- **Build and Development Tools**: Vite, esbuild, tsx, Tailwind CSS, PostCSS.
-- **AI SDK**: `@anthropic-ai/sdk` (for potential LLM features).
+- **AI Engine**: Aurora-X Ultra (Python-based autonomous code synthesis engine)
+- **Databases**: Neon Serverless PostgreSQL for production, SQLite for local development
+- **UI Components**: Radix UI primitives
+- **Build Tools**: Vite, esbuild, tsx, Tailwind CSS, PostCSS
+- **AI SDK**: `@anthropic-ai/sdk` for Claude Sonnet 4 integration

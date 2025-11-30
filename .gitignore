@@ -35,4 +35,4 @@ logs
 *.log
 npm-debug.log*systems/chango/
 env/
-unused/
+unused things/

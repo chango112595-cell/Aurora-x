@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-11-12T13:11:12.787653",
+  "timestamp": "2025-11-28T10:12:00.478981",
   "services": {
     "5000": {
       "name": "Aurora UI (frontend)",
-      "status": "DOWN"
+      "status": "UP"
     },
     "5001": {
       "name": "Aurora backend (uvicorn)",
@@ -19,7 +19,7 @@
     },
     "8000": {
       "name": "Standalone dashboards (legacy)",
-      "status": "DOWN"
+      "status": "UP"
     }
   },
   "system_info": {

@@ -1,0 +1,8 @@
+app: AuroraOS
+version: 1.0.0
+arch: x86_64
+exec: aurora.sh
+files:
+  - aurora_os.py
+  - aurora.sh
+  - aurora_core/

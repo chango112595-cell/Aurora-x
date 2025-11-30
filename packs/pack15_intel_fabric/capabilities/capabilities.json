@@ -1,0 +1,23 @@
+{
+  "pack_id": "pack15_intel_fabric",
+  "capabilities": [
+    {
+      "id": "pack15_intel_fabric.read",
+      "name": "Read Access",
+      "description": "Read access to Aurora Intelligence Fabric (cross-device cognition)",
+      "level": "basic"
+    },
+    {
+      "id": "pack15_intel_fabric.write",
+      "name": "Write Access",
+      "description": "Write access to Aurora Intelligence Fabric (cross-device cognition)",
+      "level": "elevated"
+    },
+    {
+      "id": "pack15_intel_fabric.admin",
+      "name": "Admin Access",
+      "description": "Administrative access to Aurora Intelligence Fabric (cross-device cognition)",
+      "level": "privileged"
+    }
+  ]
+}

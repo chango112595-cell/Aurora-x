@@ -1,0 +1,21 @@
+{
+  "schema_version": "aurora-manifest-v1",
+  "pack": {
+    "id": "pack05_5J_state_persistence",
+    "name": "Pack05 5J State Persistence",
+    "version": "0.1.0",
+    "description": "Plugin state persistence and snapshot system",
+    "entrypoint": {
+      "install": "install.sh",
+      "start": "start.sh",
+      "stop": "stop.sh",
+      "health": "health_check.sh"
+    },
+    "dependencies": [],
+    "artifacts": [],
+    "safety": {
+      "dry_run_supported": true,
+      "operator_approval_required": true
+    }
+  }
+}

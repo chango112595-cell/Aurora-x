@@ -1,0 +1,23 @@
+{
+  "pack_id": "pack13_runtime_2",
+  "capabilities": [
+    {
+      "id": "pack13_runtime_2.read",
+      "name": "Read Access",
+      "description": "Read access to Aurora Runtime 2.0 (state storage, sandboxing)",
+      "level": "basic"
+    },
+    {
+      "id": "pack13_runtime_2.write",
+      "name": "Write Access",
+      "description": "Write access to Aurora Runtime 2.0 (state storage, sandboxing)",
+      "level": "elevated"
+    },
+    {
+      "id": "pack13_runtime_2.admin",
+      "name": "Admin Access",
+      "description": "Administrative access to Aurora Runtime 2.0 (state storage, sandboxing)",
+      "level": "privileged"
+    }
+  ]
+}

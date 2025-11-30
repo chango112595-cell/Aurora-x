@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="AuroraOS" Language="1033" Version="1.0.0.0" Manufacturer="Aurora" UpgradeCode="PUT-GUID-HERE">
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
+    <MediaTemplate />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="AuroraOS" />
+      </Directory>
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="AuroraOS" Level="1">
+      <ComponentGroupRef Id="AuroraComponents" />
+    </Feature>
+
+    <DirectoryRef Id="INSTALLFOLDER">
+      <!-- Place component files here or use heat.exe to harvest -->
+    </DirectoryRef>
+  </Product>
+</Wix>

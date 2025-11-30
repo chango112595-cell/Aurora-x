@@ -1,0 +1,20 @@
+{
+  "created_at": "2025-11-28T10:02:03.874124",
+  "message_count": 2,
+  "topics_discussed": [],
+  "user_preferences": {},
+  "conversation_depth": 2,
+  "last_intent": null,
+  "context_memory": [],
+  "user_name": "Chris",
+  "user_info": {},
+  "mentioned_topics": [],
+  "questions_asked": [],
+  "detection": {
+    "type": "general_chat",
+    "executionMode": "standard",
+    "suggestedFormat": "mixed",
+    "keywords": [],
+    "tone": "debugging"
+  }
+}

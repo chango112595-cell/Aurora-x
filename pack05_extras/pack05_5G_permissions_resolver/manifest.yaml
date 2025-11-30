@@ -1,0 +1,21 @@
+{
+  "schema_version": "aurora-manifest-v1",
+  "pack": {
+    "id": "pack05_5G_permissions_resolver",
+    "name": "Pack05 5G Permissions Resolver",
+    "version": "0.1.0",
+    "description": "Permissions resolver and runtime enforcement",
+    "entrypoint": {
+      "install": "install.sh",
+      "start": "start.sh",
+      "stop": "stop.sh",
+      "health": "health_check.sh"
+    },
+    "dependencies": [],
+    "artifacts": [],
+    "safety": {
+      "dry_run_supported": true,
+      "operator_approval_required": true
+    }
+  }
+}

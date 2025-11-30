@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  aurora:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.multi
+    image: auroraos:latest
+    container_name: aurora-core
+    volumes:
+      - ../:/app
+    environment:
+      - AURORA_API_TOKEN=aurora-dev-token
+    ports:
+      - "5000:5000"
+      - "9701:9701"
+      - "9801:9801"
+    restart: unless-stopped
+
+  mavbridge:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.multi
+    container_name: aurora-mavbridge
+    command: python3 gateway/mavlink_bridge.py
+    ports:
+      - "9100:9100"
+    restart: unless-stopped

@@ -1,0 +1,23 @@
+{
+  "pack_id": "pack10_autonomy_engine",
+  "capabilities": [
+    {
+      "id": "pack10_autonomy_engine.read",
+      "name": "Read Access",
+      "description": "Read access to Agentic workflows and self-repair",
+      "level": "basic"
+    },
+    {
+      "id": "pack10_autonomy_engine.write",
+      "name": "Write Access",
+      "description": "Write access to Agentic workflows and self-repair",
+      "level": "elevated"
+    },
+    {
+      "id": "pack10_autonomy_engine.admin",
+      "name": "Admin Access",
+      "description": "Administrative access to Agentic workflows and self-repair",
+      "level": "privileged"
+    }
+  ]
+}

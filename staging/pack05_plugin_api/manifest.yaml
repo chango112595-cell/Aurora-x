@@ -1,0 +1,23 @@
+schema_version: "aurora-manifest-v1"
+pack:
+  id: "pack05_plugin_api"
+  name: "Plugin API Core"
+  version: "0.1.0"
+  description: "Core plugin API, registry, loader and permissions"
+  entrypoint:
+    install: "install.sh"
+    start: "start.sh"
+    stop: "stop.sh"
+    health: "health_check.sh"
+  dependencies:
+    - pack_id: "pack03_os_base"
+      version_constraint: ">=0.1.0"
+    - pack_id: "pack04_launcher"
+      version_constraint: ">=0.1.0"
+  artifacts:
+    - path: "core/api.py"
+      sha256: ""
+  safety:
+    dry_run_supported: true
+    operator_approval_required: true
+    health_check_timeout_seconds: 30

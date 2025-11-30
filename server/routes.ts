@@ -17,9 +17,10 @@ import {
   similarityQuerySchema,
   runMetaSchema,
   usedSeedSchema,
-} from "@shared/schema";
+} from "../shared/schema";
 import authRouter from "./auth-routes";
 import { getChatResponse, searchWeb } from "./aurora-chat";
+import { ResponseAdapter } from "./response-adapter";
 import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter } from "./rate-limit";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
@@ -174,6 +175,19 @@ async function refreshReadmeBadges(): Promise<void> {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // ══════════════════════════════════════════════════════════════
+  // 📊 SYSTEM ROUTES (BEFORE RATE LIMITING)
+  // ══════════════════════════════════════════════════════════════
+  
+  // Health check endpoint - EXEMPT from rate limiting (critical for monitoring)
+  app.get("/api/health", (req, res) => {
+    res.status(200).json({ 
+      status: "ok",
+      service: "chango",
+      uptime: Math.floor((Date.now() - serverStartTime) / 1000)
+    });
+  });
+
+  // ══════════════════════════════════════════════════════════════
   // 🔐 RATE LIMITING SETUP
   // ══════════════════════════════════════════════════════════════
   // Apply rate limiters in order of specificity (most specific first)
@@ -189,19 +203,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // 4. General API rate limiting for all other routes
   app.use("/api/", apiLimiter);
-
-  // ══════════════════════════════════════════════════════════════
-  // 📊 SYSTEM ROUTES
-  // ══════════════════════════════════════════════════════════════
-
-  // Simple health check endpoint for container health checks
-  app.get("/api/health", (req, res) => {
-    res.status(200).json({ 
-      status: "ok",
-      service: "chango",
-      uptime: Math.floor((Date.now() - serverStartTime) / 1000)
-    });
-  });
 
   // Autonomous healing trigger endpoint
   app.post("/api/heal", async (req, res) => {
@@ -296,7 +297,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Note: Conversation memory and web search are now handled in server/aurora-chat.ts
 
-  // Chat endpoint - Aurora's conversational interface with Claude AI
+  // Chat endpoint - Aurora's autonomous conversational interface
   // Supports both web and terminal clients
   app.post("/api/chat", async (req, res) => {
     try {
@@ -310,7 +311,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isTerminalClient = client === 'terminal';
       console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId, 'Client:', client || 'web');
 
-      // Try routing to Luminar Nexus V2 first for specific system commands
+      // Try routing to Aurora AI Backend first (port 8000)
+      try {
+        const aiResponse = await fetch('http://0.0.0.0:8000/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            text: message, 
+            session_id: sessionId,
+            context: req.body.context || {} 
+          }),
+          signal: AbortSignal.timeout(30000) // 30 second timeout
+        });
+
+        if (aiResponse.ok) {
+          const aiData = await aiResponse.json();
+          console.log('[Aurora Chat] Routed to Aurora AI Backend successfully');
+          
+          return res.json({
+            ok: true,
+            response: aiData.response,
+            message: aiData.response,
+            session_id: sessionId,
+            ai_powered: true,
+            client: client || 'web',
+            intent: aiData.intent,
+            entities: aiData.entities
+          });
+        }
+      } catch (aiError) {
+        console.warn('[Aurora Chat] Aurora AI Backend unavailable, falling back to Express handler:', aiError);
+      }
+
+      // Fallback: Try routing to Luminar Nexus V2 for system commands
       const msgLower = message.toLowerCase().trim();
       const isSystemCommand = msgLower.includes('activate tier') || 
                               (msgLower.includes('luminar') && msgLower.includes('nexus') && msgLower.includes('integrate'));
@@ -329,16 +362,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
             return res.json(v2Data);
           }
         } catch (v2Error) {
-          console.warn('[Aurora Chat] Luminar V2 unavailable, using Claude AI');
+          console.warn('[Aurora Chat] Luminar V2 unavailable, using Aurora autonomous synthesis');
         }
       }
 
-      // Use Claude AI for human-like conversational responses
-      let chatResult = await getChatResponse(message, sessionId);
+      // Final fallback: Use Aurora's autonomous problem-solving
+      const chatResult = await getChatResponse(message, sessionId, req.body.context);
+      let response = typeof chatResult === 'string' ? chatResult : (chatResult as any).response || '';
+      const detection = typeof chatResult === 'object' && (chatResult as any).detection ? (chatResult as any).detection : null;
+      
+      // Adapt response based on detected conversation type
+      if (detection) {
+        response = ResponseAdapter.adaptResponse(response, detection);
+        console.log(`[Aurora] ✨ Response adapted for: ${detection.type}`);
+      }
       
       // Format response for terminal clients (strip HTML)
       if (isTerminalClient) {
-        chatResult = chatResult
+        response = response
           .replace(/<[^>]*>/g, '')
           .replace(/&nbsp;/g, ' ')
           .replace(/&lt;/g, '<')
@@ -348,11 +389,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         ok: true,
-        response: chatResult,
-        message: chatResult,
+        response,
+        message: response,
         session_id: sessionId,
         ai_powered: true,
-        client: client || 'web'
+        client: client || 'web',
+        detection: detection ? { type: detection.type, confidence: detection.confidence } : undefined
       });
 
     } catch (error: any) {
@@ -1548,10 +1590,6 @@ except Exception as e:
     res.sendStatus(204); // No content for OPTIONS
   });
 
-  // Simple health check endpoint
-  app.get("/api/health", async (_req, res) => {
-    res.json({ status: "ok", timestamp: new Date().toISOString() });
-  });
 
   // System diagnostics endpoint
   app.get("/api/diagnostics", async (_req, res) => {
@@ -1603,6 +1641,35 @@ except Exception as e:
         status: "error",
         error: error.message,
         timestamp: new Date().toISOString()
+      });
+    }
+  });
+
+  // Aurora AI Backend health check proxy
+  app.get("/api/aurora-ai/health", async (req, res) => {
+    try {
+      const response = await fetch('http://0.0.0.0:8000/healthz', {
+        signal: AbortSignal.timeout(5000)
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        return res.json({
+          status: "ok",
+          aurora_ai_backend: data,
+          message: "Aurora AI Backend is accessible"
+        });
+      } else {
+        return res.status(503).json({
+          status: "degraded",
+          message: "Aurora AI Backend returned non-OK status"
+        });
+      }
+    } catch (error: any) {
+      return res.status(503).json({
+        status: "unavailable",
+        message: "Aurora AI Backend is not reachable",
+        error: error.message
       });
     }
   });

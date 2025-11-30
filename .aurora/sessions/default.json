@@ -1,0 +1,23 @@
+{
+  "created_at": "2025-11-28T09:49:12.172536",
+  "message_count": 9,
+  "topics_discussed": [
+    "api",
+    "react"
+  ],
+  "user_preferences": {},
+  "conversation_depth": 9,
+  "last_intent": null,
+  "context_memory": [],
+  "user_name": null,
+  "user_info": {},
+  "mentioned_topics": [],
+  "questions_asked": [],
+  "detection": {
+    "type": "general_chat",
+    "executionMode": "standard",
+    "suggestedFormat": "mixed",
+    "keywords": [],
+    "tone": "technical"
+  }
+}

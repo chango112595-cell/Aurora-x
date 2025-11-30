@@ -1,1 +1,0 @@
-{"timestamp": "2025-11-04T10:49:26.852204", "task": "Port 5001 Conflict Resolution", "status": "INVESTIGATING", "problem": "serve.py and Luminar Nexus both want port 5001", "expected": "Port 5001 = Vite UI (HTML), Port 5000 = Backend API (JSON)"}

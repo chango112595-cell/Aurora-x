@@ -1,0 +1,28 @@
+schema_version: "aurora-manifest-v1"
+pack:
+  id: "pack03_os_base"
+  name: "Aurora OS Base"
+  version: "0.1.0"
+  description: "Virtual FS, namespace, scheduler, process abstraction"
+  entrypoint:
+    install: "install.sh"
+    start: "start.sh"
+    stop: "stop.sh"
+    health: "health_check.sh"
+  dependencies:
+    - pack_id: "pack01_pack01"
+      version_constraint: ">=1.0.0"
+    - pack_id: "pack02_env_profiler"
+      version_constraint: ">=1.0.0"
+  artifacts:
+    - path: "core/vfs.py"
+      sha256: ""
+  env:
+    required: []
+  autoscan:
+    manifest_preference: ["yaml","json"]
+    auto_detect_device: true
+  safety:
+    dry_run_supported: true
+    operator_approval_required: true
+    health_check_timeout_seconds: 30

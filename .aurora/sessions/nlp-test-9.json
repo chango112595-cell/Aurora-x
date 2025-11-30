@@ -1,0 +1,22 @@
+{
+  "created_at": "2025-11-28T00:11:09.241136",
+  "message_count": 1,
+  "topics_discussed": [
+    "api"
+  ],
+  "user_preferences": {},
+  "conversation_depth": 1,
+  "last_intent": null,
+  "context_memory": [],
+  "user_name": null,
+  "user_info": {},
+  "mentioned_topics": [],
+  "questions_asked": [],
+  "detection": {
+    "type": "question_answering",
+    "executionMode": "standard",
+    "suggestedFormat": "mixed",
+    "keywords": [],
+    "tone": "technical"
+  }
+}

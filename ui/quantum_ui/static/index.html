@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Aurora Quantum UI</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, Roboto, sans-serif; margin:0; background:#0b1020; color:#e6eef8; }
+    .top { padding:16px; display:flex; gap:12px; align-items:center; background:linear-gradient(90deg,#0f1724, #071224); }
+    .brand { font-weight:700; font-size:18px; }
+    .main { display:flex; height:calc(100vh - 64px); }
+    .sidebar { width:260px; background:#071029; padding:12px; overflow:auto; }
+    .content { flex:1; padding:16px; overflow:auto; }
+    .card { background:#071229; padding:12px; border-radius:10px; margin-bottom:12px; }
+    button { background:#0ea5a4; color:#042022; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
+    input, textarea { width:100%; padding:8px; border-radius:6px; border:1px solid #0b2a34; background:#021018; color:#cfeff0; }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div class="brand">Aurora — Quantum Dashboard</div>
+    <div style="margin-left:auto">Mode: <select id="mode"><option>offline</option><option>cloud</option></select></div>
+  </div>
+  <div class="main">
+    <div class="sidebar">
+      <div class="card">
+        <h4>Agents</h4>
+        <div id="agentsList">Loading...</div>
+        <button id="refreshAgents">Refresh</button>
+      </div>
+      <div class="card">
+        <h4>Memory</h4>
+        <input id="memQuery" placeholder="Search memory"/>
+        <button id="doSearch">Search</button>
+        <div id="memResults"></div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h3>Agent Console</h3>
+        <textarea id="goal" rows="3" placeholder="Give an agent a goal..."></textarea>
+        <button id="runAgent">Run Agent</button>
+        <pre id="agentOutput"></pre>
+      </div>
+      <div class="card">
+        <h3>System Logs</h3>
+        <pre id="syslog">loading...</pre>
+      </div>
+    </div>
+  </div>
+<script>
+const API = '/api'; // local backend serves this
+async function listAgents(){
+  const r = await fetch(API + '/agents'); const j = await r.json();
+  const el = document.getElementById('agentsList'); el.innerHTML='';
+  j.forEach(a=>{ const d = document.createElement('div'); d.textContent = a.name + " ("+a.id.slice(0,6)+")"; el.appendChild(d); });
+}
+document.getElementById('refreshAgents').onclick = listAgents;
+document.getElementById('doSearch').onclick = async ()=>{
+  const q = document.getElementById('memQuery').value;
+  const r = await fetch(API+'/memory/search?q='+encodeURIComponent(q));
+  const j = await r.json(); document.getElementById('memResults').innerText = JSON.stringify(j,null,2);
+};
+document.getElementById('runAgent').onclick = async ()=>{
+  const goal = document.getElementById('goal').value;
+  const r = await fetch(API + '/agents/run', {method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({agent:'default', goal})});
+  const j = await r.json();
+  document.getElementById('agentOutput').innerText = JSON.stringify(j,null,2);
+};
+async function tailLog(){
+  const r = await fetch(API+'/sys/log?lines=200'); const j = await r.text();
+  document.getElementById('syslog').innerText = j;
+}
+setInterval(tailLog, 2500);
+listAgents(); tailLog();
+</script>
+</body>
+</html>

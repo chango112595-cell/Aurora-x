@@ -1,0 +1,11 @@
+image:
+  repository: yourrepo/auroraos
+  tag: latest
+env:
+  AURORA_API_TOKEN: "REPLACE_WITH_SECRET"
+ingress:
+  enabled: true
+  host: aurora.example.com
+  tls:
+    - hosts: ["aurora.example.com"]
+      secretName: aurora-tls

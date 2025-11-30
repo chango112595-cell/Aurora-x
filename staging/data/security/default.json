@@ -1,0 +1,7 @@
+{
+  "allow_network": false,
+  "allow_exec": true,
+  "allowed_paths": [
+    "/home/runner/workspace/staging/data/vfs"
+  ]
+}

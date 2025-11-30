@@ -1,0 +1,15 @@
+[Unit]
+Description=AuroraOS universal orchestrator
+After=network.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/home/%i/Aurora-x
+Environment=AURORA_API_TOKEN=aurora-dev-token
+ExecStart=/usr/bin/python3 /home/%i/Aurora-x/aurora_os.py start
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
