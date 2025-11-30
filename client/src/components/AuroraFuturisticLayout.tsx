@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'wouter';
-import { useLocation } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import {
   LayoutDashboard, MessageSquare, Brain, Network, Settings,
   Zap, Activity, Database, Layers, GitBranch, Code2,
