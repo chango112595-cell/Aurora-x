@@ -12,13 +12,13 @@
     "details": {
       "cpuinfo_snippet": [
         "processor\t: 0",
-        "vendor_id\t: AuthenticAMD",
-        "cpu family\t: 25",
-        "model\t\t: 17",
-        "model name\t: AMD EPYC 9B14",
-        "stepping\t: 1",
+        "vendor_id\t: GenuineIntel",
+        "cpu family\t: 6",
+        "model\t\t: 143",
+        "model name\t: Intel(R) Xeon(R) Platinum 8481C CPU @ 2.70GHz",
+        "stepping\t: 8",
         "microcode\t: 0xffffffff",
-        "cpu MHz\t\t: 2600.000"
+        "cpu MHz\t\t: 2699.998"
       ]
     }
   },
@@ -28,8 +28,8 @@
     "opencl": false
   },
   "perf": {
-    "cpu_ms": 0.020495176315307617,
-    "io_s": 0.020323991775512695
+    "cpu_ms": 0.023039579391479492,
+    "io_s": 0.01777172088623047
   },
   "score": {
     "score": 10,
