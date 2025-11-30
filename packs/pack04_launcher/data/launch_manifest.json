@@ -1,0 +1,5 @@
+{
+  "jobs": [
+    {"name": "example_job", "cmd": "echo example", "depends_on": []}
+  ]
+}
