@@ -1,0 +1,24 @@
+*** Begin File: pack06_pack06/install.sh
+#!/usr/bin/env bash
+echo "Install stub for PACK"
+exit 0
+*** End File: pack06_pack06/install.sh
+
+*** Begin File: pack06_pack06/start.sh
+#!/usr/bin/env bash
+echo "Start stub"
+exit 0
+*** End File: pack06_pack06/start.sh
+
+*** Begin File: pack06_pack06/stop.sh
+#!/usr/bin/env bash
+echo "Stop stub"
+exit 0
+*** End File: pack06_pack06/stop.sh
+
+*** Begin File: pack06_pack06/health_check.sh
+#!/usr/bin/env bash
+# default healthy
+exit 0
+*** End File: pack06_pack06/health_check.sh
+

@@ -1,0 +1,1 @@
+Run: python3 run_all_tests.py from this directory
