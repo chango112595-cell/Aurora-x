@@ -144,6 +144,31 @@ pytest                                 # Test backend
 - **Manifests**: 188 tiers, 66 AEMs, 550 modules loaded
 - **Autonomous Mode**: Enabled - workers fix issues automatically
 
+## Aurora EdgeOS Runtimes (PACK 3B-3J)
+
+Edge runtimes with both offline (fully internal) and cloud-assisted modes. Default is offline.
+
+| Runtime | Description | Location |
+|---------|-------------|----------|
+| **3B - Automotive** | CAN/UDS/OBD-II bridge, ECU suggestion workflow | `automotive/` |
+| **3C - Aviation** | RTOS partitioning, companion gateway, signed uplink | `aviation/` |
+| **3D - Maritime** | NMEA2000/NMEA0183/AIS bridge | `maritime/` |
+| **3E - IoT** | ESP32 MicroPython, OTA updates | `iot/esp32/` |
+| **3F - Router** | OpenWRT/EdgeOS agent | `router/` |
+| **3G - Satellite** | Ground uplink, companion agent | `satellite/` |
+| **3H - Smart TV** | Android TV/WebOS/Tizen agents | `tv/` |
+| **3I - Mobile** | Android/iOS companion, Termux | `mobile/` |
+| **3J - Cross-Build** | Multi-arch tooling, firmware packaging | `build/` |
+
+### Mode Toggle
+```bash
+AURORA_MODE=offline  # Default - fully local
+AURORA_MODE=cloud    # Cloud-assisted via AURORA_BUILDER_URL
+```
+
+### Safety Pattern
+All edge runtimes use companion-computer pattern with human-signed approval for safety-critical operations.
+
 ## External Dependencies
 
 - **AI Engine**: Aurora-X Ultra (Python-based autonomous code synthesis engine)
