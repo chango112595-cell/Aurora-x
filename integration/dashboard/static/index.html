@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/><title>Aurora Operator</title>
+  <style>
+    body{font-family:Inter,system-ui,Arial;margin:0;background:#0b1220;color:#e8eef2}
+    header{padding:12px;background:#071223;display:flex;align-items:center}
+    main{display:flex;height:calc(100vh-56px)}
+    .left{width:300px;padding:12px;background:#071026;overflow:auto}
+    .right{flex:1;padding:12px;overflow:auto}
+    .card{background:#071229;padding:12px;border-radius:8px;margin-bottom:12px}
+    button{background:#0ea5a4;border:none;padding:8px 12px;border-radius:6px;color:#022}
+  </style>
+</head>
+<body>
+  <header><h3>Aurora Operator Dashboard</h3></header>
+  <main>
+    <div class="left">
+      <div class="card">
+        <h4>Updater</h4>
+        <input type="file" id="file"/><br/><br/>
+        <button onclick="upload()">Upload</button>
+        <button onclick="listStage()">List Staged</button>
+        <div id="staged"></div>
+      </div>
+      <div class="card">
+        <h4>Suggestions</h4>
+        <button onclick="listSuggestions()">Refresh</button>
+        <pre id="suggestions"></pre>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <h4>Marketplace</h4>
+        <div id="catalog"></div>
+        <button onclick="listCatalog()">List Catalog</button>
+      </div>
+      <div class="card">
+        <h4>Audit</h4>
+        <pre id="audit"></pre>
+        <button onclick="loadAudit()">Load Audit</button>
+      </div>
+    </div>
+  </main>
+<script>
+async function upload(){
+  const f = document.getElementById('file').files[0];
+  if(!f) return alert("pick file");
+  const fd = new FormData(); fd.append('artifact', f);
+  await fetch('/api/updater/upload', {method:'POST', body: fd});
+  alert("uploaded");
+}
+async function listStage(){
+  const r = await fetch('/api/updater/list');
+  const j = await r.json(); document.getElementById('staged').innerText = JSON.stringify(j,null,2);
+}
+async function listSuggestions(){
+  const r = await fetch('/api/suggestions/list'); const j = await r.json();
+  document.getElementById('suggestions').innerText = JSON.stringify(j,null,2);
+}
+async function listCatalog(){
+  const r = await fetch('/api/marketplace/list'); const j = await r.json();
+  document.getElementById('catalog').innerText = JSON.stringify(j,null,2);
+}
+async function loadAudit(){ const r = await fetch('/api/audit/last'); const j = await r.json(); document.getElementById('audit').innerText = JSON.stringify(j,null,2);}
+</script>
+</body>
+</html>
