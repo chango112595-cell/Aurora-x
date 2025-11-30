@@ -1,25 +1,10 @@
-# docker/Dockerfile.multi
-FROM --platform=$BUILDPLATFORM python:3.11-slim as base
+# Use python slim base and install node for express if needed
+FROM --platform=$BUILDPLATFORM python:3.11-slim
 ARG TARGETPLATFORM
-ARG BUILDPLATFORM
-ARG TARGETARCH
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends curl ca-certificates build-essential git \
-     nodejs npm \
-  && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates build-essential git nodejs npm && rm -rf /var/lib/apt/lists/*
 COPY . /app
-
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir fastapi "uvicorn[standard]" psutil watchdog requests
-
-RUN npm ci || true
-RUN npm i -g tsx || true
-
-EXPOSE 5000 9701 9702
-
+RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir fastapi "uvicorn[standard]" psutil watchdog requests websockets
+RUN npm ci || true && npm i -g tsx || true
+EXPOSE 5000 9701 9801
 CMD ["python3","aurora_os.py","start"]

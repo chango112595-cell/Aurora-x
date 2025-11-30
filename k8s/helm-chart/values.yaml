@@ -5,10 +5,12 @@ image:
 service:
   type: ClusterIP
   port: 5000
-ingress:
-  enabled: false
-  annotations: {}
-  hosts:
-    - host: aurora.local
-      paths: ["/"]
 resources: {}
+livenessProbe:
+  enabled: true
+  path: /api/status
+  initialDelaySeconds: 10
+readinessProbe:
+  enabled: true
+  path: /api/status
+  initialDelaySeconds: 10

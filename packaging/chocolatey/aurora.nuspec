@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>auroraos</id>
+    <version>1.0.0</version>
+    <title>AuroraOS</title>
+    <authors>Aurora</authors>
+    <description>AuroraOS universal orchestrator</description>
+    <dependencies/>
+  </metadata>
+</package>

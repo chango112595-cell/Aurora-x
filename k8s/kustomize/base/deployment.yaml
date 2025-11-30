@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auroraos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auroraos
+  template:
+    metadata:
+      labels:
+        app: auroraos
+    spec:
+      containers:
+        - name: auroraos
+          image: yourrepo/auroraos:latest
+          ports:
+            - containerPort: 5000
