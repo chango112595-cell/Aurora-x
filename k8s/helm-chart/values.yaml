@@ -7,4 +7,8 @@ service:
   port: 5000
 ingress:
   enabled: false
+  annotations: {}
+  hosts:
+    - host: aurora.local
+      paths: ["/"]
 resources: {}
