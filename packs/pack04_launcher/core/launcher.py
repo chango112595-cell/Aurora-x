@@ -2,6 +2,7 @@
 """
 launcher.py - Unified launcher that reads a launch manifest (pack-specific) and
 starts modules under the supervision system. Provides CLI to list/start/stop.
+Uses a shared Supervisor instance for unified control.
 """
 import argparse, json, time, os
 from pathlib import Path
@@ -14,38 +15,30 @@ LAUNCH_MANIFEST = ROOT / "data" / "launch_manifest.json"
 
 class LauncherCLI:
     def __init__(self, manifest_path=None):
-        self._sup = None
-        self._orch = None
-        self.manifest_path = manifest_path
+        self._sup = Supervisor()
+        self._orch = Orchestrator(manifest_path, supervisor=self._sup)
         self.log = LogUnifier(ROOT / "logs" / "launcher.log")
 
     @property
     def sup(self):
-        if self._sup is None:
-            self._sup = Supervisor()
         return self._sup
 
     @property
     def orch(self):
-        if self._orch is None:
-            self._orch = Orchestrator(self.manifest_path)
         return self._orch
 
     def list(self):
         return self.orch.list_jobs()
 
     def start(self, name):
-        job = self.orch.get_job(name)
-        if not job:
-            return {"error": "job not found"}
-        res = self.sup.start_job(job)
-        self.log.append("launcher", f"started job {name}: rc={res.get('rc', 'N/A')}")
-        return res
+        result = self.orch.start_job(name)
+        self.log.append("launcher", f"started job {name}: rc={result.get('rc', 'N/A')}")
+        return result
 
     def stop(self, name):
-        res = self.sup.stop_job(name)
+        result = self.sup.stop_job(name)
         self.log.append("launcher", f"stopped job {name}")
-        return res
+        return result
 
     def start_all(self):
         results = self.orch.start_all()
@@ -53,9 +46,14 @@ class LauncherCLI:
             self.log.append("launcher", f"started job {name}: rc={res.get('rc', 'N/A')}")
         return results
 
+    def stop_all(self):
+        return self.sup.stop_all()
+
     def shutdown(self):
-        if self._sup:
-            self._sup.stop()
+        """Shutdown the supervisor and stop all jobs."""
+        self.sup.stop_all()
+        self.sup.stop()
+        Supervisor.reset_instance()
 
 def load_manifest(path=None):
     manifest_path = Path(path) if path else LAUNCH_MANIFEST

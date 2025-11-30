@@ -6,6 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from core.supervisor import Supervisor, Job, JobPolicy
 
 def test_supervisor_start_stop(tmp_path):
+    Supervisor.reset_instance()
     metrics_path = tmp_path / "metrics.json"
     s = Supervisor(metrics_path=str(metrics_path))
     # fake job spec
@@ -16,6 +17,7 @@ def test_supervisor_start_stop(tmp_path):
     stop_res = s.stop_job("unittest_job")
     assert isinstance(stop_res, dict)
     s.stop()
+    Supervisor.reset_instance()
     time.sleep(0.1)
 
 def test_job_policy():
@@ -30,6 +32,7 @@ def test_job_creation():
     assert job._restarts == 0
 
 def test_supervisor_list_jobs(tmp_path):
+    Supervisor.reset_instance()
     metrics_path = tmp_path / "metrics.json"
     s = Supervisor(metrics_path=str(metrics_path))
     s.start_job({"name": "job1", "cmd": "echo 1"})
@@ -38,3 +41,24 @@ def test_supervisor_list_jobs(tmp_path):
     assert "job1" in jobs
     assert "job2" in jobs
     s.stop()
+    Supervisor.reset_instance()
+
+def test_supervisor_singleton():
+    Supervisor.reset_instance()
+    s1 = Supervisor()
+    s2 = Supervisor()
+    assert s1 is s2
+    s1.stop()
+    Supervisor.reset_instance()
+
+def test_supervisor_pid_tracking(tmp_path):
+    Supervisor.reset_instance()
+    metrics_path = tmp_path / "metrics.json"
+    s = Supervisor(metrics_path=str(metrics_path))
+    result = s.start_background({"name": "bg_job", "cmd": "sleep 10"})
+    assert "pid" in result or "error" in result
+    pids = s.get_pids()
+    assert isinstance(pids, dict)
+    s.stop_all()
+    s.stop()
+    Supervisor.reset_instance()
