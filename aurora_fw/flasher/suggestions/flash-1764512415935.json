@@ -1,0 +1,10 @@
+{
+  "id": "flash-1764512415935",
+  "axf": "/home/runner/workspace/build/sample-linux-sbc-linux-sbc-1764512415.axf",
+  "target": {
+    "type": "linux-sbc",
+    "desc": "demo target linux-sbc"
+  },
+  "reason": "demo automatic stage for linux-sbc",
+  "ts": 1764512415.9356415
+}

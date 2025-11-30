@@ -21,6 +21,8 @@ def available_tools():
 
 def stage_flash_job(axf_path: str, target: dict, reason: str):
     # Create suggestion JSON job for operator approval
+    # Ensure directory exists (may have been cleaned)
+    SUGGESTION_DIR.mkdir(parents=True, exist_ok=True)
     ts = int(time.time()*1000)
     job = {
         "id": f"flash-{ts}",

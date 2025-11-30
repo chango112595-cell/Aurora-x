@@ -1,0 +1,10 @@
+{
+  "id": "flash-1764512415944",
+  "axf": "/home/runner/workspace/build/sample-virtual-virtual-1764512415.axf",
+  "target": {
+    "type": "virtual",
+    "desc": "demo target virtual"
+  },
+  "reason": "demo automatic stage for virtual",
+  "ts": 1764512415.9445953
+}
