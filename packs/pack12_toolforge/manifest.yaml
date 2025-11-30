@@ -1,0 +1,26 @@
+{
+  "schema_version": "aurora-manifest-v1",
+  "pack": {
+    "id": "pack12_toolforge",
+    "name": "Pack12 Toolforge",
+    "version": "0.1.0",
+    "description": "Self-writing tools & generator system",
+    "entrypoint": {
+      "install": "install.sh",
+      "start": "start.sh",
+      "stop": "stop.sh",
+      "health": "health_check.sh"
+    },
+    "dependencies": [
+      {
+        "pack_id": "pack03_os_base",
+        "version_constraint": ">=0.1.0"
+      }
+    ],
+    "artifacts": [],
+    "safety": {
+      "dry_run_supported": true,
+      "operator_approval_required": true
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "pack_id": "pack09_compute_layer",
+  "capabilities": [
+    {
+      "id": "pack09_compute_layer.read",
+      "name": "Read Access",
+      "description": "Read access to Distributed intelligence and compute offload",
+      "level": "basic"
+    },
+    {
+      "id": "pack09_compute_layer.write",
+      "name": "Write Access",
+      "description": "Write access to Distributed intelligence and compute offload",
+      "level": "elevated"
+    },
+    {
+      "id": "pack09_compute_layer.admin",
+      "name": "Admin Access",
+      "description": "Administrative access to Distributed intelligence and compute offload",
+      "level": "privileged"
+    }
+  ]
+}

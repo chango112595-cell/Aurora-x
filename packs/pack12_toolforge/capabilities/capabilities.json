@@ -1,0 +1,23 @@
+{
+  "pack_id": "pack12_toolforge",
+  "capabilities": [
+    {
+      "id": "pack12_toolforge.read",
+      "name": "Read Access",
+      "description": "Read access to Self-writing tools & generator system",
+      "level": "basic"
+    },
+    {
+      "id": "pack12_toolforge.write",
+      "name": "Write Access",
+      "description": "Write access to Self-writing tools & generator system",
+      "level": "elevated"
+    },
+    {
+      "id": "pack12_toolforge.admin",
+      "name": "Admin Access",
+      "description": "Administrative access to Self-writing tools & generator system",
+      "level": "privileged"
+    }
+  ]
+}
