@@ -1,0 +1,25 @@
+# manifests/pack01_manifest.yaml
+schema_version: "aurora-manifest-v1"
+pack:
+  id: "pack01_unified_process"
+  name: "Unified Process Core"
+  version: "1.0.0"
+  description: "Aurora core orchestrator and service loader"
+  entrypoint:
+    install: "install.sh"
+    start: "start.sh"
+    stop: "stop.sh"
+    health: "health_check.sh"
+  dependencies: []
+  artifacts:
+    - path: "aurora_core.py"
+      sha256: ""   # populate after build
+  env:
+    required: []
+  autoscan:
+    manifest_preference: ["yaml","json"]
+    auto_detect_device: true
+  safety:
+    dry_run_supported: true
+    operator_approval_required: true
+    health_check_timeout_seconds: 20
