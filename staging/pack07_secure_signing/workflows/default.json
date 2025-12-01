@@ -1,0 +1,25 @@
+{
+  "id": "pack07_secure_signing_default",
+  "name": "Pack07 Secure Signing Default Workflow",
+  "version": "0.1.0",
+  "steps": [
+    {
+      "id": "init",
+      "action": "initialize",
+      "next": "process"
+    },
+    {
+      "id": "process",
+      "action": "execute",
+      "params": {
+        "command": "default"
+      },
+      "next": "complete"
+    },
+    {
+      "id": "complete",
+      "action": "shutdown",
+      "next": null
+    }
+  ]
+}
