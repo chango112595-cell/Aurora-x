@@ -724,6 +724,233 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ================================
+  // Memory Fabric v2 API Endpoints
+  // ================================
+
+  const { getMemoryFabricClient } = await import('./memory-fabric-client');
+  const memoryFabricClient = getMemoryFabricClient();
+
+  // Check and enable Memory Fabric v2
+  memoryFabricClient.checkStatus().then(enabled => {
+    if (enabled) {
+      console.log('[Memory Fabric V2] ✅ Service connected');
+    } else {
+      console.log('[Memory Fabric V2] ⚠️ Service not available - will retry on requests');
+    }
+  });
+
+  // Memory Fabric v2 Status
+  app.get("/api/memory-fabric/status", async (req, res) => {
+    try {
+      // Try to connect if not already
+      if (!memoryFabricClient.isEnabled()) {
+        await memoryFabricClient.checkStatus();
+      }
+
+      const status = await memoryFabricClient.getStatus();
+      res.json(status);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        stats: {
+          shortTermCount: 0,
+          midTermCount: 0,
+          longTermCount: 0,
+          semanticCount: 0,
+          factCount: 0,
+          eventCount: 0,
+          totalMemories: 0,
+          activeProject: 'None',
+          sessionId: 'unavailable'
+        },
+        facts: {},
+        shortTerm: [],
+        midTerm: [],
+        longTerm: [],
+        semantic: [],
+        events: [],
+        conversations: []
+      });
+    }
+  });
+
+  // Get facts
+  app.get("/api/memory-fabric/facts", async (req, res) => {
+    try {
+      const result = await memoryFabricClient.getFacts();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Get context summary
+  app.get("/api/memory-fabric/context", async (req, res) => {
+    try {
+      const result = await memoryFabricClient.getContext();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Get integrity hashes
+  app.get("/api/memory-fabric/integrity", async (req, res) => {
+    try {
+      const result = await memoryFabricClient.getIntegrity();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Get conversation messages
+  app.get("/api/memory-fabric/conversation/:conversationId", async (req, res) => {
+    try {
+      const { conversationId } = req.params;
+      const result = await memoryFabricClient.getConversation(conversationId);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Save message to memory
+  app.post("/api/memory-fabric/message", async (req, res) => {
+    try {
+      const { role, content, importance = 0.5, tags = [] } = req.body;
+
+      if (!content || typeof content !== 'string') {
+        return res.status(400).json({
+          success: false,
+          error: 'Content is required and must be a string'
+        });
+      }
+
+      const result = await memoryFabricClient.saveMessage(role, content, importance, tags);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Save fact
+  app.post("/api/memory-fabric/fact", async (req, res) => {
+    try {
+      const { key, value, category = 'general' } = req.body;
+
+      if (!key || typeof key !== 'string') {
+        return res.status(400).json({
+          success: false,
+          error: 'Key is required and must be a string'
+        });
+      }
+
+      const result = await memoryFabricClient.saveFact(key, value, category);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Recall fact
+  app.post("/api/memory-fabric/recall", async (req, res) => {
+    try {
+      const { key } = req.body;
+
+      if (!key || typeof key !== 'string') {
+        return res.status(400).json({
+          success: false,
+          error: 'Key is required and must be a string'
+        });
+      }
+
+      const result = await memoryFabricClient.recallFact(key);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Search semantic memory
+  app.post("/api/memory-fabric/search", async (req, res) => {
+    try {
+      const { query, top_k = 5 } = req.body;
+
+      if (!query || typeof query !== 'string') {
+        return res.status(400).json({
+          success: false,
+          error: 'Query is required and must be a string'
+        });
+      }
+
+      const result = await memoryFabricClient.search(query, top_k);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Set active project
+  app.post("/api/memory-fabric/project", async (req, res) => {
+    try {
+      const { name } = req.body;
+
+      if (!name || typeof name !== 'string') {
+        return res.status(400).json({
+          success: false,
+          error: 'Project name is required and must be a string'
+        });
+      }
+
+      const result = await memoryFabricClient.setProject(name);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Start new conversation
+  app.post("/api/memory-fabric/conversation/new", async (req, res) => {
+    try {
+      const result = await memoryFabricClient.newConversation();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Create backup
+  app.post("/api/memory-fabric/backup", async (req, res) => {
+    try {
+      const result = await memoryFabricClient.backup();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Log event
+  app.post("/api/memory-fabric/event", async (req, res) => {
+    try {
+      const { type, detail = {} } = req.body;
+
+      if (!type || typeof type !== 'string') {
+        return res.status(400).json({
+          success: false,
+          error: 'Event type is required and must be a string'
+        });
+      }
+
+      const result = await memoryFabricClient.logEvent(type, detail);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
   // PWA endpoints
   app.get("/manifest.webmanifest", (req, res) => {
     const manifestPath = path.join(process.cwd(), 'frontend', 'pwa', 'manifest.webmanifest');

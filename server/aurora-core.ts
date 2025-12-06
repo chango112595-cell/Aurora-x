@@ -122,6 +122,10 @@ export class AuroraCore {
   private pythonProcess: ChildProcess | null = null;
   private pythonReady: boolean = false;
   
+  // Memory Fabric V2 Process
+  private memoryFabricProcess: ChildProcess | null = null;
+  private memoryFabricRestarting: boolean = false;
+  
   // System State
   private startTime: number;
   private readonly version = '2.0';
@@ -554,9 +558,9 @@ export class AuroraCore {
       memoryProcess.stderr?.on('data', (data) => {
         console.error('[AURORA MEMORY] Error:', data.toString());
       });
-      
-      // Wait for memory service to start
-      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Start Memory Fabric v2 service with supervision
+      await this.startMemoryFabricService();
       
       // Check if memory service is available
       const isAvailable = await this.memoryClient.checkStatus();
@@ -568,6 +572,66 @@ export class AuroraCore {
     } catch (error) {
       console.error('[AURORA] Failed to start memory system:', error);
     }
+  }
+
+  private async startMemoryFabricService(): Promise<void> {
+    if (this.memoryFabricRestarting) {
+      return;
+    }
+
+    const memoryFabricScript = path.join(process.cwd(), 'aurora_memory_fabric_v2', 'service.py');
+    
+    this.memoryFabricProcess = spawn('python3', [memoryFabricScript, '5004'], {
+      stdio: ['pipe', 'pipe', 'pipe']
+    });
+
+    this.memoryFabricProcess.stdout?.on('data', (data) => {
+      console.log('[MEMORY FABRIC V2]', data.toString().trim());
+    });
+
+    this.memoryFabricProcess.stderr?.on('data', (data) => {
+      const output = data.toString().trim();
+      if (output) {
+        console.error('[MEMORY FABRIC V2] stderr:', output);
+      }
+    });
+
+    this.memoryFabricProcess.on('exit', (code, signal) => {
+      console.log(`[MEMORY FABRIC V2] Process exited (code: ${code}, signal: ${signal})`);
+      this.memoryFabricProcess = null;
+      
+      if (!this.memoryFabricRestarting) {
+        console.log('[MEMORY FABRIC V2] Restarting service...');
+        this.memoryFabricRestarting = true;
+        setTimeout(async () => {
+          this.memoryFabricRestarting = false;
+          await this.startMemoryFabricService();
+        }, 2000);
+      }
+    });
+
+    this.memoryFabricProcess.on('error', (err) => {
+      console.error('[MEMORY FABRIC V2] Process error:', err.message);
+    });
+
+    // Wait for service to be ready via health check
+    const maxAttempts = 10;
+    const delayMs = 500;
+    
+    for (let i = 0; i < maxAttempts; i++) {
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+      try {
+        const response = await fetch('http://127.0.0.1:5004/status');
+        if (response.ok) {
+          console.log('[MEMORY FABRIC V2] ✅ Service ready');
+          return;
+        }
+      } catch {
+        // Service not ready yet
+      }
+    }
+    
+    console.log('[MEMORY FABRIC V2] ⚠️ Service startup timeout - will retry on requests');
   }
 
   public async callAuroraPython(method: string, ...args: any[]): Promise<any> {

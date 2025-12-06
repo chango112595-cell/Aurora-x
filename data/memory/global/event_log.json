@@ -1,0 +1,13 @@
+{
+  "events": [
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "test_fact",
+        "category": "test"
+      },
+      "timestamp": "2025-12-06T18:10:37.032974",
+      "project": "Aurora-X"
+    }
+  ]
+}

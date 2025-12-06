@@ -1,0 +1,10 @@
+{
+  "facts": {
+    "test_fact": {
+      "value": "Memory Fabric works!",
+      "category": "test",
+      "timestamp": "2025-12-06T18:10:37.032274"
+    }
+  },
+  "summary": ""
+}
