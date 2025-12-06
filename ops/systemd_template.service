@@ -1,0 +1,15 @@
+[Unit]
+Description=Aurora Pack %i
+After=network.target
+
+[Service]
+Type=simple
+User=aurora
+WorkingDirectory=/opt/aurora/packs/%i
+ExecStart=/opt/aurora/packs/%i/start.sh
+ExecStop=/opt/aurora/packs/%i/stop.sh
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

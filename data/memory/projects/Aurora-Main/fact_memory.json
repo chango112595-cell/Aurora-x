@@ -1,0 +1,32 @@
+{
+  "integration_date": {
+    "value": "2025-12-05T02:22:42.098189",
+    "category": "general",
+    "timestamp": "2025-12-05T02:22:42.098196",
+    "importance": 1.0
+  },
+  "fabric_version": {
+    "value": "2.0-enhanced",
+    "category": "general",
+    "timestamp": "2025-12-05T02:22:42.101217",
+    "importance": 1.0
+  },
+  "system_name": {
+    "value": "Aurora Intelligence",
+    "category": "general",
+    "timestamp": "2025-12-05T02:22:42.103953",
+    "importance": 1.0
+  },
+  "project_root": {
+    "value": "/home/runner/workspace",
+    "category": "general",
+    "timestamp": "2025-12-05T02:22:42.106829",
+    "importance": 1.0
+  },
+  "test_key": {
+    "value": "test_value",
+    "category": "general",
+    "timestamp": "2025-12-05T02:22:42.114446",
+    "importance": 1.0
+  }
+}

@@ -1,0 +1,9 @@
+# deploy/targets.yaml - example target definitions
+defaults:
+  user: aurora
+  env: staging
+nodes:
+  local:
+    host: localhost
+    port: 22
+    desc: local testing node

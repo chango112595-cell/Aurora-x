@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+"""gen_docs.py - generate pack docs from manifests"""
+import json, glob
+from pathlib import Path
+ROOT = Path.cwd()
+packs = list(Path('packs').glob('pack*'))
+out = Path('docs/docs/packs')
+out.mkdir(parents=True, exist_ok=True)
+for p in packs:
+    m = p / 'manifest.yaml'
+    title = p.name
+    if m.exists():
+        try:
+            import yaml
+            data = yaml.safe_load(m.read_text())
+            title = data.get('pack', {}).get('name', p.name)
+        except Exception:
+            pass
+    md = out / f"{p.name}.md"
+    md.write_text(f"# {title}\n\nPath: {p}\n\nManifest: {m}\n")
+print('Docs generated to docs/docs/packs')
