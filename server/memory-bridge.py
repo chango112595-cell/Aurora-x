@@ -4,7 +4,6 @@ Aurora Memory Bridge Service
 Exposes MemoryMediator functionality via HTTP API for TypeScript integration
 """
 
-from cog_kernel.memory_abstraction.manager import MemoryMediator
 import sys
 import json
 from pathlib import Path
@@ -12,8 +11,10 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 import threading
 
-# Add cog_kernel and memory to Python path
+# Add cog_kernel and memory to Python path (must be before cog_kernel imports)
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from cog_kernel.memory_abstraction.manager import MemoryMediator
 
 
 # Global memory instance
