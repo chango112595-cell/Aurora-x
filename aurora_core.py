@@ -33,6 +33,12 @@ except ImportError:
     AuroraTaskManager = None
     print("[WARN] Aurora Task Manager not found")
 
+try:
+    from core.memory_manager import AuroraMemoryManager
+except ImportError:
+    AuroraMemoryManager = None
+    print("[WARN] Aurora Memory Manager not found")
+
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor
 
@@ -96,6 +102,13 @@ class AuroraCore:
         self.intelligence = AuroraIntelligenceManager() if AuroraIntelligenceManager else None
         if self.intelligence:
             self.intelligence.log("[BRAIN] Aurora Core: Intelligence engine loaded")
+
+        # Aurora's Memory Fabric 2.0
+        self.memory = AuroraMemoryManager(base="data/memory") if AuroraMemoryManager else None
+        if self.memory:
+            self.memory.set_project("Aurora-Main")
+            if self.intelligence:
+                self.intelligence.log("[BRAIN] Aurora Core: Memory Fabric 2.0 initialized")
 
         # Aurora's AUTONOMOUS CAPABILITIES
         self.autonomous_system = None
@@ -580,6 +593,76 @@ class AuroraCore:
             self.intelligence.log(f"[EMOJI] Aurora Core: Starting chat server on port {port}")
             run_aurora_chat_server(port, aurora_core=self)
         return self.chat
+
+    def process_message(self, user_input: str) -> str:
+        """Process a message with memory integration"""
+        if not self.memory:
+            return "Memory system not available"
+        
+        # Step 1: Store raw message
+        self.memory.save_message("user", user_input)
+
+        # Step 2: Analyze intent
+        intent = self.classify_intent(user_input)
+
+        # Step 3: Generate response
+        response = self.generate_response(intent, user_input)
+
+        # Step 4: Store system response
+        self.memory.save_message("aurora", response)
+
+        # Step 5: Learn from context
+        self.memory.remember_fact("last_intent", intent)
+        self.memory.compress_short_term()
+
+        return response
+
+    def classify_intent(self, user_input: str) -> str:
+        """Classify user intent from input"""
+        user_lower = user_input.lower()
+        
+        if any(word in user_lower for word in ["remember", "recall", "what did", "who am"]):
+            return "memory_query"
+        elif any(word in user_lower for word in ["fix", "debug", "error", "issue"]):
+            return "technical_assistance"
+        elif any(word in user_lower for word in ["create", "build", "make", "develop"]):
+            return "creative_task"
+        else:
+            return "general_conversation"
+
+    def generate_response(self, intent: str, user_input: str) -> str:
+        """Generate response based on intent"""
+        if intent == "memory_query" and self.memory:
+            # Try to recall from memory
+            semantic_result = self.memory.recall_semantic(user_input)
+            if semantic_result:
+                return f"Based on past knowledge: {semantic_result}"
+            
+            # Check for specific facts
+            for key in ["user_name", "project_name", "last_task"]:
+                fact = self.memory.recall_fact(key)
+                if fact and key.replace("_", " ") in user_input.lower():
+                    return f"I remember: {fact}"
+            
+            return "I don't have that information in memory yet."
+        
+        # For other intents, return acknowledgment
+        return f"I understand you have a {intent.replace('_', ' ')} request. Processing..."
+
+    def contextual_recall(self, query: str) -> Optional[str]:
+        """Contextual recall for conversational memory"""
+        if not self.memory:
+            return None
+        
+        semantic_match = self.memory.recall_semantic(query)
+        if semantic_match:
+            return f"Based on past knowledge: {semantic_match}"
+        
+        fact = self.memory.recall_fact(query)
+        if fact:
+            return f"I remember: {fact}"
+        
+        return None
 
 
 if __name__ == "__main__":

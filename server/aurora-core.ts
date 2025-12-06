@@ -9,6 +9,7 @@ import { spawn, ChildProcess } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import MemoryClient from './memory-client';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -96,6 +97,9 @@ interface AuroraStatus {
 export class AuroraCore {
   private static instance: AuroraCore;
   
+  // Memory System Integration
+  private memoryClient: MemoryClient;
+  
   // 79 Knowledge Capabilities (Tiers 1-79)
   private knowledgeCapabilities: Map<number, KnowledgeCapability> = new Map();
   
@@ -125,6 +129,7 @@ export class AuroraCore {
   
   private constructor() {
     this.startTime = Date.now();
+    this.memoryClient = new MemoryClient(5003);
     this.initialize();
   }
   
@@ -159,6 +164,9 @@ export class AuroraCore {
     
     // Initialize Python Bridge
     await this.initializePythonBridge();
+    
+    // Initialize Memory System
+    await this.initializeMemorySystem();
     
     console.log('[AURORA] ✅ All 188 power units operational');
     console.log(`[AURORA] Knowledge: ${this.knowledgeCapabilities.size}`);
@@ -531,6 +539,37 @@ export class AuroraCore {
     });
   }
   
+  private async initializeMemorySystem(): Promise<void> {
+    try {
+      // Start memory bridge service
+      const memoryScript = path.join(__dirname, 'memory-bridge.py');
+      const memoryProcess = spawn('python', [memoryScript], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+      
+      memoryProcess.stdout?.on('data', (data) => {
+        console.log('[AURORA MEMORY]', data.toString().trim());
+      });
+      
+      memoryProcess.stderr?.on('data', (data) => {
+        console.error('[AURORA MEMORY] Error:', data.toString());
+      });
+      
+      // Wait for memory service to start
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Check if memory service is available
+      const isAvailable = await this.memoryClient.checkStatus();
+      if (isAvailable) {
+        console.log('[AURORA] ✅ Memory system connected (short-term + long-term)');
+      } else {
+        console.log('[AURORA] ⚠️  Memory system unavailable - continuing without memory');
+      }
+    } catch (error) {
+      console.error('[AURORA] Failed to start memory system:', error);
+    }
+  }
+
   public async callAuroraPython(method: string, ...args: any[]): Promise<any> {
     if (!this.pythonReady || !this.pythonProcess) {
       throw new Error('Python bridge not ready');
@@ -704,6 +743,22 @@ export class AuroraCore {
         executionTime: Date.now() - startTime
       };
     }
+  }
+  
+  public async getMemoryStatus(): Promise<any> {
+    return await this.memoryClient.getStatus();
+  }
+  
+  public async storeMemory(text: string, meta?: Record<string, any>, longterm: boolean = false): Promise<any> {
+    return await this.memoryClient.write(text, meta, longterm);
+  }
+  
+  public async queryMemory(queryText: string, topK: number = 5): Promise<any> {
+    return await this.memoryClient.query(queryText, topK);
+  }
+  
+  public isMemoryEnabled(): boolean {
+    return this.memoryClient.isEnabled();
   }
   
   public getStatus(): AuroraStatus {

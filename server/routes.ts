@@ -654,6 +654,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ══════════════════════════════════════════════════════════════
+  // 🧠 MEMORY SYSTEM API ROUTES
+  // ══════════════════════════════════════════════════════════════
+  
+  // Memory status endpoint
+  app.get("/api/memory/status", async (req, res) => {
+    try {
+      const aurora = await import('./aurora-core');
+      const core = aurora.default.getInstance();
+      const status = await core.getMemoryStatus();
+      res.json(status);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        status: 'unavailable'
+      });
+    }
+  });
+
+  // Write to memory
+  app.post("/api/memory/write", async (req, res) => {
+    try {
+      const { text, meta, longterm = false } = req.body;
+
+      if (!text || typeof text !== 'string') {
+        return res.status(400).json({
+          success: false,
+          error: 'Text is required and must be a string'
+        });
+      }
+
+      const aurora = await import('./aurora-core');
+      const core = aurora.default.getInstance();
+      const result = await core.storeMemory(text, meta, longterm);
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Query memory
+  app.post("/api/memory/query", async (req, res) => {
+    try {
+      const { query, top_k = 5 } = req.body;
+
+      if (!query || typeof query !== 'string') {
+        return res.status(400).json({
+          success: false,
+          error: 'Query is required and must be a string'
+        });
+      }
+
+      const aurora = await import('./aurora-core');
+      const core = aurora.default.getInstance();
+      const result = await core.queryMemory(query, top_k);
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   // PWA endpoints
   app.get("/manifest.webmanifest", (req, res) => {
     const manifestPath = path.join(process.cwd(), 'frontend', 'pwa', 'manifest.webmanifest');
