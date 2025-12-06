@@ -1,23 +1,22 @@
 #!/usr/bin/env python3
 """
 Aurora Memory Bridge Service
-Exposes MemoryMediator functionality via HTTP API for TypeScript integration
+Exposes Memory Manager functionality via HTTP API for TypeScript integration
 """
 
-from cog_kernel.memory_abstraction.manager import MemoryMediator
 import sys
 import json
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
-import threading
 
-# Add cog_kernel and memory to Python path
+# Add parent directory to Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from core.memory_manager import AuroraMemoryManager
 
 # Global memory instance
-memory = MemoryMediator()
+memory = AuroraMemoryManager(base="data/memory")
 
 
 class MemoryBridgeHandler(BaseHTTPRequestHandler):
@@ -37,14 +36,37 @@ class MemoryBridgeHandler(BaseHTTPRequestHandler):
                 meta = data.get('meta', {})
                 longterm = data.get('longterm', False)
 
-                result = memory.write_event(text, meta, longterm)
+                # Store message in memory
+                memory.save_message("user", text)
+                
+                # Store as a fact with metadata
+                import uuid
+                import datetime
+                mem_id = str(uuid.uuid4())
+                
+                # Create enriched fact entry
+                fact_data = {
+                    "text": text,
+                    "meta": meta,
+                    "timestamp": datetime.datetime.now().isoformat(),
+                    "type": "longterm" if longterm else "shortterm"
+                }
+                memory.remember_fact(f"memory_{mem_id}", fact_data)
+                
+                # Log the event
+                memory.log_event("memory_write", {
+                    "id": mem_id,
+                    "text_length": len(text),
+                    "has_meta": bool(meta),
+                    "longterm": longterm
+                })
 
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
                 self.wfile.write(json.dumps({
                     'success': True,
-                    'id': result['id'],
+                    'id': mem_id,
                     'longterm': longterm
                 }).encode())
 
@@ -53,17 +75,54 @@ class MemoryBridgeHandler(BaseHTTPRequestHandler):
                 query_text = data.get('query', '')
                 top_k = data.get('top_k', 5)
 
-                results = memory.query(query_text, top_k)
-
-                # Convert results to JSON-serializable format
+                # Search through facts for matching memories
                 serializable_results = []
-                for r in results:
-                    serializable_results.append({
-                        'id': r['id'],
-                        'text': r['text'],
-                        'meta': r['meta'],
-                        'score': r.get('score', 0)
-                    })
+                query_lower = query_text.lower()
+                
+                # Search through all facts
+                for key, fact_data in memory.facts.items():
+                    if key.startswith('memory_'):
+                        fact_value = fact_data.get('value', {})
+                        if isinstance(fact_value, dict):
+                            text = fact_value.get('text', '')
+                            if query_lower in text.lower():
+                                serializable_results.append({
+                                    'id': key.replace('memory_', ''),
+                                    'text': text,
+                                    'meta': fact_value.get('meta', {}),
+                                    'score': 0.95,
+                                    'timestamp': fact_value.get('timestamp', fact_data.get('stored_at', ''))
+                                })
+                
+                # Also try semantic recall as fallback
+                if not serializable_results:
+                    semantic_result = memory.recall_semantic(query_text)
+                    if semantic_result:
+                        import uuid
+                        import datetime
+                        serializable_results.append({
+                            'id': str(uuid.uuid4()),
+                            'text': semantic_result,
+                            'meta': {},
+                            'score': 0.8,
+                            'timestamp': datetime.datetime.now().isoformat()
+                        })
+                
+                # Search through recent short-term messages
+                for msg in memory.short_term[-top_k:]:
+                    if query_lower in msg.get('content', '').lower():
+                        import uuid
+                        serializable_results.append({
+                            'id': str(uuid.uuid4()),
+                            'text': msg.get('content', ''),
+                            'meta': {'role': msg.get('role', 'unknown')},
+                            'score': 0.7,
+                            'timestamp': msg.get('timestamp', '')
+                        })
+                
+                # Sort by score and limit results
+                serializable_results.sort(key=lambda x: x['score'], reverse=True)
+                serializable_results = serializable_results[:top_k]
 
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
@@ -88,14 +147,17 @@ class MemoryBridgeHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         """Handle GET requests for status"""
         if self.path == '/memory/status':
+            stats = memory.get_memory_stats()
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({
                 'success': True,
-                'status': 'operational',
-                'short_term_count': len(memory.short._index),
-                'long_term_count': len(memory.long._index)
+                'status': {
+                    'short_term_count': stats['short_term_count'],
+                    'long_term_count': stats['long_term_count'],
+                    'total_entries': stats['short_term_count'] + stats['long_term_count'] + stats['facts_count']
+                }
             }).encode())
         else:
             self.send_error(404, 'Endpoint not found')

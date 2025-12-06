@@ -311,6 +311,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isTerminalClient = client === 'terminal';
       console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId, 'Client:', client || 'web');
 
+      // Store user message in memory
+      try {
+        const aurora = await import('./aurora-core');
+        const core = aurora.default.getInstance();
+        if (core.isMemoryEnabled()) {
+          await core.storeMemory(message, { 
+            session_id: sessionId, 
+            client: client || 'web',
+            type: 'user_message'
+          });
+        }
+      } catch (memError) {
+        console.warn('[Aurora Chat] Memory storage error:', memError);
+      }
+
       // Try routing to Aurora AI Backend first (port 8000)
       try {
         const aiResponse = await fetch('http://0.0.0.0:8000/api/chat', {
@@ -385,6 +400,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
           .replace(/&lt;/g, '<')
           .replace(/&gt;/g, '>')
           .replace(/&amp;/g, '&');
+      }
+
+      // Store Aurora's response in memory
+      try {
+        const aurora = await import('./aurora-core');
+        const core = aurora.default.getInstance();
+        if (core.isMemoryEnabled()) {
+          await core.storeMemory(response, { 
+            session_id: sessionId, 
+            client: client || 'web',
+            type: 'aurora_response',
+            detection: detection ? detection.type : 'general'
+          });
+        }
+      } catch (memError) {
+        console.warn('[Aurora Chat] Memory storage error:', memError);
       }
 
       res.json({

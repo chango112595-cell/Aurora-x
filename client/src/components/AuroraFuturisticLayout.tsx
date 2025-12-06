@@ -21,6 +21,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
     // Core Systems
     { path: '/', label: 'Quantum Dashboard', icon: <LayoutDashboard className="w-5 h-5" />, category: 'core' },
     { path: '/chat', label: 'Neural Chat', icon: <MessageSquare className="w-5 h-5" />, category: 'core' },
+    { path: '/memory', label: 'Memory Fabric', icon: <Brain className="w-5 h-5" />, category: 'core' },
     { path: '/intelligence', label: 'Intelligence Core', icon: <Brain className="w-5 h-5" />, category: 'core' },
 
     // Intelligence Systems
