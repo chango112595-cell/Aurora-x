@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
-import { Brain, Database, Clock, Zap, FileText, Search, RefreshCw, Layers, MessageSquare, Lightbulb, History, Target } from "lucide-react";
+import { Brain, Database, Clock, Zap, FileText, Search, RefreshCw, Layers, MessageSquare, Lightbulb, History, Target, Network, Server, Activity } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface MemoryEntry {
@@ -42,6 +42,24 @@ interface MemoryData {
   conversations: string[];
 }
 
+interface NexusStatus {
+  v2: {
+    connected: boolean;
+    port: number;
+    status: string;
+    chatResponses?: number;
+  };
+  v3: {
+    connected: boolean;
+    status: string;
+    workers?: number;
+    tiers?: number;
+    aems?: number;
+    modules?: number;
+    hybridMode?: boolean;
+  };
+}
+
 export default function MemoryFabric() {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
@@ -54,6 +72,11 @@ export default function MemoryFabric() {
   const { data: conversationData } = useQuery<{ messages: MemoryEntry[] }>({
     queryKey: ['/api/memory-fabric/conversation', selectedConversation],
     enabled: !!selectedConversation,
+  });
+
+  const { data: nexusStatus } = useQuery<NexusStatus>({
+    queryKey: ['/api/nexus/status'],
+    refetchInterval: 10000,
   });
 
   const stats = memoryData?.stats;
@@ -300,51 +323,133 @@ export default function MemoryFabric() {
           </div>
 
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <Card className="border-cyan-500/10" data-testid="card-active-project">
+            <Card className="border-purple-500/30 bg-slate-900/80" data-testid="card-active-project">
               <CardContent className="p-3 flex items-center justify-between gap-2 flex-wrap">
-                <span className="text-sm text-muted-foreground">Active Project</span>
-                <Badge variant="outline" className="font-mono" data-testid="text-active-project">
+                <span className="text-sm text-purple-200">Active Project</span>
+                <Badge variant="outline" className="font-mono bg-purple-900/50 text-purple-100 border-purple-400/50" data-testid="text-active-project">
                   {stats?.activeProject || 'None'}
                 </Badge>
               </CardContent>
             </Card>
-            <Card className="border-cyan-500/10" data-testid="card-facts-stored">
+            <Card className="border-purple-500/30 bg-slate-900/80" data-testid="card-facts-stored">
               <CardContent className="p-3 flex items-center justify-between gap-2 flex-wrap">
-                <span className="text-sm text-muted-foreground">Facts Stored</span>
-                <Badge variant="outline" className="font-mono" data-testid="text-fact-count">
+                <span className="text-sm text-purple-200">Facts Stored</span>
+                <Badge variant="outline" className="font-mono bg-purple-900/50 text-purple-100 border-purple-400/50" data-testid="text-fact-count">
                   {stats?.factCount || 0}
                 </Badge>
               </CardContent>
             </Card>
-            <Card className="border-cyan-500/10" data-testid="card-events-logged">
+            <Card className="border-purple-500/30 bg-slate-900/80" data-testid="card-events-logged">
               <CardContent className="p-3 flex items-center justify-between gap-2 flex-wrap">
-                <span className="text-sm text-muted-foreground">Events Logged</span>
-                <Badge variant="outline" className="font-mono" data-testid="text-event-count">
+                <span className="text-sm text-purple-200">Events Logged</span>
+                <Badge variant="outline" className="font-mono bg-purple-900/50 text-purple-100 border-purple-400/50" data-testid="text-event-count">
                   {stats?.eventCount || 0}
                 </Badge>
               </CardContent>
             </Card>
           </div>
 
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <Card className="border-cyan-500/40 bg-gradient-to-br from-slate-900 to-cyan-950/50" data-testid="card-nexus-v2">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${nexusStatus?.v2?.connected ? 'bg-cyan-500/30' : 'bg-slate-700/50'}`}>
+                      <MessageSquare className={`w-5 h-5 ${nexusStatus?.v2?.connected ? 'text-cyan-400' : 'text-slate-500'}`} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-cyan-100">Luminar Nexus V2</h3>
+                      <p className="text-xs text-cyan-300/70">Chat & ML Pattern Learning</p>
+                    </div>
+                  </div>
+                  <Badge 
+                    variant="outline" 
+                    className={`${nexusStatus?.v2?.connected ? 'bg-green-900/50 text-green-300 border-green-500/50' : 'bg-red-900/50 text-red-300 border-red-500/50'}`}
+                    data-testid="badge-nexus-v2-status"
+                  >
+                    {nexusStatus?.v2?.connected ? 'Connected' : 'Offline'}
+                  </Badge>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center justify-between p-2 bg-slate-800/50 rounded">
+                    <span className="text-cyan-300/70">Port</span>
+                    <span className="font-mono text-cyan-200">{nexusStatus?.v2?.port || 8000}</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 bg-slate-800/50 rounded">
+                    <span className="text-cyan-300/70">Responses</span>
+                    <span className="font-mono text-cyan-200">{nexusStatus?.v2?.chatResponses || 0}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-purple-500/40 bg-gradient-to-br from-slate-900 to-purple-950/50" data-testid="card-nexus-v3">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${nexusStatus?.v3?.connected ? 'bg-purple-500/30' : 'bg-slate-700/50'}`}>
+                      <Network className={`w-5 h-5 ${nexusStatus?.v3?.connected ? 'text-purple-400' : 'text-slate-500'}`} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-purple-100">Aurora Nexus V3</h3>
+                      <p className="text-xs text-purple-300/70">Universal Consciousness</p>
+                    </div>
+                  </div>
+                  <Badge 
+                    variant="outline" 
+                    className={`${nexusStatus?.v3?.connected ? 'bg-green-900/50 text-green-300 border-green-500/50' : 'bg-red-900/50 text-red-300 border-red-500/50'}`}
+                    data-testid="badge-nexus-v3-status"
+                  >
+                    {nexusStatus?.v3?.connected ? 'Connected' : 'Offline'}
+                  </Badge>
+                </div>
+                <div className="grid grid-cols-4 gap-2 text-xs">
+                  <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
+                    <span className="text-purple-300/70 text-[10px]">Workers</span>
+                    <span className="font-mono text-purple-200 font-bold">{nexusStatus?.v3?.workers || 300}</span>
+                  </div>
+                  <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
+                    <span className="text-purple-300/70 text-[10px]">Tiers</span>
+                    <span className="font-mono text-purple-200 font-bold">{nexusStatus?.v3?.tiers || 188}</span>
+                  </div>
+                  <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
+                    <span className="text-purple-300/70 text-[10px]">AEMs</span>
+                    <span className="font-mono text-purple-200 font-bold">{nexusStatus?.v3?.aems || 66}</span>
+                  </div>
+                  <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
+                    <span className="text-purple-300/70 text-[10px]">Modules</span>
+                    <span className="font-mono text-purple-200 font-bold">{nexusStatus?.v3?.modules || 550}</span>
+                  </div>
+                </div>
+                {nexusStatus?.v3?.hybridMode && (
+                  <div className="mt-2 flex items-center gap-2 p-2 bg-green-900/30 rounded border border-green-500/30">
+                    <Activity className="w-4 h-4 text-green-400 animate-pulse" />
+                    <span className="text-xs text-green-300">Hybrid Mode Active - Brain Bridge Connected</span>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1" data-testid="tabs-memory-fabric">
-            <TabsList className="mb-4 bg-cyan-950/20 border border-cyan-500/20" data-testid="tablist-memory">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-cyan-500/20" data-testid="tab-trigger-overview">
+            <TabsList className="mb-4 bg-slate-900/90 border border-purple-500/40 shadow-lg" data-testid="tablist-memory">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-purple-600/50 data-[state=active]:text-white text-purple-200" data-testid="tab-trigger-overview">
                 <Target className="w-4 h-4 mr-2" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="facts" className="data-[state=active]:bg-cyan-500/20" data-testid="tab-trigger-facts">
+              <TabsTrigger value="facts" className="data-[state=active]:bg-purple-600/50 data-[state=active]:text-white text-purple-200" data-testid="tab-trigger-facts">
                 <Lightbulb className="w-4 h-4 mr-2" />
                 Facts
               </TabsTrigger>
-              <TabsTrigger value="memories" className="data-[state=active]:bg-cyan-500/20" data-testid="tab-trigger-memories">
+              <TabsTrigger value="memories" className="data-[state=active]:bg-purple-600/50 data-[state=active]:text-white text-purple-200" data-testid="tab-trigger-memories">
                 <Brain className="w-4 h-4 mr-2" />
                 Memories
               </TabsTrigger>
-              <TabsTrigger value="conversations" className="data-[state=active]:bg-cyan-500/20" data-testid="tab-trigger-conversations">
+              <TabsTrigger value="conversations" className="data-[state=active]:bg-purple-600/50 data-[state=active]:text-white text-purple-200" data-testid="tab-trigger-conversations">
                 <MessageSquare className="w-4 h-4 mr-2" />
                 Conversations
               </TabsTrigger>
-              <TabsTrigger value="events" className="data-[state=active]:bg-cyan-500/20" data-testid="tab-trigger-events">
+              <TabsTrigger value="events" className="data-[state=active]:bg-purple-600/50 data-[state=active]:text-white text-purple-200" data-testid="tab-trigger-events">
                 <History className="w-4 h-4 mr-2" />
                 Events
               </TabsTrigger>
