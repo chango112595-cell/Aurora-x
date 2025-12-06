@@ -4,6 +4,7 @@ Aurora Memory Bridge Service
 Exposes Memory Manager functionality via HTTP API for TypeScript integration
 """
 
+from core.memory_manager import AuroraMemoryManager
 import sys
 import json
 from pathlib import Path
@@ -13,7 +14,6 @@ from urllib.parse import urlparse, parse_qs
 # Add parent directory to Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.memory_manager import AuroraMemoryManager
 
 # Global memory instance
 memory = AuroraMemoryManager(base="data/memory")
@@ -38,12 +38,12 @@ class MemoryBridgeHandler(BaseHTTPRequestHandler):
 
                 # Store message in memory
                 memory.save_message("user", text)
-                
+
                 # Store as a fact with metadata
                 import uuid
                 import datetime
                 mem_id = str(uuid.uuid4())
-                
+
                 # Create enriched fact entry
                 fact_data = {
                     "text": text,
@@ -52,7 +52,7 @@ class MemoryBridgeHandler(BaseHTTPRequestHandler):
                     "type": "longterm" if longterm else "shortterm"
                 }
                 memory.remember_fact(f"memory_{mem_id}", fact_data)
-                
+
                 # Log the event
                 memory.log_event("memory_write", {
                     "id": mem_id,
@@ -78,7 +78,7 @@ class MemoryBridgeHandler(BaseHTTPRequestHandler):
                 # Search through facts for matching memories
                 serializable_results = []
                 query_lower = query_text.lower()
-                
+
                 # Search through all facts
                 for key, fact_data in memory.facts.items():
                     if key.startswith('memory_'):
@@ -93,7 +93,7 @@ class MemoryBridgeHandler(BaseHTTPRequestHandler):
                                     'score': 0.95,
                                     'timestamp': fact_value.get('timestamp', fact_data.get('stored_at', ''))
                                 })
-                
+
                 # Also try semantic recall as fallback
                 if not serializable_results:
                     semantic_result = memory.recall_semantic(query_text)
@@ -107,7 +107,7 @@ class MemoryBridgeHandler(BaseHTTPRequestHandler):
                             'score': 0.8,
                             'timestamp': datetime.datetime.now().isoformat()
                         })
-                
+
                 # Search through recent short-term messages
                 for msg in memory.short_term[-top_k:]:
                     if query_lower in msg.get('content', '').lower():
@@ -119,9 +119,10 @@ class MemoryBridgeHandler(BaseHTTPRequestHandler):
                             'score': 0.7,
                             'timestamp': msg.get('timestamp', '')
                         })
-                
+
                 # Sort by score and limit results
-                serializable_results.sort(key=lambda x: x['score'], reverse=True)
+                serializable_results.sort(
+                    key=lambda x: x['score'], reverse=True)
                 serializable_results = serializable_results[:top_k]
 
                 self.send_response(200)
