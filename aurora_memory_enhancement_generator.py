@@ -10,6 +10,7 @@ import zipfile
 from pathlib import Path
 from datetime import datetime
 
+
 def create_manifest():
     """Create deployment manifest"""
     manifest = {
@@ -36,7 +37,7 @@ def create_manifest():
             "imports_added": ["from core.memory_manager import AuroraMemoryManager"],
             "methods_added": [
                 "process_message",
-                "classify_intent", 
+                "classify_intent",
                 "generate_response",
                 "contextual_recall"
             ]
@@ -44,36 +45,38 @@ def create_manifest():
     }
     return manifest
 
+
 def create_bundle():
     """Create deployment bundle ZIP"""
     bundle_name = "aurora_memory_enhanced_bundle.zip"
-    
+
     print("[*] Creating Aurora Memory Fabric 2.0 bundle...")
-    
+
     # Create manifest
     manifest = create_manifest()
     manifest_file = Path("MEMORY_MANIFEST.json")
     with open(manifest_file, 'w') as f:
         json.dump(manifest, f, indent=2)
-    
+
     # Create ZIP
     with zipfile.ZipFile(bundle_name, 'w', zipfile.ZIP_DEFLATED) as zipf:
         # Add manifest
         zipf.write(manifest_file)
-        
+
         # Add all memory components
         for component in manifest["components"]:
             if Path(component).exists():
                 zipf.write(component)
                 print(f"  [+] Added: {component}")
-    
+
     # Cleanup
     manifest_file.unlink()
-    
+
     print(f"\n[✓] Bundle created: {bundle_name}")
     print(f"[✓] Size: {os.path.getsize(bundle_name) / 1024:.2f} KB")
-    
+
     return bundle_name
+
 
 def print_installation_instructions():
     """Print installation instructions"""
@@ -151,12 +154,13 @@ Aurora Memory Fabric 2.0 - Enhanced Hybrid System
 """
     print(instructions)
 
+
 if __name__ == "__main__":
     print("=" * 60)
     print("AURORA MEMORY ENHANCEMENT BUNDLE GENERATOR")
     print("=" * 60)
     print()
-    
+
     bundle = create_bundle()
     print()
     print_installation_instructions()

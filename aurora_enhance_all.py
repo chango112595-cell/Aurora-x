@@ -8,6 +8,7 @@ import sys
 import datetime
 from pathlib import Path
 
+
 def enhance_memory_system():
     """Integrate Aurora Memory Fabric 2.0"""
     print("[+] Integrating Aurora Memory Fabric...")
@@ -23,23 +24,25 @@ def enhance_memory_system():
         print(f"[!] Memory system integration error: {e}")
         return False
 
+
 def main():
     """Main enhancement routine"""
     print("=" * 60)
     print("AURORA GLOBAL ENHANCEMENT SYSTEM")
     print("=" * 60)
-    
+
     # Check for --include-memory flag
     include_memory = "--include-memory" in sys.argv
-    
+
     if include_memory:
         print("\n[*] Memory system enhancement requested")
         enhance_memory_system()
     else:
         print("\n[*] Run with --include-memory to integrate Memory Fabric 2.0")
-    
+
     print("\n[✓] Enhancement complete")
     print("=" * 60)
+
 
 if __name__ == "__main__":
     main()
