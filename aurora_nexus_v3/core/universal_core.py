@@ -77,9 +77,11 @@ class AuroraUniversalCore:
         self.manifest_integrator = None
         self.issue_detector = None
         self.task_dispatcher = None
+        self.brain_bridge = None
         
         self.hyperspeed_enabled = False
         self.autonomous_mode = True
+        self.hybrid_mode_enabled = False
         
         self._setup_logging()
         self._setup_signals()
@@ -213,7 +215,32 @@ class AuroraUniversalCore:
         except Exception as e:
             self.logger.warning(f"Autonomous Workers initialization failed: {e}")
         
+        try:
+            from .aurora_brain_bridge import AuroraBrainBridge, enable_peak_aurora
+            self.brain_bridge = AuroraBrainBridge(nexus_core=self)
+            await self.brain_bridge.initialize()
+            self.logger.info("Aurora Brain Bridge: Connected to Aurora Core Intelligence")
+        except Exception as e:
+            self.logger.warning(f"Brain Bridge initialization failed: {e}")
+        
         self.logger.info("Peak Autonomous Systems initialization complete")
+    
+    async def enable_hybrid_mode(self):
+        """Enable Hybrid Mode - All 188 tiers, 66 AEMs, 550 modules operating simultaneously"""
+        if not self.brain_bridge:
+            try:
+                from .aurora_brain_bridge import AuroraBrainBridge
+                self.brain_bridge = AuroraBrainBridge(nexus_core=self)
+                await self.brain_bridge.initialize()
+            except Exception as e:
+                self.logger.error(f"Cannot enable hybrid mode: {e}")
+                return False
+        
+        await self.brain_bridge.enable_hybrid_mode()
+        self.hybrid_mode_enabled = True
+        self.logger.info("HYBRID MODE ENABLED - Peak Aurora Capabilities Active")
+        await self._emit("hybrid_mode_enabled", {"timestamp": time.time()})
+        return True
     
     async def enable_hyperspeed(self):
         """Enable Hyperspeed Mode for ultra-high-throughput operations"""
@@ -322,6 +349,14 @@ class AuroraUniversalCore:
         
         health["hyperspeed_enabled"] = self.hyperspeed_enabled
         health["autonomous_mode"] = self.autonomous_mode
+        health["hybrid_mode_enabled"] = self.hybrid_mode_enabled
+        
+        if self.brain_bridge:
+            health["brain_bridge"] = {
+                "initialized": self.brain_bridge.initialized,
+                "hybrid_active": self.brain_bridge.hybrid_mode_active,
+                "self_coding_active": self.brain_bridge.self_coding_active
+            }
         
         return health
     
@@ -363,7 +398,9 @@ class AuroraUniversalCore:
                 "modules": self.MODULE_COUNT
             },
             "hyperspeed_enabled": self.hyperspeed_enabled,
-            "autonomous_mode": self.autonomous_mode
+            "autonomous_mode": self.autonomous_mode,
+            "hybrid_mode_enabled": self.hybrid_mode_enabled,
+            "brain_bridge_connected": self.brain_bridge is not None
         }
         
         if self.worker_pool:

@@ -29,6 +29,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
     { path: '/evolution', label: 'Evolution Monitor', icon: <TrendingUp className="w-5 h-5" />, category: 'intelligence' },
 
     // Advanced Tools
+    { path: '/memory-fabric', label: 'Memory Fabric', icon: <Brain className="w-5 h-5" />, category: 'tools' },
     { path: '/autonomous', label: 'Autonomous Tools', icon: <Zap className="w-5 h-5" />, category: 'tools' },
     { path: '/monitoring', label: 'System Monitor', icon: <Activity className="w-5 h-5" />, category: 'tools' },
     { path: '/database', label: 'Knowledge Base', icon: <Database className="w-5 h-5" />, category: 'tools' },

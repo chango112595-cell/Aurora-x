@@ -33,6 +33,9 @@ class NexusServer:
         
         await self.core.start()
         
+        if self.core.brain_bridge:
+            await self.core.enable_hybrid_mode()
+        
         print("\n" + "-" * 60)
         print(f"  Node ID: {self.core.config.node_id}")
         print(f"  Status: {self.core.state.value.upper()}")
