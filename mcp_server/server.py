@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Aurora MCP Server - Model Context Protocol Server with HTTP REST API
-Exposes filesystem and process tools for external AI agents like ChatGPT
+Aurora MCP Server - Model Context Protocol Server with HTTP REST API + WebSocket
+Exposes filesystem and process tools for external AI agents like ChatGPT and Claude
 """
 
 import asyncio
@@ -19,14 +19,11 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s [MCP] %(message)s')
 logger = logging.getLogger(__name__)
 
 # Import FastAPI and related
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import uvicorn
-
-# Import websockets for MCP protocol
-import websockets
 
 
 class FileReadRequest(BaseModel):
@@ -54,13 +51,35 @@ class CommandExecRequest(BaseModel):
     cwd: Optional[str] = None
 
 
+class ConnectionManager:
+    """Manages WebSocket connections for MCP protocol"""
+    
+    def __init__(self):
+        self.active = set()
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active.add(websocket)
+        logger.info(f"Client connected. Total connections: {len(self.active)}")
+
+    def disconnect(self, websocket: WebSocket):
+        self.active.discard(websocket)
+        logger.info(f"Client disconnected. Total connections: {len(self.active)}")
+
+    async def send_json(self, websocket: WebSocket, data: Dict):
+        try:
+            await websocket.send_text(json.dumps(data))
+        except Exception as e:
+            logger.error(f"Error sending JSON: {e}")
+
+
 class MCPServer:
-    """Model Context Protocol Server with HTTP REST API"""
+    """Model Context Protocol Server with HTTP REST API + WebSocket"""
     
     def __init__(self, workspace_root: str = "."):
         self.workspace_root = Path(workspace_root).resolve()
-        self.clients = set()
         self.request_id = 0
+        self.ws_manager = ConnectionManager()
         
         # Define available tools
         self.tools = {
@@ -243,6 +262,42 @@ class MCPServer:
             }
         except Exception as e:
             return {"error": str(e)}
+    
+    async def handle_websocket_message(self, websocket: WebSocket, message: Dict) -> Dict:
+        """Handle incoming WebSocket message"""
+        msg_type = message.get("type")
+        
+        if msg_type == "fs_read":
+            path = message.get("path")
+            if not path:
+                return {"type": "fs_read_error", "error": "missing_path"}
+            result = await self.handle_fs_read(path)
+            return {"type": "fs_read_resp", **result}
+        
+        elif msg_type == "fs_list":
+            path = message.get("path", ".")
+            recursive = message.get("recursive", False)
+            result = await self.handle_fs_list(path, recursive)
+            return {"type": "fs_list_resp", **result}
+        
+        elif msg_type == "run":
+            cmd = message.get("cmd")
+            if not cmd:
+                return {"type": "run_error", "error": "missing_cmd"}
+            timeout = message.get("timeout", 30)
+            result = await self.handle_process_run(cmd, timeout)
+            return {"type": "run_resp", "cmd": cmd, **result}
+        
+        elif msg_type == "fs_write":
+            path = message.get("path")
+            content = message.get("content", "")
+            if not path:
+                return {"type": "fs_write_error", "error": "missing_path"}
+            result = await self.handle_fs_write(path, content)
+            return {"type": "fs_write_resp", **result}
+        
+        else:
+            return {"type": "error", "error": "unknown_type", "received": msg_type}
 
 
 # Create MCP server instance
@@ -252,15 +307,15 @@ mcp = MCPServer(workspace_root=os.getcwd())
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    logger.info("Starting Aurora MCP HTTP Server")
+    logger.info("Starting Aurora MCP HTTP+WebSocket Server")
     yield
     # Shutdown
-    logger.info("Shutting down Aurora MCP HTTP Server")
+    logger.info("Shutting down Aurora MCP Server")
 
 app = FastAPI(
     title="Aurora MCP Server",
-    description="Model Context Protocol Server for AI Agents - Provides filesystem and process tools",
-    version="1.0.0",
+    description="Model Context Protocol Server - HTTP REST API + WebSocket for AI Agents",
+    version="2.0.0",
     lifespan=lifespan,
     servers=[
         {"url": "https://993461dc-3757-4f77-8c01-8bec9bddf5ee-00-3su7j9cyl1vd5.picard.replit.dev", "description": "Production server"}
@@ -282,18 +337,22 @@ async def root():
     """Server info and available endpoints"""
     return {
         "name": "Aurora MCP Server",
-        "version": "1.0.0",
-        "description": "Model Context Protocol Server for AI Agents",
+        "version": "2.0.0",
+        "description": "Model Context Protocol Server - HTTP REST API + WebSocket",
         "endpoints": {
-            "GET /": "This info",
-            "GET /health": "Health check",
-            "GET /tools": "List available tools",
-            "POST /fs/read": "Read a file",
-            "POST /fs/write": "Write to a file",
-            "POST /fs/list": "List directory contents",
-            "POST /process/run": "Run a shell command",
-            "POST /process/exec": "Execute a program",
-            "GET /openapi.json": "OpenAPI schema for ChatGPT"
+            "HTTP": {
+                "GET /": "This info",
+                "GET /health": "Health check",
+                "GET /tools": "List available tools",
+                "POST /fs/read": "Read a file",
+                "POST /fs/write": "Write to a file",
+                "POST /fs/list": "List directory contents",
+                "POST /process/run": "Run a shell command",
+                "GET /openapi.json": "OpenAPI schema for ChatGPT"
+            },
+            "WebSocket": {
+                "WS /mcp": "WebSocket endpoint for MCP protocol - supports fs_read, fs_list, run, fs_write"
+            }
         }
     }
 
@@ -301,7 +360,7 @@ async def root():
 @app.get("/health")
 async def health():
     """Health check endpoint"""
-    return {"status": "healthy", "server": "aurora-mcp"}
+    return {"status": "healthy", "server": "aurora-mcp", "ws_connections": len(mcp.ws_manager.active)}
 
 
 @app.get("/tools")
@@ -355,26 +414,50 @@ async def process_exec(request: CommandExecRequest):
     return result
 
 
+@app.websocket("/mcp")
+async def websocket_endpoint(websocket: WebSocket):
+    """WebSocket endpoint for MCP protocol"""
+    await mcp.ws_manager.connect(websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            try:
+                message = json.loads(data)
+                response = await mcp.handle_websocket_message(websocket, message)
+                await mcp.ws_manager.send_json(websocket, response)
+            except json.JSONDecodeError:
+                error_response = {"type": "error", "error": "invalid_json"}
+                await mcp.ws_manager.send_json(websocket, error_response)
+            except Exception as e:
+                logger.error(f"Error processing WebSocket message: {e}")
+                error_response = {"type": "error", "error": str(e)}
+                await mcp.ws_manager.send_json(websocket, error_response)
+    except WebSocketDisconnect:
+        mcp.ws_manager.disconnect(websocket)
+
+
 def main():
-    """Run the MCP HTTP server"""
+    """Run the MCP HTTP+WebSocket server"""
     port = int(os.environ.get("MCP_PORT", "8080"))
     
     # Get public URL
     replit_url = os.environ.get("REPLIT_DEV_DOMAIN", "")
     
-    print("\n" + "=" * 60)
-    print("AURORA MCP SERVER - HTTP REST API")
-    print("=" * 60)
+    print("\n" + "=" * 70)
+    print("AURORA MCP SERVER - HTTP REST API + WebSocket")
+    print("=" * 70)
     print(f"\nLocal:  http://0.0.0.0:{port}")
     if replit_url:
         print(f"Public: https://{replit_url}")
-    print("\nEndpoints for ChatGPT Actions:")
+    print("\nHTTP Endpoints for ChatGPT Actions:")
     print("  POST /fs/read    - Read file contents")
     print("  POST /fs/write   - Write to a file")
     print("  POST /fs/list    - List directory")
     print("  POST /process/run - Run shell command")
     print("  GET  /openapi.json - OpenAPI schema")
-    print("\n" + "=" * 60 + "\n")
+    print("\nWebSocket for Claude/Other MCP Clients:")
+    print("  WS /mcp - Full MCP protocol support")
+    print("\n" + "=" * 70 + "\n")
     
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
