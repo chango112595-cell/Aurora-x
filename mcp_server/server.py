@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Aurora MCP Server - Model Context Protocol WebSocket Server
+Aurora MCP Server - Model Context Protocol Server with HTTP REST API
 Exposes filesystem and process tools for external AI agents like ChatGPT
 """
 
@@ -12,17 +12,50 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import logging
+from contextlib import asynccontextmanager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [MCP] %(message)s')
 logger = logging.getLogger(__name__)
 
-# Import websockets
+# Import FastAPI and related
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+import uvicorn
+
+# Import websockets for MCP protocol
 import websockets
 
 
+class FileReadRequest(BaseModel):
+    path: str
+
+
+class FileWriteRequest(BaseModel):
+    path: str
+    content: str
+
+
+class FileListRequest(BaseModel):
+    path: str = "."
+    recursive: bool = False
+
+
+class CommandRunRequest(BaseModel):
+    command: str
+    timeout: int = 30
+
+
+class CommandExecRequest(BaseModel):
+    program: str
+    args: List[str] = []
+    cwd: Optional[str] = None
+
+
 class MCPServer:
-    """Model Context Protocol Server with WebSocket transport"""
+    """Model Context Protocol Server with HTTP REST API"""
     
     def __init__(self, workspace_root: str = "."):
         self.workspace_root = Path(workspace_root).resolve()
@@ -32,7 +65,7 @@ class MCPServer:
         # Define available tools
         self.tools = {
             "fs/read": {
-                "name": "fs/read",
+                "name": "fs_read",
                 "description": "Read the contents of a file",
                 "inputSchema": {
                     "type": "object",
@@ -43,7 +76,7 @@ class MCPServer:
                 }
             },
             "fs/write": {
-                "name": "fs/write", 
+                "name": "fs_write", 
                 "description": "Write content to a file",
                 "inputSchema": {
                     "type": "object",
@@ -55,7 +88,7 @@ class MCPServer:
                 }
             },
             "fs/list": {
-                "name": "fs/list",
+                "name": "fs_list",
                 "description": "List files and directories in a path",
                 "inputSchema": {
                     "type": "object",
@@ -66,7 +99,7 @@ class MCPServer:
                 }
             },
             "process/run": {
-                "name": "process/run",
+                "name": "process_run",
                 "description": "Run a shell command and return output",
                 "inputSchema": {
                     "type": "object",
@@ -78,7 +111,7 @@ class MCPServer:
                 }
             },
             "process/exec": {
-                "name": "process/exec",
+                "name": "process_exec",
                 "description": "Execute a command with arguments",
                 "inputSchema": {
                     "type": "object",
@@ -100,48 +133,46 @@ class MCPServer:
             raise ValueError(f"Path {path} is outside workspace")
         return resolved
     
-    async def handle_fs_read(self, params: Dict) -> Dict:
+    async def handle_fs_read(self, path: str) -> Dict:
         """Read file contents"""
         try:
-            path = self._safe_path(params.get("path", ""))
-            if not path.exists():
-                return {"error": f"File not found: {params.get('path')}"}
-            if not path.is_file():
-                return {"error": f"Not a file: {params.get('path')}"}
+            safe_path = self._safe_path(path)
+            if not safe_path.exists():
+                return {"error": f"File not found: {path}"}
+            if not safe_path.is_file():
+                return {"error": f"Not a file: {path}"}
             
-            content = path.read_text(encoding='utf-8', errors='replace')
-            return {"content": content, "path": str(path.relative_to(self.workspace_root))}
+            content = safe_path.read_text(encoding='utf-8', errors='replace')
+            return {"content": content, "path": str(safe_path.relative_to(self.workspace_root))}
         except Exception as e:
             return {"error": str(e)}
     
-    async def handle_fs_write(self, params: Dict) -> Dict:
+    async def handle_fs_write(self, path: str, content: str) -> Dict:
         """Write content to file"""
         try:
-            path = self._safe_path(params.get("path", ""))
-            content = params.get("content", "")
+            safe_path = self._safe_path(path)
             
             # Create parent directories if needed
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(content, encoding='utf-8')
+            safe_path.parent.mkdir(parents=True, exist_ok=True)
+            safe_path.write_text(content, encoding='utf-8')
             
-            return {"success": True, "path": str(path.relative_to(self.workspace_root)), "bytes_written": len(content)}
+            return {"success": True, "path": str(safe_path.relative_to(self.workspace_root)), "bytes_written": len(content)}
         except Exception as e:
             return {"error": str(e)}
     
-    async def handle_fs_list(self, params: Dict) -> Dict:
+    async def handle_fs_list(self, path: str = ".", recursive: bool = False) -> Dict:
         """List directory contents"""
         try:
-            path = self._safe_path(params.get("path", "."))
-            recursive = params.get("recursive", False)
+            safe_path = self._safe_path(path)
             
-            if not path.exists():
-                return {"error": f"Path not found: {params.get('path')}"}
-            if not path.is_dir():
-                return {"error": f"Not a directory: {params.get('path')}"}
+            if not safe_path.exists():
+                return {"error": f"Path not found: {path}"}
+            if not safe_path.is_dir():
+                return {"error": f"Not a directory: {path}"}
             
             entries = []
             if recursive:
-                for item in path.rglob("*"):
+                for item in safe_path.rglob("*"):
                     if not any(part.startswith('.') for part in item.parts):
                         rel_path = item.relative_to(self.workspace_root)
                         entries.append({
@@ -150,7 +181,7 @@ class MCPServer:
                             "size": item.stat().st_size if item.is_file() else None
                         })
             else:
-                for item in path.iterdir():
+                for item in safe_path.iterdir():
                     if not item.name.startswith('.'):
                         rel_path = item.relative_to(self.workspace_root)
                         entries.append({
@@ -159,16 +190,13 @@ class MCPServer:
                             "size": item.stat().st_size if item.is_file() else None
                         })
             
-            return {"entries": sorted(entries, key=lambda x: x["path"]), "count": len(entries)}
+            return {"entries": sorted(entries, key=lambda x: x["path"])[:100], "count": len(entries)}
         except Exception as e:
             return {"error": str(e)}
     
-    async def handle_process_run(self, params: Dict) -> Dict:
+    async def handle_process_run(self, command: str, timeout: int = 30) -> Dict:
         """Run shell command"""
         try:
-            command = params.get("command", "")
-            timeout = params.get("timeout", 30)
-            
             if not command:
                 return {"error": "No command provided"}
             
@@ -182,8 +210,8 @@ class MCPServer:
             try:
                 stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
                 return {
-                    "stdout": stdout.decode('utf-8', errors='replace'),
-                    "stderr": stderr.decode('utf-8', errors='replace'),
+                    "stdout": stdout.decode('utf-8', errors='replace')[:10000],
+                    "stderr": stderr.decode('utf-8', errors='replace')[:5000],
                     "exit_code": proc.returncode
                 }
             except asyncio.TimeoutError:
@@ -192,178 +220,164 @@ class MCPServer:
         except Exception as e:
             return {"error": str(e)}
     
-    async def handle_process_exec(self, params: Dict) -> Dict:
+    async def handle_process_exec(self, program: str, args: List[str] = [], cwd: Optional[str] = None) -> Dict:
         """Execute program with arguments"""
         try:
-            program = params.get("program", "")
-            args = params.get("args", [])
-            cwd = params.get("cwd", str(self.workspace_root))
-            
             if not program:
                 return {"error": "No program provided"}
             
+            work_dir = cwd if cwd else str(self.workspace_root)
             cmd = [program] + args
             proc = await asyncio.create_subprocess_exec(
                 *cmd,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
-                cwd=cwd
+                cwd=work_dir
             )
             
             stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=60)
             return {
-                "stdout": stdout.decode('utf-8', errors='replace'),
-                "stderr": stderr.decode('utf-8', errors='replace'),
+                "stdout": stdout.decode('utf-8', errors='replace')[:10000],
+                "stderr": stderr.decode('utf-8', errors='replace')[:5000],
                 "exit_code": proc.returncode
             }
         except Exception as e:
             return {"error": str(e)}
-    
-    async def handle_request(self, message: Dict) -> Dict:
-        """Handle incoming MCP request"""
-        method = message.get("method", "")
-        params = message.get("params", {})
-        request_id = message.get("id")
-        
-        logger.info(f"Request: {method}")
-        
-        # MCP Protocol methods
-        if method == "initialize":
-            return {
-                "jsonrpc": "2.0",
-                "id": request_id,
-                "result": {
-                    "protocolVersion": "2024-11-05",
-                    "capabilities": {
-                        "tools": {}
-                    },
-                    "serverInfo": {
-                        "name": "aurora-mcp-server",
-                        "version": "1.0.0"
-                    }
-                }
-            }
-        
-        elif method == "tools/list":
-            return {
-                "jsonrpc": "2.0",
-                "id": request_id,
-                "result": {
-                    "tools": list(self.tools.values())
-                }
-            }
-        
-        elif method == "tools/call":
-            tool_name = params.get("name", "")
-            tool_args = params.get("arguments", {})
-            
-            handlers = {
-                "fs/read": self.handle_fs_read,
-                "fs/write": self.handle_fs_write,
-                "fs/list": self.handle_fs_list,
-                "process/run": self.handle_process_run,
-                "process/exec": self.handle_process_exec
-            }
-            
-            if tool_name in handlers:
-                result = await handlers[tool_name](tool_args)
-                return {
-                    "jsonrpc": "2.0",
-                    "id": request_id,
-                    "result": {
-                        "content": [{"type": "text", "text": json.dumps(result, indent=2)}]
-                    }
-                }
-            else:
-                return {
-                    "jsonrpc": "2.0",
-                    "id": request_id,
-                    "error": {"code": -32601, "message": f"Unknown tool: {tool_name}"}
-                }
-        
-        elif method == "ping":
-            return {
-                "jsonrpc": "2.0",
-                "id": request_id,
-                "result": {}
-            }
-        
-        else:
-            return {
-                "jsonrpc": "2.0",
-                "id": request_id,
-                "error": {"code": -32601, "message": f"Method not found: {method}"}
-            }
-    
-    async def handle_connection(self, websocket):
-        """Handle WebSocket connection"""
-        client_addr = websocket.remote_address
-        logger.info(f"Client connected: {client_addr}")
-        self.clients.add(websocket)
-        
-        try:
-            async for message in websocket:
-                try:
-                    data = json.loads(message)
-                    response = await self.handle_request(data)
-                    await websocket.send(json.dumps(response))
-                except json.JSONDecodeError:
-                    error_response = {
-                        "jsonrpc": "2.0",
-                        "id": None,
-                        "error": {"code": -32700, "message": "Parse error"}
-                    }
-                    await websocket.send(json.dumps(error_response))
-                except Exception as e:
-                    logger.error(f"Error handling message: {e}")
-                    error_response = {
-                        "jsonrpc": "2.0",
-                        "id": None,
-                        "error": {"code": -32603, "message": str(e)}
-                    }
-                    await websocket.send(json.dumps(error_response))
-        except websockets.exceptions.ConnectionClosed:
-            logger.info(f"Client disconnected: {client_addr}")
-        finally:
-            self.clients.discard(websocket)
-    
-    async def start(self, host: str = "0.0.0.0", port: int = 8765):
-        """Start the MCP WebSocket server"""
-        logger.info(f"Starting MCP Server on ws://{host}:{port}")
-        
-        # Get the public URL for Replit
-        replit_url = os.environ.get("REPLIT_DEV_DOMAIN", "")
-        repl_slug = os.environ.get("REPL_SLUG", "")
-        repl_owner = os.environ.get("REPL_OWNER", "")
-        
-        if replit_url:
-            # Use the dev domain directly (Replit proxies through port 443)
-            public_url = f"wss://{replit_url}"
-        elif repl_slug and repl_owner:
-            public_url = f"wss://{repl_slug}.{repl_owner}.repl.co"
-        else:
-            public_url = f"ws://{host}:{port}"
-        
-        print("\n" + "=" * 60)
-        print("AURORA MCP SERVER STARTED")
-        print("=" * 60)
-        print(f"\nLocal:  ws://{host}:{port}")
-        print(f"Public: {public_url}")
-        print("\nAvailable Tools:")
-        for tool in self.tools.values():
-            print(f"  - {tool['name']}: {tool['description']}")
-        print("\n" + "=" * 60 + "\n")
-        
-        async with websockets.serve(self.handle_connection, host, port):
-            await asyncio.Future()  # Run forever
 
 
-async def main():
-    # Use port 8080 for MCP server (publicly accessible on Replit)
+# Create MCP server instance
+mcp = MCPServer(workspace_root=os.getcwd())
+
+# Create FastAPI app with lifespan
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    logger.info("Starting Aurora MCP HTTP Server")
+    yield
+    # Shutdown
+    logger.info("Shutting down Aurora MCP HTTP Server")
+
+app = FastAPI(
+    title="Aurora MCP Server",
+    description="Model Context Protocol Server for AI Agents - Provides filesystem and process tools",
+    version="1.0.0",
+    lifespan=lifespan,
+    servers=[
+        {"url": "https://993461dc-3757-4f77-8c01-8bec9bddf5ee-00-3su7j9cyl1vd5.picard.replit.dev", "description": "Production server"}
+    ]
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/")
+async def root():
+    """Server info and available endpoints"""
+    return {
+        "name": "Aurora MCP Server",
+        "version": "1.0.0",
+        "description": "Model Context Protocol Server for AI Agents",
+        "endpoints": {
+            "GET /": "This info",
+            "GET /health": "Health check",
+            "GET /tools": "List available tools",
+            "POST /fs/read": "Read a file",
+            "POST /fs/write": "Write to a file",
+            "POST /fs/list": "List directory contents",
+            "POST /process/run": "Run a shell command",
+            "POST /process/exec": "Execute a program",
+            "GET /openapi.json": "OpenAPI schema for ChatGPT"
+        }
+    }
+
+
+@app.get("/health")
+async def health():
+    """Health check endpoint"""
+    return {"status": "healthy", "server": "aurora-mcp"}
+
+
+@app.get("/tools")
+async def list_tools():
+    """List all available MCP tools"""
+    return {"tools": list(mcp.tools.values())}
+
+
+@app.post("/fs/read")
+async def fs_read(request: FileReadRequest):
+    """Read the contents of a file"""
+    result = await mcp.handle_fs_read(request.path)
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+
+@app.post("/fs/write")
+async def fs_write(request: FileWriteRequest):
+    """Write content to a file"""
+    result = await mcp.handle_fs_write(request.path, request.content)
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+
+@app.post("/fs/list")
+async def fs_list(request: FileListRequest):
+    """List files and directories"""
+    result = await mcp.handle_fs_list(request.path, request.recursive)
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+
+@app.post("/process/run")
+async def process_run(request: CommandRunRequest):
+    """Run a shell command"""
+    result = await mcp.handle_process_run(request.command, request.timeout)
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+
+@app.post("/process/exec")
+async def process_exec(request: CommandExecRequest):
+    """Execute a program with arguments"""
+    result = await mcp.handle_process_exec(request.program, request.args, request.cwd)
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+
+def main():
+    """Run the MCP HTTP server"""
     port = int(os.environ.get("MCP_PORT", "8080"))
-    server = MCPServer(workspace_root=os.getcwd())
-    await server.start(port=port)
+    
+    # Get public URL
+    replit_url = os.environ.get("REPLIT_DEV_DOMAIN", "")
+    
+    print("\n" + "=" * 60)
+    print("AURORA MCP SERVER - HTTP REST API")
+    print("=" * 60)
+    print(f"\nLocal:  http://0.0.0.0:{port}")
+    if replit_url:
+        print(f"Public: https://{replit_url}")
+    print("\nEndpoints for ChatGPT Actions:")
+    print("  POST /fs/read    - Read file contents")
+    print("  POST /fs/write   - Write to a file")
+    print("  POST /fs/list    - List directory")
+    print("  POST /process/run - Run shell command")
+    print("  GET  /openapi.json - OpenAPI schema")
+    print("\n" + "=" * 60 + "\n")
+    
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
