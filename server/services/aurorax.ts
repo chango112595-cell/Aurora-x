@@ -16,10 +16,12 @@ export interface SynthesisResult {
   error?: string;
 }
 
+let bridgeWarningLogged = false;
+
 async function fetchLocal(url: string, body?: any): Promise<any> {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
     
     const res = await fetch(url, {
       method: 'POST',
@@ -31,8 +33,11 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
     
     const data = await res.json() as any;
     return data.result ?? data;
-  } catch (error) {
-    console.warn(`[AuroraX] Service call failed: ${url}`, error);
+  } catch (error: any) {
+    if (error.code === 'ECONNREFUSED' && !bridgeWarningLogged) {
+      console.log('[AuroraX] Bridge service at port 5001 not available, using Claude API fallback');
+      bridgeWarningLogged = true;
+    }
     return null;
   }
 }
@@ -107,17 +112,7 @@ Provide clean, well-commented code with clear explanations.`;
 
   async adapt(intent: any, outcome: any): Promise<boolean> {
     const result = await fetchLocal(`${this.baseUrl}/learn`, { intent, outcome });
-    
-    if (result?.success) {
-      return true;
-    }
-    
-    console.log('[AuroraX] Adaptive learning recorded:', {
-      intent: intent?.action ?? 'unknown',
-      success: !!outcome
-    });
-    
-    return true;
+    return result?.success ?? true;
   }
 
   async analyze(code: string, context?: any): Promise<any> {

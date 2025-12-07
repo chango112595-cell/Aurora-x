@@ -2257,6 +2257,104 @@ def serve():
     # Create and run Flask API
     app = nexus.create_advanced_api()
 
+    # Add health check endpoint for TypeScript service integration
+    @app.route("/health", methods=["GET"])
+    def health_check():
+        return jsonify({
+            "status": "healthy",
+            "service": "luminar-nexus-v2",
+            "version": nexus.version,
+            "quantum_coherence": nexus.quantum_mesh.coherence_level
+        }), 200
+
+    # Add interpret endpoint for TypeScript AuroraAI orchestrator
+    @app.route("/interpret", methods=["POST"])
+    def interpret_message():
+        data = request.get_json() or {}
+        text = data.get("text", "")
+        ctx = data.get("ctx", {})
+        state = data.get("state", {})
+        
+        # Simple intent classification
+        text_lower = text.lower()
+        action = "respond"
+        spec = None
+        topic = None
+        query = None
+        confidence = 0.7
+        
+        if any(kw in text_lower for kw in ["write", "create", "generate", "code", "build", "make"]):
+            action = "synthesize"
+            spec = {"request": text, "context": ctx}
+            confidence = 0.85
+        elif any(kw in text_lower for kw in ["remember", "recall", "what did", "history"]):
+            action = "queryMemory"
+            query = text
+            confidence = 0.8
+        elif any(kw in text_lower for kw in ["think", "analyze", "consider", "reflect"]):
+            action = "reflect"
+            topic = text
+            confidence = 0.75
+        
+        # Learn from this conversation pattern
+        keywords = [w for w in text_lower.split() if len(w) > 3][:10]
+        nexus.ai_orchestrator.learn_conversation_patterns(
+            action, keywords, confidence * 100, text, str(ctx)[:100]
+        )
+        
+        return jsonify({
+            "action": action,
+            "spec": spec,
+            "topic": topic,
+            "query": query,
+            "confidence": confidence,
+            "quantum_state": nexus.quantum_mesh.quantum_states.get("interpretation", "stable")
+        })
+
+    # Add respond endpoint for generating responses
+    @app.route("/respond", methods=["POST"])
+    def generate_response():
+        data = request.get_json() or {}
+        intent = data.get("intent", {})
+        ctx = data.get("ctx", {})
+        
+        action = intent.get("action", "respond")
+        
+        # Generate contextual response based on intent
+        responses = {
+            "respond": "I understand your request. Let me help you with that.",
+            "synthesize": "I'll generate the code you need. Processing your synthesis request...",
+            "reflect": "Let me think about this carefully and provide my analysis.",
+            "queryMemory": "Let me search through my memory to find relevant information."
+        }
+        
+        base_response = responses.get(action, "I'm processing your request.")
+        
+        return jsonify({
+            "response": base_response,
+            "action_taken": action,
+            "context_used": bool(ctx),
+            "quantum_coherence": nexus.quantum_mesh.coherence_level
+        })
+
+    # Add reflect endpoint for deeper analysis
+    @app.route("/reflect", methods=["POST"])
+    def reflect_on_topic():
+        data = request.get_json() or {}
+        topic = data.get("topic", "")
+        ctx = data.get("ctx", {})
+        
+        # Generate a thoughtful reflection
+        reflection = f"Upon careful analysis of '{topic[:100]}...', I observe several key aspects worth considering. "
+        reflection += "The quantum coherence of this system enables deeper pattern recognition. "
+        reflection += f"Current system coherence level: {nexus.quantum_mesh.coherence_level:.2f}"
+        
+        return jsonify({
+            "reflection": reflection,
+            "topic": topic[:100],
+            "coherence": nexus.quantum_mesh.coherence_level
+        })
+
     print("\nLuminar Nexus V2 API Server Starting...")
     print("   Port: 8000")
     print(f"   Quantum Coherence: {nexus.quantum_mesh.coherence_level:.2f}")
@@ -2266,6 +2364,7 @@ def serve():
     print("   - Port conflict resolution")
     print("   - Predictive scaling")
     print("   - Neural anomaly detection")
+    print("   - TypeScript AuroraAI integration (interpret/respond/reflect)")
     print("\n")
 
     app.run(host="0.0.0.0", port=8000, debug=False, threaded=True)

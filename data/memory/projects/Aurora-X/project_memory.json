@@ -4,6 +4,78 @@
       "value": "Memory Fabric works!",
       "category": "test",
       "timestamp": "2025-12-06T18:10:37.032274"
+    },
+    "interaction_1765134069434": {
+      "value": {
+        "userInput": "Hello, can you help me understand your capabilities?",
+        "response": "",
+        "intent": {
+          "action": "respond",
+          "confidence": 0.6
+        },
+        "timestamp": 1765134069434
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-07T19:01:09.438048"
+    },
+    "interaction_1765134170257": {
+      "value": {
+        "userInput": "Hello, can you help me understand your capabilities?",
+        "response": "I understand your request. Let me help you with that.",
+        "intent": {
+          "action": "respond",
+          "confidence": 0.7,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": null,
+          "topic": null
+        },
+        "timestamp": 1765134170257
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-07T19:02:50.260789"
+    },
+    "interaction_1765134178796": {
+      "value": {
+        "userInput": "Generate a function to calculate fibonacci numbers",
+        "response": "// Code synthesis requested for: Generate a function to calculate fibonacci numbers\n// Aurora-X Ultra is processing your request...",
+        "intent": {
+          "action": "synthesize",
+          "confidence": 0.85,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": {
+            "context": {
+              "facts": {},
+              "recentMessages": [],
+              "semanticContext": "",
+              "timestamp": 1765134178760
+            },
+            "request": "Generate a function to calculate fibonacci numbers"
+          },
+          "topic": null
+        },
+        "timestamp": 1765134178796
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-07T19:02:58.811158"
+    },
+    "interaction_1765134260790": {
+      "value": {
+        "userInput": "Hello, what are your capabilities?",
+        "response": "I understand your request. Let me help you with that.",
+        "intent": {
+          "action": "respond",
+          "confidence": 0.7,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": null,
+          "topic": null
+        },
+        "timestamp": 1765134260790
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-07T19:04:20.793608"
     }
   },
   "summary": ""

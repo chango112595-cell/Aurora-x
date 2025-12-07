@@ -8,6 +8,42 @@
       },
       "timestamp": "2025-12-06T18:10:37.032974",
       "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1765134069434",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-07T19:01:09.439387",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1765134170257",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-07T19:02:50.263351",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1765134178796",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-07T19:02:58.814912",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1765134260790",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-07T19:04:20.794386",
+      "project": "Aurora-X"
     }
   ]
 }
