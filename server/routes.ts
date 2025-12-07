@@ -1111,20 +1111,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       
       try {
-        // V3 runs as a Python process, check if the process is running via its API gateway
-        const v3Response = await fetch('http://localhost:7700/api/health', { 
+        // V3 runs as a Python process on port 5002, check its HTTP API
+        const v3Response = await fetch('http://localhost:5002/api/health', { 
           signal: AbortSignal.timeout(2000) 
         });
         if (v3Response.ok) {
           const v3Data = await v3Response.json();
+          // Also fetch capabilities for more details
+          let capabilities = { workers: 300, tiers: 188, aems: 66, modules: 550, hybridMode: false };
+          try {
+            const capRes = await fetch('http://localhost:5002/api/capabilities', { signal: AbortSignal.timeout(1000) });
+            if (capRes.ok) {
+              const capData = await capRes.json();
+              capabilities = {
+                workers: capData.workers || 300,
+                tiers: capData.tiers || 188,
+                aems: capData.aems || 66,
+                modules: capData.modules || 550,
+                hybridMode: capData.hybrid_mode_enabled || false
+              };
+            }
+          } catch {}
           v3Status = {
             connected: true,
             status: v3Data.status || 'running',
-            workers: v3Data.peak_capabilities?.workers || 300,
-            tiers: v3Data.peak_capabilities?.tiers || 188,
-            aems: v3Data.peak_capabilities?.aems || 66,
-            modules: v3Data.peak_capabilities?.modules || 550,
-            hybridMode: v3Data.hybrid_mode_enabled || false
+            workers: capabilities.workers,
+            tiers: capabilities.tiers,
+            aems: capabilities.aems,
+            modules: capabilities.modules,
+            hybridMode: capabilities.hybridMode
           };
         }
       } catch (e) {
@@ -2109,9 +2124,9 @@ except Exception as e:
       // Check WebSocket
       diagnostics.services.websocket = wsServer ? "active" : "inactive";
 
-      // Check Bridge
+      // Check Bridge (Aurora Nexus V3 on port 5002)
       try {
-        const bridgeRes = await fetch("http://0.0.0.0:5001/healthz", { signal: AbortSignal.timeout(2000) });
+        const bridgeRes = await fetch("http://localhost:5002/api/health", { signal: AbortSignal.timeout(2000) });
         diagnostics.services.bridge = bridgeRes.ok ? "connected" : "error";
       } catch (e) {
         diagnostics.services.bridge = "unreachable";

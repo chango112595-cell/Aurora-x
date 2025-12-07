@@ -73,8 +73,9 @@ class IssueDetector:
         self.issue_handlers: Dict[str, Callable] = {}
         self.issue_patterns: Dict[str, List[str]] = {}
         
-        self.check_interval = 10
+        self.check_interval = 30  # Reduced frequency to prevent CPU spikes
         self.auto_fix_enabled = True
+        self._last_cpu_reading = 0  # Cache CPU reading
         
         self._initialize_patterns()
     
@@ -178,8 +179,12 @@ class IssueDetector:
                     description=f"Memory usage at {memory.percent}%"
                 )
             
-            cpu = psutil.cpu_percent(interval=1)
-            if cpu > 90:
+            # Use non-blocking CPU check (None interval means don't block)
+            # This returns the CPU usage since the last call
+            cpu = psutil.cpu_percent(interval=None)
+            self._last_cpu_reading = cpu
+            # Only report critical CPU issues (sustained high usage)
+            if cpu > 95:
                 await self._report_issue(
                     category=IssueCategory.PERFORMANCE,
                     severity=IssueSeverity.MEDIUM,

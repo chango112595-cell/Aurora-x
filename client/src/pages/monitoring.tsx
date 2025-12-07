@@ -64,7 +64,7 @@ interface RealMetrics {
 export default function MonitoringPage() {
   const { data: realMetrics } = useQuery<RealMetrics>({
     queryKey: ['/api/system/metrics'],
-    refetchInterval: 3000,
+    refetchInterval: 5000,  // Reduced from 3s to 5s to prevent CPU spikes
   });
 
   const cpuUsage = realMetrics?.cpu ?? 0;
