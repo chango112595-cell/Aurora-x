@@ -1,0 +1,5449 @@
+.
+├── agents
+│   └── tools
+├── android
+│   └── gradle-apk-stub
+├── app
+│   ├── api
+│   │   ├── aurora
+│   │   │   ├── analyze
+│   │   │   ├── error-report
+│   │   │   └── status
+│   │   ├── chat
+│   │   └── health
+│   ├── autonomous
+│   ├── chat
+│   ├── database
+│   ├── evolution
+│   ├── intelligence
+│   ├── monitoring
+│   ├── settings
+│   ├── tasks
+│   └── tiers
+├── attached_assets
+│   └── generated_images
+├── aurora
+│   ├── backend
+│   ├── core
+│   ├── frontend
+│   └── knowledge
+├── aurora_backend
+├── aurora_core
+│   └── plugin_template
+├── aurora_edgeos
+│   ├── automotive
+│   ├── aviation
+│   ├── build
+│   ├── comm
+│   ├── core
+│   ├── hal
+│   ├── iot
+│   ├── maritime
+│   ├── mobile
+│   ├── router
+│   ├── satellite
+│   └── tv
+├── aurora_fw
+│   ├── builder
+│   ├── flasher
+│   │   └── suggestions
+│   ├── registry
+│   └── toolchains
+├── aurora_memory_fabric_v2
+│   ├── core
+│   │   └── __pycache__
+│   ├── data
+│   │   └── memory
+│   │       └── global
+│   ├── integrations
+│   ├── ops
+│   │   └── cronjobs
+│   └── tests
+├── aurora_modules
+│   ├── demo-plugin
+│   │   └── demo-plugin
+│   └── example-plugin
+├── aurora_nexus_v3
+│   ├── adapters
+│   ├── core
+│   │   └── __pycache__
+│   ├── modules
+│   │   └── __pycache__
+│   ├── protocols
+│   ├── __pycache__
+│   ├── utils
+│   └── workers
+│       └── __pycache__
+├── aurora_os
+│   ├── config
+│   └── core
+├── aurora_webui
+│   ├── backend
+│   └── frontend
+├── aurora_x
+│   ├── api
+│   │   └── __pycache__
+│   ├── bridge
+│   │   └── __pycache__
+│   ├── chat
+│   │   └── __pycache__
+│   ├── checks
+│   │   └── __pycache__
+│   ├── config
+│   │   └── __pycache__
+│   ├── corpus
+│   │   └── __pycache__
+│   ├── generators
+│   │   └── __pycache__
+│   ├── learn
+│   │   └── __pycache__
+│   ├── __pycache__
+│   ├── reasoners
+│   │   └── __pycache__
+│   ├── router
+│   │   └── __pycache__
+│   ├── runs
+│   │   ├── latest -> run-20251012-152555
+│   │   └── run-20251012-152555
+│   │       ├── backend
+│   │       │   └── __pycache__
+│   │       └── frontend
+│   │           └── src
+│   │               └── components
+│   ├── spec
+│   │   └── __pycache__
+│   ├── static
+│   ├── synthesis
+│   │   └── __pycache__
+│   ├── templates
+│   │   └── __pycache__
+│   └── utils
+│       └── __pycache__
+├── aurora_x.egg-info
+├── automotive
+├── aviation
+│   └── rtos_partition
+├── backups
+│   ├── backend_backup_20251129_162051
+│   │   └── server
+│   ├── backend_backup_20251129_162819
+│   │   └── server
+│   └── branch_backup_20251206_165354
+├── badges
+├── build
+│   ├── sample_linux-sbc
+│   └── sample_virtual
+├── ci
+│   └── github-actions
+├── client
+│   ├── node_modules
+│   ├── public
+│   │   └── icons
+│   ├── src
+│   │   ├── components
+│   │   │   ├── aurora
+│   │   │   ├── examples
+│   │   │   └── ui
+│   │   ├── config
+│   │   ├── hooks
+│   │   ├── lib
+│   │   ├── pages
+│   │   └── unused
+│   └── static
+│       └── js
+├── cog_kernel
+│   ├── core
+│   ├── debugger
+│   ├── graph
+│   ├── hotswap_manager
+│   ├── memory_abstraction
+│   │   └── __pycache__
+│   └── __pycache__
+├── comm
+│   └── hub
+├── controllers
+├── core
+│   └── __pycache__
+├── coverage_html
+├── data
+│   └── memory
+│       ├── global
+│       └── projects
+│           ├── AuroraCore
+│           │   └── conversations
+│           ├── Aurora-Main
+│           │   ├── conversations
+│           │   ├── events
+│           │   └── semantic
+│           ├── Aurora-X
+│           │   ├── conversations
+│           │   ├── events
+│           │   └── semantic
+│           ├── CompressionTest
+│           │   └── conversations
+│           ├── CompressionVerification
+│           │   └── conversations
+│           ├── Project1
+│           ├── Project2
+│           ├── SemanticTest
+│           ├── TestProject
+│           └── TestProject-Verification
+├── deploy
+├── docker
+│   ├── runtime
+│   └── scripts
+├── docs
+│   ├── docs
+│   └── scripts
+├── edge
+├── gen_logs
+├── hal
+│   └── drivers
+│       └── example_driver
+├── hyperspeed
+├── installer
+├── installers
+│   ├── android
+│   │   └── apk-wrapper
+│   ├── ios
+│   ├── linux
+│   ├── macos
+│   ├── wasm
+│   └── windows
+│       └── wix
+├── integration
+│   ├── auto_deploy
+│   ├── ci
+│   ├── dashboard
+│   │   └── static
+│   ├── marketplace
+│   │   └── catalog
+│   ├── pack67
+│   └── updater
+├── ios
+├── iot
+│   └── esp32
+│       └── firmware
+├── k8s
+│   ├── helm-chart
+│   │   └── templates
+│   └── kustomize
+│       └── base
+├── live
+│   ├── environment
+│   └── pack03_os_base
+├── logs
+├── manifests
+├── maritime
+├── memory
+│   └── __pycache__
+├── mobile
+│   ├── android
+│   ├── ios
+│   └── termux
+├── monitoring
+├── node_modules
+│   ├── abbrev
+│   ├── accepts
+│   ├── agent-base
+│   │   ├── dist
+│   │   │   └── src
+│   │   └── src
+│   ├── @alloc
+│   │   └── quick-lru
+│   ├── ansi-regex
+│   ├── ansi-styles
+│   ├── @anthropic-ai
+│   │   └── sdk
+│   │       ├── bin
+│   │       ├── core
+│   │       ├── helpers
+│   │       │   └── beta
+│   │       ├── internal
+│   │       │   ├── decoders
+│   │       │   └── utils
+│   │       ├── lib
+│   │       │   └── tools
+│   │       ├── resources
+│   │       │   ├── beta
+│   │       │   │   ├── messages
+│   │       │   │   └── skills
+│   │       │   └── messages
+│   │       ├── src
+│   │       │   ├── core
+│   │       │   ├── helpers
+│   │       │   │   └── beta
+│   │       │   ├── internal
+│   │       │   │   ├── decoders
+│   │       │   │   └── utils
+│   │       │   ├── lib
+│   │       │   │   └── tools
+│   │       │   ├── resources
+│   │       │   │   ├── beta
+│   │       │   │   │   ├── messages
+│   │       │   │   │   └── skills
+│   │       │   │   └── messages
+│   │       │   └── _vendor
+│   │       │       └── partial-json-parser
+│   │       └── _vendor
+│   │           └── partial-json-parser
+│   ├── anymatch
+│   ├── any-promise
+│   │   └── register
+│   ├── aproba
+│   ├── are-we-there-yet
+│   │   └── lib
+│   ├── arg
+│   ├── aria-hidden
+│   │   └── dist
+│   │       ├── es2015
+│   │       ├── es2019
+│   │       └── es5
+│   ├── array-flatten
+│   ├── autoprefixer
+│   │   ├── bin
+│   │   ├── data
+│   │   └── lib
+│   │       └── hacks
+│   ├── @aws
+│   │   └── lambda-invoke-store
+│   │       ├── dist-cjs
+│   │       ├── dist-es
+│   │       └── dist-types
+│   ├── @aws-crypto
+│   │   ├── sha256-browser
+│   │   │   ├── build
+│   │   │   │   ├── main
+│   │   │   │   └── module
+│   │   │   ├── node_modules
+│   │   │   │   └── @smithy
+│   │   │   │       ├── is-array-buffer
+│   │   │   │       │   ├── dist-cjs
+│   │   │   │       │   ├── dist-es
+│   │   │   │       │   └── dist-types
+│   │   │   │       │       └── ts3.4
+│   │   │   │       ├── util-buffer-from
+│   │   │   │       │   ├── dist-cjs
+│   │   │   │       │   ├── dist-es
+│   │   │   │       │   └── dist-types
+│   │   │   │       │       └── ts3.4
+│   │   │   │       └── util-utf8
+│   │   │   │           ├── dist-cjs
+│   │   │   │           ├── dist-es
+│   │   │   │           └── dist-types
+│   │   │   │               └── ts3.4
+│   │   │   └── src
+│   │   ├── sha256-js
+│   │   │   ├── build
+│   │   │   │   ├── main
+│   │   │   │   └── module
+│   │   │   └── src
+│   │   ├── supports-web-crypto
+│   │   │   ├── build
+│   │   │   │   ├── main
+│   │   │   │   └── module
+│   │   │   └── src
+│   │   └── util
+│   │       ├── build
+│   │       │   ├── main
+│   │       │   └── module
+│   │       ├── node_modules
+│   │       │   └── @smithy
+│   │       │       ├── is-array-buffer
+│   │       │       │   ├── dist-cjs
+│   │       │       │   ├── dist-es
+│   │       │       │   └── dist-types
+│   │       │       │       └── ts3.4
+│   │       │       ├── util-buffer-from
+│   │       │       │   ├── dist-cjs
+│   │       │       │   ├── dist-es
+│   │       │       │   └── dist-types
+│   │       │       │       └── ts3.4
+│   │       │       └── util-utf8
+│   │       │           ├── dist-cjs
+│   │       │           ├── dist-es
+│   │       │           └── dist-types
+│   │       │               └── ts3.4
+│   │       └── src
+│   ├── @aws-sdk
+│   │   ├── client-sesv2
+│   │   │   ├── dist-cjs
+│   │   │   │   ├── auth
+│   │   │   │   └── endpoint
+│   │   │   ├── dist-es
+│   │   │   │   ├── auth
+│   │   │   │   ├── commands
+│   │   │   │   ├── endpoint
+│   │   │   │   ├── models
+│   │   │   │   ├── pagination
+│   │   │   │   └── schemas
+│   │   │   └── dist-types
+│   │   │       ├── auth
+│   │   │       ├── commands
+│   │   │       ├── endpoint
+│   │   │       ├── models
+│   │   │       ├── pagination
+│   │   │       ├── schemas
+│   │   │       └── ts3.4
+│   │   │           ├── auth
+│   │   │           ├── commands
+│   │   │           ├── endpoint
+│   │   │           ├── models
+│   │   │           ├── pagination
+│   │   │           └── schemas
+│   │   ├── client-sso
+│   │   │   ├── dist-cjs
+│   │   │   │   ├── auth
+│   │   │   │   └── endpoint
+│   │   │   ├── dist-es
+│   │   │   │   ├── auth
+│   │   │   │   ├── commands
+│   │   │   │   ├── endpoint
+│   │   │   │   ├── models
+│   │   │   │   ├── pagination
+│   │   │   │   └── schemas
+│   │   │   └── dist-types
+│   │   │       ├── auth
+│   │   │       ├── commands
+│   │   │       ├── endpoint
+│   │   │       ├── models
+│   │   │       ├── pagination
+│   │   │       ├── schemas
+│   │   │       └── ts3.4
+│   │   │           ├── auth
+│   │   │           ├── commands
+│   │   │           ├── endpoint
+│   │   │           ├── models
+│   │   │           ├── pagination
+│   │   │           └── schemas
+│   │   ├── core
+│   │   │   ├── dist-cjs
+│   │   │   │   └── submodules
+│   │   │   │       ├── account-id-endpoint
+│   │   │   │       ├── client
+│   │   │   │       ├── httpAuthSchemes
+│   │   │   │       └── protocols
+│   │   │   ├── dist-es
+│   │   │   │   └── submodules
+│   │   │   │       ├── account-id-endpoint
+│   │   │   │       ├── client
+│   │   │   │       ├── httpAuthSchemes
+│   │   │   │       │   ├── aws_sdk
+│   │   │   │       │   └── utils
+│   │   │   │       └── protocols
+│   │   │   │           ├── cbor
+│   │   │   │           ├── json
+│   │   │   │           │   └── experimental
+│   │   │   │           ├── query
+│   │   │   │           └── xml
+│   │   │   └── dist-types
+│   │   │       ├── submodules
+│   │   │       │   ├── account-id-endpoint
+│   │   │       │   ├── client
+│   │   │       │   ├── httpAuthSchemes
+│   │   │       │   │   ├── aws_sdk
+│   │   │       │   │   └── utils
+│   │   │       │   └── protocols
+│   │   │       │       ├── cbor
+│   │   │       │       ├── json
+│   │   │       │       │   └── experimental
+│   │   │       │       ├── query
+│   │   │       │       └── xml
+│   │   │       └── ts3.4
+│   │   │           └── submodules
+│   │   │               ├── account-id-endpoint
+│   │   │               ├── client
+│   │   │               ├── httpAuthSchemes
+│   │   │               │   ├── aws_sdk
+│   │   │               │   └── utils
+│   │   │               └── protocols
+│   │   │                   ├── cbor
+│   │   │                   ├── json
+│   │   │                   │   └── experimental
+│   │   │                   ├── query
+│   │   │                   └── xml
+│   │   ├── credential-provider-env
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── credential-provider-http
+│   │   │   ├── dist-cjs
+│   │   │   │   └── fromHttp
+│   │   │   ├── dist-es
+│   │   │   │   └── fromHttp
+│   │   │   └── dist-types
+│   │   │       ├── fromHttp
+│   │   │       └── ts3.4
+│   │   │           └── fromHttp
+│   │   ├── credential-provider-ini
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── credential-provider-login
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── credential-provider-node
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   │   └── runtime
+│   │   │   └── dist-types
+│   │   │       ├── runtime
+│   │   │       └── ts3.4
+│   │   │           └── runtime
+│   │   ├── credential-provider-process
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── credential-provider-sso
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── credential-provider-web-identity
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── middleware-host-header
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── middleware-logger
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── middleware-recursion-detection
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── middleware-sdk-s3
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   │   └── s3-express
+│   │   │   │       ├── classes
+│   │   │   │       ├── functions
+│   │   │   │       └── interfaces
+│   │   │   └── dist-types
+│   │   │       ├── s3-express
+│   │   │       │   ├── classes
+│   │   │       │   ├── functions
+│   │   │       │   └── interfaces
+│   │   │       └── ts3.4
+│   │   │           └── s3-express
+│   │   │               ├── classes
+│   │   │               ├── functions
+│   │   │               └── interfaces
+│   │   ├── middleware-user-agent
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── nested-clients
+│   │   │   ├── dist-cjs
+│   │   │   │   └── submodules
+│   │   │   │       ├── signin
+│   │   │   │       │   ├── auth
+│   │   │   │       │   └── endpoint
+│   │   │   │       ├── sso-oidc
+│   │   │   │       │   ├── auth
+│   │   │   │       │   └── endpoint
+│   │   │   │       └── sts
+│   │   │   │           ├── auth
+│   │   │   │           └── endpoint
+│   │   │   ├── dist-es
+│   │   │   │   └── submodules
+│   │   │   │       ├── signin
+│   │   │   │       │   ├── auth
+│   │   │   │       │   ├── commands
+│   │   │   │       │   ├── endpoint
+│   │   │   │       │   ├── models
+│   │   │   │       │   └── schemas
+│   │   │   │       ├── sso-oidc
+│   │   │   │       │   ├── auth
+│   │   │   │       │   ├── commands
+│   │   │   │       │   ├── endpoint
+│   │   │   │       │   ├── models
+│   │   │   │       │   └── schemas
+│   │   │   │       └── sts
+│   │   │   │           ├── auth
+│   │   │   │           ├── commands
+│   │   │   │           ├── endpoint
+│   │   │   │           ├── models
+│   │   │   │           └── schemas
+│   │   │   └── dist-types
+│   │   │       ├── submodules
+│   │   │       │   ├── signin
+│   │   │       │   │   ├── auth
+│   │   │       │   │   ├── commands
+│   │   │       │   │   ├── endpoint
+│   │   │       │   │   ├── models
+│   │   │       │   │   └── schemas
+│   │   │       │   ├── sso-oidc
+│   │   │       │   │   ├── auth
+│   │   │       │   │   ├── commands
+│   │   │       │   │   ├── endpoint
+│   │   │       │   │   ├── models
+│   │   │       │   │   └── schemas
+│   │   │       │   └── sts
+│   │   │       │       ├── auth
+│   │   │       │       ├── commands
+│   │   │       │       ├── endpoint
+│   │   │       │       ├── models
+│   │   │       │       └── schemas
+│   │   │       └── ts3.4
+│   │   │           └── submodules
+│   │   │               ├── signin
+│   │   │               │   ├── auth
+│   │   │               │   ├── commands
+│   │   │               │   ├── endpoint
+│   │   │               │   ├── models
+│   │   │               │   └── schemas
+│   │   │               ├── sso-oidc
+│   │   │               │   ├── auth
+│   │   │               │   ├── commands
+│   │   │               │   ├── endpoint
+│   │   │               │   ├── models
+│   │   │               │   └── schemas
+│   │   │               └── sts
+│   │   │                   ├── auth
+│   │   │                   ├── commands
+│   │   │                   ├── endpoint
+│   │   │                   ├── models
+│   │   │                   └── schemas
+│   │   ├── region-config-resolver
+│   │   │   ├── dist-cjs
+│   │   │   │   └── regionConfig
+│   │   │   ├── dist-es
+│   │   │   │   ├── extensions
+│   │   │   │   └── regionConfig
+│   │   │   └── dist-types
+│   │   │       ├── extensions
+│   │   │       ├── regionConfig
+│   │   │       └── ts3.4
+│   │   │           ├── extensions
+│   │   │           └── regionConfig
+│   │   ├── signature-v4-multi-region
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── token-providers
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── types
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   │   ├── blob
+│   │   │   │   ├── extensions
+│   │   │   │   └── identity
+│   │   │   └── dist-types
+│   │   │       ├── blob
+│   │   │       ├── extensions
+│   │   │       ├── identity
+│   │   │       └── ts3.4
+│   │   │           ├── blob
+│   │   │           ├── extensions
+│   │   │           └── identity
+│   │   ├── util-arn-parser
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-endpoints
+│   │   │   ├── dist-cjs
+│   │   │   │   └── lib
+│   │   │   │       └── aws
+│   │   │   ├── dist-es
+│   │   │   │   ├── lib
+│   │   │   │   │   └── aws
+│   │   │   │   └── types
+│   │   │   └── dist-types
+│   │   │       ├── lib
+│   │   │       │   └── aws
+│   │   │       ├── ts3.4
+│   │   │       │   ├── lib
+│   │   │       │   │   └── aws
+│   │   │       │   └── types
+│   │   │       └── types
+│   │   ├── util-locate-window
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-user-agent-browser
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-user-agent-node
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   └── xml-builder
+│   │       ├── dist-cjs
+│   │       ├── dist-es
+│   │       └── dist-types
+│   │           └── ts3.4
+│   ├── @babel
+│   │   ├── code-frame
+│   │   │   └── lib
+│   │   ├── compat-data
+│   │   │   └── data
+│   │   ├── core
+│   │   │   ├── lib
+│   │   │   │   ├── config
+│   │   │   │   │   ├── files
+│   │   │   │   │   ├── helpers
+│   │   │   │   │   └── validation
+│   │   │   │   ├── errors
+│   │   │   │   ├── gensync-utils
+│   │   │   │   ├── parser
+│   │   │   │   │   └── util
+│   │   │   │   ├── tools
+│   │   │   │   ├── transformation
+│   │   │   │   │   ├── file
+│   │   │   │   │   └── util
+│   │   │   │   └── vendor
+│   │   │   └── src
+│   │   │       └── config
+│   │   │           └── files
+│   │   ├── generator
+│   │   │   └── lib
+│   │   │       ├── generators
+│   │   │       └── node
+│   │   ├── helper-compilation-targets
+│   │   │   └── lib
+│   │   ├── helper-globals
+│   │   │   └── data
+│   │   ├── helper-module-imports
+│   │   │   └── lib
+│   │   ├── helper-module-transforms
+│   │   │   └── lib
+│   │   ├── helper-plugin-utils
+│   │   │   └── lib
+│   │   ├── helpers
+│   │   │   └── lib
+│   │   │       └── helpers
+│   │   ├── helper-string-parser
+│   │   │   └── lib
+│   │   ├── helper-validator-identifier
+│   │   │   └── lib
+│   │   ├── helper-validator-option
+│   │   │   └── lib
+│   │   ├── parser
+│   │   │   ├── bin
+│   │   │   ├── lib
+│   │   │   └── typings
+│   │   ├── plugin-transform-react-jsx-self
+│   │   │   └── lib
+│   │   ├── plugin-transform-react-jsx-source
+│   │   │   └── lib
+│   │   ├── runtime
+│   │   │   ├── helpers
+│   │   │   │   └── esm
+│   │   │   └── regenerator
+│   │   ├── template
+│   │   │   └── lib
+│   │   ├── traverse
+│   │   │   └── lib
+│   │   │       ├── path
+│   │   │       │   ├── inference
+│   │   │       │   └── lib
+│   │   │       └── scope
+│   │   │           └── lib
+│   │   └── types
+│   │       └── lib
+│   │           ├── asserts
+│   │           │   └── generated
+│   │           ├── ast-types
+│   │           │   └── generated
+│   │           ├── builders
+│   │           │   ├── flow
+│   │           │   ├── generated
+│   │           │   ├── react
+│   │           │   └── typescript
+│   │           ├── clone
+│   │           ├── comments
+│   │           ├── constants
+│   │           │   └── generated
+│   │           ├── converters
+│   │           ├── definitions
+│   │           ├── modifications
+│   │           │   ├── flow
+│   │           │   └── typescript
+│   │           ├── retrievers
+│   │           ├── traverse
+│   │           ├── utils
+│   │           │   └── react
+│   │           └── validators
+│   │               ├── generated
+│   │               └── react
+│   ├── balanced-match
+│   ├── base64-js
+│   ├── bcrypt
+│   │   ├── examples
+│   │   ├── lib
+│   │   │   └── binding
+│   │   │       └── napi-v3
+│   │   ├── src
+│   │   └── test
+│   ├── better-sqlite3
+│   │   ├── build
+│   │   │   └── Release
+│   │   ├── deps
+│   │   │   ├── patches
+│   │   │   └── sqlite3
+│   │   ├── lib
+│   │   │   └── methods
+│   │   └── src
+│   │       ├── objects
+│   │       └── util
+│   ├── binary-extensions
+│   ├── bindings
+│   ├── bl
+│   │   └── test
+│   ├── body-parser
+│   │   ├── lib
+│   │   │   └── types
+│   │   └── node_modules
+│   │       ├── debug
+│   │       │   └── src
+│   │       └── ms
+│   ├── bowser
+│   │   └── src
+│   ├── brace-expansion
+│   ├── braces
+│   │   └── lib
+│   ├── browserslist
+│   ├── buffer
+│   ├── buffer-equal-constant-time
+│   ├── buffer-from
+│   ├── bufferutil
+│   │   ├── prebuilds
+│   │   │   ├── darwin-x64+arm64
+│   │   │   ├── linux-x64
+│   │   │   ├── win32-ia32
+│   │   │   └── win32-x64
+│   │   └── src
+│   ├── bytes
+│   ├── call-bind
+│   │   └── test
+│   ├── call-bind-apply-helpers
+│   │   └── test
+│   ├── camelcase-css
+│   ├── caniuse-lite
+│   │   ├── data
+│   │   │   ├── features
+│   │   │   └── regions
+│   │   └── dist
+│   │       ├── lib
+│   │       └── unpacker
+│   ├── chokidar
+│   │   ├── lib
+│   │   ├── node_modules
+│   │   │   └── glob-parent
+│   │   └── types
+│   ├── chownr
+│   ├── class-variance-authority
+│   │   └── dist
+│   ├── client-only
+│   ├── clsx
+│   │   └── dist
+│   ├── cmdk
+│   │   └── dist
+│   ├── color-convert
+│   ├── color-name
+│   ├── color-support
+│   ├── commander
+│   │   └── typings
+│   ├── concat-map
+│   │   ├── example
+│   │   └── test
+│   ├── connect-pg-simple
+│   ├── console-control-strings
+│   ├── content-disposition
+│   ├── content-type
+│   ├── convert-source-map
+│   ├── cookie
+│   ├── cookie-signature
+│   ├── cross-env
+│   │   └── dist
+│   │       └── bin
+│   ├── cross-spawn
+│   │   └── lib
+│   │       └── util
+│   ├── cssesc
+│   │   ├── bin
+│   │   └── man
+│   ├── csstype
+│   ├── d3-array
+│   │   ├── dist
+│   │   └── src
+│   │       └── threshold
+│   ├── d3-color
+│   │   ├── dist
+│   │   └── src
+│   ├── d3-ease
+│   │   ├── dist
+│   │   └── src
+│   ├── d3-format
+│   │   ├── dist
+│   │   ├── locale
+│   │   └── src
+│   ├── d3-interpolate
+│   │   ├── dist
+│   │   └── src
+│   │       └── transform
+│   ├── d3-path
+│   │   ├── dist
+│   │   └── src
+│   ├── d3-scale
+│   │   ├── dist
+│   │   └── src
+│   ├── d3-shape
+│   │   ├── dist
+│   │   └── src
+│   │       ├── curve
+│   │       ├── offset
+│   │       ├── order
+│   │       └── symbol
+│   ├── d3-time
+│   │   ├── dist
+│   │   └── src
+│   ├── d3-time-format
+│   │   ├── dist
+│   │   ├── locale
+│   │   └── src
+│   ├── d3-timer
+│   │   ├── dist
+│   │   └── src
+│   ├── data-uri-to-buffer
+│   │   ├── dist
+│   │   └── src
+│   ├── date-fns
+│   │   ├── docs
+│   │   ├── fp
+│   │   │   └── _lib
+│   │   ├── _lib
+│   │   │   └── format
+│   │   ├── locale
+│   │   │   ├── af
+│   │   │   │   └── _lib
+│   │   │   ├── ar
+│   │   │   │   └── _lib
+│   │   │   ├── ar-DZ
+│   │   │   │   └── _lib
+│   │   │   ├── ar-EG
+│   │   │   │   └── _lib
+│   │   │   ├── ar-MA
+│   │   │   │   └── _lib
+│   │   │   ├── ar-SA
+│   │   │   │   └── _lib
+│   │   │   ├── ar-TN
+│   │   │   │   └── _lib
+│   │   │   ├── az
+│   │   │   │   └── _lib
+│   │   │   ├── be
+│   │   │   │   └── _lib
+│   │   │   ├── be-tarask
+│   │   │   │   └── _lib
+│   │   │   ├── bg
+│   │   │   │   └── _lib
+│   │   │   ├── bn
+│   │   │   │   └── _lib
+│   │   │   ├── bs
+│   │   │   │   └── _lib
+│   │   │   ├── ca
+│   │   │   │   └── _lib
+│   │   │   ├── ckb
+│   │   │   │   └── _lib
+│   │   │   ├── cs
+│   │   │   │   └── _lib
+│   │   │   ├── cy
+│   │   │   │   └── _lib
+│   │   │   ├── da
+│   │   │   │   └── _lib
+│   │   │   ├── de
+│   │   │   │   └── _lib
+│   │   │   ├── de-AT
+│   │   │   │   └── _lib
+│   │   │   ├── el
+│   │   │   │   └── _lib
+│   │   │   ├── en-AU
+│   │   │   │   └── _lib
+│   │   │   ├── en-CA
+│   │   │   │   └── _lib
+│   │   │   ├── en-GB
+│   │   │   │   └── _lib
+│   │   │   ├── en-IE
+│   │   │   ├── en-IN
+│   │   │   │   └── _lib
+│   │   │   ├── en-NZ
+│   │   │   │   └── _lib
+│   │   │   ├── en-US
+│   │   │   │   └── _lib
+│   │   │   ├── en-ZA
+│   │   │   │   └── _lib
+│   │   │   ├── eo
+│   │   │   │   └── _lib
+│   │   │   ├── es
+│   │   │   │   └── _lib
+│   │   │   ├── et
+│   │   │   │   └── _lib
+│   │   │   ├── eu
+│   │   │   │   └── _lib
+│   │   │   ├── fa-IR
+│   │   │   │   └── _lib
+│   │   │   ├── fi
+│   │   │   │   └── _lib
+│   │   │   ├── fr
+│   │   │   │   └── _lib
+│   │   │   ├── fr-CA
+│   │   │   │   └── _lib
+│   │   │   ├── fr-CH
+│   │   │   │   └── _lib
+│   │   │   ├── fy
+│   │   │   │   └── _lib
+│   │   │   ├── gd
+│   │   │   │   └── _lib
+│   │   │   ├── gl
+│   │   │   │   └── _lib
+│   │   │   ├── gu
+│   │   │   │   └── _lib
+│   │   │   ├── he
+│   │   │   │   └── _lib
+│   │   │   ├── hi
+│   │   │   │   └── _lib
+│   │   │   ├── hr
+│   │   │   │   └── _lib
+│   │   │   ├── ht
+│   │   │   │   └── _lib
+│   │   │   ├── hu
+│   │   │   │   └── _lib
+│   │   │   ├── hy
+│   │   │   │   └── _lib
+│   │   │   ├── id
+│   │   │   │   └── _lib
+│   │   │   ├── is
+│   │   │   │   └── _lib
+│   │   │   ├── it
+│   │   │   │   └── _lib
+│   │   │   ├── it-CH
+│   │   │   │   └── _lib
+│   │   │   ├── ja
+│   │   │   │   └── _lib
+│   │   │   ├── ja-Hira
+│   │   │   │   └── _lib
+│   │   │   ├── ka
+│   │   │   │   └── _lib
+│   │   │   ├── kk
+│   │   │   │   └── _lib
+│   │   │   ├── km
+│   │   │   │   └── _lib
+│   │   │   ├── kn
+│   │   │   │   └── _lib
+│   │   │   ├── ko
+│   │   │   │   └── _lib
+│   │   │   ├── lb
+│   │   │   │   └── _lib
+│   │   │   ├── _lib
+│   │   │   ├── lt
+│   │   │   │   └── _lib
+│   │   │   ├── lv
+│   │   │   │   └── _lib
+│   │   │   ├── mk
+│   │   │   │   └── _lib
+│   │   │   ├── mn
+│   │   │   │   └── _lib
+│   │   │   ├── ms
+│   │   │   │   └── _lib
+│   │   │   ├── mt
+│   │   │   │   └── _lib
+│   │   │   ├── nb
+│   │   │   │   └── _lib
+│   │   │   ├── nl
+│   │   │   │   └── _lib
+│   │   │   ├── nl-BE
+│   │   │   │   └── _lib
+│   │   │   ├── nn
+│   │   │   │   └── _lib
+│   │   │   ├── oc
+│   │   │   │   └── _lib
+│   │   │   ├── pl
+│   │   │   │   └── _lib
+│   │   │   ├── pt
+│   │   │   │   └── _lib
+│   │   │   ├── pt-BR
+│   │   │   │   └── _lib
+│   │   │   ├── ro
+│   │   │   │   └── _lib
+│   │   │   ├── ru
+│   │   │   │   └── _lib
+│   │   │   ├── se
+│   │   │   │   └── _lib
+│   │   │   ├── sk
+│   │   │   │   └── _lib
+│   │   │   ├── sl
+│   │   │   │   └── _lib
+│   │   │   ├── sq
+│   │   │   │   └── _lib
+│   │   │   ├── sr
+│   │   │   │   └── _lib
+│   │   │   ├── sr-Latn
+│   │   │   │   └── _lib
+│   │   │   ├── sv
+│   │   │   │   └── _lib
+│   │   │   ├── ta
+│   │   │   │   └── _lib
+│   │   │   ├── te
+│   │   │   │   └── _lib
+│   │   │   ├── th
+│   │   │   │   └── _lib
+│   │   │   ├── tr
+│   │   │   │   └── _lib
+│   │   │   ├── ug
+│   │   │   │   └── _lib
+│   │   │   ├── uk
+│   │   │   │   └── _lib
+│   │   │   ├── uz
+│   │   │   │   └── _lib
+│   │   │   ├── uz-Cyrl
+│   │   │   │   └── _lib
+│   │   │   ├── vi
+│   │   │   │   └── _lib
+│   │   │   ├── zh-CN
+│   │   │   │   └── _lib
+│   │   │   ├── zh-HK
+│   │   │   │   └── _lib
+│   │   │   └── zh-TW
+│   │   │       └── _lib
+│   │   └── parse
+│   │       └── _lib
+│   │           └── parsers
+│   ├── debug
+│   │   └── src
+│   ├── decimal.js-light
+│   │   └── doc
+│   ├── decompress-response
+│   ├── deep-extend
+│   │   └── lib
+│   ├── define-data-property
+│   │   └── test
+│   ├── delegates
+│   │   └── test
+│   ├── depd
+│   │   └── lib
+│   │       └── browser
+│   ├── destroy
+│   ├── detect-libc
+│   │   └── lib
+│   ├── detect-node-es
+│   │   ├── es5
+│   │   └── esm
+│   ├── didyoumean
+│   ├── dlv
+│   │   └── dist
+│   ├── dom-helpers
+│   │   ├── activeElement
+│   │   ├── addClass
+│   │   ├── addEventListener
+│   │   ├── animate
+│   │   ├── animationFrame
+│   │   ├── attribute
+│   │   ├── camelize
+│   │   ├── camelizeStyle
+│   │   ├── canUseDOM
+│   │   ├── childElements
+│   │   ├── childNodes
+│   │   ├── cjs
+│   │   ├── clear
+│   │   ├── closest
+│   │   ├── collectElements
+│   │   ├── collectSiblings
+│   │   ├── contains
+│   │   ├── css
+│   │   ├── esm
+│   │   ├── filterEventHandler
+│   │   ├── getComputedStyle
+│   │   ├── getScrollAccessor
+│   │   ├── hasClass
+│   │   ├── height
+│   │   ├── hyphenate
+│   │   ├── hyphenateStyle
+│   │   ├── insertAfter
+│   │   ├── isDocument
+│   │   ├── isInput
+│   │   ├── isTransform
+│   │   ├── isVisible
+│   │   ├── isWindow
+│   │   ├── listen
+│   │   ├── matches
+│   │   ├── nextUntil
+│   │   ├── offset
+│   │   ├── offsetParent
+│   │   ├── ownerDocument
+│   │   ├── ownerWindow
+│   │   ├── parents
+│   │   ├── position
+│   │   ├── prepend
+│   │   ├── querySelectorAll
+│   │   ├── remove
+│   │   ├── removeClass
+│   │   ├── removeEventListener
+│   │   ├── scrollbarSize
+│   │   ├── scrollLeft
+│   │   ├── scrollParent
+│   │   ├── scrollTo
+│   │   ├── scrollTop
+│   │   ├── siblings
+│   │   ├── text
+│   │   ├── toggleClass
+│   │   ├── transitionEnd
+│   │   ├── triggerEvent
+│   │   └── width
+│   ├── drizzle-kit
+│   ├── drizzle-orm
+│   │   ├── aws-data-api
+│   │   │   ├── common
+│   │   │   └── pg
+│   │   ├── better-sqlite3
+│   │   ├── bun-sql
+│   │   ├── bun-sqlite
+│   │   ├── d1
+│   │   ├── durable-sqlite
+│   │   ├── expo-sqlite
+│   │   ├── knex
+│   │   ├── kysely
+│   │   ├── libsql
+│   │   │   ├── http
+│   │   │   ├── node
+│   │   │   ├── sqlite3
+│   │   │   ├── wasm
+│   │   │   ├── web
+│   │   │   └── ws
+│   │   ├── mysql2
+│   │   ├── mysql-core
+│   │   │   ├── columns
+│   │   │   └── query-builders
+│   │   ├── mysql-proxy
+│   │   ├── neon
+│   │   ├── neon-http
+│   │   ├── neon-serverless
+│   │   ├── node-postgres
+│   │   ├── op-sqlite
+│   │   ├── pg-core
+│   │   │   ├── columns
+│   │   │   │   ├── postgis_extension
+│   │   │   │   └── vector_extension
+│   │   │   ├── query-builders
+│   │   │   └── utils
+│   │   ├── pglite
+│   │   ├── pg-proxy
+│   │   ├── planetscale-serverless
+│   │   ├── postgres-js
+│   │   ├── prisma
+│   │   │   ├── mysql
+│   │   │   ├── pg
+│   │   │   └── sqlite
+│   │   ├── query-builders
+│   │   ├── singlestore
+│   │   ├── singlestore-core
+│   │   │   ├── columns
+│   │   │   └── query-builders
+│   │   ├── singlestore-proxy
+│   │   ├── sql
+│   │   │   ├── expressions
+│   │   │   └── functions
+│   │   ├── sqlite-core
+│   │   │   ├── columns
+│   │   │   └── query-builders
+│   │   ├── sqlite-proxy
+│   │   ├── sql-js
+│   │   ├── supabase
+│   │   ├── tidb-serverless
+│   │   ├── vercel-postgres
+│   │   └── xata-http
+│   ├── @drizzle-team
+│   │   └── brocli
+│   ├── drizzle-zod
+│   ├── dunder-proto
+│   │   └── test
+│   ├── eastasianwidth
+│   ├── ecdsa-sig-formatter
+│   │   └── src
+│   ├── ee-first
+│   ├── electron-to-chromium
+│   ├── embla-carousel
+│   │   ├── cjs
+│   │   │   └── components
+│   │   ├── components
+│   │   └── esm
+│   │       └── components
+│   ├── embla-carousel-react
+│   │   ├── cjs
+│   │   │   └── components
+│   │   ├── components
+│   │   └── esm
+│   │       └── components
+│   ├── embla-carousel-reactive-utils
+│   │   ├── cjs
+│   │   │   └── components
+│   │   ├── components
+│   │   └── esm
+│   │       └── components
+│   ├── @emnapi
+│   ├── emoji-regex
+│   │   └── es2015
+│   ├── encodeurl
+│   ├── end-of-stream
+│   ├── enhanced-resolve
+│   │   └── lib
+│   │       └── util
+│   ├── @epic-web
+│   │   └── invariant
+│   │       └── dist
+│   ├── @esbuild
+│   │   └── linux-x64
+│   │       └── bin
+│   ├── esbuild
+│   │   ├── bin
+│   │   └── lib
+│   ├── @esbuild-kit
+│   │   ├── core-utils
+│   │   │   ├── dist
+│   │   │   └── node_modules
+│   │   │       ├── @esbuild
+│   │   │       │   └── linux-x64
+│   │   │       │       └── bin
+│   │   │       └── esbuild
+│   │   │           ├── bin
+│   │   │           └── lib
+│   │   └── esm-loader
+│   │       └── dist
+│   ├── esbuild-register
+│   │   └── dist
+│   ├── escalade
+│   │   ├── dist
+│   │   └── sync
+│   ├── escape-html
+│   ├── es-define-property
+│   │   └── test
+│   ├── es-errors
+│   │   └── test
+│   ├── es-object-atoms
+│   │   └── test
+│   ├── etag
+│   ├── eventemitter3
+│   │   └── umd
+│   ├── expand-template
+│   ├── express
+│   │   ├── lib
+│   │   │   ├── middleware
+│   │   │   └── router
+│   │   └── node_modules
+│   │       ├── debug
+│   │       │   └── src
+│   │       └── ms
+│   ├── express-rate-limit
+│   │   └── dist
+│   ├── express-session
+│   │   ├── node_modules
+│   │   │   ├── cookie
+│   │   │   ├── cookie-signature
+│   │   │   ├── debug
+│   │   │   │   └── src
+│   │   │   └── ms
+│   │   └── session
+│   ├── fast-equals
+│   │   ├── config
+│   │   │   ├── rollup
+│   │   │   └── tsconfig
+│   │   ├── dist
+│   │   │   ├── cjs
+│   │   │   │   └── types
+│   │   │   ├── esm
+│   │   │   │   └── types
+│   │   │   ├── min
+│   │   │   │   └── types
+│   │   │   └── umd
+│   │   │       └── types
+│   │   ├── recipes
+│   │   ├── scripts
+│   │   └── src
+│   ├── fast-glob
+│   │   ├── node_modules
+│   │   │   └── glob-parent
+│   │   └── out
+│   │       ├── managers
+│   │       ├── providers
+│   │       │   ├── filters
+│   │       │   ├── matchers
+│   │       │   └── transformers
+│   │       ├── readers
+│   │       ├── types
+│   │       └── utils
+│   ├── fastq
+│   │   └── test
+│   ├── fast-xml-parser
+│   │   ├── lib
+│   │   └── src
+│   │       ├── cli
+│   │       ├── v6
+│   │       │   ├── inputSource
+│   │       │   ├── OutputBuilders
+│   │       │   └── valueParsers
+│   │       ├── xmlbuilder
+│   │       └── xmlparser
+│   ├── fetch-blob
+│   │   └── node_modules
+│   │       └── web-streams-polyfill
+│   │           ├── dist
+│   │           │   └── types
+│   │           │       └── ts3.6
+│   │           ├── es2018
+│   │           ├── es6
+│   │           └── ponyfill
+│   │               ├── es2018
+│   │               └── es6
+│   ├── file-uri-to-path
+│   │   └── test
+│   ├── fill-range
+│   ├── finalhandler
+│   │   └── node_modules
+│   │       ├── debug
+│   │       │   └── src
+│   │       └── ms
+│   ├── @floating-ui
+│   │   ├── core
+│   │   │   └── dist
+│   │   ├── dom
+│   │   │   └── dist
+│   │   ├── react-dom
+│   │   │   └── dist
+│   │   └── utils
+│   │       ├── dist
+│   │       └── dom
+│   ├── foreground-child
+│   │   └── dist
+│   │       ├── commonjs
+│   │       └── esm
+│   ├── formdata-polyfill
+│   ├── forwarded
+│   ├── fraction.js
+│   ├── framer-motion
+│   │   ├── client
+│   │   ├── dist
+│   │   │   ├── cjs
+│   │   │   └── es
+│   │   │       ├── animation
+│   │   │       │   ├── animate
+│   │   │       │   ├── animators
+│   │   │       │   │   ├── drivers
+│   │   │       │   │   ├── utils
+│   │   │       │   │   └── waapi
+│   │   │       │   │       └── utils
+│   │   │       │   ├── generators
+│   │   │       │   │   ├── spring
+│   │   │       │   │   └── utils
+│   │   │       │   ├── hooks
+│   │   │       │   ├── interfaces
+│   │   │       │   ├── optimized-appear
+│   │   │       │   ├── sequence
+│   │   │       │   │   └── utils
+│   │   │       │   └── utils
+│   │   │       ├── components
+│   │   │       │   ├── AnimatePresence
+│   │   │       │   ├── LayoutGroup
+│   │   │       │   ├── LazyMotion
+│   │   │       │   ├── MotionConfig
+│   │   │       │   └── Reorder
+│   │   │       │       └── utils
+│   │   │       ├── context
+│   │   │       │   └── MotionContext
+│   │   │       ├── easing
+│   │   │       │   ├── modifiers
+│   │   │       │   └── utils
+│   │   │       ├── events
+│   │   │       │   └── utils
+│   │   │       ├── frameloop
+│   │   │       ├── gestures
+│   │   │       │   ├── drag
+│   │   │       │   │   └── utils
+│   │   │       │   ├── pan
+│   │   │       │   └── utils
+│   │   │       ├── motion
+│   │   │       │   ├── features
+│   │   │       │   │   ├── animation
+│   │   │       │   │   ├── layout
+│   │   │       │   │   └── viewport
+│   │   │       │   └── utils
+│   │   │       ├── projection
+│   │   │       │   ├── animation
+│   │   │       │   ├── geometry
+│   │   │       │   ├── node
+│   │   │       │   ├── shared
+│   │   │       │   ├── styles
+│   │   │       │   └── utils
+│   │   │       ├── render
+│   │   │       │   ├── components
+│   │   │       │   │   ├── m
+│   │   │       │   │   └── motion
+│   │   │       │   ├── dom
+│   │   │       │   │   ├── resize
+│   │   │       │   │   ├── scroll
+│   │   │       │   │   │   └── offsets
+│   │   │       │   │   ├── utils
+│   │   │       │   │   ├── value-types
+│   │   │       │   │   └── viewport
+│   │   │       │   ├── html
+│   │   │       │   │   └── utils
+│   │   │       │   ├── object
+│   │   │       │   ├── svg
+│   │   │       │   │   └── utils
+│   │   │       │   └── utils
+│   │   │       ├── utils
+│   │   │       │   ├── mix
+│   │   │       │   ├── offsets
+│   │   │       │   └── reduced-motion
+│   │   │       └── value
+│   │   │           ├── scroll
+│   │   │           ├── types
+│   │   │           │   ├── color
+│   │   │           │   ├── complex
+│   │   │           │   ├── numbers
+│   │   │           │   └── utils
+│   │   │           ├── use-will-change
+│   │   │           └── utils
+│   │   ├── dom
+│   │   │   └── mini
+│   │   ├── m
+│   │   └── mini
+│   ├── freckle
+│   │   ├── example
+│   │   └── lib
+│   ├── fresh
+│   ├── fs-constants
+│   ├── fs-minipass
+│   │   └── node_modules
+│   │       ├── minipass
+│   │       └── yallist
+│   ├── fs.realpath
+│   ├── function-bind
+│   │   └── test
+│   ├── gauge
+│   │   └── node_modules
+│   │       ├── ansi-regex
+│   │       ├── emoji-regex
+│   │       │   └── es2015
+│   │       ├── signal-exit
+│   │       ├── string-width
+│   │       └── strip-ansi
+│   ├── gensync
+│   │   └── test
+│   ├── get-intrinsic
+│   │   └── test
+│   ├── get-nonce
+│   │   └── dist
+│   │       ├── es2015
+│   │       └── es5
+│   ├── get-proto
+│   │   └── test
+│   ├── get-tsconfig
+│   │   └── dist
+│   ├── github-from-package
+│   │   ├── example
+│   │   └── test
+│   ├── glob
+│   │   └── dist
+│   │       ├── commonjs
+│   │       └── esm
+│   ├── glob-parent
+│   ├── gopd
+│   │   └── test
+│   ├── graceful-fs
+│   ├── hasown
+│   ├── has-property-descriptors
+│   │   └── test
+│   ├── has-symbols
+│   │   └── test
+│   │       └── shams
+│   ├── has-unicode
+│   ├── @hookform
+│   │   └── resolvers
+│   │       ├── ajv
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── arktype
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── class-validator
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── computed-types
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── dist
+│   │       ├── effect-ts
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── fluentvalidation-ts
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── io-ts
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── joi
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── nope
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── superstruct
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── typanion
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── typebox
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── typeschema
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── valibot
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── vest
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── vine
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       ├── yup
+│   │       │   ├── dist
+│   │       │   └── src
+│   │       │       └── __tests__
+│   │       │           ├── __fixtures__
+│   │       │           └── __snapshots__
+│   │       └── zod
+│   │           ├── dist
+│   │           └── src
+│   │               └── __tests__
+│   │                   ├── __fixtures__
+│   │                   └── __snapshots__
+│   ├── http-errors
+│   ├── https-proxy-agent
+│   │   └── dist
+│   ├── iconv-lite
+│   │   ├── encodings
+│   │   │   └── tables
+│   │   └── lib
+│   ├── ieee754
+│   ├── @img
+│   │   ├── colour
+│   │   ├── sharp-libvips-linux-x64
+│   │   │   └── lib
+│   │   │       └── glib-2.0
+│   │   │           └── include
+│   │   └── sharp-linux-x64
+│   │       └── lib
+│   ├── inflight
+│   ├── inherits
+│   ├── ini
+│   ├── input-otp
+│   │   └── dist
+│   ├── internmap
+│   │   ├── dist
+│   │   └── src
+│   ├── ip-address
+│   │   ├── dist
+│   │   │   ├── v4
+│   │   │   └── v6
+│   │   └── src
+│   │       ├── v4
+│   │       └── v6
+│   ├── ipaddr.js
+│   │   └── lib
+│   ├── @isaacs
+│   │   └── cliui
+│   │       └── build
+│   │           └── lib
+│   ├── is-binary-path
+│   ├── is-core-module
+│   │   └── test
+│   ├── isexe
+│   │   └── test
+│   ├── is-extglob
+│   ├── is-fullwidth-code-point
+│   ├── is-glob
+│   ├── is-number
+│   ├── jackspeak
+│   │   └── dist
+│   │       ├── commonjs
+│   │       └── esm
+│   ├── jiti
+│   │   ├── bin
+│   │   ├── dist
+│   │   │   └── plugins
+│   │   └── lib
+│   ├── @jridgewell
+│   │   ├── gen-mapping
+│   │   │   ├── dist
+│   │   │   │   └── types
+│   │   │   ├── src
+│   │   │   └── types
+│   │   ├── remapping
+│   │   │   ├── dist
+│   │   │   ├── src
+│   │   │   └── types
+│   │   ├── resolve-uri
+│   │   │   └── dist
+│   │   │       └── types
+│   │   ├── sourcemap-codec
+│   │   │   └── dist
+│   │   │       └── types
+│   │   └── trace-mapping
+│   │       ├── dist
+│   │       ├── src
+│   │       └── types
+│   ├── jsesc
+│   │   ├── bin
+│   │   └── man
+│   ├── json5
+│   │   ├── dist
+│   │   └── lib
+│   ├── json-schema-to-ts
+│   │   └── lib
+│   │       ├── cjs
+│   │       │   ├── definitions
+│   │       │   ├── parse-schema
+│   │       │   │   └── references
+│   │       │   ├── type-utils
+│   │       │   └── utils
+│   │       │       └── type-guards
+│   │       ├── esm
+│   │       │   ├── definitions
+│   │       │   ├── parse-schema
+│   │       │   │   └── references
+│   │       │   ├── type-utils
+│   │       │   └── utils
+│   │       │       └── type-guards
+│   │       └── types
+│   │           ├── definitions
+│   │           ├── parse-schema
+│   │           │   └── references
+│   │           ├── type-utils
+│   │           └── utils
+│   │               └── type-guards
+│   ├── jsonwebtoken
+│   │   ├── lib
+│   │   └── node_modules
+│   │       └── semver
+│   │           ├── bin
+│   │           ├── classes
+│   │           ├── functions
+│   │           ├── internal
+│   │           └── ranges
+│   ├── js-tokens
+│   ├── jwa
+│   ├── jws
+│   │   └── lib
+│   ├── lightningcss
+│   │   └── node
+│   ├── lightningcss-linux-x64-gnu
+│   ├── lightningcss-linux-x64-musl
+│   ├── lilconfig
+│   │   └── src
+│   ├── lines-and-columns
+│   │   └── build
+│   ├── lodash
+│   │   └── fp
+│   ├── lodash.castarray
+│   ├── lodash.includes
+│   ├── lodash.isboolean
+│   ├── lodash.isinteger
+│   ├── lodash.isnumber
+│   ├── lodash.isplainobject
+│   ├── lodash.isstring
+│   ├── lodash.merge
+│   ├── lodash.once
+│   ├── loose-envify
+│   ├── lru-cache
+│   ├── lucide-react
+│   │   └── dist
+│   │       ├── cjs
+│   │       ├── esm
+│   │       │   ├── icons
+│   │       │   └── shared
+│   │       │       └── src
+│   │       └── umd
+│   ├── magic-string
+│   │   └── dist
+│   ├── make-dir
+│   ├── @mapbox
+│   │   └── node-pre-gyp
+│   │       ├── bin
+│   │       ├── lib
+│   │       │   └── util
+│   │       │       └── nw-pre-gyp
+│   │       └── node_modules
+│   │           ├── node-fetch
+│   │           │   └── lib
+│   │           └── semver
+│   │               ├── bin
+│   │               ├── classes
+│   │               ├── functions
+│   │               ├── internal
+│   │               └── ranges
+│   ├── math-intrinsics
+│   │   ├── constants
+│   │   └── test
+│   ├── media-typer
+│   ├── memorystore
+│   │   ├── lib
+│   │   ├── node_modules
+│   │   │   ├── lru-cache
+│   │   │   └── yallist
+│   │   └── test
+│   ├── merge2
+│   ├── merge-descriptors
+│   ├── methods
+│   ├── micromatch
+│   ├── mime
+│   │   └── src
+│   ├── mime-db
+│   ├── mime-types
+│   ├── mimic-response
+│   ├── minimatch
+│   │   └── dist
+│   │       ├── commonjs
+│   │       └── esm
+│   ├── minimist
+│   │   ├── example
+│   │   └── test
+│   ├── minipass
+│   │   └── dist
+│   │       ├── commonjs
+│   │       └── esm
+│   ├── minizlib
+│   │   └── node_modules
+│   │       ├── minipass
+│   │       └── yallist
+│   ├── mitt
+│   │   └── dist
+│   ├── mkdirp
+│   │   ├── bin
+│   │   └── lib
+│   ├── mkdirp-classic
+│   ├── modern-screenshot
+│   │   └── dist
+│   ├── motion-dom
+│   │   ├── dist
+│   │   │   ├── cjs
+│   │   │   └── es
+│   │   │       ├── gestures
+│   │   │       │   └── drag
+│   │   │       │       └── state
+│   │   │       └── utils
+│   │   ├── lib
+│   │   │   ├── gestures
+│   │   │   │   └── drag
+│   │   │   │       └── state
+│   │   │   └── utils
+│   │   ├── src
+│   │   │   ├── gestures
+│   │   │   │   └── drag
+│   │   │   │       └── state
+│   │   │   └── utils
+│   │   └── types
+│   │       ├── gestures
+│   │       │   └── drag
+│   │       │       └── state
+│   │       └── utils
+│   ├── motion-utils
+│   │   ├── dist
+│   │   │   ├── cjs
+│   │   │   └── es
+│   │   ├── lib
+│   │   ├── src
+│   │   └── types
+│   ├── ms
+│   ├── mz
+│   ├── nanoid
+│   │   ├── async
+│   │   ├── bin
+│   │   ├── non-secure
+│   │   └── url-alphabet
+│   ├── napi-build-utils
+│   ├── negotiator
+│   │   └── lib
+│   ├── @neondatabase
+│   │   └── serverless
+│   ├── @next
+│   │   ├── env
+│   │   │   └── dist
+│   │   └── swc-linux-x64-gnu
+│   ├── next
+│   │   ├── compat
+│   │   ├── dist
+│   │   │   ├── api
+│   │   │   ├── bin
+│   │   │   ├── build
+│   │   │   │   ├── adapter
+│   │   │   │   ├── analysis
+│   │   │   │   ├── babel
+│   │   │   │   │   ├── loader
+│   │   │   │   │   └── plugins
+│   │   │   │   ├── jest
+│   │   │   │   │   └── __mocks__
+│   │   │   │   ├── manifests
+│   │   │   │   │   └── formatter
+│   │   │   │   ├── next-config-ts
+│   │   │   │   ├── output
+│   │   │   │   ├── polyfills
+│   │   │   │   │   ├── fetch
+│   │   │   │   │   └── object.assign
+│   │   │   │   ├── segment-config
+│   │   │   │   │   ├── app
+│   │   │   │   │   ├── middleware
+│   │   │   │   │   └── pages
+│   │   │   │   ├── static-paths
+│   │   │   │   ├── swc
+│   │   │   │   ├── templates
+│   │   │   │   ├── turbopack-build
+│   │   │   │   ├── turborepo-access-trace
+│   │   │   │   ├── webpack
+│   │   │   │   │   ├── alias
+│   │   │   │   │   ├── config
+│   │   │   │   │   │   └── blocks
+│   │   │   │   │   │       ├── css
+│   │   │   │   │   │       │   └── loaders
+│   │   │   │   │   │       └── images
+│   │   │   │   │   ├── loaders
+│   │   │   │   │   │   ├── css-loader
+│   │   │   │   │   │   │   └── src
+│   │   │   │   │   │   │       ├── plugins
+│   │   │   │   │   │   │       └── runtime
+│   │   │   │   │   │   ├── devtool
+│   │   │   │   │   │   ├── lightningcss-loader
+│   │   │   │   │   │   │   └── src
+│   │   │   │   │   │   ├── metadata
+│   │   │   │   │   │   ├── next-app-loader
+│   │   │   │   │   │   ├── next-edge-app-route-loader
+│   │   │   │   │   │   ├── next-edge-ssr-loader
+│   │   │   │   │   │   ├── next-flight-loader
+│   │   │   │   │   │   ├── next-font-loader
+│   │   │   │   │   │   ├── next-image-loader
+│   │   │   │   │   │   ├── next-route-loader
+│   │   │   │   │   │   ├── next-style-loader
+│   │   │   │   │   │   │   └── runtime
+│   │   │   │   │   │   ├── postcss-loader
+│   │   │   │   │   │   │   └── src
+│   │   │   │   │   │   └── resolve-url-loader
+│   │   │   │   │   │       └── lib
+│   │   │   │   │   └── plugins
+│   │   │   │   │       ├── minify-webpack-plugin
+│   │   │   │   │       │   └── src
+│   │   │   │   │       ├── next-types-plugin
+│   │   │   │   │       ├── telemetry-plugin
+│   │   │   │   │       └── wellknown-errors-plugin
+│   │   │   │   ├── webpack-build
+│   │   │   │   └── webpack-config-rules
+│   │   │   ├── cli
+│   │   │   │   └── internal
+│   │   │   ├── client
+│   │   │   │   ├── app-dir
+│   │   │   │   ├── compat
+│   │   │   │   ├── components
+│   │   │   │   │   ├── builtin
+│   │   │   │   │   ├── errors
+│   │   │   │   │   ├── http-access-fallback
+│   │   │   │   │   ├── router-reducer
+│   │   │   │   │   │   └── reducers
+│   │   │   │   │   ├── segment-cache
+│   │   │   │   │   └── styles
+│   │   │   │   ├── dev
+│   │   │   │   │   ├── error-overlay
+│   │   │   │   │   └── hot-reloader
+│   │   │   │   │       ├── app
+│   │   │   │   │       └── pages
+│   │   │   │   ├── legacy
+│   │   │   │   ├── lib
+│   │   │   │   ├── portal
+│   │   │   │   ├── react-client-callbacks
+│   │   │   │   ├── request
+│   │   │   │   └── tracing
+│   │   │   ├── compiled
+│   │   │   │   ├── acorn
+│   │   │   │   ├── anser
+│   │   │   │   ├── assert
+│   │   │   │   ├── async-retry
+│   │   │   │   ├── async-sema
+│   │   │   │   ├── @babel
+│   │   │   │   │   └── runtime
+│   │   │   │   │       ├── helpers
+│   │   │   │   │       │   └── esm
+│   │   │   │   │       └── regenerator
+│   │   │   │   ├── babel
+│   │   │   │   ├── babel-code-frame
+│   │   │   │   ├── babel-packages
+│   │   │   │   ├── browserify-zlib
+│   │   │   │   ├── browserslist
+│   │   │   │   ├── buffer
+│   │   │   │   ├── busboy
+│   │   │   │   ├── bytes
+│   │   │   │   ├── ci-info
+│   │   │   │   ├── client-only
+│   │   │   │   ├── cli-select
+│   │   │   │   ├── commander
+│   │   │   │   ├── comment-json
+│   │   │   │   ├── compression
+│   │   │   │   ├── conf
+│   │   │   │   ├── constants-browserify
+│   │   │   │   ├── content-disposition
+│   │   │   │   ├── content-type
+│   │   │   │   ├── cookie
+│   │   │   │   ├── cross-spawn
+│   │   │   │   ├── crypto-browserify
+│   │   │   │   ├── css.escape
+│   │   │   │   ├── cssnano-simple
+│   │   │   │   ├── data-uri-to-buffer
+│   │   │   │   ├── debug
+│   │   │   │   ├── devalue
+│   │   │   │   ├── domain-browser
+│   │   │   │   ├── @edge-runtime
+│   │   │   │   │   ├── cookies
+│   │   │   │   │   ├── ponyfill
+│   │   │   │   │   └── primitives
+│   │   │   │   ├── edge-runtime
+│   │   │   │   ├── events
+│   │   │   │   ├── find-up
+│   │   │   │   ├── fresh
+│   │   │   │   ├── glob
+│   │   │   │   ├── gzip-size
+│   │   │   │   ├── @hapi
+│   │   │   │   │   └── accept
+│   │   │   │   ├── http-proxy
+│   │   │   │   ├── http-proxy-agent
+│   │   │   │   ├── https-browserify
+│   │   │   │   ├── https-proxy-agent
+│   │   │   │   ├── icss-utils
+│   │   │   │   ├── ignore-loader
+│   │   │   │   ├── image-detector
+│   │   │   │   ├── image-size
+│   │   │   │   ├── ipaddr.js
+│   │   │   │   ├── is-animated
+│   │   │   │   ├── is-docker
+│   │   │   │   ├── is-wsl
+│   │   │   │   ├── jest-worker
+│   │   │   │   ├── json5
+│   │   │   │   ├── jsonwebtoken
+│   │   │   │   ├── loader-runner
+│   │   │   │   ├── loader-utils2
+│   │   │   │   ├── loader-utils3
+│   │   │   │   ├── lodash.curry
+│   │   │   │   ├── lru-cache
+│   │   │   │   ├── mini-css-extract-plugin
+│   │   │   │   │   └── hmr
+│   │   │   │   ├── @modelcontextprotocol
+│   │   │   │   │   └── sdk
+│   │   │   │   │       └── server
+│   │   │   │   ├── @mswjs
+│   │   │   │   │   └── interceptors
+│   │   │   │   │       └── ClientRequest
+│   │   │   │   ├── nanoid
+│   │   │   │   ├── @napi-rs
+│   │   │   │   │   └── triples
+│   │   │   │   ├── native-url
+│   │   │   │   ├── neo-async
+│   │   │   │   ├── @next
+│   │   │   │   │   ├── font
+│   │   │   │   │   │   ├── dist
+│   │   │   │   │   │   │   ├── fontkit
+│   │   │   │   │   │   │   ├── google
+│   │   │   │   │   │   │   └── local
+│   │   │   │   │   │   ├── google
+│   │   │   │   │   │   └── local
+│   │   │   │   │   └── react-refresh-utils
+│   │   │   │   │       └── dist
+│   │   │   │   │           └── internal
+│   │   │   │   ├── next-devtools
+│   │   │   │   ├── next-server
+│   │   │   │   ├── node-html-parser
+│   │   │   │   ├── @opentelemetry
+│   │   │   │   │   └── api
+│   │   │   │   ├── ora
+│   │   │   │   ├── os-browserify
+│   │   │   │   ├── path-browserify
+│   │   │   │   ├── path-to-regexp
+│   │   │   │   ├── picomatch
+│   │   │   │   ├── p-limit
+│   │   │   │   ├── postcss-flexbugs-fixes
+│   │   │   │   ├── postcss-modules-extract-imports
+│   │   │   │   ├── postcss-modules-local-by-default
+│   │   │   │   ├── postcss-modules-scope
+│   │   │   │   ├── postcss-modules-values
+│   │   │   │   ├── postcss-plugin-stub-for-cssnano-simple
+│   │   │   │   ├── postcss-preset-env
+│   │   │   │   ├── postcss-safe-parser
+│   │   │   │   ├── postcss-scss
+│   │   │   │   ├── postcss-value-parser
+│   │   │   │   ├── p-queue
+│   │   │   │   ├── process
+│   │   │   │   ├── punycode
+│   │   │   │   ├── querystring-es3
+│   │   │   │   ├── raw-body
+│   │   │   │   ├── react
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── react-dom
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── react-dom-experimental
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── react-experimental
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── react-is
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── react-refresh
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── react-server-dom-turbopack
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── react-server-dom-turbopack-experimental
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── react-server-dom-webpack
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── react-server-dom-webpack-experimental
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── regenerator-runtime
+│   │   │   │   ├── safe-stable-stringify
+│   │   │   │   ├── sass-loader
+│   │   │   │   ├── scheduler
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── scheduler-experimental
+│   │   │   │   │   └── cjs
+│   │   │   │   ├── schema-utils2
+│   │   │   │   ├── schema-utils3
+│   │   │   │   ├── semver
+│   │   │   │   ├── send
+│   │   │   │   ├── server-only
+│   │   │   │   ├── setimmediate
+│   │   │   │   ├── shell-quote
+│   │   │   │   ├── source-map
+│   │   │   │   ├── source-map08
+│   │   │   │   ├── stacktrace-parser
+│   │   │   │   ├── stream-browserify
+│   │   │   │   ├── stream-http
+│   │   │   │   ├── string_decoder
+│   │   │   │   ├── string-hash
+│   │   │   │   ├── strip-ansi
+│   │   │   │   ├── superstruct
+│   │   │   │   ├── tar
+│   │   │   │   ├── terser
+│   │   │   │   ├── text-table
+│   │   │   │   ├── timers-browserify
+│   │   │   │   ├── tty-browserify
+│   │   │   │   ├── ua-parser-js
+│   │   │   │   ├── unistore
+│   │   │   │   ├── util
+│   │   │   │   ├── @vercel
+│   │   │   │   │   ├── nft
+│   │   │   │   │   ├── og
+│   │   │   │   │   │   ├── emoji
+│   │   │   │   │   │   ├── figma
+│   │   │   │   │   │   ├── language
+│   │   │   │   │   │   └── satori
+│   │   │   │   │   └── routing-utils
+│   │   │   │   ├── vm-browserify
+│   │   │   │   ├── watchpack
+│   │   │   │   ├── webpack
+│   │   │   │   ├── webpack-sources1
+│   │   │   │   ├── webpack-sources3
+│   │   │   │   ├── web-vitals
+│   │   │   │   ├── web-vitals-attribution
+│   │   │   │   ├── ws
+│   │   │   │   ├── zod
+│   │   │   │   └── zod-validation-error
+│   │   │   ├── diagnostics
+│   │   │   ├── esm
+│   │   │   │   ├── api
+│   │   │   │   ├── build
+│   │   │   │   │   ├── adapter
+│   │   │   │   │   ├── analysis
+│   │   │   │   │   ├── babel
+│   │   │   │   │   │   ├── loader
+│   │   │   │   │   │   └── plugins
+│   │   │   │   │   ├── manifests
+│   │   │   │   │   │   └── formatter
+│   │   │   │   │   ├── next-config-ts
+│   │   │   │   │   ├── output
+│   │   │   │   │   ├── polyfills
+│   │   │   │   │   │   ├── fetch
+│   │   │   │   │   │   └── object.assign
+│   │   │   │   │   ├── segment-config
+│   │   │   │   │   │   ├── app
+│   │   │   │   │   │   ├── middleware
+│   │   │   │   │   │   └── pages
+│   │   │   │   │   ├── static-paths
+│   │   │   │   │   ├── swc
+│   │   │   │   │   ├── templates
+│   │   │   │   │   ├── turbopack-build
+│   │   │   │   │   ├── turborepo-access-trace
+│   │   │   │   │   ├── webpack
+│   │   │   │   │   │   ├── alias
+│   │   │   │   │   │   ├── config
+│   │   │   │   │   │   │   └── blocks
+│   │   │   │   │   │   │       ├── css
+│   │   │   │   │   │   │       │   └── loaders
+│   │   │   │   │   │   │       └── images
+│   │   │   │   │   │   ├── loaders
+│   │   │   │   │   │   │   ├── css-loader
+│   │   │   │   │   │   │   │   └── src
+│   │   │   │   │   │   │   │       ├── plugins
+│   │   │   │   │   │   │   │       └── runtime
+│   │   │   │   │   │   │   ├── devtool
+│   │   │   │   │   │   │   ├── lightningcss-loader
+│   │   │   │   │   │   │   │   └── src
+│   │   │   │   │   │   │   ├── metadata
+│   │   │   │   │   │   │   ├── next-app-loader
+│   │   │   │   │   │   │   ├── next-edge-app-route-loader
+│   │   │   │   │   │   │   ├── next-edge-ssr-loader
+│   │   │   │   │   │   │   ├── next-flight-loader
+│   │   │   │   │   │   │   ├── next-font-loader
+│   │   │   │   │   │   │   ├── next-image-loader
+│   │   │   │   │   │   │   ├── next-route-loader
+│   │   │   │   │   │   │   ├── next-style-loader
+│   │   │   │   │   │   │   │   └── runtime
+│   │   │   │   │   │   │   ├── postcss-loader
+│   │   │   │   │   │   │   │   └── src
+│   │   │   │   │   │   │   └── resolve-url-loader
+│   │   │   │   │   │   │       └── lib
+│   │   │   │   │   │   └── plugins
+│   │   │   │   │   │       ├── minify-webpack-plugin
+│   │   │   │   │   │       │   └── src
+│   │   │   │   │   │       ├── next-types-plugin
+│   │   │   │   │   │       ├── telemetry-plugin
+│   │   │   │   │   │       └── wellknown-errors-plugin
+│   │   │   │   │   ├── webpack-build
+│   │   │   │   │   └── webpack-config-rules
+│   │   │   │   ├── client
+│   │   │   │   │   ├── app-dir
+│   │   │   │   │   ├── compat
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── builtin
+│   │   │   │   │   │   ├── errors
+│   │   │   │   │   │   ├── http-access-fallback
+│   │   │   │   │   │   ├── router-reducer
+│   │   │   │   │   │   │   └── reducers
+│   │   │   │   │   │   ├── segment-cache
+│   │   │   │   │   │   └── styles
+│   │   │   │   │   ├── dev
+│   │   │   │   │   │   ├── error-overlay
+│   │   │   │   │   │   └── hot-reloader
+│   │   │   │   │   │       ├── app
+│   │   │   │   │   │       └── pages
+│   │   │   │   │   ├── legacy
+│   │   │   │   │   ├── lib
+│   │   │   │   │   ├── portal
+│   │   │   │   │   ├── react-client-callbacks
+│   │   │   │   │   ├── request
+│   │   │   │   │   └── tracing
+│   │   │   │   ├── export
+│   │   │   │   │   ├── helpers
+│   │   │   │   │   └── routes
+│   │   │   │   ├── lib
+│   │   │   │   │   ├── framework
+│   │   │   │   │   ├── fs
+│   │   │   │   │   ├── helpers
+│   │   │   │   │   ├── memory
+│   │   │   │   │   ├── metadata
+│   │   │   │   │   │   ├── generate
+│   │   │   │   │   │   ├── resolvers
+│   │   │   │   │   │   └── types
+│   │   │   │   │   └── typescript
+│   │   │   │   ├── next-devtools
+│   │   │   │   │   ├── server
+│   │   │   │   │   │   └── font
+│   │   │   │   │   ├── shared
+│   │   │   │   │   └── userspace
+│   │   │   │   │       ├── app
+│   │   │   │   │       │   └── errors
+│   │   │   │   │       └── pages
+│   │   │   │   ├── pages
+│   │   │   │   ├── server
+│   │   │   │   │   ├── after
+│   │   │   │   │   ├── api-utils
+│   │   │   │   │   │   └── node
+│   │   │   │   │   ├── app-render
+│   │   │   │   │   │   ├── metadata-insertion
+│   │   │   │   │   │   ├── module-loading
+│   │   │   │   │   │   └── rsc
+│   │   │   │   │   ├── async-storage
+│   │   │   │   │   ├── base-http
+│   │   │   │   │   ├── dev
+│   │   │   │   │   │   └── browser-logs
+│   │   │   │   │   ├── instrumentation
+│   │   │   │   │   ├── lib
+│   │   │   │   │   │   ├── cache-handlers
+│   │   │   │   │   │   ├── experimental
+│   │   │   │   │   │   ├── incremental-cache
+│   │   │   │   │   │   ├── module-loader
+│   │   │   │   │   │   ├── router-utils
+│   │   │   │   │   │   ├── server-ipc
+│   │   │   │   │   │   └── trace
+│   │   │   │   │   ├── mcp
+│   │   │   │   │   │   └── tools
+│   │   │   │   │   │       └── utils
+│   │   │   │   │   ├── node-environment-extensions
+│   │   │   │   │   ├── normalizers
+│   │   │   │   │   │   ├── built
+│   │   │   │   │   │   │   ├── app
+│   │   │   │   │   │   │   └── pages
+│   │   │   │   │   │   └── request
+│   │   │   │   │   ├── og
+│   │   │   │   │   ├── request
+│   │   │   │   │   ├── response-cache
+│   │   │   │   │   ├── resume-data-cache
+│   │   │   │   │   ├── route-definitions
+│   │   │   │   │   ├── route-matcher-managers
+│   │   │   │   │   ├── route-matcher-providers
+│   │   │   │   │   │   ├── dev
+│   │   │   │   │   │   │   └── helpers
+│   │   │   │   │   │   │       └── file-reader
+│   │   │   │   │   │   └── helpers
+│   │   │   │   │   │       └── manifest-loaders
+│   │   │   │   │   ├── route-matchers
+│   │   │   │   │   ├── route-matches
+│   │   │   │   │   ├── route-modules
+│   │   │   │   │   │   ├── app-page
+│   │   │   │   │   │   │   ├── helpers
+│   │   │   │   │   │   │   └── vendored
+│   │   │   │   │   │   │       ├── contexts
+│   │   │   │   │   │   │       ├── rsc
+│   │   │   │   │   │   │       └── ssr
+│   │   │   │   │   │   ├── app-route
+│   │   │   │   │   │   │   └── helpers
+│   │   │   │   │   │   ├── pages
+│   │   │   │   │   │   │   ├── builtin
+│   │   │   │   │   │   │   └── vendored
+│   │   │   │   │   │   │       └── contexts
+│   │   │   │   │   │   └── pages-api
+│   │   │   │   │   ├── stream-utils
+│   │   │   │   │   ├── typescript
+│   │   │   │   │   │   └── rules
+│   │   │   │   │   ├── use-cache
+│   │   │   │   │   └── web
+│   │   │   │   │       ├── exports
+│   │   │   │   │       ├── sandbox
+│   │   │   │   │       └── spec-extension
+│   │   │   │   │           └── adapters
+│   │   │   │   └── shared
+│   │   │   │       └── lib
+│   │   │   │           ├── errors
+│   │   │   │           ├── i18n
+│   │   │   │           ├── isomorphic
+│   │   │   │           ├── lazy-dynamic
+│   │   │   │           ├── page-path
+│   │   │   │           ├── router
+│   │   │   │           │   └── utils
+│   │   │   │           ├── segment-cache
+│   │   │   │           ├── turbopack
+│   │   │   │           └── utils
+│   │   │   ├── experimental
+│   │   │   │   ├── testing
+│   │   │   │   │   └── server
+│   │   │   │   └── testmode
+│   │   │   │       ├── playwright
+│   │   │   │       └── proxy
+│   │   │   ├── export
+│   │   │   │   ├── helpers
+│   │   │   │   └── routes
+│   │   │   ├── lib
+│   │   │   │   ├── framework
+│   │   │   │   ├── fs
+│   │   │   │   ├── helpers
+│   │   │   │   ├── memory
+│   │   │   │   ├── metadata
+│   │   │   │   │   ├── generate
+│   │   │   │   │   ├── resolvers
+│   │   │   │   │   └── types
+│   │   │   │   └── typescript
+│   │   │   ├── next-devtools
+│   │   │   │   ├── dev-overlay
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── call-stack
+│   │   │   │   │   │   ├── call-stack-frame
+│   │   │   │   │   │   ├── code-frame
+│   │   │   │   │   │   ├── copy-button
+│   │   │   │   │   │   ├── devtools-indicator
+│   │   │   │   │   │   │   └── hooks
+│   │   │   │   │   │   ├── devtools-panel
+│   │   │   │   │   │   │   └── resize
+│   │   │   │   │   │   ├── dialog
+│   │   │   │   │   │   ├── errors
+│   │   │   │   │   │   │   ├── dev-tools-indicator
+│   │   │   │   │   │   │   │   └── dev-tools-info
+│   │   │   │   │   │   │   ├── dialog
+│   │   │   │   │   │   │   ├── environment-name-label
+│   │   │   │   │   │   │   ├── error-message
+│   │   │   │   │   │   │   ├── error-overlay
+│   │   │   │   │   │   │   ├── error-overlay-bottom-stack
+│   │   │   │   │   │   │   ├── error-overlay-call-stack
+│   │   │   │   │   │   │   ├── error-overlay-footer
+│   │   │   │   │   │   │   │   └── error-feedback
+│   │   │   │   │   │   │   ├── error-overlay-layout
+│   │   │   │   │   │   │   ├── error-overlay-nav
+│   │   │   │   │   │   │   ├── error-overlay-pagination
+│   │   │   │   │   │   │   ├── error-overlay-toolbar
+│   │   │   │   │   │   │   ├── error-type-label
+│   │   │   │   │   │   │   └── overlay
+│   │   │   │   │   │   ├── fader
+│   │   │   │   │   │   ├── hot-linked-text
+│   │   │   │   │   │   ├── hydration-diff
+│   │   │   │   │   │   ├── overlay
+│   │   │   │   │   │   ├── overview
+│   │   │   │   │   │   ├── resizer
+│   │   │   │   │   │   ├── terminal
+│   │   │   │   │   │   ├── toast
+│   │   │   │   │   │   ├── tooltip
+│   │   │   │   │   │   └── version-staleness-info
+│   │   │   │   │   ├── container
+│   │   │   │   │   │   └── runtime-error
+│   │   │   │   │   ├── font
+│   │   │   │   │   ├── hooks
+│   │   │   │   │   ├── icons
+│   │   │   │   │   │   └── thumbs
+│   │   │   │   │   ├── menu
+│   │   │   │   │   ├── panel
+│   │   │   │   │   ├── styles
+│   │   │   │   │   └── utils
+│   │   │   │   ├── server
+│   │   │   │   │   └── font
+│   │   │   │   ├── shared
+│   │   │   │   └── userspace
+│   │   │   │       ├── app
+│   │   │   │       │   └── errors
+│   │   │   │       └── pages
+│   │   │   ├── pages
+│   │   │   ├── server
+│   │   │   │   ├── after
+│   │   │   │   ├── api-utils
+│   │   │   │   │   └── node
+│   │   │   │   ├── app-render
+│   │   │   │   │   ├── metadata-insertion
+│   │   │   │   │   ├── module-loading
+│   │   │   │   │   └── rsc
+│   │   │   │   ├── async-storage
+│   │   │   │   ├── base-http
+│   │   │   │   ├── dev
+│   │   │   │   │   └── browser-logs
+│   │   │   │   ├── instrumentation
+│   │   │   │   ├── lib
+│   │   │   │   │   ├── cache-handlers
+│   │   │   │   │   ├── experimental
+│   │   │   │   │   ├── incremental-cache
+│   │   │   │   │   ├── module-loader
+│   │   │   │   │   ├── router-utils
+│   │   │   │   │   ├── server-ipc
+│   │   │   │   │   └── trace
+│   │   │   │   ├── mcp
+│   │   │   │   │   └── tools
+│   │   │   │   │       └── utils
+│   │   │   │   ├── node-environment-extensions
+│   │   │   │   ├── normalizers
+│   │   │   │   │   ├── built
+│   │   │   │   │   │   ├── app
+│   │   │   │   │   │   └── pages
+│   │   │   │   │   └── request
+│   │   │   │   ├── og
+│   │   │   │   ├── request
+│   │   │   │   ├── response-cache
+│   │   │   │   ├── resume-data-cache
+│   │   │   │   ├── route-definitions
+│   │   │   │   ├── route-matcher-managers
+│   │   │   │   ├── route-matcher-providers
+│   │   │   │   │   ├── dev
+│   │   │   │   │   │   └── helpers
+│   │   │   │   │   │       └── file-reader
+│   │   │   │   │   └── helpers
+│   │   │   │   │       └── manifest-loaders
+│   │   │   │   ├── route-matchers
+│   │   │   │   ├── route-matches
+│   │   │   │   ├── route-modules
+│   │   │   │   │   ├── app-page
+│   │   │   │   │   │   ├── helpers
+│   │   │   │   │   │   └── vendored
+│   │   │   │   │   │       ├── contexts
+│   │   │   │   │   │       ├── rsc
+│   │   │   │   │   │       └── ssr
+│   │   │   │   │   ├── app-route
+│   │   │   │   │   │   └── helpers
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── builtin
+│   │   │   │   │   │   └── vendored
+│   │   │   │   │   │       └── contexts
+│   │   │   │   │   └── pages-api
+│   │   │   │   ├── stream-utils
+│   │   │   │   ├── typescript
+│   │   │   │   │   └── rules
+│   │   │   │   ├── use-cache
+│   │   │   │   └── web
+│   │   │   │       ├── exports
+│   │   │   │       ├── sandbox
+│   │   │   │       └── spec-extension
+│   │   │   │           └── adapters
+│   │   │   ├── shared
+│   │   │   │   └── lib
+│   │   │   │       ├── errors
+│   │   │   │       ├── i18n
+│   │   │   │       ├── isomorphic
+│   │   │   │       ├── lazy-dynamic
+│   │   │   │       ├── page-path
+│   │   │   │       ├── router
+│   │   │   │       │   └── utils
+│   │   │   │       ├── segment-cache
+│   │   │   │       ├── turbopack
+│   │   │   │       └── utils
+│   │   │   ├── styled-jsx
+│   │   │   │   └── types
+│   │   │   ├── telemetry
+│   │   │   │   └── events
+│   │   │   └── trace
+│   │   │       └── report
+│   │   ├── experimental
+│   │   │   ├── testing
+│   │   │   └── testmode
+│   │   │       └── playwright
+│   │   ├── font
+│   │   │   ├── google
+│   │   │   └── local
+│   │   ├── image-types
+│   │   ├── legacy
+│   │   ├── navigation-types
+│   │   │   └── compat
+│   │   ├── node_modules
+│   │   │   └── postcss
+│   │   │       └── lib
+│   │   └── types
+│   ├── next-themes
+│   │   └── dist
+│   ├── node-abi
+│   │   └── node_modules
+│   │       └── semver
+│   │           ├── bin
+│   │           ├── classes
+│   │           ├── functions
+│   │           ├── internal
+│   │           └── ranges
+│   ├── node-addon-api
+│   │   └── tools
+│   ├── node-domexception
+│   ├── node-fetch
+│   │   ├── src
+│   │   │   ├── errors
+│   │   │   └── utils
+│   │   └── @types
+│   ├── node-gyp-build
+│   ├── @nodelib
+│   │   ├── fs.scandir
+│   │   │   └── out
+│   │   │       ├── adapters
+│   │   │       ├── providers
+│   │   │       ├── types
+│   │   │       └── utils
+│   │   ├── fs.stat
+│   │   │   └── out
+│   │   │       ├── adapters
+│   │   │       ├── providers
+│   │   │       └── types
+│   │   └── fs.walk
+│   │       └── out
+│   │           ├── providers
+│   │           ├── readers
+│   │           └── types
+│   ├── nodemailer
+│   │   └── lib
+│   │       ├── addressparser
+│   │       ├── base64
+│   │       ├── dkim
+│   │       ├── fetch
+│   │       ├── json-transport
+│   │       ├── mail-composer
+│   │       ├── mailer
+│   │       ├── mime-funcs
+│   │       ├── mime-node
+│   │       ├── punycode
+│   │       ├── qp
+│   │       ├── sendmail-transport
+│   │       ├── ses-transport
+│   │       ├── shared
+│   │       ├── smtp-connection
+│   │       ├── smtp-pool
+│   │       ├── smtp-transport
+│   │       ├── stream-transport
+│   │       ├── well-known
+│   │       └── xoauth2
+│   ├── node-releases
+│   │   └── data
+│   │       ├── processed
+│   │       └── release-schedule
+│   ├── nopt
+│   │   ├── bin
+│   │   └── lib
+│   ├── normalize-path
+│   ├── normalize-range
+│   ├── npmlog
+│   ├── object-assign
+│   ├── object-hash
+│   │   └── dist
+│   ├── object-inspect
+│   │   ├── example
+│   │   └── test
+│   │       └── browser
+│   ├── obuf
+│   │   └── test
+│   ├── once
+│   ├── on-finished
+│   ├── on-headers
+│   ├── optimist
+│   │   ├── example
+│   │   ├── node_modules
+│   │   │   └── minimist
+│   │   │       ├── example
+│   │   │       └── test
+│   │   └── test
+│   │       └── _
+│   ├── package-json-from-dist
+│   │   └── dist
+│   │       ├── commonjs
+│   │       └── esm
+│   ├── parseurl
+│   ├── passport
+│   │   ├── etc
+│   │   ├── lib
+│   │   │   ├── errors
+│   │   │   ├── framework
+│   │   │   ├── http
+│   │   │   ├── middleware
+│   │   │   └── strategies
+│   │   └── sponsors
+│   ├── passport-local
+│   │   └── lib
+│   ├── passport-strategy
+│   │   └── lib
+│   ├── path-is-absolute
+│   ├── path-key
+│   ├── path-parse
+│   ├── path-scurry
+│   │   ├── dist
+│   │   │   ├── commonjs
+│   │   │   └── esm
+│   │   └── node_modules
+│   │       └── lru-cache
+│   │           └── dist
+│   │               ├── commonjs
+│   │               └── esm
+│   ├── path-to-regexp
+│   ├── pause
+│   ├── pg
+│   │   ├── lib
+│   │   │   ├── crypto
+│   │   │   └── native
+│   │   └── node_modules
+│   │       ├── pg-types
+│   │       │   ├── lib
+│   │       │   └── test
+│   │       ├── postgres-array
+│   │       ├── postgres-bytea
+│   │       ├── postgres-date
+│   │       └── postgres-interval
+│   ├── pg-cloudflare
+│   │   ├── dist
+│   │   └── src
+│   ├── pg-connection-string
+│   ├── pg-int8
+│   ├── pg-numeric
+│   ├── pgpass
+│   │   └── lib
+│   ├── pg-pool
+│   │   └── test
+│   ├── pg-protocol
+│   │   ├── dist
+│   │   └── src
+│   │       ├── testing
+│   │       └── types
+│   ├── pg-types
+│   │   └── lib
+│   ├── picocolors
+│   ├── picomatch
+│   │   └── lib
+│   ├── pify
+│   ├── @pinecone-database
+│   ├── pip
+│   │   └── lib
+│   ├── pirates
+│   │   └── lib
+│   ├── @pkgjs
+│   │   └── parseargs
+│   │       ├── examples
+│   │       └── internal
+│   ├── postcss
+│   │   └── lib
+│   ├── postcss-import
+│   │   └── lib
+│   ├── postcss-js
+│   ├── postcss-load-config
+│   │   └── src
+│   ├── postcss-nested
+│   ├── postcss-selector-parser
+│   │   └── dist
+│   │       ├── selectors
+│   │       └── util
+│   ├── postcss-value-parser
+│   │   └── lib
+│   ├── postgres-array
+│   ├── postgres-bytea
+│   ├── postgres-date
+│   ├── postgres-interval
+│   ├── postgres-range
+│   ├── prebuild-install
+│   ├── prop-types
+│   │   ├── lib
+│   │   └── node_modules
+│   │       └── react-is
+│   │           ├── cjs
+│   │           └── umd
+│   ├── proxy-addr
+│   ├── pseudomap
+│   │   └── test
+│   ├── pump
+│   ├── python
+│   │   ├── example
+│   │   ├── lib
+│   │   └── test
+│   ├── qs
+│   │   ├── dist
+│   │   ├── lib
+│   │   └── test
+│   ├── queue-microtask
+│   ├── @radix-ui
+│   │   ├── number
+│   │   │   └── dist
+│   │   ├── primitive
+│   │   │   └── dist
+│   │   ├── react-accordion
+│   │   │   └── dist
+│   │   ├── react-alert-dialog
+│   │   │   ├── dist
+│   │   │   └── src
+│   │   ├── react-arrow
+│   │   │   └── dist
+│   │   ├── react-aspect-ratio
+│   │   │   └── dist
+│   │   ├── react-avatar
+│   │   │   └── dist
+│   │   ├── react-checkbox
+│   │   │   └── dist
+│   │   ├── react-collapsible
+│   │   │   └── dist
+│   │   ├── react-collection
+│   │   │   └── dist
+│   │   ├── react-compose-refs
+│   │   │   └── dist
+│   │   ├── react-context
+│   │   │   └── dist
+│   │   ├── react-context-menu
+│   │   │   └── dist
+│   │   ├── react-dialog
+│   │   │   └── dist
+│   │   ├── react-direction
+│   │   │   └── dist
+│   │   ├── react-dismissable-layer
+│   │   │   └── dist
+│   │   ├── react-dropdown-menu
+│   │   │   └── dist
+│   │   ├── react-focus-guards
+│   │   │   └── dist
+│   │   ├── react-focus-scope
+│   │   │   └── dist
+│   │   ├── react-hover-card
+│   │   │   └── dist
+│   │   ├── react-id
+│   │   │   └── dist
+│   │   ├── react-label
+│   │   │   └── dist
+│   │   ├── react-menu
+│   │   │   └── dist
+│   │   ├── react-menubar
+│   │   │   └── dist
+│   │   ├── react-navigation-menu
+│   │   │   └── dist
+│   │   ├── react-popover
+│   │   │   └── dist
+│   │   ├── react-popper
+│   │   │   └── dist
+│   │   ├── react-portal
+│   │   │   └── dist
+│   │   ├── react-presence
+│   │   │   └── dist
+│   │   ├── react-primitive
+│   │   │   └── dist
+│   │   ├── react-progress
+│   │   │   └── dist
+│   │   ├── react-radio-group
+│   │   │   └── dist
+│   │   ├── react-roving-focus
+│   │   │   └── dist
+│   │   ├── react-scroll-area
+│   │   │   └── dist
+│   │   ├── react-select
+│   │   │   └── dist
+│   │   ├── react-separator
+│   │   │   └── dist
+│   │   ├── react-slider
+│   │   │   └── dist
+│   │   ├── react-slot
+│   │   │   └── dist
+│   │   ├── react-switch
+│   │   │   └── dist
+│   │   ├── react-tabs
+│   │   │   └── dist
+│   │   ├── react-toast
+│   │   │   └── dist
+│   │   ├── react-toggle
+│   │   │   └── dist
+│   │   ├── react-toggle-group
+│   │   │   └── dist
+│   │   ├── react-tooltip
+│   │   │   └── dist
+│   │   ├── react-use-callback-ref
+│   │   │   └── dist
+│   │   ├── react-use-controllable-state
+│   │   │   └── dist
+│   │   ├── react-use-escape-keydown
+│   │   │   └── dist
+│   │   ├── react-use-layout-effect
+│   │   │   └── dist
+│   │   ├── react-use-previous
+│   │   │   └── dist
+│   │   ├── react-use-rect
+│   │   │   └── dist
+│   │   ├── react-use-size
+│   │   │   └── dist
+│   │   ├── react-visually-hidden
+│   │   │   └── dist
+│   │   └── rect
+│   │       └── dist
+│   ├── random-bytes
+│   ├── range-parser
+│   ├── raw-body
+│   ├── rc
+│   │   ├── lib
+│   │   └── test
+│   ├── react
+│   │   ├── cjs
+│   │   └── umd
+│   ├── react-day-picker
+│   │   ├── dist
+│   │   └── src
+│   │       ├── components
+│   │       │   ├── Button
+│   │       │   ├── Caption
+│   │       │   ├── CaptionDropdowns
+│   │       │   ├── CaptionLabel
+│   │       │   ├── CaptionNavigation
+│   │       │   ├── Day
+│   │       │   ├── DayContent
+│   │       │   ├── Dropdown
+│   │       │   ├── Footer
+│   │       │   ├── Head
+│   │       │   ├── HeadRow
+│   │       │   │   └── utils
+│   │       │   ├── IconDropdown
+│   │       │   ├── IconLeft
+│   │       │   ├── IconRight
+│   │       │   ├── Month
+│   │       │   ├── Months
+│   │       │   ├── MonthsDropdown
+│   │       │   │   └── __snapshots__
+│   │       │   ├── Navigation
+│   │       │   ├── Root
+│   │       │   ├── Row
+│   │       │   ├── Table
+│   │       │   │   ├── __snapshots__
+│   │       │   │   └── utils
+│   │       │   ├── WeekNumber
+│   │       │   │   └── __snapshots__
+│   │       │   └── YearsDropdown
+│   │       │       └── __snapshots__
+│   │       ├── contexts
+│   │       │   ├── DayPicker
+│   │       │   │   ├── formatters
+│   │       │   │   ├── labels
+│   │       │   │   └── utils
+│   │       │   ├── Focus
+│   │       │   │   └── utils
+│   │       │   ├── Modifiers
+│   │       │   │   └── utils
+│   │       │   ├── Navigation
+│   │       │   │   └── utils
+│   │       │   ├── SelectMultiple
+│   │       │   ├── SelectRange
+│   │       │   │   └── utils
+│   │       │   └── SelectSingle
+│   │       ├── hooks
+│   │       │   ├── useActiveModifiers
+│   │       │   ├── useControlledValue
+│   │       │   ├── useDayEventHandlers
+│   │       │   ├── useDayRender
+│   │       │   │   └── utils
+│   │       │   ├── useId
+│   │       │   ├── useInput
+│   │       │   │   └── utils
+│   │       │   └── useSelectedDays
+│   │       └── types
+│   ├── react-dom
+│   │   ├── cjs
+│   │   └── umd
+│   ├── react-hook-form
+│   │   └── dist
+│   │       ├── logic
+│   │       ├── types
+│   │       │   └── path
+│   │       ├── __typetest__
+│   │       │   ├── __fixtures__
+│   │       │   └── path
+│   │       └── utils
+│   ├── react-icons
+│   │   ├── ai
+│   │   ├── bi
+│   │   ├── bs
+│   │   ├── cg
+│   │   ├── ci
+│   │   ├── di
+│   │   ├── fa
+│   │   ├── fa6
+│   │   ├── fc
+│   │   ├── fi
+│   │   ├── gi
+│   │   ├── go
+│   │   ├── gr
+│   │   ├── hi
+│   │   ├── hi2
+│   │   ├── im
+│   │   ├── io
+│   │   ├── io5
+│   │   ├── lia
+│   │   ├── lib
+│   │   ├── lu
+│   │   ├── md
+│   │   ├── pi
+│   │   ├── ri
+│   │   ├── rx
+│   │   ├── si
+│   │   ├── sl
+│   │   ├── tb
+│   │   ├── tfi
+│   │   ├── ti
+│   │   ├── vsc
+│   │   └── wi
+│   ├── react-is
+│   │   ├── cjs
+│   │   └── umd
+│   ├── react-refresh
+│   │   └── cjs
+│   ├── react-remove-scroll
+│   │   ├── dist
+│   │   │   ├── es2015
+│   │   │   ├── es2019
+│   │   │   └── es5
+│   │   ├── sidecar
+│   │   └── UI
+│   ├── react-remove-scroll-bar
+│   │   ├── constants
+│   │   └── dist
+│   │       ├── es2015
+│   │       ├── es2019
+│   │       └── es5
+│   ├── react-resizable-panels
+│   │   └── dist
+│   │       └── declarations
+│   │           └── src
+│   │               ├── utils
+│   │               │   ├── dom
+│   │               │   └── rects
+│   │               └── vendor
+│   ├── react-smooth
+│   │   ├── es6
+│   │   ├── lib
+│   │   ├── src
+│   │   └── umd
+│   ├── react-style-singleton
+│   │   └── dist
+│   │       ├── es2015
+│   │       ├── es2019
+│   │       └── es5
+│   ├── react-transition-group
+│   │   ├── cjs
+│   │   │   └── utils
+│   │   ├── config
+│   │   ├── CSSTransition
+│   │   ├── dist
+│   │   ├── esm
+│   │   │   └── utils
+│   │   ├── ReplaceTransition
+│   │   ├── SwitchTransition
+│   │   ├── Transition
+│   │   ├── TransitionGroup
+│   │   └── TransitionGroupContext
+│   ├── readable-stream
+│   │   └── lib
+│   │       └── internal
+│   │           └── streams
+│   ├── read-cache
+│   ├── readdirp
+│   ├── recharts
+│   │   ├── es6
+│   │   │   ├── cartesian
+│   │   │   ├── chart
+│   │   │   ├── component
+│   │   │   ├── container
+│   │   │   ├── context
+│   │   │   ├── numberAxis
+│   │   │   ├── polar
+│   │   │   ├── shape
+│   │   │   └── util
+│   │   │       ├── cursor
+│   │   │       ├── payload
+│   │   │       └── tooltip
+│   │   ├── lib
+│   │   │   ├── cartesian
+│   │   │   ├── chart
+│   │   │   ├── component
+│   │   │   ├── container
+│   │   │   ├── context
+│   │   │   ├── numberAxis
+│   │   │   ├── polar
+│   │   │   ├── shape
+│   │   │   └── util
+│   │   │       ├── cursor
+│   │   │       ├── payload
+│   │   │       └── tooltip
+│   │   ├── types
+│   │   │   ├── cartesian
+│   │   │   ├── chart
+│   │   │   ├── component
+│   │   │   ├── container
+│   │   │   ├── context
+│   │   │   ├── numberAxis
+│   │   │   ├── polar
+│   │   │   ├── shape
+│   │   │   └── util
+│   │   │       ├── cursor
+│   │   │       ├── payload
+│   │   │       └── tooltip
+│   │   └── umd
+│   ├── recharts-scale
+│   │   ├── es6
+│   │   │   └── util
+│   │   ├── lib
+│   │   │   └── util
+│   │   ├── src
+│   │   │   └── util
+│   │   └── umd
+│   ├── regenerator-runtime
+│   ├── regexparam
+│   │   └── dist
+│   ├── @replit
+│   │   ├── vite-plugin-cartographer
+│   │   │   └── dist
+│   │   │       └── beacon
+│   │   ├── vite-plugin-dev-banner
+│   │   │   └── dist
+│   │   └── vite-plugin-runtime-error-modal
+│   │       └── dist
+│   ├── resolve
+│   │   ├── bin
+│   │   ├── example
+│   │   ├── lib
+│   │   └── test
+│   │       ├── dotdot
+│   │       │   └── abc
+│   │       ├── module_dir
+│   │       │   ├── xmodules
+│   │       │   │   └── aaa
+│   │       │   ├── ymodules
+│   │       │   │   └── aaa
+│   │       │   └── zmodules
+│   │       │       └── bbb
+│   │       ├── node_path
+│   │       │   ├── x
+│   │       │   │   ├── aaa
+│   │       │   │   └── ccc
+│   │       │   └── y
+│   │       │       ├── bbb
+│   │       │       └── ccc
+│   │       ├── pathfilter
+│   │       │   └── deep_ref
+│   │       ├── precedence
+│   │       │   ├── aaa
+│   │       │   └── bbb
+│   │       ├── resolver
+│   │       │   ├── baz
+│   │       │   ├── browser_field
+│   │       │   ├── dot_main
+│   │       │   ├── dot_slash_main
+│   │       │   ├── false_main
+│   │       │   ├── incorrect_main
+│   │       │   ├── invalid_main
+│   │       │   ├── multirepo
+│   │       │   │   └── packages
+│   │       │   │       ├── package-a
+│   │       │   │       └── package-b
+│   │       │   ├── nested_symlinks
+│   │       │   │   └── mylib
+│   │       │   ├── other_path
+│   │       │   │   └── lib
+│   │       │   ├── quux
+│   │       │   │   └── foo
+│   │       │   ├── same_names
+│   │       │   │   └── foo
+│   │       │   ├── symlinked
+│   │       │   │   ├── _
+│   │       │   │   │   ├── node_modules
+│   │       │   │   │   └── symlink_target
+│   │       │   │   └── package
+│   │       │   └── without_basedir
+│   │       └── shadowed_core
+│   │           └── node_modules
+│   │               └── util
+│   ├── resolve-pkg-maps
+│   │   └── dist
+│   ├── reusify
+│   │   └── benchmarks
+│   ├── rimraf
+│   │   └── node_modules
+│   │       ├── brace-expansion
+│   │       ├── glob
+│   │       └── minimatch
+│   ├── @rolldown
+│   │   └── pluginutils
+│   │       └── dist
+│   ├── @rollup
+│   │   ├── rollup-linux-x64-gnu
+│   │   └── rollup-linux-x64-musl
+│   ├── rollup
+│   │   └── dist
+│   │       ├── bin
+│   │       ├── es
+│   │       │   └── shared
+│   │       └── shared
+│   ├── run-parallel
+│   ├── safe-buffer
+│   ├── safer-buffer
+│   ├── scheduler
+│   │   ├── cjs
+│   │   └── umd
+│   ├── semver
+│   │   └── bin
+│   ├── send
+│   │   └── node_modules
+│   │       ├── debug
+│   │       │   ├── node_modules
+│   │       │   │   └── ms
+│   │       │   └── src
+│   │       └── encodeurl
+│   ├── serve-static
+│   ├── set-blocking
+│   ├── set-function-length
+│   ├── setprototypeof
+│   │   └── test
+│   ├── sharp
+│   │   ├── install
+│   │   ├── lib
+│   │   ├── node_modules
+│   │   │   └── semver
+│   │   │       ├── bin
+│   │   │       ├── classes
+│   │   │       ├── functions
+│   │   │       ├── internal
+│   │   │       └── ranges
+│   │   └── src
+│   ├── shebang-command
+│   ├── shebang-regex
+│   ├── side-channel
+│   │   └── test
+│   ├── signal-exit
+│   │   └── dist
+│   │       ├── cjs
+│   │       └── mjs
+│   ├── simple-concat
+│   │   └── test
+│   ├── simple-get
+│   ├── @smithy
+│   │   ├── abort-controller
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── config-resolver
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   │   ├── endpointsConfig
+│   │   │   │   │   └── utils
+│   │   │   │   ├── regionConfig
+│   │   │   │   └── regionInfo
+│   │   │   └── dist-types
+│   │   │       ├── endpointsConfig
+│   │   │       │   └── utils
+│   │   │       ├── regionConfig
+│   │   │       ├── regionInfo
+│   │   │       └── ts3.4
+│   │   │           ├── endpointsConfig
+│   │   │           │   └── utils
+│   │   │           ├── regionConfig
+│   │   │           └── regionInfo
+│   │   ├── core
+│   │   │   ├── dist-cjs
+│   │   │   │   └── submodules
+│   │   │   │       ├── cbor
+│   │   │   │       ├── event-streams
+│   │   │   │       ├── protocols
+│   │   │   │       ├── schema
+│   │   │   │       └── serde
+│   │   │   ├── dist-es
+│   │   │   │   ├── middleware-http-auth-scheme
+│   │   │   │   ├── middleware-http-signing
+│   │   │   │   ├── pagination
+│   │   │   │   ├── request-builder
+│   │   │   │   ├── submodules
+│   │   │   │   │   ├── cbor
+│   │   │   │   │   ├── event-streams
+│   │   │   │   │   ├── protocols
+│   │   │   │   │   │   └── serde
+│   │   │   │   │   ├── schema
+│   │   │   │   │   │   ├── middleware
+│   │   │   │   │   │   └── schemas
+│   │   │   │   │   └── serde
+│   │   │   │   │       ├── schema-serde-lib
+│   │   │   │   │       └── value
+│   │   │   │   └── util-identity-and-auth
+│   │   │   │       └── httpAuthSchemes
+│   │   │   └── dist-types
+│   │   │       ├── middleware-http-auth-scheme
+│   │   │       ├── middleware-http-signing
+│   │   │       ├── pagination
+│   │   │       ├── request-builder
+│   │   │       ├── submodules
+│   │   │       │   ├── cbor
+│   │   │       │   ├── event-streams
+│   │   │       │   ├── protocols
+│   │   │       │   │   └── serde
+│   │   │       │   ├── schema
+│   │   │       │   │   ├── middleware
+│   │   │       │   │   └── schemas
+│   │   │       │   └── serde
+│   │   │       │       ├── schema-serde-lib
+│   │   │       │       └── value
+│   │   │       ├── ts3.4
+│   │   │       │   ├── middleware-http-auth-scheme
+│   │   │       │   ├── middleware-http-signing
+│   │   │       │   ├── pagination
+│   │   │       │   ├── request-builder
+│   │   │       │   ├── submodules
+│   │   │       │   │   ├── cbor
+│   │   │       │   │   ├── event-streams
+│   │   │       │   │   ├── protocols
+│   │   │       │   │   │   └── serde
+│   │   │       │   │   ├── schema
+│   │   │       │   │   │   ├── middleware
+│   │   │       │   │   │   └── schemas
+│   │   │       │   │   └── serde
+│   │   │       │   │       ├── schema-serde-lib
+│   │   │       │   │       └── value
+│   │   │       │   └── util-identity-and-auth
+│   │   │       │       └── httpAuthSchemes
+│   │   │       └── util-identity-and-auth
+│   │   │           └── httpAuthSchemes
+│   │   ├── credential-provider-imds
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   │   ├── config
+│   │   │   │   ├── error
+│   │   │   │   ├── remoteProvider
+│   │   │   │   └── utils
+│   │   │   └── dist-types
+│   │   │       ├── config
+│   │   │       ├── error
+│   │   │       ├── remoteProvider
+│   │   │       ├── ts3.4
+│   │   │       │   ├── config
+│   │   │       │   ├── error
+│   │   │       │   ├── remoteProvider
+│   │   │       │   └── utils
+│   │   │       └── utils
+│   │   ├── fetch-http-handler
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── hash-node
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── invalid-dependency
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── is-array-buffer
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── middleware-content-length
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── middleware-endpoint
+│   │   │   ├── dist-cjs
+│   │   │   │   └── adaptors
+│   │   │   ├── dist-es
+│   │   │   │   ├── adaptors
+│   │   │   │   └── service-customizations
+│   │   │   └── dist-types
+│   │   │       ├── adaptors
+│   │   │       ├── service-customizations
+│   │   │       └── ts3.4
+│   │   │           ├── adaptors
+│   │   │           └── service-customizations
+│   │   ├── middleware-retry
+│   │   │   ├── dist-cjs
+│   │   │   │   └── isStreamingPayload
+│   │   │   ├── dist-es
+│   │   │   │   └── isStreamingPayload
+│   │   │   └── dist-types
+│   │   │       ├── isStreamingPayload
+│   │   │       └── ts3.4
+│   │   │           └── isStreamingPayload
+│   │   ├── middleware-serde
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── middleware-stack
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── node-config-provider
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── node-http-handler
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   │   └── stream-collector
+│   │   │   └── dist-types
+│   │   │       ├── stream-collector
+│   │   │       └── ts3.4
+│   │   │           └── stream-collector
+│   │   ├── property-provider
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── protocol-http
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   │   └── extensions
+│   │   │   └── dist-types
+│   │   │       ├── extensions
+│   │   │       └── ts3.4
+│   │   │           └── extensions
+│   │   ├── querystring-builder
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── querystring-parser
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── service-error-classification
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── shared-ini-file-loader
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── signature-v4
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── smithy-client
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   │   └── extensions
+│   │   │   └── dist-types
+│   │   │       ├── extensions
+│   │   │       └── ts3.4
+│   │   │           └── extensions
+│   │   ├── types
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   │   ├── auth
+│   │   │   │   ├── blob
+│   │   │   │   ├── connection
+│   │   │   │   ├── downlevel-ts3.4
+│   │   │   │   │   └── transform
+│   │   │   │   ├── endpoints
+│   │   │   │   ├── extensions
+│   │   │   │   ├── externals-check
+│   │   │   │   ├── http
+│   │   │   │   ├── identity
+│   │   │   │   ├── schema
+│   │   │   │   ├── streaming-payload
+│   │   │   │   └── transform
+│   │   │   └── dist-types
+│   │   │       ├── auth
+│   │   │       ├── blob
+│   │   │       ├── connection
+│   │   │       ├── downlevel-ts3.4
+│   │   │       │   └── transform
+│   │   │       ├── endpoints
+│   │   │       ├── extensions
+│   │   │       ├── externals-check
+│   │   │       ├── http
+│   │   │       ├── identity
+│   │   │       ├── schema
+│   │   │       ├── streaming-payload
+│   │   │       ├── transform
+│   │   │       └── ts3.4
+│   │   │           ├── auth
+│   │   │           ├── blob
+│   │   │           ├── connection
+│   │   │           ├── downlevel-ts3.4
+│   │   │           │   └── transform
+│   │   │           ├── endpoints
+│   │   │           ├── extensions
+│   │   │           ├── externals-check
+│   │   │           ├── http
+│   │   │           ├── identity
+│   │   │           ├── schema
+│   │   │           ├── streaming-payload
+│   │   │           └── transform
+│   │   ├── url-parser
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-base64
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-body-length-browser
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-body-length-node
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-buffer-from
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-config-provider
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-defaults-mode-browser
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-defaults-mode-node
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-endpoints
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   │   ├── cache
+│   │   │   │   ├── debug
+│   │   │   │   ├── lib
+│   │   │   │   ├── types
+│   │   │   │   └── utils
+│   │   │   └── dist-types
+│   │   │       ├── cache
+│   │   │       ├── debug
+│   │   │       ├── lib
+│   │   │       ├── ts3.4
+│   │   │       │   ├── cache
+│   │   │       │   ├── debug
+│   │   │       │   ├── lib
+│   │   │       │   ├── types
+│   │   │       │   └── utils
+│   │   │       ├── types
+│   │   │       └── utils
+│   │   ├── util-hex-encoding
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-middleware
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-retry
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-stream
+│   │   │   ├── dist-cjs
+│   │   │   │   └── checksum
+│   │   │   ├── dist-es
+│   │   │   │   ├── blob
+│   │   │   │   └── checksum
+│   │   │   └── dist-types
+│   │   │       ├── blob
+│   │   │       ├── checksum
+│   │   │       └── ts3.4
+│   │   │           ├── blob
+│   │   │           └── checksum
+│   │   ├── util-uri-escape
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   ├── util-utf8
+│   │   │   ├── dist-cjs
+│   │   │   ├── dist-es
+│   │   │   └── dist-types
+│   │   │       └── ts3.4
+│   │   └── uuid
+│   │       ├── dist-cjs
+│   │       ├── dist-es
+│   │       └── dist-types
+│   │           └── ts3.4
+│   ├── source-map
+│   │   ├── dist
+│   │   └── lib
+│   ├── source-map-js
+│   │   └── lib
+│   ├── source-map-support
+│   ├── split2
+│   ├── statuses
+│   ├── string_decoder
+│   │   └── lib
+│   ├── string-width
+│   ├── string-width-cjs
+│   │   └── node_modules
+│   │       ├── ansi-regex
+│   │       ├── emoji-regex
+│   │       │   └── es2015
+│   │       └── strip-ansi
+│   ├── strip-ansi
+│   ├── strip-ansi-cjs
+│   │   └── node_modules
+│   │       └── ansi-regex
+│   ├── strip-json-comments
+│   ├── strnum
+│   ├── styled-jsx
+│   │   ├── dist
+│   │   │   ├── babel
+│   │   │   ├── index
+│   │   │   └── webpack
+│   │   └── lib
+│   ├── sucrase
+│   │   ├── bin
+│   │   ├── dist
+│   │   │   ├── esm
+│   │   │   │   ├── parser
+│   │   │   │   │   ├── plugins
+│   │   │   │   │   │   └── jsx
+│   │   │   │   │   ├── tokenizer
+│   │   │   │   │   ├── traverser
+│   │   │   │   │   └── util
+│   │   │   │   ├── transformers
+│   │   │   │   └── util
+│   │   │   ├── parser
+│   │   │   │   ├── plugins
+│   │   │   │   │   └── jsx
+│   │   │   │   ├── tokenizer
+│   │   │   │   ├── traverser
+│   │   │   │   └── util
+│   │   │   ├── transformers
+│   │   │   ├── types
+│   │   │   │   ├── parser
+│   │   │   │   │   ├── plugins
+│   │   │   │   │   │   └── jsx
+│   │   │   │   │   ├── tokenizer
+│   │   │   │   │   ├── traverser
+│   │   │   │   │   └── util
+│   │   │   │   ├── transformers
+│   │   │   │   └── util
+│   │   │   └── util
+│   │   ├── register
+│   │   └── ts-node-plugin
+│   ├── supports-preserve-symlinks-flag
+│   │   └── test
+│   ├── @swc
+│   │   └── helpers
+│   │       ├── _
+│   │       │   ├── _apply_decorated_descriptor
+│   │       │   ├── _apply_decs_2203_r
+│   │       │   ├── _array_like_to_array
+│   │       │   ├── _array_with_holes
+│   │       │   ├── _array_without_holes
+│   │       │   ├── _assert_this_initialized
+│   │       │   ├── _async_generator
+│   │       │   ├── _async_generator_delegate
+│   │       │   ├── _async_iterator
+│   │       │   ├── _async_to_generator
+│   │       │   ├── _await_async_generator
+│   │       │   ├── _await_value
+│   │       │   ├── _call_super
+│   │       │   ├── _check_private_redeclaration
+│   │       │   ├── _class_apply_descriptor_destructure
+│   │       │   ├── _class_apply_descriptor_get
+│   │       │   ├── _class_apply_descriptor_set
+│   │       │   ├── _class_apply_descriptor_update
+│   │       │   ├── _class_call_check
+│   │       │   ├── _class_check_private_static_access
+│   │       │   ├── _class_check_private_static_field_descriptor
+│   │       │   ├── _class_extract_field_descriptor
+│   │       │   ├── _class_name_tdz_error
+│   │       │   ├── _class_private_field_destructure
+│   │       │   ├── _class_private_field_get
+│   │       │   ├── _class_private_field_init
+│   │       │   ├── _class_private_field_loose_base
+│   │       │   ├── _class_private_field_loose_key
+│   │       │   ├── _class_private_field_set
+│   │       │   ├── _class_private_field_update
+│   │       │   ├── _class_private_method_get
+│   │       │   ├── _class_private_method_init
+│   │       │   ├── _class_private_method_set
+│   │       │   ├── _class_static_private_field_destructure
+│   │       │   ├── _class_static_private_field_spec_get
+│   │       │   ├── _class_static_private_field_spec_set
+│   │       │   ├── _class_static_private_field_update
+│   │       │   ├── _class_static_private_method_get
+│   │       │   ├── _construct
+│   │       │   ├── _create_class
+│   │       │   ├── _create_for_of_iterator_helper_loose
+│   │       │   ├── _create_super
+│   │       │   ├── _decorate
+│   │       │   ├── _defaults
+│   │       │   ├── _define_enumerable_properties
+│   │       │   ├── _define_property
+│   │       │   ├── _dispose
+│   │       │   ├── _export_star
+│   │       │   ├── _extends
+│   │       │   ├── _get
+│   │       │   ├── _get_prototype_of
+│   │       │   ├── _identity
+│   │       │   ├── index
+│   │       │   ├── _inherits
+│   │       │   ├── _inherits_loose
+│   │       │   ├── _initializer_define_property
+│   │       │   ├── _initializer_warning_helper
+│   │       │   ├── _instanceof
+│   │       │   ├── _interop_require_default
+│   │       │   ├── _interop_require_wildcard
+│   │       │   ├── _is_native_function
+│   │       │   ├── _is_native_reflect_construct
+│   │       │   ├── _iterable_to_array
+│   │       │   ├── _iterable_to_array_limit
+│   │       │   ├── _iterable_to_array_limit_loose
+│   │       │   ├── _jsx
+│   │       │   ├── _new_arrow_check
+│   │       │   ├── _non_iterable_rest
+│   │       │   ├── _non_iterable_spread
+│   │       │   ├── _object_destructuring_empty
+│   │       │   ├── _object_spread
+│   │       │   ├── _object_spread_props
+│   │       │   ├── _object_without_properties
+│   │       │   ├── _object_without_properties_loose
+│   │       │   ├── _possible_constructor_return
+│   │       │   ├── _read_only_error
+│   │       │   ├── _set
+│   │       │   ├── _set_prototype_of
+│   │       │   ├── _skip_first_generator_next
+│   │       │   ├── _sliced_to_array
+│   │       │   ├── _sliced_to_array_loose
+│   │       │   ├── _super_prop_base
+│   │       │   ├── _tagged_template_literal
+│   │       │   ├── _tagged_template_literal_loose
+│   │       │   ├── _throw
+│   │       │   ├── _to_array
+│   │       │   ├── _to_consumable_array
+│   │       │   ├── _to_primitive
+│   │       │   ├── _to_property_key
+│   │       │   ├── _ts_add_disposable_resource
+│   │       │   ├── _ts_decorate
+│   │       │   ├── _ts_dispose_resources
+│   │       │   ├── _ts_generator
+│   │       │   ├── _ts_metadata
+│   │       │   ├── _ts_param
+│   │       │   ├── _ts_values
+│   │       │   ├── _type_of
+│   │       │   ├── _unsupported_iterable_to_array
+│   │       │   ├── _update
+│   │       │   ├── _using
+│   │       │   ├── _using_ctx
+│   │       │   ├── _wrap_async_generator
+│   │       │   ├── _wrap_native_super
+│   │       │   └── _write_only_error
+│   │       ├── cjs
+│   │       ├── esm
+│   │       ├── scripts
+│   │       └── src
+│   ├── @tailwindcss
+│   │   ├── node
+│   │   │   ├── dist
+│   │   │   └── node_modules
+│   │   │       ├── jiti
+│   │   │       │   ├── dist
+│   │   │       │   └── lib
+│   │   │       └── tailwindcss
+│   │   │           └── dist
+│   │   ├── oxide
+│   │   ├── oxide-linux-x64-gnu
+│   │   ├── oxide-linux-x64-musl
+│   │   ├── typography
+│   │   │   ├── node_modules
+│   │   │   │   └── postcss-selector-parser
+│   │   │   │       └── dist
+│   │   │   │           ├── selectors
+│   │   │   │           └── util
+│   │   │   └── src
+│   │   └── vite
+│   │       ├── dist
+│   │       └── node_modules
+│   │           └── tailwindcss
+│   │               └── dist
+│   ├── tailwindcss
+│   │   ├── lib
+│   │   │   ├── cli
+│   │   │   │   ├── build
+│   │   │   │   ├── help
+│   │   │   │   └── init
+│   │   │   ├── css
+│   │   │   ├── lib
+│   │   │   ├── postcss-plugins
+│   │   │   │   └── nesting
+│   │   │   ├── public
+│   │   │   ├── util
+│   │   │   └── value-parser
+│   │   ├── nesting
+│   │   ├── peers
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   ├── cli
+│   │   │   │   ├── build
+│   │   │   │   ├── help
+│   │   │   │   └── init
+│   │   │   ├── css
+│   │   │   ├── lib
+│   │   │   ├── postcss-plugins
+│   │   │   │   └── nesting
+│   │   │   ├── public
+│   │   │   ├── util
+│   │   │   └── value-parser
+│   │   ├── stubs
+│   │   └── types
+│   │       └── generated
+│   ├── tailwindcss-animate
+│   ├── tailwind-merge
+│   │   ├── dist
+│   │   │   └── es5
+│   │   └── src
+│   │       └── lib
+│   ├── @tanstack
+│   │   ├── query-core
+│   │   │   ├── build
+│   │   │   │   ├── legacy
+│   │   │   │   └── modern
+│   │   │   └── src
+│   │   └── react-query
+│   │       ├── build
+│   │       │   ├── codemods
+│   │       │   │   └── src
+│   │       │   │       ├── utils
+│   │       │   │       │   └── transformers
+│   │       │   │       ├── v4
+│   │       │   │       │   └── utils
+│   │       │   │       │       └── replacers
+│   │       │   │       └── v5
+│   │       │   │           ├── is-loading
+│   │       │   │           ├── keep-previous-data
+│   │       │   │           │   └── utils
+│   │       │   │           ├── remove-overloads
+│   │       │   │           │   ├── transformers
+│   │       │   │           │   └── utils
+│   │       │   │           ├── rename-hydrate
+│   │       │   │           └── rename-properties
+│   │       │   ├── legacy
+│   │       │   ├── modern
+│   │       │   └── query-codemods
+│   │       └── src
+│   ├── tapable
+│   │   └── lib
+│   ├── tar
+│   │   ├── lib
+│   │   └── node_modules
+│   │       ├── chownr
+│   │       ├── minipass
+│   │       └── yallist
+│   ├── tar-fs
+│   │   └── test
+│   │       └── fixtures
+│   │           ├── a
+│   │           ├── b
+│   │           │   └── a
+│   │           ├── d
+│   │           │   ├── sub-dir
+│   │           │   └── sub-files
+│   │           └── e
+│   │               └── directory
+│   ├── tar-stream
+│   ├── thenify
+│   ├── thenify-all
+│   ├── tiny-invariant
+│   │   ├── dist
+│   │   │   └── esm
+│   │   └── src
+│   ├── toidentifier
+│   ├── to-regex-range
+│   ├── tr46
+│   │   └── lib
+│   ├── ts-algebra
+│   │   └── lib
+│   │       ├── meta-types
+│   │       │   ├── exclusion
+│   │       │   └── intersection
+│   │       └── utils
+│   ├── ts-interface-checker
+│   │   └── dist
+│   ├── tslib
+│   │   └── modules
+│   ├── tsx
+│   │   └── dist
+│   │       ├── cjs
+│   │       │   └── api
+│   │       └── esm
+│   │           └── api
+│   ├── tunnel-agent
+│   ├── tw-animate-css
+│   │   └── dist
+│   ├── type-is
+│   ├── @types
+│   │   ├── babel__core
+│   │   ├── babel__generator
+│   │   ├── babel__template
+│   │   ├── babel__traverse
+│   │   ├── bcrypt
+│   │   ├── better-sqlite3
+│   │   ├── body-parser
+│   │   ├── connect
+│   │   ├── connect-pg-simple
+│   │   ├── d3-array
+│   │   ├── d3-color
+│   │   ├── d3-ease
+│   │   ├── d3-interpolate
+│   │   ├── d3-path
+│   │   ├── d3-scale
+│   │   ├── d3-shape
+│   │   ├── d3-time
+│   │   ├── d3-timer
+│   │   ├── estree
+│   │   ├── express
+│   │   ├── express-serve-static-core
+│   │   ├── express-session
+│   │   ├── http-errors
+│   │   ├── jsonwebtoken
+│   │   ├── mime
+│   │   ├── ms
+│   │   ├── node
+│   │   │   ├── assert
+│   │   │   ├── dns
+│   │   │   ├── fs
+│   │   │   ├── readline
+│   │   │   ├── stream
+│   │   │   ├── timers
+│   │   │   └── ts5.6
+│   │   ├── nodemailer
+│   │   │   └── lib
+│   │   │       ├── addressparser
+│   │   │       ├── base64
+│   │   │       ├── dkim
+│   │   │       ├── fetch
+│   │   │       ├── json-transport
+│   │   │       ├── mail-composer
+│   │   │       ├── mailer
+│   │   │       ├── mime-funcs
+│   │   │       ├── mime-node
+│   │   │       ├── qp
+│   │   │       ├── sendmail-transport
+│   │   │       ├── ses-transport
+│   │   │       ├── shared
+│   │   │       ├── smtp-connection
+│   │   │       ├── smtp-pool
+│   │   │       ├── smtp-transport
+│   │   │       ├── stream-transport
+│   │   │       ├── well-known
+│   │   │       └── xoauth2
+│   │   ├── passport
+│   │   ├── passport-local
+│   │   ├── passport-strategy
+│   │   ├── pg
+│   │   │   └── lib
+│   │   ├── prop-types
+│   │   ├── qs
+│   │   ├── range-parser
+│   │   ├── react
+│   │   │   └── ts5.0
+│   │   ├── react-dom
+│   │   │   └── test-utils
+│   │   ├── send
+│   │   ├── serve-static
+│   │   └── ws
+│   ├── typescript
+│   │   ├── bin
+│   │   └── lib
+│   │       ├── cs
+│   │       ├── de
+│   │       ├── es
+│   │       ├── fr
+│   │       ├── it
+│   │       ├── ja
+│   │       ├── ko
+│   │       ├── pl
+│   │       ├── pt-br
+│   │       ├── ru
+│   │       ├── tr
+│   │       ├── zh-cn
+│   │       └── zh-tw
+│   ├── uid-safe
+│   ├── undici-types
+│   ├── unpipe
+│   ├── update-browserslist-db
+│   ├── use-callback-ref
+│   │   └── dist
+│   │       ├── es2015
+│   │       ├── es2019
+│   │       └── es5
+│   ├── use-sidecar
+│   │   └── dist
+│   │       ├── es2015
+│   │       ├── es2019
+│   │       └── es5
+│   ├── use-sync-external-store
+│   │   ├── cjs
+│   │   │   └── use-sync-external-store-shim
+│   │   └── shim
+│   ├── util-deprecate
+│   ├── utils-merge
+│   ├── vary
+│   ├── vaul
+│   │   └── dist
+│   ├── victory-vendor
+│   │   ├── es
+│   │   ├── lib
+│   │   └── lib-vendor
+│   │       ├── d3-array
+│   │       │   └── src
+│   │       │       └── threshold
+│   │       ├── d3-color
+│   │       │   └── src
+│   │       ├── d3-ease
+│   │       │   └── src
+│   │       ├── d3-format
+│   │       │   └── src
+│   │       ├── d3-interpolate
+│   │       │   └── src
+│   │       │       └── transform
+│   │       ├── d3-path
+│   │       │   └── src
+│   │       ├── d3-scale
+│   │       │   └── src
+│   │       ├── d3-shape
+│   │       │   └── src
+│   │       │       ├── curve
+│   │       │       ├── offset
+│   │       │       ├── order
+│   │       │       └── symbol
+│   │       ├── d3-time
+│   │       │   └── src
+│   │       ├── d3-time-format
+│   │       │   └── src
+│   │       ├── d3-timer
+│   │       │   └── src
+│   │       ├── d3-voronoi
+│   │       │   └── src
+│   │       └── internmap
+│   │           └── src
+│   ├── vite
+│   │   ├── bin
+│   │   ├── dist
+│   │   │   ├── client
+│   │   │   ├── node
+│   │   │   │   └── chunks
+│   │   │   └── node-cjs
+│   │   ├── node_modules
+│   │   │   ├── @esbuild
+│   │   │   │   └── linux-x64
+│   │   │   │       └── bin
+│   │   │   └── esbuild
+│   │   │       ├── bin
+│   │   │       └── lib
+│   │   └── types
+│   ├── @vitejs
+│   │   └── plugin-react
+│   │       └── dist
+│   ├── webidl-conversions
+│   │   └── lib
+│   ├── whatwg-url
+│   │   └── lib
+│   ├── which
+│   │   └── bin
+│   ├── wide-align
+│   │   └── node_modules
+│   │       ├── ansi-regex
+│   │       ├── emoji-regex
+│   │       │   └── es2015
+│   │       ├── string-width
+│   │       └── strip-ansi
+│   ├── wordwrap
+│   │   ├── example
+│   │   └── test
+│   ├── wouter
+│   │   ├── esm
+│   │   └── types
+│   ├── wrap-ansi
+│   ├── wrap-ansi-cjs
+│   │   └── node_modules
+│   │       ├── ansi-regex
+│   │       ├── ansi-styles
+│   │       ├── emoji-regex
+│   │       │   └── es2015
+│   │       ├── string-width
+│   │       └── strip-ansi
+│   ├── wrappy
+│   ├── ws
+│   │   └── lib
+│   ├── xtend
+│   ├── yallist
+│   ├── yaml
+│   │   ├── browser
+│   │   │   └── dist
+│   │   │       ├── compose
+│   │   │       ├── doc
+│   │   │       ├── nodes
+│   │   │       ├── parse
+│   │   │       ├── schema
+│   │   │       │   ├── common
+│   │   │       │   ├── core
+│   │   │       │   ├── json
+│   │   │       │   └── yaml-1.1
+│   │   │       └── stringify
+│   │   └── dist
+│   │       ├── compose
+│   │       ├── doc
+│   │       ├── nodes
+│   │       ├── parse
+│   │       ├── schema
+│   │       │   ├── common
+│   │       │   ├── core
+│   │       │   ├── json
+│   │       │   └── yaml-1.1
+│   │       └── stringify
+│   ├── zod
+│   │   ├── src
+│   │   │   ├── v3
+│   │   │   │   ├── benchmarks
+│   │   │   │   ├── helpers
+│   │   │   │   ├── locales
+│   │   │   │   └── tests
+│   │   │   ├── v4
+│   │   │   │   ├── classic
+│   │   │   │   │   └── tests
+│   │   │   │   ├── core
+│   │   │   │   │   └── tests
+│   │   │   │   │       └── locales
+│   │   │   │   ├── locales
+│   │   │   │   └── mini
+│   │   │   │       └── tests
+│   │   │   └── v4-mini
+│   │   ├── v3
+│   │   │   ├── helpers
+│   │   │   └── locales
+│   │   ├── v4
+│   │   │   ├── classic
+│   │   │   ├── core
+│   │   │   ├── locales
+│   │   │   └── mini
+│   │   └── v4-mini
+│   └── zod-validation-error
+│       └── dist
+├── ops
+│   └── cronjobs
+├── packaging
+│   ├── chocolatey
+│   ├── ci
+│   └── wix
+├── packs
+│   ├── data
+│   │   ├── gov
+│   │   ├── plugins
+│   │   │   └── packages
+│   │   │       └── acme.test
+│   │   │           └── 0.1.0
+│   │   ├── queue
+│   │   │   └── requests
+│   │   ├── security
+│   │   └── vfs
+│   │       ├── testmodpack
+│   │       └── test_runtime_pack
+│   ├── pack01_pack01
+│   │   ├── core
+│   │   ├── data
+│   │   ├── logs
+│   │   └── tests
+│   ├── pack02_env_profiler
+│   │   ├── core
+│   │   ├── logs
+│   │   ├── profiler
+│   │   └── tests
+│   ├── pack03_os_edge
+│   │   ├── automotive
+│   │   │   └── core
+│   │   ├── aviation
+│   │   │   ├── core
+│   │   │   └── rtos_partition
+│   │   ├── build
+│   │   │   ├── core
+│   │   │   ├── sample_linux-sbc
+│   │   │   └── sample_virtual
+│   │   ├── core
+│   │   ├── data
+│   │   │   └── vfs
+│   │   │       └── acme.testpkg
+│   │   ├── install_hooks
+│   │   ├── iot
+│   │   │   ├── core
+│   │   │   └── esp32
+│   │   │       └── firmware
+│   │   ├── logs
+│   │   ├── maritime
+│   │   │   └── core
+│   │   ├── mobile
+│   │   │   ├── android
+│   │   │   ├── core
+│   │   │   ├── ios
+│   │   │   └── termux
+│   │   ├── router
+│   │   │   └── core
+│   │   ├── satellite
+│   │   │   ├── companion
+│   │   │   ├── core
+│   │   │   └── ground
+│   │   ├── tests
+│   │   └── tv
+│   │       ├── android_tv
+│   │       ├── core
+│   │       ├── tizen
+│   │       └── webos
+│   ├── pack04_launcher
+│   │   ├── core
+│   │   ├── data
+│   │   ├── install_hooks
+│   │   ├── logs
+│   │   └── tests
+│   ├── pack05_plugin_system
+│   │   ├── capability_system
+│   │   │   └── core
+│   │   ├── diagnostics
+│   │   │   └── core
+│   │   ├── event_hooks
+│   │   │   └── core
+│   │   ├── permissions_resolver
+│   │   │   └── core
+│   │   ├── plugin_api
+│   │   │   ├── core
+│   │   │   ├── logs
+│   │   │   └── tests
+│   │   ├── plugin_loader
+│   │   │   ├── core
+│   │   │   ├── data
+│   │   │   │   ├── policies
+│   │   │   │   └── staged
+│   │   │   │       └── acme.testpkg
+│   │   │   ├── loader
+│   │   │   ├── logs
+│   │   │   └── tests
+│   │   ├── plugin_store
+│   │   │   └── core
+│   │   ├── state_persistence
+│   │   │   └── core
+│   │   ├── test_framework
+│   │   │   └── core
+│   │   └── versioning_upgrades
+│   │       └── core
+│   ├── pack06_firmware_system
+│   │   ├── capabilities
+│   │   ├── core
+│   │   ├── data
+│   │   ├── logs
+│   │   ├── tests
+│   │   └── workflows
+│   ├── pack07_secure_signing
+│   │   ├── capabilities
+│   │   ├── core
+│   │   ├── data
+│   │   ├── logs
+│   │   ├── tests
+│   │   └── workflows
+│   ├── pack08_conversational_engine
+│   │   ├── capabilities
+│   │   ├── core
+│   │   ├── data
+│   │   ├── logs
+│   │   ├── tests
+│   │   └── workflows
+│   ├── pack09_compute_layer
+│   │   ├── capabilities
+│   │   ├── core
+│   │   ├── data
+│   │   ├── logs
+│   │   ├── tests
+│   │   └── workflows
+│   ├── pack10_autonomy_engine
+│   │   ├── capabilities
+│   │   ├── core
+│   │   ├── logs
+│   │   ├── tests
+│   │   └── workflows
+│   ├── pack11_device_mesh
+│   │   ├── capabilities
+│   │   ├── core
+│   │   ├── logs
+│   │   ├── tests
+│   │   └── workflows
+│   ├── pack12_toolforge
+│   │   ├── capabilities
+│   │   ├── core
+│   │   ├── logs
+│   │   ├── tests
+│   │   └── workflows
+│   ├── pack13_runtime_2
+│   │   ├── capabilities
+│   │   ├── core
+│   │   ├── logs
+│   │   ├── tests
+│   │   └── workflows
+│   ├── pack14_hw_abstraction
+│   │   ├── capabilities
+│   │   ├── core
+│   │   ├── logs
+│   │   ├── tests
+│   │   └── workflows
+│   ├── pack15_intel_fabric
+│   │   ├── capabilities
+│   │   ├── core
+│   │   ├── logs
+│   │   ├── tests
+│   │   └── workflows
+│   └── __pycache__
+├── pack_zips
+├── patches
+├── __pycache__
+├── router
+├── satellite
+│   ├── companion
+│   └── ground
+├── scripts
+├── server
+│   └── services
+├── shared
+├── signing
+├── sign_tools
+├── testbench
+├── tests
+├── tools
+│   ├── device_test_helpers
+│   └── __pycache__
+├── tv
+│   ├── android_tv
+│   ├── tizen
+│   └── webos
+├── ui
+│   └── quantum_ui
+│       └── static
+├── unused-components
+│   ├── external-apis
+│   └── unused
+│       └── html_archive
+│           ├── attached_assets
+│           ├── aurora_x
+│           │   ├── runs
+│           │   │   └── run-20251012-152555
+│           │   │       └── frontend
+│           │   │           └── public
+│           │   ├── static
+│           │   └── templates
+│           ├── backups
+│           │   ├── aurora_backup_20251012_143539
+│           │   │   └── runs
+│           │   │       ├── latest
+│           │   │       ├── run-20251006-081837
+│           │   │       ├── run-20251006-082801
+│           │   │       ├── run-20251006-084421
+│           │   │       ├── run-20251006-102821
+│           │   │       ├── run-20251009-212809
+│           │   │       ├── run-20251009-223233
+│           │   │       ├── run-20251009-223904
+│           │   │       ├── run-20251009-223905
+│           │   │       ├── run-20251009-224247
+│           │   │       ├── run-20251009-224257
+│           │   │       ├── run-20251009-224258
+│           │   │       ├── run-20251009-224259
+│           │   │       ├── run-20251009-224333
+│           │   │       ├── run-20251009-224744
+│           │   │       ├── run-20251009-224757
+│           │   │       ├── run-20251009-230508
+│           │   │       ├── run-20251009-230511
+│           │   │       ├── run-20251009-230537
+│           │   │       ├── run-20251009-230554
+│           │   │       ├── run-20251009-230604
+│           │   │       ├── run-20251009-230606
+│           │   │       ├── run-20251009-231411
+│           │   │       ├── run-20251009-231441
+│           │   │       ├── run-20251009-232903
+│           │   │       ├── run-20251009-232904
+│           │   │       ├── run-20251010-001400
+│           │   │       ├── run-20251010-001401
+│           │   │       ├── run-20251010-021708
+│           │   │       ├── run-20251010-021752
+│           │   │       ├── run-20251010-021806
+│           │   │       ├── run-20251010-021817
+│           │   │       ├── run-20251010-025042
+│           │   │       ├── run-20251010-025052
+│           │   │       ├── run-20251010-054355
+│           │   │       ├── run-20251010-054401
+│           │   │       ├── run-20251010-054447
+│           │   │       ├── run-20251010-054519
+│           │   │       ├── run-20251010-054624
+│           │   │       ├── run-20251010-054636
+│           │   │       ├── run-20251010-054708
+│           │   │       ├── run-20251010-054709
+│           │   │       ├── run-20251010-054711
+│           │   │       ├── run-20251010-054712
+│           │   │       ├── run-20251010-054713
+│           │   │       ├── run-20251010-054715
+│           │   │       ├── run-20251010-054716
+│           │   │       ├── run-20251010-054718
+│           │   │       ├── run-20251010-054719
+│           │   │       ├── run-20251010-054720
+│           │   │       ├── run-20251010-055725
+│           │   │       ├── run-20251010-060029
+│           │   │       ├── run-20251010-060150
+│           │   │       ├── run-20251010-063457
+│           │   │       ├── run-20251010-063458
+│           │   │       ├── run-20251010-063459
+│           │   │       ├── run-20251010-063500
+│           │   │       ├── run-20251010-063501
+│           │   │       ├── run-20251010-063502
+│           │   │       ├── run-20251010-063552
+│           │   │       ├── run-20251010-063553
+│           │   │       ├── run-20251010-063554
+│           │   │       ├── run-20251010-063555
+│           │   │       ├── run-20251010-063556
+│           │   │       ├── run-20251010-063557
+│           │   │       ├── run-20251010-063558
+│           │   │       ├── run-20251010-063559
+│           │   │       ├── run-20251010-063600
+│           │   │       ├── run-20251010-063640
+│           │   │       ├── run-20251010-063641
+│           │   │       ├── run-20251010-063642
+│           │   │       ├── run-20251010-063644
+│           │   │       ├── run-20251010-063645
+│           │   │       ├── run-20251010-063646
+│           │   │       ├── run-20251010-063647
+│           │   │       ├── run-20251010-063648
+│           │   │       ├── run-20251010-063649
+│           │   │       ├── run-20251010-063650
+│           │   │       ├── run-20251010-063652
+│           │   │       ├── run-20251010-063653
+│           │   │       ├── run-20251010-063654
+│           │   │       ├── run-20251010-063655
+│           │   │       ├── run-20251010-063656
+│           │   │       ├── run-20251010-063657
+│           │   │       ├── run-20251010-063658
+│           │   │       ├── run-20251010-063659
+│           │   │       ├── run-20251010-063700
+│           │   │       ├── run-20251010-063701
+│           │   │       ├── run-20251010-063702
+│           │   │       ├── run-20251010-063703
+│           │   │       ├── run-20251010-063704
+│           │   │       ├── run-20251010-063705
+│           │   │       ├── run-20251010-063745
+│           │   │       ├── run-20251010-063746
+│           │   │       ├── run-20251010-063747
+│           │   │       ├── run-20251010-063748
+│           │   │       ├── run-20251010-063749
+│           │   │       ├── run-20251010-063750
+│           │   │       ├── run-20251010-063751
+│           │   │       ├── run-20251010-063752
+│           │   │       ├── run-20251010-063753
+│           │   │       ├── run-20251010-063754
+│           │   │       ├── run-20251010-165503
+│           │   │       ├── run-20251010-170117
+│           │   │       ├── run-20251010-170147
+│           │   │       ├── run-20251011-014843
+│           │   │       ├── run-20251011-014904
+│           │   │       ├── run-20251011-015031
+│           │   │       ├── run-20251011-015231
+│           │   │       ├── run-20251011-015947
+│           │   │       ├── run-20251011-020002
+│           │   │       ├── run-20251011-020015
+│           │   │       ├── run-20251011-020044
+│           │   │       ├── run-20251011-020051
+│           │   │       ├── run-20251011-020134
+│           │   │       ├── run-20251011-020214
+│           │   │       ├── run-20251011-020215
+│           │   │       ├── run-20251011-020327
+│           │   │       ├── run-20251011-020418
+│           │   │       ├── run-20251011-020457
+│           │   │       ├── run-20251011-021102
+│           │   │       ├── run-20251011-021145
+│           │   │       ├── run-20251011-021224
+│           │   │       ├── run-20251011-021505
+│           │   │       ├── run-20251011-023117
+│           │   │       ├── run-20251011-023524
+│           │   │       ├── run-20251011-023741
+│           │   │       ├── run-20251011-025025
+│           │   │       ├── run-20251011-025105
+│           │   │       ├── run-20251011-025437
+│           │   │       ├── run-20251011-025503
+│           │   │       ├── run-20251011-025843
+│           │   │       ├── run-20251011-025900
+│           │   │       ├── run-20251011-030150
+│           │   │       ├── run-20251011-030151
+│           │   │       ├── run-20251011-030152
+│           │   │       ├── run-20251011-030216
+│           │   │       ├── run-20251011-030217
+│           │   │       ├── run-20251011-030219
+│           │   │       ├── run-20251011-030226
+│           │   │       ├── run-20251011-030248
+│           │   │       ├── run-20251011-030249
+│           │   │       ├── run-20251011-030632
+│           │   │       ├── run-20251011-065523
+│           │   │       ├── run-20251011-171523
+│           │   │       ├── run-20251012-031656
+│           │   │       ├── run-20251012-034250
+│           │   │       ├── run-20251012-034434
+│           │   │       ├── run-20251012-034716
+│           │   │       ├── run-20251012-034747
+│           │   │       ├── run-20251012-034748
+│           │   │       ├── run-20251012-034859
+│           │   │       ├── run-20251012-035605
+│           │   │       ├── run-20251012-040427
+│           │   │       ├── run-20251012-084111
+│           │   │       ├── run-20251012-084121
+│           │   │       ├── run-20251012-084611
+│           │   │       ├── run-20251012-090804
+│           │   │       ├── run-20251012-090815
+│           │   │       ├── run-20251012-090920
+│           │   │       ├── run-20251012-091122
+│           │   │       ├── run-20251012-141235
+│           │   │       ├── run-20251012-141356
+│           │   │       ├── run-20251012-141414
+│           │   │       └── run-20251012-142356
+│           │   ├── aurora_backup_20251012_143542
+│           │   │   └── runs
+│           │   │       ├── latest
+│           │   │       ├── run-20251006-081837
+│           │   │       ├── run-20251006-082801
+│           │   │       ├── run-20251006-084421
+│           │   │       ├── run-20251006-102821
+│           │   │       ├── run-20251009-212809
+│           │   │       ├── run-20251009-223233
+│           │   │       ├── run-20251009-223904
+│           │   │       ├── run-20251009-223905
+│           │   │       ├── run-20251009-224247
+│           │   │       ├── run-20251009-224257
+│           │   │       ├── run-20251009-224258
+│           │   │       ├── run-20251009-224259
+│           │   │       ├── run-20251009-224333
+│           │   │       ├── run-20251009-224744
+│           │   │       ├── run-20251009-224757
+│           │   │       ├── run-20251009-230508
+│           │   │       ├── run-20251009-230511
+│           │   │       ├── run-20251009-230537
+│           │   │       ├── run-20251009-230554
+│           │   │       ├── run-20251009-230604
+│           │   │       ├── run-20251009-230606
+│           │   │       ├── run-20251009-231411
+│           │   │       ├── run-20251009-231441
+│           │   │       ├── run-20251009-232903
+│           │   │       ├── run-20251009-232904
+│           │   │       ├── run-20251010-001400
+│           │   │       ├── run-20251010-001401
+│           │   │       ├── run-20251010-021708
+│           │   │       ├── run-20251010-021752
+│           │   │       ├── run-20251010-021806
+│           │   │       ├── run-20251010-021817
+│           │   │       ├── run-20251010-025042
+│           │   │       ├── run-20251010-025052
+│           │   │       ├── run-20251010-054355
+│           │   │       ├── run-20251010-054401
+│           │   │       ├── run-20251010-054447
+│           │   │       ├── run-20251010-054519
+│           │   │       ├── run-20251010-054624
+│           │   │       ├── run-20251010-054636
+│           │   │       ├── run-20251010-054708
+│           │   │       ├── run-20251010-054709
+│           │   │       ├── run-20251010-054711
+│           │   │       ├── run-20251010-054712
+│           │   │       ├── run-20251010-054713
+│           │   │       ├── run-20251010-054715
+│           │   │       ├── run-20251010-054716
+│           │   │       ├── run-20251010-054718
+│           │   │       ├── run-20251010-054719
+│           │   │       ├── run-20251010-054720
+│           │   │       ├── run-20251010-055725
+│           │   │       ├── run-20251010-060029
+│           │   │       ├── run-20251010-060150
+│           │   │       ├── run-20251010-063457
+│           │   │       ├── run-20251010-063458
+│           │   │       ├── run-20251010-063459
+│           │   │       ├── run-20251010-063500
+│           │   │       ├── run-20251010-063501
+│           │   │       ├── run-20251010-063502
+│           │   │       ├── run-20251010-063552
+│           │   │       ├── run-20251010-063553
+│           │   │       ├── run-20251010-063554
+│           │   │       ├── run-20251010-063555
+│           │   │       ├── run-20251010-063556
+│           │   │       ├── run-20251010-063557
+│           │   │       ├── run-20251010-063558
+│           │   │       ├── run-20251010-063559
+│           │   │       ├── run-20251010-063600
+│           │   │       ├── run-20251010-063640
+│           │   │       ├── run-20251010-063641
+│           │   │       ├── run-20251010-063642
+│           │   │       ├── run-20251010-063644
+│           │   │       ├── run-20251010-063645
+│           │   │       ├── run-20251010-063646
+│           │   │       ├── run-20251010-063647
+│           │   │       ├── run-20251010-063648
+│           │   │       ├── run-20251010-063649
+│           │   │       ├── run-20251010-063650
+│           │   │       ├── run-20251010-063652
+│           │   │       ├── run-20251010-063653
+│           │   │       ├── run-20251010-063654
+│           │   │       ├── run-20251010-063655
+│           │   │       ├── run-20251010-063656
+│           │   │       ├── run-20251010-063657
+│           │   │       ├── run-20251010-063658
+│           │   │       ├── run-20251010-063659
+│           │   │       ├── run-20251010-063700
+│           │   │       ├── run-20251010-063701
+│           │   │       ├── run-20251010-063702
+│           │   │       ├── run-20251010-063703
+│           │   │       ├── run-20251010-063704
+│           │   │       ├── run-20251010-063705
+│           │   │       ├── run-20251010-063745
+│           │   │       ├── run-20251010-063746
+│           │   │       ├── run-20251010-063747
+│           │   │       ├── run-20251010-063748
+│           │   │       ├── run-20251010-063749
+│           │   │       ├── run-20251010-063750
+│           │   │       ├── run-20251010-063751
+│           │   │       ├── run-20251010-063752
+│           │   │       ├── run-20251010-063753
+│           │   │       ├── run-20251010-063754
+│           │   │       ├── run-20251010-165503
+│           │   │       ├── run-20251010-170117
+│           │   │       ├── run-20251010-170147
+│           │   │       ├── run-20251011-014843
+│           │   │       ├── run-20251011-014904
+│           │   │       ├── run-20251011-015031
+│           │   │       ├── run-20251011-015231
+│           │   │       ├── run-20251011-015947
+│           │   │       ├── run-20251011-020002
+│           │   │       ├── run-20251011-020015
+│           │   │       ├── run-20251011-020044
+│           │   │       ├── run-20251011-020051
+│           │   │       ├── run-20251011-020134
+│           │   │       ├── run-20251011-020214
+│           │   │       ├── run-20251011-020215
+│           │   │       ├── run-20251011-020327
+│           │   │       ├── run-20251011-020418
+│           │   │       ├── run-20251011-020457
+│           │   │       ├── run-20251011-021102
+│           │   │       ├── run-20251011-021145
+│           │   │       ├── run-20251011-021224
+│           │   │       ├── run-20251011-021505
+│           │   │       ├── run-20251011-023117
+│           │   │       ├── run-20251011-023524
+│           │   │       ├── run-20251011-023741
+│           │   │       ├── run-20251011-025025
+│           │   │       ├── run-20251011-025105
+│           │   │       ├── run-20251011-025437
+│           │   │       ├── run-20251011-025503
+│           │   │       ├── run-20251011-025843
+│           │   │       ├── run-20251011-025900
+│           │   │       ├── run-20251011-030150
+│           │   │       ├── run-20251011-030151
+│           │   │       ├── run-20251011-030152
+│           │   │       ├── run-20251011-030216
+│           │   │       ├── run-20251011-030217
+│           │   │       ├── run-20251011-030219
+│           │   │       ├── run-20251011-030226
+│           │   │       ├── run-20251011-030248
+│           │   │       ├── run-20251011-030249
+│           │   │       ├── run-20251011-030632
+│           │   │       ├── run-20251011-065523
+│           │   │       ├── run-20251011-171523
+│           │   │       ├── run-20251012-031656
+│           │   │       ├── run-20251012-034250
+│           │   │       ├── run-20251012-034434
+│           │   │       ├── run-20251012-034716
+│           │   │       ├── run-20251012-034747
+│           │   │       ├── run-20251012-034748
+│           │   │       ├── run-20251012-034859
+│           │   │       ├── run-20251012-035605
+│           │   │       ├── run-20251012-040427
+│           │   │       ├── run-20251012-084111
+│           │   │       ├── run-20251012-084121
+│           │   │       ├── run-20251012-084611
+│           │   │       ├── run-20251012-090804
+│           │   │       ├── run-20251012-090815
+│           │   │       ├── run-20251012-090920
+│           │   │       ├── run-20251012-091122
+│           │   │       ├── run-20251012-141235
+│           │   │       ├── run-20251012-141356
+│           │   │       ├── run-20251012-141414
+│           │   │       └── run-20251012-142356
+│           │   └── aurora_backup_20251012_143639
+│           │       └── runs
+│           │           ├── latest
+│           │           ├── run-20251006-081837
+│           │           ├── run-20251006-082801
+│           │           ├── run-20251006-084421
+│           │           ├── run-20251006-102821
+│           │           ├── run-20251009-212809
+│           │           ├── run-20251009-223233
+│           │           ├── run-20251009-223904
+│           │           ├── run-20251009-223905
+│           │           ├── run-20251009-224247
+│           │           ├── run-20251009-224257
+│           │           ├── run-20251009-224258
+│           │           ├── run-20251009-224259
+│           │           ├── run-20251009-224333
+│           │           ├── run-20251009-224744
+│           │           ├── run-20251009-224757
+│           │           ├── run-20251009-230508
+│           │           ├── run-20251009-230511
+│           │           ├── run-20251009-230537
+│           │           ├── run-20251009-230554
+│           │           ├── run-20251009-230604
+│           │           ├── run-20251009-230606
+│           │           ├── run-20251009-231411
+│           │           ├── run-20251009-231441
+│           │           ├── run-20251009-232903
+│           │           ├── run-20251009-232904
+│           │           ├── run-20251010-001400
+│           │           ├── run-20251010-001401
+│           │           ├── run-20251010-021708
+│           │           ├── run-20251010-021752
+│           │           ├── run-20251010-021806
+│           │           ├── run-20251010-021817
+│           │           ├── run-20251010-025042
+│           │           ├── run-20251010-025052
+│           │           ├── run-20251010-054355
+│           │           ├── run-20251010-054401
+│           │           ├── run-20251010-054447
+│           │           ├── run-20251010-054519
+│           │           ├── run-20251010-054624
+│           │           ├── run-20251010-054636
+│           │           ├── run-20251010-054708
+│           │           ├── run-20251010-054709
+│           │           ├── run-20251010-054711
+│           │           ├── run-20251010-054712
+│           │           ├── run-20251010-054713
+│           │           ├── run-20251010-054715
+│           │           ├── run-20251010-054716
+│           │           ├── run-20251010-054718
+│           │           ├── run-20251010-054719
+│           │           ├── run-20251010-054720
+│           │           ├── run-20251010-055725
+│           │           ├── run-20251010-060029
+│           │           ├── run-20251010-060150
+│           │           ├── run-20251010-063457
+│           │           ├── run-20251010-063458
+│           │           ├── run-20251010-063459
+│           │           ├── run-20251010-063500
+│           │           ├── run-20251010-063501
+│           │           ├── run-20251010-063502
+│           │           ├── run-20251010-063552
+│           │           ├── run-20251010-063553
+│           │           ├── run-20251010-063554
+│           │           ├── run-20251010-063555
+│           │           ├── run-20251010-063556
+│           │           ├── run-20251010-063557
+│           │           ├── run-20251010-063558
+│           │           ├── run-20251010-063559
+│           │           ├── run-20251010-063600
+│           │           ├── run-20251010-063640
+│           │           ├── run-20251010-063641
+│           │           ├── run-20251010-063642
+│           │           ├── run-20251010-063644
+│           │           ├── run-20251010-063645
+│           │           ├── run-20251010-063646
+│           │           ├── run-20251010-063647
+│           │           ├── run-20251010-063648
+│           │           ├── run-20251010-063649
+│           │           ├── run-20251010-063650
+│           │           ├── run-20251010-063652
+│           │           ├── run-20251010-063653
+│           │           ├── run-20251010-063654
+│           │           ├── run-20251010-063655
+│           │           ├── run-20251010-063656
+│           │           ├── run-20251010-063657
+│           │           ├── run-20251010-063658
+│           │           ├── run-20251010-063659
+│           │           ├── run-20251010-063700
+│           │           ├── run-20251010-063701
+│           │           ├── run-20251010-063702
+│           │           ├── run-20251010-063703
+│           │           ├── run-20251010-063704
+│           │           ├── run-20251010-063705
+│           │           ├── run-20251010-063745
+│           │           ├── run-20251010-063746
+│           │           ├── run-20251010-063747
+│           │           ├── run-20251010-063748
+│           │           ├── run-20251010-063749
+│           │           ├── run-20251010-063750
+│           │           ├── run-20251010-063751
+│           │           ├── run-20251010-063752
+│           │           ├── run-20251010-063753
+│           │           ├── run-20251010-063754
+│           │           ├── run-20251010-165503
+│           │           ├── run-20251010-170117
+│           │           ├── run-20251010-170147
+│           │           ├── run-20251011-014843
+│           │           ├── run-20251011-014904
+│           │           ├── run-20251011-015031
+│           │           ├── run-20251011-015231
+│           │           ├── run-20251011-015947
+│           │           ├── run-20251011-020002
+│           │           ├── run-20251011-020015
+│           │           ├── run-20251011-020044
+│           │           ├── run-20251011-020051
+│           │           ├── run-20251011-020134
+│           │           ├── run-20251011-020214
+│           │           ├── run-20251011-020215
+│           │           ├── run-20251011-020327
+│           │           ├── run-20251011-020418
+│           │           ├── run-20251011-020457
+│           │           ├── run-20251011-021102
+│           │           ├── run-20251011-021145
+│           │           ├── run-20251011-021224
+│           │           ├── run-20251011-021505
+│           │           ├── run-20251011-023117
+│           │           ├── run-20251011-023524
+│           │           ├── run-20251011-023741
+│           │           ├── run-20251011-025025
+│           │           ├── run-20251011-025105
+│           │           ├── run-20251011-025437
+│           │           ├── run-20251011-025503
+│           │           ├── run-20251011-025843
+│           │           ├── run-20251011-025900
+│           │           ├── run-20251011-030150
+│           │           ├── run-20251011-030151
+│           │           ├── run-20251011-030152
+│           │           ├── run-20251011-030216
+│           │           ├── run-20251011-030217
+│           │           ├── run-20251011-030219
+│           │           ├── run-20251011-030226
+│           │           ├── run-20251011-030248
+│           │           ├── run-20251011-030249
+│           │           ├── run-20251011-030632
+│           │           ├── run-20251011-065523
+│           │           ├── run-20251011-171523
+│           │           ├── run-20251012-031656
+│           │           ├── run-20251012-034250
+│           │           ├── run-20251012-034434
+│           │           ├── run-20251012-034716
+│           │           ├── run-20251012-034747
+│           │           ├── run-20251012-034748
+│           │           ├── run-20251012-034859
+│           │           ├── run-20251012-035605
+│           │           ├── run-20251012-040427
+│           │           ├── run-20251012-084111
+│           │           ├── run-20251012-084121
+│           │           ├── run-20251012-084611
+│           │           ├── run-20251012-090804
+│           │           ├── run-20251012-090815
+│           │           ├── run-20251012-090920
+│           │           ├── run-20251012-091122
+│           │           ├── run-20251012-141235
+│           │           ├── run-20251012-141356
+│           │           ├── run-20251012-141414
+│           │           └── run-20251012-142356
+│           ├── client
+│           │   ├── public
+│           │   └── templates
+│           ├── public
+│           ├── runs
+│           │   ├── run-20251006-081837
+│           │   ├── run-20251006-082801
+│           │   ├── run-20251006-084421
+│           │   ├── run-20251006-102821
+│           │   ├── run-20251009-212809
+│           │   ├── run-20251009-223233
+│           │   ├── run-20251009-223904
+│           │   ├── run-20251009-223905
+│           │   ├── run-20251009-224247
+│           │   ├── run-20251009-224257
+│           │   ├── run-20251009-224258
+│           │   ├── run-20251009-224259
+│           │   ├── run-20251009-224333
+│           │   ├── run-20251009-224744
+│           │   ├── run-20251009-224757
+│           │   ├── run-20251009-230508
+│           │   ├── run-20251009-230511
+│           │   ├── run-20251009-230537
+│           │   ├── run-20251009-230554
+│           │   ├── run-20251009-230604
+│           │   ├── run-20251009-230606
+│           │   ├── run-20251009-231411
+│           │   ├── run-20251009-231441
+│           │   ├── run-20251009-232903
+│           │   ├── run-20251009-232904
+│           │   ├── run-20251010-001400
+│           │   ├── run-20251010-001401
+│           │   ├── run-20251010-021708
+│           │   ├── run-20251010-021752
+│           │   ├── run-20251010-021806
+│           │   ├── run-20251010-021817
+│           │   ├── run-20251010-025042
+│           │   ├── run-20251010-025052
+│           │   ├── run-20251010-054355
+│           │   ├── run-20251010-054401
+│           │   ├── run-20251010-054447
+│           │   ├── run-20251010-054519
+│           │   ├── run-20251010-054624
+│           │   ├── run-20251010-054636
+│           │   ├── run-20251010-054708
+│           │   ├── run-20251010-054709
+│           │   ├── run-20251010-054711
+│           │   ├── run-20251010-054712
+│           │   ├── run-20251010-054713
+│           │   ├── run-20251010-054715
+│           │   ├── run-20251010-054716
+│           │   ├── run-20251010-054718
+│           │   ├── run-20251010-054719
+│           │   ├── run-20251010-054720
+│           │   ├── run-20251010-055725
+│           │   ├── run-20251010-060029
+│           │   ├── run-20251010-060150
+│           │   ├── run-20251010-063457
+│           │   ├── run-20251010-063458
+│           │   ├── run-20251010-063459
+│           │   ├── run-20251010-063500
+│           │   ├── run-20251010-063501
+│           │   ├── run-20251010-063502
+│           │   ├── run-20251010-063552
+│           │   ├── run-20251010-063553
+│           │   ├── run-20251010-063554
+│           │   ├── run-20251010-063555
+│           │   ├── run-20251010-063556
+│           │   ├── run-20251010-063557
+│           │   ├── run-20251010-063558
+│           │   ├── run-20251010-063559
+│           │   ├── run-20251010-063600
+│           │   ├── run-20251010-063640
+│           │   ├── run-20251010-063641
+│           │   ├── run-20251010-063642
+│           │   ├── run-20251010-063644
+│           │   ├── run-20251010-063645
+│           │   ├── run-20251010-063646
+│           │   ├── run-20251010-063647
+│           │   ├── run-20251010-063648
+│           │   ├── run-20251010-063649
+│           │   ├── run-20251010-063650
+│           │   ├── run-20251010-063652
+│           │   ├── run-20251010-063653
+│           │   ├── run-20251010-063654
+│           │   ├── run-20251010-063655
+│           │   ├── run-20251010-063656
+│           │   ├── run-20251010-063657
+│           │   ├── run-20251010-063658
+│           │   ├── run-20251010-063659
+│           │   ├── run-20251010-063700
+│           │   ├── run-20251010-063701
+│           │   ├── run-20251010-063702
+│           │   ├── run-20251010-063703
+│           │   ├── run-20251010-063704
+│           │   ├── run-20251010-063705
+│           │   ├── run-20251010-063745
+│           │   ├── run-20251010-063746
+│           │   ├── run-20251010-063747
+│           │   ├── run-20251010-063748
+│           │   ├── run-20251010-063749
+│           │   ├── run-20251010-063750
+│           │   ├── run-20251010-063751
+│           │   ├── run-20251010-063752
+│           │   ├── run-20251010-063753
+│           │   ├── run-20251010-063754
+│           │   ├── run-20251010-165503
+│           │   ├── run-20251010-170117
+│           │   ├── run-20251010-170147
+│           │   ├── run-20251011-014843
+│           │   ├── run-20251011-014904
+│           │   ├── run-20251011-015031
+│           │   ├── run-20251011-015231
+│           │   ├── run-20251011-015947
+│           │   ├── run-20251011-020002
+│           │   ├── run-20251011-020015
+│           │   ├── run-20251011-020044
+│           │   ├── run-20251011-020051
+│           │   ├── run-20251011-020134
+│           │   ├── run-20251011-020214
+│           │   ├── run-20251011-020215
+│           │   ├── run-20251011-020327
+│           │   ├── run-20251011-020418
+│           │   ├── run-20251011-020457
+│           │   ├── run-20251011-021102
+│           │   ├── run-20251011-021145
+│           │   ├── run-20251011-021224
+│           │   ├── run-20251011-021505
+│           │   ├── run-20251011-023117
+│           │   ├── run-20251011-023524
+│           │   ├── run-20251011-023741
+│           │   ├── run-20251011-025025
+│           │   ├── run-20251011-025105
+│           │   ├── run-20251011-025437
+│           │   ├── run-20251011-025503
+│           │   ├── run-20251011-025843
+│           │   ├── run-20251011-025900
+│           │   ├── run-20251011-030150
+│           │   ├── run-20251011-030151
+│           │   ├── run-20251011-030152
+│           │   ├── run-20251011-030216
+│           │   ├── run-20251011-030217
+│           │   ├── run-20251011-030219
+│           │   ├── run-20251011-030226
+│           │   ├── run-20251011-030248
+│           │   ├── run-20251011-030249
+│           │   ├── run-20251011-030632
+│           │   ├── run-20251011-065523
+│           │   ├── run-20251011-171523
+│           │   ├── run-20251012-031656
+│           │   ├── run-20251012-034250
+│           │   ├── run-20251012-034434
+│           │   ├── run-20251012-034716
+│           │   ├── run-20251012-034747
+│           │   ├── run-20251012-034748
+│           │   ├── run-20251012-034859
+│           │   ├── run-20251012-035605
+│           │   ├── run-20251012-040427
+│           │   ├── run-20251012-084111
+│           │   ├── run-20251012-084121
+│           │   ├── run-20251012-084611
+│           │   ├── run-20251012-090804
+│           │   ├── run-20251012-090815
+│           │   ├── run-20251012-090920
+│           │   ├── run-20251012-091122
+│           │   ├── run-20251012-141235
+│           │   ├── run-20251012-141356
+│           │   ├── run-20251012-141414
+│           │   ├── run-20251012-142356
+│           │   ├── run-20251012-150539
+│           │   │   └── public
+│           │   ├── run-20251012-152518
+│           │   │   └── frontend
+│           │   │       └── public
+│           │   ├── run-20251012-201844
+│           │   │   └── public
+│           │   ├── run-20251012-204522
+│           │   │   └── public
+│           │   ├── run-20251012-205210
+│           │   │   └── public
+│           │   ├── run-20251012-205606
+│           │   │   └── public
+│           │   ├── run-20251012-205854
+│           │   │   └── public
+│           │   ├── run-20251012-205905
+│           │   ├── run-20251012-205906
+│           │   ├── run-20251012-205907
+│           │   ├── run-20251012-205929
+│           │   │   └── public
+│           │   ├── run-20251012-210515
+│           │   ├── run-20251012-210516
+│           │   ├── run-20251012-210517
+│           │   ├── run-20251012-210532
+│           │   │   └── public
+│           │   ├── run-20251012-210545
+│           │   │   └── public
+│           │   ├── run-20251012-211755
+│           │   ├── run-20251012-211756
+│           │   ├── run-20251012-211757
+│           │   ├── run-20251012-211811
+│           │   │   └── public
+│           │   ├── run-20251012-211822
+│           │   ├── run-20251012-211823
+│           │   ├── run-20251012-211923
+│           │   │   └── public
+│           │   ├── run-20251012-211934
+│           │   ├── run-20251012-211935
+│           │   ├── run-20251012-230449
+│           │   ├── run-20251012-230450
+│           │   ├── run-20251012-230458
+│           │   │   └── public
+│           │   ├── run-20251012-230508
+│           │   ├── run-20251012-230509
+│           │   ├── run-20251012-230553
+│           │   │   └── public
+│           │   ├── run-20251012-230603
+│           │   ├── run-20251012-230604
+│           │   ├── run-20251012-231319
+│           │   │   └── public
+│           │   ├── run-20251012-232037
+│           │   │   └── public
+│           │   ├── run-20251012-232048
+│           │   ├── run-20251012-232049
+│           │   ├── run-2025-10-12T15-21-37
+│           │   │   └── public
+│           │   ├── run-2025-10-12T15-29-07
+│           │   │   └── public
+│           │   ├── run-2025-10-12T23-07-38
+│           │   │   └── public
+│           │   ├── run-20251013-014945
+│           │   │   └── public
+│           │   ├── run-20251013-053855
+│           │   │   └── public
+│           │   ├── run-20251013-053906
+│           │   ├── run-20251013-053907
+│           │   ├── run-20251013-054121
+│           │   │   └── public
+│           │   ├── run-20251013-054131
+│           │   ├── run-20251013-054132
+│           │   ├── run-20251013-054215
+│           │   │   └── public
+│           │   ├── run-20251014-215716
+│           │   ├── run-20251014-220039
+│           │   ├── run-20251014-220048
+│           │   ├── run-20251014-220156
+│           │   ├── run-20251014-220320
+│           │   ├── run-2025-10-14T21-54-13
+│           │   │   └── public
+│           │   ├── run-20251015-223826
+│           │   ├── run-20251115-193434
+│           │   ├── run-20251115-193449
+│           │   ├── run-20251115-193504
+│           │   ├── run-20251115-193519
+│           │   ├── run-20251115-193534
+│           │   ├── run-20251115-193549
+│           │   ├── run-20251115-193604
+│           │   ├── run-20251115-193619
+│           │   ├── run-20251115-193634
+│           │   ├── run-20251115-193649
+│           │   ├── run-20251115-193704
+│           │   ├── run-20251115-193719
+│           │   ├── run-20251115-193734
+│           │   ├── run-20251115-193749
+│           │   ├── run-20251115-193804
+│           │   ├── run-20251115-193819
+│           │   ├── run-20251115-193834
+│           │   ├── run-20251115-193849
+│           │   ├── run-20251115-193904
+│           │   ├── run-20251115-193919
+│           │   ├── run-20251115-193934
+│           │   ├── run-20251115-193950
+│           │   ├── run-20251115-194005
+│           │   ├── run-20251115-194020
+│           │   ├── run-20251115-194035
+│           │   ├── run-20251115-194050
+│           │   ├── run-20251115-194105
+│           │   ├── run-20251115-194120
+│           │   ├── run-20251115-194135
+│           │   ├── run-20251115-194150
+│           │   ├── run-20251115-194205
+│           │   ├── run-20251115-194220
+│           │   ├── run-20251115-194235
+│           │   ├── run-20251115-194250
+│           │   ├── run-20251115-194305
+│           │   ├── run-20251115-194320
+│           │   ├── run-20251115-194336
+│           │   ├── run-20251115-194351
+│           │   ├── run-20251115-194406
+│           │   ├── run-20251115-194421
+│           │   ├── run-20251115-194436
+│           │   ├── run-20251115-194451
+│           │   ├── run-20251115-194506
+│           │   ├── run-20251115-194521
+│           │   ├── run-20251115-194536
+│           │   ├── run-20251115-194551
+│           │   └── run-20251119-002717
+│           │       └── public
+│           └── tests
+│               └── runs
+│                   └── run-20251012-201744
+│                       └── public
+└── unused things
+    ├── backups
+    │   ├── aurora_backup_20251012_143539
+    │   │   └── runs
+    │   │       ├── latest
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-212809
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-223233
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-223904
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-223905
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224247
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224257
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224258
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224259
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224333
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224744
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224757
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-230508
+    │   │       │   └── tests
+    │   │       ├── run-20251009-230511
+    │   │       │   └── tests
+    │   │       ├── run-20251009-230537
+    │   │       │   └── tests
+    │   │       ├── run-20251009-230554
+    │   │       │   └── tests
+    │   │       ├── run-20251009-230604
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-230606
+    │   │       │   └── src
+    │   │       ├── run-20251011-020134
+    │   │       │   └── tests
+    │   │       ├── run-20251011-020214
+    │   │       │   └── tests
+    │   │       ├── run-20251011-020215
+    │   │       │   └── tests
+    │   │       ├── run-20251011-025105
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251011-025437
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251011-025900
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251011-030151
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251011-030152
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251011-030248
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251011-030632
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251012-031656
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251012-084121
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251012-084611
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251012-090920
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251012-091122
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251012-141356
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       └── run-20251012-141414
+    │   │           ├── src
+    │   │           └── tests
+    │   ├── aurora_backup_20251012_143542
+    │   │   └── runs
+    │   │       ├── run-20251009-212809
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-223233
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-223904
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-223905
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224247
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224257
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224259
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224744
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-224757
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       ├── run-20251009-230604
+    │   │       │   └── src
+    │   │       ├── run-20251009-230606
+    │   │       │   └── src
+    │   │       ├── run-20251011-020214
+    │   │       │   └── tests
+    │   │       ├── run-20251011-020215
+    │   │       │   └── tests
+    │   │       ├── run-20251012-090920
+    │   │       │   ├── src
+    │   │       │   └── tests
+    │   │       └── run-20251012-091122
+    │   │           ├── src
+    │   │           └── tests
+    │   └── aurora_backup_20251012_143639
+    │       └── runs
+    │           ├── run-20251009-212809
+    │           │   ├── src
+    │           │   └── tests
+    │           ├── run-20251009-223233
+    │           │   ├── src
+    │           │   └── tests
+    │           ├── run-20251009-223904
+    │           │   ├── src
+    │           │   └── tests
+    │           ├── run-20251009-223905
+    │           │   ├── src
+    │           │   └── tests
+    │           ├── run-20251009-224247
+    │           │   ├── src
+    │           │   └── tests
+    │           ├── run-20251009-224257
+    │           │   └── tests
+    │           ├── run-20251009-224259
+    │           │   └── tests
+    │           ├── run-20251009-224744
+    │           │   ├── src
+    │           │   └── tests
+    │           ├── run-20251009-224757
+    │           │   ├── src
+    │           │   └── tests
+    │           ├── run-20251009-230604
+    │           │   └── src
+    │           ├── run-20251009-230606
+    │           │   └── src
+    │           ├── run-20251011-020214
+    │           │   └── tests
+    │           ├── run-20251011-020215
+    │           │   └── tests
+    │           ├── run-20251012-090920
+    │           │   ├── src
+    │           │   └── tests
+    │           └── run-20251012-091122
+    │               ├── src
+    │               └── tests
+    ├── branch_merge_duplicates
+    │   ├── aurora_nexus_v3
+    │   │   └── core
+    │   ├── client
+    │   │   └── src
+    │   │       └── components
+    │   ├── core
+    │   └── docker
+    ├── logs
+    ├── runs
+    │   ├── run-20251009-212809
+    │   │   ├── src
+    │   │   └── tests
+    │   ├── run-20251009-223233
+    │   │   ├── src
+    │   │   └── tests
+    │   ├── run-20251009-223904
+    │   │   ├── src
+    │   │   └── tests
+    │   ├── run-20251009-223905
+    │   │   ├── src
+    │   │   └── tests
+    │   ├── run-20251009-224247
+    │   │   ├── src
+    │   │   └── tests
+    │   ├── run-20251009-224257
+    │   │   └── tests
+    │   ├── run-20251009-224259
+    │   │   └── tests
+    │   ├── run-20251009-224744
+    │   │   ├── src
+    │   │   └── tests
+    │   ├── run-20251009-224757
+    │   │   ├── src
+    │   │   └── tests
+    │   ├── run-20251009-230604
+    │   │   └── src
+    │   ├── run-20251009-230606
+    │   │   └── src
+    │   ├── run-20251011-020214
+    │   │   └── tests
+    │   ├── run-20251011-020215
+    │   │   └── tests
+    │   ├── run-20251012-090920
+    │   │   ├── src
+    │   │   └── tests
+    │   ├── run-20251012-091122
+    │   │   ├── src
+    │   │   └── tests
+    │   ├── run-20251012-205906
+    │   │   └── tests
+    │   ├── run-20251012-205907
+    │   │   └── tests
+    │   ├── run-20251012-210516
+    │   │   └── tests
+    │   ├── run-20251012-210517
+    │   │   └── tests
+    │   ├── run-20251012-211756
+    │   │   └── tests
+    │   ├── run-20251012-211757
+    │   │   └── tests
+    │   ├── run-20251012-211822
+    │   │   └── tests
+    │   ├── run-20251012-211823
+    │   │   └── tests
+    │   ├── run-20251012-211934
+    │   │   └── tests
+    │   ├── run-20251012-211935
+    │   │   └── tests
+    │   ├── run-20251012-230449
+    │   │   └── tests
+    │   ├── run-20251012-230450
+    │   │   └── tests
+    │   ├── run-20251012-230508
+    │   │   └── tests
+    │   ├── run-20251012-230509
+    │   │   └── tests
+    │   ├── run-20251012-230603
+    │   │   └── tests
+    │   ├── run-20251012-230604
+    │   │   └── tests
+    │   ├── run-20251012-232048
+    │   │   └── tests
+    │   ├── run-20251012-232049
+    │   │   └── tests
+    │   ├── run-2025-10-12T15-19-18
+    │   │   └── tests
+    │   ├── run-20251013-053906
+    │   │   └── tests
+    │   ├── run-20251013-053907
+    │   │   └── tests
+    │   ├── run-20251013-054131
+    │   │   └── tests
+    │   └── run-20251013-054132
+    │       └── tests
+    └── tests
+
+5447 directories
