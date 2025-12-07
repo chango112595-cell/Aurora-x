@@ -176,6 +176,7 @@ class AuroraUniversalCore:
         from ..modules.api_gateway import APIGateway
         from ..modules.auto_healer import AutoHealer
         from ..modules.discovery_protocol import DiscoveryProtocol
+        from ..modules.http_server import HTTPServerModule
         
         await self.register_module("platform_adapter", PlatformAdapter(self))
         await self.register_module("hardware_detector", HardwareDetector(self))
@@ -185,6 +186,7 @@ class AuroraUniversalCore:
         await self.register_module("api_gateway", APIGateway(self))
         await self.register_module("auto_healer", AutoHealer(self))
         await self.register_module("discovery_protocol", DiscoveryProtocol(self))
+        await self.register_module("http_server", HTTPServerModule(self, port=5002))
     
     async def _initialize_peak_systems(self):
         """Initialize all peak autonomous systems"""
