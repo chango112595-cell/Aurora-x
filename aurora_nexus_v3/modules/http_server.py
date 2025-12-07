@@ -5,10 +5,28 @@ Allows Express backend to query Nexus status and capabilities
 
 import asyncio
 import json
-from typing import Any, Dict
+from typing import Any, Dict, List
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
 import time
+from collections import deque
+from datetime import datetime
+
+
+activity_log: deque = deque(maxlen=100)
+
+
+def log_activity(activity_type: str, message: str, details: Dict = None):
+    """Log an activity event"""
+    entry = {
+        "id": f"act_{int(time.time() * 1000)}",
+        "timestamp": datetime.now().isoformat(),
+        "type": activity_type,
+        "message": message,
+        "details": details or {}
+    }
+    activity_log.appendleft(entry)
+    return entry
 
 
 class NexusHTTPHandler(BaseHTTPRequestHandler):
@@ -102,6 +120,32 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                 }
             self.send_json_response(manifest_data)
         
+        elif path == "/api/activity":
+            worker_pool = self.core.worker_pool
+            worker_metrics = None
+            if worker_pool:
+                metrics = worker_pool.get_metrics()
+                worker_metrics = {
+                    "total": metrics.total_workers,
+                    "active": metrics.active_workers,
+                    "idle": metrics.idle_workers,
+                    "queued": metrics.tasks_queued,
+                    "completed": metrics.tasks_completed,
+                    "failed": metrics.tasks_failed
+                }
+            
+            self.send_json_response({
+                "activities": list(activity_log),
+                "workers": worker_metrics,
+                "system": {
+                    "state": self.core.state.value,
+                    "hyperspeed": self.core.hyperspeed_enabled,
+                    "autonomous": self.core.autonomous_mode,
+                    "hybrid_mode": self.core.hybrid_mode_enabled
+                },
+                "timestamp": datetime.now().isoformat()
+            })
+        
         else:
             self.send_json_response({"error": "Endpoint not found", "path": path}, 404)
 
@@ -127,7 +171,7 @@ class HTTPServerModule:
         self.thread.start()
         
         self.logger.info(f"HTTP server started on port {self.port}")
-        self.logger.info(f"Endpoints: /api/health, /api/status, /api/modules, /api/capabilities, /api/packs, /api/manifest")
+        self.logger.info(f"Endpoints: /api/health, /api/status, /api/modules, /api/capabilities, /api/packs, /api/manifest, /api/activity")
     
     def _run_server(self):
         try:

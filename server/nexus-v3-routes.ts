@@ -107,6 +107,23 @@ export function registerNexusV3Routes(app: Express) {
     }
   });
 
+  app.get("/api/nexus-v3/activity", async (req, res) => {
+    try {
+      const response = await fetch(`${NEXUS_V3_BASE}/api/activity`, {
+        signal: AbortSignal.timeout(3000)
+      });
+      const data = await response.json();
+      res.json(data);
+    } catch (error: any) {
+      res.status(503).json({ 
+        activities: [],
+        workers: null,
+        system: null,
+        error: error.message 
+      });
+    }
+  });
+
   app.get("/api/nexus/status", async (req, res) => {
     try {
       const [v2Response, v3Response] = await Promise.allSettled([
