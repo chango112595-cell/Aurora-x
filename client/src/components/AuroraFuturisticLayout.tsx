@@ -94,8 +94,8 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                     const isActive = location === item.path || (item.path !== '/' && location?.startsWith(item.path));
                     return (
                       <Link key={item.path} to={item.path} className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 block ${isActive
-                        ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20'
-                        : 'text-purple-300 hover:bg-purple-500/10 hover:text-white'
+                        ? 'bg-gradient-to-r from-purple-600/40 to-pink-600/40 border border-purple-400/50 text-white shadow-lg shadow-purple-500/30'
+                        : 'bg-slate-800/50 text-purple-300 hover:bg-purple-500/30 hover:text-white border border-transparent hover:border-purple-500/30'
                         }`}>
                         <div className={isActive ? 'text-purple-400' : 'text-purple-500'}>
                           {item.icon}
