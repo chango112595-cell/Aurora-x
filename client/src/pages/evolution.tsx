@@ -24,6 +24,19 @@ interface LearningEvent {
   improvement: number;
 }
 
+interface EvolutionData {
+  metrics: EvolutionMetric[];
+  learningEvents: LearningEvent[];
+  summary: {
+    totalTiers: number;
+    activeTiers: number;
+    totalExecutions: number;
+    activeExecutions: number;
+    totalCapabilities: number;
+    totalModules: number;
+  };
+}
+
 interface AuroraStatus {
   status: string;
   powerUnits: number;
@@ -44,29 +57,24 @@ interface AuroraStatus {
 export default function EvolutionPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  const { data: auroraStatus, isLoading, isError, error, refetch, isRefetching } = useQuery<AuroraStatus>({
+  const { data: auroraStatus, isLoading: statusLoading, isError: statusError, error: statusErr, refetch: refetchStatus, isRefetching: refetchingStatus } = useQuery<AuroraStatus>({
     queryKey: ['/api/aurora/status'],
     refetchInterval: 10000,
   });
 
-  const evolutionMetrics: EvolutionMetric[] = [
-    { id: '1', name: 'Neural Processing', value: 94, maxValue: 100, trend: 'up', category: 'intelligence' },
-    { id: '2', name: 'Pattern Recognition', value: 87, maxValue: 100, trend: 'up', category: 'intelligence' },
-    { id: '3', name: 'Code Synthesis', value: 91, maxValue: 100, trend: 'stable', category: 'capability' },
-    { id: '4', name: 'Learning Rate', value: 78, maxValue: 100, trend: 'up', category: 'adaptation' },
-    { id: '5', name: 'Memory Efficiency', value: 85, maxValue: 100, trend: 'stable', category: 'performance' },
-    { id: '6', name: 'Context Retention', value: 92, maxValue: 100, trend: 'up', category: 'intelligence' },
-    { id: '7', name: 'Autonomous Decision', value: 76, maxValue: 100, trend: 'up', category: 'capability' },
-    { id: '8', name: 'Self-Optimization', value: 83, maxValue: 100, trend: 'up', category: 'adaptation' },
-  ];
+  const { data: evolutionData, isLoading: metricsLoading, isError: metricsError, error: metricsErr, refetch: refetchMetrics, isRefetching: refetchingMetrics } = useQuery<EvolutionData>({
+    queryKey: ['/api/evolution/metrics'],
+    refetchInterval: 15000,
+  });
 
-  const learningEvents: LearningEvent[] = [
-    { timestamp: new Date(Date.now() - 300000).toISOString(), type: 'pattern_learned', description: 'Identified new code optimization pattern', improvement: 2.3 },
-    { timestamp: new Date(Date.now() - 900000).toISOString(), type: 'capability_enhanced', description: 'Enhanced TypeScript type inference', improvement: 1.8 },
-    { timestamp: new Date(Date.now() - 1800000).toISOString(), type: 'memory_consolidated', description: 'Consolidated 47 short-term memories', improvement: 0.5 },
-    { timestamp: new Date(Date.now() - 3600000).toISOString(), type: 'self_correction', description: 'Auto-corrected syntax handling logic', improvement: 3.1 },
-    { timestamp: new Date(Date.now() - 7200000).toISOString(), type: 'pattern_learned', description: 'Learned React component patterns', improvement: 2.7 },
-  ];
+  const isLoading = statusLoading || metricsLoading;
+  const isError = statusError || metricsError;
+  const error = statusErr || metricsErr;
+  const isRefetching = refetchingStatus || refetchingMetrics;
+  const refetch = () => { refetchStatus(); refetchMetrics(); };
+
+  const evolutionMetrics = evolutionData?.metrics || [];
+  const learningEvents = evolutionData?.learningEvents || [];
 
   const categories = ['all', 'intelligence', 'capability', 'adaptation', 'performance'];
   
