@@ -131,23 +131,21 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
   let memoryContext = '';
   let userName: string | null = null;
   let consciousnessState: ConsciousnessState | null = null;
+  let cognitiveContext: any = null;
   
   try {
-    const [factsResult, contextResult, consciousness] = await Promise.all([
-      memoryClient.getFacts(),
-      memoryClient.getContext(),
-      nexusV3Client.getConsciousnessState()
-    ]);
+    const { context: loopContext, events } = await cognitiveLoop.processMessage(userMessage, sessionId, 'chat');
+    cognitiveContext = loopContext;
     
-    consciousnessState = consciousness;
+    consciousnessState = loopContext.consciousness;
     
     if (consciousnessState) {
       console.log(`[Aurora] 🌌 Consciousness: ${consciousnessState.consciousness_state} | Awareness: ${consciousnessState.awareness_level}`);
       console.log(`[Aurora] 🤖 Workers: ${consciousnessState.workers?.idle || 0} idle / ${consciousnessState.workers?.total || 0} total`);
     }
     
-    if (factsResult.success && factsResult.facts) {
-      const facts = factsResult.facts;
+    if (loopContext.facts) {
+      const facts = loopContext.facts;
       if (facts['user_name']) {
         userName = facts['user_name'] as string;
         memoryContext += `User's name: ${userName}\n`;
@@ -160,24 +158,18 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
       }
     }
     
-    if (contextResult.success && contextResult.context) {
-      memoryContext += `Recent context: ${contextResult.context}\n`;
+    if (loopContext.memoryContext) {
+      memoryContext += `Recent context: ${loopContext.memoryContext}\n`;
     }
     
     if (memoryContext) {
       console.log('[Aurora] 🧠 Memory context loaded:', memoryContext.substring(0, 100) + '...');
     }
+    
+    console.log(`[Aurora] 🔄 Cognitive loop: ${events.length} events processed`);
   } catch (memoryError) {
-    console.log('[Aurora] Memory recall skipped:', memoryError);
+    console.log('[Aurora] Cognitive loop error, using fallback:', memoryError);
   }
-  
-  nexusV3Client.reportCognitiveEvent({
-    event_type: 'user_message_received',
-    source: 'aurora-chat',
-    message: `User message: ${userMessage.substring(0, 100)}`,
-    context: { sessionId, messageLength: userMessage.length },
-    importance: 0.6
-  }).catch(() => {});
   
   const previousMessages = context
     .filter((msg: any) => typeof msg === 'object' && 'content' in msg)
@@ -232,20 +224,13 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
     response = `Nice to meet you, ${newlyExtractedName}! ` + response;
   }
 
-  memoryClient.saveMessage('assistant', response, 0.5, ['response']).catch(() => {});
-
-  nexusV3Client.reportCognitiveEvent({
-    event_type: 'response_generated',
-    source: 'aurora-chat',
-    message: `Response generated: ${response.substring(0, 100)}`,
-    context: { 
-      sessionId, 
-      detectionType: detection.type,
-      confidence: detection.confidence,
-      responseLength: response.length
-    },
-    importance: 0.5
-  }).catch(() => {});
+  const usedFallback = !response || response.includes('would you like');
+  
+  if (cognitiveContext) {
+    cognitiveLoop.completeCycle(userMessage, response, cognitiveContext, !usedFallback).catch((err) => {
+      console.log('[Aurora] Cognitive cycle completion error:', err);
+    });
+  }
 
   return { response, detection };
 }
