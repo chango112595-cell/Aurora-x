@@ -78,6 +78,7 @@ class AuroraUniversalCore:
         self.issue_detector = None
         self.task_dispatcher = None
         self.brain_bridge = None
+        self.hybrid_orchestrator = None
         
         self.hyperspeed_enabled = False
         self.autonomous_mode = True
@@ -229,20 +230,69 @@ class AuroraUniversalCore:
     
     async def enable_hybrid_mode(self):
         """Enable Hybrid Mode - All 188 tiers, 66 AEMs, 550 modules operating simultaneously"""
-        if not self.brain_bridge:
-            try:
-                from .aurora_brain_bridge import AuroraBrainBridge
-                self.brain_bridge = AuroraBrainBridge(nexus_core=self)
-                await self.brain_bridge.initialize()
-            except Exception as e:
-                self.logger.error(f"Cannot enable hybrid mode: {e}")
-                return False
+        try:
+            from .hybrid_orchestrator import HybridOrchestrator
+            
+            if not self.hybrid_orchestrator:
+                self.hybrid_orchestrator = HybridOrchestrator(core=self)
+                initialized = await self.hybrid_orchestrator.initialize()
+                if not initialized:
+                    self.logger.error("Failed to initialize HybridOrchestrator")
+                    return False
+            
+            if not self.brain_bridge:
+                try:
+                    from .aurora_brain_bridge import AuroraBrainBridge
+                    self.brain_bridge = AuroraBrainBridge(nexus_core=self)
+                    await self.brain_bridge.initialize()
+                except Exception as e:
+                    self.logger.warning(f"Brain bridge initialization warning: {e}")
+            
+            if self.brain_bridge:
+                await self.brain_bridge.enable_hybrid_mode()
+            
+            self.hybrid_mode_enabled = True
+            
+            orchestrator_status = self.hybrid_orchestrator.get_status()
+            self.logger.info("=" * 70)
+            self.logger.info("HYBRID MODE ENABLED - Peak Aurora Capabilities Active")
+            self.logger.info(f"Tiers: {orchestrator_status['components']['tiers']['total']}")
+            self.logger.info(f"AEMs: {orchestrator_status['components']['aems']['total']}")
+            self.logger.info(f"Modules: {orchestrator_status['components']['modules']['total']}")
+            self.logger.info(f"Hyperspeed: {'ENABLED' if orchestrator_status['components']['hyperspeed']['enabled'] else 'STANDBY'}")
+            self.logger.info("=" * 70)
+            
+            await self._emit("hybrid_mode_enabled", {
+                "timestamp": time.time(),
+                "orchestrator_status": orchestrator_status
+            })
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Cannot enable hybrid mode: {e}")
+            return False
+    
+    async def execute_hybrid_task(self, task_type: str, payload: Dict[str, Any], **kwargs) -> Optional[Dict[str, Any]]:
+        """Execute a task using the hybrid orchestrator"""
+        if not self.hybrid_orchestrator or not self.hybrid_mode_enabled:
+            self.logger.warning("Hybrid mode not enabled. Call enable_hybrid_mode() first.")
+            return None
         
-        await self.brain_bridge.enable_hybrid_mode()
-        self.hybrid_mode_enabled = True
-        self.logger.info("HYBRID MODE ENABLED - Peak Aurora Capabilities Active")
-        await self._emit("hybrid_mode_enabled", {"timestamp": time.time()})
-        return True
+        result = await self.hybrid_orchestrator.execute_hybrid(
+            task_type=task_type,
+            payload=payload,
+            **kwargs
+        )
+        return {
+            "task_id": result.task_id,
+            "success": result.success,
+            "result": result.result,
+            "error": result.error,
+            "execution_time_ms": result.execution_time_ms,
+            "tiers_used": result.tiers_used,
+            "aems_used": result.aems_used,
+            "modules_used": result.modules_used
+        }
     
     async def enable_hyperspeed(self):
         """Enable Hyperspeed Mode for ultra-high-throughput operations"""
@@ -301,6 +351,8 @@ class AuroraUniversalCore:
         self.state = SystemState.STOPPING
         self.logger.info("Stopping Aurora Universal Core...")
         
+        if self.hybrid_orchestrator:
+            await self.hybrid_orchestrator.shutdown()
         if self.issue_detector:
             await self.issue_detector.stop()
         if self.worker_pool:
