@@ -3,6 +3,7 @@
 Aurora Execution Wrapper - Dynamic Intelligent Response Generation
 Uses Aurora's internal conversation intelligence and knowledge systems
 NO EXTERNAL APIs - Pure Aurora Intelligence with Context-Aware Responses
+NOW WITH AUTONOMOUS EXECUTION - Aurora can actually DO things!
 """
 
 import sys
@@ -10,6 +11,8 @@ import json
 import re
 import random
 import time
+import shutil
+import subprocess
 import urllib.request
 import urllib.error
 from pathlib import Path
@@ -17,6 +20,185 @@ from typing import Any, List, Dict, Optional
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 sys.path.insert(0, str(Path(__file__).parent))
+
+
+class AuroraExecutor:
+    """Aurora's autonomous execution engine - she can DO things, not just talk about them"""
+    
+    def __init__(self):
+        self.workspace = Path("/home/runner/workspace")
+        self.execution_log = []
+    
+    def _resolve_safe_path(self, path: str) -> Optional[Path]:
+        """Resolve path and ensure it stays within workspace - prevents sandbox escape"""
+        try:
+            resolved = (self.workspace / path).resolve()
+            if not str(resolved).startswith(str(self.workspace.resolve())):
+                return None
+            return resolved
+        except Exception:
+            return None
+        
+    def execute_action(self, action_type: str, params: Dict) -> Dict:
+        """Execute an autonomous action and return results"""
+        result = {"success": False, "action": action_type, "output": ""}
+        
+        try:
+            if action_type == "create_file":
+                result = self._create_file(params.get("path", ""), params.get("content", ""))
+            elif action_type == "read_file":
+                result = self._read_file(params.get("path", ""))
+            elif action_type == "modify_file":
+                result = self._modify_file(params.get("path", ""), params.get("old", ""), params.get("new", ""))
+            elif action_type == "delete_file":
+                result = self._delete_file(params.get("path", ""))
+            elif action_type == "run_command":
+                result = self._run_command(params.get("command", ""), params.get("timeout", 30))
+            elif action_type == "list_files":
+                result = self._list_files(params.get("path", "."), params.get("pattern", "*"))
+            elif action_type == "search_files":
+                result = self._search_files(params.get("pattern", ""), params.get("path", "."))
+            else:
+                result = {"success": False, "action": action_type, "output": f"Unknown action: {action_type}"}
+        except Exception as e:
+            result = {"success": False, "action": action_type, "output": f"Error: {str(e)}"}
+        
+        self.execution_log.append(result)
+        return result
+    
+    def _create_file(self, path: str, content: str) -> Dict:
+        """Create a new file with content"""
+        try:
+            full_path = self._resolve_safe_path(path)
+            if not full_path:
+                return {"success": False, "action": "create_file", "output": "Path outside workspace - access denied"}
+            full_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(full_path, 'w') as f:
+                f.write(content)
+            return {"success": True, "action": "create_file", "output": f"Created: {path}"}
+        except Exception as e:
+            return {"success": False, "action": "create_file", "output": f"Failed: {str(e)}"}
+    
+    def _read_file(self, path: str) -> Dict:
+        """Read file contents"""
+        try:
+            full_path = self._resolve_safe_path(path)
+            if not full_path:
+                return {"success": False, "action": "read_file", "output": "Path outside workspace - access denied"}
+            with open(full_path, 'r') as f:
+                content = f.read()
+            return {"success": True, "action": "read_file", "output": content[:2000]}
+        except Exception as e:
+            return {"success": False, "action": "read_file", "output": f"Failed: {str(e)}"}
+    
+    def _modify_file(self, path: str, old_text: str, new_text: str) -> Dict:
+        """Modify file by replacing text"""
+        try:
+            full_path = self._resolve_safe_path(path)
+            if not full_path:
+                return {"success": False, "action": "modify_file", "output": "Path outside workspace - access denied"}
+            with open(full_path, 'r') as f:
+                content = f.read()
+            if old_text not in content:
+                return {"success": False, "action": "modify_file", "output": "Pattern not found"}
+            new_content = content.replace(old_text, new_text, 1)
+            shutil.copy(full_path, str(full_path) + ".bak")
+            with open(full_path, 'w') as f:
+                f.write(new_content)
+            return {"success": True, "action": "modify_file", "output": f"Modified: {path}"}
+        except Exception as e:
+            return {"success": False, "action": "modify_file", "output": f"Failed: {str(e)}"}
+    
+    def _delete_file(self, path: str) -> Dict:
+        """Delete a file"""
+        try:
+            full_path = self._resolve_safe_path(path)
+            if not full_path:
+                return {"success": False, "action": "delete_file", "output": "Path outside workspace - access denied"}
+            if full_path.exists():
+                full_path.unlink()
+                return {"success": True, "action": "delete_file", "output": f"Deleted: {path}"}
+            return {"success": False, "action": "delete_file", "output": "File not found"}
+        except Exception as e:
+            return {"success": False, "action": "delete_file", "output": f"Failed: {str(e)}"}
+    
+    def _run_command(self, command: str, timeout: int = 30) -> Dict:
+        """Run a shell command with safety restrictions"""
+        try:
+            # Safety check - allowlist of safe command prefixes
+            safe_prefixes = [
+                'npm ', 'npx ', 'pip ', 'python ', 'node ', 'ls ', 'cat ', 'head ', 'tail ',
+                'grep ', 'find ', 'echo ', 'pwd', 'whoami', 'date', 'wc ', 'sort ', 'uniq ',
+                'curl ', 'wget ', 'git status', 'git log', 'git diff', 'git branch',
+                'pytest', 'jest', 'npm test', 'npm run', 'tsc ', 'eslint '
+            ]
+            
+            # Block dangerous patterns
+            dangerous = ['rm -rf', 'rm -r /', 'mkfs', ':(){', 'dd if=', '> /dev/', 
+                        'chmod 777', 'sudo', 'eval ', '$(', '`', '&&', '||', ';', '|']
+            
+            cmd_lower = command.lower().strip()
+            
+            # Check if command starts with safe prefix
+            is_safe = any(cmd_lower.startswith(p) for p in safe_prefixes)
+            has_dangerous = any(d in command for d in dangerous)
+            
+            if has_dangerous:
+                return {"success": False, "action": "run_command", "output": "Command contains blocked patterns for safety"}
+            
+            if not is_safe:
+                return {"success": False, "action": "run_command", "output": f"Command not in allowlist. Safe commands: npm, pip, python, node, git status, etc."}
+            
+            result = subprocess.run(
+                command, shell=True, cwd=str(self.workspace),
+                capture_output=True, text=True, timeout=timeout
+            )
+            output = result.stdout + result.stderr
+            return {
+                "success": result.returncode == 0,
+                "action": "run_command",
+                "output": output[:2000] if output else "Command completed",
+                "exit_code": result.returncode
+            }
+        except subprocess.TimeoutExpired:
+            return {"success": False, "action": "run_command", "output": "Command timed out"}
+        except Exception as e:
+            return {"success": False, "action": "run_command", "output": f"Failed: {str(e)}"}
+    
+    def _list_files(self, path: str, pattern: str = "*") -> Dict:
+        """List files in a directory"""
+        try:
+            full_path = self._resolve_safe_path(path)
+            if not full_path:
+                return {"success": False, "action": "list_files", "output": "Path outside workspace - access denied"}
+            files = list(full_path.glob(pattern))[:50]
+            file_list = [str(f.relative_to(self.workspace)) for f in files if str(f.resolve()).startswith(str(self.workspace.resolve()))]
+            return {"success": True, "action": "list_files", "output": "\n".join(file_list)}
+        except Exception as e:
+            return {"success": False, "action": "list_files", "output": f"Failed: {str(e)}"}
+    
+    def _search_files(self, pattern: str, path: str = ".") -> Dict:
+        """Search for pattern in files - safely escaped and sandboxed"""
+        try:
+            safe_pattern = re.sub(r'[^\w\s\-_.]', '', pattern)
+            if not safe_pattern:
+                return {"success": False, "action": "search_files", "output": "Invalid search pattern"}
+            
+            full_path = self._resolve_safe_path(path)
+            if not full_path:
+                return {"success": False, "action": "search_files", "output": "Path outside workspace - access denied"}
+            
+            result = subprocess.run(
+                ['grep', '-rn', '--include=*.py', '--include=*.ts', '--include=*.tsx', '--include=*.js', 
+                 safe_pattern, str(full_path)],
+                cwd=str(self.workspace),
+                capture_output=True, text=True, timeout=10
+            )
+            output = result.stdout if result.stdout else "No matches found"
+            lines = output.split('\n')[:20]
+            return {"success": True, "action": "search_files", "output": "\n".join(lines)[:2000]}
+        except Exception as e:
+            return {"success": False, "action": "search_files", "output": f"Failed: {str(e)}"}
 
 
 class MemoryRecall:
@@ -103,6 +285,7 @@ class AuroraConversationEngine:
     def __init__(self):
         self.conversation_history = []
         self.memory_recall = MemoryRecall()
+        self.executor = AuroraExecutor()  # Autonomous execution engine
         
     def generate_response(self, message: str, msg_type: str, context: list) -> str:
         """Generate a dynamic, contextual response based on the actual message content"""
@@ -112,6 +295,10 @@ class AuroraConversationEngine:
         keywords = self._extract_keywords(message)
         entities = self._extract_entities(message)
         intent = self._determine_intent(message_lower)
+        
+        # AUTONOMOUS EXECUTION - Check if user wants Aurora to DO something
+        if self._is_action_request(message_lower, message):
+            return self._handle_action_request(message_lower, message, keywords, entities)
         
         # Route to appropriate handler with extracted context
         if self._is_memory_recall_question(message_lower):
@@ -155,6 +342,100 @@ class AuroraConversationEngine:
         
         # General conversation - generate dynamic response based on actual content
         return self._generate_contextual_response(message, keywords, entities, context)
+    
+    def _is_action_request(self, msg_lower: str, original: str) -> bool:
+        """Detect if user wants Aurora to execute an action"""
+        action_triggers = [
+            # File operations
+            r'\b(create|make|write|add)\b.*(file|script|module)',
+            r'\b(delete|remove)\b.*(file|folder)',
+            r'\b(edit|modify|change|update)\b.*(file|code)',
+            r'\b(read|show|display|open)\b.*(file|content)',
+            # Command operations  
+            r'\b(run|execute|start|stop)\b.*(command|script|server|test)',
+            r'\binstall\b.*(package|dependency|module)',
+            r'\b(list|find|search)\b.*(files?|folders?|code)',
+            # Direct action words
+            r'^(create|make|build|generate|write)\s+',
+            r'^(run|execute|start)\s+',
+            r'^(delete|remove)\s+',
+            r'^(install|uninstall)\s+',
+        ]
+        return any(re.search(p, msg_lower) for p in action_triggers)
+    
+    def _handle_action_request(self, msg_lower: str, original: str, keywords: List[str], entities: Dict) -> str:
+        """Handle autonomous action execution"""
+        response_parts = ["**Autonomous Execution**\n"]
+        
+        # Detect action type and extract parameters
+        action_type, params = self._parse_action(msg_lower, original)
+        
+        if not action_type:
+            return "I detected an action request but couldn't parse it. Please be more specific, like:\n- 'create file test.py with hello world'\n- 'run npm test'\n- 'list files in tools/'"
+        
+        response_parts.append(f"Action: **{action_type}**")
+        response_parts.append(f"Parameters: {json.dumps(params, indent=2)}\n")
+        response_parts.append("**Executing...**\n")
+        
+        # Execute the action
+        result = self.executor.execute_action(action_type, params)
+        
+        # Format result
+        status = "[OK]" if result['success'] else "[FAILED]"
+        response_parts.append(f"Status: {status}")
+        response_parts.append(f"Output:\n```\n{result['output']}\n```")
+        
+        return "\n".join(response_parts)
+    
+    def _parse_action(self, msg_lower: str, original: str) -> tuple:
+        """Parse the action type and parameters from the message
+        Uses original message for file paths/commands to preserve case sensitivity"""
+        
+        # Create file patterns - use original for path
+        create_match = re.search(r'(?:create|make|write|add)\s+(?:a\s+)?(?:new\s+)?(?:file\s+)?([^\s]+\.[\w]+)(?:\s+(?:with|containing)\s+(.+))?', original, re.IGNORECASE)
+        if create_match:
+            path = create_match.group(1)
+            content = create_match.group(2) or "# Created by Aurora\n"
+            return ("create_file", {"path": path, "content": content})
+        
+        # Read file patterns - use original for path
+        read_match = re.search(r'(?:read|show|display|open|cat)\s+(?:file\s+)?([^\s]+\.[\w]+)', original, re.IGNORECASE)
+        if read_match:
+            return ("read_file", {"path": read_match.group(1)})
+        
+        # Delete file patterns - use original for path
+        delete_match = re.search(r'(?:delete|remove)\s+(?:file\s+)?([^\s]+\.[\w]+)', original, re.IGNORECASE)
+        if delete_match:
+            return ("delete_file", {"path": delete_match.group(1)})
+        
+        # Run command patterns - use original to preserve command case
+        run_match = re.search(r'(?:run|execute|start)\s+(?:command\s+)?[`"\']?(.+?)[`"\']?$', original, re.IGNORECASE)
+        if run_match:
+            return ("run_command", {"command": run_match.group(1).strip()})
+        
+        # List files patterns - use original for path
+        list_match = re.search(r'(?:list|show)\s+(?:files?\s+)?(?:in\s+)?([^\s]+)?', original, re.IGNORECASE)
+        if list_match:
+            path = list_match.group(1) or "."
+            return ("list_files", {"path": path, "pattern": "*"})
+        
+        # Search patterns - use original for pattern/path
+        search_match = re.search(r'(?:search|find|grep)\s+(?:for\s+)?["\']?(.+?)["\']?\s+(?:in\s+)?(.+)?$', original, re.IGNORECASE)
+        if search_match:
+            pattern = search_match.group(1)
+            path = search_match.group(2) or "."
+            return ("search_files", {"pattern": pattern, "path": path})
+        
+        # Install package - fixed operator precedence with explicit parentheses
+        install_match = re.search(r'install\s+(?:package\s+)?(\S+)', msg_lower)
+        if install_match:
+            pkg = install_match.group(1)
+            if 'npm' in msg_lower or '.' not in pkg:
+                return ("run_command", {"command": f"npm install {pkg}"})
+            else:
+                return ("run_command", {"command": f"pip install {pkg}"})
+        
+        return (None, {})
     
     def _extract_keywords(self, message: str) -> List[str]:
         """Extract meaningful keywords from the message"""
