@@ -420,7 +420,7 @@ class AuroraConversationEngine:
             if os.path.exists('/proc/loadavg'):
                 with open('/proc/loadavg', 'r') as f:
                     load = float(f.read().split()[0])
-                    if load > 2.0:
+                    if load > 10.0:
                         issues.append(f"High CPU load: {load}")
                     diagnostics.append(f"CPU Load: {load}")
         except:
