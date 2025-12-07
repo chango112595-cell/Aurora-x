@@ -22,13 +22,23 @@ from concurrent.futures import ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
 #             results = executor.map(process_func, items)
 
+# Default configuration values
+_DEFAULT_EPSILON = 0.15
+_DEFAULT_DECAY = 0.98
+_DEFAULT_COOLDOWN_ITERS = 5
+_DEFAULT_MAX_DRIFT = 0.10
+_DEFAULT_TOP_K = 10
+
 # Import production config if available
 try:
     from aurora_x.prod_config import CFG
-
-    _use_prod_config = True
+    _DEFAULT_EPSILON = getattr(CFG, 'EPSILON', _DEFAULT_EPSILON)
+    _DEFAULT_DECAY = getattr(CFG, 'DECAY', _DEFAULT_DECAY)
+    _DEFAULT_COOLDOWN_ITERS = getattr(CFG, 'COOLDOWN_ITERS', _DEFAULT_COOLDOWN_ITERS)
+    _DEFAULT_MAX_DRIFT = getattr(CFG, 'MAX_DRIFT', _DEFAULT_MAX_DRIFT)
+    _DEFAULT_TOP_K = getattr(CFG, 'TOP_K', _DEFAULT_TOP_K)
 except ImportError:
-    _use_prod_config = False
+    pass
 
 
 @dataclass
@@ -41,12 +51,11 @@ class BiasStat:
 
 @dataclass
 class AdaptiveConfig:
-    # Use production config if available, else defaults
-    epsilon: float = CFG.EPSILON if _use_prod_config else 0.15
-    decay: float = CFG.DECAY if _use_prod_config else 0.98
-    cooldown_iters: int = CFG.COOLDOWN_ITERS if _use_prod_config else 5
-    max_drift_per_iter: float = CFG.MAX_DRIFT if _use_prod_config else 0.10
-    top_k: int = CFG.TOP_K if _use_prod_config else 10
+    epsilon: float = _DEFAULT_EPSILON
+    decay: float = _DEFAULT_DECAY
+    cooldown_iters: int = _DEFAULT_COOLDOWN_ITERS
+    max_drift_per_iter: float = _DEFAULT_MAX_DRIFT
+    top_k: int = _DEFAULT_TOP_K
     seed: int = 42
 
 
