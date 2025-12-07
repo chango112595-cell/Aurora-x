@@ -21,6 +21,7 @@ import Tasks from "./pages/tasks";
 import Tiers from "./pages/tiers";
 import Intelligence from "./pages/intelligence";
 import AuroraAITest from "@/pages/aurora-ai-test";
+import AuroraChat from "./pages/aurora-chat";
 import MemoryFabric from "./pages/memory-fabric";
 import NotFound from "./pages/not-found";
 
@@ -47,6 +48,7 @@ function App() {
         <Route path="/intelligence" component={Intelligence} />
         <Route path="/aurora-ui" component={AuroraUI} />
         <Route path="/aurora-ai-test" component={AuroraAITest} />
+        <Route path="/aurora-chat" component={AuroraChat} />
         <Route path="/memory-fabric" component={MemoryFabric} />
         <Route component={NotFound} />
       </Switch>
