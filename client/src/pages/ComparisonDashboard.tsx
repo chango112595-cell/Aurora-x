@@ -295,15 +295,15 @@ export default function ComparisonDashboard() {
                 </div>
 
                 <Tabs value={tabValue} onValueChange={setTabValue} className="space-y-6">
-                    <TabsList className="grid w-full grid-cols-8 bg-slate-800/50 backdrop-blur-sm">
-                        <TabsTrigger value="git-comparison" className="text-cyan-400">Git Comparison</TabsTrigger>
-                        <TabsTrigger value="branch-analysis" className="text-cyan-400">Branch Analysis</TabsTrigger>
-                        <TabsTrigger value="aurora-runs" className="text-cyan-400">Aurora Runs</TabsTrigger>
-                        <TabsTrigger value="overview" className="text-cyan-400">Overview</TabsTrigger>
-                        <TabsTrigger value="branches" className="text-cyan-400">Branches</TabsTrigger>
-                        <TabsTrigger value="features" className="text-cyan-400">Features</TabsTrigger>
-                        <TabsTrigger value="diagnostics" className="text-cyan-400">Diagnostics</TabsTrigger>
-                        <TabsTrigger value="approval" className="text-cyan-400">Approval</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-8 bg-slate-900/90 backdrop-blur-sm border border-purple-500/50 p-1">
+                        <TabsTrigger value="git-comparison" className="text-slate-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=inactive]:bg-slate-800/70 data-[state=inactive]:hover:bg-slate-700/80">Git Comparison</TabsTrigger>
+                        <TabsTrigger value="branch-analysis" className="text-slate-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=inactive]:bg-slate-800/70 data-[state=inactive]:hover:bg-slate-700/80">Branch Analysis</TabsTrigger>
+                        <TabsTrigger value="aurora-runs" className="text-slate-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=inactive]:bg-slate-800/70 data-[state=inactive]:hover:bg-slate-700/80">Aurora Runs</TabsTrigger>
+                        <TabsTrigger value="overview" className="text-slate-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=inactive]:bg-slate-800/70 data-[state=inactive]:hover:bg-slate-700/80">Overview</TabsTrigger>
+                        <TabsTrigger value="branches" className="text-slate-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=inactive]:bg-slate-800/70 data-[state=inactive]:hover:bg-slate-700/80">Branches</TabsTrigger>
+                        <TabsTrigger value="features" className="text-slate-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=inactive]:bg-slate-800/70 data-[state=inactive]:hover:bg-slate-700/80">Features</TabsTrigger>
+                        <TabsTrigger value="diagnostics" className="text-slate-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=inactive]:bg-slate-800/70 data-[state=inactive]:hover:bg-slate-700/80">Diagnostics</TabsTrigger>
+                        <TabsTrigger value="approval" className="text-slate-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=inactive]:bg-slate-800/70 data-[state=inactive]:hover:bg-slate-700/80">Approval</TabsTrigger>
                     </TabsList>
 
                     {/* Git Comparison Tab */}
