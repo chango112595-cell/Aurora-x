@@ -187,6 +187,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Real system metrics endpoint using psutil
+  app.get("/api/system/metrics", async (req, res) => {
+    try {
+      const pythonCode = 'import psutil,json;print(json.dumps({"cpu":psutil.cpu_percent(interval=0.1),"memory":psutil.virtual_memory().percent,"disk":psutil.disk_usage("/").percent,"network":{"bytes_sent":psutil.net_io_counters().bytes_sent,"bytes_recv":psutil.net_io_counters().bytes_recv}}))';
+      const metricsProcess = spawn('python3', ['-c', pythonCode]);
+      
+      let output = '';
+      let errorOutput = '';
+      
+      metricsProcess.stdout.on('data', (data) => { output += data.toString(); });
+      metricsProcess.stderr.on('data', (data) => { errorOutput += data.toString(); });
+      
+      metricsProcess.on('close', (code) => {
+        if (code === 0 && output.trim()) {
+          try {
+            res.json(JSON.parse(output.trim()));
+          } catch (e) {
+            res.status(500).json({ error: 'Failed to parse metrics', raw: output });
+          }
+        } else {
+          res.status(500).json({ error: 'Failed to get metrics', stderr: errorOutput });
+        }
+      });
+      
+      metricsProcess.on('error', (err) => {
+        res.status(500).json({ error: 'Process error', message: err.message });
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Metrics unavailable', message: error.message });
+    }
+  });
+
   // ══════════════════════════════════════════════════════════════
   // 🔐 RATE LIMITING SETUP
   // ══════════════════════════════════════════════════════════════

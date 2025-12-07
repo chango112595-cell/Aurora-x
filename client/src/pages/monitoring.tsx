@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -55,10 +54,22 @@ interface SystemMetric {
   icon: string;
 }
 
+interface RealMetrics {
+  cpu: number;
+  memory: number;
+  disk: number;
+  network: { bytes_sent: number; bytes_recv: number };
+}
+
 export default function MonitoringPage() {
-  const [cpuUsage, setCpuUsage] = useState(45);
-  const [memoryUsage, setMemoryUsage] = useState(62);
-  const [diskUsage, setDiskUsage] = useState(38);
+  const { data: realMetrics } = useQuery<RealMetrics>({
+    queryKey: ['/api/system/metrics'],
+    refetchInterval: 3000,
+  });
+
+  const cpuUsage = realMetrics?.cpu ?? 0;
+  const memoryUsage = realMetrics?.memory ?? 0;
+  const diskUsage = realMetrics?.disk ?? 0;
 
   const { data: diagnostics, isLoading: diagLoading, isError, error, refetch, isRefetching } = useQuery<DiagnosticsData>({
     queryKey: ['/api/diagnostics'],
@@ -75,20 +86,14 @@ export default function MonitoringPage() {
     refetchInterval: 10000,
   });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCpuUsage(prev => Math.max(20, Math.min(80, prev + (Math.random() - 0.5) * 10)));
-      setMemoryUsage(prev => Math.max(40, Math.min(85, prev + (Math.random() - 0.5) * 5)));
-      setDiskUsage(prev => Math.max(30, Math.min(60, prev + (Math.random() - 0.5) * 2)));
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
+  const networkMbps = realMetrics?.network ? 
+    Math.round((realMetrics.network.bytes_sent + realMetrics.network.bytes_recv) / 1024 / 1024) : 0;
+  
   const systemMetrics: SystemMetric[] = [
     { name: 'CPU Usage', value: cpuUsage, max: 100, unit: '%', status: cpuUsage > 70 ? 'warning' : 'healthy', icon: 'cpu' },
     { name: 'Memory', value: memoryUsage, max: 100, unit: '%', status: memoryUsage > 80 ? 'warning' : 'healthy', icon: 'memory' },
     { name: 'Disk I/O', value: diskUsage, max: 100, unit: '%', status: diskUsage > 75 ? 'warning' : 'healthy', icon: 'disk' },
-    { name: 'Network', value: 23, max: 100, unit: 'Mbps', status: 'healthy', icon: 'network' },
+    { name: 'Network', value: networkMbps, max: 10000, unit: 'MB', status: 'healthy', icon: 'network' },
   ];
 
   const getStatusIcon = (status?: string) => {
