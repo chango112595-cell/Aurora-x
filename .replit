@@ -9,7 +9,7 @@ hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["gnupg", "openssl", "postgresql", "tmux", "xcodebuild", "zlib", "tree"]
+packages = ["gnupg", "libxcrypt", "openssl", "postgresql", "tmux", "tree", "xcodebuild", "zlib"]
 
 [deployment]
 deploymentTarget = "autoscale"
@@ -35,10 +35,6 @@ externalPort = 8000
 [[ports]]
 localPort = 8080
 externalPort = 8080
-
-[[ports]]
-localPort = 33949
-externalPort = 6000
 
 [[ports]]
 localPort = 34273
@@ -150,6 +146,10 @@ args = "Luminar Nexus V2"
 task = "workflow.run"
 args = "Aurora Nexus V3"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "MCP Server"
+
 [[workflows.workflow]]
 name = "Start application"
 author = "agent"
@@ -202,6 +202,18 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd aurora_backend && pip install -r requirements.txt && python3 main.py"
+
+[[workflows.workflow]]
+name = "MCP Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 mcp_server/server.py"
+waitForPort = 8080
+
+[workflows.workflow.metadata]
+outputType = "console"
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
