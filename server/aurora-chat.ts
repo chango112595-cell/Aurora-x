@@ -6,9 +6,11 @@ import { spawn } from 'child_process';
 import * as path from 'path';
 import { getMemoryFabricClient } from './memory-fabric-client';
 import { getNexusV3Client, type ConsciousnessState } from './nexus-v3-client';
+import { getCognitiveLoop } from './cognitive-loop';
 
 const memoryClient = getMemoryFabricClient();
 const nexusV3Client = getNexusV3Client();
+const cognitiveLoop = getCognitiveLoop();
 
 export function setupAuroraChatWebSocket(server: any) {
   const wss = new WebSocketServer({ 
