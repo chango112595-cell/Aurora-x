@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { AuroraMetricsOverlay } from "@/components/aurora-metrics";
 
 type MessageStatus = "pending" | "processing" | "complete" | "error";
 
@@ -413,6 +414,9 @@ export default function AuroraChat() {
           </p>
         </div>
       </Card>
+
+      {/* Real-time system metrics overlay */}
+      <AuroraMetricsOverlay refreshInterval={5000} />
     </div>
   );
 }
