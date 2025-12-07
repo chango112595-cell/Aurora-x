@@ -59,13 +59,65 @@ export default function AutonomousPage() {
     { id: '6', name: 'Memory Manager', description: 'Manages and optimizes memory consolidation', status: 'active', category: 'memory', lastRun: '3 min ago', successRate: 92, icon: 'layers' },
   ];
 
-  const workerTasks: WorkerTask[] = [
-    { id: '1', type: 'code_fix', status: 'running', priority: 'high', description: 'Fixing TypeScript compilation errors in routes.ts', progress: 67, startedAt: new Date(Date.now() - 120000).toISOString() },
-    { id: '2', type: 'optimization', status: 'running', priority: 'medium', description: 'Optimizing database query performance', progress: 45, startedAt: new Date(Date.now() - 180000).toISOString() },
-    { id: '3', type: 'security_scan', status: 'queued', priority: 'high', description: 'Scanning authentication module for vulnerabilities', progress: 0, startedAt: '' },
-    { id: '4', type: 'pattern_analysis', status: 'completed', priority: 'low', description: 'Analyzed React component patterns', progress: 100, startedAt: new Date(Date.now() - 600000).toISOString() },
-    { id: '5', type: 'memory_consolidation', status: 'queued', priority: 'medium', description: 'Consolidating short-term memories to mid-term', progress: 0, startedAt: '' },
-  ];
+  const getWorkerTasks = (): WorkerTask[] => {
+    const activeWorkers = auroraStatus?.autofixer?.active || 0;
+    const queuedTasks = auroraStatus?.autofixer?.queued || 0;
+    const completedTasks = auroraStatus?.autofixer?.completed || 0;
+    
+    const tasks: WorkerTask[] = [];
+    
+    if (completedTasks > 0) {
+      tasks.push({ 
+        id: 'completed-1', 
+        type: 'system_check', 
+        status: 'completed', 
+        priority: 'low', 
+        description: `Completed ${completedTasks} autonomous task${completedTasks > 1 ? 's' : ''}`, 
+        progress: 100, 
+        startedAt: new Date(Date.now() - 300000).toISOString() 
+      });
+    }
+    
+    if (activeWorkers > 0) {
+      tasks.push({ 
+        id: 'active-1', 
+        type: 'monitoring', 
+        status: 'running', 
+        priority: 'medium', 
+        description: `${activeWorkers} worker${activeWorkers > 1 ? 's' : ''} actively processing`, 
+        progress: 50, 
+        startedAt: new Date(Date.now() - 60000).toISOString() 
+      });
+    }
+    
+    if (queuedTasks > 0) {
+      tasks.push({ 
+        id: 'queued-1', 
+        type: 'pending', 
+        status: 'queued', 
+        priority: 'low', 
+        description: `${queuedTasks} task${queuedTasks > 1 ? 's' : ''} in queue`, 
+        progress: 0, 
+        startedAt: '' 
+      });
+    }
+    
+    if (tasks.length === 0) {
+      tasks.push({ 
+        id: 'idle-1', 
+        type: 'standby', 
+        status: 'completed', 
+        priority: 'low', 
+        description: 'All workers idle - ready for new tasks', 
+        progress: 100, 
+        startedAt: new Date().toISOString() 
+      });
+    }
+    
+    return tasks;
+  };
+  
+  const workerTasks = getWorkerTasks();
 
   const getStatusColor = (status: string) => {
     switch (status) {
