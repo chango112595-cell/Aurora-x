@@ -7,7 +7,7 @@ import type {
   RunMeta,
   UsedSeed,
   CorpusQuery,
-} from "@shared/schema";
+} from "../shared/schema";
 
 export class CorpusStorage {
   private db: Database.Database;
