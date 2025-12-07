@@ -1,0 +1,30 @@
+# Aurora-X Ultra - Complete Python Dependencies
+# Generated for portable installation
+
+# Core Web Frameworks
+fastapi>=0.118.2
+flask>=3.0.3
+flask-cors>=5.0.0
+uvicorn[standard]>=0.33.0
+
+# HTTP & Networking
+httpx>=0.28.1
+requests>=2.32.4
+websockets>=12.0
+aiohttp>=3.9.0
+
+# Data & Validation
+pydantic>=2.5.0
+python-multipart>=0.0.6
+
+# System & Utilities
+psutil>=5.9.0
+watchdog>=3.0.0
+
+# Testing
+pytest>=8.3.5
+
+# Optional: Development tools
+black>=22.0
+mypy>=0.950
+ruff>=0.1.0
