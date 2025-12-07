@@ -217,6 +217,5 @@ app.use((req, res, next) => {
     log(`serving on port ${PORT}`);
     log(`environment: ${app.get("env")}`);
     log(`access at: http://${HOST}:${PORT}`);
-    log(`vite hmr ready on wss://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`);
   });
 })();
