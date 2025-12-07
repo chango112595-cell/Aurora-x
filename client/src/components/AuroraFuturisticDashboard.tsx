@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import UnifiedSystemStatus from './UnifiedSystemStatus';
+import ActivityMonitor from './ActivityMonitor';
 
 export default function AuroraFuturisticDashboard() {
   const [quantumCoherence, setQuantumCoherence] = useState(100);
@@ -280,6 +281,11 @@ export default function AuroraFuturisticDashboard() {
       {/* Live System Status from Aurora Nexus */}
       <div className="mb-6">
         <UnifiedSystemStatus />
+      </div>
+
+      {/* Activity Monitor - Shows what Aurora is doing */}
+      <div className="mb-6">
+        <ActivityMonitor />
       </div>
 
       {/* Neural Activity Monitor */}
