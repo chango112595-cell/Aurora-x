@@ -371,11 +371,11 @@ class AuroraConversationEngine:
         issues = []
         services_status = {}
         
-        # Check each service
+        # Check each service with their actual endpoints
         services = [
-            ("Memory Bridge", 5003, "/health"),
-            ("Memory Fabric V2", 5004, "/health"),
-            ("Luminar Nexus V2", 8000, "/health"),
+            ("Memory Bridge", 5003, "/memory/status"),
+            ("Memory Fabric V2", 5004, "/status"),
+            ("Luminar Nexus V2", 8000, "/api/nexus/status"),
         ]
         
         for name, port, endpoint in services:
