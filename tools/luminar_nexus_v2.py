@@ -42,11 +42,32 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import Any
+import urllib.request
+import json as json_lib
 
 import numpy as np
 import psutil
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+
+
+def log_to_activity_monitor(activity_type: str, message: str, details: dict = None):
+    """Log activity to Aurora Nexus V3 Activity Monitor"""
+    try:
+        data = json_lib.dumps({
+            "type": activity_type,
+            "message": message,
+            "details": details or {}
+        }).encode('utf-8')
+        req = urllib.request.Request(
+            "http://0.0.0.0:5002/api/activity/log",
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        urllib.request.urlopen(req, timeout=1)
+    except Exception:
+        pass
 
 # Add tools directory to path for Port Manager
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
@@ -1357,11 +1378,17 @@ class LuminarNexusV2:
                 if not message:
                     return jsonify({"error": "No message provided"}), 400
 
+                log_to_activity_monitor("chat", f"Received: {message[:50]}...", {"session": session_id})
+                log_to_activity_monitor("processing", "Routing to Aurora Bridge", {"session": session_id})
+
                 # Advanced routing through Aurora Bridge
                 if AURORA_BRIDGE_AVAILABLE and route_to_enhanced_aurora_core is not None:
                     print(f" Nexus v2 -> Aurora Bridge: {message[:50]}...")
+                    log_to_activity_monitor("thinking", "Aurora processing request...", {"bridge": "enhanced"})
                     response = route_to_enhanced_aurora_core(message, session_id)
+                    log_to_activity_monitor("complete", f"Response generated ({len(response)} chars)", {"session": session_id})
                 else:
+                    log_to_activity_monitor("error", "Aurora Bridge unavailable", {})
                     response = "Nexus v2 operational, but Aurora Bridge unavailable. Please check system configuration."
 
                 return jsonify(
@@ -1375,6 +1402,7 @@ class LuminarNexusV2:
                 )
 
             except Exception as e:
+                log_to_activity_monitor("error", f"Chat error: {str(e)[:50]}", {})
                 print(f"[ERROR] Chat routing error: {e}")
                 return jsonify({"error": str(e)}), 500
 

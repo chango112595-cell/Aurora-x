@@ -148,6 +148,24 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
         
         else:
             self.send_json_response({"error": "Endpoint not found", "path": path}, 404)
+    
+    def do_POST(self):
+        if self.path == "/api/activity/log":
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                body = self.rfile.read(content_length).decode('utf-8')
+                data = json.loads(body) if body else {}
+                
+                activity_type = data.get("type", "info")
+                message = data.get("message", "Activity logged")
+                details = data.get("details", {})
+                
+                entry = log_activity(activity_type, message, details)
+                self.send_json_response({"success": True, "entry": entry})
+            except Exception as e:
+                self.send_json_response({"error": str(e)}, 400)
+        else:
+            self.send_json_response({"error": "Endpoint not found"}, 404)
 
 
 class HTTPServerModule:
