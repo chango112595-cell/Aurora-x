@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Aurora MCP Server - Model Context Protocol Server with HTTP REST API
-Exposes filesystem and process tools for external AI agents like ChatGPT
+Aurora MCP Server - Model Context Protocol Server
+Supports both HTTP REST API (for ChatGPT) and WebSocket (for MCP clients)
 """
 
 import asyncio
@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import logging
 from contextlib import asynccontextmanager
+import threading
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [MCP] %(message)s')
@@ -28,6 +29,10 @@ import uvicorn
 # Import websockets for MCP protocol
 import websockets
 
+
+# ============================================================
+# Pydantic Models for HTTP API
+# ============================================================
 
 class FileReadRequest(BaseModel):
     path: str
@@ -53,6 +58,107 @@ class CommandExecRequest(BaseModel):
     args: List[str] = []
     cwd: Optional[str] = None
 
+
+# ============================================================
+# WebSocket MCP Server (from user's code)
+# ============================================================
+
+async def ws_send(ws, msg):
+    await ws.send(json.dumps(msg))
+
+async def ws_handle_request(ws, req):
+    method = req.get("method")
+    id = req.get("id")
+
+    # File read
+    if method == "fs/read":
+        path = req["params"]["path"]
+        try:
+            with open(path, "r") as f:
+                data = f.read()
+            return {"id": id, "result": {"content": data}}
+        except Exception as e:
+            return {"id": id, "error": {"message": str(e)}}
+
+    # File write
+    if method == "fs/write":
+        path = req["params"]["path"]
+        content = req["params"]["content"]
+        try:
+            with open(path, "w") as f:
+                f.write(content)
+            return {"id": id, "result": {"success": True}}
+        except Exception as e:
+            return {"id": id, "error": {"message": str(e)}}
+
+    # File list
+    if method == "fs/list":
+        path = req["params"]["path"]
+        try:
+            items = os.listdir(path)
+            return {"id": id, "result": {"items": items}}
+        except Exception as e:
+            return {"id": id, "error": {"message": str(e)}}
+
+    # Run a process
+    if method == "process/run":
+        cmd = req["params"]["cmd"]
+        try:
+            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            return {
+                "id": id,
+                "result": {
+                    "stdout": result.stdout,
+                    "stderr": result.stderr,
+                    "returncode": result.returncode
+                }
+            }
+        except Exception as e:
+            return {"id": id, "error": {"message": str(e)}}
+
+    # Unknown method
+    return {
+        "id": id,
+        "error": {"message": f"Unknown method: {method}"}
+    }
+
+
+async def ws_handler(ws):
+    async for message in ws:
+        req = json.loads(message)
+
+        if req.get("method") == "initialize":
+            await ws_send(ws, {
+                "id": req["id"],
+                "result": {
+                    "protocolVersion": "2024-02-01",
+                    "capabilities": {
+                        "tools": {
+                            "fs/read": {},
+                            "fs/write": {},
+                            "fs/list": {},
+                            "process/run": {}
+                        }
+                    }
+                }
+            })
+            continue
+
+        response = await ws_handle_request(ws, req)
+        if response:
+            await ws_send(ws, response)
+
+
+async def run_websocket_server():
+    """Run the WebSocket MCP server on port 8000"""
+    print("MCP WebSocket Server running on ws://0.0.0.0:8000")
+    async with websockets.serve(ws_handler, "0.0.0.0", 8000):
+        await asyncio.Future()  # run forever
+
+
+# ============================================================
+# HTTP REST API Server (for ChatGPT)
+# ============================================================
 
 class MCPServer:
     """Model Context Protocol Server with HTTP REST API"""
@@ -251,11 +357,17 @@ mcp = MCPServer(workspace_root=os.getcwd())
 # Create FastAPI app with lifespan
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
+    # Startup - also start WebSocket server in background
     logger.info("Starting Aurora MCP HTTP Server")
+    
+    # Start WebSocket server in a background task
+    ws_task = asyncio.create_task(run_websocket_server())
+    
     yield
+    
     # Shutdown
-    logger.info("Shutting down Aurora MCP HTTP Server")
+    ws_task.cancel()
+    logger.info("Shutting down Aurora MCP Servers")
 
 app = FastAPI(
     title="Aurora MCP Server",
@@ -284,6 +396,10 @@ async def root():
         "name": "Aurora MCP Server",
         "version": "1.0.0",
         "description": "Model Context Protocol Server for AI Agents",
+        "protocols": {
+            "http": "Port 8080 - REST API for ChatGPT Actions",
+            "websocket": "Port 8000 - WebSocket for MCP clients"
+        },
         "endpoints": {
             "GET /": "This info",
             "GET /health": "Health check",
@@ -356,19 +472,24 @@ async def process_exec(request: CommandExecRequest):
 
 
 def main():
-    """Run the MCP HTTP server"""
+    """Run the MCP HTTP server (WebSocket starts automatically)"""
     port = int(os.environ.get("MCP_PORT", "8080"))
     
     # Get public URL
     replit_url = os.environ.get("REPLIT_DEV_DOMAIN", "")
     
     print("\n" + "=" * 60)
-    print("AURORA MCP SERVER - HTTP REST API")
+    print("AURORA MCP SERVER")
     print("=" * 60)
-    print(f"\nLocal:  http://0.0.0.0:{port}")
+    print("\nHTTP REST API (for ChatGPT):")
+    print(f"  Local:  http://0.0.0.0:{port}")
     if replit_url:
-        print(f"Public: https://{replit_url}")
-    print("\nEndpoints for ChatGPT Actions:")
+        print(f"  Public: https://{replit_url}")
+    print("\nWebSocket MCP Protocol:")
+    print("  Local:  ws://0.0.0.0:8000")
+    if replit_url:
+        print(f"  Public: wss://{replit_url}:8000")
+    print("\nEndpoints:")
     print("  POST /fs/read    - Read file contents")
     print("  POST /fs/write   - Write to a file")
     print("  POST /fs/list    - List directory")
