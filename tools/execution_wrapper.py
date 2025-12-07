@@ -9,11 +9,91 @@ import sys
 import json
 import re
 import random
+import urllib.request
+import urllib.error
 from pathlib import Path
-from typing import Any, List, Dict
+from typing import Any, List, Dict, Optional
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 sys.path.insert(0, str(Path(__file__).parent))
+
+
+class MemoryRecall:
+    """Interface to Aurora's memory system for recalling stored information"""
+    
+    def __init__(self, memory_port: int = 5003, fabric_port: int = 5004):
+        self.memory_url = f"http://127.0.0.1:{memory_port}"
+        self.fabric_url = f"http://127.0.0.1:{fabric_port}"
+    
+    def query_memory(self, query: str, top_k: int = 10) -> List[Dict]:
+        """Query both memory services for relevant information"""
+        results = []
+        
+        # Try memory bridge
+        try:
+            data = json.dumps({"query": query, "top_k": top_k}).encode('utf-8')
+            req = urllib.request.Request(
+                f"{self.memory_url}/memory/query",
+                data=data,
+                headers={'Content-Type': 'application/json'}
+            )
+            with urllib.request.urlopen(req, timeout=3) as response:
+                resp_data = json.loads(response.read().decode('utf-8'))
+                if resp_data.get('success') and resp_data.get('results'):
+                    results.extend(resp_data['results'])
+        except:
+            pass
+        
+        # Try memory fabric v2
+        try:
+            data = json.dumps({"query": query, "top_k": top_k}).encode('utf-8')
+            req = urllib.request.Request(
+                f"{self.fabric_url}/recall",
+                data=data,
+                headers={'Content-Type': 'application/json'}
+            )
+            with urllib.request.urlopen(req, timeout=3) as response:
+                resp_data = json.loads(response.read().decode('utf-8'))
+                if resp_data.get('success') and resp_data.get('memories'):
+                    for mem in resp_data['memories']:
+                        results.append({
+                            'text': mem.get('content', mem.get('text', '')),
+                            'meta': mem.get('meta', {}),
+                            'score': mem.get('relevance', mem.get('score', 0))
+                        })
+        except:
+            pass
+        
+        return results
+    
+    def find_user_info(self, query: str) -> Optional[str]:
+        """Search memories for user-related information like name, preferences"""
+        memories = self.query_memory(query, top_k=15)
+        
+        # Look for name patterns in memories
+        name_patterns = [
+            r"(?:my name is|i'm|i am|call me|name's)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)",
+            r"(?:name|user|called)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)",
+            r"user_name[\"']?\s*[:\s]+[\"']?([A-Za-z]+)",
+        ]
+        
+        for memory in memories:
+            text = memory.get('text', '')
+            meta = memory.get('meta', {})
+            
+            # Check meta for stored name
+            if meta.get('user_name'):
+                return meta['user_name']
+            if meta.get('name'):
+                return meta['name']
+            
+            # Search text for name patterns
+            for pattern in name_patterns:
+                match = re.search(pattern, text, re.IGNORECASE)
+                if match:
+                    return match.group(1).strip()
+        
+        return None
 
 
 class AuroraConversationEngine:
@@ -21,6 +101,7 @@ class AuroraConversationEngine:
     
     def __init__(self):
         self.conversation_history = []
+        self.memory_recall = MemoryRecall()
         
     def generate_response(self, message: str, msg_type: str, context: list) -> str:
         """Generate a dynamic, contextual response based on the actual message content"""
@@ -32,6 +113,9 @@ class AuroraConversationEngine:
         intent = self._determine_intent(message_lower)
         
         # Route to appropriate handler with extracted context
+        if self._is_memory_recall_question(message_lower):
+            return self._handle_memory_recall(message_lower, message, context)
+        
         if self._is_identity_question(message_lower):
             return self._handle_identity(message_lower, keywords)
         
@@ -172,6 +256,60 @@ class AuroraConversationEngine:
         if any(w in message for w in ['help', 'assist', 'support', 'guide']):
             return 'help'
         return 'general'
+    
+    def _is_memory_recall_question(self, msg: str) -> bool:
+        """Check if user is asking Aurora to recall something from memory"""
+        patterns = [
+            r'\bremember\b.*\b(my|me|i)\b',
+            r'\bdo you (know|recall|remember)\b',
+            r"\bwhat's my\b",
+            r'\bwhat is my\b',
+            r'\bmy name\b',
+            r'\bwho am i\b',
+            r'\brecall\b.*\b(my|me)\b',
+            r'\bforget\b.*\bme\b',
+            r'\bknow\b.*\babout me\b',
+        ]
+        return any(re.search(p, msg) for p in patterns)
+    
+    def _handle_memory_recall(self, msg_lower: str, original_msg: str, context: list) -> str:
+        """Handle questions about what Aurora remembers about the user"""
+        # Check for name recall specifically
+        if any(x in msg_lower for x in ['my name', 'who am i', 'remember me', 'know me']):
+            # Search memory for user's name
+            name = self.memory_recall.find_user_info("user name called")
+            
+            # Also check conversation context for name
+            if not name and context:
+                for msg in context:
+                    if isinstance(msg, dict):
+                        content = msg.get('content', '')
+                    else:
+                        content = str(msg)
+                    # Look for "my name is X" pattern
+                    match = re.search(r"(?:my name is|i'm|i am|call me)\s+([A-Z][a-z]+)", content, re.IGNORECASE)
+                    if match:
+                        name = match.group(1)
+                        break
+            
+            if name:
+                return f"Yes, I remember you! Your name is {name}. It's great to chat with you again. How can I help you today?"
+            else:
+                return "I don't have your name stored in my memory yet. Would you like to tell me your name so I can remember you for our future conversations?"
+        
+        # General memory recall
+        memories = self.memory_recall.query_memory(original_msg, top_k=5)
+        if memories:
+            memory_summary = []
+            for mem in memories[:3]:
+                text = mem.get('text', '')[:100]
+                if text:
+                    memory_summary.append(f"- {text}")
+            
+            if memory_summary:
+                return f"From our previous conversations, I recall:\n\n" + "\n".join(memory_summary) + "\n\nIs there something specific you'd like me to remember or recall?"
+        
+        return "I'm searching my memory but don't have specific information stored about that yet. Would you like to share something for me to remember?"
     
     def _is_identity_question(self, msg: str) -> bool:
         patterns = [r'\bwho are you\b', r'\bwhat are you\b', r'\byour name\b',
