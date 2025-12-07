@@ -432,24 +432,24 @@ export default function MemoryFabric() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1" data-testid="tabs-memory-fabric">
-            <TabsList className="mb-4 bg-slate-900/90 border border-purple-500/40 shadow-lg" data-testid="tablist-memory">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-purple-600/50 data-[state=active]:text-white text-purple-200" data-testid="tab-trigger-overview">
+            <TabsList className="mb-4 bg-slate-900 border border-purple-500/40 shadow-lg" data-testid="tablist-memory">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-overview">
                 <Target className="w-4 h-4 mr-2" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="facts" className="data-[state=active]:bg-purple-600/50 data-[state=active]:text-white text-purple-200" data-testid="tab-trigger-facts">
+              <TabsTrigger value="facts" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-facts">
                 <Lightbulb className="w-4 h-4 mr-2" />
                 Facts
               </TabsTrigger>
-              <TabsTrigger value="memories" className="data-[state=active]:bg-purple-600/50 data-[state=active]:text-white text-purple-200" data-testid="tab-trigger-memories">
+              <TabsTrigger value="memories" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-memories">
                 <Brain className="w-4 h-4 mr-2" />
                 Memories
               </TabsTrigger>
-              <TabsTrigger value="conversations" className="data-[state=active]:bg-purple-600/50 data-[state=active]:text-white text-purple-200" data-testid="tab-trigger-conversations">
+              <TabsTrigger value="conversations" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-conversations">
                 <MessageSquare className="w-4 h-4 mr-2" />
                 Conversations
               </TabsTrigger>
-              <TabsTrigger value="events" className="data-[state=active]:bg-purple-600/50 data-[state=active]:text-white text-purple-200" data-testid="tab-trigger-events">
+              <TabsTrigger value="events" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-events">
                 <History className="w-4 h-4 mr-2" />
                 Events
               </TabsTrigger>
@@ -458,31 +458,31 @@ export default function MemoryFabric() {
             <TabsContent value="overview" className="h-[calc(100%-60px)]" data-testid="tab-content-overview">
               <ScrollArea className="h-full">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <Card className="border-cyan-500/20" data-testid="card-overview-facts">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-lg">
+                  <Card className="border-cyan-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-overview-facts">
+                    <CardHeader className="border-b border-cyan-500/20">
+                      <CardTitle className="flex items-center gap-2 text-lg text-cyan-300">
                         <Lightbulb className="w-5 h-5 text-yellow-400" />
                         Key Facts Aurora Knows
                       </CardTitle>
-                      <CardDescription>Important information stored in memory</CardDescription>
+                      <CardDescription className="text-cyan-300/60">Important information stored in memory</CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-4">
                       {renderFactsCard(memoryData?.facts || {})}
                     </CardContent>
                   </Card>
 
-                  <Card className="border-purple-500/20" data-testid="card-overview-short-term">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-lg">
+                  <Card className="border-purple-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-overview-short-term">
+                    <CardHeader className="border-b border-purple-500/20">
+                      <CardTitle className="flex items-center gap-2 text-lg text-purple-300">
                         <Zap className="w-5 h-5 text-yellow-400" />
                         Recent Short-Term Memories
                       </CardTitle>
-                      <CardDescription>Current session context</CardDescription>
+                      <CardDescription className="text-purple-300/60">Current session context</CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-4">
                       <ScrollArea className="h-[300px]">
                         {(memoryData?.shortTerm || []).length === 0 ? (
-                          <p className="text-muted-foreground text-sm" data-testid="text-no-short-term-overview">No short-term memories in current session.</p>
+                          <p className="text-purple-300/50 text-sm" data-testid="text-no-short-term-overview">No short-term memories in current session.</p>
                         ) : (
                           memoryData?.shortTerm.slice(-5).map((entry, i) => renderMemoryCard(entry, i))
                         )}
