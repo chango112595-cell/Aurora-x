@@ -849,14 +849,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const { getMemoryFabricClient } = await import('./memory-fabric-client');
   const memoryFabricClient = getMemoryFabricClient();
 
-  // Check and enable Memory Fabric v2
-  memoryFabricClient.checkStatus().then(enabled => {
+  // Check Memory Fabric v2 after delay to allow service to start
+  setTimeout(async () => {
+    const enabled = await memoryFabricClient.checkStatus();
     if (enabled) {
       console.log('[Memory Fabric V2] ✅ Service connected');
-    } else {
-      console.log('[Memory Fabric V2] ⚠️ Service not available - will retry on requests');
     }
-  });
+    // Silently retry on requests if not available - no warning needed
+  }, 5000);
 
   // Memory Fabric v2 Status
   app.get("/api/memory-fabric/status", async (req, res) => {
