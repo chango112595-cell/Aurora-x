@@ -1258,8 +1258,6 @@ class LuminarNexusV2:
 
     def _update_quantum_coherence(self):
         """Update system quantum coherence level"""
-        now = datetime.now()
-        
         established_services = [
             h for h in self.health_monitor.values() 
             if h.last_healthy_at is not None
@@ -1269,11 +1267,12 @@ class LuminarNexusV2:
             healthy_count = sum(1 for h in established_services if h.status in {"healthy", "degraded"})
             total = len(established_services)
             self.quantum_mesh.coherence_level = healthy_count / total
+            # Only warn when we have degraded services
+            if self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"]:
+                print(f"[WARN]  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
         else:
+            # No established services yet - maintain full coherence silently
             self.quantum_mesh.coherence_level = 1.0
-
-        if established_services and self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"]:
-            print(f"[WARN]  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
 
     def get_system_status(self) -> dict[str, Any]:
         """Get comprehensive system status"""

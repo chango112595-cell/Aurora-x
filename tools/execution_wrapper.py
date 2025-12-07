@@ -300,6 +300,10 @@ class AuroraConversationEngine:
         if self._is_action_request(message_lower, message):
             return self._handle_action_request(message_lower, message, keywords, entities)
         
+        # Check if user is introducing themselves (name storage)
+        if self._is_name_introduction(message_lower, message):
+            return self._handle_name_introduction(message, context)
+        
         # Route to appropriate handler with extracted context
         if self._is_memory_recall_question(message_lower):
             return self._handle_memory_recall(message_lower, message, context)
@@ -539,6 +543,57 @@ class AuroraConversationEngine:
             return 'help'
         return 'general'
     
+    def _is_name_introduction(self, msg_lower: str, original: str) -> bool:
+        """Check if user is telling Aurora their name - only explicit introductions"""
+        patterns = [
+            r"(?:my name is|i'm called|i am called|call me|name's|my name's)\s+[A-Za-z]+",
+            r"^i'm\s+[A-Za-z]+$",  # "I'm John" at start of message
+            r"^i am\s+[A-Za-z]+$",  # "I am John" at start of message
+        ]
+        # Exclude questions about name
+        if any(q in msg_lower for q in ['what is my name', "what's my name", 'do you know my name', 'remember my name']):
+            return False
+        # Exclude common greetings that might match "i'm" patterns
+        greetings = ['hello', 'hi', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening', 'howdy', "what's up", 'sup', 'yo']
+        if any(g in msg_lower for g in greetings) and len(msg_lower) < 30:
+            return False
+        return any(re.search(p, msg_lower) for p in patterns)
+    
+    def _handle_name_introduction(self, message: str, context: list) -> str:
+        """Handle when user tells Aurora their name - store it"""
+        # Extract the name from explicit introduction patterns
+        patterns = [
+            r"(?:my name is|i'm called|i am called|call me|name's|my name's)\s+([A-Za-z]+)",
+            r"^i'm\s+([A-Za-z]+)$",  # "I'm John"
+            r"^i am\s+([A-Za-z]+)$",  # "I am John"
+        ]
+        name = None
+        for pattern in patterns:
+            match = re.search(pattern, message, re.IGNORECASE)
+            if match:
+                name = match.group(1).capitalize()
+                break
+        
+        if name:
+            # Store in memory via memory fabric
+            try:
+                data = json.dumps({
+                    "content": f"User's name is {name}",
+                    "meta": {"user_name": name, "type": "personal_info"}
+                }).encode('utf-8')
+                req = urllib.request.Request(
+                    "http://127.0.0.1:5004/store",
+                    data=data,
+                    headers={'Content-Type': 'application/json'}
+                )
+                urllib.request.urlopen(req, timeout=2)
+            except:
+                pass  # Memory storage optional
+            
+            return f"Nice to meet you, {name}! I'll remember your name. How can I help you today?"
+        
+        return "I didn't catch your name. Could you tell me again?"
+    
     def _is_memory_recall_question(self, msg: str) -> bool:
         """Check if user is asking Aurora to recall something from memory"""
         patterns = [
@@ -546,12 +601,14 @@ class AuroraConversationEngine:
             r'\bdo you (know|recall|remember)\b',
             r"\bwhat's my\b",
             r'\bwhat is my\b',
-            r'\bmy name\b',
             r'\bwho am i\b',
             r'\brecall\b.*\b(my|me)\b',
             r'\bforget\b.*\bme\b',
             r'\bknow\b.*\babout me\b',
         ]
+        # Check for name recall but not name introduction
+        if 'my name' in msg and not any(p in msg for p in ['my name is', "i'm", 'i am', 'call me']):
+            return True
         return any(re.search(p, msg) for p in patterns)
     
     def _handle_memory_recall(self, msg_lower: str, original_msg: str, context: list) -> str:

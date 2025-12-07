@@ -317,7 +317,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
-            text: message, 
+            message: message,  // Luminar V2 expects 'message' not 'text'
             session_id: sessionId,
             context: req.body.context || {} 
           }),
