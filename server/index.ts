@@ -7,7 +7,6 @@ import { registerLuminarRoutes } from "./luminar-routes";
 import { registerNexusV3Routes } from "./nexus-v3-routes";
 import { createWebSocketServer } from "./websocket-server";
 import { getAuroraAI } from "./aurora";
-import mcpRouter from "./mcp-server";
 
 // Initialize Aurora Core Intelligence with 188 power units
 const aurora = AuroraCore.getInstance();
@@ -67,10 +66,6 @@ app.use((req, res, next) => {
 
   // Aurora Nexus V3 routes (port 5002 bridge)
   registerNexusV3Routes(app);
-
-  // MCP Server routes for external AI integration (ChatGPT, etc.)
-  app.use('/mcp', mcpRouter);
-  console.log("[MCP] ✅ MCP Server routes registered at /mcp");
 
   // Aurora API Routes - Phase 2 Implementation (must be before Vite setup)
   // Route 1: GET /api/aurora/status

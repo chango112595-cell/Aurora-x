@@ -204,5 +204,5 @@ task = "shell.exec"
 args = "cd aurora_backend && pip install -r requirements.txt && python3 main.py"
 
 [agent]
-integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0", "javascript_openai_ai_integrations:1.0.0"]
+integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
 expertMode = true
