@@ -363,15 +363,117 @@ class AuroraConversationEngine:
         return random.choice(responses)
     
     def _handle_system_question(self, msg: str, keywords: List[str]) -> str:
-        return """**System Status: Operational**
-
-All core systems are active:
-- Intelligence tiers: 188 (fully loaded)
-- Execution programs: 66 (ready)
-- Response engine: Online
-- Pattern learning: Active
-
-What would you like me to help you with?"""
+        """Perform real system diagnostics and return actual status"""
+        import os
+        import socket
+        
+        diagnostics = []
+        issues = []
+        services_status = {}
+        
+        # Check each service
+        services = [
+            ("Memory Bridge", 5003, "/health"),
+            ("Memory Fabric V2", 5004, "/health"),
+            ("Luminar Nexus V2", 8000, "/health"),
+        ]
+        
+        for name, port, endpoint in services:
+            try:
+                req = urllib.request.Request(f"http://127.0.0.1:{port}{endpoint}", method='GET')
+                with urllib.request.urlopen(req, timeout=2) as response:
+                    services_status[name] = {"status": "online", "port": port}
+            except urllib.error.URLError:
+                services_status[name] = {"status": "offline", "port": port}
+                issues.append(f"{name} (port {port}) is not responding")
+            except socket.timeout:
+                services_status[name] = {"status": "timeout", "port": port}
+                issues.append(f"{name} (port {port}) is slow to respond")
+            except Exception as e:
+                services_status[name] = {"status": "error", "port": port, "error": str(e)}
+                issues.append(f"{name} (port {port}) error: {str(e)[:50]}")
+        
+        # Check system resources
+        try:
+            # Memory check using /proc/meminfo (Linux)
+            if os.path.exists('/proc/meminfo'):
+                with open('/proc/meminfo', 'r') as f:
+                    meminfo = f.read()
+                    mem_total = int([l for l in meminfo.split('\n') if 'MemTotal' in l][0].split()[1]) // 1024
+                    mem_avail = int([l for l in meminfo.split('\n') if 'MemAvailable' in l][0].split()[1]) // 1024
+                    mem_used_pct = round((1 - mem_avail / mem_total) * 100, 1)
+                    
+                    if mem_used_pct > 90:
+                        issues.append(f"High memory usage: {mem_used_pct}%")
+                    diagnostics.append(f"Memory: {mem_used_pct}% used ({mem_avail}MB available)")
+        except:
+            diagnostics.append("Memory: Unable to check")
+        
+        # Check load average
+        try:
+            if os.path.exists('/proc/loadavg'):
+                with open('/proc/loadavg', 'r') as f:
+                    load = float(f.read().split()[0])
+                    if load > 2.0:
+                        issues.append(f"High CPU load: {load}")
+                    diagnostics.append(f"CPU Load: {load}")
+        except:
+            diagnostics.append("CPU Load: Unable to check")
+        
+        # Check data directory
+        data_dir = Path(__file__).parent.parent / "data"
+        if data_dir.exists():
+            try:
+                db_files = list(data_dir.glob("*.db"))
+                wal_files = list(data_dir.glob("*.db-wal"))
+                if wal_files:
+                    for wal in wal_files:
+                        size_mb = wal.stat().st_size / (1024 * 1024)
+                        if size_mb > 50:
+                            issues.append(f"Large WAL file: {wal.name} ({size_mb:.1f}MB)")
+                diagnostics.append(f"Databases: {len(db_files)} found")
+            except:
+                pass
+        
+        # Build response
+        online_count = sum(1 for s in services_status.values() if s['status'] == 'online')
+        total_count = len(services_status)
+        
+        if issues:
+            status_line = f"**System Status: Issues Detected ({len(issues)})**"
+        elif online_count == total_count:
+            status_line = "**System Status: All Systems Operational**"
+        else:
+            status_line = f"**System Status: Partial ({online_count}/{total_count} services online)**"
+        
+        response_parts = [status_line, ""]
+        
+        # Services section
+        response_parts.append("**Services:**")
+        for name, info in services_status.items():
+            icon = "+" if info['status'] == 'online' else "-"
+            response_parts.append(f"  {icon} {name}: {info['status'].upper()} (port {info['port']})")
+        
+        # Diagnostics section
+        if diagnostics:
+            response_parts.append("")
+            response_parts.append("**System Resources:**")
+            for diag in diagnostics:
+                response_parts.append(f"  - {diag}")
+        
+        # Issues section
+        if issues:
+            response_parts.append("")
+            response_parts.append("**Issues Found:**")
+            for issue in issues:
+                response_parts.append(f"  ! {issue}")
+            response_parts.append("")
+            response_parts.append("Would you like me to attempt auto-repair of these issues?")
+        else:
+            response_parts.append("")
+            response_parts.append("All systems healthy. How can I help you?")
+        
+        return "\n".join(response_parts)
     
     def _handle_capability_question(self, msg: str, keywords: List[str]) -> str:
         # Dynamic response based on what they're asking about
