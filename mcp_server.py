@@ -150,9 +150,9 @@ async def ws_handler(ws):
 
 
 async def run_websocket_server():
-    """Run the WebSocket MCP server on port 8000"""
-    print("MCP WebSocket Server running on ws://0.0.0.0:8000")
-    async with websockets.serve(ws_handler, "0.0.0.0", 8000):
+    """Run the WebSocket MCP server on port 9000"""
+    print("MCP WebSocket Server running on ws://0.0.0.0:9000")
+    async with websockets.serve(ws_handler, "0.0.0.0", 9000):
         await asyncio.Future()  # run forever
 
 
@@ -473,22 +473,22 @@ async def process_exec(request: CommandExecRequest):
 
 def main():
     """Run the MCP HTTP server (WebSocket starts automatically)"""
-    port = int(os.environ.get("MCP_PORT", "8080"))
+    port = int(os.environ.get("MCP_PORT", "9080"))
     
     # Get public URL
     replit_url = os.environ.get("REPLIT_DEV_DOMAIN", "")
     
     print("\n" + "=" * 60)
-    print("AURORA MCP SERVER")
+    print("AURORA MCP SERVER (Standalone)")
     print("=" * 60)
     print("\nHTTP REST API (for ChatGPT):")
     print(f"  Local:  http://0.0.0.0:{port}")
     if replit_url:
-        print(f"  Public: https://{replit_url}")
+        print(f"  Public: https://{replit_url}:{port}")
     print("\nWebSocket MCP Protocol:")
-    print("  Local:  ws://0.0.0.0:8000")
+    print("  Local:  ws://0.0.0.0:9000")
     if replit_url:
-        print(f"  Public: wss://{replit_url}:8000")
+        print(f"  Public: wss://{replit_url}:9000")
     print("\nEndpoints:")
     print("  POST /fs/read    - Read file contents")
     print("  POST /fs/write   - Write to a file")
