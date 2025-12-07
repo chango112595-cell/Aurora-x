@@ -4,20 +4,36 @@ import { conversationPatternAdapter } from './conversation-pattern-adapter';
 import { executeWithProgram } from './execution-dispatcher';
 import { spawn } from 'child_process';
 import * as path from 'path';
+import { getMemoryFabricClient } from './memory-fabric-client';
 
-// Aurora's chat WebSocket server
+const memoryClient = getMemoryFabricClient();
+
 export function setupAuroraChatWebSocket(server: any) {
   const wss = new WebSocketServer({ 
     server,
     path: '/aurora/chat'
   });
 
-  wss.on('connection', (ws: WebSocket) => {
+  wss.on('connection', async (ws: WebSocket) => {
     console.log('[Aurora] New chat connection established');
 
-    // Welcome message
+    const memoryStatus = await memoryClient.checkStatus();
+    console.log(`[Aurora] Memory Fabric: ${memoryStatus ? 'connected' : 'offline'}`);
+
+    let greeting = "Hello! I'm Aurora, your AI assistant. I'm here to help you with coding, questions, analysis, and more.";
+    
+    if (memoryStatus) {
+      const factsResult = await memoryClient.getFacts();
+      if (factsResult.success && factsResult.facts) {
+        const userName = factsResult.facts['user_name'] as string;
+        if (userName) {
+          greeting = `Welcome back, ${userName}! I'm Aurora, your AI assistant. How can I help you today?`;
+        }
+      }
+    }
+
     ws.send(JSON.stringify({
-      message: "Hello! I'm Aurora, your AI assistant. I'm here to help you with coding, questions, analysis, and more. What would you like to work on today?"
+      message: greeting + " What would you like to work on today?"
     }));
 
     ws.on('message', async (data: Buffer) => {
@@ -25,7 +41,6 @@ export function setupAuroraChatWebSocket(server: any) {
         const { message, sessionId, context } = JSON.parse(data.toString());
         console.log('[Aurora] Received:', message);
 
-        // Aurora processes the message with auto-detection
         const { response, detection } = await processWithAuroraIntelligence(message, sessionId || 'websocket', context);
 
         ws.send(JSON.stringify({
@@ -52,8 +67,97 @@ export function setupAuroraChatWebSocket(server: any) {
   console.log('[Aurora] 🌌 Intelligent chat WebSocket ready on /aurora/chat');
 }
 
+function extractUserName(message: string): string | null {
+  const patterns = [
+    /(?:my name is|i'm|i am|call me|this is)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /^([A-Z][a-z]+)\s+here/i,
+    /(?:name's|names)\s+([A-Z][a-z]+)/i,
+  ];
+  
+  for (const pattern of patterns) {
+    const match = message.match(pattern);
+    if (match && match[1]) {
+      const name = match[1].trim();
+      const invalidNames = ['aurora', 'bot', 'assistant', 'ai', 'help', 'here', 'there', 'that', 'this', 'what', 'how', 'why', 'when', 'where'];
+      if (!invalidNames.includes(name.toLowerCase()) && name.length >= 2 && name.length <= 30) {
+        return name;
+      }
+    }
+  }
+  return null;
+}
+
+function extractFacts(message: string): { key: string; value: string; category: string }[] {
+  const facts: { key: string; value: string; category: string }[] = [];
+  
+  const userName = extractUserName(message);
+  if (userName) {
+    facts.push({ key: 'user_name', value: userName, category: 'identity' });
+  }
+  
+  const locationPatterns = [
+    /(?:i live in|i'm from|i am from|located in|based in)\s+([A-Za-z\s]+?)(?:\.|,|$)/i,
+  ];
+  for (const pattern of locationPatterns) {
+    const match = message.match(pattern);
+    if (match && match[1]) {
+      facts.push({ key: 'user_location', value: match[1].trim(), category: 'identity' });
+      break;
+    }
+  }
+  
+  const jobPatterns = [
+    /(?:i work as|i'm a|i am a|my job is|i'm an|i am an)\s+([\w\s]+?)(?:\.|,|$)/i,
+  ];
+  for (const pattern of jobPatterns) {
+    const match = message.match(pattern);
+    if (match && match[1]) {
+      const job = match[1].trim();
+      if (job.length > 2 && job.length < 50) {
+        facts.push({ key: 'user_occupation', value: job, category: 'identity' });
+        break;
+      }
+    }
+  }
+  
+  return facts;
+}
+
 async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default', context: any[] = []): Promise<{ response: string; detection: ConversationDetection }> {
-  // Auto-detect conversation type and adapt strategy
+  let memoryContext = '';
+  let userName: string | null = null;
+  
+  try {
+    const [factsResult, contextResult] = await Promise.all([
+      memoryClient.getFacts(),
+      memoryClient.getContext()
+    ]);
+    
+    if (factsResult.success && factsResult.facts) {
+      const facts = factsResult.facts;
+      if (facts['user_name']) {
+        userName = facts['user_name'] as string;
+        memoryContext += `User's name: ${userName}\n`;
+      }
+      if (facts['user_location']) {
+        memoryContext += `User's location: ${facts['user_location']}\n`;
+      }
+      if (facts['user_occupation']) {
+        memoryContext += `User's occupation: ${facts['user_occupation']}\n`;
+      }
+    }
+    
+    if (contextResult.success && contextResult.context) {
+      memoryContext += `Recent context: ${contextResult.context}\n`;
+    }
+    
+    if (memoryContext) {
+      console.log('[Aurora] 🧠 Memory context loaded:', memoryContext.substring(0, 100) + '...');
+    }
+  } catch (memoryError) {
+    console.log('[Aurora] Memory recall skipped:', memoryError);
+  }
+  
   const previousMessages = context
     .filter((msg: any) => typeof msg === 'object' && 'content' in msg)
     .slice(-4)
@@ -66,44 +170,52 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
   console.log(`[Aurora] 🔍 Detected: ${detection.type} (confidence: ${detection.confidence}%)`);
   console.log(`[Aurora] 📋 Format: ${detection.suggestedFormat} | Mode: ${detection.executionMode}`);
 
-  // Send pattern to V2 for learning (non-blocking)
   conversationPatternAdapter.sendPatternToV2(detection, userMessage, previousMessages.join(' ')).catch(() => {});
 
-  // Route through execution dispatcher (primary path)
+  memoryClient.saveMessage('user', userMessage, 0.7, [detection.type]).catch(() => {});
+  
+  const extractedFacts = extractFacts(userMessage);
+  for (const fact of extractedFacts) {
+    memoryClient.saveFact(fact.key, fact.value, fact.category).then((result) => {
+      if (result.success) {
+        console.log(`[Aurora] 💾 Saved fact: ${fact.key} = ${fact.value}`);
+      }
+    }).catch(() => {});
+  }
+
+  let response = '';
+
   try {
     const dispatchedResponse = await executeWithProgram(userMessage, detection, sessionId, context);
     if (dispatchedResponse && dispatchedResponse.length > 0) {
-      return {
-        response: dispatchedResponse,
-        detection
-      };
+      response = dispatchedResponse;
     }
   } catch (dispatchError) {
     console.log('[Aurora] Dispatcher error, using fallback:', dispatchError);
   }
 
-  // Fallback: Use execution wrapper directly
-  try {
-    const fallbackResponse = await callExecutionWrapperDirect(userMessage, detection.type, context);
-    return {
-      response: fallbackResponse,
-      detection
-    };
-  } catch (fallbackError) {
-    console.log('[Aurora] Fallback also failed:', fallbackError);
+  if (!response) {
+    try {
+      response = await callExecutionWrapperDirect(userMessage, detection.type, context);
+    } catch (fallbackError) {
+      console.log('[Aurora] Fallback also failed:', fallbackError);
+    }
   }
 
-  // Final fallback: Generate a contextual response based on detection
-  const contextualResponse = generateContextualFallback(userMessage, detection);
-  return {
-    response: contextualResponse,
-    detection
-  };
+  if (!response) {
+    response = generateContextualFallback(userMessage, detection, userName);
+  }
+  
+  const newlyExtractedName = extractUserName(userMessage);
+  if (newlyExtractedName && !response.includes(newlyExtractedName)) {
+    response = `Nice to meet you, ${newlyExtractedName}! ` + response;
+  }
+
+  memoryClient.saveMessage('assistant', response, 0.5, ['response']).catch(() => {});
+
+  return { response, detection };
 }
 
-/**
- * Call the execution wrapper directly for fallback
- */
 function callExecutionWrapperDirect(message: string, msgType: string, context: any[]): Promise<string> {
   return new Promise((resolve, reject) => {
     const wrapperPath = path.join(process.cwd(), 'tools', 'execution_wrapper.py');
@@ -136,7 +248,6 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: a
           }
         }
         
-        // If no JSON, return cleaned output
         const cleanOutput = output.trim();
         if (cleanOutput) {
           resolve(cleanOutput);
@@ -150,7 +261,6 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: a
 
     python.on('error', (err) => reject(err));
 
-    // Timeout after 8 seconds
     setTimeout(() => {
       python.kill();
       reject(new Error('Timeout'));
@@ -158,11 +268,7 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: a
   });
 }
 
-/**
- * Generate a contextual response - uses message content dynamically
- */
-function generateContextualFallback(userMessage: string, detection: ConversationDetection): string {
-  // Extract key words from the user's message for personalization
+function generateContextualFallback(userMessage: string, detection: ConversationDetection, userName: string | null = null): string {
   const keywords = userMessage.toLowerCase()
     .replace(/[^\w\s]/g, '')
     .split(/\s+/)
@@ -171,46 +277,45 @@ function generateContextualFallback(userMessage: string, detection: Conversation
   
   const topic = keywords.join(' ') || 'your request';
   const hasQuestion = userMessage.includes('?');
+  const greeting = userName ? `${userName}, ` : '';
   
-  // Generate dynamic response based on type AND content
   switch (detection.type) {
     case 'code_generation':
-      return `I can write code for ${topic}. Which language would you prefer, and what specific requirements should I address?`;
+      return `${greeting}I can write code for ${topic}. Which language would you prefer, and what specific requirements should I address?`;
     
     case 'debugging':
-      return `I'll help debug ${topic}. Please share the error message and relevant code, and I'll identify the issue.`;
+      return `${greeting}I'll help debug ${topic}. Please share the error message and relevant code, and I'll identify the issue.`;
     
     case 'explanation':
       return hasQuestion 
-        ? `Let me explain ${topic}. What specific aspect would be most useful - the basics, technical details, or practical examples?`
-        : `I can explain ${topic} in detail. What angle would be most helpful for you?`;
+        ? `${greeting}Let me explain ${topic}. What specific aspect would be most useful - the basics, technical details, or practical examples?`
+        : `${greeting}I can explain ${topic} in detail. What angle would be most helpful for you?`;
     
     case 'architecture':
-      return `For ${topic}, I can help design the architecture. What are your scalability needs and technology constraints?`;
+      return `${greeting}For ${topic}, I can help design the architecture. What are your scalability needs and technology constraints?`;
     
     case 'optimization':
-      return `I'll help optimize ${topic}. Share the relevant code and I'll suggest specific improvements.`;
+      return `${greeting}I'll help optimize ${topic}. Share the relevant code and I'll suggest specific improvements.`;
     
     case 'testing':
-      return `I can write tests for ${topic}. What testing framework do you prefer and what edge cases concern you?`;
+      return `${greeting}I can write tests for ${topic}. What testing framework do you prefer and what edge cases concern you?`;
     
     case 'refactoring':
-      return `I'll refactor ${topic} for better clarity. Share the code and tell me what aspects you'd like improved.`;
+      return `${greeting}I'll refactor ${topic} for better clarity. Share the code and tell me what aspects you'd like improved.`;
     
     case 'analysis':
-      return `Analyzing ${topic}. All systems operational - 188 tiers active, 66 programs ready. What specific analysis do you need?`;
+      return `${greeting}Analyzing ${topic}. All systems operational - 188 tiers active, 66 programs ready. What specific analysis do you need?`;
     
     case 'question_answering':
       return hasQuestion
-        ? `That's a good question about ${topic}. Could you provide more context so I can give you the most accurate answer?`
-        : `I can address ${topic}. What specifically would you like to know?`;
+        ? `${greeting}That's a good question about ${topic}. Could you provide more context so I can give you the most accurate answer?`
+        : `${greeting}I can address ${topic}. What specifically would you like to know?`;
     
     default:
-      return `I understand you're interested in ${topic}. How can I help - would you like explanations, code, or problem-solving assistance?`;
+      return `${greeting}I understand you're interested in ${topic}. How can I help - would you like explanations, code, or problem-solving assistance?`;
   }
 }
 
-// Export functions needed by routes
 export async function getChatResponse(message: string, sessionId: string, context: any[] = []): Promise<{ response: string; detection: ConversationDetection }> {
   return processWithAuroraIntelligence(message, sessionId, context);
 }
