@@ -9,9 +9,9 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
+from __future__ import annotations
 
 from typing import Dict, List, Tuple, Optional, Any, Union
-import annotations
 
 import json
 from pathlib import Path
@@ -121,7 +121,6 @@ document.getElementById('saveTh').onclick = async ()=>{
 $('#refresh').onclick = load; load(); setInterval(load, 5000);
 </script>
 </body></html>"""
-
 
 def attach_progress(app):
     @app.get("/api/progress")

@@ -1,7 +1,5 @@
 """
-Main
-
-Comprehensive module documentation explaining purpose, usage, and architecture.
+Aurora-X main module with corpus integration and learning weights.
 
 This module is part of Aurora's ecosystem and follows perfect code quality standards.
 All functions are fully documented with type hints and error handling.
@@ -9,10 +7,6 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
-
-#!/usr/bin/env python3
-"""Aurora-X main module with corpus integration and learning weights."""
-
 from __future__ import annotations
 
 import argparse
@@ -620,20 +614,6 @@ class AuroraX:
             run, build_module, synthesize_best, save_run_config
         """
     def __init__(
-        """
-              Init  
-            
-            Args:
-                seed: seed
-                max_iters: max iters
-                beam: beam
-                timeout_s: timeout s
-                outdir: outdir
-                rng_cfg: rng cfg
-                disable_seed: disable seed
-                seed_bias_override: seed bias override
-                baseline: baseline
-            """
         self,
         seed: int,
         max_iters: int,
@@ -645,6 +625,20 @@ class AuroraX:
         seed_bias_override: float | None = None,
         baseline: Path | None = None,
     ):
+        """
+        Initialize AuroraX synthesis engine.
+        
+        Args:
+            seed: Random seed for reproducibility
+            max_iters: Maximum synthesis iterations
+            beam: Beam search width
+            timeout_s: Timeout in seconds
+            outdir: Output directory path
+            rng_cfg: RNG configuration dictionary
+            disable_seed: Whether to disable seed learning
+            seed_bias_override: Override value for seed bias
+            baseline: Path to baseline for comparison
+        """
         random.seed(seed)
         self._start_time = time.time()
         self.repo = Repo.create(outdir)

@@ -1,7 +1,6 @@
 """
-Adaptive
-
-Comprehensive module documentation explaining purpose, usage, and architecture.
+Adaptive Learning Engine for Aurora-X
+Implements epsilon-greedy exploration with decay and cooldown
 
 This module is part of Aurora's ecosystem and follows perfect code quality standards.
 All functions are fully documented with type hints and error handling.
@@ -9,15 +8,8 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
-
-#!/usr/bin/env python3
-"""
-Adaptive Learning Engine for Aurora-X
-Implements epsilon-greedy exploration with decay and cooldown
-"""
-
+from __future__ import annotations
 from typing import Dict, List, Tuple, Optional, Any, Union
-import annotations
 
 import math
 import random
