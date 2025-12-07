@@ -5,11 +5,17 @@ import { setupVite, serveStatic, log } from "./vite";
 import AuroraCore from "./aurora-core";
 import { registerLuminarRoutes } from "./luminar-routes";
 import { registerNexusV3Routes } from "./nexus-v3-routes";
+import { createWebSocketServer } from "./websocket-server";
+import { getAuroraAI } from "./aurora";
 
 // Initialize Aurora Core Intelligence with 188 power units
 const aurora = AuroraCore.getInstance();
 console.log("[AURORA] ✅ Aurora initialized with 188 power units");
 console.log(`[AURORA] Status: ${JSON.stringify(aurora.getStatus(), null, 2)}`);
+
+// Initialize AuroraAI Orchestrator (unified consciousness system)
+const auroraAI = getAuroraAI();
+console.log("[AuroraAI] ✅ Unified orchestrator initialized");
 
 const app = express();
 const server = createServer(app);
@@ -109,6 +115,49 @@ app.use((req, res, next) => {
     }
   });
 
+  // AuroraAI Orchestrator Routes
+  // Route 5: GET /api/auroraai/status - Get orchestrator status
+  app.get('/api/auroraai/status', async (_req: Request, res: Response) => {
+    try {
+      const status = await auroraAI.getStatus();
+      res.json(status);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Route 6: POST /api/auroraai/chat - Chat with AuroraAI (REST fallback)
+  app.post('/api/auroraai/chat', async (req: Request, res: Response) => {
+    try {
+      const { message } = req.body;
+      if (!message) {
+        return res.status(400).json({ error: 'Message is required' });
+      }
+      const response = await auroraAI.handleChat(message);
+      res.json({ response, timestamp: new Date().toISOString() });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Route 7: POST /api/auroraai/synthesize - Direct code synthesis
+  app.post('/api/auroraai/synthesize', async (req: Request, res: Response) => {
+    try {
+      const { spec } = req.body;
+      if (!spec) {
+        return res.status(400).json({ error: 'Spec is required' });
+      }
+      const result = await auroraAI.synthesize(spec);
+      res.json({ result, timestamp: new Date().toISOString() });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Initialize WebSocket server for real-time chat
+  const wsServer = createWebSocketServer(server);
+  console.log("[WebSocket] ✅ WebSocket server attached to HTTP server");
+
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
@@ -147,6 +196,7 @@ app.use((req, res, next) => {
   process.on('SIGTERM', () => {
     console.log('SIGTERM received, closing server...');
     aurora.shutdown();
+    auroraAI.shutdown();
     server.close(() => {
       console.log('Server closed');
       process.exit(0);
@@ -156,6 +206,7 @@ app.use((req, res, next) => {
   process.on('SIGINT', () => {
     console.log('SIGINT received, closing server...');
     aurora.shutdown();
+    auroraAI.shutdown();
     server.close(() => {
       console.log('Server closed');
       process.exit(0);
