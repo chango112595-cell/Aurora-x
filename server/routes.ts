@@ -729,7 +729,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Aurora: Natural language conversation endpoint (proxies to Luminar Nexus)
-  app.post("/api/conversation", async (req, res) => {
+  app.post("/api/chat", async (req, res) => {
     try {
       const { message, session_id } = req.body;
 
@@ -3037,7 +3037,7 @@ except Exception as e:
     }
   });
 
-  // OLD synthesis endpoint - now using /api/conversation for chat
+  // OLD synthesis endpoint - now using /api/chat for chat
   // 🆕 Apply synthesis rate limiting
   app.post("/api/synthesis", async (req, res) => {
     try {

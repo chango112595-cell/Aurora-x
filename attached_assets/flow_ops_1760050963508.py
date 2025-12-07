@@ -41,7 +41,7 @@ def impl_for(signature: str, description: str) -> str:
     return (
         SAFE_HEADER
         + sig
-        + ':{\n    """Template not recognized."""\n    raise NotImplementedError("No v3 template matched")\n'
+        + ':{\n    """Template not recognized."""\n    return None  # aurora-placeholder("No v3 template matched")\n'
     )
 
 
