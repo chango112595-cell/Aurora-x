@@ -220,5 +220,5 @@ waitForPort = 8080
 outputType = "console"
 
 [agent]
-integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
+integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0", "javascript_log_in_with_replit:1.0.0", "javascript_database:1.0.0"]
 expertMode = true

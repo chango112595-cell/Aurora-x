@@ -22,6 +22,7 @@ import authRouter from "./auth-routes";
 import { getChatResponse, searchWeb } from "./aurora-chat";
 import { ResponseAdapter } from "./response-adapter";
 import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter } from "./rate-limit";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
@@ -174,6 +175,23 @@ async function refreshReadmeBadges(): Promise<void> {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // ══════════════════════════════════════════════════════════════
+  // 🔐 REPLIT AUTH SETUP
+  // ══════════════════════════════════════════════════════════════
+  await setupAuth(app);
+
+  // Auth user endpoint
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
   // ══════════════════════════════════════════════════════════════
   // 📊 SYSTEM ROUTES (BEFORE RATE LIMITING)
   // ══════════════════════════════════════════════════════════════
