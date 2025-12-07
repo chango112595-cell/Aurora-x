@@ -146,6 +146,47 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                 "timestamp": datetime.now().isoformat()
             })
         
+        elif path == "/api/consciousness":
+            worker_pool = self.core.worker_pool
+            worker_metrics = None
+            if worker_pool:
+                metrics = worker_pool.get_metrics()
+                worker_metrics = {
+                    "total": metrics.total_workers,
+                    "active": metrics.active_workers,
+                    "idle": metrics.idle_workers,
+                    "ready_for_tasks": metrics.idle_workers > 0
+                }
+            
+            manifest_state = None
+            if self.core.manifest_integrator:
+                manifest_state = {
+                    "tiers_loaded": len(getattr(self.core.manifest_integrator, 'tiers', [])),
+                    "aems_loaded": len(getattr(self.core.manifest_integrator, 'aems', [])),
+                    "modules_loaded": len(getattr(self.core.manifest_integrator, 'modules', []))
+                }
+            
+            self.send_json_response({
+                "success": True,
+                "consciousness_state": self.core.state.value,
+                "awareness_level": "hyperspeed" if self.core.hyperspeed_enabled else "standard",
+                "autonomous_mode": self.core.autonomous_mode,
+                "hybrid_mode": self.core.hybrid_mode_enabled,
+                "brain_bridge_connected": self.core.brain_bridge is not None,
+                "uptime": time.time() - self.core.start_time,
+                "workers": worker_metrics,
+                "manifest": manifest_state,
+                "peak_capabilities": {
+                    "workers": self.core.WORKER_COUNT,
+                    "tiers": self.core.TIER_COUNT,
+                    "aems": self.core.AEM_COUNT,
+                    "modules": self.core.MODULE_COUNT
+                },
+                "active_goals": [],
+                "recent_cognitive_events": list(activity_log)[:10],
+                "timestamp": datetime.now().isoformat()
+            })
+        
         else:
             self.send_json_response({"error": "Endpoint not found", "path": path}, 404)
     
@@ -164,6 +205,63 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                 self.send_json_response({"success": True, "entry": entry})
             except Exception as e:
                 self.send_json_response({"error": str(e)}, 400)
+        
+        elif self.path == "/api/cognitive-event":
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                body = self.rfile.read(content_length).decode('utf-8')
+                data = json.loads(body) if body else {}
+                
+                event_type = data.get("event_type", "cognition")
+                source = data.get("source", "aurora-chat")
+                message = data.get("message", "")
+                context = data.get("context", {})
+                importance = data.get("importance", 0.5)
+                
+                entry = log_activity(
+                    f"cognitive_{event_type}", 
+                    f"[{source}] {message}",
+                    {
+                        "context": context,
+                        "importance": importance,
+                        "source": source,
+                        "event_type": event_type
+                    }
+                )
+                
+                self.send_json_response({
+                    "success": True, 
+                    "entry": entry,
+                    "consciousness_acknowledged": True
+                })
+            except Exception as e:
+                self.send_json_response({"error": str(e)}, 400)
+        
+        elif self.path == "/api/dispatch-task":
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                body = self.rfile.read(content_length).decode('utf-8')
+                data = json.loads(body) if body else {}
+                
+                task_type = data.get("task_type", "general")
+                payload = data.get("payload", {})
+                priority = data.get("priority", "normal")
+                
+                entry = log_activity(
+                    "task_dispatch",
+                    f"Task dispatched: {task_type}",
+                    {"payload": payload, "priority": priority}
+                )
+                
+                self.send_json_response({
+                    "success": True,
+                    "task_id": entry["id"],
+                    "status": "queued",
+                    "workers_available": self.core.worker_pool.get_metrics().idle_workers if self.core.worker_pool else 0
+                })
+            except Exception as e:
+                self.send_json_response({"error": str(e)}, 400)
+        
         else:
             self.send_json_response({"error": "Endpoint not found"}, 404)
 

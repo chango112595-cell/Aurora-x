@@ -5,8 +5,10 @@ import { executeWithProgram } from './execution-dispatcher';
 import { spawn } from 'child_process';
 import * as path from 'path';
 import { getMemoryFabricClient } from './memory-fabric-client';
+import { getNexusV3Client, type ConsciousnessState } from './nexus-v3-client';
 
 const memoryClient = getMemoryFabricClient();
+const nexusV3Client = getNexusV3Client();
 
 export function setupAuroraChatWebSocket(server: any) {
   const wss = new WebSocketServer({ 
@@ -126,12 +128,21 @@ function extractFacts(message: string): { key: string; value: string; category: 
 async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default', context: any[] = []): Promise<{ response: string; detection: ConversationDetection }> {
   let memoryContext = '';
   let userName: string | null = null;
+  let consciousnessState: ConsciousnessState | null = null;
   
   try {
-    const [factsResult, contextResult] = await Promise.all([
+    const [factsResult, contextResult, consciousness] = await Promise.all([
       memoryClient.getFacts(),
-      memoryClient.getContext()
+      memoryClient.getContext(),
+      nexusV3Client.getConsciousnessState()
     ]);
+    
+    consciousnessState = consciousness;
+    
+    if (consciousnessState) {
+      console.log(`[Aurora] 🌌 Consciousness: ${consciousnessState.consciousness_state} | Awareness: ${consciousnessState.awareness_level}`);
+      console.log(`[Aurora] 🤖 Workers: ${consciousnessState.workers?.idle || 0} idle / ${consciousnessState.workers?.total || 0} total`);
+    }
     
     if (factsResult.success && factsResult.facts) {
       const facts = factsResult.facts;
@@ -157,6 +168,14 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
   } catch (memoryError) {
     console.log('[Aurora] Memory recall skipped:', memoryError);
   }
+  
+  nexusV3Client.reportCognitiveEvent({
+    event_type: 'user_message_received',
+    source: 'aurora-chat',
+    message: `User message: ${userMessage.substring(0, 100)}`,
+    context: { sessionId, messageLength: userMessage.length },
+    importance: 0.6
+  }).catch(() => {});
   
   const previousMessages = context
     .filter((msg: any) => typeof msg === 'object' && 'content' in msg)
@@ -203,7 +222,7 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
   }
 
   if (!response) {
-    response = generateContextualFallback(userMessage, detection, userName);
+    response = generateContextualFallback(userMessage, detection, userName, consciousnessState);
   }
   
   const newlyExtractedName = extractUserName(userMessage);
@@ -212,6 +231,19 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
   }
 
   memoryClient.saveMessage('assistant', response, 0.5, ['response']).catch(() => {});
+
+  nexusV3Client.reportCognitiveEvent({
+    event_type: 'response_generated',
+    source: 'aurora-chat',
+    message: `Response generated: ${response.substring(0, 100)}`,
+    context: { 
+      sessionId, 
+      detectionType: detection.type,
+      confidence: detection.confidence,
+      responseLength: response.length
+    },
+    importance: 0.5
+  }).catch(() => {});
 
   return { response, detection };
 }
@@ -268,7 +300,12 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: a
   });
 }
 
-function generateContextualFallback(userMessage: string, detection: ConversationDetection, userName: string | null = null): string {
+function generateContextualFallback(
+  userMessage: string, 
+  detection: ConversationDetection, 
+  userName: string | null = null,
+  consciousness: ConsciousnessState | null = null
+): string {
   const keywords = userMessage.toLowerCase()
     .replace(/[^\w\s]/g, '')
     .split(/\s+/)
@@ -278,6 +315,10 @@ function generateContextualFallback(userMessage: string, detection: Conversation
   const topic = keywords.join(' ') || 'your request';
   const hasQuestion = userMessage.includes('?');
   const greeting = userName ? `${userName}, ` : '';
+  
+  const systemStatus = consciousness 
+    ? `[${consciousness.peak_capabilities?.tiers || 188} tiers, ${consciousness.peak_capabilities?.aems || 66} programs, ${consciousness.workers?.idle || 0} workers ready]` 
+    : '[188 tiers, 66 programs ready]';
   
   switch (detection.type) {
     case 'code_generation':
@@ -304,7 +345,7 @@ function generateContextualFallback(userMessage: string, detection: Conversation
       return `${greeting}I'll refactor ${topic} for better clarity. Share the code and tell me what aspects you'd like improved.`;
     
     case 'analysis':
-      return `${greeting}Analyzing ${topic}. All systems operational - 188 tiers active, 66 programs ready. What specific analysis do you need?`;
+      return `${greeting}Analyzing ${topic}. All systems operational ${systemStatus}. What specific analysis do you need?`;
     
     case 'question_answering':
       return hasQuestion
