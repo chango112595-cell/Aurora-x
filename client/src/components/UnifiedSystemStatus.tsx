@@ -53,8 +53,8 @@ function StatusIndicator({ connected, label, testId }: { connected: boolean; lab
       ) : (
         <XCircle className="h-4 w-4 text-red-500" />
       )}
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <Badge variant={connected ? "default" : "destructive"} className="ml-auto" data-testid={`badge-status-${testId}`}>
+      <span className="text-sm text-slate-600">{label}</span>
+      <Badge className={`ml-auto ${connected ? "bg-cyan-500 text-white" : "bg-red-500 text-white"}`} data-testid={`badge-status-${testId}`}>
         {connected ? "Online" : "Offline"}
       </Badge>
     </div>
@@ -113,27 +113,27 @@ export default function UnifiedSystemStatus() {
 
   return (
     <div className="space-y-4" data-testid="unified-system-status">
-      <Card>
+      <Card className="bg-purple-100/80 border-purple-200">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-slate-800">
+            <Activity className="h-5 w-5 text-purple-600" />
             Aurora System Status
             {nexusLoading && <Loader2 className="h-4 w-4 animate-spin ml-2" />}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {nexusError && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive" data-testid="error-nexus-status">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-red-100 text-red-700" data-testid="error-nexus-status">
               <AlertTriangle className="h-4 w-4" />
               <span className="text-sm">Unable to fetch system status. Backend may be unavailable.</span>
             </div>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-3 p-4 rounded-lg bg-muted/50">
+            <div className="space-y-3 p-4 rounded-lg bg-white/90 border border-purple-200">
               <div className="flex items-center gap-2 mb-3">
-                <Server className="h-4 w-4" />
-                <span className="font-medium">Luminar Nexus V2</span>
-                <Badge variant="outline" className="ml-auto" data-testid="badge-v2-port">Port 8000</Badge>
+                <Server className="h-4 w-4 text-slate-600" />
+                <span className="font-medium text-slate-800">Luminar Nexus V2</span>
+                <Badge variant="outline" className="ml-auto bg-slate-100 text-slate-600 border-slate-300" data-testid="badge-v2-port">Port 8000</Badge>
               </div>
               {nexusLoading ? (
                 <LoadingIndicator testId="v2" />
@@ -147,25 +147,25 @@ export default function UnifiedSystemStatus() {
                   {v2?.connected && (
                     <>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Quantum Coherence</span>
-                        <span data-testid="text-v2-quantum-coherence">{(v2.quantum_coherence || 0).toFixed(2)}</span>
+                        <span className="text-slate-600">Quantum Coherence</span>
+                        <span className="text-slate-800" data-testid="text-v2-quantum-coherence">{(v2.quantum_coherence || 0).toFixed(2)}</span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">AI Learning</span>
-                        <Badge variant={v2.ai_learning_active ? "default" : "secondary"} data-testid="badge-v2-ai-learning">
+                        <span className="text-slate-600">AI Learning</span>
+                        <Badge className={v2.ai_learning_active ? "bg-cyan-500 text-white" : "bg-slate-200 text-slate-600"} data-testid="badge-v2-ai-learning">
                           {v2.ai_learning_active ? "Active" : "Inactive"}
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Auto Healing</span>
-                        <Badge variant={v2.autonomous_healing_active ? "default" : "secondary"} data-testid="badge-v2-auto-healing">
+                        <span className="text-slate-600">Auto Healing</span>
+                        <Badge className={v2.autonomous_healing_active ? "bg-cyan-500 text-white" : "bg-slate-200 text-slate-600"} data-testid="badge-v2-auto-healing">
                           {v2.autonomous_healing_active ? "Active" : "Inactive"}
                         </Badge>
                       </div>
                     </>
                   )}
                   {!v2?.connected && !nexusLoading && (
-                    <div className="text-xs text-muted-foreground" data-testid="text-v2-offline-hint">
+                    <div className="text-xs text-slate-500" data-testid="text-v2-offline-hint">
                       Service unavailable or not started
                     </div>
                   )}
@@ -173,11 +173,11 @@ export default function UnifiedSystemStatus() {
               )}
             </div>
 
-            <div className="space-y-3 p-4 rounded-lg bg-muted/50">
+            <div className="space-y-3 p-4 rounded-lg bg-white/90 border border-purple-200">
               <div className="flex items-center gap-2 mb-3">
-                <Brain className="h-4 w-4" />
-                <span className="font-medium">Aurora Nexus V3</span>
-                <Badge variant="outline" className="ml-auto" data-testid="badge-v3-port">Port 5002</Badge>
+                <Brain className="h-4 w-4 text-slate-600" />
+                <span className="font-medium text-slate-800">Aurora Nexus V3</span>
+                <Badge variant="outline" className="ml-auto bg-slate-100 text-slate-600 border-slate-300" data-testid="badge-v3-port">Port 5002</Badge>
               </div>
               {nexusLoading ? (
                 <LoadingIndicator testId="v3" />
@@ -191,25 +191,25 @@ export default function UnifiedSystemStatus() {
                   {v3?.connected && (
                     <>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">State</span>
-                        <Badge variant="default" data-testid="badge-v3-state">{v3.state?.toUpperCase() || "RUNNING"}</Badge>
+                        <span className="text-slate-600">State</span>
+                        <Badge className="bg-cyan-500 text-white" data-testid="badge-v3-state">{v3.state?.toUpperCase() || "RUNNING"}</Badge>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Hybrid Mode</span>
-                        <Badge variant={v3Capabilities?.hybrid_mode_enabled ? "default" : "secondary"} data-testid="badge-v3-hybrid-mode">
+                        <span className="text-slate-600">Hybrid Mode</span>
+                        <Badge className={v3Capabilities?.hybrid_mode_enabled ? "bg-cyan-500 text-white" : "bg-slate-200 text-slate-600"} data-testid="badge-v3-hybrid-mode">
                           {v3Capabilities?.hybrid_mode_enabled ? "Enabled" : "Disabled"}
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Hyperspeed</span>
-                        <Badge variant={v3Capabilities?.hyperspeed_enabled ? "default" : "secondary"} data-testid="badge-v3-hyperspeed">
+                        <span className="text-slate-600">Hyperspeed</span>
+                        <Badge className={v3Capabilities?.hyperspeed_enabled ? "bg-cyan-500 text-white" : "bg-slate-200 text-slate-600"} data-testid="badge-v3-hyperspeed">
                           {v3Capabilities?.hyperspeed_enabled ? "Enabled" : "Disabled"}
                         </Badge>
                       </div>
                     </>
                   )}
                   {!v3?.connected && !nexusLoading && (
-                    <div className="text-xs text-muted-foreground" data-testid="text-v3-offline-hint">
+                    <div className="text-xs text-slate-500" data-testid="text-v3-offline-hint">
                       Service unavailable or not started
                     </div>
                   )}
@@ -220,10 +220,10 @@ export default function UnifiedSystemStatus() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-purple-100/80 border-purple-200">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-slate-800">
+            <Zap className="h-5 w-5 text-purple-600" />
             Peak Capabilities
             {capabilitiesLoading && <Loader2 className="h-4 w-4 animate-spin ml-2" />}
           </CardTitle>
@@ -237,31 +237,31 @@ export default function UnifiedSystemStatus() {
               <MetricSkeleton />
             </div>
           ) : capabilitiesError ? (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive" data-testid="error-capabilities">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-red-100 text-red-700" data-testid="error-capabilities">
               <AlertTriangle className="h-4 w-4" />
               <span className="text-sm">Failed to fetch capabilities data from Nexus V3</span>
             </div>
           ) : v3?.connected && hasCapabilitiesData ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 rounded-lg bg-muted/50" data-testid="metric-workers">
-                <div className="text-3xl font-bold text-primary" data-testid="text-workers-count">{workers}</div>
-                <div className="text-sm text-muted-foreground">Workers</div>
+              <div className="text-center p-4 rounded-lg bg-white/90 border border-purple-200" data-testid="metric-workers">
+                <div className="text-3xl font-bold text-cyan-500" data-testid="text-workers-count">{workers}</div>
+                <div className="text-sm text-slate-600">Workers</div>
               </div>
-              <div className="text-center p-4 rounded-lg bg-muted/50" data-testid="metric-tiers">
-                <div className="text-3xl font-bold text-primary" data-testid="text-tiers-count">{tiers}</div>
-                <div className="text-sm text-muted-foreground">Tiers</div>
+              <div className="text-center p-4 rounded-lg bg-white/90 border border-purple-200" data-testid="metric-tiers">
+                <div className="text-3xl font-bold text-cyan-500" data-testid="text-tiers-count">{tiers}</div>
+                <div className="text-sm text-slate-600">Tiers</div>
               </div>
-              <div className="text-center p-4 rounded-lg bg-muted/50" data-testid="metric-aems">
-                <div className="text-3xl font-bold text-primary" data-testid="text-aems-count">{aems}</div>
-                <div className="text-sm text-muted-foreground">AEMs</div>
+              <div className="text-center p-4 rounded-lg bg-white/90 border border-purple-200" data-testid="metric-aems">
+                <div className="text-3xl font-bold text-cyan-500" data-testid="text-aems-count">{aems}</div>
+                <div className="text-sm text-slate-600">AEMs</div>
               </div>
-              <div className="text-center p-4 rounded-lg bg-muted/50" data-testid="metric-modules">
-                <div className="text-3xl font-bold text-primary" data-testid="text-modules-count">{modules}</div>
-                <div className="text-sm text-muted-foreground">Modules</div>
+              <div className="text-center p-4 rounded-lg bg-white/90 border border-purple-200" data-testid="metric-modules">
+                <div className="text-3xl font-bold text-cyan-500" data-testid="text-modules-count">{modules}</div>
+                <div className="text-sm text-slate-600">Modules</div>
               </div>
             </div>
           ) : (
-            <div className="text-center p-6 text-muted-foreground" data-testid="text-capabilities-unavailable">
+            <div className="text-center p-6 text-slate-500" data-testid="text-capabilities-unavailable">
               <AlertTriangle className="h-8 w-8 mx-auto mb-2 opacity-50" />
               <p className="text-sm">Nexus V3 offline - capabilities unavailable</p>
             </div>
@@ -269,10 +269,10 @@ export default function UnifiedSystemStatus() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-purple-100/80 border-purple-200">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2">
-            <Package className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-slate-800">
+            <Package className="h-5 w-5 text-purple-600" />
             Pack System
             {packLoading && <Loader2 className="h-4 w-4 animate-spin ml-2" />}
           </CardTitle>
@@ -285,48 +285,48 @@ export default function UnifiedSystemStatus() {
               <MetricSkeleton />
             </div>
           ) : packError ? (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive" data-testid="error-packs">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-red-100 text-red-700" data-testid="error-packs">
               <AlertTriangle className="h-4 w-4" />
               <span className="text-sm">Failed to fetch pack data from Nexus V3</span>
             </div>
           ) : packData && packData.total_packs && packData.total_packs > 0 ? (
             <>
               <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="text-center p-3 rounded-lg bg-muted/50" data-testid="metric-total-packs">
-                  <div className="text-2xl font-bold text-primary" data-testid="text-total-packs">{packData.total_packs}</div>
-                  <div className="text-xs text-muted-foreground">Total Packs</div>
+                <div className="text-center p-3 rounded-lg bg-white/90 border border-purple-200" data-testid="metric-total-packs">
+                  <div className="text-2xl font-bold text-cyan-500" data-testid="text-total-packs">{packData.total_packs}</div>
+                  <div className="text-xs text-slate-600">Total Packs</div>
                 </div>
-                <div className="text-center p-3 rounded-lg bg-muted/50" data-testid="metric-loaded-packs">
+                <div className="text-center p-3 rounded-lg bg-white/90 border border-purple-200" data-testid="metric-loaded-packs">
                   <div className="text-2xl font-bold text-green-500" data-testid="text-loaded-packs">{packData.loaded_packs}</div>
-                  <div className="text-xs text-muted-foreground">Loaded</div>
+                  <div className="text-xs text-slate-600">Loaded</div>
                 </div>
-                <div className="text-center p-3 rounded-lg bg-muted/50" data-testid="metric-submodules">
-                  <div className="text-2xl font-bold text-primary" data-testid="text-submodules">{packData.total_submodules}</div>
-                  <div className="text-xs text-muted-foreground">Submodules</div>
+                <div className="text-center p-3 rounded-lg bg-white/90 border border-purple-200" data-testid="metric-submodules">
+                  <div className="text-2xl font-bold text-cyan-500" data-testid="text-submodules">{packData.total_submodules}</div>
+                  <div className="text-xs text-slate-600">Submodules</div>
                 </div>
               </div>
               {packData.packs && Object.keys(packData.packs).length > 0 && (
                 <div className="space-y-2">
                   {Object.entries(packData.packs).slice(0, 5).map(([id, pack]: [string, any]) => (
-                    <div key={id} className="flex items-center justify-between text-sm p-2 rounded bg-muted/30" data-testid={`pack-item-${id}`}>
+                    <div key={id} className="flex items-center justify-between text-sm p-2 rounded-lg bg-white/70 border border-purple-100" data-testid={`pack-item-${id}`}>
                       <div className="flex items-center gap-2">
                         {pack.exists ? (
                           <CheckCircle2 className="h-3 w-3 text-green-500" />
                         ) : (
                           <AlertTriangle className="h-3 w-3 text-yellow-500" />
                         )}
-                        <span className="font-mono text-xs" data-testid={`text-pack-id-${id}`}>{id}</span>
-                        <span className="text-muted-foreground" data-testid={`text-pack-name-${id}`}>{pack.name}</span>
+                        <span className="font-mono text-xs text-slate-500" data-testid={`text-pack-id-${id}`}>{id}</span>
+                        <span className="text-slate-700" data-testid={`text-pack-name-${id}`}>{pack.name}</span>
                       </div>
                       {pack.submodule_count > 0 && (
-                        <Badge variant="outline" className="text-xs" data-testid={`badge-pack-submodules-${id}`}>
+                        <Badge variant="outline" className="text-xs bg-slate-100 text-slate-600 border-slate-300" data-testid={`badge-pack-submodules-${id}`}>
                           {pack.submodule_count} submodules
                         </Badge>
                       )}
                     </div>
                   ))}
                   {Object.keys(packData.packs).length > 5 && (
-                    <div className="text-xs text-muted-foreground text-center" data-testid="text-packs-remaining">
+                    <div className="text-xs text-slate-500 text-center" data-testid="text-packs-remaining">
                       +{Object.keys(packData.packs).length - 5} more packs
                     </div>
                   )}
@@ -334,7 +334,7 @@ export default function UnifiedSystemStatus() {
               )}
             </>
           ) : (
-            <div className="text-center p-6 text-muted-foreground" data-testid="text-packs-unavailable">
+            <div className="text-center p-6 text-slate-500" data-testid="text-packs-unavailable">
               <Package className="h-8 w-8 mx-auto mb-2 opacity-50" />
               <p className="text-sm">No packs loaded or Nexus V3 offline</p>
             </div>
@@ -342,7 +342,7 @@ export default function UnifiedSystemStatus() {
         </CardContent>
       </Card>
 
-      <div className="text-xs text-muted-foreground text-center" data-testid="text-last-updated">
+      <div className="text-xs text-slate-500 text-center" data-testid="text-last-updated">
         Last updated: {nexusStatus?.unified?.timestamp ? new Date(nexusStatus.unified.timestamp).toLocaleTimeString() : 'N/A'}
       </div>
     </div>
