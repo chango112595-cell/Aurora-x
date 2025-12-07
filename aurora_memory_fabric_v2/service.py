@@ -259,13 +259,58 @@ class MemoryFabricHandler(BaseHTTPRequestHandler):
         pass
 
 
+import socket
+
+
+class ReusableHTTPServer(HTTPServer):
+    """HTTP server with socket reuse enabled"""
+    allow_reuse_address = True
+    
+    def server_bind(self):
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        super().server_bind()
+
+
+def is_port_in_use(port: int) -> bool:
+    """Check if a port is already in use"""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind(('127.0.0.1', port))
+            return False
+        except OSError:
+            return True
+
+
+def check_existing_service(port: int) -> bool:
+    """Check if Memory Fabric service is already responding"""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(1)
+            s.connect(('127.0.0.1', port))
+            s.sendall(b'GET /status HTTP/1.1\r\nHost: localhost\r\n\r\n')
+            response = s.recv(1024)
+            return b'success' in response.lower() or b'200' in response
+    except:
+        return False
+
+
 def start_memory_fabric_service(port: int = 5004):
     """Start the Memory Fabric v2 HTTP server"""
+    if check_existing_service(port):
+        print(f"[MEMORY FABRIC V2] Service already running on port {port}", flush=True)
+        return
+    
     get_or_create_memory()
-    server = HTTPServer(('127.0.0.1', port), MemoryFabricHandler)
-    print(f"[MEMORY FABRIC V2] Running on http://127.0.0.1:{port}", flush=True)
-    print("[MEMORY FABRIC V2] Ready for operations", flush=True)
-    server.serve_forever()
+    try:
+        server = ReusableHTTPServer(('127.0.0.1', port), MemoryFabricHandler)
+        print(f"[MEMORY FABRIC V2] Running on http://127.0.0.1:{port}", flush=True)
+        print("[MEMORY FABRIC V2] Ready for operations", flush=True)
+        server.serve_forever()
+    except OSError as e:
+        if 'Address already in use' in str(e):
+            print(f"[MEMORY FABRIC V2] Port {port} busy, assuming service running", flush=True)
+        else:
+            raise
 
 
 if __name__ == '__main__':
