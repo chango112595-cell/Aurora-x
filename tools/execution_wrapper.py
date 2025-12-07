@@ -544,31 +544,36 @@ class AuroraConversationEngine:
         return 'general'
     
     def _is_name_introduction(self, msg_lower: str, original: str) -> bool:
-        """Check if user is telling Aurora their name - only explicit introductions"""
-        patterns = [
-            r"(?:my name is|i'm called|i am called|call me|name's|my name's)\s+[A-Za-z]+",
-            r"^i'm\s+[A-Za-z]+$",  # "I'm John" at start of message
-            r"^i am\s+[A-Za-z]+$",  # "I am John" at start of message
-        ]
+        """Check if user is telling Aurora their name - ONLY explicit unambiguous patterns
+        
+        We intentionally do NOT try to handle 'I'm X' patterns because they are
+        too error-prone (can't reliably distinguish 'I'm John' from 'I'm tired' 
+        or 'I'm Canadian' without NER). Users should use explicit patterns like
+        'my name is X' or 'call me X' for reliable name recognition.
+        """
         # Exclude questions about name
         if any(q in msg_lower for q in ['what is my name', "what's my name", 'do you know my name', 'remember my name']):
             return False
-        # Exclude common greetings that might match "i'm" patterns
-        greetings = ['hello', 'hi', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening', 'howdy', "what's up", 'sup', 'yo']
-        if any(g in msg_lower for g in greetings) and len(msg_lower) < 30:
-            return False
-        return any(re.search(p, msg_lower) for p in patterns)
+        # ONLY accept explicit, unambiguous introduction patterns
+        explicit_patterns = [
+            r"(?:my name is|my name's)\s+[A-Za-z]+",
+            r"(?:i'm called|i am called|call me)\s+[A-Za-z]+",
+            r"(?:name's|the name's|the name is)\s+[A-Za-z]+",
+            r"(?:you can call me|just call me|please call me)\s+[A-Za-z]+",
+        ]
+        return any(re.search(p, msg_lower) for p in explicit_patterns)
     
     def _handle_name_introduction(self, message: str, context: list) -> str:
         """Handle when user tells Aurora their name - store it"""
-        # Extract the name from explicit introduction patterns
-        patterns = [
-            r"(?:my name is|i'm called|i am called|call me|name's|my name's)\s+([A-Za-z]+)",
-            r"^i'm\s+([A-Za-z]+)$",  # "I'm John"
-            r"^i am\s+([A-Za-z]+)$",  # "I am John"
-        ]
         name = None
-        for pattern in patterns:
+        # ONLY use explicit introduction patterns (unambiguous)
+        explicit_patterns = [
+            r"(?:my name is|my name's)\s+([A-Za-z]+)",
+            r"(?:i'm called|i am called|call me)\s+([A-Za-z]+)",
+            r"(?:name's|the name's|the name is)\s+([A-Za-z]+)",
+            r"(?:you can call me|just call me|please call me)\s+([A-Za-z]+)",
+        ]
+        for pattern in explicit_patterns:
             match = re.search(pattern, message, re.IGNORECASE)
             if match:
                 name = match.group(1).capitalize()
