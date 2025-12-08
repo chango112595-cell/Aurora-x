@@ -3921,31 +3921,6 @@ if __name__ == "__main__":
 
       console.log('[Synthesis] Starting project generation for prompt:', prompt.substring(0, 100) + '...');
 
-      // For now, create a mock response to test the integration
-      // We'll replace this with the actual Python call once we verify the endpoint works
-      const mockResult = {
-        status: "success",
-        run_id: `run-${new Date().toISOString().replace(/[:.]/g, '-').replace('T', '-').substring(0, 17)}`,
-        files: ["src/main.py", "requirements.txt", "README.md"],
-        project_type: "python_script",
-        framework: "python",
-        language: "python",
-        features: ["simple"],
-        message: "Mock project generated successfully for testing"
-      };
-
-      console.log('[Synthesis] Mock response created:', mockResult);
-
-      // Set CORS headers
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-      res.setHeader('Content-Type', 'application/json');
-
-      // Return the mock result
-      return res.json(mockResult);
-
-      /* TODO: Replace with actual Python call once verified
       // Call Python synthesis engine
       const result = await new Promise<any>((resolve, reject) => {
         const pythonProcess = spawn('python3', [
@@ -4039,7 +4014,6 @@ asyncio.run(main())
         features: result.features || [],
         message: `Successfully generated ${result.project_type || 'project'} with ${(result.files || []).length} files`
       });
-      */
 
     } catch (error: any) {
       console.error('[Synthesis] Unexpected error:', error);
