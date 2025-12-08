@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aurora-x.fullname" . }}-config
+  labels:
+    {{- include "aurora-x.labels" . | nindent 4 }}
+data:
+  AURORA_ENV: {{ .Values.aurora.env | quote }}
+  AURORA_LOG_LEVEL: {{ .Values.aurora.logLevel | quote }}
+  AURORA_MODULES_PATH: {{ .Values.aurora.modulesPath | quote }}
+  AURORA_REGISTRY_PATH: {{ .Values.aurora.registryPath | quote }}
+  AURORA_AUTONOMY_LEVEL: {{ .Values.aurora.autonomyLevel | quote }}
+  AURORA_SANDBOX_TYPE: {{ .Values.aurora.sandboxType | quote }}
+  ETCD_FALLBACK_ENABLED: "true"

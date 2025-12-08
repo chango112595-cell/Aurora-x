@@ -278,3 +278,120 @@ class AutonomyManager:
         
         threading.Thread(target=restore, daemon=True).start()
         logger.warning(f"Escalated to FULL_AUTO for {duration_seconds}s")
+
+
+class AutonomyHTTPServer:
+    """Simple HTTP server for health checks and metrics."""
+    
+    def __init__(self, manager: AutonomyManager, port: int = 8081):
+        self.manager = manager
+        self.port = port
+        self._server = None
+    
+    def start(self):
+        """Start the HTTP server."""
+        from http.server import HTTPServer, BaseHTTPRequestHandler
+        import json
+        
+        manager = self.manager
+        
+        class Handler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                if self.path == "/health":
+                    self.send_response(200)
+                    self.send_header("Content-Type", "application/json")
+                    self.end_headers()
+                    self.wfile.write(b'{"status":"healthy"}')
+                elif self.path == "/ready":
+                    self.send_response(200)
+                    self.send_header("Content-Type", "application/json")
+                    self.end_headers()
+                    self.wfile.write(b'{"status":"ready"}')
+                elif self.path == "/status":
+                    self.send_response(200)
+                    self.send_header("Content-Type", "application/json")
+                    self.end_headers()
+                    self.wfile.write(json.dumps(manager.get_status()).encode())
+                elif self.path == "/metrics":
+                    self.send_response(200)
+                    self.send_header("Content-Type", "text/plain")
+                    self.end_headers()
+                    status = manager.get_status()
+                    metrics = f"""# HELP aurora_autonomy_queued_actions Number of queued actions
+# TYPE aurora_autonomy_queued_actions gauge
+aurora_autonomy_queued_actions {status['queued_actions']}
+# HELP aurora_autonomy_pending_approvals Number of pending approvals
+# TYPE aurora_autonomy_pending_approvals gauge
+aurora_autonomy_pending_approvals {status['pending_approvals']}
+# HELP aurora_autonomy_history_count Total actions in history
+# TYPE aurora_autonomy_history_count counter
+aurora_autonomy_history_count {status['action_history_count']}
+"""
+                    self.wfile.write(metrics.encode())
+                else:
+                    self.send_response(404)
+                    self.end_headers()
+            
+            def log_message(self, format, *args):
+                pass  # Suppress logs
+        
+        self._server = HTTPServer(("0.0.0.0", self.port), Handler)
+        threading.Thread(target=self._server.serve_forever, daemon=True).start()
+        logger.info(f"Autonomy HTTP server started on port {self.port}")
+    
+    def stop(self):
+        """Stop the HTTP server."""
+        if self._server:
+            self._server.shutdown()
+
+
+def main():
+    """CLI entrypoint for the autonomy manager."""
+    import os
+    import signal
+    
+    logging.basicConfig(
+        level=getattr(logging, os.environ.get("AURORA_LOG_LEVEL", "INFO")),
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    
+    logger.info("Starting Aurora-X Autonomy Manager...")
+    
+    autonomy_level_str = os.environ.get("AURORA_AUTONOMY_LEVEL", "hybrid").upper()
+    autonomy_level = AutonomyLevel[autonomy_level_str] if autonomy_level_str in AutonomyLevel.__members__ else AutonomyLevel.HYBRID
+    
+    policy = AutonomyPolicy(
+        level=autonomy_level,
+        allowed_actions=[ActionType.MONITOR, ActionType.DIAGNOSE, ActionType.REPAIR],
+        max_auto_repairs_per_hour=20
+    )
+    
+    manager = AutonomyManager(policy)
+    
+    http_port = int(os.environ.get("AURORA_AUTONOMY_PORT", "8081"))
+    http_server = AutonomyHTTPServer(manager, http_port)
+    http_server.start()
+    
+    manager.start()
+    logger.info(f"Autonomy Manager running with level: {autonomy_level.name}")
+    
+    shutdown = threading.Event()
+    
+    def signal_handler(sig, frame):
+        logger.info("Received shutdown signal...")
+        shutdown.set()
+    
+    signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGINT, signal_handler)
+    
+    try:
+        shutdown.wait()
+    finally:
+        logger.info("Shutting down...")
+        http_server.stop()
+        manager.stop()
+        logger.info("Aurora-X Autonomy Manager stopped")
+
+
+if __name__ == "__main__":
+    main()

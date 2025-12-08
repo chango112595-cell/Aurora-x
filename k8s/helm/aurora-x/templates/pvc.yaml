@@ -1,0 +1,47 @@
+{{- if .Values.persistence.modules.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "aurora-x.fullname" . }}-modules
+  labels:
+    {{- include "aurora-x.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    {{- toYaml .Values.persistence.modules.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.modules.size }}
+  storageClassName: {{ .Values.persistence.modules.storageClass }}
+{{- end }}
+---
+{{- if .Values.persistence.registry.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "aurora-x.fullname" . }}-registry
+  labels:
+    {{- include "aurora-x.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    {{- toYaml .Values.persistence.registry.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.registry.size }}
+  storageClassName: {{ .Values.persistence.registry.storageClass }}
+{{- end }}
+---
+{{- if .Values.persistence.etcdFallback.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "aurora-x.fullname" . }}-etcd-fallback
+  labels:
+    {{- include "aurora-x.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.persistence.etcdFallback.size }}
+  storageClassName: {{ .Values.persistence.etcdFallback.storageClass }}
+{{- end }}

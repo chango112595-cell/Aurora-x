@@ -76,7 +76,7 @@ class SandboxedModule:
         if not self._loaded:
             self.load()
         
-        if hasattr(self._init_module, 'init'):
+        if self._init_module is not None and hasattr(self._init_module, 'init'):
             return self._init_module.init(config)
         return {"status": "no_init_function", "module": self.module_id}
     
@@ -86,7 +86,7 @@ class SandboxedModule:
         if not self._loaded:
             self.load()
         
-        if hasattr(self._execute_module, 'execute'):
+        if self._execute_module is not None and hasattr(self._execute_module, 'execute'):
             return self._execute_module.execute(payload, context, timeout)
         return {"status": "no_execute_function", "module": self.module_id}
     
@@ -95,7 +95,7 @@ class SandboxedModule:
         if not self._loaded:
             return {"status": "not_loaded", "module": self.module_id}
         
-        if hasattr(self._cleanup_module, 'cleanup'):
+        if self._cleanup_module is not None and hasattr(self._cleanup_module, 'cleanup'):
             return self._cleanup_module.cleanup()
         return {"status": "no_cleanup_function", "module": self.module_id}
 

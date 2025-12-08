@@ -122,12 +122,29 @@ spec:
     metadata:
       labels:
         app: aurora-autonomy
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
     spec:
       serviceAccountName: aurora-autonomy
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
       containers:
         - name: autonomy-manager
           image: aurora-x/autonomy:v3
           imagePullPolicy: Always
+          command: ["python3", "-m", "aurora_nexus_v3.autonomy.manager"]
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          ports:
+            - containerPort: 8081
+              name: http
           envFrom:
             - configMapRef:
                 name: aurora-config
@@ -140,13 +157,29 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
           volumeMounts:
             - name: etcd-fallback
               mountPath: /app/data/etcd_fallback
+            - name: tmp
+              mountPath: /tmp
       volumes:
         - name: etcd-fallback
           persistentVolumeClaim:
             claimName: aurora-etcd-fallback-pvc
+        - name: tmp
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
