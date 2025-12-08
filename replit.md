@@ -4,7 +4,11 @@
 
 Aurora-X Ultra is an AI-powered autonomous code synthesis engine inspired by JARVIS. It features a sophisticated architecture with 188 intelligence tiers, 66 advanced execution methods, and 550 hybrid mode modules, enabling hyperspeed code generation. The platform offers a chat interface for requesting complex code, monitoring synthesis progress, exploring generated code libraries, and analyzing corpus learning data.
 
-**Latest Updates (Nov 29, 2025)**:
+**Latest Updates (Dec 08, 2025)**:
+- **Phase-1 Production Bundle**: Complete autonomy system with generate -> inspect -> test -> promote pipeline
+- **New Components**: Code Inspector, Rule Engine, Lifecycle Runner, Module Generator Helpers
+
+**Previous Updates (Nov 29, 2025)**:
 - **PEAK AUTONOMY RESTORED**: Aurora Nexus V3 now operates at full power
 - 300 Autonomous Workers (non-conscious task executors)
 - 188 Grandmaster Tiers fully integrated
@@ -168,6 +172,39 @@ AURORA_MODE=cloud    # Cloud-assisted via AURORA_BUILDER_URL
 
 ### Safety Pattern
 All edge runtimes use companion-computer pattern with human-signed approval for safety-critical operations.
+
+## Phase-1 Production Bundle
+
+Complete autonomy system for module generation, inspection, testing, and promotion.
+
+**Location**: `aurora_phase1_production/`
+
+### Components
+
+| Component | File | Description |
+|-----------|------|-------------|
+| **Manifest Generator** | `tools/make_550_manifest.py` | Creates module manifests |
+| **Module Generator** | `tools/generate_modules.py` | Generates init/execute/cleanup files |
+| **Autonomy Manager** | `aurora_nexus_v3/autonomy/manager.py` | Orchestrates the full pipeline |
+| **Sandbox Runner** | `aurora_nexus_v3/autonomy/sandbox_runner_no_docker.py` | Containerless code execution |
+| **Registry Store** | `aurora_nexus_v3/autonomy/etcd_store.py` | File-backed KV store with locking |
+| **Code Inspector** | `inspector/inspector.py` | Banned-pattern and security checks |
+| **Rule Engine** | `rule_engine/rule_engine.py` | Severity scoring and decisions |
+| **Lifecycle Runner** | `lifecycle/lifecycle.py` | Module lifecycle management |
+| **Generator Helpers** | `module_generator/helpers.py` | Candidate/snapshot/promote utilities |
+
+### Quick Start
+
+```bash
+# Generate manifest
+python aurora_phase1_production/tools/make_550_manifest.py --out manifest.json --count 10
+
+# Generate modules
+python aurora_phase1_production/tools/generate_modules.py --manifest manifest.json --out modules/
+
+# Run automated tests
+python aurora_phase1_production/tests/run_phase1_tests.py --count 10 --audit-report audit.json
+```
 
 ## External Dependencies
 
