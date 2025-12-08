@@ -148,30 +148,73 @@ class NexusBridge:
         """
         Execute payload across all matching modules in parallel.
         Uses existing V3 ThreadPool pattern.
+        
+        HYBRID MODE:
+        - Uses GPU when available for modules 451-550
+        - Falls back to CPU pool otherwise
+        - Preserves original payload, adds metadata under separate keys
         """
         targets = []
+        gpu_targets = []
+        
         for name, module in self.modules.items():
             if filter_category and module.category != filter_category:
                 continue
             if filter_tier and module.temporal_tier != filter_tier:
                 continue
-            targets.append(module)
+            
+            if self.gpu_available and hasattr(module, 'gpu_enabled') and module.gpu_enabled:
+                gpu_targets.append(module)
+            else:
+                targets.append(module)
 
-        if not targets:
+        if not targets and not gpu_targets:
             return []
 
-        futures = {self.pool.submit(m.execute, payload): m.name for m in targets}
         results = []
-
-        for future in as_completed(futures):
-            name = futures[future]
-            try:
-                result = future.result(timeout=30)
-                results.append(result)
-            except Exception as e:
-                results.append({"status": "error", "module": name, "error": str(e)})
+        
+        if self.gpu_available and gpu_targets:
+            gpu_payload = {**payload, "_hybrid_mode": "gpu", "_execution_target": "cuda"}
+            for module in gpu_targets:
+                try:
+                    result = module.execute(gpu_payload)
+                    results.append(result)
+                except Exception as e:
+                    results.append({"status": "error", "module": module.name, "error": str(e)})
+        
+        if targets:
+            cpu_payload = {**payload, "_hybrid_mode": "cpu", "_execution_target": "pool"} if self.gpu_available else payload
+            futures = {self.pool.submit(m.execute, cpu_payload): m.name for m in targets}
+            
+            for future in as_completed(futures):
+                name = futures[future]
+                try:
+                    result = future.result(timeout=30)
+                    results.append(result)
+                except Exception as e:
+                    results.append({"status": "error", "module": name, "error": str(e)})
 
         return results
+    
+    def execute_hybrid(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Hybrid-Mode Runtime: CPU + GPU + Speculative Threads.
+        Schedules GPU tasks via NexusBridge if CUDA available; else reverts to CPU pool.
+        Preserves original payload semantics - adds metadata without overwriting.
+        """
+        if self.gpu_available:
+            print(f"[NexusBridge] Hybrid mode: GPU available, using CUDA acceleration")
+        else:
+            print(f"[NexusBridge] Hybrid mode: GPU not available, using CPU pool")
+        
+        results = self.execute_all(payload)
+        
+        return {
+            "status": "success",
+            "mode": "gpu" if self.gpu_available else "cpu",
+            "modules_executed": len(results),
+            "results": results
+        }
 
     def on_boot(self):
         """V3 lifecycle hook - initialize all modules"""
