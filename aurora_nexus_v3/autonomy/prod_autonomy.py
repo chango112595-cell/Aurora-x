@@ -294,7 +294,7 @@ def build_prod_autonomy_manager(autonomy_level: str = "balanced", hybrid_mode: b
 def handle_incident_and_return(incident_payload: Dict[str, Any], autonomy_level: str = "balanced") -> Dict[str, Any]:
     mgr = build_prod_autonomy_manager(autonomy_level=autonomy_level)
     incident = Incident(
-        module_id=incident_payload.get("module_id"),
+        module_id=incident_payload.get("module_id", "unknown"),
         error=incident_payload.get("error", ""),
         stacktrace=incident_payload.get("stacktrace", ""),
         metrics=incident_payload.get("metrics", {}),

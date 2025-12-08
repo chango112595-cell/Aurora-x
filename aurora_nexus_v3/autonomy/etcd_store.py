@@ -294,3 +294,53 @@ class ModuleRegistry:
             info["updated_at"] = time.time()
             return self.register(module_id, info)
         return False
+
+
+# Module-level singleton and functions for prod_autonomy.py compatibility
+_default_store: Optional[EtcdStore] = None
+_registry_key = "/aurora/modules_registry"
+
+
+def _get_store() -> EtcdStore:
+    """Get or create the default store instance."""
+    global _default_store
+    if _default_store is None:
+        endpoints = os.environ.get("ETCD_HOSTS", "localhost:2379").split(",")
+        _default_store = EtcdStore(endpoints=endpoints)
+    return _default_store
+
+
+def get_registry() -> dict:
+    """Get the modules registry from etcd (or fallback)."""
+    store = _get_store()
+    data = store.get(_registry_key)
+    if data is None:
+        return {}
+    return data
+
+
+def put_registry_atomic(updater_func) -> tuple:
+    """
+    Atomically update the registry using the provided updater function.
+    Returns (success: bool, new_registry: dict).
+    """
+    store = _get_store()
+    lock_key = "registry_update"
+    
+    try:
+        with store.lock(lock_key, ttl=30):
+            current = get_registry()
+            updated = updater_func(current)
+            success = store.put(_registry_key, updated)
+            return (success, updated if success else current)
+    except Exception as e:
+        logger.error(f"Atomic registry update failed: {e}")
+        return (False, get_registry())
+
+
+@contextmanager
+def acquire_lock(name: str, ttl: int = 30):
+    """Context manager for acquiring a distributed lock."""
+    store = _get_store()
+    with store.lock(name, ttl):
+        yield

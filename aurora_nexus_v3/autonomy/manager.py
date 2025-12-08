@@ -14,6 +14,26 @@ from concurrent.futures import ThreadPoolExecutor
 logger = logging.getLogger(__name__)
 
 
+# Incident and RepairResult for prod_autonomy.py compatibility
+@dataclass
+class Incident:
+    """Represents an incident that needs repair."""
+    module_id: str
+    error: str = ""
+    stacktrace: str = ""
+    metrics: Dict[str, Any] = field(default_factory=dict)
+    extra: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class RepairResult:
+    """Result of a repair attempt."""
+    success: bool = False
+    promoted: bool = False
+    attempts: int = 0
+    details: Dict[str, Any] = field(default_factory=dict)
+
+
 class AutonomyLevel(Enum):
     """Autonomy operation levels."""
     DISABLED = 0
@@ -72,7 +92,25 @@ class AutonomyManager:
     Supports hybrid mode where some actions require approval.
     """
     
-    def __init__(self, policy: Optional[AutonomyPolicy] = None):
+    def __init__(
+        self,
+        policy: Optional[AutonomyPolicy] = None,
+        # New parameters for prod_autonomy.py compatibility
+        manifest_registry: Optional[Dict[str, Any]] = None,
+        autonomy_level: str = "balanced",
+        hybrid_mode: bool = True,
+        protected_scopes: Optional[List[str]] = None,
+        generator_func: Optional[Callable] = None,
+        inspector_func: Optional[Callable] = None,
+        sandbox_tester: Optional[Callable] = None,
+        promote_func: Optional[Callable] = None,
+        snapshot_func: Optional[Callable] = None,
+        restore_snapshot: Optional[Callable] = None,
+        notify_human: Optional[Callable] = None,
+        sign_artifact: Optional[Callable] = None,
+        max_repair_attempts: int = 3,
+        worker_pool: int = 6,
+    ):
         self.policy = policy or AutonomyPolicy()
         self.action_queue: List[AutonomyAction] = []
         self.action_history: List[AutonomyAction] = []
@@ -80,9 +118,98 @@ class AutonomyManager:
         self._action_counts: Dict[str, int] = {}
         self._last_reset = time.time()
         self._lock = threading.Lock()
-        self._executor = ThreadPoolExecutor(max_workers=5)
+        self._executor = ThreadPoolExecutor(max_workers=worker_pool)
         self._running = False
         self._action_handlers: Dict[ActionType, Callable] = {}
+        
+        # Store prod_autonomy adapters
+        self.manifest_registry = manifest_registry or {}
+        self.autonomy_level = autonomy_level
+        self.hybrid_mode = hybrid_mode
+        self.protected_scopes = protected_scopes or []
+        self.generator_func = generator_func
+        self.inspector_func = inspector_func
+        self.sandbox_tester = sandbox_tester
+        self.promote_func = promote_func
+        self.snapshot_func = snapshot_func
+        self.restore_snapshot = restore_snapshot
+        self.notify_human = notify_human
+        self.sign_artifact = sign_artifact
+        self.max_repair_attempts = max_repair_attempts
+    
+    def handle_incident(self, incident: Incident) -> RepairResult:
+        """
+        Handle an incident by attempting to repair the affected module.
+        This is the main entry point for prod_autonomy.py.
+        """
+        result = RepairResult()
+        module_id = incident.module_id
+        
+        logger.info(f"Handling incident for module: {module_id}")
+        
+        # Check if module is protected
+        if module_id in self.protected_scopes:
+            logger.warning(f"Module {module_id} is protected, notifying human")
+            if self.notify_human:
+                self.notify_human({"incident": incident.__dict__, "reason": "protected_scope"})
+            result.details = {"reason": "protected_scope"}
+            return result
+        
+        # Get manifest for the module
+        manifest = self.manifest_registry.get(module_id, {"id": module_id})
+        
+        for attempt in range(1, self.max_repair_attempts + 1):
+            result.attempts = attempt
+            logger.info(f"Repair attempt {attempt}/{self.max_repair_attempts} for {module_id}")
+            
+            try:
+                # Step 1: Generate candidate
+                if self.generator_func:
+                    candidate_path = self.generator_func(manifest)
+                else:
+                    result.details = {"error": "no_generator_func"}
+                    break
+                
+                # Step 2: Inspect candidate
+                if self.inspector_func:
+                    inspect_result = self.inspector_func(candidate_path)
+                    if not inspect_result.get("ok"):
+                        logger.warning(f"Inspection failed: {inspect_result.get('issues')}")
+                        continue
+                
+                # Step 3: Test in sandbox
+                if self.sandbox_tester:
+                    test_inputs = manifest.get("test_inputs", [{}])
+                    test_result = self.sandbox_tester(candidate_path, manifest, test_inputs)
+                    if not test_result.get("ok"):
+                        logger.warning(f"Sandbox test failed: {test_result}")
+                        continue
+                
+                # Step 4: Promote if tests pass
+                if self.promote_func:
+                    promote_result = self.promote_func(candidate_path, manifest)
+                    if promote_result.get("ok"):
+                        result.success = True
+                        result.promoted = True
+                        result.details = promote_result
+                        logger.info(f"Successfully repaired and promoted module {module_id}")
+                        return result
+                    else:
+                        logger.warning(f"Promotion failed: {promote_result}")
+                
+            except Exception as e:
+                logger.exception(f"Repair attempt {attempt} failed with exception: {e}")
+                result.details = {"error": str(e), "attempt": attempt}
+        
+        # All attempts failed, notify human if in hybrid mode
+        if self.hybrid_mode and self.notify_human:
+            self.notify_human({
+                "incident": incident.__dict__,
+                "attempts": result.attempts,
+                "reason": "max_attempts_exceeded"
+            })
+        
+        return result
     
     def register_handler(self, action_type: ActionType, handler: Callable):
         """Register a handler for an action type."""

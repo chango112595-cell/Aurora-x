@@ -310,3 +310,73 @@ class SandboxRunner:
             "default_sandbox": self.default_config.sandbox_type.value,
             "supported_types": [t.value for t in SandboxType]
         }
+
+
+# Module-level singleton and function for prod_autonomy.py compatibility
+_default_runner: Optional[SandboxRunner] = None
+
+
+def _get_runner() -> SandboxRunner:
+    """Get or create the default sandbox runner."""
+    global _default_runner
+    if _default_runner is None:
+        _default_runner = SandboxRunner()
+    return _default_runner
+
+
+def run_module_candidate(
+    candidate_dir: Path,
+    exec_rel_path: str,
+    test_input_json: str,
+    resource_limits: Dict[str, Any],
+    timeout_s: int = 30,
+    image: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Run a module candidate in a sandbox.
+    
+    Args:
+        candidate_dir: Path to the candidate directory
+        exec_rel_path: Relative path to the execute file within modules/
+        test_input_json: JSON string of test input
+        resource_limits: Dict with mem_mb and cpus
+        timeout_s: Timeout in seconds
+        image: Optional Docker image to use
+    
+    Returns:
+        Dict with ok, stdout, stderr, exit_code
+    """
+    runner = _get_runner()
+    
+    modules_dir = candidate_dir / "modules"
+    exec_path = modules_dir / exec_rel_path
+    
+    if not exec_path.exists():
+        return {"ok": False, "error": f"Execute file not found: {exec_path}"}
+    
+    config = SandboxConfig(
+        memory_limit_mb=resource_limits.get("mem_mb", 256),
+        cpu_limit_percent=int(resource_limits.get("cpus", 0.5) * 100),
+        timeout_seconds=timeout_s
+    )
+    
+    try:
+        payload = json.loads(test_input_json)
+    except json.JSONDecodeError as e:
+        return {"ok": False, "error": f"Invalid JSON input: {e}"}
+    
+    result = runner.run_module(
+        module_id=exec_rel_path,
+        module_path=str(exec_path),
+        payload=payload,
+        sandbox_type=SandboxType.CONTAINER if image else SandboxType.CGROUP,
+        config=config
+    )
+    
+    return {
+        "ok": result.success,
+        "stdout": str(result.output) if result.output else "",
+        "stderr": result.error or "",
+        "exit_code": result.exit_code,
+        "execution_time_ms": result.execution_time_ms
+    }
