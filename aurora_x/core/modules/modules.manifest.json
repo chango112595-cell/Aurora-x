@@ -1,0 +1,3857 @@
+{
+  "generated": "2025-12-08T22:47:44.831759",
+  "version": "1.0.0",
+  "total_modules": 550,
+  "modules": [
+    {
+      "id": 1,
+      "name": "AuroraModule001",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 2,
+      "name": "AuroraModule002",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 3,
+      "name": "AuroraModule003",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 4,
+      "name": "AuroraModule004",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 5,
+      "name": "AuroraModule005",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 6,
+      "name": "AuroraModule006",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 7,
+      "name": "AuroraModule007",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 8,
+      "name": "AuroraModule008",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 9,
+      "name": "AuroraModule009",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 10,
+      "name": "AuroraModule010",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 11,
+      "name": "AuroraModule011",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 12,
+      "name": "AuroraModule012",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 13,
+      "name": "AuroraModule013",
+      "tier": "foundational",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 14,
+      "name": "AuroraModule014",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 15,
+      "name": "AuroraModule015",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 16,
+      "name": "AuroraModule016",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 17,
+      "name": "AuroraModule017",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 18,
+      "name": "AuroraModule018",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 19,
+      "name": "AuroraModule019",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 20,
+      "name": "AuroraModule020",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 21,
+      "name": "AuroraModule021",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 22,
+      "name": "AuroraModule022",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 23,
+      "name": "AuroraModule023",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 24,
+      "name": "AuroraModule024",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 25,
+      "name": "AuroraModule025",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 26,
+      "name": "AuroraModule026",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 27,
+      "name": "AuroraModule027",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 28,
+      "name": "AuroraModule028",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 29,
+      "name": "AuroraModule029",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 30,
+      "name": "AuroraModule030",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 31,
+      "name": "AuroraModule031",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 32,
+      "name": "AuroraModule032",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 33,
+      "name": "AuroraModule033",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 34,
+      "name": "AuroraModule034",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 35,
+      "name": "AuroraModule035",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 36,
+      "name": "AuroraModule036",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 37,
+      "name": "AuroraModule037",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 38,
+      "name": "AuroraModule038",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 39,
+      "name": "AuroraModule039",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 40,
+      "name": "AuroraModule040",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 41,
+      "name": "AuroraModule041",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 42,
+      "name": "AuroraModule042",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 43,
+      "name": "AuroraModule043",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 44,
+      "name": "AuroraModule044",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 45,
+      "name": "AuroraModule045",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 46,
+      "name": "AuroraModule046",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 47,
+      "name": "AuroraModule047",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 48,
+      "name": "AuroraModule048",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 49,
+      "name": "AuroraModule049",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 50,
+      "name": "AuroraModule050",
+      "tier": "intermediate",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 51,
+      "name": "AuroraModule051",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 52,
+      "name": "AuroraModule052",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 53,
+      "name": "AuroraModule053",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 54,
+      "name": "AuroraModule054",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 55,
+      "name": "AuroraModule055",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 56,
+      "name": "AuroraModule056",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 57,
+      "name": "AuroraModule057",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 58,
+      "name": "AuroraModule058",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 59,
+      "name": "AuroraModule059",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 60,
+      "name": "AuroraModule060",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 61,
+      "name": "AuroraModule061",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 62,
+      "name": "AuroraModule062",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 63,
+      "name": "AuroraModule063",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 64,
+      "name": "AuroraModule064",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 65,
+      "name": "AuroraModule065",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 66,
+      "name": "AuroraModule066",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 67,
+      "name": "AuroraModule067",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 68,
+      "name": "AuroraModule068",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 69,
+      "name": "AuroraModule069",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 70,
+      "name": "AuroraModule070",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 71,
+      "name": "AuroraModule071",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 72,
+      "name": "AuroraModule072",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 73,
+      "name": "AuroraModule073",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 74,
+      "name": "AuroraModule074",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 75,
+      "name": "AuroraModule075",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 76,
+      "name": "AuroraModule076",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 77,
+      "name": "AuroraModule077",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 78,
+      "name": "AuroraModule078",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 79,
+      "name": "AuroraModule079",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 80,
+      "name": "AuroraModule080",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 81,
+      "name": "AuroraModule081",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 82,
+      "name": "AuroraModule082",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 83,
+      "name": "AuroraModule083",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 84,
+      "name": "AuroraModule084",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 85,
+      "name": "AuroraModule085",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 86,
+      "name": "AuroraModule086",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 87,
+      "name": "AuroraModule087",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 88,
+      "name": "AuroraModule088",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 89,
+      "name": "AuroraModule089",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 90,
+      "name": "AuroraModule090",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 91,
+      "name": "AuroraModule091",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 92,
+      "name": "AuroraModule092",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 93,
+      "name": "AuroraModule093",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 94,
+      "name": "AuroraModule094",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 95,
+      "name": "AuroraModule095",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 96,
+      "name": "AuroraModule096",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 97,
+      "name": "AuroraModule097",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 98,
+      "name": "AuroraModule098",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 99,
+      "name": "AuroraModule099",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 100,
+      "name": "AuroraModule100",
+      "tier": "advanced",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 101,
+      "name": "AuroraModule101",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 102,
+      "name": "AuroraModule102",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 103,
+      "name": "AuroraModule103",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 104,
+      "name": "AuroraModule104",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 105,
+      "name": "AuroraModule105",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 106,
+      "name": "AuroraModule106",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 107,
+      "name": "AuroraModule107",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 108,
+      "name": "AuroraModule108",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 109,
+      "name": "AuroraModule109",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 110,
+      "name": "AuroraModule110",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 111,
+      "name": "AuroraModule111",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 112,
+      "name": "AuroraModule112",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 113,
+      "name": "AuroraModule113",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 114,
+      "name": "AuroraModule114",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 115,
+      "name": "AuroraModule115",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 116,
+      "name": "AuroraModule116",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 117,
+      "name": "AuroraModule117",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 118,
+      "name": "AuroraModule118",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 119,
+      "name": "AuroraModule119",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 120,
+      "name": "AuroraModule120",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 121,
+      "name": "AuroraModule121",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 122,
+      "name": "AuroraModule122",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 123,
+      "name": "AuroraModule123",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 124,
+      "name": "AuroraModule124",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 125,
+      "name": "AuroraModule125",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 126,
+      "name": "AuroraModule126",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 127,
+      "name": "AuroraModule127",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 128,
+      "name": "AuroraModule128",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 129,
+      "name": "AuroraModule129",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 130,
+      "name": "AuroraModule130",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 131,
+      "name": "AuroraModule131",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 132,
+      "name": "AuroraModule132",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 133,
+      "name": "AuroraModule133",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 134,
+      "name": "AuroraModule134",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 135,
+      "name": "AuroraModule135",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 136,
+      "name": "AuroraModule136",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 137,
+      "name": "AuroraModule137",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 138,
+      "name": "AuroraModule138",
+      "tier": "grandmaster",
+      "category": "Ancient",
+      "requires_gpu": false
+    },
+    {
+      "id": 139,
+      "name": "AuroraModule139",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 140,
+      "name": "AuroraModule140",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 141,
+      "name": "AuroraModule141",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 142,
+      "name": "AuroraModule142",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 143,
+      "name": "AuroraModule143",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 144,
+      "name": "AuroraModule144",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 145,
+      "name": "AuroraModule145",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 146,
+      "name": "AuroraModule146",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 147,
+      "name": "AuroraModule147",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 148,
+      "name": "AuroraModule148",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 149,
+      "name": "AuroraModule149",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 150,
+      "name": "AuroraModule150",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 151,
+      "name": "AuroraModule151",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 152,
+      "name": "AuroraModule152",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 153,
+      "name": "AuroraModule153",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 154,
+      "name": "AuroraModule154",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 155,
+      "name": "AuroraModule155",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 156,
+      "name": "AuroraModule156",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 157,
+      "name": "AuroraModule157",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 158,
+      "name": "AuroraModule158",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 159,
+      "name": "AuroraModule159",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 160,
+      "name": "AuroraModule160",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 161,
+      "name": "AuroraModule161",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 162,
+      "name": "AuroraModule162",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 163,
+      "name": "AuroraModule163",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 164,
+      "name": "AuroraModule164",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 165,
+      "name": "AuroraModule165",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 166,
+      "name": "AuroraModule166",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 167,
+      "name": "AuroraModule167",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 168,
+      "name": "AuroraModule168",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 169,
+      "name": "AuroraModule169",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 170,
+      "name": "AuroraModule170",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 171,
+      "name": "AuroraModule171",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 172,
+      "name": "AuroraModule172",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 173,
+      "name": "AuroraModule173",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 174,
+      "name": "AuroraModule174",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 175,
+      "name": "AuroraModule175",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 176,
+      "name": "AuroraModule176",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 177,
+      "name": "AuroraModule177",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 178,
+      "name": "AuroraModule178",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 179,
+      "name": "AuroraModule179",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 180,
+      "name": "AuroraModule180",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 181,
+      "name": "AuroraModule181",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 182,
+      "name": "AuroraModule182",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 183,
+      "name": "AuroraModule183",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 184,
+      "name": "AuroraModule184",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 185,
+      "name": "AuroraModule185",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 186,
+      "name": "AuroraModule186",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 187,
+      "name": "AuroraModule187",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 188,
+      "name": "AuroraModule188",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 189,
+      "name": "AuroraModule189",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 190,
+      "name": "AuroraModule190",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 191,
+      "name": "AuroraModule191",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 192,
+      "name": "AuroraModule192",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 193,
+      "name": "AuroraModule193",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 194,
+      "name": "AuroraModule194",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 195,
+      "name": "AuroraModule195",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 196,
+      "name": "AuroraModule196",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 197,
+      "name": "AuroraModule197",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 198,
+      "name": "AuroraModule198",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 199,
+      "name": "AuroraModule199",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 200,
+      "name": "AuroraModule200",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 201,
+      "name": "AuroraModule201",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 202,
+      "name": "AuroraModule202",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 203,
+      "name": "AuroraModule203",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 204,
+      "name": "AuroraModule204",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 205,
+      "name": "AuroraModule205",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 206,
+      "name": "AuroraModule206",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 207,
+      "name": "AuroraModule207",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 208,
+      "name": "AuroraModule208",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 209,
+      "name": "AuroraModule209",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 210,
+      "name": "AuroraModule210",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 211,
+      "name": "AuroraModule211",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 212,
+      "name": "AuroraModule212",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 213,
+      "name": "AuroraModule213",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 214,
+      "name": "AuroraModule214",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 215,
+      "name": "AuroraModule215",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 216,
+      "name": "AuroraModule216",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 217,
+      "name": "AuroraModule217",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 218,
+      "name": "AuroraModule218",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 219,
+      "name": "AuroraModule219",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 220,
+      "name": "AuroraModule220",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 221,
+      "name": "AuroraModule221",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 222,
+      "name": "AuroraModule222",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 223,
+      "name": "AuroraModule223",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 224,
+      "name": "AuroraModule224",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 225,
+      "name": "AuroraModule225",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 226,
+      "name": "AuroraModule226",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 227,
+      "name": "AuroraModule227",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 228,
+      "name": "AuroraModule228",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 229,
+      "name": "AuroraModule229",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 230,
+      "name": "AuroraModule230",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 231,
+      "name": "AuroraModule231",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 232,
+      "name": "AuroraModule232",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 233,
+      "name": "AuroraModule233",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 234,
+      "name": "AuroraModule234",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 235,
+      "name": "AuroraModule235",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 236,
+      "name": "AuroraModule236",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 237,
+      "name": "AuroraModule237",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 238,
+      "name": "AuroraModule238",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 239,
+      "name": "AuroraModule239",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 240,
+      "name": "AuroraModule240",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 241,
+      "name": "AuroraModule241",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 242,
+      "name": "AuroraModule242",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 243,
+      "name": "AuroraModule243",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 244,
+      "name": "AuroraModule244",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 245,
+      "name": "AuroraModule245",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 246,
+      "name": "AuroraModule246",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 247,
+      "name": "AuroraModule247",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 248,
+      "name": "AuroraModule248",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 249,
+      "name": "AuroraModule249",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 250,
+      "name": "AuroraModule250",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 251,
+      "name": "AuroraModule251",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 252,
+      "name": "AuroraModule252",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 253,
+      "name": "AuroraModule253",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 254,
+      "name": "AuroraModule254",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 255,
+      "name": "AuroraModule255",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 256,
+      "name": "AuroraModule256",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 257,
+      "name": "AuroraModule257",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 258,
+      "name": "AuroraModule258",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 259,
+      "name": "AuroraModule259",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 260,
+      "name": "AuroraModule260",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 261,
+      "name": "AuroraModule261",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 262,
+      "name": "AuroraModule262",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 263,
+      "name": "AuroraModule263",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 264,
+      "name": "AuroraModule264",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 265,
+      "name": "AuroraModule265",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 266,
+      "name": "AuroraModule266",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 267,
+      "name": "AuroraModule267",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 268,
+      "name": "AuroraModule268",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 269,
+      "name": "AuroraModule269",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 270,
+      "name": "AuroraModule270",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 271,
+      "name": "AuroraModule271",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 272,
+      "name": "AuroraModule272",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 273,
+      "name": "AuroraModule273",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 274,
+      "name": "AuroraModule274",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 275,
+      "name": "AuroraModule275",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 276,
+      "name": "AuroraModule276",
+      "tier": "grandmaster",
+      "category": "Classical",
+      "requires_gpu": false
+    },
+    {
+      "id": 277,
+      "name": "AuroraModule277",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 278,
+      "name": "AuroraModule278",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 279,
+      "name": "AuroraModule279",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 280,
+      "name": "AuroraModule280",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 281,
+      "name": "AuroraModule281",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 282,
+      "name": "AuroraModule282",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 283,
+      "name": "AuroraModule283",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 284,
+      "name": "AuroraModule284",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 285,
+      "name": "AuroraModule285",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 286,
+      "name": "AuroraModule286",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 287,
+      "name": "AuroraModule287",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 288,
+      "name": "AuroraModule288",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 289,
+      "name": "AuroraModule289",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 290,
+      "name": "AuroraModule290",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 291,
+      "name": "AuroraModule291",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 292,
+      "name": "AuroraModule292",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 293,
+      "name": "AuroraModule293",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 294,
+      "name": "AuroraModule294",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 295,
+      "name": "AuroraModule295",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 296,
+      "name": "AuroraModule296",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 297,
+      "name": "AuroraModule297",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 298,
+      "name": "AuroraModule298",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 299,
+      "name": "AuroraModule299",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 300,
+      "name": "AuroraModule300",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 301,
+      "name": "AuroraModule301",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 302,
+      "name": "AuroraModule302",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 303,
+      "name": "AuroraModule303",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 304,
+      "name": "AuroraModule304",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 305,
+      "name": "AuroraModule305",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 306,
+      "name": "AuroraModule306",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 307,
+      "name": "AuroraModule307",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 308,
+      "name": "AuroraModule308",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 309,
+      "name": "AuroraModule309",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 310,
+      "name": "AuroraModule310",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 311,
+      "name": "AuroraModule311",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 312,
+      "name": "AuroraModule312",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 313,
+      "name": "AuroraModule313",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 314,
+      "name": "AuroraModule314",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 315,
+      "name": "AuroraModule315",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 316,
+      "name": "AuroraModule316",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 317,
+      "name": "AuroraModule317",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 318,
+      "name": "AuroraModule318",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 319,
+      "name": "AuroraModule319",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 320,
+      "name": "AuroraModule320",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 321,
+      "name": "AuroraModule321",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 322,
+      "name": "AuroraModule322",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 323,
+      "name": "AuroraModule323",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 324,
+      "name": "AuroraModule324",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 325,
+      "name": "AuroraModule325",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 326,
+      "name": "AuroraModule326",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 327,
+      "name": "AuroraModule327",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 328,
+      "name": "AuroraModule328",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 329,
+      "name": "AuroraModule329",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 330,
+      "name": "AuroraModule330",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 331,
+      "name": "AuroraModule331",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 332,
+      "name": "AuroraModule332",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 333,
+      "name": "AuroraModule333",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 334,
+      "name": "AuroraModule334",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 335,
+      "name": "AuroraModule335",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 336,
+      "name": "AuroraModule336",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 337,
+      "name": "AuroraModule337",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 338,
+      "name": "AuroraModule338",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 339,
+      "name": "AuroraModule339",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 340,
+      "name": "AuroraModule340",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 341,
+      "name": "AuroraModule341",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 342,
+      "name": "AuroraModule342",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 343,
+      "name": "AuroraModule343",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 344,
+      "name": "AuroraModule344",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 345,
+      "name": "AuroraModule345",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 346,
+      "name": "AuroraModule346",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 347,
+      "name": "AuroraModule347",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 348,
+      "name": "AuroraModule348",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 349,
+      "name": "AuroraModule349",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 350,
+      "name": "AuroraModule350",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 351,
+      "name": "AuroraModule351",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 352,
+      "name": "AuroraModule352",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 353,
+      "name": "AuroraModule353",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 354,
+      "name": "AuroraModule354",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 355,
+      "name": "AuroraModule355",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 356,
+      "name": "AuroraModule356",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 357,
+      "name": "AuroraModule357",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 358,
+      "name": "AuroraModule358",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 359,
+      "name": "AuroraModule359",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 360,
+      "name": "AuroraModule360",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 361,
+      "name": "AuroraModule361",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 362,
+      "name": "AuroraModule362",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 363,
+      "name": "AuroraModule363",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 364,
+      "name": "AuroraModule364",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 365,
+      "name": "AuroraModule365",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 366,
+      "name": "AuroraModule366",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 367,
+      "name": "AuroraModule367",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 368,
+      "name": "AuroraModule368",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 369,
+      "name": "AuroraModule369",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 370,
+      "name": "AuroraModule370",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 371,
+      "name": "AuroraModule371",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 372,
+      "name": "AuroraModule372",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 373,
+      "name": "AuroraModule373",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 374,
+      "name": "AuroraModule374",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 375,
+      "name": "AuroraModule375",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 376,
+      "name": "AuroraModule376",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 377,
+      "name": "AuroraModule377",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 378,
+      "name": "AuroraModule378",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 379,
+      "name": "AuroraModule379",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 380,
+      "name": "AuroraModule380",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 381,
+      "name": "AuroraModule381",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 382,
+      "name": "AuroraModule382",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 383,
+      "name": "AuroraModule383",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 384,
+      "name": "AuroraModule384",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 385,
+      "name": "AuroraModule385",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 386,
+      "name": "AuroraModule386",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 387,
+      "name": "AuroraModule387",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 388,
+      "name": "AuroraModule388",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 389,
+      "name": "AuroraModule389",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 390,
+      "name": "AuroraModule390",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 391,
+      "name": "AuroraModule391",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 392,
+      "name": "AuroraModule392",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 393,
+      "name": "AuroraModule393",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 394,
+      "name": "AuroraModule394",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 395,
+      "name": "AuroraModule395",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 396,
+      "name": "AuroraModule396",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 397,
+      "name": "AuroraModule397",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 398,
+      "name": "AuroraModule398",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 399,
+      "name": "AuroraModule399",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 400,
+      "name": "AuroraModule400",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 401,
+      "name": "AuroraModule401",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 402,
+      "name": "AuroraModule402",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 403,
+      "name": "AuroraModule403",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 404,
+      "name": "AuroraModule404",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 405,
+      "name": "AuroraModule405",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 406,
+      "name": "AuroraModule406",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 407,
+      "name": "AuroraModule407",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 408,
+      "name": "AuroraModule408",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 409,
+      "name": "AuroraModule409",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 410,
+      "name": "AuroraModule410",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 411,
+      "name": "AuroraModule411",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 412,
+      "name": "AuroraModule412",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 413,
+      "name": "AuroraModule413",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 414,
+      "name": "AuroraModule414",
+      "tier": "grandmaster",
+      "category": "Modern",
+      "requires_gpu": false
+    },
+    {
+      "id": 415,
+      "name": "AuroraModule415",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 416,
+      "name": "AuroraModule416",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 417,
+      "name": "AuroraModule417",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 418,
+      "name": "AuroraModule418",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 419,
+      "name": "AuroraModule419",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 420,
+      "name": "AuroraModule420",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 421,
+      "name": "AuroraModule421",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 422,
+      "name": "AuroraModule422",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 423,
+      "name": "AuroraModule423",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 424,
+      "name": "AuroraModule424",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 425,
+      "name": "AuroraModule425",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 426,
+      "name": "AuroraModule426",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 427,
+      "name": "AuroraModule427",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 428,
+      "name": "AuroraModule428",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 429,
+      "name": "AuroraModule429",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 430,
+      "name": "AuroraModule430",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 431,
+      "name": "AuroraModule431",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 432,
+      "name": "AuroraModule432",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 433,
+      "name": "AuroraModule433",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 434,
+      "name": "AuroraModule434",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 435,
+      "name": "AuroraModule435",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 436,
+      "name": "AuroraModule436",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 437,
+      "name": "AuroraModule437",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 438,
+      "name": "AuroraModule438",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 439,
+      "name": "AuroraModule439",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 440,
+      "name": "AuroraModule440",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 441,
+      "name": "AuroraModule441",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 442,
+      "name": "AuroraModule442",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 443,
+      "name": "AuroraModule443",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 444,
+      "name": "AuroraModule444",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 445,
+      "name": "AuroraModule445",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 446,
+      "name": "AuroraModule446",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 447,
+      "name": "AuroraModule447",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 448,
+      "name": "AuroraModule448",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 449,
+      "name": "AuroraModule449",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 450,
+      "name": "AuroraModule450",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": false
+    },
+    {
+      "id": 451,
+      "name": "AuroraModule451",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 452,
+      "name": "AuroraModule452",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 453,
+      "name": "AuroraModule453",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 454,
+      "name": "AuroraModule454",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 455,
+      "name": "AuroraModule455",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 456,
+      "name": "AuroraModule456",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 457,
+      "name": "AuroraModule457",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 458,
+      "name": "AuroraModule458",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 459,
+      "name": "AuroraModule459",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 460,
+      "name": "AuroraModule460",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 461,
+      "name": "AuroraModule461",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 462,
+      "name": "AuroraModule462",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 463,
+      "name": "AuroraModule463",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 464,
+      "name": "AuroraModule464",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 465,
+      "name": "AuroraModule465",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 466,
+      "name": "AuroraModule466",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 467,
+      "name": "AuroraModule467",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 468,
+      "name": "AuroraModule468",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 469,
+      "name": "AuroraModule469",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 470,
+      "name": "AuroraModule470",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 471,
+      "name": "AuroraModule471",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 472,
+      "name": "AuroraModule472",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 473,
+      "name": "AuroraModule473",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 474,
+      "name": "AuroraModule474",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 475,
+      "name": "AuroraModule475",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 476,
+      "name": "AuroraModule476",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 477,
+      "name": "AuroraModule477",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 478,
+      "name": "AuroraModule478",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 479,
+      "name": "AuroraModule479",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 480,
+      "name": "AuroraModule480",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 481,
+      "name": "AuroraModule481",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 482,
+      "name": "AuroraModule482",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 483,
+      "name": "AuroraModule483",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 484,
+      "name": "AuroraModule484",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 485,
+      "name": "AuroraModule485",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 486,
+      "name": "AuroraModule486",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 487,
+      "name": "AuroraModule487",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 488,
+      "name": "AuroraModule488",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 489,
+      "name": "AuroraModule489",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 490,
+      "name": "AuroraModule490",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 491,
+      "name": "AuroraModule491",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 492,
+      "name": "AuroraModule492",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 493,
+      "name": "AuroraModule493",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 494,
+      "name": "AuroraModule494",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 495,
+      "name": "AuroraModule495",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 496,
+      "name": "AuroraModule496",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 497,
+      "name": "AuroraModule497",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 498,
+      "name": "AuroraModule498",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 499,
+      "name": "AuroraModule499",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 500,
+      "name": "AuroraModule500",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 501,
+      "name": "AuroraModule501",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 502,
+      "name": "AuroraModule502",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 503,
+      "name": "AuroraModule503",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 504,
+      "name": "AuroraModule504",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 505,
+      "name": "AuroraModule505",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 506,
+      "name": "AuroraModule506",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 507,
+      "name": "AuroraModule507",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 508,
+      "name": "AuroraModule508",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 509,
+      "name": "AuroraModule509",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 510,
+      "name": "AuroraModule510",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 511,
+      "name": "AuroraModule511",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 512,
+      "name": "AuroraModule512",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 513,
+      "name": "AuroraModule513",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 514,
+      "name": "AuroraModule514",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 515,
+      "name": "AuroraModule515",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 516,
+      "name": "AuroraModule516",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 517,
+      "name": "AuroraModule517",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 518,
+      "name": "AuroraModule518",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 519,
+      "name": "AuroraModule519",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 520,
+      "name": "AuroraModule520",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 521,
+      "name": "AuroraModule521",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 522,
+      "name": "AuroraModule522",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 523,
+      "name": "AuroraModule523",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 524,
+      "name": "AuroraModule524",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 525,
+      "name": "AuroraModule525",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 526,
+      "name": "AuroraModule526",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 527,
+      "name": "AuroraModule527",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 528,
+      "name": "AuroraModule528",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 529,
+      "name": "AuroraModule529",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 530,
+      "name": "AuroraModule530",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 531,
+      "name": "AuroraModule531",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 532,
+      "name": "AuroraModule532",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 533,
+      "name": "AuroraModule533",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 534,
+      "name": "AuroraModule534",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 535,
+      "name": "AuroraModule535",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 536,
+      "name": "AuroraModule536",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 537,
+      "name": "AuroraModule537",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 538,
+      "name": "AuroraModule538",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 539,
+      "name": "AuroraModule539",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 540,
+      "name": "AuroraModule540",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 541,
+      "name": "AuroraModule541",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 542,
+      "name": "AuroraModule542",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 543,
+      "name": "AuroraModule543",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 544,
+      "name": "AuroraModule544",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 545,
+      "name": "AuroraModule545",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 546,
+      "name": "AuroraModule546",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 547,
+      "name": "AuroraModule547",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 548,
+      "name": "AuroraModule548",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 549,
+      "name": "AuroraModule549",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    },
+    {
+      "id": 550,
+      "name": "AuroraModule550",
+      "tier": "grandmaster",
+      "category": "Futuristic",
+      "requires_gpu": true
+    }
+  ]
+}

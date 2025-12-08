@@ -64,7 +64,9 @@ class NexusBridge:
 
     def _find_module_path(self) -> str:
         """Auto-detect module path from common locations"""
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         candidates = [
+            os.path.join(base_dir, "aurora_x/core/modules"),
             "aurora_x/core/modules",
             "aurora_phase1_production/aurora_x/modules",
             "modules",
@@ -73,7 +75,7 @@ class NexusBridge:
         for path in candidates:
             if os.path.isdir(path):
                 return path
-        return "aurora_x/core/modules"
+        return os.path.join(base_dir, "aurora_x/core/modules")
 
     def attach_v3_core(self, core):
         """Attach to existing V3 core (called by V3 main.py)"""
