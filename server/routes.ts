@@ -1,10 +1,8 @@
 import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { WebSocketServer } from "ws";
 import { storage } from "./storage";
 import { corpusStorage } from "./corpus-storage";
 import { progressStore } from "./progress-store";
-import { createWebSocketServer, type SynthesisWebSocketServer } from "./websocket-server";
+import type { SynthesisWebSocketServer } from "./websocket-server";
 import * as path from "path";
 import * as fs from "fs";
 import { spawn, execFile } from "child_process";
@@ -30,8 +28,14 @@ const AURORA_REPO = process.env.AURORA_REPO || "chango112595-cell/Aurora-x";
 const TARGET_BRANCH = process.env.AURORA_TARGET_BRANCH || "main";
 const AURORA_GH_TOKEN = process.env.AURORA_GH_TOKEN;
 const GH_API = "https://api.github.com";
-let wsServer: SynthesisWebSocketServer | null = null;
 let serverStartTime: number = Date.now();
+
+// WebSocket server reference - set from index.ts after initialization
+let wsServer: SynthesisWebSocketServer | null = null;
+
+export function setWebSocketServer(server: SynthesisWebSocketServer): void {
+  wsServer = server;
+}
 
 // GitHub API helper function
 function getGitHubHeaders() {
@@ -173,7 +177,7 @@ async function refreshReadmeBadges(): Promise<void> {
   }
 }
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export async function registerRoutes(app: Express): Promise<void> {
   // ══════════════════════════════════════════════════════════════
   // 📊 SYSTEM ROUTES (BEFORE RATE LIMITING)
   // ══════════════════════════════════════════════════════════════
@@ -4818,52 +4822,8 @@ asyncio.run(main())
     }
   });
 
-  const httpServer = createServer(app);
-
-  // Set up WebSocket server for real-time progress updates
-  wsServer = createWebSocketServer(httpServer);
-
-  // Aurora: Setup intelligent chat WebSocket
-  const auroraWss = new WebSocketServer({ 
-    server: httpServer,
-    path: '/aurora/chat'
-  });
-
-  auroraWss.on('connection', (ws) => {
-    console.log('[Aurora] New chat connection established');
-
-    // Aurora's welcome message
-    ws.send(JSON.stringify({
-      message: "Hello! I'm Aurora 🌌\n\nI'm your omniscient AI assistant with complete mastery across 27 technology domains. I can help you build anything, debug any issue, and explain any concept from ancient computing to future quantum systems.\n\nWhat would you like to work on today?"
-    }));
-
-    ws.on('message', async (data) => {
-      try {
-        const { message } = JSON.parse(data.toString());
-        console.log('[Aurora] User:', message);
-
-        // Aurora responds intelligently
-        const response = await processAuroraMessage(message);
-
-        console.log('[Aurora] Response:', response.substring(0, 100) + '...');
-
-        ws.send(JSON.stringify({ message: response }));
-      } catch (error) {
-        console.error('[Aurora] Error:', error);
-        ws.send(JSON.stringify({
-          message: "I encountered an error processing that. Could you rephrase your question? I'm here to help!"
-        }));
-      }
-    });
-
-    ws.on('close', () => {
-      console.log('[Aurora] Chat connection closed');
-    });
-  });
-
-  console.log('[Aurora] 🌌 Intelligent chat WebSocket ready on /aurora/chat');
-
-  return httpServer;
+  // Note: HTTP server and WebSocket are initialized in server/index.ts
+  // This function only registers routes on the Express app
 }
 
 // Aurora's intelligent conversational message processing with FULL GRANDMASTER KNOWLEDGE

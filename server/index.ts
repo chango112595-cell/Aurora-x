@@ -1,6 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
-import { registerRoutes } from "./routes";
+import { registerRoutes, setWebSocketServer } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import AuroraCore from "./aurora-core";
 import { registerLuminarRoutes } from "./luminar-routes";
@@ -156,6 +156,7 @@ app.use((req, res, next) => {
 
   // Initialize WebSocket server for real-time chat
   const wsServer = createWebSocketServer(server);
+  setWebSocketServer(wsServer);  // Share with routes for progress broadcasting
   console.log("[WebSocket] ✅ WebSocket server attached to HTTP server");
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
