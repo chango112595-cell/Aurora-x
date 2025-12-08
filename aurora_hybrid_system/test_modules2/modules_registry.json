@@ -1,0 +1,56 @@
+{
+  "generated_at": "2025-12-08T11:38:50.017416Z",
+  "count": 5,
+  "modules": {
+    "0001": {
+      "id": "0001",
+      "name": "Connector_0001",
+      "category": "connector",
+      "files": [
+        "test_modules2/connector/connector_0001_init.py",
+        "test_modules2/connector/connector_0001_execute.py",
+        "test_modules2/connector/connector_0001_cleanup.py"
+      ]
+    },
+    "0002": {
+      "id": "0002",
+      "name": "Processor_0002",
+      "category": "processor",
+      "files": [
+        "test_modules2/processor/processor_0002_init.py",
+        "test_modules2/processor/processor_0002_execute.py",
+        "test_modules2/processor/processor_0002_cleanup.py"
+      ]
+    },
+    "0003": {
+      "id": "0003",
+      "name": "Analyzer_0003",
+      "category": "analyzer",
+      "files": [
+        "test_modules2/analyzer/analyzer_0003_init.py",
+        "test_modules2/analyzer/analyzer_0003_execute.py",
+        "test_modules2/analyzer/analyzer_0003_cleanup.py"
+      ]
+    },
+    "0004": {
+      "id": "0004",
+      "name": "Generator_0004",
+      "category": "generator",
+      "files": [
+        "test_modules2/generator/generator_0004_init.py",
+        "test_modules2/generator/generator_0004_execute.py",
+        "test_modules2/generator/generator_0004_cleanup.py"
+      ]
+    },
+    "0005": {
+      "id": "0005",
+      "name": "Transformer_0005",
+      "category": "transformer",
+      "files": [
+        "test_modules2/transformer/transformer_0005_init.py",
+        "test_modules2/transformer/transformer_0005_execute.py",
+        "test_modules2/transformer/transformer_0005_cleanup.py"
+      ]
+    }
+  }
+}
