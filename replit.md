@@ -204,7 +204,10 @@ Complete autonomy system for module generation, inspection, testing, and promoti
 ### Quick Start
 
 ```bash
-# Generate all 550 temporal modules with GPU support
+# HYBRID MODE: Enhanced generator with Nexus V3 bridge integration
+python aurora_phase1_production/tools/enhanced_generate_aurora_modules.py --output aurora_x --zip
+
+# Generate all 550 temporal modules with GPU support (standalone)
 python aurora_phase1_production/tools/generate_aurora_modules.py --output aurora_x --registry
 
 # Universal build (auto-detects system, Python, GPU)
@@ -217,6 +220,28 @@ python aurora_phase1_production/tools/generate_modules.py --manifest manifest.js
 # Run automated tests
 python aurora_phase1_production/tests/run_phase1_tests.py --count 10 --audit-report audit.json
 ```
+
+### Nexus V3 Bridge Integration (HYBRID MODE)
+
+The NexusBridge connects 550 modules to Nexus V3 without breaking existing systems:
+
+```python
+# In aurora_nexus_v3/main.py (after core initialization)
+from aurora_nexus_v3.core import NexusBridge
+
+bridge = NexusBridge(module_path='aurora_nexus_v3/modules')
+bridge.load_modules()
+bridge.attach_v3_core(self.core)  # optional - ties into V3 reflection/learning
+
+# Luminar V2 can query modules through V3:
+response = bridge.execute(101, {'task': 'semantic-summary'})
+```
+
+Key integration points:
+- `on_boot()` - Called during V3 boot sequence
+- `on_tick()` - Called on scheduler tick
+- `on_reflect()` - Hooks into V3 reflection system
+- `update_bias()` - Ties into V3 learning stats
 
 ### Temporal Module Categories
 

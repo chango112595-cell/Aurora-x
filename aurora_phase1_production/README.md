@@ -175,7 +175,10 @@ python tests/run_phase1_tests.py --count 10 --audit-report test_audit.json
 Generate all 550 temporal modules with GPU acceleration support:
 
 ```bash
-# Generate all 550 modules with ZIP archive
+# HYBRID MODE: Enhanced generator with Nexus V3 bridge (recommended)
+python tools/enhanced_generate_aurora_modules.py --output aurora_x --zip
+
+# Standalone generation with ZIP archive
 python tools/generate_aurora_modules.py --output aurora_x --registry
 
 # Check system capabilities first
@@ -183,6 +186,25 @@ python tools/generate_aurora_modules.py --check-system
 
 # Full universal build (system check + generation)
 python tools/universal_build.py --output aurora_build --modules 550
+```
+
+### Nexus V3 Bridge Integration
+
+The `enhanced_generate_aurora_modules.py` creates a NexusBridge that:
+- Plugs into V3 lifecycle hooks (on_boot, on_tick, on_reflect)
+- Keeps Luminar V2 chat separate but queryable through V3
+- Uses V3's existing ThreadPool (no double-threads)
+- Falls back gracefully when GPU/optional libs missing
+
+```python
+from aurora_nexus_v3.core import NexusBridge
+
+bridge = NexusBridge(module_path='aurora_nexus_v3/modules')
+bridge.load_modules()
+bridge.attach_v3_core(v3_core)  # optional
+
+# Query from Luminar V2 through V3
+response = bridge.execute(101, {'task': 'semantic-summary'})
 ```
 
 ### Temporal Categories
