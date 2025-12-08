@@ -41,8 +41,8 @@ class SandboxConfig:
     timeout_seconds: int = 30
     network_enabled: bool = False
     filesystem_readonly: bool = True
-    allowed_paths: List[str] = None
-    env_vars: Dict[str, str] = None
+    allowed_paths: Optional[List[str]] = None
+    env_vars: Optional[Dict[str, str]] = None
     
     def __post_init__(self):
         if self.allowed_paths is None:

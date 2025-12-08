@@ -56,9 +56,9 @@ class SandboxedModule:
             logger.error(f"Failed to load module {self.module_id}: {e}")
             return False
     
-    def _import_from_path(self, path: str):
+    def _import_from_path(self, path_str: str):
         """Import module from file path."""
-        path = Path(path)
+        path = Path(path_str)
         if not path.exists():
             raise ModuleLoadError(f"Module file not found: {path}")
         
