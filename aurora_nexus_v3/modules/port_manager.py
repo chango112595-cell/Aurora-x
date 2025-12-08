@@ -47,10 +47,10 @@ class PortManager:
         "system": (1, 1023),
         "registered": (1024, 49151),
         "dynamic": (49152, 65535),
-        "aurora": (5000, 5999)
+        "aurora": (5001, 5999)  # Starts at 5001, 5000 reserved for main app
     }
     
-    RESERVED_PORTS = {22, 80, 443, 3306, 5432, 6379, 27017}
+    RESERVED_PORTS = {22, 80, 443, 3306, 5000, 5432, 6379, 27017}  # 5000 reserved for main app
     
     def __init__(self, core):
         self.core = core
@@ -63,7 +63,7 @@ class PortManager:
         self._init_pools()
     
     def _init_pools(self):
-        self.pools["aurora"] = set(range(5000, 5100))
+        self.pools["aurora"] = set(range(5001, 5100))  # Starts at 5001, 5000 reserved for main app
         self.pools["services"] = set(range(8000, 9000))
         self.pools["dynamic"] = set(range(49152, 50000))
     

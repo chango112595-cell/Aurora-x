@@ -23,8 +23,8 @@ class ResourceLimits:
 @dataclass
 class NetworkConfig:
     api_host: str = "0.0.0.0"
-    api_port: int = 5000
-    websocket_port: int = 5001
+    api_port: int = 5002  # Changed from 5000 to avoid conflict with main app
+    websocket_port: int = 5003
     discovery_port: int = 5353
     mesh_port: int = 6000
     enable_mdns: bool = True
@@ -74,7 +74,7 @@ class NexusConfig:
         config.environment = os.getenv("AURORA_ENV", "development")
         config.debug = os.getenv("AURORA_DEBUG", "1") == "1"
         config.log_level = os.getenv("AURORA_LOG_LEVEL", "INFO")
-        config.network.api_port = int(os.getenv("PORT", "5000"))
+        config.network.api_port = int(os.getenv("AURORA_NEXUS_PORT", "5002"))
         config.security.api_key = os.getenv("AURORA_API_KEY")
         return config
     
