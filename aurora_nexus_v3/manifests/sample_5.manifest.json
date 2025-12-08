@@ -1,0 +1,63 @@
+{
+  "generated_at": "2025-12-08T11:04:28.698222Z",
+  "modules": [
+    {
+      "id": "0001",
+      "name": "Connector_0001",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0001"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0001"
+    },
+    {
+      "id": "0002",
+      "name": "Processor_0002",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0002"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0002"
+    },
+    {
+      "id": "0003",
+      "name": "Analyzer_0003",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0003"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0003"
+    },
+    {
+      "id": "0004",
+      "name": "Generator_0004",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0004"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0004"
+    },
+    {
+      "id": "0005",
+      "name": "Transformer_0005",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0005"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0005"
+    }
+  ]
+}

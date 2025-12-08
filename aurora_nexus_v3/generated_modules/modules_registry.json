@@ -1,0 +1,46 @@
+{
+  "generated_at": "2025-12-08T11:04:28.717349Z",
+  "count": 5,
+  "modules": {
+    "0001": {
+      "id": "0001",
+      "files": [
+        "connector/connector_0001_init.py",
+        "connector/connector_0001_execute.py",
+        "connector/connector_0001_cleanup.py"
+      ]
+    },
+    "0002": {
+      "id": "0002",
+      "files": [
+        "processor/processor_0002_init.py",
+        "processor/processor_0002_execute.py",
+        "processor/processor_0002_cleanup.py"
+      ]
+    },
+    "0003": {
+      "id": "0003",
+      "files": [
+        "analyzer/analyzer_0003_init.py",
+        "analyzer/analyzer_0003_execute.py",
+        "analyzer/analyzer_0003_cleanup.py"
+      ]
+    },
+    "0004": {
+      "id": "0004",
+      "files": [
+        "generator/generator_0004_init.py",
+        "generator/generator_0004_execute.py",
+        "generator/generator_0004_cleanup.py"
+      ]
+    },
+    "0005": {
+      "id": "0005",
+      "files": [
+        "transformer/transformer_0005_init.py",
+        "transformer/transformer_0005_execute.py",
+        "transformer/transformer_0005_cleanup.py"
+      ]
+    }
+  }
+}
