@@ -179,12 +179,20 @@ Complete autonomy system for module generation, inspection, testing, and promoti
 
 **Location**: `aurora_phase1_production/`
 
+**Features**:
+- Universal cross-platform support (Linux, macOS, Windows, WSL)
+- GPU acceleration via PyTorch (auto-detected)
+- 550 temporal module infrastructure
+- Generate -> Inspect -> Test -> Promote pipeline
+
 ### Components
 
 | Component | File | Description |
 |-----------|------|-------------|
 | **Manifest Generator** | `tools/make_550_manifest.py` | Creates module manifests |
 | **Module Generator** | `tools/generate_modules.py` | Generates init/execute/cleanup files |
+| **550 Module Generator** | `tools/generate_aurora_modules.py` | Universal 550-module generator with GPU |
+| **Universal Build** | `tools/universal_build.py` | Cross-platform build script |
 | **Autonomy Manager** | `aurora_nexus_v3/autonomy/manager.py` | Orchestrates the full pipeline |
 | **Sandbox Runner** | `aurora_nexus_v3/autonomy/sandbox_runner_no_docker.py` | Containerless code execution |
 | **Registry Store** | `aurora_nexus_v3/autonomy/etcd_store.py` | File-backed KV store with locking |
@@ -196,15 +204,28 @@ Complete autonomy system for module generation, inspection, testing, and promoti
 ### Quick Start
 
 ```bash
-# Generate manifest
-python aurora_phase1_production/tools/make_550_manifest.py --out manifest.json --count 10
+# Generate all 550 temporal modules with GPU support
+python aurora_phase1_production/tools/generate_aurora_modules.py --output aurora_x --registry
 
-# Generate modules
+# Universal build (auto-detects system, Python, GPU)
+python aurora_phase1_production/tools/universal_build.py --output aurora_build --modules 550
+
+# Phase-1 pipeline (manifest -> modules)
+python aurora_phase1_production/tools/make_550_manifest.py --out manifest.json --count 10
 python aurora_phase1_production/tools/generate_modules.py --manifest manifest.json --out modules/
 
 # Run automated tests
 python aurora_phase1_production/tests/run_phase1_tests.py --count 10 --audit-report audit.json
 ```
+
+### Temporal Module Categories
+
+| Category | ID Range | GPU | Description |
+|----------|----------|-----|-------------|
+| Ancient | 1-100 | No | Pattern recognition, logic, reasoning |
+| Classical | 101-250 | No | Algorithms, structures, systems |
+| Modern | 251-450 | Yes | ML, AI agents, real-time adaptation |
+| Futuristic | 451-550 | Yes | Quantum, neural links, consciousness |
 
 ## External Dependencies
 

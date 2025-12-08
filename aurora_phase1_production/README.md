@@ -2,13 +2,22 @@
 
 A production-ready autonomy system for Aurora module generation, inspection, testing, and promotion.
 
+**Features:**
+- Universal cross-platform support (Linux, macOS, Windows, WSL)
+- GPU acceleration via PyTorch (auto-detected)
+- 550 temporal module infrastructure
+- Generate -> Inspect -> Test -> Promote pipeline
+- Auto-registration for Aurora Core
+
 ## Structure
 
 ```
 aurora_phase1_production/
 ├── tools/
 │   ├── make_550_manifest.py      # Generates module manifests
-│   └── generate_modules.py       # Production module generator
+│   ├── generate_modules.py       # Production module generator
+│   ├── generate_aurora_modules.py # Universal 550-module generator with GPU
+│   └── universal_build.py        # Cross-platform build script
 ├── aurora_nexus_v3/
 │   └── autonomy/
 │       ├── sandbox_runner_no_docker.py  # Containerless sandbox runner
@@ -161,7 +170,45 @@ Run the automated test suite:
 python tests/run_phase1_tests.py --count 10 --audit-report test_audit.json
 ```
 
-## Module Categories
+## Universal 550 Module Generator
+
+Generate all 550 temporal modules with GPU acceleration support:
+
+```bash
+# Generate all 550 modules with ZIP archive
+python tools/generate_aurora_modules.py --output aurora_x --registry
+
+# Check system capabilities first
+python tools/generate_aurora_modules.py --check-system
+
+# Full universal build (system check + generation)
+python tools/universal_build.py --output aurora_build --modules 550
+```
+
+### Temporal Categories
+
+| Category | ID Range | Drivers | Description |
+|----------|----------|---------|-------------|
+| Ancient | 1-100 | cpu, sequential, symbolic | Pattern recognition, logic, reasoning |
+| Classical | 101-250 | cpu, parallel, distributed | Algorithms, structures, systems |
+| Modern | 251-450 | cpu, gpu, tpu, distributed | ML, AI agents, real-time adaptation |
+| Futuristic | 451-550 | gpu, quantum, neural, hybrid | Quantum computing, neural links |
+
+### GPU Support
+
+Modules in Modern (251-450) and Futuristic (451-550) categories have GPU acceleration when:
+- PyTorch is installed (`pip install torch`)
+- CUDA is available
+- Driver is `gpu` or `hybrid`
+
+Each module exposes:
+- `.execute()` - Main operational logic
+- `.learn()` - Adaptive update hooks
+- `.diagnose()` - Self-checks and reporting
+- `.metadata()` - System metadata for discovery
+- `.gpu_accelerate()` - GPU acceleration (if available)
+
+## Phase-1 Module Categories
 
 | Category | Drivers | Description |
 |----------|---------|-------------|
