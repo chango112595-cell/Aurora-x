@@ -85,11 +85,27 @@ class AuroraSupervisor:
         self.workers = []
         self.running = True
         self.fabric.load_state()
+        self.parameters = {}
+        self.pending_updates = []
+        self.error_count = 0
+        self.evolver = None
 
     def start(self):
         analyze_environment()
         self.spawn_workers()
+        self._start_auto_evolution()
         self.main_loop()
+
+    def _start_auto_evolution(self):
+        try:
+            try:
+                from aurora_supervisor.auto_evolution import AutoEvolution
+            except ImportError:
+                from auto_evolution import AutoEvolution
+            self.evolver = AutoEvolution(supervisor=self)
+            self.evolver.start()
+        except Exception as e:
+            print(f"[Supervisor] Auto-evolution init failed: {e}")
 
     def spawn_workers(self):
         for i in range(100):
@@ -117,10 +133,47 @@ class AuroraSupervisor:
     def shutdown(self):
         print("[Supervisor] Shutting down...")
         self.running = False
+        if self.evolver:
+            self.evolver.stop()
         for h in self.healers + self.workers:
             h.stop()
         self.fabric.save_state()
         print("[Supervisor] State saved, all workers stopped.")
+
+    def detect_instability(self):
+        """Check if error logs exceed threshold"""
+        try:
+            events_file = os.path.join(self.root, "data/knowledge/events.jsonl")
+            if not os.path.exists(events_file):
+                return False
+            recent_errors = 0
+            cutoff = time.time() - 3600
+            with open(events_file, "r") as f:
+                for line in f:
+                    try:
+                        event = json.loads(line)
+                        if event.get("kind") == "error" and event.get("ts", 0) > cutoff:
+                            recent_errors += 1
+                    except:
+                        continue
+            return recent_errors > 5
+        except:
+            return False
+
+    def update_parameter(self, key, delta):
+        """Apply local parameter adjustment"""
+        self.parameters[key] = self.parameters.get(key, 1.0) + delta
+        self.fabric.record_event("evolution", key, f"Parameter updated by {delta}")
+
+    def queue_safe_update(self, improvement):
+        """Queue a moderate improvement for safe application"""
+        self.pending_updates.append(improvement)
+        self.fabric.record_event("evolution", improvement.get("target"), "Queued for safe update")
+
+    def request_core_validation(self, improvement):
+        """Request core validation for critical improvements"""
+        self.fabric.record_event("evolution", improvement.get("target"), "Core validation requested")
+        print(f"[Supervisor] Core validation requested for: {improvement.get('target')}")
 
 if __name__ == "__main__":
     sup = AuroraSupervisor()
