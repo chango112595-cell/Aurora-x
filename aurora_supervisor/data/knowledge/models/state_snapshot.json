@@ -1,5 +1,5 @@
 {
-  "timestamp": 1765313574.7990508,
+  "timestamp": 1765313589.8007355,
   "memory": {
     "task-1": "build_phase_4_6_modules",
     "task-0": "build_phase_4_6_modules",
@@ -10,7 +10,7 @@
     "task-10": "optimize_learning_parameters",
     "task-9": "optimize_learning_parameters",
     "task-299": "optimize_learning_parameters",
-    "task-12": "build_phase_4_6_modules",
+    "task-12": "optimize_learning_parameters",
     "healer-7": "validate_integrity_phase_4_6",
     "healer-13": "validate_integrity_phase_4_6",
     "task-288": "optimize_learning_parameters",
