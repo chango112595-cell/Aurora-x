@@ -76,6 +76,16 @@
       },
       "category": "conversation",
       "timestamp": "2025-12-07T19:04:20.793608"
+    },
+    "test_fact_1765244499": {
+      "value": "Aurora-X Ultra test value",
+      "category": "test",
+      "timestamp": "2025-12-09T01:41:39.426288"
+    },
+    "test_fact_1765244533": {
+      "value": "Aurora-X Ultra test value",
+      "category": "test",
+      "timestamp": "2025-12-09T01:42:13.180549"
     }
   },
   "summary": ""

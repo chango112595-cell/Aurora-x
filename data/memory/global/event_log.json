@@ -44,6 +44,24 @@
       },
       "timestamp": "2025-12-07T19:04:20.794386",
       "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "test_fact_1765244499",
+        "category": "test"
+      },
+      "timestamp": "2025-12-09T01:41:39.433720",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "test_fact_1765244533",
+        "category": "test"
+      },
+      "timestamp": "2025-12-09T01:42:13.180968",
+      "project": "Aurora-X"
     }
   ]
 }
