@@ -99,13 +99,24 @@ class NexusBridge:
         loaded = 0
         errors = []
 
-        for m in data.get("modules", []):
+        modules_list = data if isinstance(data, list) else data.get("modules", [])
+        for m in modules_list:
             try:
                 mid = m["id"]
-                name = m["name"]
-                module_file = os.path.join(self.module_path, f"module_{mid:03d}.py")
-
-                if not os.path.exists(module_file):
+                name = m.get("name", f"module_{mid:03d}")
+                
+                file_candidates = [
+                    os.path.join(self.module_path, f"AuroraModule{mid:03d}.py"),
+                    os.path.join(self.module_path, f"module_{mid:03d}.py"),
+                ]
+                
+                module_file = None
+                for candidate in file_candidates:
+                    if os.path.exists(candidate):
+                        module_file = candidate
+                        break
+                
+                if not module_file:
                     continue
 
                 spec = importlib.util.spec_from_file_location(f"module_{mid:03d}", module_file)
@@ -113,13 +124,16 @@ class NexusBridge:
                     mod = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(mod)
 
-                    cls = getattr(mod, f"AuroraModule{mid:03d}")
-                    instance = cls()
-                    instance.set_nexus(self)
+                    cls_name = f"AuroraModule{mid}" if hasattr(mod, f"AuroraModule{mid}") else f"AuroraModule{mid:03d}"
+                    cls = getattr(mod, cls_name, None)
+                    if cls:
+                        instance = cls()
+                        if hasattr(instance, 'set_nexus'):
+                            instance.set_nexus(self)
 
-                    self.modules[name] = instance
-                    self.modules_by_id[mid] = instance
-                    loaded += 1
+                        self.modules[name] = instance
+                        self.modules_by_id[mid] = instance
+                        loaded += 1
 
             except Exception as e:
                 errors.append({"id": m.get("id"), "error": str(e)})
