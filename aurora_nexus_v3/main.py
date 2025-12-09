@@ -100,6 +100,14 @@ async def main():
         for sig in (signal.SIGTERM, signal.SIGINT):
             loop.add_signal_handler(sig, signal_handler)
     
+    # ===== Supervisor Integration Hook (Phase 4-6 Controller) =====
+    try:
+        from aurora_nexus_v3.integrations.supervisor_integration import attach_to_nexus_v3
+        attach_to_nexus_v3(server)
+    except Exception as e:
+        print(f"[Startup] Supervisor integration skipped or failed: {e}")
+    # ===============================================================
+    
     await server.run_forever()
 
 
