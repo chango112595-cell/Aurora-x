@@ -1,0 +1,13 @@
+{
+  "id": 512,
+  "name": "analytics_processors_module_002",
+  "category": "analytics_processors",
+  "tier_id": 136,
+  "tier_name": "tier_136",
+  "aem_id": 50,
+  "aem_type": "hybrid",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

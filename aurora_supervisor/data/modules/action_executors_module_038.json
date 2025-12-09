@@ -1,0 +1,13 @@
+{
+  "id": 323,
+  "name": "action_executors_module_038",
+  "category": "action_executors",
+  "tier_id": 135,
+  "tier_name": "tier_135",
+  "aem_id": 59,
+  "aem_type": "hybrid",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

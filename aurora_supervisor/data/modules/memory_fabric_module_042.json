@@ -1,0 +1,13 @@
+{
+  "id": 92,
+  "name": "memory_fabric_module_042",
+  "category": "memory_fabric",
+  "tier_id": 92,
+  "tier_name": "tier_092",
+  "aem_id": 26,
+  "aem_type": "hybrid",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

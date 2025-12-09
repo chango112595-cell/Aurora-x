@@ -1,0 +1,13 @@
+{
+  "id": 208,
+  "name": "reasoning_modules_module_018",
+  "category": "reasoning_modules",
+  "tier_id": 20,
+  "tier_name": "tier_020",
+  "aem_id": 10,
+  "aem_type": "async",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

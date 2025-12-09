@@ -1,0 +1,13 @@
+{
+  "id": 456,
+  "name": "adaptation_systems_module_006",
+  "category": "adaptation_systems",
+  "tier_id": 80,
+  "tier_name": "tier_080",
+  "aem_id": 60,
+  "aem_type": "sync",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

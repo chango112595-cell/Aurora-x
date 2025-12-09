@@ -175,6 +175,70 @@ class AuroraSupervisor:
         self.fabric.record_event("evolution", improvement.get("target"), "Core validation requested")
         print(f"[Supervisor] Core validation requested for: {improvement.get('target')}")
 
+    def dispatch_task(self, task_name):
+        """Dispatch a task to the task queue for worker processing"""
+        self.task_q.put(task_name)
+        self.fabric.record_event("dispatch", task_name, f"Task dispatched: {task_name}")
+        print(f"[Supervisor] Dispatched task: {task_name}")
+
+    def dispatch_heal(self, heal_task):
+        """Dispatch a healing task to the healer queue"""
+        self.heal_q.put(heal_task)
+        self.fabric.record_event("heal", heal_task, f"Heal task dispatched: {heal_task}")
+
+    def heal(self):
+        """Trigger healers for error recovery"""
+        self.heal_q.put("emergency_heal_cycle")
+        self.heal_q.put("validate_system_integrity")
+        self.heal_q.put("recover_failed_modules")
+        self.fabric.record_event("heal", "emergency", "Emergency heal cycle triggered")
+        print("[Supervisor] Emergency heal cycle triggered - 100 healers activated")
+
+    def save_state(self, name="state_snapshot"):
+        """Save current state to knowledge fabric"""
+        self.fabric.memory["parameters"] = self.parameters
+        self.fabric.memory["pending_updates"] = len(self.pending_updates)
+        self.fabric.memory["error_count"] = self.error_count
+        self.fabric.save_state(name)
+        print(f"[Supervisor] State saved: {name}")
+
+    def _load_knowledge(self):
+        """Load previous state from knowledge fabric"""
+        self.fabric.load_state()
+        if "parameters" in self.fabric.memory:
+            self.parameters = self.fabric.memory.get("parameters", {})
+        print("[Supervisor] Knowledge loaded from fabric")
+
+    def _spawn_workers(self):
+        """Spawn worker threads if not already running"""
+        if not self.workers:
+            for i in range(300):
+                w = BaseWorker(i, "task", self.task_q, self.fabric)
+                self.workers.append(w)
+                w.start()
+            print("[Supervisor] 300 task workers spawned")
+
+    def _spawn_healers(self):
+        """Spawn healer threads if not already running"""
+        if not self.healers:
+            for i in range(100):
+                h = BaseWorker(i, "healer", self.heal_q, self.fabric)
+                self.healers.append(h)
+                h.start()
+            print("[Supervisor] 100 healers spawned")
+
+    def get_status(self):
+        """Get current supervisor status"""
+        return {
+            "running": self.running,
+            "workers": len(self.workers),
+            "healers": len(self.healers),
+            "task_queue_size": self.task_q.qsize(),
+            "heal_queue_size": self.heal_q.qsize(),
+            "parameters": self.parameters,
+            "error_count": self.error_count
+        }
+
 SupervisorCore = AuroraSupervisor
 
 if __name__ == "__main__":

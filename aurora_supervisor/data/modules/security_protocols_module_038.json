@@ -1,0 +1,13 @@
+{
+  "id": 398,
+  "name": "security_protocols_module_038",
+  "category": "security_protocols",
+  "tier_id": 22,
+  "tier_name": "tier_022",
+  "aem_id": 2,
+  "aem_type": "hybrid",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}
