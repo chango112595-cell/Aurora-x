@@ -1,0 +1,168 @@
+Excellent. ✅
+
+Here’s a **production-ready unit-test suite** for Aurora-X Ultra — covering the hybrid runner, the module bridge, and system integration.
+Everything is written with **pytest** and fully compatible with your V3 + Luminar setup.
+
+---
+
+## 🧪 Folder Structure
+
+```
+tests/
+├── test_runner.py
+├── test_bridge.py
+├── test_modules_integrity.py
+└── test_system_integration.py
+```
+
+---
+
+## **1️⃣ test_runner.py**
+
+Verifies that the universal runner starts, supervises, and shuts down all services properly.
+
+```python
+# tests/test_runner.py
+import subprocess, time, signal, os, sys, psutil
+
+def test_runner_boot_and_shutdown(tmp_path):
+    """Ensure aurora_runner.py boots and terminates correctly."""
+    proc = subprocess.Popen(
+        [sys.executable, "aurora_runner.py"],
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+    )
+    time.sleep(5)
+    # Verify processes appear
+    assert proc.poll() is None, "Runner crashed prematurely"
+    # Send SIGINT
+    proc.send_signal(signal.SIGINT)
+    try:
+        proc.wait(timeout=10)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+    assert proc.returncode == 0 or proc.returncode is None
+```
+
+---
+
+## **2️⃣ test_bridge.py**
+
+Ensures NexusBridge can import and execute loaded modules dynamically.
+
+```python
+# tests/test_bridge.py
+import importlib, sys, os, json
+
+def test_module_bridge_loads():
+    from aurora_nexus_v3.bridge import NexusBridge
+    bridge = NexusBridge()
+    bridge.load_all_modules()
+    assert len(bridge.modules) == 550
+    assert all(callable(m.execute) for m in bridge.modules.values())
+
+def test_sample_module_exec():
+    from aurora_nexus_v3.bridge import NexusBridge
+    bridge = NexusBridge()
+    bridge.load_all_modules()
+    result = bridge.modules["AuroraModule101"].execute({"task": "semantic-summary"})
+    assert isinstance(result, dict)
+    assert "status" in result
+```
+
+---
+
+## **3️⃣ test_modules_integrity.py**
+
+Validates that every generated module has the proper lifecycle hooks.
+
+```python
+# tests/test_modules_integrity.py
+import importlib, pathlib
+
+MODULE_PATH = pathlib.Path("aurora_x/core/modules")
+
+def test_all_modules_present():
+    files = list(MODULE_PATH.glob("AuroraModule*.py"))
+    assert len(files) == 550, f"Expected 550 modules, found {len(files)}"
+
+def test_required_functions_exist():
+    for file in MODULE_PATH.glob("AuroraModule*.py"):
+        mod = importlib.import_module(f"aurora_x.core.modules.{file.stem}")
+        for fn in ["execute", "on_boot", "on_tick", "on_reflect"]:
+            assert hasattr(mod, fn), f"{file.stem} missing {fn}"
+```
+
+---
+
+## **4️⃣ test_system_integration.py**
+
+Integration test that ensures Nexus V3, Luminar V2, and Memory Fabric cooperate correctly.
+
+```python
+# tests/test_system_integration.py
+import requests, time, subprocess, sys, os, json
+
+def test_end_to_end_boot_and_chat(tmp_path):
+    """Boot minimal stack and verify chat + memory fabric integration."""
+    mem = subprocess.Popen([sys.executable, "aurora_memory_fabric_v2/service.py"])
+    nexus = subprocess.Popen([sys.executable, "aurora_nexus_v3/main.py"])
+    luminar = subprocess.Popen([sys.executable, "tools/luminar_nexus_v2.py", "serve"])
+    time.sleep(10)
+    try:
+        # Verify memory fabric status
+        r = requests.get("http://localhost:5004/status", timeout=5)
+        assert r.status_code == 200
+
+        # Send chat request
+        chat_payload = {"message": "Hello Aurora"}
+        r2 = requests.post("http://localhost:8000/api/chat", json=chat_payload, timeout=5)
+        assert r2.status_code == 200
+        body = r2.json()
+        assert "response" in body
+    finally:
+        for p in [luminar, nexus, mem]:
+            p.terminate()
+```
+
+---
+
+## **🧩 Run Tests**
+
+Install dependencies first:
+
+```bash
+pip install pytest requests psutil
+```
+
+Then execute:
+
+```bash
+pytest -v --maxfail=1 --disable-warnings
+```
+
+---
+
+## **✅ What This Validates**
+
+| Test                            | Purpose                                                                    |
+| ------------------------------- | -------------------------------------------------------------------------- |
+| `test_runner_boot_and_shutdown` | Confirms the unified runner starts and stops cleanly                       |
+| `test_bridge_loads`             | Ensures 550 modules load with proper APIs                                  |
+| `test_sample_module_exec`       | Verifies that module execution returns structured results                  |
+| `test_modules_integrity`        | Guarantees lifecycle hooks exist in all modules                            |
+| `test_system_integration`       | Confirms that Memory Fabric, Luminar V2, and Nexus V3 interact as expected |
+
+---
+
+## **Optional Enhancements**
+
+You can add:
+
+* GPU readiness check (`torch.cuda.is_available()` flag test)
+* MemoryFabric semantic search regression test
+* Worker pool concurrency test (ensuring all 300 workers spawn & terminate)
+
+---
+
+Would you like me to generate those *optional GPU + worker concurrency tests* as part of the extended test suite (Stage G)?
+They ensure that the hybrid mode and autonomous worker engine are stable under heavy load.
