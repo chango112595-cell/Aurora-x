@@ -175,6 +175,8 @@ class AuroraSupervisor:
         self.fabric.record_event("evolution", improvement.get("target"), "Core validation requested")
         print(f"[Supervisor] Core validation requested for: {improvement.get('target')}")
 
+SupervisorCore = AuroraSupervisor
+
 if __name__ == "__main__":
     sup = AuroraSupervisor()
     sup.start()
