@@ -4,6 +4,18 @@ Phase 4–6 Mega Supervisor
 Safe for Replit sandbox execution
 """
 import os, json, time, threading, queue, platform, psutil, traceback, shutil
+import sys
+
+_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _root not in sys.path:
+    sys.path.insert(0, _root)
+
+try:
+    from aurora_core.utils import json_tools
+    JSON_TOOLS_AVAILABLE = True
+except ImportError:
+    json_tools = None
+    JSON_TOOLS_AVAILABLE = False
 
 # ---------- KNOWLEDGE FABRIC (persistent memory) ----------
 class KnowledgeFabric:
@@ -89,6 +101,9 @@ class AuroraSupervisor:
         self.pending_updates = []
         self.error_count = 0
         self.evolver = None
+        self.json = json_tools
+        if JSON_TOOLS_AVAILABLE:
+            print("[Aurora Supervisor] Internal JSON Tools registered.")
 
     def start(self):
         analyze_environment()
