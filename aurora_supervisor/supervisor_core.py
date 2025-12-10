@@ -41,8 +41,13 @@ class KnowledgeFabric:
     def load_state(self, name="state_snapshot"):
         path = os.path.join(self.models_dir, f"{name}.json")
         if os.path.exists(path):
-            with open(path) as f:
-                self.memory = json.load(f).get("memory", {})
+            try:
+                with open(path) as f:
+                    data = json.load(f)
+                    self.memory = data.get("memory", {}) if isinstance(data, dict) else {}
+            except (json.JSONDecodeError, Exception) as e:
+                print(f"[KnowledgeFabric] State file corrupted, resetting: {e}")
+                self.memory = {}
 
 # ---------- ENVIRONMENT ANALYSIS ----------
 def analyze_environment():

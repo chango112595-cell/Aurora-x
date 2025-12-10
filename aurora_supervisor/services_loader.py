@@ -17,6 +17,7 @@ SERVICE_STATUS_FILE = DATA_DIR / "service_status.json"
 
 CONTROLLERS = [
     ("Master Controller", "controllers/aurora_master_controller.py"),
+    ("Nexus V3 Universal", "controllers/aurora_nexus_v3_universal.py"),
     ("Self-Healing System", "controllers/aurora_ultimate_self_healing_system_DRAFT2.py"),
 ]
 

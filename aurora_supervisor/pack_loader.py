@@ -111,33 +111,46 @@ class PackLoader:
 
     def start_pack(self, pack_id):
         pack_dir = PACKS_DIR / pack_id
-        start_script = pack_dir / "start.sh"
+        start_scripts = []
         
-        if not start_script.exists():
-            for subdir in pack_dir.iterdir():
-                if subdir.is_dir():
-                    sub_start = subdir / "start.sh"
-                    if sub_start.exists():
-                        start_script = sub_start
-                        break
+        main_start = pack_dir / "start.sh"
+        if main_start.exists():
+            start_scripts.append(main_start)
+        
+        for subdir in pack_dir.iterdir():
+            if subdir.is_dir():
+                sub_start = subdir / "start.sh"
+                if sub_start.exists():
+                    start_scripts.append(sub_start)
 
-        if start_script.exists():
-            try:
-                log_file = DATA_DIR / f"{pack_id}.log"
-                with open(log_file, "w") as lf:
-                    process = subprocess.Popen(
-                        ["bash", str(start_script)],
-                        cwd=str(start_script.parent),
-                        stdout=lf,
-                        stderr=subprocess.STDOUT,
-                        start_new_session=True
-                    )
-                    self.processes[pack_id] = process
-                    self.status[pack_id]["running"] = True
-                    self.log(f"{PACK_NAMES.get(pack_id, pack_id)} started (PID: {process.pid})", "OK")
-                    return True
-            except Exception as e:
-                self.log(f"{pack_id} start error: {e}", "ERR")
+        if start_scripts:
+            started = 0
+            for start_script in start_scripts:
+                try:
+                    script_name = start_script.parent.name
+                    log_file = DATA_DIR / f"{pack_id}_{script_name}.log"
+                    with open(log_file, "w") as lf:
+                        process = subprocess.Popen(
+                            ["bash", str(start_script)],
+                            cwd=str(start_script.parent),
+                            stdout=lf,
+                            stderr=subprocess.STDOUT,
+                            start_new_session=True
+                        )
+                        proc_key = f"{pack_id}_{script_name}"
+                        self.processes[proc_key] = process
+                        started += 1
+                        if len(start_scripts) > 1:
+                            self.log(f"{PACK_NAMES.get(pack_id, pack_id)}/{script_name} started (PID: {process.pid})", "OK")
+                        else:
+                            self.log(f"{PACK_NAMES.get(pack_id, pack_id)} started (PID: {process.pid})", "OK")
+                except Exception as e:
+                    self.log(f"{pack_id} start error: {e}", "ERR")
+            
+            if started > 0:
+                self.status[pack_id]["running"] = True
+                self.status[pack_id]["processes"] = started
+                return True
         else:
             self.log(f"{pack_id} has no start.sh - skipping start", "WARN")
             self.status[pack_id]["running"] = True
