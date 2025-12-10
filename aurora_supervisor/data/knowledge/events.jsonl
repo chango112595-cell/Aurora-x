@@ -2226,3 +2226,1380 @@
 {"ts": 1765319520.9423044, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: build_phase_4_6_modules"}
 {"ts": 1765319520.942682, "kind": "task", "path": "task-31", "reason": "[task-31] processing task: optimize_learning_parameters"}
 {"ts": 1765319520.9435813, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319535.9080644, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765319535.9087121, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: optimize_learning_parameters"}
+{"ts": 1765319535.9080174, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319535.9438457, "kind": "task", "path": "healer-11", "reason": "[healer-11] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319535.9440074, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: build_phase_4_6_modules"}
+{"ts": 1765319535.9441683, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: optimize_learning_parameters"}
+{"ts": 1765319550.9088511, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319550.9088802, "kind": "task", "path": "task-272", "reason": "[task-272] processing task: build_phase_4_6_modules"}
+{"ts": 1765319550.9094589, "kind": "task", "path": "task-275", "reason": "[task-275] processing task: optimize_learning_parameters"}
+{"ts": 1765319551.0619454, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: build_phase_4_6_modules"}
+{"ts": 1765319551.0626638, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: optimize_learning_parameters"}
+{"ts": 1765319551.0628176, "kind": "task", "path": "healer-11", "reason": "[healer-11] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319565.9098287, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319565.9098718, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765319565.910144, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: optimize_learning_parameters"}
+{"ts": 1765319566.0630097, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: build_phase_4_6_modules"}
+{"ts": 1765319566.0629444, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319566.0635366, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: optimize_learning_parameters"}
+{"ts": 1765319580.9107053, "kind": "task", "path": "task-272", "reason": "[task-272] processing task: optimize_learning_parameters"}
+{"ts": 1765319580.9105747, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319580.9106305, "kind": "task", "path": "task-287", "reason": "[task-287] processing task: build_phase_4_6_modules"}
+{"ts": 1765319581.0650904, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: build_phase_4_6_modules"}
+{"ts": 1765319581.0652087, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: optimize_learning_parameters"}
+{"ts": 1765319581.06439, "kind": "task", "path": "healer-11", "reason": "[healer-11] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319595.9118285, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319595.912214, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765319595.9123194, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: optimize_learning_parameters"}
+{"ts": 1765319596.0656328, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: build_phase_4_6_modules"}
+{"ts": 1765319596.0657468, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765319596.0655468, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319610.9143412, "kind": "task", "path": "task-269", "reason": "[task-269] processing task: optimize_learning_parameters"}
+{"ts": 1765319610.9138803, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319610.9132502, "kind": "task", "path": "task-244", "reason": "[task-244] processing task: build_phase_4_6_modules"}
+{"ts": 1765319611.066329, "kind": "task", "path": "healer-11", "reason": "[healer-11] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319611.0667646, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: build_phase_4_6_modules"}
+{"ts": 1765319611.0668786, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: optimize_learning_parameters"}
+{"ts": 1765319625.9148734, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319625.9150417, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: build_phase_4_6_modules"}
+{"ts": 1765319625.9151187, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: optimize_learning_parameters"}
+{"ts": 1765319626.0674548, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: build_phase_4_6_modules"}
+{"ts": 1765319626.0673788, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319626.0680318, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765319640.9152763, "kind": "task", "path": "task-287", "reason": "[task-287] processing task: build_phase_4_6_modules"}
+{"ts": 1765319640.9153056, "kind": "task", "path": "task-284", "reason": "[task-284] processing task: optimize_learning_parameters"}
+{"ts": 1765319640.9152417, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319641.0690508, "kind": "task", "path": "healer-11", "reason": "[healer-11] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319641.0691915, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: optimize_learning_parameters"}
+{"ts": 1765319641.0691419, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: build_phase_4_6_modules"}
+{"ts": 1765319655.9164345, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765319655.916383, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: build_phase_4_6_modules"}
+{"ts": 1765319655.916357, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319656.0694687, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319656.0699983, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: build_phase_4_6_modules"}
+{"ts": 1765319656.0700555, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765319670.9174595, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319670.9181085, "kind": "task", "path": "task-214", "reason": "[task-214] processing task: build_phase_4_6_modules"}
+{"ts": 1765319670.9192271, "kind": "task", "path": "task-229", "reason": "[task-229] processing task: optimize_learning_parameters"}
+{"ts": 1765319671.073249, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: build_phase_4_6_modules"}
+{"ts": 1765319671.0733883, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: optimize_learning_parameters"}
+{"ts": 1765319671.0731988, "kind": "task", "path": "healer-11", "reason": "[healer-11] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319685.9192042, "kind": "task", "path": "task-26", "reason": "[task-26] processing task: build_phase_4_6_modules"}
+{"ts": 1765319685.9191701, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319685.919467, "kind": "task", "path": "task-56", "reason": "[task-56] processing task: optimize_learning_parameters"}
+{"ts": 1765319686.076419, "kind": "task", "path": "healer-26", "reason": "[healer-26] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319686.0761387, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765319686.076268, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: optimize_learning_parameters"}
+{"ts": 1765319700.920308, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319700.9204283, "kind": "task", "path": "task-285", "reason": "[task-285] processing task: build_phase_4_6_modules"}
+{"ts": 1765319700.920597, "kind": "task", "path": "task-229", "reason": "[task-229] processing task: optimize_learning_parameters"}
+{"ts": 1765319701.0777001, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: build_phase_4_6_modules"}
+{"ts": 1765319701.0778987, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: optimize_learning_parameters"}
+{"ts": 1765319701.0773952, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319715.92132, "kind": "task", "path": "healer-22", "reason": "[healer-22] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319715.9221547, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: build_phase_4_6_modules"}
+{"ts": 1765319715.9225068, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: optimize_learning_parameters"}
+{"ts": 1765319716.0788472, "kind": "task", "path": "healer-26", "reason": "[healer-26] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319716.0793765, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: optimize_learning_parameters"}
+{"ts": 1765319716.0794864, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: build_phase_4_6_modules"}
+{"ts": 1765319730.922965, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319730.9238744, "kind": "task", "path": "task-263", "reason": "[task-263] processing task: build_phase_4_6_modules"}
+{"ts": 1765319730.9238887, "kind": "task", "path": "task-235", "reason": "[task-235] processing task: optimize_learning_parameters"}
+{"ts": 1765319731.0791914, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319731.080841, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: build_phase_4_6_modules"}
+{"ts": 1765319731.081125, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: optimize_learning_parameters"}
+{"ts": 1765319745.9262161, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: build_phase_4_6_modules"}
+{"ts": 1765319745.9264057, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: optimize_learning_parameters"}
+{"ts": 1765319745.9287155, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319746.0845516, "kind": "task", "path": "healer-26", "reason": "[healer-26] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319746.0847695, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: optimize_learning_parameters"}
+{"ts": 1765319746.0847383, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: build_phase_4_6_modules"}
+{"ts": 1765319760.929592, "kind": "task", "path": "task-165", "reason": "[task-165] processing task: build_phase_4_6_modules"}
+{"ts": 1765319760.9300303, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319760.9299185, "kind": "task", "path": "task-233", "reason": "[task-233] processing task: optimize_learning_parameters"}
+{"ts": 1765319761.084664, "kind": "task", "path": "healer-26", "reason": "[healer-26] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319761.084813, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: build_phase_4_6_modules"}
+{"ts": 1765319761.0854478, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: optimize_learning_parameters"}
+{"ts": 1765319775.931536, "kind": "task", "path": "healer-22", "reason": "[healer-22] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319775.93185, "kind": "task", "path": "task-56", "reason": "[task-56] processing task: build_phase_4_6_modules"}
+{"ts": 1765319775.9320831, "kind": "task", "path": "task-56", "reason": "[task-56] processing task: optimize_learning_parameters"}
+{"ts": 1765319776.0859387, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: build_phase_4_6_modules"}
+{"ts": 1765319776.0858657, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319776.0863352, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: optimize_learning_parameters"}
+{"ts": 1765319790.9334722, "kind": "task", "path": "task-221", "reason": "[task-221] processing task: build_phase_4_6_modules"}
+{"ts": 1765319790.9335158, "kind": "task", "path": "task-243", "reason": "[task-243] processing task: optimize_learning_parameters"}
+{"ts": 1765319790.9337046, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319791.0868254, "kind": "task", "path": "healer-26", "reason": "[healer-26] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319791.0870352, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765319791.0873759, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765319805.9363594, "kind": "task", "path": "healer-38", "reason": "[healer-38] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319805.9365184, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: optimize_learning_parameters"}
+{"ts": 1765319805.9363863, "kind": "task", "path": "task-26", "reason": "[task-26] processing task: build_phase_4_6_modules"}
+{"ts": 1765319806.0878592, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319806.0880036, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: build_phase_4_6_modules"}
+{"ts": 1765319806.0883539, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: optimize_learning_parameters"}
+{"ts": 1765319820.9375486, "kind": "task", "path": "task-291", "reason": "[task-291] processing task: build_phase_4_6_modules"}
+{"ts": 1765319820.937526, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319820.9375858, "kind": "task", "path": "task-228", "reason": "[task-228] processing task: optimize_learning_parameters"}
+{"ts": 1765319821.089113, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765319821.0890112, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765319821.0889487, "kind": "task", "path": "healer-26", "reason": "[healer-26] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319835.9386783, "kind": "task", "path": "healer-27", "reason": "[healer-27] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319835.9387372, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765319835.9390016, "kind": "task", "path": "task-38", "reason": "[task-38] processing task: optimize_learning_parameters"}
+{"ts": 1765319836.089621, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319836.0901198, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: build_phase_4_6_modules"}
+{"ts": 1765319836.0902052, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: optimize_learning_parameters"}
+{"ts": 1765319850.9397666, "kind": "task", "path": "task-207", "reason": "[task-207] processing task: build_phase_4_6_modules"}
+{"ts": 1765319850.9402971, "kind": "task", "path": "task-279", "reason": "[task-279] processing task: optimize_learning_parameters"}
+{"ts": 1765319850.939735, "kind": "task", "path": "healer-22", "reason": "[healer-22] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319851.0905902, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765319851.0905492, "kind": "task", "path": "healer-26", "reason": "[healer-26] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319851.0910954, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765319865.9409578, "kind": "task", "path": "healer-27", "reason": "[healer-27] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319865.9409933, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765319865.941182, "kind": "task", "path": "task-38", "reason": "[task-38] processing task: optimize_learning_parameters"}
+{"ts": 1765319866.091338, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319866.0915396, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: optimize_learning_parameters"}
+{"ts": 1765319866.0914605, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: build_phase_4_6_modules"}
+{"ts": 1765319880.9427211, "kind": "task", "path": "healer-22", "reason": "[healer-22] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319880.9430594, "kind": "task", "path": "task-218", "reason": "[task-218] processing task: build_phase_4_6_modules"}
+{"ts": 1765319880.9439824, "kind": "task", "path": "task-291", "reason": "[task-291] processing task: optimize_learning_parameters"}
+{"ts": 1765319881.0922668, "kind": "task", "path": "healer-26", "reason": "[healer-26] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319881.0923097, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: build_phase_4_6_modules"}
+{"ts": 1765319881.092527, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765319895.9444363, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: build_phase_4_6_modules"}
+{"ts": 1765319895.9447443, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: optimize_learning_parameters"}
+{"ts": 1765319895.9475408, "kind": "task", "path": "healer-38", "reason": "[healer-38] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319896.0946393, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319896.094768, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: build_phase_4_6_modules"}
+{"ts": 1765319896.094851, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: optimize_learning_parameters"}
+{"ts": 1765319910.944978, "kind": "task", "path": "task-299", "reason": "[task-299] processing task: build_phase_4_6_modules"}
+{"ts": 1765319910.9449425, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319910.9450703, "kind": "task", "path": "task-207", "reason": "[task-207] processing task: optimize_learning_parameters"}
+{"ts": 1765319911.0948863, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: build_phase_4_6_modules"}
+{"ts": 1765319911.0950766, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319911.0955436, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: optimize_learning_parameters"}
+{"ts": 1765319925.9463503, "kind": "task", "path": "healer-27", "reason": "[healer-27] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319925.9465384, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765319925.9469135, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: optimize_learning_parameters"}
+{"ts": 1765319926.0964737, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319926.0969152, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: build_phase_4_6_modules"}
+{"ts": 1765319926.097563, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: optimize_learning_parameters"}
+{"ts": 1765319940.9472551, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319940.9474335, "kind": "task", "path": "task-207", "reason": "[task-207] processing task: optimize_learning_parameters"}
+{"ts": 1765319940.9474034, "kind": "task", "path": "task-287", "reason": "[task-287] processing task: build_phase_4_6_modules"}
+{"ts": 1765319941.0985277, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: build_phase_4_6_modules"}
+{"ts": 1765319941.0984755, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319941.0991762, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: optimize_learning_parameters"}
+{"ts": 1765319955.9481423, "kind": "task", "path": "healer-38", "reason": "[healer-38] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319955.9481723, "kind": "task", "path": "task-63", "reason": "[task-63] processing task: build_phase_4_6_modules"}
+{"ts": 1765319955.9483263, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: optimize_learning_parameters"}
+{"ts": 1765319956.0994473, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319956.100062, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: optimize_learning_parameters"}
+{"ts": 1765319956.0999966, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: build_phase_4_6_modules"}
+{"ts": 1765319970.9491613, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319970.9491856, "kind": "task", "path": "task-207", "reason": "[task-207] processing task: build_phase_4_6_modules"}
+{"ts": 1765319970.94931, "kind": "task", "path": "task-287", "reason": "[task-287] processing task: optimize_learning_parameters"}
+{"ts": 1765319971.1009147, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319971.1019154, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: build_phase_4_6_modules"}
+{"ts": 1765319971.1031563, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: optimize_learning_parameters"}
+{"ts": 1765319985.9500034, "kind": "task", "path": "healer-38", "reason": "[healer-38] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319985.9500813, "kind": "task", "path": "task-63", "reason": "[task-63] processing task: build_phase_4_6_modules"}
+{"ts": 1765319985.9502802, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: optimize_learning_parameters"}
+{"ts": 1765319986.1025283, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765319986.10276, "kind": "task", "path": "task-26", "reason": "[task-26] processing task: optimize_learning_parameters"}
+{"ts": 1765319986.1025724, "kind": "task", "path": "task-62", "reason": "[task-62] processing task: build_phase_4_6_modules"}
+{"ts": 1765320000.9518657, "kind": "task", "path": "task-173", "reason": "[task-173] processing task: build_phase_4_6_modules"}
+{"ts": 1765320000.952426, "kind": "task", "path": "task-207", "reason": "[task-207] processing task: optimize_learning_parameters"}
+{"ts": 1765320000.9524596, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320001.1036658, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: build_phase_4_6_modules"}
+{"ts": 1765320001.1042168, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: optimize_learning_parameters"}
+{"ts": 1765320001.1049519, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320015.9523773, "kind": "task", "path": "healer-37", "reason": "[healer-37] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320015.9536233, "kind": "task", "path": "task-25", "reason": "[task-25] processing task: optimize_learning_parameters"}
+{"ts": 1765320015.9534085, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: build_phase_4_6_modules"}
+{"ts": 1765320016.105388, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320016.1059446, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765320016.1057332, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: build_phase_4_6_modules"}
+{"ts": 1765320030.9543035, "kind": "task", "path": "task-248", "reason": "[task-248] processing task: build_phase_4_6_modules"}
+{"ts": 1765320030.9542751, "kind": "task", "path": "healer-38", "reason": "[healer-38] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320030.9548182, "kind": "task", "path": "task-283", "reason": "[task-283] processing task: optimize_learning_parameters"}
+{"ts": 1765320031.1062677, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: build_phase_4_6_modules"}
+{"ts": 1765320031.106591, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: optimize_learning_parameters"}
+{"ts": 1765320031.1062036, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320045.9552004, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: build_phase_4_6_modules"}
+{"ts": 1765320045.955152, "kind": "task", "path": "healer-37", "reason": "[healer-37] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320045.9553423, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: optimize_learning_parameters"}
+{"ts": 1765320046.1091084, "kind": "task", "path": "healer-32", "reason": "[healer-32] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320046.1088812, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: build_phase_4_6_modules"}
+{"ts": 1765320046.1090398, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765320060.9562662, "kind": "task", "path": "healer-38", "reason": "[healer-38] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320060.956885, "kind": "task", "path": "task-283", "reason": "[task-283] processing task: build_phase_4_6_modules"}
+{"ts": 1765320060.9569774, "kind": "task", "path": "task-283", "reason": "[task-283] processing task: optimize_learning_parameters"}
+{"ts": 1765320061.1104045, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320061.110895, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765320061.1109736, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: optimize_learning_parameters"}
+{"ts": 1765320075.9578438, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: build_phase_4_6_modules"}
+{"ts": 1765320075.957986, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: optimize_learning_parameters"}
+{"ts": 1765320075.9598248, "kind": "task", "path": "healer-37", "reason": "[healer-37] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320076.1119092, "kind": "task", "path": "healer-21", "reason": "[healer-21] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320076.1127417, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: build_phase_4_6_modules"}
+{"ts": 1765320076.1129377, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765320090.957712, "kind": "task", "path": "healer-38", "reason": "[healer-38] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320090.9577415, "kind": "task", "path": "task-283", "reason": "[task-283] processing task: build_phase_4_6_modules"}
+{"ts": 1765320090.9584584, "kind": "task", "path": "task-245", "reason": "[task-245] processing task: optimize_learning_parameters"}
+{"ts": 1765320091.1143808, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: optimize_learning_parameters"}
+{"ts": 1765320091.1137156, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765320091.1149147, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320105.959526, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: optimize_learning_parameters"}
+{"ts": 1765320105.9594734, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: build_phase_4_6_modules"}
+{"ts": 1765320105.9594407, "kind": "task", "path": "healer-37", "reason": "[healer-37] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320106.1159189, "kind": "task", "path": "healer-30", "reason": "[healer-30] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320106.1161575, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: optimize_learning_parameters"}
+{"ts": 1765320106.116285, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: build_phase_4_6_modules"}
+{"ts": 1765320120.9606037, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320120.9606535, "kind": "task", "path": "task-173", "reason": "[task-173] processing task: build_phase_4_6_modules"}
+{"ts": 1765320120.9608266, "kind": "task", "path": "task-288", "reason": "[task-288] processing task: optimize_learning_parameters"}
+{"ts": 1765320121.116533, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765320121.116234, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320121.1167083, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: optimize_learning_parameters"}
+{"ts": 1765320135.9632866, "kind": "task", "path": "healer-25", "reason": "[healer-25] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320135.9650521, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: optimize_learning_parameters"}
+{"ts": 1765320135.965264, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: build_phase_4_6_modules"}
+{"ts": 1765320136.117402, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: build_phase_4_6_modules"}
+{"ts": 1765320136.1175466, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: optimize_learning_parameters"}
+{"ts": 1765320136.1173625, "kind": "task", "path": "healer-30", "reason": "[healer-30] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320150.96422, "kind": "task", "path": "healer-27", "reason": "[healer-27] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320150.9646885, "kind": "task", "path": "task-296", "reason": "[task-296] processing task: optimize_learning_parameters"}
+{"ts": 1765320150.9642465, "kind": "task", "path": "task-250", "reason": "[task-250] processing task: build_phase_4_6_modules"}
+{"ts": 1765320151.1186762, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320151.1188602, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: build_phase_4_6_modules"}
+{"ts": 1765320151.119567, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: optimize_learning_parameters"}
+{"ts": 1765320165.9651449, "kind": "task", "path": "healer-25", "reason": "[healer-25] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320165.965291, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: build_phase_4_6_modules"}
+{"ts": 1765320165.9653218, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: optimize_learning_parameters"}
+{"ts": 1765320166.1196032, "kind": "task", "path": "healer-30", "reason": "[healer-30] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320166.120076, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: build_phase_4_6_modules"}
+{"ts": 1765320166.1202579, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: optimize_learning_parameters"}
+{"ts": 1765320180.9671783, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: build_phase_4_6_modules"}
+{"ts": 1765320180.9674804, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320180.9673603, "kind": "task", "path": "task-176", "reason": "[task-176] processing task: optimize_learning_parameters"}
+{"ts": 1765320181.120589, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320181.1213338, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: build_phase_4_6_modules"}
+{"ts": 1765320181.1216486, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: optimize_learning_parameters"}
+{"ts": 1765320195.968203, "kind": "task", "path": "healer-25", "reason": "[healer-25] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320195.96887, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: build_phase_4_6_modules"}
+{"ts": 1765320195.9690483, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: optimize_learning_parameters"}
+{"ts": 1765320196.122349, "kind": "task", "path": "task-33", "reason": "[task-33] processing task: build_phase_4_6_modules"}
+{"ts": 1765320196.1226075, "kind": "task", "path": "healer-35", "reason": "[healer-35] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765320196.1230865, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: optimize_learning_parameters"}
+{"ts": 1765325968.7731915, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765325968.7737384, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765325968.7747054, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: build_phase_4_6_modules"}
+{"ts": 1765325968.8900795, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765325968.890204, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765325968.8903263, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765325983.7715173, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765325983.7715523, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: build_phase_4_6_modules"}
+{"ts": 1765325983.7721593, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: optimize_learning_parameters"}
+{"ts": 1765325983.890222, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765325983.8904815, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: optimize_learning_parameters"}
+{"ts": 1765325983.8904142, "kind": "task", "path": "task-38", "reason": "[task-38] processing task: build_phase_4_6_modules"}
+{"ts": 1765325998.772466, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765325998.7725103, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765325998.772541, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: optimize_learning_parameters"}
+{"ts": 1765325998.8916802, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765325998.8913872, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765325998.8922584, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326013.7736564, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326013.7738028, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: optimize_learning_parameters"}
+{"ts": 1765326013.7737136, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: build_phase_4_6_modules"}
+{"ts": 1765326013.892382, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326013.8927717, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: optimize_learning_parameters"}
+{"ts": 1765326013.892431, "kind": "task", "path": "task-40", "reason": "[task-40] processing task: build_phase_4_6_modules"}
+{"ts": 1765326028.7748744, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326028.7749166, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: build_phase_4_6_modules"}
+{"ts": 1765326028.7750819, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: optimize_learning_parameters"}
+{"ts": 1765326028.893595, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326028.893911, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326028.893938, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326043.776038, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326043.7761686, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326043.776668, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: optimize_learning_parameters"}
+{"ts": 1765326043.8939948, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326043.8940394, "kind": "task", "path": "task-40", "reason": "[task-40] processing task: build_phase_4_6_modules"}
+{"ts": 1765326043.8941684, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: optimize_learning_parameters"}
+{"ts": 1765326058.776913, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326058.7769678, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: build_phase_4_6_modules"}
+{"ts": 1765326058.777426, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: optimize_learning_parameters"}
+{"ts": 1765326058.8949993, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326058.8950298, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326058.895113, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326073.7781136, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326073.7783887, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326073.778046, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326073.8958967, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326073.8961904, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: optimize_learning_parameters"}
+{"ts": 1765326073.895967, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: build_phase_4_6_modules"}
+{"ts": 1765326088.77909, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326088.7793632, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326088.7794287, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326088.8971827, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326088.897666, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326088.8970683, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326103.7801232, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326103.7801454, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: build_phase_4_6_modules"}
+{"ts": 1765326103.7804523, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: optimize_learning_parameters"}
+{"ts": 1765326103.8990705, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326103.8992658, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: build_phase_4_6_modules"}
+{"ts": 1765326103.899324, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: optimize_learning_parameters"}
+{"ts": 1765326118.7813485, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765326118.7814987, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326118.7824044, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326118.899245, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326118.8987749, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326118.8994458, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326133.782184, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326133.7824128, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: build_phase_4_6_modules"}
+{"ts": 1765326133.7827792, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: optimize_learning_parameters"}
+{"ts": 1765326133.9002318, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326133.90035, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: build_phase_4_6_modules"}
+{"ts": 1765326133.9008372, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: optimize_learning_parameters"}
+{"ts": 1765326148.7831912, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326148.7832286, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: build_phase_4_6_modules"}
+{"ts": 1765326148.7834291, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: optimize_learning_parameters"}
+{"ts": 1765326148.901174, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326148.9011247, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326148.9018874, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326163.784253, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326163.784325, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: build_phase_4_6_modules"}
+{"ts": 1765326163.784912, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: optimize_learning_parameters"}
+{"ts": 1765326163.9025886, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: optimize_learning_parameters"}
+{"ts": 1765326163.902332, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: build_phase_4_6_modules"}
+{"ts": 1765326163.902219, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326178.7855647, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326178.7857194, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: optimize_learning_parameters"}
+{"ts": 1765326178.7855904, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: build_phase_4_6_modules"}
+{"ts": 1765326178.9032545, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326178.9037037, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326178.9031591, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326193.7867064, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326193.7867856, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: optimize_learning_parameters"}
+{"ts": 1765326193.7867322, "kind": "task", "path": "task-20", "reason": "[task-20] processing task: build_phase_4_6_modules"}
+{"ts": 1765326193.904706, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326193.904857, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: optimize_learning_parameters"}
+{"ts": 1765326193.9048197, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: build_phase_4_6_modules"}
+{"ts": 1765326208.7877011, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326208.7879045, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: optimize_learning_parameters"}
+{"ts": 1765326208.7878108, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: build_phase_4_6_modules"}
+{"ts": 1765326208.906298, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326208.9065444, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326208.9066374, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326223.7888618, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326223.7889137, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: build_phase_4_6_modules"}
+{"ts": 1765326223.7895143, "kind": "task", "path": "task-20", "reason": "[task-20] processing task: optimize_learning_parameters"}
+{"ts": 1765326223.9060464, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326223.9068277, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: optimize_learning_parameters"}
+{"ts": 1765326223.9066753, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: build_phase_4_6_modules"}
+{"ts": 1765326238.7899783, "kind": "task", "path": "task-20", "reason": "[task-20] processing task: build_phase_4_6_modules"}
+{"ts": 1765326238.7901158, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: optimize_learning_parameters"}
+{"ts": 1765326238.789939, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326238.907665, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326238.9070837, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326238.907888, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326253.7921185, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: optimize_learning_parameters"}
+{"ts": 1765326253.7920518, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326253.7920723, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: build_phase_4_6_modules"}
+{"ts": 1765326253.9079788, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326253.9082355, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: optimize_learning_parameters"}
+{"ts": 1765326253.908039, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: build_phase_4_6_modules"}
+{"ts": 1765326268.7930722, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: optimize_learning_parameters"}
+{"ts": 1765326268.7930222, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: build_phase_4_6_modules"}
+{"ts": 1765326268.7935953, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326268.9125652, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326268.9124985, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326268.9128215, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326283.7938328, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326283.7938905, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: build_phase_4_6_modules"}
+{"ts": 1765326283.7946367, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765326283.9134192, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326283.913841, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: optimize_learning_parameters"}
+{"ts": 1765326283.9138236, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: build_phase_4_6_modules"}
+{"ts": 1765326298.7951112, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: build_phase_4_6_modules"}
+{"ts": 1765326298.7950664, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326298.795379, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765326298.9142451, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326298.9145315, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326298.914386, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326313.7961397, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326313.7967098, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: optimize_learning_parameters"}
+{"ts": 1765326313.7966392, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: build_phase_4_6_modules"}
+{"ts": 1765326313.9153993, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326313.9154487, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: build_phase_4_6_modules"}
+{"ts": 1765326313.9159608, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: optimize_learning_parameters"}
+{"ts": 1765326328.7970319, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: build_phase_4_6_modules"}
+{"ts": 1765326328.7971895, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765326328.797848, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326328.9167747, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326328.9169447, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326328.9169664, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326334.7158463, "kind": "heal", "path": "emergency", "reason": "Emergency heal cycle triggered"}
+{"ts": 1765326334.7162464, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: load_tier_1"}
+{"ts": 1765326334.716208, "kind": "dispatch", "path": "load_tier_1", "reason": "Task dispatched: load_tier_1"}
+{"ts": 1765326334.7165082, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: load_tier_2"}
+{"ts": 1765326334.7164595, "kind": "dispatch", "path": "load_tier_2", "reason": "Task dispatched: load_tier_2"}
+{"ts": 1765326334.7167838, "kind": "dispatch", "path": "load_tier_3", "reason": "Task dispatched: load_tier_3"}
+{"ts": 1765326334.7169292, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: load_tier_3"}
+{"ts": 1765326334.7168922, "kind": "dispatch", "path": "load_tier_4", "reason": "Task dispatched: load_tier_4"}
+{"ts": 1765326334.7171016, "kind": "dispatch", "path": "load_tier_5", "reason": "Task dispatched: load_tier_5"}
+{"ts": 1765326334.7174754, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: load_tier_5"}
+{"ts": 1765326334.7174387, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: load_tier_4"}
+{"ts": 1765326334.7176266, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: load_tier_6"}
+{"ts": 1765326334.7175014, "kind": "dispatch", "path": "load_tier_6", "reason": "Task dispatched: load_tier_6"}
+{"ts": 1765326334.718217, "kind": "dispatch", "path": "load_tier_7", "reason": "Task dispatched: load_tier_7"}
+{"ts": 1765326334.7182543, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: load_tier_7"}
+{"ts": 1765326334.7191675, "kind": "dispatch", "path": "load_tier_8", "reason": "Task dispatched: load_tier_8"}
+{"ts": 1765326334.719204, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: load_tier_8"}
+{"ts": 1765326334.7195008, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: load_tier_9"}
+{"ts": 1765326334.7194743, "kind": "dispatch", "path": "load_tier_9", "reason": "Task dispatched: load_tier_9"}
+{"ts": 1765326334.7196822, "kind": "dispatch", "path": "load_tier_10", "reason": "Task dispatched: load_tier_10"}
+{"ts": 1765326334.7200184, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: load_tier_10"}
+{"ts": 1765326334.7206464, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: load_tier_11"}
+{"ts": 1765326334.7205732, "kind": "dispatch", "path": "load_tier_11", "reason": "Task dispatched: load_tier_11"}
+{"ts": 1765326334.7208288, "kind": "dispatch", "path": "load_tier_12", "reason": "Task dispatched: load_tier_12"}
+{"ts": 1765326334.7209105, "kind": "dispatch", "path": "load_tier_13", "reason": "Task dispatched: load_tier_13"}
+{"ts": 1765326334.7210975, "kind": "dispatch", "path": "load_tier_14", "reason": "Task dispatched: load_tier_14"}
+{"ts": 1765326334.721285, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: load_tier_13"}
+{"ts": 1765326334.721044, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: load_tier_12"}
+{"ts": 1765326334.7217064, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: load_tier_15"}
+{"ts": 1765326334.7215421, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: load_tier_14"}
+{"ts": 1765326334.7215645, "kind": "dispatch", "path": "load_tier_15", "reason": "Task dispatched: load_tier_15"}
+{"ts": 1765326334.7219584, "kind": "dispatch", "path": "load_tier_16", "reason": "Task dispatched: load_tier_16"}
+{"ts": 1765326334.7221165, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: load_tier_16"}
+{"ts": 1765326334.7220702, "kind": "dispatch", "path": "load_tier_17", "reason": "Task dispatched: load_tier_17"}
+{"ts": 1765326334.722338, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: load_tier_17"}
+{"ts": 1765326334.7224379, "kind": "dispatch", "path": "load_tier_18", "reason": "Task dispatched: load_tier_18"}
+{"ts": 1765326334.7225318, "kind": "dispatch", "path": "load_tier_19", "reason": "Task dispatched: load_tier_19"}
+{"ts": 1765326334.7227113, "kind": "dispatch", "path": "load_tier_20", "reason": "Task dispatched: load_tier_20"}
+{"ts": 1765326334.722667, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: load_tier_19"}
+{"ts": 1765326334.7226245, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: load_tier_18"}
+{"ts": 1765326334.723235, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: load_tier_20"}
+{"ts": 1765326334.7234304, "kind": "dispatch", "path": "load_tier_21", "reason": "Task dispatched: load_tier_21"}
+{"ts": 1765326334.723544, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: load_tier_21"}
+{"ts": 1765326334.7237651, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: load_tier_22"}
+{"ts": 1765326334.7236605, "kind": "dispatch", "path": "load_tier_22", "reason": "Task dispatched: load_tier_22"}
+{"ts": 1765326334.723945, "kind": "dispatch", "path": "load_tier_23", "reason": "Task dispatched: load_tier_23"}
+{"ts": 1765326334.7240252, "kind": "dispatch", "path": "load_tier_24", "reason": "Task dispatched: load_tier_24"}
+{"ts": 1765326334.7240996, "kind": "dispatch", "path": "load_tier_25", "reason": "Task dispatched: load_tier_25"}
+{"ts": 1765326334.7241828, "kind": "dispatch", "path": "load_tier_26", "reason": "Task dispatched: load_tier_26"}
+{"ts": 1765326334.724255, "kind": "dispatch", "path": "load_tier_27", "reason": "Task dispatched: load_tier_27"}
+{"ts": 1765326334.7243547, "kind": "dispatch", "path": "load_tier_28", "reason": "Task dispatched: load_tier_28"}
+{"ts": 1765326334.7244234, "kind": "dispatch", "path": "load_tier_29", "reason": "Task dispatched: load_tier_29"}
+{"ts": 1765326334.7246034, "kind": "dispatch", "path": "load_tier_30", "reason": "Task dispatched: load_tier_30"}
+{"ts": 1765326334.7248983, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: load_tier_26"}
+{"ts": 1765326334.7250044, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: load_tier_29"}
+{"ts": 1765326334.7251906, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: load_tier_24"}
+{"ts": 1765326334.7252383, "kind": "task", "path": "task-23", "reason": "[task-23] processing task: load_tier_25"}
+{"ts": 1765326334.7250617, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: load_tier_23"}
+{"ts": 1765326334.7256927, "kind": "dispatch", "path": "load_tier_31", "reason": "Task dispatched: load_tier_31"}
+{"ts": 1765326334.7260172, "kind": "task", "path": "task-26", "reason": "[task-26] processing task: load_tier_28"}
+{"ts": 1765326334.72608, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: load_tier_30"}
+{"ts": 1765326334.726216, "kind": "task", "path": "task-25", "reason": "[task-25] processing task: load_tier_27"}
+{"ts": 1765326334.726429, "kind": "task", "path": "task-23", "reason": "[task-23] processing task: load_tier_31"}
+{"ts": 1765326334.7264564, "kind": "dispatch", "path": "load_tier_32", "reason": "Task dispatched: load_tier_32"}
+{"ts": 1765326334.7266643, "kind": "task", "path": "task-23", "reason": "[task-23] processing task: load_tier_32"}
+{"ts": 1765326334.7267485, "kind": "dispatch", "path": "load_tier_33", "reason": "Task dispatched: load_tier_33"}
+{"ts": 1765326334.726864, "kind": "task", "path": "task-32", "reason": "[task-32] processing task: load_tier_33"}
+{"ts": 1765326334.7269852, "kind": "dispatch", "path": "load_tier_34", "reason": "Task dispatched: load_tier_34"}
+{"ts": 1765326334.7272124, "kind": "task", "path": "task-33", "reason": "[task-33] processing task: load_tier_34"}
+{"ts": 1765326334.7270892, "kind": "dispatch", "path": "load_tier_35", "reason": "Task dispatched: load_tier_35"}
+{"ts": 1765326334.7274132, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: load_tier_35"}
+{"ts": 1765326334.728096, "kind": "dispatch", "path": "load_tier_36", "reason": "Task dispatched: load_tier_36"}
+{"ts": 1765326334.7286613, "kind": "task", "path": "task-35", "reason": "[task-35] processing task: load_tier_36"}
+{"ts": 1765326334.7288759, "kind": "dispatch", "path": "load_tier_37", "reason": "Task dispatched: load_tier_37"}
+{"ts": 1765326334.7289753, "kind": "dispatch", "path": "load_tier_38", "reason": "Task dispatched: load_tier_38"}
+{"ts": 1765326334.7290547, "kind": "dispatch", "path": "load_tier_39", "reason": "Task dispatched: load_tier_39"}
+{"ts": 1765326334.7291203, "kind": "dispatch", "path": "load_tier_40", "reason": "Task dispatched: load_tier_40"}
+{"ts": 1765326334.7291906, "kind": "dispatch", "path": "load_tier_41", "reason": "Task dispatched: load_tier_41"}
+{"ts": 1765326334.7296414, "kind": "task", "path": "task-40", "reason": "[task-40] processing task: load_tier_41"}
+{"ts": 1765326334.7297611, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: load_tier_38"}
+{"ts": 1765326334.72925, "kind": "dispatch", "path": "load_tier_42", "reason": "Task dispatched: load_tier_42"}
+{"ts": 1765326334.7295694, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: load_tier_39"}
+{"ts": 1765326334.730027, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: load_tier_42"}
+{"ts": 1765326334.730145, "kind": "dispatch", "path": "load_tier_43", "reason": "Task dispatched: load_tier_43"}
+{"ts": 1765326334.7294261, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: load_tier_37"}
+{"ts": 1765326334.7299776, "kind": "task", "path": "task-38", "reason": "[task-38] processing task: load_tier_40"}
+{"ts": 1765326334.7302232, "kind": "dispatch", "path": "load_tier_44", "reason": "Task dispatched: load_tier_44"}
+{"ts": 1765326334.7307534, "kind": "task", "path": "task-40", "reason": "[task-40] processing task: load_tier_43"}
+{"ts": 1765326334.7309475, "kind": "dispatch", "path": "load_tier_45", "reason": "Task dispatched: load_tier_45"}
+{"ts": 1765326334.7310536, "kind": "dispatch", "path": "load_tier_46", "reason": "Task dispatched: load_tier_46"}
+{"ts": 1765326334.7313588, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: load_tier_46"}
+{"ts": 1765326334.7311115, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: load_tier_44"}
+{"ts": 1765326334.7311518, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: load_tier_45"}
+{"ts": 1765326334.7317443, "kind": "dispatch", "path": "load_tier_47", "reason": "Task dispatched: load_tier_47"}
+{"ts": 1765326334.7318494, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: load_tier_47"}
+{"ts": 1765326334.731978, "kind": "dispatch", "path": "load_tier_48", "reason": "Task dispatched: load_tier_48"}
+{"ts": 1765326334.732046, "kind": "dispatch", "path": "load_tier_49", "reason": "Task dispatched: load_tier_49"}
+{"ts": 1765326334.7321043, "kind": "dispatch", "path": "load_tier_50", "reason": "Task dispatched: load_tier_50"}
+{"ts": 1765326334.7323492, "kind": "dispatch", "path": "load_tier_51", "reason": "Task dispatched: load_tier_51"}
+{"ts": 1765326334.7324414, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: load_tier_48"}
+{"ts": 1765326334.7333045, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: load_tier_50"}
+{"ts": 1765326334.7334902, "kind": "dispatch", "path": "load_tier_52", "reason": "Task dispatched: load_tier_52"}
+{"ts": 1765326334.7338474, "kind": "task", "path": "task-49", "reason": "[task-49] processing task: load_tier_49"}
+{"ts": 1765326334.7339883, "kind": "task", "path": "task-50", "reason": "[task-50] processing task: load_tier_51"}
+{"ts": 1765326334.734071, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: load_tier_52"}
+{"ts": 1765326334.7342699, "kind": "dispatch", "path": "load_tier_53", "reason": "Task dispatched: load_tier_53"}
+{"ts": 1765326334.7344089, "kind": "dispatch", "path": "load_tier_54", "reason": "Task dispatched: load_tier_54"}
+{"ts": 1765326334.7344847, "kind": "task", "path": "task-52", "reason": "[task-52] processing task: load_tier_54"}
+{"ts": 1765326334.7344425, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: load_tier_53"}
+{"ts": 1765326334.7349026, "kind": "dispatch", "path": "load_tier_55", "reason": "Task dispatched: load_tier_55"}
+{"ts": 1765326334.735038, "kind": "dispatch", "path": "load_tier_56", "reason": "Task dispatched: load_tier_56"}
+{"ts": 1765326334.735375, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: load_tier_55"}
+{"ts": 1765326334.735495, "kind": "task", "path": "task-55", "reason": "[task-55] processing task: load_tier_56"}
+{"ts": 1765326334.7358282, "kind": "task", "path": "task-56", "reason": "[task-56] processing task: load_tier_57"}
+{"ts": 1765326334.7356915, "kind": "dispatch", "path": "load_tier_57", "reason": "Task dispatched: load_tier_57"}
+{"ts": 1765326334.7363322, "kind": "dispatch", "path": "load_tier_58", "reason": "Task dispatched: load_tier_58"}
+{"ts": 1765326334.736412, "kind": "dispatch", "path": "load_tier_59", "reason": "Task dispatched: load_tier_59"}
+{"ts": 1765326334.7364767, "kind": "dispatch", "path": "load_tier_60", "reason": "Task dispatched: load_tier_60"}
+{"ts": 1765326334.7366674, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: load_tier_58"}
+{"ts": 1765326334.7367952, "kind": "task", "path": "task-59", "reason": "[task-59] processing task: load_tier_60"}
+{"ts": 1765326334.7369657, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: load_tier_59"}
+{"ts": 1765326334.7370558, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: load_tier_61"}
+{"ts": 1765326334.736608, "kind": "dispatch", "path": "load_tier_61", "reason": "Task dispatched: load_tier_61"}
+{"ts": 1765326334.7374036, "kind": "dispatch", "path": "load_tier_62", "reason": "Task dispatched: load_tier_62"}
+{"ts": 1765326334.7375457, "kind": "dispatch", "path": "load_tier_63", "reason": "Task dispatched: load_tier_63"}
+{"ts": 1765326334.7376285, "kind": "dispatch", "path": "load_tier_64", "reason": "Task dispatched: load_tier_64"}
+{"ts": 1765326334.7377698, "kind": "dispatch", "path": "load_tier_65", "reason": "Task dispatched: load_tier_65"}
+{"ts": 1765326334.7384238, "kind": "task", "path": "task-62", "reason": "[task-62] processing task: load_tier_63"}
+{"ts": 1765326334.7383664, "kind": "task", "path": "task-63", "reason": "[task-63] processing task: load_tier_64"}
+{"ts": 1765326334.7380073, "kind": "dispatch", "path": "load_tier_66", "reason": "Task dispatched: load_tier_66"}
+{"ts": 1765326334.7392516, "kind": "task", "path": "task-64", "reason": "[task-64] processing task: load_tier_65"}
+{"ts": 1765326334.7380698, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: load_tier_62"}
+{"ts": 1765326334.7392163, "kind": "task", "path": "task-62", "reason": "[task-62] processing task: load_tier_66"}
+{"ts": 1765326334.7398262, "kind": "dispatch", "path": "load_tier_67", "reason": "Task dispatched: load_tier_67"}
+{"ts": 1765326334.739918, "kind": "dispatch", "path": "load_tier_68", "reason": "Task dispatched: load_tier_68"}
+{"ts": 1765326334.739986, "kind": "dispatch", "path": "load_tier_69", "reason": "Task dispatched: load_tier_69"}
+{"ts": 1765326334.740049, "kind": "dispatch", "path": "load_tier_70", "reason": "Task dispatched: load_tier_70"}
+{"ts": 1765326334.740112, "kind": "dispatch", "path": "load_tier_71", "reason": "Task dispatched: load_tier_71"}
+{"ts": 1765326334.7406063, "kind": "task", "path": "task-68", "reason": "[task-68] processing task: load_tier_69"}
+{"ts": 1765326334.7407265, "kind": "task", "path": "task-69", "reason": "[task-69] processing task: load_tier_71"}
+{"ts": 1765326334.740898, "kind": "task", "path": "task-66", "reason": "[task-66] processing task: load_tier_72"}
+{"ts": 1765326334.740992, "kind": "task", "path": "task-63", "reason": "[task-63] processing task: load_tier_70"}
+{"ts": 1765326334.741132, "kind": "task", "path": "task-71", "reason": "[task-71] processing task: load_tier_68"}
+{"ts": 1765326334.7405057, "kind": "task", "path": "task-67", "reason": "[task-67] processing task: load_tier_67"}
+{"ts": 1765326334.7403483, "kind": "dispatch", "path": "load_tier_72", "reason": "Task dispatched: load_tier_72"}
+{"ts": 1765326334.741431, "kind": "task", "path": "task-72", "reason": "[task-72] processing task: load_tier_73"}
+{"ts": 1765326334.7413986, "kind": "dispatch", "path": "load_tier_73", "reason": "Task dispatched: load_tier_73"}
+{"ts": 1765326334.7416599, "kind": "dispatch", "path": "load_tier_74", "reason": "Task dispatched: load_tier_74"}
+{"ts": 1765326334.7417674, "kind": "dispatch", "path": "load_tier_75", "reason": "Task dispatched: load_tier_75"}
+{"ts": 1765326334.7416904, "kind": "task", "path": "task-73", "reason": "[task-73] processing task: load_tier_74"}
+{"ts": 1765326334.7418277, "kind": "dispatch", "path": "load_tier_76", "reason": "Task dispatched: load_tier_76"}
+{"ts": 1765326334.7419777, "kind": "task", "path": "task-75", "reason": "[task-75] processing task: load_tier_75"}
+{"ts": 1765326334.7420685, "kind": "task", "path": "task-74", "reason": "[task-74] processing task: load_tier_76"}
+{"ts": 1765326334.7422314, "kind": "task", "path": "task-76", "reason": "[task-76] processing task: load_tier_77"}
+{"ts": 1765326334.7421982, "kind": "dispatch", "path": "load_tier_77", "reason": "Task dispatched: load_tier_77"}
+{"ts": 1765326334.7424119, "kind": "task", "path": "task-77", "reason": "[task-77] processing task: load_tier_78"}
+{"ts": 1765326334.7423863, "kind": "dispatch", "path": "load_tier_78", "reason": "Task dispatched: load_tier_78"}
+{"ts": 1765326334.7428997, "kind": "task", "path": "task-77", "reason": "[task-77] processing task: load_tier_79"}
+{"ts": 1765326334.7426288, "kind": "dispatch", "path": "load_tier_79", "reason": "Task dispatched: load_tier_79"}
+{"ts": 1765326334.7430787, "kind": "dispatch", "path": "load_tier_80", "reason": "Task dispatched: load_tier_80"}
+{"ts": 1765326334.7431579, "kind": "dispatch", "path": "load_tier_81", "reason": "Task dispatched: load_tier_81"}
+{"ts": 1765326334.7432213, "kind": "dispatch", "path": "load_tier_82", "reason": "Task dispatched: load_tier_82"}
+{"ts": 1765326334.7433422, "kind": "task", "path": "task-81", "reason": "[task-81] processing task: load_tier_80"}
+{"ts": 1765326334.7434912, "kind": "task", "path": "task-80", "reason": "[task-80] processing task: load_tier_82"}
+{"ts": 1765326334.7435427, "kind": "dispatch", "path": "load_tier_83", "reason": "Task dispatched: load_tier_83"}
+{"ts": 1765326334.7434556, "kind": "task", "path": "task-79", "reason": "[task-79] processing task: load_tier_81"}
+{"ts": 1765326334.7440956, "kind": "task", "path": "task-79", "reason": "[task-79] processing task: load_tier_83"}
+{"ts": 1765326334.744564, "kind": "dispatch", "path": "load_tier_84", "reason": "Task dispatched: load_tier_84"}
+{"ts": 1765326334.744608, "kind": "task", "path": "task-83", "reason": "[task-83] processing task: load_tier_84"}
+{"ts": 1765326334.744904, "kind": "task", "path": "task-83", "reason": "[task-83] processing task: load_tier_85"}
+{"ts": 1765326334.7448015, "kind": "dispatch", "path": "load_tier_85", "reason": "Task dispatched: load_tier_85"}
+{"ts": 1765326334.7451546, "kind": "dispatch", "path": "load_tier_86", "reason": "Task dispatched: load_tier_86"}
+{"ts": 1765326334.7452953, "kind": "dispatch", "path": "load_tier_87", "reason": "Task dispatched: load_tier_87"}
+{"ts": 1765326334.7454164, "kind": "task", "path": "task-85", "reason": "[task-85] processing task: load_tier_86"}
+{"ts": 1765326334.7458842, "kind": "dispatch", "path": "load_tier_88", "reason": "Task dispatched: load_tier_88"}
+{"ts": 1765326334.7454503, "kind": "task", "path": "task-86", "reason": "[task-86] processing task: load_tier_87"}
+{"ts": 1765326334.7476301, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: load_tier_89"}
+{"ts": 1765326334.7472064, "kind": "task", "path": "task-87", "reason": "[task-87] processing task: load_tier_88"}
+{"ts": 1765326334.7474263, "kind": "dispatch", "path": "load_tier_89", "reason": "Task dispatched: load_tier_89"}
+{"ts": 1765326334.7481444, "kind": "dispatch", "path": "load_tier_90", "reason": "Task dispatched: load_tier_90"}
+{"ts": 1765326334.7481713, "kind": "task", "path": "task-89", "reason": "[task-89] processing task: load_tier_90"}
+{"ts": 1765326334.7484426, "kind": "task", "path": "task-90", "reason": "[task-90] processing task: load_tier_91"}
+{"ts": 1765326334.7483542, "kind": "dispatch", "path": "load_tier_91", "reason": "Task dispatched: load_tier_91"}
+{"ts": 1765326334.748623, "kind": "task", "path": "task-91", "reason": "[task-91] processing task: load_tier_92"}
+{"ts": 1765326334.7485971, "kind": "dispatch", "path": "load_tier_92", "reason": "Task dispatched: load_tier_92"}
+{"ts": 1765326334.7488174, "kind": "dispatch", "path": "load_tier_93", "reason": "Task dispatched: load_tier_93"}
+{"ts": 1765326334.7488441, "kind": "task", "path": "task-92", "reason": "[task-92] processing task: load_tier_93"}
+{"ts": 1765326334.7490199, "kind": "dispatch", "path": "load_tier_94", "reason": "Task dispatched: load_tier_94"}
+{"ts": 1765326334.7490501, "kind": "task", "path": "task-93", "reason": "[task-93] processing task: load_tier_94"}
+{"ts": 1765326334.749224, "kind": "task", "path": "task-94", "reason": "[task-94] processing task: load_tier_95"}
+{"ts": 1765326334.7491639, "kind": "dispatch", "path": "load_tier_95", "reason": "Task dispatched: load_tier_95"}
+{"ts": 1765326334.7493954, "kind": "dispatch", "path": "load_tier_96", "reason": "Task dispatched: load_tier_96"}
+{"ts": 1765326334.749422, "kind": "task", "path": "task-95", "reason": "[task-95] processing task: load_tier_96"}
+{"ts": 1765326334.7497094, "kind": "dispatch", "path": "load_tier_97", "reason": "Task dispatched: load_tier_97"}
+{"ts": 1765326334.7498202, "kind": "task", "path": "task-96", "reason": "[task-96] processing task: load_tier_97"}
+{"ts": 1765326334.750034, "kind": "dispatch", "path": "load_tier_98", "reason": "Task dispatched: load_tier_98"}
+{"ts": 1765326334.7500727, "kind": "task", "path": "task-97", "reason": "[task-97] processing task: load_tier_98"}
+{"ts": 1765326334.7503371, "kind": "dispatch", "path": "load_tier_99", "reason": "Task dispatched: load_tier_99"}
+{"ts": 1765326334.7503855, "kind": "task", "path": "task-98", "reason": "[task-98] processing task: load_tier_99"}
+{"ts": 1765326334.750664, "kind": "task", "path": "task-99", "reason": "[task-99] processing task: load_tier_100"}
+{"ts": 1765326334.750632, "kind": "dispatch", "path": "load_tier_100", "reason": "Task dispatched: load_tier_100"}
+{"ts": 1765326334.7509844, "kind": "dispatch", "path": "load_tier_101", "reason": "Task dispatched: load_tier_101"}
+{"ts": 1765326334.7511203, "kind": "task", "path": "task-100", "reason": "[task-100] processing task: load_tier_101"}
+{"ts": 1765326334.752461, "kind": "task", "path": "task-100", "reason": "[task-100] processing task: load_tier_102"}
+{"ts": 1765326334.751188, "kind": "dispatch", "path": "load_tier_102", "reason": "Task dispatched: load_tier_102"}
+{"ts": 1765326334.7526772, "kind": "task", "path": "task-101", "reason": "[task-101] processing task: load_tier_103"}
+{"ts": 1765326334.7526097, "kind": "dispatch", "path": "load_tier_103", "reason": "Task dispatched: load_tier_103"}
+{"ts": 1765326334.7528734, "kind": "task", "path": "task-103", "reason": "[task-103] processing task: load_tier_104"}
+{"ts": 1765326334.752825, "kind": "dispatch", "path": "load_tier_104", "reason": "Task dispatched: load_tier_104"}
+{"ts": 1765326334.7530692, "kind": "dispatch", "path": "load_tier_105", "reason": "Task dispatched: load_tier_105"}
+{"ts": 1765326334.7531185, "kind": "task", "path": "task-104", "reason": "[task-104] processing task: load_tier_105"}
+{"ts": 1765326334.7532692, "kind": "dispatch", "path": "load_tier_106", "reason": "Task dispatched: load_tier_106"}
+{"ts": 1765326334.75338, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: load_tier_106"}
+{"ts": 1765326334.753591, "kind": "dispatch", "path": "load_tier_107", "reason": "Task dispatched: load_tier_107"}
+{"ts": 1765326334.7536585, "kind": "dispatch", "path": "load_tier_108", "reason": "Task dispatched: load_tier_108"}
+{"ts": 1765326334.7537718, "kind": "dispatch", "path": "load_tier_109", "reason": "Task dispatched: load_tier_109"}
+{"ts": 1765326334.7538924, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: load_tier_107"}
+{"ts": 1765326334.7541568, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: load_tier_108"}
+{"ts": 1765326334.7543905, "kind": "dispatch", "path": "load_tier_110", "reason": "Task dispatched: load_tier_110"}
+{"ts": 1765326334.7542636, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: load_tier_109"}
+{"ts": 1765326334.7544422, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: load_tier_110"}
+{"ts": 1765326334.7550876, "kind": "dispatch", "path": "load_tier_111", "reason": "Task dispatched: load_tier_111"}
+{"ts": 1765326334.7552114, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: load_tier_111"}
+{"ts": 1765326334.755529, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: load_tier_112"}
+{"ts": 1765326334.755482, "kind": "dispatch", "path": "load_tier_112", "reason": "Task dispatched: load_tier_112"}
+{"ts": 1765326334.7556834, "kind": "dispatch", "path": "load_tier_113", "reason": "Task dispatched: load_tier_113"}
+{"ts": 1765326334.7557135, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: load_tier_113"}
+{"ts": 1765326334.7558606, "kind": "dispatch", "path": "load_tier_114", "reason": "Task dispatched: load_tier_114"}
+{"ts": 1765326334.7558968, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: load_tier_114"}
+{"ts": 1765326334.7560222, "kind": "dispatch", "path": "load_tier_115", "reason": "Task dispatched: load_tier_115"}
+{"ts": 1765326334.7561393, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: load_tier_115"}
+{"ts": 1765326334.7562566, "kind": "dispatch", "path": "load_tier_116", "reason": "Task dispatched: load_tier_116"}
+{"ts": 1765326334.7564824, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: load_tier_116"}
+{"ts": 1765326334.7565572, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: load_tier_117"}
+{"ts": 1765326334.7565315, "kind": "dispatch", "path": "load_tier_117", "reason": "Task dispatched: load_tier_117"}
+{"ts": 1765326334.756831, "kind": "dispatch", "path": "load_tier_118", "reason": "Task dispatched: load_tier_118"}
+{"ts": 1765326334.7568696, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: load_tier_118"}
+{"ts": 1765326334.757001, "kind": "dispatch", "path": "load_tier_119", "reason": "Task dispatched: load_tier_119"}
+{"ts": 1765326334.7570457, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: load_tier_119"}
+{"ts": 1765326334.7573068, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: load_tier_120"}
+{"ts": 1765326334.7571988, "kind": "dispatch", "path": "load_tier_120", "reason": "Task dispatched: load_tier_120"}
+{"ts": 1765326334.7575083, "kind": "dispatch", "path": "load_tier_121", "reason": "Task dispatched: load_tier_121"}
+{"ts": 1765326334.7575746, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: load_tier_121"}
+{"ts": 1765326334.75761, "kind": "dispatch", "path": "load_tier_122", "reason": "Task dispatched: load_tier_122"}
+{"ts": 1765326334.7578259, "kind": "dispatch", "path": "load_tier_123", "reason": "Task dispatched: load_tier_123"}
+{"ts": 1765326334.7579527, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: load_tier_123"}
+{"ts": 1765326334.757686, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: load_tier_122"}
+{"ts": 1765326334.7582493, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: load_tier_124"}
+{"ts": 1765326334.758219, "kind": "dispatch", "path": "load_tier_124", "reason": "Task dispatched: load_tier_124"}
+{"ts": 1765326334.7584546, "kind": "dispatch", "path": "load_tier_125", "reason": "Task dispatched: load_tier_125"}
+{"ts": 1765326334.7585444, "kind": "task", "path": "task-20", "reason": "[task-20] processing task: load_tier_125"}
+{"ts": 1765326334.7586827, "kind": "dispatch", "path": "load_tier_126", "reason": "Task dispatched: load_tier_126"}
+{"ts": 1765326334.7588015, "kind": "dispatch", "path": "load_tier_127", "reason": "Task dispatched: load_tier_127"}
+{"ts": 1765326334.75895, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: load_tier_127"}
+{"ts": 1765326334.7588384, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: load_tier_126"}
+{"ts": 1765326334.7595012, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: load_tier_128"}
+{"ts": 1765326334.7593005, "kind": "dispatch", "path": "load_tier_128", "reason": "Task dispatched: load_tier_128"}
+{"ts": 1765326334.7597337, "kind": "dispatch", "path": "load_tier_129", "reason": "Task dispatched: load_tier_129"}
+{"ts": 1765326334.7598093, "kind": "dispatch", "path": "load_tier_130", "reason": "Task dispatched: load_tier_130"}
+{"ts": 1765326334.7598624, "kind": "dispatch", "path": "load_tier_131", "reason": "Task dispatched: load_tier_131"}
+{"ts": 1765326334.7600188, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: load_tier_129"}
+{"ts": 1765326334.7601593, "kind": "dispatch", "path": "load_tier_132", "reason": "Task dispatched: load_tier_132"}
+{"ts": 1765326334.7604864, "kind": "task", "path": "task-27", "reason": "[task-27] processing task: load_tier_131"}
+{"ts": 1765326334.760511, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: load_tier_132"}
+{"ts": 1765326334.7607574, "kind": "dispatch", "path": "load_tier_133", "reason": "Task dispatched: load_tier_133"}
+{"ts": 1765326334.7609842, "kind": "task", "path": "task-30", "reason": "[task-30] processing task: load_tier_130"}
+{"ts": 1765326334.7611084, "kind": "dispatch", "path": "load_tier_134", "reason": "Task dispatched: load_tier_134"}
+{"ts": 1765326334.761459, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: load_tier_133"}
+{"ts": 1765326334.7616274, "kind": "dispatch", "path": "load_tier_135", "reason": "Task dispatched: load_tier_135"}
+{"ts": 1765326334.7617664, "kind": "task", "path": "task-25", "reason": "[task-25] processing task: load_tier_134"}
+{"ts": 1765326334.761807, "kind": "dispatch", "path": "load_tier_136", "reason": "Task dispatched: load_tier_136"}
+{"ts": 1765326334.7618556, "kind": "task", "path": "task-23", "reason": "[task-23] processing task: load_tier_136"}
+{"ts": 1765326334.7621145, "kind": "task", "path": "task-26", "reason": "[task-26] processing task: load_tier_135"}
+{"ts": 1765326334.7622073, "kind": "dispatch", "path": "load_tier_137", "reason": "Task dispatched: load_tier_137"}
+{"ts": 1765326334.7623215, "kind": "task", "path": "task-32", "reason": "[task-32] processing task: load_tier_137"}
+{"ts": 1765326334.7633836, "kind": "dispatch", "path": "load_tier_138", "reason": "Task dispatched: load_tier_138"}
+{"ts": 1765326334.7634337, "kind": "task", "path": "task-31", "reason": "[task-31] processing task: load_tier_138"}
+{"ts": 1765326334.7636526, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: load_tier_139"}
+{"ts": 1765326334.763622, "kind": "dispatch", "path": "load_tier_139", "reason": "Task dispatched: load_tier_139"}
+{"ts": 1765326334.763932, "kind": "dispatch", "path": "load_tier_140", "reason": "Task dispatched: load_tier_140"}
+{"ts": 1765326334.7640293, "kind": "dispatch", "path": "load_tier_141", "reason": "Task dispatched: load_tier_141"}
+{"ts": 1765326334.7641044, "kind": "dispatch", "path": "load_tier_142", "reason": "Task dispatched: load_tier_142"}
+{"ts": 1765326334.76418, "kind": "dispatch", "path": "load_tier_143", "reason": "Task dispatched: load_tier_143"}
+{"ts": 1765326334.7642894, "kind": "dispatch", "path": "load_tier_144", "reason": "Task dispatched: load_tier_144"}
+{"ts": 1765326334.7643816, "kind": "dispatch", "path": "load_tier_145", "reason": "Task dispatched: load_tier_145"}
+{"ts": 1765326334.7644584, "kind": "dispatch", "path": "load_tier_146", "reason": "Task dispatched: load_tier_146"}
+{"ts": 1765326334.7645314, "kind": "dispatch", "path": "load_tier_147", "reason": "Task dispatched: load_tier_147"}
+{"ts": 1765326334.7648647, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: load_tier_140"}
+{"ts": 1765326334.7650025, "kind": "task", "path": "task-38", "reason": "[task-38] processing task: load_tier_141"}
+{"ts": 1765326334.7652137, "kind": "task", "path": "task-35", "reason": "[task-35] processing task: load_tier_143"}
+{"ts": 1765326334.7656114, "kind": "dispatch", "path": "load_tier_148", "reason": "Task dispatched: load_tier_148"}
+{"ts": 1765326334.765308, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: load_tier_146"}
+{"ts": 1765326334.765177, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: load_tier_144"}
+{"ts": 1765326334.7658632, "kind": "task", "path": "task-33", "reason": "[task-33] processing task: load_tier_142"}
+{"ts": 1765326334.7660012, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: load_tier_145"}
+{"ts": 1765326334.766062, "kind": "task", "path": "task-35", "reason": "[task-35] processing task: load_tier_148"}
+{"ts": 1765326334.7665129, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: load_tier_147"}
+{"ts": 1765326334.766669, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: load_tier_149"}
+{"ts": 1765326334.7665741, "kind": "dispatch", "path": "load_tier_149", "reason": "Task dispatched: load_tier_149"}
+{"ts": 1765326334.7668216, "kind": "dispatch", "path": "load_tier_150", "reason": "Task dispatched: load_tier_150"}
+{"ts": 1765326334.766883, "kind": "dispatch", "path": "load_tier_151", "reason": "Task dispatched: load_tier_151"}
+{"ts": 1765326334.7669296, "kind": "dispatch", "path": "load_tier_152", "reason": "Task dispatched: load_tier_152"}
+{"ts": 1765326334.7669709, "kind": "dispatch", "path": "load_tier_153", "reason": "Task dispatched: load_tier_153"}
+{"ts": 1765326334.7671568, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: load_tier_151"}
+{"ts": 1765326334.7670536, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: load_tier_150"}
+{"ts": 1765326334.7675908, "kind": "dispatch", "path": "load_tier_154", "reason": "Task dispatched: load_tier_154"}
+{"ts": 1765326334.76777, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: load_tier_154"}
+{"ts": 1765326334.7674384, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: load_tier_152"}
+{"ts": 1765326334.7678506, "kind": "dispatch", "path": "load_tier_155", "reason": "Task dispatched: load_tier_155"}
+{"ts": 1765326334.7679305, "kind": "task", "path": "task-49", "reason": "[task-49] processing task: load_tier_155"}
+{"ts": 1765326334.7674925, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: load_tier_153"}
+{"ts": 1765326334.7684832, "kind": "task", "path": "task-50", "reason": "[task-50] processing task: load_tier_156"}
+{"ts": 1765326334.7684474, "kind": "dispatch", "path": "load_tier_156", "reason": "Task dispatched: load_tier_156"}
+{"ts": 1765326334.7687962, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: load_tier_157"}
+{"ts": 1765326334.768761, "kind": "dispatch", "path": "load_tier_157", "reason": "Task dispatched: load_tier_157"}
+{"ts": 1765326334.7690349, "kind": "task", "path": "task-52", "reason": "[task-52] processing task: load_tier_158"}
+{"ts": 1765326334.769001, "kind": "dispatch", "path": "load_tier_158", "reason": "Task dispatched: load_tier_158"}
+{"ts": 1765326334.7692487, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: load_tier_159"}
+{"ts": 1765326334.7692206, "kind": "dispatch", "path": "load_tier_159", "reason": "Task dispatched: load_tier_159"}
+{"ts": 1765326334.7694774, "kind": "dispatch", "path": "load_tier_160", "reason": "Task dispatched: load_tier_160"}
+{"ts": 1765326334.769632, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: load_tier_161"}
+{"ts": 1765326334.7695925, "kind": "dispatch", "path": "load_tier_161", "reason": "Task dispatched: load_tier_161"}
+{"ts": 1765326334.7695396, "kind": "task", "path": "task-56", "reason": "[task-56] processing task: load_tier_160"}
+{"ts": 1765326334.7698197, "kind": "dispatch", "path": "load_tier_162", "reason": "Task dispatched: load_tier_162"}
+{"ts": 1765326334.7698393, "kind": "task", "path": "task-55", "reason": "[task-55] processing task: load_tier_162"}
+{"ts": 1765326334.7699554, "kind": "dispatch", "path": "load_tier_163", "reason": "Task dispatched: load_tier_163"}
+{"ts": 1765326334.7699904, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: load_tier_163"}
+{"ts": 1765326334.7702043, "kind": "dispatch", "path": "load_tier_164", "reason": "Task dispatched: load_tier_164"}
+{"ts": 1765326334.7703233, "kind": "dispatch", "path": "load_tier_165", "reason": "Task dispatched: load_tier_165"}
+{"ts": 1765326334.7703521, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: load_tier_164"}
+{"ts": 1765326334.7705228, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: load_tier_165"}
+{"ts": 1765326334.7706678, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: load_tier_166"}
+{"ts": 1765326334.770495, "kind": "dispatch", "path": "load_tier_166", "reason": "Task dispatched: load_tier_166"}
+{"ts": 1765326334.770926, "kind": "dispatch", "path": "load_tier_167", "reason": "Task dispatched: load_tier_167"}
+{"ts": 1765326334.7709708, "kind": "task", "path": "task-65", "reason": "[task-65] processing task: load_tier_167"}
+{"ts": 1765326334.7710855, "kind": "task", "path": "task-64", "reason": "[task-64] processing task: load_tier_168"}
+{"ts": 1765326334.7710445, "kind": "dispatch", "path": "load_tier_168", "reason": "Task dispatched: load_tier_168"}
+{"ts": 1765326334.7714305, "kind": "dispatch", "path": "load_tier_169", "reason": "Task dispatched: load_tier_169"}
+{"ts": 1765326334.7715588, "kind": "dispatch", "path": "load_tier_170", "reason": "Task dispatched: load_tier_170"}
+{"ts": 1765326334.771756, "kind": "dispatch", "path": "load_tier_171", "reason": "Task dispatched: load_tier_171"}
+{"ts": 1765326334.7714632, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: load_tier_169"}
+{"ts": 1765326334.7716742, "kind": "task", "path": "task-62", "reason": "[task-62] processing task: load_tier_170"}
+{"ts": 1765326334.7720604, "kind": "task", "path": "task-70", "reason": "[task-70] processing task: load_tier_171"}
+{"ts": 1765326334.7723331, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: load_tier_172"}
+{"ts": 1765326334.7720184, "kind": "dispatch", "path": "load_tier_172", "reason": "Task dispatched: load_tier_172"}
+{"ts": 1765326334.7726216, "kind": "dispatch", "path": "load_tier_173", "reason": "Task dispatched: load_tier_173"}
+{"ts": 1765326334.7726467, "kind": "task", "path": "task-69", "reason": "[task-69] processing task: load_tier_173"}
+{"ts": 1765326334.7727811, "kind": "dispatch", "path": "load_tier_174", "reason": "Task dispatched: load_tier_174"}
+{"ts": 1765326334.772821, "kind": "task", "path": "task-69", "reason": "[task-69] processing task: load_tier_174"}
+{"ts": 1765326334.7730277, "kind": "dispatch", "path": "load_tier_175", "reason": "Task dispatched: load_tier_175"}
+{"ts": 1765326334.7731183, "kind": "task", "path": "task-63", "reason": "[task-63] processing task: load_tier_175"}
+{"ts": 1765326334.7731829, "kind": "dispatch", "path": "load_tier_176", "reason": "Task dispatched: load_tier_176"}
+{"ts": 1765326334.7733812, "kind": "task", "path": "task-71", "reason": "[task-71] processing task: load_tier_176"}
+{"ts": 1765326334.7735906, "kind": "dispatch", "path": "load_tier_177", "reason": "Task dispatched: load_tier_177"}
+{"ts": 1765326334.7736294, "kind": "task", "path": "task-67", "reason": "[task-67] processing task: load_tier_177"}
+{"ts": 1765326334.773832, "kind": "dispatch", "path": "load_tier_178", "reason": "Task dispatched: load_tier_178"}
+{"ts": 1765326334.7739456, "kind": "dispatch", "path": "load_tier_179", "reason": "Task dispatched: load_tier_179"}
+{"ts": 1765326334.7739742, "kind": "task", "path": "task-72", "reason": "[task-72] processing task: load_tier_178"}
+{"ts": 1765326334.7741213, "kind": "dispatch", "path": "load_tier_180", "reason": "Task dispatched: load_tier_180"}
+{"ts": 1765326334.7743695, "kind": "dispatch", "path": "load_tier_181", "reason": "Task dispatched: load_tier_181"}
+{"ts": 1765326334.774722, "kind": "dispatch", "path": "load_tier_182", "reason": "Task dispatched: load_tier_182"}
+{"ts": 1765326334.774645, "kind": "task", "path": "task-72", "reason": "[task-72] processing task: load_tier_180"}
+{"ts": 1765326334.7745154, "kind": "task", "path": "task-74", "reason": "[task-74] processing task: load_tier_179"}
+{"ts": 1765326334.7764404, "kind": "task", "path": "task-76", "reason": "[task-76] processing task: load_tier_183"}
+{"ts": 1765326334.7763417, "kind": "task", "path": "task-78", "reason": "[task-78] processing task: load_tier_182"}
+{"ts": 1765326334.7758253, "kind": "task", "path": "task-72", "reason": "[task-72] processing task: load_tier_181"}
+{"ts": 1765326334.7755811, "kind": "dispatch", "path": "load_tier_183", "reason": "Task dispatched: load_tier_183"}
+{"ts": 1765326334.7768328, "kind": "dispatch", "path": "load_tier_184", "reason": "Task dispatched: load_tier_184"}
+{"ts": 1765326334.7768888, "kind": "task", "path": "task-77", "reason": "[task-77] processing task: load_tier_184"}
+{"ts": 1765326334.7770133, "kind": "dispatch", "path": "load_tier_185", "reason": "Task dispatched: load_tier_185"}
+{"ts": 1765326334.7770998, "kind": "task", "path": "task-81", "reason": "[task-81] processing task: load_tier_185"}
+{"ts": 1765326334.777196, "kind": "dispatch", "path": "load_tier_186", "reason": "Task dispatched: load_tier_186"}
+{"ts": 1765326334.7772377, "kind": "task", "path": "task-79", "reason": "[task-79] processing task: load_tier_186"}
+{"ts": 1765326334.777528, "kind": "task", "path": "task-80", "reason": "[task-80] processing task: load_tier_187"}
+{"ts": 1765326334.777505, "kind": "dispatch", "path": "load_tier_187", "reason": "Task dispatched: load_tier_187"}
+{"ts": 1765326334.7779868, "kind": "dispatch", "path": "load_tier_188", "reason": "Task dispatched: load_tier_188"}
+{"ts": 1765326334.7780998, "kind": "task", "path": "task-83", "reason": "[task-83] processing task: load_tier_188"}
+{"ts": 1765326334.778066, "kind": "dispatch", "path": "load_aem_1", "reason": "Task dispatched: load_aem_1"}
+{"ts": 1765326334.7784286, "kind": "task", "path": "task-83", "reason": "[task-83] processing task: load_aem_1"}
+{"ts": 1765326334.7784677, "kind": "dispatch", "path": "load_aem_2", "reason": "Task dispatched: load_aem_2"}
+{"ts": 1765326334.7785099, "kind": "task", "path": "task-84", "reason": "[task-84] processing task: load_aem_2"}
+{"ts": 1765326334.7788694, "kind": "dispatch", "path": "load_aem_3", "reason": "Task dispatched: load_aem_3"}
+{"ts": 1765326334.778935, "kind": "task", "path": "task-85", "reason": "[task-85] processing task: load_aem_3"}
+{"ts": 1765326334.779153, "kind": "dispatch", "path": "load_aem_4", "reason": "Task dispatched: load_aem_4"}
+{"ts": 1765326334.7792006, "kind": "task", "path": "task-86", "reason": "[task-86] processing task: load_aem_4"}
+{"ts": 1765326334.7795124, "kind": "dispatch", "path": "load_aem_5", "reason": "Task dispatched: load_aem_5"}
+{"ts": 1765326334.7795448, "kind": "task", "path": "task-87", "reason": "[task-87] processing task: load_aem_5"}
+{"ts": 1765326334.7799017, "kind": "dispatch", "path": "load_aem_6", "reason": "Task dispatched: load_aem_6"}
+{"ts": 1765326334.7799277, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: load_aem_6"}
+{"ts": 1765326334.7801619, "kind": "task", "path": "task-89", "reason": "[task-89] processing task: load_aem_7"}
+{"ts": 1765326334.7801218, "kind": "dispatch", "path": "load_aem_7", "reason": "Task dispatched: load_aem_7"}
+{"ts": 1765326334.7804444, "kind": "task", "path": "task-90", "reason": "[task-90] processing task: load_aem_8"}
+{"ts": 1765326334.780417, "kind": "dispatch", "path": "load_aem_8", "reason": "Task dispatched: load_aem_8"}
+{"ts": 1765326334.780606, "kind": "dispatch", "path": "load_aem_9", "reason": "Task dispatched: load_aem_9"}
+{"ts": 1765326334.780803, "kind": "dispatch", "path": "load_aem_10", "reason": "Task dispatched: load_aem_10"}
+{"ts": 1765326334.7809536, "kind": "task", "path": "task-92", "reason": "[task-92] processing task: load_aem_10"}
+{"ts": 1765326334.780646, "kind": "task", "path": "task-90", "reason": "[task-90] processing task: load_aem_9"}
+{"ts": 1765326334.7813182, "kind": "dispatch", "path": "load_aem_11", "reason": "Task dispatched: load_aem_11"}
+{"ts": 1765326334.781415, "kind": "task", "path": "task-94", "reason": "[task-94] processing task: load_aem_11"}
+{"ts": 1765326334.7814791, "kind": "dispatch", "path": "load_aem_12", "reason": "Task dispatched: load_aem_12"}
+{"ts": 1765326334.781634, "kind": "task", "path": "task-93", "reason": "[task-93] processing task: load_aem_12"}
+{"ts": 1765326334.7818635, "kind": "dispatch", "path": "load_aem_13", "reason": "Task dispatched: load_aem_13"}
+{"ts": 1765326334.7820995, "kind": "dispatch", "path": "load_aem_14", "reason": "Task dispatched: load_aem_14"}
+{"ts": 1765326334.782204, "kind": "task", "path": "task-96", "reason": "[task-96] processing task: load_aem_14"}
+{"ts": 1765326334.782312, "kind": "dispatch", "path": "load_aem_15", "reason": "Task dispatched: load_aem_15"}
+{"ts": 1765326334.7819786, "kind": "task", "path": "task-95", "reason": "[task-95] processing task: load_aem_13"}
+{"ts": 1765326334.7823422, "kind": "task", "path": "task-97", "reason": "[task-97] processing task: load_aem_15"}
+{"ts": 1765326334.782924, "kind": "task", "path": "task-98", "reason": "[task-98] processing task: load_aem_16"}
+{"ts": 1765326334.782896, "kind": "dispatch", "path": "load_aem_16", "reason": "Task dispatched: load_aem_16"}
+{"ts": 1765326334.7832098, "kind": "task", "path": "task-99", "reason": "[task-99] processing task: load_aem_17"}
+{"ts": 1765326334.7831633, "kind": "dispatch", "path": "load_aem_17", "reason": "Task dispatched: load_aem_17"}
+{"ts": 1765326334.7834225, "kind": "task", "path": "task-100", "reason": "[task-100] processing task: load_aem_18"}
+{"ts": 1765326334.783388, "kind": "dispatch", "path": "load_aem_18", "reason": "Task dispatched: load_aem_18"}
+{"ts": 1765326334.7836199, "kind": "task", "path": "task-102", "reason": "[task-102] processing task: load_aem_19"}
+{"ts": 1765326334.7835863, "kind": "dispatch", "path": "load_aem_19", "reason": "Task dispatched: load_aem_19"}
+{"ts": 1765326334.7837815, "kind": "dispatch", "path": "load_aem_20", "reason": "Task dispatched: load_aem_20"}
+{"ts": 1765326334.783821, "kind": "task", "path": "task-101", "reason": "[task-101] processing task: load_aem_20"}
+{"ts": 1765326334.783964, "kind": "dispatch", "path": "load_aem_21", "reason": "Task dispatched: load_aem_21"}
+{"ts": 1765326334.7841501, "kind": "task", "path": "task-103", "reason": "[task-103] processing task: load_aem_21"}
+{"ts": 1765326334.784373, "kind": "task", "path": "task-104", "reason": "[task-104] processing task: load_aem_22"}
+{"ts": 1765326334.7843404, "kind": "dispatch", "path": "load_aem_22", "reason": "Task dispatched: load_aem_22"}
+{"ts": 1765326334.7845476, "kind": "dispatch", "path": "load_aem_23", "reason": "Task dispatched: load_aem_23"}
+{"ts": 1765326334.7845762, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: load_aem_23"}
+{"ts": 1765326334.784756, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: load_aem_24"}
+{"ts": 1765326334.7847211, "kind": "dispatch", "path": "load_aem_24", "reason": "Task dispatched: load_aem_24"}
+{"ts": 1765326334.7850227, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: load_aem_25"}
+{"ts": 1765326334.7849946, "kind": "dispatch", "path": "load_aem_25", "reason": "Task dispatched: load_aem_25"}
+{"ts": 1765326334.7851896, "kind": "dispatch", "path": "load_aem_26", "reason": "Task dispatched: load_aem_26"}
+{"ts": 1765326334.7852638, "kind": "dispatch", "path": "load_aem_27", "reason": "Task dispatched: load_aem_27"}
+{"ts": 1765326334.7853363, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: load_aem_26"}
+{"ts": 1765326334.7854793, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: load_aem_27"}
+{"ts": 1765326334.7855687, "kind": "dispatch", "path": "load_aem_28", "reason": "Task dispatched: load_aem_28"}
+{"ts": 1765326334.7856147, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: load_aem_28"}
+{"ts": 1765326334.7859268, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: load_aem_29"}
+{"ts": 1765326334.7858741, "kind": "dispatch", "path": "load_aem_29", "reason": "Task dispatched: load_aem_29"}
+{"ts": 1765326334.7861462, "kind": "dispatch", "path": "load_aem_30", "reason": "Task dispatched: load_aem_30"}
+{"ts": 1765326334.7863283, "kind": "dispatch", "path": "load_aem_31", "reason": "Task dispatched: load_aem_31"}
+{"ts": 1765326334.7864149, "kind": "dispatch", "path": "load_aem_32", "reason": "Task dispatched: load_aem_32"}
+{"ts": 1765326334.7865705, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: load_aem_30"}
+{"ts": 1765326334.7867262, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: load_aem_31"}
+{"ts": 1765326334.786961, "kind": "dispatch", "path": "load_aem_33", "reason": "Task dispatched: load_aem_33"}
+{"ts": 1765326334.7871308, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: load_aem_32"}
+{"ts": 1765326334.7871594, "kind": "dispatch", "path": "load_aem_34", "reason": "Task dispatched: load_aem_34"}
+{"ts": 1765326334.7876155, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: load_aem_33"}
+{"ts": 1765326334.7877584, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: load_aem_35"}
+{"ts": 1765326334.7875288, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: load_aem_34"}
+{"ts": 1765326334.7875755, "kind": "dispatch", "path": "load_aem_35", "reason": "Task dispatched: load_aem_35"}
+{"ts": 1765326334.7881255, "kind": "dispatch", "path": "load_aem_36", "reason": "Task dispatched: load_aem_36"}
+{"ts": 1765326334.7881603, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: load_aem_36"}
+{"ts": 1765326334.7883239, "kind": "dispatch", "path": "load_aem_37", "reason": "Task dispatched: load_aem_37"}
+{"ts": 1765326334.7884262, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: load_aem_37"}
+{"ts": 1765326334.788539, "kind": "dispatch", "path": "load_aem_38", "reason": "Task dispatched: load_aem_38"}
+{"ts": 1765326334.7885756, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: load_aem_38"}
+{"ts": 1765326334.7890186, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: load_aem_39"}
+{"ts": 1765326334.7889872, "kind": "dispatch", "path": "load_aem_39", "reason": "Task dispatched: load_aem_39"}
+{"ts": 1765326334.789173, "kind": "dispatch", "path": "load_aem_40", "reason": "Task dispatched: load_aem_40"}
+{"ts": 1765326334.7892394, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: load_aem_40"}
+{"ts": 1765326334.7893672, "kind": "dispatch", "path": "load_aem_41", "reason": "Task dispatched: load_aem_41"}
+{"ts": 1765326334.7894006, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: load_aem_41"}
+{"ts": 1765326334.7895691, "kind": "dispatch", "path": "load_aem_42", "reason": "Task dispatched: load_aem_42"}
+{"ts": 1765326334.7896535, "kind": "task", "path": "task-20", "reason": "[task-20] processing task: load_aem_42"}
+{"ts": 1765326334.790092, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: load_aem_43"}
+{"ts": 1765326334.7900622, "kind": "dispatch", "path": "load_aem_43", "reason": "Task dispatched: load_aem_43"}
+{"ts": 1765326334.7903094, "kind": "dispatch", "path": "load_aem_44", "reason": "Task dispatched: load_aem_44"}
+{"ts": 1765326334.7904007, "kind": "dispatch", "path": "load_aem_45", "reason": "Task dispatched: load_aem_45"}
+{"ts": 1765326334.7914023, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: load_aem_44"}
+{"ts": 1765326334.7904706, "kind": "dispatch", "path": "load_aem_46", "reason": "Task dispatched: load_aem_46"}
+{"ts": 1765326334.7915945, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: load_aem_45"}
+{"ts": 1765326334.7917202, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: load_aem_46"}
+{"ts": 1765326334.7917738, "kind": "dispatch", "path": "load_aem_47", "reason": "Task dispatched: load_aem_47"}
+{"ts": 1765326334.792052, "kind": "task", "path": "task-30", "reason": "[task-30] processing task: load_aem_47"}
+{"ts": 1765326334.792227, "kind": "dispatch", "path": "load_aem_48", "reason": "Task dispatched: load_aem_48"}
+{"ts": 1765326334.792264, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: load_aem_48"}
+{"ts": 1765326334.7924745, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: load_aem_49"}
+{"ts": 1765326334.7924411, "kind": "dispatch", "path": "load_aem_49", "reason": "Task dispatched: load_aem_49"}
+{"ts": 1765326334.7936463, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: load_aem_50"}
+{"ts": 1765326334.7936144, "kind": "dispatch", "path": "load_aem_50", "reason": "Task dispatched: load_aem_50"}
+{"ts": 1765326334.7938304, "kind": "task", "path": "task-25", "reason": "[task-25] processing task: load_aem_51"}
+{"ts": 1765326334.7937887, "kind": "dispatch", "path": "load_aem_51", "reason": "Task dispatched: load_aem_51"}
+{"ts": 1765326334.793983, "kind": "dispatch", "path": "load_aem_52", "reason": "Task dispatched: load_aem_52"}
+{"ts": 1765326334.7940779, "kind": "task", "path": "task-23", "reason": "[task-23] processing task: load_aem_52"}
+{"ts": 1765326334.7942111, "kind": "dispatch", "path": "load_aem_53", "reason": "Task dispatched: load_aem_53"}
+{"ts": 1765326334.7945025, "kind": "task", "path": "task-32", "reason": "[task-32] processing task: load_aem_54"}
+{"ts": 1765326334.7942395, "kind": "task", "path": "task-26", "reason": "[task-26] processing task: load_aem_53"}
+{"ts": 1765326334.794473, "kind": "dispatch", "path": "load_aem_54", "reason": "Task dispatched: load_aem_54"}
+{"ts": 1765326334.795194, "kind": "dispatch", "path": "load_aem_55", "reason": "Task dispatched: load_aem_55"}
+{"ts": 1765326334.7952235, "kind": "task", "path": "task-31", "reason": "[task-31] processing task: load_aem_55"}
+{"ts": 1765326334.7956362, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: load_aem_56"}
+{"ts": 1765326334.7955444, "kind": "dispatch", "path": "load_aem_56", "reason": "Task dispatched: load_aem_56"}
+{"ts": 1765326334.7958572, "kind": "dispatch", "path": "load_aem_57", "reason": "Task dispatched: load_aem_57"}
+{"ts": 1765326334.7960923, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: load_aem_57"}
+{"ts": 1765326334.7963705, "kind": "task", "path": "task-40", "reason": "[task-40] processing task: load_aem_58"}
+{"ts": 1765326334.7963345, "kind": "dispatch", "path": "load_aem_58", "reason": "Task dispatched: load_aem_58"}
+{"ts": 1765326334.7965317, "kind": "dispatch", "path": "load_aem_59", "reason": "Task dispatched: load_aem_59"}
+{"ts": 1765326334.7965605, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: load_aem_59"}
+{"ts": 1765326334.7966988, "kind": "dispatch", "path": "load_aem_60", "reason": "Task dispatched: load_aem_60"}
+{"ts": 1765326334.7969098, "kind": "task", "path": "task-33", "reason": "[task-33] processing task: load_aem_61"}
+{"ts": 1765326334.796741, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: load_aem_60"}
+{"ts": 1765326334.7968738, "kind": "dispatch", "path": "load_aem_61", "reason": "Task dispatched: load_aem_61"}
+{"ts": 1765326334.7972512, "kind": "dispatch", "path": "load_aem_62", "reason": "Task dispatched: load_aem_62"}
+{"ts": 1765326334.7973409, "kind": "task", "path": "task-35", "reason": "[task-35] processing task: load_aem_62"}
+{"ts": 1765326334.797451, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: load_aem_63"}
+{"ts": 1765326334.7974253, "kind": "dispatch", "path": "load_aem_63", "reason": "Task dispatched: load_aem_63"}
+{"ts": 1765326334.7977343, "kind": "dispatch", "path": "load_aem_64", "reason": "Task dispatched: load_aem_64"}
+{"ts": 1765326334.7980468, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: load_aem_64"}
+{"ts": 1765326334.798305, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: load_aem_65"}
+{"ts": 1765326334.7982557, "kind": "dispatch", "path": "load_aem_65", "reason": "Task dispatched: load_aem_65"}
+{"ts": 1765326334.7984672, "kind": "dispatch", "path": "load_aem_66", "reason": "Task dispatched: load_aem_66"}
+{"ts": 1765326334.7984967, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: load_aem_66"}
+{"ts": 1765326335.3089159, "kind": "dispatch", "path": "validate_module_imports", "reason": "Task dispatched: validate_module_imports"}
+{"ts": 1765326335.3090713, "kind": "dispatch", "path": "verify_module_dependencies", "reason": "Task dispatched: verify_module_dependencies"}
+{"ts": 1765326335.3089674, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: validate_module_imports"}
+{"ts": 1765326335.3091211, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: verify_module_dependencies"}
+{"ts": 1765326335.8108575, "kind": "dispatch", "path": "fuse_category_core_systems", "reason": "Task dispatched: fuse_category_core_systems"}
+{"ts": 1765326335.8109524, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: fuse_category_core_systems"}
+{"ts": 1765326335.8110394, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: fuse_category_memory_fabric"}
+{"ts": 1765326335.8110008, "kind": "dispatch", "path": "fuse_category_memory_fabric", "reason": "Task dispatched: fuse_category_memory_fabric"}
+{"ts": 1765326335.8114386, "kind": "dispatch", "path": "fuse_category_nexus_integration", "reason": "Task dispatched: fuse_category_nexus_integration"}
+{"ts": 1765326335.8115125, "kind": "dispatch", "path": "fuse_category_learning_engines", "reason": "Task dispatched: fuse_category_learning_engines"}
+{"ts": 1765326335.8116593, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: fuse_category_learning_engines"}
+{"ts": 1765326335.811636, "kind": "task", "path": "task-49", "reason": "[task-49] processing task: fuse_category_nexus_integration"}
+{"ts": 1765326335.8117762, "kind": "dispatch", "path": "fuse_category_reasoning_modules", "reason": "Task dispatched: fuse_category_reasoning_modules"}
+{"ts": 1765326335.8118052, "kind": "task", "path": "task-50", "reason": "[task-50] processing task: fuse_category_reasoning_modules"}
+{"ts": 1765326335.8123348, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: fuse_category_perception_handlers"}
+{"ts": 1765326335.8122993, "kind": "dispatch", "path": "fuse_category_perception_handlers", "reason": "Task dispatched: fuse_category_perception_handlers"}
+{"ts": 1765326335.812782, "kind": "dispatch", "path": "fuse_category_action_executors", "reason": "Task dispatched: fuse_category_action_executors"}
+{"ts": 1765326335.8128326, "kind": "task", "path": "task-52", "reason": "[task-52] processing task: fuse_category_action_executors"}
+{"ts": 1765326335.813015, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: fuse_category_communication_layer"}
+{"ts": 1765326335.8129597, "kind": "dispatch", "path": "fuse_category_communication_layer", "reason": "Task dispatched: fuse_category_communication_layer"}
+{"ts": 1765326335.8135, "kind": "dispatch", "path": "fuse_category_security_protocols", "reason": "Task dispatched: fuse_category_security_protocols"}
+{"ts": 1765326335.8135376, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: fuse_category_security_protocols"}
+{"ts": 1765326335.8138306, "kind": "task", "path": "task-56", "reason": "[task-56] processing task: fuse_category_optimization_engines"}
+{"ts": 1765326335.8137038, "kind": "dispatch", "path": "fuse_category_optimization_engines", "reason": "Task dispatched: fuse_category_optimization_engines"}
+{"ts": 1765326335.8140705, "kind": "dispatch", "path": "fuse_category_adaptation_systems", "reason": "Task dispatched: fuse_category_adaptation_systems"}
+{"ts": 1765326335.8141325, "kind": "task", "path": "task-55", "reason": "[task-55] processing task: fuse_category_adaptation_systems"}
+{"ts": 1765326335.8141856, "kind": "dispatch", "path": "fuse_category_interface_bridges", "reason": "Task dispatched: fuse_category_interface_bridges"}
+{"ts": 1765326335.814355, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: fuse_category_interface_bridges"}
+{"ts": 1765326335.8145616, "kind": "dispatch", "path": "fuse_category_analytics_processors", "reason": "Task dispatched: fuse_category_analytics_processors"}
+{"ts": 1765326335.8147948, "kind": "dispatch", "path": "fuse_modules_with_services", "reason": "Task dispatched: fuse_modules_with_services"}
+{"ts": 1765326335.8147712, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: fuse_category_analytics_processors"}
+{"ts": 1765326335.814903, "kind": "task", "path": "task-59", "reason": "[task-59] processing task: fuse_modules_with_services"}
+{"ts": 1765326335.8153625, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: integrate_nexus_v3"}
+{"ts": 1765326335.8153286, "kind": "dispatch", "path": "integrate_nexus_v3", "reason": "Task dispatched: integrate_nexus_v3"}
+{"ts": 1765326335.815686, "kind": "dispatch", "path": "connect_memory_fabric_v2", "reason": "Task dispatched: connect_memory_fabric_v2"}
+{"ts": 1765326335.8158016, "kind": "task", "path": "task-64", "reason": "[task-64] processing task: connect_memory_fabric_v2"}
+{"ts": 1765326336.3249226, "kind": "dispatch", "path": "build_autonomy_loop", "reason": "Task dispatched: build_autonomy_loop"}
+{"ts": 1765326336.325022, "kind": "dispatch", "path": "configure_background_routing", "reason": "Task dispatched: configure_background_routing"}
+{"ts": 1765326336.325178, "kind": "task", "path": "task-68", "reason": "[task-68] processing task: configure_background_routing"}
+{"ts": 1765326336.3251429, "kind": "task", "path": "task-65", "reason": "[task-65] processing task: build_autonomy_loop"}
+{"ts": 1765326336.3253996, "kind": "dispatch", "path": "enable_self_optimization", "reason": "Task dispatched: enable_self_optimization"}
+{"ts": 1765326336.3255534, "kind": "dispatch", "path": "activate_adaptive_learning", "reason": "Task dispatched: activate_adaptive_learning"}
+{"ts": 1765326336.3254414, "kind": "task", "path": "task-70", "reason": "[task-70] processing task: enable_self_optimization"}
+{"ts": 1765326336.3257172, "kind": "task", "path": "task-62", "reason": "[task-62] processing task: activate_adaptive_learning"}
+{"ts": 1765326336.8340921, "kind": "dispatch", "path": "build_interface_layer", "reason": "Task dispatched: build_interface_layer"}
+{"ts": 1765326336.8342152, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: build_interface_layer"}
+{"ts": 1765326336.8344798, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: configure_cli_endpoints"}
+{"ts": 1765326336.8344264, "kind": "dispatch", "path": "configure_cli_endpoints", "reason": "Task dispatched: configure_cli_endpoints"}
+{"ts": 1765326336.8348484, "kind": "dispatch", "path": "configure_rest_api", "reason": "Task dispatched: configure_rest_api"}
+{"ts": 1765326336.8349965, "kind": "dispatch", "path": "enable_websocket_streaming", "reason": "Task dispatched: enable_websocket_streaming"}
+{"ts": 1765326336.8361516, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: configure_rest_api"}
+{"ts": 1765326336.8365264, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: enable_websocket_streaming"}
+{"ts": 1765326343.7982938, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326343.79893, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: optimize_learning_parameters"}
+{"ts": 1765326343.7983375, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: build_phase_4_6_modules"}
+{"ts": 1765326343.9175823, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326343.9177613, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: build_phase_4_6_modules"}
+{"ts": 1765326343.9178653, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: optimize_learning_parameters"}
+{"ts": 1765326358.803771, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: build_phase_4_6_modules"}
+{"ts": 1765326358.8037293, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326358.804334, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: optimize_learning_parameters"}
+{"ts": 1765326358.9185572, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326358.918154, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326358.91872, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326373.8046818, "kind": "task", "path": "healer-15", "reason": "[healer-15] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326373.805263, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: optimize_learning_parameters"}
+{"ts": 1765326373.8051665, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: build_phase_4_6_modules"}
+{"ts": 1765326373.9188805, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: build_phase_4_6_modules"}
+{"ts": 1765326373.9196446, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326373.9198647, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: optimize_learning_parameters"}
+{"ts": 1765326388.8056712, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326388.8062053, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: optimize_learning_parameters"}
+{"ts": 1765326388.8056962, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: build_phase_4_6_modules"}
+{"ts": 1765326388.9203944, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326388.920028, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326388.9204974, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326403.8067305, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: build_phase_4_6_modules"}
+{"ts": 1765326403.8069081, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: optimize_learning_parameters"}
+{"ts": 1765326403.8078465, "kind": "task", "path": "healer-15", "reason": "[healer-15] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326403.9218316, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326403.9226692, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: build_phase_4_6_modules"}
+{"ts": 1765326403.923706, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: optimize_learning_parameters"}
+{"ts": 1765326418.808326, "kind": "task", "path": "healer-15", "reason": "[healer-15] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326418.8083594, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: build_phase_4_6_modules"}
+{"ts": 1765326418.8084888, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: optimize_learning_parameters"}
+{"ts": 1765326418.9234343, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326418.922979, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326418.9236393, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326433.809424, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: build_phase_4_6_modules"}
+{"ts": 1765326433.8096757, "kind": "task", "path": "healer-12", "reason": "[healer-12] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326433.8097687, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: optimize_learning_parameters"}
+{"ts": 1765326433.9248898, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: build_phase_4_6_modules"}
+{"ts": 1765326433.9249842, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326433.9250314, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: optimize_learning_parameters"}
+{"ts": 1765326448.8105974, "kind": "task", "path": "task-256", "reason": "[task-256] processing task: build_phase_4_6_modules"}
+{"ts": 1765326448.8107913, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765326448.8104935, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326448.9255211, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326448.925473, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326448.9267018, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326463.81237, "kind": "task", "path": "healer-12", "reason": "[healer-12] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326463.8123276, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: build_phase_4_6_modules"}
+{"ts": 1765326463.8125973, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: optimize_learning_parameters"}
+{"ts": 1765326463.927517, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326463.9275827, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: optimize_learning_parameters"}
+{"ts": 1765326463.9275577, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: build_phase_4_6_modules"}
+{"ts": 1765326478.8127959, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: optimize_learning_parameters"}
+{"ts": 1765326478.8125534, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326478.8126605, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: build_phase_4_6_modules"}
+{"ts": 1765326478.9282274, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326478.9283113, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326478.9290009, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326493.8139517, "kind": "task", "path": "healer-12", "reason": "[healer-12] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326493.8144784, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: optimize_learning_parameters"}
+{"ts": 1765326493.8144145, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: build_phase_4_6_modules"}
+{"ts": 1765326493.9290988, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: build_phase_4_6_modules"}
+{"ts": 1765326493.9291458, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326493.9291832, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: optimize_learning_parameters"}
+{"ts": 1765326508.8148155, "kind": "task", "path": "healer-12", "reason": "[healer-12] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326508.8148408, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: build_phase_4_6_modules"}
+{"ts": 1765326508.8148618, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: optimize_learning_parameters"}
+{"ts": 1765326508.930484, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326508.9306688, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326508.93074, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326523.816026, "kind": "task", "path": "healer-14", "reason": "[healer-14] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326523.8169277, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: build_phase_4_6_modules"}
+{"ts": 1765326523.8170295, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: optimize_learning_parameters"}
+{"ts": 1765326523.9316, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326523.9323492, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: optimize_learning_parameters"}
+{"ts": 1765326523.9315386, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: build_phase_4_6_modules"}
+{"ts": 1765326538.8177106, "kind": "task", "path": "healer-14", "reason": "[healer-14] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326538.8177621, "kind": "task", "path": "task-282", "reason": "[task-282] processing task: build_phase_4_6_modules"}
+{"ts": 1765326538.8185647, "kind": "task", "path": "task-296", "reason": "[task-296] processing task: optimize_learning_parameters"}
+{"ts": 1765326538.9328876, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326538.9354239, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326538.9355216, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326553.8199043, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: build_phase_4_6_modules"}
+{"ts": 1765326553.8200455, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: optimize_learning_parameters"}
+{"ts": 1765326553.819636, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326553.936579, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765326553.936503, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: build_phase_4_6_modules"}
+{"ts": 1765326553.9362144, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326568.8206174, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: build_phase_4_6_modules"}
+{"ts": 1765326568.821748, "kind": "task", "path": "task-294", "reason": "[task-294] processing task: optimize_learning_parameters"}
+{"ts": 1765326568.8216727, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326568.9371445, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326568.937777, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765326568.938169, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326583.82226, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: build_phase_4_6_modules"}
+{"ts": 1765326583.822236, "kind": "task", "path": "healer-28", "reason": "[healer-28] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326583.8228102, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: optimize_learning_parameters"}
+{"ts": 1765326583.9384713, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765326583.9382248, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326583.9384031, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: build_phase_4_6_modules"}
+{"ts": 1765326598.8233845, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326598.8234127, "kind": "task", "path": "task-253", "reason": "[task-253] processing task: build_phase_4_6_modules"}
+{"ts": 1765326598.8237047, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: optimize_learning_parameters"}
+{"ts": 1765326598.9399903, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326598.9401913, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765326598.940395, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326613.8245254, "kind": "task", "path": "healer-28", "reason": "[healer-28] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326613.8245637, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: build_phase_4_6_modules"}
+{"ts": 1765326613.8250098, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: optimize_learning_parameters"}
+{"ts": 1765326613.9420216, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326613.9421396, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: build_phase_4_6_modules"}
+{"ts": 1765326613.942576, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: optimize_learning_parameters"}
+{"ts": 1765326628.8254387, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326628.8256245, "kind": "task", "path": "task-253", "reason": "[task-253] processing task: build_phase_4_6_modules"}
+{"ts": 1765326628.8260558, "kind": "task", "path": "task-253", "reason": "[task-253] processing task: optimize_learning_parameters"}
+{"ts": 1765326628.9428387, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326628.9445302, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765326628.944657, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326643.8264706, "kind": "task", "path": "healer-28", "reason": "[healer-28] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326643.8266659, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: build_phase_4_6_modules"}
+{"ts": 1765326643.8270588, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: optimize_learning_parameters"}
+{"ts": 1765326643.9449167, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: build_phase_4_6_modules"}
+{"ts": 1765326643.9448543, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326643.945355, "kind": "task", "path": "task-52", "reason": "[task-52] processing task: optimize_learning_parameters"}
+{"ts": 1765326658.827605, "kind": "task", "path": "task-253", "reason": "[task-253] processing task: optimize_learning_parameters"}
+{"ts": 1765326658.8275614, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765326658.8275256, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326658.9456282, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326658.946973, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326658.9470966, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326673.828671, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: build_phase_4_6_modules"}
+{"ts": 1765326673.8287125, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: optimize_learning_parameters"}
+{"ts": 1765326673.8286161, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326673.947076, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326673.947125, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: build_phase_4_6_modules"}
+{"ts": 1765326673.9472163, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765326688.8296113, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326688.8296535, "kind": "task", "path": "task-246", "reason": "[task-246] processing task: build_phase_4_6_modules"}
+{"ts": 1765326688.8303096, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326688.948207, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326688.94811, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326688.9484675, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326703.8305163, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326703.8310292, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: build_phase_4_6_modules"}
+{"ts": 1765326703.8310494, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: optimize_learning_parameters"}
+{"ts": 1765326703.949204, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326703.9493685, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: optimize_learning_parameters"}
+{"ts": 1765326703.9492385, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: build_phase_4_6_modules"}
+{"ts": 1765326718.8314543, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326718.8320687, "kind": "task", "path": "task-246", "reason": "[task-246] processing task: build_phase_4_6_modules"}
+{"ts": 1765326718.8321116, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326718.9504948, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326718.9505298, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326718.9509475, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326733.8322458, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: build_phase_4_6_modules"}
+{"ts": 1765326733.832208, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326733.8324943, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: optimize_learning_parameters"}
+{"ts": 1765326733.9514024, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326733.9516408, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: build_phase_4_6_modules"}
+{"ts": 1765326733.9521728, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: optimize_learning_parameters"}
+{"ts": 1765326748.83394, "kind": "task", "path": "healer-9", "reason": "[healer-9] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326748.833363, "kind": "task", "path": "task-256", "reason": "[task-256] processing task: build_phase_4_6_modules"}
+{"ts": 1765326748.8340762, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326748.9526806, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326748.9528153, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326748.952721, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765326763.835101, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: build_phase_4_6_modules"}
+{"ts": 1765326763.8350525, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326763.8353775, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: optimize_learning_parameters"}
+{"ts": 1765326763.9538717, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326763.9539578, "kind": "task", "path": "task-52", "reason": "[task-52] processing task: build_phase_4_6_modules"}
+{"ts": 1765326763.9543467, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: optimize_learning_parameters"}
+{"ts": 1765326778.8361077, "kind": "task", "path": "task-246", "reason": "[task-246] processing task: build_phase_4_6_modules"}
+{"ts": 1765326778.8364494, "kind": "task", "path": "healer-14", "reason": "[healer-14] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326778.836267, "kind": "task", "path": "task-246", "reason": "[task-246] processing task: optimize_learning_parameters"}
+{"ts": 1765326778.9553332, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326778.9555244, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326778.955898, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: optimize_learning_parameters"}
+{"ts": 1765326793.8373055, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: optimize_learning_parameters"}
+{"ts": 1765326793.8373563, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326793.8372517, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: build_phase_4_6_modules"}
+{"ts": 1765326793.9563248, "kind": "task", "path": "task-52", "reason": "[task-52] processing task: build_phase_4_6_modules"}
+{"ts": 1765326793.9562387, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326793.9565907, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: optimize_learning_parameters"}
+{"ts": 1765326808.8393772, "kind": "task", "path": "task-294", "reason": "[task-294] processing task: build_phase_4_6_modules"}
+{"ts": 1765326808.839331, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326808.8403263, "kind": "task", "path": "task-246", "reason": "[task-246] processing task: optimize_learning_parameters"}
+{"ts": 1765326808.9571385, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326808.9581144, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765326808.9581587, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: optimize_learning_parameters"}
+{"ts": 1765326823.841445, "kind": "task", "path": "healer-20", "reason": "[healer-20] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326823.8416865, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: build_phase_4_6_modules"}
+{"ts": 1765326823.841864, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: optimize_learning_parameters"}
+{"ts": 1765326823.958592, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326823.9588282, "kind": "task", "path": "task-50", "reason": "[task-50] processing task: optimize_learning_parameters"}
+{"ts": 1765326823.9587996, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: build_phase_4_6_modules"}
+{"ts": 1765326838.843171, "kind": "task", "path": "task-265", "reason": "[task-265] processing task: optimize_learning_parameters"}
+{"ts": 1765326838.8425877, "kind": "task", "path": "healer-14", "reason": "[healer-14] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326838.843145, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: build_phase_4_6_modules"}
+{"ts": 1765326838.960032, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326838.9602015, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326838.9601753, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765326853.8439968, "kind": "task", "path": "task-30", "reason": "[task-30] processing task: build_phase_4_6_modules"}
+{"ts": 1765326853.843966, "kind": "task", "path": "healer-13", "reason": "[healer-13] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326853.8443375, "kind": "task", "path": "task-33", "reason": "[task-33] processing task: optimize_learning_parameters"}
+{"ts": 1765326853.9610894, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: build_phase_4_6_modules"}
+{"ts": 1765326853.9611878, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: optimize_learning_parameters"}
+{"ts": 1765326853.9615173, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326868.8449178, "kind": "task", "path": "healer-14", "reason": "[healer-14] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326868.8449569, "kind": "task", "path": "task-265", "reason": "[task-265] processing task: build_phase_4_6_modules"}
+{"ts": 1765326868.8449914, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: optimize_learning_parameters"}
+{"ts": 1765326868.9613185, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326868.9613645, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326868.9616854, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765326883.8459485, "kind": "task", "path": "task-33", "reason": "[task-33] processing task: build_phase_4_6_modules"}
+{"ts": 1765326883.846022, "kind": "task", "path": "task-30", "reason": "[task-30] processing task: optimize_learning_parameters"}
+{"ts": 1765326883.8461754, "kind": "task", "path": "healer-13", "reason": "[healer-13] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326883.9622111, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: build_phase_4_6_modules"}
+{"ts": 1765326883.962184, "kind": "task", "path": "healer-5", "reason": "[healer-5] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326883.9624054, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: optimize_learning_parameters"}
+{"ts": 1765326898.846908, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326898.8469813, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: optimize_learning_parameters"}
+{"ts": 1765326898.846943, "kind": "task", "path": "task-283", "reason": "[task-283] processing task: build_phase_4_6_modules"}
+{"ts": 1765326898.963255, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326898.9635212, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326898.9631987, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326913.8480976, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326913.8487751, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: optimize_learning_parameters"}
+{"ts": 1765326913.8487053, "kind": "task", "path": "task-30", "reason": "[task-30] processing task: build_phase_4_6_modules"}
+{"ts": 1765326913.964659, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: optimize_learning_parameters"}
+{"ts": 1765326913.9645088, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326913.964608, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: build_phase_4_6_modules"}
+{"ts": 1765326928.8491483, "kind": "task", "path": "task-283", "reason": "[task-283] processing task: optimize_learning_parameters"}
+{"ts": 1765326928.849098, "kind": "task", "path": "healer-28", "reason": "[healer-28] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326928.849134, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: build_phase_4_6_modules"}
+{"ts": 1765326928.9662013, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326928.9664862, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765326928.9665763, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326943.8501222, "kind": "task", "path": "healer-24", "reason": "[healer-24] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326943.8502886, "kind": "task", "path": "task-30", "reason": "[task-30] processing task: optimize_learning_parameters"}
+{"ts": 1765326943.8501463, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: build_phase_4_6_modules"}
+{"ts": 1765326943.9662614, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326943.9663835, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: build_phase_4_6_modules"}
+{"ts": 1765326943.966523, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: optimize_learning_parameters"}
+{"ts": 1765326958.8511705, "kind": "task", "path": "task-265", "reason": "[task-265] processing task: optimize_learning_parameters"}
+{"ts": 1765326958.8510962, "kind": "task", "path": "healer-28", "reason": "[healer-28] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326958.8511348, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: build_phase_4_6_modules"}
+{"ts": 1765326958.9673276, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326958.9676726, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765326958.9676955, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765326973.852548, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: build_phase_4_6_modules"}
+{"ts": 1765326973.8525817, "kind": "task", "path": "task-31", "reason": "[task-31] processing task: optimize_learning_parameters"}
+{"ts": 1765326973.8525078, "kind": "task", "path": "healer-23", "reason": "[healer-23] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326973.968632, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: build_phase_4_6_modules"}
+{"ts": 1765326973.968888, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: optimize_learning_parameters"}
+{"ts": 1765326973.968685, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326988.853685, "kind": "task", "path": "task-265", "reason": "[task-265] processing task: build_phase_4_6_modules"}
+{"ts": 1765326988.853875, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765326988.8539472, "kind": "task", "path": "healer-28", "reason": "[healer-28] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326988.9692376, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: build_phase_4_6_modules"}
+{"ts": 1765326988.9691412, "kind": "task", "path": "healer-24", "reason": "[healer-24] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765326988.9694538, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765327003.8549397, "kind": "task", "path": "task-31", "reason": "[task-31] processing task: build_phase_4_6_modules"}
+{"ts": 1765327003.854922, "kind": "task", "path": "healer-19", "reason": "[healer-19] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327003.8555138, "kind": "task", "path": "task-27", "reason": "[task-27] processing task: optimize_learning_parameters"}
+{"ts": 1765327003.970253, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327003.9702957, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: build_phase_4_6_modules"}
+{"ts": 1765327003.970335, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: optimize_learning_parameters"}
+{"ts": 1765327018.8557765, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327018.8558116, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765327018.8558474, "kind": "task", "path": "task-293", "reason": "[task-293] processing task: optimize_learning_parameters"}
+{"ts": 1765327018.9715586, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765327018.9717546, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765327018.971254, "kind": "task", "path": "healer-24", "reason": "[healer-24] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327033.8567553, "kind": "task", "path": "healer-19", "reason": "[healer-19] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327033.8569114, "kind": "task", "path": "task-31", "reason": "[task-31] processing task: optimize_learning_parameters"}
+{"ts": 1765327033.8568501, "kind": "task", "path": "task-27", "reason": "[task-27] processing task: build_phase_4_6_modules"}
+{"ts": 1765327033.9722507, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: optimize_learning_parameters"}
+{"ts": 1765327033.9721725, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327033.9722269, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: build_phase_4_6_modules"}
+{"ts": 1765327048.858053, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327048.8585262, "kind": "task", "path": "task-265", "reason": "[task-265] processing task: build_phase_4_6_modules"}
+{"ts": 1765327048.8588588, "kind": "task", "path": "task-283", "reason": "[task-283] processing task: optimize_learning_parameters"}
+{"ts": 1765327048.9735372, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: build_phase_4_6_modules"}
+{"ts": 1765327048.9736934, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: optimize_learning_parameters"}
+{"ts": 1765327048.9733698, "kind": "task", "path": "healer-24", "reason": "[healer-24] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327063.8589785, "kind": "task", "path": "healer-19", "reason": "[healer-19] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327063.8590183, "kind": "task", "path": "task-27", "reason": "[task-27] processing task: build_phase_4_6_modules"}
+{"ts": 1765327063.8590627, "kind": "task", "path": "task-31", "reason": "[task-31] processing task: optimize_learning_parameters"}
+{"ts": 1765327063.974642, "kind": "task", "path": "task-49", "reason": "[task-49] processing task: build_phase_4_6_modules"}
+{"ts": 1765327063.9749157, "kind": "task", "path": "healer-24", "reason": "[healer-24] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327063.9748793, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: optimize_learning_parameters"}
+{"ts": 1765327078.8601093, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327078.860808, "kind": "task", "path": "task-265", "reason": "[task-265] processing task: optimize_learning_parameters"}
+{"ts": 1765327078.8601625, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: build_phase_4_6_modules"}
+{"ts": 1765327078.9757433, "kind": "task", "path": "healer-11", "reason": "[healer-11] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327078.9759076, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: build_phase_4_6_modules"}
+{"ts": 1765327078.9760194, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: optimize_learning_parameters"}
+{"ts": 1765327093.8620121, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: build_phase_4_6_modules"}
+{"ts": 1765327093.862158, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: optimize_learning_parameters"}
+{"ts": 1765327093.8626897, "kind": "task", "path": "healer-19", "reason": "[healer-19] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327093.9790406, "kind": "task", "path": "healer-11", "reason": "[healer-11] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327093.9792879, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: build_phase_4_6_modules"}
+{"ts": 1765327093.9794664, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: optimize_learning_parameters"}
+{"ts": 1765327108.8625808, "kind": "task", "path": "healer-31", "reason": "[healer-31] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327108.8621855, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: build_phase_4_6_modules"}
+{"ts": 1765327108.8624995, "kind": "task", "path": "task-293", "reason": "[task-293] processing task: optimize_learning_parameters"}
+{"ts": 1765327108.9811184, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: build_phase_4_6_modules"}
+{"ts": 1765327108.9812684, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: optimize_learning_parameters"}
+{"ts": 1765327108.9810688, "kind": "task", "path": "healer-12", "reason": "[healer-12] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327123.8637826, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: optimize_learning_parameters"}
+{"ts": 1765327123.8636167, "kind": "task", "path": "healer-19", "reason": "[healer-19] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327123.8636653, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: build_phase_4_6_modules"}
+{"ts": 1765327123.9816027, "kind": "task", "path": "healer-12", "reason": "[healer-12] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327123.9816935, "kind": "task", "path": "task-49", "reason": "[task-49] processing task: build_phase_4_6_modules"}
+{"ts": 1765327123.98172, "kind": "task", "path": "task-75", "reason": "[task-75] processing task: optimize_learning_parameters"}
+{"ts": 1765327138.8647778, "kind": "task", "path": "healer-28", "reason": "[healer-28] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327138.8655035, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: optimize_learning_parameters"}
+{"ts": 1765327138.8656118, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: build_phase_4_6_modules"}
+{"ts": 1765327138.9827106, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: build_phase_4_6_modules"}
+{"ts": 1765327138.9826567, "kind": "task", "path": "healer-20", "reason": "[healer-20] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327138.9832149, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: optimize_learning_parameters"}
+{"ts": 1765327153.8664258, "kind": "task", "path": "task-26", "reason": "[task-26] processing task: build_phase_4_6_modules"}
+{"ts": 1765327153.8670254, "kind": "task", "path": "healer-19", "reason": "[healer-19] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327153.8664567, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: optimize_learning_parameters"}
+{"ts": 1765327153.983763, "kind": "task", "path": "healer-20", "reason": "[healer-20] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327153.9840436, "kind": "task", "path": "task-49", "reason": "[task-49] processing task: optimize_learning_parameters"}
+{"ts": 1765327153.9839678, "kind": "task", "path": "task-75", "reason": "[task-75] processing task: build_phase_4_6_modules"}
+{"ts": 1765327168.8674033, "kind": "task", "path": "healer-28", "reason": "[healer-28] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327168.867684, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: optimize_learning_parameters"}
+{"ts": 1765327168.867458, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: build_phase_4_6_modules"}
+{"ts": 1765327168.9849277, "kind": "task", "path": "healer-16", "reason": "[healer-16] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327168.9856515, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: build_phase_4_6_modules"}
+{"ts": 1765327168.98569, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765327183.8685918, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: build_phase_4_6_modules"}
+{"ts": 1765327183.8689919, "kind": "task", "path": "task-26", "reason": "[task-26] processing task: optimize_learning_parameters"}
+{"ts": 1765327183.868559, "kind": "task", "path": "healer-19", "reason": "[healer-19] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327183.986215, "kind": "task", "path": "healer-20", "reason": "[healer-20] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327183.9862585, "kind": "task", "path": "task-65", "reason": "[task-65] processing task: build_phase_4_6_modules"}
+{"ts": 1765327183.98671, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: optimize_learning_parameters"}
+{"ts": 1765327198.8700163, "kind": "task", "path": "healer-20", "reason": "[healer-20] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327198.8703492, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: build_phase_4_6_modules"}
+{"ts": 1765327198.8703873, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: optimize_learning_parameters"}
+{"ts": 1765327198.9872077, "kind": "task", "path": "healer-13", "reason": "[healer-13] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327198.9875684, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765327198.9872692, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: build_phase_4_6_modules"}
+{"ts": 1765327213.871138, "kind": "task", "path": "healer-19", "reason": "[healer-19] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327213.871171, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: build_phase_4_6_modules"}
+{"ts": 1765327213.8714, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: optimize_learning_parameters"}
+{"ts": 1765327213.9881139, "kind": "task", "path": "healer-20", "reason": "[healer-20] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327213.9886022, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: build_phase_4_6_modules"}
+{"ts": 1765327213.9887953, "kind": "task", "path": "task-65", "reason": "[task-65] processing task: optimize_learning_parameters"}
+{"ts": 1765327228.872257, "kind": "task", "path": "task-33", "reason": "[task-33] processing task: build_phase_4_6_modules"}
+{"ts": 1765327228.8721828, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327228.8728094, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: optimize_learning_parameters"}
+{"ts": 1765327228.989192, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: build_phase_4_6_modules"}
+{"ts": 1765327228.9891596, "kind": "task", "path": "healer-16", "reason": "[healer-16] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327228.9894073, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765327243.8734088, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: build_phase_4_6_modules"}
+{"ts": 1765327243.8734481, "kind": "task", "path": "healer-19", "reason": "[healer-19] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327243.8738322, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: optimize_learning_parameters"}
+{"ts": 1765327243.990551, "kind": "task", "path": "healer-13", "reason": "[healer-13] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327243.9904945, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: build_phase_4_6_modules"}
+{"ts": 1765327243.9908142, "kind": "task", "path": "task-65", "reason": "[task-65] processing task: optimize_learning_parameters"}
+{"ts": 1765327258.874316, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: build_phase_4_6_modules"}
+{"ts": 1765327258.8742583, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327258.8748736, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: optimize_learning_parameters"}
+{"ts": 1765327258.9910123, "kind": "task", "path": "healer-16", "reason": "[healer-16] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327258.9919593, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: build_phase_4_6_modules"}
+{"ts": 1765327258.9922209, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: optimize_learning_parameters"}
+{"ts": 1765327273.875253, "kind": "task", "path": "healer-19", "reason": "[healer-19] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327273.8754911, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: build_phase_4_6_modules"}
+{"ts": 1765327273.876182, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: optimize_learning_parameters"}
+{"ts": 1765327273.992436, "kind": "task", "path": "healer-13", "reason": "[healer-13] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327273.9926264, "kind": "task", "path": "task-65", "reason": "[task-65] processing task: optimize_learning_parameters"}
+{"ts": 1765327273.9925225, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: build_phase_4_6_modules"}
+{"ts": 1765327288.8767557, "kind": "task", "path": "healer-24", "reason": "[healer-24] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327288.8767827, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: build_phase_4_6_modules"}
+{"ts": 1765327288.8770258, "kind": "task", "path": "task-30", "reason": "[task-30] processing task: optimize_learning_parameters"}
+{"ts": 1765327288.9935963, "kind": "task", "path": "healer-16", "reason": "[healer-16] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327288.9937685, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: build_phase_4_6_modules"}
+{"ts": 1765327288.9946954, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765327303.8778253, "kind": "task", "path": "healer-30", "reason": "[healer-30] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327303.8780348, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: optimize_learning_parameters"}
+{"ts": 1765327303.8778515, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: build_phase_4_6_modules"}
+{"ts": 1765327303.9944465, "kind": "task", "path": "healer-16", "reason": "[healer-16] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327303.9948337, "kind": "task", "path": "task-65", "reason": "[task-65] processing task: build_phase_4_6_modules"}
+{"ts": 1765327303.9949036, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: optimize_learning_parameters"}
+{"ts": 1765327318.8789785, "kind": "task", "path": "task-30", "reason": "[task-30] processing task: build_phase_4_6_modules"}
+{"ts": 1765327318.8790221, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: optimize_learning_parameters"}
+{"ts": 1765327318.8789055, "kind": "task", "path": "healer-24", "reason": "[healer-24] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327318.9957578, "kind": "task", "path": "healer-23", "reason": "[healer-23] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765327318.996149, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: optimize_learning_parameters"}
+{"ts": 1765327318.9961288, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: build_phase_4_6_modules"}
