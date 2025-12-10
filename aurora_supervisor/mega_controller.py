@@ -11,11 +11,45 @@ from pathlib import Path
 import time
 import json
 import os
+import shutil
 
 try:
     from aurora_supervisor.supervisor_core import SupervisorCore
 except ImportError:
     from supervisor_core import SupervisorCore
+
+import sys
+_script_root = Path(__file__).resolve().parent.parent
+if str(_script_root) not in sys.path:
+    sys.path.insert(0, str(_script_root))
+
+try:
+    from aurora_core.utils.json_tools import pretty_print_json, load_json, save_json, validate_json
+    JSON_TOOLS_AVAILABLE = True
+except ImportError:
+    JSON_TOOLS_AVAILABLE = False
+
+def _check_json_tools():
+    """Check and report JSON tool availability"""
+    if shutil.which("jq") is None:
+        print("[Aurora] jq not found — activating internal JSON inspector.")
+        if JSON_TOOLS_AVAILABLE:
+            print("[Aurora] Using json_tools.pretty_print_json for manifest inspection.")
+        else:
+            print("[Aurora] Using built-in json module for inspection.")
+    return JSON_TOOLS_AVAILABLE
+
+def inspect_json(path):
+    """Universal JSON inspection - uses internal tools, no jq needed"""
+    if JSON_TOOLS_AVAILABLE:
+        pretty_print_json(path)
+    else:
+        try:
+            with open(path) as f:
+                data = json.load(f)
+            print(json.dumps(data, indent=2))
+        except Exception as e:
+            print(f"[Aurora] Could not inspect {path}: {e}")
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "aurora_supervisor" / "data"
@@ -299,6 +333,7 @@ class MegaController:
     
     def run_all_phases(self):
         """Execute all 6 phases in sequence"""
+        _check_json_tools()
         log("=" * 60)
         log("Starting full Phase 1-6 module orchestration")
         log(f"Target: 550 modules, 188 tiers, 66 AEMs")
