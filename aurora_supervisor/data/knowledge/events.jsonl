@@ -5017,3 +5017,704 @@
 {"ts": 1765327986.7018888, "kind": "dispatch", "path": "configure_rest_api", "reason": "Task dispatched: configure_rest_api"}
 {"ts": 1765327986.7043047, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: enable_websocket_streaming"}
 {"ts": 1765327986.7042403, "kind": "dispatch", "path": "enable_websocket_streaming", "reason": "Task dispatched: enable_websocket_streaming"}
+{"ts": 1765328598.2274752, "kind": "evolution", "path": "healer_ratio", "reason": "Queued for safe update"}
+{"ts": 1765328598.2282434, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: build_phase_4_6_modules"}
+{"ts": 1765328598.2287273, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765328598.2278776, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328598.2782419, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328598.2784405, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765328598.2791672, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: optimize_learning_parameters"}
+{"ts": 1765328598.2799966, "kind": "evolution", "path": "healer_ratio", "reason": "Queued for safe update"}
+{"ts": 1765328613.238188, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328613.2384548, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765328613.2386725, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765328613.2804236, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328613.281277, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765328613.2803597, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765328628.2394574, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328628.2396982, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: build_phase_4_6_modules"}
+{"ts": 1765328628.2401745, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765328628.2822952, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765328628.282445, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765328628.283347, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328643.2408023, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: build_phase_4_6_modules"}
+{"ts": 1765328643.2410023, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: optimize_learning_parameters"}
+{"ts": 1765328643.240744, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328643.2836893, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328643.2848344, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: build_phase_4_6_modules"}
+{"ts": 1765328643.285024, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: optimize_learning_parameters"}
+{"ts": 1765328658.245239, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: build_phase_4_6_modules"}
+{"ts": 1765328658.245392, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: optimize_learning_parameters"}
+{"ts": 1765328658.243782, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328658.2847493, "kind": "task", "path": "task-287", "reason": "[task-287] processing task: build_phase_4_6_modules"}
+{"ts": 1765328658.284876, "kind": "task", "path": "task-260", "reason": "[task-260] processing task: optimize_learning_parameters"}
+{"ts": 1765328658.2850516, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328673.2466524, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: build_phase_4_6_modules"}
+{"ts": 1765328673.246575, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328673.2467093, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: optimize_learning_parameters"}
+{"ts": 1765328673.2868073, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: build_phase_4_6_modules"}
+{"ts": 1765328673.2867503, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328673.2871299, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: optimize_learning_parameters"}
+{"ts": 1765328688.247993, "kind": "task", "path": "healer-18", "reason": "[healer-18] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328688.2485764, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: build_phase_4_6_modules"}
+{"ts": 1765328688.2487009, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765328688.288194, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328688.2891943, "kind": "task", "path": "task-260", "reason": "[task-260] processing task: build_phase_4_6_modules"}
+{"ts": 1765328688.289506, "kind": "task", "path": "task-261", "reason": "[task-261] processing task: optimize_learning_parameters"}
+{"ts": 1765328703.2502878, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: build_phase_4_6_modules"}
+{"ts": 1765328703.2498915, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328703.2506375, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: optimize_learning_parameters"}
+{"ts": 1765328703.28941, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328703.290038, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: build_phase_4_6_modules"}
+{"ts": 1765328703.2902925, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: optimize_learning_parameters"}
+{"ts": 1765328718.2512214, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: build_phase_4_6_modules"}
+{"ts": 1765328718.2536924, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: optimize_learning_parameters"}
+{"ts": 1765328718.2537956, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328718.2913318, "kind": "task", "path": "healer-6", "reason": "[healer-6] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328718.2915227, "kind": "task", "path": "task-282", "reason": "[task-282] processing task: optimize_learning_parameters"}
+{"ts": 1765328718.2912583, "kind": "task", "path": "task-260", "reason": "[task-260] processing task: build_phase_4_6_modules"}
+{"ts": 1765328733.2538185, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: build_phase_4_6_modules"}
+{"ts": 1765328733.2537088, "kind": "task", "path": "healer-20", "reason": "[healer-20] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328733.2551992, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: optimize_learning_parameters"}
+{"ts": 1765328733.2927852, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: build_phase_4_6_modules"}
+{"ts": 1765328733.2951934, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: optimize_learning_parameters"}
+{"ts": 1765328733.295564, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328748.255734, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: optimize_learning_parameters"}
+{"ts": 1765328748.255578, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328748.255461, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: build_phase_4_6_modules"}
+{"ts": 1765328748.3010845, "kind": "task", "path": "task-269", "reason": "[task-269] processing task: build_phase_4_6_modules"}
+{"ts": 1765328748.3036478, "kind": "task", "path": "task-152", "reason": "[task-152] processing task: optimize_learning_parameters"}
+{"ts": 1765328748.3056386, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328763.2574718, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: build_phase_4_6_modules"}
+{"ts": 1765328763.2578099, "kind": "task", "path": "healer-21", "reason": "[healer-21] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328763.2578688, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: optimize_learning_parameters"}
+{"ts": 1765328763.2981977, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: build_phase_4_6_modules"}
+{"ts": 1765328763.2984283, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328763.299672, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: optimize_learning_parameters"}
+{"ts": 1765328778.2589595, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: build_phase_4_6_modules"}
+{"ts": 1765328778.26119, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: optimize_learning_parameters"}
+{"ts": 1765328778.2619758, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328778.300319, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328778.3010979, "kind": "task", "path": "task-275", "reason": "[task-275] processing task: optimize_learning_parameters"}
+{"ts": 1765328778.3008904, "kind": "task", "path": "task-297", "reason": "[task-297] processing task: build_phase_4_6_modules"}
+{"ts": 1765328793.266062, "kind": "task", "path": "healer-28", "reason": "[healer-28] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328793.266473, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: build_phase_4_6_modules"}
+{"ts": 1765328793.2671676, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: optimize_learning_parameters"}
+{"ts": 1765328793.3017244, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: build_phase_4_6_modules"}
+{"ts": 1765328793.3018777, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: optimize_learning_parameters"}
+{"ts": 1765328793.3020124, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328808.2674062, "kind": "task", "path": "healer-20", "reason": "[healer-20] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328808.2690098, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: build_phase_4_6_modules"}
+{"ts": 1765328808.2693741, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: optimize_learning_parameters"}
+{"ts": 1765328808.3029296, "kind": "task", "path": "healer-7", "reason": "[healer-7] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328808.3036673, "kind": "task", "path": "task-275", "reason": "[task-275] processing task: optimize_learning_parameters"}
+{"ts": 1765328808.302746, "kind": "task", "path": "task-297", "reason": "[task-297] processing task: build_phase_4_6_modules"}
+{"ts": 1765328823.2704804, "kind": "task", "path": "healer-52", "reason": "[healer-52] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328823.2705295, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: build_phase_4_6_modules"}
+{"ts": 1765328823.2705765, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: optimize_learning_parameters"}
+{"ts": 1765328823.3061671, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: build_phase_4_6_modules"}
+{"ts": 1765328823.3065288, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328823.3066313, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: optimize_learning_parameters"}
+{"ts": 1765328838.2716975, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: build_phase_4_6_modules"}
+{"ts": 1765328838.2718732, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: optimize_learning_parameters"}
+{"ts": 1765328838.272546, "kind": "task", "path": "healer-21", "reason": "[healer-21] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328838.3075256, "kind": "task", "path": "task-269", "reason": "[task-269] processing task: build_phase_4_6_modules"}
+{"ts": 1765328838.307747, "kind": "task", "path": "task-152", "reason": "[task-152] processing task: optimize_learning_parameters"}
+{"ts": 1765328838.3076763, "kind": "task", "path": "healer-8", "reason": "[healer-8] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328853.2744708, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: build_phase_4_6_modules"}
+{"ts": 1765328853.2751348, "kind": "task", "path": "healer-17", "reason": "[healer-17] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328853.2754066, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: optimize_learning_parameters"}
+{"ts": 1765328853.3089297, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: build_phase_4_6_modules"}
+{"ts": 1765328853.30905, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: optimize_learning_parameters"}
+{"ts": 1765328853.308874, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328868.2758658, "kind": "task", "path": "healer-28", "reason": "[healer-28] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328868.2763, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: build_phase_4_6_modules"}
+{"ts": 1765328868.276368, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: optimize_learning_parameters"}
+{"ts": 1765328868.3104498, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: build_phase_4_6_modules"}
+{"ts": 1765328868.310291, "kind": "task", "path": "healer-4", "reason": "[healer-4] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328868.3105853, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: optimize_learning_parameters"}
+{"ts": 1765328869.3366108, "kind": "heal", "path": "emergency", "reason": "Emergency heal cycle triggered"}
+{"ts": 1765328869.3391032, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: load_tier_1"}
+{"ts": 1765328869.3390772, "kind": "dispatch", "path": "load_tier_1", "reason": "Task dispatched: load_tier_1"}
+{"ts": 1765328869.3398247, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: load_tier_2"}
+{"ts": 1765328869.339701, "kind": "dispatch", "path": "load_tier_2", "reason": "Task dispatched: load_tier_2"}
+{"ts": 1765328869.340328, "kind": "dispatch", "path": "load_tier_3", "reason": "Task dispatched: load_tier_3"}
+{"ts": 1765328869.3404608, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: load_tier_3"}
+{"ts": 1765328869.3409572, "kind": "dispatch", "path": "load_tier_4", "reason": "Task dispatched: load_tier_4"}
+{"ts": 1765328869.3411193, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: load_tier_4"}
+{"ts": 1765328869.3417387, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: load_tier_5"}
+{"ts": 1765328869.3417149, "kind": "dispatch", "path": "load_tier_5", "reason": "Task dispatched: load_tier_5"}
+{"ts": 1765328869.342283, "kind": "dispatch", "path": "load_tier_6", "reason": "Task dispatched: load_tier_6"}
+{"ts": 1765328869.3423302, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: load_tier_6"}
+{"ts": 1765328869.34405, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: load_tier_7"}
+{"ts": 1765328869.343528, "kind": "dispatch", "path": "load_tier_7", "reason": "Task dispatched: load_tier_7"}
+{"ts": 1765328869.3463314, "kind": "dispatch", "path": "load_tier_8", "reason": "Task dispatched: load_tier_8"}
+{"ts": 1765328869.3463702, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: load_tier_8"}
+{"ts": 1765328869.3480165, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: load_tier_9"}
+{"ts": 1765328869.3478842, "kind": "dispatch", "path": "load_tier_9", "reason": "Task dispatched: load_tier_9"}
+{"ts": 1765328869.3497665, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: load_tier_10"}
+{"ts": 1765328869.3495283, "kind": "dispatch", "path": "load_tier_10", "reason": "Task dispatched: load_tier_10"}
+{"ts": 1765328869.3504086, "kind": "dispatch", "path": "load_tier_11", "reason": "Task dispatched: load_tier_11"}
+{"ts": 1765328869.3507442, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: load_tier_11"}
+{"ts": 1765328869.3523252, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: load_tier_12"}
+{"ts": 1765328869.3521566, "kind": "dispatch", "path": "load_tier_12", "reason": "Task dispatched: load_tier_12"}
+{"ts": 1765328869.3554204, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: load_tier_13"}
+{"ts": 1765328869.355313, "kind": "dispatch", "path": "load_tier_13", "reason": "Task dispatched: load_tier_13"}
+{"ts": 1765328869.3568873, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: load_tier_14"}
+{"ts": 1765328869.3566725, "kind": "dispatch", "path": "load_tier_14", "reason": "Task dispatched: load_tier_14"}
+{"ts": 1765328869.3581383, "kind": "dispatch", "path": "load_tier_15", "reason": "Task dispatched: load_tier_15"}
+{"ts": 1765328869.3583393, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: load_tier_15"}
+{"ts": 1765328869.3591812, "kind": "dispatch", "path": "load_tier_16", "reason": "Task dispatched: load_tier_16"}
+{"ts": 1765328869.3593175, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: load_tier_16"}
+{"ts": 1765328869.3618412, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: load_tier_17"}
+{"ts": 1765328869.3616648, "kind": "dispatch", "path": "load_tier_17", "reason": "Task dispatched: load_tier_17"}
+{"ts": 1765328869.3628304, "kind": "dispatch", "path": "load_tier_18", "reason": "Task dispatched: load_tier_18"}
+{"ts": 1765328869.3630538, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: load_tier_18"}
+{"ts": 1765328869.3652558, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: load_tier_19"}
+{"ts": 1765328869.3650763, "kind": "dispatch", "path": "load_tier_19", "reason": "Task dispatched: load_tier_19"}
+{"ts": 1765328869.3672895, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: load_tier_20"}
+{"ts": 1765328869.3671284, "kind": "dispatch", "path": "load_tier_20", "reason": "Task dispatched: load_tier_20"}
+{"ts": 1765328869.3694074, "kind": "task", "path": "task-20", "reason": "[task-20] processing task: load_tier_21"}
+{"ts": 1765328869.3692634, "kind": "dispatch", "path": "load_tier_21", "reason": "Task dispatched: load_tier_21"}
+{"ts": 1765328869.370371, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: load_tier_22"}
+{"ts": 1765328869.3701863, "kind": "dispatch", "path": "load_tier_22", "reason": "Task dispatched: load_tier_22"}
+{"ts": 1765328869.3714592, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: load_tier_23"}
+{"ts": 1765328869.3714368, "kind": "dispatch", "path": "load_tier_23", "reason": "Task dispatched: load_tier_23"}
+{"ts": 1765328869.3723025, "kind": "task", "path": "task-23", "reason": "[task-23] processing task: load_tier_24"}
+{"ts": 1765328869.3721213, "kind": "dispatch", "path": "load_tier_24", "reason": "Task dispatched: load_tier_24"}
+{"ts": 1765328869.3739207, "kind": "task", "path": "task-23", "reason": "[task-23] processing task: load_tier_25"}
+{"ts": 1765328869.3732445, "kind": "dispatch", "path": "load_tier_25", "reason": "Task dispatched: load_tier_25"}
+{"ts": 1765328869.3757339, "kind": "task", "path": "task-25", "reason": "[task-25] processing task: load_tier_26"}
+{"ts": 1765328869.3754697, "kind": "dispatch", "path": "load_tier_26", "reason": "Task dispatched: load_tier_26"}
+{"ts": 1765328869.3770237, "kind": "task", "path": "task-26", "reason": "[task-26] processing task: load_tier_27"}
+{"ts": 1765328869.3767622, "kind": "dispatch", "path": "load_tier_27", "reason": "Task dispatched: load_tier_27"}
+{"ts": 1765328869.378411, "kind": "task", "path": "task-27", "reason": "[task-27] processing task: load_tier_28"}
+{"ts": 1765328869.3782525, "kind": "dispatch", "path": "load_tier_28", "reason": "Task dispatched: load_tier_28"}
+{"ts": 1765328869.3792775, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: load_tier_29"}
+{"ts": 1765328869.379138, "kind": "dispatch", "path": "load_tier_29", "reason": "Task dispatched: load_tier_29"}
+{"ts": 1765328869.3800318, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: load_tier_30"}
+{"ts": 1765328869.3799367, "kind": "dispatch", "path": "load_tier_30", "reason": "Task dispatched: load_tier_30"}
+{"ts": 1765328869.3810492, "kind": "dispatch", "path": "load_tier_31", "reason": "Task dispatched: load_tier_31"}
+{"ts": 1765328869.381212, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: load_tier_31"}
+{"ts": 1765328869.382786, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: load_tier_32"}
+{"ts": 1765328869.382429, "kind": "dispatch", "path": "load_tier_32", "reason": "Task dispatched: load_tier_32"}
+{"ts": 1765328869.384114, "kind": "task", "path": "task-32", "reason": "[task-32] processing task: load_tier_33"}
+{"ts": 1765328869.3840752, "kind": "dispatch", "path": "load_tier_33", "reason": "Task dispatched: load_tier_33"}
+{"ts": 1765328869.386215, "kind": "task", "path": "task-33", "reason": "[task-33] processing task: load_tier_34"}
+{"ts": 1765328869.386163, "kind": "dispatch", "path": "load_tier_34", "reason": "Task dispatched: load_tier_34"}
+{"ts": 1765328869.3873029, "kind": "dispatch", "path": "load_tier_35", "reason": "Task dispatched: load_tier_35"}
+{"ts": 1765328869.3875456, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: load_tier_35"}
+{"ts": 1765328869.3892617, "kind": "task", "path": "task-35", "reason": "[task-35] processing task: load_tier_36"}
+{"ts": 1765328869.3891392, "kind": "dispatch", "path": "load_tier_36", "reason": "Task dispatched: load_tier_36"}
+{"ts": 1765328869.3929017, "kind": "dispatch", "path": "load_tier_37", "reason": "Task dispatched: load_tier_37"}
+{"ts": 1765328869.3930433, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: load_tier_37"}
+{"ts": 1765328869.3943136, "kind": "dispatch", "path": "load_tier_38", "reason": "Task dispatched: load_tier_38"}
+{"ts": 1765328869.3944411, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: load_tier_38"}
+{"ts": 1765328869.3981657, "kind": "task", "path": "task-38", "reason": "[task-38] processing task: load_tier_39"}
+{"ts": 1765328869.3979912, "kind": "dispatch", "path": "load_tier_39", "reason": "Task dispatched: load_tier_39"}
+{"ts": 1765328869.3991613, "kind": "dispatch", "path": "load_tier_40", "reason": "Task dispatched: load_tier_40"}
+{"ts": 1765328869.399768, "kind": "task", "path": "task-40", "reason": "[task-40] processing task: load_tier_40"}
+{"ts": 1765328869.3995545, "kind": "dispatch", "path": "load_tier_41", "reason": "Task dispatched: load_tier_41"}
+{"ts": 1765328869.3999352, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: load_tier_41"}
+{"ts": 1765328869.400815, "kind": "dispatch", "path": "load_tier_42", "reason": "Task dispatched: load_tier_42"}
+{"ts": 1765328869.4008453, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: load_tier_42"}
+{"ts": 1765328869.4036713, "kind": "dispatch", "path": "load_tier_43", "reason": "Task dispatched: load_tier_43"}
+{"ts": 1765328869.4057052, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: load_tier_43"}
+{"ts": 1765328869.4099803, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: load_tier_44"}
+{"ts": 1765328869.4098282, "kind": "dispatch", "path": "load_tier_44", "reason": "Task dispatched: load_tier_44"}
+{"ts": 1765328869.410837, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: load_tier_45"}
+{"ts": 1765328869.4106479, "kind": "dispatch", "path": "load_tier_45", "reason": "Task dispatched: load_tier_45"}
+{"ts": 1765328869.4115522, "kind": "dispatch", "path": "load_tier_46", "reason": "Task dispatched: load_tier_46"}
+{"ts": 1765328869.4117186, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: load_tier_46"}
+{"ts": 1765328869.4127705, "kind": "dispatch", "path": "load_tier_47", "reason": "Task dispatched: load_tier_47"}
+{"ts": 1765328869.4130194, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: load_tier_47"}
+{"ts": 1765328869.4147866, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: load_tier_48"}
+{"ts": 1765328869.4144573, "kind": "dispatch", "path": "load_tier_48", "reason": "Task dispatched: load_tier_48"}
+{"ts": 1765328869.4178653, "kind": "dispatch", "path": "load_tier_49", "reason": "Task dispatched: load_tier_49"}
+{"ts": 1765328869.4179237, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: load_tier_49"}
+{"ts": 1765328869.4185038, "kind": "dispatch", "path": "load_tier_50", "reason": "Task dispatched: load_tier_50"}
+{"ts": 1765328869.4218605, "kind": "dispatch", "path": "load_tier_51", "reason": "Task dispatched: load_tier_51"}
+{"ts": 1765328869.4219077, "kind": "task", "path": "task-50", "reason": "[task-50] processing task: load_tier_51"}
+{"ts": 1765328869.4191582, "kind": "task", "path": "task-49", "reason": "[task-49] processing task: load_tier_50"}
+{"ts": 1765328869.423388, "kind": "task", "path": "task-50", "reason": "[task-50] processing task: load_tier_52"}
+{"ts": 1765328869.4232078, "kind": "dispatch", "path": "load_tier_52", "reason": "Task dispatched: load_tier_52"}
+{"ts": 1765328869.42572, "kind": "dispatch", "path": "load_tier_53", "reason": "Task dispatched: load_tier_53"}
+{"ts": 1765328869.4258695, "kind": "task", "path": "task-52", "reason": "[task-52] processing task: load_tier_53"}
+{"ts": 1765328869.4270864, "kind": "dispatch", "path": "load_tier_54", "reason": "Task dispatched: load_tier_54"}
+{"ts": 1765328869.4272182, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: load_tier_54"}
+{"ts": 1765328869.4279072, "kind": "dispatch", "path": "load_tier_55", "reason": "Task dispatched: load_tier_55"}
+{"ts": 1765328869.4279363, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: load_tier_55"}
+{"ts": 1765328869.428578, "kind": "dispatch", "path": "load_tier_56", "reason": "Task dispatched: load_tier_56"}
+{"ts": 1765328869.428821, "kind": "task", "path": "task-55", "reason": "[task-55] processing task: load_tier_56"}
+{"ts": 1765328869.4302082, "kind": "task", "path": "task-56", "reason": "[task-56] processing task: load_tier_57"}
+{"ts": 1765328869.430107, "kind": "dispatch", "path": "load_tier_57", "reason": "Task dispatched: load_tier_57"}
+{"ts": 1765328869.4311416, "kind": "dispatch", "path": "load_tier_58", "reason": "Task dispatched: load_tier_58"}
+{"ts": 1765328869.4312623, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: load_tier_58"}
+{"ts": 1765328869.4320812, "kind": "dispatch", "path": "load_tier_59", "reason": "Task dispatched: load_tier_59"}
+{"ts": 1765328869.4322448, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: load_tier_59"}
+{"ts": 1765328869.4334035, "kind": "dispatch", "path": "load_tier_60", "reason": "Task dispatched: load_tier_60"}
+{"ts": 1765328869.433532, "kind": "task", "path": "task-59", "reason": "[task-59] processing task: load_tier_60"}
+{"ts": 1765328869.434745, "kind": "task", "path": "task-59", "reason": "[task-59] processing task: load_tier_61"}
+{"ts": 1765328869.4345365, "kind": "dispatch", "path": "load_tier_61", "reason": "Task dispatched: load_tier_61"}
+{"ts": 1765328869.435719, "kind": "dispatch", "path": "load_tier_62", "reason": "Task dispatched: load_tier_62"}
+{"ts": 1765328869.4358563, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: load_tier_62"}
+{"ts": 1765328869.4365516, "kind": "task", "path": "task-62", "reason": "[task-62] processing task: load_tier_63"}
+{"ts": 1765328869.4364238, "kind": "dispatch", "path": "load_tier_63", "reason": "Task dispatched: load_tier_63"}
+{"ts": 1765328869.4381576, "kind": "dispatch", "path": "load_tier_64", "reason": "Task dispatched: load_tier_64"}
+{"ts": 1765328869.4383297, "kind": "task", "path": "task-63", "reason": "[task-63] processing task: load_tier_64"}
+{"ts": 1765328869.4394875, "kind": "task", "path": "task-64", "reason": "[task-64] processing task: load_tier_65"}
+{"ts": 1765328869.439278, "kind": "dispatch", "path": "load_tier_65", "reason": "Task dispatched: load_tier_65"}
+{"ts": 1765328869.440773, "kind": "task", "path": "task-65", "reason": "[task-65] processing task: load_tier_66"}
+{"ts": 1765328869.440532, "kind": "dispatch", "path": "load_tier_66", "reason": "Task dispatched: load_tier_66"}
+{"ts": 1765328869.4414334, "kind": "dispatch", "path": "load_tier_67", "reason": "Task dispatched: load_tier_67"}
+{"ts": 1765328869.4416127, "kind": "task", "path": "task-66", "reason": "[task-66] processing task: load_tier_67"}
+{"ts": 1765328869.4426746, "kind": "dispatch", "path": "load_tier_68", "reason": "Task dispatched: load_tier_68"}
+{"ts": 1765328869.4428313, "kind": "task", "path": "task-66", "reason": "[task-66] processing task: load_tier_68"}
+{"ts": 1765328869.4436855, "kind": "dispatch", "path": "load_tier_69", "reason": "Task dispatched: load_tier_69"}
+{"ts": 1765328869.4438605, "kind": "task", "path": "task-67", "reason": "[task-67] processing task: load_tier_69"}
+{"ts": 1765328869.445295, "kind": "task", "path": "task-69", "reason": "[task-69] processing task: load_tier_70"}
+{"ts": 1765328869.4450603, "kind": "dispatch", "path": "load_tier_70", "reason": "Task dispatched: load_tier_70"}
+{"ts": 1765328869.4465408, "kind": "dispatch", "path": "load_tier_71", "reason": "Task dispatched: load_tier_71"}
+{"ts": 1765328869.446699, "kind": "task", "path": "task-70", "reason": "[task-70] processing task: load_tier_71"}
+{"ts": 1765328869.4478147, "kind": "task", "path": "task-71", "reason": "[task-71] processing task: load_tier_72"}
+{"ts": 1765328869.447554, "kind": "dispatch", "path": "load_tier_72", "reason": "Task dispatched: load_tier_72"}
+{"ts": 1765328869.449282, "kind": "task", "path": "task-72", "reason": "[task-72] processing task: load_tier_73"}
+{"ts": 1765328869.449262, "kind": "dispatch", "path": "load_tier_73", "reason": "Task dispatched: load_tier_73"}
+{"ts": 1765328869.4503372, "kind": "task", "path": "task-73", "reason": "[task-73] processing task: load_tier_74"}
+{"ts": 1765328869.450321, "kind": "dispatch", "path": "load_tier_74", "reason": "Task dispatched: load_tier_74"}
+{"ts": 1765328869.4514322, "kind": "dispatch", "path": "load_tier_75", "reason": "Task dispatched: load_tier_75"}
+{"ts": 1765328869.4516344, "kind": "task", "path": "task-74", "reason": "[task-74] processing task: load_tier_75"}
+{"ts": 1765328869.452349, "kind": "task", "path": "task-74", "reason": "[task-74] processing task: load_tier_76"}
+{"ts": 1765328869.452187, "kind": "dispatch", "path": "load_tier_76", "reason": "Task dispatched: load_tier_76"}
+{"ts": 1765328869.4539738, "kind": "dispatch", "path": "load_tier_77", "reason": "Task dispatched: load_tier_77"}
+{"ts": 1765328869.454153, "kind": "task", "path": "task-76", "reason": "[task-76] processing task: load_tier_77"}
+{"ts": 1765328869.4551191, "kind": "task", "path": "task-77", "reason": "[task-77] processing task: load_tier_78"}
+{"ts": 1765328869.454999, "kind": "dispatch", "path": "load_tier_78", "reason": "Task dispatched: load_tier_78"}
+{"ts": 1765328869.456151, "kind": "task", "path": "task-78", "reason": "[task-78] processing task: load_tier_79"}
+{"ts": 1765328869.4561331, "kind": "dispatch", "path": "load_tier_79", "reason": "Task dispatched: load_tier_79"}
+{"ts": 1765328869.4568768, "kind": "dispatch", "path": "load_tier_80", "reason": "Task dispatched: load_tier_80"}
+{"ts": 1765328869.4568992, "kind": "task", "path": "task-79", "reason": "[task-79] processing task: load_tier_80"}
+{"ts": 1765328869.4580162, "kind": "task", "path": "task-80", "reason": "[task-80] processing task: load_tier_81"}
+{"ts": 1765328869.4578137, "kind": "dispatch", "path": "load_tier_81", "reason": "Task dispatched: load_tier_81"}
+{"ts": 1765328869.4597952, "kind": "dispatch", "path": "load_tier_82", "reason": "Task dispatched: load_tier_82"}
+{"ts": 1765328869.4598212, "kind": "task", "path": "task-81", "reason": "[task-81] processing task: load_tier_82"}
+{"ts": 1765328869.461583, "kind": "task", "path": "task-82", "reason": "[task-82] processing task: load_tier_83"}
+{"ts": 1765328869.461439, "kind": "dispatch", "path": "load_tier_83", "reason": "Task dispatched: load_tier_83"}
+{"ts": 1765328869.462945, "kind": "dispatch", "path": "load_tier_84", "reason": "Task dispatched: load_tier_84"}
+{"ts": 1765328869.4631033, "kind": "task", "path": "task-83", "reason": "[task-83] processing task: load_tier_84"}
+{"ts": 1765328869.4640846, "kind": "dispatch", "path": "load_tier_85", "reason": "Task dispatched: load_tier_85"}
+{"ts": 1765328869.4642615, "kind": "task", "path": "task-84", "reason": "[task-84] processing task: load_tier_85"}
+{"ts": 1765328869.4658854, "kind": "task", "path": "task-85", "reason": "[task-85] processing task: load_tier_86"}
+{"ts": 1765328869.465516, "kind": "dispatch", "path": "load_tier_86", "reason": "Task dispatched: load_tier_86"}
+{"ts": 1765328869.4672563, "kind": "task", "path": "task-86", "reason": "[task-86] processing task: load_tier_87"}
+{"ts": 1765328869.467235, "kind": "dispatch", "path": "load_tier_87", "reason": "Task dispatched: load_tier_87"}
+{"ts": 1765328869.4683387, "kind": "task", "path": "task-87", "reason": "[task-87] processing task: load_tier_88"}
+{"ts": 1765328869.4681573, "kind": "dispatch", "path": "load_tier_88", "reason": "Task dispatched: load_tier_88"}
+{"ts": 1765328869.4695494, "kind": "dispatch", "path": "load_tier_89", "reason": "Task dispatched: load_tier_89"}
+{"ts": 1765328869.469801, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: load_tier_89"}
+{"ts": 1765328869.4707236, "kind": "dispatch", "path": "load_tier_90", "reason": "Task dispatched: load_tier_90"}
+{"ts": 1765328869.47086, "kind": "task", "path": "task-89", "reason": "[task-89] processing task: load_tier_90"}
+{"ts": 1765328869.4715843, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: load_tier_91"}
+{"ts": 1765328869.4714003, "kind": "dispatch", "path": "load_tier_91", "reason": "Task dispatched: load_tier_91"}
+{"ts": 1765328869.472435, "kind": "dispatch", "path": "load_tier_92", "reason": "Task dispatched: load_tier_92"}
+{"ts": 1765328869.4725788, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: load_tier_92"}
+{"ts": 1765328869.4734132, "kind": "dispatch", "path": "load_tier_93", "reason": "Task dispatched: load_tier_93"}
+{"ts": 1765328869.473572, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: load_tier_93"}
+{"ts": 1765328869.4748, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: load_tier_94"}
+{"ts": 1765328869.4745739, "kind": "dispatch", "path": "load_tier_94", "reason": "Task dispatched: load_tier_94"}
+{"ts": 1765328869.4761014, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: load_tier_95"}
+{"ts": 1765328869.4759154, "kind": "dispatch", "path": "load_tier_95", "reason": "Task dispatched: load_tier_95"}
+{"ts": 1765328869.4768696, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: load_tier_96"}
+{"ts": 1765328869.4768364, "kind": "dispatch", "path": "load_tier_96", "reason": "Task dispatched: load_tier_96"}
+{"ts": 1765328869.4775627, "kind": "dispatch", "path": "load_tier_97", "reason": "Task dispatched: load_tier_97"}
+{"ts": 1765328869.477832, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: load_tier_97"}
+{"ts": 1765328869.4788353, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: load_tier_98"}
+{"ts": 1765328869.4786994, "kind": "dispatch", "path": "load_tier_98", "reason": "Task dispatched: load_tier_98"}
+{"ts": 1765328869.4796383, "kind": "dispatch", "path": "load_tier_99", "reason": "Task dispatched: load_tier_99"}
+{"ts": 1765328869.4797962, "kind": "task", "path": "task-8", "reason": "[task-8] processing task: load_tier_99"}
+{"ts": 1765328869.4809883, "kind": "dispatch", "path": "load_tier_100", "reason": "Task dispatched: load_tier_100"}
+{"ts": 1765328869.481114, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: load_tier_100"}
+{"ts": 1765328869.482001, "kind": "dispatch", "path": "load_tier_101", "reason": "Task dispatched: load_tier_101"}
+{"ts": 1765328869.4821339, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: load_tier_101"}
+{"ts": 1765328869.4833329, "kind": "task", "path": "task-9", "reason": "[task-9] processing task: load_tier_102"}
+{"ts": 1765328869.4831858, "kind": "dispatch", "path": "load_tier_102", "reason": "Task dispatched: load_tier_102"}
+{"ts": 1765328869.484605, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: load_tier_103"}
+{"ts": 1765328869.4844368, "kind": "dispatch", "path": "load_tier_103", "reason": "Task dispatched: load_tier_103"}
+{"ts": 1765328869.4853842, "kind": "dispatch", "path": "load_tier_104", "reason": "Task dispatched: load_tier_104"}
+{"ts": 1765328869.4855552, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: load_tier_104"}
+{"ts": 1765328869.4866104, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: load_tier_105"}
+{"ts": 1765328869.486389, "kind": "dispatch", "path": "load_tier_105", "reason": "Task dispatched: load_tier_105"}
+{"ts": 1765328869.4877954, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: load_tier_106"}
+{"ts": 1765328869.4875705, "kind": "dispatch", "path": "load_tier_106", "reason": "Task dispatched: load_tier_106"}
+{"ts": 1765328869.4888914, "kind": "dispatch", "path": "load_tier_107", "reason": "Task dispatched: load_tier_107"}
+{"ts": 1765328869.4890153, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: load_tier_107"}
+{"ts": 1765328869.4899163, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: load_tier_108"}
+{"ts": 1765328869.4897325, "kind": "dispatch", "path": "load_tier_108", "reason": "Task dispatched: load_tier_108"}
+{"ts": 1765328869.4912279, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: load_tier_109"}
+{"ts": 1765328869.4910805, "kind": "dispatch", "path": "load_tier_109", "reason": "Task dispatched: load_tier_109"}
+{"ts": 1765328869.4924548, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: load_tier_110"}
+{"ts": 1765328869.492338, "kind": "dispatch", "path": "load_tier_110", "reason": "Task dispatched: load_tier_110"}
+{"ts": 1765328869.493466, "kind": "task", "path": "task-20", "reason": "[task-20] processing task: load_tier_111"}
+{"ts": 1765328869.4933243, "kind": "dispatch", "path": "load_tier_111", "reason": "Task dispatched: load_tier_111"}
+{"ts": 1765328869.4942625, "kind": "dispatch", "path": "load_tier_112", "reason": "Task dispatched: load_tier_112"}
+{"ts": 1765328869.4943905, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: load_tier_112"}
+{"ts": 1765328869.4952056, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: load_tier_113"}
+{"ts": 1765328869.4950933, "kind": "dispatch", "path": "load_tier_113", "reason": "Task dispatched: load_tier_113"}
+{"ts": 1765328869.4963918, "kind": "dispatch", "path": "load_tier_114", "reason": "Task dispatched: load_tier_114"}
+{"ts": 1765328869.4965065, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: load_tier_114"}
+{"ts": 1765328869.497379, "kind": "dispatch", "path": "load_tier_115", "reason": "Task dispatched: load_tier_115"}
+{"ts": 1765328869.4975533, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: load_tier_115"}
+{"ts": 1765328869.49857, "kind": "dispatch", "path": "load_tier_116", "reason": "Task dispatched: load_tier_116"}
+{"ts": 1765328869.4987962, "kind": "task", "path": "task-25", "reason": "[task-25] processing task: load_tier_116"}
+{"ts": 1765328869.5000918, "kind": "task", "path": "task-25", "reason": "[task-25] processing task: load_tier_117"}
+{"ts": 1765328869.49995, "kind": "dispatch", "path": "load_tier_117", "reason": "Task dispatched: load_tier_117"}
+{"ts": 1765328869.5011802, "kind": "dispatch", "path": "load_tier_118", "reason": "Task dispatched: load_tier_118"}
+{"ts": 1765328869.5013137, "kind": "task", "path": "task-27", "reason": "[task-27] processing task: load_tier_118"}
+{"ts": 1765328869.5023718, "kind": "task", "path": "task-27", "reason": "[task-27] processing task: load_tier_119"}
+{"ts": 1765328869.5021825, "kind": "dispatch", "path": "load_tier_119", "reason": "Task dispatched: load_tier_119"}
+{"ts": 1765328869.503754, "kind": "task", "path": "task-30", "reason": "[task-30] processing task: load_tier_120"}
+{"ts": 1765328869.5035343, "kind": "dispatch", "path": "load_tier_120", "reason": "Task dispatched: load_tier_120"}
+{"ts": 1765328869.5046628, "kind": "dispatch", "path": "load_tier_121", "reason": "Task dispatched: load_tier_121"}
+{"ts": 1765328869.5048, "kind": "task", "path": "task-31", "reason": "[task-31] processing task: load_tier_121"}
+{"ts": 1765328869.5055795, "kind": "dispatch", "path": "load_tier_122", "reason": "Task dispatched: load_tier_122"}
+{"ts": 1765328869.5057778, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: load_tier_122"}
+{"ts": 1765328869.506425, "kind": "task", "path": "task-32", "reason": "[task-32] processing task: load_tier_123"}
+{"ts": 1765328869.5062697, "kind": "dispatch", "path": "load_tier_123", "reason": "Task dispatched: load_tier_123"}
+{"ts": 1765328869.5077407, "kind": "task", "path": "task-33", "reason": "[task-33] processing task: load_tier_124"}
+{"ts": 1765328869.5075464, "kind": "dispatch", "path": "load_tier_124", "reason": "Task dispatched: load_tier_124"}
+{"ts": 1765328869.5085554, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: load_tier_125"}
+{"ts": 1765328869.508375, "kind": "dispatch", "path": "load_tier_125", "reason": "Task dispatched: load_tier_125"}
+{"ts": 1765328869.509776, "kind": "dispatch", "path": "load_tier_126", "reason": "Task dispatched: load_tier_126"}
+{"ts": 1765328869.5098226, "kind": "task", "path": "task-35", "reason": "[task-35] processing task: load_tier_126"}
+{"ts": 1765328869.5108173, "kind": "task", "path": "task-35", "reason": "[task-35] processing task: load_tier_127"}
+{"ts": 1765328869.510482, "kind": "dispatch", "path": "load_tier_127", "reason": "Task dispatched: load_tier_127"}
+{"ts": 1765328869.5125184, "kind": "dispatch", "path": "load_tier_128", "reason": "Task dispatched: load_tier_128"}
+{"ts": 1765328869.5126777, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: load_tier_128"}
+{"ts": 1765328869.5132496, "kind": "dispatch", "path": "load_tier_129", "reason": "Task dispatched: load_tier_129"}
+{"ts": 1765328869.5132954, "kind": "task", "path": "task-38", "reason": "[task-38] processing task: load_tier_129"}
+{"ts": 1765328869.5141993, "kind": "dispatch", "path": "load_tier_130", "reason": "Task dispatched: load_tier_130"}
+{"ts": 1765328869.5143423, "kind": "task", "path": "task-40", "reason": "[task-40] processing task: load_tier_130"}
+{"ts": 1765328869.5154378, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: load_tier_131"}
+{"ts": 1765328869.5152416, "kind": "dispatch", "path": "load_tier_131", "reason": "Task dispatched: load_tier_131"}
+{"ts": 1765328869.5166001, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: load_tier_132"}
+{"ts": 1765328869.5165598, "kind": "dispatch", "path": "load_tier_132", "reason": "Task dispatched: load_tier_132"}
+{"ts": 1765328869.5175128, "kind": "dispatch", "path": "load_tier_133", "reason": "Task dispatched: load_tier_133"}
+{"ts": 1765328869.5176861, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: load_tier_133"}
+{"ts": 1765328869.5186734, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: load_tier_134"}
+{"ts": 1765328869.5185854, "kind": "dispatch", "path": "load_tier_134", "reason": "Task dispatched: load_tier_134"}
+{"ts": 1765328869.5195975, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: load_tier_135"}
+{"ts": 1765328869.519425, "kind": "dispatch", "path": "load_tier_135", "reason": "Task dispatched: load_tier_135"}
+{"ts": 1765328869.5205517, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: load_tier_136"}
+{"ts": 1765328869.5204208, "kind": "dispatch", "path": "load_tier_136", "reason": "Task dispatched: load_tier_136"}
+{"ts": 1765328869.5214245, "kind": "dispatch", "path": "load_tier_137", "reason": "Task dispatched: load_tier_137"}
+{"ts": 1765328869.5215645, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: load_tier_137"}
+{"ts": 1765328869.5227067, "kind": "dispatch", "path": "load_tier_138", "reason": "Task dispatched: load_tier_138"}
+{"ts": 1765328869.522865, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: load_tier_138"}
+{"ts": 1765328869.5235445, "kind": "dispatch", "path": "load_tier_139", "reason": "Task dispatched: load_tier_139"}
+{"ts": 1765328869.5237381, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: load_tier_139"}
+{"ts": 1765328869.524211, "kind": "dispatch", "path": "load_tier_140", "reason": "Task dispatched: load_tier_140"}
+{"ts": 1765328869.524365, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: load_tier_140"}
+{"ts": 1765328869.5260067, "kind": "task", "path": "task-49", "reason": "[task-49] processing task: load_tier_141"}
+{"ts": 1765328869.5258074, "kind": "dispatch", "path": "load_tier_141", "reason": "Task dispatched: load_tier_141"}
+{"ts": 1765328869.5273278, "kind": "task", "path": "task-50", "reason": "[task-50] processing task: load_tier_142"}
+{"ts": 1765328869.5271835, "kind": "dispatch", "path": "load_tier_142", "reason": "Task dispatched: load_tier_142"}
+{"ts": 1765328869.5284948, "kind": "dispatch", "path": "load_tier_143", "reason": "Task dispatched: load_tier_143"}
+{"ts": 1765328869.5286663, "kind": "task", "path": "task-52", "reason": "[task-52] processing task: load_tier_143"}
+{"ts": 1765328869.5295045, "kind": "dispatch", "path": "load_tier_144", "reason": "Task dispatched: load_tier_144"}
+{"ts": 1765328869.5297523, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: load_tier_144"}
+{"ts": 1765328869.5308816, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: load_tier_145"}
+{"ts": 1765328869.5306911, "kind": "dispatch", "path": "load_tier_145", "reason": "Task dispatched: load_tier_145"}
+{"ts": 1765328869.5323045, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: load_tier_146"}
+{"ts": 1765328869.53214, "kind": "dispatch", "path": "load_tier_146", "reason": "Task dispatched: load_tier_146"}
+{"ts": 1765328869.533451, "kind": "task", "path": "task-56", "reason": "[task-56] processing task: load_tier_147"}
+{"ts": 1765328869.5332682, "kind": "dispatch", "path": "load_tier_147", "reason": "Task dispatched: load_tier_147"}
+{"ts": 1765328869.5344317, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: load_tier_148"}
+{"ts": 1765328869.5342946, "kind": "dispatch", "path": "load_tier_148", "reason": "Task dispatched: load_tier_148"}
+{"ts": 1765328869.535379, "kind": "dispatch", "path": "load_tier_149", "reason": "Task dispatched: load_tier_149"}
+{"ts": 1765328869.5355065, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: load_tier_149"}
+{"ts": 1765328869.5364635, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: load_tier_150"}
+{"ts": 1765328869.536256, "kind": "dispatch", "path": "load_tier_150", "reason": "Task dispatched: load_tier_150"}
+{"ts": 1765328869.5388377, "kind": "task", "path": "task-59", "reason": "[task-59] processing task: load_tier_151"}
+{"ts": 1765328869.5387194, "kind": "dispatch", "path": "load_tier_151", "reason": "Task dispatched: load_tier_151"}
+{"ts": 1765328869.539886, "kind": "dispatch", "path": "load_tier_152", "reason": "Task dispatched: load_tier_152"}
+{"ts": 1765328869.5400658, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: load_tier_152"}
+{"ts": 1765328869.5410588, "kind": "task", "path": "task-61", "reason": "[task-61] processing task: load_tier_153"}
+{"ts": 1765328869.5409117, "kind": "dispatch", "path": "load_tier_153", "reason": "Task dispatched: load_tier_153"}
+{"ts": 1765328869.5430174, "kind": "dispatch", "path": "load_tier_154", "reason": "Task dispatched: load_tier_154"}
+{"ts": 1765328869.543118, "kind": "task", "path": "task-63", "reason": "[task-63] processing task: load_tier_154"}
+{"ts": 1765328869.5438974, "kind": "dispatch", "path": "load_tier_155", "reason": "Task dispatched: load_tier_155"}
+{"ts": 1765328869.5440981, "kind": "task", "path": "task-64", "reason": "[task-64] processing task: load_tier_155"}
+{"ts": 1765328869.5454805, "kind": "task", "path": "task-64", "reason": "[task-64] processing task: load_tier_156"}
+{"ts": 1765328869.5453124, "kind": "dispatch", "path": "load_tier_156", "reason": "Task dispatched: load_tier_156"}
+{"ts": 1765328869.5465345, "kind": "dispatch", "path": "load_tier_157", "reason": "Task dispatched: load_tier_157"}
+{"ts": 1765328869.5465698, "kind": "task", "path": "task-66", "reason": "[task-66] processing task: load_tier_157"}
+{"ts": 1765328869.547351, "kind": "dispatch", "path": "load_tier_158", "reason": "Task dispatched: load_tier_158"}
+{"ts": 1765328869.5476322, "kind": "task", "path": "task-68", "reason": "[task-68] processing task: load_tier_158"}
+{"ts": 1765328869.5488644, "kind": "task", "path": "task-68", "reason": "[task-68] processing task: load_tier_159"}
+{"ts": 1765328869.5487154, "kind": "dispatch", "path": "load_tier_159", "reason": "Task dispatched: load_tier_159"}
+{"ts": 1765328869.5499399, "kind": "dispatch", "path": "load_tier_160", "reason": "Task dispatched: load_tier_160"}
+{"ts": 1765328869.5501287, "kind": "task", "path": "task-69", "reason": "[task-69] processing task: load_tier_160"}
+{"ts": 1765328869.5506845, "kind": "dispatch", "path": "load_tier_161", "reason": "Task dispatched: load_tier_161"}
+{"ts": 1765328869.5508385, "kind": "task", "path": "task-69", "reason": "[task-69] processing task: load_tier_161"}
+{"ts": 1765328869.552056, "kind": "dispatch", "path": "load_tier_162", "reason": "Task dispatched: load_tier_162"}
+{"ts": 1765328869.5523083, "kind": "task", "path": "task-69", "reason": "[task-69] processing task: load_tier_162"}
+{"ts": 1765328869.5537314, "kind": "dispatch", "path": "load_tier_163", "reason": "Task dispatched: load_tier_163"}
+{"ts": 1765328869.5538974, "kind": "task", "path": "task-72", "reason": "[task-72] processing task: load_tier_163"}
+{"ts": 1765328869.5547073, "kind": "dispatch", "path": "load_tier_164", "reason": "Task dispatched: load_tier_164"}
+{"ts": 1765328869.5548391, "kind": "task", "path": "task-73", "reason": "[task-73] processing task: load_tier_164"}
+{"ts": 1765328869.5558484, "kind": "dispatch", "path": "load_tier_165", "reason": "Task dispatched: load_tier_165"}
+{"ts": 1765328869.555972, "kind": "task", "path": "task-75", "reason": "[task-75] processing task: load_tier_165"}
+{"ts": 1765328869.5568469, "kind": "dispatch", "path": "load_tier_166", "reason": "Task dispatched: load_tier_166"}
+{"ts": 1765328869.5570045, "kind": "task", "path": "task-75", "reason": "[task-75] processing task: load_tier_166"}
+{"ts": 1765328869.5588293, "kind": "task", "path": "task-76", "reason": "[task-76] processing task: load_tier_167"}
+{"ts": 1765328869.5586686, "kind": "dispatch", "path": "load_tier_167", "reason": "Task dispatched: load_tier_167"}
+{"ts": 1765328869.560163, "kind": "dispatch", "path": "load_tier_168", "reason": "Task dispatched: load_tier_168"}
+{"ts": 1765328869.5603378, "kind": "task", "path": "task-77", "reason": "[task-77] processing task: load_tier_168"}
+{"ts": 1765328869.560984, "kind": "dispatch", "path": "load_tier_169", "reason": "Task dispatched: load_tier_169"}
+{"ts": 1765328869.5611567, "kind": "task", "path": "task-78", "reason": "[task-78] processing task: load_tier_169"}
+{"ts": 1765328869.5636919, "kind": "task", "path": "task-79", "reason": "[task-79] processing task: load_tier_170"}
+{"ts": 1765328869.5635216, "kind": "dispatch", "path": "load_tier_170", "reason": "Task dispatched: load_tier_170"}
+{"ts": 1765328869.5655434, "kind": "dispatch", "path": "load_tier_171", "reason": "Task dispatched: load_tier_171"}
+{"ts": 1765328869.5657458, "kind": "task", "path": "task-80", "reason": "[task-80] processing task: load_tier_171"}
+{"ts": 1765328869.5663047, "kind": "dispatch", "path": "load_tier_172", "reason": "Task dispatched: load_tier_172"}
+{"ts": 1765328869.5664902, "kind": "task", "path": "task-81", "reason": "[task-81] processing task: load_tier_172"}
+{"ts": 1765328869.567351, "kind": "dispatch", "path": "load_tier_173", "reason": "Task dispatched: load_tier_173"}
+{"ts": 1765328869.567585, "kind": "task", "path": "task-82", "reason": "[task-82] processing task: load_tier_173"}
+{"ts": 1765328869.568691, "kind": "task", "path": "task-83", "reason": "[task-83] processing task: load_tier_174"}
+{"ts": 1765328869.5684628, "kind": "dispatch", "path": "load_tier_174", "reason": "Task dispatched: load_tier_174"}
+{"ts": 1765328869.5705297, "kind": "task", "path": "task-84", "reason": "[task-84] processing task: load_tier_175"}
+{"ts": 1765328869.570337, "kind": "dispatch", "path": "load_tier_175", "reason": "Task dispatched: load_tier_175"}
+{"ts": 1765328869.5713396, "kind": "dispatch", "path": "load_tier_176", "reason": "Task dispatched: load_tier_176"}
+{"ts": 1765328869.5715373, "kind": "task", "path": "task-85", "reason": "[task-85] processing task: load_tier_176"}
+{"ts": 1765328869.5728586, "kind": "task", "path": "task-86", "reason": "[task-86] processing task: load_tier_177"}
+{"ts": 1765328869.5726008, "kind": "dispatch", "path": "load_tier_177", "reason": "Task dispatched: load_tier_177"}
+{"ts": 1765328869.5740833, "kind": "dispatch", "path": "load_tier_178", "reason": "Task dispatched: load_tier_178"}
+{"ts": 1765328869.5741947, "kind": "task", "path": "task-87", "reason": "[task-87] processing task: load_tier_178"}
+{"ts": 1765328869.5750387, "kind": "dispatch", "path": "load_tier_179", "reason": "Task dispatched: load_tier_179"}
+{"ts": 1765328869.575201, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: load_tier_179"}
+{"ts": 1765328869.57637, "kind": "dispatch", "path": "load_tier_180", "reason": "Task dispatched: load_tier_180"}
+{"ts": 1765328869.5765727, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: load_tier_180"}
+{"ts": 1765328869.5779834, "kind": "dispatch", "path": "load_tier_181", "reason": "Task dispatched: load_tier_181"}
+{"ts": 1765328869.5781338, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: load_tier_181"}
+{"ts": 1765328869.5789347, "kind": "dispatch", "path": "load_tier_182", "reason": "Task dispatched: load_tier_182"}
+{"ts": 1765328869.5790706, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: load_tier_182"}
+{"ts": 1765328869.5799181, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: load_tier_183"}
+{"ts": 1765328869.5797086, "kind": "dispatch", "path": "load_tier_183", "reason": "Task dispatched: load_tier_183"}
+{"ts": 1765328869.5812452, "kind": "dispatch", "path": "load_tier_184", "reason": "Task dispatched: load_tier_184"}
+{"ts": 1765328869.5813878, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: load_tier_184"}
+{"ts": 1765328869.582102, "kind": "dispatch", "path": "load_tier_185", "reason": "Task dispatched: load_tier_185"}
+{"ts": 1765328869.5822787, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: load_tier_185"}
+{"ts": 1765328869.5830016, "kind": "dispatch", "path": "load_tier_186", "reason": "Task dispatched: load_tier_186"}
+{"ts": 1765328869.583254, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: load_tier_186"}
+{"ts": 1765328869.5841632, "kind": "dispatch", "path": "load_tier_187", "reason": "Task dispatched: load_tier_187"}
+{"ts": 1765328869.584411, "kind": "task", "path": "task-6", "reason": "[task-6] processing task: load_tier_187"}
+{"ts": 1765328869.5861645, "kind": "dispatch", "path": "load_tier_188", "reason": "Task dispatched: load_tier_188"}
+{"ts": 1765328869.5863187, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: load_tier_188"}
+{"ts": 1765328869.58772, "kind": "task", "path": "task-7", "reason": "[task-7] processing task: load_aem_1"}
+{"ts": 1765328869.587507, "kind": "dispatch", "path": "load_aem_1", "reason": "Task dispatched: load_aem_1"}
+{"ts": 1765328869.5888968, "kind": "task", "path": "task-10", "reason": "[task-10] processing task: load_aem_2"}
+{"ts": 1765328869.5887153, "kind": "dispatch", "path": "load_aem_2", "reason": "Task dispatched: load_aem_2"}
+{"ts": 1765328869.5901623, "kind": "dispatch", "path": "load_aem_3", "reason": "Task dispatched: load_aem_3"}
+{"ts": 1765328869.590356, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: load_aem_3"}
+{"ts": 1765328869.5913546, "kind": "task", "path": "task-11", "reason": "[task-11] processing task: load_aem_4"}
+{"ts": 1765328869.5911732, "kind": "dispatch", "path": "load_aem_4", "reason": "Task dispatched: load_aem_4"}
+{"ts": 1765328869.592706, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: load_aem_5"}
+{"ts": 1765328869.5924892, "kind": "dispatch", "path": "load_aem_5", "reason": "Task dispatched: load_aem_5"}
+{"ts": 1765328869.594306, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: load_aem_6"}
+{"ts": 1765328869.5940702, "kind": "dispatch", "path": "load_aem_6", "reason": "Task dispatched: load_aem_6"}
+{"ts": 1765328869.5957854, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: load_aem_7"}
+{"ts": 1765328869.5956671, "kind": "dispatch", "path": "load_aem_7", "reason": "Task dispatched: load_aem_7"}
+{"ts": 1765328869.5968103, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: load_aem_8"}
+{"ts": 1765328869.5966456, "kind": "dispatch", "path": "load_aem_8", "reason": "Task dispatched: load_aem_8"}
+{"ts": 1765328869.5978765, "kind": "dispatch", "path": "load_aem_9", "reason": "Task dispatched: load_aem_9"}
+{"ts": 1765328869.5980196, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: load_aem_9"}
+{"ts": 1765328869.5989015, "kind": "task", "path": "task-17", "reason": "[task-17] processing task: load_aem_10"}
+{"ts": 1765328869.5985863, "kind": "dispatch", "path": "load_aem_10", "reason": "Task dispatched: load_aem_10"}
+{"ts": 1765328869.599926, "kind": "dispatch", "path": "load_aem_11", "reason": "Task dispatched: load_aem_11"}
+{"ts": 1765328869.60007, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: load_aem_11"}
+{"ts": 1765328869.601125, "kind": "dispatch", "path": "load_aem_12", "reason": "Task dispatched: load_aem_12"}
+{"ts": 1765328869.6012893, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: load_aem_12"}
+{"ts": 1765328869.6021852, "kind": "dispatch", "path": "load_aem_13", "reason": "Task dispatched: load_aem_13"}
+{"ts": 1765328869.6023567, "kind": "task", "path": "task-19", "reason": "[task-19] processing task: load_aem_13"}
+{"ts": 1765328869.603905, "kind": "task", "path": "task-22", "reason": "[task-22] processing task: load_aem_14"}
+{"ts": 1765328869.6037607, "kind": "dispatch", "path": "load_aem_14", "reason": "Task dispatched: load_aem_14"}
+{"ts": 1765328869.605516, "kind": "task", "path": "task-21", "reason": "[task-21] processing task: load_aem_15"}
+{"ts": 1765328869.6054811, "kind": "dispatch", "path": "load_aem_15", "reason": "Task dispatched: load_aem_15"}
+{"ts": 1765328869.6068265, "kind": "task", "path": "task-23", "reason": "[task-23] processing task: load_aem_16"}
+{"ts": 1765328869.6065476, "kind": "dispatch", "path": "load_aem_16", "reason": "Task dispatched: load_aem_16"}
+{"ts": 1765328869.6091473, "kind": "dispatch", "path": "load_aem_17", "reason": "Task dispatched: load_aem_17"}
+{"ts": 1765328869.609304, "kind": "task", "path": "task-24", "reason": "[task-24] processing task: load_aem_17"}
+{"ts": 1765328869.610465, "kind": "task", "path": "task-26", "reason": "[task-26] processing task: load_aem_18"}
+{"ts": 1765328869.6102297, "kind": "dispatch", "path": "load_aem_18", "reason": "Task dispatched: load_aem_18"}
+{"ts": 1765328869.6133811, "kind": "dispatch", "path": "load_aem_19", "reason": "Task dispatched: load_aem_19"}
+{"ts": 1765328869.6135356, "kind": "task", "path": "task-25", "reason": "[task-25] processing task: load_aem_19"}
+{"ts": 1765328869.615579, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: load_aem_20"}
+{"ts": 1765328869.6151626, "kind": "dispatch", "path": "load_aem_20", "reason": "Task dispatched: load_aem_20"}
+{"ts": 1765328869.6177795, "kind": "dispatch", "path": "load_aem_21", "reason": "Task dispatched: load_aem_21"}
+{"ts": 1765328869.6181598, "kind": "task", "path": "task-27", "reason": "[task-27] processing task: load_aem_21"}
+{"ts": 1765328869.6193533, "kind": "dispatch", "path": "load_aem_22", "reason": "Task dispatched: load_aem_22"}
+{"ts": 1765328869.6194246, "kind": "task", "path": "task-30", "reason": "[task-30] processing task: load_aem_22"}
+{"ts": 1765328869.6207697, "kind": "task", "path": "task-31", "reason": "[task-31] processing task: load_aem_23"}
+{"ts": 1765328869.6207125, "kind": "dispatch", "path": "load_aem_23", "reason": "Task dispatched: load_aem_23"}
+{"ts": 1765328869.623497, "kind": "dispatch", "path": "load_aem_24", "reason": "Task dispatched: load_aem_24"}
+{"ts": 1765328869.6235528, "kind": "task", "path": "task-29", "reason": "[task-29] processing task: load_aem_24"}
+{"ts": 1765328869.6249382, "kind": "task", "path": "task-32", "reason": "[task-32] processing task: load_aem_25"}
+{"ts": 1765328869.6247606, "kind": "dispatch", "path": "load_aem_25", "reason": "Task dispatched: load_aem_25"}
+{"ts": 1765328869.6267421, "kind": "task", "path": "task-33", "reason": "[task-33] processing task: load_aem_26"}
+{"ts": 1765328869.6265454, "kind": "dispatch", "path": "load_aem_26", "reason": "Task dispatched: load_aem_26"}
+{"ts": 1765328869.6272864, "kind": "dispatch", "path": "load_aem_27", "reason": "Task dispatched: load_aem_27"}
+{"ts": 1765328869.6273782, "kind": "task", "path": "task-34", "reason": "[task-34] processing task: load_aem_27"}
+{"ts": 1765328869.6281269, "kind": "dispatch", "path": "load_aem_28", "reason": "Task dispatched: load_aem_28"}
+{"ts": 1765328869.628213, "kind": "task", "path": "task-36", "reason": "[task-36] processing task: load_aem_28"}
+{"ts": 1765328869.6308632, "kind": "dispatch", "path": "load_aem_29", "reason": "Task dispatched: load_aem_29"}
+{"ts": 1765328869.630914, "kind": "task", "path": "task-35", "reason": "[task-35] processing task: load_aem_29"}
+{"ts": 1765328869.6321769, "kind": "dispatch", "path": "load_aem_30", "reason": "Task dispatched: load_aem_30"}
+{"ts": 1765328869.6325479, "kind": "task", "path": "task-37", "reason": "[task-37] processing task: load_aem_30"}
+{"ts": 1765328869.6354158, "kind": "task", "path": "task-38", "reason": "[task-38] processing task: load_aem_31"}
+{"ts": 1765328869.634938, "kind": "dispatch", "path": "load_aem_31", "reason": "Task dispatched: load_aem_31"}
+{"ts": 1765328869.6365404, "kind": "task", "path": "task-40", "reason": "[task-40] processing task: load_aem_32"}
+{"ts": 1765328869.6365, "kind": "dispatch", "path": "load_aem_32", "reason": "Task dispatched: load_aem_32"}
+{"ts": 1765328869.6373549, "kind": "dispatch", "path": "load_aem_33", "reason": "Task dispatched: load_aem_33"}
+{"ts": 1765328869.63758, "kind": "task", "path": "task-39", "reason": "[task-39] processing task: load_aem_33"}
+{"ts": 1765328869.6388857, "kind": "task", "path": "task-41", "reason": "[task-41] processing task: load_aem_34"}
+{"ts": 1765328869.6386695, "kind": "dispatch", "path": "load_aem_34", "reason": "Task dispatched: load_aem_34"}
+{"ts": 1765328869.641983, "kind": "dispatch", "path": "load_aem_35", "reason": "Task dispatched: load_aem_35"}
+{"ts": 1765328869.6421528, "kind": "task", "path": "task-42", "reason": "[task-42] processing task: load_aem_35"}
+{"ts": 1765328869.6434507, "kind": "task", "path": "task-43", "reason": "[task-43] processing task: load_aem_36"}
+{"ts": 1765328869.643352, "kind": "dispatch", "path": "load_aem_36", "reason": "Task dispatched: load_aem_36"}
+{"ts": 1765328869.6450977, "kind": "task", "path": "task-44", "reason": "[task-44] processing task: load_aem_37"}
+{"ts": 1765328869.6450806, "kind": "dispatch", "path": "load_aem_37", "reason": "Task dispatched: load_aem_37"}
+{"ts": 1765328869.6454759, "kind": "dispatch", "path": "load_aem_38", "reason": "Task dispatched: load_aem_38"}
+{"ts": 1765328869.6455495, "kind": "task", "path": "task-46", "reason": "[task-46] processing task: load_aem_38"}
+{"ts": 1765328869.6470509, "kind": "task", "path": "task-47", "reason": "[task-47] processing task: load_aem_39"}
+{"ts": 1765328869.6467378, "kind": "dispatch", "path": "load_aem_39", "reason": "Task dispatched: load_aem_39"}
+{"ts": 1765328869.647816, "kind": "task", "path": "task-45", "reason": "[task-45] processing task: load_aem_40"}
+{"ts": 1765328869.6477096, "kind": "dispatch", "path": "load_aem_40", "reason": "Task dispatched: load_aem_40"}
+{"ts": 1765328869.6484346, "kind": "dispatch", "path": "load_aem_41", "reason": "Task dispatched: load_aem_41"}
+{"ts": 1765328869.6485152, "kind": "task", "path": "task-51", "reason": "[task-51] processing task: load_aem_41"}
+{"ts": 1765328869.6491406, "kind": "dispatch", "path": "load_aem_42", "reason": "Task dispatched: load_aem_42"}
+{"ts": 1765328869.6494038, "kind": "task", "path": "task-48", "reason": "[task-48] processing task: load_aem_42"}
+{"ts": 1765328869.6512384, "kind": "dispatch", "path": "load_aem_43", "reason": "Task dispatched: load_aem_43"}
+{"ts": 1765328869.6514556, "kind": "task", "path": "task-49", "reason": "[task-49] processing task: load_aem_43"}
+{"ts": 1765328869.6535327, "kind": "task", "path": "task-50", "reason": "[task-50] processing task: load_aem_44"}
+{"ts": 1765328869.6534708, "kind": "dispatch", "path": "load_aem_44", "reason": "Task dispatched: load_aem_44"}
+{"ts": 1765328869.6555293, "kind": "dispatch", "path": "load_aem_45", "reason": "Task dispatched: load_aem_45"}
+{"ts": 1765328869.6559567, "kind": "dispatch", "path": "load_aem_46", "reason": "Task dispatched: load_aem_46"}
+{"ts": 1765328869.6581373, "kind": "task", "path": "task-53", "reason": "[task-53] processing task: load_aem_46"}
+{"ts": 1765328869.662811, "kind": "task", "path": "task-55", "reason": "[task-55] processing task: load_aem_47"}
+{"ts": 1765328869.6559753, "kind": "task", "path": "task-52", "reason": "[task-52] processing task: load_aem_45"}
+{"ts": 1765328869.6623461, "kind": "dispatch", "path": "load_aem_47", "reason": "Task dispatched: load_aem_47"}
+{"ts": 1765328869.6661906, "kind": "dispatch", "path": "load_aem_48", "reason": "Task dispatched: load_aem_48"}
+{"ts": 1765328869.666258, "kind": "task", "path": "task-54", "reason": "[task-54] processing task: load_aem_48"}
+{"ts": 1765328869.6681764, "kind": "task", "path": "task-56", "reason": "[task-56] processing task: load_aem_49"}
+{"ts": 1765328869.6667635, "kind": "dispatch", "path": "load_aem_49", "reason": "Task dispatched: load_aem_49"}
+{"ts": 1765328869.670036, "kind": "dispatch", "path": "load_aem_50", "reason": "Task dispatched: load_aem_50"}
+{"ts": 1765328869.6701584, "kind": "task", "path": "task-57", "reason": "[task-57] processing task: load_aem_50"}
+{"ts": 1765328869.671183, "kind": "dispatch", "path": "load_aem_51", "reason": "Task dispatched: load_aem_51"}
+{"ts": 1765328869.671631, "kind": "task", "path": "task-58", "reason": "[task-58] processing task: load_aem_51"}
+{"ts": 1765328869.671572, "kind": "dispatch", "path": "load_aem_52", "reason": "Task dispatched: load_aem_52"}
+{"ts": 1765328869.672983, "kind": "task", "path": "task-60", "reason": "[task-60] processing task: load_aem_52"}
+{"ts": 1765328869.6748424, "kind": "dispatch", "path": "load_aem_53", "reason": "Task dispatched: load_aem_53"}
+{"ts": 1765328869.6763432, "kind": "task", "path": "task-59", "reason": "[task-59] processing task: load_aem_53"}
+{"ts": 1765328869.677696, "kind": "dispatch", "path": "load_aem_54", "reason": "Task dispatched: load_aem_54"}
+{"ts": 1765328869.678007, "kind": "task", "path": "task-62", "reason": "[task-62] processing task: load_aem_54"}
+{"ts": 1765328869.6801407, "kind": "task", "path": "task-62", "reason": "[task-62] processing task: load_aem_55"}
+{"ts": 1765328869.6799579, "kind": "dispatch", "path": "load_aem_55", "reason": "Task dispatched: load_aem_55"}
+{"ts": 1765328869.6811523, "kind": "dispatch", "path": "load_aem_56", "reason": "Task dispatched: load_aem_56"}
+{"ts": 1765328869.6811905, "kind": "task", "path": "task-63", "reason": "[task-63] processing task: load_aem_56"}
+{"ts": 1765328869.681976, "kind": "task", "path": "task-63", "reason": "[task-63] processing task: load_aem_57"}
+{"ts": 1765328869.6818397, "kind": "dispatch", "path": "load_aem_57", "reason": "Task dispatched: load_aem_57"}
+{"ts": 1765328869.6829603, "kind": "dispatch", "path": "load_aem_58", "reason": "Task dispatched: load_aem_58"}
+{"ts": 1765328869.6829941, "kind": "task", "path": "task-64", "reason": "[task-64] processing task: load_aem_58"}
+{"ts": 1765328869.6837647, "kind": "task", "path": "task-66", "reason": "[task-66] processing task: load_aem_59"}
+{"ts": 1765328869.6835735, "kind": "dispatch", "path": "load_aem_59", "reason": "Task dispatched: load_aem_59"}
+{"ts": 1765328869.6851509, "kind": "dispatch", "path": "load_aem_60", "reason": "Task dispatched: load_aem_60"}
+{"ts": 1765328869.685168, "kind": "task", "path": "task-67", "reason": "[task-67] processing task: load_aem_60"}
+{"ts": 1765328869.6858063, "kind": "task", "path": "task-68", "reason": "[task-68] processing task: load_aem_61"}
+{"ts": 1765328869.6855843, "kind": "dispatch", "path": "load_aem_61", "reason": "Task dispatched: load_aem_61"}
+{"ts": 1765328869.687148, "kind": "task", "path": "task-70", "reason": "[task-70] processing task: load_aem_62"}
+{"ts": 1765328869.6870284, "kind": "dispatch", "path": "load_aem_62", "reason": "Task dispatched: load_aem_62"}
+{"ts": 1765328869.6879563, "kind": "task", "path": "task-71", "reason": "[task-71] processing task: load_aem_63"}
+{"ts": 1765328869.6878877, "kind": "dispatch", "path": "load_aem_63", "reason": "Task dispatched: load_aem_63"}
+{"ts": 1765328869.6886342, "kind": "dispatch", "path": "load_aem_64", "reason": "Task dispatched: load_aem_64"}
+{"ts": 1765328869.6887398, "kind": "task", "path": "task-69", "reason": "[task-69] processing task: load_aem_64"}
+{"ts": 1765328869.6894736, "kind": "dispatch", "path": "load_aem_65", "reason": "Task dispatched: load_aem_65"}
+{"ts": 1765328869.6896129, "kind": "task", "path": "task-69", "reason": "[task-69] processing task: load_aem_65"}
+{"ts": 1765328869.690734, "kind": "task", "path": "task-73", "reason": "[task-73] processing task: load_aem_66"}
+{"ts": 1765328869.690579, "kind": "dispatch", "path": "load_aem_66", "reason": "Task dispatched: load_aem_66"}
+{"ts": 1765328870.2099736, "kind": "task", "path": "task-74", "reason": "[task-74] processing task: validate_module_imports"}
+{"ts": 1765328870.2098238, "kind": "dispatch", "path": "validate_module_imports", "reason": "Task dispatched: validate_module_imports"}
+{"ts": 1765328870.2119281, "kind": "task", "path": "task-75", "reason": "[task-75] processing task: verify_module_dependencies"}
+{"ts": 1765328870.2117813, "kind": "dispatch", "path": "verify_module_dependencies", "reason": "Task dispatched: verify_module_dependencies"}
+{"ts": 1765328870.7180498, "kind": "task", "path": "task-76", "reason": "[task-76] processing task: fuse_category_core_systems"}
+{"ts": 1765328870.7179193, "kind": "dispatch", "path": "fuse_category_core_systems", "reason": "Task dispatched: fuse_category_core_systems"}
+{"ts": 1765328870.7188582, "kind": "task", "path": "task-77", "reason": "[task-77] processing task: fuse_category_memory_fabric"}
+{"ts": 1765328870.718844, "kind": "dispatch", "path": "fuse_category_memory_fabric", "reason": "Task dispatched: fuse_category_memory_fabric"}
+{"ts": 1765328870.7192042, "kind": "task", "path": "task-78", "reason": "[task-78] processing task: fuse_category_nexus_integration"}
+{"ts": 1765328870.719191, "kind": "dispatch", "path": "fuse_category_nexus_integration", "reason": "Task dispatched: fuse_category_nexus_integration"}
+{"ts": 1765328870.7196548, "kind": "task", "path": "task-79", "reason": "[task-79] processing task: fuse_category_learning_engines"}
+{"ts": 1765328870.7196155, "kind": "dispatch", "path": "fuse_category_learning_engines", "reason": "Task dispatched: fuse_category_learning_engines"}
+{"ts": 1765328870.7200694, "kind": "dispatch", "path": "fuse_category_reasoning_modules", "reason": "Task dispatched: fuse_category_reasoning_modules"}
+{"ts": 1765328870.7201421, "kind": "task", "path": "task-80", "reason": "[task-80] processing task: fuse_category_reasoning_modules"}
+{"ts": 1765328870.723754, "kind": "task", "path": "task-81", "reason": "[task-81] processing task: fuse_category_perception_handlers"}
+{"ts": 1765328870.7220082, "kind": "dispatch", "path": "fuse_category_perception_handlers", "reason": "Task dispatched: fuse_category_perception_handlers"}
+{"ts": 1765328870.7258134, "kind": "task", "path": "task-82", "reason": "[task-82] processing task: fuse_category_action_executors"}
+{"ts": 1765328870.7257879, "kind": "dispatch", "path": "fuse_category_action_executors", "reason": "Task dispatched: fuse_category_action_executors"}
+{"ts": 1765328870.7281096, "kind": "task", "path": "task-83", "reason": "[task-83] processing task: fuse_category_communication_layer"}
+{"ts": 1765328870.7279344, "kind": "dispatch", "path": "fuse_category_communication_layer", "reason": "Task dispatched: fuse_category_communication_layer"}
+{"ts": 1765328870.7311053, "kind": "task", "path": "task-84", "reason": "[task-84] processing task: fuse_category_security_protocols"}
+{"ts": 1765328870.730847, "kind": "dispatch", "path": "fuse_category_security_protocols", "reason": "Task dispatched: fuse_category_security_protocols"}
+{"ts": 1765328870.7327557, "kind": "task", "path": "task-85", "reason": "[task-85] processing task: fuse_category_optimization_engines"}
+{"ts": 1765328870.7326407, "kind": "dispatch", "path": "fuse_category_optimization_engines", "reason": "Task dispatched: fuse_category_optimization_engines"}
+{"ts": 1765328870.7351377, "kind": "dispatch", "path": "fuse_category_adaptation_systems", "reason": "Task dispatched: fuse_category_adaptation_systems"}
+{"ts": 1765328870.735318, "kind": "task", "path": "task-86", "reason": "[task-86] processing task: fuse_category_adaptation_systems"}
+{"ts": 1765328870.736236, "kind": "dispatch", "path": "fuse_category_interface_bridges", "reason": "Task dispatched: fuse_category_interface_bridges"}
+{"ts": 1765328870.736429, "kind": "task", "path": "task-87", "reason": "[task-87] processing task: fuse_category_interface_bridges"}
+{"ts": 1765328870.7372358, "kind": "dispatch", "path": "fuse_category_analytics_processors", "reason": "Task dispatched: fuse_category_analytics_processors"}
+{"ts": 1765328870.7373736, "kind": "task", "path": "task-87", "reason": "[task-87] processing task: fuse_category_analytics_processors"}
+{"ts": 1765328870.7383943, "kind": "task", "path": "task-88", "reason": "[task-88] processing task: fuse_modules_with_services"}
+{"ts": 1765328870.7382333, "kind": "dispatch", "path": "fuse_modules_with_services", "reason": "Task dispatched: fuse_modules_with_services"}
+{"ts": 1765328870.7401235, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: integrate_nexus_v3"}
+{"ts": 1765328870.7399778, "kind": "dispatch", "path": "integrate_nexus_v3", "reason": "Task dispatched: integrate_nexus_v3"}
+{"ts": 1765328870.7412848, "kind": "dispatch", "path": "connect_memory_fabric_v2", "reason": "Task dispatched: connect_memory_fabric_v2"}
+{"ts": 1765328870.7414503, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: connect_memory_fabric_v2"}
+{"ts": 1765328871.25794, "kind": "dispatch", "path": "build_autonomy_loop", "reason": "Task dispatched: build_autonomy_loop"}
+{"ts": 1765328871.2580633, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_autonomy_loop"}
+{"ts": 1765328871.260015, "kind": "dispatch", "path": "configure_background_routing", "reason": "Task dispatched: configure_background_routing"}
+{"ts": 1765328871.2602153, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: configure_background_routing"}
+{"ts": 1765328871.2616224, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: enable_self_optimization"}
+{"ts": 1765328871.261465, "kind": "dispatch", "path": "enable_self_optimization", "reason": "Task dispatched: enable_self_optimization"}
+{"ts": 1765328871.2628155, "kind": "task", "path": "task-5", "reason": "[task-5] processing task: activate_adaptive_learning"}
+{"ts": 1765328871.2627926, "kind": "dispatch", "path": "activate_adaptive_learning", "reason": "Task dispatched: activate_adaptive_learning"}
+{"ts": 1765328871.7870026, "kind": "task", "path": "task-74", "reason": "[task-74] processing task: build_interface_layer"}
+{"ts": 1765328871.7867727, "kind": "dispatch", "path": "build_interface_layer", "reason": "Task dispatched: build_interface_layer"}
+{"ts": 1765328871.7884154, "kind": "dispatch", "path": "configure_cli_endpoints", "reason": "Task dispatched: configure_cli_endpoints"}
+{"ts": 1765328871.788566, "kind": "task", "path": "task-74", "reason": "[task-74] processing task: configure_cli_endpoints"}
+{"ts": 1765328871.7898498, "kind": "dispatch", "path": "configure_rest_api", "reason": "Task dispatched: configure_rest_api"}
+{"ts": 1765328871.7901495, "kind": "task", "path": "task-76", "reason": "[task-76] processing task: configure_rest_api"}
+{"ts": 1765328871.7916403, "kind": "dispatch", "path": "enable_websocket_streaming", "reason": "Task dispatched: enable_websocket_streaming"}
+{"ts": 1765328871.7918115, "kind": "task", "path": "task-76", "reason": "[task-76] processing task: enable_websocket_streaming"}
+{"ts": 1765328883.2778425, "kind": "task", "path": "healer-17", "reason": "[healer-17] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328883.2773676, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: build_phase_4_6_modules"}
+{"ts": 1765328883.2784333, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765328883.3123987, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: build_phase_4_6_modules"}
+{"ts": 1765328883.3127503, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: optimize_learning_parameters"}
+{"ts": 1765328883.3128603, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328898.278586, "kind": "task", "path": "healer-52", "reason": "[healer-52] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328898.278802, "kind": "task", "path": "task-18", "reason": "[task-18] processing task: build_phase_4_6_modules"}
+{"ts": 1765328898.2795467, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: optimize_learning_parameters"}
+{"ts": 1765328898.313879, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: build_phase_4_6_modules"}
+{"ts": 1765328898.3141296, "kind": "task", "path": "task-278", "reason": "[task-278] processing task: optimize_learning_parameters"}
+{"ts": 1765328898.313242, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328913.2799463, "kind": "task", "path": "healer-17", "reason": "[healer-17] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328913.2801917, "kind": "task", "path": "task-12", "reason": "[task-12] processing task: build_phase_4_6_modules"}
+{"ts": 1765328913.2806396, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: optimize_learning_parameters"}
+{"ts": 1765328913.314031, "kind": "task", "path": "healer-3", "reason": "[healer-3] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328913.3148339, "kind": "task", "path": "task-4", "reason": "[task-4] processing task: optimize_learning_parameters"}
+{"ts": 1765328913.3146687, "kind": "task", "path": "task-28", "reason": "[task-28] processing task: build_phase_4_6_modules"}
+{"ts": 1765328928.2815118, "kind": "task", "path": "healer-17", "reason": "[healer-17] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328928.2812686, "kind": "task", "path": "task-13", "reason": "[task-13] processing task: build_phase_4_6_modules"}
+{"ts": 1765328928.282458, "kind": "task", "path": "task-16", "reason": "[task-16] processing task: optimize_learning_parameters"}
+{"ts": 1765328928.3152893, "kind": "task", "path": "healer-2", "reason": "[healer-2] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765328928.3159926, "kind": "task", "path": "task-278", "reason": "[task-278] processing task: build_phase_4_6_modules"}
+{"ts": 1765328928.3164155, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: optimize_learning_parameters"}
