@@ -110,6 +110,10 @@ args = "MCP Server"
 task = "workflow.run"
 args = "Aurora Supervisor"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Aurora Roadmap Supervisor"
+
 [[workflows.workflow]]
 name = "Start application"
 author = "agent"
@@ -182,6 +186,17 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python3 aurora_supervisor/supervisor_core.py"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow]]
+name = "Aurora Roadmap Supervisor"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 /home/runner/Aurora-X/aurora_supervisor/aurora_autonomous_roadmap.py"
 
 [workflows.workflow.metadata]
 outputType = "console"
