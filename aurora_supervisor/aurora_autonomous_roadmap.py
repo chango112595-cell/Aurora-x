@@ -1,21 +1,93 @@
 """
 Aurora-X Autonomous Roadmap Supervisor
-Tracks, executes, and summarizes all phases automatically.
-Persistent across restarts, fully Python, no network calls.
+Now includes:
+ - Discord notifications
+ - Persistent encrypted secret vault (no Replit secrets needed)
+ - Stall detection
+ - Daily summary writer
+ - Full self-management across restarts
 """
 
-import json, time, threading, subprocess
+import json, time, threading, subprocess, os, hashlib, base64
 from pathlib import Path
+import requests
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "aurora_supervisor" / "data"
+SECURE = ROOT / "aurora_supervisor" / "secure"
 PROGRESS = DATA / "roadmap_progress.json"
 SUMMARY = DATA / "roadmap_summary.json"
-PHASES = [f"phase{i}_controller.py" for i in range(1, 10)]
+VAULT = SECURE / "secret_vault.json"
 CHECK_INTERVAL = 300      # 5 minutes
 SUMMARY_INTERVAL = 86400  # 24 hours
+PHASES = [f"phase{i}_controller.py" for i in range(1, 10)]
 
-# -------------------- UTILITIES --------------------
+# =============================================================
+#  SECURE VAULT SYSTEM (Persistent encrypted Discord key)
+# =============================================================
+
+def _generate_key():
+    """
+    Uses environment fingerprint + static salt to derive a stable encryption key.
+    This persists across reboots and account transfers.
+    """
+    fp = str(ROOT) + "aurora_universal_salt_v1"
+    return hashlib.sha256(fp.encode()).digest()
+
+def _encrypt(raw: str) -> str:
+    key = _generate_key()
+    data = raw.encode()
+    enc = bytes([data[i] ^ key[i % len(key)] for i in range(len(data))])
+    return base64.b64encode(enc).decode()
+
+def _decrypt(enc: str) -> str | None:
+    try:
+        key = _generate_key()
+        data = base64.b64decode(enc)
+        dec = bytes([data[i] ^ key[i % len(key)] for i in range(len(data))])
+        return dec.decode()
+    except Exception:
+        return None
+
+def get_secret(key: str) -> str | None:
+    if not VAULT.exists():
+        return None
+    try:
+        vault = json.load(open(VAULT))
+        enc = vault.get(key)
+        if not enc:
+            return None
+        return _decrypt(enc)
+    except Exception:
+        return None
+
+def set_secret(key: str, value: str):
+    SECURE.mkdir(parents=True, exist_ok=True)
+    vault = json.load(open(VAULT)) if VAULT.exists() else {}
+    vault[key] = _encrypt(value)
+    json.dump(vault, open(VAULT, "w"), indent=2)
+
+
+# =============================================================
+#  DISCORD NOTIFICATION SYSTEM
+# =============================================================
+def discord_notify(message: str):
+    """Send message to Discord via encrypted persistent webhook vault."""
+    webhook = get_secret("discord_webhook")
+    if not webhook:
+        print("[Discord Notify] No webhook set.")
+        return
+    try:
+        payload = {"content": f"**Aurora-X:** {message}"}
+        requests.post(webhook, json=payload, timeout=10)
+        print("[Discord Notify] Sent:", message)
+    except Exception as e:
+        print("[Discord Notify] Error:", e)
+
+
+# =============================================================
+#  GENERAL UTILITIES
+# =============================================================
 def log(msg):
     print(f"[Aurora-Roadmap] {msg}")
 
@@ -32,9 +104,12 @@ def save_json(path, data):
     with open(path, "w") as f:
         json.dump(data, f, indent=2)
 
-# -------------------- PROGRESS HANDLING --------------------
+
+# =============================================================
+#  PROGRESS TRACKING
+# =============================================================
 def load_state():
-    return load_json(PROGRESS, {"phase": 1, "status": "pending", "subphase": None})
+    return load_json(PROGRESS, {"phase": 1, "status": "pending"})
 
 def save_state(state):
     state["last_update"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -44,20 +119,25 @@ def mark_phase_complete(phase):
     state = load_state()
     state.update({"phase": phase, "status": "complete"})
     save_state(state)
+    discord_notify(f"Phase {phase} completed.")
     log(f"Phase {phase} marked complete.")
 
-# -------------------- PHASE EXECUTION --------------------
+
+# =============================================================
+#  PHASE EXECUTION
+# =============================================================
 def run_phase(phase_num):
     phase_file = DATA / f"phase{phase_num}_controller.py"
     if not phase_file.exists():
-        log(f"Phase {phase_num} script missing, skipping.")
+        log(f"Phase {phase_num} missing; skipping.")
         return
     log(f"Running {phase_file.name} ...")
     subprocess.call(["python3", str(phase_file)])
     mark_phase_complete(phase_num)
 
+
 def detect_progress():
-    """Infer progress from existing data and artifacts."""
+    """Auto-detect progress from artifacts."""
     modules = list((DATA / "modules").glob("*.json"))
     phase = 1
     if len(modules) > 500: phase = 3
@@ -66,7 +146,10 @@ def detect_progress():
     if (DATA / "evolution_log.jsonl").exists(): phase = 7
     return phase
 
-# -------------------- DAILY SUMMARY --------------------
+
+# =============================================================
+#  DAILY SUMMARY
+# =============================================================
 def write_summary():
     state = load_state()
     summary = {
@@ -78,40 +161,51 @@ def write_summary():
         "evolution_log_entries": sum(1 for _ in open(DATA / "evolution_log.jsonl")) if (DATA / "evolution_log.jsonl").exists() else 0,
     }
     save_json(SUMMARY, summary)
-    log("Daily summary written.")
+    discord_notify(f"Daily summary written. Phase {summary['current_phase']} ({summary['status']}).")
     threading.Timer(SUMMARY_INTERVAL, write_summary).start()
 
-# -------------------- STALL DETECTION --------------------
+
+# =============================================================
+#  STALL DETECTION
+# =============================================================
 def stall_check():
     state = load_state()
     if state.get("status") != "complete":
-        log(f"⚠️ Phase {state.get('phase')} still pending, may be stalled.")
+        msg = f"⚠️ Phase {state.get('phase')} may be stalled."
+        log(msg)
+        discord_notify(msg)
     threading.Timer(CHECK_INTERVAL * 3, stall_check).start()
 
-# -------------------- MAIN TRACKER LOOP --------------------
+
+# =============================================================
+#  MAIN LOOP
+# =============================================================
 def tracker_loop():
     state = load_state()
     detected = detect_progress()
+
     if detected > state.get("phase", 1):
         state["phase"] = detected
         state["status"] = "complete"
-        log(f"Detected auto-complete up to phase {detected}.")
         save_state(state)
+        discord_notify(f"Auto-detected completion up to phase {detected}.")
+        log(f"Detected progress up to phase {detected}.")
 
     next_phase = state["phase"] + 1
     if next_phase <= len(PHASES):
-        log(f"Scheduling phase {next_phase} ...")
         run_phase(next_phase)
     else:
         log("All phases complete. Monitoring only.")
 
     threading.Timer(CHECK_INTERVAL, tracker_loop).start()
 
+
 def main():
     log("Starting Aurora Autonomous Roadmap Supervisor ...")
     tracker_loop()
-    write_summary()  # daily auto-summary
-    stall_check()    # stall detection
+    write_summary()
+    stall_check()
+
 
 if __name__ == "__main__":
     main()
