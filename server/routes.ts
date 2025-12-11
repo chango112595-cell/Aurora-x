@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import express from "express";
 import { storage } from "./storage";
 import { corpusStorage } from "./corpus-storage";
 import { progressStore } from "./progress-store";
@@ -307,6 +308,119 @@ export async function registerRoutes(app: Express): Promise<void> {
     } catch (error: any) {
       res.status(500).json({ error: 'Failed to get evolution metrics', message: error.message });
     }
+  });
+
+  // ══════════════════════════════════════════════════════════════
+  // 🗺️ ROADMAP API ROUTES (Autonomous Roadmap Supervisor)
+  // ══════════════════════════════════════════════════════════════
+  
+  const AURORA_ROOT = process.env.AURORA_ROOT || path.resolve(process.cwd());
+  const SUPERVISOR_DATA = path.join(AURORA_ROOT, "aurora_supervisor", "data");
+  const ADMIN_API_KEY = process.env.AURORA_ADMIN_KEY || "aurora-admin-key";
+
+  // Helper to read JSON safely
+  async function readJsonSafe(relPath: string) {
+    const p = path.join(SUPERVISOR_DATA, relPath);
+    const text = await fs.promises.readFile(p, "utf8");
+    return JSON.parse(text);
+  }
+
+  // Roadmap progress endpoint
+  app.get("/api/roadmap/progress", async (req, res) => {
+    try {
+      const data = await readJsonSafe("roadmap_progress.json");
+      return res.json({ ok: true, data });
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, error: String(e.message || e) });
+    }
+  });
+
+  // Roadmap summary endpoint
+  app.get("/api/roadmap/summary", async (req, res) => {
+    try {
+      const data = await readJsonSafe("roadmap_summary.json");
+      return res.json({ ok: true, data });
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, error: String(e.message || e) });
+    }
+  });
+
+  // Evolution log endpoint (tail last 200 entries)
+  app.get("/api/evolution/log", async (req, res) => {
+    try {
+      const p = path.join(SUPERVISOR_DATA, "evolution_log.jsonl");
+      const raw = await fs.promises.readFile(p, "utf8");
+      const lines = raw.trim().split(/\r?\n/).filter(Boolean).slice(-200);
+      const entries = lines.map(l => JSON.parse(l));
+      return res.json({ ok: true, entries });
+    } catch (e: any) {
+      return res.json({ ok: true, entries: [] });
+    }
+  });
+
+  // Queued approvals endpoint (requires admin key)
+  app.get("/api/evolution/queued", async (req, res) => {
+    const key = req.headers["x-api-key"] as string | undefined;
+    if (!key || key !== ADMIN_API_KEY) {
+      return res.status(401).json({ ok: false, error: "unauthorized" });
+    }
+    try {
+      const p = path.join(SUPERVISOR_DATA, "evolution_log.jsonl");
+      const raw = await fs.promises.readFile(p, "utf8");
+      const list = raw.trim().split(/\r?\n/).filter(Boolean).map(l => JSON.parse(l));
+      const queued: any[] = [];
+      for (const entry of list) {
+        (entry.queued || []).forEach((q: any) => { if (q.requires_approval) queued.push(q); });
+      }
+      return res.json({ ok: true, queued });
+    } catch (e: any) {
+      return res.json({ ok: true, queued: [] });
+    }
+  });
+
+  // Approve an evolution change
+  app.post("/api/evolution/approve", express.json(), async (req, res) => {
+    const key = req.headers["x-api-key"] as string | undefined;
+    if (!key || key !== ADMIN_API_KEY) {
+      return res.status(401).json({ ok: false, error: "unauthorized" });
+    }
+    try {
+      const { target } = req.body;
+      if (!target) {
+        return res.status(400).json({ ok: false, error: "target is required" });
+      }
+      const script = path.join(AURORA_ROOT, "aurora_supervisor", "apply_approved.py");
+      const child = spawn("python3", [script, target], { stdio: "pipe" });
+      let out = "";
+      child.stdout.on("data", d => out += d.toString());
+      child.stderr.on("data", d => out += d.toString());
+      child.on("close", (code) => {
+        if (code === 0) return res.json({ ok: true, message: out });
+        return res.status(500).json({ ok: false, error: out });
+      });
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, error: String(e.message || e) });
+    }
+  });
+
+  // Run next roadmap phase (manual trigger)
+  app.post("/api/roadmap/run-next", async (req, res) => {
+    const key = req.headers["x-api-key"] as string | undefined;
+    if (!key || key !== ADMIN_API_KEY) {
+      return res.status(401).json({ ok: false, error: "unauthorized" });
+    }
+    try {
+      const script = path.join(AURORA_ROOT, "aurora_supervisor", "aurora_autonomous_roadmap.py");
+      spawn("python3", [script], { detached: true, stdio: "ignore" }).unref();
+      return res.json({ ok: true, message: "Triggered roadmap runner" });
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, error: String(e.message || e) });
+    }
+  });
+
+  // Roadmap health endpoint
+  app.get("/api/roadmap/health", async (req, res) => {
+    res.json({ ok: true, ts: Date.now() });
   });
 
   // ══════════════════════════════════════════════════════════════
