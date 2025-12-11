@@ -40,9 +40,16 @@ export default function VaultPage() {
   });
 
   const requestsQuery = useQuery<{ requests: VaultRequest[] }>({
-    queryKey: ["/api/vault/requests"],
+    queryKey: ["/api/vault/requests", adminKey],
     enabled: !!adminKey,
-    refetchInterval: 10000
+    refetchInterval: 10000,
+    queryFn: async () => {
+      const res = await fetch("/api/vault/requests", {
+        headers: { "x-api-key": adminKey }
+      });
+      if (!res.ok) throw new Error("Failed to fetch requests");
+      return res.json();
+    }
   });
 
   const requestUnlockMutation = useMutation({
