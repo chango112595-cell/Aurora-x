@@ -76,7 +76,7 @@ export default function MemoryFabric() {
 
   const { data: nexusStatus } = useQuery<NexusStatus>({
     queryKey: ['/api/nexus/status'],
-    refetchInterval: 10000,
+    refetchInterval: 86400000, // 24 hours
   });
 
   const stats = memoryData?.stats;
