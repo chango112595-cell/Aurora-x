@@ -30,3 +30,7 @@ mypy>=0.950
 ruff>=0.1.0
 numpy
 orchestrator-core
+argon2-cffi
+blake3
+cryptography
+pynacl
