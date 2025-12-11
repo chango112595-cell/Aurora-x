@@ -270,6 +270,49 @@ Key integration points:
 | Modern | 251-450 | Yes | ML, AI agents, real-time adaptation |
 | Futuristic | 451-550 | Yes | Quantum, neural links, consciousness |
 
+## ASE-∞ Vault (Multi-Layer Secret Encryption)
+
+**Location**: `aurora_supervisor/secure/`
+
+The ASE-∞ (Aurora Secure Encryption - Infinite) Vault provides multi-layer encryption for secrets:
+
+### Features
+- **22-layer encryption** by default (configurable up to 30+)
+- **Multiple algorithms**: AES-GCM, ChaCha20-Poly1305, NaCl SecretBox, Chaotic XOR
+- **Argon2id key stretching** for secure passphrase derivation
+- **Machine fingerprinting** for host-binding
+- **Blake3** hashing (with SHA-256 fallback)
+
+### Environment Variables
+- `AURORA_MASTER_PASSPHRASE`: Master passphrase for vault encryption/decryption
+- `AURORA_ADMIN_KEY`: Admin API key for vault approval endpoints
+
+### CLI Usage
+```bash
+# Set a secret
+cd aurora_supervisor/secure
+python3 vault_set.py <alias> <master_passphrase> [layers]
+
+# Read a secret
+python3 vault_read.py <alias> <master_passphrase>
+
+# List all secrets
+python3 vault_list.py
+```
+
+### API Endpoints
+- `GET /api/vault/health` - Check vault configuration status
+- `POST /api/vault/unlock-request` - Request secret unlock (audit logged)
+- `POST /api/vault/approve` - Approve and retrieve secret (admin only)
+- `GET /api/vault/requests` - View operation log (admin only)
+- `GET /api/vault/aliases` - List secret aliases (admin only)
+
+### Frontend
+Access the Vault UI at `/vault` to:
+- Request secret unlocks
+- View and approve pending requests (admin)
+- Monitor operation logs
+
 ## External Dependencies
 
 - **AI Engine**: Aurora-X Ultra (Python-based autonomous code synthesis engine)

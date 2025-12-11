@@ -18,6 +18,7 @@ import {
   usedSeedSchema,
 } from "../shared/schema";
 import authRouter from "./auth-routes";
+import vaultRouter from "./routes-vault";
 import { getChatResponse, searchWeb } from "./aurora-chat";
 import { ResponseAdapter } from "./response-adapter";
 import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter } from "./rate-limit";
@@ -422,6 +423,11 @@ export async function registerRoutes(app: Express): Promise<void> {
   app.get("/api/roadmap/health", async (req, res) => {
     res.json({ ok: true, ts: Date.now() });
   });
+
+  // ══════════════════════════════════════════════════════════════
+  // 🔐 ASE-∞ VAULT ROUTES
+  // ══════════════════════════════════════════════════════════════
+  app.use("/api/vault", vaultRouter);
 
   // ══════════════════════════════════════════════════════════════
   // 🔐 RATE LIMITING SETUP
