@@ -7,7 +7,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { spawn } from "child_process";
 import { fileURLToPath } from "url";
-import { readVaultSecretAsync, getVaultOpLog, appendVaultOpLog, listVaultSecrets } from "./vault-bridge";
+import { readVaultSecretAsync, getVaultOpLog, appendVaultOpLog, listVaultSecrets, setVaultSecret, deleteVaultSecret } from "./vault-bridge";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -138,6 +138,58 @@ router.get("/aliases", requireAdmin, async (req: Request, res: Response) => {
     return res.json({ ok: true, aliases });
   } catch (error: any) {
     return res.status(500).json({ error: error.message || "Failed to list aliases" });
+  }
+});
+
+/**
+ * POST /api/vault/secrets
+ * Store a new secret in the vault (requires admin)
+ */
+router.post("/secrets", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { alias, value } = req.body || {};
+    
+    if (!alias || !value) {
+      return res.status(400).json({ error: "alias and value required" });
+    }
+    
+    if (!/^[a-zA-Z0-9_.-]+$/.test(alias)) {
+      return res.status(400).json({ error: "Invalid alias format. Use only letters, numbers, dots, underscores, and hyphens." });
+    }
+    
+    const success = await setVaultSecret(alias, value);
+    
+    if (success) {
+      return res.json({ ok: true, alias, message: "Secret stored successfully" });
+    } else {
+      return res.status(500).json({ error: "Failed to store secret" });
+    }
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message || "Failed to store secret" });
+  }
+});
+
+/**
+ * DELETE /api/vault/secrets/:alias
+ * Delete a secret from the vault (requires admin)
+ */
+router.delete("/secrets/:alias", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { alias } = req.params;
+    
+    if (!alias) {
+      return res.status(400).json({ error: "alias required" });
+    }
+    
+    const success = await deleteVaultSecret(alias);
+    
+    if (success) {
+      return res.json({ ok: true, alias, message: "Secret deleted successfully" });
+    } else {
+      return res.status(404).json({ error: "Secret not found" });
+    }
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message || "Failed to delete secret" });
   }
 });
 

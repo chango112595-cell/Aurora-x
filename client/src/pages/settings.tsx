@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,14 +9,256 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Settings, RefreshCw, Palette, Brain, Zap, Bell, Shield, Server, Save, RotateCcw, Moon, Sun, Monitor } from "lucide-react";
+import { Settings, RefreshCw, Palette, Brain, Zap, Bell, Shield, Server, Save, RotateCcw, Moon, Sun, Monitor, Key, Plus, Trash2, Lock, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 
 interface SettingsSection {
   id: string;
   label: string;
   icon: React.ReactNode;
+}
+
+function SecurityApiKeyManager() {
+  const { toast } = useToast();
+  const [adminKey, setAdminKey] = useState(() => localStorage.getItem("aurora_admin_key") || "");
+  const [newAlias, setNewAlias] = useState("");
+  const [newValue, setNewValue] = useState("");
+  const [showValue, setShowValue] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (adminKey) {
+      localStorage.setItem("aurora_admin_key", adminKey);
+    }
+  }, [adminKey]);
+
+  const aliasesQuery = useQuery<{ ok: boolean; aliases: string[] }>({
+    queryKey: ["/api/vault/aliases"],
+    enabled: isAuthenticated,
+    queryFn: async () => {
+      const res = await fetch("/api/vault/aliases", {
+        headers: { "x-api-key": adminKey }
+      });
+      if (!res.ok) throw new Error("Unauthorized");
+      return res.json();
+    }
+  });
+
+  const healthQuery = useQuery<{ ok: boolean; configured: boolean; hasMasterPassphrase: boolean; hasAdminKey: boolean }>({
+    queryKey: ["/api/vault/health"]
+  });
+
+  const addSecretMutation = useMutation({
+    mutationFn: async (data: { alias: string; value: string }) => {
+      const res = await fetch("/api/vault/secrets", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "x-api-key": adminKey 
+        },
+        body: JSON.stringify(data)
+      });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      if (data.ok) {
+        toast({ title: "API Key Added", description: `${data.alias} stored securely in vault.` });
+        setNewAlias("");
+        setNewValue("");
+        queryClient.invalidateQueries({ queryKey: ["/api/vault/aliases"] });
+      } else {
+        toast({ title: "Error", description: data.error || "Failed to add key", variant: "destructive" });
+      }
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to add API key", variant: "destructive" });
+    }
+  });
+
+  const deleteSecretMutation = useMutation({
+    mutationFn: async (alias: string) => {
+      const res = await fetch(`/api/vault/secrets/${alias}`, {
+        method: "DELETE",
+        headers: { "x-api-key": adminKey }
+      });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      if (data.ok) {
+        toast({ title: "API Key Deleted", description: `${data.alias} removed from vault.` });
+        queryClient.invalidateQueries({ queryKey: ["/api/vault/aliases"] });
+      } else {
+        toast({ title: "Error", description: data.error || "Failed to delete key", variant: "destructive" });
+      }
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to delete API key", variant: "destructive" });
+    }
+  });
+
+  const handleAuthenticate = () => {
+    if (!adminKey.trim()) {
+      toast({ title: "Admin Key Required", description: "Please enter your admin API key.", variant: "destructive" });
+      return;
+    }
+    setIsAuthenticated(true);
+  };
+
+  const handleAddSecret = () => {
+    if (!newAlias.trim() || !newValue.trim()) {
+      toast({ title: "Missing Fields", description: "Please enter both alias and value.", variant: "destructive" });
+      return;
+    }
+    addSecretMutation.mutate({ alias: newAlias.trim(), value: newValue.trim() });
+  };
+
+  return (
+    <div className="grid gap-6">
+      <Card className="border-red-500/30 bg-slate-900/50 backdrop-blur-xl">
+        <CardHeader className="border-b border-red-500/20">
+          <CardTitle className="text-lg text-red-300 flex items-center gap-2">
+            <Shield className="w-5 h-5" />
+            ASE-Infinity Vault - API Key Management
+          </CardTitle>
+          <CardDescription className="text-red-300/60">Securely store and manage API keys with 22-layer encryption</CardDescription>
+        </CardHeader>
+        <CardContent className="pt-4 space-y-4">
+          <div className="p-4 bg-slate-800/50 rounded-lg border border-red-500/20">
+            <div className="flex items-center gap-3 mb-2">
+              <Lock className="w-5 h-5 text-green-400" />
+              <span className="text-sm text-red-200 font-semibold">Vault Status</span>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              {healthQuery.data?.configured ? (
+                <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500/30">Configured</Badge>
+              ) : (
+                <Badge variant="outline" className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">Not Configured</Badge>
+              )}
+              {healthQuery.data?.hasMasterPassphrase && (
+                <Badge variant="outline" className="bg-blue-500/20 text-blue-300 border-blue-500/30">Master Key Set</Badge>
+              )}
+              <span className="text-xs text-red-300/60">22-layer AES encryption active</span>
+            </div>
+          </div>
+
+          {!isAuthenticated ? (
+            <div className="p-4 bg-slate-800/50 rounded-lg border border-red-500/20">
+              <Label className="text-red-200 mb-2 block">Admin API Key</Label>
+              <div className="flex gap-2">
+                <Input
+                  type="password"
+                  placeholder="Enter admin key to manage secrets"
+                  value={adminKey}
+                  onChange={(e) => setAdminKey(e.target.value)}
+                  className="flex-1 bg-slate-700/50 border-red-500/30"
+                  data-testid="input-admin-key"
+                />
+                <Button onClick={handleAuthenticate} className="bg-red-600 hover:bg-red-500" data-testid="button-authenticate">
+                  <Key className="w-4 h-4 mr-2" />
+                  Unlock
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="p-4 bg-slate-800/50 rounded-lg border border-green-500/20">
+                <Label className="text-green-200 mb-3 block flex items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  Add New API Key
+                </Label>
+                <div className="space-y-3">
+                  <Input
+                    placeholder="Alias (e.g., discord_webhook, openai_key)"
+                    value={newAlias}
+                    onChange={(e) => setNewAlias(e.target.value)}
+                    className="bg-slate-700/50 border-green-500/30"
+                    data-testid="input-new-alias"
+                  />
+                  <div className="relative">
+                    <Input
+                      type={showValue ? "text" : "password"}
+                      placeholder="API Key / Secret Value"
+                      value={newValue}
+                      onChange={(e) => setNewValue(e.target.value)}
+                      className="bg-slate-700/50 border-green-500/30 pr-10"
+                      data-testid="input-new-value"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                      onClick={() => setShowValue(!showValue)}
+                    >
+                      {showValue ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                  <Button 
+                    onClick={handleAddSecret} 
+                    disabled={addSecretMutation.isPending}
+                    className="w-full bg-green-600 hover:bg-green-500"
+                    data-testid="button-add-secret"
+                  >
+                    {addSecretMutation.isPending ? (
+                      <><RefreshCw className="w-4 h-4 mr-2 animate-spin" />Encrypting...</>
+                    ) : (
+                      <><Lock className="w-4 h-4 mr-2" />Store in Vault</>
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="p-4 bg-slate-800/50 rounded-lg border border-cyan-500/20">
+                <div className="flex items-center justify-between mb-3">
+                  <Label className="text-cyan-200 flex items-center gap-2">
+                    <Key className="w-4 h-4" />
+                    Stored API Keys ({aliasesQuery.data?.aliases?.length || 0})
+                  </Label>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => aliasesQuery.refetch()}
+                    data-testid="button-refresh-keys"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${aliasesQuery.isFetching ? 'animate-spin' : ''}`} />
+                  </Button>
+                </div>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {aliasesQuery.isLoading ? (
+                    <div className="text-center py-4 text-cyan-300/60">Loading...</div>
+                  ) : aliasesQuery.data?.aliases?.length === 0 ? (
+                    <div className="text-center py-4 text-cyan-300/60">No API keys stored yet</div>
+                  ) : (
+                    aliasesQuery.data?.aliases?.map((alias, i) => (
+                      <div key={alias} className="flex items-center justify-between p-2 bg-slate-700/30 rounded" data-testid={`row-key-${i}`}>
+                        <div className="flex items-center gap-2">
+                          <Lock className="w-4 h-4 text-cyan-400" />
+                          <span className="text-sm text-cyan-200 font-mono">{alias}</span>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-red-400 hover:text-red-300 hover:bg-red-500/20"
+                          onClick={() => deleteSecretMutation.mutate(alias)}
+                          disabled={deleteSecretMutation.isPending}
+                          data-testid={`button-delete-${i}`}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
 
 export default function SettingsPage() {
@@ -336,36 +578,7 @@ export default function SettingsPage() {
             </TabsContent>
 
             <TabsContent value="security" className="mt-0" data-testid="tab-content-security">
-              <div className="grid gap-6">
-                <Card className="border-red-500/30 bg-slate-900/50 backdrop-blur-xl">
-                  <CardHeader className="border-b border-red-500/20">
-                    <CardTitle className="text-lg text-red-300">Security Settings</CardTitle>
-                    <CardDescription className="text-red-300/60">Manage security and privacy options</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-4 space-y-4">
-                    <div className="p-4 bg-slate-800/50 rounded-lg border border-red-500/20">
-                      <div className="flex items-center gap-3 mb-2">
-                        <Shield className="w-5 h-5 text-green-400" />
-                        <span className="text-sm text-red-200 font-semibold">Security Status</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500/30">
-                          Protected
-                        </Badge>
-                        <span className="text-xs text-red-300/60">All security measures active</span>
-                      </div>
-                    </div>
-
-                    <div className="p-3 bg-slate-800/50 rounded-lg">
-                      <p className="text-sm text-red-200 mb-2">API Key Management</p>
-                      <p className="text-xs text-red-300/60 mb-3">Securely stored and encrypted</p>
-                      <Button variant="outline" size="sm" className="border-red-500/30 text-red-300">
-                        Manage API Keys
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              <SecurityApiKeyManager />
             </TabsContent>
 
             <TabsContent value="advanced" className="mt-0" data-testid="tab-content-advanced">

@@ -146,10 +146,89 @@ export function readVaultSecretAsync(alias: string): Promise<string | null> {
   });
 }
 
+/**
+ * Store a secret in the ASE-∞ vault
+ * @param alias The secret alias
+ * @param value The secret value to encrypt
+ * @returns Promise resolving to success status
+ */
+export function setVaultSecret(alias: string, value: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const master = process.env.AURORA_MASTER_PASSPHRASE || "";
+    if (!master) {
+      console.warn("[Vault Bridge] AURORA_MASTER_PASSPHRASE not set");
+      resolve(false);
+      return;
+    }
+    
+    const VAULT_SET_PY = path.join(ROOT, "aurora_supervisor", "secure", "vault_set_noninteractive.py");
+    
+    const child = spawn("python3", [VAULT_SET_PY, alias, master, value], {
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    
+    let out = "";
+    let err = "";
+    
+    child.stdout.on("data", (d) => { out += d.toString(); });
+    child.stderr.on("data", (d) => { err += d.toString(); });
+    
+    child.on("close", (code) => {
+      if (code !== 0) {
+        console.warn(`[Vault Bridge] Failed to set secret '${alias}': ${err}`);
+        resolve(false);
+        return;
+      }
+      appendVaultOpLog({ op: "set_secret", alias });
+      resolve(true);
+    });
+    
+    child.on("error", (error) => {
+      console.error("[Vault Bridge] Process error:", error);
+      resolve(false);
+    });
+  });
+}
+
+/**
+ * Delete a secret from the ASE-∞ vault
+ * @param alias The secret alias to delete
+ * @returns Promise resolving to success status
+ */
+export function deleteVaultSecret(alias: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    try {
+      const VAULT_FILE = path.join(ROOT, "aurora_supervisor", "secure", "secret_vault.json");
+      
+      if (!fs.existsSync(VAULT_FILE)) {
+        resolve(false);
+        return;
+      }
+      
+      const data = JSON.parse(fs.readFileSync(VAULT_FILE, "utf8"));
+      
+      if (!data.secrets || !data.secrets[alias]) {
+        resolve(false);
+        return;
+      }
+      
+      delete data.secrets[alias];
+      fs.writeFileSync(VAULT_FILE, JSON.stringify(data, null, 2));
+      appendVaultOpLog({ op: "delete_secret", alias });
+      resolve(true);
+    } catch (error) {
+      console.error("[Vault Bridge] Error deleting secret:", error);
+      resolve(false);
+    }
+  });
+}
+
 export default {
   readVaultSecret,
   readVaultSecretAsync,
   listVaultSecrets,
   getVaultOpLog,
-  appendVaultOpLog
+  appendVaultOpLog,
+  setVaultSecret,
+  deleteVaultSecret
 };
