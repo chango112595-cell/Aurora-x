@@ -17,12 +17,23 @@ Secrets are stored in: `aurora_supervisor/secure/secret_vault.json`
 
 ---
 
-## Step 1: Store Your First API Key
+## Step 1: Navigate to the Vault Directory
 
 Open the Shell and run:
 
 ```bash
 cd aurora_supervisor/secure
+```
+
+**Important:** Make sure you type `cd` (change directory), not `cs`. If you see "cs: command not installed", press Ctrl+C to cancel and retype with `cd`.
+
+---
+
+## Step 2: Store Your First API Key
+
+Run:
+
+```bash
 python3 vault_set.py my-api-key MyMasterPassphrase123
 ```
 
@@ -40,10 +51,9 @@ python3 vault_set.py openai-key MySecretPass2024
 
 ---
 
-## Step 2: Retrieve a Stored Secret
+## Step 3: Retrieve a Stored Secret
 
 ```bash
-cd aurora_supervisor/secure
 python3 vault_read.py openai-key MySecretPass2024
 ```
 
@@ -51,10 +61,9 @@ This prints the decrypted API key.
 
 ---
 
-## Step 3: List All Stored Secrets
+## Step 4: List All Stored Secrets
 
 ```bash
-cd aurora_supervisor/secure
 python3 vault_list.py
 ```
 
