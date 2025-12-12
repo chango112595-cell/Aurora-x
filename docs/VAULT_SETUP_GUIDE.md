@@ -2,230 +2,131 @@
 
 ## Overview
 
-The ASE-∞ (Aurora Secure Encryption - Infinite) Vault provides multi-layer encryption for storing sensitive secrets like API keys, tokens, and credentials. It uses 22+ layers of encryption by default with algorithms including AES-GCM, ChaCha20-Poly1305, and NaCl SecretBox.
+The ASE-∞ (Aurora Secure Encryption - Infinite) Vault is Aurora's built-in system for securely storing API keys and secrets. It uses 22 layers of encryption with multiple algorithms (AES-GCM, ChaCha20-Poly1305, NaCl SecretBox, Chaotic XOR).
+
+Secrets are stored in: `aurora_supervisor/secure/secret_vault.json`
 
 ---
 
-## Step 1: Set Required Environment Variables
+## How It Works
 
-Before using the vault, you must configure two environment variables in Replit's Secrets tool.
-
-### How to Access Secrets in Replit
-
-1. Look at the left side of your Replit workspace
-2. Click **"All tools"** (or use the search bar at the top)
-3. Select **"Secrets"** from the list
-4. You'll see the Secrets management panel
-
-### Required Secrets
-
-Add these two secrets:
-
-| Key | Description | Example Value |
-|-----|-------------|---------------|
-| `AURORA_MASTER_PASSPHRASE` | Master passphrase used to encrypt/decrypt all vault secrets. Choose a strong, memorable passphrase. | `MySecure-Passphrase-2024!` |
-| `AURORA_ADMIN_KEY` | Admin API key for approving vault unlock requests. Generate a random string. | `admin-key-abc123xyz789` |
-
-### Adding a Secret
-
-1. Click the **"+ New Secret"** button
-2. Enter the **Key** (e.g., `AURORA_MASTER_PASSPHRASE`)
-3. Enter the **Value** (your chosen passphrase or key)
-4. Click **"Add Secret"**
-5. Repeat for the second secret
+1. You choose a **master passphrase** - this is the key to encrypt/decrypt all your secrets
+2. Secrets are encrypted with 22+ layers of different algorithms
+3. Each secret is stored under an **alias** (a name you choose, like `openai-key`)
+4. To retrieve a secret, you need the alias + your master passphrase
 
 ---
 
-## Step 2: Verify Vault Health
+## Step 1: Store Your First API Key
 
-After setting the environment variables, verify the vault is configured correctly.
-
-### Option A: Using the API
-
-Open a browser or use curl:
-
-```
-GET https://your-replit-url/api/vault/health
-```
-
-Expected response when configured:
-```json
-{
-  "status": "configured",
-  "hasPassphrase": true,
-  "hasAdminKey": true
-}
-```
-
-### Option B: Using the Frontend
-
-1. Navigate to `/vault` in your browser
-2. The vault dashboard will show the configuration status
-3. Green indicators mean everything is set up correctly
-
----
-
-## Step 3: Using the Vault
-
-### Storing a Secret (CLI)
-
-Open the Shell in Replit and run:
+Open the Shell and run:
 
 ```bash
 cd aurora_supervisor/secure
-python3 vault_set.py <alias> <your_master_passphrase> [layers]
+python3 vault_set.py my-api-key MyMasterPassphrase123
 ```
+
+Then paste your API key when prompted and press Enter.
 
 **Parameters:**
-- `<alias>`: A name for your secret (e.g., `openai-api-key`)
-- `<your_master_passphrase>`: Your `AURORA_MASTER_PASSPHRASE` value
-- `[layers]`: Optional - number of encryption layers (default: 22)
+- `my-api-key` = the alias (name) for this secret
+- `MyMasterPassphrase123` = your master passphrase (you choose this, remember it!)
 
-**Example:**
+**Example - storing an OpenAI key:**
 ```bash
-python3 vault_set.py openai-key MySecure-Passphrase-2024!
-# Then enter your secret value when prompted
+python3 vault_set.py openai-key MySecretPass2024
+# When prompted, paste: sk-proj-abc123...
 ```
 
-### Non-Interactive Mode
+---
 
-For automation, use the non-interactive script:
-
-```bash
-python3 vault_set_noninteractive.py <alias> <master_passphrase> <secret_value> [layers]
-```
-
-### Reading a Secret (CLI)
+## Step 2: Retrieve a Stored Secret
 
 ```bash
 cd aurora_supervisor/secure
-python3 vault_read.py <alias> <your_master_passphrase>
+python3 vault_read.py openai-key MySecretPass2024
 ```
 
-**Example:**
-```bash
-python3 vault_read.py openai-key MySecure-Passphrase-2024!
-```
+This prints the decrypted API key.
 
-### Listing All Secrets (CLI)
+---
+
+## Step 3: List All Stored Secrets
 
 ```bash
 cd aurora_supervisor/secure
 python3 vault_list.py
 ```
 
-This shows all stored secret aliases (not the actual values).
+This shows all the aliases you've stored (but not the actual values).
 
 ---
 
-## Step 4: Using the Web Interface
+## Using the Web Interface
 
-### Accessing the Vault UI
+### Access the Vault Page
 
-Navigate to `/vault` in your browser to access the visual interface.
+1. Start Aurora (`./aurora-start`)
+2. Go to `/vault` in your browser
 
-### Requesting a Secret Unlock
+### What You'll See
 
-1. Go to `/vault`
-2. Enter the **alias** of the secret you need
-3. Enter your **master passphrase**
-4. Click **"Request Unlock"**
-5. The request is logged for audit purposes
-
-### Admin Approval (For Sensitive Operations)
-
-If admin approval is required:
-
-1. Go to `/vault`
-2. Enter your **Admin Key** (`AURORA_ADMIN_KEY` value)
-3. View pending requests in the admin panel
-4. Click **"Approve"** to retrieve the decrypted secret
+- **Vault Status** - Shows if the vault is configured
+- **Request Unlock tab** - Request access to a secret
+- **Admin Approvals tab** - Approve unlock requests (requires admin key)
+- **Operation Log tab** - View all vault operations
 
 ---
 
-## API Reference
+## Advanced: Non-Interactive Mode
 
-### Check Vault Health
-```
-GET /api/vault/health
-```
-Returns configuration status.
+For scripts/automation, use:
 
-### Request Secret Unlock
-```
-POST /api/vault/unlock-request
-Content-Type: application/json
-
-{
-  "alias": "my-secret-name",
-  "passphrase": "your-master-passphrase"
-}
+```bash
+python3 vault_set_noninteractive.py <alias> <passphrase> <secret_value> [layers]
 ```
 
-### Approve and Retrieve Secret (Admin Only)
-```
-POST /api/vault/approve
-Content-Type: application/json
-
-{
-  "alias": "my-secret-name",
-  "passphrase": "your-master-passphrase",
-  "adminKey": "your-admin-key"
-}
-```
-
-### List Secret Aliases (Admin Only)
-```
-GET /api/vault/aliases?adminKey=your-admin-key
-```
-
-### View Operation Log (Admin Only)
-```
-GET /api/vault/requests?adminKey=your-admin-key
+**Example:**
+```bash
+python3 vault_set_noninteractive.py discord-token MyPass123 "MTk4NjIyNDg..." 22
 ```
 
 ---
 
-## Security Best Practices
+## Advanced: Custom Encryption Layers
 
-1. **Choose a strong master passphrase**: Use a combination of words, numbers, and symbols. At least 16 characters recommended.
+By default, the vault uses 22 encryption layers. You can increase this:
 
-2. **Keep your admin key private**: Only share with trusted administrators.
+```bash
+python3 vault_set.py my-secret MyPassphrase 30
+```
 
-3. **Don't commit secrets to git**: The vault stores encrypted data in `aurora_supervisor/secure/vault_data/` which should be in `.gitignore`.
-
-4. **Use different passphrases for different environments**: Development and production should have separate master passphrases.
-
-5. **Regularly rotate secrets**: Periodically update stored secrets and the master passphrase.
+This uses 30 layers instead of 22.
 
 ---
 
-## Troubleshooting
+## API Endpoints (For Programmatic Access)
 
-### "Vault not configured" Error
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/vault/health` | GET | Check vault status |
+| `/api/vault/unlock-request` | POST | Request to unlock a secret |
+| `/api/vault/approve` | POST | Approve an unlock request (admin) |
+| `/api/vault/aliases` | GET | List all secret aliases (admin) |
+| `/api/vault/requests` | GET | View operation log (admin) |
 
-**Cause**: Missing environment variables.
+---
 
-**Solution**: 
-1. Go to Secrets tool in Replit
-2. Verify both `AURORA_MASTER_PASSPHRASE` and `AURORA_ADMIN_KEY` are set
-3. Restart the application workflow
+## Environment Variables (Optional)
 
-### "Decryption failed" Error
+If you want to use the web API endpoints, you can set these:
 
-**Cause**: Wrong passphrase or corrupted data.
+| Variable | Purpose |
+|----------|---------|
+| `AURORA_MASTER_PASSPHRASE` | Pre-set passphrase for API calls |
+| `AURORA_ADMIN_KEY` | Admin API key for approval endpoints |
 
-**Solution**:
-1. Verify you're using the correct master passphrase
-2. Check that the secret alias exists with `python3 vault_list.py`
-
-### "Unauthorized" Error on Admin Endpoints
-
-**Cause**: Invalid or missing admin key.
-
-**Solution**:
-1. Verify your `AURORA_ADMIN_KEY` is set correctly
-2. Ensure you're passing the correct admin key in requests
+These are optional - you can always use the CLI directly with your passphrase.
 
 ---
 
@@ -233,22 +134,35 @@ GET /api/vault/requests?adminKey=your-admin-key
 
 | File | Purpose |
 |------|---------|
-| `aurora_supervisor/secure/ase_vault.py` | Main vault encryption/decryption logic |
-| `aurora_supervisor/secure/vault_set.py` | CLI tool to store secrets |
-| `aurora_supervisor/secure/vault_read.py` | CLI tool to read secrets |
-| `aurora_supervisor/secure/vault_list.py` | CLI tool to list secret aliases |
-| `aurora_supervisor/secure/vault_data/` | Encrypted secret storage (auto-created) |
-| `server/routes-vault.ts` | Backend API routes |
-| `server/vault-bridge.ts` | TypeScript-to-Python bridge |
-| `client/src/pages/vault.tsx` | Frontend vault UI |
+| `aurora_supervisor/secure/secret_vault.json` | Encrypted secrets storage |
+| `aurora_supervisor/secure/vault_oplog.jsonl` | Operation audit log |
+| `aurora_supervisor/secure/vault_set.py` | CLI to store secrets |
+| `aurora_supervisor/secure/vault_read.py` | CLI to read secrets |
+| `aurora_supervisor/secure/vault_list.py` | CLI to list aliases |
+| `aurora_supervisor/secure/ase_vault.py` | Core encryption logic |
 
 ---
 
-## Quick Start Checklist
+## Quick Reference
 
-- [ ] Set `AURORA_MASTER_PASSPHRASE` in Replit Secrets
-- [ ] Set `AURORA_ADMIN_KEY` in Replit Secrets  
-- [ ] Restart the application workflow
-- [ ] Verify vault health at `/api/vault/health`
-- [ ] Access vault UI at `/vault`
-- [ ] Store your first secret using CLI or web interface
+```bash
+# Store a secret
+cd aurora_supervisor/secure
+python3 vault_set.py <alias> <your-passphrase>
+# Then paste the secret value
+
+# Read a secret
+python3 vault_read.py <alias> <your-passphrase>
+
+# List all secrets
+python3 vault_list.py
+```
+
+---
+
+## Important Notes
+
+1. **Remember your passphrase** - If you forget it, you cannot recover your secrets
+2. **Same passphrase for all secrets** - Use the same master passphrase for all your stored secrets
+3. **Secrets are stored locally** - In `aurora_supervisor/secure/secret_vault.json`
+4. **Machine-bound** - Secrets include a machine fingerprint, so they work best on the same machine they were created on
