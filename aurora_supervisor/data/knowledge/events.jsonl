@@ -10477,3 +10477,15 @@
 {"ts": 1765450240.882593, "kind": "task", "path": "task-14", "reason": "[task-14] processing task: build_phase_4_6_modules"}
 {"ts": 1765450240.8825302, "kind": "task", "path": "healer-94", "reason": "[healer-94] processing task: validate_integrity_phase_4_6"}
 {"ts": 1765450240.8838243, "kind": "task", "path": "task-15", "reason": "[task-15] processing task: optimize_learning_parameters"}
+{"ts": 1765507356.2194567, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765507356.2197444, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: build_phase_4_6_modules"}
+{"ts": 1765507356.220067, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: optimize_learning_parameters"}
+{"ts": 1765507356.2502344, "kind": "task", "path": "task-0", "reason": "[task-0] processing task: optimize_learning_parameters"}
+{"ts": 1765507356.250176, "kind": "task", "path": "task-1", "reason": "[task-1] processing task: build_phase_4_6_modules"}
+{"ts": 1765507356.2500136, "kind": "task", "path": "healer-0", "reason": "[healer-0] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765507371.2209663, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
+{"ts": 1765507371.2213542, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765507371.221461, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765507371.2498667, "kind": "task", "path": "healer-1", "reason": "[healer-1] processing task: validate_integrity_phase_4_6"}
+{"ts": 1765507371.250734, "kind": "task", "path": "task-3", "reason": "[task-3] processing task: optimize_learning_parameters"}
+{"ts": 1765507371.2503076, "kind": "task", "path": "task-2", "reason": "[task-2] processing task: build_phase_4_6_modules"}
