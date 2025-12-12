@@ -14,16 +14,24 @@ There are **two ways** to use the vault:
 
 This is the Settings page UI with "ASE-Infinity Vault - API Key Management".
 
-### Step 1: Set Environment Variables
+### Step 1: Open Secrets Tool
 
-You need to set two environment variables. In Replit, go to the **Secrets** tool and add:
+1. In Replit, look at the left sidebar
+2. Click **"All tools"** (or press Cmd/Ctrl+K and search "Secrets")
+3. Select **"Secrets"**
 
-| Key | What to Enter |
-|-----|---------------|
-| `AURORA_MASTER_PASSPHRASE` | Choose a strong passphrase (e.g., `MySecurePass2024!`) |
-| `AURORA_ADMIN_KEY` | Choose an admin key (e.g., `admin-key-xyz123`) |
+### Step 2: Add Two Secrets
 
-### Step 2: Restart the Application
+Click **"+ New Secret"** and add each of these:
+
+| Key | Value (you choose) |
+|-----|-----|
+| `AURORA_MASTER_PASSPHRASE` | Your master passphrase (e.g., `MySecurePass2024!`) |
+| `AURORA_ADMIN_KEY` | Your admin key (e.g., `admin-key-xyz123`) |
+
+**Important:** Remember these values - you'll need the passphrase to decrypt your stored secrets.
+
+### Step 3: Restart the Application
 
 After setting the secrets, restart Aurora:
 ```bash
