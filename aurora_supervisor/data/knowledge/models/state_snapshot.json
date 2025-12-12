@@ -1,5 +1,5 @@
 {
-  "timestamp": 1765555696.7584734,
+  "timestamp": 1765555816.7854714,
   "memory": {
     "task-0": "build_phase_4_6_modules",
     "task-1": "build_phase_4_6_modules",
@@ -45,7 +45,7 @@
     "task-74": "optimize_learning_parameters",
     "healer-34": "validate_integrity_phase_4_6",
     "task-41": "optimize_learning_parameters",
-    "task-11": "optimize_learning_parameters",
+    "task-11": "build_phase_4_6_modules",
     "healer-1": "validate_integrity_phase_4_6",
     "task-220": "optimize_learning_parameters",
     "task-241": "build_phase_4_6_modules",
@@ -176,9 +176,4 @@
     "task-231": "build_phase_4_6_modules",
     "task-223": "build_phase_4_6_modules",
     "task-290": "optimize_learning_parameters",
-    "healer-64": "validate_integrity_phase_4_6",
-    "healer-99": "validate_integrity_phase_4_6",
-    "healer-66": "validate_integrity_phase_4_6",
-    "task-23": "optimize_learning_parameters"
-  }
-}
+    "healer-64": "validate_integrity_phase_4_6"
