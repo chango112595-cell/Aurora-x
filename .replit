@@ -88,10 +88,6 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Aurora Roadmap Supervisor"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Start application"
 
 [[workflows.workflow]]
@@ -111,17 +107,6 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd aurora_backend && pip install -r requirements.txt && python3 main.py"
-
-[[workflows.workflow]]
-name = "Aurora Roadmap Supervisor"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python3 /home/runner/Aurora-X/aurora_supervisor/aurora_autonomous_roadmap.py"
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [[workflows.workflow]]
 name = "Start application"
