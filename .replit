@@ -92,62 +92,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Start application"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Luminar Nexus V2"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Aurora Nexus V3"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "MCP Server"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Aurora Supervisor"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Aurora Roadmap Supervisor"
-
-[[workflows.workflow]]
-name = "Start application"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
-
-[[workflows.workflow]]
-name = "Luminar Nexus V2"
-author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "console"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python3 tools/luminar_nexus_v2.py serve"
-waitForPort = 8000
-
-[[workflows.workflow]]
-name = "Aurora Nexus V3"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python3 aurora_nexus_v3/main.py"
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [[workflows.workflow]]
 name = "Aurora V3 Autonomous"
@@ -166,29 +111,6 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd aurora_backend && pip install -r requirements.txt && python3 main.py"
-
-[[workflows.workflow]]
-name = "MCP Server"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python3 mcp_server/server.py"
-waitForPort = 8080
-
-[workflows.workflow.metadata]
-outputType = "console"
-
-[[workflows.workflow]]
-name = "Aurora Supervisor"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python3 aurora_supervisor/supervisor_core.py"
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [[workflows.workflow]]
 name = "Aurora Roadmap Supervisor"
