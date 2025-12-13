@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,15 +8,32 @@ import { CheckCircle2, XCircle, Loader2, Send } from "lucide-react";
 import { useState } from "react";
 import API_CONFIG from "@/config/api";
 
+interface ExpressHealthResponse {
+  service: string;
+  uptime: number;
+  status?: string;
+}
+
+interface AIBackendInfo {
+  service: string;
+  aurora_core: string;
+}
+
+interface AIHealthResponse {
+  status: string;
+  message?: string;
+  aurora_ai_backend?: AIBackendInfo;
+}
+
 export default function AuroraAITest() {
   const [chatMessage, setChatMessage] = useState("");
   const [chatResponse, setChatResponse] = useState<any>(null);
 
-  const { data: expressHealth, isLoading: expressLoading, refetch: refetchExpress } = useQuery({
+  const { data: expressHealth, isLoading: expressLoading, refetch: refetchExpress } = useQuery<ExpressHealthResponse>({
     queryKey: ['/api/health'],
   });
 
-  const { data: aiHealth, isLoading: aiLoading, refetch: refetchAI } = useQuery({
+  const { data: aiHealth, isLoading: aiLoading, refetch: refetchAI } = useQuery<AIHealthResponse>({
     queryKey: ['/api/aurora-ai/health'],
   });
 

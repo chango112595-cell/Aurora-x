@@ -25,10 +25,6 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 5002
-externalPort = 3002
-
-[[ports]]
 localPort = 6000
 externalPort = 6000
 
@@ -94,6 +90,10 @@ author = "agent"
 task = "workflow.run"
 args = "Aurora Roadmap Supervisor"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
 [[workflows.workflow]]
 name = "Aurora V3 Autonomous"
 author = 50347865
@@ -122,6 +122,18 @@ args = "python3 /home/runner/Aurora-X/aurora_supervisor/aurora_autonomous_roadma
 
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
 
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
