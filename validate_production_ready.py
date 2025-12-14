@@ -163,7 +163,7 @@ class ProductionValidator:
             self.results["modules"]["actual"] = len(modules)
             
             if len(modules) >= 550:
-                self.log_success(f"Found {len(modules)}/550+ Cross-Temporal Modules")
+                self.log_success(f"Found {len(modules)}/550 Cross-Temporal Modules (minimum required: 550)")
                 self.results["modules"]["status"] = "passed"
                 
                 # Validate module categories
@@ -175,7 +175,7 @@ class ProductionValidator:
                 self.log_info(f"  Categories: {len(categories)}")
                 return True
             else:
-                self.log_error(f"Expected 550+ modules, found {len(modules)}")
+                self.log_error(f"Expected minimum 550 modules, found {len(modules)}")
                 self.results["modules"]["status"] = "failed"
                 return False
                 
@@ -208,9 +208,15 @@ class ProductionValidator:
                 
                 return True
             else:
-                self.log_warning(f"Expected 15 packs, found {len(pack_dirs)}")
+                # Pack count validation is informational - system can still function with different pack count
+                self.log_warning(f"Expected 15 packs, found {len(pack_dirs)} (non-critical)")
                 self.results["packs"]["status"] = "warning"
-                return True  # Not critical
+                
+                # List packs that are present
+                for pack in sorted(pack_dirs):
+                    self.log_info(f"  - {pack.name}")
+                
+                return True  # Non-critical - system functional with any pack count
                 
         except Exception as e:
             self.log_error(f"Error validating packs: {e}")

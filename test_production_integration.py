@@ -24,6 +24,11 @@ from typing import Dict, List
 class ProductionIntegrationTest:
     """Integration test for production readiness"""
     
+    # Expected component counts (must match HybridOrchestrator constants)
+    EXPECTED_TIERS = 188
+    EXPECTED_AEMS = 66
+    EXPECTED_MODULES = 550
+    
     def __init__(self):
         self.root = Path(__file__).parent
         self.test_results = []
@@ -53,9 +58,9 @@ class ProductionIntegrationTest:
             
             # Verify all components
             checks = [
-                (status["components"]["tiers"]["total"] == 188, "188 Tiers loaded"),
-                (status["components"]["aems"]["total"] == 66, "66 AEMs loaded"),
-                (status["components"]["modules"]["total"] == 550, "550 Modules loaded"),
+                (status["components"]["tiers"]["total"] == self.EXPECTED_TIERS, f"{self.EXPECTED_TIERS} Tiers loaded"),
+                (status["components"]["aems"]["total"] == self.EXPECTED_AEMS, f"{self.EXPECTED_AEMS} AEMs loaded"),
+                (status["components"]["modules"]["total"] == self.EXPECTED_MODULES, f"{self.EXPECTED_MODULES} Modules loaded"),
                 (status["components"]["hyperspeed"]["enabled"], "Hyperspeed enabled"),
                 (status["initialized"], "Orchestrator initialized"),
                 (status["running"], "Orchestrator running")

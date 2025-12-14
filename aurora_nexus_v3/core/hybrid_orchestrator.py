@@ -1037,10 +1037,14 @@ class HybridOrchestrator:
         Returns:
             Dict mapping component names to health status strings
         """
-        return {
-            name: status.value 
-            for name, status in self.health_status.items()
-        }
+        health_dict = {}
+        for name, status in self.health_status.items():
+            # Handle both enum values and string values
+            if hasattr(status, 'value'):
+                health_dict[name] = status.value
+            else:
+                health_dict[name] = str(status)
+        return health_dict
     
     def get_metrics(self) -> Dict[str, Any]:
         """
