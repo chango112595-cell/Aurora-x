@@ -1,91 +1,71 @@
 /**
- * RAG (Retrieval Augmented Generation) System
- * Uses Pinecone for vector storage and OpenAI for embeddings
+ * Self-Contained RAG (Retrieval Augmented Generation) System
+ * Aurora's autonomous knowledge system - no external APIs required
+ * Uses in-memory vector storage with local embeddings
  */
 
-import { Pinecone } from '@pinecone-database/pinecone';
-
-let pinecone: Pinecone | null = null;
-let index: any = null;
-
-const OPENAI_API_KEY = process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY;
-const OPENAI_BASE_URL = process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || 'https://api.openai.com/v1';
-
-// Initialize Pinecone if API key is provided
-if (process.env.PINECONE_API_KEY) {
-  try {
-    pinecone = new Pinecone({
-      apiKey: process.env.PINECONE_API_KEY,
-    });
-    
-    const indexName = process.env.PINECONE_INDEX || 'aurora-knowledge';
-    index = pinecone.index(indexName);
-    
-    console.log('[RAG] Pinecone vector database connected:', indexName);
-  } catch (error: any) {
-    console.error('[RAG] Pinecone initialization failed:', error.message);
-  }
-} else {
-  console.log('[RAG] Pinecone not configured (set PINECONE_API_KEY for vector search)');
+interface VectorDocument {
+  id: string;
+  text: string;
+  embedding: number[];
+  metadata: DocumentMetadata;
 }
 
-// Log OpenAI embeddings status
-if (OPENAI_API_KEY) {
-  console.log('[RAG] OpenAI embeddings configured');
-} else {
-  console.log('[RAG] OpenAI not configured - using fallback embeddings (set OPENAI_API_KEY for production)');
-}
+const vectorStore: Map<string, VectorDocument> = new Map();
+
+console.log('[RAG] Self-contained knowledge system initialized');
+console.log('[RAG] Using local embeddings and in-memory vector storage');
 
 /**
- * Generate embeddings for text using OpenAI's text-embedding-3-small model
- * Falls back to a simple hash-based embedding if OpenAI is not configured
+ * Generate embeddings locally using TF-IDF inspired hashing
+ * No external APIs required - fully self-contained
  */
-async function generateEmbedding(text: string): Promise<number[]> {
-  if (OPENAI_API_KEY) {
-    try {
-      const response = await fetch(`${OPENAI_BASE_URL}/embeddings`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'text-embedding-3-small',
-          input: text.substring(0, 8000),
-        }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('[RAG] OpenAI embedding error:', errorText);
-        throw new Error(`OpenAI API error: ${response.status}`);
-      }
-
-      const data = await response.json() as { data: Array<{ embedding: number[] }> };
-      return data.data[0].embedding;
-    } catch (error: any) {
-      console.error('[RAG] OpenAI embedding failed, using fallback:', error.message);
-      return generateFallbackEmbedding(text);
+function generateLocalEmbedding(text: string): number[] {
+  const normalized = text.toLowerCase().trim();
+  const tokens = normalized.split(/\s+/).filter(t => t.length > 2);
+  const embedding = new Array(384).fill(0);
+  
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    const hash = hashToken(token);
+    const position = Math.abs(hash) % embedding.length;
+    const weight = 1 / Math.sqrt(i + 1);
+    
+    embedding[position] += weight;
+    embedding[(position + 1) % embedding.length] += weight * 0.5;
+    embedding[(position + 2) % embedding.length] += weight * 0.25;
+    
+    for (let j = 0; j < token.length; j++) {
+      const charHash = (hash * (j + 1) + token.charCodeAt(j)) % embedding.length;
+      embedding[Math.abs(charHash)] += weight * 0.1;
     }
   }
   
-  return generateFallbackEmbedding(text);
+  const magnitude = Math.sqrt(embedding.reduce((sum, val) => sum + val * val, 0)) || 1;
+  return embedding.map(val => val / magnitude);
 }
 
-function generateFallbackEmbedding(text: string): number[] {
-  const hash = simpleHash(text);
-  return new Array(1536).fill(0).map((_, i) => 
-    Math.sin(hash * (i + 1)) * 0.1
-  );
-}
-
-function simpleHash(str: string): number {
-  let hash = 0;
+function hashToken(str: string): number {
+  let hash = 5381;
   for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i);
-    hash = hash & hash;
+    hash = ((hash << 5) + hash) ^ str.charCodeAt(i);
   }
   return hash;
+}
+
+function cosineSimilarity(a: number[], b: number[]): number {
+  let dotProduct = 0;
+  let normA = 0;
+  let normB = 0;
+  
+  for (let i = 0; i < a.length; i++) {
+    dotProduct += a[i] * b[i];
+    normA += a[i] * a[i];
+    normB += b[i] * b[i];
+  }
+  
+  const denominator = Math.sqrt(normA) * Math.sqrt(normB);
+  return denominator === 0 ? 0 : dotProduct / denominator;
 }
 
 export interface DocumentMetadata {
@@ -101,25 +81,21 @@ export async function storeDocument(
   text: string,
   metadata: DocumentMetadata = { text }
 ): Promise<boolean> {
-  if (!index) {
-    console.warn('[RAG] Cannot store document - Pinecone not configured');
-    return false;
-  }
-
   try {
-    const embedding = await generateEmbedding(text);
+    const embedding = generateLocalEmbedding(text);
     
-    await index.upsert([{
+    vectorStore.set(id, {
       id,
-      values: embedding,
+      text,
+      embedding,
       metadata: {
         ...metadata,
         text,
         timestamp: metadata.timestamp || Date.now()
       }
-    }]);
+    });
 
-    console.log('[RAG] Document stored:', id);
+    console.log('[RAG] Document stored locally:', id);
     return true;
   } catch (error: any) {
     console.error('[RAG] Store error:', error.message);
@@ -138,25 +114,32 @@ export async function semanticSearch(
   topK: number = 5,
   filter?: Record<string, any>
 ): Promise<SearchResult[]> {
-  if (!index) {
-    console.warn('[RAG] Cannot search - Pinecone not configured');
-    return [];
-  }
-
   try {
-    const embedding = await generateEmbedding(query);
+    const queryEmbedding = generateLocalEmbedding(query);
+    const results: Array<{ doc: VectorDocument; score: number }> = [];
     
-    const results = await index.query({
-      vector: embedding,
-      topK,
-      includeMetadata: true,
-      filter
-    });
-
-    return results.matches.map((match: any) => ({
-      id: match.id,
-      score: match.score,
-      metadata: match.metadata
+    for (const doc of vectorStore.values()) {
+      if (filter) {
+        let matches = true;
+        for (const [key, value] of Object.entries(filter)) {
+          if (doc.metadata[key] !== value) {
+            matches = false;
+            break;
+          }
+        }
+        if (!matches) continue;
+      }
+      
+      const score = cosineSimilarity(queryEmbedding, doc.embedding);
+      results.push({ doc, score });
+    }
+    
+    results.sort((a, b) => b.score - a.score);
+    
+    return results.slice(0, topK).map(r => ({
+      id: r.doc.id,
+      score: r.score,
+      metadata: r.doc.metadata
     }));
   } catch (error: any) {
     console.error('[RAG] Search error:', error.message);
@@ -175,10 +158,11 @@ export async function getRAGContext(
   }
 
   const context = results
+    .filter(r => r.score > 0.1)
     .map((result, i) => `[Context ${i + 1}] ${result.metadata.text}`)
     .join('\n\n');
 
-  return `\nRelevant Context:\n${context}\n`;
+  return context ? `\nRelevant Context:\n${context}\n` : '';
 }
 
 export async function addToKnowledgeBase(
@@ -201,13 +185,10 @@ export async function addToKnowledgeBase(
 }
 
 export async function deleteFromKnowledgeBase(ids: string[]): Promise<boolean> {
-  if (!index) {
-    console.warn('[RAG] Cannot delete - Pinecone not configured');
-    return false;
-  }
-
   try {
-    await index.deleteMany(ids);
+    for (const id of ids) {
+      vectorStore.delete(id);
+    }
     console.log(`[RAG] Deleted ${ids.length} documents`);
     return true;
   } catch (error: any) {
@@ -217,9 +198,22 @@ export async function deleteFromKnowledgeBase(ids: string[]): Promise<boolean> {
 }
 
 export function isRAGAvailable(): boolean {
-  return index !== null;
+  return true;
 }
 
 export function isEmbeddingsAvailable(): boolean {
-  return !!OPENAI_API_KEY;
+  return true;
+}
+
+export function getKnowledgeBaseStats(): { documentCount: number; categories: string[] } {
+  const categories = new Set<string>();
+  for (const doc of vectorStore.values()) {
+    if (doc.metadata.category) {
+      categories.add(doc.metadata.category);
+    }
+  }
+  return {
+    documentCount: vectorStore.size,
+    categories: Array.from(categories)
+  };
 }
