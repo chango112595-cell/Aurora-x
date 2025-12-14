@@ -123,3 +123,9 @@ outputType = "webview"
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
 expertMode = true
+
+[userenv]
+
+[userenv.shared]
+JWT_SECRET = "MqxVZ3XGIDawfZPLy0FD/ymg/EBe06X10knOINk7WNg="
+ADMIN_PASSWORD = "AuroraX-Admin-2025!"
