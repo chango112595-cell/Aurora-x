@@ -62,6 +62,15 @@
       },
       "timestamp": "2025-12-09T01:42:13.180968",
       "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "user_name",
+        "category": "identity"
+      },
+      "timestamp": "2025-12-14T04:37:48.777145",
+      "project": "Aurora-X"
     }
   ]
 }

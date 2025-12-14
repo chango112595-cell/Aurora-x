@@ -14,7 +14,7 @@ packages = ["cargo", "gnupg", "libiconv", "libsodium", "libxcrypt", "openssl", "
 [deployment]
 deploymentTarget = "autoscale"
 build = ["npm", "run", "build"]
-run = ["npm", "start"]  # Changed from gunicorn
+run = ["npm", "run", "server"]
 
 [[ports]]
 localPort = 3000

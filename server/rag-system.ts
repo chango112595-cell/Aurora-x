@@ -1,20 +1,15 @@
 /**
  * Self-Contained RAG (Retrieval Augmented Generation) System
- * Aurora's autonomous knowledge system - no external APIs required
- * Uses in-memory vector storage with local embeddings
+ * Aurora's autonomous knowledge system - production-ready with PostgreSQL persistence
+ * Uses local embeddings with database-backed vector storage
  */
 
-interface VectorDocument {
-  id: string;
-  text: string;
-  embedding: number[];
-  metadata: DocumentMetadata;
-}
+import { db } from "./db";
+import { knowledgeDocuments } from "../shared/schema";
+import { eq } from "drizzle-orm";
 
-const vectorStore: Map<string, VectorDocument> = new Map();
-
-console.log('[RAG] Self-contained knowledge system initialized');
-console.log('[RAG] Using local embeddings and in-memory vector storage');
+console.log('[RAG] Production knowledge system initialized');
+console.log('[RAG] Using local embeddings with PostgreSQL persistence');
 
 /**
  * Generate embeddings locally using TF-IDF inspired hashing
@@ -58,7 +53,8 @@ function cosineSimilarity(a: number[], b: number[]): number {
   let normA = 0;
   let normB = 0;
   
-  for (let i = 0; i < a.length; i++) {
+  const len = Math.min(a.length, b.length);
+  for (let i = 0; i < len; i++) {
     dotProduct += a[i] * b[i];
     normA += a[i] * a[i];
     normB += b[i] * b[i];
@@ -84,18 +80,25 @@ export async function storeDocument(
   try {
     const embedding = generateLocalEmbedding(text);
     
-    vectorStore.set(id, {
-      id,
-      text,
-      embedding,
-      metadata: {
-        ...metadata,
+    await db.insert(knowledgeDocuments)
+      .values({
+        id,
         text,
-        timestamp: metadata.timestamp || Date.now()
-      }
-    });
+        embedding,
+        source: metadata.source || null,
+        category: metadata.category || null,
+      })
+      .onConflictDoUpdate({
+        target: knowledgeDocuments.id,
+        set: {
+          text,
+          embedding,
+          source: metadata.source || null,
+          category: metadata.category || null,
+        }
+      });
 
-    console.log('[RAG] Document stored locally:', id);
+    console.log('[RAG] Document stored:', id);
     return true;
   } catch (error: any) {
     console.error('[RAG] Store error:', error.message);
@@ -116,21 +119,19 @@ export async function semanticSearch(
 ): Promise<SearchResult[]> {
   try {
     const queryEmbedding = generateLocalEmbedding(query);
-    const results: Array<{ doc: VectorDocument; score: number }> = [];
     
-    for (const doc of vectorStore.values()) {
+    const docs = await db.select().from(knowledgeDocuments);
+    
+    const results: Array<{ doc: typeof docs[0]; score: number }> = [];
+    
+    for (const doc of docs) {
       if (filter) {
-        let matches = true;
-        for (const [key, value] of Object.entries(filter)) {
-          if (doc.metadata[key] !== value) {
-            matches = false;
-            break;
-          }
-        }
-        if (!matches) continue;
+        if (filter.category && doc.category !== filter.category) continue;
+        if (filter.source && doc.source !== filter.source) continue;
       }
       
-      const score = cosineSimilarity(queryEmbedding, doc.embedding);
+      const docEmbedding = doc.embedding as number[];
+      const score = cosineSimilarity(queryEmbedding, docEmbedding);
       results.push({ doc, score });
     }
     
@@ -139,7 +140,12 @@ export async function semanticSearch(
     return results.slice(0, topK).map(r => ({
       id: r.doc.id,
       score: r.score,
-      metadata: r.doc.metadata
+      metadata: {
+        text: r.doc.text,
+        source: r.doc.source || undefined,
+        category: r.doc.category || undefined,
+        timestamp: r.doc.createdAt.getTime(),
+      }
     }));
   } catch (error: any) {
     console.error('[RAG] Search error:', error.message);
@@ -187,7 +193,7 @@ export async function addToKnowledgeBase(
 export async function deleteFromKnowledgeBase(ids: string[]): Promise<boolean> {
   try {
     for (const id of ids) {
-      vectorStore.delete(id);
+      await db.delete(knowledgeDocuments).where(eq(knowledgeDocuments.id, id));
     }
     console.log(`[RAG] Deleted ${ids.length} documents`);
     return true;
@@ -205,15 +211,20 @@ export function isEmbeddingsAvailable(): boolean {
   return true;
 }
 
-export function getKnowledgeBaseStats(): { documentCount: number; categories: string[] } {
-  const categories = new Set<string>();
-  for (const doc of vectorStore.values()) {
-    if (doc.metadata.category) {
-      categories.add(doc.metadata.category);
+export async function getKnowledgeBaseStats(): Promise<{ documentCount: number; categories: string[] }> {
+  try {
+    const docs = await db.select().from(knowledgeDocuments);
+    const categories = new Set<string>();
+    for (const doc of docs) {
+      if (doc.category) {
+        categories.add(doc.category);
+      }
     }
+    return {
+      documentCount: docs.length,
+      categories: Array.from(categories)
+    };
+  } catch (error) {
+    return { documentCount: 0, categories: [] };
   }
-  return {
-    documentCount: vectorStore.size,
-    categories: Array.from(categories)
-  };
 }
