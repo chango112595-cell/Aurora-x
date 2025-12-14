@@ -1030,6 +1030,52 @@ class HybridOrchestrator:
         mod_ids = self.module_index_by_category.get(category, [])
         return [self.modules[mid] for mid in mod_ids if mid in self.modules]
     
+    def get_health(self) -> Dict[str, str]:
+        """
+        Get current health status of all components
+        
+        Returns:
+            Dict mapping component names to health status strings
+        """
+        health_dict = {}
+        for name, status in self.health_status.items():
+            # Handle both enum values and string values
+            if hasattr(status, 'value'):
+                health_dict[name] = status.value
+            else:
+                health_dict[name] = str(status)
+        return health_dict
+    
+    def get_metrics(self) -> Dict[str, Any]:
+        """
+        Get current metrics
+        
+        Returns:
+            Dict containing all current metrics
+        """
+        return {
+            "total_tasks_executed": self.metrics.total_tasks_executed,
+            "successful_tasks": self.metrics.successful_tasks,
+            "failed_tasks": self.metrics.failed_tasks,
+            "success_rate": (
+                self.metrics.successful_tasks / self.metrics.total_tasks_executed
+                if self.metrics.total_tasks_executed > 0 else 0
+            ),
+            "average_execution_time_ms": self.metrics.average_execution_time_ms,
+            "total_execution_time_ms": self.metrics.total_execution_time_ms,
+            "active_tasks": self.metrics.active_tasks,
+            "queued_tasks": self.metrics.queued_tasks,
+            "tiers_activated": self.metrics.tiers_activated,
+            "aems_activated": self.metrics.aems_activated,
+            "modules_activated": self.metrics.modules_activated,
+            "hyperspeed_executions": self.metrics.hyperspeed_executions,
+            "uptime_seconds": self.metrics.uptime_seconds,
+            "last_health_check": (
+                self.metrics.last_health_check.isoformat() 
+                if self.metrics.last_health_check else None
+            )
+        }
+    
     def on(self, event: str, handler: Callable):
         """Register an event handler"""
         if event not in self.event_handlers:
