@@ -51,7 +51,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 
-def log_to_activity_monitor(activity_type: str, message: str, details: dict = None):
+def log_to_activity_monitor(activity_type: str, message: str, details: dict | None = None):
     """Log activity to Aurora Nexus V3 Activity Monitor"""
     try:
         data = json_lib.dumps({
