@@ -181,7 +181,10 @@ def run_aurora_chat_server(port: int = 5003, aurora_core=None) -> Any:
     @app.route("/api/chat", methods=["POST"])
     def chat_endpoint() -> Any:
         """Main chat endpoint"""
-        data = request.get_json() or {}
+        data = request.get_json()
+        if data is None:
+            return jsonify({"error": "Invalid JSON body"}), 400
+        
         message = data.get("message", "")
         session_id = data.get("session_id", "default")
 
