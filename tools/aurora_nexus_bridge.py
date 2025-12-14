@@ -13,12 +13,15 @@ Quality: 10/10 (Perfect)
 #!/usr/bin/env python3
 """
 Aurora Nexus Bridge - Simple routing from Luminar Nexus to Enhanced Aurora Core
-Avoids circular from typing import Dict, List, Tuple, Optional, Any, Union
-import issues by creating a simple message bridge
+Connects V2 and V3 orchestration systems to the core intelligence layer.
+Avoids circular import issues by creating a simple message bridge.
 """
 
+from typing import Dict, List, Optional, Any
 import asyncio
 import sys
+import time
+import requests
 from pathlib import Path
 
 # Aurora Performance Optimization
@@ -28,12 +31,118 @@ from concurrent.futures import ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
 #             results = executor.map(process_func, items)
 
+# Service endpoints
+LUMINAR_V2_URL = "http://0.0.0.0:5005"
+LUMINAR_V3_URL = "http://0.0.0.0:5031"
+
+
+def check_luminar_v2_status() -> Dict[str, Any]:
+    """
+    Check if Luminar Nexus V2 is available and return its status.
+    
+    Returns:
+        Dict containing status information or error details
+    """
+    try:
+        response = requests.get(f"{LUMINAR_V2_URL}/api/nexus/status", timeout=3)
+        if response.status_code == 200:
+            return {"available": True, "status": response.json()}
+    except Exception as e:
+        return {"available": False, "error": str(e)}
+    return {"available": False, "error": "Unknown error"}
+
+
+def check_luminar_v3_status() -> Dict[str, Any]:
+    """
+    Check if Luminar Nexus V3 is available and return its status.
+    
+    Returns:
+        Dict containing status information or error details
+    """
+    try:
+        response = requests.get(f"{LUMINAR_V3_URL}/api/nexus/status", timeout=3)
+        if response.status_code == 200:
+            return {"available": True, "status": response.json()}
+    except Exception as e:
+        return {"available": False, "error": str(e)}
+    return {"available": False, "error": "Unknown error"}
+
+
+def route_via_luminar_v2(message: str, session_id: str = "default") -> Optional[str]:
+    """
+    Route a message through Luminar Nexus V2.
+    
+    Args:
+        message: The message to process
+        session_id: Session identifier for context
+        
+    Returns:
+        Response string or None if V2 is unavailable
+    """
+    try:
+        response = requests.post(
+            f"{LUMINAR_V2_URL}/api/chat",
+            json={"message": message, "session_id": session_id},
+            timeout=5
+        )
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("response") or data.get("message")
+    except Exception as e:
+        print(f"[Bridge] Luminar V2 routing error: {e}")
+    return None
+
+
+def route_via_luminar_v3(message: str, session_id: str = "default") -> Optional[str]:
+    """
+    Route a message through Luminar Nexus V3.
+    
+    Args:
+        message: The message to process
+        session_id: Session identifier for context
+        
+    Returns:
+        Response string or None if V3 is unavailable
+    """
+    try:
+        response = requests.post(
+            f"{LUMINAR_V3_URL}/api/chat",
+            json={"message": message, "session_id": session_id},
+            timeout=5
+        )
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("response") or data.get("message")
+    except Exception as e:
+        print(f"[Bridge] Luminar V3 routing error: {e}")
+    return None
+
 
 def route_to_enhanced_aurora_core(message: str, session_id: str = "default") -> str:
     """
-    Route a message through Enhanced Aurora Core without circular imports
-    Returns the enhanced response or falls back to simple response
+    Route a message through Enhanced Aurora Core without circular imports.
+    Uses fallback chain: V2 -> V3 -> Local Aurora Core -> Built-in response.
+    
+    Args:
+        message: The message to process
+        session_id: Session identifier for context
+        
+    Returns:
+        The enhanced response or falls back to simple response
     """
+    # Try Luminar Nexus V2 first (AI orchestration)
+    v2_response = route_via_luminar_v2(message, session_id)
+    if v2_response:
+        print(f"[Bridge] Routed via Luminar Nexus V2")
+        return v2_response
+    
+    # Try Luminar Nexus V3 (universal consciousness)
+    v3_response = route_via_luminar_v3(message, session_id)
+    if v3_response:
+        print(f"[Bridge] Routed via Luminar Nexus V3")
+        return v3_response
+    
+    # Fall back to local Aurora Core
     try:
         # Add the tools directory to Python path
         tools_dir = Path(__file__).parent
@@ -85,6 +194,7 @@ def route_to_enhanced_aurora_core(message: str, session_id: str = "default") -> 
 
                 # Return Aurora's response directly without wrapping
                 if response and len(response.strip()) > 0:
+                    print(f"[Bridge] Routed via local Aurora Core")
                     return response
                 else:
                     return "I'm processing that. Let me think..."
@@ -97,12 +207,62 @@ def route_to_enhanced_aurora_core(message: str, session_id: str = "default") -> 
             sys.modules.update(original_modules)
 
     except Exception as e:
-        print(f"[SYNC] Enhanced Aurora Core bridge error: {e}")
-        return f"Enhanced Aurora Core temporarily unavailable: {str(e)[:100]}... Using fallback response."
+        print(f"[Bridge] Enhanced Aurora Core bridge error: {e}")
+        return f"Aurora processing: {message[:100]}... (Luminar Nexus V2/V3 and local core unavailable)"
+
+
+def get_unified_status() -> Dict[str, Any]:
+    """
+    Get unified status of all Luminar Nexus services.
+    
+    Returns:
+        Dictionary with status of V2, V3, and overall system health
+    """
+    v2_status = check_luminar_v2_status()
+    v3_status = check_luminar_v3_status()
+    
+    services_available = sum([v2_status.get("available", False), v3_status.get("available", False)])
+    
+    return {
+        "v2": v2_status,
+        "v3": v3_status,
+        "services_available": services_available,
+        "total_services": 2,
+        "health_percentage": (services_available / 2) * 100,
+        "timestamp": time.time()
+    }
 
 
 # Test function
 if __name__ == "__main__":
+    print("Aurora Nexus Bridge - Testing Integration")
+    print("=" * 50)
+    
+    # Check service status
+    print("\n[1] Checking Luminar Nexus V2 status...")
+    v2_status = check_luminar_v2_status()
+    print(f"    V2 Available: {v2_status.get('available', False)}")
+    if not v2_status.get('available'):
+        print(f"    Error: {v2_status.get('error', 'Unknown')}")
+    
+    print("\n[2] Checking Luminar Nexus V3 status...")
+    v3_status = check_luminar_v3_status()
+    print(f"    V3 Available: {v3_status.get('available', False)}")
+    if not v3_status.get('available'):
+        print(f"    Error: {v3_status.get('error', 'Unknown')}")
+    
+    # Get unified status
+    print("\n[3] Getting unified status...")
+    unified = get_unified_status()
+    print(f"    Services Available: {unified['services_available']}/{unified['total_services']}")
+    print(f"    Health: {unified['health_percentage']}%")
+    
+    # Test message routing
+    print("\n[4] Testing message routing...")
     test_message = "What is your architectural structure?"
     response = route_to_enhanced_aurora_core(test_message)
-    print(f"Test Response: {response}")
+    print(f"    Test Message: {test_message}")
+    print(f"    Response: {response[:200]}..." if len(response) > 200 else f"    Response: {response}")
+    
+    print("\n" + "=" * 50)
+    print("Aurora Nexus Bridge - Test Complete")
