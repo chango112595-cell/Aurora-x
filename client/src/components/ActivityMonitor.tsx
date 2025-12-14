@@ -153,11 +153,11 @@ export function ActivityMonitor() {
           <div className="flex flex-wrap gap-2" data-testid="system-status-badges">
             <Badge 
               variant="outline" 
-              className={system.state === "hyperspeed" ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/30" : ""}
+              className={(system.state || system.status) === "hyperspeed" ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/30" : ""}
               data-testid="badge-system-state"
             >
               <Zap className="h-3 w-3 mr-1" />
-              {system.state.toUpperCase()}
+              {(system.state || system.status || "active").toUpperCase()}
             </Badge>
             {system.hyperspeed && (
               <Badge variant="outline" className="bg-purple-500/20 text-purple-400 border-purple-500/30" data-testid="badge-hyperspeed">
