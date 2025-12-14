@@ -580,17 +580,17 @@ export async function registerRoutes(app: Express): Promise<void> {
       const isTerminalClient = client === 'terminal';
       console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId, 'Client:', client || 'web');
 
-      // Try routing to Aurora AI Backend first (port 8000)
+      // Try routing to Aurora AI Backend first (port 8000) - quick timeout for fast fallback
       try {
         const aiResponse = await fetch('http://0.0.0.0:8000/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
-            message: message,  // Luminar V2 expects 'message' not 'text'
+            message: message,
             session_id: sessionId,
             context: req.body.context || {} 
           }),
-          signal: AbortSignal.timeout(30000) // 30 second timeout
+          signal: AbortSignal.timeout(2000) // 2 second timeout - fast fallback when backend unavailable
         });
 
         if (aiResponse.ok) {
@@ -609,7 +609,7 @@ export async function registerRoutes(app: Express): Promise<void> {
           });
         }
       } catch (aiError) {
-        console.warn('[Aurora Chat] Aurora AI Backend unavailable, falling back to Express handler:', aiError);
+        // External backend unavailable - silently use embedded fallback
       }
 
       // Fallback: Try routing to Luminar Nexus V2 for system commands
@@ -622,7 +622,8 @@ export async function registerRoutes(app: Express): Promise<void> {
           const v2Response = await fetch('http://localhost:5005/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message, session_id: sessionId })
+            body: JSON.stringify({ message, session_id: sessionId }),
+            signal: AbortSignal.timeout(2000) // Quick timeout for fast fallback
           });
 
           if (v2Response.ok) {
@@ -631,7 +632,7 @@ export async function registerRoutes(app: Express): Promise<void> {
             return res.json(v2Data);
           }
         } catch (v2Error) {
-          console.warn('[Aurora Chat] Luminar V2 unavailable, using Aurora autonomous synthesis');
+          // V2 unavailable - use embedded fallback
         }
       }
 
