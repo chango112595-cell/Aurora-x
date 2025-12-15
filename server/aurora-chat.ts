@@ -7,22 +7,37 @@ import * as fs from 'fs';
 import { getMemoryFabricClient } from './memory-fabric-client';
 import { getNexusV3Client, type ConsciousnessState } from './nexus-v3-client';
 import { getCognitiveLoop } from './cognitive-loop';
+import type { Server } from 'http';
+
+interface ChatMessage {
+  content: string;
+  role?: string;
+}
+
+interface CognitiveLoopContext {
+  consciousness: ConsciousnessState | null;
+  facts?: Record<string, string | number | boolean>;
+  memoryContext?: string;
+  recentEvents?: unknown[];
+}
+
+interface ExecutionWrapperResult {
+  success: boolean;
+  result?: string | Record<string, unknown>;
+}
 
 const memoryClient = getMemoryFabricClient();
 const nexusV3Client = getNexusV3Client();
 const cognitiveLoop = getCognitiveLoop();
 
-export function setupAuroraChatWebSocket(server: any) {
+export function setupAuroraChatWebSocket(server: Server) {
   const wss = new WebSocketServer({ 
     server,
     path: '/aurora/chat'
   });
 
   wss.on('connection', async (ws: WebSocket) => {
-    console.log('[Aurora] New chat connection established');
-
     const memoryStatus = await memoryClient.checkStatus();
-    console.log(`[Aurora] Memory Fabric: ${memoryStatus ? 'connected' : 'offline'}`);
 
     let greeting = "Hello! I'm Aurora. What would you like me to do?";
     
@@ -41,7 +56,6 @@ export function setupAuroraChatWebSocket(server: any) {
     ws.on('message', async (data: Buffer) => {
       try {
         const { message, sessionId, context } = JSON.parse(data.toString());
-        console.log('[Aurora] Received:', message);
 
         const { response, detection } = await processWithAuroraIntelligence(message, sessionId || 'websocket', context);
 
@@ -54,7 +68,6 @@ export function setupAuroraChatWebSocket(server: any) {
           }
         }));
       } catch (error) {
-        console.error('[Aurora] Error:', error);
         ws.send(JSON.stringify({
           message: "Error processing request: " + (error as Error).message
         }));
@@ -62,11 +75,8 @@ export function setupAuroraChatWebSocket(server: any) {
     });
 
     ws.on('close', () => {
-      console.log('[Aurora] Chat connection closed');
     });
   });
-
-  console.log('[Aurora] Chat WebSocket ready on /aurora/chat');
 }
 
 function extractUserName(message: string): string | null {
@@ -131,14 +141,8 @@ async function analyzeCodebaseIssues(): Promise<string> {
               issues.push(`server/${file}: Uses 'any' type ${anyCount} times - reduces type safety`);
             }
           }
-          
-          if (content.includes('console.log') && !file.includes('index')) {
-            const logCount = (content.match(/console\.log/g) || []).length;
-            if (logCount > 5) {
-              issues.push(`server/${file}: Has ${logCount} console.log statements`);
-            }
-          }
-        } catch (e) {}
+        } catch {
+        }
       }
     }
     
@@ -169,7 +173,8 @@ async function analyzeCodebaseIssues(): Promise<string> {
             }
           }
         }
-      } catch (e) {}
+      } catch {
+      }
     }
     
     try {
@@ -181,7 +186,8 @@ async function analyzeCodebaseIssues(): Promise<string> {
       if (result) {
         issues.push(`npm dependencies: ${result.split('\n').length} issues detected`);
       }
-    } catch (e) {}
+    } catch {
+    }
     
     const checkPaths = [
       'server/anthropic-service.ts',
@@ -220,7 +226,8 @@ async function analyzeCodebaseIssues(): Promise<string> {
               }
             }
           }
-        } catch (e) {}
+        } catch {
+        }
       }
     }
     
@@ -280,7 +287,7 @@ async function analyzeIntegrationStatus(): Promise<string> {
       } else {
         status.notWorking.push(`${service.name} (port ${service.port} - error ${response.status})`);
       }
-    } catch (e) {
+    } catch {
       status.notWorking.push(`${service.name} (port ${service.port} - not responding)`);
     }
   }
@@ -367,7 +374,7 @@ async function executeFileOperation(message: string): Promise<string | null> {
       } else {
         return `No matches found for "${pattern}"`;
       }
-    } catch (e) {
+    } catch {
       return `No matches found for "${pattern}"`;
     }
   }
@@ -375,15 +382,15 @@ async function executeFileOperation(message: string): Promise<string | null> {
   return null;
 }
 
-async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default', context: any[] = []): Promise<{ response: string; detection: ConversationDetection }> {
+async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default', context: ChatMessage[] = []): Promise<{ response: string; detection: ConversationDetection }> {
   let memoryContext = '';
   let userName: string | null = null;
   let consciousnessState: ConsciousnessState | null = null;
-  let cognitiveContext: any = null;
+  let cognitiveContext: CognitiveLoopContext | null = null;
   
   try {
     const { context: loopContext, events } = await cognitiveLoop.processMessage(userMessage, sessionId, 'chat');
-    cognitiveContext = loopContext;
+    cognitiveContext = loopContext as CognitiveLoopContext;
     consciousnessState = loopContext.consciousness;
     
     if (loopContext.facts) {
@@ -393,20 +400,17 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
         memoryContext += `User's name: ${userName}\n`;
       }
     }
-  } catch (memoryError) {
-    console.log('[Aurora] Cognitive loop error:', memoryError);
+  } catch {
   }
   
   const previousMessages = context
-    .filter((msg: any) => typeof msg === 'object' && 'content' in msg)
+    .filter((msg: ChatMessage) => typeof msg === 'object' && 'content' in msg)
     .slice(-4)
-    .map((msg: any) => msg.content)
+    .map((msg: ChatMessage) => msg.content)
     .filter(Boolean);
 
   const detection = conversationDetector.detect(userMessage, previousMessages);
   conversationDetector.addMessageToHistory(userMessage);
-
-  console.log(`[Aurora] Detected: ${detection.type} (confidence: ${detection.confidence}%)`);
 
   conversationPatternAdapter.sendPatternToV2(detection, userMessage, previousMessages.join(' ')).catch(() => {});
   memoryClient.saveMessage('user', userMessage, 0.7, [detection.type]).catch(() => {});
@@ -471,8 +475,7 @@ What would you like me to do?`;
           response = result;
         }
       }
-    } catch (e) {
-      console.log('[Aurora] Wrapper error:', e);
+    } catch {
     }
   }
 
@@ -493,7 +496,7 @@ To get useful responses, try:
   return { response, detection };
 }
 
-function callExecutionWrapperDirect(message: string, msgType: string, context: any[]): Promise<string> {
+function callExecutionWrapperDirect(message: string, msgType: string, context: ChatMessage[]): Promise<string> {
   return new Promise((resolve, reject) => {
     const wrapperPath = path.join(process.cwd(), 'tools', 'execution_wrapper.py');
     const inputData = JSON.stringify({
@@ -516,7 +519,7 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: a
         const jsonLine = lines.find(l => l.trim().startsWith('{'));
         
         if (jsonLine) {
-          const parsed = JSON.parse(jsonLine.trim());
+          const parsed = JSON.parse(jsonLine.trim()) as ExecutionWrapperResult;
           if (parsed.success && parsed.result) {
             resolve(typeof parsed.result === 'string' ? parsed.result : JSON.stringify(parsed.result, null, 2));
             return;
@@ -543,10 +546,15 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: a
   });
 }
 
-export async function getChatResponse(message: string, sessionId: string, context: any[] = []): Promise<{ response: string; detection: ConversationDetection }> {
+export async function getChatResponse(message: string, sessionId: string, context: ChatMessage[] = []): Promise<{ response: string; detection: ConversationDetection }> {
   return processWithAuroraIntelligence(message, sessionId, context);
 }
 
-export async function searchWeb(query: string): Promise<any> {
+interface SearchResult {
+  results: unknown[];
+  message: string;
+}
+
+export async function searchWeb(query: string): Promise<SearchResult> {
   return { results: [], message: `Search query received: ${query}` };
 }

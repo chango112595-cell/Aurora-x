@@ -12,6 +12,14 @@ export interface ChatResponse {
   timestamp: number;
 }
 
+import type { SynthesisSpec as AuroraXSynthesisSpec } from './services/aurorax';
+
+type SynthesisSpec = AuroraXSynthesisSpec;
+
+interface AnalysisContext {
+  [key: string]: unknown;
+}
+
 export class AuroraAI {
   private luminar: LuminarNexus;
   private memory: MemoryFabric;
@@ -33,8 +41,6 @@ export class AuroraAI {
   async initialize(): Promise<void> {
     if (this.initialized) return;
 
-    console.log('[AuroraAI] Initializing orchestrator...');
-
     const [luminarOk, memoryOk, nexusOk, auroraXOk] = await Promise.all([
       this.luminar.checkHealth(),
       this.memory.checkHealth(),
@@ -42,16 +48,8 @@ export class AuroraAI {
       this.auroraX.checkHealth()
     ]);
 
-    console.log('[AuroraAI] Service status:');
-    console.log(`  - Luminar Nexus V2: ${luminarOk ? '✅ connected' : '⚠️ offline'}`);
-    console.log(`  - Memory Fabric V2: ${memoryOk ? '✅ connected' : '⚠️ offline'}`);
-    console.log(`  - Aurora Nexus V3:  ${nexusOk ? '✅ connected' : '⚠️ offline'}`);
-    console.log(`  - Aurora-X Core:    ${auroraXOk ? '✅ connected' : '⚠️ offline'}`);
-
     this.startEnhancements();
     this.initialized = true;
-    
-    console.log('[AuroraAI] ✅ Orchestrator initialized');
   }
 
   private startEnhancements(): void {
@@ -62,8 +60,6 @@ export class AuroraAI {
     this.metricsInterval = setInterval(async () => {
       await adaptiveMetrics(this.memory, this.auroraX);
     }, 120000);
-
-    console.log('[AuroraAI] Enhancement hooks started (self-healing: 60s, metrics: 120s)');
   }
 
   async handleChat(userInput: string): Promise<string> {
@@ -76,31 +72,23 @@ export class AuroraAI {
       this.nexus.getConsciousState()
     ]);
 
-    console.log(`[AuroraAI] 🧠 Context retrieved in ${Date.now() - startTime}ms`);
-    console.log(`[AuroraAI] 🌌 Consciousness: ${state.state} | Workers: ${state.workers.idle}/${state.workers.total}`);
-
     const intent = await this.luminar.interpret(userInput, context, state);
-    console.log(`[AuroraAI] 🎯 Intent: ${intent.action} (confidence: ${(intent.confidence * 100).toFixed(0)}%)`);
 
     let result: string;
     switch (intent.action) {
       case 'synthesize':
-        console.log('[AuroraAI] ⚡ Executing code synthesis...');
         result = await this.auroraX.synthesize(intent.spec);
         break;
         
       case 'reflect':
-        console.log('[AuroraAI] 💭 Reflecting on topic...');
         result = await this.luminar.reflect(intent.topic ?? userInput, context);
         break;
         
       case 'queryMemory':
-        console.log('[AuroraAI] 🔍 Querying memory...');
         result = await this.memory.query(intent.query ?? userInput);
         break;
         
       default:
-        console.log('[AuroraAI] 💬 Generating response...');
         result = await this.luminar.respond(intent, context);
     }
 
@@ -122,8 +110,6 @@ export class AuroraAI {
     if (this.turnContext.length > 20) {
       this.turnContext.splice(0, 2);
     }
-
-    console.log(`[AuroraAI] ✅ Cycle complete in ${Date.now() - startTime}ms`);
 
     return result;
   }
@@ -177,12 +163,12 @@ export class AuroraAI {
     };
   }
 
-  async synthesize(spec: any): Promise<string> {
+  async synthesize(spec: SynthesisSpec): Promise<string> {
     await this.initialize();
     return this.auroraX.synthesize(spec);
   }
 
-  async analyze(input: string, context?: any): Promise<any> {
+  async analyze(input: string, context?: AnalysisContext): Promise<Record<string, unknown>> {
     await this.initialize();
     return this.auroraX.analyze(input, context);
   }
@@ -233,7 +219,6 @@ export class AuroraAI {
       this.metricsInterval = null;
     }
     this.initialized = false;
-    console.log('[AuroraAI] Orchestrator shutdown complete');
   }
 }
 

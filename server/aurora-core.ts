@@ -149,35 +149,13 @@ export class AuroraCore {
   // ========================================
   
   private async initialize(): Promise<void> {
-    console.log('[AURORA] Initializing 188 power units...');
-    
-    // Initialize 79 Knowledge Capabilities
     this.initializeKnowledgeCapabilities();
-    
-    // Initialize 66 Execution Modes
     this.initializeExecutionModes();
-    
-    // Initialize 43 System Components
     this.initializeSystemComponents();
-    
-    // Initialize 289+ Modules
     this.initializeModules();
-    
-    // Initialize 100-Worker Pool
     this.initializeWorkerPool();
-    
-    // Initialize Python Bridge
     await this.initializePythonBridge();
-    
-    // Initialize Memory System
     await this.initializeMemorySystem();
-    
-    console.log('[AURORA] ✅ All 188 power units operational');
-    console.log(`[AURORA] Knowledge: ${this.knowledgeCapabilities.size}`);
-    console.log(`[AURORA] Execution: ${this.executionModes.size}`);
-    console.log(`[AURORA] Systems: ${this.systemComponents.size}`);
-    console.log(`[AURORA] Modules: ${this.modules.size}`);
-    console.log(`[AURORA] Workers: ${this.workerPool.length}`);
   }
   
   // ========================================
@@ -459,7 +437,6 @@ export class AuroraCore {
     for (let i = 1; i <= 100; i++) {
       this.workerPool.push(new Worker(i, this));
     }
-    console.log('[AURORA] ✅ 100-worker autofixer pool initialized');
   }
   
   public async executeFixJob(code: string, issue: string): Promise<string> {
@@ -518,15 +495,12 @@ export class AuroraCore {
       // Fix: Use process.cwd() for project root instead of __dirname (which points to .next in Next.js)
       const pythonPath = path.join(process.cwd(), 'aurora_core.py');
       
-      console.log('[AURORA] Connecting to Python intelligence...');
-      
       this.pythonProcess = spawn('python', ['-u', pythonPath]);
       
       this.pythonProcess.stdout?.on('data', (data) => {
         const output = data.toString();
         if (output.includes('[BRAIN] Aurora Core Intelligence')) {
           this.pythonReady = true;
-          console.log('[AURORA] ✅ Python bridge connected');
           resolve();
         }
       });
@@ -551,8 +525,7 @@ export class AuroraCore {
         stdio: ['pipe', 'pipe', 'pipe']
       });
       
-      memoryProcess.stdout?.on('data', (data) => {
-        console.log('[AURORA MEMORY]', data.toString().trim());
+      memoryProcess.stdout?.on('data', () => {
       });
       
       memoryProcess.stderr?.on('data', (data) => {
@@ -563,12 +536,7 @@ export class AuroraCore {
       await this.startMemoryFabricService();
       
       // Check if memory service is available
-      const isAvailable = await this.memoryClient.checkStatus();
-      if (isAvailable) {
-        console.log('[AURORA] ✅ Memory system connected (short-term + long-term)');
-      } else {
-        console.log('[AURORA] ⚠️  Memory system unavailable - continuing without memory');
-      }
+      await this.memoryClient.checkStatus();
     } catch (error) {
       console.error('[AURORA] Failed to start memory system:', error);
     }
@@ -585,8 +553,7 @@ export class AuroraCore {
       stdio: ['pipe', 'pipe', 'pipe']
     });
 
-    this.memoryFabricProcess.stdout?.on('data', (data) => {
-      console.log('[MEMORY FABRIC V2]', data.toString().trim());
+    this.memoryFabricProcess.stdout?.on('data', () => {
     });
 
     this.memoryFabricProcess.stderr?.on('data', (data) => {
@@ -596,12 +563,10 @@ export class AuroraCore {
       }
     });
 
-    this.memoryFabricProcess.on('exit', (code, signal) => {
-      console.log(`[MEMORY FABRIC V2] Process exited (code: ${code}, signal: ${signal})`);
+    this.memoryFabricProcess.on('exit', () => {
       this.memoryFabricProcess = null;
       
       if (!this.memoryFabricRestarting) {
-        console.log('[MEMORY FABRIC V2] Restarting service...');
         this.memoryFabricRestarting = true;
         setTimeout(async () => {
           this.memoryFabricRestarting = false;
@@ -621,9 +586,9 @@ export class AuroraCore {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, delayMs));
       try {
-        const response = await fetch('http://127.0.0.1:5004/status');
+        const memoryFabricPort = process.env.MEMORY_FABRIC_PORT || '5004';
+        const response = await fetch(`http://127.0.0.1:${memoryFabricPort}/status`);
         if (response.ok) {
-          console.log('[MEMORY FABRIC V2] ✅ Service ready');
           return;
         }
       } catch {
@@ -631,7 +596,6 @@ export class AuroraCore {
       }
     }
     
-    console.log('[MEMORY FABRIC V2] ⚠️ Service startup timeout - will retry on requests');
   }
 
   public async callAuroraPython(method: string, ...args: any[]): Promise<any> {
@@ -849,7 +813,6 @@ export class AuroraCore {
       this.pythonProcess.kill();
       this.pythonProcess = null;
     }
-    console.log('[AURORA] Shutdown complete');
   }
 }
 
