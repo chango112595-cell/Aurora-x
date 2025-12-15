@@ -290,6 +290,11 @@ class AuroraConversationEngine:
     def generate_response(self, message: str, msg_type: str, context: list) -> str:
         """Generate a dynamic, contextual response based on the actual message content"""
         message_lower = message.lower().strip()
+        original_message = message.strip()
+        
+        # FIRST: Check if message is a file path - if so, read the file
+        if self._is_file_path(original_message):
+            return self._handle_file_path(original_message)
         
         # Extract key elements from the message for personalized responses
         keywords = self._extract_keywords(message)
@@ -346,6 +351,46 @@ class AuroraConversationEngine:
         
         # General conversation - generate dynamic response based on actual content
         return self._generate_contextual_response(message, keywords, entities, context)
+    
+    def _is_file_path(self, message: str) -> bool:
+        """Detect if message is a file path that should be read"""
+        msg = message.strip().rstrip('/')
+        # Check for common file extensions
+        file_extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.json', '.css', '.html', 
+                          '.md', '.yaml', '.yml', '.txt', '.sh', '.sql', '.xml', '.env',
+                          '.toml', '.cfg', '.ini', '.vue', '.svelte', '.go', '.rs', '.java']
+        
+        # Check if it looks like a file path
+        has_extension = any(msg.endswith(ext) for ext in file_extensions)
+        has_slash = '/' in msg
+        no_spaces = ' ' not in msg.strip()
+        not_url = not msg.startswith('http')
+        
+        return has_extension and (has_slash or no_spaces) and not_url
+    
+    def _handle_file_path(self, file_path: str) -> str:
+        """Read and return the contents of a file when user types a path"""
+        path = file_path.strip().rstrip('/')
+        
+        # Try to read the file
+        result = self.executor.execute_action("read_file", {"path": path})
+        
+        if result['success']:
+            content = result['output']
+            # Determine file type for syntax highlighting
+            ext = Path(path).suffix.lower()
+            lang_map = {
+                '.ts': 'typescript', '.tsx': 'tsx', '.js': 'javascript', '.jsx': 'jsx',
+                '.py': 'python', '.json': 'json', '.css': 'css', '.html': 'html',
+                '.md': 'markdown', '.yaml': 'yaml', '.yml': 'yaml', '.sh': 'bash',
+                '.sql': 'sql', '.go': 'go', '.rs': 'rust', '.java': 'java'
+            }
+            lang = lang_map.get(ext, '')
+            
+            return f"**File: {path}**\n\n```{lang}\n{content}\n```"
+        else:
+            # File not found - suggest alternatives
+            return f"Could not read file `{path}`: {result['output']}\n\nTo read a file, ensure the path is correct relative to the workspace."
     
     def _is_action_request(self, msg_lower: str, original: str) -> bool:
         """Detect if user wants Aurora to execute an action"""
@@ -505,24 +550,34 @@ class AuroraConversationEngine:
                    'deploy', 'install', 'configure', 'setup', 'explain', 'describe',
                    'compare', 'analyze', 'review', 'help', 'show', 'teach', 'learn']
         
+        # Use word boundaries for matching to avoid false positives
+        # e.g., 'r' shouldn't match inside 'server', 'go' shouldn't match inside 'algorithm'
+        def word_match(term: str, text: str) -> bool:
+            # For short terms (<=2 chars), require strict word boundaries
+            if len(term) <= 2:
+                pattern = r'\b' + re.escape(term) + r'\b'
+                return bool(re.search(pattern, text))
+            # For longer terms, simple containment is usually fine
+            return term in text
+        
         for lang in langs:
-            if lang in message_lower:
+            if word_match(lang, message_lower):
                 entities['languages'].append(lang)
         
         for fw in frameworks:
-            if fw in message_lower:
+            if word_match(fw, message_lower):
                 entities['frameworks'].append(fw)
         
         for tech in techs:
-            if tech in message_lower:
+            if word_match(tech, message_lower):
                 entities['technologies'].append(tech)
         
         for concept in concepts:
-            if concept in message_lower:
+            if word_match(concept, message_lower):
                 entities['concepts'].append(concept)
         
         for action in actions:
-            if action in message_lower:
+            if word_match(action, message_lower):
                 entities['actions'].append(action)
         
         return entities
