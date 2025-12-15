@@ -1,9 +1,9 @@
 import { WebSocket, WebSocketServer } from 'ws';
 import { conversationDetector, type ConversationDetection } from './conversation-detector';
 import { conversationPatternAdapter } from './conversation-pattern-adapter';
-import { executeWithProgram } from './execution-dispatcher';
-import { spawn } from 'child_process';
+import { spawn, execSync } from 'child_process';
 import * as path from 'path';
+import * as fs from 'fs';
 import { getMemoryFabricClient } from './memory-fabric-client';
 import { getNexusV3Client, type ConsciousnessState } from './nexus-v3-client';
 import { getCognitiveLoop } from './cognitive-loop';
@@ -24,21 +24,19 @@ export function setupAuroraChatWebSocket(server: any) {
     const memoryStatus = await memoryClient.checkStatus();
     console.log(`[Aurora] Memory Fabric: ${memoryStatus ? 'connected' : 'offline'}`);
 
-    let greeting = "Hello! I'm Aurora, your AI assistant. I'm here to help you with coding, questions, analysis, and more.";
+    let greeting = "Hello! I'm Aurora. What would you like me to do?";
     
     if (memoryStatus) {
       const factsResult = await memoryClient.getFacts();
       if (factsResult.success && factsResult.facts) {
         const userName = factsResult.facts['user_name'] as string;
         if (userName) {
-          greeting = `Welcome back, ${userName}! I'm Aurora, your AI assistant. How can I help you today?`;
+          greeting = `Welcome back, ${userName}! What would you like me to do?`;
         }
       }
     }
 
-    ws.send(JSON.stringify({
-      message: greeting + " What would you like to work on today?"
-    }));
+    ws.send(JSON.stringify({ message: greeting }));
 
     ws.on('message', async (data: Buffer) => {
       try {
@@ -58,7 +56,7 @@ export function setupAuroraChatWebSocket(server: any) {
       } catch (error) {
         console.error('[Aurora] Error:', error);
         ws.send(JSON.stringify({
-          message: "I encountered an issue processing that. Could you try rephrasing your request?"
+          message: "Error processing request: " + (error as Error).message
         }));
       }
     });
@@ -68,7 +66,7 @@ export function setupAuroraChatWebSocket(server: any) {
     });
   });
 
-  console.log('[Aurora] 🌌 Intelligent chat WebSocket ready on /aurora/chat');
+  console.log('[Aurora] Chat WebSocket ready on /aurora/chat');
 }
 
 function extractUserName(message: string): string | null {
@@ -99,32 +97,282 @@ function extractFacts(message: string): { key: string; value: string; category: 
     facts.push({ key: 'user_name', value: userName, category: 'identity' });
   }
   
-  const locationPatterns = [
-    /(?:i live in|i'm from|i am from|located in|based in)\s+([A-Za-z\s]+?)(?:\.|,|$)/i,
-  ];
-  for (const pattern of locationPatterns) {
-    const match = message.match(pattern);
-    if (match && match[1]) {
-      facts.push({ key: 'user_location', value: match[1].trim(), category: 'identity' });
-      break;
-    }
-  }
+  return facts;
+}
+
+async function analyzeCodebaseIssues(): Promise<string> {
+  const issues: string[] = [];
+  const cwd = process.cwd();
   
-  const jobPatterns = [
-    /(?:i work as|i'm a|i am a|my job is|i'm an|i am an)\s+([\w\s]+?)(?:\.|,|$)/i,
-  ];
-  for (const pattern of jobPatterns) {
-    const match = message.match(pattern);
-    if (match && match[1]) {
-      const job = match[1].trim();
-      if (job.length > 2 && job.length < 50) {
-        facts.push({ key: 'user_occupation', value: job, category: 'identity' });
-        break;
+  try {
+    const serverDir = path.join(cwd, 'server');
+    const clientDir = path.join(cwd, 'client');
+    
+    if (fs.existsSync(serverDir)) {
+      const serverFiles = fs.readdirSync(serverDir).filter(f => f.endsWith('.ts'));
+      for (const file of serverFiles.slice(0, 20)) {
+        try {
+          const content = fs.readFileSync(path.join(serverDir, file), 'utf-8');
+          
+          if (content.includes('// TODO') || content.includes('// FIXME')) {
+            const todoMatch = content.match(/\/\/\s*(TODO|FIXME)[:\s]+([^\n]+)/gi);
+            if (todoMatch) {
+              issues.push(`server/${file}: ${todoMatch.slice(0, 2).join(', ')}`);
+            }
+          }
+          
+          if (content.includes('throw new Error') && !content.includes('try {')) {
+            issues.push(`server/${file}: Has unhandled throw statements`);
+          }
+          
+          if (content.includes('any') && content.includes(': any')) {
+            const anyCount = (content.match(/:\s*any/g) || []).length;
+            if (anyCount > 3) {
+              issues.push(`server/${file}: Uses 'any' type ${anyCount} times - reduces type safety`);
+            }
+          }
+          
+          if (content.includes('console.log') && !file.includes('index')) {
+            const logCount = (content.match(/console\.log/g) || []).length;
+            if (logCount > 5) {
+              issues.push(`server/${file}: Has ${logCount} console.log statements`);
+            }
+          }
+        } catch (e) {}
       }
     }
+    
+    const envExample = path.join(cwd, '.env.example');
+    const envFile = path.join(cwd, '.env');
+    if (fs.existsSync(envExample) && !fs.existsSync(envFile)) {
+      issues.push('Missing .env file (template exists at .env.example)');
+    }
+    
+    const packageJson = path.join(cwd, 'package.json');
+    if (fs.existsSync(packageJson)) {
+      try {
+        const pkg = JSON.parse(fs.readFileSync(packageJson, 'utf-8'));
+        const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+        
+        const outdatedPatterns = [
+          { name: 'react', min: '18' },
+          { name: 'typescript', min: '5' },
+          { name: 'express', min: '4' },
+        ];
+        
+        for (const { name, min } of outdatedPatterns) {
+          if (deps[name]) {
+            const version = deps[name].replace(/[\^~]/g, '');
+            const major = parseInt(version.split('.')[0]);
+            if (major < parseInt(min)) {
+              issues.push(`package.json: ${name}@${version} may need upgrade (recommend v${min}+)`);
+            }
+          }
+        }
+      } catch (e) {}
+    }
+    
+    try {
+      const result = execSync('npm ls 2>&1 | grep -i "UNMET\\|missing\\|invalid" | head -5', { 
+        cwd, 
+        encoding: 'utf-8',
+        timeout: 5000 
+      }).trim();
+      if (result) {
+        issues.push(`npm dependencies: ${result.split('\n').length} issues detected`);
+      }
+    } catch (e) {}
+    
+    const checkPaths = [
+      'server/anthropic-service.ts',
+      'server/aurora.ts',
+      'server/aurora-core.ts',
+    ];
+    
+    for (const checkPath of checkPaths) {
+      const fullPath = path.join(cwd, checkPath);
+      if (fs.existsSync(fullPath)) {
+        try {
+          const content = fs.readFileSync(fullPath, 'utf-8');
+          
+          if (content.includes('process.env.') && content.includes('API_KEY')) {
+            const keyMatch = content.match(/process\.env\.(\w+_API_KEY)/g);
+            if (keyMatch) {
+              for (const key of keyMatch) {
+                const envVar = key.replace('process.env.', '');
+                if (!process.env[envVar]) {
+                  issues.push(`${checkPath}: ${envVar} not configured`);
+                }
+              }
+            }
+          }
+          
+          if (content.includes('fetch(') || content.includes('axios')) {
+            const urlMatches = content.match(/(?:fetch|axios)\s*\(\s*['"`]([^'"`]+)['"`]/g);
+            if (urlMatches) {
+              for (const match of urlMatches) {
+                if (match.includes('localhost') || match.includes('127.0.0.1')) {
+                  const port = match.match(/:(\d+)/)?.[1];
+                  if (port) {
+                    issues.push(`${checkPath}: References localhost:${port} - may need external service`);
+                  }
+                }
+              }
+            }
+          }
+        } catch (e) {}
+      }
+    }
+    
+  } catch (error) {
+    issues.push(`Analysis error: ${(error as Error).message}`);
   }
   
-  return facts;
+  if (issues.length === 0) {
+    return "**Codebase Analysis Complete**\n\nNo critical issues detected. The codebase appears to be in good shape.";
+  }
+  
+  return `**Codebase Analysis - ${issues.length} Issues Found**\n\n${issues.map((issue, i) => `${i + 1}. ${issue}`).join('\n')}`;
+}
+
+async function analyzeIntegrationStatus(): Promise<string> {
+  const status: { working: string[]; notWorking: string[]; unknown: string[] } = {
+    working: [],
+    notWorking: [],
+    unknown: []
+  };
+  
+  const cwd = process.cwd();
+  
+  if (process.env.ANTHROPIC_API_KEY) {
+    status.working.push('Anthropic API (key configured)');
+  } else {
+    status.notWorking.push('Anthropic API (ANTHROPIC_API_KEY not set)');
+  }
+  
+  if (process.env.OPENAI_API_KEY) {
+    status.working.push('OpenAI API (key configured)');
+  } else {
+    status.unknown.push('OpenAI API (key not set - may not be needed)');
+  }
+  
+  if (process.env.DATABASE_URL || process.env.PGHOST) {
+    status.working.push('PostgreSQL Database (configured)');
+  } else {
+    status.unknown.push('PostgreSQL Database (no DATABASE_URL - using memory storage)');
+  }
+  
+  const services = [
+    { name: 'Memory Fabric', port: 5004 },
+    { name: 'Memory Bridge', port: 5003 },
+    { name: 'Luminar Nexus V2', port: 8000 },
+    { name: 'Nexus V3', port: 5002 },
+  ];
+  
+  for (const service of services) {
+    try {
+      const response = await fetch(`http://127.0.0.1:${service.port}/`, { 
+        method: 'GET',
+        signal: AbortSignal.timeout(500) 
+      });
+      if (response.ok || response.status < 500) {
+        status.working.push(`${service.name} (port ${service.port})`);
+      } else {
+        status.notWorking.push(`${service.name} (port ${service.port} - error ${response.status})`);
+      }
+    } catch (e) {
+      status.notWorking.push(`${service.name} (port ${service.port} - not responding)`);
+    }
+  }
+  
+  const checkFiles = [
+    { path: 'server/routes.ts', name: 'Express Routes' },
+    { path: 'server/storage.ts', name: 'Storage Layer' },
+    { path: 'client/src/App.tsx', name: 'React Frontend' },
+    { path: 'shared/schema.ts', name: 'Data Schema' },
+  ];
+  
+  for (const file of checkFiles) {
+    const fullPath = path.join(cwd, file.path);
+    if (fs.existsSync(fullPath)) {
+      status.working.push(`${file.name} (${file.path})`);
+    } else {
+      status.notWorking.push(`${file.name} (${file.path} missing)`);
+    }
+  }
+  
+  let report = '**Integration Status Report**\n\n';
+  
+  if (status.working.length > 0) {
+    report += `**Working (${status.working.length}):**\n${status.working.map(s => `- ${s}`).join('\n')}\n\n`;
+  }
+  
+  if (status.notWorking.length > 0) {
+    report += `**Not Working (${status.notWorking.length}):**\n${status.notWorking.map(s => `- ${s}`).join('\n')}\n\n`;
+  }
+  
+  if (status.unknown.length > 0) {
+    report += `**Unknown/Optional (${status.unknown.length}):**\n${status.unknown.map(s => `- ${s}`).join('\n')}\n`;
+  }
+  
+  return report;
+}
+
+async function executeFileOperation(message: string): Promise<string | null> {
+  const cwd = process.cwd();
+  const msgLower = message.toLowerCase();
+  
+  const listMatch = msgLower.match(/(?:list|show|what)\s+(?:files?|are)\s+(?:in|inside)?\s*(.+)?/);
+  if (listMatch || msgLower.includes('list files') || msgLower.includes('show files')) {
+    const dirPath = listMatch?.[1]?.trim() || '.';
+    const targetPath = path.join(cwd, dirPath.replace(/^\//, ''));
+    
+    if (fs.existsSync(targetPath) && fs.statSync(targetPath).isDirectory()) {
+      const files = fs.readdirSync(targetPath).slice(0, 50);
+      return `**Files in ${dirPath}:**\n\n${files.map(f => {
+        const stat = fs.statSync(path.join(targetPath, f));
+        return `- ${f}${stat.isDirectory() ? '/' : ''}`;
+      }).join('\n')}`;
+    }
+  }
+  
+  const readMatch = message.match(/(?:read|show|display|cat|open)\s+(?:file\s+)?([^\s]+\.[a-z]+)/i);
+  if (readMatch) {
+    const filePath = readMatch[1];
+    const fullPath = path.join(cwd, filePath);
+    
+    if (fs.existsSync(fullPath)) {
+      const content = fs.readFileSync(fullPath, 'utf-8');
+      const lines = content.split('\n');
+      const preview = lines.slice(0, 50).join('\n');
+      return `**${filePath}** (${lines.length} lines):\n\n\`\`\`\n${preview}\n${lines.length > 50 ? '\n... (truncated)' : ''}\n\`\`\``;
+    } else {
+      return `File not found: ${filePath}`;
+    }
+  }
+  
+  const searchMatch = message.match(/(?:search|find|grep)\s+(?:for\s+)?['"]?([^'"]+)['"]?\s+(?:in\s+)?(.+)?/i);
+  if (searchMatch) {
+    const pattern = searchMatch[1].trim();
+    const searchPath = searchMatch[2]?.trim() || '.';
+    
+    try {
+      const result = execSync(
+        `grep -rn --include="*.ts" --include="*.tsx" --include="*.js" --include="*.py" "${pattern}" ${searchPath} 2>/dev/null | head -20`,
+        { cwd, encoding: 'utf-8', timeout: 5000 }
+      ).trim();
+      
+      if (result) {
+        return `**Search results for "${pattern}":**\n\n\`\`\`\n${result}\n\`\`\``;
+      } else {
+        return `No matches found for "${pattern}"`;
+      }
+    } catch (e) {
+      return `No matches found for "${pattern}"`;
+    }
+  }
+  
+  return null;
 }
 
 async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default', context: any[] = []): Promise<{ response: string; detection: ConversationDetection }> {
@@ -136,13 +384,7 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
   try {
     const { context: loopContext, events } = await cognitiveLoop.processMessage(userMessage, sessionId, 'chat');
     cognitiveContext = loopContext;
-    
     consciousnessState = loopContext.consciousness;
-    
-    if (consciousnessState) {
-      console.log(`[Aurora] 🌌 Consciousness: ${consciousnessState.consciousness_state} | Awareness: ${consciousnessState.awareness_level}`);
-      console.log(`[Aurora] 🤖 Workers: ${consciousnessState.workers?.idle || 0} idle / ${consciousnessState.workers?.total || 0} total`);
-    }
     
     if (loopContext.facts) {
       const facts = loopContext.facts;
@@ -150,25 +392,9 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
         userName = facts['user_name'] as string;
         memoryContext += `User's name: ${userName}\n`;
       }
-      if (facts['user_location']) {
-        memoryContext += `User's location: ${facts['user_location']}\n`;
-      }
-      if (facts['user_occupation']) {
-        memoryContext += `User's occupation: ${facts['user_occupation']}\n`;
-      }
     }
-    
-    if (loopContext.memoryContext) {
-      memoryContext += `Recent context: ${loopContext.memoryContext}\n`;
-    }
-    
-    if (memoryContext) {
-      console.log('[Aurora] 🧠 Memory context loaded:', memoryContext.substring(0, 100) + '...');
-    }
-    
-    console.log(`[Aurora] 🔄 Cognitive loop: ${events.length} events processed`);
   } catch (memoryError) {
-    console.log('[Aurora] Cognitive loop error, using fallback:', memoryError);
+    console.log('[Aurora] Cognitive loop error:', memoryError);
   }
   
   const previousMessages = context
@@ -180,56 +406,88 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
   const detection = conversationDetector.detect(userMessage, previousMessages);
   conversationDetector.addMessageToHistory(userMessage);
 
-  console.log(`[Aurora] 🔍 Detected: ${detection.type} (confidence: ${detection.confidence}%)`);
-  console.log(`[Aurora] 📋 Format: ${detection.suggestedFormat} | Mode: ${detection.executionMode}`);
+  console.log(`[Aurora] Detected: ${detection.type} (confidence: ${detection.confidence}%)`);
 
   conversationPatternAdapter.sendPatternToV2(detection, userMessage, previousMessages.join(' ')).catch(() => {});
-
   memoryClient.saveMessage('user', userMessage, 0.7, [detection.type]).catch(() => {});
   
   const extractedFacts = extractFacts(userMessage);
   for (const fact of extractedFacts) {
-    memoryClient.saveFact(fact.key, fact.value, fact.category).then((result) => {
-      if (result.success) {
-        console.log(`[Aurora] 💾 Saved fact: ${fact.key} = ${fact.value}`);
-      }
-    }).catch(() => {});
+    memoryClient.saveFact(fact.key, fact.value, fact.category).catch(() => {});
   }
 
   let response = '';
+  const msgLower = userMessage.toLowerCase();
 
-  try {
-    const dispatchedResponse = await executeWithProgram(userMessage, detection, sessionId, context);
-    if (dispatchedResponse && dispatchedResponse.length > 0) {
-      response = dispatchedResponse;
+  if (msgLower.includes('not working') || msgLower.includes('not integrated') || 
+      msgLower.includes('what\'s broken') || msgLower.includes("what is broken") ||
+      msgLower.includes('issues') || msgLower.includes('problems') ||
+      (msgLower.includes('tell me') && (msgLower.includes('not') || msgLower.includes('broken') || msgLower.includes('issues')))) {
+    response = await analyzeIntegrationStatus();
+    const codeIssues = await analyzeCodebaseIssues();
+    response += '\n\n' + codeIssues;
+  }
+  else if (msgLower.includes('status') || msgLower.includes('integration')) {
+    response = await analyzeIntegrationStatus();
+  }
+  else if (msgLower.includes('analyze') && (msgLower.includes('code') || msgLower.includes('codebase'))) {
+    response = await analyzeCodebaseIssues();
+  }
+  else if (msgLower.includes('list files') || msgLower.includes('show files') || 
+           msgLower.includes('read file') || msgLower.includes('search for') ||
+           msgLower.includes('find ') || msgLower.includes('grep ')) {
+    const fileResult = await executeFileOperation(userMessage);
+    if (fileResult) {
+      response = fileResult;
     }
-  } catch (dispatchError) {
-    console.log('[Aurora] Dispatcher error, using fallback:', dispatchError);
+  }
+  else if (msgLower.match(/^(hi|hello|hey|greetings)/)) {
+    response = userName 
+      ? `Hello ${userName}! What would you like me to do?` 
+      : "Hello! What would you like me to do?";
+  }
+  else if (msgLower.includes('who are you') || msgLower.includes('what are you')) {
+    response = "I'm Aurora, an AI assistant integrated into this codebase. I can analyze your code, check integration status, search files, and help with development tasks. Try asking me 'what is not working' or 'analyze the codebase'.";
+  }
+  else if (msgLower.includes('help') || msgLower.includes('what can you do')) {
+    response = `**Available Commands:**
+
+1. **"What is not working?"** - Analyze integration status and find issues
+2. **"Analyze the codebase"** - Check for code quality issues
+3. **"List files in [directory]"** - Show files in a directory
+4. **"Read file [path]"** - Display file contents
+5. **"Search for [pattern]"** - Find text in code files
+6. **"Status"** - Check service integrations
+
+What would you like me to do?`;
   }
 
   if (!response) {
     try {
-      response = await callExecutionWrapperDirect(userMessage, detection.type, context);
-    } catch (fallbackError) {
-      console.log('[Aurora] Fallback also failed:', fallbackError);
+      const wrapperPath = path.join(process.cwd(), 'tools', 'execution_wrapper.py');
+      if (fs.existsSync(wrapperPath)) {
+        const result = await callExecutionWrapperDirect(userMessage, detection.type, context);
+        if (result && result.length > 10 && !result.includes('would you like')) {
+          response = result;
+        }
+      }
+    } catch (e) {
+      console.log('[Aurora] Wrapper error:', e);
     }
   }
 
   if (!response) {
-    response = generateContextualFallback(userMessage, detection, userName, consciousnessState);
-  }
-  
-  const newlyExtractedName = extractUserName(userMessage);
-  if (newlyExtractedName && !response.includes(newlyExtractedName)) {
-    response = `Nice to meet you, ${newlyExtractedName}! ` + response;
+    response = `I received your message: "${userMessage.substring(0, 100)}${userMessage.length > 100 ? '...' : ''}"
+
+To get useful responses, try:
+- "What is not working?" - to check integration status
+- "Analyze the codebase" - to find code issues  
+- "List files in server/" - to explore files
+- "Search for [text]" - to find code`;
   }
 
-  const usedFallback = !response || response.includes('would you like');
-  
   if (cognitiveContext) {
-    cognitiveLoop.completeCycle(userMessage, response, cognitiveContext, !usedFallback).catch((err) => {
-      console.log('[Aurora] Cognitive cycle completion error:', err);
-    });
+    cognitiveLoop.completeCycle(userMessage, response, cognitiveContext, true).catch(() => {});
   }
 
   return { response, detection };
@@ -246,15 +504,13 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: a
 
     const python = spawn('python3', [wrapperPath], { cwd: process.cwd() });
     let output = '';
-    let stderr = '';
 
     python.stdin.write(inputData);
     python.stdin.end();
 
     python.stdout.on('data', (data) => output += data.toString());
-    python.stderr.on('data', (data) => stderr += data.toString());
 
-    python.on('close', (code) => {
+    python.on('close', () => {
       try {
         const lines = output.split('\n');
         const jsonLine = lines.find(l => l.trim().startsWith('{'));
@@ -271,7 +527,7 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: a
         if (cleanOutput) {
           resolve(cleanOutput);
         } else {
-          reject(new Error('No output from wrapper'));
+          reject(new Error('No output'));
         }
       } catch (e) {
         reject(e);
@@ -285,63 +541,6 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: a
       reject(new Error('Timeout'));
     }, 8000);
   });
-}
-
-function generateContextualFallback(
-  userMessage: string, 
-  detection: ConversationDetection, 
-  userName: string | null = null,
-  consciousness: ConsciousnessState | null = null
-): string {
-  const keywords = userMessage.toLowerCase()
-    .replace(/[^\w\s]/g, '')
-    .split(/\s+/)
-    .filter(w => w.length > 3)
-    .slice(0, 5);
-  
-  const topic = keywords.join(' ') || 'your request';
-  const hasQuestion = userMessage.includes('?');
-  const greeting = userName ? `${userName}, ` : '';
-  
-  const systemStatus = consciousness 
-    ? `[${consciousness.peak_capabilities?.tiers || 188} tiers, ${consciousness.peak_capabilities?.aems || 66} programs, ${consciousness.workers?.idle || 0} workers ready]` 
-    : '[188 tiers, 66 programs ready]';
-  
-  switch (detection.type) {
-    case 'code_generation':
-      return `${greeting}I can write code for ${topic}. Which language would you prefer, and what specific requirements should I address?`;
-    
-    case 'debugging':
-      return `${greeting}I'll help debug ${topic}. Please share the error message and relevant code, and I'll identify the issue.`;
-    
-    case 'explanation':
-      return hasQuestion 
-        ? `${greeting}Let me explain ${topic}. What specific aspect would be most useful - the basics, technical details, or practical examples?`
-        : `${greeting}I can explain ${topic} in detail. What angle would be most helpful for you?`;
-    
-    case 'architecture':
-      return `${greeting}For ${topic}, I can help design the architecture. What are your scalability needs and technology constraints?`;
-    
-    case 'optimization':
-      return `${greeting}I'll help optimize ${topic}. Share the relevant code and I'll suggest specific improvements.`;
-    
-    case 'testing':
-      return `${greeting}I can write tests for ${topic}. What testing framework do you prefer and what edge cases concern you?`;
-    
-    case 'refactoring':
-      return `${greeting}I'll refactor ${topic} for better clarity. Share the code and tell me what aspects you'd like improved.`;
-    
-    case 'analysis':
-      return `${greeting}Analyzing ${topic}. All systems operational ${systemStatus}. What specific analysis do you need?`;
-    
-    case 'question_answering':
-      return hasQuestion
-        ? `${greeting}That's a good question about ${topic}. Could you provide more context so I can give you the most accurate answer?`
-        : `${greeting}I can address ${topic}. What specifically would you like to know?`;
-    
-    default:
-      return `${greeting}I understand you're interested in ${topic}. How can I help - would you like explanations, code, or problem-solving assistance?`;
-  }
 }
 
 export async function getChatResponse(message: string, sessionId: string, context: any[] = []): Promise<{ response: string; detection: ConversationDetection }> {
