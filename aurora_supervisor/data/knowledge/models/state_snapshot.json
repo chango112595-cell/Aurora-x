@@ -1,5 +1,5 @@
 {
-  "timestamp": 1765857563.0613422,
+  "timestamp": 1765857893.105515,
   "memory": {
     "healer-0": "validate_integrity_phase_4_6",
     "task-1": "optimize_learning_parameters",
@@ -57,7 +57,7 @@
     "task-283": "optimize_learning_parameters",
     "task-296": "build_phase_4_6_modules",
     "task-298": "optimize_learning_parameters",
-    "task-281": "optimize_learning_parameters",
+    "task-281": "build_phase_4_6_modules",
     "task-290": "build_phase_4_6_modules",
     "healer-12": "validate_integrity_phase_4_6",
     "task-288": "optimize_learning_parameters",
@@ -69,7 +69,7 @@
     "task-9": "optimize_learning_parameters",
     "task-12": "optimize_learning_parameters",
     "task-26": "optimize_learning_parameters",
-    "task-15": "optimize_learning_parameters",
+    "task-15": "build_phase_4_6_modules",
     "healer-13": "validate_integrity_phase_4_6",
     "task-31": "build_phase_4_6_modules",
     "task-8": "optimize_learning_parameters",
@@ -90,15 +90,21 @@
     "healer-98": "validate_integrity_phase_4_6",
     "task-74": "optimize_learning_parameters",
     "healer-65": "validate_integrity_phase_4_6",
-    "task-50": "build_phase_4_6_modules",
+    "task-50": "optimize_learning_parameters",
     "healer-31": "validate_integrity_phase_4_6",
     "task-47": "optimize_learning_parameters",
     "healer-99": "validate_integrity_phase_4_6",
     "task-43": "build_phase_4_6_modules",
     "task-63": "build_phase_4_6_modules",
-    "task-52": "build_phase_4_6_modules",
+    "task-52": "optimize_learning_parameters",
     "task-53": "optimize_learning_parameters",
     "healer-48": "validate_integrity_phase_4_6",
-    "task-49": "optimize_learning_parameters"
+    "task-49": "build_phase_4_6_modules",
+    "healer-93": "validate_integrity_phase_4_6",
+    "healer-41": "validate_integrity_phase_4_6",
+    "healer-77": "validate_integrity_phase_4_6",
+    "task-77": "build_phase_4_6_modules",
+    "task-88": "build_phase_4_6_modules",
+    "healer-45": "validate_integrity_phase_4_6"
   }
 }
