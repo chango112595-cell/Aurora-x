@@ -206,6 +206,29 @@ async function executeCodeReview(input: string, aemId: number): Promise<Executio
 
 async function executeDebugAnalysis(input: string, aemId: number): Promise<ExecutionResult> {
   const start = Date.now();
+  const inputLower = input.toLowerCase();
+  
+  const isSelfDebug = inputLower.includes('self') || 
+                       inputLower.includes('your') || 
+                       inputLower.includes('system') ||
+                       inputLower.includes('aurora') ||
+                       inputLower.match(/^(debug|analyze|diagnose|check|fix)$/);
+  
+  if (isSelfDebug) {
+    return performSelfDiagnostics(aemId, start);
+  }
+  
+  const isFileDiagnostic = inputLower.includes('file') && 
+                            (inputLower.includes('broken') || 
+                             inputLower.includes('not working') ||
+                             inputLower.includes('error') ||
+                             inputLower.includes('fail') ||
+                             inputLower.includes('issue'));
+  
+  if (isFileDiagnostic) {
+    return findBrokenFiles(aemId, start);
+  }
+  
   return {
     success: true,
     output: `Debug analysis initiated: ${input}\n\nI'll trace through the code to identify the root cause.`,
@@ -213,6 +236,137 @@ async function executeDebugAnalysis(input: string, aemId: number): Promise<Execu
     aemName: 'Debug Analysis',
     executionTime: Date.now() - start,
     metadata: { requiresLLM: true }
+  };
+}
+
+async function performSelfDiagnostics(aemId: number, start: number): Promise<ExecutionResult> {
+  const issues: string[] = [];
+  const checks: string[] = [];
+  
+  try {
+    const result = execSync('ps aux | grep -E "(node|python)" | grep -v grep | wc -l', { encoding: 'utf-8' }).trim();
+    checks.push(`Active processes: ${result}`);
+  } catch { checks.push('Process check: Unable to verify'); }
+  
+  try {
+    const memInfo = execSync('free -m | grep Mem | awk \'{print $3"/"$2"MB"}\'', { encoding: 'utf-8' }).trim();
+    checks.push(`Memory usage: ${memInfo}`);
+  } catch { checks.push('Memory check: Unable to verify'); }
+  
+  const ports = [5000, 5003, 5004, 8000];
+  for (const port of ports) {
+    try {
+      const result = execSync(`lsof -i :${port} 2>/dev/null | grep LISTEN | head -1`, { encoding: 'utf-8' }).trim();
+      checks.push(`Port ${port}: ${result ? 'ACTIVE' : 'Not bound'}`);
+    } catch { checks.push(`Port ${port}: Not bound`); }
+  }
+  
+  try {
+    const tsErrors = execSync('npx tsc --noEmit 2>&1 | head -20', { encoding: 'utf-8', timeout: 15000 }).trim();
+    if (tsErrors && !tsErrors.includes('error TS')) {
+      checks.push('TypeScript: No compilation errors');
+    } else if (tsErrors) {
+      const errorCount = (tsErrors.match(/error TS/g) || []).length;
+      issues.push(`TypeScript: ${errorCount} compilation error(s)`);
+    }
+  } catch { checks.push('TypeScript check: Skipped'); }
+  
+  const logsToCheck = ['/tmp/logs'];
+  for (const logDir of logsToCheck) {
+    try {
+      if (fs.existsSync(logDir)) {
+        const logFiles = fs.readdirSync(logDir).filter(f => f.endsWith('.log')).slice(-5);
+        for (const logFile of logFiles) {
+          const content = fs.readFileSync(path.join(logDir, logFile), 'utf-8').slice(-2000);
+          const errorLines = content.split('\n').filter(l => 
+            l.toLowerCase().includes('error') || l.toLowerCase().includes('exception')
+          );
+          if (errorLines.length > 0) {
+            issues.push(`${logFile}: ${errorLines.length} error(s) in recent logs`);
+          }
+        }
+      }
+    } catch {}
+  }
+  
+  const output = `**Self-Diagnostic Report**\n\n` +
+    `**System Checks:**\n${checks.map(c => `- ${c}`).join('\n')}\n\n` +
+    (issues.length > 0 ? 
+      `**Issues Found (${issues.length}):**\n${issues.map(i => `- ${i}`).join('\n')}` : 
+      `**Status:** All systems healthy - no issues detected`);
+  
+  return {
+    success: true,
+    output,
+    aemUsed: aemId,
+    aemName: 'Debug Analysis',
+    executionTime: Date.now() - start
+  };
+}
+
+async function findBrokenFiles(aemId: number, start: number): Promise<ExecutionResult> {
+  const brokenFiles: string[] = [];
+  const cwd = process.cwd();
+  
+  try {
+    const tsOutput = execSync('npx tsc --noEmit 2>&1 || true', { 
+      encoding: 'utf-8', 
+      timeout: 30000,
+      cwd 
+    });
+    const errorMatches = tsOutput.match(/([^:\s]+\.tsx?)\(\d+,\d+\)/g) || [];
+    const uniqueFiles = [...new Set(errorMatches.map(m => m.split('(')[0]))];
+    uniqueFiles.forEach(f => brokenFiles.push(`TypeScript error in: ${f}`));
+  } catch {}
+  
+  try {
+    const lspOutput = execSync('grep -r "import .* from" server/*.ts 2>/dev/null | head -50', { 
+      encoding: 'utf-8', 
+      timeout: 5000,
+      cwd 
+    });
+    const imports = lspOutput.split('\n').filter(Boolean);
+    for (const line of imports.slice(0, 20)) {
+      const match = line.match(/from\s+['"]([^'"]+)['"]/);
+      if (match && match[1].startsWith('./')) {
+        const filePath = match[1].replace('./', 'server/');
+        const fullPath = path.join(cwd, filePath + '.ts');
+        if (!fs.existsSync(fullPath) && !fs.existsSync(fullPath.replace('.ts', '.tsx'))) {
+          brokenFiles.push(`Missing import: ${match[1]} (referenced in ${line.split(':')[0]})`);
+        }
+      }
+    }
+  } catch {}
+  
+  const logsDir = '/tmp/logs';
+  try {
+    if (fs.existsSync(logsDir)) {
+      const recentLogs = fs.readdirSync(logsDir)
+        .filter(f => f.endsWith('.log'))
+        .slice(-3);
+      
+      for (const logFile of recentLogs) {
+        const content = fs.readFileSync(path.join(logsDir, logFile), 'utf-8').slice(-3000);
+        const errorLines = content.split('\n').filter(l => 
+          l.toLowerCase().includes('error') && !l.includes('[vite]')
+        );
+        if (errorLines.length > 0) {
+          brokenFiles.push(`Log errors in ${logFile}: ${errorLines.length} error(s)`);
+        }
+      }
+    }
+  } catch {}
+  
+  const output = brokenFiles.length > 0 ?
+    `**Files with Issues Found (${brokenFiles.length}):**\n\n${brokenFiles.map(f => `- ${f}`).join('\n')}` :
+    `**No Broken Files Detected**\n\nAll TypeScript files compile without errors.\nNo missing imports found.\nNo recent errors in logs.`;
+  
+  return {
+    success: true,
+    output,
+    aemUsed: aemId,
+    aemName: 'Debug Analysis',
+    executionTime: Date.now() - start
   };
 }
 
@@ -309,8 +463,39 @@ async function executeFileSearch(input: string, aemId: number): Promise<Executio
 
 async function executeDirectoryList(input: string, aemId: number): Promise<ExecutionResult> {
   const start = Date.now();
-  const dirMatch = input.match(/(?:list|show|ls)\s+(?:files?\s+)?(?:in\s+)?(.+)?/i);
+  const inputLower = input.toLowerCase();
+  
+  const isDiagnosticRequest = inputLower.includes('broken') ||
+                               inputLower.includes('not working') ||
+                               inputLower.includes("aren't working") ||
+                               inputLower.includes('error') ||
+                               inputLower.includes('fail') ||
+                               inputLower.includes('issue') ||
+                               inputLower.includes('problem');
+  
+  if (isDiagnosticRequest) {
+    return findBrokenFiles(9, start);
+  }
+  
+  const dirMatch = input.match(/(?:list|show|ls)\s+(?:files?\s+)?(?:in\s+)?([a-zA-Z0-9_./-]+(?:\/[a-zA-Z0-9_./-]*)*)/i);
   const dirPath = dirMatch?.[1]?.trim() || '.';
+  
+  if (dirPath === 'that' || dirPath === 'the' || dirPath === 'all') {
+    const files = fs.readdirSync(process.cwd()).slice(0, 50);
+    const output = files.map(f => {
+      const stat = fs.statSync(path.join(process.cwd(), f));
+      return `- ${f}${stat.isDirectory() ? '/' : ''}`;
+    }).join('\n');
+    
+    return {
+      success: true,
+      output: `**Files in project root:**\n\n${output}`,
+      aemUsed: aemId,
+      aemName: 'Directory List',
+      executionTime: Date.now() - start
+    };
+  }
+  
   const fullPath = path.join(process.cwd(), dirPath.replace(/^\//, ''));
   
   if (fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory()) {

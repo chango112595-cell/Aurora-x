@@ -594,7 +594,18 @@ export async function registerRoutes(app: Express): Promise<void> {
                              msgLower.includes('check integration') ||
                              msgLower.includes('analyze codebase') ||
                              msgLower.includes('git status') ||
-                             msgLower.includes('dependencies');
+                             msgLower.includes('dependencies') ||
+                             msgLower.includes('self debug') ||
+                             msgLower.includes('self diagnos') ||
+                             msgLower.includes('self analyz') ||
+                             msgLower.includes('self analysis') ||
+                             (msgLower.includes('broken') && msgLower.includes('file')) ||
+                             (msgLower.includes('not working') && msgLower.includes('file')) ||
+                             msgLower.includes("what's broken") ||
+                             msgLower.includes('what is broken') ||
+                             msgLower.includes('check system') ||
+                             msgLower.includes('diagnose') ||
+                             msgLower.includes('root cause');
 
       if (isDirectAction) {
         const selectedAEM = selectExecutionMethod(message);
