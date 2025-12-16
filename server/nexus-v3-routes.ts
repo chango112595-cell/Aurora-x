@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import { AuroraCore } from "./aurora-core";
 
 const NEXUS_V3_BASE = "http://0.0.0.0:5002";
 
@@ -189,18 +190,31 @@ export function registerNexusV3Routes(app: Express) {
     res.json(data);
   });
 
-  // Self-Healers endpoint
+  // Self-Healers endpoint - Now connected to real AuroraCore healer data
   app.get("/api/nexus-v3/self-healers", async (req, res) => {
+    const aurora = AuroraCore.getInstance();
+    const healerStats = aurora.getSelfHealerStats();
+    const recentEvents = aurora.getRecentHealingEvents(20);
+    
     res.json({
-      total: embeddedNexusV3State.selfHealers.total,
-      active: embeddedNexusV3State.selfHealers.active,
-      status: embeddedNexusV3State.selfHealers.status,
-      healers: Array.from({ length: 100 }, (_, i) => ({
-        id: i + 1,
-        name: `Healer-${String(i + 1).padStart(3, '0')}`,
-        status: "active",
-        lastHealed: new Date().toISOString(),
-        healsPerformed: Math.floor(Math.random() * 50) + 10
+      total: healerStats.total,
+      active: healerStats.active,
+      healing: healerStats.healing,
+      cooldown: healerStats.cooldown,
+      status: healerStats.status,
+      healsPerformed: healerStats.healsPerformed,
+      healthyComponents: healerStats.healthyComponents,
+      totalComponents: healerStats.totalComponents,
+      recentEvents: recentEvents.map(event => ({
+        id: event.id,
+        healerId: event.healerId,
+        targetId: event.targetId,
+        targetType: event.targetType,
+        action: event.action,
+        status: event.status,
+        startTime: new Date(event.startTime).toISOString(),
+        endTime: event.endTime ? new Date(event.endTime).toISOString() : null,
+        details: event.details
       })),
       mode: "production"
     });

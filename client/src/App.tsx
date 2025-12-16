@@ -25,6 +25,7 @@ import AuroraChat from "./pages/aurora-chat";
 import MemoryFabric from "./pages/memory-fabric";
 import Roadmap from "./pages/roadmap";
 import Vault from "./pages/vault";
+import Aurora from "./pages/aurora";
 import NotFound from "./pages/not-found";
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
         <Route path="/memory-fabric" component={MemoryFabric} />
         <Route path="/roadmap" component={Roadmap} />
         <Route path="/vault" component={Vault} />
+        <Route path="/aurora" component={Aurora} />
         <Route component={NotFound} />
       </Switch>
     </AuroraFuturisticLayout>
