@@ -52,7 +52,7 @@ interface NexusStatus {
   v3: {
     connected: boolean;
     status: string;
-    workers?: number;
+    workers?: number | { total: number; active: number; idle: number };
     tiers?: number;
     aems?: number;
     modules?: number;
@@ -406,7 +406,11 @@ export default function MemoryFabric() {
                 <div className="grid grid-cols-4 gap-2 text-xs">
                   <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
                     <span className="text-purple-300/70 text-[10px]">Workers</span>
-                    <span className="font-mono text-purple-200 font-bold">{nexusStatus?.v3?.workers || 300}</span>
+                    <span className="font-mono text-purple-200 font-bold">
+                      {typeof nexusStatus?.v3?.workers === 'object' 
+                        ? nexusStatus.v3.workers.total 
+                        : (nexusStatus?.v3?.workers || 300)}
+                    </span>
                   </div>
                   <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
                     <span className="text-purple-300/70 text-[10px]">Tiers</span>
