@@ -1,0 +1,11 @@
+{
+  "modules": "generated, mostly structural",
+  "workers": "idle",
+  "healers": "present but not active",
+  "packs": "simulated",
+  "autonomy": "loop exists but no task dispatch",
+  "memory": "partially broken (snapshot corruption)",
+  "security": "unsafe defaults present",
+  "external_ai": "still referenced",
+  "state": "development, not production"
+}

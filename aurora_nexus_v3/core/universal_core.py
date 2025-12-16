@@ -212,6 +212,21 @@ class AuroraUniversalCore:
             
             await self.worker_pool.start()
             await self.issue_detector.start()
+            await self.worker_pool.start()
+            await self.issue_detector.start()
+
+            # 🔥 BOOTSTRAP TASK — forces at least one worker to run
+            if self.task_dispatcher:
+                self.task_dispatcher.dispatch({
+                    "task_id": "bootstrap_integrity_check",
+                    "action": "validate_core_components",
+                    "priority": "high",
+                    "source": "system_startup"
+                })
+
+            self.logger.info(f"Autonomous Workers: {self.WORKER_COUNT} initialized and ready")
+            self.logger.info("Issue Detector: Monitoring enabled — automatic healing active")
+
             
             self.logger.info(f"Autonomous Workers: {self.WORKER_COUNT} workers initialized and ready")
             self.logger.info("Issue Detector: Monitoring enabled - automatic healing active")
