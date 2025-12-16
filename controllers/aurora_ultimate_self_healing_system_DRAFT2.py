@@ -57,8 +57,11 @@ class SafeLogger:
         try:
             with open(self.log_file, 'a', encoding='utf-8') as f:
                 f.write(log_line)
-        except:
-            pass
+        except Exception as error:
+            try:
+                sys.stderr.write(f"[SafeLogger] Failed to write log: {error}\n")
+            except Exception:
+                self.console_available = False
 
         # Try console output
         if self.console_available:
@@ -766,8 +769,8 @@ class AuroraUltimateSelfHealingSystem:
                 if os.path.exists(filepath):
                     with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
                         backups[filepath] = f.read()
-            except:
-                pass
+            except Exception as error:
+                self.log(f"[ROLLBACK] Failed to snapshot {filepath}: {error}")
         return backups
 
     def rollback(self, rollback_point):
@@ -777,8 +780,8 @@ class AuroraUltimateSelfHealingSystem:
             try:
                 with open(filepath, 'w', encoding='utf-8') as f:
                     f.write(content)
-            except:
-                pass
+            except Exception as error:
+                self.log(f"[ROLLBACK] Could not restore {filepath}: {error}")
 
     def execute_service_repair(self, fix):
         """Execute service repair fix"""
@@ -838,8 +841,8 @@ class AuroraUltimateSelfHealingSystem:
                 with open(filepath, 'w', encoding='utf-8') as f:
                     f.write(content)
                 return True
-        except:
-            pass
+        except Exception as error:
+            self.log(f"[ENCODING] Failed to normalize {filepath}: {error}")
         return False
 
     def fix_windows_compatibility(self, filepath):
@@ -865,8 +868,8 @@ class AuroraUltimateSelfHealingSystem:
                 with open(filepath, 'w', encoding='utf-8') as f:
                     f.writelines(new_lines)
                 return True
-        except:
-            pass
+        except Exception as error:
+            self.log(f"[WINDOWS] Compatibility patch failed for {filepath}: {error}")
         return False
 
     def fix_variable_issues(self, filepath):
@@ -882,8 +885,8 @@ class AuroraUltimateSelfHealingSystem:
             with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(content)
             return True
-        except:
-            pass
+        except Exception as error:
+            self.log(f"[VARIABLES] Failed to fix variables in {filepath}: {error}")
         return False
 
     def optimize_launcher(self, task_services):
@@ -988,8 +991,8 @@ class AuroraUltimateSelfHealingSystem:
                 if file_score >= 8:
                     clean_files += 1
 
-            except:
-                pass
+            except Exception as error:
+                self.log(f"[QUALITY] Skipped {filepath}: {error}")
 
         # Calculate final score
         max_score_per_metric = total_files
@@ -1069,8 +1072,8 @@ class AuroraUltimateSelfHealingSystem:
 
             with open('.aurora_health_dashboard.json', 'w') as f:
                 json.dump(dashboard, f, indent=2)
-        except:
-            pass
+        except Exception as error:
+            self.log(f"[DASHBOARD] Failed to persist health dashboard: {error}")
 
     def continuous_monitoring(self):
         """Continuous monitoring loop"""
@@ -1095,8 +1098,9 @@ class AuroraUltimateSelfHealingSystem:
                 self.update_health_dashboard()
 
                 time.sleep(check_interval)
-            except:
-                pass
+            except Exception as error:
+                self.log(f"[MONITOR] Monitoring loop error: {error}")
+                time.sleep(5)
 
     def notify(self, level, message):
         """Send notification"""
@@ -1112,8 +1116,8 @@ class AuroraUltimateSelfHealingSystem:
         try:
             with open('.aurora_notifications.json', 'w') as f:
                 json.dump(self.notification_log[-50:], f, indent=2)
-        except:
-            pass
+        except Exception as error:
+            self.log(f"[NOTIFY] Failed to persist notification log: {error}")
 
         self.log(f"  [NOTIFY] {level}: {message}")
 

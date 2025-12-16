@@ -20,6 +20,7 @@ python-multipart>=0.0.6
 # System & Utilities
 psutil>=5.9.0
 watchdog>=3.0.0
+waitress>=2.1.2
 
 # Testing
 pytest>=8.3.5

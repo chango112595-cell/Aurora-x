@@ -17,11 +17,24 @@ try:
 except Exception:
     UDS_OK = False
 
-def read_vin():
+def read_vin(bus=None):
+    """
+    Read VIN from vehicle. Requires udsoncan + hardware; will not emit fake VINs.
+    Optionally accepts a pre-configured bus/session for testing.
+    """
     if not UDS_OK:
-        return {"vin": "SIM-VIN-000", "note":"udsoncan not installed"}
-    # implement with python-can + isotp (this is device-specific)
-    return {"vin":"REAL-VIN-PLACEHOLDER"}
+        raise RuntimeError("udsoncan not installed; cannot read VIN without dependencies.")
+
+    if bus is None:
+        raise RuntimeError("No CAN/UDS session provided; supply a bus/session to read VIN.")
+
+    try:
+        client = Client(PythonIsoTpConnection(bus), request_timeout=2)
+        with client:
+            resp = client.read_data_by_identifier(0xF190)
+            return {"vin": resp.data.decode(errors="ignore").strip()}
+    except Exception as exc:
+        raise RuntimeError(f"VIN read failed: {exc}") from exc
 
 def request_ecu_action(ecu, action, payload):
     # Save suggestion; require human signature/approval before execution

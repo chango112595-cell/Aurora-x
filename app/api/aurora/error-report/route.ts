@@ -30,12 +30,19 @@ ${'='.repeat(80)}
 
     fs.appendFileSync(logFile, logEntry);
 
-    // TODO: Trigger Aurora's autonomous fix system
-    // Aurora should analyze the error and attempt to fix it
+    // Queue for autonomous remediation pipeline (local, non-networked)
+    const actionFile = path.join(logDir, 'aurora-error-actions.jsonl');
+    const action = {
+      receivedAt: new Date().toISOString(),
+      action: 'queue_autofix',
+      error: errorData,
+      status: 'pending',
+    };
+    fs.appendFileSync(actionFile, JSON.stringify(action) + '\n');
 
     return NextResponse.json({ 
       success: true, 
-      message: 'Error reported to Aurora',
+      message: 'Error reported and queued for remediation',
     });
   } catch (error) {
     console.error('[AURORA] Failed to process error report:', error);

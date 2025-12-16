@@ -10,9 +10,14 @@ import os, json, time
 from pathlib import Path
 SUGGEST_DIR = Path("aviation/suggestions"); SUGGEST_DIR.mkdir(parents=True, exist_ok=True)
 
-def collect_telemetry():
-    # placeholder: interface to autopilot (PX4/MAVLink or ARINC)
-    return {"airspeed": 123, "alt": 1000, "gps": [39.0, -86.0]}
+def collect_telemetry(allow_sim: bool = False):
+    """
+    Collect telemetry from autopilot. When allow_sim=True, returns static sample;
+    otherwise raises until a real interface is provided.
+    """
+    if not allow_sim:
+        raise RuntimeError("Autopilot telemetry not configured; enable hardware integration or allow_sim.")
+    return {"airspeed": 123, "alt": 1000, "gps": [39.0, -86.0], "mode": "simulated"}
 
 def prepare_uplink(commands, manifest):
     ts = int(time.time())

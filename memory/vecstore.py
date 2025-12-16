@@ -5,7 +5,8 @@ Modes:
  - pure (no external deps): uses simple TF-IDF-like vectors via hashlib + token counts
  - sqlite (fallback)
  - hnsw (if hnswlib available)
-Also exposes embedding stub; for real use plug sentence-transformers or your own embedding model.
+Embeddings are pluggable: set AURORA_EMBEDDER_MODEL to use sentence-transformers,
+otherwise a deterministic local embedder is used (no external APIs).
 """
 
 import os, json, math, uuid
@@ -18,7 +19,6 @@ STORE_DIR.mkdir(exist_ok=True)
 class SimpleEmbedder:
     def embed(self, text: str):
         # deterministic lightweight embedding: bag-of-words hashed counts into fixed-size vector
-        # Not ideal for semantics; replace with real embeddings (sentence-transformers) when available.
         vec = [0.0]*128
         for i,w in enumerate(text.split()):
             idx = hash(w) % 128
@@ -27,6 +27,32 @@ class SimpleEmbedder:
         norm = math.sqrt(sum(x*x for x in vec)) or 1.0
         vec = [x/norm for x in vec]
         return vec
+
+
+class PluggableEmbedder:
+    """
+    Uses sentence-transformers if available and AURORA_EMBEDDER_MODEL is set,
+    otherwise falls back to SimpleEmbedder.
+    """
+    def __init__(self):
+        self.model = None
+        model_name = os.getenv("AURORA_EMBEDDER_MODEL")
+        if model_name:
+            try:
+                from sentence_transformers import SentenceTransformer  # type: ignore
+                self.model = SentenceTransformer(model_name)
+            except Exception as exc:
+                print(f"[VecStore] sentence-transformers unavailable ({exc}); using simple embedder.")
+        self.fallback = SimpleEmbedder()
+
+    def embed(self, text: str):
+        if self.model:
+            try:
+                vec = self.model.encode([text], normalize_embeddings=True)[0].tolist()
+                return vec
+            except Exception as exc:
+                print(f"[VecStore] Model encode failed ({exc}); using fallback embedder.")
+        return self.fallback.embed(text)
 
 def cosine(a, b):
     s = sum(x*y for x,y in zip(a,b))
@@ -38,7 +64,7 @@ def cosine(a, b):
 class MemoryStore:
     def __init__(self, mode="pure"):
         self.mode = mode
-        self.embedder = SimpleEmbedder()
+        self.embedder = PluggableEmbedder()
         self._mem = {}  # id -> {text, vec, meta}
         self._index = []  # list of ids (keeps insertion order)
     def write(self, text: str, meta: Dict=None):

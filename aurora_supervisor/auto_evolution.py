@@ -63,12 +63,37 @@ class AutoEvolution:
                 print("[AutoEvolution] Exception in background loop:", e)
             time.sleep(300)
 
+    def _load_snapshot(self):
+        """
+        Load the knowledge snapshot or recreate a safe baseline if it's missing/corrupted.
+        This keeps auto-evolution running instead of failing on empty/invalid JSON.
+        """
+        baseline = {
+            "timestamp": time.time(),
+            "metrics": {},
+            "memory": {}
+        }
+
+        self.knowledge_path.parent.mkdir(parents=True, exist_ok=True)
+
+        try:
+            if self.knowledge_path.exists():
+                raw = self.knowledge_path.read_text().strip()
+                if raw:
+                    return json.loads(raw)
+            self.knowledge_path.write_text(json.dumps(baseline, indent=2))
+            return baseline
+        except Exception as e:
+            print("[AutoEvolution] Snapshot invalid, regenerating baseline:", e)
+            self.knowledge_path.write_text(json.dumps(baseline, indent=2))
+            return baseline
+
     def run_evolution_cycle(self, reason="manual"):
         self.last_run = time.time()
         print(f"[AutoEvolution] Starting evolution cycle ({reason}) at {datetime.datetime.now()}")
 
         try:
-            data = json.loads(self.knowledge_path.read_text())
+            data = self._load_snapshot()
         except Exception as e:
             print("[AutoEvolution] Could not load knowledge snapshot:", e)
             return

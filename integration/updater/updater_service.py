@@ -118,14 +118,17 @@ class SimpleHandler(BaseHTTPRequestHandler):
             body = self.rfile.read(length).decode() if length else "{}"
             data = json.loads(body or "{}")
             fname = data.get("file")
+            signed_token = data.get("signed_token")
             # mark suggestion as approved and return signed token placeholder
             if not fname:
                 return self._send(400, {"error":"file required"})
+            if not signed_token:
+                return self._send(400, {"error":"signed_token required for approval"})
             f = SUGGESTIONS / fname
             if not f.exists():
                 return self._send(404, {"error":"not found"})
             # in production: operator signs suggestion and token is returned
-            out = {"ok": True, "applied": fname, "signed_token": "operator-signed-placeholder"}
+            out = {"ok": True, "applied": fname, "signed_token": signed_token}
             (SUGGESTIONS / (fname + ".approved")).write_text(json.dumps({"ts": time.time(), "op":"approved"}))
             return self._send(200, out)
         return self._send(404, {"error":"not supported"})

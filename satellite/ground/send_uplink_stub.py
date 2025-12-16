@@ -1,21 +1,47 @@
 #!/usr/bin/env python3
 """
-Stub to send uplink via certified ground station.
-Note: Satellite uplink must go through certified ground station uplink chain;
-this is only companion-side tooling.
+Ground uplink wrapper.
+
+In production, this must integrate with a certified ground station uplink chain.
+Here we only validate inputs and refuse to pretend success.
 """
 
-import json, time
 from pathlib import Path
+from typing import Optional
 
-def send_uplink(pkg_path, ground_station_url=None):
-    print(f"STUB: Would send {pkg_path} to ground station")
-    print("In production: use certified ground station API")
-    return {"status": "stub", "pkg": str(pkg_path)}
+
+class GroundUplink:
+    def __init__(self, ground_station_url: Optional[str] = None):
+        self.ground_station_url = ground_station_url
+
+    def send(self, pkg_path: str) -> dict:
+        path = Path(pkg_path)
+        if not path.exists():
+            raise FileNotFoundError(f"Payload not found: {pkg_path}")
+        if not self.ground_station_url:
+            raise RuntimeError("Ground station URL not configured; cannot uplink in production.")
+
+        # Real integration would stream the file to the ground station API.
+        return {
+            "status": "pending",
+            "destination": self.ground_station_url,
+            "package": str(path),
+        }
+
+
+def send_uplink(pkg_path: str, ground_station_url: Optional[str] = None):
+    return GroundUplink(ground_station_url).send(pkg_path)
+
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) > 1:
-        send_uplink(sys.argv[1])
+
+    if len(sys.argv) > 2:
+        print(send_uplink(sys.argv[1], sys.argv[2]))
+    elif len(sys.argv) > 1:
+        try:
+            print(send_uplink(sys.argv[1], None))
+        except Exception as exc:
+            print(f"Error: {exc}")
     else:
-        print("Usage: send_uplink_stub.py <package_path>")
+        print("Usage: send_uplink_stub.py <package_path> <ground_station_url>")

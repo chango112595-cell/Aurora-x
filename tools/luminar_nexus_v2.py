@@ -69,6 +69,23 @@ def log_to_activity_monitor(activity_type: str, message: str, details: dict | No
     except Exception:
         pass
 
+
+def run_wsgi(app: Flask, port: int) -> None:
+    """
+    Run the API using a production-ready WSGI server when available.
+    Falls back to the standard library server if waitress is missing.
+    """
+    try:
+        from waitress import serve  # type: ignore
+
+        serve(app, host="0.0.0.0", port=port, threads=8)
+    except Exception as exc:  # pragma: no cover - fallback path
+        from wsgiref.simple_server import make_server
+
+        print(f"[WARN] Waitress unavailable ({exc}); using wsgiref fallback.")
+        with make_server("0.0.0.0", port, app) as httpd:
+            httpd.serve_forever()
+
 # Add tools directory to path for Port Manager
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 try:
@@ -2331,7 +2348,7 @@ def run_luminar_nexus_v2(port: int = 5005):
     print(f"[START] Luminar Nexus v2 running on port {port}")
     print("[FEATURES] Features: AI Healing | Quantum Coherence | Predictive Scaling | Neural Anomaly Detection")
 
-    app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
+    run_wsgi(app, port)
 
 
 def run_chat_server_v2(port: int = 5003):
@@ -2366,7 +2383,7 @@ def run_chat_server_v2(port: int = 5003):
     print("   Health: http://localhost:{port}/health")
     print("   Chat: POST http://localhost:{port}/api/chat")
 
-    app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
+    run_wsgi(app, port)
 
 
 def main():
@@ -2535,7 +2552,7 @@ def serve():
     print("   - TypeScript AuroraAI integration (interpret/respond/reflect)")
     print("\n")
 
-    app.run(host="0.0.0.0", port=8000, debug=False, threaded=True)
+    run_wsgi(app, 8000)
 
 
 if __name__ == "__main__":

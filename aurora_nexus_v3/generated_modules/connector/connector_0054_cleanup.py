@@ -15,5 +15,13 @@ class Connector0054Cleanup:
         pass
 
     def teardown(self) -> dict:
-        logger.info('cleanup called')
-        return {'status': 'done'}
+        try:
+            if hasattr(self, 'resource') and getattr(self, 'resource', None):
+                res = getattr(self, 'resource')
+                if hasattr(res, 'close'):
+                    res.close()
+            logger.info('cleanup completed')
+            return {'status': 'done'}
+        except Exception as exc:
+            logger.warning('cleanup failed: %s', exc)
+            return {'status': 'error', 'error': str(exc)}
