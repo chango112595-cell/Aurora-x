@@ -38,6 +38,7 @@ function App() {
         <Route path="/chat" component={Chat} />
         <Route path="/memory" component={Memory} />
         <Route path="/library" component={Library} />
+        <Route path="/luminar-nexus" component={LuminarNexus} />
         <Route path="/comparison" component={ComparisonDashboard} />
         <Route path="/luminar-nexus" component={LuminarNexus} />
         <Route path="/servers" component={ServerControl} />
