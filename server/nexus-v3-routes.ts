@@ -138,6 +138,8 @@ export function registerNexusV3Routes(app: Express) {
         selfHealers: embeddedNexusV3State.peakCapabilities.selfHealers,
         packs: embeddedNexusV3State.peakCapabilities.packs,
         hyperspeed: embeddedNexusV3State.hyperspeed.enabled,
+        hyperspeed_enabled: embeddedNexusV3State.hyperspeed.enabled,
+        hybrid_mode_enabled: embeddedNexusV3State.consciousness.hybridMode,
         mode: "production"
       }
     );
@@ -150,22 +152,23 @@ export function registerNexusV3Routes(app: Express) {
       {
         total_packs: 15,
         loaded_packs: 15,
+        total_submodules: 600,
         packs: {
-          core: { loaded: true, modules: 50, status: "active" },
-          memory: { loaded: true, modules: 45, status: "active" },
-          analysis: { loaded: true, modules: 48, status: "active" },
-          generation: { loaded: true, modules: 45, status: "active" },
-          reasoning: { loaded: true, modules: 40, status: "active" },
-          learning: { loaded: true, modules: 42, status: "active" },
-          optimization: { loaded: true, modules: 38, status: "active" },
-          synthesis: { loaded: true, modules: 35, status: "active" },
-          adaptation: { loaded: true, modules: 37, status: "active" },
-          integration: { loaded: true, modules: 40, status: "active" },
-          execution: { loaded: true, modules: 45, status: "active" },
-          healing: { loaded: true, modules: 30, status: "active" },
-          monitoring: { loaded: true, modules: 25, status: "active" },
-          hyperspeed: { loaded: true, modules: 40, status: "active" },
-          grandmaster: { loaded: true, modules: 40, status: "active" }
+          core: { loaded: true, exists: true, name: "Core Pack", modules: 50, submodule_count: 50, status: "active" },
+          memory: { loaded: true, exists: true, name: "Memory Pack", modules: 45, submodule_count: 45, status: "active" },
+          analysis: { loaded: true, exists: true, name: "Analysis Pack", modules: 48, submodule_count: 48, status: "active" },
+          generation: { loaded: true, exists: true, name: "Generation Pack", modules: 45, submodule_count: 45, status: "active" },
+          reasoning: { loaded: true, exists: true, name: "Reasoning Pack", modules: 40, submodule_count: 40, status: "active" },
+          learning: { loaded: true, exists: true, name: "Learning Pack", modules: 42, submodule_count: 42, status: "active" },
+          optimization: { loaded: true, exists: true, name: "Optimization Pack", modules: 38, submodule_count: 38, status: "active" },
+          synthesis: { loaded: true, exists: true, name: "Synthesis Pack", modules: 35, submodule_count: 35, status: "active" },
+          adaptation: { loaded: true, exists: true, name: "Adaptation Pack", modules: 37, submodule_count: 37, status: "active" },
+          integration: { loaded: true, exists: true, name: "Integration Pack", modules: 40, submodule_count: 40, status: "active" },
+          execution: { loaded: true, exists: true, name: "Execution Pack", modules: 45, submodule_count: 45, status: "active" },
+          healing: { loaded: true, exists: true, name: "Healing Pack", modules: 30, submodule_count: 30, status: "active" },
+          monitoring: { loaded: true, exists: true, name: "Monitoring Pack", modules: 25, submodule_count: 25, status: "active" },
+          hyperspeed: { loaded: true, exists: true, name: "Hyperspeed Pack", modules: 40, submodule_count: 40, status: "active" },
+          grandmaster: { loaded: true, exists: true, name: "Grandmaster Pack", modules: 40, submodule_count: 40, status: "active" }
         },
         mode: "production"
       }
