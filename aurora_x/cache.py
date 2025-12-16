@@ -33,19 +33,19 @@ class CacheManager:
     """
 
     def __init__(
-        """
-              Init  
-            
-            Args:
-                redis_url: redis url
-                default_ttl: default ttl
-                max_memory_items: max memory items
-            """
         self,
         redis_url: str = "redis://localhost:6379/0",
         default_ttl: int = 300,  # 5 minutes
         max_memory_items: int = 1000,
     ):
+        """
+        Initialize cache manager.
+        
+        Args:
+            redis_url: Redis connection URL
+            default_ttl: Default time-to-live in seconds
+            max_memory_items: Maximum items in memory cache
+        """
         self.default_ttl = default_ttl
         self.redis_url = redis_url
         self.redis_client: redis.Redis | None = None

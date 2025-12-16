@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Aurora-X Master Loader - Quick Launch Script
+# Activates all 46+ dormant components
+
+set -e
+
+echo ""
+echo "======================================================================"
+echo "    AURORA-X MASTER LOADER"
+echo "    Activating all systems..."
+echo "======================================================================"
+echo ""
+
+cd "$(dirname "$0")"
+
+python3 aurora_supervisor/aurora_master_loader.py start
+
+echo ""
+echo "Aurora-X fully loaded!"
+echo ""

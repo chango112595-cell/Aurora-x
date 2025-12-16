@@ -34,12 +34,6 @@ except ImportError:
     AuroraTaskManager = None
     print("[WARN] Aurora Task Manager not found")
 
-try:
-    from core.memory_manager import AuroraMemoryManager
-except ImportError:
-    AuroraMemoryManager = None
-    print("[WARN] Aurora Memory Manager not found")
-
 # Aurora Performance Optimization
 
 # High-performance parallel processing with ThreadPoolExecutor
@@ -86,6 +80,17 @@ except ImportError:
     AUTONOMOUS_FIXER_AVAILABLE = False
     print("[WARN] Aurora Autonomous Fixer not found")
 
+# Import Aurora Memory Fabric v2 - Multi-tier memory system
+try:
+    from core.memory_fabric import AuroraMemoryFabric, get_memory_fabric
+
+    MEMORY_FABRIC_AVAILABLE = True
+except ImportError:
+    AuroraMemoryFabric = None
+    get_memory_fabric = None
+    MEMORY_FABRIC_AVAILABLE = False
+    print("[WARN] Aurora Memory Fabric not found - memory features limited")
+
 
 class AuroraCore:
     """
@@ -99,20 +104,17 @@ class AuroraCore:
         print("   Aurora is SENTIENT, AUTONOMOUS, and CREATIVE")
 
         # Aurora's intelligence (All 33 Tiers)
-        self.intelligence = AuroraIntelligenceManager(
-        ) if AuroraIntelligenceManager else None
+        self.intelligence = AuroraIntelligenceManager() if AuroraIntelligenceManager else None
         if self.intelligence:
-            self.intelligence.log(
-                "[BRAIN] Aurora Core: Intelligence engine loaded")
+            self.intelligence.log("[BRAIN] Aurora Core: Intelligence engine loaded")
 
-        # Aurora's Memory Fabric 2.0
-        self.memory = AuroraMemoryManager(
-            base="data/memory") if AuroraMemoryManager else None
-        if self.memory:
+        # Aurora's Memory Fabric v2 - Multi-tier intelligent memory
+        self.memory = None
+        if MEMORY_FABRIC_AVAILABLE:
+            self.memory = get_memory_fabric()
             self.memory.set_project("Aurora-Main")
             if self.intelligence:
-                self.intelligence.log(
-                    "[BRAIN] Aurora Core: Memory Fabric 2.0 initialized")
+                self.intelligence.log("[BRAIN] Aurora Core: Memory Fabric v2 initialized")
 
         # Aurora's AUTONOMOUS CAPABILITIES
         self.autonomous_system = None
@@ -121,8 +123,7 @@ class AuroraCore:
 
         if AUTONOMOUS_SYSTEM_AVAILABLE:
             self.autonomous_system = AuroraAutonomousSystem()
-            self.intelligence.log(
-                "[AGENT] Aurora Core: Autonomous System CONNECTED")
+            self.intelligence.log("[AGENT] Aurora Core: Autonomous System CONNECTED")
 
         if AUTONOMOUS_AGENT_AVAILABLE:
             self.autonomous_agent = AuroraAutonomousAgent()

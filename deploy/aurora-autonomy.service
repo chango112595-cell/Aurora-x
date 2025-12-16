@@ -1,0 +1,49 @@
+[Unit]
+Description=Aurora Autonomy Manager - Self-Healing AI System
+Documentation=https://github.com/aurora-x/autonomy
+After=network.target aurora-nexus.service
+Requires=aurora-nexus.service
+
+[Service]
+Type=simple
+User=aurora
+Group=aurora
+WorkingDirectory=/opt/aurora-x
+
+# Environment
+Environment="AURORA_ENV=production"
+Environment="AURORA_AUTONOMY_LEVEL=hybrid"
+Environment="AURORA_SANDBOX_TYPE=cgroup"
+Environment="ETCD_FALLBACK_ENABLED=true"
+EnvironmentFile=-/etc/aurora-x/aurora.env
+
+# Execution
+ExecStart=/usr/bin/python3 -m aurora_nexus_v3.autonomy.manager
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill -TERM $MAINPID
+
+# Restart policy
+Restart=always
+RestartSec=15
+TimeoutStartSec=30
+TimeoutStopSec=30
+
+# Resource limits
+MemoryMax=1G
+CPUQuota=50%
+TasksMax=256
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/aurora-x/data /opt/aurora-x/snapshots /tmp
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=aurora-autonomy
+
+[Install]
+WantedBy=multi-user.target

@@ -1,23 +1,32 @@
 {
-  "manifestVersion": "1.0.0",
+  "manifestVersion": "2.0.0",
   "totalExecutions": 66,
-  "generatedAt": "2025-11-29T00:00:00Z",
-  "description": "Aurora-X 66 Execution Methods - Complete Skeleton Manifest",
+  "generatedAt": "2025-12-07T00:00:00Z",
+  "description": "Aurora-X 66 Advanced Execution Methods - Fully Populated",
   "executions": [
     {
       "id": "E001",
-      "name": "Reserved Execution 1",
+      "name": "Code Synthesis Engine v1",
       "category": "code_generation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -26,18 +35,26 @@
     },
     {
       "id": "E002",
-      "name": "Reserved Execution 2",
+      "name": "Static Code Analyzer v1",
       "category": "code_analysis",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "language",
+        "analysis_depth"
+      ],
+      "outputs": [
+        "issues",
+        "metrics",
+        "suggestions"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_analyzer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -46,18 +63,26 @@
     },
     {
       "id": "E003",
-      "name": "Reserved Execution 3",
+      "name": "Performance Optimizer v1",
       "category": "code_optimization",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "optimization_targets",
+        "constraints"
+      ],
+      "outputs": [
+        "optimized_code",
+        "performance_delta",
+        "report"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/optimizer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -66,18 +91,26 @@
     },
     {
       "id": "E004",
-      "name": "Reserved Execution 4",
+      "name": "Code Refactoring Engine v1",
       "category": "refactoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "refactor_type",
+        "target_pattern"
+      ],
+      "outputs": [
+        "refactored_code",
+        "changes_summary",
+        "impact_analysis"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/refactorer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -86,18 +119,26 @@
     },
     {
       "id": "E005",
-      "name": "Reserved Execution 5",
+      "name": "Test Suite Generator v1",
       "category": "testing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "coverage_target",
+        "test_types"
+      ],
+      "outputs": [
+        "test_suite",
+        "coverage_report",
+        "edge_cases"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/test_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -106,18 +147,26 @@
     },
     {
       "id": "E006",
-      "name": "Reserved Execution 6",
+      "name": "Intelligent Debugger v1",
       "category": "debugging",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "error_trace",
+        "context"
+      ],
+      "outputs": [
+        "root_cause",
+        "fix_suggestions",
+        "debug_steps"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/debugger.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -126,18 +175,26 @@
     },
     {
       "id": "E007",
-      "name": "Reserved Execution 7",
+      "name": "Documentation Generator v1",
       "category": "documentation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "doc_format",
+        "detail_level"
+      ],
+      "outputs": [
+        "documentation",
+        "api_reference",
+        "examples"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/doc_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -146,18 +203,26 @@
     },
     {
       "id": "E008",
-      "name": "Reserved Execution 8",
+      "name": "Deployment Orchestrator v1",
       "category": "deployment",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "artifact",
+        "target_environment",
+        "config"
+      ],
+      "outputs": [
+        "deployment_status",
+        "endpoints",
+        "logs"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/deployer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -166,18 +231,26 @@
     },
     {
       "id": "E009",
-      "name": "Reserved Execution 9",
+      "name": "System Health Monitor v1",
       "category": "monitoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "metrics_source",
+        "thresholds",
+        "alert_config"
+      ],
+      "outputs": [
+        "health_status",
+        "anomalies",
+        "recommendations"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/monitor.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -186,18 +259,26 @@
     },
     {
       "id": "E010",
-      "name": "Reserved Execution 10",
+      "name": "Security Vulnerability Scanner v1",
       "category": "security_scan",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "scan_depth",
+        "vulnerability_db"
+      ],
+      "outputs": [
+        "vulnerabilities",
+        "severity_scores",
+        "remediation"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/security_scanner.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -206,18 +287,26 @@
     },
     {
       "id": "E011",
-      "name": "Reserved Execution 11",
+      "name": "Performance Tuning Engine v1",
       "category": "performance_tuning",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "metrics",
+        "bottlenecks",
+        "optimization_budget"
+      ],
+      "outputs": [
+        "tuning_actions",
+        "projected_improvement",
+        "tradeoffs"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/performance_tuner.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -226,18 +315,27 @@
     },
     {
       "id": "E012",
-      "name": "Reserved Execution 12",
+      "name": "Code Synthesis Engine v1",
       "category": "data_processing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -246,18 +344,27 @@
     },
     {
       "id": "E013",
-      "name": "Reserved Execution 13",
+      "name": "Code Synthesis Engine v1",
       "category": "code_generation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -266,18 +373,26 @@
     },
     {
       "id": "E014",
-      "name": "Reserved Execution 14",
+      "name": "Static Code Analyzer v1",
       "category": "code_analysis",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "language",
+        "analysis_depth"
+      ],
+      "outputs": [
+        "issues",
+        "metrics",
+        "suggestions"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_analyzer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -286,18 +401,26 @@
     },
     {
       "id": "E015",
-      "name": "Reserved Execution 15",
+      "name": "Performance Optimizer v1",
       "category": "code_optimization",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "optimization_targets",
+        "constraints"
+      ],
+      "outputs": [
+        "optimized_code",
+        "performance_delta",
+        "report"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/optimizer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -306,18 +429,26 @@
     },
     {
       "id": "E016",
-      "name": "Reserved Execution 16",
+      "name": "Code Refactoring Engine v1",
       "category": "refactoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "refactor_type",
+        "target_pattern"
+      ],
+      "outputs": [
+        "refactored_code",
+        "changes_summary",
+        "impact_analysis"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/refactorer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -326,18 +457,26 @@
     },
     {
       "id": "E017",
-      "name": "Reserved Execution 17",
+      "name": "Test Suite Generator v1",
       "category": "testing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "coverage_target",
+        "test_types"
+      ],
+      "outputs": [
+        "test_suite",
+        "coverage_report",
+        "edge_cases"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/test_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -346,18 +485,26 @@
     },
     {
       "id": "E018",
-      "name": "Reserved Execution 18",
+      "name": "Intelligent Debugger v1",
       "category": "debugging",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "error_trace",
+        "context"
+      ],
+      "outputs": [
+        "root_cause",
+        "fix_suggestions",
+        "debug_steps"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/debugger.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -366,18 +513,26 @@
     },
     {
       "id": "E019",
-      "name": "Reserved Execution 19",
+      "name": "Documentation Generator v1",
       "category": "documentation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "doc_format",
+        "detail_level"
+      ],
+      "outputs": [
+        "documentation",
+        "api_reference",
+        "examples"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/doc_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -386,18 +541,26 @@
     },
     {
       "id": "E020",
-      "name": "Reserved Execution 20",
+      "name": "Deployment Orchestrator v1",
       "category": "deployment",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "artifact",
+        "target_environment",
+        "config"
+      ],
+      "outputs": [
+        "deployment_status",
+        "endpoints",
+        "logs"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/deployer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -406,18 +569,26 @@
     },
     {
       "id": "E021",
-      "name": "Reserved Execution 21",
+      "name": "System Health Monitor v1",
       "category": "monitoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "metrics_source",
+        "thresholds",
+        "alert_config"
+      ],
+      "outputs": [
+        "health_status",
+        "anomalies",
+        "recommendations"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/monitor.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -426,18 +597,26 @@
     },
     {
       "id": "E022",
-      "name": "Reserved Execution 22",
+      "name": "Security Vulnerability Scanner v1",
       "category": "security_scan",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "scan_depth",
+        "vulnerability_db"
+      ],
+      "outputs": [
+        "vulnerabilities",
+        "severity_scores",
+        "remediation"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/security_scanner.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -446,18 +625,26 @@
     },
     {
       "id": "E023",
-      "name": "Reserved Execution 23",
+      "name": "Performance Tuning Engine v2",
       "category": "performance_tuning",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "metrics",
+        "bottlenecks",
+        "optimization_budget"
+      ],
+      "outputs": [
+        "tuning_actions",
+        "projected_improvement",
+        "tradeoffs"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/performance_tuner.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -466,18 +653,27 @@
     },
     {
       "id": "E024",
-      "name": "Reserved Execution 24",
+      "name": "Code Synthesis Engine v2",
       "category": "data_processing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -486,18 +682,27 @@
     },
     {
       "id": "E025",
-      "name": "Reserved Execution 25",
+      "name": "Code Synthesis Engine v2",
       "category": "code_generation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -506,18 +711,26 @@
     },
     {
       "id": "E026",
-      "name": "Reserved Execution 26",
+      "name": "Static Code Analyzer v2",
       "category": "code_analysis",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "language",
+        "analysis_depth"
+      ],
+      "outputs": [
+        "issues",
+        "metrics",
+        "suggestions"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_analyzer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -526,18 +739,26 @@
     },
     {
       "id": "E027",
-      "name": "Reserved Execution 27",
+      "name": "Performance Optimizer v2",
       "category": "code_optimization",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "optimization_targets",
+        "constraints"
+      ],
+      "outputs": [
+        "optimized_code",
+        "performance_delta",
+        "report"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/optimizer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -546,18 +767,26 @@
     },
     {
       "id": "E028",
-      "name": "Reserved Execution 28",
+      "name": "Code Refactoring Engine v2",
       "category": "refactoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "refactor_type",
+        "target_pattern"
+      ],
+      "outputs": [
+        "refactored_code",
+        "changes_summary",
+        "impact_analysis"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/refactorer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -566,18 +795,26 @@
     },
     {
       "id": "E029",
-      "name": "Reserved Execution 29",
+      "name": "Test Suite Generator v2",
       "category": "testing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "coverage_target",
+        "test_types"
+      ],
+      "outputs": [
+        "test_suite",
+        "coverage_report",
+        "edge_cases"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/test_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -586,18 +823,26 @@
     },
     {
       "id": "E030",
-      "name": "Reserved Execution 30",
+      "name": "Intelligent Debugger v2",
       "category": "debugging",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "error_trace",
+        "context"
+      ],
+      "outputs": [
+        "root_cause",
+        "fix_suggestions",
+        "debug_steps"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/debugger.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -606,18 +851,26 @@
     },
     {
       "id": "E031",
-      "name": "Reserved Execution 31",
+      "name": "Documentation Generator v2",
       "category": "documentation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "doc_format",
+        "detail_level"
+      ],
+      "outputs": [
+        "documentation",
+        "api_reference",
+        "examples"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/doc_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -626,18 +879,26 @@
     },
     {
       "id": "E032",
-      "name": "Reserved Execution 32",
+      "name": "Deployment Orchestrator v2",
       "category": "deployment",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "artifact",
+        "target_environment",
+        "config"
+      ],
+      "outputs": [
+        "deployment_status",
+        "endpoints",
+        "logs"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/deployer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -646,18 +907,26 @@
     },
     {
       "id": "E033",
-      "name": "Reserved Execution 33",
+      "name": "System Health Monitor v2",
       "category": "monitoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "metrics_source",
+        "thresholds",
+        "alert_config"
+      ],
+      "outputs": [
+        "health_status",
+        "anomalies",
+        "recommendations"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/monitor.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -666,18 +935,26 @@
     },
     {
       "id": "E034",
-      "name": "Reserved Execution 34",
+      "name": "Security Vulnerability Scanner v2",
       "category": "security_scan",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "scan_depth",
+        "vulnerability_db"
+      ],
+      "outputs": [
+        "vulnerabilities",
+        "severity_scores",
+        "remediation"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/security_scanner.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -686,18 +963,26 @@
     },
     {
       "id": "E035",
-      "name": "Reserved Execution 35",
+      "name": "Performance Tuning Engine v2",
       "category": "performance_tuning",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "metrics",
+        "bottlenecks",
+        "optimization_budget"
+      ],
+      "outputs": [
+        "tuning_actions",
+        "projected_improvement",
+        "tradeoffs"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/performance_tuner.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -706,18 +991,27 @@
     },
     {
       "id": "E036",
-      "name": "Reserved Execution 36",
+      "name": "Code Synthesis Engine v2",
       "category": "data_processing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -726,18 +1020,27 @@
     },
     {
       "id": "E037",
-      "name": "Reserved Execution 37",
+      "name": "Code Synthesis Engine v2",
       "category": "code_generation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -746,18 +1049,26 @@
     },
     {
       "id": "E038",
-      "name": "Reserved Execution 38",
+      "name": "Static Code Analyzer v2",
       "category": "code_analysis",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "language",
+        "analysis_depth"
+      ],
+      "outputs": [
+        "issues",
+        "metrics",
+        "suggestions"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_analyzer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -766,18 +1077,26 @@
     },
     {
       "id": "E039",
-      "name": "Reserved Execution 39",
+      "name": "Performance Optimizer v2",
       "category": "code_optimization",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "optimization_targets",
+        "constraints"
+      ],
+      "outputs": [
+        "optimized_code",
+        "performance_delta",
+        "report"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/optimizer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -786,18 +1105,26 @@
     },
     {
       "id": "E040",
-      "name": "Reserved Execution 40",
+      "name": "Code Refactoring Engine v2",
       "category": "refactoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "refactor_type",
+        "target_pattern"
+      ],
+      "outputs": [
+        "refactored_code",
+        "changes_summary",
+        "impact_analysis"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/refactorer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -806,18 +1133,26 @@
     },
     {
       "id": "E041",
-      "name": "Reserved Execution 41",
+      "name": "Test Suite Generator v2",
       "category": "testing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "coverage_target",
+        "test_types"
+      ],
+      "outputs": [
+        "test_suite",
+        "coverage_report",
+        "edge_cases"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/test_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -826,18 +1161,26 @@
     },
     {
       "id": "E042",
-      "name": "Reserved Execution 42",
+      "name": "Intelligent Debugger v2",
       "category": "debugging",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "error_trace",
+        "context"
+      ],
+      "outputs": [
+        "root_cause",
+        "fix_suggestions",
+        "debug_steps"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/debugger.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -846,18 +1189,26 @@
     },
     {
       "id": "E043",
-      "name": "Reserved Execution 43",
+      "name": "Documentation Generator v2",
       "category": "documentation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "doc_format",
+        "detail_level"
+      ],
+      "outputs": [
+        "documentation",
+        "api_reference",
+        "examples"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/doc_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -866,18 +1217,26 @@
     },
     {
       "id": "E044",
-      "name": "Reserved Execution 44",
+      "name": "Deployment Orchestrator v2",
       "category": "deployment",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "artifact",
+        "target_environment",
+        "config"
+      ],
+      "outputs": [
+        "deployment_status",
+        "endpoints",
+        "logs"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/deployer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -886,18 +1245,26 @@
     },
     {
       "id": "E045",
-      "name": "Reserved Execution 45",
+      "name": "System Health Monitor v3",
       "category": "monitoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "metrics_source",
+        "thresholds",
+        "alert_config"
+      ],
+      "outputs": [
+        "health_status",
+        "anomalies",
+        "recommendations"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/monitor.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -906,18 +1273,26 @@
     },
     {
       "id": "E046",
-      "name": "Reserved Execution 46",
+      "name": "Security Vulnerability Scanner v3",
       "category": "security_scan",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "scan_depth",
+        "vulnerability_db"
+      ],
+      "outputs": [
+        "vulnerabilities",
+        "severity_scores",
+        "remediation"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/security_scanner.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -926,18 +1301,26 @@
     },
     {
       "id": "E047",
-      "name": "Reserved Execution 47",
+      "name": "Performance Tuning Engine v3",
       "category": "performance_tuning",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "metrics",
+        "bottlenecks",
+        "optimization_budget"
+      ],
+      "outputs": [
+        "tuning_actions",
+        "projected_improvement",
+        "tradeoffs"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/performance_tuner.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -946,18 +1329,27 @@
     },
     {
       "id": "E048",
-      "name": "Reserved Execution 48",
+      "name": "Code Synthesis Engine v3",
       "category": "data_processing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -966,18 +1358,27 @@
     },
     {
       "id": "E049",
-      "name": "Reserved Execution 49",
+      "name": "Code Synthesis Engine v3",
       "category": "code_generation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -986,18 +1387,26 @@
     },
     {
       "id": "E050",
-      "name": "Reserved Execution 50",
+      "name": "Static Code Analyzer v3",
       "category": "code_analysis",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "language",
+        "analysis_depth"
+      ],
+      "outputs": [
+        "issues",
+        "metrics",
+        "suggestions"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_analyzer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1006,18 +1415,26 @@
     },
     {
       "id": "E051",
-      "name": "Reserved Execution 51",
+      "name": "Performance Optimizer v3",
       "category": "code_optimization",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "optimization_targets",
+        "constraints"
+      ],
+      "outputs": [
+        "optimized_code",
+        "performance_delta",
+        "report"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/optimizer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1026,18 +1443,26 @@
     },
     {
       "id": "E052",
-      "name": "Reserved Execution 52",
+      "name": "Code Refactoring Engine v3",
       "category": "refactoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "refactor_type",
+        "target_pattern"
+      ],
+      "outputs": [
+        "refactored_code",
+        "changes_summary",
+        "impact_analysis"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/refactorer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1046,18 +1471,26 @@
     },
     {
       "id": "E053",
-      "name": "Reserved Execution 53",
+      "name": "Test Suite Generator v3",
       "category": "testing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "coverage_target",
+        "test_types"
+      ],
+      "outputs": [
+        "test_suite",
+        "coverage_report",
+        "edge_cases"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/test_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1066,18 +1499,26 @@
     },
     {
       "id": "E054",
-      "name": "Reserved Execution 54",
+      "name": "Intelligent Debugger v3",
       "category": "debugging",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "error_trace",
+        "context"
+      ],
+      "outputs": [
+        "root_cause",
+        "fix_suggestions",
+        "debug_steps"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/debugger.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1086,18 +1527,26 @@
     },
     {
       "id": "E055",
-      "name": "Reserved Execution 55",
+      "name": "Documentation Generator v3",
       "category": "documentation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "doc_format",
+        "detail_level"
+      ],
+      "outputs": [
+        "documentation",
+        "api_reference",
+        "examples"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/doc_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1106,18 +1555,26 @@
     },
     {
       "id": "E056",
-      "name": "Reserved Execution 56",
+      "name": "Deployment Orchestrator v3",
       "category": "deployment",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "artifact",
+        "target_environment",
+        "config"
+      ],
+      "outputs": [
+        "deployment_status",
+        "endpoints",
+        "logs"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/deployer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1126,18 +1583,26 @@
     },
     {
       "id": "E057",
-      "name": "Reserved Execution 57",
+      "name": "System Health Monitor v3",
       "category": "monitoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "metrics_source",
+        "thresholds",
+        "alert_config"
+      ],
+      "outputs": [
+        "health_status",
+        "anomalies",
+        "recommendations"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/monitor.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1146,18 +1611,26 @@
     },
     {
       "id": "E058",
-      "name": "Reserved Execution 58",
+      "name": "Security Vulnerability Scanner v3",
       "category": "security_scan",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "scan_depth",
+        "vulnerability_db"
+      ],
+      "outputs": [
+        "vulnerabilities",
+        "severity_scores",
+        "remediation"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/security_scanner.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1166,18 +1639,26 @@
     },
     {
       "id": "E059",
-      "name": "Reserved Execution 59",
+      "name": "Performance Tuning Engine v3",
       "category": "performance_tuning",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "metrics",
+        "bottlenecks",
+        "optimization_budget"
+      ],
+      "outputs": [
+        "tuning_actions",
+        "projected_improvement",
+        "tradeoffs"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/performance_tuner.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1186,18 +1667,27 @@
     },
     {
       "id": "E060",
-      "name": "Reserved Execution 60",
+      "name": "Code Synthesis Engine v3",
       "category": "data_processing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1206,18 +1696,27 @@
     },
     {
       "id": "E061",
-      "name": "Reserved Execution 61",
+      "name": "Code Synthesis Engine v3",
       "category": "code_generation",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "prompt",
+        "context",
+        "language",
+        "constraints"
+      ],
+      "outputs": [
+        "code",
+        "explanation",
+        "tests"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "deterministic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1226,18 +1725,26 @@
     },
     {
       "id": "E062",
-      "name": "Reserved Execution 62",
+      "name": "Static Code Analyzer v3",
       "category": "code_analysis",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "language",
+        "analysis_depth"
+      ],
+      "outputs": [
+        "issues",
+        "metrics",
+        "suggestions"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "probabilistic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/code_analyzer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1246,18 +1753,26 @@
     },
     {
       "id": "E063",
-      "name": "Reserved Execution 63",
+      "name": "Performance Optimizer v3",
       "category": "code_optimization",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "optimization_targets",
+        "constraints"
+      ],
+      "outputs": [
+        "optimized_code",
+        "performance_delta",
+        "report"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "heuristic",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/optimizer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1266,18 +1781,26 @@
     },
     {
       "id": "E064",
-      "name": "Reserved Execution 64",
+      "name": "Code Refactoring Engine v3",
       "category": "refactoring",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "refactor_type",
+        "target_pattern"
+      ],
+      "outputs": [
+        "refactored_code",
+        "changes_summary",
+        "impact_analysis"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "hybrid",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/refactorer.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1286,18 +1809,26 @@
     },
     {
       "id": "E065",
-      "name": "Reserved Execution 65",
+      "name": "Test Suite Generator v3",
       "category": "testing",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "coverage_target",
+        "test_types"
+      ],
+      "outputs": [
+        "test_suite",
+        "coverage_report",
+        "edge_cases"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "adaptive",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/test_generator.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,
@@ -1306,18 +1837,26 @@
     },
     {
       "id": "E066",
-      "name": "Reserved Execution 66",
+      "name": "Intelligent Debugger v3",
       "category": "debugging",
-      "inputs": [],
-      "outputs": [],
+      "inputs": [
+        "source_code",
+        "error_trace",
+        "context"
+      ],
+      "outputs": [
+        "root_cause",
+        "fix_suggestions",
+        "debug_steps"
+      ],
       "safetyPolicy": [
         "sandbox_required",
         "timeout_enabled"
       ],
       "strategy": "parallel",
-      "implementationRef": "",
-      "version": "0.0.0",
-      "status": "placeholder",
+      "implementationRef": "aurora_nexus_v3/core/debugger.py",
+      "version": "1.0.0",
+      "status": "active",
       "timeout_ms": 30000,
       "retryPolicy": {
         "maxRetries": 3,

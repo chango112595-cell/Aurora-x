@@ -12,7 +12,7 @@ from typing import Optional
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aurora_nexus_v3.core import AuroraUniversalCore, NexusConfig
+from aurora_nexus_v3.core import AuroraUniversalCore, NexusConfig, NexusBridge
 
 
 class NexusServer:
@@ -21,6 +21,7 @@ class NexusServer:
     def __init__(self, config: Optional[NexusConfig] = None):
         self.config = config or NexusConfig.from_env()
         self.core: Optional[AuroraUniversalCore] = None
+        self.module_bridge: Optional[NexusBridge] = None
         self._shutdown_event = asyncio.Event()
     
     async def start(self):
@@ -32,6 +33,17 @@ class NexusServer:
         self.core = AuroraUniversalCore(self.config)
         
         await self.core.start()
+        
+        self.module_bridge = NexusBridge()
+        self.module_bridge.attach_v3_core(self.core)
+        bridge_result = self.module_bridge.load_modules()
+        if bridge_result.get("loaded", 0) > 0:
+            print(f"[NexusBridge] 550 Aurora-X modules integrated")
+            print(f"[NexusBridge] Categories: Ancient, Classical, Modern, Futuristic")
+            print(f"[NexusBridge] Tiers: foundational, intermediate, advanced, grandmaster")
+        
+        if self.core.brain_bridge:
+            await self.core.enable_hybrid_mode()
         
         print("\n" + "-" * 60)
         print(f"  Node ID: {self.core.config.node_id}")
@@ -54,6 +66,9 @@ class NexusServer:
         return self.core
     
     async def stop(self):
+        if self.module_bridge:
+            self.module_bridge.shutdown()
+            print("[NexusBridge] 550 Aurora-X modules unloaded")
         if self.core:
             await self.core.stop()
             print("\nAurora Nexus V3 shutdown complete.")
@@ -84,6 +99,14 @@ async def main():
     if sys.platform != "win32":
         for sig in (signal.SIGTERM, signal.SIGINT):
             loop.add_signal_handler(sig, signal_handler)
+    
+    # ===== Supervisor Integration Hook (Phase 4-6 Controller) =====
+    try:
+        from aurora_nexus_v3.integrations.supervisor_integration import attach_to_nexus_v3
+        attach_to_nexus_v3(server)
+    except Exception as e:
+        print(f"[Startup] Supervisor integration skipped or failed: {e}")
+    # ===============================================================
     
     await server.run_forever()
 

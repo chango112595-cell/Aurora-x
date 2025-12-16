@@ -1,0 +1,13 @@
+{
+  "id": 393,
+  "name": "security_protocols_module_033",
+  "category": "security_protocols",
+  "tier_id": 17,
+  "tier_name": "tier_017",
+  "aem_id": 63,
+  "aem_type": "sync",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

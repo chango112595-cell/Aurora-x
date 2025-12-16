@@ -295,15 +295,15 @@ export default function ComparisonDashboard() {
                 </div>
 
                 <Tabs value={tabValue} onValueChange={setTabValue} className="space-y-6">
-                    <TabsList className="grid w-full grid-cols-8 bg-slate-800/50 backdrop-blur-sm">
-                        <TabsTrigger value="git-comparison" className="text-cyan-400">Git Comparison</TabsTrigger>
-                        <TabsTrigger value="branch-analysis" className="text-cyan-400">Branch Analysis</TabsTrigger>
-                        <TabsTrigger value="aurora-runs" className="text-cyan-400">Aurora Runs</TabsTrigger>
-                        <TabsTrigger value="overview" className="text-cyan-400">Overview</TabsTrigger>
-                        <TabsTrigger value="branches" className="text-cyan-400">Branches</TabsTrigger>
-                        <TabsTrigger value="features" className="text-cyan-400">Features</TabsTrigger>
-                        <TabsTrigger value="diagnostics" className="text-cyan-400">Diagnostics</TabsTrigger>
-                        <TabsTrigger value="approval" className="text-cyan-400">Approval</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-8 bg-purple-200/80 backdrop-blur-sm border border-purple-300 p-1.5 rounded-lg">
+                        <TabsTrigger value="git-comparison" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-cyan-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Git Comparison</TabsTrigger>
+                        <TabsTrigger value="branch-analysis" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-pink-500 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Branch Analysis</TabsTrigger>
+                        <TabsTrigger value="aurora-runs" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-yellow-500 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Aurora Runs</TabsTrigger>
+                        <TabsTrigger value="overview" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-cyan-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Overview</TabsTrigger>
+                        <TabsTrigger value="branches" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-pink-500 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Branches</TabsTrigger>
+                        <TabsTrigger value="features" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-yellow-500 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Features</TabsTrigger>
+                        <TabsTrigger value="diagnostics" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-cyan-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Diagnostics</TabsTrigger>
+                        <TabsTrigger value="approval" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-pink-500 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Approval</TabsTrigger>
                     </TabsList>
 
                     {/* Git Comparison Tab */}

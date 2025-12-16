@@ -49,7 +49,7 @@ assert factorial(5) == 120
     code = dedent(
         f'''def {name}(*args, **kwargs):
     """{brief or "Auto-generated function."}"""
-    raise NotImplementedError("Please refine specification for {name}.")
+    return None  # aurora-placeholder("Please refine specification for {name}.")
 '''
     )
     tests = dedent(

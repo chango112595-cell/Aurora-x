@@ -1,0 +1,11 @@
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
+app = FastAPI()
+@app.get('/api/health')
+async def health():
+    return JSONResponse({'status':'ok'})
+@app.get('/api/packs')
+async def packs():
+    import os
+    packs = [d for d in os.listdir('packs') if d.startswith('pack')]
+    return {'packs': packs}

@@ -1,0 +1,4 @@
+{"timestamp": "2025-12-10T01:26:22.046840", "service": "ui", "action": "auto_restart", "reason": "Service down detected", "success": false, "error": "[Errno 2] No such file or directory: '/bin/python3'"}
+{"timestamp": "2025-12-10T01:26:22.104906", "service": "backend", "action": "auto_restart", "reason": "Service down detected", "success": false, "error": "[Errno 2] No such file or directory: '/bin/python3'"}
+{"timestamp": "2025-12-10T01:27:39.926836", "service": "ui", "action": "auto_restart", "reason": "Service down detected", "success": false, "error": "[Errno 2] No such file or directory: '/bin/python3'"}
+{"timestamp": "2025-12-10T01:27:39.953513", "service": "backend", "action": "auto_restart", "reason": "Service down detected", "success": false, "error": "[Errno 2] No such file or directory: '/bin/python3'"}

@@ -2,9 +2,9 @@
 Aurora-X English Mode API Addons
 Provides chat and approval endpoints for natural language synthesis
 """
+from __future__ import annotations
 
 from typing import Dict, List, Tuple, Optional, Any, Union
-import annotations
 
 import hashlib
 import subprocess
@@ -20,13 +20,11 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from aurora_x.spec.parser_v2 import _snake, english_to_spec
 
-
 class ChatRequest(BaseModel):
     """Request model for chat endpoint"""
 
     prompt: str
     auto_synthesize: bool = False  # Whether to immediately trigger synthesis
-
 
 class ChatResponse(BaseModel):
     """Response model for chat endpoint"""
@@ -37,13 +35,11 @@ class ChatResponse(BaseModel):
     message: str | None = None
     synthesis_started: bool = False
 
-
 class ApprovalRequest(BaseModel):
     """Request model for approval endpoint"""
 
     token: str
     approved: bool
-
 
 def attach(app: FastAPI) -> None:
     """Attach English mode routes to the FastAPI app"""

@@ -19,7 +19,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
 
   const navItems: NavItem[] = [
     // Core Systems
-    { path: '/', label: 'Quantum Dashboard', icon: <LayoutDashboard className="w-5 h-5" />, category: 'core' },
+    { path: '/dashboard', label: 'Quantum Dashboard', icon: <LayoutDashboard className="w-5 h-5" />, category: 'core' },
     { path: '/chat', label: 'Neural Chat', icon: <MessageSquare className="w-5 h-5" />, category: 'core' },
     { path: '/memory', label: 'Memory Fabric', icon: <Brain className="w-5 h-5" />, category: 'core' },
     { path: '/intelligence', label: 'Intelligence Core', icon: <Brain className="w-5 h-5" />, category: 'core' },
@@ -30,6 +30,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
     { path: '/evolution', label: 'Evolution Monitor', icon: <TrendingUp className="w-5 h-5" />, category: 'intelligence' },
 
     // Advanced Tools
+    { path: '/memory-fabric', label: 'Memory Fabric', icon: <Brain className="w-5 h-5" />, category: 'tools' },
     { path: '/autonomous', label: 'Autonomous Tools', icon: <Zap className="w-5 h-5" />, category: 'tools' },
     { path: '/monitoring', label: 'System Monitor', icon: <Activity className="w-5 h-5" />, category: 'tools' },
     { path: '/database', label: 'Knowledge Base', icon: <Database className="w-5 h-5" />, category: 'tools' },
@@ -94,8 +95,8 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                     const isActive = location === item.path || (item.path !== '/' && location?.startsWith(item.path));
                     return (
                       <Link key={item.path} to={item.path} className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 block ${isActive
-                        ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20'
-                        : 'text-purple-300 hover:bg-purple-500/10 hover:text-white'
+                        ? 'bg-gradient-to-r from-purple-600/40 to-pink-600/40 border border-purple-400/50 text-white shadow-lg shadow-purple-500/30'
+                        : 'bg-slate-800/50 text-purple-300 hover:bg-purple-500/30 hover:text-white border border-transparent hover:border-purple-500/30'
                         }`}>
                         <div className={isActive ? 'text-purple-400' : 'text-purple-500'}>
                           {item.icon}

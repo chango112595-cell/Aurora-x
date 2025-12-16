@@ -1,1 +1,0 @@
-# Aurora OS Core package

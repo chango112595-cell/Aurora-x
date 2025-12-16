@@ -3,7 +3,7 @@
  * Handles user registration, login, token refresh, and profile management
  */
 
-import { Router, type Request, Response } from 'express';
+import { Router, type Request, Response, type RequestHandler } from 'express';
 import {
   requireAuth,
   requireAdmin,
@@ -37,7 +37,6 @@ router.post('/register', async (req: Request, res: Response) => {
   try {
     const { username, email, password, role }: CreateUserData = req.body;
 
-    // Validate required fields
     if (!username || !email || !password) {
       return res.status(400).json({
         error: 'Validation Error',
@@ -45,10 +44,8 @@ router.post('/register', async (req: Request, res: Response) => {
       });
     }
 
-    // Prevent non-admins from creating admin users via public endpoint
     const sanitizedRole = role === 'admin' ? 'user' : role;
 
-    // Register user
     const result = await registerUser({
       username,
       email,
@@ -62,12 +59,12 @@ router.post('/register', async (req: Request, res: Response) => {
       accessToken: result.tokens.accessToken,
       refreshToken: result.tokens.refreshToken
     });
-  } catch (error: any) {
-    console.error('[Auth API] Registration error:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
     
     return res.status(400).json({
       error: 'Registration Failed',
-      message: error.message || 'Failed to register user'
+      message: err.message || 'Failed to register user'
     });
   }
 });
@@ -80,7 +77,6 @@ router.post('/login', async (req: Request, res: Response) => {
   try {
     const { username, password }: LoginCredentials = req.body;
 
-    // Validate required fields
     if (!username || !password) {
       return res.status(400).json({
         error: 'Validation Error',
@@ -88,7 +84,6 @@ router.post('/login', async (req: Request, res: Response) => {
       });
     }
 
-    // Authenticate user
     const result = await loginUser({ username, password });
 
     if (!result) {
@@ -104,10 +99,10 @@ router.post('/login', async (req: Request, res: Response) => {
       accessToken: result.tokens.accessToken,
       refreshToken: result.tokens.refreshToken
     });
-  } catch (error: any) {
-    console.error('[Auth API] Login error:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
 
-    if (error.message === 'User account is disabled') {
+    if (err.message === 'User account is disabled') {
       return res.status(403).json({
         error: 'Account Disabled',
         message: 'Your account has been disabled. Please contact an administrator.'
@@ -136,7 +131,6 @@ router.post('/refresh', (req: Request, res: Response) => {
       });
     }
 
-    // Generate new access token
     const newAccessToken = refreshAccessToken(refreshToken);
 
     if (!newAccessToken) {
@@ -150,9 +144,7 @@ router.post('/refresh', (req: Request, res: Response) => {
       message: 'Token refreshed successfully',
       accessToken: newAccessToken
     });
-  } catch (error: any) {
-    console.error('[Auth API] Token refresh error:', error);
-    
+  } catch (error: unknown) {
     return res.status(500).json({
       error: 'Token Refresh Failed',
       message: 'An error occurred while refreshing token'
@@ -168,16 +160,17 @@ router.post('/refresh', (req: Request, res: Response) => {
  * GET /api/auth/me
  * Get current user's profile
  */
-router.get('/me', requireAuth, (req: AuthRequest, res: Response) => {
+router.get('/me', requireAuth as RequestHandler, (req: Request, res: Response) => {
+  const authReq = req as AuthRequest;
   try {
-    if (!req.user) {
+    if (!authReq.user) {
       return res.status(401).json({
         error: 'Unauthorized',
         message: 'User not found in request'
       });
     }
 
-    const user = getUserProfile(req.user.id);
+    const user = getUserProfile(authReq.user.id);
 
     if (!user) {
       return res.status(404).json({
@@ -189,9 +182,7 @@ router.get('/me', requireAuth, (req: AuthRequest, res: Response) => {
     return res.json({
       user
     });
-  } catch (error: any) {
-    console.error('[Auth API] Get profile error:', error);
-    
+  } catch (error: unknown) {
     return res.status(500).json({
       error: 'Failed to Fetch Profile',
       message: 'An error occurred while fetching user profile'
@@ -203,9 +194,10 @@ router.get('/me', requireAuth, (req: AuthRequest, res: Response) => {
  * PUT /api/auth/me
  * Update current user's profile
  */
-router.put('/me', requireAuth, async (req: AuthRequest, res: Response) => {
+router.put('/me', requireAuth as RequestHandler, async (req: Request, res: Response) => {
+  const authReq = req as AuthRequest;
   try {
-    if (!req.user) {
+    if (!authReq.user) {
       return res.status(401).json({
         error: 'Unauthorized',
         message: 'User not found in request'
@@ -214,9 +206,7 @@ router.put('/me', requireAuth, async (req: AuthRequest, res: Response) => {
 
     const { email }: UpdateUserData = req.body;
 
-    // Users can only update their email via this endpoint
-    // Password changes use separate endpoint for security
-    const updatedUser = await updateUserProfile(req.user.id, { email });
+    const updatedUser = await updateUserProfile(authReq.user.id, { email });
 
     if (!updatedUser) {
       return res.status(404).json({
@@ -229,12 +219,12 @@ router.put('/me', requireAuth, async (req: AuthRequest, res: Response) => {
       message: 'Profile updated successfully',
       user: updatedUser
     });
-  } catch (error: any) {
-    console.error('[Auth API] Update profile error:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
     
     return res.status(400).json({
       error: 'Update Failed',
-      message: error.message || 'Failed to update profile'
+      message: err.message || 'Failed to update profile'
     });
   }
 });
@@ -243,9 +233,10 @@ router.put('/me', requireAuth, async (req: AuthRequest, res: Response) => {
  * POST /api/auth/change-password
  * Change current user's password
  */
-router.post('/change-password', requireAuth, async (req: AuthRequest, res: Response) => {
+router.post('/change-password', requireAuth as RequestHandler, async (req: Request, res: Response) => {
+  const authReq = req as AuthRequest;
   try {
-    if (!req.user) {
+    if (!authReq.user) {
       return res.status(401).json({
         error: 'Unauthorized',
         message: 'User not found in request'
@@ -254,7 +245,6 @@ router.post('/change-password', requireAuth, async (req: AuthRequest, res: Respo
 
     const { currentPassword, newPassword } = req.body;
 
-    // Validate required fields
     if (!currentPassword || !newPassword) {
       return res.status(400).json({
         error: 'Validation Error',
@@ -262,8 +252,7 @@ router.post('/change-password', requireAuth, async (req: AuthRequest, res: Respo
       });
     }
 
-    // Change password
-    const success = await changePassword(req.user.id, currentPassword, newPassword);
+    const success = await changePassword(authReq.user.id, currentPassword, newPassword);
 
     if (!success) {
       return res.status(404).json({
@@ -275,10 +264,10 @@ router.post('/change-password', requireAuth, async (req: AuthRequest, res: Respo
     return res.json({
       message: 'Password changed successfully'
     });
-  } catch (error: any) {
-    console.error('[Auth API] Password change error:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
     
-    if (error.message === 'Current password is incorrect') {
+    if (err.message === 'Current password is incorrect') {
       return res.status(401).json({
         error: 'Invalid Password',
         message: 'Current password is incorrect'
@@ -287,7 +276,7 @@ router.post('/change-password', requireAuth, async (req: AuthRequest, res: Respo
     
     return res.status(400).json({
       error: 'Password Change Failed',
-      message: error.message || 'Failed to change password'
+      message: err.message || 'Failed to change password'
     });
   }
 });
@@ -296,12 +285,7 @@ router.post('/change-password', requireAuth, async (req: AuthRequest, res: Respo
  * POST /api/auth/logout
  * Logout user (client should delete tokens)
  */
-router.post('/logout', requireAuth, (req: AuthRequest, res: Response) => {
-  // In a stateless JWT system, logout is handled client-side by deleting tokens
-  // If you implement token blacklisting in the future, add it here
-  
-  console.log(`[Auth API] User logged out: ${req.user?.username}`);
-  
+router.post('/logout', requireAuth as RequestHandler, (req: Request, res: Response) => {
   return res.json({
     message: 'Logout successful'
   });
@@ -315,7 +299,7 @@ router.post('/logout', requireAuth, (req: AuthRequest, res: Response) => {
  * GET /api/auth/users
  * List all users (admin only)
  */
-router.get('/users', requireAuth, requireAdmin, (req: Request, res: Response) => {
+router.get('/users', requireAuth as RequestHandler, requireAdmin as RequestHandler, (req: Request, res: Response) => {
   try {
     const includeInactive = req.query.includeInactive === 'true';
     const users = listAllUsers(includeInactive);
@@ -324,9 +308,7 @@ router.get('/users', requireAuth, requireAdmin, (req: Request, res: Response) =>
       users,
       count: users.length
     });
-  } catch (error: any) {
-    console.error('[Auth API] List users error:', error);
-    
+  } catch (error: unknown) {
     return res.status(500).json({
       error: 'Failed to List Users',
       message: 'An error occurred while fetching users'
@@ -338,16 +320,14 @@ router.get('/users', requireAuth, requireAdmin, (req: Request, res: Response) =>
  * GET /api/auth/users/stats
  * Get user statistics (admin only)
  */
-router.get('/users/stats', requireAuth, requireAdmin, (req: Request, res: Response) => {
+router.get('/users/stats', requireAuth as RequestHandler, requireAdmin as RequestHandler, (req: Request, res: Response) => {
   try {
     const stats = getUserStats();
 
     return res.json({
       stats
     });
-  } catch (error: any) {
-    console.error('[Auth API] Get stats error:', error);
-    
+  } catch (error: unknown) {
     return res.status(500).json({
       error: 'Failed to Get Statistics',
       message: 'An error occurred while fetching statistics'
@@ -359,7 +339,7 @@ router.get('/users/stats', requireAuth, requireAdmin, (req: Request, res: Respon
  * GET /api/auth/users/:id
  * Get specific user by ID (admin only)
  */
-router.get('/users/:id', requireAuth, requireAdmin, (req: Request, res: Response) => {
+router.get('/users/:id', requireAuth as RequestHandler, requireAdmin as RequestHandler, (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const user = getUserProfile(id);
@@ -374,9 +354,7 @@ router.get('/users/:id', requireAuth, requireAdmin, (req: Request, res: Response
     return res.json({
       user
     });
-  } catch (error: any) {
-    console.error('[Auth API] Get user error:', error);
-    
+  } catch (error: unknown) {
     return res.status(500).json({
       error: 'Failed to Fetch User',
       message: 'An error occurred while fetching user'
@@ -388,7 +366,7 @@ router.get('/users/:id', requireAuth, requireAdmin, (req: Request, res: Response
  * PUT /api/auth/users/:id
  * Update user by ID (admin only)
  */
-router.put('/users/:id', requireAuth, requireAdmin, async (req: Request, res: Response) => {
+router.put('/users/:id', requireAuth as RequestHandler, requireAdmin as RequestHandler, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { email, role, isActive, password }: UpdateUserData = req.body;
@@ -411,12 +389,12 @@ router.put('/users/:id', requireAuth, requireAdmin, async (req: Request, res: Re
       message: 'User updated successfully',
       user: updatedUser
     });
-  } catch (error: any) {
-    console.error('[Auth API] Update user error:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
     
     return res.status(400).json({
       error: 'Update Failed',
-      message: error.message || 'Failed to update user'
+      message: err.message || 'Failed to update user'
     });
   }
 });
@@ -425,11 +403,10 @@ router.put('/users/:id', requireAuth, requireAdmin, async (req: Request, res: Re
  * POST /api/auth/users
  * Create new user (admin only)
  */
-router.post('/users', requireAuth, requireAdmin, async (req: Request, res: Response) => {
+router.post('/users', requireAuth as RequestHandler, requireAdmin as RequestHandler, async (req: Request, res: Response) => {
   try {
     const { username, email, password, role }: CreateUserData = req.body;
 
-    // Validate required fields
     if (!username || !email || !password) {
       return res.status(400).json({
         error: 'Validation Error',
@@ -437,7 +414,6 @@ router.post('/users', requireAuth, requireAdmin, async (req: Request, res: Respo
       });
     }
 
-    // Admins can create users with any role
     const result = await registerUser({
       username,
       email,
@@ -448,14 +424,13 @@ router.post('/users', requireAuth, requireAdmin, async (req: Request, res: Respo
     return res.status(201).json({
       message: 'User created successfully',
       user: result.user
-      // Don't return tokens for admin-created users
     });
-  } catch (error: any) {
-    console.error('[Auth API] Create user error:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
     
     return res.status(400).json({
       error: 'User Creation Failed',
-      message: error.message || 'Failed to create user'
+      message: err.message || 'Failed to create user'
     });
   }
 });

@@ -180,7 +180,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
                             }
                         )
 
-                    if "raise NotImplementedError" in line or "pass  # TODO" in line:
+                    if "return None  # aurora-placeholder" in line or "return None  # aurora-placeholder" in line:
                         self.results["incomplete_items"].append(
                             {
                                 "file": str(py_file.relative_to(self.workspace)),

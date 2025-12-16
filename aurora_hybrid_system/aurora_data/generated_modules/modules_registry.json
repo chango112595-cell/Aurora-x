@@ -1,0 +1,106 @@
+{
+  "generated_at": "2025-12-08T11:39:12.492601Z",
+  "count": 10,
+  "modules": {
+    "0001": {
+      "id": "0001",
+      "name": "Connector_0001",
+      "category": "connector",
+      "files": [
+        "aurora_data/generated_modules/connector/connector_0001_init.py",
+        "aurora_data/generated_modules/connector/connector_0001_execute.py",
+        "aurora_data/generated_modules/connector/connector_0001_cleanup.py"
+      ]
+    },
+    "0002": {
+      "id": "0002",
+      "name": "Processor_0002",
+      "category": "processor",
+      "files": [
+        "aurora_data/generated_modules/processor/processor_0002_init.py",
+        "aurora_data/generated_modules/processor/processor_0002_execute.py",
+        "aurora_data/generated_modules/processor/processor_0002_cleanup.py"
+      ]
+    },
+    "0003": {
+      "id": "0003",
+      "name": "Analyzer_0003",
+      "category": "analyzer",
+      "files": [
+        "aurora_data/generated_modules/analyzer/analyzer_0003_init.py",
+        "aurora_data/generated_modules/analyzer/analyzer_0003_execute.py",
+        "aurora_data/generated_modules/analyzer/analyzer_0003_cleanup.py"
+      ]
+    },
+    "0004": {
+      "id": "0004",
+      "name": "Generator_0004",
+      "category": "generator",
+      "files": [
+        "aurora_data/generated_modules/generator/generator_0004_init.py",
+        "aurora_data/generated_modules/generator/generator_0004_execute.py",
+        "aurora_data/generated_modules/generator/generator_0004_cleanup.py"
+      ]
+    },
+    "0005": {
+      "id": "0005",
+      "name": "Transformer_0005",
+      "category": "transformer",
+      "files": [
+        "aurora_data/generated_modules/transformer/transformer_0005_init.py",
+        "aurora_data/generated_modules/transformer/transformer_0005_execute.py",
+        "aurora_data/generated_modules/transformer/transformer_0005_cleanup.py"
+      ]
+    },
+    "0006": {
+      "id": "0006",
+      "name": "Validator_0006",
+      "category": "validator",
+      "files": [
+        "aurora_data/generated_modules/validator/validator_0006_init.py",
+        "aurora_data/generated_modules/validator/validator_0006_execute.py",
+        "aurora_data/generated_modules/validator/validator_0006_cleanup.py"
+      ]
+    },
+    "0007": {
+      "id": "0007",
+      "name": "Formatter_0007",
+      "category": "formatter",
+      "files": [
+        "aurora_data/generated_modules/formatter/formatter_0007_init.py",
+        "aurora_data/generated_modules/formatter/formatter_0007_execute.py",
+        "aurora_data/generated_modules/formatter/formatter_0007_cleanup.py"
+      ]
+    },
+    "0008": {
+      "id": "0008",
+      "name": "Optimizer_0008",
+      "category": "optimizer",
+      "files": [
+        "aurora_data/generated_modules/optimizer/optimizer_0008_init.py",
+        "aurora_data/generated_modules/optimizer/optimizer_0008_execute.py",
+        "aurora_data/generated_modules/optimizer/optimizer_0008_cleanup.py"
+      ]
+    },
+    "0009": {
+      "id": "0009",
+      "name": "Monitor_0009",
+      "category": "monitor",
+      "files": [
+        "aurora_data/generated_modules/monitor/monitor_0009_init.py",
+        "aurora_data/generated_modules/monitor/monitor_0009_execute.py",
+        "aurora_data/generated_modules/monitor/monitor_0009_cleanup.py"
+      ]
+    },
+    "0010": {
+      "id": "0010",
+      "name": "Integrator_0010",
+      "category": "integrator",
+      "files": [
+        "aurora_data/generated_modules/integrator/integrator_0010_init.py",
+        "aurora_data/generated_modules/integrator/integrator_0010_execute.py",
+        "aurora_data/generated_modules/integrator/integrator_0010_cleanup.py"
+      ]
+    }
+  }
+}

@@ -38,15 +38,7 @@ export async function setupVite(app: Express, server: Server) {
   const vite = await createViteServer({
     server: {
       middlewareMode: true,
-      hmr: hmrHost ? {
-        server,
-        protocol: 'wss',
-        host: hmrHost,
-        port: 5000,
-        clientPort: 443,
-      } : {
-        server,
-      },
+      hmr: false, // Disable HMR to prevent WebSocket connection issues in Replit proxy environment
     },
     appType: "spa",
   });

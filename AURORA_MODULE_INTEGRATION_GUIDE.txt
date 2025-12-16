@@ -1,0 +1,1104 @@
+================================================================================
+                    AURORA-X MODULE INTEGRATION GUIDE
+                    Complete Integration & Development Reference
+                    Version: 3.1.0 | December 16, 2025
+================================================================================
+
+TABLE OF CONTENTS
+-----------------
+1. Module Architecture Overview
+2. Module Structure & Categories
+3. Core Module Loader System
+4. Module Registration & Discovery
+5. Module Lifecycle (Init/Execute/Cleanup)
+6. Inter-Module Communication
+7. Integration with UniversalCore
+8. Adding New Modules Step-by-Step
+9. Pack System Integration
+10. Best Practices & Patterns
+11. Code Examples
+12. Troubleshooting
+
+================================================================================
+                    1. MODULE ARCHITECTURE OVERVIEW
+================================================================================
+
+Aurora-X uses a hierarchical module system with 3,226+ Python module files:
+
+LAYER 1: Core System Modules (9 modules)
+├── platform_adapter.py      - Platform abstraction
+├── hardware_detector.py     - Hardware detection
+├── resource_manager.py      - Resource allocation
+├── port_manager.py          - Port management
+├── service_registry.py      - Service registration
+├── api_gateway.py           - API gateway
+├── auto_healer.py           - Self-healing
+├── discovery_protocol.py    - Discovery
+└── http_server.py           - HTTP server
+
+LAYER 2: Numbered Modules (550 modules)
+├── module_001.py → module_550.py
+└── Cross-temporal spanning Ancient to Futuristic eras
+
+LAYER 3: Category Modules (1,660 modules)
+├── analyzer/     (166 modules)
+├── connector/    (166 modules)
+├── formatter/    (166 modules)
+├── generator/    (166 modules)
+├── integrator/   (166 modules)
+├── monitor/      (166 modules)
+├── optimizer/    (166 modules)
+├── processor/    (166 modules)
+├── transformer/  (166 modules)
+└── validator/    (166 modules)
+
+LAYER 4: Pack Modules (217 modules across 15 packs)
+└── packs/pack01_* through pack15_*
+
+LAYER 5: Support Modules
+├── aurora_phase1_production/  (571 modules)
+├── tools/                     (133 modules)
+├── aurora_hybrid_system/      (73 modules)
+└── Other locations            (22 modules)
+
+================================================================================
+                    2. MODULE STRUCTURE & CATEGORIES
+================================================================================
+
+NUMBERED MODULE STRUCTURE (module_XXX.py):
+------------------------------------------
+Each numbered module follows this standard pattern:
+
+```python
+"""
+Aurora-X Module XXX - [Name]
+Category: [Era] | Tier: [foundational/intermediate/advanced/grandmaster] | Driver: [sequential/parallel]
+Auto-generated for Nexus V3 integration
+"""
+
+from typing import Any, Dict, Optional
+import time
+
+class AuroraModuleXXX:
+    """Aurora-X temporal module"""
+
+    def __init__(self):
+        self.module_id = XXX
+        self.name = "[module_name]"
+        self.category = "[Ancient/Classical/Modern/Contemporary/Futuristic]"
+        self.temporal_tier = "[foundational/intermediate/advanced/grandmaster]"
+        self.driver = "[sequential/parallel]"
+        self.requires_gpu = False
+        self.gpu_enabled = False
+        self.device = "cpu"
+        self.initialized = False
+        self.nexus = None
+        self._state = {}
+        self._metrics = {"executions": 0, "errors": 0, "learn_cycles": 0}
+
+    def set_nexus(self, nexus):
+        """Attach to Nexus V3 bridge for lifecycle integration"""
+        self.nexus = nexus
+
+    def initialize(self) -> str:
+        """Initialize module (called on first execute or on_boot)"""
+        if self.initialized:
+            return f"{self.name} already initialized"
+        self.initialized = True
+        self._state["init_time"] = time.time()
+        return f"{self.name} initialized on {self.device}"
+
+    def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """Main execution method - processes task payload"""
+        # Implementation...
+
+    def cleanup(self) -> Dict[str, Any]:
+        """Cleanup resources on shutdown"""
+        # Implementation...
+
+    def get_metrics(self) -> Dict[str, Any]:
+        """Return module metrics"""
+        return self._metrics
+```
+
+CATEGORY MODULE STRUCTURE (analyzer/analyzer_module_XXX.py):
+------------------------------------------------------------
+Category modules are specialized versions organized by function:
+
+- analyzer/    - Data analysis, pattern recognition
+- connector/   - External system connections
+- formatter/   - Data formatting and transformation
+- generator/   - Code and data generation
+- integrator/  - System integration logic
+- monitor/     - Monitoring and observability
+- optimizer/   - Performance optimization
+- processor/   - Data processing pipelines
+- transformer/ - Data transformation
+- validator/   - Validation and verification
+
+================================================================================
+                    3. CORE MODULE LOADER SYSTEM
+================================================================================
+
+LOCATION: aurora_nexus_v3/module_loader.py
+
+The ModuleLoader class handles dynamic module loading:
+
+```python
+from aurora_nexus_v3.module_loader import ModuleLoader, SandboxedModule
+
+# Initialize loader
+loader = ModuleLoader()
+
+# Load registry
+loader.load_registry()
+
+# Load a specific module
+module = loader.load_module("module_001")
+
+# Execute module
+result = module.execute({"action": "process", "data": {}})
+
+# Cleanup
+module.cleanup()
+```
+
+KEY CLASSES:
+------------
+
+1. SandboxedModule - Wrapper for safe module execution
+   - load() - Import module files
+   - initialize(config) - Run init
+   - execute(payload, context, timeout) - Run main logic
+   - cleanup() - Release resources
+
+2. ModuleLoader - Registry and loading management
+   - load_registry() - Load modules_registry.json
+   - load_module(module_id) - Load single module
+   - load_all_modules() - Load all registered modules
+   - get_module(module_id) - Get loaded module
+   - execute_module(module_id, payload) - Execute directly
+
+REGISTRY PATH: aurora_nexus_v3/modules_registry.json
+
+================================================================================
+                    4. MODULE REGISTRATION & DISCOVERY
+================================================================================
+
+MODULE REGISTRY FORMAT (modules_registry.json):
+-----------------------------------------------
+```json
+{
+  "version": "3.1.0",
+  "generated": "2025-12-16T00:00:00Z",
+  "modules": [
+    {
+      "id": "module_001",
+      "name": "Ancient_symbolic_logic_001",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "paths": {
+        "init": "aurora_nexus_v3/modules/module_001.py",
+        "execute": "aurora_nexus_v3/modules/module_001.py",
+        "cleanup": "aurora_nexus_v3/modules/module_001.py"
+      },
+      "requires_gpu": false,
+      "dependencies": [],
+      "capabilities": ["symbolic_logic", "ancient_patterns"]
+    }
+  ]
+}
+```
+
+DISCOVERY PROCESS:
+------------------
+1. Scan MODULES_ROOT directory for *.py files
+2. Parse module metadata from docstrings/class definitions
+3. Validate module structure (must have AuroraModuleXXX class)
+4. Register in modules_registry.json
+5. Build dependency graph
+6. Cache for fast subsequent loads
+
+HOW TO REGISTER A NEW MODULE:
+-----------------------------
+Option A - Manual Registration:
+1. Add entry to modules_registry.json
+2. Restart V3 service
+
+Option B - Auto-Discovery:
+1. Place module in correct directory
+2. Follow naming convention (module_XXX.py)
+3. Include required class structure
+4. Run discovery script:
+   python aurora_nexus_v3/module_loader.py --discover
+
+================================================================================
+                    5. MODULE LIFECYCLE (Init/Execute/Cleanup)
+================================================================================
+
+LIFECYCLE PHASES:
+-----------------
+
+PHASE 1: REGISTRATION
+- Module file discovered
+- Metadata extracted
+- Added to registry
+- Dependencies resolved
+
+PHASE 2: LOADING
+- Module imported via importlib
+- Class instantiated
+- Nexus bridge attached
+- State initialized to empty
+
+PHASE 3: INITIALIZATION
+- initialize() called
+- Resources allocated
+- Connections established
+- init_time recorded
+
+PHASE 4: EXECUTION (repeated)
+- execute(payload) called
+- Action dispatched
+- Result computed
+- Metrics updated
+- Nexus notified for reflection
+
+PHASE 5: CLEANUP
+- cleanup() called
+- Resources released
+- Connections closed
+- Final state saved
+
+LIFECYCLE CODE:
+---------------
+```python
+class AuroraModuleXXX:
+    
+    def initialize(self) -> str:
+        """
+        Called once before first execution.
+        - Allocate resources
+        - Establish connections
+        - Load cached state
+        """
+        if self.initialized:
+            return f"{self.name} already initialized"
+        
+        # Your initialization logic
+        self._state["init_time"] = time.time()
+        self.initialized = True
+        return f"{self.name} initialized"
+    
+    def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Called for each task.
+        - Process input payload
+        - Return results
+        - Update metrics
+        """
+        if not self.initialized:
+            self.initialize()
+        
+        self._metrics["executions"] += 1
+        start = time.time()
+        
+        try:
+            # Your execution logic
+            result = self._process(payload)
+            elapsed = (time.time() - start) * 1000
+            
+            return {
+                "status": "ok",
+                "module_id": self.module_id,
+                "result": result,
+                "elapsed_ms": elapsed
+            }
+        except Exception as e:
+            self._metrics["errors"] += 1
+            return {"status": "error", "error": str(e)}
+    
+    def cleanup(self) -> Dict[str, Any]:
+        """
+        Called on shutdown.
+        - Release resources
+        - Close connections
+        - Save state
+        """
+        self.initialized = False
+        return {
+            "status": "cleaned",
+            "module_id": self.module_id,
+            "final_metrics": self._metrics
+        }
+```
+
+================================================================================
+                    6. INTER-MODULE COMMUNICATION
+================================================================================
+
+METHOD 1: SERVICE REGISTRY (Recommended)
+----------------------------------------
+Use the ServiceRegistry for module discovery and communication:
+
+```python
+from aurora_nexus_v3.modules import ServiceRegistry
+
+# Register a service
+registry = ServiceRegistry()
+registry.register("my_module", {
+    "endpoint": self,
+    "capabilities": ["analyze", "process"]
+})
+
+# Discover and call another module
+analyzer = registry.get("analyzer_module_001")
+result = analyzer.execute({"action": "analyze", "data": input_data})
+```
+
+METHOD 2: NEXUS BRIDGE
+----------------------
+Use the nexus bridge for event-driven communication:
+
+```python
+def set_nexus(self, nexus):
+    self.nexus = nexus
+
+def execute(self, payload):
+    # Process locally
+    result = self._process(payload)
+    
+    # Notify nexus for cross-module coordination
+    if self.nexus:
+        self.nexus.reflect(self.name, payload)
+        
+        # Request another module via nexus
+        other_result = self.nexus.dispatch("module_002", {"action": "validate"})
+    
+    return result
+```
+
+METHOD 3: DIRECT IMPORT (Use Sparingly)
+---------------------------------------
+For hard dependencies only:
+
+```python
+from aurora_nexus_v3.modules.module_002 import AuroraModule002
+
+class AuroraModule001:
+    def __init__(self):
+        self._validator = AuroraModule002()
+    
+    def execute(self, payload):
+        # Validate using direct dependency
+        valid = self._validator.validate(payload)
+```
+
+METHOD 4: EVENT BUS
+-------------------
+For async/decoupled communication:
+
+```python
+class AuroraModuleXXX:
+    def __init__(self):
+        self._event_handlers = {}
+    
+    def on(self, event_name, handler):
+        self._event_handlers[event_name] = handler
+    
+    def emit(self, event_name, data):
+        if self.nexus:
+            self.nexus.broadcast(event_name, data)
+```
+
+================================================================================
+                    7. INTEGRATION WITH UNIVERSALCORE
+================================================================================
+
+LOCATION: aurora_nexus_v3/core/universal_core.py
+
+UniversalCore is the central orchestrator that manages all modules.
+
+INTEGRATION POINTS:
+-------------------
+
+1. STARTUP REGISTRATION
+```python
+# In UniversalCore.__init__
+from aurora_nexus_v3.module_loader import ModuleLoader
+
+class UniversalCore:
+    def __init__(self):
+        self.module_loader = ModuleLoader()
+        self.modules = {}
+    
+    def boot(self):
+        # Load registry
+        self.module_loader.load_registry()
+        
+        # Load all modules
+        for module_id in self.module_loader.registry:
+            module = self.module_loader.load_module(module_id)
+            module.set_nexus(self)
+            self.modules[module_id] = module
+        
+        # Initialize modules in dependency order
+        for module_id, module in self.modules.items():
+            module.initialize()
+```
+
+2. TASK DISPATCHING
+```python
+def dispatch(self, module_id: str, payload: Dict) -> Dict:
+    """Dispatch task to specific module"""
+    if module_id not in self.modules:
+        return {"error": f"Module {module_id} not found"}
+    
+    return self.modules[module_id].execute(payload)
+
+def dispatch_to_category(self, category: str, payload: Dict) -> List[Dict]:
+    """Dispatch to all modules in a category"""
+    results = []
+    for module_id, module in self.modules.items():
+        if module.category == category:
+            results.append(module.execute(payload))
+    return results
+```
+
+3. REFLECTION/LEARNING
+```python
+def reflect(self, module_name: str, payload: Dict):
+    """Called by modules after execution for learning"""
+    # Record execution for learning
+    self._record_execution(module_name, payload)
+    
+    # Trigger self-healing if needed
+    if self._should_heal(module_name):
+        self.auto_healer.heal(module_name)
+```
+
+4. WORKER POOL INTEGRATION
+```python
+def submit_to_workers(self, module_id: str, payloads: List[Dict]) -> List[Dict]:
+    """Submit batch to worker pool for parallel execution"""
+    return self.worker_pool.submit_batch(module_id, payloads)
+```
+
+================================================================================
+                    8. ADDING NEW MODULES STEP-BY-STEP
+================================================================================
+
+STEP 1: DETERMINE MODULE TYPE
+-----------------------------
+- Numbered module (001-550): General purpose, temporal era
+- Category module: Specialized function (analyzer, validator, etc.)
+- Pack module: Part of a feature pack
+
+STEP 2: CREATE MODULE FILE
+--------------------------
+For numbered module, create: aurora_nexus_v3/modules/module_XXX.py
+
+```python
+"""
+Aurora-X Module XXX - [Your Module Name]
+Category: [Era] | Tier: [tier] | Driver: [driver]
+Auto-generated for Nexus V3 integration
+"""
+
+from typing import Any, Dict, Optional
+import time
+
+class AuroraModuleXXX:
+    """[Description of what this module does]"""
+
+    def __init__(self):
+        self.module_id = XXX  # Your module number
+        self.name = "your_module_name"
+        self.category = "Modern"  # Ancient/Classical/Modern/Contemporary/Futuristic
+        self.temporal_tier = "intermediate"  # foundational/intermediate/advanced/grandmaster
+        self.driver = "sequential"  # sequential/parallel
+        self.requires_gpu = False
+        self.gpu_enabled = False
+        self.device = "cpu"
+        self.initialized = False
+        self.nexus = None
+        self._state = {}
+        self._metrics = {"executions": 0, "errors": 0, "learn_cycles": 0}
+
+    def set_nexus(self, nexus):
+        self.nexus = nexus
+
+    def initialize(self) -> str:
+        if self.initialized:
+            return f"{self.name} already initialized"
+        self.initialized = True
+        self._state["init_time"] = time.time()
+        return f"{self.name} initialized on {self.device}"
+
+    def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        if not self.initialized:
+            self.initialize()
+
+        self._metrics["executions"] += 1
+        start = time.time()
+
+        try:
+            # YOUR LOGIC HERE
+            action = payload.get("action", "process")
+            data = payload.get("data", {})
+            
+            result = self._process(data)
+            
+            elapsed = (time.time() - start) * 1000
+            
+            if self.nexus:
+                self.nexus.reflect(self.name, payload)
+
+            return {
+                "status": "ok",
+                "module_id": self.module_id,
+                "result": result,
+                "elapsed_ms": elapsed
+            }
+        except Exception as e:
+            self._metrics["errors"] += 1
+            return {"status": "error", "error": str(e)}
+
+    def _process(self, data: Dict[str, Any]) -> Any:
+        """Your main processing logic"""
+        # IMPLEMENT YOUR LOGIC
+        return {"processed": True, "data": data}
+
+    def cleanup(self) -> Dict[str, Any]:
+        self.initialized = False
+        return {"status": "cleaned", "module_id": self.module_id}
+
+    def get_metrics(self) -> Dict[str, Any]:
+        return self._metrics
+```
+
+STEP 3: REGISTER IN REGISTRY
+----------------------------
+Add entry to aurora_nexus_v3/modules_registry.json:
+
+```json
+{
+  "id": "module_XXX",
+  "name": "your_module_name",
+  "category": "Modern",
+  "tier": "intermediate",
+  "driver": "sequential",
+  "paths": {
+    "init": "aurora_nexus_v3/modules/module_XXX.py",
+    "execute": "aurora_nexus_v3/modules/module_XXX.py",
+    "cleanup": "aurora_nexus_v3/modules/module_XXX.py"
+  },
+  "requires_gpu": false,
+  "dependencies": [],
+  "capabilities": ["your_capability_1", "your_capability_2"]
+}
+```
+
+STEP 4: UPDATE MANIFEST (Optional)
+----------------------------------
+If module should appear in tier/capability manifests:
+aurora_nexus_v3/manifests/modules_manifest.json
+
+STEP 5: TEST MODULE
+-------------------
+```python
+# Test script
+from aurora_nexus_v3.modules.module_XXX import AuroraModuleXXX
+
+module = AuroraModuleXXX()
+print(module.initialize())
+result = module.execute({"action": "process", "data": {"test": True}})
+print(result)
+print(module.cleanup())
+```
+
+STEP 6: RESTART V3
+------------------
+Restart the Aurora Nexus V3 workflow to load new module.
+
+================================================================================
+                    9. PACK SYSTEM INTEGRATION
+================================================================================
+
+PACK STRUCTURE:
+---------------
+packs/
+├── pack01_pack01/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── config.json
+│   ├── manifest.json
+│   ├── modules/
+│   │   ├── module_a.py
+│   │   └── module_b.py
+│   └── tests/
+│       └── test_pack.py
+├── pack02_env_profiler/
+│   └── ...
+└── pack15_intel_fabric/
+    └── ...
+
+PACK MANIFEST FORMAT (manifest.json):
+-------------------------------------
+```json
+{
+  "pack_id": "pack01",
+  "name": "Core Pack",
+  "version": "1.0.0",
+  "description": "Core functionality pack",
+  "modules": [
+    {
+      "id": "pack01_module_a",
+      "file": "modules/module_a.py",
+      "class": "ModuleA",
+      "capabilities": ["core_function_1"]
+    }
+  ],
+  "dependencies": [],
+  "required_tiers": ["foundational"]
+}
+```
+
+LOADING PACKS:
+--------------
+```python
+from pathlib import Path
+import json
+
+def load_pack(pack_dir: Path):
+    manifest_path = pack_dir / "manifest.json"
+    with open(manifest_path) as f:
+        manifest = json.load(f)
+    
+    modules = {}
+    for module_def in manifest["modules"]:
+        module_path = pack_dir / module_def["file"]
+        # Import and instantiate module
+        spec = importlib.util.spec_from_file_location(module_def["id"], module_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        
+        cls = getattr(module, module_def["class"])
+        modules[module_def["id"]] = cls()
+    
+    return modules
+```
+
+================================================================================
+                    10. BEST PRACTICES & PATTERNS
+================================================================================
+
+1. DETERMINISTIC SIGNATURES
+---------------------------
+Always use these exact method signatures:
+- __init__(self) - No parameters
+- initialize(self) -> str
+- execute(self, payload: Dict[str, Any]) -> Dict[str, Any]
+- cleanup(self) -> Dict[str, Any]
+- set_nexus(self, nexus)
+
+2. IDEMPOTENT INITIALIZATION
+----------------------------
+```python
+def initialize(self) -> str:
+    if self.initialized:
+        return f"{self.name} already initialized"  # Idempotent!
+    # ... initialization logic
+    self.initialized = True
+```
+
+3. ALWAYS RETURN STRUCTURED RESPONSES
+-------------------------------------
+```python
+return {
+    "status": "ok" | "error",
+    "module_id": self.module_id,
+    "result": <your_result>,
+    "elapsed_ms": <execution_time>,
+    "error": <error_message if status=error>
+}
+```
+
+4. TRACK METRICS
+----------------
+```python
+self._metrics = {
+    "executions": 0,
+    "errors": 0,
+    "learn_cycles": 0,
+    "total_time_ms": 0
+}
+```
+
+5. USE NEXUS FOR REFLECTION
+---------------------------
+```python
+if self.nexus:
+    self.nexus.reflect(self.name, payload)
+```
+
+6. HANDLE ERRORS GRACEFULLY
+---------------------------
+```python
+try:
+    result = self._process(payload)
+except Exception as e:
+    self._metrics["errors"] += 1
+    return {"status": "error", "error": str(e), "module_id": self.module_id}
+```
+
+7. SUPPORT GPU WHEN APPLICABLE
+------------------------------
+```python
+try:
+    import torch
+    TORCH_AVAILABLE = True
+    CUDA_AVAILABLE = torch.cuda.is_available()
+except ImportError:
+    TORCH_AVAILABLE = False
+    CUDA_AVAILABLE = False
+
+class AuroraModuleXXX:
+    def __init__(self):
+        self.requires_gpu = True
+        self.gpu_enabled = self.requires_gpu and CUDA_AVAILABLE
+        self.device = "cuda" if self.gpu_enabled else "cpu"
+```
+
+8. DOCUMENT CAPABILITIES
+------------------------
+```python
+"""
+Aurora-X Module XXX - [Name]
+Category: [Era] | Tier: [tier] | Driver: [driver]
+
+Capabilities:
+- capability_1: Description
+- capability_2: Description
+
+Dependencies:
+- module_001: For validation
+"""
+```
+
+================================================================================
+                    11. CODE EXAMPLES
+================================================================================
+
+EXAMPLE 1: SIMPLE PROCESSOR MODULE
+----------------------------------
+```python
+"""
+Aurora-X Module 601 - Data Normalizer
+Category: Modern | Tier: intermediate | Driver: sequential
+"""
+
+from typing import Any, Dict
+import time
+
+class AuroraModule601:
+    def __init__(self):
+        self.module_id = 601
+        self.name = "data_normalizer"
+        self.category = "Modern"
+        self.temporal_tier = "intermediate"
+        self.driver = "sequential"
+        self.requires_gpu = False
+        self.initialized = False
+        self.nexus = None
+        self._metrics = {"executions": 0, "errors": 0}
+
+    def set_nexus(self, nexus):
+        self.nexus = nexus
+
+    def initialize(self) -> str:
+        if self.initialized:
+            return f"{self.name} already initialized"
+        self.initialized = True
+        return f"{self.name} initialized"
+
+    def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        if not self.initialized:
+            self.initialize()
+        
+        self._metrics["executions"] += 1
+        start = time.time()
+        
+        try:
+            data = payload.get("data", {})
+            
+            # Normalize data
+            normalized = {}
+            for key, value in data.items():
+                if isinstance(value, (int, float)):
+                    normalized[key] = float(value) / 100.0
+                else:
+                    normalized[key] = value
+            
+            elapsed = (time.time() - start) * 1000
+            
+            return {
+                "status": "ok",
+                "module_id": self.module_id,
+                "result": {"normalized_data": normalized},
+                "elapsed_ms": elapsed
+            }
+        except Exception as e:
+            self._metrics["errors"] += 1
+            return {"status": "error", "error": str(e)}
+
+    def cleanup(self) -> Dict[str, Any]:
+        self.initialized = False
+        return {"status": "cleaned", "module_id": self.module_id}
+```
+
+EXAMPLE 2: ANALYZER WITH DEPENDENCIES
+-------------------------------------
+```python
+"""
+Aurora-X Module 602 - Pattern Analyzer
+Category: Modern | Tier: advanced | Driver: parallel
+Dependencies: module_001 (validator)
+"""
+
+from typing import Any, Dict, List
+import time
+
+class AuroraModule602:
+    def __init__(self):
+        self.module_id = 602
+        self.name = "pattern_analyzer"
+        self.category = "Modern"
+        self.temporal_tier = "advanced"
+        self.driver = "parallel"
+        self.requires_gpu = False
+        self.initialized = False
+        self.nexus = None
+        self._patterns = []
+        self._metrics = {"executions": 0, "patterns_found": 0}
+
+    def set_nexus(self, nexus):
+        self.nexus = nexus
+
+    def initialize(self) -> str:
+        if self.initialized:
+            return f"{self.name} already initialized"
+        
+        # Load patterns
+        self._patterns = [
+            {"name": "sequence", "regex": r"\d+"},
+            {"name": "email", "regex": r"[^@]+@[^@]+\.[^@]+"},
+        ]
+        
+        self.initialized = True
+        return f"{self.name} initialized with {len(self._patterns)} patterns"
+
+    def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        if not self.initialized:
+            self.initialize()
+        
+        self._metrics["executions"] += 1
+        start = time.time()
+        
+        try:
+            data = payload.get("data", "")
+            
+            # Analyze patterns
+            import re
+            found = []
+            for pattern in self._patterns:
+                matches = re.findall(pattern["regex"], str(data))
+                if matches:
+                    found.append({
+                        "pattern": pattern["name"],
+                        "matches": matches
+                    })
+            
+            self._metrics["patterns_found"] += len(found)
+            
+            # Optionally validate via nexus
+            if self.nexus and found:
+                self.nexus.reflect(self.name, {"patterns_found": len(found)})
+            
+            elapsed = (time.time() - start) * 1000
+            
+            return {
+                "status": "ok",
+                "module_id": self.module_id,
+                "result": {"patterns": found, "count": len(found)},
+                "elapsed_ms": elapsed
+            }
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+
+    def cleanup(self) -> Dict[str, Any]:
+        self._patterns = []
+        self.initialized = False
+        return {"status": "cleaned", "module_id": self.module_id}
+```
+
+EXAMPLE 3: GPU-ENABLED MODULE
+-----------------------------
+```python
+"""
+Aurora-X Module 603 - Neural Processor
+Category: Futuristic | Tier: grandmaster | Driver: parallel
+GPU: Required
+"""
+
+from typing import Any, Dict
+import time
+
+try:
+    import torch
+    import torch.nn as nn
+    TORCH_AVAILABLE = True
+    CUDA_AVAILABLE = torch.cuda.is_available()
+except ImportError:
+    TORCH_AVAILABLE = False
+    CUDA_AVAILABLE = False
+
+class AuroraModule603:
+    def __init__(self):
+        self.module_id = 603
+        self.name = "neural_processor"
+        self.category = "Futuristic"
+        self.temporal_tier = "grandmaster"
+        self.driver = "parallel"
+        self.requires_gpu = True
+        self.gpu_enabled = CUDA_AVAILABLE
+        self.device = "cuda" if self.gpu_enabled else "cpu"
+        self.initialized = False
+        self.nexus = None
+        self._model = None
+        self._metrics = {"executions": 0, "gpu_ops": 0}
+
+    def set_nexus(self, nexus):
+        self.nexus = nexus
+
+    def initialize(self) -> str:
+        if self.initialized:
+            return f"{self.name} already initialized"
+        
+        if TORCH_AVAILABLE:
+            # Create simple model
+            self._model = nn.Sequential(
+                nn.Linear(128, 64),
+                nn.ReLU(),
+                nn.Linear(64, 32)
+            ).to(self.device)
+        
+        self.initialized = True
+        return f"{self.name} initialized on {self.device}"
+
+    def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        if not self.initialized:
+            self.initialize()
+        
+        self._metrics["executions"] += 1
+        start = time.time()
+        
+        try:
+            if not TORCH_AVAILABLE:
+                return {"status": "error", "error": "PyTorch not available"}
+            
+            data = payload.get("data", [])
+            
+            # Process with neural network
+            input_tensor = torch.tensor(data, dtype=torch.float32).to(self.device)
+            if input_tensor.dim() == 1:
+                input_tensor = input_tensor.unsqueeze(0)
+            
+            with torch.no_grad():
+                output = self._model(input_tensor)
+            
+            if self.gpu_enabled:
+                self._metrics["gpu_ops"] += 1
+            
+            elapsed = (time.time() - start) * 1000
+            
+            return {
+                "status": "ok",
+                "module_id": self.module_id,
+                "result": {"output": output.cpu().tolist()},
+                "device": self.device,
+                "elapsed_ms": elapsed
+            }
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+
+    def cleanup(self) -> Dict[str, Any]:
+        if self._model is not None:
+            del self._model
+            self._model = None
+            if TORCH_AVAILABLE and CUDA_AVAILABLE:
+                torch.cuda.empty_cache()
+        
+        self.initialized = False
+        return {"status": "cleaned", "module_id": self.module_id}
+```
+
+================================================================================
+                    12. TROUBLESHOOTING
+================================================================================
+
+ISSUE: Module not loading
+-------------------------
+1. Check file exists in correct location
+2. Verify class name matches AuroraModuleXXX pattern
+3. Check for syntax errors: python -m py_compile module_XXX.py
+4. Verify entry exists in modules_registry.json
+5. Check logs for import errors
+
+ISSUE: Module not executing
+---------------------------
+1. Verify module.initialized is True
+2. Check payload format matches expected structure
+3. Look for exceptions in _metrics["errors"]
+4. Verify nexus bridge is attached
+
+ISSUE: Inter-module communication failing
+-----------------------------------------
+1. Check both modules are loaded
+2. Verify ServiceRegistry is initialized
+3. Check nexus.dispatch() is working
+4. Look for circular dependencies
+
+ISSUE: GPU not being used
+-------------------------
+1. Verify CUDA is available: torch.cuda.is_available()
+2. Check requires_gpu = True in module
+3. Verify tensors are on correct device
+4. Check for CPU fallback in code
+
+ISSUE: Memory leak
+------------------
+1. Ensure cleanup() releases all resources
+2. Check for unclosed file handles
+3. Verify torch.cuda.empty_cache() called
+4. Look for growing _state dict
+
+COMMON ERRORS:
+--------------
+- "Module not found": Check registry paths
+- "No execute function": Ensure execute() method exists
+- "Module already initialized": Normal - initialization is idempotent
+- "Nexus not connected": Call set_nexus() before execute()
+
+================================================================================
+                    END OF INTEGRATION GUIDE
+================================================================================
+
+For questions or issues, check:
+- aurora_project_issues_report.txt - Known issues
+- AURORA_COMPLETE_CODEBASE.txt - Full system documentation
+- aurora_nexus_v3/module_loader.py - Loader implementation
+- aurora_nexus_v3/core/universal_core.py - Core integration
+
+================================================================================

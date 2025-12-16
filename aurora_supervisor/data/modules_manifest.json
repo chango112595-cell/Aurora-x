@@ -1,0 +1,2202 @@
+[
+  {
+    "category": "core_systems",
+    "index": 1
+  },
+  {
+    "category": "core_systems",
+    "index": 2
+  },
+  {
+    "category": "core_systems",
+    "index": 3
+  },
+  {
+    "category": "core_systems",
+    "index": 4
+  },
+  {
+    "category": "core_systems",
+    "index": 5
+  },
+  {
+    "category": "core_systems",
+    "index": 6
+  },
+  {
+    "category": "core_systems",
+    "index": 7
+  },
+  {
+    "category": "core_systems",
+    "index": 8
+  },
+  {
+    "category": "core_systems",
+    "index": 9
+  },
+  {
+    "category": "core_systems",
+    "index": 10
+  },
+  {
+    "category": "core_systems",
+    "index": 11
+  },
+  {
+    "category": "core_systems",
+    "index": 12
+  },
+  {
+    "category": "core_systems",
+    "index": 13
+  },
+  {
+    "category": "core_systems",
+    "index": 14
+  },
+  {
+    "category": "core_systems",
+    "index": 15
+  },
+  {
+    "category": "core_systems",
+    "index": 16
+  },
+  {
+    "category": "core_systems",
+    "index": 17
+  },
+  {
+    "category": "core_systems",
+    "index": 18
+  },
+  {
+    "category": "core_systems",
+    "index": 19
+  },
+  {
+    "category": "core_systems",
+    "index": 20
+  },
+  {
+    "category": "core_systems",
+    "index": 21
+  },
+  {
+    "category": "core_systems",
+    "index": 22
+  },
+  {
+    "category": "core_systems",
+    "index": 23
+  },
+  {
+    "category": "core_systems",
+    "index": 24
+  },
+  {
+    "category": "core_systems",
+    "index": 25
+  },
+  {
+    "category": "core_systems",
+    "index": 26
+  },
+  {
+    "category": "core_systems",
+    "index": 27
+  },
+  {
+    "category": "core_systems",
+    "index": 28
+  },
+  {
+    "category": "core_systems",
+    "index": 29
+  },
+  {
+    "category": "core_systems",
+    "index": 30
+  },
+  {
+    "category": "core_systems",
+    "index": 31
+  },
+  {
+    "category": "core_systems",
+    "index": 32
+  },
+  {
+    "category": "core_systems",
+    "index": 33
+  },
+  {
+    "category": "core_systems",
+    "index": 34
+  },
+  {
+    "category": "core_systems",
+    "index": 35
+  },
+  {
+    "category": "core_systems",
+    "index": 36
+  },
+  {
+    "category": "core_systems",
+    "index": 37
+  },
+  {
+    "category": "core_systems",
+    "index": 38
+  },
+  {
+    "category": "core_systems",
+    "index": 39
+  },
+  {
+    "category": "core_systems",
+    "index": 40
+  },
+  {
+    "category": "core_systems",
+    "index": 41
+  },
+  {
+    "category": "core_systems",
+    "index": 42
+  },
+  {
+    "category": "core_systems",
+    "index": 43
+  },
+  {
+    "category": "core_systems",
+    "index": 44
+  },
+  {
+    "category": "core_systems",
+    "index": 45
+  },
+  {
+    "category": "core_systems",
+    "index": 46
+  },
+  {
+    "category": "core_systems",
+    "index": 47
+  },
+  {
+    "category": "core_systems",
+    "index": 48
+  },
+  {
+    "category": "core_systems",
+    "index": 49
+  },
+  {
+    "category": "core_systems",
+    "index": 50
+  },
+  {
+    "category": "memory_fabric",
+    "index": 1
+  },
+  {
+    "category": "memory_fabric",
+    "index": 2
+  },
+  {
+    "category": "memory_fabric",
+    "index": 3
+  },
+  {
+    "category": "memory_fabric",
+    "index": 4
+  },
+  {
+    "category": "memory_fabric",
+    "index": 5
+  },
+  {
+    "category": "memory_fabric",
+    "index": 6
+  },
+  {
+    "category": "memory_fabric",
+    "index": 7
+  },
+  {
+    "category": "memory_fabric",
+    "index": 8
+  },
+  {
+    "category": "memory_fabric",
+    "index": 9
+  },
+  {
+    "category": "memory_fabric",
+    "index": 10
+  },
+  {
+    "category": "memory_fabric",
+    "index": 11
+  },
+  {
+    "category": "memory_fabric",
+    "index": 12
+  },
+  {
+    "category": "memory_fabric",
+    "index": 13
+  },
+  {
+    "category": "memory_fabric",
+    "index": 14
+  },
+  {
+    "category": "memory_fabric",
+    "index": 15
+  },
+  {
+    "category": "memory_fabric",
+    "index": 16
+  },
+  {
+    "category": "memory_fabric",
+    "index": 17
+  },
+  {
+    "category": "memory_fabric",
+    "index": 18
+  },
+  {
+    "category": "memory_fabric",
+    "index": 19
+  },
+  {
+    "category": "memory_fabric",
+    "index": 20
+  },
+  {
+    "category": "memory_fabric",
+    "index": 21
+  },
+  {
+    "category": "memory_fabric",
+    "index": 22
+  },
+  {
+    "category": "memory_fabric",
+    "index": 23
+  },
+  {
+    "category": "memory_fabric",
+    "index": 24
+  },
+  {
+    "category": "memory_fabric",
+    "index": 25
+  },
+  {
+    "category": "memory_fabric",
+    "index": 26
+  },
+  {
+    "category": "memory_fabric",
+    "index": 27
+  },
+  {
+    "category": "memory_fabric",
+    "index": 28
+  },
+  {
+    "category": "memory_fabric",
+    "index": 29
+  },
+  {
+    "category": "memory_fabric",
+    "index": 30
+  },
+  {
+    "category": "memory_fabric",
+    "index": 31
+  },
+  {
+    "category": "memory_fabric",
+    "index": 32
+  },
+  {
+    "category": "memory_fabric",
+    "index": 33
+  },
+  {
+    "category": "memory_fabric",
+    "index": 34
+  },
+  {
+    "category": "memory_fabric",
+    "index": 35
+  },
+  {
+    "category": "memory_fabric",
+    "index": 36
+  },
+  {
+    "category": "memory_fabric",
+    "index": 37
+  },
+  {
+    "category": "memory_fabric",
+    "index": 38
+  },
+  {
+    "category": "memory_fabric",
+    "index": 39
+  },
+  {
+    "category": "memory_fabric",
+    "index": 40
+  },
+  {
+    "category": "memory_fabric",
+    "index": 41
+  },
+  {
+    "category": "memory_fabric",
+    "index": 42
+  },
+  {
+    "category": "memory_fabric",
+    "index": 43
+  },
+  {
+    "category": "memory_fabric",
+    "index": 44
+  },
+  {
+    "category": "memory_fabric",
+    "index": 45
+  },
+  {
+    "category": "nexus_integration",
+    "index": 1
+  },
+  {
+    "category": "nexus_integration",
+    "index": 2
+  },
+  {
+    "category": "nexus_integration",
+    "index": 3
+  },
+  {
+    "category": "nexus_integration",
+    "index": 4
+  },
+  {
+    "category": "nexus_integration",
+    "index": 5
+  },
+  {
+    "category": "nexus_integration",
+    "index": 6
+  },
+  {
+    "category": "nexus_integration",
+    "index": 7
+  },
+  {
+    "category": "nexus_integration",
+    "index": 8
+  },
+  {
+    "category": "nexus_integration",
+    "index": 9
+  },
+  {
+    "category": "nexus_integration",
+    "index": 10
+  },
+  {
+    "category": "nexus_integration",
+    "index": 11
+  },
+  {
+    "category": "nexus_integration",
+    "index": 12
+  },
+  {
+    "category": "nexus_integration",
+    "index": 13
+  },
+  {
+    "category": "nexus_integration",
+    "index": 14
+  },
+  {
+    "category": "nexus_integration",
+    "index": 15
+  },
+  {
+    "category": "nexus_integration",
+    "index": 16
+  },
+  {
+    "category": "nexus_integration",
+    "index": 17
+  },
+  {
+    "category": "nexus_integration",
+    "index": 18
+  },
+  {
+    "category": "nexus_integration",
+    "index": 19
+  },
+  {
+    "category": "nexus_integration",
+    "index": 20
+  },
+  {
+    "category": "nexus_integration",
+    "index": 21
+  },
+  {
+    "category": "nexus_integration",
+    "index": 22
+  },
+  {
+    "category": "nexus_integration",
+    "index": 23
+  },
+  {
+    "category": "nexus_integration",
+    "index": 24
+  },
+  {
+    "category": "nexus_integration",
+    "index": 25
+  },
+  {
+    "category": "nexus_integration",
+    "index": 26
+  },
+  {
+    "category": "nexus_integration",
+    "index": 27
+  },
+  {
+    "category": "nexus_integration",
+    "index": 28
+  },
+  {
+    "category": "nexus_integration",
+    "index": 29
+  },
+  {
+    "category": "nexus_integration",
+    "index": 30
+  },
+  {
+    "category": "nexus_integration",
+    "index": 31
+  },
+  {
+    "category": "nexus_integration",
+    "index": 32
+  },
+  {
+    "category": "nexus_integration",
+    "index": 33
+  },
+  {
+    "category": "nexus_integration",
+    "index": 34
+  },
+  {
+    "category": "nexus_integration",
+    "index": 35
+  },
+  {
+    "category": "nexus_integration",
+    "index": 36
+  },
+  {
+    "category": "nexus_integration",
+    "index": 37
+  },
+  {
+    "category": "nexus_integration",
+    "index": 38
+  },
+  {
+    "category": "nexus_integration",
+    "index": 39
+  },
+  {
+    "category": "nexus_integration",
+    "index": 40
+  },
+  {
+    "category": "learning_engines",
+    "index": 1
+  },
+  {
+    "category": "learning_engines",
+    "index": 2
+  },
+  {
+    "category": "learning_engines",
+    "index": 3
+  },
+  {
+    "category": "learning_engines",
+    "index": 4
+  },
+  {
+    "category": "learning_engines",
+    "index": 5
+  },
+  {
+    "category": "learning_engines",
+    "index": 6
+  },
+  {
+    "category": "learning_engines",
+    "index": 7
+  },
+  {
+    "category": "learning_engines",
+    "index": 8
+  },
+  {
+    "category": "learning_engines",
+    "index": 9
+  },
+  {
+    "category": "learning_engines",
+    "index": 10
+  },
+  {
+    "category": "learning_engines",
+    "index": 11
+  },
+  {
+    "category": "learning_engines",
+    "index": 12
+  },
+  {
+    "category": "learning_engines",
+    "index": 13
+  },
+  {
+    "category": "learning_engines",
+    "index": 14
+  },
+  {
+    "category": "learning_engines",
+    "index": 15
+  },
+  {
+    "category": "learning_engines",
+    "index": 16
+  },
+  {
+    "category": "learning_engines",
+    "index": 17
+  },
+  {
+    "category": "learning_engines",
+    "index": 18
+  },
+  {
+    "category": "learning_engines",
+    "index": 19
+  },
+  {
+    "category": "learning_engines",
+    "index": 20
+  },
+  {
+    "category": "learning_engines",
+    "index": 21
+  },
+  {
+    "category": "learning_engines",
+    "index": 22
+  },
+  {
+    "category": "learning_engines",
+    "index": 23
+  },
+  {
+    "category": "learning_engines",
+    "index": 24
+  },
+  {
+    "category": "learning_engines",
+    "index": 25
+  },
+  {
+    "category": "learning_engines",
+    "index": 26
+  },
+  {
+    "category": "learning_engines",
+    "index": 27
+  },
+  {
+    "category": "learning_engines",
+    "index": 28
+  },
+  {
+    "category": "learning_engines",
+    "index": 29
+  },
+  {
+    "category": "learning_engines",
+    "index": 30
+  },
+  {
+    "category": "learning_engines",
+    "index": 31
+  },
+  {
+    "category": "learning_engines",
+    "index": 32
+  },
+  {
+    "category": "learning_engines",
+    "index": 33
+  },
+  {
+    "category": "learning_engines",
+    "index": 34
+  },
+  {
+    "category": "learning_engines",
+    "index": 35
+  },
+  {
+    "category": "learning_engines",
+    "index": 36
+  },
+  {
+    "category": "learning_engines",
+    "index": 37
+  },
+  {
+    "category": "learning_engines",
+    "index": 38
+  },
+  {
+    "category": "learning_engines",
+    "index": 39
+  },
+  {
+    "category": "learning_engines",
+    "index": 40
+  },
+  {
+    "category": "learning_engines",
+    "index": 41
+  },
+  {
+    "category": "learning_engines",
+    "index": 42
+  },
+  {
+    "category": "learning_engines",
+    "index": 43
+  },
+  {
+    "category": "learning_engines",
+    "index": 44
+  },
+  {
+    "category": "learning_engines",
+    "index": 45
+  },
+  {
+    "category": "learning_engines",
+    "index": 46
+  },
+  {
+    "category": "learning_engines",
+    "index": 47
+  },
+  {
+    "category": "learning_engines",
+    "index": 48
+  },
+  {
+    "category": "learning_engines",
+    "index": 49
+  },
+  {
+    "category": "learning_engines",
+    "index": 50
+  },
+  {
+    "category": "learning_engines",
+    "index": 51
+  },
+  {
+    "category": "learning_engines",
+    "index": 52
+  },
+  {
+    "category": "learning_engines",
+    "index": 53
+  },
+  {
+    "category": "learning_engines",
+    "index": 54
+  },
+  {
+    "category": "learning_engines",
+    "index": 55
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 1
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 2
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 3
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 4
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 5
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 6
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 7
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 8
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 9
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 10
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 11
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 12
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 13
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 14
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 15
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 16
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 17
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 18
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 19
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 20
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 21
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 22
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 23
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 24
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 25
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 26
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 27
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 28
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 29
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 30
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 31
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 32
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 33
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 34
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 35
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 36
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 37
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 38
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 39
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 40
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 41
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 42
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 43
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 44
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 45
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 46
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 47
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 48
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 49
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 50
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 51
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 52
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 53
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 54
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 55
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 56
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 57
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 58
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 59
+  },
+  {
+    "category": "reasoning_modules",
+    "index": 60
+  },
+  {
+    "category": "perception_handlers",
+    "index": 1
+  },
+  {
+    "category": "perception_handlers",
+    "index": 2
+  },
+  {
+    "category": "perception_handlers",
+    "index": 3
+  },
+  {
+    "category": "perception_handlers",
+    "index": 4
+  },
+  {
+    "category": "perception_handlers",
+    "index": 5
+  },
+  {
+    "category": "perception_handlers",
+    "index": 6
+  },
+  {
+    "category": "perception_handlers",
+    "index": 7
+  },
+  {
+    "category": "perception_handlers",
+    "index": 8
+  },
+  {
+    "category": "perception_handlers",
+    "index": 9
+  },
+  {
+    "category": "perception_handlers",
+    "index": 10
+  },
+  {
+    "category": "perception_handlers",
+    "index": 11
+  },
+  {
+    "category": "perception_handlers",
+    "index": 12
+  },
+  {
+    "category": "perception_handlers",
+    "index": 13
+  },
+  {
+    "category": "perception_handlers",
+    "index": 14
+  },
+  {
+    "category": "perception_handlers",
+    "index": 15
+  },
+  {
+    "category": "perception_handlers",
+    "index": 16
+  },
+  {
+    "category": "perception_handlers",
+    "index": 17
+  },
+  {
+    "category": "perception_handlers",
+    "index": 18
+  },
+  {
+    "category": "perception_handlers",
+    "index": 19
+  },
+  {
+    "category": "perception_handlers",
+    "index": 20
+  },
+  {
+    "category": "perception_handlers",
+    "index": 21
+  },
+  {
+    "category": "perception_handlers",
+    "index": 22
+  },
+  {
+    "category": "perception_handlers",
+    "index": 23
+  },
+  {
+    "category": "perception_handlers",
+    "index": 24
+  },
+  {
+    "category": "perception_handlers",
+    "index": 25
+  },
+  {
+    "category": "perception_handlers",
+    "index": 26
+  },
+  {
+    "category": "perception_handlers",
+    "index": 27
+  },
+  {
+    "category": "perception_handlers",
+    "index": 28
+  },
+  {
+    "category": "perception_handlers",
+    "index": 29
+  },
+  {
+    "category": "perception_handlers",
+    "index": 30
+  },
+  {
+    "category": "perception_handlers",
+    "index": 31
+  },
+  {
+    "category": "perception_handlers",
+    "index": 32
+  },
+  {
+    "category": "perception_handlers",
+    "index": 33
+  },
+  {
+    "category": "perception_handlers",
+    "index": 34
+  },
+  {
+    "category": "perception_handlers",
+    "index": 35
+  },
+  {
+    "category": "action_executors",
+    "index": 1
+  },
+  {
+    "category": "action_executors",
+    "index": 2
+  },
+  {
+    "category": "action_executors",
+    "index": 3
+  },
+  {
+    "category": "action_executors",
+    "index": 4
+  },
+  {
+    "category": "action_executors",
+    "index": 5
+  },
+  {
+    "category": "action_executors",
+    "index": 6
+  },
+  {
+    "category": "action_executors",
+    "index": 7
+  },
+  {
+    "category": "action_executors",
+    "index": 8
+  },
+  {
+    "category": "action_executors",
+    "index": 9
+  },
+  {
+    "category": "action_executors",
+    "index": 10
+  },
+  {
+    "category": "action_executors",
+    "index": 11
+  },
+  {
+    "category": "action_executors",
+    "index": 12
+  },
+  {
+    "category": "action_executors",
+    "index": 13
+  },
+  {
+    "category": "action_executors",
+    "index": 14
+  },
+  {
+    "category": "action_executors",
+    "index": 15
+  },
+  {
+    "category": "action_executors",
+    "index": 16
+  },
+  {
+    "category": "action_executors",
+    "index": 17
+  },
+  {
+    "category": "action_executors",
+    "index": 18
+  },
+  {
+    "category": "action_executors",
+    "index": 19
+  },
+  {
+    "category": "action_executors",
+    "index": 20
+  },
+  {
+    "category": "action_executors",
+    "index": 21
+  },
+  {
+    "category": "action_executors",
+    "index": 22
+  },
+  {
+    "category": "action_executors",
+    "index": 23
+  },
+  {
+    "category": "action_executors",
+    "index": 24
+  },
+  {
+    "category": "action_executors",
+    "index": 25
+  },
+  {
+    "category": "action_executors",
+    "index": 26
+  },
+  {
+    "category": "action_executors",
+    "index": 27
+  },
+  {
+    "category": "action_executors",
+    "index": 28
+  },
+  {
+    "category": "action_executors",
+    "index": 29
+  },
+  {
+    "category": "action_executors",
+    "index": 30
+  },
+  {
+    "category": "action_executors",
+    "index": 31
+  },
+  {
+    "category": "action_executors",
+    "index": 32
+  },
+  {
+    "category": "action_executors",
+    "index": 33
+  },
+  {
+    "category": "action_executors",
+    "index": 34
+  },
+  {
+    "category": "action_executors",
+    "index": 35
+  },
+  {
+    "category": "action_executors",
+    "index": 36
+  },
+  {
+    "category": "action_executors",
+    "index": 37
+  },
+  {
+    "category": "action_executors",
+    "index": 38
+  },
+  {
+    "category": "action_executors",
+    "index": 39
+  },
+  {
+    "category": "action_executors",
+    "index": 40
+  },
+  {
+    "category": "action_executors",
+    "index": 41
+  },
+  {
+    "category": "action_executors",
+    "index": 42
+  },
+  {
+    "category": "action_executors",
+    "index": 43
+  },
+  {
+    "category": "action_executors",
+    "index": 44
+  },
+  {
+    "category": "action_executors",
+    "index": 45
+  },
+  {
+    "category": "communication_layer",
+    "index": 1
+  },
+  {
+    "category": "communication_layer",
+    "index": 2
+  },
+  {
+    "category": "communication_layer",
+    "index": 3
+  },
+  {
+    "category": "communication_layer",
+    "index": 4
+  },
+  {
+    "category": "communication_layer",
+    "index": 5
+  },
+  {
+    "category": "communication_layer",
+    "index": 6
+  },
+  {
+    "category": "communication_layer",
+    "index": 7
+  },
+  {
+    "category": "communication_layer",
+    "index": 8
+  },
+  {
+    "category": "communication_layer",
+    "index": 9
+  },
+  {
+    "category": "communication_layer",
+    "index": 10
+  },
+  {
+    "category": "communication_layer",
+    "index": 11
+  },
+  {
+    "category": "communication_layer",
+    "index": 12
+  },
+  {
+    "category": "communication_layer",
+    "index": 13
+  },
+  {
+    "category": "communication_layer",
+    "index": 14
+  },
+  {
+    "category": "communication_layer",
+    "index": 15
+  },
+  {
+    "category": "communication_layer",
+    "index": 16
+  },
+  {
+    "category": "communication_layer",
+    "index": 17
+  },
+  {
+    "category": "communication_layer",
+    "index": 18
+  },
+  {
+    "category": "communication_layer",
+    "index": 19
+  },
+  {
+    "category": "communication_layer",
+    "index": 20
+  },
+  {
+    "category": "communication_layer",
+    "index": 21
+  },
+  {
+    "category": "communication_layer",
+    "index": 22
+  },
+  {
+    "category": "communication_layer",
+    "index": 23
+  },
+  {
+    "category": "communication_layer",
+    "index": 24
+  },
+  {
+    "category": "communication_layer",
+    "index": 25
+  },
+  {
+    "category": "communication_layer",
+    "index": 26
+  },
+  {
+    "category": "communication_layer",
+    "index": 27
+  },
+  {
+    "category": "communication_layer",
+    "index": 28
+  },
+  {
+    "category": "communication_layer",
+    "index": 29
+  },
+  {
+    "category": "communication_layer",
+    "index": 30
+  },
+  {
+    "category": "security_protocols",
+    "index": 1
+  },
+  {
+    "category": "security_protocols",
+    "index": 2
+  },
+  {
+    "category": "security_protocols",
+    "index": 3
+  },
+  {
+    "category": "security_protocols",
+    "index": 4
+  },
+  {
+    "category": "security_protocols",
+    "index": 5
+  },
+  {
+    "category": "security_protocols",
+    "index": 6
+  },
+  {
+    "category": "security_protocols",
+    "index": 7
+  },
+  {
+    "category": "security_protocols",
+    "index": 8
+  },
+  {
+    "category": "security_protocols",
+    "index": 9
+  },
+  {
+    "category": "security_protocols",
+    "index": 10
+  },
+  {
+    "category": "security_protocols",
+    "index": 11
+  },
+  {
+    "category": "security_protocols",
+    "index": 12
+  },
+  {
+    "category": "security_protocols",
+    "index": 13
+  },
+  {
+    "category": "security_protocols",
+    "index": 14
+  },
+  {
+    "category": "security_protocols",
+    "index": 15
+  },
+  {
+    "category": "security_protocols",
+    "index": 16
+  },
+  {
+    "category": "security_protocols",
+    "index": 17
+  },
+  {
+    "category": "security_protocols",
+    "index": 18
+  },
+  {
+    "category": "security_protocols",
+    "index": 19
+  },
+  {
+    "category": "security_protocols",
+    "index": 20
+  },
+  {
+    "category": "security_protocols",
+    "index": 21
+  },
+  {
+    "category": "security_protocols",
+    "index": 22
+  },
+  {
+    "category": "security_protocols",
+    "index": 23
+  },
+  {
+    "category": "security_protocols",
+    "index": 24
+  },
+  {
+    "category": "security_protocols",
+    "index": 25
+  },
+  {
+    "category": "security_protocols",
+    "index": 26
+  },
+  {
+    "category": "security_protocols",
+    "index": 27
+  },
+  {
+    "category": "security_protocols",
+    "index": 28
+  },
+  {
+    "category": "security_protocols",
+    "index": 29
+  },
+  {
+    "category": "security_protocols",
+    "index": 30
+  },
+  {
+    "category": "security_protocols",
+    "index": 31
+  },
+  {
+    "category": "security_protocols",
+    "index": 32
+  },
+  {
+    "category": "security_protocols",
+    "index": 33
+  },
+  {
+    "category": "security_protocols",
+    "index": 34
+  },
+  {
+    "category": "security_protocols",
+    "index": 35
+  },
+  {
+    "category": "security_protocols",
+    "index": 36
+  },
+  {
+    "category": "security_protocols",
+    "index": 37
+  },
+  {
+    "category": "security_protocols",
+    "index": 38
+  },
+  {
+    "category": "security_protocols",
+    "index": 39
+  },
+  {
+    "category": "security_protocols",
+    "index": 40
+  },
+  {
+    "category": "optimization_engines",
+    "index": 1
+  },
+  {
+    "category": "optimization_engines",
+    "index": 2
+  },
+  {
+    "category": "optimization_engines",
+    "index": 3
+  },
+  {
+    "category": "optimization_engines",
+    "index": 4
+  },
+  {
+    "category": "optimization_engines",
+    "index": 5
+  },
+  {
+    "category": "optimization_engines",
+    "index": 6
+  },
+  {
+    "category": "optimization_engines",
+    "index": 7
+  },
+  {
+    "category": "optimization_engines",
+    "index": 8
+  },
+  {
+    "category": "optimization_engines",
+    "index": 9
+  },
+  {
+    "category": "optimization_engines",
+    "index": 10
+  },
+  {
+    "category": "optimization_engines",
+    "index": 11
+  },
+  {
+    "category": "optimization_engines",
+    "index": 12
+  },
+  {
+    "category": "optimization_engines",
+    "index": 13
+  },
+  {
+    "category": "optimization_engines",
+    "index": 14
+  },
+  {
+    "category": "optimization_engines",
+    "index": 15
+  },
+  {
+    "category": "optimization_engines",
+    "index": 16
+  },
+  {
+    "category": "optimization_engines",
+    "index": 17
+  },
+  {
+    "category": "optimization_engines",
+    "index": 18
+  },
+  {
+    "category": "optimization_engines",
+    "index": 19
+  },
+  {
+    "category": "optimization_engines",
+    "index": 20
+  },
+  {
+    "category": "optimization_engines",
+    "index": 21
+  },
+  {
+    "category": "optimization_engines",
+    "index": 22
+  },
+  {
+    "category": "optimization_engines",
+    "index": 23
+  },
+  {
+    "category": "optimization_engines",
+    "index": 24
+  },
+  {
+    "category": "optimization_engines",
+    "index": 25
+  },
+  {
+    "category": "optimization_engines",
+    "index": 26
+  },
+  {
+    "category": "optimization_engines",
+    "index": 27
+  },
+  {
+    "category": "optimization_engines",
+    "index": 28
+  },
+  {
+    "category": "optimization_engines",
+    "index": 29
+  },
+  {
+    "category": "optimization_engines",
+    "index": 30
+  },
+  {
+    "category": "optimization_engines",
+    "index": 31
+  },
+  {
+    "category": "optimization_engines",
+    "index": 32
+  },
+  {
+    "category": "optimization_engines",
+    "index": 33
+  },
+  {
+    "category": "optimization_engines",
+    "index": 34
+  },
+  {
+    "category": "optimization_engines",
+    "index": 35
+  },
+  {
+    "category": "optimization_engines",
+    "index": 36
+  },
+  {
+    "category": "optimization_engines",
+    "index": 37
+  },
+  {
+    "category": "optimization_engines",
+    "index": 38
+  },
+  {
+    "category": "optimization_engines",
+    "index": 39
+  },
+  {
+    "category": "optimization_engines",
+    "index": 40
+  },
+  {
+    "category": "optimization_engines",
+    "index": 41
+  },
+  {
+    "category": "optimization_engines",
+    "index": 42
+  },
+  {
+    "category": "optimization_engines",
+    "index": 43
+  },
+  {
+    "category": "optimization_engines",
+    "index": 44
+  },
+  {
+    "category": "optimization_engines",
+    "index": 45
+  },
+  {
+    "category": "optimization_engines",
+    "index": 46
+  },
+  {
+    "category": "optimization_engines",
+    "index": 47
+  },
+  {
+    "category": "optimization_engines",
+    "index": 48
+  },
+  {
+    "category": "optimization_engines",
+    "index": 49
+  },
+  {
+    "category": "optimization_engines",
+    "index": 50
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 1
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 2
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 3
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 4
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 5
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 6
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 7
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 8
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 9
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 10
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 11
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 12
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 13
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 14
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 15
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 16
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 17
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 18
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 19
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 20
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 21
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 22
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 23
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 24
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 25
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 26
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 27
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 28
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 29
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 30
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 31
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 32
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 33
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 34
+  },
+  {
+    "category": "adaptation_systems",
+    "index": 35
+  },
+  {
+    "category": "interface_bridges",
+    "index": 1
+  },
+  {
+    "category": "interface_bridges",
+    "index": 2
+  },
+  {
+    "category": "interface_bridges",
+    "index": 3
+  },
+  {
+    "category": "interface_bridges",
+    "index": 4
+  },
+  {
+    "category": "interface_bridges",
+    "index": 5
+  },
+  {
+    "category": "interface_bridges",
+    "index": 6
+  },
+  {
+    "category": "interface_bridges",
+    "index": 7
+  },
+  {
+    "category": "interface_bridges",
+    "index": 8
+  },
+  {
+    "category": "interface_bridges",
+    "index": 9
+  },
+  {
+    "category": "interface_bridges",
+    "index": 10
+  },
+  {
+    "category": "interface_bridges",
+    "index": 11
+  },
+  {
+    "category": "interface_bridges",
+    "index": 12
+  },
+  {
+    "category": "interface_bridges",
+    "index": 13
+  },
+  {
+    "category": "interface_bridges",
+    "index": 14
+  },
+  {
+    "category": "interface_bridges",
+    "index": 15
+  },
+  {
+    "category": "interface_bridges",
+    "index": 16
+  },
+  {
+    "category": "interface_bridges",
+    "index": 17
+  },
+  {
+    "category": "interface_bridges",
+    "index": 18
+  },
+  {
+    "category": "interface_bridges",
+    "index": 19
+  },
+  {
+    "category": "interface_bridges",
+    "index": 20
+  },
+  {
+    "category": "interface_bridges",
+    "index": 21
+  },
+  {
+    "category": "interface_bridges",
+    "index": 22
+  },
+  {
+    "category": "interface_bridges",
+    "index": 23
+  },
+  {
+    "category": "interface_bridges",
+    "index": 24
+  },
+  {
+    "category": "interface_bridges",
+    "index": 25
+  },
+  {
+    "category": "analytics_processors",
+    "index": 1
+  },
+  {
+    "category": "analytics_processors",
+    "index": 2
+  },
+  {
+    "category": "analytics_processors",
+    "index": 3
+  },
+  {
+    "category": "analytics_processors",
+    "index": 4
+  },
+  {
+    "category": "analytics_processors",
+    "index": 5
+  },
+  {
+    "category": "analytics_processors",
+    "index": 6
+  },
+  {
+    "category": "analytics_processors",
+    "index": 7
+  },
+  {
+    "category": "analytics_processors",
+    "index": 8
+  },
+  {
+    "category": "analytics_processors",
+    "index": 9
+  },
+  {
+    "category": "analytics_processors",
+    "index": 10
+  },
+  {
+    "category": "analytics_processors",
+    "index": 11
+  },
+  {
+    "category": "analytics_processors",
+    "index": 12
+  },
+  {
+    "category": "analytics_processors",
+    "index": 13
+  },
+  {
+    "category": "analytics_processors",
+    "index": 14
+  },
+  {
+    "category": "analytics_processors",
+    "index": 15
+  },
+  {
+    "category": "analytics_processors",
+    "index": 16
+  },
+  {
+    "category": "analytics_processors",
+    "index": 17
+  },
+  {
+    "category": "analytics_processors",
+    "index": 18
+  },
+  {
+    "category": "analytics_processors",
+    "index": 19
+  },
+  {
+    "category": "analytics_processors",
+    "index": 20
+  },
+  {
+    "category": "analytics_processors",
+    "index": 21
+  },
+  {
+    "category": "analytics_processors",
+    "index": 22
+  },
+  {
+    "category": "analytics_processors",
+    "index": 23
+  },
+  {
+    "category": "analytics_processors",
+    "index": 24
+  },
+  {
+    "category": "analytics_processors",
+    "index": 25
+  },
+  {
+    "category": "analytics_processors",
+    "index": 26
+  },
+  {
+    "category": "analytics_processors",
+    "index": 27
+  },
+  {
+    "category": "analytics_processors",
+    "index": 28
+  },
+  {
+    "category": "analytics_processors",
+    "index": 29
+  },
+  {
+    "category": "analytics_processors",
+    "index": 30
+  },
+  {
+    "category": "analytics_processors",
+    "index": 31
+  },
+  {
+    "category": "analytics_processors",
+    "index": 32
+  },
+  {
+    "category": "analytics_processors",
+    "index": 33
+  },
+  {
+    "category": "analytics_processors",
+    "index": 34
+  },
+  {
+    "category": "analytics_processors",
+    "index": 35
+  },
+  {
+    "category": "analytics_processors",
+    "index": 36
+  },
+  {
+    "category": "analytics_processors",
+    "index": 37
+  },
+  {
+    "category": "analytics_processors",
+    "index": 38
+  },
+  {
+    "category": "analytics_processors",
+    "index": 39
+  },
+  {
+    "category": "analytics_processors",
+    "index": 40
+  }
+]

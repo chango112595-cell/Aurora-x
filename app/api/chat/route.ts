@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({
         type: 'neural_chat',
-        keywords: message.toLowerCase().split(' ').filter(w => w.length > 3),
+        keywords: message.toLowerCase().split(' ').filter((w: string) => w.length > 3),
         confidence: 85,
         userMessage: message,
         context: sessionId

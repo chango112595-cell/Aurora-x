@@ -4,15 +4,24 @@ Aurora Memory Bridge Service
 Exposes Memory Manager functionality via HTTP API for TypeScript integration
 """
 
+<<<<<<< HEAD
 from core.memory_manager import AuroraMemoryManager
+=======
+>>>>>>> 9f35319329dbaf49c6f6babeb507a21019a8c838
 import sys
 import json
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
+<<<<<<< HEAD
 # Add parent directory to Python path
+=======
+# Add cog_kernel and memory to Python path (must be before cog_kernel imports)
+>>>>>>> 9f35319329dbaf49c6f6babeb507a21019a8c838
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from cog_kernel.memory_abstraction.manager import MemoryMediator
 
 
 # Global memory instance
@@ -168,12 +177,30 @@ class MemoryBridgeHandler(BaseHTTPRequestHandler):
         pass
 
 
+import socket
+
+
+class ReusableHTTPServer(HTTPServer):
+    """HTTP server with socket reuse enabled"""
+    allow_reuse_address = True
+    
+    def server_bind(self):
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        super().server_bind()
+
+
 def start_memory_service(port=5003):
     """Start the memory bridge HTTP server"""
-    server = HTTPServer(('127.0.0.1', port), MemoryBridgeHandler)
-    print(f"[MEMORY BRIDGE] Running on http://127.0.0.1:{port}", flush=True)
-    print("[MEMORY BRIDGE] Ready for memory operations", flush=True)
-    server.serve_forever()
+    try:
+        server = ReusableHTTPServer(('127.0.0.1', port), MemoryBridgeHandler)
+        print(f"[MEMORY BRIDGE] Running on http://127.0.0.1:{port}", flush=True)
+        print("[MEMORY BRIDGE] Ready for memory operations", flush=True)
+        server.serve_forever()
+    except OSError as e:
+        if 'Address already in use' in str(e):
+            print(f"[MEMORY BRIDGE] Port {port} busy, service may already be running", flush=True)
+        else:
+            raise
 
 
 if __name__ == '__main__':

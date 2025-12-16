@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import path from 'path';
-import { componentTagger } from 'lovable-tagger';
 
 export default defineConfig(({ mode }) => ({
   define: {
@@ -16,6 +15,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     port: 5173,
     strictPort: false,
+    host: '0.0.0.0',
   },
   build: {
     outDir: 'dist',

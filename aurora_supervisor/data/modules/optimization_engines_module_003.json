@@ -1,0 +1,13 @@
+{
+  "id": 403,
+  "name": "optimization_engines_module_003",
+  "category": "optimization_engines",
+  "tier_id": 27,
+  "tier_name": "tier_027",
+  "aem_id": 7,
+  "aem_type": "async",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Brain, Cpu, Zap, Network, Shield, Activity, Database, Code2, Sparkles, Terminal, Globe } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import UnifiedSystemStatus from './UnifiedSystemStatus';
+import ActivityMonitor from './ActivityMonitor';
 
 export default function AuroraFuturisticDashboard() {
   const [quantumCoherence, setQuantumCoherence] = useState(100);
@@ -275,6 +277,16 @@ export default function AuroraFuturisticDashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Live System Status from Aurora Nexus */}
+      <div className="mb-6">
+        <UnifiedSystemStatus />
+      </div>
+
+      {/* Activity Monitor - Shows what Aurora is doing */}
+      <div className="mb-6">
+        <ActivityMonitor />
+      </div>
 
       {/* Neural Activity Monitor */}
       <Card className="bg-slate-900/50 backdrop-blur-xl border-pink-500/30">

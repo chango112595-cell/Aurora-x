@@ -1,0 +1,118 @@
+{
+  "generated_at": "2025-12-08T11:18:24.772143Z",
+  "modules": [
+    {
+      "id": "0001",
+      "name": "Connector_0001",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0001"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0001"
+    },
+    {
+      "id": "0002",
+      "name": "Processor_0002",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0002"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0002"
+    },
+    {
+      "id": "0003",
+      "name": "Analyzer_0003",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0003"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0003"
+    },
+    {
+      "id": "0004",
+      "name": "Generator_0004",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0004"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0004"
+    },
+    {
+      "id": "0005",
+      "name": "Transformer_0005",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0005"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0005"
+    },
+    {
+      "id": "0006",
+      "name": "Validator_0006",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0006"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0006"
+    },
+    {
+      "id": "0007",
+      "name": "Formatter_0007",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0007"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0007"
+    },
+    {
+      "id": "0008",
+      "name": "Optimizer_0008",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0008"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0008"
+    },
+    {
+      "id": "0009",
+      "name": "Monitor_0009",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0009"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0009"
+    },
+    {
+      "id": "0010",
+      "name": "Integrator_0010",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0010"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0010"
+    }
+  ]
+}

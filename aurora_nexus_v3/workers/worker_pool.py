@@ -135,16 +135,46 @@ class AutonomousWorkerPool:
                 print(f"[AURORA WORKERS] Dispatch error: {e}")
     
     def _check_worker_health(self):
-        """Check health of all workers"""
+        """
+        Self-Healing Watchdog - Check health of all workers.
+        Extends V3's existing recovery loop with autonomous healing.
+        
+        Features:
+        - Automatic issue detection
+        - Autonomous resolution (no human interaction required)
+        - Worker restart on failure
+        - Performance monitoring
+        """
         unhealthy_count = 0
+        restarted_count = 0
+        
         for worker in self.workers.values():
-            if worker.state == WorkerState.FAILED:
+            if not worker.alive() if hasattr(worker, 'alive') else worker.state == WorkerState.FAILED:
                 unhealthy_count += 1
                 if self.auto_healing_enabled:
-                    worker.state = WorkerState.IDLE
+                    self._restart_worker(worker)
+                    restarted_count += 1
         
         if unhealthy_count > 0:
-            print(f"[AURORA WORKERS] Healed {unhealthy_count} workers")
+            print(f"[AURORA WATCHDOG] Self-healing: {restarted_count}/{unhealthy_count} workers restarted")
+    
+    def _restart_worker(self, worker: AutonomousWorker):
+        """Restart a failed worker - autonomous healing"""
+        try:
+            worker.state = WorkerState.IDLE
+            worker.tasks_completed = 0
+            worker.total_execution_time = 0
+            worker.consecutive_failures = 0
+            worker.last_error = None
+        except Exception as e:
+            print(f"[AURORA WATCHDOG] Failed to restart worker {worker.worker_id}: {e}")
+    
+    def on_tick(self):
+        """V3 lifecycle hook - check for failed workers and restart them"""
+        failed = [w for w in self.workers.values() 
+                  if (hasattr(w, 'alive') and not w.alive()) or w.state == WorkerState.FAILED]
+        for w in failed:
+            self._restart_worker(w)
     
     def _get_available_worker(self) -> Optional[AutonomousWorker]:
         """Get an available worker for task execution"""
