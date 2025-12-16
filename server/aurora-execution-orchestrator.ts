@@ -210,15 +210,22 @@ async function executeDebugAnalysis(input: string, aemId: number): Promise<Execu
   
   const isSelfDebug = inputLower.includes('self') || 
                        inputLower.includes('your') || 
-                       inputLower.includes('system') ||
-                       inputLower.includes('aurora') ||
                        inputLower.match(/^(debug|analyze|diagnose|check|fix)$/);
   
   if (isSelfDebug) {
     return performSelfDiagnostics(aemId, start);
   }
   
-  const isFileDiagnostic = inputLower.includes('file') && 
+  const isCodebaseAnalysis = inputLower.includes('codebase') || 
+                              inputLower.includes('code base') ||
+                              inputLower.includes('project') ||
+                              inputLower.includes('integration');
+  
+  if (isCodebaseAnalysis) {
+    return performCodebaseAnalysis(aemId, start, inputLower.includes('integration'));
+  }
+  
+  const isFileDiagnostic = (inputLower.includes('file') || inputLower.includes('broken') || inputLower.includes('not working')) && 
                             (inputLower.includes('broken') || 
                              inputLower.includes('not working') ||
                              inputLower.includes('error') ||
@@ -229,13 +236,133 @@ async function executeDebugAnalysis(input: string, aemId: number): Promise<Execu
     return findBrokenFiles(aemId, start);
   }
   
+  return performFullDiagnostics(aemId, start);
+}
+
+async function performCodebaseAnalysis(aemId: number, start: number, checkIntegrations: boolean): Promise<ExecutionResult> {
+  const findings: string[] = [];
+  const integrationIssues: string[] = [];
+  const cwd = process.cwd();
+  
+  try {
+    const tsOutput = execSync('npx tsc --noEmit 2>&1 | head -30 || true', { 
+      encoding: 'utf-8', timeout: 30000, cwd 
+    });
+    const errorCount = (tsOutput.match(/error TS/g) || []).length;
+    if (errorCount > 0) {
+      findings.push(`TypeScript Errors: ${errorCount} compilation error(s) found`);
+      const errorFiles = tsOutput.match(/([^\s]+\.tsx?)\(\d+,\d+\)/g) || [];
+      const uniqueFiles = [...new Set(errorFiles.map(m => m.split('(')[0]))].slice(0, 5);
+      uniqueFiles.forEach(f => findings.push(`  - ${f}`));
+    } else {
+      findings.push('TypeScript: No compilation errors');
+    }
+  } catch { findings.push('TypeScript check: Could not complete'); }
+  
+  if (checkIntegrations) {
+    const integrationChecks = [
+      { name: 'Anthropic API', envVar: 'ANTHROPIC_API_KEY', required: false },
+      { name: 'Database', envVar: 'DATABASE_URL', required: false },
+      { name: 'Memory Fabric', port: 5004 },
+      { name: 'Luminar Nexus V2', port: 8000 },
+      { name: 'Memory Bridge', port: 5003 }
+    ];
+    
+    for (const check of integrationChecks) {
+      if (check.envVar) {
+        if (!process.env[check.envVar]) {
+          integrationIssues.push(`${check.name}: Not configured (${check.envVar} missing)`);
+        } else {
+          findings.push(`${check.name}: Configured`);
+        }
+      }
+      if (check.port) {
+        try {
+          const result = execSync(`curl -s -o /dev/null -w '%{http_code}' http://localhost:${check.port}/api/status 2>/dev/null || echo "000"`, 
+            { encoding: 'utf-8', timeout: 2000 }).trim();
+          if (result === '200' || result === '404') {
+            findings.push(`${check.name} (port ${check.port}): ONLINE`);
+          } else {
+            integrationIssues.push(`${check.name} (port ${check.port}): Not responding (HTTP ${result})`);
+          }
+        } catch {
+          integrationIssues.push(`${check.name} (port ${check.port}): Connection failed`);
+        }
+      }
+    }
+    
+    try {
+      const routesContent = fs.readFileSync(path.join(cwd, 'server/routes.ts'), 'utf-8');
+      const importMatches = routesContent.match(/import.*from\s+['"]\.\/([^'"]+)['"]/g) || [];
+      for (const imp of importMatches.slice(0, 20)) {
+        const match = imp.match(/from\s+['"]\.\/([^'"]+)['"]/);
+        if (match) {
+          const importPath = path.join(cwd, 'server', match[1]);
+          const fullPath = importPath.endsWith('.ts') ? importPath : importPath + '.ts';
+          if (!fs.existsSync(fullPath)) {
+            integrationIssues.push(`Missing module: ${match[1]} (imported in routes.ts)`);
+          }
+        }
+      }
+    } catch {}
+  }
+  
+  try {
+    const serverFiles = fs.readdirSync(path.join(cwd, 'server')).filter(f => f.endsWith('.ts'));
+    findings.push(`Server modules: ${serverFiles.length} TypeScript files`);
+    
+    const clientSrcPath = path.join(cwd, 'client/src');
+    if (fs.existsSync(clientSrcPath)) {
+      const countFiles = (dir: string): number => {
+        let count = 0;
+        const items = fs.readdirSync(dir);
+        for (const item of items) {
+          const fullPath = path.join(dir, item);
+          if (fs.statSync(fullPath).isDirectory()) {
+            count += countFiles(fullPath);
+          } else if (item.endsWith('.tsx') || item.endsWith('.ts')) {
+            count++;
+          }
+        }
+        return count;
+      };
+      findings.push(`Client modules: ${countFiles(clientSrcPath)} TypeScript/TSX files`);
+    }
+  } catch {}
+  
+  const output = `**Codebase Analysis Complete**\n\n` +
+    `**Findings:**\n${findings.map(f => `- ${f}`).join('\n')}\n\n` +
+    (integrationIssues.length > 0 ? 
+      `**Integration Issues Found (${integrationIssues.length}):**\n${integrationIssues.map(i => `- ${i}`).join('\n')}` :
+      `**Integration Status:** All checked integrations are properly connected`);
+  
   return {
     success: true,
-    output: `Debug analysis initiated: ${input}\n\nI'll trace through the code to identify the root cause.`,
+    output,
     aemUsed: aemId,
     aemName: 'Debug Analysis',
-    executionTime: Date.now() - start,
-    metadata: { requiresLLM: true }
+    executionTime: Date.now() - start
+  };
+}
+
+async function performFullDiagnostics(aemId: number, start: number): Promise<ExecutionResult> {
+  const results = await Promise.all([
+    performSelfDiagnostics(aemId, start),
+    findBrokenFiles(aemId, start)
+  ]);
+  
+  const selfDiag = results[0];
+  const brokenFiles = results[1];
+  
+  const output = `**Full System Diagnostic**\n\n` +
+    `${selfDiag.output}\n\n---\n\n${brokenFiles.output}`;
+  
+  return {
+    success: true,
+    output,
+    aemUsed: aemId,
+    aemName: 'Debug Analysis',
+    executionTime: Date.now() - start
   };
 }
 
