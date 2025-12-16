@@ -1,39 +1,120 @@
 #!/usr/bin/env node
-import { execSync } from "child_process";
-
-const cmd = process.argv[2];
+import { execSync, spawn } from "child_process";
+import fs from "fs";
+import path from "path";
 
 const SERVICES = {
   backend: "tsx server/index.ts",
   nexus3: "python3 aurora_nexus_v3/main.py",
   nexus2: "python3 tools/luminar_nexus_v2.py serve",
-  core: "python3 tools/aurora_core.py"
+  core: "python3 tools/aurora_core.py",
 };
 
-function start() {
-  for (const [name, command] of Object.entries(SERVICES)) {
-    console.log(`[START] ${name}`);
-    execSync(`${command} &`, { stdio: "inherit" });
+const PID_FILE = path.join(process.cwd(), ".aurora", "launcher_pids.json");
+
+function loadPids() {
+  try {
+    return JSON.parse(fs.readFileSync(PID_FILE, "utf8"));
+  } catch {
+    return {};
   }
 }
 
+function savePids(pids) {
+  fs.mkdirSync(path.dirname(PID_FILE), { recursive: true });
+  fs.writeFileSync(PID_FILE, JSON.stringify(pids, null, 2));
+}
+
+function isRunning(pid) {
+  if (!pid) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function startService(name, command) {
+  const child = spawn(command, {
+    shell: true,
+    detached: true,
+    stdio: "inherit",
+  });
+  child.unref();
+  return child.pid;
+}
+
+function stopProcess(pid) {
+  if (!pid) return false;
+  try {
+    if (process.platform === "win32") {
+      execSync(`taskkill /PID ${pid} /T /F`, { stdio: "ignore" });
+    } else {
+      process.kill(pid, "SIGTERM");
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function start() {
+  const pids = loadPids();
+  for (const [name, command] of Object.entries(SERVICES)) {
+    if (isRunning(pids[name])) {
+      console.log(`[SKIP] ${name} already running (pid ${pids[name]})`);
+      continue;
+    }
+    const pid = startService(name, command);
+    pids[name] = pid;
+    console.log(`[START] ${name} (pid ${pid})`);
+  }
+  savePids(pids);
+}
+
 function stop() {
-  execSync("pkill -f 'tsx server/index.ts' || true");
-  execSync("pkill -f aurora_nexus_v3 || true");
-  execSync("pkill -f luminar_nexus_v2 || true");
-  execSync("pkill -f aurora_core.py || true");
+  const pids = loadPids();
+  const remaining = {};
+
+  for (const [name, pid] of Object.entries(pids)) {
+    const stopped = stopProcess(pid);
+    const status = stopped ? "STOPPED" : "NOT FOUND";
+    console.log(`[${status}] ${name}${pid ? ` (pid ${pid})` : ""}`);
+    if (!stopped && pid) {
+      remaining[name] = pid;
+    }
+  }
+
+  savePids(remaining);
 }
 
 function status() {
-  execSync("ps aux | grep -E 'tsx|nexus|aurora_core' | grep -v grep", {
-    stdio: "inherit",
-  });
+  const pids = loadPids();
+  if (Object.keys(pids).length === 0) {
+    console.log("No tracked Aurora services are running.");
+    return;
+  }
+
+  for (const [name, pid] of Object.entries(pids)) {
+    const running = isRunning(pid);
+    const state = running ? "RUNNING" : "STOPPED";
+    console.log(`[${state}] ${name}${pid ? ` (pid ${pid})` : ""}`);
+  }
 }
 
+const cmd = process.argv[2];
+
 switch (cmd) {
-  case "start": start(); break;
-  case "stop": stop(); break;
-  case "status": status(); break;
+  case "start":
+    start();
+    break;
+  case "stop":
+    stop();
+    break;
+  case "status":
+    status();
+    break;
   default:
     console.log("Usage: x-start | x-stop | x-status");
 }
