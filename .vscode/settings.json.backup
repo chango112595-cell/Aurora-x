@@ -1,0 +1,99 @@
+{
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": [],
+    "python.analysis.extraPaths": [
+        "./tools"
+    ],
+    "python.analysis.exclude": [
+        "**/tools/luminar_nexus.py",
+        "**/.venv/**",
+        "**/node_modules/**",
+        "**/__pycache__/**",
+        "**/dist/**",
+        "**/build/**"
+    ],
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportGeneralTypeIssues": "none",
+        "reportUnusedVariable": "none",
+        "reportUnusedImport": "warning",
+        "reportMissingImports": "none",
+        "reportOptionalMemberAccess": "none",
+        "reportShadowedImports": "none",
+        "reportUnusedFunction": "none",
+        "reportUnusedClass": "none"
+    },
+    "python.analysis.indexing": true,
+    "python.analysis.memory.keepLibraryAst": false,
+    "python.analysis.autoImportCompletions": false,
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "",
+            "depth": 1
+        }
+    ],
+    "python.analysis.useLibraryCodeForTypes": false,
+    "python.analysis.completeFunctionParens": false,
+    "python.analysis.importFormat": "relative",
+    "python.analysis.enablePytestSupport": false,
+    "python.analysis.gotoDefinitionInStringLiteral": false,
+    "python.analysis.inlayHints.callArgumentNames": "off",
+    "python.analysis.inlayHints.functionReturnTypes": false,
+    "python.analysis.inlayHints.pytestParameters": false,
+    "python.analysis.inlayHints.variableTypes": false,
+    "python.analysis.logLevel": "Error",
+    "python.analysis.stubPath": "",
+    "python.analysis.typeCheckingMode": "off",
+    "python.languageServer": "Pylance",
+    "python.defaultInterpreterPath": "./.venv/bin/python",
+    "pylint.enabled": false,
+    "python.linting.enabled": false,
+    "python.linting.pylintEnabled": false,
+    "files.watcherExclude": {
+        "**/.venv/**": true,
+        "**/node_modules/**": true,
+        "**/__pycache__/**": true,
+        "**/.pytest_cache/**": true,
+        "**/*.pyc": true,
+        "**/dist/**": true,
+        "**/build/**": true
+    },
+    "search.exclude": {
+        "**/.venv": true,
+        "**/node_modules": true,
+        "**/__pycache__": true,
+        "**/dist": true,
+        "**/build": true
+    },
+    "css.lint.unknownAtRules": "ignore",
+    "css.lint.vendorPrefix": "warning",
+    "remote.autoForwardPorts": true,
+    "remote.autoForwardPortsSource": "process",
+    "remote.forwardOnOpen": true,
+    "remote.portsAttributes": {
+        "5000": {
+            "label": "🔷 Aurora Backend API",
+            "onAutoForward": "notify",
+            "protocol": "http",
+            "elevateIfNeeded": false
+        },
+        "5001": {
+            "label": "🌉 Aurora Bridge Service",
+            "onAutoForward": "notify",
+            "protocol": "http",
+            "elevateIfNeeded": false
+        },
+        "5002": {
+            "label": "🧠 Aurora Self-Learning",
+            "onAutoForward": "notify",
+            "protocol": "http",
+            "elevateIfNeeded": false
+        },
+        "5173": {
+            "label": "⚡ Aurora Frontend (Main UI)",
+            "onAutoForward": "openBrowserOnce",
+            "protocol": "http",
+            "elevateIfNeeded": false,
+            "requireLocalPort": false
+        }
+    }
+}
