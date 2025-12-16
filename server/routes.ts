@@ -20,6 +20,7 @@ import {
 import authRouter from "./auth-routes";
 import vaultRouter from "./routes-vault";
 import { getChatResponse, searchWeb } from "./aurora-chat";
+import { executeWithOrchestrator, selectExecutionMethod, getCapabilities, type ExecutionContext } from "./aurora-execution-orchestrator";
 import { ResponseAdapter } from "./response-adapter";
 import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter } from "./rate-limit";
 
@@ -580,7 +581,60 @@ export async function registerRoutes(app: Express): Promise<void> {
       const isTerminalClient = client === 'terminal';
       console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId, 'Client:', client || 'web');
 
-      // Try routing to Aurora AI Backend first (port 8000) - quick timeout for fast fallback
+      const msgLower = message.toLowerCase().trim();
+      
+      const isDirectAction = msgLower.includes('list files') || 
+                             msgLower.includes('read file') ||
+                             msgLower.includes('search for') ||
+                             msgLower.includes('grep ') ||
+                             msgLower.includes('show files') ||
+                             msgLower.startsWith('status') ||
+                             msgLower.includes('how are you') ||
+                             msgLower.includes('what can you do') ||
+                             msgLower.includes('check integration') ||
+                             msgLower.includes('analyze codebase') ||
+                             msgLower.includes('git status') ||
+                             msgLower.includes('dependencies');
+
+      if (isDirectAction) {
+        const selectedAEM = selectExecutionMethod(message);
+        console.log(`[Aurora] 🖐️ Direct execution with AEM #${selectedAEM.id}: ${selectedAEM.name}`);
+        
+        const executionContext: ExecutionContext = {
+          sessionId,
+          capabilities: getCapabilities()
+        };
+        
+        try {
+          const result = await executeWithOrchestrator(message, executionContext);
+          
+          if (result.success && result.output) {
+            let response = `**[AEM #${result.aemUsed}: ${result.aemName}]**\n\n${result.output}`;
+            
+            if (isTerminalClient) {
+              response = response
+                .replace(/<[^>]*>/g, '')
+                .replace(/&nbsp;/g, ' ')
+                .replace(/\*\*/g, '');
+            }
+            
+            return res.json({
+              ok: true,
+              response,
+              message: response,
+              session_id: sessionId,
+              ai_powered: true,
+              client: client || 'web',
+              aemUsed: { id: result.aemUsed, name: result.aemName },
+              executionTime: result.executionTime,
+              intent: 'direct_action'
+            });
+          }
+        } catch (execError) {
+          console.log('[Aurora] Orchestrator execution failed, falling back to AI backend');
+        }
+      }
+
       try {
         const aiResponse = await fetch('http://0.0.0.0:8000/api/chat', {
           method: 'POST',
@@ -590,7 +644,7 @@ export async function registerRoutes(app: Express): Promise<void> {
             session_id: sessionId,
             context: req.body.context || {} 
           }),
-          signal: AbortSignal.timeout(2000) // 2 second timeout - fast fallback when backend unavailable
+          signal: AbortSignal.timeout(2000)
         });
 
         if (aiResponse.ok) {
@@ -609,11 +663,8 @@ export async function registerRoutes(app: Express): Promise<void> {
           });
         }
       } catch (aiError) {
-        // External backend unavailable - silently use embedded fallback
       }
 
-      // Fallback: Try routing to Luminar Nexus V2 for system commands
-      const msgLower = message.toLowerCase().trim();
       const isSystemCommand = msgLower.includes('activate tier') || 
                               (msgLower.includes('luminar') && msgLower.includes('nexus') && msgLower.includes('integrate'));
 
@@ -623,7 +674,7 @@ export async function registerRoutes(app: Express): Promise<void> {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message, session_id: sessionId }),
-            signal: AbortSignal.timeout(2000) // Quick timeout for fast fallback
+            signal: AbortSignal.timeout(2000)
           });
 
           if (v2Response.ok) {
@@ -632,22 +683,23 @@ export async function registerRoutes(app: Express): Promise<void> {
             return res.json(v2Data);
           }
         } catch (v2Error) {
-          // V2 unavailable - use embedded fallback
         }
       }
 
-      // Final fallback: Use Aurora's autonomous problem-solving
       const chatResult = await getChatResponse(message, sessionId, req.body.context);
       let response = typeof chatResult === 'string' ? chatResult : (chatResult as any).response || '';
       const detection = typeof chatResult === 'object' && (chatResult as any).detection ? (chatResult as any).detection : null;
+      const aemUsed = typeof chatResult === 'object' && (chatResult as any).aemUsed ? (chatResult as any).aemUsed : null;
       
-      // Adapt response based on detected conversation type
       if (detection) {
         response = ResponseAdapter.adaptResponse(response, detection);
         console.log(`[Aurora] ✨ Response adapted for: ${detection.type}`);
       }
       
-      // Format response for terminal clients (strip HTML)
+      if (aemUsed) {
+        console.log(`[Aurora] 🖐️ Executed with AEM #${aemUsed.id}: ${aemUsed.name}`);
+      }
+      
       if (isTerminalClient) {
         response = response
           .replace(/<[^>]*>/g, '')
@@ -664,7 +716,8 @@ export async function registerRoutes(app: Express): Promise<void> {
         session_id: sessionId,
         ai_powered: true,
         client: client || 'web',
-        detection: detection ? { type: detection.type, confidence: detection.confidence } : undefined
+        aemUsed: aemUsed || undefined,
+        intent: detection?.type || 'general_chat'
       });
 
     } catch (error: any) {

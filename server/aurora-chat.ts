@@ -8,6 +8,14 @@ import { getMemoryFabricClient } from './memory-fabric-client';
 import { getNexusV3Client, type ConsciousnessState } from './nexus-v3-client';
 import { getCognitiveLoop } from './cognitive-loop';
 import type { Server } from 'http';
+import { 
+  executeWithOrchestrator, 
+  selectExecutionMethod, 
+  getSystemPromptWithCapabilities,
+  getCapabilities,
+  type ExecutionResult,
+  type ExecutionContext
+} from './aurora-execution-orchestrator';
 
 interface ChatMessage {
   content: string;
@@ -382,7 +390,7 @@ async function executeFileOperation(message: string): Promise<string | null> {
   return null;
 }
 
-async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default', context: ChatMessage[] = []): Promise<{ response: string; detection: ConversationDetection }> {
+async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default', context: ChatMessage[] = []): Promise<{ response: string; detection: ConversationDetection; aemUsed?: { id: number; name: string } }> {
   let memoryContext = '';
   let userName: string | null = null;
   let consciousnessState: ConsciousnessState | null = null;
@@ -420,7 +428,18 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
     memoryClient.saveFact(fact.key, fact.value, fact.category).catch(() => {});
   }
 
+  const selectedAEM = selectExecutionMethod(userMessage);
+  console.log(`[Aurora] Selected AEM #${selectedAEM.id}: ${selectedAEM.name} for request`);
+
+  const executionContext: ExecutionContext = {
+    sessionId,
+    userName: userName || undefined,
+    capabilities: getCapabilities(),
+    recentMessages: previousMessages
+  };
+
   let response = '';
+  let aemUsed = { id: selectedAEM.id, name: selectedAEM.name };
   const msgLower = userMessage.toLowerCase();
 
   if (msgLower.includes('not working') || msgLower.includes('not integrated') || 
@@ -467,33 +486,63 @@ What would you like me to do?`;
   }
 
   if (!response) {
-    try {
-      const wrapperPath = path.join(process.cwd(), 'tools', 'execution_wrapper.py');
-      if (fs.existsSync(wrapperPath)) {
-        const result = await callExecutionWrapperDirect(userMessage, detection.type, context);
-        if (result && result.length > 10 && !result.includes('would you like')) {
-          response = result;
+    const orchestratorResult = await executeWithOrchestrator(userMessage, executionContext);
+    
+    if (orchestratorResult.success && orchestratorResult.output) {
+      aemUsed = { id: orchestratorResult.aemUsed, name: orchestratorResult.aemName };
+      
+      if (orchestratorResult.metadata?.requiresLLM) {
+        try {
+          const wrapperPath = path.join(process.cwd(), 'tools', 'execution_wrapper.py');
+          if (fs.existsSync(wrapperPath)) {
+            const result = await callExecutionWrapperDirect(userMessage, detection.type, context);
+            if (result && result.length > 10 && !result.includes('would you like')) {
+              response = `**[AEM #${aemUsed.id}: ${aemUsed.name}]**\n\n${result}`;
+            }
+          }
+        } catch {
+          response = orchestratorResult.output;
         }
+      } else {
+        response = `**[AEM #${aemUsed.id}: ${aemUsed.name}]**\n\n${orchestratorResult.output}`;
       }
-    } catch {
     }
   }
 
   if (!response) {
-    response = `I received your message: "${userMessage.substring(0, 100)}${userMessage.length > 100 ? '...' : ''}"
+    const caps = getCapabilities();
+    response = `**[AEM #66: General Assistant]**
 
-To get useful responses, try:
-- "What is not working?" - to check integration status
-- "Analyze the codebase" - to find code issues  
-- "List files in server/" - to explore files
-- "Search for [text]" - to find code`;
+I have **${caps.aems} Advanced Execution Methods (hands)** ready to help you. Here's what I can do:
+
+**Code Operations:**
+- "Write code for [description]" - Code Generation (AEM #7)
+- "Debug [issue]" - Debug Analysis (AEM #9)
+- "Review this code" - Code Review (AEM #8)
+
+**File Operations:**
+- "Read file [path]" - File Read (AEM #10)
+- "List files in [directory]" - Directory List (AEM #13)
+- "Search for [pattern]" - File Search (AEM #12)
+
+**Analysis:**
+- "Status" or "How are you" - System Status (AEM #14)
+- "Analyze codebase" - Codebase Analysis (AEM #15)
+- "Check integrations" - Integration Check (AEM #16)
+
+**Security & Performance:**
+- "Security check" - Adversarial Analysis (AEM #4)
+- "Optimize [component]" - Performance Analysis (AEM #24)
+
+What would you like me to execute?`;
+    aemUsed = { id: 66, name: 'General Assistant' };
   }
 
   if (cognitiveContext) {
     cognitiveLoop.completeCycle(userMessage, response, cognitiveContext, true).catch(() => {});
   }
 
-  return { response, detection };
+  return { response, detection, aemUsed };
 }
 
 function callExecutionWrapperDirect(message: string, msgType: string, context: ChatMessage[]): Promise<string> {
@@ -546,7 +595,7 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: C
   });
 }
 
-export async function getChatResponse(message: string, sessionId: string, context: ChatMessage[] = []): Promise<{ response: string; detection: ConversationDetection }> {
+export async function getChatResponse(message: string, sessionId: string, context: ChatMessage[] = []): Promise<{ response: string; detection: ConversationDetection; aemUsed?: { id: number; name: string } }> {
   return processWithAuroraIntelligence(message, sessionId, context);
 }
 

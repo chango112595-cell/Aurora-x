@@ -7,15 +7,17 @@ interface Message {
   content: string;
   timestamp: Date;
   status?: 'thinking' | 'executing' | 'complete' | 'error';
+  aemUsed?: { id: number; name: string };
 }
 
 export default function AuroraFuturisticChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Hey! I'm Aurora. I have 188 intelligence tiers with 66 advanced execution programs and 200+ hybrid mode modules active. I can help you with:\n\n• Write and debug code in any language\n• Explain complex concepts clearly\n• Design system architectures\n• Solve technical problems\n• Review and optimize code\n\nWhat would you like to work on today?",
+      content: "**Aurora Quantum Neural Intelligence System - Online**\n\n**Active Systems:**\n- 188 Knowledge Tiers\n- 66 Advanced Execution Methods (my hands)\n- 550 Active Modules\n- 300 Parallel Workers\n- 100 Self-Healers\n- Hyperspeed Mode: ACTIVE\n\n**What I can do with my hands:**\n\n• **Code Operations (AEM 7-12):** Write, debug, review code; read/write files\n• **Analysis (AEM 15-17):** Analyze codebase, check integrations, recognize patterns\n• **Synthesis (AEM 18-22):** Design architectures, create documentation, build APIs\n• **System (AEM 14, 32-35):** Check status, git operations, deployment planning\n\nTry saying: \"Status\", \"List files\", \"Analyze codebase\", or describe what you need built.\n\n**What would you like me to execute?**",
       timestamp: new Date(),
-      status: 'complete'
+      status: 'complete',
+      aemUsed: { id: 14, name: 'System Status' }
     }
   ]);
   const [input, setInput] = useState('');
@@ -46,10 +48,9 @@ export default function AuroraFuturisticChat() {
     setInput('');
     setIsProcessing(true);
 
-    // Add thinking message with visual feedback
     const thinkingMessage: Message = {
       role: 'assistant',
-      content: 'Processing your request with 188 intelligence tiers and 66 advanced execution programs...',
+      content: 'Selecting optimal AEM and executing with 300 parallel workers...',
       timestamp: new Date(),
       status: 'thinking'
     };
@@ -76,7 +77,6 @@ export default function AuroraFuturisticChat() {
         throw new Error('Invalid response from Aurora');
       }
 
-      // Update with response - replace thinking message
       setMessages(prev => {
         const newMessages = [...prev];
         const lastIndex = newMessages.length - 1;
@@ -85,7 +85,8 @@ export default function AuroraFuturisticChat() {
           role: 'assistant',
           content: data.response,
           timestamp: new Date(),
-          status: 'complete'
+          status: 'complete',
+          aemUsed: data.aemUsed
         };
 
         return newMessages;
