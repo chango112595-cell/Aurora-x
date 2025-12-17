@@ -5,7 +5,7 @@ import AuroraFuturisticLayout from "./components/AuroraFuturisticLayout";
 import Dashboard from "./pages/dashboard";
 import Home from "./pages/home";
 import Chat from "./pages/chat";
-import Memory from "./pages/memory";
+import MemoryFabric from "./pages/memory-fabric";
 import Corpus from "./pages/corpus";
 import SelfLearning from "./pages/self-learning";
 import ServerControl from "./pages/server-control";
@@ -23,7 +23,6 @@ import Tiers from "./pages/tiers";
 import Intelligence from "./pages/intelligence";
 import AuroraAITest from "@/pages/aurora-ai-test";
 import AuroraChat from "./pages/aurora-chat";
-import MemoryFabric from "./pages/memory-fabric";
 import Roadmap from "./pages/roadmap";
 import Vault from "./pages/vault";
 import Aurora from "./pages/aurora";
@@ -36,7 +35,7 @@ function App() {
         <Route path="/" component={Home} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/chat" component={Chat} />
-        <Route path="/memory" component={Memory} />
+        <Route path="/memory" component={MemoryFabric} />
         <Route path="/library" component={Library} />
         <Route path="/nexus" component={Nexus} />
         <Route path="/comparison" component={ComparisonDashboard} />

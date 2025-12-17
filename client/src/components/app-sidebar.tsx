@@ -15,7 +15,7 @@ import {
 
 const menuItems = [
   { title: "Chat", icon: MessageSquare, url: "/chat" },
-  { title: "Memory", icon: Brain, url: "/memory" },
+  { title: "Memory Fabric", icon: Brain, url: "/memory" },
   { title: "Code Library", icon: BookOpen, url: "/library" },
   { title: "Aurora Dashboard", icon: BarChart3, url: "/dashboard" },
   { title: "Comparison", icon: TrendingUp, url: "/comparison" },

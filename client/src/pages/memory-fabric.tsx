@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
-import { Brain, Database, Clock, Zap, FileText, Search, RefreshCw, Layers, MessageSquare, Lightbulb, History, Target, Network, Server, Activity } from "lucide-react";
+import { Brain, Database, Clock, Zap, FileText, Search, RefreshCw, Layers, MessageSquare, Lightbulb, History, Target, Network, Server, Activity, CheckCircle, AlertCircle, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface MemoryEntry {
@@ -60,9 +62,48 @@ interface NexusStatus {
   };
 }
 
+interface MemoryBridgeStatus {
+  success: boolean;
+  status: {
+    short_term_count: number;
+    long_term_count: number;
+    total_entries: number;
+  };
+  error?: string;
+}
+
+interface MemoryBridgeRecord {
+  id: string;
+  text: string;
+  meta: Record<string, unknown>;
+  timestamp: string;
+  score?: number;
+}
+
+interface MemoryBridgeWriteResult {
+  success: boolean;
+  id?: string;
+  longterm?: boolean;
+  error?: string;
+}
+
+interface MemoryBridgeQueryResult {
+  success: boolean;
+  results?: MemoryBridgeRecord[];
+  error?: string;
+}
+
 export default function MemoryFabric() {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+  const [bridgeMessage, setBridgeMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [bridgeLoading, setBridgeLoading] = useState(false);
+  const [bridgeWriteText, setBridgeWriteText] = useState('');
+  const [bridgeWriteMeta, setBridgeWriteMeta] = useState('{}');
+  const [bridgeWriteLongterm, setBridgeWriteLongterm] = useState(false);
+  const [bridgeQueryText, setBridgeQueryText] = useState('');
+  const [bridgeQueryTopK, setBridgeQueryTopK] = useState(5);
+  const [bridgeResults, setBridgeResults] = useState<MemoryBridgeRecord[]>([]);
 
   const { data: memoryData, isLoading, refetch, isRefetching } = useQuery<MemoryData>({
     queryKey: ['/api/memory-fabric/status'],
@@ -77,6 +118,11 @@ export default function MemoryFabric() {
   const { data: nexusStatus } = useQuery<NexusStatus>({
     queryKey: ['/api/nexus/status'],
     refetchInterval: 86400000, // 24 hours
+  });
+
+  const { data: bridgeStatus, refetch: refetchBridgeStatus } = useQuery<MemoryBridgeStatus>({
+    queryKey: ['/api/memory/status'],
+    refetchInterval: 15000,
   });
 
   const stats = memoryData?.stats;
@@ -130,6 +176,107 @@ export default function MemoryFabric() {
       </Card>
     </motion.div>
   );
+
+  const renderBridgeResult = (entry: MemoryBridgeRecord, index: number) => (
+    <Card key={`${entry.id}-${index}`} className="border-cyan-500/20 bg-slate-900/50">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <Badge variant="outline" className="text-xs">
+            #{index + 1}
+          </Badge>
+          <div className="flex items-center gap-2">
+            {entry.score !== undefined && (
+              <Badge variant="outline" className="text-xs">
+                Score {entry.score.toFixed(3)}
+              </Badge>
+            )}
+            <span className="text-xs text-muted-foreground">{new Date(entry.timestamp).toLocaleString()}</span>
+          </div>
+        </div>
+        <p className="text-sm text-foreground/90 whitespace-pre-wrap">{entry.text}</p>
+        {entry.meta && Object.keys(entry.meta).length > 0 && (
+          <pre className="text-xs text-muted-foreground mt-3 bg-slate-950/50 border border-cyan-500/10 rounded p-2 overflow-x-auto">
+            {JSON.stringify(entry.meta, null, 2)}
+          </pre>
+        )}
+      </CardContent>
+    </Card>
+  );
+
+  const handleBridgeWrite = async () => {
+    setBridgeLoading(true);
+    setBridgeMessage(null);
+    let meta: Record<string, unknown> = {};
+
+    try {
+      if (bridgeWriteMeta.trim()) {
+        meta = JSON.parse(bridgeWriteMeta);
+      }
+    } catch {
+      setBridgeMessage({ type: 'error', text: 'Metadata must be valid JSON.' });
+      setBridgeLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/memory/write', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: bridgeWriteText,
+          meta,
+          longterm: bridgeWriteLongterm,
+        })
+      });
+      const data: MemoryBridgeWriteResult = await response.json();
+
+      if (data.success) {
+        setBridgeMessage({
+          type: 'success',
+          text: `Memory stored (ID ${data.id?.slice(0, 8)}...)`,
+        });
+        setBridgeWriteText('');
+        setBridgeWriteMeta('{}');
+        setBridgeWriteLongterm(false);
+        refetchBridgeStatus();
+      } else {
+        setBridgeMessage({ type: 'error', text: data.error || 'Failed to store memory.' });
+      }
+    } catch (error) {
+      setBridgeMessage({ type: 'error', text: `Error: ${String(error)}` });
+    } finally {
+      setBridgeLoading(false);
+    }
+  };
+
+  const handleBridgeQuery = async () => {
+    setBridgeLoading(true);
+    setBridgeMessage(null);
+    try {
+      const response = await fetch('/api/memory/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: bridgeQueryText,
+          top_k: bridgeQueryTopK,
+        })
+      });
+
+      const data: MemoryBridgeQueryResult = await response.json();
+      if (data.success && data.results) {
+        setBridgeResults(data.results);
+        setBridgeMessage({ type: 'success', text: `Found ${data.results.length} match(es)` });
+      } else {
+        setBridgeResults([]);
+        setBridgeMessage({ type: 'error', text: data.error || 'No results returned.' });
+      }
+    } catch (error) {
+      setBridgeResults([]);
+      setBridgeMessage({ type: 'error', text: `Error: ${String(error)}` });
+    } finally {
+      setBridgeLoading(false);
+    }
+  };
 
   const renderFactsCard = (facts: Record<string, unknown>) => {
     const entries = Object.entries(facts);
@@ -244,7 +391,10 @@ export default function MemoryFabric() {
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={() => refetch()}
+            onClick={() => {
+              refetch();
+              refetchBridgeStatus();
+            }}
             disabled={isRefetching}
             className="border-cyan-500/30 hover:border-cyan-400/50"
             data-testid="button-refresh"
@@ -457,6 +607,10 @@ export default function MemoryFabric() {
                 <History className="w-4 h-4 mr-2" />
                 Events
               </TabsTrigger>
+              <TabsTrigger value="bridge" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-bridge">
+                <Server className="w-4 h-4 mr-2" />
+                Memory Bridge
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="h-[calc(100%-60px)]" data-testid="tab-content-overview">
@@ -632,6 +786,163 @@ export default function MemoryFabric() {
                     {renderEventsLog(memoryData?.events || [])}
                   </CardContent>
                 </Card>
+              </ScrollArea>
+            </TabsContent>
+
+            <TabsContent value="bridge" className="h-[calc(100%-60px)]" data-testid="tab-content-bridge">
+              <ScrollArea className="h-full">
+                <div className="space-y-6">
+                  <Card className="border-cyan-500/30 bg-slate-900/60">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Database className="w-5 h-5 text-cyan-400" />
+                        Memory Bridge Status
+                      </CardTitle>
+                      <CardDescription>Legacy memory bridge metrics and operations</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {bridgeStatus?.success ? (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="p-3 rounded border border-cyan-500/20 bg-cyan-950/20">
+                            <div className="text-xs text-cyan-300/70">Short-Term</div>
+                            <div className="text-2xl font-bold text-cyan-200">
+                              {bridgeStatus.status.short_term_count}
+                            </div>
+                          </div>
+                          <div className="p-3 rounded border border-purple-500/20 bg-purple-950/20">
+                            <div className="text-xs text-purple-300/70">Long-Term</div>
+                            <div className="text-2xl font-bold text-purple-200">
+                              {bridgeStatus.status.long_term_count}
+                            </div>
+                          </div>
+                          <div className="p-3 rounded border border-blue-500/20 bg-blue-950/20">
+                            <div className="text-xs text-blue-300/70">Total</div>
+                            <div className="text-2xl font-bold text-blue-200">
+                              {bridgeStatus.status.total_entries}
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-sm text-muted-foreground">
+                          {bridgeStatus?.error || 'Memory bridge unavailable.'}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {bridgeMessage && (
+                    <div className={`flex items-center gap-2 rounded border px-3 py-2 text-sm ${bridgeMessage.type === 'success'
+                      ? 'border-green-500/30 bg-green-500/10 text-green-300'
+                      : 'border-red-500/30 bg-red-500/10 text-red-300'
+                      }`}>
+                      {bridgeMessage.type === 'success' ? (
+                        <CheckCircle className="w-4 h-4" />
+                      ) : (
+                        <AlertCircle className="w-4 h-4" />
+                      )}
+                      <span>{bridgeMessage.text}</span>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <Card className="border-cyan-500/20 bg-slate-900/60">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-cyan-300">
+                          <Plus className="w-4 h-4" />
+                          Store Memory
+                        </CardTitle>
+                        <CardDescription>Write through the memory bridge</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <label className="text-xs text-cyan-300/70">Memory Text</label>
+                          <Textarea
+                            value={bridgeWriteText}
+                            onChange={(e) => setBridgeWriteText(e.target.value)}
+                            className="mt-2 bg-slate-950/40 border-cyan-500/20"
+                            rows={4}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-cyan-300/70">Metadata (JSON)</label>
+                          <Textarea
+                            value={bridgeWriteMeta}
+                            onChange={(e) => setBridgeWriteMeta(e.target.value)}
+                            className="mt-2 bg-slate-950/40 border-cyan-500/20 font-mono text-xs"
+                            rows={3}
+                          />
+                        </div>
+                        <label className="flex items-center gap-2 text-xs text-cyan-300/70">
+                          <input
+                            type="checkbox"
+                            checked={bridgeWriteLongterm}
+                            onChange={(e) => setBridgeWriteLongterm(e.target.checked)}
+                            className="h-4 w-4 rounded border-cyan-500/30 bg-slate-950/40"
+                          />
+                          Store as long-term memory
+                        </label>
+                        <Button
+                          onClick={handleBridgeWrite}
+                          disabled={bridgeLoading || !bridgeWriteText}
+                          className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white"
+                        >
+                          Store Memory
+                        </Button>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-purple-500/20 bg-slate-900/60">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-purple-300">
+                          <Search className="w-4 h-4" />
+                          Search Memory
+                        </CardTitle>
+                        <CardDescription>Query legacy memory entries</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <label className="text-xs text-purple-300/70">Query</label>
+                          <Input
+                            value={bridgeQueryText}
+                            onChange={(e) => setBridgeQueryText(e.target.value)}
+                            className="mt-2 bg-slate-950/40 border-purple-500/20"
+                            onKeyDown={(e) => e.key === 'Enter' && handleBridgeQuery()}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-purple-300/70">Top K</label>
+                          <Input
+                            type="number"
+                            min={1}
+                            max={20}
+                            value={bridgeQueryTopK}
+                            onChange={(e) => setBridgeQueryTopK(parseInt(e.target.value) || 5)}
+                            className="mt-2 bg-slate-950/40 border-purple-500/20"
+                          />
+                        </div>
+                        <Button
+                          onClick={handleBridgeQuery}
+                          disabled={bridgeLoading || !bridgeQueryText}
+                          className="w-full bg-gradient-to-r from-purple-500 to-cyan-500 text-white"
+                        >
+                          Search Memory
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {bridgeResults.length > 0 && (
+                    <Card className="border-cyan-500/20 bg-slate-900/60">
+                      <CardHeader>
+                        <CardTitle>Search Results</CardTitle>
+                        <CardDescription>{bridgeResults.length} result(s)</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        {bridgeResults.map((entry, index) => renderBridgeResult(entry, index))}
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
               </ScrollArea>
             </TabsContent>
           </Tabs>
