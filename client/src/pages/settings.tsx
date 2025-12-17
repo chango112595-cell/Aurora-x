@@ -211,9 +211,9 @@ function SecurityApiKeyManager() {
                 </div>
               </div>
 
-              <div className="p-4 bg-slate-800/50 rounded-lg border border-cyan-500/20">
+              <div className="p-4 bg-slate-800/50 rounded-lg border border-emerald-500/20">
                 <div className="flex items-center justify-between mb-3">
-                  <Label className="text-cyan-200 flex items-center gap-2">
+                  <Label className="text-emerald-200 flex items-center gap-2">
                     <Key className="w-4 h-4" />
                     Stored API Keys ({aliasesQuery.data?.aliases?.length || 0})
                   </Label>
@@ -228,15 +228,15 @@ function SecurityApiKeyManager() {
                 </div>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {aliasesQuery.isLoading ? (
-                    <div className="text-center py-4 text-cyan-300/60">Loading...</div>
+                    <div className="text-center py-4 text-emerald-300/60">Loading...</div>
                   ) : aliasesQuery.data?.aliases?.length === 0 ? (
-                    <div className="text-center py-4 text-cyan-300/60">No API keys stored yet</div>
+                    <div className="text-center py-4 text-emerald-300/60">No API keys stored yet</div>
                   ) : (
                     aliasesQuery.data?.aliases?.map((alias, i) => (
                       <div key={alias} className="flex items-center justify-between p-2 bg-slate-700/30 rounded" data-testid={`row-key-${i}`}>
                         <div className="flex items-center gap-2">
-                          <Lock className="w-4 h-4 text-cyan-400" />
-                          <span className="text-sm text-cyan-200 font-mono">{alias}</span>
+                          <Lock className="w-4 h-4 text-emerald-400" />
+                          <span className="text-sm text-emerald-200 font-mono">{alias}</span>
                         </div>
                         <Button
                           variant="ghost"
@@ -265,7 +265,7 @@ export default function SettingsPage() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('appearance');
   const [theme, setTheme] = useState('dark');
-  const [accentColor, setAccentColor] = useState('cyan');
+  const [accentColor, setAccentColor] = useState('emerald');
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -295,7 +295,7 @@ export default function SettingsPage() {
 
   const handleReset = () => {
     setTheme('dark');
-    setAccentColor('cyan');
+    setAccentColor('emerald');
     setAnimationsEnabled(true);
     setAutoSaveEnabled(true);
     setNotificationsEnabled(true);
@@ -313,18 +313,18 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-background via-cyan-950/5 to-purple-950/5">
-      <div className="p-6 border-b border-cyan-500/20">
+    <div className="h-full flex flex-col bg-gradient-to-br from-background via-emerald-950/5 to-sky-950/5">
+      <div className="p-6 border-b border-emerald-500/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <div className="absolute inset-0 bg-purple-500/30 rounded-full blur-md animate-pulse" />
-              <div className="relative w-12 h-12 rounded-full border-2 border-purple-400/50 flex items-center justify-center bg-gradient-to-br from-purple-500/20 to-pink-500/20">
-                <Settings className="w-6 h-6 text-purple-400" />
+              <div className="absolute inset-0 bg-sky-500/30 rounded-full blur-md animate-pulse" />
+              <div className="relative w-12 h-12 rounded-full border-2 border-sky-400/50 flex items-center justify-center bg-gradient-to-br from-sky-500/20 to-amber-500/20">
+                <Settings className="w-6 h-6 text-sky-400" />
               </div>
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent" data-testid="text-page-title">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-sky-400 via-amber-400 to-sky-400 bg-clip-text text-transparent" data-testid="text-page-title">
                 Configuration
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -346,7 +346,7 @@ export default function SettingsPage() {
             <Button 
               size="sm" 
               onClick={handleSave}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500"
+              className="bg-gradient-to-r from-sky-600 to-amber-600 hover:from-sky-500 hover:to-amber-500"
               data-testid="button-save"
             >
               <Save className="w-4 h-4 mr-2" />
@@ -358,12 +358,12 @@ export default function SettingsPage() {
 
       <div className="flex-1 overflow-hidden p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col" data-testid="tabs-settings">
-          <TabsList className="mb-4 bg-slate-900 border border-purple-500/40 shadow-lg flex-wrap justify-start gap-1" data-testid="tablist-settings">
+          <TabsList className="mb-4 bg-slate-900 border border-sky-500/40 shadow-lg flex-wrap justify-start gap-1" data-testid="tablist-settings">
             {sections.map((section) => (
               <TabsTrigger 
                 key={section.id}
                 value={section.id} 
-                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-pink-600/70 data-[state=active]:text-white text-purple-300"
+                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600/70 data-[state=active]:to-amber-600/70 data-[state=active]:text-white text-sky-300"
                 data-testid={`tab-trigger-${section.id}`}
               >
                 {section.icon}
@@ -375,14 +375,14 @@ export default function SettingsPage() {
           <ScrollArea className="flex-1">
             <TabsContent value="appearance" className="mt-0" data-testid="tab-content-appearance">
               <div className="grid gap-6">
-                <Card className="border-purple-500/30 bg-slate-900/50 backdrop-blur-xl">
-                  <CardHeader className="border-b border-purple-500/20">
-                    <CardTitle className="text-lg text-purple-300">Theme Settings</CardTitle>
-                    <CardDescription className="text-purple-300/60">Customize the visual appearance</CardDescription>
+                <Card className="border-sky-500/30 bg-slate-900/50 backdrop-blur-xl">
+                  <CardHeader className="border-b border-sky-500/20">
+                    <CardTitle className="text-lg text-sky-300">Theme Settings</CardTitle>
+                    <CardDescription className="text-sky-300/60">Customize the visual appearance</CardDescription>
                   </CardHeader>
                   <CardContent className="pt-4 space-y-6">
                     <div className="space-y-3">
-                      <Label className="text-purple-200">Color Theme</Label>
+                      <Label className="text-sky-200">Color Theme</Label>
                       <div className="flex gap-3">
                         {[
                           { value: 'light', icon: <Sun className="w-4 h-4" />, label: 'Light' },
@@ -395,8 +395,8 @@ export default function SettingsPage() {
                             size="sm"
                             onClick={() => setTheme(option.value)}
                             className={theme === option.value 
-                              ? "bg-gradient-to-r from-purple-600 to-pink-600" 
-                              : "border-purple-500/30 text-purple-300"}
+                              ? "bg-gradient-to-r from-sky-600 to-amber-600" 
+                              : "border-sky-500/30 text-sky-300"}
                             data-testid={`button-theme-${option.value}`}
                           >
                             {option.icon}
@@ -407,15 +407,15 @@ export default function SettingsPage() {
                     </div>
 
                     <div className="space-y-3">
-                      <Label className="text-purple-200">Accent Color</Label>
+                      <Label className="text-sky-200">Accent Color</Label>
                       <Select value={accentColor} onValueChange={setAccentColor}>
-                        <SelectTrigger className="bg-slate-800/50 border-purple-500/30" data-testid="select-accent-color">
+                        <SelectTrigger className="bg-slate-800/50 border-sky-500/30" data-testid="select-accent-color">
                           <SelectValue placeholder="Select accent color" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="cyan">Cyan</SelectItem>
-                          <SelectItem value="purple">Purple</SelectItem>
-                          <SelectItem value="pink">Pink</SelectItem>
+                          <SelectItem value="emerald">Cyan</SelectItem>
+                          <SelectItem value="sky">Purple</SelectItem>
+                          <SelectItem value="amber">Pink</SelectItem>
                           <SelectItem value="green">Green</SelectItem>
                           <SelectItem value="blue">Blue</SelectItem>
                         </SelectContent>
@@ -424,8 +424,8 @@ export default function SettingsPage() {
 
                     <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
                       <div>
-                        <p className="text-sm text-purple-200">Enable Animations</p>
-                        <p className="text-xs text-purple-300/60">Smooth transitions and effects</p>
+                        <p className="text-sm text-sky-200">Enable Animations</p>
+                        <p className="text-xs text-sky-300/60">Smooth transitions and effects</p>
                       </div>
                       <Switch 
                         checked={animationsEnabled} 
@@ -440,16 +440,16 @@ export default function SettingsPage() {
 
             <TabsContent value="ai" className="mt-0" data-testid="tab-content-ai">
               <div className="grid gap-6">
-                <Card className="border-cyan-500/30 bg-slate-900/50 backdrop-blur-xl">
-                  <CardHeader className="border-b border-cyan-500/20">
-                    <CardTitle className="text-lg text-cyan-300">AI Behavior</CardTitle>
-                    <CardDescription className="text-cyan-300/60">Configure Aurora's learning and response patterns</CardDescription>
+                <Card className="border-emerald-500/30 bg-slate-900/50 backdrop-blur-xl">
+                  <CardHeader className="border-b border-emerald-500/20">
+                    <CardTitle className="text-lg text-emerald-300">AI Behavior</CardTitle>
+                    <CardDescription className="text-emerald-300/60">Configure Aurora's learning and response patterns</CardDescription>
                   </CardHeader>
                   <CardContent className="pt-4 space-y-6">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <Label className="text-cyan-200">Learning Rate</Label>
-                        <span className="text-sm text-cyan-400 font-mono">{learningRate[0]}%</span>
+                        <Label className="text-emerald-200">Learning Rate</Label>
+                        <span className="text-sm text-emerald-400 font-mono">{learningRate[0]}%</span>
                       </div>
                       <Slider
                         value={learningRate}
@@ -459,13 +459,13 @@ export default function SettingsPage() {
                         className="w-full"
                         data-testid="slider-learning-rate"
                       />
-                      <p className="text-xs text-cyan-300/60">Higher values mean faster adaptation but may reduce stability</p>
+                      <p className="text-xs text-emerald-300/60">Higher values mean faster adaptation but may reduce stability</p>
                     </div>
 
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <Label className="text-cyan-200">Memory Retention</Label>
-                        <span className="text-sm text-cyan-400 font-mono">{memoryRetention[0]}%</span>
+                        <Label className="text-emerald-200">Memory Retention</Label>
+                        <span className="text-sm text-emerald-400 font-mono">{memoryRetention[0]}%</span>
                       </div>
                       <Slider
                         value={memoryRetention}
@@ -475,13 +475,13 @@ export default function SettingsPage() {
                         className="w-full"
                         data-testid="slider-memory-retention"
                       />
-                      <p className="text-xs text-cyan-300/60">Controls how long Aurora retains learned information</p>
+                      <p className="text-xs text-emerald-300/60">Controls how long Aurora retains learned information</p>
                     </div>
 
                     <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
                       <div>
-                        <p className="text-sm text-cyan-200">Autonomous Mode</p>
-                        <p className="text-xs text-cyan-300/60">Allow self-directed learning and optimization</p>
+                        <p className="text-sm text-emerald-200">Autonomous Mode</p>
+                        <p className="text-xs text-emerald-300/60">Allow self-directed learning and optimization</p>
                       </div>
                       <Switch 
                         checked={autonomousMode} 

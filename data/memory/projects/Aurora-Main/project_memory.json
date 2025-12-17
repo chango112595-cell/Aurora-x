@@ -2,6 +2,7 @@
   "short_term": [
     {
       "role": "user",
+<<<<<<< HEAD
       "content": "ping",
       "timestamp": "2025-12-17T07:54:18.477616"
     }
@@ -13,6 +14,40 @@
       "first_message": "2025-12-05T15:16:09.058407",
       "last_message": "2025-12-17T07:53:41.865204",
       "compressed_at": "2025-12-17T07:53:41.867057"
+=======
+      "content": "Hello Aurora, my name is Kai",
+      "timestamp": "2025-12-05T15:17:50.514287"
+    },
+    {
+      "role": "aurora",
+      "content": "I understand you have a general conversation request. Processing...",
+      "timestamp": "2025-12-05T15:17:50.515709"
+    },
+    {
+      "role": "user",
+      "content": "status",
+      "timestamp": "2025-12-17T07:24:36.031567"
+    },
+    {
+      "role": "user",
+      "content": "self diagnose",
+      "timestamp": "2025-12-17T07:24:41.438617"
+    },
+    {
+      "role": "user",
+      "content": "analyze codebase",
+      "timestamp": "2025-12-17T13:37:17.104966"
+    },
+    {
+      "role": "user",
+      "content": "are they broken?",
+      "timestamp": "2025-12-17T13:37:34.339212"
+    },
+    {
+      "role": "user",
+      "content": "SELF DIAGNOSE",
+      "timestamp": "2025-12-17T13:37:52.459947"
+>>>>>>> 06d5e4e66f4a309104e0a58bd74992b34b19664a
     }
   ],
   "long_term": [],
@@ -67,6 +102,7 @@
       },
       "stored_at": "2025-12-17T07:24:41.441048"
     },
+<<<<<<< HEAD
     "memory_9285ec3b-7e4c-4ea7-80c3-d5e3c11541b0": {
       "value": {
         "text": "self diagnose",
@@ -131,6 +167,46 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-17T07:54:18.482482"
+=======
+    "memory_46aea133-d834-4eb7-9ee3-3ed1a6dfdeac": {
+      "value": {
+        "text": "analyze codebase",
+        "meta": {
+          "session_id": "chat-1765978619732",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-17T13:37:17.109194",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-17T13:37:17.109202"
+    },
+    "memory_bad6eb96-b88a-4c11-a730-77b8805b0811": {
+      "value": {
+        "text": "are they broken?",
+        "meta": {
+          "session_id": "chat-1765978619732",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-17T13:37:34.340744",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-17T13:37:34.340751"
+    },
+    "memory_d738ca42-84f3-498e-a028-b2914fc050d5": {
+      "value": {
+        "text": "SELF DIAGNOSE",
+        "meta": {
+          "session_id": "chat-1765978619732",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-17T13:37:52.461470",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-17T13:37:52.461476"
+>>>>>>> 06d5e4e66f4a309104e0a58bd74992b34b19664a
     }
   },
   "events": [
@@ -157,11 +233,36 @@
     {
       "type": "memory_write",
       "details": {
+<<<<<<< HEAD
         "id": "9285ec3b-7e4c-4ea7-80c3-d5e3c11541b0",
+=======
+        "id": "46aea133-d834-4eb7-9ee3-3ed1a6dfdeac",
+        "text_length": 16,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-17T13:37:17.109941"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "bad6eb96-b88a-4c11-a730-77b8805b0811",
+        "text_length": 16,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-17T13:37:34.341158"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "d738ca42-84f3-498e-a028-b2914fc050d5",
+>>>>>>> 06d5e4e66f4a309104e0a58bd74992b34b19664a
         "text_length": 13,
         "has_meta": true,
         "longterm": false
       },
+<<<<<<< HEAD
       "timestamp": "2025-12-17T07:51:07.445164"
     },
     {
@@ -207,4 +308,11 @@
   ],
   "semantic_index": {},
   "last_updated": "2025-12-17T07:54:18.504329"
+=======
+      "timestamp": "2025-12-17T13:37:52.461868"
+    }
+  ],
+  "semantic_index": {},
+  "last_updated": "2025-12-17T13:37:52.461928"
+>>>>>>> 06d5e4e66f4a309104e0a58bd74992b34b19664a
 }
