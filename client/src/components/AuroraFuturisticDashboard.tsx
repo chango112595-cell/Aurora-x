@@ -160,6 +160,20 @@ function formatBreakdown(breakdown?: Record<string, number>, maxItems: number = 
     .join(" | ");
 }
 
+function getStateBadgeClass(state?: string) {
+  const normalized = state?.toLowerCase();
+  if (!normalized) {
+    return "bg-slate-900/70 text-slate-200 border-slate-700/60";
+  }
+  if (["available", "ready", "online", "operational"].includes(normalized)) {
+    return "bg-emerald-500/20 text-emerald-100 border-emerald-400/40";
+  }
+  if (["degraded", "warning"].includes(normalized)) {
+    return "bg-amber-500/20 text-amber-100 border-amber-400/40";
+  }
+  return "bg-rose-500/20 text-rose-100 border-rose-400/40";
+}
+
 export default function AuroraFuturisticDashboard() {
   const { data: v3Capabilities } = useQuery<V3Capabilities>({
     queryKey: ["/api/nexus-v3/capabilities"],
@@ -227,119 +241,135 @@ export default function AuroraFuturisticDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white p-6">
-      <div className="mb-8 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 blur-3xl" />
-        <div className="relative bg-slate-900/60 backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-8">
-          <div className="flex flex-wrap items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <Brain className="h-14 w-14 text-cyan-400 animate-pulse" />
-                <div className="absolute inset-0 bg-cyan-400/20 blur-xl rounded-full" />
-              </div>
-              <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  AURORA
-                </h1>
-                <p className="text-cyan-300/70 text-sm mt-1">Production Operations Dashboard</p>
-                <div className="flex flex-wrap gap-2 mt-2 text-xs">
-                  <Badge className="bg-slate-800 text-slate-200 border-slate-600/40">
-                    {v3Status?.state ? v3Status.state.toUpperCase() : "STATE UNAVAILABLE"}
-                  </Badge>
-                  <Badge className="bg-slate-800 text-slate-200 border-slate-600/40">
-                    {v3Status?.version ? `Nexus V3 ${v3Status.version}` : "Nexus V3 Unknown"}
-                  </Badge>
-                </div>
-              </div>
+    <div className="text-slate-100">
+      <section className="relative mb-6 overflow-hidden rounded-3xl border border-slate-800/70 bg-slate-900/60 p-8">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.18),_transparent_60%)]" />
+        <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-amber-400/10 blur-3xl" />
+        <div className="absolute -left-16 bottom-0 h-32 w-32 rounded-full bg-sky-400/10 blur-3xl" />
+        <div className="relative flex flex-wrap items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <Brain className="h-12 w-12 text-emerald-300 animate-pulse" />
+              <div className="absolute inset-0 rounded-full bg-emerald-400/20 blur-xl" />
             </div>
-            <div className="text-right space-y-2 min-w-[200px]">
-              <div className="text-3xl font-bold text-cyan-400">
-                {coherencePercent !== undefined ? `${coherencePercent.toFixed(1)}%` : "Unavailable"}
+            <div>
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-100">AURORA</h1>
+              <p className="mt-1 text-xs uppercase tracking-[0.25em] text-slate-400">Command Operations</p>
+              <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                <Badge className={getStateBadgeClass(v3Status?.state)}>
+                  {v3Status?.state ? v3Status.state.toUpperCase() : "STATE UNAVAILABLE"}
+                </Badge>
+                <Badge className="bg-slate-900/70 text-slate-200 border-slate-700/60">
+                  {v3Status?.version ? `Nexus V3 ${v3Status.version}` : "Nexus V3 Unknown"}
+                </Badge>
               </div>
-              <div className="text-xs text-cyan-300/60">Quantum Coherence (V2)</div>
-              <Progress value={coherencePercent ?? 0} className="h-2 bg-slate-800" />
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 mt-6 text-xs">
-            <Badge className={v3Capabilities?.hyperspeed_enabled ? "bg-purple-500/30 text-purple-100 border-purple-400/50" : "bg-slate-800 text-slate-300 border-slate-600/40"}>
-              Hyperspeed {v3Capabilities?.hyperspeed_enabled ? "Enabled" : "Disabled"}
-            </Badge>
-            <Badge className={v3Capabilities?.hybrid_mode_enabled ? "bg-emerald-500/30 text-emerald-100 border-emerald-400/50" : "bg-slate-800 text-slate-300 border-slate-600/40"}>
-              Hybrid {v3Capabilities?.hybrid_mode_enabled ? "Enabled" : "Disabled"}
-            </Badge>
-            <Badge className={v3Capabilities?.autonomous_mode ? "bg-cyan-500/30 text-cyan-100 border-cyan-400/50" : "bg-slate-800 text-slate-300 border-slate-600/40"}>
-              Autonomous {v3Capabilities?.autonomous_mode ? "Enabled" : "Disabled"}
-            </Badge>
+          <div className="min-w-[200px] space-y-2 text-right">
+            <div className="text-3xl font-semibold text-emerald-300">
+              {coherencePercent !== undefined ? `${coherencePercent.toFixed(1)}%` : "Unavailable"}
+            </div>
+            <div className="text-xs text-slate-400">Quantum Coherence (V2)</div>
+            <Progress value={coherencePercent ?? 0} className="h-2 bg-slate-800/80" />
           </div>
         </div>
-      </div>
+        <div className="relative mt-6 flex flex-wrap gap-2 text-xs">
+          <Badge
+            className={
+              v3Capabilities?.hyperspeed_enabled
+                ? "bg-amber-500/20 text-amber-100 border-amber-400/40"
+                : "bg-slate-900/70 text-slate-300 border-slate-700/60"
+            }
+          >
+            Hyperspeed {v3Capabilities?.hyperspeed_enabled ? "Enabled" : "Disabled"}
+          </Badge>
+          <Badge
+            className={
+              v3Capabilities?.hybrid_mode_enabled
+                ? "bg-emerald-500/20 text-emerald-100 border-emerald-400/40"
+                : "bg-slate-900/70 text-slate-300 border-slate-700/60"
+            }
+          >
+            Hybrid {v3Capabilities?.hybrid_mode_enabled ? "Enabled" : "Disabled"}
+          </Badge>
+          <Badge
+            className={
+              v3Capabilities?.autonomous_mode
+                ? "bg-sky-500/20 text-sky-100 border-sky-400/40"
+                : "bg-slate-900/70 text-slate-300 border-slate-700/60"
+            }
+          >
+            Autonomous {v3Capabilities?.autonomous_mode ? "Enabled" : "Disabled"}
+          </Badge>
+        </div>
+      </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
-        <Card className="bg-slate-900/60 border-cyan-500/30">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4 mb-6">
+        <Card className="bg-slate-900/60 border-sky-500/30">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-cyan-200 text-sm">
-              <Network className="h-4 w-4 text-cyan-400" />
+            <CardTitle className="flex items-center gap-2 text-sky-200 text-sm">
+              <Network className="h-4 w-4 text-sky-400" />
               Knowledge Tiers
             </CardTitle>
           </CardHeader>
-          <CardContent className="text-2xl font-semibold text-cyan-100">
+          <CardContent className="text-2xl font-semibold text-sky-100">
             {formatCount(v3Capabilities?.tiers)}
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-900/60 border-purple-500/30">
+        <Card className="bg-slate-900/60 border-amber-500/30">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-purple-200 text-sm">
-              <Zap className="h-4 w-4 text-purple-400" />
+            <CardTitle className="flex items-center gap-2 text-amber-200 text-sm">
+              <Zap className="h-4 w-4 text-amber-400" />
               AEMs
             </CardTitle>
           </CardHeader>
-          <CardContent className="text-2xl font-semibold text-purple-100">
+          <CardContent className="text-2xl font-semibold text-amber-100">
             {formatCount(v3Capabilities?.aems)}
-          </CardContent>
-        </Card>
-
-        <Card className="bg-slate-900/60 border-pink-500/30">
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-pink-200 text-sm">
-              <Activity className="h-4 w-4 text-pink-400" />
-              Modules
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-2xl font-semibold text-pink-100">
-            {formatCount(v3Capabilities?.modules)}
           </CardContent>
         </Card>
 
         <Card className="bg-slate-900/60 border-emerald-500/30">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-emerald-200 text-sm">
-              <Cpu className="h-4 w-4 text-emerald-400" />
-              Workers
+              <Activity className="h-4 w-4 text-emerald-400" />
+              Modules
             </CardTitle>
           </CardHeader>
           <CardContent className="text-2xl font-semibold text-emerald-100">
+            {formatCount(v3Capabilities?.modules)}
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-900/60 border-cyan-500/30">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-cyan-200 text-sm">
+              <Cpu className="h-4 w-4 text-cyan-400" />
+              Workers
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-2xl font-semibold text-cyan-100">
             {formatCount(v3Workers?.total ?? v3Capabilities?.workers)}
           </CardContent>
         </Card>
       </div>
 
       <div className="grid grid-cols-1 gap-6 mb-6">
-        <Card className="bg-slate-900/60 border-amber-500/30">
+        <Card className="bg-slate-900/60 border-orange-500/30">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-amber-200 text-sm">
-              <Package className="h-4 w-4 text-amber-400" />
+            <CardTitle className="flex items-center gap-2 text-orange-200 text-sm">
+              <Package className="h-4 w-4 text-orange-400" />
               Packs
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-1 text-sm">
             <div className="flex items-center justify-between">
-              <span className="text-amber-200/70">Total</span>
-              <span className="text-amber-100 font-semibold">{formatCount(packSummary?.total_packs)}</span>
+              <span className="text-orange-200/70">Total</span>
+              <span className="text-orange-100 font-semibold">{formatCount(packSummary?.total_packs)}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-amber-200/70">Loaded</span>
-              <span className="text-amber-100 font-semibold">{formatCount(packSummary?.loaded_packs)}</span>
+              <span className="text-orange-200/70">Loaded</span>
+              <span className="text-orange-100 font-semibold">{formatCount(packSummary?.loaded_packs)}</span>
             </div>
           </CardContent>
         </Card>
@@ -367,23 +397,23 @@ export default function AuroraFuturisticDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-900/60 border-blue-500/30">
+        <Card className="bg-slate-900/60 border-sky-500/30">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-blue-200 text-sm">
-              <Database className="h-4 w-4 text-blue-400" />
+            <CardTitle className="flex items-center gap-2 text-sky-200 text-sm">
+              <Database className="h-4 w-4 text-sky-400" />
               Database
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-1 text-sm">
             <div className="flex items-center justify-between">
-              <span className="text-blue-200/70">Status</span>
-              <span className="text-blue-100 font-semibold">
+              <span className="text-sky-200/70">Status</span>
+              <span className="text-sky-100 font-semibold">
                 {dbStatus?.ready ? "Ready" : "Unavailable"}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-blue-200/70">Configured</span>
-              <span className="text-blue-100 font-semibold">
+              <span className="text-sky-200/70">Configured</span>
+              <span className="text-sky-100 font-semibold">
                 {dbStatus?.configured ? "Yes" : "No"}
               </span>
             </div>
@@ -392,43 +422,43 @@ export default function AuroraFuturisticDashboard() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
-        <Card className="bg-slate-900/60 border-cyan-500/30">
+        <Card className="bg-slate-900/60 border-slate-700/70">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-cyan-200 text-sm">
-              <Sparkles className="h-4 w-4 text-cyan-400" />
+            <CardTitle className="flex items-center gap-2 text-slate-200 text-sm">
+              <Sparkles className="h-4 w-4 text-emerald-300" />
               System Load
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <div>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-cyan-200/70">CPU</span>
-                <span className="text-cyan-100 font-semibold">{formatPercent(systemMetrics?.cpu)}</span>
+                <span className="text-slate-300/70">CPU</span>
+                <span className="text-slate-100 font-semibold">{formatPercent(systemMetrics?.cpu)}</span>
               </div>
-              <Progress value={systemMetrics?.cpu ?? 0} className="h-2 bg-slate-800" />
+              <Progress value={systemMetrics?.cpu ?? 0} className="h-2 bg-slate-800/80" />
             </div>
             <div>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-cyan-200/70">Memory</span>
-                <span className="text-cyan-100 font-semibold">{formatPercent(systemMetrics?.memory)}</span>
+                <span className="text-slate-300/70">Memory</span>
+                <span className="text-slate-100 font-semibold">{formatPercent(systemMetrics?.memory)}</span>
               </div>
-              <Progress value={systemMetrics?.memory ?? 0} className="h-2 bg-slate-800" />
+              <Progress value={systemMetrics?.memory ?? 0} className="h-2 bg-slate-800/80" />
             </div>
             <div>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-cyan-200/70">Disk</span>
-                <span className="text-cyan-100 font-semibold">{formatPercent(systemMetrics?.disk)}</span>
+                <span className="text-slate-300/70">Disk</span>
+                <span className="text-slate-100 font-semibold">{formatPercent(systemMetrics?.disk)}</span>
               </div>
-              <Progress value={systemMetrics?.disk ?? 0} className="h-2 bg-slate-800" />
+              <Progress value={systemMetrics?.disk ?? 0} className="h-2 bg-slate-800/80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-900/60 border-sky-500/30">
+        <Card className="bg-slate-900/60 border-emerald-500/30">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-3">
-              <CardTitle className="flex items-center gap-2 text-sky-200 text-sm">
-                <RefreshCw className="h-4 w-4 text-sky-400" />
+              <CardTitle className="flex items-center gap-2 text-emerald-200 text-sm">
+                <RefreshCw className="h-4 w-4 text-emerald-400" />
                 Update Center
               </CardTitle>
               <Button
@@ -445,51 +475,51 @@ export default function AuroraFuturisticDashboard() {
           <CardContent className="space-y-3 text-sm">
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-sky-200/70">UI</span>
-                <span className="text-sky-100 font-semibold">
+                <span className="text-emerald-200/70">UI</span>
+                <span className="text-emerald-100 font-semibold">
                   {updateStatus?.ui?.version
                     ? `${updateStatus?.ui?.name ?? "UI"} ${updateStatus?.ui?.version}`
                     : "Unavailable"}
                 </span>
               </div>
-              <div className="text-xs text-sky-300/60">Updated {formatTimestamp(updateStatus?.ui?.lastUpdated)}</div>
+              <div className="text-xs text-emerald-300/60">Updated {formatTimestamp(updateStatus?.ui?.lastUpdated)}</div>
             </div>
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-sky-200/70">Backend</span>
-                <span className="text-sky-100 font-semibold">{updateStatus?.backend?.version ?? "Unavailable"}</span>
+                <span className="text-emerald-200/70">Backend</span>
+                <span className="text-emerald-100 font-semibold">{updateStatus?.backend?.version ?? "Unavailable"}</span>
               </div>
-              <div className="text-xs text-sky-300/60">
+              <div className="text-xs text-emerald-300/60">
                 Node {updateStatus?.backend?.node ?? "Unknown"} | Uptime {formatDuration(updateStatus?.backend?.uptimeSeconds)}
               </div>
             </div>
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-sky-200/70">Nexus V3</span>
-                <span className="text-sky-100 font-semibold">{updateStatus?.nexusV3?.version ?? "Unavailable"}</span>
+                <span className="text-emerald-200/70">Nexus V3</span>
+                <span className="text-emerald-100 font-semibold">{updateStatus?.nexusV3?.version ?? "Unavailable"}</span>
               </div>
-              <div className="text-xs text-sky-300/60">Updated {formatTimestamp(updateStatus?.nexusV3?.lastUpdated)}</div>
+              <div className="text-xs text-emerald-300/60">Updated {formatTimestamp(updateStatus?.nexusV3?.lastUpdated)}</div>
             </div>
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-sky-200/70">Memory Fabric</span>
-                <span className="text-sky-100 font-semibold">
+                <span className="text-emerald-200/70">Memory Fabric</span>
+                <span className="text-emerald-100 font-semibold">
                   {updateStatus?.memoryFabric?.lastUpdated ? "Ready" : "Unavailable"}
                 </span>
               </div>
-              <div className="text-xs text-sky-300/60">Updated {formatTimestamp(updateStatus?.memoryFabric?.lastUpdated)}</div>
+              <div className="text-xs text-emerald-300/60">Updated {formatTimestamp(updateStatus?.memoryFabric?.lastUpdated)}</div>
             </div>
-            <div className="pt-2 border-t border-sky-500/20 text-xs text-sky-300/70 space-y-1">
+            <div className="pt-2 border-t border-emerald-500/20 text-xs text-emerald-300/70 space-y-1">
               <div className="flex items-center justify-between">
                 <span>Manifests</span>
                 <span>{formatCount(updateStatus?.manifests?.modules?.count)} modules</span>
               </div>
-              <div className="text-sky-300/60">
+              <div className="text-emerald-300/60">
                 Tiers {formatCount(updateStatus?.manifests?.tiers?.count)} | AEMs {formatCount(updateStatus?.manifests?.executions?.count)}
               </div>
-              <div className="text-sky-300/60">Updated {formatTimestamp(updateStatus?.manifests?.modules?.lastUpdated)}</div>
+              <div className="text-emerald-300/60">Updated {formatTimestamp(updateStatus?.manifests?.modules?.lastUpdated)}</div>
             </div>
-            <div className="text-xs text-sky-400/70">Snapshot {formatTimestamp(updateStatus?.timestamp)}</div>
+            <div className="text-xs text-emerald-400/70">Snapshot {formatTimestamp(updateStatus?.timestamp)}</div>
           </CardContent>
         </Card>
       </div>
