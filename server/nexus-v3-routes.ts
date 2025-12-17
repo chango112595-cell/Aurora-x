@@ -102,6 +102,8 @@ async function fetchJson(url: string, options: RequestInit = {}, timeoutMs = 300
       return null;
     }
     return await res.json();
+  } catch {
+    return null;
   } finally {
     clearTimeout(timeoutId);
   }

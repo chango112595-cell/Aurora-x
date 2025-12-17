@@ -24,7 +24,21 @@ os.chdir(script_dir)
 
 # Detect platform
 IS_WINDOWS = platform.system() == "Windows"
-PYTHON_CMD = "python" if IS_WINDOWS else "python3"
+DEFAULT_PYTHON = "python" if IS_WINDOWS else "python3"
+
+
+def resolve_python_cmd():
+    if IS_WINDOWS:
+        candidates = [r".venv\Scripts\python.exe", r"venv\Scripts\python.exe"]
+    else:
+        candidates = [".venv/bin/python", "venv/bin/python"]
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            return candidate
+    return DEFAULT_PYTHON
+
+
+PYTHON_CMD = resolve_python_cmd()
 
 processes = []
 
@@ -242,23 +256,27 @@ print("[WEB] 20. Starting Bridge Service (port 5001)...")
 start_process([PYTHON_CMD, "-m", "aurora_x.bridge.service"], "Bridge Service")
 time.sleep(2)
 
-# Self-Learning
-print("[WEB] 21. Starting Self-Learning Service (port 5002)...")
-start_process([PYTHON_CMD, "-m", "aurora_x.self_learn_server"],
-              "Self-Learning")
-time.sleep(2)
+# Aurora Nexus V3
+print("[WEB] 21. Starting Aurora Nexus V3 (port 5002)...")
+if os.path.exists("aurora_nexus_v3/main.py"):
+    start_process([PYTHON_CMD, "aurora_nexus_v3/main.py"], "Aurora Nexus V3", critical=True)
+    time.sleep(2)
+else:
+    print("   [WARN]  aurora_nexus_v3/main.py not found - Nexus V3 offline")
 
-# Chat Server
-print("[WEB] 22. Starting Chat Server (port 5003)...")
-start_process([PYTHON_CMD, "aurora_chat_server.py",
-              "--port", "5003"], "Chat Server")
-time.sleep(2)
+# Memory Bridge
+print("[WEB] 22. Starting Memory Bridge (port 5003)...")
+if os.path.exists("server/memory-bridge.py"):
+    start_process([PYTHON_CMD, "server/memory-bridge.py"], "Memory Bridge")
+    time.sleep(2)
+else:
+    print("   [WARN]  server/memory-bridge.py not found - memory disabled")
 
-# Luminar Nexus Dashboard
-print("[WEB] 23. Starting Luminar Nexus Dashboard (port 5005)...")
+# Luminar Nexus V2 API
+print("[WEB] 23. Starting Luminar Nexus V2 API (port 8000)...")
 luminar_path = "tools\\luminar_nexus_v2.py" if IS_WINDOWS else "tools/luminar_nexus_v2.py"
 if os.path.exists(luminar_path.replace("\\", "\\")):
-    start_process([PYTHON_CMD, luminar_path, "api"], "Luminar Dashboard")
+    start_process([PYTHON_CMD, luminar_path, "serve"], "Luminar Nexus V2")
     time.sleep(2)
 
 print("\n" + "━" * 80)
@@ -276,8 +294,7 @@ if os.path.exists(uam_path.replace("\\", "\\")):
 print("[AURORA] 25. Starting Luminar Nexus Orchestration...")
 luminar_main = "tools\\luminar_nexus.py" if IS_WINDOWS else "tools/luminar_nexus.py"
 if os.path.exists(luminar_main.replace("\\", "\\")):
-    start_process([PYTHON_CMD, luminar_main, "monitor"], "Luminar Nexus")
-    time.sleep(2)
+    print("   [WARN]  Legacy Luminar Nexus detected - skipping auto-start")
 
 print("\n" + "━" * 80)
 print("PHASE 9: BACKGROUND PROCESSES")
@@ -341,9 +358,9 @@ print("\n[WEB] WEB SERVICES:")
 services = [
     ("Backend API + Frontend", 5000),
     ("Bridge Service", 5001),
-    ("Self-Learning Service", 5002),
-    ("Chat Server", 5003),
-    ("Luminar Dashboard", 5005),
+    ("Aurora Nexus V3", 5002),
+    ("Memory Bridge", 5003),
+    ("Luminar Nexus V2", 8000),
 ]
 
 web_running = 0

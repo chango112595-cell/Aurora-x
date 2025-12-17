@@ -1,4 +1,4 @@
-#!/workspaces/Aurora-x/.venv/bin/python3
+#!/workspaces/Aurora-x/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
