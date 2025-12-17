@@ -117,7 +117,7 @@ export default function ServerControl() {
         <div className="h-full overflow-auto bg-gradient-to-br from-background via-background to-primary/5">
             <div className="container mx-auto p-6 space-y-8 max-w-7xl">
                 <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-3 pt-6">
-                    <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-cyan-500 to-purple-500 bg-clip-text text-transparent">
+                    <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-emerald-500 to-sky-500 bg-clip-text text-transparent">
                         Aurora Control Center
                     </h1>
                     <p className="text-muted-foreground text-lg">Manage all Aurora services from one powerful interface</p>

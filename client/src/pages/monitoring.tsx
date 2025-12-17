@@ -155,18 +155,18 @@ export default function MonitoringPage() {
   const isLoading = diagLoading;
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-background via-cyan-950/5 to-purple-950/5">
-      <div className="p-6 border-b border-cyan-500/20">
+    <div className="h-full flex flex-col bg-gradient-to-br from-background via-emerald-950/5 to-sky-950/5">
+      <div className="p-6 border-b border-emerald-500/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
               <div className="absolute inset-0 bg-green-500/30 rounded-full blur-md animate-pulse" />
-              <div className="relative w-12 h-12 rounded-full border-2 border-green-400/50 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-cyan-500/20">
+              <div className="relative w-12 h-12 rounded-full border-2 border-green-400/50 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-emerald-500/20">
                 <Activity className="w-6 h-6 text-green-400" />
               </div>
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-green-400 via-cyan-400 to-green-400 bg-clip-text text-transparent" data-testid="text-page-title">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-green-400 via-emerald-400 to-green-400 bg-clip-text text-transparent" data-testid="text-page-title">
                 System Monitor
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -245,13 +245,13 @@ export default function MonitoringPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <Card className="border-cyan-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-services">
-              <CardHeader className="border-b border-cyan-500/20">
-                <CardTitle className="flex items-center gap-2 text-lg text-cyan-300">
-                  <Server className="w-5 h-5 text-cyan-400" />
+            <Card className="border-emerald-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-services">
+              <CardHeader className="border-b border-emerald-500/20">
+                <CardTitle className="flex items-center gap-2 text-lg text-emerald-300">
+                  <Server className="w-5 h-5 text-emerald-400" />
                   Service Status
                 </CardTitle>
-                <CardDescription className="text-cyan-300/60">Core system services health</CardDescription>
+                <CardDescription className="text-emerald-300/60">Core system services health</CardDescription>
               </CardHeader>
               <CardContent className="pt-4">
                 <div className="space-y-3">
@@ -265,7 +265,7 @@ export default function MonitoringPage() {
                     >
                       <div className="flex items-center gap-3">
                         {getStatusIcon(status)}
-                        <span className="text-sm text-cyan-200 capitalize">{service}</span>
+                        <span className="text-sm text-emerald-200 capitalize">{service}</span>
                       </div>
                       <Badge variant="outline" className={getStatusColor(status)}>
                         {status}
@@ -275,7 +275,7 @@ export default function MonitoringPage() {
                   <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
                     <div className="flex items-center gap-3">
                       {getStatusIcon(nexusStatus?.v2?.connected ? 'connected' : 'error')}
-                      <span className="text-sm text-cyan-200">Luminar Nexus V2</span>
+                      <span className="text-sm text-emerald-200">Luminar Nexus V2</span>
                     </div>
                     <Badge variant="outline" className={getStatusColor(nexusStatus?.v2?.connected ? 'connected' : 'error')}>
                       {nexusStatus?.v2?.connected ? 'Connected' : 'Offline'}
@@ -284,7 +284,7 @@ export default function MonitoringPage() {
                   <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
                     <div className="flex items-center gap-3">
                       {getStatusIcon(nexusStatus?.v3?.connected ? 'connected' : 'error')}
-                      <span className="text-sm text-cyan-200">Aurora Nexus V3</span>
+                      <span className="text-sm text-emerald-200">Aurora Nexus V3</span>
                     </div>
                     <Badge variant="outline" className={getStatusColor(nexusStatus?.v3?.connected ? 'connected' : 'error')}>
                       {nexusStatus?.v3?.connected ? 'Connected' : 'Offline'}
@@ -294,34 +294,34 @@ export default function MonitoringPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-purple-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-aurora-health">
-              <CardHeader className="border-b border-purple-500/20">
-                <CardTitle className="flex items-center gap-2 text-lg text-purple-300">
-                  <Zap className="w-5 h-5 text-purple-400" />
+            <Card className="border-sky-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-aurora-health">
+              <CardHeader className="border-b border-sky-500/20">
+                <CardTitle className="flex items-center gap-2 text-lg text-sky-300">
+                  <Zap className="w-5 h-5 text-sky-400" />
                   Aurora Core Health
                 </CardTitle>
-                <CardDescription className="text-purple-300/60">AI engine performance metrics</CardDescription>
+                <CardDescription className="text-sky-300/60">AI engine performance metrics</CardDescription>
               </CardHeader>
               <CardContent className="pt-4">
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-3 bg-slate-800/50 rounded-lg">
-                      <p className="text-xs text-purple-300/60 mb-1">Power Units</p>
-                      <p className="text-xl font-bold text-purple-300" data-testid="text-power-units">
+                      <p className="text-xs text-sky-300/60 mb-1">Power Units</p>
+                      <p className="text-xl font-bold text-sky-300" data-testid="text-power-units">
                         {auroraStatus?.powerUnits || 0}
                       </p>
                     </div>
                     <div className="p-3 bg-slate-800/50 rounded-lg">
-                      <p className="text-xs text-purple-300/60 mb-1">Uptime</p>
-                      <p className="text-xl font-bold text-purple-300" data-testid="text-uptime">
+                      <p className="text-xs text-sky-300/60 mb-1">Uptime</p>
+                      <p className="text-xl font-bold text-sky-300" data-testid="text-uptime">
                         {formatUptime(auroraStatus?.uptime || 0)}
                       </p>
                     </div>
                   </div>
                   <div className="p-3 bg-slate-800/50 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-xs text-purple-300/60">Worker Utilization</p>
-                      <p className="text-xs text-purple-300">
+                      <p className="text-xs text-sky-300/60">Worker Utilization</p>
+                      <p className="text-xs text-sky-300">
                         {auroraStatus?.autofixer?.active || 0} / {auroraStatus?.autofixer?.workers || 300}
                       </p>
                     </div>
@@ -333,7 +333,7 @@ export default function MonitoringPage() {
                   <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <TrendingUp className="w-4 h-4 text-green-400" />
-                      <span className="text-sm text-purple-200">Completed Tasks</span>
+                      <span className="text-sm text-sky-200">Completed Tasks</span>
                     </div>
                     <span className="text-sm font-mono text-green-400">
                       {auroraStatus?.autofixer?.completed || 0}

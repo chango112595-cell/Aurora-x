@@ -35,10 +35,11 @@ interface WorkerMetrics {
 }
 
 interface SystemState {
-  state: string;
-  hyperspeed: boolean;
-  autonomous: boolean;
-  hybrid_mode: boolean;
+  state?: string;
+  status?: string;
+  hyperspeed?: boolean;
+  autonomous?: boolean;
+  hybrid_mode?: boolean;
 }
 
 interface ActivityData {
@@ -151,13 +152,13 @@ export function ActivityMonitor() {
       <CardContent className="space-y-4 pt-4">
         {system && (
           <div className="flex flex-wrap gap-2" data-testid="system-status-badges">
-            <Badge 
-              variant="outline" 
-              className={(system.state || system.status) === "hyperspeed" ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" : ""}
+            <Badge
+              variant="outline"
+              className={(system.state ?? system.status) === "hyperspeed" ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" : ""}
               data-testid="badge-system-state"
             >
               <Zap className="h-3 w-3 mr-1" />
-              {(system.state || system.status || "active").toUpperCase()}
+              {(system.state ?? system.status ?? "unavailable").toUpperCase()}
             </Badge>
             {system.hyperspeed && (
               <Badge variant="outline" className="bg-sky-500/20 text-sky-400 border-sky-500/30" data-testid="badge-hyperspeed">
