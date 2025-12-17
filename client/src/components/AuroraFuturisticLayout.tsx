@@ -31,6 +31,7 @@ interface NavItem {
   label: string;
   icon: React.ReactNode;
   category: 'core' | 'intelligence' | 'operations' | 'labs';
+  tier: 'essential' | 'advanced';
 }
 
 export default function AuroraFuturisticLayout({ children }: { children: React.ReactNode }) {
@@ -38,31 +39,31 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
   const [location] = useLocation();
 
   const navItems: NavItem[] = [
-    { path: '/dashboard', label: 'Command Overview', icon: <LayoutDashboard className="w-5 h-5" />, category: 'core' },
-    { path: '/aurora', label: 'Aurora Core', icon: <Sparkles className="w-5 h-5" />, category: 'core' },
-    { path: '/chat', label: 'Neural Chat', icon: <MessageSquare className="w-5 h-5" />, category: 'core' },
-    { path: '/memory', label: 'Memory Fabric', icon: <Database className="w-5 h-5" />, category: 'core' },
-    { path: '/nexus', label: 'Nexus Command', icon: <Network className="w-5 h-5" />, category: 'core' },
-    { path: '/library', label: 'Code Library', icon: <BookOpen className="w-5 h-5" />, category: 'core' },
+    { path: '/dashboard', label: 'Command Overview', icon: <LayoutDashboard className="w-5 h-5" />, category: 'core', tier: 'essential' },
+    { path: '/aurora', label: 'Aurora Core', icon: <Sparkles className="w-5 h-5" />, category: 'core', tier: 'essential' },
+    { path: '/chat', label: 'Neural Chat', icon: <MessageSquare className="w-5 h-5" />, category: 'core', tier: 'essential' },
+    { path: '/memory', label: 'Memory Fabric', icon: <Database className="w-5 h-5" />, category: 'core', tier: 'essential' },
+    { path: '/nexus', label: 'Nexus Command', icon: <Network className="w-5 h-5" />, category: 'core', tier: 'essential' },
+    { path: '/library', label: 'Code Library', icon: <BookOpen className="w-5 h-5" />, category: 'core', tier: 'advanced' },
 
-    { path: '/intelligence', label: 'Intelligence Core', icon: <Cpu className="w-5 h-5" />, category: 'intelligence' },
-    { path: '/tasks', label: 'Execution Methods', icon: <Layers className="w-5 h-5" />, category: 'intelligence' },
-    { path: '/tiers', label: 'Knowledge Tiers', icon: <GitBranch className="w-5 h-5" />, category: 'intelligence' },
-    { path: '/evolution', label: 'Evolution Monitor', icon: <TrendingUp className="w-5 h-5" />, category: 'intelligence' },
-    { path: '/self-learning', label: 'Self-Learning', icon: <Brain className="w-5 h-5" />, category: 'intelligence' },
-    { path: '/autonomous', label: 'Autonomous Tools', icon: <Zap className="w-5 h-5" />, category: 'intelligence' },
+    { path: '/intelligence', label: 'Intelligence Core', icon: <Cpu className="w-5 h-5" />, category: 'intelligence', tier: 'advanced' },
+    { path: '/tasks', label: 'Execution Methods', icon: <Layers className="w-5 h-5" />, category: 'intelligence', tier: 'advanced' },
+    { path: '/tiers', label: 'Knowledge Tiers', icon: <GitBranch className="w-5 h-5" />, category: 'intelligence', tier: 'advanced' },
+    { path: '/evolution', label: 'Evolution Monitor', icon: <TrendingUp className="w-5 h-5" />, category: 'intelligence', tier: 'advanced' },
+    { path: '/self-learning', label: 'Self-Learning', icon: <Brain className="w-5 h-5" />, category: 'intelligence', tier: 'advanced' },
+    { path: '/autonomous', label: 'Autonomous Tools', icon: <Zap className="w-5 h-5" />, category: 'intelligence', tier: 'advanced' },
 
-    { path: '/monitoring', label: 'System Monitor', icon: <Activity className="w-5 h-5" />, category: 'operations' },
-    { path: '/servers', label: 'Server Control', icon: <Server className="w-5 h-5" />, category: 'operations' },
-    { path: '/database', label: 'Knowledge Base', icon: <Database className="w-5 h-5" />, category: 'operations' },
-    { path: '/roadmap', label: 'Roadmap', icon: <Map className="w-5 h-5" />, category: 'operations' },
-    { path: '/vault', label: 'Vault', icon: <Lock className="w-5 h-5" />, category: 'operations' },
-    { path: '/settings', label: 'Configuration', icon: <Settings className="w-5 h-5" />, category: 'operations' },
+    { path: '/monitoring', label: 'System Monitor', icon: <Activity className="w-5 h-5" />, category: 'operations', tier: 'essential' },
+    { path: '/servers', label: 'Server Control', icon: <Server className="w-5 h-5" />, category: 'operations', tier: 'essential' },
+    { path: '/database', label: 'Knowledge Base', icon: <Database className="w-5 h-5" />, category: 'operations', tier: 'advanced' },
+    { path: '/roadmap', label: 'Roadmap', icon: <Map className="w-5 h-5" />, category: 'operations', tier: 'advanced' },
+    { path: '/vault', label: 'Vault', icon: <Lock className="w-5 h-5" />, category: 'operations', tier: 'advanced' },
+    { path: '/settings', label: 'Configuration', icon: <Settings className="w-5 h-5" />, category: 'operations', tier: 'essential' },
 
-    { path: '/comparison', label: 'Comparison Lab', icon: <BarChart3 className="w-5 h-5" />, category: 'labs' },
-    { path: '/corpus', label: 'Corpus Archive', icon: <FileText className="w-5 h-5" />, category: 'labs' },
-    { path: '/aurora-ui', label: 'Aurora UI', icon: <Palette className="w-5 h-5" />, category: 'labs' },
-    { path: '/aurora-ai-test', label: 'Aurora AI Test', icon: <TestTube className="w-5 h-5" />, category: 'labs' },
+    { path: '/comparison', label: 'Comparison Lab', icon: <BarChart3 className="w-5 h-5" />, category: 'labs', tier: 'advanced' },
+    { path: '/corpus', label: 'Corpus Archive', icon: <FileText className="w-5 h-5" />, category: 'labs', tier: 'advanced' },
+    { path: '/aurora-ui', label: 'Aurora UI', icon: <Palette className="w-5 h-5" />, category: 'labs', tier: 'advanced' },
+    { path: '/aurora-ai-test', label: 'Aurora AI Test', icon: <TestTube className="w-5 h-5" />, category: 'labs', tier: 'advanced' },
   ];
 
   const categoryLabels = {
@@ -74,6 +75,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
 
   const [moduleCount, setModuleCount] = useState<number | null>(null);
   const [quantumCoherence, setQuantumCoherence] = useState<number | null>(null);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   useEffect(() => {
     let isActive = true;
@@ -114,10 +116,24 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const stored = window.localStorage.getItem('aurora-ui-mode');
+    if (stored === 'advanced') {
+      setShowAdvanced(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem('aurora-ui-mode', showAdvanced ? 'advanced' : 'essential');
+  }, [showAdvanced]);
+
   const coherencePercent = quantumCoherence !== null
     ? Math.min(100, Math.max(0, quantumCoherence * 100))
     : null;
 
+  const visibleNavItems = navItems.filter((item) => showAdvanced || item.tier === 'essential');
   const activeItem = navItems.find((item) => location === item.path || (item.path !== '/' && location?.startsWith(item.path)));
 
   const moduleLabel = moduleCount !== null ? moduleCount.toLocaleString() : 'Unavailable';
@@ -180,42 +196,79 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
             )}
           </div>
 
-          <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-4">
-            {(['core', 'intelligence', 'operations', 'labs'] as const).map((category) => (
-              <div key={category}>
-                {sidebarOpen && (
-                  <h3 className="px-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                    {categoryLabels[category]}
-                  </h3>
-                )}
-                <div className="mt-3 space-y-2">
-                  {navItems.filter(item => item.category === category).map(item => {
-                    const isActive = location === item.path || (item.path !== '/' && location?.startsWith(item.path));
-                    return (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`group relative flex items-center gap-3 rounded-2xl border px-3 py-2.5 text-sm transition-all ${
-                          isActive
-                            ? 'border-emerald-400/40 bg-gradient-to-r from-emerald-500/20 via-slate-900/70 to-slate-900/60 text-white shadow-lg shadow-emerald-500/10'
-                            : 'border-transparent bg-slate-900/40 text-slate-300 hover:border-slate-700/70 hover:bg-slate-900/70'
-                        }`}
-                      >
-                        <div className={`${isActive ? 'text-emerald-300' : 'text-slate-400 group-hover:text-slate-200'}`}>
-                          {item.icon}
-                        </div>
-                        {sidebarOpen && (
-                          <span className="font-medium">{item.label}</span>
-                        )}
-                        {isActive && sidebarOpen && (
-                          <span className="ml-auto h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
-                        )}
-                      </Link>
-                    );
-                  })}
+          <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
+            {sidebarOpen && (
+              <div className="rounded-2xl border border-slate-800/60 bg-slate-900/50 p-3 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Navigation Mode</span>
+                  <span className="text-slate-200">{showAdvanced ? 'Advanced' : 'Essential'}</span>
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setShowAdvanced(false)}
+                    className={`rounded-lg border px-2 py-1 text-xs transition ${
+                      !showAdvanced
+                        ? 'border-emerald-400/50 bg-emerald-500/20 text-emerald-100'
+                        : 'border-slate-800/60 bg-slate-900/60 text-slate-300 hover:border-slate-700/80'
+                    }`}
+                    type="button"
+                  >
+                    Essential
+                  </button>
+                  <button
+                    onClick={() => setShowAdvanced(true)}
+                    className={`rounded-lg border px-2 py-1 text-xs transition ${
+                      showAdvanced
+                        ? 'border-sky-400/50 bg-sky-500/20 text-sky-100'
+                        : 'border-slate-800/60 bg-slate-900/60 text-slate-300 hover:border-slate-700/80'
+                    }`}
+                    type="button"
+                  >
+                    Advanced
+                  </button>
                 </div>
               </div>
-            ))}
+            )}
+
+            {(['core', 'intelligence', 'operations', 'labs'] as const).map((category) => {
+              const categoryItems = visibleNavItems.filter(item => item.category === category);
+              if (categoryItems.length === 0) return null;
+              return (
+                <div key={category}>
+                  {sidebarOpen && (
+                    <h3 className="px-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                      {categoryLabels[category]}
+                    </h3>
+                  )}
+                  <div className="mt-3 space-y-2">
+                    {categoryItems.map(item => {
+                      const isActive = location === item.path || (item.path !== '/' && location?.startsWith(item.path));
+                      return (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={`group relative flex items-center gap-3 rounded-2xl border px-3 py-2.5 text-sm transition-all ${
+                            isActive
+                              ? 'border-emerald-400/40 bg-gradient-to-r from-emerald-500/20 via-slate-900/70 to-slate-900/60 text-white shadow-lg shadow-emerald-500/10'
+                              : 'border-transparent bg-slate-900/40 text-slate-300 hover:border-slate-700/70 hover:bg-slate-900/70'
+                          }`}
+                        >
+                          <div className={`${isActive ? 'text-emerald-300' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                            {item.icon}
+                          </div>
+                          {sidebarOpen && (
+                            <span className="font-medium">{item.label}</span>
+                          )}
+                          {isActive && sidebarOpen && (
+                            <span className="ml-auto h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
           </nav>
 
           <div className="border-t border-slate-800/60 p-4">
