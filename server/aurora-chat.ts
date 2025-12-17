@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import { getMemoryFabricClient } from './memory-fabric-client';
 import { getNexusV3Client, type ConsciousnessState } from './nexus-v3-client';
 import { getCognitiveLoop } from './cognitive-loop';
+import { resolvePythonCommand } from './python-runtime';
 import type { Server } from 'http';
 import { 
   executeWithOrchestrator, 
@@ -37,6 +38,7 @@ interface ExecutionWrapperResult {
 const memoryClient = getMemoryFabricClient();
 const nexusV3Client = getNexusV3Client();
 const cognitiveLoop = getCognitiveLoop();
+const PYTHON_CMD = resolvePythonCommand();
 
 export function setupAuroraChatWebSocket(server: Server) {
   const wss = new WebSocketServer({ 
@@ -554,7 +556,7 @@ function callExecutionWrapperDirect(message: string, msgType: string, context: C
       context: context.slice(-4)
     });
 
-    const python = spawn('python3', [wrapperPath], { cwd: process.cwd() });
+    const python = spawn(PYTHON_CMD, [wrapperPath], { cwd: process.cwd() });
     let output = '';
 
     python.stdin.write(inputData);

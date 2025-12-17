@@ -1,6 +1,9 @@
 import { spawn } from 'child_process';
 import { conversationDetector, type ConversationDetection } from './conversation-detector';
 import * as path from 'path';
+import { resolvePythonCommand } from './python-runtime';
+
+const PYTHON_CMD = resolvePythonCommand();
 
 /**
  * EXECUTION DISPATCHER - SIMPLIFIED & WORKING
@@ -36,7 +39,7 @@ function callExecutionWrapper(input: any): Promise<string> {
     const wrapperPath = path.join(process.cwd(), 'tools', 'execution_wrapper.py');
     const inputJson = JSON.stringify(input);
 
-    const python = spawn('python3', [wrapperPath], { cwd: process.cwd() });
+    const python = spawn(PYTHON_CMD, [wrapperPath], { cwd: process.cwd() });
     let output = '';
 
     python.stdin.write(inputJson);

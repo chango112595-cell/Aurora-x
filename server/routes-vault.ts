@@ -8,6 +8,7 @@ import * as fs from "fs";
 import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import { readVaultSecretAsync, getVaultOpLog, appendVaultOpLog, listVaultSecrets, setVaultSecret, deleteVaultSecret } from "./vault-bridge";
+import { resolvePythonCommand } from "./python-runtime";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,6 +17,7 @@ const router = Router();
 const ROOT = path.resolve(__dirname, "..");
 const OPLOG_PATH = path.join(ROOT, "aurora_supervisor", "secure", "vault_oplog.jsonl");
 const VAULT_READ_PY = path.join(ROOT, "aurora_supervisor", "secure", "vault_read.py");
+const PYTHON_CMD = resolvePythonCommand();
 
 const ADMIN_API_KEY = process.env.AURORA_ADMIN_KEY || "";
 
@@ -83,7 +85,7 @@ router.post("/approve", requireAdmin, async (req: Request, res: Response) => {
       return res.status(500).json({ error: "master passphrase not set on server" });
     }
     
-    const child = spawn("python3", [VAULT_READ_PY, alias, master], {
+    const child = spawn(PYTHON_CMD, [VAULT_READ_PY, alias, master], {
       stdio: ["ignore", "pipe", "pipe"]
     });
     

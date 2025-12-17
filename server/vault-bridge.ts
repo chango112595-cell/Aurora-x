@@ -6,6 +6,7 @@ import { spawnSync, spawn } from "child_process";
 import * as path from "path";
 import * as fs from "fs";
 import { fileURLToPath } from "url";
+import { resolvePythonCommand } from "./python-runtime";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +14,7 @@ const ROOT = path.resolve(__dirname, "..");
 const VAULT_READ_PY = path.join(ROOT, "aurora_supervisor", "secure", "vault_read.py");
 const VAULT_LIST_PY = path.join(ROOT, "aurora_supervisor", "secure", "vault_list.py");
 const OPLOG_PATH = path.join(ROOT, "aurora_supervisor", "secure", "vault_oplog.jsonl");
+const PYTHON_CMD = resolvePythonCommand();
 
 /**
  * Read a secret from the ASE-∞ vault
@@ -27,7 +29,7 @@ export function readVaultSecret(alias: string): string | null {
   }
   
   try {
-    const out = spawnSync("python3", [VAULT_READ_PY, alias, master], {
+    const out = spawnSync(PYTHON_CMD, [VAULT_READ_PY, alias, master], {
       encoding: "utf8",
       timeout: 10000
     });
@@ -50,7 +52,7 @@ export function readVaultSecret(alias: string): string | null {
  */
 export function listVaultSecrets(): string[] {
   try {
-    const out = spawnSync("python3", [VAULT_LIST_PY], {
+    const out = spawnSync(PYTHON_CMD, [VAULT_LIST_PY], {
       encoding: "utf8",
       timeout: 5000
     });
@@ -120,7 +122,7 @@ export function readVaultSecretAsync(alias: string): Promise<string | null> {
       return;
     }
     
-    const child = spawn("python3", [VAULT_READ_PY, alias, master], {
+    const child = spawn(PYTHON_CMD, [VAULT_READ_PY, alias, master], {
       stdio: ["ignore", "pipe", "pipe"]
     });
     
@@ -163,7 +165,7 @@ export function setVaultSecret(alias: string, value: string): Promise<boolean> {
     
     const VAULT_SET_PY = path.join(ROOT, "aurora_supervisor", "secure", "vault_set_noninteractive.py");
     
-    const child = spawn("python3", [VAULT_SET_PY, alias, master, value], {
+    const child = spawn(PYTHON_CMD, [VAULT_SET_PY, alias, master, value], {
       stdio: ["ignore", "pipe", "pipe"]
     });
     

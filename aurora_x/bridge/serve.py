@@ -13,7 +13,7 @@ Quality: 10/10 (Perfect)
 #!/usr/bin/env python3
 
 from typing import Dict, List, Tuple, Optional, Any, Union
-import FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from aurora_x.bridge.attach_bridge import attach_bridge
@@ -51,19 +51,6 @@ def health():
 
 
 if __name__ == "__main__":
-
-# Aurora Perfect Error Handling
-try:
-    # Main execution with complete error coverage
-    pass
-except Exception as e:
-    # Handle all exceptions gracefully
-    pass
     import uvicorn
 
-    print("[EMOJI] Starting Aurora Bridge API on port 5001...")
-    print("[EMOJI] Comparison endpoints available at /api/bridge/comparison/*")
-
-    uvicorn.run(app, host="0.0.0.0", port=5001)
-
-# Type annotations: str, int -> bool
+    uvicorn.run(app, host="0.0.0.0", port=5001, log_level="info")

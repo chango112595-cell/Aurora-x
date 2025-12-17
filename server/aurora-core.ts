@@ -11,6 +11,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import MemoryClient from './memory-client';
+import { resolvePythonCommand } from './python-runtime';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,6 +22,7 @@ const PACKS_DIR = path.join(PROJECT_ROOT, "packs");
 const HYPERSPEED_PATH = path.join(PROJECT_ROOT, "hyperspeed", "aurora_hyper_speed_mode.py");
 const NEXUS_V3_CORE_PATH = path.join(PROJECT_ROOT, "aurora_nexus_v3", "core", "universal_core.py");
 const NEXUS_V3_INIT_PATH = path.join(PROJECT_ROOT, "aurora_nexus_v3", "__init__.py");
+const PYTHON_CMD = resolvePythonCommand();
 
 function readJsonFile<T>(filePath: string): T | null {
   try {
@@ -911,7 +913,7 @@ export class AuroraCore {
       // Fix: Use process.cwd() for project root instead of __dirname (which points to .next in Next.js)
       const pythonPath = path.join(process.cwd(), 'aurora_core.py');
       
-      this.pythonProcess = spawn('python', ['-u', pythonPath]);
+      this.pythonProcess = spawn(PYTHON_CMD, ['-u', pythonPath]);
       
       this.pythonProcess.stdout?.on('data', (data) => {
         const output = data.toString();
@@ -937,7 +939,7 @@ export class AuroraCore {
     try {
       // Start memory bridge service
       const memoryScript = path.join(__dirname, 'memory-bridge.py');
-      const memoryProcess = spawn('python', [memoryScript], {
+      const memoryProcess = spawn(PYTHON_CMD, [memoryScript], {
         stdio: ['pipe', 'pipe', 'pipe']
       });
       
@@ -965,7 +967,7 @@ export class AuroraCore {
 
     const memoryFabricScript = path.join(process.cwd(), 'aurora_memory_fabric_v2', 'service.py');
     
-    this.memoryFabricProcess = spawn('python3', [memoryFabricScript, '5004'], {
+    this.memoryFabricProcess = spawn(PYTHON_CMD, [memoryFabricScript, '5004'], {
       stdio: ['pipe', 'pipe', 'pipe']
     });
 

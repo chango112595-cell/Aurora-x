@@ -7,6 +7,8 @@ import { registerLuminarRoutes } from "./luminar-routes";
 import { registerNexusV3Routes } from "./nexus-v3-routes";
 import { createWebSocketServer } from "./websocket-server";
 import { getAuroraAI } from "./aurora";
+import { bootstrapAuxServices, stopAuxServices } from "./service-bootstrap";
+import type { ChildProcess } from "child_process";
 
 interface ServerError extends Error {
   code?: string;
@@ -40,6 +42,7 @@ interface SynthesizeRequest {
 const aurora = AuroraCore.getInstance();
 
 const auroraAI = getAuroraAI();
+let auxProcesses: ChildProcess[] = [];
 
 const app = express();
 const server = createServer(app);
@@ -80,6 +83,11 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  const autoStart = process.env.AURORA_AUTO_START !== "0" && process.env.AURORA_AUTO_START !== "false";
+  if (autoStart) {
+    auxProcesses = await bootstrapAuxServices();
+  }
+
   registerRoutes(app);
 
   registerLuminarRoutes(app);
@@ -200,6 +208,7 @@ app.use((req, res, next) => {
   process.on('SIGTERM', () => {
     aurora.shutdown();
     auroraAI.shutdown();
+    stopAuxServices(auxProcesses);
     server.close(() => {
       process.exit(0);
     });
@@ -208,6 +217,7 @@ app.use((req, res, next) => {
   process.on('SIGINT', () => {
     aurora.shutdown();
     auroraAI.shutdown();
+    stopAuxServices(auxProcesses);
     server.close(() => {
       process.exit(0);
     });

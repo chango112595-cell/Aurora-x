@@ -25,6 +25,7 @@ import { ResponseAdapter } from "./response-adapter";
 import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter } from "./rate-limit";
 import { AuroraCore } from "./aurora-core";
 import { assertDatabaseReady, dbError, isDatabaseAvailable } from "./db";
+import { resolvePythonCommand } from "./python-runtime";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
@@ -36,6 +37,7 @@ const AURORA_GH_TOKEN = process.env.AURORA_GH_TOKEN;
 const GH_API = "https://api.github.com";
 let serverStartTime: number = Date.now();
 const execFileAsync = promisify(execFile);
+const PYTHON_CMD = resolvePythonCommand();
 
 async function runGit(args: string[]): Promise<string> {
   const { stdout } = await execFileAsync("git", args, { cwd: process.cwd() });
@@ -80,7 +82,7 @@ async function refreshReadmeBadges(): Promise<void> {
 
     // Run the Python script to update badges
     await new Promise<void>((resolve, reject) => {
-      execFile('python3', [scriptPath], {
+      execFile(PYTHON_CMD, [scriptPath], {
         cwd: process.cwd(),
         timeout: 10000, // 10 second timeout
         maxBuffer: 1024 * 1024, // 1MB buffer
@@ -227,7 +229,7 @@ export async function registerRoutes(app: Express): Promise<void> {
   app.get("/api/system/metrics", async (req, res) => {
     try {
       const pythonCode = 'import psutil,json;print(json.dumps({"cpu":psutil.cpu_percent(interval=0.1),"memory":psutil.virtual_memory().percent,"disk":psutil.disk_usage("/").percent,"network":{"bytes_sent":psutil.net_io_counters().bytes_sent,"bytes_recv":psutil.net_io_counters().bytes_recv}}))';
-      const metricsProcess = spawn('python3', ['-c', pythonCode]);
+      const metricsProcess = spawn(PYTHON_CMD, ['-c', pythonCode]);
       
       let output = '';
       let errorOutput = '';
@@ -443,7 +445,7 @@ export async function registerRoutes(app: Express): Promise<void> {
         return res.status(400).json({ ok: false, error: "target is required" });
       }
       const script = path.join(AURORA_ROOT, "aurora_supervisor", "apply_approved.py");
-      const child = spawn("python3", [script, target], { stdio: "pipe" });
+      const child = spawn(PYTHON_CMD, [script, target], { stdio: "pipe" });
       let out = "";
       child.stdout.on("data", d => out += d.toString());
       child.stderr.on("data", d => out += d.toString());
@@ -464,7 +466,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     }
     try {
       const script = path.join(AURORA_ROOT, "aurora_supervisor", "aurora_autonomous_roadmap.py");
-      spawn("python3", [script], { detached: true, stdio: "ignore" }).unref();
+      spawn(PYTHON_CMD, [script], { detached: true, stdio: "ignore" }).unref();
       return res.json({ ok: true, message: "Triggered roadmap runner" });
     } catch (e: any) {
       return res.status(500).json({ ok: false, error: String(e.message || e) });
@@ -504,7 +506,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       console.log('[Aurora Heal] Autonomous Healing Requested');
       
       // Execute the Python healing system
-      const healerProcess = spawn('python3', ['tools/aurora_autonomous_fixer.py', '--heal'], {
+      const healerProcess = spawn(PYTHON_CMD, ['tools/aurora_autonomous_fixer.py', '--heal'], {
         cwd: process.cwd(),
         timeout: 30000
       });
@@ -1236,7 +1238,7 @@ except Exception as e:
 `;
 
       // Execute the Python script
-      execFile('python3', ['-c', pythonScript], {
+      execFile(PYTHON_CMD, ['-c', pythonScript], {
         cwd: process.cwd(),
         timeout: 60000, // 60 second timeout for synthesis
         maxBuffer: 10 * 1024 * 1024, // 10MB buffer
@@ -1741,7 +1743,7 @@ except Exception as e:
 
         try {
           await new Promise<void>((resolve, reject) => {
-            execFile('python3', [updateProgressScriptPath], {
+            execFile(PYTHON_CMD, [updateProgressScriptPath], {
               cwd: process.cwd(),
               timeout: 30000, // 30 second timeout
               maxBuffer: 1024 * 1024 * 5, // 5MB buffer
@@ -1795,7 +1797,7 @@ except Exception as e:
 
         try {
           await new Promise<void>((resolve, reject) => {
-            execFile('python3', [patchReadmeScriptPath], {
+            execFile(PYTHON_CMD, [patchReadmeScriptPath], {
               cwd: process.cwd(),
               timeout: 10000, // 10 second timeout
               maxBuffer: 1024 * 1024, // 1MB buffer
@@ -2283,7 +2285,7 @@ except Exception as e:
         console.log('[Self-Learning] Auto-starting daemon after server boot...');
         const interval = 15; // Default 15 seconds
 
-        selfLearningProcess = spawn('python3', [
+        selfLearningProcess = spawn(PYTHON_CMD, [
           '-m', 'aurora_x.self_learn',
           '--sleep', interval.toString(),
           '--max-iters', SELF_LEARNING_DEFAULT_MAX_ITERS.toString(),
@@ -2354,7 +2356,7 @@ except Exception as e:
       console.log(`[Self-Learning] Starting daemon with ${interval}s interval...`);
 
       // Start as detached background process
-      selfLearningProcess = spawn('python3', [
+      selfLearningProcess = spawn(PYTHON_CMD, [
         '-m', 'aurora_x.self_learn',
         '--sleep', interval.toString(),
         '--max-iters', SELF_LEARNING_DEFAULT_MAX_ITERS.toString(),
@@ -2847,7 +2849,7 @@ except Exception as e:
       console.log(`[NL Compile] Processing prompt: "${sanitizedPrompt}"`);
 
       // Execute Aurora-X natural language compilation command
-      const pythonProcess = spawn('python3', ['-m', 'aurora_x.main', '--nl', sanitizedPrompt], {
+      const pythonProcess = spawn(PYTHON_CMD, ['-m', 'aurora_x.main', '--nl', sanitizedPrompt], {
         cwd: process.cwd(),
         timeout: 60000, // 60 second timeout
         shell: false, // Disable shell to prevent injection
@@ -3043,7 +3045,7 @@ except Exception as e:
 
           // Execute Aurora-X with the natural language command using spawn for security
           // Use spawn instead of exec to prevent command injection
-          const spawnProcess = spawn('python3', ['-m', 'aurora_x.main', '--nl', sanitizedMessage], {
+          const spawnProcess = spawn(PYTHON_CMD, ['-m', 'aurora_x.main', '--nl', sanitizedMessage], {
             cwd: process.cwd(),
             timeout: 30000, // 30 second timeout
             shell: false, // Explicitly disable shell to prevent injection
@@ -3605,7 +3607,7 @@ except Exception as e:
 
       // Call Python synthesis engine
       const result = await new Promise<any>((resolve, reject) => {
-        const pythonProcess = spawn('python3', [
+        const pythonProcess = spawn(PYTHON_CMD, [
           '-c',
           `
 import sys
@@ -3813,7 +3815,7 @@ asyncio.run(main())
       const pythonCommand = `from aurora_x.generators.solver import solve_text; import json; import sys; q = sys.stdin.read(); print(json.dumps(solve_text(q)))`;
 
       // Spawn Python process with the query as stdin
-      const python = spawn('python3', ['-c', pythonCommand], {
+      const python = spawn(PYTHON_CMD, ['-c', pythonCommand], {
         cwd: process.cwd(),
         timeout: 5000, // 5 second timeout
       });
@@ -3913,7 +3915,7 @@ asyncio.run(main())
       const pythonCommand = `from aurora_x.generators.solver import solve_text; import json; import sys; q = sys.stdin.read(); print(json.dumps(solve_text(q)))`;
 
       // Spawn Python process with the query as stdin
-      const python = spawn('python3', ['-c', pythonCommand], {
+      const python = spawn(PYTHON_CMD, ['-c', pythonCommand], {
         cwd: process.cwd(),
         timeout: 5000, // 5 second timeout
       });
@@ -4672,21 +4674,21 @@ asyncio.run(main())
 
       if (action === "start") {
         // Start all services using Luminar Nexus
-        execSync(`python3 ${luminarCmd} start-all`, { stdio: "pipe" });
+        execSync(`"${PYTHON_CMD}" ${luminarCmd} start-all`, { stdio: "pipe" });
         res.json({ status: "ok", message: `All Aurora services started via Luminar Nexus` });
       } else if (action === "stop") {
         // Stop all services using Luminar Nexus
-        execSync(`python3 ${luminarCmd} stop-all`, { stdio: "pipe" });
+        execSync(`"${PYTHON_CMD}" ${luminarCmd} stop-all`, { stdio: "pipe" });
         res.json({ status: "ok", message: `All Aurora services stopped via Luminar Nexus` });
       } else if (action === "restart") {
         // Restart all services using Luminar Nexus
-        execSync(`python3 ${luminarCmd} stop-all`, { stdio: "pipe" });
+        execSync(`"${PYTHON_CMD}" ${luminarCmd} stop-all`, { stdio: "pipe" });
         await new Promise(resolve => setTimeout(resolve, 2000));
-        execSync(`python3 ${luminarCmd} start-all`, { stdio: "pipe" });
+        execSync(`"${PYTHON_CMD}" ${luminarCmd} start-all`, { stdio: "pipe" });
         res.json({ status: "ok", message: `All Aurora services restarted via Luminar Nexus` });
       } else if (action === "status") {
         // Get status from Luminar Nexus
-        const output = execSync(`python3 ${luminarCmd} status`, { encoding: 'utf-8' });
+        const output = execSync(`"${PYTHON_CMD}" ${luminarCmd} status`, { encoding: 'utf-8' });
         res.json({ status: "ok", message: output });
       } else {
         res.status(400).json({ status: "error", message: "Unknown action" });
