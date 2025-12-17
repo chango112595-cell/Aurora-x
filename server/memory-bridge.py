@@ -4,24 +4,16 @@ Aurora Memory Bridge Service
 Exposes Memory Manager functionality via HTTP API for TypeScript integration
 """
 
-<<<<<<< HEAD
-from core.memory_manager import AuroraMemoryManager
-=======
->>>>>>> 9f35319329dbaf49c6f6babeb507a21019a8c838
 import sys
 import json
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
-<<<<<<< HEAD
-# Add parent directory to Python path
-=======
-# Add cog_kernel and memory to Python path (must be before cog_kernel imports)
->>>>>>> 9f35319329dbaf49c6f6babeb507a21019a8c838
+# Add parent directory to Python path for core imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from cog_kernel.memory_abstraction.manager import MemoryMediator
+from core.memory_manager import AuroraMemoryManager
 
 
 # Global memory instance

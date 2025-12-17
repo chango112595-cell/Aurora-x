@@ -23,15 +23,24 @@ import { getChatResponse, searchWeb } from "./aurora-chat";
 import { executeWithOrchestrator, selectExecutionMethod, getCapabilities, type ExecutionContext } from "./aurora-execution-orchestrator";
 import { ResponseAdapter } from "./response-adapter";
 import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter } from "./rate-limit";
+import { AuroraCore } from "./aurora-core";
+import { assertDatabaseReady, dbError, isDatabaseAvailable } from "./db";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
 const BRIDGE_URL = process.env.AURORA_BRIDGE_URL || "http://0.0.0.0:5001";
+const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://0.0.0.0:8000";
 const AURORA_REPO = process.env.AURORA_REPO || "chango112595-cell/Aurora-x";
 const TARGET_BRANCH = process.env.AURORA_TARGET_BRANCH || "main";
 const AURORA_GH_TOKEN = process.env.AURORA_GH_TOKEN;
 const GH_API = "https://api.github.com";
 let serverStartTime: number = Date.now();
+const execFileAsync = promisify(execFile);
+
+async function runGit(args: string[]): Promise<string> {
+  const { stdout } = await execFileAsync("git", args, { cwd: process.cwd() });
+  return stdout.trim();
+}
 
 // WebSocket server reference - set from index.ts after initialization
 let wsServer: SynthesisWebSocketServer | null = null;
@@ -194,6 +203,26 @@ export async function registerRoutes(app: Express): Promise<void> {
     });
   });
 
+  app.get("/api/database/status", async (_req, res) => {
+    try {
+      await assertDatabaseReady();
+      res.json({
+        ready: true,
+        configured: true,
+        available: isDatabaseAvailable()
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Database unavailable";
+      res.status(503).json({
+        ready: false,
+        configured: !!process.env.DATABASE_URL,
+        available: isDatabaseAvailable(),
+        error: message,
+        last_error: dbError || undefined
+      });
+    }
+  });
+
   // Real system metrics endpoint using psutil
   app.get("/api/system/metrics", async (req, res) => {
     try {
@@ -287,6 +316,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       
       // Read evolution log for real learning events
       let learningEvents: any[] = [];
+      let learningLogAvailable = false;
       try {
         const evolutionLogPath = pathModule.join(process.cwd(), 'aurora_supervisor/data/evolution_log.jsonl');
         const logContent = await fsPromises.readFile(evolutionLogPath, 'utf-8');
@@ -309,21 +339,15 @@ export async function registerRoutes(app: Express): Promise<void> {
             };
           }
         }).slice(0, 5);
+        learningLogAvailable = true;
       } catch {
-        // No evolution log, create placeholder based on real tier data
-        const now = Date.now();
-        learningEvents = [
-          { timestamp: new Date(now - 60000).toISOString(), type: 'tier_activation', description: `${activeTiers} intelligence tiers active`, improvement: 1.5 },
-          { timestamp: new Date(now - 120000).toISOString(), type: 'execution_ready', description: `${activeExecs} execution methods operational`, improvement: 1.2 },
-          { timestamp: new Date(now - 180000).toISOString(), type: 'module_loaded', description: `${moduleCount} modules integrated`, improvement: 1.8 },
-          { timestamp: new Date(now - 240000).toISOString(), type: 'capability_count', description: `${totalCapabilities} capabilities available`, improvement: 1.3 },
-          { timestamp: new Date(now - 300000).toISOString(), type: 'system_ready', description: 'Aurora system fully operational', improvement: 2.0 },
-        ];
+        learningEvents = [];
       }
       
       res.json({
         metrics: evolutionMetrics,
         learningEvents,
+        learningLogAvailable,
         summary: {
           totalTiers: tiersData.tiers.length,
           activeTiers,
@@ -537,34 +561,6 @@ export async function registerRoutes(app: Express): Promise<void> {
     }
   });
 
-  // Luminar Nexus V2 Status Proxy - forwards requests to port 5005
-  app.get("/api/luminar-nexus/v2/status", async (req, res) => {
-    try {
-      const response = await fetch('http://localhost:5005/api/nexus/status');
-
-      if (!response.ok) {
-        return res.status(response.status).json({ 
-          error: "Luminar Nexus V2 service unavailable",
-          status: "degraded"
-        });
-      }
-
-      const data = await response.json();
-      res.json(data);
-    } catch (error) {
-      console.error('[Luminar Nexus V2] Proxy error:', error);
-      res.status(503).json({ 
-        error: "Could not connect to Luminar Nexus V2",
-        status: "unavailable",
-        services: {},
-        quantum_coherence: 0,
-        healthy_services: 0,
-        ai_learning_active: false,
-        autonomous_healing_active: false
-      });
-    }
-  });
-
   // Note: Conversation memory and web search are now handled in server/aurora-chat.ts
 
   // Chat endpoint - Aurora's autonomous conversational interface
@@ -581,7 +577,6 @@ export async function registerRoutes(app: Express): Promise<void> {
       const isTerminalClient = client === 'terminal';
       console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId, 'Client:', client || 'web');
 
-<<<<<<< HEAD
       // Store user message in memory
       try {
         const aurora = await import('./aurora-core');
@@ -597,8 +592,6 @@ export async function registerRoutes(app: Express): Promise<void> {
         console.warn('[Aurora Chat] Memory storage error:', memError);
       }
 
-      // Try routing to Aurora AI Backend first (port 8000)
-=======
       const msgLower = message.toLowerCase().trim();
       
       const isDirectAction = msgLower.includes('list files') || 
@@ -664,9 +657,9 @@ export async function registerRoutes(app: Express): Promise<void> {
         }
       }
 
->>>>>>> 9f35319329dbaf49c6f6babeb507a21019a8c838
+      // Try routing to Aurora AI Backend first
       try {
-        const aiResponse = await fetch('http://0.0.0.0:8000/api/chat', {
+        const aiResponse = await fetch(`${LUMINAR_V2_URL}/api/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -700,7 +693,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
       if (isSystemCommand) {
         try {
-          const v2Response = await fetch('http://localhost:5005/api/chat', {
+          const v2Response = await fetch(`${LUMINAR_V2_URL}/api/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message, session_id: sessionId }),
@@ -783,7 +776,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       let v2SystemStatus = null;
 
       try {
-        const v2StatusResponse = await fetch('http://localhost:5005/api/nexus/status', {
+        const v2StatusResponse = await fetch(`${LUMINAR_V2_URL}/api/nexus/status`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });
@@ -826,200 +819,6 @@ export async function registerRoutes(app: Express): Promise<void> {
       res.json(status);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
-    }
-  });
-
-  // Luminar Nexus V2 detailed status endpoint for dashboard
-  app.get("/api/luminar-nexus/v2/status", async (req, res) => {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
-      const v2Response = await fetch('http://0.0.0.0:5005/api/nexus/status', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (v2Response.ok) {
-        const v2Data = await v2Response.json();
-        res.json({
-          version: '2.0.0',
-          active: true,
-          ...v2Data
-        });
-      } else {
-        res.status(503).json({ 
-          error: 'Luminar Nexus V2 not available',
-          active: false,
-          version: '2.0.0'
-        });
-      }
-    } catch (error: any) {
-      if (error.name === 'AbortError') {
-        res.status(504).json({ 
-          error: 'Luminar Nexus V2 timeout',
-          active: false,
-          version: '2.0.0'
-        });
-      } else {
-        res.status(503).json({ 
-          error: 'Luminar Nexus V2 not running',
-          message: error.message,
-          active: false,
-          version: '2.0.0'
-        });
-      }
-    }
-  });
-
-  // Luminar Nexus V2 service action endpoints
-  app.post("/api/luminar-nexus/v2/services/:serviceName/restart", async (req, res) => {
-    try {
-      const { serviceName } = req.params;
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-      const v2Response = await fetch(`http://0.0.0.0:5005/api/services/${serviceName}/restart`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (v2Response.ok) {
-        const data = await v2Response.json();
-        res.json(data);
-      } else {
-        res.status(503).json({ 
-          error: 'Service restart not available',
-          message: 'Luminar Nexus V2 service action endpoint not responding'
-        });
-      }
-    } catch (error: any) {
-      if (error.name === 'AbortError') {
-        res.status(504).json({ error: 'Request timeout' });
-      } else {
-        res.status(500).json({ error: error.message });
-      }
-    }
-  });
-
-  app.post("/api/luminar-nexus/v2/services/:serviceName/scale", async (req, res) => {
-    try {
-      const { serviceName } = req.params;
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-      const v2Response = await fetch(`http://0.0.0.0:5005/api/services/${serviceName}/scale`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (v2Response.ok) {
-        const data = await v2Response.json();
-        res.json(data);
-      } else {
-        res.status(503).json({ 
-          error: 'Service scaling not available',
-          message: 'Luminar Nexus V2 service action endpoint not responding'
-        });
-      }
-    } catch (error: any) {
-      if (error.name === 'AbortError') {
-        res.status(504).json({ error: 'Request timeout' });
-      } else {
-        res.status(500).json({ error: error.message });
-      }
-    }
-  });
-
-  app.get("/api/luminar-nexus/v2/logs/:serviceName", async (req, res) => {
-    const { serviceName } = req.params;
-
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-      const v2Response = await fetch(`http://0.0.0.0:5005/api/services/${serviceName}/logs`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (v2Response.ok) {
-        const data = await v2Response.json();
-        res.json(data);
-      } else {
-        res.json({ 
-          logs: [
-            `[${new Date().toISOString()}] Service logs not available`,
-            `[${new Date().toISOString()}] Luminar Nexus V2 service log endpoint not responding`,
-            `[${new Date().toISOString()}] Service: ${serviceName}`
-          ]
-        });
-      }
-    } catch (error: any) {
-      res.json({ 
-        logs: [
-          `[${new Date().toISOString()}] Error fetching logs: ${error.message}`,
-          `[${new Date().toISOString()}] Service: ${serviceName}`
-        ]
-      });
-    }
-  });
-
-  // Aurora: Natural language conversation endpoint (proxies to Luminar Nexus)
-  app.post("/api/chat", async (req, res) => {
-    try {
-      const { message, session_id } = req.body;
-
-      if (!message || typeof message !== 'string') {
-        return res.status(400).json({
-          response: "I need a message to respond to!",
-          type: "error"
-        });
-      }
-
-      console.log('[Aurora] Proxying conversation to Luminar Nexus:', message);
-
-      // Proxy to Luminar Nexus chat server (port 5003)
-      const nexusResponse = await fetch('http://localhost:5003/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: message,
-          session_id: session_id || 'backend-session'
-        })
-      });
-
-      if (!nexusResponse.ok) {
-        throw new Error(`Luminar Nexus returned ${nexusResponse.status}`);
-      }
-
-      const data = await nexusResponse.json();
-
-      res.status(200).json({
-        response: data.response,
-        type: "conversation",
-        timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      console.error('[Aurora] Conversation proxy error:', error);
-      res.status(500).json({
-        response: "I encountered an error processing that. Could you try again?",
-        type: "error"
-      });
     }
   });
 
@@ -1317,102 +1116,6 @@ export async function registerRoutes(app: Express): Promise<void> {
       res.json(result);
     } catch (error: any) {
       res.status(500).json({ success: false, error: error.message });
-    }
-  });
-
-  // ================================
-  // Combined Nexus Status API
-  // ================================
-  app.get("/api/nexus/status", async (req, res) => {
-    try {
-      // Check Luminar Nexus V2 status (Chat & ML)
-      let v2Status = {
-        connected: false,
-        port: 8000,
-        status: 'offline',
-        chatResponses: 0
-      };
-      
-      try {
-        const v2Response = await fetch('http://localhost:8000/api/nexus/status', { 
-          signal: AbortSignal.timeout(2000) 
-        });
-        if (v2Response.ok) {
-          const v2Data = await v2Response.json();
-          v2Status = {
-            connected: true,
-            port: 8000,
-            status: v2Data.status || 'running',
-            chatResponses: v2Data.chat_responses || v2Data.ml_patterns_learned || v2Data.requests_served || 0
-          };
-        }
-      } catch (e) {
-        // V2 not available
-      }
-
-      // Check Aurora Nexus V3 status (Universal Consciousness)
-      let v3Status = {
-        connected: false,
-        status: 'offline',
-        workers: 300,
-        tiers: 188,
-        aems: 66,
-        modules: 550,
-        hybridMode: false
-      };
-      
-      try {
-        // V3 runs as a Python process on port 5002, check its HTTP API
-        const v3Response = await fetch('http://localhost:5002/api/health', { 
-          signal: AbortSignal.timeout(2000) 
-        });
-        if (v3Response.ok) {
-          const v3Data = await v3Response.json();
-          // Also fetch capabilities for more details
-          let capabilities = { workers: 300, tiers: 188, aems: 66, modules: 550, hybridMode: false };
-          try {
-            const capRes = await fetch('http://localhost:5002/api/capabilities', { signal: AbortSignal.timeout(1000) });
-            if (capRes.ok) {
-              const capData = await capRes.json();
-              capabilities = {
-                workers: capData.workers || 300,
-                tiers: capData.tiers || 188,
-                aems: capData.aems || 66,
-                modules: capData.modules || 550,
-                hybridMode: capData.hybrid_mode_enabled || false
-              };
-            }
-          } catch {}
-          v3Status = {
-            connected: true,
-            status: v3Data.status || 'running',
-            workers: capabilities.workers,
-            tiers: capabilities.tiers,
-            aems: capabilities.aems,
-            modules: capabilities.modules,
-            hybridMode: capabilities.hybridMode
-          };
-        }
-      } catch (e) {
-        // V3 API not available, check if manifests are loaded (indicates V3 is running)
-        try {
-          const { existsSync } = await import('fs');
-          if (existsSync('manifests/tiers.manifest.json')) {
-            v3Status.connected = true;
-            v3Status.status = 'running (standalone)';
-          }
-        } catch {}
-      }
-
-      res.json({
-        v2: v2Status,
-        v3: v3Status
-      });
-    } catch (error: any) {
-      res.status(500).json({
-        v2: { connected: false, port: 8000, status: 'error', chatResponses: 0 },
-        v3: { connected: false, status: 'error', workers: 300, tiers: 188, aems: 66, modules: 550, hybridMode: false }
-      });
     }
   });
 
@@ -2407,7 +2110,7 @@ except Exception as e:
   // Aurora AI Backend health check proxy
   app.get("/api/aurora-ai/health", async (req, res) => {
     try {
-      const response = await fetch('http://0.0.0.0:8000/healthz', {
+      const response = await fetch(`${LUMINAR_V2_URL}/healthz`, {
         signal: AbortSignal.timeout(5000)
       });
       
@@ -3477,43 +3180,9 @@ except Exception as e:
           description = docstringMatch[1].trim();
         }
 
-        // Check if the code contains todo_spec (old fallback pattern) and replace it
+        // Reject placeholder output instead of fabricating code.
         if (code && (code.includes('todo_spec') || code.includes('def todo_spec()'))) {
-          console.log(`[Aurora-X] Warning: Generated code contains todo_spec, replacing with proper implementation`);
-
-          // Generate a proper function name from the message
-          const cleanMessage = message.toLowerCase().replace(/[^\w\s]/g, '').trim();
-          const words = cleanMessage.split(/\s+/).filter(w => 
-            !['a', 'an', 'the', 'to', 'for', 'of', 'with', 'by', 'from', 'in', 'on', 'at', 'me', 'you', 'i', 'we', 'my', 'your', 'please', 'can', 'could', 'would'].includes(w)
-          ).slice(0, 4);
-          const funcName = words.join('_') || 'custom_function';
-          functionName = funcName;
-
-          // Determine appropriate implementation based on request
-          const lowerMsg = message.toLowerCase();
-          if (lowerMsg.includes('haiku') || lowerMsg.includes('poem')) {
-            code = `def ${funcName}() -> str:
-    """Generate creative text based on request: ${message}"""
-    return """Silent code runs deep
-Algorithms dance in loops  
-Data flows like streams"""`;
-          } else if (lowerMsg.includes('happy') || lowerMsg.includes('joy')) {
-            code = `def ${funcName}() -> str:
-    """Generate something uplifting"""
-    return "✨ Here's a spark of joy! Remember, every line of code you write makes the digital world a little brighter!"`;
-          } else if (lowerMsg.includes('calculate') || lowerMsg.includes('compute') || lowerMsg.includes('quantum')) {
-            code = `def ${funcName}() -> int:
-    """Perform calculation for: ${message}"""
-    return 42  # The universal answer`;
-          } else if (lowerMsg.includes('generate') || lowerMsg.includes('create') || lowerMsg.includes('make')) {
-            code = `def ${funcName}() -> str:
-    """Generate output for: ${message}"""
-    return "Generated creative output for: ${message}"`;
-          } else {
-            code = `def ${funcName}() -> str:
-    """Process request: ${message}"""
-    return f"Processing complete for: ${message}"`;
-          }
+          throw new Error("Synthesis output contains placeholder markers");
         }
 
         // Prepare response message
@@ -3524,55 +3193,8 @@ Data flows like streams"""`;
           responseMessage += `This function was generated based on your request: "${message}"`;
         }
 
-        // If still no code, use an enhanced fallback
         if (!code) {
-          console.log(`[Aurora-X] Warning: No generated code found, using enhanced fallback`);
-
-          // Generate a proper function name from the message
-          const cleanMessage = message.toLowerCase().replace(/[^\w\s]/g, '').trim();
-          const words = cleanMessage.split(/\s+/).filter(w => 
-            !['a', 'an', 'the', 'to', 'for', 'of', 'with', 'by', 'from', 'in', 'on', 'at', 'me', 'you', 'i', 'we', 'my', 'your', 'please', 'can', 'could', 'would'].includes(w)
-          ).slice(0, 4);
-          const funcName = words.join('_') || 'custom_function';
-          functionName = funcName;
-
-          // Generate working code based on request type
-          const lowerMsg = message.toLowerCase();
-          if (lowerMsg.includes('haiku') || lowerMsg.includes('poem')) {
-            code = `# Aurora-X Synthesis Result
-# Request: ${message}
-def ${funcName}() -> str:
-    """Generate something to brighten your day"""
-    return "😊 You're doing amazing! Keep up the great work!"`;
-          } else if (lowerMsg.includes('story')) {
-            code = `# Aurora-X Synthesis Result
-# Request: ${message}
-
-def ${funcName}() -> str:
-    """Generate a short story"""
-    return "Once upon a time, in a digital realm where functions lived and thrived, there was a special algorithm that brought joy to all who encountered it."`;
-          } else if (lowerMsg.includes('joke')) {
-            code = `# Aurora-X Synthesis Result
-# Request: ${message}
-
-def ${funcName}() -> str:
-    """Generate a programming joke"""
-    return "Why do programmers prefer dark mode? Because light attracts bugs!"`;
-          } else if (lowerMsg.includes('calculate') || lowerMsg.includes('compute')) {
-            code = `# Aurora-X Synthesis Result
-# Request: ${message}
-
-def ${funcName}() -> int:
-    """Perform calculation"""
-    return 42  # The answer to everything`;
-          } else {
-            code = `# Aurora-X Synthesis Result
-# Request: ${message}
-
-def ${funcName}() -> str:
-    """Function generated by Aurora-X for: ${message}"""
-    return "Result generated for: ${message}"`;
-          }
+          throw new Error("No synthesized code produced");
         }
 
         // Update progress store with COMPLETE status and synthesis result
@@ -3608,191 +3230,7 @@ def ${funcName}() -> str:
           wsServer.broadcastProgress(progressStore.getProgress(synthesisId)!);
         }
 
-        // Try to provide a fallback implementation
-        const lowerMessage = message.toLowerCase();
-        let fallbackCode = "";
-        let fallbackMessage = "I'll help you with that. ";
-
-        // Provide basic implementations for common requests
-        if (lowerMessage.includes("reverse") && lowerMessage.includes("string")) {
-          fallbackMessage += "Here's a string reversal function:";
-          fallbackCode = `def reverse_string(s: str) -> str:
-    """Reverse a given string."""
-    return s[::-1]
-
-# Example usage
-if __name__ == "__main__":
-    test_string = "hello"
-    result = reverse_string(test_string)
-    print(f"'{test_string}' reversed is '{result}'")`;
-        } else if (lowerMessage.includes("factorial")) {
-          fallbackMessage += "Here's a factorial calculation function:";
-          fallbackCode = `def factorial(n: int) -> int:
-    """Calculate the factorial of a non-negative integer."""
-    if n < 0:
-        raise ValueError("Factorial is not defined for negative numbers")
-    if n == 0 or n == 1:
-        return 1
-    result = 1
-    for i in range(2, n + 1):
-        result *= i
-    return result
-
-# Example usage
-if __name__ == "__main__":
-    num = 5
-    result = factorial(num)
-    print(f"Factorial of {num} is {result}")`;
-        } else if (lowerMessage.includes("palindrome")) {
-          fallbackMessage += "Here's a palindrome checker:";
-          fallbackCode = `def is_palindrome(s: str) -> bool:
-    """Check if a string is a palindrome."""
-    # Remove spaces and convert to lowercase for comparison
-    cleaned = ''.join(s.split()).lower()
-    return cleaned == cleaned[::-1]
-
-# Example usage
-if __name__ == "__main__":
-    test_string = "racecar"
-    result = is_palindrome(test_string)
-    print(f"'{test_string}' is {'a' if result else 'not a'} palindrome")`;
-        } else if (lowerMessage.includes("fibonacci")) {
-          fallbackMessage += "Here's a Fibonacci sequence function:";
-          fallbackCode = `def fibonacci(n: int) -> int:
-    """Return the nth Fibonacci number."""
-    if n < 0:
-        raise ValueError("n must be non-negative")
-    if n <= 1:
-        return n
-
-    a, b = 0, 1
-    for _ in range(2, n + 1):
-        a, b = b, a + b
-    return b
-
-# Example usage
-if __name__ == "__main__":
-    n = 10
-    result = fibonacci(n)
-    print(f"The {n}th Fibonacci number is {result}")`;
-        } else if (lowerMessage.includes("prime")) {
-          fallbackMessage += "Here's a prime number checker:";
-          fallbackCode = `def is_prime(n: int) -> bool:
-    """Check if a number is prime."""
-    if n < 2:
-        return False
-    if n == 2:
-        return True
-    if n % 2 == 0:
-        return False
-
-    for i in range(3, int(n**0.5) + 1, 2):
-        if n % i == 0:
-            return False
-    return True
-
-# Example usage
-if __name__ == "__main__":
-    num = 17
-    result = is_prime(num)
-    print(f"{num} is {'prime' if result else 'not prime'}")`;
-        } else if ((lowerMessage.includes("add") || lowerMessage.includes("sum")) && lowerMessage.includes("two")) {
-          fallbackMessage += "Here's a function to add two numbers:";
-          fallbackCode = `def add_two_numbers(a: int, b: int) -> int:
-    """Add two numbers together."""
-    return a + b
-
-# Example usage
-if __name__ == "__main__":
-    result = add_two_numbers(5, 3)
-    print(f"5 + 3 = {result}")`;
-        } else if (lowerMessage.includes("largest") || lowerMessage.includes("maximum")) {
-          fallbackMessage += "Here's a function to find the largest number:";
-          fallbackCode = `def find_largest(numbers: list[int]) -> int:
-    """Find the largest number in a list."""
-    if not numbers:
-        raise ValueError("List cannot be empty")
-    return max(numbers)
-
-# Example usage
-if __name__ == "__main__":
-    nums = [3, 7, 2, 9, 1, 5]
-    result = find_largest(nums)
-    print(f"The largest number in {nums} is {result}")`;
-        } else if (lowerMessage.includes("sort")) {
-          fallbackMessage += "Here's a sorting function:";
-          fallbackCode = `def sort_list(nums: list[int]) -> list[int]:
-    """Sort a list of integers in ascending order."""
-    return sorted(nums)
-
-# Example usage
-if __name__ == "__main__":
-    nums = [3, 7, 2, 9, 1, 5]
-    result = sort_list(nums)
-    print(f"Sorted list: {result}")`;
-        } else if (lowerMessage.includes("vowel")) {
-          fallbackMessage += "Here's a vowel counting function:";
-          fallbackCode = `def count_vowels(s: str) -> int:
-    """Count the number of vowels in a string."""
-    vowels = "aeiouAEIOU"
-    return sum(1 for char in s if char in vowels)
-
-# Example usage
-if __name__ == "__main__":
-    text = "hello world"
-    result = count_vowels(text)
-    print(f"'{text}' contains {result} vowels")`;
-        } else if (lowerMessage.includes("gcd") || lowerMessage.includes("greatest common divisor")) {
-          fallbackMessage += "Here's a GCD function:";
-          fallbackCode = `def gcd(a: int, b: int) -> int:
-    """Find the greatest common divisor of two numbers."""
-    while b:
-        a, b = b, a % b
-    return abs(a)
-
-# Example usage
-if __name__ == "__main__":
-    result = gcd(48, 18)
-    print(f"GCD of 48 and 18 is {result}")`;
-        } else {
-          fallbackMessage += "Here's a template function based on your request:";
-          fallbackCode = `def custom_function():
-    """
-    Function for: ${message}
-
-    This is a placeholder. Aurora-X synthesis engine
-    would normally generate the actual implementation.
-    """
-    # Implementation would be generated here
-    return "Result based on: ${message}"
-
-# Example usage
-if __name__ == "__main__":
-    result = custom_function()
-    print(result)`;
-        }
-
-        // Update progress store with fallback result
-        progressStore.updateProgress(
-          synthesisId,
-          "COMPLETE",
-          100,
-          fallbackMessage,
-          {
-            code: fallbackCode,
-            language: "python",
-            functionName: "fallback_function",
-            description: fallbackMessage,
-            timestamp: new Date().toISOString()
-          }
-        );
-
-        // Broadcast completion via WebSocket if available
-        if (wsServer) {
-          wsServer.broadcastProgress(progressStore.getProgress(synthesisId)!);
-        }
-
-        console.log(`[Aurora-X] Synthesis completed with fallback for: ${synthesisId}`);
+        console.warn(`[Aurora-X] Synthesis failed without fallback for: ${synthesisId}`);
       }
       }, 100); // Execute synthesis asynchronously with 100ms delay
     } catch (error: any) {
@@ -4589,6 +4027,224 @@ asyncio.run(main())
         error: "Internal server error",
         message: error.message
       });
+    }
+  });
+
+  // Self-healing status endpoint
+  app.get("/api/self-healing/status", async (req, res) => {
+    try {
+      const aurora = AuroraCore.getInstance();
+      const healerStats = aurora.getSelfHealerStats();
+      const recentEvents = aurora.getRecentHealingEvents(10);
+      const lastEvent = recentEvents[recentEvents.length - 1];
+
+      res.json({
+        enabled: healerStats.status === "operational",
+        healers: {
+          total: healerStats.total,
+          active: healerStats.active,
+          healing: healerStats.healing,
+          cooldown: healerStats.cooldown
+        },
+        lastHealTime: lastEvent?.endTime ? new Date(lastEvent.endTime).toISOString() : null,
+        healsCompleted: healerStats.healsPerformed,
+        issuesDetected: recentEvents.length,
+        mode: "autonomous"
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to get self-healing status", message: error.message });
+    }
+  });
+
+  // Comparison endpoints for Aurora runs and git history
+  app.get("/api/bridge/comparison/commits", async (req, res) => {
+    try {
+      const currentBranch = await runGit(["rev-parse", "--abbrev-ref", "HEAD"]);
+      const log = await runGit(["log", "-20", "--pretty=format:%H|%h|%s"]);
+      const commits = log
+        .split("\n")
+        .filter(Boolean)
+        .map((line) => {
+          const [hash, short_hash, message] = line.split("|");
+          return { hash, short_hash, message };
+        });
+      res.json({ ok: true, current_branch: currentBranch, commits });
+    } catch (error: any) {
+      res.status(500).json({ ok: false, error: "commit_query_failed", message: error.message });
+    }
+  });
+
+  app.get("/api/bridge/comparison/diff", async (req, res) => {
+    try {
+      const commit1 = typeof req.query.commit1 === "string" ? req.query.commit1 : "";
+      const commit2 = typeof req.query.commit2 === "string" ? req.query.commit2 : "";
+      const args = commit1 && commit2
+        ? ["diff", "--name-status", `${commit1}`, `${commit2}`]
+        : ["diff", "--name-status"];
+      const diff = await runGit(args);
+      const files = diff
+        ? diff.split("\n").filter(Boolean).map((line) => {
+            const parts = line.split("\t");
+            const status = parts[0];
+            const file = parts[parts.length - 1];
+            const statusText = status.startsWith("A")
+              ? "Added"
+              : status.startsWith("M")
+                ? "Modified"
+                : status.startsWith("D")
+                  ? "Deleted"
+                  : status.startsWith("R")
+                    ? "Renamed"
+                    : "Changed";
+            return { status, file, status_text: statusText };
+          })
+        : [];
+      res.json({ ok: true, files });
+    } catch (error: any) {
+      res.status(500).json({ ok: false, error: "diff_failed", message: error.message });
+    }
+  });
+
+  app.get("/api/bridge/comparison/branches", async (req, res) => {
+    try {
+      const rawBranches = await runGit(["for-each-ref", "refs/heads", "--format=%(refname:short)"]);
+      const branches = rawBranches ? rawBranches.split("\n").filter(Boolean) : [];
+      const baseBranch = branches.includes("main") ? "main" : branches.includes("master") ? "master" : branches[0] || "";
+
+      const results = [];
+      for (const branch of branches) {
+        const commitCount = parseInt(await runGit(["rev-list", "--count", branch]), 10) || 0;
+        const last = await runGit(["log", "-1", "--pretty=format:%h|%s", branch]);
+        const [lastHash, lastMessage] = last.split("|");
+        const diff = baseBranch ? await runGit(["diff", "--numstat", `${baseBranch}..${branch}`]) : "";
+        let filesChanged = 0;
+        let added = 0;
+        let deleted = 0;
+        for (const line of diff.split("\n").filter(Boolean)) {
+          const [addStr, delStr] = line.split("\t");
+          filesChanged += 1;
+          added += parseInt(addStr, 10) || 0;
+          deleted += parseInt(delStr, 10) || 0;
+        }
+        const messages = await runGit(["log", "-3", "--pretty=format:%s", branch]);
+        const uniqueFeatures = messages.split("\n").filter(Boolean);
+        const featureCategory = uniqueFeatures.some((msg) => /fix|bug/i.test(msg))
+          ? "fix"
+          : uniqueFeatures.some((msg) => /perf|opt/i.test(msg))
+            ? "performance"
+            : uniqueFeatures.some((msg) => /feat|add/i.test(msg))
+              ? "feature"
+              : "general";
+        const churn = added + deleted;
+        const improvementScore = Math.max(0, Math.min(100, Math.round((added / Math.max(churn, 1)) * 100)));
+
+        results.push({
+          name: branch,
+          commit_count: commitCount,
+          last_commit: lastHash,
+          last_commit_message: lastMessage,
+          unique_features: uniqueFeatures,
+          file_changes: filesChanged,
+          lines_added: added,
+          lines_deleted: deleted,
+          feature_category: featureCategory,
+          improvement_score: improvementScore
+        });
+      }
+
+      res.json({ ok: true, branches: results });
+    } catch (error: any) {
+      res.status(500).json({ ok: false, error: "branch_query_failed", message: error.message });
+    }
+  });
+
+  app.get("/api/bridge/comparison/branch-analysis", async (req, res) => {
+    try {
+      const branch = typeof req.query.branch === "string" ? req.query.branch : "";
+      if (!branch) {
+        return res.status(400).json({ ok: false, error: "branch_required" });
+      }
+      const branches = (await runGit(["for-each-ref", "refs/heads", "--format=%(refname:short)"])).split("\n").filter(Boolean);
+      const baseBranch = branches.includes("main") ? "main" : branches.includes("master") ? "master" : branches[0] || "";
+      const diff = baseBranch ? await runGit(["diff", "--numstat", `${baseBranch}..${branch}`]) : "";
+      const fileChanges = [];
+      let added = 0;
+      let deleted = 0;
+      let testFiles = 0;
+
+      for (const line of diff.split("\n").filter(Boolean)) {
+        const [addStr, delStr, file] = line.split("\t");
+        const add = parseInt(addStr, 10) || 0;
+        const del = parseInt(delStr, 10) || 0;
+        added += add;
+        deleted += del;
+        if (/test|spec/i.test(file || "")) testFiles += 1;
+        fileChanges.push({ status: "modified", file, additions: add, deletions: del });
+      }
+
+      const messages = await runGit(["log", "-5", "--pretty=format:%s", branch]);
+      const messageList = messages.split("\n").filter(Boolean);
+      const keyFeatures = messageList.map((msg) => ({
+        category: /fix|bug/i.test(msg) ? "fix" : /perf|opt/i.test(msg) ? "performance" : "feature",
+        description: msg,
+        impact: added + deleted > 500 ? "major" : "minor"
+      }));
+
+      const churn = added + deleted;
+      const testCoverage = fileChanges.length ? Math.round((testFiles / fileChanges.length) * 100) : 0;
+      const codeQualityScore = Math.max(1, Math.min(10, 10 - Math.round(churn / 500)));
+      const performanceScore = messageList.some((msg) => /perf|opt/i.test(msg)) ? 8 : 6;
+      const maintainability = Math.max(1, Math.min(10, 10 - Math.round(fileChanges.length / 50)));
+
+      res.json({
+        ok: true,
+        analysis: {
+          key_features: keyFeatures,
+          quality_metrics: {
+            test_coverage: testCoverage,
+            code_quality_score: codeQualityScore,
+            performance_score: performanceScore,
+            maintainability
+          },
+          file_changes: fileChanges,
+          recommendations: {
+            summary: churn > 1000 ? "Large change set; consider targeted review and test focus." : "Change set is within normal range.",
+            action_items: churn > 1000 ? ["Review high-churn files", "Run full regression tests"] : []
+          }
+        }
+      });
+    } catch (error: any) {
+      res.status(500).json({ ok: false, error: "branch_analysis_failed", message: error.message });
+    }
+  });
+
+  app.get("/api/bridge/comparison/aurora-runs", async (req, res) => {
+    try {
+      const runsDir = path.join(process.cwd(), "aurora_x", "runs");
+      if (!fs.existsSync(runsDir)) {
+        return res.json({ ok: true, runs: [] });
+      }
+      const runs = fs.readdirSync(runsDir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory() && entry.name.startsWith("run-"))
+        .map((entry) => {
+          const runPath = path.join(runsDir, entry.name);
+          const stats = fs.statSync(runPath);
+          const files = fs.readdirSync(runPath);
+          const hasGraphDiff = files.some((f) => f.includes("graph") && f.includes("diff"));
+          const hasScoresDiff = files.some((f) => f.includes("score") && f.includes("diff"));
+          const hasReport = files.some((f) => f.endsWith(".md") || f.endsWith(".html") || f.endsWith(".json"));
+          return {
+            name: entry.name,
+            path: runPath,
+            has_graph_diff: hasGraphDiff,
+            has_scores_diff: hasScoresDiff,
+            has_report: hasReport,
+            start_time: Math.floor(stats.mtimeMs / 1000)
+          };
+        });
+      res.json({ ok: true, runs });
+    } catch (error: any) {
+      res.status(500).json({ ok: false, error: "aurora_runs_failed", message: error.message });
     }
   });
 

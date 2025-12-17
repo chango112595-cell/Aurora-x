@@ -21,17 +21,35 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
   const [input, setInput] = useState('');
   const [connected, setConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [tiersActive, setTiersActive] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const fetchCapabilities = async () => {
+      try {
+        const res = await fetch('/api/nexus-v3/capabilities');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (typeof data.tiers === 'number') {
+          setTiersActive(data.tiers);
+        }
+      } catch (error) {
+        console.error('[AuroraChatInterface] Capabilities fetch failed:', error);
+      }
+    };
+    fetchCapabilities();
+  }, []);
+
+  useEffect(() => {
     // Aurora welcome message with conversational style
+    const tierLabel = tiersActive ? `${tiersActive}` : 'available';
     setMessages([
       {
         id: '0',
         role: 'aurora',
         content: compact
           ? "Hey — I'm Aurora. Chat with me quickly from the sidebar. Ask anything!"
-          : "Hey! 👋 Aurora here with all 66 knowledge tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?",
+          : `Hey! 👋 Aurora here with all ${tierLabel} knowledge tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?`,
         timestamp: new Date(),
       },
     ]);
@@ -39,7 +57,7 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
 
     // Auto-scroll
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [compact]);
+  }, [compact, tiersActive]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -142,7 +160,7 @@ export default function AuroraChatInterface({ compact = false }: AuroraChatProps
             <Sparkles className="h-6 w-6 text-cyan-400" />
             Chat with Aurora
             <Badge variant={connected ? "default" : "secondary"} className="ml-auto bg-cyan-500/20 text-cyan-300">
-              {connected ? (compact ? '🌌 Sidebar' : '🌌 53 Tiers Active') : '○ Offline'}
+              {connected ? (compact ? '🌌 Sidebar' : `🌌 ${tiersActive ?? 'Tiers'} Active`) : '○ Offline'}
             </Badge>
           </CardTitle>
           <p className="text-sm text-muted-foreground mt-2">

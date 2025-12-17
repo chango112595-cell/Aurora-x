@@ -11,12 +11,11 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import {
-    AuroraChatInterface,
     AuroraFuturisticDashboard,
-    AuroraMonitor,
     UnifiedAuroraChat
 } from '@/components/aurora';
 import { Brain, Zap, Settings, Package, Heart, Activity } from 'lucide-react';
+import ActivityMonitor from '@/components/ActivityMonitor';
 
 interface AuroraStatus {
     status: string;
@@ -46,10 +45,10 @@ interface AuroraStatus {
     };
     nexusV3: {
         connected: boolean;
-        version: string;
-        tiers: number;
-        aems: number;
-        modules: number;
+        version: string | null;
+        tiers: number | null;
+        aems: number | null;
+        modules: number | null;
         hyperspeedEnabled: boolean;
     };
     uptime: number;
@@ -102,6 +101,26 @@ export default function AuroraPage() {
 
     const uptimeMinutes = Math.floor(status.uptime / 60000);
     const uptimeSeconds = Math.floor((status.uptime % 60000) / 1000);
+    const healerActive = typeof status.selfHealers?.active === 'number' ? status.selfHealers.active : null;
+    const healerTotal = typeof status.selfHealers?.total === 'number' ? status.selfHealers.total : null;
+    const healerProgress = healerActive !== null && healerTotal
+        ? (healerActive / healerTotal) * 100
+        : 0;
+    const componentHealthy = typeof status.selfHealers?.healthyComponents === 'number' ? status.selfHealers.healthyComponents : null;
+    const componentTotal = typeof status.selfHealers?.totalComponents === 'number' ? status.selfHealers.totalComponents : null;
+    const componentProgress = componentHealthy !== null && componentTotal
+        ? (componentHealthy / componentTotal) * 100
+        : 0;
+    const autofixerActive = typeof status.autofixer?.active === 'number' ? status.autofixer.active : null;
+    const autofixerTotal = typeof status.autofixer?.workers === 'number' ? status.autofixer.workers : null;
+    const autofixerProgress = autofixerActive !== null && autofixerTotal
+        ? (autofixerActive / autofixerTotal) * 100
+        : 0;
+    const packTotal = typeof status.packs?.total === 'number' ? status.packs.total : null;
+    const packLoaded = typeof status.packs?.loaded === 'number' ? status.packs.loaded : null;
+
+    const formatCount = (value: number | null | undefined) =>
+        typeof value === 'number' ? value.toLocaleString() : 'Unavailable';
 
     return (
         <div className="container mx-auto p-6 space-y-6">
@@ -112,7 +131,7 @@ export default function AuroraPage() {
                         Aurora Intelligence v{status.version}
                     </h1>
                     <p className="text-muted-foreground mt-2">
-                        188 Power Units • Full Autonomous Operation
+                        {formatCount(status.powerUnits)} Power Units • Operational Overview
                     </p>
                 </div>
                 <Badge
@@ -129,7 +148,7 @@ export default function AuroraPage() {
                     <div className="flex items-center justify-between gap-2">
                         <div>
                             <p className="text-sm text-muted-foreground">Knowledge</p>
-                            <p className="text-3xl font-bold text-purple-600">{status.knowledgeCapabilities}</p>
+                            <p className="text-3xl font-bold text-purple-600">{formatCount(status.knowledgeCapabilities)}</p>
                             <p className="text-xs text-muted-foreground mt-1">Capabilities</p>
                         </div>
                         <Brain className="w-10 h-10 text-purple-500" />
@@ -140,7 +159,7 @@ export default function AuroraPage() {
                     <div className="flex items-center justify-between gap-2">
                         <div>
                             <p className="text-sm text-muted-foreground">Execution</p>
-                            <p className="text-3xl font-bold text-blue-600">{status.executionModes}</p>
+                            <p className="text-3xl font-bold text-blue-600">{formatCount(status.executionModes)}</p>
                             <p className="text-xs text-muted-foreground mt-1">Modes</p>
                         </div>
                         <Zap className="w-10 h-10 text-blue-500" />
@@ -151,7 +170,7 @@ export default function AuroraPage() {
                     <div className="flex items-center justify-between gap-2">
                         <div>
                             <p className="text-sm text-muted-foreground">Systems</p>
-                            <p className="text-3xl font-bold text-green-600">{status.systemComponents}</p>
+                            <p className="text-3xl font-bold text-green-600">{formatCount(status.systemComponents)}</p>
                             <p className="text-xs text-muted-foreground mt-1">Components</p>
                         </div>
                         <Settings className="w-10 h-10 text-green-500" />
@@ -162,7 +181,7 @@ export default function AuroraPage() {
                     <div className="flex items-center justify-between gap-2">
                         <div>
                             <p className="text-sm text-muted-foreground">Modules</p>
-                            <p className="text-3xl font-bold text-orange-600">{status.totalModules}</p>
+                            <p className="text-3xl font-bold text-orange-600">{formatCount(status.totalModules)}</p>
                             <p className="text-xs text-muted-foreground mt-1">Active</p>
                         </div>
                         <Package className="w-10 h-10 text-orange-500" />
@@ -175,28 +194,28 @@ export default function AuroraPage() {
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold">Aurora Nexus V3</h2>
                     <Badge variant={status.nexusV3?.connected ? 'default' : 'destructive'}>
-                        {status.nexusV3?.connected ? 'Connected' : 'Offline'} - {status.nexusV3?.version || '3.0.0'}
+                        {status.nexusV3?.connected ? 'Connected' : 'Offline'} - {status.nexusV3?.version || 'Unknown'}
                     </Badge>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
                     <div>
-                        <p className="text-2xl font-bold text-indigo-600">{status.nexusV3?.tiers || 188}</p>
-                        <p className="text-xs text-muted-foreground">Knowledge Tiers</p>
+                        <p className="text-2xl font-bold text-indigo-600">{formatCount(status.nexusV3?.tiers)}</p>
+                        <p className="text-xs text-muted-foreground">Tiers</p>
                     </div>
                     <div>
-                        <p className="text-2xl font-bold text-purple-600">{status.nexusV3?.aems || 66}</p>
+                        <p className="text-2xl font-bold text-purple-600">{formatCount(status.nexusV3?.aems)}</p>
                         <p className="text-xs text-muted-foreground">AEMs</p>
                     </div>
                     <div>
-                        <p className="text-2xl font-bold text-blue-600">{status.nexusV3?.modules || 550}</p>
+                        <p className="text-2xl font-bold text-blue-600">{formatCount(status.nexusV3?.modules)}</p>
                         <p className="text-xs text-muted-foreground">Modules</p>
                     </div>
                     <div>
-                        <p className="text-2xl font-bold text-green-600">{status.selfHealers?.total || 100}</p>
+                        <p className="text-2xl font-bold text-green-600">{formatCount(status.selfHealers?.total)}</p>
                         <p className="text-xs text-muted-foreground">Self-Healers</p>
                     </div>
                     <div>
-                        <p className="text-2xl font-bold text-amber-600">{status.packs?.total || 15}</p>
+                        <p className="text-2xl font-bold text-amber-600">{formatCount(status.packs?.total)}</p>
                         <p className="text-xs text-muted-foreground">Packs</p>
                     </div>
                 </div>
@@ -209,68 +228,68 @@ export default function AuroraPage() {
 
             {/* Self-Healers & Workers Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* 100 Self-Healers Status */}
+                {/* Self-Healers Status */}
                 <Card className="p-6 bg-gradient-to-br from-green-500/10 to-emerald-500/5 border-green-500/20">
                     <div className="flex items-center justify-between gap-2 mb-4">
                         <div className="flex items-center gap-2">
                             <Heart className="w-5 h-5 text-green-500" />
-                            <h2 className="text-xl font-bold">100 Self-Healers</h2>
+                            <h2 className="text-xl font-bold">Self-Healers</h2>
                         </div>
                         <Badge variant={status.selfHealers?.status === 'operational' ? 'default' : 'destructive'}>
-                            {status.selfHealers?.status || 'operational'}
+                            {status.selfHealers?.status || 'unknown'}
                         </Badge>
                     </div>
                     <div className="space-y-4">
                         <div>
                             <div className="flex justify-between text-sm mb-2">
                                 <span className="text-muted-foreground">Active Healers</span>
-                                <span className="font-medium">{status.selfHealers?.active || 100}/{status.selfHealers?.total || 100}</span>
+                                <span className="font-medium">{formatCount(healerActive)}/{formatCount(healerTotal)}</span>
                             </div>
-                            <Progress value={((status.selfHealers?.active || 100) / (status.selfHealers?.total || 100)) * 100} className="bg-green-500/20" />
+                            <Progress value={healerProgress} className="bg-green-500/20" />
                         </div>
                         <div>
                             <div className="flex justify-between text-sm mb-2">
                                 <span className="text-muted-foreground">Component Health</span>
-                                <span className="font-medium">{status.selfHealers?.healthyComponents || 0}/{status.selfHealers?.totalComponents || 6}</span>
+                                <span className="font-medium">{formatCount(componentHealthy)}/{formatCount(componentTotal)}</span>
                             </div>
                             <Progress 
-                                value={((status.selfHealers?.healthyComponents || 0) / (status.selfHealers?.totalComponents || 6)) * 100} 
+                                value={componentProgress} 
                                 className="bg-emerald-500/20" 
                             />
                         </div>
                         <div className="text-center">
-                            <p className="text-2xl font-bold text-green-600">{status.selfHealers?.healsPerformed || 0}</p>
+                            <p className="text-2xl font-bold text-green-600">{formatCount(status.selfHealers?.healsPerformed)}</p>
                             <p className="text-xs text-muted-foreground">Heals Performed</p>
                         </div>
                     </div>
                 </Card>
 
-                {/* 100-Worker Autofixer Status */}
+                {/* Autofixer Status */}
                 <Card className="p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/5 border-blue-500/20">
                     <div className="flex items-center justify-between gap-2 mb-4">
                         <div className="flex items-center gap-2">
                             <Activity className="w-5 h-5 text-blue-500" />
-                            <h2 className="text-xl font-bold">100-Worker Autofixer</h2>
+                            <h2 className="text-xl font-bold">Autofixer Workers</h2>
                         </div>
                         <Badge variant="outline">
-                            {status.autofixer?.active || 0}/{status.autofixer?.workers || 100} Active
+                            {formatCount(autofixerActive)}/{formatCount(autofixerTotal)} Active
                         </Badge>
                     </div>
                     <div className="space-y-4">
                         <div>
                             <div className="flex justify-between text-sm mb-2">
                                 <span className="text-muted-foreground">Workers Active</span>
-                                <span className="font-medium">{status.autofixer?.active || 0}</span>
+                                <span className="font-medium">{formatCount(autofixerActive)}</span>
                             </div>
-                            <Progress value={((status.autofixer?.active || 0) / (status.autofixer?.workers || 100)) * 100} className="bg-blue-500/20" />
+                            <Progress value={autofixerProgress} className="bg-blue-500/20" />
                         </div>
                         <div className="grid grid-cols-2 gap-4 text-center">
                             <div>
-                                <p className="text-2xl font-bold text-blue-600">{status.autofixer?.queued || 0}</p>
+                                <p className="text-2xl font-bold text-blue-600">{formatCount(status.autofixer?.queued)}</p>
                                 <p className="text-xs text-muted-foreground">Queued</p>
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-purple-600">{status.autofixer?.completed || 0}</p>
+                                <p className="text-2xl font-bold text-purple-600">{formatCount(status.autofixer?.completed)}</p>
                                 <p className="text-xs text-muted-foreground">Completed</p>
                             </div>
                         </div>
@@ -283,13 +302,13 @@ export default function AuroraPage() {
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold">Pack System</h2>
                     <Badge variant="default">
-                        {status.packs?.loaded || 15}/{status.packs?.total || 15} Loaded
+                        {formatCount(packLoaded)}/{formatCount(packTotal)} Loaded
                     </Badge>
                 </div>
                 <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
-                    {(status.packs?.active || []).slice(0, 15).map((pack, i) => (
+                    {(status.packs?.active || []).slice(0, 15).map((pack) => (
                         <Badge key={pack} variant="outline" className="justify-center text-xs py-1">
-                            Pack {String(i + 1).padStart(2, '0')}
+                            {pack}
                         </Badge>
                     ))}
                 </div>
@@ -300,7 +319,7 @@ export default function AuroraPage() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                     <div>
                         <p className="text-sm text-muted-foreground">Total Power</p>
-                        <p className="text-2xl font-bold text-purple-600">{status.powerUnits}</p>
+                        <p className="text-2xl font-bold text-purple-600">{formatCount(status.powerUnits)}</p>
                     </div>
                     <div>
                         <p className="text-sm text-muted-foreground">Uptime</p>
@@ -331,20 +350,20 @@ export default function AuroraPage() {
                         <h3 className="text-xl font-bold mb-4">System Architecture</h3>
                         <div className="space-y-3">
                             <div className="flex items-center justify-between p-3 bg-muted rounded">
-                                <span className="font-medium">Knowledge Capabilities (Tiers 1-79)</span>
-                                <Badge>{status.knowledgeCapabilities}</Badge>
+                                <span className="font-medium">Knowledge Capabilities</span>
+                                <Badge>{formatCount(status.knowledgeCapabilities)}</Badge>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-muted rounded">
-                                <span className="font-medium">Execution Modes (4 Categories)</span>
-                                <Badge>{status.executionModes}</Badge>
+                                <span className="font-medium">Execution Modes</span>
+                                <Badge>{formatCount(status.executionModes)}</Badge>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-muted rounded">
-                                <span className="font-medium">System Components (7 Types)</span>
-                                <Badge>{status.systemComponents}</Badge>
+                                <span className="font-medium">System Components</span>
+                                <Badge>{formatCount(status.systemComponents)}</Badge>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-muted rounded">
                                 <span className="font-medium">Operational Modules</span>
-                                <Badge>{status.totalModules}+</Badge>
+                                <Badge>{formatCount(status.totalModules)}</Badge>
                             </div>
                         </div>
                     </Card>
@@ -359,7 +378,7 @@ export default function AuroraPage() {
                 </TabsContent>
 
                 <TabsContent value="monitor">
-                    <AuroraMonitor />
+                    <ActivityMonitor />
                 </TabsContent>
             </Tabs>
         </div>

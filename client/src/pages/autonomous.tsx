@@ -1,12 +1,10 @@
-import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
-import { Switch } from "@/components/ui/switch";
 import { useQuery } from "@tanstack/react-query";
-import { Zap, RefreshCw, Bot, Cpu, Play, Pause, CheckCircle, Clock, AlertCircle, Layers, Wrench, Shield, Code, Sparkles, AlertTriangle } from "lucide-react";
+import { Zap, RefreshCw, Bot, Cpu, Play, Pause, CheckCircle, Clock, AlertCircle, Shield, Sparkles, AlertTriangle, Activity } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface AuroraStatus {
@@ -20,43 +18,56 @@ interface AuroraStatus {
   };
 }
 
-interface AutonomousTool {
-  id: string;
-  name: string;
-  description: string;
-  status: 'active' | 'idle' | 'disabled';
-  category: string;
-  lastRun: string;
-  successRate: number;
-  icon: string;
-}
-
 interface WorkerTask {
   id: string;
   type: string;
   status: 'running' | 'queued' | 'completed' | 'failed';
   priority: 'high' | 'medium' | 'low';
   description: string;
-  progress: number;
+  progress?: number;
   startedAt: string;
 }
 
-export default function AutonomousPage() {
-  const [autoHealEnabled, setAutoHealEnabled] = useState(true);
-  const [autoOptimizeEnabled, setAutoOptimizeEnabled] = useState(true);
+interface V3Capabilities {
+  autonomous_mode?: boolean;
+  hybrid_mode_enabled?: boolean;
+  hyperspeed_enabled?: boolean;
+  available?: boolean;
+}
 
+export default function AutonomousPage() {
   const { data: auroraStatus, isLoading, isError, error, refetch, isRefetching } = useQuery<AuroraStatus>({
     queryKey: ['/api/aurora/status'],
     refetchInterval: 5000,
   });
 
-  const autonomousTools: AutonomousTool[] = [
-    { id: '1', name: 'Auto-Fixer', description: 'Automatically detects and repairs code issues', status: 'active', category: 'repair', lastRun: '2 min ago', successRate: 94, icon: 'wrench' },
-    { id: '2', name: 'Code Optimizer', description: 'Optimizes code for performance and readability', status: 'active', category: 'optimization', lastRun: '5 min ago', successRate: 91, icon: 'zap' },
-    { id: '3', name: 'Pattern Detector', description: 'Identifies code patterns and suggests improvements', status: 'idle', category: 'analysis', lastRun: '15 min ago', successRate: 88, icon: 'sparkles' },
-    { id: '4', name: 'Security Scanner', description: 'Scans for vulnerabilities and security issues', status: 'active', category: 'security', lastRun: '1 min ago', successRate: 97, icon: 'shield' },
-    { id: '5', name: 'Type Inferencer', description: 'Infers and adds TypeScript types automatically', status: 'idle', category: 'typing', lastRun: '30 min ago', successRate: 85, icon: 'code' },
-    { id: '6', name: 'Memory Manager', description: 'Manages and optimizes memory consolidation', status: 'active', category: 'memory', lastRun: '3 min ago', successRate: 92, icon: 'layers' },
+  const { data: v3Capabilities } = useQuery<V3Capabilities>({
+    queryKey: ['/api/nexus-v3/capabilities'],
+    refetchInterval: 15000,
+  });
+
+  const autonomyModes = [
+    {
+      id: 'autonomous',
+      name: 'Autonomous Mode',
+      description: 'Self-directed execution without manual input',
+      status: v3Capabilities?.autonomous_mode ? 'active' : 'disabled',
+      icon: Bot
+    },
+    {
+      id: 'hybrid',
+      name: 'Hybrid Mode',
+      description: 'Balanced execution between autonomous and guided control',
+      status: v3Capabilities?.hybrid_mode_enabled ? 'active' : 'disabled',
+      icon: Activity
+    },
+    {
+      id: 'hyperspeed',
+      name: 'Hyperspeed Mode',
+      description: 'High-throughput execution pipeline for rapid tasks',
+      status: v3Capabilities?.hyperspeed_enabled ? 'active' : 'disabled',
+      icon: Sparkles
+    }
   ];
 
   const getWorkerTasks = (): WorkerTask[] => {
@@ -73,7 +84,7 @@ export default function AutonomousPage() {
         status: 'completed', 
         priority: 'low', 
         description: `Completed ${completedTasks} autonomous task${completedTasks > 1 ? 's' : ''}`, 
-        progress: 100, 
+        progress: 100,
         startedAt: new Date(Date.now() - 300000).toISOString() 
       });
     }
@@ -85,7 +96,6 @@ export default function AutonomousPage() {
         status: 'running', 
         priority: 'medium', 
         description: `${activeWorkers} worker${activeWorkers > 1 ? 's' : ''} actively processing`, 
-        progress: 50, 
         startedAt: new Date(Date.now() - 60000).toISOString() 
       });
     }
@@ -97,7 +107,7 @@ export default function AutonomousPage() {
         status: 'queued', 
         priority: 'low', 
         description: `${queuedTasks} task${queuedTasks > 1 ? 's' : ''} in queue`, 
-        progress: 0, 
+        progress: 0,
         startedAt: '' 
       });
     }
@@ -109,7 +119,7 @@ export default function AutonomousPage() {
         status: 'completed', 
         priority: 'low', 
         description: 'All workers idle - ready for new tasks', 
-        progress: 100, 
+        progress: 100,
         startedAt: new Date().toISOString() 
       });
     }
@@ -141,17 +151,8 @@ export default function AutonomousPage() {
     }
   };
 
-  const getToolIcon = (icon: string) => {
-    switch (icon) {
-      case 'wrench': return <Wrench className="w-5 h-5" />;
-      case 'zap': return <Zap className="w-5 h-5" />;
-      case 'sparkles': return <Sparkles className="w-5 h-5" />;
-      case 'shield': return <Shield className="w-5 h-5" />;
-      case 'code': return <Code className="w-5 h-5" />;
-      case 'layers': return <Layers className="w-5 h-5" />;
-      default: return <Bot className="w-5 h-5" />;
-    }
-  };
+  const formatCount = (value?: number) =>
+    typeof value === 'number' ? value.toLocaleString() : 'Unavailable';
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -234,7 +235,7 @@ export default function AutonomousPage() {
                   <div>
                     <p className="text-xs text-cyan-300/60">Workers</p>
                     <p className="text-2xl font-bold text-cyan-400" data-testid="text-workers">
-                      {auroraStatus?.autofixer?.workers || 300}
+                      {formatCount(auroraStatus?.autofixer?.workers)}
                     </p>
                   </div>
                 </div>
@@ -250,7 +251,7 @@ export default function AutonomousPage() {
                   <div>
                     <p className="text-xs text-green-300/60">Active</p>
                     <p className="text-2xl font-bold text-green-400" data-testid="text-active">
-                      {auroraStatus?.autofixer?.active || 0}
+                      {formatCount(auroraStatus?.autofixer?.active)}
                     </p>
                   </div>
                 </div>
@@ -266,7 +267,7 @@ export default function AutonomousPage() {
                   <div>
                     <p className="text-xs text-purple-300/60">Queued</p>
                     <p className="text-2xl font-bold text-purple-400" data-testid="text-queued">
-                      {auroraStatus?.autofixer?.queued || 0}
+                      {formatCount(auroraStatus?.autofixer?.queued)}
                     </p>
                   </div>
                 </div>
@@ -282,7 +283,7 @@ export default function AutonomousPage() {
                   <div>
                     <p className="text-xs text-pink-300/60">Completed</p>
                     <p className="text-2xl font-bold text-pink-400" data-testid="text-completed">
-                      {auroraStatus?.autofixer?.completed || 0}
+                      {formatCount(auroraStatus?.autofixer?.completed)}
                     </p>
                   </div>
                 </div>
@@ -293,37 +294,45 @@ export default function AutonomousPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
             <Card className="border-cyan-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-auto-settings">
               <CardHeader className="border-b border-cyan-500/20">
-                <CardTitle className="text-lg text-cyan-300">Autonomous Settings</CardTitle>
-                <CardDescription className="text-cyan-300/60">Configure self-directed behavior</CardDescription>
+                <CardTitle className="text-lg text-cyan-300">Autonomy Status</CardTitle>
+                <CardDescription className="text-cyan-300/60">Live mode flags from Nexus V3</CardDescription>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">
                 <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <Shield className="w-5 h-5 text-green-400" />
                     <div>
-                      <p className="text-sm text-cyan-200">Auto-Heal</p>
-                      <p className="text-xs text-cyan-300/60">Automatically repair issues</p>
+                      <p className="text-sm text-cyan-200">Autonomous Mode</p>
+                      <p className="text-xs text-cyan-300/60">Self-directed orchestration</p>
                     </div>
                   </div>
-                  <Switch 
-                    checked={autoHealEnabled} 
-                    onCheckedChange={setAutoHealEnabled}
-                    data-testid="switch-auto-heal"
-                  />
+                  <Badge variant="outline" className={getStatusColor(v3Capabilities?.autonomous_mode ? 'active' : 'disabled')}>
+                    {v3Capabilities?.autonomous_mode ? 'Active' : 'Disabled'}
+                  </Badge>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <Zap className="w-5 h-5 text-yellow-400" />
                     <div>
-                      <p className="text-sm text-cyan-200">Auto-Optimize</p>
-                      <p className="text-xs text-cyan-300/60">Continuous optimization</p>
+                      <p className="text-sm text-cyan-200">Hybrid Mode</p>
+                      <p className="text-xs text-cyan-300/60">Blended execution strategy</p>
                     </div>
                   </div>
-                  <Switch 
-                    checked={autoOptimizeEnabled} 
-                    onCheckedChange={setAutoOptimizeEnabled}
-                    data-testid="switch-auto-optimize"
-                  />
+                  <Badge variant="outline" className={getStatusColor(v3Capabilities?.hybrid_mode_enabled ? 'active' : 'disabled')}>
+                    {v3Capabilities?.hybrid_mode_enabled ? 'Active' : 'Disabled'}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="w-5 h-5 text-purple-400" />
+                    <div>
+                      <p className="text-sm text-cyan-200">Hyperspeed Mode</p>
+                      <p className="text-xs text-cyan-300/60">High-throughput execution</p>
+                    </div>
+                  </div>
+                  <Badge variant="outline" className={getStatusColor(v3Capabilities?.hyperspeed_enabled ? 'active' : 'disabled')}>
+                    {v3Capabilities?.hyperspeed_enabled ? 'Active' : 'Disabled'}
+                  </Badge>
                 </div>
               </CardContent>
             </Card>
@@ -363,7 +372,7 @@ export default function AutonomousPage() {
                                   </Badge>
                                 </div>
                               </div>
-                              {task.status === 'running' && (
+                              {task.status === 'running' && typeof task.progress === 'number' && (
                                 <div className="mt-2">
                                   <div className="flex items-center justify-between mb-1">
                                     <span className="text-xs text-purple-300/60">Progress</span>
@@ -383,39 +392,35 @@ export default function AutonomousPage() {
             </div>
           </div>
 
-          <Card className="border-cyan-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-autonomous-tools">
-            <CardHeader className="border-b border-cyan-500/20">
-              <CardTitle className="flex items-center gap-2 text-lg text-cyan-300">
-                <Bot className="w-5 h-5 text-cyan-400" />
-                Autonomous Tools
-              </CardTitle>
-              <CardDescription className="text-cyan-300/60">Self-directed capabilities and automation modules</CardDescription>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {autonomousTools.map((tool, index) => (
+            <Card className="border-cyan-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-autonomous-tools">
+              <CardHeader className="border-b border-cyan-500/20">
+                <CardTitle className="flex items-center gap-2 text-lg text-cyan-300">
+                  <Bot className="w-5 h-5 text-cyan-400" />
+                  Autonomy Modes
+                </CardTitle>
+                <CardDescription className="text-cyan-300/60">Live capability modes from Nexus V3</CardDescription>
+              </CardHeader>
+              <CardContent className="pt-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {autonomyModes.map((mode, index) => (
                   <motion.div
-                    key={tool.id}
+                    key={mode.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <Card className="border-cyan-500/20 bg-slate-800/50 hover:border-cyan-400/40 transition-colors" data-testid={`card-tool-${tool.id}`}>
+                    <Card className="border-cyan-500/20 bg-slate-800/50 hover:border-cyan-400/40 transition-colors" data-testid={`card-tool-${mode.id}`}>
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-2 mb-3">
                           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center text-cyan-400">
-                            {getToolIcon(tool.icon)}
+                            <mode.icon className="w-5 h-5" />
                           </div>
-                          <Badge variant="outline" className={`text-xs ${getStatusColor(tool.status)}`}>
-                            {tool.status}
+                          <Badge variant="outline" className={`text-xs ${getStatusColor(mode.status)}`}>
+                            {mode.status}
                           </Badge>
                         </div>
-                        <h3 className="text-sm font-semibold text-cyan-200 mb-1">{tool.name}</h3>
-                        <p className="text-xs text-cyan-300/60 mb-3">{tool.description}</p>
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-muted-foreground">Last run: {tool.lastRun}</span>
-                          <span className="text-green-400">{tool.successRate}% success</span>
-                        </div>
+                        <h3 className="text-sm font-semibold text-cyan-200 mb-1">{mode.name}</h3>
+                        <p className="text-xs text-cyan-300/60">{mode.description}</p>
                       </CardContent>
                     </Card>
                   </motion.div>

@@ -1,5 +1,5 @@
 import { type User, type InsertUser, users } from "../shared/schema";
-import { db } from "./db";
+import { requireDb } from "./db";
 import { eq } from "drizzle-orm";
 
 export interface IStorage {
@@ -10,16 +10,19 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
+    const db = requireDb();
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
+    const db = requireDb();
     const [user] = await db.select().from(users).where(eq(users.username, username));
     return user;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
+    const db = requireDb();
     const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }

@@ -4,7 +4,7 @@
  * Uses local embeddings with database-backed vector storage
  */
 
-import { db } from "./db";
+import { isDatabaseAvailable, requireDb } from "./db";
 import { knowledgeDocuments } from "../shared/schema";
 import { eq } from "drizzle-orm";
 
@@ -78,6 +78,7 @@ export async function storeDocument(
   metadata: DocumentMetadata = { text }
 ): Promise<boolean> {
   try {
+    const db = requireDb();
     const embedding = generateLocalEmbedding(text);
     
     await db.insert(knowledgeDocuments)
@@ -118,6 +119,7 @@ export async function semanticSearch(
   filter?: Record<string, any>
 ): Promise<SearchResult[]> {
   try {
+    const db = requireDb();
     const queryEmbedding = generateLocalEmbedding(query);
     
     const docs = await db.select().from(knowledgeDocuments);
@@ -192,6 +194,7 @@ export async function addToKnowledgeBase(
 
 export async function deleteFromKnowledgeBase(ids: string[]): Promise<boolean> {
   try {
+    const db = requireDb();
     for (const id of ids) {
       await db.delete(knowledgeDocuments).where(eq(knowledgeDocuments.id, id));
     }
@@ -204,7 +207,7 @@ export async function deleteFromKnowledgeBase(ids: string[]): Promise<boolean> {
 }
 
 export function isRAGAvailable(): boolean {
-  return true;
+  return isDatabaseAvailable();
 }
 
 export function isEmbeddingsAvailable(): boolean {
@@ -213,6 +216,7 @@ export function isEmbeddingsAvailable(): boolean {
 
 export async function getKnowledgeBaseStats(): Promise<{ documentCount: number; categories: string[] }> {
   try {
+    const db = requireDb();
     const docs = await db.select().from(knowledgeDocuments);
     const categories = new Set<string>();
     for (const doc of docs) {

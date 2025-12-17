@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { Activity, Cpu, HardDrive, Users, Zap, HeartPulse } from "lucide-react";
+import { Activity, Cpu, HardDrive, Users, HeartPulse } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface Metrics {
-  cpu: number;
-  memory: number;
+  cpu?: number;
+  memory?: number;
   disk?: number;
-  workers: number;
-  learningRate: number;
-  selfHealingEvents: number;
+  workers?: number;
+  selfHealingEvents?: number;
+  v3Available?: boolean;
 }
 
 interface AuroraMetricsOverlayProps {
@@ -25,20 +25,43 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
     const fetchMetrics = async () => {
       try {
         setError(null);
-        const res = await fetch("/api/system/metrics");
-        if (res.ok) {
-          const data = await res.json();
-          setMetrics({
-            cpu: data.cpu || 0,
-            memory: data.memory || 0,
-            disk: data.disk || 0,
-            workers: data.workers || 300,
-            learningRate: data.learningRate || 0.015 + Math.random() * 0.005,
-            selfHealingEvents: data.selfHealingEvents || Math.floor(Math.random() * 5),
-          });
-        } else {
-          setError("Failed to fetch metrics");
+        const [systemRes, workersRes, healersRes, v3Res] = await Promise.allSettled([
+          fetch("/api/system/metrics"),
+          fetch("/api/nexus-v3/workers"),
+          fetch("/api/nexus-v3/self-healers"),
+          fetch("/api/nexus-v3/health"),
+        ]);
+
+        const nextMetrics: Metrics = {};
+
+        if (systemRes.status === "fulfilled" && systemRes.value.ok) {
+          const data = await systemRes.value.json();
+          nextMetrics.cpu = typeof data.cpu === "number" ? data.cpu : undefined;
+          nextMetrics.memory = typeof data.memory === "number" ? data.memory : undefined;
+          nextMetrics.disk = typeof data.disk === "number" ? data.disk : undefined;
         }
+
+        if (workersRes.status === "fulfilled" && workersRes.value.ok) {
+          const data = await workersRes.value.json();
+          nextMetrics.workers = typeof data.total === "number" ? data.total : undefined;
+        }
+
+        if (healersRes.status === "fulfilled" && healersRes.value.ok) {
+          const data = await healersRes.value.json();
+          nextMetrics.selfHealingEvents = typeof data.healsPerformed === "number" ? data.healsPerformed : undefined;
+        }
+
+        if (v3Res.status === "fulfilled" && v3Res.value.ok) {
+          const data = await v3Res.value.json();
+          nextMetrics.v3Available = data.status === "healthy" || data.available === true;
+        }
+
+        if (!Object.keys(nextMetrics).length) {
+          setError("Metrics unavailable");
+          return;
+        }
+
+        setMetrics(nextMetrics);
       } catch (err) {
         console.error("[AuroraMetrics] Failed to fetch:", err);
         setError("Metrics unavailable");
@@ -74,7 +97,8 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
     );
   }
 
-  const getStatusColor = (value: number, thresholds: { warning: number; critical: number }) => {
+  const getStatusColor = (value: number | undefined, thresholds: { warning: number; critical: number }) => {
+    if (typeof value !== "number") return "text-slate-500";
     if (value >= thresholds.critical) return "text-red-400";
     if (value >= thresholds.warning) return "text-yellow-400";
     return "text-green-400";
@@ -100,7 +124,7 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
             <span className="text-slate-300">CPU</span>
           </div>
           <span className={getStatusColor(metrics.cpu, { warning: 70, critical: 90 })}>
-            {metrics.cpu.toFixed(1)}%
+            {typeof metrics.cpu === "number" ? `${metrics.cpu.toFixed(1)}%` : "Unavailable"}
           </span>
         </div>
         
@@ -110,7 +134,7 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
             <span className="text-slate-300">Memory</span>
           </div>
           <span className={getStatusColor(metrics.memory, { warning: 80, critical: 95 })}>
-            {metrics.memory.toFixed(1)}%
+            {typeof metrics.memory === "number" ? `${metrics.memory.toFixed(1)}%` : "Unavailable"}
           </span>
         </div>
         
@@ -119,15 +143,9 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
             <Users className="w-3.5 h-3.5 text-purple-400" />
             <span className="text-slate-300">Workers</span>
           </div>
-          <span className="text-purple-300">{metrics.workers}</span>
-        </div>
-        
-        <div className="flex items-center justify-between" data-testid="metric-learning">
-          <div className="flex items-center gap-2">
-            <Zap className="w-3.5 h-3.5 text-yellow-400" />
-            <span className="text-slate-300">Learning Rate</span>
-          </div>
-          <span className="text-yellow-300">{metrics.learningRate.toFixed(4)}</span>
+          <span className="text-purple-300">
+            {typeof metrics.workers === "number" ? metrics.workers : "Unavailable"}
+          </span>
         </div>
         
         <div className="flex items-center justify-between" data-testid="metric-healing">
@@ -135,14 +153,18 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
             <HeartPulse className="w-3.5 h-3.5 text-pink-400" />
             <span className="text-slate-300">Self-Heals</span>
           </div>
-          <span className="text-pink-300">{metrics.selfHealingEvents}</span>
+          <span className="text-pink-300">
+            {typeof metrics.selfHealingEvents === "number" ? metrics.selfHealingEvents : "Unavailable"}
+          </span>
         </div>
       </div>
       
       <div className="mt-3 pt-2 border-t border-purple-500/20">
         <div className="flex items-center justify-between text-[10px]">
           <span className="text-slate-500">Aurora Nexus V3</span>
-          <span className="text-green-400">Active</span>
+          <span className={metrics.v3Available ? "text-green-400" : "text-slate-500"}>
+            {metrics.v3Available ? "Active" : "Unavailable"}
+          </span>
         </div>
       </div>
     </div>

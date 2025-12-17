@@ -1,4 +1,6 @@
 node_modules
+.aurora_backup
+*.aurora_backup
 dist
 .DS_Store
 server/public

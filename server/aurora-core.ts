@@ -6,6 +6,7 @@
  */
 
 import { spawn, ChildProcess } from 'child_process';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -13,6 +14,65 @@ import MemoryClient from './memory-client';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://0.0.0.0:8000";
+const PROJECT_ROOT = path.resolve(__dirname, "..");
+const MANIFEST_DIR = path.join(PROJECT_ROOT, "manifests");
+const PACKS_DIR = path.join(PROJECT_ROOT, "packs");
+const HYPERSPEED_PATH = path.join(PROJECT_ROOT, "hyperspeed", "aurora_hyper_speed_mode.py");
+const NEXUS_V3_CORE_PATH = path.join(PROJECT_ROOT, "aurora_nexus_v3", "core", "universal_core.py");
+const NEXUS_V3_INIT_PATH = path.join(PROJECT_ROOT, "aurora_nexus_v3", "__init__.py");
+
+function readJsonFile<T>(filePath: string): T | null {
+  try {
+    const raw = fs.readFileSync(filePath, "utf-8");
+    return JSON.parse(raw) as T;
+  } catch {
+    return null;
+  }
+}
+
+function getManifestCounts() {
+  const tiers = readJsonFile<{ tiers?: unknown[]; totalTiers?: number }>(path.join(MANIFEST_DIR, "tiers.manifest.json"));
+  const executions = readJsonFile<{ executions?: unknown[]; totalExecutions?: number }>(
+    path.join(MANIFEST_DIR, "executions.manifest.json")
+  );
+  const modules = readJsonFile<{ modules?: unknown[]; totalModules?: number }>(
+    path.join(MANIFEST_DIR, "modules.manifest.json")
+  );
+
+  return {
+    tiers: tiers?.tiers?.length ?? tiers?.totalTiers ?? 0,
+    aems: executions?.executions?.length ?? executions?.totalExecutions ?? 0,
+    modules: modules?.modules?.length ?? modules?.totalModules ?? 0
+  };
+}
+
+function getPackDirectories() {
+  if (!fs.existsSync(PACKS_DIR)) {
+    return [];
+  }
+  return fs.readdirSync(PACKS_DIR, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && entry.name.startsWith("pack"))
+    .map((entry) => entry.name)
+    .sort();
+}
+
+function readVersionFromFile(filePath: string, regex: RegExp): string | null {
+  try {
+    const raw = fs.readFileSync(filePath, "utf-8");
+    const match = raw.match(regex);
+    return match ? match[1] : null;
+  } catch {
+    return null;
+  }
+}
+
+function getNexusV3Version(): string | null {
+  return (
+    readVersionFromFile(NEXUS_V3_CORE_PATH, /VERSION\s*=\s*["']([^"']+)["']/) ||
+    readVersionFromFile(NEXUS_V3_INIT_PATH, /__version__\s*=\s*["']([^"']+)["']/)
+  );
+}
 
 // ========================================
 // TYPES & INTERFACES
@@ -122,10 +182,10 @@ interface AuroraStatus {
   };
   nexusV3: {
     connected: boolean;
-    version: string;
-    tiers: number;
-    aems: number;
-    modules: number;
+    version: string | null;
+    tiers: number | null;
+    aems: number | null;
+    modules: number | null;
     hyperspeedEnabled: boolean;
   };
   uptime: number;
@@ -573,9 +633,9 @@ export class AuroraCore {
   }
   
   private async checkExternalServices(): Promise<void> {
-    // Check Luminar Nexus V2 (port 5001)
+    // Check Luminar Nexus V2
     try {
-      const v2Response = await fetch('http://0.0.0.0:5001/api/status', { 
+      const v2Response = await fetch(`${LUMINAR_V2_URL}/api/nexus/status`, { 
         method: 'GET',
         signal: AbortSignal.timeout(2000)
       }).catch(() => null);
@@ -591,7 +651,7 @@ export class AuroraCore {
     
     // Check Aurora Nexus V3 (port 5002)
     try {
-      const v3Response = await fetch('http://0.0.0.0:5002/api/nexus/status', {
+      const v3Response = await fetch('http://0.0.0.0:5002/api/status', {
         method: 'GET',
         signal: AbortSignal.timeout(2000)
       }).catch(() => null);
@@ -1147,14 +1207,34 @@ export class AuroraCore {
   
   public getStatus(): AuroraStatus {
     const healerStats = this.getSelfHealerStats();
+    const manifestCounts = getManifestCounts();
+    const packDirs = getPackDirectories();
+    const v3Metric = this.systemHealthMetrics.get('nexus-v3');
+    const v3Connected = v3Metric?.healthy ?? false;
+    const v3Version = getNexusV3Version();
+    const hyperspeedEnabled = v3Connected && fs.existsSync(HYPERSPEED_PATH);
+    const v3Tiers = manifestCounts.tiers > 0 ? manifestCounts.tiers : null;
+    const v3Aems = manifestCounts.aems > 0 ? manifestCounts.aems : null;
+    const v3Modules = manifestCounts.modules > 0 ? manifestCounts.modules : null;
+    const healthMetrics = Array.from(this.systemHealthMetrics.values());
+    const healthyCount = healthMetrics.filter((metric) => metric.healthy).length;
+    const totalCount = healthMetrics.length;
+    let overallStatus: AuroraStatus["status"] = "operational";
+    if (totalCount > 0) {
+      if (healthyCount === 0) {
+        overallStatus = "offline";
+      } else if (healthyCount < totalCount) {
+        overallStatus = "degraded";
+      }
+    }
     
     return {
-      status: 'operational',
+      status: overallStatus,
       powerUnits: this.totalPowerUnits,
       knowledgeCapabilities: this.knowledgeCapabilities.size,
       executionModes: this.executionModes.size,
       systemComponents: this.systemComponents.size,
-      totalModules: this.modules.size,
+      totalModules: manifestCounts.modules > 0 ? manifestCounts.modules : this.modules.size,
       autofixer: {
         workers: this.workerPool.length,
         active: this.activeJobs.size,
@@ -1170,22 +1250,17 @@ export class AuroraCore {
         totalComponents: healerStats.totalComponents
       },
       packs: {
-        total: 15,
-        loaded: 15,
-        active: [
-          'pack01_core', 'pack02_env_profiler', 'pack03_os_edge', 'pack04_launcher',
-          'pack05_plugin_system', 'pack06_firmware', 'pack07_secure_signing',
-          'pack08_memory', 'pack09_analysis', 'pack10_generation', 'pack11_reasoning',
-          'pack12_learning', 'pack13_optimization', 'pack14_hyperspeed', 'pack15_grandmaster'
-        ]
+        total: packDirs.length,
+        loaded: packDirs.length,
+        active: packDirs
       },
       nexusV3: {
-        connected: true,
-        version: '3.0.0-production',
-        tiers: 188,
-        aems: 66,
-        modules: 550,
-        hyperspeedEnabled: true
+        connected: v3Connected,
+        version: v3Version,
+        tiers: v3Tiers,
+        aems: v3Aems,
+        modules: v3Modules,
+        hyperspeedEnabled
       },
       uptime: Date.now() - this.startTime,
       version: this.version

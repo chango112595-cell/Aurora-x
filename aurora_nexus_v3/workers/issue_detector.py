@@ -76,6 +76,8 @@ class IssueDetector:
         self.check_interval = 30  # Reduced frequency to prevent CPU spikes
         self.auto_fix_enabled = True
         self._last_cpu_reading = 0  # Cache CPU reading
+        self._last_code_scan = 0.0
+        self.code_scan_interval = 600  # seconds
         
         self._initialize_patterns()
     
@@ -158,11 +160,48 @@ class IssueDetector:
     
     async def _check_code_issues(self):
         """Check for code issues in the project"""
-        pass
+        now = time.time()
+        if now - self._last_code_scan < self.code_scan_interval:
+            return
+        self._last_code_scan = now
+
+        root = Path(__file__).resolve().parents[2]
+        targets = [
+            root / "aurora_nexus_v3",
+            root / "server",
+            root / "packs"
+        ]
+
+        for target in targets:
+            if target.exists():
+                await self.scan_directory(str(target), extensions=[".py", ".ts", ".tsx"])
     
     async def _check_service_health(self):
         """Check health of running services"""
-        pass
+        import socket
+
+        services = {
+            "main_app": 5000,
+            "nexus_v3": 5002,
+            "luminar_v2": 8000,
+            "memory_fabric": 5004
+        }
+
+        for name, port in services.items():
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(0.5)
+            try:
+                sock.connect(("127.0.0.1", port))
+            except Exception:
+                await self._report_issue(
+                    category=IssueCategory.SERVICE,
+                    severity=IssueSeverity.HIGH,
+                    issue_type="service_down",
+                    target=name,
+                    description=f"Service {name} unreachable on port {port}"
+                )
+            finally:
+                sock.close()
     
     async def _check_system_resources(self):
         """Check system resource usage"""

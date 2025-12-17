@@ -83,7 +83,20 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                 for name, mod_status in self.core.module_status.items()
             ]
             self.send_json_response({"modules": modules, "count": len(modules)})
-        
+
+        elif path == "/api/workers":
+            if not self.core.worker_pool:
+                self.send_json_response({"error": "Worker pool not initialized"}, 503)
+                return
+            pool_status = self.core.worker_pool.get_status()
+            workers = self.core.worker_pool.get_all_workers_status()
+            self.send_json_response({
+                "total": pool_status["worker_count"],
+                "active": pool_status["metrics"]["active_workers"],
+                "idle": pool_status["metrics"]["idle_workers"],
+                "workers": workers
+            })
+
         elif path == "/api/capabilities":
             self.send_json_response({
                 "workers": self.core.WORKER_COUNT,

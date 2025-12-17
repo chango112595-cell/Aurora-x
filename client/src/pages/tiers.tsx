@@ -1,151 +1,131 @@
 'use client';
 
 import React from 'react';
-import { Globe, Code, Database, Brain, Sparkles, Zap } from 'lucide-react';
+import { useQuery } from "@tanstack/react-query";
+import { Brain, Globe, Sparkles } from 'lucide-react';
 
-const knowledgeTiers = {
-  'Ancient Languages': [
-    { id: 1, name: 'Ancient Languages', progress: 100 },
-    { id: 2, name: 'Classical Studies', progress: 100 },
-    { id: 3, name: 'Historical Linguistics', progress: 100 },
-  ],
-  'Modern Languages': [
-    { id: 4, name: 'European Languages', progress: 100 },
-    { id: 5, name: 'Asian Languages', progress: 100 },
-    { id: 6, name: 'Middle Eastern Languages', progress: 100 },
-    { id: 7, name: 'African Languages', progress: 100 },
-  ],
-  'Programming': [
-    { id: 8, name: 'Systems Programming', progress: 100 },
-    { id: 9, name: 'Web Development', progress: 100 },
-    { id: 10, name: 'Mobile Development', progress: 100 },
-    { id: 11, name: 'Database Systems', progress: 100 },
-  ],
-  'AI & Machine Learning': [
-    { id: 12, name: 'Neural Networks', progress: 100 },
-    { id: 13, name: 'Deep Learning', progress: 100 },
-    { id: 14, name: 'NLP Systems', progress: 100 },
-    { id: 15, name: 'Computer Vision', progress: 100 },
-  ],
-  'Engineering': [
-    { id: 16, name: 'Software Architecture', progress: 100 },
-    { id: 17, name: 'DevOps', progress: 100 },
-    { id: 18, name: 'Cloud Computing', progress: 100 },
-    { id: 19, name: 'Cybersecurity', progress: 100 },
-  ],
-  'Creative Arts': [
-    { id: 20, name: 'Digital Art', progress: 100 },
-    { id: 21, name: 'Music Theory', progress: 100 },
-    { id: 22, name: 'Creative Writing', progress: 100 },
-    { id: 23, name: 'Design Systems', progress: 100 },
-  ],
-  'Sciences': [
-    { id: 24, name: 'Physics', progress: 100 },
-    { id: 25, name: 'Chemistry', progress: 100 },
-    { id: 26, name: 'Biology', progress: 100 },
-    { id: 27, name: 'Mathematics', progress: 100 },
-  ],
-  'Autonomous Systems': [
-    { id: 28, name: 'Self-Learning', progress: 100 },
-    { id: 29, name: 'Autonomous Reasoning', progress: 100 },
-    { id: 30, name: 'Decision Making', progress: 100 },
-    { id: 31, name: 'Error Recovery', progress: 100 },
-    { id: 32, name: 'System Optimization', progress: 100 },
-    { id: 33, name: 'Adaptive Evolution', progress: 100 },
-    { id: 34, name: 'Grandmaster Autonomous', progress: 100 },
-  ],
-};
+interface TierCategory {
+  name: string;
+  count: number;
+}
 
-const categoryIcons = {
-  'Ancient Languages': Globe,
-  'Modern Languages': Globe,
-  'Programming': Code,
-  'AI & Machine Learning': Brain,
-  'Engineering': Database,
-  'Creative Arts': Sparkles,
-  'Sciences': Zap,
-  'Autonomous Systems': Brain,
-};
+interface TierSummary {
+  totalTiers: number;
+  categories: TierCategory[];
+  mode?: string;
+}
 
-const categoryColors = {
-  'Ancient Languages': 'from-amber-500 to-orange-500',
-  'Modern Languages': 'from-blue-500 to-cyan-500',
-  'Programming': 'from-green-500 to-emerald-500',
-  'AI & Machine Learning': 'from-purple-500 to-pink-500',
-  'Engineering': 'from-red-500 to-rose-500',
-  'Creative Arts': 'from-pink-500 to-fuchsia-500',
-  'Sciences': 'from-cyan-500 to-blue-500',
-  'Autonomous Systems': 'from-violet-500 to-purple-500',
-};
+const categoryPalette = [
+  'from-amber-500 to-orange-500',
+  'from-blue-500 to-cyan-500',
+  'from-green-500 to-emerald-500',
+  'from-purple-500 to-pink-500',
+  'from-red-500 to-rose-500',
+  'from-pink-500 to-fuchsia-500',
+  'from-cyan-500 to-blue-500',
+  'from-violet-500 to-purple-500',
+  'from-teal-500 to-emerald-500',
+  'from-lime-500 to-green-500',
+  'from-sky-500 to-indigo-500',
+  'from-rose-500 to-pink-500',
+];
+
+const formatLabel = (value: string) =>
+  value
+    .split('_')
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
 
 export default function TiersPage() {
+  const { data, isLoading, isError } = useQuery<TierSummary>({
+    queryKey: ['/api/nexus-v3/tiers'],
+    refetchInterval: 60000
+  });
+
+  const totalTiers = data?.totalTiers ?? 0;
+  const categories = (data?.categories ?? []).slice().sort((a, b) => b.count - a.count);
+
   return (
     <div className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-            66 Knowledge Tiers
+            {totalTiers ? `${totalTiers} Knowledge Tiers` : 'Knowledge Tiers'}
           </h1>
-          <p className="text-purple-400 text-lg">Specialized domain expertise across all fields of knowledge</p>
+          <p className="text-purple-400 text-lg">Live tier distribution from the Nexus V3 manifest</p>
         </div>
 
-        <div className="space-y-8">
-          {Object.entries(knowledgeTiers).map(([category, tiers]) => {
-            const Icon = categoryIcons[category as keyof typeof categoryIcons];
-            const colorClass = categoryColors[category as keyof typeof categoryColors];
-            
-            return (
-              <div key={category} className="bg-slate-900/50 backdrop-blur-xl border border-purple-500/30 rounded-2xl p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colorClass} flex items-center justify-center`}>
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-white">{category}</h2>
-                    <p className="text-purple-400 text-sm">{tiers.length} Tiers</p>
-                  </div>
-                </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-16 text-purple-300">
+            Loading tier distribution...
+          </div>
+        ) : isError ? (
+          <div className="flex items-center justify-center py-16 text-red-300">
+            Failed to load tier distribution.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {categories.map((category, index) => {
+              const colorClass = categoryPalette[index % categoryPalette.length];
+              const Icon = index % 2 === 0 ? Globe : Brain;
+              const percent = totalTiers > 0 ? Math.round((category.count / totalTiers) * 100) : 0;
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {tiers.map((tier) => (
-                    <div key={tier.id} className="bg-slate-800/50 border border-purple-500/20 rounded-xl p-4 hover:border-purple-500/40 transition-all">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-purple-400 font-mono">Tier {String(tier.id).padStart(2, '0')}</span>
-                        <span className="text-xs text-cyan-400 font-mono">{tier.progress}%</span>
-                      </div>
-                      <h3 className="text-white font-medium mb-3">{tier.name}</h3>
-                      <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                        <div 
-                          className={`h-full bg-gradient-to-r ${colorClass}`}
-                          style={{ width: `${tier.progress}%` }}
-                        />
-                      </div>
+              return (
+                <div key={category.name} className="bg-slate-900/50 backdrop-blur-xl border border-purple-500/30 rounded-2xl p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colorClass} flex items-center justify-center`}>
+                      <Icon className="w-6 h-6 text-white" />
                     </div>
-                  ))}
+                    <div>
+                      <h2 className="text-xl font-bold text-white">{formatLabel(category.name)}</h2>
+                      <p className="text-purple-400 text-sm">{category.count} tiers</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-purple-400">Share of total</span>
+                      <span className="text-cyan-400 font-mono">{percent}%</span>
+                    </div>
+                    <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full bg-gradient-to-r ${colorClass} transition-all`}
+                        style={{ width: `${percent}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
 
         <div className="mt-8 bg-slate-900/50 backdrop-blur-xl border border-purple-500/30 rounded-2xl p-6">
           <h3 className="text-xl font-bold text-white mb-4">Knowledge Tier Overview</h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">34</div>
-              <div className="text-purple-400 text-sm">Knowledge Tiers</div>
+              <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                {totalTiers || 'Unavailable'}
+              </div>
+              <div className="text-purple-400 text-sm">Total Tiers</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">8</div>
-              <div className="text-purple-400 text-sm">Categories</div>
+              <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                {categories.length || 'Unavailable'}
+              </div>
+              <div className="text-purple-400 text-sm">Domains</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-cyan-400 bg-clip-text text-transparent">100%</div>
-              <div className="text-purple-400 text-sm">Mastery</div>
+              <div className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-cyan-400 bg-clip-text text-transparent">
+                {data?.mode ?? 'Unknown'}
+              </div>
+              <div className="text-purple-400 text-sm">Mode</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Active</div>
-              <div className="text-purple-400 text-sm">Status</div>
+              <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                <Sparkles className="w-8 h-8 inline-block" />
+              </div>
+              <div className="text-purple-400 text-sm">Nexus V3</div>
             </div>
           </div>
         </div>

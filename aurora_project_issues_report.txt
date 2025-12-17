@@ -11,6 +11,21 @@ TABLE OF CONTENTS
 4. Low Priority Issues (Maintenance/Cleanup)
 5. Summary of What's Working
 
+STATUS UPDATE (December 17, 2025)
+---------------------------------
+Issue #1: Guarded with /api/database/status and requireDb checks; provisioning still required for persistent storage.
+Issue #2: Resolved - /api/bridge/comparison/aurora-runs added and dashboard uses live data.
+Issue #3: Resolved - /api/self-healing/status added and wired to AuroraCore.
+Issue #4: Resolved - pack summary reads real pack directories and manifests.
+Issue #5: Resolved - worker pool dispatch, issue detector scans, and bootstrap task on startup.
+Issue #6: Resolved - quantum coherence floor enforced in Luminar V2.
+Issue #7: Resolved - anthropic-service now calls local Luminar V2 chat.
+Issue #8: Resolved - draft controller finalized and references updated.
+Issue #9/#12: Backups retained intentionally; ignored in git via .gitignore (no deletions).
+Issue #10: Resolved - mock and placeholder outputs removed from chat and comparison surfaces.
+Issue #11: Pending - browserslist update requires network access to refresh caniuse-lite.
+Issue #13: Deferred - centralized error handling remains a long-term refactor.
+
 ================================================================================
                     1. CRITICAL ISSUES - NOT PRODUCTION READY
 ================================================================================

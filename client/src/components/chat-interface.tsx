@@ -58,7 +58,7 @@ export function ChatInterface() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: promptToSend }),
+        body: JSON.stringify({ message: promptToSend, session_id: 'aurora-chat-ui' }),
       });
 
       console.log('🌟 Aurora: Response status:', response.status);
@@ -70,10 +70,16 @@ export function ChatInterface() {
       const data = await response.json();
       console.log('🌟 Aurora: Response data:', data);
 
+      const content = typeof data?.response === 'string'
+        ? data.response
+        : typeof data?.message === 'string'
+          ? data.message
+          : formatAuroraResponse(data);
+
       const auroraMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'aurora',
-        content: formatAuroraResponse(data),
+        content,
         timestamp: new Date(),
         data: data,
       };

@@ -8,7 +8,7 @@
   "Self-Healing System": {
     "running": true,
     "pid": 8449,
-    "script": "controllers/aurora_ultimate_self_healing_system_DRAFT2.py",
+    "script": "controllers/aurora_ultimate_self_healing_system.py",
     "started_at": "Wed Dec 10 01:27:38 2025"
   },
   "Hyperspeed Mode": {

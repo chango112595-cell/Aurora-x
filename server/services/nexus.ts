@@ -1,4 +1,6 @@
 import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
 
 export interface ConsciousState {
   ok: boolean;
@@ -18,6 +20,34 @@ export interface ConsciousState {
     workers: number;
   };
   uptime: number;
+}
+
+const PROJECT_ROOT = path.resolve(process.cwd());
+const MANIFEST_DIR = path.join(PROJECT_ROOT, "manifests");
+
+function readJsonFile<T>(filePath: string): T | null {
+  try {
+    const raw = fs.readFileSync(filePath, "utf-8");
+    return JSON.parse(raw) as T;
+  } catch {
+    return null;
+  }
+}
+
+function getManifestCounts() {
+  const tiers = readJsonFile<{ tiers?: unknown[]; totalTiers?: number }>(path.join(MANIFEST_DIR, "tiers.manifest.json"));
+  const executions = readJsonFile<{ executions?: unknown[]; totalExecutions?: number }>(
+    path.join(MANIFEST_DIR, "executions.manifest.json")
+  );
+  const modules = readJsonFile<{ modules?: unknown[]; totalModules?: number }>(
+    path.join(MANIFEST_DIR, "modules.manifest.json")
+  );
+
+  return {
+    tiers: tiers?.tiers?.length ?? tiers?.totalTiers ?? 0,
+    aems: executions?.executions?.length ?? executions?.totalExecutions ?? 0,
+    modules: modules?.modules?.length ?? modules?.totalModules ?? 0
+  };
 }
 
 async function fetchLocal(url: string, body?: any): Promise<any> {
@@ -79,6 +109,7 @@ export class AuroraNexus {
 
   async getConsciousState(): Promise<ConsciousState> {
     const result = await fetchLocal(`${this.baseUrl}/api/consciousness`);
+    const manifestCounts = getManifestCounts();
     
     if (result && result.success) {
       return {
@@ -93,9 +124,9 @@ export class AuroraNexus {
           idle: result.workers?.idle ?? 300
         },
         peakCapabilities: {
-          tiers: result.peak_capabilities?.tiers ?? 188,
-          aems: result.peak_capabilities?.aems ?? 66,
-          modules: result.peak_capabilities?.modules ?? 550,
+          tiers: result.peak_capabilities?.tiers ?? manifestCounts.tiers,
+          aems: result.peak_capabilities?.aems ?? manifestCounts.aems,
+          modules: result.peak_capabilities?.modules ?? manifestCounts.modules,
           workers: result.peak_capabilities?.workers ?? 300
         },
         uptime: result.uptime ?? 0
@@ -109,7 +140,7 @@ export class AuroraNexus {
       autonomousMode: false,
       hybridMode: false,
       workers: { total: 0, active: 0, idle: 0 },
-      peakCapabilities: { tiers: 188, aems: 66, modules: 550, workers: 300 },
+      peakCapabilities: { tiers: manifestCounts.tiers, aems: manifestCounts.aems, modules: manifestCounts.modules, workers: 300 },
       uptime: 0
     };
   }
@@ -141,7 +172,11 @@ export class AuroraNexus {
 
   async getManifest(): Promise<Record<string, number>> {
     const result = await fetchLocal(`${this.baseUrl}/api/manifest`);
-    return result ?? { tiers: 188, aems: 66, modules: 550 };
+    if (result) {
+      return result;
+    }
+    const counts = getManifestCounts();
+    return { tiers: counts.tiers, aems: counts.aems, modules: counts.modules };
   }
 
   isEnabled(): boolean {

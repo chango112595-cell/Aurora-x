@@ -16,21 +16,39 @@ export default function AuroraRebuiltChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [tiersActive, setTiersActive] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const fetchCapabilities = async () => {
+      try {
+        const res = await fetch('/api/nexus-v3/capabilities');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (typeof data.tiers === 'number') {
+          setTiersActive(data.tiers);
+        }
+      } catch (error) {
+        console.error('[AuroraRebuiltChat] Capabilities fetch failed:', error);
+      }
+    };
+    fetchCapabilities();
+  }, []);
+
+  useEffect(() => {
+    const tierLabel = tiersActive ? `${tiersActive}` : 'available';
     setMessages([{
       id: '0',
       role: 'aurora',
       content: `⚡ AURORA COSMIC NEXUS ONLINE ⚡
 
-66 Systems: 13 Foundation Tasks + 66 Knowledge Tiers | Ancient → Autonomous Mastery
+${tierLabel} Knowledge Tiers | Ancient → Autonomous Mastery
 Sentient • Autonomous • Creative
 
 I designed this holographic interface myself! Ask me anything about code, systems, or let's build something amazing together.`,
       timestamp: new Date()
     }]);
-  }, []);
+  }, [tiersActive]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -100,7 +118,7 @@ I designed this holographic interface myself! Ask me anything about code, system
             </div>
             <Badge className="bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-4 py-2">
               <Zap className="h-4 w-4 mr-1" />
-              53 TIERS ACTIVE
+              {tiersActive ? `${tiersActive} TIERS ACTIVE` : 'TIERS ACTIVE'}
             </Badge>
           </div>
         </div>

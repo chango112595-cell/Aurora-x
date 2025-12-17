@@ -13,7 +13,7 @@ import Library from "./pages/library";
 import Settings from "./pages/settings";
 import AuroraUI from "./pages/aurora-ui";
 import ComparisonDashboard from "./pages/ComparisonDashboard";
-import LuminarNexus from "./pages/luminar-nexus";
+import Nexus from "./pages/nexus";
 import Autonomous from "./pages/autonomous";
 import Monitoring from "./pages/monitoring";
 import Database from "./pages/database";
@@ -38,9 +38,9 @@ function App() {
         <Route path="/chat" component={Chat} />
         <Route path="/memory" component={Memory} />
         <Route path="/library" component={Library} />
-        <Route path="/luminar-nexus" component={LuminarNexus} />
+        <Route path="/nexus" component={Nexus} />
         <Route path="/comparison" component={ComparisonDashboard} />
-        <Route path="/luminar-nexus" component={LuminarNexus} />
+        <Route path="/luminar-nexus" component={Nexus} />
         <Route path="/servers" component={ServerControl} />
         <Route path="/self-learning" component={SelfLearning} />
         <Route path="/corpus" component={Corpus} />

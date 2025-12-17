@@ -578,6 +578,7 @@ class LuminarNexusV2:
             "healing_enabled": True,
             "ai_learning_enabled": True,
             "quantum_coherence_threshold": 0.7,
+            "quantum_coherence_floor": 0.5,
         }
 
         # Get the current working directory
@@ -1296,6 +1297,7 @@ class LuminarNexusV2:
 
     def _update_quantum_coherence(self):
         """Update system quantum coherence level"""
+        coherence_floor = self.config.get("quantum_coherence_floor", 0.5)
         established_services = [
             h for h in self.health_monitor.values() 
             if h.last_healthy_at is not None
@@ -1304,7 +1306,7 @@ class LuminarNexusV2:
         if established_services:
             healthy_count = sum(1 for h in established_services if h.status in {"healthy", "degraded"})
             total = len(established_services)
-            self.quantum_mesh.coherence_level = healthy_count / total
+            self.quantum_mesh.coherence_level = max(coherence_floor, healthy_count / total)
             # Only warn when we have degraded services
             if self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"]:
                 print(f"[WARN]  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
