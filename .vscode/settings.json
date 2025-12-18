@@ -1,6 +1,7 @@
 {
     "python-envs.defaultEnvManager": "ms-python.python:system",
     "python-envs.pythonProjects": [],
+    "python.defaultInterpreterPath": ".venv\\Scripts\\python.exe",
     "python.analysis.extraPaths": [
         "./tools"
     ],
