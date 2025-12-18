@@ -115,7 +115,8 @@ def ensure_node_env(state: dict) -> None:
     if not package_json.exists():
         return
 
-    if not shutil.which("npm"):
+    npm_cmd = shutil.which("npm")
+    if not npm_cmd:
         print("   [WARN] npm not found; Node services will not start.")
         return
 
@@ -125,7 +126,7 @@ def ensure_node_env(state: dict) -> None:
 
     if not node_modules.exists() or state.get("package_lock_hash") != lock_hash:
         print("   [BOOT] Installing Node dependencies...")
-        subprocess.run(["npm", "install"], check=True)
+        subprocess.run([npm_cmd, "install"], check=True)
         state["package_lock_hash"] = lock_hash
 
 
