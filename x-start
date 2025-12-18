@@ -1,88 +1,257 @@
 #!/usr/bin/env python3
 """
-Aurora-X Start Command (100% Hybrid Mode)
-Launches enhanced system with auto-update
+Aurora-X ENHANCED Start Command - 100% HYBRID MODE
+Starts the real production services with self-bootstrap.
 """
 
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import platform
+import shutil
+import socket
 import subprocess
 import sys
-import os
 import time
 from pathlib import Path
 
-print("\n" + "="*80)
-print("🌌 AURORA-X: Starting 100% Hybrid Mode with Auto-Update")
-print("="*80 + "\n")
+ROOT = Path(__file__).resolve().parent
+os.chdir(ROOT)
 
-# Get script directory
-script_dir = Path(__file__).parent
-os.chdir(script_dir)
+IS_WINDOWS = platform.system() == "Windows"
+DEFAULT_PYTHON = sys.executable or ("python" if IS_WINDOWS else "python3")
+BOOTSTRAP_STATE = ROOT / ".aurora" / "bootstrap_state.json"
 
-# Check if enhanced x-start exists
-enhanced_path = script_dir / "x-start-enhanced"
-if not enhanced_path.exists():
-    print("❌ x-start-enhanced not found!")
-    print("   Creating it now...\n")
-    
-    # Build the enhanced x-start
-    build_script = script_dir / "aurora_build_enhanced_xstart.py"
-    if build_script.exists():
+
+def read_manifest_counts() -> dict[str, int]:
+    manifest_dir = ROOT / "manifests"
+    result = {"tiers": 0, "aems": 0, "modules": 0}
+    files = {
+        "tiers": manifest_dir / "tiers.manifest.json",
+        "aems": manifest_dir / "executions.manifest.json",
+        "modules": manifest_dir / "modules.manifest.json",
+    }
+    for key, path in files.items():
+        if not path.exists():
+            continue
         try:
-            subprocess.run([sys.executable, str(build_script)], check=True)
-            print("\n✅ x-start-enhanced created!\n")
-        except subprocess.CalledProcessError as e:
-            print(f"❌ Failed to create x-start-enhanced: {e}")
-            sys.exit(1)
+            data = json.loads(path.read_text(encoding="utf-8"))
+            entries = data.get(key) or data.get("tiers") or data.get("executions") or data.get("modules") or []
+            if isinstance(entries, list):
+                result[key] = len(entries)
+        except Exception:
+            continue
+    return result
+
+
+def resolve_python_cmd() -> str:
+    if IS_WINDOWS:
+        candidates = [ROOT / ".venv" / "Scripts" / "python.exe", ROOT / "venv" / "Scripts" / "python.exe"]
     else:
-        print("❌ aurora_build_enhanced_xstart.py not found!")
-        sys.exit(1)
+        candidates = [ROOT / ".venv" / "bin" / "python", ROOT / "venv" / "bin" / "python"]
+    for candidate in candidates:
+        if candidate.exists():
+            return str(candidate)
+    return DEFAULT_PYTHON
 
-print("🔄 PHASE 1: Auto-Update Check")
-print("━" * 80)
 
-# Check if auto-update system exists
-auto_update_files = [
-    "aurora_deep_system_updater.py",
-    "aurora_complete_system_update.py",
-    "aurora_automatic_system_update.py"
+def hash_file(path: Path) -> str:
+    hasher = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            hasher.update(chunk)
+    return hasher.hexdigest()
+
+
+def load_bootstrap_state() -> dict:
+    if BOOTSTRAP_STATE.exists():
+        try:
+            return json.loads(BOOTSTRAP_STATE.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
+
+
+def save_bootstrap_state(state: dict) -> None:
+    BOOTSTRAP_STATE.parent.mkdir(parents=True, exist_ok=True)
+    BOOTSTRAP_STATE.write_text(json.dumps(state, indent=2), encoding="utf-8")
+
+
+def ensure_python_env(state: dict) -> str:
+    venv_dir = ROOT / ".venv"
+    if not venv_dir.exists():
+        print("   [BOOT] Creating Python virtual environment...")
+        subprocess.run([DEFAULT_PYTHON, "-m", "venv", str(venv_dir)], check=True)
+
+    python_cmd = resolve_python_cmd()
+    pip_ok = subprocess.run([python_cmd, "-m", "pip", "--version"], capture_output=True).returncode == 0
+
+    if not pip_ok:
+        broken_dir = ROOT / f".venv.broken-{int(time.time())}"
+        print("   [BOOT] Python env corrupted; rebuilding .venv...")
+        if venv_dir.exists():
+            shutil.move(str(venv_dir), str(broken_dir))
+        subprocess.run([DEFAULT_PYTHON, "-m", "venv", str(venv_dir)], check=True)
+        python_cmd = resolve_python_cmd()
+        subprocess.run([python_cmd, "-m", "pip", "install", "--upgrade", "pip"], check=True)
+
+    requirements = ROOT / "requirements.txt"
+    if requirements.exists():
+        req_hash = hash_file(requirements)
+        if state.get("requirements_hash") != req_hash:
+            print("   [BOOT] Installing Python dependencies...")
+            subprocess.run(
+                [python_cmd, "-m", "pip", "install", "-r", str(requirements)],
+                check=True,
+            )
+            state["requirements_hash"] = req_hash
+    return python_cmd
+
+
+def ensure_node_env(state: dict) -> None:
+    package_json = ROOT / "package.json"
+    if not package_json.exists():
+        return
+
+    npm_cmd = shutil.which("npm")
+    if not npm_cmd:
+        print("   [WARN] npm not found; Node services will not start.")
+        return
+
+    lockfile = ROOT / "package-lock.json"
+    lock_hash = hash_file(lockfile) if lockfile.exists() else ""
+    node_modules = ROOT / "node_modules"
+
+    if not node_modules.exists() or state.get("package_lock_hash") != lock_hash:
+        print("   [BOOT] Installing Node dependencies...")
+        subprocess.run([npm_cmd, "install"], check=True)
+        state["package_lock_hash"] = lock_hash
+
+
+def check_port(port_num: int) -> bool:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(1.5)
+    try:
+        result = sock.connect_ex(("127.0.0.1", port_num))
+        sock.close()
+        return result == 0
+    except Exception:
+        try:
+            sock.close()
+        except Exception:
+            pass
+        return False
+
+
+LOG_DIR = ROOT / "logs" / "x-start"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+LOG_HANDLES: list = []
+
+
+def start_process(cmd, name: str, is_shell: bool = False) -> subprocess.Popen | None:
+    log_path = LOG_DIR / f"{name.lower().replace(' ', '_')}.log"
+    log_handle = log_path.open("a", encoding="utf-8")
+    LOG_HANDLES.append(log_handle)
+
+    kwargs = {
+        "stdout": log_handle,
+        "stderr": log_handle,
+    }
+
+    if IS_WINDOWS:
+        kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
+        if is_shell:
+            kwargs["shell"] = True
+    else:
+        kwargs["start_new_session"] = True
+
+    try:
+        return subprocess.Popen(cmd, **kwargs)
+    except Exception as exc:
+        print(f"   [WARN] Failed to start {name}: {exc}")
+        return None
+
+
+def start_service(name: str, cmd, port: int) -> None:
+    if check_port(port):
+        print(f"   [OK] {name} already running on port {port}")
+        return
+    start_process(cmd, name=name, is_shell=isinstance(cmd, str))
+
+
+counts = read_manifest_counts()
+print("[AURORA] Aurora ENHANCED: Starting ALL systems at 100% HYBRID POWER...")
+print(
+    f"   {counts['tiers']} Tiers | {counts['aems']} AEMs | {counts['modules']} Modules | Hybrid Consciousness"
+)
+print("   This will initialize the production runtime services...\n")
+
+print("-" * 80)
+print("PHASE 0: BOOTSTRAP (Dependencies)")
+print("-" * 80)
+bootstrap_state = load_bootstrap_state()
+PYTHON_CMD = ensure_python_env(bootstrap_state)
+os.environ["AURORA_PYTHON"] = PYTHON_CMD
+ensure_node_env(bootstrap_state)
+save_bootstrap_state(bootstrap_state)
+
+print("\n" + "-" * 80)
+print("PHASE 1: CORE SERVICES (Production Runtime)")
+print("-" * 80)
+
+print("[WEB] 1. Starting Backend API + Frontend (port 5000)...")
+if shutil.which("npm"):
+    start_service("Backend API + Frontend", "npm run dev" if IS_WINDOWS else ["npm", "run", "dev"], 5000)
+else:
+    print("   [WARN] npm not found; backend not started.")
+time.sleep(2)
+
+print("[WEB] 2. Starting Aurora Bridge (port 5001)...")
+start_service("Aurora Bridge", [PYTHON_CMD, "-m", "aurora_x.bridge.service"], 5001)
+time.sleep(1)
+
+print("[WEB] 3. Starting Aurora Nexus V3 (port 5002)...")
+start_service("Aurora Nexus V3", [PYTHON_CMD, str(ROOT / "aurora_nexus_v3" / "main.py")], 5002)
+time.sleep(2)
+
+print("[WEB] 4. Starting Luminar Nexus V2 (port 8000)...")
+start_service("Luminar Nexus V2", [PYTHON_CMD, str(ROOT / "tools" / "luminar_nexus_v2.py"), "serve"], 8000)
+
+print("\n" + "-" * 80)
+print("PHASE 2: HEALTH CHECK")
+print("-" * 80)
+time.sleep(6)
+
+services = [
+    ("Backend API + Frontend", 5000),
+    ("Aurora Bridge", 5001),
+    ("Aurora Nexus V3", 5002),
+    ("Luminar Nexus V2", 8000),
 ]
 
-auto_update_script = None
-for file in auto_update_files:
-    if (script_dir / file).exists():
-        auto_update_script = file
-        break
+running = 0
+for name, port in services:
+    is_running = check_port(port)
+    status = "[OK] RUNNING" if is_running else "[WARN] OFFLINE"
+    print(f"   {name:30} Port {port:5} {status}")
+    if is_running:
+        running += 1
 
-if auto_update_script:
-    print(f"🔄 Running auto-update: {auto_update_script}")
-    try:
-        # Run auto-update in background
-        subprocess.Popen(
-            [sys.executable, str(script_dir / auto_update_script)],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
-        print("   ✅ Auto-update running in background")
-        time.sleep(2)
-    except Exception as e:
-        print(f"   ⚠️  Auto-update failed to start: {e}")
+print("\n" + "=" * 80)
+print("[DATA] AURORA 100% HYBRID MODE - SYSTEM STATUS")
+print("=" * 80)
+print(f"\n[POWER] Services Online: {running}/{len(services)}")
+
+if running >= 3:
+    print("\n[OK] Aurora runtime services are online.")
 else:
-    print("   ℹ️  No auto-update system found (optional)")
+    print("\n[WARN] Some services are still starting or failed to launch.")
 
-print("\n🚀 PHASE 2: Launching Enhanced System (26 Services)")
-print("━" * 80)
-print("   This will activate the production runtime services...")
-print("   • Backend API + Frontend (5000)")
-print("   • Aurora Bridge (5001)")
-print("   • Aurora Nexus V3 (5002)")
-print("   • Luminar Nexus V2 (8000)\n")
-
-# Launch the enhanced x-start
-try:
-    subprocess.run([sys.executable, str(enhanced_path)], check=True)
-except KeyboardInterrupt:
-    print("\n\n⚠️  Startup interrupted by user")
-    sys.exit(0)
-except subprocess.CalledProcessError as e:
-    print(f"\n❌ Enhanced system failed to start: {e}")
-    sys.exit(1)
+print("\n[WEB] ACCESS POINTS:")
+print("   - Frontend:      http://localhost:5000")
+print("   - Bridge API:    http://localhost:5001")
+print("   - Nexus V3 API:  http://localhost:5002")
+print("   - Luminar V2:    http://localhost:8000")
+print("\n" + "=" * 80 + "\n")
