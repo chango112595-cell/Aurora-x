@@ -621,7 +621,7 @@ export class AuroraCore {
     
     // Worker pool health - check if workers are available
     const workerMetric = this.systemHealthMetrics.get('worker-pool')!;
-    const freeWorkers = this.workerPool.filter(w => !w.isBusy()).length;
+    const freeWorkers = this.workerPool.filter(w => w.status === 'idle').length;
     workerMetric.healthy = freeWorkers > 10; // At least 10% free
     workerMetric.lastCheck = Date.now();
     
