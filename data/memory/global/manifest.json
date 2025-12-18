@@ -1,0 +1,13 @@
+{
+  "fabric_version": "2.0-enhanced",
+  "created": "2025-12-05 03:01:21.668530",
+  "features": [
+    "short/mid/long/semantic memory",
+    "project/conversation compartments",
+    "auto summarization",
+    "fact/event stores",
+    "semantic vector recall",
+    "backup + integrity",
+    "encryption-ready"
+  ]
+}

@@ -1,5 +1,6 @@
+
 """
-  Init  
+Corpus module for Aurora-X
 
 Comprehensive module documentation explaining purpose, usage, and architecture.
 
@@ -10,9 +11,8 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
-# Corpus module for Aurora-X
-from .pretty from typing import Dict, List, Tuple, Optional, Any, Union
-import fmt_rows
+from typing import Dict, List, Tuple, Optional, Any, Union
+from .pretty import fmt_rows
 from .store import record, retrieve, spec_digest
 
 # Aurora Performance Optimization
@@ -32,5 +32,3 @@ try:
 except Exception as e:
     # Handle all exceptions gracefully
     pass
-
-# Type annotations: str, int -> bool

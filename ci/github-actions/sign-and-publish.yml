@@ -1,0 +1,27 @@
+name: Sign and publish update
+on:
+  workflow_dispatch:
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build archive
+        run: |
+          tar czf aurora-update.tar.gz .
+          sha256sum aurora-update.tar.gz > aurora-update.tar.gz.sha256
+      - name: Sign (GPG secret in secrets.GPG_PRIVATE)
+        env:
+          GPG_PRIVATE: ${{ secrets.GPG_PRIVATE }}
+        run: |
+          echo "$GPG_PRIVATE" | base64 --decode > gpg.key
+          gpg --batch --import gpg.key
+          gpg --armor --detach-sign aurora-update.tar.gz
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aurora_update
+          path: |
+            aurora-update.tar.gz
+            aurora-update.tar.gz.asc
+            aurora-update.tar.gz.sha256

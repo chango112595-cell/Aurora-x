@@ -9,9 +9,9 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
+from __future__ import annotations
 
 from typing import Dict, List, Tuple, Optional, Any, Union
-import annotations
 
 import hashlib
 import re
@@ -23,14 +23,11 @@ from concurrent.futures import ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
 #             results = executor.map(process_func, items)
 
-
 class NLParseResult(dict):
     pass
 
-
 def _hash(text: str) -> str:
     return hashlib.sha1(text.encode("utf-8"), usedforsecurity=False).hexdigest()[:8]
-
 
 def _snake(text: str) -> str:
     """Convert text to snake_case function name"""
@@ -82,7 +79,6 @@ def _snake(text: str) -> str:
 
     return name
 
-
 def _extract_routes(text: str) -> list:
     """Extract potential routes from the request text"""
     t = text.lower()
@@ -115,7 +111,6 @@ def _extract_routes(text: str) -> list:
         routes.append({"path": "/", "name": "index"})
 
     return routes
-
 
 def parse_english(text: str) -> NLParseResult:
     """Parse English request into structured format."""
@@ -361,7 +356,6 @@ def parse_english(text: str) -> NLParseResult:
             "examples": examples,
         }
     )
-
 
 # Aurora Perfect Error Handling
 try:

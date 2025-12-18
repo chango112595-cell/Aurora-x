@@ -1,0 +1,25 @@
+{
+  "id": "pack15_intel_fabric_default",
+  "name": "Pack15 Intel Fabric Default Workflow",
+  "version": "0.1.0",
+  "steps": [
+    {
+      "id": "init",
+      "action": "initialize",
+      "next": "process"
+    },
+    {
+      "id": "process",
+      "action": "execute",
+      "params": {
+        "command": "default"
+      },
+      "next": "complete"
+    },
+    {
+      "id": "complete",
+      "action": "shutdown",
+      "next": null
+    }
+  ]
+}

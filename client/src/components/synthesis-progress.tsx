@@ -6,12 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Circle, Loader2, Clock, Zap, AlertCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
-export type SynthesisStage = 
-  | "QUEUED" 
-  | "ANALYZING" 
-  | "GENERATING" 
-  | "TESTING" 
-  | "COMPLETE" 
+export type SynthesisStage =
+  | "QUEUED"
+  | "ANALYZING"
+  | "GENERATING"
+  | "TESTING"
+  | "COMPLETE"
   | "ERROR";
 
 interface ProgressData {
@@ -35,9 +35,9 @@ interface SynthesisProgressProps {
   className?: string;
 }
 
-export function SynthesisProgress({ 
-  synthesisId, 
-  onComplete, 
+export function SynthesisProgress({
+  synthesisId,
+  onComplete,
   hideOnComplete = false,
   className = ""
 }: SynthesisProgressProps) {
@@ -59,7 +59,7 @@ export function SynthesisProgress({
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsUrl = `${protocol}//${window.location.host}/ws/synthesis`;
-    
+
     try {
       const ws = new WebSocket(wsUrl);
       wsRef.current = ws;
@@ -76,10 +76,10 @@ export function SynthesisProgress({
       ws.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data);
-          
+
           if (message.type === 'progress' && message.data) {
             setProgressData(message.data);
-            
+
             if (message.data.stage === 'COMPLETE' && !completedRef.current) {
               completedRef.current = true;
               if (onComplete) {
@@ -177,7 +177,7 @@ export function SynthesisProgress({
     }
   };
 
-  const stages: Array<{name: SynthesisStage, label: string, description: string}> = [
+  const stages: Array<{ name: SynthesisStage, label: string, description: string }> = [
     { name: "QUEUED", label: "Queued", description: "Request received and queued" },
     { name: "ANALYZING", label: "Analyzing", description: "Understanding requirements" },
     { name: "GENERATING", label: "Generating", description: "Creating code solution" },
@@ -189,7 +189,7 @@ export function SynthesisProgress({
     const stageOrder = ["QUEUED", "ANALYZING", "GENERATING", "TESTING", "COMPLETE"];
     const currentIndex = stageOrder.indexOf(currentData.stage);
     const stageIndex = stageOrder.indexOf(stageName);
-    
+
     if (stageIndex < currentIndex) return "completed";
     if (stageIndex === currentIndex) return "in-progress";
     return "pending";
@@ -213,11 +213,11 @@ export function SynthesisProgress({
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent top-0 animate-scan" />
       </div>
-      
+
       {/* Corner glow effects */}
       <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-transparent blur-xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-tl from-purple-500/20 to-transparent blur-xl pointer-events-none" />
-      
+
       <CardHeader>
         <div className="flex items-center justify-between relative z-10">
           <CardTitle className="flex items-center gap-2">
@@ -274,9 +274,9 @@ export function SynthesisProgress({
           </div>
           <div className="relative">
             <Progress value={currentData.percentage} className="h-3 bg-cyan-950/30" data-testid="progress-bar" />
-            <div 
+            <div
               className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 rounded-full transition-all duration-300"
-              style={{ 
+              style={{
                 width: `${currentData.percentage}%`,
                 boxShadow: '0 0 20px rgba(6, 182, 212, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
               }}
@@ -290,7 +290,7 @@ export function SynthesisProgress({
           {stages.map((stage) => {
             const status = getStageStatus(stage.name);
             return (
-              <div key={stage.name} className="flex items-start gap-3" data-testid={`stage-${stage.name.toLowerCase()}`}>
+              <div key={`stage-${stage.name}`} className="flex items-start gap-3" data-testid={`stage-${stage.name.toLowerCase()}`}>
                 <div className="mt-0.5">
                   {status === "completed" ? (
                     <CheckCircle2 className="h-5 w-5 text-chart-2" />

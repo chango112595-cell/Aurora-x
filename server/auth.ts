@@ -7,20 +7,48 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { Request, Response, NextFunction } from 'express';
+import { randomBytes } from 'crypto';
+import fs from 'fs';
+import path from 'path';
 
 // ══════════════════════════════════════════════════════════════
 // 🔐 CONFIGURATION
 // ══════════════════════════════════════════════════════════════
 
-const JWT_SECRET = process.env.JWT_SECRET || 'change-this-in-production-to-a-strong-secret';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h'; // Token expiration
-const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d'; // Refresh token expiration
-const BCRYPT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS || '12'); // Salt rounds for bcrypt
+const SECRETS_DIR = process.env.AURORA_SECRETS_DIR || path.join(process.cwd(), 'secrets');
 
-// Warn if using default secret
-if (JWT_SECRET === 'change-this-in-production-to-a-strong-secret') {
-  console.warn('[Auth] ⚠️  WARNING: Using default JWT secret. Set JWT_SECRET environment variable in production!');
+function loadJwtSecret(): string {
+  const envSecret = process.env.JWT_SECRET?.trim();
+  if (envSecret && envSecret !== 'change-this-in-production-to-a-strong-secret') {
+    return envSecret;
+  }
+
+  const secretPath = path.join(SECRETS_DIR, 'jwt_secret');
+
+  try {
+    if (fs.existsSync(secretPath)) {
+      const storedSecret = fs.readFileSync(secretPath, 'utf8').trim();
+      if (storedSecret) {
+        return storedSecret;
+      }
+    }
+
+    fs.mkdirSync(SECRETS_DIR, { recursive: true });
+    const generatedSecret = randomBytes(48).toString('hex');
+    fs.writeFileSync(secretPath, generatedSecret, { mode: 0o600 });
+    console.warn(`[Auth] Generated secure JWT secret at ${secretPath}. Set JWT_SECRET to override.`);
+    return generatedSecret;
+  } catch (error) {
+    throw new Error(
+      'JWT secret unavailable. Set JWT_SECRET or ensure the secrets directory is writable.',
+    );
+  }
 }
+
+const JWT_SECRET = loadJwtSecret();
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
+const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
+const BCRYPT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS || '12');
 
 // ══════════════════════════════════════════════════════════════
 // 📦 TYPES
@@ -34,13 +62,17 @@ export interface UserPayload {
 }
 
 export interface TokenPayload extends UserPayload {
-  iat?: number; // Issued at
-  exp?: number; // Expiration
+  iat?: number;
+  exp?: number;
   type: 'access' | 'refresh';
 }
 
 export interface AuthRequest extends Request {
   user?: UserPayload;
+}
+
+interface JwtError extends Error {
+  name: 'TokenExpiredError' | 'JsonWebTokenError' | string;
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -56,8 +88,7 @@ export async function hashPassword(password: string): Promise<string> {
   try {
     const hash = await bcrypt.hash(password, BCRYPT_ROUNDS);
     return hash;
-  } catch (error: any) {
-    console.error('[Auth] Password hashing error:', error);
+  } catch (error: unknown) {
     throw new Error('Failed to hash password');
   }
 }
@@ -72,8 +103,7 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   try {
     const match = await bcrypt.compare(password, hash);
     return match;
-  } catch (error: any) {
-    console.error('[Auth] Password verification error:', error);
+  } catch (error: unknown) {
     return false;
   }
 }
@@ -95,13 +125,12 @@ export function generateAccessToken(user: UserPayload): string {
     };
 
     const token = jwt.sign(payload, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES_IN as string,
-      algorithm: 'HS256' as const
-    });
+      expiresIn: JWT_EXPIRES_IN,
+      algorithm: 'HS256'
+    } as jwt.SignOptions);
 
     return token;
-  } catch (error: any) {
-    console.error('[Auth] Token generation error:', error);
+  } catch (error: unknown) {
     throw new Error('Failed to generate access token');
   }
 }
@@ -119,13 +148,12 @@ export function generateRefreshToken(user: UserPayload): string {
     };
 
     const token = jwt.sign(payload, JWT_SECRET, {
-      expiresIn: JWT_REFRESH_EXPIRES_IN as string,
-      algorithm: 'HS256' as const
-    });
+      expiresIn: JWT_REFRESH_EXPIRES_IN,
+      algorithm: 'HS256'
+    } as jwt.SignOptions);
 
     return token;
-  } catch (error: any) {
-    console.error('[Auth] Refresh token generation error:', error);
+  } catch (error: unknown) {
     throw new Error('Failed to generate refresh token');
   }
 }
@@ -158,14 +186,7 @@ export function verifyToken(token: string): TokenPayload | null {
     }) as TokenPayload;
 
     return decoded;
-  } catch (error: any) {
-    if (error.name === 'TokenExpiredError') {
-      console.log('[Auth] Token expired:', error.message);
-    } else if (error.name === 'JsonWebTokenError') {
-      console.log('[Auth] Invalid token:', error.message);
-    } else {
-      console.error('[Auth] Token verification error:', error);
-    }
+  } catch (error: unknown) {
     return null;
   }
 }
@@ -182,7 +203,6 @@ export function extractToken(req: Request): string | null {
     return null;
   }
 
-  // Support both "Bearer TOKEN" and just "TOKEN"
   if (authHeader.startsWith('Bearer ')) {
     return authHeader.substring(7);
   }
@@ -200,7 +220,6 @@ export function extractToken(req: Request): string | null {
  */
 export function requireAuth(req: AuthRequest, res: Response, next: NextFunction): void {
   try {
-    // Extract token from header
     const token = extractToken(req);
 
     if (!token) {
@@ -211,7 +230,6 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
       return;
     }
 
-    // Verify token
     const decoded = verifyToken(token);
 
     if (!decoded) {
@@ -222,7 +240,6 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
       return;
     }
 
-    // Check token type (should be access token)
     if (decoded.type !== 'access') {
       res.status(401).json({
         error: 'Unauthorized',
@@ -231,7 +248,6 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
       return;
     }
 
-    // Attach user to request
     req.user = {
       id: decoded.id,
       username: decoded.username,
@@ -239,10 +255,8 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
       role: decoded.role
     };
 
-    // Continue to next middleware/route handler
     next();
-  } catch (error: any) {
-    console.error('[Auth] Authentication middleware error:', error);
+  } catch (error: unknown) {
     res.status(500).json({
       error: 'Internal Server Error',
       message: 'Authentication failed'
@@ -271,11 +285,8 @@ export function optionalAuth(req: AuthRequest, res: Response, next: NextFunction
       }
     }
 
-    // Continue regardless of auth status
     next();
-  } catch (error: any) {
-    console.error('[Auth] Optional authentication middleware error:', error);
-    // Continue even on error
+  } catch (error: unknown) {
     next();
   }
 }
@@ -342,13 +353,10 @@ export function refreshAccessToken(refreshToken: string): string | null {
       return null;
     }
 
-    // Check token type (should be refresh token)
     if (decoded.type !== 'refresh') {
-      console.log('[Auth] Invalid token type for refresh:', decoded.type);
       return null;
     }
 
-    // Generate new access token with same user data
     const user: UserPayload = {
       id: decoded.id,
       username: decoded.username,
@@ -358,8 +366,7 @@ export function refreshAccessToken(refreshToken: string): string | null {
 
     const newAccessToken = generateAccessToken(user);
     return newAccessToken;
-  } catch (error: any) {
-    console.error('[Auth] Token refresh error:', error);
+  } catch (error: unknown) {
     return null;
   }
 }
@@ -377,7 +384,7 @@ export function getTokenExpiration(token: string): number | null {
   try {
     const decoded = jwt.decode(token) as TokenPayload | null;
     return decoded?.exp || null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     return null;
   }
 }
@@ -412,30 +419,19 @@ export function getTokenTTL(token: string): number {
 // ══════════════════════════════════════════════════════════════
 
 export default {
-  // Password functions
   hashPassword,
   verifyPassword,
-
-  // Token generation
   generateAccessToken,
   generateRefreshToken,
   generateTokens,
-
-  // Token verification
   verifyToken,
   extractToken,
-
-  // Middleware
   requireAuth,
   optionalAuth,
   requireRole,
   requireAdmin,
   requireUser,
-
-  // Token refresh
   refreshAccessToken,
-
-  // Utilities
   getTokenExpiration,
   isTokenExpired,
   getTokenTTL

@@ -1,0 +1,21 @@
+apiVersion: v2
+name: aurora-x
+description: Aurora-X Modular AI System with 550 Functional Modules
+type: application
+version: 3.0.0
+appVersion: "3.0.0"
+maintainers:
+  - name: Aurora-X Team
+    email: team@aurora-x.io
+keywords:
+  - ai
+  - modules
+  - autonomous
+  - distributed
+sources:
+  - https://github.com/aurora-x/nexus
+dependencies:
+  - name: etcd
+    version: "9.0.0"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: etcd.enabled

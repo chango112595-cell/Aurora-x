@@ -65,9 +65,12 @@ interface ComparisonItem {
     description: string;
     status: 'approved' | 'pending' | 'rejected';
     category: string;
+    impact?: string;
+    complexity?: string;
 }
 
 export default function ComparisonDashboard() {
+    const [tabValue, setTabValue] = useState<string>('git-comparison');
     const [approvedItems, setApprovedItems] = useState<Set<string>>(new Set());
     const [commits, setCommits] = useState<Commit[]>([]);
     const [auroraRuns, setAuroraRuns] = useState<AuroraRun[]>([]);
@@ -95,15 +98,12 @@ export default function ComparisonDashboard() {
     };
 
     const fetchAuroraRuns = async () => {
-        // 🌌 Aurora fix: Endpoint doesn't exist - disabled to prevent 500 errors
-        // TODO: Create /api/bridge/comparison/aurora-runs endpoint or remove this feature
         try {
-            // const response = await fetch('/api/bridge/comparison/aurora-runs');
-            // const data = await response.json();
-            // if (data.ok) {
-            //     setAuroraRuns(data.runs);
-            // }
-            setAuroraRuns([]); // Aurora: Set empty for now
+            const response = await fetch('/api/bridge/comparison/aurora-runs');
+            const data = await response.json();
+            if (data.ok) {
+                setAuroraRuns(data.runs);
+            }
         } catch (error) {
             console.error('Failed to fetch Aurora runs:', error);
         }
@@ -189,65 +189,58 @@ export default function ComparisonDashboard() {
         }
     }, [selectedCommit1, selectedCommit2]);
 
+    const activeDevelopment = branches.filter((branch) => branch.commit_count > 0).length;
+    const mergedFeatures = commits.filter((commit) => /merge/i.test(commit.message)).length;
+    const pendingReviews = branches.filter((branch) => branch.improvement_score < 50).length;
+    const codeHealth = branches.length
+        ? Math.round(branches.reduce((sum, branch) => sum + branch.improvement_score, 0) / branches.length)
+        : 0;
+
+    const derivedBranches = branches.map((branch) => ({
+        name: branch.name,
+        commits: branch.commit_count,
+        lastActivity: branch.last_commit_message,
+        status: branch.improvement_score > 70 ? 'stable' : branch.improvement_score > 40 ? 'active' : 'urgent'
+    }));
+
+    const derivedFeatures: ComparisonItem[] = (branchAnalysis?.key_features?.length
+        ? branchAnalysis.key_features.map((feature, index) => ({
+            id: `${selectedBranch || 'branch'}-${index}`,
+            title: feature.description,
+            description: feature.impact,
+            status: approvedItems.has(`${selectedBranch || 'branch'}-${index}`) ? 'approved' : 'pending',
+            category: feature.category
+        }))
+        : commits.slice(0, 10).map((commit) => ({
+            id: commit.short_hash,
+            title: commit.message,
+            description: commit.message,
+            status: approvedItems.has(commit.short_hash) ? 'approved' : 'pending',
+            category: /fix|bug/i.test(commit.message) ? 'Fix' : /perf|opt/i.test(commit.message) ? 'Performance' : 'Feature'
+        })));
+
+    const derivedImprovements = (branchAnalysis?.file_changes?.length ? branchAnalysis.file_changes : fileChanges).map((change: any, index: number) => ({
+        id: `imp-${index}`,
+        title: change.file,
+        description: `Changes in ${change.file}`,
+        category: change.status || 'modified',
+        metrics: {
+            additions: change.additions ?? 0,
+            deletions: change.deletions ?? 0
+        }
+    }));
+
     const comparisonData = {
         overview: {
-            totalBranches: 45,
-            activeDevelopment: 12,
-            mergedFeatures: 156,
-            pendingReviews: 8,
-            codeHealth: 94
+            totalBranches: branches.length,
+            activeDevelopment,
+            mergedFeatures,
+            pendingReviews,
+            codeHealth
         },
-        branches: [
-            { name: 'main', commits: 1240, lastActivity: '2 hours ago', status: 'stable' },
-            { name: 'feature/ai-engine', commits: 45, lastActivity: '15 minutes ago', status: 'active' },
-            { name: 'feature/dashboard-v2', commits: 23, lastActivity: '1 hour ago', status: 'active' },
-            { name: 'hotfix/security-patch', commits: 3, lastActivity: '30 minutes ago', status: 'urgent' }
-        ],
-        features: [
-            {
-                id: 'ai-synthesis',
-                title: 'AI Code Synthesis Engine',
-                description: 'Advanced AI-powered code generation with multi-language support',
-                status: 'approved' as const,
-                category: 'Core Feature',
-                impact: 'High',
-                complexity: 'High'
-            },
-            {
-                id: 'dashboard-ui',
-                title: 'Professional Dashboard UI',
-                description: 'Modern, responsive dashboard with real-time metrics',
-                status: 'pending' as const,
-                category: 'UI/UX',
-                impact: 'Medium',
-                complexity: 'Medium'
-            },
-            {
-                id: 'api-gateway',
-                title: 'Unified API Gateway',
-                description: 'Centralized API management with rate limiting and authentication',
-                status: 'approved' as const,
-                category: 'Infrastructure',
-                impact: 'High',
-                complexity: 'High'
-            }
-        ],
-        improvements: [
-            {
-                id: 'performance-opt',
-                title: 'Performance Optimization',
-                description: 'Reduced load times by 60% through code splitting and lazy loading',
-                category: 'Performance',
-                metrics: { before: '3.2s', after: '1.3s', improvement: '59%' }
-            },
-            {
-                id: 'security-hardening',
-                title: 'Security Hardening',
-                description: 'Implemented OAuth2, HTTPS enforcement, and input validation',
-                category: 'Security',
-                metrics: { vulnerabilities: '0', security_score: '98/100' }
-            }
-        ]
+        branches: derivedBranches,
+        features: derivedFeatures,
+        improvements: derivedImprovements
     };
 
     return (
@@ -293,16 +286,16 @@ export default function ComparisonDashboard() {
                     </p>
                 </div>
 
-                <Tabs defaultValue="git-comparison" className="space-y-6">
-                    <TabsList className="grid w-full grid-cols-8 bg-slate-800/50 backdrop-blur-sm">
-                        <TabsTrigger value="git-comparison" className="text-cyan-400">Git Comparison</TabsTrigger>
-                        <TabsTrigger value="branch-analysis" className="text-cyan-400">Branch Analysis</TabsTrigger>
-                        <TabsTrigger value="aurora-runs" className="text-cyan-400">Aurora Runs</TabsTrigger>
-                        <TabsTrigger value="overview" className="text-cyan-400">Overview</TabsTrigger>
-                        <TabsTrigger value="branches" className="text-cyan-400">Branches</TabsTrigger>
-                        <TabsTrigger value="features" className="text-cyan-400">Features</TabsTrigger>
-                        <TabsTrigger value="diagnostics" className="text-cyan-400">Diagnostics</TabsTrigger>
-                        <TabsTrigger value="approval" className="text-cyan-400">Approval</TabsTrigger>
+                <Tabs value={tabValue} onValueChange={setTabValue} className="space-y-6">
+                    <TabsList className="grid w-full grid-cols-8 bg-purple-200/80 backdrop-blur-sm border border-purple-300 p-1.5 rounded-lg">
+                        <TabsTrigger value="git-comparison" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-cyan-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Git Comparison</TabsTrigger>
+                        <TabsTrigger value="branch-analysis" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-pink-500 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Branch Analysis</TabsTrigger>
+                        <TabsTrigger value="aurora-runs" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-yellow-500 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Aurora Runs</TabsTrigger>
+                        <TabsTrigger value="overview" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-cyan-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Overview</TabsTrigger>
+                        <TabsTrigger value="branches" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-pink-500 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Branches</TabsTrigger>
+                        <TabsTrigger value="features" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-yellow-500 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Features</TabsTrigger>
+                        <TabsTrigger value="diagnostics" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-cyan-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Diagnostics</TabsTrigger>
+                        <TabsTrigger value="approval" className="text-purple-700 data-[state=active]:bg-white data-[state=active]:text-pink-500 data-[state=active]:shadow-sm data-[state=inactive]:hover:bg-purple-100 rounded-md font-medium">Approval</TabsTrigger>
                     </TabsList>
 
                     {/* Git Comparison Tab */}
@@ -795,10 +788,20 @@ export default function ComparisonDashboard() {
                                         <CardDescription className="text-slate-300 mb-4">
                                             {feature.description}
                                         </CardDescription>
-                                        <div className="flex gap-4 text-sm">
-                                            <span className="text-slate-400">Impact: <span className="text-cyan-400">{feature.impact}</span></span>
-                                            <span className="text-slate-400">Complexity: <span className="text-purple-400">{feature.complexity}</span></span>
-                                        </div>
+                                        {(feature.impact || feature.complexity) && (
+                                            <div className="flex gap-4 text-sm">
+                                                {feature.impact && (
+                                                    <span className="text-slate-400">
+                                                        Impact: <span className="text-cyan-400">{feature.impact}</span>
+                                                    </span>
+                                                )}
+                                                {feature.complexity && (
+                                                    <span className="text-slate-400">
+                                                        Complexity: <span className="text-purple-400">{feature.complexity}</span>
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
                                     </CardContent>
                                 </Card>
                             ))}
@@ -849,19 +852,27 @@ export default function ComparisonDashboard() {
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center">
                                         <span className="text-slate-300">Build Status</span>
-                                        <Badge className="bg-green-500/20 text-green-400">Passing</Badge>
+                                        <Badge className="bg-green-500/20 text-green-400">
+                                            {branchAnalysis ? 'Analyzed' : 'Unavailable'}
+                                        </Badge>
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <span className="text-slate-300">Test Coverage</span>
-                                        <Badge className="bg-cyan-500/20 text-cyan-400">94%</Badge>
+                                        <Badge className="bg-cyan-500/20 text-cyan-400">
+                                            {branchAnalysis?.quality_metrics ? `${branchAnalysis.quality_metrics.test_coverage}%` : 'N/A'}
+                                        </Badge>
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <span className="text-slate-300">Security Scan</span>
-                                        <Badge className="bg-green-500/20 text-green-400">No Issues</Badge>
+                                        <Badge className="bg-green-500/20 text-green-400">
+                                            {branchAnalysis ? 'Reviewed' : 'N/A'}
+                                        </Badge>
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <span className="text-slate-300">Performance Score</span>
-                                        <Badge className="bg-purple-500/20 text-purple-400">98/100</Badge>
+                                        <Badge className="bg-purple-500/20 text-purple-400">
+                                            {branchAnalysis?.quality_metrics ? `${branchAnalysis.quality_metrics.performance_score}/10` : 'N/A'}
+                                        </Badge>
                                     </div>
                                 </div>
                             </CardContent>

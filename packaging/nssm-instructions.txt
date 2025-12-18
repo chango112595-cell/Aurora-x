@@ -1,0 +1,8 @@
+1) Download nssm and put nssm.exe in C:\Windows\System32 (or PATH).
+2) Run (Admin PowerShell):
+   nssm install AuroraOS "C:\Python39\python.exe" "C:\path\to\Aurora-x\aurora_os.py start"
+   nssm set AuroraOS AppDirectory "C:\path\to\Aurora-x"
+   nssm start AuroraOS
+3) To remove:
+   nssm stop AuroraOS
+   nssm remove AuroraOS confirm

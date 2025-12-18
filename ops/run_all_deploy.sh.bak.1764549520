@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# convenience script: stage, install and smoke-test all packs
+set -euo pipefail
+for p in $(ls packs | grep pack); do
+  echo '---' $p
+  python3 installer/aurora_installer.py stage --pack $p || true
+  python3 installer/aurora_installer.py dry-run --pack $p || true
+  python3 installer/aurora_installer.py install --pack $p || true
+  bash packs/$p/health_check.sh || true
+done
+echo Done.

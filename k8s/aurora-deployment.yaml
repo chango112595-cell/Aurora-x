@@ -1,0 +1,331 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aurora-x
+  labels:
+    app.kubernetes.io/name: aurora-x
+    app.kubernetes.io/component: ai-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aurora-config
+  namespace: aurora-x
+data:
+  AURORA_ENV: "production"
+  AURORA_LOG_LEVEL: "INFO"
+  AURORA_MODULES_PATH: "/app/aurora_nexus_v3/modules"
+  AURORA_REGISTRY_PATH: "/app/aurora_nexus_v3/modules_registry.json"
+  AURORA_AUTONOMY_LEVEL: "hybrid"
+  AURORA_SANDBOX_TYPE: "cgroup"
+  ETCD_FALLBACK_ENABLED: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aurora-secrets
+  namespace: aurora-x
+type: Opaque
+stringData:
+  ETCD_PASSWORD: ""
+  SIGNING_KEY: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aurora-nexus
+  namespace: aurora-x
+  labels:
+    app: aurora-nexus
+    version: v3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: aurora-nexus
+  template:
+    metadata:
+      labels:
+        app: aurora-nexus
+        version: v3
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: aurora-nexus
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: aurora-nexus
+          image: aurora-x/nexus:v3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 9090
+              name: metrics
+          envFrom:
+            - configMapRef:
+                name: aurora-config
+            - secretRef:
+                name: aurora-secrets
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: modules-data
+              mountPath: /app/aurora_nexus_v3/modules
+            - name: registry-data
+              mountPath: /app/data
+      volumes:
+        - name: modules-data
+          persistentVolumeClaim:
+            claimName: aurora-modules-pvc
+        - name: registry-data
+          persistentVolumeClaim:
+            claimName: aurora-registry-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aurora-autonomy
+  namespace: aurora-x
+  labels:
+    app: aurora-autonomy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aurora-autonomy
+  template:
+    metadata:
+      labels:
+        app: aurora-autonomy
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+    spec:
+      serviceAccountName: aurora-autonomy
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: autonomy-manager
+          image: aurora-x/autonomy:v3
+          imagePullPolicy: Always
+          command: ["python3", "-m", "aurora_nexus_v3.autonomy.manager"]
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          ports:
+            - containerPort: 8081
+              name: http
+          envFrom:
+            - configMapRef:
+                name: aurora-config
+            - secretRef:
+                name: aurora-secrets
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: etcd-fallback
+              mountPath: /app/data/etcd_fallback
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: etcd-fallback
+          persistentVolumeClaim:
+            claimName: aurora-etcd-fallback-pvc
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aurora-nexus
+  namespace: aurora-x
+spec:
+  selector:
+    app: aurora-nexus
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aurora-nexus
+  namespace: aurora-x
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aurora-autonomy
+  namespace: aurora-x
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: aurora-nexus-role
+  namespace: aurora-x
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: aurora-nexus-rolebinding
+  namespace: aurora-x
+subjects:
+  - kind: ServiceAccount
+    name: aurora-nexus
+    namespace: aurora-x
+roleRef:
+  kind: Role
+  name: aurora-nexus-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aurora-modules-pvc
+  namespace: aurora-x
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aurora-registry-pvc
+  namespace: aurora-x
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aurora-etcd-fallback-pvc
+  namespace: aurora-x
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: aurora-nexus-hpa
+  namespace: aurora-x
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: aurora-nexus
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: aurora-network-policy
+  namespace: aurora-x
+spec:
+  podSelector:
+    matchLabels:
+      app: aurora-nexus
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 2379

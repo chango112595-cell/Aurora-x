@@ -1,4 +1,6 @@
 node_modules
+.aurora_backup
+*.aurora_backup
 dist
 .DS_Store
 server/public
@@ -35,4 +37,4 @@ logs
 *.log
 npm-debug.log*systems/chango/
 env/
-unused/
+unused things/

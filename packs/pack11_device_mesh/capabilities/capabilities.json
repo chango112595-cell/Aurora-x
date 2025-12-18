@@ -1,0 +1,23 @@
+{
+  "pack_id": "pack11_device_mesh",
+  "capabilities": [
+    {
+      "id": "pack11_device_mesh.read",
+      "name": "Read Access",
+      "description": "Read access to Device mesh, telemetry, P2P graph",
+      "level": "basic"
+    },
+    {
+      "id": "pack11_device_mesh.write",
+      "name": "Write Access",
+      "description": "Write access to Device mesh, telemetry, P2P graph",
+      "level": "elevated"
+    },
+    {
+      "id": "pack11_device_mesh.admin",
+      "name": "Admin Access",
+      "description": "Administrative access to Device mesh, telemetry, P2P graph",
+      "level": "privileged"
+    }
+  ]
+}

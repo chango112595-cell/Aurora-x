@@ -13,8 +13,8 @@ export default function AuroraChatTest() {
   const messagesDiv = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    addMessage("system", "🌌 Luminar Nexus v2 Advanced Interface Initialized", false);
-    addMessage("system", "✨ Features: Quantum State Monitoring | AI Healing | Multi-Endpoint Routing", false);
+    addMessage("system", "🌌 Aurora Nexus Interface Initialized", false);
+    addMessage("system", "✨ Features: Quantum State Monitoring | AI Healing | Internal Routing", false);
     refreshStatus();
     const interval = setInterval(refreshStatus, 30000);
     return () => clearInterval(interval);
@@ -44,10 +44,13 @@ export default function AuroraChatTest() {
 
   async function refreshStatus() {
     try {
-      const nexusResponse = await fetch("http://localhost:5005/api/nexus/status");
+      const nexusResponse = await fetch("/api/luminar-nexus/v2/status");
+      if (!nexusResponse.ok) {
+        throw new Error(`Status check failed (${nexusResponse.status})`);
+      }
       const nexusStatus = await nexusResponse.json();
       setSystemStatus(nexusStatus);
-      addMessage("system", "✅ System status updated via Luminar Nexus v2");
+      addMessage("system", "✅ System status updated via Nexus V2");
     } catch (error: any) {
       addMessage("system", "❌ Failed to refresh status: " + error.message);
     }
@@ -123,26 +126,17 @@ export default function AuroraChatTest() {
     addMessage("user", input);
     setInput("");
     try {
-      const endpoints = [
-        "http://localhost:5001/chat",
-        "http://localhost:5003/api/chat",
-      ];
-      let data = null;
-      for (const endpoint of endpoints) {
-        try {
-          const response = await fetch(endpoint, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: input, message: input }),
-          });
-          if (response.ok) {
-            data = await response.json();
-            break;
-          }
-        } catch (err) { }
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      });
+      if (!response.ok) {
+        throw new Error(`Chat request failed (${response.status})`);
       }
+      const data = await response.json();
       if (data) {
-        let auroraReply = "🌟 Aurora via Luminar Nexus v2:\n\n";
+        let auroraReply = "🌟 Aurora Response:\n\n";
         if (data.response) {
           auroraReply += data.response;
         } else if (data.message) {
@@ -153,12 +147,12 @@ export default function AuroraChatTest() {
         addMessage("assistant", auroraReply);
         setTimeout(refreshStatus, 1000);
       } else {
-        throw new Error("No valid response from any Aurora endpoint");
+        throw new Error("No valid response from Aurora");
       }
     } catch (error: any) {
       addMessage(
         "assistant",
-        "❌ Communication Error: " + error.message + "\n\n🔧 Luminar Nexus v2 will attempt autonomous healing..."
+        "❌ Communication Error: " + error.message + "\n\n🔧 Nexus will attempt autonomous healing..."
       );
       setTimeout(refreshStatus, 2000);
     }
@@ -167,7 +161,7 @@ export default function AuroraChatTest() {
   return (
     <div style={{ fontFamily: 'Monaco, Menlo, monospace', maxWidth: 1200, margin: '20px auto', background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)', color: '#00ff88', padding: 20, minHeight: '100vh' }}>
       <div className="header" style={{ textAlign: 'center', marginBottom: 30, border: '2px solid #00ff88', padding: 20, borderRadius: 10, background: 'rgba(0,255,136,0.05)' }}>
-        <h1>🌌 Aurora Luminar Nexus v2 - Advanced System Interface</h1>
+        <h1>🌌 Aurora Nexus - System Interface</h1>
         <p>AI-Driven Orchestration | Quantum Coherence Monitoring | Autonomous Healing</p>
         {updateSystemDisplay(systemStatus)}
       </div>
@@ -187,7 +181,7 @@ export default function AuroraChatTest() {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && sendMessage()}
-          placeholder="Send message to Aurora via Luminar Nexus v2..."
+          placeholder="Send message to Aurora..."
           style={{ background: '#0a0a0a', border: '1px solid #00ff88', color: '#00ff88', padding: 12, fontFamily: 'monospace', borderRadius: 3 }}
         />
         <button onClick={sendMessage} style={{ background: '#0a0a0a', border: '1px solid #00ff88', color: '#00ff88', padding: 12, fontFamily: 'monospace', borderRadius: 3, cursor: 'pointer', transition: 'all 0.3s' }}>Send Message</button>

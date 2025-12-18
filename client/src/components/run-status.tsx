@@ -140,7 +140,7 @@ export function RunStatus() {
             <div className="space-y-3">
               {seeds.map((seed: any, idx: number) => (
                 <div
-                  key={seed.id || idx}
+                  key={seed.id || `seed-${idx}`}
                   className="p-3 rounded-lg border hover-elevate"
                   data-testid={`seed-${idx}`}
                 >
@@ -176,7 +176,7 @@ export function RunStatus() {
                   {seed.snippet && (
                     <div className="mt-2 relative">
                       <pre className="text-xs bg-background border rounded p-2 overflow-x-auto font-mono" data-testid={`seed-snippet-${idx}`}>
-{seed.snippet}
+                        {seed.snippet}
                       </pre>
                       <Button
                         size="icon"

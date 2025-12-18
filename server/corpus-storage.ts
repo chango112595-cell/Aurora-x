@@ -7,13 +7,125 @@ import type {
   RunMeta,
   UsedSeed,
   CorpusQuery,
-} from "@shared/schema";
+} from "../shared/schema";
+
+interface ParsedCorpusEntry {
+  id: string;
+  timestamp: string;
+  spec_id: string;
+  spec_hash: string;
+  func_name: string;
+  func_signature: string;
+  passed: number;
+  total: number;
+  score: number;
+  snippet: string;
+  complexity: number | null;
+  iteration: number | null;
+  sig_key: string | null;
+  duration_ms: number | null;
+  synthesis_method: string | null;
+  failing_tests: string[];
+  calls_functions: string[];
+  post_bow: string[];
+}
+
+interface CorpusRow {
+  id: string;
+  timestamp: string;
+  spec_id: string;
+  spec_hash: string;
+  func_name: string;
+  func_signature: string;
+  passed: number;
+  total: number;
+  score: number;
+  failing_tests: string;
+  snippet: string;
+  complexity: number | null;
+  iteration: number | null;
+  calls_functions: string;
+  sig_key: string | null;
+  post_bow: string;
+  duration_ms: number | null;
+  synthesis_method: string | null;
+}
+
+interface RunMetaRow {
+  run_id: string;
+  timestamp: string;
+  seed_bias: number;
+  seeding_enabled: number;
+  max_iters: number;
+  beam: number | null;
+  notes: string | null;
+}
+
+interface UsedSeedRow {
+  id: string;
+  run_id: string;
+  function: string;
+  source_id: string | null;
+  reason_json: string | null;
+  score: number | null;
+  passed: number | null;
+  total: number | null;
+  snippet: string | null;
+  timestamp: string;
+}
+
+interface SimilarityResult {
+  entry: ParsedCorpusEntry;
+  similarity: number;
+  breakdown: {
+    returnMatch: number;
+    argMatch: number;
+    jaccardScore: number;
+    perfectBonus: number;
+  };
+}
+
+interface GetEntriesParams {
+  func?: string;
+  limit: number;
+  offset?: number;
+  perfectOnly?: boolean;
+  minScore?: number;
+  maxScore?: number;
+  startDate?: string;
+  endDate?: string;
+}
+
+interface InsertRunMetaInput {
+  run_id: string;
+  timestamp: string;
+  seed_bias: number;
+  seeding_enabled: boolean;
+  max_iters: number;
+  beam?: number | null;
+  notes?: string | null;
+}
+
+interface InsertUsedSeedInput {
+  run_id: string;
+  function: string;
+  source_id?: string | null;
+  reason?: Record<string, unknown>;
+  score?: number | null;
+  passed?: number | null;
+  total?: number | null;
+  snippet?: string | null;
+  timestamp: string;
+}
+
+interface ParsedUsedSeed extends Omit<UsedSeedRow, 'reason_json'> {
+  reason: Record<string, unknown> | null;
+}
 
 export class CorpusStorage {
   private db: Database.Database;
 
   constructor(dbPath: string) {
-    // Ensure data directory exists
     const dataDir = path.dirname(dbPath);
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
@@ -92,7 +204,7 @@ export class CorpusStorage {
       ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     `);
 
-    const result = stmt.run(
+    stmt.run(
       entry.id,
       entry.timestamp,
       entry.spec_id,
@@ -112,11 +224,9 @@ export class CorpusStorage {
       entry.duration_ms ?? null,
       entry.synthesis_method ?? null
     );
-
-    console.log(`[Corpus Storage] Inserted entry: ${entry.func_name}, changes: ${result.changes}`);
   }
 
-  private parseEntry(row: any): any {
+  private parseEntry(row: CorpusRow): ParsedCorpusEntry {
     return {
       ...row,
       failing_tests: row.failing_tests ? JSON.parse(row.failing_tests) : [],
@@ -125,18 +235,9 @@ export class CorpusStorage {
     };
   }
 
-  getEntries(params: {
-    func?: string;
-    limit: number;
-    offset?: number;
-    perfectOnly?: boolean;
-    minScore?: number;
-    maxScore?: number;
-    startDate?: string;
-    endDate?: string;
-  }): any[] {
+  getEntries(params: GetEntriesParams): ParsedCorpusEntry[] {
     const conditions: string[] = [];
-    const values: any[] = [];
+    const values: (string | number)[] = [];
 
     if (params.func) {
       conditions.push("func_name = ?");
@@ -173,11 +274,11 @@ export class CorpusStorage {
     const sql = `SELECT * FROM corpus ${whereClause} ORDER BY timestamp DESC LIMIT ? OFFSET ?`;
     values.push(params.limit, offset);
 
-    const rows = this.db.prepare(sql).all(...values);
-    return rows.map((row: any) => this.parseEntry(row));
+    const rows = this.db.prepare(sql).all(...values) as CorpusRow[];
+    return rows.map((row: CorpusRow) => this.parseEntry(row));
   }
 
-  getTopByFunc(func: string, limit: number): any[] {
+  getTopByFunc(func: string, limit: number): ParsedCorpusEntry[] {
     const rows = this.db
       .prepare(
         `SELECT * FROM corpus
@@ -185,11 +286,11 @@ export class CorpusStorage {
          ORDER BY (passed = total) DESC, score ASC, timestamp DESC
          LIMIT ?`
       )
-      .all(func, limit);
-    return rows.map((row: any) => this.parseEntry(row));
+      .all(func, limit) as CorpusRow[];
+    return rows.map((row: CorpusRow) => this.parseEntry(row));
   }
 
-  getRecent(limit: number = 10): any[] {
+  getRecent(limit: number = 10): ParsedCorpusEntry[] {
     const query = `
       SELECT * FROM corpus 
       WHERE id IS NOT NULL
@@ -197,11 +298,7 @@ export class CorpusStorage {
       LIMIT ?
     `;
 
-    const rows = this.db.prepare(query).all(limit) as any[];
-    console.log(`[Corpus Storage] getRecent found ${rows.length} entries`);
-    if (rows.length > 0) {
-      console.log(`[Corpus Storage] First entry:`, rows[0]);
-    }
+    const rows = this.db.prepare(query).all(limit) as CorpusRow[];
     return rows.map(row => this.parseEntry(row));
   }
 
@@ -226,25 +323,12 @@ export class CorpusStorage {
     targetSigKey: string,
     targetPostBow: string[],
     limit: number
-  ): Array<{
-    entry: any;
-    similarity: number;
-    breakdown: {
-      returnMatch: number;
-      argMatch: number;
-      jaccardScore: number;
-      perfectBonus: number;
-    };
-  }> {
+  ): SimilarityResult[] {
     const rows = this.db
       .prepare(`SELECT * FROM corpus ORDER BY timestamp DESC LIMIT 2000`)
-      .all();
+      .all() as CorpusRow[];
 
-    const results: Array<{
-      entry: any;
-      similarity: number;
-      breakdown: any;
-    }> = [];
+    const results: SimilarityResult[] = [];
 
     let targetName = "";
     let targetArgs = "";
@@ -254,7 +338,8 @@ export class CorpusStorage {
       targetName = parts[0] || "";
       targetArgs = parts[1] || "";
       targetRet = parts[2] || "";
-    } catch {}
+    } catch {
+    }
 
     for (const row of rows) {
       const entry = this.parseEntry(row);
@@ -268,7 +353,8 @@ export class CorpusStorage {
         name = parts[0] || "";
         args = parts[1] || "";
         ret = parts[2] || "";
-      } catch {}
+      } catch {
+      }
 
       const returnMatch = ret === targetRet && ret !== "" ? 1.0 : 0.0;
       const argMatch = args === targetArgs && args !== "" ? 1.0 : 0.0;
@@ -296,7 +382,7 @@ export class CorpusStorage {
     results.sort((a, b) => b.similarity - a.similarity);
 
     const seen = new Set<string>();
-    const unique: typeof results = [];
+    const unique: SimilarityResult[] = [];
     for (const result of results) {
       if (!seen.has(result.entry.snippet)) {
         seen.add(result.entry.snippet);
@@ -308,7 +394,7 @@ export class CorpusStorage {
     return unique;
   }
 
-  insertRunMeta(meta: any): void {
+  insertRunMeta(meta: InsertRunMetaInput): void {
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO run_meta(
         run_id, timestamp, seed_bias, seeding_enabled, max_iters, beam, notes
@@ -326,10 +412,10 @@ export class CorpusStorage {
     );
   }
 
-  getLatestRunMeta(): any {
+  getLatestRunMeta(): (Omit<RunMetaRow, 'seeding_enabled'> & { seeding_enabled: boolean }) | null {
     const row = this.db
       .prepare(`SELECT * FROM run_meta ORDER BY timestamp DESC LIMIT 1`)
-      .get() as any;
+      .get() as RunMetaRow | undefined;
     if (!row) return null;
     return {
       ...row,
@@ -337,7 +423,7 @@ export class CorpusStorage {
     };
   }
 
-  insertUsedSeed(seed: any): string {
+  insertUsedSeed(seed: InsertUsedSeedInput): string {
     const id = randomUUID();
     const stmt = this.db.prepare(`
       INSERT INTO used_seeds(
@@ -361,22 +447,22 @@ export class CorpusStorage {
     return id;
   }
 
-  getUsedSeeds(params: { run_id?: string; limit?: number }): any[] {
+  getUsedSeeds(params: { run_id?: string; limit?: number }): ParsedUsedSeed[] {
     const limit = params.limit ?? 200;
 
     if (params.run_id) {
       const rows = this.db
         .prepare(`SELECT * FROM used_seeds WHERE run_id = ? ORDER BY timestamp DESC LIMIT ?`)
-        .all(params.run_id, limit);
-      return rows.map((row: any) => ({
+        .all(params.run_id, limit) as UsedSeedRow[];
+      return rows.map((row: UsedSeedRow) => ({
         ...row,
         reason: row.reason_json ? JSON.parse(row.reason_json) : null,
       }));
     } else {
       const rows = this.db
         .prepare(`SELECT * FROM used_seeds ORDER BY timestamp DESC LIMIT ?`)
-        .all(limit);
-      return rows.map((row: any) => ({
+        .all(limit) as UsedSeedRow[];
+      return rows.map((row: UsedSeedRow) => ({
         ...row,
         reason: row.reason_json ? JSON.parse(row.reason_json) : null,
       }));

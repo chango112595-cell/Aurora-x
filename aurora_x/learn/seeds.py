@@ -1,7 +1,6 @@
 """
-Seeds
-
-Comprehensive module documentation explaining purpose, usage, and architecture.
+Persistent Learning Seeds for Aurora-X
+Implements EMA-based seed bias learning with drift caps
 
 This module is part of Aurora's ecosystem and follows perfect code quality standards.
 All functions are fully documented with type hints and error handling.
@@ -9,13 +8,6 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
-
-#!/usr/bin/env python3
-"""
-Persistent Learning Seeds for Aurora-X
-Implements EMA-based seed bias learning with drift caps
-"""
-
 from __future__ import annotations
 
 import hashlib

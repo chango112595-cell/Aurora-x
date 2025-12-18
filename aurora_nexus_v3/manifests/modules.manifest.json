@@ -1,0 +1,6220 @@
+{
+  "generated_at": "2025-12-08T11:18:23.745821Z",
+  "modules": [
+    {
+      "id": "0001",
+      "name": "Connector_0001",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0001"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0001"
+    },
+    {
+      "id": "0002",
+      "name": "Connector_0002",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0002"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0002"
+    },
+    {
+      "id": "0003",
+      "name": "Connector_0003",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0003"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0003"
+    },
+    {
+      "id": "0004",
+      "name": "Connector_0004",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0004"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0004"
+    },
+    {
+      "id": "0005",
+      "name": "Connector_0005",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0005"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0005"
+    },
+    {
+      "id": "0006",
+      "name": "Connector_0006",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0006"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0006"
+    },
+    {
+      "id": "0007",
+      "name": "Connector_0007",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0007"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0007"
+    },
+    {
+      "id": "0008",
+      "name": "Connector_0008",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0008"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0008"
+    },
+    {
+      "id": "0009",
+      "name": "Connector_0009",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0009"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0009"
+    },
+    {
+      "id": "0010",
+      "name": "Connector_0010",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0010"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0010"
+    },
+    {
+      "id": "0011",
+      "name": "Connector_0011",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0011"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0011"
+    },
+    {
+      "id": "0012",
+      "name": "Connector_0012",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0012"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0012"
+    },
+    {
+      "id": "0013",
+      "name": "Connector_0013",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0013"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0013"
+    },
+    {
+      "id": "0014",
+      "name": "Connector_0014",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0014"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0014"
+    },
+    {
+      "id": "0015",
+      "name": "Connector_0015",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0015"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0015"
+    },
+    {
+      "id": "0016",
+      "name": "Connector_0016",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0016"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0016"
+    },
+    {
+      "id": "0017",
+      "name": "Connector_0017",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0017"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0017"
+    },
+    {
+      "id": "0018",
+      "name": "Connector_0018",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0018"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0018"
+    },
+    {
+      "id": "0019",
+      "name": "Connector_0019",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0019"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0019"
+    },
+    {
+      "id": "0020",
+      "name": "Connector_0020",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0020"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0020"
+    },
+    {
+      "id": "0021",
+      "name": "Connector_0021",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0021"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0021"
+    },
+    {
+      "id": "0022",
+      "name": "Connector_0022",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0022"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0022"
+    },
+    {
+      "id": "0023",
+      "name": "Connector_0023",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0023"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0023"
+    },
+    {
+      "id": "0024",
+      "name": "Connector_0024",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0024"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0024"
+    },
+    {
+      "id": "0025",
+      "name": "Connector_0025",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0025"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0025"
+    },
+    {
+      "id": "0026",
+      "name": "Connector_0026",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0026"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0026"
+    },
+    {
+      "id": "0027",
+      "name": "Connector_0027",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0027"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0027"
+    },
+    {
+      "id": "0028",
+      "name": "Connector_0028",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0028"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0028"
+    },
+    {
+      "id": "0029",
+      "name": "Connector_0029",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0029"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0029"
+    },
+    {
+      "id": "0030",
+      "name": "Connector_0030",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0030"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0030"
+    },
+    {
+      "id": "0031",
+      "name": "Connector_0031",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0031"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0031"
+    },
+    {
+      "id": "0032",
+      "name": "Connector_0032",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0032"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0032"
+    },
+    {
+      "id": "0033",
+      "name": "Connector_0033",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0033"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0033"
+    },
+    {
+      "id": "0034",
+      "name": "Connector_0034",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0034"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0034"
+    },
+    {
+      "id": "0035",
+      "name": "Connector_0035",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0035"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0035"
+    },
+    {
+      "id": "0036",
+      "name": "Connector_0036",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0036"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0036"
+    },
+    {
+      "id": "0037",
+      "name": "Connector_0037",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0037"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0037"
+    },
+    {
+      "id": "0038",
+      "name": "Connector_0038",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0038"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0038"
+    },
+    {
+      "id": "0039",
+      "name": "Connector_0039",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0039"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0039"
+    },
+    {
+      "id": "0040",
+      "name": "Connector_0040",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0040"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0040"
+    },
+    {
+      "id": "0041",
+      "name": "Connector_0041",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0041"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0041"
+    },
+    {
+      "id": "0042",
+      "name": "Connector_0042",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0042"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0042"
+    },
+    {
+      "id": "0043",
+      "name": "Connector_0043",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0043"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0043"
+    },
+    {
+      "id": "0044",
+      "name": "Connector_0044",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0044"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0044"
+    },
+    {
+      "id": "0045",
+      "name": "Connector_0045",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0045"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0045"
+    },
+    {
+      "id": "0046",
+      "name": "Connector_0046",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0046"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0046"
+    },
+    {
+      "id": "0047",
+      "name": "Connector_0047",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0047"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0047"
+    },
+    {
+      "id": "0048",
+      "name": "Connector_0048",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0048"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0048"
+    },
+    {
+      "id": "0049",
+      "name": "Connector_0049",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0049"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0049"
+    },
+    {
+      "id": "0050",
+      "name": "Connector_0050",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0050"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0050"
+    },
+    {
+      "id": "0051",
+      "name": "Connector_0051",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0051"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0051"
+    },
+    {
+      "id": "0052",
+      "name": "Connector_0052",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0052"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0052"
+    },
+    {
+      "id": "0053",
+      "name": "Connector_0053",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0053"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0053"
+    },
+    {
+      "id": "0054",
+      "name": "Connector_0054",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0054"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0054"
+    },
+    {
+      "id": "0055",
+      "name": "Connector_0055",
+      "category": "connector",
+      "sample_input": {
+        "example": true,
+        "module": "Connector_0055"
+      },
+      "required_config_keys": [
+        "host",
+        "port"
+      ],
+      "description": "Auto-generated production manifest entry for Connector_0055"
+    },
+    {
+      "id": "0056",
+      "name": "Processor_0056",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0056"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0056"
+    },
+    {
+      "id": "0057",
+      "name": "Processor_0057",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0057"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0057"
+    },
+    {
+      "id": "0058",
+      "name": "Processor_0058",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0058"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0058"
+    },
+    {
+      "id": "0059",
+      "name": "Processor_0059",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0059"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0059"
+    },
+    {
+      "id": "0060",
+      "name": "Processor_0060",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0060"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0060"
+    },
+    {
+      "id": "0061",
+      "name": "Processor_0061",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0061"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0061"
+    },
+    {
+      "id": "0062",
+      "name": "Processor_0062",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0062"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0062"
+    },
+    {
+      "id": "0063",
+      "name": "Processor_0063",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0063"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0063"
+    },
+    {
+      "id": "0064",
+      "name": "Processor_0064",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0064"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0064"
+    },
+    {
+      "id": "0065",
+      "name": "Processor_0065",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0065"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0065"
+    },
+    {
+      "id": "0066",
+      "name": "Processor_0066",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0066"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0066"
+    },
+    {
+      "id": "0067",
+      "name": "Processor_0067",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0067"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0067"
+    },
+    {
+      "id": "0068",
+      "name": "Processor_0068",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0068"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0068"
+    },
+    {
+      "id": "0069",
+      "name": "Processor_0069",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0069"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0069"
+    },
+    {
+      "id": "0070",
+      "name": "Processor_0070",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0070"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0070"
+    },
+    {
+      "id": "0071",
+      "name": "Processor_0071",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0071"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0071"
+    },
+    {
+      "id": "0072",
+      "name": "Processor_0072",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0072"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0072"
+    },
+    {
+      "id": "0073",
+      "name": "Processor_0073",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0073"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0073"
+    },
+    {
+      "id": "0074",
+      "name": "Processor_0074",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0074"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0074"
+    },
+    {
+      "id": "0075",
+      "name": "Processor_0075",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0075"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0075"
+    },
+    {
+      "id": "0076",
+      "name": "Processor_0076",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0076"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0076"
+    },
+    {
+      "id": "0077",
+      "name": "Processor_0077",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0077"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0077"
+    },
+    {
+      "id": "0078",
+      "name": "Processor_0078",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0078"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0078"
+    },
+    {
+      "id": "0079",
+      "name": "Processor_0079",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0079"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0079"
+    },
+    {
+      "id": "0080",
+      "name": "Processor_0080",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0080"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0080"
+    },
+    {
+      "id": "0081",
+      "name": "Processor_0081",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0081"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0081"
+    },
+    {
+      "id": "0082",
+      "name": "Processor_0082",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0082"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0082"
+    },
+    {
+      "id": "0083",
+      "name": "Processor_0083",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0083"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0083"
+    },
+    {
+      "id": "0084",
+      "name": "Processor_0084",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0084"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0084"
+    },
+    {
+      "id": "0085",
+      "name": "Processor_0085",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0085"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0085"
+    },
+    {
+      "id": "0086",
+      "name": "Processor_0086",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0086"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0086"
+    },
+    {
+      "id": "0087",
+      "name": "Processor_0087",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0087"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0087"
+    },
+    {
+      "id": "0088",
+      "name": "Processor_0088",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0088"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0088"
+    },
+    {
+      "id": "0089",
+      "name": "Processor_0089",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0089"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0089"
+    },
+    {
+      "id": "0090",
+      "name": "Processor_0090",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0090"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0090"
+    },
+    {
+      "id": "0091",
+      "name": "Processor_0091",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0091"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0091"
+    },
+    {
+      "id": "0092",
+      "name": "Processor_0092",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0092"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0092"
+    },
+    {
+      "id": "0093",
+      "name": "Processor_0093",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0093"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0093"
+    },
+    {
+      "id": "0094",
+      "name": "Processor_0094",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0094"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0094"
+    },
+    {
+      "id": "0095",
+      "name": "Processor_0095",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0095"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0095"
+    },
+    {
+      "id": "0096",
+      "name": "Processor_0096",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0096"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0096"
+    },
+    {
+      "id": "0097",
+      "name": "Processor_0097",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0097"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0097"
+    },
+    {
+      "id": "0098",
+      "name": "Processor_0098",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0098"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0098"
+    },
+    {
+      "id": "0099",
+      "name": "Processor_0099",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0099"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0099"
+    },
+    {
+      "id": "0100",
+      "name": "Processor_0100",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0100"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0100"
+    },
+    {
+      "id": "0101",
+      "name": "Processor_0101",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0101"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0101"
+    },
+    {
+      "id": "0102",
+      "name": "Processor_0102",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0102"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0102"
+    },
+    {
+      "id": "0103",
+      "name": "Processor_0103",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0103"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0103"
+    },
+    {
+      "id": "0104",
+      "name": "Processor_0104",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0104"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0104"
+    },
+    {
+      "id": "0105",
+      "name": "Processor_0105",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0105"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0105"
+    },
+    {
+      "id": "0106",
+      "name": "Processor_0106",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0106"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0106"
+    },
+    {
+      "id": "0107",
+      "name": "Processor_0107",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0107"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0107"
+    },
+    {
+      "id": "0108",
+      "name": "Processor_0108",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0108"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0108"
+    },
+    {
+      "id": "0109",
+      "name": "Processor_0109",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0109"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0109"
+    },
+    {
+      "id": "0110",
+      "name": "Processor_0110",
+      "category": "processor",
+      "sample_input": {
+        "example": true,
+        "module": "Processor_0110"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Processor_0110"
+    },
+    {
+      "id": "0111",
+      "name": "Analyzer_0111",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0111"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0111"
+    },
+    {
+      "id": "0112",
+      "name": "Analyzer_0112",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0112"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0112"
+    },
+    {
+      "id": "0113",
+      "name": "Analyzer_0113",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0113"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0113"
+    },
+    {
+      "id": "0114",
+      "name": "Analyzer_0114",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0114"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0114"
+    },
+    {
+      "id": "0115",
+      "name": "Analyzer_0115",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0115"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0115"
+    },
+    {
+      "id": "0116",
+      "name": "Analyzer_0116",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0116"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0116"
+    },
+    {
+      "id": "0117",
+      "name": "Analyzer_0117",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0117"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0117"
+    },
+    {
+      "id": "0118",
+      "name": "Analyzer_0118",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0118"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0118"
+    },
+    {
+      "id": "0119",
+      "name": "Analyzer_0119",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0119"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0119"
+    },
+    {
+      "id": "0120",
+      "name": "Analyzer_0120",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0120"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0120"
+    },
+    {
+      "id": "0121",
+      "name": "Analyzer_0121",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0121"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0121"
+    },
+    {
+      "id": "0122",
+      "name": "Analyzer_0122",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0122"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0122"
+    },
+    {
+      "id": "0123",
+      "name": "Analyzer_0123",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0123"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0123"
+    },
+    {
+      "id": "0124",
+      "name": "Analyzer_0124",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0124"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0124"
+    },
+    {
+      "id": "0125",
+      "name": "Analyzer_0125",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0125"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0125"
+    },
+    {
+      "id": "0126",
+      "name": "Analyzer_0126",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0126"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0126"
+    },
+    {
+      "id": "0127",
+      "name": "Analyzer_0127",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0127"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0127"
+    },
+    {
+      "id": "0128",
+      "name": "Analyzer_0128",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0128"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0128"
+    },
+    {
+      "id": "0129",
+      "name": "Analyzer_0129",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0129"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0129"
+    },
+    {
+      "id": "0130",
+      "name": "Analyzer_0130",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0130"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0130"
+    },
+    {
+      "id": "0131",
+      "name": "Analyzer_0131",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0131"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0131"
+    },
+    {
+      "id": "0132",
+      "name": "Analyzer_0132",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0132"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0132"
+    },
+    {
+      "id": "0133",
+      "name": "Analyzer_0133",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0133"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0133"
+    },
+    {
+      "id": "0134",
+      "name": "Analyzer_0134",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0134"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0134"
+    },
+    {
+      "id": "0135",
+      "name": "Analyzer_0135",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0135"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0135"
+    },
+    {
+      "id": "0136",
+      "name": "Analyzer_0136",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0136"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0136"
+    },
+    {
+      "id": "0137",
+      "name": "Analyzer_0137",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0137"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0137"
+    },
+    {
+      "id": "0138",
+      "name": "Analyzer_0138",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0138"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0138"
+    },
+    {
+      "id": "0139",
+      "name": "Analyzer_0139",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0139"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0139"
+    },
+    {
+      "id": "0140",
+      "name": "Analyzer_0140",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0140"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0140"
+    },
+    {
+      "id": "0141",
+      "name": "Analyzer_0141",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0141"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0141"
+    },
+    {
+      "id": "0142",
+      "name": "Analyzer_0142",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0142"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0142"
+    },
+    {
+      "id": "0143",
+      "name": "Analyzer_0143",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0143"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0143"
+    },
+    {
+      "id": "0144",
+      "name": "Analyzer_0144",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0144"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0144"
+    },
+    {
+      "id": "0145",
+      "name": "Analyzer_0145",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0145"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0145"
+    },
+    {
+      "id": "0146",
+      "name": "Analyzer_0146",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0146"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0146"
+    },
+    {
+      "id": "0147",
+      "name": "Analyzer_0147",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0147"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0147"
+    },
+    {
+      "id": "0148",
+      "name": "Analyzer_0148",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0148"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0148"
+    },
+    {
+      "id": "0149",
+      "name": "Analyzer_0149",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0149"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0149"
+    },
+    {
+      "id": "0150",
+      "name": "Analyzer_0150",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0150"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0150"
+    },
+    {
+      "id": "0151",
+      "name": "Analyzer_0151",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0151"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0151"
+    },
+    {
+      "id": "0152",
+      "name": "Analyzer_0152",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0152"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0152"
+    },
+    {
+      "id": "0153",
+      "name": "Analyzer_0153",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0153"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0153"
+    },
+    {
+      "id": "0154",
+      "name": "Analyzer_0154",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0154"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0154"
+    },
+    {
+      "id": "0155",
+      "name": "Analyzer_0155",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0155"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0155"
+    },
+    {
+      "id": "0156",
+      "name": "Analyzer_0156",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0156"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0156"
+    },
+    {
+      "id": "0157",
+      "name": "Analyzer_0157",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0157"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0157"
+    },
+    {
+      "id": "0158",
+      "name": "Analyzer_0158",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0158"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0158"
+    },
+    {
+      "id": "0159",
+      "name": "Analyzer_0159",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0159"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0159"
+    },
+    {
+      "id": "0160",
+      "name": "Analyzer_0160",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0160"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0160"
+    },
+    {
+      "id": "0161",
+      "name": "Analyzer_0161",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0161"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0161"
+    },
+    {
+      "id": "0162",
+      "name": "Analyzer_0162",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0162"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0162"
+    },
+    {
+      "id": "0163",
+      "name": "Analyzer_0163",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0163"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0163"
+    },
+    {
+      "id": "0164",
+      "name": "Analyzer_0164",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0164"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0164"
+    },
+    {
+      "id": "0165",
+      "name": "Analyzer_0165",
+      "category": "analyzer",
+      "sample_input": {
+        "example": true,
+        "module": "Analyzer_0165"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Analyzer_0165"
+    },
+    {
+      "id": "0166",
+      "name": "Generator_0166",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0166"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0166"
+    },
+    {
+      "id": "0167",
+      "name": "Generator_0167",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0167"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0167"
+    },
+    {
+      "id": "0168",
+      "name": "Generator_0168",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0168"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0168"
+    },
+    {
+      "id": "0169",
+      "name": "Generator_0169",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0169"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0169"
+    },
+    {
+      "id": "0170",
+      "name": "Generator_0170",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0170"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0170"
+    },
+    {
+      "id": "0171",
+      "name": "Generator_0171",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0171"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0171"
+    },
+    {
+      "id": "0172",
+      "name": "Generator_0172",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0172"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0172"
+    },
+    {
+      "id": "0173",
+      "name": "Generator_0173",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0173"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0173"
+    },
+    {
+      "id": "0174",
+      "name": "Generator_0174",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0174"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0174"
+    },
+    {
+      "id": "0175",
+      "name": "Generator_0175",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0175"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0175"
+    },
+    {
+      "id": "0176",
+      "name": "Generator_0176",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0176"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0176"
+    },
+    {
+      "id": "0177",
+      "name": "Generator_0177",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0177"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0177"
+    },
+    {
+      "id": "0178",
+      "name": "Generator_0178",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0178"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0178"
+    },
+    {
+      "id": "0179",
+      "name": "Generator_0179",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0179"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0179"
+    },
+    {
+      "id": "0180",
+      "name": "Generator_0180",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0180"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0180"
+    },
+    {
+      "id": "0181",
+      "name": "Generator_0181",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0181"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0181"
+    },
+    {
+      "id": "0182",
+      "name": "Generator_0182",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0182"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0182"
+    },
+    {
+      "id": "0183",
+      "name": "Generator_0183",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0183"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0183"
+    },
+    {
+      "id": "0184",
+      "name": "Generator_0184",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0184"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0184"
+    },
+    {
+      "id": "0185",
+      "name": "Generator_0185",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0185"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0185"
+    },
+    {
+      "id": "0186",
+      "name": "Generator_0186",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0186"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0186"
+    },
+    {
+      "id": "0187",
+      "name": "Generator_0187",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0187"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0187"
+    },
+    {
+      "id": "0188",
+      "name": "Generator_0188",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0188"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0188"
+    },
+    {
+      "id": "0189",
+      "name": "Generator_0189",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0189"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0189"
+    },
+    {
+      "id": "0190",
+      "name": "Generator_0190",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0190"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0190"
+    },
+    {
+      "id": "0191",
+      "name": "Generator_0191",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0191"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0191"
+    },
+    {
+      "id": "0192",
+      "name": "Generator_0192",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0192"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0192"
+    },
+    {
+      "id": "0193",
+      "name": "Generator_0193",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0193"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0193"
+    },
+    {
+      "id": "0194",
+      "name": "Generator_0194",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0194"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0194"
+    },
+    {
+      "id": "0195",
+      "name": "Generator_0195",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0195"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0195"
+    },
+    {
+      "id": "0196",
+      "name": "Generator_0196",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0196"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0196"
+    },
+    {
+      "id": "0197",
+      "name": "Generator_0197",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0197"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0197"
+    },
+    {
+      "id": "0198",
+      "name": "Generator_0198",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0198"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0198"
+    },
+    {
+      "id": "0199",
+      "name": "Generator_0199",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0199"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0199"
+    },
+    {
+      "id": "0200",
+      "name": "Generator_0200",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0200"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0200"
+    },
+    {
+      "id": "0201",
+      "name": "Generator_0201",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0201"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0201"
+    },
+    {
+      "id": "0202",
+      "name": "Generator_0202",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0202"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0202"
+    },
+    {
+      "id": "0203",
+      "name": "Generator_0203",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0203"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0203"
+    },
+    {
+      "id": "0204",
+      "name": "Generator_0204",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0204"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0204"
+    },
+    {
+      "id": "0205",
+      "name": "Generator_0205",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0205"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0205"
+    },
+    {
+      "id": "0206",
+      "name": "Generator_0206",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0206"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0206"
+    },
+    {
+      "id": "0207",
+      "name": "Generator_0207",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0207"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0207"
+    },
+    {
+      "id": "0208",
+      "name": "Generator_0208",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0208"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0208"
+    },
+    {
+      "id": "0209",
+      "name": "Generator_0209",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0209"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0209"
+    },
+    {
+      "id": "0210",
+      "name": "Generator_0210",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0210"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0210"
+    },
+    {
+      "id": "0211",
+      "name": "Generator_0211",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0211"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0211"
+    },
+    {
+      "id": "0212",
+      "name": "Generator_0212",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0212"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0212"
+    },
+    {
+      "id": "0213",
+      "name": "Generator_0213",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0213"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0213"
+    },
+    {
+      "id": "0214",
+      "name": "Generator_0214",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0214"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0214"
+    },
+    {
+      "id": "0215",
+      "name": "Generator_0215",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0215"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0215"
+    },
+    {
+      "id": "0216",
+      "name": "Generator_0216",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0216"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0216"
+    },
+    {
+      "id": "0217",
+      "name": "Generator_0217",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0217"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0217"
+    },
+    {
+      "id": "0218",
+      "name": "Generator_0218",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0218"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0218"
+    },
+    {
+      "id": "0219",
+      "name": "Generator_0219",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0219"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0219"
+    },
+    {
+      "id": "0220",
+      "name": "Generator_0220",
+      "category": "generator",
+      "sample_input": {
+        "example": true,
+        "module": "Generator_0220"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Generator_0220"
+    },
+    {
+      "id": "0221",
+      "name": "Transformer_0221",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0221"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0221"
+    },
+    {
+      "id": "0222",
+      "name": "Transformer_0222",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0222"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0222"
+    },
+    {
+      "id": "0223",
+      "name": "Transformer_0223",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0223"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0223"
+    },
+    {
+      "id": "0224",
+      "name": "Transformer_0224",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0224"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0224"
+    },
+    {
+      "id": "0225",
+      "name": "Transformer_0225",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0225"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0225"
+    },
+    {
+      "id": "0226",
+      "name": "Transformer_0226",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0226"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0226"
+    },
+    {
+      "id": "0227",
+      "name": "Transformer_0227",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0227"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0227"
+    },
+    {
+      "id": "0228",
+      "name": "Transformer_0228",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0228"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0228"
+    },
+    {
+      "id": "0229",
+      "name": "Transformer_0229",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0229"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0229"
+    },
+    {
+      "id": "0230",
+      "name": "Transformer_0230",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0230"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0230"
+    },
+    {
+      "id": "0231",
+      "name": "Transformer_0231",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0231"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0231"
+    },
+    {
+      "id": "0232",
+      "name": "Transformer_0232",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0232"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0232"
+    },
+    {
+      "id": "0233",
+      "name": "Transformer_0233",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0233"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0233"
+    },
+    {
+      "id": "0234",
+      "name": "Transformer_0234",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0234"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0234"
+    },
+    {
+      "id": "0235",
+      "name": "Transformer_0235",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0235"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0235"
+    },
+    {
+      "id": "0236",
+      "name": "Transformer_0236",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0236"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0236"
+    },
+    {
+      "id": "0237",
+      "name": "Transformer_0237",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0237"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0237"
+    },
+    {
+      "id": "0238",
+      "name": "Transformer_0238",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0238"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0238"
+    },
+    {
+      "id": "0239",
+      "name": "Transformer_0239",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0239"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0239"
+    },
+    {
+      "id": "0240",
+      "name": "Transformer_0240",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0240"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0240"
+    },
+    {
+      "id": "0241",
+      "name": "Transformer_0241",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0241"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0241"
+    },
+    {
+      "id": "0242",
+      "name": "Transformer_0242",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0242"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0242"
+    },
+    {
+      "id": "0243",
+      "name": "Transformer_0243",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0243"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0243"
+    },
+    {
+      "id": "0244",
+      "name": "Transformer_0244",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0244"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0244"
+    },
+    {
+      "id": "0245",
+      "name": "Transformer_0245",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0245"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0245"
+    },
+    {
+      "id": "0246",
+      "name": "Transformer_0246",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0246"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0246"
+    },
+    {
+      "id": "0247",
+      "name": "Transformer_0247",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0247"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0247"
+    },
+    {
+      "id": "0248",
+      "name": "Transformer_0248",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0248"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0248"
+    },
+    {
+      "id": "0249",
+      "name": "Transformer_0249",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0249"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0249"
+    },
+    {
+      "id": "0250",
+      "name": "Transformer_0250",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0250"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0250"
+    },
+    {
+      "id": "0251",
+      "name": "Transformer_0251",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0251"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0251"
+    },
+    {
+      "id": "0252",
+      "name": "Transformer_0252",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0252"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0252"
+    },
+    {
+      "id": "0253",
+      "name": "Transformer_0253",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0253"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0253"
+    },
+    {
+      "id": "0254",
+      "name": "Transformer_0254",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0254"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0254"
+    },
+    {
+      "id": "0255",
+      "name": "Transformer_0255",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0255"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0255"
+    },
+    {
+      "id": "0256",
+      "name": "Transformer_0256",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0256"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0256"
+    },
+    {
+      "id": "0257",
+      "name": "Transformer_0257",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0257"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0257"
+    },
+    {
+      "id": "0258",
+      "name": "Transformer_0258",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0258"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0258"
+    },
+    {
+      "id": "0259",
+      "name": "Transformer_0259",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0259"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0259"
+    },
+    {
+      "id": "0260",
+      "name": "Transformer_0260",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0260"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0260"
+    },
+    {
+      "id": "0261",
+      "name": "Transformer_0261",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0261"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0261"
+    },
+    {
+      "id": "0262",
+      "name": "Transformer_0262",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0262"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0262"
+    },
+    {
+      "id": "0263",
+      "name": "Transformer_0263",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0263"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0263"
+    },
+    {
+      "id": "0264",
+      "name": "Transformer_0264",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0264"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0264"
+    },
+    {
+      "id": "0265",
+      "name": "Transformer_0265",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0265"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0265"
+    },
+    {
+      "id": "0266",
+      "name": "Transformer_0266",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0266"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0266"
+    },
+    {
+      "id": "0267",
+      "name": "Transformer_0267",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0267"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0267"
+    },
+    {
+      "id": "0268",
+      "name": "Transformer_0268",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0268"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0268"
+    },
+    {
+      "id": "0269",
+      "name": "Transformer_0269",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0269"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0269"
+    },
+    {
+      "id": "0270",
+      "name": "Transformer_0270",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0270"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0270"
+    },
+    {
+      "id": "0271",
+      "name": "Transformer_0271",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0271"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0271"
+    },
+    {
+      "id": "0272",
+      "name": "Transformer_0272",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0272"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0272"
+    },
+    {
+      "id": "0273",
+      "name": "Transformer_0273",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0273"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0273"
+    },
+    {
+      "id": "0274",
+      "name": "Transformer_0274",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0274"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0274"
+    },
+    {
+      "id": "0275",
+      "name": "Transformer_0275",
+      "category": "transformer",
+      "sample_input": {
+        "example": true,
+        "module": "Transformer_0275"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Transformer_0275"
+    },
+    {
+      "id": "0276",
+      "name": "Validator_0276",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0276"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0276"
+    },
+    {
+      "id": "0277",
+      "name": "Validator_0277",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0277"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0277"
+    },
+    {
+      "id": "0278",
+      "name": "Validator_0278",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0278"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0278"
+    },
+    {
+      "id": "0279",
+      "name": "Validator_0279",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0279"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0279"
+    },
+    {
+      "id": "0280",
+      "name": "Validator_0280",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0280"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0280"
+    },
+    {
+      "id": "0281",
+      "name": "Validator_0281",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0281"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0281"
+    },
+    {
+      "id": "0282",
+      "name": "Validator_0282",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0282"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0282"
+    },
+    {
+      "id": "0283",
+      "name": "Validator_0283",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0283"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0283"
+    },
+    {
+      "id": "0284",
+      "name": "Validator_0284",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0284"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0284"
+    },
+    {
+      "id": "0285",
+      "name": "Validator_0285",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0285"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0285"
+    },
+    {
+      "id": "0286",
+      "name": "Validator_0286",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0286"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0286"
+    },
+    {
+      "id": "0287",
+      "name": "Validator_0287",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0287"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0287"
+    },
+    {
+      "id": "0288",
+      "name": "Validator_0288",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0288"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0288"
+    },
+    {
+      "id": "0289",
+      "name": "Validator_0289",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0289"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0289"
+    },
+    {
+      "id": "0290",
+      "name": "Validator_0290",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0290"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0290"
+    },
+    {
+      "id": "0291",
+      "name": "Validator_0291",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0291"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0291"
+    },
+    {
+      "id": "0292",
+      "name": "Validator_0292",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0292"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0292"
+    },
+    {
+      "id": "0293",
+      "name": "Validator_0293",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0293"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0293"
+    },
+    {
+      "id": "0294",
+      "name": "Validator_0294",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0294"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0294"
+    },
+    {
+      "id": "0295",
+      "name": "Validator_0295",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0295"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0295"
+    },
+    {
+      "id": "0296",
+      "name": "Validator_0296",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0296"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0296"
+    },
+    {
+      "id": "0297",
+      "name": "Validator_0297",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0297"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0297"
+    },
+    {
+      "id": "0298",
+      "name": "Validator_0298",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0298"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0298"
+    },
+    {
+      "id": "0299",
+      "name": "Validator_0299",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0299"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0299"
+    },
+    {
+      "id": "0300",
+      "name": "Validator_0300",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0300"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0300"
+    },
+    {
+      "id": "0301",
+      "name": "Validator_0301",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0301"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0301"
+    },
+    {
+      "id": "0302",
+      "name": "Validator_0302",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0302"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0302"
+    },
+    {
+      "id": "0303",
+      "name": "Validator_0303",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0303"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0303"
+    },
+    {
+      "id": "0304",
+      "name": "Validator_0304",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0304"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0304"
+    },
+    {
+      "id": "0305",
+      "name": "Validator_0305",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0305"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0305"
+    },
+    {
+      "id": "0306",
+      "name": "Validator_0306",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0306"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0306"
+    },
+    {
+      "id": "0307",
+      "name": "Validator_0307",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0307"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0307"
+    },
+    {
+      "id": "0308",
+      "name": "Validator_0308",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0308"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0308"
+    },
+    {
+      "id": "0309",
+      "name": "Validator_0309",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0309"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0309"
+    },
+    {
+      "id": "0310",
+      "name": "Validator_0310",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0310"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0310"
+    },
+    {
+      "id": "0311",
+      "name": "Validator_0311",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0311"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0311"
+    },
+    {
+      "id": "0312",
+      "name": "Validator_0312",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0312"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0312"
+    },
+    {
+      "id": "0313",
+      "name": "Validator_0313",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0313"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0313"
+    },
+    {
+      "id": "0314",
+      "name": "Validator_0314",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0314"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0314"
+    },
+    {
+      "id": "0315",
+      "name": "Validator_0315",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0315"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0315"
+    },
+    {
+      "id": "0316",
+      "name": "Validator_0316",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0316"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0316"
+    },
+    {
+      "id": "0317",
+      "name": "Validator_0317",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0317"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0317"
+    },
+    {
+      "id": "0318",
+      "name": "Validator_0318",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0318"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0318"
+    },
+    {
+      "id": "0319",
+      "name": "Validator_0319",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0319"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0319"
+    },
+    {
+      "id": "0320",
+      "name": "Validator_0320",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0320"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0320"
+    },
+    {
+      "id": "0321",
+      "name": "Validator_0321",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0321"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0321"
+    },
+    {
+      "id": "0322",
+      "name": "Validator_0322",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0322"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0322"
+    },
+    {
+      "id": "0323",
+      "name": "Validator_0323",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0323"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0323"
+    },
+    {
+      "id": "0324",
+      "name": "Validator_0324",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0324"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0324"
+    },
+    {
+      "id": "0325",
+      "name": "Validator_0325",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0325"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0325"
+    },
+    {
+      "id": "0326",
+      "name": "Validator_0326",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0326"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0326"
+    },
+    {
+      "id": "0327",
+      "name": "Validator_0327",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0327"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0327"
+    },
+    {
+      "id": "0328",
+      "name": "Validator_0328",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0328"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0328"
+    },
+    {
+      "id": "0329",
+      "name": "Validator_0329",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0329"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0329"
+    },
+    {
+      "id": "0330",
+      "name": "Validator_0330",
+      "category": "validator",
+      "sample_input": {
+        "example": true,
+        "module": "Validator_0330"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Validator_0330"
+    },
+    {
+      "id": "0331",
+      "name": "Formatter_0331",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0331"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0331"
+    },
+    {
+      "id": "0332",
+      "name": "Formatter_0332",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0332"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0332"
+    },
+    {
+      "id": "0333",
+      "name": "Formatter_0333",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0333"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0333"
+    },
+    {
+      "id": "0334",
+      "name": "Formatter_0334",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0334"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0334"
+    },
+    {
+      "id": "0335",
+      "name": "Formatter_0335",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0335"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0335"
+    },
+    {
+      "id": "0336",
+      "name": "Formatter_0336",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0336"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0336"
+    },
+    {
+      "id": "0337",
+      "name": "Formatter_0337",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0337"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0337"
+    },
+    {
+      "id": "0338",
+      "name": "Formatter_0338",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0338"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0338"
+    },
+    {
+      "id": "0339",
+      "name": "Formatter_0339",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0339"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0339"
+    },
+    {
+      "id": "0340",
+      "name": "Formatter_0340",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0340"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0340"
+    },
+    {
+      "id": "0341",
+      "name": "Formatter_0341",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0341"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0341"
+    },
+    {
+      "id": "0342",
+      "name": "Formatter_0342",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0342"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0342"
+    },
+    {
+      "id": "0343",
+      "name": "Formatter_0343",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0343"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0343"
+    },
+    {
+      "id": "0344",
+      "name": "Formatter_0344",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0344"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0344"
+    },
+    {
+      "id": "0345",
+      "name": "Formatter_0345",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0345"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0345"
+    },
+    {
+      "id": "0346",
+      "name": "Formatter_0346",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0346"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0346"
+    },
+    {
+      "id": "0347",
+      "name": "Formatter_0347",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0347"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0347"
+    },
+    {
+      "id": "0348",
+      "name": "Formatter_0348",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0348"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0348"
+    },
+    {
+      "id": "0349",
+      "name": "Formatter_0349",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0349"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0349"
+    },
+    {
+      "id": "0350",
+      "name": "Formatter_0350",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0350"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0350"
+    },
+    {
+      "id": "0351",
+      "name": "Formatter_0351",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0351"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0351"
+    },
+    {
+      "id": "0352",
+      "name": "Formatter_0352",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0352"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0352"
+    },
+    {
+      "id": "0353",
+      "name": "Formatter_0353",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0353"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0353"
+    },
+    {
+      "id": "0354",
+      "name": "Formatter_0354",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0354"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0354"
+    },
+    {
+      "id": "0355",
+      "name": "Formatter_0355",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0355"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0355"
+    },
+    {
+      "id": "0356",
+      "name": "Formatter_0356",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0356"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0356"
+    },
+    {
+      "id": "0357",
+      "name": "Formatter_0357",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0357"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0357"
+    },
+    {
+      "id": "0358",
+      "name": "Formatter_0358",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0358"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0358"
+    },
+    {
+      "id": "0359",
+      "name": "Formatter_0359",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0359"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0359"
+    },
+    {
+      "id": "0360",
+      "name": "Formatter_0360",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0360"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0360"
+    },
+    {
+      "id": "0361",
+      "name": "Formatter_0361",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0361"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0361"
+    },
+    {
+      "id": "0362",
+      "name": "Formatter_0362",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0362"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0362"
+    },
+    {
+      "id": "0363",
+      "name": "Formatter_0363",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0363"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0363"
+    },
+    {
+      "id": "0364",
+      "name": "Formatter_0364",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0364"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0364"
+    },
+    {
+      "id": "0365",
+      "name": "Formatter_0365",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0365"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0365"
+    },
+    {
+      "id": "0366",
+      "name": "Formatter_0366",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0366"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0366"
+    },
+    {
+      "id": "0367",
+      "name": "Formatter_0367",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0367"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0367"
+    },
+    {
+      "id": "0368",
+      "name": "Formatter_0368",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0368"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0368"
+    },
+    {
+      "id": "0369",
+      "name": "Formatter_0369",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0369"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0369"
+    },
+    {
+      "id": "0370",
+      "name": "Formatter_0370",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0370"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0370"
+    },
+    {
+      "id": "0371",
+      "name": "Formatter_0371",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0371"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0371"
+    },
+    {
+      "id": "0372",
+      "name": "Formatter_0372",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0372"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0372"
+    },
+    {
+      "id": "0373",
+      "name": "Formatter_0373",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0373"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0373"
+    },
+    {
+      "id": "0374",
+      "name": "Formatter_0374",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0374"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0374"
+    },
+    {
+      "id": "0375",
+      "name": "Formatter_0375",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0375"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0375"
+    },
+    {
+      "id": "0376",
+      "name": "Formatter_0376",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0376"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0376"
+    },
+    {
+      "id": "0377",
+      "name": "Formatter_0377",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0377"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0377"
+    },
+    {
+      "id": "0378",
+      "name": "Formatter_0378",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0378"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0378"
+    },
+    {
+      "id": "0379",
+      "name": "Formatter_0379",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0379"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0379"
+    },
+    {
+      "id": "0380",
+      "name": "Formatter_0380",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0380"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0380"
+    },
+    {
+      "id": "0381",
+      "name": "Formatter_0381",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0381"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0381"
+    },
+    {
+      "id": "0382",
+      "name": "Formatter_0382",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0382"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0382"
+    },
+    {
+      "id": "0383",
+      "name": "Formatter_0383",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0383"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0383"
+    },
+    {
+      "id": "0384",
+      "name": "Formatter_0384",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0384"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0384"
+    },
+    {
+      "id": "0385",
+      "name": "Formatter_0385",
+      "category": "formatter",
+      "sample_input": {
+        "example": true,
+        "module": "Formatter_0385"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Formatter_0385"
+    },
+    {
+      "id": "0386",
+      "name": "Optimizer_0386",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0386"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0386"
+    },
+    {
+      "id": "0387",
+      "name": "Optimizer_0387",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0387"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0387"
+    },
+    {
+      "id": "0388",
+      "name": "Optimizer_0388",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0388"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0388"
+    },
+    {
+      "id": "0389",
+      "name": "Optimizer_0389",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0389"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0389"
+    },
+    {
+      "id": "0390",
+      "name": "Optimizer_0390",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0390"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0390"
+    },
+    {
+      "id": "0391",
+      "name": "Optimizer_0391",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0391"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0391"
+    },
+    {
+      "id": "0392",
+      "name": "Optimizer_0392",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0392"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0392"
+    },
+    {
+      "id": "0393",
+      "name": "Optimizer_0393",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0393"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0393"
+    },
+    {
+      "id": "0394",
+      "name": "Optimizer_0394",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0394"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0394"
+    },
+    {
+      "id": "0395",
+      "name": "Optimizer_0395",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0395"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0395"
+    },
+    {
+      "id": "0396",
+      "name": "Optimizer_0396",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0396"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0396"
+    },
+    {
+      "id": "0397",
+      "name": "Optimizer_0397",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0397"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0397"
+    },
+    {
+      "id": "0398",
+      "name": "Optimizer_0398",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0398"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0398"
+    },
+    {
+      "id": "0399",
+      "name": "Optimizer_0399",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0399"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0399"
+    },
+    {
+      "id": "0400",
+      "name": "Optimizer_0400",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0400"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0400"
+    },
+    {
+      "id": "0401",
+      "name": "Optimizer_0401",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0401"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0401"
+    },
+    {
+      "id": "0402",
+      "name": "Optimizer_0402",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0402"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0402"
+    },
+    {
+      "id": "0403",
+      "name": "Optimizer_0403",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0403"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0403"
+    },
+    {
+      "id": "0404",
+      "name": "Optimizer_0404",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0404"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0404"
+    },
+    {
+      "id": "0405",
+      "name": "Optimizer_0405",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0405"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0405"
+    },
+    {
+      "id": "0406",
+      "name": "Optimizer_0406",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0406"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0406"
+    },
+    {
+      "id": "0407",
+      "name": "Optimizer_0407",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0407"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0407"
+    },
+    {
+      "id": "0408",
+      "name": "Optimizer_0408",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0408"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0408"
+    },
+    {
+      "id": "0409",
+      "name": "Optimizer_0409",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0409"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0409"
+    },
+    {
+      "id": "0410",
+      "name": "Optimizer_0410",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0410"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0410"
+    },
+    {
+      "id": "0411",
+      "name": "Optimizer_0411",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0411"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0411"
+    },
+    {
+      "id": "0412",
+      "name": "Optimizer_0412",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0412"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0412"
+    },
+    {
+      "id": "0413",
+      "name": "Optimizer_0413",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0413"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0413"
+    },
+    {
+      "id": "0414",
+      "name": "Optimizer_0414",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0414"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0414"
+    },
+    {
+      "id": "0415",
+      "name": "Optimizer_0415",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0415"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0415"
+    },
+    {
+      "id": "0416",
+      "name": "Optimizer_0416",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0416"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0416"
+    },
+    {
+      "id": "0417",
+      "name": "Optimizer_0417",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0417"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0417"
+    },
+    {
+      "id": "0418",
+      "name": "Optimizer_0418",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0418"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0418"
+    },
+    {
+      "id": "0419",
+      "name": "Optimizer_0419",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0419"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0419"
+    },
+    {
+      "id": "0420",
+      "name": "Optimizer_0420",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0420"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0420"
+    },
+    {
+      "id": "0421",
+      "name": "Optimizer_0421",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0421"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0421"
+    },
+    {
+      "id": "0422",
+      "name": "Optimizer_0422",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0422"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0422"
+    },
+    {
+      "id": "0423",
+      "name": "Optimizer_0423",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0423"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0423"
+    },
+    {
+      "id": "0424",
+      "name": "Optimizer_0424",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0424"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0424"
+    },
+    {
+      "id": "0425",
+      "name": "Optimizer_0425",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0425"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0425"
+    },
+    {
+      "id": "0426",
+      "name": "Optimizer_0426",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0426"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0426"
+    },
+    {
+      "id": "0427",
+      "name": "Optimizer_0427",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0427"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0427"
+    },
+    {
+      "id": "0428",
+      "name": "Optimizer_0428",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0428"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0428"
+    },
+    {
+      "id": "0429",
+      "name": "Optimizer_0429",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0429"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0429"
+    },
+    {
+      "id": "0430",
+      "name": "Optimizer_0430",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0430"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0430"
+    },
+    {
+      "id": "0431",
+      "name": "Optimizer_0431",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0431"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0431"
+    },
+    {
+      "id": "0432",
+      "name": "Optimizer_0432",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0432"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0432"
+    },
+    {
+      "id": "0433",
+      "name": "Optimizer_0433",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0433"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0433"
+    },
+    {
+      "id": "0434",
+      "name": "Optimizer_0434",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0434"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0434"
+    },
+    {
+      "id": "0435",
+      "name": "Optimizer_0435",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0435"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0435"
+    },
+    {
+      "id": "0436",
+      "name": "Optimizer_0436",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0436"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0436"
+    },
+    {
+      "id": "0437",
+      "name": "Optimizer_0437",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0437"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0437"
+    },
+    {
+      "id": "0438",
+      "name": "Optimizer_0438",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0438"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0438"
+    },
+    {
+      "id": "0439",
+      "name": "Optimizer_0439",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0439"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0439"
+    },
+    {
+      "id": "0440",
+      "name": "Optimizer_0440",
+      "category": "optimizer",
+      "sample_input": {
+        "example": true,
+        "module": "Optimizer_0440"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Optimizer_0440"
+    },
+    {
+      "id": "0441",
+      "name": "Monitor_0441",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0441"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0441"
+    },
+    {
+      "id": "0442",
+      "name": "Monitor_0442",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0442"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0442"
+    },
+    {
+      "id": "0443",
+      "name": "Monitor_0443",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0443"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0443"
+    },
+    {
+      "id": "0444",
+      "name": "Monitor_0444",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0444"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0444"
+    },
+    {
+      "id": "0445",
+      "name": "Monitor_0445",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0445"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0445"
+    },
+    {
+      "id": "0446",
+      "name": "Monitor_0446",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0446"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0446"
+    },
+    {
+      "id": "0447",
+      "name": "Monitor_0447",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0447"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0447"
+    },
+    {
+      "id": "0448",
+      "name": "Monitor_0448",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0448"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0448"
+    },
+    {
+      "id": "0449",
+      "name": "Monitor_0449",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0449"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0449"
+    },
+    {
+      "id": "0450",
+      "name": "Monitor_0450",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0450"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0450"
+    },
+    {
+      "id": "0451",
+      "name": "Monitor_0451",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0451"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0451"
+    },
+    {
+      "id": "0452",
+      "name": "Monitor_0452",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0452"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0452"
+    },
+    {
+      "id": "0453",
+      "name": "Monitor_0453",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0453"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0453"
+    },
+    {
+      "id": "0454",
+      "name": "Monitor_0454",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0454"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0454"
+    },
+    {
+      "id": "0455",
+      "name": "Monitor_0455",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0455"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0455"
+    },
+    {
+      "id": "0456",
+      "name": "Monitor_0456",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0456"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0456"
+    },
+    {
+      "id": "0457",
+      "name": "Monitor_0457",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0457"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0457"
+    },
+    {
+      "id": "0458",
+      "name": "Monitor_0458",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0458"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0458"
+    },
+    {
+      "id": "0459",
+      "name": "Monitor_0459",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0459"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0459"
+    },
+    {
+      "id": "0460",
+      "name": "Monitor_0460",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0460"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0460"
+    },
+    {
+      "id": "0461",
+      "name": "Monitor_0461",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0461"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0461"
+    },
+    {
+      "id": "0462",
+      "name": "Monitor_0462",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0462"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0462"
+    },
+    {
+      "id": "0463",
+      "name": "Monitor_0463",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0463"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0463"
+    },
+    {
+      "id": "0464",
+      "name": "Monitor_0464",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0464"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0464"
+    },
+    {
+      "id": "0465",
+      "name": "Monitor_0465",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0465"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0465"
+    },
+    {
+      "id": "0466",
+      "name": "Monitor_0466",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0466"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0466"
+    },
+    {
+      "id": "0467",
+      "name": "Monitor_0467",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0467"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0467"
+    },
+    {
+      "id": "0468",
+      "name": "Monitor_0468",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0468"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0468"
+    },
+    {
+      "id": "0469",
+      "name": "Monitor_0469",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0469"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0469"
+    },
+    {
+      "id": "0470",
+      "name": "Monitor_0470",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0470"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0470"
+    },
+    {
+      "id": "0471",
+      "name": "Monitor_0471",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0471"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0471"
+    },
+    {
+      "id": "0472",
+      "name": "Monitor_0472",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0472"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0472"
+    },
+    {
+      "id": "0473",
+      "name": "Monitor_0473",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0473"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0473"
+    },
+    {
+      "id": "0474",
+      "name": "Monitor_0474",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0474"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0474"
+    },
+    {
+      "id": "0475",
+      "name": "Monitor_0475",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0475"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0475"
+    },
+    {
+      "id": "0476",
+      "name": "Monitor_0476",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0476"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0476"
+    },
+    {
+      "id": "0477",
+      "name": "Monitor_0477",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0477"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0477"
+    },
+    {
+      "id": "0478",
+      "name": "Monitor_0478",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0478"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0478"
+    },
+    {
+      "id": "0479",
+      "name": "Monitor_0479",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0479"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0479"
+    },
+    {
+      "id": "0480",
+      "name": "Monitor_0480",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0480"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0480"
+    },
+    {
+      "id": "0481",
+      "name": "Monitor_0481",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0481"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0481"
+    },
+    {
+      "id": "0482",
+      "name": "Monitor_0482",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0482"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0482"
+    },
+    {
+      "id": "0483",
+      "name": "Monitor_0483",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0483"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0483"
+    },
+    {
+      "id": "0484",
+      "name": "Monitor_0484",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0484"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0484"
+    },
+    {
+      "id": "0485",
+      "name": "Monitor_0485",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0485"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0485"
+    },
+    {
+      "id": "0486",
+      "name": "Monitor_0486",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0486"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0486"
+    },
+    {
+      "id": "0487",
+      "name": "Monitor_0487",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0487"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0487"
+    },
+    {
+      "id": "0488",
+      "name": "Monitor_0488",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0488"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0488"
+    },
+    {
+      "id": "0489",
+      "name": "Monitor_0489",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0489"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0489"
+    },
+    {
+      "id": "0490",
+      "name": "Monitor_0490",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0490"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0490"
+    },
+    {
+      "id": "0491",
+      "name": "Monitor_0491",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0491"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0491"
+    },
+    {
+      "id": "0492",
+      "name": "Monitor_0492",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0492"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0492"
+    },
+    {
+      "id": "0493",
+      "name": "Monitor_0493",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0493"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0493"
+    },
+    {
+      "id": "0494",
+      "name": "Monitor_0494",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0494"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0494"
+    },
+    {
+      "id": "0495",
+      "name": "Monitor_0495",
+      "category": "monitor",
+      "sample_input": {
+        "example": true,
+        "module": "Monitor_0495"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Monitor_0495"
+    },
+    {
+      "id": "0496",
+      "name": "Integrator_0496",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0496"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0496"
+    },
+    {
+      "id": "0497",
+      "name": "Integrator_0497",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0497"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0497"
+    },
+    {
+      "id": "0498",
+      "name": "Integrator_0498",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0498"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0498"
+    },
+    {
+      "id": "0499",
+      "name": "Integrator_0499",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0499"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0499"
+    },
+    {
+      "id": "0500",
+      "name": "Integrator_0500",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0500"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0500"
+    },
+    {
+      "id": "0501",
+      "name": "Integrator_0501",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0501"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0501"
+    },
+    {
+      "id": "0502",
+      "name": "Integrator_0502",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0502"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0502"
+    },
+    {
+      "id": "0503",
+      "name": "Integrator_0503",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0503"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0503"
+    },
+    {
+      "id": "0504",
+      "name": "Integrator_0504",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0504"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0504"
+    },
+    {
+      "id": "0505",
+      "name": "Integrator_0505",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0505"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0505"
+    },
+    {
+      "id": "0506",
+      "name": "Integrator_0506",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0506"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0506"
+    },
+    {
+      "id": "0507",
+      "name": "Integrator_0507",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0507"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0507"
+    },
+    {
+      "id": "0508",
+      "name": "Integrator_0508",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0508"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0508"
+    },
+    {
+      "id": "0509",
+      "name": "Integrator_0509",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0509"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0509"
+    },
+    {
+      "id": "0510",
+      "name": "Integrator_0510",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0510"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0510"
+    },
+    {
+      "id": "0511",
+      "name": "Integrator_0511",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0511"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0511"
+    },
+    {
+      "id": "0512",
+      "name": "Integrator_0512",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0512"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0512"
+    },
+    {
+      "id": "0513",
+      "name": "Integrator_0513",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0513"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0513"
+    },
+    {
+      "id": "0514",
+      "name": "Integrator_0514",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0514"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0514"
+    },
+    {
+      "id": "0515",
+      "name": "Integrator_0515",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0515"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0515"
+    },
+    {
+      "id": "0516",
+      "name": "Integrator_0516",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0516"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0516"
+    },
+    {
+      "id": "0517",
+      "name": "Integrator_0517",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0517"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0517"
+    },
+    {
+      "id": "0518",
+      "name": "Integrator_0518",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0518"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0518"
+    },
+    {
+      "id": "0519",
+      "name": "Integrator_0519",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0519"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0519"
+    },
+    {
+      "id": "0520",
+      "name": "Integrator_0520",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0520"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0520"
+    },
+    {
+      "id": "0521",
+      "name": "Integrator_0521",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0521"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0521"
+    },
+    {
+      "id": "0522",
+      "name": "Integrator_0522",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0522"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0522"
+    },
+    {
+      "id": "0523",
+      "name": "Integrator_0523",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0523"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0523"
+    },
+    {
+      "id": "0524",
+      "name": "Integrator_0524",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0524"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0524"
+    },
+    {
+      "id": "0525",
+      "name": "Integrator_0525",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0525"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0525"
+    },
+    {
+      "id": "0526",
+      "name": "Integrator_0526",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0526"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0526"
+    },
+    {
+      "id": "0527",
+      "name": "Integrator_0527",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0527"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0527"
+    },
+    {
+      "id": "0528",
+      "name": "Integrator_0528",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0528"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0528"
+    },
+    {
+      "id": "0529",
+      "name": "Integrator_0529",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0529"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0529"
+    },
+    {
+      "id": "0530",
+      "name": "Integrator_0530",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0530"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0530"
+    },
+    {
+      "id": "0531",
+      "name": "Integrator_0531",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0531"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0531"
+    },
+    {
+      "id": "0532",
+      "name": "Integrator_0532",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0532"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0532"
+    },
+    {
+      "id": "0533",
+      "name": "Integrator_0533",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0533"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0533"
+    },
+    {
+      "id": "0534",
+      "name": "Integrator_0534",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0534"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0534"
+    },
+    {
+      "id": "0535",
+      "name": "Integrator_0535",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0535"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0535"
+    },
+    {
+      "id": "0536",
+      "name": "Integrator_0536",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0536"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0536"
+    },
+    {
+      "id": "0537",
+      "name": "Integrator_0537",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0537"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0537"
+    },
+    {
+      "id": "0538",
+      "name": "Integrator_0538",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0538"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0538"
+    },
+    {
+      "id": "0539",
+      "name": "Integrator_0539",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0539"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0539"
+    },
+    {
+      "id": "0540",
+      "name": "Integrator_0540",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0540"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0540"
+    },
+    {
+      "id": "0541",
+      "name": "Integrator_0541",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0541"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0541"
+    },
+    {
+      "id": "0542",
+      "name": "Integrator_0542",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0542"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0542"
+    },
+    {
+      "id": "0543",
+      "name": "Integrator_0543",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0543"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0543"
+    },
+    {
+      "id": "0544",
+      "name": "Integrator_0544",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0544"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0544"
+    },
+    {
+      "id": "0545",
+      "name": "Integrator_0545",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0545"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0545"
+    },
+    {
+      "id": "0546",
+      "name": "Integrator_0546",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0546"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0546"
+    },
+    {
+      "id": "0547",
+      "name": "Integrator_0547",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0547"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0547"
+    },
+    {
+      "id": "0548",
+      "name": "Integrator_0548",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0548"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0548"
+    },
+    {
+      "id": "0549",
+      "name": "Integrator_0549",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0549"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0549"
+    },
+    {
+      "id": "0550",
+      "name": "Integrator_0550",
+      "category": "integrator",
+      "sample_input": {
+        "example": true,
+        "module": "Integrator_0550"
+      },
+      "required_config_keys": [],
+      "description": "Auto-generated production manifest entry for Integrator_0550"
+    }
+  ]
+}

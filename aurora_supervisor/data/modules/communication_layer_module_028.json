@@ -1,0 +1,13 @@
+{
+  "id": 358,
+  "name": "communication_layer_module_028",
+  "category": "communication_layer",
+  "tier_id": 170,
+  "tier_name": "tier_170",
+  "aem_id": 28,
+  "aem_type": "async",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

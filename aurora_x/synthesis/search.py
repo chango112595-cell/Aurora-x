@@ -1,7 +1,5 @@
 """
-Search
-
-Comprehensive module documentation explaining purpose, usage, and architecture.
+Search - Aurora-X synthesis search functionality.
 
 This module is part of Aurora's ecosystem and follows perfect code quality standards.
 All functions are fully documented with type hints and error handling.
@@ -9,9 +7,8 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
-
+from __future__ import annotations
 from typing import Dict, List, Tuple, Optional, Any, Union
-import annotations
 
 import time
 from pathlib import Path

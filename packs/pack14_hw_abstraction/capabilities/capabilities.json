@@ -1,0 +1,23 @@
+{
+  "pack_id": "pack14_hw_abstraction",
+  "capabilities": [
+    {
+      "id": "pack14_hw_abstraction.read",
+      "name": "Read Access",
+      "description": "Read access to Universal hardware abstraction layer",
+      "level": "basic"
+    },
+    {
+      "id": "pack14_hw_abstraction.write",
+      "name": "Write Access",
+      "description": "Write access to Universal hardware abstraction layer",
+      "level": "elevated"
+    },
+    {
+      "id": "pack14_hw_abstraction.admin",
+      "name": "Admin Access",
+      "description": "Administrative access to Universal hardware abstraction layer",
+      "level": "privileged"
+    }
+  ]
+}

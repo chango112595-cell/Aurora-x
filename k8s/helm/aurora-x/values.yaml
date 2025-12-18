@@ -1,0 +1,121 @@
+replicaCount: 3
+
+image:
+  repository: aurora-x/nexus
+  tag: v3
+  pullPolicy: Always
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/metrics"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+  metricsPort: 9090
+
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  hosts:
+    - host: aurora-x.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "2Gi"
+    cpu: "1000m"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+aurora:
+  env: production
+  logLevel: INFO
+  modulesPath: /app/aurora_nexus_v3/modules
+  registryPath: /app/aurora_nexus_v3/modules_registry.json
+  autonomyLevel: hybrid
+  sandboxType: cgroup
+
+autonomy:
+  enabled: true
+  replicas: 1
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+
+persistence:
+  modules:
+    enabled: true
+    size: 5Gi
+    storageClass: standard
+    accessModes:
+      - ReadWriteMany
+  registry:
+    enabled: true
+    size: 1Gi
+    storageClass: standard
+    accessModes:
+      - ReadWriteOnce
+  etcdFallback:
+    enabled: true
+    size: 1Gi
+    storageClass: standard
+
+etcd:
+  enabled: true
+  auth:
+    rbac:
+      create: false
+  persistence:
+    enabled: true
+    size: 2Gi
+
+networkPolicy:
+  enabled: true
+
+secrets:
+  etcdPassword: ""
+  signingKey: ""

@@ -1,0 +1,17 @@
+{
+  "name": "sample-virtual",
+  "version": "0.1.0",
+  "target_arch": "virtual",
+  "created": "2025-11-30T14:20:15.939318Z",
+  "files": [
+    {
+      "path": "meta.txt",
+      "sha256": "f8f0f6e3f395f673fd3e6ad4ab1b10fb36a95a1115de97e701c1395ecd2fc105"
+    },
+    {
+      "path": "run_sim.sh",
+      "sha256": "7898a60265b969d2a463ef2ba6fd20ab8ad75cbb663a70f84b80e5c760cd3f1d"
+    }
+  ],
+  "meta": {}
+}

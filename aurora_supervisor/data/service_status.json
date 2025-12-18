@@ -1,0 +1,86 @@
+{
+  "Master Controller": {
+    "running": true,
+    "pid": 8438,
+    "script": "controllers/aurora_master_controller.py",
+    "started_at": "Wed Dec 10 01:27:37 2025"
+  },
+  "Self-Healing System": {
+    "running": true,
+    "pid": 8449,
+    "script": "controllers/aurora_ultimate_self_healing_system.py",
+    "started_at": "Wed Dec 10 01:27:38 2025"
+  },
+  "Hyperspeed Mode": {
+    "running": true,
+    "pid": 8455,
+    "script": "hyperspeed/aurora_hyper_speed_mode.py",
+    "started_at": "Wed Dec 10 01:27:38 2025"
+  },
+  "Automotive UDS": {
+    "running": true,
+    "pid": 8469,
+    "script": "automotive/uds_service.py",
+    "started_at": "Wed Dec 10 01:27:38 2025"
+  },
+  "ESP32 OTA Server": {
+    "running": true,
+    "pid": 8485,
+    "script": "iot/esp32/ota_server.py",
+    "started_at": "Wed Dec 10 01:27:38 2025"
+  },
+  "Health Dashboard": {
+    "running": true,
+    "pid": 8491,
+    "script": "tools/aurora_health_dashboard.py",
+    "started_at": "Wed Dec 10 01:27:39 2025"
+  },
+  "Self Monitor": {
+    "running": true,
+    "pid": 8502,
+    "script": "tools/aurora_self_monitor.py",
+    "started_at": "Wed Dec 10 01:27:39 2025"
+  },
+  "Knowledge Engine": {
+    "running": true,
+    "pid": 8511,
+    "script": "tools/aurora_knowledge_engine.py",
+    "started_at": "Wed Dec 10 01:27:39 2025"
+  },
+  "Learning Engine": {
+    "running": true,
+    "pid": 8517,
+    "script": "tools/aurora_learning_engine.py",
+    "started_at": "Wed Dec 10 01:27:39 2025"
+  },
+  "Monitor Daemon": {
+    "running": true,
+    "pid": 8529,
+    "script": "tools/monitor_daemon.py",
+    "started_at": "Wed Dec 10 01:27:40 2025"
+  },
+  "Aurora Backend": {
+    "running": true,
+    "pid": 8535,
+    "script": "aurora_backend/main.py",
+    "started_at": "Wed Dec 10 01:27:40 2025"
+  },
+  "Aurora Hybrid System": {
+    "running": true,
+    "pid": 8540,
+    "script": "aurora_hybrid_system/main.py",
+    "started_at": "Wed Dec 10 01:27:40 2025"
+  },
+  "Aurora X Core": {
+    "running": true,
+    "pid": 8545,
+    "script": "aurora_x/main.py",
+    "started_at": "Wed Dec 10 01:27:40 2025"
+  },
+  "Nexus V3 Universal": {
+    "running": true,
+    "pid": 8443,
+    "script": "controllers/aurora_nexus_v3_universal.py",
+    "started_at": "Wed Dec 10 01:27:37 2025"
+  }
+}

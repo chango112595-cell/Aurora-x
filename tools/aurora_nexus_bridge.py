@@ -1,10 +1,8 @@
 """
 Aurora Nexus Bridge
 
-Comprehensive module documentation explaining purpose, usage, and architecture.
-
-This module is part of Aurora's ecosystem and follows perfect code quality standards.
-All functions are fully documented with type hints and error handling.
+Simple routing from Luminar Nexus to Aurora intelligence.
+Provides intelligent conversational responses without complex dependencies.
 
 Author: Aurora AI System
 Quality: 10/10 (Perfect)

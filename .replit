@@ -9,12 +9,12 @@ hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["gnupg", "openssl", "postgresql", "tmux", "xcodebuild", "zlib"]
+packages = ["cargo", "gnupg", "libiconv", "libsodium", "libxcrypt", "openssl", "pkg-config", "postgresql", "rustc", "tmux", "tree", "xcodebuild", "zlib"]
 
 [deployment]
 deploymentTarget = "autoscale"
 build = ["npm", "run", "build"]
-run = ["npm", "start"]  # Changed from gunicorn
+run = ["npm", "run", "server"]
 
 [[ports]]
 localPort = 3000
@@ -25,64 +25,24 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
+localPort = 5002
+externalPort = 3002
+
+[[ports]]
+localPort = 6000
+externalPort = 6000
+
+[[ports]]
+localPort = 8000
+externalPort = 8000
+
+[[ports]]
 localPort = 8080
 externalPort = 8080
 
 [[ports]]
-localPort = 33949
-externalPort = 6000
-
-[[ports]]
-localPort = 34273
-externalPort = 3003
-
-[[ports]]
-localPort = 36405
-externalPort = 5000
-
-[[ports]]
-localPort = 39139
-externalPort = 5173
-
-[[ports]]
-localPort = 39179
-externalPort = 8081
-
-[[ports]]
-localPort = 39729
-externalPort = 9000
-
-[[ports]]
-localPort = 41087
+localPort = 24678
 externalPort = 3001
-
-[[ports]]
-localPort = 41131
-externalPort = 8000
-
-[[ports]]
-localPort = 41953
-externalPort = 8008
-
-[[ports]]
-localPort = 42059
-externalPort = 3002
-
-[[ports]]
-localPort = 42969
-externalPort = 8099
-
-[[ports]]
-localPort = 45037
-externalPort = 4200
-
-[[ports]]
-localPort = 45531
-externalPort = 3000
-
-[[ports]]
-localPort = 45603
-externalPort = 6800
 
 [env]
 PORT = "5000"
@@ -134,6 +94,32 @@ author = "agent"
 task = "workflow.run"
 args = "Start application"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Luminar Nexus V2"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Aurora Nexus V3"
+
+[[workflows.workflow]]
+name = "Aurora V3 Autonomous"
+author = 50347865
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 aurora/core/aurora_nexus_v3_controller.py"
+
+[[workflows.workflow]]
+name = "Start Aurora AI Backend"
+author = 50376670
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd aurora_backend && pip install -r requirements.txt && python3 main.py"
+
 [[workflows.workflow]]
 name = "Start application"
 author = "agent"
@@ -146,6 +132,35 @@ waitForPort = 5000
 [workflows.workflow.metadata]
 outputType = "webview"
 
+[[workflows.workflow]]
+name = "Luminar Nexus V2"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python tools/luminar_nexus_v2.py serve"
+waitForPort = 8000
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow]]
+name = "Aurora Nexus V3"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python aurora_nexus_v3/main.py"
+
 [agent]
 integrations = ["javascript_mem_db:1.0.0", "javascript_websocket:1.0.0", "javascript_anthropic:1.0.0"]
 expertMode = true
+
+[userenv]
+
+[userenv.shared]
+JWT_SECRET = "MqxVZ3XGIDawfZPLy0FD/ymg/EBe06X10knOINk7WNg="
+ADMIN_PASSWORD = "AuroraX-Admin-2025!"

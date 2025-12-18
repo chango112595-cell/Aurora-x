@@ -1,5 +1,5 @@
 import { ErrorBoundary } from '@/components/error-boundary';
-import { Home, MessageSquare, BookOpen, BarChart3, Settings, Zap, Activity, TrendingUp, Database, Network, Cpu, Sparkles } from "lucide-react";
+import { Home, MessageSquare, BookOpen, BarChart3, Settings, Zap, Activity, TrendingUp, Database, Network, Cpu, Sparkles, Brain } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import {
   Sidebar,
@@ -15,10 +15,11 @@ import {
 
 const menuItems = [
   { title: "Chat", icon: MessageSquare, url: "/chat" },
+  { title: "Memory Fabric", icon: Brain, url: "/memory" },
   { title: "Code Library", icon: BookOpen, url: "/library" },
   { title: "Aurora Dashboard", icon: BarChart3, url: "/dashboard" },
   { title: "Comparison", icon: TrendingUp, url: "/comparison" },
-  { title: "Luminar Nexus", icon: Network, url: "/luminar-nexus" },
+  { title: "Nexus", icon: Network, url: "/nexus" },
   { title: "Server Control", icon: Cpu, url: "/servers" },
   { title: "Self-Learning", icon: Sparkles, url: "/self-learning" },
 ];
@@ -108,7 +109,7 @@ export function AppSidebar() {
           <SidebarGroupContent className="mt-2">
             <SidebarMenu>
               {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={`menu-${item.title}`}>
                   <SidebarMenuButton
                     asChild
                     isActive={location === item.url}
@@ -120,7 +121,7 @@ export function AppSidebar() {
                       }
                     `}
                   >
-                    <Link href={item.url}>
+                    <Link to={item.url}>
                       {/* Holographic glow on active */}
                       {location === item.url && (
                         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 via-purple-400/10 to-cyan-400/10 animate-pulse" />

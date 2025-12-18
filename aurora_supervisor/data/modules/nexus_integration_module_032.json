@@ -1,0 +1,13 @@
+{
+  "id": 127,
+  "name": "nexus_integration_module_032",
+  "category": "nexus_integration",
+  "tier_id": 127,
+  "tier_name": "tier_127",
+  "aem_id": 61,
+  "aem_type": "async",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

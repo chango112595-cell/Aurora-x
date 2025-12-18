@@ -1,0 +1,16 @@
+replicaCount: 1
+image:
+  repository: yourrepo/auroraos
+  tag: latest
+service:
+  type: ClusterIP
+  port: 5000
+resources: {}
+livenessProbe:
+  enabled: true
+  path: /api/status
+  initialDelaySeconds: 10
+readinessProbe:
+  enabled: true
+  path: /api/status
+  initialDelaySeconds: 10

@@ -1,0 +1,15 @@
+[Unit]
+Description=Aurora Operator Dashboard
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USER
+WorkingDirectory=/home/YOUR_USER/Aurora-x
+Environment=AURORA_API_TOKEN=aurora-dev-token
+ExecStart=/usr/bin/python3 /home/YOUR_USER/Aurora-x/integration/dashboard/backend.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+{
+  "id": 142,
+  "name": "learning_engines_module_007",
+  "category": "learning_engines",
+  "tier_id": 142,
+  "tier_name": "tier_142",
+  "aem_id": 10,
+  "aem_type": "async",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

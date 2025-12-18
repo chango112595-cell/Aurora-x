@@ -26,6 +26,7 @@ from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import re
 import subprocess
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -180,7 +181,12 @@ I learn from every interaction to serve you better. What shall we build today?\`
                             }
                         )
 
-                    if "raise NotImplementedError" in line or "pass  # TODO" in line:
+                    not_implemented_markers = (
+                        "raise NotImplementedError",
+                        "pass  # TODO",
+                        "return None  # aurora-placeholder",
+                    )
+                    if any(marker in line for marker in not_implemented_markers):
                         self.results["incomplete_items"].append(
                             {
                                 "file": str(py_file.relative_to(self.workspace)),
@@ -195,7 +201,7 @@ I learn from every interaction to serve you better. What shall we build today?\`
         # Check for broken imports
         try:
             result = subprocess.run(
-                ["python3", "-m", "py_compile"] + [str(f) for f in python_files[:20]],
+                [sys.executable, "-m", "py_compile"] + [str(f) for f in python_files[:20]],
                 capture_output=True,
                 text=True,
                 cwd=str(self.workspace),

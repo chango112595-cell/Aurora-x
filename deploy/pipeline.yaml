@@ -1,0 +1,6 @@
+# deploy/pipeline.yaml - basic ordered deployment pipeline
+- name: pack05_plugin_api
+- name: pack06_firmware_system
+- name: pack07_secure_signing
+- name: pack08_conversational_engine
+# add more packs in dependency order

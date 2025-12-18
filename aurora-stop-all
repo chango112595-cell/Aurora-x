@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Aurora-X Master Loader - Stop All Script
+
+set -e
+
+echo ""
+echo "======================================================================"
+echo "    AURORA-X - STOPPING ALL SYSTEMS"
+echo "======================================================================"
+echo ""
+
+cd "$(dirname "$0")"
+
+python3 aurora_supervisor/aurora_master_loader.py stop
+
+echo ""
+echo "All Aurora-X systems stopped."
+echo ""

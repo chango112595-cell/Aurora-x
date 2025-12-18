@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+import hashlib
+from pathlib import Path
+import argparse, json
+p = argparse.ArgumentParser()
+p.add_argument('--in', dest='fin', required=True)
+p.add_argument('--out', dest='fout', required=True)
+args = p.parse_args()
+b = Path(args.fin).read_bytes()
+h = hashlib.sha256(b).hexdigest()
+Path(args.fout).write_text(json.dumps({'file':str(args.fin),'sha256':h}))
+print('Wrote', args.fout)

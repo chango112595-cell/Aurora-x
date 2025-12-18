@@ -1,0 +1,6 @@
+{
+  "name": "example-plugin",
+  "version": "0.1.0",
+  "entry": "run.py",
+  "description": "Example plugin for Aurora Core: simple echo service"
+}

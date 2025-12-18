@@ -1,0 +1,20 @@
+{
+  "created_at": "2025-11-28T12:33:06.043442",
+  "message_count": 2,
+  "topics_discussed": [],
+  "user_preferences": {},
+  "conversation_depth": 2,
+  "last_intent": null,
+  "context_memory": [],
+  "user_name": null,
+  "user_info": {},
+  "mentioned_topics": [],
+  "questions_asked": [],
+  "detection": {
+    "type": "debugging",
+    "executionMode": "detailed",
+    "suggestedFormat": "step_by_step",
+    "keywords": [],
+    "tone": "technical"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "sample-linux-sbc",
+  "version": "0.1.0",
+  "target_arch": "linux-sbc",
+  "created": "2025-11-30T14:20:15.923282Z",
+  "files": [
+    {
+      "path": "install.sh",
+      "sha256": "48d0dec5c2546fee5b361cb8fe9958e54f15acda8e49dec9052aa3b801b6dce7"
+    },
+    {
+      "path": "meta.txt",
+      "sha256": "890e7a4f98aa0daad2edc2cd1f302dd43ac6bf8ac4bea0ef31c144d754ef2afa"
+    }
+  ],
+  "meta": {}
+}

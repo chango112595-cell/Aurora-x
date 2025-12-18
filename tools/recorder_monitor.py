@@ -15,7 +15,7 @@ Quality: 10/10 (Perfect)
 Simple recorder/monitor script for Aurora-X workspace.
 - Polls service endpoints and records results as JSONL to .aurora_knowledge/RECORDING_LOG.jsonl
 - Checks disk space and writes warnings
-- Cleans up temp files older than 7 days (.pyc, __pycache__, .aurora_backup)
+- Cleans up temp files older than 7 days (.pyc, __pycache__)
 
 This script runs independently of Aurora and does NOT modify Aurora runtime.
 """
@@ -48,8 +48,9 @@ SERVICES = [
     {"name": "vite", "url": "http://localhost:5173/"},
 ]
 
-CLEANUP_PATTERNS = ["*.pyc", "__pycache__", "*.aurora_backup"]
+CLEANUP_PATTERNS = ["*.pyc", "__pycache__"]
 CLEANUP_AGE_DAYS = 7
+EXCLUDE_CLEANUP_DIRS = {".git", "node_modules", "backups", "attached_assets"}
 
 INTERVAL = int(os.environ.get("RECORDER_INTERVAL_SECONDS", "60"))
 
@@ -133,8 +134,18 @@ def cleanup_temp():
     now = datetime.now()
     cutoff = now - timedelta(days=CLEANUP_AGE_DAYS)
     removed = []
-    # cleanup .pyc and .aurora_backup files
+    # cleanup .pyc files
     for root, dirs, files in os.walk("."):
+        # Never delete artifacts or vendor directories.
+        # (This repo intentionally retains `backups/` and `attached_assets/` for audits.)
+        if root == ".":
+            dirs[:] = [d for d in dirs if d not in EXCLUDE_CLEANUP_DIRS]
+        else:
+            parts = Path(root).parts
+            if parts and parts[0] in EXCLUDE_CLEANUP_DIRS:
+                dirs[:] = []
+                continue
+
         # remove __pycache__ dirs older than cutoff
         if "__pycache__" in dirs:
             dirpath = Path(root) / "__pycache__"
@@ -152,7 +163,7 @@ def cleanup_temp():
             except Exception:
                 pass
         # remove matching files
-        for pattern in ["*.pyc", "*.aurora_backup"]:
+        for pattern in ["*.pyc"]:
             for p in Path(root).glob(pattern):
                 try:
                     mtime = datetime.fromtimestamp(p.stat().st_mtime)

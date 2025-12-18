@@ -1,11 +1,18 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { Server } from 'http';
 import { progressStore, type ProgressEntry } from './progress-store';
+import AuroraCore from './aurora-core';
+import { getAuroraAI, type AuroraAI } from './aurora';
 
 interface WSClient {
   ws: WebSocket;
   synthesisIds: Set<string>;
+  auroraSubscribed: boolean;
+  chatSubscribed: boolean;
 }
+
+const aurora = AuroraCore.getInstance();
+const auroraAI: AuroraAI = getAuroraAI();
 
 export class SynthesisWebSocketServer {
   private wss: WebSocketServer;
@@ -29,7 +36,9 @@ export class SynthesisWebSocketServer {
 
       const client: WSClient = {
         ws,
-        synthesisIds: new Set()
+        synthesisIds: new Set(),
+        auroraSubscribed: false,
+        chatSubscribed: false
       };
 
       this.clients.set(ws, client);
@@ -101,6 +110,23 @@ export class SynthesisWebSocketServer {
       return;
     }
 
+    // Handle Aurora subscriptions
+    if (data.type === 'subscribe_aurora') {
+      client.auroraSubscribed = true;
+      ws.send(JSON.stringify({
+        type: 'aurora_subscribed',
+        message: 'Subscribed to Aurora real-time updates'
+      }));
+      
+      // Send initial status
+      const status = aurora.getStatus();
+      ws.send(JSON.stringify({
+        type: 'aurora_status',
+        data: status
+      }));
+      return;
+    }
+
     switch (data.type) {
       case 'subscribe':
         if (data.synthesisId) {
@@ -135,8 +161,19 @@ export class SynthesisWebSocketServer {
         break;
 
       case 'ping':
-        // Respond to ping with pong to keep connection alive
         ws.send(JSON.stringify({ type: 'pong' }));
+        break;
+
+      case 'chat':
+        this.handleChatMessage(ws, data);
+        break;
+
+      case 'subscribe_chat':
+        client.chatSubscribed = true;
+        ws.send(JSON.stringify({
+          type: 'chat_subscribed',
+          message: 'Subscribed to Aurora chat'
+        }));
         break;
 
       default:
@@ -146,6 +183,63 @@ export class SynthesisWebSocketServer {
           error: `Unknown message type: ${data.type}`
         }));
     }
+  }
+
+  private async handleChatMessage(ws: WebSocket, data: any): Promise<void> {
+    const messageId = data.messageId || `msg_${Date.now()}`;
+    const userInput = data.message || data.content;
+
+    if (!userInput) {
+      ws.send(JSON.stringify({
+        type: 'chat_error',
+        messageId,
+        error: 'Missing message content'
+      }));
+      return;
+    }
+
+    console.log(`[WebSocket] Chat message received: "${userInput.substring(0, 50)}..."`);
+
+    ws.send(JSON.stringify({
+      type: 'chat_processing',
+      messageId,
+      timestamp: new Date().toISOString()
+    }));
+
+    try {
+      const response = await auroraAI.handleChat(userInput);
+
+      ws.send(JSON.stringify({
+        type: 'chat_response',
+        messageId,
+        response,
+        timestamp: new Date().toISOString()
+      }));
+
+      console.log(`[WebSocket] Chat response sent for message: ${messageId}`);
+    } catch (error: any) {
+      console.error('[WebSocket] Chat error:', error);
+      ws.send(JSON.stringify({
+        type: 'chat_error',
+        messageId,
+        error: error.message || 'Failed to process chat message'
+      }));
+    }
+  }
+
+  public broadcastChatResponse(response: string, context?: any): void {
+    const message = JSON.stringify({
+      type: 'chat_broadcast',
+      response,
+      context,
+      timestamp: new Date().toISOString()
+    });
+
+    this.clients.forEach((client) => {
+      if (client.chatSubscribed && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(message);
+      }
+    });
   }
 
   // Broadcast progress update to all subscribed clients
@@ -178,6 +272,57 @@ export class SynthesisWebSocketServer {
             console.error(`[WebSocket] Error sending message to client for synthesis ${synthesisId}:`, error);
           }
         });
+      }
+    });
+  }
+
+  // Aurora real-time status broadcasting
+  public broadcastAuroraStatus(): void {
+    const status = aurora.getStatus();
+    const message = JSON.stringify({
+      type: 'aurora_status',
+      data: status,
+      timestamp: new Date().toISOString()
+    });
+
+    this.clients.forEach((client) => {
+      if (client.auroraSubscribed && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(message);
+      }
+    });
+  }
+
+  // Aurora analysis streaming
+  public streamAuroraAnalysis(analysisId: string, progress: number, data: any): void {
+    const message = JSON.stringify({
+      type: 'aurora_analysis',
+      analysisId,
+      progress,
+      data,
+      timestamp: new Date().toISOString()
+    });
+
+    this.clients.forEach((client) => {
+      if (client.auroraSubscribed && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(message);
+      }
+    });
+  }
+
+  // Aurora fix progress streaming
+  public streamAuroraFix(jobId: string, workerId: number, progress: number, status: string): void {
+    const message = JSON.stringify({
+      type: 'aurora_fix',
+      jobId,
+      workerId,
+      progress,
+      status,
+      timestamp: new Date().toISOString()
+    });
+
+    this.clients.forEach((client) => {
+      if (client.auroraSubscribed && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(message);
       }
     });
   }

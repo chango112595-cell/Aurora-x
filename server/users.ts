@@ -4,6 +4,10 @@
  * Uses in-memory storage (replace with database in production)
  */
 
+import { randomBytes } from "crypto";
+import fs from "fs";
+import path from "path";
+
 import {
   hashPassword,
   verifyPassword,
@@ -46,6 +50,38 @@ export interface UpdateUserData {
   isActive?: boolean;
 }
 
+const SECRETS_DIR =
+  process.env.AURORA_SECRETS_DIR || path.join(process.cwd(), "secrets");
+const ADMIN_PASSWORD_PATH = path.join(SECRETS_DIR, "admin_password");
+
+function resolveAdminPassword(): string {
+  const envPassword = process.env.ADMIN_PASSWORD?.trim();
+  if (envPassword && envPassword !== "Alebec95!") {
+    return envPassword;
+  }
+
+  try {
+    if (fs.existsSync(ADMIN_PASSWORD_PATH)) {
+      const stored = fs.readFileSync(ADMIN_PASSWORD_PATH, "utf8").trim();
+      if (stored) {
+        return stored;
+      }
+    }
+
+    fs.mkdirSync(SECRETS_DIR, { recursive: true });
+    const generated = `admin-${randomBytes(18).toString("hex")}`;
+    fs.writeFileSync(ADMIN_PASSWORD_PATH, generated, { mode: 0o600 });
+    console.warn(
+      `[UserStore] No ADMIN_PASSWORD set. Generated a secure admin password and stored at ${ADMIN_PASSWORD_PATH}.`,
+    );
+    return generated;
+  } catch (error) {
+    throw new Error(
+      "ADMIN_PASSWORD not configured and secrets directory is not writable.",
+    );
+  }
+}
+
 // ══════════════════════════════════════════════════════════════
 // 💾 IN-MEMORY USER STORAGE
 // ══════════════════════════════════════════════════════════════
@@ -63,9 +99,8 @@ class UserStore {
 
   private async initializeDefaultAdmin(): Promise<void> {
     try {
-      // Use environment variable for admin password, or fall back to Alebec95!
-      const defaultPassword = process.env.ADMIN_PASSWORD || "Alebec95!";
-      const adminPasswordHash = await hashPassword(defaultPassword);
+      const adminPassword = resolveAdminPassword();
+      const adminPasswordHash = await hashPassword(adminPassword);
 
       const adminUser: User = {
         id: "admin-001",
@@ -87,7 +122,7 @@ class UserStore {
       );
       if (!process.env.ADMIN_PASSWORD) {
         console.log(
-          "[UserStore] ⚠️  SECURITY WARNING: Using default admin password. Set ADMIN_PASSWORD environment variable in production!",
+          `[UserStore] 🔐 Admin password loaded from ${ADMIN_PASSWORD_PATH}. Set ADMIN_PASSWORD to rotate.`,
         );
       }
     } catch (error: any) {

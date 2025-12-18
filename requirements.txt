@@ -1,24 +1,37 @@
-# Aurora-X project dependencies
-# These dependencies are also specified in pyproject.toml
+# Aurora-X Ultra - Complete Python Dependencies
+# Generated for portable installation
+
+# Core Web Frameworks
 fastapi>=0.118.2
 flask>=3.0.3
 flask-cors>=5.0.0
-httpx>=0.28.1
-pytest>=8.3.5
-requests>=2.32.4
 uvicorn[standard]>=0.33.0
-bandit
-lxml
-pytest-cov
-ruff
-semgrep
-email_validator
-flask
-flask-sqlalchemy
-gunicorn
-psycopg2-binary
-psutil
-flask
-flask-cors
+
+# HTTP & Networking
+httpx>=0.28.1
+requests>=2.32.4
+websockets>=12.0
+aiohttp>=3.9.0
+
+# Data & Validation
+pydantic>=2.5.0
+python-multipart>=0.0.6
+
+# System & Utilities
+psutil>=5.9.0
+watchdog>=3.0.0
+waitress>=2.1.2
+
+# Testing
+pytest>=8.3.5
+
+# Optional: Development tools
+black>=22.0
+mypy>=0.950
+ruff>=0.1.0
 numpy
-psutil
+orchestrator-core
+argon2-cffi
+blake3
+cryptography
+pynacl

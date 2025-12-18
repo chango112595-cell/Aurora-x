@@ -9,9 +9,9 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
+from __future__ import annotations
 
 from typing import Dict, List, Tuple, Optional, Any, Union
-import annotations
 
 import json
 import os
@@ -32,10 +32,8 @@ from concurrent.futures import ThreadPoolExecutor
 # Module-level flag for GPG import caching
 _GPG_KEY_IMPORTED = False
 
-
 def _run(cmd: str, cwd: str | None = None):
     return subprocess.run(shlex.split(cmd), cwd=cwd, capture_output=True, text=True)
-
 
 def _check_gpg_available():
     """Check if GPG binary is available in the system"""
@@ -44,7 +42,6 @@ def _check_gpg_available():
         return result.returncode == 0
     except (subprocess.SubprocessError, FileNotFoundError, OSError):
         return False
-
 
 def _get_git_config(key: str, scope: str = ""):
     """Get current git config value, returns None if not set
@@ -56,7 +53,6 @@ def _get_git_config(key: str, scope: str = ""):
     cmd = f"git config {scope} --get {key}".strip()
     result = _run(cmd)
     return result.stdout.strip() if result.returncode == 0 else None
-
 
 def _git(cfg: dict[str, str] | None = None):
     global _GPG_KEY_IMPORTED
@@ -186,7 +182,6 @@ def _git(cfg: dict[str, str] | None = None):
         _restore_git_config(original_config)
         raise
 
-
 def _restore_git_config(original_config: dict):
     """Restore original git config values"""
     for key, value in original_config.items():
@@ -196,12 +191,10 @@ def _restore_git_config(original_config: dict):
             # Unset config if it wasn't previously set
             _run(f"git config --unset {key}")
 
-
 def _ensure_remote(url: str):
     _run("git rev-parse --is-inside-work-tree")
     _run("git remote remove origin")
     _run(f"git remote add origin {url}")
-
 
 def _github_api(path: str, method="GET", payload: dict | None = None):
     tok = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("AURORA_GH_TOKEN")
@@ -223,7 +216,6 @@ def _github_api(path: str, method="GET", payload: dict | None = None):
     except Exception as e:
         return {"ok": False, "err": str(e)}
 
-
 def _extract_zip_into_cwd(zip_rel: str | None):
     if not zip_rel:
         return False
@@ -237,7 +229,6 @@ def _extract_zip_into_cwd(zip_rel: str | None):
     with zipfile.ZipFile(zpath, "r") as z:
         z.extractall(".")
     return True
-
 
 def pr_create(owner: str, name: str, base: str, title: str, body: str, zip_rel: str | None):
     if not (owner and name):

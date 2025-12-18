@@ -142,7 +142,7 @@ export default function ServerControl() {
                                     <Button onClick={restartAllServices} size="lg" variant="outline" className="h-16 text-lg font-semibold gap-3 border-2">
                                         <RotateCw className="h-6 w-6" /> Restart All
                                     </Button>
-                                    <Link href="/luminar">
+                                    <Link to="/luminar">
                                         <Button size="lg" variant="outline" className="h-16 text-lg font-semibold gap-3 border-2 w-full">
                                             <Activity className="h-6 w-6" /> View All
                                         </Button>

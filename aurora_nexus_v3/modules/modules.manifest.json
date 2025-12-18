@@ -1,0 +1,4407 @@
+{
+  "generated": "2025-12-08T14:32:36.728974",
+  "version": "1.0.0",
+  "total_modules": 550,
+  "modules": [
+    {
+      "id": 1,
+      "name": "Ancient_symbolic_logic_001",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 2,
+      "name": "Ancient_pattern_recognition_002",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 3,
+      "name": "Ancient_basic_reasoning_003",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 4,
+      "name": "Ancient_memory_encoding_004",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 5,
+      "name": "Ancient_sequential_processing_005",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 6,
+      "name": "Ancient_rule_based_inference_006",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 7,
+      "name": "Ancient_symbolic_logic_007",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 8,
+      "name": "Ancient_pattern_recognition_008",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 9,
+      "name": "Ancient_basic_reasoning_009",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 10,
+      "name": "Ancient_memory_encoding_010",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 11,
+      "name": "Ancient_sequential_processing_011",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 12,
+      "name": "Ancient_rule_based_inference_012",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 13,
+      "name": "Ancient_symbolic_logic_013",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 14,
+      "name": "Ancient_pattern_recognition_014",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 15,
+      "name": "Ancient_basic_reasoning_015",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 16,
+      "name": "Ancient_memory_encoding_016",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 17,
+      "name": "Ancient_sequential_processing_017",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 18,
+      "name": "Ancient_rule_based_inference_018",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 19,
+      "name": "Ancient_symbolic_logic_019",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 20,
+      "name": "Ancient_pattern_recognition_020",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 21,
+      "name": "Ancient_basic_reasoning_021",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 22,
+      "name": "Ancient_memory_encoding_022",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 23,
+      "name": "Ancient_sequential_processing_023",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 24,
+      "name": "Ancient_rule_based_inference_024",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 25,
+      "name": "Ancient_symbolic_logic_025",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 26,
+      "name": "Ancient_pattern_recognition_026",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 27,
+      "name": "Ancient_basic_reasoning_027",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 28,
+      "name": "Ancient_memory_encoding_028",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 29,
+      "name": "Ancient_sequential_processing_029",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 30,
+      "name": "Ancient_rule_based_inference_030",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 31,
+      "name": "Ancient_symbolic_logic_031",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 32,
+      "name": "Ancient_pattern_recognition_032",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 33,
+      "name": "Ancient_basic_reasoning_033",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 34,
+      "name": "Ancient_memory_encoding_034",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 35,
+      "name": "Ancient_sequential_processing_035",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 36,
+      "name": "Ancient_rule_based_inference_036",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 37,
+      "name": "Ancient_symbolic_logic_037",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 38,
+      "name": "Ancient_pattern_recognition_038",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 39,
+      "name": "Ancient_basic_reasoning_039",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 40,
+      "name": "Ancient_memory_encoding_040",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 41,
+      "name": "Ancient_sequential_processing_041",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 42,
+      "name": "Ancient_rule_based_inference_042",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 43,
+      "name": "Ancient_symbolic_logic_043",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 44,
+      "name": "Ancient_pattern_recognition_044",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 45,
+      "name": "Ancient_basic_reasoning_045",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 46,
+      "name": "Ancient_memory_encoding_046",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 47,
+      "name": "Ancient_sequential_processing_047",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 48,
+      "name": "Ancient_rule_based_inference_048",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 49,
+      "name": "Ancient_symbolic_logic_049",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 50,
+      "name": "Ancient_pattern_recognition_050",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 51,
+      "name": "Ancient_basic_reasoning_051",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 52,
+      "name": "Ancient_memory_encoding_052",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 53,
+      "name": "Ancient_sequential_processing_053",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 54,
+      "name": "Ancient_rule_based_inference_054",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 55,
+      "name": "Ancient_symbolic_logic_055",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 56,
+      "name": "Ancient_pattern_recognition_056",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 57,
+      "name": "Ancient_basic_reasoning_057",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 58,
+      "name": "Ancient_memory_encoding_058",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 59,
+      "name": "Ancient_sequential_processing_059",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 60,
+      "name": "Ancient_rule_based_inference_060",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 61,
+      "name": "Ancient_symbolic_logic_061",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 62,
+      "name": "Ancient_pattern_recognition_062",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 63,
+      "name": "Ancient_basic_reasoning_063",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 64,
+      "name": "Ancient_memory_encoding_064",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 65,
+      "name": "Ancient_sequential_processing_065",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 66,
+      "name": "Ancient_rule_based_inference_066",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 67,
+      "name": "Ancient_symbolic_logic_067",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 68,
+      "name": "Ancient_pattern_recognition_068",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 69,
+      "name": "Ancient_basic_reasoning_069",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 70,
+      "name": "Ancient_memory_encoding_070",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 71,
+      "name": "Ancient_sequential_processing_071",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 72,
+      "name": "Ancient_rule_based_inference_072",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 73,
+      "name": "Ancient_symbolic_logic_073",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 74,
+      "name": "Ancient_pattern_recognition_074",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 75,
+      "name": "Ancient_basic_reasoning_075",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 76,
+      "name": "Ancient_memory_encoding_076",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 77,
+      "name": "Ancient_sequential_processing_077",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 78,
+      "name": "Ancient_rule_based_inference_078",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 79,
+      "name": "Ancient_symbolic_logic_079",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 80,
+      "name": "Ancient_pattern_recognition_080",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 81,
+      "name": "Ancient_basic_reasoning_081",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 82,
+      "name": "Ancient_memory_encoding_082",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 83,
+      "name": "Ancient_sequential_processing_083",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 84,
+      "name": "Ancient_rule_based_inference_084",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 85,
+      "name": "Ancient_symbolic_logic_085",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 86,
+      "name": "Ancient_pattern_recognition_086",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 87,
+      "name": "Ancient_basic_reasoning_087",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 88,
+      "name": "Ancient_memory_encoding_088",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 89,
+      "name": "Ancient_sequential_processing_089",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 90,
+      "name": "Ancient_rule_based_inference_090",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 91,
+      "name": "Ancient_symbolic_logic_091",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 92,
+      "name": "Ancient_pattern_recognition_092",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 93,
+      "name": "Ancient_basic_reasoning_093",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 94,
+      "name": "Ancient_memory_encoding_094",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 95,
+      "name": "Ancient_sequential_processing_095",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 96,
+      "name": "Ancient_rule_based_inference_096",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 97,
+      "name": "Ancient_symbolic_logic_097",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 98,
+      "name": "Ancient_pattern_recognition_098",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 99,
+      "name": "Ancient_basic_reasoning_099",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 100,
+      "name": "Ancient_memory_encoding_100",
+      "category": "Ancient",
+      "tier": "foundational",
+      "driver": "sequential",
+      "requires_gpu": false
+    },
+    {
+      "id": 101,
+      "name": "Classical_network_protocols_101",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 102,
+      "name": "Classical_system_integration_102",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 103,
+      "name": "Classical_algorithmic_optimization_103",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 104,
+      "name": "Classical_data_structures_104",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 105,
+      "name": "Classical_parallel_processing_105",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 106,
+      "name": "Classical_distributed_computing_106",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 107,
+      "name": "Classical_network_protocols_107",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 108,
+      "name": "Classical_system_integration_108",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 109,
+      "name": "Classical_algorithmic_optimization_109",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 110,
+      "name": "Classical_data_structures_110",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 111,
+      "name": "Classical_parallel_processing_111",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 112,
+      "name": "Classical_distributed_computing_112",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 113,
+      "name": "Classical_network_protocols_113",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 114,
+      "name": "Classical_system_integration_114",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 115,
+      "name": "Classical_algorithmic_optimization_115",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 116,
+      "name": "Classical_data_structures_116",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 117,
+      "name": "Classical_parallel_processing_117",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 118,
+      "name": "Classical_distributed_computing_118",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 119,
+      "name": "Classical_network_protocols_119",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 120,
+      "name": "Classical_system_integration_120",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 121,
+      "name": "Classical_algorithmic_optimization_121",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 122,
+      "name": "Classical_data_structures_122",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 123,
+      "name": "Classical_parallel_processing_123",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 124,
+      "name": "Classical_distributed_computing_124",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 125,
+      "name": "Classical_network_protocols_125",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 126,
+      "name": "Classical_system_integration_126",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 127,
+      "name": "Classical_algorithmic_optimization_127",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 128,
+      "name": "Classical_data_structures_128",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 129,
+      "name": "Classical_parallel_processing_129",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 130,
+      "name": "Classical_distributed_computing_130",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 131,
+      "name": "Classical_network_protocols_131",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 132,
+      "name": "Classical_system_integration_132",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 133,
+      "name": "Classical_algorithmic_optimization_133",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 134,
+      "name": "Classical_data_structures_134",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 135,
+      "name": "Classical_parallel_processing_135",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 136,
+      "name": "Classical_distributed_computing_136",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 137,
+      "name": "Classical_network_protocols_137",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 138,
+      "name": "Classical_system_integration_138",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 139,
+      "name": "Classical_algorithmic_optimization_139",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 140,
+      "name": "Classical_data_structures_140",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 141,
+      "name": "Classical_parallel_processing_141",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 142,
+      "name": "Classical_distributed_computing_142",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 143,
+      "name": "Classical_network_protocols_143",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 144,
+      "name": "Classical_system_integration_144",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 145,
+      "name": "Classical_algorithmic_optimization_145",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 146,
+      "name": "Classical_data_structures_146",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 147,
+      "name": "Classical_parallel_processing_147",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 148,
+      "name": "Classical_distributed_computing_148",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 149,
+      "name": "Classical_network_protocols_149",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 150,
+      "name": "Classical_system_integration_150",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 151,
+      "name": "Classical_algorithmic_optimization_151",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 152,
+      "name": "Classical_data_structures_152",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 153,
+      "name": "Classical_parallel_processing_153",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 154,
+      "name": "Classical_distributed_computing_154",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 155,
+      "name": "Classical_network_protocols_155",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 156,
+      "name": "Classical_system_integration_156",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 157,
+      "name": "Classical_algorithmic_optimization_157",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 158,
+      "name": "Classical_data_structures_158",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 159,
+      "name": "Classical_parallel_processing_159",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 160,
+      "name": "Classical_distributed_computing_160",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 161,
+      "name": "Classical_network_protocols_161",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 162,
+      "name": "Classical_system_integration_162",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 163,
+      "name": "Classical_algorithmic_optimization_163",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 164,
+      "name": "Classical_data_structures_164",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 165,
+      "name": "Classical_parallel_processing_165",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 166,
+      "name": "Classical_distributed_computing_166",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 167,
+      "name": "Classical_network_protocols_167",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 168,
+      "name": "Classical_system_integration_168",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 169,
+      "name": "Classical_algorithmic_optimization_169",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 170,
+      "name": "Classical_data_structures_170",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 171,
+      "name": "Classical_parallel_processing_171",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 172,
+      "name": "Classical_distributed_computing_172",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 173,
+      "name": "Classical_network_protocols_173",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 174,
+      "name": "Classical_system_integration_174",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 175,
+      "name": "Classical_algorithmic_optimization_175",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 176,
+      "name": "Classical_data_structures_176",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 177,
+      "name": "Classical_parallel_processing_177",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 178,
+      "name": "Classical_distributed_computing_178",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 179,
+      "name": "Classical_network_protocols_179",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 180,
+      "name": "Classical_system_integration_180",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 181,
+      "name": "Classical_algorithmic_optimization_181",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 182,
+      "name": "Classical_data_structures_182",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 183,
+      "name": "Classical_parallel_processing_183",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 184,
+      "name": "Classical_distributed_computing_184",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 185,
+      "name": "Classical_network_protocols_185",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 186,
+      "name": "Classical_system_integration_186",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 187,
+      "name": "Classical_algorithmic_optimization_187",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 188,
+      "name": "Classical_data_structures_188",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 189,
+      "name": "Classical_parallel_processing_189",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 190,
+      "name": "Classical_distributed_computing_190",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 191,
+      "name": "Classical_network_protocols_191",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 192,
+      "name": "Classical_system_integration_192",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 193,
+      "name": "Classical_algorithmic_optimization_193",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 194,
+      "name": "Classical_data_structures_194",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 195,
+      "name": "Classical_parallel_processing_195",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 196,
+      "name": "Classical_distributed_computing_196",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 197,
+      "name": "Classical_network_protocols_197",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 198,
+      "name": "Classical_system_integration_198",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 199,
+      "name": "Classical_algorithmic_optimization_199",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 200,
+      "name": "Classical_data_structures_200",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 201,
+      "name": "Classical_parallel_processing_201",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 202,
+      "name": "Classical_distributed_computing_202",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 203,
+      "name": "Classical_network_protocols_203",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 204,
+      "name": "Classical_system_integration_204",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 205,
+      "name": "Classical_algorithmic_optimization_205",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 206,
+      "name": "Classical_data_structures_206",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 207,
+      "name": "Classical_parallel_processing_207",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 208,
+      "name": "Classical_distributed_computing_208",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 209,
+      "name": "Classical_network_protocols_209",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 210,
+      "name": "Classical_system_integration_210",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 211,
+      "name": "Classical_algorithmic_optimization_211",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 212,
+      "name": "Classical_data_structures_212",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 213,
+      "name": "Classical_parallel_processing_213",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 214,
+      "name": "Classical_distributed_computing_214",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 215,
+      "name": "Classical_network_protocols_215",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 216,
+      "name": "Classical_system_integration_216",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 217,
+      "name": "Classical_algorithmic_optimization_217",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 218,
+      "name": "Classical_data_structures_218",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 219,
+      "name": "Classical_parallel_processing_219",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 220,
+      "name": "Classical_distributed_computing_220",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 221,
+      "name": "Classical_network_protocols_221",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 222,
+      "name": "Classical_system_integration_222",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 223,
+      "name": "Classical_algorithmic_optimization_223",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 224,
+      "name": "Classical_data_structures_224",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 225,
+      "name": "Classical_parallel_processing_225",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 226,
+      "name": "Classical_distributed_computing_226",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 227,
+      "name": "Classical_network_protocols_227",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 228,
+      "name": "Classical_system_integration_228",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 229,
+      "name": "Classical_algorithmic_optimization_229",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 230,
+      "name": "Classical_data_structures_230",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 231,
+      "name": "Classical_parallel_processing_231",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 232,
+      "name": "Classical_distributed_computing_232",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 233,
+      "name": "Classical_network_protocols_233",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 234,
+      "name": "Classical_system_integration_234",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 235,
+      "name": "Classical_algorithmic_optimization_235",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 236,
+      "name": "Classical_data_structures_236",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 237,
+      "name": "Classical_parallel_processing_237",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 238,
+      "name": "Classical_distributed_computing_238",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 239,
+      "name": "Classical_network_protocols_239",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 240,
+      "name": "Classical_system_integration_240",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 241,
+      "name": "Classical_algorithmic_optimization_241",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 242,
+      "name": "Classical_data_structures_242",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 243,
+      "name": "Classical_parallel_processing_243",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 244,
+      "name": "Classical_distributed_computing_244",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 245,
+      "name": "Classical_network_protocols_245",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 246,
+      "name": "Classical_system_integration_246",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 247,
+      "name": "Classical_algorithmic_optimization_247",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 248,
+      "name": "Classical_data_structures_248",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 249,
+      "name": "Classical_parallel_processing_249",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 250,
+      "name": "Classical_distributed_computing_250",
+      "category": "Classical",
+      "tier": "intermediate",
+      "driver": "parallel",
+      "requires_gpu": false
+    },
+    {
+      "id": 251,
+      "name": "Modern_nlp_processing_251",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 252,
+      "name": "Modern_reinforcement_learning_252",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 253,
+      "name": "Modern_machine_learning_253",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 254,
+      "name": "Modern_deep_learning_254",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 255,
+      "name": "Modern_neural_networks_255",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 256,
+      "name": "Modern_computer_vision_256",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 257,
+      "name": "Modern_nlp_processing_257",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 258,
+      "name": "Modern_reinforcement_learning_258",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 259,
+      "name": "Modern_machine_learning_259",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 260,
+      "name": "Modern_deep_learning_260",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 261,
+      "name": "Modern_neural_networks_261",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 262,
+      "name": "Modern_computer_vision_262",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 263,
+      "name": "Modern_nlp_processing_263",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 264,
+      "name": "Modern_reinforcement_learning_264",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 265,
+      "name": "Modern_machine_learning_265",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 266,
+      "name": "Modern_deep_learning_266",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 267,
+      "name": "Modern_neural_networks_267",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 268,
+      "name": "Modern_computer_vision_268",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 269,
+      "name": "Modern_nlp_processing_269",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 270,
+      "name": "Modern_reinforcement_learning_270",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 271,
+      "name": "Modern_machine_learning_271",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 272,
+      "name": "Modern_deep_learning_272",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 273,
+      "name": "Modern_neural_networks_273",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 274,
+      "name": "Modern_computer_vision_274",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 275,
+      "name": "Modern_nlp_processing_275",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 276,
+      "name": "Modern_reinforcement_learning_276",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 277,
+      "name": "Modern_machine_learning_277",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 278,
+      "name": "Modern_deep_learning_278",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 279,
+      "name": "Modern_neural_networks_279",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 280,
+      "name": "Modern_computer_vision_280",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 281,
+      "name": "Modern_nlp_processing_281",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 282,
+      "name": "Modern_reinforcement_learning_282",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 283,
+      "name": "Modern_machine_learning_283",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 284,
+      "name": "Modern_deep_learning_284",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 285,
+      "name": "Modern_neural_networks_285",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 286,
+      "name": "Modern_computer_vision_286",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 287,
+      "name": "Modern_nlp_processing_287",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 288,
+      "name": "Modern_reinforcement_learning_288",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 289,
+      "name": "Modern_machine_learning_289",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 290,
+      "name": "Modern_deep_learning_290",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 291,
+      "name": "Modern_neural_networks_291",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 292,
+      "name": "Modern_computer_vision_292",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 293,
+      "name": "Modern_nlp_processing_293",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 294,
+      "name": "Modern_reinforcement_learning_294",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 295,
+      "name": "Modern_machine_learning_295",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 296,
+      "name": "Modern_deep_learning_296",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 297,
+      "name": "Modern_neural_networks_297",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 298,
+      "name": "Modern_computer_vision_298",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 299,
+      "name": "Modern_nlp_processing_299",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 300,
+      "name": "Modern_reinforcement_learning_300",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 301,
+      "name": "Modern_machine_learning_301",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 302,
+      "name": "Modern_deep_learning_302",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 303,
+      "name": "Modern_neural_networks_303",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 304,
+      "name": "Modern_computer_vision_304",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 305,
+      "name": "Modern_nlp_processing_305",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 306,
+      "name": "Modern_reinforcement_learning_306",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 307,
+      "name": "Modern_machine_learning_307",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 308,
+      "name": "Modern_deep_learning_308",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 309,
+      "name": "Modern_neural_networks_309",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 310,
+      "name": "Modern_computer_vision_310",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 311,
+      "name": "Modern_nlp_processing_311",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 312,
+      "name": "Modern_reinforcement_learning_312",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 313,
+      "name": "Modern_machine_learning_313",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 314,
+      "name": "Modern_deep_learning_314",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 315,
+      "name": "Modern_neural_networks_315",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 316,
+      "name": "Modern_computer_vision_316",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 317,
+      "name": "Modern_nlp_processing_317",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 318,
+      "name": "Modern_reinforcement_learning_318",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 319,
+      "name": "Modern_machine_learning_319",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 320,
+      "name": "Modern_deep_learning_320",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 321,
+      "name": "Modern_neural_networks_321",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 322,
+      "name": "Modern_computer_vision_322",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 323,
+      "name": "Modern_nlp_processing_323",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 324,
+      "name": "Modern_reinforcement_learning_324",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 325,
+      "name": "Modern_machine_learning_325",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 326,
+      "name": "Modern_deep_learning_326",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 327,
+      "name": "Modern_neural_networks_327",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 328,
+      "name": "Modern_computer_vision_328",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 329,
+      "name": "Modern_nlp_processing_329",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 330,
+      "name": "Modern_reinforcement_learning_330",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 331,
+      "name": "Modern_machine_learning_331",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 332,
+      "name": "Modern_deep_learning_332",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 333,
+      "name": "Modern_neural_networks_333",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 334,
+      "name": "Modern_computer_vision_334",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 335,
+      "name": "Modern_nlp_processing_335",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 336,
+      "name": "Modern_reinforcement_learning_336",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 337,
+      "name": "Modern_machine_learning_337",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 338,
+      "name": "Modern_deep_learning_338",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 339,
+      "name": "Modern_neural_networks_339",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 340,
+      "name": "Modern_computer_vision_340",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 341,
+      "name": "Modern_nlp_processing_341",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 342,
+      "name": "Modern_reinforcement_learning_342",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 343,
+      "name": "Modern_machine_learning_343",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 344,
+      "name": "Modern_deep_learning_344",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 345,
+      "name": "Modern_neural_networks_345",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 346,
+      "name": "Modern_computer_vision_346",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 347,
+      "name": "Modern_nlp_processing_347",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 348,
+      "name": "Modern_reinforcement_learning_348",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 349,
+      "name": "Modern_machine_learning_349",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 350,
+      "name": "Modern_deep_learning_350",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 351,
+      "name": "Modern_neural_networks_351",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 352,
+      "name": "Modern_computer_vision_352",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 353,
+      "name": "Modern_nlp_processing_353",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 354,
+      "name": "Modern_reinforcement_learning_354",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 355,
+      "name": "Modern_machine_learning_355",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 356,
+      "name": "Modern_deep_learning_356",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 357,
+      "name": "Modern_neural_networks_357",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 358,
+      "name": "Modern_computer_vision_358",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 359,
+      "name": "Modern_nlp_processing_359",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 360,
+      "name": "Modern_reinforcement_learning_360",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 361,
+      "name": "Modern_machine_learning_361",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 362,
+      "name": "Modern_deep_learning_362",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 363,
+      "name": "Modern_neural_networks_363",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 364,
+      "name": "Modern_computer_vision_364",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 365,
+      "name": "Modern_nlp_processing_365",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 366,
+      "name": "Modern_reinforcement_learning_366",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 367,
+      "name": "Modern_machine_learning_367",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 368,
+      "name": "Modern_deep_learning_368",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 369,
+      "name": "Modern_neural_networks_369",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 370,
+      "name": "Modern_computer_vision_370",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 371,
+      "name": "Modern_nlp_processing_371",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 372,
+      "name": "Modern_reinforcement_learning_372",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 373,
+      "name": "Modern_machine_learning_373",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 374,
+      "name": "Modern_deep_learning_374",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 375,
+      "name": "Modern_neural_networks_375",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 376,
+      "name": "Modern_computer_vision_376",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 377,
+      "name": "Modern_nlp_processing_377",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 378,
+      "name": "Modern_reinforcement_learning_378",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 379,
+      "name": "Modern_machine_learning_379",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 380,
+      "name": "Modern_deep_learning_380",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 381,
+      "name": "Modern_neural_networks_381",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 382,
+      "name": "Modern_computer_vision_382",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 383,
+      "name": "Modern_nlp_processing_383",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 384,
+      "name": "Modern_reinforcement_learning_384",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 385,
+      "name": "Modern_machine_learning_385",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 386,
+      "name": "Modern_deep_learning_386",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 387,
+      "name": "Modern_neural_networks_387",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 388,
+      "name": "Modern_computer_vision_388",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 389,
+      "name": "Modern_nlp_processing_389",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 390,
+      "name": "Modern_reinforcement_learning_390",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 391,
+      "name": "Modern_machine_learning_391",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 392,
+      "name": "Modern_deep_learning_392",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 393,
+      "name": "Modern_neural_networks_393",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 394,
+      "name": "Modern_computer_vision_394",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 395,
+      "name": "Modern_nlp_processing_395",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 396,
+      "name": "Modern_reinforcement_learning_396",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 397,
+      "name": "Modern_machine_learning_397",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 398,
+      "name": "Modern_deep_learning_398",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 399,
+      "name": "Modern_neural_networks_399",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 400,
+      "name": "Modern_computer_vision_400",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 401,
+      "name": "Modern_nlp_processing_401",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 402,
+      "name": "Modern_reinforcement_learning_402",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 403,
+      "name": "Modern_machine_learning_403",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 404,
+      "name": "Modern_deep_learning_404",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 405,
+      "name": "Modern_neural_networks_405",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 406,
+      "name": "Modern_computer_vision_406",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 407,
+      "name": "Modern_nlp_processing_407",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 408,
+      "name": "Modern_reinforcement_learning_408",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 409,
+      "name": "Modern_machine_learning_409",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 410,
+      "name": "Modern_deep_learning_410",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 411,
+      "name": "Modern_neural_networks_411",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 412,
+      "name": "Modern_computer_vision_412",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 413,
+      "name": "Modern_nlp_processing_413",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 414,
+      "name": "Modern_reinforcement_learning_414",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 415,
+      "name": "Modern_machine_learning_415",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 416,
+      "name": "Modern_deep_learning_416",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 417,
+      "name": "Modern_neural_networks_417",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 418,
+      "name": "Modern_computer_vision_418",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 419,
+      "name": "Modern_nlp_processing_419",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 420,
+      "name": "Modern_reinforcement_learning_420",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 421,
+      "name": "Modern_machine_learning_421",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 422,
+      "name": "Modern_deep_learning_422",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 423,
+      "name": "Modern_neural_networks_423",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 424,
+      "name": "Modern_computer_vision_424",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 425,
+      "name": "Modern_nlp_processing_425",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 426,
+      "name": "Modern_reinforcement_learning_426",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 427,
+      "name": "Modern_machine_learning_427",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 428,
+      "name": "Modern_deep_learning_428",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 429,
+      "name": "Modern_neural_networks_429",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 430,
+      "name": "Modern_computer_vision_430",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 431,
+      "name": "Modern_nlp_processing_431",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 432,
+      "name": "Modern_reinforcement_learning_432",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 433,
+      "name": "Modern_machine_learning_433",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 434,
+      "name": "Modern_deep_learning_434",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 435,
+      "name": "Modern_neural_networks_435",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 436,
+      "name": "Modern_computer_vision_436",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 437,
+      "name": "Modern_nlp_processing_437",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 438,
+      "name": "Modern_reinforcement_learning_438",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 439,
+      "name": "Modern_machine_learning_439",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 440,
+      "name": "Modern_deep_learning_440",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 441,
+      "name": "Modern_neural_networks_441",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 442,
+      "name": "Modern_computer_vision_442",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 443,
+      "name": "Modern_nlp_processing_443",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 444,
+      "name": "Modern_reinforcement_learning_444",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 445,
+      "name": "Modern_machine_learning_445",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 446,
+      "name": "Modern_deep_learning_446",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 447,
+      "name": "Modern_neural_networks_447",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 448,
+      "name": "Modern_computer_vision_448",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 449,
+      "name": "Modern_nlp_processing_449",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 450,
+      "name": "Modern_reinforcement_learning_450",
+      "category": "Modern",
+      "tier": "advanced",
+      "driver": "gpu",
+      "requires_gpu": true
+    },
+    {
+      "id": 451,
+      "name": "Futuristic_quantum_computing_451",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 452,
+      "name": "Futuristic_neural_link_452",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 453,
+      "name": "Futuristic_consciousness_mapping_453",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 454,
+      "name": "Futuristic_temporal_synthesis_454",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 455,
+      "name": "Futuristic_reality_modeling_455",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 456,
+      "name": "Futuristic_autonomous_evolution_456",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 457,
+      "name": "Futuristic_quantum_computing_457",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 458,
+      "name": "Futuristic_neural_link_458",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 459,
+      "name": "Futuristic_consciousness_mapping_459",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 460,
+      "name": "Futuristic_temporal_synthesis_460",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 461,
+      "name": "Futuristic_reality_modeling_461",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 462,
+      "name": "Futuristic_autonomous_evolution_462",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 463,
+      "name": "Futuristic_quantum_computing_463",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 464,
+      "name": "Futuristic_neural_link_464",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 465,
+      "name": "Futuristic_consciousness_mapping_465",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 466,
+      "name": "Futuristic_temporal_synthesis_466",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 467,
+      "name": "Futuristic_reality_modeling_467",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 468,
+      "name": "Futuristic_autonomous_evolution_468",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 469,
+      "name": "Futuristic_quantum_computing_469",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 470,
+      "name": "Futuristic_neural_link_470",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 471,
+      "name": "Futuristic_consciousness_mapping_471",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 472,
+      "name": "Futuristic_temporal_synthesis_472",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 473,
+      "name": "Futuristic_reality_modeling_473",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 474,
+      "name": "Futuristic_autonomous_evolution_474",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 475,
+      "name": "Futuristic_quantum_computing_475",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 476,
+      "name": "Futuristic_neural_link_476",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 477,
+      "name": "Futuristic_consciousness_mapping_477",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 478,
+      "name": "Futuristic_temporal_synthesis_478",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 479,
+      "name": "Futuristic_reality_modeling_479",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 480,
+      "name": "Futuristic_autonomous_evolution_480",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 481,
+      "name": "Futuristic_quantum_computing_481",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 482,
+      "name": "Futuristic_neural_link_482",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 483,
+      "name": "Futuristic_consciousness_mapping_483",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 484,
+      "name": "Futuristic_temporal_synthesis_484",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 485,
+      "name": "Futuristic_reality_modeling_485",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 486,
+      "name": "Futuristic_autonomous_evolution_486",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 487,
+      "name": "Futuristic_quantum_computing_487",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 488,
+      "name": "Futuristic_neural_link_488",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 489,
+      "name": "Futuristic_consciousness_mapping_489",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 490,
+      "name": "Futuristic_temporal_synthesis_490",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 491,
+      "name": "Futuristic_reality_modeling_491",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 492,
+      "name": "Futuristic_autonomous_evolution_492",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 493,
+      "name": "Futuristic_quantum_computing_493",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 494,
+      "name": "Futuristic_neural_link_494",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 495,
+      "name": "Futuristic_consciousness_mapping_495",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 496,
+      "name": "Futuristic_temporal_synthesis_496",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 497,
+      "name": "Futuristic_reality_modeling_497",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 498,
+      "name": "Futuristic_autonomous_evolution_498",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 499,
+      "name": "Futuristic_quantum_computing_499",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 500,
+      "name": "Futuristic_neural_link_500",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 501,
+      "name": "Futuristic_consciousness_mapping_501",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 502,
+      "name": "Futuristic_temporal_synthesis_502",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 503,
+      "name": "Futuristic_reality_modeling_503",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 504,
+      "name": "Futuristic_autonomous_evolution_504",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 505,
+      "name": "Futuristic_quantum_computing_505",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 506,
+      "name": "Futuristic_neural_link_506",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 507,
+      "name": "Futuristic_consciousness_mapping_507",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 508,
+      "name": "Futuristic_temporal_synthesis_508",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 509,
+      "name": "Futuristic_reality_modeling_509",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 510,
+      "name": "Futuristic_autonomous_evolution_510",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 511,
+      "name": "Futuristic_quantum_computing_511",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 512,
+      "name": "Futuristic_neural_link_512",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 513,
+      "name": "Futuristic_consciousness_mapping_513",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 514,
+      "name": "Futuristic_temporal_synthesis_514",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 515,
+      "name": "Futuristic_reality_modeling_515",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 516,
+      "name": "Futuristic_autonomous_evolution_516",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 517,
+      "name": "Futuristic_quantum_computing_517",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 518,
+      "name": "Futuristic_neural_link_518",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 519,
+      "name": "Futuristic_consciousness_mapping_519",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 520,
+      "name": "Futuristic_temporal_synthesis_520",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 521,
+      "name": "Futuristic_reality_modeling_521",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 522,
+      "name": "Futuristic_autonomous_evolution_522",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 523,
+      "name": "Futuristic_quantum_computing_523",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 524,
+      "name": "Futuristic_neural_link_524",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 525,
+      "name": "Futuristic_consciousness_mapping_525",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 526,
+      "name": "Futuristic_temporal_synthesis_526",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 527,
+      "name": "Futuristic_reality_modeling_527",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 528,
+      "name": "Futuristic_autonomous_evolution_528",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 529,
+      "name": "Futuristic_quantum_computing_529",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 530,
+      "name": "Futuristic_neural_link_530",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 531,
+      "name": "Futuristic_consciousness_mapping_531",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 532,
+      "name": "Futuristic_temporal_synthesis_532",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 533,
+      "name": "Futuristic_reality_modeling_533",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 534,
+      "name": "Futuristic_autonomous_evolution_534",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 535,
+      "name": "Futuristic_quantum_computing_535",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 536,
+      "name": "Futuristic_neural_link_536",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 537,
+      "name": "Futuristic_consciousness_mapping_537",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 538,
+      "name": "Futuristic_temporal_synthesis_538",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 539,
+      "name": "Futuristic_reality_modeling_539",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 540,
+      "name": "Futuristic_autonomous_evolution_540",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 541,
+      "name": "Futuristic_quantum_computing_541",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 542,
+      "name": "Futuristic_neural_link_542",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 543,
+      "name": "Futuristic_consciousness_mapping_543",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 544,
+      "name": "Futuristic_temporal_synthesis_544",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 545,
+      "name": "Futuristic_reality_modeling_545",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 546,
+      "name": "Futuristic_autonomous_evolution_546",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 547,
+      "name": "Futuristic_quantum_computing_547",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 548,
+      "name": "Futuristic_neural_link_548",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 549,
+      "name": "Futuristic_consciousness_mapping_549",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    },
+    {
+      "id": 550,
+      "name": "Futuristic_temporal_synthesis_550",
+      "category": "Futuristic",
+      "tier": "grandmaster",
+      "driver": "hybrid",
+      "requires_gpu": true
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": 487,
+  "name": "interface_bridges_module_002",
+  "category": "interface_bridges",
+  "tier_id": 111,
+  "tier_name": "tier_111",
+  "aem_id": 25,
+  "aem_type": "async",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

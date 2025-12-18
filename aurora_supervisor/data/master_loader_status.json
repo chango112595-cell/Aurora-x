@@ -1,0 +1,13 @@
+{
+  "phase_integration": "complete",
+  "packs": {
+    "success": 15,
+    "failed": 0,
+    "failed_list": []
+  },
+  "services": {
+    "started": 14
+  },
+  "timestamp": "Wed Dec 10 01:27:40 2025",
+  "elapsed_seconds": 5.952904224395752
+}

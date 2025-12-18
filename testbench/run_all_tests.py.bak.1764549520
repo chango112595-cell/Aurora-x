@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+# lightweight runner that runs existing testbench and additional checks
+import subprocess, sys
+def sh(cmd):
+    print('>', cmd)
+    r = subprocess.run(cmd, shell=True)
+    return r.returncode
+# run installer testbench
+print('Running pack-level pytest...')
+sh('python3 -m pytest packs -q')
+print('Run ops runbook (smoke):')
+sh('bash ops/run_all_deploy.sh')
+print('Done.')

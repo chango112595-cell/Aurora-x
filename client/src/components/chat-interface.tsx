@@ -58,7 +58,7 @@ export function ChatInterface() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: promptToSend }),
+        body: JSON.stringify({ message: promptToSend, session_id: 'aurora-chat-ui' }),
       });
 
       console.log('🌟 Aurora: Response status:', response.status);
@@ -70,10 +70,16 @@ export function ChatInterface() {
       const data = await response.json();
       console.log('🌟 Aurora: Response data:', data);
 
+      const content = typeof data?.response === 'string'
+        ? data.response
+        : typeof data?.message === 'string'
+          ? data.message
+          : formatAuroraResponse(data);
+
       const auroraMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'aurora',
-        content: formatAuroraResponse(data),
+        content,
         timestamp: new Date(),
         data: data,
       };
@@ -153,7 +159,7 @@ export function ChatInterface() {
           <div className="space-y-6">
             {messages.map((message) => (
               <div
-                key={message.id}
+                key={`message-${message.id}`}
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
@@ -172,7 +178,7 @@ export function ChatInterface() {
                           if (line.includes('**')) {
                             const parts = line.split('**');
                             return (
-                              <div key={i}>
+                              <div key={`line-${message.id}-${i}`}>
                                 {parts.map((part, j) =>
                                   j % 2 === 1 ? <strong key={j}>{part}</strong> : part
                                 )}

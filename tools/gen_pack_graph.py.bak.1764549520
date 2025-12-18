@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+"""gen_pack_graph.py - generate pack dependency graph (dot/svg) from manifests"""
+from pathlib import Path
+import json, subprocess
+packs = list(Path('packs').glob('pack*'))
+dot = ['digraph packs {']
+for p in packs:
+    dot.append(f'"{p.name}";')
+    # read manifest to detect dependencies
+    m = p / 'manifest.yaml'
+    if m.exists():
+        try:
+            import yaml
+            data = yaml.safe_load(m.read_text())
+            deps = data.get('pack', {}).get('dependencies', [])
+            for d in deps:
+                dot.append(f'"{p.name}" -> "{d.get("pack_id")}";')
+        except Exception:
+            pass
+dot.append('}')
+Path('tools/pack_graph.dot').write_text('\n'.join(dot))
+print('DOT file written to tools/pack_graph.dot. Use dot -Tsvg tools/pack_graph.dot -o output/pack_graph.svg')

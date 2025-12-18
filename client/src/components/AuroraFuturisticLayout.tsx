@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import {
   LayoutDashboard, MessageSquare, Brain, Network, Settings,
@@ -19,16 +19,18 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
 
   const navItems: NavItem[] = [
     // Core Systems
-    { path: '/', label: 'Quantum Dashboard', icon: <LayoutDashboard className="w-5 h-5" />, category: 'core' },
+    { path: '/dashboard', label: 'Quantum Dashboard', icon: <LayoutDashboard className="w-5 h-5" />, category: 'core' },
     { path: '/chat', label: 'Neural Chat', icon: <MessageSquare className="w-5 h-5" />, category: 'core' },
+    { path: '/memory', label: 'Memory Fabric', icon: <Brain className="w-5 h-5" />, category: 'core' },
     { path: '/intelligence', label: 'Intelligence Core', icon: <Brain className="w-5 h-5" />, category: 'core' },
 
     // Intelligence Systems
-    { path: '/tasks', label: '13 Foundation Tasks', icon: <Layers className="w-5 h-5" />, category: 'intelligence' },
-    { path: '/tiers', label: '66 Knowledge Tiers', icon: <Network className="w-5 h-5" />, category: 'intelligence' },
+    { path: '/tasks', label: 'Execution Methods', icon: <Layers className="w-5 h-5" />, category: 'intelligence' },
+    { path: '/tiers', label: 'Knowledge Tiers', icon: <Network className="w-5 h-5" />, category: 'intelligence' },
     { path: '/evolution', label: 'Evolution Monitor', icon: <TrendingUp className="w-5 h-5" />, category: 'intelligence' },
 
     // Advanced Tools
+    { path: '/nexus', label: 'Nexus', icon: <Sparkles className="w-5 h-5" />, category: 'tools' },
     { path: '/autonomous', label: 'Autonomous Tools', icon: <Zap className="w-5 h-5" />, category: 'tools' },
     { path: '/monitoring', label: 'System Monitor', icon: <Activity className="w-5 h-5" />, category: 'tools' },
     { path: '/database', label: 'Knowledge Base', icon: <Database className="w-5 h-5" />, category: 'tools' },
@@ -40,6 +42,52 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
     intelligence: 'Intelligence Matrix',
     tools: 'Advanced Tools'
   };
+
+  const [moduleCount, setModuleCount] = useState<number | null>(null);
+  const [quantumCoherence, setQuantumCoherence] = useState<number | null>(null);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const fetchSidebarStats = async () => {
+      try {
+        const [manifestRes, v2Res] = await Promise.allSettled([
+          fetch('/api/nexus-v3/manifest'),
+          fetch('/api/luminar-nexus/v2/status'),
+        ]);
+
+        if (manifestRes.status === 'fulfilled' && manifestRes.value.ok) {
+          const data = await manifestRes.value.json();
+          if (isActive && typeof data.modules === 'number') {
+            setModuleCount(data.modules);
+          }
+        }
+
+        if (v2Res.status === 'fulfilled' && v2Res.value.ok) {
+          const data = await v2Res.value.json();
+          if (isActive && typeof data.quantum_coherence === 'number') {
+            setQuantumCoherence(data.quantum_coherence);
+          }
+        }
+      } catch {
+        if (isActive) {
+          setModuleCount(null);
+          setQuantumCoherence(null);
+        }
+      }
+    };
+
+    fetchSidebarStats();
+    const interval = setInterval(fetchSidebarStats, 15000);
+    return () => {
+      isActive = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const coherencePercent = quantumCoherence !== null
+    ? Math.min(100, Math.max(0, quantumCoherence * 100))
+    : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
@@ -66,7 +114,9 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                     <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                       Aurora
                     </h1>
-                    <p className="text-xs text-purple-400">79 Complete Systems</p>
+                    <p className="text-xs text-purple-400">
+                      {moduleCount !== null ? `${moduleCount} Modules Online` : "Modules Unavailable"}
+                    </p>
                   </div>
                 </div>
               )}
@@ -90,11 +140,11 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                 )}
                 <div className="space-y-1">
                   {navItems.filter(item => item.category === category).map(item => {
-                    const isActive = location === item.path || (item.path !== '/' && location.startsWith(item.path));
+                    const isActive = location === item.path || (item.path !== '/' && location?.startsWith(item.path));
                     return (
-                      <Link key={item.path} href={item.path} className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 block ${isActive
-                        ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-lg shadow-purple-500/20'
-                        : 'text-purple-300 hover:bg-purple-500/10 hover:text-white'
+                      <Link key={item.path} to={item.path} className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 block ${isActive
+                        ? 'bg-gradient-to-r from-purple-600/40 to-pink-600/40 border border-purple-400/50 text-white shadow-lg shadow-purple-500/30'
+                        : 'bg-slate-800/50 text-purple-300 hover:bg-purple-500/30 hover:text-white border border-transparent hover:border-purple-500/30'
                         }`}>
                         <div className={isActive ? 'text-purple-400' : 'text-purple-500'}>
                           {item.icon}
@@ -119,10 +169,15 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-purple-400">Quantum Coherence</span>
-                  <span className="text-cyan-400 font-mono">98.7%</span>
+                  <span className="text-cyan-400 font-mono">
+                    {coherencePercent !== null ? `${coherencePercent.toFixed(1)}%` : "Unavailable"}
+                  </span>
                 </div>
                 <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full w-[98.7%] bg-gradient-to-r from-cyan-500 to-purple-500 animate-pulse" />
+                  <div
+                    className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 animate-pulse"
+                    style={{ width: `${coherencePercent ?? 0}%` }}
+                  />
                 </div>
               </div>
             ) : (

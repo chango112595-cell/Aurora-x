@@ -1,0 +1,26 @@
+NSSM (Non-sucking Service Manager) - Windows Service Installation
+
+1. Download NSSM from: https://nssm.cc/download
+   Extract to C:\Program Files\nssm (or any location)
+
+2. Open PowerShell as Administrator and run:
+   C:\Program Files\nssm\nssm.exe install AuroraOS "C:\Python310\python.exe" "C:\path\to\Aurora-x\aurora_os.py start"
+
+3. Configure service (optional):
+   - Set working directory: nssm set AuroraOS AppDirectory "C:\path\to\Aurora-x"
+   - Set environment: nssm set AuroraOS AppEnvironmentExtra AURORA_API_TOKEN=aurora-dev-token
+   - Set startup type: nssm set AuroraOS Start SERVICE_AUTO_START
+   - Set restart policy: nssm set AuroraOS AppRestart Restart
+   - Set restart delay: nssm set AuroraOS AppRestartDelay 5000
+
+4. Start the service:
+   nssm start AuroraOS
+
+5. Check status:
+   nssm status AuroraOS
+
+6. Stop the service:
+   nssm stop AuroraOS
+
+7. Remove the service:
+   nssm remove AuroraOS confirm

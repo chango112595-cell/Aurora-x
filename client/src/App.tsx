@@ -1,40 +1,64 @@
+'use client';
+
 import { Route, Switch } from "wouter";
 import AuroraFuturisticLayout from "./components/AuroraFuturisticLayout";
 import Dashboard from "./pages/dashboard";
-import ChatPage from "./pages/chat";
-import TasksPage from "./pages/tasks";
-import TiersPage from "./pages/tiers";
-import IntelligencePage from "./pages/intelligence";
-import EvolutionPage from "./pages/evolution";
-import AutonomousPage from "./pages/autonomous";
-import MonitoringPage from "./pages/monitoring";
-import DatabasePage from "./pages/database";
-import SettingsPage from "./pages/settings";
+import Home from "./pages/home";
+import Chat from "./pages/chat";
+import MemoryFabric from "./pages/memory-fabric";
+import Corpus from "./pages/corpus";
+import SelfLearning from "./pages/self-learning";
+import ServerControl from "./pages/server-control";
+import Library from "./pages/library";
+import Settings from "./pages/settings";
+import AuroraUI from "./pages/aurora-ui";
+import ComparisonDashboard from "./pages/ComparisonDashboard";
+import Nexus from "./pages/nexus";
+import Autonomous from "./pages/autonomous";
+import Monitoring from "./pages/monitoring";
+import Database from "./pages/database";
+import Evolution from "./pages/evolution";
+import Tasks from "./pages/tasks";
+import Tiers from "./pages/tiers";
+import Intelligence from "./pages/intelligence";
+import AuroraAITest from "@/pages/aurora-ai-test";
+import AuroraChat from "./pages/aurora-chat";
+import Roadmap from "./pages/roadmap";
+import Vault from "./pages/vault";
+import Aurora from "./pages/aurora";
+import NotFound from "./pages/not-found";
 
 function App() {
   return (
     <AuroraFuturisticLayout>
       <Switch>
-        <Route path="/" component={Dashboard} />
-        <Route path="/chat" component={ChatPage} />
-        <Route path="/tasks" component={TasksPage} />
-        <Route path="/tiers" component={TiersPage} />
-        <Route path="/intelligence" component={IntelligencePage} />
-        <Route path="/evolution" component={EvolutionPage} />
-        <Route path="/autonomous" component={AutonomousPage} />
-        <Route path="/monitoring" component={MonitoringPage} />
-        <Route path="/database" component={DatabasePage} />
-        <Route path="/settings" component={SettingsPage} />
-        <Route>
-          <div className="flex items-center justify-center h-screen">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-                404 - Quantum Path Not Found
-              </h1>
-              <p className="text-purple-400">This neural pathway doesn't exist yet.</p>
-            </div>
-          </div>
-        </Route>
+        <Route path="/" component={Home} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/chat" component={Chat} />
+        <Route path="/memory" component={MemoryFabric} />
+        <Route path="/library" component={Library} />
+        <Route path="/nexus" component={Nexus} />
+        <Route path="/comparison" component={ComparisonDashboard} />
+        <Route path="/luminar-nexus" component={Nexus} />
+        <Route path="/servers" component={ServerControl} />
+        <Route path="/self-learning" component={SelfLearning} />
+        <Route path="/corpus" component={Corpus} />
+        <Route path="/autonomous" component={Autonomous} />
+        <Route path="/monitoring" component={Monitoring} />
+        <Route path="/database" component={Database} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/tasks" component={Tasks} />
+        <Route path="/tiers" component={Tiers} />
+        <Route path="/evolution" component={Evolution} />
+        <Route path="/intelligence" component={Intelligence} />
+        <Route path="/aurora-ui" component={AuroraUI} />
+        <Route path="/aurora-ai-test" component={AuroraAITest} />
+        <Route path="/aurora-chat" component={AuroraChat} />
+        <Route path="/memory-fabric" component={MemoryFabric} />
+        <Route path="/roadmap" component={Roadmap} />
+        <Route path="/vault" component={Vault} />
+        <Route path="/aurora" component={Aurora} />
+        <Route component={NotFound} />
       </Switch>
     </AuroraFuturisticLayout>
   );

@@ -9,9 +9,9 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
+from __future__ import annotations
 
 from typing import Dict, List, Tuple, Optional, Any, Union
-import annotations
 
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor
@@ -20,13 +20,11 @@ from concurrent.futures import ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
 #             results = executor.map(process_func, items)
 
-
 def mutate_candidates(code: str) -> list[str]:
     variants = [code]
     if "return" in code:
         variants.append(code.replace("return", "return "))
     return list(dict.fromkeys(variants))
-
 
 # Aurora Perfect Error Handling
 try:

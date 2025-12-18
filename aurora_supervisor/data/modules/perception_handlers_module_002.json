@@ -1,0 +1,13 @@
+{
+  "id": 252,
+  "name": "perception_handlers_module_002",
+  "category": "perception_handlers",
+  "tier_id": 64,
+  "tier_name": "tier_064",
+  "aem_id": 54,
+  "aem_type": "sync",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

@@ -1,0 +1,92 @@
+{
+  "pack01_pack01": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack02_env_profiler": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack03_os_edge": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack04_launcher": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack05_plugin_system": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 2
+  },
+  "pack06_firmware_system": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack07_secure_signing": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack08_conversational_engine": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack09_compute_layer": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack10_autonomy_engine": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack11_device_mesh": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack12_toolforge": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack13_runtime_2": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack14_hw_abstraction": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  },
+  "pack15_intel_fabric": {
+    "installed": true,
+    "running": true,
+    "healthy": true,
+    "processes": 1
+  }
+}

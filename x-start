@@ -71,16 +71,11 @@ else:
 
 print("\n🚀 PHASE 2: Launching Enhanced System (26 Services)")
 print("━" * 80)
-print("   This will activate all 188 capabilities...")
-print("   • Consciousness Layer")
-print("   • Core Intelligence (79 Tiers)")
-print("   • Autonomous Systems")
-print("   • Grandmaster Capabilities")
-print("   • Advanced Tiers")
-print("   • Code Quality Systems")
-print("   • Web Services (5 ports)")
-print("   • Orchestration")
-print("   • Background Processes\n")
+print("   This will activate the production runtime services...")
+print("   • Backend API + Frontend (5000)")
+print("   • Aurora Bridge (5001)")
+print("   • Aurora Nexus V3 (5002)")
+print("   • Luminar Nexus V2 (8000)\n")
 
 # Launch the enhanced x-start
 try:

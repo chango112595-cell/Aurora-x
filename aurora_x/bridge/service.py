@@ -101,22 +101,7 @@ def root():
 
 
 if __name__ == "__main__":
-
-# Aurora Perfect Error Handling
-try:
-    # Main execution with complete error coverage
-    pass
-except Exception as e:
-    # Handle all exceptions gracefully
-    pass
     import sys
-
-    # Set UTF-8 encoding for Windows compatibility
-    if sys.platform == "win32":
-        import io
-
-        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
-        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
 
     print("[ROCKET] Starting Aurora-X Factory Bridge on port 5001...", flush=True)
     sys.stdout.flush()

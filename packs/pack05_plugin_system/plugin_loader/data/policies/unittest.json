@@ -1,0 +1,9 @@
+{
+  "allowed_paths": [
+    "/tmp"
+  ],
+  "blocked_syscalls": [
+    "fork"
+  ],
+  "max_memory_mb": 64
+}

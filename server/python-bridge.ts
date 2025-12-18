@@ -3,10 +3,11 @@
  */
 
 import { spawn } from 'child_process';
-import { promisify } from 'util';
+import { resolvePythonCommand } from './python-runtime';
 
 export async function callPythonSolver(text: string): Promise<any> {
   return new Promise((resolve, reject) => {
+    const pythonCmd = resolvePythonCommand();
     const pythonScript = `
 import sys
 import json
@@ -18,7 +19,7 @@ result = solve_text(text)
 print(json.dumps(result))
 `;
 
-    const python = spawn('python', ['-c', pythonScript]);
+    const python = spawn(pythonCmd, ['-c', pythonScript]);
     let output = '';
     let error = '';
 

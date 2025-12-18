@@ -1,4 +1,22 @@
 import { WebSocket, WebSocketServer } from 'ws';
+import { conversationDetector, type ConversationDetection } from './conversation-detector';
+import { conversationPatternAdapter } from './conversation-pattern-adapter';
+import { spawn, execSync } from 'child_process';
+import * as path from 'path';
+import * as fs from 'fs';
+import { getMemoryFabricClient } from './memory-fabric-client';
+import { getNexusV3Client, type ConsciousnessState } from './nexus-v3-client';
+import { getCognitiveLoop } from './cognitive-loop';
+import { resolvePythonCommand } from './python-runtime';
+import type { Server } from 'http';
+import { 
+  executeWithOrchestrator, 
+  selectExecutionMethod, 
+  getSystemPromptWithCapabilities,
+  getCapabilities,
+  type ExecutionResult,
+  type ExecutionContext
+} from './aurora-execution-orchestrator';
 
 // Luminar Nexus service endpoints
 const LUMINAR_NEXUS_V2_URL = process.env.LUMINAR_NEXUS_V2_URL || 'http://0.0.0.0:5005';
@@ -233,8 +251,10 @@ export function setupAuroraChatWebSocket(server: any) {
     path: '/aurora/chat'
   });
 
-  wss.on('connection', (ws: WebSocket) => {
-    console.log('[Aurora] New chat connection established');
+  wss.on('connection', async (ws: WebSocket) => {
+    const memoryStatus = await memoryClient.checkStatus();
+
+    let greeting = "Hello! I'm Aurora. What would you like me to do?";
     
     // Welcome message
     ws.send(JSON.stringify({
@@ -250,10 +270,14 @@ export function setupAuroraChatWebSocket(server: any) {
         const response = await processWithAuroraIntelligence(message, session_id || 'websocket-default');
         
         ws.send(JSON.stringify({
-          message: response
+          message: response,
+          detection: {
+            type: detection.type,
+            confidence: detection.confidence,
+            executionMode: detection.executionMode
+          }
         }));
       } catch (error) {
-        console.error('[Aurora] Error:', error);
         ws.send(JSON.stringify({
           message: 'I encountered an error processing your message. Please try again.'
         }));
@@ -261,9 +285,9 @@ export function setupAuroraChatWebSocket(server: any) {
     });
 
     ws.on('close', () => {
-      console.log('[Aurora] Chat connection closed');
     });
   });
+}
 
   console.log('[Aurora] Chat WebSocket server ready on /aurora/chat (Luminar Nexus V2/V3 integrated)');
 }

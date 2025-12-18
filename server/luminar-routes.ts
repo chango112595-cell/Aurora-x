@@ -1,4 +1,3 @@
-
 import type { Express } from "express";
 
 /**
@@ -11,163 +10,121 @@ export function registerLuminarRoutes(app: Express) {
   const LUMINAR_V3_BASE = process.env.LUMINAR_NEXUS_V3_URL || "http://0.0.0.0:5031";
   const AURORA_BRIDGE_BASE = process.env.AURORA_BRIDGE_URL || "http://0.0.0.0:5001";
 
-  // Health check for Luminar Nexus V2
-  app.get("/api/luminar-nexus/v2/health", async (req, res) => {
-    try {
-      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/status`);
-      const data = await response.json();
-      res.json({ ok: true, status: data });
-    } catch (error: any) {
-      res.status(503).json({ 
-        ok: false, 
-        error: "Luminar Nexus V2 not available",
-        message: error.message 
-      });
+const LUMINAR_V2_BASE = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
+
+async function requestV2(path: string, options: RequestInit = {}) {
+  const res = await fetch(`${LUMINAR_V2_BASE}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
     }
   });
 
-  // Get comprehensive system status
-  app.get("/api/luminar-nexus/v2/status", async (req, res) => {
+  if (!res.ok) {
+    const text = (await res.text()) || res.statusText;
+    throw new Error(`${res.status}: ${text}`);
+  }
+
+  return res.json();
+}
+
+function respondUnavailable(res: any, error: unknown, path: string) {
+  const message = error instanceof Error ? error.message : "Luminar Nexus V2 unavailable";
+  res.status(503).json({
+    available: false,
+    error: message,
+    path
+  });
+}
+
+export function registerLuminarRoutes(app: Express) {
+  app.get("/api/luminar-nexus/v2/health", async (_req, res) => {
     try {
-      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/status`);
-      if (!response.ok) {
-        throw new Error(`V2 returned ${response.status}`);
-      }
-      const data = await response.json();
-      res.json(data);
-    } catch (error: any) {
-      res.status(503).json({ 
-        error: "Luminar Nexus V2 unavailable",
-        message: error.message 
-      });
+      const data = await requestV2("/api/nexus/status");
+      res.json({ ...data, available: true });
+    } catch (error) {
+      respondUnavailable(res, error, "/api/nexus/status");
     }
   });
 
-  // Get service health details
+  app.get("/api/luminar-nexus/v2/status", async (_req, res) => {
+    try {
+      const data = await requestV2("/api/nexus/status");
+      res.json({ ...data, available: true });
+    } catch (error) {
+      respondUnavailable(res, error, "/api/nexus/status");
+    }
+  });
+
   app.get("/api/luminar-nexus/v2/services/:serviceName", async (req, res) => {
+    const { serviceName } = req.params;
     try {
-      const { serviceName } = req.params;
-      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/health/${serviceName}`);
-      if (!response.ok) {
-        throw new Error(`Service not found: ${serviceName}`);
-      }
-      const data = await response.json();
-      res.json(data);
-    } catch (error: any) {
-      res.status(404).json({ 
-        error: "Service not found",
-        message: error.message 
-      });
+      const data = await requestV2(`/api/nexus/health/${encodeURIComponent(serviceName)}`);
+      res.json({ ...data, available: true });
+    } catch (error) {
+      respondUnavailable(res, error, `/api/nexus/health/${serviceName}`);
     }
   });
 
-  // Restart a service
   app.post("/api/luminar-nexus/v2/services/:serviceName/restart", async (req, res) => {
+    const { serviceName } = req.params;
     try {
-      const { serviceName } = req.params;
-      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/restart/${serviceName}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+      const data = await requestV2(`/api/nexus/restart/${encodeURIComponent(serviceName)}`, {
+        method: "POST"
       });
-      const data = await response.json();
-      res.json(data);
-    } catch (error: any) {
-      res.status(500).json({ 
-        error: "Restart failed",
-        message: error.message 
-      });
+      res.json({ ...data, available: true });
+    } catch (error) {
+      respondUnavailable(res, error, `/api/nexus/restart/${serviceName}`);
     }
   });
 
-  // Scale a service
   app.post("/api/luminar-nexus/v2/services/:serviceName/scale", async (req, res) => {
+    const { serviceName } = req.params;
     try {
-      const { serviceName } = req.params;
-      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/scale/${serviceName}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+      const data = await requestV2(`/api/nexus/scale/${encodeURIComponent(serviceName)}`, {
+        method: "POST"
       });
-      const data = await response.json();
-      res.json(data);
-    } catch (error: any) {
-      res.status(500).json({ 
-        error: "Scaling failed",
-        message: error.message 
-      });
+      res.json({ ...data, available: true });
+    } catch (error) {
+      respondUnavailable(res, error, `/api/nexus/scale/${serviceName}`);
     }
   });
 
-  // Get service logs
   app.get("/api/luminar-nexus/v2/logs/:serviceName", async (req, res) => {
+    const { serviceName } = req.params;
     try {
-      const { serviceName } = req.params;
-      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/logs/${serviceName}`);
-      if (!response.ok) {
-        throw new Error(`Logs not available for ${serviceName}`);
-      }
-      const data = await response.json();
-      res.json(data);
-    } catch (error: any) {
-      res.status(404).json({ 
-        error: "Logs not available",
-        message: error.message 
-      });
+      const data = await requestV2(`/api/nexus/logs/${encodeURIComponent(serviceName)}`);
+      res.json({ ...data, available: true });
+    } catch (error) {
+      respondUnavailable(res, error, `/api/nexus/logs/${serviceName}`);
     }
   });
 
-  // Get quantum mesh status
-  app.get("/api/luminar-nexus/v2/quantum", async (req, res) => {
+  app.get("/api/luminar-nexus/v2/quantum", async (_req, res) => {
     try {
-      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/quantum`);
-      const data = await response.json();
-      res.json(data);
-    } catch (error: any) {
-      res.status(503).json({ 
-        error: "Quantum mesh unavailable",
-        message: error.message 
-      });
+      const data = await requestV2("/api/nexus/quantum");
+      res.json({ ...data, available: true });
+    } catch (error) {
+      respondUnavailable(res, error, "/api/nexus/quantum");
     }
   });
 
-  // Get AI insights
-  app.get("/api/luminar-nexus/v2/ai/insights", async (req, res) => {
+  app.get("/api/luminar-nexus/v2/ai/insights", async (_req, res) => {
     try {
-      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/ai/insights`);
-      const data = await response.json();
-      res.json(data);
-    } catch (error: any) {
-      res.status(503).json({ 
-        error: "AI insights unavailable",
-        message: error.message 
-      });
+      const data = await requestV2("/api/nexus/ai/insights");
+      res.json({ ...data, available: true });
+    } catch (error) {
+      respondUnavailable(res, error, "/api/nexus/ai/insights");
     }
   });
 
-  // Get security status
-  app.get("/api/luminar-nexus/v2/security/status", async (req, res) => {
+  app.get("/api/luminar-nexus/v2/security/status", async (_req, res) => {
     try {
-      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/security/status`);
-      const data = await response.json();
-      res.json(data);
-    } catch (error: any) {
-      res.status(503).json({ 
-        error: "Security status unavailable",
-        message: error.message 
-      });
-    }
-  });
-
-  // Get performance metrics
-  app.get("/api/luminar-nexus/v2/performance/metrics", async (req, res) => {
-    try {
-      const response = await fetch(`${LUMINAR_V2_BASE}/api/nexus/performance/metrics`);
-      const data = await response.json();
-      res.json(data);
-    } catch (error: any) {
-      res.status(503).json({ 
-        error: "Performance metrics unavailable",
-        message: error.message 
-      });
+      const data = await requestV2("/api/nexus/security/status");
+      res.json({ ...data, available: true });
+    } catch (error) {
+      respondUnavailable(res, error, "/api/nexus/security/status");
     }
   });
 

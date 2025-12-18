@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "created": "2025-11-25T01:14:58.297001",
+  "created": "2025-11-29T04:07:04.603957",
   "commands": {
     "monitor": {
       "command": "python aurora_self_monitor.py",

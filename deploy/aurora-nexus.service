@@ -1,0 +1,52 @@
+[Unit]
+Description=Aurora Nexus V3 - AI Module Orchestrator
+Documentation=https://github.com/aurora-x/nexus
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aurora
+Group=aurora
+WorkingDirectory=/opt/aurora-x
+
+# Environment
+Environment="AURORA_ENV=production"
+Environment="AURORA_LOG_LEVEL=INFO"
+Environment="AURORA_MODULES_PATH=/opt/aurora-x/aurora_nexus_v3/modules"
+Environment="AURORA_REGISTRY_PATH=/opt/aurora-x/aurora_nexus_v3/modules_registry.json"
+Environment="AURORA_AUTONOMY_LEVEL=hybrid"
+EnvironmentFile=-/etc/aurora-x/aurora.env
+
+# Execution
+ExecStartPre=/usr/bin/python3 -c "import aurora_nexus_v3; print('Modules loaded')"
+ExecStart=/usr/bin/python3 -m aurora_nexus_v3.core.hybrid_orchestrator
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill -TERM $MAINPID
+
+# Restart policy
+Restart=always
+RestartSec=10
+TimeoutStartSec=60
+TimeoutStopSec=30
+
+# Resource limits
+MemoryMax=2G
+CPUQuota=100%
+TasksMax=1024
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/aurora-x/data /opt/aurora-x/logs /tmp
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=aurora-nexus
+
+[Install]
+WantedBy=multi-user.target

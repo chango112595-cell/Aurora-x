@@ -1,7 +1,23 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, real, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+export const knowledgeDocuments = pgTable("knowledge_documents", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  text: text("text").notNull(),
+  embedding: real("embedding").array().notNull(),
+  source: varchar("source", { length: 255 }),
+  category: varchar("category", { length: 100 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertKnowledgeDocumentSchema = createInsertSchema(knowledgeDocuments).omit({
+  createdAt: true,
+});
+
+export type InsertKnowledgeDocument = z.infer<typeof insertKnowledgeDocumentSchema>;
+export type KnowledgeDocument = typeof knowledgeDocuments.$inferSelect;
 
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

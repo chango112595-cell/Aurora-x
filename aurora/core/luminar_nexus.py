@@ -1170,7 +1170,7 @@ class AuroraConversationalAI:
         - Ancient (1940s-60s): Paper tape debugging, toggle switches, punch card verification
         - Classical (70s-80s): printf debugging, gdb, strace, core dumps
         - Modern (90s-2010s): IDE debuggers, DevTools, profilers, Docker debugging
-        - AI-Native (2020s): GitHub Copilot, ChatGPT assistance, AI-powered diagnostics
+        - AI-Native (2020s): Code assistants, AI-powered diagnostics
         - Future (2030s+): Quantum debugging, neural interface diagnostics, self-evolving code
         - Sci-Fi: HAL 9000 self-diagnostic, Data's positronic brain introspection, Skynet autonomous improvement
 
@@ -4089,7 +4089,7 @@ I'm trained across the entire spectrum of computing history and speculative futu
 • Tier 14: Cloud (AWS, GCP, Azure, Kubernetes, Docker)
 
 **[EMOJI] CUTTING EDGE (2020s):**
-• Tier 15: AI/ML (Perceptrons -> GPT-4 -> LLMs with 100B+ params)
+• Tier 15: AI/ML (Perceptrons -> large-scale LLMs with 100B+ params)
 • Tier 16: Analytics & monitoring (observability, APM)
 • Tier 17: Gaming & XR (3D engines, VR/AR)
 • Tier 18: IoT & embedded systems
@@ -4160,7 +4160,7 @@ What project should we tackle together?"""
         # AI/ML specific
         elif (
             re.search(
-                r"(ai|ml|machine learning|neural|llm|gpt|transformer|model|deep learning)", msg)
+                r"(ai|ml|machine learning|neural|llm|transformer|model|deep learning)", msg)
             and "email" not in msg
         ):
             return """**TIER_15: AI/ML COMPLETE OMNISCIENT GRANDMASTER** [EMOJI]
@@ -4170,7 +4170,7 @@ I have mastery from ancient perceptrons to AGI to sci-fi AI!
 **Ancient (1943-1960s):** McCulloch-Pitts neurons, Perceptron, ELIZA
 **Classical (70s-90s):** Expert systems, backprop, SVMs, AI winters
 **Modern (2000s-10s):** Deep learning revolution, ImageNet, word2vec
-**Cutting Edge (2020-25):** Transformers, GPT/Claude/Gemini, diffusion models, LLMs with 100B+ params
+**Cutting Edge (2020-25):** Transformers, large language models, diffusion models, LLMs with 100B+ params
 **Future (2030s+):** AGI, quantum ML, brain-computer interfaces
 **Sci-Fi:** HAL 9000, Skynet, JARVIS, Samantha (Her), GLaDOS
 
@@ -4306,3 +4306,5 @@ def run_chat_server(port=5003):
     print("   Use 'python tools/luminar_nexus.py start-all' to start everything\n")
 
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
+
+

@@ -1,0 +1,29 @@
+{% macro type_and_default(field, type, required_in) -%}
+{{ required(field, type, required_in) }}{{ default(field, type, required_in) }}
+{%- endmacro %}
+
+{% macro required(field, type, required_in) -%}
+{{ type }}{% if field.required not in required_in %} | None{% endif %}
+{%- endmacro %}
+
+{% macro default(field, type, required_in) -%}
+{% if field.required not in required_in -%}
+ = {% if field.default is defined %}{{ field.default }}{% else %}None{% endif %}
+{%- endif %}
+{%- endmacro %}
+
+{% macro list_field(name, list_type) -%}
+{% if list_type in ["int", "str"] -%}
+{{ name }}: list[{{ list_type }}]
+{%- else -%}
+{{ name }}: ListOf{{ name | capitalize }}[{{ list_type }}]
+{%- endif -%}
+{%- endmacro %}
+
+{% macro lifecycle_type(type, existing_product_blocks, lifecycle) -%}
+{% if type in existing_product_blocks -%}
+{{ type }}Block{{ lifecycle }}
+{%- else -%}
+{{ type }}
+{%- endif -%}
+{%- endmacro %}

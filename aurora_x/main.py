@@ -1,7 +1,5 @@
 """
-Main
-
-Comprehensive module documentation explaining purpose, usage, and architecture.
+Aurora-X main module with corpus integration and learning weights.
 
 This module is part of Aurora's ecosystem and follows perfect code quality standards.
 All functions are fully documented with type hints and error handling.
@@ -9,10 +7,6 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
-
-#!/usr/bin/env python3
-"""Aurora-X main module with corpus integration and learning weights."""
-
 from __future__ import annotations
 
 import argparse
@@ -548,6 +542,9 @@ def main():
 
     # ----- Show bias mode (no synthesis) -----
     if args.show_bias:
+        if outdir is None:
+            print("[AURORA-X] Error: --outdir required for --show-bias")
+            return 1
         run_root = outdir / "latest"
         weights_file = run_root / "learn_weights.json"
         if weights_file.exists():
@@ -563,6 +560,9 @@ def main():
 
     # ----- Corpus dump mode (no synthesis) -----
     if args.dump_corpus:
+        if outdir is None:
+            print("[AURORA-X] Error: --outdir required for --dump-corpus")
+            return 1
         run_root = outdir / "run-dump"
         run_root.mkdir(parents=True, exist_ok=True)
         rows = corpus_retrieve(run_root, args.dump_corpus, k=max(1, args.top))
@@ -620,20 +620,6 @@ class AuroraX:
             run, build_module, synthesize_best, save_run_config
         """
     def __init__(
-        """
-              Init  
-            
-            Args:
-                seed: seed
-                max_iters: max iters
-                beam: beam
-                timeout_s: timeout s
-                outdir: outdir
-                rng_cfg: rng cfg
-                disable_seed: disable seed
-                seed_bias_override: seed bias override
-                baseline: baseline
-            """
         self,
         seed: int,
         max_iters: int,
@@ -645,6 +631,20 @@ class AuroraX:
         seed_bias_override: float | None = None,
         baseline: Path | None = None,
     ):
+        """
+        Initialize AuroraX synthesis engine.
+        
+        Args:
+            seed: Random seed for reproducibility
+            max_iters: Maximum synthesis iterations
+            beam: Beam search width
+            timeout_s: Timeout in seconds
+            outdir: Output directory path
+            rng_cfg: RNG configuration dictionary
+            disable_seed: Whether to disable seed learning
+            seed_bias_override: Override value for seed bias
+            baseline: Path to baseline for comparison
+        """
         random.seed(seed)
         self._start_time = time.time()
         self.repo = Repo.create(outdir)
@@ -678,6 +678,7 @@ class AuroraX:
             # Gather seed snippets from corpus
             seed_snippets: list[str] = []
             sig = f"{f.name}({', '.join(a + ': ' + t for a, t in f.args)}) -> {f.returns}"
+            seed_key: str = ""
 
             if not self.disable_seed:
                 # Get seed bias for this function
@@ -696,7 +697,7 @@ class AuroraX:
                     self.adaptive_scheduler.tick()
 
             # Synthesize (stub - would call actual synthesis)
-            cand = type("obj", (object,), {"src": "def stub(): pass"})()
+            cand_src = "def stub(): pass"
 
             # Record to corpus
             corpus_entry = {
@@ -705,15 +706,15 @@ class AuroraX:
                 "passed": 1,
                 "total": 1,
                 "score": 1.0,
-                "snippet": cand.src,
+                "snippet": cand_src,
                 **spec_digest(spec_text),
             }
             corpus_record(self.repo.root, corpus_entry)
 
-            best_map[f.name] = cand.src
+            best_map[f.name] = cand_src
 
             # Update seed store with result
-            if not self.disable_seed:
+            if not self.disable_seed and seed_key:
                 success = corpus_entry["passed"] == corpus_entry["total"]
                 result = {"seed_key": seed_key, "score": corpus_entry["score"], "success": success}
                 self.seed_store.update(result)
@@ -723,7 +724,7 @@ class AuroraX:
                     self.adaptive_scheduler.reward(seed_key, success, magnitude=corpus_entry["score"])
 
             # Learning nudge (keep legacy for backward compat)
-            won_with_seed = _seed_won(cand.src, seed_snippets)
+            won_with_seed = _seed_won(cand_src, seed_snippets)
             self.weights["seed_bias"] = learn.update_seed_bias(float(self.weights.get("seed_bias", 0.0)), won_with_seed)
             learn.save(self.repo.root, self.weights)
 

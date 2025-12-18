@@ -24,13 +24,31 @@ export default function UnifiedAuroraChat({ compact = false, theme = 'profession
   const [input, setInput] = useState('');
   const [connected, setConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [tiersActive, setTiersActive] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const fetchCapabilities = async () => {
+      try {
+        const res = await fetch('/api/nexus-v3/capabilities');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (typeof data.tiers === 'number') {
+          setTiersActive(data.tiers);
+        }
+      } catch (error) {
+        console.error('[UnifiedAuroraChat] Capabilities fetch failed:', error);
+      }
+    };
+    fetchCapabilities();
+  }, []);
+
+  useEffect(() => {
     // Aurora welcome message
+    const tierLabel = tiersActive ? `${tiersActive}` : 'available';
     const welcomeMessage = compact
       ? "Hey — I'm Aurora. Chat with me from the sidebar. Ask anything!"
-      : "Hey! 👋 Aurora here with all 66 knowledge tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?";
+      : `Hey! 👋 Aurora here with all ${tierLabel} knowledge tiers active.\n\nI can help you:\n• Build anything (web, mobile, cloud, AI)\n• Debug any issue\n• Explain complex concepts\n• Review and optimize code\n\nJust chat naturally with me - I understand context! What's on your mind?`;
 
     setMessages([{
       id: '0',
@@ -39,7 +57,7 @@ export default function UnifiedAuroraChat({ compact = false, theme = 'profession
       timestamp: new Date(),
     }]);
     setConnected(true);
-  }, [compact]);
+  }, [compact, tiersActive]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -128,7 +146,7 @@ export default function UnifiedAuroraChat({ compact = false, theme = 'profession
               </div>
               <Badge className="bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-4 py-2">
                 <Zap className="h-4 w-4 mr-1" />
-                53 TIERS ACTIVE
+                {tiersActive ? `${tiersActive} TIERS ACTIVE` : 'TIERS ACTIVE'}
               </Badge>
             </div>
           </div>

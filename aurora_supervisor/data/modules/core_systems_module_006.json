@@ -1,0 +1,13 @@
+{
+  "id": 6,
+  "name": "core_systems_module_006",
+  "category": "core_systems",
+  "tier_id": 6,
+  "tier_name": "tier_006",
+  "aem_id": 6,
+  "aem_type": "sync",
+  "status": "generated",
+  "created_at": "Tue Dec  9 21:41:05 2025",
+  "validated_at": null,
+  "fused_at": null
+}

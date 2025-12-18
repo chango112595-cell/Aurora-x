@@ -1,0 +1,32 @@
+name: Build & Sign Release
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Build updater tar
+        run: |
+          tar czf aurora-update.tar.gz aurora_core aurora_os.py aurora_modules || true
+          sha256sum aurora-update.tar.gz > aurora-update.tar.gz.sha256
+      - name: Import GPG (secret base64)
+        env:
+          GPG_PRIVATE: ${{ secrets.GPG_PRIVATE }}
+        run: |
+          echo "$GPG_PRIVATE" | base64 --decode > gpg.key
+          gpg --batch --import gpg.key
+      - name: Sign update
+        run: gpg --armor --detach-sign aurora-update.tar.gz
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: aurora_update
+          path: |
+            aurora-update.tar.gz
+            aurora-update.tar.gz.asc
+            aurora-update.tar.gz.sha256

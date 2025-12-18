@@ -41,22 +41,10 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
-    allowedHosts: [
-      '.replit.dev',
-      '.repl.co',
-      '.app.github.dev',
-      '.preview.app.github.dev',
-    ],
+    allowedHosts: true,
     fs: {
       strict: true,
       deny: ["**/.*"],
-    },
-    hmr: {
-      timeout: 30000,
-      overlay: false,
-      // For Codespaces/GitHub dev containers
-      host: 'localhost',
-      port: 5173,
     },
     watch: {
       usePolling: false,

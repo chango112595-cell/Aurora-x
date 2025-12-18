@@ -38,7 +38,7 @@ export function AuroraStatus() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {statusItems.map((item) => (
-        <Card key={item.title} className="hover-elevate" data-testid={`card-status-${item.title.toLowerCase().replace(' ', '-')}`}>
+        <Card key={`status-${item.title}`} className="hover-elevate" data-testid={`card-status-${item.title.toLowerCase().replace(' ', '-')}`}>
           <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{item.title}</CardTitle>
             <item.icon className={`h-4 w-4 ${item.color}`} />

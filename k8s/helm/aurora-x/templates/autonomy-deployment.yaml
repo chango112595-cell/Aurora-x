@@ -1,0 +1,84 @@
+{{- if .Values.autonomy.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "aurora-x.fullname" . }}-autonomy
+  labels:
+    {{- include "aurora-x.labels" . | nindent 4 }}
+    app.kubernetes.io/component: autonomy
+spec:
+  replicas: {{ .Values.autonomy.replicas }}
+  selector:
+    matchLabels:
+      {{- include "aurora-x.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: autonomy
+  template:
+    metadata:
+      labels:
+        {{- include "aurora-x.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: autonomy
+    spec:
+      serviceAccountName: {{ include "aurora-x.serviceAccountName" . }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: autonomy-manager
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["python3", "-m", "aurora_nexus_v3.autonomy.manager"]
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          env:
+            - name: AURORA_ENV
+              value: {{ .Values.aurora.env | quote }}
+            - name: AURORA_LOG_LEVEL
+              value: {{ .Values.aurora.logLevel | quote }}
+            - name: AURORA_AUTONOMY_LEVEL
+              value: {{ .Values.aurora.autonomyLevel | quote }}
+            - name: AURORA_SANDBOX_TYPE
+              value: {{ .Values.aurora.sandboxType | quote }}
+            - name: ETCD_FALLBACK_ENABLED
+              value: "true"
+          envFrom:
+            - secretRef:
+                name: {{ include "aurora-x.fullname" . }}-secrets
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.autonomy.resources | nindent 12 }}
+          volumeMounts:
+            - name: etcd-fallback
+              mountPath: /app/data/etcd_fallback
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: etcd-fallback
+          {{- if .Values.persistence.etcdFallback.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "aurora-x.fullname" . }}-etcd-fallback
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: tmp
+          emptyDir: {}
+{{- end }}

@@ -1,0 +1,97 @@
+================================================================================
+                    AURORA PROJECT ISSUES REPORT
+                    Generated: December 18, 2025
+================================================================================
+
+SUMMARY
+-------
+Aurora-X is configured to run self-contained with no external AI APIs.
+
+Key points:
+- Chat routing: `server/aurora-local-service.ts` -> Luminar Nexus V2 (local)
+- Persistence: SQLite fallback for local storage (default); PostgreSQL optional via `DATABASE_URL`
+- GitHub: preserved; repo operations require `AURORA_GH_TOKEN`
+- Backups: `.aurora_backup` files and `backups/` artifacts are retained and not required at runtime
+
+STATUS UPDATE (December 18, 2025)
+---------------------------------
+- External AI APIs: Removed from code/docs/artifacts (scan shows 0 references)
+- Local storage: `/api/database/status` reports provider `sqlite` when Postgres is unavailable
+- Comparison endpoint: `/api/bridge/comparison/aurora-runs` exists
+- Self-healing endpoint: `/api/self-healing/status` exists
+- Pack summary: reads real `packs/` directory and manifests
+- Browserslist warning: Resolved (caniuse-lite updated via `npx update-browserslist-db@latest`)
+- Build verification: `npm run check` (TypeScript) and `npm run build` (Vite) succeed
+- Python validation: `python -m compileall` succeeds for core/runtime directories
+
+================================================================================
+                    1. CRITICAL (Blockers)
+================================================================================
+
+None for self-contained local mode.
+
+If you require PostgreSQL in production deployments:
+- Ensure `DATABASE_URL` is set and reachable.
+- `/api/database/status` will return provider `postgres` only when the connection is valid.
+
+================================================================================
+                    2. HIGH PRIORITY (Operational)
+================================================================================
+
+ISSUE A: Python services not running
+-----------------------------------
+Symptoms:
+- `/api/nexus-v3/status` fails or times out
+- Luminar endpoints not responding
+
+Notes:
+- Aurora spawns local Python services (Luminar, Nexus V3, Memory Fabric) and expects Python 3.11+.
+
+Fix:
+- Install Python 3.11+ and required packages, then start services via the launcher scripts or `npm run dev`.
+
+ISSUE B: GitHub token missing for repo operations
+-------------------------------------------------
+Symptoms:
+- Endpoints that call GitHub API fail with auth errors.
+
+Fix:
+- Set `AURORA_GH_TOKEN` for any GitHub-backed functionality.
+
+================================================================================
+                    3. MEDIUM PRIORITY (Quality / Cleanup)
+================================================================================
+
+ISSUE C: `.aurora_backup` files are not required
+------------------------------------------------
+Status:
+- Backups are ignored by git (`.gitignore`) and not imported by runtime.
+- Current inventory: 291 backups total (263 identical, 27 different, 1 missing original).
+
+Recommendation:
+- Keep them for reference, or prune/relocate them once reviewed.
+
+ISSUE D: Browserslist database outdated
+--------------------------------------
+Status:
+- Resolved. `npx update-browserslist-db@latest` refreshed the local browsers data.
+
+================================================================================
+                    4. DEFERRED (Long-term Refactors)
+================================================================================
+
+- Centralized error handling standardization (server/client)
+- Optional: unify pack metadata sources between server and Nexus V3
+
+================================================================================
+                    5. VERIFIED ENDPOINTS
+================================================================================
+
+- Health: `GET /api/health`
+- Storage: `GET /api/database/status`
+- Self-healing: `GET /api/self-healing/status`
+- Comparison: `GET /api/bridge/comparison/aurora-runs`
+
+================================================================================
+                    END OF REPORT
+================================================================================

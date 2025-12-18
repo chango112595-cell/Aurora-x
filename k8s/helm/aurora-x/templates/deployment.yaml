@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "aurora-x.fullname" . }}
+  labels:
+    {{- include "aurora-x.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "aurora-x.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "aurora-x.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "aurora-x.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+            - name: metrics
+              containerPort: {{ .Values.service.metricsPort }}
+              protocol: TCP
+          env:
+            - name: AURORA_ENV
+              value: {{ .Values.aurora.env | quote }}
+            - name: AURORA_LOG_LEVEL
+              value: {{ .Values.aurora.logLevel | quote }}
+            - name: AURORA_MODULES_PATH
+              value: {{ .Values.aurora.modulesPath | quote }}
+            - name: AURORA_REGISTRY_PATH
+              value: {{ .Values.aurora.registryPath | quote }}
+            - name: AURORA_AUTONOMY_LEVEL
+              value: {{ .Values.aurora.autonomyLevel | quote }}
+            - name: AURORA_SANDBOX_TYPE
+              value: {{ .Values.aurora.sandboxType | quote }}
+          envFrom:
+            - secretRef:
+                name: {{ include "aurora-x.fullname" . }}-secrets
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: modules-data
+              mountPath: {{ .Values.aurora.modulesPath }}
+            - name: registry-data
+              mountPath: /app/data
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: modules-data
+          {{- if .Values.persistence.modules.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "aurora-x.fullname" . }}-modules
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: registry-data
+          {{- if .Values.persistence.registry.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "aurora-x.fullname" . }}-registry
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
