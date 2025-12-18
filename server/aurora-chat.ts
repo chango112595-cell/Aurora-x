@@ -200,7 +200,7 @@ async function analyzeCodebaseIssues(): Promise<string> {
     }
     
     const checkPaths = [
-      'server/anthropic-service.ts',
+      'server/aurora-local-service.ts',
       'server/aurora.ts',
       'server/aurora-core.ts',
     ];
@@ -260,18 +260,6 @@ async function analyzeIntegrationStatus(): Promise<string> {
   };
   
   const cwd = process.cwd();
-  
-  if (process.env.ANTHROPIC_API_KEY) {
-    status.working.push('Anthropic API (key configured)');
-  } else {
-    status.notWorking.push('Anthropic API (ANTHROPIC_API_KEY not set)');
-  }
-  
-  if (process.env.OPENAI_API_KEY) {
-    status.working.push('OpenAI API (key configured)');
-  } else {
-    status.unknown.push('OpenAI API (key not set - may not be needed)');
-  }
   
   if (process.env.DATABASE_URL || process.env.PGHOST) {
     status.working.push('PostgreSQL Database (configured)');

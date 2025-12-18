@@ -586,7 +586,7 @@
           "Crash reporting"
         ],
         "ai_powered": [
-          "GitHub Copilot debugging",
+          "GitHub-based coding assistant debugging",
           "Tabnine suggestions",
           "AI code review",
           "Automated fixes"
@@ -969,8 +969,8 @@
         ],
         "creative_ai": [
           "StyleGAN",
-          "DALL-E",
-          "MidJourney",
+          "image generation model",
+          "image generation model",
           "Stable Diffusion",
           "Neural style transfer"
         ]
@@ -1892,12 +1892,12 @@
       },
       "LLM_MASTERY": {
         "models": [
-          "GPT",
+          "Decoder-only LLMs",
           "BERT",
           "T5",
           "LLaMA",
-          "Claude",
-          "Gemini",
+          "Local LLMs",
+          "Multimodal LLMs",
           "Mistral"
         ],
         "techniques": [

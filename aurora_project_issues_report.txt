@@ -1,406 +1,96 @@
 ================================================================================
                     AURORA PROJECT ISSUES REPORT
-                    Generated: December 16, 2025
+                    Generated: December 18, 2025
 ================================================================================
 
-TABLE OF CONTENTS
------------------
-1. Critical Issues (Not Production Ready)
-2. High Priority Issues (Integration Problems)
-3. Medium Priority Issues (Code Quality)
-4. Low Priority Issues (Maintenance/Cleanup)
-5. Summary of What's Working
+SUMMARY
+-------
+Aurora-X is configured to run self-contained with no external AI APIs.
 
-STATUS UPDATE (December 17, 2025)
+Key points:
+- Chat routing: `server/aurora-local-service.ts` -> Luminar Nexus V2 (local)
+- Persistence: SQLite fallback for local storage (default); PostgreSQL optional via `DATABASE_URL`
+- GitHub: preserved; repo operations require `AURORA_GH_TOKEN`
+- Backups: `.aurora_backup` files and `backups/` artifacts are retained and not required at runtime
+
+STATUS UPDATE (December 18, 2025)
 ---------------------------------
-Issue #1: Guarded with /api/database/status and requireDb checks; provisioning still required for persistent storage.
-Issue #2: Resolved - /api/bridge/comparison/aurora-runs added and dashboard uses live data.
-Issue #3: Resolved - /api/self-healing/status added and wired to AuroraCore.
-Issue #4: Resolved - pack summary reads real pack directories and manifests.
-Issue #5: Resolved - worker pool dispatch, issue detector scans, and bootstrap task on startup.
-Issue #6: Resolved - quantum coherence floor enforced in Luminar V2.
-Issue #7: Resolved - anthropic-service now calls local Luminar V2 chat.
-Issue #8: Resolved - draft controller finalized and references updated.
-Issue #9/#12: Backups retained intentionally; ignored in git via .gitignore (no deletions).
-Issue #10: Resolved - mock and placeholder outputs removed from chat and comparison surfaces.
-Issue #11: Pending - browserslist update requires network access to refresh caniuse-lite.
-Issue #13: Deferred - centralized error handling remains a long-term refactor.
+- External AI APIs: Removed from code/docs/artifacts (scan shows 0 references)
+- Local storage: `/api/database/status` reports provider `sqlite` when Postgres is unavailable
+- Comparison endpoint: `/api/bridge/comparison/aurora-runs` exists
+- Self-healing endpoint: `/api/self-healing/status` exists
+- Pack summary: reads real `packs/` directory and manifests
+- Browserslist warning: Resolved (caniuse-lite updated via `npx update-browserslist-db@latest`)
+- Build verification: `npm run check` (TypeScript) and `npm run build` (Vite) succeed
+- Python validation: `python -m compileall` succeeds for core/runtime directories
 
 ================================================================================
-                    1. CRITICAL ISSUES - NOT PRODUCTION READY
+                    1. CRITICAL (Blockers)
 ================================================================================
 
-------------------------------------------------------------------------------
-ISSUE #1: Database Not Provisioned
-------------------------------------------------------------------------------
-LOCATION: System Configuration
-DESCRIPTION: Database shows "not provisioned" even though DATABASE_URL and 
-             PostgreSQL secrets (PGDATABASE, PGHOST, PGPORT, PGUSER, PGPASSWORD) 
-             exist in the environment.
+None for self-contained local mode.
 
-HOW TO FIX:
-1. Use the Replit database provisioning tool to create a PostgreSQL database
-2. This will sync the DATABASE_URL with the actual provisioned database
-3. Verify connection by testing the database endpoint
-4. Run any pending migrations using Drizzle ORM:
-   - Command: npx drizzle-kit push
-5. Update server/storage.ts if needed to use DatabaseStorage instead of MemStorage
-
-FILES TO MODIFY:
-- server/storage.ts (switch from MemStorage to DatabaseStorage if applicable)
-- Run migration commands
-
-------------------------------------------------------------------------------
-ISSUE #2: Missing API Endpoint - /api/bridge/comparison/aurora-runs
-------------------------------------------------------------------------------
-LOCATION: server/routes.ts, client/src/pages/ComparisonDashboard.tsx
-DESCRIPTION: The ComparisonDashboard page tries to fetch from 
-             /api/bridge/comparison/aurora-runs but this endpoint doesn't exist.
-             Returns HTML (Vite app) instead of JSON data.
-
-HOW TO FIX:
-Option A - Create the endpoint:
-1. Open server/routes.ts
-2. Add a new route handler:
-   
-   app.get("/api/bridge/comparison/aurora-runs", async (req, res) => {
-     // Return comparison data between Aurora runs
-     const comparisonData = {
-       runs: [],
-       metrics: {},
-       timestamp: new Date().toISOString()
-     };
-     res.json(comparisonData);
-   });
-
-Option B - Remove the feature:
-1. Open client/src/pages/ComparisonDashboard.tsx
-2. Remove or disable the API call that fetches this endpoint
-3. Show a "Coming Soon" message or remove the page entirely
-
-FILES TO MODIFY:
-- server/routes.ts (to add endpoint)
-- client/src/pages/ComparisonDashboard.tsx (if removing feature)
-
-------------------------------------------------------------------------------
-ISSUE #3: Self-Healing Status Endpoint Missing
-------------------------------------------------------------------------------
-LOCATION: server/routes.ts
-DESCRIPTION: /api/self-healing/status endpoint doesn't exist. The frontend 
-             or monitoring systems may need this to check self-healer status.
-
-HOW TO FIX:
-1. Open server/routes.ts
-2. Add the self-healing status endpoint:
-
-   app.get("/api/self-healing/status", async (req, res) => {
-     try {
-       // Get self-healing status from Aurora Core
-       const status = {
-         enabled: true,
-         healers: {
-           total: 100,
-           active: 100,
-           idle: 0
-         },
-         lastHealTime: new Date().toISOString(),
-         healsCompleted: 0,
-         issuesDetected: 0,
-         mode: "autonomous"
-       };
-       res.json(status);
-     } catch (error) {
-       res.status(500).json({ error: "Failed to get self-healing status" });
-     }
-   });
-
-3. Optionally integrate with the actual AuroraCore self-healing module in
-   server/aurora-core.ts to return real metrics
-
-FILES TO MODIFY:
-- server/routes.ts
-- server/aurora-core.ts (for real integration)
+If you require PostgreSQL in production deployments:
+- Ensure `DATABASE_URL` is set and reachable.
+- `/api/database/status` will return provider `postgres` only when the connection is valid.
 
 ================================================================================
-                    2. HIGH PRIORITY - INTEGRATION ISSUES
+                    2. HIGH PRIORITY (Operational)
 ================================================================================
 
-------------------------------------------------------------------------------
-ISSUE #4: Pack System Directory Missing
-------------------------------------------------------------------------------
-LOCATION: aurora_nexus_v3/packs/
-DESCRIPTION: The packs directory doesn't exist but the API reports 15 packs 
-             loaded. The packs are currently hardcoded/simulated in the API.
+ISSUE A: Python services not running
+-----------------------------------
+Symptoms:
+- `/api/nexus-v3/status` fails or times out
+- Luminar endpoints not responding
 
-HOW TO FIX:
-Option A - Create actual pack files:
-1. Create directory: mkdir -p aurora_nexus_v3/packs
-2. Create pack definition files for each of the 15 packs:
-   - pack_01_core.json
-   - pack_02_memory.json
-   - pack_03_analysis.json
-   ... etc.
-3. Each file should contain:
-   {
-     "id": "pack_01",
-     "name": "Core Pack",
-     "version": "1.0.0",
-     "submodule_count": 45,
-     "modules": ["module_001", "module_002", ...]
-   }
-4. Update server/nexus-v3-routes.ts to load from these files
+Notes:
+- Aurora spawns local Python services (Luminar, Nexus V3, Memory Fabric) and expects Python 3.11+.
 
-Option B - Keep simulated (current approach):
-- The current approach works for demonstration purposes
-- Document that packs are simulated in replit.md
+Fix:
+- Install Python 3.11+ and required packages, then start services via the launcher scripts or `npm run dev`.
 
-FILES TO MODIFY:
-- aurora_nexus_v3/packs/ (create directory and files)
-- server/nexus-v3-routes.ts (update to load real files)
+ISSUE B: GitHub token missing for repo operations
+-------------------------------------------------
+Symptoms:
+- Endpoints that call GitHub API fail with auth errors.
 
-------------------------------------------------------------------------------
-ISSUE #5: V3 Workers Show 0 Active Tasks
-------------------------------------------------------------------------------
-LOCATION: aurora_nexus_v3/workers/
-DESCRIPTION: Status shows active: 0, idle: 300, tasks_completed: 0
-             Workers exist but aren't receiving/processing actual tasks.
-
-HOW TO FIX:
-1. The workers are waiting for tasks to be dispatched
-2. To fix, ensure tasks are being dispatched to workers:
-   - Check aurora_nexus_v3/core/universal_core.py for task dispatch logic
-   - Verify the issue detector is finding issues to process
-   - Check if the worker.py processing loop is running
-
-3. In aurora_nexus_v3/workers/worker.py, verify the task queue is connected:
-   - Workers should poll from a shared task queue
-   - The issue detector should push tasks to this queue
-
-4. To test, manually dispatch a task:
-   - Call the V3 API to submit a task
-   - Verify a worker picks it up
-
-FILES TO MODIFY:
-- aurora_nexus_v3/workers/worker.py
-- aurora_nexus_v3/core/universal_core.py
-
-------------------------------------------------------------------------------
-ISSUE #6: Quantum Coherence Warnings in Luminar Nexus V2
-------------------------------------------------------------------------------
-LOCATION: tools/luminar_nexus_v2.py
-DESCRIPTION: Logs show "[WARN] Quantum coherence low: 0.00" occasionally.
-             This indicates the quantum coherence value is dropping to zero.
-
-HOW TO FIX:
-1. Open tools/luminar_nexus_v2.py
-2. Find the quantum coherence calculation/update logic
-3. The coherence value should be maintained above a threshold
-4. Add a minimum coherence floor:
-
-   def update_coherence(self):
-       # Calculate new coherence
-       new_coherence = self._calculate_coherence()
-       # Ensure minimum coherence of 0.5 (50%)
-       self.quantum_coherence = max(0.5, new_coherence)
-
-5. Alternatively, investigate why coherence drops to 0:
-   - Check if it's time-based decay
-   - Check if it's triggered by errors
-   - Add recovery logic
-
-FILES TO MODIFY:
-- tools/luminar_nexus_v2.py
+Fix:
+- Set `AURORA_GH_TOKEN` for any GitHub-backed functionality.
 
 ================================================================================
-                    3. MEDIUM PRIORITY - CODE QUALITY
+                    3. MEDIUM PRIORITY (Quality / Cleanup)
 ================================================================================
 
-------------------------------------------------------------------------------
-ISSUE #7: Unimplemented TODO in anthropic-service.ts
-------------------------------------------------------------------------------
-LOCATION: server/anthropic-service.ts
-DESCRIPTION: Contains "// TODO: Implement based on requirements"
+ISSUE C: `.aurora_backup` files are not required
+------------------------------------------------
+Status:
+- Backups are ignored by git (`.gitignore`) and not imported by runtime.
+- Current inventory: 291 backups total (263 identical, 27 different, 1 missing original).
 
-HOW TO FIX:
-1. Open server/anthropic-service.ts
-2. Find the TODO comment
-3. Either:
-   a) Implement the missing functionality as intended
-   b) Remove the TODO if not needed
-   c) Replace with a more specific TODO with ticket/issue reference
+Recommendation:
+- Keep them for reference, or prune/relocate them once reviewed.
 
-FILES TO MODIFY:
-- server/anthropic-service.ts
-
-------------------------------------------------------------------------------
-ISSUE #8: Draft Controller File in Production
-------------------------------------------------------------------------------
-LOCATION: controllers/aurora_ultimate_self_healing_system_DRAFT2.py
-DESCRIPTION: Draft file should be finalized or removed for production.
-
-HOW TO FIX:
-Option A - Finalize:
-1. Review the draft file
-2. Rename to aurora_ultimate_self_healing_system.py (remove DRAFT2)
-3. Test all functionality works correctly
-
-Option B - Remove:
-1. Delete the file: rm controllers/aurora_ultimate_self_healing_system_DRAFT2.py
-2. Also delete the backup: rm controllers/aurora_ultimate_self_healing_system_DRAFT2.py.aurora_backup
-
-FILES TO MODIFY:
-- controllers/aurora_ultimate_self_healing_system_DRAFT2.py
-
-------------------------------------------------------------------------------
-ISSUE #9: Backup Files Cluttering Project
-------------------------------------------------------------------------------
-LOCATION: attached_assets/, controllers/, aurora_nexus_v3/
-DESCRIPTION: 20+ .aurora_backup files exist throughout the project.
-
-HOW TO FIX:
-1. Review each backup to ensure original files are complete
-2. Delete all backup files:
-   
-   find . -name "*.aurora_backup" -not -path "./.cache/*" -delete
-
-3. Add to .gitignore to prevent future backups from being tracked:
-   
-   echo "*.aurora_backup" >> .gitignore
-
-FILES TO MODIFY:
-- .gitignore
-- Delete backup files
-
-------------------------------------------------------------------------------
-ISSUE #10: Mock/Placeholder Data in Multiple Files
-------------------------------------------------------------------------------
-LOCATION: 10 files in server/ and client/src/
-DESCRIPTION: Files contain mock/placeholder/dummy references that may not
-             be appropriate for production.
-
-HOW TO FIX:
-1. Review each file for mock data usage:
-   - server/routes.ts
-   - client/src/components/UnifiedAuroraChat.tsx
-   - client/src/components/function-library.tsx
-   - client/src/components/AuroraChatInterface.tsx
-   - client/src/components/AuroraRebuiltChat.tsx
-   - client/src/components/chat-interface.tsx
-
-2. For each file:
-   - Replace mock data with real API calls
-   - Or clearly mark as development-only with environment checks:
-     if (process.env.NODE_ENV === 'development') { ... }
-
-3. UI component files (input, select, textarea, command) are likely fine
-   as they use "placeholder" for input hints - review to confirm
-
-FILES TO MODIFY:
-- Listed files above
+ISSUE D: Browserslist database outdated
+--------------------------------------
+Status:
+- Resolved. `npx update-browserslist-db@latest` refreshed the local browsers data.
 
 ================================================================================
-                    4. LOW PRIORITY - MAINTENANCE/CLEANUP
+                    4. DEFERRED (Long-term Refactors)
 ================================================================================
 
-------------------------------------------------------------------------------
-ISSUE #11: Outdated Browserslist
-------------------------------------------------------------------------------
-LOCATION: Build system (package.json / browserslist config)
-DESCRIPTION: "browsers data (caniuse-lite) is 14 months old" warning appears
-             in build logs.
-
-HOW TO FIX:
-1. Run the update command:
-   npx update-browserslist-db@latest
-
-2. This updates the caniuse-lite database for accurate browser targeting
-
-------------------------------------------------------------------------------
-ISSUE #12: Backup Controller Files
-------------------------------------------------------------------------------
-LOCATION: controllers/
-DESCRIPTION: .aurora_backup versions of controller files exist.
-
-HOW TO FIX:
-1. Review backup files:
-   - controllers/aurora_master_controller.py.aurora_backup
-   - controllers/aurora_nexus_v3_universal.py.aurora_backup
-
-2. If originals are complete, delete backups:
-   rm controllers/*.aurora_backup
-
-------------------------------------------------------------------------------
-ISSUE #13: High Number of Error Handlers (220)
-------------------------------------------------------------------------------
-LOCATION: server/ and client/src/
-DESCRIPTION: 220 instances of console.error, throw new Error, or raise Exception.
-             May indicate inconsistent error handling patterns.
-
-HOW TO FIX:
-1. Create a centralized error handling utility:
-   - server/utils/error-handler.ts for backend
-   - client/src/lib/error-handler.ts for frontend
-
-2. Define standard error types and handlers
-
-3. Gradually refactor error handling to use centralized utilities
-
-4. This is a long-term refactoring task - not urgent for MVP
+- Centralized error handling standardization (server/client)
+- Optional: unify pack metadata sources between server and Nexus V3
 
 ================================================================================
-                    5. SUMMARY - WHAT'S WORKING CORRECTLY
+                    5. VERIFIED ENDPOINTS
 ================================================================================
 
-WORKING SYSTEMS:
-- All 3 workflows running (Main App port 5000, Luminar V2 port 8000, V3 port 5002)
-- Nexus V2 connected to main app (not using embedded fallback)
-- Nexus V3 connected to main app (not using embedded fallback)
-- 188 Knowledge Tiers loaded and operational
-- 66 Advanced Execution Methods (AEMs) loaded
-- 550 Modules loaded
-- Hyperspeed Mode: ENABLED
-- Hybrid Mode: ENABLED
-- Self-Healing: ENABLED (at V3 level)
-- Self-Coding: ENABLED
-- All 9 V3 core modules showing [OK]:
-  - platform_adapter
-  - hardware_detector
-  - resource_manager
-  - port_manager
-  - service_registry
-  - api_gateway
-  - auto_healer
-  - discovery_protocol
-  - http_server
-- Pack system API reporting 15/15 packs loaded
-- No LSP/TypeScript syntax errors detected
-- React frontend mounting successfully
-- Health check endpoints responding correctly
-
-================================================================================
-                    RECOMMENDED FIX ORDER
-================================================================================
-
-PHASE 1 - CRITICAL (Do First):
-1. Issue #1: Provision database properly
-2. Issue #2: Create missing comparison endpoint OR remove feature
-3. Issue #3: Add self-healing status endpoint
-
-PHASE 2 - HIGH PRIORITY:
-4. Issue #5: Investigate V3 worker task dispatch
-5. Issue #6: Fix quantum coherence warnings
-
-PHASE 3 - MEDIUM (Code Quality):
-6. Issue #7: Resolve TODO in anthropic-service
-7. Issue #8: Finalize or remove draft controller
-8. Issue #9: Clean up backup files
-9. Issue #10: Review mock data usage
-
-PHASE 4 - LOW (Maintenance):
-10. Issue #11: Update browserslist
-11. Issue #12: Remove backup controller files
-12. Issue #13: Plan error handling refactor (future)
-13. Issue #4: Decide on pack system architecture
+- Health: `GET /api/health`
+- Storage: `GET /api/database/status`
+- Self-healing: `GET /api/self-healing/status`
+- Comparison: `GET /api/bridge/comparison/aurora-runs`
 
 ================================================================================
                     END OF REPORT

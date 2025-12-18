@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Aurora MCP Server - Model Context Protocol Server with HTTP REST API + WebSocket
-Exposes filesystem and process tools for external AI agents like ChatGPT and Claude
+Exposes filesystem and process tools for external AI clients
 """
 
 import asyncio
@@ -348,7 +348,7 @@ async def root():
                 "POST /fs/write": "Write to a file",
                 "POST /fs/list": "List directory contents",
                 "POST /process/run": "Run a shell command",
-                "GET /openapi.json": "OpenAPI schema for ChatGPT"
+                "GET /openapi.json": "OpenAPI schema for MCP clients"
             },
             "WebSocket": {
                 "WS /mcp": "WebSocket endpoint for MCP protocol - supports fs_read, fs_list, run, fs_write"
@@ -449,13 +449,13 @@ def main():
     print(f"\nLocal:  http://0.0.0.0:{port}")
     if replit_url:
         print(f"Public: https://{replit_url}")
-    print("\nHTTP Endpoints for ChatGPT Actions:")
+    print("\nHTTP Endpoints for MCP Actions:")
     print("  POST /fs/read    - Read file contents")
     print("  POST /fs/write   - Write to a file")
     print("  POST /fs/list    - List directory")
     print("  POST /process/run - Run shell command")
     print("  GET  /openapi.json - OpenAPI schema")
-    print("\nWebSocket for Claude/Other MCP Clients:")
+    print("\nWebSocket for MCP Clients:")
     print("  WS /mcp - Full MCP protocol support")
     print("\n" + "=" * 70 + "\n")
     

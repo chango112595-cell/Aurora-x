@@ -60,7 +60,7 @@ def log_to_activity_monitor(activity_type: str, message: str, details: dict | No
             "details": details or {}
         }).encode('utf-8')
         req = urllib.request.Request(
-            "http://0.0.0.0:5002/api/activity/log",
+            "http://127.0.0.1:5002/api/activity/log",
             data=data,
             headers={"Content-Type": "application/json"},
             method="POST"
@@ -1466,7 +1466,7 @@ class LuminarNexusV2:
                     })
                     
                     result = subprocess.run(
-                        ["python3", wrapper_path],
+                        [sys.executable, wrapper_path],
                         input=input_data,
                         capture_output=True,
                         text=True,

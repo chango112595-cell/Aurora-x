@@ -65,6 +65,8 @@ interface ComparisonItem {
     description: string;
     status: 'approved' | 'pending' | 'rejected';
     category: string;
+    impact?: string;
+    complexity?: string;
 }
 
 export default function ComparisonDashboard() {
@@ -786,10 +788,20 @@ export default function ComparisonDashboard() {
                                         <CardDescription className="text-slate-300 mb-4">
                                             {feature.description}
                                         </CardDescription>
-                                        <div className="flex gap-4 text-sm">
-                                            <span className="text-slate-400">Impact: <span className="text-cyan-400">{feature.impact}</span></span>
-                                            <span className="text-slate-400">Complexity: <span className="text-purple-400">{feature.complexity}</span></span>
-                                        </div>
+                                        {(feature.impact || feature.complexity) && (
+                                            <div className="flex gap-4 text-sm">
+                                                {feature.impact && (
+                                                    <span className="text-slate-400">
+                                                        Impact: <span className="text-cyan-400">{feature.impact}</span>
+                                                    </span>
+                                                )}
+                                                {feature.complexity && (
+                                                    <span className="text-slate-400">
+                                                        Complexity: <span className="text-purple-400">{feature.complexity}</span>
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
                                     </CardContent>
                                 </Card>
                             ))}

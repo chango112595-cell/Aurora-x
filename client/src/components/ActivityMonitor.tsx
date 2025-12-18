@@ -36,6 +36,7 @@ interface WorkerMetrics {
 
 interface SystemState {
   state: string;
+  status?: string;
   hyperspeed: boolean;
   autonomous: boolean;
   hybrid_mode: boolean;

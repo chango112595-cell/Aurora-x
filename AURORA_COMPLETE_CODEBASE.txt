@@ -1,4 +1,4 @@
-au================================================================================
+================================================================================
                     AURORA-X ULTRA - COMPLETE SYSTEM DOCUMENTATION
                     Version: 3.1.0 "Peak Autonomy"
                     Updated: December 16, 2025
@@ -62,7 +62,7 @@ Frontend:
   - TanStack Query
 
 AI Integration:
-  - Claude Sonnet 4 via Anthropic SDK
+  - Aurora Chat AI via Luminar Nexus V2 (local)
   - Aurora Chat AI with 10-turn memory
   
 Databases:
@@ -909,7 +909,6 @@ ENVIRONMENT VARIABLES:
 | NEXUS_V3_PORT         | 5002         | V3 service port            |
 | LUMINAR_PORT          | 8000         | Luminar service port       |
 | DATABASE_URL          | -            | PostgreSQL connection      |
-| ANTHROPIC_API_KEY     | -            | Claude API key             |
 | AURORA_MODE           | offline      | offline/cloud              |
 | HYPERSPEED_ENABLED    | false        | Enable hyperspeed mode     |
 | WORKER_COUNT          | 300          | Number of workers          |

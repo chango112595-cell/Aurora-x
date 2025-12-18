@@ -90,6 +90,12 @@ def send_text(msg: str) -> bool:
 
 
 def send_embed(
+    title: str,
+    description: str,
+    color: int = BLUE,
+    fields: list | None = None,
+    url: str | None = None,
+) -> bool:
     """
         Send Embed
         
@@ -103,12 +109,6 @@ def send_embed(
         Returns:
             Result of operation
         """
-    title: str,
-    description: str,
-    color: int = BLUE,
-    fields: list | None = None,
-    url: str | None = None,
-) -> bool:
     embed = {"title": title, "description": description, "color": color}
     if fields:
         embed["fields"] = fields

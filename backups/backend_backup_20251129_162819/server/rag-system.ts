@@ -27,16 +27,16 @@ if (process.env.PINECONE_API_KEY) {
 }
 
 // ══════════════════════════════════════════════════════════════
-// Vector Embedding (Simple placeholder - would use OpenAI in production)
+// Vector Embedding (Simple placeholder - would use a local model in production)
 // ══════════════════════════════════════════════════════════════
 
 /**
  * Generate embeddings for text
- * In production, this should use OpenAI's text-embedding-ada-002 or similar
+ * In production, this should use a local embedding model
  */
 async function generateEmbedding(text: string): Promise<number[]> {
   // Placeholder: Simple hash-based embedding
-  // TODO: Replace with actual embedding model (OpenAI, HuggingFace, etc.)
+  // TODO: Replace with actual embedding model (a local embedding model)
   
   const hash = simpleHash(text);
   const embedding = new Array(1536).fill(0).map((_, i) => 
@@ -206,3 +206,4 @@ export async function deleteFromKnowledgeBase(ids: string[]): Promise<boolean> {
 export function isRAGAvailable(): boolean {
   return index !== null;
 }
+

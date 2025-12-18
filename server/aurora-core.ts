@@ -15,7 +15,7 @@ import { resolvePythonCommand } from './python-runtime';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://0.0.0.0:8000";
+const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const MANIFEST_DIR = path.join(PROJECT_ROOT, "manifests");
 const PACKS_DIR = path.join(PROJECT_ROOT, "packs");
@@ -621,7 +621,7 @@ export class AuroraCore {
     
     // Worker pool health - check if workers are available
     const workerMetric = this.systemHealthMetrics.get('worker-pool')!;
-    const freeWorkers = this.workerPool.filter(w => w.status === 'idle').length;
+    const freeWorkers = this.workerPool.filter(w => !w.isBusy()).length;
     workerMetric.healthy = freeWorkers > 10; // At least 10% free
     workerMetric.lastCheck = Date.now();
     
@@ -653,7 +653,7 @@ export class AuroraCore {
     
     // Check Aurora Nexus V3 (port 5002)
     try {
-      const v3Response = await fetch('http://0.0.0.0:5002/api/status', {
+      const v3Response = await fetch('http://127.0.0.1:5002/api/status', {
         method: 'GET',
         signal: AbortSignal.timeout(2000)
       }).catch(() => null);

@@ -30,7 +30,7 @@ tests/test_runtime_loader.py — unit tests.
 Save as pack03_3C.patch.
 
 From 2222222222222222222222222222222222222222 Mon Sep 17 00:00:00 2001
-From: AuroraGPT <aurora@gpt.local>
+From: AuroraLocal <aurora@aurora.local>
 Date: Mon, 01 Dec 2025 00:10:00 +0000
 Subject: [PATCH] pack03 3C: Runtime loader & multi-runtime manager
 
@@ -179,7 +179,7 @@ Save as `pack03_3D.patch`.
 
 
 From 3333333333333333333333333333333333333333 Mon Sep 17 00:00:00 2001
-From: AuroraGPT aurora@gpt.local
+From: AuroraLocal aurora@aurora.local
 
 Date: Mon, 01 Dec 2025 00:12:00 +0000
 Subject: [PATCH] pack03 3D: Cross-language IPC bridge (python <-> node)
@@ -316,7 +316,7 @@ tests/test_lifecycle.py
 Save as pack03_3E.patch.
 
 From 4444444444444444444444444444444444444444 Mon Sep 17 00:00:00 2001
-From: AuroraGPT <aurora@gpt.local>
+From: AuroraLocal <aurora@aurora.local>
 Date: Mon, 01 Dec 2025 00:14:00 +0000
 Subject: [PATCH] pack03 3E: Module lifecycle manager (load/activate/hotswap)
 
@@ -421,7 +421,7 @@ Save as `pack03_3F.patch`.
 
 
 From 5555555555555555555555555555555555555555 Mon Sep 17 00:00:00 2001
-From: AuroraGPT aurora@gpt.local
+From: AuroraLocal aurora@aurora.local
 
 Date: Mon, 01 Dec 2025 00:16:00 +0000
 Subject: [PATCH] pack03 3F: Virtual networking layer (local service mesh)
@@ -599,7 +599,7 @@ tests/test_security.py
 Save as pack03_3G.patch.
 
 From 6666666666666666666666666666666666666666 Mon Sep 17 00:00:00 2001
-From: AuroraGPT <aurora@gpt.local>
+From: AuroraLocal <aurora@aurora.local>
 Date: Mon, 01 Dec 2025 00:18:00 +0000
 Subject: [PATCH] pack03 3G: Security layer (policy loader, seccomp hints)
 
@@ -683,7 +683,7 @@ Save as `pack03_3H.patch`.
 
 
 From 7777777777777777777777777777777777777777 Mon Sep 17 00:00:00 2001
-From: AuroraGPT aurora@gpt.local
+From: AuroraLocal aurora@aurora.local
 
 Date: Mon, 01 Dec 2025 00:20:00 +0000
 Subject: [PATCH] pack03 3H: OS health & diagnostics
@@ -762,7 +762,7 @@ manifest ci hints (very small)
 Save as pack03_3I.patch.
 
 From 8888888888888888888888888888888888888888 Mon Sep 17 00:00:00 2001
-From: AuroraGPT <aurora@gpt.local>
+From: AuroraLocal <aurora@aurora.local>
 Date: Mon, 01 Dec 2025 00:22:00 +0000
 Subject: [PATCH] pack03 3I: Test aggregator & CI run script
 
@@ -797,7 +797,7 @@ small pack03_integration.md
 Save as pack03_3J.patch.
 
 From 9999999999999999999999999999999999999999 Mon Sep 17 00:00:00 2001
-From: AuroraGPT <aurora@gpt.local>
+From: AuroraLocal <aurora@aurora.local>
 Date: Mon, 01 Dec 2025 00:24:00 +0000
 Subject: [PATCH] pack03 3J: Installer integration hooks & docs
 

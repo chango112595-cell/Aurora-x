@@ -1,7 +1,7 @@
 
 import fetch from 'node-fetch';
 
-const AI_BACKEND_URL = process.env.AI_BACKEND_URL || 'http://0.0.0.0:8000';
+const AI_BACKEND_URL = process.env.AI_BACKEND_URL || 'http://127.0.0.1:8000';
 
 export async function forwardToAI(path: string, data: any, method: string = 'POST') {
   try {

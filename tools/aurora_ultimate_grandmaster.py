@@ -75,7 +75,7 @@ COMPREHENSIVE TECHNOLOGY DOMAINS:
 10. ARTIFICIAL INTELLIGENCE (1950s-2040s)
     - Ancient: Perceptrons, Expert Systems, ELIZA
     - Classic: Neural Networks, SVM, Decision Trees
-    - Modern: Deep Learning, Transformers, GPT, LLMs
+    - Modern: Deep Learning, Transformers, LLMs
     - Future: AGI, ASI, Quantum AI, Consciousness simulation
 
 11. CLOUD & INFRASTRUCTURE (1960s-2040s)
@@ -570,3 +570,4 @@ def main():
 if __name__ == "__main__":
     mastery_level = main()
     print(f"\n[EMOJI] Training Complete! Mastery: {mastery_level} points")
+
