@@ -1,1 +1,1 @@
-# Aurora Updater Service
+# Aurora Integration Module

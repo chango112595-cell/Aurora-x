@@ -162,7 +162,7 @@ KEY COMPONENTS:
 TECHNOLOGY STACK:
 - Backend: Express.js, TypeScript, Python
 - Frontend: React, TypeScript, Vite, Tailwind CSS
-- AI: Claude Sonnet 4 via Anthropic SDK
+- AI: Luminar Nexus V2 (local Aurora chat engine)
 - Database: SQLite (corpus), PostgreSQL (production)
 """)
     

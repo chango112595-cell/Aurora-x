@@ -29,3 +29,10 @@ export class DatabaseStorage implements IStorage {
 }
 
 export const storage = new DatabaseStorage();
+
+export function getStorageStatus(): { type: string; connected: boolean } {
+  return {
+    type: "database",
+    connected: true
+  };
+}

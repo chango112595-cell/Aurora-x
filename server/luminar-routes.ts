@@ -6,7 +6,7 @@ import type { Express } from "express";
  * Returns explicit errors when the service is unavailable (no simulated data).
  */
 
-const LUMINAR_V2_BASE = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://0.0.0.0:8000";
+const LUMINAR_V2_BASE = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
 
 async function requestV2(path: string, options: RequestInit = {}) {
   const res = await fetch(`${LUMINAR_V2_BASE}${path}`, {

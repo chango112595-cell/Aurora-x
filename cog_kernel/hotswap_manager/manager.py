@@ -1,29 +1,32 @@
 #!/usr/bin/env python3
 """
-High-level memory manager that orchestrates short-term and long-term memory,
-handles consolidation and forgetting policies.
+Hot-swap orchestration:
+- Accepts new module package (tar .py files)
+- Runs evaluator (tests) in isolated sandbox (Docker or subprocess)
+- If pass, schedules swap with graceful draining (notify agents, pause traffic)
 """
+import tarfile, tempfile, shutil, time, os
+from pathlib import Path
+from ..core.evaluator import run_tests_for_module
+from ..core.hotswap import HotSwapManager
 
-from memory.vecstore import MemoryStore
+HSM = HotSwapManager()
 
-class MemoryMediator:
-    def __init__(self):
-        self.short = MemoryStore()
-        self.long = MemoryStore()
-
-    def write_event(self, text, meta=None, longterm=False):
-        if longterm:
-            return self.long.write(text, meta)
-        return self.short.write(text, meta)
-
-    def query(self, q, top_k=5):
-        # search both and merge
-        s1 = self.short.search(q, top_k=top_k)
-        s2 = self.long.search(q, top_k=top_k)
-        # dedupe by id
-        seen = set()
-        out = []
-        for r in s1 + s2:
-            if r["id"] in seen: continue
-            seen.add(r["id"]); out.append(r)
-        return out[:top_k]
+def apply_module_tar(tar_path: str, module_name: str):
+    # extract to temp, run tests, then move into place if ok
+    with tempfile.TemporaryDirectory() as tmp:
+        with tarfile.open(tar_path, "r:*") as tf:
+            tf.extractall(tmp)
+        # run tests
+        res = run_tests_for_module(tmp)
+        if res.get("rc",0) != 0:
+            return {"ok": False, "test": res}
+        # move into aurora_modules/<module_name>
+        dest = Path("aurora_modules") / module_name
+        if dest.exists():
+            backup = Path(".aurora_backup") / f"{module_name}-{int(time.time())}"
+            shutil.move(str(dest), str(backup))
+        shutil.copytree(tmp, dest)
+        # attempt hot reload
+        HSM.reload(f"aurora_modules.{module_name}")
+        return {"ok": True, "installed": str(dest)}

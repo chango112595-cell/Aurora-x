@@ -1,2 +1,1 @@
-from .sensor import Sensor
-from .actuator import Actuator
+from .edge_comm import EdgeComm

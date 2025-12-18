@@ -101,9 +101,7 @@ def root():
 
 
 if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=5001, log_level="info")
+    import sys
 
     print("[ROCKET] Starting Aurora-X Factory Bridge on port 5001...", flush=True)
     sys.stdout.flush()

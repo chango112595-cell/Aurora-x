@@ -261,7 +261,6 @@ async function performCodebaseAnalysis(aemId: number, start: number, checkIntegr
   
   if (checkIntegrations) {
     const integrationChecks = [
-      { name: 'Anthropic API', envVar: 'ANTHROPIC_API_KEY', required: false },
       { name: 'Database', envVar: 'DATABASE_URL', required: false },
       { name: 'Memory Fabric', port: 5004 },
       { name: 'Luminar Nexus V2', port: 8000 },
@@ -708,7 +707,6 @@ async function executeCodebaseAnalysis(input: string, aemId: number): Promise<Ex
 async function executeIntegrationCheck(input: string, aemId: number): Promise<ExecutionResult> {
   const start = Date.now();
   const integrations = [
-    { name: 'Anthropic API', status: process.env.ANTHROPIC_API_KEY ? 'Connected' : 'Not configured' },
     { name: 'Database', status: process.env.DATABASE_URL ? 'Connected' : 'Using memory' },
     { name: 'Memory Fabric', status: 'Active' },
     { name: 'Nexus V3', status: 'Active (Production Mode)' }

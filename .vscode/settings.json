@@ -44,7 +44,6 @@
     "python.analysis.stubPath": "",
     "python.analysis.typeCheckingMode": "off",
     "python.languageServer": "Pylance",
-    "python.defaultInterpreterPath": "./.venv/bin/python",
     "pylint.enabled": false,
     "python.linting.enabled": false,
     "python.linting.pylintEnabled": false,

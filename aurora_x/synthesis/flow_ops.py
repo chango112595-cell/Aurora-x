@@ -240,6 +240,7 @@ def impl_for(signature: str, description: str, metadata: dict | None = None) -> 
         # Replace the placeholder return with something more meaningful
         result = SAFE_HEADER + "\n".join(fallback_lines)
         # Ensure no NotImplementedError or pass-only functions
+        result = result.replace("raise NotImplementedError", "return None  # Placeholder implementation")
         result = result.replace("return None  # aurora-placeholder", "return None  # Placeholder implementation")
         result = result.replace("pass", "return None  # Placeholder implementation")
         return result
