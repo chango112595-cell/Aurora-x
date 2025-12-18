@@ -1,1 +1,1 @@
-# package marker for cog_kernel.hotswap_manager
+# package marker for cog_kernel.memory_abstraction

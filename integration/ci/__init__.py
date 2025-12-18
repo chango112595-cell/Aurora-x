@@ -1,1 +1,1 @@
-# Aurora CI
+# Aurora Updater Service

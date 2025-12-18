@@ -1,1 +1,1 @@
-# package marker for cog_kernel.debugger
+# package marker for cog_kernel.memory_abstraction
