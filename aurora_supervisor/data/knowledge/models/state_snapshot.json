@@ -1,5 +1,5 @@
 {
-  "timestamp": 1766077934.7290502,
+  "timestamp": 1766078174.7539062,
   "memory": {
     "healer-0": "validate_integrity_phase_4_6",
     "task-1": "optimize_learning_parameters",
@@ -30,7 +30,7 @@
     "task-173": "build_phase_4_6_modules",
     "task-53": "optimize_learning_parameters",
     "task-123": "optimize_learning_parameters",
-    "task-64": "optimize_learning_parameters",
+    "task-64": "build_phase_4_6_modules",
     "healer-19": "validate_integrity_phase_4_6",
     "task-225": "build_phase_4_6_modules",
     "healer-36": "validate_integrity_phase_4_6",
@@ -129,11 +129,11 @@
     "task-187": "optimize_learning_parameters",
     "healer-77": "validate_integrity_phase_4_6",
     "healer-95": "validate_integrity_phase_4_6",
-    "task-286": "optimize_learning_parameters",
+    "task-286": "build_phase_4_6_modules",
     "task-38": "build_phase_4_6_modules",
     "healer-73": "validate_integrity_phase_4_6",
     "task-216": "build_phase_4_6_modules",
-    "task-66": "build_phase_4_6_modules",
+    "task-66": "optimize_learning_parameters",
     "healer-12": "validate_integrity_phase_4_6",
     "healer-49": "validate_integrity_phase_4_6",
     "task-227": "optimize_learning_parameters",
@@ -146,7 +146,19 @@
     "healer-53": "validate_integrity_phase_4_6",
     "task-247": "optimize_learning_parameters",
     "healer-10": "validate_integrity_phase_4_6",
-    "task-70": "build_phase_4_6_modules",
-    "task-25": "optimize_learning_parameters"
+    "task-70": "optimize_learning_parameters",
+    "task-25": "build_phase_4_6_modules",
+    "task-195": "optimize_learning_parameters",
+    "healer-83": "validate_integrity_phase_4_6",
+    "task-106": "optimize_learning_parameters",
+    "healer-98": "validate_integrity_phase_4_6",
+    "healer-2": "validate_integrity_phase_4_6",
+    "task-211": "build_phase_4_6_modules",
+    "task-51": "optimize_learning_parameters",
+    "task-281": "optimize_learning_parameters",
+    "healer-50": "validate_integrity_phase_4_6",
+    "task-201": "optimize_learning_parameters",
+    "task-246": "build_phase_4_6_modules",
+    "healer-58": "validate_integrity_phase_4_6"
   }
 }
