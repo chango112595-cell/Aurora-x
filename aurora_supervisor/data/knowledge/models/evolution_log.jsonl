@@ -25,20 +25,19 @@
 {"timestamp": "2025-12-16T11:47:47.649672", "reason": "daily", "improvements": [{"target": "healer_ratio", "proposed": "increase_healer_allocation", "delta": 0.05, "level": "moderate"}]}
 {"timestamp": "2025-12-17T05:39:53.986985", "reason": "daily", "improvements": []}
 {"timestamp": "2025-12-17T06:05:34.259574", "reason": "daily", "improvements": []}
-<<<<<<< HEAD
-{"timestamp": "2025-12-17T07:50:31.148132", "reason": "daily", "improvements": []}
-{"timestamp": "2025-12-17T17:25:14.593765", "reason": "daily", "improvements": []}
-{"timestamp": "2025-12-17T19:35:17.393252", "reason": "daily", "improvements": []}
-{"timestamp": "2025-12-17T23:30:31.580697", "reason": "daily", "improvements": []}
-=======
 {"timestamp": "2025-12-17T08:29:12.745460", "reason": "daily", "improvements": []}
 {"timestamp": "2025-12-17T12:03:38.012739", "reason": "daily", "improvements": []}
 {"timestamp": "2025-12-17T12:54:42.974665", "reason": "daily", "improvements": []}
 {"timestamp": "2025-12-17T13:07:17.583426", "reason": "daily", "improvements": []}
 {"timestamp": "2025-12-17T13:36:29.051358", "reason": "daily", "improvements": []}
->>>>>>> 06d5e4e66f4a309104e0a58bd74992b34b19664a
 {"timestamp": "2025-12-18T11:14:39.925730", "reason": "daily", "improvements": []}
 {"timestamp": "2025-12-18T15:51:14.329059", "reason": "daily", "improvements": []}
-{"timestamp": "2025-12-18T19:37:31.423131", "reason": "daily", "improvements": []}
-{"timestamp": "2025-12-18T23:02:33.299331", "reason": "daily", "improvements": []}
-{"timestamp": "2025-12-19T18:51:35.825089", "reason": "daily", "improvements": []}
+{"timestamp": "2025-12-18T13:41:38.274714", "reason": "daily", "improvements": []}
+{"timestamp": "2025-12-18T14:08:18.935633", "reason": "daily", "improvements": []}
+{"timestamp": "2025-12-18T14:45:59.727674", "reason": "daily", "improvements": []}
+{"timestamp": "2025-12-18T18:05:17.513135", "reason": "daily", "improvements": []}
+{"timestamp": "2025-12-19T18:59:30.546270", "reason": "daily", "improvements": []}
+{"timestamp": "2025-12-19T19:00:40.051384", "reason": "daily", "improvements": []}
+{"timestamp": "2025-12-19T19:01:28.436671", "reason": "daily", "improvements": []}
+{"timestamp": "2025-12-19T19:01:32.939627", "reason": "daily", "improvements": []}
+{"timestamp": "2025-12-19T19:10:48.180220", "reason": "daily", "improvements": []}
