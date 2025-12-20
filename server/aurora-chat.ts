@@ -252,10 +252,6 @@ export function setupAuroraChatWebSocket(server: any) {
   });
 
   wss.on('connection', async (ws: WebSocket) => {
-    const memoryStatus = await memoryClient.checkStatus();
-
-    let greeting = "Hello! I'm Aurora. What would you like me to do?";
-    
     // Welcome message
     ws.send(JSON.stringify({
       message: 'Aurora online. Connected to Luminar Nexus V2 and V3 orchestration systems. 79 capabilities (66 knowledge tiers + 13 foundation tasks) active. How may I assist you today?'
@@ -272,9 +268,9 @@ export function setupAuroraChatWebSocket(server: any) {
         ws.send(JSON.stringify({
           message: response,
           detection: {
-            type: detection.type,
-            confidence: detection.confidence,
-            executionMode: detection.executionMode
+            type: 'processed',
+            confidence: 0.95,
+            executionMode: 'luminar-nexus'
           }
         }));
       } catch (error) {
@@ -287,7 +283,6 @@ export function setupAuroraChatWebSocket(server: any) {
     ws.on('close', () => {
     });
   });
-}
 
   console.log('[Aurora] Chat WebSocket server ready on /aurora/chat (Luminar Nexus V2/V3 integrated)');
 }

@@ -5,12 +5,9 @@ import type { Express } from "express";
  * Proxies requests to Luminar Nexus V2 (port 5005) and V3 (port 5031) services
  * Also provides unified status endpoints for the Aurora Bridge integration
  */
-export function registerLuminarRoutes(app: Express) {
-  const LUMINAR_V2_BASE = process.env.LUMINAR_NEXUS_V2_URL || "http://0.0.0.0:5005";
-  const LUMINAR_V3_BASE = process.env.LUMINAR_NEXUS_V3_URL || "http://0.0.0.0:5031";
-  const AURORA_BRIDGE_BASE = process.env.AURORA_BRIDGE_URL || "http://0.0.0.0:5001";
-
 const LUMINAR_V2_BASE = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
+const LUMINAR_V3_BASE = process.env.LUMINAR_NEXUS_V3_URL || "http://0.0.0.0:5031";
+const AURORA_BRIDGE_BASE = process.env.AURORA_BRIDGE_URL || "http://0.0.0.0:5001";
 
 async function requestV2(path: string, options: RequestInit = {}) {
   const res = await fetch(`${LUMINAR_V2_BASE}${path}`, {
