@@ -4,7 +4,7 @@
 Aurora AI Backend - FastAPI Service
 Handles all AI intelligence, NLP, and chat processing
 """
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
@@ -20,7 +20,7 @@ try:
     AURORA_AVAILABLE = True
 except ImportError:
     AURORA_AVAILABLE = False
-    logging.warning("Aurora core not available, using stub mode")
+    logging.error("Aurora core not available; backend will respond with 503 until restored.")
 
 app = FastAPI(title="Aurora AI Core", version="1.0.0")
 
@@ -89,25 +89,20 @@ async def info():
 async def chat_endpoint(msg: ChatMessage):
     """Process chat message through Aurora intelligence"""
     try:
-        if aurora_core:
-            # Use Aurora's conversation intelligence
-            context = aurora_core.get_conversation_context(msg.session_id)
-            result = aurora_core.analyze_natural_language(msg.text, context)
-            return {
-                "response": result.get("response", "Processing..."),
-                "intent": result.get("intent"),
-                "entities": result.get("entities", {}),
-                "session_id": msg.session_id
-            }
-        else:
-            # Stub response when Aurora not available
-            return {
-                "response": f"Echo (stub mode): {msg.text}",
-                "intent": "unknown",
-                "entities": {},
-                "session_id": msg.session_id,
-                "note": "Aurora core not initialized"
-            }
+        if not aurora_core:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Aurora core not initialized",
+            )
+        # Use Aurora's conversation intelligence
+        context = aurora_core.get_conversation_context(msg.session_id)
+        result = aurora_core.analyze_natural_language(msg.text, context)
+        return {
+            "response": result.get("response", "Processing..."),
+            "intent": result.get("intent"),
+            "entities": result.get("entities", {}),
+            "session_id": msg.session_id
+        }
     except Exception as e:
         logger.error(f"Chat processing error: {e}")
         return {
@@ -119,6 +114,11 @@ async def chat_endpoint(msg: ChatMessage):
 @app.websocket("/ws/chat/{session_id}")
 async def websocket_chat(ws: WebSocket, session_id: str):
     """WebSocket endpoint for real-time chat"""
+    if not aurora_core:
+        await ws.accept()
+        await ws.send_text("Aurora core not initialized")
+        await ws.close(code=1011)
+        return
     await manager.connect(session_id, ws)
     try:
         while True:
