@@ -4,11 +4,12 @@ Adaptive configuration system for all platforms
 """
 
 import os
-import json
 import platform
 from typing import Dict, Any, Optional
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from aurora_nexus_v3.utils.atomic_io import atomic_json_write, load_snapshot
 
 
 @dataclass
@@ -80,8 +81,7 @@ class NexusConfig:
     
     @classmethod
     def from_file(cls, path: str) -> "NexusConfig":
-        with open(path, "r") as f:
-            data = json.load(f)
+        data = load_snapshot(path, {})
         config = cls()
         for key, value in data.items():
             if hasattr(config, key):
@@ -100,8 +100,7 @@ class NexusConfig:
             "log_level": self.log_level
         }
         
-        with open(path, "w") as f:
-            json.dump(data, f, indent=2)
+        atomic_json_write(path, data)
     
     def get_device_tier(self) -> str:
         total_memory = self._get_total_memory_mb()

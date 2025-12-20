@@ -11,6 +11,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 import threading
 
+from aurora_nexus_v3.utils.atomic_io import atomic_json_write, load_snapshot
+
 
 class DiscoveryMethod(Enum):
     MDNS = "mdns"

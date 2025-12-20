@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import MemoryClient from './memory-client';
 import { resolvePythonCommand } from './python-runtime';
+import { getExternalAIConfig, isAnthropicAvailable, isAnyExternalAIAvailable, logAIGuardStatus, type ExternalAIConfig } from './external-ai-guard';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -190,6 +191,13 @@ interface AuroraStatus {
     modules: number | null;
     hyperspeedEnabled: boolean;
   };
+  externalAI: {
+    enabled: boolean;
+    anthropicAvailable: boolean;
+    openaiAvailable: boolean;
+    mode: 'external' | 'local-only' | 'hybrid';
+    fallbackReason?: string;
+  };
   uptime: number;
   version: string;
 }
@@ -267,6 +275,19 @@ export class AuroraCore {
     await this.initializePythonBridge();
     await this.initializeMemorySystem();
     this.startHealingMonitor();
+    logAIGuardStatus();
+  }
+  
+  public getExternalAIConfig(): ExternalAIConfig {
+    return getExternalAIConfig();
+  }
+  
+  public isExternalAIEnabled(): boolean {
+    return isAnyExternalAIAvailable();
+  }
+  
+  public isAnthropicEnabled(): boolean {
+    return isAnthropicAvailable();
   }
   
   // ========================================
@@ -1264,6 +1285,7 @@ export class AuroraCore {
         modules: v3Modules,
         hyperspeedEnabled
       },
+      externalAI: getExternalAIConfig(),
       uptime: Date.now() - this.startTime,
       version: this.version
     };

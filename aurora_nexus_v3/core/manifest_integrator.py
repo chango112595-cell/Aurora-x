@@ -8,12 +8,13 @@ This module loads and integrates:
 - 550 Cross-Temporal Modules (tools spanning all eras)
 """
 
-import json
 import os
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from pathlib import Path
 from datetime import datetime
+
+from aurora_nexus_v3.utils.atomic_io import load_snapshot
 
 
 @dataclass
@@ -109,8 +110,7 @@ class ManifestIntegrator:
             return
         
         try:
-            with open(tier_file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
+            data = load_snapshot(str(tier_file), {"tiers": []})
             
             for tier_data in data.get("tiers", []):
                 tier = Tier(
@@ -141,8 +141,7 @@ class ManifestIntegrator:
             return
         
         try:
-            with open(aem_file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
+            data = load_snapshot(str(aem_file), {"executions": []})
             
             for aem_data in data.get("executions", []):
                 aem = ExecutionMethod(
@@ -176,8 +175,7 @@ class ManifestIntegrator:
             return
         
         try:
-            with open(module_file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
+            data = load_snapshot(str(module_file), {"modules": []})
             
             for mod_data in data.get("modules", []):
                 module = Module(

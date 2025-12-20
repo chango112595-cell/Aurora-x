@@ -8,6 +8,7 @@ import { registerNexusV3Routes } from "./nexus-v3-routes";
 import { createWebSocketServer } from "./websocket-server";
 import { getAuroraAI } from "./aurora";
 import { bootstrapAuxServices, stopAuxServices } from "./service-bootstrap";
+import { enforceSecurityAtStartup } from "./security-validator";
 import type { ChildProcess } from "child_process";
 
 interface ServerError extends Error {
@@ -83,6 +84,9 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Security validation - will exit with code 1 in production if insecure defaults detected
+  enforceSecurityAtStartup();
+
   const autoStart = process.env.AURORA_AUTO_START !== "0" && process.env.AURORA_AUTO_START !== "false";
   if (autoStart) {
     auxProcesses = await bootstrapAuxServices();
