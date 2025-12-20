@@ -73,12 +73,20 @@ class PortManager:
         self._scanner_task = asyncio.create_task(self._scan_loop())
     
     async def shutdown(self):
+        """Cleanup port manager - cancel tasks and release allocations."""
+        self.logger.info("Port manager shutting down")
         if self._scanner_task:
             self._scanner_task.cancel()
             try:
                 await self._scanner_task
             except asyncio.CancelledError:
                 pass
+            self.logger.debug("Scanner task cancelled")
+        with self._lock:
+            allocation_count = len(self.allocations)
+            self.allocations.clear()
+            self._init_pools()
+        self.logger.debug(f"Released {allocation_count} port allocations, pools reset")
         self.logger.info("Port manager shut down")
     
     async def _scan_loop(self):

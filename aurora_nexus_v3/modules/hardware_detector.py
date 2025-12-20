@@ -81,7 +81,10 @@ class HardwareDetector:
                         f"Score: {self.profile.capability_score}/100")
     
     async def shutdown(self):
-        pass
+        """Cleanup hardware detector resources."""
+        self.logger.info("Hardware detector shutting down")
+        self.profile = None
+        self.logger.debug("Hardware profile cleared")
     
     async def detect(self) -> HardwareProfile:
         profile = HardwareProfile()

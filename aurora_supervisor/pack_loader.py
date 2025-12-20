@@ -1,6 +1,12 @@
 """
 Aurora-X PACK System Unified Loader
 Activates all 15 PACK systems in the correct order with health checks.
+
+Pack Module Locations:
+- Main 15 PACK systems: packs/ directory (pack01_pack01 through pack15_intel_fabric)
+- Generated modules: aurora_nexus_v3/generated_modules/ (~1,755 files)
+- Core modules: aurora_nexus_v3/modules/ (~2,209 files)
+- Manifest: aurora_nexus_v3/manifests/modules.manifest.json (550 registered modules)
 """
 
 import os
@@ -12,7 +18,19 @@ from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# Main 15 PACK systems directory
 PACKS_DIR = ROOT / "packs"
+
+# Additional module directories (generated and core modules)
+MODULES_DIRS = [
+    ROOT / "aurora_nexus_v3" / "generated_modules",  # ~1,755 generated module files
+    ROOT / "aurora_nexus_v3" / "modules",            # ~2,209 core module files
+]
+
+# Manifest file containing registered modules
+MODULES_MANIFEST = ROOT / "aurora_nexus_v3" / "manifests" / "modules.manifest.json"
+
 LIVE_DIR = ROOT / "live"
 DATA_DIR = ROOT / "aurora_supervisor" / "data"
 PACK_STATUS_FILE = DATA_DIR / "pack_status.json"
@@ -60,6 +78,46 @@ class PackLoader:
         LIVE_DIR.mkdir(parents=True, exist_ok=True)
         self.status = self._load_status()
         self.processes = {}
+        self._module_cache = None
+
+    def _scan_module_files(self):
+        """Scan all module directories and count Python module files."""
+        if self._module_cache is not None:
+            return self._module_cache
+        
+        module_counts = {
+            "generated_modules": 0,
+            "core_modules": 0,
+            "manifest_modules": 0,
+            "total_files": 0,
+            "by_category": {}
+        }
+        
+        for modules_dir in MODULES_DIRS:
+            if modules_dir.exists():
+                for py_file in modules_dir.rglob("*.py"):
+                    if py_file.name != "__init__.py":
+                        module_counts["total_files"] += 1
+                        if "generated_modules" in str(modules_dir):
+                            module_counts["generated_modules"] += 1
+                        else:
+                            module_counts["core_modules"] += 1
+                        
+                        # Count by category (analyzer, connector, etc.)
+                        category = py_file.parent.name
+                        if category not in ["generated_modules", "modules"]:
+                            module_counts["by_category"][category] = module_counts["by_category"].get(category, 0) + 1
+        
+        # Load manifest count if available
+        if MODULES_MANIFEST.exists():
+            try:
+                manifest_data = json.loads(MODULES_MANIFEST.read_text())
+                module_counts["manifest_modules"] = len(manifest_data.get("modules", []))
+            except Exception:
+                pass
+        
+        self._module_cache = module_counts
+        return module_counts
 
     def _load_status(self):
         if PACK_STATUS_FILE.exists():
@@ -196,9 +254,14 @@ class PackLoader:
         return True
 
     def activate_all(self, parallel=False):
+        module_counts = self._scan_module_files()
         self.log("=" * 60)
         self.log("AURORA-X PACK SYSTEM LOADER")
         self.log(f"Activating {len(PACK_ORDER)} PACK systems...")
+        self.log(f"Total modules available: {module_counts['total_files']} "
+                 f"(generated: {module_counts['generated_modules']}, "
+                 f"core: {module_counts['core_modules']}, "
+                 f"manifest: {module_counts['manifest_modules']})")
         self.log("=" * 60)
         
         success_count = 0
@@ -225,7 +288,8 @@ class PackLoader:
                     failed.append(pack_id)
 
         self.log("=" * 60)
-        self.log(f"PACK ACTIVATION COMPLETE: {success_count}/{len(PACK_ORDER)} successful")
+        self.log(f"PACK ACTIVATION COMPLETE: {success_count}/{len(PACK_ORDER)} packs successful")
+        self.log(f"Total modules loaded: {module_counts['total_files']} module files")
         if failed:
             self.log(f"Failed packs: {', '.join(failed)}", "WARN")
         self.log("=" * 60)
@@ -246,11 +310,18 @@ class PackLoader:
         self._save_status()
 
     def get_status(self):
+        module_counts = self._scan_module_files()
         return {
             "packs": self.status,
             "running_count": sum(1 for s in self.status.values() if s.get("running")),
             "healthy_count": sum(1 for s in self.status.values() if s.get("healthy")),
-            "total": len(PACK_ORDER)
+            "total_packs": len(PACK_ORDER),
+            "total_modules": module_counts["total_files"],
+            "generated_modules": module_counts["generated_modules"],
+            "core_modules": module_counts["core_modules"],
+            "manifest_modules": module_counts["manifest_modules"],
+            "modules_by_category": module_counts["by_category"],
+            "total": len(PACK_ORDER)  # Kept for backwards compatibility
         }
 
 

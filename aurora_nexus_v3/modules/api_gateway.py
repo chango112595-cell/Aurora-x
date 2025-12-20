@@ -62,6 +62,14 @@ class APIGateway:
         self.logger.info(f"Registered {len(self.endpoints)} endpoints")
     
     async def shutdown(self):
+        """Cleanup API gateway resources."""
+        self.logger.info("API gateway shutting down")
+        with self._lock:
+            endpoint_count = len(self.endpoints)
+            self.endpoints.clear()
+            self.middleware.clear()
+            self.rate_limits.clear()
+        self.logger.debug(f"Cleared {endpoint_count} endpoints, middleware, and rate limits")
         self.logger.info("API gateway shut down")
     
     def _register_core_endpoints(self):

@@ -310,9 +310,17 @@ class HTTPServerModule:
                 self.logger.error(f"HTTP server error: {e}")
     
     async def shutdown(self):
+        """Cleanup HTTP server - stop server thread and release resources."""
+        self.logger.info("HTTP server shutting down")
         self.running = False
         if self.server:
-            self.server.shutdown()
+            try:
+                self.server.shutdown()
+                self.logger.debug("HTTP server shutdown complete")
+            except Exception as e:
+                self.logger.warning(f"Error shutting down HTTP server: {e}")
+            self.server = None
+        NexusHTTPHandler.core = None
         self.logger.info("HTTP server stopped")
     
     def get_info(self) -> Dict[str, Any]:

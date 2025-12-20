@@ -78,12 +78,23 @@ class AutoHealer:
         self._monitor_task = asyncio.create_task(self._monitor_loop())
     
     async def shutdown(self):
+        """Cleanup auto healer - cancel tasks, clear rules and events."""
+        self.logger.info("Auto healer shutting down")
         if self._monitor_task:
             self._monitor_task.cancel()
             try:
                 await self._monitor_task
             except asyncio.CancelledError:
                 pass
+            self.logger.debug("Monitor task cancelled")
+        with self._lock:
+            rule_count = len(self.rules)
+            event_count = len(self.events)
+            self.rules.clear()
+            self.events.clear()
+            self.cooldowns.clear()
+        self._healing_handlers.clear()
+        self.logger.debug(f"Cleared {rule_count} rules, {event_count} events, handlers")
         self.logger.info("Auto healer shut down")
     
     def _register_default_rules(self):
