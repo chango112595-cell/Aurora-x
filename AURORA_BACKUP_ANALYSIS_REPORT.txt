@@ -1,0 +1,206 @@
+================================================================================
+                  AURORA BACKUP ANALYSIS REPORT (*.aurora_backup)
+                  Generated: 2025-12-17 20:38:46
+================================================================================
+
+Total backups: 291
+Identical to originals: 263
+Different from originals: 27
+Missing original: 1
+
+Missing original files:
+- controllers/aurora_ultimate_self_healing_system_DRAFT2.py.aurora_backup
+
+Different backups (detailed):
+--------------------------------------------------------------------------------
+Backup:   attached_assets/aurora_auto_fix.py.aurora_backup
+Original: attached_assets/aurora_auto_fix.py
+Class:    older_or_variant
+Purpose:  Generated attachment/script (not part of runtime)
+Backup first line:   #!/usr/bin/env python3
+Original first line: #!/usr/bin/env python3
+--------------------------------------------------------------------------------
+Backup:   attached_assets/flow_ops_1760050963508.py.aurora_backup
+Original: attached_assets/flow_ops_1760050963508.py
+Class:    older_or_variant
+Purpose:  Generated attachment/script (not part of runtime)
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   attached_assets/lib_function_1760154384150.py.aurora_backup
+Original: attached_assets/lib_function_1760154384150.py
+Class:    older_or_variant
+Purpose:  Generated attachment/script (not part of runtime)
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   attached_assets/lib_function_1760164876901.py.aurora_backup
+Original: attached_assets/lib_function_1760164876901.py
+Class:    older_or_variant
+Purpose:  Generated attachment/script (not part of runtime)
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   attached_assets/templates_py_1760045183153.py.aurora_backup
+Original: attached_assets/templates_py_1760045183153.py
+Class:    older_or_variant
+Purpose:  Generated attachment/script (not part of runtime)
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   aurora/core/aurora_complete_assignment.py.aurora_backup
+Original: aurora/core/aurora_complete_assignment.py
+Class:    older_or_variant
+Purpose:  Packaged Python core (mirrors tools in aurora/core)
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   aurora/core/luminar_nexus.py.aurora_backup
+Original: aurora/core/luminar_nexus.py
+Class:    older_or_variant
+Purpose:  Packaged Python core (mirrors tools in aurora/core)
+Backup first line:   #!/usr/bin/env python3
+Original first line: #!/usr/bin/env python3
+--------------------------------------------------------------------------------
+Backup:   aurora/core/luminar_nexus_v1_backup.py.aurora_backup
+Original: aurora/core/luminar_nexus_v1_backup.py
+Class:    older_or_variant
+Purpose:  Packaged Python core (mirrors tools in aurora/core)
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   aurora_nexus_v3/main.py.aurora_backup
+Original: aurora_nexus_v3/main.py
+Class:    older_or_variant
+Purpose:  Aurora Nexus V3 runtime module/entrypoint
+Backup first line:   #!/usr/bin/env python3
+Original first line: #!/usr/bin/env python3
+--------------------------------------------------------------------------------
+Backup:   aurora_nexus_v3/modules/http_server.py.aurora_backup
+Original: aurora_nexus_v3/modules/http_server.py
+Class:    older_or_variant
+Purpose:  Aurora Nexus V3 runtime module/entrypoint
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   aurora_nexus_v3/modules/port_manager.py.aurora_backup
+Original: aurora_nexus_v3/modules/port_manager.py
+Class:    older_or_variant
+Purpose:  Aurora Nexus V3 runtime module/entrypoint
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   aurora_nexus_v3/workers/issue_detector.py.aurora_backup
+Original: aurora_nexus_v3/workers/issue_detector.py
+Class:    older_or_variant
+Purpose:  Aurora Nexus V3 runtime module/entrypoint
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   aurora_x/__init__.py.aurora_backup
+Original: aurora_x/__init__.py
+Class:    template_placeholder
+Purpose:  Backup looks like a generic template; original is minimal package init.
+Backup first line:   """
+Original first line: """Aurora-X Package"""
+--------------------------------------------------------------------------------
+Backup:   aurora_x/bridge/serve.py.aurora_backup
+Original: aurora_x/bridge/serve.py
+Class:    broken_syntax
+Purpose:  Python syntax error in backup: PyCompileError
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   aurora_x/bridge/service.py.aurora_backup
+Original: aurora_x/bridge/service.py
+Class:    broken_syntax
+Purpose:  Python syntax error in backup: PyCompileError
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   aurora_x/synthesis/flow_ops.py.aurora_backup
+Original: aurora_x/synthesis/flow_ops.py
+Class:    older_or_variant
+Purpose:  Backup differs from original (purpose not classified)
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   backups/backend_backup_20251129_162051/server/routes.ts.aurora_backup
+Original: backups/backend_backup_20251129_162051/server/routes.ts
+Class:    older_or_variant
+Purpose:  Historical snapshot under backups/ (not used by runtime)
+Backup first line:   import type { Express } from "express";
+Original first line: import type { Express } from "express";
+--------------------------------------------------------------------------------
+Backup:   backups/backend_backup_20251129_162819/server/routes.ts.aurora_backup
+Original: backups/backend_backup_20251129_162819/server/routes.ts
+Class:    older_or_variant
+Purpose:  Historical snapshot under backups/ (not used by runtime)
+Backup first line:   import type { Express } from "express";
+Original first line: import type { Express } from "express";
+--------------------------------------------------------------------------------
+Backup:   client/src/components/AuroraChatInterface.tsx.aurora_backup
+Original: client/src/components/AuroraChatInterface.tsx
+Class:    older_or_variant
+Purpose:  Frontend UI component/page
+Backup first line:   import { useState, useEffect, useRef } from 'react';
+Original first line: import { useState, useEffect, useRef } from 'react';
+--------------------------------------------------------------------------------
+Backup:   client/src/pages/luminar-nexus.tsx.aurora_backup
+Original: client/src/pages/luminar-nexus.tsx
+Class:    older_or_variant
+Purpose:  Frontend UI component/page
+Backup first line:   import { useState } from "react";
+Original first line: export { default } from "./nexus";
+--------------------------------------------------------------------------------
+Backup:   client/src/pages/server-control.tsx.aurora_backup
+Original: client/src/pages/server-control.tsx
+Class:    older_or_variant
+Purpose:  Frontend UI component/page
+Backup first line:   import { useEffect, useState } from 'react';
+Original first line: import { ErrorBoundary } from '@/components/error-boundary';
+--------------------------------------------------------------------------------
+Backup:   controllers/aurora_nexus_v3_universal.py.aurora_backup
+Original: controllers/aurora_nexus_v3_universal.py
+Class:    broken_syntax
+Purpose:  Python syntax error in backup: PyCompileError
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   tools/aurora_complete_assignment.py.aurora_backup
+Original: tools/aurora_complete_assignment.py
+Class:    older_or_variant
+Purpose:  Developer tool / local service script
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   tools/execution_wrapper.py.aurora_backup
+Original: tools/execution_wrapper.py
+Class:    older_or_variant
+Purpose:  Developer tool / local service script
+Backup first line:   #!/usr/bin/env python3
+Original first line: #!/usr/bin/env python3
+--------------------------------------------------------------------------------
+Backup:   tools/luminar_nexus.py.aurora_backup
+Original: tools/luminar_nexus.py
+Class:    older_or_variant
+Purpose:  Developer tool / local service script
+Backup first line:   #!/usr/bin/env python3
+Original first line: #!/usr/bin/env python3
+--------------------------------------------------------------------------------
+Backup:   tools/luminar_nexus_v1_backup.py.aurora_backup
+Original: tools/luminar_nexus_v1_backup.py
+Class:    older_or_variant
+Purpose:  Developer tool / local service script
+Backup first line:   """
+Original first line: """
+--------------------------------------------------------------------------------
+Backup:   tools/luminar_nexus_v2.py.aurora_backup
+Original: tools/luminar_nexus_v2.py
+Class:    older_or_variant
+Purpose:  Developer tool / local service script
+Backup first line:   """
+Original first line: """
+================================================================================
+End of report
+================================================================================

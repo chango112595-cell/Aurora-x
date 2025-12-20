@@ -76,7 +76,7 @@ When prompted, paste your API key and press Enter.
 
 **Example:**
 ```bash
-python3 vault_set.py openai-key MySecretPass2024
+python3 vault_set.py service-key MySecretPass2024
 # Paste: sk-proj-abc123...
 # Press Enter
 ```
@@ -89,7 +89,7 @@ python3 vault_read.py <alias> <your-passphrase>
 
 **Example:**
 ```bash
-python3 vault_read.py openai-key MySecretPass2024
+python3 vault_read.py service-key MySecretPass2024
 ```
 
 ### Step 4: List All Stored Keys

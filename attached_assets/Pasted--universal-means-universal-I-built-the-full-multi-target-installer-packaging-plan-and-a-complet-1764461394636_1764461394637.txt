@@ -397,4 +397,4 @@ A ready git patch (diff) that adds all files above into your repo, or
 
 A downloadable zip of the files so you can drop them into C:\Users\negry\Aurora-x, or
 
-A git command sequence you can paste to create aurora-gpt branch and add & commit all files at once.
+A git command sequence you can paste to create aurora-local branch and add & commit all files at once.

@@ -134,7 +134,7 @@ This is normal for a system waiting for tasks, but indicates no active workload.
 
 **File**: `server/rag-system.ts`
 ```
-Line 39: // TODO: Replace with actual embedding model (OpenAI, HuggingFace, etc.)
+Line 39: // TODO: Replace with local embedding model (Luminar/Memory Fabric)
 ```
 
 The RAG (Retrieval Augmented Generation) system uses a placeholder embedding model.

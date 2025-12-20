@@ -13,7 +13,7 @@ Express Backend + Frontend for interaction
 
 🧠 Aurora-X Ultra — Internal Chat & Reasoning Flow
 
-(Claude removed, fully autonomous conversation pipeline)
+(Local model removed, fully autonomous conversation pipeline)
 
 sequenceDiagram
     autonumber

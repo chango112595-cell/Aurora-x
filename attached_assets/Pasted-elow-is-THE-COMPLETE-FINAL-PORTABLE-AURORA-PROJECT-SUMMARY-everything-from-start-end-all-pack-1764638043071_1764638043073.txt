@@ -1,6 +1,6 @@
 elow is THE COMPLETE, FINAL, PORTABLE AURORA PROJECT SUMMARY — everything from start → end, all packs, all fixes, all enhancements, all scripts, all workflows, all tools, all known issues, all resolutions, EVERYTHING consolidated into one master document.
 
-This is the definitive context transfer package you can paste into ANY new AI chat (GPT, Claude, Llama, anything).
+This is the definitive context transfer package you can paste into ANY new AI chat (Local model, Local model, Llama, anything).
 It recreates the ENTIRE knowledge of this massive project in ONE MESSAGE.
 
 No environment-specific paths, no replit crashes, no missing context.

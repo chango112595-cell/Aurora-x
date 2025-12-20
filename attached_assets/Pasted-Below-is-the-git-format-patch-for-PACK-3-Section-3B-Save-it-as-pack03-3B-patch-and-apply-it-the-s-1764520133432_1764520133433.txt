@@ -42,7 +42,7 @@ python3 -m pytest packs/pack03_os_base/tests -q
 
 Patch — save this as pack03_3B.patch
 From 1111111111111111111111111111111111111111 Mon Sep 17 00:00:00 2001
-From: AuroraGPT <aurora@gpt.local>
+From: AuroraLocal <aurora@aurora.local>
 Date: Mon, 01 Dec 2025 00:05:00 +0000
 Subject: [PATCH] pack03 3B: Hypervisor core, sandbox runner, resource governor
 

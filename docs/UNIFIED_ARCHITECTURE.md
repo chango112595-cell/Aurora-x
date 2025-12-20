@@ -205,7 +205,7 @@ Memory flows through three tiers with automatic consolidation:
 
 Aurora-X Ultra operates 100% internally:
 
-- No external AI APIs (Anthropic, OpenAI, etc.)
+- No external AI APIs
 - No external vector databases (Pinecone, etc.)
 - No Docker or containers required
 - All services run natively on the host

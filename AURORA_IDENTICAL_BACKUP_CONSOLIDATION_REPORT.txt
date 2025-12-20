@@ -1,0 +1,54 @@
+================================================================================
+          AURORA IDENTICAL BACKUP CONSOLIDATION REPORT (*.aurora_backup)
+                            Generated: 2025-12-18
+================================================================================
+
+Goal
+----
+Reduce duplicate backup clutter by consolidating `*.aurora_backup` files that are
+byte-identical to their corresponding original file (same path minus
+`.aurora_backup`).
+
+Important: No backup content was destroyed.
+The identical backups were moved into a central archive folder so the active
+code tree only keeps one copy (the original file).
+
+What Was Done
+-------------
+- Identified identical backup/original pairs using SHA-256 verification.
+- Consolidated 211 identical `*.aurora_backup` files (excluding `attached_assets/`)
+  into:
+  `backups/aurora_backup_identical_merged_20251218_054400/`
+- Preserved the relative paths inside the archive folder so restores are
+  deterministic.
+
+Why `attached_assets/` Was Excluded
+-----------------------------------
+You said you have files you want to review, and your active IDE file is under
+`attached_assets/`. To avoid disrupting review, this consolidation pass did NOT
+touch `attached_assets/` backups (even if identical).
+
+Where The Data Is
+-----------------
+- Archive folder:
+  `backups/aurora_backup_identical_merged_20251218_054400/`
+- Manifest (what moved + hashes):
+  `backups/aurora_backup_identical_merged_20251218_054400/manifest.json`
+- Restore script (moves files back to original locations):
+  `backups/aurora_backup_identical_merged_20251218_054400/restore_identical_backups.ps1`
+
+How To Restore (If Needed)
+--------------------------
+Run:
+  `powershell -ExecutionPolicy Bypass -File backups/aurora_backup_identical_merged_20251218_054400/restore_identical_backups.ps1`
+
+This script will refuse to overwrite any existing files.
+
+Next Step (When You Say So)
+---------------------------
+We can run the same consolidation for `attached_assets/` once you finish review.
+
+================================================================================
+End of report
+================================================================================
+

@@ -7,7 +7,7 @@
 ## Issue Report Highlights (aurora_project_issues_report.txt)
 - Critical gaps: database not provisioned despite env vars; missing `/api/bridge/comparison/aurora-runs` endpoint or stale frontend call; missing `/api/self-healing/status` endpoint.
 - High priorities: pack definitions absent but simulated; worker pool shows zero activity; Luminar Nexus V2 logs quantum coherence dropping to zero.
-- Medium/low priorities: TODO in `anthropic-service.ts`, draft self-healing controller, numerous `.aurora_backup` files, mock data in server/client, outdated browserslist, and need for centralized error handling.
+- Medium/low priorities: TODO in `aurora-local-service.ts`, draft self-healing controller, numerous `.aurora_backup` files, mock data in server/client, outdated browserslist, and need for centralized error handling.
 - Recommended fix order prioritizes provisioning database and restoring missing endpoints before worker dispatch and Luminar coherence fixes.
 
 ## Integration Guidance (AURORA_MODULE_INTEGRATION_GUIDE.txt)

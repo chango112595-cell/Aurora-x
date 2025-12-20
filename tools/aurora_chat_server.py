@@ -455,7 +455,7 @@ def generate_response(message: str, context: str = "") -> str:
     Generate a response to the user message
     
     This is a placeholder for actual AI response generation.
-    In production, this would integrate with an LLM like Claude or GPT.
+    In production, this should integrate with the local Luminar engine.
     """
     message_lower = message.lower()
     

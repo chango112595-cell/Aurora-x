@@ -6,8 +6,8 @@ Best-effort automated fixer for the Aurora-X repo.
 What it does (attempts):
   - Scans for TODO/FIXME/XXX/HACK markers and records them to fixes_report.json
   - Replaces common placeholder implementations:
-        - "return None  # aurora-placeholder" -> "return None  # placeholder"
-        - "return None  # aurora-placeholder" -> "return None  # placeholder"
+        - "raise NotImplementedError" -> "return None  # placeholder"
+        - "pass  # TODO" -> "return None  # placeholder"
   - For TypeScript/TSX files:
         - Replace occurrences of '/api/conversation' with '/api/chat'
         - Try to ensure fetch responses are parsed with response.json() when missing (best-effort)
@@ -81,13 +81,13 @@ def scan_and_fix(root: Path, dry_run: bool=False):
 
         modified = False
 
-        # Python: replace return None  # aurora-placeholder / pass TODO
+        # Python: replace raise NotImplementedError / pass TODO
         if p.suffix == ".py":
-            if "return None  # aurora-placeholder" in txt or "return None  # aurora-placeholder" in txt or re.search(r"pass\s*$", txt, flags=re.M):
+            if "raise NotImplementedError" in txt or "pass  # TODO" in txt or re.search(r"pass\s*$", txt, flags=re.M):
                 if not dry_run:
                     backup_file(p)
                     new_txt = re.sub(r"raise\s+NotImplementedError", "return None  # aurora-placeholder", txt)
-                    new_txt = new_txt.replace("return None  # aurora-placeholder", "return None  # aurora-placeholder")
+                    new_txt = new_txt.replace("pass  # TODO", "return None  # aurora-placeholder")
                     # Replace bare 'pass' inside functions only (best-effort): replace lines that are only '    pass' with '    return None  # aurora-placeholder'
                     new_txt = re.sub(r"(?m)^(\\s+)pass\\s*$", r"\\1return None  # aurora-placeholder", new_txt)
                     p.write_text(new_txt, encoding="utf-8")
@@ -128,7 +128,7 @@ def scan_and_fix(root: Path, dry_run: bool=False):
                 p.write_text(content, encoding="utf-8")
 
         # Simple textual fixes across file types
-        if "return None  # aurora-placeholder" in txt or "return None  # aurora-placeholder" in txt:
+        if "raise NotImplementedError" in txt or "pass  # TODO" in txt:
             # already handled for python; for other files just note
             report["incomplete_items"].append({"file": str(p.relative_to(root)), "line": 1, "marker": "NOT_IMPLEMENTED", "content": "Placeholder implementation found"})
 

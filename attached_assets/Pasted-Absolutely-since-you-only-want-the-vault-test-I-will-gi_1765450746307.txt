@@ -200,7 +200,7 @@ Output: ThisIsATestSecretValue
 
 ---
 
-# 🏁 **You’re good to move the project to the next ChatGPT session**
+# 🏁 **You’re good to move the project to the next Local chat engine session**
 
 This script verifies that:
 

@@ -36,4 +36,3 @@ The architecture emphasizes modularity, autonomy, and resilience. The "Always-On
 - **Databases**: Neon Serverless PostgreSQL, SQLite (better-sqlite3)
 - **UI Components**: Radix UI
 - **Build Tools**: Vite, esbuild, tsx, Tailwind CSS, PostCSS
-- **AI SDK**: `@anthropic-ai/sdk` for Claude Sonnet 4 integration

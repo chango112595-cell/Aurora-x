@@ -117,6 +117,5 @@ networkPolicy:
   enabled: true
 
 secrets:
-  anthropicApiKey: ""
   etcdPassword: ""
   signingKey: ""

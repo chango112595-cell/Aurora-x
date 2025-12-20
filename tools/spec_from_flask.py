@@ -160,14 +160,6 @@ python -m unittest tests/test_{app_name}_app.py</pre>
 
 
 if __name__ == "__main__":
-
-# Aurora Perfect Error Handling
-try:
-    # Main execution with complete error coverage
-    pass
-except Exception as e:
-    # Handle all exceptions gracefully
-    pass
     import sys
 
     if len(sys.argv) > 1:

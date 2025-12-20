@@ -1,0 +1,233 @@
+================================================================================
+             AURORA BACKUP COMPARISON REPORT (BACKUP vs CURRENT)
+                      Generated: 2025-12-18
+================================================================================
+
+This report is sanitized (no external-AI brand strings).
+
+Total entries: 28
+- Different: 27
+- Missing original: 1
+
+--------------------------------------------------------------------------------
+Backup:  attached_assets/aurora_auto_fix.py.aurora_backup
+Group:   attached_assets
+Status:  different
+Current: attached_assets/aurora_auto_fix.py
+Diff:    hunks=3 added=6 removed=6 backup_lines=172 current_lines=172
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  attached_assets/flow_ops_1760050963508.py.aurora_backup
+Group:   attached_assets
+Status:  different
+Current: attached_assets/flow_ops_1760050963508.py
+Diff:    hunks=1 added=1 removed=1 backup_lines=54 current_lines=54
+Backup compile:  ok
+Current compile: ok
+Fact deltas: has_not_implemented, has_placeholder_marker
+--------------------------------------------------------------------------------
+Backup:  attached_assets/lib_function_1760154384150.py.aurora_backup
+Group:   attached_assets
+Status:  different
+Current: attached_assets/lib_function_1760154384150.py
+Diff:    hunks=1 added=1 removed=1 backup_lines=63 current_lines=63
+Backup compile:  ok
+Current compile: ok
+Fact deltas: has_placeholder_marker
+--------------------------------------------------------------------------------
+Backup:  attached_assets/lib_function_1760164876901.py.aurora_backup
+Group:   attached_assets
+Status:  different
+Current: attached_assets/lib_function_1760164876901.py
+Diff:    hunks=1 added=1 removed=1 backup_lines=57 current_lines=57
+Backup compile:  ok
+Current compile: ok
+Fact deltas: has_placeholder_marker
+--------------------------------------------------------------------------------
+Backup:  attached_assets/templates_py_1760045183153.py.aurora_backup
+Group:   attached_assets
+Status:  different
+Current: attached_assets/templates_py_1760045183153.py
+Diff:    hunks=1 added=1 removed=1 backup_lines=66 current_lines=66
+Backup compile:  ok
+Current compile: ok
+Fact deltas: has_not_implemented, has_placeholder_marker
+--------------------------------------------------------------------------------
+Backup:  aurora_nexus_v3/main.py.aurora_backup
+Group:   aurora_nexus_v3
+Status:  different
+Current: aurora_nexus_v3/main.py
+Diff:    hunks=5 added=21 removed=1 backup_lines=102 current_lines=122
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  aurora_nexus_v3/modules/http_server.py.aurora_backup
+Group:   aurora_nexus_v3
+Status:  different
+Current: aurora_nexus_v3/modules/http_server.py
+Diff:    hunks=1 added=14 removed=1 backup_lines=317 current_lines=330
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  aurora_nexus_v3/modules/port_manager.py.aurora_backup
+Group:   aurora_nexus_v3
+Status:  different
+Current: aurora_nexus_v3/modules/port_manager.py
+Diff:    hunks=2 added=3 removed=3 backup_lines=264 current_lines=264
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  aurora_nexus_v3/workers/issue_detector.py.aurora_backup
+Group:   aurora_nexus_v3
+Status:  different
+Current: aurora_nexus_v3/workers/issue_detector.py
+Diff:    hunks=2 added=41 removed=2 backup_lines=309 current_lines=348
+Backup compile:  ok
+Current compile: ok
+Fact deltas: mentions_127
+--------------------------------------------------------------------------------
+Backup:  aurora_x/__init__.py.aurora_backup
+Group:   aurora_x
+Status:  different
+Current: aurora_x/__init__.py
+Diff:    hunks=1 added=2 removed=34 backup_lines=34 current_lines=2
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  aurora_x/bridge/serve.py.aurora_backup
+Group:   aurora_x
+Status:  different
+Current: aurora_x/bridge/serve.py
+Diff:    hunks=2 added=2 removed=15 backup_lines=69 current_lines=56
+Backup compile:  IndentationError: expected an indented block after 'if' statement on line 53 (aurora_x/bridge/serve.py.aurora_backup, line 56)
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  aurora_x/bridge/service.py.aurora_backup
+Group:   aurora_x
+Status:  different
+Current: aurora_x/bridge/service.py
+Diff:    hunks=1 added=0 removed=15 backup_lines=123 current_lines=108
+Backup compile:  IndentationError: expected an indented block after 'if' statement on line 103 (aurora_x/bridge/service.py.aurora_backup, line 106)
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  aurora_x/synthesis/flow_ops.py.aurora_backup
+Group:   aurora_x
+Status:  different
+Current: aurora_x/synthesis/flow_ops.py
+Diff:    hunks=1 added=1 removed=1 backup_lines=253 current_lines=253
+Backup compile:  ok
+Current compile: ok
+Fact deltas: has_placeholder_marker
+--------------------------------------------------------------------------------
+Backup:  aurora/core/aurora_complete_assignment.py.aurora_backup
+Group:   aurora/core
+Status:  different
+Current: aurora/core/aurora_complete_assignment.py
+Diff:    hunks=1 added=1 removed=1 backup_lines=671 current_lines=671
+Backup compile:  ok
+Current compile: ok
+Fact deltas: has_not_implemented, has_placeholder_marker
+--------------------------------------------------------------------------------
+Backup:  aurora/core/luminar_nexus.py.aurora_backup
+Group:   aurora/core
+Status:  different
+Current: aurora/core/luminar_nexus.py
+Diff:    hunks=5 added=6 removed=2 backup_lines=4308 current_lines=4310
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  aurora/core/luminar_nexus_v1_backup.py.aurora_backup
+Group:   aurora/core
+Status:  different
+Current: aurora/core/luminar_nexus_v1_backup.py
+Diff:    hunks=5 added=6 removed=2 backup_lines=4025 current_lines=4027
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  client/src/components/AuroraChatInterface.tsx.aurora_backup
+Group:   client
+Status:  different
+Current: client/src/components/AuroraChatInterface.tsx
+Diff:    hunks=6 added=34 removed=10 backup_lines=236 current_lines=260
+Fact deltas: mentions_api_conversation, mentions_api_chat
+--------------------------------------------------------------------------------
+Backup:  client/src/pages/luminar-nexus.tsx.aurora_backup
+Group:   client
+Status:  different
+Current: client/src/pages/luminar-nexus.tsx
+Diff:    hunks=1 added=1 removed=639 backup_lines=639 current_lines=1
+--------------------------------------------------------------------------------
+Backup:  client/src/pages/server-control.tsx.aurora_backup
+Group:   client
+Status:  different
+Current: client/src/pages/server-control.tsx
+Diff:    hunks=4 added=10 removed=8 backup_lines=235 current_lines=237
+--------------------------------------------------------------------------------
+Backup:  controllers/aurora_nexus_v3_universal.py.aurora_backup
+Group:   controllers
+Status:  different
+Current: controllers/aurora_nexus_v3_universal.py
+Diff:    hunks=1 added=13 removed=11 backup_lines=1142 current_lines=1144
+Backup compile:  SyntaxError: invalid syntax (controllers/aurora_nexus_v3_universal.py.aurora_backup, line 596)
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  controllers/aurora_ultimate_self_healing_system_DRAFT2.py.aurora_backup
+Group:   controllers
+Status:  missing_original
+Backup compile:  ok
+--------------------------------------------------------------------------------
+Backup:  tools/aurora_complete_assignment.py.aurora_backup
+Group:   tools
+Status:  different
+Current: tools/aurora_complete_assignment.py
+Diff:    hunks=1 added=1 removed=1 backup_lines=671 current_lines=671
+Backup compile:  ok
+Current compile: ok
+Fact deltas: has_not_implemented, has_placeholder_marker
+--------------------------------------------------------------------------------
+Backup:  tools/execution_wrapper.py.aurora_backup
+Group:   tools
+Status:  different
+Current: tools/execution_wrapper.py
+Diff:    hunks=3 added=60 removed=5 backup_lines=1165 current_lines=1220
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  tools/luminar_nexus.py.aurora_backup
+Group:   tools
+Status:  different
+Current: tools/luminar_nexus.py
+Diff:    hunks=5 added=6 removed=2 backup_lines=4308 current_lines=4310
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  tools/luminar_nexus_v1_backup.py.aurora_backup
+Group:   tools
+Status:  different
+Current: tools/luminar_nexus_v1_backup.py
+Diff:    hunks=5 added=6 removed=2 backup_lines=4025 current_lines=4027
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  tools/luminar_nexus_v2.py.aurora_backup
+Group:   tools
+Status:  different
+Current: tools/luminar_nexus_v2.py
+Diff:    hunks=10 added=204 removed=17 backup_lines=2378 current_lines=2565
+Backup compile:  ok
+Current compile: ok
+--------------------------------------------------------------------------------
+Backup:  backups/backend_backup_20251129_162051/server/routes.ts.aurora_backup
+Group:   backups_snapshot
+Status:  different
+Current: backups/backend_backup_20251129_162051/server/routes.ts
+Diff:    hunks=8 added=15 removed=10 backup_lines=4741 current_lines=4741
+Fact deltas: mentions_api_conversation
+--------------------------------------------------------------------------------
+Backup:  backups/backend_backup_20251129_162819/server/routes.ts.aurora_backup
+Group:   backups_snapshot
+Status:  different
+Current: backups/backend_backup_20251129_162819/server/routes.ts
+Diff:    hunks=8 added=15 removed=10 backup_lines=4741 current_lines=4741
+Fact deltas: mentions_api_conversation

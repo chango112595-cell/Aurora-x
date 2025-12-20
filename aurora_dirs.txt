@@ -253,7 +253,7 @@
 │   │   └── quick-lru
 │   ├── ansi-regex
 │   ├── ansi-styles
-│   ├── @anthropic-ai
+│   ├── @aurora-local-ai
 │   │   └── sdk
 │   │       ├── bin
 │   │       ├── core

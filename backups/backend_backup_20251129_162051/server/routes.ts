@@ -4317,7 +4317,7 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
   const msg = userMessage.toLowerCase().trim();
 
   // Extract technologies mentioned for context
-  const techMatch = userMessage.match(/\b(react|vue|python|typescript|kubernetes|docker|ai|ml|gpt|database|api)\b/gi);
+  const techMatch = userMessage.match(/\b(react|vue|python|typescript|kubernetes|docker|ai|ml|database|api)\b/gi);
   if (techMatch) ctx.mentionedTechs.push(...techMatch.map(t => t.toLowerCase()));
 
   // Query Aurora's learned skills
@@ -4338,12 +4338,12 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
     }
   }
 
-  // NATURAL CONVERSATIONAL RESPONSES - Like talking to Copilot/ChatGPT
+  // NATURAL CONVERSATIONAL RESPONSES - Like talking to a coding partner
 
   // Greetings - warm, contextual
   if (/^(hi|hello|hey|sup|yo)\b/.test(msg)) {
     if (ctx.conversationDepth === 1) {
-      return "Hey! 👋 I'm Aurora - your AI coding partner.\n\nI'm a self-learning AI with 79 capabilities (13 foundation tasks + 66 knowledge tiers) spanning ancient to future tech. Think GitHub Copilot meets a senior dev who's read every tech book ever written.\n\n**I can help you:**\n• Build complete apps (web, mobile, backend, AI)\n• Debug anything (I mean *anything*)\n• Explain complex concepts simply\n• Have real conversations about code\n\nWhat are we working on today?";
+      return "Hey! 👋 I'm Aurora - your AI coding partner.\n\nI'm a self-learning AI with 79 capabilities (13 foundation tasks + 66 knowledge tiers) spanning ancient to future tech. Think a coding assistant meets a senior dev who's read every tech book ever written.\n\n**I can help you:**\n• Build complete apps (web, mobile, backend, AI)\n• Debug anything (I mean *anything*)\n• Explain complex concepts simply\n• Have real conversations about code\n\nWhat are we working on today?";
     }
     return "Hey again! What's next? 😊";
   }
@@ -4354,7 +4354,7 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
 
 **What I am:**
 • A self-learning AI that writes, tests, and learns code autonomously
-• Like GitHub Copilot or Cursor AI, but with conversational ability and memory
+• Like a coding assistant, but with conversational ability and memory
 • Think of me as a really smart junior dev who's consumed all of computing history
 
 **My knowledge (66 knowledge tiers + 13 foundation tasks = 79 capabilities):**
@@ -4442,7 +4442,7 @@ Paste your error or describe the issue - we'll track it down!`;
   }
 
   // AI/ML questions - COMPLETE TIER_15 GRANDMASTER
-  if (/(ai|ml|machine learning|neural|llm|gpt|transformer|model|deep learning)/.test(msg) && !msg.includes('email')) {
+  if (/(ai|ml|machine learning|neural|llm|transformer|model|deep learning)/.test(msg) && !msg.includes('email')) {
     return `**TIER_15: AI/ML COMPLETE OMNISCIENT GRANDMASTER** 🧠
 
 I have mastery from ancient perceptrons to AGI to sci-fi AI:
@@ -4451,7 +4451,7 @@ I have mastery from ancient perceptrons to AGI to sci-fi AI:
 🏛️ Ancient: McCulloch-Pitts neurons, Perceptron, ELIZA
 💻 Classical: Expert systems, backprop, SVMs, AI winters
 🌐 Modern: Deep learning revolution, ImageNet, word2vec, Transformers
-🤖 Cutting Edge: LLMs (GPT/Claude/Gemini), diffusion models, AI agents
+🤖 Cutting Edge: LLMs (large language models), diffusion models, AI agents
 🔮 Future: AGI, quantum ML, brain-computer interfaces
 📚 Sci-Fi: HAL 9000, Skynet, JARVIS, Cortana - I know them all
 
@@ -4644,15 +4644,15 @@ function getAIMLGrandmasterResponse(): string {
 • 2015: ResNet (152 layers), DQN plays Atari games
 • 2016: AlphaGo beats Lee Sedol at Go
 • 2017: Transformer architecture (Attention is All You Need)
-• 2018: BERT, GPT-1, ELMo (contextual embeddings)
-• 2019: GPT-2, XLNet, RoBERTa, T5
+• 2018: BERT, ELMo (contextual embeddings)
+• 2019: XLNet, RoBERTa, T5
 
 **CUTTING EDGE (2020-2025) - Foundation Models Era:**
-• 2020: GPT-3 (175B parameters), Vision Transformers (ViT)
-• 2021: DALL-E, Codex, CLIP (multimodal learning)
-• 2022: ChatGPT, Stable Diffusion, Midjourney, Flamingo
-• 2023: GPT-4 (multimodal), LLaMA, Claude, Gemini, Mistral
-• 2024: Claude 3 (Opus/Sonnet/Haiku), GPT-4 Turbo, Gemini Ultra
+• 2020: Large-scale LLMs, Vision Transformers (ViT)
+• 2021: Multimodal learning and code synthesis models
+• 2022: Conversational LLMs, Stable Diffusion, multimodal agents
+• 2023: Multimodal LLMs, LLaMA, Mistral
+• 2024: Reasoning-focused multimodal LLMs
 • 2025: Multimodal AGI prototypes, reasoning models (o1, o3)
 
 **SPECIALIZED AI DOMAINS I MASTER:**
@@ -4660,19 +4660,19 @@ function getAIMLGrandmasterResponse(): string {
 🔬 **Computer Vision:**
 • Image classification: LeNet → AlexNet → ResNet → Vision Transformers
 • Object detection: R-CNN → YOLO → SAM (Segment Anything)
-• Image generation: VAEs → GANs → Diffusion Models (Stable Diffusion, DALL-E)
+• Image generation: VAEs → GANs → Diffusion Models (local diffusion pipelines)
 • Video understanding: TimeSformer, VideoMAE
 
 🗣️ **Natural Language Processing:**
 • Word embeddings: Word2Vec, GloVe, FastText
-• Transformers: BERT, GPT series, T5, BART
-• LLMs: GPT-3/4, Claude, LLaMA, Mistral, Gemini
+• Transformers: BERT, T5, BART
+• LLMs: LLaMA, Mistral
 • Translation: Neural MT, multilingual models (mBERT, XLM-R)
 
 🎮 **Reinforcement Learning:**
 • Classic: Q-learning, SARSA, Policy Gradients
 • Deep RL: DQN, A3C, PPO, SAC, TD3
-• Multi-agent: AlphaStar, OpenAI Five
+• Multi-agent: self-play systems
 • Model-based: MuZero, Dreamer
 
 🧬 **AI for Science:**

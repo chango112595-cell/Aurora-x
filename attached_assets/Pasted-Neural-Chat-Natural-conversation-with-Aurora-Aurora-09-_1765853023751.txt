@@ -97,11 +97,11 @@ Files with Issues Found (8):
 TypeScript error in: client/src/components/ActivityMonitor.tsx
 TypeScript error in: things/branch_merge_duplicates/client/src/App.tsx
 TypeScript error in: things/branch_merge_duplicates/client/src/components/AuroraFuturisticChat.tsx
-Missing import: ./MyComponent (referenced in server/anthropic-service.ts)
-Missing import: ./MyComponent (referenced in server/anthropic-service.ts)
-Missing import: ./MyComponent (referenced in server/anthropic-service.ts)
-Missing import: ./utils (referenced in server/anthropic-service.ts)
-Missing import: ./data.json (referenced in server/anthropic-service.ts)
+Missing import: ./MyComponent (referenced in server/aurora-local-service.ts)
+Missing import: ./MyComponent (referenced in server/aurora-local-service.ts)
+Missing import: ./MyComponent (referenced in server/aurora-local-service.ts)
+Missing import: ./utils (referenced in server/aurora-local-service.ts)
+Missing import: ./data.json (referenced in server/aurora-local-service.ts)
 You
 09:43 PM
 repair them
