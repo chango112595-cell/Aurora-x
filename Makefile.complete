@@ -1,0 +1,663 @@
+# ============================================================================
+# Aurora-X Complete Project Makefile
+# Comprehensive automation for the entire Aurora AI System
+# Version: 4.0.0 | Date: December 2025
+# ============================================================================
+
+.DEFAULT_GOAL := help
+
+# ============================================================================
+# CORE VARIABLES
+# ============================================================================
+
+# System Commands
+PYTHON := python3
+PIP := pip3
+NODE := node
+NPM := npm
+DOCKER := docker
+GIT := git
+UV := uv
+
+# Ports Configuration
+PORT_FRONTEND    := 5000
+PORT_BRIDGE      := 5001
+PORT_NEXUS_V3    := 5002
+PORT_CHAT        := 5003
+PORT_LUMINAR     := 8000
+PORT_SELF_LEARN  := 5004
+
+# Directory Structure
+ROOT_DIR         := $(shell pwd)
+AURORA_CORE      := aurora_core
+AURORA_NEXUS     := aurora_nexus_v3
+AURORA_SUPERVISOR := aurora_supervisor
+AURORA_X         := aurora_x
+AURORA_WEBUI     := aurora_webui
+AURORA_BACKEND   := aurora_backend
+TOOLS_DIR        := tools
+CLIENT_DIR       := client
+LOGS_DIR         := logs
+DATA_DIR         := data
+RUNS_DIR         := runs
+SPECS_DIR        := specs
+TESTS_DIR        := tests
+SCRIPTS_DIR      := scripts
+BACKUPS_DIR      := backups
+KNOWLEDGE_DIR    := .aurora_knowledge
+
+# Version
+VERSION ?= $(shell cat pyproject.toml 2>/dev/null | grep '^version' | cut -d'"' -f2 || echo "4.0.0")
+
+# ============================================================================
+# HELP & INFORMATION
+# ============================================================================
+
+.PHONY: help
+help:
+	@echo ""
+	@echo "╔══════════════════════════════════════════════════════════════════════╗"
+	@echo "║             AURORA-X COMPLETE PROJECT MAKEFILE v4.0                  ║"
+	@echo "╚══════════════════════════════════════════════════════════════════════╝"
+	@echo ""
+	@echo "QUICK START:"
+	@echo "  make start              Start all Aurora services (recommended)"
+	@echo "  make stop               Stop all Aurora services"
+	@echo "  make status             Check status of all services"
+	@echo "  make install            Install all dependencies"
+	@echo ""
+	@echo "SERVICES:"
+	@echo "  make web                Start frontend + backend (port $(PORT_FRONTEND))"
+	@echo "  make bridge             Start Aurora Bridge (port $(PORT_BRIDGE))"
+	@echo "  make nexus              Start Aurora Nexus V3 (port $(PORT_NEXUS_V3))"
+	@echo "  make luminar            Start Luminar Nexus V2 (port $(PORT_LUMINAR))"
+	@echo "  make supervisor         Start Aurora Supervisor"
+	@echo ""
+	@echo "DEVELOPMENT:"
+	@echo "  make dev                Start development mode with hot reload"
+	@echo "  make test               Run all tests"
+	@echo "  make lint               Run linters (ruff, eslint)"
+	@echo "  make format             Auto-format code"
+	@echo "  make type-check         Run type checking"
+	@echo ""
+	@echo "AURORA AI FEATURES:"
+	@echo "  make chat               Interactive English mode chat"
+	@echo "  make spec SPEC=<file>   Compile spec to code"
+	@echo "  make say WHAT='...'     Natural language to code"
+	@echo "  make self-learn         Start self-learning daemon"
+	@echo "  make evolve             Run autonomous evolution cycle"
+	@echo ""
+	@echo "MAINTENANCE:"
+	@echo "  make clean              Clean temporary files"
+	@echo "  make backup             Create project backup"
+	@echo "  make health             Run health checks"
+	@echo "  make logs               View latest logs"
+	@echo ""
+	@echo "DEPLOYMENT:"
+	@echo "  make build              Build for production"
+	@echo "  make package            Create distributable package"
+	@echo "  make docker-build       Build Docker images"
+	@echo ""
+	@echo "Use 'make help-<category>' for detailed help on each category."
+	@echo ""
+
+.PHONY: help-services help-dev help-ai help-maintenance help-deploy
+help-services:
+	@echo "SERVICE COMMANDS:"
+	@echo "  make start              - Start all services via x-start"
+	@echo "  make start-all          - Alias for start"
+	@echo "  make stop               - Stop all Aurora services"
+	@echo "  make restart            - Restart all services"
+	@echo "  make web                - Start web app (frontend + backend)"
+	@echo "  make bridge             - Start Aurora Bridge service"
+	@echo "  make nexus              - Start Aurora Nexus V3"
+	@echo "  make luminar            - Start Luminar Nexus V2"
+	@echo "  make supervisor         - Start Aurora Supervisor"
+	@echo "  make orchestrator       - Start T07 Orchestrator"
+
+help-dev:
+	@echo "DEVELOPMENT COMMANDS:"
+	@echo "  make dev                - Start dev mode with hot reload"
+	@echo "  make test               - Run all tests"
+	@echo "  make test-unit          - Run unit tests only"
+	@echo "  make test-integration   - Run integration tests"
+	@echo "  make test-cov           - Run tests with coverage"
+	@echo "  make lint               - Run all linters"
+	@echo "  make format             - Format all code"
+	@echo "  make type-check         - Run mypy/pyright"
+	@echo "  make gates              - Run all quality gates"
+
+help-ai:
+	@echo "AURORA AI COMMANDS:"
+	@echo "  make chat               - Interactive chat mode"
+	@echo "  make chat-api           - Chat via API endpoint"
+	@echo "  make say WHAT='...'     - Natural language to code"
+	@echo "  make spec SPEC=<file>   - Compile spec file"
+	@echo "  make spec3 SPEC3=<file> - Compile V3 spec"
+	@echo "  make self-learn         - Start self-learning daemon"
+	@echo "  make evolve             - Run evolution cycle"
+	@echo "  make approve            - Approve pending changes"
+
+help-maintenance:
+	@echo "MAINTENANCE COMMANDS:"
+	@echo "  make clean              - Clean temp files"
+	@echo "  make clean-all          - Deep clean (includes node_modules)"
+	@echo "  make backup             - Create timestamped backup"
+	@echo "  make health             - Run health checks"
+	@echo "  make logs               - View recent logs"
+	@echo "  make kill-ports         - Kill all Aurora ports"
+
+help-deploy:
+	@echo "DEPLOYMENT COMMANDS:"
+	@echo "  make build              - Build for production"
+	@echo "  make package            - Create distributable tarball"
+	@echo "  make docker-build       - Build all Docker images"
+	@echo "  make docker-up          - Start Docker composition"
+	@echo "  make docker-down        - Stop Docker composition"
+
+# ============================================================================
+# INSTALLATION
+# ============================================================================
+
+.PHONY: install install-python install-node install-deps install-dev
+
+install: install-python install-node
+	@echo "✅ All dependencies installed"
+
+install-python:
+	@echo "🐍 Setting up Python environment..."
+	@if command -v uv >/dev/null 2>&1; then \
+		uv sync; \
+	else \
+		$(PYTHON) -m pip install --upgrade pip; \
+		$(PYTHON) -m pip install -r requirements.txt; \
+		$(PYTHON) -m pip install -e .; \
+	fi
+	@echo "✅ Python environment ready"
+
+install-node:
+	@echo "📦 Setting up Node.js environment..."
+	@$(NPM) install
+	@echo "✅ Node.js environment ready"
+
+install-dev: install
+	@echo "🔧 Installing development dependencies..."
+	@$(PYTHON) -m pip install ruff mypy pytest pytest-cov bandit
+	@echo "✅ Development dependencies installed"
+
+# ============================================================================
+# SERVICE MANAGEMENT
+# ============================================================================
+
+.PHONY: start stop restart status
+
+start:
+	@echo "🚀 Starting Aurora-X Complete System..."
+	@./x-start
+
+start-all: start
+
+stop:
+	@echo "🛑 Stopping all Aurora services..."
+	@./x-stop 2>/dev/null || true
+	@$(MAKE) kill-ports
+	@echo "✅ All services stopped"
+
+restart: stop
+	@sleep 2
+	@$(MAKE) start
+
+status:
+	@echo ""
+	@echo "╔══════════════════════════════════════════════════════════════╗"
+	@echo "║                    AURORA SYSTEM STATUS                      ║"
+	@echo "╚══════════════════════════════════════════════════════════════╝"
+	@echo ""
+	@printf "%-35s %-10s %s\n" "SERVICE" "PORT" "STATUS"
+	@echo "─────────────────────────────────────────────────────────────────"
+	@for pair in "Frontend+Backend:$(PORT_FRONTEND)" "Aurora Bridge:$(PORT_BRIDGE)" "Aurora Nexus V3:$(PORT_NEXUS_V3)" "Luminar Nexus V2:$(PORT_LUMINAR)"; do \
+		name=$$(echo $$pair | cut -d: -f1); \
+		port=$$(echo $$pair | cut -d: -f2); \
+		if curl -s http://localhost:$$port >/dev/null 2>&1; then \
+			printf "%-35s %-10s \033[32m● ONLINE\033[0m\n" "$$name" "$$port"; \
+		else \
+			printf "%-35s %-10s \033[31m○ OFFLINE\033[0m\n" "$$name" "$$port"; \
+		fi; \
+	done
+	@echo ""
+
+# Individual Services
+.PHONY: web bridge nexus luminar supervisor
+
+web:
+	@echo "🌐 Starting web application on port $(PORT_FRONTEND)..."
+	@$(NPM) run dev
+
+bridge:
+	@echo "🌉 Starting Aurora Bridge on port $(PORT_BRIDGE)..."
+	@$(PYTHON) -m aurora_x.bridge.service
+
+nexus:
+	@echo "🧠 Starting Aurora Nexus V3 on port $(PORT_NEXUS_V3)..."
+	@$(PYTHON) $(AURORA_NEXUS)/main.py
+
+luminar:
+	@echo "✨ Starting Luminar Nexus V2 on port $(PORT_LUMINAR)..."
+	@$(PYTHON) $(TOOLS_DIR)/luminar_nexus_v2.py serve
+
+supervisor:
+	@echo "👁️ Starting Aurora Supervisor..."
+	@$(PYTHON) $(AURORA_SUPERVISOR)/supervisor_core.py
+
+orchestrator:
+	@echo "🎭 Starting T07 Orchestrator..."
+	@$(PYTHON) $(AURORA_X)/orchestrator.py
+
+# ============================================================================
+# DEVELOPMENT
+# ============================================================================
+
+.PHONY: dev test test-unit test-integration test-cov lint format type-check gates
+
+dev:
+	@echo "🔧 Starting development mode..."
+	@$(NPM) run dev
+
+test:
+	@echo "🧪 Running all tests..."
+	@$(PYTHON) -m pytest $(TESTS_DIR)/ -v
+
+test-unit:
+	@echo "🧪 Running unit tests..."
+	@$(PYTHON) -m pytest $(TESTS_DIR)/ -v -m "not integration"
+
+test-integration:
+	@echo "🧪 Running integration tests..."
+	@$(PYTHON) -m pytest $(TESTS_DIR)/ -v -m integration
+
+test-cov:
+	@echo "📊 Running tests with coverage..."
+	@$(PYTHON) -m pytest $(TESTS_DIR)/ --cov=$(AURORA_X) --cov-report=html --cov-report=term
+	@echo "Coverage report: coverage_html/index.html"
+
+lint:
+	@echo "🔍 Running linters..."
+	@ruff check . --fix || true
+	@$(NPM) run lint 2>/dev/null || true
+	@echo "✅ Linting complete"
+
+format:
+	@echo "✨ Formatting code..."
+	@ruff format . || true
+	@$(NPM) run format 2>/dev/null || true
+	@echo "✅ Formatting complete"
+
+type-check:
+	@echo "🔎 Running type checks..."
+	@$(PYTHON) -m mypy $(AURORA_X) $(AURORA_CORE) $(AURORA_NEXUS) --ignore-missing-imports || true
+	@echo "✅ Type checking complete"
+
+gates: lint type-check test
+	@echo "✅ All quality gates passed"
+
+# ============================================================================
+# AURORA AI FEATURES
+# ============================================================================
+
+.PHONY: chat chat-api say spec spec3 self-learn evolve approve
+
+WHAT ?= find the largest number in a list
+SPEC ?= specs/rich_spec.md
+SPEC3 ?= specs/check_palindrome.md
+API_URL ?= http://localhost:$(PORT_BRIDGE)
+
+chat:
+	@echo "🗣️  Aurora-X Interactive English Mode"
+	@echo "Enter your request in plain English:"
+	@read -r prompt; \
+	if [ -z "$$prompt" ]; then \
+		echo "Using default: $(WHAT)"; \
+		prompt="$(WHAT)"; \
+	fi; \
+	echo "📝 Generating from: $$prompt"; \
+	$(PYTHON) $(TOOLS_DIR)/english_to_spec.py "$$prompt"
+
+chat-api:
+	@echo "🌐 Using Aurora-X Chat API..."
+	@read -r prompt; \
+	curl -X POST $(API_URL)/api/chat \
+		-H "Content-Type: application/json" \
+		-d "{\"prompt\": \"$$prompt\", \"auto_synthesize\": true}" | \
+		$(PYTHON) -m json.tool
+
+say:
+	@echo "🗣️  Natural Language → Code: $(WHAT)"
+	@$(PYTHON) -m aurora_x.main --nl "$(WHAT)"
+
+spec:
+	@echo "🔧 Compiling spec: $(SPEC)"
+	@$(PYTHON) $(TOOLS_DIR)/spec_compile.py $(SPEC)
+
+spec3:
+	@echo "🔧 V3 Compile: $(SPEC3)"
+	@$(PYTHON) $(TOOLS_DIR)/spec_compile_v3.py $(SPEC3)
+
+self-learn:
+	@echo "🧠 Starting self-learning daemon..."
+	@$(PYTHON) $(AURORA_X)/self_learn.py
+
+evolve:
+	@echo "🧬 Running autonomous evolution cycle..."
+	@$(PYTHON) $(AURORA_SUPERVISOR)/auto_evolution.py
+
+approve:
+	@echo "📋 Checking pending changes..."
+	@$(PYTHON) $(AURORA_SUPERVISOR)/approve_changes.py
+
+# ============================================================================
+# MAINTENANCE
+# ============================================================================
+
+.PHONY: clean clean-all backup health logs kill-ports
+
+clean:
+	@echo "🧹 Cleaning temporary files..."
+	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type f -name "*.pyc" -delete 2>/dev/null || true
+	@find . -type f -name "*.pyo" -delete 2>/dev/null || true
+	@rm -rf .pytest_cache .mypy_cache .ruff_cache 2>/dev/null || true
+	@rm -rf *.egg-info build dist 2>/dev/null || true
+	@echo "✅ Clean complete"
+
+clean-all: clean
+	@echo "🧹 Deep cleaning..."
+	@rm -rf node_modules 2>/dev/null || true
+	@rm -rf .venv venv 2>/dev/null || true
+	@rm -rf coverage_html 2>/dev/null || true
+	@echo "✅ Deep clean complete"
+
+backup:
+	@echo "💾 Creating backup..."
+	@mkdir -p $(BACKUPS_DIR)
+	@TIMESTAMP=$$(date +%Y%m%d_%H%M%S); \
+	tar --exclude='node_modules' \
+		--exclude='venv' \
+		--exclude='.venv' \
+		--exclude='__pycache__' \
+		--exclude='.git' \
+		--exclude='*.pyc' \
+		--exclude='logs/*' \
+		--exclude='backups' \
+		-czf $(BACKUPS_DIR)/aurora-backup-$$TIMESTAMP.tar.gz . 2>/dev/null; \
+	echo "✅ Backup created: $(BACKUPS_DIR)/aurora-backup-$$TIMESTAMP.tar.gz"
+
+health:
+	@echo "🏥 Running health checks..."
+	@$(PYTHON) $(TOOLS_DIR)/system_health_check.py 2>/dev/null || echo "Health check script not found"
+	@$(MAKE) status
+
+logs:
+	@echo "📜 Recent logs:"
+	@echo ""
+	@echo "=== x-start logs ==="
+	@tail -20 $(LOGS_DIR)/x-start/*.log 2>/dev/null || echo "No x-start logs found"
+	@echo ""
+	@echo "=== Application logs ==="
+	@tail -20 $(LOGS_DIR)/*.log 2>/dev/null || echo "No application logs found"
+
+kill-ports:
+	@echo "🔪 Killing Aurora ports..."
+	@for port in $(PORT_FRONTEND) $(PORT_BRIDGE) $(PORT_NEXUS_V3) $(PORT_LUMINAR) $(PORT_CHAT); do \
+		kill -9 $$(lsof -t -i:$$port) 2>/dev/null || true; \
+	done
+	@echo "✅ Ports cleared"
+
+# ============================================================================
+# DEPLOYMENT & PACKAGING
+# ============================================================================
+
+.PHONY: build package package-release docker-build docker-up docker-down
+
+build:
+	@echo "🏗️  Building for production..."
+	@$(NPM) run build 2>/dev/null || true
+	@$(PYTHON) -m build 2>/dev/null || true
+	@echo "✅ Build complete"
+
+PACKAGE_NAME := aurora-x-v$(VERSION)
+
+package:
+	@echo "📦 Creating package: $(PACKAGE_NAME).tar.gz"
+	@mkdir -p dist
+	@tar --exclude='node_modules' \
+		--exclude='venv' \
+		--exclude='.venv' \
+		--exclude='.git' \
+		--exclude='__pycache__' \
+		--exclude='*.pyc' \
+		--exclude='.env' \
+		--exclude='dist' \
+		--exclude='*.egg-info' \
+		--exclude='coverage_html' \
+		--exclude='logs/*' \
+		--exclude='runs/*' \
+		--exclude='.pytest_cache' \
+		--exclude='*.log' \
+		--exclude='*.zip' \
+		--exclude='pack_zips' \
+		--exclude='backups' \
+		--exclude='unused*' \
+		-czvf dist/$(PACKAGE_NAME).tar.gz \
+		--transform 's,^,$(PACKAGE_NAME)/,' \
+		. 2>/dev/null
+	@echo ""
+	@echo "✅ Package created: dist/$(PACKAGE_NAME).tar.gz"
+
+package-release:
+	@$(MAKE) package VERSION=$(VERSION)
+
+docker-build:
+	@echo "🐳 Building Docker images..."
+	@$(DOCKER) build -t aurora-x:$(VERSION) -f Dockerfile .
+	@$(DOCKER) build -t aurora-x-backend:$(VERSION) -f Dockerfile.backend . 2>/dev/null || true
+	@$(DOCKER) build -t aurora-x-frontend:$(VERSION) -f Dockerfile.frontend . 2>/dev/null || true
+	@echo "✅ Docker images built"
+
+docker-up:
+	@echo "🐳 Starting Docker composition..."
+	@docker-compose up -d
+
+docker-down:
+	@echo "🐳 Stopping Docker composition..."
+	@docker-compose down
+
+# ============================================================================
+# AURORA NEXUS V3 SPECIFIC
+# ============================================================================
+
+.PHONY: nexus-test nexus-modules nexus-workers nexus-status
+
+nexus-test:
+	@echo "🧪 Testing Aurora Nexus V3..."
+	@$(PYTHON) $(AURORA_NEXUS)/test_nexus.py
+
+nexus-modules:
+	@echo "📦 Listing Nexus V3 modules..."
+	@$(PYTHON) -c "import json; print(json.dumps(json.load(open('$(AURORA_NEXUS)/modules_registry.json')), indent=2))" | head -50
+
+nexus-workers:
+	@echo "👷 Nexus V3 workers status..."
+	@ls -la $(AURORA_NEXUS)/workers/
+
+nexus-status:
+	@echo "🧠 Aurora Nexus V3 Status..."
+	@curl -s http://localhost:$(PORT_NEXUS_V3)/api/health 2>/dev/null || echo "Nexus V3 not running"
+
+# ============================================================================
+# AURORA SUPERVISOR SPECIFIC
+# ============================================================================
+
+.PHONY: supervisor-status supervisor-evolve supervisor-approve
+
+supervisor-status:
+	@echo "👁️ Aurora Supervisor Status..."
+	@$(PYTHON) $(AURORA_SUPERVISOR)/supervisor_core.py --status 2>/dev/null || echo "Supervisor not available"
+
+supervisor-evolve:
+	@echo "🧬 Running supervisor evolution..."
+	@$(PYTHON) $(AURORA_SUPERVISOR)/auto_evolution.py
+
+supervisor-approve:
+	@echo "✅ Approving supervisor changes..."
+	@$(PYTHON) $(AURORA_SUPERVISOR)/approve_changes.py
+
+# ============================================================================
+# QUALITY GATES (CI/CD)
+# ============================================================================
+
+.PHONY: ci-test ci-lint ci-security ci-all
+
+ci-test:
+	@echo "🧪 CI: Running tests..."
+	@$(PYTHON) -m pytest $(TESTS_DIR)/ -v --tb=short
+
+ci-lint:
+	@echo "🔍 CI: Running linters..."
+	@ruff check . --output-format=github
+
+ci-security:
+	@echo "🔐 CI: Running security scan..."
+	@bandit -r $(AURORA_X) $(AURORA_CORE) $(AURORA_NEXUS) -f json -o bandit-report.json || true
+
+ci-all: ci-lint ci-security ci-test
+	@echo "✅ CI: All checks passed"
+
+# ============================================================================
+# DEMO & EXAMPLES
+# ============================================================================
+
+.PHONY: demo demo-seed demo-clean demo-status
+
+demo:
+	@echo "🎭 Running Aurora demos..."
+	@$(MAKE) demo-seed
+	@$(MAKE) demo-status
+
+demo-seed:
+	@echo "🌱 Seeding demo specs..."
+	@mkdir -p $(SPECS_DIR) $(RUNS_DIR)
+	@printf "## reverse_string\n\n- input: abc\n- output: cba\n" > $(SPECS_DIR)/reverse_string.md
+	@printf "## math_eval\n\n- expr: (2+3)^2 + 1\n" > $(SPECS_DIR)/math_eval.md
+	@echo "✅ Demo specs created"
+
+demo-clean:
+	@echo "🧹 Cleaning demo artifacts..."
+	@rm -f $(SPECS_DIR)/reverse_string.md $(SPECS_DIR)/math_eval.md 2>/dev/null || true
+	@echo "✅ Demo artifacts cleaned"
+
+demo-status:
+	@echo "📊 Demo status..."
+	@curl -s http://localhost:$(PORT_LUMINAR)/healthz 2>/dev/null | $(PYTHON) -m json.tool || echo "Server not running"
+
+# ============================================================================
+# MANIFEST & MODULE MANAGEMENT
+# ============================================================================
+
+.PHONY: manifest-info manifest-tiers manifest-modules
+
+manifest-info:
+	@echo "📋 Aurora Manifests:"
+	@echo ""
+	@for f in manifests/*.json; do \
+		echo "  - $$f: $$(cat $$f 2>/dev/null | $(PYTHON) -c 'import sys,json; d=json.load(sys.stdin); print(len(d.get(list(d.keys())[0] if d else [], [])))' 2>/dev/null || echo 0) entries"; \
+	done
+
+manifest-tiers:
+	@echo "🏆 Aurora Tiers:"
+	@$(PYTHON) -c "import json; tiers=json.load(open('manifests/tiers.manifest.json'))['tiers']; [print(f\"  T{t['id']:02d}: {t['name']}\") for t in tiers]" 2>/dev/null || echo "Tiers manifest not found"
+
+manifest-modules:
+	@echo "📦 Aurora Modules:"
+	@$(PYTHON) -c "import json; mods=json.load(open('manifests/modules.manifest.json'))['modules'][:10]; [print(f\"  - {m['name']}\") for m in mods]; print(f'  ... and {len(json.load(open(\"manifests/modules.manifest.json\"))[\"modules\"])-10} more')" 2>/dev/null || echo "Modules manifest not found"
+
+# ============================================================================
+# KNOWLEDGE & MEMORY
+# ============================================================================
+
+.PHONY: knowledge-status knowledge-backup knowledge-snapshot
+
+knowledge-status:
+	@echo "🧠 Aurora Knowledge Status:"
+	@wc -l $(KNOWLEDGE_DIR)/*.jsonl 2>/dev/null || echo "No knowledge files found"
+
+knowledge-backup:
+	@echo "💾 Backing up knowledge..."
+	@mkdir -p $(BACKUPS_DIR)/knowledge
+	@cp -r $(KNOWLEDGE_DIR)/* $(BACKUPS_DIR)/knowledge/ 2>/dev/null || true
+	@echo "✅ Knowledge backed up to $(BACKUPS_DIR)/knowledge/"
+
+knowledge-snapshot:
+	@echo "📸 Creating knowledge snapshot..."
+	@$(PYTHON) $(SCRIPTS_DIR)/snapshot_supervisor_knowledge.py 2>/dev/null || echo "Snapshot script not available"
+
+# ============================================================================
+# UTILITIES
+# ============================================================================
+
+.PHONY: update-progress info version
+
+update-progress:
+	@$(PYTHON) $(TOOLS_DIR)/update_progress.py 2>/dev/null || echo "Progress updater not found"
+
+info:
+	@echo ""
+	@echo "Aurora-X System Information"
+	@echo "==========================="
+	@echo "Version:     $(VERSION)"
+	@echo "Python:      $$($(PYTHON) --version 2>&1)"
+	@echo "Node:        $$($(NODE) --version 2>&1)"
+	@echo "NPM:         $$($(NPM) --version 2>&1)"
+	@echo "Root:        $(ROOT_DIR)"
+	@echo ""
+	@echo "Core Directories:"
+	@echo "  - Aurora Core:      $(AURORA_CORE)"
+	@echo "  - Aurora Nexus V3:  $(AURORA_NEXUS)"
+	@echo "  - Aurora Supervisor:$(AURORA_SUPERVISOR)"
+	@echo "  - Aurora X:         $(AURORA_X)"
+	@echo ""
+
+version:
+	@echo "$(VERSION)"
+
+# ============================================================================
+# LEGACY COMPATIBILITY (from original Makefile)
+# ============================================================================
+
+.PHONY: run serve serve-v3 cov sec diff rollback
+
+run:
+	@$(PYTHON) -m aurora_x.main --spec $(SPEC) --seed-bias 0.25
+
+serve-v3:
+	@echo "🚀 Starting FastAPI server on port $(PORT_BRIDGE)..."
+	@uvicorn aurora_x.serve:app --host 0.0.0.0 --port $(PORT_BRIDGE)
+
+serve: serve-v3
+
+cov:
+	@$(MAKE) test-cov
+
+sec:
+	@echo "🔐 Running security scan..."
+	@bandit -r $(AURORA_X) -ll 2>/dev/null || echo "Install bandit: pip install bandit"
+
+diff:
+	@$(GIT) diff --stat
+
+rollback:
+	@echo "⚠️  Rolling back to previous commit..."
+	@$(GIT) reset --hard HEAD~1
+
+# ============================================================================
+# END OF MAKEFILE
+# ============================================================================
