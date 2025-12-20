@@ -295,33 +295,34 @@ class HardwareDetector:
     
     async def get_info(self) -> Dict[str, Any]:
         if not self.profile:
-            await self.detect()
+            self.profile = await self.detect()
         
+        profile = self.profile
         return {
             "cpu": {
-                "cores_physical": self.profile.cpu.cores_physical,
-                "cores_logical": self.profile.cpu.cores_logical,
-                "architecture": self.profile.cpu.architecture,
-                "model": self.profile.cpu.model
+                "cores_physical": profile.cpu.cores_physical,
+                "cores_logical": profile.cpu.cores_logical,
+                "architecture": profile.cpu.architecture,
+                "model": profile.cpu.model
             },
             "memory": {
-                "total_mb": self.profile.memory.total_mb,
-                "available_mb": self.profile.memory.available_mb,
-                "percent_used": self.profile.memory.percent_used
+                "total_mb": profile.memory.total_mb,
+                "available_mb": profile.memory.available_mb,
+                "percent_used": profile.memory.percent_used
             },
             "storage": [
                 {"mount": s.mount_point, "total_gb": s.total_gb, "available_gb": s.available_gb}
-                for s in self.profile.storage
+                for s in profile.storage
             ],
             "network": [
                 {"name": n.name, "address": n.address, "is_up": n.is_up}
-                for n in self.profile.network
+                for n in profile.network
             ],
-            "gpu_available": self.profile.gpu_available,
+            "gpu_available": profile.gpu_available,
             "battery": {
-                "powered": self.profile.battery_powered,
-                "percent": self.profile.battery_percent
+                "powered": profile.battery_powered,
+                "percent": profile.battery_percent
             },
-            "capability_score": self.profile.capability_score,
+            "capability_score": profile.capability_score,
             "device_tier": self.get_device_tier()
         }
