@@ -17,6 +17,7 @@ import { getExternalAIConfig, isAnthropicAvailable, isAnyExternalAIAvailable, lo
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
+const AURORA_NEXUS_V3_URL = process.env.AURORA_NEXUS_V3_URL || "http://127.0.0.1:5002";
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const MANIFEST_DIR = path.join(PROJECT_ROOT, "manifests");
 const PACKS_DIR = path.join(PROJECT_ROOT, "packs");
@@ -672,9 +673,9 @@ export class AuroraCore {
       v2Metric.lastCheck = Date.now();
     }
     
-    // Check Aurora Nexus V3 (port 5002)
+    // Check Aurora Nexus V3 (default port 5002)
     try {
-      const v3Response = await fetch('http://127.0.0.1:5002/api/status', {
+      const v3Response = await fetch(`${AURORA_NEXUS_V3_URL}/api/status`, {
         method: 'GET',
         signal: AbortSignal.timeout(2000)
       }).catch(() => null);
