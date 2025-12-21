@@ -56,7 +56,10 @@ class PlatformAdapter:
                         f"Docker={self.capabilities.has_docker}")
     
     async def shutdown(self):
+        """Cleanup platform adapter resources."""
         self.logger.info("Platform adapter shutting down")
+        self._adapters.clear()
+        self.logger.debug("Platform adapters cleared")
     
     def _detect_platform(self) -> PlatformType:
         system = platform.system().lower()

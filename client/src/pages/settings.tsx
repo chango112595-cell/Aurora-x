@@ -171,7 +171,7 @@ function SecurityApiKeyManager() {
                 </Label>
                 <div className="space-y-3">
                   <Input
-                    placeholder="Alias (e.g., discord_webhook, openai_key)"
+                    placeholder="Alias (e.g., discord_webhook, service_key)"
                     value={newAlias}
                     onChange={(e) => setNewAlias(e.target.value)}
                     className="bg-slate-700/50 border-green-500/30"

@@ -72,12 +72,20 @@ class ResourceManager:
         self._monitor_task = asyncio.create_task(self._monitor_loop())
     
     async def shutdown(self):
+        """Cleanup resource manager - cancel tasks and release allocations."""
+        self.logger.info("Resource manager shutting down")
         if self._monitor_task:
             self._monitor_task.cancel()
             try:
                 await self._monitor_task
             except asyncio.CancelledError:
                 pass
+            self.logger.debug("Monitor task cancelled")
+        with self._lock:
+            allocation_count = len(self.allocations)
+            self.allocations.clear()
+            self.budgets.clear()
+        self.logger.debug(f"Released {allocation_count} allocations")
         self.logger.info("Resource manager shut down")
     
     async def _monitor_loop(self):

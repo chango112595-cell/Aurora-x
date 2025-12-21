@@ -60,7 +60,7 @@ def log_to_activity_monitor(activity_type: str, message: str, details: dict | No
             "details": details or {}
         }).encode('utf-8')
         req = urllib.request.Request(
-            "http://0.0.0.0:5002/api/activity/log",
+            "http://127.0.0.1:5002/api/activity/log",
             data=data,
             headers={"Content-Type": "application/json"},
             method="POST"
@@ -73,13 +73,18 @@ def log_to_activity_monitor(activity_type: str, message: str, details: dict | No
 def run_wsgi(app: Flask, port: int) -> None:
     """
     Run the API using a production-ready WSGI server when available.
-    Falls back to the standard library server if waitress is missing.
+    Falls back to the standard library server only when explicitly allowed.
     """
     try:
         from waitress import serve  # type: ignore
 
         serve(app, host="0.0.0.0", port=port, threads=8)
     except Exception as exc:  # pragma: no cover - fallback path
+        if os.getenv("AURORA_ALLOW_DEV_SERVER") != "1":
+            raise RuntimeError(
+                "Waitress is required for production. Set AURORA_ALLOW_DEV_SERVER=1 "
+                "to allow the development fallback."
+            ) from exc
         from wsgiref.simple_server import make_server
 
         print(f"[WARN] Waitress unavailable ({exc}); using wsgiref fallback.")
@@ -1466,7 +1471,7 @@ class LuminarNexusV2:
                     })
                     
                     result = subprocess.run(
-                        ["python3", wrapper_path],
+                        [sys.executable, wrapper_path],
                         input=input_data,
                         capture_output=True,
                         text=True,

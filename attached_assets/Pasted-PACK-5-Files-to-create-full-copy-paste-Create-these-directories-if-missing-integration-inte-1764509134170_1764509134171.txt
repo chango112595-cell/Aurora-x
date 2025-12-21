@@ -554,7 +554,7 @@ Run these commands from repo root:
 
 Create branch and commit current work:
 
-git checkout -b aurora-gpt-pack5
+git checkout -b aurora-local-pack5
 git add -A
 git commit -m "backup before pack5 integration"
 
@@ -682,7 +682,7 @@ Safety-first architecture: companion-computer patterns, no automatic ECU/flight 
 
 Final notes & recommended immediate steps
 
-Create branch aurora-gpt-pack5 and commit current state.
+Create branch aurora-local-pack5 and commit current state.
 
 Add all new files above; set executable bits on Python/Bash scripts.
 

@@ -116,6 +116,12 @@ class AuroraMasterLoader:
         MASTER_STATUS_FILE.write_text(json.dumps(self.status, indent=2))
 
     def _print_summary(self, pack_count, service_count, elapsed):
+        pack_status = self.pack_loader.get_status()
+        total_modules = pack_status.get("total_modules", 0)
+        generated_modules = pack_status.get("generated_modules", 0)
+        core_modules = pack_status.get("core_modules", 0)
+        manifest_modules = pack_status.get("manifest_modules", 0)
+        
         print()
         print("=" * 70)
         print("    AURORA-X MASTER LOADER - ACTIVATION COMPLETE")
@@ -123,6 +129,10 @@ class AuroraMasterLoader:
         print()
         print(f"    Phase Integration: {self.status.get('phase_integration', 'unknown')}")
         print(f"    PACK Systems:      {pack_count}/15 activated")
+        print(f"    Total Modules:     {total_modules} loaded")
+        print(f"      - Generated:     {generated_modules}")
+        print(f"      - Core:          {core_modules}")
+        print(f"      - Manifest:      {manifest_modules}")
         print(f"    Services:          {service_count} started")
         print(f"    Total Time:        {elapsed:.2f} seconds")
         print()
@@ -131,7 +141,7 @@ class AuroraMasterLoader:
         print("=" * 70)
         print()
         print("    Active Workflows:")
-        print("    - Aurora Nexus V3 (300 workers, 188 tiers, 66 AEMs, 550 modules)")
+        print(f"    - Aurora Nexus V3 (300 workers, 188 tiers, 66 AEMs, {total_modules} modules)")
         print("    - Aurora Supervisor (100 healers + auto-evolution)")
         print("    - Luminar Nexus V2 (Chat + ML learning)")
         print("    - MCP Server (HTTP/WebSocket API)")

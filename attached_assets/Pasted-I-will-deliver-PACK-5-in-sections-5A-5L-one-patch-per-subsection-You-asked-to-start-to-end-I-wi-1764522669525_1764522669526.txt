@@ -44,7 +44,7 @@ Unit tests
 Save the block below as pack05_5A.patch and apply.
 
 From bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb Mon Sep 17 00:00:00 2001
-From: AuroraGPT <aurora@gpt.local>
+From: AuroraLocal <aurora@aurora.local>
 Date: Mon, 01 Dec 2025 01:30:00 +0000
 Subject: [PATCH] pack05 5A: Plugin API Core (registry, API, loader, tests)
 

@@ -11,6 +11,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 import threading
 
+from aurora_nexus_v3.utils.atomic_io import atomic_json_write, load_snapshot
+
 
 class DiscoveryMethod(Enum):
     MDNS = "mdns"
@@ -68,16 +70,28 @@ class DiscoveryProtocol:
         self._discovery_task = asyncio.create_task(self._discovery_loop())
     
     async def shutdown(self):
+        """Cleanup discovery protocol - cancel tasks, close socket, clear nodes."""
+        self.logger.info("Discovery protocol shutting down")
         if self._discovery_task:
             self._discovery_task.cancel()
             try:
                 await self._discovery_task
             except asyncio.CancelledError:
                 pass
+            self.logger.debug("Discovery task cancelled")
         
         if self._broadcast_socket:
-            self._broadcast_socket.close()
+            try:
+                self._broadcast_socket.close()
+                self.logger.debug("Broadcast socket closed")
+            except Exception as e:
+                self.logger.warning(f"Error closing broadcast socket: {e}")
+            self._broadcast_socket = None
         
+        with self._lock:
+            node_count = len(self.nodes)
+            self.nodes.clear()
+        self.logger.debug(f"Cleared {node_count} discovered nodes")
         self.logger.info("Discovery protocol shut down")
     
     def _setup_broadcast_socket(self):

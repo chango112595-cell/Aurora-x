@@ -11,7 +11,7 @@ Open PowerShell **in your repo root** (where `server/` lives) and run these line
 
 ```powershell
 # 1) create and switch to new branch
-git checkout -b aurora-gpt
+git checkout -b aurora-local
 
 # 2) create a timestamped backup folder
 $ts = Get-Date -Format "yyyyMMdd_HHmm"
@@ -24,7 +24,7 @@ Copy-Item -Path ".\server" -Destination $backup -Recurse -Force
 
 # 4) commit the backup snapshot to the new branch
 git add -A
-git commit -m "chore: create aurora-gpt branch and backup old backend"
+git commit -m "chore: create aurora-local branch and backup old backend"
 ```
 
 **Notes for PowerShell:**
@@ -41,7 +41,7 @@ Run these **in your repo root**:
 
 ```bash
 # create and switch to new branch
-git checkout -b aurora-gpt
+git checkout -b aurora-local
 
 # snapshot backup with timestamp and copy server folder
 mkdir -p "backups/backend_backup_$(date +%Y%m%d_%H%M)"
@@ -49,7 +49,7 @@ cp -r server "backups/backend_backup_$(date +%Y%m%d_%H%M)/"
 
 # commit snapshot
 git add -A
-git commit -m "chore: create aurora-gpt branch and backup old backend"
+git commit -m "chore: create aurora-local branch and backup old backend"
 ```
 
 ---
@@ -65,4 +65,4 @@ git commit -m "chore: create aurora-gpt branch and backup old backend"
 
 ---
 
-I’ve given the exact, non-destructive steps to create `aurora-gpt` and back up your existing backend safely. Run the block that matches your environment and paste any error output if anything still fails — I’ll produce the next fixed command immediately.
+I’ve given the exact, non-destructive steps to create `aurora-local` and back up your existing backend safely. Run the block that matches your environment and paste any error output if anything still fails — I’ll produce the next fixed command immediately.

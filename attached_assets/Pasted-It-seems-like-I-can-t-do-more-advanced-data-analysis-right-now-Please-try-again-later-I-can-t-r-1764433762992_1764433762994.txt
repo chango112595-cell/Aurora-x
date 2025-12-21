@@ -12,7 +12,7 @@ I can’t run more file-inspection tools in this environment right now, but I *d
 
 Because I can’t run more advanced automated edits here, I will give you a complete, **actionable** start-to-end plan plus ready-to-paste files and terminal commands you can run locally to:
 
-1. Create the `aurora-gpt` branch (non-destructive).
+1. Create the `aurora-local` branch (non-destructive).
 2. Scaffold a hybrid architecture (Express remains gateway on port 5000; new Python FastAPI AI core runs in its own container).
 3. Add Docker/Docker-Compose and NGINX proxying between services.
 4. Run diagnostics to confirm which services/ports are active.
@@ -28,12 +28,12 @@ Below are **exact files** (copy into your repo) and **exact commands** (run in P
 
 ```bash
 cd /path/to/your/local/aurora-x-repo
-git checkout -b aurora-gpt
+git checkout -b aurora-local
 # snapshot the old backend into a backup folder inside the new branch
 mkdir -p backups/backend_backup_$(date +%Y%m%d_%H%M)
 cp -r server backups/backend_backup_$(date +%Y%m%d_%H%M)/
 git add -A
-git commit -m "chore: create aurora-gpt branch and backup old backend"
+git commit -m "chore: create aurora-local branch and backup old backend"
 ```
 
 ---
@@ -85,7 +85,7 @@ curl -sI http://localhost:5000/ > diag_5000.txt || true
 
 ---
 
-# C. New files to add (create these under your `aurora-gpt` branch)
+# C. New files to add (create these under your `aurora-local` branch)
 
 **1) `docker-compose.yml` (repo root)**
 This starts three services: `express-gateway` (keeps your existing server on 5000), `aurora-ai` (FastAPI AI core on 8000), and `nginx` (reverse proxy for production). In dev you can skip nginx.
@@ -390,7 +390,7 @@ Ensure health checks use `http://aurora-ai:8000/healthz` and `http://express-gat
 
 # H. How to build & run locally (after adding files)
 
-From repo root in `aurora-gpt` branch:
+From repo root in `aurora-local` branch:
 
 ```bash
 # Build and run containers
@@ -423,7 +423,7 @@ npx wscat -c ws://localhost:8000/ws/chat
 4. Test chat REST endpoint: POST `/api/chat` via express which proxies to aurora-ai → aurora_core invoked → returns result. (Temporarily stubbed until you wire `aurora_core` in.)
 5. Test websocket flows: client → nginx → aurora-ai `/ws/chat` → receives echo (then wire to aurora_core).
 6. Run unit tests for name detection and key NLP flows.
-7. After everything verified on `aurora-gpt` branch, delete `server/` in that branch if you want (keep main branch intact).
+7. After everything verified on `aurora-local` branch, delete `server/` in that branch if you want (keep main branch intact).
 
 ---
 
@@ -439,7 +439,7 @@ I’m currently blocked from running the deeper automated repo transforms in thi
 ### Immediate next action I recommend (do this now):
 
 1. Run the diagnostic commands in section B and paste the outputs here (or attach the three files produced).
-2. While you do that, create the `aurora-gpt` branch as shown and add the new `docker-compose.yml`, `docker/ai.Dockerfile`, `backend_stub/main.py`, and `docker/nginx.conf` files (copy/paste from above). Then run `docker-compose up --build` and paste the logs (express & aurora-ai). If you get errors, paste the logs and I’ll produce concrete fixes.
+2. While you do that, create the `aurora-local` branch as shown and add the new `docker-compose.yml`, `docker/ai.Dockerfile`, `backend_stub/main.py`, and `docker/nginx.conf` files (copy/paste from above). Then run `docker-compose up --build` and paste the logs (express & aurora-ai). If you get errors, paste the logs and I’ll produce concrete fixes.
 
 ---
 

@@ -13,7 +13,7 @@ Responsibilities:
 
 Usage (HTTP + CLI wrappers provided below).
 """
-import os, sys, tarfile, shutil, hashlib, subprocess, json, time
+import os, sys, tarfile, shutil, hashlib, subprocess, json, time, hmac
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import threading
@@ -25,6 +25,15 @@ SUGGESTIONS = ROOT / "integration" / "updater" / "suggestions"
 STAGING.mkdir(parents=True, exist_ok=True)
 BACKUP.mkdir(parents=True, exist_ok=True)
 SUGGESTIONS.mkdir(parents=True, exist_ok=True)
+
+def require_operator_key():
+    key = os.getenv("AURORA_OPERATOR_SIGNING_KEY")
+    if not key:
+        raise RuntimeError("AURORA_OPERATOR_SIGNING_KEY is required for approvals")
+    return key
+
+def sign_payload(payload: bytes, key: str) -> str:
+    return hmac.new(key.encode("utf-8"), payload, hashlib.sha256).hexdigest()
 
 def sha256_of(path: Path):
     h = hashlib.sha256()
@@ -119,17 +128,41 @@ class SimpleHandler(BaseHTTPRequestHandler):
             data = json.loads(body or "{}")
             fname = data.get("file")
             signed_token = data.get("signed_token")
-            # mark suggestion as approved and return signed token placeholder
+            signed_ts = data.get("signed_ts")
+            operator = data.get("operator", "operator")
+            # mark suggestion as approved and return signed token
             if not fname:
                 return self._send(400, {"error":"file required"})
-            if not signed_token:
-                return self._send(400, {"error":"signed_token required for approval"})
             f = SUGGESTIONS / fname
             if not f.exists():
                 return self._send(404, {"error":"not found"})
-            # in production: operator signs suggestion and token is returned
-            out = {"ok": True, "applied": fname, "signed_token": signed_token}
-            (SUGGESTIONS / (fname + ".approved")).write_text(json.dumps({"ts": time.time(), "op":"approved"}))
+            try:
+                key = require_operator_key()
+            except RuntimeError as exc:
+                return self._send(503, {"error": str(exc)})
+            content = f.read_text()
+            if signed_token:
+                if signed_ts is None:
+                    return self._send(400, {"error":"signed_ts required when signed_token provided"})
+                payload = json.dumps(
+                    {"file": fname, "operator": operator, "ts": signed_ts, "content": content},
+                    sort_keys=True,
+                ).encode("utf-8")
+                expected = sign_payload(payload, key)
+                if not hmac.compare_digest(expected, signed_token):
+                    return self._send(403, {"error":"signed_token invalid"})
+                signature = signed_token
+                ts = signed_ts
+            else:
+                ts = time.time()
+                payload = json.dumps(
+                    {"file": fname, "operator": operator, "ts": ts, "content": content},
+                    sort_keys=True,
+                ).encode("utf-8")
+                signature = sign_payload(payload, key)
+            approval = {"ts": ts, "op":"approved", "operator": operator, "signature": signature}
+            (SUGGESTIONS / (fname + ".approved")).write_text(json.dumps(approval, indent=2))
+            out = {"ok": True, "applied": fname, "signed_token": signature, "signed_ts": ts}
             return self._send(200, out)
         return self._send(404, {"error":"not supported"})
 

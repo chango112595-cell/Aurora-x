@@ -2,9 +2,23 @@
   "short_term": [
     {
       "role": "user",
-<<<<<<< HEAD
       "content": "ping",
       "timestamp": "2025-12-17T07:54:18.477616"
+    },
+    {
+      "role": "user",
+      "content": " Self diagnose",
+      "timestamp": "2025-12-20T06:21:31.905943"
+    },
+    {
+      "role": "user",
+      "content": "Status",
+      "timestamp": "2025-12-20T06:21:43.881376"
+    },
+    {
+      "role": "user",
+      "content": "Give me a list of things that need work on",
+      "timestamp": "2025-12-20T06:22:08.549239"
     }
   ],
   "mid_term": [
@@ -14,40 +28,6 @@
       "first_message": "2025-12-05T15:16:09.058407",
       "last_message": "2025-12-17T07:53:41.865204",
       "compressed_at": "2025-12-17T07:53:41.867057"
-=======
-      "content": "Hello Aurora, my name is Kai",
-      "timestamp": "2025-12-05T15:17:50.514287"
-    },
-    {
-      "role": "aurora",
-      "content": "I understand you have a general conversation request. Processing...",
-      "timestamp": "2025-12-05T15:17:50.515709"
-    },
-    {
-      "role": "user",
-      "content": "status",
-      "timestamp": "2025-12-17T07:24:36.031567"
-    },
-    {
-      "role": "user",
-      "content": "self diagnose",
-      "timestamp": "2025-12-17T07:24:41.438617"
-    },
-    {
-      "role": "user",
-      "content": "analyze codebase",
-      "timestamp": "2025-12-17T13:37:17.104966"
-    },
-    {
-      "role": "user",
-      "content": "are they broken?",
-      "timestamp": "2025-12-17T13:37:34.339212"
-    },
-    {
-      "role": "user",
-      "content": "SELF DIAGNOSE",
-      "timestamp": "2025-12-17T13:37:52.459947"
->>>>>>> 06d5e4e66f4a309104e0a58bd74992b34b19664a
     }
   ],
   "long_term": [],
@@ -102,7 +82,6 @@
       },
       "stored_at": "2025-12-17T07:24:41.441048"
     },
-<<<<<<< HEAD
     "memory_9285ec3b-7e4c-4ea7-80c3-d5e3c11541b0": {
       "value": {
         "text": "self diagnose",
@@ -116,45 +95,6 @@
       },
       "stored_at": "2025-12-17T07:51:07.444139"
     },
-    "memory_088b081c-fade-43c6-baf4-d76b61bb6acc": {
-      "value": {
-        "text": "check system files",
-        "meta": {
-          "session_id": "chat-1765957847519",
-          "client": "web",
-          "type": "user_message"
-        },
-        "timestamp": "2025-12-17T07:51:25.093120",
-        "type": "shortterm"
-      },
-      "stored_at": "2025-12-17T07:51:25.093128"
-    },
-    "memory_b6e726da-041a-4af9-812a-b1b202b1d010": {
-      "value": {
-        "text": "list files/",
-        "meta": {
-          "session_id": "chat-1765957847519",
-          "client": "web",
-          "type": "user_message"
-        },
-        "timestamp": "2025-12-17T07:51:32.812001",
-        "type": "shortterm"
-      },
-      "stored_at": "2025-12-17T07:51:32.812009"
-    },
-    "memory_e53496ce-18f5-4d38-8c3f-a3dd635a6c22": {
-      "value": {
-        "text": "files/",
-        "meta": {
-          "session_id": "chat-1765957847519",
-          "client": "web",
-          "type": "user_message"
-        },
-        "timestamp": "2025-12-17T07:53:41.871814",
-        "type": "shortterm"
-      },
-      "stored_at": "2025-12-17T07:53:41.871822"
-    },
     "memory_fb112052-29a6-4555-a3e8-f2ded6f72bbd": {
       "value": {
         "text": "ping",
@@ -167,7 +107,7 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-17T07:54:18.482482"
-=======
+    },
     "memory_46aea133-d834-4eb7-9ee3-3ed1a6dfdeac": {
       "value": {
         "text": "analyze codebase",
@@ -181,19 +121,6 @@
       },
       "stored_at": "2025-12-17T13:37:17.109202"
     },
-    "memory_bad6eb96-b88a-4c11-a730-77b8805b0811": {
-      "value": {
-        "text": "are they broken?",
-        "meta": {
-          "session_id": "chat-1765978619732",
-          "client": "web",
-          "type": "user_message"
-        },
-        "timestamp": "2025-12-17T13:37:34.340744",
-        "type": "shortterm"
-      },
-      "stored_at": "2025-12-17T13:37:34.340751"
-    },
     "memory_d738ca42-84f3-498e-a028-b2914fc050d5": {
       "value": {
         "text": "SELF DIAGNOSE",
@@ -206,7 +133,45 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-17T13:37:52.461476"
->>>>>>> 06d5e4e66f4a309104e0a58bd74992b34b19664a
+    },
+    "memory_e747aff3-f320-4d0b-8e9b-a77d015e1901": {
+      "value": {
+        "text": " Self diagnose",
+        "meta": {
+          "session_id": "chat-1766211682850",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-20T06:21:31.918533",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-20T06:21:31.918545"
+    },
+    "memory_e76b831b-301a-4ff0-b10a-7b0bb2c27fae": {
+      "value": {
+        "text": "Status",
+        "meta": {
+          "session_id": "chat-1766211682850",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-20T06:21:43.882664",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-20T06:21:43.882673"
+    },
+    "memory_e0f59a2f-3c76-490a-abf1-7a2a698fe8a3": {
+      "value": {
+        "text": "Give me a list of things that need work on",
+        "meta": {
+          "session_id": "chat-1766211682850",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-20T06:22:08.550964",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-20T06:22:08.550973"
     }
   },
   "events": [
@@ -233,86 +198,44 @@
     {
       "type": "memory_write",
       "details": {
-<<<<<<< HEAD
-        "id": "9285ec3b-7e4c-4ea7-80c3-d5e3c11541b0",
-=======
-        "id": "46aea133-d834-4eb7-9ee3-3ed1a6dfdeac",
-        "text_length": 16,
-        "has_meta": true,
-        "longterm": false
-      },
-      "timestamp": "2025-12-17T13:37:17.109941"
-    },
-    {
-      "type": "memory_write",
-      "details": {
-        "id": "bad6eb96-b88a-4c11-a730-77b8805b0811",
-        "text_length": 16,
-        "has_meta": true,
-        "longterm": false
-      },
-      "timestamp": "2025-12-17T13:37:34.341158"
-    },
-    {
-      "type": "memory_write",
-      "details": {
-        "id": "d738ca42-84f3-498e-a028-b2914fc050d5",
->>>>>>> 06d5e4e66f4a309104e0a58bd74992b34b19664a
-        "text_length": 13,
-        "has_meta": true,
-        "longterm": false
-      },
-<<<<<<< HEAD
-      "timestamp": "2025-12-17T07:51:07.445164"
-    },
-    {
-      "type": "memory_write",
-      "details": {
-        "id": "088b081c-fade-43c6-baf4-d76b61bb6acc",
-        "text_length": 18,
-        "has_meta": true,
-        "longterm": false
-      },
-      "timestamp": "2025-12-17T07:51:25.244964"
-    },
-    {
-      "type": "memory_write",
-      "details": {
-        "id": "b6e726da-041a-4af9-812a-b1b202b1d010",
-        "text_length": 11,
-        "has_meta": true,
-        "longterm": false
-      },
-      "timestamp": "2025-12-17T07:51:32.820560"
-    },
-    {
-      "type": "memory_write",
-      "details": {
-        "id": "e53496ce-18f5-4d38-8c3f-a3dd635a6c22",
-        "text_length": 6,
-        "has_meta": true,
-        "longterm": false
-      },
-      "timestamp": "2025-12-17T07:53:41.872824"
-    },
-    {
-      "type": "memory_write",
-      "details": {
         "id": "fb112052-29a6-4555-a3e8-f2ded6f72bbd",
         "text_length": 4,
         "has_meta": true,
         "longterm": false
       },
       "timestamp": "2025-12-17T07:54:18.490235"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e747aff3-f320-4d0b-8e9b-a77d015e1901",
+        "text_length": 14,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-20T06:21:31.919156"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e76b831b-301a-4ff0-b10a-7b0bb2c27fae",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-20T06:21:43.888353"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e0f59a2f-3c76-490a-abf1-7a2a698fe8a3",
+        "text_length": 42,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-20T06:22:08.682783"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-17T07:54:18.504329"
-=======
-      "timestamp": "2025-12-17T13:37:52.461868"
-    }
-  ],
-  "semantic_index": {},
-  "last_updated": "2025-12-17T13:37:52.461928"
->>>>>>> 06d5e4e66f4a309104e0a58bd74992b34b19664a
+  "last_updated": "2025-12-20T06:22:08.682897"
 }

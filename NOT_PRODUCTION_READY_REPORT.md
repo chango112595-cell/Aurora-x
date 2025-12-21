@@ -99,7 +99,7 @@ def cleanup(self):
 
 | File | Line | TODO |
 |------|------|------|
-| `server/rag-system.ts` | 39 | "Replace with actual embedding model (OpenAI, HuggingFace, etc.)" |
+| `server/rag-system.ts` | 39 | "Replace with local embedding model (Luminar/Memory Fabric)" |
 | `app/api/aurora/error-report/route.ts` | 33 | "Trigger Aurora's autonomous fix system" |
 | `server/routes.ts` | 3236-3238 | Code contains todo_spec fallback patterns |
 
@@ -172,7 +172,7 @@ These exist as code but are NOT connected to the main system:
 ### 8.1 RAG System (Retrieval Augmented Generation)
 
 **File**: `server/rag-system.ts`
-**Issue**: Uses placeholder embedding - needs real OpenAI/HuggingFace integration
+**Issue**: Uses placeholder embedding - needs local embedding integration
 
 ### 8.2 Memory Fabric V2 - AI Response Generation
 

@@ -23,7 +23,7 @@ python3 -m pytest packs/pack05_plugin_loader/tests -q
 
 ```
 From cccccccccccccccccccccccccccccccccccccccc Mon Sep 17 00:00:00 2001
-From: AuroraGPT <aurora@gpt.local>
+From: AuroraLocal <aurora@aurora.local>
 Date: Mon, 01 Dec 2025 02:10:00 +0000
 Subject: [PATCH] pack05 5B: Sandboxed Plugin Loader (sandbox runtime, isolation, jail policies)
 

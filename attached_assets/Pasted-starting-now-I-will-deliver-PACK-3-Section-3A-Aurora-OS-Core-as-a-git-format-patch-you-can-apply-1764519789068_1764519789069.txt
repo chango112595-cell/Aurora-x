@@ -56,7 +56,7 @@ The patch (apply as-is)
 Save everything between the lines below into pack03_3A.patch and run the commands above.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: AuroraGPT <aurora@gpt.local>
+From: AuroraLocal <aurora@aurora.local>
 Date: Mon, 01 Dec 2025 00:00:00 +0000
 Subject: [PATCH] pack03 3A: Aurora OS Core - vfs, namespace, scheduler, process abstraction
 

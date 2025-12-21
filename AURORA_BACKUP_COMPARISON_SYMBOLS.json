@@ -1,0 +1,886 @@
+[
+  {
+    "backup": "attached_assets/aurora_auto_fix.py.aurora_backup",
+    "original": "attached_assets/aurora_auto_fix.py",
+    "status": "different",
+    "category": "attached_assets",
+    "py_defs_backup": {
+      "functions": [
+        "backup_file",
+        "find_files",
+        "main",
+        "replace_in_file",
+        "scan_and_fix"
+      ],
+      "classes": []
+    },
+    "py_defs_current": {
+      "functions": [
+        "backup_file",
+        "find_files",
+        "main",
+        "replace_in_file",
+        "scan_and_fix"
+      ],
+      "classes": []
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "attached_assets/flow_ops_1760050963508.py.aurora_backup",
+    "original": "attached_assets/flow_ops_1760050963508.py",
+    "status": "different",
+    "category": "attached_assets",
+    "py_defs_backup": {
+      "functions": [
+        "impl_for"
+      ],
+      "classes": []
+    },
+    "py_defs_current": {
+      "functions": [
+        "impl_for"
+      ],
+      "classes": []
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "attached_assets/lib_function_1760154384150.py.aurora_backup",
+    "original": "attached_assets/lib_function_1760154384150.py",
+    "status": "different",
+    "category": "attached_assets",
+    "py_defs_backup": {
+      "functions": [
+        "render_function"
+      ],
+      "classes": []
+    },
+    "py_defs_current": {
+      "functions": [
+        "render_function"
+      ],
+      "classes": []
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "attached_assets/lib_function_1760164876901.py.aurora_backup",
+    "original": "attached_assets/lib_function_1760164876901.py",
+    "status": "different",
+    "category": "attached_assets",
+    "py_defs_backup": {
+      "functions": [
+        "render_function"
+      ],
+      "classes": []
+    },
+    "py_defs_current": {
+      "functions": [
+        "render_function"
+      ],
+      "classes": []
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "attached_assets/templates_py_1760045183153.py.aurora_backup",
+    "original": "attached_assets/templates_py_1760045183153.py",
+    "status": "different",
+    "category": "attached_assets",
+    "py_defs_backup": {
+      "functions": [
+        "_template_add",
+        "_template_reverse",
+        "_template_stub",
+        "_template_sub",
+        "generate_impl"
+      ],
+      "classes": []
+    },
+    "py_defs_current": {
+      "functions": [
+        "_template_add",
+        "_template_reverse",
+        "_template_stub",
+        "_template_sub",
+        "generate_impl"
+      ],
+      "classes": []
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "aurora_nexus_v3/main.py.aurora_backup",
+    "original": "aurora_nexus_v3/main.py",
+    "status": "different",
+    "category": "aurora_nexus_v3",
+    "py_defs_backup": {
+      "functions": [
+        "main",
+        "run"
+      ],
+      "classes": [
+        "NexusServer"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [
+        "main",
+        "run"
+      ],
+      "classes": [
+        "NexusServer"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "aurora_nexus_v3/modules/http_server.py.aurora_backup",
+    "original": "aurora_nexus_v3/modules/http_server.py",
+    "status": "different",
+    "category": "aurora_nexus_v3",
+    "py_defs_backup": {
+      "functions": [
+        "log_activity"
+      ],
+      "classes": [
+        "HTTPServerModule",
+        "NexusHTTPHandler"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [
+        "log_activity"
+      ],
+      "classes": [
+        "HTTPServerModule",
+        "NexusHTTPHandler"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "aurora_nexus_v3/modules/port_manager.py.aurora_backup",
+    "original": "aurora_nexus_v3/modules/port_manager.py",
+    "status": "different",
+    "category": "aurora_nexus_v3",
+    "py_defs_backup": {
+      "functions": [],
+      "classes": [
+        "PortAllocation",
+        "PortManager",
+        "PortProtocol",
+        "PortState"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [],
+      "classes": [
+        "PortAllocation",
+        "PortManager",
+        "PortProtocol",
+        "PortState"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "aurora_nexus_v3/workers/issue_detector.py.aurora_backup",
+    "original": "aurora_nexus_v3/workers/issue_detector.py",
+    "status": "different",
+    "category": "aurora_nexus_v3",
+    "py_defs_backup": {
+      "functions": [],
+      "classes": [
+        "DetectedIssue",
+        "IssueCategory",
+        "IssueDetector",
+        "IssueSeverity"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [],
+      "classes": [
+        "DetectedIssue",
+        "IssueCategory",
+        "IssueDetector",
+        "IssueSeverity"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "aurora_x/__init__.py.aurora_backup",
+    "original": "aurora_x/__init__.py",
+    "status": "different",
+    "category": "aurora_x",
+    "py_defs_backup": {
+      "functions": [],
+      "classes": []
+    },
+    "py_defs_current": {
+      "functions": [],
+      "classes": []
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "aurora_x/bridge/serve.py.aurora_backup",
+    "original": "aurora_x/bridge/serve.py",
+    "status": "different",
+    "category": "aurora_x",
+    "py_defs_backup": {
+      "error": "IndentationError: expected an indented block after 'if' statement on line 53 (aurora_x/bridge/serve.py.aurora_backup, line 56)"
+    },
+    "py_defs_current": {
+      "functions": [
+        "health",
+        "root"
+      ],
+      "classes": []
+    }
+  },
+  {
+    "backup": "aurora_x/bridge/service.py.aurora_backup",
+    "original": "aurora_x/bridge/service.py",
+    "status": "different",
+    "category": "aurora_x",
+    "py_defs_backup": {
+      "error": "IndentationError: expected an indented block after 'if' statement on line 103 (aurora_x/bridge/service.py.aurora_backup, line 106)"
+    },
+    "py_defs_current": {
+      "functions": [
+        "health_check",
+        "root",
+        "status_check"
+      ],
+      "classes": []
+    }
+  },
+  {
+    "backup": "aurora_x/synthesis/flow_ops.py.aurora_backup",
+    "original": "aurora_x/synthesis/flow_ops.py",
+    "status": "different",
+    "category": "aurora_x",
+    "py_defs_backup": {
+      "functions": [
+        "impl_for"
+      ],
+      "classes": []
+    },
+    "py_defs_current": {
+      "functions": [
+        "impl_for"
+      ],
+      "classes": []
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "aurora/core/aurora_complete_assignment.py.aurora_backup",
+    "original": "aurora/core/aurora_complete_assignment.py",
+    "status": "different",
+    "category": "aurora/core",
+    "py_defs_backup": {
+      "functions": [],
+      "classes": [
+        "AuroraAssignment"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [],
+      "classes": [
+        "AuroraAssignment"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "aurora/core/luminar_nexus.py.aurora_backup",
+    "original": "aurora/core/luminar_nexus.py",
+    "status": "different",
+    "category": "aurora/core",
+    "py_defs_backup": {
+      "functions": [
+        "chat_endpoint",
+        "chat_status",
+        "health_check",
+        "main",
+        "run_chat_server"
+      ],
+      "classes": [
+        "AuroraConversationalAI",
+        "LuminarNexus",
+        "LuminarNexusServerManager"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [
+        "chat_endpoint",
+        "chat_status",
+        "health_check",
+        "main",
+        "run_chat_server"
+      ],
+      "classes": [
+        "AuroraConversationalAI",
+        "LuminarNexus",
+        "LuminarNexusServerManager"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "aurora/core/luminar_nexus_v1_backup.py.aurora_backup",
+    "original": "aurora/core/luminar_nexus_v1_backup.py",
+    "status": "different",
+    "category": "aurora/core",
+    "py_defs_backup": {
+      "functions": [
+        "chat_endpoint",
+        "chat_status",
+        "health_check",
+        "main",
+        "run_chat_server"
+      ],
+      "classes": [
+        "AuroraConversationalAI",
+        "LuminarNexusServerManager"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [
+        "chat_endpoint",
+        "chat_status",
+        "health_check",
+        "main",
+        "run_chat_server"
+      ],
+      "classes": [
+        "AuroraConversationalAI",
+        "LuminarNexusServerManager"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "client/src/components/AuroraChatInterface.tsx.aurora_backup",
+    "original": "client/src/components/AuroraChatInterface.tsx",
+    "status": "different",
+    "category": "client",
+    "api_endpoints_backup": [
+      "/api/conversation"
+    ],
+    "api_endpoints_current": [
+      "/api/chat",
+      "/api/nexus-v3/capabilities"
+    ],
+    "api_endpoints_added": [
+      "/api/chat",
+      "/api/nexus-v3/capabilities"
+    ],
+    "api_endpoints_removed": [
+      "/api/conversation"
+    ]
+  },
+  {
+    "backup": "client/src/pages/luminar-nexus.tsx.aurora_backup",
+    "original": "client/src/pages/luminar-nexus.tsx",
+    "status": "different",
+    "category": "client",
+    "api_endpoints_backup": [],
+    "api_endpoints_current": [],
+    "api_endpoints_added": [],
+    "api_endpoints_removed": []
+  },
+  {
+    "backup": "client/src/pages/server-control.tsx.aurora_backup",
+    "original": "client/src/pages/server-control.tsx",
+    "status": "different",
+    "category": "client",
+    "api_endpoints_backup": [
+      "/api/services/control",
+      "/api/services/status"
+    ],
+    "api_endpoints_current": [
+      "/api/control",
+      "/api/status"
+    ],
+    "api_endpoints_added": [
+      "/api/control",
+      "/api/status"
+    ],
+    "api_endpoints_removed": [
+      "/api/services/control",
+      "/api/services/status"
+    ]
+  },
+  {
+    "backup": "controllers/aurora_nexus_v3_universal.py.aurora_backup",
+    "original": "controllers/aurora_nexus_v3_universal.py",
+    "status": "different",
+    "category": "controllers",
+    "py_defs_backup": {
+      "error": "SyntaxError: invalid syntax (controllers/aurora_nexus_v3_universal.py.aurora_backup, line 596)"
+    },
+    "py_defs_current": {
+      "functions": [
+        "main"
+      ],
+      "classes": [
+        "AuroraUniversalCore",
+        "AutoHealer",
+        "DeviceType",
+        "HardwareDetector",
+        "HardwareProfile",
+        "LearningEngine",
+        "ModuleLoader",
+        "PlatformAdapter",
+        "PortInfo",
+        "PortManager",
+        "PortState",
+        "QuantumStateManager",
+        "Service",
+        "ServiceRegistry",
+        "ServiceState",
+        "SimpleAPI"
+      ]
+    }
+  },
+  {
+    "backup": "controllers/aurora_ultimate_self_healing_system_DRAFT2.py.aurora_backup",
+    "original": null,
+    "status": "missing_original",
+    "category": "controllers"
+  },
+  {
+    "backup": "tools/aurora_complete_assignment.py.aurora_backup",
+    "original": "tools/aurora_complete_assignment.py",
+    "status": "different",
+    "category": "tools",
+    "py_defs_backup": {
+      "functions": [],
+      "classes": [
+        "AuroraAssignment"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [],
+      "classes": [
+        "AuroraAssignment"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "tools/execution_wrapper.py.aurora_backup",
+    "original": "tools/execution_wrapper.py",
+    "status": "different",
+    "category": "tools",
+    "py_defs_backup": {
+      "functions": [
+        "execute_request",
+        "main"
+      ],
+      "classes": [
+        "AuroraConversationEngine",
+        "AuroraExecutor",
+        "MemoryRecall"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [
+        "execute_request",
+        "main"
+      ],
+      "classes": [
+        "AuroraConversationEngine",
+        "AuroraExecutor",
+        "MemoryRecall"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "tools/luminar_nexus.py.aurora_backup",
+    "original": "tools/luminar_nexus.py",
+    "status": "different",
+    "category": "tools",
+    "py_defs_backup": {
+      "functions": [
+        "chat_endpoint",
+        "chat_status",
+        "health_check",
+        "main",
+        "run_chat_server"
+      ],
+      "classes": [
+        "AuroraConversationalAI",
+        "LuminarNexus",
+        "LuminarNexusServerManager"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [
+        "chat_endpoint",
+        "chat_status",
+        "health_check",
+        "main",
+        "run_chat_server"
+      ],
+      "classes": [
+        "AuroraConversationalAI",
+        "LuminarNexus",
+        "LuminarNexusServerManager"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "tools/luminar_nexus_v1_backup.py.aurora_backup",
+    "original": "tools/luminar_nexus_v1_backup.py",
+    "status": "different",
+    "category": "tools",
+    "py_defs_backup": {
+      "functions": [
+        "chat_endpoint",
+        "chat_status",
+        "health_check",
+        "main",
+        "run_chat_server"
+      ],
+      "classes": [
+        "AuroraConversationalAI",
+        "LuminarNexusServerManager"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [
+        "chat_endpoint",
+        "chat_status",
+        "health_check",
+        "main",
+        "run_chat_server"
+      ],
+      "classes": [
+        "AuroraConversationalAI",
+        "LuminarNexusServerManager"
+      ]
+    },
+    "py_added_functions": [],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "tools/luminar_nexus_v2.py.aurora_backup",
+    "original": "tools/luminar_nexus_v2.py",
+    "status": "different",
+    "category": "tools",
+    "py_defs_backup": {
+      "functions": [
+        "log_to_activity_monitor",
+        "main",
+        "run_chat_server_v2",
+        "run_luminar_nexus_v2",
+        "sanitize_for_json",
+        "serve"
+      ],
+      "classes": [
+        "AIServiceOrchestrator",
+        "LuminarNexusV2",
+        "NeuralAnomalyDetector",
+        "PerformanceOptimizer",
+        "PredictiveScaler",
+        "QuantumServiceMesh",
+        "SecurityGuardian",
+        "ServiceHealth"
+      ]
+    },
+    "py_defs_current": {
+      "functions": [
+        "log_to_activity_monitor",
+        "main",
+        "run_chat_server_v2",
+        "run_luminar_nexus_v2",
+        "run_wsgi",
+        "sanitize_for_json",
+        "serve"
+      ],
+      "classes": [
+        "AIServiceOrchestrator",
+        "LuminarNexusV2",
+        "NeuralAnomalyDetector",
+        "PerformanceOptimizer",
+        "PredictiveScaler",
+        "QuantumServiceMesh",
+        "SecurityGuardian",
+        "ServiceHealth"
+      ]
+    },
+    "py_added_functions": [
+      "run_wsgi"
+    ],
+    "py_removed_functions": [],
+    "py_added_classes": [],
+    "py_removed_classes": []
+  },
+  {
+    "backup": "backups/backend_backup_20251129_162051/server/routes.ts.aurora_backup",
+    "original": "backups/backend_backup_20251129_162051/server/routes.ts",
+    "status": "different",
+    "category": "backups_snapshot",
+    "api_endpoints_backup": [
+      "/api/adaptive_stats",
+      "/api/auth",
+      "/api/bridge/nl",
+      "/api/bridge/rollback/merged",
+      "/api/bridge/rollback/open",
+      "/api/chat",
+      "/api/control",
+      "/api/conversation",
+      "/api/corpus",
+      "/api/corpus/recent",
+      "/api/corpus/similar",
+      "/api/corpus/top",
+      "/api/diagnostics",
+      "/api/heal",
+      "/api/health",
+      "/api/luminar-nexus/status",
+      "/api/luminar-nexus/v2/logs/:serviceName",
+      "/api/luminar-nexus/v2/services/:serviceName/restart",
+      "/api/luminar-nexus/v2/services/:serviceName/scale",
+      "/api/luminar-nexus/v2/status",
+      "/api/nl/compile",
+      "/api/nl/compile_full",
+      "/api/progress",
+      "/api/progress/recompute",
+      "/api/progress/task_percent",
+      "/api/projects/:runId/download",
+      "/api/projects/:run_id/download",
+      "/api/run-meta",
+      "/api/run-meta/latest",
+      "/api/seed_bias",
+      "/api/seed_bias/history",
+      "/api/self-learning/start",
+      "/api/self-learning/status",
+      "/api/self-learning/stop",
+      "/api/solve",
+      "/api/solve/pretty",
+      "/api/status",
+      "/api/synthesis",
+      "/api/synthesis/estimate",
+      "/api/synthesis/progress/:id",
+      "/api/synthesis/result/:id",
+      "/api/t08/activate",
+      "/api/ui/generate",
+      "/api/units",
+      "/api/used-seeds"
+    ],
+    "api_endpoints_current": [
+      "/api/adaptive_stats",
+      "/api/auth",
+      "/api/bridge/nl",
+      "/api/bridge/rollback/merged",
+      "/api/bridge/rollback/open",
+      "/api/chat",
+      "/api/control",
+      "/api/corpus",
+      "/api/corpus/recent",
+      "/api/corpus/similar",
+      "/api/corpus/top",
+      "/api/diagnostics",
+      "/api/heal",
+      "/api/health",
+      "/api/luminar-nexus/status",
+      "/api/luminar-nexus/v2/logs/:serviceName",
+      "/api/luminar-nexus/v2/services/:serviceName/restart",
+      "/api/luminar-nexus/v2/services/:serviceName/scale",
+      "/api/luminar-nexus/v2/status",
+      "/api/nl/compile",
+      "/api/nl/compile_full",
+      "/api/progress",
+      "/api/progress/recompute",
+      "/api/progress/task_percent",
+      "/api/projects/:runId/download",
+      "/api/projects/:run_id/download",
+      "/api/run-meta",
+      "/api/run-meta/latest",
+      "/api/seed_bias",
+      "/api/seed_bias/history",
+      "/api/self-learning/start",
+      "/api/self-learning/status",
+      "/api/self-learning/stop",
+      "/api/solve",
+      "/api/solve/pretty",
+      "/api/status",
+      "/api/synthesis",
+      "/api/synthesis/estimate",
+      "/api/synthesis/progress/:id",
+      "/api/synthesis/result/:id",
+      "/api/t08/activate",
+      "/api/ui/generate",
+      "/api/units",
+      "/api/used-seeds"
+    ],
+    "api_endpoints_added": [],
+    "api_endpoints_removed": [
+      "/api/conversation"
+    ]
+  },
+  {
+    "backup": "backups/backend_backup_20251129_162819/server/routes.ts.aurora_backup",
+    "original": "backups/backend_backup_20251129_162819/server/routes.ts",
+    "status": "different",
+    "category": "backups_snapshot",
+    "api_endpoints_backup": [
+      "/api/adaptive_stats",
+      "/api/auth",
+      "/api/bridge/nl",
+      "/api/bridge/rollback/merged",
+      "/api/bridge/rollback/open",
+      "/api/chat",
+      "/api/control",
+      "/api/conversation",
+      "/api/corpus",
+      "/api/corpus/recent",
+      "/api/corpus/similar",
+      "/api/corpus/top",
+      "/api/diagnostics",
+      "/api/heal",
+      "/api/health",
+      "/api/luminar-nexus/status",
+      "/api/luminar-nexus/v2/logs/:serviceName",
+      "/api/luminar-nexus/v2/services/:serviceName/restart",
+      "/api/luminar-nexus/v2/services/:serviceName/scale",
+      "/api/luminar-nexus/v2/status",
+      "/api/nl/compile",
+      "/api/nl/compile_full",
+      "/api/progress",
+      "/api/progress/recompute",
+      "/api/progress/task_percent",
+      "/api/projects/:runId/download",
+      "/api/projects/:run_id/download",
+      "/api/run-meta",
+      "/api/run-meta/latest",
+      "/api/seed_bias",
+      "/api/seed_bias/history",
+      "/api/self-learning/start",
+      "/api/self-learning/status",
+      "/api/self-learning/stop",
+      "/api/solve",
+      "/api/solve/pretty",
+      "/api/status",
+      "/api/synthesis",
+      "/api/synthesis/estimate",
+      "/api/synthesis/progress/:id",
+      "/api/synthesis/result/:id",
+      "/api/t08/activate",
+      "/api/ui/generate",
+      "/api/units",
+      "/api/used-seeds"
+    ],
+    "api_endpoints_current": [
+      "/api/adaptive_stats",
+      "/api/auth",
+      "/api/bridge/nl",
+      "/api/bridge/rollback/merged",
+      "/api/bridge/rollback/open",
+      "/api/chat",
+      "/api/control",
+      "/api/corpus",
+      "/api/corpus/recent",
+      "/api/corpus/similar",
+      "/api/corpus/top",
+      "/api/diagnostics",
+      "/api/heal",
+      "/api/health",
+      "/api/luminar-nexus/status",
+      "/api/luminar-nexus/v2/logs/:serviceName",
+      "/api/luminar-nexus/v2/services/:serviceName/restart",
+      "/api/luminar-nexus/v2/services/:serviceName/scale",
+      "/api/luminar-nexus/v2/status",
+      "/api/nl/compile",
+      "/api/nl/compile_full",
+      "/api/progress",
+      "/api/progress/recompute",
+      "/api/progress/task_percent",
+      "/api/projects/:runId/download",
+      "/api/projects/:run_id/download",
+      "/api/run-meta",
+      "/api/run-meta/latest",
+      "/api/seed_bias",
+      "/api/seed_bias/history",
+      "/api/self-learning/start",
+      "/api/self-learning/status",
+      "/api/self-learning/stop",
+      "/api/solve",
+      "/api/solve/pretty",
+      "/api/status",
+      "/api/synthesis",
+      "/api/synthesis/estimate",
+      "/api/synthesis/progress/:id",
+      "/api/synthesis/result/:id",
+      "/api/t08/activate",
+      "/api/ui/generate",
+      "/api/units",
+      "/api/used-seeds"
+    ],
+    "api_endpoints_added": [],
+    "api_endpoints_removed": [
+      "/api/conversation"
+    ]
+  }
+]

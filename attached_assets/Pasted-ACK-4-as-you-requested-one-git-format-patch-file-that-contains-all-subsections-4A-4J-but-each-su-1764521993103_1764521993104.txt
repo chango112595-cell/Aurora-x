@@ -15,7 +15,7 @@ python3 -m pytest packs/pack04_launcher/tests -q
 
 The patch — save exactly everything between the lines below into pack04_all_4A-4J.patch
 From aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa Mon Sep 17 00:00:00 2001
-From: AuroraGPT <aurora@gpt.local>
+From: AuroraLocal <aurora@aurora.local>
 Date: Mon, 01 Dec 2025 01:00:00 +0000
 Subject: [PATCH] pack04 4A-4J: Unified Launcher + Supervisor System (full)
 

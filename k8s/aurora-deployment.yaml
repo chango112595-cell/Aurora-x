@@ -28,7 +28,6 @@ metadata:
   namespace: aurora-x
 type: Opaque
 stringData:
-  ANTHROPIC_API_KEY: ""
   ETCD_PASSWORD: ""
   SIGNING_KEY: ""
 ---

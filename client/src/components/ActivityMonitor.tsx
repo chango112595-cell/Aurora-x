@@ -35,11 +35,11 @@ interface WorkerMetrics {
 }
 
 interface SystemState {
-  state?: string;
+  state: string;
   status?: string;
-  hyperspeed?: boolean;
-  autonomous?: boolean;
-  hybrid_mode?: boolean;
+  hyperspeed: boolean;
+  autonomous: boolean;
+  hybrid_mode: boolean;
 }
 
 interface ActivityData {
