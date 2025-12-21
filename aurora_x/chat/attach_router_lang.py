@@ -4,7 +4,7 @@ Integrates with FastAPI to provide polyglot code generation.
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
-import Path
+from pathlib import Path
 
 from aurora_x.router.intent_router import classify
 from aurora_x.router.lang_select import pick_language

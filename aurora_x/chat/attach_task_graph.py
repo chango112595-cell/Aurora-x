@@ -11,7 +11,7 @@ Quality: 10/10 (Perfect)
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
-import Response
+from fastapi import Response
 
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor
