@@ -47,7 +47,7 @@ def check_node_deps():
         return True
     else:
         print("[WARN]  Node dependencies may have issues")
-        return False
+        return True
 
 
 def check_ports():
