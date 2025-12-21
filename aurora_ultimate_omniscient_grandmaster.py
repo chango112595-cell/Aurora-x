@@ -1085,6 +1085,7 @@ def _load_manifest_tiers() -> dict:
 
 
 def _merge_manifest_tiers() -> tuple[int, int, list[str]]:
+def _merge_manifest_tiers() -> tuple[int, int]:
     """Merge manifest tiers into the ultimate registry."""
     manifest_tiers = _load_manifest_tiers()
     added = 0
@@ -1132,6 +1133,10 @@ AURORA_ULTIMATE_GRANDMASTER["UNIFIED_TIER_SYSTEM"] = {
     "breadth_count": MANIFEST_TIER_COUNT,
     "description": "Unified tier system combining depth (core tiers) with breadth (manifest tiers).",
 }
+    return added, len(manifest_tiers)
+
+
+MANIFEST_TIERS_ADDED, MANIFEST_TIER_COUNT = _merge_manifest_tiers()
 
 
 def print_ultimate_grandmaster() -> None:
@@ -1142,6 +1147,7 @@ def print_ultimate_grandmaster() -> None:
     print("Knowledge Spanning: Ancient Computational Era -> Future Post-Singularity")
     print(
         "COMPLETE OMNISCIENCE: 26 CORE TIERS + "
+        "COMPLETE OMNISCIENCE: 25 CORE TIERS + "
         f"{MANIFEST_TIERS_ADDED}/{MANIFEST_TIER_COUNT} MANIFEST TIERS - "
         "EVERY DOMAIN FROM ANCIENT TO FUTURE"
     )
