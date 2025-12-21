@@ -26,6 +26,7 @@ import { apiLimiter, authLimiter, chatLimiter, synthesisLimiter, searchLimiter }
 import { AuroraCore } from "./aurora-core";
 import { assertDatabaseReady, dbError, isDatabaseAvailable } from "./db";
 import { resolvePythonCommand } from "./python-runtime";
+import { ensureLuminarRunning } from "./service-bootstrap";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
@@ -675,54 +676,65 @@ export async function registerRoutes(app: Express): Promise<void> {
       }
 
       // Try routing to Aurora AI Backend first
-      try {
-        const aiResponse = await fetch(`${LUMINAR_V2_URL}/api/chat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            message: message,
-            session_id: sessionId,
-            context: req.body.context || {} 
-          }),
-          signal: AbortSignal.timeout(2000)
-        });
-
-        if (aiResponse.ok) {
-          const aiData = await aiResponse.json();
-          console.log('[Aurora Chat] Routed to Aurora AI Backend successfully');
-          
-          return res.json({
-            ok: true,
-            response: aiData.response,
-            message: aiData.response,
-            session_id: sessionId,
-            ai_powered: true,
-            client: client || 'web',
-            intent: aiData.intent,
-            entities: aiData.entities
+      const luminarReady = await ensureLuminarRunning();
+      if (luminarReady) {
+        try {
+          const aiResponse = await fetch(`${LUMINAR_V2_URL}/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              message: message,
+              session_id: sessionId,
+              context: req.body.context || {} 
+            }),
+            signal: AbortSignal.timeout(2000)
           });
+
+          if (aiResponse.ok) {
+            const aiData = await aiResponse.json();
+            console.log('[Aurora Chat] Routed to Aurora AI Backend successfully');
+            
+            return res.json({
+              ok: true,
+              response: aiData.response,
+              message: aiData.response,
+              session_id: sessionId,
+              ai_powered: true,
+              client: client || 'web',
+              intent: aiData.intent,
+              entities: aiData.entities
+            });
+          }
+        } catch (aiError) {
+          console.warn('[Aurora Chat] Luminar V2 request failed:', aiError);
         }
-      } catch (aiError) {
+      } else {
+        console.warn('[Aurora Chat] Luminar V2 not running; skipping remote routing');
       }
 
       const isSystemCommand = msgLower.includes('activate tier') || 
                               (msgLower.includes('luminar') && msgLower.includes('nexus') && msgLower.includes('integrate'));
 
       if (isSystemCommand) {
-        try {
-          const v2Response = await fetch(`${LUMINAR_V2_URL}/api/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message, session_id: sessionId }),
-            signal: AbortSignal.timeout(2000)
-          });
+        if (luminarReady) {
+          try {
+            const v2Response = await fetch(`${LUMINAR_V2_URL}/api/chat`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message, session_id: sessionId }),
+              signal: AbortSignal.timeout(2000)
+            });
 
-          if (v2Response.ok) {
-            const v2Data = await v2Response.json();
-            console.log('[Aurora Chat] Routed system command to Luminar V2');
-            return res.json(v2Data);
+            if (v2Response.ok) {
+              const v2Data = await v2Response.json();
+              console.log('[Aurora Chat] Routed system command to Luminar V2');
+              return res.json(v2Data);
+            }
+          } catch (v2Error) {
+            console.warn('[Aurora Chat] Luminar system command failed:', v2Error);
           }
-        } catch (v2Error) {
+        } else {
+          console.warn('[Aurora Chat] Luminar V2 not running; cannot handle system command');
         }
       }
 
