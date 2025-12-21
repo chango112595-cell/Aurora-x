@@ -67,8 +67,6 @@ interface ComparisonItem {
     complexity?: string;
     status: 'approved' | 'pending' | 'rejected';
     category: string;
-    impact?: string;
-    complexity?: string;
 }
 
 export default function ComparisonDashboard() {

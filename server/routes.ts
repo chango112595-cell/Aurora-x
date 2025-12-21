@@ -32,6 +32,7 @@ const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-producti
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
 const BRIDGE_URL = process.env.AURORA_BRIDGE_URL || "http://127.0.0.1:5001";
 const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
+const AURORA_CORPUS_URL = process.env.AURORA_CORPUS_URL || "http://127.0.0.1:5000";
 const AURORA_REPO = process.env.AURORA_REPO || "chango112595-cell/Aurora-x";
 const TARGET_BRANCH = process.env.AURORA_TARGET_BRANCH || "main";
 const AURORA_GH_TOKEN = process.env.AURORA_GH_TOKEN;
@@ -4295,7 +4296,7 @@ asyncio.run(main())
 
       // Proxy to FastAPI server
       try {
-        const response = await fetch('http://localhost:5001/api/bridge/nl', {
+        const response = await fetch(`${BRIDGE_URL}/api/bridge/nl`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -4759,7 +4760,7 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
   if (msg.includes('what have you learned') || msg.includes('show me your skills') || 
       msg.includes('your library') || msg.includes('learned functions')) {
     try {
-      const response = await fetch('http://localhost:5000/api/corpus?limit=10');
+      const response = await fetch(`${AURORA_CORPUS_URL}/api/corpus?limit=10`);
       const data = await response.json();
       const functions = data.items || [];
 
@@ -4903,7 +4904,7 @@ What AI system are we building? Or want me to explain a concept?`;
   // Status check - real system integration
   if (/(status|how are you|running|health|online|working)/.test(msg) && ctx.conversationDepth > 1) {
     try {
-      const statusResponse = await fetch('http://localhost:5000/api/status');
+      const statusResponse = await fetch(`${AURORA_CORPUS_URL}/api/status`);
       const statusData = await statusResponse.json();
       const services = statusData.services || {};
       const serviceList = Object.values(services).map((svc: any) => 
@@ -5174,5 +5175,4 @@ function getAIMLGrandmasterResponse(): string {
 
 **What AI system are we building? From ancient perceptrons to AGI to sci-fi concepts, I've got complete mastery!** 🚀`;
 }
-
 
