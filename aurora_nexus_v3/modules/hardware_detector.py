@@ -7,6 +7,7 @@ import platform
 import socket
 import logging
 from typing import Dict, Any, Optional, List, Tuple, Protocol
+from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass, field
 
 
@@ -74,6 +75,7 @@ class HardwareDetector:
     }
     
     def __init__(self, core: HardwareCore):
+    def __init__(self, core: Any):
         self.core = core
         self.logger: logging.Logger = core.logger.getChild("hardware")
         self.profile: Optional[HardwareProfile] = None
