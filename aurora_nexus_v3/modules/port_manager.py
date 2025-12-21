@@ -80,7 +80,7 @@ class PortManager:
             try:
                 await self._scanner_task
             except asyncio.CancelledError:
-                pass
+                self.logger.debug("Scanner task cancellation acknowledged")
             self.logger.debug("Scanner task cancelled")
         with self._lock:
             allocation_count = len(self.allocations)
@@ -129,8 +129,8 @@ class PortManager:
         finally:
             try:
                 sock.close()
-            except Exception:
-                pass
+            except Exception as exc:
+                self.logger.debug(f"Failed to close socket for port {port}: {exc}")
     
     async def allocate(
         self,

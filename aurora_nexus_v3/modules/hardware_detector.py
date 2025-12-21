@@ -123,7 +123,7 @@ class HardwareDetector:
             if freq:
                 info.frequency_mhz = freq.current
         except ImportError:
-            pass
+            self.logger.debug("psutil not available; CPU frequency detection skipped")
         
         return info
     
@@ -159,8 +159,12 @@ class HardwareDetector:
                         mount_point=partition.mountpoint
                     )
                     storage_list.append(storage)
-                except Exception:
-                    pass
+                except Exception as exc:
+                    self.logger.debug(
+                        "Failed to read storage usage for %s: %s",
+                        partition.mountpoint,
+                        exc,
+                    )
         except ImportError:
             storage_list.append(StorageInfo(total_gb=100, available_gb=50))
         
@@ -216,8 +220,8 @@ class HardwareDetector:
             battery = psutil.sensors_battery()
             if battery:
                 return True, battery.percent
-        except Exception:
-            pass
+        except Exception as exc:
+            self.logger.debug("Battery detection failed: %s", exc)
         return False, None
     
     def _calculate_score(self, profile: HardwareProfile) -> int:

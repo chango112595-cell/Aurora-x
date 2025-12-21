@@ -22,12 +22,10 @@ MODULES_ROOT = Path("aurora_nexus_v3/modules")
 
 class ModuleLoadError(Exception):
     """Raised when module loading fails."""
-    pass
 
 
 class ModuleExecutionError(Exception):
     """Raised when module execution fails."""
-    pass
 
 
 class SandboxedModule:

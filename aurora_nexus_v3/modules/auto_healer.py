@@ -85,7 +85,7 @@ class AutoHealer:
             try:
                 await self._monitor_task
             except asyncio.CancelledError:
-                pass
+                self.logger.debug("Monitor task cancellation acknowledged")
             self.logger.debug("Monitor task cancelled")
         with self._lock:
             rule_count = len(self.rules)

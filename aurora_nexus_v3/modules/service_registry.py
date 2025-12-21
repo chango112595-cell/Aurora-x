@@ -76,7 +76,7 @@ class ServiceRegistry:
             try:
                 await self._health_task
             except asyncio.CancelledError:
-                pass
+                self.logger.debug("Health check task cancellation acknowledged")
             self.logger.debug("Health check task cancelled")
         with self._lock:
             service_count = len(self.services)
