@@ -139,8 +139,8 @@ class ContainerSandbox:
                 subprocess.run([runtime, "--version"], 
                              capture_output=True, check=True)
                 return runtime
-            except:
-                pass
+            except Exception as exc:
+                logger.debug("Runtime %s not available: %s", runtime, exc)
         return None
     
     def execute(self, module_path: str, payload: Dict[str, Any]) -> SandboxResult:

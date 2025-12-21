@@ -79,7 +79,7 @@ class NexusServer:
         try:
             await self._shutdown_event.wait()
         except asyncio.CancelledError:
-            pass
+            print("Shutdown wait cancelled; continuing cleanup.")
         finally:
             await self.stop()
     

@@ -460,7 +460,7 @@ aurora_autonomy_history_count {status['action_history_count']}
                     self.end_headers()
             
             def log_message(self, format, *args):
-                pass  # Suppress logs
+                logger.debug("Autonomy server: " + format, *args)
         
         self._server = HTTPServer(("0.0.0.0", self.port), Handler)
         threading.Thread(target=self._server.serve_forever, daemon=True).start()

@@ -102,8 +102,8 @@ def _cleanup_cgroup(cgroup_path: Path) -> None:
                     if pid:
                         try:
                             os.kill(int(pid), signal.SIGKILL)
-                        except (ProcessLookupError, ValueError):
-                            pass
+                        except (ProcessLookupError, ValueError) as exc:
+                            logger.debug("Failed to kill leftover pid %s: %s", pid, exc)
             # Small delay for cleanup
             time.sleep(0.1)
             cgroup_path.rmdir()
@@ -124,22 +124,22 @@ try:
     # Memory limit (in bytes)
     mem_limit = {resource.RLIMIT_AS}
     resource.setrlimit(mem_limit, ({256 * 1024 * 1024}, {256 * 1024 * 1024}))
-except Exception:
-    pass
+except Exception as exc:
+    logger.debug("Failed to apply memory limit: %s", exc)
 
 try:
     # CPU time limit (in seconds)
     cpu_limit = {resource.RLIMIT_CPU}
     resource.setrlimit(cpu_limit, (10, 10))
-except Exception:
-    pass
+except Exception as exc:
+    logger.debug("Failed to apply CPU limit: %s", exc)
 
 try:
     # File descriptor limit
     nofile = {resource.RLIMIT_NOFILE}
     resource.setrlimit(nofile, (512, 512))
-except Exception:
-    pass
+except Exception as exc:
+    logger.debug("Failed to apply file descriptor limit: %s", exc)
 
 # Change to module directory
 os.chdir("{exec_path.parent}")
@@ -242,18 +242,18 @@ def run_module_candidate(
             try:
                 # Memory limit
                 resource.setrlimit(resource.RLIMIT_AS, (mem_mb * 1024 * 1024, mem_mb * 1024 * 1024))
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.debug("Failed to apply memory limit in child: %s", exc)
             try:
                 # CPU time limit
                 resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds))
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.debug("Failed to apply CPU limit in child: %s", exc)
             try:
                 # File descriptor limit
                 resource.setrlimit(resource.RLIMIT_NOFILE, (nofile, nofile))
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.debug("Failed to apply nofile limit in child: %s", exc)
             
             # If cgroup is available, move self into it
             if cgroup_path:
@@ -261,8 +261,8 @@ def run_module_candidate(
                     procs_file = cgroup_path / "cgroup.procs"
                     if procs_file.exists():
                         procs_file.write_text(str(os.getpid()))
-                except Exception:
-                    pass
+                except Exception as exc:
+                    logger.debug("Failed to assign process to cgroup: %s", exc)
         
         # Run the process
         try:
@@ -310,8 +310,8 @@ def run_module_candidate(
         # Cleanup
         try:
             os.unlink(script_path)
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.debug("Failed to remove sandbox script: %s", exc)
         
         if cgroup_path:
             _cleanup_cgroup(cgroup_path)
