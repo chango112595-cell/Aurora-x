@@ -3,6 +3,7 @@
  * Provides secure secret management through Python vault bridge
  */
 import { spawnSync, spawn } from "child_process";
+import * as crypto from "crypto";
 import * as path from "path";
 import * as fs from "fs";
 import { fileURLToPath } from "url";
@@ -15,6 +16,68 @@ const VAULT_READ_PY = path.join(ROOT, "aurora_supervisor", "secure", "vault_read
 const VAULT_LIST_PY = path.join(ROOT, "aurora_supervisor", "secure", "vault_list.py");
 const OPLOG_PATH = path.join(ROOT, "aurora_supervisor", "secure", "vault_oplog.jsonl");
 const PYTHON_CMD = resolvePythonCommand();
+const VAULT_LAYER_COUNT = 22;
+const VAULT_LAYER_PREFIX = "ase22:";
+
+type VaultLayerEnvelope = {
+  v: number;
+  data: string;
+  layers: Array<{ iv: string; tag: string }>;
+};
+
+function deriveLayerKey(master: string, layer: number): Buffer {
+  const salt = `ase-infinity-vault-layer-${layer}`;
+  return crypto.scryptSync(master, salt, 32);
+}
+
+function encryptWithVaultLayers(value: string, master: string): string {
+  let data = Buffer.from(value, "utf8");
+  const layers: VaultLayerEnvelope["layers"] = [];
+
+  for (let i = 1; i <= VAULT_LAYER_COUNT; i += 1) {
+    const key = deriveLayerKey(master, i);
+    const iv = crypto.randomBytes(12);
+    const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
+    data = Buffer.concat([cipher.update(data), cipher.final()]);
+    const tag = cipher.getAuthTag();
+    layers.push({ iv: iv.toString("base64"), tag: tag.toString("base64") });
+  }
+
+  const payload: VaultLayerEnvelope = {
+    v: 1,
+    data: data.toString("base64"),
+    layers
+  };
+
+  return `${VAULT_LAYER_PREFIX}${Buffer.from(JSON.stringify(payload)).toString("base64")}`;
+}
+
+function decryptVaultLayers(value: string, master: string): string | null {
+  if (!value.startsWith(VAULT_LAYER_PREFIX)) {
+    return value;
+  }
+
+  try {
+    const encoded = value.slice(VAULT_LAYER_PREFIX.length);
+    const payload = JSON.parse(Buffer.from(encoded, "base64").toString("utf8")) as VaultLayerEnvelope;
+    let data = Buffer.from(payload.data, "base64");
+
+    for (let i = payload.layers.length - 1; i >= 0; i -= 1) {
+      const layer = payload.layers[i];
+      const key = deriveLayerKey(master, i + 1);
+      const iv = Buffer.from(layer.iv, "base64");
+      const tag = Buffer.from(layer.tag, "base64");
+      const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
+      decipher.setAuthTag(tag);
+      data = Buffer.concat([decipher.update(data), decipher.final()]);
+    }
+
+    return data.toString("utf8");
+  } catch (error) {
+    console.warn("[Vault Bridge] Failed to decrypt vault layers:", error);
+    return null;
+  }
+}
 
 /**
  * Read a secret from the ASE-∞ vault
@@ -39,7 +102,7 @@ export function readVaultSecret(alias: string): string | null {
       return null;
     }
     
-    return out.stdout.trim();
+    return decryptVaultLayers(out.stdout.trim(), master);
   } catch (error) {
     console.error("[Vault Bridge] Error reading vault:", error);
     return null;
@@ -138,7 +201,7 @@ export function readVaultSecretAsync(alias: string): Promise<string | null> {
         resolve(null);
         return;
       }
-      resolve(out.trim());
+      resolve(decryptVaultLayers(out.trim(), master));
     });
     
     child.on("error", (error) => {
@@ -165,7 +228,8 @@ export function setVaultSecret(alias: string, value: string): Promise<boolean> {
     
     const VAULT_SET_PY = path.join(ROOT, "aurora_supervisor", "secure", "vault_set_noninteractive.py");
     
-    const child = spawn(PYTHON_CMD, [VAULT_SET_PY, alias, master, value], {
+    const encryptedValue = encryptWithVaultLayers(value, master);
+    const child = spawn(PYTHON_CMD, [VAULT_SET_PY, alias, master, encryptedValue], {
       stdio: ["ignore", "pipe", "pipe"]
     });
     

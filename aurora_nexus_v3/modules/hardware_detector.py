@@ -6,6 +6,7 @@ Detects CPU, memory, storage, network, GPU, and sensors
 import platform
 import socket
 import logging
+from typing import Dict, Any, Optional, List, Tuple, Protocol
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass, field
 
@@ -56,19 +57,24 @@ class HardwareProfile:
     capability_score: int = 0
 
 
+class HardwareCore(Protocol):
+    logger: logging.Logger
+
+
 class HardwareDetector:
     """
     Detects hardware capabilities and scores device
     Determines what features Aurora can enable
     """
     
-    CAPABILITY_THRESHOLDS = {
+    CAPABILITY_THRESHOLDS: Dict[str, int] = {
         "full": 80,
         "standard": 50,
         "lite": 25,
         "micro": 0
     }
     
+    def __init__(self, core: HardwareCore):
     def __init__(self, core: Any):
         self.core = core
         self.logger: logging.Logger = core.logger.getChild("hardware")
