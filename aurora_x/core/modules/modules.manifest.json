@@ -1,3302 +1,3304 @@
-[
-  {
-    "id": 1,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 2,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 3,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 4,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 5,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 6,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 7,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 8,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 9,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 10,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 11,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 12,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 13,
-    "tier": "foundational",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 14,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 15,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 16,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 17,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 18,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 19,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 20,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 21,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 22,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 23,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 24,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 25,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 26,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 27,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 28,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 29,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 30,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 31,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 32,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 33,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 34,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 35,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 36,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 37,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 38,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 39,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 40,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 41,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 42,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 43,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 44,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 45,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 46,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 47,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 48,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 49,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 50,
-    "tier": "intermediate",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 51,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 52,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 53,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 54,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 55,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 56,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 57,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 58,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 59,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 60,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 61,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 62,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 63,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 64,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 65,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 66,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 67,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 68,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 69,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 70,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 71,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 72,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 73,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 74,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 75,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 76,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 77,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 78,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 79,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 80,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 81,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 82,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 83,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 84,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 85,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 86,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 87,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 88,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 89,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 90,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 91,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 92,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 93,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 94,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 95,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 96,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 97,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 98,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 99,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 100,
-    "tier": "advanced",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 101,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 102,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 103,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 104,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 105,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 106,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 107,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 108,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 109,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 110,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 111,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 112,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 113,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 114,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 115,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 116,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 117,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 118,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 119,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 120,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 121,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 122,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 123,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 124,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 125,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 126,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 127,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 128,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 129,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 130,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 131,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 132,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 133,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 134,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 135,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 136,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 137,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 138,
-    "tier": "grandmaster",
-    "temporal": "Ancient",
-    "gpu_enabled": false
-  },
-  {
-    "id": 139,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 140,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 141,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 142,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 143,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 144,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 145,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 146,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 147,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 148,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 149,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 150,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 151,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 152,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 153,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 154,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 155,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 156,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 157,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 158,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 159,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 160,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 161,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 162,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 163,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 164,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 165,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 166,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 167,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 168,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 169,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 170,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 171,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 172,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 173,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 174,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 175,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 176,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 177,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 178,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 179,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 180,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 181,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 182,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 183,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 184,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 185,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 186,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 187,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 188,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 189,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 190,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 191,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 192,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 193,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 194,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 195,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 196,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 197,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 198,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 199,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 200,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 201,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 202,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 203,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 204,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 205,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 206,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 207,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 208,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 209,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 210,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 211,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 212,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 213,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 214,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 215,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 216,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 217,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 218,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 219,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 220,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 221,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 222,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 223,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 224,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 225,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 226,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 227,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 228,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 229,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 230,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 231,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 232,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 233,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 234,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 235,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 236,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 237,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 238,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 239,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 240,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 241,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 242,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 243,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 244,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 245,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 246,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 247,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 248,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 249,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 250,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 251,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 252,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 253,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 254,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 255,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 256,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 257,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 258,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 259,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 260,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 261,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 262,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 263,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 264,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 265,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 266,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 267,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 268,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 269,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 270,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 271,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 272,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 273,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 274,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 275,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 276,
-    "tier": "grandmaster",
-    "temporal": "Classical",
-    "gpu_enabled": false
-  },
-  {
-    "id": 277,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 278,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 279,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 280,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 281,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 282,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 283,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 284,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 285,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 286,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 287,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 288,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 289,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 290,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 291,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 292,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 293,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 294,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 295,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 296,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 297,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 298,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 299,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 300,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 301,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 302,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 303,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 304,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 305,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 306,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 307,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 308,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 309,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 310,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 311,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 312,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 313,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 314,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 315,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 316,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 317,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 318,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 319,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 320,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 321,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 322,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 323,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 324,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 325,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 326,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 327,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 328,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 329,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 330,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 331,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 332,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 333,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 334,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 335,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 336,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 337,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 338,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 339,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 340,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 341,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 342,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 343,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 344,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 345,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 346,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 347,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 348,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 349,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 350,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 351,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 352,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 353,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 354,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 355,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 356,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 357,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 358,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 359,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 360,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 361,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 362,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 363,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 364,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 365,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 366,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 367,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 368,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 369,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 370,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 371,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 372,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 373,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 374,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 375,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 376,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 377,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 378,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 379,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 380,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 381,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 382,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 383,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 384,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 385,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 386,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 387,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 388,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 389,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 390,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 391,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 392,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 393,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 394,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 395,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 396,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 397,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 398,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 399,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 400,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 401,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 402,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 403,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 404,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 405,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 406,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 407,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 408,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 409,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 410,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 411,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 412,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 413,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 414,
-    "tier": "grandmaster",
-    "temporal": "Modern",
-    "gpu_enabled": false
-  },
-  {
-    "id": 415,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 416,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 417,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 418,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 419,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 420,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 421,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 422,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 423,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 424,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 425,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 426,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 427,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 428,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 429,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 430,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 431,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 432,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 433,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 434,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 435,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 436,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 437,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 438,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 439,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 440,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 441,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 442,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 443,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 444,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 445,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 446,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 447,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 448,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 449,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 450,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": false
-  },
-  {
-    "id": 451,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 452,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 453,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 454,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 455,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 456,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 457,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 458,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 459,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 460,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 461,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 462,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 463,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 464,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 465,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 466,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 467,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 468,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 469,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 470,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 471,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 472,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 473,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 474,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 475,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 476,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 477,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 478,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 479,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 480,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 481,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 482,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 483,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 484,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 485,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 486,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 487,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 488,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 489,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 490,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 491,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 492,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 493,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 494,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 495,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 496,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 497,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 498,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 499,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 500,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 501,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 502,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 503,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 504,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 505,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 506,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 507,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 508,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 509,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 510,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 511,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 512,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 513,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 514,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 515,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 516,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 517,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 518,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 519,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 520,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 521,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 522,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 523,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 524,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 525,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 526,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 527,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 528,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 529,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 530,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 531,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 532,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 533,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 534,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 535,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 536,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 537,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 538,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 539,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 540,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 541,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 542,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 543,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 544,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 545,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 546,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 547,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 548,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 549,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  },
-  {
-    "id": 550,
-    "tier": "grandmaster",
-    "temporal": "Futuristic",
-    "gpu_enabled": true
-  }
-]
+{
+  "modules": [
+    {
+      "id": 1,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 2,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 3,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 4,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 5,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 6,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 7,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 8,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 9,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 10,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 11,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 12,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 13,
+      "tier": "foundational",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 14,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 15,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 16,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 17,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 18,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 19,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 20,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 21,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 22,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 23,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 24,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 25,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 26,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 27,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 28,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 29,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 30,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 31,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 32,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 33,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 34,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 35,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 36,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 37,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 38,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 39,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 40,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 41,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 42,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 43,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 44,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 45,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 46,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 47,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 48,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 49,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 50,
+      "tier": "intermediate",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 51,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 52,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 53,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 54,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 55,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 56,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 57,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 58,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 59,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 60,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 61,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 62,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 63,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 64,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 65,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 66,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 67,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 68,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 69,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 70,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 71,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 72,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 73,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 74,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 75,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 76,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 77,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 78,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 79,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 80,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 81,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 82,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 83,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 84,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 85,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 86,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 87,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 88,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 89,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 90,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 91,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 92,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 93,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 94,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 95,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 96,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 97,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 98,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 99,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 100,
+      "tier": "advanced",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 101,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 102,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 103,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 104,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 105,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 106,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 107,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 108,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 109,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 110,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 111,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 112,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 113,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 114,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 115,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 116,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 117,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 118,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 119,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 120,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 121,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 122,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 123,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 124,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 125,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 126,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 127,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 128,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 129,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 130,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 131,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 132,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 133,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 134,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 135,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 136,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 137,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 138,
+      "tier": "grandmaster",
+      "temporal": "Ancient",
+      "gpu_enabled": false
+    },
+    {
+      "id": 139,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 140,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 141,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 142,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 143,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 144,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 145,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 146,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 147,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 148,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 149,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 150,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 151,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 152,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 153,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 154,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 155,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 156,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 157,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 158,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 159,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 160,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 161,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 162,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 163,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 164,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 165,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 166,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 167,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 168,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 169,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 170,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 171,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 172,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 173,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 174,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 175,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 176,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 177,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 178,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 179,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 180,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 181,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 182,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 183,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 184,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 185,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 186,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 187,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 188,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 189,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 190,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 191,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 192,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 193,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 194,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 195,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 196,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 197,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 198,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 199,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 200,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 201,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 202,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 203,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 204,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 205,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 206,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 207,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 208,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 209,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 210,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 211,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 212,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 213,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 214,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 215,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 216,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 217,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 218,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 219,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 220,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 221,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 222,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 223,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 224,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 225,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 226,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 227,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 228,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 229,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 230,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 231,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 232,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 233,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 234,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 235,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 236,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 237,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 238,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 239,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 240,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 241,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 242,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 243,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 244,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 245,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 246,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 247,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 248,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 249,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 250,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 251,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 252,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 253,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 254,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 255,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 256,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 257,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 258,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 259,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 260,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 261,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 262,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 263,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 264,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 265,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 266,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 267,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 268,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 269,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 270,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 271,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 272,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 273,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 274,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 275,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 276,
+      "tier": "grandmaster",
+      "temporal": "Classical",
+      "gpu_enabled": false
+    },
+    {
+      "id": 277,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 278,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 279,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 280,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 281,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 282,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 283,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 284,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 285,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 286,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 287,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 288,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 289,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 290,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 291,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 292,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 293,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 294,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 295,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 296,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 297,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 298,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 299,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 300,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 301,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 302,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 303,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 304,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 305,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 306,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 307,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 308,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 309,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 310,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 311,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 312,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 313,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 314,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 315,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 316,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 317,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 318,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 319,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 320,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 321,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 322,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 323,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 324,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 325,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 326,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 327,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 328,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 329,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 330,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 331,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 332,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 333,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 334,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 335,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 336,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 337,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 338,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 339,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 340,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 341,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 342,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 343,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 344,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 345,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 346,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 347,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 348,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 349,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 350,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 351,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 352,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 353,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 354,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 355,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 356,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 357,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 358,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 359,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 360,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 361,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 362,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 363,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 364,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 365,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 366,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 367,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 368,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 369,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 370,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 371,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 372,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 373,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 374,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 375,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 376,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 377,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 378,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 379,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 380,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 381,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 382,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 383,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 384,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 385,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 386,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 387,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 388,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 389,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 390,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 391,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 392,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 393,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 394,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 395,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 396,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 397,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 398,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 399,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 400,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 401,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 402,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 403,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 404,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 405,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 406,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 407,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 408,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 409,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 410,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 411,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 412,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 413,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 414,
+      "tier": "grandmaster",
+      "temporal": "Modern",
+      "gpu_enabled": false
+    },
+    {
+      "id": 415,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 416,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 417,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 418,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 419,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 420,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 421,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 422,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 423,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 424,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 425,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 426,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 427,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 428,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 429,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 430,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 431,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 432,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 433,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 434,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 435,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 436,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 437,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 438,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 439,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 440,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 441,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 442,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 443,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 444,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 445,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 446,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 447,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 448,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 449,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 450,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": false
+    },
+    {
+      "id": 451,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 452,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 453,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 454,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 455,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 456,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 457,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 458,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 459,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 460,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 461,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 462,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 463,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 464,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 465,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 466,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 467,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 468,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 469,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 470,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 471,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 472,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 473,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 474,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 475,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 476,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 477,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 478,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 479,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 480,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 481,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 482,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 483,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 484,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 485,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 486,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 487,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 488,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 489,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 490,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 491,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 492,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 493,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 494,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 495,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 496,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 497,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 498,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 499,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 500,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 501,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 502,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 503,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 504,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 505,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 506,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 507,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 508,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 509,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 510,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 511,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 512,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 513,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 514,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 515,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 516,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 517,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 518,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 519,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 520,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 521,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 522,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 523,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 524,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 525,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 526,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 527,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 528,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 529,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 530,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 531,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 532,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 533,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 534,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 535,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 536,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 537,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 538,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 539,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 540,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 541,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 542,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 543,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 544,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 545,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 546,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 547,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 548,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 549,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    },
+    {
+      "id": 550,
+      "tier": "grandmaster",
+      "temporal": "Futuristic",
+      "gpu_enabled": true
+    }
+  ]
+}

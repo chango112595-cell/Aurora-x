@@ -5,7 +5,8 @@ Detects CPU, memory, storage, network, GPU, and sensors
 
 import os
 import platform
-from typing import Dict, Any, Optional, List
+import socket
+from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass, field
 
 
@@ -161,7 +162,7 @@ class HardwareDetector:
     
     def _detect_network(self) -> List[NetworkInterface]:
         interfaces = []
-        
+
         try:
             import psutil
             addrs = psutil.net_if_addrs()
@@ -173,9 +174,10 @@ class HardwareDetector:
                 
                 iface = NetworkInterface(name=name)
                 for addr in addr_list:
-                    if addr.family.name == "AF_INET":
+                    family = getattr(addr.family, "name", addr.family)
+                    if family in ("AF_INET", socket.AF_INET):
                         iface.address = addr.address
-                    elif addr.family.name == "AF_PACKET":
+                    elif family in ("AF_PACKET", socket.AF_PACKET):
                         iface.mac = addr.address
                 
                 if name in stats:
@@ -201,7 +203,7 @@ class HardwareDetector:
         except Exception:
             return False
     
-    def _detect_battery(self) -> tuple:
+    def _detect_battery(self) -> Tuple[bool, Optional[float]]:
         try:
             import psutil
             battery = psutil.sensors_battery()

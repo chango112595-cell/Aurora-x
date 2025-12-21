@@ -79,7 +79,7 @@ class ResourceManager:
             try:
                 await self._monitor_task
             except asyncio.CancelledError:
-                pass
+                self.logger.debug("Monitor task cancellation acknowledged")
             self.logger.debug("Monitor task cancelled")
         with self._lock:
             allocation_count = len(self.allocations)

@@ -60,8 +60,8 @@ class FileBasedLock:
                 try:
                     os.unlink(str(lock_file))
                     return self.acquire(key, holder, ttl)
-                except:
-                    pass
+                except Exception as exc:
+                    logger.debug("Failed to remove expired lock %s: %s", lock_file, exc)
             return False
     
     def _is_lock_expired(self, lock_file: Path) -> bool:
@@ -75,7 +75,8 @@ class FileBasedLock:
             
             elapsed = time.time() - data.get("acquired_at", 0)
             return elapsed > data.get("ttl", 30)
-        except:
+        except Exception as exc:
+            logger.debug("Failed to read lock %s: %s", lock_file, exc)
             return True
     
     def release(self, key: str) -> bool:
@@ -94,7 +95,8 @@ class FileBasedLock:
             
             logger.debug(f"Lock released: {key}")
             return True
-        except:
+        except Exception as exc:
+            logger.debug("Failed to release lock %s: %s", key, exc)
             return False
     
     def is_locked(self, key: str) -> bool:
@@ -130,7 +132,7 @@ class EtcdStore:
     def _try_connect(self):
         """Try to connect to etcd."""
         try:
-            pass
+            logger.info("etcd client not configured; using fallback store")
             self._using_fallback = True
             logger.info("Using file-based fallback for storage")
         except Exception as e:
@@ -162,7 +164,7 @@ class EtcdStore:
                 }
                 self._save_fallback_data()
             else:
-                pass
+                logger.warning("etcd client unavailable; write skipped for %s", key)
             return True
         except Exception as e:
             logger.error(f"Failed to put {key}: {e}")
@@ -185,7 +187,7 @@ class EtcdStore:
                 
                 return entry.get("value")
             else:
-                pass
+                logger.warning("etcd client unavailable; read skipped for %s", key)
         except Exception as e:
             logger.error(f"Failed to get {key}: {e}")
             return None
@@ -219,7 +221,7 @@ class EtcdStore:
             if self._using_fallback:
                 acquired = self._file_lock.acquire(lock_key, holder, ttl)
             else:
-                pass
+                logger.warning("etcd client unavailable; lock fallback skipped for %s", key)
             
             if not acquired:
                 raise RuntimeError(f"Failed to acquire lock: {key}")

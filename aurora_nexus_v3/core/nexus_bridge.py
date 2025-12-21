@@ -106,8 +106,8 @@ class NexusBridge:
                 name = m.get("name", f"module_{mid:03d}")
                 
                 file_candidates = [
-                    os.path.join(self.module_path, f"AuroraModule{mid:03d}.py"),
                     os.path.join(self.module_path, f"module_{mid:03d}.py"),
+                    os.path.join(self.module_path, f"AuroraModule{mid:03d}.py"),
                 ]
                 
                 module_file = None
@@ -130,6 +130,15 @@ class NexusBridge:
                         instance = cls()
                         if hasattr(instance, 'set_nexus'):
                             instance.set_nexus(self)
+
+                        if not hasattr(instance, "name"):
+                            setattr(instance, "name", name)
+                        if not hasattr(instance, "category"):
+                            setattr(instance, "category", m.get("category", "unknown"))
+                        if not hasattr(instance, "temporal_tier"):
+                            setattr(instance, "temporal_tier", m.get("tier", "foundational"))
+                        if not hasattr(instance, "gpu_enabled"):
+                            setattr(instance, "gpu_enabled", False)
 
                         self.modules[name] = instance
                         self.modules_by_id[mid] = instance
@@ -198,7 +207,7 @@ class NexusBridge:
         
         if targets:
             cpu_payload = {**payload, "_hybrid_mode": "cpu", "_execution_target": "pool"} if self.gpu_available else payload
-            futures = {self.pool.submit(m.execute, cpu_payload): m.name for m in targets}
+            futures = {self.pool.submit(m.execute, cpu_payload): getattr(m, "name", "unknown") for m in targets}
             
             for future in as_completed(futures):
                 name = futures[future]
@@ -242,14 +251,27 @@ class NexusBridge:
         """V3 lifecycle hook - propagate tick to modules"""
         for module in self.modules.values():
             if hasattr(module, 'on_tick'):
-                module.on_tick(tick_data)
+                try:
+                    module.on_tick(tick_data)
+                except TypeError:
+                    module.on_tick()
 
     def on_reflect(self, context: Dict[str, Any] = None):
         """V3 lifecycle hook - collect reflection data from modules"""
         reflections = []
         for module in self.modules.values():
             if hasattr(module, 'on_reflect'):
-                reflections.append(module.on_reflect(context))
+                try:
+                    result = module.on_reflect(context)
+                except TypeError:
+                    result = module.on_reflect()
+                if result is None:
+                    result = {
+                        "module": getattr(module, "name", "unknown"),
+                        "metrics": {},
+                        "healthy": True,
+                    }
+                reflections.append(result)
         return reflections
 
     def reflect(self, source: str, payload: Dict[str, Any]):
@@ -291,7 +313,13 @@ class NexusBridge:
         gpu_modules = 0
 
         for module in self.modules.values():
-            diag = module.diagnose()
+            if hasattr(module, "diagnose"):
+                diag = module.diagnose()
+            else:
+                diag = {
+                    "healthy": True,
+                    "gpu_enabled": getattr(module, "gpu_enabled", False),
+                }
             if diag.get("healthy"):
                 healthy += 1
             else:
