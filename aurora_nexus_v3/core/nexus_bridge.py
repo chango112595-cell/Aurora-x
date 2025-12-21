@@ -20,6 +20,7 @@ import json
 import threading
 import importlib
 import importlib.util
+import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, Any, List, Optional
@@ -29,6 +30,8 @@ try:
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
+
+logger = logging.getLogger(__name__)
 
 
 class NexusBridge:
@@ -282,14 +285,14 @@ class NexusBridge:
         for callback in self._reflection_callbacks:
             try:
                 callback(source, payload)
-            except:
-                pass
+            except Exception as exc:
+                logger.debug("Reflection callback failed for %s: %s", source, exc)
 
         if self._v3_core and hasattr(self._v3_core, 'reflection_manager'):
             try:
                 self._v3_core.reflection_manager.add_signal(source, payload)
-            except:
-                pass
+            except Exception as exc:
+                logger.debug("Failed to forward reflection signal from %s: %s", source, exc)
 
     def add_reflection_callback(self, callback):
         """Add custom reflection callback"""
@@ -303,8 +306,8 @@ class NexusBridge:
         if self._v3_core and hasattr(self._v3_core, 'learning_manager'):
             try:
                 self._v3_core.learning_manager.update_bias(module_name, data)
-            except:
-                pass
+            except Exception as exc:
+                logger.debug("Failed to update bias for %s: %s", module_name, exc)
 
     def get_status(self) -> Dict[str, Any]:
         """Get bridge and module status"""

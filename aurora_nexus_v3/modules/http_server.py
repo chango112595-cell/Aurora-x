@@ -5,6 +5,7 @@ Allows Express backend to query Nexus status and capabilities
 
 import asyncio
 import json
+import logging
 from typing import Any, Dict, List
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
@@ -14,6 +15,7 @@ from datetime import datetime
 
 
 activity_log: deque = deque(maxlen=100)
+logger = logging.getLogger(__name__)
 
 
 def log_activity(activity_type: str, message: str, details: Dict = None):
@@ -35,7 +37,15 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
     core = None
     
     def log_message(self, format, *args):
-        pass
+        message = "%s - - [%s] %s" % (
+            self.client_address[0],
+            self.log_date_time_string(),
+            format % args
+        )
+        if self.core and getattr(self.core, "logger", None):
+            self.core.logger.getChild("http_server").debug(message)
+        else:
+            logger.debug(message)
     
     def send_json_response(self, data: Dict[str, Any], status: int = 200):
         self.send_response(status)

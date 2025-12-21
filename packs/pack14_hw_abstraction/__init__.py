@@ -18,10 +18,12 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from abc import ABC, abstractmethod
+import logging
 
 PACK_ID = "pack14"
 PACK_NAME = "Hardware Abstraction"
 PACK_VERSION = "2.0.0"
+LOGGER = logging.getLogger("pack14_hw_abstraction")
 
 
 class HardwareType(Enum):
@@ -66,19 +68,19 @@ class SensorReading:
 class HardwareDriver(ABC):
     @abstractmethod
     def initialize(self) -> bool:
-        pass
+        raise NotImplementedError
     
     @abstractmethod
     def read(self) -> Dict[str, Any]:
-        pass
+        raise NotImplementedError
     
     @abstractmethod
     def write(self, data: Any) -> bool:
-        pass
+        raise NotImplementedError
     
     @abstractmethod
     def shutdown(self) -> bool:
-        pass
+        raise NotImplementedError
 
 
 class CPUDriver(HardwareDriver):
@@ -265,8 +267,9 @@ class SensorManager:
                     if entries:
                         temp = entries[0].current
                         break
-        except Exception:
-            pass
+        except Exception as exc:
+            LOGGER.debug("CPU temperature unavailable: %s", exc)
+            temp = 0.0
         
         return SensorReading(
             sensor_id="cpu_temp",
@@ -280,7 +283,7 @@ class SensorManager:
             import psutil
             load = psutil.cpu_percent(interval=0.1)
         except ImportError:
-            pass
+            load = 0.0
         
         return SensorReading(
             sensor_id="cpu_load",
@@ -294,7 +297,7 @@ class SensorManager:
             import psutil
             usage = psutil.virtual_memory().percent
         except ImportError:
-            pass
+            usage = 0.0
         
         return SensorReading(
             sensor_id="memory_usage",
@@ -308,7 +311,7 @@ class SensorManager:
             import psutil
             usage = psutil.disk_usage('/').percent
         except ImportError:
-            pass
+            usage = 0.0
         
         return SensorReading(
             sensor_id="disk_usage",

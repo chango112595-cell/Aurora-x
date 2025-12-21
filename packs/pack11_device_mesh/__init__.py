@@ -19,10 +19,12 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 import hashlib
+import logging
 
 PACK_ID = "pack11"
 PACK_NAME = "Device Mesh"
 PACK_VERSION = "2.0.0"
+LOGGER = logging.getLogger("pack11_device_mesh")
 
 
 class DeviceStatus(Enum):
@@ -187,8 +189,8 @@ class MessageRouter:
         for handler in handlers:
             try:
                 handler(message)
-            except Exception:
-                pass
+            except Exception as exc:
+                LOGGER.warning("Handler failed for %s: %s", message.message_type, exc)
     
     def get_message_stats(self) -> Dict[str, int]:
         with self._lock:

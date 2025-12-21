@@ -285,7 +285,7 @@ def run_module_candidate(
                 output = json.loads(stdout.strip().split("\n")[-1])
                 ok = output.get("ok", ok)
             except (json.JSONDecodeError, IndexError):
-                pass
+                logger.debug("Failed to parse sandbox output as JSON")
             
             return {
                 "ok": ok,

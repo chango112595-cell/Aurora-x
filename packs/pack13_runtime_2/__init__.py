@@ -88,7 +88,7 @@ class OutputCapture:
                 self.buffer.write(text[:remaining])
     
     def flush(self):
-        pass
+        return None
     
     def get_output(self) -> str:
         with self._lock:

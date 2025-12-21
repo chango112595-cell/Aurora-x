@@ -77,7 +77,7 @@ class DiscoveryProtocol:
             try:
                 await self._discovery_task
             except asyncio.CancelledError:
-                pass
+                self.logger.debug("Discovery task cancellation acknowledged")
             self.logger.debug("Discovery task cancelled")
         
         if self._broadcast_socket:
@@ -173,8 +173,8 @@ class DiscoveryProtocol:
             if result == 0:
                 await self._register_node(host, port, DiscoveryMethod.BROADCAST, latency)
                 
-        except Exception:
-            pass
+        except Exception as exc:
+            self.logger.debug(f"Probe failed for {host}:{port}: {exc}")
     
     async def _register_node(
         self,
