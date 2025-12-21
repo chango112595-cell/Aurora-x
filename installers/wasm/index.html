@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurora-X WASM (Local Pyodide)</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 24px;
+        background: #0b1020;
+        color: #e6e9ff;
+      }
+      pre {
+        background: #11162b;
+        padding: 16px;
+        border-radius: 8px;
+        white-space: pre-wrap;
+      }
+      .status {
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Aurora-X WASM (Offline)</h1>
+    <div class="status" id="status">Booting Pyodide...</div>
+    <pre id="output"></pre>
+    <script src="./pyodide/pyodide.js"></script>
+    <script type="module" src="./wasm-app.js"></script>
+  </body>
+</html>
