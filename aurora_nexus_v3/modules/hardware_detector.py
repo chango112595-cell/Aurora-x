@@ -3,9 +3,9 @@ Hardware Detector - Understands device capabilities
 Detects CPU, memory, storage, network, GPU, and sensors
 """
 
-import os
 import platform
 import socket
+import logging
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass, field
 
@@ -69,19 +69,19 @@ class HardwareDetector:
         "micro": 0
     }
     
-    def __init__(self, core):
+    def __init__(self, core: Any):
         self.core = core
-        self.logger = core.logger.getChild("hardware")
+        self.logger: logging.Logger = core.logger.getChild("hardware")
         self.profile: Optional[HardwareProfile] = None
     
-    async def initialize(self):
+    async def initialize(self) -> None:
         self.logger.info("Detecting hardware capabilities...")
         self.profile = await self.detect()
         self.logger.info(f"Hardware detected: {self.profile.cpu.cores_logical} cores, "
                         f"{self.profile.memory.total_mb}MB RAM, "
                         f"Score: {self.profile.capability_score}/100")
     
-    async def shutdown(self):
+    async def shutdown(self) -> None:
         """Cleanup hardware detector resources."""
         self.logger.info("Hardware detector shutting down")
         self.profile = None
@@ -138,7 +138,7 @@ class HardwareDetector:
         return info
     
     def _detect_storage(self) -> List[StorageInfo]:
-        storage_list = []
+        storage_list: List[StorageInfo] = []
         
         try:
             import psutil
@@ -161,7 +161,7 @@ class HardwareDetector:
         return storage_list
     
     def _detect_network(self) -> List[NetworkInterface]:
-        interfaces = []
+        interfaces: List[NetworkInterface] = []
 
         try:
             import psutil
@@ -174,10 +174,11 @@ class HardwareDetector:
                 
                 iface = NetworkInterface(name=name)
                 for addr in addr_list:
-                    family = getattr(addr.family, "name", addr.family)
-                    if family in ("AF_INET", socket.AF_INET):
+                    family = addr.family
+                    family_name = getattr(family, "name", "")
+                    if family in (socket.AF_INET, socket.AF_INET6) or family_name in ("AF_INET", "AF_INET6"):
                         iface.address = addr.address
-                    elif family in ("AF_PACKET", socket.AF_PACKET):
+                    elif family == socket.AF_PACKET or family_name == "AF_PACKET":
                         iface.mac = addr.address
                 
                 if name in stats:
