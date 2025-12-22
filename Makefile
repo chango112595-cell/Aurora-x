@@ -609,7 +609,7 @@ progress-open:
 # ------- Aurora Make targets (one-liners) -------
 HOST ?= http://localhost:5000
 
-.PHONY: dev prod-check orch-up orch-down orch-logs thresholds t08-on t08-off badge demo smoke progress-recompute
+.PHONY: dev prod-check orch-up orch-up-basic orch-down orch-logs thresholds t08-on t08-off badge demo smoke progress-recompute
 
 dev:
 	python -m aurora_x.serve
@@ -617,6 +617,7 @@ dev:
 prod-check:
 	python -m aurora_x.checks.ci_gate
 
+orch-up-basic:
 orch-up:
 	AURORA_GIT_AUTO=1 python -m aurora_x.orchestrator --interval 300 --git-branch main --git-url $${AURORA_GIT_URL:-""} & \
 	echo $$! > /tmp/aurora_orch.pid && echo "orchestrator pid: $$(cat /tmp/aurora_orch.pid)"
@@ -923,6 +924,15 @@ sign-off:
 	@echo "  unset AURORA_SIGN"
 
 # === CI Helper Commands ===
+# CI-specific lint, sec, test targets
+lint-ci:
+	ruff check .
+
+sec-ci:
+	bandit -r aurora_x -lll
+	semgrep --config p/security-audit --config p/python --config semgrep.yml
+
+test-ci:
 # Redefined lint, sec, test for CI environment
 lint:
 	ruff check .
@@ -934,7 +944,7 @@ sec:
 test:
 	pytest --cov=aurora_x --cov-report=term-missing
 
-ci-local: lint sec test
+ci-local: lint-ci sec-ci test-ci
 
 # Workflow Management
 .PHONY: check-workflows enable-workflows workflow-status fix-workflows workflow-dashboard

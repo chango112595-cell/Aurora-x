@@ -114,21 +114,21 @@ app.use((req, res, next) => {
 
 /*
 # 1. Register new user
-curl -X POST http://localhost:5000/api/auth/register \
+curl -X POST ${BASE_URL:-http://127.0.0.1:5000}/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"username":"testuser","email":"test@example.com","password":"password123"}'
 
 # 2. Login
-curl -X POST http://localhost:5000/api/auth/login \
+curl -X POST ${BASE_URL:-http://127.0.0.1:5000}/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"admin123"}'
 
 # 3. Get profile (replace TOKEN with access token from login)
-curl http://localhost:5000/api/auth/me \
+curl ${BASE_URL:-http://127.0.0.1:5000}/api/auth/me \
   -H "Authorization: Bearer TOKEN"
 
 # 4. Admin: List users
-curl http://localhost:5000/api/auth/users \
+curl ${BASE_URL:-http://127.0.0.1:5000}/api/auth/users \
   -H "Authorization: Bearer ADMIN_TOKEN"
 */
 

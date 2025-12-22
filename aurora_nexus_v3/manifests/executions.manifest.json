@@ -1,0 +1,1788 @@
+{
+  "version": "1.0.0",
+  "generated": "2025-12-22",
+  "executions": [
+    {
+      "id": "AEM-001",
+      "name": "Sequential Method 01",
+      "category": "sequential",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "sequential",
+      "implementationRef": "aurora_nexus_v3.aems.sequential.aem-001",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-002",
+      "name": "Sequential Method 02",
+      "category": "sequential",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "sequential",
+      "implementationRef": "aurora_nexus_v3.aems.sequential.aem-002",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-003",
+      "name": "Sequential Method 03",
+      "category": "sequential",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "sequential",
+      "implementationRef": "aurora_nexus_v3.aems.sequential.aem-003",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-004",
+      "name": "Sequential Method 04",
+      "category": "sequential",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "sequential",
+      "implementationRef": "aurora_nexus_v3.aems.sequential.aem-004",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-005",
+      "name": "Sequential Method 05",
+      "category": "sequential",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "sequential",
+      "implementationRef": "aurora_nexus_v3.aems.sequential.aem-005",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-006",
+      "name": "Sequential Method 06",
+      "category": "sequential",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "sequential",
+      "implementationRef": "aurora_nexus_v3.aems.sequential.aem-006",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-007",
+      "name": "Sequential Method 07",
+      "category": "sequential",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "sequential",
+      "implementationRef": "aurora_nexus_v3.aems.sequential.aem-007",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-008",
+      "name": "Sequential Method 08",
+      "category": "sequential",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "sequential",
+      "implementationRef": "aurora_nexus_v3.aems.sequential.aem-008",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-009",
+      "name": "Sequential Method 09",
+      "category": "sequential",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "sequential",
+      "implementationRef": "aurora_nexus_v3.aems.sequential.aem-009",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-010",
+      "name": "Sequential Method 10",
+      "category": "sequential",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "sequential",
+      "implementationRef": "aurora_nexus_v3.aems.sequential.aem-010",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-011",
+      "name": "Parallel Method 01",
+      "category": "parallel",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "parallel",
+      "implementationRef": "aurora_nexus_v3.aems.parallel.aem-011",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-012",
+      "name": "Parallel Method 02",
+      "category": "parallel",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "parallel",
+      "implementationRef": "aurora_nexus_v3.aems.parallel.aem-012",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-013",
+      "name": "Parallel Method 03",
+      "category": "parallel",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "parallel",
+      "implementationRef": "aurora_nexus_v3.aems.parallel.aem-013",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-014",
+      "name": "Parallel Method 04",
+      "category": "parallel",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "parallel",
+      "implementationRef": "aurora_nexus_v3.aems.parallel.aem-014",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-015",
+      "name": "Parallel Method 05",
+      "category": "parallel",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "parallel",
+      "implementationRef": "aurora_nexus_v3.aems.parallel.aem-015",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-016",
+      "name": "Parallel Method 06",
+      "category": "parallel",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "parallel",
+      "implementationRef": "aurora_nexus_v3.aems.parallel.aem-016",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-017",
+      "name": "Parallel Method 07",
+      "category": "parallel",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "parallel",
+      "implementationRef": "aurora_nexus_v3.aems.parallel.aem-017",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-018",
+      "name": "Parallel Method 08",
+      "category": "parallel",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "parallel",
+      "implementationRef": "aurora_nexus_v3.aems.parallel.aem-018",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-019",
+      "name": "Parallel Method 09",
+      "category": "parallel",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "parallel",
+      "implementationRef": "aurora_nexus_v3.aems.parallel.aem-019",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-020",
+      "name": "Parallel Method 10",
+      "category": "parallel",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "parallel",
+      "implementationRef": "aurora_nexus_v3.aems.parallel.aem-020",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-021",
+      "name": "Speculative Method 01",
+      "category": "speculative",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "speculative",
+      "implementationRef": "aurora_nexus_v3.aems.speculative.aem-021",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-022",
+      "name": "Speculative Method 02",
+      "category": "speculative",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "speculative",
+      "implementationRef": "aurora_nexus_v3.aems.speculative.aem-022",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-023",
+      "name": "Speculative Method 03",
+      "category": "speculative",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "speculative",
+      "implementationRef": "aurora_nexus_v3.aems.speculative.aem-023",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-024",
+      "name": "Speculative Method 04",
+      "category": "speculative",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "speculative",
+      "implementationRef": "aurora_nexus_v3.aems.speculative.aem-024",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-025",
+      "name": "Speculative Method 05",
+      "category": "speculative",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "speculative",
+      "implementationRef": "aurora_nexus_v3.aems.speculative.aem-025",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-026",
+      "name": "Speculative Method 06",
+      "category": "speculative",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "speculative",
+      "implementationRef": "aurora_nexus_v3.aems.speculative.aem-026",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-027",
+      "name": "Speculative Method 07",
+      "category": "speculative",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "speculative",
+      "implementationRef": "aurora_nexus_v3.aems.speculative.aem-027",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-028",
+      "name": "Speculative Method 08",
+      "category": "speculative",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "speculative",
+      "implementationRef": "aurora_nexus_v3.aems.speculative.aem-028",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-029",
+      "name": "Speculative Method 09",
+      "category": "speculative",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "speculative",
+      "implementationRef": "aurora_nexus_v3.aems.speculative.aem-029",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-030",
+      "name": "Speculative Method 10",
+      "category": "speculative",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "speculative",
+      "implementationRef": "aurora_nexus_v3.aems.speculative.aem-030",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-031",
+      "name": "Adversarial Method 01",
+      "category": "adversarial",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "adversarial",
+      "implementationRef": "aurora_nexus_v3.aems.adversarial.aem-031",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-032",
+      "name": "Adversarial Method 02",
+      "category": "adversarial",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "adversarial",
+      "implementationRef": "aurora_nexus_v3.aems.adversarial.aem-032",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-033",
+      "name": "Adversarial Method 03",
+      "category": "adversarial",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "adversarial",
+      "implementationRef": "aurora_nexus_v3.aems.adversarial.aem-033",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-034",
+      "name": "Adversarial Method 04",
+      "category": "adversarial",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "adversarial",
+      "implementationRef": "aurora_nexus_v3.aems.adversarial.aem-034",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-035",
+      "name": "Adversarial Method 05",
+      "category": "adversarial",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "adversarial",
+      "implementationRef": "aurora_nexus_v3.aems.adversarial.aem-035",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-036",
+      "name": "Adversarial Method 06",
+      "category": "adversarial",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "adversarial",
+      "implementationRef": "aurora_nexus_v3.aems.adversarial.aem-036",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-037",
+      "name": "Adversarial Method 07",
+      "category": "adversarial",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "adversarial",
+      "implementationRef": "aurora_nexus_v3.aems.adversarial.aem-037",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-038",
+      "name": "Adversarial Method 08",
+      "category": "adversarial",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "adversarial",
+      "implementationRef": "aurora_nexus_v3.aems.adversarial.aem-038",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-039",
+      "name": "Adversarial Method 09",
+      "category": "adversarial",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "adversarial",
+      "implementationRef": "aurora_nexus_v3.aems.adversarial.aem-039",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-040",
+      "name": "Adversarial Method 10",
+      "category": "adversarial",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "adversarial",
+      "implementationRef": "aurora_nexus_v3.aems.adversarial.aem-040",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-041",
+      "name": "Self Reflective Method 01",
+      "category": "self_reflective",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "self_reflective",
+      "implementationRef": "aurora_nexus_v3.aems.self_reflective.aem-041",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-042",
+      "name": "Self Reflective Method 02",
+      "category": "self_reflective",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "self_reflective",
+      "implementationRef": "aurora_nexus_v3.aems.self_reflective.aem-042",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-043",
+      "name": "Self Reflective Method 03",
+      "category": "self_reflective",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "self_reflective",
+      "implementationRef": "aurora_nexus_v3.aems.self_reflective.aem-043",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-044",
+      "name": "Self Reflective Method 04",
+      "category": "self_reflective",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "self_reflective",
+      "implementationRef": "aurora_nexus_v3.aems.self_reflective.aem-044",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-045",
+      "name": "Self Reflective Method 05",
+      "category": "self_reflective",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "self_reflective",
+      "implementationRef": "aurora_nexus_v3.aems.self_reflective.aem-045",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-046",
+      "name": "Self Reflective Method 06",
+      "category": "self_reflective",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "self_reflective",
+      "implementationRef": "aurora_nexus_v3.aems.self_reflective.aem-046",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-047",
+      "name": "Self Reflective Method 07",
+      "category": "self_reflective",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "self_reflective",
+      "implementationRef": "aurora_nexus_v3.aems.self_reflective.aem-047",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-048",
+      "name": "Self Reflective Method 08",
+      "category": "self_reflective",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "self_reflective",
+      "implementationRef": "aurora_nexus_v3.aems.self_reflective.aem-048",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-049",
+      "name": "Self Reflective Method 09",
+      "category": "self_reflective",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "self_reflective",
+      "implementationRef": "aurora_nexus_v3.aems.self_reflective.aem-049",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-050",
+      "name": "Self Reflective Method 10",
+      "category": "self_reflective",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "self_reflective",
+      "implementationRef": "aurora_nexus_v3.aems.self_reflective.aem-050",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-051",
+      "name": "Hybrid Method 01",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-051",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-052",
+      "name": "Hybrid Method 02",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-052",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-053",
+      "name": "Hybrid Method 03",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-053",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-054",
+      "name": "Hybrid Method 04",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-054",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-055",
+      "name": "Hybrid Method 05",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-055",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-056",
+      "name": "Hybrid Method 06",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-056",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-057",
+      "name": "Hybrid Method 07",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-057",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-058",
+      "name": "Hybrid Method 08",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-058",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-059",
+      "name": "Hybrid Method 09",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-059",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-060",
+      "name": "Hybrid Method 10",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-060",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-061",
+      "name": "Hybrid Method 11",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-061",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-062",
+      "name": "Hybrid Method 12",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-062",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-063",
+      "name": "Hybrid Method 13",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-063",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-064",
+      "name": "Hybrid Method 14",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-064",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-065",
+      "name": "Hybrid Method 15",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-065",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    },
+    {
+      "id": "AEM-066",
+      "name": "Hybrid Method 16",
+      "category": "hybrid",
+      "inputs": [
+        "task",
+        "context"
+      ],
+      "outputs": [
+        "result",
+        "metrics"
+      ],
+      "safetyPolicy": [
+        "audit",
+        "rollback",
+        "rate_limit"
+      ],
+      "strategy": "hybrid",
+      "implementationRef": "aurora_nexus_v3.aems.hybrid.aem-066",
+      "version": "1.0.0",
+      "status": "active",
+      "timeout_ms": 30000,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "backoffMs": 1000
+      }
+    }
+  ]
+}
