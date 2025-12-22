@@ -73,6 +73,10 @@ class ManifestIntegrator:
     """
     
     MANIFEST_DIR = Path("manifests")
+    TEMPORAL_ERAS = ("Ancient", "Classical", "Modern", "Futuristic", "Post-Quantum")
+    TEMPORAL_ALIAS = {
+        "Futuristic": "Post-Quantum"
+    }
     
     def __init__(self, core: Any = None):
         self.core = core
@@ -178,10 +182,14 @@ class ManifestIntegrator:
             data = load_snapshot(str(module_file), {"modules": []})
             
             for mod_data in data.get("modules", []):
+                category = mod_data.get("category", "")
+                temporal_era = mod_data.get("temporalEra") or self.TEMPORAL_ALIAS.get(category, category)
+                if temporal_era not in self.TEMPORAL_ERAS:
+                    temporal_era = "Unknown"
                 module = Module(
                     id=mod_data.get("id", ""),
                     name=mod_data.get("name", ""),
-                    category=mod_data.get("category", ""),
+                    category=category,
                     supported_devices=mod_data.get("supportedDevices", []),
                     entrypoints=mod_data.get("entrypoints", {}),
                     sandbox=mod_data.get("sandbox", "vm"),
@@ -189,7 +197,7 @@ class ManifestIntegrator:
                     version=mod_data.get("version", "0.0.0"),
                     status=mod_data.get("status", "placeholder"),
                     dependencies=mod_data.get("dependencies", []),
-                    metadata=mod_data.get("metadata", {})
+                    metadata={**mod_data.get("metadata", {}), "temporal_era": temporal_era}
                 )
                 self.modules[module.id] = module
             
@@ -270,6 +278,15 @@ class ManifestIntegrator:
         for module in self.modules.values():
             categories[module.category] = categories.get(module.category, 0) + 1
         return categories
+
+    def get_temporal_coverage(self) -> Dict[str, int]:
+        """Get module count by temporal era."""
+        coverage = {era: 0 for era in self.TEMPORAL_ERAS}
+        for module in self.modules.values():
+            era = module.metadata.get("temporal_era", "Unknown")
+            if era in coverage:
+                coverage[era] += 1
+        return coverage
     
     def get_status(self) -> Dict[str, Any]:
         """Get integrator status"""
@@ -284,7 +301,8 @@ class ManifestIntegrator:
             "active_modules": len(self.get_active_modules()),
             "tier_categories": self.get_tier_categories(),
             "aem_categories": self.get_aem_categories(),
-            "module_categories": self.get_module_categories()
+            "module_categories": self.get_module_categories(),
+            "temporal_coverage": self.get_temporal_coverage()
         }
     
     async def shutdown(self):
