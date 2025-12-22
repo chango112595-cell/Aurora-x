@@ -8,7 +8,7 @@ import axios, { AxiosError } from 'axios';
 import { log } from './vite';
 
 // Aurora Nexus V3 API Configuration
-const AURORA_NEXUS_HOST = process.env.AURORA_NEXUS_HOST || 'http://localhost:5001';
+const AURORA_NEXUS_HOST = process.env.AURORA_NEXUS_HOST || 'http://127.0.0.1:5001';
 const AURORA_API_TIMEOUT = 30000; // 30 seconds
 
 interface AuroraResponse {
