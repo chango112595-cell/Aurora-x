@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class Integrator0504Cleanup:
     def __init__(self):
-        pass
+        self.resource = None
 
     def teardown(self) -> dict:
         try:

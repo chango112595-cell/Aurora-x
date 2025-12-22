@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class Formatter0356Cleanup:
     def __init__(self):
-        pass
+        self.resource = None
 
     def teardown(self) -> dict:
         try:
