@@ -4,11 +4,15 @@ Registration, discovery, health tracking, dependencies
 """
 
 import asyncio
+import os
 import time
 from typing import Dict, Any, Optional, List, Set
 from dataclasses import dataclass, field
 from enum import Enum
 import threading
+
+
+DEFAULT_SERVICE_HOST = os.environ.get("AURORA_SERVICE_HOST", "127.0.0.1")
 
 
 class ServiceState(Enum):
@@ -37,7 +41,7 @@ class ServiceDefinition:
     id: str
     name: str
     type: ServiceType
-    host: str = "localhost"
+    host: str = DEFAULT_SERVICE_HOST
     port: Optional[int] = None
     protocol: str = "http"
     state: ServiceState = ServiceState.REGISTERED
@@ -107,7 +111,7 @@ class ServiceRegistry:
         self,
         name: str,
         service_type: ServiceType,
-        host: str = "localhost",
+        host: str = DEFAULT_SERVICE_HOST,
         port: Optional[int] = None,
         protocol: str = "http",
         health_endpoint: Optional[str] = None,
