@@ -131,6 +131,9 @@ export async function notifyCodeSynthesisComplete(
   functionName: string,
   userEmail?: string
 ): Promise<void> {
+  const baseUrl = process.env.BASE_URL
+    || process.env.PUBLIC_BASE_URL
+    || `http://127.0.0.1:${process.env.PORT || '5000'}`;
   // Send email if configured and user email provided
   if (userEmail && emailTransporter) {
     await sendEmail({
@@ -140,7 +143,7 @@ export async function notifyCodeSynthesisComplete(
         <h2>✅ Your code is ready!</h2>
         <p>Aurora has finished synthesizing your function: <strong>${functionName}</strong></p>
         <p>Synthesis ID: <code>${synthesisId}</code></p>
-        <p><a href="${process.env.BASE_URL || 'http://localhost:5000'}/dashboard">View in Dashboard</a></p>
+        <p><a href="${baseUrl}/dashboard">View in Dashboard</a></p>
       `,
       text: `Your code synthesis is complete!\n\nFunction: ${functionName}\nSynthesis ID: ${synthesisId}`
     });

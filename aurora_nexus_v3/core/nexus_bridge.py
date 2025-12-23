@@ -25,11 +25,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 
-try:
-    import torch
-    TORCH_AVAILABLE = True
-except ImportError:
-    TORCH_AVAILABLE = False
+from aurora_nexus_v3.modules.hardware_detector import detect_cuda_details
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +55,8 @@ class NexusBridge:
         self.modules: Dict[str, Any] = {}
         self.modules_by_id: Dict[int, Any] = {}
         self.lock = threading.Lock()
-        self.gpu_available = TORCH_AVAILABLE and (torch.cuda.is_available() if TORCH_AVAILABLE else False)
+        self.gpu_details = detect_cuda_details(logger)
+        self.gpu_available = self.gpu_details.get("available", False)
         self.pool = ThreadPoolExecutor(max_workers=pool_size)
         self._initialized = False
         self._v3_core = None
