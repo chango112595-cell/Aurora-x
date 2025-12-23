@@ -16,7 +16,61 @@ try:
 except ImportError:
     REDIS_AVAILABLE = False
 
-from cachetools import LRUCache, TTLCache
+try:
+    from cachetools import LRUCache, TTLCache
+except ImportError:
+    import time
+    from collections import OrderedDict
+
+    class LRUCache:
+        def __init__(self, maxsize: int = 1000):
+            self.maxsize = maxsize
+            self._data = OrderedDict()
+
+        def __getitem__(self, key):
+            value = self._data.pop(key)
+            self._data[key] = value
+            return value
+
+        def __setitem__(self, key, value):
+            if key in self._data:
+                self._data.pop(key)
+            self._data[key] = value
+            if len(self._data) > self.maxsize:
+                self._data.popitem(last=False)
+
+        def get(self, key, default=None):
+            try:
+                return self.__getitem__(key)
+            except KeyError:
+                return default
+
+        def clear(self):
+            self._data.clear()
+
+        def __len__(self):
+            return len(self._data)
+
+    class TTLCache(LRUCache):
+        def __init__(self, maxsize: int = 1000, ttl: int = 300):
+            super().__init__(maxsize=maxsize)
+            self.ttl = ttl
+            self._expiry = {}
+
+        def __setitem__(self, key, value):
+            super().__setitem__(key, value)
+            self._expiry[key] = time.time() + self.ttl
+
+        def __getitem__(self, key):
+            if key in self._expiry and time.time() > self._expiry[key]:
+                self._data.pop(key, None)
+                self._expiry.pop(key, None)
+                raise KeyError(key)
+            return super().__getitem__(key)
+
+        def clear(self):
+            super().clear()
+            self._expiry.clear()
 
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor

@@ -387,6 +387,19 @@ class HybridOrchestrator:
     async def _validate_manifests(self):
         """Validate loaded manifests for consistency"""
         validation_errors = []
+
+        if len(self.tiers) != self.TIER_COUNT:
+            validation_errors.append(
+                f"Tiers count mismatch: expected {self.TIER_COUNT}, got {len(self.tiers)}"
+            )
+        if len(self.execution_methods) != self.AEM_COUNT:
+            validation_errors.append(
+                f"AEM count mismatch: expected {self.AEM_COUNT}, got {len(self.execution_methods)}"
+            )
+        if len(self.modules) < self.MODULE_COUNT:
+            validation_errors.append(
+                f"Module count mismatch: expected at least {self.MODULE_COUNT}, got {len(self.modules)}"
+            )
         
         for tier_id, tier in self.tiers.items():
             for dep in tier.get("dependencies", []):
@@ -399,9 +412,10 @@ class HybridOrchestrator:
                     validation_errors.append(f"Module {mod_id} has missing dependency: {dep}")
         
         if validation_errors:
-            self.logger.warning(f"Manifest validation found {len(validation_errors)} warnings")
-            for error in validation_errors[:5]:
-                self.logger.warning(f"  - {error}")
+            self.logger.error(f"Manifest validation found {len(validation_errors)} issues")
+            for error in validation_errors[:10]:
+                self.logger.error(f"  - {error}")
+            raise RuntimeError("Manifest validation failed; required components missing.")
         else:
             self.logger.info("Manifest validation passed successfully")
     

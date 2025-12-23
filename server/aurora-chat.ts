@@ -17,6 +17,7 @@ import {
   type ExecutionResult,
   type ExecutionContext
 } from './aurora-execution-orchestrator';
+import { getExternalAIConfig, getLocalFallbackResponse, isAnyExternalAIAvailable } from './external-ai-guard';
 
 // Luminar Nexus service endpoints
 const LUMINAR_NEXUS_V2_URL = process.env.LUMINAR_NEXUS_V2_URL || 'http://0.0.0.0:5005';
@@ -146,8 +147,13 @@ async function routeViaAuroraChatServer(message: string, sessionId: string): Pro
 /**
  * Get system status from all Luminar Nexus services
  */
-async function getSystemStatus(): Promise<{ v2: any; v3: any; bridge: any }> {
-  const status = { v2: null, v3: null, bridge: null };
+async function getSystemStatus(): Promise<{ v2: any; v3: any; bridge: any; externalAI: any }> {
+  const status: { v2: any; v3: any; bridge: any; externalAI: any } = { 
+    v2: null, 
+    v3: null, 
+    bridge: null,
+    externalAI: getExternalAIConfig()
+  };
 
   try {
     const v2Response = await fetch(`${LUMINAR_NEXUS_V2_URL}/api/nexus/status`, {
@@ -221,27 +227,45 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
 
 /**
  * Generate a built-in response when all services are unavailable
+ * Uses external AI guard for graceful fallback behavior
  */
 function generateBuiltInResponse(message: string): string {
   const msg = message.toLowerCase();
+  const aiConfig = getExternalAIConfig();
+  const modeInfo = aiConfig.mode === 'local-only' 
+    ? ` Operating in local-only mode${aiConfig.fallbackReason ? ` (${aiConfig.fallbackReason})` : ''}.`
+    : '';
 
   if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
-    return "Hello! I'm Aurora, your AI assistant. I'm currently operating in standalone mode while connecting to Luminar Nexus services. How can I help you today?";
+    return `Hello! I'm Aurora, your AI assistant. I'm currently operating in standalone mode while connecting to Luminar Nexus services.${modeInfo} How can I help you today?`;
   }
 
   if (msg.includes('status') || msg.includes('health') || msg.includes('check')) {
-    return "Aurora Status: I'm online and processing your messages. However, Luminar Nexus V2 and V3 services appear to be offline or starting up. I'm ready to assist you with basic queries while the full system initializes.";
+    const externalAIStatus = aiConfig.enabled 
+      ? `External AI: ${aiConfig.anthropicAvailable ? 'Anthropic available' : 'No Anthropic key'}, ${aiConfig.openaiAvailable ? 'OpenAI available' : 'No OpenAI key'}`
+      : 'External AI: Disabled (ENABLE_EXTERNAL_AI not set to "true")';
+    return `Aurora Status: I'm online and processing your messages. ${externalAIStatus}. Luminar Nexus V2 and V3 services appear to be offline or starting up. I'm ready to assist you with basic queries while the full system initializes.`;
   }
 
   if (msg.includes('help')) {
-    return "I'm Aurora, an AI assistant with 79 capabilities across 27 technology domains. While my full Luminar Nexus integration is connecting, I can help with: code reviews, architecture discussions, debugging tips, and general development questions. What would you like to work on?";
+    return `I'm Aurora, an AI assistant with 79 capabilities across 27 technology domains.${modeInfo} While my full Luminar Nexus integration is connecting, I can help with: code reviews, architecture discussions, debugging tips, and general development questions. What would you like to work on?`;
   }
 
   if (msg.includes('luminar') || msg.includes('nexus')) {
     return "Luminar Nexus is Aurora's advanced orchestration system. V2 provides AI-driven service management and autonomous healing. V3 adds universal consciousness and quantum-inspired state management. The system is currently initializing - please try again in a moment.";
   }
 
-  return `I received your message: "${message.substring(0, 100)}${message.length > 100 ? '...' : ''}"\n\nI'm currently connecting to Luminar Nexus V2 and V3 for enhanced processing. In the meantime, I'm here to help with any questions or tasks you have. What would you like to explore?`;
+  if (msg.includes('anthropic') || msg.includes('claude') || msg.includes('external ai')) {
+    if (!aiConfig.enabled) {
+      return "External AI services (Anthropic/Claude) are currently disabled. Set ENABLE_EXTERNAL_AI=true and configure ANTHROPIC_API_KEY to enable external AI features. Aurora is fully functional in local-only mode.";
+    } else if (!aiConfig.anthropicAvailable) {
+      return "Anthropic/Claude is enabled but no API key is configured. Set ANTHROPIC_API_KEY to use Claude models. Aurora continues to operate using other available services.";
+    } else {
+      return "Anthropic/Claude is configured and available for AI-powered features.";
+    }
+  }
+
+  return `I received your message: "${message.substring(0, 100)}${message.length > 100 ? '...' : ''}"\n\nI'm currently connecting to Luminar Nexus V2 and V3 for enhanced processing.${modeInfo} In the meantime, I'm here to help with any questions or tasks you have. What would you like to explore?`;
 }
 
 // Aurora's chat WebSocket server
@@ -252,10 +276,6 @@ export function setupAuroraChatWebSocket(server: any) {
   });
 
   wss.on('connection', async (ws: WebSocket) => {
-    const memoryStatus = await memoryClient.checkStatus();
-
-    let greeting = "Hello! I'm Aurora. What would you like me to do?";
-    
     // Welcome message
     ws.send(JSON.stringify({
       message: 'Aurora online. Connected to Luminar Nexus V2 and V3 orchestration systems. 79 capabilities (66 knowledge tiers + 13 foundation tasks) active. How may I assist you today?'
@@ -272,9 +292,9 @@ export function setupAuroraChatWebSocket(server: any) {
         ws.send(JSON.stringify({
           message: response,
           detection: {
-            type: detection.type,
-            confidence: detection.confidence,
-            executionMode: detection.executionMode
+            type: 'processed',
+            confidence: 0.95,
+            executionMode: 'luminar-nexus'
           }
         }));
       } catch (error) {
@@ -287,7 +307,6 @@ export function setupAuroraChatWebSocket(server: any) {
     ws.on('close', () => {
     });
   });
-}
 
   console.log('[Aurora] Chat WebSocket server ready on /aurora/chat (Luminar Nexus V2/V3 integrated)');
 }

@@ -65,8 +65,8 @@ function getActivityIcon(type: string) {
 function getActivityColor(type: string) {
   switch (type) {
     case "chat": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-    case "processing": return "bg-purple-500/20 text-purple-400 border-purple-500/30";
-    case "synthesis": return "bg-cyan-500/20 text-cyan-400 border-cyan-500/30";
+    case "processing": return "bg-sky-500/20 text-sky-400 border-sky-500/30";
+    case "synthesis": return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
     case "thinking": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
     case "complete": return "bg-green-500/20 text-green-400 border-green-500/30";
     case "error": return "bg-red-500/20 text-red-400 border-red-500/30";
@@ -91,10 +91,10 @@ export function ActivityMonitor() {
 
   if (isLoading) {
     return (
-      <Card className="bg-slate-900/50 backdrop-blur-xl border-cyan-500/30" data-testid="activity-monitor-loading">
-        <CardHeader className="pb-3 border-b border-cyan-500/20">
-          <CardTitle className="text-sm font-medium flex items-center gap-2 text-cyan-300">
-            <Activity className="h-4 w-4 text-cyan-400" />
+      <Card className="bg-slate-900/50 backdrop-blur-xl border-emerald-500/30" data-testid="activity-monitor-loading">
+        <CardHeader className="pb-3 border-b border-emerald-500/20">
+          <CardTitle className="text-sm font-medium flex items-center gap-2 text-emerald-300">
+            <Activity className="h-4 w-4 text-emerald-400" />
             Activity Monitor
           </CardTitle>
         </CardHeader>
@@ -108,10 +108,10 @@ export function ActivityMonitor() {
 
   if (error || !data) {
     return (
-      <Card className="bg-slate-900/50 backdrop-blur-xl border-cyan-500/30" data-testid="activity-monitor-error">
-        <CardHeader className="pb-3 border-b border-cyan-500/20">
-          <CardTitle className="text-sm font-medium flex items-center gap-2 text-cyan-300">
-            <Activity className="h-4 w-4 text-cyan-400" />
+      <Card className="bg-slate-900/50 backdrop-blur-xl border-emerald-500/30" data-testid="activity-monitor-error">
+        <CardHeader className="pb-3 border-b border-emerald-500/20">
+          <CardTitle className="text-sm font-medium flex items-center gap-2 text-emerald-300">
+            <Activity className="h-4 w-4 text-emerald-400" />
             Activity Monitor
           </CardTitle>
         </CardHeader>
@@ -133,11 +133,11 @@ export function ActivityMonitor() {
     Math.round((workers.active / workers.total) * 100) : 0;
 
   return (
-    <Card className="bg-slate-900/50 backdrop-blur-xl border-cyan-500/30" data-testid="activity-monitor">
-      <CardHeader className="pb-3 border-b border-cyan-500/20">
-        <CardTitle className="text-sm font-medium flex items-center justify-between text-cyan-300">
+    <Card className="bg-slate-900/50 backdrop-blur-xl border-emerald-500/30" data-testid="activity-monitor">
+      <CardHeader className="pb-3 border-b border-emerald-500/20">
+        <CardTitle className="text-sm font-medium flex items-center justify-between text-emerald-300">
           <div className="flex items-center gap-2">
-            <Activity className="h-4 w-4 text-cyan-400" />
+            <Activity className="h-4 w-4 text-emerald-400" />
             Activity Monitor
           </div>
           <button 
@@ -145,23 +145,23 @@ export function ActivityMonitor() {
             className="p-1 hover:bg-slate-800 rounded transition-colors"
             data-testid="button-refresh-activity"
           >
-            <RefreshCw className="h-3 w-3 text-cyan-300/50" />
+            <RefreshCw className="h-3 w-3 text-emerald-300/50" />
           </button>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 pt-4">
         {system && (
           <div className="flex flex-wrap gap-2" data-testid="system-status-badges">
-            <Badge 
-              variant="outline" 
-              className={(system.state || system.status) === "hyperspeed" ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/30" : ""}
+            <Badge
+              variant="outline"
+              className={(system.state ?? system.status) === "hyperspeed" ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" : ""}
               data-testid="badge-system-state"
             >
               <Zap className="h-3 w-3 mr-1" />
-              {(system.state || system.status || "active").toUpperCase()}
+              {(system.state ?? system.status ?? "unavailable").toUpperCase()}
             </Badge>
             {system.hyperspeed && (
-              <Badge variant="outline" className="bg-purple-500/20 text-purple-400 border-purple-500/30" data-testid="badge-hyperspeed">
+              <Badge variant="outline" className="bg-sky-500/20 text-sky-400 border-sky-500/30" data-testid="badge-hyperspeed">
                 <Sparkles className="h-3 w-3 mr-1" />
                 HYPERSPEED
               </Badge>
@@ -178,8 +178,8 @@ export function ActivityMonitor() {
         {workers && (
           <div className="space-y-2" data-testid="worker-metrics">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-cyan-300/70">Worker Utilization</span>
-              <span className="font-mono text-cyan-300">{workers.active}/{workers.total} active</span>
+              <span className="text-emerald-300/70">Worker Utilization</span>
+              <span className="font-mono text-emerald-300">{workers.active}/{workers.total} active</span>
             </div>
             <Progress value={workerUtilization} className="h-2 bg-slate-800" data-testid="progress-worker-utilization" />
             <div className="grid grid-cols-3 gap-2 text-center">
@@ -191,9 +191,9 @@ export function ActivityMonitor() {
                 <div className="text-lg font-bold text-yellow-400" data-testid="text-tasks-queued">{workers.queued}</div>
                 <div className="text-[10px] text-yellow-300/70">Queued</div>
               </div>
-              <div className="p-2 rounded-xl bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30">
-                <div className="text-lg font-bold text-cyan-400" data-testid="text-tasks-completed">{workers.completed}</div>
-                <div className="text-[10px] text-cyan-300/70">Done</div>
+              <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30">
+                <div className="text-lg font-bold text-emerald-400" data-testid="text-tasks-completed">{workers.completed}</div>
+                <div className="text-[10px] text-emerald-300/70">Done</div>
               </div>
             </div>
           </div>
@@ -201,12 +201,12 @@ export function ActivityMonitor() {
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-cyan-300/70">Recent Activity</span>
-            <span className="text-[10px] text-cyan-300/50">{activities.length} events</span>
+            <span className="text-xs text-emerald-300/70">Recent Activity</span>
+            <span className="text-[10px] text-emerald-300/50">{activities.length} events</span>
           </div>
           <ScrollArea className="h-[200px]" data-testid="activity-feed">
             {activities.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-cyan-300/50 text-sm">
+              <div className="flex flex-col items-center justify-center h-full text-emerald-300/50 text-sm">
                 <Clock className="h-8 w-8 mb-2 opacity-50" />
                 <p>No recent activity</p>
                 <p className="text-xs">Activity will appear when Aurora processes requests</p>
@@ -216,17 +216,17 @@ export function ActivityMonitor() {
                 {activities.map((activity) => (
                   <div 
                     key={activity.id} 
-                    className="flex items-start gap-2 p-2 rounded-lg bg-slate-800/50 border border-cyan-500/20"
+                    className="flex items-start gap-2 p-2 rounded-lg bg-slate-800/50 border border-emerald-500/20"
                     data-testid={`activity-entry-${activity.id}`}
                   >
                     <div className={`p-1 rounded ${getActivityColor(activity.type)}`}>
                       {getActivityIcon(activity.type)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs truncate text-cyan-100" data-testid={`text-activity-message-${activity.id}`}>
+                      <p className="text-xs truncate text-emerald-100" data-testid={`text-activity-message-${activity.id}`}>
                         {activity.message}
                       </p>
-                      <p className="text-[10px] text-cyan-300/50">
+                      <p className="text-[10px] text-emerald-300/50">
                         {formatTime(activity.timestamp)}
                       </p>
                     </div>

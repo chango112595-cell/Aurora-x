@@ -63,10 +63,10 @@ interface ComparisonItem {
     id: string;
     title: string;
     description: string;
-    status: 'approved' | 'pending' | 'rejected';
-    category: string;
     impact?: string;
     complexity?: string;
+    status: 'approved' | 'pending' | 'rejected';
+    category: string;
 }
 
 export default function ComparisonDashboard() {
@@ -208,6 +208,7 @@ export default function ComparisonDashboard() {
             id: `${selectedBranch || 'branch'}-${index}`,
             title: feature.description,
             description: feature.impact,
+            impact: feature.impact,
             status: approvedItems.has(`${selectedBranch || 'branch'}-${index}`) ? 'approved' : 'pending',
             category: feature.category
         }))

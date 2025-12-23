@@ -134,7 +134,7 @@ export default function MemoryFabric() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
     >
-      <Card className="mb-3 border-cyan-500/20 bg-gradient-to-br from-cyan-950/20 to-purple-950/20">
+      <Card className="mb-3 border-emerald-500/20 bg-gradient-to-br from-emerald-950/20 to-sky-950/20">
         <CardContent className="p-4">
           <div className="flex items-start justify-between gap-2 mb-2">
             <Badge variant={entry.role === 'user' ? 'outline' : 'default'} className="text-xs" data-testid={`badge-role-${index}`}>
@@ -155,20 +155,20 @@ export default function MemoryFabric() {
           {entry.tags && entry.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
               {entry.tags.map((tag, i) => (
-                <Badge key={i} variant="outline" className="text-xs text-cyan-400/80">
+                <Badge key={i} variant="outline" className="text-xs text-emerald-400/80">
                   {tag}
                 </Badge>
               ))}
             </div>
           )}
           <div className="flex items-center gap-2 mt-2">
-            <div className="flex-1 h-1 bg-cyan-950/50 rounded-full overflow-hidden">
+            <div className="flex-1 h-1 bg-emerald-950/50 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-cyan-500 to-purple-500" 
+                className="h-full bg-gradient-to-r from-emerald-500 to-sky-500" 
                 style={{ width: `${(entry.importance || 0.5) * 100}%` }} 
               />
             </div>
-            <span className="text-xs text-cyan-400/60 font-mono">
+            <span className="text-xs text-emerald-400/60 font-mono">
               {((entry.importance || 0.5) * 100).toFixed(0)}%
             </span>
           </div>
@@ -178,7 +178,7 @@ export default function MemoryFabric() {
   );
 
   const renderBridgeResult = (entry: MemoryBridgeRecord, index: number) => (
-    <Card key={`${entry.id}-${index}`} className="border-cyan-500/20 bg-slate-900/50">
+    <Card key={`${entry.id}-${index}`} className="border-emerald-500/20 bg-slate-900/50">
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-2 mb-2">
           <Badge variant="outline" className="text-xs">
@@ -195,7 +195,7 @@ export default function MemoryFabric() {
         </div>
         <p className="text-sm text-foreground/90 whitespace-pre-wrap">{entry.text}</p>
         {entry.meta && Object.keys(entry.meta).length > 0 && (
-          <pre className="text-xs text-muted-foreground mt-3 bg-slate-950/50 border border-cyan-500/10 rounded p-2 overflow-x-auto">
+          <pre className="text-xs text-muted-foreground mt-3 bg-slate-950/50 border border-emerald-500/10 rounded p-2 overflow-x-auto">
             {JSON.stringify(entry.meta, null, 2)}
           </pre>
         )}
@@ -298,12 +298,12 @@ export default function MemoryFabric() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
-                <Card className="border-cyan-500/20 bg-gradient-to-br from-cyan-950/10 to-purple-950/10">
+                <Card className="border-emerald-500/20 bg-gradient-to-br from-emerald-950/10 to-sky-950/10">
                   <CardContent className="p-3">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Lightbulb className="w-4 h-4 text-yellow-400" />
-                        <span className="font-mono text-sm text-cyan-300">{key}</span>
+                        <span className="font-mono text-sm text-emerald-300">{key}</span>
                       </div>
                       <Badge variant="outline" className="text-xs">
                         {category}
@@ -313,9 +313,9 @@ export default function MemoryFabric() {
                       {displayValue}
                     </p>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1 bg-cyan-950/50 rounded-full overflow-hidden">
+                      <div className="flex-1 h-1 bg-emerald-950/50 rounded-full overflow-hidden">
                         <div 
-                          className="h-full bg-gradient-to-r from-yellow-500 to-cyan-500" 
+                          className="h-full bg-gradient-to-r from-yellow-500 to-emerald-500" 
                           style={{ width: `${importance * 100}%` }} 
                         />
                       </div>
@@ -345,7 +345,7 @@ export default function MemoryFabric() {
             animate={{ opacity: 1 }}
             transition={{ delay: index * 0.02 }}
           >
-            <Card className="border-purple-500/20 bg-gradient-to-br from-purple-950/10 to-cyan-950/10" data-testid={`card-event-${index}`}>
+            <Card className="border-sky-500/20 bg-gradient-to-br from-sky-950/10 to-emerald-950/10" data-testid={`card-event-${index}`}>
               <CardContent className="p-3">
                 <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
                   <Badge variant="outline" className="text-xs" data-testid={`badge-event-type-${index}`}>
@@ -369,18 +369,18 @@ export default function MemoryFabric() {
   );
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-background via-cyan-950/5 to-purple-950/5">
-      <div className="p-6 border-b border-cyan-500/20">
+    <div className="h-full flex flex-col bg-gradient-to-br from-background via-emerald-950/5 to-sky-950/5">
+      <div className="p-6 border-b border-emerald-500/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <div className="absolute inset-0 bg-cyan-500/30 rounded-full blur-md animate-pulse" />
-              <div className="relative w-12 h-12 rounded-full border-2 border-cyan-400/50 flex items-center justify-center bg-gradient-to-br from-cyan-500/20 to-purple-500/20">
-                <Brain className="w-6 h-6 text-cyan-400" />
+              <div className="absolute inset-0 bg-emerald-500/30 rounded-full blur-md animate-pulse" />
+              <div className="relative w-12 h-12 rounded-full border-2 border-emerald-400/50 flex items-center justify-center bg-gradient-to-br from-emerald-500/20 to-sky-500/20">
+                <Brain className="w-6 h-6 text-emerald-400" />
               </div>
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent" data-testid="text-page-title">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 via-sky-400 to-emerald-400 bg-clip-text text-transparent" data-testid="text-page-title">
                 Memory Fabric
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -396,7 +396,7 @@ export default function MemoryFabric() {
               refetchBridgeStatus();
             }}
             disabled={isRefetching}
-            className="border-cyan-500/30 hover:border-cyan-400/50"
+            className="border-emerald-500/30 hover:border-emerald-400/50"
             data-testid="button-refresh"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefetching ? 'animate-spin' : ''}`} />
@@ -408,20 +408,20 @@ export default function MemoryFabric() {
       {isLoading ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <Brain className="w-12 h-12 text-cyan-400 animate-pulse mx-auto mb-4" />
+            <Brain className="w-12 h-12 text-emerald-400 animate-pulse mx-auto mb-4" />
             <p className="text-muted-foreground">Loading Aurora's memories...</p>
           </div>
         </div>
       ) : (
         <div className="flex-1 overflow-hidden p-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <Card className="border-cyan-500/20 bg-gradient-to-br from-cyan-950/20 to-transparent" data-testid="card-stat-short-term">
+            <Card className="border-emerald-500/20 bg-gradient-to-br from-emerald-950/20 to-transparent" data-testid="card-stat-short-term">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Zap className="w-8 h-8 text-yellow-400" />
                   <div>
                     <p className="text-xs text-muted-foreground">Short-Term</p>
-                    <p className="text-2xl font-bold text-cyan-400" data-testid="text-short-term-count">
+                    <p className="text-2xl font-bold text-emerald-400" data-testid="text-short-term-count">
                       {stats?.shortTermCount || 0}
                     </p>
                   </div>
@@ -429,13 +429,13 @@ export default function MemoryFabric() {
               </CardContent>
             </Card>
             
-            <Card className="border-purple-500/20 bg-gradient-to-br from-purple-950/20 to-transparent" data-testid="card-stat-mid-term">
+            <Card className="border-sky-500/20 bg-gradient-to-br from-sky-950/20 to-transparent" data-testid="card-stat-mid-term">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <Clock className="w-8 h-8 text-purple-400" />
+                  <Clock className="w-8 h-8 text-sky-400" />
                   <div>
                     <p className="text-xs text-muted-foreground">Mid-Term</p>
-                    <p className="text-2xl font-bold text-purple-400" data-testid="text-mid-term-count">
+                    <p className="text-2xl font-bold text-sky-400" data-testid="text-mid-term-count">
                       {stats?.midTermCount || 0}
                     </p>
                   </div>
@@ -473,26 +473,26 @@ export default function MemoryFabric() {
           </div>
 
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <Card className="border-purple-500/30 bg-slate-900/80" data-testid="card-active-project">
+            <Card className="border-sky-500/30 bg-slate-900/80" data-testid="card-active-project">
               <CardContent className="p-3 flex items-center justify-between gap-2 flex-wrap">
-                <span className="text-sm text-purple-200">Active Project</span>
-                <Badge variant="outline" className="font-mono bg-purple-900/50 text-purple-100 border-purple-400/50" data-testid="text-active-project">
+                <span className="text-sm text-sky-200">Active Project</span>
+                <Badge variant="outline" className="font-mono bg-sky-900/50 text-sky-100 border-sky-400/50" data-testid="text-active-project">
                   {stats?.activeProject || 'None'}
                 </Badge>
               </CardContent>
             </Card>
-            <Card className="border-purple-500/30 bg-slate-900/80" data-testid="card-facts-stored">
+            <Card className="border-sky-500/30 bg-slate-900/80" data-testid="card-facts-stored">
               <CardContent className="p-3 flex items-center justify-between gap-2 flex-wrap">
-                <span className="text-sm text-purple-200">Facts Stored</span>
-                <Badge variant="outline" className="font-mono bg-purple-900/50 text-purple-100 border-purple-400/50" data-testid="text-fact-count">
+                <span className="text-sm text-sky-200">Facts Stored</span>
+                <Badge variant="outline" className="font-mono bg-sky-900/50 text-sky-100 border-sky-400/50" data-testid="text-fact-count">
                   {stats?.factCount || 0}
                 </Badge>
               </CardContent>
             </Card>
-            <Card className="border-purple-500/30 bg-slate-900/80" data-testid="card-events-logged">
+            <Card className="border-sky-500/30 bg-slate-900/80" data-testid="card-events-logged">
               <CardContent className="p-3 flex items-center justify-between gap-2 flex-wrap">
-                <span className="text-sm text-purple-200">Events Logged</span>
-                <Badge variant="outline" className="font-mono bg-purple-900/50 text-purple-100 border-purple-400/50" data-testid="text-event-count">
+                <span className="text-sm text-sky-200">Events Logged</span>
+                <Badge variant="outline" className="font-mono bg-sky-900/50 text-sky-100 border-sky-400/50" data-testid="text-event-count">
                   {stats?.eventCount || 0}
                 </Badge>
               </CardContent>
@@ -500,16 +500,16 @@ export default function MemoryFabric() {
           </div>
 
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <Card className="border-cyan-500/40 bg-gradient-to-br from-slate-900 to-cyan-950/50" data-testid="card-nexus-v2">
+            <Card className="border-emerald-500/40 bg-gradient-to-br from-slate-900 to-emerald-950/50" data-testid="card-nexus-v2">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${nexusStatus?.v2?.connected ? 'bg-cyan-500/30' : 'bg-slate-700/50'}`}>
-                      <MessageSquare className={`w-5 h-5 ${nexusStatus?.v2?.connected ? 'text-cyan-400' : 'text-slate-500'}`} />
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${nexusStatus?.v2?.connected ? 'bg-emerald-500/30' : 'bg-slate-700/50'}`}>
+                      <MessageSquare className={`w-5 h-5 ${nexusStatus?.v2?.connected ? 'text-emerald-400' : 'text-slate-500'}`} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-cyan-100">Luminar Nexus V2</h3>
-                      <p className="text-xs text-cyan-300/70">Chat & ML Pattern Learning</p>
+                      <h3 className="font-semibold text-emerald-100">Luminar Nexus V2</h3>
+                      <p className="text-xs text-emerald-300/70">Chat & ML Pattern Learning</p>
                     </div>
                   </div>
                   <Badge 
@@ -522,27 +522,27 @@ export default function MemoryFabric() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="flex items-center justify-between p-2 bg-slate-800/50 rounded">
-                    <span className="text-cyan-300/70">Port</span>
-                    <span className="font-mono text-cyan-200">{nexusStatus?.v2?.port || 8000}</span>
+                    <span className="text-emerald-300/70">Port</span>
+                    <span className="font-mono text-emerald-200">{nexusStatus?.v2?.port || 8000}</span>
                   </div>
                   <div className="flex items-center justify-between p-2 bg-slate-800/50 rounded">
-                    <span className="text-cyan-300/70">Responses</span>
-                    <span className="font-mono text-cyan-200">{nexusStatus?.v2?.chatResponses || 0}</span>
+                    <span className="text-emerald-300/70">Responses</span>
+                    <span className="font-mono text-emerald-200">{nexusStatus?.v2?.chatResponses || 0}</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-purple-500/40 bg-gradient-to-br from-slate-900 to-purple-950/50" data-testid="card-nexus-v3">
+            <Card className="border-sky-500/40 bg-gradient-to-br from-slate-900 to-sky-950/50" data-testid="card-nexus-v3">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${nexusStatus?.v3?.connected ? 'bg-purple-500/30' : 'bg-slate-700/50'}`}>
-                      <Network className={`w-5 h-5 ${nexusStatus?.v3?.connected ? 'text-purple-400' : 'text-slate-500'}`} />
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${nexusStatus?.v3?.connected ? 'bg-sky-500/30' : 'bg-slate-700/50'}`}>
+                      <Network className={`w-5 h-5 ${nexusStatus?.v3?.connected ? 'text-sky-400' : 'text-slate-500'}`} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-purple-100">Aurora Nexus V3</h3>
-                      <p className="text-xs text-purple-300/70">Universal Consciousness</p>
+                      <h3 className="font-semibold text-sky-100">Aurora Nexus V3</h3>
+                      <p className="text-xs text-sky-300/70">Universal Consciousness</p>
                     </div>
                   </div>
                   <Badge 
@@ -555,24 +555,24 @@ export default function MemoryFabric() {
                 </div>
                 <div className="grid grid-cols-4 gap-2 text-xs">
                   <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
-                    <span className="text-purple-300/70 text-[10px]">Workers</span>
-                    <span className="font-mono text-purple-200 font-bold">
+                    <span className="text-sky-300/70 text-[10px]">Workers</span>
+                    <span className="font-mono text-sky-200 font-bold">
                       {typeof nexusStatus?.v3?.workers === 'object' 
                         ? nexusStatus.v3.workers.total 
                         : (nexusStatus?.v3?.workers || 300)}
                     </span>
                   </div>
                   <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
-                    <span className="text-purple-300/70 text-[10px]">Tiers</span>
-                    <span className="font-mono text-purple-200 font-bold">{nexusStatus?.v3?.tiers || 188}</span>
+                    <span className="text-sky-300/70 text-[10px]">Tiers</span>
+                    <span className="font-mono text-sky-200 font-bold">{nexusStatus?.v3?.tiers || 188}</span>
                   </div>
                   <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
-                    <span className="text-purple-300/70 text-[10px]">AEMs</span>
-                    <span className="font-mono text-purple-200 font-bold">{nexusStatus?.v3?.aems || 66}</span>
+                    <span className="text-sky-300/70 text-[10px]">AEMs</span>
+                    <span className="font-mono text-sky-200 font-bold">{nexusStatus?.v3?.aems || 66}</span>
                   </div>
                   <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
-                    <span className="text-purple-300/70 text-[10px]">Modules</span>
-                    <span className="font-mono text-purple-200 font-bold">{nexusStatus?.v3?.modules || 550}</span>
+                    <span className="text-sky-300/70 text-[10px]">Modules</span>
+                    <span className="font-mono text-sky-200 font-bold">{nexusStatus?.v3?.modules || 550}</span>
                   </div>
                 </div>
                 {nexusStatus?.v3?.hybridMode && (
@@ -586,28 +586,28 @@ export default function MemoryFabric() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1" data-testid="tabs-memory-fabric">
-            <TabsList className="mb-4 bg-slate-900 border border-purple-500/40 shadow-lg" data-testid="tablist-memory">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-overview">
+            <TabsList className="mb-4 bg-slate-900 border border-sky-500/40 shadow-lg" data-testid="tablist-memory">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600/70 data-[state=active]:to-emerald-600/70 data-[state=active]:text-white text-sky-300" data-testid="tab-trigger-overview">
                 <Target className="w-4 h-4 mr-2" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="facts" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-facts">
+              <TabsTrigger value="facts" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600/70 data-[state=active]:to-emerald-600/70 data-[state=active]:text-white text-sky-300" data-testid="tab-trigger-facts">
                 <Lightbulb className="w-4 h-4 mr-2" />
                 Facts
               </TabsTrigger>
-              <TabsTrigger value="memories" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-memories">
+              <TabsTrigger value="memories" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600/70 data-[state=active]:to-emerald-600/70 data-[state=active]:text-white text-sky-300" data-testid="tab-trigger-memories">
                 <Brain className="w-4 h-4 mr-2" />
                 Memories
               </TabsTrigger>
-              <TabsTrigger value="conversations" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-conversations">
+              <TabsTrigger value="conversations" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600/70 data-[state=active]:to-emerald-600/70 data-[state=active]:text-white text-sky-300" data-testid="tab-trigger-conversations">
                 <MessageSquare className="w-4 h-4 mr-2" />
                 Conversations
               </TabsTrigger>
-              <TabsTrigger value="events" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-events">
+              <TabsTrigger value="events" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600/70 data-[state=active]:to-emerald-600/70 data-[state=active]:text-white text-sky-300" data-testid="tab-trigger-events">
                 <History className="w-4 h-4 mr-2" />
                 Events
               </TabsTrigger>
-              <TabsTrigger value="bridge" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/70 data-[state=active]:to-cyan-600/70 data-[state=active]:text-white text-purple-300" data-testid="tab-trigger-bridge">
+              <TabsTrigger value="bridge" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600/70 data-[state=active]:to-emerald-600/70 data-[state=active]:text-white text-sky-300" data-testid="tab-trigger-bridge">
                 <Server className="w-4 h-4 mr-2" />
                 Memory Bridge
               </TabsTrigger>
@@ -616,31 +616,31 @@ export default function MemoryFabric() {
             <TabsContent value="overview" className="h-[calc(100%-60px)]" data-testid="tab-content-overview">
               <ScrollArea className="h-full">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <Card className="border-cyan-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-overview-facts">
-                    <CardHeader className="border-b border-cyan-500/20">
-                      <CardTitle className="flex items-center gap-2 text-lg text-cyan-300">
+                  <Card className="border-emerald-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-overview-facts">
+                    <CardHeader className="border-b border-emerald-500/20">
+                      <CardTitle className="flex items-center gap-2 text-lg text-emerald-300">
                         <Lightbulb className="w-5 h-5 text-yellow-400" />
                         Key Facts Aurora Knows
                       </CardTitle>
-                      <CardDescription className="text-cyan-300/60">Important information stored in memory</CardDescription>
+                      <CardDescription className="text-emerald-300/60">Important information stored in memory</CardDescription>
                     </CardHeader>
                     <CardContent className="pt-4">
                       {renderFactsCard(memoryData?.facts || {})}
                     </CardContent>
                   </Card>
 
-                  <Card className="border-purple-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-overview-short-term">
-                    <CardHeader className="border-b border-purple-500/20">
-                      <CardTitle className="flex items-center gap-2 text-lg text-purple-300">
+                  <Card className="border-sky-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-overview-short-term">
+                    <CardHeader className="border-b border-sky-500/20">
+                      <CardTitle className="flex items-center gap-2 text-lg text-sky-300">
                         <Zap className="w-5 h-5 text-yellow-400" />
                         Recent Short-Term Memories
                       </CardTitle>
-                      <CardDescription className="text-purple-300/60">Current session context</CardDescription>
+                      <CardDescription className="text-sky-300/60">Current session context</CardDescription>
                     </CardHeader>
                     <CardContent className="pt-4">
                       <ScrollArea className="h-[300px]">
                         {(memoryData?.shortTerm || []).length === 0 ? (
-                          <p className="text-purple-300/50 text-sm" data-testid="text-no-short-term-overview">No short-term memories in current session.</p>
+                          <p className="text-sky-300/50 text-sm" data-testid="text-no-short-term-overview">No short-term memories in current session.</p>
                         ) : (
                           memoryData?.shortTerm.slice(-5).map((entry, i) => renderMemoryCard(entry, i))
                         )}
@@ -653,7 +653,7 @@ export default function MemoryFabric() {
 
             <TabsContent value="facts" className="h-[calc(100%-60px)]" data-testid="tab-content-facts">
               <ScrollArea className="h-full">
-                <Card className="border-cyan-500/20" data-testid="card-all-facts">
+                <Card className="border-emerald-500/20" data-testid="card-all-facts">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Lightbulb className="w-5 h-5 text-yellow-400" />
@@ -687,10 +687,10 @@ export default function MemoryFabric() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-purple-500/20" data-testid="card-mid-term-memories">
+                  <Card className="border-sky-500/20" data-testid="card-mid-term-memories">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-lg">
-                        <Clock className="w-5 h-5 text-purple-400" />
+                        <Clock className="w-5 h-5 text-sky-400" />
                         Mid-Term Memory ({memoryData?.midTerm?.length || 0})
                       </CardTitle>
                     </CardHeader>
@@ -724,10 +724,10 @@ export default function MemoryFabric() {
 
             <TabsContent value="conversations" className="h-[calc(100%-60px)]" data-testid="tab-content-conversations">
               <ScrollArea className="h-full">
-                <Card className="border-cyan-500/20" data-testid="card-conversations">
+                <Card className="border-emerald-500/20" data-testid="card-conversations">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <MessageSquare className="w-5 h-5 text-cyan-400" />
+                      <MessageSquare className="w-5 h-5 text-emerald-400" />
                       Conversation History
                     </CardTitle>
                     <CardDescription>Past conversations stored in memory</CardDescription>
@@ -740,13 +740,13 @@ export default function MemoryFabric() {
                         {memoryData?.conversations.map((conv, index) => (
                           <Card 
                             key={index} 
-                            className={`cursor-pointer transition-all hover:border-cyan-400/50 ${selectedConversation === conv ? 'border-cyan-400/50 bg-cyan-500/10' : 'border-cyan-500/20'}`}
+                            className={`cursor-pointer transition-all hover:border-emerald-400/50 ${selectedConversation === conv ? 'border-emerald-400/50 bg-emerald-500/10' : 'border-emerald-500/20'}`}
                             onClick={() => setSelectedConversation(conv)}
                             data-testid={`card-conversation-${index}`}
                           >
                             <CardContent className="p-3 flex items-center justify-between gap-2 flex-wrap">
                               <div className="flex items-center gap-2">
-                                <FileText className="w-4 h-4 text-cyan-400" />
+                                <FileText className="w-4 h-4 text-emerald-400" />
                                 <span className="text-sm font-mono" data-testid={`text-conversation-name-${index}`}>{conv}</span>
                               </div>
                               <Badge variant="outline" className="text-xs" data-testid={`button-view-conversation-${index}`}>
@@ -759,7 +759,7 @@ export default function MemoryFabric() {
                     )}
 
                     {selectedConversation && conversationData?.messages && (
-                      <div className="mt-6 pt-6 border-t border-cyan-500/20" data-testid="section-conversation-messages">
+                      <div className="mt-6 pt-6 border-t border-emerald-500/20" data-testid="section-conversation-messages">
                         <h4 className="text-sm font-medium mb-4 flex items-center gap-2">
                           <MessageSquare className="w-4 h-4" />
                           {selectedConversation}
@@ -774,10 +774,10 @@ export default function MemoryFabric() {
 
             <TabsContent value="events" className="h-[calc(100%-60px)]" data-testid="tab-content-events">
               <ScrollArea className="h-full">
-                <Card className="border-purple-500/20" data-testid="card-events">
+                <Card className="border-sky-500/20" data-testid="card-events">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <History className="w-5 h-5 text-purple-400" />
+                      <History className="w-5 h-5 text-sky-400" />
                       Event Log
                     </CardTitle>
                     <CardDescription>System events and actions recorded by Aurora</CardDescription>
@@ -792,10 +792,10 @@ export default function MemoryFabric() {
             <TabsContent value="bridge" className="h-[calc(100%-60px)]" data-testid="tab-content-bridge">
               <ScrollArea className="h-full">
                 <div className="space-y-6">
-                  <Card className="border-cyan-500/30 bg-slate-900/60">
+                  <Card className="border-emerald-500/30 bg-slate-900/60">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
-                        <Database className="w-5 h-5 text-cyan-400" />
+                        <Database className="w-5 h-5 text-emerald-400" />
                         Memory Bridge Status
                       </CardTitle>
                       <CardDescription>Legacy memory bridge metrics and operations</CardDescription>
@@ -803,15 +803,15 @@ export default function MemoryFabric() {
                     <CardContent>
                       {bridgeStatus?.success ? (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className="p-3 rounded border border-cyan-500/20 bg-cyan-950/20">
-                            <div className="text-xs text-cyan-300/70">Short-Term</div>
-                            <div className="text-2xl font-bold text-cyan-200">
+                          <div className="p-3 rounded border border-emerald-500/20 bg-emerald-950/20">
+                            <div className="text-xs text-emerald-300/70">Short-Term</div>
+                            <div className="text-2xl font-bold text-emerald-200">
                               {bridgeStatus.status.short_term_count}
                             </div>
                           </div>
-                          <div className="p-3 rounded border border-purple-500/20 bg-purple-950/20">
-                            <div className="text-xs text-purple-300/70">Long-Term</div>
-                            <div className="text-2xl font-bold text-purple-200">
+                          <div className="p-3 rounded border border-sky-500/20 bg-sky-950/20">
+                            <div className="text-xs text-sky-300/70">Long-Term</div>
+                            <div className="text-2xl font-bold text-sky-200">
                               {bridgeStatus.status.long_term_count}
                             </div>
                           </div>
@@ -845,9 +845,9 @@ export default function MemoryFabric() {
                   )}
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <Card className="border-cyan-500/20 bg-slate-900/60">
+                    <Card className="border-emerald-500/20 bg-slate-900/60">
                       <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-cyan-300">
+                        <CardTitle className="flex items-center gap-2 text-emerald-300">
                           <Plus className="w-4 h-4" />
                           Store Memory
                         </CardTitle>
@@ -855,45 +855,45 @@ export default function MemoryFabric() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div>
-                          <label className="text-xs text-cyan-300/70">Memory Text</label>
+                          <label className="text-xs text-emerald-300/70">Memory Text</label>
                           <Textarea
                             value={bridgeWriteText}
                             onChange={(e) => setBridgeWriteText(e.target.value)}
-                            className="mt-2 bg-slate-950/40 border-cyan-500/20"
+                            className="mt-2 bg-slate-950/40 border-emerald-500/20"
                             rows={4}
                           />
                         </div>
                         <div>
-                          <label className="text-xs text-cyan-300/70">Metadata (JSON)</label>
+                          <label className="text-xs text-emerald-300/70">Metadata (JSON)</label>
                           <Textarea
                             value={bridgeWriteMeta}
                             onChange={(e) => setBridgeWriteMeta(e.target.value)}
-                            className="mt-2 bg-slate-950/40 border-cyan-500/20 font-mono text-xs"
+                            className="mt-2 bg-slate-950/40 border-emerald-500/20 font-mono text-xs"
                             rows={3}
                           />
                         </div>
-                        <label className="flex items-center gap-2 text-xs text-cyan-300/70">
+                        <label className="flex items-center gap-2 text-xs text-emerald-300/70">
                           <input
                             type="checkbox"
                             checked={bridgeWriteLongterm}
                             onChange={(e) => setBridgeWriteLongterm(e.target.checked)}
-                            className="h-4 w-4 rounded border-cyan-500/30 bg-slate-950/40"
+                            className="h-4 w-4 rounded border-emerald-500/30 bg-slate-950/40"
                           />
                           Store as long-term memory
                         </label>
                         <Button
                           onClick={handleBridgeWrite}
                           disabled={bridgeLoading || !bridgeWriteText}
-                          className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white"
+                          className="w-full bg-gradient-to-r from-emerald-500 to-sky-500 text-white"
                         >
                           Store Memory
                         </Button>
                       </CardContent>
                     </Card>
 
-                    <Card className="border-purple-500/20 bg-slate-900/60">
+                    <Card className="border-sky-500/20 bg-slate-900/60">
                       <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-purple-300">
+                        <CardTitle className="flex items-center gap-2 text-sky-300">
                           <Search className="w-4 h-4" />
                           Search Memory
                         </CardTitle>
@@ -901,29 +901,29 @@ export default function MemoryFabric() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div>
-                          <label className="text-xs text-purple-300/70">Query</label>
+                          <label className="text-xs text-sky-300/70">Query</label>
                           <Input
                             value={bridgeQueryText}
                             onChange={(e) => setBridgeQueryText(e.target.value)}
-                            className="mt-2 bg-slate-950/40 border-purple-500/20"
+                            className="mt-2 bg-slate-950/40 border-sky-500/20"
                             onKeyDown={(e) => e.key === 'Enter' && handleBridgeQuery()}
                           />
                         </div>
                         <div>
-                          <label className="text-xs text-purple-300/70">Top K</label>
+                          <label className="text-xs text-sky-300/70">Top K</label>
                           <Input
                             type="number"
                             min={1}
                             max={20}
                             value={bridgeQueryTopK}
                             onChange={(e) => setBridgeQueryTopK(parseInt(e.target.value) || 5)}
-                            className="mt-2 bg-slate-950/40 border-purple-500/20"
+                            className="mt-2 bg-slate-950/40 border-sky-500/20"
                           />
                         </div>
                         <Button
                           onClick={handleBridgeQuery}
                           disabled={bridgeLoading || !bridgeQueryText}
-                          className="w-full bg-gradient-to-r from-purple-500 to-cyan-500 text-white"
+                          className="w-full bg-gradient-to-r from-sky-500 to-emerald-500 text-white"
                         >
                           Search Memory
                         </Button>
@@ -932,7 +932,7 @@ export default function MemoryFabric() {
                   </div>
 
                   {bridgeResults.length > 0 && (
-                    <Card className="border-cyan-500/20 bg-slate-900/60">
+                    <Card className="border-emerald-500/20 bg-slate-900/60">
                       <CardHeader>
                         <CardTitle>Search Results</CardTitle>
                         <CardDescription>{bridgeResults.length} result(s)</CardDescription>

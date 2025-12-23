@@ -5,6 +5,7 @@ Allows Express backend to query Nexus status and capabilities
 
 import asyncio
 import json
+import logging
 from typing import Any, Dict, List
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
@@ -14,6 +15,7 @@ from datetime import datetime
 
 
 activity_log: deque = deque(maxlen=100)
+logger = logging.getLogger(__name__)
 
 
 def log_activity(activity_type: str, message: str, details: Dict = None):
@@ -35,7 +37,15 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
     core = None
     
     def log_message(self, format, *args):
-        pass
+        message = "%s - - [%s] %s" % (
+            self.client_address[0],
+            self.log_date_time_string(),
+            format % args
+        )
+        if self.core and getattr(self.core, "logger", None):
+            self.core.logger.getChild("http_server").debug(message)
+        else:
+            logger.debug(message)
     
     def send_json_response(self, data: Dict[str, Any], status: int = 200):
         self.send_response(status)
@@ -310,9 +320,17 @@ class HTTPServerModule:
                 self.logger.error(f"HTTP server error: {e}")
     
     async def shutdown(self):
+        """Cleanup HTTP server - stop server thread and release resources."""
+        self.logger.info("HTTP server shutting down")
         self.running = False
         if self.server:
-            self.server.shutdown()
+            try:
+                self.server.shutdown()
+                self.logger.debug("HTTP server shutdown complete")
+            except Exception as e:
+                self.logger.warning(f"Error shutting down HTTP server: {e}")
+            self.server = None
+        NexusHTTPHandler.core = None
         self.logger.info("HTTP server stopped")
     
     def get_info(self) -> Dict[str, Any]:

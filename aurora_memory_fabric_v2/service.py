@@ -7,6 +7,7 @@ Exposes Memory Fabric v2 functionality via REST API for TypeScript integration
 import sys
 import os
 import json
+import time
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
@@ -260,6 +261,8 @@ class MemoryFabricHandler(BaseHTTPRequestHandler):
 
 
 import socket
+import signal
+import threading
 
 
 class ReusableHTTPServer(HTTPServer):
@@ -297,19 +300,34 @@ def check_existing_service(port: int) -> bool:
 def start_memory_fabric_service(port: int = 5004):
     """Start the Memory Fabric v2 HTTP server"""
     if check_existing_service(port):
-        print(f"[MEMORY FABRIC V2] Service already running on port {port}", flush=True)
-        return
+        for _ in range(20):
+            time.sleep(0.5)
+            if not check_existing_service(port):
+                break
+        if check_existing_service(port):
+            print(f"[MEMORY FABRIC V2] Service already running on port {port}", flush=True)
+            return
     
     get_or_create_memory()
-    try:
-        server = ReusableHTTPServer(('127.0.0.1', port), MemoryFabricHandler)
-        print(f"[MEMORY FABRIC V2] Running on http://127.0.0.1:{port}", flush=True)
-        print("[MEMORY FABRIC V2] Ready for operations", flush=True)
-        server.serve_forever()
-    except OSError as e:
-        if 'Address already in use' in str(e):
-            print(f"[MEMORY FABRIC V2] Port {port} busy, assuming service running", flush=True)
-        else:
+    for attempt in range(10):
+        try:
+            server = ReusableHTTPServer(('127.0.0.1', port), MemoryFabricHandler)
+            def _handle_sigterm(signum, frame):
+                print("[MEMORY FABRIC V2] Shutdown requested", flush=True)
+                threading.Timer(2.0, server.shutdown).start()
+
+            signal.signal(signal.SIGTERM, _handle_sigterm)
+            print(f"[MEMORY FABRIC V2] Running on http://127.0.0.1:{port}", flush=True)
+            print("[MEMORY FABRIC V2] Ready for operations", flush=True)
+            server.serve_forever()
+            return
+        except OSError as e:
+            if 'Address already in use' in str(e) and attempt < 9:
+                time.sleep(0.5)
+                continue
+            if 'Address already in use' in str(e):
+                print(f"[MEMORY FABRIC V2] Port {port} busy, assuming service running", flush=True)
+                return
             raise
 
 

@@ -1,37 +1,35 @@
 {
   "short_term": [
     {
-      "role": "system",
-      "content": "Aurora Memory Fabric 2.0 initialized.",
-      "timestamp": "2025-12-05T15:16:09.058407"
-    },
-    {
-      "role": "system",
-      "content": "Aurora Memory Fabric 2.0 initialized.",
-      "timestamp": "2025-12-05T15:16:14.475512"
+      "role": "user",
+      "content": "ping",
+      "timestamp": "2025-12-17T07:54:18.477616"
     },
     {
       "role": "user",
-      "content": "Hello Aurora, my name is Kai",
-      "timestamp": "2025-12-05T15:17:50.514287"
-    },
-    {
-      "role": "aurora",
-      "content": "I understand you have a general conversation request. Processing...",
-      "timestamp": "2025-12-05T15:17:50.515709"
+      "content": " Self diagnose",
+      "timestamp": "2025-12-20T06:21:31.905943"
     },
     {
       "role": "user",
-      "content": "status",
-      "timestamp": "2025-12-17T07:24:36.031567"
+      "content": "Status",
+      "timestamp": "2025-12-20T06:21:43.881376"
     },
     {
       "role": "user",
-      "content": "self diagnose",
-      "timestamp": "2025-12-17T07:24:41.438617"
+      "content": "Give me a list of things that need work on",
+      "timestamp": "2025-12-20T06:22:08.549239"
     }
   ],
-  "mid_term": [],
+  "mid_term": [
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-05T15:16:09.058407",
+      "last_message": "2025-12-17T07:53:41.865204",
+      "compressed_at": "2025-12-17T07:53:41.867057"
+    }
+  ],
   "long_term": [],
   "facts": {
     "integration_date": {
@@ -83,6 +81,97 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-17T07:24:41.441048"
+    },
+    "memory_9285ec3b-7e4c-4ea7-80c3-d5e3c11541b0": {
+      "value": {
+        "text": "self diagnose",
+        "meta": {
+          "session_id": "chat-1765957847519",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-17T07:51:07.444129",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-17T07:51:07.444139"
+    },
+    "memory_fb112052-29a6-4555-a3e8-f2ded6f72bbd": {
+      "value": {
+        "text": "ping",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-17T07:54:18.482474",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-17T07:54:18.482482"
+    },
+    "memory_46aea133-d834-4eb7-9ee3-3ed1a6dfdeac": {
+      "value": {
+        "text": "analyze codebase",
+        "meta": {
+          "session_id": "chat-1765978619732",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-17T13:37:17.109194",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-17T13:37:17.109202"
+    },
+    "memory_d738ca42-84f3-498e-a028-b2914fc050d5": {
+      "value": {
+        "text": "SELF DIAGNOSE",
+        "meta": {
+          "session_id": "chat-1765978619732",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-17T13:37:52.461470",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-17T13:37:52.461476"
+    },
+    "memory_e747aff3-f320-4d0b-8e9b-a77d015e1901": {
+      "value": {
+        "text": " Self diagnose",
+        "meta": {
+          "session_id": "chat-1766211682850",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-20T06:21:31.918533",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-20T06:21:31.918545"
+    },
+    "memory_e76b831b-301a-4ff0-b10a-7b0bb2c27fae": {
+      "value": {
+        "text": "Status",
+        "meta": {
+          "session_id": "chat-1766211682850",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-20T06:21:43.882664",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-20T06:21:43.882673"
+    },
+    "memory_e0f59a2f-3c76-490a-abf1-7a2a698fe8a3": {
+      "value": {
+        "text": "Give me a list of things that need work on",
+        "meta": {
+          "session_id": "chat-1766211682850",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-20T06:22:08.550964",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-20T06:22:08.550973"
     }
   },
   "events": [
@@ -105,8 +194,48 @@
         "longterm": false
       },
       "timestamp": "2025-12-17T07:24:41.441585"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "fb112052-29a6-4555-a3e8-f2ded6f72bbd",
+        "text_length": 4,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-17T07:54:18.490235"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e747aff3-f320-4d0b-8e9b-a77d015e1901",
+        "text_length": 14,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-20T06:21:31.919156"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e76b831b-301a-4ff0-b10a-7b0bb2c27fae",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-20T06:21:43.888353"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e0f59a2f-3c76-490a-abf1-7a2a698fe8a3",
+        "text_length": 42,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-20T06:22:08.682783"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-17T07:24:41.441654"
+  "last_updated": "2025-12-20T06:22:08.682897"
 }

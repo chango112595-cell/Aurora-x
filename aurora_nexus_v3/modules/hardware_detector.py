@@ -3,9 +3,11 @@ Hardware Detector - Understands device capabilities
 Detects CPU, memory, storage, network, GPU, and sensors
 """
 
-import os
 import platform
-from typing import Dict, Any, Optional, List
+import socket
+import logging
+from typing import Dict, Any, Optional, List, Tuple, Protocol
+from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass, field
 
 
@@ -55,33 +57,41 @@ class HardwareProfile:
     capability_score: int = 0
 
 
+class HardwareCore(Protocol):
+    logger: logging.Logger
+
+
 class HardwareDetector:
     """
     Detects hardware capabilities and scores device
     Determines what features Aurora can enable
     """
     
-    CAPABILITY_THRESHOLDS = {
+    CAPABILITY_THRESHOLDS: Dict[str, int] = {
         "full": 80,
         "standard": 50,
         "lite": 25,
         "micro": 0
     }
     
-    def __init__(self, core):
+    def __init__(self, core: HardwareCore):
+    def __init__(self, core: Any):
         self.core = core
-        self.logger = core.logger.getChild("hardware")
+        self.logger: logging.Logger = core.logger.getChild("hardware")
         self.profile: Optional[HardwareProfile] = None
     
-    async def initialize(self):
+    async def initialize(self) -> None:
         self.logger.info("Detecting hardware capabilities...")
         self.profile = await self.detect()
         self.logger.info(f"Hardware detected: {self.profile.cpu.cores_logical} cores, "
                         f"{self.profile.memory.total_mb}MB RAM, "
                         f"Score: {self.profile.capability_score}/100")
     
-    async def shutdown(self):
-        pass
+    async def shutdown(self) -> None:
+        """Cleanup hardware detector resources."""
+        self.logger.info("Hardware detector shutting down")
+        self.profile = None
+        self.logger.debug("Hardware profile cleared")
     
     async def detect(self) -> HardwareProfile:
         profile = HardwareProfile()
@@ -113,7 +123,7 @@ class HardwareDetector:
             if freq:
                 info.frequency_mhz = freq.current
         except ImportError:
-            pass
+            self.logger.debug("psutil not available; CPU frequency detection skipped")
         
         return info
     
@@ -134,7 +144,7 @@ class HardwareDetector:
         return info
     
     def _detect_storage(self) -> List[StorageInfo]:
-        storage_list = []
+        storage_list: List[StorageInfo] = []
         
         try:
             import psutil
@@ -149,16 +159,20 @@ class HardwareDetector:
                         mount_point=partition.mountpoint
                     )
                     storage_list.append(storage)
-                except Exception:
-                    pass
+                except Exception as exc:
+                    self.logger.debug(
+                        "Failed to read storage usage for %s: %s",
+                        partition.mountpoint,
+                        exc,
+                    )
         except ImportError:
             storage_list.append(StorageInfo(total_gb=100, available_gb=50))
         
         return storage_list
     
     def _detect_network(self) -> List[NetworkInterface]:
-        interfaces = []
-        
+        interfaces: List[NetworkInterface] = []
+
         try:
             import psutil
             addrs = psutil.net_if_addrs()
@@ -170,9 +184,11 @@ class HardwareDetector:
                 
                 iface = NetworkInterface(name=name)
                 for addr in addr_list:
-                    if addr.family.name == "AF_INET":
+                    family = addr.family
+                    family_name = getattr(family, "name", "")
+                    if family in (socket.AF_INET, socket.AF_INET6) or family_name in ("AF_INET", "AF_INET6"):
                         iface.address = addr.address
-                    elif addr.family.name == "AF_PACKET":
+                    elif family == socket.AF_PACKET or family_name == "AF_PACKET":
                         iface.mac = addr.address
                 
                 if name in stats:
@@ -198,14 +214,14 @@ class HardwareDetector:
         except Exception:
             return False
     
-    def _detect_battery(self) -> tuple:
+    def _detect_battery(self) -> Tuple[bool, Optional[float]]:
         try:
             import psutil
             battery = psutil.sensors_battery()
             if battery:
                 return True, battery.percent
-        except Exception:
-            pass
+        except Exception as exc:
+            self.logger.debug("Battery detection failed: %s", exc)
         return False, None
     
     def _calculate_score(self, profile: HardwareProfile) -> int:
@@ -295,33 +311,34 @@ class HardwareDetector:
     
     async def get_info(self) -> Dict[str, Any]:
         if not self.profile:
-            await self.detect()
+            self.profile = await self.detect()
         
+        profile = self.profile
         return {
             "cpu": {
-                "cores_physical": self.profile.cpu.cores_physical,
-                "cores_logical": self.profile.cpu.cores_logical,
-                "architecture": self.profile.cpu.architecture,
-                "model": self.profile.cpu.model
+                "cores_physical": profile.cpu.cores_physical,
+                "cores_logical": profile.cpu.cores_logical,
+                "architecture": profile.cpu.architecture,
+                "model": profile.cpu.model
             },
             "memory": {
-                "total_mb": self.profile.memory.total_mb,
-                "available_mb": self.profile.memory.available_mb,
-                "percent_used": self.profile.memory.percent_used
+                "total_mb": profile.memory.total_mb,
+                "available_mb": profile.memory.available_mb,
+                "percent_used": profile.memory.percent_used
             },
             "storage": [
                 {"mount": s.mount_point, "total_gb": s.total_gb, "available_gb": s.available_gb}
-                for s in self.profile.storage
+                for s in profile.storage
             ],
             "network": [
                 {"name": n.name, "address": n.address, "is_up": n.is_up}
-                for n in self.profile.network
+                for n in profile.network
             ],
-            "gpu_available": self.profile.gpu_available,
+            "gpu_available": profile.gpu_available,
             "battery": {
-                "powered": self.profile.battery_powered,
-                "percent": self.profile.battery_percent
+                "powered": profile.battery_powered,
+                "percent": profile.battery_percent
             },
-            "capability_score": self.profile.capability_score,
+            "capability_score": profile.capability_score,
             "device_tier": self.get_device_tier()
         }

@@ -18,6 +18,8 @@ STORE_DIR.mkdir(exist_ok=True)
 
 class SimpleEmbedder:
     def embed(self, text: str):
+        if not isinstance(text, str):
+            text = json.dumps(text, ensure_ascii=False, sort_keys=True)
         # deterministic lightweight embedding: bag-of-words hashed counts into fixed-size vector
         vec = [0.0]*128
         for i,w in enumerate(text.split()):
@@ -68,6 +70,8 @@ class MemoryStore:
         self._mem = {}  # id -> {text, vec, meta}
         self._index = []  # list of ids (keeps insertion order)
     def write(self, text: str, meta: Dict=None):
+        if not isinstance(text, str):
+            text = json.dumps(text, ensure_ascii=False, sort_keys=True)
         mid = str(uuid.uuid4())
         vec = self.embedder.embed(text)
         rec = {"id": mid, "text": text, "vec": vec, "meta": meta or {}}

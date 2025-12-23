@@ -3,8 +3,12 @@ set -uo pipefail
 
 echo "🔍 Checking Bridge service..."
 
+BRIDGE_HOST="127.0.0.1"
+BRIDGE_PORT="5001"
+BRIDGE_URL="http://${BRIDGE_HOST}:${BRIDGE_PORT}/healthz"
+
 # Check if Bridge is already running
-if curl -fsS http://0.0.0.0:5001/healthz >/dev/null 2>&1; then
+if curl -fsS "${BRIDGE_URL}" >/dev/null 2>&1; then
     echo "✅ Bridge already running"
     exit 0
 fi
@@ -23,12 +27,16 @@ BRIDGE_PID=$!
 echo $BRIDGE_PID > /tmp/bridge.pid
 echo "📍 Bridge PID: $BRIDGE_PID"
 
-# Wait for Bridge to be healthy (max 10 seconds)
+# Wait for Bridge to be healthy (max 15 seconds)
 echo "⏳ Waiting for Bridge to start..."
-for i in {1..20}; do
-    if curl -fsS http://0.0.0.0:5001/healthz >/dev/null 2>&1; then
-        echo "✅ Bridge healthy on port 5001"
+for i in {1..30}; do
+    if curl -fsS "${BRIDGE_URL}" >/dev/null 2>&1; then
+        echo "✅ Bridge healthy on port ${BRIDGE_PORT}"
         exit 0
+    fi
+    if ! kill -0 "${BRIDGE_PID}" >/dev/null 2>&1; then
+        echo "❌ Bridge process exited early"
+        break
     fi
     sleep 0.5
 done

@@ -39,7 +39,7 @@ class NexusServer:
         bridge_result = self.module_bridge.load_modules()
         if bridge_result.get("loaded", 0) > 0:
             print(f"[NexusBridge] 550 Aurora-X modules integrated")
-            print(f"[NexusBridge] Categories: Ancient, Classical, Modern, Futuristic")
+            print(f"[NexusBridge] Categories: Ancient, Classical, Modern, Futuristic, Post-Quantum")
             print(f"[NexusBridge] Tiers: foundational, intermediate, advanced, grandmaster")
         
         if self.core.brain_bridge:
@@ -79,7 +79,7 @@ class NexusServer:
         try:
             await self._shutdown_event.wait()
         except asyncio.CancelledError:
-            pass
+            print("Shutdown wait cancelled; continuing cleanup.")
         finally:
             await self.stop()
     

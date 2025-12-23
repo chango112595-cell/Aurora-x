@@ -1,12 +1,13 @@
 {
     "python-envs.defaultEnvManager": "ms-python.python:system",
     "python-envs.pythonProjects": [],
+    "python.defaultInterpreterPath": "C:\\\\Python314\\\\python.exe",
     "python.analysis.extraPaths": [
         "./tools"
     ],
     "python.analysis.exclude": [
         "**/tools/luminar_nexus.py",
-        "**/.venv/**",
+        "**/.venv*/**",
         "**/node_modules/**",
         "**/__pycache__/**",
         "**/dist/**",
@@ -22,7 +23,8 @@
         "reportUnusedFunction": "none",
         "reportUnusedClass": "none"
     },
-    "python.analysis.indexing": true,
+    "python.analysis.indexing": false,
+    "python.analysis.diagnosticMode": "openFilesOnly",
     "python.analysis.memory.keepLibraryAst": false,
     "python.analysis.autoImportCompletions": false,
     "python.analysis.packageIndexDepths": [
@@ -48,7 +50,7 @@
     "python.linting.enabled": false,
     "python.linting.pylintEnabled": false,
     "files.watcherExclude": {
-        "**/.venv/**": true,
+        "**/.venv*/**": true,
         "**/node_modules/**": true,
         "**/__pycache__/**": true,
         "**/.pytest_cache/**": true,
@@ -57,7 +59,7 @@
         "**/build/**": true
     },
     "search.exclude": {
-        "**/.venv": true,
+        "**/.venv*": true,
         "**/node_modules": true,
         "**/__pycache__": true,
         "**/dist": true,

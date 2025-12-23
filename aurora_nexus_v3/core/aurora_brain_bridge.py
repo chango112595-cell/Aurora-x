@@ -98,6 +98,7 @@ class AuroraBrainBridge:
         self.hybrid_mode_active = False
         self.hyperspeed_active = False
         self.self_coding_active = False
+        self.last_hyperspeed_result: Optional[Dict[str, Any]] = None
         
         self.pending_self_codings: List[SelfCodingContext] = []
         self.executed_self_codings: List[SelfCodingContext] = []
@@ -311,6 +312,30 @@ class AuroraBrainBridge:
         
         if self.nexus_core:
             await self.nexus_core.enable_hyperspeed()
+            orchestrator = getattr(self.nexus_core, "hybrid_orchestrator", None)
+            if orchestrator and getattr(orchestrator, "initialized", False):
+                try:
+                    from .hybrid_orchestrator import ExecutionStrategy, TaskPriority
+
+                    hyperspeed_result = await orchestrator.execute_hybrid(
+                        task_type="hyperspeed_scan",
+                        payload={"trigger": "enable_hyperspeed"},
+                        strategy=ExecutionStrategy.HYPERSPEED,
+                        priority=TaskPriority.HIGH,
+                        timeout_ms=15000
+                    )
+                    result_payload = hyperspeed_result.result
+                    if not isinstance(result_payload, dict):
+                        result_payload = {"result": result_payload}
+                    self.last_hyperspeed_result = result_payload
+                    self.logger.info(
+                        "  - Hyperspeed warm-up scan completed "
+                        f"(problems_found={result_payload.get('problems_found', 0)}, "
+                        f"fixes_applied={result_payload.get('fixes_applied', 0)})"
+                    )
+                except Exception as e:
+                    self.last_hyperspeed_result = {"error": str(e)}
+                    self.logger.warning(f"  - Hyperspeed warm-up scan failed: {e}")
     
     async def enable_self_coding(self):
         """Enable Aurora's self-coding capabilities"""
@@ -403,6 +428,7 @@ class AuroraBrainBridge:
                 "modules": self.hybrid_config.module_count,
                 "workers": self.hybrid_config.worker_count
             },
+            "hyperspeed_last_result": self.last_hyperspeed_result,
             "aurora_core": {
                 "connected": self.aurora_core is not None,
                 "version": AURORA_VERSION if self.aurora_core else None

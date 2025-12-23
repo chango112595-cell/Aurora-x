@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class Monitor0492Cleanup:
     def __init__(self):
-        pass
+        self.resource = None
 
     def teardown(self) -> dict:
         try:

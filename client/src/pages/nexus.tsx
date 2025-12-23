@@ -1,8 +1,19 @@
+'use client';
+
 import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Activity, Brain, Cpu, HeartPulse, Network, Package, Sparkles } from "lucide-react";
+import {
+  Activity,
+  Brain,
+  Cpu,
+  HeartPulse,
+  Network,
+  Package,
+  Sparkles,
+  Zap,
+} from "lucide-react";
 import ActivityMonitor from "@/components/ActivityMonitor";
 import UnifiedSystemStatus from "@/components/UnifiedSystemStatus";
 
@@ -91,7 +102,13 @@ function formatPercent(value?: number) {
 
 function StatusBadge({ active, label }: { active?: boolean; label: string }) {
   return (
-    <Badge className={active ? "bg-emerald-500/20 text-emerald-200 border-emerald-500/40" : "bg-slate-800 text-slate-300 border-slate-600/40"}>
+    <Badge
+      className={
+        active
+          ? "bg-emerald-500/20 text-emerald-200 border-emerald-500/40"
+          : "bg-slate-800 text-slate-300 border-slate-600/40"
+      }
+    >
       {label}
     </Badge>
   );
@@ -152,219 +169,271 @@ export default function NexusPage() {
   const v2ServiceCount = v2Status ? v2ServiceEntries.length : undefined;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-cyan-950/20 to-purple-950/20 text-white p-6">
-      <div className="container mx-auto max-w-7xl space-y-8">
-        <header className="space-y-2">
-          <div className="flex flex-wrap items-center gap-3">
-            <Sparkles className="h-6 w-6 text-cyan-400" />
-            <h1 className="text-3xl font-semibold text-cyan-100">Nexus</h1>
-            <Badge className="bg-cyan-500/20 text-cyan-200 border-cyan-500/40">
-              Unified V2 + V3
-            </Badge>
+    <div className="mx-auto max-w-7xl space-y-6">
+      <section className="rounded-3xl border border-slate-800/70 bg-slate-900/60 p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-3">
+              <Sparkles className="h-6 w-6 text-emerald-300" />
+              <h1 className="text-2xl font-semibold text-slate-100">Nexus Command</h1>
+              <Badge className="bg-emerald-500/20 text-emerald-100 border-emerald-400/40">
+                Unified V2 + V3
+              </Badge>
+            </div>
+            <p className="text-sm text-slate-400">
+              Live production telemetry for Aurora Nexus V3 and Luminar Nexus V2.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <StatusBadge active={unifiedStatus?.v3?.connected} label="Nexus V3" />
+              <StatusBadge active={unifiedStatus?.v2?.connected} label="Nexus V2" />
+              <StatusBadge active={unifiedStatus?.unified?.allConnected} label="Unified" />
+            </div>
           </div>
-          <p className="text-sm text-cyan-200/70">
-            Production telemetry for Aurora Nexus V3 and Luminar Nexus V2. All values reflect live services.
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <StatusBadge active={unifiedStatus?.v3?.connected} label="Nexus V3" />
-            <StatusBadge active={unifiedStatus?.v2?.connected} label="Nexus V2" />
-            <StatusBadge active={unifiedStatus?.unified?.allConnected} label="Unified" />
+          <div className="text-xs text-slate-500">
+            Snapshot {unifiedStatus?.unified?.timestamp ? new Date(unifiedStatus.unified.timestamp).toLocaleTimeString() : "Unavailable"}
           </div>
-        </header>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-slate-900/60 border-cyan-500/30">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-cyan-200">
-                <Brain className="h-5 w-5 text-cyan-400" />
-                Aurora Nexus V3
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex flex-wrap gap-2">
-                <StatusBadge active={v3Connected} label="Online" />
-                <Badge className="bg-slate-800 text-slate-300 border-slate-600/40">
-                  {v3Status?.state ? v3Status.state.toUpperCase() : "STATE UNAVAILABLE"}
-                </Badge>
-                <Badge className="bg-slate-800 text-slate-300 border-slate-600/40">
-                  {v3Status?.version ? `v${v3Status.version}` : "Version Unknown"}
-                </Badge>
-              </div>
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-lg bg-slate-950/60 border border-cyan-500/20 p-3">
-                  <div className="text-cyan-200/70">Workers</div>
-                  <div className="text-lg font-semibold text-cyan-100">
-                    {formatCount(v3Capabilities?.workers)}
-                  </div>
-                </div>
-                <div className="rounded-lg bg-slate-950/60 border border-cyan-500/20 p-3">
-                  <div className="text-cyan-200/70">Modules</div>
-                  <div className="text-lg font-semibold text-cyan-100">
-                    {formatCount(v3Capabilities?.modules)}
-                  </div>
-                </div>
-                <div className="rounded-lg bg-slate-950/60 border border-cyan-500/20 p-3">
-                  <div className="text-cyan-200/70">Tiers</div>
-                  <div className="text-lg font-semibold text-cyan-100">
-                    {formatCount(v3Capabilities?.tiers)}
-                  </div>
-                </div>
-                <div className="rounded-lg bg-slate-950/60 border border-cyan-500/20 p-3">
-                  <div className="text-cyan-200/70">AEMs</div>
-                  <div className="text-lg font-semibold text-cyan-100">
-                    {formatCount(v3Capabilities?.aems)}
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-2 text-xs">
-                <StatusBadge active={v3Capabilities?.hyperspeed_enabled} label="Hyperspeed" />
-                <StatusBadge active={v3Capabilities?.hybrid_mode_enabled} label="Hybrid Mode" />
-                <StatusBadge active={v3Capabilities?.autonomous_mode} label="Autonomous" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-900/60 border-purple-500/30">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-purple-200">
-                <Network className="h-5 w-5 text-purple-400" />
-                Luminar Nexus V2
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex flex-wrap gap-2">
-                <StatusBadge active={v2Connected} label="Online" />
-                <Badge className="bg-slate-800 text-slate-300 border-slate-600/40">
-                  {v2Status?.version ? `v${v2Status.version}` : "Version Unknown"}
-                </Badge>
-              </div>
-              <div className="space-y-2 rounded-lg bg-slate-950/60 border border-purple-500/20 p-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-purple-200/70">Quantum Coherence</span>
-                  <span className="text-purple-100 font-semibold">{formatPercent(coherencePercent)}</span>
-                </div>
-                <Progress value={coherencePercent ?? 0} className="h-2 bg-slate-800" />
-              </div>
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-lg bg-slate-950/60 border border-purple-500/20 p-3">
-                  <div className="text-purple-200/70">Healthy Services</div>
-                  <div className="text-lg font-semibold text-purple-100">
-                    {formatCount(v2Status?.healthy_services ?? unifiedStatus?.v2?.healthy_services)}
-                  </div>
-                </div>
-                <div className="rounded-lg bg-slate-950/60 border border-purple-500/20 p-3">
-                  <div className="text-purple-200/70">Services Online</div>
-                  <div className="text-lg font-semibold text-purple-100">
-                    {formatCount(v2ServiceCount)}
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-2 text-xs">
-                <StatusBadge active={v2Status?.ai_learning_active ?? unifiedStatus?.v2?.ai_learning_active} label="AI Learning" />
-                <StatusBadge active={v2Status?.autonomous_healing_active ?? unifiedStatus?.v2?.autonomous_healing_active} label="Auto-Healing" />
-              </div>
-            </CardContent>
-          </Card>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Card className="bg-slate-900/60 border-cyan-500/30">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-cyan-200">
-                <Cpu className="h-5 w-5 text-cyan-400" />
-                Worker Load
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-cyan-200/70">Total</span>
-                <span className="text-cyan-100 font-semibold">{formatCount(v3Workers?.total)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-cyan-200/70">Active</span>
-                <span className="text-cyan-100 font-semibold">{formatCount(v3Workers?.active)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-cyan-200/70">Idle</span>
-                <span className="text-cyan-100 font-semibold">{formatCount(v3Workers?.idle)}</span>
-              </div>
-            </CardContent>
-          </Card>
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <Card className="bg-slate-900/60 border-emerald-500/30">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm text-emerald-200">
+              <Cpu className="h-4 w-4 text-emerald-400" />
+              Workers
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-2xl font-semibold text-emerald-100">
+            {formatCount(v3Capabilities?.workers)}
+          </CardContent>
+        </Card>
+        <Card className="bg-slate-900/60 border-sky-500/30">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm text-sky-200">
+              <Network className="h-4 w-4 text-sky-400" />
+              Tiers
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-2xl font-semibold text-sky-100">
+            {formatCount(v3Capabilities?.tiers)}
+          </CardContent>
+        </Card>
+        <Card className="bg-slate-900/60 border-amber-500/30">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm text-amber-200">
+              <Zap className="h-4 w-4 text-amber-400" />
+              AEMs
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-2xl font-semibold text-amber-100">
+            {formatCount(v3Capabilities?.aems)}
+          </CardContent>
+        </Card>
+        <Card className="bg-slate-900/60 border-emerald-500/30">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm text-emerald-200">
+              <Package className="h-4 w-4 text-emerald-400" />
+              Modules
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-2xl font-semibold text-emerald-100">
+            {formatCount(v3Capabilities?.modules)}
+          </CardContent>
+        </Card>
+      </section>
 
-          <Card className="bg-slate-900/60 border-emerald-500/30">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-emerald-200">
-                <HeartPulse className="h-5 w-5 text-emerald-400" />
-                Self-Healing
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-emerald-200/70">Active Healers</span>
-                <span className="text-emerald-100 font-semibold">{formatCount(v3Healers?.active)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-emerald-200/70">Total Healers</span>
-                <span className="text-emerald-100 font-semibold">{formatCount(v3Healers?.total)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-emerald-200/70">Heals Performed</span>
-                <span className="text-emerald-100 font-semibold">{formatCount(v3Healers?.healsPerformed)}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-900/60 border-amber-500/30">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-amber-200">
-                <Package className="h-5 w-5 text-amber-400" />
-                Packs
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-amber-200/70">Total Packs</span>
-                <span className="text-amber-100 font-semibold">{formatCount(packSummary?.total_packs)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-amber-200/70">Loaded Packs</span>
-                <span className="text-amber-100 font-semibold">{formatCount(packSummary?.loaded_packs)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-amber-200/70">Submodules</span>
-                <span className="text-amber-100 font-semibold">{formatCount(packSummary?.total_submodules)}</span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {v2ServiceEntries.length > 0 && (
-          <Card className="bg-slate-900/60 border-purple-500/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-purple-200">
-                <Activity className="h-5 w-5 text-purple-400" />
-                V2 Service Health
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
-              {v2ServiceEntries.map(([name, service]) => (
-                <div key={name} className="rounded-lg border border-purple-500/20 bg-slate-950/60 p-3">
-                  <div className="text-purple-100 font-semibold">{name}</div>
-                  <div className="text-purple-200/70">Status: {service.status ?? "Unknown"}</div>
-                  {typeof service.health === "number" && (
-                    <div className="text-purple-200/70">Health: {service.health}%</div>
-                  )}
+      <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Card className="bg-slate-900/60 border-emerald-500/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-emerald-200">
+              <Brain className="h-5 w-5 text-emerald-400" />
+              Aurora Nexus V3
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <StatusBadge active={v3Connected} label="Online" />
+              <Badge className="bg-slate-800 text-slate-300 border-slate-600/40">
+                {v3Status?.state ? v3Status.state.toUpperCase() : "STATE UNAVAILABLE"}
+              </Badge>
+              <Badge className="bg-slate-800 text-slate-300 border-slate-600/40">
+                {v3Status?.version ? `v${v3Status.version}` : "Version Unknown"}
+              </Badge>
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="rounded-lg bg-slate-950/60 border border-emerald-500/20 p-3">
+                <div className="text-emerald-200/70">Workers</div>
+                <div className="text-lg font-semibold text-emerald-100">
+                  {formatCount(v3Capabilities?.workers)}
                 </div>
-              ))}
-            </CardContent>
-          </Card>
-        )}
+              </div>
+              <div className="rounded-lg bg-slate-950/60 border border-emerald-500/20 p-3">
+                <div className="text-emerald-200/70">Modules</div>
+                <div className="text-lg font-semibold text-emerald-100">
+                  {formatCount(v3Capabilities?.modules)}
+                </div>
+              </div>
+              <div className="rounded-lg bg-slate-950/60 border border-emerald-500/20 p-3">
+                <div className="text-emerald-200/70">Tiers</div>
+                <div className="text-lg font-semibold text-emerald-100">
+                  {formatCount(v3Capabilities?.tiers)}
+                </div>
+              </div>
+              <div className="rounded-lg bg-slate-950/60 border border-emerald-500/20 p-3">
+                <div className="text-emerald-200/70">AEMs</div>
+                <div className="text-lg font-semibold text-emerald-100">
+                  {formatCount(v3Capabilities?.aems)}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 text-xs">
+              <StatusBadge active={v3Capabilities?.hyperspeed_enabled} label="Hyperspeed" />
+              <StatusBadge active={v3Capabilities?.hybrid_mode_enabled} label="Hybrid Mode" />
+              <StatusBadge active={v3Capabilities?.autonomous_mode} label="Autonomous" />
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <UnifiedSystemStatus />
-          <ActivityMonitor />
-        </div>
-      </div>
+        <Card className="bg-slate-900/60 border-sky-500/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-sky-200">
+              <Network className="h-5 w-5 text-sky-400" />
+              Luminar Nexus V2
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <StatusBadge active={v2Connected} label="Online" />
+              <Badge className="bg-slate-800 text-slate-300 border-slate-600/40">
+                {v2Status?.version ? `v${v2Status.version}` : "Version Unknown"}
+              </Badge>
+            </div>
+            <div className="space-y-2 rounded-lg bg-slate-950/60 border border-sky-500/20 p-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-sky-200/70">Quantum Coherence</span>
+                <span className="text-sky-100 font-semibold">{formatPercent(coherencePercent)}</span>
+              </div>
+              <Progress value={coherencePercent ?? 0} className="h-2 bg-slate-800" />
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="rounded-lg bg-slate-950/60 border border-sky-500/20 p-3">
+                <div className="text-sky-200/70">Healthy Services</div>
+                <div className="text-lg font-semibold text-sky-100">
+                  {formatCount(v2Status?.healthy_services ?? unifiedStatus?.v2?.healthy_services)}
+                </div>
+              </div>
+              <div className="rounded-lg bg-slate-950/60 border border-sky-500/20 p-3">
+                <div className="text-sky-200/70">Services Online</div>
+                <div className="text-lg font-semibold text-sky-100">
+                  {formatCount(v2ServiceCount)}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 text-xs">
+              <StatusBadge active={v2Status?.ai_learning_active ?? unifiedStatus?.v2?.ai_learning_active} label="AI Learning" />
+              <StatusBadge active={v2Status?.autonomous_healing_active ?? unifiedStatus?.v2?.autonomous_healing_active} label="Auto-Healing" />
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <Card className="bg-slate-900/60 border-emerald-500/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-emerald-200">
+              <Cpu className="h-5 w-5 text-emerald-400" />
+              Worker Load
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-emerald-200/70">Total</span>
+              <span className="text-emerald-100 font-semibold">{formatCount(v3Workers?.total)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-emerald-200/70">Active</span>
+              <span className="text-emerald-100 font-semibold">{formatCount(v3Workers?.active)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-emerald-200/70">Idle</span>
+              <span className="text-emerald-100 font-semibold">{formatCount(v3Workers?.idle)}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-900/60 border-rose-500/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-rose-200">
+              <HeartPulse className="h-5 w-5 text-rose-400" />
+              Self-Healing
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-rose-200/70">Active Healers</span>
+              <span className="text-rose-100 font-semibold">{formatCount(v3Healers?.active)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-rose-200/70">Total Healers</span>
+              <span className="text-rose-100 font-semibold">{formatCount(v3Healers?.total)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-rose-200/70">Heals Performed</span>
+              <span className="text-rose-100 font-semibold">{formatCount(v3Healers?.healsPerformed)}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-slate-900/60 border-amber-500/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-amber-200">
+              <Package className="h-5 w-5 text-amber-400" />
+              Packs
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-amber-200/70">Total Packs</span>
+              <span className="text-amber-100 font-semibold">{formatCount(packSummary?.total_packs)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-amber-200/70">Loaded Packs</span>
+              <span className="text-amber-100 font-semibold">{formatCount(packSummary?.loaded_packs)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-amber-200/70">Submodules</span>
+              <span className="text-amber-100 font-semibold">{formatCount(packSummary?.total_submodules)}</span>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      {v2ServiceEntries.length > 0 && (
+        <Card className="bg-slate-900/60 border-sky-500/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-sky-200">
+              <Activity className="h-5 w-5 text-sky-400" />
+              V2 Service Health
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 gap-3 text-sm md:grid-cols-2 lg:grid-cols-3">
+            {v2ServiceEntries.map(([name, service]) => (
+              <div key={name} className="rounded-lg border border-sky-500/20 bg-slate-950/60 p-3">
+                <div className="text-sky-100 font-semibold">{name}</div>
+                <div className="text-sky-200/70">Status: {service.status ?? "Unknown"}</div>
+                {typeof service.health === "number" && (
+                  <div className="text-sky-200/70">Health: {service.health}%</div>
+                )}
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <UnifiedSystemStatus />
+        <ActivityMonitor />
+      </section>
     </div>
   );
 }

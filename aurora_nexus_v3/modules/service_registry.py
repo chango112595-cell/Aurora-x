@@ -69,12 +69,21 @@ class ServiceRegistry:
         self._health_task = asyncio.create_task(self._health_loop())
     
     async def shutdown(self):
+        """Cleanup service registry - cancel tasks, clear services and watchers."""
+        self.logger.info("Service registry shutting down")
         if self._health_task:
             self._health_task.cancel()
             try:
                 await self._health_task
             except asyncio.CancelledError:
-                pass
+                self.logger.debug("Health check task cancellation acknowledged")
+            self.logger.debug("Health check task cancelled")
+        with self._lock:
+            service_count = len(self.services)
+            self.services.clear()
+        watcher_count = len(self.watchers)
+        self.watchers.clear()
+        self.logger.debug(f"Cleared {service_count} services, {watcher_count} watcher groups")
         self.logger.info("Service registry shut down")
     
     async def _health_loop(self):

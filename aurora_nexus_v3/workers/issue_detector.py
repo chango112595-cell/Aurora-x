@@ -11,6 +11,7 @@ import time
 import threading
 import re
 import os
+import logging
 from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -66,6 +67,10 @@ class IssueDetector:
     def __init__(self, worker_pool: Any = None, core: Any = None):
         self.worker_pool = worker_pool
         self.core = core
+        if core and hasattr(core, "logger"):
+            self.logger = core.logger.getChild("issue_detector")
+        else:
+            self.logger = logging.getLogger(__name__)
         self.monitoring_active = False
         self._monitor_thread: Optional[threading.Thread] = None
         
@@ -232,7 +237,7 @@ class IssueDetector:
                     description=f"CPU usage at {cpu}%"
                 )
         except ImportError:
-            pass
+            self.logger.debug("psutil not available; skipping system resource checks")
     
     async def _report_issue(self, category: IssueCategory, severity: IssueSeverity,
                            issue_type: str, target: str, description: str,

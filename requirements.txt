@@ -21,9 +21,11 @@ python-multipart>=0.0.6
 psutil>=5.9.0
 watchdog>=3.0.0
 waitress>=2.1.2
+cachetools>=5.3.3
 
 # Testing
 pytest>=8.3.5
+pytest-cov>=5.0.0
 
 # Optional: Development tools
 black>=22.0
