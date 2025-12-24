@@ -5,16 +5,14 @@ Write-Host "AURORA NEXUS STATUS CHECK" -ForegroundColor Cyan
 Write-Host "=" -NoNewline; Write-Host "=".PadRight(68, "=")
 Write-Host ""
 
-$AuroraHost = if ($env:AURORA_HOST) { $env:AURORA_HOST } else { "localhost" }
-$NexusPort = if ($env:AURORA_NEXUS_PORT) { [int]$env:AURORA_NEXUS_PORT } else { 8000 }
-$BackendPort = if ($env:AURORA_BACKEND_PORT) { [int]$env:AURORA_BACKEND_PORT } else { 5000 }
-$NexusBaseUrl = "http://$AuroraHost`:$NexusPort"
-$BackendBaseUrl = "http://$AuroraHost`:$BackendPort"
+$auroraHost = if ($env:AURORA_HOST) { $env:AURORA_HOST } else { "127.0.0.1" }
+$baseUrl = if ($env:AURORA_BASE_URL) { $env:AURORA_BASE_URL } else { "http://$auroraHost:5000" }
+$luminarUrl = if ($env:AURORA_LUMINAR_URL) { $env:AURORA_LUMINAR_URL } else { "http://$auroraHost:8000" }
 
 # Check Luminar Nexus V2 Backend
-Write-Host "[1] Luminar Nexus V2 (Direct - Port $NexusPort)" -ForegroundColor Yellow
+Write-Host "[1] Luminar Nexus V2 (Direct - Port 8000)" -ForegroundColor Yellow
 try {
-    $nexusV2 = Invoke-RestMethod -Uri "$NexusBaseUrl/api/nexus/status" -TimeoutSec 3
+    $nexusV2 = Invoke-RestMethod -Uri "$luminarUrl/api/nexus/status" -TimeoutSec 3
     Write-Host "    Status: OK" -ForegroundColor Green
     Write-Host "    Version: $($nexusV2.version)" -ForegroundColor Gray
     Write-Host "    Services: $($nexusV2.total_services)" -ForegroundColor Gray
@@ -28,9 +26,9 @@ try {
 Write-Host ""
 
 # Check Express Backend Integration
-Write-Host "[2] Express Backend (Port $BackendPort)" -ForegroundColor Yellow
+Write-Host "[2] Express Backend (Port 5000)" -ForegroundColor Yellow
 try {
-    $backend = Invoke-RestMethod -Uri "$BackendBaseUrl/api/health" -TimeoutSec 3
+    $backend = Invoke-RestMethod -Uri "$baseUrl/api/health" -TimeoutSec 3
     Write-Host "    Status: OK" -ForegroundColor Green
 } catch {
     Write-Host "    Status: OFFLINE" -ForegroundColor Red
@@ -41,7 +39,7 @@ Write-Host ""
 # Check Luminar Nexus Routes (through Express)
 Write-Host "[3] Luminar Nexus Routes (via Express)" -ForegroundColor Yellow
 try {
-    $luminarProxy = Invoke-RestMethod -Uri "$BackendBaseUrl/api/luminar-nexus/v2/status" -TimeoutSec 3
+    $luminarProxy = Invoke-RestMethod -Uri "$baseUrl/api/luminar-nexus/v2/status" -TimeoutSec 3
     Write-Host "    Status: OK (Proxying to Luminar V2)" -ForegroundColor Green
     Write-Host "    Services: $($luminarProxy.total_services)" -ForegroundColor Gray
 } catch {
@@ -54,7 +52,7 @@ Write-Host ""
 # Check Memory Fabric
 Write-Host "[4] Memory Fabric Integration" -ForegroundColor Yellow
 try {
-    $memory = Invoke-RestMethod -Uri "$BackendBaseUrl/api/memory/status" -TimeoutSec 3
+    $memory = Invoke-RestMethod -Uri "$baseUrl/api/memory/status" -TimeoutSec 3
     Write-Host "    Status: OK" -ForegroundColor Green
     Write-Host "    Connected: $($memory.connected)" -ForegroundColor Gray
 } catch {
@@ -68,7 +66,7 @@ Write-Host "[5] Frontend Pages" -ForegroundColor Yellow
 $pages = @("/", "/memory", "/luminar-nexus", "/chat")
 foreach ($page in $pages) {
     try {
-        $response = Invoke-WebRequest -Uri "$BackendBaseUrl$page" -TimeoutSec 2 -UseBasicParsing
+        $response = Invoke-WebRequest -Uri "$baseUrl$page" -TimeoutSec 2 -UseBasicParsing
         Write-Host "    $page - OK" -ForegroundColor Green
     } catch {
         Write-Host "    $page - ERROR" -ForegroundColor Red

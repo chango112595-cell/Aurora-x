@@ -886,6 +886,11 @@ def main():
     import uvicorn
 
     # Auto-start all Aurora services via Luminar Nexus (if not already running)
+    base_url = os.getenv("AURORA_BASE_URL")
+    if not base_url:
+        aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        base_url = f"http://{aurora_host}:5000"
+
     try:
         import subprocess
         from pathlib import Path
@@ -898,7 +903,7 @@ def main():
             import requests
 
             try:
-                requests.get("http://localhost:5000/healthz", timeout=1)
+                requests.get(f"{base_url}/healthz", timeout=1)
             except Exception as e:
                 # Services not running, start them
                 print("[Aurora-X] Starting all services via Luminar Nexus...")

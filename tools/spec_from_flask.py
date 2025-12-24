@@ -113,10 +113,8 @@ if __name__ == '__main__':
     test_file.write_text(test_code, encoding="utf-8")
 
     # Create a simple report
-    host = os.getenv("AURORA_HOST", "localhost")
-    port = os.getenv("AURORA_PORT", os.getenv("AURORA_BACKEND_PORT", "5000"))
-    base_url = os.getenv("AURORA_BASE_URL", f"http://{host}:{port}")
-
+    aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+    base_url = os.getenv("AURORA_BASE_URL", f"http://{aurora_host}:5000")
     report_html = f"""<!DOCTYPE html>
 <html>
 <head>

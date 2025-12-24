@@ -897,7 +897,8 @@ if __name__ == "__main__":
 
     print(f"[ROCKET] Starting FastAPI application on port {{port}}...")
     print(f"[EMOJI] Description: {intent.description[:100]}")
-    print(f"[EMOJI] API Documentation: http://localhost:{{port}}/docs")
+    host = os.environ.get("AURORA_HOST", "127.0.0.1")
+    print(f"[EMOJI] API Documentation: http://{host}:{{port}}/docs")
 
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
 """

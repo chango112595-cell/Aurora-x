@@ -23,6 +23,7 @@ from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import os
 import shutil
+import os
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -40,19 +41,13 @@ LOG_PATH = Path(".aurora_knowledge/RECORDING_LOG.jsonl")
 LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
 MONITOR_LOG = Path(".aurora_knowledge/recorder_monitor.log")
 
-DEFAULT_HOST = os.getenv("AURORA_HOST", "localhost")
-BACKEND_PORT = int(os.getenv("AURORA_BACKEND_PORT", "5000"))
-BRIDGE_PORT = int(os.getenv("AURORA_BRIDGE_PORT", "5001"))
-SELF_LEARN_PORT = int(os.getenv("AURORA_SELF_LEARN_PORT", "5002"))
-CHAT_PORT = int(os.getenv("AURORA_CHAT_PORT", "5003"))
-VITE_PORT = int(os.getenv("AURORA_VITE_PORT", "5173"))
-
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 SERVICES = [
-    {"name": "backend", "url": f"http://{DEFAULT_HOST}:{BACKEND_PORT}/health"},
-    {"name": "bridge", "url": f"http://{DEFAULT_HOST}:{BRIDGE_PORT}/health"},
-    {"name": "self-learn", "url": f"http://{DEFAULT_HOST}:{SELF_LEARN_PORT}/health"},
-    {"name": "chat", "url": f"http://{DEFAULT_HOST}:{CHAT_PORT}/health"},
-    {"name": "vite", "url": f"http://{DEFAULT_HOST}:{VITE_PORT}/"},
+    {"name": "backend", "url": f"http://{AURORA_HOST}:5000/health"},
+    {"name": "bridge", "url": f"http://{AURORA_HOST}:5001/health"},
+    {"name": "self-learn", "url": f"http://{AURORA_HOST}:5002/health"},
+    {"name": "chat", "url": f"http://{AURORA_HOST}:5003/health"},
+    {"name": "vite", "url": f"http://{AURORA_HOST}:5173/"},
 ]
 
 CLEANUP_PATTERNS = ["*.pyc", "__pycache__"]

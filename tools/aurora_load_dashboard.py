@@ -51,9 +51,8 @@ class AuroraDashboardLoader:
             
             Args:
             """
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.vite_port = int(os.getenv("AURORA_VITE_PORT", "5000"))
-        self.vite_url = f"http://{self.host}:{self.vite_port}"
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.vite_url = os.getenv("AURORA_VITE_URL", f"http://{self.aurora_host}:5000")
         self.dashboard_routes = ["/aurora-dashboard", "/dashboard", "/"]
 
     def check_server_status(self):
@@ -77,10 +76,12 @@ class AuroraDashboardLoader:
 
         # Kill any existing processes
         subprocess.run(["pkill", "-f", "vite"], capture_output=True)
-        subprocess.run(["pkill", "-f", str(self.vite_port)], capture_output=True)
+        subprocess.run(["pkill", "-f", "5000"], capture_output=True)
         time.sleep(2)
 
         # Change to client directory and start server
+        import os
+
         os.chdir("/workspaces/Aurora-x/client")
 
         # Start Vite in background

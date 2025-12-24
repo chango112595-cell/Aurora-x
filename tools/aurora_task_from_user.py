@@ -34,7 +34,7 @@ WHERE TO FIX:
 3. Need to verify what's actually being served on port 5000
 
 SOLUTION STEPS:
-1. Check what HTML is being served at AURORA_BASE_URL (default http://localhost:5000)
+1. Check what HTML is being served at 127.0.0.1:5000 (or set AURORA_BASE_URL)
 2. Verify it's Vite serving React app (not Express)
 3. Check if service worker is truly unregistered
 4. Create a cache-busting solution
@@ -80,9 +80,8 @@ class AuroraTaskExecutor:
             Args:
             """
         self.workspace = Path("/workspaces/Aurora-x")
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.port = os.getenv("AURORA_PORT", os.getenv("AURORA_BACKEND_PORT", "5000"))
-        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.host}:{self.port}")
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
 
     def log(self, msg, emoji="[STAR]"):
         """
@@ -96,7 +95,7 @@ class AuroraTaskExecutor:
 
     def step1_verify_vite_serving(self):
         """Verify Vite is serving the UI"""
-        self.log(f"Step 1: Verifying what's on {self.base_url}...", "[SCAN]")
+        self.log("Step 1: Verifying what's on port 5000...", "[SCAN]")
 
         try:
             response = requests.get(self.base_url, timeout=3)
@@ -115,7 +114,7 @@ class AuroraTaskExecutor:
 
             return has_vite and has_react_root and not has_chango
         except Exception as e:
-            self.log(f"Error checking {self.base_url}: {e}", "[ERROR]")
+            self.log(f"Error checking port 5000: {e}", "[ERROR]")
             return False
 
     def step2_force_service_worker_unregister(self):
@@ -249,7 +248,7 @@ class AuroraTaskExecutor:
 1. [OK] Replaced all Chango references with Aurora
 2. [OK] Added service worker killer to index.html
 3. [OK] Enabled cache busting
-4. [OK] Restarted Vite cleanly on port {self.port}
+4. [OK] Restarted Vite cleanly on port 5000
 
 ### What You Need To Do (CRITICAL):
 
@@ -278,11 +277,11 @@ class AuroraTaskExecutor:
 - [EMOJI] "Ask Aurora to create something amazing..." in chat input
 
 ### If Still Showing Chango:
-1. Close ALL browser tabs for {self.base_url}
+1. Close ALL browser tabs for the configured base URL
 2. Clear browser cache completely:
    - Chrome: Settings -> Privacy -> Clear browsing data -> Cached images and files
 3. Restart browser
-4. Open {self.base_url} fresh
+4. Open the configured base URL fresh
 
 ---
 [STAR] Aurora is ready to serve you!

@@ -480,7 +480,6 @@ def generate_response(message: str, context: str = "") -> str:
 
 def run_chat_server(port: int = 5003, project: str = "Aurora-Main"):
     """Run the Aurora Chat Server"""
-    host = os.getenv("AURORA_HOST", "localhost")
     print("=" * 60)
     print("Aurora Chat Server - Memory Fabric 2.0 Enhanced")
     print("=" * 60)
@@ -496,14 +495,15 @@ def run_chat_server(port: int = 5003, project: str = "Aurora-Main"):
     print(f"Project: {project}")
     print(f"Memory Fabric: {'Connected' if MEMORY_FABRIC_AVAILABLE else 'Not Available'}")
     print("\nEndpoints:")
-    print(f"  - Health: http://{host}:{port}/health")
-    print(f"  - Chat: POST http://{host}:{port}/api/chat")
-    print(f"  - Remember: POST http://{host}:{port}/api/remember")
-    print(f"  - Recall: GET http://{host}:{port}/api/recall?key=...")
-    print(f"  - Facts: GET http://{host}:{port}/api/facts")
-    print(f"  - Context: GET http://{host}:{port}/api/context")
-    print(f"  - Search: POST http://{host}:{port}/api/search")
-    print(f"  - Stats: GET http://{host}:{port}/api/stats")
+    aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+    print(f"  - Health: http://{aurora_host}:{port}/health")
+    print(f"  - Chat: POST http://{aurora_host}:{port}/api/chat")
+    print(f"  - Remember: POST http://{aurora_host}:{port}/api/remember")
+    print(f"  - Recall: GET http://{aurora_host}:{port}/api/recall?key=...")
+    print(f"  - Facts: GET http://{aurora_host}:{port}/api/facts")
+    print(f"  - Context: GET http://{aurora_host}:{port}/api/context")
+    print(f"  - Search: POST http://{aurora_host}:{port}/api/search")
+    print(f"  - Stats: GET http://{aurora_host}:{port}/api/stats")
     print("=" * 60)
     
     app.run(host='0.0.0.0', port=port, debug=False)

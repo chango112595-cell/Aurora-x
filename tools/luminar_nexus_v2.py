@@ -42,6 +42,8 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import Any
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 import urllib.request
 import json as json_lib
 
@@ -564,11 +566,6 @@ class LuminarNexusV2:
         self.health_monitor = {}
         self.monitoring_active = True
         self.port_healing_active = True
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.bridge_port = int(os.getenv("AURORA_BRIDGE_PORT", "5001"))
-        self.backend_port = int(os.getenv("AURORA_BACKEND_PORT", "5000"))
-        self.self_learn_port = int(os.getenv("AURORA_SELF_LEARN_PORT", "5002"))
-        self.chat_port = int(os.getenv("AURORA_CHAT_PORT", "5003"))
 
         # Initialize AI components
         self.ai_orchestrator = AIServiceOrchestrator()
@@ -603,8 +600,8 @@ class LuminarNexusV2:
                 "name": "Aurora Bridge Service",
                 "command": f"cd {cwd} && {python_cmd} -m aurora_x.bridge.service",
                 "session": "aurora-bridge",
-                "port": self.bridge_port,
-                "health_check": f"http://{self.host}:{self.bridge_port}/health",
+                "port": 5001,
+                "health_check": f"http://{AURORA_HOST}:5001/health",
             },
             "backend": {
                 "name": "Aurora Backend API",
@@ -614,22 +611,22 @@ class LuminarNexusV2:
                     f"npx tsx server/index.ts"
                 ),
                 "session": "aurora-backend",
-                "port": self.backend_port,
-                "health_check": f"http://{self.host}:{self.backend_port}/health",
+                "port": 5000,
+                "health_check": f"http://{AURORA_HOST}:5000/health",
             },
             "self-learn": {
                 "name": "Aurora Self-Learning Server",
                 "command": f"cd {cwd} && {python_cmd} -m aurora_x.self_learn_server",
                 "session": "aurora-self-learn",
-                "port": self.self_learn_port,
-                "health_check": f"http://{self.host}:{self.self_learn_port}/health",
+                "port": 5002,
+                "health_check": f"http://{AURORA_HOST}:5002/health",
             },
             "chat": {
                 "name": "Aurora Chat Server",
-                "command": (f"cd {cwd} && {python_cmd} " f"aurora_chat_server.py --port {self.chat_port}"),
+                "command": (f"cd {cwd} && {python_cmd} " f"aurora_chat_server.py --port 5003"),
                 "session": "aurora-chat",
-                "port": self.chat_port,
-                "health_check": f"http://{self.host}:{self.chat_port}/health",
+                "port": 5003,
+                "health_check": f"http://{AURORA_HOST}:5003/health",
             },
         }
 
@@ -686,7 +683,7 @@ class LuminarNexusV2:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
-            result = sock.connect_ex((self.host, port))
+            result = sock.connect_ex((AURORA_HOST, port))
             sock.close()
             initial_status = "healthy" if result == 0 else "initializing"
         except Exception:
@@ -723,7 +720,7 @@ class LuminarNexusV2:
             for attempt in range(3):
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.settimeout(2)
-                result = sock.connect_ex((self.host, health.port))
+                result = sock.connect_ex((AURORA_HOST, health.port))
                 sock.close()
                 if result == 0:
                     port_available = True
@@ -1078,7 +1075,7 @@ class LuminarNexusV2:
         """Check if a port is in use"""
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                return s.connect_ex((self.host, port)) == 0
+                return s.connect_ex((AURORA_HOST, port)) == 0
         except (OSError, subprocess.CalledProcessError):
             return False
 
@@ -2392,9 +2389,8 @@ def run_chat_server_v2(port: int = 5003):
         }, 200
 
     print(f"[START] Chat Server V2 running on port {port}")
-    host = os.getenv("AURORA_HOST", "localhost")
-    print(f"   Health: http://{host}:{port}/health")
-    print(f"   Chat: POST http://{host}:{port}/api/chat")
+    print(f"   Health: http://{AURORA_HOST}:{{port}}/health")
+    print(f"   Chat: POST http://{AURORA_HOST}:{{port}}/api/chat")
 
     run_wsgi(app, port)
 

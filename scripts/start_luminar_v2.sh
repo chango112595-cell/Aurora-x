@@ -4,12 +4,11 @@
 
 echo "🌌 Starting Luminar Nexus V2..."
 echo "   Version: 2.0.0"
-LUMINAR_HOST="${AURORA_HOST:-localhost}"
-LUMINAR_PORT="${AURORA_NEXUS_V2_PORT:-5005}"
-LUMINAR_BASE_URL="http://${LUMINAR_HOST}:${LUMINAR_PORT}"
-echo "   Host: ${LUMINAR_HOST}"
-echo "   Port: ${LUMINAR_PORT}"
+echo "   Port: 5005"
 echo ""
+
+AURORA_HOST="${AURORA_HOST:-127.0.0.1}"
+BASE_URL="http://${AURORA_HOST}:5005"
 
 # Start V2 API server
 python3 tools/luminar_nexus_v2.py serve &
@@ -18,10 +17,10 @@ python3 tools/luminar_nexus_v2.py serve &
 sleep 3
 
 # Check if running
-if curl -s "${LUMINAR_BASE_URL}/api/nexus/status" > /dev/null; then
+if curl -s "${BASE_URL}/api/nexus/status" > /dev/null; then
     echo "✅ Luminar Nexus V2 is running!"
-    echo "   API: ${LUMINAR_BASE_URL}"
-    echo "   Status: ${LUMINAR_BASE_URL}/api/nexus/status"
+    echo "   API: ${BASE_URL}"
+    echo "   Status: ${BASE_URL}/api/nexus/status"
     echo "   Features: AI healing, Quantum mesh, Port management"
 else
     echo "❌ V2 failed to start - check logs"

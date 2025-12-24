@@ -19,7 +19,6 @@ Checks and fixes rendering, CSS, and React issues
 
 from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
-import os
 from pathlib import Path
 
 
@@ -32,9 +31,6 @@ class AuroraBlankPageAutoFixer:
         self.knowledge_dir = self.workspace / ".aurora_knowledge"
         self.knowledge_dir.mkdir(exist_ok=True)
         self.fixes_applied = []
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.vite_port = int(os.getenv("AURORA_VITE_PORT", "5173"))
-        self.vite_base_url = f"http://{self.host}:{self.vite_port}"
 
     def print_fix(self, msg: str, status: str = "FIX"):
         """Print fix status"""
@@ -316,7 +312,7 @@ if (!rootElement) {
         print("-" * 90)
 
         print(
-            f"""
+            """
 [OK] Aurora has applied all automatic fixes!
 
 TO VERIFY THE FIX WORKS:
@@ -331,7 +327,7 @@ TO VERIFY THE FIX WORKS:
    npm run dev
 
 3. TEST IN BROWSER:
-    Open {self.vite_base_url}
+    Open http://127.0.0.1:5173 (or set AURORA_HOST)
     Check browser console (F12) for errors
     Verify page loads with content (not blank)
 

@@ -34,6 +34,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
+
 
 class AuroraAutonomousFixer:
     """Aurora fixes problems herself, her way."""
@@ -47,9 +49,6 @@ class AuroraAutonomousFixer:
         self.root = Path(__file__).parent.parent
         self.log_file = self.root / ".aurora_knowledge" / "autonomous_fixes.jsonl"
         self.log_file.parent.mkdir(exist_ok=True)
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.chat_port = int(os.getenv("AURORA_BRIDGE_PORT", "5001"))
-        self.chat_base_url = f"http://{self.host}:{self.chat_port}"
 
     def log_action(self, action: str, details: dict[str, Any]):
         """Aurora logs everything she does."""
@@ -92,7 +91,7 @@ class AuroraAutonomousFixer:
                 [
                     "curl",
                     "-s",
-                    f"{self.chat_base_url}/chat",
+                    f"http://{AURORA_HOST}:5001/chat",
                     "-X",
                     "POST",
                     "-H",
@@ -252,7 +251,7 @@ class AuroraSelfMonitor:
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
-                        f"http://{self.host}:{port}/health",
+                        f"http://{AURORA_HOST}:{port}/health",
                         timeout=aiohttp.ClientTimeout(total=2)
                     ) as response:
                         health["checks"]["http_responding"] = response.status == 200
@@ -517,7 +516,7 @@ if __name__ == "__main__":
                     "-s",
                     "-X",
                     "POST",
-                    f"{self.chat_base_url}/chat",
+                    f"http://{AURORA_HOST}:5001/chat",
                     "-H",
                     "Content-Type: application/json",
                     "-d",

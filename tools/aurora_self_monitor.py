@@ -20,6 +20,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
+
 
 class AuroraSelfMonitor:
     """
@@ -38,7 +40,6 @@ class AuroraSelfMonitor:
         self.health_log = self.root / ".aurora_knowledge" / "health_log.jsonl"
         self.auto_fixes_log = self.root / ".aurora_knowledge" / "auto_fixes.jsonl"
         self.health_log.parent.mkdir(exist_ok=True)
-        self.host = os.getenv("AURORA_HOST", "localhost")
 
         # Aurora's monitoring configuration
         self.services = {
@@ -76,7 +77,7 @@ class AuroraSelfMonitor:
         # Check 2: HTTP health endpoint (if applicable)
         if service_key in ["backend", "chat"]:
             try:
-                req = urllib.request.Request(f"http://{self.host}:{port}/health")
+                req = urllib.request.Request(f"http://{AURORA_HOST}:{port}/health")
                 with urllib.request.urlopen(req, timeout=2) as response:
                     health["checks"]["http_responding"] = response.status == 200
             except Exception as e:

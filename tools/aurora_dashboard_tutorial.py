@@ -16,8 +16,8 @@ Aurora Dashboard Loader - Teaching Aurora How to Load Her Own Dashboard
 Copilot demonstrates, then Aurora learns and does it herself
 """
 from typing import Dict, List, Tuple, Optional, Any, Union
-import json
 import os
+import json
 import subprocess
 import time
 from datetime import datetime
@@ -47,9 +47,8 @@ class AuroraDashboardLoader:
             """
         self.tutorial_log = Path("/workspaces/Aurora-x/.aurora_knowledge/dashboard_tutorial.jsonl")
         self.tutorial_log.parent.mkdir(exist_ok=True)
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.port = os.getenv("AURORA_PORT", os.getenv("AURORA_BACKEND_PORT", "5000"))
-        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.host}:{self.port}")
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
 
     def log_tutorial_step(self, step, description, command=None):
         """Log each step for Aurora to learn"""
@@ -88,7 +87,7 @@ class AuroraDashboardLoader:
         # Step 2: Check if the server is running
         self.log_tutorial_step(
             2,
-            f"Check if the Vite development server is running on port {self.port}",
+            "Check if the Vite development server is running on port 5000",
             f"curl -s -I {self.base_url}",
         )
 
@@ -150,7 +149,7 @@ class AuroraDashboardLoader:
 
         # Kill any existing process
         subprocess.run(["pkill", "-f", "vite"], capture_output=True)
-        subprocess.run(["pkill", "-f", str(self.port)], capture_output=True)
+        subprocess.run(["pkill", "-f", "5000"], capture_output=True)
         time.sleep(2)
 
         # Start Vite
