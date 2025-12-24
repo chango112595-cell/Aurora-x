@@ -24,7 +24,7 @@ from concurrent.futures import ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
 #             results = executor.map(process_func, items)
 
-BASE = os.getenv("AURORA_BASE_URL", "http://localhost:5000")
+BASE = os.getenv("AURORA_BASE_URL", "http://127.0.0.1:5000")
 paths = ["/dashboard/spec_runs", "/api/spec_runs"]
 ok = True
 for p in paths:

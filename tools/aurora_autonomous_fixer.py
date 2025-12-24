@@ -26,12 +26,15 @@ This is Aurora working independently with her own personality and approach.
 
 import asyncio
 import json
+import os
 import subprocess
 import sys
 import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 
 class AuroraAutonomousFixer:
@@ -88,7 +91,7 @@ class AuroraAutonomousFixer:
                 [
                     "curl",
                     "-s",
-                    "http://localhost:5001/chat",
+                    f"http://{AURORA_HOST}:5001/chat",
                     "-X",
                     "POST",
                     "-H",
@@ -248,7 +251,7 @@ class AuroraSelfMonitor:
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
-                        f"http://localhost:{port}/health",
+                        f"http://{AURORA_HOST}:{port}/health",
                         timeout=aiohttp.ClientTimeout(total=2)
                     ) as response:
                         health["checks"]["http_responding"] = response.status == 200
@@ -513,7 +516,7 @@ if __name__ == "__main__":
                     "-s",
                     "-X",
                     "POST",
-                    "http://localhost:5001/chat",
+                    f"http://{AURORA_HOST}:5001/chat",
                     "-H",
                     "Content-Type: application/json",
                     "-d",

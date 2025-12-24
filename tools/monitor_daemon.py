@@ -12,11 +12,14 @@ Quality: 10/10 (Perfect)
 
 #!/usr/bin/env python3
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import subprocess
 import time
 from datetime import datetime
 
 import requests
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor
@@ -40,7 +43,7 @@ def monitor_services() -> None:
 
         for port, name in services.items():
             try:
-                response = requests.get(f"http://localhost:{port}", timeout=5)
+                response = requests.get(f"http://{AURORA_HOST}:{port}", timeout=5)
                 if response.status_code == 200:
                     print(f"[OK] {name} (:{port}): HEALTHY")
                 else:

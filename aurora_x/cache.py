@@ -3,6 +3,7 @@ Aurora Redis Cache Manager
 Centralized caching layer for performance optimization
 """
 
+import os
 import pickle
 from collections.abc import Callable
 from functools import wraps
@@ -88,7 +89,7 @@ class CacheManager:
 
     def __init__(
         self,
-        redis_url: str = "redis://localhost:6379/0",
+        redis_url: str | None = None,
         default_ttl: int = 300,  # 5 minutes
         max_memory_items: int = 1000,
     ):
@@ -100,6 +101,9 @@ class CacheManager:
             default_ttl: Default time-to-live in seconds
             max_memory_items: Maximum items in memory cache
         """
+        if redis_url is None:
+            redis_url = os.getenv("AURORA_REDIS_URL", "redis://127.0.0.1:6379/0")
+
         self.default_ttl = default_ttl
         self.redis_url = redis_url
         self.redis_client: redis.Redis | None = None

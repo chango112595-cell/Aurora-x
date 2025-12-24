@@ -12,6 +12,7 @@ Quality: 10/10 (Perfect)
 
 # FastAPI endpoint for running all demo cards
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -68,7 +69,10 @@ def attach_demo_runall(app: FastAPI):
         success_count = 0
         error_count = 0
 
-        # Use httpx for making async HTTP requests to localhost
+        aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        base_url = os.getenv("AURORA_CHAT_BASE_URL", f"http://{aurora_host}:5001")
+
+        # Use httpx for making async HTTP requests to the configured host
         async with httpx.AsyncClient(timeout=15.0) as client:
             for card in cards:
                 card_id = card.get("id", "unknown")
@@ -77,8 +81,8 @@ def attach_demo_runall(app: FastAPI):
                 body = card.get("body", {})
 
                 try:
-                    # Make request to localhost:5001
-                    url = f"http://localhost:5001{endpoint}"
+                    # Make request to the configured chat service
+                    url = f"{base_url}{endpoint}"
 
                     if method == "POST":
                         response = await client.post(url, json=body)

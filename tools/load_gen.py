@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-import argparse, requests, threading, time
+import argparse, os, requests, threading, time
 
 p=argparse.ArgumentParser()
-p.add_argument("--url", default="http://localhost:5000/health")
+aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+p.add_argument("--url", default=os.getenv("AURORA_BASE_URL", f"http://{aurora_host}:5000") + "/health")
 p.add_argument("--clients", type=int, default=5)
 p.add_argument("--rps", type=float, default=1.0)
 a=p.parse_args()
