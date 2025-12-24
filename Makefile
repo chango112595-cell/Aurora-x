@@ -618,6 +618,7 @@ prod-check:
 	python -m aurora_x.checks.ci_gate
 
 orch-up-basic:
+orch-up:
 	AURORA_GIT_AUTO=1 python -m aurora_x.orchestrator --interval 300 --git-branch main --git-url $${AURORA_GIT_URL:-""} & \
 	echo $$! > /tmp/aurora_orch.pid && echo "orchestrator pid: $$(cat /tmp/aurora_orch.pid)"
 
@@ -932,6 +933,27 @@ sec-ci:
 	semgrep --config p/security-audit --config p/python --config semgrep.yml
 
 test-ci:
+
+sec-ci:
+	bandit -r aurora_x -lll
+	semgrep --config p/security-audit --config p/python --config semgrep.yml
+
+test-ci:
+
+sec-ci:
+	bandit -r aurora_x -lll
+	semgrep --config p/security-audit --config p/python --config semgrep.yml
+
+test-ci:
+# Redefined lint, sec, test for CI environment
+lint:
+	ruff check .
+
+sec:
+	bandit -r aurora_x -lll
+	semgrep --config p/security-audit --config p/python --config semgrep.yml
+
+test:
 	pytest --cov=aurora_x --cov-report=term-missing
 
 ci-local: lint-ci sec-ci test-ci
