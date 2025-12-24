@@ -327,7 +327,7 @@ TO VERIFY THE FIX WORKS:
    npm run dev
 
 3. TEST IN BROWSER:
-    Open http://localhost:5173
+    Open http://127.0.0.1:5173 (or set AURORA_HOST)
     Check browser console (F12) for errors
     Verify page loads with content (not blank)
 

@@ -19,6 +19,7 @@ Aurora Direct Telemetry Interface
 """
 from typing import Dict, List, Tuple, Optional, Any, Union
 import json
+import os
 import time
 from datetime import datetime
 from pathlib import Path
@@ -54,6 +55,8 @@ class AuroraDirectTelemetry:
             """
         self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/telemetry.log")
         self.log_file.parent.mkdir(exist_ok=True)
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
 
     def log_message(self, sender, message, action=None):
         """Log all telemetry messages"""
@@ -95,13 +98,13 @@ class AuroraDirectTelemetry:
             # Check if Vite is running
             import subprocess
 
-            result = subprocess.run(["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True)
+            result = subprocess.run(["curl", "-s", "-I", self.base_url], capture_output=True, text=True)
 
             if "200 OK" in result.stdout:
                 print("[OK] Aurora: Vite server is responding")
 
                 # Check for compilation errors
-                result = subprocess.run(["curl", "-s", "http://localhost:5000"], capture_output=True, text=True)
+                result = subprocess.run(["curl", "-s", self.base_url], capture_output=True, text=True)
 
                 if len(result.stdout) < 100:
                     print("[ERROR] Aurora: Page content is minimal - likely compilation error")
@@ -165,7 +168,7 @@ class AuroraDirectTelemetry:
 
         print("[OK] Aurora: Vite server starting...")
         time.sleep(3)
-        print("[OK] Aurora: Server should be ready at http://localhost:5000")
+        print(f"[OK] Aurora: Server should be ready at {self.base_url}")
 
     def message_loop(self):
         """Direct message loop with user"""

@@ -235,10 +235,13 @@ Manages all development servers with proper process control
 
 import subprocess
 import json
+import os
 import time
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Optional
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor
@@ -260,14 +263,14 @@ class LuminarNexusServerManager:
                 "command": "cd /workspaces/Aurora-x/client && npm run dev",
                 "session": "aurora-vite",
                 "port": 5173,
-                "health_check": "http://localhost:5173"
+                "health_check": f"http://{AURORA_HOST}:5173"
             },
             "backend": {
                 "name": "Aurora Backend API",
                 "command": "cd /workspaces/Aurora-x && npm run server",
                 "session": "aurora-api",
                 "port": 5001,
-                "health_check": "http://localhost:5001/health"
+                "health_check": f"http://{AURORA_HOST}:5001/health"
             }
         }
         

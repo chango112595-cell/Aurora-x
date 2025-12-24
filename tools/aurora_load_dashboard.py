@@ -16,6 +16,7 @@ Aurora's Autonomous Dashboard Loader
 Created by Aurora - Complete implementation with NO TODOs
 """
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import subprocess
 import time
 import webbrowser
@@ -50,7 +51,8 @@ class AuroraDashboardLoader:
             
             Args:
             """
-        self.vite_url = "http://localhost:5000"
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.vite_url = os.getenv("AURORA_VITE_URL", f"http://{self.aurora_host}:5000")
         self.dashboard_routes = ["/aurora-dashboard", "/dashboard", "/"]
 
     def check_server_status(self):

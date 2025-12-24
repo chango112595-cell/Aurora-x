@@ -39,6 +39,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
+AURORA_BASE_URL = os.getenv("AURORA_BASE_URL", f"http://{AURORA_HOST}:5000")
+
 try:
     import requests
 except ImportError:
@@ -314,7 +317,7 @@ class AdvancedServerManager:
                 # Check if port is occupied
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.settimeout(1)
-                result = sock.connect_ex(("localhost", port))
+                result = sock.connect_ex((AURORA_HOST, port))
 
                 if result == 0:  # Port is open
                     # Check what process is using it
@@ -327,7 +330,7 @@ class AdvancedServerManager:
                             # Check if process is responding
                             if requests:
                                 try:
-                                    response = requests.get(f"http://localhost:{port}", timeout=3)
+                                    response = requests.get(f"http://{AURORA_HOST}:{port}", timeout=3)
                                     if response.status_code >= 500:
                                         issues.append(
                                             {
@@ -480,7 +483,7 @@ class AdvancedServerManager:
                 }
             )
 
-        # Test localhost connectivity
+        # Test loopback connectivity
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
@@ -491,7 +494,7 @@ class AdvancedServerManager:
                 {
                     "type": "routing_error",
                     "severity": "medium",
-                    "description": "Localhost routing issues detected",
+                    "description": "Loopback routing issues detected",
                     "auto_fixable": True,
                 }
             )
@@ -561,10 +564,10 @@ class AdvancedServerManager:
 
         # Test Aurora services
         aurora_services = [
-            ("Frontend", "http://localhost:5000"),
-            ("Learning API", "http://localhost:5002"),
-            ("Bridge API", "http://localhost:5001"),
-            ("File Server", "http://localhost:8080"),
+            ("Frontend", f"http://{AURORA_HOST}:5000"),
+            ("Learning API", f"http://{AURORA_HOST}:5002"),
+            ("Bridge API", f"http://{AURORA_HOST}:5001"),
+            ("File Server", f"http://{AURORA_HOST}:8080"),
         ]
 
         for name, url in aurora_services:
@@ -1099,7 +1102,7 @@ class AdvancedServerManager:
             # Test if service is responding
             try:
                 if requests:
-                    response = requests.get(f"http://localhost:{config['port']}", timeout=3)
+                    response = requests.get(f"http://{AURORA_HOST}:{config['port']}", timeout=3)
                     service_analysis["responding"] = True
 
                     # Check content type
@@ -1139,7 +1142,10 @@ class AdvancedServerManager:
                             test_data = {} if method == "POST" else None
 
                             response = requests.request(
-                                method, f"http://localhost:{config['port']}{endpoint}", json=test_data, timeout=3
+                                method,
+                                f"http://{AURORA_HOST}:{config['port']}{endpoint}",
+                                json=test_data,
+                                timeout=3,
                             )
                             service_analysis["endpoints_working"][endpoint] = response.status_code < 500
 
@@ -1161,7 +1167,7 @@ class AdvancedServerManager:
                 for dep in config["backend_dependencies"]:
                     try:
                         if requests:
-                            response = requests.get(f"http://localhost:{dep['port']}", timeout=2)
+                            response = requests.get(f"http://{AURORA_HOST}:{dep['port']}", timeout=2)
                             if response.status_code >= 400:
                                 service_analysis["dependencies_healthy"] = False
                                 if dep["critical"]:
@@ -1441,7 +1447,7 @@ class AdvancedServerManager:
                     "365",
                     "-nodes",
                     "-subj",
-                    "/CN=localhost",
+                    f"/CN={AURORA_HOST}",
                 ],
                 check=True,
             )
@@ -1660,7 +1666,7 @@ def fix_browser_connection() -> bool:
 
         # Test direct curl vs browser access
         curl_test = subprocess.run(
-            ["curl", "-s", "-I", "http://localhost:5000/PROFESSIONAL_COMPARISON_DASHBOARD.html"],
+            ["curl", "-s", "-I", f"{AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html"],
             capture_output=True,
             text=True,
             timeout=5,
@@ -1675,7 +1681,7 @@ def fix_browser_connection() -> bool:
             # Method 1: Create a port redirect
             try:
                 subprocess.run(
-                    ["socat", "TCP-LISTEN:3030,reuseaddr,fork", "TCP:localhost:5000"],
+                    ["socat", "TCP-LISTEN:3030,reuseaddr,fork", f"TCP:{AURORA_HOST}:5000"],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
                     timeout=1,
@@ -1711,33 +1717,37 @@ def fix_browser_connection() -> bool:
         print("\n[DATA] TESTING PROFESSIONAL COMPARISON DASHBOARD ACCESS:")
 
         # Method 1: Professional Dashboard via Node.js server (port 5000)
-        health_prof_5000 = check_server_health("http://localhost:5000/PROFESSIONAL_COMPARISON_DASHBOARD.html")
+        health_prof_5000 = check_server_health(
+            f"{AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html"
+        )
         if health_prof_5000["healthy"]:
-            print("  [OK] Professional Dashboard: http://localhost:5000/PROFESSIONAL_COMPARISON_DASHBOARD.html")
+            print(f"  [OK] Professional Dashboard: {AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html")
         else:
             print(f"  [ERROR] Professional Dashboard failed: {health_prof_5000.get('error', 'Unknown')}")
 
         # Method 2: Via HTTP server (port 8080)
-        health_8080 = check_server_health("http://127.0.0.1:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html")
+        health_8080 = check_server_health(
+            f"http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html"
+        )
         if health_8080["healthy"]:
-            print("  [OK] File Server: http://127.0.0.1:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html")
+            print(f"  [OK] File Server: http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html")
         else:
             print(f"  [ERROR] File Server failed: {health_8080.get('error', 'Unknown')}")
 
         # Also check the basic comparison for fallback
-        health_basic = check_server_health("http://127.0.0.1:8080/comparison_dashboard.html")
+        health_basic = check_server_health(f"http://{AURORA_HOST}:8080/comparison_dashboard.html")
         if health_basic["healthy"]:
-            print("  [OK] Alternative: http://127.0.0.1:8080/comparison_dashboard.html")
+            print(f"  [OK] Alternative: http://{AURORA_HOST}:8080/comparison_dashboard.html")
 
         # Provide clear instructions
         print("\n[TARGET] PROFESSIONAL DASHBOARD ACCESS:")
         print("  [EMOJI] RECOMMENDED: Professional Aurora-X Comparison Dashboard")
         if health_prof_5000["healthy"]:
-            print("     -> http://localhost:5000/PROFESSIONAL_COMPARISON_DASHBOARD.html")
+            print(f"     -> {AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html")
         elif health_8080["healthy"]:
-            print("     -> http://127.0.0.1:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html")
+            print(f"     -> http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html")
         elif health_basic["healthy"]:
-            print("     -> http://127.0.0.1:8080/comparison_dashboard.html")
+            print(f"     -> http://{AURORA_HOST}:8080/comparison_dashboard.html")
 
         print("\n[QUALITY] FEATURES INCLUDED:")
         print("  [EMOJI] Advanced comparison tools & filters")
@@ -1791,11 +1801,11 @@ def fix_browser_connection() -> bool:
         print("\n[TARGET] TESTING ALL ACCESS OPTIONS:")
 
         access_options = [
-            ("PRIMARY (Node.js)", "http://localhost:5000/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
-            ("FILE SERVER", "http://127.0.0.1:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
-            ("ALTERNATIVE", "http://127.0.0.1:8080/comparison_dashboard.html"),
-            ("BACKUP SERVER", "http://localhost:3031/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
-            ("EMERGENCY", "http://localhost:3032/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
+            ("PRIMARY (Node.js)", f"{AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
+            ("FILE SERVER", f"http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
+            ("ALTERNATIVE", f"http://{AURORA_HOST}:8080/comparison_dashboard.html"),
+            ("BACKUP SERVER", f"http://{AURORA_HOST}:3031/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
+            ("EMERGENCY", f"http://{AURORA_HOST}:3032/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
         ]
 
         working_options = []
@@ -1829,9 +1839,11 @@ def fix_browser_connection() -> bool:
         return False
 
 
-def setup_port_forwarding(source_port: int, target_port: int, target_host: str = "localhost") -> bool:
+def setup_port_forwarding(source_port: int, target_port: int, target_host: str | None = None) -> bool:
     """Advanced port forwarding setup"""
     try:
+        if target_host is None:
+            target_host = AURORA_HOST
         print(f"[EMOJI] Setting up port forwarding: {source_port} -> {target_host}:{target_port}")
 
         # Use socat for advanced port forwarding
@@ -1943,7 +1955,7 @@ def network_diagnostics() -> dict:
             pass
 
         # Connectivity tests
-        test_hosts = ["localhost", "127.0.0.1"]
+        test_hosts = [AURORA_HOST, "127.0.0.1"]
         for host in test_hosts:
             try:
                 ping = subprocess.run(["ping", "-c", "1", "-W", "2", host], capture_output=True, text=True, timeout=5)
@@ -1975,10 +1987,10 @@ def setup_service_discovery() -> bool:
 
                 # Try to identify service type
                 health_urls = [
-                    f"http://localhost:{port}/health",
-                    f"http://localhost:{port}/api/health",
-                    f"http://localhost:{port}/healthz",
-                    f"http://localhost:{port}/",
+                    f"http://{AURORA_HOST}:{port}/health",
+                    f"http://{AURORA_HOST}:{port}/api/health",
+                    f"http://{AURORA_HOST}:{port}/healthz",
+                    f"http://{AURORA_HOST}:{port}/",
                 ]
 
                 for url in health_urls:
@@ -2015,9 +2027,9 @@ def auto_fix_connection_refused() -> bool:
 
         # Test all critical endpoints
         test_urls = [
-            "http://localhost:5000/PROFESSIONAL_COMPARISON_DASHBOARD.html",
-            "http://127.0.0.1:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html",
-            "http://localhost:5000/api/health",
+            f"{AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html",
+            f"http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html",
+            f"{AURORA_BASE_URL}/api/health",
         ]
 
         connection_issues = []
@@ -2092,14 +2104,16 @@ def fix_routing_issues() -> bool:
 
         fixes_applied = []
 
-        # 1. Check localhost resolution
+        # 1. Check host resolution
         try:
-            socket.gethostbyname("localhost")
-            fixes_applied.append("[OK] Localhost resolution: OK")
+            socket.gethostbyname(AURORA_HOST)
+            fixes_applied.append(f"[OK] Host resolution: {AURORA_HOST} OK")
         except Exception as e:
-            print("  [EMOJI] Fixing localhost resolution...")
-            subprocess.run(["echo", "127.0.0.1 localhost >> /etc/hosts"], shell=True)
-            fixes_applied.append("[EMOJI] Added localhost to /etc/hosts")
+            print("  [EMOJI] Fixing host resolution...")
+            subprocess.run(
+                ["sh", "-c", f"echo '127.0.0.1 {AURORA_HOST}' >> /etc/hosts"], shell=False
+            )
+            fixes_applied.append(f"[EMOJI] Added {AURORA_HOST} to /etc/hosts")
 
         # 2. Check port conflicts
         port_conflicts = []
@@ -2120,7 +2134,7 @@ def fix_routing_issues() -> bool:
 
         # 3. Test service accessibility
         test_urls = [
-            "http://localhost:5000/GIT_HISTORY_COMPARISON.html",
+            f"{AURORA_BASE_URL}/GIT_HISTORY_COMPARISON.html",
             "http://127.0.0.1:8080/GIT_HISTORY_COMPARISON.html",
         ]
 
@@ -2208,7 +2222,7 @@ def create_emergency_server() -> bool:
             stderr=subprocess.DEVNULL,
         )
 
-        print("[OK] Emergency server started: http://localhost:9999/emergency_index.html")
+        print(f"[OK] Emergency server started: http://{AURORA_HOST}:9999/emergency_index.html")
         return True
 
     except Exception as e:
@@ -2239,7 +2253,7 @@ def comprehensive_server_scan() -> dict:
         for port in web_ports:
             try:
                 response = subprocess.run(
-                    ["curl", "-s", "-I", "--connect-timeout", "2", f"http://localhost:{port}/"],
+                    ["curl", "-s", "-I", "--connect-timeout", "2", f"http://{AURORA_HOST}:{port}/"],
                     capture_output=True,
                     timeout=3,
                 )
@@ -2311,9 +2325,11 @@ def optimize_network_performance() -> bool:
         return False
 
 
-def create_ssl_certificates(domain: str = "localhost") -> bool:
+def create_ssl_certificates(domain: str | None = None) -> bool:
     """Generate SSL certificates for HTTPS"""
     try:
+        if domain is None:
+            domain = AURORA_HOST
         print(f"[EMOJI] Creating SSL certificates for {domain}")
 
         cert_dir = "/workspaces/Aurora-x/.ssl"
@@ -2606,7 +2622,7 @@ def cleanup_unused_ports():
             if port_info["listening"] and port not in [5000, 5001, 5002, 8080]:
                 # Check if it's serving any content or just hanging
                 try:
-                    response = requests.get(f"http://localhost:{port}", timeout=1)
+                    response = requests.get(f"http://{AURORA_HOST}:{port}", timeout=1)
                     if response.status_code >= 400:
                         long_running_ports.append(port)
                 except Exception as e:
@@ -2654,7 +2670,7 @@ def monitor_services():
         
         for port, name in services.items():
             try:
-                response = requests.get(f"http://localhost:{port}", timeout=5)
+                response = requests.get(f"http://{AURORA_HOST}:{port}", timeout=5)
                 if response.status_code == 200:
                     print(f"[OK] {name} (:{port}): HEALTHY")
                 else:
@@ -2862,7 +2878,7 @@ def main():
         source_port, target_port = args.port_forward
         setup_port_forwarding(int(source_port), int(target_port))
     elif args.reverse_proxy:
-        backends = [{"host": "localhost", "port": 5000}, {"host": "localhost", "port": 8080}]
+        backends = [{"host": AURORA_HOST, "port": 5000}, {"host": AURORA_HOST, "port": 8080}]
         create_reverse_proxy(args.reverse_proxy, backends)
     elif args.network_diag:
         diag = network_diagnostics()

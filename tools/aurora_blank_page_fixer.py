@@ -18,6 +18,7 @@ Scans TSX components, identifies rendering problems, fixes and tests
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import re
 import subprocess
 from datetime import datetime
@@ -189,7 +190,10 @@ class AuroraBlankPageFixer:
 
         try:
             # Check if dev server is running
-            response = subprocess.run(["curl", "-s", "-I", "http://localhost:5173"], capture_output=True, timeout=5)
+            aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+            response = subprocess.run(
+                ["curl", "-s", "-I", f"http://{aurora_host}:5173"], capture_output=True, timeout=5
+            )
 
             if response.returncode == 0:
                 self.print_status("Dev server is running", "SUCCESS")
