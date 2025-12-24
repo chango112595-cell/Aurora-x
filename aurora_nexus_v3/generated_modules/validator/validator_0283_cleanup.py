@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class Validator0283Cleanup:
     def __init__(self):
-        pass
+        self.resource = None
 
     def teardown(self) -> dict:
         try:

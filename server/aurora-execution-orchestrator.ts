@@ -2,6 +2,8 @@ import { execSync, spawn } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 
+const DEFAULT_STATUS_HOST = process.env.AURORA_STATUS_HOST || '127.0.0.1';
+
 export interface ExecutionMethod {
   id: number;
   name: string;
@@ -277,7 +279,7 @@ async function performCodebaseAnalysis(aemId: number, start: number, checkIntegr
       }
       if (check.port) {
         try {
-          const result = execSync(`curl -s -o /dev/null -w '%{http_code}' http://localhost:${check.port}/api/status 2>/dev/null || echo "000"`, 
+          const result = execSync(`curl -s -o /dev/null -w '%{http_code}' http://${DEFAULT_STATUS_HOST}:${check.port}/api/status 2>/dev/null || echo "000"`, 
             { encoding: 'utf-8', timeout: 2000 }).trim();
           if (result === '200' || result === '404') {
             findings.push(`${check.name} (port ${check.port}): ONLINE`);

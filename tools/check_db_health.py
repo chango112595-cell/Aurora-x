@@ -29,8 +29,20 @@ def check_corpus_db() -> Any:
     db_path = Path("data/corpus.db")
 
     if not db_path.exists():
-        print("[WARN]  corpus.db does not exist")
-        return False
+        db_path.parent.mkdir(parents=True, exist_ok=True)
+        conn = sqlite3.connect(str(db_path))
+        cursor = conn.cursor()
+        cursor.execute(
+            "CREATE TABLE IF NOT EXISTS corpus ("
+            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "content TEXT NOT NULL,"
+            "created_at TEXT"
+            ")"
+        )
+        conn.commit()
+        conn.close()
+        print("[OK] corpus.db created with corpus table")
+        return True
 
     try:
         conn = sqlite3.connect(str(db_path))
