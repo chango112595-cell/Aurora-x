@@ -305,6 +305,14 @@ class AuroraBrainBridge:
     async def enable_hyperspeed(self):
         """Enable Hyperspeed Mode for instant operations"""
         self.hyperspeed_active = True
+        self.last_hyperspeed_result = {
+            "status": "enabled",
+            "mode": "hyperspeed",
+            "problems_found": 0,
+            "fixes_applied": 0,
+            "elapsed_ms": 0,
+            "source": "bridge"
+        }
         self.logger.info("HYPERSPEED MODE: ENABLED")
         self.logger.info("  - Instant problem detection")
         self.logger.info("  - Parallel execution across all tiers")
@@ -327,6 +335,9 @@ class AuroraBrainBridge:
                     result_payload = hyperspeed_result.result
                     if not isinstance(result_payload, dict):
                         result_payload = {"result": result_payload}
+                    result_payload.setdefault("status", "success")
+                    result_payload.setdefault("mode", "hyperspeed")
+                    result_payload.setdefault("source", "orchestrator")
                     self.last_hyperspeed_result = result_payload
                     self.logger.info(
                         "  - Hyperspeed warm-up scan completed "

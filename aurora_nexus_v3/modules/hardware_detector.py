@@ -3,12 +3,11 @@ Hardware Detector - Understands device capabilities
 Detects CPU, memory, storage, network, GPU, and sensors
 """
 
+import logging
 import platform
 import socket
-import logging
-from typing import Dict, Any, Optional, List, Tuple, Protocol
-from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Protocol, Tuple
 
 
 @dataclass
@@ -52,6 +51,7 @@ class HardwareProfile:
     storage: List[StorageInfo] = field(default_factory=list)
     network: List[NetworkInterface] = field(default_factory=list)
     gpu_available: bool = False
+    gpu_details: Dict[str, Any] = field(default_factory=dict)
     battery_powered: bool = False
     battery_percent: Optional[float] = None
     capability_score: int = 0
@@ -59,6 +59,66 @@ class HardwareProfile:
 
 class HardwareCore(Protocol):
     logger: logging.Logger
+
+
+def detect_cuda_details(logger: Optional[logging.Logger] = None) -> Dict[str, Any]:
+    details: Dict[str, Any] = {
+        "available": False,
+        "cuda_available": False,
+        "device_count": 0,
+        "device_name": None,
+        "cuda_version": None,
+        "driver_version": None,
+        "source": None,
+        "errors": []
+    }
+
+    try:
+        import torch
+    except ImportError:
+        torch = None
+
+    if torch:
+        try:
+            details["cuda_available"] = torch.cuda.is_available()
+            details["cuda_version"] = torch.version.cuda
+            details["source"] = "torch"
+            if details["cuda_available"]:
+                details["device_count"] = torch.cuda.device_count()
+                if details["device_count"] > 0:
+                    details["device_name"] = torch.cuda.get_device_name(0)
+                    details["available"] = True
+                else:
+                    details["errors"].append("CUDA reported available but no devices detected")
+            elif details["cuda_version"] is None:
+                details["errors"].append("Torch CUDA runtime not available")
+        except Exception as exc:
+            details["errors"].append(f"Torch CUDA check failed: {exc}")
+            if logger:
+                logger.debug("Torch CUDA check failed: %s", exc)
+
+    if not details["available"]:
+        try:
+            import subprocess
+            result = subprocess.run(
+                ["nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader"],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            if result.returncode == 0 and result.stdout:
+                first_line = result.stdout.strip().splitlines()[0]
+                name, driver = [part.strip() for part in first_line.split(",", 1)]
+                details["device_name"] = details["device_name"] or name
+                details["driver_version"] = driver or details["driver_version"]
+                details["available"] = True
+                details["source"] = details["source"] or "nvidia-smi"
+        except Exception as exc:
+            details["errors"].append(f"nvidia-smi check failed: {exc}")
+            if logger:
+                logger.debug("nvidia-smi check failed: %s", exc)
+
+    return details
 
 
 class HardwareDetector:
@@ -74,7 +134,6 @@ class HardwareDetector:
         "micro": 0
     }
     
-    def __init__(self, core: HardwareCore):
     def __init__(self, core: Any):
         self.core = core
         self.logger: logging.Logger = core.logger.getChild("hardware")
@@ -99,7 +158,8 @@ class HardwareDetector:
         profile.memory = self._detect_memory()
         profile.storage = self._detect_storage()
         profile.network = self._detect_network()
-        profile.gpu_available = self._detect_gpu()
+        profile.gpu_details = self._detect_gpu_details()
+        profile.gpu_available = profile.gpu_details.get("available", False)
         profile.battery_powered, profile.battery_percent = self._detect_battery()
         profile.capability_score = self._calculate_score(profile)
         return profile
@@ -202,17 +262,8 @@ class HardwareDetector:
         
         return interfaces
     
-    def _detect_gpu(self) -> bool:
-        try:
-            import subprocess
-            result = subprocess.run(
-                ["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"],
-                capture_output=True,
-                timeout=5
-            )
-            return result.returncode == 0
-        except Exception:
-            return False
+    def _detect_gpu_details(self) -> Dict[str, Any]:
+        return detect_cuda_details(self.logger)
     
     def _detect_battery(self) -> Tuple[bool, Optional[float]]:
         try:
@@ -335,6 +386,7 @@ class HardwareDetector:
                 for n in profile.network
             ],
             "gpu_available": profile.gpu_available,
+            "gpu_details": profile.gpu_details,
             "battery": {
                 "powered": profile.battery_powered,
                 "percent": profile.battery_percent

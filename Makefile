@@ -933,6 +933,18 @@ sec-ci:
 	semgrep --config p/security-audit --config p/python --config semgrep.yml
 
 test-ci:
+
+sec-ci:
+	bandit -r aurora_x -lll
+	semgrep --config p/security-audit --config p/python --config semgrep.yml
+
+test-ci:
+
+sec-ci:
+	bandit -r aurora_x -lll
+	semgrep --config p/security-audit --config p/python --config semgrep.yml
+
+test-ci:
 # Redefined lint, sec, test for CI environment
 lint:
 	ruff check .
