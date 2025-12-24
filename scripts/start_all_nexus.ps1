@@ -14,7 +14,8 @@ $luminarUrl = if ($env:AURORA_LUMINAR_URL) { $env:AURORA_LUMINAR_URL } else { "h
 try {
     $pythonVersion = python --version 2>&1
     Write-Host "[OK] Python detected: $pythonVersion" -ForegroundColor Green
-} catch {
+}
+catch {
     Write-Host "[ERROR] Python not found! Please install Python 3.8+" -ForegroundColor Red
     exit 1
 }
@@ -23,7 +24,8 @@ try {
 try {
     $nodeVersion = node --version
     Write-Host "[OK] Node.js detected: $nodeVersion" -ForegroundColor Green
-} catch {
+}
+catch {
     Write-Host "[ERROR] Node.js not found! Please install Node.js" -ForegroundColor Red
     exit 1
 }
@@ -42,7 +44,8 @@ Start-Sleep -Seconds 3
 try {
     $response = Invoke-WebRequest -Uri "$luminarUrl/api/nexus/status" -TimeoutSec 5 -UseBasicParsing
     Write-Host "[OK] Luminar Nexus V2 is responding!" -ForegroundColor Green
-} catch {
+}
+catch {
     Write-Host "[WARN] Luminar Nexus V2 may still be starting..." -ForegroundColor Yellow
 }
 
@@ -54,7 +57,8 @@ Write-Host "--------------------------------------------------------------------
 try {
     $backendCheck = Invoke-WebRequest -Uri "$baseUrl/api/health" -TimeoutSec 2 -UseBasicParsing -ErrorAction Stop
     Write-Host "[OK] Backend already running on port 5000" -ForegroundColor Green
-} catch {
+}
+catch {
     Write-Host "[INFO] Starting backend server..." -ForegroundColor Cyan
     # Backend should auto-start, but verify
 }
@@ -70,7 +74,8 @@ Write-Host "[TEST] GET /api/luminar-nexus/v2/status" -ForegroundColor Cyan
 try {
     $luminarStatus = Invoke-RestMethod -Uri "$baseUrl/api/luminar-nexus/v2/status" -Method Get -TimeoutSec 5
     Write-Host "[OK] Luminar routes working! Services: $($luminarStatus.total_services)" -ForegroundColor Green
-} catch {
+}
+catch {
     Write-Host "[WARN] Luminar routes not responding yet" -ForegroundColor Yellow
 }
 

@@ -11,6 +11,7 @@ Quality: 10/10 (Perfect)
 """
 
 # aurora_x/serve.py  FastAPI app with Aurora-X v3 dashboard mounted
+from aurora_x.bridge.attach_bridge import attach_bridge
 from typing import Dict, List, Tuple, Optional, Any, Union
 import html
 import json
@@ -184,7 +185,6 @@ attach_units_format(app)
 attach_demo(app)
 
 # Attach T12 Factory Bridge endpoints
-from aurora_x.bridge.attach_bridge import attach_bridge
 
 attach_bridge(app)
 
@@ -218,7 +218,6 @@ except Exception as e:
     traceback.print_exc()
 
 # Attach T12 Factory Bridge endpoints
-from aurora_x.bridge.attach_bridge import attach_bridge
 
 attach_bridge(app)  # /api/bridge/nl, /api/bridge/spec, /api/bridge/deploy
 
@@ -262,13 +261,13 @@ def healthz():
 def set_thresholds(payload: dict):
     """
         Set Thresholds
-        
+
         Args:
             payload: payload
-    
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -291,10 +290,10 @@ def set_thresholds(payload: dict):
 def t08_status():
     """
         T08 Status
-        
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -305,13 +304,13 @@ def t08_status():
 def t08_activate(payload: dict):
     """
         T08 Activate
-        
+
         Args:
             payload: payload
-    
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -374,7 +373,8 @@ def start_self_learning():
         import subprocess
 
         process = subprocess.Popen(
-            ["python", "-m", "aurora_x.self_learn", "--sleep", "15", "--max-iters", "50", "--beam", "20"],
+            ["python", "-m", "aurora_x.self_learn", "--sleep",
+                "15", "--max-iters", "50", "--beam", "20"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
@@ -437,10 +437,10 @@ def _color_for(val: int, ok: int, warn: int) -> str:
 def badge_progress():
     """
         Badge Progress
-        
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -465,7 +465,8 @@ def badge_progress():
         val = 85  # fallback
 
     color = _color_for(val, SETTINGS.ui.ok, SETTINGS.ui.warn)
-    svg = _BADGE_TEMPLATE.replace("{VAL}", str(val)).replace("{COLOR}", html.escape(color))
+    svg = _BADGE_TEMPLATE.replace("{VAL}", str(val)).replace(
+        "{COLOR}", html.escape(color))
     return Response(content=svg, media_type="image/svg+xml")
 
 
@@ -521,7 +522,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
         prompt = request.prompt.strip()
         if not prompt:
-            raise HTTPException(status_code=400, detail="Prompt cannot be empty")
+            raise HTTPException(
+                status_code=400, detail="Prompt cannot be empty")
 
         # Parse the natural language prompt
         parsed = parse_english(prompt)
@@ -558,8 +560,10 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             except ImportError as e:
                 # Aurora: Graceful fallback to prevent crashes
-                print(f"Aurora Warning: spec_from_flask module not available: {e}")
-                raise HTTPException(status_code=500, detail=f"Flask synthesis module not available: {str(e)}")
+                print(
+                    f"Aurora Warning: spec_from_flask module not available: {e}")
+                raise HTTPException(
+                    status_code=500, detail=f"Flask synthesis module not available: {str(e)}")
         else:
             # Regular function synthesis
             tools_dir = Path(__file__).parent.parent / "tools"
@@ -586,7 +590,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
                     if result.returncode != 0:
                         error_msg = result.stderr if result.stderr else result.stdout
-                        raise HTTPException(status_code=500, detail=f"Spec compilation failed: {error_msg}")
+                        raise HTTPException(
+                            status_code=500, detail=f"Spec compilation failed: {error_msg}")
 
                     # Parse output to find generated files
                     output_lines = result.stdout.splitlines()
@@ -596,7 +601,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
                             if len(parts) > 1:
                                 path = parts[1].strip()
                                 if Path(path).exists():
-                                    files_generated.append(str(Path(path).relative_to(Path.cwd())))
+                                    files_generated.append(
+                                        str(Path(path).relative_to(Path.cwd())))
                         if "run-" in line:
                             # Extract run ID from output
                             import re
@@ -621,8 +627,10 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             except ImportError as e:
                 # Aurora: Graceful fallback for spec_from_text import errors
-                print(f"Aurora Warning: spec_from_text module not available: {e}")
-                raise HTTPException(status_code=500, detail=f"Text synthesis module not available: {str(e)}")
+                print(
+                    f"Aurora Warning: spec_from_text module not available: {e}")
+                raise HTTPException(
+                    status_code=500, detail=f"Text synthesis module not available: {str(e)}")
 
         # Ensure we have valid files generated list
         if not files_generated:
@@ -630,7 +638,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
             if run_dir.exists():
                 for item in run_dir.rglob("*"):
                     if item.is_file():
-                        files_generated.append(str(item.relative_to(Path.cwd())))
+                        files_generated.append(
+                            str(item.relative_to(Path.cwd())))
 
         return NLCompileResponse(run_id=run_name, status="success", files_generated=files_generated, message=message)
 
@@ -640,7 +649,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
     except Exception as e:
         # Log the full traceback for debugging
         error_trace = traceback.format_exc()
-        print(f"[ERROR] Natural language compilation failed: {error_trace}", file=sys.stderr)
+        print(
+            f"[ERROR] Natural language compilation failed: {error_trace}", file=sys.stderr)
 
         # Return error response
         return NLCompileResponse(
@@ -757,10 +767,10 @@ async def solve_pretty_endpoint(request: SolverRequest):
 def root():
     """
         Root
-        
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -902,7 +912,8 @@ def main():
             # Check if services are already running
             import requests
 
-            base_url = os.getenv("AURORA_CORE_URL") or os.getenv("AURORA_BASE_URL")
+            base_url = os.getenv("AURORA_CORE_URL") or os.getenv(
+                "AURORA_BASE_URL")
             if base_url:
                 health_url = f"{base_url.rstrip('/')}/healthz"
             else:
@@ -933,13 +944,11 @@ def main():
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
 
-
-
 @app.get("/api/aurora/scores", tags=["monitoring"], summary="Get Aurora Quality Scores")
 async def get_aurora_scores():
     """
     Get Aurora's code quality scores and analysis history.
-    
+
     Returns all quality assessments Aurora has performed, including:
     - Timestamp of analysis
     - Programming language
@@ -949,16 +958,16 @@ async def get_aurora_scores():
     try:
         from pathlib import Path
         import json
-        
+
         scores_file = Path(__file__).parent.parent / '.aurora_scores.json'
-        
+
         if not scores_file.exists():
             return {
                 "ok": True,
                 "scores": [],
                 "message": "No scores recorded yet"
             }
-        
+
         scores = []
         with open(scores_file, 'r', encoding='utf-8') as f:
             for line in f:
@@ -968,17 +977,17 @@ async def get_aurora_scores():
                         scores.append(json.loads(line))
                     except Exception as e:
                         pass
-        
+
         # Sort by timestamp (newest first)
         scores.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
-        
+
         return {
             "ok": True,
             "scores": scores,
             "total": len(scores),
             "latest_score": scores[0] if scores else None
         }
-        
+
     except Exception as e:
         return {
             "ok": False,
@@ -995,10 +1004,10 @@ async def get_aurora_status():
     try:
         from pathlib import Path
         import json
-        
+
         project_root = Path(__file__).parent.parent
         scores_file = project_root / '.aurora_scores.json'
-        
+
         # Count scores
         score_count = 0
         latest_score = None
@@ -1011,7 +1020,7 @@ async def get_aurora_status():
                         latest_score = json.loads(lines[-1])
                     except Exception as e:
                         pass
-        
+
         return {
             "ok": True,
             "aurora_version": "2.0",
@@ -1028,13 +1037,12 @@ async def get_aurora_status():
                 "last_activity": latest_score.get('timestamp') if latest_score else None
             }
         }
-        
+
     except Exception as e:
         return {
             "ok": False,
             "error": str(e)
         }
-
 
 
 if __name__ == "__main__":
