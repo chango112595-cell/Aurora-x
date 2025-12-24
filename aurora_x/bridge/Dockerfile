@@ -53,14 +53,10 @@ USER aurora
 # Expose port
 EXPOSE 5001
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-<<<<<<< HEAD
-    CMD-SHELL curl -f "${AURORA_BRIDGE_HEALTH_URL:-http://127.0.0.1:5001/api/health}" || exit 1
-=======
+# Health check URL (configurable via environment variable)
 ENV AURORA_BRIDGE_HEALTH_URL="http://127.0.0.1:5001/api/health"
-CMD curl -f "$AURORA_BRIDGE_HEALTH_URL" || exit 1
->>>>>>> 49b60f0475b5dbe841523c9d5d27758717b03e99
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f "$AURORA_BRIDGE_HEALTH_URL" || exit 1
 
 # Start the bridge service
 CMD ["python", "-m", "uvicorn", "aurora_x.bridge.service:app", "--host", "0.0.0.0", "--port", "5001"]

@@ -38,16 +38,8 @@ def _default_server_url() -> str:
 class AuroraTerminalClient:
     """Terminal client for Aurora"""
     
-<<<<<<< HEAD
-    def __init__(self, server_url: Optional[str] = None):
-        self.server_url = server_url or _default_server_url()
-=======
     def __init__(self, server_url: str | None = None):
-        if server_url is None:
-            aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
-            server_url = os.getenv("AURORA_BASE_URL", f"http://{aurora_host}:5000")
-        self.server_url = server_url
->>>>>>> 49b60f0475b5dbe841523c9d5d27758717b03e99
+        self.server_url = server_url or _default_server_url()
         self.session_id = f"terminal_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         self.conversation_history = []
         self.config_file = Path.home() / ".aurora_terminal_config"
@@ -294,13 +286,8 @@ def main():
     )
     parser.add_argument(
         "--server",
-<<<<<<< HEAD
         default=_default_server_url(),
         help="Aurora server URL (default: $AURORA_SERVER_URL or $AURORA_BASE_URL)"
-=======
-        default=os.getenv("AURORA_BASE_URL", "http://127.0.0.1:5000"),
-        help="Aurora server URL (default: http://127.0.0.1:5000 or set AURORA_BASE_URL)",
->>>>>>> 49b60f0475b5dbe841523c9d5d27758717b03e99
     )
     parser.add_argument(
         "--session",

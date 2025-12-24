@@ -6,32 +6,9 @@ Write-Host " AURORA NEXUS STARTUP" -ForegroundColor Cyan
 Write-Host "=" -NoNewline -ForegroundColor Cyan; Write-Host "=".PadRight(68, "=") -ForegroundColor Cyan
 Write-Host ""
 
-<<<<<<< HEAD
-$auroraBaseUrl = $env:AURORA_BASE_URL
-$auroraScheme = $env:AURORA_SCHEME
-$auroraHost = $env:AURORA_HOST
-
-if ($auroraBaseUrl) {
-    try {
-        $baseUri = [System.Uri]$auroraBaseUrl
-        if (-not $auroraScheme) { $auroraScheme = $baseUri.Scheme }
-        if (-not $auroraHost) { $auroraHost = $baseUri.Host }
-    } catch {
-        Write-Host "[WARN] Invalid AURORA_BASE_URL provided; falling back to host/scheme defaults." -ForegroundColor Yellow
-        $auroraBaseUrl = $null
-    }
-}
-
-if (-not $auroraScheme) { $auroraScheme = "http" }
-if (-not $auroraHost) { $auroraHost = "127.0.0.1" }
-
-$baseUrl = "$auroraScheme://$auroraHost"
-$frontendBaseUrl = if ($auroraBaseUrl) { $auroraBaseUrl.TrimEnd("/") } else { "$baseUrl:5000" }
-=======
 $auroraHost = if ($env:AURORA_HOST) { $env:AURORA_HOST } else { "127.0.0.1" }
 $baseUrl = if ($env:AURORA_BASE_URL) { $env:AURORA_BASE_URL } else { "http://$auroraHost:5000" }
 $luminarUrl = if ($env:AURORA_LUMINAR_URL) { $env:AURORA_LUMINAR_URL } else { "http://$auroraHost:8000" }
->>>>>>> 49b60f0475b5dbe841523c9d5d27758717b03e99
 
 # Check if Python is available
 try {
@@ -63,11 +40,7 @@ Start-Sleep -Seconds 3
 
 # Check if Luminar is responding
 try {
-<<<<<<< HEAD
-    $response = Invoke-WebRequest -Uri "$baseUrl:8000/api/nexus/status" -TimeoutSec 5 -UseBasicParsing
-=======
     $response = Invoke-WebRequest -Uri "$luminarUrl/api/nexus/status" -TimeoutSec 5 -UseBasicParsing
->>>>>>> 49b60f0475b5dbe841523c9d5d27758717b03e99
     Write-Host "[OK] Luminar Nexus V2 is responding!" -ForegroundColor Green
 } catch {
     Write-Host "[WARN] Luminar Nexus V2 may still be starting..." -ForegroundColor Yellow
@@ -79,11 +52,7 @@ Write-Host "--------------------------------------------------------------------
 
 # Check if backend is already running
 try {
-<<<<<<< HEAD
-    $backendCheck = Invoke-WebRequest -Uri "$frontendBaseUrl/api/health" -TimeoutSec 2 -UseBasicParsing -ErrorAction Stop
-=======
     $backendCheck = Invoke-WebRequest -Uri "$baseUrl/api/health" -TimeoutSec 2 -UseBasicParsing -ErrorAction Stop
->>>>>>> 49b60f0475b5dbe841523c9d5d27758717b03e99
     Write-Host "[OK] Backend already running on port 5000" -ForegroundColor Green
 } catch {
     Write-Host "[INFO] Starting backend server..." -ForegroundColor Cyan
@@ -99,11 +68,7 @@ Start-Sleep -Seconds 2
 # Test Luminar routes
 Write-Host "[TEST] GET /api/luminar-nexus/v2/status" -ForegroundColor Cyan
 try {
-<<<<<<< HEAD
-    $luminarStatus = Invoke-RestMethod -Uri "$frontendBaseUrl/api/luminar-nexus/v2/status" -Method Get -TimeoutSec 5
-=======
     $luminarStatus = Invoke-RestMethod -Uri "$baseUrl/api/luminar-nexus/v2/status" -Method Get -TimeoutSec 5
->>>>>>> 49b60f0475b5dbe841523c9d5d27758717b03e99
     Write-Host "[OK] Luminar routes working! Services: $($luminarStatus.total_services)" -ForegroundColor Green
 } catch {
     Write-Host "[WARN] Luminar routes not responding yet" -ForegroundColor Yellow
@@ -115,16 +80,9 @@ Write-Host " NEXUS STARTUP COMPLETE" -ForegroundColor Cyan
 Write-Host "=" -NoNewline -ForegroundColor Cyan; Write-Host "=".PadRight(68, "=") -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Access points:" -ForegroundColor White
-<<<<<<< HEAD
-Write-Host "  Frontend:       $frontendBaseUrl" -ForegroundColor Cyan
-Write-Host "  Luminar Nexus:  $frontendBaseUrl/luminar-nexus" -ForegroundColor Cyan
-Write-Host "  Memory Fabric:  $frontendBaseUrl/memory" -ForegroundColor Cyan
-Write-Host "  API Status:     $frontendBaseUrl/api/luminar-nexus/v2/status" -ForegroundColor Cyan
-=======
 Write-Host "  Frontend:       $baseUrl" -ForegroundColor Cyan
 Write-Host "  Luminar Nexus:  $baseUrl/luminar-nexus" -ForegroundColor Cyan
 Write-Host "  Memory Fabric:  $baseUrl/memory" -ForegroundColor Cyan
 Write-Host "  API Status:     $baseUrl/api/luminar-nexus/v2/status" -ForegroundColor Cyan
->>>>>>> 49b60f0475b5dbe841523c9d5d27758717b03e99
 Write-Host ""
 Write-Host "[TIP] Press Ctrl+C to stop, then run: Stop-Process -Name node,python -Force" -ForegroundColor DarkGray

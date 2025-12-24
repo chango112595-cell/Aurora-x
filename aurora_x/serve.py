@@ -914,11 +914,7 @@ def main():
             health_url = os.getenv("AURORA_CORE_HEALTH_URL", health_url)
 
             try:
-<<<<<<< HEAD
                 requests.get(health_url, timeout=1)
-=======
-                requests.get(f"{base_url}/healthz", timeout=1)
->>>>>>> 49b60f0475b5dbe841523c9d5d27758717b03e99
             except Exception as e:
                 # Services not running, start them
                 print("[Aurora-X] Starting all services via Luminar Nexus...")
