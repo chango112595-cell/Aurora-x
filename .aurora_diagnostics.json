@@ -1,5 +1,17 @@
 {
-  "generated_at": "2025-12-24T06:39:19.962286",
+  "generated_at": "2025-12-24T06:39:35.176949",
+  "latest_diagnosis": {
+    "timestamp": "2025-12-24T06:39:35.172666",
+    "spec_name": "decryption_program.md",
+    "success": true,
+    "quality_score": 10.0,
+    "issues": [
+      "Generated code has quality issues"
+    ],
+    "recommendations": [
+      "Review generated code patterns"
+    ]
+  },
   "progress": {
     "total_runs": 100,
     "success_rate": 100.0,
@@ -9,12 +21,6 @@
     "zero_score_runs": 0
   },
   "recent_scores": [
-    {
-      "spec": "decrypt_program.md",
-      "score": 10.0,
-      "timestamp": "2025-12-24T06:34:33.306881",
-      "success": true
-    },
     {
       "spec": "who_are.md",
       "score": 10.0,
@@ -128,7 +134,12 @@
       "score": 10.0,
       "timestamp": "2025-12-24T06:39:19.941325",
       "success": true
+    },
+    {
+      "spec": "decryption_program.md",
+      "score": 10.0,
+      "timestamp": "2025-12-24T06:39:35.172666",
+      "success": true
     }
-  ],
-  "failure_history": []
+  ]
 }
