@@ -1,17 +1,5 @@
 {
-  "generated_at": "2025-12-24T06:40:20.386170",
-  "latest_diagnosis": {
-    "timestamp": "2025-12-24T06:40:20.372626",
-    "spec_name": "auto_ef4957ec.md",
-    "success": true,
-    "quality_score": 10.0,
-    "issues": [
-      "Generated code has quality issues"
-    ],
-    "recommendations": [
-      "Review generated code patterns"
-    ]
-  },
+  "generated_at": "2025-12-24T06:40:35.478599",
   "progress": {
     "total_runs": 100,
     "success_rate": 100.0,
@@ -21,12 +9,6 @@
     "zero_score_runs": 0
   },
   "recent_scores": [
-    {
-      "spec": "generate_most_complex_time.md",
-      "score": 10.0,
-      "timestamp": "2025-12-24T06:35:33.638636",
-      "success": true
-    },
     {
       "spec": "reverse_string.md",
       "score": 10.0,
@@ -140,6 +122,13 @@
       "score": 10.0,
       "timestamp": "2025-12-24T06:40:20.372626",
       "success": true
+    },
+    {
+      "spec": "create_flask_web_app_app.md",
+      "score": 10.0,
+      "timestamp": "2025-12-24T06:40:35.454965",
+      "success": true
     }
-  ]
+  ],
+  "failure_history": []
 }
