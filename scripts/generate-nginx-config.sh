@@ -4,12 +4,8 @@
 # Nginx configuration for Aurora-X services
 #
 
-AURORA_NGINX_HOST="${AURORA_NGINX_HOST:-localhost}"
-BACKEND_PRIMARY_PORT="${AURORA_BACKEND_PRIMARY_PORT:-5001}"
-BACKEND_SECONDARY_PORT="${AURORA_BACKEND_SECONDARY_PORT:-5002}"
-FRONTEND_PORT="${AURORA_FRONTEND_PORT:-5173}"
-CHAT_PORT="${AURORA_CHAT_PORT:-8080}"
-SERVER_NAME="${AURORA_NGINX_SERVER_NAME:-aurora.local}"
+AURORA_NGINX_UPSTREAM_HOST="${AURORA_NGINX_UPSTREAM_HOST:-127.0.0.1}"
+AURORA_NGINX_SERVER_NAME="${AURORA_NGINX_SERVER_NAME:-aurora.local}"
 
 cat > /tmp/aurora-nginx.conf << EOF
 # Aurora-X Load Balancer Configuration
@@ -20,8 +16,8 @@ upstream aurora_backend {
     least_conn;
     
     # Backend servers
-    server ${AURORA_NGINX_HOST}:${BACKEND_PRIMARY_PORT} max_fails=3 fail_timeout=30s;
-    server ${AURORA_NGINX_HOST}:${BACKEND_SECONDARY_PORT} max_fails=3 fail_timeout=30s backup;
+    server ${AURORA_NGINX_UPSTREAM_HOST}:5001 max_fails=3 fail_timeout=30s;
+    server ${AURORA_NGINX_UPSTREAM_HOST}:5002 max_fails=3 fail_timeout=30s backup;
     
     # Keep-alive connections
     keepalive 32;
@@ -29,19 +25,19 @@ upstream aurora_backend {
 
 upstream aurora_frontend {
     # Round-robin for static content
-    server ${AURORA_NGINX_HOST}:${FRONTEND_PORT} max_fails=3 fail_timeout=30s;
+    server ${AURORA_NGINX_UPSTREAM_HOST}:5173 max_fails=3 fail_timeout=30s;
 }
 
 upstream aurora_chat {
     # IP hash for sticky sessions (chat requires session persistence)
     ip_hash;
-    server ${AURORA_NGINX_HOST}:${CHAT_PORT} max_fails=3 fail_timeout=30s;
+    server ${AURORA_NGINX_UPSTREAM_HOST}:8080 max_fails=3 fail_timeout=30s;
 }
 
 # Main server block
 server {
     listen 80;
-    server_name ${SERVER_NAME} ${AURORA_NGINX_HOST};
+    server_name ${AURORA_NGINX_SERVER_NAME};
     
     # Logging
     access_log /var/log/nginx/aurora_access.log;
@@ -66,10 +62,10 @@ server {
         proxy_http_version 1.1;
         
         # Headers
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
         
         # Keep-alive
         proxy_set_header Connection "";
@@ -94,13 +90,13 @@ server {
         proxy_http_version 1.1;
         
         # WebSocket support
-        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         
         # Headers
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         
         # Timeouts (longer for WebSocket)
         proxy_connect_timeout 60s;
@@ -114,9 +110,9 @@ server {
         proxy_http_version 1.1;
         
         # Headers
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         
         # Caching for static assets
         location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {

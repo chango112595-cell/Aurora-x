@@ -16,8 +16,8 @@ Aurora's Performance Review & Retry Assignment
 Copilot delivers detailed feedback and sets up Aurora's second attempt
 """
 from typing import Dict, List, Tuple, Optional, Any, Union
-import json
 import os
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -196,9 +196,8 @@ class AuroraPerformanceReview:
 
     def how_to_get_a_plus(self):
         """Clear path to A+ grade"""
-        host = os.getenv("AURORA_HOST", "localhost")
-        port = os.getenv("AURORA_PORT", os.getenv("AURORA_BACKEND_PORT", "5000"))
-        base_url = os.getenv("AURORA_BASE_URL", f"http://{host}:{port}")
+        aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        base_url = os.getenv("AURORA_BASE_URL", f"http://{aurora_host}:5000")
 
         print("\n" + "=" * 70)
         print("[TARGET] HOW TO GET A+ ON RETRY (95+ points required)")

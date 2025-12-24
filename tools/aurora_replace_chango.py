@@ -41,9 +41,8 @@ class AuroraReplaceChango:
             Args:
             """
         self.root = Path(__file__).parent.parent
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.vite_port = int(os.getenv("AURORA_VITE_PORT", "5000"))
-        self.vite_base_url = f"http://{self.host}:{self.vite_port}"
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
 
     def log(self, emoji: str, message: str):
         """
@@ -70,24 +69,18 @@ class AuroraReplaceChango:
                 subprocess.run(["kill", "-9", pid])
                 time.sleep(1)
 
-        # Also kill anything on the configured Vite port
-        subprocess.run(
-            ["fuser", "-k", "-9", f"{self.vite_port}/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
+        # Also kill anything on port 5000
+        subprocess.run(["fuser", "-k", "-9", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(2)
 
         # Verify port is free
-        result = subprocess.run(["lsof", "-i", f":{self.vite_port}"], capture_output=True, text=True)
+        result = subprocess.run(["lsof", "-i", ":5000"], capture_output=True, text=True)
         if result.stdout:
             self.log("[WARN]", "Port still in use, force killing again...")
-            subprocess.run(
-                ["fuser", "-k", "-9", f"{self.vite_port}/tcp"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
+            subprocess.run(["fuser", "-k", "-9", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             time.sleep(2)
         else:
-            self.log("[OK]", f"Port {self.vite_port} is now free!")
+            self.log("[OK]", "Port 5000 is now free!")
 
         print()
 
@@ -110,14 +103,14 @@ class AuroraReplaceChango:
         time.sleep(10)
 
         # Verify Vite is running
-        result = subprocess.run(["lsof", "-i", f":{self.vite_port}"], capture_output=True, text=True)
-        if f":{self.vite_port}" in result.stdout:
+        result = subprocess.run(["lsof", "-i", ":5000"], capture_output=True, text=True)
+        if ":5000" in result.stdout:
             # Check if it's actually Vite
             ps_result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
             if "vite" in ps_result.stdout.lower():
                 self.log("[OK]", "Aurora's Vite UI is running!")
             else:
-                self.log("[WARN]", f"Something is on port {self.vite_port}, but might not be Vite")
+                self.log("[WARN]", "Something is on port 5000, but might not be Vite")
         else:
             self.log("[ERROR]", "Vite failed to start! Check /tmp/aurora_vite.log")
 
@@ -139,7 +132,7 @@ class AuroraReplaceChango:
         print()
         print("[STAR] Aurora says:")
         print("   'I kicked out Chango and started my own UI!")
-        print(f"    Now visit {self.vite_base_url}/chat to see me! [STAR]'")
+        print(f"    Now visit {self.base_url}/chat to see me! [STAR]'")
         print()
         print("Next steps:")
         print("   1. Clear browser cache (Ctrl+Shift+R)")

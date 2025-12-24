@@ -47,9 +47,6 @@ class AuroraBlankPageFixer:
         self.knowledge_dir.mkdir(exist_ok=True)
         self.issues = []
         self.fixes = []
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.vite_port = int(os.getenv("AURORA_VITE_PORT", "5173"))
-        self.vite_base_url = f"http://{self.host}:{self.vite_port}"
 
     def print_status(self, msg: str, level: str = "INFO"):
         """Print diagnostic status"""
@@ -193,7 +190,10 @@ class AuroraBlankPageFixer:
 
         try:
             # Check if dev server is running
-            response = subprocess.run(["curl", "-s", "-I", self.vite_base_url], capture_output=True, timeout=5)
+            aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+            response = subprocess.run(
+                ["curl", "-s", "-I", f"http://{aurora_host}:5173"], capture_output=True, timeout=5
+            )
 
             if response.returncode == 0:
                 self.print_status("Dev server is running", "SUCCESS")

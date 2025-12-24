@@ -17,7 +17,7 @@ BACKUP_DIR="${BACKUP_DIR:-/workspaces/Aurora-x/backups/database}"
 BACKUP_RETENTION_DAYS="${BACKUP_RETENTION_DAYS:-30}"
 
 # Database configuration (from environment or docker-compose)
-DB_HOST="${DB_HOST:-localhost}"
+DB_HOST="${DB_HOST:-127.0.0.1}"
 DB_PORT="${DB_PORT:-5432}"
 DB_NAME="${DB_NAME:-aurora}"
 DB_USER="${DB_USER:-postgres}"

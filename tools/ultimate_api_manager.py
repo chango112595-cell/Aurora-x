@@ -428,12 +428,12 @@ class UltimateAPIManager:
 
         # AURORA INTEGRATION FOR INTELLIGENT ASSISTANCE
         self.aurora_assistance_enabled = True
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.backend_port = int(os.getenv("AURORA_BACKEND_PORT", "5000"))
-        self.learning_port = int(os.getenv("AURORA_SELF_LEARN_PORT", "5002"))
-        self.aurora_learning_endpoint = os.getenv(
-            "AURORA_LEARNING_ENDPOINT", f"http://{self.host}:{self.learning_port}/api/chat"
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
+        self.learning_api_url = os.getenv(
+            "AURORA_LEARNING_API_URL", f"http://{self.aurora_host}:5002"
         )
+        self.aurora_learning_endpoint = f"{self.learning_api_url}/api/chat"
         self.connection_retry_strategies = {
             "immediate": {"retries": 3, "delay": 1},
             "progressive": {"retries": 5, "delay": [1, 2, 5, 10, 30]},
@@ -890,7 +890,7 @@ class UltimateAPIManager:
         """Ultra-comprehensive health check"""
         service = self.services[service_name]
         port = service["port"]
-        health_url = f"http://{self.host}:{port}{service['health_endpoint']}"
+        health_url = f"http://{self.aurora_host}:{port}{service['health_endpoint']}"
 
         health_data = {
             "service_name": service_name,
@@ -914,7 +914,7 @@ class UltimateAPIManager:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
-            result = sock.connect_ex((self.host, port))
+            result = sock.connect_ex((self.aurora_host, port))
             health_data["port_listening"] = result == 0
             sock.close()
         except Exception:
@@ -1022,7 +1022,7 @@ class UltimateAPIManager:
 
         # Check for frontend serving JSON instead of HTML
         try:
-            response = requests.get(f"http://{self.host}:{self.backend_port}", timeout=3)
+            response = requests.get(self.base_url, timeout=3)
             if response.headers.get("content-type", "").startswith("application/json"):
                 issues["frontend_issues"].append(
                     "frontend_serving_json_instead_of_html")
@@ -1040,7 +1040,7 @@ class UltimateAPIManager:
                 try:
                     response = requests.request(
                         endpoint_config.get("method", "GET"),
-                        f"http://{self.host}:{port}{endpoint}",
+                        f"http://{self.aurora_host}:{port}{endpoint}",
                         timeout=3,
                         json={} if endpoint_config.get(
                             "method") == "POST" else None,
@@ -1104,7 +1104,7 @@ class UltimateAPIManager:
 
             # Wait and verify
             time.sleep(10)
-            response = requests.get(f"http://{self.host}:{self.backend_port}", timeout=5)
+            response = requests.get(self.base_url, timeout=5)
             if "<!DOCTYPE html>" in response.text:
                 self.log("[OK] Frontend routing fixed - now serving HTML")
                 return True
@@ -1506,7 +1506,7 @@ class UltimateAPIManager:
 
         # 1. Check what's actually running on port 5000
         try:
-            response = requests.get(f"http://{self.host}:{self.backend_port}", timeout=5)
+            response = requests.get(self.base_url, timeout=5)
             if response.headers.get("content-type", "").startswith("application/json"):
                 print(
                     "[ERROR] Port 5000 is serving JSON API instead of HTML frontend")
@@ -1521,7 +1521,7 @@ class UltimateAPIManager:
 
                     # Verify it's now serving HTML
                     time.sleep(5)
-                    response = requests.get(f"http://{self.host}:{self.backend_port}", timeout=5)
+                    response = requests.get(self.base_url, timeout=5)
                     if "<!DOCTYPE html>" in response.text:
                         print("[OK] Frontend now serving HTML correctly")
                         return True
@@ -2715,7 +2715,7 @@ class UltimateAPIManager:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
-            result = sock.connect_ex((self.host, port))
+            result = sock.connect_ex((self.aurora_host, port))
             sock.close()
             return result == 0
         except Exception as e:

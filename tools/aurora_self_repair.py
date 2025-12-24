@@ -18,8 +18,8 @@ Aurora diagnoses and fixes her own UI connection issues.
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
-import asyncio
 import os
+import asyncio
 import subprocess
 from pathlib import Path
 
@@ -36,8 +36,6 @@ class AuroraSelfRepair:
         self.root = Path(__file__).parent.parent
         self.issues = []
         self.fixes = []
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.bridge_port = int(os.getenv("AURORA_BRIDGE_PORT", "5001"))
 
     async def diagnose_connections(self):
         """Diagnose connection refused errors."""
@@ -86,8 +84,9 @@ class AuroraSelfRepair:
                 content = path.read_text()
 
                 # Check for hardcoded URLs
-                if "localhost" in content:
-                    print("   [WARN]  Found 'localhost' - may need to use correct host")
+                loopback_host = os.getenv("AURORA_HOST", "127.0.0.1")
+                if loopback_host in content:
+                    print(f"   [WARN]  Found '{loopback_host}' - may need to use correct host")
 
                 # Look for API endpoints
                 if "http://" in content:
@@ -243,12 +242,12 @@ async def healthz():
         # Check what's wrong
         issues_found = []
 
-        if "localhost:5001" in content:
-            issues_found.append("Hardcoded localhost:5001")
-        if "localhost:5002" in content:
-            issues_found.append("Hardcoded localhost:5002")
-        if "localhost:8080" in content:
-            issues_found.append("Hardcoded localhost:8080")
+        if "127.0.0.1:5001" in content:
+            issues_found.append("Hardcoded 127.0.0.1:5001")
+        if "127.0.0.1:5002" in content:
+            issues_found.append("Hardcoded 127.0.0.1:5002")
+        if "127.0.0.1:8080" in content:
+            issues_found.append("Hardcoded 127.0.0.1:8080")
 
         if issues_found:
             print("\n   Found issues:")
@@ -257,10 +256,10 @@ async def healthz():
 
             print("\n   Aurora's recommendation:")
             print("      Use relative URLs to proxy through Vite dev server")
-            print(f"      Example: '/api/health' instead of 'http://{self.host}:{self.bridge_port}/health'")
+            print("      Example: '/api/health' instead of 'http://127.0.0.1:5001/health'")
 
         else:
-            print("   [OK] No hardcoded localhost URLs found")
+            print("   [OK] No hardcoded loopback URLs found")
 
         return True
 
@@ -323,7 +322,7 @@ async def healthz():
         print()
         print("   3. Check Server Control page is using correct URLs")
         print("      - Should use relative URLs like /api/health")
-        print(f"      - Not hardcoded http://{self.host}:{self.bridge_port}")
+        print("      - Not hardcoded http://127.0.0.1:5001")
         print()
         print("   4. Refresh the UI and test connections")
 

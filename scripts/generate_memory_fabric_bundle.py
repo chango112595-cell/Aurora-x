@@ -311,7 +311,7 @@ chmod -R 755 data/
 **3. WebSocket connection fails**
 ```
 Solution: Check the server is running and port 5000 is accessible.
-curl "${AURORA_BASE_URL:-http://localhost:5000}/api/health"
+curl ${AURORA_BASE_URL:-http://127.0.0.1:5000}/api/health
 ```
 
 **4. Embeddings not working**

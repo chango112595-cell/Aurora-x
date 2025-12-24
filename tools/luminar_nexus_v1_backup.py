@@ -21,6 +21,7 @@ Aurora is a Grandmaster in ALL tech: Ancient to Future, Ethical to Unethical
 from typing import Dict, List, Tuple, Optional, Any, Union
 import asyncio
 import json
+import os
 import re
 import subprocess
 import sys
@@ -30,6 +31,14 @@ from pathlib import Path
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
+AURORA_BASE_URL = os.getenv("AURORA_BASE_URL", f"http://{AURORA_HOST}:5000")
+AURORA_CHAT_URL = os.getenv("AURORA_CHAT_URL", f"http://{AURORA_HOST}:5003")
+AURORA_VITE_URL = os.getenv("AURORA_VITE_URL", f"http://{AURORA_HOST}:5173")
+AURORA_CONTROL_URL = os.getenv("AURORA_CONTROL_URL", f"http://{AURORA_HOST}:9090")
+AURORA_HOST_PATTERN = re.escape(AURORA_HOST)
+AURORA_CONTROL_HOSTPORT = AURORA_CONTROL_URL.replace("http://", "").replace("https://", "")
 
 # Enhanced Aurora Core routing through bridge to avoid circular imports
 print("[OK] Aurora Nexus Bridge system initialized for Enhanced Aurora Core routing")
@@ -146,13 +155,6 @@ class LuminarNexusServerManager:
             """
         # Determine project root from current file location
         self._project_root = Path(__file__).resolve().parents[1]
-        self.host = os.getenv("AURORA_HOST", "localhost")
-        self.backend_port = int(os.getenv("AURORA_BACKEND_PORT", "5000"))
-        self.bridge_port = int(os.getenv("AURORA_BRIDGE_PORT", "5001"))
-        self.self_learn_port = int(os.getenv("AURORA_SELF_LEARN_PORT", "5002"))
-        self.chat_port = int(os.getenv("AURORA_CHAT_PORT", "5003"))
-        self.vite_port = int(os.getenv("AURORA_VITE_PORT", "5173"))
-        self.dashboard_port = int(os.getenv("AURORA_HEALTH_DASHBOARD_PORT", "9090"))
 
         # Load Aurora's project ownership configuration
         self.project_config = self._load_project_config()
@@ -175,7 +177,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-bridge",
                 "preferred_port": 5001,
                 "port": None,  # Will be assigned dynamically
-                "health_check_template": f"http://{self.host}:{{port}}/health",
+                "health_check_template": f"http://{AURORA_HOST}:{{port}}/health",
             },
             "backend": {
                 "name": "Aurora Backend API (Main Server)",
@@ -183,7 +185,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-backend",
                 "preferred_port": 5000,
                 "port": None,
-                "health_check_template": f"http://{self.host}:{{port}}/healthz",
+                "health_check_template": f"http://{AURORA_HOST}:{{port}}/healthz",
             },
             "vite": {
                 "name": "Aurora Vite Dev Server (Frontend)",
@@ -191,7 +193,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-vite",
                 "preferred_port": 5173,
                 "port": None,
-                "health_check_template": f"http://{self.host}:{{port}}",
+                "health_check_template": f"http://{AURORA_HOST}:{{port}}",
             },
             "self-learn": {
                 "name": "Aurora Self-Learning Server (Continuous Learning)",
@@ -199,7 +201,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-self-learn",
                 "preferred_port": 5002,
                 "port": None,
-                "health_check_template": f"http://{self.host}:{{port}}/health",
+                "health_check_template": f"http://{AURORA_HOST}:{{port}}/health",
             },
             "chat": {
                 "name": "Aurora Conversational AI Chat Server",
@@ -207,7 +209,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-chat",
                 "preferred_port": 5003,
                 "port": None,
-                "health_check_template": f"http://{self.host}:{{port}}/health",
+                "health_check_template": f"http://{AURORA_HOST}:{{port}}/health",
             },
         }
 
@@ -639,14 +641,13 @@ class LuminarNexusServerManager:
         content = vite_file.read_text()
 
         # Find proxy targets using simple regex (works for typical vite.config.js patterns)
-        host_pattern = re.escape(self.host)
         chat_match = re.search(
-            rf"'/api/chat'\s*:\s*\{{[^}}]*target\s*:\s*['\"]http://{host_pattern}:(\d+)['\"]",
+            rf"'/api/chat'\s*:\s*\{{[^}}]*target\s*:\s*['\"]http://{AURORA_HOST}:(\d+)['\"]",
             content,
             re.S,
         )
         api_match = re.search(
-            rf"'/api'\s*:\s*\{{[^}}]*target\s*:\s*['\"]http://{host_pattern}:(\d+)['\"]",
+            rf"'/api'\s*:\s*\{{[^}}]*target\s*:\s*['\"]http://{AURORA_HOST}:(\d+)['\"]",
             content,
             re.S,
         )
@@ -1224,17 +1225,15 @@ class AuroraConversationalAI:
             log.append("[EMOJI] **AUTONOMOUS INVESTIGATION EXAMPLE**:\n")
 
             # Check chat server status
-            chat_status = self.execute_tool(
-                "test_endpoint", f"http://{self.host}:{self.chat_port}/api/chat/status"
-            )
+            chat_status = self.execute_tool("test_endpoint", f"{AURORA_CHAT_URL}/api/chat/status")
             log.append(f"**Chat Server (Port 5003)**: {chat_status}")
 
             # Check Vite server
-            vite_status = self.execute_tool("test_endpoint", f"http://{self.host}:{self.vite_port}")
+            vite_status = self.execute_tool("test_endpoint", AURORA_VITE_URL)
             log.append(f"**Vite Frontend (Port 5173)**: {vite_status}")
 
             # Check backend
-            backend_status = self.execute_tool("test_endpoint", f"http://{self.host}:{self.backend_port}")
+            backend_status = self.execute_tool("test_endpoint", AURORA_BASE_URL)
             log.append(f"**Backend API (Port 5000)**: {backend_status}\n")
 
             log.append("[EMOJI] **CREATING ANALYSIS DOCUMENTS**\n")
@@ -1298,9 +1297,9 @@ class AuroraConversationalAI:
 
             # Check all services
             services = {
-                f"Chat Server ({self.chat_port})": f"http://{self.host}:{self.chat_port}/api/chat/status",
-                f"Backend API ({self.backend_port})": f"http://{self.host}:{self.backend_port}",
-                f"Vite Frontend ({self.vite_port})": f"http://{self.host}:{self.vite_port}",
+                "Chat Server (5003)": f"{AURORA_CHAT_URL}/api/chat/status",
+                "Backend API (5000)": AURORA_BASE_URL,
+                "Vite Frontend (5173)": AURORA_VITE_URL,
             }
 
             for service_name, endpoint in services.items():
@@ -1484,7 +1483,7 @@ class AuroraConversationalAI:
         log.append(" Verifying backend route handlers\n")
 
         # Test current chat endpoint
-        chat_test = self.execute_tool("test_endpoint", f"http://{self.host}:{self.chat_port}/api/chat")
+        chat_test = self.execute_tool("test_endpoint", f"{AURORA_CHAT_URL}/api/chat")
         log.append(f"**Chat Endpoint Status**: {chat_test}\n")
 
         log.append("**FIX STRATEGY:**")
@@ -1514,7 +1513,7 @@ class AuroraConversationalAI:
         log = []
         log.append("[SCAN] **ANALYZING VITE CONFIGURATION...**\n")
 
-        vite_test = self.execute_tool("test_endpoint", f"http://{self.host}:{self.vite_port}")
+        vite_test = self.execute_tool("test_endpoint", AURORA_VITE_URL)
         log.append(f"**Vite Server Status**: {vite_test}\n")
 
         log.append("[OK] **STATUS**: Vite server running on correct port")
@@ -1605,7 +1604,6 @@ class AuroraConversationalAI:
 
         try:
             # Aurora will create a status endpoint file
-            status_api_host = os.getenv("AURORA_HOST", "localhost")
             status_api_code = '''"""
 Aurora Live Status API - Auto-generated by Aurora
 Provides real-time server status data for dashboard
@@ -1627,7 +1625,7 @@ def get_live_status():
     for name, info in servers.items():
         try:
             result = subprocess.run(
-                f"curl -s -o /dev/null -w '%{{http_code}}' http://__AURORA_HOST__:{info['port']} --max-time 2",
+                f"curl -s -o /dev/null -w '%{{http_code}}' http://{AURORA_HOST}:{info['port']} --max-time 2",
                 shell=True, capture_output=True, text=True, timeout=3
             )
             status_code = result.stdout.strip()
@@ -1642,7 +1640,6 @@ if __name__ == "__main__":
     import json
     print(json.dumps(get_live_status(), indent=2))
 '''
-            status_api_code = status_api_code.replace("__AURORA_HOST__", status_api_host)
 
             status_file = "/workspaces/Aurora-x/.aurora_knowledge/live_status_api.py"
             result = self.execute_tool("write_file", status_file, status_api_code)
@@ -1715,14 +1712,12 @@ if __name__ == "__main__":
 
         # Step 1: Test backend endpoint
         diagnostic_log.append("\n**Step 1: Testing Backend Endpoint**")
-        backend_result = self.execute_tool(
-            "test_endpoint", f"http://{self.host}:{self.backend_port}/api/conversation"
-        )
+        backend_result = self.execute_tool("test_endpoint", f"{AURORA_BASE_URL}/api/conversation")
         diagnostic_log.append(f"Backend /api/conversation: {backend_result}")
 
         # Step 2: Test Luminar Nexus chat endpoint
         diagnostic_log.append("\n**Step 2: Testing Luminar Nexus Chat Service**")
-        chat_result = self.execute_tool("test_endpoint", f"http://{self.host}:{self.chat_port}/api/chat")
+        chat_result = self.execute_tool("test_endpoint", f"{AURORA_CHAT_URL}/api/chat")
         diagnostic_log.append(f"Luminar Nexus /api/chat: {chat_result}")
 
         # Step 3: Comprehensive system check
@@ -1968,7 +1963,8 @@ if __name__ == "__main__":
             task_type = "restart_servers"
         # Check for BUG FIX commands (GRANDMASTER LEVEL)
         elif re.search(
-            r"(fix|repair|correct|patch|resolve).*(bug|error|issue|404|500|broken|localhost)", user_message.lower()
+            rf"(fix|repair|correct|patch|resolve).*(bug|error|issue|404|500|broken|{AURORA_HOST_PATTERN})",
+            user_message.lower(),
         ):
             task_type = "fix_bug"
             log.append("[SCAN] **DEBUG**: Detected fix_bug task type")
@@ -2204,8 +2200,8 @@ if __name__ == "__main__":
                 log.append(f"[EMOJI] **Target Files**: {', '.join(target_files)}\n")
 
             # Find what to search for
-            if "localhost:9090" in user_message or "9090" in user_message:
-                search_pattern = "localhost:9090"
+            if AURORA_CONTROL_HOSTPORT in user_message or "9090" in user_message:
+                search_pattern = AURORA_CONTROL_HOSTPORT
                 log.append(f"[SCAN] **Searching for**: {search_pattern}\n")
 
             # If no specific files mentioned, search for them
@@ -2255,23 +2251,23 @@ if __name__ == "__main__":
                             self.execute_tool("run_command", f"cp {file_path} {backup_path}")
                             log.append(f"   [EMOJI] Backup: unused/{filename}.backup")
 
-                            # Apply fix - Replace localhost:9090 with relative /api
+                            # Apply fix - Replace loopback control URL with relative /api
                             new_content = content.replace(
-                                f"'http://{self.host}:{self.dashboard_port}/api/status'", "'/api/status'"
+                                f"'{AURORA_CONTROL_URL}/api/status'", "'/api/status'"
                             )
                             new_content = new_content.replace(
-                                f"'http://{self.host}:{self.dashboard_port}/api/control'", "'/api/control'"
+                                f"'{AURORA_CONTROL_URL}/api/control'", "'/api/control'"
                             )
                             new_content = new_content.replace(
-                                f'"http://{self.host}:{self.dashboard_port}/api/status"', '"/api/status"'
+                                f'"{AURORA_CONTROL_URL}/api/status"', '"/api/status"'
                             )
                             new_content = new_content.replace(
-                                f'"http://{self.host}:{self.dashboard_port}/api/control"', '"/api/control"'
+                                f'"{AURORA_CONTROL_URL}/api/control"', '"/api/control"'
                             )
 
                             # Write fixed file
                             self.execute_tool("write_file", file_path, new_content)
-                            log.append("   [OK] Fixed: localhost:9090 -> /api (Vite proxy)")
+                            log.append("   [OK] Fixed: loopback control URL -> /api (Vite proxy)")
                             fixed_count += 1
                         else:
                             log.append("    Pattern not found")
