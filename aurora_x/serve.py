@@ -897,8 +897,19 @@ def main():
             # Check if services are already running
             import requests
 
+            base_url = os.getenv("AURORA_CORE_URL") or os.getenv("AURORA_BASE_URL")
+            if base_url:
+                health_url = f"{base_url.rstrip('/')}/healthz"
+            else:
+                base_host = os.getenv("AURORA_HOST", "127.0.0.1")
+                base_scheme = os.getenv("AURORA_SCHEME", "http")
+                base_port = os.getenv("AURORA_CORE_PORT", "5000")
+                health_url = f"{base_scheme}://{base_host}:{base_port}/healthz"
+
+            health_url = os.getenv("AURORA_CORE_HEALTH_URL", health_url)
+
             try:
-                requests.get("http://localhost:5000/healthz", timeout=1)
+                requests.get(health_url, timeout=1)
             except Exception as e:
                 # Services not running, start them
                 print("[Aurora-X] Starting all services via Luminar Nexus...")
