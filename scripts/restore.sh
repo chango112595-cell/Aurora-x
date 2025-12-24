@@ -19,7 +19,7 @@ LOG_DIR="${LOG_DIR:-/workspaces/Aurora-x/logs}"
 LOG_FILE="${LOG_DIR}/restore-$(date +%Y%m%d_%H%M%S).log"
 
 # Database configuration
-DB_HOST="${DB_HOST:-localhost}"
+DB_HOST="${DB_HOST:-127.0.0.1}"
 DB_PORT="${DB_PORT:-5432}"
 DB_NAME="${DB_NAME:-aurora}"
 DB_USER="${DB_USER:-postgres}"

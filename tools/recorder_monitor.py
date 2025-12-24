@@ -23,6 +23,7 @@ from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import os
 import shutil
+import os
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -40,12 +41,13 @@ LOG_PATH = Path(".aurora_knowledge/RECORDING_LOG.jsonl")
 LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
 MONITOR_LOG = Path(".aurora_knowledge/recorder_monitor.log")
 
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 SERVICES = [
-    {"name": "backend", "url": "http://localhost:5000/health"},
-    {"name": "bridge", "url": "http://localhost:5001/health"},
-    {"name": "self-learn", "url": "http://localhost:5002/health"},
-    {"name": "chat", "url": "http://localhost:5003/health"},
-    {"name": "vite", "url": "http://localhost:5173/"},
+    {"name": "backend", "url": f"http://{AURORA_HOST}:5000/health"},
+    {"name": "bridge", "url": f"http://{AURORA_HOST}:5001/health"},
+    {"name": "self-learn", "url": f"http://{AURORA_HOST}:5002/health"},
+    {"name": "chat", "url": f"http://{AURORA_HOST}:5003/health"},
+    {"name": "vite", "url": f"http://{AURORA_HOST}:5173/"},
 ]
 
 CLEANUP_PATTERNS = ["*.pyc", "__pycache__"]

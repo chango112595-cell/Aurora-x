@@ -18,6 +18,7 @@ Built by Aurora in seconds - because experts don't need weeks.
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import json
 import logging
 import os
@@ -34,6 +35,8 @@ import requests
 
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -129,7 +132,7 @@ class AuroraSupervisor:
                 port=5000,
                 start_command="npm run dev",
                 working_dir="/workspaces/Aurora-x",
-                health_endpoint="http://localhost:5000/api/health",
+                health_endpoint=f"http://{AURORA_HOST}:5000/api/health",
                 dependencies=[],
             ),
             ServiceConfig(
@@ -137,7 +140,7 @@ class AuroraSupervisor:
                 port=5001,
                 start_command="uvicorn aurora_x.serve:app --host 0.0.0.0 --port 5001",
                 working_dir="/workspaces/Aurora-x",
-                health_endpoint="http://localhost:5001/health",
+                health_endpoint=f"http://{AURORA_HOST}:5001/health",
                 dependencies=[],
                 env_activation=". .venv/bin/activate",
             ),
@@ -146,7 +149,7 @@ class AuroraSupervisor:
                 port=5002,
                 start_command="python -m aurora_x.self_learn_server",
                 working_dir="/workspaces/Aurora-x",
-                health_endpoint="http://localhost:5002/health",
+                health_endpoint=f"http://{AURORA_HOST}:5002/health",
                 dependencies=["aurora-backend"],
                 env_activation=". .venv/bin/activate",
             ),

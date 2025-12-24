@@ -18,6 +18,7 @@ Built by Aurora - Because visibility = control
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import json
 import subprocess
 from datetime import datetime
@@ -462,7 +463,8 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
 def main():
     """Run health dashboard server"""
     server = HTTPServer(("0.0.0.0", PORT), HealthDashboardHandler)
-    print(f"[WEB] Aurora Health Monitor running at http://localhost:{PORT}")
+    aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+    print(f"[WEB] Aurora Health Monitor running at http://{aurora_host}:{PORT}")
     print("[DATA] Open in browser to view real-time dashboard")
 
     try:

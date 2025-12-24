@@ -26,6 +26,7 @@ Aurora will become a server infrastructure expert across all eras
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import json
 import time
 from datetime import datetime
@@ -33,6 +34,8 @@ from pathlib import Path
 
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -262,7 +265,7 @@ class AuroraServerGrandmaster:
                 "default_port": 5173,
                 "start_command": "vite",
                 "dev_start": "npm run dev",
-                "check_status": "curl -I http://localhost:5173",
+                "check_status": f"curl -I http://{AURORA_HOST}:5173",
                 "kill_command": "pkill -f vite",
                 "config_file": "vite.config.js",
                 "advantages": ["Instant server start", "Lightning fast HMR", "Native ESM"],
@@ -300,7 +303,7 @@ class AuroraServerGrandmaster:
             # Teach Aurora how to manage Vite specifically (her current server)
             if "Vite" in server:
                 print("   [TARGET] AURORA'S CURRENT SERVER - DEEP DIVE:")
-                print("   [OK] Check if running: curl -s -I http://localhost:5173")
+                print(f"   [OK] Check if running: curl -s -I http://{AURORA_HOST}:5173")
                 print("   [OK] Start server: cd client && npm run dev")
                 print("   [OK] Kill server: pkill -f vite")
                 print("   [OK] Check process: ps aux | grep vite")
@@ -435,9 +438,9 @@ class AuroraServerGrandmaster:
                 "with_host": "vite --host 0.0.0.0 --port 5173",
             },
             "Check server status": {
-                "http_check": "curl -I http://localhost:5173",
+                "http_check": f"curl -I http://{AURORA_HOST}:5173",
                 "process_check": "ps aux | grep vite",
-                "port_check": "nc -zv localhost 5173",
+                "port_check": f"nc -zv {AURORA_HOST} 5173",
             },
             "View server logs": {
                 "live_logs": "tail -f /path/to/server.log",
@@ -448,7 +451,7 @@ class AuroraServerGrandmaster:
                 "step_1": "pkill -f vite",
                 "step_2": "sleep 2",
                 "step_3": "cd /workspaces/Aurora-x/client && npm run dev &",
-                "step_4": "curl -I http://localhost:5173",
+                "step_4": f"curl -I http://{AURORA_HOST}:5173",
             },
         }
 

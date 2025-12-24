@@ -16,6 +16,7 @@ Aurora Emergency Debug System
 Activated when Aurora needs to debug issues autonomously
 """
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import json
 import subprocess
 import time
@@ -53,6 +54,8 @@ class AuroraEmergencyDebug:
             """
         self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/debug_responses.jsonl")
         self.log_file.parent.mkdir(exist_ok=True)
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
 
     def log_response(self, message, status="IN_PROGRESS"):
         """Log Aurora's debug responses"""
@@ -96,7 +99,7 @@ class AuroraEmergencyDebug:
 
         try:
             result = subprocess.run(
-                ["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True, timeout=5
+                ["curl", "-s", "-I", self.base_url], capture_output=True, text=True, timeout=5
             )
 
             if "200 OK" in result.stdout:
@@ -134,7 +137,7 @@ class AuroraEmergencyDebug:
         # Verify it started
         try:
             result = subprocess.run(
-                ["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True, timeout=5
+                ["curl", "-s", "-I", self.base_url], capture_output=True, text=True, timeout=5
             )
             if "200 OK" in result.stdout:
                 self.log_response("[OK] Vite server restarted successfully")

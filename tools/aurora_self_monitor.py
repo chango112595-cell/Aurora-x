@@ -12,12 +12,15 @@ Aurora's personality:
 
 import asyncio
 import json
+import os
 import subprocess
 import urllib.error
 import urllib.request
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 
 class AuroraSelfMonitor:
@@ -74,7 +77,7 @@ class AuroraSelfMonitor:
         # Check 2: HTTP health endpoint (if applicable)
         if service_key in ["backend", "chat"]:
             try:
-                req = urllib.request.Request(f"http://localhost:{port}/health")
+                req = urllib.request.Request(f"http://{AURORA_HOST}:{port}/health")
                 with urllib.request.urlopen(req, timeout=2) as response:
                     health["checks"]["http_responding"] = response.status == 200
             except Exception as e:
