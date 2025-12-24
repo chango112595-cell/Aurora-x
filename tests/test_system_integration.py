@@ -2,10 +2,7 @@
 System Integration Test Suite
 Ensures Nexus V3, Luminar V2, and Memory Fabric cooperate correctly.
 """
-import os
 import requests
-
-MEMORY_FABRIC_BASE_URL = os.getenv("AURORA_MEMORY_FABRIC_URL", "http://127.0.0.1:5004")
 import time
 import subprocess
 import sys
@@ -50,7 +47,7 @@ class TestMemoryFabricIntegration:
             wait_for_port(5004, timeout=10)
             
             try:
-                r = requests.get(f"{MEMORY_FABRIC_BASE_URL}/status", timeout=5)
+                r = requests.get("http://localhost:5004/status", timeout=5)
                 assert r.status_code == 200, f"Expected 200, got {r.status_code}"
                 
                 body = r.json()
@@ -59,7 +56,7 @@ class TestMemoryFabricIntegration:
             finally:
                 mem.terminate()
         else:
-            r = requests.get(f"{MEMORY_FABRIC_BASE_URL}/status", timeout=5)
+            r = requests.get("http://localhost:5004/status", timeout=5)
             assert r.status_code == 200
     
     def test_memory_fabric_message_storage(self):
@@ -74,7 +71,7 @@ class TestMemoryFabricIntegration:
             
             try:
                 r = requests.post(
-                    f"{MEMORY_FABRIC_BASE_URL}/message",
+                    "http://localhost:5004/message",
                     json={"role": "user", "content": "Test message", "importance": 0.8},
                     timeout=5
                 )
@@ -87,7 +84,7 @@ class TestMemoryFabricIntegration:
                 mem.terminate()
         else:
             r = requests.post(
-                f"{MEMORY_FABRIC_BASE_URL}/message",
+                "http://localhost:5004/message",
                 json={"role": "user", "content": "Test message", "importance": 0.8},
                 timeout=5
             )
@@ -159,7 +156,7 @@ class TestFullStackIntegration:
                 processes.append(mem)
                 wait_for_port(5004, timeout=10)
             
-            r = requests.get(f"{MEMORY_FABRIC_BASE_URL}/status", timeout=5)
+            r = requests.get("http://localhost:5004/status", timeout=5)
             assert r.status_code == 200, "Memory Fabric should respond"
             
             from aurora_nexus_v3.core.nexus_bridge import NexusBridge
