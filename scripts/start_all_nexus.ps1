@@ -6,6 +6,27 @@ Write-Host " AURORA NEXUS STARTUP" -ForegroundColor Cyan
 Write-Host "=" -NoNewline -ForegroundColor Cyan; Write-Host "=".PadRight(68, "=") -ForegroundColor Cyan
 Write-Host ""
 
+$auroraBaseUrl = $env:AURORA_BASE_URL
+$auroraScheme = $env:AURORA_SCHEME
+$auroraHost = $env:AURORA_HOST
+
+if ($auroraBaseUrl) {
+    try {
+        $baseUri = [System.Uri]$auroraBaseUrl
+        if (-not $auroraScheme) { $auroraScheme = $baseUri.Scheme }
+        if (-not $auroraHost) { $auroraHost = $baseUri.Host }
+    } catch {
+        Write-Host "[WARN] Invalid AURORA_BASE_URL provided; falling back to host/scheme defaults." -ForegroundColor Yellow
+        $auroraBaseUrl = $null
+    }
+}
+
+if (-not $auroraScheme) { $auroraScheme = "http" }
+if (-not $auroraHost) { $auroraHost = "127.0.0.1" }
+
+$baseUrl = "$auroraScheme://$auroraHost"
+$frontendBaseUrl = if ($auroraBaseUrl) { $auroraBaseUrl.TrimEnd("/") } else { "$baseUrl:5000" }
+
 # Check if Python is available
 try {
     $pythonVersion = python --version 2>&1
@@ -36,7 +57,7 @@ Start-Sleep -Seconds 3
 
 # Check if Luminar is responding
 try {
-    $response = Invoke-WebRequest -Uri "http://localhost:8000/api/nexus/status" -TimeoutSec 5 -UseBasicParsing
+    $response = Invoke-WebRequest -Uri "$baseUrl:8000/api/nexus/status" -TimeoutSec 5 -UseBasicParsing
     Write-Host "[OK] Luminar Nexus V2 is responding!" -ForegroundColor Green
 } catch {
     Write-Host "[WARN] Luminar Nexus V2 may still be starting..." -ForegroundColor Yellow
@@ -48,7 +69,7 @@ Write-Host "--------------------------------------------------------------------
 
 # Check if backend is already running
 try {
-    $backendCheck = Invoke-WebRequest -Uri "http://localhost:5000/api/health" -TimeoutSec 2 -UseBasicParsing -ErrorAction Stop
+    $backendCheck = Invoke-WebRequest -Uri "$frontendBaseUrl/api/health" -TimeoutSec 2 -UseBasicParsing -ErrorAction Stop
     Write-Host "[OK] Backend already running on port 5000" -ForegroundColor Green
 } catch {
     Write-Host "[INFO] Starting backend server..." -ForegroundColor Cyan
@@ -64,7 +85,7 @@ Start-Sleep -Seconds 2
 # Test Luminar routes
 Write-Host "[TEST] GET /api/luminar-nexus/v2/status" -ForegroundColor Cyan
 try {
-    $luminarStatus = Invoke-RestMethod -Uri "http://localhost:5000/api/luminar-nexus/v2/status" -Method Get -TimeoutSec 5
+    $luminarStatus = Invoke-RestMethod -Uri "$frontendBaseUrl/api/luminar-nexus/v2/status" -Method Get -TimeoutSec 5
     Write-Host "[OK] Luminar routes working! Services: $($luminarStatus.total_services)" -ForegroundColor Green
 } catch {
     Write-Host "[WARN] Luminar routes not responding yet" -ForegroundColor Yellow
@@ -76,9 +97,9 @@ Write-Host " NEXUS STARTUP COMPLETE" -ForegroundColor Cyan
 Write-Host "=" -NoNewline -ForegroundColor Cyan; Write-Host "=".PadRight(68, "=") -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Access points:" -ForegroundColor White
-Write-Host "  Frontend:       http://localhost:5000" -ForegroundColor Cyan
-Write-Host "  Luminar Nexus:  http://localhost:5000/luminar-nexus" -ForegroundColor Cyan
-Write-Host "  Memory Fabric:  http://localhost:5000/memory" -ForegroundColor Cyan
-Write-Host "  API Status:     http://localhost:5000/api/luminar-nexus/v2/status" -ForegroundColor Cyan
+Write-Host "  Frontend:       $frontendBaseUrl" -ForegroundColor Cyan
+Write-Host "  Luminar Nexus:  $frontendBaseUrl/luminar-nexus" -ForegroundColor Cyan
+Write-Host "  Memory Fabric:  $frontendBaseUrl/memory" -ForegroundColor Cyan
+Write-Host "  API Status:     $frontendBaseUrl/api/luminar-nexus/v2/status" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "[TIP] Press Ctrl+C to stop, then run: Stop-Process -Name node,python -Force" -ForegroundColor DarkGray
