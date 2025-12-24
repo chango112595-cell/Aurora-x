@@ -19,6 +19,7 @@ Aurora stops all old services and reloads herself with the new UI
 
 from typing import Dict, List, Tuple, Optional, Any, Union
 import os
+import os
 import subprocess
 import time
 from pathlib import Path
@@ -41,6 +42,9 @@ class AuroraSelfReload:
             Args:
             """
         self.root = Path(__file__).parent.parent
+        self.host = os.getenv("AURORA_HOST", "localhost")
+        self.port = os.getenv("AURORA_PORT", os.getenv("AURORA_BACKEND_PORT", "5000"))
+        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.host}:{self.port}")
 
     def log(self, emoji: str, message: str):
         """
@@ -133,7 +137,7 @@ class AuroraSelfReload:
         print("   'I've stopped all old services and started fresh with my new UI!'")
         print()
         print("Next steps:")
-        print("   1. Open http://localhost:5000/chat in your browser")
+        print(f"   1. Open {self.base_url}/chat in your browser")
         print("   2. Clear browser cache (Ctrl+Shift+R)")
         print("   3. Unregister service workers (F12 -> Application -> Service Workers)")
         print("   4. You should see my new Aurora chat interface! [STAR]")

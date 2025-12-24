@@ -17,6 +17,7 @@ Copilot delivers detailed feedback and sets up Aurora's second attempt
 """
 from typing import Dict, List, Tuple, Optional, Any, Union
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -195,6 +196,9 @@ class AuroraPerformanceReview:
 
     def how_to_get_a_plus(self):
         """Clear path to A+ grade"""
+        host = os.getenv("AURORA_HOST", "localhost")
+        port = os.getenv("AURORA_PORT", os.getenv("AURORA_BACKEND_PORT", "5000"))
+        base_url = os.getenv("AURORA_BASE_URL", f"http://{host}:{port}")
 
         print("\n" + "=" * 70)
         print("[TARGET] HOW TO GET A+ ON RETRY (95+ points required)")
@@ -205,7 +209,7 @@ class AuroraPerformanceReview:
         print("\n1  Complete the Dashboard Loader (35/35)")
         print("   TO-DO LIST:")
         print("   [ ] Create /workspaces/Aurora-x/tools/aurora_load_dashboard.py")
-        print("   [ ] Implement server checking (curl -s -I http://localhost:5000)")
+        print(f"   [ ] Implement server checking (curl -s -I {base_url})")
         print("   [ ] Implement server starting if needed (npm run dev)")
         print("   [ ] Implement dashboard route finding (check App.tsx)")
         print("   [ ] Implement dashboard opening (webbrowser.open)")
@@ -220,7 +224,7 @@ class AuroraPerformanceReview:
         print("   [ ] Remove them (the ones without matching opening tags)")
         print("   [ ] Save the file")
         print("   [ ] Restart Vite server")
-        print("   [ ] Test: Open http://localhost:5000 in browser")
+        print(f"   [ ] Test: Open {base_url} in browser")
         print("   [ ] Verify: No blank pages, no console errors")
         print("   [ ] Document: Log that the fix was verified")
 
@@ -260,7 +264,7 @@ class AuroraPerformanceReview:
 
         print("\n[TARGET] SUCCESS CRITERIA:")
         print("   1. aurora_load_dashboard.py exists and works")
-        print("   2. http://localhost:5000 loads without blank pages")
+        print(f"   2. {base_url} loads without blank pages")
         print("   3. All orphaned JSX tags removed from chat-interface.tsx")
         print("   4. Telemetry interface executes real actions")
         print("   5. Emergency debug verifies its fixes")

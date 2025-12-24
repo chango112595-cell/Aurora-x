@@ -19,6 +19,7 @@ Built by Aurora - Because visibility = control
 
 from typing import Dict, List, Tuple, Optional, Any, Union
 import json
+import os
 import subprocess
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -33,7 +34,8 @@ from concurrent.futures import ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
 #             results = executor.map(process_func, items)
 
-PORT = 9090
+HOST = os.getenv("AURORA_HOST", "localhost")
+PORT = int(os.getenv("AURORA_HEALTH_DASHBOARD_PORT", "9090"))
 
 
 class HealthDashboardHandler(BaseHTTPRequestHandler):
@@ -462,7 +464,7 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
 def main():
     """Run health dashboard server"""
     server = HTTPServer(("0.0.0.0", PORT), HealthDashboardHandler)
-    print(f"[WEB] Aurora Health Monitor running at http://localhost:{PORT}")
+    print(f"[WEB] Aurora Health Monitor running at http://{HOST}:{PORT}")
     print("[DATA] Open in browser to view real-time dashboard")
 
     try:

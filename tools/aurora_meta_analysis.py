@@ -25,6 +25,7 @@ Aurora will analyze the DISCONNECT between backend and frontend display.
 
 from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
+import os
 from pathlib import Path
 
 # Aurora Performance Optimization
@@ -41,6 +42,10 @@ class AuroraMetaAnalyzer:
     def __init__(self):
         self.root = Path(__file__).parent.parent
         self.chat_page = self.root / "client" / "src" / "pages" / "chat.tsx"
+        self.host = os.getenv("AURORA_HOST", "localhost")
+        self.backend_port = int(os.getenv("AURORA_BACKEND_PORT", "5000"))
+        self.bridge_port = int(os.getenv("AURORA_BRIDGE_PORT", "5001"))
+        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.host}:{self.backend_port}")
 
     def log(self, emoji: str, message: str):
         timestamp = datetime.now().strftime("%H:%M:%S")
@@ -72,7 +77,7 @@ class AuroraMetaAnalyzer:
         print("    User sees different page or 404")
         print()
         print("2. CORS ISSUE")
-        print("    Frontend can't call localhost:5001 from localhost:5000")
+        print(f"    Frontend can't call {self.host}:{self.bridge_port} from {self.host}:{self.backend_port}")
         print("    Browser blocks the request")
         print()
         print("3. NETWORK REQUEST FAILS SILENTLY")
@@ -304,11 +309,11 @@ class AuroraMetaAnalyzer:
 
         if "CORSMiddleware" in content:
             self.log("[OK]", "CORS already configured")
-            # Check if localhost:5000 is allowed
+            # Check if backend base URL is allowed
             if "5000" in content or "*" in content:
-                self.log("[OK]", "localhost:5000 appears to be allowed")
+                self.log("[OK]", f"{self.host}:{self.backend_port} appears to be allowed")
             else:
-                self.log("[WARN]", "Might need to add localhost:5000 to CORS origins")
+                self.log("[WARN]", f"Might need to add {self.host}:{self.backend_port} to CORS origins")
         else:
             self.log("", "Adding CORS middleware...")
             # Would add CORS configuration here
@@ -359,7 +364,7 @@ class AuroraMetaAnalyzer:
         print()
         print("Next steps:")
         print("  1. Restart the dev server (it should hot-reload)")
-        print("  2. Go to http://localhost:5000/chat")
+        print(f"  2. Go to {self.base_url}/chat")
         print("  3. Send a message")
         print()
         print("If you still have issues, check the browser console!")

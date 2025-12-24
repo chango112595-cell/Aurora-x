@@ -123,30 +123,34 @@ class AuroraSupervisor:
 
     def create_default_config(self):
         """Create default Aurora-X service configuration"""
+        host = os.getenv("AURORA_HOST", "localhost")
+        ui_port = int(os.getenv("AURORA_BACKEND_PORT", "5000"))
+        backend_port = int(os.getenv("AURORA_BRIDGE_PORT", "5001"))
+        self_learn_port = int(os.getenv("AURORA_SELF_LEARN_PORT", "5002"))
         services = [
             ServiceConfig(
                 name="aurora-ui",
-                port=5000,
+                port=ui_port,
                 start_command="npm run dev",
                 working_dir="/workspaces/Aurora-x",
-                health_endpoint="http://localhost:5000/api/health",
+                health_endpoint=f"http://{host}:{ui_port}/api/health",
                 dependencies=[],
             ),
             ServiceConfig(
                 name="aurora-backend",
-                port=5001,
-                start_command="uvicorn aurora_x.serve:app --host 0.0.0.0 --port 5001",
+                port=backend_port,
+                start_command=f"uvicorn aurora_x.serve:app --host 0.0.0.0 --port {backend_port}",
                 working_dir="/workspaces/Aurora-x",
-                health_endpoint="http://localhost:5001/health",
+                health_endpoint=f"http://{host}:{backend_port}/health",
                 dependencies=[],
                 env_activation=". .venv/bin/activate",
             ),
             ServiceConfig(
                 name="self-learning",
-                port=5002,
+                port=self_learn_port,
                 start_command="python -m aurora_x.self_learn_server",
                 working_dir="/workspaces/Aurora-x",
-                health_endpoint="http://localhost:5002/health",
+                health_endpoint=f"http://{host}:{self_learn_port}/health",
                 dependencies=["aurora-backend"],
                 env_activation=". .venv/bin/activate",
             ),

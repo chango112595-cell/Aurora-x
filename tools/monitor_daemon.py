@@ -13,6 +13,7 @@ Quality: 10/10 (Perfect)
 #!/usr/bin/env python3
 from typing import Dict, List, Tuple, Optional, Any, Union
 import subprocess
+import os
 import time
 from datetime import datetime
 
@@ -40,7 +41,8 @@ def monitor_services() -> None:
 
         for port, name in services.items():
             try:
-                response = requests.get(f"http://localhost:{port}", timeout=5)
+                host = os.getenv("AURORA_HOST", "localhost")
+                response = requests.get(f"http://{host}:{port}", timeout=5)
                 if response.status_code == 200:
                     print(f"[OK] {name} (:{port}): HEALTHY")
                 else:

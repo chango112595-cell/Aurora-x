@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """load_gen.py - simple load generator for IPC/chat endpoints"""
-import argparse, requests, time, threading
+import argparse, os, requests, time, threading
 def worker(url, count, delay):
     for i in range(count):
         try:
@@ -11,7 +11,10 @@ def worker(url, count, delay):
         time.sleep(delay)
 if __name__ == '__main__':
     p = argparse.ArgumentParser()
-    p.add_argument('--url', default='http://localhost:5000/healthz')
+    host = os.getenv("AURORA_HOST", "localhost")
+    port = os.getenv("AURORA_BACKEND_PORT", "5000")
+    base_url = os.getenv("AURORA_BASE_URL", f"http://{host}:{port}")
+    p.add_argument('--url', default=f"{base_url}/healthz")
     p.add_argument('--clients', type=int, default=10)
     p.add_argument('--rps', type=float, default=1.0)
     args = p.parse_args()

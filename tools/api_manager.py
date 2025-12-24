@@ -43,6 +43,7 @@ class AuroraAPIManager:
             
             Args:
             """
+        self.host = os.getenv("AURORA_HOST", "localhost")
         self.apis = {
             "main_web": {
                 "port": 5000,
@@ -109,7 +110,7 @@ class AuroraAPIManager:
         """Comprehensive health check for an API"""
         api = self.apis[api_name]
         port = api["port"]
-        health_url = f"http://localhost:{port}{api['health_endpoint']}"
+        health_url = f"http://{self.host}:{port}{api['health_endpoint']}"
 
         health_data = {
             "name": api_name,

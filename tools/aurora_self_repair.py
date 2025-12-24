@@ -19,6 +19,7 @@ Aurora diagnoses and fixes her own UI connection issues.
 
 from typing import Dict, List, Tuple, Optional, Any, Union
 import asyncio
+import os
 import subprocess
 from pathlib import Path
 
@@ -35,6 +36,8 @@ class AuroraSelfRepair:
         self.root = Path(__file__).parent.parent
         self.issues = []
         self.fixes = []
+        self.host = os.getenv("AURORA_HOST", "localhost")
+        self.bridge_port = int(os.getenv("AURORA_BRIDGE_PORT", "5001"))
 
     async def diagnose_connections(self):
         """Diagnose connection refused errors."""
@@ -254,7 +257,7 @@ async def healthz():
 
             print("\n   Aurora's recommendation:")
             print("      Use relative URLs to proxy through Vite dev server")
-            print("      Example: '/api/health' instead of 'http://localhost:5001/health'")
+            print(f"      Example: '/api/health' instead of 'http://{self.host}:{self.bridge_port}/health'")
 
         else:
             print("   [OK] No hardcoded localhost URLs found")
@@ -320,7 +323,7 @@ async def healthz():
         print()
         print("   3. Check Server Control page is using correct URLs")
         print("      - Should use relative URLs like /api/health")
-        print("      - Not hardcoded http://localhost:5001")
+        print(f"      - Not hardcoded http://{self.host}:{self.bridge_port}")
         print()
         print("   4. Refresh the UI and test connections")
 

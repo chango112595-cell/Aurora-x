@@ -38,6 +38,11 @@ SAFETY_DIR = Path("/workspaces/Aurora-x/safety_data")
 STATE_FILE = SAFETY_DIR / "aurora_state.json"
 CRASH_LOG = SAFETY_DIR / "crash_recovery.json"
 DIAGNOSTIC_LOG = SAFETY_DIR / "diagnostics.json"
+HEALTH_DASHBOARD_HOST = os.getenv("AURORA_HOST", "localhost")
+HEALTH_DASHBOARD_PORT = int(os.getenv("AURORA_HEALTH_DASHBOARD_PORT", "9090"))
+HEALTH_DASHBOARD_BASE_URL = os.getenv(
+    "AURORA_HEALTH_DASHBOARD_URL", f"http://{HEALTH_DASHBOARD_HOST}:{HEALTH_DASHBOARD_PORT}"
+)
 SESSION_LOG = SAFETY_DIR / "session_history.json"
 AUTO_SAVE_INTERVAL = 30  # seconds
 
@@ -186,7 +191,7 @@ class AuroraSafetyProtocol:
         try:
             import requests
 
-            response = requests.get("http://localhost:9090/api/status", timeout=2)
+            response = requests.get(f"{HEALTH_DASHBOARD_BASE_URL}/api/status", timeout=2)
             if response.status_code == 200:
                 return response.json()
         except Exception:
@@ -550,7 +555,9 @@ class AuroraSafetyProtocol:
             import requests
 
             response = requests.post(
-                "http://localhost:9090/api/control", json={"service": crash.service_name, "action": "start"}, timeout=5
+                f"{HEALTH_DASHBOARD_BASE_URL}/api/control",
+                json={"service": crash.service_name, "action": "start"},
+                timeout=5,
             )
 
             if response.status_code == 200:

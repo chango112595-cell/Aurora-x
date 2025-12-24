@@ -233,6 +233,7 @@ Luminar Nexus - Aurora's Server Command Center
 Manages all development servers with proper process control
 """
 
+import os
 import subprocess
 import json
 import time
@@ -254,20 +255,23 @@ class LuminarNexusServerManager:
     """
     
     def __init__(self):
+        self.host = os.getenv("AURORA_HOST", "localhost")
+        self.vite_port = int(os.getenv("AURORA_VITE_PORT", "5173"))
+        self.backend_port = int(os.getenv("AURORA_BRIDGE_PORT", "5001"))
         self.servers = {
             "vite": {
                 "name": "Aurora Vite Dev Server",
                 "command": "cd /workspaces/Aurora-x/client && npm run dev",
                 "session": "aurora-vite",
-                "port": 5173,
-                "health_check": "http://localhost:5173"
+                "port": self.vite_port,
+                "health_check": f"http://{self.host}:{self.vite_port}"
             },
             "backend": {
                 "name": "Aurora Backend API",
                 "command": "cd /workspaces/Aurora-x && npm run server",
                 "session": "aurora-api",
-                "port": 5001,
-                "health_check": "http://localhost:5001/health"
+                "port": self.backend_port,
+                "health_check": f"http://{self.host}:{self.backend_port}/health"
             }
         }
         

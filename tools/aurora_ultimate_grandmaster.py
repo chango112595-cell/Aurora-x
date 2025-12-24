@@ -96,6 +96,7 @@ and practical implementation knowledge from ancient times to future predictions.
 
 from typing import Dict, List, Tuple, Optional, Any, Union
 import json
+import os
 import subprocess
 import time
 from datetime import datetime
@@ -124,6 +125,8 @@ class AuroraUltimateGrandmaster:
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
         self.knowledge_base.mkdir(exist_ok=True)
         self.master_log = self.knowledge_base / "ultimate_grandmaster.jsonl"
+        self.host = os.getenv("AURORA_HOST", "localhost")
+        self.vite_port = int(os.getenv("AURORA_VITE_PORT", "5173"))
 
         self.total_mastery = 0
         self.max_mastery = 1000  # 1000 points across all domains
@@ -364,7 +367,7 @@ class AuroraUltimateGrandmaster:
         for port in [5173, 5000, 3000]:
             try:
                 result = subprocess.run(
-                    ["curl", "-s", "-I", f"http://localhost:{port}"], capture_output=True, text=True, timeout=2
+                    ["curl", "-s", "-I", f"http://{self.host}:{port}"], capture_output=True, text=True, timeout=2
                 )
                 if "200" in result.stdout or "OK" in result.stdout:
                     print(f"   [OK] Port {port}: WORKING! Server responding")
@@ -446,7 +449,7 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
             },
             "Step 3: Verify It Works": {
                 "what": "Check that the result is correct",
-                "example": "curl -I http://localhost:5173",
+                "example": f"curl -I http://{self.host}:{self.vite_port}",
                 "status": "[ERROR] MISSED",
             },
             "Step 4: Document Success": {
@@ -570,4 +573,3 @@ def main():
 if __name__ == "__main__":
     mastery_level = main()
     print(f"\n[EMOJI] Training Complete! Mastery: {mastery_level} points")
-

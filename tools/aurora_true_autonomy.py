@@ -97,6 +97,7 @@ class AuroraTrueAutonomy:
 Aurora's Autonomous Dashboard Loader
 Created by Aurora - Complete implementation with NO TODOs
 """
+import os
 import subprocess
 import time
 import webbrowser
@@ -111,7 +112,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 class AuroraDashboardLoader:
     def __init__(self):
-        self.vite_url = "http://localhost:5000"
+        host = os.getenv("AURORA_HOST", "localhost")
+        port = os.getenv("AURORA_PORT", os.getenv("AURORA_BACKEND_PORT", "5000"))
+        self.vite_url = os.getenv("AURORA_BASE_URL", f"http://{host}:{port}")
         self.dashboard_routes = ["/aurora-dashboard", "/dashboard", "/"]
         
     def check_server_status(self):

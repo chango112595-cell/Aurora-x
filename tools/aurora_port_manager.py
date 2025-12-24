@@ -18,6 +18,7 @@ Integrated with Luminar Nexus v2 for autonomous port healing
 
 from typing import Dict, List, Tuple, Optional, Any, Union
 import json
+import os
 import subprocess
 import threading
 import time
@@ -92,6 +93,7 @@ class AuroraPortManager:
 
         self.healing_active = True
         self.monitoring_thread = None
+        self.host = os.getenv("AURORA_HOST", "localhost")
 
     def scan_port_usage(self) -> dict[int, PortInfo]:
         """Scan all Aurora ports for current usage using psutil"""
@@ -273,10 +275,10 @@ class AuroraPortManager:
         try:
             # Try different health check endpoints
             endpoints = [
-                f"http://localhost:{port}/health",
-                f"http://localhost:{port}/api/health",
-                f"http://localhost:{port}/status",
-                f"http://localhost:{port}/api/nexus/status",  # For Nexus v2
+                f"http://{self.host}:{port}/health",
+                f"http://{self.host}:{port}/api/health",
+                f"http://{self.host}:{port}/status",
+                f"http://{self.host}:{port}/api/nexus/status",  # For Nexus v2
             ]
 
             for endpoint in endpoints:

@@ -34,7 +34,7 @@ WHERE TO FIX:
 3. Need to verify what's actually being served on port 5000
 
 SOLUTION STEPS:
-1. Check what HTML is being served at localhost:5000
+1. Check what HTML is being served at AURORA_BASE_URL (default http://localhost:5000)
 2. Verify it's Vite serving React app (not Express)
 3. Check if service worker is truly unregistered
 4. Create a cache-busting solution
@@ -44,6 +44,7 @@ EXECUTE NOW - NO MISTAKES
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import subprocess
 from pathlib import Path
 
@@ -79,6 +80,9 @@ class AuroraTaskExecutor:
             Args:
             """
         self.workspace = Path("/workspaces/Aurora-x")
+        self.host = os.getenv("AURORA_HOST", "localhost")
+        self.port = os.getenv("AURORA_PORT", os.getenv("AURORA_BACKEND_PORT", "5000"))
+        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.host}:{self.port}")
 
     def log(self, msg, emoji="[STAR]"):
         """
@@ -92,10 +96,10 @@ class AuroraTaskExecutor:
 
     def step1_verify_vite_serving(self):
         """Verify Vite is serving the UI"""
-        self.log("Step 1: Verifying what's on port 5000...", "[SCAN]")
+        self.log(f"Step 1: Verifying what's on {self.base_url}...", "[SCAN]")
 
         try:
-            response = requests.get("http://localhost:5000", timeout=3)
+            response = requests.get(self.base_url, timeout=3)
             html = response.text
 
             # Check for Vite indicators
@@ -111,7 +115,7 @@ class AuroraTaskExecutor:
 
             return has_vite and has_react_root and not has_chango
         except Exception as e:
-            self.log(f"Error checking port 5000: {e}", "[ERROR]")
+            self.log(f"Error checking {self.base_url}: {e}", "[ERROR]")
             return False
 
     def step2_force_service_worker_unregister(self):
@@ -236,7 +240,7 @@ class AuroraTaskExecutor:
         """Create clear instructions for user"""
         self.log("Step 5: Creating user instructions...", "[EMOJI]")
 
-        instructions = """
+        instructions = f"""
 # [STAR] AURORA UI - USER INSTRUCTIONS
 
 ## The Fix Is Complete! 
@@ -245,7 +249,7 @@ class AuroraTaskExecutor:
 1. [OK] Replaced all Chango references with Aurora
 2. [OK] Added service worker killer to index.html
 3. [OK] Enabled cache busting
-4. [OK] Restarted Vite cleanly on port 5000
+4. [OK] Restarted Vite cleanly on port {self.port}
 
 ### What You Need To Do (CRITICAL):
 
@@ -265,8 +269,8 @@ class AuroraTaskExecutor:
    - Or: Hold Ctrl/Cmd and click refresh button
 
 4. **Navigate to:**
-   - http://localhost:5000
-   - or http://localhost:5000/chat
+   - {self.base_url}
+   - or {self.base_url}/chat
 
 ### You Should See:
 - [SPARKLE] Aurora's name in sidebar (not Chango)
@@ -274,11 +278,11 @@ class AuroraTaskExecutor:
 - [EMOJI] "Ask Aurora to create something amazing..." in chat input
 
 ### If Still Showing Chango:
-1. Close ALL browser tabs for localhost:5000
+1. Close ALL browser tabs for {self.base_url}
 2. Clear browser cache completely:
    - Chrome: Settings -> Privacy -> Clear browsing data -> Cached images and files
 3. Restart browser
-4. Open http://localhost:5000 fresh
+4. Open {self.base_url} fresh
 
 ---
 [STAR] Aurora is ready to serve you!

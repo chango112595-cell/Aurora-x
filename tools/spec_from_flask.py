@@ -17,6 +17,7 @@ Directly generates Flask application code from parsed metadata
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import Path
 
 from aurora_x.spec.parser_nl import parse_english
@@ -112,6 +113,10 @@ if __name__ == '__main__':
     test_file.write_text(test_code, encoding="utf-8")
 
     # Create a simple report
+    host = os.getenv("AURORA_HOST", "localhost")
+    port = os.getenv("AURORA_PORT", os.getenv("AURORA_BACKEND_PORT", "5000"))
+    base_url = os.getenv("AURORA_BASE_URL", f"http://{host}:{port}")
+
     report_html = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -142,7 +147,7 @@ python src/{app_name}_app.py</pre>
             <h2>To Test:</h2>
             <pre>cd {run_dir}
 python -m unittest tests/test_{app_name}_app.py</pre>
-            <p>The app will be available at <a href="http://localhost:5000">http://localhost:5000</a></p>
+            <p>The app will be available at <a href="{base_url}">{base_url}</a></p>
         </div>
     </div>
 </body>

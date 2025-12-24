@@ -8,7 +8,7 @@ Requirements:
 
 Usage:
     python3 tools/aurora_terminal_client.py
-    python3 tools/aurora_terminal_client.py --server http://localhost:5000
+    python3 tools/aurora_terminal_client.py --server ${AURORA_BASE_URL:-http://localhost:5000}
     python3 tools/aurora_terminal_client.py --message "Hello Aurora"
 """
 
@@ -28,11 +28,17 @@ except ImportError:
     REQUESTS_AVAILABLE = False
 
 
+def _default_server_url() -> str:
+    host = os.getenv("AURORA_HOST", "localhost")
+    port = os.getenv("AURORA_PORT", os.getenv("AURORA_BACKEND_PORT", "5000"))
+    return os.getenv("AURORA_BASE_URL", f"http://{host}:{port}")
+
+
 class AuroraTerminalClient:
     """Terminal client for Aurora"""
     
-    def __init__(self, server_url: str = "http://localhost:5000"):
-        self.server_url = server_url
+    def __init__(self, server_url: str | None = None):
+        self.server_url = server_url or _default_server_url()
         self.session_id = f"terminal_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         self.conversation_history = []
         self.config_file = Path.home() / ".aurora_terminal_config"
@@ -274,13 +280,13 @@ def main():
         epilog="Examples:\n"
                "  python3 tools/aurora_terminal_client.py\n"
                "  python3 tools/aurora_terminal_client.py --message 'Hello!'\n"
-               "  python3 tools/aurora_terminal_client.py --server http://localhost:5000",
+               f"  python3 tools/aurora_terminal_client.py --server {_default_server_url()}",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(
         "--server",
-        default="http://localhost:5000",
-        help="Aurora server URL (default: http://localhost:5000)"
+        default=_default_server_url(),
+        help=f"Aurora server URL (default: {_default_server_url()})"
     )
     parser.add_argument(
         "--session",

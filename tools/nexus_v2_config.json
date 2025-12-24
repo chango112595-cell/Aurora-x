@@ -20,7 +20,7 @@
           "type": "ui",
           "quantum_state": "entangled",
           "dependencies": [],
-          "health_check_endpoint": "http://localhost:5173",
+          "health_check_endpoint": "http://${AURORA_HOST:-localhost}:${AURORA_VITE_PORT:-5173}",
           "scaling_strategy": "horizontal"
         },
         "backend": {
@@ -28,7 +28,7 @@
           "type": "api",
           "quantum_state": "stable",
           "dependencies": [],
-          "health_check_endpoint": "http://localhost:5000/api/status",
+          "health_check_endpoint": "http://${AURORA_HOST:-localhost}:${AURORA_BACKEND_PORT:-5000}/api/status",
           "scaling_strategy": "vertical"
         },
         "bridge": {
@@ -36,7 +36,7 @@
           "type": "middleware",
           "quantum_state": "stable",
           "dependencies": ["backend"],
-          "health_check_endpoint": "http://localhost:5001/api/status",
+          "health_check_endpoint": "http://${AURORA_HOST:-localhost}:${AURORA_BRIDGE_PORT:-5001}/api/status",
           "scaling_strategy": "horizontal"
         },
         "self_learn": {
@@ -44,7 +44,7 @@
           "type": "ai",
           "quantum_state": "superposition",
           "dependencies": ["backend"],
-          "health_check_endpoint": "http://localhost:5002/api/status",
+          "health_check_endpoint": "http://${AURORA_HOST:-localhost}:${AURORA_SELF_LEARN_PORT:-5002}/api/status",
           "scaling_strategy": "ai_adaptive"
         },
         "chat": {
@@ -52,7 +52,7 @@
           "type": "ai",
           "quantum_state": "entangled",
           "dependencies": ["bridge"],
-          "health_check_endpoint": "http://localhost:5003/api/chat/status",
+          "health_check_endpoint": "http://${AURORA_HOST:-localhost}:${AURORA_CHAT_PORT:-5003}/api/chat/status",
           "scaling_strategy": "ai_adaptive"
         }
       },
@@ -62,7 +62,7 @@
         "type": "orchestrator",
         "quantum_state": "quantum_superposition",
         "dependencies": ["all"],
-        "health_check_endpoint": "http://localhost:5005/api/nexus/status"
+        "health_check_endpoint": "http://${AURORA_HOST:-localhost}:${AURORA_NEXUS_V2_PORT:-5005}/api/nexus/status"
       }
     },
     
