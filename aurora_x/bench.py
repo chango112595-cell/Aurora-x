@@ -10,6 +10,10 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
+from typing import Any
+from pathlib import Path
+import time
+import logging
 from typing import Dict, List, Tuple, Optional, Any, Union
 
 # Aurora Performance Optimization
@@ -26,21 +30,17 @@ from concurrent.futures import ThreadPoolExecutor
 Provides performance benchmarking for corpus retrieval and seeding operations.
 """
 
-import logging
-import time
-from pathlib import Path
-from typing import Any
 
 _logger = logging.getLogger("aurora.bench")
 
 
 def benchmark_corpus(corpus_path: str, iterations: int = 100) -> dict:
     """Benchmark corpus retrieval and seeding performance.
-    
+
     Args:
         corpus_path: Path to the corpus directory
         iterations: Number of benchmark iterations
-        
+
     Returns:
         Dict with benchmark results including timings and statistics
     """
@@ -51,17 +51,17 @@ def benchmark_corpus(corpus_path: str, iterations: int = 100) -> dict:
         "timings": [],
         "errors": []
     }
-    
+
     corpus_dir = Path(corpus_path)
     if not corpus_dir.exists():
         results["status"] = "error"
         results["errors"].append(f"Corpus path does not exist: {corpus_path}")
         return results
-    
+
     try:
         # Import corpus functions
         from aurora_x.corpus import corpus_retrieve
-        
+
         # Benchmark corpus retrieval
         for i in range(iterations):
             start = time.perf_counter()
@@ -71,15 +71,16 @@ def benchmark_corpus(corpus_path: str, iterations: int = 100) -> dict:
                 results["timings"].append(elapsed)
             except Exception as e:
                 results["errors"].append(f"Iteration {i}: {str(e)}")
-        
+
         if results["timings"]:
             results["min_time"] = min(results["timings"])
             results["max_time"] = max(results["timings"])
-            results["avg_time"] = sum(results["timings"]) / len(results["timings"])
+            results["avg_time"] = sum(
+                results["timings"]) / len(results["timings"])
             results["status"] = "completed"
         else:
             results["status"] = "no_successful_runs"
-            
+
     except ImportError as e:
         results["status"] = "import_error"
         results["errors"].append(f"Cannot import corpus module: {e}")
@@ -87,5 +88,5 @@ def benchmark_corpus(corpus_path: str, iterations: int = 100) -> dict:
         results["status"] = "error"
         results["errors"].append(str(e))
         _logger.error(f"Benchmark failed: {e}")
-    
+
     return results

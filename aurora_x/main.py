@@ -54,7 +54,8 @@ _global_adaptive_scheduler: AdaptiveBiasScheduler | None = None
 
 # Progress tracking constants
 PROGRESS_JSON_DEFAULT = Path(__file__).resolve().parents[1] / "progress.json"
-UPDATE_SCRIPT_DEFAULT = Path(__file__).resolve().parents[1] / "tools" / "update_progress.py"
+UPDATE_SCRIPT_DEFAULT = Path(__file__).resolve(
+).parents[1] / "tools" / "update_progress.py"
 HIST_DIR = Path(__file__).resolve().parents[1] / ".progress_history"
 
 
@@ -215,15 +216,15 @@ def diff_scores(old: dict[str, dict[str, Any]], new: dict[str, dict[str, Any]]) 
 class Repo:
     """
         Repo
-        
+
         Comprehensive class providing repo functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
             create, path, set_hash, list_files
         """
@@ -231,10 +232,10 @@ class Repo:
     def create(outdir):
         """
             Create
-            
+
             Args:
                 outdir: outdir
-        
+
             Returns:
                 Result of operation
             """
@@ -253,8 +254,8 @@ class Repo:
 
     def __init__(self):
         """
-              Init  
-            
+              Init
+
             Args:
             """
         self.root = Path(".")
@@ -262,10 +263,10 @@ class Repo:
     def path(self, p):
         """
             Path
-            
+
             Args:
                 p: p
-        
+
             Returns:
                 Result of operation
             """
@@ -274,7 +275,7 @@ class Repo:
     def set_hash(self, p, c):
         """
             Set Hash
-            
+
             Args:
                 p: p
                 c: c
@@ -284,9 +285,9 @@ class Repo:
     def list_files(self):
         """
             List Files
-            
+
             Args:
-        
+
             Returns:
                 Result of operation
             """
@@ -296,22 +297,23 @@ class Repo:
 class Sandbox:
     """
         Sandbox
-        
+
         Comprehensive class providing sandbox functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
-            
+
         """
+
     def __init__(self, root, timeout_s):
         """
-              Init  
-            
+              Init
+
             Args:
                 root: root
                 timeout_s: timeout s
@@ -322,22 +324,23 @@ class Sandbox:
 class Spec:
     """
         Spec
-        
+
         Comprehensive class providing spec functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
-            
+
         """
+
     def __init__(self):
         """
-              Init  
-            
+              Init
+
             Args:
             """
         self.functions = []
@@ -346,10 +349,10 @@ class Spec:
 def parse_spec(text):
     """
         Parse Spec
-        
+
         Args:
             text: text
-    
+
         Returns:
             Result of operation
         """
@@ -359,7 +362,7 @@ def parse_spec(text):
 def write_file(p, c):
     """
         Write File
-        
+
         Args:
             p: p
             c: c
@@ -381,7 +384,8 @@ def run_spec(path: str):
     print(f"Source: {out / 'src'}")
     print(f"Tests: {out / 'tests'}")
     print(f"Report: {out / 'report.html'}")
-    print(f"Run tests: python -m unittest discover -s {out / 'tests'} -t {out}")
+    print(
+        f"Run tests: python -m unittest discover -s {out / 'tests'} -t {out}")
 
 
 def main():
@@ -390,47 +394,66 @@ def main():
 
     # Mutually exclusive: spec (for spec compilation), spec-text, spec-file, dump-corpus, show-bias, progress-print, or nl (natural language)
     g = ap.add_mutually_exclusive_group(required=True)
-    g.add_argument("--spec", type=str, help="Path to spec markdown to compile -> code")
-    g.add_argument("--spec-text", type=str, help="Inline spec text (Markdown DSL)")
-    g.add_argument("--spec-file", type=str, help="Path to spec file (legacy synthesis)")
-    g.add_argument("--nl", type=str, help="Natural language instruction to generate a spec")
-    g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
-    g.add_argument("--show-bias", action="store_true", help="Print current seed_bias and exit")
-    g.add_argument("--progress-print", action="store_true", help="Print computed progress and exit")
+    g.add_argument("--spec", type=str,
+                   help="Path to spec markdown to compile -> code")
+    g.add_argument("--spec-text", type=str,
+                   help="Inline spec text (Markdown DSL)")
+    g.add_argument("--spec-file", type=str,
+                   help="Path to spec file (legacy synthesis)")
+    g.add_argument("--nl", type=str,
+                   help="Natural language instruction to generate a spec")
+    g.add_argument("--dump-corpus", type=str,
+                   help="Signature to query corpus instead of running synthesis")
+    g.add_argument("--show-bias", action="store_true",
+                   help="Print current seed_bias and exit")
+    g.add_argument("--progress-print", action="store_true",
+                   help="Print computed progress and exit")
 
     # Corpus dump options
-    ap.add_argument("--top", type=int, default=10, help="How many corpus entries to print with --dump-corpus")
-    ap.add_argument("--json", action="store_true", help="Emit JSON for --dump-corpus")
-    ap.add_argument("--grep", type=str, default=None, help="Filter results by substring for --dump-corpus")
+    ap.add_argument("--top", type=int, default=10,
+                    help="How many corpus entries to print with --dump-corpus")
+    ap.add_argument("--json", action="store_true",
+                    help="Emit JSON for --dump-corpus")
+    ap.add_argument("--grep", type=str, default=None,
+                    help="Filter results by substring for --dump-corpus")
 
     # Synthesis options
     ap.add_argument("--seed", type=int, default=1337, help="Random seed")
-    ap.add_argument("--outdir", type=str, default="./runs", help="Output directory")
-    ap.add_argument("--no-seed", action="store_true", help="Disable seeding from corpus")
+    ap.add_argument("--outdir", type=str, default="./runs",
+                    help="Output directory")
+    ap.add_argument("--no-seed", action="store_true",
+                    help="Disable seeding from corpus")
     ap.add_argument(
         "--baseline",
         type=str,
         default=None,
         help="Path to baseline run dir for report diffs (default: runs/latest)",
     )
-    ap.add_argument("--seed-bias", type=float, default=None, help="Override learned seed bias [0.0..0.5]")
-    ap.add_argument("--max-iters", type=int, default=100, help="Maximum synthesis iterations")
+    ap.add_argument("--seed-bias", type=float, default=None,
+                    help="Override learned seed bias [0.0..0.5]")
+    ap.add_argument("--max-iters", type=int, default=100,
+                    help="Maximum synthesis iterations")
     ap.add_argument("--beam", type=int, default=20, help="Beam search width")
-    ap.add_argument("--timeout", type=int, default=5, help="Timeout in seconds")
+    ap.add_argument("--timeout", type=int, default=5,
+                    help="Timeout in seconds")
 
     # RNG config
     ap.add_argument("--temp", type=float, default=0.9, help="Temperature")
     ap.add_argument("--top-k", type=int, default=50, help="Top-K sampling")
-    ap.add_argument("--top-p", type=float, default=0.95, help="Top-P (nucleus) sampling")
+    ap.add_argument("--top-p", type=float, default=0.95,
+                    help="Top-P (nucleus) sampling")
 
     # Progress tracking options
-    ap.add_argument("--update-task", action="append", default=None, help="ID=NN or ID=auto (repeatable)")
-    ap.add_argument("--bump", action="append", default=None, help="ID=+/- (repeatable)")
+    ap.add_argument("--update-task", action="append",
+                    default=None, help="ID=NN or ID=auto (repeatable)")
+    ap.add_argument("--bump", action="append", default=None,
+                    help="ID=+/- (repeatable)")
 
     args = ap.parse_args()
 
     outdir = Path(args.outdir).resolve() if args.outdir else None
-    rng_cfg = {"temperature": args.temp, "top_k": args.top_k, "top_p": args.top_p}
+    rng_cfg = {"temperature": args.temp,
+        "top_k": args.top_k, "top_p": args.top_p}
 
     # ----- Natural language mode -----
     if args.nl:
@@ -482,11 +505,13 @@ def main():
                 import subprocess
 
                 subprocess.check_call(
-                    [sys.executable, "tools/spec_compile_v3.py", str(spec_path)],
+                    [sys.executable, "tools/spec_compile_v3.py",
+                        str(spec_path)],
                     env=os.environ.copy(),
                 )
             else:
-                print("No v3 compiler found (tools/spec_compile_v3.py). Add v3 pack first.")
+                print(
+                    "No v3 compiler found (tools/spec_compile_v3.py). Add v3 pack first.")
         return 0
 
     # ----- Spec compilation mode -----
@@ -571,7 +596,8 @@ def main():
         return 0
 
     # ----- Synthesis mode -----
-    spec_text = args.spec_text if args.spec_text else Path(args.spec_file).read_text()
+    spec_text = args.spec_text if args.spec_text else Path(
+        args.spec_file).read_text()
 
     ax = AuroraX(
         seed=args.seed,
@@ -607,18 +633,19 @@ def main():
 class AuroraX:
     """
         Aurorax
-        
+
         Comprehensive class providing aurorax functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
             run, build_module, synthesize_best, save_run_config
         """
+
     def __init__(
         self,
         seed: int,
@@ -633,7 +660,7 @@ class AuroraX:
     ):
         """
         Initialize AuroraX synthesis engine.
-        
+
         Args:
             seed: Random seed for reproducibility
             max_iters: Maximum synthesis iterations
@@ -656,7 +683,8 @@ class AuroraX:
         self.baseline = baseline
         self.weights = learn.load(self.repo.root)
         if seed_bias_override is not None:
-            self.weights["seed_bias"] = max(0.0, min(0.5, float(seed_bias_override)))
+            self.weights["seed_bias"] = max(
+                0.0, min(0.5, float(seed_bias_override)))
 
         # Initialize persistent seed store
         self.seed_store = get_seed_store()

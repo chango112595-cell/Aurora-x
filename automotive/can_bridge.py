@@ -32,7 +32,7 @@ except ImportError:
 
 def read_loop(interface: str = 'can0', channel: Optional[str] = None, bustype: str = 'socketcan'):
     """Main CAN bus read loop.
-    
+
     Args:
         interface: CAN interface name
         channel: Optional channel override
@@ -41,10 +41,11 @@ def read_loop(interface: str = 'can0', channel: Optional[str] = None, bustype: s
     if not CAN_AVAILABLE:
         _logger.error("Cannot start CAN read loop: python-can not installed")
         _logger.info("Install with: pip install python-can")
-        _logger.info("CAN bridge will not emit data until python-can is available")
+        _logger.info(
+            "CAN bridge will not emit data until python-can is available")
         # Do NOT emit fake data - just log and return
         return
-    
+
     try:
         bus = can.interface.Bus(channel=interface, bustype=bustype)
         _logger.info(f"CAN bridge started on {interface} ({bustype})")
@@ -57,12 +58,13 @@ def read_loop(interface: str = 'can0', channel: Optional[str] = None, bustype: s
     except Exception as e:
         _logger.error(f"CAN bus error: {e}")
 
+
 def publish_telemetry(msg: dict) -> bool:
     """Publish telemetry to Aurora Core via UDP.
-    
+
     Args:
         msg: Telemetry message dict
-        
+
     Returns:
         True if sent successfully, False otherwise.
     """
@@ -70,11 +72,13 @@ def publish_telemetry(msg: dict) -> bool:
     try:
         aurora_host = os.environ.get("AURORA_HOST", "127.0.0.1")
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.sendto(json.dumps({"type": "can_telemetry", "payload": msg}).encode(), (aurora_host, 9801))
+        s.sendto(json.dumps({"type": "can_telemetry",
+                 "payload": msg}).encode(), (aurora_host, 9801))
         return True
     except Exception as e:
         _logger.debug(f"Failed to publish telemetry: {e}")
         return False
+
 
 def store_suggestion(data):
     ts = int(time.time()*1000)
@@ -82,11 +86,14 @@ def store_suggestion(data):
     fn.write_text(json.dumps(data, indent=2))
     print("Saved suggestion:", fn)
 
+
 def suggest_ecu_command(ecu, service, params, reason):
     # prepare non-destructive suggestion; human must approve
-    obj = {"ecu":ecu,"service":service,"params":params,"reason":reason,"ts":time.time()}
+    obj = {"ecu": ecu, "service": service, "params": params,
+           "reason": reason, "ts": time.time()}
     store_suggestion(obj)
-    return {"ok":True, "saved": True}
+    return {"ok": True, "saved": True}
+
 
 if __name__ == "__main__":
     import argparse

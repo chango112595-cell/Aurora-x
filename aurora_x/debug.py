@@ -10,6 +10,9 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
+from typing import Any
+import traceback
+import logging
 from typing import Dict, List, Tuple, Optional, Any, Union
 
 # Aurora Performance Optimization
@@ -22,20 +25,17 @@ from concurrent.futures import ThreadPoolExecutor
 
 """Aurora-X debugging utilities with real execution."""
 
-import logging
-import traceback
-from typing import Any
 
 _debug_logger = logging.getLogger("aurora.debug")
 
 
 def debug_candidate(code: str, test_cases: list) -> dict:
     """Debug a synthesis candidate against test cases.
-    
+
     Args:
         code: Python code string to test
         test_cases: List of dicts with 'inputs' and 'expected' keys
-        
+
     Returns:
         Dict with execution results and status
     """
@@ -48,15 +48,15 @@ def debug_candidate(code: str, test_cases: list) -> dict:
         "errors": [],
         "test_results": []
     }
-    
+
     if not code or not test_cases:
         results["status"] = "invalid_input"
         results["errors"].append("Empty code or test cases provided")
         return results
-    
+
     # Create isolated namespace for execution
     namespace: dict[str, Any] = {}
-    
+
     # Compile and execute the code
     try:
         compiled = compile(code, "<synthesis_candidate>", "exec")
@@ -69,19 +69,21 @@ def debug_candidate(code: str, test_cases: list) -> dict:
     except Exception as e:
         results["status"] = "execution_error"
         results["errors"].append(f"Execution error: {str(e)}")
-        _debug_logger.error(f"Execution error in candidate: {traceback.format_exc()}")
+        _debug_logger.error(
+            f"Execution error in candidate: {traceback.format_exc()}")
         return results
-    
+
     # Run test cases
     for i, test in enumerate(test_cases):
         results["tests_run"] += 1
         test_result = {"test_index": i, "passed": False, "error": None}
-        
+
         try:
             inputs = test.get("inputs", {})
             expected = test.get("expected")
-            func_name = test.get("function", list(namespace.keys())[-1] if namespace else None)
-            
+            func_name = test.get("function", list(
+                namespace.keys())[-1] if namespace else None)
+
             if func_name and callable(namespace.get(func_name)):
                 func = namespace[func_name]
                 if isinstance(inputs, dict):
@@ -90,7 +92,7 @@ def debug_candidate(code: str, test_cases: list) -> dict:
                     actual = func(*inputs)
                 else:
                     actual = func(inputs)
-                
+
                 if actual == expected:
                     test_result["passed"] = True
                     results["tests_passed"] += 1
@@ -104,9 +106,9 @@ def debug_candidate(code: str, test_cases: list) -> dict:
             results["tests_failed"] += 1
             test_result["error"] = str(e)
             _debug_logger.debug(f"Test {i} failed with exception: {e}")
-        
+
         results["test_results"].append(test_result)
-    
+
     # Determine final status
     if results["tests_run"] == 0:
         results["status"] = "no_tests"
@@ -116,5 +118,5 @@ def debug_candidate(code: str, test_cases: list) -> dict:
         results["status"] = "partial"
     else:
         results["status"] = "failed"
-    
+
     return results

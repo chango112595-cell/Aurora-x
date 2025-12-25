@@ -11,6 +11,7 @@ Quality: 10/10 (Perfect)
 """
 
 # aurora_x/serve.py  FastAPI app with Aurora-X v3 dashboard mounted
+import logging
 from aurora_x.bridge.attach_bridge import attach_bridge
 from typing import Dict, List, Tuple, Optional, Any, Union
 import html
@@ -122,7 +123,6 @@ if static_dir.exists() and any(static_dir.iterdir()):
 app.include_router(make_router(static_dir, templates_dir))
 
 # Include server control API (Aurora's fix for Server Control page)
-import logging
 _serve_logger = logging.getLogger("aurora.serve")
 
 try:

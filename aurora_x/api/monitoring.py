@@ -99,7 +99,8 @@ async def get_metrics_history(minutes: int = 60) -> dict[str, Any]:
     cutoff_time = datetime.utcnow() - timedelta(minutes=minutes)
 
     # Filter history by time
-    filtered_history = [m for m in _metrics_history if datetime.fromisoformat(m["timestamp"]) >= cutoff_time]
+    filtered_history = [m for m in _metrics_history if datetime.fromisoformat(
+        m["timestamp"]) >= cutoff_time]
 
     return {"metrics": filtered_history, "count": len(filtered_history), "period_minutes": minutes}
 

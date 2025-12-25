@@ -50,50 +50,51 @@ if AIOHTTP_OK:
         """Handle WebRTC offer and return answer"""
         try:
             data = await request.json()
-            
+
             if not AIORTC_OK:
                 # Without aiortc, we can only do signaling relay
-                _logger.warning("WebRTC offer received but aiortc not available")
+                _logger.warning(
+                    "WebRTC offer received but aiortc not available")
                 return web.json_response({
                     "error": "WebRTC unavailable",
                     "reason": "aiortc not installed",
                     "hint": "Install aiortc for full WebRTC support: pip install aiortc"
                 }, status=503)
-            
+
             # Parse the incoming offer
             offer_sdp = data.get("sdp")
             offer_type = data.get("type", "offer")
-            
+
             if not offer_sdp:
                 return web.json_response({
                     "error": "Missing SDP in offer"
                 }, status=400)
-            
+
             # Create peer connection
             pc = RTCPeerConnection()
             pc_id = str(id(pc))
             _peer_connections[pc_id] = pc
-            
+
             @pc.on("connectionstatechange")
             async def on_connection_state_change():
                 _logger.info(f"Connection state: {pc.connectionState}")
                 if pc.connectionState in ["failed", "closed"]:
                     _peer_connections.pop(pc_id, None)
-            
+
             # Set remote description (the offer)
             offer_desc = RTCSessionDescription(sdp=offer_sdp, type=offer_type)
             await pc.setRemoteDescription(offer_desc)
-            
+
             # Create and set local description (the answer)
             answer = await pc.createAnswer()
             await pc.setLocalDescription(answer)
-            
+
             return web.json_response({
                 "type": pc.localDescription.type,
                 "sdp": pc.localDescription.sdp,
                 "connection_id": pc_id
             })
-            
+
         except json.JSONDecodeError:
             return web.json_response({"error": "Invalid JSON"}, status=400)
         except Exception as e:
@@ -105,12 +106,12 @@ if AIOHTTP_OK:
         try:
             data = await request.json()
             pc_id = data.get("connection_id")
-            
+
             if pc_id and pc_id in _peer_connections:
                 pc = _peer_connections.pop(pc_id)
                 await pc.close()
                 return web.json_response({"status": "closed"})
-            
+
             return web.json_response({"error": "Connection not found"}, status=404)
         except Exception as e:
             return web.json_response({"error": str(e)}, status=500)
@@ -121,10 +122,10 @@ if AIOHTTP_OK:
         app.router.add_get('/', index)
         app.router.add_post('/offer', offer)
         app.router.add_post('/close', close_connection)
-        
+
         _logger.info(f"Starting WebRTC Hub on port {port}")
         _logger.info(f"aiortc available: {AIORTC_OK}")
-        
+
         web.run_app(app, port=port)
 
 else:

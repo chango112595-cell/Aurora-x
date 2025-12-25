@@ -31,23 +31,23 @@ _mavlink_connection = None
 
 def init_mavlink(connection_string: Optional[str] = None) -> bool:
     """Initialize MAVLink connection to autopilot.
-    
+
     Args:
         connection_string: MAVLink connection string (e.g., 'udp:127.0.0.1:14550')
-        
+
     Returns:
         True if connection successful, False otherwise.
     """
     global _mavlink_connection
-    
+
     if not MAVLINK_AVAILABLE:
         _logger.warning("MAVLink not available - install pymavlink")
         return False
-    
+
     conn_str = connection_string or os.environ.get(
         "MAVLINK_CONNECTION", "udp:127.0.0.1:14550"
     )
-    
+
     try:
         _mavlink_connection = mavutil.mavlink_connection(conn_str)
         _mavlink_connection.wait_heartbeat(timeout=5)
@@ -61,7 +61,7 @@ def init_mavlink(connection_string: Optional[str] = None) -> bool:
 
 def collect_telemetry() -> dict:
     """Collect telemetry from flight computer.
-    
+
     Returns:
         Dict with telemetry data or unavailable status.
     """
@@ -71,7 +71,7 @@ def collect_telemetry() -> dict:
             "error": "pymavlink not installed",
             "hint": "Install with: pip install pymavlink"
         }
-    
+
     if _mavlink_connection is None:
         if not init_mavlink():
             return {
@@ -79,30 +79,30 @@ def collect_telemetry() -> dict:
                 "error": "MAVLink connection not established",
                 "hint": "Set MAVLINK_CONNECTION environment variable"
             }
-    
+
     try:
         # Request VFR_HUD message for airspeed/altitude
         msg = _mavlink_connection.recv_match(
             type='VFR_HUD', blocking=True, timeout=2
         )
-        
+
         if msg:
             airspeed = msg.airspeed
             altitude = msg.alt
         else:
             airspeed = None
             altitude = None
-        
+
         # Request GPS_RAW_INT for position
         gps_msg = _mavlink_connection.recv_match(
             type='GPS_RAW_INT', blocking=True, timeout=2
         )
-        
+
         if gps_msg:
             gps = [gps_msg.lat / 1e7, gps_msg.lon / 1e7]
         else:
             gps = None
-        
+
         return {
             "available": True,
             "airspeed": airspeed,
@@ -110,13 +110,14 @@ def collect_telemetry() -> dict:
             "gps": gps,
             "timestamp": time.time()
         }
-        
+
     except Exception as e:
         _logger.error(f"Telemetry collection failed: {e}")
         return {
             "available": False,
             "error": str(e)
         }
+
 
 def prepare_uplink(commands, manifest):
     ts = int(time.time())
@@ -125,6 +126,7 @@ def prepare_uplink(commands, manifest):
     pkg.write_text(json.dumps(payload, indent=2))
     print("Saved uplink package:", pkg)
     return pkg
+
 
 if __name__ == "__main__":
     print("Aviation companion gateway running. Ctrl-C to stop.")
