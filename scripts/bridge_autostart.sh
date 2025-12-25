@@ -3,8 +3,8 @@ set -uo pipefail
 
 echo "🔍 Checking Bridge service..."
 
-BRIDGE_HOST="127.0.0.1"
-BRIDGE_PORT="5001"
+BRIDGE_HOST="${BRIDGE_HOST:-${AURORA_BRIDGE_HOST:-${AURORA_HOST:-127.0.0.1}}}"
+BRIDGE_PORT="${BRIDGE_PORT:-${AURORA_BRIDGE_PORT:-5001}}"
 BRIDGE_URL="http://${BRIDGE_HOST}:${BRIDGE_PORT}/healthz"
 
 # Check if Bridge is already running
