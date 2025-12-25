@@ -230,11 +230,6 @@ except Exception as e:
 
     traceback.print_exc()
 
-# Attach T12 Factory Bridge endpoints
-
-attach_bridge(app)  # /api/bridge/nl, /api/bridge/spec, /api/bridge/deploy
-
-
 @app.get("/dashboard/demos", response_class=HTMLResponse)
 async def serve_demo_dashboard():
     """Serve the demo dashboard HTML page"""

@@ -222,7 +222,7 @@ def test_serve_health_endpoint():
         assert hasattr(app, 'routes'), "App should have routes"
         route_paths = [r.path for r in app.routes if hasattr(r, 'path')]
         health_routes = [p for p in route_paths if 'health' in p.lower()]
-        assert len(health_routes) >= 0, "Health routes should be configurable"
+        assert len(health_routes) > 0, "Health routes should be present"
     except ImportError:
         pass  # serve.py may not be importable in test environment
 

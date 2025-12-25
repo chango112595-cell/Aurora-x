@@ -725,7 +725,8 @@ class AuroraX:
                     self.adaptive_scheduler.tick()
 
             # Synthesize using actual synthesis method
-            result = self.synthesize_best(f, {}, \"\")\n            cand_src = result.src if hasattr(result, 'src') else f\"def {f.name}(): raise NotImplementedError('Synthesis failed')\"
+            result = self.synthesize_best(f, {}, "")
+            cand_src = result.src if hasattr(result, "src") else f"def {f.name}(): raise NotImplementedError('Synthesis failed')"
 
             # Record to corpus
             corpus_entry = {

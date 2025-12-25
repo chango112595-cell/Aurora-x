@@ -222,11 +222,11 @@ def test_serve_health_endpoint():
         from aurora_x.serve import app
         # Verify app is a FastAPI instance
         assert hasattr(app, 'routes'), "App should have routes"
-        
+
         # Check for health-related routes
         route_paths = [r.path for r in app.routes if hasattr(r, 'path')]
         health_routes = [p for p in route_paths if 'health' in p.lower()]
-        assert len(health_routes) >= 0, "Health routes should be configurable"
+        assert len(health_routes) > 0, "Health routes should be present"
     except ImportError:
         # serve.py may not be importable in test environment
         pass

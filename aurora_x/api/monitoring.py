@@ -59,12 +59,26 @@ async def get_dashboard_data() -> dict[str, Any]:
     # Calculate actual server uptime
     uptime_seconds = int(time.time() - _server_start_time)
 
+    # Derive system status
+    any_down = any(s["status"] != "running" for s in service_statuses)
+    resource_alert = any(
+        comp.get("status") in {"warning", "critical"}
+        for comp in [cpu, memory, disk]
+    )
+
+    if resource_alert:
+        system_status = "degraded"
+    elif any_down:
+        system_status = "partial"
+    else:
+        system_status = "healthy"
+
     return {
         "timestamp": datetime.utcnow().isoformat(),
         "overview": {
             "services_running": sum(1 for s in service_statuses if s["status"] == "running"),
             "services_total": len(service_statuses),
-            "system_status": "healthy",  # Would calculate from metrics
+            "system_status": system_status,
             "uptime_seconds": uptime_seconds,
         },
         "services": service_statuses,
