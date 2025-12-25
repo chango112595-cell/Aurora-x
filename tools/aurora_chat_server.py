@@ -452,13 +452,14 @@ def start_conversation():
 
 def generate_response(message: str, context: str = "") -> str:
     """
-    Generate a response to the user message
+    Generate a response to the user message using Aurora's intelligence.
     
-    This is a placeholder for actual AI response generation.
-    In production, this should integrate with the local Luminar engine.
+    Integrates with local Luminar engine when available, falls back to
+    context-aware response generation.
     """
     message_lower = message.lower()
     
+    # Handle name storage/recall - this is real functionality
     if "my name is" in message_lower:
         name = message.split("my name is")[-1].strip().rstrip(".")
         if memory_instance:
@@ -472,10 +473,41 @@ def generate_response(message: str, context: str = "") -> str:
                 return f"Your name is {name}."
         return "I don't know your name yet. What's your name?"
     
+    # Try to use Luminar Intelligence Manager if available
+    if INTELLIGENCE_AVAILABLE and intelligence:
+        try:
+            # Use the intelligence manager for response generation
+            response = intelligence.process_query(message, context=context)
+            if response and response != message:
+                return response
+        except Exception as e:
+            print(f"[WARN] Intelligence processing failed: {e}")
+    
+    # Try to use local LLM inference if configured
+    llm_endpoint = os.environ.get("AURORA_LLM_ENDPOINT")
+    if llm_endpoint:
+        try:
+            import requests
+            resp = requests.post(
+                llm_endpoint,
+                json={"prompt": message, "context": context},
+                timeout=30
+            )
+            if resp.ok:
+                data = resp.json()
+                if "response" in data:
+                    return data["response"]
+        except Exception as e:
+            print(f"[WARN] LLM endpoint call failed: {e}")
+    
+    # Context-aware response when no AI backend available
     if context:
         return f"Based on my memory: {context}. How can I help you further?"
     
-    return "I've received your message and stored it in my memory. How can I assist you?"
+    # Honest response when no AI processing available
+    return ("I've stored your message in my memory. Note: Full AI response generation "
+            "requires either AURORA_LLM_ENDPOINT to be configured or the Luminar "
+            "Intelligence Manager to be available.")
 
 
 def run_chat_server(port: int = 5003, project: str = "Aurora-Main"):

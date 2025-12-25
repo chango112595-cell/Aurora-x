@@ -5,10 +5,14 @@ Simple monitoring interface for Aurora services
 
 from datetime import datetime, timedelta
 from typing import Any
+import time
 
 from fastapi import APIRouter
 
 router = APIRouter(prefix="/api/monitoring", tags=["monitoring"])
+
+# Track actual server start time for real uptime calculation
+_server_start_time: float = time.time()
 
 # In-memory storage for metrics history (would use Redis/database in production)
 _metrics_history: list[dict[str, Any]] = []
@@ -52,8 +56,8 @@ async def get_dashboard_data() -> dict[str, Any]:
             }
         )
 
-    # Calculate uptime (placeholder - would track actual uptime in production)
-    uptime_seconds = 86400  # 24 hours placeholder
+    # Calculate actual server uptime
+    uptime_seconds = int(time.time() - _server_start_time)
 
     return {
         "timestamp": datetime.utcnow().isoformat(),

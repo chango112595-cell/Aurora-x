@@ -122,46 +122,59 @@ if static_dir.exists() and any(static_dir.iterdir()):
 app.include_router(make_router(static_dir, templates_dir))
 
 # Include server control API (Aurora's fix for Server Control page)
+import logging
+_serve_logger = logging.getLogger("aurora.serve")
+
 try:
     from aurora_x.api.server_control import router as server_control_router
-
     app.include_router(server_control_router)
-except Exception:
-    pass
+    _serve_logger.info("Server control router loaded")
+except ImportError as e:
+    _serve_logger.warning(f"Server control API not available: {e}")
+except Exception as e:
+    _serve_logger.error(f"Failed to load server control router: {e}")
 
 # Include health check and monitoring APIs (Aurora Priority #7)
 try:
     from aurora_x.api.health_check import router as health_check_router
     from aurora_x.api.monitoring import router as monitoring_router
-
     app.include_router(health_check_router)
     app.include_router(monitoring_router)
-except Exception:
-    pass  # Health check and monitoring endpoints not available yet
+    _serve_logger.info("Health check and monitoring routers loaded")
+except ImportError as e:
+    _serve_logger.warning(f"Health check/monitoring APIs not available: {e}")
+except Exception as e:
+    _serve_logger.error(f"Failed to load health/monitoring routers: {e}")
 
 # Include performance API (Aurora Priority #9)
 try:
     from aurora_x.api.performance import router as performance_router
-
     app.include_router(performance_router)
-except Exception:
-    pass  # Performance endpoints not available yet
+    _serve_logger.info("Performance router loaded")
+except ImportError as e:
+    _serve_logger.warning(f"Performance API not available: {e}")
+except Exception as e:
+    _serve_logger.error(f"Failed to load performance router: {e}")
 
 # Include unified command router
 try:
     from aurora_x.api.commands import router as commands_router
-
     app.include_router(commands_router)
-except ImportError:
-    pass  # API endpoints not available yet
+    _serve_logger.info("Commands router loaded")
+except ImportError as e:
+    _serve_logger.warning(f"Commands API not available: {e}")
+except Exception as e:
+    _serve_logger.error(f"Failed to load commands router: {e}")
 
 # Include natural conversation router
 try:
     from aurora_x.chat.conversation import attach_conversation
-
     attach_conversation(app)
-except ImportError:
-    pass  # Conversation endpoint not available yet
+    _serve_logger.info("Conversation endpoint attached")
+except ImportError as e:
+    _serve_logger.warning(f"Conversation endpoint not available: {e}")
+except Exception as e:
+    _serve_logger.error(f"Failed to attach conversation endpoint: {e}")
 
 # Attach English mode addons
 attach_factory(app)
