@@ -17,6 +17,7 @@ Integrated with Luminar Nexus v2 for autonomous port healing
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import json
 import subprocess
 import threading
@@ -80,6 +81,7 @@ class AuroraPortManager:
             
             Args:
             """
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
         self.aurora_port_map = {
             5000: {"service": "backend", "type": "api", "priority": 1},
             5001: {"service": "bridge", "type": "middleware", "priority": 1},
@@ -273,10 +275,10 @@ class AuroraPortManager:
         try:
             # Try different health check endpoints
             endpoints = [
-                f"http://localhost:{port}/health",
-                f"http://localhost:{port}/api/health",
-                f"http://localhost:{port}/status",
-                f"http://localhost:{port}/api/nexus/status",  # For Nexus v2
+                f"http://{self.aurora_host}:{port}/health",
+                f"http://{self.aurora_host}:{port}/api/health",
+                f"http://{self.aurora_host}:{port}/status",
+                f"http://{self.aurora_host}:{port}/api/nexus/status",  # For Nexus v2
             ]
 
             for endpoint in endpoints:

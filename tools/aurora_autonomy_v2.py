@@ -18,6 +18,7 @@ No hardcoded tasks. Dynamic problem detection and resolution.
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import json
 import os
 import subprocess
@@ -30,6 +31,8 @@ import requests
 
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -86,7 +89,7 @@ class AuroraAutonom:
         ports_status = {}
         for port in [5000, 5001, 5002, 5173]:
             try:
-                response = requests.get(f"http://localhost:{port}/healthz", timeout=1)
+                response = requests.get(f"http://{AURORA_HOST}:{port}/healthz", timeout=1)
                 ports_status[port] = response.status_code == 200
             except Exception as e:
                 ports_status[port] = False
@@ -208,11 +211,11 @@ class AuroraAutonom:
 
         try:
             # Test port 5001 (should be Vite UI with HTML)
-            r5001 = requests.get("http://localhost:5001/", timeout=2)
+            r5001 = requests.get(f"http://{AURORA_HOST}:5001/", timeout=2)
             is_html = "<!DOCTYPE" in r5001.text or "<html" in r5001.text
 
             # Test port 5000 (should be API with JSON)
-            r5000 = requests.get("http://localhost:5000/", timeout=2)
+            r5000 = requests.get(f"http://{AURORA_HOST}:5000/", timeout=2)
             is_json = '"ok"' in r5000.text
 
             if is_html and is_json:

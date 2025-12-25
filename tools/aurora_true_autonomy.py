@@ -16,6 +16,7 @@ Aurora True Autonomous Execution Engine
 This is Aurora's REAL autonomous brain - she can now DO things, not just plan them
 """
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import json
 import subprocess
 import sys
@@ -111,7 +112,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 class AuroraDashboardLoader:
     def __init__(self):
-        self.vite_url = "http://localhost:5000"
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.vite_url = os.getenv("AURORA_VITE_URL", f"http://{self.aurora_host}:5000")
         self.dashboard_routes = ["/aurora-dashboard", "/dashboard", "/"]
         
     def check_server_status(self):

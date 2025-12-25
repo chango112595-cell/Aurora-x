@@ -140,6 +140,7 @@ export default function ServerControl() {
   const [shutdownDialogOpen, setShutdownDialogOpen] = useState(false);
   const [shutdownType, setShutdownType] = useState<ShutdownType>('graceful');
   const { toast } = useToast();
+  const controlBaseUrl = import.meta.env.VITE_AURORA_CONTROL_URL ?? "http://127.0.0.1:9090";
 
   useEffect(() => {
     fetchStatus();
@@ -161,7 +162,7 @@ export default function ServerControl() {
 
   const fetchStatus = async () => {
     try {
-      const res = await fetch('http://localhost:9090/api/status');
+      const res = await fetch(`${controlBaseUrl}/api/status`);
       const data = await res.json();
       setServices(data);
       setLoading(false);
@@ -172,7 +173,7 @@ export default function ServerControl() {
 
   const controlService = async (service: string, action: string) => {
     try {
-      await fetch('http://localhost:9090/api/control', {
+      await fetch(`${controlBaseUrl}/api/control`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ service, action })
@@ -368,7 +369,7 @@ export default function LuminarNexus() {
 
   const fetchHealthData = async () => {
     try {
-      const res = await fetch('http://localhost:9090/api/status');
+      const res = await fetch(`${controlBaseUrl}/api/status`);
       const data = await res.json();
       setHealthData(data);
       setLoading(false);

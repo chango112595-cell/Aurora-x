@@ -96,6 +96,10 @@ class AuroraSafetyProtocol:
         self.last_save_time = 0
         self.crash_events: list[CrashEvent] = []
         self.diagnostic_reports: list[DiagnosticReport] = []
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.control_base_url = os.getenv(
+            "AURORA_CONTROL_URL", f"http://{self.aurora_host}:9090"
+        )
 
         # Ensure safety directory exists
         SAFETY_DIR.mkdir(exist_ok=True)
@@ -186,7 +190,7 @@ class AuroraSafetyProtocol:
         try:
             import requests
 
-            response = requests.get("http://localhost:9090/api/status", timeout=2)
+            response = requests.get(f"{self.control_base_url}/api/status", timeout=2)
             if response.status_code == 200:
                 return response.json()
         except Exception:
@@ -550,7 +554,9 @@ class AuroraSafetyProtocol:
             import requests
 
             response = requests.post(
-                "http://localhost:9090/api/control", json={"service": crash.service_name, "action": "start"}, timeout=5
+                f"{self.control_base_url}/api/control",
+                json={"service": crash.service_name, "action": "start"},
+                timeout=5,
             )
 
             if response.status_code == 200:

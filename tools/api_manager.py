@@ -29,6 +29,8 @@ import requests
 # Aurora Performance Optimization
 from concurrent.futures import ThreadPoolExecutor
 
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
+
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
 #             results = executor.map(process_func, items)
@@ -109,7 +111,7 @@ class AuroraAPIManager:
         """Comprehensive health check for an API"""
         api = self.apis[api_name]
         port = api["port"]
-        health_url = f"http://localhost:{port}{api['health_endpoint']}"
+        health_url = f"http://{AURORA_HOST}:{port}{api['health_endpoint']}"
 
         health_data = {
             "name": api_name,

@@ -25,6 +25,7 @@ Aurora's approach: Systematic debugging with her personality
 """
 
 from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import json
 import subprocess
 import sys
@@ -49,6 +50,9 @@ class AuroraChatDebugger:
             Args:
             """
         self.root = Path(__file__).parent.parent
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
+        self.chat_base_url = os.getenv("AURORA_CHAT_BASE_URL", f"http://{self.aurora_host}:5001")
         self.chat_page = self.root / "client" / "src" / "pages" / "chat.tsx"
 
     def log(self, emoji: str, message: str):
@@ -117,7 +121,7 @@ class AuroraChatDebugger:
                     "-s",
                     "-X",
                     "POST",
-                    "http://localhost:5001/chat",
+                    f"{self.chat_base_url}/chat",
                     "-H",
                     "Content-Type: application/json",
                     "-d",
@@ -307,7 +311,7 @@ class AuroraChatDebugger:
             try {
                 console.log('[STAR] Sending to Aurora:', prompt);
                 
-                const response = await fetch('http://localhost:5001/chat', {
+                const response = await fetch('{self.chat_base_url}/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt })
@@ -344,7 +348,7 @@ class AuroraChatDebugger:
         test_file.write_text(test_page)
 
         self.log("[OK]", f"Test page created: {test_file.relative_to(self.root)}")
-        self.log("[EMOJI]", "Open in browser: http://localhost:5000/../aurora_chat_test.html")
+        self.log("[EMOJI]", f"Open in browser: {self.base_url}/../aurora_chat_test.html")
         self.log("[EMOJI]", "Or directly: file://" + str(test_file))
 
     def run_diagnosis_and_fix(self):
@@ -382,7 +386,7 @@ class AuroraChatDebugger:
         print("    I also created a test page so you can verify the endpoint works.'")
         print()
         print("[EMOJI] Next steps:")
-        print("   1. Refresh the Aurora UI at http://localhost:5000")
+        print(f"   1. Refresh the Aurora UI at {self.base_url}")
         print("   2. Go to the Chat page")
         print("   3. Send a test message")
         print("   4. Or open aurora_chat_test.html to test directly")

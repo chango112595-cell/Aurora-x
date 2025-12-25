@@ -96,6 +96,7 @@ and practical implementation knowledge from ancient times to future predictions.
 
 from typing import Dict, List, Tuple, Optional, Any, Union
 import json
+import os
 import subprocess
 import time
 from datetime import datetime
@@ -361,10 +362,14 @@ class AuroraUltimateGrandmaster:
 
         # Check 3: Can we curl the server?
         print("3  Testing HTTP connection to Vite...")
+        aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
         for port in [5173, 5000, 3000]:
             try:
                 result = subprocess.run(
-                    ["curl", "-s", "-I", f"http://localhost:{port}"], capture_output=True, text=True, timeout=2
+                    ["curl", "-s", "-I", f"http://{aurora_host}:{port}"],
+                    capture_output=True,
+                    text=True,
+                    timeout=2,
                 )
                 if "200" in result.stdout or "OK" in result.stdout:
                     print(f"   [OK] Port {port}: WORKING! Server responding")
@@ -446,7 +451,7 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
             },
             "Step 3: Verify It Works": {
                 "what": "Check that the result is correct",
-                "example": "curl -I http://localhost:5173",
+                "example": "curl -I http://127.0.0.1:5173 (or set AURORA_HOST)",
                 "status": "[ERROR] MISSED",
             },
             "Step 4: Document Success": {
@@ -570,4 +575,3 @@ def main():
 if __name__ == "__main__":
     mastery_level = main()
     print(f"\n[EMOJI] Training Complete! Mastery: {mastery_level} points")
-
