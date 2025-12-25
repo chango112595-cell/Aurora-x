@@ -726,7 +726,8 @@ class AuroraX:
 
             # Synthesize using actual synthesis method
             result = self.synthesize_best(f, {}, "")
-            cand_src = result.src if hasattr(result, "src") else f"def {f.name}(): raise NotImplementedError('Synthesis failed')"
+            cand_src = result.src if hasattr(
+                result, "src") else f"def {f.name}(): raise NotImplementedError('Synthesis failed')"
 
             # Record to corpus
             corpus_entry = {
@@ -745,16 +746,19 @@ class AuroraX:
             # Update seed store with result
             if not self.disable_seed and seed_key:
                 success = corpus_entry["passed"] == corpus_entry["total"]
-                result = {"seed_key": seed_key, "score": corpus_entry["score"], "success": success}
+                result = {"seed_key": seed_key,
+                    "score": corpus_entry["score"], "success": success}
                 self.seed_store.update(result)
 
                 # Update adaptive scheduler
                 if self.adaptive_scheduler:
-                    self.adaptive_scheduler.reward(seed_key, success, magnitude=corpus_entry["score"])
+                    self.adaptive_scheduler.reward(
+                        seed_key, success, magnitude=corpus_entry["score"])
 
             # Learning nudge (keep legacy for backward compat)
             won_with_seed = _seed_won(cand_src, seed_snippets)
-            self.weights["seed_bias"] = learn.update_seed_bias(float(self.weights.get("seed_bias", 0.0)), won_with_seed)
+            self.weights["seed_bias"] = learn.update_seed_bias(
+                float(self.weights.get("seed_bias", 0.0)), won_with_seed)
             learn.save(self.repo.root, self.weights)
 
         # Save persistent seed store at end of loop
@@ -783,7 +787,8 @@ class AuroraX:
             "end_ts": iso_now(),
             "duration_seconds": duration_seconds,
         }
-        write_file(self.repo.path("run_meta.json"), json.dumps(run_metadata, indent=2))
+        write_file(self.repo.path("run_meta.json"),
+                   json.dumps(run_metadata, indent=2))
 
         # Generate HTML report (before symlink update so it can detect previous latest run)
         write_html_report(self.repo, spec, baseline=self.baseline)
@@ -794,9 +799,11 @@ class AuroraX:
             if latest_link.exists() or latest_link.is_symlink():
                 latest_link.unlink()
             latest_link.symlink_to(self.repo.root.resolve())
-            print(f"[AURORA-X] Updated symlink: {latest_link} -> {self.repo.root.name}")
+            print(
+                f"[AURORA-X] Updated symlink: {latest_link} -> {self.repo.root.name}")
         except Exception as e:
-            print(f"[AURORA-X] (nonfatal) failed to update 'latest' symlink: {e}")
+            print(
+                f"[AURORA-X] (nonfatal) failed to update 'latest' symlink: {e}")
 
         return self.repo, True
 
@@ -806,7 +813,7 @@ class AuroraX:
 
     def synthesize_best(self, f, callees_meta, base_prefix):
         """Synthesize best candidate for function.
-        
+
         Uses corpus retrieval and enumeration to find optimal implementation.
         Falls back to basic implementation if synthesis fails.
         """

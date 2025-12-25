@@ -230,6 +230,7 @@ except Exception as e:
 
     traceback.print_exc()
 
+
 @app.get("/dashboard/demos", response_class=HTMLResponse)
 async def serve_demo_dashboard():
     """Serve the demo dashboard HTML page"""
