@@ -2101,8 +2101,18 @@ def fix_routing_issues() -> bool:
                 fixes_applied.append(f"[WARN] Localhost resolves to {resolved_ip} instead of 127.0.0.1")
         except Exception as e:
             print("  [EMOJI] Fixing localhost resolution...")
-            subprocess.run(["echo", "127.0.0.1 localhost >> /etc/hosts"], shell=True)
-            fixes_applied.append("[EMOJI] Added localhost to /etc/hosts")
+            try:
+                result = subprocess.run(
+                    ['sh', '-c', 'echo "127.0.0.1 localhost" >> /etc/hosts'],
+                    capture_output=True,
+                    text=True
+                )
+                if result.returncode == 0:
+                    fixes_applied.append("[EMOJI] Added localhost to /etc/hosts")
+                else:
+                    fixes_applied.append(f"[ERROR] Failed to update /etc/hosts: {result.stderr}")
+            except Exception as hosts_error:
+                fixes_applied.append(f"[ERROR] Could not update /etc/hosts (requires root): {hosts_error}")
 
         # 2. Check port conflicts
         port_conflicts = []
