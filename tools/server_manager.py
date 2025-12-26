@@ -2098,8 +2098,22 @@ def fix_routing_issues() -> bool:
             if resolved_ip == "127.0.0.1":
                 fixes_applied.append("[OK] Localhost resolution: OK")
             else:
-                fixes_applied.append(f"[WARN] Localhost resolves to {resolved_ip} instead of 127.0.0.1")
+                # Localhost resolves to wrong IP - attempt to fix
+                print(f"  [EMOJI] Localhost resolves to {resolved_ip}, fixing to 127.0.0.1...")
+                try:
+                    result = subprocess.run(
+                        ['sh', '-c', 'echo "127.0.0.1 localhost" >> /etc/hosts'],
+                        capture_output=True,
+                        text=True
+                    )
+                    if result.returncode == 0:
+                        fixes_applied.append(f"[EMOJI] Updated localhost resolution (was {resolved_ip})")
+                    else:
+                        fixes_applied.append(f"[WARN] Localhost resolves to {resolved_ip} instead of 127.0.0.1 (fix failed: {result.stderr})")
+                except Exception as hosts_error:
+                    fixes_applied.append(f"[WARN] Localhost resolves to {resolved_ip} instead of 127.0.0.1 (requires root to fix)")
         except Exception as e:
+            # Localhost cannot be resolved at all - attempt to fix
             print("  [EMOJI] Fixing localhost resolution...")
             try:
                 result = subprocess.run(
