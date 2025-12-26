@@ -480,7 +480,7 @@ class AdvancedServerManager:
                 }
             )
 
-        # Test 127.0.0.1 connectivity
+        # Test loopback connectivity
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
@@ -1943,7 +1943,7 @@ def network_diagnostics() -> dict:
             pass
 
         # Connectivity tests
-        test_hosts = ["127.0.0.1", "127.0.0.1"]
+        test_hosts = ["127.0.0.1", "8.8.8.8"]  # Test loopback and external connectivity
         for host in test_hosts:
             try:
                 ping = subprocess.run(["ping", "-c", "1", "-W", "2", host], capture_output=True, text=True, timeout=5)
@@ -2092,14 +2092,16 @@ def fix_routing_issues() -> bool:
 
         fixes_applied = []
 
-        # 1. Check 127.0.0.1 resolution
+        # 1. Check loopback connectivity
         try:
-            socket.gethostbyname("127.0.0.1")
-            fixes_applied.append("[OK] Localhost resolution: OK")
+            # Test if we can bind to loopback interface
+            test_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            test_socket.bind(("127.0.0.1", 0))
+            test_socket.close()
+            fixes_applied.append("[OK] Loopback interface: OK")
         except Exception as e:
-            print("  [EMOJI] Fixing 127.0.0.1 resolution...")
-            subprocess.run(["echo", "127.0.0.1 127.0.0.1 >> /etc/hosts"], shell=True)
-            fixes_applied.append("[EMOJI] Added 127.0.0.1 to /etc/hosts")
+            print(f"  [EMOJI] Warning: Loopback interface issue: {e}")
+            fixes_applied.append(f"[WARN] Loopback interface issue: {e}")
 
         # 2. Check port conflicts
         port_conflicts = []
