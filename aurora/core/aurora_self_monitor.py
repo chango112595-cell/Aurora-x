@@ -74,7 +74,7 @@ class AuroraSelfMonitor:
         # Check 2: HTTP health endpoint (if applicable)
         if service_key in ["backend", "chat"]:
             try:
-                req = urllib.request.Request(f"http://localhost:{port}/health")
+                req = urllib.request.Request(f"http://127.0.0.1:{port}/health")
                 with urllib.request.urlopen(req, timeout=2) as response:
                     health["checks"]["http_responding"] = response.status == 200
             except Exception as e:

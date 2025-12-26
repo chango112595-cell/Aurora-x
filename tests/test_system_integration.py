@@ -8,26 +8,35 @@ import subprocess
 import sys
 import os
 import socket
+from urllib.parse import urlparse
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+MEMORY_FABRIC_URL = os.getenv("AURORA_MEMORY_FABRIC_URL", "http://127.0.0.1:5004")
 
 
-def is_port_open(port: int, timeout: float = 1.0) -> bool:
+def _memory_fabric_target() -> tuple[str, int]:
+    parsed = urlparse(MEMORY_FABRIC_URL)
+    host = parsed.hostname or "127.0.0.1"
+    port = parsed.port or 5004
+    return host, port
+
+
+def is_port_open(host: str, port: int, timeout: float = 1.0) -> bool:
     """Check if a port is accepting connections."""
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             sock.settimeout(timeout)
-            result = sock.connect_ex(('127.0.0.1', port))
+            result = sock.connect_ex((host, port))
             return result == 0
     except:
         return False
 
 
-def wait_for_port(port: int, timeout: int = 30) -> bool:
+def wait_for_port(host: str, port: int, timeout: int = 30) -> bool:
     """Wait for a port to become available."""
     start = time.time()
     while time.time() - start < timeout:
-        if is_port_open(port):
+        if is_port_open(host, port):
             return True
         time.sleep(0.5)
     return False
@@ -38,16 +47,17 @@ class TestMemoryFabricIntegration:
     
     def test_memory_fabric_status(self):
         """Verify memory fabric status endpoint."""
-        if not is_port_open(5004):
+        host, port = _memory_fabric_target()
+        if not is_port_open(host, port):
             mem = subprocess.Popen(
                 [sys.executable, "aurora_memory_fabric_v2/service.py"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT
             )
-            wait_for_port(5004, timeout=10)
+            wait_for_port(host, port, timeout=10)
             
             try:
-                r = requests.get("http://localhost:5004/status", timeout=5)
+                r = requests.get(f"{MEMORY_FABRIC_URL}/status", timeout=5)
                 assert r.status_code == 200, f"Expected 200, got {r.status_code}"
                 
                 body = r.json()
@@ -56,22 +66,23 @@ class TestMemoryFabricIntegration:
             finally:
                 mem.terminate()
         else:
-            r = requests.get("http://localhost:5004/status", timeout=5)
+            r = requests.get(f"{MEMORY_FABRIC_URL}/status", timeout=5)
             assert r.status_code == 200
     
     def test_memory_fabric_message_storage(self):
         """Verify memory fabric can store and retrieve messages."""
-        if not is_port_open(5004):
+        host, port = _memory_fabric_target()
+        if not is_port_open(host, port):
             mem = subprocess.Popen(
                 [sys.executable, "aurora_memory_fabric_v2/service.py"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT
             )
-            wait_for_port(5004, timeout=10)
+            wait_for_port(host, port, timeout=10)
             
             try:
                 r = requests.post(
-                    "http://localhost:5004/message",
+                    f"{MEMORY_FABRIC_URL}/message",
                     json={"role": "user", "content": "Test message", "importance": 0.8},
                     timeout=5
                 )
@@ -84,7 +95,7 @@ class TestMemoryFabricIntegration:
                 mem.terminate()
         else:
             r = requests.post(
-                "http://localhost:5004/message",
+                f"{MEMORY_FABRIC_URL}/message",
                 json={"role": "user", "content": "Test message", "importance": 0.8},
                 timeout=5
             )
@@ -147,16 +158,17 @@ class TestFullStackIntegration:
         processes = []
         
         try:
-            if not is_port_open(5004):
+            host, port = _memory_fabric_target()
+            if not is_port_open(host, port):
                 mem = subprocess.Popen(
                     [sys.executable, "aurora_memory_fabric_v2/service.py"],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT
                 )
                 processes.append(mem)
-                wait_for_port(5004, timeout=10)
+                wait_for_port(host, port, timeout=10)
             
-            r = requests.get("http://localhost:5004/status", timeout=5)
+            r = requests.get(f"{MEMORY_FABRIC_URL}/status", timeout=5)
             assert r.status_code == 200, "Memory Fabric should respond"
             
             from aurora_nexus_v3.core.nexus_bridge import NexusBridge

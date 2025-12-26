@@ -128,7 +128,7 @@ def render_go_service(name: str, brief: str = None) -> dict:
         "go.mod": GO_MOD,
     }
 
-    return {"files": files, "hint": "Run: go run . (then try: curl localhost:8080/health)"}
+    return {"files": files, "hint": "Run: go run . (then try: curl 127.0.0.1:8080/health)"}
 
 
 # Aurora Perfect Error Handling

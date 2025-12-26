@@ -142,7 +142,7 @@ python src/{app_name}_app.py</pre>
             <h2>To Test:</h2>
             <pre>cd {run_dir}
 python -m unittest tests/test_{app_name}_app.py</pre>
-            <p>The app will be available at <a href="http://localhost:5000">http://localhost:5000</a></p>
+            <p>The app will be available at <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a></p>
         </div>
     </div>
 </body>

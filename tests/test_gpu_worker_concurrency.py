@@ -8,8 +8,17 @@ import time
 import threading
 import concurrent.futures
 from typing import List, Dict, Any
+from urllib.parse import urlparse
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+MEMORY_FABRIC_URL = os.getenv("AURORA_MEMORY_FABRIC_URL", "http://127.0.0.1:5004")
+
+
+def _memory_fabric_target() -> tuple[str, int]:
+    parsed = urlparse(MEMORY_FABRIC_URL)
+    host = parsed.hostname or "127.0.0.1"
+    port = parsed.port or 5004
+    return host, port
 
 
 class TestGPUReadiness:
@@ -200,26 +209,27 @@ class TestMemoryFabricSemanticSearch:
         import socket
         import requests
         
-        def is_port_open(port):
+        def is_port_open(host, port):
             try:
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     s.settimeout(1)
-                    return s.connect_ex(('127.0.0.1', port)) == 0
+                    return s.connect_ex((host, port)) == 0
             except:
                 return False
         
-        if not is_port_open(5004):
+        host, port = _memory_fabric_target()
+        if not is_port_open(host, port):
             return
         
         r = requests.post(
-            "http://localhost:5004/message",
+            f"{MEMORY_FABRIC_URL}/message",
             json={"role": "user", "content": "Test semantic memory entry", "importance": 0.9},
             timeout=5
         )
         assert r.status_code == 200
         
         r = requests.post(
-            "http://localhost:5004/search",
+            f"{MEMORY_FABRIC_URL}/search",
             json={"query": "semantic memory", "top_k": 5},
             timeout=5
         )
@@ -234,18 +244,19 @@ class TestMemoryFabricSemanticSearch:
         import socket
         import requests
         
-        def is_port_open(port):
+        def is_port_open(host, port):
             try:
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     s.settimeout(1)
-                    return s.connect_ex(('127.0.0.1', port)) == 0
+                    return s.connect_ex((host, port)) == 0
             except:
                 return False
         
-        if not is_port_open(5004):
+        host, port = _memory_fabric_target()
+        if not is_port_open(host, port):
             return
         
-        r = requests.get("http://localhost:5004/integrity", timeout=5)
+        r = requests.get(f"{MEMORY_FABRIC_URL}/integrity", timeout=5)
         
         assert r.status_code == 200
         body = r.json()
@@ -257,29 +268,30 @@ class TestMemoryFabricSemanticSearch:
         import socket
         import requests
         
-        def is_port_open(port):
+        def is_port_open(host, port):
             try:
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     s.settimeout(1)
-                    return s.connect_ex(('127.0.0.1', port)) == 0
+                    return s.connect_ex((host, port)) == 0
             except:
                 return False
         
-        if not is_port_open(5004):
+        host, port = _memory_fabric_target()
+        if not is_port_open(host, port):
             return
         
         test_key = f"test_fact_{int(time.time())}"
         test_value = "Aurora-X Ultra test value"
         
         r = requests.post(
-            "http://localhost:5004/fact",
+            f"{MEMORY_FABRIC_URL}/fact",
             json={"key": test_key, "value": test_value, "category": "test"},
             timeout=5
         )
         assert r.status_code == 200
         
         r = requests.post(
-            "http://localhost:5004/recall",
+            f"{MEMORY_FABRIC_URL}/recall",
             json={"key": test_key},
             timeout=5
         )

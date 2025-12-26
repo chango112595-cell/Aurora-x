@@ -578,7 +578,7 @@ if __name__ == '__main__':
         # Run the Flask application
         app = create_app()
         port = int(os.environ.get('PORT', '5000'))
-        print(f"[ROCKET] Aurora Timer UI starting on http://localhost:{port}")
+        print(f"[ROCKET] Aurora Timer UI starting on http://127.0.0.1:{port}")
         app.run(host='0.0.0.0', port=port, debug=True)
 '''
 
@@ -677,7 +677,7 @@ def create_app() -> Flask:
 if __name__ == '__main__':
     app = create_app()
     port = int(os.environ.get('PORT', '5000'))
-    print(f"[ROCKET] Flask API starting on http://localhost:{{port}}")
+    print(f"[ROCKET] Flask API starting on http://127.0.0.1:{{port}}")
     app.run(host='0.0.0.0', port=port, debug=True)
 '''
 
@@ -827,7 +827,7 @@ def create_app() -> Flask:
 if __name__ == '__main__':
     app = create_app()
     port = int(os.environ.get('PORT', '5000'))
-    print(f"[ROCKET] Flask Web App starting on http://localhost:{{port}}")
+    print(f"[ROCKET] Flask Web App starting on http://127.0.0.1:{{port}}")
     app.run(host='0.0.0.0', port=port, debug=True)
 '''
 
@@ -884,7 +884,7 @@ def create_app() -> Flask:
 if __name__ == '__main__':
     app = create_app()
     port = int(os.environ.get('PORT', '5000'))
-    print(f"[ROCKET] Flask App starting on http://localhost:{{port}}")
+    print(f"[ROCKET] Flask App starting on http://127.0.0.1:{{port}}")
     app.run(host='0.0.0.0', port=port, debug=True)
 '''
 

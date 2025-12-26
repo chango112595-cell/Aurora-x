@@ -72,7 +72,7 @@ class AuroraMetaAnalyzer:
         print("    User sees different page or 404")
         print()
         print("2. CORS ISSUE")
-        print("    Frontend can't call localhost:5001 from localhost:5000")
+        print("    Frontend can't call 127.0.0.1:5001 from 127.0.0.1:5000")
         print("    Browser blocks the request")
         print()
         print("3. NETWORK REQUEST FAILS SILENTLY")
@@ -304,11 +304,11 @@ class AuroraMetaAnalyzer:
 
         if "CORSMiddleware" in content:
             self.log("[OK]", "CORS already configured")
-            # Check if localhost:5000 is allowed
+            # Check if 127.0.0.1:5000 is allowed
             if "5000" in content or "*" in content:
-                self.log("[OK]", "localhost:5000 appears to be allowed")
+                self.log("[OK]", "127.0.0.1:5000 appears to be allowed")
             else:
-                self.log("[WARN]", "Might need to add localhost:5000 to CORS origins")
+                self.log("[WARN]", "Might need to add 127.0.0.1:5000 to CORS origins")
         else:
             self.log("", "Adding CORS middleware...")
             # Would add CORS configuration here
@@ -359,7 +359,7 @@ class AuroraMetaAnalyzer:
         print()
         print("Next steps:")
         print("  1. Restart the dev server (it should hot-reload)")
-        print("  2. Go to http://localhost:5000/chat")
+        print("  2. Go to http://127.0.0.1:5000/chat")
         print("  3. Send a message")
         print()
         print("If you still have issues, check the browser console!")

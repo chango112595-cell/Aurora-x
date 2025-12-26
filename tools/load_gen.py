@@ -2,7 +2,7 @@
 import argparse, requests, threading, time
 
 p=argparse.ArgumentParser()
-p.add_argument("--url", default="http://localhost:5000/health")
+p.add_argument("--url", default="http://127.0.0.1:5000/health")
 p.add_argument("--clients", type=int, default=5)
 p.add_argument("--rps", type=float, default=1.0)
 a=p.parse_args()

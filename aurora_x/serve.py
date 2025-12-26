@@ -898,7 +898,7 @@ def main():
             import requests
 
             try:
-                requests.get("http://localhost:5000/healthz", timeout=1)
+                requests.get("http://127.0.0.1:5000/healthz", timeout=1)
             except Exception as e:
                 # Services not running, start them
                 print("[Aurora-X] Starting all services via Luminar Nexus...")

@@ -20,7 +20,7 @@
           "type": "ui",
           "quantum_state": "entangled",
           "dependencies": [],
-          "health_check_endpoint": "http://localhost:5173",
+          "health_check_endpoint": "http://127.0.0.1:5173",
           "scaling_strategy": "horizontal"
         },
         "backend": {
@@ -28,7 +28,7 @@
           "type": "api",
           "quantum_state": "stable",
           "dependencies": [],
-          "health_check_endpoint": "http://localhost:5000/api/status",
+          "health_check_endpoint": "http://127.0.0.1:5000/api/status",
           "scaling_strategy": "vertical"
         },
         "bridge": {
@@ -36,7 +36,7 @@
           "type": "middleware",
           "quantum_state": "stable",
           "dependencies": ["backend"],
-          "health_check_endpoint": "http://localhost:5001/api/status",
+          "health_check_endpoint": "http://127.0.0.1:5001/api/status",
           "scaling_strategy": "horizontal"
         },
         "self_learn": {
@@ -44,7 +44,7 @@
           "type": "ai",
           "quantum_state": "superposition",
           "dependencies": ["backend"],
-          "health_check_endpoint": "http://localhost:5002/api/status",
+          "health_check_endpoint": "http://127.0.0.1:5002/api/status",
           "scaling_strategy": "ai_adaptive"
         },
         "chat": {
@@ -52,7 +52,7 @@
           "type": "ai",
           "quantum_state": "entangled",
           "dependencies": ["bridge"],
-          "health_check_endpoint": "http://localhost:5003/api/chat/status",
+          "health_check_endpoint": "http://127.0.0.1:5003/api/chat/status",
           "scaling_strategy": "ai_adaptive"
         }
       },
@@ -62,7 +62,7 @@
         "type": "orchestrator",
         "quantum_state": "quantum_superposition",
         "dependencies": ["all"],
-        "health_check_endpoint": "http://localhost:5005/api/nexus/status"
+        "health_check_endpoint": "http://127.0.0.1:5005/api/nexus/status"
       }
     },
     

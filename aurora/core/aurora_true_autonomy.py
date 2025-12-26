@@ -111,7 +111,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 class AuroraDashboardLoader:
     def __init__(self):
-        self.vite_url = "http://localhost:5000"
+        self.vite_url = "http://127.0.0.1:5000"
         self.dashboard_routes = ["/aurora-dashboard", "/dashboard", "/"]
         
     def check_server_status(self):

@@ -14,10 +14,10 @@ python3 tools/luminar_nexus_v2.py serve &
 sleep 3
 
 # Check if running
-if curl -s http://localhost:5005/api/nexus/status > /dev/null; then
+if curl -s http://127.0.0.1:5005/api/nexus/status > /dev/null; then
     echo "✅ Luminar Nexus V2 is running!"
-    echo "   API: http://localhost:5005"
-    echo "   Status: http://localhost:5005/api/nexus/status"
+    echo "   API: http://127.0.0.1:5005"
+    echo "   Status: http://127.0.0.1:5005/api/nexus/status"
     echo "   Features: AI healing, Quantum mesh, Port management"
 else
     echo "❌ V2 failed to start - check logs"

@@ -68,7 +68,7 @@ def attach_demo_runall(app: FastAPI):
         success_count = 0
         error_count = 0
 
-        # Use httpx for making async HTTP requests to localhost
+        # Use httpx for making async HTTP requests to 127.0.0.1
         async with httpx.AsyncClient(timeout=15.0) as client:
             for card in cards:
                 card_id = card.get("id", "unknown")
@@ -77,8 +77,8 @@ def attach_demo_runall(app: FastAPI):
                 body = card.get("body", {})
 
                 try:
-                    # Make request to localhost:5001
-                    url = f"http://localhost:5001{endpoint}"
+                    # Make request to 127.0.0.1:5001
+                    url = f"http://127.0.0.1:5001{endpoint}"
 
                     if method == "POST":
                         response = await client.post(url, json=body)

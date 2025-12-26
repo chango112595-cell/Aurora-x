@@ -260,14 +260,14 @@ class LuminarNexusServerManager:
                 "command": "cd /workspaces/Aurora-x/client && npm run dev",
                 "session": "aurora-vite",
                 "port": 5173,
-                "health_check": "http://localhost:5173"
+                "health_check": "http://127.0.0.1:5173"
             },
             "backend": {
                 "name": "Aurora Backend API",
                 "command": "cd /workspaces/Aurora-x && npm run server",
                 "session": "aurora-api",
                 "port": 5001,
-                "health_check": "http://localhost:5001/health"
+                "health_check": "http://127.0.0.1:5001/health"
             }
         }
         

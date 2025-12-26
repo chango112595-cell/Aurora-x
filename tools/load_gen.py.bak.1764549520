@@ -11,7 +11,7 @@ def worker(url, count, delay):
         time.sleep(delay)
 if __name__ == '__main__':
     p = argparse.ArgumentParser()
-    p.add_argument('--url', default='http://localhost:5000/healthz')
+    p.add_argument('--url', default='http://127.0.0.1:5000/healthz')
     p.add_argument('--clients', type=int, default=10)
     p.add_argument('--rps', type=float, default=1.0)
     args = p.parse_args()

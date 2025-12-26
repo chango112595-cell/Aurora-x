@@ -8,7 +8,7 @@ Requirements:
 
 Usage:
     python3 tools/aurora_terminal_client.py
-    python3 tools/aurora_terminal_client.py --server http://localhost:5000
+    python3 tools/aurora_terminal_client.py --server http://127.0.0.1:5000
     python3 tools/aurora_terminal_client.py --message "Hello Aurora"
 """
 
@@ -31,7 +31,7 @@ except ImportError:
 class AuroraTerminalClient:
     """Terminal client for Aurora"""
     
-    def __init__(self, server_url: str = "http://localhost:5000"):
+    def __init__(self, server_url: str = "http://127.0.0.1:5000"):
         self.server_url = server_url
         self.session_id = f"terminal_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         self.conversation_history = []
@@ -274,13 +274,13 @@ def main():
         epilog="Examples:\n"
                "  python3 tools/aurora_terminal_client.py\n"
                "  python3 tools/aurora_terminal_client.py --message 'Hello!'\n"
-               "  python3 tools/aurora_terminal_client.py --server http://localhost:5000",
+               "  python3 tools/aurora_terminal_client.py --server http://127.0.0.1:5000",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(
         "--server",
-        default="http://localhost:5000",
-        help="Aurora server URL (default: http://localhost:5000)"
+        default="http://127.0.0.1:5000",
+        help="Aurora server URL (default: http://127.0.0.1:5000)"
     )
     parser.add_argument(
         "--session",

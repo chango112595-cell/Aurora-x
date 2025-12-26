@@ -83,10 +83,10 @@ class AuroraDashboardLoader:
 
         # Step 2: Check if the server is running
         self.log_tutorial_step(
-            2, "Check if the Vite development server is running on port 5000", "curl -s -I http://localhost:5000"
+            2, "Check if the Vite development server is running on port 5000", "curl -s -I http://127.0.0.1:5000"
         )
 
-        result = subprocess.run(["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True)
+        result = subprocess.run(["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True)
 
         if "200 OK" in result.stdout:
             print("   [OK] Server is running!")
@@ -109,7 +109,7 @@ class AuroraDashboardLoader:
 
         # Step 4: Open the dashboard
         self.log_tutorial_step(
-            4, "Open the dashboard in the browser", "Open http://localhost:5000/aurora-dashboard (or appropriate route)"
+            4, "Open the dashboard in the browser", "Open http://127.0.0.1:5000/aurora-dashboard (or appropriate route)"
         )
 
         print("   [WEB] Opening Aurora Dashboard...")
@@ -156,7 +156,7 @@ class AuroraDashboardLoader:
         time.sleep(5)
 
         # Verify
-        result = subprocess.run(["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True)
+        result = subprocess.run(["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True)
 
         if "200 OK" in result.stdout:
             print("   [OK] Server started successfully!")
@@ -174,14 +174,14 @@ class AuroraDashboardLoader:
 
             # Look for dashboard routes
             if "aurora-dashboard" in content.lower():
-                return "http://localhost:5000/aurora-dashboard"
+                return "http://127.0.0.1:5000/aurora-dashboard"
             elif "dashboard" in content.lower():
-                return "http://localhost:5000/dashboard"
+                return "http://127.0.0.1:5000/dashboard"
             else:
                 # Default to home page
-                return "http://localhost:5000"
+                return "http://127.0.0.1:5000"
 
-        return "http://localhost:5000"
+        return "http://127.0.0.1:5000"
 
     def teach_aurora_to_load_dashboard(self):
         """Teach Aurora to load her own dashboard"""
@@ -192,7 +192,7 @@ class AuroraDashboardLoader:
 
         print("\n[EMOJI] Aurora, now YOU try loading your dashboard autonomously!")
         print("\nHere's what you learned:")
-        print("1. Check if server is running: curl -s -I http://localhost:5000")
+        print("1. Check if server is running: curl -s -I http://127.0.0.1:5000")
         print("2. If not running: cd /workspaces/Aurora-x/client && npm run dev")
         print("3. Find dashboard route in App.tsx")
         print("4. Open dashboard URL in browser")

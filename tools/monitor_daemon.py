@@ -40,7 +40,7 @@ def monitor_services() -> None:
 
         for port, name in services.items():
             try:
-                response = requests.get(f"http://localhost:{port}", timeout=5)
+                response = requests.get(f"http://127.0.0.1:{port}", timeout=5)
                 if response.status_code == 200:
                     print(f"[OK] {name} (:{port}): HEALTHY")
                 else:

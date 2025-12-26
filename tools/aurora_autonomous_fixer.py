@@ -88,7 +88,7 @@ class AuroraAutonomousFixer:
                 [
                     "curl",
                     "-s",
-                    "http://localhost:5001/chat",
+                    "http://127.0.0.1:5001/chat",
                     "-X",
                     "POST",
                     "-H",
@@ -248,7 +248,7 @@ class AuroraSelfMonitor:
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
-                        f"http://localhost:{port}/health",
+                        f"http://127.0.0.1:{port}/health",
                         timeout=aiohttp.ClientTimeout(total=2)
                     ) as response:
                         health["checks"]["http_responding"] = response.status == 200
@@ -513,7 +513,7 @@ if __name__ == "__main__":
                     "-s",
                     "-X",
                     "POST",
-                    "http://localhost:5001/chat",
+                    "http://127.0.0.1:5001/chat",
                     "-H",
                     "Content-Type: application/json",
                     "-d",

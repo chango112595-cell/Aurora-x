@@ -107,7 +107,7 @@ class AuroraLiveIntegration:
         Connect to a running API server
 
         Args:
-            base_url: Base URL of API (e.g., http://localhost:5000)
+            base_url: Base URL of API (e.g., http://127.0.0.1:5000)
             headers: Optional headers for authentication
 
         Returns:
@@ -480,7 +480,7 @@ def main():
 
     # Test 1: API Connection
     print("Test 1: API Connection")
-    api_conn = live.connect_to_api("http://localhost:5000")
+    api_conn = live.connect_to_api("http://127.0.0.1:5000")
     print(f"  Connection ID: {api_conn.connection_id}")
     print(f"  Latency: {api_conn.latency_ms}ms\n")
 
@@ -492,13 +492,13 @@ def main():
 
     # Test 3: Server Health
     print("Test 3: Server Health Monitoring")
-    health = live.monitor_server_health("http://localhost:5000")
+    health = live.monitor_server_health("http://127.0.0.1:5000")
     print(f"  Status: {health['status']}")
     print(f"  Uptime: {health['uptime_percentage']}%\n")
 
     # Test 4: Database Connection
     print("Test 4: Database Connection")
-    db_conn = live.connect_to_database("postgresql://localhost:5432/aurora")
+    db_conn = live.connect_to_database("postgresql://127.0.0.1:5432/aurora")
     results = live.execute_query(db_conn.connection_id, "SELECT * FROM tiers")
     print(f"  Results: {len(results)} rows\n")
 

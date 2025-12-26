@@ -41,11 +41,11 @@ LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
 MONITOR_LOG = Path(".aurora_knowledge/recorder_monitor.log")
 
 SERVICES = [
-    {"name": "backend", "url": "http://localhost:5000/health"},
-    {"name": "bridge", "url": "http://localhost:5001/health"},
-    {"name": "self-learn", "url": "http://localhost:5002/health"},
-    {"name": "chat", "url": "http://localhost:5003/health"},
-    {"name": "vite", "url": "http://localhost:5173/"},
+    {"name": "backend", "url": "http://127.0.0.1:5000/health"},
+    {"name": "bridge", "url": "http://127.0.0.1:5001/health"},
+    {"name": "self-learn", "url": "http://127.0.0.1:5002/health"},
+    {"name": "chat", "url": "http://127.0.0.1:5003/health"},
+    {"name": "vite", "url": "http://127.0.0.1:5173/"},
 ]
 
 CLEANUP_PATTERNS = ["*.pyc", "__pycache__"]

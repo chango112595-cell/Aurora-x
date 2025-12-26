@@ -88,7 +88,7 @@ class CacheManager:
 
     def __init__(
         self,
-        redis_url: str = "redis://localhost:6379/0",
+        redis_url: str = "redis://127.0.0.1:6379/0",
         default_ttl: int = 300,  # 5 minutes
         max_memory_items: int = 1000,
     ):

@@ -273,10 +273,10 @@ class AuroraPortManager:
         try:
             # Try different health check endpoints
             endpoints = [
-                f"http://localhost:{port}/health",
-                f"http://localhost:{port}/api/health",
-                f"http://localhost:{port}/status",
-                f"http://localhost:{port}/api/nexus/status",  # For Nexus v2
+                f"http://127.0.0.1:{port}/health",
+                f"http://127.0.0.1:{port}/api/health",
+                f"http://127.0.0.1:{port}/status",
+                f"http://127.0.0.1:{port}/api/nexus/status",  # For Nexus v2
             ]
 
             for endpoint in endpoints:

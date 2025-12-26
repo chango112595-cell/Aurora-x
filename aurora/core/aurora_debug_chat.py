@@ -117,7 +117,7 @@ class AuroraChatDebugger:
                     "-s",
                     "-X",
                     "POST",
-                    "http://localhost:5001/chat",
+                    "http://127.0.0.1:5001/chat",
                     "-H",
                     "Content-Type: application/json",
                     "-d",
@@ -307,7 +307,7 @@ class AuroraChatDebugger:
             try {
                 console.log('[STAR] Sending to Aurora:', prompt);
                 
-                const response = await fetch('http://localhost:5001/chat', {
+                const response = await fetch('http://127.0.0.1:5001/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt })
@@ -344,7 +344,7 @@ class AuroraChatDebugger:
         test_file.write_text(test_page)
 
         self.log("[OK]", f"Test page created: {test_file.relative_to(self.root)}")
-        self.log("[EMOJI]", "Open in browser: http://localhost:5000/../aurora_chat_test.html")
+        self.log("[EMOJI]", "Open in browser: http://127.0.0.1:5000/../aurora_chat_test.html")
         self.log("[EMOJI]", "Or directly: file://" + str(test_file))
 
     def run_diagnosis_and_fix(self):
@@ -382,7 +382,7 @@ class AuroraChatDebugger:
         print("    I also created a test page so you can verify the endpoint works.'")
         print()
         print("[EMOJI] Next steps:")
-        print("   1. Refresh the Aurora UI at http://localhost:5000")
+        print("   1. Refresh the Aurora UI at http://127.0.0.1:5000")
         print("   2. Go to the Chat page")
         print("   3. Send a test message")
         print("   4. Or open aurora_chat_test.html to test directly")

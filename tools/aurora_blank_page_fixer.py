@@ -189,7 +189,7 @@ class AuroraBlankPageFixer:
 
         try:
             # Check if dev server is running
-            response = subprocess.run(["curl", "-s", "-I", "http://localhost:5173"], capture_output=True, timeout=5)
+            response = subprocess.run(["curl", "-s", "-I", "http://127.0.0.1:5173"], capture_output=True, timeout=5)
 
             if response.returncode == 0:
                 self.print_status("Dev server is running", "SUCCESS")

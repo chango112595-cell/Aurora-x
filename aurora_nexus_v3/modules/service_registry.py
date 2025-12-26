@@ -37,7 +37,7 @@ class ServiceDefinition:
     id: str
     name: str
     type: ServiceType
-    host: str = "localhost"
+    host: str = "127.0.0.1"
     port: Optional[int] = None
     protocol: str = "http"
     state: ServiceState = ServiceState.REGISTERED
@@ -107,7 +107,7 @@ class ServiceRegistry:
         self,
         name: str,
         service_type: ServiceType,
-        host: str = "localhost",
+        host: str = "127.0.0.1",
         port: Optional[int] = None,
         protocol: str = "http",
         health_endpoint: Optional[str] = None,

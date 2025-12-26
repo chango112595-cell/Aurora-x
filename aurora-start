@@ -9,7 +9,7 @@ echo "  ✓ Backend API (Express)"
 echo "  ✓ Frontend (React + Vite)"
 echo "  ✓ Chat System"
 echo ""
-echo "Running on: http://localhost:5000"
+echo "Running on: http://127.0.0.1:5000"
 echo ""
 
 npm run dev

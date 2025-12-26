@@ -428,7 +428,7 @@ class UltimateAPIManager:
 
         # AURORA INTEGRATION FOR INTELLIGENT ASSISTANCE
         self.aurora_assistance_enabled = True
-        self.aurora_learning_endpoint = "http://localhost:5002/api/chat"
+        self.aurora_learning_endpoint = "http://127.0.0.1:5002/api/chat"
         self.connection_retry_strategies = {
             "immediate": {"retries": 3, "delay": 1},
             "progressive": {"retries": 5, "delay": [1, 2, 5, 10, 30]},
@@ -885,7 +885,7 @@ class UltimateAPIManager:
         """Ultra-comprehensive health check"""
         service = self.services[service_name]
         port = service["port"]
-        health_url = f"http://localhost:{port}{service['health_endpoint']}"
+        health_url = f"http://127.0.0.1:{port}{service['health_endpoint']}"
 
         health_data = {
             "service_name": service_name,
@@ -909,7 +909,7 @@ class UltimateAPIManager:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
-            result = sock.connect_ex(("localhost", port))
+            result = sock.connect_ex(("127.0.0.1", port))
             health_data["port_listening"] = result == 0
             sock.close()
         except Exception:
@@ -1017,7 +1017,7 @@ class UltimateAPIManager:
 
         # Check for frontend serving JSON instead of HTML
         try:
-            response = requests.get("http://localhost:5000", timeout=3)
+            response = requests.get("http://127.0.0.1:5000", timeout=3)
             if response.headers.get("content-type", "").startswith("application/json"):
                 issues["frontend_issues"].append(
                     "frontend_serving_json_instead_of_html")
@@ -1035,7 +1035,7 @@ class UltimateAPIManager:
                 try:
                     response = requests.request(
                         endpoint_config.get("method", "GET"),
-                        f"http://localhost:{port}{endpoint}",
+                        f"http://127.0.0.1:{port}{endpoint}",
                         timeout=3,
                         json={} if endpoint_config.get(
                             "method") == "POST" else None,
@@ -1099,7 +1099,7 @@ class UltimateAPIManager:
 
             # Wait and verify
             time.sleep(10)
-            response = requests.get("http://localhost:5000", timeout=5)
+            response = requests.get("http://127.0.0.1:5000", timeout=5)
             if "<!DOCTYPE html>" in response.text:
                 self.log("[OK] Frontend routing fixed - now serving HTML")
                 return True
@@ -1501,7 +1501,7 @@ class UltimateAPIManager:
 
         # 1. Check what's actually running on port 5000
         try:
-            response = requests.get("http://localhost:5000", timeout=5)
+            response = requests.get("http://127.0.0.1:5000", timeout=5)
             if response.headers.get("content-type", "").startswith("application/json"):
                 print(
                     "[ERROR] Port 5000 is serving JSON API instead of HTML frontend")
@@ -1516,7 +1516,7 @@ class UltimateAPIManager:
 
                     # Verify it's now serving HTML
                     time.sleep(5)
-                    response = requests.get("http://localhost:5000", timeout=5)
+                    response = requests.get("http://127.0.0.1:5000", timeout=5)
                     if "<!DOCTYPE html>" in response.text:
                         print("[OK] Frontend now serving HTML correctly")
                         return True
@@ -2710,7 +2710,7 @@ class UltimateAPIManager:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
-            result = sock.connect_ex(("localhost", port))
+            result = sock.connect_ex(("127.0.0.1", port))
             sock.close()
             return result == 0
         except Exception as e:

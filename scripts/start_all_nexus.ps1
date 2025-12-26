@@ -36,7 +36,7 @@ Start-Sleep -Seconds 3
 
 # Check if Luminar is responding
 try {
-    $response = Invoke-WebRequest -Uri "http://localhost:8000/api/nexus/status" -TimeoutSec 5 -UseBasicParsing
+    $response = Invoke-WebRequest -Uri "http://127.0.0.1:8000/api/nexus/status" -TimeoutSec 5 -UseBasicParsing
     Write-Host "[OK] Luminar Nexus V2 is responding!" -ForegroundColor Green
 } catch {
     Write-Host "[WARN] Luminar Nexus V2 may still be starting..." -ForegroundColor Yellow
@@ -48,7 +48,7 @@ Write-Host "--------------------------------------------------------------------
 
 # Check if backend is already running
 try {
-    $backendCheck = Invoke-WebRequest -Uri "http://localhost:5000/api/health" -TimeoutSec 2 -UseBasicParsing -ErrorAction Stop
+    $backendCheck = Invoke-WebRequest -Uri "http://127.0.0.1:5000/api/health" -TimeoutSec 2 -UseBasicParsing -ErrorAction Stop
     Write-Host "[OK] Backend already running on port 5000" -ForegroundColor Green
 } catch {
     Write-Host "[INFO] Starting backend server..." -ForegroundColor Cyan
@@ -64,7 +64,7 @@ Start-Sleep -Seconds 2
 # Test Luminar routes
 Write-Host "[TEST] GET /api/luminar-nexus/v2/status" -ForegroundColor Cyan
 try {
-    $luminarStatus = Invoke-RestMethod -Uri "http://localhost:5000/api/luminar-nexus/v2/status" -Method Get -TimeoutSec 5
+    $luminarStatus = Invoke-RestMethod -Uri "http://127.0.0.1:5000/api/luminar-nexus/v2/status" -Method Get -TimeoutSec 5
     Write-Host "[OK] Luminar routes working! Services: $($luminarStatus.total_services)" -ForegroundColor Green
 } catch {
     Write-Host "[WARN] Luminar routes not responding yet" -ForegroundColor Yellow
@@ -76,9 +76,9 @@ Write-Host " NEXUS STARTUP COMPLETE" -ForegroundColor Cyan
 Write-Host "=" -NoNewline -ForegroundColor Cyan; Write-Host "=".PadRight(68, "=") -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Access points:" -ForegroundColor White
-Write-Host "  Frontend:       http://localhost:5000" -ForegroundColor Cyan
-Write-Host "  Luminar Nexus:  http://localhost:5000/luminar-nexus" -ForegroundColor Cyan
-Write-Host "  Memory Fabric:  http://localhost:5000/memory" -ForegroundColor Cyan
-Write-Host "  API Status:     http://localhost:5000/api/luminar-nexus/v2/status" -ForegroundColor Cyan
+Write-Host "  Frontend:       http://127.0.0.1:5000" -ForegroundColor Cyan
+Write-Host "  Luminar Nexus:  http://127.0.0.1:5000/luminar-nexus" -ForegroundColor Cyan
+Write-Host "  Memory Fabric:  http://127.0.0.1:5000/memory" -ForegroundColor Cyan
+Write-Host "  API Status:     http://127.0.0.1:5000/api/luminar-nexus/v2/status" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "[TIP] Press Ctrl+C to stop, then run: Stop-Process -Name node,python -Force" -ForegroundColor DarkGray

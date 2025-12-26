@@ -13,8 +13,8 @@ upstream aurora_backend {
     least_conn;
     
     # Backend servers
-    server localhost:5001 max_fails=3 fail_timeout=30s;
-    server localhost:5002 max_fails=3 fail_timeout=30s backup;
+    server 127.0.0.1:5001 max_fails=3 fail_timeout=30s;
+    server 127.0.0.1:5002 max_fails=3 fail_timeout=30s backup;
     
     # Keep-alive connections
     keepalive 32;
@@ -22,19 +22,19 @@ upstream aurora_backend {
 
 upstream aurora_frontend {
     # Round-robin for static content
-    server localhost:5173 max_fails=3 fail_timeout=30s;
+    server 127.0.0.1:5173 max_fails=3 fail_timeout=30s;
 }
 
 upstream aurora_chat {
     # IP hash for sticky sessions (chat requires session persistence)
     ip_hash;
-    server localhost:8080 max_fails=3 fail_timeout=30s;
+    server 127.0.0.1:8080 max_fails=3 fail_timeout=30s;
 }
 
 # Main server block
 server {
     listen 80;
-    server_name aurora.local localhost;
+    server_name aurora.local 127.0.0.1;
     
     # Logging
     access_log /var/log/nginx/aurora_access.log;

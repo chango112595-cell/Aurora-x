@@ -109,7 +109,7 @@ class AuroraAPIManager:
         """Comprehensive health check for an API"""
         api = self.apis[api_name]
         port = api["port"]
-        health_url = f"http://localhost:{port}{api['health_endpoint']}"
+        health_url = f"http://127.0.0.1:{port}{api['health_endpoint']}"
 
         health_data = {
             "name": api_name,
