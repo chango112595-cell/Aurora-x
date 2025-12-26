@@ -2098,7 +2098,7 @@ def fix_routing_issues() -> bool:
             fixes_applied.append("[OK] Localhost resolution: OK")
         except Exception as e:
             print("  [EMOJI] Fixing 127.0.0.1 resolution...")
-            subprocess.run(["echo", "127.0.0.1 localhost >> /etc/hosts"], shell=True)
+            subprocess.run(['sh', '-c', 'echo "127.0.0.1 localhost" >> /etc/hosts'])
             fixes_applied.append("[EMOJI] Added 127.0.0.1 localhost to /etc/hosts")
 
         # 2. Check port conflicts
