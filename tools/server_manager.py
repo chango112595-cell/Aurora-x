@@ -2092,13 +2092,15 @@ def fix_routing_issues() -> bool:
 
         fixes_applied = []
 
-        # 1. Check loopback connectivity
+        # 1. Check loopback interface availability
         try:
             # Test if we can bind to loopback interface
             test_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            test_socket.bind(("127.0.0.1", 0))
-            test_socket.close()
-            fixes_applied.append("[OK] Loopback interface: OK")
+            try:
+                test_socket.bind(("127.0.0.1", 0))
+                fixes_applied.append("[OK] Loopback interface: OK")
+            finally:
+                test_socket.close()
         except Exception as e:
             print(f"  [EMOJI] Warning: Loopback interface issue: {e}")
             fixes_applied.append(f"[WARN] Loopback interface issue: {e}")
