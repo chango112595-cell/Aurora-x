@@ -2092,14 +2092,17 @@ def fix_routing_issues() -> bool:
 
         fixes_applied = []
 
-        # 1. Check 127.0.0.1 resolution
+        # 1. Check localhost resolution
         try:
-            socket.gethostbyname("127.0.0.1")
-            fixes_applied.append("[OK] Localhost resolution: OK")
+            resolved_ip = socket.gethostbyname("localhost")
+            if resolved_ip == "127.0.0.1":
+                fixes_applied.append("[OK] Localhost resolution: OK")
+            else:
+                fixes_applied.append(f"[WARN] Localhost resolves to {resolved_ip} instead of 127.0.0.1")
         except Exception as e:
-            print("  [EMOJI] Fixing 127.0.0.1 resolution...")
-            subprocess.run(["echo", "127.0.0.1 127.0.0.1 >> /etc/hosts"], shell=True)
-            fixes_applied.append("[EMOJI] Added 127.0.0.1 to /etc/hosts")
+            print("  [EMOJI] Fixing localhost resolution...")
+            subprocess.run(["echo", "127.0.0.1 localhost >> /etc/hosts"], shell=True)
+            fixes_applied.append("[EMOJI] Added localhost to /etc/hosts")
 
         # 2. Check port conflicts
         port_conflicts = []
