@@ -482,12 +482,10 @@ class AdvancedServerManager:
 
         # Test loopback connectivity
         try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
                 sock.settimeout(1)
-                sock.connect(("127.0.0.1", 22))  # SSH port should be open
-            finally:
-                sock.close()
+                # Test loopback by binding to an ephemeral port instead of assuming SSH is available
+                sock.bind(("127.0.0.1", 0))
         except Exception as e:
             issues.append(
                 {
