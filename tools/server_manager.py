@@ -483,9 +483,11 @@ class AdvancedServerManager:
         # Test loopback connectivity
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(1)
-            sock.connect(("127.0.0.1", 22))  # SSH port should be open
-            sock.close()
+            try:
+                sock.settimeout(1)
+                sock.connect(("127.0.0.1", 22))  # SSH port should be open
+            finally:
+                sock.close()
         except Exception as e:
             issues.append(
                 {
@@ -2095,12 +2097,9 @@ def fix_routing_issues() -> bool:
         # 1. Check loopback interface availability
         try:
             # Test if we can bind to loopback interface
-            test_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as test_socket:
                 test_socket.bind(("127.0.0.1", 0))
-                fixes_applied.append("[OK] Loopback interface: OK")
-            finally:
-                test_socket.close()
+            fixes_applied.append("[OK] Loopback interface: OK")
         except Exception as e:
             print(f"  [EMOJI] Warning: Loopback interface issue: {e}")
             fixes_applied.append(f"[WARN] Loopback interface issue: {e}")
