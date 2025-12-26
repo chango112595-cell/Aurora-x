@@ -2085,6 +2085,37 @@ def auto_fix_connection_refused() -> bool:
         return False
 
 
+def _update_hosts_file_for_localhost() -> tuple[bool, str]:
+    """Helper to safely update /etc/hosts with localhost entry.
+    
+    Returns:
+        Tuple of (success: bool, message: str)
+    """
+    try:
+        # Check if localhost entry already exists in /etc/hosts
+        try:
+            with open('/etc/hosts', 'r') as f:
+                hosts_content = f.read()
+                if '127.0.0.1' in hosts_content and 'localhost' in hosts_content:
+                    # Entry likely already exists
+                    return True, "localhost entry already exists in /etc/hosts"
+        except (PermissionError, FileNotFoundError):
+            pass  # Continue to try appending
+        
+        # Append localhost entry
+        result = subprocess.run(
+            ['sh', '-c', 'grep -q "^127.0.0.1.*localhost" /etc/hosts || echo "127.0.0.1 localhost" >> /etc/hosts'],
+            capture_output=True,
+            text=True
+        )
+        if result.returncode == 0:
+            return True, "Added localhost to /etc/hosts"
+        else:
+            return False, f"Failed to update /etc/hosts: {result.stderr}"
+    except Exception as e:
+        return False, f"Could not update /etc/hosts (requires root): {e}"
+
+
 def fix_routing_issues() -> bool:
     """Advanced routing issue resolution"""
     try:
@@ -2100,33 +2131,19 @@ def fix_routing_issues() -> bool:
             else:
                 # Localhost resolves to wrong IP - attempt to fix
                 print(f"  [EMOJI] Localhost resolves to {resolved_ip}, fixing to 127.0.0.1...")
-                try:
-                    result = subprocess.run(
-                        ['sh', '-c', 'echo "127.0.0.1 localhost" >> /etc/hosts'],
-                        capture_output=True,
-                        text=True
-                    )
-                    if result.returncode == 0:
-                        fixes_applied.append(f"[EMOJI] Updated localhost resolution (was {resolved_ip})")
-                    else:
-                        fixes_applied.append(f"[WARN] Localhost resolves to {resolved_ip} instead of 127.0.0.1 (fix failed: {result.stderr})")
-                except Exception as hosts_error:
-                    fixes_applied.append(f"[WARN] Localhost resolves to {resolved_ip} instead of 127.0.0.1 (requires root to fix)")
+                success, message = _update_hosts_file_for_localhost()
+                if success:
+                    fixes_applied.append(f"[EMOJI] Updated localhost resolution (was {resolved_ip})")
+                else:
+                    fixes_applied.append(f"[WARN] Localhost resolves to {resolved_ip} instead of 127.0.0.1 ({message})")
         except Exception as e:
             # Localhost cannot be resolved at all - attempt to fix
-            print("  [EMOJI] Fixing localhost resolution...")
-            try:
-                result = subprocess.run(
-                    ['sh', '-c', 'echo "127.0.0.1 localhost" >> /etc/hosts'],
-                    capture_output=True,
-                    text=True
-                )
-                if result.returncode == 0:
-                    fixes_applied.append("[EMOJI] Added localhost to /etc/hosts")
-                else:
-                    fixes_applied.append(f"[ERROR] Failed to update /etc/hosts: {result.stderr}")
-            except Exception as hosts_error:
-                fixes_applied.append(f"[ERROR] Could not update /etc/hosts (requires root): {hosts_error}")
+            print(f"  [EMOJI] Fixing localhost resolution (error: {e})...")
+            success, message = _update_hosts_file_for_localhost()
+            if success:
+                fixes_applied.append(f"[EMOJI] {message}")
+            else:
+                fixes_applied.append(f"[ERROR] {message}")
 
         # 2. Check port conflicts
         port_conflicts = []
