@@ -2093,8 +2093,9 @@ def _update_hosts_file_for_localhost() -> tuple[bool, str]:
     """
     try:
         # First check if a proper localhost entry already exists
+        # Using portable whitespace pattern for better cross-system compatibility
         check_result = subprocess.run(
-            ['sh', '-c', 'grep -q "^127\\.0\\.0\\.1[[:space:]].*localhost" /etc/hosts'],
+            ['sh', '-c', 'grep -q "^127\\.0\\.0\\.1[ \\t].*localhost" /etc/hosts'],
             capture_output=True,
             text=True
         )
@@ -2113,7 +2114,8 @@ def _update_hosts_file_for_localhost() -> tuple[bool, str]:
         if append_result.returncode == 0:
             return True, "Added localhost entry to /etc/hosts"
         else:
-            return False, f"Failed to update /etc/hosts: {append_result.stderr.strip() or 'unknown error'}"
+            error_msg = append_result.stderr.strip() or 'permission denied'
+            return False, f"Failed to update /etc/hosts: {error_msg} (try running with sudo)"
             
     except Exception as e:
         return False, f"Could not update /etc/hosts (requires root): {e}"
