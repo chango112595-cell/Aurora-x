@@ -8,6 +8,7 @@ from typing import Any
 import time
 
 from fastapi import APIRouter
+from aurora_x.config.runtime_config import readiness
 
 router = APIRouter(prefix="/api/monitoring", tags=["monitoring"])
 
@@ -73,6 +74,8 @@ async def get_dashboard_data() -> dict[str, Any]:
     else:
         system_status = "healthy"
 
+    dep = readiness()
+
     return {
         "timestamp": datetime.utcnow().isoformat(),
         "overview": {
@@ -101,6 +104,7 @@ async def get_dashboard_data() -> dict[str, Any]:
                 "status": disk.get("status", "unknown"),
             },
         },
+        "dependencies": dep,
     }
 
 

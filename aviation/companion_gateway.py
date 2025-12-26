@@ -13,8 +13,10 @@ import logging
 from pathlib import Path
 from typing import Optional
 
+from aurora_x.config.runtime_config import data_path
+
 _logger = logging.getLogger("aurora.aviation.gateway")
-SUGGEST_DIR = Path("aviation/suggestions")
+SUGGEST_DIR = data_path("aviation", "suggestions")
 SUGGEST_DIR.mkdir(parents=True, exist_ok=True)
 
 # Check for MAVLink support

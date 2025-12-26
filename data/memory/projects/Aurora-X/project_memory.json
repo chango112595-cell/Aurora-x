@@ -91,6 +91,11 @@
       "value": "Chris",
       "category": "identity",
       "timestamp": "2025-12-14T04:37:48.775241"
+    },
+    "test_fact_1766727175": {
+      "value": "Aurora-X Ultra test value",
+      "category": "test",
+      "timestamp": "2025-12-26T00:32:55.407787"
     }
   },
   "summary": ""

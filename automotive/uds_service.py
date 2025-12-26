@@ -10,9 +10,10 @@ import os
 import json
 import time
 import logging
+from aurora_x.config.runtime_config import data_path
 
 _logger = logging.getLogger("aurora.uds_service")
-SUGGEST_DIR = "automotive/suggestions"
+SUGGEST_DIR = data_path("automotive", "suggestions")
 
 try:
     import can
@@ -79,10 +80,10 @@ def read_vin() -> dict:
 
 def request_ecu_action(ecu, action, payload):
     # Save suggestion; require human signature/approval before execution
-    os.makedirs(SUGGEST_DIR, exist_ok=True)
+    SUGGEST_DIR.mkdir(parents=True, exist_ok=True)
     ts = int(time.time()*1000)
-    fn = os.path.join(SUGGEST_DIR, f"uds_suggest_{ts}.json")
+    fn = SUGGEST_DIR / f"uds_suggest_{ts}.json"
     with open(fn, "w") as fh:
         json.dump({"ecu": ecu, "action": action, "payload": payload,
                   "ts": time.time()}, fh, indent=2)
-    return {"ok": True, "file": fn}
+    return {"ok": True, "file": str(fn)}

@@ -15,10 +15,12 @@ import logging
 from pathlib import Path
 from typing import Optional
 
+from aurora_x.config.runtime_config import data_path
+
 _logger = logging.getLogger("aurora.can_bridge")
 
 AURORA_TOKEN = os.environ.get("AURORA_API_TOKEN", "aurora-dev-token")
-SUGGEST_DIR = Path("automotive/suggestions")
+SUGGEST_DIR = data_path("automotive", "suggestions")
 SUGGEST_DIR.mkdir(parents=True, exist_ok=True)
 
 # Try import python-can; if missing, functionality is unavailable
