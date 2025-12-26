@@ -112,8 +112,10 @@ may have rate limiting applied in production environments.
 try:
     from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 
-    REQUEST_COUNT = Counter("aurora_http_requests_total", "HTTP requests", ["path", "method", "status"])
-    REQUEST_LATENCY = Histogram("aurora_http_request_latency_seconds", "Request latency", ["path", "method"])
+    REQUEST_COUNT = Counter("aurora_http_requests_total", "HTTP requests", [
+                            "path", "method", "status"])
+    REQUEST_LATENCY = Histogram(
+        "aurora_http_request_latency_seconds", "Request latency", ["path", "method"])
     _PROM_AVAILABLE = True
 except Exception:
     _PROM_AVAILABLE = False
@@ -123,7 +125,8 @@ except Exception:
 _performance_middleware_ref = {"instance": None}
 _rate_limit_state: dict[str, dict[str, float]] = {}
 _REQUESTS_PER_MIN = int(os.environ.get("AURORA_RATE_LIMIT_PER_MIN", "120"))
-_REQUIRE_AUTH = os.environ.get("AURORA_REQUIRE_AUTH", "0").lower() in {"1", "true", "yes"}
+_REQUIRE_AUTH = os.environ.get("AURORA_REQUIRE_AUTH", "0").lower() in {
+    "1", "true", "yes"}
 _API_KEY = os.environ.get("AURORA_API_KEY")
 _AUTH_WHITELIST = {"/healthz", "/readyz", "/metrics", "/openapi.json"}
 
@@ -137,8 +140,10 @@ async def request_id_middleware(request: Request, call_next):
         response = await call_next(request)
     except Exception as exc:
         if _PROM_AVAILABLE:
-            REQUEST_COUNT.labels(path=request.url.path, method=request.method, status="500").inc()
-            REQUEST_LATENCY.labels(path=request.url.path, method=request.method).observe(time.perf_counter() - start)
+            REQUEST_COUNT.labels(path=request.url.path,
+                                 method=request.method, status="500").inc()
+            REQUEST_LATENCY.labels(path=request.url.path, method=request.method).observe(
+                time.perf_counter() - start)
         else:
             _metrics_fallback["errors"] += 1
             _metrics_fallback["latencies"].append(time.perf_counter() - start)
@@ -149,8 +154,10 @@ async def request_id_middleware(request: Request, call_next):
     status = getattr(response, "status_code", 200)
 
     if _PROM_AVAILABLE:
-        REQUEST_COUNT.labels(path=request.url.path, method=request.method, status=str(status)).inc()
-        REQUEST_LATENCY.labels(path=request.url.path, method=request.method).observe(duration)
+        REQUEST_COUNT.labels(path=request.url.path,
+                             method=request.method, status=str(status)).inc()
+        REQUEST_LATENCY.labels(path=request.url.path,
+                               method=request.method).observe(duration)
     else:
         _metrics_fallback["requests"] += 1
         _metrics_fallback["latencies"].append(duration)
@@ -162,7 +169,8 @@ async def request_id_middleware(request: Request, call_next):
 async def rate_limit_middleware(request: Request, call_next):
     # Simple token bucket per client IP
     client_ip = request.client.host if request.client else "unknown"
-    state = _rate_limit_state.setdefault(client_ip, {"tokens": _REQUESTS_PER_MIN, "ts": time.time()})
+    state = _rate_limit_state.setdefault(
+        client_ip, {"tokens": _REQUESTS_PER_MIN, "ts": time.time()})
     now = time.time()
     elapsed = now - state["ts"]
     # Refill tokens per minute
@@ -179,7 +187,8 @@ async def rate_limit_middleware(request: Request, call_next):
 async def auth_middleware(request: Request, call_next):
     if not _REQUIRE_AUTH or request.url.path in _AUTH_WHITELIST or request.url.path.startswith("/static"):
         return await call_next(request)
-    key = request.headers.get("X-AURORA-API-KEY") or request.headers.get("Authorization", "").replace("Bearer ", "")
+    key = request.headers.get(
+        "X-AURORA-API-KEY") or request.headers.get("Authorization", "").replace("Bearer ", "")
     if not key or (_API_KEY and key != _API_KEY):
         return JSONResponse(status_code=401, content={"error": "unauthorized"})
     return await call_next(request)
@@ -224,9 +233,11 @@ def metrics():
         f"aurora_http_errors_total {_metrics_fallback['errors']}",
     ]
     if _metrics_fallback["latencies"]:
-        avg = sum(_metrics_fallback["latencies"]) / len(_metrics_fallback["latencies"])
+        avg = sum(_metrics_fallback["latencies"]) / \
+            len(_metrics_fallback["latencies"])
         content.append(f"aurora_http_request_latency_seconds_avg {avg}")
     return PlainTextResponse("\n".join(content), media_type="text/plain")
+
 
 try:
     from aurora_x.api.server_control import router as server_control_router
