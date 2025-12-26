@@ -2092,26 +2092,29 @@ def _update_hosts_file_for_localhost() -> tuple[bool, str]:
         Tuple of (success: bool, message: str)
     """
     try:
-        # Check if localhost entry already exists in /etc/hosts
-        try:
-            with open('/etc/hosts', 'r') as f:
-                hosts_content = f.read()
-                if '127.0.0.1' in hosts_content and 'localhost' in hosts_content:
-                    # Entry likely already exists
-                    return True, "localhost entry already exists in /etc/hosts"
-        except (PermissionError, FileNotFoundError):
-            pass  # Continue to try appending
-        
-        # Append localhost entry
-        result = subprocess.run(
-            ['sh', '-c', 'grep -q "^127.0.0.1.*localhost" /etc/hosts || echo "127.0.0.1 localhost" >> /etc/hosts'],
+        # First check if a proper localhost entry already exists
+        check_result = subprocess.run(
+            ['sh', '-c', 'grep -q "^127\\.0\\.0\\.1[[:space:]].*localhost" /etc/hosts'],
             capture_output=True,
             text=True
         )
-        if result.returncode == 0:
-            return True, "Added localhost to /etc/hosts"
+        
+        if check_result.returncode == 0:
+            # Entry already exists
+            return True, "localhost entry already exists in /etc/hosts"
+        
+        # Entry doesn't exist, try to append it
+        append_result = subprocess.run(
+            ['sh', '-c', 'echo "127.0.0.1 localhost" >> /etc/hosts'],
+            capture_output=True,
+            text=True
+        )
+        
+        if append_result.returncode == 0:
+            return True, "Added localhost entry to /etc/hosts"
         else:
-            return False, f"Failed to update /etc/hosts: {result.stderr}"
+            return False, f"Failed to update /etc/hosts: {append_result.stderr.strip() or 'unknown error'}"
+            
     except Exception as e:
         return False, f"Could not update /etc/hosts (requires root): {e}"
 
