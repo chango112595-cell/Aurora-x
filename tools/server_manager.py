@@ -2085,6 +2085,42 @@ def auto_fix_connection_refused() -> bool:
         return False
 
 
+def _update_hosts_file_for_localhost() -> tuple[bool, str]:
+    """Helper to safely update /etc/hosts with localhost entry.
+    
+    Returns:
+        Tuple of (success: bool, message: str)
+    """
+    try:
+        # First check if a proper localhost entry already exists
+        # Using portable whitespace pattern for better cross-system compatibility
+        check_result = subprocess.run(
+            ['sh', '-c', 'grep -q "^127\\.0\\.0\\.1[ \\t].*localhost" /etc/hosts'],
+            capture_output=True,
+            text=True
+        )
+        
+        if check_result.returncode == 0:
+            # Entry already exists
+            return True, "localhost entry already exists in /etc/hosts"
+        
+        # Entry doesn't exist, try to append it
+        append_result = subprocess.run(
+            ['sh', '-c', 'echo "127.0.0.1 localhost" >> /etc/hosts'],
+            capture_output=True,
+            text=True
+        )
+        
+        if append_result.returncode == 0:
+            return True, "Added localhost entry to /etc/hosts"
+        else:
+            error_msg = append_result.stderr.strip() or 'permission denied'
+            return False, f"Failed to update /etc/hosts: {error_msg} (try running with sudo)"
+            
+    except Exception as e:
+        return False, f"Could not update /etc/hosts (requires root): {e}"
+
+
 def fix_routing_issues() -> bool:
     """Advanced routing issue resolution"""
     try:
