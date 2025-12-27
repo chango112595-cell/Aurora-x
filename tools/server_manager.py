@@ -480,7 +480,7 @@ class AdvancedServerManager:
                 }
             )
 
-        # Test 127.0.0.1 connectivity
+        # Test loopback connectivity
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
@@ -1943,7 +1943,7 @@ def network_diagnostics() -> dict:
             pass
 
         # Connectivity tests
-        test_hosts = ["127.0.0.1", "127.0.0.1"]
+        test_hosts = ["127.0.0.1"]
         for host in test_hosts:
             try:
                 ping = subprocess.run(["ping", "-c", "1", "-W", "2", host], capture_output=True, text=True, timeout=5)
