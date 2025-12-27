@@ -8,8 +8,8 @@ echo "Created API token and stored in .aurora/api.token"
 # create TLS cert for local dev (mkcert if available)
 if command -v mkcert >/dev/null 2>&1; then
   mkcert -install
-  mkcert -key-file "$ROOT/.aurora/127.0.0.1-key.pem" -cert-file "$ROOT/.aurora/127.0.0.1-cert.pem" "127.0.0.1" "127.0.0.1"
+  mkcert -key-file "$ROOT/.aurora/127.0.0.1-key.pem" -cert-file "$ROOT/.aurora/127.0.0.1-cert.pem" "127.0.0.1" "localhost"
   echo "Created dev certs at ./.aurora/"
 else
-  echo "mkcert not installed; to create TLS certs run: mkcert -install && mkcert 127.0.0.1 127.0.0.1"
+  echo "mkcert not installed; to create TLS certs run: mkcert -install && mkcert 127.0.0.1 localhost"
 fi
