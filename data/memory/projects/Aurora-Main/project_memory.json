@@ -1,36 +1,5 @@
 {
-  "short_term": [
-    {
-      "role": "user",
-      "content": "to make my computer faster",
-      "timestamp": "2025-12-28T17:05:21.147838"
-    },
-    {
-      "role": "user",
-      "content": "anything i am open to it",
-      "timestamp": "2025-12-28T17:05:29.496422"
-    },
-    {
-      "role": "user",
-      "content": "analyze my computer",
-      "timestamp": "2025-12-28T17:07:37.409546"
-    },
-    {
-      "role": "user",
-      "content": "my computer is slow",
-      "timestamp": "2025-12-28T17:07:51.358989"
-    },
-    {
-      "role": "user",
-      "content": "why is it slow?",
-      "timestamp": "2025-12-28T17:08:02.094991"
-    },
-    {
-      "role": "user",
-      "content": "i am not sure can you scan it?",
-      "timestamp": "2025-12-28T17:08:23.391028"
-    }
-  ],
+  "short_term": [],
   "mid_term": [
     {
       "summary": "Compressed 10 messages",
@@ -73,6 +42,13 @@
       "first_message": "2025-12-28T16:52:04.993539",
       "last_message": "2025-12-28T17:05:09.455842",
       "compressed_at": "2025-12-28T17:05:09.461577"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-28T17:05:21.147838",
+      "last_message": "2025-12-28T17:11:17.352450",
+      "compressed_at": "2025-12-28T17:11:17.356873"
     }
   ],
   "long_term": [],
@@ -896,6 +872,58 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-28T17:08:23.408505"
+    },
+    "memory_dae099f4-e599-49e9-a413-eca77670eb55": {
+      "value": {
+        "text": "scan my computer for performance issues",
+        "meta": {
+          "session_id": "chat-1766959830800",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:10:43.499874",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:10:43.499885"
+    },
+    "memory_68f2fd55-0bd6-4e4e-9af6-41d40fb5c766": {
+      "value": {
+        "text": "status",
+        "meta": {
+          "session_id": "chat-1766959830800",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:10:56.632661",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:10:56.632731"
+    },
+    "memory_1d1f9220-b128-4fc9-a8e7-ba0df6644796": {
+      "value": {
+        "text": "performance",
+        "meta": {
+          "session_id": "chat-1766959830800",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:11:10.109192",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:11:10.109212"
+    },
+    "memory_76cd4875-446f-41a5-95c1-ce0bce509c49": {
+      "value": {
+        "text": "slow",
+        "meta": {
+          "session_id": "chat-1766959830800",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:11:17.381430",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:11:17.381447"
     }
   },
   "events": [
@@ -1478,8 +1506,48 @@
         "longterm": false
       },
       "timestamp": "2025-12-28T17:08:23.422902"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "dae099f4-e599-49e9-a413-eca77670eb55",
+        "text_length": 39,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:10:43.512665"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "68f2fd55-0bd6-4e4e-9af6-41d40fb5c766",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:10:56.644492"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1d1f9220-b128-4fc9-a8e7-ba0df6644796",
+        "text_length": 11,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:11:10.121272"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "76cd4875-446f-41a5-95c1-ce0bce509c49",
+        "text_length": 4,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:11:17.417218"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-28T17:08:23.423739"
+  "last_updated": "2025-12-28T17:11:17.417855"
 }

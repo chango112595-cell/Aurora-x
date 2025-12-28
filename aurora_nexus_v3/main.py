@@ -36,6 +36,8 @@ class NexusServer:
         
         self.module_bridge = NexusBridge()
         self.module_bridge.attach_v3_core(self.core)
+        # Expose bridge on core so HTTP/status endpoints can report aggregated modules
+        setattr(self.core, "nexus_bridge", self.module_bridge)
         bridge_result = self.module_bridge.load_modules()
         manifest_modules_loaded = bridge_result.get("loaded", 0)
         manifest_tiers = bridge_result.get("tiers", self.core.MODULE_COUNT)
