@@ -10,7 +10,6 @@ CAN Bridge - Companion-computer pattern
 import os
 import json
 import time
-import threading
 import logging
 from pathlib import Path
 from typing import Optional
