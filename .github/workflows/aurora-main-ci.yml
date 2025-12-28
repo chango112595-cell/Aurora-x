@@ -165,7 +165,7 @@ jobs:
   docker-build:
     name: Docker Multi-Arch Build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     needs: test-and-build
 
     steps:

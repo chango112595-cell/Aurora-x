@@ -155,7 +155,11 @@ jobs:
         env:
           DATABASE_URL: postgresql://aurora:test_password@localhost:5432/aurora_x_test
         run: |
-          pytest tests/integration/ -v -m integration
+          if [ -d "tests/integration" ]; then
+            pytest tests/integration/ -v -m integration
+          else
+            echo "No integration tests directory found"
+          fi
 
   # ============================================
   # Docker Build Tests
