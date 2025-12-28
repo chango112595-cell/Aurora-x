@@ -2,38 +2,23 @@
   "short_term": [
     {
       "role": "user",
-      "content": "how the weather",
-      "timestamp": "2025-12-28T16:23:42.901201"
+      "content": "system analysis",
+      "timestamp": "2025-12-28T16:52:04.993539"
     },
     {
       "role": "user",
-      "content": "do you still remember?",
-      "timestamp": "2025-12-28T16:36:03.204082"
+      "content": "enhance",
+      "timestamp": "2025-12-28T16:52:11.197083"
     },
     {
       "role": "user",
-      "content": "do you know my name?",
-      "timestamp": "2025-12-28T16:36:11.682108"
+      "content": "analyze the system",
+      "timestamp": "2025-12-28T16:52:19.626030"
     },
     {
       "role": "user",
-      "content": "my name is chris you're creator.",
-      "timestamp": "2025-12-28T16:36:27.650798"
-    },
-    {
-      "role": "user",
-      "content": "give me a list of the systems that needs enhancements?",
-      "timestamp": "2025-12-28T16:36:42.072973"
-    },
-    {
-      "role": "user",
-      "content": "hey aurora do you know my name",
-      "timestamp": "2025-12-28T16:43:09.653666"
-    },
-    {
-      "role": "user",
-      "content": "i am chris you're creator",
-      "timestamp": "2025-12-28T16:43:20.503607"
+      "content": "i need you to analyze my computer and tell me what is wrong with it?",
+      "timestamp": "2025-12-28T16:52:50.628665"
     }
   ],
   "mid_term": [
@@ -64,6 +49,13 @@
       "first_message": "2025-12-28T16:20:29.171641",
       "last_message": "2025-12-28T16:23:34.350628",
       "compressed_at": "2025-12-28T16:23:34.355554"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-28T16:23:42.901201",
+      "last_message": "2025-12-28T16:51:24.251935",
+      "compressed_at": "2025-12-28T16:51:24.253914"
     }
   ],
   "long_term": [],
@@ -640,6 +632,97 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-28T16:43:20.517955"
+    },
+    "memory_78c023f6-c426-43b1-8432-a2cb71045b45": {
+      "value": {
+        "text": "do you remember my name?",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:50:31.678021",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:50:31.678046"
+    },
+    "memory_f5a1c985-e627-4756-b40b-176168540b49": {
+      "value": {
+        "text": "My name is chris the one that created you",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:50:46.784489",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:50:46.784511"
+    },
+    "memory_5f841d35-d2f1-4f0c-b790-f0b61c0a6541": {
+      "value": {
+        "text": "nice to meet you aurora. I need you to analyze you're system and tell me what neede enhancements",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:51:24.263986",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:51:24.264003"
+    },
+    "memory_d61c8a32-1dc4-4a81-882f-5e956e27c1ce": {
+      "value": {
+        "text": "system analysis",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:52:05.007592",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:52:05.007611"
+    },
+    "memory_febc96b2-9c4c-4b34-bc9b-f9a581bf2f3f": {
+      "value": {
+        "text": "enhance",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:52:11.211321",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:52:11.211338"
+    },
+    "memory_edf85e64-d850-4d2a-89dc-c6e2151ccf8e": {
+      "value": {
+        "text": "analyze the system",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:52:19.640397",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:52:19.640416"
+    },
+    "memory_1c963cf5-c59f-46fc-902c-c73b0ddf4119": {
+      "value": {
+        "text": "i need you to analyze my computer and tell me what is wrong with it?",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:52:50.641949",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:52:50.641966"
     }
   },
   "events": [
@@ -1032,8 +1115,78 @@
         "longterm": false
       },
       "timestamp": "2025-12-28T16:43:20.530470"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "78c023f6-c426-43b1-8432-a2cb71045b45",
+        "text_length": 24,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:50:31.689736"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "f5a1c985-e627-4756-b40b-176168540b49",
+        "text_length": 41,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:50:46.791957"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "5f841d35-d2f1-4f0c-b790-f0b61c0a6541",
+        "text_length": 96,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:51:24.267586"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "d61c8a32-1dc4-4a81-882f-5e956e27c1ce",
+        "text_length": 15,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:52:05.014963"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "febc96b2-9c4c-4b34-bc9b-f9a581bf2f3f",
+        "text_length": 7,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:52:11.224599"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "edf85e64-d850-4d2a-89dc-c6e2151ccf8e",
+        "text_length": 18,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:52:19.652969"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1c963cf5-c59f-46fc-902c-c73b0ddf4119",
+        "text_length": 68,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:52:50.654718"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-28T16:43:20.532133"
+  "last_updated": "2025-12-28T16:52:50.655401"
 }

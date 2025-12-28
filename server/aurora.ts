@@ -69,6 +69,11 @@ export class AuroraAI {
     const startTime = Date.now();
     this.captureUserName(userInput);
 
+    const systemIntercept = await this.maybeHandleSystemQuery(userInput);
+    if (systemIntercept) {
+      return this.applyPersonaVoice(systemIntercept);
+    }
+
     const intercept = this.maybeHandleNameQuery(userInput);
     if (intercept) {
       return this.applyPersonaVoice(intercept);
@@ -137,6 +142,18 @@ export class AuroraAI {
     await this.initialize();
 
     this.captureUserName(userInput);
+
+    const systemIntercept = await this.maybeHandleSystemQuery(userInput);
+    if (systemIntercept) {
+      const response = this.applyPersonaVoice(systemIntercept);
+      return {
+        response,
+        intent: { action: "system_diagnostics", topic: "status", meta: {} } as any,
+        context: { facts: {}, recentMessages: [], semanticContext: "", timestamp: Date.now() },
+        consciousness: await this.nexus.getConsciousState(),
+        timestamp: Date.now()
+      };
+    }
 
     const intercept = this.maybeHandleNameQuery(userInput);
     if (intercept) {
@@ -299,6 +316,69 @@ export class AuroraAI {
       return `Yes, I remember. You are ${this.userName}.`;
     }
     return "I don’t have your name yet. Tell me once and I will remember for this session.";
+  }
+
+  private async maybeHandleSystemQuery(input: string): Promise<string | null> {
+    const low = input.toLowerCase();
+    const wantsStatus =
+      low.includes("system status") ||
+      low.includes("system analysis") ||
+      low.includes("analyze system") ||
+      low.includes("analyze your system") ||
+      low.includes("analyze my computer") ||
+      low.includes("system audit") ||
+      low.trim() === "status" ||
+      low.trim() === "diagnostics";
+
+    if (!wantsStatus) return null;
+
+    const [luminarOk, memoryOk, nexusOk, auroraXOk] = await Promise.all([
+      this.luminar.checkHealth(),
+      this.memory.checkHealth(),
+      this.nexus.checkHealth(),
+      this.auroraX.checkHealth()
+    ]);
+    const consciousness = await this.nexus.getConsciousState();
+
+    let packSummary: string | null = null;
+    try {
+      // Lazy import to avoid startup cost if packs not needed
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { get_pack_summary } = require("packs");
+      const summary = get_pack_summary();
+      packSummary = `${summary.loaded_packs}/${summary.total_packs} packs, ${summary.total_submodules} submodules`;
+    } catch {
+      packSummary = null;
+    }
+
+    const workers = consciousness?.workers || { total: this.nexus.WORKER_COUNT, idle: 0, active: 0 };
+    const services = [
+      `Luminar: ${luminarOk ? "ONLINE" : "OFFLINE"}`,
+      `Memory: ${memoryOk ? "ONLINE" : "OFFLINE"}`,
+      `Nexus V3: ${nexusOk ? `ONLINE (${consciousness?.state ?? "unknown"})` : "OFFLINE"}`,
+      `AuroraX: ${auroraXOk ? "ONLINE" : "OFFLINE"}`
+    ].join(" | ");
+
+    const recs: string[] = [];
+    if (!luminarOk || !memoryOk || !nexusOk || !auroraXOk) {
+      recs.push("Restart offline services via control panel or x-start.");
+    }
+    if ((workers.idle ?? 0) < (workers.total ?? 0) * 0.1) {
+      recs.push("Worker pool under pressure; consider scaling or pausing heavy jobs.");
+    }
+    if (recs.length === 0) {
+      recs.push("No critical faults detected.");
+    }
+
+    return [
+      "Diagnostics report:",
+      services,
+      `Workers: total ${workers.total ?? "?"}, active ${workers.active ?? "?"}, idle ${workers.idle ?? "?"}`,
+      packSummary ? `Packs: ${packSummary}` : "",
+      `Recommendations: ${recs.join(" ")}`.trim()
+    ]
+      .filter(Boolean)
+      .join("\n");
   }
 
   private applyPersonaVoice(base: string): string {
