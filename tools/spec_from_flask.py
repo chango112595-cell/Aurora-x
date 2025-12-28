@@ -17,7 +17,6 @@ Directly generates Flask application code from parsed metadata
 """
 
 import os
-from typing import Dict, List, Tuple, Optional, Any, Union
 import Path
 from aurora_x.templates.flask_app import generate_flask_app
 from aurora_x.spec.parser_nl import parse_english
