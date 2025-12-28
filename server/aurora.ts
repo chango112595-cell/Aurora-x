@@ -29,6 +29,7 @@ export class AuroraAI {
   private turnContext: string[] = [];
   private selfHealingInterval: NodeJS.Timeout | null = null;
   private metricsInterval: NodeJS.Timeout | null = null;
+  private userName: string | null = null;
   private initialized: boolean = false;
 
   constructor() {
@@ -66,6 +67,7 @@ export class AuroraAI {
     await this.initialize();
 
     const startTime = Date.now();
+    this.captureUserName(userInput);
 
     const [context, state] = await Promise.all([
       this.memory.retrieveContext(userInput),
@@ -123,11 +125,13 @@ export class AuroraAI {
       this.turnContext.splice(0, 2);
     }
 
-    return result;
+    return this.applyPersonaVoice(result);
   }
 
   async handleChatFull(userInput: string): Promise<ChatResponse> {
     await this.initialize();
+
+    this.captureUserName(userInput);
 
     const [context, consciousness] = await Promise.all([
       this.memory.retrieveContext(userInput),
@@ -175,7 +179,7 @@ export class AuroraAI {
     }
 
     return {
-      response,
+      response: this.applyPersonaVoice(response),
       intent,
       context,
       consciousness,
@@ -256,6 +260,24 @@ export class AuroraAI {
       this.metricsInterval = null;
     }
     this.initialized = false;
+  }
+
+  private captureUserName(input: string) {
+    if (this.userName) return;
+    const match =
+      input.match(/\b(?:my name is|i am|i['’]m|im)\s+([A-Za-z][\w\-]*)/i);
+    if (match && match[1]) {
+      const cleaned = match[1].replace(/[^\w\-]/g, "");
+      this.userName = cleaned || this.userName;
+      // best-effort persistence; ignore failures
+      this.memory.saveMessage("profile", `user_name=${this.userName}`, 0.9, ["profile", "name"]).catch(() => {});
+    }
+  }
+
+  private applyPersonaVoice(base: string): string {
+    const name = this.userName || "Commander";
+    const preface = `Acknowledged, ${name}.`;
+    return `${preface} ${base}`;
   }
 }
 

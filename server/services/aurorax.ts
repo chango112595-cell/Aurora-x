@@ -34,11 +34,13 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
 
     const data = await res.json() as any;
     return data.result ?? data;
-  } finally {
-    clearTimeout(timeoutId);
-  } catch (err) {
+  }
+  catch (err) {
     console.warn("[AuroraXCore] Bridge call failed:", (err as Error).message);
     return null;
+  }
+  finally {
+    clearTimeout(timeoutId);
   }
 }
 

@@ -74,6 +74,9 @@ function openBrowser(url) {
 
 function stopProcess(pid) {
   if (!pid) return false;
+  if (!isRunning(pid)) {
+    return true; // already gone; treat as stopped so we can clean stale pids
+  }
   try {
     if (process.platform === "win32") {
       execSync(`taskkill /PID ${pid} /T /F`, { stdio: "ignore" });

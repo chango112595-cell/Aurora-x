@@ -2,48 +2,38 @@
   "short_term": [
     {
       "role": "user",
-      "content": "system diagnose",
-      "timestamp": "2025-12-24T03:56:47.452559"
+      "content": "how the weather",
+      "timestamp": "2025-12-28T16:23:42.901201"
     },
     {
       "role": "user",
-      "content": "status",
-      "timestamp": "2025-12-24T03:56:50.437710"
+      "content": "do you still remember?",
+      "timestamp": "2025-12-28T16:36:03.204082"
     },
     {
       "role": "user",
-      "content": "issues with you're system",
-      "timestamp": "2025-12-24T03:57:11.983694"
+      "content": "do you know my name?",
+      "timestamp": "2025-12-28T16:36:11.682108"
     },
     {
       "role": "user",
-      "content": "I need to a diagnostic report from you're system. Self analyze you're programing",
-      "timestamp": "2025-12-24T03:57:59.752546"
+      "content": "my name is chris you're creator.",
+      "timestamp": "2025-12-28T16:36:27.650798"
     },
     {
       "role": "user",
-      "content": "what issues do you have",
-      "timestamp": "2025-12-24T03:58:11.792649"
+      "content": "give me a list of the systems that needs enhancements?",
+      "timestamp": "2025-12-28T16:36:42.072973"
     },
     {
       "role": "user",
-      "content": "status",
-      "timestamp": "2025-12-24T21:48:30.899153"
+      "content": "hey aurora do you know my name",
+      "timestamp": "2025-12-28T16:43:09.653666"
     },
     {
       "role": "user",
-      "content": "i need analysis of code enhancement",
-      "timestamp": "2025-12-24T21:48:58.271253"
-    },
-    {
-      "role": "user",
-      "content": "python",
-      "timestamp": "2025-12-24T21:49:09.028231"
-    },
-    {
-      "role": "user",
-      "content": "decryption program",
-      "timestamp": "2025-12-24T21:49:23.843163"
+      "content": "i am chris you're creator",
+      "timestamp": "2025-12-28T16:43:20.503607"
     }
   ],
   "mid_term": [
@@ -60,6 +50,20 @@
       "first_message": "2025-12-17T07:54:18.477616",
       "last_message": "2025-12-24T03:56:33.719477",
       "compressed_at": "2025-12-24T03:56:33.722106"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-24T03:56:47.452559",
+      "last_message": "2025-12-28T16:20:21.216758",
+      "compressed_at": "2025-12-28T16:20:21.228381"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-28T16:20:29.171641",
+      "last_message": "2025-12-28T16:23:34.350628",
+      "compressed_at": "2025-12-28T16:23:34.355554"
     }
   ],
   "long_term": [],
@@ -400,6 +404,242 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-24T21:49:23.852831"
+    },
+    "memory_982db534-cba9-4691-aa2e-73ebc37d3b5c": {
+      "value": {
+        "text": "hey aurora",
+        "meta": {
+          "session_id": "chat-1766956813775",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:20:21.296665",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:20:21.296688"
+    },
+    "memory_81cd16c3-df53-4045-b258-eb538d9b690c": {
+      "value": {
+        "text": "do you remember my name?",
+        "meta": {
+          "session_id": "chat-1766956813775",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:20:29.186147",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:20:29.186177"
+    },
+    "memory_0f47eea1-fd9f-484d-a3b1-c70b4a516e3f": {
+      "value": {
+        "text": "I received your message: \"do you remember my name?\"\n\nI'm currently connecting to Luminar Nexus V2 and V3 for enhanced processing. Operating in local-only mode (ENABLE_EXTERNAL_AI is not set to \"true\"). In the meantime, I'm here to help with any questions or tasks you have. What would you like to explore?",
+        "meta": {
+          "session_id": "chat-1766956813775",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "general"
+        },
+        "timestamp": "2025-12-28T16:20:31.859320",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:20:31.859361"
+    },
+    "memory_2780d8d7-66ca-430e-8df4-e8a2324dc813": {
+      "value": {
+        "text": "system status",
+        "meta": {
+          "session_id": "chat-1766956813775",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:21:03.334367",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:21:03.334400"
+    },
+    "memory_8d5eb6a5-0adb-4daa-8d33-92cc1e6c1335": {
+      "value": {
+        "text": "Aurora Status: I'm online and processing your messages. External AI: Disabled (ENABLE_EXTERNAL_AI not set to \"true\"). Luminar Nexus V2 and V3 services appear to be offline or starting up. I'm ready to assist you with basic queries while the full system initializes.",
+        "meta": {
+          "session_id": "chat-1766956813775",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "general"
+        },
+        "timestamp": "2025-12-28T16:21:05.585953",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:21:05.585998"
+    },
+    "memory_2457751a-9563-4625-9cff-b4155abda7db": {
+      "value": {
+        "text": "hey aurora",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:22:42.660508",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:22:42.660525"
+    },
+    "memory_0ff65f79-790b-4e26-82e1-437e396a7072": {
+      "value": {
+        "text": "do you remember my name?",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:22:49.158282",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:22:49.158302"
+    },
+    "memory_e565c1d3-15d7-4c4a-9709-cd37e6f63234": {
+      "value": {
+        "text": "My name is chris",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:22:54.679555",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:22:54.679571"
+    },
+    "memory_8e733b8a-05ad-424b-8caf-fc5ad0e23412": {
+      "value": {
+        "text": "i am you're creator",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:23:02.678154",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:23:02.678173"
+    },
+    "memory_8f83cf0b-d341-4896-90f7-36a813f8a5a6": {
+      "value": {
+        "text": "i want you to analyze the system",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:23:12.236935",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:23:12.236951"
+    },
+    "memory_6d98e14c-5503-4c9f-b49b-a9e1aa5236c1": {
+      "value": {
+        "text": "give me a list of things that needs to be repair or enhance?",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:23:34.369056",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:23:34.369074"
+    },
+    "memory_7d6e96da-3439-4135-bf2d-e8b7bf029c17": {
+      "value": {
+        "text": "how the weather",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:23:42.913107",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:23:42.913135"
+    },
+    "memory_40281e3c-4271-4510-8b75-fc6846591f6e": {
+      "value": {
+        "text": "do you still remember?",
+        "meta": {
+          "session_id": "chat-1766957745049",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:36:03.259955",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:36:03.259968"
+    },
+    "memory_b29987c2-d227-49cc-867d-58e2cf76d8a9": {
+      "value": {
+        "text": "do you know my name?",
+        "meta": {
+          "session_id": "chat-1766957745049",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:36:11.696437",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:36:11.696476"
+    },
+    "memory_93aea948-1e55-48ce-8718-511d7a1ba8be": {
+      "value": {
+        "text": "my name is chris you're creator.",
+        "meta": {
+          "session_id": "chat-1766957745049",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:36:27.664032",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:36:27.664052"
+    },
+    "memory_e6025d50-627a-4118-879f-18b864904b64": {
+      "value": {
+        "text": "give me a list of the systems that needs enhancements?",
+        "meta": {
+          "session_id": "chat-1766957745049",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:36:42.085905",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:36:42.085926"
+    },
+    "memory_37c1bcab-3d5d-4862-b87d-64f73bbeb6e7": {
+      "value": {
+        "text": "hey aurora do you know my name",
+        "meta": {
+          "session_id": "chat-1766958157079",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:43:09.695820",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:43:09.695838"
+    },
+    "memory_1e3e310d-96fc-43d2-a5dd-0f4f4042f7d4": {
+      "value": {
+        "text": "i am chris you're creator",
+        "meta": {
+          "session_id": "chat-1766958157079",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:43:20.517933",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:43:20.517955"
     }
   },
   "events": [
@@ -612,8 +852,188 @@
         "longterm": false
       },
       "timestamp": "2025-12-24T21:49:23.859972"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "982db534-cba9-4691-aa2e-73ebc37d3b5c",
+        "text_length": 10,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:20:21.303571"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "81cd16c3-df53-4045-b258-eb538d9b690c",
+        "text_length": 24,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:20:29.192911"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "0f47eea1-fd9f-484d-a3b1-c70b4a516e3f",
+        "text_length": 305,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:20:31.871374"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2780d8d7-66ca-430e-8df4-e8a2324dc813",
+        "text_length": 13,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:21:03.340433"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "8d5eb6a5-0adb-4daa-8d33-92cc1e6c1335",
+        "text_length": 265,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:21:05.605029"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2457751a-9563-4625-9cff-b4155abda7db",
+        "text_length": 10,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:22:42.666839"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "0ff65f79-790b-4e26-82e1-437e396a7072",
+        "text_length": 24,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:22:49.164065"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e565c1d3-15d7-4c4a-9709-cd37e6f63234",
+        "text_length": 16,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:22:54.692533"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "8e733b8a-05ad-424b-8caf-fc5ad0e23412",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:23:02.686418"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "8f83cf0b-d341-4896-90f7-36a813f8a5a6",
+        "text_length": 32,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:23:12.244603"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "6d98e14c-5503-4c9f-b49b-a9e1aa5236c1",
+        "text_length": 60,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:23:34.376678"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "7d6e96da-3439-4135-bf2d-e8b7bf029c17",
+        "text_length": 15,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:23:42.919783"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "40281e3c-4271-4510-8b75-fc6846591f6e",
+        "text_length": 22,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:36:03.271995"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "b29987c2-d227-49cc-867d-58e2cf76d8a9",
+        "text_length": 20,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:36:11.713168"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "93aea948-1e55-48ce-8718-511d7a1ba8be",
+        "text_length": 32,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:36:27.670724"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e6025d50-627a-4118-879f-18b864904b64",
+        "text_length": 54,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:36:42.095209"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "37c1bcab-3d5d-4862-b87d-64f73bbeb6e7",
+        "text_length": 30,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:43:09.704883"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1e3e310d-96fc-43d2-a5dd-0f4f4042f7d4",
+        "text_length": 25,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:43:20.530470"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-24T21:49:23.861095"
+  "last_updated": "2025-12-28T16:43:20.532133"
 }
