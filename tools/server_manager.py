@@ -47,7 +47,7 @@ AURORA_BASE_URL = os.getenv("AURORA_BASE_URL", f"http://{AURORA_HOST}:5000")
 DEFAULT_SAN_ENTRIES = ["DNS:localhost", "IP:127.0.0.1"]
 
 
-def _add_host_to_san(host: str, san_entries: list) -> None:
+def _add_host_to_san(host: str, san_entries: list[str]) -> None:
     """Add a host to SAN entries, detecting whether it's an IP or DNS name.
     
     Args:
