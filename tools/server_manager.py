@@ -29,6 +29,7 @@ Features:
 """
 
 import json
+import ipaddress
 import os
 import shutil
 import socket
@@ -41,6 +42,27 @@ from typing import Any
 
 AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 AURORA_BASE_URL = os.getenv("AURORA_BASE_URL", f"http://{AURORA_HOST}:5000")
+
+# Default SAN entries for SSL certificates
+DEFAULT_SAN_ENTRIES = ["DNS:localhost", "IP:127.0.0.1"]
+
+
+def _add_host_to_san(host: str, san_entries: list[str]) -> None:
+    """Add a host to SAN entries, detecting whether it's an IP or DNS name.
+    
+    Args:
+        host: The hostname or IP address to add
+        san_entries: List of SAN entries to append to
+    """
+    if host not in ["localhost", "127.0.0.1"]:
+        try:
+            # Try to parse as IP address
+            ipaddress.ip_address(host)
+            san_entries.append(f"IP:{host}")
+        except ValueError:
+            # Not a valid IP, treat as DNS name
+            san_entries.append(f"DNS:{host}")
+
 
 try:
     import requests
@@ -1478,8 +1500,12 @@ class AdvancedServerManager:
             return False
 
     def create_ssl_certificate(self) -> bool:
-        """Create SSL certificate"""
+        """Create SSL certificate with proper subjectAltName for TLS validation"""
         try:
+            # Build SAN string with both localhost and the configured host
+            san_entries = DEFAULT_SAN_ENTRIES.copy()
+            _add_host_to_san(AURORA_HOST, san_entries)
+            
             subprocess.run(
                 [
                     "openssl",
@@ -1496,6 +1522,8 @@ class AdvancedServerManager:
                     "-nodes",
                     "-subj",
                     f"/CN={AURORA_HOST}",
+                    "-addext",
+                    f"subjectAltName={','.join(san_entries)}",
                 ],
                 check=True,
             )
@@ -2350,9 +2378,9 @@ def create_emergency_server() -> bool:
             stderr=subprocess.DEVNULL,
         )
 
-    print(
-        f"[OK] Emergency server started: http://{AURORA_HOST}:9999/emergency_index.html")
-    return True
+        print(
+            f"[OK] Emergency server started: http://{AURORA_HOST}:9999/emergency_index.html")
+        return True
 
     except Exception as e:
         print(f"[ERROR] Emergency server failed: {e}")
@@ -2481,7 +2509,10 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
             subprocess.run(["which", "openssl"],
                            capture_output=True, timeout=2, check=True)
 
-            # Generate self-signed certificate
+            # Generate self-signed certificate with proper subjectAltName for TLS validation
+            san_entries = DEFAULT_SAN_ENTRIES.copy()
+            _add_host_to_san(domain, san_entries)
+            
             subprocess.run(
                 [
                     "openssl",
@@ -2498,6 +2529,8 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
                     "-nodes",
                     "-subj",
                     f"/C=US/ST=State/L=City/O=Aurora-X/CN={domain}",
+                    "-addext",
+                    f"subjectAltName={','.join(san_entries)}",
                 ],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,

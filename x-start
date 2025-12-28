@@ -24,6 +24,15 @@ IS_WINDOWS = platform.system() == "Windows"
 DEFAULT_PYTHON = sys.executable or ("python" if IS_WINDOWS else "python3")
 BOOTSTRAP_STATE = ROOT / ".aurora" / "bootstrap_state.json"
 
+AURORA_HOST = os.getenv("AURORA_HOST", "localhost")
+AURORA_PORT = os.getenv("AURORA_PORT", "5000")
+AURORA_BRIDGE_HOST = os.getenv("AURORA_BRIDGE_HOST", AURORA_HOST)
+AURORA_BRIDGE_PORT = os.getenv("AURORA_BRIDGE_PORT", "5001")
+AURORA_NEXUS_HOST = os.getenv("AURORA_NEXUS_HOST", AURORA_HOST)
+AURORA_NEXUS_PORT = os.getenv("AURORA_NEXUS_PORT", "5002")
+LUMINAR_HOST = os.getenv("LUMINAR_HOST", AURORA_HOST)
+LUMINAR_PORT = os.getenv("LUMINAR_PORT", "8000")
+
 
 def read_manifest_counts() -> dict[str, int]:
     manifest_dir = ROOT / "manifests"
@@ -250,8 +259,8 @@ else:
     print("\n[WARN] Some services are still starting or failed to launch.")
 
 print("\n[WEB] ACCESS POINTS:")
-print("   - Frontend:      http://127.0.0.1:5000")
-print("   - Bridge API:    http://127.0.0.1:5001")
-print("   - Nexus V3 API:  http://127.0.0.1:5002")
-print("   - Luminar V2:    http://127.0.0.1:8000")
+print(f"   - Frontend:      http://{AURORA_HOST}:{AURORA_PORT}")
+print(f"   - Bridge API:    http://{AURORA_BRIDGE_HOST}:{AURORA_BRIDGE_PORT}")
+print(f"   - Nexus V3 API:  http://{AURORA_NEXUS_HOST}:{AURORA_NEXUS_PORT}")
+print(f"   - Luminar V2:    http://{LUMINAR_HOST}:{LUMINAR_PORT}")
 print("\n" + "=" * 80 + "\n")
