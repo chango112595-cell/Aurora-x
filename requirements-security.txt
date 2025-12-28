@@ -1,2 +1,2 @@
-bandit
-safety
+bandit>=1.7.10
+safety>=3.2.5
