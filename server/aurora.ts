@@ -70,6 +70,11 @@ export class AuroraAI {
     const startTime = Date.now();
     this.captureUserName(userInput);
 
+    const perf = await this.maybeHandlePerformanceConcerns(userInput);
+    if (perf) {
+      return this.applyPersonaVoice(perf);
+    }
+
     const proactive = await this.maybeHandleEnhanceOrAnalyze(userInput);
     if (proactive) {
       return this.applyPersonaVoice(proactive);
@@ -148,6 +153,18 @@ export class AuroraAI {
     await this.initialize();
 
     this.captureUserName(userInput);
+
+    const perf = await this.maybeHandlePerformanceConcerns(userInput);
+    if (perf) {
+      const response = this.applyPersonaVoice(perf);
+      return {
+        response,
+        intent: { action: "performance", topic: "system", meta: {} } as any,
+        context: { facts: {}, recentMessages: [], semanticContext: "", timestamp: Date.now() },
+        consciousness: await this.nexus.getConsciousState(),
+        timestamp: Date.now()
+      };
+    }
 
     const proactive = await this.maybeHandleEnhanceOrAnalyze(userInput);
     if (proactive) {
@@ -409,6 +426,8 @@ export class AuroraAI {
       low.includes("improve") ||
       low.includes("analyze system") ||
       low.includes("system analysis") ||
+      low.includes("system structure") ||
+      low.includes("structure") ||
       low.trim() === "analyze" ||
       low.trim() === "enhance";
 
@@ -458,6 +477,33 @@ export class AuroraAI {
     ]
       .filter(Boolean)
       .join("\n");
+  }
+
+  private async maybeHandlePerformanceConcerns(input: string): Promise<string | null> {
+    const low = input.toLowerCase();
+    const flags = ["slow", "lag", "overloaded", "overload", "cpu", "performance", "fast", "faster"];
+    const matches = flags.some(f => low.includes(f));
+    if (!matches) return null;
+
+    const memTotal = os.totalmem();
+    const memFree = os.freemem();
+    const memUsedPct = memTotal ? (((memTotal - memFree) / memTotal) * 100).toFixed(1) : "n/a";
+    const cpuLoad = os.loadavg()?.[0]?.toFixed(2) ?? "n/a";
+    const cpuCount = os.cpus()?.length ?? 0;
+
+    const steps: string[] = [];
+    steps.push("Close heavy apps and browser tabs consuming CPU/RAM.");
+    steps.push("Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused.");
+    steps.push("Reduce worker load: pause scans or lower concurrency for a few minutes.");
+    steps.push("Optional: restart Aurora services (x-stop then x-start) to clear stale processes.");
+
+    return [
+      "Performance check:",
+      `CPU: ${cpuLoad} load / ${cpuCount} cores`,
+      `Memory: ${memUsedPct}% used`,
+      `Recommended actions: ${steps.join(" ")}`,
+      "Tell me to execute a restart or target a process, and I’ll proceed."
+    ].join("\n");
   }
 
   private applyPersonaVoice(base: string): string {

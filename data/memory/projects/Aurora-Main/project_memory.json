@@ -2,33 +2,13 @@
   "short_term": [
     {
       "role": "user",
-      "content": "system analysis",
-      "timestamp": "2025-12-28T16:52:04.993539"
+      "content": "to make my computer faster",
+      "timestamp": "2025-12-28T17:05:21.147838"
     },
     {
       "role": "user",
-      "content": "enhance",
-      "timestamp": "2025-12-28T16:52:11.197083"
-    },
-    {
-      "role": "user",
-      "content": "analyze the system",
-      "timestamp": "2025-12-28T16:52:19.626030"
-    },
-    {
-      "role": "user",
-      "content": "i need you to analyze my computer and tell me what is wrong with it?",
-      "timestamp": "2025-12-28T16:52:50.628665"
-    },
-    {
-      "role": "user",
-      "content": "analyze the system",
-      "timestamp": "2025-12-28T17:01:16.677382"
-    },
-    {
-      "role": "user",
-      "content": "i need you to check for my system for enhsncement",
-      "timestamp": "2025-12-28T17:01:34.112456"
+      "content": "anything i am open to it",
+      "timestamp": "2025-12-28T17:05:29.496422"
     }
   ],
   "mid_term": [
@@ -66,6 +46,13 @@
       "first_message": "2025-12-28T16:23:42.901201",
       "last_message": "2025-12-28T16:51:24.251935",
       "compressed_at": "2025-12-28T16:51:24.253914"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-28T16:52:04.993539",
+      "last_message": "2025-12-28T17:05:09.455842",
+      "compressed_at": "2025-12-28T17:05:09.461577"
     }
   ],
   "long_term": [],
@@ -759,6 +746,84 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-28T17:01:34.128719"
+    },
+    "memory_2070ace2-5917-41ad-9b0b-5492b9d00744": {
+      "value": {
+        "text": "analyze the system structure",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:04:36.321265",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:04:36.321283"
+    },
+    "memory_2dc39ce0-61d9-40ed-8670-68d00ae1bd8f": {
+      "value": {
+        "text": "analyze my computer",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:04:48.600432",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:04:48.600455"
+    },
+    "memory_c2bedc33-51b6-44e1-bb3b-a0c786c69bfc": {
+      "value": {
+        "text": "slow",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:04:54.718557",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:04:54.718575"
+    },
+    "memory_6a11f168-8b6b-4e68-bf42-f36037772688": {
+      "value": {
+        "text": "my computer is slow and i think the cpu is overloaded",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:05:09.482254",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:05:09.482314"
+    },
+    "memory_28a7d473-bacc-450f-a4de-bfc050f4a21f": {
+      "value": {
+        "text": "to make my computer faster",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:05:21.164698",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:05:21.164720"
+    },
+    "memory_e339eec2-047c-41de-b68d-881355931ecd": {
+      "value": {
+        "text": "anything i am open to it",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:05:29.511107",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:05:29.511129"
     }
   },
   "events": [
@@ -1241,8 +1306,68 @@
         "longterm": false
       },
       "timestamp": "2025-12-28T17:01:34.142651"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2070ace2-5917-41ad-9b0b-5492b9d00744",
+        "text_length": 28,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:04:36.331896"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2dc39ce0-61d9-40ed-8670-68d00ae1bd8f",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:04:48.611228"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "c2bedc33-51b6-44e1-bb3b-a0c786c69bfc",
+        "text_length": 4,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:04:54.731559"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "6a11f168-8b6b-4e68-bf42-f36037772688",
+        "text_length": 53,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:05:09.494054"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "28a7d473-bacc-450f-a4de-bfc050f4a21f",
+        "text_length": 26,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:05:21.177216"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e339eec2-047c-41de-b68d-881355931ecd",
+        "text_length": 24,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:05:29.525542"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-28T17:01:34.143519"
+  "last_updated": "2025-12-28T17:05:29.526125"
 }
