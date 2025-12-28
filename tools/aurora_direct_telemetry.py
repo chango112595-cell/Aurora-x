@@ -18,7 +18,6 @@ Aurora Direct Telemetry Interface
 - Aurora handles all tasks autonomously
 """
 import json
-from typing import Dict, List, Tuple, Optional, Any, Union
 import os
 import time
 from datetime import datetime

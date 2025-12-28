@@ -31,7 +31,7 @@ catch {
 }
 
 Write-Host ""
-Write-Host "[STEP 1] Starting Luminar Nexus V2 (Port 8000)..." -ForegroundColor Yellow
+Write-Host "[STEP 1] Starting Luminar Nexus V2 (Port $LuminarPort)..." -ForegroundColor Yellow
 Write-Host "----------------------------------------------------------------------" -ForegroundColor DarkGray
 
 # Start Luminar Nexus V2 in background
@@ -50,7 +50,7 @@ catch {
 }
 
 Write-Host ""
-Write-Host "[STEP 2] Starting Express Backend (Port 5000)..." -ForegroundColor Yellow
+Write-Host "[STEP 2] Starting Express Backend (Port $AuroraPort)..." -ForegroundColor Yellow
 Write-Host "----------------------------------------------------------------------" -ForegroundColor DarkGray
 
 # Check if backend is already running

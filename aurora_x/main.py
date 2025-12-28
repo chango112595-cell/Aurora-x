@@ -819,7 +819,7 @@ class AuroraX:
         """
         try:
             # Build signature for corpus lookup
-            sig = f\"{f.name}({', '.join(a + ': ' + t for a, t in f.args)}) -> {f.returns}\"
+            sig = f"{f.name}({', '.join(a + ': ' + t for a, t in f.args)}) -> {f.returns}"
             
             # Retrieve relevant snippets from corpus
             snippets = list(corpus_retrieve(self.repo.root, sig, k=min(12, self.beam // 4)))

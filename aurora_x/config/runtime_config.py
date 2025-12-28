@@ -10,6 +10,7 @@ import importlib.util
 import time
 from pathlib import Path
 from typing import Dict, Any
+import logging
 
 REQUIRED_SECRETS = ["AURORA_TOKEN_SECRET"]
 OPTIONAL_DEP_KEYS = [
@@ -33,6 +34,8 @@ OPTIONAL_DEP_MODULES = {
 
 _DATA_ROOT_ENV = "AURORA_DATA_ROOT"
 _DEFAULT_DATA_ROOT = Path("data")
+
+_LOG = logging.getLogger(__name__)
 
 
 def data_root() -> Path:
@@ -84,8 +87,15 @@ def readiness() -> Dict[str, Any]:
     try:
         cfg = validate_required_config()
         config_ok = True
-    except Exception as exc:  # keep message for health reporting
-        cfg = {"error": str(exc), "missing": getattr(exc, "missing", [])}
+    except Exception as exc:  # keep message for health reporting (internally)
+        # Log full exception details server-side, but avoid exposing them in the response.
+        _LOG.exception("Configuration validation failed during readiness check")
+        missing = getattr(exc, "missing", [])
+        cfg = {
+            "error": "configuration validation failed",
+            "missing": missing,
+            "missing_count": len(missing),
+        }
         config_ok = False
 
     deps = dependency_status()

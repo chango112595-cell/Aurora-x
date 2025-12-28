@@ -10,7 +10,7 @@ $baseUrl = if ($env:AURORA_BASE_URL) { $env:AURORA_BASE_URL } else { "http://$au
 $luminarUrl = if ($env:AURORA_LUMINAR_URL) { $env:AURORA_LUMINAR_URL } else { "http://$auroraHost:8000" }
 
 # Check Luminar Nexus V2 Backend
-Write-Host "[1] Luminar Nexus V2 (Direct - Port 8000)" -ForegroundColor Yellow
+Write-Host "[1] Luminar Nexus V2 (Direct - Port $LuminarPort)" -ForegroundColor Yellow
 try {
     $nexusV2 = Invoke-RestMethod -Uri "$luminarUrl/api/nexus/status" -TimeoutSec 3
     Write-Host "    Status: OK" -ForegroundColor Green
@@ -27,7 +27,7 @@ catch {
 Write-Host ""
 
 # Check Express Backend Integration
-Write-Host "[2] Express Backend (Port 5000)" -ForegroundColor Yellow
+Write-Host "[2] Express Backend (Port $AuroraPort)" -ForegroundColor Yellow
 try {
     $backend = Invoke-RestMethod -Uri "$baseUrl/api/health" -TimeoutSec 3
     Write-Host "    Status: OK" -ForegroundColor Green
@@ -47,7 +47,7 @@ try {
 }
 catch {
     Write-Host "    Status: NOT AVAILABLE" -ForegroundColor Red
-    Write-Host "    Note: Luminar V2 needs to be running on port 8000" -ForegroundColor Yellow
+    Write-Host "    Note: Luminar V2 needs to be running on port $LuminarPort" -ForegroundColor Yellow
 }
 
 Write-Host ""
