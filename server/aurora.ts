@@ -408,7 +408,9 @@ export class AuroraAI {
       low.includes("upgrade") ||
       low.includes("improve") ||
       low.includes("analyze system") ||
-      low.includes("system analysis");
+      low.includes("system analysis") ||
+      low.trim() === "analyze" ||
+      low.trim() === "enhance";
 
     if (!wantsEnhance) return null;
 
@@ -441,15 +443,18 @@ export class AuroraAI {
       recs.push("Worker pool saturated: consider scaling or deferring tasks.");
     }
     if (recs.length === 0) {
-      recs.push("No critical faults detected. Standing by to execute your orders.");
+      recs.push("No critical faults detected. Standing by to execute.");
     }
+
+    const capabilities = `I can execute: code fixes/generation, config tweaks, service restarts. Say "execute enhancements" to let me proceed, or give me a target (file/service) to patch.`;
 
     return [
       "System enhancement scan:",
       `Services -> Luminar: ${luminarOk ? "ONLINE" : "OFFLINE"}, Memory: ${memoryOk ? "ONLINE" : "OFFLINE"}, Nexus V3: ${nexusOk ? "ONLINE" : "OFFLINE"}, AuroraX: ${auroraXOk ? "ONLINE" : "OFFLINE"}`,
       `Resources -> CPU: ${cpuLoad} load / ${cpuCount} cores, Memory: ${memUsedPct}% used`,
       `Workers -> total ${workers.total ?? "?"}, active ${workers.active ?? "?"}, idle ${workers.idle ?? "?"}`,
-      `Actions -> ${recs.join(" ")}`
+      `Actions -> ${recs.join(" ")}`,
+      capabilities
     ]
       .filter(Boolean)
       .join("\n");
