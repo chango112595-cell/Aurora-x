@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
 import {
   Activity,
@@ -83,60 +83,102 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
     totalMem: number;
     freeMem: number;
   } | null>(null);
+  const [serviceStatus, setServiceStatus] = useState<{
+    backend: boolean;
+    nexusV2: boolean;
+    nexusV3: boolean;
+    bridge: boolean;
+    message?: string;
+  }>({ backend: false, nexusV2: false, nexusV3: false, bridge: false });
+  const [controlMessage, setControlMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    let isActive = true;
+  const fetchWithTimeout = async (url: string, opts: RequestInit = {}, timeoutMs = 2000) => {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { ...opts, signal: controller.signal });
+      clearTimeout(id);
+      return res;
+    } catch (err) {
+      clearTimeout(id);
+      throw err;
+    }
+  };
 
-    const fetchSidebarStats = async () => {
-      try {
-        const [manifestRes, v2Res, hwRes] = await Promise.allSettled([
-          fetch('/api/nexus-v3/manifest'),
-          fetch('/api/luminar-nexus/v2/status'),
-          fetch('/api/hardware'),
-        ]);
+  const fetchSidebarStats = useCallback(async () => {
+    try {
+      const [manifestRes, v2Res, hwRes] = await Promise.allSettled([
+        fetchWithTimeout('/api/nexus-v3/manifest'),
+        fetchWithTimeout('/api/luminar-nexus/status'),
+        fetchWithTimeout('/api/hardware'),
+      ]);
 
-        if (manifestRes.status === 'fulfilled' && manifestRes.value.ok) {
-          const data = await manifestRes.value.json();
-          if (isActive && typeof data.modules === 'number') {
-            setModuleCount(data.modules);
-          }
-        }
-
-        if (v2Res.status === 'fulfilled' && v2Res.value.ok) {
-          const data = await v2Res.value.json();
-          if (isActive && typeof data.quantum_coherence === 'number') {
-            setQuantumCoherence(data.quantum_coherence);
-          }
-        }
-
-        if (hwRes.status === 'fulfilled' && hwRes.value.ok) {
-          const data = await hwRes.value.json();
-          if (isActive && data) {
-            setHardware({
-              arch: data.arch,
-              platform: data.platform,
-              cpus: data.cpus || { count: 0, model: 'unknown', speedMHz: 0 },
-              totalMem: data.totalMem || 0,
-              freeMem: data.freeMem || 0,
-            });
-          }
-        }
-      } catch {
-        if (isActive) {
-          setModuleCount(null);
-          setQuantumCoherence(null);
-          setHardware(null);
+      if (manifestRes.status === 'fulfilled' && manifestRes.value.ok) {
+        const data = await manifestRes.value.json();
+        if (typeof data.modules === 'number') {
+          setModuleCount(data.modules);
         }
       }
-    };
 
+      if (v2Res.status === 'fulfilled' && v2Res.value.ok) {
+        const data = await v2Res.value.json();
+        if (typeof data.quantum_coherence === 'number') {
+          setQuantumCoherence(data.quantum_coherence);
+        }
+        setServiceStatus((prev) => ({ ...prev, nexusV2: data.v2?.active ?? false }));
+      }
+
+      // Backend + bridge + V3 status
+      try {
+        const healthRes = await fetchWithTimeout('/api/health');
+        if (healthRes.ok) {
+          setServiceStatus((prev) => ({ ...prev, backend: true }));
+        }
+      } catch {
+        setServiceStatus((prev) => ({ ...prev, backend: false }));
+      }
+
+      try {
+        const v3Status = await fetchWithTimeout('/api/nexus-v3/manifest');
+        setServiceStatus((prev) => ({ ...prev, nexusV3: v3Status.ok }));
+      } catch {
+        setServiceStatus((prev) => ({ ...prev, nexusV3: false }));
+      }
+
+      try {
+        const bridgeStatus = await fetchWithTimeout('/api/auroraai/status');
+        setServiceStatus((prev) => ({ ...prev, bridge: bridgeStatus.ok }));
+      } catch {
+        setServiceStatus((prev) => ({ ...prev, bridge: false }));
+      }
+
+      if (hwRes.status === 'fulfilled' && hwRes.value.ok) {
+        const data = await hwRes.value.json();
+        if (data) {
+          setHardware({
+            arch: data.arch,
+            platform: data.platform,
+            cpus: data.cpus || { count: 0, model: 'unknown', speedMHz: 0 },
+            totalMem: data.totalMem || 0,
+            freeMem: data.freeMem || 0,
+          });
+        }
+      }
+    } catch {
+      setModuleCount(null);
+      setQuantumCoherence(null);
+      setHardware(null);
+      setServiceStatus({ backend: false, nexusV2: false, nexusV3: false, bridge: false, message: "Offline" });
+    }
+  }, []);
+
+  useEffect(() => {
     fetchSidebarStats();
     const interval = setInterval(fetchSidebarStats, 15000);
     return () => {
-      isActive = false;
       clearInterval(interval);
     };
-  }, []);
+  }, [fetchSidebarStats]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -316,13 +358,58 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">System Pulse</span>
                   <span className="flex items-center gap-2 text-emerald-300">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                    Online
+                    <span className={`h-2 w-2 rounded-full ${serviceStatus.backend ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'}`} />
+                    {serviceStatus.backend ? "Online" : "Offline"}
                   </span>
                 </div>
-                <div className="mt-2 h-1.5 rounded-full bg-slate-800">
-                  <div className="h-full w-4/5 rounded-full bg-gradient-to-r from-emerald-400 to-sky-400" />
+                <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] text-slate-300">
+                  <div className="flex items-center gap-2">
+                    <span className={`h-2 w-2 rounded-full ${serviceStatus.bridge ? 'bg-emerald-400' : 'bg-yellow-400'}`} />
+                    Bridge
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`h-2 w-2 rounded-full ${serviceStatus.nexusV2 ? 'bg-emerald-400' : 'bg-yellow-400'}`} />
+                    Nexus V2
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`h-2 w-2 rounded-full ${serviceStatus.nexusV3 ? 'bg-emerald-400' : 'bg-yellow-400'}`} />
+                    Nexus V3
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`h-2 w-2 rounded-full ${serviceStatus.backend ? 'bg-emerald-400' : 'bg-red-400'}`} />
+                    Backend
+                  </div>
                 </div>
+                <div className="mt-3 flex gap-2">
+                  {["start","stop","restart"].map(action => (
+                    <button
+                      key={action}
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          setControlMessage(`Executing ${action}…`);
+                          const res = await fetch('/api/control', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action })
+                          });
+                          const data = await res.json();
+                          setControlMessage(data.message || `${action} sent`);
+                          // refresh status shortly after
+                          setTimeout(() => fetchSidebarStats(), 1200);
+                        } catch (err: any) {
+                          setControlMessage(`Failed: ${err?.message || 'error'}`);
+                        }
+                      }}
+                      className="flex-1 rounded-lg border border-slate-800/60 bg-slate-900/60 px-2 py-1 text-slate-200 hover:border-emerald-400/50 hover:text-emerald-200 transition"
+                    >
+                      {action === 'start' ? 'Start' : action === 'stop' ? 'Stop' : 'Restart'}
+                    </button>
+                  ))}
+                </div>
+                {controlMessage && (
+                  <div className="mt-2 text-[11px] text-slate-400">{controlMessage}</div>
+                )}
               </div>
             ) : (
               <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl border border-slate-800/60 bg-slate-900/60">

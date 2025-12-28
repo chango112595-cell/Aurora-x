@@ -13,9 +13,6 @@ foreach ($port in $ports) {
 Write-Host "All required ports cleared." -ForegroundColor Green
 
 # Open browser automatically after a short delay
-Start-Job {
-    Start-Sleep -Seconds 5
-    Start-Process "http://localhost:5000"
-} | Out-Null
+Start-Process powershell -WindowStyle Hidden -ArgumentList "-NoProfile -Command Start-Sleep -Seconds 3; Start-Process 'http://localhost:5000'"
 
 npm run x-start

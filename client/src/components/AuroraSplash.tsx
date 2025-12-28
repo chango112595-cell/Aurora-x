@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function AuroraSplash() {
+export default function AuroraSplash({ statusText = "Initializing holographic interface…" }: { statusText?: string }) {
   return (
     <div className="h-screen w-screen bg-black relative overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/30 via-black to-purple-900/40 animate-pulse" />
@@ -16,7 +16,7 @@ export default function AuroraSplash() {
         </div>
         <div className="text-center">
           <p className="text-sm uppercase tracking-[0.3em] text-cyan-200/80">Aurora System</p>
-          <p className="text-xl text-white font-semibold mt-2">Initializing holographic interface…</p>
+          <p className="text-xl text-white font-semibold mt-2">{statusText}</p>
         </div>
       </div>
     </div>

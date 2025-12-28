@@ -4698,7 +4698,7 @@ asyncio.run(main())
 
     try {
       const { execSync } = await import("child_process");
-      const luminarCmd = "/workspaces/Aurora-x/tools/luminar_nexus.py";
+      const luminarCmd = path.join(process.cwd(), "tools", "luminar_nexus_v2.py");
 
       if (action === "start") {
         // Start all services using Luminar Nexus
