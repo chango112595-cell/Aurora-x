@@ -9,6 +9,26 @@
       "role": "user",
       "content": "anything i am open to it",
       "timestamp": "2025-12-28T17:05:29.496422"
+    },
+    {
+      "role": "user",
+      "content": "analyze my computer",
+      "timestamp": "2025-12-28T17:07:37.409546"
+    },
+    {
+      "role": "user",
+      "content": "my computer is slow",
+      "timestamp": "2025-12-28T17:07:51.358989"
+    },
+    {
+      "role": "user",
+      "content": "why is it slow?",
+      "timestamp": "2025-12-28T17:08:02.094991"
+    },
+    {
+      "role": "user",
+      "content": "i am not sure can you scan it?",
+      "timestamp": "2025-12-28T17:08:23.391028"
     }
   ],
   "mid_term": [
@@ -824,6 +844,58 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-28T17:05:29.511129"
+    },
+    "memory_1947d475-f358-4a26-a787-98c82a97eeb6": {
+      "value": {
+        "text": "analyze my computer",
+        "meta": {
+          "session_id": "chat-1766959643365",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:07:37.467444",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:07:37.467464"
+    },
+    "memory_f2f0214b-1389-4f41-a9fd-f45f07003b90": {
+      "value": {
+        "text": "my computer is slow",
+        "meta": {
+          "session_id": "chat-1766959643365",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:07:51.400230",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:07:51.400254"
+    },
+    "memory_c9e4fd10-0272-433f-9c56-9430fabf8a2a": {
+      "value": {
+        "text": "why is it slow?",
+        "meta": {
+          "session_id": "chat-1766959643365",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:08:02.111045",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:08:02.111068"
+    },
+    "memory_89205100-e59a-4b07-a15d-5a3c06d3bdeb": {
+      "value": {
+        "text": "i am not sure can you scan it?",
+        "meta": {
+          "session_id": "chat-1766959643365",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:08:23.408445",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:08:23.408505"
     }
   },
   "events": [
@@ -1366,8 +1438,48 @@
         "longterm": false
       },
       "timestamp": "2025-12-28T17:05:29.525542"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1947d475-f358-4a26-a787-98c82a97eeb6",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:07:37.476314"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "f2f0214b-1389-4f41-a9fd-f45f07003b90",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:07:51.412950"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "c9e4fd10-0272-433f-9c56-9430fabf8a2a",
+        "text_length": 15,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:08:02.121157"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "89205100-e59a-4b07-a15d-5a3c06d3bdeb",
+        "text_length": 30,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:08:23.422902"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-28T17:05:29.526125"
+  "last_updated": "2025-12-28T17:08:23.423739"
 }

@@ -481,7 +481,7 @@ export class AuroraAI {
 
   private async maybeHandlePerformanceConcerns(input: string): Promise<string | null> {
     const low = input.toLowerCase();
-    const flags = ["slow", "lag", "overloaded", "overload", "cpu", "performance", "fast", "faster"];
+    const flags = ["slow", "lag", "overloaded", "overload", "cpu", "performance", "fast", "faster", "scan"];
     const matches = flags.some(f => low.includes(f));
     if (!matches) return null;
 
@@ -507,10 +507,7 @@ export class AuroraAI {
   }
 
   private applyPersonaVoice(base: string): string {
-    const name = this.userName || "Commander";
-    const trimmed = (base || "").trim();
-    const preface = `At your command, ${name}.`;
-    return `${preface} ${trimmed}`;
+    return (base || "").trim();
   }
 }
 
