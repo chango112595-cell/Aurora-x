@@ -130,7 +130,7 @@ lsof -i :5000
 kill -9 <PID>
 
 # Test API endpoint
-curl http://localhost:5000/api/health
+curl "http://${AURORA_HOST:-localhost}:${AURORA_PORT:-5000}/api/health"
 
 # Run with debug logging
 AURORA_DEBUG=1 AURORA_LOG_LEVEL=DEBUG ./aurora-start
@@ -146,10 +146,29 @@ AURORA_ENV=production          # or development
 AURORA_DEBUG=0                 # 0 or 1
 AURORA_LOG_LEVEL=INFO         # DEBUG, INFO, WARNING, ERROR
 PORT=5000                      # Server port
+AURORA_HOST=localhost          # Hostname for printed URLs and health checks
+AURORA_PORT=5000               # Frontend/backend port for scripts
+AURORA_BRIDGE_HOST=localhost   # Bridge host override (x-start/bridge autostart)
+AURORA_BRIDGE_PORT=5001        # Bridge port override
+AURORA_NEXUS_HOST=localhost    # Nexus host override (x-start)
+AURORA_NEXUS_PORT=5002         # Nexus port override (x-start)
+AURORA_CHAT_PORT=5003          # Chat port override (hyperspeed scripts)
+AURORA_HEALTH_PORT=5004        # Health port override (hyperspeed scripts)
+AURORA_DASHBOARD_PORT=5005     # Dashboard port override (hyperspeed scripts)
+AURORA_NEXUS_V3_PORT=5031      # Nexus V3 port override (hyperspeed scripts)
+LUMINAR_HOST=localhost         # Luminar host override
+LUMINAR_PORT=8000              # Luminar port override (auto-selects serve/api in start_luminar_v2.sh)
+LUMINAR_MODE=auto              # Luminar startup mode: auto (5005 -> api, else serve), serve, api
 AURORA_API_KEY=your_secret     # API key
 ```
 
 ---
+
+## 🌐 Host/URL Overrides & Edge Cases
+
+- **Health checks use URLs, not bind addresses.** If you set `AURORA_HOST` to `0.0.0.0` for binding, curl/Invoke-WebRequest calls will fail because `0.0.0.0` is not routable. Use a reachable host (service name, container IP, or `127.0.0.1`) for health scripts.
+- **Luminar serve binds to 8000.** `tools/luminar_nexus_v2.py serve` always binds to port `8000`. `scripts/start_luminar_v2.sh` auto-selects `serve` vs `api` based on `LUMINAR_PORT` (5005 -> `api`, otherwise `serve`). Set `LUMINAR_MODE=api` explicitly if you want port `5005`.
+- **CI/container runs need matching service hosts.** If services are started in other containers, set `AURORA_HOST`/`LUMINAR_HOST`/`AURORA_BRIDGE_HOST` to the service DNS name or container IP so health checks resolve correctly.
 
 ## 📊 System Status & Power Levels
 
@@ -342,4 +361,3 @@ When you run `./aurora-start`:
 - API Bridge ✅
 
 **STATUS: 🔥 FULL OPERATIONAL POWER**
-

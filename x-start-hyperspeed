@@ -25,6 +25,13 @@ os.chdir(script_dir)
 IS_WINDOWS = platform.system() == "Windows"
 PYTHON_CMD = "python" if IS_WINDOWS else "python3"
 
+AURORA_HOST = os.getenv("AURORA_HOST", "localhost")
+AURORA_PORT = os.getenv("AURORA_PORT", "5000")
+AURORA_CHAT_PORT = os.getenv("AURORA_CHAT_PORT", "5003")
+AURORA_HEALTH_PORT = os.getenv("AURORA_HEALTH_PORT", "5004")
+AURORA_DASHBOARD_PORT = os.getenv("AURORA_DASHBOARD_PORT", "5005")
+AURORA_NEXUS_V3_PORT = os.getenv("AURORA_NEXUS_V3_PORT", "5031")
+
 processes = []
 
 
@@ -293,11 +300,11 @@ if check_port(5031) and critical_running >= critical_total * 0.7:
     print("      [OK] Conflict prevention")
     print("      [OK] Complete port visibility")
     print("\n   [WEB] ACCESS POINTS:")
-    print("      • Frontend:     http://127.0.0.1:5000")
-    print("      • Chat:         http://127.0.0.1:5003")
-    print("      • Health:       http://127.0.0.1:5004")
-    print("      • Dashboard:    http://127.0.0.1:5005")
-    print("      • Nexus V3 API: http://127.0.0.1:5031 ⭐")
+    print(f"      • Frontend:     http://{AURORA_HOST}:{AURORA_PORT}")
+    print(f"      • Chat:         http://{AURORA_HOST}:{AURORA_CHAT_PORT}")
+    print(f"      • Health:       http://{AURORA_HOST}:{AURORA_HEALTH_PORT}")
+    print(f"      • Dashboard:    http://{AURORA_HOST}:{AURORA_DASHBOARD_PORT}")
+    print(f"      • Nexus V3 API: http://{AURORA_HOST}:{AURORA_NEXUS_V3_PORT} ⭐")
     print("\n" + "=" * 80)
 else:
     print("\n[WARN]  PARTIAL ACTIVATION - Some systems still initializing")

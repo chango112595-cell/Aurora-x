@@ -2,9 +2,14 @@
 #!/bin/bash
 # Start Luminar Nexus V2 with all advanced features
 
+LUMINAR_HOST="${LUMINAR_HOST:-${AURORA_HOST:-localhost}}"
+LUMINAR_PORT="${LUMINAR_PORT:-8000}"
+LUMINAR_MODE="${LUMINAR_MODE:-auto}"
+
 echo "🌌 Starting Luminar Nexus V2..."
 echo "   Version: 2.0.0"
-echo "   Port: 5005"
+echo "   Host: ${LUMINAR_HOST}"
+echo "   Port: ${LUMINAR_PORT}"
 echo ""
 
 AURORA_HOST="${AURORA_HOST:-127.0.0.1}"
