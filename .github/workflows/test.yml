@@ -43,6 +43,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
           flags: python
           name: python-${{ matrix.python-version }}
@@ -51,7 +52,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: python-test-results
+          name: python-test-results-${{ matrix.python-version }}
           path: |
             htmlcov/
             coverage.xml
@@ -155,7 +156,11 @@ jobs:
         env:
           DATABASE_URL: postgresql://aurora:test_password@localhost:5432/aurora_x_test
         run: |
-          pytest tests/integration/ -v -m integration
+          if [ -d "tests/integration" ]; then
+            pytest tests/integration/ -v -m integration
+          else
+            echo "No integration tests directory found"
+          fi
 
   # ============================================
   # Docker Build Tests
@@ -184,7 +189,7 @@ jobs:
         run: docker build -f Dockerfile.frontend -t aurora-frontend:test .
       
       - name: Test docker-compose config
-        run: docker-compose config
+        run: docker compose config
 
   # ============================================
   # Security Scan

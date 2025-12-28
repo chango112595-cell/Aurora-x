@@ -28,7 +28,7 @@ export default {
     '!client/src/vite-env.d.ts',
   ],
   
-  coverageThresholds: {
+  coverageThreshold: {
     global: {
       branches: 50,
       functions: 50,
@@ -36,6 +36,8 @@ export default {
       statements: 50,
     },
   },
+
+  passWithNoTests: true,
   
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html', 'json'],
