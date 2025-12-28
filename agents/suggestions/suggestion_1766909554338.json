@@ -1,0 +1,11 @@
+{
+  "agent": "9d09cf74-9407-42fa-b948-76bb8b8d5eb6",
+  "goal": "install testpkg",
+  "step": {
+    "step": 2,
+    "action": "execute",
+    "params": {
+      "goal": "install testpkg"
+    }
+  }
+}

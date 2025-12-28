@@ -188,7 +188,7 @@ jobs:
         run: docker build -f Dockerfile.frontend -t aurora-frontend:test .
       
       - name: Test docker-compose config
-        run: docker-compose config
+        run: docker compose config
 
   # ============================================
   # Security Scan
