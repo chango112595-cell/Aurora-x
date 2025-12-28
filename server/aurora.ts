@@ -69,6 +69,11 @@ export class AuroraAI {
     const startTime = Date.now();
     this.captureUserName(userInput);
 
+    const intercept = this.maybeHandleNameQuery(userInput);
+    if (intercept) {
+      return this.applyPersonaVoice(intercept);
+    }
+
     const [context, state] = await Promise.all([
       this.memory.retrieveContext(userInput),
       this.nexus.getConsciousState()
@@ -132,6 +137,18 @@ export class AuroraAI {
     await this.initialize();
 
     this.captureUserName(userInput);
+
+    const intercept = this.maybeHandleNameQuery(userInput);
+    if (intercept) {
+      const response = this.applyPersonaVoice(intercept);
+      return {
+        response,
+        intent: { action: "smalltalk", topic: "identity", meta: {} } as any,
+        context: { facts: {}, recentMessages: [], semanticContext: "", timestamp: Date.now() },
+        consciousness: await this.nexus.getConsciousState(),
+        timestamp: Date.now()
+      };
+    }
 
     const [context, consciousness] = await Promise.all([
       this.memory.retrieveContext(userInput),
@@ -274,10 +291,21 @@ export class AuroraAI {
     }
   }
 
+  private maybeHandleNameQuery(input: string): string | null {
+    const low = input.toLowerCase();
+    const asksName = low.includes("your name") || low.includes("know my name") || low.includes("remember my name") || low.includes("do you remember me");
+    if (!asksName) return null;
+    if (this.userName) {
+      return `Yes, I remember. You are ${this.userName}.`;
+    }
+    return "I don’t have your name yet. Tell me once and I will remember for this session.";
+  }
+
   private applyPersonaVoice(base: string): string {
     const name = this.userName || "Commander";
-    const preface = `Acknowledged, ${name}.`;
-    return `${preface} ${base}`;
+    const trimmed = (base || "").trim();
+    const preface = `At your command, ${name}.`;
+    return `${preface} ${trimmed}`;
   }
 }
 
