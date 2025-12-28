@@ -3,6 +3,7 @@ import { MemoryFabric, getMemoryFabric, type MemoryContext } from './services/me
 import { AuroraNexus, getAuroraNexus, type ConsciousState } from './services/nexus';
 import { AuroraXCore, getAuroraXCore } from './services/aurorax';
 import { enhanceSelfHealing, adaptiveMetrics } from './enhancements';
+import os from 'os';
 
 export interface ChatResponse {
   response: string;
@@ -68,6 +69,11 @@ export class AuroraAI {
 
     const startTime = Date.now();
     this.captureUserName(userInput);
+
+    const proactive = await this.maybeHandleEnhanceOrAnalyze(userInput);
+    if (proactive) {
+      return this.applyPersonaVoice(proactive);
+    }
 
     const systemIntercept = await this.maybeHandleSystemQuery(userInput);
     if (systemIntercept) {
@@ -142,6 +148,18 @@ export class AuroraAI {
     await this.initialize();
 
     this.captureUserName(userInput);
+
+    const proactive = await this.maybeHandleEnhanceOrAnalyze(userInput);
+    if (proactive) {
+      const response = this.applyPersonaVoice(proactive);
+      return {
+        response,
+        intent: { action: "system_enhancement", topic: "analysis", meta: {} } as any,
+        context: { facts: {}, recentMessages: [], semanticContext: "", timestamp: Date.now() },
+        consciousness: await this.nexus.getConsciousState(),
+        timestamp: Date.now()
+      };
+    }
 
     const systemIntercept = await this.maybeHandleSystemQuery(userInput);
     if (systemIntercept) {
@@ -376,6 +394,62 @@ export class AuroraAI {
       `Workers: total ${workers.total ?? "?"}, active ${workers.active ?? "?"}, idle ${workers.idle ?? "?"}`,
       packSummary ? `Packs: ${packSummary}` : "",
       `Recommendations: ${recs.join(" ")}`.trim()
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
+
+  private async maybeHandleEnhanceOrAnalyze(input: string): Promise<string | null> {
+    const low = input.toLowerCase();
+    const wantsEnhance =
+      low.includes("enhance") ||
+      low.includes("optimize") ||
+      low.includes("reprogram") ||
+      low.includes("upgrade") ||
+      low.includes("improve") ||
+      low.includes("analyze system") ||
+      low.includes("system analysis");
+
+    if (!wantsEnhance) return null;
+
+    const [luminarOk, memoryOk, nexusOk, auroraXOk] = await Promise.all([
+      this.luminar.checkHealth(),
+      this.memory.checkHealth(),
+      this.nexus.checkHealth(),
+      this.auroraX.checkHealth()
+    ]);
+    const consciousness = await this.nexus.getConsciousState();
+    const workers = consciousness?.workers || { total: this.nexus.WORKER_COUNT, idle: 0, active: 0 };
+
+    const memTotal = os.totalmem();
+    const memFree = os.freemem();
+    const memUsedPct = memTotal ? (((memTotal - memFree) / memTotal) * 100).toFixed(1) : "n/a";
+    const cpuLoad = os.loadavg()?.[0]?.toFixed(2) ?? "n/a";
+    const cpuCount = os.cpus()?.length ?? 0;
+
+    const recs: string[] = [];
+    if (!luminarOk || !memoryOk || !nexusOk || !auroraXOk) {
+      recs.push("Restart offline services (x-start or control panel).");
+    }
+    if (parseFloat(memUsedPct) > 85) {
+      recs.push("Memory high: close heavy tasks or increase limits.");
+    }
+    if (parseFloat(cpuLoad) > cpuCount * 0.75) {
+      recs.push("CPU busy: pause background jobs or scale worker pool.");
+    }
+    if ((workers.idle ?? 0) < (workers.total ?? 0) * 0.1) {
+      recs.push("Worker pool saturated: consider scaling or deferring tasks.");
+    }
+    if (recs.length === 0) {
+      recs.push("No critical faults detected. Standing by to execute your orders.");
+    }
+
+    return [
+      "System enhancement scan:",
+      `Services -> Luminar: ${luminarOk ? "ONLINE" : "OFFLINE"}, Memory: ${memoryOk ? "ONLINE" : "OFFLINE"}, Nexus V3: ${nexusOk ? "ONLINE" : "OFFLINE"}, AuroraX: ${auroraXOk ? "ONLINE" : "OFFLINE"}`,
+      `Resources -> CPU: ${cpuLoad} load / ${cpuCount} cores, Memory: ${memUsedPct}% used`,
+      `Workers -> total ${workers.total ?? "?"}, active ${workers.active ?? "?"}, idle ${workers.idle ?? "?"}`,
+      `Actions -> ${recs.join(" ")}`
     ]
       .filter(Boolean)
       .join("\n");
