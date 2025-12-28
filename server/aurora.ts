@@ -3,6 +3,7 @@ import { MemoryFabric, getMemoryFabric, type MemoryContext } from './services/me
 import { AuroraNexus, getAuroraNexus, type ConsciousState } from './services/nexus';
 import { AuroraXCore, getAuroraXCore } from './services/aurorax';
 import { enhanceSelfHealing, adaptiveMetrics } from './enhancements';
+import fetch from 'node-fetch';
 import os from 'os';
 
 export interface ChatResponse {
@@ -69,6 +70,11 @@ export class AuroraAI {
 
     const startTime = Date.now();
     this.captureUserName(userInput);
+
+    const execute = await this.maybeExecuteRemediation(userInput);
+    if (execute) {
+      return this.applyPersonaVoice(execute);
+    }
 
     const perf = await this.maybeHandlePerformanceConcerns(userInput);
     if (perf) {
@@ -153,6 +159,18 @@ export class AuroraAI {
     await this.initialize();
 
     this.captureUserName(userInput);
+
+    const execute = await this.maybeExecuteRemediation(userInput);
+    if (execute) {
+      const response = this.applyPersonaVoice(execute);
+      return {
+        response,
+        intent: { action: "remediation", topic: "system", meta: {} } as any,
+        context: { facts: {}, recentMessages: [], semanticContext: "", timestamp: Date.now() },
+        consciousness: await this.nexus.getConsciousState(),
+        timestamp: Date.now()
+      };
+    }
 
     const perf = await this.maybeHandlePerformanceConcerns(userInput);
     if (perf) {
@@ -502,8 +520,29 @@ export class AuroraAI {
       `CPU: ${cpuLoad} load / ${cpuCount} cores`,
       `Memory: ${memUsedPct}% used`,
       `Recommended actions: ${steps.join(" ")}`,
-      "Tell me to execute a restart or target a process, and I’ll proceed."
+      "Say 'execute remediation' to restart Aurora services now, or tell me which process/port to target."
     ].join("\n");
+  }
+
+  private async maybeExecuteRemediation(input: string): Promise<string | null> {
+    const low = input.toLowerCase();
+    const trigger = low.includes("execute remediation") || low.includes("fix it now") || low.includes("restart services");
+    if (!trigger) return null;
+
+    try {
+      const res = await fetch("http://127.0.0.1:5000/api/control", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "restart" })
+      });
+      if (res.ok) {
+        return "Issued remediation: restarting Aurora services via control endpoint.";
+      }
+      const text = await res.text();
+      return `Attempted remediation but control endpoint returned ${res.status}: ${text}`;
+    } catch (err: any) {
+      return `Remediation attempt failed: ${err?.message ?? 'unknown error'}.`;
+    }
   }
 
   private applyPersonaVoice(base: string): string {
