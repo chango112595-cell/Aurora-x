@@ -33,6 +33,12 @@ data/corpus.jsonl
 .aurora/seeds.json
 aurora_supervisor/data/knowledge/events.jsonl
 aurora_supervisor/data/knowledge/models/state_snapshot.json
+aurora_supervisor/data/knowledge/models/evolution_log.jsonl
+
+# Test data and runtime artifacts
+data/memory/projects/*/project_memory.json
+data/memory/projects/*/conversations/
+agents/suggestions/
 
 # Logs
 logs
