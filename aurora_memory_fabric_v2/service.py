@@ -20,6 +20,9 @@ from core.memory_fabric import AuroraMemoryFabric, get_memory_fabric
 
 memory: Optional[AuroraMemoryFabric] = None
 
+# Configuration: Get host from environment, default to loopback
+MEMORY_FABRIC_HOST = os.environ.get('MEMORY_FABRIC_HOST', '127.0.0.1')
+
 
 def get_or_create_memory() -> AuroraMemoryFabric:
     """Get or create the global memory fabric instance"""
@@ -274,50 +277,51 @@ class ReusableHTTPServer(HTTPServer):
         super().server_bind()
 
 
-def is_port_in_use(port: int) -> bool:
+def is_port_in_use(port: int, host: str = MEMORY_FABRIC_HOST) -> bool:
     """Check if a port is already in use"""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         try:
-            s.bind(('127.0.0.1', port))
+            s.bind((host, port))
             return False
         except OSError:
             return True
 
 
-def check_existing_service(port: int) -> bool:
+def check_existing_service(port: int, host: str = MEMORY_FABRIC_HOST) -> bool:
     """Check if Memory Fabric service is already responding"""
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(1)
-            s.connect(('127.0.0.1', port))
-            s.sendall(b'GET /status HTTP/1.1\r\nHost: localhost\r\n\r\n')
+            s.connect((host, port))
+            # Use the configured host in the HTTP header as well
+            s.sendall(f'GET /status HTTP/1.1\r\nHost: {host}\r\n\r\n'.encode())
             response = s.recv(1024)
             return b'success' in response.lower() or b'200' in response
     except:
         return False
 
 
-def start_memory_fabric_service(port: int = 5004):
+def start_memory_fabric_service(port: int = 5004, host: str = MEMORY_FABRIC_HOST):
     """Start the Memory Fabric v2 HTTP server"""
-    if check_existing_service(port):
+    if check_existing_service(port, host):
         for _ in range(20):
             time.sleep(0.5)
-            if not check_existing_service(port):
+            if not check_existing_service(port, host):
                 break
-        if check_existing_service(port):
-            print(f"[MEMORY FABRIC V2] Service already running on port {port}", flush=True)
+        if check_existing_service(port, host):
+            print(f"[MEMORY FABRIC V2] Service already running on {host}:{port}", flush=True)
             return
     
     get_or_create_memory()
     for attempt in range(10):
         try:
-            server = ReusableHTTPServer(('127.0.0.1', port), MemoryFabricHandler)
+            server = ReusableHTTPServer((host, port), MemoryFabricHandler)
             def _handle_sigterm(signum, frame):
                 print("[MEMORY FABRIC V2] Shutdown requested", flush=True)
                 threading.Timer(2.0, server.shutdown).start()
 
             signal.signal(signal.SIGTERM, _handle_sigterm)
-            print(f"[MEMORY FABRIC V2] Running on http://127.0.0.1:{port}", flush=True)
+            print(f"[MEMORY FABRIC V2] Running on http://{host}:{port}", flush=True)
             print("[MEMORY FABRIC V2] Ready for operations", flush=True)
             server.serve_forever()
             return
@@ -333,4 +337,5 @@ def start_memory_fabric_service(port: int = 5004):
 
 if __name__ == '__main__':
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 5004
-    start_memory_fabric_service(port)
+    host = sys.argv[2] if len(sys.argv) > 2 else MEMORY_FABRIC_HOST
+    start_memory_fabric_service(port, host)
