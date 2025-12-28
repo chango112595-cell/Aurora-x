@@ -43,6 +43,27 @@ from typing import Any
 AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 AURORA_BASE_URL = os.getenv("AURORA_BASE_URL", f"http://{AURORA_HOST}:5000")
 
+# Default SAN entries for SSL certificates
+DEFAULT_SAN_ENTRIES = ["DNS:localhost", "IP:127.0.0.1"]
+
+
+def _add_host_to_san(host: str, san_entries: list) -> None:
+    """Add a host to SAN entries, detecting whether it's an IP or DNS name.
+    
+    Args:
+        host: The hostname or IP address to add
+        san_entries: List of SAN entries to append to
+    """
+    if host not in ["localhost", "127.0.0.1"]:
+        try:
+            # Try to parse as IP address
+            ipaddress.ip_address(host)
+            san_entries.append(f"IP:{host}")
+        except ValueError:
+            # Not a valid IP, treat as DNS name
+            san_entries.append(f"DNS:{host}")
+
+
 try:
     import requests
 except ImportError:
@@ -1482,16 +1503,8 @@ class AdvancedServerManager:
         """Create SSL certificate with proper subjectAltName for TLS validation"""
         try:
             # Build SAN string with both localhost and the configured host
-            san_entries = ["DNS:localhost", "IP:127.0.0.1"]
-            # Add AURORA_HOST if it's different from localhost/127.0.0.1
-            if AURORA_HOST not in ["localhost", "127.0.0.1"]:
-                try:
-                    # Try to parse as IP address
-                    ipaddress.ip_address(AURORA_HOST)
-                    san_entries.append(f"IP:{AURORA_HOST}")
-                except ValueError:
-                    # Not a valid IP, treat as DNS name
-                    san_entries.append(f"DNS:{AURORA_HOST}")
+            san_entries = DEFAULT_SAN_ENTRIES.copy()
+            _add_host_to_san(AURORA_HOST, san_entries)
             
             subprocess.run(
                 [
@@ -2497,17 +2510,8 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
                            capture_output=True, timeout=2, check=True)
 
             # Generate self-signed certificate with proper subjectAltName for TLS validation
-            # Build SAN string with both localhost and the configured domain
-            san_entries = ["DNS:localhost", "IP:127.0.0.1"]
-            # Add domain if it's different from localhost/127.0.0.1
-            if domain not in ["localhost", "127.0.0.1"]:
-                try:
-                    # Try to parse as IP address
-                    ipaddress.ip_address(domain)
-                    san_entries.append(f"IP:{domain}")
-                except ValueError:
-                    # Not a valid IP, treat as DNS name
-                    san_entries.append(f"DNS:{domain}")
+            san_entries = DEFAULT_SAN_ENTRIES.copy()
+            _add_host_to_san(domain, san_entries)
             
             subprocess.run(
                 [
