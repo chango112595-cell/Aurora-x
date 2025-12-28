@@ -33,7 +33,7 @@ import { useEffect, useState } from "react";
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [appReady, setAppReady] = useState(false);
-  const [statusText, setStatusText] = useState("Connecting to Aurora services…");
+  const [statusText, setStatusText] = useState("Connecting to Aurora services...");
 
   useEffect(() => {
     let cancelled = false;
@@ -45,12 +45,12 @@ function App() {
         clearTimeout(timer);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         if (!cancelled) {
-          setStatusText("Aurora online. Loading interface…");
+          setStatusText("Aurora online. Loading interface...");
           setAppReady(true);
         }
       } catch (err: any) {
         if (!cancelled) {
-          setStatusText("Waiting for backend… retrying");
+          setStatusText("Waiting for backend... retrying");
           setTimeout(checkHealth, 1200);
         }
       }

@@ -51,6 +51,27 @@ function startService(name, command) {
   return child.pid;
 }
 
+function openBrowser(url) {
+  try {
+    if (process.env.AURORA_NO_AUTO_OPEN === "1") {
+      return;
+    }
+    const target = url || "http://localhost:5000";
+    if (process.platform === "win32") {
+      spawn("cmd", ["/c", "start", "", target], {
+        detached: true,
+        stdio: "ignore",
+      }).unref();
+    } else if (process.platform === "darwin") {
+      spawn("open", [target], { detached: true, stdio: "ignore" }).unref();
+    } else {
+      spawn("xdg-open", [target], { detached: true, stdio: "ignore" }).unref();
+    }
+  } catch {
+    // Non-fatal if the auto-open fails
+  }
+}
+
 function stopProcess(pid) {
   if (!pid) return false;
   try {
@@ -77,6 +98,7 @@ function start() {
     console.log(`[START] ${name} (pid ${pid})`);
   }
   savePids(pids);
+  openBrowser();
 }
 
 function stop() {

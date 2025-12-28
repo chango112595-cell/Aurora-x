@@ -37,8 +37,11 @@ class NexusServer:
         self.module_bridge = NexusBridge()
         self.module_bridge.attach_v3_core(self.core)
         bridge_result = self.module_bridge.load_modules()
-        if bridge_result.get("loaded", 0) > 0:
-            print(f"[NexusBridge] 550 Aurora-X modules integrated")
+        manifest_modules_loaded = bridge_result.get("loaded", 0)
+        manifest_tiers = bridge_result.get("tiers", self.core.MODULE_COUNT)
+        manifest_aems = bridge_result.get("aems", self.core.AEM_COUNT)
+        if manifest_modules_loaded > 0:
+            print(f"[NexusBridge] {manifest_modules_loaded} Aurora-X modules integrated")
             print(f"[NexusBridge] Categories: Ancient, Classical, Modern, Futuristic, Post-Quantum")
             print(f"[NexusBridge] Tiers: foundational, intermediate, advanced, grandmaster")
         
@@ -48,7 +51,9 @@ class NexusServer:
         print("\n" + "-" * 60)
         print(f"  Node ID: {self.core.config.node_id}")
         print(f"  Status: {self.core.state.value.upper()}")
-        print(f"  Modules Loaded: {len(self.core.modules)}")
+        print(f"  Core Modules Loaded: {len(self.core.modules)}")
+        if manifest_modules_loaded:
+            print(f"  Manifest Modules Loaded: {manifest_modules_loaded} (tiers={manifest_tiers}, aems={manifest_aems})")
         print(f"  Device Tier: {self.core.config.get_device_tier().upper()}")
         print("-" * 60 + "\n")
         
