@@ -24,14 +24,17 @@ Aurora receives problem descriptions and autonomously:
 This is Aurora working independently with her own personality and approach.
 """
 
-import asyncio
 import json
+import asyncio
+import os
 import subprocess
 import sys
 import time
 from datetime import datetime
-from pathlib import Path
 from typing import Any
+from pathlib import Path
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 
 class AuroraAutonomousFixer:
@@ -40,7 +43,7 @@ class AuroraAutonomousFixer:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.root = Path(__file__).parent.parent
@@ -88,7 +91,7 @@ class AuroraAutonomousFixer:
                 [
                     "curl",
                     "-s",
-                    "http://127.0.0.1:5001/chat",
+                    f"http://{AURORA_HOST}:5001/chat",
                     "-X",
                     "POST",
                     "-H",
@@ -103,13 +106,16 @@ class AuroraAutonomousFixer:
 
             if result.returncode == 0:
                 print(f"   [OK] Chat endpoint responds: {result.stdout[:100]}")
-                diagnosis["aurora_analysis"].append("Chat backend endpoint is working")
+                diagnosis["aurora_analysis"].append(
+                    "Chat backend endpoint is working")
             else:
                 print(f"   [ERROR] Chat endpoint error: {result.stderr}")
-                diagnosis["likely_causes"].append("Chat endpoint not responding")
+                diagnosis["likely_causes"].append(
+                    "Chat endpoint not responding")
         except Exception as e:
             print(f"   [ERROR] Can't reach chat endpoint: {e}")
-            diagnosis["likely_causes"].append(f"Chat endpoint unreachable: {e}")
+            diagnosis["likely_causes"].append(
+                f"Chat endpoint unreachable: {e}")
 
         # Step 2: Check frontend chat component
         print("\n2 Checking frontend chat component...")
@@ -122,7 +128,8 @@ class AuroraAutonomousFixer:
             content = chat_page.read_text()
             if "WebSocket" in content or "socket" in content:
                 print("   [EMOJI] Chat uses WebSocket connection")
-                diagnosis["aurora_analysis"].append("Chat uses WebSocket (real-time)")
+                diagnosis["aurora_analysis"].append(
+                    "Chat uses WebSocket (real-time)")
             if "fetch" in content or "axios" in content:
                 print("   [WEB] Chat uses HTTP requests")
                 diagnosis["aurora_analysis"].append("Chat uses HTTP fetch")
@@ -248,7 +255,7 @@ class AuroraSelfMonitor:
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
-                        f"http://127.0.0.1:{port}/health",
+                        f"http://{AURORA_HOST}:{port}/health",
                         timeout=aiohttp.ClientTimeout(total=2)
                     ) as response:
                         health["checks"]["http_responding"] = response.status == 200
@@ -513,7 +520,7 @@ if __name__ == "__main__":
                     "-s",
                     "-X",
                     "POST",
-                    "http://127.0.0.1:5001/chat",
+                    f"http://{AURORA_HOST}:5001/chat",
                     "-H",
                     "Content-Type: application/json",
                     "-d",
@@ -581,7 +588,8 @@ if __name__ == "__main__":
         print()
         print("Results:")
         print(f"   {'[OK]' if diagnosis else '[ERROR]'} Diagnosis complete")
-        print(f"   {'[OK]' if monitor_file else '[ERROR]'} Self-monitoring system created")
+        print(
+            f"   {'[OK]' if monitor_file else '[ERROR]'} Self-monitoring system created")
         print(f"   {'[OK]' if fixed else '[ERROR]'} Chat interface fixed")
         print(f"   {'[OK]' if validated else '[ERROR]'} Fix validated")
         print()
@@ -592,7 +600,8 @@ if __name__ == "__main__":
         print("[STAR] Aurora says:")
         print("   \"I've fixed the chat interface and created a self-monitoring")
         print("    system so I can catch and fix issues automatically from now on.")
-        print('    The chat will now show my responses with my personality! [STAR]"')
+        print(
+            '    The chat will now show my responses with my personality! [STAR]"')
         print()
 
         # Final action log
@@ -630,13 +639,13 @@ async def main():
 
 class AutonomousHealer:
     """Autonomously identifies and fixes Aurora issues"""
-    
+
     def __init__(self):
         self.fixes_log = Path(".aurora_healing_log.json")
         self.fixes_applied = []
         self.health_history = []
         self.root = Path(__file__).parent.parent
-        
+
     def health_check(self) -> dict[str, Any]:
         """Check Aurora's health across all systems with detailed diagnostics"""
         health = {
@@ -650,15 +659,17 @@ class AutonomousHealer:
                 "state_files": self._check_state_files()
             }
         }
-        
-        health_scores = [1 if h["healthy"] else 0 for h in health["systems"].values()]
-        health["overall_health"] = round(sum(health_scores) / len(health_scores) * 100, 1)
+
+        health_scores = [1 if h["healthy"]
+                         else 0 for h in health["systems"].values()]
+        health["overall_health"] = round(
+            sum(health_scores) / len(health_scores) * 100, 1)
         health["healthy_systems"] = sum(health_scores)
         health["total_systems"] = len(health_scores)
-        
+
         self.health_history.append(health)
         return health
-    
+
     def _check_diagnostics(self) -> dict[str, Any]:
         """Check if diagnostics system is working"""
         try:
@@ -670,10 +681,10 @@ class AutonomousHealer:
                     "status": "No diagnostics yet (normal for fresh start)",
                     "issue": None
                 }
-            
+
             diag_data = json.loads(diag_file.read_text())
             progress = diag_data.get("progress", {})
-            
+
             return {
                 "name": "Diagnostics",
                 "healthy": True,
@@ -688,7 +699,7 @@ class AutonomousHealer:
                 "status": "Error reading diagnostics",
                 "issue": str(e)
             }
-    
+
     def _check_state_files(self) -> dict[str, Any]:
         """Check state file integrity"""
         state_files = {
@@ -696,7 +707,7 @@ class AutonomousHealer:
             ".aurora_diagnostics.json": False,
             ".aurora_healing_log.json": False
         }
-        
+
         issues = []
         for sf in state_files:
             path = Path(sf)
@@ -706,7 +717,7 @@ class AutonomousHealer:
                     state_files[sf] = True
                 except json.JSONDecodeError:
                     issues.append(f"{sf} is corrupted")
-        
+
         return {
             "name": "State Files",
             "healthy": len(issues) == 0,
@@ -714,12 +725,12 @@ class AutonomousHealer:
             "issue": "; ".join(issues) if issues else None,
             "details": state_files
         }
-    
+
     def _check_self_learn(self) -> dict[str, Any]:
         """Check if self-learning system is operational"""
         try:
             state_file = Path(".self_learning_state.json")
-            
+
             if not state_file.exists():
                 return {
                     "name": "Self-Learning",
@@ -727,9 +738,9 @@ class AutonomousHealer:
                     "status": "Not running (normal)",
                     "issue": None
                 }
-            
+
             state = json.loads(state_file.read_text())
-            
+
             return {
                 "name": "Self-Learning",
                 "healthy": True,
@@ -743,7 +754,7 @@ class AutonomousHealer:
                 "status": "Error",
                 "issue": str(e)
             }
-    
+
     def _check_chat_server(self) -> dict[str, Any]:
         """Check if chat server is operational"""
         try:
@@ -755,7 +766,7 @@ class AutonomousHealer:
                     "status": "Server files missing",
                     "issue": "server/index.ts not found"
                 }
-            
+
             return {
                 "name": "Chat Server",
                 "healthy": True,
@@ -769,21 +780,21 @@ class AutonomousHealer:
                 "status": "Error",
                 "issue": str(e)
             }
-    
+
     def _check_corpus_db(self) -> dict[str, Any]:
         """Check if corpus database is accessible"""
         try:
             sys.path.insert(0, str(Path(__file__).parent.parent))
             from aurora_x.corpus.store import CorpusStore
             corpus = CorpusStore()
-            
+
             entry_count = 0
             try:
                 entries = corpus.get_recent(limit=1)
                 entry_count = len(entries) if entries else 0
             except Exception:
                 pass
-            
+
             return {
                 "name": "Corpus Database",
                 "healthy": True,
@@ -804,7 +815,7 @@ class AutonomousHealer:
                 "status": "Database error",
                 "issue": str(e)
             }
-    
+
     def _check_frontend(self) -> dict[str, Any]:
         """Check if frontend files exist"""
         try:
@@ -816,7 +827,7 @@ class AutonomousHealer:
                     "status": "Frontend files missing",
                     "issue": "client/src/App.tsx not found"
                 }
-            
+
             return {
                 "name": "Frontend",
                 "healthy": True,
@@ -830,10 +841,10 @@ class AutonomousHealer:
                 "status": "Error",
                 "issue": str(e)
             }
-    
+
     def fix_issue(self, issue_name: str) -> tuple[bool, str]:
         """Attempt to fix a specific issue"""
-        
+
         if issue_name == "missing_corpus_db":
             return self._fix_corpus_db()
         elif issue_name == "session_persistence":
@@ -844,14 +855,14 @@ class AutonomousHealer:
             return self._fix_corrupted_state()
         else:
             return False, f"Unknown issue: {issue_name}"
-    
+
     def _fix_corpus_db(self) -> tuple[bool, str]:
         """Fix corpus database issues"""
         try:
             sys.path.insert(0, str(Path(__file__).parent.parent))
             from aurora_x.corpus.store import CorpusStore
             corpus = CorpusStore()
-            
+
             fix_record = {
                 "timestamp": datetime.utcnow().isoformat(),
                 "issue": "corpus_db_initialization",
@@ -862,7 +873,7 @@ class AutonomousHealer:
             return True, "Corpus database reinitialized"
         except Exception as e:
             return False, f"Failed to fix corpus db: {str(e)}"
-    
+
     def _fix_session_persistence(self) -> tuple[bool, str]:
         """Fix session persistence issues"""
         try:
@@ -875,7 +886,7 @@ class AutonomousHealer:
                     if now - sess.get("created", 0) < 86400
                 }
                 session_file.write_text(json.dumps(updated_sessions, indent=2))
-            
+
             fix_record = {
                 "timestamp": datetime.utcnow().isoformat(),
                 "issue": "session_persistence",
@@ -886,7 +897,7 @@ class AutonomousHealer:
             return True, "Sessions cleaned up"
         except Exception as e:
             return False, f"Failed to fix sessions: {str(e)}"
-    
+
     def _fix_routing(self) -> tuple[bool, str]:
         """Fix routing issues"""
         try:
@@ -900,12 +911,12 @@ class AutonomousHealer:
             return True, "Routing verified"
         except Exception as e:
             return False, f"Failed to fix routing: {str(e)}"
-    
+
     def autonomous_heal(self) -> dict[str, Any]:
         """Run autonomous healing with comprehensive diagnostics and fixes"""
         start_time = datetime.utcnow()
         health = self.health_check()
-        
+
         healing_report = {
             "timestamp": start_time.isoformat(),
             "health_before": health,
@@ -915,7 +926,7 @@ class AutonomousHealer:
             "fixes_successful": [],
             "healing_duration_ms": 0
         }
-        
+
         for system_name, system_health in health["systems"].items():
             if not system_health["healthy"] and system_health.get("issue"):
                 healing_report["issues_found"].append({
@@ -923,20 +934,20 @@ class AutonomousHealer:
                     "issue": system_health["issue"],
                     "status": system_health.get("status", "unknown")
                 })
-        
+
         issue_to_fix_map = {
             "corpus_db": "missing_corpus_db",
             "state_files": "corrupted_state",
             "session_persistence": "session_persistence",
             "routing": "routing_failure"
         }
-        
+
         for issue_found in healing_report["issues_found"]:
             system = issue_found["system"]
             if system in issue_to_fix_map:
                 fix_name = issue_to_fix_map[system]
                 success, message = self.fix_issue(fix_name)
-                
+
                 healing_report["fixes_attempted"].append({
                     "system": system,
                     "fix_type": fix_name,
@@ -945,34 +956,35 @@ class AutonomousHealer:
                     "message": message,
                     "timestamp": datetime.utcnow().isoformat()
                 })
-                
+
                 if success:
                     healing_report["fixes_successful"].append(fix_name)
-        
+
         if healing_report["fixes_attempted"]:
             health_after = self.health_check()
             healing_report["health_after"] = health_after
             healing_report["overall_health_after"] = health_after["overall_health"]
             healing_report["health_improved"] = health_after["overall_health"] > health["overall_health"]
-        
+
         end_time = datetime.utcnow()
-        healing_report["healing_duration_ms"] = (end_time - start_time).total_seconds() * 1000
-        
+        healing_report["healing_duration_ms"] = (
+            end_time - start_time).total_seconds() * 1000
+
         self._save_healing_report(healing_report)
-        
+
         return healing_report
-    
+
     def _fix_corrupted_state(self) -> tuple[bool, str]:
         """Fix corrupted state files"""
         fixed = []
         failed = []
-        
+
         state_files = [
             ".self_learning_state.json",
-            ".aurora_diagnostics.json", 
+            ".aurora_diagnostics.json",
             ".aurora_healing_log.json"
         ]
-        
+
         for sf in state_files:
             path = Path(sf)
             if path.exists():
@@ -984,14 +996,14 @@ class AutonomousHealer:
                         fixed.append(sf)
                     except Exception:
                         failed.append(sf)
-        
+
         if failed:
             return False, f"Could not fix: {', '.join(failed)}"
         elif fixed:
             return True, f"Removed corrupted files: {', '.join(fixed)}"
         else:
             return True, "No corrupted files found"
-    
+
     def _save_healing_report(self, report: dict[str, Any]):
         """Save healing report to disk"""
         self.fixes_log.write_text(json.dumps(report, indent=2))
@@ -1007,13 +1019,16 @@ def run_healer():
 
 if __name__ == "__main__":
     import argparse
-    
-    parser = argparse.ArgumentParser(description="Aurora Autonomous Fixer/Healer")
-    parser.add_argument("--heal", action="store_true", help="Run autonomous healing")
-    parser.add_argument("--health", action="store_true", help="Run health check only")
-    
+
+    parser = argparse.ArgumentParser(
+        description="Aurora Autonomous Fixer/Healer")
+    parser.add_argument("--heal", action="store_true",
+                        help="Run autonomous healing")
+    parser.add_argument("--health", action="store_true",
+                        help="Run health check only")
+
     args = parser.parse_args()
-    
+
     if args.heal:
         run_healer()
     elif args.health:

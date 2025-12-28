@@ -17,19 +17,21 @@ TRULY autonomous - monitors, detects problems, fixes them, learns
 No hardcoded tasks. Dynamic problem detection and resolution.
 """
 
+import os
 from typing import Dict, List, Tuple, Optional, Any, Union
 import json
-import os
 import subprocess
 import sys
 import time
 from datetime import datetime
 from pathlib import Path
-
+from concurrent.futures import ThreadPoolExecutor
 import requests
 
+
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -51,7 +53,7 @@ class AuroraAutonom:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.workspace = Path("/workspaces/Aurora-x")
@@ -86,7 +88,8 @@ class AuroraAutonom:
         ports_status = {}
         for port in [5000, 5001, 5002, 5173]:
             try:
-                response = requests.get(f"http://127.0.0.1:{port}/healthz", timeout=1)
+                response = requests.get(
+                    f"http://{AURORA_HOST}:{port}/healthz", timeout=1)
                 ports_status[port] = response.status_code == 200
             except Exception as e:
                 ports_status[port] = False
@@ -128,7 +131,8 @@ class AuroraAutonom:
         """Analyze serve.py vs server/index.ts to understand the architecture"""
         print("\n[EMOJI] ANALYZING ARCHITECTURE...")
 
-        analysis = {"serve_py": None, "server_index_ts": None, "recommendation": None}
+        analysis = {"serve_py": None,
+                    "server_index_ts": None, "recommendation": None}
 
         # Check serve.py
         serve_file = self.workspace / "aurora_x" / "serve.py"
@@ -208,20 +212,22 @@ class AuroraAutonom:
 
         try:
             # Test port 5001 (should be Vite UI with HTML)
-            r5001 = requests.get("http://127.0.0.1:5001/", timeout=2)
+            r5001 = requests.get(f"http://{AURORA_HOST}:5001/", timeout=2)
             is_html = "<!DOCTYPE" in r5001.text or "<html" in r5001.text
 
             # Test port 5000 (should be API with JSON)
-            r5000 = requests.get("http://127.0.0.1:5000/", timeout=2)
+            r5000 = requests.get(f"http://{AURORA_HOST}:5000/", timeout=2)
             is_json = '"ok"' in r5000.text
 
             if is_html and is_json:
                 self.log_event(
-                    "TESTS_PASSED", {"port_5001": "[+] HTML (Vite UI)", "port_5000": "[+] JSON (API)"}, "SUCCESS"
+                    "TESTS_PASSED", {
+                        "port_5001": "[+] HTML (Vite UI)", "port_5000": "[+] JSON (API)"}, "SUCCESS"
                 )
                 return True
             else:
-                self.log_event("TESTS_FAILED", {"port_5001_html": is_html, "port_5000_json": is_json}, "ERROR")
+                self.log_event("TESTS_FAILED", {
+                               "port_5001_html": is_html, "port_5000_json": is_json}, "ERROR")
                 return False
         except Exception as e:
             self.log_event("TEST_ERROR", {"error": str(e)}, "ERROR")
@@ -235,7 +241,8 @@ class AuroraAutonom:
             os.chdir(self.workspace)
 
             # Git add and commit
-            subprocess.run(["git", "add", "aurora_x/serve.py"], check=True, capture_output=True)
+            subprocess.run(["git", "add", "aurora_x/serve.py"],
+                           check=True, capture_output=True)
 
             commit_msg = """Aurora Autonomous Fix: Resolve port 5001 conflict
 
@@ -266,14 +273,17 @@ Verified:
 
 This fix was generated and tested autonomously by Aurora."""
 
-            subprocess.run(["git", "commit", "-m", commit_msg], check=True, capture_output=True)
+            subprocess.run(["git", "commit", "-m", commit_msg],
+                           check=True, capture_output=True)
 
             # Push to origin
-            subprocess.run(["git", "push", "origin", "draft"], check=True, capture_output=True)
+            subprocess.run(["git", "push", "origin", "draft"],
+                           check=True, capture_output=True)
 
             self.log_event(
                 "FIX_COMMITTED",
-                {"commit": "Aurora Autonomous Fix: Resolve port 5001 conflict", "pushed_to": "origin/draft"},
+                {"commit": "Aurora Autonomous Fix: Resolve port 5001 conflict",
+                    "pushed_to": "origin/draft"},
                 "SUCCESS",
             )
 

@@ -25,14 +25,17 @@ Topics Covered:
 Aurora will become a server infrastructure expert across all eras
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
-import json
-import time
-from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from datetime import datetime
+import time
+import json
+from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -48,7 +51,7 @@ class AuroraServerGrandmaster:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
@@ -87,7 +90,8 @@ class AuroraServerGrandmaster:
         with open(self.server_log, "a") as f:
             f.write(json.dumps(entry) + "\n")
 
-        print(f"[STAR] Aurora mastered: {topic} ({mastery_score}% proficiency)")
+        print(
+            f"[STAR] Aurora mastered: {topic} ({mastery_score}% proficiency)")
 
     def teach_ancient_servers(self):
         """Ancient servers: 1960s-1990s"""
@@ -262,7 +266,7 @@ class AuroraServerGrandmaster:
                 "default_port": 5173,
                 "start_command": "vite",
                 "dev_start": "npm run dev",
-                "check_status": "curl -I http://127.0.0.1:5173",
+                "check_status": f"curl -I http://{AURORA_HOST}:5173",
                 "kill_command": "pkill -f vite",
                 "config_file": "vite.config.js",
                 "advantages": ["Instant server start", "Lightning fast HMR", "Native ESM"],
@@ -300,7 +304,8 @@ class AuroraServerGrandmaster:
             # Teach Aurora how to manage Vite specifically (her current server)
             if "Vite" in server:
                 print("   [TARGET] AURORA'S CURRENT SERVER - DEEP DIVE:")
-                print("   [OK] Check if running: curl -s -I http://127.0.0.1:5173")
+                print(
+                    f"   [OK] Check if running: curl -s -I http://{AURORA_HOST}:5173")
                 print("   [OK] Start server: cd client && npm run dev")
                 print("   [OK] Kill server: pkill -f vite")
                 print("   [OK] Check process: ps aux | grep vite")
@@ -435,9 +440,9 @@ class AuroraServerGrandmaster:
                 "with_host": "vite --host 0.0.0.0 --port 5173",
             },
             "Check server status": {
-                "http_check": "curl -I http://127.0.0.1:5173",
+                "http_check": f"curl -I http://{AURORA_HOST}:5173",
                 "process_check": "ps aux | grep vite",
-                "port_check": "nc -zv 127.0.0.1 5173",
+                "port_check": f"nc -zv {AURORA_HOST} 5173",
             },
             "View server logs": {
                 "live_logs": "tail -f /path/to/server.log",
@@ -448,7 +453,7 @@ class AuroraServerGrandmaster:
                 "step_1": "pkill -f vite",
                 "step_2": "sleep 2",
                 "step_3": "cd /workspaces/Aurora-x/client && npm run dev &",
-                "step_4": "curl -I http://127.0.0.1:5173",
+                "step_4": f"curl -I http://{AURORA_HOST}:5173",
             },
         }
 
@@ -493,7 +498,8 @@ class AuroraServerGrandmaster:
 
         print("\n[EMOJI] Server Eras Mastered:")
         for era, servers in self.server_eras.items():
-            print(f"   [OK] {era.replace('_', ' ').title()}: {', '.join(servers[:3])}...")
+            print(
+                f"   [OK] {era.replace('_', ' ').title()}: {', '.join(servers[:3])}...")
 
         # Save certification
         cert = {
@@ -545,4 +551,5 @@ def main():
 
 if __name__ == "__main__":
     mastery_level = main()
-    print(f"\n[EMOJI] Training complete! Aurora achieved {mastery_level}% server mastery!")
+    print(
+        f"\n[EMOJI] Training complete! Aurora achieved {mastery_level}% server mastery!")

@@ -166,5 +166,8 @@ expertMode = true
 [userenv]
 
 [userenv.shared]
-JWT_SECRET = "MqxVZ3XGIDawfZPLy0FD/ymg/EBe06X10knOINk7WNg="
-ADMIN_PASSWORD = "AuroraX-Admin-2025!"
+# SECURITY: Secrets must be set via environment variables, NOT hardcoded
+# Set these in your deployment environment:
+#   JWT_SECRET - Generate with: openssl rand -base64 32
+#   ADMIN_PASSWORD - Use a strong, unique password
+# Example: export JWT_SECRET=$(openssl rand -base64 32)

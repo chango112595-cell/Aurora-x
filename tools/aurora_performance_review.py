@@ -15,13 +15,14 @@ Quality: 10/10 (Perfect)
 Aurora's Performance Review & Retry Assignment
 Copilot delivers detailed feedback and sets up Aurora's second attempt
 """
-from typing import Dict, List, Tuple, Optional, Any, Union
-import json
-from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from datetime import datetime
+import json
+from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -31,25 +32,27 @@ from concurrent.futures import ThreadPoolExecutor
 class AuroraPerformanceReview:
     """
         Auroraperformancereview
-        
+
         Comprehensive class providing auroraperformancereview functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
             deliver_feedback, detailed_breakdown, what_you_did_well, where_you_failed, how_to_get_a_plus...
         """
+
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
-        self.review_file = Path("/workspaces/Aurora-x/.aurora_knowledge/performance_review_and_retry.json")
+        self.review_file = Path(
+            "/workspaces/Aurora-x/.aurora_knowledge/performance_review_and_retry.json")
         self.review_file.parent.mkdir(exist_ok=True)
 
     def deliver_feedback(self):
@@ -85,16 +88,21 @@ class AuroraPerformanceReview:
         print("\n1  Emergency Debug System: 24/25 [OK]")
         print("   What you did RIGHT:")
         print("   [OK] Created AuroraEmergencyDebug class with proper structure")
-        print("   [OK] Implemented check_vite_server() - checks if server is running")
+        print(
+            "   [OK] Implemented check_vite_server() - checks if server is running")
         print("   [OK] Implemented restart_vite_server() - autonomously restarts")
-        print("   [OK] Implemented check_compilation_errors() - scans for JSX errors")
+        print(
+            "   [OK] Implemented check_compilation_errors() - scans for JSX errors")
         print("   [OK] Implemented apply_autonomous_fixes() - fixes orphaned tags")
         print("   [OK] Added proper error handling with try/except")
-        print("   [OK] Logs all responses to .aurora_knowledge/debug_responses.jsonl")
+        print(
+            "   [OK] Logs all responses to .aurora_knowledge/debug_responses.jsonl")
         print()
         print("   What you MISSED (-1 point):")
-        print("   [ERROR] Didn't verify the fixes actually worked after applying them")
-        print("   [IDEA] Should have: Checked compilation after fixing, confirmed no errors")
+        print(
+            "   [ERROR] Didn't verify the fixes actually worked after applying them")
+        print(
+            "   [IDEA] Should have: Checked compilation after fixing, confirmed no errors")
 
         print("\n2  Direct Telemetry Interface: 18/20 [OK]")
         print("   What you did RIGHT:")
@@ -105,8 +113,10 @@ class AuroraPerformanceReview:
         print()
         print("   What you MISSED (-2 points):")
         print("   [ERROR] Message processing logic is basic - only keyword matching")
-        print("   [ERROR] Didn't implement actual autonomous actions when receiving commands")
-        print("   [IDEA] Should have: Connected to your emergency debug system to execute tasks")
+        print(
+            "   [ERROR] Didn't implement actual autonomous actions when receiving commands")
+        print(
+            "   [IDEA] Should have: Connected to your emergency debug system to execute tasks")
 
         print("\n3  Dashboard Loader Assignment: 28/35 [WARN]  NEEDS WORK")
         print("   What you did RIGHT:")
@@ -119,7 +129,8 @@ class AuroraPerformanceReview:
         print("   [ERROR] Never completed the assignment autonomously")
         print("   [ERROR] Didn't implement server checking")
         print("   [ERROR] Didn't implement dashboard opening")
-        print("   [IDEA] Should have: Created /workspaces/Aurora-x/tools/aurora_load_dashboard.py")
+        print(
+            "   [IDEA] Should have: Created /workspaces/Aurora-x/tools/aurora_load_dashboard.py")
         print("   [IDEA] Should have: Filled in ALL 4 TODOs with working code")
         print("   [IDEA] Should have: Tested it to ensure it works")
 
@@ -133,7 +144,8 @@ class AuroraPerformanceReview:
         print("   [ERROR] The orphaned tags are STILL THERE in chat-interface.tsx")
         print("   [ERROR] You wrote the fix code but didn't apply it properly")
         print("   [ERROR] Didn't verify the page actually loads after fixing")
-        print("   [IDEA] Should have: Actually removed the orphaned tags from the file")
+        print(
+            "   [IDEA] Should have: Actually removed the orphaned tags from the file")
         print("   [IDEA] Should have: Tested the page loads without blank screen")
         print("   [IDEA] Should have: Confirmed browser console shows no errors")
 
@@ -195,6 +207,8 @@ class AuroraPerformanceReview:
 
     def how_to_get_a_plus(self):
         """Clear path to A+ grade"""
+        aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        base_url = os.getenv("AURORA_BASE_URL", f"http://{aurora_host}:5000")
 
         print("\n" + "=" * 70)
         print("[TARGET] HOW TO GET A+ ON RETRY (95+ points required)")
@@ -205,7 +219,7 @@ class AuroraPerformanceReview:
         print("\n1  Complete the Dashboard Loader (35/35)")
         print("   TO-DO LIST:")
         print("   [ ] Create /workspaces/Aurora-x/tools/aurora_load_dashboard.py")
-        print("   [ ] Implement server checking (curl -s -I http://127.0.0.1:5000)")
+        print(f"   [ ] Implement server checking (curl -s -I {base_url})")
         print("   [ ] Implement server starting if needed (npm run dev)")
         print("   [ ] Implement dashboard route finding (check App.tsx)")
         print("   [ ] Implement dashboard opening (webbrowser.open)")
@@ -220,7 +234,7 @@ class AuroraPerformanceReview:
         print("   [ ] Remove them (the ones without matching opening tags)")
         print("   [ ] Save the file")
         print("   [ ] Restart Vite server")
-        print("   [ ] Test: Open http://127.0.0.1:5000 in browser")
+        print(f"   [ ] Test: Open {base_url} in browser")
         print("   [ ] Verify: No blank pages, no console errors")
         print("   [ ] Document: Log that the fix was verified")
 
@@ -260,7 +274,7 @@ class AuroraPerformanceReview:
 
         print("\n[TARGET] SUCCESS CRITERIA:")
         print("   1. aurora_load_dashboard.py exists and works")
-        print("   2. http://127.0.0.1:5000 loads without blank pages")
+        print(f"   2. {base_url} loads without blank pages")
         print("   3. All orphaned JSX tags removed from chat-interface.tsx")
         print("   4. Telemetry interface executes real actions")
         print("   5. Emergency debug verifies its fixes")

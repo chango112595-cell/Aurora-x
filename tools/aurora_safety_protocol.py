@@ -16,18 +16,18 @@ Aurora Safety Protocol System
 Provides continuous auto-save, crash recovery, diagnostics, and never-lose-work guarantees
 """
 
-import datetime
 import json
+import datetime
 import os
 import threading
 import time
 import traceback
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -88,7 +88,7 @@ class AuroraSafetyProtocol:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.running = False
@@ -96,6 +96,10 @@ class AuroraSafetyProtocol:
         self.last_save_time = 0
         self.crash_events: list[CrashEvent] = []
         self.diagnostic_reports: list[DiagnosticReport] = []
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.control_base_url = os.getenv(
+            "AURORA_CONTROL_URL", f"http://{self.aurora_host}:9090"
+        )
 
         # Ensure safety directory exists
         SAFETY_DIR.mkdir(exist_ok=True)
@@ -109,7 +113,8 @@ class AuroraSafetyProtocol:
             if STATE_FILE.exists():
                 with open(STATE_FILE) as f:
                     data = json.load(f)
-                    print(f"[OK] Loaded previous state from {data.get('timestamp', 'unknown time')}")
+                    print(
+                        f"[OK] Loaded previous state from {data.get('timestamp', 'unknown time')}")
                     return data
             else:
                 print("  No previous state found (first run)")
@@ -186,7 +191,8 @@ class AuroraSafetyProtocol:
         try:
             import requests
 
-            response = requests.get("http://127.0.0.1:9090/api/status", timeout=2)
+            response = requests.get(
+                f"{self.control_base_url}/api/status", timeout=2)
             if response.status_code == 200:
                 return response.json()
         except Exception:
@@ -231,7 +237,8 @@ class AuroraSafetyProtocol:
 
             # Save to file
             with open(STATE_FILE, "w") as f:
-                json.dump({"reason": reason, "state": asdict(state)}, f, indent=2)
+                json.dump(
+                    {"reason": reason, "state": asdict(state)}, f, indent=2)
 
             self.last_save_time = time.time()
             self.save_count = getattr(self, "save_count", 0) + 1
@@ -260,7 +267,8 @@ class AuroraSafetyProtocol:
             return
 
         self.running = True
-        self.auto_save_thread = threading.Thread(target=self.auto_save_loop, daemon=True)
+        self.auto_save_thread = threading.Thread(
+            target=self.auto_save_loop, daemon=True)
         self.auto_save_thread.start()
         print("[OK] Auto-save started")
 
@@ -336,7 +344,8 @@ class AuroraSafetyProtocol:
                     auto_fixable=True,
                 )
 
-            running = sum(1 for s in services.values() if s.get("status") == "running")
+            running = sum(1 for s in services.values()
+                          if s.get("status") == "running")
             total = len(services)
 
             if running == total:
@@ -354,7 +363,8 @@ class AuroraSafetyProtocol:
                 check_name="Service Health",
                 status=status_result,
                 details=details,
-                recommendations=["Start stopped services via health dashboard"] if running < total else [],
+                recommendations=[
+                    "Start stopped services via health dashboard"] if running < total else [],
                 auto_fixable=True,
             )
 
@@ -364,7 +374,8 @@ class AuroraSafetyProtocol:
                 check_name="Service Health",
                 status="FAIL",
                 details=f"Error checking services: {str(e)}",
-                recommendations=["Check supervisor logs", "Restart aurora_supervisor.py"],
+                recommendations=["Check supervisor logs",
+                                 "Restart aurora_supervisor.py"],
                 auto_fixable=False,
             )
 
@@ -380,7 +391,8 @@ class AuroraSafetyProtocol:
             result = sock.connect_ex(("127.0.0.1", port))
             sock.close()
 
-            if result != 0:  # Port not in use (should be in use by our services)
+            # Port not in use (should be in use by our services)
+            if result != 0:
                 conflicts.append(f"Port {port} not listening")
 
         if not conflicts:
@@ -457,7 +469,8 @@ class AuroraSafetyProtocol:
         else:
             status_result = "FAIL"
             details = f"Disk usage: {percent_used:.1f}% (critical)"
-            recommendations = ["Clean up disk space immediately", "Remove old backups"]
+            recommendations = [
+                "Clean up disk space immediately", "Remove old backups"]
 
         return DiagnosticReport(
             timestamp=datetime.datetime.now().isoformat(),
@@ -484,7 +497,8 @@ class AuroraSafetyProtocol:
                     with open(config_path) as f:
                         json.load(f)  # Validate JSON
                 except json.JSONDecodeError as e:
-                    issues.append(f"Invalid JSON in {os.path.basename(config_path)}: {e}")
+                    issues.append(
+                        f"Invalid JSON in {os.path.basename(config_path)}: {e}")
 
         if not issues:
             return DiagnosticReport(
@@ -501,7 +515,8 @@ class AuroraSafetyProtocol:
                 check_name="Configuration Integrity",
                 status="FAIL",
                 details=", ".join(issues),
-                recommendations=["Restore config files from backup", "Regenerate missing configs"],
+                recommendations=[
+                    "Restore config files from backup", "Regenerate missing configs"],
                 auto_fixable=True,
             )
 
@@ -509,7 +524,8 @@ class AuroraSafetyProtocol:
         """Save diagnostic reports to file"""
         try:
             with open(DIAGNOSTIC_LOG, "w") as f:
-                json.dump([asdict(r) for r in self.diagnostic_reports], f, indent=2)
+                json.dump([asdict(r)
+                          for r in self.diagnostic_reports], f, indent=2)
         except Exception as e:
             print(f"[WARN]  Failed to save diagnostic reports: {e}")
 
@@ -550,7 +566,9 @@ class AuroraSafetyProtocol:
             import requests
 
             response = requests.post(
-                "http://127.0.0.1:9090/api/control", json={"service": crash.service_name, "action": "start"}, timeout=5
+                f"{self.control_base_url}/api/control",
+                json={"service": crash.service_name, "action": "start"},
+                timeout=5,
             )
 
             if response.status_code == 200:
@@ -558,7 +576,8 @@ class AuroraSafetyProtocol:
                 crash.recovery_successful = True
                 return True
             else:
-                print(f"[ERROR] Failed to restart {crash.service_name}: HTTP {response.status_code}")
+                print(
+                    f"[ERROR] Failed to restart {crash.service_name}: HTTP {response.status_code}")
                 return False
 
         except Exception as e:
@@ -638,14 +657,21 @@ def main():
             """
     import argparse
 
-    parser = argparse.ArgumentParser(description="Aurora Safety Protocol System")
-    parser.add_argument("--start", action="store_true", help="Start auto-save daemon")
-    parser.add_argument("--stop", action="store_true", help="Stop auto-save daemon")
-    parser.add_argument("--status", action="store_true", help="Show current status")
-    parser.add_argument("--diagnose", action="store_true", help="Run diagnostics")
+    parser = argparse.ArgumentParser(
+        description="Aurora Safety Protocol System")
+    parser.add_argument("--start", action="store_true",
+                        help="Start auto-save daemon")
+    parser.add_argument("--stop", action="store_true",
+                        help="Stop auto-save daemon")
+    parser.add_argument("--status", action="store_true",
+                        help="Show current status")
+    parser.add_argument("--diagnose", action="store_true",
+                        help="Run diagnostics")
     parser.add_argument("--save", action="store_true", help="Save state now")
-    parser.add_argument("--luminar", action="store_true", help="Output Luminar Nexus data")
-    parser.add_argument("--daemon", action="store_true", help="Run as daemon (blocks)")
+    parser.add_argument("--luminar", action="store_true",
+                        help="Output Luminar Nexus data")
+    parser.add_argument("--daemon", action="store_true",
+                        help="Run as daemon (blocks)")
 
     args = parser.parse_args()
 

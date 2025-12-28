@@ -94,15 +94,16 @@ Aurora will master EVERY technology domain with complete historical context
 and practical implementation knowledge from ancient times to future predictions.
 """
 
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from datetime import datetime
+import time
+import subprocess
+import os
 from typing import Dict, List, Tuple, Optional, Any, Union
 import json
-import subprocess
-import time
-from datetime import datetime
-from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -118,7 +119,7 @@ class AuroraUltimateGrandmaster:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
@@ -327,7 +328,8 @@ class AuroraUltimateGrandmaster:
         # Check 1: Is Vite actually running?
         print("1  Checking if Vite process is running...")
         result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
-        vite_processes = [line for line in result.stdout.split("\n") if "vite" in line.lower()]
+        vite_processes = [line for line in result.stdout.split(
+            "\n") if "vite" in line.lower()]
 
         if vite_processes:
             print(f"   [OK] Found {len(vite_processes)} Vite process(es):")
@@ -335,14 +337,17 @@ class AuroraUltimateGrandmaster:
                 print(f"      {proc[:100]}")
         else:
             print("   [ERROR] NO Vite process running!")
-            print("   [IDEA] FIX: Need to start Vite with: cd client && npm run dev")
+            print(
+                "   [IDEA] FIX: Need to start Vite with: cd client && npm run dev")
         print()
 
         # Check 2: What ports are actually listening?
         print("2  Checking which ports are listening...")
         try:
-            result = subprocess.run(["ss", "-tlnp"], capture_output=True, text=True)
-            listening_ports = [line for line in result.stdout.split("\n") if "LISTEN" in line]
+            result = subprocess.run(
+                ["ss", "-tlnp"], capture_output=True, text=True)
+            listening_ports = [line for line in result.stdout.split(
+                "\n") if "LISTEN" in line]
 
             print(f"   Found {len(listening_ports)} listening ports:")
             for port_line in listening_ports[:10]:
@@ -361,10 +366,14 @@ class AuroraUltimateGrandmaster:
 
         # Check 3: Can we curl the server?
         print("3  Testing HTTP connection to Vite...")
+        aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
         for port in [5173, 5000, 3000]:
             try:
                 result = subprocess.run(
-                    ["curl", "-s", "-I", f"http://127.0.0.1:{port}"], capture_output=True, text=True, timeout=2
+                    ["curl", "-s", "-I", f"http://{aurora_host}:{port}"],
+                    capture_output=True,
+                    text=True,
+                    timeout=2,
                 )
                 if "200" in result.stdout or "OK" in result.stdout:
                     print(f"   [OK] Port {port}: WORKING! Server responding")
@@ -385,7 +394,8 @@ class AuroraUltimateGrandmaster:
             with open(package_json) as f:
                 pkg = json.load(f)
                 if "scripts" in pkg and "dev" in pkg["scripts"]:
-                    print(f"   [OK] npm run dev command: {pkg['scripts']['dev']}")
+                    print(
+                        f"   [OK] npm run dev command: {pkg['scripts']['dev']}")
                 else:
                     print("   [ERROR] No 'dev' script in package.json!")
 
@@ -422,7 +432,8 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
 
         print("[OK] Port Diagnostics Complete!\n")
 
-        self.log_mastery("Port Debugging", "Complete Diagnosis", "Identified why ports not working", 10)
+        self.log_mastery("Port Debugging", "Complete Diagnosis",
+                         "Identified why ports not working", 10)
         self.total_mastery += 10
 
     def teach_complete_fix_process(self):
@@ -446,7 +457,7 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
             },
             "Step 3: Verify It Works": {
                 "what": "Check that the result is correct",
-                "example": "curl -I http://127.0.0.1:5173",
+                "example": "curl -I http://127.0.0.1:5173 (or set AURORA_HOST)",
                 "status": "[ERROR] MISSED",
             },
             "Step 4: Document Success": {
@@ -461,7 +472,8 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
         for step, details in process.items():
             print(f"{step}:")
             for key, value in details.items():
-                icon = "[OK]" if value.startswith("[OK]") else "[ERROR]" if value.startswith("[ERROR]") else ""
+                icon = "[OK]" if value.startswith(
+                    "[OK]") else "[ERROR]" if value.startswith("[ERROR]") else ""
                 print(f"   {key}: {value}")
             print()
 
@@ -473,7 +485,8 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
         print("   Aurora must: CREATE -> EXECUTE -> VERIFY -> DOCUMENT")
         print()
 
-        self.log_mastery("Process Mastery", "Complete Fix Process", "Create->Execute->Verify->Document", 10)
+        self.log_mastery("Process Mastery", "Complete Fix Process",
+                         "Create->Execute->Verify->Document", 10)
         self.total_mastery += 10
 
     def generate_ultimate_certification(self):
@@ -484,7 +497,8 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
 
         percentage = (self.total_mastery / self.max_mastery) * 100
 
-        print(f"[DATA] Current Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)")
+        print(
+            f"[DATA] Current Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)")
         print(f"[EMOJI] Domains Mastered: {len(self.domains_mastered)}")
 
         if percentage >= 90:
@@ -570,4 +584,3 @@ def main():
 if __name__ == "__main__":
     mastery_level = main()
     print(f"\n[EMOJI] Training Complete! Mastery: {mastery_level} points")
-

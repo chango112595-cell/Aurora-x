@@ -17,14 +17,14 @@ Aurora Restarts Herself
 Aurora stops all old services and reloads herself with the new UI
 """
 
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+import time
+import subprocess
 from typing import Dict, List, Tuple, Optional, Any, Union
 import os
-import subprocess
-import time
-from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -37,15 +37,18 @@ class AuroraSelfReload:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.root = Path(__file__).parent.parent
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv(
+            "AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
 
     def log(self, emoji: str, message: str):
         """
             Log
-            
+
             Args:
                 emoji: emoji
                 message: message
@@ -61,14 +64,17 @@ class AuroraSelfReload:
         self.log("1", "Stopping UI servers on port 5000...")
         subprocess.run(["pkill", "-f", "vite"], capture_output=True)
         subprocess.run(["pkill", "-f", "npm run dev"], capture_output=True)
-        subprocess.run(["fuser", "-k", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["fuser", "-k", "5000/tcp"],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(2)
 
         # Verify port is free
-        result = subprocess.run(["lsof", "-i", ":5000", "-P", "-n"], capture_output=True, text=True)
+        result = subprocess.run(
+            ["lsof", "-i", ":5000", "-P", "-n"], capture_output=True, text=True)
         if result.stdout:
             self.log("[WARN]", "Port 5000 still in use, force killing...")
-            subprocess.run(["fuser", "-k", "-9", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["fuser", "-k", "-9", "5000/tcp"],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             time.sleep(2)
         else:
             self.log("[OK]", "Port 5000 is free")
@@ -81,10 +87,14 @@ class AuroraSelfReload:
         print()
 
         # Clear build artifacts
-        subprocess.run(["rm", "-rf", str(self.root / "client" / ".vite")], capture_output=True)
-        subprocess.run(["rm", "-rf", str(self.root / "client" / "dist")], capture_output=True)
-        subprocess.run(["rm", "-rf", str(self.root / "dist")], capture_output=True)
-        subprocess.run(["rm", "-rf", str(self.root / ".vite")], capture_output=True)
+        subprocess.run(
+            ["rm", "-rf", str(self.root / "client" / ".vite")], capture_output=True)
+        subprocess.run(
+            ["rm", "-rf", str(self.root / "client" / "dist")], capture_output=True)
+        subprocess.run(["rm", "-rf", str(self.root / "dist")],
+                       capture_output=True)
+        subprocess.run(["rm", "-rf", str(self.root / ".vite")],
+                       capture_output=True)
 
         self.log("[OK]", "Caches cleared")
         print()
@@ -106,7 +116,8 @@ class AuroraSelfReload:
         time.sleep(8)
 
         # Verify it's running
-        result = subprocess.run(["lsof", "-i", ":5000", "-P", "-n"], capture_output=True, text=True)
+        result = subprocess.run(
+            ["lsof", "-i", ":5000", "-P", "-n"], capture_output=True, text=True)
         if ":5000" in result.stdout:
             self.log("[OK]", "Aurora UI is running on port 5000!")
         else:
@@ -133,7 +144,7 @@ class AuroraSelfReload:
         print("   'I've stopped all old services and started fresh with my new UI!'")
         print()
         print("Next steps:")
-        print("   1. Open http://127.0.0.1:5000/chat in your browser")
+        print(f"   1. Open {self.base_url}/chat in your browser")
         print("   2. Clear browser cache (Ctrl+Shift+R)")
         print("   3. Unregister service workers (F12 -> Application -> Service Workers)")
         print("   4. You should see my new Aurora chat interface! [STAR]")

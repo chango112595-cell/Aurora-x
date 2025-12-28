@@ -17,14 +17,15 @@ Aurora Direct Telemetry Interface
 - Copilot supervises but does not intervene
 - Aurora handles all tasks autonomously
 """
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
+from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 import time
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -34,30 +35,36 @@ from concurrent.futures import ThreadPoolExecutor
 class AuroraDirectTelemetry:
     """
         Auroradirecttelemetry
-        
+
         Comprehensive class providing auroradirecttelemetry functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
             log_message, start_session, fix_compilation_errors, start_vite_server, message_loop...
         """
+
     def __init__(self) -> None:
         """
               Init  
-            
+
             Args:
             """
-        self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/telemetry.log")
+        self.log_file = Path(
+            "/workspaces/Aurora-x/.aurora_knowledge/telemetry.log")
         self.log_file.parent.mkdir(exist_ok=True)
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv(
+            "AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
 
     def log_message(self, sender, message, action=None):
         """Log all telemetry messages"""
-        entry = {"timestamp": datetime.now().isoformat(), "sender": sender, "message": message, "action": action}
+        entry = {"timestamp": datetime.now().isoformat(), "sender": sender,
+                 "message": message, "action": action}
 
         with open(self.log_file, "a") as f:
             f.write(json.dumps(entry) + "\n")
@@ -85,7 +92,8 @@ class AuroraDirectTelemetry:
         print()
         print("[STAR] Aurora: I detected you're seeing blank pages. Let me diagnose...")
 
-        self.log_message("AURORA", "Status check complete, diagnosing blank pages")
+        self.log_message(
+            "AURORA", "Status check complete, diagnosing blank pages")
 
         # Aurora's autonomous diagnosis
         print("[SCAN] Aurora: Running diagnostics...")
@@ -95,16 +103,19 @@ class AuroraDirectTelemetry:
             # Check if Vite is running
             import subprocess
 
-            result = subprocess.run(["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True)
+            result = subprocess.run(
+                ["curl", "-s", "-I", self.base_url], capture_output=True, text=True)
 
             if "200 OK" in result.stdout:
                 print("[OK] Aurora: Vite server is responding")
 
                 # Check for compilation errors
-                result = subprocess.run(["curl", "-s", "http://127.0.0.1:5000"], capture_output=True, text=True)
+                result = subprocess.run(
+                    ["curl", "-s", self.base_url], capture_output=True, text=True)
 
                 if len(result.stdout) < 100:
-                    print("[ERROR] Aurora: Page content is minimal - likely compilation error")
+                    print(
+                        "[ERROR] Aurora: Page content is minimal - likely compilation error")
                     print("[EMOJI] Aurora: Starting automatic fix...")
                     self.fix_compilation_errors()
                 else:
@@ -131,7 +142,8 @@ class AuroraDirectTelemetry:
         print("[EMOJI] Aurora: Checking for JSX/React errors...")
 
         # Check chat-interface.tsx specifically
-        chat_file = Path("/workspaces/Aurora-x/client/src/components/chat-interface.tsx")
+        chat_file = Path(
+            "/workspaces/Aurora-x/client/src/components/chat-interface.tsx")
         if chat_file.exists():
             content = chat_file.read_text()
 
@@ -141,11 +153,13 @@ class AuroraDirectTelemetry:
                 print("[EMOJI] Aurora: Fixing JSX structure...")
 
                 # Fix the specific errors
-                fixed_content = content.replace("        </QuantumBackground>\n", "")
+                fixed_content = content.replace(
+                    "        </QuantumBackground>\n", "")
                 chat_file.write_text(fixed_content)
 
                 print("[OK] Aurora: JSX errors fixed")
-                self.log_message("AURORA", "Fixed JSX compilation errors in chat-interface.tsx")
+                self.log_message(
+                    "AURORA", "Fixed JSX compilation errors in chat-interface.tsx")
             else:
                 print("[OK] Aurora: No obvious JSX errors found")
 
@@ -161,11 +175,12 @@ class AuroraDirectTelemetry:
 
         # Start Vite in background
         os.chdir("/workspaces/Aurora-x/client")
-        subprocess.Popen(["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(["npm", "run", "dev"],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         print("[OK] Aurora: Vite server starting...")
         time.sleep(3)
-        print("[OK] Aurora: Server should be ready at http://127.0.0.1:5000")
+        print(f"[OK] Aurora: Server should be ready at {self.base_url}")
 
     def message_loop(self):
         """Direct message loop with user"""

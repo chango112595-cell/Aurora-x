@@ -36,20 +36,21 @@ OUTPUT_ZIP = BASE_DIR / f"{BUNDLE_NAME}.zip"
 
 class BundleStats:
     """Track bundle statistics"""
+
     def __init__(self):
         self.files_added = 0
         self.directories_created = 0
         self.total_size = 0
         self.categories: Dict[str, int] = {}
-    
+
     def add_file(self, category: str, size: int):
         self.files_added += 1
         self.total_size += size
         self.categories[category] = self.categories.get(category, 0) + 1
-    
+
     def add_directory(self):
         self.directories_created += 1
-    
+
     def summary(self) -> Dict[str, Any]:
         return {
             "total_files": self.files_added,
@@ -84,21 +85,21 @@ def copy_file(src: Path, dst: Path, stats: BundleStats, category: str) -> bool:
         return False
 
 
-def copy_directory(src: Path, dst: Path, stats: BundleStats, category: str, 
+def copy_directory(src: Path, dst: Path, stats: BundleStats, category: str,
                    extensions: Optional[List[str]] = None,
                    exclude_patterns: Optional[List[str]] = None) -> int:
     """Copy a directory recursively with optional filtering"""
     if not src.exists():
         print(f"  [SKIP] Directory not found: {src}")
         return 0
-    
+
     count = 0
     exclude_patterns = exclude_patterns or []
-    
+
     for item in src.rglob("*"):
         if item.is_file():
             rel_path = item.relative_to(src)
-            
+
             skip = False
             for pattern in exclude_patterns:
                 if pattern in str(rel_path):
@@ -106,13 +107,13 @@ def copy_directory(src: Path, dst: Path, stats: BundleStats, category: str,
                     break
             if skip:
                 continue
-            
+
             if extensions and item.suffix.lower() not in extensions:
                 continue
-            
+
             if copy_file(item, dst / rel_path, stats, category):
                 count += 1
-    
+
     if count > 0:
         stats.add_directory()
     return count
@@ -311,7 +312,7 @@ chmod -R 755 data/
 **3. WebSocket connection fails**
 ```
 Solution: Check the server is running and port 5000 is accessible.
-curl http://127.0.0.1:5000/api/health
+curl ${AURORA_BASE_URL:-http://127.0.0.1:5000}/api/health
 ```
 
 **4. Embeddings not working**
@@ -398,18 +399,18 @@ def main():
     print(f"Timestamp: {TIMESTAMP}")
     print(f"Output: {OUTPUT_ZIP}")
     print()
-    
+
     if TEMP_DIR.exists():
         shutil.rmtree(TEMP_DIR)
     TEMP_DIR.mkdir(parents=True)
-    
+
     stats = BundleStats()
     files_manifest: List[Dict] = []
-    
+
     print("[1/8] Collecting Backend System (TypeScript)...")
     backend_dir = TEMP_DIR / "backend"
     backend_dir.mkdir()
-    
+
     backend_files = [
         "server/persistent-memory.ts",
         "server/session-manager.ts",
@@ -427,7 +428,7 @@ def main():
         "server/conversation-pattern-adapter.ts",
         "server/execution-dispatcher.ts",
     ]
-    
+
     for f in backend_files:
         src = BASE_DIR / f
         if src.exists():
@@ -440,11 +441,11 @@ def main():
                     "hash": sha256_file(src)
                 })
                 print(f"  [+] {Path(f).name}")
-    
+
     print("\n[2/8] Collecting Frontend Dashboard (React)...")
     frontend_dir = TEMP_DIR / "frontend"
     frontend_dir.mkdir()
-    
+
     frontend_files = [
         "client/src/pages/memory-fabric.tsx",
         "client/src/components/AuroraDashboard.tsx",
@@ -459,7 +460,7 @@ def main():
         "client/src/pages/intelligence.tsx",
         "client/src/pages/self-learning.tsx",
     ]
-    
+
     for f in frontend_files:
         src = BASE_DIR / f
         if src.exists():
@@ -472,17 +473,17 @@ def main():
                     "hash": sha256_file(src)
                 })
                 print(f"  [+] {Path(f).name}")
-    
+
     print("\n[3/8] Collecting Database Files...")
     db_dir = TEMP_DIR / "database"
     db_dir.mkdir()
-    
+
     db_files = [
         "data/corpus.db",
         "data/corpus.db-wal",
         "data/corpus.db-shm",
     ]
-    
+
     for f in db_files:
         src = BASE_DIR / f
         if src.exists():
@@ -495,24 +496,24 @@ def main():
                     "hash": sha256_file(src)
                 })
                 print(f"  [+] {Path(f).name}")
-    
+
     print("\n[4/8] Collecting Python Intelligence...")
     py_dir = TEMP_DIR / "python_intelligence"
-    
+
     # Aurora Memory Fabric v2 Core
     src_py = BASE_DIR / "aurora_memory_fabric_v2"
     if src_py.exists():
-        count = copy_directory(src_py, py_dir / "aurora_memory_fabric_v2", stats, "python_intelligence", 
-                              extensions=[".py", ".json", ".md"])
+        count = copy_directory(src_py, py_dir / "aurora_memory_fabric_v2", stats, "python_intelligence",
+                               extensions=[".py", ".json", ".md"])
         print(f"  [+] aurora_memory_fabric_v2: {count} files")
-    
+
     # Core memory manager
     core_dir = BASE_DIR / "core"
     if core_dir.exists():
         count = copy_directory(core_dir, py_dir / "core", stats, "python_intelligence",
-                              extensions=[".py", ".json"])
+                               extensions=[".py", ".json"])
         print(f"  [+] core: {count} files")
-    
+
     # Aurora Core Intelligence
     aurora_core_files = [
         "aurora/core/aurora_core.py",
@@ -520,42 +521,42 @@ def main():
         "aurora/core/aurora_knowledge_engine.py",
         "aurora/core/aurora_learning_engine.py",
     ]
-    
+
     for f in aurora_core_files:
         src = BASE_DIR / f
         if src.exists():
             dst = py_dir / "aurora_core" / Path(f).name
             if copy_file(src, dst, stats, "python_intelligence"):
                 print(f"  [+] {Path(f).name}")
-    
+
     print("\n[5/8] Collecting Knowledge Base...")
     kb_dir = TEMP_DIR / "knowledge_base"
     kb_dir.mkdir()
-    
+
     # Memory fabric data structure
     memory_global = BASE_DIR / "data" / "memory" / "global"
     if memory_global.exists():
         count = copy_directory(memory_global, kb_dir / "global", stats, "knowledge_base",
-                              extensions=[".json", ".jsonl"])
+                               extensions=[".json", ".jsonl"])
         print(f"  [+] data/memory/global: {count} files")
-    
+
     memory_projects = BASE_DIR / "data" / "memory" / "projects"
     if memory_projects.exists():
         count = copy_directory(memory_projects, kb_dir / "projects", stats, "knowledge_base",
-                              extensions=[".json", ".jsonl"])
+                               extensions=[".json", ".jsonl"])
         print(f"  [+] data/memory/projects: {count} files")
-    
+
     # Aurora knowledge base
     aurora_kb = BASE_DIR / ".aurora_knowledge"
     if aurora_kb.exists():
         count = copy_directory(aurora_kb, kb_dir / "aurora_knowledge", stats, "knowledge_base",
-                              extensions=[".json", ".jsonl"])
+                               extensions=[".json", ".jsonl"])
         print(f"  [+] .aurora_knowledge: {count} files")
-    
+
     print("\n[6/8] Collecting Sessions & Backups...")
     sessions_dir = TEMP_DIR / "sessions"
     backups_dir = TEMP_DIR / "backups"
-    
+
     src_sessions = BASE_DIR / "data" / "memory" / "projects"
     if src_sessions.exists():
         for project_dir in src_sessions.iterdir():
@@ -564,55 +565,56 @@ def main():
                 if conv_dir.exists():
                     dst = sessions_dir / project_dir.name
                     count = copy_directory(conv_dir, dst, stats, "sessions",
-                                          extensions=[".json"])
-                    print(f"  [+] {project_dir.name}/conversations: {count} files")
-    
+                                           extensions=[".json"])
+                    print(
+                        f"  [+] {project_dir.name}/conversations: {count} files")
+
     src_backups = BASE_DIR / "backups"
     if src_backups.exists():
         count = copy_directory(src_backups, backups_dir, stats, "backups",
-                              extensions=[".zip", ".json", ".tar.gz"])
+                               extensions=[".zip", ".json", ".tar.gz"])
         print(f"  [+] backups: {count} files")
-    
+
     print("\n[7/8] Generating Documentation...")
     docs_dir = TEMP_DIR / "docs"
     docs_dir.mkdir()
-    
+
     readme_content = generate_readme()
     readme_path = TEMP_DIR / "README.md"
     readme_path.write_text(readme_content)
     stats.add_file("documentation", len(readme_content))
     print("  [+] README.md")
-    
+
     req_content = generate_requirements()
     req_path = TEMP_DIR / "requirements.txt"
     req_path.write_text(req_content)
     stats.add_file("documentation", len(req_content))
     print("  [+] requirements.txt")
-    
+
     for doc_file in ["README.md", "COMMANDS.md", "QUICK_START.md", "CHANGELOG.md"]:
         src = BASE_DIR / doc_file
         if src.exists():
             dst = docs_dir / doc_file
             if copy_file(src, dst, stats, "documentation"):
                 print(f"  [+] docs/{doc_file}")
-    
+
     print("\n[8/8] Creating Bundle Archive...")
-    
+
     manifest = generate_manifest(stats, files_manifest)
     manifest_path = TEMP_DIR / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2))
     stats.add_file("metadata", len(json.dumps(manifest)))
     print("  [+] manifest.json")
-    
+
     with zipfile.ZipFile(OUTPUT_ZIP, "w", zipfile.ZIP_DEFLATED) as zf:
         for root, dirs, files in os.walk(TEMP_DIR):
             for file in files:
                 file_path = Path(root) / file
                 arc_name = file_path.relative_to(TEMP_DIR)
                 zf.write(file_path, arc_name)
-    
+
     final_size = OUTPUT_ZIP.stat().st_size
-    
+
     print("\n" + "=" * 70)
     print("Bundle Generation Complete!")
     print("=" * 70)
@@ -632,13 +634,13 @@ def main():
     print(f"  - Sessions & Backups")
     print(f"  - Documentation")
     print(f"\nManifest and comprehensive README included.")
-    
+
     shutil.rmtree(TEMP_DIR)
-    
+
     print(f"\n{'=' * 70}")
     print(f"SUCCESS: {OUTPUT_ZIP.name}")
     print(f"{'=' * 70}")
-    
+
     return str(OUTPUT_ZIP)
 
 

@@ -11,21 +11,25 @@ Quality: 10/10 (Perfect)
 """
 
 # aurora_x/serve.py  FastAPI app with Aurora-X v3 dashboard mounted
+import logging
+import time
+import uuid
+from aurora_x.bridge.attach_bridge import attach_bridge
 from typing import Dict, List, Tuple, Optional, Any, Union
 import html
 import json
 import os
 import subprocess
 import sys
-import time
 import traceback
 from datetime import datetime
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, Response, Request
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from aurora_x.config.runtime_config import readiness, validate_required_config
 
 from aurora_x.app_settings import SETTINGS
 from aurora_x.chat.attach_demo import attach_demo
@@ -104,8 +108,90 @@ may have rate limiting applied in production environments.
     ],
 )
 
+# Metrics (prometheus_client if available; fallback to simple counters)
+try:
+    from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
+
+    REQUEST_COUNT = Counter("aurora_http_requests_total", "HTTP requests", [
+                            "path", "method", "status"])
+    REQUEST_LATENCY = Histogram(
+        "aurora_http_request_latency_seconds", "Request latency", ["path", "method"])
+    _PROM_AVAILABLE = True
+except Exception:
+    _PROM_AVAILABLE = False
+    _metrics_fallback = {"requests": 0, "errors": 0, "latencies": []}
+
 # Aurora Priority #9: Performance optimization will be added after routers
 _performance_middleware_ref = {"instance": None}
+_rate_limit_state: dict[str, dict[str, float]] = {}
+_REQUESTS_PER_MIN = int(os.environ.get("AURORA_RATE_LIMIT_PER_MIN", "120"))
+_REQUIRE_AUTH = os.environ.get("AURORA_REQUIRE_AUTH", "0").lower() in {
+    "1", "true", "yes"}
+_API_KEY = os.environ.get("AURORA_API_KEY")
+_AUTH_WHITELIST = {"/healthz", "/readyz", "/metrics", "/openapi.json"}
+
+
+@app.middleware("http")
+async def request_id_middleware(request: Request, call_next):
+    req_id = str(uuid.uuid4())
+    request.state.request_id = req_id
+    start = time.perf_counter()
+    try:
+        response = await call_next(request)
+    except Exception as exc:
+        if _PROM_AVAILABLE:
+            REQUEST_COUNT.labels(path=request.url.path,
+                                 method=request.method, status="500").inc()
+            REQUEST_LATENCY.labels(path=request.url.path, method=request.method).observe(
+                time.perf_counter() - start)
+        else:
+            _metrics_fallback["errors"] += 1
+            _metrics_fallback["latencies"].append(time.perf_counter() - start)
+        raise exc
+
+    duration = time.perf_counter() - start
+    response.headers["X-Request-ID"] = req_id
+    status = getattr(response, "status_code", 200)
+
+    if _PROM_AVAILABLE:
+        REQUEST_COUNT.labels(path=request.url.path,
+                             method=request.method, status=str(status)).inc()
+        REQUEST_LATENCY.labels(path=request.url.path,
+                               method=request.method).observe(duration)
+    else:
+        _metrics_fallback["requests"] += 1
+        _metrics_fallback["latencies"].append(duration)
+
+    return response
+
+
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    # Simple token bucket per client IP
+    client_ip = request.client.host if request.client else "unknown"
+    state = _rate_limit_state.setdefault(
+        client_ip, {"tokens": _REQUESTS_PER_MIN, "ts": time.time()})
+    now = time.time()
+    elapsed = now - state["ts"]
+    # Refill tokens per minute
+    refill = (_REQUESTS_PER_MIN / 60.0) * elapsed
+    state["tokens"] = min(_REQUESTS_PER_MIN, state["tokens"] + refill)
+    state["ts"] = now
+    if state["tokens"] < 1:
+        return JSONResponse(status_code=429, content={"error": "rate_limited", "retry_after_sec": 1})
+    state["tokens"] -= 1
+    return await call_next(request)
+
+
+@app.middleware("http")
+async def auth_middleware(request: Request, call_next):
+    if not _REQUIRE_AUTH or request.url.path in _AUTH_WHITELIST or request.url.path.startswith("/static"):
+        return await call_next(request)
+    key = request.headers.get(
+        "X-AURORA-API-KEY") or request.headers.get("Authorization", "").replace("Bearer ", "")
+    if not key or (_API_KEY and key != _API_KEY):
+        return JSONResponse(status_code=401, content={"error": "unauthorized"})
+    return await call_next(request)
 
 # Create static and templates directories if they don't exist
 static_dir = BASE / "static"
@@ -121,46 +207,88 @@ if static_dir.exists() and any(static_dir.iterdir()):
 app.include_router(make_router(static_dir, templates_dir))
 
 # Include server control API (Aurora's fix for Server Control page)
+_serve_logger = logging.getLogger("aurora.serve")
+
+
+@app.on_event("startup")
+async def _startup_validate_config():
+    # Fail fast if required secrets/config missing
+    validate_required_config()
+
+
+@app.get("/readyz", tags=["health"], summary="Readiness probe")
+def readyz():
+    state = readiness()
+    status = 200 if state.get("config_ok") else 503
+    return JSONResponse(content=state, status_code=status)
+
+
+@app.get("/metrics")
+def metrics():
+    if _PROM_AVAILABLE:
+        return PlainTextResponse(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+    # Fallback exposition
+    content = [
+        f"aurora_http_requests_total {_metrics_fallback['requests']}",
+        f"aurora_http_errors_total {_metrics_fallback['errors']}",
+    ]
+    if _metrics_fallback["latencies"]:
+        avg = sum(_metrics_fallback["latencies"]) / \
+            len(_metrics_fallback["latencies"])
+        content.append(f"aurora_http_request_latency_seconds_avg {avg}")
+    return PlainTextResponse("\n".join(content), media_type="text/plain")
+
+
 try:
     from aurora_x.api.server_control import router as server_control_router
-
     app.include_router(server_control_router)
-except Exception:
-    pass
+    _serve_logger.info("Server control router loaded")
+except ImportError as e:
+    _serve_logger.warning(f"Server control API not available: {e}")
+except Exception as e:
+    _serve_logger.error(f"Failed to load server control router: {e}")
 
 # Include health check and monitoring APIs (Aurora Priority #7)
 try:
     from aurora_x.api.health_check import router as health_check_router
     from aurora_x.api.monitoring import router as monitoring_router
-
     app.include_router(health_check_router)
     app.include_router(monitoring_router)
-except Exception:
-    pass  # Health check and monitoring endpoints not available yet
+    _serve_logger.info("Health check and monitoring routers loaded")
+except ImportError as e:
+    _serve_logger.warning(f"Health check/monitoring APIs not available: {e}")
+except Exception as e:
+    _serve_logger.error(f"Failed to load health/monitoring routers: {e}")
 
 # Include performance API (Aurora Priority #9)
 try:
     from aurora_x.api.performance import router as performance_router
-
     app.include_router(performance_router)
-except Exception:
-    pass  # Performance endpoints not available yet
+    _serve_logger.info("Performance router loaded")
+except ImportError as e:
+    _serve_logger.warning(f"Performance API not available: {e}")
+except Exception as e:
+    _serve_logger.error(f"Failed to load performance router: {e}")
 
 # Include unified command router
 try:
     from aurora_x.api.commands import router as commands_router
-
     app.include_router(commands_router)
-except ImportError:
-    pass  # API endpoints not available yet
+    _serve_logger.info("Commands router loaded")
+except ImportError as e:
+    _serve_logger.warning(f"Commands API not available: {e}")
+except Exception as e:
+    _serve_logger.error(f"Failed to load commands router: {e}")
 
 # Include natural conversation router
 try:
     from aurora_x.chat.conversation import attach_conversation
-
     attach_conversation(app)
-except ImportError:
-    pass  # Conversation endpoint not available yet
+    _serve_logger.info("Conversation endpoint attached")
+except ImportError as e:
+    _serve_logger.warning(f"Conversation endpoint not available: {e}")
+except Exception as e:
+    _serve_logger.error(f"Failed to attach conversation endpoint: {e}")
 
 # Attach English mode addons
 attach_factory(app)
@@ -184,7 +312,6 @@ attach_units_format(app)
 attach_demo(app)
 
 # Attach T12 Factory Bridge endpoints
-from aurora_x.bridge.attach_bridge import attach_bridge
 
 attach_bridge(app)
 
@@ -216,11 +343,6 @@ except Exception as e:
     import traceback
 
     traceback.print_exc()
-
-# Attach T12 Factory Bridge endpoints
-from aurora_x.bridge.attach_bridge import attach_bridge
-
-attach_bridge(app)  # /api/bridge/nl, /api/bridge/spec, /api/bridge/deploy
 
 
 @app.get("/dashboard/demos", response_class=HTMLResponse)
@@ -262,13 +384,13 @@ def healthz():
 def set_thresholds(payload: dict):
     """
         Set Thresholds
-        
+
         Args:
             payload: payload
-    
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -291,10 +413,10 @@ def set_thresholds(payload: dict):
 def t08_status():
     """
         T08 Status
-        
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -305,13 +427,13 @@ def t08_status():
 def t08_activate(payload: dict):
     """
         T08 Activate
-        
+
         Args:
             payload: payload
-    
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -374,7 +496,8 @@ def start_self_learning():
         import subprocess
 
         process = subprocess.Popen(
-            ["python", "-m", "aurora_x.self_learn", "--sleep", "15", "--max-iters", "50", "--beam", "20"],
+            ["python", "-m", "aurora_x.self_learn", "--sleep",
+                "15", "--max-iters", "50", "--beam", "20"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
@@ -437,10 +560,10 @@ def _color_for(val: int, ok: int, warn: int) -> str:
 def badge_progress():
     """
         Badge Progress
-        
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -465,7 +588,8 @@ def badge_progress():
         val = 85  # fallback
 
     color = _color_for(val, SETTINGS.ui.ok, SETTINGS.ui.warn)
-    svg = _BADGE_TEMPLATE.replace("{VAL}", str(val)).replace("{COLOR}", html.escape(color))
+    svg = _BADGE_TEMPLATE.replace("{VAL}", str(val)).replace(
+        "{COLOR}", html.escape(color))
     return Response(content=svg, media_type="image/svg+xml")
 
 
@@ -521,7 +645,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
         prompt = request.prompt.strip()
         if not prompt:
-            raise HTTPException(status_code=400, detail="Prompt cannot be empty")
+            raise HTTPException(
+                status_code=400, detail="Prompt cannot be empty")
 
         # Parse the natural language prompt
         parsed = parse_english(prompt)
@@ -558,8 +683,10 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             except ImportError as e:
                 # Aurora: Graceful fallback to prevent crashes
-                print(f"Aurora Warning: spec_from_flask module not available: {e}")
-                raise HTTPException(status_code=500, detail=f"Flask synthesis module not available: {str(e)}")
+                print(
+                    f"Aurora Warning: spec_from_flask module not available: {e}")
+                raise HTTPException(
+                    status_code=500, detail=f"Flask synthesis module not available: {str(e)}")
         else:
             # Regular function synthesis
             tools_dir = Path(__file__).parent.parent / "tools"
@@ -586,7 +713,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
                     if result.returncode != 0:
                         error_msg = result.stderr if result.stderr else result.stdout
-                        raise HTTPException(status_code=500, detail=f"Spec compilation failed: {error_msg}")
+                        raise HTTPException(
+                            status_code=500, detail=f"Spec compilation failed: {error_msg}")
 
                     # Parse output to find generated files
                     output_lines = result.stdout.splitlines()
@@ -596,7 +724,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
                             if len(parts) > 1:
                                 path = parts[1].strip()
                                 if Path(path).exists():
-                                    files_generated.append(str(Path(path).relative_to(Path.cwd())))
+                                    files_generated.append(
+                                        str(Path(path).relative_to(Path.cwd())))
                         if "run-" in line:
                             # Extract run ID from output
                             import re
@@ -621,8 +750,10 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             except ImportError as e:
                 # Aurora: Graceful fallback for spec_from_text import errors
-                print(f"Aurora Warning: spec_from_text module not available: {e}")
-                raise HTTPException(status_code=500, detail=f"Text synthesis module not available: {str(e)}")
+                print(
+                    f"Aurora Warning: spec_from_text module not available: {e}")
+                raise HTTPException(
+                    status_code=500, detail=f"Text synthesis module not available: {str(e)}")
 
         # Ensure we have valid files generated list
         if not files_generated:
@@ -630,7 +761,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
             if run_dir.exists():
                 for item in run_dir.rglob("*"):
                     if item.is_file():
-                        files_generated.append(str(item.relative_to(Path.cwd())))
+                        files_generated.append(
+                            str(item.relative_to(Path.cwd())))
 
         return NLCompileResponse(run_id=run_name, status="success", files_generated=files_generated, message=message)
 
@@ -640,7 +772,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
     except Exception as e:
         # Log the full traceback for debugging
         error_trace = traceback.format_exc()
-        print(f"[ERROR] Natural language compilation failed: {error_trace}", file=sys.stderr)
+        print(
+            f"[ERROR] Natural language compilation failed: {error_trace}", file=sys.stderr)
 
         # Return error response
         return NLCompileResponse(
@@ -757,10 +890,10 @@ async def solve_pretty_endpoint(request: SolverRequest):
 def root():
     """
         Root
-        
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -886,6 +1019,11 @@ def main():
     import uvicorn
 
     # Auto-start all Aurora services via Luminar Nexus (if not already running)
+    base_url = os.getenv("AURORA_BASE_URL")
+    if not base_url:
+        aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        base_url = f"http://{aurora_host}:5000"
+
     try:
         import subprocess
         from pathlib import Path
@@ -897,8 +1035,20 @@ def main():
             # Check if services are already running
             import requests
 
+            base_url = os.getenv("AURORA_CORE_URL") or os.getenv(
+                "AURORA_BASE_URL")
+            if base_url:
+                health_url = f"{base_url.rstrip('/')}/healthz"
+            else:
+                base_host = os.getenv("AURORA_HOST", "127.0.0.1")
+                base_scheme = os.getenv("AURORA_SCHEME", "http")
+                base_port = os.getenv("AURORA_CORE_PORT", "5000")
+                health_url = f"{base_scheme}://{base_host}:{base_port}/healthz"
+
+            health_url = os.getenv("AURORA_CORE_HEALTH_URL", health_url)
+
             try:
-                requests.get("http://127.0.0.1:5000/healthz", timeout=1)
+                requests.get(health_url, timeout=1)
             except Exception as e:
                 # Services not running, start them
                 print("[Aurora-X] Starting all services via Luminar Nexus...")
@@ -917,13 +1067,11 @@ def main():
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
 
-
-
 @app.get("/api/aurora/scores", tags=["monitoring"], summary="Get Aurora Quality Scores")
 async def get_aurora_scores():
     """
     Get Aurora's code quality scores and analysis history.
-    
+
     Returns all quality assessments Aurora has performed, including:
     - Timestamp of analysis
     - Programming language
@@ -933,16 +1081,16 @@ async def get_aurora_scores():
     try:
         from pathlib import Path
         import json
-        
+
         scores_file = Path(__file__).parent.parent / '.aurora_scores.json'
-        
+
         if not scores_file.exists():
             return {
                 "ok": True,
                 "scores": [],
                 "message": "No scores recorded yet"
             }
-        
+
         scores = []
         with open(scores_file, 'r', encoding='utf-8') as f:
             for line in f:
@@ -952,17 +1100,17 @@ async def get_aurora_scores():
                         scores.append(json.loads(line))
                     except Exception as e:
                         pass
-        
+
         # Sort by timestamp (newest first)
         scores.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
-        
+
         return {
             "ok": True,
             "scores": scores,
             "total": len(scores),
             "latest_score": scores[0] if scores else None
         }
-        
+
     except Exception as e:
         return {
             "ok": False,
@@ -979,10 +1127,10 @@ async def get_aurora_status():
     try:
         from pathlib import Path
         import json
-        
+
         project_root = Path(__file__).parent.parent
         scores_file = project_root / '.aurora_scores.json'
-        
+
         # Count scores
         score_count = 0
         latest_score = None
@@ -995,7 +1143,7 @@ async def get_aurora_status():
                         latest_score = json.loads(lines[-1])
                     except Exception as e:
                         pass
-        
+
         return {
             "ok": True,
             "aurora_version": "2.0",
@@ -1012,13 +1160,12 @@ async def get_aurora_status():
                 "last_activity": latest_score.get('timestamp') if latest_score else None
             }
         }
-        
+
     except Exception as e:
         return {
             "ok": False,
             "error": str(e)
         }
-
 
 
 if __name__ == "__main__":

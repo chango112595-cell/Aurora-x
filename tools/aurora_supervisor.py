@@ -17,10 +17,10 @@ Self-healing service orchestration with health monitoring and auto-restart
 Built by Aurora in seconds - because experts don't need weeks.
 """
 
+import os
 from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import logging
-import os
 import signal
 import subprocess
 import time
@@ -28,12 +28,14 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from threading import Event, Thread
-
 import psutil
+from concurrent.futures import ThreadPoolExecutor
 import requests
 
+
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+
+AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -43,7 +45,8 @@ from concurrent.futures import ThreadPoolExecutor
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.FileHandler("/tmp/aurora_supervisor.log"), logging.StreamHandler()],
+    handlers=[logging.FileHandler(
+        "/tmp/aurora_supervisor.log"), logging.StreamHandler()],
 )
 logger = logging.getLogger(__name__)
 
@@ -65,7 +68,7 @@ class ServiceConfig:
     def __post_init__(self):
         """
               Post Init  
-            
+
             Args:
             """
         if self.dependencies is None:
@@ -95,7 +98,7 @@ class AuroraSupervisor:
     def __init__(self, config_file: str = "aurora_supervisor_config.json"):
         """
               Init  
-            
+
             Args:
                 config_file: config file
             """
@@ -116,7 +119,8 @@ class AuroraSupervisor:
                 for svc_data in config_data["services"]:
                     svc = ServiceConfig(**svc_data)
                     self.services[svc.name] = svc
-                    self.states[svc.name] = ServiceState(name=svc.name, status="stopped", port=svc.port)
+                    self.states[svc.name] = ServiceState(
+                        name=svc.name, status="stopped", port=svc.port)
         else:
             # Create default config
             self.create_default_config()
@@ -129,7 +133,7 @@ class AuroraSupervisor:
                 port=5000,
                 start_command="npm run dev",
                 working_dir="/workspaces/Aurora-x",
-                health_endpoint="http://127.0.0.1:5000/api/health",
+                health_endpoint=f"http://{AURORA_HOST}:5000/api/health",
                 dependencies=[],
             ),
             ServiceConfig(
@@ -137,7 +141,7 @@ class AuroraSupervisor:
                 port=5001,
                 start_command="uvicorn aurora_x.serve:app --host 0.0.0.0 --port 5001",
                 working_dir="/workspaces/Aurora-x",
-                health_endpoint="http://127.0.0.1:5001/health",
+                health_endpoint=f"http://{AURORA_HOST}:5001/health",
                 dependencies=[],
                 env_activation=". .venv/bin/activate",
             ),
@@ -146,7 +150,7 @@ class AuroraSupervisor:
                 port=5002,
                 start_command="python -m aurora_x.self_learn_server",
                 working_dir="/workspaces/Aurora-x",
-                health_endpoint="http://127.0.0.1:5002/health",
+                health_endpoint=f"http://{AURORA_HOST}:5002/health",
                 dependencies=["aurora-backend"],
                 env_activation=". .venv/bin/activate",
             ),
@@ -162,13 +166,15 @@ class AuroraSupervisor:
 
         for svc in services:
             self.services[svc.name] = svc
-            self.states[svc.name] = ServiceState(name=svc.name, status="stopped", port=svc.port)
+            self.states[svc.name] = ServiceState(
+                name=svc.name, status="stopped", port=svc.port)
 
         self.save_config()
 
     def save_config(self):
         """Save current configuration"""
-        config_data = {"services": [asdict(svc) for svc in self.services.values()]}
+        config_data = {"services": [asdict(svc)
+                                    for svc in self.services.values()]}
         with open(self.config_file, "w") as f:
             json.dump(config_data, f, indent=2)
 
@@ -193,7 +199,8 @@ class AuroraSupervisor:
             # Don't kill a running service just because health endpoint is wrong
             port_alive = self.check_port(service.port)
             if port_alive:
-                logger.debug(f"Health endpoint failed for {service.name}, but port {service.port} is listening")
+                logger.debug(
+                    f"Health endpoint failed for {service.name}, but port {service.port} is listening")
             return port_alive
 
     def get_process_for_port(self, port: int) -> int | None:
@@ -247,7 +254,8 @@ class AuroraSupervisor:
                 state.status = "running"
                 state.pid = self.get_process_for_port(service.port)
                 state.uptime_seconds = 0
-                logger.info(f"[OK] Service {service_name} started successfully on port {service.port}")
+                logger.info(
+                    f"[OK] Service {service_name} started successfully on port {service.port}")
                 return True
             else:
                 state.status = "failed"
@@ -309,7 +317,8 @@ class AuroraSupervisor:
 
         # Check restart limits
         if state.restart_count >= service.max_restarts:
-            logger.error(f" Service {service_name} exceeded max restarts ({service.max_restarts})")
+            logger.error(
+                f" Service {service_name} exceeded max restarts ({service.max_restarts})")
             state.status = "failed"
             return
 
@@ -318,7 +327,8 @@ class AuroraSupervisor:
 
         # Exponential backoff
         delay = service.restart_delay * (2**state.restart_count)
-        logger.info(f"[SYNC] Restarting {service_name} in {delay}s (attempt {state.restart_count + 1})")
+        logger.info(
+            f"[SYNC] Restarting {service_name} in {delay}s (attempt {state.restart_count + 1})")
         time.sleep(delay)
 
         # Stop and start - don't pause on restart
@@ -343,7 +353,8 @@ class AuroraSupervisor:
 
             # Skip monitoring if service is paused
             if state.paused:
-                logger.debug(f"Service {service_name} is paused, skipping monitoring")
+                logger.debug(
+                    f"Service {service_name} is paused, skipping monitoring")
                 continue
 
             if state.status != "running":
@@ -358,7 +369,8 @@ class AuroraSupervisor:
                 state.uptime_seconds += 10
             else:
                 state.health_status = "unhealthy"
-                logger.warning(f"[WARN] Service {service_name} failed health check")
+                logger.warning(
+                    f"[WARN] Service {service_name} failed health check")
 
                 # Only attempt restart if NOT paused
                 if not state.paused:
@@ -389,13 +401,15 @@ class AuroraSupervisor:
                         started.add(service_name)
 
                         # Start monitoring thread
-                        thread = Thread(target=self.monitor_service, args=(service_name,), daemon=True)
+                        thread = Thread(target=self.monitor_service, args=(
+                            service_name,), daemon=True)
                         thread.start()
                         self.monitor_threads[service_name] = thread
 
             time.sleep(2)
 
-        logger.info(f"[OK] Started {len(started)}/{len(self.services)} services")
+        logger.info(
+            f"[OK] Started {len(started)}/{len(self.services)} services")
 
     def stop_all(self):
         """Stop all services"""
@@ -442,12 +456,14 @@ def main():
     """Entry point"""
     import argparse
 
-    parser = argparse.ArgumentParser(description="Aurora Advanced Process Supervisor")
+    parser = argparse.ArgumentParser(
+        description="Aurora Advanced Process Supervisor")
     parser.add_argument(
         "command", choices=["start", "stop", "pause", "resume", "restart", "status"], help="Command to execute"
     )
     parser.add_argument("--service", help="Specific service name (optional)")
-    parser.add_argument("--config", default="aurora_supervisor_config.json", help="Config file path")
+    parser.add_argument(
+        "--config", default="aurora_supervisor_config.json", help="Config file path")
 
     args = parser.parse_args()
 
@@ -462,7 +478,8 @@ def main():
 
     elif args.command == "stop":
         if args.service:
-            supervisor.stop_service(args.service, pause=True)  # Dashboard stop = pause
+            # Dashboard stop = pause
+            supervisor.stop_service(args.service, pause=True)
         else:
             supervisor.stop_all()
 

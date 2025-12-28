@@ -2,23 +2,48 @@
   "short_term": [
     {
       "role": "user",
-      "content": "ping",
-      "timestamp": "2025-12-17T07:54:18.477616"
+      "content": "system diagnose",
+      "timestamp": "2025-12-24T03:56:47.452559"
     },
     {
       "role": "user",
-      "content": " Self diagnose",
-      "timestamp": "2025-12-20T06:21:31.905943"
+      "content": "status",
+      "timestamp": "2025-12-24T03:56:50.437710"
     },
     {
       "role": "user",
-      "content": "Status",
-      "timestamp": "2025-12-20T06:21:43.881376"
+      "content": "issues with you're system",
+      "timestamp": "2025-12-24T03:57:11.983694"
     },
     {
       "role": "user",
-      "content": "Give me a list of things that need work on",
-      "timestamp": "2025-12-20T06:22:08.549239"
+      "content": "I need to a diagnostic report from you're system. Self analyze you're programing",
+      "timestamp": "2025-12-24T03:57:59.752546"
+    },
+    {
+      "role": "user",
+      "content": "what issues do you have",
+      "timestamp": "2025-12-24T03:58:11.792649"
+    },
+    {
+      "role": "user",
+      "content": "status",
+      "timestamp": "2025-12-24T21:48:30.899153"
+    },
+    {
+      "role": "user",
+      "content": "i need analysis of code enhancement",
+      "timestamp": "2025-12-24T21:48:58.271253"
+    },
+    {
+      "role": "user",
+      "content": "python",
+      "timestamp": "2025-12-24T21:49:09.028231"
+    },
+    {
+      "role": "user",
+      "content": "decryption program",
+      "timestamp": "2025-12-24T21:49:23.843163"
     }
   ],
   "mid_term": [
@@ -28,6 +53,13 @@
       "first_message": "2025-12-05T15:16:09.058407",
       "last_message": "2025-12-17T07:53:41.865204",
       "compressed_at": "2025-12-17T07:53:41.867057"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-17T07:54:18.477616",
+      "last_message": "2025-12-24T03:56:33.719477",
+      "compressed_at": "2025-12-24T03:56:33.722106"
     }
   ],
   "long_term": [],
@@ -172,6 +204,202 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-20T06:22:08.550973"
+    },
+    "memory_df21641f-e603-4cfb-b540-48abc691601d": {
+      "value": {
+        "text": "self diagnose",
+        "meta": {
+          "session_id": "chat-1766566468607",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T03:54:36.187844",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:54:36.187856"
+    },
+    "memory_d00ab949-7b26-44b7-ab39-3077efea28bd": {
+      "value": {
+        "text": "status",
+        "meta": {
+          "session_id": "chat-1766566468607",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T03:54:42.576204",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:54:42.576224"
+    },
+    "memory_2ff986cd-57ca-4859-9757-15fd900ac97b": {
+      "value": {
+        "text": "diagnose you're system",
+        "meta": {
+          "session_id": "chat-1766566468607",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T03:54:57.687026",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:54:57.687035"
+    },
+    "memory_73eb813b-a3ee-4a8f-ba1f-335618b1654a": {
+      "value": {
+        "text": "system issues",
+        "meta": {
+          "session_id": "chat-1766566468607",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T03:55:05.468615",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:55:05.468625"
+    },
+    "memory_6b5ca710-a207-4fdf-ab85-ec4552c13e7a": {
+      "value": {
+        "text": "I received your message: \"system issues\"\n\nI'm currently connecting to Luminar Nexus V2 and V3 for enhanced processing. Operating in local-only mode (ENABLE_EXTERNAL_AI is not set to \"true\"). In the meantime, I'm here to help with any questions or tasks you have. What would you like to explore?",
+        "meta": {
+          "session_id": "chat-1766566468607",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "general"
+        },
+        "timestamp": "2025-12-24T03:55:07.632792",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:55:07.632805"
+    },
+    "memory_1da5ddc6-c988-4762-a455-ce01d2a029b5": {
+      "value": {
+        "text": "diagnose the system",
+        "meta": {
+          "session_id": "chat-1766566578713",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T03:56:33.742359",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:56:33.742374"
+    },
+    "memory_7efd4ee2-71fc-4146-a7c8-9d775059df07": {
+      "value": {
+        "text": "system diagnose",
+        "meta": {
+          "session_id": "chat-1766566578713",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T03:56:47.457099",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:56:47.457107"
+    },
+    "memory_7d0cec78-1b77-45e2-9c5a-a2501ea9e836": {
+      "value": {
+        "text": "status",
+        "meta": {
+          "session_id": "chat-1766566578713",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T03:56:50.442589",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:56:50.442606"
+    },
+    "memory_6dda9fff-6da2-421a-9a3a-04bc2b9d400b": {
+      "value": {
+        "text": "issues with you're system",
+        "meta": {
+          "session_id": "chat-1766566578713",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T03:57:11.988584",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:57:11.988593"
+    },
+    "memory_e9ad2ef4-c3f8-433a-87e4-ee8a8dc6167b": {
+      "value": {
+        "text": "I need to a diagnostic report from you're system. Self analyze you're programing",
+        "meta": {
+          "session_id": "chat-1766566578713",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T03:57:59.757978",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:57:59.757990"
+    },
+    "memory_033b1bee-887d-4942-9815-1960ffd2228d": {
+      "value": {
+        "text": "what issues do you have",
+        "meta": {
+          "session_id": "chat-1766566578713",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T03:58:11.797171",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T03:58:11.797179"
+    },
+    "memory_629161f2-20dd-409d-8168-e4955b31b0f1": {
+      "value": {
+        "text": "status",
+        "meta": {
+          "session_id": "chat-1766630905890",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T21:48:30.926124",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T21:48:30.926141"
+    },
+    "memory_174e5160-fa4f-4899-8aae-9f22e7d67af6": {
+      "value": {
+        "text": "i need analysis of code enhancement",
+        "meta": {
+          "session_id": "chat-1766630905890",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T21:48:58.283244",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T21:48:58.283259"
+    },
+    "memory_30ee4f15-3acb-4257-b902-b43b7ab40359": {
+      "value": {
+        "text": "python",
+        "meta": {
+          "session_id": "chat-1766630905890",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T21:49:09.037231",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T21:49:09.037246"
+    },
+    "memory_86debaa0-b07f-4a94-ada1-111c021ec26a": {
+      "value": {
+        "text": "decryption program",
+        "meta": {
+          "session_id": "chat-1766630905890",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-24T21:49:23.852816",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-24T21:49:23.852831"
     }
   },
   "events": [
@@ -234,8 +462,158 @@
         "longterm": false
       },
       "timestamp": "2025-12-20T06:22:08.682783"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "df21641f-e603-4cfb-b540-48abc691601d",
+        "text_length": 13,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:54:36.190195"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "d00ab949-7b26-44b7-ab39-3077efea28bd",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:54:42.578686"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2ff986cd-57ca-4859-9757-15fd900ac97b",
+        "text_length": 22,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:54:57.690007"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "73eb813b-a3ee-4a8f-ba1f-335618b1654a",
+        "text_length": 13,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:55:05.471065"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "6b5ca710-a207-4fdf-ab85-ec4552c13e7a",
+        "text_length": 294,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:55:07.634831"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1da5ddc6-c988-4762-a455-ce01d2a029b5",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:56:33.745723"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "7efd4ee2-71fc-4146-a7c8-9d775059df07",
+        "text_length": 15,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:56:47.459359"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "7d0cec78-1b77-45e2-9c5a-a2501ea9e836",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:56:50.446249"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "6dda9fff-6da2-421a-9a3a-04bc2b9d400b",
+        "text_length": 25,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:57:11.990702"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e9ad2ef4-c3f8-433a-87e4-ee8a8dc6167b",
+        "text_length": 80,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:57:59.760718"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "033b1bee-887d-4942-9815-1960ffd2228d",
+        "text_length": 23,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T03:58:11.799723"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "629161f2-20dd-409d-8168-e4955b31b0f1",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T21:48:30.932845"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "174e5160-fa4f-4899-8aae-9f22e7d67af6",
+        "text_length": 35,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T21:48:58.288026"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "30ee4f15-3acb-4257-b902-b43b7ab40359",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T21:49:09.044767"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "86debaa0-b07f-4a94-ada1-111c021ec26a",
+        "text_length": 18,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-24T21:49:23.859972"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-20T06:22:08.682897"
+  "last_updated": "2025-12-24T21:49:23.861095"
 }

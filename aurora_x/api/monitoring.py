@@ -5,10 +5,15 @@ Simple monitoring interface for Aurora services
 
 from datetime import datetime, timedelta
 from typing import Any
+import time
 
 from fastapi import APIRouter
+from aurora_x.config.runtime_config import readiness
 
 router = APIRouter(prefix="/api/monitoring", tags=["monitoring"])
+
+# Track actual server start time for real uptime calculation
+_server_start_time: float = time.time()
 
 # In-memory storage for metrics history (would use Redis/database in production)
 _metrics_history: list[dict[str, Any]] = []
@@ -52,15 +57,31 @@ async def get_dashboard_data() -> dict[str, Any]:
             }
         )
 
-    # Calculate uptime (placeholder - would track actual uptime in production)
-    uptime_seconds = 86400  # 24 hours placeholder
+    # Calculate actual server uptime
+    uptime_seconds = int(time.time() - _server_start_time)
+
+    # Derive system status
+    any_down = any(s["status"] != "running" for s in service_statuses)
+    resource_alert = any(
+        comp.get("status") in {"warning", "critical"}
+        for comp in [cpu, memory, disk]
+    )
+
+    if resource_alert:
+        system_status = "degraded"
+    elif any_down:
+        system_status = "partial"
+    else:
+        system_status = "healthy"
+
+    dep = readiness()
 
     return {
         "timestamp": datetime.utcnow().isoformat(),
         "overview": {
             "services_running": sum(1 for s in service_statuses if s["status"] == "running"),
             "services_total": len(service_statuses),
-            "system_status": "healthy",  # Would calculate from metrics
+            "system_status": system_status,
             "uptime_seconds": uptime_seconds,
         },
         "services": service_statuses,
@@ -83,6 +104,7 @@ async def get_dashboard_data() -> dict[str, Any]:
                 "status": disk.get("status", "unknown"),
             },
         },
+        "dependencies": dep,
     }
 
 
@@ -95,7 +117,8 @@ async def get_metrics_history(minutes: int = 60) -> dict[str, Any]:
     cutoff_time = datetime.utcnow() - timedelta(minutes=minutes)
 
     # Filter history by time
-    filtered_history = [m for m in _metrics_history if datetime.fromisoformat(m["timestamp"]) >= cutoff_time]
+    filtered_history = [m for m in _metrics_history if datetime.fromisoformat(
+        m["timestamp"]) >= cutoff_time]
 
     return {"metrics": filtered_history, "count": len(filtered_history), "period_minutes": minutes}
 

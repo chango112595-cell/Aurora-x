@@ -209,7 +209,10 @@ def render_csharp_webapi(name: str, brief: str = None) -> dict:
     return {
         "folder": folder,
         "files": files,
-        "hint": f"Run: cd {folder} && dotnet run (then visit http://127.0.0.1:5080/swagger)",
+        "hint": (
+            f"Run: cd {folder} && dotnet run (then visit http://127.0.0.1:5080/swagger"
+            " or set AURORA_HOST)"
+        ),
     }
 
 

@@ -15,15 +15,16 @@ Quality: 10/10 (Perfect)
 Aurora Emergency Debug System
 Activated when Aurora needs to debug issues autonomously
 """
-from typing import Dict, List, Tuple, Optional, Any, Union
-import json
-import subprocess
-import time
-from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from datetime import datetime
+import time
+import subprocess
+import json
+from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -33,26 +34,31 @@ from concurrent.futures import ThreadPoolExecutor
 class AuroraEmergencyDebug:
     """
         Auroraemergencydebug
-        
+
         Comprehensive class providing auroraemergencydebug functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
             log_response, start_debug, check_vite_server, restart_vite_server, check_compilation_errors...
         """
+
     def __init__(self) -> None:
         """
               Init  
-            
+
             Args:
             """
-        self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/debug_responses.jsonl")
+        self.log_file = Path(
+            "/workspaces/Aurora-x/.aurora_knowledge/debug_responses.jsonl")
         self.log_file.parent.mkdir(exist_ok=True)
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv(
+            "AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
 
     def log_response(self, message, status="IN_PROGRESS"):
         """Log Aurora's debug responses"""
@@ -70,7 +76,8 @@ class AuroraEmergencyDebug:
 
     def start_debug(self):
         """Aurora starts emergency debugging"""
-        self.log_response("Emergency debug mode activated! Analyzing all systems...")
+        self.log_response(
+            "Emergency debug mode activated! Analyzing all systems...")
 
         print("\n" + "=" * 60)
         print("[STAR] AURORA EMERGENCY DEBUG MODE")
@@ -88,7 +95,8 @@ class AuroraEmergencyDebug:
         # Step 4: Apply fixes
         self.apply_autonomous_fixes()
 
-        self.log_response("Emergency debug complete! All systems checked and fixed.", "COMPLETE")
+        self.log_response(
+            "Emergency debug complete! All systems checked and fixed.", "COMPLETE")
 
     def check_vite_server(self):
         """Check if Vite server is running properly"""
@@ -96,14 +104,15 @@ class AuroraEmergencyDebug:
 
         try:
             result = subprocess.run(
-                ["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True, timeout=5
+                ["curl", "-s", "-I", self.base_url], capture_output=True, text=True, timeout=5
             )
 
             if "200 OK" in result.stdout:
                 self.log_response("[OK] Vite server responding normally")
                 return True
             else:
-                self.log_response("[ERROR] Vite server not responding - restarting...")
+                self.log_response(
+                    "[ERROR] Vite server not responding - restarting...")
                 self.restart_vite_server()
                 return False
 
@@ -126,7 +135,8 @@ class AuroraEmergencyDebug:
 
         os.chdir("/workspaces/Aurora-x/client")
 
-        process = subprocess.Popen(["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        process = subprocess.Popen(
+            ["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         self.log_response(f"Vite server starting (PID: {process.pid})...")
         time.sleep(5)
@@ -134,12 +144,13 @@ class AuroraEmergencyDebug:
         # Verify it started
         try:
             result = subprocess.run(
-                ["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True, timeout=5
+                ["curl", "-s", "-I", self.base_url], capture_output=True, text=True, timeout=5
             )
             if "200 OK" in result.stdout:
                 self.log_response("[OK] Vite server restarted successfully")
             else:
-                self.log_response("[WARN] Vite server may still be starting...")
+                self.log_response(
+                    "[WARN] Vite server may still be starting...")
         except Exception as e:
             self.log_response("[WARN] Vite server restart in progress...")
 
@@ -169,7 +180,8 @@ class AuroraEmergencyDebug:
                     errors_found.append(f"Mismatched JSX tags in {file.name}")
 
         if errors_found:
-            self.log_response(f"[ERROR] Found {len(errors_found)} compilation errors")
+            self.log_response(
+                f"[ERROR] Found {len(errors_found)} compilation errors")
             for error in errors_found:
                 self.log_response(f"   - {error}")
             return False
@@ -181,16 +193,19 @@ class AuroraEmergencyDebug:
         """Check if React components are properly structured"""
         self.log_response("Verifying component integrity...")
 
-        chat_interface = Path("/workspaces/Aurora-x/client/src/components/chat-interface.tsx")
+        chat_interface = Path(
+            "/workspaces/Aurora-x/client/src/components/chat-interface.tsx")
 
         if chat_interface.exists():
             content = chat_interface.read_text()
 
             # Check for required exports
             if "export" in content and "ChatInterface" in content:
-                self.log_response("[OK] ChatInterface component exports correctly")
+                self.log_response(
+                    "[OK] ChatInterface component exports correctly")
             else:
-                self.log_response("[ERROR] ChatInterface component export issue")
+                self.log_response(
+                    "[ERROR] ChatInterface component export issue")
 
             # Check for React imports
             if "import React" in content or "import {" in content:
@@ -205,7 +220,8 @@ class AuroraEmergencyDebug:
         self.log_response("Applying autonomous fixes...")
 
         # Fix 1: Clean up orphaned JSX tags
-        chat_file = Path("/workspaces/Aurora-x/client/src/components/chat-interface.tsx")
+        chat_file = Path(
+            "/workspaces/Aurora-x/client/src/components/chat-interface.tsx")
         if chat_file.exists():
             content = chat_file.read_text()
 
