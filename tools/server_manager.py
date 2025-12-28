@@ -1480,6 +1480,15 @@ class AdvancedServerManager:
     def create_ssl_certificate(self) -> bool:
         """Create SSL certificate with proper subjectAltName for TLS validation"""
         try:
+            # Build SAN string with both localhost and the configured host
+            san_entries = ["DNS:localhost", "IP:127.0.0.1"]
+            # Add AURORA_HOST if it's different from localhost/127.0.0.1
+            if AURORA_HOST not in ["localhost", "127.0.0.1"]:
+                if AURORA_HOST.replace(".", "").isdigit():  # Check if it's an IP
+                    san_entries.append(f"IP:{AURORA_HOST}")
+                else:
+                    san_entries.append(f"DNS:{AURORA_HOST}")
+            
             subprocess.run(
                 [
                     "openssl",
@@ -1497,7 +1506,7 @@ class AdvancedServerManager:
                     "-subj",
                     f"/CN={AURORA_HOST}",
                     "-addext",
-                    "subjectAltName=DNS:localhost,IP:127.0.0.1",
+                    f"subjectAltName={','.join(san_entries)}",
                 ],
                 check=True,
             )
@@ -2484,6 +2493,15 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
                            capture_output=True, timeout=2, check=True)
 
             # Generate self-signed certificate with proper subjectAltName for TLS validation
+            # Build SAN string with both localhost and the configured domain
+            san_entries = ["DNS:localhost", "IP:127.0.0.1"]
+            # Add domain if it's different from localhost/127.0.0.1
+            if domain not in ["localhost", "127.0.0.1"]:
+                if domain.replace(".", "").isdigit():  # Check if it's an IP
+                    san_entries.append(f"IP:{domain}")
+                else:
+                    san_entries.append(f"DNS:{domain}")
+            
             subprocess.run(
                 [
                     "openssl",
@@ -2501,7 +2519,7 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
                     "-subj",
                     f"/C=US/ST=State/L=City/O=Aurora-X/CN={domain}",
                     "-addext",
-                    "subjectAltName=DNS:localhost,IP:127.0.0.1",
+                    f"subjectAltName={','.join(san_entries)}",
                 ],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
