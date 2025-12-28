@@ -38,11 +38,39 @@ class AuroraChatInterface:
             """
         self.aurora_core = aurora_core
         self.contexts = {}
+        self.greetings = {"hello", "hi", "hey", "yo", "sup"}
+        self.status_keywords = {"status", "health", "alive", "up", "running"}
+        self.help_keywords = {"help", "capabilities", "what can you do", "abilities"}
 
     async def process_message(self, message, session_id="default"):
         """Process a chat message"""
-        # Chat logic will be moved here from luminar_nexus.py
-        return f"Aurora Core Chat (to be fully implemented): {message}"
+        text = (message or "").strip()
+        lowered = text.lower()
+
+        # Basic routing for a local-only prototype
+        if not text:
+            return "Please share a message so I can help."
+
+        if any(greet in lowered for greet in self.greetings):
+            return "Hello! I'm Aurora running in local chat mode. I can answer questions, echo code, and keep a short memory for this session."
+
+        if any(k in lowered for k in self.status_keywords):
+            return "Aurora is online in local mode. No external services required. Core chat loop healthy."
+
+        if any(k in lowered for k in self.help_keywords):
+            return "I can: answer quick questions, echo snippets back, and keep short per-session context. Ask me about code, architecture, or paste a path to read."
+
+        # Store short session context (last 5 turns) in memory
+        history = self.contexts.get(session_id, [])
+        history.append(text)
+        self.contexts[session_id] = history[-5:]
+
+        # Simple contextual reply
+        if "code" in lowered or "bug" in lowered or "error" in lowered:
+            return f"I noted your issue: \"{text[:120]}\". In local mode I can suggest checking recent logs/tests, or paste the code for a quick look."
+
+        # Default echo with context hint
+        return f"I heard: \"{text[:200]}\". (Session memory: {len(self.contexts[session_id])} recent messages.)"
 
 
 def run_aurora_chat_server(port=5003, aurora_core=None) -> Any:
