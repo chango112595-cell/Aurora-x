@@ -5,6 +5,8 @@ import { AuroraXCore, getAuroraXCore } from './services/aurorax';
 import { enhanceSelfHealing, adaptiveMetrics } from './enhancements';
 import fetch from 'node-fetch';
 import os from 'os';
+import fs from 'fs';
+import path from 'path';
 
 export interface ChatResponse {
   response: string;
@@ -33,6 +35,25 @@ export class AuroraAI {
   private metricsInterval: NodeJS.Timeout | null = null;
   private userName: string | null = null;
   private initialized: boolean = false;
+
+  // Local pack registry mirror (Python packs are not importable from Node)
+  private static PACKS: Record<string, { name: string; dir: string; submodules?: string[] }> = {
+    pack01: { name: 'Core System', dir: 'pack01_pack01' },
+    pack02: { name: 'Environment Profiler', dir: 'pack02_env_profiler' },
+    pack03: { name: 'OS Base + EdgeOS', dir: 'pack03_os_edge', submodules: ['3A','3B','3C','3D','3E','3F','3G','3H','3I','3J'] },
+    pack04: { name: 'Launcher', dir: 'pack04_launcher' },
+    pack05: { name: 'Plugin System', dir: 'pack05_plugin_system', submodules: ['5A','5B','5E','5F','5G','5H','5I','5J','5K','5L'] },
+    pack06: { name: 'Firmware System', dir: 'pack06_firmware_system' },
+    pack07: { name: 'Secure Signing', dir: 'pack07_secure_signing' },
+    pack08: { name: 'Conversational Engine', dir: 'pack08_conversational_engine' },
+    pack09: { name: 'Compute Layer', dir: 'pack09_compute_layer' },
+    pack10: { name: 'Autonomy Engine', dir: 'pack10_autonomy_engine' },
+    pack11: { name: 'Device Mesh', dir: 'pack11_device_mesh' },
+    pack12: { name: 'Toolforge', dir: 'pack12_toolforge' },
+    pack13: { name: 'Runtime 2', dir: 'pack13_runtime_2' },
+    pack14: { name: 'Hardware Abstraction', dir: 'pack14_hw_abstraction' },
+    pack15: { name: 'Intel Fabric', dir: 'pack15_intel_fabric' },
+  };
 
   constructor() {
     this.luminar = getLuminarNexus();
@@ -361,6 +382,27 @@ export class AuroraAI {
     }
   }
 
+  private getPackSummary(): string | null {
+    const root = process.cwd();
+    const packsRoot = path.join(root, "packs");
+    let loaded = 0;
+    let submodules = 0;
+
+    for (const info of Object.values(AuroraAI.PACKS)) {
+      const exists = fs.existsSync(path.join(packsRoot, info.dir));
+      if (exists) {
+        loaded += 1;
+        if (info.submodules?.length) {
+          submodules += info.submodules.length;
+        }
+      }
+    }
+
+    const total = Object.keys(AuroraAI.PACKS).length;
+    if (total === 0) return null;
+    return `${loaded}/${total} packs, ${submodules} submodules`;
+  }
+
   private maybeHandleNameQuery(input: string): string | null {
     const low = input.toLowerCase();
     const asksName = low.includes("your name") || low.includes("know my name") || low.includes("remember my name") || low.includes("do you remember me");
@@ -393,16 +435,7 @@ export class AuroraAI {
     ]);
     const consciousness = await this.nexus.getConsciousState();
 
-    let packSummary: string | null = null;
-    try {
-      // Lazy import to avoid startup cost if packs not needed
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { get_pack_summary } = require("packs");
-      const summary = get_pack_summary();
-      packSummary = `${summary.loaded_packs}/${summary.total_packs} packs, ${summary.total_submodules} submodules`;
-    } catch {
-      packSummary = null;
-    }
+    const packSummary = this.getPackSummary();
 
     const workers = consciousness?.workers || { total: this.nexus.WORKER_COUNT, idle: 0, active: 0 };
     const services = [
