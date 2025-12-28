@@ -29,6 +29,7 @@ Features:
 """
 
 import json
+import ipaddress
 import os
 import shutil
 import socket
@@ -1484,9 +1485,12 @@ class AdvancedServerManager:
             san_entries = ["DNS:localhost", "IP:127.0.0.1"]
             # Add AURORA_HOST if it's different from localhost/127.0.0.1
             if AURORA_HOST not in ["localhost", "127.0.0.1"]:
-                if AURORA_HOST.replace(".", "").isdigit():  # Check if it's an IP
+                try:
+                    # Try to parse as IP address
+                    ipaddress.ip_address(AURORA_HOST)
                     san_entries.append(f"IP:{AURORA_HOST}")
-                else:
+                except ValueError:
+                    # Not a valid IP, treat as DNS name
                     san_entries.append(f"DNS:{AURORA_HOST}")
             
             subprocess.run(
@@ -2497,9 +2501,12 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
             san_entries = ["DNS:localhost", "IP:127.0.0.1"]
             # Add domain if it's different from localhost/127.0.0.1
             if domain not in ["localhost", "127.0.0.1"]:
-                if domain.replace(".", "").isdigit():  # Check if it's an IP
+                try:
+                    # Try to parse as IP address
+                    ipaddress.ip_address(domain)
                     san_entries.append(f"IP:{domain}")
-                else:
+                except ValueError:
+                    # Not a valid IP, treat as DNS name
                     san_entries.append(f"DNS:{domain}")
             
             subprocess.run(
