@@ -2350,9 +2350,9 @@ def create_emergency_server() -> bool:
             stderr=subprocess.DEVNULL,
         )
 
-    print(
-        f"[OK] Emergency server started: http://{AURORA_HOST}:9999/emergency_index.html")
-    return True
+        print(
+            f"[OK] Emergency server started: http://{AURORA_HOST}:9999/emergency_index.html")
+        return True
 
     except Exception as e:
         print(f"[ERROR] Emergency server failed: {e}")
