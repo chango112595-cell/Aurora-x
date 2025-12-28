@@ -91,7 +91,7 @@ class AuroraMasterController:
     def _check_agent(self, name, port):
         try:
             response = requests.get(
-                f"http://localhost:{port}/health", timeout=1)
+                f"http://127.0.0.1:{port}/health", timeout=1)
             return response.status_code == 200
         except Exception as e:
             return False
@@ -114,7 +114,7 @@ class AuroraMasterController:
         """Auto-activate an agent if it's offline"""
         try:
             response = requests.post(
-                f"http://localhost:{port}/activate", timeout=2)
+                f"http://127.0.0.1:{port}/activate", timeout=2)
             if response.status_code == 200:
                 print(f"[AUTO-ACTIVATE] Activated {name}")
                 self.decisions_made += 1
@@ -150,7 +150,7 @@ class AuroraMasterController:
         if agent and agent["status"] == "running":
             try:
                 requests.post(
-                    f"http://localhost:{agent['port']}/execute",
+                    f"http://127.0.0.1:{agent['port']}/execute",
                     json=task,
                     timeout=5
                 )

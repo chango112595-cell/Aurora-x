@@ -17,14 +17,14 @@ Aurora Kills Chango and Starts Herself
 Aurora stops the Chango server and starts her own Vite UI
 """
 
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+import time
+import subprocess
 from typing import Dict, List, Tuple, Optional, Any, Union
 import os
-import subprocess
-import time
-from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -37,17 +37,18 @@ class AuroraReplaceChango:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.root = Path(__file__).parent.parent
         self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
-        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
+        self.base_url = os.getenv(
+            "AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
 
     def log(self, emoji: str, message: str):
         """
             Log
-            
+
             Args:
                 emoji: emoji
                 message: message
@@ -70,14 +71,17 @@ class AuroraReplaceChango:
                 time.sleep(1)
 
         # Also kill anything on port 5000
-        subprocess.run(["fuser", "-k", "-9", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["fuser", "-k", "-9", "5000/tcp"],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(2)
 
         # Verify port is free
-        result = subprocess.run(["lsof", "-i", ":5000"], capture_output=True, text=True)
+        result = subprocess.run(["lsof", "-i", ":5000"],
+                                capture_output=True, text=True)
         if result.stdout:
             self.log("[WARN]", "Port still in use, force killing again...")
-            subprocess.run(["fuser", "-k", "-9", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["fuser", "-k", "-9", "5000/tcp"],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             time.sleep(2)
         else:
             self.log("[OK]", "Port 5000 is now free!")
@@ -103,16 +107,20 @@ class AuroraReplaceChango:
         time.sleep(10)
 
         # Verify Vite is running
-        result = subprocess.run(["lsof", "-i", ":5000"], capture_output=True, text=True)
+        result = subprocess.run(["lsof", "-i", ":5000"],
+                                capture_output=True, text=True)
         if ":5000" in result.stdout:
             # Check if it's actually Vite
-            ps_result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
+            ps_result = subprocess.run(
+                ["ps", "aux"], capture_output=True, text=True)
             if "vite" in ps_result.stdout.lower():
                 self.log("[OK]", "Aurora's Vite UI is running!")
             else:
-                self.log("[WARN]", "Something is on port 5000, but might not be Vite")
+                self.log(
+                    "[WARN]", "Something is on port 5000, but might not be Vite")
         else:
-            self.log("[ERROR]", "Vite failed to start! Check /tmp/aurora_vite.log")
+            self.log(
+                "[ERROR]", "Vite failed to start! Check /tmp/aurora_vite.log")
 
         print()
 

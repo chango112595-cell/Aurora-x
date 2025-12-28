@@ -250,8 +250,8 @@ else:
     print("\n[WARN] Some services are still starting or failed to launch.")
 
 print("\n[WEB] ACCESS POINTS:")
-print("   - Frontend:      http://localhost:5000")
-print("   - Bridge API:    http://localhost:5001")
-print("   - Nexus V3 API:  http://localhost:5002")
-print("   - Luminar V2:    http://localhost:8000")
+print("   - Frontend:      http://127.0.0.1:5000")
+print("   - Bridge API:    http://127.0.0.1:5001")
+print("   - Nexus V3 API:  http://127.0.0.1:5002")
+print("   - Luminar V2:    http://127.0.0.1:8000")
 print("\n" + "=" * 80 + "\n")

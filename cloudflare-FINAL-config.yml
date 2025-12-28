@@ -6,7 +6,7 @@ credentials-file: /home/user/.cloudflared/aurora-tunnel.json
 
 ingress:
   - hostname: aurora.myproject.tk  # FREE domain from Freenom
-    service: http://localhost:8000
+    service: http://127.0.0.1:8000
     originRequest:
       httpHostHeader: aurora.myproject.tk
       noTLSVerify: true

@@ -34,7 +34,7 @@ WHERE TO FIX:
 3. Need to verify what's actually being served on port 5000
 
 SOLUTION STEPS:
-1. Check what HTML is being served at localhost:5000
+1. Check what HTML is being served at 127.0.0.1:5000
 2. Verify it's Vite serving React app (not Express)
 3. Check if service worker is truly unregistered
 4. Create a cache-busting solution
@@ -95,7 +95,7 @@ class AuroraTaskExecutor:
         self.log("Step 1: Verifying what's on port 5000...", "[SCAN]")
 
         try:
-            response = requests.get("http://localhost:5000", timeout=3)
+            response = requests.get("http://127.0.0.1:5000", timeout=3)
             html = response.text
 
             # Check for Vite indicators
@@ -265,8 +265,8 @@ class AuroraTaskExecutor:
    - Or: Hold Ctrl/Cmd and click refresh button
 
 4. **Navigate to:**
-   - http://localhost:5000
-   - or http://localhost:5000/chat
+   - http://127.0.0.1:5000
+   - or http://127.0.0.1:5000/chat
 
 ### You Should See:
 - [SPARKLE] Aurora's name in sidebar (not Chango)
@@ -274,11 +274,11 @@ class AuroraTaskExecutor:
 - [EMOJI] "Ask Aurora to create something amazing..." in chat input
 
 ### If Still Showing Chango:
-1. Close ALL browser tabs for localhost:5000
+1. Close ALL browser tabs for 127.0.0.1:5000
 2. Clear browser cache completely:
    - Chrome: Settings -> Privacy -> Clear browsing data -> Cached images and files
 3. Restart browser
-4. Open http://localhost:5000 fresh
+4. Open http://127.0.0.1:5000 fresh
 
 ---
 [STAR] Aurora is ready to serve you!

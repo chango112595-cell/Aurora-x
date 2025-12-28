@@ -11,6 +11,7 @@ Quality: 10/10 (Perfect)
 """
 
 #!/usr/bin/env python3
+from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Tuple, Optional, Any, Union
 import os
 import subprocess
@@ -22,7 +23,6 @@ import requests
 AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -39,15 +39,18 @@ def monitor_services() -> None:
     }
 
     while True:
-        print(f"\n[EMOJI] {datetime.now().strftime('%H:%M:%S')} - Health Check")
+        print(
+            f"\n[EMOJI] {datetime.now().strftime('%H:%M:%S')} - Health Check")
 
         for port, name in services.items():
             try:
-                response = requests.get(f"http://{AURORA_HOST}:{port}", timeout=5)
+                response = requests.get(
+                    f"http://{AURORA_HOST}:{port}", timeout=5)
                 if response.status_code == 200:
                     print(f"[OK] {name} (:{port}): HEALTHY")
                 else:
-                    print(f"[WARN]  {name} (:{port}): Status {response.status_code}")
+                    print(
+                        f"[WARN]  {name} (:{port}): Status {response.status_code}")
             except Exception as e:
                 print(f"[ERROR] {name} (:{port}): DOWN - {str(e)[:50]}")
                 # Auto-restart logic here

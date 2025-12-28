@@ -26,9 +26,9 @@ class AuroraCodeGenerator:
     def __init__(self):
         """
               Init  
-            
+
             Args:
-        
+
             Raises:
                 Exception: On operation failure
             """

@@ -367,7 +367,7 @@ cat > tools/load_gen.py <<'EOF'
 import argparse, requests, threading, time
 
 p=argparse.ArgumentParser()
-p.add_argument("--url", default="http://localhost:5000/health")
+p.add_argument("--url", default="http://127.0.0.1:5000/health")
 p.add_argument("--clients", type=int, default=5)
 p.add_argument("--rps", type=float, default=1.0)
 a=p.parse_args()
@@ -395,7 +395,7 @@ global:
 scrape_configs:
   - job_name: aurora
     static_configs:
-      - targets: ['localhost:8000']
+      - targets: ['127.0.0.1:8000']
 EOF
 
 # ops

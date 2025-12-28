@@ -1099,7 +1099,7 @@ def main(orchestration_mode=False, silent=False):
             print("   Managing ALL x-start systems with intelligent port control")
             print(
                 f"   {status['services']['total']} systems registered | Self-healing | Self-optimizing")
-            print(f"   Nexus V3 API: http://localhost:{api_port}")
+            print(f"   Nexus V3 API: http://127.0.0.1:{api_port}")
         else:
             print("[OK] Aurora Universal Nexus V3 is RUNNING")
             print("   Your vision realized: Smart port management across all devices")

@@ -1058,8 +1058,8 @@ def render_floating_hud(repo_root: Path) -> str:
       (function(){{
         const hint = document.getElementById('aurora-hint');
         const served = location.protocol.startsWith('http');
-        if(!served){{
-          hint.innerText = "To edit: run `aurorax-serve --run-dir <RUN_DIR>` and open http://127.0.0.1:8000 (or set AURORA_BASE_URL)";
+                if(!served){
+                    hint.innerText = "To edit: run `aurorax-serve --run-dir <RUN_DIR>` and open http://127.0.0.1:8000 (or set AURORA_BASE_URL)";
           document.getElementById('aurora-id').disabled = true;
           document.getElementById('aurora-val').disabled = true;
         }} else {{

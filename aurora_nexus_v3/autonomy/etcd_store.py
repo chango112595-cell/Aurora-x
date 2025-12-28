@@ -117,7 +117,7 @@ class EtcdStore:
     
     def __init__(self, endpoints: Optional[List[str]] = None,
                  fallback_dir: str = "data/etcd_fallback"):
-        self.endpoints = endpoints or ["localhost:2379"]
+        self.endpoints = endpoints or ["127.0.0.1:2379"]
         self.fallback_dir = Path(fallback_dir)
         self.fallback_dir.mkdir(parents=True, exist_ok=True)
         
@@ -307,7 +307,7 @@ def _get_store() -> EtcdStore:
     """Get or create the default store instance."""
     global _default_store
     if _default_store is None:
-        endpoints = os.environ.get("ETCD_HOSTS", "localhost:2379").split(",")
+        endpoints = os.environ.get("ETCD_HOSTS", "127.0.0.1:2379").split(",")
         _default_store = EtcdStore(endpoints=endpoints)
     return _default_store
 

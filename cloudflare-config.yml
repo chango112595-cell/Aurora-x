@@ -5,7 +5,7 @@ credentials-file: /home/$USER/.cloudflared/aurora-x.json
 ingress:
   # Main Aurora app - CUSTOMIZE THIS HOSTNAME
   - hostname: aurora.yourdomain.com  # Change to your actual domain
-    service: http://localhost:8000
+    service: http://127.0.0.1:8000
     originRequest:
       httpHostHeader: aurora.yourdomain.com
       connectTimeout: 10s

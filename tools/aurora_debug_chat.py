@@ -24,16 +24,16 @@ User still can't see responses. Aurora will:
 Aurora's approach: Systematic debugging with her personality
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
-import os
-import json
-import subprocess
-import sys
-from datetime import datetime
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
+import sys
+import subprocess
+import json
+import os
+from typing import Dict, List, Tuple, Optional, Any, Union
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -46,14 +46,16 @@ class AuroraChatDebugger:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.root = Path(__file__).parent.parent
-        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
-        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
-        self.chat_base_url = os.getenv("AURORA_CHAT_BASE_URL", f"http://{self.aurora_host}:5001")
         self.chat_page = self.root / "client" / "src" / "pages" / "chat.tsx"
+        self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
+        self.base_url = os.getenv(
+            "AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
+        self.chat_base_url = os.getenv(
+            "AURORA_CHAT_BASE_URL", f"http://{self.aurora_host}:5001")
 
     def log(self, emoji: str, message: str):
         """Aurora logs with personality."""
@@ -68,7 +70,8 @@ class AuroraChatDebugger:
             self.log("[ERROR]", f"Chat page NOT found at {self.chat_page}")
             return False
 
-        self.log("[OK]", f"Chat page found: {self.chat_page.relative_to(self.root)}")
+        self.log(
+            "[OK]", f"Chat page found: {self.chat_page.relative_to(self.root)}")
         return True
 
     def analyze_chat_implementation(self) -> dict:
@@ -95,7 +98,8 @@ class AuroraChatDebugger:
         if "setMessages((prev) => [...prev," in content or "setMessages([...messages," in content:
             analysis["messages_update_found"] = True
         else:
-            analysis["issues_found"].append("Messages state update might be missing")
+            analysis["issues_found"].append(
+                "Messages state update might be missing")
 
         # Check for error handling
         if "catch" in content:
@@ -103,7 +107,8 @@ class AuroraChatDebugger:
         else:
             analysis["issues_found"].append("No error handling found")
 
-        self.log("[DATA]", f"Analysis complete: {len(analysis['issues_found'])} potential issues")
+        self.log(
+            "[DATA]", f"Analysis complete: {len(analysis['issues_found'])} potential issues")
 
         for issue in analysis["issues_found"]:
             self.log("[WARN]", f"  Issue: {issue}")
@@ -137,7 +142,8 @@ class AuroraChatDebugger:
                 return {"success": False, "error": result.stderr}
 
             response_data = json.loads(result.stdout)
-            self.log("[OK]", f"Endpoint responds: {json.dumps(response_data, indent=2)[:200]}...")
+            self.log(
+                "[OK]", f"Endpoint responds: {json.dumps(response_data, indent=2)[:200]}...")
 
             return {
                 "success": True,
@@ -189,7 +195,8 @@ class AuroraChatDebugger:
         elif len(analysis.get("issues_found", [])) > 0:
             diagnosis["root_cause"] = "Frontend implementation issues"
             diagnosis["fix_needed"] = "Fix response handling in chat.tsx"
-            self.log("[ERROR]", f"Frontend has {len(analysis['issues_found'])} issues")
+            self.log(
+                "[ERROR]", f"Frontend has {len(analysis['issues_found'])} issues")
         else:
             diagnosis["root_cause"] = "Unknown - need to check browser console"
             diagnosis["fix_needed"] = "Debug frontend runtime"
@@ -208,7 +215,8 @@ class AuroraChatDebugger:
         # Aurora's diagnosis: The issue is likely that responses aren't being properly
         # added to the messages state or displayed. Let me create a robust version.
 
-        self.log("[IDEA]", "Aurora's fix: Ensuring response properly added to messages state")
+        self.log(
+            "[IDEA]", "Aurora's fix: Ensuring response properly added to messages state")
         self.log("[IDEA]", "Aurora's fix: Adding detailed console logging")
         self.log("[IDEA]", "Aurora's fix: Simplifying state management")
 
@@ -311,7 +319,7 @@ class AuroraChatDebugger:
             try {
                 console.log('[STAR] Sending to Aurora:', prompt);
                 
-                const response = await fetch('{self.chat_base_url}/chat', {
+                const response = await fetch('http://127.0.0.1:5001/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt })
@@ -344,11 +352,16 @@ class AuroraChatDebugger:
 </body>
 </html>"""
 
+        test_page = test_page.replace(
+            "http://127.0.0.1:5001", self.chat_base_url)
+
         test_file = self.root / "aurora_chat_test.html"
         test_file.write_text(test_page)
 
-        self.log("[OK]", f"Test page created: {test_file.relative_to(self.root)}")
-        self.log("[EMOJI]", f"Open in browser: {self.base_url}/../aurora_chat_test.html")
+        self.log(
+            "[OK]", f"Test page created: {test_file.relative_to(self.root)}")
+        self.log(
+            "[EMOJI]", f"Open in browser: {self.base_url}/../aurora_chat_test.html")
         self.log("[EMOJI]", "Or directly: file://" + str(test_file))
 
     def run_diagnosis_and_fix(self):

@@ -94,16 +94,16 @@ Aurora will master EVERY technology domain with complete historical context
 and practical implementation knowledge from ancient times to future predictions.
 """
 
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from datetime import datetime
+import time
+import subprocess
+import os
 from typing import Dict, List, Tuple, Optional, Any, Union
 import json
-import os
-import subprocess
-import time
-from datetime import datetime
-from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -119,7 +119,7 @@ class AuroraUltimateGrandmaster:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
@@ -328,7 +328,8 @@ class AuroraUltimateGrandmaster:
         # Check 1: Is Vite actually running?
         print("1  Checking if Vite process is running...")
         result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
-        vite_processes = [line for line in result.stdout.split("\n") if "vite" in line.lower()]
+        vite_processes = [line for line in result.stdout.split(
+            "\n") if "vite" in line.lower()]
 
         if vite_processes:
             print(f"   [OK] Found {len(vite_processes)} Vite process(es):")
@@ -336,14 +337,17 @@ class AuroraUltimateGrandmaster:
                 print(f"      {proc[:100]}")
         else:
             print("   [ERROR] NO Vite process running!")
-            print("   [IDEA] FIX: Need to start Vite with: cd client && npm run dev")
+            print(
+                "   [IDEA] FIX: Need to start Vite with: cd client && npm run dev")
         print()
 
         # Check 2: What ports are actually listening?
         print("2  Checking which ports are listening...")
         try:
-            result = subprocess.run(["ss", "-tlnp"], capture_output=True, text=True)
-            listening_ports = [line for line in result.stdout.split("\n") if "LISTEN" in line]
+            result = subprocess.run(
+                ["ss", "-tlnp"], capture_output=True, text=True)
+            listening_ports = [line for line in result.stdout.split(
+                "\n") if "LISTEN" in line]
 
             print(f"   Found {len(listening_ports)} listening ports:")
             for port_line in listening_ports[:10]:
@@ -390,7 +394,8 @@ class AuroraUltimateGrandmaster:
             with open(package_json) as f:
                 pkg = json.load(f)
                 if "scripts" in pkg and "dev" in pkg["scripts"]:
-                    print(f"   [OK] npm run dev command: {pkg['scripts']['dev']}")
+                    print(
+                        f"   [OK] npm run dev command: {pkg['scripts']['dev']}")
                 else:
                     print("   [ERROR] No 'dev' script in package.json!")
 
@@ -427,7 +432,8 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
 
         print("[OK] Port Diagnostics Complete!\n")
 
-        self.log_mastery("Port Debugging", "Complete Diagnosis", "Identified why ports not working", 10)
+        self.log_mastery("Port Debugging", "Complete Diagnosis",
+                         "Identified why ports not working", 10)
         self.total_mastery += 10
 
     def teach_complete_fix_process(self):
@@ -466,7 +472,8 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
         for step, details in process.items():
             print(f"{step}:")
             for key, value in details.items():
-                icon = "[OK]" if value.startswith("[OK]") else "[ERROR]" if value.startswith("[ERROR]") else ""
+                icon = "[OK]" if value.startswith(
+                    "[OK]") else "[ERROR]" if value.startswith("[ERROR]") else ""
                 print(f"   {key}: {value}")
             print()
 
@@ -478,7 +485,8 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
         print("   Aurora must: CREATE -> EXECUTE -> VERIFY -> DOCUMENT")
         print()
 
-        self.log_mastery("Process Mastery", "Complete Fix Process", "Create->Execute->Verify->Document", 10)
+        self.log_mastery("Process Mastery", "Complete Fix Process",
+                         "Create->Execute->Verify->Document", 10)
         self.total_mastery += 10
 
     def generate_ultimate_certification(self):
@@ -489,7 +497,8 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
 
         percentage = (self.total_mastery / self.max_mastery) * 100
 
-        print(f"[DATA] Current Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)")
+        print(
+            f"[DATA] Current Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)")
         print(f"[EMOJI] Domains Mastered: {len(self.domains_mastered)}")
 
         if percentage >= 90:

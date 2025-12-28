@@ -290,7 +290,7 @@ def check_existing_service(port: int) -> bool:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(1)
             s.connect(('127.0.0.1', port))
-            s.sendall(b'GET /status HTTP/1.1\r\nHost: localhost\r\n\r\n')
+            s.sendall(b'GET /status HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n')
             response = s.recv(1024)
             return b'success' in response.lower() or b'200' in response
     except:
