@@ -168,7 +168,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-bridge",
                 "preferred_port": 5001,
                 "port": None,  # Will be assigned dynamically
-                "health_check_template": "http://localhost:{port}/health",
+                "health_check_template": "http://127.0.0.1:{port}/health",
             },
             "backend": {
                 "name": "Aurora Backend API (Main Server)",
@@ -176,7 +176,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-backend",
                 "preferred_port": 5000,
                 "port": None,
-                "health_check_template": "http://localhost:{port}/healthz",
+                "health_check_template": "http://127.0.0.1:{port}/healthz",
             },
             "vite": {
                 "name": "Aurora Vite Dev Server (Frontend)",
@@ -184,7 +184,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-vite",
                 "preferred_port": 5173,
                 "port": None,
-                "health_check_template": "http://localhost:{port}",
+                "health_check_template": "http://127.0.0.1:{port}",
             },
             "self-learn": {
                 "name": "Aurora Self-Learning Server (Continuous Learning)",
@@ -192,7 +192,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-self-learn",
                 "preferred_port": 5002,
                 "port": None,
-                "health_check_template": "http://localhost:{port}/health",
+                "health_check_template": "http://127.0.0.1:{port}/health",
             },
             "chat": {
                 "name": "Aurora Conversational AI Chat Server",
@@ -200,7 +200,7 @@ class LuminarNexusServerManager:
                 "session": "aurora-chat",
                 "preferred_port": 5003,
                 "port": None,
-                "health_check_template": "http://localhost:{port}/health",
+                "health_check_template": "http://127.0.0.1:{port}/health",
             },
         }
 
@@ -632,8 +632,8 @@ class LuminarNexusServerManager:
         content = vite_file.read_text()
 
         # Find proxy targets using simple regex (works for typical vite.config.js patterns)
-        chat_match = re.search(r"'/api/chat'\s*:\s*\{[^}]*target\s*:\s*['\"]http://localhost:(\d+)['\"]", content, re.S)
-        api_match = re.search(r"'/api'\s*:\s*\{[^}]*target\s*:\s*['\"]http://localhost:(\d+)['\"]", content, re.S)
+        chat_match = re.search(r"'/api/chat'\s*:\s*\{[^}]*target\s*:\s*['\"]http://127.0.0.1:(\d+)['\"]", content, re.S)
+        api_match = re.search(r"'/api'\s*:\s*\{[^}]*target\s*:\s*['\"]http://127.0.0.1:(\d+)['\"]", content, re.S)
 
         if chat_match:
             result["api_chat_target_port"] = int(chat_match.group(1))
@@ -1208,15 +1208,15 @@ class AuroraConversationalAI:
             log.append("[EMOJI] **AUTONOMOUS INVESTIGATION EXAMPLE**:\n")
 
             # Check chat server status
-            chat_status = self.execute_tool("test_endpoint", "http://localhost:5003/api/chat/status")
+            chat_status = self.execute_tool("test_endpoint", "http://127.0.0.1:5003/api/chat/status")
             log.append(f"**Chat Server (Port 5003)**: {chat_status}")
 
             # Check Vite server
-            vite_status = self.execute_tool("test_endpoint", "http://localhost:5173")
+            vite_status = self.execute_tool("test_endpoint", "http://127.0.0.1:5173")
             log.append(f"**Vite Frontend (Port 5173)**: {vite_status}")
 
             # Check backend
-            backend_status = self.execute_tool("test_endpoint", "http://localhost:5000")
+            backend_status = self.execute_tool("test_endpoint", "http://127.0.0.1:5000")
             log.append(f"**Backend API (Port 5000)**: {backend_status}\n")
 
             log.append("[EMOJI] **CREATING ANALYSIS DOCUMENTS**\n")
@@ -1280,9 +1280,9 @@ class AuroraConversationalAI:
 
             # Check all services
             services = {
-                "Chat Server (5003)": "http://localhost:5003/api/chat/status",
-                "Backend API (5000)": "http://localhost:5000",
-                "Vite Frontend (5173)": "http://localhost:5173",
+                "Chat Server (5003)": "http://127.0.0.1:5003/api/chat/status",
+                "Backend API (5000)": "http://127.0.0.1:5000",
+                "Vite Frontend (5173)": "http://127.0.0.1:5173",
             }
 
             for service_name, endpoint in services.items():
@@ -1466,7 +1466,7 @@ class AuroraConversationalAI:
         log.append(" Verifying backend route handlers\n")
 
         # Test current chat endpoint
-        chat_test = self.execute_tool("test_endpoint", "http://localhost:5003/api/chat")
+        chat_test = self.execute_tool("test_endpoint", "http://127.0.0.1:5003/api/chat")
         log.append(f"**Chat Endpoint Status**: {chat_test}\n")
 
         log.append("**FIX STRATEGY:**")
@@ -1496,7 +1496,7 @@ class AuroraConversationalAI:
         log = []
         log.append("[SCAN] **ANALYZING VITE CONFIGURATION...**\n")
 
-        vite_test = self.execute_tool("test_endpoint", "http://localhost:5173")
+        vite_test = self.execute_tool("test_endpoint", "http://127.0.0.1:5173")
         log.append(f"**Vite Server Status**: {vite_test}\n")
 
         log.append("[OK] **STATUS**: Vite server running on correct port")
@@ -1608,7 +1608,7 @@ def get_live_status():
     for name, info in servers.items():
         try:
             result = subprocess.run(
-                f"curl -s -o /dev/null -w '%{{http_code}}' http://localhost:{info['port']} --max-time 2",
+                f"curl -s -o /dev/null -w '%{{http_code}}' http://127.0.0.1:{info['port']} --max-time 2",
                 shell=True, capture_output=True, text=True, timeout=3
             )
             status_code = result.stdout.strip()
@@ -1695,12 +1695,12 @@ if __name__ == "__main__":
 
         # Step 1: Test backend endpoint
         diagnostic_log.append("\n**Step 1: Testing Backend Endpoint**")
-        backend_result = self.execute_tool("test_endpoint", "http://localhost:5000/api/conversation")
+        backend_result = self.execute_tool("test_endpoint", "http://127.0.0.1:5000/api/conversation")
         diagnostic_log.append(f"Backend /api/conversation: {backend_result}")
 
         # Step 2: Test Luminar Nexus chat endpoint
         diagnostic_log.append("\n**Step 2: Testing Luminar Nexus Chat Service**")
-        chat_result = self.execute_tool("test_endpoint", "http://localhost:5003/api/chat")
+        chat_result = self.execute_tool("test_endpoint", "http://127.0.0.1:5003/api/chat")
         diagnostic_log.append(f"Luminar Nexus /api/chat: {chat_result}")
 
         # Step 3: Comprehensive system check
@@ -1946,7 +1946,7 @@ if __name__ == "__main__":
             task_type = "restart_servers"
         # Check for BUG FIX commands (GRANDMASTER LEVEL)
         elif re.search(
-            r"(fix|repair|correct|patch|resolve).*(bug|error|issue|404|500|broken|localhost)", user_message.lower()
+            r"(fix|repair|correct|patch|resolve).*(bug|error|issue|404|500|broken|127.0.0.1)", user_message.lower()
         ):
             task_type = "fix_bug"
             log.append("[SCAN] **DEBUG**: Detected fix_bug task type")
@@ -2182,8 +2182,8 @@ if __name__ == "__main__":
                 log.append(f"[EMOJI] **Target Files**: {', '.join(target_files)}\n")
 
             # Find what to search for
-            if "localhost:9090" in user_message or "9090" in user_message:
-                search_pattern = "localhost:9090"
+            if "127.0.0.1:9090" in user_message or "9090" in user_message:
+                search_pattern = "127.0.0.1:9090"
                 log.append(f"[SCAN] **Searching for**: {search_pattern}\n")
 
             # If no specific files mentioned, search for them
@@ -2233,15 +2233,15 @@ if __name__ == "__main__":
                             self.execute_tool("run_command", f"cp {file_path} {backup_path}")
                             log.append(f"   [EMOJI] Backup: unused/{filename}.backup")
 
-                            # Apply fix - Replace localhost:9090 with relative /api
-                            new_content = content.replace("'http://localhost:9090/api/status'", "'/api/status'")
-                            new_content = new_content.replace("'http://localhost:9090/api/control'", "'/api/control'")
-                            new_content = new_content.replace('"http://localhost:9090/api/status"', '"/api/status"')
-                            new_content = new_content.replace('"http://localhost:9090/api/control"', '"/api/control"')
+                            # Apply fix - Replace 127.0.0.1:9090 with relative /api
+                            new_content = content.replace("'http://127.0.0.1:9090/api/status'", "'/api/status'")
+                            new_content = new_content.replace("'http://127.0.0.1:9090/api/control'", "'/api/control'")
+                            new_content = new_content.replace('"http://127.0.0.1:9090/api/status"', '"/api/status"')
+                            new_content = new_content.replace('"http://127.0.0.1:9090/api/control"', '"/api/control"')
 
                             # Write fixed file
                             self.execute_tool("write_file", file_path, new_content)
-                            log.append("   [OK] Fixed: localhost:9090 -> /api (Vite proxy)")
+                            log.append("   [OK] Fixed: 127.0.0.1:9090 -> /api (Vite proxy)")
                             fixed_count += 1
                         else:
                             log.append("    Pattern not found")

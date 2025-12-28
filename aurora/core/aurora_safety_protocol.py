@@ -186,7 +186,7 @@ class AuroraSafetyProtocol:
         try:
             import requests
 
-            response = requests.get("http://localhost:9090/api/status", timeout=2)
+            response = requests.get("http://127.0.0.1:9090/api/status", timeout=2)
             if response.status_code == 200:
                 return response.json()
         except Exception:
@@ -550,7 +550,7 @@ class AuroraSafetyProtocol:
             import requests
 
             response = requests.post(
-                "http://localhost:9090/api/control", json={"service": crash.service_name, "action": "start"}, timeout=5
+                "http://127.0.0.1:9090/api/control", json={"service": crash.service_name, "action": "start"}, timeout=5
             )
 
             if response.status_code == 200:

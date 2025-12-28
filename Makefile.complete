@@ -218,7 +218,7 @@ status:
 	@for pair in "Frontend+Backend:$(PORT_FRONTEND)" "Aurora Bridge:$(PORT_BRIDGE)" "Aurora Nexus V3:$(PORT_NEXUS_V3)" "Luminar Nexus V2:$(PORT_LUMINAR)"; do \
 		name=$$(echo $$pair | cut -d: -f1); \
 		port=$$(echo $$pair | cut -d: -f2); \
-		if curl -s http://localhost:$$port >/dev/null 2>&1; then \
+		if curl -s http://127.0.0.1:$$port >/dev/null 2>&1; then \
 			printf "%-35s %-10s \033[32m● ONLINE\033[0m\n" "$$name" "$$port"; \
 		else \
 			printf "%-35s %-10s \033[31m○ OFFLINE\033[0m\n" "$$name" "$$port"; \
@@ -309,7 +309,7 @@ gates: lint type-check test
 WHAT ?= find the largest number in a list
 SPEC ?= specs/rich_spec.md
 SPEC3 ?= specs/check_palindrome.md
-API_URL ?= http://localhost:$(PORT_BRIDGE)
+API_URL ?= http://127.0.0.1:$(PORT_BRIDGE)
 
 chat:
 	@echo "🗣️  Aurora-X Interactive English Mode"
@@ -491,7 +491,7 @@ nexus-workers:
 
 nexus-status:
 	@echo "🧠 Aurora Nexus V3 Status..."
-	@curl -s http://localhost:$(PORT_NEXUS_V3)/api/health 2>/dev/null || echo "Nexus V3 not running"
+	@curl -s http://127.0.0.1:$(PORT_NEXUS_V3)/api/health 2>/dev/null || echo "Nexus V3 not running"
 
 # ============================================================================
 # AURORA SUPERVISOR SPECIFIC
@@ -557,7 +557,7 @@ demo-clean:
 
 demo-status:
 	@echo "📊 Demo status..."
-	@curl -s http://localhost:$(PORT_LUMINAR)/healthz 2>/dev/null | $(PYTHON) -m json.tool || echo "Server not running"
+	@curl -s http://127.0.0.1:$(PORT_LUMINAR)/healthz 2>/dev/null | $(PYTHON) -m json.tool || echo "Server not running"
 
 # ============================================================================
 # MANIFEST & MODULE MANAGEMENT

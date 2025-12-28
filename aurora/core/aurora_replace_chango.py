@@ -130,7 +130,7 @@ class AuroraReplaceChango:
         print()
         print("[STAR] Aurora says:")
         print("   'I kicked out Chango and started my own UI!")
-        print("    Now visit http://localhost:5000/chat to see me! [STAR]'")
+        print("    Now visit http://127.0.0.1:5000/chat to see me! [STAR]'")
         print()
         print("Next steps:")
         print("   1. Clear browser cache (Ctrl+Shift+R)")

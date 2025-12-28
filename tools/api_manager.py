@@ -17,17 +17,17 @@ Specialized manager for API services, endpoints, and health monitoring
 Works in conjunction with server_manager.py for complete infrastructure management
 """
 
-import os
 import subprocess
+import os
 import time
 from datetime import datetime
 from typing import Any
-
 import psutil
+from concurrent.futures import ThreadPoolExecutor
 import requests
 
+
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
@@ -42,7 +42,7 @@ class AuroraAPIManager:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.apis = {
@@ -89,16 +89,20 @@ class AuroraAPIManager:
         for dep in api.get("dependencies", []):
             try:
                 if dep == "node":
-                    result = subprocess.run(["node", "--version"], capture_output=True, text=True, timeout=5)
+                    result = subprocess.run(
+                        ["node", "--version"], capture_output=True, text=True, timeout=5)
                     results[dep] = result.returncode == 0
                 elif dep == "npm":
-                    result = subprocess.run(["npm", "--version"], capture_output=True, text=True, timeout=5)
+                    result = subprocess.run(
+                        ["npm", "--version"], capture_output=True, text=True, timeout=5)
                     results[dep] = result.returncode == 0
                 elif dep == "python3":
-                    result = subprocess.run(["python3", "--version"], capture_output=True, text=True, timeout=5)
+                    result = subprocess.run(
+                        ["python3", "--version"], capture_output=True, text=True, timeout=5)
                     results[dep] = result.returncode == 0
                 elif dep in ["uvicorn", "fastapi", "flask"]:
-                    result = subprocess.run(["python3", "-c", f"import {dep}"], capture_output=True, timeout=5)
+                    result = subprocess.run(
+                        ["python3", "-c", f"import {dep}"], capture_output=True, timeout=5)
                     results[dep] = result.returncode == 0
                 else:
                     results[dep] = False
@@ -146,7 +150,8 @@ class AuroraAPIManager:
 
             health_data.update(
                 {
-                    "healthy": response.status_code in [200, 404],  # 404 is OK if endpoint doesn't exist
+                    # 404 is OK if endpoint doesn't exist
+                    "healthy": response.status_code in [200, 404],
                     "status_code": response.status_code,
                     "response_time": round(response_time, 2),
                 }
@@ -187,12 +192,15 @@ class AuroraAPIManager:
 
         # Check dependencies
         deps = self.check_dependencies(api_name)
-        missing_deps = [dep for dep, available in deps.items() if not available]
+        missing_deps = [dep for dep, available in deps.items()
+                        if not available]
         if missing_deps:
-            print(f"[ERROR] Missing dependencies for {api_name}: {missing_deps}")
+            print(
+                f"[ERROR] Missing dependencies for {api_name}: {missing_deps}")
             return False
 
-        print(f"[EMOJI] Starting {api['description']} on port {api['port']}...")
+        print(
+            f"[EMOJI] Starting {api['description']} on port {api['port']}...")
 
         try:
             # Kill any process using the port
@@ -258,7 +266,8 @@ class AuroraAPIManager:
                 try:
                     for conn in proc.connections():
                         if conn.laddr.port == port:
-                            print(f"[EMOJI] Killing process {proc.info['pid']} ({proc.info['name']}) on port {port}")
+                            print(
+                                f"[EMOJI] Killing process {proc.info['pid']} ({proc.info['name']}) on port {port}")
                             proc.kill()
                             return True
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
@@ -325,22 +334,28 @@ class AuroraAPIManager:
             print(f"  {status_icon} {api['description']} (Port {api['port']})")
 
             if health["healthy"]:
-                print(f"     Status: HEALTHY ({health['status_code']}) - {health['response_time']}ms")
+                print(
+                    f"     Status: HEALTHY ({health['status_code']}) - {health['response_time']}ms")
             else:
-                print(f"     Status: DOWN - {health.get('error', 'Unknown error')}")
+                print(
+                    f"     Status: DOWN - {health.get('error', 'Unknown error')}")
 
-            print(f"     Process: {'Running' if health['process_running'] else 'Stopped'}")
-            print(f"     Port: {'Listening' if health['port_listening'] else 'Not listening'}")
+            print(
+                f"     Process: {'Running' if health['process_running'] else 'Stopped'}")
+            print(
+                f"     Port: {'Listening' if health['port_listening'] else 'Not listening'}")
 
             # Dependencies
             deps = health["dependencies"]
             missing = [k for k, v in deps.items() if not v]
             if missing:
-                print(f"     Dependencies: [ERROR] Missing: {', '.join(missing)}")
+                print(
+                    f"     Dependencies: [ERROR] Missing: {', '.join(missing)}")
             else:
                 print("     Dependencies: [OK] All available")
 
-        print(f"\n Last checked: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(
+            f"\n Last checked: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("=" * 70)
 
 
@@ -348,15 +363,21 @@ def main():
     """Main CLI interface for API Manager"""
     import argparse
 
-    parser = argparse.ArgumentParser(description="Aurora-X Advanced API Manager")
-    parser.add_argument("--status", action="store_true", help="Show API status")
+    parser = argparse.ArgumentParser(
+        description="Aurora-X Advanced API Manager")
+    parser.add_argument("--status", action="store_true",
+                        help="Show API status")
     parser.add_argument("--start", type=str, help="Start specific API")
     parser.add_argument("--stop", type=str, help="Stop specific API")
     parser.add_argument("--restart", type=str, help="Restart specific API")
-    parser.add_argument("--restart-all", action="store_true", help="Restart all APIs")
-    parser.add_argument("--auto-heal", action="store_true", help="Auto-heal unhealthy APIs")
-    parser.add_argument("--health", action="store_true", help="Run health checks")
-    parser.add_argument("--monitor", action="store_true", help="Continuous monitoring mode")
+    parser.add_argument("--restart-all", action="store_true",
+                        help="Restart all APIs")
+    parser.add_argument("--auto-heal", action="store_true",
+                        help="Auto-heal unhealthy APIs")
+    parser.add_argument("--health", action="store_true",
+                        help="Run health checks")
+    parser.add_argument("--monitor", action="store_true",
+                        help="Continuous monitoring mode")
 
     args = parser.parse_args()
 
@@ -380,7 +401,8 @@ def main():
     elif args.health:
         results = api_manager.health_check_all()
         for api_name, health in results.items():
-            print(f"{api_name}: {'HEALTHY' if health['healthy'] else 'UNHEALTHY'}")
+            print(
+                f"{api_name}: {'HEALTHY' if health['healthy'] else 'UNHEALTHY'}")
     elif args.monitor:
         print("[SCAN] Starting continuous monitoring mode (Ctrl+C to stop)...")
         try:

@@ -4,6 +4,6 @@ defaults:
   env: staging
 nodes:
   local:
-    host: localhost
+    host: 127.0.0.1
     port: 22
     desc: local testing node

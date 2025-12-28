@@ -17,7 +17,7 @@ services:
     ports:
       - "5000:5000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -41,7 +41,7 @@ services:
     ports:
       - "5001:5001"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5001/api/health"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5001/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -65,7 +65,7 @@ services:
     ports:
       - "5002:5002"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5002/api/health"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5002/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -89,7 +89,7 @@ services:
     ports:
       - "5003:5003"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5003/api/health"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5003/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -110,7 +110,7 @@ services:
     ports:
       - "5173:5173"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5173/"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5173/"]
       interval: 30s
       timeout: 10s
       retries: 3

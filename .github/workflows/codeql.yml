@@ -2,9 +2,9 @@ name: "CodeQL Security Analysis"
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   schedule:
     # Run at 6:00 AM UTC every Monday
     - cron: '0 6 * * 1'
@@ -32,6 +32,7 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
+        build-mode: none
         # Override default queries with custom security queries
         queries: +security-extended,security-and-quality
 
@@ -49,18 +50,8 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt || true; fi
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
-
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{ matrix.language }}"
         upload: true
-
-    - name: Upload SARIF results
-      if: always()
-      uses: github/codeql-action/upload-sarif@v3
-      with:
-        sarif_file: ../results
-        category: "/language:${{ matrix.language }}"

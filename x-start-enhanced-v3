@@ -30,6 +30,12 @@ os.chdir(script_dir)
 IS_WINDOWS = platform.system() == "Windows"
 PYTHON_CMD = "python" if IS_WINDOWS else "python3"
 
+AURORA_HOST = os.getenv("AURORA_HOST", "localhost")
+AURORA_PORT = os.getenv("AURORA_PORT", "5000")
+AURORA_CHAT_PORT = os.getenv("AURORA_CHAT_PORT", "5003")
+AURORA_NEXUS_V3_PORT = os.getenv("AURORA_NEXUS_V3_PORT", "5004")
+AURORA_DASHBOARD_PORT = os.getenv("AURORA_DASHBOARD_PORT", "5005")
+
 processes = []
 
 
@@ -464,10 +470,10 @@ if nexus_running and running_critical >= total_critical * 0.7 and web_running >=
     print("      • Peak Intelligence Mode: ONLINE")
     print("      • Omniscient Capabilities: ENABLED")
     print("\n   [WEB] ACCESS POINTS:")
-    print("      • Frontend:      http://localhost:5000")
-    print("      • Chat:          http://localhost:5003")
-    print("      • Nexus V3 API:  http://localhost:5004  ⭐ NEW")
-    print("      • Dashboard:     http://localhost:5005")
+    print(f"      • Frontend:      http://{AURORA_HOST}:{AURORA_PORT}")
+    print(f"      • Chat:          http://{AURORA_HOST}:{AURORA_CHAT_PORT}")
+    print(f"      • Nexus V3 API:  http://{AURORA_HOST}:{AURORA_NEXUS_V3_PORT}  ⭐ NEW")
+    print(f"      • Dashboard:     http://{AURORA_HOST}:{AURORA_DASHBOARD_PORT}")
     print("\n   [EMOJI] CONSCIOUS INTERFACE:")
     print("      • Run: python aurora_conscious.py")
     print("      • Full consciousness, memory, authentic conversation")

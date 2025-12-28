@@ -17,11 +17,11 @@ Aurora Self-Diagnosis and Repair
 Aurora diagnoses and fixes her own UI connection issues.
 """
 
+from pathlib import Path
+import subprocess
+import asyncio
 from typing import Dict, List, Tuple, Optional, Any, Union
 import os
-import asyncio
-import subprocess
-from pathlib import Path
 
 
 class AuroraSelfRepair:
@@ -30,7 +30,7 @@ class AuroraSelfRepair:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.root = Path(__file__).parent.parent
@@ -47,7 +47,8 @@ class AuroraSelfRepair:
         print("\n[DATA] Step 1: Check which ports are actually listening")
         print("-" * 70)
 
-        result = subprocess.run(["lsof", "-i", "-P", "-n"], capture_output=True, text=True)
+        result = subprocess.run(
+            ["lsof", "-i", "-P", "-n"], capture_output=True, text=True)
 
         listening_ports = {}
         for line in result.stdout.split("\n"):
@@ -75,7 +76,8 @@ class AuroraSelfRepair:
         print("-" * 70)
 
         # Read the server control page
-        server_control_files = ["client/src/pages/server-control.tsx", "client/src/pages/server-control-new.tsx"]
+        server_control_files = [
+            "client/src/pages/server-control.tsx", "client/src/pages/server-control-new.tsx"]
 
         for file in server_control_files:
             path = self.root / file
@@ -86,7 +88,8 @@ class AuroraSelfRepair:
                 # Check for hardcoded URLs
                 loopback_host = os.getenv("AURORA_HOST", "127.0.0.1")
                 if loopback_host in content:
-                    print(f"   [WARN]  Found '{loopback_host}' - may need to use correct host")
+                    print(
+                        f"   [WARN]  Found '{loopback_host}' - may need to use correct host")
 
                 # Look for API endpoints
                 if "http://" in content:
@@ -214,11 +217,13 @@ async def healthz():
                     if app_creation != -1:
                         next_line = content.find("\n\n", app_creation)
                         if next_line != -1:
-                            content = content[:next_line] + health_endpoint + content[next_line:]
+                            content = content[:next_line] + \
+                                health_endpoint + content[next_line:]
 
                             serve_file.write_text(content)
                             print("[OK] Added /health and /healthz endpoints")
-                            self.fixes.append("Added health endpoints to aurora_x/serve.py")
+                            self.fixes.append(
+                                "Added health endpoints to aurora_x/serve.py")
         else:
             print("[OK] Health endpoint already exists")
 
@@ -256,7 +261,8 @@ async def healthz():
 
             print("\n   Aurora's recommendation:")
             print("      Use relative URLs to proxy through Vite dev server")
-            print("      Example: '/api/health' instead of 'http://127.0.0.1:5001/health'")
+            print(
+                "      Example: '/api/health' instead of 'http://127.0.0.1:5001/health'")
 
         else:
             print("   [OK] No hardcoded loopback URLs found")

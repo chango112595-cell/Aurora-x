@@ -96,7 +96,7 @@ class AuroraEmergencyDebug:
 
         try:
             result = subprocess.run(
-                ["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True, timeout=5
+                ["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True, timeout=5
             )
 
             if "200 OK" in result.stdout:
@@ -134,7 +134,7 @@ class AuroraEmergencyDebug:
         # Verify it started
         try:
             result = subprocess.run(
-                ["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True, timeout=5
+                ["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True, timeout=5
             )
             if "200 OK" in result.stdout:
                 self.log_response("[OK] Vite server restarted successfully")

@@ -91,7 +91,7 @@ class AuroraXCLI:
             url = f"https://{repl_slug}.{repl_owner}.repl.co/dashboard"
         else:
             # Local environment
-            url = f"http://localhost:{port}/dashboard"
+            url = f"http://127.0.0.1:{port}/dashboard"
         
         print(f"🌌 Opening Aurora-X Dashboard: {url}")
         

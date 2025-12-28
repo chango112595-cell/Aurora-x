@@ -95,13 +95,13 @@ class AuroraDirectTelemetry:
             # Check if Vite is running
             import subprocess
 
-            result = subprocess.run(["curl", "-s", "-I", "http://localhost:5000"], capture_output=True, text=True)
+            result = subprocess.run(["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True)
 
             if "200 OK" in result.stdout:
                 print("[OK] Aurora: Vite server is responding")
 
                 # Check for compilation errors
-                result = subprocess.run(["curl", "-s", "http://localhost:5000"], capture_output=True, text=True)
+                result = subprocess.run(["curl", "-s", "http://127.0.0.1:5000"], capture_output=True, text=True)
 
                 if len(result.stdout) < 100:
                     print("[ERROR] Aurora: Page content is minimal - likely compilation error")
@@ -165,7 +165,7 @@ class AuroraDirectTelemetry:
 
         print("[OK] Aurora: Vite server starting...")
         time.sleep(3)
-        print("[OK] Aurora: Server should be ready at http://localhost:5000")
+        print("[OK] Aurora: Server should be ready at http://127.0.0.1:5000")
 
     def message_loop(self):
         """Direct message loop with user"""

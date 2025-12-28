@@ -17,9 +17,9 @@ Aurora autonomously fixes the blank page issue
 Checks and fixes rendering, CSS, and React issues
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
 from pathlib import Path
+from typing import Dict, List, Tuple, Optional, Any, Union
 
 
 class AuroraBlankPageAutoFixer:
@@ -34,7 +34,8 @@ class AuroraBlankPageAutoFixer:
 
     def print_fix(self, msg: str, status: str = "FIX"):
         """Print fix status"""
-        icons = {"FIX": "[EMOJI]", "SUCCESS": "[OK]", "ERROR": "[ERROR]", "CHECK": "[SCAN]", "WARN": "[WARN]"}
+        icons = {"FIX": "[EMOJI]", "SUCCESS": "[OK]",
+                 "ERROR": "[ERROR]", "CHECK": "[SCAN]", "WARN": "[WARN]"}
         print(f"{icons.get(status, '')} {msg}")
 
     def fix_index_css_body_styles(self) -> bool:
@@ -68,9 +69,11 @@ class AuroraBlankPageAutoFixer:
 }
 """
             # Insert after @tailwind utilities
-            insert_pos = content.find("@tailwind utilities;") + len("@tailwind utilities;")
+            insert_pos = content.find(
+                "@tailwind utilities;") + len("@tailwind utilities;")
             if insert_pos > len("@tailwind utilities;"):
-                content = content[:insert_pos] + body_styles + content[insert_pos:]
+                content = content[:insert_pos] + \
+                    body_styles + content[insert_pos:]
                 index_css.write_text(content)
                 self.print_fix("Added body and root CSS styles", "SUCCESS")
                 self.fixes_applied.append("body_css_styles")
@@ -167,10 +170,12 @@ if (!rootElement) {
             # Check for export
             if "export default" not in content and "export const" not in content:
                 issues.append(f"{page_file.name}: Missing export")
-                self.print_fix(f"  [WARN]  {page_file.name} doesn't export component", "WARN")
+                self.print_fix(
+                    f"  [WARN]  {page_file.name} doesn't export component", "WARN")
             elif "return" not in content and "<" not in content:
                 issues.append(f"{page_file.name}: Might not return JSX")
-                self.print_fix(f"  [WARN]  {page_file.name} might not return JSX", "WARN")
+                self.print_fix(
+                    f"  [WARN]  {page_file.name} might not return JSX", "WARN")
 
         if issues:
             self.print_fix(f"Found {len(issues)} page export issues", "WARN")
@@ -194,7 +199,8 @@ if (!rootElement) {
         if "root:" in content and "client" in content:
             self.print_fix("Vite root configured correctly", "SUCCESS")
         else:
-            self.print_fix("Vite root configuration might be incorrect", "WARN")
+            self.print_fix(
+                "Vite root configuration might be incorrect", "WARN")
 
         return True
 
@@ -241,9 +247,11 @@ if (!rootElement) {
     </script>
 """
                 # Insert before closing head tag
-                content = content.replace("</head>", cleanup_script + "\n  </head>")
+                content = content.replace(
+                    "</head>", cleanup_script + "\n  </head>")
                 index_html.write_text(content)
-                self.print_fix("Added service worker cleanup script", "SUCCESS")
+                self.print_fix(
+                    "Added service worker cleanup script", "SUCCESS")
                 return True
 
         return True
@@ -271,7 +279,8 @@ if (!rootElement) {
             ]
 
             if missing:
-                self.print_fix(f"Missing dependencies: {', '.join(missing)}", "WARN")
+                self.print_fix(
+                    f"Missing dependencies: {', '.join(missing)}", "WARN")
                 return False
 
             self.print_fix("All critical dependencies present", "SUCCESS")

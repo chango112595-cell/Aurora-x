@@ -3,7 +3,7 @@ credentials-file: /home/<YOU>/.cloudflared/<TUNNEL-UUID>.json
 
 ingress:
   - hostname: aurora.x.com
-    service: http://localhost:8000
+    service: http://127.0.0.1:8000
     originRequest:
       httpHostHeader: aurora.x.com
       connectTimeout: 10s

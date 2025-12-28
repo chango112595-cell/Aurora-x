@@ -1,10 +1,10 @@
 # Language Auto-Select Testing Targets
-# Usage: HOST=http://localhost:5001 make -f Makefile.lang.add chat PROMPT="your prompt"
+# Usage: HOST=http://127.0.0.1:5001 make -f Makefile.lang.add chat PROMPT="your prompt"
 #
 # For Replit: Set HOST to your Replit URL
 # Example: HOST=https://aurora-x.yourusername.replit.dev make -f Makefile.lang.add chat PROMPT="fast api"
 
-HOST ?= http://localhost:5001
+HOST ?= http://127.0.0.1:5001
 PROMPT ?= make a web api
 LANG ?=
 PORT ?= 8000
