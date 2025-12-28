@@ -9,5 +9,8 @@ if (!databaseUrl) {
 export default {
   out: "./migrations",
   schema: "./shared/schema.ts",
-  connectionString: databaseUrl,
+  dialect: "postgresql",
+  dbCredentials: {
+    url: databaseUrl,
+  },
 } satisfies Config;
