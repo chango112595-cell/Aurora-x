@@ -10,6 +10,7 @@ import { getAuroraAI } from "./aurora";
 import { bootstrapAuxServices, stopAuxServices } from "./service-bootstrap";
 import { enforceSecurityAtStartup } from "./security-validator";
 import type { ChildProcess } from "child_process";
+import os from "os";
 
 interface ServerError extends Error {
   code?: string;
@@ -97,6 +98,22 @@ app.use((req, res, next) => {
   registerLuminarRoutes(app);
 
   registerNexusV3Routes(app);
+
+  app.get("/api/hardware", (_req: Request, res: Response) => {
+    const cpuInfo = os.cpus()?.[0];
+    res.json({
+      arch: os.arch(),
+      platform: os.platform(),
+      totalMem: os.totalmem(),
+      freeMem: os.freemem(),
+      loadAvg: os.loadavg(),
+      cpus: {
+        count: os.cpus()?.length || 0,
+        model: cpuInfo?.model || "unknown",
+        speedMHz: cpuInfo?.speed || 0,
+      },
+    });
+  });
 
   app.get('/api/aurora/status', (_req: Request, res: Response) => {
     res.json(aurora.getStatus());

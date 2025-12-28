@@ -2,6 +2,7 @@
 
 import { Route, Switch } from "wouter";
 import AuroraFuturisticLayout from "./components/AuroraFuturisticLayout";
+import AuroraSplash from "./components/AuroraSplash";
 import Dashboard from "./pages/dashboard";
 import Home from "./pages/home";
 import Chat from "./pages/chat";
@@ -27,8 +28,20 @@ import Roadmap from "./pages/roadmap";
 import Vault from "./pages/vault";
 import Aurora from "./pages/aurora";
 import NotFound from "./pages/not-found";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 1600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showSplash) {
+    return <AuroraSplash />;
+  }
+
   return (
     <AuroraFuturisticLayout>
       <Switch>
