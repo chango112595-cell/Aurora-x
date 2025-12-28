@@ -1478,7 +1478,7 @@ class AdvancedServerManager:
             return False
 
     def create_ssl_certificate(self) -> bool:
-        """Create SSL certificate"""
+        """Create SSL certificate with proper subjectAltName for TLS validation"""
         try:
             subprocess.run(
                 [
@@ -1496,6 +1496,8 @@ class AdvancedServerManager:
                     "-nodes",
                     "-subj",
                     f"/CN={AURORA_HOST}",
+                    "-addext",
+                    "subjectAltName=DNS:localhost,IP:127.0.0.1",
                 ],
                 check=True,
             )
@@ -2481,7 +2483,7 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
             subprocess.run(["which", "openssl"],
                            capture_output=True, timeout=2, check=True)
 
-            # Generate self-signed certificate
+            # Generate self-signed certificate with proper subjectAltName for TLS validation
             subprocess.run(
                 [
                     "openssl",
@@ -2498,6 +2500,8 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
                     "-nodes",
                     "-subj",
                     f"/C=US/ST=State/L=City/O=Aurora-X/CN={domain}",
+                    "-addext",
+                    "subjectAltName=DNS:localhost,IP:127.0.0.1",
                 ],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
