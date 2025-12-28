@@ -20,7 +20,6 @@ Simple recorder/monitor script for Aurora-X workspace.
 This script runs independently of Aurora and does NOT modify Aurora runtime.
 """
 import json
-from typing import Dict, List, Tuple, Optional, Any, Union
 import os
 import shutil
 import time
