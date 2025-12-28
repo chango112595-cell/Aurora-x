@@ -75,21 +75,27 @@ export class AuroraAI {
     const intent = await this.luminar.interpret(userInput, context, state);
 
     let result: string;
-    switch (intent.action) {
-      case 'synthesize':
-        result = await this.auroraX.synthesize(intent.spec);
-        break;
-        
-      case 'reflect':
-        result = await this.luminar.reflect(intent.topic ?? userInput, context);
-        break;
-        
-      case 'queryMemory':
-        result = await this.memory.query(intent.query ?? userInput);
-        break;
-        
-      default:
-        result = await this.luminar.respond(intent, context);
+    try {
+      switch (intent.action) {
+        case 'synthesize':
+          result = await this.auroraX.synthesize(intent.spec);
+          break;
+          
+        case 'reflect':
+          result = await this.luminar.reflect(intent.topic ?? userInput, context);
+          break;
+          
+        case 'queryMemory':
+          result = await this.memory.query(intent.query ?? userInput);
+          break;
+          
+        default:
+          result = await this.luminar.respond(intent, context);
+      }
+    } catch (error: any) {
+      // Fallback to a local response if bridge services are unavailable
+      const fallback = await this.luminar.respond(intent, context);
+      result = `${fallback}\n\n[Aurora local mode] Bridge unavailable: ${error?.message ?? 'unknown error'}.`;
     }
 
     await Promise.all([
@@ -99,7 +105,13 @@ export class AuroraAI {
         intent,
         timestamp: Date.now()
       }),
-      this.auroraX.adapt(intent, result),
+      (async () => {
+        try {
+          await this.auroraX.adapt(intent, result);
+        } catch {
+          // Ignore adaptation errors in offline mode
+        }
+      })(),
       this.nexus.reportEvent('chat_cycle_complete', {
         action: intent.action,
         duration: Date.now() - startTime
@@ -125,18 +137,22 @@ export class AuroraAI {
     const intent = await this.luminar.interpret(userInput, context, consciousness);
 
     let response: string;
-    switch (intent.action) {
-      case 'synthesize':
-        response = await this.auroraX.synthesize(intent.spec);
-        break;
-      case 'reflect':
-        response = await this.luminar.reflect(intent.topic ?? userInput, context);
-        break;
-      case 'queryMemory':
-        response = await this.memory.query(intent.query ?? userInput);
-        break;
-      default:
-        response = await this.luminar.respond(intent, context);
+    try {
+      switch (intent.action) {
+        case 'synthesize':
+          response = await this.auroraX.synthesize(intent.spec);
+          break;
+        case 'reflect':
+          response = await this.luminar.reflect(intent.topic ?? userInput, context);
+          break;
+        case 'queryMemory':
+          response = await this.memory.query(intent.query ?? userInput);
+          break;
+        default:
+          response = await this.luminar.respond(intent, context);
+      }
+    } catch (error: any) {
+      response = `${await this.luminar.respond(intent, context)}\n\n[Aurora local mode] Bridge unavailable: ${error?.message ?? 'unknown error'}.`;
     }
 
     await this.memory.storeFact({
@@ -146,7 +162,11 @@ export class AuroraAI {
       timestamp: Date.now()
     });
 
-    await this.auroraX.adapt(intent, response);
+    try {
+      await this.auroraX.adapt(intent, response);
+    } catch {
+      // Ignore adaptation errors when bridge is offline
+    }
     await this.nexus.reportEvent('chat_cycle_complete');
 
     this.turnContext.push(userInput, response);
@@ -165,17 +185,34 @@ export class AuroraAI {
 
   async synthesize(spec: SynthesisSpec): Promise<string> {
     await this.initialize();
-    return this.auroraX.synthesize(spec);
+    try {
+      return await this.auroraX.synthesize(spec);
+    } catch (error: any) {
+      return `[Aurora local mode] Unable to reach synthesis bridge. Draft for "${spec.request}": please run x-start or set AURORA_AUTO_START=1.\nReason: ${error?.message ?? 'unknown error'}`;
+    }
   }
 
   async analyze(input: string, context?: AnalysisContext): Promise<Record<string, unknown>> {
     await this.initialize();
-    return this.auroraX.analyze(input, context);
+    try {
+      return await this.auroraX.analyze(input, context);
+    } catch (error: any) {
+      return {
+        success: false,
+        message: "Aurora bridge unavailable; returning local placeholder analysis.",
+        error: error?.message ?? "bridge offline",
+        input,
+      };
+    }
   }
 
   async fix(code: string, issue: string): Promise<string> {
     await this.initialize();
-    return this.auroraX.fix(code, issue);
+    try {
+      return await this.auroraX.fix(code, issue);
+    } catch (error: any) {
+      return `[Aurora local mode] Bridge unavailable, suggested fix for "${issue}":\n${code}\n\nError: ${error?.message ?? 'offline'}`;
+    }
   }
 
   async getStatus(): Promise<Record<string, unknown>> {

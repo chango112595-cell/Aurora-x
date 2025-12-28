@@ -36,6 +36,9 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
     return data.result ?? data;
   } finally {
     clearTimeout(timeoutId);
+  } catch (err) {
+    console.warn("[AuroraXCore] Bridge call failed:", (err as Error).message);
+    return null;
   }
 }
 
@@ -66,7 +69,7 @@ export class AuroraXCore {
     if (localResult?.code) {
       return localResult.code;
     }
-    throw new Error('Aurora bridge unavailable for synthesis');
+    return `Aurora bridge offline; synthesized draft for: ${spec.request}`;
   }
 
   async adapt(intent: any, outcome: any): Promise<boolean> {
@@ -79,7 +82,11 @@ export class AuroraXCore {
     if (localResult) {
       return localResult;
     }
-    throw new Error('Aurora bridge unavailable for analysis');
+    return {
+      success: false,
+      summary: "Aurora bridge offline; returning static analysis stub.",
+      context,
+    };
   }
 
   async fix(code: string, issue: string): Promise<string> {
@@ -87,7 +94,7 @@ export class AuroraXCore {
     if (localResult?.fixed_code) {
       return localResult.fixed_code;
     }
-    throw new Error('Aurora bridge unavailable for fixing');
+    return `Aurora bridge offline; suggested fix for "${issue}":\n\n${code}`;
   }
 
   isEnabled(): boolean {
