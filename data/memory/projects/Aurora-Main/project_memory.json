@@ -2,48 +2,23 @@
   "short_term": [
     {
       "role": "user",
-      "content": "system diagnose",
-      "timestamp": "2025-12-24T03:56:47.452559"
+      "content": "do you remember me?",
+      "timestamp": "2025-12-28T04:47:43.808355"
     },
     {
       "role": "user",
-      "content": "status",
-      "timestamp": "2025-12-24T03:56:50.437710"
+      "content": "well i am chris",
+      "timestamp": "2025-12-28T04:47:51.090690"
     },
     {
       "role": "user",
-      "content": "issues with you're system",
-      "timestamp": "2025-12-24T03:57:11.983694"
+      "content": "I want you to analyze you're program",
+      "timestamp": "2025-12-28T04:48:00.743562"
     },
     {
       "role": "user",
-      "content": "I need to a diagnostic report from you're system. Self analyze you're programing",
-      "timestamp": "2025-12-24T03:57:59.752546"
-    },
-    {
-      "role": "user",
-      "content": "what issues do you have",
-      "timestamp": "2025-12-24T03:58:11.792649"
-    },
-    {
-      "role": "user",
-      "content": "status",
-      "timestamp": "2025-12-24T21:48:30.899153"
-    },
-    {
-      "role": "user",
-      "content": "i need analysis of code enhancement",
-      "timestamp": "2025-12-24T21:48:58.271253"
-    },
-    {
-      "role": "user",
-      "content": "python",
-      "timestamp": "2025-12-24T21:49:09.028231"
-    },
-    {
-      "role": "user",
-      "content": "decryption program",
-      "timestamp": "2025-12-24T21:49:23.843163"
+      "content": "system",
+      "timestamp": "2025-12-28T04:48:06.643111"
     }
   ],
   "mid_term": [
@@ -60,6 +35,13 @@
       "first_message": "2025-12-17T07:54:18.477616",
       "last_message": "2025-12-24T03:56:33.719477",
       "compressed_at": "2025-12-24T03:56:33.722106"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-24T03:56:47.452559",
+      "last_message": "2025-12-28T04:47:35.092690",
+      "compressed_at": "2025-12-28T04:47:35.111125"
     }
   ],
   "long_term": [],
@@ -400,6 +382,71 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-24T21:49:23.852831"
+    },
+    "memory_1769469e-4765-4f05-beb6-84a2758826e0": {
+      "value": {
+        "text": "hello",
+        "meta": {
+          "session_id": "chat-1766915185642",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T04:47:35.155078",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T04:47:35.155133"
+    },
+    "memory_8a9281ed-aca3-48fa-89e3-aea2b040032d": {
+      "value": {
+        "text": "do you remember me?",
+        "meta": {
+          "session_id": "chat-1766915185642",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T04:47:43.829309",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T04:47:43.829344"
+    },
+    "memory_0ce084fa-12a8-4d04-9197-d8d985ae3341": {
+      "value": {
+        "text": "well i am chris",
+        "meta": {
+          "session_id": "chat-1766915185642",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T04:47:51.105081",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T04:47:51.105096"
+    },
+    "memory_20245f67-725b-4653-8e86-669848a3f726": {
+      "value": {
+        "text": "I want you to analyze you're program",
+        "meta": {
+          "session_id": "chat-1766915185642",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T04:48:00.754770",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T04:48:00.754786"
+    },
+    "memory_d5e612ff-554b-461b-b458-525f1ca78239": {
+      "value": {
+        "text": "system",
+        "meta": {
+          "session_id": "chat-1766915185642",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T04:48:06.654774",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T04:48:06.654790"
     }
   },
   "events": [
@@ -612,8 +659,58 @@
         "longterm": false
       },
       "timestamp": "2025-12-24T21:49:23.859972"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1769469e-4765-4f05-beb6-84a2758826e0",
+        "text_length": 5,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T04:47:35.161359"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "8a9281ed-aca3-48fa-89e3-aea2b040032d",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T04:47:43.843621"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "0ce084fa-12a8-4d04-9197-d8d985ae3341",
+        "text_length": 15,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T04:47:51.112561"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "20245f67-725b-4653-8e86-669848a3f726",
+        "text_length": 36,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T04:48:00.761506"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "d5e612ff-554b-461b-b458-525f1ca78239",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T04:48:06.662617"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-24T21:49:23.861095"
+  "last_updated": "2025-12-28T04:48:06.663400"
 }
