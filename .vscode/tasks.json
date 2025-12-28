@@ -9,6 +9,14 @@
             "runOptions": {
                 "runOn": "folderOpen"
             }
+        },
+        {
+            "label": "npm install",
+            "type": "shell",
+            "command": "npm install",
+            "presentation": {
+                "reveal": "silent"
+            }
         }
     ]
 }

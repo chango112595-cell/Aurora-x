@@ -76,15 +76,23 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
   const [moduleCount, setModuleCount] = useState<number | null>(null);
   const [quantumCoherence, setQuantumCoherence] = useState<number | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [hardware, setHardware] = useState<{
+    arch: string;
+    platform: string;
+    cpus: { count: number; model: string; speedMHz: number };
+    totalMem: number;
+    freeMem: number;
+  } | null>(null);
 
   useEffect(() => {
     let isActive = true;
 
     const fetchSidebarStats = async () => {
       try {
-        const [manifestRes, v2Res] = await Promise.allSettled([
+        const [manifestRes, v2Res, hwRes] = await Promise.allSettled([
           fetch('/api/nexus-v3/manifest'),
           fetch('/api/luminar-nexus/v2/status'),
+          fetch('/api/hardware'),
         ]);
 
         if (manifestRes.status === 'fulfilled' && manifestRes.value.ok) {
@@ -100,10 +108,24 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
             setQuantumCoherence(data.quantum_coherence);
           }
         }
+
+        if (hwRes.status === 'fulfilled' && hwRes.value.ok) {
+          const data = await hwRes.value.json();
+          if (isActive && data) {
+            setHardware({
+              arch: data.arch,
+              platform: data.platform,
+              cpus: data.cpus || { count: 0, model: 'unknown', speedMHz: 0 },
+              totalMem: data.totalMem || 0,
+              freeMem: data.freeMem || 0,
+            });
+          }
+        }
       } catch {
         if (isActive) {
           setModuleCount(null);
           setQuantumCoherence(null);
+          setHardware(null);
         }
       }
     };
@@ -197,6 +219,23 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
           </div>
 
           <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
+            {sidebarOpen && hardware && (
+              <div className="rounded-2xl border border-slate-800/60 bg-slate-900/50 p-3 text-xs mb-2">
+                <div className="flex items-center justify-between text-slate-300">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Hardware</span>
+                  <span className="text-slate-200">{hardware.cpus.count} cores</span>
+                </div>
+                <div className="mt-2 text-slate-200">
+                  <div className="text-[11px] text-slate-400">
+                    {hardware.cpus.model || hardware.platform} · {hardware.arch}
+                  </div>
+                  <div className="text-[11px] text-slate-400 mt-1">
+                    RAM: {(hardware.totalMem / 1_073_741_824).toFixed(1)} GB total
+                  </div>
+                </div>
+              </div>
+            )}
+
             {sidebarOpen && (
               <div className="rounded-2xl border border-slate-800/60 bg-slate-900/50 p-3 text-xs">
                 <div className="flex items-center justify-between">
