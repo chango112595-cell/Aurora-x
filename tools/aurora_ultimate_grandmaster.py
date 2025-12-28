@@ -474,7 +474,7 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
             for key, value in details.items():
                 icon = "[OK]" if value.startswith(
                     "[OK]") else "[ERROR]" if value.startswith("[ERROR]") else ""
-                print(f"   {key}: {value}")
+                print(f"   {icon} {key}: {value}")
             print()
 
         print("[TARGET] KEY LESSON FOR AURORA:")
